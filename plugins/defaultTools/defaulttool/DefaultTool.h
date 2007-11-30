@@ -25,6 +25,7 @@
 #include <KoInteractionTool.h>
 #include <KoFlake.h>
 #include <commands/KoShapeAlignCommand.h>
+#include <commands/KoShapeReorderCommand.h>
 
 #include <QPolygonF>
 #include <QTime>
@@ -80,6 +81,11 @@ private slots:
     void selectionAlignVerticalCenter();
     void selectionAlignVerticalBottom();
 
+    void selectionBringToFront();
+    void selectionSendToBack();
+    void selectionMoveUp();
+    void selectionMoveDown();
+
     void updateHotPosition( KoFlake::Position hotPosition );
 
 public: // Events
@@ -104,6 +110,7 @@ private:
     double rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation );
 
     void selectionAlign(KoShapeAlignCommand::Align align);
+    void selectionReorder(KoShapeReorderCommand::MoveShapeType order );
 
     QRectF handlesSize();
 

@@ -64,7 +64,7 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     bringToFront->setDefaultAction( m_tool->action( "object_move_totop" ) );
     raiseLevel->setDefaultAction( m_tool->action( "object_move_up" ) );
     lowerLevel->setDefaultAction( m_tool->action( "object_move_down" ) );
-    sendBack->setDefaultAction( m_tool->action( "object_move_up" ) );
+    sendBack->setDefaultAction( m_tool->action( "object_move_tobottom" ) );
     bottomAlign->setDefaultAction( m_tool->action( "object_align_vertical_bottom" ) );
     vCenterAlign->setDefaultAction( m_tool->action( "object_align_vertical_center" ) );
     topAlign->setDefaultAction( m_tool->action( "object_align_vertical_top" ) );

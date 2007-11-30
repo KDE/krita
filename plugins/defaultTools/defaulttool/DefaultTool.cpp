@@ -109,23 +109,23 @@ void DefaultTool::setupActions()
                                                i18n( "Bring to &Front" ), this );
     addAction( "object_move_totop", actionBringToFront );
     actionBringToFront->setShortcut( QKeySequence( "Ctrl+Shift+]" ) );
-//     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
+    connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
     QAction* actionRaise = new QAction( KIcon( "raise" ), i18n( "&Raise" ), this );
     addAction( "object_move_up", actionRaise );
     actionRaise->setShortcut( QKeySequence( "Ctrl+]" ) );
-//    connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
+    connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
     QAction* actionLower = new QAction( KIcon( "lower" ), i18n( "&Lower" ), this );
     addAction( "object_move_down", actionLower );
     actionLower->setShortcut( QKeySequence( "Ctrl+[" ) );
-//    connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
+    connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
     QAction* actionSendToBack = new QAction( KIcon( "send_backward" ),
                                              i18n( "Send to &Back" ), this );
     addAction( "object_move_tobottom", actionSendToBack );
     actionSendToBack->setShortcut( QKeySequence( "Ctrl+Shift+[" ) );
-//    connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
+    connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
     QAction* actionAlignLeft = new QAction( KIcon( "aoleft" ),
                                             i18n( "Align Left" ), this );
@@ -660,6 +660,40 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
 
     m_canvas->addCommand( cmd );
     selection->updateSizeAndPosition();
+}
+
+void DefaultTool::selectionBringToFront()
+{
+    selectionReorder( KoShapeReorderCommand::BringToFront );
+}
+
+void DefaultTool::selectionMoveUp()
+{
+    selectionReorder( KoShapeReorderCommand::RaiseShape );
+}
+
+void DefaultTool::selectionMoveDown()
+{
+    selectionReorder( KoShapeReorderCommand::LowerShape );
+}
+
+void DefaultTool::selectionSendToBack()
+{
+    selectionReorder( KoShapeReorderCommand::SendToBack );
+}
+
+void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order )
+{
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    if( selectedShapes.count() < 1)
+        return;
+
+    QUndoCommand * cmd = KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), order );
+    m_canvas->addCommand( cmd );
 }
 
 QWidget* DefaultTool::createOptionWidget() {

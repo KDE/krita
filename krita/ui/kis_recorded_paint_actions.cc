@@ -42,37 +42,69 @@ class KisRecordedPaintActionsFactory {
 
 KisRecordedPaintActionsFactory factory;
 
-KisRecordedPaintAction::KisRecordedPaintAction(QString name, QString id) : KisRecordedAction(name, id)
-{
-}
-
-KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs) : KisRecordedAction(rhs)
-{
-    
-}
-
 //--- KisRecordedPolyLinePaintAction ---//
 
-struct KisRecordedPolyLinePaintAction::Private {
-    QList<KisPaintInformation> infos;
+struct KisRecordedPaintAction::Private {
     KisLayerSP layer;
     KisBrush* brush;
     QString paintOpId;
 };
 
-KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId)
-    : KisRecordedPaintAction(name, "PolyLinePaintAction"), d(new Private)
+KisRecordedPaintAction::KisRecordedPaintAction(QString name, QString id, KisLayerSP layer, KisBrush* brush, QString paintOpId) : KisRecordedAction(name, id), d(new Private)
 {
     d->layer = layer;
     d->brush = brush;
     d->paintOpId = paintOpId;
 }
 
-KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction& rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
+KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs) : KisRecordedAction(rhs), d(new Private(*rhs.d))
 {
     
 }
 
+KisRecordedPaintAction::~KisRecordedPaintAction()
+{
+    delete d;
+}
+
+void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
+{
+    KisRecordedAction::toXML(doc, elt);
+    elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));
+    elt.setAttribute("paintop", d->paintOpId);
+    QDomElement ressourceElt = doc.createElement( "Brush");
+    d->brush->toXML(doc, ressourceElt);
+    elt.appendChild(ressourceElt);
+}
+
+KisLayerSP KisRecordedPaintAction::layer() const
+{
+    return d->layer;
+}
+KisBrush* KisRecordedPaintAction::brush() const
+{
+    return d->brush;
+}
+QString KisRecordedPaintAction::paintOpId() const
+{
+    return d->paintOpId;
+}
+
+//--- KisRecordedPolyLinePaintAction ---//
+
+struct KisRecordedPolyLinePaintAction::Private {
+    QList<KisPaintInformation> infos;
+};
+
+KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId)
+    : KisRecordedPaintAction(name, "PolyLinePaintAction", layer, brush, paintOpId), d(new Private)
+{
+}
+
+KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction& rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
+{
+    
+}
 
 KisRecordedPolyLinePaintAction::~KisRecordedPolyLinePaintAction()
 {
@@ -88,28 +120,23 @@ void KisRecordedPolyLinePaintAction::play(KisUndoAdapter* adapter) const
 {
     if(d->infos.size() < 0) return;
     KisTransaction * cmd = 0;
-    if (adapter) cmd = new KisTransaction("", d->layer->paintDevice());
-    KisPainter painter( d->layer->paintDevice());
-    painter.setBrush( d->brush );
-    painter.setPaintOp( KisPaintOpRegistry::instance()->paintOp( d->paintOpId, (KisPaintOpSettings*)0, &painter, d->layer->image() ) );
+    if (adapter) cmd = new KisTransaction("", layer()->paintDevice());
+    KisPainter painter( layer()->paintDevice());
+    painter.setBrush( brush() );
+    painter.setPaintOp( KisPaintOpRegistry::instance()->paintOp( paintOpId(), (KisPaintOpSettings*)0, &painter, layer()->image() ) );
     painter.paintAt(d->infos[0]);
     double savedDist = 0.0;
     for(int i = 0; i < d->infos.size() - 1; i++)
     {
         savedDist = painter.paintLine(d->infos[i],d->infos[i+1], savedDist);
     }
-    d->layer->setDirty( painter.dirtyRegion() );
+    layer()->setDirty( painter.dirtyRegion() );
     if (adapter) adapter->addCommand( cmd );
 }
 
 void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
     KisRecordedPaintAction::toXML(doc,elt);
-    elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));
-    elt.setAttribute("paintop", d->paintOpId);
-    QDomElement ressourceElt = doc.createElement( "Brush");
-    d->brush->toXML(doc, ressourceElt);
-    elt.appendChild(ressourceElt);
     QDomElement waypointsElt = doc.createElement( "Waypoints");
     foreach(KisPaintInformation info, d->infos)
     {

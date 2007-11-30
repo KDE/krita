@@ -27,7 +27,7 @@ class KisFilterConfiguration;
 class KisFilterManager;
 class KisLayer;
 class KisView2;
-
+class QRect;
 /**
  *
  */
@@ -47,6 +47,7 @@ public slots:
     void showDialog();
     void reapply();
     void apply(KisLayerSP, KisFilterConfiguration*);
+    void areaDone(const QRect & rc);
 
 private:
     struct Private;

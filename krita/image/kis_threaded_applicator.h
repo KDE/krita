@@ -47,17 +47,19 @@ public:
 
 
     virtual ~KisJob() {}
-
+    
     /**
      * Reimplement this method if you need something done whenever the
      * job is done.
      */
     virtual void jobDone() {}
+
+    QRect area() { return m_rc; }
 protected:
 
     KisPaintDeviceSP m_dev;
-    QRect m_rc;
-    int m_margin;
+    QRect m_rc; // the area we execute on without the margin
+    int m_margin; // we will execute on m_rc enlarged by the margin
 };
 
 /**
@@ -109,6 +111,10 @@ public:
 
      */
     void execute();
+
+signals:
+
+    void areaDone(const QRect & rc);
 
 private slots:
 

@@ -24,11 +24,11 @@
 class KisFilterJobTest : public QObject
 {
     Q_OBJECT
+
 private slots:
 
     void testCreation();
     void testInWeaver();
-
 };
 
 #endif

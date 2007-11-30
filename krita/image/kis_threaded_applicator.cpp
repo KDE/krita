@@ -21,6 +21,7 @@
 
 #include <QThread>
 #include <QRect>
+#include <QCoreApplication>
 
 #include <threadweaver/ThreadWeaver.h>
 
@@ -115,12 +116,18 @@ void KisThreadedApplicator::execute()
             col += m_d->tileSize;
         }
     }
-    m_d->weaver->finish();
+    while (!m_d->weaver->isIdle()) {
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    }
+    //m_d->weaver->finish();
 }
 
 void KisThreadedApplicator::jobDone( Job* job)
 {
+    QRect rc = static_cast<KisJob*>(job)->area();
     delete job;
+    emit areaDone( rc );
+    
 }
 
 #include "kis_threaded_applicator.moc"

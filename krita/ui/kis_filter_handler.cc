@@ -20,7 +20,7 @@
 #include "kis_filter_handler.h"
 
 #include <QApplication>
-
+#include <QRect>
 #include <kmessagebox.h>
 #include <kguiitem.h>
 
@@ -62,6 +62,7 @@ struct KisFilterHandler::Private {
     KisView2* view;
     KisFilterManager* manager;
     KisFilterConfiguration* lastConfiguration;
+    KisPaintDeviceSP dev;
 };
 
 KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view) 
@@ -121,9 +122,9 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     kDebug(41007) <<"Applying a filter";
     if( not layer ) return;
 
-    KisPaintDeviceSP dev = layer->paintDevice();
+    m_d->dev = layer->paintDevice();
 
-    QRect r1 = dev->extent();
+    QRect r1 = m_d->dev->extent();
     QRect r2 = layer->image()->bounds();
 
     // Filters should work only on the visible part of an image.
@@ -135,16 +136,20 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     }
 
     KisTransaction * cmd = 0;
-    if (layer->image()->undo()) cmd = new KisTransaction(m_d->filter->name(), dev);
+    if (layer->image()->undo()) cmd = new KisTransaction(m_d->filter->name(), m_d->dev);
+
+    
 
     if ( !m_d->filter->supportsThreading() ) {
-        m_d->filter->process(dev, rect, config);
+        m_d->filter->process(m_d->dev, rect, config);
+        areaDone(rect);
     }
     else {
         // Chop up in rects.
         KisFilterJobFactory factory( m_d->filter, config );
         KoProgressUpdater updater( m_d->view->statusBar()->progress() );
-        KisThreadedApplicator applicator(dev, rect, &factory, &updater, m_d->filter->overlapMarginNeeded( config ));
+        KisThreadedApplicator applicator(m_d->dev, rect, &factory, &updater, m_d->filter->overlapMarginNeeded( config ));
+        applicator.connect( &applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect &)));
         applicator.execute();
     }
 /*    if (m_d->filter->cancelRequested()) { // TODO: port to the progress display reporter
@@ -154,8 +159,6 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
             delete cmd;
         }
     } else */{
-        dev->setDirty(rect);
-        m_d->view->document()->setModified(true);
         if (cmd) m_d->view->document()->addCommand(cmd);
         if(m_d->filter->bookmarkManager())
         {
@@ -178,6 +181,10 @@ const KisFilterSP KisFilterHandler::filter() const
 {
     return m_d->filter;
 }
-
+void KisFilterHandler::areaDone(const QRect & rc)
+{
+    m_d->dev->setDirty(rc); // Starts computing the projection for the area we've done.
+    m_d->view->document()->setModified(true);
+}
 
 #include "kis_filter_handler.moc"

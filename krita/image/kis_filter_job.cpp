@@ -63,7 +63,6 @@ void KisFilterJob::run()
     p.bitBlt( m_rc.topLeft(), dst, m_rc );
     p.end();
     m_updater->setProgress(100);
-    kDebug() << "Done!\n";
 }
 
 KisFilterJobFactory::KisFilterJobFactory( const KisFilter* filter, const KisFilterConfiguration * config )

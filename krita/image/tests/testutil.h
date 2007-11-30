@@ -37,7 +37,10 @@ namespace TestUtil {
 struct TestProgressBar : public KoProgressProxy
 {
     int maximum() const { return 0; }
-    void setValue( int ) {}
+    void setValue( int value )
+        {
+            //qDebug() << "Progress (" << this << "): " << value ;
+        }
     void setRange( int, int) {}
     void setFormat( const QString & ) {}
 };

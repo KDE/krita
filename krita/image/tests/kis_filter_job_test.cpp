@@ -19,6 +19,8 @@
 
 #include <qtest_kde.h>
 
+#include <QMutex>
+
 #include "kis_filter_job_test.h"
 
 #include <KoProgressUpdater.h>
@@ -38,6 +40,9 @@
 
 void KisFilterJobTest::testCreation()
 {
+    QMutex m;
+    qDebug() << m.d;
+    
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT( f );
 
@@ -55,6 +60,7 @@ void KisFilterJobTest::testCreation()
     ThreadWeaver::Job * job = factory.createJob(0, dev, QRect(0, 0, 2000, 2000), f->overlapMarginNeeded(kfc), &up);
     Q_ASSERT(job);
 }
+
 
 void KisFilterJobTest::testInWeaver()
 {

@@ -29,8 +29,8 @@ class QRect;
 class KoUpdater;
 
 #include "kis_types.h"
-
-class KisFilterJob : public KisJob {
+#include "krita_export.h"
+class KRITAIMAGE_EXPORT KisFilterJob : public KisJob {
 public:
 
     KisFilterJob( const KisFilter* filter,

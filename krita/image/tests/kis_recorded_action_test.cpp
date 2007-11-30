@@ -32,7 +32,7 @@ public:
         {
         }
 
-    void play()
+    void play(KisUndoAdapter*) const
         {
         }
 

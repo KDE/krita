@@ -27,6 +27,8 @@
 #include "kis_filter_registry.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
+#include "kis_transaction.h"
+#include "kis_undo_adapter.h"
 
 struct KisRecordedFilterAction::Private {
     KisLayerSP layer;
@@ -53,14 +55,17 @@ KisRecordedFilterAction::~KisRecordedFilterAction()
 {
 }
 
-void KisRecordedFilterAction::play()
+void KisRecordedFilterAction::play(KisUndoAdapter* adapter) const
 {
+    
     KisFilterConfiguration * kfc = d->filter->defaultConfiguration(0);
     if(kfc)
     {
         kfc->fromXML(d->config);
     }
     KisPaintDeviceSP dev = d->layer->paintDevice();
+    KisTransaction * cmd = 0;
+    if (adapter) cmd = new KisTransaction(d->filter->name(), dev);
 
     QRect r1 = dev->extent();
     QRect r2 = d->layer->image()->bounds();
@@ -73,10 +78,11 @@ void KisRecordedFilterAction::play()
         rect = rect.intersect(r3);
     }
 
-    const_cast<KisFilter*>(d->filter)->process( dev, rect, kfc);
+    d->filter->process( dev, rect, kfc);
+    if (adapter) adapter->addCommand( cmd );
 }
 
-void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt)
+void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
     KisRecordedAction::toXML(doc,elt);
     elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));

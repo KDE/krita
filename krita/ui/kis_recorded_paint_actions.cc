@@ -28,6 +28,8 @@
 #include "kis_paintop_registry.h"
 #include "kis_recorded_action_factory_registry.h"
 #include "kis_resourceserver.h"
+#include "kis_transaction.h"
+#include "kis_undo_adapter.h"
 
 class KisRecordedPaintActionsFactory {
     public:
@@ -82,9 +84,11 @@ void KisRecordedPolyLinePaintAction::addPoint(const KisPaintInformation& info)
     d->infos.append(info);
 }
 
-void KisRecordedPolyLinePaintAction::play()
+void KisRecordedPolyLinePaintAction::play(KisUndoAdapter* adapter) const
 {
     if(d->infos.size() < 0) return;
+    KisTransaction * cmd = 0;
+    if (adapter) cmd = new KisTransaction("", d->layer->paintDevice());
     KisPainter painter( d->layer->paintDevice());
     painter.setBrush( d->brush );
     painter.setPaintOp( KisPaintOpRegistry::instance()->paintOp( d->paintOpId, (KisPaintOpSettings*)0, &painter, d->layer->image() ) );
@@ -95,9 +99,10 @@ void KisRecordedPolyLinePaintAction::play()
         savedDist = painter.paintLine(d->infos[i],d->infos[i+1]);
     }
     d->layer->setDirty( painter.dirtyRegion() );
+    if (adapter) adapter->addCommand( cmd );
 }
 
-void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt)
+void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
     KisRecordedPaintAction::toXML(doc,elt);
     elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));

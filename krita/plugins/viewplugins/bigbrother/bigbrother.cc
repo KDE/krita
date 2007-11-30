@@ -127,7 +127,7 @@ void BigBrotherPlugin::slotOpen()
                 // TODO error message
             }
         } else {
-            kDebug() << "Unexistant file";
+            kDebug() << "Unexistant file : " << filename;
         }
     }
 }

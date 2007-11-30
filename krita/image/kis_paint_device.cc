@@ -168,7 +168,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
 
 KisPaintDevice::~KisPaintDevice()
 {
-    delete m_d->colorSpace;
+//     delete m_d->colorSpace;
     delete m_d->paintEngine;
     delete m_d;
 }

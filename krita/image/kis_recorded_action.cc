@@ -57,7 +57,7 @@ QString KisRecordedAction::name() const
     return d->name;
 }
 
-void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt)
+void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt) const
 {
     elt.setAttribute( "name", name() );
     elt.setAttribute( "id", id() );

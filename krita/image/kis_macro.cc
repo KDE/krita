@@ -21,10 +21,12 @@
 #include <QDomNode>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_image.h"
 #include "kis_recorded_action.h"
 #include "kis_recorded_action_factory_registry.h"
+#include "kis_undo_adapter.h"
 
 struct KisMacro::Private {
     QList<KisRecordedAction*> actions;
@@ -57,10 +59,22 @@ void KisMacro::addAction(const KisRecordedAction& action)
 
 void KisMacro::play()
 {
+    KisUndoAdapter* undoAdapter = 0;
+    if(d->image->undo())
+    {
+        undoAdapter = d->image->undoAdapter();
+        undoAdapter->beginMacro(i18n("Play macro"));
+    }
+    
     for( QList<KisRecordedAction*>::iterator it = d->actions.begin();
          it != d->actions.end(); ++it)
     {
-        (*it)->play();
+        (*it)->play(undoAdapter);
+    }
+    
+    if(undoAdapter)
+    {
+        undoAdapter->endMacro();
     }
 }
 

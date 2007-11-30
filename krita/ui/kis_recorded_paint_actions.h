@@ -40,8 +40,8 @@ class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAct
         KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction&);
         ~KisRecordedPolyLinePaintAction();
         void addPoint(const KisPaintInformation& info);
-        virtual void play();
-        virtual void toXML(QDomDocument& doc, QDomElement& elt);
+        virtual void play(KisUndoAdapter* adapter = 0) const;
+        virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
         virtual KisRecordedAction* clone() const;
     private:
         struct Private;

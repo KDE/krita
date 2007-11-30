@@ -32,8 +32,8 @@ class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction {
         KisRecordedFilterAction(QString name, KisLayerSP layer, const KisFilter* filter, KisFilterConfiguration*);
         KisRecordedFilterAction(const KisRecordedFilterAction&);
         virtual ~KisRecordedFilterAction();
-        virtual void play();
-        virtual void toXML(QDomDocument& doc, QDomElement& elt);
+        virtual void play(KisUndoAdapter* adapter = 0) const;
+        virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
         virtual KisRecordedAction* clone() const;
     private:
         struct Private;

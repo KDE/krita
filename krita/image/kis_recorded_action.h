@@ -22,6 +22,7 @@
 class QDomDocument;
 class QDomElement;
 class QString;
+class KisUndoAdapter;
 
 #include <krita_export.h>
 #include <kis_types.h>
@@ -31,9 +32,9 @@ class KRITAIMAGE_EXPORT KisRecordedAction {
         KisRecordedAction(QString name, QString id);
         KisRecordedAction(const KisRecordedAction&);
         virtual ~KisRecordedAction();
-        virtual void play() = 0;
+        virtual void play(KisUndoAdapter* adapter = 0) const = 0;
         virtual KisRecordedAction* clone() const = 0;
-        virtual void toXML(QDomDocument& doc, QDomElement& elt);
+        virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
     public:
         QString id() const;
         QString name() const;

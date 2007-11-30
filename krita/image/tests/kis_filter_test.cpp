@@ -21,7 +21,13 @@
 
 #include "kis_filter_test.h"
 
+#include "kis_filter_mask.h"
+#include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
+#include "kis_selection.h"
+#include "kis_filter_processing_information.h"
 #include "kis_filter.h"
+#include "testutil.h"
 
 class TestFilter : public KisFilter 
 {
@@ -54,6 +60,32 @@ void KisFilterTest::testCreation()
     TestFilter test;
 }
 
+void KisFilterTest::testSingleThreaded()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-QTEST_KDEMAIN(KisFilterTest, GUI)
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs, "filter test");
+    dev->convertFromQImage(qimg, "", 0, 0);
+    
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+
+    KisFilterConstantProcessingInformation src( dev,  QPoint(0, 0), 0 );
+    KisFilterProcessingInformation dst( dev, QPoint(0, 0), 0 );
+    
+    f->process(src, dst, qimg.size(), kfc);
+
+    QPoint errpoint;
+    if ( !TestUtil::compareQImages( errpoint, inverted, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
+        QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+    }
+}
+
+QTEST_KDEMAIN(KisFilterTest, GUI);
 #include "kis_filter_test.moc"

@@ -27,7 +27,7 @@ class KisFilterTest : public QObject
 private slots:
 
     void testCreation();
-
+    void testSingleThreaded();
 };
 
 #endif

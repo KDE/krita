@@ -41,7 +41,7 @@
 void KisFilterJobTest::testCreation()
 {
     QMutex m;
-    qDebug() << m.d;
+    //qDebug() << m.d;
     
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT( f );

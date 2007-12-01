@@ -517,7 +517,7 @@ void DefaultTool::deleteSelection()
     // tz: TODO is StrippedSelection the right one?
     QList<KoShape *> shapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::StrippedSelection );
     if ( !shapes.empty() ) {
-        m_canvas->addCommand( new KoShapeDeleteCommand( m_canvas->shapeController()->shapeControllerBase(), shapes ) );
+        m_canvas->addCommand( m_canvas->shapeController()->removeShapes(shapes) );
     }
 }
 

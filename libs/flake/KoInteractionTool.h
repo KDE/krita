@@ -83,9 +83,6 @@ protected:
      */
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event) = 0;
 
-    /// checks recursively if the shape or one of its parents is not visible or locked
-    static bool shapeIsEditable( const KoShape * shape );
-
 private:
     KoInteractionTool(const KoInteractionTool&);
     KoInteractionTool& operator=(const KoInteractionTool&);

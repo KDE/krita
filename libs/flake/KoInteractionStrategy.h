@@ -97,10 +97,6 @@ protected:
      */
     QPointF snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers );
 
-    friend class KoInteractionTool;
-    /// checks recursively if the shape or one of its parents is not visible or locked
-    static bool isEditable( const KoShape * shape );
-
 protected: // members
     KoTool *m_parent; ///< the KoTool instance that controls this strategy.
     QList<KoShape*> m_selectedShapes; ///< the objects this strategy will act on.

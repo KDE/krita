@@ -297,7 +297,7 @@ void DefaultTool::updateCursor() {
     if(koSelection()->count() > 0) { // has a selection
         bool editable=false;
         foreach(KoShape *shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
-            if(!shape->isLocked())
+            if(editable || !shape->isEditable())
                 editable = true;
         }
 
@@ -767,7 +767,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
     KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
 
     foreach (KoShape* shape, select->selectedShapes()) {
-        if( shapeIsEditable( shape ) ) {
+        if( shape->isEditable() ) {
             editableShape = true;
             break;
         }

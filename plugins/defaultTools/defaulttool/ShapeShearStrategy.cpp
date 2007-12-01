@@ -44,7 +44,7 @@ ShapeShearStrategy::ShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, cons
     KoSelection * sel = canvas->shapeManager()->selection();
     QList<KoShape*> selectedShapes = sel->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if( ! isEditable( shape ) )
+        if( ! shape->isEditable() )
             continue;
         m_selectedShapes << shape;
         m_oldTransforms << shape->transformation();

@@ -37,7 +37,7 @@ ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
     Q_ASSERT( canvas->shapeManager()->selection()->count() > 0);
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if( ! isEditable( shape ) )
+        if( ! shape->isEditable() )
             continue;
         m_selectedShapes << shape;
         m_startPositions << shape->position();

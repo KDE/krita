@@ -115,8 +115,4 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event) {
     }
 }
 
-bool KoInteractionTool::shapeIsEditable( const KoShape * shape ) {
-    return KoInteractionStrategy::isEditable(shape);
-}
-
 #include "KoInteractionTool.moc"

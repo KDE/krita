@@ -39,7 +39,7 @@ ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, co
 {
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if( ! isEditable( shape ) )
+        if( ! shape->isEditable() )
             continue;
         m_selectedShapes << shape;
         if( m_selectedShapes.count() == 1 )

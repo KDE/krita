@@ -72,24 +72,3 @@ QPointF KoInteractionStrategy::snapToGrid( const QPointF &point, Qt::KeyboardMod
     return p;
 }
 
-// static
-bool KoInteractionStrategy::isEditable( const KoShape * shape ) {
-    Q_ASSERT(shape);
-
-    if( !shape || !shape->isVisible() || shape->isLocked() )
-        return false;
-
-    KoShapeContainer * parent = shape->parent();
-
-    if(parent && parent->isChildLocked(shape))
-        return false;
-
-    while( parent )
-    {
-        if( ! parent->isVisible() )
-            return false;
-        parent = parent->parent();
-    }
-
-    return true;
-}

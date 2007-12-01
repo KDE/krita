@@ -59,9 +59,19 @@ public:
      * @param parent the parent command if the resulting command is a compound undo command.
      * 
      * @return command which will insert the shape into the document or 0 if the 
-     *         insertion was canceled. The command is not yet executed.
+     *         insertion was cancelled. The command is not yet executed.
      */
     QUndoCommand* addShape( KoShape *shape, QUndoCommand *parent = 0 );
+
+    /**
+     * @brief Add a shape to the document, skipping any dialogs or other user interaction.
+     *
+     * @param shape to add to the document
+     * @param parent the parent command if the resulting command is a compound undo command.
+     *
+     * @return command which will insert the shape into the document. The command is not yet executed.
+     */
+    QUndoCommand* addShapeDirect( KoShape *shape, QUndoCommand *parent = 0 );
 
     /**
      * @brief Remove a shape from the document.
@@ -91,14 +101,6 @@ public:
      * @param shapeControllerBase the new shapeControllerBase
      */
     void setShapeControllerBase(KoShapeControllerBase* shapeControllerBase);
-
-    /**
-     * @brief Get the KoShapeControllerBase used to add/remove shapes
-     *
-     * @return shapeControllerBase which can be used for adding/remove shapes 
-     *         from the document.
-     */
-    KoShapeControllerBase * shapeControllerBase();
 
 private:
     class Private;

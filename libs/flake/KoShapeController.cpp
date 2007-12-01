@@ -41,6 +41,75 @@ public:
     Private() : canvas(0), shapeController(0) {}
     KoCanvasBase *canvas;
     KoShapeControllerBase *shapeController;
+
+    QUndoCommand* addShape( KoShape *shape, bool showDialog, QUndoCommand *parent) {
+        Q_ASSERT(canvas->shapeManager());
+
+        KoShapeFactory *factory = KoShapeRegistry::instance()->value( shape->shapeId() );
+        Q_ASSERT(factory);
+        int z=0;
+        foreach(KoShape *sh, canvas->shapeManager()->shapes())
+            z = qMax(z, sh->zIndex());
+        shape->setZIndex(z+1);
+
+        if (showDialog) {
+            // show config dialog.
+            KPageDialog *dialog = new KPageDialog(canvas->canvasWidget());
+            dialog->setCaption(i18n("%1 Options", factory->name()));
+
+            int pageCount = 0;
+            QList<KoShapeConfigFactory*> panels = factory->panelFactories();
+            qSort(panels.begin(), panels.end(), KoShapeConfigFactory::compare);
+            QList<KoShapeConfigWidgetBase*> widgets;
+            foreach (KoShapeConfigFactory *panelFactory, panels) {
+                if(! panelFactory->showForShapeId( shape->shapeId() ) )
+                    continue;
+                KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
+                if(widget == 0)
+                    continue;
+                if( ! widget->showOnShapeCreate() ) {
+                    delete widget;
+                    continue;
+                }
+                widgets.append(widget);
+                widget->setResourceProvider(canvas->resourceProvider());
+                widget->setUnit(canvas->unit());
+                dialog->addPage(widget, panelFactory->name());
+                pageCount ++;
+            }
+            foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
+                if( ! panel->showOnShapeCreate() )
+                    continue;
+                panel->open(shape);
+                widgets.append(panel);
+                panel->setResourceProvider(canvas->resourceProvider());
+                panel->setUnit(canvas->unit());
+                QString title = panel->windowTitle().isEmpty() ? panel->objectName() : panel->windowTitle();
+                dialog->addPage(panel, title);
+                pageCount ++;
+            }
+
+            if(pageCount > 0) {
+                if(pageCount > 1)
+                    dialog->setFaceType(KPageDialog::Tabbed);
+                if(dialog->exec() != KPageDialog::Accepted) {
+                    delete dialog;
+                    return 0;
+                }
+                foreach(KoShapeConfigWidgetBase *widget, widgets)
+                    widget->save();
+            }
+            delete dialog;
+        }
+
+        // set the active layer as parent if there is not yet a parent.
+        if ( !shape->parent() )
+        {
+            shape->setParent( canvas->shapeManager()->selection()->activeLayer() );
+        }
+
+        return new KoShapeCreateCommand( shapeController, shape, parent );
+    }
 };
 
 KoShapeController::KoShapeController( KoCanvasBase *canvas, KoShapeControllerBase *shapeController )
@@ -56,69 +125,12 @@ KoShapeController::~KoShapeController() {
 
 QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent )
 {
-    Q_ASSERT(d->canvas->shapeManager());
+    return d->addShape(shape, true, parent);
+}
 
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value( shape->shapeId() );
-    Q_ASSERT(factory);
-    int z=0;
-    foreach(KoShape *sh, d->canvas->shapeManager()->shapes())
-        z = qMax(z, sh->zIndex());
-    shape->setZIndex(z+1);
-
-    // show config dialog.
-    KPageDialog *dialog = new KPageDialog(d->canvas->canvasWidget());
-    dialog->setCaption(i18n("%1 Options", factory->name()));
-
-    int pageCount = 0;
-    QList<KoShapeConfigFactory*> panels = factory->panelFactories();
-    qSort(panels.begin(), panels.end(), KoShapeConfigFactory::compare);
-    QList<KoShapeConfigWidgetBase*> widgets;
-    foreach (KoShapeConfigFactory *panelFactory, panels) {
-        if(! panelFactory->showForShapeId( shape->shapeId() ) )
-            continue;
-        KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
-        if(widget == 0)
-            continue;
-        if( ! widget->showOnShapeCreate() ) {
-            delete widget;
-            continue;
-        }
-        widgets.append(widget);
-        widget->setResourceProvider(d->canvas->resourceProvider());
-        widget->setUnit(d->canvas->unit());
-        dialog->addPage(widget, panelFactory->name());
-        pageCount ++;
-    }
-    foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
-        if( ! panel->showOnShapeCreate() )
-            continue;
-        panel->open(shape);
-        widgets.append(panel);
-        panel->setResourceProvider(d->canvas->resourceProvider());
-        panel->setUnit(d->canvas->unit());
-        QString title = panel->windowTitle().isEmpty() ? panel->objectName() : panel->windowTitle();
-        dialog->addPage(panel, title);
-        pageCount ++;
-    }
-
-    if(pageCount > 0) {
-        if(pageCount > 1)
-            dialog->setFaceType(KPageDialog::Tabbed);
-        if(dialog->exec() != KPageDialog::Accepted) {
-            delete dialog;
-            return 0;
-        }
-        foreach(KoShapeConfigWidgetBase *widget, widgets)
-            widget->save();
-    }
-    delete dialog;
-    // set the active layer as parent if there is not yet a parent.
-    if ( !shape->parent() )
-    {
-        shape->setParent( d->canvas->shapeManager()->selection()->activeLayer() );
-    }
-
-    return new KoShapeCreateCommand( d->shapeController, shape, parent );
+QUndoCommand* KoShapeController::addShapeDirect( KoShape *shape, QUndoCommand *parent)
+{
+    return d->addShape(shape, false, parent);
 }
 
 QUndoCommand* KoShapeController::removeShape( KoShape *shape, QUndoCommand *parent  )
@@ -134,9 +146,4 @@ QUndoCommand* KoShapeController::removeShapes( const QList<KoShape*> &shapes, QU
 void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeControllerBase)
 {
     d->shapeController = shapeControllerBase;
-}
-
-KoShapeControllerBase * KoShapeController::shapeControllerBase()
-{
-    return d->shapeController;
 }

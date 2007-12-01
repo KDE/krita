@@ -79,7 +79,7 @@ bool KoShapePaste::process( const KoXmlElement & body, KoOdfReadStore & odfStore
             if ( ! shape->parent() ) {
                 shape->setParent( d->parent );
             }
-            new KoShapeCreateCommand( d->canvas->shapeController()->shapeControllerBase(), shape, cmd );
+            d->canvas->shapeController()->addShapeDirect(shape, cmd);
         }
     }
 

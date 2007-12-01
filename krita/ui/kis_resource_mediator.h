@@ -23,10 +23,9 @@
 #include <QWidget>
 
 class QTableWidgetItem;
-class KisItemChooser;
+class KoResourceItemChooser;
 class KoResourceItem;
 class KoResource;
-class KisResourceServerBase;
 
 /**
  * A resource mediator manages access to resources like
@@ -38,13 +37,13 @@ class KisResourceMediator : public QObject {
     Q_OBJECT
 
 public:
-    KisResourceMediator(KisItemChooser *chooser,
+    KisResourceMediator(KoResourceItemChooser *chooser,
                 QObject *parent = 0,
                 const char *name = 0);
     virtual ~KisResourceMediator();
 
 public:
-    void connectServer(KisResourceServerBase* rServer);
+    void addItems(const QList<KoResourceItem *>& items);
     KoResource *currentResource() const;
     KoResourceItem *itemFor(KoResource *r) const;
     KoResource *resourceFor(QTableWidgetItem *item) const;
@@ -58,11 +57,10 @@ public slots:
 signals:
     void activatedResource(KoResource *r);
 
-private slots:
-    void rServerAddedResource(KoResource *resource);
-
 private:
-    KisItemChooser *m_chooser;
+    void addResourceItem(KoResourceItem* item);
+
+    KoResourceItemChooser *m_chooser;
     QMap<KoResource*, KoResourceItem*> m_items;
     QTableWidgetItem *m_activeItem;
 };

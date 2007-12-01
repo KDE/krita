@@ -16,20 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QList>
+#include "kis_resource_mediator.h"
 
+#include <QList>
 #include <QTableWidgetItem>
-#include <KoResourceItemChooser.h>
 
 #include "kdebug.h"
 
-#include "kis_icon_item.h"
-#include "KoResource.h"
-#include "kis_itemchooser.h"
-#include "kis_resourceserver.h"
-#include "kis_resource_mediator.h"
+#include <KoResource.h>
+#include <KoResourceItemChooser.h>
 
-KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
+KisResourceMediator::KisResourceMediator(KoResourceItemChooser *chooser,
                      QObject *parent,
                      const char *name)
     : QObject(parent), m_chooser(chooser)
@@ -46,17 +43,10 @@ KisResourceMediator::~KisResourceMediator()
 {
 }
 
-void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
+void KisResourceMediator::addItems(const QList<KoResourceItem *>& items)
 {
-    // Add the initially loaded items
-    QList<KoResource*> resources = rServer->resources();
-
-    foreach (KoResource *resource, resources)
-        rServerAddedResource(resource);
-
-    // And connect to the server permanently, so that we may receive updates afterwards
-    connect(rServer, SIGNAL(resourceAdded(KoResource*)),
-            this, SLOT(rServerAddedResource(KoResource*)));
+    foreach (KoResourceItem *item, items)
+        addResourceItem(item);
 }
 
 KoResource *KisResourceMediator::currentResource() const
@@ -106,14 +96,11 @@ void KisResourceMediator::setActiveItem(QTableWidgetItem *item)
     }
 }
 
-void KisResourceMediator::rServerAddedResource(KoResource *resource)
+void KisResourceMediator::addResourceItem(KoResourceItem* item)
 {
-    if (resource && resource->valid()) {
+    if (item->resource() && item->resource()->valid()) {
 
-        KoResourceItem *item = new KoResourceItem(resource);
-        Q_CHECK_PTR(item);
-
-        m_items[resource] = item;
+        m_items[item->resource()] = item;
 
         m_chooser->addItem(item);
         if (m_activeItem == 0) setActiveItem(item);

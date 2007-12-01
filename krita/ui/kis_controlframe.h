@@ -40,7 +40,7 @@ class KisBrush;
 class KisBrushChooser;
 class KoSegmentGradient;
 class KisGradientChooser;
-class KisItemChooser;
+class KoResourceItemChooser;
 class KisResourceMediator;
 class KisPaintopBox;
 class KisView2;
@@ -99,7 +99,7 @@ private:
 
     KisAutobrush * m_autobrush;
     KisBrushChooser * m_brushChooser;
-    KisGradientChooser * m_gradientChooser;
+    KoResourceItemChooser * m_gradientChooser;
 
     KisPaintopBox * m_paintopBox;
 };

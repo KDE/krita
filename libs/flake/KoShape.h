@@ -614,6 +614,9 @@ public:
      */
     void deleteLater();
 
+    /// checks recursively if the shape or one of its parents is not visible or locked
+    bool isEditable() const;
+
 protected:
 
 /* ** loading saving helper methods */

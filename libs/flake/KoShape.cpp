@@ -622,6 +622,22 @@ void KoShape::deleteLater() {
     new ShapeDeleter(this);
 }
 
+bool KoShape::isEditable() const {
+    if( !d->visible || d->locked )
+        return false;
+
+    KoShapeContainer * p = parent();
+    if(p && p->isChildLocked(this))
+        return false;
+    while( p )
+    {
+        if( ! p->isVisible() )
+            return false;
+        p = p->parent();
+    }
+
+    return true;
+}
 
 // loading & saving methods
 void KoShape::saveOdfConnections(KoShapeSavingContext &context) const {

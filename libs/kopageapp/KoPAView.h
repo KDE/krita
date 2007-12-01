@@ -141,6 +141,9 @@ protected slots:
     /// Insert a new page after the current one
     void insertPage();
 
+    /// Copy Page
+    void copyPage();
+
     /// Delete the current page
     void deletePage();
 
@@ -163,6 +166,7 @@ private:
     KToggleAction *m_actionViewShowMasterPages;
 
     KAction * m_actionInsertPage;
+    KAction * m_actionCopyPage;
     KAction * m_actionDeletePage;
 
     KoRuler *m_horizontalRuler;

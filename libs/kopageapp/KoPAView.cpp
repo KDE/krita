@@ -54,6 +54,9 @@
 #include "commands/KoPAPageInsertCommand.h"
 #include "commands/KoPAPageDeleteCommand.h"
 
+#include "KoShapeOdfSaveHelper.h"
+#include "KoShapePaste.h"
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
@@ -189,6 +192,12 @@ void KoPAView::initActions()
     m_actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
     connect( m_actionInsertPage, SIGNAL( triggered() ), this, SLOT( insertPage() ) );
 
+    m_actionCopyPage = new KAction( i18n( "Copy Page" ), this );
+    actionCollection()->addAction( "edit_copypage", m_actionCopyPage );
+    m_actionCopyPage->setToolTip( i18n( "Copy the current page" ) );
+    m_actionCopyPage->setWhatsThis( i18n( "Copy the current page" ) );
+    connect( m_actionCopyPage, SIGNAL( triggered() ), this, SLOT( copyPage() ) );
+
     m_actionDeletePage = new KAction( i18n( "Delete Page" ), this );
     actionCollection()->addAction( "edit_deletepage", m_actionDeletePage );
     m_actionDeletePage->setToolTip( i18n( "Delete a new page after the current one" ) );
@@ -207,35 +216,32 @@ void KoPAView::viewSnapToGrid()
 
 void KoPAView::viewGrid()
 {
-
 }
 
 void KoPAView::editCut()
 {
+    m_canvas->toolProxy()->cut();
 }
 
 void KoPAView::editCopy()
 {
-    QList<KoPAPageBase *> pages;
-    pages.append( m_activePage );
-    KoPAOdfPageSaveHelper saveHelper( m_doc, pages );
-    KoDrag drag;
-    drag.setOdf( KoOdf::mimeType( m_doc->documentType() ), saveHelper );
-    //drag.setData( "text/plain", "Test" );
-    drag.addToClipboard();
+    m_canvas->toolProxy()->copy();
 }
 
 void KoPAView::editPaste()
 {
-    const QMimeData * data = QApplication::clipboard()->mimeData();
+    if ( !m_canvas->toolProxy()->paste() ) {
+        const QMimeData * data = QApplication::clipboard()->mimeData();
 
-    KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+        KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
 
-    for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
-    {
-        if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
-            KoPAPastePage paste( m_doc, m_activePage );
-            paste.paste( documentTypes[i], data );
+        for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
+        {
+            if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
+                KoPAPastePage paste( m_doc, m_activePage );
+                paste.paste( documentTypes[i], data );
+                break;
+            }
         }
     }
 }
@@ -396,6 +402,15 @@ void KoPAView::insertPage()
     m_canvas->addCommand( command );
 }
 
+void KoPAView::copyPage()
+{
+    QList<KoPAPageBase *> pages;
+    pages.append( m_activePage );
+    KoPAOdfPageSaveHelper saveHelper( m_doc, pages );
+    KoDrag drag;
+    drag.setOdf( KoOdf::mimeType( m_doc->documentType() ), saveHelper );
+    drag.addToClipboard();
+}
 
 void KoPAView::deletePage()
 {

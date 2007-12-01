@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -60,6 +60,16 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
     virtual void repaintDecorations();
+
+    ///reimplemented
+    virtual void copy() const;
+
+    ///reimplemented
+    virtual void deleteSelection();
+
+    ///reimplemented
+    virtual bool paste();
+
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
      * @return which selection handle is at params point (or NoHandle if none).

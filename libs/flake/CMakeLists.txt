@@ -77,6 +77,8 @@ set(flake_SRCS
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
     KoDragOdfSaveHelper.cpp
+    KoShapeOdfSaveHelper.cpp
+    KoShapePaste.cpp
     KoConnectionShape.cpp
     KoConnectionShapeFactory.cpp
     KoConnectionShapeConfigWidget.cpp

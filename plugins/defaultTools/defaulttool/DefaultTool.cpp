@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -30,15 +30,23 @@
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
 #include <KoSelection.h>
+#include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoShapeGroup.h>
+#include <KoShapeLayer.h>
+#include <KoShapePaste.h>
+#include <KoShapeOdfSaveHelper.h>
+#include <KoDrag.h>
+#include <KoDocument.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
+#include <commands/KoShapeDeleteCommand.h>
 
 #include <QAction>
 #include <QKeyEvent>
+#include <QClipboard>
 #include <kstandarddirs.h>
 
 #include <math.h>
@@ -491,6 +499,47 @@ void DefaultTool::repaintDecorations() {
     Q_ASSERT(koSelection());
     if ( koSelection()->count() > 0 )
         m_canvas->updateCanvas(handlesSize());
+}
+
+void DefaultTool::copy() const
+{
+    QList<KoShape *> shapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::StrippedSelection );
+    if ( !shapes.empty() ) {
+        KoShapeOdfSaveHelper saveHelper( shapes );
+        KoDrag drag;
+        drag.setOdf( KoOdf::mimeType( KoOdf::Text ), saveHelper );
+        drag.addToClipboard();
+    }
+}
+
+void DefaultTool::deleteSelection()
+{
+    // tz: TODO is StrippedSelection the right one?
+    QList<KoShape *> shapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::StrippedSelection );
+    if ( !shapes.empty() ) {
+        m_canvas->addCommand( new KoShapeDeleteCommand( m_canvas->shapeController()->shapeControllerBase(), shapes ) );
+    }
+}
+
+bool DefaultTool::paste()
+{
+    const QMimeData * data = QApplication::clipboard()->mimeData();
+
+    bool success = false;
+    if ( data->hasFormat( KoOdf::mimeType( KoOdf::Text ) ) ) {
+        KoShapeManager * shapeManager = m_canvas->shapeManager();
+        int zIndex = 0;
+        foreach ( KoShape *shape, shapeManager->shapes() )
+        {
+            zIndex = qMax( zIndex, shape->zIndex() );
+        }
+
+        // TODO it is not possible to get the doc
+        KoShapePaste paste( static_cast<KoDocument*>( 0 ), m_canvas,
+                            zIndex + 1, shapeManager->selection()->activeLayer() );
+        success = paste.paste( KoOdf::Text, data );
+    }
+    return success;
 }
 
 KoSelection *DefaultTool::koSelection() {

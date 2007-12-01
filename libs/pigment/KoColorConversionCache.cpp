@@ -21,6 +21,7 @@
 
 #include <QHash>
 #include <QList>
+#include <QMutex>
 
 #include <KoColorSpace.h>
 
@@ -58,6 +59,7 @@ struct KoColorConversionCache::CachedTransformation {
 
 struct KoColorConversionCache::Private {
     QMultiHash< KoColorConversionCacheKey, CachedTransformation*> cache;
+    QMutex cacheMutex;
 };
 
 
@@ -77,6 +79,7 @@ KoColorConversionCache::~KoColorConversionCache()
 
 KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent)
 {
+    QMutexLocker lock(&d->cacheMutex);
     KoColorConversionCacheKey key(src, dst, _renderingIntent);
     QList< CachedTransformation* > cachedTransfos = d->cache.values( key );
     if(cachedTransfos.size() != 0)
@@ -99,6 +102,7 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
 
 void KoColorConversionCache::colorSpaceIsDestroyed(const KoColorSpace* cs)
 {
+    QMutexLocker lock(&d->cacheMutex);
     QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator endIt = d->cache.end();
     for( QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator it = d->cache.begin(); it != endIt; )
     {

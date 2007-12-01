@@ -19,11 +19,15 @@
 */
 #include <QColor>
 
+#include <QDomDocument>
+
 #include "kdebug.h"
 #include "KoColor.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
+
+
 
 class KoColor::Private {
 public:
@@ -253,3 +257,12 @@ const KoColorSpace * KoColor::colorSpace() const {
     return d->colorSpace;
 }
 
+void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
+{
+    d->colorSpace->colorToXML( d->data, doc, colorElt);
+}
+
+KoColor KoColor::fromXML(const QDomElement& elt, QString bitDepthId, QHash<QString, QString> aliases)
+{
+    return KoColor();
+}

@@ -19,6 +19,8 @@
 
 #include "kis_xyz_u16_colorspace.h"
 
+#include <QDomElement>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -55,5 +57,24 @@ bool KisXyzU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 KoColorSpace* KisXyzU16ColorSpace::clone() const
 {
     return new KisXyzU16ColorSpace( profile()->clone());
+}
+
+void KisXyzU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+{
+    const XyzU16Traits::Pixel* p = reinterpret_cast<const XyzU16Traits::Pixel*>( pixel );
+    QDomElement labElt = doc.createElement( "XYZ" );
+    labElt.setAttribute("x", KoColorSpaceMaths< XyzU16Traits::channels_type, double>::scaleToA( p->X) );
+    labElt.setAttribute("y", KoColorSpaceMaths< XyzU16Traits::channels_type, double>::scaleToA( p->Y) );
+    labElt.setAttribute("z", KoColorSpaceMaths< XyzU16Traits::channels_type, double>::scaleToA( p->Z) );
+    labElt.setAttribute("space", profile()->name() );
+    colorElt.appendChild( labElt );
+}
+
+void KisXyzU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+{
+    XyzU16Traits::Pixel* p = reinterpret_cast<XyzU16Traits::Pixel*>( pixel );
+    p->X = KoColorSpaceMaths< double, XyzU16Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());
+    p->Y = KoColorSpaceMaths< double, XyzU16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
+    p->Z = KoColorSpaceMaths< double, XyzU16Traits::channels_type >::scaleToA(elt.attribute("z").toDouble());
 }
 

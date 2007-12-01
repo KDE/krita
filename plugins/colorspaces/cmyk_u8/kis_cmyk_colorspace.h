@@ -24,7 +24,7 @@
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
 
-typedef KoColorSpaceTrait<quint8, 5, 4> CmykU8Traits;
+typedef KoCmykTraits<quint8> CmykU8Traits;
 
 class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
 {
@@ -34,6 +34,8 @@ class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
         virtual KoID colorModelId() const { return CMYKAColorModelID; }
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
         virtual KoColorSpace* clone() const;
+        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt);
 };
 
 class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory

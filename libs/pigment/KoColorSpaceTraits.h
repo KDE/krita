@@ -108,7 +108,7 @@ struct KoColorSpaceTrait {
  */
 template<typename _channels_type_>
 struct KoLabTraits : public KoColorSpaceTrait<quint16, 4,3> {
-    typedef _channels_type_ channels_type; // /me wonders why gcc refuses to build without that line ?, which is pretty annoying as it's less clean
+    typedef _channels_type_ channels_type;
     static const qint32 L_pos = 0;
     static const qint32 a_pos = 1;
     static const qint32 b_pos = 2;
@@ -170,7 +170,7 @@ struct KoLabU16Traits : public KoLabTraits<quint16> {
  */
 template<typename _channels_type_>
 struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
-    typedef _channels_type_ channels_type; // /me wonders why gcc refuses to build without that line ?, which is pretty annoying as it's less clean
+    typedef _channels_type_ channels_type;
     typedef KoColorSpaceTrait<_channels_type_, 4,3> parent;
     static const qint32 red_pos = 2;
     static const qint32 green_pos = 1;
@@ -227,15 +227,15 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
 struct KoRgbU16Traits : public KoRgbTraits<quint16> {
 };
 
-/** Base class for rgb traits, it provides some convenient functions to
+/** Base class for XYZ traits, it provides some convenient functions to
  * access XYZ channels through an explicit API.
  */
 template<typename _channels_type_>
 struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
-    typedef _channels_type_ channels_type; // /me wonders why gcc refuses to build without that line ?, which is pretty annoying as it's less clean
-    static const qint32 x_pos = 2;
+    typedef _channels_type_ channels_type;
+    static const qint32 x_pos = 0;
     static const qint32 y_pos = 1;
-    static const qint32 z_pos = 0;
+    static const qint32 z_pos = 2;
 
     /**
      * An RGB pixel
@@ -247,6 +247,31 @@ struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
         channels_type alpha;
     };
 };
+
+/** Base class for CMYK traits, it provides some convenient functions to
+ * access CMYK channels through an explicit API.
+ */
+template<typename _channels_type_>
+struct KoCmykTraits : public KoColorSpaceTrait<_channels_type_, 5,4> {
+    typedef _channels_type_ channels_type;
+    static const qint32 c_pos = 2;
+    static const qint32 m_pos = 1;
+    static const qint32 y_pos = 0;
+    static const qint32 k_pos = 0;
+
+    /**
+     * An RGB pixel
+     */
+    struct Pixel {
+        channels_type cyan;
+        channels_type magenta;
+        channels_type yellow;
+        channels_type black;
+        channels_type alpha;
+    };
+};
+
+
 
 
 #endif

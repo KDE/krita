@@ -19,6 +19,7 @@
 
 #include "kis_cmyk_u16_colorspace.h"
 
+#include <QDomElement>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -56,5 +57,26 @@ bool KisCmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) cons
 KoColorSpace* KisCmykU16ColorSpace::clone() const
 {
     return new KisCmykU16ColorSpace( profile()->clone());
+}
+
+void KisCmykU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+{
+    const CmykU16Traits::Pixel* p = reinterpret_cast<const CmykU16Traits::Pixel*>( pixel );
+    QDomElement labElt = doc.createElement( "CMYK" );
+    labElt.setAttribute("c", KoColorSpaceMaths< CmykU16Traits::channels_type, double>::scaleToA( p->cyan) );
+    labElt.setAttribute("m", KoColorSpaceMaths< CmykU16Traits::channels_type, double>::scaleToA( p->magenta) );
+    labElt.setAttribute("y", KoColorSpaceMaths< CmykU16Traits::channels_type, double>::scaleToA( p->yellow) );
+    labElt.setAttribute("k", KoColorSpaceMaths< CmykU16Traits::channels_type, double>::scaleToA( p->black) );
+    labElt.setAttribute("space", profile()->name() );
+    colorElt.appendChild( labElt );
+}
+
+void KisCmykU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+{
+    CmykU16Traits::Pixel* p = reinterpret_cast<CmykU16Traits::Pixel*>( pixel );
+    p->cyan = KoColorSpaceMaths< double, CmykU16Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());
+    p->magenta = KoColorSpaceMaths< double, CmykU16Traits::channels_type >::scaleToA(elt.attribute("m").toDouble());
+    p->yellow = KoColorSpaceMaths< double, CmykU16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
+    p->black = KoColorSpaceMaths< double, CmykU16Traits::channels_type >::scaleToA(elt.attribute("k").toDouble());
 }
 

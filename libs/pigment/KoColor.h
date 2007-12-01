@@ -24,6 +24,9 @@
 #include <QMetaType>
 #include <pigment_export.h>
 
+class QDomDocument;
+class QDomElement;
+
 class KoColorProfile;
 class KoColorSpace;
 
@@ -114,6 +117,35 @@ public:
      */
     const quint8 * data() const;
 
+    /**
+     * Serialize this color following Create's swatch color specification available
+     * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
+     * 
+     * This function doesn't create the <color /> element but rather the <CMYK />,
+     * <sRGB />, <RGB /> ... elements. It is assumed that colorElt is the <color />
+     * element.
+     * 
+     * @param colorElt root element for the serialization, it is assumed that this
+     *                 element is <color />
+     * @param doc is the document containing colorElt
+     */
+    void toXML(QDomDocument& doc, QDomElement& colorElt) const;
+    /**
+     * Unserialize a color following Create's swatch color specification available
+     * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
+     * 
+     * @param elt the element to unserialize (<CMYK />, <sRGB />, <RGB />)
+     * @param bitDepthId the bit depth is unspecified by the spec, this allow to select
+     *                   a preferred bit depth for creating the KoColor object (if that
+     *                   bit depth isn't available, this function will randomly select
+     *                   an other bit depth)
+     * @param profileAliases alias between the profile name specified by the "space"
+     *                       attribute and the profile name used inside pigment
+     * @return the unserialize color, or an empty color object if the function failed
+     *         to unserialize the color
+     */
+    static KoColor fromXML(const QDomElement& elt, QString bitDepthId, QHash<QString, QString> aliases);
+    
 #ifndef NODEBUG
     /// use kDebug calls to print internal info
     void dump() const;

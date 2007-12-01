@@ -146,6 +146,14 @@ public:
     {
         kDebug() <<"Undefined operation in the alpha colorspace";
     }
+    virtual void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const
+    {
+        kDebug() <<"Undefined operation in the alpha colorspace";
+    }
+    virtual void colorFromXML( quint8* , const QDomElement& )
+    {
+        kDebug() <<"Undefined operation in the alpha colorspace";
+    }
 
 public:
 

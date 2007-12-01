@@ -19,6 +19,8 @@
 
 #include "KoLabColorSpace.h"
 
+#include <QDomElement>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -84,3 +86,21 @@ QString KoLabColorSpace::colorSpaceId()
     return QString("LABA");
 }
 
+void KoLabColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+{
+    const KoLabU16Traits::Pixel* p = reinterpret_cast<const KoLabU16Traits::Pixel*>( pixel );
+    QDomElement labElt = doc.createElement( "Lab" );
+    labElt.setAttribute("L", KoColorSpaceMaths< KoLabU16Traits::channels_type, double>::scaleToA( p->L) );
+    labElt.setAttribute("a", KoColorSpaceMaths< KoLabU16Traits::channels_type, double>::scaleToA( p->a) );
+    labElt.setAttribute("b", KoColorSpaceMaths< KoLabU16Traits::channels_type, double>::scaleToA( p->b) );
+    labElt.setAttribute("space", profile()->name() );
+    colorElt.appendChild( labElt );
+}
+
+void KoLabColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+{
+    KoLabU16Traits::Pixel* p = reinterpret_cast<KoLabU16Traits::Pixel*>( pixel );
+    p->L = KoColorSpaceMaths< double, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());
+    p->a = KoColorSpaceMaths< double, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("a").toDouble());
+    p->b = KoColorSpaceMaths< double, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+}

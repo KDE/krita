@@ -96,6 +96,8 @@ private: // This is a singleton
     KisPainterlyOverlayColorSpace operator=(const KisPainterlyOverlayColorSpace&);
 
 public:
+    void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const{}
+    void colorFromXML( quint8* , const QDomElement& ){}
 
     bool willDegrade(ColorSpaceIndependence independence) const
         {

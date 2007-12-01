@@ -26,7 +26,7 @@
 #include <pigment_cmyk_u16_export.h>
 #include "KoColorModelStandardIds.h"
 
-typedef KoColorSpaceTrait<quint16, 5, 4> CmykU16Traits;
+typedef KoCmykTraits<quint16> CmykU16Traits;
 
 class KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
 {
@@ -36,6 +36,8 @@ class KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
         virtual KoID colorModelId() const { return CMYKAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual KoColorSpace* clone() const;
+        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt);
 };
 
 class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory

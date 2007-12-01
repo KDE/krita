@@ -17,6 +17,8 @@
 #ifndef _KIS_YCBCR_BASE_COLORSPACE_H_
 #define _KIS_YCBCR_BASE_COLORSPACE_H_
 
+#include <QDomElement>
+
 #include "klocale.h"
 #include <KoIncompleteColorSpace.h>
 #include <KoColorSpaceTraits.h>
@@ -83,6 +85,25 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
                 NATIVE_TO_UINT8(_CSTraits::computeBlue( src->Y, src->Cb, src->Cr) ) );
             *opacity = NATIVE_TO_UINT8(src->alpha);
         }
+        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+        {
+            const typename _CSTraits::Pixel* p = reinterpret_cast<const typename _CSTraits::Pixel*>( pixel );
+            QDomElement labElt = doc.createElement( "YCbCr" );
+            labElt.setAttribute("Y", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->Y) );
+            labElt.setAttribute("Cb", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->Cb) );
+            labElt.setAttribute("Cr", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->Cr) );
+            labElt.setAttribute("space", "ycbcr" );
+            colorElt.appendChild( labElt );
+        }
+        
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt)
+        {
+            typename _CSTraits::Pixel* p = reinterpret_cast<typename _CSTraits::Pixel*>( pixel );
+            p->Y = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("Y").toDouble());
+            p->Cb = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("Cb").toDouble());
+            p->Cr = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("Cr").toDouble());
+        }
+
     private:
 };
 

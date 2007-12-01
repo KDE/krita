@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QDomElement>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -43,3 +45,20 @@ KoColorSpace* KisGrayU16ColorSpace::clone() const
 {
     return new KisGrayU16ColorSpace(profile()->clone());
 }
+
+
+void KisGrayU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+{
+    const GrayU16Traits::channels_type* p = reinterpret_cast<const GrayU16Traits::channels_type*>( pixel );
+    QDomElement labElt = doc.createElement( "Gray" );
+    labElt.setAttribute("g", KoColorSpaceMaths< GrayU16Traits::channels_type, double>::scaleToA( p[0]) );
+    labElt.setAttribute("space", profile()->name() );
+    colorElt.appendChild( labElt );
+}
+
+void KisGrayU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+{
+    GrayU16Traits::channels_type* p = reinterpret_cast<GrayU16Traits::channels_type*>( pixel );
+    p[0] = KoColorSpaceMaths< double, GrayU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+}
+

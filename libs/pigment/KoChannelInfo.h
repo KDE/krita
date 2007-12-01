@@ -44,6 +44,7 @@ public:
         UINT32, ///< use this for an unsigned integer 21bits channel
         FLOAT16, ///< use this for a float 16bits channel
         FLOAT32, ///< use this for a float 32bits channel
+        FLOAT64, ///< use this for a float 64bits channel
         INT8, ///< use this for an integer 8bits channel
         INT16, ///< use this for an integer 16bits channel
         OTHER ///< Use this if the channel is neither an integer or a float

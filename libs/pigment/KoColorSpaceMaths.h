@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.bet
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.bet
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -130,6 +130,19 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<float> {
         static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
+template<>
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<double> {
+    public:
+        typedef double compositetype;
+        static const double zeroValue;
+        static const double unitValue;
+        static const double max;
+        static const double min;
+        static const double epsilon;
+        static const qint8 bits = 64;
+        static const KoChannelInfo::enumChannelValueType channelValueType;
+};
+
 /**
  * This class defines some elementary operations used by various color
  * space. It's intended to be generic, but some specialization exists
@@ -179,18 +192,44 @@ class KoColorSpaceMaths {
 };
 
 //------------------------------ double specialization ------------------------------//
-
 template<>
-inline quint8 KoColorSpaceMaths<float,quint8>::scaleToA(float a)
+inline quint8 KoColorSpaceMaths<double,quint8>::scaleToA(double a)
 {
-    float v = a * 255;
+    double v = a * 255;
     return (quint8)(CLAMP(v, 0, 255));
 }
 
 template<>
-inline float KoColorSpaceMaths<quint8,float>::scaleToA(quint8 a)
+inline double KoColorSpaceMaths<quint8,double>::scaleToA(quint8 a)
 {
     return a * ( 1.0 / 255.0 );
+}
+
+template<>
+inline quint16 KoColorSpaceMaths<double, quint16>::scaleToA(double a)
+{
+    double v = a * 0xFFFF;
+    return (quint16)(CLAMP(v, 0, 0xFFFF));
+}
+
+template<>
+inline double KoColorSpaceMaths<quint16, double>::scaleToA(quint16 a)
+{
+    return a * ( 1.0 / 0xFFFF );
+}
+
+//------------------------------ half specialization ------------------------------//
+
+template<>
+inline float KoColorSpaceMaths<double, float>::scaleToA(double a)
+{
+    return (float)a;
+}
+
+template<>
+inline double KoColorSpaceMaths<float, double>::scaleToA(float a)
+{
+    return a;
 }
 
 template<>
@@ -207,6 +246,19 @@ inline float KoColorSpaceMaths<quint16,float>::scaleToA(quint16 a)
 }
 
 template<>
+inline quint8 KoColorSpaceMaths<float,quint8>::scaleToA(float a)
+{
+    float v = a * 255;
+    return (quint8)(CLAMP(v, 0, 255));
+}
+
+template<>
+inline float KoColorSpaceMaths<quint8,float>::scaleToA(quint8 a)
+{
+    return a * ( 1.0 / 255.0 );
+}
+
+template<>
 inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 {
     return ( a - b) * alpha + b;
@@ -215,6 +267,18 @@ inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 //------------------------------ half specialization ------------------------------//
 
 #ifdef HAVE_OPENEXR
+
+template<>
+inline half KoColorSpaceMaths<double, half>::scaleToA(double a)
+{
+    return (half)a;
+}
+
+template<>
+inline double KoColorSpaceMaths<half, double>::scaleToA(half a)
+{
+    return a;
+}
 
 template<>
 inline float KoColorSpaceMaths<half,float>::scaleToA(half a)

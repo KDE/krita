@@ -19,6 +19,8 @@
 #ifndef KIS_RGB_FLOAT_HDR_COLORSPACE_H_
 #define KIS_RGB_FLOAT_HDR_COLORSPACE_H_
 
+#include <QDomElement>
+
 #include <klocale.h>
 #include <math.h>
 
@@ -230,6 +232,27 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
                 src += this->pixelSize();
             }
         }
+        
+        void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+        {
+            const typename _CSTraits::Pixel* p = reinterpret_cast<const typename _CSTraits::Pixel*>( pixel );
+            QDomElement labElt = doc.createElement( "RGB" );
+            labElt.setAttribute("r", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->red) );
+            labElt.setAttribute("g", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->green) );
+            labElt.setAttribute("b", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->blue) );
+            labElt.setAttribute("space", profile()->name() );
+            colorElt.appendChild( labElt );
+        }
+        
+        void colorFromXML( quint8* pixel, const QDomElement& elt)
+        {
+            typename _CSTraits::Pixel* p = reinterpret_cast<typename _CSTraits::Pixel*>( pixel );
+            p->red = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("r").toDouble());
+            p->green = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+            p->blue = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+        }
+
+
     private:
         struct Pixel {
             typename _CSTraits::channels_type blue;

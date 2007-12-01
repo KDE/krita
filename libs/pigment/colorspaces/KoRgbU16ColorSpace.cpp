@@ -19,6 +19,8 @@
 
 #include "KoRgbU16ColorSpace.h"
 
+#include <QDomElement>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -52,5 +54,24 @@ QString KoRgbU16ColorSpace::colorSpaceId()
 KoColorSpace* KoRgbU16ColorSpace::clone() const
 {
     return new KoRgbU16ColorSpace( profile()->clone());
+}
+
+void KoRgbU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+{
+    const KoRgbU16Traits::Pixel* p = reinterpret_cast<const KoRgbU16Traits::Pixel*>( pixel );
+    QDomElement labElt = doc.createElement( "RGB" );
+    labElt.setAttribute("r", KoColorSpaceMaths< KoRgbU16Traits::channels_type, double>::scaleToA( p->red) );
+    labElt.setAttribute("g", KoColorSpaceMaths< KoRgbU16Traits::channels_type, double>::scaleToA( p->green) );
+    labElt.setAttribute("b", KoColorSpaceMaths< KoRgbU16Traits::channels_type, double>::scaleToA( p->blue) );
+    labElt.setAttribute("space", profile()->name() );
+    colorElt.appendChild( labElt );
+}
+
+void KoRgbU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+{
+    KoRgbU16Traits::Pixel* p = reinterpret_cast<KoRgbU16Traits::Pixel*>( pixel );
+    p->red = KoColorSpaceMaths< double, KoRgbU16Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
+    p->green = KoColorSpaceMaths< double, KoRgbU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p->blue = KoColorSpaceMaths< double, KoRgbU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
 }
 

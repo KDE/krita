@@ -20,6 +20,8 @@
 #ifndef _KIS_XYZ_HDR_COLORSPACE_H_
 #define _KIS_XYZ_HDR_COLORSPACE_H_
 
+#include <QDomElement>
+
 #include <math.h>
 
 #include "KoIncompleteColorSpace.h"
@@ -74,6 +76,24 @@ class KisXyzFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             addCompositeOp( new KoCompositeOpOver<_CSTraits>( this ) );
             addCompositeOp( new KoCompositeOpErase<_CSTraits>( this ) );
 
+        }
+        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+        {
+            const typename _CSTraits::Pixel* p = reinterpret_cast<const typename _CSTraits::Pixel*>( pixel );
+            QDomElement labElt = doc.createElement( "XYZ" );
+            labElt.setAttribute("x", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->X) );
+            labElt.setAttribute("y", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->Y) );
+            labElt.setAttribute("z", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->Z) );
+            labElt.setAttribute("space", "xyz" );
+            colorElt.appendChild( labElt );
+        }
+        
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt)
+        {
+            typename _CSTraits::Pixel* p = reinterpret_cast<typename _CSTraits::Pixel*>( pixel );
+            p->X = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("x").toDouble());
+            p->Y = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("y").toDouble());
+            p->Z = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("z").toDouble());
         }
     public:
         virtual bool profileIsCompatible(const KoColorProfile* profile) const

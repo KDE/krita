@@ -17,8 +17,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QImage>
 #include <QColor>
+#include <QDomElement>
+#include <QImage>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -100,4 +101,24 @@ KoColorSpace* KoRgbU8ColorSpace::clone() const
 {
     return new KoRgbU8ColorSpace( profile()->clone());
 }
+
+void KoRgbU8ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+{
+    const RgbU8Traits::Pixel* p = reinterpret_cast<const RgbU8Traits::Pixel*>( pixel );
+    QDomElement labElt = doc.createElement( "RGB" );
+    labElt.setAttribute("r", KoColorSpaceMaths< RgbU8Traits::channels_type, double>::scaleToA( p->red) );
+    labElt.setAttribute("g", KoColorSpaceMaths< RgbU8Traits::channels_type, double>::scaleToA( p->green) );
+    labElt.setAttribute("b", KoColorSpaceMaths< RgbU8Traits::channels_type, double>::scaleToA( p->blue) );
+    labElt.setAttribute("space", profile()->name() );
+    colorElt.appendChild( labElt );
+}
+
+void KoRgbU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+{
+    RgbU8Traits::Pixel* p = reinterpret_cast<RgbU8Traits::Pixel*>( pixel );
+    p->red = KoColorSpaceMaths< double, RgbU8Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
+    p->green = KoColorSpaceMaths< double, RgbU8Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p->blue = KoColorSpaceMaths< double, RgbU8Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+}
+
 

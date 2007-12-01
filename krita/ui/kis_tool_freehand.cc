@@ -156,10 +156,14 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
             newTangent *= m_smoothness / norm( newTangent ) ;
             double normVec = 0.5 * norm(dragVec);
+            QPointF control1 = m_previousPaintInformation.pos() + m_previousTangent * normVec;
+            QPointF control2 = info.pos() - newTangent * normVec;
+            
             paintBezierCurve(m_previousPaintInformation,
-                             m_previousPaintInformation.pos() + m_previousTangent * normVec,
-                             info.pos() - newTangent * normVec,
+                             control1,
+                             control2,
                              info);
+            m_bezierCurvePaintAction->addPoint(m_previousPaintInformation, control1, control2, info);
             m_previousTangent = newTangent;
             m_previousDrag = dragVec;
         } else {
@@ -266,6 +270,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 */
     if(m_smooth)
     {
+        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(i18n("Freehand tool"),  currentLayer(), currentBrush(), currentPaintOp() );
     } else {
         m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"), currentLayer(), currentBrush(), currentPaintOp() );
     }
@@ -326,6 +331,9 @@ void KisToolFreehand::endPaint()
     }
     if(m_smooth)
     {
+        if (currentLayer()->image())
+            currentLayer()->image()->actionRecorder()->addAction(*m_bezierCurvePaintAction);
+        m_bezierCurvePaintAction = 0;
     } else {
         if (currentLayer()->image())
             currentLayer()->image()->actionRecorder()->addAction(*m_polyLinePaintAction);

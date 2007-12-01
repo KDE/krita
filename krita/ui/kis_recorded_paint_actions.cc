@@ -31,11 +31,35 @@
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 
+class KisRecordedPaintActionFactory : public KisRecordedActionFactory {
+    public:
+        KisRecordedPaintActionFactory(QString id) : KisRecordedActionFactory(id) {}
+        virtual ~KisRecordedPaintActionFactory(){}
+    protected:
+        KisBrush* brushFromXML(const QDomElement& elt);
+};
+
+class KisRecordedPolyLinePaintActionFactory : public KisRecordedPaintActionFactory {
+    public:
+        KisRecordedPolyLinePaintActionFactory();
+        virtual ~KisRecordedPolyLinePaintActionFactory();
+        virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
+};
+
+class KisRecordedBezierCurvePaintActionFactory : public KisRecordedPaintActionFactory {
+    public:
+        KisRecordedBezierCurvePaintActionFactory();
+        virtual ~KisRecordedBezierCurvePaintActionFactory();
+        virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
+};
+
+
 class KisRecordedPaintActionsFactory {
     public:
         KisRecordedPaintActionsFactory()
         {
             KisRecordedActionFactoryRegistry::instance()->add(new KisRecordedPolyLinePaintActionFactory);
+            KisRecordedActionFactoryRegistry::instance()->add(new KisRecordedBezierCurvePaintActionFactory);
         }
 
 };
@@ -90,6 +114,38 @@ QString KisRecordedPaintAction::paintOpId() const
     return d->paintOpId;
 }
 
+void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
+{
+    KisTransaction * cmd = 0;
+    if (adapter) cmd = new KisTransaction("", layer()->paintDevice());
+    KisPainter painter( layer()->paintDevice());
+    painter.setBrush( brush() );
+    painter.setPaintOp( KisPaintOpRegistry::instance()->paintOp( paintOpId(), (KisPaintOpSettings*)0, &painter, layer()->image() ) );
+    
+    playPaint(&painter);
+    
+    layer()->setDirty( painter.dirtyRegion() );
+    if (adapter) adapter->addCommand( cmd );
+}
+
+
+KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
+{
+    // TODO: support for autobrush
+    QString name = elt.attribute("name","");
+    kDebug() << "Looking for brush " << name;
+    QList<KoResource*> resources = KisResourceServerRegistry::instance()->get("BrushServer")->resources();
+    foreach(KoResource* r, resources)
+    {
+        if(r->name() == name)
+        {
+            return static_cast<KisBrush*>(r);
+        }
+    }
+    kDebug() << "Brush " << name << " not found.";
+    return 0;
+}
+
 //--- KisRecordedPolyLinePaintAction ---//
 
 struct KisRecordedPolyLinePaintAction::Private {
@@ -116,22 +172,15 @@ void KisRecordedPolyLinePaintAction::addPoint(const KisPaintInformation& info)
     d->infos.append(info);
 }
 
-void KisRecordedPolyLinePaintAction::play(KisUndoAdapter* adapter) const
+void KisRecordedPolyLinePaintAction::playPaint(KisPainter* painter) const
 {
     if(d->infos.size() < 0) return;
-    KisTransaction * cmd = 0;
-    if (adapter) cmd = new KisTransaction("", layer()->paintDevice());
-    KisPainter painter( layer()->paintDevice());
-    painter.setBrush( brush() );
-    painter.setPaintOp( KisPaintOpRegistry::instance()->paintOp( paintOpId(), (KisPaintOpSettings*)0, &painter, layer()->image() ) );
-    painter.paintAt(d->infos[0]);
+    painter->paintAt(d->infos[0]);
     double savedDist = 0.0;
     for(int i = 0; i < d->infos.size() - 1; i++)
     {
-        savedDist = painter.paintLine(d->infos[i],d->infos[i+1], savedDist);
+        savedDist = painter->paintLine(d->infos[i],d->infos[i+1], savedDist);
     }
-    layer()->setDirty( painter.dirtyRegion() );
-    if (adapter) adapter->addCommand( cmd );
 }
 
 void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
@@ -153,7 +202,7 @@ KisRecordedAction* KisRecordedPolyLinePaintAction::clone() const
 }
 
 KisRecordedPolyLinePaintActionFactory::KisRecordedPolyLinePaintActionFactory() :
-        KisRecordedActionFactory("PolyLinePaintAction")
+        KisRecordedPaintActionFactory("PolyLinePaintAction")
 {
 }
 KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
@@ -197,19 +246,140 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     return rplpa;
 }
 
-KisBrush* KisRecordedPolyLinePaintActionFactory::brushFromXML(const QDomElement& elt)
-{
-    // TODO: support for autobrush
-    QString name = elt.attribute("name","");
-    kDebug() << "Looking for brush " << name;
-    QList<KoResource*> resources = KisResourceServerRegistry::instance()->get("BrushServer")->resources();
-    foreach(KoResource* r, resources)
+//--- KisRecordedBezierCurvePaintAction ---//
+
+struct KisRecordedBezierCurvePaintAction::Private {
+    struct BezierCurveSlice
     {
-        if(r->name() == name)
-        {
-            return static_cast<KisBrush*>(r);
-        }
-    }
-    kDebug() << "Brush " << name << " not found.";
-    return 0;
+        KisPaintInformation point1;
+        QPointF control1;
+        QPointF control2;
+        KisPaintInformation point2;
+    };
+    QList<BezierCurveSlice> infos;
+};
+
+KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId)
+    : KisRecordedPaintAction(name, "BezierCurvePaintAction", layer, brush, paintOpId), d(new Private)
+{
 }
+
+KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction& rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
+{
+    
+}
+
+KisRecordedBezierCurvePaintAction::~KisRecordedBezierCurvePaintAction()
+{
+    delete d;
+}
+
+void KisRecordedBezierCurvePaintAction::addPoint(const KisPaintInformation& point1, const QPointF& control1, const QPointF& control2, const KisPaintInformation& point2)
+{
+    Private::BezierCurveSlice slice;
+    slice.point1 = point1;
+    slice.control1 = control1;
+    slice.control2 = control2;
+    slice.point2 = point2;
+    d->infos.append(slice);
+}
+
+void KisRecordedBezierCurvePaintAction::playPaint(KisPainter* painter) const
+{
+    if(d->infos.size() < 0) return;
+    double savedDist = 0.0;
+    for(int i = 0; i < d->infos.size() - 1; i++)
+    {
+        savedDist = painter->paintBezierCurve( d->infos[i].point1, d->infos[i].control1, d->infos[i].control2, d->infos[i].point2, savedDist);
+    }
+}
+
+void KisRecordedBezierCurvePaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
+{
+    KisRecordedPaintAction::toXML(doc,elt);
+    QDomElement waypointsElt = doc.createElement( "Waypoints");
+    foreach(Private::BezierCurveSlice info, d->infos)
+    {
+        QDomElement infoElt = doc.createElement( "Waypoint");
+        // Point1
+        QDomElement point1Elt = doc.createElement( "Point1");
+        info.point1.toXML(doc, point1Elt);
+        infoElt.appendChild(point1Elt);
+        // Control1
+        QDomElement control1Elt = doc.createElement( "Control1");
+        control1Elt.setAttribute("x", info.control1.x());
+        control1Elt.setAttribute("y", info.control1.y());
+        infoElt.appendChild(control1Elt);
+        // Control2
+        QDomElement control2Elt = doc.createElement( "Control2");
+        control2Elt.setAttribute("x", info.control2.x());
+        control2Elt.setAttribute("y", info.control2.y());
+        infoElt.appendChild(control2Elt);
+        // Point2
+        QDomElement point2Elt = doc.createElement( "Point2");
+        info.point2.toXML(doc, point2Elt);
+        infoElt.appendChild(point2Elt);
+        
+        waypointsElt.appendChild(infoElt);
+    }
+    elt.appendChild(waypointsElt);
+}
+
+KisRecordedAction* KisRecordedBezierCurvePaintAction::clone() const
+{
+    return new KisRecordedBezierCurvePaintAction(*this);
+}
+
+KisRecordedBezierCurvePaintActionFactory::KisRecordedBezierCurvePaintActionFactory() :
+        KisRecordedPaintActionFactory("BezierCurvePaintAction")
+{
+}
+KisRecordedBezierCurvePaintActionFactory::~KisRecordedBezierCurvePaintActionFactory()
+{
+    
+}
+
+KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
+{
+    QString name = elt.attribute("name");
+    KisLayerSP layer = KisRecordedActionFactory::indexPathToLayer(img, elt.attribute("layer"));
+    QString paintOpId = elt.attribute("paintop");
+    KisBrush* brush = 0;
+    
+    QDomElement brushElt = elt.firstChildElement("Brush");
+    if(not brushElt.isNull())
+    {
+        brush = brushFromXML(brushElt);
+    } else {
+        kDebug() << "Warning: no <Brush /> found";
+    }
+    
+    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, layer, brush, paintOpId);
+    
+    QDomElement wpElt = elt.firstChildElement("Waypoints");
+    if(not wpElt.isNull())
+    {
+        QDomNode nWp = wpElt.firstChild();
+        while(not nWp.isNull())
+        {
+            QDomElement eWp = nWp.toElement();
+            if(not eWp.isNull() and eWp.tagName() == "Waypoint")
+            {
+                QDomElement control1Elt = eWp.firstChildElement("Control1");
+                QDomElement control2Elt = eWp.firstChildElement("Control2");
+                rplpa->addPoint( KisPaintInformation::fromXML(eWp.firstChildElement("Point1") ), 
+                                 QPointF(control1Elt.attribute("x","0.0").toDouble(), 
+                                         control1Elt.attribute("y","0.0").toDouble()),
+                                 QPointF(control2Elt.attribute("x","0.0").toDouble(), 
+                                         control2Elt.attribute("y","0.0").toDouble()),
+                                 KisPaintInformation::fromXML(eWp.firstChildElement("Point2") ) );
+            }
+            nWp = nWp.nextSibling();
+        }
+    } else {
+        kDebug() << "Warning: no <Waypoints /> found";
+    }
+    return rplpa;
+}
+
+

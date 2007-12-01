@@ -25,6 +25,7 @@
 
 class KisPaintInformation;
 class KisBrush;
+class KisPainter;
 
 #include <krita_export.h>
 
@@ -34,7 +35,9 @@ class KisRecordedPaintAction : public KisRecordedAction {
         KisRecordedPaintAction(const KisRecordedPaintAction&);
         ~KisRecordedPaintAction();
         virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+        virtual void play(KisUndoAdapter* adapter = 0) const;
     protected:
+        virtual void playPaint(KisPainter* painter) const = 0;
         KisLayerSP layer() const;
         KisBrush* brush() const;
         QString paintOpId() const;
@@ -49,21 +52,29 @@ class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAct
         KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction&);
         ~KisRecordedPolyLinePaintAction();
         void addPoint(const KisPaintInformation& info);
-        virtual void play(KisUndoAdapter* adapter = 0) const;
         virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
         virtual KisRecordedAction* clone() const;
+    protected:
+        virtual void playPaint(KisPainter* painter) const;
     private:
         struct Private;
         Private* const d;
 };
 
-class KisRecordedPolyLinePaintActionFactory : public KisRecordedActionFactory {
+class KRITAUI_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction {
     public:
-        KisRecordedPolyLinePaintActionFactory();
-        virtual ~KisRecordedPolyLinePaintActionFactory();
-        virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
+        KisRecordedBezierCurvePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId);
+        KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction&);
+        ~KisRecordedBezierCurvePaintAction();
+        void addPoint(const KisPaintInformation& point1, const QPointF& control1, const QPointF& control2, const KisPaintInformation& point2);
+        virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+        virtual KisRecordedAction* clone() const;
     protected:
-        KisBrush* brushFromXML(const QDomElement& elt); // <- probably need to be moved in a KisRecordedPaintActionFactory
+        virtual void playPaint(KisPainter* painter) const;
+    private:
+        struct Private;
+        Private* const d;
 };
+
 
 #endif

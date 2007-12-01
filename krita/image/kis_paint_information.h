@@ -62,7 +62,7 @@ public:
     double angle() const;
     
     void toXML(QDomDocument&, QDomElement&) const;
-    static KisPaintInformation fromXML(QDomElement&);
+    static KisPaintInformation fromXML(const QDomElement&);
 private:
     struct Private;
     Private* const d;

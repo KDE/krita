@@ -68,7 +68,7 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
     e.setAttribute("movementY", movement().y());
 }
 
-KisPaintInformation KisPaintInformation::fromXML(QDomElement& e)
+KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
 {
     double pointX = e.attribute("pointX","0.0").toDouble();
     double pointY = e.attribute("pointY","0.0").toDouble();

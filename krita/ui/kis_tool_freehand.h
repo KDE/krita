@@ -34,6 +34,7 @@ class KisPainter;
 class FreehandPaintJobExecutor;
 class FreehandPaintJob;
 class KisRecordedPolyLinePaintAction;
+class KisRecordedBezierCurvePaintAction;
 class FreehandPaintJobExecutor;
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
@@ -98,6 +99,7 @@ private:
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPolyLinePaintAction* m_polyLinePaintAction;
+    KisRecordedBezierCurvePaintAction* m_bezierCurvePaintAction;
     FreehandPaintJobExecutor* m_executor;
 };
 

@@ -27,6 +27,7 @@ class KisMaskTest : public QObject
 private slots:
 
     void testCreation();
+    void testSelection();
 
 };
 

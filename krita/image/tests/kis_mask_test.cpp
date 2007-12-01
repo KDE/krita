@@ -22,6 +22,8 @@
 #include "kis_mask_test.h"
 #include "kis_node.h"
 #include "kis_mask.h"
+#include "kis_selection.h"
+
 class TestMask : public KisMask
 {
 public:
@@ -48,6 +50,19 @@ void KisMaskTest::testCreation()
     TestMask test;
 }
 
+void KisMaskTest::testSelection()
+{
+    TestMask mask;
+    QVERIFY(mask.selection()->isTotallyUnselected(QRect(0, 0, 1000, 1000)));
+    QVERIFY(mask.exactBounds().width() == 0);
+    QVERIFY(mask.extent().width() == 0);
+    
+    mask.select(QRect(0, 0, 1000, 1000));
+    
+    QCOMPARE(mask.exactBounds(), QRect(0, 0, 1000, 1000));
+    QCOMPARE(mask.extent(), QRect(0, 0, 1024, 1024));
+    
+}
 
 QTEST_KDEMAIN(KisMaskTest, GUI)
 #include "kis_mask_test.moc"

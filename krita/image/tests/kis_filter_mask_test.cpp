@@ -18,6 +18,8 @@
 
 #include <qtest_kde.h>
 #include <QThread>
+#include <QCoreApplication>
+
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_filter.h"
@@ -32,7 +34,7 @@
 #include "kis_filter_mask_test.h"
 #include "testutil.h"
 
-void KisFilterMaskTest::testProjection()
+void KisFilterMaskTest::testProjectionNotSelected()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 
@@ -58,19 +60,36 @@ void KisFilterMaskTest::testProjection()
         projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest1.png");
         QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
+}
 
-    projection = new KisPaintDevice( cs );
+void KisFilterMaskTest::testProjectionSelected()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+
+    KisFilterMaskSP mask = new KisFilterMask();
+    mask->setFilter( kfc );
+
+    KisPaintDeviceSP projection = new KisPaintDevice( cs );
     projection->convertFromQImage( qimg, 0, 0, 0 );
     mask->select(qimg.rect(), MAX_SELECTED);
     mask->apply( projection, QRect( 0, 0, qimg.width(), qimg.height() ) );
-
+    QVERIFY(mask->exactBounds() == QRect( 0, 0, qimg.width(), qimg.height() ));
+    
+    QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, inverted, projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
         QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
     
 }
-
 
 void KisFilterMaskTest::testInImage()
 {
@@ -97,6 +116,9 @@ void KisFilterMaskTest::testInImage()
     image->addNode( layer.data() );
     image->addNode( mask.data(), layer.data() );
     layer->setDirty( qimg.rect() );
+    
+    QTest::qSleep(250); // allow the action to do its job.
+    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
 
     KisPaintDeviceSP pd = image->projection();
 

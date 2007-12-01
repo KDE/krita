@@ -19,8 +19,6 @@
 
 #include <qtest_kde.h>
 
-#include <QMutex>
-
 #include "kis_filter_job_test.h"
 
 #include <KoProgressUpdater.h>
@@ -40,9 +38,6 @@
 
 void KisFilterJobTest::testCreation()
 {
-    QMutex m;
-    //qDebug() << m.d;
-    
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT( f );
 

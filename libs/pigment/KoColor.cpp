@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -289,6 +290,10 @@ KoColor KoColor::fromXML(const QDomElement& elt, QString bitDepthId, QHash<QStri
         if( aliases.contains(profileName))
         {
             profileName = aliases.value(profileName);
+        }
+        if( not KoColorSpaceRegistry::instance()->profileByName( profileName))
+        {
+            profileName = "";
         }
     }
     QString csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, bitDepthId);

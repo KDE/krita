@@ -194,6 +194,22 @@ QList<KoToolManager::Button> KoToolManager::createToolList() const {
     return answer;
 }
 
+void KoToolManager::requestToolActivation( KoCanvasController * controller )
+{
+    if( d->canvasses.contains( controller ) )
+    {
+        QString activeToolId = d->canvasses.value( controller ).first()->activeToolId;
+        foreach( ToolHelper * th, d->tools )
+        {
+            if( th->id() == activeToolId )
+            {
+                toolActivated( th );
+                break;
+            }
+        }
+    }
+}
+
 KoInputDevice KoToolManager::currentInputDevice() const {
     return d->inputDevice;
 }
@@ -394,8 +410,22 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     if(tp)
         tp->setCanvasController(controller);
 
-//   if (cd->activeTool == 0)
-//       toolActivated(d->defaultTool); // TODO
+    if (cd->activeTool == 0)
+    {
+        // no active tool, so we activate the highest priority main tool
+        int highestPriority = INT_MAX;
+        ToolHelper * helper = 0;
+        foreach( ToolHelper * th, d->tools )
+        {
+            if( th->toolType() == KoToolFactory::mainToolType() )
+            {
+                highestPriority = qMin( highestPriority, th->priority() );
+                helper = th;
+            }
+        }
+        if( helper )
+            toolActivated( helper );
+    }
 
     Connector *connector = new Connector(controller->canvas()->shapeManager());
     connect(connector, SIGNAL(selectionChanged(QList<KoShape*>)), this,

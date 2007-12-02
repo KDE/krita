@@ -86,6 +86,7 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 
 bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
 {
+    if(not oldCs) return false;
     return *dev->colorSpace() == *oldCs;
 }
 

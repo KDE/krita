@@ -161,6 +161,8 @@ void KoPAView::initGUI()
     KoPADocumentStructureDockerFactory structureDockerFactory( m_canvas );
     m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
 
+    KoToolManager::instance()->requestToolActivation( m_canvasController );
+
     show();
 }
 

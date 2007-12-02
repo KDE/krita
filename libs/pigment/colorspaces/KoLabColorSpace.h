@@ -41,7 +41,7 @@ class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual KoColorSpace* clone() const;
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt);
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
 
     private:
         static const quint32 CHANNEL_L = 0;

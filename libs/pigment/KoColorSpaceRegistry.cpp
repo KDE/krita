@@ -353,15 +353,20 @@ QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility optio
     }
     return ids;
 }
-
 QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId, ColorSpaceListVisibility option ) const
+{
+    return colorDepthList(colorModelId.id(), option);
+}
+
+
+QList<KoID> KoColorSpaceRegistry::colorDepthList(QString colorModelId, ColorSpaceListVisibility option ) const
 {
     QList<KoID> ids;
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories)
     {
-        if(not ids.contains(factory->colorDepthId())
-           and factory->colorModelId() == colorModelId
+        if(not ids.contains(KoID(factory->colorDepthId()))
+           and factory->colorModelId().id() == colorModelId
            and ( option == AllColorSpaces or factory->userVisible() ))
         {
             ids << factory->colorDepthId();

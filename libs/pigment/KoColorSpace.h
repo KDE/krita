@@ -650,7 +650,7 @@ public:
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */
-    virtual void colorFromXML( quint8* pixel, const QDomElement& elt) = 0;
+    virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const = 0;
 
     /**
      * The backgroundfilters will be run periodically on the newly

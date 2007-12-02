@@ -97,7 +97,7 @@ private: // This is a singleton
 
 public:
     void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const{}
-    void colorFromXML( quint8* , const QDomElement& ){}
+    void colorFromXML( quint8* , const QDomElement& ) const{}
 
     bool willDegrade(ColorSpaceIndependence independence) const
         {

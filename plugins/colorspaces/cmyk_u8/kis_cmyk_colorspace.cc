@@ -72,7 +72,7 @@ void KisCmykU8ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QD
     colorElt.appendChild( labElt );
 }
 
-void KisCmykU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+void KisCmykU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     CmykU8Traits::Pixel* p = reinterpret_cast<CmykU8Traits::Pixel*>( pixel );
     p->cyan = KoColorSpaceMaths< double, CmykU8Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());

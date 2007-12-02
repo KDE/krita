@@ -236,6 +236,10 @@ public:
      * @return the list of available color models for the given colorModelId
      */
     QList<KoID> colorDepthList(const KoID& colorModelId, ColorSpaceListVisibility option ) const;
+    /**
+     * @return the list of available color models for the given colorModelId
+     */
+    QList<KoID> colorDepthList(QString colorModelId, ColorSpaceListVisibility option ) const;
     
     /**
      * @return the color conversion system use by the registry and the color

@@ -61,7 +61,7 @@ void KisGrayAU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, 
     colorElt.appendChild( labElt );
 }
 
-void KisGrayAU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+void KisGrayAU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     GrayAU16Traits::channels_type* p = reinterpret_cast<GrayAU16Traits::channels_type*>( pixel );
     p[0] = KoColorSpaceMaths< double, GrayAU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());

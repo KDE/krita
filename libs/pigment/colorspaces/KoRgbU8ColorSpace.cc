@@ -113,7 +113,7 @@ void KoRgbU8ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDom
     colorElt.appendChild( labElt );
 }
 
-void KoRgbU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+void KoRgbU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     RgbU8Traits::Pixel* p = reinterpret_cast<RgbU8Traits::Pixel*>( pixel );
     p->red = KoColorSpaceMaths< double, RgbU8Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());

@@ -36,7 +36,7 @@ class PIGMENT_GRAY_U16_EXPORT KisGrayAU16ColorSpace : public KoLcmsColorSpace<Gr
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual KoColorSpace* clone() const;
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt);
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
 };
 
 class KisGrayAU16ColorSpaceFactory : public KoLcmsColorSpaceFactory

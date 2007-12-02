@@ -244,7 +244,7 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             colorElt.appendChild( labElt );
         }
         
-        void colorFromXML( quint8* pixel, const QDomElement& elt)
+        void colorFromXML( quint8* pixel, const QDomElement& elt) const
         {
             typename _CSTraits::Pixel* p = reinterpret_cast<typename _CSTraits::Pixel*>( pixel );
             p->red = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("r").toDouble());

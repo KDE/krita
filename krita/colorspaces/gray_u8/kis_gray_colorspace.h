@@ -36,7 +36,7 @@ class KRITA_GRAY_U8_EXPORT KisGrayColorSpace : public KoLcmsColorSpace<GrayU8Tra
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
         virtual KoColorSpace* clone() const;
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt);
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
 };
 
 class KisGrayColorSpaceFactory : public KoLcmsColorSpaceFactory

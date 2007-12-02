@@ -70,7 +70,7 @@ void KisXyzU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QD
     colorElt.appendChild( labElt );
 }
 
-void KisXyzU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+void KisXyzU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     XyzU16Traits::Pixel* p = reinterpret_cast<XyzU16Traits::Pixel*>( pixel );
     p->X = KoColorSpaceMaths< double, XyzU16Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());

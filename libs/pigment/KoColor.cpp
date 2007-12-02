@@ -23,6 +23,7 @@
 
 #include "kdebug.h"
 #include "KoColor.h"
+#include "KoColorModelStandardIds.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -264,5 +265,48 @@ void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
 
 KoColor KoColor::fromXML(const QDomElement& elt, QString bitDepthId, QHash<QString, QString> aliases)
 {
-    return KoColor();
+    QString modelId;
+    if(elt.tagName() == "CMYK")
+    {
+        modelId = CMYKAColorModelID.id();
+    } else if( elt.tagName() == "RGB") {
+        modelId = RGBAColorModelID.id();
+    } else if( elt.tagName() == "sRGB") {
+        modelId = RGBAColorModelID.id();
+    } else if( elt.tagName() == "Lab") {
+        modelId = LABAColorModelID.id();
+    } else if( elt.tagName() == "XYZ") {
+        modelId = XYZAColorModelID.id();
+    } else if( elt.tagName() == "Gray") {
+        modelId = GrayAColorModelID.id();
+    } else if( elt.tagName() == "YCbCr") {
+        modelId = YCbCrAColorModelID.id();
+    }
+    QString profileName;
+    if( elt.tagName() != "sRGB")
+    {
+        profileName = elt.attribute("space","");
+        if( aliases.contains(profileName))
+        {
+            profileName = aliases.value(profileName);
+        }
+    }
+    QString csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, bitDepthId);
+    if(csId == "")
+    {
+        QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces );
+        if(not list.empty())
+        {
+            csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, list[0].id());
+        }
+    }
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profileName);
+    if(cs)
+    {
+        KoColor c(cs);
+        cs->colorFromXML( c.data(), elt);
+        return c;
+    } else {
+        return KoColor();
+    }
 }

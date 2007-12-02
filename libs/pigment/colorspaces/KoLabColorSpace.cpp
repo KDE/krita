@@ -97,7 +97,7 @@ void KoLabColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomEl
     colorElt.appendChild( labElt );
 }
 
-void KoLabColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt)
+void KoLabColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     KoLabU16Traits::Pixel* p = reinterpret_cast<KoLabU16Traits::Pixel*>( pixel );
     p->L = KoColorSpaceMaths< double, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());

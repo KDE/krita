@@ -239,7 +239,7 @@ class KisGenericColorSpace : public KoColorSpace {
                             const KoCompositeOp& /*op*/) { }
 
         virtual void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const{}
-        virtual void colorFromXML( quint8* , const QDomElement& ){}
+        virtual void colorFromXML( quint8* , const QDomElement& ) const{}
 };
 
 #endif // KIS_COLORSPACE_H_

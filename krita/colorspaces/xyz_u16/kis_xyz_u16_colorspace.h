@@ -37,7 +37,7 @@ class PIGMENT_XYZ_U16_EXPORT KisXyzU16ColorSpace : public KoLcmsColorSpace<XyzU1
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual KoColorSpace* clone() const;
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt);
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
 };
 
 #define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))

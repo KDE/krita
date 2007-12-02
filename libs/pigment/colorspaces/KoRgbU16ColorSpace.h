@@ -33,7 +33,7 @@ class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual KoColorSpace* clone() const;
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt);
+        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
 
     /**
      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 

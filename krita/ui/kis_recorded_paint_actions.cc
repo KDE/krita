@@ -21,6 +21,9 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include <KoColor.h>
+#include <KoColorModelStandardIds.h>
+
 #include "kis_brush.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
@@ -72,13 +75,17 @@ struct KisRecordedPaintAction::Private {
     KisLayerSP layer;
     KisBrush* brush;
     QString paintOpId;
+    KoColor foregroundColor;
+    KoColor backgroundColor;
 };
 
-KisRecordedPaintAction::KisRecordedPaintAction(QString name, QString id, KisLayerSP layer, KisBrush* brush, QString paintOpId) : KisRecordedAction(name, id), d(new Private)
+KisRecordedPaintAction::KisRecordedPaintAction(QString name, QString id, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor) : KisRecordedAction(name, id), d(new Private)
 {
     d->layer = layer;
     d->brush = brush;
     d->paintOpId = paintOpId;
+    d->foregroundColor = foregroundColor;
+    d->backgroundColor = backgroundColor;
 }
 
 KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs) : KisRecordedAction(rhs), d(new Private(*rhs.d))
@@ -96,9 +103,18 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
     KisRecordedAction::toXML(doc, elt);
     elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));
     elt.setAttribute("paintop", d->paintOpId);
+    // Brush
     QDomElement ressourceElt = doc.createElement( "Brush");
     d->brush->toXML(doc, ressourceElt);
     elt.appendChild(ressourceElt);
+    // ForegroundColor
+    QDomElement foregroundColorElt = doc.createElement( "ForegroundColor" );
+    d->foregroundColor.toXML(doc, foregroundColorElt );
+    elt.appendChild( foregroundColorElt );
+    // BackgroundColor
+    QDomElement backgroundColorElt = doc.createElement( "BackgroundColor" );
+    d->backgroundColor.toXML(doc, backgroundColorElt );
+    elt.appendChild( backgroundColorElt );
 }
 
 KisLayerSP KisRecordedPaintAction::layer() const
@@ -121,6 +137,9 @@ void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
     KisPainter painter( layer()->paintDevice());
     painter.setBrush( brush() );
     painter.setPaintOp( KisPaintOpRegistry::instance()->paintOp( paintOpId(), (KisPaintOpSettings*)0, &painter, layer()->image() ) );
+    
+    painter.setPaintColor( d->foregroundColor );
+    painter.setFillColor( d->backgroundColor );
     
     playPaint(&painter);
     
@@ -152,8 +171,8 @@ struct KisRecordedPolyLinePaintAction::Private {
     QList<KisPaintInformation> infos;
 };
 
-KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId)
-    : KisRecordedPaintAction(name, "PolyLinePaintAction", layer, brush, paintOpId), d(new Private)
+KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor)
+    : KisRecordedPaintAction(name, "PolyLinePaintAction", layer, brush, paintOpId, foregroundColor, backgroundColor), d(new Private)
 {
 }
 
@@ -225,7 +244,24 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
         kDebug() << "Warning: no <Brush /> found";
     }
     
-    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, layer, brush, paintOpId);
+    QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
+    KoColor bC;
+    if(not backgroundColorElt.isNull())
+    {
+        bC = KoColor::fromXML( backgroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
+    } else {
+        kDebug() << "Warning: no <BackgroundColor /> found";
+    }
+    QDomElement foregroundColorElt = elt.firstChildElement("ForegroundColor");
+    KoColor fC;
+    if(not foregroundColorElt.isNull())
+    {
+        fC = KoColor::fromXML( foregroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
+    } else {
+        kDebug() << "Warning: no <ForegroundColor /> found";
+    }
+    
+    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, layer, brush, paintOpId, fC, bC);
     
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if(not wpElt.isNull())
@@ -259,8 +295,8 @@ struct KisRecordedBezierCurvePaintAction::Private {
     QList<BezierCurveSlice> infos;
 };
 
-KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId)
-    : KisRecordedPaintAction(name, "BezierCurvePaintAction", layer, brush, paintOpId), d(new Private)
+KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor)
+    : KisRecordedPaintAction(name, "BezierCurvePaintAction", layer, brush, paintOpId, foregroundColor, backgroundColor), d(new Private)
 {
 }
 
@@ -353,8 +389,24 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
     } else {
         kDebug() << "Warning: no <Brush /> found";
     }
+    QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
+    KoColor bC;
+    if(not backgroundColorElt.isNull())
+    {
+        bC = KoColor::fromXML( backgroundColorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
+    } else {
+        kDebug() << "Warning: no <BackgroundColor /> found";
+    }
+    QDomElement foregroundColorElt = elt.firstChildElement("ForegroundColor");
+    KoColor fC;
+    if(not foregroundColorElt.isNull())
+    {
+        fC = KoColor::fromXML( foregroundColorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
+    } else {
+        kDebug() << "Warning: no <ForegroundColor /> found";
+    }
     
-    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, layer, brush, paintOpId);
+    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, layer, brush, paintOpId, fC, bC);
     
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if(not wpElt.isNull())

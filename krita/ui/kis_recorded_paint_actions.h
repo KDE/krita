@@ -26,12 +26,13 @@
 class KisPaintInformation;
 class KisBrush;
 class KisPainter;
+class KoColor;
 
 #include <krita_export.h>
 
 class KisRecordedPaintAction : public KisRecordedAction {
     public:
-        KisRecordedPaintAction(QString name, QString id, KisLayerSP layer, KisBrush* brush, QString paintOpId);
+        KisRecordedPaintAction(QString name, QString id, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor);
         KisRecordedPaintAction(const KisRecordedPaintAction&);
         ~KisRecordedPaintAction();
         virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
@@ -48,7 +49,7 @@ class KisRecordedPaintAction : public KisRecordedAction {
 
 class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction {
     public:
-        KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId);
+        KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor);
         KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction&);
         ~KisRecordedPolyLinePaintAction();
         void addPoint(const KisPaintInformation& info);
@@ -63,7 +64,7 @@ class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAct
 
 class KRITAUI_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction {
     public:
-        KisRecordedBezierCurvePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId);
+        KisRecordedBezierCurvePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor);
         KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction&);
         ~KisRecordedBezierCurvePaintAction();
         void addPoint(const KisPaintInformation& point1, const QPointF& control1, const QPointF& control2, const KisPaintInformation& point2);

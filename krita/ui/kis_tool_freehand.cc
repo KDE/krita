@@ -270,9 +270,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 */
     if(m_smooth)
     {
-        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(i18n("Freehand tool"),  currentLayer(), currentBrush(), currentPaintOp() );
+        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction( i18n("Freehand tool"),  currentLayer(), currentBrush(), currentPaintOp(), m_painter->paintColor(), m_painter->backgroundColor() );
     } else {
-        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"), currentLayer(), currentBrush(), currentPaintOp() );
+        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction( i18n("Freehand tool"), currentLayer(), currentBrush(), currentPaintOp(), m_painter->paintColor(), m_painter->backgroundColor() );
     }
     m_executor->start();
 }

@@ -57,20 +57,24 @@ public:
     /// return the amount of jobs that is curently helt
     int count();
 
+    /// @return the first job on the list
+    ThreadWeaver::Job* firstJob();
+    
     /**
      * lock this policy from modifications by other threads. Will also disallow new
      * jobs to be started.
      * You should call unlock() afterwards.
      */
-    void lock() { mutex.lock(); }
+    void lock() { writeMutex.lock(); }
     /**
      * unlock.
      * @see lock()
      */
-    void unlock() { mutex.unlock(); }
+    void unlock() { writeMutex.unlock(); }
 
 private:
     QList<ThreadWeaver::Job*> m_jobs;
+    QMutex writeMutex;
     QMutex mutex;
 };
 

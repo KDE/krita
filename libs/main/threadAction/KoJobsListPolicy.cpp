@@ -30,9 +30,8 @@ KoJobsListPolicy::~KoJobsListPolicy() {
 }
 
 bool KoJobsListPolicy::canRun (Job *job) {
-    mutex.lock();
+    QMutexLocker ml(&mutex);
     bool rc = m_jobs.isEmpty() || m_jobs[0] == job;
-    mutex.unlock();
     return rc;
 }
 
@@ -42,10 +41,9 @@ void KoJobsListPolicy::free (Job *job) {
 }
 
 void KoJobsListPolicy::release (Job *job) {
-    mutex.lock();
+    QMutexLocker ml(&mutex);
     m_jobs.removeAll(job);
     job->removeQueuePolicy(this);
-    mutex.unlock();
 }
 
 void KoJobsListPolicy::destructed (Job *job) {
@@ -54,22 +52,26 @@ void KoJobsListPolicy::destructed (Job *job) {
 
 const QList<Job*> KoJobsListPolicy::jobs() {
     QList<Job*> answer;
-    mutex.lock();
+    QMutexLocker ml(&mutex);
     foreach(Job *job, m_jobs)
         answer.append(job);
-    mutex.unlock();
     return answer;
 }
 
 void KoJobsListPolicy::addJob(Job *job) {
-    mutex.lock();
+    QMutexLocker ml(&mutex);
     m_jobs.append(job);
-    mutex.unlock();
 }
 
 int KoJobsListPolicy::count() {
-    mutex.lock();
+    QMutexLocker ml(&mutex);
     int i = m_jobs.count();
-    mutex.unlock();
     return i;
+}
+
+ThreadWeaver::Job* KoJobsListPolicy::firstJob()
+{
+    QMutexLocker ml(&mutex);
+    if(m_jobs.isEmpty()) return 0;
+    return m_jobs[0];
 }

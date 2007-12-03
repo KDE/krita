@@ -123,6 +123,7 @@ KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar)
 KoProgressUpdater::~KoProgressUpdater() {
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
+    delete d;
 }
 
 void KoProgressUpdater::start(int range, const QString &text) {

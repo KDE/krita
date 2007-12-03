@@ -140,7 +140,10 @@ KoInsets KoTextShapeData::shapeMargins() const {
 }
 
 void KoTextShapeData::setPageNumber(int page) {
+    if (page == d->pageNumber)
+        return;
     d->pageNumber = page;
+    d->dirty = true;
 }
 
 int KoTextShapeData::pageNumber() const {

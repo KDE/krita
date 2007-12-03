@@ -281,6 +281,11 @@ public slots:
     virtual void slotCloseAllViews();
 
     /**
+     * Toggle full screen on/off.
+     */
+    virtual void viewFullscreen(bool fullScreen);
+
+    /**
      * Reload file
      */
     void slotReloadFile();

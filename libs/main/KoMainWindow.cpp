@@ -178,9 +178,9 @@ public:
   QByteArray m_lastExportFormat;
   int m_lastExportSpecialOutputFlag;
 
-    QMap<QString, QDockWidget*> m_dockWidgetMap;
-    KActionMenu* m_dockWidgetMenu;
-    QMap<QDockWidget*, bool> m_dockWidgetVisibilityMap;
+  QMap<QString, QDockWidget*> m_dockWidgetMap;
+  KActionMenu* m_dockWidgetMenu;
+  QMap<QDockWidget*, bool> m_dockWidgetVisibilityMap;
 };
 
 KoMainWindow::KoMainWindow( const KComponentData &componentData )
@@ -278,6 +278,11 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     connect( d->m_removeView, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()) );
     d->m_splitViewActionList.append(d->m_removeView);
     d->m_removeView->setEnabled(false);
+
+    KToggleAction *fullscreenAction  = new KToggleAction(KIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
+    actionCollection()->addAction("view_fullscreen", fullscreenAction);
+    fullscreenAction->setShortcut(QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_F ));
+    connect(fullscreenAction, SIGNAL(toggled(bool)), this, SLOT(viewFullscreen(bool)));
 
     d->m_orientation  = new KSelectAction(KIcon("view_orientation"), i18n("Splitter &Orientation"), this);
     actionCollection()->addAction("view_splitter_orientation", d->m_orientation );
@@ -428,11 +433,11 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     delete oldRootDoc;
   }
 
-    if(doc && !d->m_dockWidgetVisibilityMap.isEmpty()) {
-        foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
-            dockWidget->setVisible( d->m_dockWidgetVisibilityMap.value(dockWidget) );
-        }
+  if(doc && !d->m_dockWidgetVisibilityMap.isEmpty()) {
+    foreach( QDockWidget* dockWidget, d->m_dockWidgetMap.values() ) {
+      dockWidget->setVisible( d->m_dockWidgetVisibilityMap.value(dockWidget) );
     }
+  }
 }
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)
@@ -1477,6 +1482,17 @@ void KoMainWindow::slotRemoveView() {
 
     if(d->m_rootViews.count()==1)
         d->m_splitted=false;
+}
+
+void KoMainWindow::viewFullscreen(bool fullScreen)
+{
+    //TODO optional hide toolbars, statusbar, dockers, etc. Probably introduce own 'view modes' with there own kconfig-settings
+    if(fullScreen) {
+        showFullScreen();
+    }
+    else {
+        showNormal();
+    }
 }
 
 void KoMainWindow::slotSetOrientation() {

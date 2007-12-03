@@ -1,0 +1,21 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Text Shape
+Name[ca]=Forma de text
+Name[de]=Text-Objekt
+Name[el]=Σχήμα κειμένου
+Name[es]=Forma de texto
+Name[fi]=Tekstihahmo
+Name[ga]=Giuirléid Téacs
+Name[ja]=テキストシェイプ
+Name[ne]=पाठ आकार
+Name[pt]=Forma de Texto
+Name[pt_BR]=Forma de Texto
+Name[sv]=Textform
+Name[x-test]=xxText Shapexx
+Name[zh_TW]=文字元件
+ServiceTypes=KOffice/Flake
+Type=Service
+X-KDE-Library=textshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

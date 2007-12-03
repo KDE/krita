@@ -1,0 +1,286 @@
+<ui version="4.0" >
+ <class>ParagraphIndentSpacing</class>
+ <widget class="QWidget" name="ParagraphIndentSpacing" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>388</height>
+   </rect>
+  </property>
+  <property name="whatsThis" >
+   <string>&lt;p>&lt;ul>&lt;li>&lt;b>Single&lt;/b>: The normal linespacing&lt;/li>&lt;/ul>&lt;/p> </string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Indent</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Left:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>left</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="left" />
+      </item>
+      <item rowspan="3" row="0" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>71</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>Right:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>right</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="right" />
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="text" >
+         <string>First Line:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>first</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="first" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item rowspan="4" row="0" column="1" >
+    <widget class="QGroupBox" name="previewPane" >
+     <property name="title" >
+      <string>Preview</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="whatsThis" >
+      <string>&lt;p>&lt;ul>&lt;li>&lt;b>Single&lt;/b>: The normal linespacing&lt;/li>&lt;/ul>&lt;/p> </string>
+     </property>
+     <property name="title" >
+      <string>Line Spacing</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" colspan="2" >
+       <widget class="QComboBox" name="lineSpacing" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QStackedWidget" name="spacingStack" >
+        <property name="currentIndex" >
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="unitsPage" >
+         <layout class="QHBoxLayout" >
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="KoUnitDoubleSpinBox" name="custom" />
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="percentPage" >
+         <layout class="QHBoxLayout" >
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QSpinBox" name="proportional" >
+            <property name="suffix" >
+             <string> %</string>
+            </property>
+            <property name="minimum" >
+             <number>85</number>
+            </property>
+            <property name="maximum" >
+             <number>999</number>
+            </property>
+            <property name="singleStep" >
+             <number>5</number>
+            </property>
+            <property name="value" >
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <layout class="QGridLayout" >
+        <item row="0" column="0" >
+         <widget class="QLabel" name="label_4" >
+          <property name="text" >
+           <string>Use Font Metrics:</string>
+          </property>
+          <property name="buddy" >
+           <cstring>useFont</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QCheckBox" name="useFont" >
+          <property name="text" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="label_7" >
+          <property name="text" >
+           <string>Minimum:</string>
+          </property>
+          <property name="buddy" >
+           <cstring>minimumLineSpacing</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="KoUnitDoubleSpinBox" name="minimumLineSpacing" />
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="1" colspan="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>91</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="title" >
+      <string>Paragraph Space</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label_5" >
+        <property name="text" >
+         <string>Before:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>before</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="before" />
+      </item>
+      <item rowspan="2" row="0" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>51</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_6" >
+        <property name="text" >
+         <string>After:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>after</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="after" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>313</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoUnitDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>KoUnitDoubleSpinBox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

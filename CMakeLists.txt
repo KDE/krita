@@ -175,7 +175,6 @@ add_subdirectory(servicetypes)
 add_subdirectory(templates)
 add_subdirectory(tools)
 add_subdirectory(filters)
-add_subdirectory(shapes)
 macro_optional_add_subdirectory(doc)
 message( STATUS "Re-add koshell when ported")
 

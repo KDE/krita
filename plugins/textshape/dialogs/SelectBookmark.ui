@@ -1,0 +1,64 @@
+<ui version="4.0" >
+ <class>SelectBookmark</class>
+ <widget class="QWidget" name="SelectBookmark" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>352</width>
+    <height>165</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Select Bookmark</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QGroupBox" name="bookmarkGroupBox" >
+     <property name="title" >
+      <string>Bookmarks</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="1" >
+       <widget class="QPushButton" name="buttonRename" >
+        <property name="text" >
+         <string>&amp;Rename</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QPushButton" name="buttonDelete" >
+        <property name="text" >
+         <string>&amp;Delete</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>71</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item rowspan="3" row="0" column="0" >
+       <widget class="QListWidget" name="bookmarkList" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>bookmarkList</tabstop>
+  <tabstop>buttonRename</tabstop>
+  <tabstop>buttonDelete</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

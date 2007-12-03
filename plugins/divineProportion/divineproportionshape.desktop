@@ -1,0 +1,21 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=DivineProportion Shape
+Name[ca]=Forma de proporció divina
+Name[de]=Göttliche-Teilung-Objekt
+Name[el]=Σχήμα θεϊκής αναλογίας
+Name[es]=Forma de proporción áurea
+Name[fi]=Kultainen leikkaus -hahmo
+Name[ga]=Giuirléid Chóimheasa Diaga
+Name[ja]=黄金分割シェイプ
+Name[ne]=उच्चतम अनुपात आकार
+Name[pt]=Forma de Proporção Divina
+Name[pt_BR]=Forma de Proporção Divina
+Name[sv]=Gudomlig proportionsform
+Name[x-test]=xxDivineProportion Shapexx
+Name[zh_TW]=DivineProportion 元件
+ServiceTypes=KOffice/Flake
+Type=Service
+X-KDE-Library=divineproportionshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

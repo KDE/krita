@@ -43,6 +43,7 @@
 #include <QApplication>
 #include <Q3ValueList>
 #include <QPrintDialog>
+#include <kdeversion.h>
 
 //static
 QString KoView::newObjectName()
@@ -194,7 +195,13 @@ KoView::KoView( KoDocument *document, QWidget *parent )
         createDockWidget(factory);
     }
 
-  actionCollection()->associateWidget(this);
+  actionCollection()->addAssociatedWidget(this);
+  foreach (QAction* action, actionCollection()->actions())
+#if QT_VERSION < KDE_MAKE_VERSION(4,4,0)
+    action->setShortcutContext(Qt::WidgetShortcut); // remove after Qt4.4 becomes mandatory
+#else
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+#endif
 }
 
 KoView::~KoView()

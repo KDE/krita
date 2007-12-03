@@ -21,12 +21,16 @@
 #define KOPROGRESSUPDATER_TEST_H
 
 #include <QtTest/QtTest>
+#include <threadweaver/Job.h>
 
 class KoProgressUpdaterTest : public QObject
 {
     Q_OBJECT
 
+public slots:
 
+    void jobDone(ThreadWeaver::Job* );
+    
 private slots:
 
     void testCreation();
@@ -36,7 +40,10 @@ private slots:
     void testSimpleThreadedProgress();
     void testRecursiveProgress();
     void testThreadedRecursiveProgress();
-    
+    void testFromWeaver();
 
+private:
+
+    int jobsdone;
 };
 #endif

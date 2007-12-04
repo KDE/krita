@@ -18,6 +18,14 @@ In the plugins/defaultTools/ConnectorTool:
 * Allow to insert multi-lines much the same way Kivio did previously.
 * Create and use an undo command for inserting the connection and the points.
 
+== ShapeManager ==
+
+* We need some infrastructure which supports that shapes can listen/be notified of changes
+  from other shapes so they can update accordingly if they depend in some way on these other shapes
+  This is needed for:
+  - KoConnectionShape
+  - shapes clones (to be implemented)
+  - text on path (SimpleTextShape)
 
 == More Advanced ==
 * Add shadow to a KoShape

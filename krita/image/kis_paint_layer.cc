@@ -112,7 +112,7 @@ bool KisPaintLayer::allowAsChild( KisNodeSP node) const
 void KisPaintLayer::init()
 {
     connect( m_d->paintDevice.data(), SIGNAL( colorSpaceChanged( const KoColorSpace* ) ), this, SLOT( slotColorSpaceChanged() ) );
-    connect( m_d->paintDevice.data(), SIGNAL( profileChanged( KoColorProfile* ) ), this, SLOT( slotColorSpaceChanged() ) );
+    connect( m_d->paintDevice.data(), SIGNAL( profileChanged( const KoColorProfile* ) ), this, SLOT( slotColorSpaceChanged() ) );
 }
 
 

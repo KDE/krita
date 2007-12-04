@@ -13,6 +13,7 @@ set(kritapanorama_PART_SRCS
     )
 
 
+include_directories( ${EIGEN_INCLUDE_DIR} )
 kde4_add_ui_files(kritapanorama_PART_SRCS wdgpanoramacreation.ui )
 
 kde4_add_plugin(kritapanorama ${kritapanorama_PART_SRCS})

@@ -58,6 +58,7 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
     , m_shapeSelection( 0 )
 {
     Q_ASSERT(dev);
+    clear();
 }
 
 
@@ -84,6 +85,7 @@ KisSelection::KisSelection()
     , m_hasShapeSelection(false)
     , m_shapeSelection( 0 )
 {
+    clear();
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)

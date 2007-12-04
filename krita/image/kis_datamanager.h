@@ -45,20 +45,26 @@ class KoStore;
 class KisDataManager : public ACTUAL_DATAMGR {
 
 public:
+
+    /**
+     * Create a new datamanger where every pixel will take pixelSize bytes and will initialized
+     * by default with defPixel. The value of defPixel is copied, the caller still owns the pointer.
+     *
+     * Note that if pixelSize > size of the defPixel array, we will happily read beyond the
+     * defPixel array.
+     */
     KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {}
     KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { }
 
 public:
     /**
-     * Sets the default pixel. Note that this might change every occurrence, and it might not, but new data
-     * well be initialised with this pixel
+     * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
+     * caller still owns the pointer.
      */
     inline void setDefaultPixel(const quint8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); }
 
-//     inline void setSwappable( bool swappable ) { ACTUAL_DATAMGR::setSwappable( swappable );  }
-
     /**
-     * Gets the default pixel.
+     * Get a pointer to the default pixel.
      */
      inline const quint8 *defaultPixel() const { return ACTUAL_DATAMGR::defaultPixel(); }
 

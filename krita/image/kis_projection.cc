@@ -148,7 +148,7 @@ void KisProjection::setRegionOfInterest( const QRect & roi )
     if ( !m_d->roi.contains( roi ) ) {
         QRegion region( roi );
         region -= QRegion( m_d->roi );
-        // Get the overlap between the regoin of interest
+        // Get the overlap between the region of interest
         QVector<QRect> rects = region.intersected( m_d->dirtyRegion ).rects();
         for ( int i = 0; i < rects.size(); ++i ) {
             scheduleRect( rects.at( i ) );

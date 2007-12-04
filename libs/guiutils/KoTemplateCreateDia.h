@@ -52,7 +52,7 @@ public:
     static void createTemplate( const QByteArray &templateType, const KComponentData &instance,
                                 const QString &file, const QPixmap &pix, QWidget *parent=0L );
 
-protected:
+protected slots:
     void slotOk();
 
 private slots:

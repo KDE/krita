@@ -325,7 +325,7 @@ void KoTemplateCreateDia::slotOk() {
     if ( !ignore )
     {
         // copy the template file
-        KIO::FileCopyJob *job = KIO::file_copy( orig, dest,KIO::Overwrite | KIO::HideProgressInfo);
+        KIO::FileCopyJob *job = KIO::file_copy( orig, dest, 0600, KIO::Overwrite | KIO::HideProgressInfo);
         job->exec();
  
         // save the picture
@@ -364,7 +364,6 @@ void KoTemplateCreateDia::slotOk() {
       grp.writePathEntry( "FullTemplateName", dir + '/' + t->file() );
       grp.writePathEntry( "AlwaysUseTemplate", dir + '/' + t->file() );
     }
-    slotButtonClicked( KDialog::Ok );
 }
 
 void KoTemplateCreateDia::slotDefault() {

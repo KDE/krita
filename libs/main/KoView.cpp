@@ -691,7 +691,10 @@ void KoView::setupGlobalActions()
 {
     actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView );
-  connect( actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()) );
+    connect( actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()) );
+
+    if( shell() )
+        actionCollection()->addAction("view_fullscreen", shell()->actionCollection()->action("view_fullscreen"));
 }
 
 void KoView::setupPrinter( QPrinter &, QPrintDialog &printDialog )
@@ -778,10 +781,7 @@ void KoView::slotClearStatusText()
 
 QDockWidget *KoView::createDockWidget(KoDockFactory* factory)
 {
-    if( !shell() )
-        return 0;
-
-    return shell()->createDockWidget(factory);
+    return shell() ? shell()->createDockWidget(factory) : 0;
 }
 
 QPoint KoView::applyViewTransformations( const QPoint& p ) const

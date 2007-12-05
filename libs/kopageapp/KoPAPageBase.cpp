@@ -21,7 +21,6 @@
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
 
-#include <QDebug>
 #include <QPainter>
 
 #include <kdebug.h>
@@ -129,7 +128,7 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
         KoXmlElement child;
         forEachElement( child, element )
         {
-            kDebug() <<"loading shape" << child.localName();
+            kDebug(30010) <<"loading shape" << child.localName();
 
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, loadingContext );
             if ( shape ) {

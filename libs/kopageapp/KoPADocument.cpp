@@ -154,7 +154,7 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
     QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
     for ( ; it != masterStyles.constEnd(); ++it )
     {
-        qDebug() << "Master:" << it.key();
+        kDebug(30010) << "Master:" << it.key();
         KoPAMasterPage * masterPage = newMasterPage();
         masterPage->loadOdf( *( it.value() ), context );
         masterPages.append( masterPage );

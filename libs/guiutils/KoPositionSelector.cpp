@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,17 +65,23 @@ public:
         QSize prefSize = calcSizes();
 
         qreal columnWidth, rowHeight;
-        if (geom.width() < minimum.width())
+        if (geom.width() <= minimum.width())
             columnWidth = geom.width() / (qreal) maxCol;
         else
             columnWidth = prefSize.width() + GAP;
-        if (geom.height() < minimum.height())
+        if (geom.height() <= minimum.height())
             rowHeight = geom.height() / (qreal) maxRow;
         else
             rowHeight = prefSize.height() + GAP;
+        // padding inside row and column so that radio button is centered
+        QPoint padding( qRound(0.5 * (columnWidth - prefSize.width())), qRound(0.5 * (rowHeight - prefSize.height())));
+        // offset so that all the radio button are centered within the widget
+        qreal offsetX = 0.5 * (geom.width()- static_cast<qreal>(maxCol) * columnWidth);
+        qreal offsetY = 0.5 * (geom.height() - static_cast<qreal>(maxRow) * rowHeight);
+        QPoint offset( qRound(offsetX), qRound(offsetY));
         foreach(Item item, items) {
             QPoint point( qRound(item.column * columnWidth), qRound(item.row * rowHeight) );
-            QRect rect(point + geom.topLeft(), prefSize);
+            QRect rect(point + offset + padding + geom.topLeft(), prefSize);
             item.child->setGeometry(rect);
         }
     }
@@ -93,7 +100,7 @@ public:
                         but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight, &opt, but));
             }
             maxRow = qMax(maxRow, item.row);
-            maxCol = qMax(maxRow, item.column);
+            maxCol = qMax(maxCol, item.column);
         }
         maxCol++; maxRow++; // due to being zero-based.
         preferred = QSize(maxCol * prefSize.width() + (maxCol-1) * GAP, maxRow * prefSize.height() + (maxRow-1) * GAP);
@@ -214,7 +221,6 @@ void KoPositionSelector::paintEvent (QPaintEvent *) {
         width = 3;
     pen.setWidth(width);
     painter.setPen(pen);
-    painter.drawRect(d->topLeft->width() / 2, d->topLeft->height() / 2, d->bottomRight->x(), d->bottomRight->y());
+    painter.drawRect( QRect( d->topLeft->geometry().center(), d->bottomRight->geometry().center() ) );
     painter.end();
 }
-

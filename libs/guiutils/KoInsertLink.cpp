@@ -52,19 +52,19 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
 
   KVBox *page = new KVBox();
   p1=addPage(page, i18n("Internet") );
-  p1->setIcon( KIcon(BarIcon("html",KIconLoader::SizeMedium)) );
+  p1->setIcon( KIcon(BarIcon("internet-web-browser",KIconLoader::SizeMedium)) );
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
 
   page = new KVBox();
   p2=addPage(page, i18n("Mail & News") );
-  p2->setIcon( KIcon(BarIcon("mail",KIconLoader::SizeMedium)) );
+  p2->setIcon( KIcon(BarIcon("internet-mail",KIconLoader::SizeMedium)) );
   mailLink = new  mailLinkPage(page );
   connect(mailLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
   page = new KVBox();
   p3=addPage(page, i18n("File"));
-  p3->setIcon( KIcon(BarIcon("document-new",KIconLoader::SizeMedium)) );
+  p3->setIcon( KIcon(BarIcon("system-file-manager",KIconLoader::SizeMedium)) );
   fileLink = new  fileLinkPage(page );
   connect(fileLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 

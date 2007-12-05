@@ -1,4 +1,3 @@
-#add_subdirectory( performancetest )
 add_subdirectory( colorrange )
 add_subdirectory( compose )
 add_subdirectory( colorspaceconversion )

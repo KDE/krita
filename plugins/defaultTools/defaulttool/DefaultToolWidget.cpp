@@ -35,8 +35,7 @@
 #include <QtGui/QLabel>
 
 DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
-    QWidget* parent ) : QTabWidget( parent ),
-    m_moveCommand(0)
+                                    QWidget* parent ) : QTabWidget( parent )
 {
     m_tool = tool;
 
@@ -46,14 +45,15 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
 
     connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), this, SLOT( updatePosition() ) );
 
-    connect( positionXSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( positionHasChanged() ) );
-    connect( positionYSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( positionHasChanged() ) );
+    connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
+    connect( positionYSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
 
     connect( widthSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
     connect( heightSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
 
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updatePosition() ) );
+    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updateSize() ) );
     KoShapeManager * manager = m_tool->canvas()->shapeManager();
     connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updatePosition() ) );
     connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updateSize() ) );
@@ -84,11 +84,11 @@ void DefaultToolWidget::updatePosition()
     KoFlake::Position position = positionSelector->position();
 
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    if( m_shapesToModify.count() )
+    if( selection->count() )
         selPosition = selection->absolutePosition( position );
 
-    positionXSpinBox->setEnabled( m_shapesToModify.count() );
-    positionYSpinBox->setEnabled( m_shapesToModify.count() );
+    positionXSpinBox->setEnabled( selection->count() );
+    positionYSpinBox->setEnabled( selection->count() );
 
     positionXSpinBox->blockSignals(true);
     positionYSpinBox->blockSignals(true);
@@ -103,7 +103,7 @@ void DefaultToolWidget::updatePosition()
 void DefaultToolWidget::positionHasChanged()
 {
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    if( ! m_shapesToModify.count() )
+    if( ! selection->count() )
         return;
 
     KoFlake::Position position = positionSelector->position();
@@ -112,46 +112,25 @@ void DefaultToolWidget::positionHasChanged()
     if( oldPos == newPos )
         return;
 
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
     QPointF moveBy = newPos - oldPos;
     QList<QPointF> oldPositions;
     QList<QPointF> newPositions;
-    foreach( KoShape* shape, m_shapesToModify )
+    foreach( KoShape* shape, selectedShapes )
     {
         oldPositions.append( shape->position() );
         newPositions.append( shape->position() + moveBy );
     }
     selection->setPosition( selection->position() + moveBy );
-    QTime now = QTime::currentTime();
-    if (m_moveCommand ==0 || now > m_commandExpire) {
-        m_moveCommand = new KoShapeMoveCommand( m_shapesToModify, oldPositions, newPositions );
-        m_tool->canvas()->addCommand( m_moveCommand );
-    }
-    else {
-        m_moveCommand->setNewPositions(newPositions);
-        m_moveCommand->redo();
-    }
-    m_commandExpire = now.addMSecs(4000);
+    m_tool->canvas()->addCommand( new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions ) );
     updatePosition();
-}
-
-void DefaultToolWidget::selectionChanged()
-{
-    m_moveCommand = 0;
-    m_shapesToModify.clear();
-    KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    foreach(KoShape *shape, selection->selectedShapes( KoFlake::TopLevelSelection) ) {
-        if (shape->isEditable())
-            m_shapesToModify.append(shape);
-    }
-    updatePosition();
-    updateSize();
 }
 
 void DefaultToolWidget::updateSize()
 {
     QSizeF selSize( 0, 0 );
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    uint selectionCount = m_shapesToModify.count();
+    uint selectionCount = selection->count();
     if( selectionCount )
         selSize = selection->boundingRect().size();
 
@@ -190,11 +169,12 @@ void DefaultToolWidget::sizeHasChanged()
         resizeMatrix.scale( newSize.width() / rect.width(), newSize.height() / rect.height() );
         resizeMatrix.translate( -rect.x(), -rect.y() );
 
+        QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
         QList<QSizeF> oldSizes, newSizes;
         QList<QMatrix> oldState;
         QList<QMatrix> newState;
 
-        foreach( KoShape* shape, m_shapesToModify )
+        foreach( KoShape* shape, selectedShapes )
         {
             QSizeF oldSize = shape->size();
             oldState << shape->transformation();
@@ -221,8 +201,8 @@ void DefaultToolWidget::sizeHasChanged()
         m_tool->repaintDecorations();
         selection->applyAbsoluteTransformation( resizeMatrix );
         QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
-        new KoShapeSizeCommand( m_shapesToModify, oldSizes, newSizes, cmd );
-        new KoShapeTransformCommand( m_shapesToModify, oldState, newState, cmd );
+        new KoShapeSizeCommand( selectedShapes, oldSizes, newSizes, cmd );
+        new KoShapeTransformCommand( selectedShapes, oldState, newState, cmd );
         m_tool->canvas()->addCommand( cmd );
         updateSize();
         updatePosition();
@@ -238,7 +218,7 @@ void DefaultToolWidget::setUnit( const KoUnit &unit )
     heightSpinBox->setUnit( unit );
 }
 
-void DefaultToolWidget::resourceChanged( int key, const QVariant &)
+void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
 {
     if( key == KoCanvasResource::Unit )
         setUnit( m_tool->canvas()->unit() );

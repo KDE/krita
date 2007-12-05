@@ -24,13 +24,9 @@
 #include <KoFlake.h>
 
 #include <QTabWidget>
-#include <QTime>
-#include <QList>
 
 class KoInteractionTool;
 class QRadioButton;
-class KoShapeMoveCommand;
-class KoShape;
 
 class DefaultToolWidget : public QTabWidget, Ui::DefaultToolWidget {
     Q_OBJECT
@@ -49,13 +45,9 @@ private slots:
     void updateSize();
     void sizeHasChanged();
     void resourceChanged( int key, const QVariant & res );
-    void selectionChanged();
 
 private:
     KoInteractionTool* m_tool;
-    KoShapeMoveCommand *m_moveCommand;
-    QTime m_commandExpire;
-    QList<KoShape *> m_shapesToModify;
 };
 
 #endif

@@ -308,7 +308,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
             adj->profiles[0] = d->profile->lcmsProfile();
             adj->profiles[2] = d->profile->lcmsProfile();
-            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
+            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, cmsFLAGS_NOWHITEONWHITEFIXUP);
             adj->csProfile = d->profile->lcmsProfile();
             return adj;
         }
@@ -367,7 +367,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             // LUT is already on virtual profile
             cmsFreeLUT(Lut);
 
-            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, 0);
+            adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(), INTENT_PERCEPTUAL, cmsFLAGS_NOWHITEONWHITEFIXUP);
 
             return adj;
         }

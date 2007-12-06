@@ -80,6 +80,7 @@ public slots:
     void nodeProperties( KisNodeSP node );
     void nodeOpacityChanged( double opacity, bool final);
     void nodeCompositeOpChanged( const KoCompositeOp* op );
+    void duplicateActiveNode( KisNodeSP node );
 private:
 
     struct Private;

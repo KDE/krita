@@ -9,23 +9,8 @@
     <height>542</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="spacing" >
-    <number>0</number>
-   </property>
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>0</number>
-   </property>
-   <item>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
     <layout class="QHBoxLayout" >
      <property name="leftMargin" >
       <number>0</number>
@@ -73,23 +58,11 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0" >
     <widget class="KoDocumentSectionView" native="1" name="listLayers" />
    </item>
-   <item>
+   <item row="2" column="0" >
     <layout class="QHBoxLayout" >
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
      <item>
       <widget class="QToolButton" name="bnAdd" >
        <property name="sizePolicy" >
@@ -121,6 +94,37 @@
        </property>
        <property name="popupMode" >
         <enum>QToolButton::MenuButtonPopup</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="bnDuplicate" >
+       <property name="minimumSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>18</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Duplicate layer or mask</string>
+       </property>
+       <property name="statusTip" >
+        <string>Duplicate layer or mask</string>
+       </property>
+       <property name="whatsThis" >
+        <string>Duplicate the currently selected layer or mask</string>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="icon" >
+        <iconset>image1</iconset>
        </property>
       </widget>
      </item>
@@ -206,8 +210,8 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>20</width>
-         <height>20</height>
+         <width>151</width>
+         <height>22</height>
         </size>
        </property>
       </spacer>

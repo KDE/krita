@@ -141,6 +141,7 @@ KisLayerBox::KisLayerBox()
     connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     connect(bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
+    connect(bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
     connect(doubleOpacity, SIGNAL(valueChanged(double, bool)), SIGNAL(sigOpacityChanged(double, bool)));
     connect(cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
 }
@@ -260,6 +261,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(KIcon("document-properties"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
         menu.addSeparator();
         menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
+        menu.addAction(KIcon("edit-duplicate"), i18n("&Duplicate Layer or Mask"), this, SLOT(slotDuplicateClicked()));
         QMenu *sub = menu.addMenu(KIcon("document-new"), i18n("&New"));
 
         sub->addAction(KIcon("document-new"), i18n("&Paint Layer"), this, SLOT(slotNewPaintLayer()));
@@ -498,7 +500,13 @@ void KisLayerBox::slotLowerClicked()
 void KisLayerBox::slotPropertiesClicked()
 {
     if (KisNodeSP active = m_nodeManager->activeNode())
-        emit sigRequestNodeProperties(active);
+        emit sigRequestNodeProperties( active );
+}
+
+void KisLayerBox::slotDuplicateClicked()
+{
+    if ( KisNodeSP active = m_nodeManager->activeNode() )
+        m_nodeManager->duplicateActiveNode( active );
 }
 
 void KisLayerBox::slotNodeActivated(const QModelIndex & node)

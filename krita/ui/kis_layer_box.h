@@ -94,7 +94,8 @@ private slots:
     void slotRaiseClicked();
     void slotLowerClicked();
     void slotPropertiesClicked();
-
+    void slotDuplicateClicked();
+    
     void slotNewPaintLayer();
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();

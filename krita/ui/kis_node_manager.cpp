@@ -220,5 +220,15 @@ void KisNodeManager::nodeCompositeOpChanged( const KoCompositeOp* op )
     m_d->layerManager->layerCompositeOp( op );
 }
 
+void KisNodeManager::duplicateActiveNode( KisNodeSP node )
+{
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layerDuplicate();
+    }
+    else if (node->inherits("KisMask")) {
+        m_d->maskManager->duplicateMask();
+    }
+}
+
 #include "kis_node_manager.moc"
 

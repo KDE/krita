@@ -28,9 +28,16 @@ class KisPixelSelectionTest : public QObject
 private slots:
 
     void testCreation();
-    void testInvert();
+    void testSetSelected();
+    void testMaskImage();
     void testSelect();
+    void testInvert();
+    void testClear();
     void testExtent();
+    void testAddSelection();
+    void testSubtractSelection();
+    void testIntersectSelection();
+    void testTotally();
 };
 
 #endif

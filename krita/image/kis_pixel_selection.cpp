@@ -37,10 +37,9 @@
 #include "kis_image.h"
 #include "kis_datamanager.h"
 #include "kis_fill_painter.h"
-#include "kis_mask.h"
 
-struct KisPixelSelection::Private{
-
+struct KisPixelSelection::Private
+{
     KisPaintDeviceWSP parentPaintDevice;
     bool interestedInDirtyness;
 };
@@ -62,18 +61,6 @@ KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev)
     m_d->parentPaintDevice = dev;
     m_d->interestedInDirtyness = true;
 }
-
-
-KisPixelSelection::KisPixelSelection( KisPaintDeviceSP parent, KisMaskSP mask )
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection for ") + parent->objectName())
-    , m_d( new Private )
-{
-    Q_ASSERT(parent);
-    m_d->parentPaintDevice = parent;
-    m_d->interestedInDirtyness = true;
-    m_datamanager = mask->selection()->getOrCreatePixelSelection()->dataManager();
-}
-
 
 KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
     : KisPaintDevice( rhs )
@@ -108,19 +95,18 @@ void KisPixelSelection::setSelected(qint32 x, qint32 y, quint8 s)
     *pix = s;
 }
 
-QImage KisPixelSelection::maskImage( KisImageSP image ) const
+QImage KisPixelSelection::maskImage( const QRect & rc  ) const
 {
     // If part of a KisAdjustmentLayer, there may be no parent device.
     QImage img;
     QRect bounds;
     if (m_d->parentPaintDevice) {
-
         bounds = m_d->parentPaintDevice->exactBounds();
-        bounds = bounds.intersect( image->bounds() );
+        bounds = bounds.intersect( rc );
         img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     }
     else {
-        bounds = QRect( 0, 0, image->width(), image->height());
+        bounds = rc;
         img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     }
 
@@ -167,14 +153,34 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionA
 
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 {
+#if 0
     KisPainter painter(this);
     QRect r = selection->selectedExactRect();
     painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
     painter.end();
+#endif
+
+    QRect r = selection->selectedRect();
+    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
+    KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
+    for (int i = 0; i < r.height(); ++i) {
+        while (!src.isDone()) {
+            if ( *src.rawData() + *dst.rawData() < MAX_SELECTED )
+                *dst.rawData() = *src.rawData() + *dst.rawData();
+            else
+                *dst.rawData() = MAX_SELECTED;
+            ++src;
+            ++dst;
+        }
+        dst.nextRow();
+        src.nextRow();
+    }
+    
 }
 
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 {
+#if 0
     KisPainter painter(this);
     selection->invert();
 
@@ -183,10 +189,28 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 
     selection->invert();
     painter.end();
+#endif
+    QRect r = selection->selectedRect();
+    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
+    KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
+    for (int i = 0; i < r.height(); ++i) {
+        while (!src.isDone()) {
+            if ( *dst.rawData() - *src.rawData() > MIN_SELECTED )
+                *dst.rawData() = *dst.rawData() - *src.rawData();
+            else
+                *dst.rawData() = MIN_SELECTED;
+            ++src;
+            ++dst;
+        }
+        dst.nextRow();
+        src.nextRow();
+    }
+    
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 {
+#if 0
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(this));
 
     KisPainter painter(tmpSel);
@@ -197,13 +221,35 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 
     this->clear();
     addSelection(tmpSel);
+#endif
+    QRect r = selection->selectedRect().united(selectedRect());
+
+    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
+    KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
+    for (int i = 0; i < r.height(); ++i) {
+        while (!src.isDone()) {
+            if ( *dst.rawData() == MAX_SELECTED && *src.rawData() == MAX_SELECTED )
+                *dst.rawData() = MAX_SELECTED;
+            else
+                *dst.rawData() = MIN_SELECTED;
+            ++src;
+            ++dst;
+        }
+        dst.nextRow();
+        src.nextRow();
+    }
 }
 
 void KisPixelSelection::clear(QRect r)
 {
-    KisFillPainter painter(KisPaintDeviceSP(this));
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
+    if (*(m_datamanager->defaultPixel()) != MIN_SELECTED) {
+        KisFillPainter painter(KisPaintDeviceSP(this));
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
+    }
+    else {
+        m_datamanager->clear(r.x(), r.y(), r.width(), r.height(), m_datamanager->defaultPixel());
+    }
 }
 
 void KisPixelSelection::clear()
@@ -215,15 +261,13 @@ void KisPixelSelection::clear()
 
 void KisPixelSelection::invert()
 {
-    //extent is needed here (not exactBounds), because unselected but existing pixel
-    //need to be inverted too
+    // Extent is needed here (not exactBounds), because unselected but existing pixel
+    // need to be inverted too
     QRect rc = extent();
 
     KisRectIterator it = createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
     while ( ! it.isDone() )
     {
-        // CBR this is wrong only first byte is inverted
-        // BSAR: But we have always only one byte in this color model :-).
         *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         ++it;
     }
@@ -250,18 +294,56 @@ bool KisPixelSelection::isProbablyTotallyUnselected(QRect r) const
 
 QRect KisPixelSelection::selectedRect() const
 {
-    if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_d->parentPaintDevice)
-        return extent();
-    else
-        return extent().unite(m_d->parentPaintDevice->extent());
+    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED )
+    {
+        if (m_d->parentPaintDevice) {
+            // The selected exact rect is the area of this selection that overlaps
+            // with the parent paint device.
+            return m_d->parentPaintDevice->extent().intersected(extent());
+        }
+        else {
+            return extent();
+        }
+    }
+    else {
+        if (m_d->parentPaintDevice) {
+            // By default all pixels are selected, to the size of the parent paint device.
+            return m_d->parentPaintDevice->extent();
+        }
+        else {
+            // By default all pixels are selected; no matter how many pixels are
+            // marked as deselected, there are always by-default-selected pixels
+            // around the deselected pixels.
+            return QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX);
+        }
+    }
 }
 
 QRect KisPixelSelection::selectedExactRect() const
 {
-    if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_d->parentPaintDevice)
-        return exactBounds();
-    else
-        return exactBounds().unite(m_d->parentPaintDevice->exactBounds());
+    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED )
+    {
+        if (m_d->parentPaintDevice) {
+            // The selected exact rect is the area of this selection that overlaps
+            // with the parent paint device.
+            return m_d->parentPaintDevice->exactBounds().intersected(exactBounds());
+        }
+        else {
+            return exactBounds();
+        }
+    }
+    else {
+        if (m_d->parentPaintDevice) {
+            // By default all pixels are selected, to the size of the parent paint device.
+            return m_d->parentPaintDevice->exactBounds();
+        }
+        else {
+            // By default all pixels are selected; no matter how many pixels are
+            // marked as deselected, there are always by-default-selected pixels
+            // around the deselected pixels.
+            return QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX);
+        }
+    }
 }
 
 void KisPixelSelection::setInterestedInDirtyness(bool b)

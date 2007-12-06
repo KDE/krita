@@ -37,7 +37,6 @@ class KRITAIMAGE_EXPORT KisPixelSelection : public KisPaintDevice, public KisSel
 
 public:
 
-
     /**
      * Create a new KisPixelSelection. This selection will not have a
      * parent paint device.
@@ -46,25 +45,11 @@ public:
 
     /**
      * Create a new KisPixelSelection. The selection will never be
-     * bigger than the parent paint device. This constructor will not
-     * set the newly created pixel selection on the parent paintdevice.
-     *
-     * The parent paint device can be the paintDevice of a paint
-     * layer. If the selection belongs to a paint layer, both the
-     * selection and the paint device will have the paint layer set as
-     * parent layer.
+     * bigger than the parent paint device.
      *
      * @param dev the parent paint device.
      */
     KisPixelSelection(KisPaintDeviceSP dev);
-
-
-    /**
-     * Create a new KisPixelSelection from the given mask. The
-     * selection will share its pixel data with the mask.
-     */
-    KisPixelSelection( KisPaintDeviceSP parent, KisMaskSP mask );
-
 
     /**
      * Copy the selection
@@ -78,9 +63,34 @@ public:
 
     void setSelected(qint32 x, qint32 y, quint8 s);
 
-    QImage maskImage( KisImageSP image ) const;
+    /**
+     * Return a grayscale QImage representing the selectedness as grayscale
+     * pixels of the specified rect of this pixel selection.
+     */
+    QImage maskImage( const QRect & rc ) const;
 
+    /**
+     * Fill the specified rect with the specified selectedness.
+     */
     void select(const QRect & r, quint8 selectedness = MAX_SELECTED);
+
+    /**
+     * Invert the total selection. This will also invert the default value
+     * of the selection paint device, from MIN_SELECTED to MAX_SELECTED or
+     * back.
+     */ 
+    void invert();
+
+    /**
+     * Set the specfied rect to MIN_SELECTED.
+     */
+    void clear(QRect r);
+
+    /**
+     * Reset the entire selection. The selectedRect and selectedExactRect
+     * will be empty. The selection will be completely deselected.
+     */
+    void clear();
 
     /**
      * Apply a selection to the selection using the specified selection mode
@@ -91,17 +101,17 @@ public:
     /** Add a selection */
     void addSelection(KisPixelSelectionSP selection);
 
-    /** Subtracts a selection */
+    /**
+     * Subtracts a selection
+     */
     void subtractSelection(KisPixelSelectionSP selection);
 
-    /** Intersects a selection */
+    /**
+     * Intersects a selection. Only pixels that are MAX_SELECTED in both this pixel selection
+     * and the specified selection will remain selected. Pixels that are not completely
+     * selected in either pixel selection will be completely deselected.
+     */
     void intersectSelection(KisPixelSelectionSP selection);
-
-    void invert();
-
-    void clear(QRect r);
-
-    void clear();
 
     /// Tests if the the rect is totally outside the selection
     bool isTotallyUnselected(QRect r) const;

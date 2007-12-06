@@ -245,7 +245,7 @@ void DlgColorRange::updatePreview()
 
     qint32 x, y, w, h;
     m_dev->exactBounds(x, y, w, h);
-    QPixmap pix = QPixmap::fromImage(m_selection->maskImage( m_view->image() ).scaled(350, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    QPixmap pix = QPixmap::fromImage(m_selection->maskImage( m_view->image()->bounds() ).scaled(350, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     m_view->canvas()->update();
     m_page->pixSelection->setPixmap(pix);
 }

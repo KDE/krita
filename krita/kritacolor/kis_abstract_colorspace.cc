@@ -304,7 +304,7 @@ KisColorAdjustment *KisAbstractColorSpace::createBrightnessContrastAdjustment(Q_
 
     adj->profiles[0] = m_profile->profile();
     adj->profiles[2] = m_profile->profile();
-    adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+    adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, cmsFLAGS_NOWHITEONWHITEFIXUP);
     adj->csProfile = m_profile->profile();
     return adj;
 }
@@ -388,7 +388,7 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
     // LUT is already on virtual profile
     cmsFreeLUT(Lut);
 
-    adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+    adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, cmsFLAGS_NOWHITEONWHITEFIXUP);
 
     return adj;
 }

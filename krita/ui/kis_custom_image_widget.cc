@@ -23,6 +23,8 @@
 #include <QSlider>
 #include <QComboBox>
 #include <QRect>
+#include <QApplication>
+#include <QClipboard>
 
 #include <kcolorcombo.h>
 #include <kdebug.h>
@@ -92,6 +94,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
 
     colorSpaceSelector->setCurrentColorModel(RGBAColorModelID);
     colorSpaceSelector->setCurrentColorDepth(Integer8BitsColorDepthID);
+
+    connect( QApplication::clipboard(), SIGNAL( dataChanged() ), this, SLOT( clipboardDataChanged() ) );
+    connect( QApplication::clipboard(), SIGNAL( selectionChanged() ), this, SLOT( clipboardDataChanged() ) );
+    connect( QApplication::clipboard(), SIGNAL( changed( QClipboard::Mode) ), this, SLOT( clipboardDataChanged() ) );
 }
 
 void KisCustomImageWidget::resolutionChanged(double res)
@@ -199,6 +205,33 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
         return 0;
 
     return (opacity * 255) / 100;
+}
+
+void KisCustomImageWidget::clipboardDataChanged()
+{
+    QClipboard *cb = QApplication::clipboard();
+    QImage qimg = cb->image();
+    const QMimeData *cbData = cb->mimeData();
+    QByteArray mimeType("application/x-krita-selection");
+
+    if ((cbData && cbData->hasFormat(mimeType)) || !qimg.isNull()) {
+        KisClipboard * cb = KisClipboard::instance();
+        QSize sz = cb->clipSize();
+        if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
+            chkFromClipboard->setChecked(true);
+            chkFromClipboard->setEnabled(true);
+            doubleWidth->setValue(sz.width());
+            doubleWidth->setDecimals(0);
+            doubleHeight->setValue(sz.height());
+            doubleHeight->setDecimals(0);
+        }
+        else {
+            chkFromClipboard->setChecked(false);
+            chkFromClipboard->setEnabled(false);
+
+        }
+    }
+
 }
 
 #include "kis_custom_image_widget.moc"

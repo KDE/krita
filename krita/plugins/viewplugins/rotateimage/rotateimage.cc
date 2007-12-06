@@ -66,15 +66,15 @@ true);
         actionCollection()->addAction("rotateimage", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage()));
 
-        action  = new KAction(KIcon("object-rotate-left"), i18n("Rotate Image CW"), this);
+        action  = new KAction(KIcon("object-rotate-left"), i18n("Right 90°"), this);
         actionCollection()->addAction("rotateImageCW90", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage90()));
 
-        action  = new KAction(i18n("Rotate Image 1&80"), this);
+        action  = new KAction(i18n("1&80°"), this);
         actionCollection()->addAction("rotateImage180", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage180()));
 
-        action  = new KAction(KIcon("object-rotate-right"), i18n("Rotate Image CCW"), this);
+        action  = new KAction(KIcon("object-rotate-right"), i18n("Left 90°"), this);
         actionCollection()->addAction("rotateImageCCW90", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
 
@@ -82,15 +82,15 @@ true);
         actionCollection()->addAction("rotatelayer", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateLayer()));
 
-        action  = new KAction(i18n("Rotate 1&80"), this);
+        action  = new KAction(i18n("1&80°"), this);
         actionCollection()->addAction("rotateLayer180", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayer180()));
 
-        action  = new KAction(KIcon("object-rotate-right"), i18n("Rotate CCW"), this);
+        action  = new KAction(KIcon("object-rotate-right"), i18n("Right 90°"), this);
         actionCollection()->addAction("rotateLayerCCW90", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerLeft90()));
 
-        action  = new KAction(KIcon("object-rotate-left"), i18n("Rotate CW"), this);
+        action  = new KAction(KIcon("object-rotate-left"), i18n("Left 90°"), this);
         actionCollection()->addAction("rotateLayerCW90", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerRight90()));
     }

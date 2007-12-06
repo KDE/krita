@@ -176,13 +176,15 @@ void KisCustomImageWidget::buttonClicked()
         if (layer) {
             layer->setOpacity(backgroundOpacity());
         }
-        if (chkFromClipboard) {
+        if ( chkFromClipboard->isChecked() ) {
             KisPaintDeviceSP clip = KisClipboard::instance()->clip();
-            QRect r = clip->exactBounds();
-            KisPainter gc;
-            gc.begin(layer->paintDevice());
-            gc.bitBlt(0, 0, COMPOSITE_COPY, clip, r.x(), r.y(), r.width(), r.height());
-            gc.end();
+            if (clip) {
+                QRect r = clip->exactBounds();
+                KisPainter gc;
+                gc.begin(layer->paintDevice());
+                gc.bitBlt(0, 0, COMPOSITE_COPY, clip, r.x(), r.y(), r.width(), r.height());
+                gc.end();
+            }
         }
     }
 

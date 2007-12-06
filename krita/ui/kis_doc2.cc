@@ -774,13 +774,15 @@ QWidget* KisDoc2::createCustomDocumentWidget(QWidget *parent)
 
     int w = cfg.defImgWidth();
     int h = cfg.defImgHeight();
-
+    bool clipAvailable = false;
+    
     QSize sz = KisClipboard::instance()->clipSize();
     if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
         w = sz.width();
         h = sz.height();
+        clipAvailable = true;
     }
-    return new KisCustomImageWidget(parent, this, w, h, cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
+    return new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
     return 0;
 }
 

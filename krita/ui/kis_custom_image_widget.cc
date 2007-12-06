@@ -1,6 +1,7 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QComboBox>
+#include <QRect>
 
 #include <kcolorcombo.h>
 #include <kdebug.h>
@@ -34,6 +36,7 @@
 #include <KoUnit.h>
 #include <KoColorModelStandardIds.h>
 
+#include "kis_clipboard.h"
 #include "kis_doc2.h"
 
 #include "kis_cmb_idlist.h"
@@ -41,8 +44,11 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_paint_device.h"
+#include "kis_painter.h"
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorSpaceName, const QString & imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, bool clipAvailable, double resolution, const QString & defColorSpaceName, const QString & imageName)
     : WdgNewImage(parent)
 {
     Q_UNUSED( defColorSpaceName );
@@ -80,6 +86,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
         this, SLOT(heightChanged(double)));
     connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
     m_createButton -> setDefault(true);
+
+    chkFromClipboard->setChecked(clipAvailable);
+    chkFromClipboard->setEnabled(clipAvailable);
 
     colorSpaceSelector->setCurrentColorModel(RGBAColorModelID);
     colorSpaceSelector->setCurrentColorDepth(Integer8BitsColorDepthID);
@@ -166,6 +175,14 @@ void KisCustomImageWidget::buttonClicked()
         KisLayer * layer = dynamic_cast<KisLayer*>( img->root()->firstChild().data() );
         if (layer) {
             layer->setOpacity(backgroundOpacity());
+        }
+        if (chkFromClipboard) {
+            KisPaintDeviceSP clip = KisClipboard::instance()->clip();
+            QRect r = clip->exactBounds();
+            KisPainter gc;
+            gc.begin(layer->paintDevice());
+            gc.bitBlt(0, 0, COMPOSITE_COPY, clip, r.x(), r.y(), r.width(), r.height());
+            gc.end();
         }
     }
 

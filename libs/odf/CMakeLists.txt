@@ -42,7 +42,6 @@ install( FILES
     KoGenStyles.h
     KoOasisLoadingContext.h
     KoOasisSettings.h
-    KoOdfStylesReader.cpp
     KoOdfStylesReader.h
     KoOdfNumberStyles.h
     KoOdfPaste.h

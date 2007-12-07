@@ -33,7 +33,6 @@
 
 #include "KoCanvasBase.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
 #include "kis_painter.h"
 #include "kis_int_spinbox.h"
 #include "KoPointerEvent.h"

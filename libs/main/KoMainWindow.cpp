@@ -273,7 +273,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     connect( splitView, SIGNAL(triggered(bool)), this, SLOT(slotSplitView()) );
     d->m_splitViewActionList.append(splitView);
 
-    d->m_removeView  = new KAction(KIcon("view_remove"), i18n("&Remove View"), this);
+    d->m_removeView  = new KAction(KIcon("view-close"), i18n("&Remove View"), this);
     actionCollection()->addAction("view_rm_splitter", d->m_removeView );
     connect( d->m_removeView, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()) );
     d->m_splitViewActionList.append(d->m_removeView);

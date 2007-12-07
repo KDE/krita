@@ -812,7 +812,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Display" ));
     page->setHeader( i18n( "Display" ) );
-    page->setIcon(  KIcon(BarIcon( "datashow", KIconLoader::SizeMedium)));
+    page->setIcon( KIcon( "preferences-desktop-display" ));
     addPage( page );
 
     m_displaySettings = new DisplaySettingsTab( vbox );
@@ -820,21 +820,21 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Color Management"));
     page->setHeader( i18n( "Color") );
-    page->setIcon( KIcon( BarIcon( "color-fill", KIconLoader::SizeMedium )));
+    page->setIcon( KIcon( "preferences-desktop-color" ));
     addPage( page );
     m_colorSettings = new ColorSettingsTab( vbox );
 
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Performance"));
     page->setHeader( i18n( "Performance") );
-    page->setIcon( KIcon( BarIcon( "fork", KIconLoader::SizeMedium )));
+    page->setIcon( KIcon( "preferences-system-performance" ));
     addPage( page );
 
     m_performanceSettings = new PerformanceTab ( vbox );
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Tablet" ));
     page->setHeader( i18n( "Tablet" ));
-    page->setIcon( KIcon( BarIcon( "tablet", KIconLoader::SizeMedium )));
+    page->setIcon( KIcon( "input-tablet" ));
     addPage( page );
 
     m_tabletSettings = new TabletSettingsTab( vbox );

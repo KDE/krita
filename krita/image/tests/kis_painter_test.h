@@ -28,20 +28,20 @@ class KisPainterTest : public QObject
     Q_OBJECT
 
 private:
+
     void allCsApplicator(void (KisPainterTest::* funcPtr)( const KoColorSpace*cs ) );
     void testPaintDeviceBltMask( const KoColorSpace * cs );
     void testPaintDeviceBltMaskIrregular( const KoColorSpace * cs );
     void testPaintDeviceBltMaskInverted( const KoColorSpace * cs );
 
-
-
 private slots:
-
+    
     void testPaintDeviceBltMask(); // Square selection
     void testPaintDeviceBltMaskIrregular(); // Irregular selection
     void testPaintDeviceBltMaskInverted(); // Inverted selection
     void testSelectionBltMask(); // Square selection
     void testSelectionBltMaskIrregular(); // Irregular selection
+    void testSimpleAlphaCopy();
 
 };
 

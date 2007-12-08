@@ -26,6 +26,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
+#include "kis_datamanager.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
@@ -294,9 +295,24 @@ void KisPainterTest::testSelectionBltMaskIrregular()
     QCOMPARE( dst->selected(13,13), MIN_SELECTED);
 }
 
+void KisPainterTest::testSimpleAlphaCopy()
+{
+    KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "src");
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "dst");
+    quint8 p = 128;
+    src->fill(0, 0, 100, 100, &p);
+    QVERIFY(src->exactBounds() == QRect(0, 0, 100, 100));
+    KisPainter gc(dst);
+    gc.setCompositeOp(KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_COPY));
+    gc.bitBlt(QPoint(0, 0), src, src->exactBounds());
+    gc.end();
+    src->convertToQImage(0, 0, 0, 200, 200).save("1.png");
+    dst->convertToQImage(0, 0, 0, 200, 200).save("2.png");
+    QCOMPARE(dst->exactBounds(), QRect(0, 0, 100, 100));
+    
+}
 
-
-QTEST_KDEMAIN(KisPainterTest, NoGUI)
+QTEST_KDEMAIN(KisPainterTest, NoGUI);
 #include "kis_painter_test.moc"
 
 

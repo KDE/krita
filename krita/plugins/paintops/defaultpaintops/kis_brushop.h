@@ -43,7 +43,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "paintbrush"; }
     virtual QString name() const { return i18n("Pixel Brush"); }
-    virtual QString pixmap() { return "paintbrush.png"; }
+    virtual QString pixmap() { return "draw-brush"; }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
 };
 

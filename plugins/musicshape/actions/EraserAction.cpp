@@ -45,7 +45,7 @@
 using namespace MusicCore;
 
 EraserAction::EraserAction(SimpleEntryTool* tool)
-    : AbstractNoteMusicAction(KIcon("eraser"), i18n("Eraser"), tool)
+    : AbstractNoteMusicAction(KIcon("draw-eraser"), i18n("Eraser"), tool)
 {
 }
 

@@ -193,7 +193,7 @@ void KoDocumentInfoDlg::initAuthorTab()
     d->m_authorUi->lblAuthor->setPixmap( p );
     p = KIconLoader::global()->loadIcon( "kaddressbook", KIconLoader::Small );
     d->m_authorUi->pbLoadKABC->setIcon( QIcon( p ) );
-    p= KIconLoader::global()->loadIcon( "eraser", KIconLoader::Small );
+    p= KIconLoader::global()->loadIcon( "draw-eraser", KIconLoader::Small );
     d->m_authorUi->pbDelete->setIcon( QIcon( p ) );
 
     d->m_authorUi->leFullName->setText( d->m_info->authorInfo( "creator" ) );

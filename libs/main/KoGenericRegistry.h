@@ -122,10 +122,11 @@ public:
     QList<KoID> listKeys() const
     {
         QList<KoID> answer;
-        QList<QString> keys(m_hash.keys());
+        typename QHash<QString, T>::const_iterator it = m_hash.begin();
+
         // we do not use foreach() here because of GCC 3.3.x bug
-        for (QList<QString>::const_iterator it(keys.constBegin()); it!=keys.constEnd(); ++it)
-            answer.append(KoID(*it, value(*it)->name()));
+        for ( ; it != m_hash.end(); ++it )
+            answer.append(KoID(it.key(), it.value()->name()));
         return answer;
     }
 

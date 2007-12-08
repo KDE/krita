@@ -40,7 +40,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "duplicate"; }
     virtual QString name() const { return i18n("Duplicate"); }
-    virtual QString pixmap() { return "duplicate.png"; }
+    virtual QString pixmap() { return "krita-duplicate.png"; }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
 };
 

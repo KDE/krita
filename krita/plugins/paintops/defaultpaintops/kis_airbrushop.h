@@ -38,7 +38,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "airbrush"; }
     virtual QString name() const { return i18n("Pixel Airbrush"); }
-    virtual QString pixmap() { return "airbrush.png"; }
+    virtual QString pixmap() { return "krita-airbrush.png"; }
 };
 
 

@@ -71,6 +71,8 @@ public:
     virtual void mouseMoveEvent( KoPointerEvent *event );
     /// reimplemented from superclass
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+    /// reimplemented from superclass
+    virtual void mouseDoubleClickEvent( KoPointerEvent *event) {} // when a krita tool is enabled, don't push double click on
 
     /// Convert from native (postscript points) to image pixel
     /// coordinates.
@@ -108,6 +110,7 @@ protected:
 
     /// Call this to set the document modified
     void notifyModified() const;
+    
     KisImageSP currentImage();
     KisBrush* currentBrush();
     KisPattern* currentPattern();

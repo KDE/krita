@@ -18,6 +18,7 @@
     Boston, MA 02110-1301, USA.
 */
 #include "KoZoomAction.h"
+#include "KoZoomAction_p.h"
 #include "KoZoomMode.h"
 
 #include <QString>
@@ -377,3 +378,4 @@ void KoZoomAction::ExtLineEdit::focusOutEvent ( QFocusEvent * event )
 }
 
 #include "KoZoomAction.moc"
+#include "KoZoomAction_p.moc"

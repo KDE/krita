@@ -17,15 +17,13 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef kozoomaction_h
-#define kozoomaction_h
+#ifndef KOZOOMACTION_H
+#define KOZOOMACTION_H
 
-#include <QLineEdit>
-#include <kaction.h>
-#include <koguiutils_export.h>
 #include <kselectaction.h>
 #include <KoZoomMode.h>
 
+#include "koguiutils_export.h"
 
 /**
  * Class KoZoomAction implements an action to provide zoom values.
@@ -129,17 +127,4 @@ private:
     Private * const d;
 };
 
-class KoZoomAction::ExtLineEdit : public QLineEdit
-{
-Q_OBJECT
-
-public:
-    ExtLineEdit ( const QString & contents, QWidget * parent = 0 );
-
-Q_SIGNALS:
-    void lostFocus();
-protected:
-    void focusOutEvent ( QFocusEvent * event );
-};
-
-#endif // kozoomaction_h
+#endif

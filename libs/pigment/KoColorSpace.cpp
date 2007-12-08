@@ -310,7 +310,8 @@ void KoColorSpace::bitBlt(quint8 *dst,
     if (rows <= 0 || cols <= 0)
         return;
 
-    if (this != srcSpace) {
+    if (!(*this == *srcSpace)) {
+        
         quint32 len = pixelSize() * rows * cols;
 
         QVector<quint8> * conversionCache = threadLocalConversionCache(len);

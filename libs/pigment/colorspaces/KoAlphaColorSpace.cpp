@@ -36,7 +36,6 @@
 namespace {
     const quint8 PIXEL_MASK = 0;
 
-
     class CompositeOver : public KoCompositeOp {
 
     public:
@@ -211,8 +210,6 @@ namespace {
 
     };
 
-
-
     class CompositeErase : public KoCompositeOp {
 
     public:
@@ -277,7 +274,6 @@ namespace {
                 }
             }
     };
-
 
     class CompositeSubtract : public KoCompositeOp {
 
@@ -416,15 +412,10 @@ bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
 
     quint32 j = 0;
     quint32 i = 0;
+    
+    memset(dst, 0, numPixels * size);
+    dstColorSpace->applyInverseAlphaU8Mask(dst, src, numPixels);
 
-    while ( i < numPixels ) {
-
-        dstColorSpace->fromQColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j));
-
-        i += 1;
-        j += size;
-
-    }
     return true;
 
 }

@@ -52,20 +52,13 @@ ShapePropertiesDocker::ShapePropertiesDocker(QWidget *parent)
     setWidget(d->widgetStack);
 }
 
-ShapePropertiesDocker::~ShapePropertiesDocker() {
+ShapePropertiesDocker::~ShapePropertiesDocker() 
+{
     delete d;
 }
 
 void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
 {
-    if( d->canvas )
-    {
-        Q_ASSERT( d->canvas->shapeManager() );
-        disconnect( d->canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), 
-            this, SLOT( selectionChanged() ) );
-        disconnect( d->canvas->resourceProvider(), SIGNAL( resourceChanged( int, const QVariant& ) ),
-            this, SLOT( resourceChanged( int, const QVariant& ) ) );
-    }
     d->canvas = canvas;
     if( d->canvas )
     {
@@ -78,6 +71,9 @@ void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
 
 void ShapePropertiesDocker::selectionChanged()
 {
+    if( ! d->canvas )
+        return;
+
     KoSelection *selection = d->canvas->shapeManager()->selection();
     if( selection->count() == 1 )
         addWidgetForShape( selection->firstSelectedShape() );
@@ -129,7 +125,7 @@ void ShapePropertiesDocker::addWidgetForShape( KoShape * shape )
 
 void ShapePropertiesDocker::shapePropertyChanged()
 {
-    if( d->currentPanel )
+    if( d->canvas && d->currentPanel )
     {
         QUndoCommand * cmd = d->currentPanel->createCommand();
         if( ! cmd )

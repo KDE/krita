@@ -131,7 +131,7 @@ KisAutobrushResource::~KisAutobrushResource()
     delete d;
 }
 
-void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
     kDebug() << "========================================";
     kDebug() << subPixelX << " " << subPixelY;
@@ -143,10 +143,11 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, doub
     const KoColorSpace* cs = dst->colorSpace();
     dst->dataManager()->setDefaultPixel( color.data() );
     
-    int dstWidth = maskWidth(scale);
-    int dstHeight = maskHeight(scale);
+    int dstWidth = maskWidth(scaleX);
+    int dstHeight = maskHeight(scaleY);
     
-    double invScale = 1.0 / scale;
+    double invScaleX = 1.0 / scaleX;
+    double invScaleY = 1.0 / scaleY;
     
     double centerX = dstWidth * 0.5 - 1.0 + subPixelX;
     double centerY = dstHeight * 0.5 - 1.0 + subPixelY;
@@ -157,8 +158,8 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, doub
     {
         while(! hiter.isDone())
         {
-            double x = ( hiter.x() ) * invScale - centerX;
-            double y = ( hiter.y() ) * invScale - centerY;
+            double x = ( hiter.x() ) * invScaleX - centerX;
+            double y = ( hiter.y() ) * invScaleY - centerY;
             double x_i = floor(x);
             double x_f = x - x_i;
             if( x_f < 0.0) { x_f *= -1.0; }
@@ -182,7 +183,7 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, doub
 
 }
 
-void KisAutobrushResource::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info , double subPixelX , double subPixelY ) const
+void KisAutobrushResource::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info , double subPixelX , double subPixelY ) const
 {
     Q_UNUSED(info);
     

@@ -216,7 +216,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
     KisPaintDeviceSP dab = cachedDab();
-    brush->mask(dab, tmpDev, scale, 0.0, info, xFraction, yFraction);
+    brush->mask(dab, tmpDev, scale, scale, 0.0, info, xFraction, yFraction);
     
 #if 0
     KisHLineIterator hiter = tmpDev->createHLineIterator(0, 0, maskWidth);

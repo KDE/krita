@@ -92,9 +92,7 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
 
     KoColor color = painter()->paintColor();
     color.convertTo( m_dab->colorSpace() );
-    m_brush->mask(m_dab, color, 0.5 * (m_scaleX + m_scaleY), m_rotate, info, xFraction, yFraction);
-
-//     createStamp(m_dab, coloringsrc, pos, info);
+    m_brush->mask(m_dab, color, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);
 
     // paint the dab
     QRect dabRect = rect();
@@ -132,68 +130,3 @@ QRect KisDabShape::rect() const
     int height = m_brush->maskHeight( m_scaleY );
     return QRect(-width/2, -height/2, width, height);
 }
-
-
-#if 0
-
-void KisAlphaMaskShape::resize(double xs, double ys)
-{
-    Q_UNUSED(xs);
-    Q_UNUSED(ys);
-    // TODO: implement it
-}
-
-KisDynamicShape* KisAutoMaskShape::clone() const
-{
-    return new KisAutoMaskShape(*this);
-}
-
-void KisAutoMaskShape::resize(double xs, double ys)
-{
-    autoDab.width = (int)(autoDab.width * xs);
-    autoDab.hfade = (int)(autoDab.hfade * xs);
-    autoDab.height = (int)(autoDab.height * ys);
-    autoDab.vfade = (int)(autoDab.vfade * ys);
-}
-
-void KisAutoMaskShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc,const QPointF &/*pos*/, const KisPaintInformation& /*info*/)
-{
-    // Transform into the paintdevice to apply
-    switch(autoDab.shape)
-    {
-        case KisAutoDab::ShapeCircle:
-            m_shape = new KisAutobrushCircleShape(autoDab.width, autoDab.height, autoDab.hfade, autoDab.vfade);
-            break;
-        case KisAutoDab::ShapeRectangle:
-            m_shape = new KisAutobrushRectShape(autoDab.width, autoDab.height, autoDab.hfade, autoDab.vfade);
-            break;
-    }
-
-    // Apply the coloring
-    const KoColorSpace * colorSpace = stamp->colorSpace();
-
-    // Convert the kiscolor to the right colorspace.
-    KoColor kc;
-    qint32 pixelSize = colorSpace->pixelSize();
-
-    KisHLineIteratorPixel hiter = stamp->createHLineIterator( -autoDab.width/2, -autoDab.height/2, autoDab.width); // hum cheating (can't remember what?)
-    for (int y = 0; y < autoDab.height; y++) // hum cheating (once again) /me slaps himself (again, what ?)
-    {
-        int x=0;
-        while(! hiter.isDone())
-        {
-            coloringsrc->colorAt(x,y, &kc);
-            colorSpace->setAlpha(kc.data(), alphaAt(x, y), 1);
-            memcpy(hiter.rawData(), kc.data(), pixelSize);
-            x++;
-            ++hiter;
-        }
-        hiter.nextRow();
-    }
-}
-
-KisAlphaMaskShape::~KisAlphaMaskShape()
-{
-}
-
-#endif

@@ -100,7 +100,7 @@ public:
      * @return a mask computed from the grey-level values of the
      * pixels in the brush.
      */
-    virtual void mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    virtual void mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     /**
      * This function creates a mask from a paint device, it basically takes the source paint device
      * color information, and set the alpha value from the brush mask information. 
@@ -118,7 +118,7 @@ public:
      * @return a mask computed from the grey-level values of the
      * pixels in the brush.
      */
-    virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
     virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 

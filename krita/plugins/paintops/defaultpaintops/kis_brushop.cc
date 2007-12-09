@@ -282,7 +282,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         dab = cachedDab( );
         KoColor color = painter()->paintColor();
         color.convertTo( dab->colorSpace() );
-        brush->mask(dab, color, scale, 0.0, info, xFraction, yFraction);
+        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);

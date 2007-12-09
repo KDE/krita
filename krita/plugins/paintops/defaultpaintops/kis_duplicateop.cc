@@ -362,7 +362,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 //     copySelection.end();
 
     KisPaintDeviceSP dab = cachedDab( );
-    brush->mask(dab, m_srcdev, scale, 0.0, info, xFraction, yFraction);
+    brush->mask(dab, m_srcdev, scale, scale, 0.0, info, xFraction, yFraction);
     
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale), brush->maskHeight(scale));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());

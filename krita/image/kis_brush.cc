@@ -404,10 +404,12 @@ QImage KisBrush::img() const
     return image;
 }
 
-void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
+void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
 {
     Q_UNUSED(angle);
     Q_UNUSED(info_);
+    
+    double scale = 0.5 *(scaleX + scaleY);
     
     if (d->scaledBrushes.isEmpty()) {
         createScaledBrushes();
@@ -470,11 +472,12 @@ void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, do
     
 }
 
-void KisBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+void KisBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
     Q_UNUSED(dst);
     Q_UNUSED(src);
-    Q_UNUSED(scale);
+    Q_UNUSED(scaleX);
+    Q_UNUSED(scaleY);
     Q_UNUSED(angle);
     Q_UNUSED(info);
     Q_UNUSED(subPixelX);
@@ -1274,7 +1277,7 @@ void KisBrush::generateBoundary() {
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
-        mask(dev, KoColor( cs ), 1.0, 0.0, KisPaintInformation() );
+        mask(dev, KoColor( cs ), 1.0, 1.0, 0.0, KisPaintInformation() );
 #if 0
         KisQImagemaskSP amask = mask(KisPaintInformation());
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA",0);

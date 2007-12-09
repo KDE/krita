@@ -83,8 +83,8 @@ class KRITAIMAGE_EXPORT KisAutobrushResource : public KisBrush
         KisAutobrushResource(KisAutobrushShape* img);
         virtual ~KisAutobrushResource();
     public:
-        virtual void mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
-        virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+        virtual void mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+        virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     public:
         virtual bool load() { return false; }
     private:

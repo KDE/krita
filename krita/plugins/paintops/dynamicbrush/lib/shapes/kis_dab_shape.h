@@ -46,41 +46,4 @@ class DYNAMIC_BRUSH_EXPORT KisDabShape : public KisDynamicShape {
         KisBrush* m_brush;
 };
 
-#if 0
-
-struct DYNAMIC_BRUSH_EXPORT KisAlphaMaskShape : public KisDabShape {
-    KisAlphaMaskShape();
-    virtual ~KisAlphaMaskShape();
-    virtual quint8 alphaAt(int x, int y);
-    virtual void resize(double xs, double ys);
-};
-
-class DYNAMIC_BRUSH_EXPORT KisAutoMaskShape : public KisDabShape {
-  public:
-        struct KisAutoDab {
-            enum Shape {
-                ShapeCircle, ShapeRectangle
-            };
-            int width, height, hfade, vfade;
-            Shape shape;
-        };
-    public:
-        KisAutoMaskShape()  {  m_shape = 0; }
-        virtual ~KisAutoMaskShape();
-        virtual KisDynamicShape* clone() const;
-        virtual quint8 alphaAt(int x, int y);
-        virtual void resize(double xs, double ys);
-    virtual void rotate(double r) { Q_UNUSED( r ); }
-        virtual void createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc,const QPointF &pos, const KisPaintInformation& info);
-        virtual QRect rect()
-        {
-            return QRect(-autoDab.width/2, -autoDab.width/2, autoDab.width, autoDab.height);
-        }
-    public:
-        KisAutoDab autoDab;
-        KisAutobrushShape* m_shape;
-};
-
-#endif
-
 #endif

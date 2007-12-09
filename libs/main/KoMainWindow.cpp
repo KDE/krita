@@ -288,7 +288,8 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     d->m_exportFile->setEnabled( false );
     d->m_paSave->setEnabled( false );
     d->m_paPrint->setEnabled( false );
-    d->m_paPrintPreview->setEnabled( false );
+    if( d->m_paPrintPreview )
+        d->m_paPrintPreview->setEnabled( false );
     d->m_sendfile->setEnabled( false);
     d->m_exportPdf->setEnabled( false);
     d->m_paCloseFile->setEnabled( false);
@@ -456,7 +457,8 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   d->m_importFile->setEnabled( enable );
   d->m_exportFile->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
-  d->m_paPrintPreview->setEnabled( enable );
+  if( d->m_paPrintPreview )
+    d->m_paPrintPreview->setEnabled( enable );
   d->m_sendfile->setEnabled( enable);
   d->m_exportPdf->setEnabled( enable);
   d->m_paCloseFile->setEnabled( enable);
@@ -509,7 +511,8 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const Q3PtrList<KoVie
   d->m_paSaveAs->setEnabled( enable );
   d->m_exportFile->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
-  d->m_paPrintPreview->setEnabled( enable );
+  if( d->m_paPrintPreview )
+    d->m_paPrintPreview->setEnabled( enable );
   d->m_sendfile->setEnabled( enable);
   d->m_exportPdf->setEnabled( enable);
   d->m_paCloseFile->setEnabled( enable );

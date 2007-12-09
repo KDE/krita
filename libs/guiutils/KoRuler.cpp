@@ -207,6 +207,8 @@ void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPain
     }
     textLength += 4;  // Add some padding
 
+    if (numberStepPixel == 0 || numberStep == 0)
+        return;
     // Change number step so all digits fits
     while(textLength > numberStepPixel) {
         numberStepPixel += numberStepPixel;
@@ -419,6 +421,8 @@ void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainte
     }
     textLength += 4;  // Add some padding
 
+    if (numberStepPixel == 0 || numberStep == 0)
+        return;
     // Change number step so all digits will fit
     while(textLength > numberStepPixel) {
         numberStepPixel += numberStepPixel;

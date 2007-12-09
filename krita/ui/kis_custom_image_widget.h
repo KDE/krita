@@ -59,7 +59,8 @@ private slots:
     void heightChanged(double value);
     void resolutionChanged(double value);
     void clipboardDataChanged();
-
+    void screenSizeClicked();
+    
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
     void documentSelected();

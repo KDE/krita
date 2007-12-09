@@ -205,6 +205,16 @@
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QPushButton" name="bnScreenSize" >
+        <property name="toolTip" >
+         <string>Set Width and Height to screen resolution.</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Screen size</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -256,6 +266,186 @@
       </item>
       <item row="0" column="1" >
        <widget class="KColorCombo" name="cmbColor" >
+        <item>
+         <property name="text" >
+          <string>Custom...</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Custom...</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
         <item>
          <property name="text" >
           <string>Custom...</string>
@@ -577,6 +767,9 @@
       <widget class="QPushButton" name="m_createButton" >
        <property name="text" >
         <string>Create</string>
+       </property>
+       <property name="autoDefault" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>

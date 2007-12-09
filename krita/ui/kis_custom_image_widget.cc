@@ -25,6 +25,7 @@
 #include <QRect>
 #include <QApplication>
 #include <QClipboard>
+#include <QDesktopWidget>
 
 #include <kcolorcombo.h>
 #include <kdebug.h>
@@ -98,6 +99,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ), this, SLOT( clipboardDataChanged() ) );
     connect( QApplication::clipboard(), SIGNAL( selectionChanged() ), this, SLOT( clipboardDataChanged() ) );
     connect( QApplication::clipboard(), SIGNAL( changed( QClipboard::Mode) ), this, SLOT( clipboardDataChanged() ) );
+
+    connect( bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()) );
 }
 
 void KisCustomImageWidget::resolutionChanged(double res)
@@ -232,6 +235,15 @@ void KisCustomImageWidget::clipboardDataChanged()
         }
     }
 
+}
+
+void KisCustomImageWidget::screenSizeClicked()
+{
+    QSize sz = QApplication::desktop()->availableGeometry(this).size();
+    doubleWidth->setValue(sz.width());
+    doubleWidth->setDecimals(0);
+    doubleHeight->setValue(sz.height());
+    doubleHeight->setDecimals(0);
 }
 
 #include "kis_custom_image_widget.moc"

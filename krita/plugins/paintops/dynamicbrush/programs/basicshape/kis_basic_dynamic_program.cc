@@ -110,7 +110,7 @@ void KisBasicDynamicProgram::apply(KisDynamicShape* shape, const KisPaintInforma
     if(m_angleEnabled)
     {
         double v = jitter( m_angleJitter, m_angleSensor->parameter( info ) );
-        shape->rotate( v );
+        shape->rotate( v * 2 * M_PI );
     }
 }
 

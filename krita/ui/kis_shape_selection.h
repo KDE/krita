@@ -21,7 +21,8 @@
 #include <KoShapeContainer.h>
 #include <KoShapeFactory.h>
 
-#include "kis_selection_component.h"
+#include <kis_selection_component.h>
+#include <kis_types.h>
 
 #include <krita_export.h>
 
@@ -58,6 +59,9 @@ private slots:
     void repaintTimerEvent();
 
 private:
+    
+    Q_DISABLE_COPY(KisShapeSelection);
+
     void renderSelection(KisSelection* projection, const QRect& r);
 
     int m_dashOffset;
@@ -68,6 +72,7 @@ private:
 
     friend class KisShapeSelectionModel;
 };
+
 
 class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactory
 {

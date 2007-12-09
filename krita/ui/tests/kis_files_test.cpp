@@ -60,15 +60,8 @@ void KisFilesTest::testFiles()
             tmpFile.setAutoRemove(false);
             doc.setOutputMimeType("image/png");
             doc.saveAs( "file://" + tmpFile.fileName());
-            doc.saveAs( KUrl("file:///home/cyrille/test2.png" ) );
             QImage resultImg(resultFileInfo.absoluteFilePath());
             QImage sourceImg(tmpFile.fileName());
-            resultImg.save("/home/cyrille/testResult.png");
-            resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
-            resultImg.save("/home/cyrille/testResultRGB.png");
-            sourceImg.save("/home/cyrille/testSource.png");
-            sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
-            sourceImg.save("/home/cyrille/testSourceRGB.png");
             QVERIFY(resultImg.width() == sourceImg.width());
             QVERIFY(resultImg.height() == sourceImg.height());
             QVERIFY(resultImg.numBytes() == sourceImg.numBytes());

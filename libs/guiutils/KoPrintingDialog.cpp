@@ -33,17 +33,20 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QTimer>
+#include <QDialog>
 
-class KoPrintingDialog::Private {
+class KoPrintingDialogPrivate {
 public:
-    Private(KoPrintingDialog *dia)
+    KoPrintingDialogPrivate(KoPrintingDialog *dia)
         : parent(dia),
         stop(false),
         shapeManager(0),
         painter(0),
         printer(new QPrinter()),
         index(0),
-        progress(0)
+        progress(0),
+        dialog(0),
+        removePolicy(KoPrintJob::DoNotDelete)
     {
         action = new KoAction(parent);
         QObject::connect(action, SIGNAL(triggered (const QVariant&)),
@@ -52,12 +55,13 @@ public:
                 parent, SLOT(printPage(const QVariant&)), Qt::DirectConnection);
     }
 
-    ~Private() {
+    ~KoPrintingDialogPrivate() {
         stop = true;
         delete progress;
         if(painter && painter->isActive())
             painter->end();
         delete printer;
+        delete dialog;
     }
 
     void preparePage(const QVariant &page) {
@@ -69,21 +73,37 @@ public:
         updater.setProgress(50);
 
         QList<KoShape*> shapes = parent->shapesOnPage(pageNumber);
-        const int progressPart = 50 / shapes.count();
-        foreach(KoShape *shape, shapes) {
-            kDebug(30004) <<"Calling waitUntilReady on shape (" << shape <<")";
-            if(! stop)
-                shape->waitUntilReady();
-            kDebug(30004) <<"  done";
-            updater.setProgress(updater.progress() + progressPart);
+        if (shapes.isEmpty()) {
+            kDebug(30004) <<"Printing page" << pageNumber << "I notice there are no shapes on this page";
+        } else {
+            const int progressPart = 50 / shapes.count();
+            foreach(KoShape *shape, shapes) {
+                kDebug(30004) <<"Calling waitUntilReady on shape (" << shape <<")";
+                if(! stop)
+                    shape->waitUntilReady();
+                kDebug(30004) <<"  done";
+                updater.setProgress(updater.progress() + progressPart);
+            }
         }
         updater.setProgress(100);
+    }
+
+    void resetValues() {
+        index = 0;
+        updaters.clear();
+        if(painter && painter->isActive())
+            painter->end();
+        delete painter;
+        painter = 0;
     }
 
     void printPage(const QVariant &) {
         if(! stop)
             shapeManager->paint( *painter, zoomer, true );
         painter->restore(); // matching the one in preparePage above
+        painter->save();
+        parent->printPage(index, *painter);
+        painter->restore();
 
         if(!stop && index < pages.count()) {
             printer->newPage();
@@ -99,19 +119,27 @@ public:
         pageNumber->setText(i18n("Printing done"));
         button->setText(i18n("Close"));
         stop = true;
-        QTimer::singleShot(1200, parent, SLOT(accept()));
+        QTimer::singleShot(1200, dialog, SLOT(accept()));
+        if (removePolicy == KoPrintJob::DeleteWhenDone)
+            parent->deleteLater();
+        else
+            resetValues();
     }
 
     void stopPressed() {
         if(stop) { // pressed a second time.
-            parent->done(0);
+            dialog->done(0);
             return;
         }
         stop = true;
         progress->cancel();
         parent->printingDone();
         pageNumber->setText(i18n("Stopped"));
-        QTimer::singleShot(1200, parent, SLOT(accept()));
+        QTimer::singleShot(1200, dialog, SLOT(accept()));
+        if (removePolicy == KoPrintJob::DeleteWhenDone)
+            parent->deleteLater();
+        else
+            resetValues();
     }
 
     KoZoomHandler zoomer;
@@ -127,23 +155,37 @@ public:
     QPushButton *button;
     QList<int> pages;
     QList<KoUpdater> updaters;
+    QDialog *dialog;
+    KoPrintJob::RemovePolicy removePolicy;
 };
 
+class PrintDialog : public QDialog {
+public:
+    PrintDialog(KoPrintingDialogPrivate *d, QWidget *parent)
+        : QDialog(parent)
+    {
+        setModal(true);
+        QGridLayout *grid = new QGridLayout(this);
+        setLayout(grid);
+
+        d->pageNumber = new QLabel(this);
+        d->pageNumber->setMinimumWidth(200);
+        grid->addWidget(d->pageNumber, 0, 0, 1, 2);
+        KoProgressBar *bar = new KoProgressBar(this);
+        d->progress = new KoProgressUpdater(bar);
+        grid->addWidget(bar, 1, 0, 1, 2);
+        d->button = new QPushButton(i18n("Stop"), this);
+        grid->addWidget(d->button, 2, 1);
+        grid->setColumnStretch(0, 1);
+    }
+};
+
+
 KoPrintingDialog::KoPrintingDialog(QWidget *parent)
-    : QDialog(parent),
-    d(new Private(this))
+    : KoPrintJob(parent),
+    d(new KoPrintingDialogPrivate(this))
 {
-    setModal(true);
-    setAttribute(Qt::WA_DeleteOnClose, true);
-    QGridLayout *grid = new QGridLayout(this);
-    setLayout(grid);
-    d->pageNumber = new QLabel(this);
-    grid->addWidget(d->pageNumber, 0, 0);
-    KoProgressBar *bar = new KoProgressBar(this);
-    d->progress = new KoProgressUpdater(bar);
-    grid->addWidget(bar, 1, 0, 1, 3);
-    d->button = new QPushButton(i18n("Stop"), this);
-    grid->addWidget(d->button, 2, 2);
+    d->dialog = new PrintDialog(d, parent);
 
     connect(d->button, SIGNAL(released()), this, SLOT(stopPressed()));
 }
@@ -158,13 +200,13 @@ void KoPrintingDialog::setShapeManager(KoShapeManager *sm) {
     d->shapeManager = sm;
 }
 
+KoShapeManager *KoPrintingDialog::shapeManager() const {
+    return d->shapeManager;
+}
+
 void KoPrintingDialog::setPageRange(const QList<int> &pages) {
     if(d->index == 0) // can't change after we started
         d->pages = pages;
-}
-
-KoShapeManager *KoPrintingDialog::shapeManager() const {
-    return d->shapeManager;
 }
 
 QPainter & KoPrintingDialog::painter() const {
@@ -176,13 +218,20 @@ bool KoPrintingDialog::isStopped() const {
     return d->stop;
 }
 
-void KoPrintingDialog::showEvent(QShowEvent *event) {
-    QWidget::showEvent(event);
-    QTimer::singleShot(0, this, SLOT(startPrinting()));
-}
+void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
+    d->removePolicy = removePolicy;
+    if (d->pages.isEmpty()) { // auto-fill from min/max
+        for (int i=d->printer->fromPage(); i <= d->printer->toPage(); i++)
+            d->pages.append(i);
+    }
+    if (d->pages.isEmpty()) {
+        kWarning(30004) << "KoPrintingDialog::startPrinting: No pages to print, did you forget to call setPageRange()?";
+        return;
+    }
 
-void KoPrintingDialog::startPrinting() {
+    d->dialog->show();
     if(d->index == 0 && d->pages.count() > 0 && d->printer) {
+        d->stop = false;
         d->painter = new QPainter(d->printer);
         d->zoomer.setZoomAndResolution(100, d->printer->resolution(), d->printer->resolution());
         d->progress->start();
@@ -195,6 +244,14 @@ void KoPrintingDialog::startPrinting() {
 
 QPrinter &KoPrintingDialog::printer() {
     return *d->printer;
+}
+
+void KoPrintingDialog::printPage(int, QPainter &)
+{
+}
+
+void KoPrintingDialog::preparePage(int)
+{
 }
 
 #include <KoPrintingDialog.moc>

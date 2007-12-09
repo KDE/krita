@@ -42,7 +42,6 @@
 #include <QToolBar>
 #include <QApplication>
 #include <Q3ValueList>
-#include <QPrintDialog>
 #include <kdeversion.h>
 
 //static
@@ -83,8 +82,6 @@ public:
                           // since this only happens in ~QObject, and views
                           // get deleted by ~KoDocument].
   QTimer *m_scrollTimer;
-  //Temporary until Qt4.4. provides API for add/set/get of pages
-  QList<QWidget*> m_printDialogPages;
 
 
   // Hmm sorry for polluting the private class with such a big inner class.
@@ -686,6 +683,11 @@ void KoView::slotAutoScroll(  )
     }
 }
 
+KoPrintJob * KoView::createPrintJob() {
+    kWarning(30003) << "Printing not implemented in this application";
+    return 0;
+}
+
 
 void KoView::setupGlobalActions()
 {
@@ -695,23 +697,6 @@ void KoView::setupGlobalActions()
 
     if( shell() )
         actionCollection()->addAction("view_fullscreen", shell()->actionCollection()->action("view_fullscreen"));
-}
-
-void KoView::setupPrinter( QPrinter &, QPrintDialog &printDialog )
-{
-    Q_UNUSED( printDialog );
-
-    kDebug(30003) <<"KoView::setupPrinter not implemented by the application!";
-}
-
-void KoView::print( QPrinter &, QPrintDialog &printDialog )
-{
-    kDebug(30003) <<"KoView::print not implemented by the application!";
-}
-
-QList<QWidget*> KoView::printDialogPages()
-{
-    return QList<QWidget*>();
 }
 
 void KoView::newView() {

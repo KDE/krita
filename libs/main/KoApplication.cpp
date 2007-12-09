@@ -218,7 +218,7 @@ bool KoApplication::start()
                 // now try to load
                 } else if ( shell->openDocument( doc, args->url(i) ) ) {
                     if ( print ) {
-                        shell->print(false /*we want to get the dialog*/);
+                        shell->slotFilePrint();
                         // delete shell; done by ~KoDocument
                         nPrinted++;
 		    } else {

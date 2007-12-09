@@ -25,10 +25,8 @@
 #include <kdiroperator.h>
 #include <kdebug.h>
 
-KoFileDialog::KoFileDialog(const QString& startDir, const QString& filter,
-                           QWidget *parent, const char* /*name*/,
-                           bool /*modal*/ )
-    : KFileDialog( startDir, filter, parent )
+KoFileDialog::KoFileDialog(const QString& startDir, QWidget *parent)
+    : KFileDialog( startDir, QString(), parent )
 {
     connect( filterWidget(), SIGNAL( activated( int) ),
              this, SLOT( slotChangedfilter( int ) ) );

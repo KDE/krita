@@ -36,9 +36,7 @@ class KoFileDialog : public KFileDialog
 {
     Q_OBJECT
 public:
-    KoFileDialog( const QString& startDir, const QString& filter,
-                  QWidget *parent, const char *name,
-                  bool modal );
+    KoFileDialog( const QString& startDir, QWidget *parent);
     void setSpecialMimeFilter( QStringList& mimeFilter,
                                const QString& currentFormat, const int specialOutputFlag,
                                const QString& nativeFormat,

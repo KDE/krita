@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOffice" version="20">
+<kpartgui name="KOffice" version="21">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -19,6 +19,7 @@
   <Separator />
   <Action name="file_print" />
   <Action name="file_print_preview" />
+  <Action name="file_export_pdf" />
   <Separator/>
   <Action name="file_documentinfo" />
   <DefineGroup name="file_infos" />

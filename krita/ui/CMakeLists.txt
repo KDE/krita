@@ -123,6 +123,7 @@ set(kritaui_LIB_SRCS
     kis_prescaled_projection.cpp
     kis_node_manager.cpp
     kis_selection_tool_helper.cpp
+    kis_print_job.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

@@ -101,6 +101,7 @@
 #include "kis_node.h"
 #include "kis_node_manager.h"
 #include "kis_selection.h"
+#include "kis_print_job.h"
 
 class KisView2::KisView2Private {
 
@@ -660,6 +661,7 @@ void KisView2::disconnectCurrentImage()
     }
 }
 
+#if 0
 void KisView2::setupPrinter(QPrinter &printer, QPrintDialog &printDialog)
 {
     Q_UNUSED(printer);
@@ -692,6 +694,7 @@ void KisView2::print(QPrinter& printer, QPrintDialog &printDialog)
     gc.scale(scaleX, scaleY);
     img->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile, exposure);
 }
+#endif
 
 void KisView2::slotUpdateFullScreen(bool toggle)
 {
@@ -784,6 +787,11 @@ void KisView2::loadPlugins()
 KisDoc2 * KisView2::document() const
 {
     return m_d->doc;
+}
+
+KoPrintJob * KisView2::createPrintJob()
+{
+    return new KisPrintJob(this);
 }
 
 #include "kis_view2.moc"

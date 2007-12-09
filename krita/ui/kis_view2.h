@@ -76,9 +76,6 @@ public:
     void slotChildActivated(bool a);
     void canvasAddChild( KoViewChild * child );
 
-    virtual void print(QPrinter &printer, QPrintDialog &printDialog);
-    virtual void setupPrinter(QPrinter &printer, QPrintDialog &printDialog);
-
 public:  // Krita specific interfaces
 
     /// Return the image this view is displaying
@@ -159,6 +156,8 @@ public:  // Krita specific interfaces
     /// Disconnect the current image (for instance, before connecting
     /// another image) from the slots in the various managers
     void disconnectCurrentImage();
+
+    virtual KoPrintJob * createPrintJob();
 
 private slots:
 

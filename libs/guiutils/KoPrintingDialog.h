@@ -19,14 +19,13 @@
 #ifndef KOPRINTINGDIALOG_H
 #define KOPRINTINGDIALOG_H
 
-#include "koguiutils_export.h"
-
-#include <QDialog>
+#include <KoPrintJob.h>
 #include <QList>
+#include "koguiutils_export.h"
 
 class KoShapeManager;
 class KoShape;
-
+class KoPrintingDialogPrivate;
 
 /**
  * Dialog that will allow you to print any flake-based document, with full interaction and ability to stop.
@@ -37,8 +36,7 @@ class KoShape;
  * This class is of the type of 'create and forget'. Meaning that you create the dialog, initialize it with
  * data and then call show() on it.  It then continues to print and delete itself when ready.
  * @code
-    QPrinter printer;
-    KWPrintingDialog *dia = new KWPrintingDialog(myWidget);
+    KoPrintingDialog *dia = new KoPrintingDialog(myWidget);
     dia->printer().setOutputFormat(QPrinter::PdfFormat);
     dia->printer().setOutputFileName("output.pdf");
     dia->printer().setResolution(600);
@@ -47,7 +45,7 @@ class KoShape;
     QList<int> pages;
     pages.append(1);
     dia->setPageRange(pages);
-    dia->show();
+    dia->startPrinting();
     @endcode
  * The dialog works by looping over all pages in the page-range and sequentially calling preparePage(int) and
  * then using the shapeManager() to actually print the shapes.
@@ -57,7 +55,7 @@ class KoShape;
  * This typically means that the preparePage() makes sure the shapeManager is updated and the correct cliprect
  * is set on the painter().
  */
-class KOGUIUTILS_EXPORT KoPrintingDialog : public QDialog {
+class KOGUIUTILS_EXPORT KoPrintingDialog : public KoPrintJob {
     Q_OBJECT
 public:
     /**
@@ -86,7 +84,7 @@ public:
     QPrinter &printer();
 
 public slots:
-    void startPrinting();
+    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 protected:
     /**
@@ -95,9 +93,16 @@ protected:
      * This method will be called in a thread that is not the main-thread. So the processing can take
      * a reasonably long time withing posing problems for user interaction.
      * @param pageNumber the number of the page to prepare.
+     * @see isStopped() printPage()
+     */
+    virtual void preparePage(int pageNumber);
+
+    /**
+     * This is a similar method to preparePage(), but is guarenteed to be called in the Ui thread.
+     * @param pageNumber the number of the page to prepare.
      * @see isStopped()
      */
-    virtual void preparePage(int pageNumber) = 0;
+    virtual void printPage(int pageNumber, QPainter &painter);
 
     /**
      * Implement to return the shapes on the requested page.
@@ -122,9 +127,6 @@ protected:
      */
     bool isStopped() const;
 
-    /// reimplemented
-    virtual void showEvent(QShowEvent *event);
-
     /**
      * This virtual hook is called at the end of the printing process, either on success of on failure.
      * The method is empty by default.
@@ -132,8 +134,8 @@ protected:
     virtual void printingDone() { }
 
 private:
-    class Private;
-    Private * const d;
+    KoPrintingDialogPrivate * const d;
+    friend class KoPrintingDialogPrivate;
     Q_PRIVATE_SLOT(d, void preparePage(const QVariant &page))
     Q_PRIVATE_SLOT(d, void printPage(const QVariant &page))
     Q_PRIVATE_SLOT(d, void stopPressed())

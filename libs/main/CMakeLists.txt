@@ -63,6 +63,7 @@ set(komain_LIB_SRCS
     KoGuidesData.cpp
     KoDockRegistry.cpp
     KoDockWidgetTitleBar.cpp
+    KoPrintJob.cpp
 )
 
 

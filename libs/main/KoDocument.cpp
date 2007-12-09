@@ -225,6 +225,8 @@ KoBrowserExtension::KoBrowserExtension( KoDocument * doc )
 
 void KoBrowserExtension::print()
 {
+    kDebug() << "implement; KoBrowserExtension::print";
+/*
     KoDocument * doc = static_cast<KoDocument *>( parent() );
     KoViewWrapperWidget * wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
     KoView * view = wrapper->koView();
@@ -235,6 +237,7 @@ void KoBrowserExtension::print()
     view->setupPrinter( printer, *printDialog );
     if ( printDialog->exec() )
         view->print( printer, *printDialog );
+*/
 }
 
 KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleViewMode )

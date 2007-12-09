@@ -31,6 +31,7 @@
 #include "kkbdaccessextensions.h"
 #include "KoDockFactory.h"
 #include "KoDockWidgetTitleBar.h"
+#include "KoPrintJob.h"
 
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
@@ -64,6 +65,10 @@
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
 
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+#include <QtGui/QPrintPreviewDialog>
+#endif
+
 class KoPartManager : public KParts::PartManager
 {
 public:
@@ -89,32 +94,33 @@ public:
 class KoMainWindowPrivate
 {
 public:
-  KoMainWindowPrivate()
+  KoMainWindowPrivate(KoMainWindow *w)
   {
-    m_rootDoc = 0L;
-    m_docToOpen = 0L;
-    m_manager = 0L;
+    parent = w;
+    m_rootDoc = 0;
+    m_docToOpen = 0;
+    m_manager = 0;
     bMainWindowGUIBuilt = false;
     m_forQuit=false;
     m_splitted=false;
-    m_activePart = 0L;
-    m_activeView = 0L;
-    m_splitter=0L;
-    m_orientation=0L;
-    m_removeView=0L;
+    m_activePart = 0;
+    m_activeView = 0;
+    m_splitter=0;
+    m_orientation=0;
+    m_removeView=0;
     m_firstTime=true;
-    m_progress=0L;
+    m_progress=0;
     m_paDocInfo = 0;
     m_paSave = 0;
     m_paSaveAs = 0;
     m_paPrint = 0;
     m_paPrintPreview = 0;
-    statusBarLabel = 0L;
-//     m_dcopObject = 0;
+    statusBarLabel = 0;
     m_sendfile = 0;
-    m_paCloseFile = 0L;
+    m_exportPdf = 0;
+    m_paCloseFile = 0;
     m_reloadfile = 0L;
-    m_versionsfile = 0L;
+    m_versionsfile = 0;
     m_importFile = 0;
     m_exportFile = 0;
     m_isImporting = false;
@@ -126,10 +132,34 @@ public:
   }
   ~KoMainWindowPrivate()
   {
-//     delete m_dcopObject;
     qDeleteAll( m_toolbarList );
   }
 
+    void applyDefaultSettings(QPrinter &printer) {
+        QString title = m_rootDoc->documentInfo()->aboutInfo( "title" );
+        if ( title.isEmpty() ) {
+            title = m_rootDoc->url().fileName();
+            // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
+            KMimeType::Ptr mime = KMimeType::mimeType( m_rootDoc->outputMimeType() );
+            if ( mime ) {
+                QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
+
+                if ( title.endsWith( extension ) )
+                    title.truncate( title.length() - extension.length() );
+            }
+        }
+
+        if ( title.isEmpty() ) {
+            // #139905
+            const QString programName = parent->componentData().aboutData() ?
+                parent->componentData().aboutData()->programName() : parent->componentData().componentName();
+            title = i18n("%1 unsaved document (%2)", programName,
+                    KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
+        }
+        printer.setDocName( title );
+    }
+
+    KoMainWindow *parent;
   KoDocument *m_rootDoc;
   KoDocument *m_docToOpen;
   Q3PtrList<KoView> m_rootViews;
@@ -148,7 +178,6 @@ public:
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   QAction *m_removeView;
-//   KoMainWindowIface *m_dcopObject;
 
   QList<QAction *> m_toolbarList;
 
@@ -165,6 +194,7 @@ public:
   QAction *m_paPrint;
   QAction *m_paPrintPreview;
   QAction *m_sendfile;
+  QAction *m_exportPdf;
   QAction *m_paCloseFile;
   QAction *m_reloadfile;
   QAction *m_versionsfile;
@@ -185,7 +215,7 @@ public:
 
 KoMainWindow::KoMainWindow( const KComponentData &componentData )
     : KParts::MainWindow()
-    , d( new KoMainWindowPrivate )
+    , d( new KoMainWindowPrivate(this) )
 {
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
@@ -211,7 +241,15 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     d->m_paSave = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT( slotFileSave() ));
     d->m_paSaveAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT( slotFileSaveAs() ));
     d->m_paPrint = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT( slotFilePrint() ));
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT( slotFilePrintPreview() ));
+#endif
+
+    d->m_exportPdf  = new QAction(i18n("Export as PDF..."), this);
+    d->m_exportPdf->setIcon(KIcon("pdf"));
+    actionCollection()->addAction("file_export_pdf", d->m_exportPdf );
+    connect(d->m_exportPdf, SIGNAL(triggered()), this, SLOT(slotPrintAndSave()));
+
     d->m_sendfile = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT( slotEmailFile() ));
 
     d->m_paCloseFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT( slotFileClose() ));
@@ -252,6 +290,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     d->m_paPrint->setEnabled( false );
     d->m_paPrintPreview->setEnabled( false );
     d->m_sendfile->setEnabled( false);
+    d->m_exportPdf->setEnabled( false);
     d->m_paCloseFile->setEnabled( false);
 
     d->m_splitter = new QSplitter( Qt::Vertical, this );
@@ -419,6 +458,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
   d->m_sendfile->setEnabled( enable);
+  d->m_exportPdf->setEnabled( enable);
   d->m_paCloseFile->setEnabled( enable);
   updateCaption();
 
@@ -471,6 +511,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const Q3PtrList<KoVie
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
   d->m_sendfile->setEnabled( enable);
+  d->m_exportPdf->setEnabled( enable);
   d->m_paCloseFile->setEnabled( enable );
 }
 
@@ -829,8 +870,9 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog *dialog = new KoFileDialog( (isExporting() && !d->m_lastExportURL.isEmpty() )? d->m_lastExportURL.url () : suggestedURL.url (),
-                                                QString(), this, "file dialog", true);
+        KoFileDialog *dialog = new KoFileDialog(
+                (isExporting() && !d->m_lastExportURL.isEmpty() ) ?
+                d->m_lastExportURL.url () : suggestedURL.url (), this);
 
         if (!isExporting())
             dialog->setCaption( i18n("Save Document As") );
@@ -1245,54 +1287,7 @@ void KoMainWindow::slotFileQuit()
     close();
 }
 
-void KoMainWindow::print(bool quick) {
-    if ( !rootView() )
-    {
-        kDebug(30003) <<"KoMainWindow::slotFilePrint : No root view!";
-        return;
-    }
-
-    QPrinter printer( QPrinter::HighResolution );
-    QString title = rootView()->koDocument()->documentInfo()->aboutInfo( "title" );
-    QString fileName = rootView()->koDocument()->url().fileName();
-
-    // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
-    KMimeType::Ptr mime = KMimeType::mimeType( rootView()->koDocument()->outputMimeType() );
-    if ( mime ) {
-        QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
-
-        if ( fileName.endsWith( extension ) )
-            fileName.truncate( fileName.length() - extension.length() );
-    }
-
-    if ( title.isEmpty() )
-        title = fileName;
-    if ( title.isEmpty() ) {
-        // #139905
-        const QString programName = componentData().aboutData() ? componentData().aboutData()->programName() : componentData().componentName();
-        title = i18n("%1 unsaved document (%2)",programName,KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
-    }
-    printer.setDocName( title );
-#if 0 // XXX
-    printer.setDocFileName( fileName );
-    printer.setDocDirectory( rootView()->koDocument()->url().directory() );
-#endif
-    // ### TODO: apply global koffice settings here
-
-    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, rootView()->printDialogPages(), this);
-
-    rootView()->setupPrinter( printer, *printDialog );
-
-    if ( quick ||  printDialog->exec() )
-        rootView()->print( printer, *printDialog );
-}
-
-
-void KoMainWindow::slotFilePrint()
-{
-    print(false);
-}
-
+#if 0
 void KoMainWindow::slotFilePrintPreview()
 {
     if ( !rootView() )
@@ -1337,6 +1332,64 @@ void KoMainWindow::slotFilePrintPreview()
     printer.setOption( "kde-preview", oldKDEPreview );
 #endif
 }
+#endif
+
+void KoMainWindow::slotFilePrint()
+{
+    if ( !rootView() )
+        return;
+    KoPrintJob *printJob = rootView()->createPrintJob();
+    if (printJob == 0)
+        return;
+    d->applyDefaultSettings(printJob->printer());
+    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
+            printJob->createOptionWidgets(), this);
+    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
+    if (printDialog->exec() == QDialog::Accepted)
+        printJob->startPrinting( KoPrintJob::DeleteWhenDone );
+    else
+        delete printJob;
+    delete printDialog;
+}
+
+void KoMainWindow::slotFilePrintPreview() {
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    if ( !rootView() )
+        return;
+    KoPrintJob *printJob = rootView()->createPrintJob();
+    if (printJob == 0)
+        return;
+    QPrintPreviewDialog *preview = new QPrintPreviewDialog(&printJob->printer(), this);
+    printJob->setParent(preview); // will take care of deleting the job
+    connect(preview, SIGNAL(paintRequested(QPrinter*)), printJob, SLOT(startPrinting()));
+    preview->exec();
+    delete preview;
+#endif
+}
+
+void KoMainWindow::slotPrintAndSave() {
+    if ( !rootView() )
+        return;
+    KoPrintJob *printJob = rootView()->createPrintJob();
+    if (printJob == 0)
+        return;
+    d->applyDefaultSettings(printJob->printer());
+    KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///SaveDialog/"), QString::fromLatin1("*.pdf *.ps"), this);
+    dialog->setObjectName( "print file" );
+    dialog->setMode(KFile::File);
+    dialog->setCaption( i18n("Write PDF") );
+    if(dialog->exec()!=QDialog::Accepted) {
+        delete dialog;
+        delete printJob;
+        return;
+    }
+    KUrl url( dialog->selectedUrl() );
+    delete dialog;
+    // TODO for remote files we have to first save locally and then upload.
+    printJob->printer().setOutputFileName(url.toLocalFile());
+    printJob->startPrinting( KoPrintJob::DeleteWhenDone );
+}
+
 
 void KoMainWindow::slotConfigureKeys()
 {
@@ -1649,16 +1702,6 @@ void KoMainWindow::setMaxRecentItems(uint _number)
 {
         m_recent->setMaxItems( _number );
 }
-
-// DCOPObject * KoMainWindow::dcopObject()
-// {
-//     if ( !d->m_dcopObject )
-//     {
-//         d->m_dcopObject = new KoMainWindowIface( this );
-//     }
-//
-//     return d->m_dcopObject;
-// }
 
 void KoMainWindow::slotEmailFile()
 {

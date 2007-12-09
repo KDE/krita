@@ -96,12 +96,6 @@ public:
     virtual KParts::PartManager *partManager();
 
     /**
-     * Prints the document
-     * @param quick whether the print setup dialog is to be displayed
-     **/
-    void print(bool quick);
-
-    /**
      * The application should call this to show or hide a toolbar.
      * It also takes care of the corresponding action in the settings menu.
      */
@@ -226,11 +220,8 @@ public slots:
      *  Prints the actual document.
      */
     virtual void slotFilePrint();
-
-    /**
-     *  Show a print preview
-     */
-    void slotFilePrintPreview(); // make virtual later
+    virtual void slotFilePrintPreview();
+    virtual void slotPrintAndSave();
 
     /**
      * Show a dialog with author and document information.

@@ -34,6 +34,7 @@
 #include <KoViewChild.h>
 class KoDocument;
 class KoMainWindow;
+class KoPrintJob;
 class KoViewPrivate;
 class KoViewChild;
 class KoDocumentChild;
@@ -41,8 +42,6 @@ class KoDockFactory;
 
 // KDE classes
 class KStatusBar;
-class QPrinter;
-class QPrintDialog;
 class KXmlGuiWindow;
 class KAction;
 class KActionCollection;
@@ -298,31 +297,7 @@ public:
    */
   KoViewChild *child( KoDocument *document );
 
-  /**
-   * Return a DCOP interface for this view
-   * KOffice Applications are strongly recommended to reimplement this method,
-   * so that their dcop interface provides more functionality than the basic KoViewIface
-   */
-//   virtual DCOPObject * dcopObject();
-
-  /**
-   * Overload this method to setup QPrinter before the actual printing.
-   *
-   * @see #print
-   */
-  virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
-  // BCI: make it return a bool, so that aborting doesn't still fire up the print preview afterwards
-  /**
-   * Overload this method with your own printing code.
-   */
-  virtual void print( QPrinter &printer, QPrintDialog &printDialog );
-  /**
-   * Overload this method with your own printing code if you require special
-   * print dialog page(s).  Default is an empty list.
-   *
-   * This is interim code, to be replaced for Qt4.4
-   */
-  virtual QList<QWidget*> printDialogPages();
+    virtual KoPrintJob * createPrintJob();
 
   /**
    * @return the KoMainWindow in which this view is currently.

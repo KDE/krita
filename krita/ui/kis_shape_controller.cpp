@@ -119,14 +119,11 @@ void KisShapeController::setImage( KisImageSP image )
 
 void KisShapeController::removeShape( KoShape* shape )
 {
-    kDebug() << "Going to remove " << shape;
-    if ( !shape ) return;
 
     // Also remove all the children, if any
     {
         KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shape );
         if ( parent ) {
-            qDebug() << "children " << parent->childCount();
             foreach( KoShape * child, parent->iterator() ) {
                 removeShape( child );
             }

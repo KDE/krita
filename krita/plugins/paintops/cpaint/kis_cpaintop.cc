@@ -150,9 +150,6 @@ KisCPaintOp::KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, Ki
     m_color = this->painter()->paintColor();
     m_stroke = 0;
     KisPaintDeviceSP dev = painter->device();
-
-    m_tempImage = QImage( dev->width(), dev->height(), QImage::Format_ARGB32 );
-
 }
 
 KisCPaintOp::~KisCPaintOp()

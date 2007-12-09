@@ -72,6 +72,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     QDialog( parent ),
     d( new Private )
 {
+    QRect rc = layer->extent();
     setModal( false );
     d->uiFilterDialog.setupUi( this );
     d->widgetLayout = new QGridLayout( d->uiFilterDialog.centralWidgetHolder );
@@ -80,7 +81,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
 
     d->mask = new KisFilterMask();
     KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
-    psel->select( QRect( 0, 0, 500, 500 ) );
+    psel->select( rc );
     d->mask->selection()->updateProjection();
     
     d->layer->setPreviewMask( d->mask );
@@ -141,8 +142,8 @@ void KisFilterDialog::updatePreview()
     else {
         d->mask->setFilter( d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
     }
-    kDebug() << "d->mask " << d->mask->filter();
-    d->mask->setDirty(QRect(0, 0, 500, 500));
+     d->mask->setDirty(d->layer->extent());
+
 }
 
 void KisFilterDialog::apply()
@@ -160,6 +161,7 @@ void KisFilterDialog::apply()
 void KisFilterDialog::reject()
 {
     d->layer->removePreviewMask();
+    d->layer->setDirty(d->layer->extent());
 }
 
 void KisFilterDialog::slotBookmarkedFilterConfigurationSelected(int index)

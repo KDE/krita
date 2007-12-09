@@ -42,10 +42,11 @@
 #include <kis_iterators_pixel.h>
 #include <kis_selected_transaction.h>
 #include <kis_canvas2.h>
+#include <kis_pixel_selection.h>
 
 #include "kis_tool_selectsimilar.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 * c, int fuzziness, selectionAction mode)
+void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness, selectionAction mode)
 {
     // XXX: Multithread this!
     qint32 x, y, w, h;
@@ -122,7 +123,7 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
 {
 useCursor(m_subtractCursor);
     if (m_canvas) {
-//         QApplication::setOverrideCursor(KisCursor::waitCursor());
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
         quint8 opacity = OPACITY_OPAQUE;
 
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
@@ -138,15 +139,17 @@ useCursor(m_subtractCursor);
 
         QPointF pos = convertToPixelCoord(e);
         KisSelectionSP selection = currentLayer()->selection();
-        bool hasSelection = selection;
+        if (!selection) selection = currentImage()->globalSelection();
+        KisPixelSelectionSP pSel = selection->pixelSelection();
+        bool hasSelection = pSel;
 #if 0 // XXX_SELECTIOn
         KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 #endif
         if (!hasSelection || m_defaultSelectAction == SELECTION_REPLACE)
         {
-            selection->clear();
+            pSel->clear();
             if(m_defaultSelectAction == SELECTION_SUBTRACT)
-                selection->invert();
+                pSel->invert();
         }
 
         KoColor c = dev->colorAt(pos.x(), pos.y());
@@ -154,12 +157,14 @@ useCursor(m_subtractCursor);
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)
-        selectByColor(dev, selection, c.data(), m_fuzziness, m_currentSelectAction);
+        selectByColor(dev, pSel, c.data(), m_fuzziness, m_currentSelectAction);
 #if 0
-        dev->setDirty();
+        
         m_canvas->addCommand(t);
 #endif
-//         QApplication::restoreOverrideCursor();
+        selection->updateProjection();
+        dev->setDirty();
+        QApplication::restoreOverrideCursor();
     }
 }
 

@@ -41,7 +41,7 @@ void KisSensorSelector::setCurrent(KisDynamicSensor* sensor)
     m_currentSensor = sensor;
     sensorSelectorUI->comboBoxSensor->setCurrent( sensor->id() );
     delete m_currentConfigWidget;
-    m_currentConfigWidget = sensor->createConfigurationWidget( sensorSelectorUI->widgetConfiguration );
+    m_currentConfigWidget = sensor->createConfigurationWidget( sensorSelectorUI->widgetConfiguration, this );
     if(m_currentConfigWidget)
     {
         m_layout->addWidget( m_currentConfigWidget );

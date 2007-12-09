@@ -24,6 +24,7 @@
 #include "ui_SensorTimeConfiguration.h"
 
 #include "kis_paint_information.h"
+#include "kis_sensor_selector.h"
 
 KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(30), m_periodic(true)
 {
@@ -45,7 +46,6 @@ double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
             m_time = m_length;
         }
     }
-//     kdDebug() << m_time << " " << pi.movement.length() << " " << m_length << " " << (1.0 - m_time / m_length) << endl;
     return 1.0 - m_time / m_length;
 }
 
@@ -59,15 +59,17 @@ void KisDynamicSensorTime::setLength(int length)
     m_length = length;
 }
 
-QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent)
+QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorTimeConfiguration stc;
     stc.setupUi(wdg);
     stc.checkBoxRepeat->setChecked(m_periodic);
     connect(stc.checkBoxRepeat, SIGNAL( toggled ( bool )), SLOT(setPeriodic(bool )));
+    connect(stc.checkBoxRepeat, SIGNAL( toggled ( bool )), ss, SIGNAL(parametersChanged()));
     stc.spinBoxLength->setValue(m_length);
     connect(stc.spinBoxLength, SIGNAL(valueChanged ( int )), SLOT(setLength(int )));
+    connect(stc.spinBoxLength, SIGNAL(valueChanged ( int )), ss, SIGNAL(parametersChanged()));
     return wdg;
 }
 

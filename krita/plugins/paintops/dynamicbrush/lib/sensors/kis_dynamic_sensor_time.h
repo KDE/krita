@@ -32,7 +32,7 @@ class KisDynamicSensorTime : public KisDynamicSensor {
         KisDynamicSensorTime();
         virtual ~KisDynamicSensorTime() { }
         virtual double parameter(const KisPaintInformation& );
-        virtual QWidget* createConfigurationWidget(QWidget* parent);
+        virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector* );
     public slots:
         virtual void setPeriodic(bool periodic);
         virtual void setLength(int length);

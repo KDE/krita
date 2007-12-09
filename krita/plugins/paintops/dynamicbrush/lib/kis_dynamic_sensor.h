@@ -30,6 +30,7 @@
 
 class QWidget;
 class KisPaintInformation;
+class KisSensorSelector;
 
 const KoID FuzzyId("fuzzy", i18n("Fuzzy"));
 const KoID SpeedId("speed", i18n("Speed"));
@@ -58,7 +59,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject, public KisSerializ
          * @return the value of this sensor for the given KisPaintInformation
          */
         virtual double parameter(const KisPaintInformation& info) = 0;
-        virtual QWidget* createConfigurationWidget(QWidget* parent);
+        virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
         /**
          * Creates a sensor from its identifiant.
          */

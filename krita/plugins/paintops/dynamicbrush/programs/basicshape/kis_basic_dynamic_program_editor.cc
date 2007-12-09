@@ -41,20 +41,24 @@ KisBasicDynamicProgramEditor::KisBasicDynamicProgramEditor(KisBasicDynamicProgra
     connect(m_basicDynamicProgramEditor->sizeMinimum, SIGNAL(valueChanged(int)), program, SLOT(setSizeMinimum(int)));
     connect(m_basicDynamicProgramEditor->sizeMaximum, SIGNAL(valueChanged(int)), program, SLOT(setSizeMaximum(int)));
     connect(m_basicDynamicProgramEditor->sizeSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), program, SLOT(setSizeSensor(KisDynamicSensor* )));
+    connect(m_basicDynamicProgramEditor->sizeSensor, SIGNAL(parametersChanged()), program, SIGNAL(programChanged()));
     // Connect to edit the angle
     connect(m_basicDynamicProgramEditor->angleEnabled, SIGNAL(clicked(bool)), program, SLOT(setEnableAngle(bool)));
     connect(m_basicDynamicProgramEditor->angleJitter, SIGNAL(valueChanged(int)), program, SLOT(setAngleJitter(int)));
     connect(m_basicDynamicProgramEditor->angleSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), program, SLOT(setAngleSensor(KisDynamicSensor* )));
+    connect(m_basicDynamicProgramEditor->angleSensor, SIGNAL(parametersChanged()), program, SIGNAL(programChanged()));
     // Connect to edit the scattering
     connect(m_basicDynamicProgramEditor->scatterEnabled, SIGNAL(clicked(bool)), program, SLOT(setEnableScatter(bool)));
     connect(m_basicDynamicProgramEditor->scatterJitter, SIGNAL(valueChanged(int)), program, SLOT(setScatterJitter(int)));
     connect(m_basicDynamicProgramEditor->scatterAmount, SIGNAL(valueChanged(int)), program, SLOT(setScatterAmount(int)));
     connect(m_basicDynamicProgramEditor->scatterSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), program, SLOT(setScatterSensor(KisDynamicSensor* )));
+    connect(m_basicDynamicProgramEditor->scatterSensor, SIGNAL(parametersChanged()), program, SIGNAL(programChanged()));
     // Connect to edit the count
     connect(m_basicDynamicProgramEditor->countEnabled, SIGNAL(clicked(bool)), program, SLOT(setEnableCount(bool)));
     connect(m_basicDynamicProgramEditor->countJitter, SIGNAL(valueChanged(int)), program, SLOT(setCountJitter(int)));
     connect(m_basicDynamicProgramEditor->countCount, SIGNAL(valueChanged(int)), program, SLOT(setCountCount(int)));
     connect(m_basicDynamicProgramEditor->countSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), program, SLOT(setCountSensor(KisDynamicSensor* )));
+    connect(m_basicDynamicProgramEditor->countSensor, SIGNAL(parametersChanged()), program, SIGNAL(programChanged()));
     // Set the value
     setEnableSize(program->isSizeEnabled());
     m_basicDynamicProgramEditor->sizeEnabled->setChecked( program->isSizeEnabled() );

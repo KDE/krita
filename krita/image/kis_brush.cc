@@ -667,16 +667,20 @@ double KisBrush::ySpacing(double scale) const
     return height() * scale * d->spacing;
 }
 
-qint32 KisBrush::maskWidth(double scale) const
+qint32 KisBrush::maskWidth(double scale, double angle) const
 {
+    double width_ = width() *scale;
+    double height_ = height() *scale;
     // Add one for sub-pixel shift
-    return static_cast<qint32>(ceil(width() * scale) + 1);
+    return static_cast<qint32>(ceil(width_ * cos(angle) - height_ * sin(angle)) + 1);
 }
 
-qint32 KisBrush::maskHeight(double scale) const
+qint32 KisBrush::maskHeight(double scale, double angle) const
 {
+    double width_ = width() *scale;
+    double height_ = height() *scale;
     // Add one for sub-pixel shift
-    return static_cast<qint32>(ceil(height() * scale) + 1);
+    return static_cast<qint32>(ceil(width_ * sin(angle) + height_ * cos(angle)) + 1);
 }
 
 KisQImagemaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const
@@ -1269,8 +1273,8 @@ void KisBrush::setHeight(qint32 h)
 
 void KisBrush::generateBoundary() {
     KisPaintDeviceSP dev;
-    int w = maskWidth(1.0);
-    int h = maskHeight(1.0);
+    int w = maskWidth(1.0, 0.0);
+    int h = maskHeight(1.0, 0.0);
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
         dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA",0), 1.0, 0.0,KisPaintInformation());

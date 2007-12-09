@@ -18,6 +18,7 @@
  
 #include "kis_autobrush_resource.h"
 #include <kdebug.h>
+#include <math.h>
 
 #include <KoColor.h>
 
@@ -143,23 +144,26 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, doub
     const KoColorSpace* cs = dst->colorSpace();
     dst->dataManager()->setDefaultPixel( color.data() );
     
-    int dstWidth = maskWidth(scaleX);
-    int dstHeight = maskHeight(scaleY);
+    int dstWidth = maskWidth(scaleX, 0.0);
+    int dstHeight = maskHeight(scaleY, 0.0);
     
     double invScaleX = 1.0 / scaleX;
     double invScaleY = 1.0 / scaleY;
     
     double centerX = dstWidth * 0.5 - 1.0 + subPixelX;
     double centerY = dstHeight * 0.5 - 1.0 + subPixelY;
-    
+    double cosa = cos(angle);
+    double sina = sin(angle);
     // Apply the alpha mask
     KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, dstWidth);
     for (int y = 0; y < dstHeight; y++)
     {
         while(! hiter.isDone())
         {
-            double x = ( hiter.x() - centerX) * invScaleX;
-            double y = ( hiter.y() - centerY) * invScaleY ;
+            double x_ = ( hiter.x() - centerX) * invScaleX;
+            double y_ = ( hiter.y() - centerY) * invScaleY ;
+            double x = cosa * x_ - sina * y_;
+            double y = sina * x_ + cosa * y_;
             double x_i = floor(x);
             double x_f = x - x_i;
             if( x_f < 0.0) { x_f *= -1.0; }

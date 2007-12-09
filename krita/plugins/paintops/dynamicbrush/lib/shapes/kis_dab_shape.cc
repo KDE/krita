@@ -126,7 +126,7 @@ void KisDabShape::rotate(double r)
 
 QRect KisDabShape::rect() const
 {
-    int width = m_brush->maskWidth( m_scaleX );
-    int height = m_brush->maskHeight( m_scaleY );
+    int width = m_brush->maskWidth( m_scaleX, m_rotate );
+    int height = m_brush->maskHeight( m_scaleY, m_rotate );
     return QRect(-width/2, -height/2, width, height);
 }

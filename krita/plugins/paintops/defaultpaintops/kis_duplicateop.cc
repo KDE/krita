@@ -197,8 +197,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
                              y - static_cast<qint32>(m_settings->offset().y()));
 
 
-    qint32 sw = brush->maskWidth( scale );
-    qint32 sh = brush->maskHeight( scale );
+    qint32 sw = brush->maskWidth( scale, 0.0 );
+    qint32 sh = brush->maskHeight( scale, 0.0 );
 
     if (srcPoint.x() < 0 )
         srcPoint.setX(0);
@@ -364,7 +364,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = cachedDab( );
     brush->mask(dab, m_srcdev, scale, scale, 0.0, info, xFraction, yFraction);
     
-    QRect dabRect = QRect(0, 0, brush->maskWidth(scale), brush->maskHeight(scale));
+    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     if ( painter()->bounds().isValid() ) {

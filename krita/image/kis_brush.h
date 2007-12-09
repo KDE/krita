@@ -147,11 +147,11 @@ public:
     /**
      * @return the width of the mask for the given scale
      */
-    qint32 maskWidth(double scale) const;
+    qint32 maskWidth(double scale, double angle) const;
     /**
      * @return the height of the mask for the given scale
      */
-    qint32 maskHeight(double scale) const;
+    qint32 maskHeight(double scale, double angle) const;
 
     virtual void setUseColorAsMask(bool useColorAsMask);
     virtual bool useColorAsMask() const;

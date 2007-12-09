@@ -124,7 +124,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     painter()->setDab(dab); // Cache dab for future paints in the painter.
     painter()->setPressure(info.pressure()); // Cache pressure in the current painter.
 
-    QRect dabRect = QRect(0, 0, brush->maskWidth(scale), brush->maskHeight(scale));
+    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     if ( painter()->bounds().isValid() ) {

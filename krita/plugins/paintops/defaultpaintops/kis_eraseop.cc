@@ -100,15 +100,15 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     KoColor color( dab->colorSpace() );
     brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
 
-    KisRectIteratorPixel it = dab->createRectIterator(0, 0, brush->maskWidth(scale), brush->maskHeight(scale));
+    KisRectIteratorPixel it = dab->createRectIterator(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     const KoColorSpace* cs = dab->colorSpace();
     while (!it.isDone()) {
         cs->setAlpha(it.rawData(), quint8_MAX - cs->alpha(it.rawData()), 1);
         ++it;
     }
 
-    QRect dabRect = QRect(0, 0, brush->maskWidth(scale),
-                          brush->maskHeight(scale));
+    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0),
+                          brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
 

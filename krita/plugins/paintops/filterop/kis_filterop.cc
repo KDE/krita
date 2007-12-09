@@ -191,8 +191,8 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     painter()->setPressure(info.pressure());
 
-    qint32 maskWidth = brush->maskWidth(scale);
-    qint32 maskHeight = brush->maskHeight(scale);
+    qint32 maskWidth = brush->maskWidth(scale, 0.0);
+    qint32 maskHeight = brush->maskHeight(scale, 0.0);
 
     // Create a temporary paint device
     KisPaintDeviceSP tmpDev = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "filterop tmpdev"));

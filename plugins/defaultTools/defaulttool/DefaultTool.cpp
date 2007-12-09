@@ -296,9 +296,12 @@ void DefaultTool::updateCursor() {
 
     if(koSelection()->count() > 0) { // has a selection
         bool editable=false;
+        // check if we have at least one shape that is edtiable
         foreach(KoShape *shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
-            if(editable || !shape->isEditable())
+            if( shape->isEditable() ) {
                 editable = true;
+                break;
+            }
         }
 
         if(!m_mouseWasInsideHandles) {

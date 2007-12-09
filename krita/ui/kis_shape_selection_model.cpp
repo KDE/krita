@@ -22,6 +22,7 @@
 #include "kis_shape_selection_model.h"
 #include "kis_paint_device.h"
 #include "kis_shape_selection.h"
+#include "kis_selection.h"
 
 KisShapeSelectionModel::KisShapeSelectionModel(KisImageSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection)
  : m_image(image)

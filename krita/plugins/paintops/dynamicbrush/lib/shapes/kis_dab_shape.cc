@@ -96,7 +96,7 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
 
     // paint the dab
     QRect dabRect = rect();
-    QRect dstRect = QRect(x + dabRect.x(), y + dabRect.y(), dabRect.width(), dabRect.height());
+    QRect dstRect = QRect(x , y , dabRect.width(), dabRect.height());
 
     if ( painter()->bounds().isValid() ) {
         dstRect &= painter()->bounds();
@@ -104,12 +104,12 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
 
     if (dstRect.isNull() or dstRect.isEmpty() or not dstRect.isValid()) return;
 
-    qint32 sx = 0 ;//dstRect.x() - x;
-    qint32 sy = 0;//dstRect.y() - y;
+    qint32 sx = 0;//dstRect.x() - x - dabRect.x();
+    qint32 sy = 0;//dstRect.y() - y - dabRect.y();
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x() + dabRect.x(), dstRect.y() + dabRect.x(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
 //    }
 
 }

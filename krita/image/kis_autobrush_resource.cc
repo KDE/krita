@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -158,8 +158,8 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, doub
     {
         while(! hiter.isDone())
         {
-            double x = ( hiter.x() ) * invScaleX - centerX;
-            double y = ( hiter.y() ) * invScaleY - centerY;
+            double x = ( hiter.x() - centerX) * invScaleX;
+            double y = ( hiter.y() - centerY) * invScaleY ;
             double x_i = floor(x);
             double x_f = x - x_i;
             if( x_f < 0.0) { x_f *= -1.0; }

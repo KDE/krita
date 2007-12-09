@@ -24,6 +24,8 @@
 
 #include "kis_dynamic_coloring.h"
 
+#if 0
+
 quint8 KisAlphaMaskShape::alphaAt(int x, int y)
 {
     Q_UNUSED(x);
@@ -39,10 +41,18 @@ quint8 KisAutoMaskShape::alphaAt(int x, int y)
 
 KisAutoMaskShape::~KisAutoMaskShape() { if(m_shape) delete m_shape; }
 
-KisDabShape::~KisDabShape() { }
-KisDabShape::KisDabShape() : m_dab(0) { }
 
 KisAlphaMaskShape::KisAlphaMaskShape() {}
+
+#endif
+
+KisDabShape::~KisDabShape() { }
+KisDabShape::KisDabShape(KisBrush* brush) : m_scaleX(1.0), m_scaleY(1.0), m_rotate(0.0), m_dab(0), m_brush(brush) { }
+
+KisDynamicShape* KisDabShape::clone() const
+{
+    return new KisDabShape(*this);
+}
 
 inline void splitCoordinate(double coordinate, qint32 *whole, double *fraction)
 {
@@ -80,7 +90,11 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     splitCoordinate(pos.x(), &x, &xFraction);
     splitCoordinate(pos.y(), &y, &yFraction);
 
-    createStamp(m_dab, coloringsrc, pos, info);
+    KoColor color = painter()->paintColor();
+    color.convertTo( m_dab->colorSpace() );
+    m_brush->mask(m_dab, color, 0.5 * (m_scaleX + m_scaleY), m_rotate, info, xFraction, yFraction);
+
+//     createStamp(m_dab, coloringsrc, pos, info);
 
     // paint the dab
     QRect dabRect = rect();
@@ -92,24 +106,35 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
 
     if (dstRect.isNull() or dstRect.isEmpty() or not dstRect.isValid()) return;
 
-    qint32 sx = dabRect.x() ;//dstRect.x() - x;
-    qint32 sy = dabRect.y();//dstRect.y() - y;
+    qint32 sx = 0 ;//dstRect.x() - x;
+    qint32 sy = 0;//dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
-#if 0
-//     kDebug() << sx <<"" << sy <<"" << sw <<"" << sh;
-    if (painter()->device()->hasSelection()) {
-        painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab,
-                                painter()->device()->selection(), painter()->opacity(), sx, sy, sw, sh);
-    }
-
-    else {
-#endif
 
     painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
 //    }
 
 }
+
+void KisDabShape::resize(double xs, double ys)
+{
+    m_scaleX *= xs;
+    m_scaleY *= ys;
+}
+void KisDabShape::rotate(double r)
+{
+    m_rotate += r;
+}
+
+QRect KisDabShape::rect() const
+{
+    int width = m_brush->maskWidth( m_scaleX );
+    int height = m_brush->maskHeight( m_scaleY );
+    return QRect(-width/2, -height/2, width, height);
+}
+
+
+#if 0
 
 void KisAlphaMaskShape::resize(double xs, double ys)
 {
@@ -170,3 +195,5 @@ void KisAutoMaskShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* c
 KisAlphaMaskShape::~KisAlphaMaskShape()
 {
 }
+
+#endif

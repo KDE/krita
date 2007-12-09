@@ -74,7 +74,7 @@ KisBristleShape::KisBristleShape(double paintbrushMinRadius, double paintbrushMa
 {
 }
 
-QRect KisBristleShape::rect()
+QRect KisBristleShape::rect() const
 {
   return m_rect;
 }

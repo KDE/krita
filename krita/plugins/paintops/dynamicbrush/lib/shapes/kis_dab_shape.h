@@ -27,22 +27,26 @@
 class KisAutobrushShape;
 class KisDynamicColoring;
 class KisPaintInformation;
+class KisBrush;
 
 #include "kis_dynamic_shape.h"
 
-struct DYNAMIC_BRUSH_EXPORT KisDabShape : public KisDynamicShape {
-    KisDabShape();
-    virtual ~KisDabShape();
-    virtual quint8 alphaAt(int x, int y) = 0;
-    virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
-    /**
-      * Call this function to create the stamp to apply on the paint device
-      * @param stamp the temporary paint device on which the shape will draw the stamp
-      * @param coloringsrc the color source to use for the stamp
-      */
-    virtual void createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* coloringsrc,const QPointF &pos, const KisPaintInformation& info) =0;
-    KisPaintDeviceSP m_dab;
+class DYNAMIC_BRUSH_EXPORT KisDabShape : public KisDynamicShape {
+    public:
+        KisDabShape(KisBrush* brush);
+        virtual ~KisDabShape();
+        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
+        virtual void resize(double xs, double ys);
+        virtual void rotate(double r);
+        virtual QRect rect() const;
+        virtual KisDynamicShape* clone() const;
+    private:
+        double m_scaleX, m_scaleY, m_rotate;
+        KisPaintDeviceSP m_dab;
+        KisBrush* m_brush;
 };
+
+#if 0
 
 struct DYNAMIC_BRUSH_EXPORT KisAlphaMaskShape : public KisDabShape {
     KisAlphaMaskShape();
@@ -76,5 +80,7 @@ class DYNAMIC_BRUSH_EXPORT KisAutoMaskShape : public KisDabShape {
         KisAutoDab autoDab;
         KisAutobrushShape* m_shape;
 };
+
+#endif
 
 #endif

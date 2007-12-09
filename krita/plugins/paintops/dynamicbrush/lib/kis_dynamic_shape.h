@@ -35,7 +35,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicShape : public KisDynamicTransformable {
         KisDynamicShape() {}
         virtual ~KisDynamicShape() {}
     public:
-        virtual QRect rect() =0;
+        virtual QRect rect() const =0;
         virtual KisDynamicShape* clone() const = 0;
         virtual void startPainting(KisPainter* m_painter);
         virtual void endPainting();

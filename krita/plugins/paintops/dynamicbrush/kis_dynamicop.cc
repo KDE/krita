@@ -96,7 +96,7 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
 #include <kis_dynamic_brush.h>
 // TEMP
 
-KisDynamicBrush* KisDynamicOpSettings::createBrush() const
+KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
@@ -117,14 +117,7 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush() const
         default:
         case 0:
         {
-            // TODO Take the real parameters.
-            KisAutoMaskShape* dabsrc = new KisAutoMaskShape;
-            dabsrc->autoDab.shape = KisAutoMaskShape::KisAutoDab::ShapeCircle;
-            dabsrc->autoDab.width = 10;
-            dabsrc->autoDab.height = 10;
-            dabsrc->autoDab.hfade = 2;
-            dabsrc->autoDab.vfade = 2;
-            current->setShape(dabsrc);
+            current->setShape( new KisDabShape( painter->brush() ) );
         }
     }
     return current;
@@ -134,7 +127,7 @@ KisDynamicOp::KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter *pai
     : KisPaintOp(painter), m_settings(settings)
 {
     Q_ASSERT(settings);
-    m_brush = m_settings->createBrush();
+    m_brush = m_settings->createBrush(painter);
     m_brush->startPainting(painter);
 }
 

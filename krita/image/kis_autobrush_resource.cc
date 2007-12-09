@@ -19,20 +19,27 @@
 #include "kis_autobrush_resource.h"
 #include <kdebug.h>
 
+#include <KoColor.h>
+
+#include "kis_datamanager.h"
+#include "kis_paint_device.h"
+
 void KisAutobrushShape::createBrush( QImage* img)
 {
-    *img = QImage(m_w, m_h, QImage::Format_ARGB32);
+    *img = QImage((int)(m_w+0.5), (int)(m_h+0.5), QImage::Format_ARGB32);
+    double centerX = img->width() * 0.5;
+    double centerY = img->height() * 0.5;
     for(int j = 0; j < m_h; j++)
     {
         for(int i = 0; i < m_w; i++)
         {
-            qint8 v = valueAt(i,j);
+            qint8 v = valueAt( i - centerX, j - centerY);
             img->setPixel( i, j, qRgb(v,v,v));
         }
     }
 }
 
-KisAutobrushCircleShape::KisAutobrushCircleShape(qint32 w, qint32 h, double fh, double fv)
+KisAutobrushCircleShape::KisAutobrushCircleShape(double w, double h, double fh, double fv)
     : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
         m_xcenter ( w / 2.0 ),
         m_ycenter ( h / 2.0 ),
@@ -42,10 +49,10 @@ KisAutobrushCircleShape::KisAutobrushCircleShape(qint32 w, qint32 h, double fh, 
         m_yfadecoef ( (m_fv == 0) ? 1 : ( 1.0 / m_fv))
 {
 }
-quint8 KisAutobrushCircleShape::valueAt(qint32 x, qint32 y)
+quint8 KisAutobrushCircleShape::valueAt(double x, double y)
 {
-    double xr = (x - m_xcenter) + 0.5;
-    double yr = (y - m_ycenter) + 0.5;
+    double xr = (x /*- m_xcenter*/);
+    double yr = (y /*- m_ycenter*/);
     double n = norme( xr * m_xcoef, yr * m_ycoef);
     if( n > 1 )
     {
@@ -80,17 +87,17 @@ quint8 KisAutobrushCircleShape::valueAt(qint32 x, qint32 y)
     }
 }
 
-KisAutobrushRectShape::KisAutobrushRectShape(qint32 w, qint32 h, double fh, double fv)
+KisAutobrushRectShape::KisAutobrushRectShape(double w, double h, double fh, double fv)
     : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
         m_xcenter ( w / 2.0 ),
         m_ycenter ( h / 2.0 ),
         m_c( fv/fh)
 {
 }
-quint8 KisAutobrushRectShape::valueAt(qint32 x, qint32 y)
+quint8 KisAutobrushRectShape::valueAt(double x, double y)
 {
-    double xr = QABS(x - m_xcenter);
-    double yr = QABS(y - m_ycenter);
+    double xr = QABS(x /*- m_xcenter*/);
+    double yr = QABS(y /*- m_ycenter*/);
     if( xr > m_fh || yr > m_fv )
     {
         if( yr <= ((xr - m_fh) * m_c + m_fv )  )
@@ -104,3 +111,80 @@ quint8 KisAutobrushRectShape::valueAt(qint32 x, qint32 y)
         return 0;
     }
 }
+
+struct KisAutobrushResource::Private {
+    KisAutobrushShape* shape;
+};
+
+KisAutobrushResource::KisAutobrushResource(KisAutobrushShape* as) : KisBrush(""), d(new Private)
+{
+    d->shape = as;
+    QImage* img;
+    d->shape->createBrush( img );
+    setImage(*img);
+    setBrushType(MASK);
+}
+
+KisAutobrushResource::~KisAutobrushResource()
+{
+    delete d->shape;
+    delete d;
+}
+
+void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+{
+    kDebug() << "========================================";
+    kDebug() << subPixelX << " " << subPixelY;
+    Q_UNUSED(info);
+
+        // Generate the paint device from the mask
+    Q_ASSERT(*color.colorSpace() == *dst->colorSpace());
+    
+    const KoColorSpace* cs = dst->colorSpace();
+    dst->dataManager()->setDefaultPixel( color.data() );
+    
+    int dstWidth = maskWidth(scale);
+    int dstHeight = maskHeight(scale);
+    
+    double invScale = 1.0 / scale;
+    
+    double centerX = dstWidth * 0.5 - 1.0 + subPixelX;
+    double centerY = dstHeight * 0.5 - 1.0 + subPixelY;
+    
+    // Apply the alpha mask
+    KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, dstWidth);
+    for (int y = 0; y < dstHeight; y++)
+    {
+        while(! hiter.isDone())
+        {
+            double x = ( hiter.x() ) * invScale - centerX;
+            double y = ( hiter.y() ) * invScale - centerY;
+            double x_i = floor(x);
+            double x_f = x - x_i;
+            if( x_f < 0.0) { x_f *= -1.0; }
+            double x_f_r = 1.0 - x_f;
+            double y_i = floor(y);
+            double y_f = fabs( y - y_i );
+            if( y_f < 0.0) { y_f *= -1.0; }
+            double y_f_r = 1.0 - y_f;
+            cs->setAlpha( hiter.rawData(),
+                          OPACITY_OPAQUE - (
+                                x_f_r * y_f_r * d->shape->valueAt( x_i , y_i  ) + 
+                                x_f   * y_f_r * d->shape->valueAt( x_i + 1, y_i ) +
+                                x_f_r * y_f   * d->shape->valueAt( x_i,  y_i + 1) +
+                                x_f   * y_f   * d->shape->valueAt( x_i + 1,  y_i + 1 ) )
+                                  , 1 );
+            ++hiter;
+        }
+        hiter.nextRow();
+    }
+
+
+}
+
+void KisAutobrushResource::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info , double subPixelX , double subPixelY ) const
+{
+    Q_UNUSED(info);
+    
+}
+

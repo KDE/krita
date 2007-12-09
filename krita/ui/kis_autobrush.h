@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public:
 
 signals:
     void activatedResource(KoResource *r);
-
+    
 private slots:
     void paramChanged();
     void spinBoxWidthChanged(int );

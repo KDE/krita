@@ -34,15 +34,15 @@ class KRITAIMAGE_EXPORT KisAutobrushShape {
          * @param fh horizontal fade (fh \< w / 2 )
          * @param fv vertical fade (fv \< h / 2 )
          */
-        KisAutobrushShape(qint32 w, qint32 h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv)
+        KisAutobrushShape(double w, double h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv)
         { }
         void createBrush( QImage* img);
         /**
          * @return the alpha value at the position (x,y)
          */
-        virtual quint8 valueAt(qint32 x, qint32 y) =0;
+        virtual quint8 valueAt(double x, double y) =0;
     protected:
-        qint32 m_w, m_h;
+        double m_w, m_h;
         double m_fh, m_fv;
 };
 
@@ -52,8 +52,8 @@ class KRITAIMAGE_EXPORT KisAutobrushShape {
 class KRITAIMAGE_EXPORT KisAutobrushCircleShape : public KisAutobrushShape {
     public:
 		virtual ~KisAutobrushCircleShape(){}
-        KisAutobrushCircleShape(qint32 w, qint32 h, double fh, double fv);
-        virtual quint8 valueAt(qint32 x, qint32 y);
+        KisAutobrushCircleShape(double w, double h, double fh, double fv);
+        virtual quint8 valueAt(double x, double y);
     private:
         double norme(double a, double b)
         {
@@ -71,8 +71,8 @@ class KRITAIMAGE_EXPORT KisAutobrushCircleShape : public KisAutobrushShape {
 class KRITAIMAGE_EXPORT KisAutobrushRectShape : public KisAutobrushShape {
     public:
 		virtual ~KisAutobrushRectShape() {}
-        KisAutobrushRectShape(qint32 w, qint32 h, double fh, double fv);
-        virtual quint8 valueAt(qint32 x, qint32 y);
+        KisAutobrushRectShape(double w, double h, double fh, double fv);
+        virtual quint8 valueAt(double x, double y);
     private:
         double m_xcenter, m_ycenter, m_c;
 };
@@ -80,13 +80,15 @@ class KRITAIMAGE_EXPORT KisAutobrushRectShape : public KisAutobrushShape {
 class KRITAIMAGE_EXPORT KisAutobrushResource : public KisBrush
 {
     public:
-		virtual ~KisAutobrushResource() {}
-        KisAutobrushResource(QImage& img) : KisBrush("")
-        {
-            setImage(img);
-            setBrushType(MASK);
-        }
+        KisAutobrushResource(KisAutobrushShape* img);
+        virtual ~KisAutobrushResource();
+    public:
+        virtual void mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+        virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scale, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     public:
         virtual bool load() { return false; }
+    private:
+        struct Private;
+        Private* const d;
 };
 #endif // _KIS_AUTOBRUSH_RESOURCE_H_

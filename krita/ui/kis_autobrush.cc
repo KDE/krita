@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -110,11 +110,10 @@ void KisAutobrush::paramChanged()
     
     p = QPixmap::fromImage(pi);
     brushPreview->setIcon(QIcon(p));
-    KisAutobrushResource * resource = new KisAutobrushResource(*m_brsh);
+    KisAutobrushResource * resource = new KisAutobrushResource(kas);
     Q_CHECK_PTR(resource);
 
     emit(activatedResource(resource));
-    delete kas;
 }
 void KisAutobrush::spinBoxWidthChanged(int a)
 {
@@ -174,6 +173,5 @@ void KisAutobrush::linkFadeToggled(bool b)
         bnLinkFade->setIcon(QIcon(kir.chainBroken()));
     }
 }
-
 
 #include "kis_autobrush.moc"

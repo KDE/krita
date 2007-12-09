@@ -404,12 +404,6 @@ QImage KisBrush::img() const
     return image;
 }
 
-//       d->color = d->painter->paintColor();
-//       d->previousPaintColor = d->painter->paintColor();
-//       d->color.convertTo(cs);
-//       d->color.fromKoColor( d->painter->paintColor());
-//       d->dab->dataManager()->setDefaultPixel( d->color.data() );
-
 void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scale, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
 {
     Q_UNUSED(angle);

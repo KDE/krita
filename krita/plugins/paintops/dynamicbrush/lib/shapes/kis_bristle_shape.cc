@@ -98,11 +98,9 @@ void KisBristleShape::rotate(double r)
 void KisBristleShape::startPainting(KisPainter* _painter)
 {
     KisDynamicShape::startPainting(_painter);
-    KisAutobrushCircleShape cs(1, 1, 1.0, 1.0);
-    QImage img;
-    cs.createBrush(&img);
+    KisAutobrushCircleShape* kacs = new KisAutobrushCircleShape(1, 1, 1.0, 1.0);
     m_paintBrush->bristlesPainter = new KisPainter(painter()->device() );
-    m_paintBrush->bristlesPainter->setBrush( new KisAutobrushResource(img) );
+    m_paintBrush->bristlesPainter->setBrush( new KisAutobrushResource(kacs) );
     m_paintBrush->bristlesPainter->setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, m_paintBrush->bristlesPainter, 0) );
     m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8()) );
 

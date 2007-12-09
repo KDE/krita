@@ -137,6 +137,7 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionA
     switch(action)
     {
         case SELECTION_REPLACE:
+            // XXX: Shouldn't we actually replace the selection, instead of falling through to add?
         case SELECTION_ADD:
             addSelection(selection);
             break;
@@ -544,8 +545,9 @@ void KisPixelSelection::renderToProjection(KisSelection* projection)
 {
     QRect updateRect = selectedExactRect();
     KisPainter painter(projection);
-    painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_COPY, KisPaintDeviceSP(this),
-                   updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height());
+    painter.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+    
+    painter.bitBlt(updateRect.topLeft(), KisPaintDeviceSP(this), updateRect);
     painter.end();
 }
 

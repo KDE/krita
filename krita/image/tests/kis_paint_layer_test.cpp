@@ -98,10 +98,7 @@ void KisPaintLayerTest::testProjection()
     gc.fillRect(qimg.rect(), KoColor(QColor(0, 0, 0, 0), cs), MAX_SELECTED);
     gc.end();
 
-    qDebug() << transparencyMask->selection()->pixelSelection()->selectedExactRect();
-    qDebug() << transparencyMask->selection()->selectedExactRect();
     transparencyMask->selection()->updateProjection(qimg.rect());
-    qDebug() << transparencyMask->selection()->selectedExactRect();
 
     layer->updateProjection( qimg.rect() );
 

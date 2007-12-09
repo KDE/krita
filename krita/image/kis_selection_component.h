@@ -18,8 +18,10 @@
 #ifndef KIS_SELECTION_COMPONENT_H
 #define KIS_SELECTION_COMPONENT_H
 
-#include "kis_selection.h"
 #include <krita_export.h>
+
+class QRect;
+class KisSelection;
 
 class KRITAIMAGE_EXPORT KisSelectionComponent
 {
@@ -29,6 +31,7 @@ public:
 
     virtual void renderToProjection(KisSelection* projection) = 0;
     virtual void renderToProjection(KisSelection* projection, const QRect& r) = 0;
+
 };
 
 #endif

@@ -399,12 +399,6 @@ target_link_libraries(KisPaintDeviceJobsTest  ${KDE4_KDEUI_LIBS} komain kritaima
 
 ########### next target ###############
 
-set(kis_paint_engine_test_SRCS kis_paint_engine_test.cpp )
-kde4_add_unit_test(KisPaintEngineTest TESTNAME krita-image-KisPaintEngineTest ${kis_paint_engine_test_SRCS})
-target_link_libraries(KisPaintEngineTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_painterly_overlay_colorspace_test_SRCS kis_painterly_overlay_colorspace_test.cpp )
 kde4_add_unit_test(KisPainterlyOverlayColorspaceTest TESTNAME krita-image-KisPainterlyOverlayColorspaceTest ${kis_painterly_overlay_colorspace_test_SRCS})
 target_link_libraries(KisPainterlyOverlayColorspaceTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
@@ -480,12 +474,6 @@ target_link_libraries(KisRotateVisitorTest  ${KDE4_KDEUI_LIBS} komain kritaimage
 set(kis_selected_transaction_test_SRCS kis_selected_transaction_test.cpp )
 kde4_add_unit_test(KisSelectedTransactionTest TESTNAME krita-image-KisSelectedTransactionTest ${kis_selected_transaction_test_SRCS})
 target_link_libraries(KisSelectedTransactionTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_selection_component_test_SRCS kis_selection_component_test.cpp )
-kde4_add_unit_test(KisSelectionComponentTest TESTNAME krita-image-KisSelectionComponentTest ${kis_selection_component_test_SRCS})
-target_link_libraries(KisSelectionComponentTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

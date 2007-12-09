@@ -27,6 +27,20 @@ class KisDataManagerTest : public QObject
 private slots:
 
     void testCreation();
+    void testDefaultPixel();
+    void testMemento();
+    void testReadWrite();
+    void testExtent();
+    void testClear();
+    void testSetPixel();
+    void testReadBytes();
+    void testWriteBytes();
+    void testPlanarBytes();
+    void testContiguousColumns();
+    void testRowStride();
+    void testThreadedReadAccess();
+    void testThreadedWriteAccess();
+    void testThreadedReadWriteAccess();
 
 };
 

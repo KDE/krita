@@ -50,7 +50,6 @@ void KisPaintDeviceTest::testCreation()
     QVERIFY( dev->pixelSize() == cs->pixelSize() );
     QVERIFY( dev->channelCount() == cs->channelCount() );
     QVERIFY( dev->dataManager() != 0 );
-    QVERIFY( dev->paintEngine() != 0 );
 
     KisImageSP image = new KisImage(0, 1000, 1000, cs, "merge test");
     KisPaintLayerSP layer = new KisPaintLayer( image, "bla", 125 );
@@ -63,7 +62,6 @@ void KisPaintDeviceTest::testCreation()
     QVERIFY( dev->pixelSize() == cs->pixelSize() );
     QVERIFY( dev->channelCount() == cs->channelCount() );
     QVERIFY( dev->dataManager() != 0 );
-    QVERIFY( dev->paintEngine() != 0 );
 
     // Let the layer go out of scope and see what happens
     {
@@ -73,208 +71,6 @@ void KisPaintDeviceTest::testCreation()
 
 }
 
-void KisPaintDeviceTest::testPaintEngine()
-{
-    // Create a paint device and a QImage. Let the paintEngine paint
-    // on both, then do a pixel-by-pixel comparison
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice( cs );
-    quint8* pixel = cs->allocPixelBuffer( 1 );
-    cs->fromQColor( Qt::white, pixel );
-    dev->fill( 0, 0, 512, 512, pixel);
-
-    QImage img( 512, 512, QImage::Format_ARGB32 );
-    QPainter p( &img );
-    p.fillRect( QRect( 0, 0, 512, 512 ), Qt::white );
-    p.end();
-
-
-    QPainter gc( dev.data() );
-    QPainter gc2( &img );
-
-    // drawArc
-    {
-        QRectF rectangle(10.0, 20.0, 80.0, 60.0);
-        int startAngle = 30 * 16;
-        int spanAngle = 120 * 16;
-        gc.drawArc( rectangle, startAngle, spanAngle );
-        gc2.drawArc( rectangle, startAngle, spanAngle );
-    }
-
-    // drawChord
-    {
-        QRectF rectangle(10.0, 20.0, 80.0, 60.0);
-        int startAngle = 30 * 16;
-        int spanAngle = 120 * 16;
-
-        gc.drawChord(rectangle, startAngle, spanAngle);
-        gc2.drawChord(rectangle, startAngle, spanAngle);
-    }
-
-    // drawConvexPolygon
-    {
-        static const QPointF points[4] = {
-            QPointF(10.0, 80.0),
-            QPointF(20.0, 10.0),
-            QPointF(80.0, 30.0),
-            QPointF(90.0, 70.0)
-        };
-
-
-        gc.drawConvexPolygon(points, 4);
-        gc2.drawConvexPolygon(points, 4);
-    }
-
-    // drawEllipse
-    {
-         QRectF rectangle(10.0, 20.0, 80.0, 60.0);
-
-         gc.drawEllipse( rectangle );
-         gc2.drawEllipse( rectangle );
-
-    }
-
-    // drawImage
-    {
-        QRectF target(100.0, 200.0, 80.0, 60.0);
-        QRectF source(0.0, 0.0, 70.0, 40.0);
-        QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-
-        gc.drawImage(target, image, source);
-        gc2.drawImage(target, image, source );
-    }
-
-    // drawLine
-    {
-           QLineF line(10.0, 80.0, 90.0, 20.0);
-
-           gc.drawLine(line);
-           gc2.drawLine( line );
-    }
-
-    // drawPainterPath
-    {
-        QPainterPath path;
-        path.moveTo(20, 80);
-        path.lineTo(20, 30);
-        path.cubicTo(80, 0, 50, 50, 80, 80);
-
-
-        gc.drawPath(path);
-        gc2.drawPath( path );
-    }
-
-    // draw pie
-    {
-        QRectF rectangle(10.0, 20.0, 80.0, 60.0);
-        int startAngle = 30 * 16;
-        int spanAngle = 120 * 16;
-
-        gc.drawPie(rectangle, startAngle, spanAngle);
-        gc2.drawPie(rectangle, startAngle, spanAngle);
-    }
-
-    // draw pixmap
-    {
-         QRectF target(200.0, 200.0, 80.0, 60.0);
-         QRectF source(0.0, 0.0, 70.0, 40.0);
-         QPixmap pixmap(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-
-         gc.drawPixmap(target, pixmap, source);
-         gc2.drawPixmap(target, pixmap, source);
-    }
-
-    // draw point
-    {
-        QPointF pt( 50.0, 45.0 );
-        gc.drawPoint( pt );
-        gc2.drawPoint( pt );
-    }
-
-    // draw points
-    {
-        static const QPointF points[4] = {
-            QPointF(10.0, 80.0),
-            QPointF(20.0, 10.0),
-            QPointF(80.0, 30.0),
-            QPointF(90.0, 70.0)
-        };
-
-
-        gc.drawPoints(points, 4);
-        gc2.drawPoints(points, 4);
-
-    }
-
-    // draw polygon
-    {
-        static const QPointF points[4] = {
-            QPointF(10.0, 80.0),
-            QPointF(20.0, 10.0),
-            QPointF(80.0, 30.0),
-            QPointF(90.0, 70.0)
-        };
-
-        gc.drawPolygon(points, 4);
-        gc2.drawPolygon(points, 4);
-    }
-
-    // draw polyline
-    {
-         static const QPointF points[3] = {
-             QPointF(10.0, 80.0),
-             QPointF(20.0, 10.0),
-             QPointF(80.0, 30.0),
-         };
-
-         gc.drawPolyline(points, 3);
-         gc2.drawPolyline(points, 3);
-    }
-
-    // draw rect
-    {
-        QRectF rectangle(10.0, 300.0, 80.0, 60.0);
-
-        gc.drawRect(rectangle);
-        gc2.drawRect(rectangle);
-    }
-
-    // draw round rect
-    {
-           QRectF rectangle(10.0, 400.0, 80.0, 60.0);
-           gc.drawRoundRect(rectangle);
-           gc2.drawRoundRect(rectangle);
-    }
-
-    // draw text
-    {
-        QRectF rect ( 250, 250, 100, 10 );
-        gc.drawText(rect, Qt::AlignCenter, tr("Krita"));
-        gc2.drawText(rect, Qt::AlignCenter, tr("Krita "));
-    }
-
-    // draw Tiled pixmap
-    {
-        QRectF target(300.0, 300.0, 212, 212);
-        QPixmap pixmap(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
-
-        gc.drawTiledPixmap( target, pixmap, QPointF( 0, 0 ) );
-        gc2.drawTiledPixmap( target, pixmap,QPointF( 0, 0 ) );
-    }
-
-    gc.end();
-    gc2.end();
-
-    QImage result = dev->convertToQImage( 0, 0, 0, 512, 512 );
-
-    QPoint errpoint;
-
-    if ( !TestUtil::compareQImages( errpoint, img, result ) ) {
-        img.save( "kis_paint_device_test_test_paintengine_qimage.png" );
-        result.save( "kis_paint_device_test_test_paintengine_result.png" );
-        QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
-    }
-}
 
 void KisPaintDeviceTest::testStore()
 {
@@ -710,11 +506,6 @@ void KisPaintDeviceTest::testMirrorTransaction()
         dev2->mirrorX();
         dev2->convertToQImage(0, 0, 0, image.width(), image.height()).save( "mirror_test_t_2.png" );
     }
-}
-
-void KisPaintDeviceTest::testSelection()
-{
-    QFAIL( "Implement unittests for the selection API of KisPaintDevice" );
 }
 
 void KisPaintDeviceTest::testPlanarReadWrite()

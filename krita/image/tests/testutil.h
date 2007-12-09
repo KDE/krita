@@ -39,6 +39,7 @@ struct TestProgressBar : public KoProgressProxy
     int maximum() const { return 0; }
     void setValue( int value )
         {
+            Q_UNUSED(value);
             //qDebug() << "Progress (" << this << "): " << value ;
         }
     void setRange( int, int) {}

@@ -24,8 +24,8 @@
 #include <qimage.h>
 
 /**
- * KisGenericColorSpace is a colorspace you use if you want to store some values
- * in a KisPaintDevice which are not colors. For instance the results of the 
+ * KisGenericColorSpace is a colorspace you use if you want to store some structured
+ * values in a KisPaintDevice which are not colors. For instance the results of the
  * computation of a wavelets.
  * 
  * This allow to create huge arrays of memory even on a computer with limited

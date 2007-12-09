@@ -39,7 +39,6 @@
 #include <KoStore.h>
 
 #include "kis_global.h"
-#include "kis_paint_engine.h"
 #include "kis_types.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
@@ -60,8 +59,6 @@
 #include "kis_pixel_selection.h"
 #include "kis_paint_device_jobs.h"
 
-//#define CACHE_EXACT_BOUNDS
-
 class KisPaintDevice::Private {
 
 public:
@@ -72,12 +69,6 @@ public:
     KoColorSpace * colorSpace;
     qint32 pixelSize;
     qint32 nChannels;
-    QPaintEngine * paintEngine;
-
-#ifdef CACHE_EXACT_BOUNDS
-    QRect exactBounds;
-#endif
-
     KisPainterlyOverlaySP painterlyOverlay;
 
 };
@@ -98,7 +89,6 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
 
     quint8 *defaultPixel = new quint8 [ m_d->pixelSize ];
     memset( defaultPixel, 0, m_d->pixelSize );
-
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;
 
@@ -107,8 +97,6 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
     m_d->parent = 0;
 
     m_d->colorSpace = colorSpace->clone();
-
-    m_d->paintEngine = new KisPaintEngine();
 
 }
 
@@ -135,7 +123,6 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;
     Q_CHECK_PTR(m_datamanager);
-    m_d->paintEngine = new KisPaintEngine();
 
 }
 
@@ -143,7 +130,6 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
     : QObject()
     , KisShared(rhs)
-    , QPaintDevice()
     , m_d( new Private() )
 {
     if (this != &rhs) {
@@ -162,89 +148,24 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         m_d->pixelSize = rhs.m_d->pixelSize;
 
         m_d->nChannels = rhs.m_d->nChannels;
-        m_d->paintEngine = rhs.m_d->paintEngine;
     }
 }
 
 KisPaintDevice::~KisPaintDevice()
 {
     delete m_d->colorSpace;
-    delete m_d->paintEngine;
     delete m_d;
-}
-
-QPaintEngine * KisPaintDevice::paintEngine () const
-{
-    return m_d->paintEngine;
-}
-
-int KisPaintDevice::metric( PaintDeviceMetric metric ) const
-{
-    QRect rc = exactBounds();
-    int depth = colorSpace()->pixelSize() - 1;
-
-    switch (metric) {
-    case PdmWidth:
-        return rc.width();
-        break;
-
-    case PdmHeight:
-        return rc.height();
-        break;
-
-    case PdmWidthMM:
-        return qRound( rc.width() * ( 72 / 25.4 ) );
-        break;
-
-    case PdmHeightMM:
-        return qRound( rc.height() * ( 72 / 25.4 ) );
-        break;
-
-    case PdmNumColors:
-        return depth * depth;
-        break;
-
-    case PdmDepth:
-        return qRound( colorSpace()->pixelSize() * 8 ); // in bits
-        break;
-
-    case PdmDpiX:
-        return 72;
-        break;
-
-    case PdmDpiY:
-        return 72;
-        break;
-
-    case PdmPhysicalDpiX:
-        return 72;
-        break;
-
-    case PdmPhysicalDpiY:
-        return 72;
-        break;
-    default:
-        qWarning("QImage::metric(): Unhandled metric type %d", metric);
-        break;
-    }
-    return 0;
 }
 
 void KisPaintDevice::setDirty(const QRect & rc)
 {
 
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds |= rc;
-#endif
     if ( m_d->parent.isValid() )
         m_d->parent->setDirty( rc );
 }
 
 void KisPaintDevice::setDirty( const QRegion & region )
 {
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds |= region.boundingRect();
-#endif
     if ( m_d->parent.isValid() )
         m_d->parent->setDirty( region );
 }
@@ -285,9 +206,6 @@ QRect KisPaintDevice::extent() const
 
 QRect KisPaintDevice::exactBounds() const
 {
-#ifdef CACHE_EXACT_BOUNDS
-    return m_d->exactBounds;
-#else
     // Solution n°2
     qint32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
     QRect rc = extent();
@@ -368,15 +286,11 @@ QRect KisPaintDevice::exactBounds() const
         }
     }
     return QRect(boundX2, boundY2, boundW2, boundH2);
-#endif
 }
 
 
 void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 {
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds = QRect( x, y, w, h );
-#endif
     m_datamanager->setExtent(x - m_d->x, y - m_d->y, w, h);
 }
 
@@ -384,36 +298,23 @@ void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 void KisPaintDevice::crop(const QRect & r)
 {
     QRect rc( r );
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds = rc;
-#endif
     rc.translate(-m_d->x, -m_d->y);
     m_datamanager->setExtent(rc);
 }
 
 void KisPaintDevice::clear()
 {
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds = QRect( 0, 0, 0, 0 );
-#endif
     m_datamanager->clear();
 }
 
 void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel)
 {
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds &= QRect( x, y, w, h );
-#endif
     m_datamanager->clear(x, y, w, h, fillPixel);
 }
 
 
 void KisPaintDevice::clear( const QRect & rc )
 {
-#ifdef CACHE_EXACT_BOUNDS
-    if ( rc.contains( m_d->exactBounds) )
-         m_d->exactBounds = QRect();
-#endif
     m_datamanager->clear( rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel() );
 }
 
@@ -645,49 +546,27 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     m_d->nChannels = m_d->colorSpace->channelCount();
 
     setDirty(extent());
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds = extent();
-#endif
-
 }
 
 void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcProfileName,
                                        qint32 offsetX, qint32 offsetY)
 {
-    Q_UNUSED( srcProfileName );
-
     QImage img = image;
 
     if (img.format() != QImage::Format_ARGB32) {
         img = img.convertToFormat(QImage::Format_ARGB32);
     }
-#ifdef __GNUC__
-#warning "KisPaintDevice::convertFromQImage. re-enable use of srcProfileName"
-#endif
-#if 0
-
-    // XXX: Apply import profile
-    if (colorSpace() == KoColorSpaceRegistry::instance() ->colorSpace("RGBA",0)) {
+    // Don't convert if not no profile is given and both paint dev and qimage are rgba.
+    if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
     }
     else {
-#endif
-#if 0
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
                 ->colorSpace("RGBA", srcProfileName)->
                         convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
-#endif
-        KisPainter p( this );
-        p.bitBlt(offsetX, offsetY, colorSpace()->compositeOp( COMPOSITE_OVER ),
-                 &image, OPACITY_OPAQUE,
-                 0, 0, image.width(), image.height());
-        p.end();
-#ifdef CACHE_EXACT_BOUNDS
-        m_d->exactBounds = image.rect();
-#endif
-//    }
+   }
 }
 
 QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, float exposure)
@@ -807,9 +686,6 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
 
 KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection)
 {
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds &= QRect( left, top, w, h );
-#endif
     KisDataManager* selectionDm = 0;
 
     if ( selection )
@@ -831,10 +707,6 @@ KisRectConstIteratorPixel KisPaintDevice::createRectConstIterator(qint32 left, q
 
 KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection)
 {
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds &= QRect( x, y, w, 1 );
-#endif
-
     KisDataManager* selectionDm = 0;
 
     if(selection)
@@ -856,10 +728,6 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
 
 KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection)
 {
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds &= QRect( x, y, 1, h );
-#endif
-
     KisDataManager* selectionDm = 0;
 
     if(selection)
@@ -1056,9 +924,6 @@ void KisPaintDevice::readBytes(quint8 * data, const QRect &rect)
 
 void KisPaintDevice::writeBytes(const quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h)
 {
-#ifdef CACHE_EXACT_BOUNDS
-    m_d->exactBounds &= QRect( x, y, w, h );
-#endif
     m_datamanager->writeBytes( data, x - m_d->x, y - m_d->y, w, h);
 }
 

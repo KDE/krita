@@ -88,27 +88,24 @@ class KRITAIMAGE_EXPORT KisThreadedApplicator : public QObject {
 public:
 
     /**
-       @param dev The paintdevice that is the subject of the jobs
-       @param rc The part of the paintdevice that needs to be acted on
-       @param jobFactory The factory class that creates the
-              specialized jobs
-       @param updater The master KoProgressUpdater that will track updates for
-              all threads.
-       @param margin. If present, the rects parcelled out to the jobs
-                      will have the specified margin. When the results
-                      are put together again, the margin is cut off.
-                      Use this for convolutions, for instance.
-
-    */
+     * @param dev The paintdevice that is the subject of the jobs
+     *  @param rc The part of the paintdevice that needs to be acted on
+     *  @param jobFactory The factory class that creates the
+     *         specialized jobs
+     *  @param updater The master KoProgressUpdater that will track updates for
+     *         all threads.
+     *  @param margin. If present, the rects parcelled out to the jobs
+     *                 will have the specified margin. When the results
+     *                 are put together again, the margin is cut off.
+     *                 Use this for convolutions, for instance.
+     *
+     */
     KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, KoProgressUpdater * updater, int margin = 0);
     ~KisThreadedApplicator();
 
     /**
-      Start all threads. Returns when all subthreads are done.
-
-      XXX: make it possible to cancel the jobs!
-      XXX: integrate with the progress updater thingy
-
+     * Execute the given job and return when the whole rect has
+     * been done.
      */
     void execute();
 

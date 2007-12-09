@@ -26,11 +26,12 @@ class KisFilterMaskTest : public QObject
 {
     Q_OBJECT
 
+    void testProjectionNotSelected();
+    void testInImage();
+
 private slots:
 
-    void testProjectionNotSelected();
     void testProjectionSelected();
-    void testInImage();
 
 };
 

@@ -19,19 +19,22 @@
 #include <qtest_kde.h>
 #include "kis_projection_test.h"
 
+#include <KoColor.h>
+#include <KoColorSpace.h>
+
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_paint_layer.h"
+#include "kis_fill_painter.h"
 
 void KisProjectionTest::testDirty()
 {
     KisImageSP image = new KisImage( 0, 1000, 1000, 0, "layer tests" );
     KisLayerSP layer = new KisPaintLayer( image, "layer 1", OPACITY_OPAQUE );
     image->addNode( layer );
-    QPainter gc( layer->paintDevice().data() );
-    gc.fillRect( 0, 0, 1000, 1000, Qt::red );
-    gc.end();
-
+    KisFillPainter gc( layer->paintDevice() );
+    KoColor c(Qt::red, layer->colorSpace());
+    gc.fillRect( 0, 0, 1000, 1000, c );
 }
 
 void KisProjectionTest::stressTestDirty()

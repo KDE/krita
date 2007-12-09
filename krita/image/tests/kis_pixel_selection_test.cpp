@@ -189,6 +189,15 @@ void KisPixelSelectionTest::testTotally()
     QVERIFY(sel->isProbablyTotallyUnselected(QRect(128, 0, 100, 100)));
 }
 
+void KisPixelSelectionTest::testUpdateProjection()
+{
+    KisSelectionSP sel = new KisSelection();
+    KisPixelSelectionSP psel = new KisPixelSelection();
+    psel->select(QRect(0, 0, 100, 100));
+    psel->renderToProjection(sel.data());
+    QCOMPARE(sel->selectedExactRect(), QRect(0, 0, 100, 100));
+}
+
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI);
 #include "kis_pixel_selection_test.moc"
 

@@ -52,9 +52,7 @@ KisFilterRegistry::KisFilterRegistry()
         int errCode = 0;
         KParts::Plugin* plugin =
              KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
-        if ( plugin )
-            kDebug(DBG_AREA_PLUGINS) <<"found plugin" << service->property("Name").toString() <<"";
-        else {
+        if ( !plugin ) {
             kDebug(41006) <<"found plugin" << service->property("Name").toString() <<"," << errCode <<"";
             if( errCode == KLibLoader::ErrNoLibrary)
             {
@@ -80,13 +78,11 @@ KisFilterRegistry* KisFilterRegistry::instance()
 
 void KisFilterRegistry::add(KisFilterSP item)
 {
-    kDebug(41001) <<"adding" << item->id();
     add(item->id(), item);
 }
 
 void KisFilterRegistry::add(const QString &id, KisFilterSP item)
 {
-    kDebug(41001) <<"adding" << id;
     KoGenericRegistry<KisFilterSP>::add(id, item);
     emit(filterAdded(id));
 }

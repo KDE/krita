@@ -131,7 +131,6 @@ void KisLayer::setOpacity(quint8 val)
     if ( opacity() != val )
     {
         nodeProperties().setProperty( "opacity", val );
-        setDirty();
     }
 }
 
@@ -250,7 +249,6 @@ void KisLayer::setPreviewMask( KisEffectMaskSP mask )
 {
     m_d->previewMask = mask;
     m_d->previewMask->setParent( this );
-    setDirty( mask->extent() );
 }
 
 KisEffectMaskSP KisLayer::previewMask() const
@@ -261,7 +259,6 @@ KisEffectMaskSP KisLayer::previewMask() const
 void KisLayer::removePreviewMask()
 {
     m_d->previewMask = 0;
-    if ( m_d->previewMask ) setDirty( m_d->previewMask->extent() );
 }
 
 KisLayerSP KisLayer::parentLayer() const

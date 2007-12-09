@@ -60,7 +60,8 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
-    : KisLayer(rhs), KisIndirectPaintingSupport(rhs)
+    : KisLayer(rhs)
+    , KisIndirectPaintingSupport(rhs)
     , m_d( new Private() )
 {
     m_d->filterConfig = new KisFilterConfiguration(*rhs.m_d->filterConfig);
@@ -134,7 +135,6 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 {
     Q_ASSERT(filterConfig);
     m_d->filterConfig = filterConfig;
-    setDirty();
 }
 
 
@@ -160,8 +160,6 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
     gc.end();
 
     m_d->selection->setInterestedInDirtyness(true);
-
-    setDirty();
 }
 
 
@@ -276,6 +274,5 @@ QImage KisAdjustmentLayer::createThumbnail(qint32 w, qint32 h)
 KisPaintDeviceSP KisAdjustmentLayer::cachedPaintDevice() { return m_d->cachedPaintDevice; }
 bool KisAdjustmentLayer::showSelection() const { return m_d->showSelection; }
 void KisAdjustmentLayer::setSelection(bool b) { m_d->showSelection = b; }
-
 
 #include "kis_adjustment_layer.moc"

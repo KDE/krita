@@ -37,7 +37,6 @@ set(kritaimage_LIB_SRCS
    kis_threaded_applicator.cpp
    kis_projection.cc
    kis_adjustment_layer.cc
-   kis_paint_engine.cc
    kis_brush_p.cc
    kis_autobrush_resource.cc
    kis_autogradient_resource.cc

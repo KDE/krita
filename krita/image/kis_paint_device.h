@@ -26,7 +26,6 @@
 #include <QList>
 #include <QString>
 #include <QPaintDevice>
-#include <QPaintEngine>
 
 #include "kdebug.h"
 
@@ -44,7 +43,6 @@
 class QRect;
 class QImage;
 class QPoint;
-class QPaintEngine;
 
 class KoStore;
 
@@ -54,7 +52,6 @@ class KisDataManager;
 class KisSelectionComponent;
 class KisPainterlyOverlay;
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
-
 
 /**
  * A paint device contains the actual pixel data and offers methods
@@ -66,7 +63,6 @@ typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 class KRITAIMAGE_EXPORT KisPaintDevice
     : public QObject
     , public KisShared
-    , public QPaintDevice
 {
 
         Q_OBJECT
@@ -93,22 +89,6 @@ public:
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
-
-public:
-
-    /**
-     * Returns an instance of KisPaintEngine for QPainters to work with.
-     */
-    QPaintEngine * paintEngine () const;
-
-protected:
-
-    /**
-     * Returns the metric information for the given paint device
-     * metric. Part of the QPaintDevice api necessary for
-     * KisPaintEngine.
-     */
-    int metric( PaintDeviceMetric metric ) const;
 
 public:
     /**

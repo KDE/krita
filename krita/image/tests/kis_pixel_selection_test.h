@@ -38,6 +38,7 @@ private slots:
     void testSubtractSelection();
     void testIntersectSelection();
     void testTotally();
+    void testUpdateProjection();
 };
 
 #endif

@@ -106,36 +106,6 @@ public:
     KisPaintDeviceSP device() const { return m_device; }
 
     /**
-     * Paint the given QImage onto the current paint device.
-     * If necessary, the QImage is first converted to the right
-     * colorspace. If the QImage is not of the QImage::Format_ARGB32
-     * or QImage::Format_RGB32 type, the result is undefined.
-     *
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op a pointer to the composite op used to blast the pixels from src on dst
-     * @param src the source device
-     * @param opacity the opacity of the source pixel
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    void bitBlt(qint32 dx, qint32 dy,
-                const KoCompositeOp* op,
-                const QImage * src,
-                quint8 opacity,
-                qint32 sx, qint32 sy,
-                qint32 sw, qint32 sh);
-
-
-    /**
-     * Convenience method that uses the opacity and composite op set
-     * in the painter. If nothing is set, opaque and OVER are assumed.
-     */
-    void bitBlt(QPoint pos, const QImage * src, QRect srcRect );
-
-    /**
      * Blast the specified region from src onto the current paint device.
      * @param dx the destination x-coordinate
      * @param dy the destination y-coordinate

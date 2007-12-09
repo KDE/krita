@@ -211,76 +211,6 @@ void KisPainter::setPaintOp(KisPaintOp * paintOp)
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KoCompositeOp* op,
-                        const QImage * src,
-                        quint8 opacity,
-                        qint32 sx, qint32 sy,
-                        qint32 sw, qint32 sh)
-{
-#ifdef __GNUC__
-#warning "Don't assume the same resolution for a QImage and a KisPaintDevice -- see QImage::dotsPerMeterX|Y"
-#endif
-
-    if ( src == 0 ) return;
-    if ( src->isNull() ) return;
-    if ( src->format() != QImage::Format_RGB32 && src->format() != QImage::Format_ARGB32 ) return;
-    if ( src->depth() != 32 ) return;
-
-    QRect srcRect = QRect( sx, sy, sw, sh );
-    const KoColorSpace * srcCs = KoColorSpaceRegistry::instance()->rgb8();
-
-    // Make sure we don't try to blit outside the source image
-    if ( src->rect().isValid() && op != srcCs->compositeOp( COMPOSITE_COPY ) ) {
-        srcRect &= src->rect();
-    }
-
-    dx += srcRect.x() - sx;
-    dy += srcRect.y() - sy;
-
-    sx = srcRect.x();
-    sy = srcRect.y();
-    sw = srcRect.width();
-    sh = srcRect.height();
-
-    addDirtyRect( QRect( dx, dy, sw, sh ));
-
-    const quint8 * srcData = src->bits();
-
-    for ( qint32 row = 0; row < sh; ++row ) {
-
-        KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dx, dy + row, sw);
-        while ( !dstIt.isDone() ) {
-            qint32 pixels = dstIt.nConseqHPixels();
-            m_colorSpace->bitBlt(dstIt.rawData(),
-                                 0,
-                                 srcCs,
-                                 srcData,
-                                 0,
-                                 0,
-                                 0,
-                                 opacity,
-                                 1,
-                                 pixels,
-                                 op,
-                                 m_channelFlags);
-
-            srcData += ( pixels * 4 ); // 4 bytes to one QImage pixel
-
-            dstIt += pixels;
-
-        }
-        dstIt.nextRow();
-
-    }
-
-}
-
-void KisPainter::bitBlt(QPoint pos, const QImage * src, QRect srcRect )
-{
-    bitBlt( pos.x(), pos.y(), m_compositeOp, src, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
-}
-
-void KisPainter::bitBlt(qint32 dx, qint32 dy,
-                        const KoCompositeOp* op,
                         const KisPaintDeviceSP srcdev,
                         quint8 opacity,
                         qint32 sx, qint32 sy,
@@ -292,9 +222,10 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
+    // Don't try to read outside the source rect
+    //if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
         srcRect &= srcdev->extent();
-    }
+    //}
 
     if (srcRect.isEmpty()) {
         return;
@@ -340,12 +271,10 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
             srcIt.moveTo(srcX, srcY);
-//             KisHLineConstIteratorPixel srcIt = srcdev->createHLineConstIterator(srcX, srcY, columns);
             const quint8 *srcData = srcIt.rawData();
 
             qint32 dstRowStride = m_device->rowStride(dstX, dstY);
             dstIt.moveTo(dstX, dstY);
-//             KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns);
             quint8 *dstData = dstIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
@@ -394,9 +323,9 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
+    //if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
         srcRect &= srcdev->exactBounds();
-    }
+    //}
 
     srcRect &= selMask->exactBounds().translated( -dx + sx, -dy + sy );
 

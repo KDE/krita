@@ -172,7 +172,6 @@ qint32 KisCloneLayer::x() const
 void KisCloneLayer::setX(qint32 x)
 {
     m_d->x = x;
-    setDirty();
 }
 
 qint32 KisCloneLayer::y() const
@@ -183,7 +182,6 @@ qint32 KisCloneLayer::y() const
 void KisCloneLayer::setY(qint32 y)
 {
     m_d->y = y;
-    setDirty();
 }
 
 /// Returns an approximation of where the bounds on actual data are in this layer
@@ -229,8 +227,6 @@ void KisCloneLayer::setCopyFrom( KisLayerSP fromLayer, CopyLayerType type )
 {
     m_d->type = type;
     m_d->copyFrom = fromLayer;
-
-    setDirty();
 }
 
 KisLayerSP KisCloneLayer::copyFrom() const
@@ -242,8 +238,6 @@ void KisCloneLayer::setCopyType( CopyLayerType type )
 {
     if ( type != m_d->type ) {
         m_d->type = type;
-        if ( m_d->copyFrom )
-            setDirty();
     }
 }
 

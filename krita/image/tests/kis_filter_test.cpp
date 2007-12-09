@@ -82,7 +82,7 @@ void KisFilterTest::testSingleThreaded()
 
     QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, inverted, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
-        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
+        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtertest.png");
         QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 }

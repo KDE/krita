@@ -50,8 +50,17 @@ const QString KIS_SELECTION_ID = "KisSelection";
 class KisSelectionComponent;
 
 /**
- * KisSelection contains a byte-map representation of a layer, where
- * the value of a byte signifies whether a corresponding pixel is selected, or not.
+ * KisSelection is a paint device that is constructed out of several components.
+ * such as a pixel selection, a vector selection or something else we haven't thought
+ * up yet.
+ *
+ * Every pixel in the paint device can indicate a degree of selectedness, varying
+ * between MIN_SELECTED and MAX_SELECTED.
+ *
+ * The paint device itself is only a projection:
+ * you can read from it, but not write to it. You need to keep track of the need
+ * for updating the projection yourself: there is no automatic updating after changing
+ * the contents of one or more of the selection components.
  */
 class KRITAIMAGE_EXPORT KisSelection : public KisPaintDevice {
 
@@ -71,49 +80,48 @@ public:
     KisSelection( KisPaintDeviceSP parent, KisMaskSP mask );
 
     /**
-     * Create a new KisSelection. This selection will not have a parent paint device.
+     * Create a new KisSelection. This selection will not have a
+     * parent paint device.
      */
     KisSelection();
 
     /**
-     * Copy the selection
+     * Copy the selection. The components are not copied. (XXX: should they?)
      */
     KisSelection(const KisSelection& rhs);
 
+    /**
+     * Delete the selection. The shape selection component is deleted, the
+     * pixel selection component is contained in a shared pointer, so that
+     * may still be valid.
+     *
+     * XXX: Make this sane!
+     */
     virtual ~KisSelection();
-
-    QIcon icon() const
-        {
-            return KIcon("frame-edit"); //XXX: Get good icon!
-        }
-
 
     /**
      * Returns selectedness of the specified pixel, or 0 if invalid
-     * coordinates
+     * coordinates. The projection is not updated before determinging selectedness.
      */
     quint8 selected(qint32 x, qint32 y) const;
 
     /**
-     * Invert the selection.
-     *
-     * XXX: The extent that is inverted is the total
-     * extent of the selection projection, not that of the selection
-     * components, the parent paint device or the image. Shouldn't we
-     * fix this?
-     */
-    void invert();
-
-    /**
-     * Clear the selection.
-     *
-     * XXX: shouldn't we also clear the selection components?
+     * Clear the selection. This invalidates the projection. It does not clear
+     * the selection components.
+     * Afterwards, you can call updateProjection to recompute the selection.
      */
     void clear();
-    void clear(const QRect& r);
+    
+    /**
+     * Clear the specified rect in the selection projection. This invalidates
+     * the projection. It does not clear the selection components.
+     * Afterwards, you can call updateProjection to recompute
+     * the selection.
+     */
+     void clear(const QRect& r);
 
     /**
-     * Tests if the the rect is totally outside the selection
+     * Tests if the the rect is totally outside the selection.
      */
     bool isTotallyUnselected(QRect r) const;
 
@@ -126,18 +134,19 @@ public:
 
     /**
      * Rough, but fastish way of determining the area
-     * of the tiles used by the selection.
+     * of the tiles used by the selection projection.
      */
     QRect selectedRect() const;
 
     /**
      * Slow, but exact way of determining the rectangle
-     * that encloses the selection
+     * that encloses the selection projection.
      */
     QRect selectedExactRect() const;
 
     /**
-     * paint a mask-like representation of the selection onto the given QImage
+     * paint a mask-like representation of the selection projection
+     * onto the given QImage.
      */
     void paint(QImage* img, const QRect & r);
 
@@ -145,13 +154,13 @@ public:
      * If the parent paint device is interested in keeping up to date
      * with the dirtyness of this selection, set to true
      */
-    void setInterestedInDirtyness(bool b) { m_interestedInDirtyness = b; }
+    void setInterestedInDirtyness(bool b);
 
     /**
      * returns true if the parent paint device is interested in
      * keeping up with the dirtyness of the selection.
      */
-    bool interestedInDirtyness() const { return m_interestedInDirtyness; }
+    bool interestedInDirtyness() const;
 
     virtual void setDirty(const QRect & rc);
     virtual void setDirty( const QRegion & region );
@@ -171,8 +180,7 @@ public:
      * if hasShapeSelection() returns false.
      */
     KisSelectionComponent* shapeSelection();
-
-
+    
     /**
      * Return the pixel selection associated with this selection or
      * create a new one if there is currently no pixel selection
@@ -204,13 +212,8 @@ private:
 
 private:
 
-    // XXX: Move to Private class!
-    KisPaintDeviceWSP m_parentPaintDevice;
-    bool m_interestedInDirtyness;
-    bool m_hasPixelSelection;
-    bool m_hasShapeSelection;
-    KisPixelSelectionSP m_pixelSelection;
-    KisSelectionComponent* m_shapeSelection;
+    struct Private;
+    Private * const m_d;
 };
 
 #endif // KIS_SELECTION_H_

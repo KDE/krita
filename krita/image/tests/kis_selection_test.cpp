@@ -26,7 +26,10 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_pixel_selection.h"
+#include "kis_selection.h"
 #include "kis_fill_painter.h"
+#include "kis_mask.h"
+#include "kis_transparency_mask.h"
 
 void KisSelectionTest::testSelectionComponents()
 {
@@ -41,6 +44,12 @@ void KisSelectionTest::testSelectionComponents()
     QVERIFY( selection->pixelSelection() == pixelSelection );
     QVERIFY( selection->hasPixelSelection() == true );
 
+    KisMaskSP mask = new KisTransparencyMask();
+    mask->select(QRect(0, 0, 100, 100));
+    selection = new KisSelection(0, mask);
+    selection->updateProjection();
+    QVERIFY( selection->hasPixelSelection() == true );
+    QCOMPARE( selection->selectedExactRect(), QRect(0, 0, 100, 100));
 }
 
 void KisSelectionTest::testSelectionActions()
@@ -61,7 +70,6 @@ void KisSelectionTest::testSelectionActions()
     pixelSelection->addSelection(tmpSel);
     selection->updateProjection();
     QCOMPARE( selection->selectedExactRect(), QRect( 0, 0, 30, 20 ) );
-
 
     pixelSelection->clear();
     pixelSelection->select(QRect(0,0,20,20));
@@ -108,6 +116,7 @@ void KisSelectionTest::testInvertSelection()
     QCOMPARE( selection->selected(22,22), MIN_SELECTED);
     QCOMPARE( selection->selected(10,10), MAX_SELECTED);
 }
+
 void KisSelectionTest::testUpdateSelectionProjection()
 {
     KisSelectionSP selection = new KisSelection();
@@ -122,11 +131,11 @@ void KisSelectionTest::testUpdateSelectionProjection()
 
     QVERIFY(selection->pixelSelection()->selectedExactRect() == QRect(0, 0, 100, 100) );
     QVERIFY(selection->selectedExactRect().isNull() );
-    selection->updateProjection( QRect(0, 0, 100, 100) );
-    QVERIFY(selection->pixelSelection()->selectedExactRect() == QRect( 0, 0, 100, 100 ) );
-
-
+    selection->updateProjection();
+    QCOMPARE(selection->pixelSelection()->selectedExactRect(), QRect( 0, 0, 100, 100 ) );
+    QCOMPARE(selection->selectedExactRect(), QRect( 0, 0, 100, 100 ) );
 }
+
 void KisSelectionTest::testUpdatePixelSelection()
 {
     KisSelectionSP selection = new KisSelection();
@@ -143,7 +152,11 @@ void KisSelectionTest::testUpdatePixelSelection()
     
 }
 
-QTEST_KDEMAIN(KisSelectionTest, NoGUI)
+void KisSelectionTest::testSelectionExtent()
+{
+}
+
+QTEST_KDEMAIN(KisSelectionTest, NoGUI);
 #include "kis_selection_test.moc"
 
 

@@ -65,7 +65,7 @@ KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev,
 
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->maxThreads = cfg.readEntry("maxthreads",  QThread::idealThreadCount() );
-    m_d->tileSize = cfg.readEntry( "threadingtilesize", 256 );
+    m_d->tileSize = cfg.readEntry( "threadingtilesize", 512 );
 
     m_d->weaver = new Weaver();
     m_d->weaver->setMaximumNumberOfThreads( m_d->maxThreads );
@@ -97,7 +97,7 @@ void KisThreadedApplicator::execute()
     }
     else {
         int numTasks = static_cast<int>( ceil( w / m_d->tileSize * h / m_d->tileSize) );
-        m_d->progressUpdater->start( numTasks );
+        m_d->progressUpdater->start( numTasks);
 
         int wleft = w;
         int col = 0;
@@ -119,7 +119,7 @@ void KisThreadedApplicator::execute()
     while (!m_d->weaver->isIdle()) {
         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
-    //m_d->weaver->finish();
+    m_d->weaver->finish();
 }
 
 void KisThreadedApplicator::jobDone( Job* job)
@@ -127,7 +127,6 @@ void KisThreadedApplicator::jobDone( Job* job)
     QRect rc = static_cast<KisJob*>(job)->area();
     delete job;
     emit areaDone( rc );
-    
 }
 
 #include "kis_threaded_applicator.moc"

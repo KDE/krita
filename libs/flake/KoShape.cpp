@@ -91,6 +91,8 @@ public:
         if(parent)
             parent->model()->childChanged(me, type);
         me->shapeChanged(type);
+        foreach( KoShape * shape, dependees )
+            shape->notifyShapeChanged( me, type );
     }
 
     QSizeF size; // size in pt
@@ -117,6 +119,7 @@ public:
     KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
     QList<KoShapeConnection*> connections;
     KoShape *me;
+    QList<KoShape*> dependees; ///< list of shape dependent on this shape
 };
 
 KoShape::KoShape()
@@ -956,3 +959,21 @@ void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converte
     painter.scale(zoomX, zoomY);
 }
 
+void KoShape::addDependee( KoShape * shape )
+{
+    if( ! d->dependees.contains( shape ) )
+        d->dependees.append( shape );
+}
+
+void KoShape::removeDependee( KoShape * shape )
+{
+    int index = d->dependees.indexOf( shape );
+    if( index >= 0 )
+        d->dependees.removeAt( index );
+}
+
+void KoShape::notifyShapeChanged( KoShape * shape, ChangeType type )
+{
+    Q_UNUSED( shape );
+    Q_UNUSED( type );
+}

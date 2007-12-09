@@ -102,6 +102,9 @@ protected:
 
 private:
 
+    // reimplemented
+    virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
+
     double scalarProd( const QPointF &v1, const QPointF &v2 );
     double crossProd( const QPointF &v1, const QPointF &v2 );
 

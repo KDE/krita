@@ -67,13 +67,15 @@ KoConnectionShape::KoConnectionShape()
 
 KoConnectionShape::~KoConnectionShape()
 {
+    if( d->shape1 )
+        d->shape1->removeDependee( this );
+    if( d->shape2 )
+        d->shape2->removeDependee( this );
+
     delete d;
 }
 
 void KoConnectionShape::paint( QPainter&, const KoViewConverter& ) {
-    // TODO find a better place to update the connections (maybe inside the shape manager?)
-    if( isParametricShape() )
-        updateConnections();
 }
 
 void KoConnectionShape::saveOdf( KoShapeSavingContext & context ) const
@@ -98,6 +100,8 @@ bool KoConnectionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
     {
         QString shapeId1 = element.attributeNS( KoXmlNS::draw, "start-shape", "" );
         d->shape1 = context.shapeById( shapeId1 );
+        if( d->shape1 )
+            d->shape1->addDependee( this );
         d->connectionPointIndex1 = element.attributeNS( KoXmlNS::draw, "start-glue-point", "" ).toInt();
     }
     else
@@ -110,6 +114,8 @@ bool KoConnectionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
     {
         QString shapeId2 = element.attributeNS( KoXmlNS::draw, "end-shape", "" );
         d->shape2 = context.shapeById( shapeId2 );
+        if( d->shape2 )
+            d->shape2->addDependee( this );
         d->connectionPointIndex2 = element.attributeNS( KoXmlNS::draw, "end-glue-point", "" ).toInt();
     }
     else
@@ -241,13 +247,21 @@ void KoConnectionShape::updatePath( const QSizeF &size )
 
 void KoConnectionShape::setConnection1( KoShape * shape1, int connectionPointIndex1 )
 {
+    if( d->shape1 )
+        d->shape1->removeDependee( this );
     d->shape1 = shape1;
+    if( d->shape1 )
+        d->shape1->addDependee( this );
     d->connectionPointIndex1 = connectionPointIndex1;
 }
 
 void KoConnectionShape::setConnection2( KoShape * shape2, int connectionPointIndex2 )
 {
+    if( d->shape2 )
+        d->shape2->removeDependee( this );
     d->shape2 = shape2;
+    if( d->shape2 )
+        d->shape2->addDependee( this );
     d->connectionPointIndex2 = connectionPointIndex2;
 }
 
@@ -431,4 +445,10 @@ void KoConnectionShape::shapeChanged(ChangeType type)
         default:
             return;
     }
+}
+
+void KoConnectionShape::notifyShapeChanged( KoShape *, ChangeType )
+{
+    if( isParametricShape() )
+        updateConnections();
 }

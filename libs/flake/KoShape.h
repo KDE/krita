@@ -617,6 +617,15 @@ public:
     /// checks recursively if the shape or one of its parents is not visible or locked
     bool isEditable() const;
 
+        /// Removes connection point with given index
+    void removeConnectionPoint( int index );
+
+    /// Adds a shape which depends on this shape
+    void addDependee( KoShape * shape );
+
+    /// Removes as shape depending on this shape
+    void removeDependee( KoShape * shape );
+
 protected:
 
 /* ** loading saving helper methods */
@@ -704,6 +713,9 @@ protected:
      */
     virtual void shapeChanged(ChangeType type) { Q_UNUSED(type); }
 
+    /// This is called whenever a shape this shape depends on has changed
+    virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
+
     /**
      * Set the property collision detection.
      * Setting this to true will result in calls to shapeChanged() with the CollisionDetected
@@ -731,9 +743,6 @@ protected:
      * This is typically called only from the destructor of the KoShapeConnection class.
      */
     void removeConnection(KoShapeConnection *connection);
-
-    /// Removes connection point with given index
-    void removeConnectionPoint( int index );
 
 private:
     friend class KoShapeManager;

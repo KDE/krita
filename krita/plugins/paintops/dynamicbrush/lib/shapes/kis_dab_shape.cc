@@ -110,7 +110,6 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     qint32 sh = dstRect.height();
 
     painter()->bitBlt(dstRect.x() + dabRect.x(), dstRect.y() + dabRect.x(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
-//    }
 
 }
 

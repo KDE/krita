@@ -1,4 +1,4 @@
-# add_subdirectory( tests )
+add_subdirectory( tests )
 add_subdirectory( tiles )
 
 ########### next target ###############

@@ -672,7 +672,19 @@ qint32 KisBrush::maskWidth(double scale, double angle) const
     double width_ = width() *scale;
     double height_ = height() *scale;
     // Add one for sub-pixel shift
-    return static_cast<qint32>(ceil(width_ * cos(angle) - height_ * sin(angle)) + 1);
+    if(angle >= 0.0 and angle < M_PI_2)
+    {
+        return qAbs(static_cast<qint32>(ceil(width_ * cos(angle) + height_ * sin(angle)) + 1));
+    } else if(angle >= M_PI_2 and angle < M_PI)
+    {
+        return qAbs(static_cast<qint32>(ceil(-width_ * cos(angle) + height_ * sin(angle)) + 1));
+    } else if(angle >= M_PI and angle < (M_PI + M_PI_2))
+    {
+        return qAbs(static_cast<qint32>(ceil(-width_ * cos(angle) - height_ * sin(angle)) + 1));
+    } else
+    {
+        return qAbs(static_cast<qint32>(ceil( width_ * cos(angle) - height_ * sin(angle)) + 1));
+    }
 }
 
 qint32 KisBrush::maskHeight(double scale, double angle) const
@@ -680,7 +692,19 @@ qint32 KisBrush::maskHeight(double scale, double angle) const
     double width_ = width() *scale;
     double height_ = height() *scale;
     // Add one for sub-pixel shift
-    return static_cast<qint32>(ceil(width_ * sin(angle) + height_ * cos(angle)) + 1);
+    if(angle >= 0.0 and angle < M_PI_2)
+    {
+        return qAbs(static_cast<qint32>(ceil(width_ * sin(angle) + height_ * cos(angle)) + 1));
+    } else if(angle >= M_PI_2 and angle < M_PI)
+    {
+        return qAbs(static_cast<qint32>(ceil(width_ * sin(angle) - height_ * cos(angle)) + 1));
+    } else if(angle >= M_PI and angle < (M_PI + M_PI_2))
+    {
+        return qAbs(static_cast<qint32>(ceil(-width_ * sin(angle) - height_ * cos(angle)) + 1));
+    } else
+    {
+        return qAbs(static_cast<qint32>(ceil(-width_ * sin(angle) + height_ * cos(angle)) + 1));
+    }
 }
 
 KisQImagemaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const

@@ -134,8 +134,6 @@ KisAutobrushResource::~KisAutobrushResource()
 
 void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
-    kDebug() << "========================================";
-    kDebug() << subPixelX << " " << subPixelY;
     Q_UNUSED(info);
 
         // Generate the paint device from the mask
@@ -144,8 +142,8 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, const KoColor& color, doub
     const KoColorSpace* cs = dst->colorSpace();
     dst->dataManager()->setDefaultPixel( color.data() );
     
-    int dstWidth = maskWidth(scaleX, 0.0);
-    int dstHeight = maskHeight(scaleY, 0.0);
+    int dstWidth = maskWidth(scaleX, angle);
+    int dstHeight = maskHeight(scaleY, angle);
     
     double invScaleX = 1.0 / scaleX;
     double invScaleY = 1.0 / scaleY;

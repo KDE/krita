@@ -192,9 +192,25 @@ void KisMergeVisitorTest::visitAdjustmentLayer()
     KisMergeVisitor v( projection, original.rect() );
     adjust->accept( v );
 
-    projection->convertToQImage(0, 0, 0, original.width(), original.height()).save("xxx.png");
-
+    QImage result = projection->convertToQImage(0, 0, 0, original.width(), original.height());
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, result, inverted)) {
+        result.save("merge_visitor5.png");
+        QFAIL( QString( "Failed to apply adjustment layer, first different pixel: %1,%2 " )
+            .arg( errpoint.x() )
+            .arg( errpoint.y() )
+            .toAscii() );    
+    }
     // Check that the projection is cached in the adjustment layer
+    result = adjust->projection()->convertToQImage(0, 0, 0, original.width(), original.height());
+    if (!TestUtil::compareQImages(errpoint, result, inverted)) {
+        result.save("merge_visitor6.png");
+        QFAIL( QString( "Failed cache projection in adjustment layer, first different pixel: %1,%2 " )
+            .arg( errpoint.x() )
+            .arg( errpoint.y() )
+            .toAscii() );    
+    }
+    
 }
 
 void KisMergeVisitorTest::visitCloneLayer()

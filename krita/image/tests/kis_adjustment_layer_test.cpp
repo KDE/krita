@@ -41,7 +41,6 @@ void KisAdjustmentLayerTest::testCreation()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT( kfc );
 
-
     KisAdjustmentLayer test(image, "test", kfc, 0);
 }
 

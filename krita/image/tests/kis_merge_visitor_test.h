@@ -37,7 +37,8 @@ private slots:
     void testMergePreviewTwice();
 
     void visitPaintLayer();
-    void visitGroupLayer();
+    void visitGroupLayerWithOnlyPaintLayers();
+    void visitGroupLayerWithAnAdjustmentLayer();
     void visitAdjustmentLayer();
     void visitCloneLayer();
     

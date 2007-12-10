@@ -135,7 +135,7 @@ void KisMergeVisitorTest::visitPaintLayer()
 
 }
 
-void KisMergeVisitorTest::visitGroupLayer()
+void KisMergeVisitorTest::visitGroupLayerWithOnlyPaintLayers()
 {
     
     KisPaintLayerSP layer1 = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
@@ -168,11 +168,33 @@ void KisMergeVisitorTest::visitGroupLayer()
             .arg( errpoint.y() )
             .toAscii() );    
     }
-    
-}    
+}
+
+void KisMergeVisitorTest::visitGroupLayerWithAnAdjustmentLayer()
+{
+}
 
 void KisMergeVisitorTest::visitAdjustmentLayer()
 {
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisSelectionSP sel = new KisSelection();
+    sel->getOrCreatePixelSelection()->invert(); // Make sure everything is selected
+    sel->updateProjection();
+    
+    KisAdjustmentLayerSP adjust = new KisAdjustmentLayer(image, "test", kfc, sel);
+    adjust->setDirty();
+    
+    // Prepare a projection
+    KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
+    projection->convertFromQImage(original, 0, 0, 0);
+
+    KisMergeVisitor v( projection, original.rect() );
+    adjust->accept( v );
+
+    projection->convertToQImage(0, 0, 0, original.width(), original.height()).save("xxx.png");
+
+    // Check that the projection is cached in the adjustment layer
 }
 
 void KisMergeVisitorTest::visitCloneLayer()

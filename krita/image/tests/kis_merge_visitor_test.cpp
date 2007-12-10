@@ -29,7 +29,7 @@
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
 #include "kis_merge_visitor.h"
-
+#include "kis_fill_painter.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_transformation_mask.h"
@@ -47,7 +47,7 @@ void KisMergeVisitorTest::initTestCase()
     inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
     colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
-
+    image->lock(); // We don't want the automatic recomposition to kick in
     
 }
 
@@ -137,7 +137,39 @@ void KisMergeVisitorTest::visitPaintLayer()
 
 void KisMergeVisitorTest::visitGroupLayer()
 {
-}
+    
+    KisPaintLayerSP layer1 = new KisPaintLayer(image, "l1", OPACITY_OPAQUE);
+    layer1->paintDevice()->convertFromQImage( original, 0, 0, 0  );
+    layer1->setCompositeOp(colorSpace->compositeOp(COMPOSITE_OVER));
+    
+    KisPaintLayerSP layer2 = new KisPaintLayer(image, "l2", 128);
+    KoColor c(Qt::red, colorSpace);
+    KisFillPainter gc(layer2->paintDevice());
+    gc.fillRect(original.rect(), c);
+    gc.end();
+    layer2->setCompositeOp(colorSpace->compositeOp(COMPOSITE_OVER));
+
+    KisGroupLayerSP group = new KisGroupLayer(image, "test", OPACITY_OPAQUE);
+    image->addNode(group.data());
+    image->addNode(layer1.data(), group.data());
+    image->addNode(layer2.data(), group.data(), layer1.data());
+    
+    group->setDirty(original.rect());
+    KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
+    KisMergeVisitor v( projection, original.rect() );
+    group->accept( v );
+
+    QImage result = group->projection()->convertToQImage(0, 0, 0, original.width(), original.height());
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, result, QImage(QString(FILES_DATA_DIR) + QDir::separator() + "merge_visitor4.png"))) {
+        result.save("merge_visitor4.png");
+        QFAIL( QString( "Failed to merge two layers in one group, first different pixel: %1,%2 " )
+            .arg( errpoint.x() )
+            .arg( errpoint.y() )
+            .toAscii() );    
+    }
+    
+}    
 
 void KisMergeVisitorTest::visitAdjustmentLayer()
 {

@@ -27,6 +27,7 @@ class KisTransparencyMaskTest : public QObject
 private slots:
 
     void testCreation();
+    void testApply();
 
 };
 

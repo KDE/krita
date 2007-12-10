@@ -94,12 +94,7 @@ void KisPaintLayerTest::testProjection()
     }
 
     // Now fill the layer with some opaque pixels
-    KisFillPainter gc(transparencyMask->selection()->getOrCreatePixelSelection());
-    gc.fillRect(qimg.rect(), KoColor(QColor(0, 0, 0, 0), cs), MAX_SELECTED);
-    gc.end();
-
-    transparencyMask->selection()->updateProjection(qimg.rect());
-
+    transparencyMask->select(qimg.rect());
     layer->updateProjection( qimg.rect() );
 
     layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("aaa.png");

@@ -64,7 +64,8 @@ void KisMergeVisitorTest::testMergePreview()
     mask->setFilter( kfc );
     mask->select( original.rect() );
     layer->setPreviewMask( mask );
-
+    layer->setDirty( original.rect() );
+    
     KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
     KisMergeVisitor v( projection, original.rect() );
     layer->accept( v );
@@ -74,7 +75,7 @@ void KisMergeVisitorTest::testMergePreview()
                                     inverted,
                                     projection->convertToQImage(0, 0, 0, original.width(), original.height() ) ) ) {
 
-        projection->convertToQImage(0, 0, 0, original.width(), original.height() ).save("bla.png");
+        projection->convertToQImage(0, 0, 0, original.width(), original.height() ).save("merge_visitor1.png");
         QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " )
             .arg( errpoint.x() )
             .arg( errpoint.y() )
@@ -96,7 +97,7 @@ void KisMergeVisitorTest::testMergePreviewTwice()
     mask->setFilter( kfc );
     mask->select( original.rect() );
     layer->setPreviewMask( mask );
-
+    layer->setDirty( original.rect() );
     KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
     KisMergeVisitor v( projection, original.rect() );
     layer->accept( v );
@@ -107,7 +108,7 @@ void KisMergeVisitorTest::testMergePreviewTwice()
                                     inverted,
                                     projection->convertToQImage(0, 0, 0, original.width(), original.height() ) ) ) {
 
-        projection->convertToQImage(0, 0, 0, original.width(), original.height() ).save("bla.png");
+        projection->convertToQImage(0, 0, 0, original.width(), original.height() ).save("merge_visitor2.png");
         QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " )
             .arg( errpoint.x() )
             .arg( errpoint.y() )
@@ -115,6 +116,6 @@ void KisMergeVisitorTest::testMergePreviewTwice()
     }
     delete kfc;}
 
-QTEST_KDEMAIN(KisMergeVisitorTest, NoGUI)
+QTEST_KDEMAIN(KisMergeVisitorTest, NoGUI);
 #include "kis_merge_visitor_test.moc"
 

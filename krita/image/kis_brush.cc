@@ -404,7 +404,7 @@ QImage KisBrush::img() const
     return image;
 }
 
-void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
+void KisBrush::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
 {
     Q_UNUSED(angle);
     Q_UNUSED(info_);
@@ -446,10 +446,8 @@ void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, d
     }
     
     // Generate the paint device from the mask
-    Q_ASSERT(*color.colorSpace() == *dst->colorSpace());
     
     const KoColorSpace* cs = dst->colorSpace();
-    dst->dataManager()->setDefaultPixel( color.data() );
     
     quint8 * maskData = outputMask->data();
     qint32 maskWidth = outputMask->width();
@@ -470,18 +468,6 @@ void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, d
         hiter.nextRow();
     }
     
-}
-
-void KisBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
-{
-    Q_UNUSED(dst);
-    Q_UNUSED(src);
-    Q_UNUSED(scaleX);
-    Q_UNUSED(scaleY);
-    Q_UNUSED(angle);
-    Q_UNUSED(info);
-    Q_UNUSED(subPixelX);
-    Q_UNUSED(subPixelY);
 }
 
 KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
@@ -1305,7 +1291,7 @@ void KisBrush::generateBoundary() {
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
-        mask(dev, KoColor( cs ), 1.0, 1.0, 0.0, KisPaintInformation() );
+        mask(dev, 1.0, 1.0, 0.0, KisPaintInformation() );
 #if 0
         KisQImagemaskSP amask = mask(KisPaintInformation());
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA",0);

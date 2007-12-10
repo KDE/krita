@@ -361,8 +361,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 //     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
 //     copySelection.end();
 
-    KisPaintDeviceSP dab = cachedDab( );
-    brush->mask(dab, m_srcdev, scale, scale, 0.0, info, xFraction, yFraction);
+    brush->mask( m_srcdev, scale, scale, 0.0, info, xFraction, yFraction);
     
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
@@ -378,5 +377,5 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     sw = dstRect.width();
     sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_srcdev, painter()->opacity(), sx, sy, sw, sh);
 }

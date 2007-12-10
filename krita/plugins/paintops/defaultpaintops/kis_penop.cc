@@ -26,6 +26,7 @@
 #include <kdebug.h>
 
 #include "kis_brush.h"
+#include <kis_datamanager.h>
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "klocale.h"
@@ -85,7 +86,8 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
         dab = cachedDab( );
         KoColor color = painter()->paintColor();
         color.convertTo( dab->colorSpace() );
-        brush->mask(dab, color, scale, scale, 0.0, info);
+        dab->dataManager()->setDefaultPixel( color.data() );
+        brush->mask(dab, scale, scale, 0.0, info);
     }
 
     painter()->setPressure(info.pressure());

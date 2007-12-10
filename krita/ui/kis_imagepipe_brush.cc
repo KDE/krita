@@ -307,24 +307,14 @@ QImage KisImagePipeBrush::img() const
 }
 
 
-void KisImagePipeBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+void KisImagePipeBrush::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
     Q_UNUSED(scaleX);
     Q_UNUSED(scaleY);
     Q_UNUSED(angle);
     if (m_brushes.isEmpty()) return;
     selectNextBrush(info);
-    m_brushes.at(m_currentBrush)->mask(dst, color, 1.0, 1.0, 0.0, info, subPixelX, subPixelY);
-}
-
-void KisImagePipeBrush::mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
-{
-    Q_UNUSED(scaleX);
-    Q_UNUSED(scaleY);
-    Q_UNUSED(angle);
-    if (m_brushes.isEmpty()) return;
-    selectNextBrush(info);
-    m_brushes.at(m_currentBrush)->mask(dst, src, 1.0, 1.0, 0.0, info, subPixelX, subPixelY);
+    m_brushes.at(m_currentBrush)->mask(dst, 1.0, 1.0, 0.0, info, subPixelX, subPixelY);
 }
 
 KisPaintDeviceSP KisImagePipeBrush::image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const

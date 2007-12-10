@@ -39,6 +39,7 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 
+#include <kis_datamanager.h>
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
@@ -282,7 +283,8 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         dab = cachedDab( );
         KoColor color = painter()->paintColor();
         color.convertTo( dab->colorSpace() );
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
+        dab->dataManager()->setDefaultPixel( color.data() );
+        brush->mask(dab, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);

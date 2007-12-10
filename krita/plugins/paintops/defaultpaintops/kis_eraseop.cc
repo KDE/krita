@@ -97,8 +97,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.y(), &destY, &yFraction);
 
     KisPaintDeviceSP dab = cachedDab( );
-    KoColor color( dab->colorSpace() );
-    brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
+    brush->mask(dab, scale, scale, 0.0, info, xFraction, yFraction);
 
     KisRectIteratorPixel it = dab->createRectIterator(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     const KoColorSpace* cs = dab->colorSpace();

@@ -32,6 +32,7 @@
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_airbrushop.h"
+#include "kis_datamanager.h"
 
 KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
@@ -118,7 +119,8 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
         dab = cachedDab( );
         KoColor color = painter()->paintColor();
         color.convertTo( dab->colorSpace() );
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
+        dab->dataManager()->setDefaultPixel( color.data() );
+        brush->mask(dab, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
     painter()->setDab(dab); // Cache dab for future paints in the painter.

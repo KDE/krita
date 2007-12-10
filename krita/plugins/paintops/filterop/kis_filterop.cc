@@ -195,7 +195,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 maskHeight = brush->maskHeight(scale, 0.0);
 
     // Create a temporary paint device
-    KisPaintDeviceSP tmpDev = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "filterop tmpdev"));
+    KisPaintDeviceSP tmpDev = new KisPaintDevice(colorSpace, "filterop tmpdev");
     Q_CHECK_PTR(tmpDev);
 
     // Copy the layer data onto the new paint device
@@ -215,8 +215,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
-    KisPaintDeviceSP dab = cachedDab();
-    brush->mask(dab, tmpDev, scale, scale, 0.0, info, xFraction, yFraction);
+    brush->mask(tmpDev, scale, scale, 0.0, info, xFraction, yFraction);
     
 #if 0
     KisHLineIterator hiter = tmpDev->createHLineIterator(0, 0, maskWidth);
@@ -250,7 +249,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev, painter()->opacity(), sx, sy, sw, sh);
 }
 
 #include "kis_filterop.moc"

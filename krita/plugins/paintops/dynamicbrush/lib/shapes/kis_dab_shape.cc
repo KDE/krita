@@ -18,6 +18,7 @@
 #include "kis_dab_shape.h"
 
 #include <kis_autobrush_resource.h>
+#include <kis_datamanager.h>
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
@@ -92,7 +93,8 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
 
     KoColor color = painter()->paintColor();
     color.convertTo( m_dab->colorSpace() );
-    m_brush->mask(m_dab, color, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);
+    m_dab->dataManager()->setDefaultPixel( color.data() );
+    m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);
 
     // paint the dab
     QRect dabRect = rect();

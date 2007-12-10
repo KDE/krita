@@ -87,8 +87,8 @@ public:
 
     /**
      * 
-     * @param dst the destination that will be draw on the image
-     * @param color the color use on the destination
+     * @param dst the destination that will be draw on the image, and this function
+     *            will edit its alpha channel
      * @param scale a scale applied on the alpha mask
      * @param angle a rotation applied on the alpha mask
      * @param info the painting information (this is only and should only be used by
@@ -100,25 +100,7 @@ public:
      * @return a mask computed from the grey-level values of the
      * pixels in the brush.
      */
-    virtual void mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
-    /**
-     * This function creates a mask from a paint device, it basically takes the source paint device
-     * color information, and set the alpha value from the brush mask information. 
-     * 
-     * @param dst the destination that will be draw on the image
-     * @param src is a paint device containing the color information used on the destination
-     * @param scale a scale applied on the alpha mask
-     * @param angle a rotation applied on the alpha mask
-     * @param info the painting information (this is only and should only be used by
-     *             KisImagePipeBrush and only to be backward compatible with the Gimp,
-     *             KisImagePipeBrush is ignoring scale and angle information)
-     * @param subPixelX sub position of the brush (contained between 0.0 and 1.0)
-     * @param subPixelY sub position of the brush (contained between 0.0 and 1.0)
-     * 
-     * @return a mask computed from the grey-level values of the
-     * pixels in the brush.
-     */
-    virtual void mask(KisPaintDeviceSP dst, KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    virtual void mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
     virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 

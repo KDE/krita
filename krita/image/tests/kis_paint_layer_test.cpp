@@ -21,6 +21,8 @@
 #include "kis_paint_layer_test.h"
 
 #include <QImage>
+#include <QCoreApplication>
+
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -40,7 +42,8 @@ void KisPaintLayerTest::testProjection()
     QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisImageSP image = new KisImage(0, qimg.width(), qimg.height(), cs, "merge test");
-
+    image->lock(); // We'll call for recomposition ourselves
+    
     KisPaintLayerSP layer = new KisPaintLayer( image, "test", OPACITY_OPAQUE );
     layer->paintDevice()->convertFromQImage( qimg, 0, 0, 0 );
     image->addNode( layer.data() );
@@ -96,8 +99,8 @@ void KisPaintLayerTest::testProjection()
     // Now fill the layer with some opaque pixels
     transparencyMask->select( qimg.rect() );
     transparencyMask->setDirty( qimg.rect() );
+    layer->updateProjection(qimg.rect());
     
-
     layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("aaa.png");
     // Nothing is transparent anymore, so the projection and the paint device should be identical again
     QPoint errpoint;

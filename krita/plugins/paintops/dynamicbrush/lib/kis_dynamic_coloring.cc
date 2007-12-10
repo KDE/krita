@@ -19,14 +19,24 @@
 
 #include <kis_paint_device.h>
 
-#include "KoColorTransformation.h"
+#include <KoColorTransformation.h>
+#include <kis_datamanager.h>
 
 KisDynamicColoring::~KisDynamicColoring() { }
-KisPlainColoring::~KisPlainColoring() { if(m_cacheColor) delete m_cacheColor; }
+
+KisPlainColoring::KisPlainColoring(const KoColor& color) : m_color(color), m_cacheColor(0)
+{
+
+}
+
+KisPlainColoring::~KisPlainColoring()
+{
+    delete m_cacheColor;
+}
 
 KisDynamicColoring* KisPlainColoring::clone() const
 {
-    return new KisPlainColoring(*this);
+    return new KisPlainColoring(m_color);
 }
 
 void KisPlainColoring::darken(qint32 v)
@@ -34,6 +44,25 @@ void KisPlainColoring::darken(qint32 v)
     KoColorTransformation* transfo = m_color.colorSpace()->createDarkenAdjustement(v, false, 0.0);
     transfo->transform( m_color.data(),  m_color.data(), 1);
     delete transfo;
+}
+
+void KisPlainColoring::rotate(double )
+{}
+
+void KisPlainColoring::resize(double , double ) {
+    // Do nothing as plain color doesn't have size
+}
+
+void KisPlainColoring::colorize(KisPaintDeviceSP dev )
+{
+    if(not m_cacheColor or not (*dev->colorSpace() == *m_cacheColor->colorSpace()))
+    {
+        if(m_cacheColor) delete m_cacheColor;
+        m_cacheColor = new KoColor( dev->colorSpace() );
+        m_cacheColor->fromKoColor(m_color);
+    }
+    dev->dataManager()->setDefaultPixel(  m_cacheColor->data());
+    dev->clear();
 }
 
 void KisPlainColoring::colorAt(int x, int y, KoColor* c)

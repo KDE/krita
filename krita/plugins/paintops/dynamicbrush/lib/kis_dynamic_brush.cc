@@ -31,9 +31,6 @@
 KisDynamicBrush::KisDynamicBrush(const QString& name)
     : m_name(name), m_shape(0), m_coloring(0), m_shapeProgram(0), m_coloringProgram(0)
 {
-    // for debug purpose only
-    KisPlainColoring* coloringsrc = new KisPlainColoring( KoColor(QColor(255,200,100), 255, KoColorSpaceRegistry::instance()->rgb8() ) );
-    m_coloring = coloringsrc;
 }
 
 KisDynamicBrush::~KisDynamicBrush()
@@ -72,4 +69,10 @@ void KisDynamicBrush::setShape(KisDynamicShape* shape)
 {
     delete m_shape;
     m_shape = shape;
+}
+
+void KisDynamicBrush::setColoring(KisDynamicColoring* coloring)
+{
+    delete m_coloring;
+    m_coloring = coloring;
 }

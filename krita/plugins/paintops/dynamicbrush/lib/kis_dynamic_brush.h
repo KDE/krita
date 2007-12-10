@@ -42,6 +42,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicBrush {
         void setShape(KisDynamicShape* shape);
         void setShapeProgram(KisDynamicShapeProgram* p);
         void setColoringProgram(KisDynamicColoringProgram* p);
+        void setColoring(KisDynamicColoring* coloring);
         void startPainting(KisPainter* _painter);
         void endPainting();
     private:

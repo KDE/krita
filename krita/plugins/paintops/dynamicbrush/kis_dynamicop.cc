@@ -99,16 +99,19 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
 KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
+    // Init shape program
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
             m_uiOptions->comboBoxShapePrograms->currentIndex(),0);
     KisDynamicShapeProgram* shapeProgram = static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration( shapeModelIndex ) );
     Q_ASSERT(shapeProgram);
     current->setShapeProgram(shapeProgram);
+    // Init coloring program
     QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
             m_uiOptions->comboBoxColoringPrograms->currentIndex(),0);
     KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration( coloringModelIndex ) );
     Q_ASSERT(coloringProgram);
     current->setColoringProgram(coloringProgram);
+    // Init shape
     switch(m_uiOptions->comboBoxShapes->currentIndex())
     {
         case 1:
@@ -120,6 +123,10 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
             current->setShape( new KisDabShape( painter->brush() ) );
         }
     }
+    // Init coloring
+    KisPlainColoring* coloringsrc = new KisPlainColoring( painter->paintColor() );
+    current->setColoring( coloringsrc );
+
     return current;
 }
 

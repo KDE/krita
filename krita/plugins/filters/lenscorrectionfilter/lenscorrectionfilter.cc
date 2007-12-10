@@ -37,6 +37,8 @@
 #include <knuminput.h>
 #include <kstandarddirs.h>
 
+#include <KoProgressUpdater.h>
+
 #include <kis_paint_device.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -44,6 +46,7 @@
 #include <kis_global.h>
 #include <kis_layer.h>
 #include <kis_random_sub_accessor.h>
+#include <kis_selection.h>
 #include <kis_types.h>
 
 #include "kis_wdg_lens_correction.h"
@@ -94,19 +97,18 @@ KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidg
     return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterLensCorrection::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisFilterLensCorrection::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
@@ -114,7 +116,9 @@ void KisFilterLensCorrection::process(KisFilterConstantProcessingInformation src
 
     QRect workingrect = layerrect.intersect( QRect(srcTopLeft, size) );
 
-    setProgressTotalSteps(workingrect.width() * workingrect.height());
+    int cost = (size.width() * size.height()) / 100;
+    if( cost == 0 ) cost = 1;
+    int count = 0;
 
     KoColorSpace* cs = dst->colorSpace();
 
@@ -125,8 +129,8 @@ void KisFilterLensCorrection::process(KisFilterConstantProcessingInformation src
     double correctionnearedges = (config && config->getProperty("correctionnearedges", value)) ? value.toDouble() : 0.;
     double brightness = ( (config && config->getProperty("brightness", value)) ? value.toDouble() : 0. );
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), workingrect.width(), workingrect.height() );
-    KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), workingrect.width(), workingrect.height(), dstInfo.selection() );
+    KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor( srcInfo.selection() );
 
     double normallise_radius_sq = 4.0 / (layerrect.width() * layerrect.width() + layerrect.height() * layerrect.height());
     xcenter = layerrect.x() + layerrect.width() * xcenter / 100.0;
@@ -163,8 +167,6 @@ void KisFilterLensCorrection::process(KisFilterConstantProcessingInformation src
         cs->fromLabA16( (quint8*)lab, dstIt.rawData(), 1);
 
         ++dstIt;
-        incProgress();
+        if(progressUpdater) progressUpdater->setProgress( (++count) / cost);
     }
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
 }

@@ -35,12 +35,15 @@
 #include <knuminput.h>
 #include <kstandarddirs.h>
 
+#include <KoProgressUpdater.h>
+
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_layer.h>
 #include <kis_random_sub_accessor.h>
+#include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
 #include "kis_wdg_wave.h"
@@ -136,24 +139,24 @@ KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterWave::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisFilterWave::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     
-#if 0
     Q_ASSERT(src.data() != 0);
     Q_ASSERT(dst.data() != 0);
 
-    setProgressTotalSteps(size.width() * size.height());
+    int cost = (size.width() * size.height()) / 100;
+    if( cost == 0 ) cost = 1;
+    int count = 0;
 
     QVariant value;
     int horizontalwavelength = (config && config->getProperty("horizontalwavelength", value)) ? value.toInt() : 50;
@@ -164,7 +167,7 @@ void KisFilterWave::process(KisFilterConstantProcessingInformation src,
     int verticalshift = (config && config->getProperty("verticalshift", value)) ? value.toInt() : 50;
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
     KisWaveCurve* verticalcurve;
     if(verticalshape == 1)
         verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
@@ -175,7 +178,7 @@ void KisFilterWave::process(KisFilterConstantProcessingInformation src,
         horizontalcurve = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     else
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
-    KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
+    KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor( srcInfo.selection());
     int tx = srcTopLeft.x() - dstTopLeft.x();
     int ty = srcTopLeft.y() - dstTopLeft.y();
     while(!dstIt.isDone())
@@ -185,10 +188,8 @@ void KisFilterWave::process(KisFilterConstantProcessingInformation src,
         srcRSA.moveTo( QPointF( xv - tx, yv - ty ) );
         srcRSA.sampledOldRawData(dstIt.rawData());
         ++dstIt;
-        incProgress();
+        if(progressUpdater) progressUpdater->setProgress( (++count) / cost);
     }
     delete horizontalcurve;
     delete verticalcurve;
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
 }

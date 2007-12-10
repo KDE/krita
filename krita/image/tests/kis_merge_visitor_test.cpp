@@ -138,11 +138,11 @@ void KisMergeVisitorTest::visitPaintLayer()
 void KisMergeVisitorTest::visitGroupLayer()
 {
     
-    KisPaintLayerSP layer1 = new KisPaintLayer(image, "l1", OPACITY_OPAQUE);
+    KisPaintLayerSP layer1 = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
     layer1->paintDevice()->convertFromQImage( original, 0, 0, 0  );
     layer1->setCompositeOp(colorSpace->compositeOp(COMPOSITE_OVER));
     
-    KisPaintLayerSP layer2 = new KisPaintLayer(image, "l2", 128);
+    KisPaintLayerSP layer2 = new KisPaintLayer(image, "layer 2", 128);
     KoColor c(Qt::red, colorSpace);
     KisFillPainter gc(layer2->paintDevice());
     gc.fillRect(original.rect(), c);

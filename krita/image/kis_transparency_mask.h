@@ -25,7 +25,6 @@
 
 class QRect;
 
-
 /**
  *  A transparency mask is a single channel mask that applies a particular
  *  transparency to the layer the mask belongs to. It differs from an

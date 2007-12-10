@@ -243,6 +243,8 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     // Get the first layer in this group to start compositing with
     KisLayerSP child = dynamic_cast<KisLayer*>( lastChild().data() );
 
+    //qDebug() << "last child: " << child->name();
+    
     // No child -- clear the projection. Without children, a group layer is empty.
     if (!child)
         m_d->projection->clear();
@@ -262,6 +264,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     // if it's found, and if we have found an adj. layer before the the dirty layer,
     // composite from the first adjustment layer searching back from the first dirty layer
     while (child) {
+        //qDebug() << "looking for starting point " << child->name();
         KisAdjustmentLayerSP tmpAdjLayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(child.data()));
         if (tmpAdjLayer) {
             if (gotPaintLayer) {
@@ -306,42 +309,45 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     // No adj layer -- all layers inside the group must be recomposited
     if (adjLayer.isNull()) {
-        startWith = dynamic_cast<KisLayer*>( lastChild().data() );
+        startWith = dynamic_cast<KisLayer*>( firstChild().data() );
     }
-
-
-    startWith = dynamic_cast<KisLayer*>( lastChild().data() );
 
     if (startWith.isNull()) {
         return;
     }
+
+    //qDebug() << "startWith = " << startWith->name();
+    
     m_d->projection->clear( rc );
 
     bool first = true; // The first layer in a stack needs special compositing
 
-    // Fill the projection either the cached data, if it's there
-    KisFillPainter gc(m_d->projection);
+
 
     if (!adjLayer.isNull()) {
+        KisPainter gc(m_d->projection);
         gc.bitBlt(rc.left(), rc.top(),
                   COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
                   rc.left(), rc.top(), rc.width(), rc.height());
+        gc.end();
         first = false;
     }
     else {
         first = true;
     }
-    gc.end();
 
-
+    //qDebug() << "first: " << first;
+    
     KisMergeVisitor visitor(m_d->projection, rc);
 
     child = startWith;
 
     while(child)
     {
+        //qDebug() << "child: " << child->name();
         if(first)
         {
+            //qDebug() << "first for child " << child->name();
             // Copy the lowest layer rather than compositing it with the background
             // or an empty image. This means the layer's composite op is ignored,
             // which is consistent with Photoshop and gimp.
@@ -360,10 +366,11 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             child->setCompositeOp( cop );
             first = false;
         }
-        else
+        else {
+            //qDebug() << "not first: " << child->name();
             child->accept(visitor);
-
-        child = dynamic_cast<KisLayer*>( child->prevSibling().data() );
+        }
+        child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
 }
 

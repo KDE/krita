@@ -303,6 +303,8 @@ void KoPAView::updateActivePage( KoPAPageBase * page )
     m_zoomController->setDocumentSize( pageSize );
 
     m_canvas->update();
+
+    emit activePageChanged();
 }
 
 void KoPAView::setActivePage( KoPAPageBase* page )

@@ -108,6 +108,10 @@ public slots:
     /// Shows/hides the rulers
     void setShowRulers(bool show);
 
+signals:
+    /// Emitted every time the active page is changed
+    void activePageChanged();
+
 protected:
     /// creates the widgets (called from the constructor)
     void initGUI();

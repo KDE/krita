@@ -104,6 +104,8 @@ KisFilterDialog::~KisFilterDialog()
 
 void KisFilterDialog::setFilter(KisFilterSP f)
 {
+    Q_ASSERT(f);
+    setWindowTitle(f->name());
     kDebug() << "setFilter: " << f;
     d->currentFilter = f;
     delete d->currentCentralWidget;

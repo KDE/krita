@@ -159,7 +159,7 @@ target_link_libraries(KisPaintLayerTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${
 
 set(kis_merge_visitor_test_SRCS kis_merge_visitor_test.cpp )
 
-kde4_add_unit_test(KisMergeVisitorTest TESTNAME krita-image-KisPaintLayerTest ${kis_merge_visitor_test_SRCS})
+kde4_add_unit_test(KisMergeVisitorTest TESTNAME krita-image-KisMergeVisitorTest ${kis_merge_visitor_test_SRCS})
 
 target_link_libraries(KisMergeVisitorTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
 

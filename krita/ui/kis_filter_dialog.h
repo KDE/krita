@@ -40,7 +40,7 @@ class KisFilterDialog : public QDialog {
     protected slots:
         void slotBookmarkedFilterConfigurationSelected(int );
         void apply();
-        void reject();
+        void close();
         void editConfigurations();
     signals:
         void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);

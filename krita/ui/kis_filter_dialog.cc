@@ -89,8 +89,10 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )),
             SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
+    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
+    connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
     connect(d->uiFilterDialog.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
 }
@@ -158,7 +160,7 @@ void KisFilterDialog::apply()
     emit(sigPleaseApplyFilter(d->layer, config));
 }
 
-void KisFilterDialog::reject()
+void KisFilterDialog::close()
 {
     d->layer->removePreviewMask();
     d->layer->setDirty(d->layer->extent());
@@ -181,5 +183,6 @@ void KisFilterDialog::editConfigurations()
     KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedFilterConfigurationsModel, config);
     editor.exec();
 }
+
 
 #include "kis_filter_dialog.moc"

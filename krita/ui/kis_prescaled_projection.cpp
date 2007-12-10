@@ -663,6 +663,8 @@ QRect KisPrescaledProjection::viewRectFromImagePixels( const QRect & rc )
     QRectF docRect;
     docRect.setCoords((rc.left() - 2) / xRes, (rc.top() - 2) / yRes, (rc.right() + 2) / xRes, (rc.bottom() + 2) / yRes);
 
+    Q_ASSERT(m_d->viewConverter);
+    
     QRect viewRect = m_d->viewConverter->documentToView(docRect).toAlignedRect();
     viewRect = viewRect.translated( -m_d->documentOffset );
     viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasSize.width(), m_d->canvasSize.width() ) );

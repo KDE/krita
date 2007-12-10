@@ -93,6 +93,7 @@ bool KisAdjustmentLayer::allowAsChild( KisNodeSP node) const
 void KisAdjustmentLayer::updateProjection(const QRect& r)
 {
     Q_UNUSED( r );
+    // XXX: apply the masks to the selection data!
 
 }
 

@@ -215,6 +215,10 @@ bool KisLayer::hasEffectMasks() const
 
 void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect & rc )
 {
+    if ( m_d->previewMask ) {
+        m_d->previewMask->apply( projection, rc );
+    }
+
     QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), KoProperties() );
 
     // Then loop through the effect masks and apply them
@@ -226,9 +230,6 @@ void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect 
             effectMask->apply( projection, rc );
     }
 
-    if ( m_d->previewMask ) {
-        m_d->previewMask->apply( projection, rc );
-    }
 }
 
 

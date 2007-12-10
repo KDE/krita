@@ -372,6 +372,8 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         }
         child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
+
+    // XXX: Apply the masks!
 }
 
 #include "kis_group_layer.moc"

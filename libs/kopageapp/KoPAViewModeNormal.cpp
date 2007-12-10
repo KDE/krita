@@ -123,12 +123,12 @@ void KoPAViewModeNormal::setMasterMode( bool master )
     KoPAPage * page = dynamic_cast<KoPAPage *>( m_view->activePage() );
     if ( m_masterMode ) {
         if ( page ) {
-            m_view->setActivePage( page->masterPage() );
+            m_view->updateActivePage( page->masterPage() );
             m_savedPage = page;
         }
     }
     else if ( m_savedPage ) {
-        m_view->setActivePage( m_savedPage );
+        m_view->updateActivePage( m_savedPage );
         m_savedPage = 0;
     }
 }

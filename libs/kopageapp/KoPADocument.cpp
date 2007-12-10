@@ -417,7 +417,7 @@ int KoPADocument::takePage( KoPAPageBase *page )
         {
             KoPAView * kopaView = static_cast<KoPAView*>( view );
             if ( page == kopaView->activePage() ) {
-                kopaView->setActivePage( newActivePage );
+                kopaView->updateActivePage( newActivePage );
             }
         }
     }

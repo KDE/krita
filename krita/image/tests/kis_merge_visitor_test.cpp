@@ -114,7 +114,40 @@ void KisMergeVisitorTest::testMergePreviewTwice()
             .arg( errpoint.y() )
             .toAscii() );
     }
-    delete kfc;}
+    delete kfc;
+}
+
+void KisMergeVisitorTest::visitPaintLayer()
+{
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
+    layer->paintDevice()->convertFromQImage( original, 0, 0, 0  );
+    KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
+    KisMergeVisitor v( projection, original.rect() );
+    layer->accept( v );
+    QPoint errpoint;
+    if (!TestUtil::comparePaintDevices(errpoint, projection, layer->paintDevice())) {
+        projection->convertToQImage(0, 0, 0, original.width(), original.height() ).save("merge_visitor3.png");
+        QFAIL( QString( "Failed to merge layer onto projection, first different pixel: %1,%2 " )
+            .arg( errpoint.x() )
+            .arg( errpoint.y() )
+            .toAscii() );    
+    }
+
+}
+
+void KisMergeVisitorTest::visitGroupLayer()
+{
+}
+
+void KisMergeVisitorTest::visitAdjustmentLayer()
+{
+}
+
+void KisMergeVisitorTest::visitCloneLayer()
+{
+}
+
+    
 
 QTEST_KDEMAIN(KisMergeVisitorTest, NoGUI);
 #include "kis_merge_visitor_test.moc"

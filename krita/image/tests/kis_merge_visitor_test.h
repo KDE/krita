@@ -36,6 +36,12 @@ private slots:
     void testMergePreview();
     void testMergePreviewTwice();
 
+    void visitPaintLayer();
+    void visitGroupLayer();
+    void visitAdjustmentLayer();
+    void visitCloneLayer();
+    
+    
 private:
     const KoColorSpace * colorSpace;
     KisImageSP image;

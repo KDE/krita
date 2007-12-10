@@ -145,7 +145,7 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, double scaleX, double scal
     double invScaleX = 1.0 / scaleX;
     double invScaleY = 1.0 / scaleY;
     
-    double centerX = dstWidth * 0.5 - 1.0 + subPixelX;
+    double centerX = dstWidth  * 0.5 - 1.0 + subPixelX;
     double centerY = dstHeight * 0.5 - 1.0 + subPixelY;
     double cosa = cos(angle);
     double sina = sin(angle);

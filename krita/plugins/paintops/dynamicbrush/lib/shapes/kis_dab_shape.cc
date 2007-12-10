@@ -88,30 +88,30 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     qint32 y;
     double yFraction;
 
-    splitCoordinate(pos.x(), &x, &xFraction);
-    splitCoordinate(pos.y(), &y, &yFraction);
+    QPointF hotSpot = m_brush->hotSpot( m_scaleX, m_scaleY );
+    splitCoordinate(pos.x() - hotSpot.x(), &x, &xFraction);
+    splitCoordinate(pos.y() - hotSpot.y(), &y, &yFraction);
 
-    KoColor color = painter()->paintColor();
-    color.convertTo( m_dab->colorSpace() );
-    m_dab->dataManager()->setDefaultPixel( color.data() );
+    coloringsrc->colorize( m_dab );
     m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);
 
-    // paint the dab
-    QRect dabRect = rect();
-    QRect dstRect = QRect(x , y , dabRect.width(), dabRect.height());
+    QRect dabRect = QRect(0, 0, m_brush->maskWidth(m_scaleX, m_rotate),
+                          m_brush->maskHeight(m_scaleY, m_rotate));
+    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+
 
     if ( painter()->bounds().isValid() ) {
         dstRect &= painter()->bounds();
     }
 
-    if (dstRect.isNull() or dstRect.isEmpty() or not dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    qint32 sx = 0;//dstRect.x() - x - dabRect.x();
-    qint32 sy = 0;//dstRect.y() - y - dabRect.y();
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    painter()->bitBlt(dstRect.x() + dabRect.x(), dstRect.y() + dabRect.x(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_dab, painter()->opacity(), sx, sy, sw, sh);
 
 }
 
@@ -129,5 +129,6 @@ QRect KisDabShape::rect() const
 {
     int width = m_brush->maskWidth( m_scaleX, m_rotate );
     int height = m_brush->maskHeight( m_scaleY, m_rotate );
-    return QRect(-width/2, -height/2, width, height);
+    QPointF hotSpot = m_brush->hotSpot( m_scaleX, m_scaleY );
+    return QRect(-hotSpot.x(), -hotSpot.y(), width, height);
 }

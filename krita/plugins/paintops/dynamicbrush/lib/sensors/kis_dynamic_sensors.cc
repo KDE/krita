@@ -38,10 +38,10 @@ double KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
     double v = modulo(m_angle - angle + M_PI, 2.0 * M_PI) - M_PI;
     if(v < 0)
     {
-        m_angle += 0.01;
+        m_angle += 0.1;
     } else if( v > 0)
     {
-        m_angle -= 0.01;
+        m_angle -= 0.1;
     }
     m_angle = modulo(m_angle, 2.0 * M_PI);
     return m_angle / (2.0 * M_PI);

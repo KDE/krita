@@ -43,7 +43,7 @@ public:
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
 private:
-    void prepareRow (const KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h);
+    void prepareRow (const KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h) const;
 };
 
 #endif

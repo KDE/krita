@@ -35,12 +35,15 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include <KoProgressUpdater.h>
+
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
+#include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
 #include <KoProgressUpdater.h>
@@ -76,7 +79,7 @@ KisSobelFilter::KisSobelFilter() : KisFilter(id(), CategoryEdgeDetection, i18n("
 }
 
 
-void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h)
+void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h) const
 {
     if (y > h -1) y = h -1;
     quint32 pixelSize = src->pixelSize();
@@ -93,21 +96,21 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::process(KisFilterConstantProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisSobelFilter::process(KisFilterConstantProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
-                 const KisFilterConfiguration* config,
+                 const KisFilterConfiguration* configuration,
                  KoUpdater* progressUpdater
         ) const
 {
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(!src.isNull());
+    Q_ASSERT(!dst.isNull());
 
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
     
-#if 0
     //read the filter configuration values from the KisFilterConfiguration object
     bool doHorizontal = configuration->getBool("doHorizontally", true);
     bool doVertical = configuration->getBool("doVertically", true);
@@ -118,8 +121,7 @@ void KisSobelFilter::process(KisFilterConstantProcessingInformation src,
     quint32 height = size.height();
     quint32 pixelSize = src->pixelSize();
 
-    setProgressTotalSteps( height );
-    setProgressStage(i18n("Applying sobel filter..."),0);
+    int cost = size.height();
 
     /*  allocate row buffers  */
     quint8* prevRow = new quint8[ (width + 2) * pixelSize];
@@ -144,7 +146,7 @@ void KisSobelFilter::process(KisFilterConstantProcessingInformation src,
     qint32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), width);
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), width, dstInfo.selection() );
 
     for (quint32 row = 0; row < height; row++)
     {
@@ -193,15 +195,13 @@ void KisSobelFilter::process(KisFilterConstantProcessingInformation src,
             }
             dstIt.nextRow();
         }
-        setProgress(row);
+        if(progressUpdater) progressUpdater->setProgress( row / cost);
     }
-    setProgressDone();
 
     delete[] prevRow;
     delete[] curRow;
     delete[] nextRow;
     delete[] dest;
-#endif
 }
 
 

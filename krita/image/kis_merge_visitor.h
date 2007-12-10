@@ -195,7 +195,7 @@ public:
             if (!f) return false;
 
             // Possibly enlarge the rect that changed (like for convolution filters)
-            // m_rc = f->enlargeRect(m_rc, cfg);
+            m_rc = f->enlargeRect(m_rc, cfg);
 
             KisSelectionSP selection = layer->selection();
 

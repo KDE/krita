@@ -82,6 +82,7 @@ KoResourceChooser::KoResourceChooser(QSize aIconSize, QWidget *parent)
 
 KoResourceChooser::~KoResourceChooser()
 {
+    delete d;
 }
 
 void KoResourceChooser::keyPressEvent(QKeyEvent * e)

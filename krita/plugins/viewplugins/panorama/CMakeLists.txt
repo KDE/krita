@@ -5,6 +5,7 @@ set(kritapanorama_PART_SRCS
 # image alignement framework
     imagealignment/harris_detector.cpp
     imagealignment/matching.cpp
+    imagealignment/kis_image_alignment.cpp
     imagealignment/kis_interest_points_detector.cpp
     )
 

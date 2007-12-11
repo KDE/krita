@@ -1,7 +1,7 @@
 /*
- * matching.cpp -- Part of Krita
+ * kis_image_alignment.h -- Part of Krita
  *
- * Copyright (c) 2005-2006 Cyrille Berger (cberger@cberger.net)
+ * Copyright (c) 2007 Cyrille Berger (cberger@cberger.net)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -14,27 +14,35 @@
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
-#ifndef _MATCHING_HPP_
-#define _MATCHING_HPP_
-#include <list>
+#ifndef _KIS_IMAGE_ALIGNMENT_H_
+#define _KIS_IMAGE_ALIGNMENT_H_
+
 #include <vector>
+
 #include <QRect>
 
 #include <kis_types.h>
-
 #include "kis_interest_points_detector.h"
 
-struct KisMatch {
-    const KisInterestPoint* ref;
-    const KisInterestPoint* match;
-    double strength;
-    inline bool operator==(const KisMatch& m) const {
-        return ref == m.ref and match == m.match;
-    }
+
+class KisImageAlignment {
+    public:
+        struct ImageInfo {
+            KisPaintDeviceSP device;
+            QRect rect;
+            lInterestPoints points;
+        };
+    public:
+        KisImageAlignment(KisInterestPointsDetector* );
+        ~KisImageAlignment();
+        std::vector<double> align(QList<ImageInfo> info);
+    private:
+        struct Private;
+        Private* const d;
 };
 
-typedef std::vector<KisMatch> lMatches;
-lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& pointsmatch);
+
 #endif

@@ -4,8 +4,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,9 +21,8 @@
 
 #include <kparts/plugin.h>
 
-#include "kis_interest_points_detector.h"
-
 #include <kis_types.h>
+#include <kis_image_alignment.h>
 
 class KisView2;
 class Ui_WdgPanoramaCreation;
@@ -34,11 +32,6 @@ class Ui_WdgPanoramaCreation;
  */
 class PanoramaPlugin : public KParts::Plugin
 {
-    struct PanoramaImage{
-        KisPaintDeviceSP device;
-        QRect rect;
-        lInterestPoints points;
-    };
     Q_OBJECT
     public:
         PanoramaPlugin(QObject *parent, const QStringList &);
@@ -52,7 +45,7 @@ class PanoramaPlugin : public KParts::Plugin
         void slotPreview();
     
     private:
-        void createPanorama(QList<PanoramaImage>& images, KisPaintDeviceSP dstdevice, QRect& area);
+        void createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect& area);
     private:
         KisView2 * m_view;
         Ui_WdgPanoramaCreation* m_wdgPanoramaCreation;

@@ -438,7 +438,6 @@ public:
      */
     virtual void setDirty();
 
-
     /**
      * Mirror the device along the X axis
      */

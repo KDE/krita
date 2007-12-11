@@ -429,7 +429,15 @@ public:
     /** Draw a spot at pos using the currently set paint op, brush and color */
     void paintAt(const KisPaintInformation &pos);
 
+    /**
+     * Stroke the given QPainterPath.
+     */
+    void paintPainterPath(const QPainterPath& path);
 
+    /**
+     * Fills the area enclosed by the given QPainterPath
+     */
+    void fillPainterPath(const QPainterPath& path);
     // ------------------------------------------------------------------------
     // Set the parameters for the higher level graphics primitives.
 
@@ -560,13 +568,6 @@ public:
      */
     QRegion addDirtyRect(QRect r);
 
-    void paintPainterPath(const QPainterPath& path);
-
-    //TODO expand to paint PainterPath
-    /**
-     * Paints a painterpath. The points are in pixel coordinates.
-     */
-    void fillPainterPath(const QPainterPath& path);
 
 
 protected:
@@ -577,10 +578,12 @@ protected:
     void fillPolygon(const vQPointF& points, FillStyle fillStyle);
 
 private:
+
     KisPainter(const KisPainter&);
     KisPainter& operator=(const KisPainter&);
 
 protected:
+
     KisPaintDeviceSP m_device;
     KisSelectionSP m_selection;
     KisTransaction  *m_transaction;

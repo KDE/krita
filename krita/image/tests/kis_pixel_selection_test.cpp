@@ -198,6 +198,26 @@ void KisPixelSelectionTest::testUpdateProjection()
     QCOMPARE(sel->selectedExactRect(), QRect(0, 0, 100, 100));
 }
 
+void KisPixelSelectionTest::testExactRectWithParent()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    KisPixelSelectionSP sel = new KisPixelSelection(dev);
+    sel->select(QRect(10, 10, 200, 143));
+    // Parent paint dev is empty
+    QCOMPARE(sel->selectedExactRect(), QRect(0, 0, 0, 0));
+    QCOMPARE(sel->selectedRect(), QRect(0, 0, 0, 0));
+    KisFillPainter gc(dev);
+    gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, dev->colorSpace()));
+    
+    QCOMPARE(sel->selectedExactRect(), QRect(10, 10, 90, 90));
+    QCOMPARE(sel->selectedRect(), QRect(0, 0, 128, 128));
+
+    gc.fillRect(0, 0, 500, 500, KoColor(Qt::blue, dev->colorSpace()));
+    
+    QCOMPARE(sel->selectedExactRect(), QRect(10, 10, 200, 143));
+    QCOMPARE(sel->selectedRect(), QRect(0, 0, 256, 192));
+}
+
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI);
 #include "kis_pixel_selection_test.moc"
 

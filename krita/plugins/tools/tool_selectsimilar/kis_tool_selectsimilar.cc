@@ -152,7 +152,8 @@ useCursor(m_subtractCursor);
                 pSel->invert();
         }
 
-        KoColor c = dev->colorAt(pos.x(), pos.y());
+        KoColor c;
+        dev->pixel(pos.x(), pos.y(), &c);
         opacity = dev->colorSpace()->alpha(c.data());
 
         // XXX we should make this configurable: "allow to select transparent"

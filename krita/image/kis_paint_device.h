@@ -348,11 +348,6 @@ public:
     bool pixel(qint32 x, qint32 y, KoColor * kc);
 
     /**
-     * Return the KoColor of the pixel at x,y.
-     */
-    KoColor colorAt(qint32 x, qint32 y) const;
-
-    /**
      * Set the specified pixel to the specified color. Note that this
      * bypasses KisPainter. the PaintDevice is here used as an equivalent
      * to QImage, not QPixmap. This means that this is not undoable; also,

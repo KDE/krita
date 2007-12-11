@@ -853,12 +853,6 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc)
     return true;
 }
 
-KoColor KisPaintDevice::colorAt(qint32 x, qint32 y) const
-{
-    KisRandomConstAccessorPixel iter = createRandomConstAccessor(x, y);
-    return KoColor(iter.rawData(), m_d->colorSpace);
-}
-
 bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c, quint8  opacity)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);

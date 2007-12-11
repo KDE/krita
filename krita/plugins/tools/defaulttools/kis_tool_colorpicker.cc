@@ -110,7 +110,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
         }
 
         if (m_radius == 1) {
-            m_pickedColor = dev->colorAt (pos.x(), pos.y());
+            m_dev->pixel(pos.x(), pos.y(), &m_pickedColor);
         } else {
             // radius 2 ==> 9 pixels, 3 => 9 pixels, etc
             static int counts[] = { 0, 1, 9, 25, 45, 69, 109, 145, 193, 249 };
@@ -127,7 +127,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
             KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(0, 0, 1);;
             for (int y = - m_radius; y <= m_radius; y++) {
                 for (int x = - m_radius; x <= m_radius; x++) {
-                    if (x*x + y*y < m_radius * m_radius) {
+                    if (((x * x) + (y * y)) < m_radius * m_radius) {
                         iter = dev->createHLineIterator(pos.x() + x, pos.y() + y, 1);
 
                         pixels[i] = new quint8[pixelSize];

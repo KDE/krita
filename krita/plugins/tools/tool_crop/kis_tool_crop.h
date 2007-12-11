@@ -60,7 +60,6 @@ public:
      virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-//     virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual quint32 priority() { return 1; }
 
     virtual void mousePressEvent(KoPointerEvent *e);
@@ -74,6 +73,7 @@ public slots:
 
     virtual void activate( bool );
     virtual void deactivate();
+    
 private:
     QRectF boundingRect();
     QRectF borderLineRect();

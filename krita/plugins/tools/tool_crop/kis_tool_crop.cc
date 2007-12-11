@@ -69,18 +69,19 @@ void KisToolCrop::activate( bool tmp )
 {
     super::activate( tmp );
 
-#if 0
-    // No current crop rectangle, try to use the selection of the device to make a rectangle
-    if (m_subject && currentImage() && currentLayer()->paintDevice()) {
-        KisPaintDeviceSP device = currentLayer()->paintDevice();
-        if (!device->hasSelection())
-            return;
+    KisLayerSP layer = currentLayer();
+    KisImageSP image = currentImage();
 
-        m_rectCrop = device->selection()->exactBounds();
-        validateSelection();
-        crop();
+    KisSelectionSP selection = layer->selection();
+    if (!selection) {
+        selection = image->globalSelection();
     }
-#endif
+    if (selection) {
+        selection->updateProjection();
+        m_rectCrop = selection->selectedExactRect();
+        validateSelection();
+        updateCanvasPixelRect(image->bounds());
+    }
 }
 
 void KisToolCrop::deactivate()
@@ -303,6 +304,8 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *e)
 void KisToolCrop::updateWidgetValues(bool updateratio)
 {
     QRect r = m_rectCrop.normalized();
+    if (!m_optWidget) createOptionWidget();
+    
     setOptionWidgetX(r.x());
     setOptionWidgetY(r.y());
     setOptionWidgetWidth(r.width() );

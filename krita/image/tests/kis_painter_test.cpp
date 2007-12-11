@@ -21,6 +21,7 @@
 
 #include <kdebug.h>
 #include <QRect>
+#include <QTime>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -302,6 +303,32 @@ void KisPainterTest::testSimpleAlphaCopy()
     gc.end();
     QCOMPARE(dst->exactBounds(), QRect(0, 0, 100, 100));
     
+}
+
+void KisPainterTest::checkPerformance()
+{
+    KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "src");
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "dst");
+    quint8 p = 128;
+    src->fill(0, 0, 10000, 5000, &p);
+    KisSelectionSP sel = new KisSelection();
+    sel->getOrCreatePixelSelection()->select(QRect(0, 0, 10000, 5000), 128);
+    sel->updateProjection();
+    
+    QTime t;
+    t.start();
+    for (int i = 0; i < 10; ++i) {
+        KisPainter gc(dst);
+        gc.bitBlt(0, 0, COMPOSITE_OVER, src, OPACITY_OPAQUE, 0, 0, 10000, 5000);
+    }
+    qDebug() << "bitblt: " << t.elapsed();
+    
+    t.restart();
+    for (int i = 0; i < 10; ++i) {
+        KisPainter gc(dst, sel);
+        gc.bltSelection(0, 0, COMPOSITE_OVER, src, OPACITY_OPAQUE, 0, 0, 10000, 5000);
+    }
+    qDebug() << "selection: " << t.elapsed();
 }
 
 QTEST_KDEMAIN(KisPainterTest, NoGUI);

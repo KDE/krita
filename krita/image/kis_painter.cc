@@ -309,6 +309,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
                               qint32 sx, qint32 sy,
                               qint32 sw, qint32 sh)
 {
+
     if (srcdev.isNull()) return;
 
     if (selMask.isNull()) return;
@@ -316,7 +317,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     if (m_device.isNull()) return;
         
     if (selMask->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
-            return;
+        return;
     }
 
     QRect srcRect = QRect(sx, sy, sw, sh);
@@ -345,6 +346,10 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     qint32 srcY = sy;
     qint32 rowsRemaining = sh;
 
+    KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx,sy);
+    KisRandomAccessorPixel dstIt = m_device->createRandomAccessor(dx,dy);
+    KisRandomConstAccessorPixel maskIt = selMask->createRandomConstAccessor(dx,dy);
+    
     while (rowsRemaining > 0) {
 
         qint32 dstX = dx;
@@ -352,41 +357,41 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
         qint32 columnsRemaining = sw;
         qint32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
         qint32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
-        qint32 numContiguousSelRows = selMask->numContiguousRows(dstY, dstX, dstX + sw - 1);
-
+        qint32 numContiguousSelRows = selMask->numContiguousRows(srcY, srcX, srcX + sw - 1);
+        
         qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
-        rows = qMin(numContiguousSelRows, rows);
+        rows = qMin(rows, numContiguousSelRows);
         rows = qMin(rows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
             qint32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
             qint32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
-            qint32 numContiguousSelColumns = selMask->numContiguousColumns(dstX, dstY, dstY + rows - 1);
-
+            qint32 numContiguousSelColumns = selMask->numContiguousColumns(srcX, srcY, srcY + rows - 1);
+            
             qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
-            columns = qMin(numContiguousSelColumns, columns);
+            columns = qMin(columns, numContiguousSelColumns);
             columns = qMin(columns, columnsRemaining);
 
-            qint32 dstRowStride = m_device->rowStride(dstX, dstY);
-            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns);
-            quint8 *dstData = dstIt.rawData();
-
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
-            KisHLineConstIteratorPixel srcIt = srcdev->createHLineConstIterator(srcX, srcY, columns);
+            srcIt.moveTo(srcX, srcY);
             const quint8 *srcData = srcIt.rawData();
 
-            qint32 selRowStride = selMask->rowStride(dstX, dstY);
-            KisHLineConstIteratorPixel selIt = selMask->createHLineConstIterator(dstX, dstY, columns);
-            const quint8 *selData = selIt.rawData();
+            qint32 dstRowStride = m_device->rowStride(dstX, dstY);
+            dstIt.moveTo(dstX, dstY);
+            quint8 *dstData = dstIt.rawData();
 
+            qint32 maskRowStride = selMask->rowStride(dstX, dstY);
+            maskIt.moveTo(dstX, dstY);
+            const quint8 *maskData = maskIt.rawData();
+            
             m_colorSpace->bitBlt(dstData,
                                  dstRowStride,
                                  srcCs,
                                  srcData,
                                  srcRowStride,
-                                 selData,
-                                 selRowStride,
+                                 maskData,
+                                 maskRowStride,
                                  opacity,
                                  rows,
                                  columns,
@@ -402,7 +407,6 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
         dstY += rows;
         rowsRemaining -= rows;
     }
-
     addDirtyRect(QRect(dx, dy, sw, sh));
 }
 
@@ -414,6 +418,7 @@ double KisPainter::paintLine(const KisPaintInformation &pi1,
     if (!m_device) return 0;
     if (!m_paintOp) return 0;
     if (!m_brush) return 0;
+    
     return m_paintOp->paintLine(pi1, pi2, savedDist);
 }
 

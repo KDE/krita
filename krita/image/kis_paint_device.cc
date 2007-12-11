@@ -21,8 +21,6 @@
 #include <QImage>
 #include <QApplication>
 #include <QList>
-#include <QTime>
-#include <QTimer>
 #include <QUndoCommand>
 #include <QHash>
 

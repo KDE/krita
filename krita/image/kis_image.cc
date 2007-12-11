@@ -934,15 +934,11 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
     srcRect.setBottom(static_cast<int>(ceil((r.bottom() + 1) * yScale)) - 1);
 
     KisPaintDeviceSP mergedImage = m_d->rootLayer->projection();
-    QTime t;
-    t.start();
 
     quint8 *scaledImageData = new quint8[r.width() * r.height() * pixelSize];
 
     quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
     const qint32 imageRowX = srcRect.x();
-
-    t.restart();
 
     for (qint32 y = 0; y < r.height(); ++y) {
 
@@ -967,7 +963,6 @@ QImage KisImage::convertToQImage(const QRect& r, const double xScale, const doub
         }
     }
 
-    t.restart();
     delete [] imageRow;
 
     QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), const_cast<KoColorProfile*>( profile ), KoColorConversionTransformation::IntentPerceptual);

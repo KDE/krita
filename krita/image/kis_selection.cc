@@ -23,7 +23,6 @@
 
 #include "kis_selection.h"
 
-#include <QTime>
 #include <QImage>
 #include <QVector>
 #include <QRect>

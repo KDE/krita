@@ -348,9 +348,6 @@ void KisPixelSelection::setDirty()
 
 QVector<QPolygon> KisPixelSelection::outline()
 {
-    QTime t;
-    t.start();
-
     quint8 defaultPixel = *(m_datamanager->defaultPixel());
     QRect selectionExtent = exactBounds();
     qint32 xOffset = selectionExtent.x();

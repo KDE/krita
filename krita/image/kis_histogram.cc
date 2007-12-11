@@ -19,7 +19,6 @@
 
 #include <kdebug.h>
 #include <QVector>
-#include <QDateTime> // ### Debug
 
 #include "kis_types.h"
 #include "kis_histogram.h"
@@ -65,9 +64,6 @@ void KisHistogram::updateHistogram()
     r = m_dev->exactBounds();
     KisRectConstIteratorPixel srcIt = m_dev->createRectConstIterator(r.x(), r.y(), r.width(), r.height());
     const KoColorSpace* cs = m_dev->colorSpace();
-
-    QTime t;
-    t.start();
 
     // Let the producer do it's work
     m_producer->clear();

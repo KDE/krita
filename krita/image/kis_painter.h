@@ -287,7 +287,6 @@ public:
             bltSelection(dx, dy, op, srcdev, m_selection, opacity, sx, sy, sw, sh );
         }
     }
-                      
 
     /**
      * Overloaded function of the previous that takes the name of the composite op using the name

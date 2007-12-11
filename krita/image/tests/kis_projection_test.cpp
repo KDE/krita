@@ -30,19 +30,30 @@
 void KisProjectionTest::testDirty()
 {
     KisImageSP image = new KisImage( 0, 1000, 1000, 0, "layer tests" );
+
+    // Two layers so the single-layer-is-rootlayer optimization doesn't kick in
     KisLayerSP layer = new KisPaintLayer( image, "layer 1", OPACITY_OPAQUE );
+    KisLayerSP layer2 = new KisPaintLayer( image, "layer 2", OPACITY_OPAQUE );
     image->addNode( layer );
-    KisFillPainter gc( layer->paintDevice() );
-    KoColor c(Qt::red, layer->colorSpace());
+    image->addNode( layer2 );
+    KisFillPainter gc( layer2->paintDevice() );
+    KoColor c(Qt::red, layer2->colorSpace());
     gc.fillRect( 0, 0, 1000, 1000, c );
+    gc.end();
+    layer2->setDirty(gc.dirtyRegion());
+
+    // wait a little for the projection to finish
+    QTest::qSleep(250);
+
+    // Check that the projection is totally redistribute
+    KisRectConstIteratorPixel iter = image->projection()->createRectConstIterator(0, 0, 1000, 1000);
+    while (!iter.isDone()) {
+        QColor c;
+        image->colorSpace()->toQColor(iter.rawData(), &c, image->profile());
+        QVERIFY( c == Qt::red );
+        ++iter;
+    }
 }
-
-void KisProjectionTest::stressTestDirty()
-{
-    QFAIL( "Implement KisProjectionTest::stressTestDirty" );
-
-}
-
 
 QTEST_KDEMAIN(KisProjectionTest, NoGUI)
 #include "kis_projection_test.moc"

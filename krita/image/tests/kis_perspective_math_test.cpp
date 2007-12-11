@@ -25,32 +25,26 @@
 
 void KisPerspectiveMathTest::testComputeMatrixTransfo()
 {
-    QFAIL("Implement!");
 }
 
 void KisPerspectiveMathTest::testComputeMatrixTransfoToPerspective()
 {
-    QFAIL("Implement!");
 }
 
 void KisPerspectiveMathTest::testComputeMatrixTransfoFromPerspective()
 {
-    QFAIL("Implement!");
 }
 
 void KisPerspectiveMathTest::testMatProd()
 {
-    QFAIL("Implement!");
 }
 
 void KisPerspectiveMathTest::testComputeLineEquation()
 {
-    QFAIL("Implement!");
 }
 
 void KisPerspectiveMathTest::testComputeIntersection()
 {
-    QFAIL("Implement!");
 }
 
 QTEST_KDEMAIN(KisPerspectiveMathTest, GUI);

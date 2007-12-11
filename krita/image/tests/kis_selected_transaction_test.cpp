@@ -30,10 +30,12 @@
 
 void KisSelectedTransactionTest::testCreation()
 {
+    
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    QUndoCommand cmd;
-    KisSelectedTransaction test("bla", dev, &cmd);
+    QUndoCommand * cmd = new QUndoCommand();
+    KisSelectedTransaction test("bla", dev, cmd);
+    
 }
 
 

@@ -38,7 +38,7 @@ KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDevi
 
 KisSelectedTransaction::~KisSelectedTransaction()
 {
-    delete m_selTransaction;
+    //delete m_selTransaction;
 }
 
 void KisSelectedTransaction::redo()

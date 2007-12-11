@@ -104,6 +104,7 @@ public:
      * Return the region of interest.
      */
     QRect regionOfInterest();
+    
 signals:
 
     void sigProjectionUpdated( const QRect & );

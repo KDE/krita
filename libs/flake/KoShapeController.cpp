@@ -45,14 +45,14 @@ public:
     QUndoCommand* addShape( KoShape *shape, bool showDialog, QUndoCommand *parent) {
         Q_ASSERT(canvas->shapeManager());
 
-        KoShapeFactory *factory = KoShapeRegistry::instance()->value( shape->shapeId() );
-        Q_ASSERT(factory);
-        int z=0;
-        foreach(KoShape *sh, canvas->shapeManager()->shapes())
-            z = qMax(z, sh->zIndex());
-        shape->setZIndex(z+1);
-
         if (showDialog) {
+            KoShapeFactory *factory = KoShapeRegistry::instance()->value( shape->shapeId() );
+            Q_ASSERT(factory);
+            int z=0;
+            foreach(KoShape *sh, canvas->shapeManager()->shapes())
+                z = qMax(z, sh->zIndex());
+            shape->setZIndex(z+1);
+
             // show config dialog.
             KPageDialog *dialog = new KPageDialog(canvas->canvasWidget());
             dialog->setCaption(i18n("%1 Options", factory->name()));

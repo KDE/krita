@@ -29,7 +29,6 @@ class KisImageTest : public QObject
 private slots:
 
     void layerTests();
-    void mergeTests();
 };
 
 #endif

@@ -341,11 +341,9 @@ public:
      */
     KisPaintDeviceSP mergedImage();
 
-    /*
-     * Returns the color of the merged image at pixel (x, y).
+    /**
+     * @return the root node of the image node graph
      */
-    KoColor mergedPixel(qint32 x, qint32 y);
-
     KisGroupLayerSP rootLayer() const;
 
     /// Return the projection; that is, the complete, composited representation

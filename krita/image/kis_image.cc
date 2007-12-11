@@ -996,11 +996,6 @@ KisPaintDeviceSP KisImage::mergedImage()
     return m_d->rootLayer->projection();
 }
 
-KoColor KisImage::mergedPixel(qint32 x, qint32 y)
-{
-    return m_d->rootLayer->projection()->colorAt(x, y);
-}
-
 void KisImage::notifyLayersChanged()
 {
     emit sigLayersChanged(rootLayer());

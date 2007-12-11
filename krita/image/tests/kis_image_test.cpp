@@ -29,8 +29,8 @@
 #include "kis_group_layer.h"
 #include <kdebug.h>
 
-#define IMAGE_WIDTH 1
-#define IMAGE_HEIGHT 1
+#define IMAGE_WIDTH 128
+#define IMAGE_HEIGHT 128
 
 void KisImageTest::layerTests()
 {
@@ -43,58 +43,6 @@ void KisImageTest::layerTests()
 
     QVERIFY( image->rootLayer()->firstChild()->objectName() == layer->objectName() );
 }
-
-void KisImageTest::mergeTests()
-{
-    KoColorSpaceRegistry * reg = KoColorSpaceRegistry::instance();
-    QVERIFY2( reg, "Could not get colorspace registry" );
-
-    const KoColorSpace * colorSpace = reg->colorSpace("RGBA", 0);
-
-    KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
-
-    KoColor mergedPixel = image->mergedPixel(0, 0);
-
-    QColor color;
-    quint8 opacity;
-
-    mergedPixel.toQColor(&color, &opacity);
-
-    QCOMPARE(opacity, OPACITY_TRANSPARENT);
-
-    KisPaintLayerSP layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
-    image->addNode(layer.data(), image->rootLayer(), 0);
-
-    layer->paintDevice()->setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
-    layer->setDirty();
-
-    mergedPixel = image->mergedPixel(0, 0);
-    mergedPixel.toQColor(&color, &opacity);
-
-    QCOMPARE(opacity, OPACITY_OPAQUE);
-    QCOMPARE(color.red(), 255);
-    QCOMPARE(color.green(), 128);
-    QCOMPARE(color.blue(), 64);
-
-    KisPaintLayerSP layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE / 255);
-    image->addNode( layer2.data() );
-
-    layer2->paintDevice()->setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
-    layer2->setDirty();
-
-    image->rootLayer()->projection()->convertToQImage(0).save( "test.png" );
-
-    mergedPixel = image->mergedPixel(0, 0);
-    mergedPixel.toQColor(&color, &opacity);
-
-    // Does not work. See BUG: 147193
-    kDebug() <<"XXXXXXXXXXXXXXXX: BUG: 147193";
-    QCOMPARE(( uint ) opacity, ( uint ) OPACITY_OPAQUE);
-    QCOMPARE(( uint ) color.red(), ( uint )255);
-    QCOMPARE(( uint ) color.green(), ( uint )( 128 + ((255 - 128) / 2) ) );
-    QCOMPARE(( uint ) color.blue(), ( uint ) ( 64 + ((255 - 64) / 2) ) );
-}
-
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)
 #include "kis_image_test.moc"

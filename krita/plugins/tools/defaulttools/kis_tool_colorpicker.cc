@@ -110,7 +110,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
         }
 
         if (m_radius == 1) {
-            m_dev->pixel(pos.x(), pos.y(), &m_pickedColor);
+            dev->pixel(pos.x(), pos.y(), &m_pickedColor);
         } else {
             // radius 2 ==> 9 pixels, 3 => 9 pixels, etc
             static int counts[] = { 0, 1, 9, 25, 45, 69, 109, 145, 193, 249 };

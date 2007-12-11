@@ -95,11 +95,11 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         fillpainter.setWidth( rc.width() );
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(m_sampleMerged);
-        KisPixelSelectionSP selection =
+        KisSelectionSP selection =
             fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage() );
 
         KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Contiguous Area Selection"));
-        QUndoCommand* cmd = helper.selectPixelSelection(selection, m_selectAction);
+        QUndoCommand* cmd = helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
         m_canvas->addCommand(cmd);
 
         QApplication::restoreOverrideCursor();

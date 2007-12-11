@@ -301,25 +301,23 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     }
 }
 
-void KisPainter::bitBlt(QPoint pos, const KisPaintDeviceSP src, QRect srcRect )
-{
-    bitBlt( pos.x(), pos.y(), m_compositeOp, src, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
-}
-
-void KisPainter::bltMask(qint32 dx, qint32 dy,
-                         const KoCompositeOp *op,
-                         const KisPaintDeviceSP srcdev,
-                         const KisPaintDeviceSP selMask,
-                         quint8 opacity,
-                         qint32 sx, qint32 sy,
-                         qint32 sw, qint32 sh)
+void KisPainter::bltSelection(qint32 dx, qint32 dy,
+                              const KoCompositeOp  *op,
+                              const KisPaintDeviceSP srcdev,
+                              const KisSelectionSP selMask,
+                              quint8 opacity,
+                              qint32 sx, qint32 sy,
+                              qint32 sw, qint32 sh)
 {
     if (srcdev.isNull()) return;
 
     if (selMask.isNull()) return;
 
     if (m_device.isNull()) return;
-
+        
+    if (selMask->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
+            return;
+    }
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
@@ -327,7 +325,7 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
         srcRect &= srcdev->exactBounds();
     //}
 
-    srcRect &= selMask->exactBounds().translated( -dx + sx, -dy + sy );
+    srcRect &= selMask->selectedExactRect().translated( -dx + sx, -dy + sy );
 
     if (srcRect.isEmpty()) {
         return;
@@ -408,49 +406,6 @@ void KisPainter::bltMask(qint32 dx, qint32 dy,
     addDirtyRect(QRect(dx, dy, sw, sh));
 }
 
-void KisPainter::bltMask(QPoint pos, const KisPaintDeviceSP src, KisPaintDeviceSP selMask, QRect srcRect )
-{
-    bltMask( pos.x(), pos.y(), m_compositeOp, src, selMask, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
-}
-
-void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                              const KoCompositeOp * op,
-                              const KisPaintDeviceSP srcdev,
-                              const KisSelectionSP seldev,
-                              quint8 opacity,
-                              qint32 sx, qint32 sy,
-                              qint32 sw, qint32 sh)
-{
-    if (!seldev) return;
-    // Better use a probablistic method than a too slow one
-    if (seldev->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
-        return;
-    }
-    bltMask(dx, dy, op, srcdev, seldev, opacity, sx, sy, sw, sh);
-
-}
-
-void KisPainter::bltSelection(QPoint pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, QRect srcRect )
-{
-    bltSelection( pos.x(), pos.y(), m_compositeOp, src, selDev, m_opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
-}
-
-
-void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                              const KoCompositeOp* op,
-                              const KisPaintDeviceSP srcdev,
-                              quint8 opacity,
-                              qint32 sx, qint32 sy,
-                              qint32 sw, qint32 sh)
-{
-    if (m_device.isNull()) return;
-    if ( !m_selection ) {
-        bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
-    }
-    else {
-        bltSelection(dx, dy, op, srcdev, m_selection, opacity, sx, sy, sw, sh );
-    }
-}
 
 double KisPainter::paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,

@@ -21,7 +21,7 @@
 
 #include <QRect>
 
-#include "kis_pixel_selection.h"
+#include "kis_selection.h"
 
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
@@ -140,7 +140,7 @@ public:
      * always use the the projection param and deprecated the
      * sampleMerged setting)
      */
-    KisPixelSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP projection);
+    KisSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP projection);
 
     /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
@@ -185,7 +185,7 @@ private:
     void genericFillStart(int startX, int startY, KisPaintDeviceSP projection);
     void genericFillEnd(KisPaintDeviceSP filled);
 
-    KisPixelSelectionSP m_fillSelection;
+    KisSelectionSP m_fillSelection;
 
     int m_threshold;
     int m_size;

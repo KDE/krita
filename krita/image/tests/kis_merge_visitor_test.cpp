@@ -38,6 +38,7 @@
 #include "kis_group_layer.h"
 #include "kis_clone_layer.h"
 #include "kis_adjustment_layer.h"
+#include "kis_pixel_selection.h"
 
 #include "testutil.h"
 

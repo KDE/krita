@@ -61,6 +61,8 @@ class KisSelectionComponent;
  * you can read from it, but not write to it. You need to keep track of the need
  * for updating the projection yourself: there is no automatic updating after changing
  * the contents of one or more of the selection components.
+ *
+ * XXX: optimize: if there is only a PixelSelection, use that as projection.
  */
 class KRITAIMAGE_EXPORT KisSelection : public KisPaintDevice {
 

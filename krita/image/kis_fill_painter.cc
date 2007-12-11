@@ -194,7 +194,7 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     QRect rc = m_fillSelection->selectedExactRect();
 
     // Sets dirty!
-    bltMask(rc.x(), rc.y(), m_compositeOp, filled, m_fillSelection, m_opacity,
+    bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_fillSelection, m_opacity,
                  rc.x(), rc.y(), rc.width(), rc.height());
 
     if ( m_progressUpdater ) m_progressUpdater->setProgress(100);
@@ -211,7 +211,7 @@ struct FillSegment {
 
 typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
-KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection) {
+KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection) {
 
     if (m_width < 0 || m_height < 0) {
         if (m_selection && m_careForSelection) {
@@ -225,14 +225,14 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
-        return KisPixelSelectionSP(new KisPixelSelection(m_device));
+        return new KisSelection(m_device);
 
     KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
 
     // sample merged?
     if (m_sampleMerged) {
         if (!projection) {
-            return KisPixelSelectionSP(new KisPixelSelection(m_device));
+            return new KisSelection(m_device);
         }
         sourceDevice = projection;
     } else {
@@ -241,8 +241,10 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
 
     m_size = m_width * m_height;
 
-    KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(m_device));
-    const KoColorSpace * colorSpace = selection->colorSpace();
+    KisSelectionSP selection = new KisSelection(m_device);
+    KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
+    
+    const KoColorSpace * colorSpace = pSel->colorSpace();
     const KoColorSpace * devColorSpace = sourceDevice->colorSpace();
 
     quint8* source = new quint8[sourceDevice->pixelSize()];
@@ -266,7 +268,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
     if (hasSelection) {
         srcSel = m_selection;
         if(!srcSel->hasPixelSelection())
-            srcSel->setPixelSelection(KisPixelSelectionSP(new KisPixelSelection(sourceDevice)));
+            srcSel->setPixelSelection(new KisPixelSelection(sourceDevice));
     }
 
     while(!stack.empty()) {
@@ -294,7 +296,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
         }
 
         // Here as well: start the iterator at (0,y)
-        KisHLineIteratorPixel selIt = selection->createHLineIterator(0, y, m_width);
+        KisHLineIteratorPixel selIt = pSel->createHLineIterator(0, y, m_width);
         selIt += x;
         if (m_fuzzy)
             colorSpace->fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
@@ -355,7 +357,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
 
         // and go to the right
         pixelIt = sourceDevice->createHLineIterator(x, y, m_width);
-        selIt = selection->createHLineIterator(x, y, m_width);
+        selIt = pSel->createHLineIterator(x, y, m_width);
 
         stop = false;
         while(!stop && x < m_width && (map[m_width * y + x] != Checked) ) {
@@ -399,6 +401,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(int startX, int startY,
 
     delete[] map;
     delete[] source;
-
+    
+    selection->updateProjection();
     return selection;
 }

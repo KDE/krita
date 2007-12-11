@@ -154,13 +154,6 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionA
 
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 {
-#if 0
-    KisPainter painter(this);
-    QRect r = selection->selectedExactRect();
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
-    painter.end();
-#endif
-
     QRect r = selection->selectedRect();
     KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
     KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
@@ -181,16 +174,6 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 {
-#if 0
-    KisPainter painter(this);
-    selection->invert();
-
-    QRect r = selection->selectedExactRect();
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_ERASE, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
-
-    selection->invert();
-    painter.end();
-#endif
     QRect r = selection->selectedRect();
     KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
     KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
@@ -211,18 +194,6 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 {
-#if 0
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(this));
-
-    KisPainter painter(tmpSel);
-    QRect r = selection->selectedExactRect();
-    painter.bltMask(r.x(), r.y(),  selection->colorSpace()->compositeOp(COMPOSITE_OVER), this,
-                    selection, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
-    painter.end();
-
-    this->clear();
-    addSelection(tmpSel);
-#endif
     QRect r = selection->selectedRect().united(selectedRect());
 
     KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());

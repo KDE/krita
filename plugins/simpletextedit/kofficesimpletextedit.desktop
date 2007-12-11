@@ -11,6 +11,7 @@ Name[x-test]=xxSimple Text Editxx
 Comment=Simpler Text Edit docker
 Comment[el]=Προσάρτηση απλής επεξεργασίας κειμένου
 Comment[es]=Anclaje del editor de texto sencillo
+Comment[fi]=Yksinkertainen tekstieditori-docker
 Comment[pt]=Área acoplável de edição de texto simples
 Comment[pt_BR]=Área acoplável de edição de texto simples
 Comment[sv]=Enkel dockningstexteditor

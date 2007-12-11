@@ -34,13 +34,14 @@ private:
     void testPaintDeviceBltMaskIrregular( const KoColorSpace * cs );
     void testPaintDeviceBltMaskInverted( const KoColorSpace * cs );
 
-private slots:
-    
     void testPaintDeviceBltMask(); // Square selection
     void testPaintDeviceBltMaskIrregular(); // Irregular selection
     void testPaintDeviceBltMaskInverted(); // Inverted selection
-    void testSelectionBltMask(); // Square selection
     void testSelectionBltMaskIrregular(); // Irregular selection
+    
+private slots:
+    
+    void testSelectionBltMask(); // Square selection
     void testSimpleAlphaCopy();
 
 };

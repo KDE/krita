@@ -210,19 +210,16 @@ void KisPainterTest::testPaintDeviceBltMaskInverted()
 
 void KisPainterTest::testSelectionBltMask()
 {
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
-
-    KisPixelSelectionSP src = KisPixelSelectionSP(new KisPixelSelection(dev));
+    KisPixelSelectionSP src = new KisPixelSelection();
     src->select(QRect(0,0,20,20));
     QCOMPARE( src->selectedExactRect(), QRect( 0, 0, 20, 20 ) );
 
-    KisPixelSelectionSP mask = KisPixelSelectionSP(new KisPixelSelection(dev));
+    KisPixelSelectionSP mask = new KisPixelSelection();
     mask->select(QRect(10,10,20,20));
     QCOMPARE( mask->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
 
-    KisPixelSelectionSP dst = KisPixelSelectionSP(new KisPixelSelection(dev));
+    KisPixelSelectionSP dst = new KisPixelSelection();
     KisPainter painter(dst);
-
 
     painter.bltMask(0, 0,
                     dst->colorSpace()->compositeOp(COMPOSITE_OVER),

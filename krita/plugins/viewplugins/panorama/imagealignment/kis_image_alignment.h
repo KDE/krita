@@ -24,6 +24,8 @@
 
 #include <QRect>
 
+#include <eigen/matrix.h>
+
 #include <kis_types.h>
 #include "kis_interest_points_detector.h"
 
@@ -35,10 +37,14 @@ class KisImageAlignment {
             QRect rect;
             lInterestPoints points;
         };
+        struct Result {
+            double a,b,c; // Distortion parameters
+            Eigen::Matrix3d homography; ///< homography parameters
+        };
     public:
         KisImageAlignment(KisInterestPointsDetector* );
         ~KisImageAlignment();
-        std::vector<double> align(QList<ImageInfo> info);
+        std::vector<Result> align(QList<ImageInfo> info);
     private:
         struct Private;
         Private* const d;

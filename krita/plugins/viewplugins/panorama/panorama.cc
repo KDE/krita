@@ -188,61 +188,40 @@ void PanoramaPlugin::slotPreview()
 void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect& )
 {
     KisImageAlignment ia( KisInterestPointsDetector::interestPointDetector());
-    std::vector<double> p = ia.align(images);
-// HomographyImageMatchModel
+    std::vector< KisImageAlignment::Result > p = ia.align(images);
+    std::cout << "Number of results = " << p.size() << std::endl;
+    // blend
+    QList<KisImagesBlender::LayerSource> sources;
+    // First layer
+    KisImagesBlender::LayerSource firstLayer;
+    firstLayer.layer = images[0].device;
+    firstLayer.a = p[0].a;
+    firstLayer.b = p[0].b;
+    firstLayer.c = p[0].c;
+    firstLayer.xc1 = images[0].rect.width()  * 0.5;
+    firstLayer.xc2 = images[0].rect.width()  * 0.5;
+    firstLayer.yc1 = images[0].rect.height() * 0.5;
+    firstLayer.yc2 = images[0].rect.height() * 0.5;
+    firstLayer.norm = (4.0 / ( images[0].rect.width() * images[0].rect.width() + images[0].rect.height() * images[0].rect.height() ) );
+    firstLayer.homography = p[0].homography;
+    firstLayer.rect = images[0].rect;
+    sources.push_back(firstLayer);
+    // Second Layer
+    KisImagesBlender::LayerSource secondLayer;
+    secondLayer.layer = images[1].device;
+    secondLayer.a = p[1].a;
+    secondLayer.b = p[1].b;
+    secondLayer.c = p[1].c;
+    secondLayer.xc1 = images[1].rect.width()  * 0.5;
+    secondLayer.xc2 = images[1].rect.width()  * 0.5;
+    secondLayer.yc1 = images[1].rect.height() * 0.5;
+    secondLayer.yc2 = images[1].rect.height() * 0.5;
+    secondLayer.norm = (4.0 / ( images[1].rect.width() * images[1].rect.width() + images[1].rect.height() * images[1].rect.height() ) );
+    secondLayer.homography = p[1].homography;
+    secondLayer.rect = images[1].rect;
+    sources.push_back(secondLayer);
 
-        // blend
-        QList<KisImagesBlender::LayerSource> sources;
-        KisImagesBlender::LayerSource firstLayer;
-        firstLayer.layer = images[0].device;
-        firstLayer.a = p[HomographySameDistortionFunction::INDX_a];
-        firstLayer.b = p[HomographySameDistortionFunction::INDX_b];
-        firstLayer.c = p[HomographySameDistortionFunction::INDX_c];
-    /*      firstLayer.a = p[HomographyFunction::INDX_a1];
-        firstLayer.b = p[HomographyFunction::INDX_b1];
-        firstLayer.c = p[HomographyFunction::INDX_c1];*/
-        firstLayer.xc1 = images[0].rect.width() * 0.5;
-        firstLayer.xc2 = images[0].rect.width() * 0.5;
-        firstLayer.yc1 = images[0].rect.height() * 0.5;
-        firstLayer.yc2 = images[0].rect.height() * 0.5;
-        firstLayer.norm = (4.0 / ( images[0].rect.width() * images[0].rect.width() + images[0].rect.height() * images[0].rect.height() ) );
-        for(int i = 0; i < 3; i++)
-        {
-            for(int j = 0; j < 3; j++)
-            {
-            firstLayer.homography(i,j) = 0.0;
-            }
-            firstLayer.homography(i,i) = 1.0;
-        }
-        firstLayer.rect = images[0].rect;
-        sources.push_back(firstLayer);
-        KisImagesBlender::LayerSource secondLayer;
-        secondLayer.layer = images[1].device;
-        secondLayer.a = p[HomographySameDistortionFunction::INDX_a];
-        secondLayer.b = p[HomographySameDistortionFunction::INDX_b];
-        secondLayer.c = p[HomographySameDistortionFunction::INDX_c];
-    /*      secondLayer.a = p[HomographyFunction::INDX_a2];
-        secondLayer.b = p[HomographyFunction::INDX_b2];
-        secondLayer.c = p[HomographyFunction::INDX_c2];*/
-        secondLayer.xc1 = images[1].rect.width() * 0.5;
-        secondLayer.xc2 = images[1].rect.width() * 0.5;
-        secondLayer.yc1 = images[1].rect.height() * 0.5;
-        secondLayer.yc2 = images[1].rect.height() * 0.5;
-        secondLayer.norm = (4.0 / ( images[1].rect.width() * images[1].rect.width() + images[1].rect.height() * images[1].rect.height() ) );
-        kDebug(41006) <<" homography = [" << p[HomographySameDistortionFunction::INDX_h11] <<"" << p[HomographySameDistortionFunction::INDX_h21] <<"" << p[HomographySameDistortionFunction::INDX_h31] <<" ;" << p[HomographySameDistortionFunction::INDX_h12] <<"" << p[HomographySameDistortionFunction::INDX_h22] <<"" << p[HomographySameDistortionFunction::INDX_h32] <<" ;" << p[HomographySameDistortionFunction::INDX_h13] <<"" << p[HomographySameDistortionFunction::INDX_h23] <<"" << 1.0 <<" ]";
-        secondLayer.homography(0,0) = p[HomographySameDistortionFunction::INDX_h11];
-        secondLayer.homography(0,1) = p[HomographySameDistortionFunction::INDX_h21];
-        secondLayer.homography(0,2) = p[HomographySameDistortionFunction::INDX_h31];
-        secondLayer.homography(1,0) = p[HomographySameDistortionFunction::INDX_h12];
-        secondLayer.homography(1,1) = p[HomographySameDistortionFunction::INDX_h22];
-        secondLayer.homography(1,2) = p[HomographySameDistortionFunction::INDX_h32];
-        secondLayer.homography(2,0) = p[HomographySameDistortionFunction::INDX_h13];
-        secondLayer.homography(2,1) = p[HomographySameDistortionFunction::INDX_h23];
-        secondLayer.homography(2,2) = 1.0;
-        secondLayer.rect = images[1].rect;
-        sources.push_back(secondLayer);
-
-        KisImagesBlender::blend(sources, dstdevice);
+    KisImagesBlender::blend(sources, dstdevice);
 }
 
 #include "panorama.moc"

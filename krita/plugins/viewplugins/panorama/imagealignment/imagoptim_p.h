@@ -21,7 +21,7 @@
 #define _PANOPTIM_P_H_
 
 #include "optimization.h"
-#include "panoptim_functions.h"
+#include "imagoptim_functions.h"
 // For each image there is four parameters to estimate : translation (2 parameters) + distortion (2 parameters)
 template<class _TFunction_, int _TParamCount_>
 class PanoptimFunction {

@@ -49,11 +49,10 @@
 #include "harris_detector.h"
 #include "matching.h"
 #include "ransac.h"
-#include "panoptim_p.h"
+#include "imagoptim_p.h"
 #include "imagematchmodel_p.h"
 #include "homographyimagematchmodel_p.h"
 #include "kis_images_blender.h"
-#include "hessiandetector/kis_hessian_detector.h"
 
 #include "ui_wdgpanoramacreation.h"
 
@@ -112,12 +111,12 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     dialog->setModal(true);
     m_wdgPanoramaCreation->setupUi(dialog);
 
-/*    addImage("/home/cyrille/H0010632.JPG");
-    addImage("/home/cyrille/H0010633.JPG");*/
+//     addImage("/home/cyrille/H0010632.JPG");
+//     addImage("/home/cyrille/H0010633.JPG");
     addImage("/home/cyrille/0.png");
     addImage("/home/cyrille/1.png");
-/*    addImage("/home/cyrille/0.a.png");
-    addImage("/home/cyrille/1.a.png");*/
+//     addImage("/home/cyrille/0.a.png");
+//     addImage("/home/cyrille/1.a.png");
 
     connect(m_wdgPanoramaCreation->pushButtonCancel, SIGNAL(released()), dialog, SLOT(reject ()));
     connect(m_wdgPanoramaCreation->pushButtonCreatePanorama, SIGNAL(released()), dialog, SLOT(accept ()));

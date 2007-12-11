@@ -1,19 +1,15 @@
 
 set(kritapanorama_PART_SRCS
     panorama.cc
-    harris_detector.cpp
-    matching.cpp
-    kis_interest_points_detector.cpp
     kis_images_blender.cpp
-# hessian detector
-    hessiandetector/APImage.cpp
-    hessiandetector/Descriptor.cpp
-    hessiandetector/HessianDetector.cpp
-    hessiandetector/kis_hessian_detector.cpp
+# image alignement framework
+    imagealignment/harris_detector.cpp
+    imagealignment/matching.cpp
+    imagealignment/kis_interest_points_detector.cpp
     )
 
 
-include_directories( ${EIGEN_INCLUDE_DIR} )
+include_directories( ${EIGEN_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/imagealignment)
 kde4_add_ui_files(kritapanorama_PART_SRCS wdgpanoramacreation.ui )
 
 kde4_add_plugin(kritapanorama ${kritapanorama_PART_SRCS})

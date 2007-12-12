@@ -23,7 +23,7 @@
 #include <koguiutils_export.h>
 
 /**
- * XXX: What should we use instead of these deprecated methods?
+ * You should use KoAspectButton instead.
  */
 class KOGUIUTILS_EXPORT KoImageResource
 {

@@ -19,6 +19,7 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <algorithm>
 
 template<class _Tmodel_, class _TmodelStaticParam_, class _Tdata_>
 class Ransac {

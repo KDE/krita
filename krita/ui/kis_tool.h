@@ -72,7 +72,7 @@ public:
     /// reimplemented from superclass
     virtual void mouseReleaseEvent( KoPointerEvent *event );
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event) {} // when a krita tool is enabled, don't push double click on
+    virtual void mouseDoubleClickEvent( KoPointerEvent *) {} // when a krita tool is enabled, don't push double click on
 
     /// Convert from native (postscript points) to image pixel
     /// coordinates.

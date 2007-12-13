@@ -50,8 +50,8 @@ void StarShapeConfigWidget::open(KoShape *shape)
     widget.convex->blockSignals( true );
 
     widget.corners->setValue( m_star->cornerCount() );
-    widget.innerRadius->setValue( m_star->baseRadius() );
-    widget.outerRadius->setValue( m_star->tipRadius() );
+    widget.innerRadius->changeValue( m_star->baseRadius() );
+    widget.outerRadius->changeValue( m_star->tipRadius() );
     widget.convex->setCheckState( m_star->convex() ? Qt::Checked : Qt::Unchecked );
     typeChanged();
 

@@ -32,6 +32,7 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_pixel_selection.h"
+#include "kis_fill_painter.h"
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( const KoColorSpace*cs ) )
 {
@@ -121,17 +122,18 @@ void KisPainterTest::testPaintDeviceBltSelection()
 
 void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * cs)
 {
-
     KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
-
     KisPaintDeviceSP src = new KisPaintDevice( cs, "src" );
-    src->fill( 0, 0, 20, 20, KoColor( Qt::red, 128, cs ).data() );
+    KisFillPainter gc(src);
+    gc.fillRect( 0, 0, 20, 20, KoColor( Qt::red, cs ));
+    gc.end();
 
     QCOMPARE( src->exactBounds(), QRect( 0, 0, 20, 20 ) );
 
     KisPixelSelectionSP psel = new KisPixelSelection();
     psel->select(QRect(10,15,20,15));
     psel->select(QRect(15,10,15,5));
+    
     QCOMPARE( psel->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
     QCOMPARE( psel->selected(13,13), MIN_SELECTED);
     KisSelectionSP sel = new KisSelection();
@@ -172,17 +174,16 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular()
 void KisPainterTest::testPaintDeviceBltSelectionInverted(const KoColorSpace * cs)
 {
     KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
-
     KisPaintDeviceSP src = new KisPaintDevice( cs, "src" );
-    src->fill( 0, 0, 30, 30, KoColor( Qt::red, 128, cs ).data() );
-
+    KisFillPainter gc(src);
+    gc.fillRect( 0, 0, 30, 30, KoColor( Qt::red, cs ));
+    gc.end();
     QCOMPARE( src->exactBounds(), QRect( 0, 0, 30, 30 ) );
-
-    KisPixelSelectionSP Selection = KisPixelSelectionSP(new KisPixelSelection());
-    Selection->select(QRect(10,10,20,20));
-    Selection->invert();
+    
     KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(Selection);
+    KisPixelSelectionSP psel = sel->getOrCreatePixelSelection();
+    psel->select(QRect(10,10,20,20));
+    psel->invert();
     sel->updateProjection();
     
     KisPainter painter(dst);
@@ -193,16 +194,12 @@ void KisPainterTest::testPaintDeviceBltSelectionInverted(const KoColorSpace * cs
                     OPACITY_OPAQUE,
                     0, 0, 30, 30);
     painter.end();
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>> going to save";
-    dst->convertToQImage(0, 0, 0, 50, 50).save( "blt_Selection_inverted.png" );
-    
     QCOMPARE( dst->exactBounds(), QRect( 0, 0, 30, 30 ) );
 }
 
 void KisPainterTest::testPaintDeviceBltSelectionInverted()
 {
-    //allCsApplicator( &KisPainterTest::testPaintDeviceBltSelectionInverted );
-    testPaintDeviceBltSelectionInverted(KoColorSpaceRegistry::instance()->rgb8());
+    allCsApplicator( &KisPainterTest::testPaintDeviceBltSelectionInverted );
 }
 
 
@@ -261,11 +258,11 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
 
-    KisPixelSelectionSP src = KisPixelSelectionSP(new KisPixelSelection(dev));
+    KisPixelSelectionSP src = new KisPixelSelection();
     src->select(QRect(0,0,20,20));
     QCOMPARE( src->selectedExactRect(), QRect( 0, 0, 20, 20 ) );
 
-    KisPixelSelectionSP Selection = KisPixelSelectionSP(new KisPixelSelection(dev));
+    KisPixelSelectionSP Selection = new KisPixelSelection();
     Selection->select(QRect(10,15,20,15));
     Selection->select(QRect(15,10,15,5));
     QCOMPARE( Selection->selectedExactRect(), QRect( 10, 10, 20, 20 ) );
@@ -275,7 +272,7 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
     sel->setPixelSelection(Selection);
     sel->updateProjection();
 
-    KisPixelSelectionSP dst = KisPixelSelectionSP(new KisPixelSelection(dev));
+    KisPixelSelectionSP dst = new KisPixelSelection();
     KisPainter painter(dst);
     painter.setSelection(sel);
 

@@ -39,6 +39,9 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
+#include <KoColorSpace.h>
+#include <KoColor.h>
+
 #include "kis_brush.h"
 #include "kis_complex_color.h"
 #include "kis_debug_areas.h"
@@ -47,7 +50,6 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
-#include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -56,8 +58,8 @@
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
-#include "KoColor.h"
 
+#include "kis_pixel_selection.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -222,11 +224,8 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    // Don't try to read outside the source rect
-    //if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
-        srcRect &= srcdev->extent();
-    //}
-
+    srcRect &= srcdev->extent();
+    
     if (srcRect.isEmpty()) {
         return;
     }
@@ -319,15 +318,9 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     if (selMask->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
         return;
     }
-
     QRect srcRect = QRect(sx, sy, sw, sh);
-
-    //if (op != srcdev->colorSpace()->compositeOp( COMPOSITE_COPY )) {
-        srcRect &= srcdev->exactBounds();
-    //}
-
-    srcRect &= selMask->selectedExactRect().translated( -dx + sx, -dy + sy );
-
+    srcRect &= srcdev->exactBounds();
+    srcRect &= selMask->selectedExactRect();
     if (srcRect.isEmpty()) {
         return;
     }

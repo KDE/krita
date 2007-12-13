@@ -189,7 +189,7 @@ QRect KisSelection::selectedRect() const
             // By default all pixels are selected; no matter how many pixels are
             // marked as deselected, there are always by-default-selected pixels
             // around the deselected pixels.
-            return QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX);
+            return QRect(0, 0, qint32_MAX, qint32_MAX);
         }
     }
 }
@@ -216,7 +216,7 @@ QRect KisSelection::selectedExactRect() const
             // By default all pixels are selected; no matter how many pixels are
             // marked as deselected, there are always by-default-selected pixels
             // around the deselected pixels.
-            return QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX);
+            return QRect(0, 0, qint32_MAX, qint32_MAX);
         }
     }
 }

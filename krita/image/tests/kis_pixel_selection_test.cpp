@@ -81,8 +81,8 @@ void KisPixelSelectionTest::testInvert()
     selection->invert();
     QCOMPARE( selection->selected( 20, 20), MAX_SELECTED);
     QCOMPARE( selection->selected( 6, 6), MIN_SELECTED);
-    QCOMPARE( selection->selectedExactRect(), QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX));
-    QCOMPARE( selection->selectedRect(), QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX));
+    QCOMPARE( selection->selectedExactRect(), QRect(0, 0, qint32_MAX, qint32_MAX));
+    QCOMPARE( selection->selectedRect(), QRect(0, 0, qint32_MAX, qint32_MAX));
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);

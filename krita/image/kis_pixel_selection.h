@@ -130,7 +130,7 @@ public:
 
     /**
      * Slow, but exact way of determining the rectangle
-     * that encloses the selection
+     * that encloses the selection.
      */
     QRect selectedExactRect() const;
 

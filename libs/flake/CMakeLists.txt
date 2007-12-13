@@ -91,7 +91,6 @@ set(flake_SRCS
     commands/KoShapeDistributeCommand.cpp
     commands/KoShapeLockCommand.cpp
     commands/KoShapeMoveCommand.cpp
-    commands/KoShapeRotateCommand.cpp
     commands/KoShapeShearCommand.cpp
     commands/KoShapeSizeCommand.cpp
     commands/KoShapeUngroupCommand.cpp

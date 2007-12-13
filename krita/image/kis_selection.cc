@@ -169,19 +169,55 @@ bool KisSelection::isProbablyTotallyUnselected(QRect r) const
 
 QRect KisSelection::selectedRect() const
 {
-    if(*(dataManager()->defaultPixel()) == MIN_SELECTED || !m_d->parentPaintDevice)
-        return extent();
-    else
-        return extent().unite(m_d->parentPaintDevice->extent());
+    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED )
+    {
+        if (m_d->parentPaintDevice) {
+            // The selected exact rect is the area of this selection that overlaps
+            // with the parent paint device.
+            return m_d->parentPaintDevice->extent().intersected(extent());
+        }
+        else {
+            return extent();
+        }
+    }
+    else {
+        if (m_d->parentPaintDevice) {
+            // By default all pixels are selected, to the size of the parent paint device.
+            return m_d->parentPaintDevice->extent();
+        }
+        else {
+            // By default all pixels are selected; no matter how many pixels are
+            // marked as deselected, there are always by-default-selected pixels
+            // around the deselected pixels.
+            return QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX);
+        }
+    }
 }
 
 QRect KisSelection::selectedExactRect() const
 {
-    if(*(dataManager()->defaultPixel()) == MIN_SELECTED || !m_d->parentPaintDevice) {
-        return exactBounds();
+    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED )
+    {
+        if (m_d->parentPaintDevice) {
+            // The selected exact rect is the area of this selection that overlaps
+            // with the parent paint device.
+            return m_d->parentPaintDevice->exactBounds().intersected(exactBounds());
+        }
+        else {
+            return exactBounds();
+        }
     }
     else {
-        return exactBounds().unite(m_d->parentPaintDevice->exactBounds());
+        if (m_d->parentPaintDevice) {
+            // By default all pixels are selected, to the size of the parent paint device.
+            return m_d->parentPaintDevice->exactBounds();
+        }
+        else {
+            // By default all pixels are selected; no matter how many pixels are
+            // marked as deselected, there are always by-default-selected pixels
+            // around the deselected pixels.
+            return QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX);
+        }
     }
 }
 

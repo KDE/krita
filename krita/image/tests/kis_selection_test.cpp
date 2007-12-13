@@ -98,6 +98,7 @@ void KisSelectionTest::testInvertSelection()
     QCOMPARE( pixelSelection->selected( 512, 512 ), MIN_SELECTED );
 
     pixelSelection->invert();
+    
 
     QCOMPARE( pixelSelection->selected(100,100), MAX_SELECTED);
     QCOMPARE( pixelSelection->selected(22,22), MIN_SELECTED);
@@ -107,6 +108,9 @@ void KisSelectionTest::testInvertSelection()
     // XXX: This should happen automatically
     selection->updateProjection();
     selection->convertToQImage(0, 0, 0, 100, 100).save("zzz.png");
+
+    QCOMPARE( selection->selectedExactRect(), QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX));
+    QCOMPARE( selection->selectedRect(), QRect(qint32_MIN, qint32_MIN, qint32_MAX, qint32_MAX));
     
     QCOMPARE( selection->selected(100,100), MAX_SELECTED);
     QCOMPARE( selection->selected(22,22), MIN_SELECTED);

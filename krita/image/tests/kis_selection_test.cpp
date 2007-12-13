@@ -25,6 +25,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_datamanager.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
@@ -54,7 +55,6 @@ void KisSelectionTest::testSelectionComponents()
 
 void KisSelectionTest::testSelectionActions()
 {
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "tmp");
     KisPixelSelectionSP pixelSelection = new KisPixelSelection();
 
     KisSelectionSP selection = new KisSelection();
@@ -64,10 +64,11 @@ void KisSelectionTest::testSelectionActions()
 
     pixelSelection->select(QRect(0,0,20,20));
 
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
+    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
     tmpSel->select(QRect(10,0,20,20));
 
     pixelSelection->addSelection(tmpSel);
+    QCOMPARE( pixelSelection->selectedExactRect(), QRect( 0, 0, 30, 20 ) );
     selection->updateProjection();
     QCOMPARE( selection->selectedExactRect(), QRect( 0, 0, 30, 20 ) );
 
@@ -89,12 +90,6 @@ void KisSelectionTest::testSelectionActions()
 
 void KisSelectionTest::testInvertSelection()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs, "tmp");
-    quint8* pixel = cs->allocPixelBuffer( 1 );
-    cs->fromQColor( Qt::white, pixel );
-    dev->fill( 0, 0, 512, 512, pixel);
-
     KisSelectionSP selection = new KisSelection();
     KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
     pixelSelection->select(QRect(20,20,20,20));
@@ -108,13 +103,17 @@ void KisSelectionTest::testInvertSelection()
     QCOMPARE( pixelSelection->selected(22,22), MIN_SELECTED);
     QCOMPARE( pixelSelection->selected( 0, 0 ), MAX_SELECTED );
     QCOMPARE( pixelSelection->selected( 512, 512 ), MAX_SELECTED );
-
+    pixelSelection->convertToQImage(0, 0, 0, 100, 100).save("yyy.png");
     // XXX: This should happen automatically
     selection->updateProjection();
-
+    selection->convertToQImage(0, 0, 0, 100, 100).save("zzz.png");
+    
     QCOMPARE( selection->selected(100,100), MAX_SELECTED);
     QCOMPARE( selection->selected(22,22), MIN_SELECTED);
     QCOMPARE( selection->selected(10,10), MAX_SELECTED);
+    QCOMPARE( selection->selected( 0, 0 ), MAX_SELECTED );
+    QCOMPARE( selection->selected( 512, 512 ), MAX_SELECTED );
+
 }
 
 void KisSelectionTest::testUpdateSelectionProjection()
@@ -130,7 +129,6 @@ void KisSelectionTest::testUpdateSelectionProjection()
     gc.end();
 
     QVERIFY(selection->pixelSelection()->selectedExactRect() == QRect(0, 0, 100, 100) );
-    QVERIFY(selection->selectedExactRect().isNull() );
     selection->updateProjection();
     QCOMPARE(selection->pixelSelection()->selectedExactRect(), QRect( 0, 0, 100, 100 ) );
     QCOMPARE(selection->selectedExactRect(), QRect( 0, 0, 100, 100 ) );
@@ -142,7 +140,6 @@ void KisSelectionTest::testUpdatePixelSelection()
     KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
     pSel->select(QRect(0, 0, 348, 212));
     QVERIFY(selection->pixelSelection()->selectedExactRect() == QRect(0, 0, 348, 212) );
-    QVERIFY(selection->selectedExactRect().isNull() );
     selection->updateProjection( QRect(0, 0, 348, 212) );
     for ( int i = 0; i < 212; ++i ) {
         for ( int j = 0; j < 348; ++j ) {
@@ -150,10 +147,6 @@ void KisSelectionTest::testUpdatePixelSelection()
         }
     }
     
-}
-
-void KisSelectionTest::testSelectionExtent()
-{
 }
 
 QTEST_KDEMAIN(KisSelectionTest, NoGUI);

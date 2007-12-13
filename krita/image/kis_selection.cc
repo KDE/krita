@@ -45,6 +45,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
+#include "kis_datamanager.h"
 
 struct KisSelection::Private {
     KisPaintDeviceWSP parentPaintDevice;
@@ -88,6 +89,9 @@ KisSelection::KisSelection( KisPaintDeviceSP parent, KisMaskSP mask )
     gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
     gc.bitBlt( extent.topLeft(), mask->selection(), extent );
     gc.end();
+
+    // Share the data manager with the pixel selection until we get an additional selection component
+    m_datamanager = m_d->pixelSelection->dataManager();
 }
 
 KisSelection::KisSelection()
@@ -140,6 +144,7 @@ void KisSelection::clear()
 
 void KisSelection::clear(const QRect& r)
 {
+    
     KisFillPainter painter(KisPaintDeviceSP(this));
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), *(dataManager()->defaultPixel()));
@@ -291,7 +296,10 @@ KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
             pixelSelection = new KisPixelSelection();
         setPixelSelection( pixelSelection );
     }
-
+    // Share the datamanager unless there's a shape selection
+    if (!m_d->hasShapeSelection) {
+        m_datamanager = m_d->pixelSelection->dataManager();
+    }
     return m_d->pixelSelection;
 }
 
@@ -299,29 +307,41 @@ void KisSelection::setPixelSelection(KisPixelSelectionSP pixelSelection)
 {
      m_d->pixelSelection = pixelSelection;
      m_d->hasPixelSelection = true;
+    // Share the datamanager unless there's a shape selection
+    if (!m_d->hasShapeSelection) {
+        m_datamanager = pixelSelection->dataManager();
+    }     
 }
 
 void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
 {
     m_d->shapeSelection = shapeSelection;
     m_d->hasShapeSelection = true;
+    // Unshare the data manager of the pixel selection
+    if (m_d->hasPixelSelection && m_datamanager == m_d->pixelSelection->dataManager()) {
+        m_datamanager = new KisDataManager(1, m_d->pixelSelection->dataManager()->defaultPixel());
+    }
 }
 
 void KisSelection::updateProjection()
 {
+    // if we share the datamanager with the pixel selection, no updates are necessary
+    if (!m_d->hasShapeSelection) return;
+    
     clear();
     if(m_d->hasPixelSelection) {
          quint8 defPixel = *(m_d->pixelSelection->dataManager()->defaultPixel());
          dataManager()->setDefaultPixel(&defPixel);
          m_d->pixelSelection->renderToProjection(this);
     }
-    if(m_d->hasShapeSelection) {
-        m_d->shapeSelection->renderToProjection(this);
-    }
+    m_d->shapeSelection->renderToProjection(this);
 }
 
 void KisSelection::updateProjection(const QRect& r)
 {
+    // if we share the datamanager with the pixel selection, no updates are necessary
+    if (!m_d->hasShapeSelection) return;
+    
     clear(r);
     if(m_d->hasPixelSelection) {
          quint8 defPixel = *(m_d->pixelSelection->dataManager()->defaultPixel());
@@ -329,7 +349,5 @@ void KisSelection::updateProjection(const QRect& r)
 
         m_d->pixelSelection->renderToProjection(this, r);
     }
-    if(m_d->hasShapeSelection) {
-        m_d->shapeSelection->renderToProjection(this, r);
-    }
+    m_d->shapeSelection->renderToProjection(this, r);
 }

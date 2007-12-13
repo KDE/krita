@@ -276,12 +276,12 @@ bool KisSelection::hasShapeSelection() const
     return m_d->hasShapeSelection;
 }
 
-KisPixelSelectionSP KisSelection::pixelSelection()
+KisPixelSelectionSP KisSelection::pixelSelection() const
 {
     return m_d->pixelSelection;
 }
 
-KisSelectionComponent* KisSelection::shapeSelection()
+KisSelectionComponent* KisSelection::shapeSelection() const
 {
    return m_d->shapeSelection;
 }

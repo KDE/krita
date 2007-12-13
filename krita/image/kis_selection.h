@@ -175,13 +175,13 @@ public:
      * return the pixel selection component of this selection or zero
      * if hasPixelSelection() returns false.
      */
-    KisPixelSelectionSP pixelSelection();
+    KisPixelSelectionSP pixelSelection() const;
 
     /**
      * return the vector selection component of this selection or zero
      * if hasShapeSelection() returns false.
      */
-    KisSelectionComponent* shapeSelection();
+    KisSelectionComponent* shapeSelection() const;
     
     /**
      * Return the pixel selection associated with this selection or

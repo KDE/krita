@@ -58,7 +58,7 @@ void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device
     v1 /= v1(2);
     pa.setPoint(3, QPoint((int)v1(0), (int)v1(1)));
 
-//     kDebug(41006) << pa[0]<< pa[1]<< pa[2]<< pa[3];
+    kDebug(41006) << pa[0]<< pa[1]<< pa[2]<< pa[3];
     sources[i].boundingBox = pa;
     resultRect |= sources[i].boundingBox.boundingRect();
     sources[i].accessor = new KisRandomSubAccessorPixel( sources[i].layer->createRandomSubAccessor() );

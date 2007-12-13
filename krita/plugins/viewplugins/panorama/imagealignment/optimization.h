@@ -26,7 +26,7 @@
 #include "gmm/gmm_transposed.h"
 #include "gmm/gmm_dense_lu.h"
 
-// #define OPTIMIZATION_DEBUG_SHOW_ITERATIONS
+#define OPTIMIZATION_DEBUG_SHOW_ITERATIONS
 
 // Declaration
 namespace Optimization {
@@ -385,7 +385,10 @@ namespace Optimization {
           lambda *= nu;
         }
         if(lambda == 0.0 or lambda >= 1.0e200)
-          return previousremain;
+        {
+          lambda = lambda0;
+//           return previousremain;
+        }
   #ifdef OPTIMIZATION_DEBUG_SHOW_ITERATIONS
         std::cout << " Parameters " << parameters << endl;
   #endif

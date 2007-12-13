@@ -423,9 +423,9 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             r2 *= m_norm;
             double fx1 = func(aim, bim, cim, r1, m_xc, m_i1, m_xc);
             double fy1 = func(aim, bim, cim, r1, m_yc, m_j1, m_yc);
+            double norm_1 = 1.0 / ( h13_1 * fx1 + h23_1 * fy1 + 1.0 );
             double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
-            double norm_1 = 1.0 / ( h13_1 * fx1 + h23_1 * fy1 + 1.0 );
             double norm_2 = 1.0 / ( h13_2 * fx2 + h23_2 * fy2 + 1.0 );
             
             res_f1 = ( ( h11_1 * fx1 + h21_1 * fy1 + h31_1 ) * norm_1
@@ -460,12 +460,23 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
             r2 *= m_norm;
             // Compute the derivatives
-            double da2f1 = derivEnA(aim, bim, cim, r2, m_xc, m_i2, m_xc);
-            double db2f1 = derivEnB(aim, bim, cim, r2, m_xc, m_i2, m_xc);
-            double dc2f1 = derivEnC(aim, bim, cim, r2, m_xc, m_i2, m_xc);
-            double da2f2 = derivEnA(aim, bim, cim, r2, m_yc, m_j2, m_yc);
-            double db2f2 = derivEnB(aim, bim, cim, r2, m_yc, m_j2, m_yc);
-            double dc2f2 = derivEnC(aim, bim, cim, r2, m_yc, m_j2, m_yc);
+            // Image 1
+            double da2f1_1 = derivEnA(aim, bim, cim, r2, m_xc, m_i1, m_xc);
+            double db2f1_1 = derivEnB(aim, bim, cim, r2, m_xc, m_i1, m_xc);
+            double dc2f1_1 = derivEnC(aim, bim, cim, r2, m_xc, m_i1, m_xc);
+            double da2f2_1 = derivEnA(aim, bim, cim, r2, m_yc, m_j1, m_yc);
+            double db2f2_1 = derivEnB(aim, bim, cim, r2, m_yc, m_j1, m_yc);
+            double dc2f2_1 = derivEnC(aim, bim, cim, r2, m_yc, m_j1, m_yc);
+            double fx1 = func(aim, bim, cim, r1, m_xc, m_i1, m_xc);
+            double fy1 = func(aim, bim, cim, r1, m_yc, m_j1, m_yc);
+            double norm_1 = 1.0 / ( h13_1 * fx1 + h23_1 * fy1 + 1.0 );
+            // Image 2
+            double da2f1_2 = derivEnA(aim, bim, cim, r2, m_xc, m_i2, m_xc);
+            double db2f1_2 = derivEnB(aim, bim, cim, r2, m_xc, m_i2, m_xc);
+            double dc2f1_2 = derivEnC(aim, bim, cim, r2, m_xc, m_i2, m_xc);
+            double da2f2_2 = derivEnA(aim, bim, cim, r2, m_yc, m_j2, m_yc);
+            double db2f2_2 = derivEnB(aim, bim, cim, r2, m_yc, m_j2, m_yc);
+            double dc2f2_2 = derivEnC(aim, bim, cim, r2, m_yc, m_j2, m_yc);
             double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
             double norm_2 = 1.0 / ( h13_2 * fx2 + h23_2 * fy2 + 1.0 );
@@ -476,29 +487,56 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             
             // Compute the jacobian
             // derivative of the first function
-            jt(pos, INDX_a) = derivEnA(aim, bim, cim, r1, m_xc, m_i1, m_xc) - (da2f1* h11_2 + da2f2 * h21_2) * norm_2;
-            jt(pos, INDX_b) = derivEnB(aim, bim, cim, r1, m_xc, m_i1, m_xc) - (db2f1* h11_2 + db2f2 * h21_2) * norm_2;
-            jt(pos, INDX_c) = derivEnC(aim, bim, cim, r1, m_xc, m_i1, m_xc) - (dc2f1* h11_2 + dc2f2 * h21_2) * norm_2;
-            jt(pos, INDX_h11_2) = -(fx2)*norm_2; // dh11
-            jt(pos, INDX_h21_2) = -(fy2)*norm_2; // dh21
-            jt(pos, INDX_h31_2) = -norm_2; // dh31
-            jt(pos, INDX_h12_2) = 0; // dh12
-            jt(pos, INDX_h22_2) = 0; // dh22
-            jt(pos, INDX_h32_2) = 0; // dh32
-            jt(pos, INDX_h13_2) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
-            jt(pos, INDX_h23_2) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+            jt(pos, m_idx[ INDX_a ]) = (da2f1_1 * h11_2 + da2f2_1 * h21_1) * norm_1 - (da2f1_2 * h11_2 + da2f2_2 * h21_2) * norm_2;
+            jt(pos, m_idx[ INDX_b ]) = (db2f1_1 * h11_2 + db2f2_1 * h21_1) * norm_1 - (db2f1_2 * h11_2 + db2f2_2 * h21_2) * norm_2;
+            jt(pos, m_idx[ INDX_c ]) = (dc2f1_1 * h11_2 + dc2f2_1 * h21_1) * norm_1 - (dc2f1_2 * h11_2 + dc2f2_2 * h21_2) * norm_2;
+            // Image 1
+#if 1
+            jt(pos, m_idx[ INDX_h11_1 ]) = (fx1)*norm_1; // dh11
+            jt(pos, m_idx[ INDX_h21_1 ]) = (fy1)*norm_1; // dh21
+            jt(pos, m_idx[ INDX_h31_1 ]) = norm_2; // dh31
+            jt(pos, m_idx[ INDX_h12_1 ]) = 0; // dh12
+            jt(pos, m_idx[ INDX_h22_1 ]) = 0; // dh22
+            jt(pos, m_idx[ INDX_h32_1 ]) = 0; // dh32
+            jt(pos, m_idx[ INDX_h13_1 ]) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fx1; 
+            jt(pos, m_idx[ INDX_h23_1 ]) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fy1;
+#endif
+            // Image 2
+            jt(pos, m_idx[ INDX_h11_2 ]) = -(fx2)*norm_2; // dh11
+            jt(pos, m_idx[ INDX_h21_2 ]) = -(fy2)*norm_2; // dh21
+            jt(pos, m_idx[ INDX_h31_2 ]) = -norm_2; // dh31
+            jt(pos, m_idx[ INDX_h12_2 ]) = 0; // dh12
+            jt(pos, m_idx[ INDX_h22_2 ]) = 0; // dh22
+            jt(pos, m_idx[ INDX_h32_2 ]) = 0; // dh32
+            jt(pos, m_idx[ INDX_h13_2 ]) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos, m_idx[ INDX_h23_2 ]) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
             // derivative of the second function
-            jt(pos + 1, INDX_a) = derivEnA(aim, bim, cim, r1, m_yc, m_j1, m_yc) - (da2f1* h12_2 + da2f2 * h22_2) * norm_2;
-            jt(pos + 1, INDX_b) = derivEnB(aim, bim, cim, r1, m_yc, m_j1, m_yc) - (db2f1* h12_2 + db2f2 * h22_2) * norm_2;
-            jt(pos + 1, INDX_c) = derivEnC(aim, bim, cim, r1, m_yc, m_j1, m_yc) - (dc2f1* h12_2 + dc2f2 * h22_2) * norm_2;
-            jt(pos + 1, INDX_h11_2) = 0; // dh11
-            jt(pos + 1, INDX_h21_2) = 0; // dh21
-            jt(pos + 1, INDX_h31_2) = 0; // dh31
-            jt(pos + 1, INDX_h12_2) = -(fx2)*norm_2; // dh12
-            jt(pos + 1, INDX_h22_2) = -(fy2)*norm_2; // dh22
-            jt(pos + 1, INDX_h32_2) = -norm_2; // dh32
-            jt(pos + 1, INDX_h13_2) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
-            jt(pos + 1, INDX_h23_2) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+            jt(pos + 1, m_idx[ INDX_a ]) = (da2f1_1 * h12_1 + da2f2_1 * h22_1) * norm_1
+                    - (da2f1_2 * h12_2 + da2f2_2 * h22_2) * norm_2;
+            jt(pos + 1, m_idx[ INDX_b ]) = (db2f1_1 * h12_1 + db2f2_1 * h22_1) * norm_1
+                    - (db2f1_2 * h12_2 + db2f2_2 * h22_2) * norm_2;
+            jt(pos + 1, m_idx[ INDX_c ]) = (dc2f1_1 * h12_1 + dc2f2_1 * h22_1) * norm_1
+                    - (dc2f1_2 * h12_2 + dc2f2_2 * h22_2) * norm_2;
+            // Image 1
+#if 1
+            jt(pos + 1, m_idx[ INDX_h11_1 ]) = 0; // dh11
+            jt(pos + 1, m_idx[ INDX_h21_1 ]) = 0; // dh21
+            jt(pos + 1, m_idx[ INDX_h31_1 ]) = 0; // dh31
+            jt(pos + 1, m_idx[ INDX_h12_1 ]) = (fx1) * norm_1; // dh12
+            jt(pos + 1, m_idx[ INDX_h22_1 ]) = (fy1) * norm_1; // dh22
+            jt(pos + 1, m_idx[ INDX_h32_1 ]) = norm_1; // dh32
+            jt(pos + 1, m_idx[ INDX_h13_1 ]) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos + 1, m_idx[ INDX_h23_1 ]) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+#endif
+            // Image 2
+            jt(pos + 1, m_idx[ INDX_h11_2 ]) = 0; // dh11
+            jt(pos + 1, m_idx[ INDX_h21_2 ]) = 0; // dh21
+            jt(pos + 1, m_idx[ INDX_h31_2 ]) = 0; // dh31
+            jt(pos + 1, m_idx[ INDX_h12_2 ]) = -(fx2)*norm_2; // dh12
+            jt(pos + 1, m_idx[ INDX_h22_2 ]) = -(fy2)*norm_2; // dh22
+            jt(pos + 1, m_idx[ INDX_h32_2 ]) = -norm_2; // dh32
+            jt(pos + 1, m_idx[ INDX_h13_2 ]) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos + 1, m_idx[ INDX_h23_2 ]) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
         }
 //     private:
     public:

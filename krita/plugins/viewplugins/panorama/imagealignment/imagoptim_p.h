@@ -52,6 +52,7 @@ class PanoptimFunction {
       }
       return v;
     }
+    double pow2(double f) { return f*f; }
     gmm::row_matrix< gmm::rsvector<double> > jacobian(const std::vector<double>& parameters)
     {
       gmm::row_matrix< gmm::wsvector<double> > jt(count(), parameters.size());

@@ -423,13 +423,15 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             r2 *= m_norm;
             double fx1 = func(aim, bim, cim, r1, m_xc, m_i1, m_xc);
             double fy1 = func(aim, bim, cim, r1, m_yc, m_j1, m_yc);
-//             kDebug(41006) <<"Real r1 =" << ( (fx1- m_xc) * (fx1-m_xc) + (fy1-m_yc) * (fy1-m_yc)) * m_norm <<" fx1 =" << fx1 <<" fy1 =" << fy1 <<"" << m_i1 <<"" << m_j1;
             double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
-            double norm = 1.0 / ( h13_2 * fx2 + h23_2 * fy2 + 1.0 );
-//             kDebug(41006) <<"Real r2 =" << ( (fx2 - m_xc ) * (fx2 - m_xc) + (fy2 - m_yc) * (fy2 -m_yc)) * m_norm <<" fx2 =" << fx2 <<" fy2 =" << fy2 <<"" << m_i2 <<"" << m_j2 <<"" << ((h11 * fx2 + h21 * fy2 + h31) * norm) <<"" << ((h12 * fx2 + h22 * fy2 + h32) * norm);
-            res_f1 = (fx1 - (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm);
-            res_f2 = (fy1 - (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm);
+            double norm_1 = 1.0 / ( h13_1 * fx1 + h23_1 * fy1 + 1.0 );
+            double norm_2 = 1.0 / ( h13_2 * fx2 + h23_2 * fy2 + 1.0 );
+            
+            res_f1 = ( ( h11_1 * fx1 + h21_1 * fy1 + h31_1 ) * norm_1
+                     - ( h11_2 * fx2 + h21_2 * fy2 + h31_2 ) * norm_2 );
+            res_f2 = ( ( h12_1 * fx1 + h22_1 * fy1 + h32_1 ) * norm_1
+                     - ( h12_2 * fx2 + h22_2 * fy2 + h32_2 ) * norm_2 );
         }
         void jac(const std::vector<double>& parameters, gmm::row_matrix< gmm::wsvector<double> >& jt, int pos)
         {

@@ -68,9 +68,15 @@ void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device
   KisHLineIteratorPixel hitDevice = device->createHLineIterator(resultRect.left(), resultRect.top(), resultRect.width());
   Eigen::Vector3d vec1,vec2;
   vec1(2) = 1.0;
+  int previousReport = -1;
   for(int y = resultRect.top(); y <= resultRect.bottom(); y++)
   {
-    kDebug(41006) << ((100 * (y - resultRect.top()) ) / resultRect.height());
+    int report = ((100 * (y - resultRect.top()) ) / resultRect.height());
+    if( report != previousReport)
+    {
+        kDebug(41006) << report;
+        previousReport = report;
+    }
     while(not hitDevice.isDone())
     {
       QPoint p(hitDevice.x(), hitDevice.y());

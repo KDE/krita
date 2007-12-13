@@ -152,7 +152,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
 
         QRect dstArea;
         createPanorama(images, layer->paintDevice(), dstArea);
-
+        m_view->image()->rootLayer()->setDirty();
     }
     delete dialog;
 }

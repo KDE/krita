@@ -384,4 +384,127 @@ class HomographySameDistortionFunction : public BaseFunction {
 };
 
 
+class DoubleHomographySameDistortionFunction : public BaseFunction {
+    public:
+        enum indexes {
+            INDX_a, INDX_b, INDX_c, INDX_h11_1, INDX_h21_1, INDX_h31_1, INDX_h12_1, INDX_h22_1, INDX_h32_1, INDX_h13_1, INDX_h23_1, INDX_h11_2, INDX_h21_2, INDX_h31_2, INDX_h12_2, INDX_h22_2, INDX_h32_2, INDX_h13_2, INDX_h23_2, SIZEINDEXES
+        };
+    public:
+        DoubleHomographySameDistortionFunction(const int idx[SIZEINDEXES], double xc, double yc, double norm, double i1, double j1, double i2, double j2) :
+            m_xc(xc), m_yc(yc), m_norm(norm), m_i1(i1), m_j1(j1), m_i2(i2), m_j2(j2)
+        {
+            memcpy(m_idx, idx, SIZEINDEXES * sizeof(int));
+        }
+        void f(const std::vector<double>& parameters, double& res_f1, double& res_f2)
+        {
+            double aim = parameters[ m_idx[ INDX_a ] ];
+            double bim = parameters[ m_idx[ INDX_b ] ];
+            double cim = parameters[ m_idx[ INDX_c ] ];
+            double h11_1 = parameters[ m_idx[ INDX_h11_1 ] ];
+            double h21_1 = parameters[ m_idx[ INDX_h21_1 ] ];
+            double h31_1 = parameters[ m_idx[ INDX_h31_1 ] ];
+            double h12_1 = parameters[ m_idx[ INDX_h12_1 ] ];
+            double h22_1 = parameters[ m_idx[ INDX_h22_1 ] ];
+            double h32_1 = parameters[ m_idx[ INDX_h32_1 ] ];
+            double h13_1 = parameters[ m_idx[ INDX_h13_1 ] ];
+            double h23_1 = parameters[ m_idx[ INDX_h23_1 ] ];
+            double h11_2 = parameters[ m_idx[ INDX_h11_2 ] ];
+            double h21_2 = parameters[ m_idx[ INDX_h21_2 ] ];
+            double h31_2 = parameters[ m_idx[ INDX_h31_2 ] ];
+            double h12_2 = parameters[ m_idx[ INDX_h12_2 ] ];
+            double h22_2 = parameters[ m_idx[ INDX_h22_2 ] ];
+            double h32_2 = parameters[ m_idx[ INDX_h32_2 ] ];
+            double h13_2 = parameters[ m_idx[ INDX_h13_2 ] ];
+            double h23_2 = parameters[ m_idx[ INDX_h23_2 ] ];
+            
+            double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
+            r1 *= m_norm;
+            double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
+            r2 *= m_norm;
+            double fx1 = func(aim, bim, cim, r1, m_xc, m_i1, m_xc);
+            double fy1 = func(aim, bim, cim, r1, m_yc, m_j1, m_yc);
+//             kDebug(41006) <<"Real r1 =" << ( (fx1- m_xc) * (fx1-m_xc) + (fy1-m_yc) * (fy1-m_yc)) * m_norm <<" fx1 =" << fx1 <<" fy1 =" << fy1 <<"" << m_i1 <<"" << m_j1;
+            double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
+            double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
+            double norm = 1.0 / ( h13_2 * fx2 + h23_2 * fy2 + 1.0 );
+//             kDebug(41006) <<"Real r2 =" << ( (fx2 - m_xc ) * (fx2 - m_xc) + (fy2 - m_yc) * (fy2 -m_yc)) * m_norm <<" fx2 =" << fx2 <<" fy2 =" << fy2 <<"" << m_i2 <<"" << m_j2 <<"" << ((h11 * fx2 + h21 * fy2 + h31) * norm) <<"" << ((h12 * fx2 + h22 * fy2 + h32) * norm);
+            res_f1 = (fx1 - (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm);
+            res_f2 = (fy1 - (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm);
+        }
+        void jac(const std::vector<double>& parameters, gmm::row_matrix< gmm::wsvector<double> >& jt, int pos)
+        {
+            double aim = parameters[ m_idx[ INDX_a ] ];
+            double bim = parameters[ m_idx[ INDX_b ] ];
+            double cim = parameters[ m_idx[ INDX_c ] ];
+            double h11_1 = parameters[ m_idx[ INDX_h11_1 ] ];
+            double h21_1 = parameters[ m_idx[ INDX_h21_1 ] ];
+            double h31_1 = parameters[ m_idx[ INDX_h31_1 ] ];
+            double h12_1 = parameters[ m_idx[ INDX_h12_1 ] ];
+            double h22_1 = parameters[ m_idx[ INDX_h22_1 ] ];
+            double h32_1 = parameters[ m_idx[ INDX_h32_1 ] ];
+            double h13_1 = parameters[ m_idx[ INDX_h13_1 ] ];
+            double h23_1 = parameters[ m_idx[ INDX_h23_1 ] ];
+            double h11_2 = parameters[ m_idx[ INDX_h11_2 ] ];
+            double h21_2 = parameters[ m_idx[ INDX_h21_2 ] ];
+            double h31_2 = parameters[ m_idx[ INDX_h31_2 ] ];
+            double h12_2 = parameters[ m_idx[ INDX_h12_2 ] ];
+            double h22_2 = parameters[ m_idx[ INDX_h22_2 ] ];
+            double h32_2 = parameters[ m_idx[ INDX_h32_2 ] ];
+            double h13_2 = parameters[ m_idx[ INDX_h13_2 ] ];
+            double h23_2 = parameters[ m_idx[ INDX_h23_2 ] ];
+            
+            double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
+            r1 *= m_norm;
+            double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
+            r2 *= m_norm;
+            // Compute the derivatives
+            double da2f1 = derivEnA(aim, bim, cim, r2, m_xc, m_i2, m_xc);
+            double db2f1 = derivEnB(aim, bim, cim, r2, m_xc, m_i2, m_xc);
+            double dc2f1 = derivEnC(aim, bim, cim, r2, m_xc, m_i2, m_xc);
+            double da2f2 = derivEnA(aim, bim, cim, r2, m_yc, m_j2, m_yc);
+            double db2f2 = derivEnB(aim, bim, cim, r2, m_yc, m_j2, m_yc);
+            double dc2f2 = derivEnC(aim, bim, cim, r2, m_yc, m_j2, m_yc);
+            double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
+            double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
+            double norm_2 = 1.0 / ( h13_2 * fx2 + h23_2 * fy2 + 1.0 );
+            
+//             double norm = 1.0 / ( h13 * fx2 + h23 * fy2 + 1.0 );
+//             res_f1 = (fx1 - (h11 * fx2 + h21 * fy2 + h31) * norm);
+//             res_f2 = (fy1 - (h12 * fx2 + h22 * fy2 + h32) * norm);
+            
+            // Compute the jacobian
+            // derivative of the first function
+            jt(pos, INDX_a) = derivEnA(aim, bim, cim, r1, m_xc, m_i1, m_xc) - (da2f1* h11_2 + da2f2 * h21_2) * norm_2;
+            jt(pos, INDX_b) = derivEnB(aim, bim, cim, r1, m_xc, m_i1, m_xc) - (db2f1* h11_2 + db2f2 * h21_2) * norm_2;
+            jt(pos, INDX_c) = derivEnC(aim, bim, cim, r1, m_xc, m_i1, m_xc) - (dc2f1* h11_2 + dc2f2 * h21_2) * norm_2;
+            jt(pos, INDX_h11_2) = -(fx2)*norm_2; // dh11
+            jt(pos, INDX_h21_2) = -(fy2)*norm_2; // dh21
+            jt(pos, INDX_h31_2) = -norm_2; // dh31
+            jt(pos, INDX_h12_2) = 0; // dh12
+            jt(pos, INDX_h22_2) = 0; // dh22
+            jt(pos, INDX_h32_2) = 0; // dh32
+            jt(pos, INDX_h13_2) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos, INDX_h23_2) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+            // derivative of the second function
+            jt(pos + 1, INDX_a) = derivEnA(aim, bim, cim, r1, m_yc, m_j1, m_yc) - (da2f1* h12_2 + da2f2 * h22_2) * norm_2;
+            jt(pos + 1, INDX_b) = derivEnB(aim, bim, cim, r1, m_yc, m_j1, m_yc) - (db2f1* h12_2 + db2f2 * h22_2) * norm_2;
+            jt(pos + 1, INDX_c) = derivEnC(aim, bim, cim, r1, m_yc, m_j1, m_yc) - (dc2f1* h12_2 + dc2f2 * h22_2) * norm_2;
+            jt(pos + 1, INDX_h11_2) = 0; // dh11
+            jt(pos + 1, INDX_h21_2) = 0; // dh21
+            jt(pos + 1, INDX_h31_2) = 0; // dh31
+            jt(pos + 1, INDX_h12_2) = -(fx2)*norm_2; // dh12
+            jt(pos + 1, INDX_h22_2) = -(fy2)*norm_2; // dh22
+            jt(pos + 1, INDX_h32_2) = -norm_2; // dh32
+            jt(pos + 1, INDX_h13_2) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos + 1, INDX_h23_2) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+        }
+//     private:
+    public:
+        int m_idx[SIZEINDEXES];
+        double m_xc, m_yc, m_norm, m_epsilon;
+        double m_i1, m_j1, m_i2, m_j2;
+};
+
+
+
 #endif

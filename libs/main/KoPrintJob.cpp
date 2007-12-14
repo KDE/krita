@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-KoPrintJob::KoPrintJob(QWidget *parent)
+KoPrintJob::KoPrintJob(QObject *parent)
     : QObject(parent)
 {
 }
@@ -32,6 +32,8 @@ KoPrintJob::~KoPrintJob()
 
 void KoPrintJob::startPrinting(RemovePolicy removePolicy)
 {
+    if (removePolicy == DeleteWhenDone)
+        deleteLater();
 }
 
 #include <KoPrintJob.moc>

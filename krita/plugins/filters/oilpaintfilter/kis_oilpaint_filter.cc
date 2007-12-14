@@ -68,6 +68,7 @@ void KisOilPaintFilter::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(config);
     Q_UNUSED(progressUpdater);
 #if 0
+XXX_PORT
     if (!configuration) {
         kWarning() << "No configuration object for oilpaint filter\n";
         return;

@@ -68,6 +68,7 @@ void KisWaveletNoiseReduction::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(config);
     Q_UNUSED(progressUpdater);
 #if 0
+XXX_PORT
     float threshold;
 
     if(!config)

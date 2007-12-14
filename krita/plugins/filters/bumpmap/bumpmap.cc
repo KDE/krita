@@ -150,6 +150,7 @@ void KisFilterBumpmap::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(config);
     Q_UNUSED(progressUpdater);
 #if 0
+XXX_PORT
     if (!src) return;
     if (!dst) return;
     if (!config) return;

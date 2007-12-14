@@ -87,6 +87,7 @@ void KisFilterRandomPick::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(config);
     Q_UNUSED(progressUpdater);
 #if 0
+XXX_PORT
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 

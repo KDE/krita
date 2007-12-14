@@ -72,6 +72,7 @@ void KisRoundCornersFilter::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(progressUpdater);
     
 #if 0
+XXX_PORT
     if (!src ||
         srcTopLeft.isNull() ||
         !dst ||

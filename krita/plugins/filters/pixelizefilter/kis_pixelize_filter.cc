@@ -70,6 +70,7 @@ void KisPixelizeFilter::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(config);
     Q_UNUSED(progressUpdater);
 #if 0
+XXX_PORT
 // FIXME THIS FILTER DOESN'T WORK WELL IF SRC != DST !!!
     Q_ASSERT( src );
     Q_ASSERT( dst );

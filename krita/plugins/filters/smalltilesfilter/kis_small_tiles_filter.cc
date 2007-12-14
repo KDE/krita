@@ -90,6 +90,7 @@ void KisSmallTilesFilter::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(config);
     Q_UNUSED(progressUpdater);
 #if 0
+XXX_PORT
         //read the filter configuration values from the KisFilterConfiguration object
         quint32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();
 

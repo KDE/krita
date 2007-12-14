@@ -90,6 +90,7 @@ void KisRainDropsFilter::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(progressUpdater);
     
 #if 0
+XXX_PORT
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 DropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
     quint32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();

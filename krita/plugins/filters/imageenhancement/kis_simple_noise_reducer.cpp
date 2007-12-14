@@ -76,6 +76,7 @@ void KisSimpleNoiseReducer::process(KisFilterConstProcessingInformation src,
     Q_UNUSED(progressUpdater);
     
 #if 0
+XXX_PORT
     int threshold, windowsize;
     if(config ==0)
     {

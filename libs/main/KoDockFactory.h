@@ -40,7 +40,7 @@ public:
         DockBottom, ///< Below the central widget
         DockRight,  ///< Right of the centra widget
         DockLeft,   ///< Left of the centra widget
-        DockMinimized,  ///< Not docked, but reachable via the menu
+        DockMinimized  ///< Not docked, but reachable via the menu
     };
 
     KoDockFactory() {}

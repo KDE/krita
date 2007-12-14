@@ -76,7 +76,7 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 
     selection()->updateProjection(rc);
 
-    KisFilterConstantProcessingInformation src( projection,  rc.topLeft(), selection() );
+    KisFilterConstProcessingInformation src( projection,  rc.topLeft(), selection() );
     KisFilterProcessingInformation dst( projection, rc.topLeft(), selection() );
 
     KisFilterSP filter = KisFilterRegistry::instance()->value( m_d->filterConfig->name() );

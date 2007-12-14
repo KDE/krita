@@ -96,7 +96,7 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisSobelFilter::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* configuration,

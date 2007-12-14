@@ -77,7 +77,7 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void KisEmbossFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

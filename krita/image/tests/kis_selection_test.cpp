@@ -31,6 +31,7 @@
 #include "kis_fill_painter.h"
 #include "kis_mask.h"
 #include "kis_transparency_mask.h"
+#include "testutil.h"
 
 void KisSelectionTest::testSelectionComponents()
 {
@@ -151,6 +152,22 @@ void KisSelectionTest::testUpdatePixelSelection()
         }
     }
     
+}
+
+void KisSelectionTest::testCopy()
+{
+    KisSelectionSP sel = new KisSelection();
+    sel->getOrCreatePixelSelection()->select(QRect(10, 10, 200, 200), 128);
+    KisSelectionSP sel2 = new KisSelection(*sel.data());
+    QCOMPARE(sel2->selectedExactRect(), sel->selectedExactRect());
+    QPoint errpoint;
+    if (!TestUtil::comparePaintDevices(errpoint, sel, sel2)) {
+        sel2->convertToQImage(0, 0, 0, 200, 200).save("merge_visitor6.png");
+        QFAIL( QString( "Failed to copy selection, first different pixel: %1,%2 " )
+            .arg( errpoint.x() )
+            .arg( errpoint.y() )
+            .toAscii() );   
+    }
 }
 
 QTEST_KDEMAIN(KisSelectionTest, NoGUI);

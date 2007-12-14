@@ -57,7 +57,7 @@ KisFilterConfiguration* KisBlurFilter::factoryConfiguration(const KisPaintDevice
     return config;
 }
 
-void KisBlurFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisBlurFilter::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

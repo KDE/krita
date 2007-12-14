@@ -94,7 +94,7 @@ bool KisAutoContrast::workWith(const KoColorSpace* cs) const
     return (cs->profile() != 0);
 }
 
-void KisAutoContrast::process(KisFilterConstantProcessingInformation srcInfo,
+void KisAutoContrast::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
@@ -261,7 +261,7 @@ bool KisDesaturateFilter::workWith(const KoColorSpace* cs) const
     return (cs->profile() != 0);
 }
 
-void KisDesaturateFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisDesaturateFilter::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

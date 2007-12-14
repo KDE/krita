@@ -137,7 +137,7 @@ KisFilterConfiguration* KisFilterBumpmap::factoryConfiguration(const KisPaintDev
 }
 
 
-void KisFilterBumpmap::process(KisFilterConstantProcessingInformation src,
+void KisFilterBumpmap::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

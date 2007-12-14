@@ -34,6 +34,7 @@ private slots:
     void testInvertSelection();
     void testUpdatePixelSelection();
     void testUpdateSelectionProjection();
+    void testCopy();
 };
 
 #endif

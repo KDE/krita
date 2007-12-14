@@ -37,7 +37,7 @@ KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category
 }
 
 
-void KisConvolutionFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisConvolutionFilter::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

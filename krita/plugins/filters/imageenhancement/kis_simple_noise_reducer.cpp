@@ -62,7 +62,7 @@ inline int ABS(int v)
     return v;
 }
 
-void KisSimpleNoiseReducer::process(KisFilterConstantProcessingInformation src,
+void KisSimpleNoiseReducer::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

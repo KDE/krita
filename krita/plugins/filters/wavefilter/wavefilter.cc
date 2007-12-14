@@ -139,7 +139,7 @@ KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterWave::process(KisFilterConstantProcessingInformation srcInfo,
+void KisFilterWave::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

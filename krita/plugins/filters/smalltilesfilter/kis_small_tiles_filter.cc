@@ -77,7 +77,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::Category
     setSupportsIncrementalPainting( false );
 }
 
-void KisSmallTilesFilter::process(KisFilterConstantProcessingInformation src,
+void KisSmallTilesFilter::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

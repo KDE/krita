@@ -86,7 +86,7 @@ KisFilterConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* paren
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterNoise::process(KisFilterConstantProcessingInformation src,
+void KisFilterNoise::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

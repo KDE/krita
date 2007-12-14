@@ -54,7 +54,7 @@ KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDev
     return config;
 }
 
-void KisUnsharpFilter::process(KisFilterConstantProcessingInformation src,
+void KisUnsharpFilter::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& areaSize,
                  const KisFilterConfiguration* config,

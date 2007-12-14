@@ -184,6 +184,7 @@ void KisMergeVisitorTest::visitAdjustmentLayer()
     sel->updateProjection();
     
     KisAdjustmentLayerSP adjust = new KisAdjustmentLayer(image, "test", kfc, sel);
+    adjust->selection()->convertToQImage(0, 0, 0, original.width(), original.height()).save("1111.png");
     adjust->setDirty();
     
     // Prepare a projection
@@ -192,6 +193,7 @@ void KisMergeVisitorTest::visitAdjustmentLayer()
 
     KisMergeVisitor v( projection, original.rect() );
     adjust->accept( v );
+    adjust->projection()->convertToQImage(0, 0, 0, original.width(), original.height()).save("1.png");
 
     QImage result = projection->convertToQImage(0, 0, 0, original.width(), original.height());
     QPoint errpoint;

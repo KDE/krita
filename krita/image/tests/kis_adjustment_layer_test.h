@@ -27,7 +27,8 @@ class KisAdjustmentLayerTest : public QObject
 private slots:
 
     void testCreation();
-
+    void testSetSelection();
+    void testInverted();
 };
 
 #endif

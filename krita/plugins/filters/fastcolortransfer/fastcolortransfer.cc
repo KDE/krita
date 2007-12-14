@@ -78,7 +78,7 @@ KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const K
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisFilterFastColorTransfer::process(KisFilterConstantProcessingInformation src,
+void KisFilterFastColorTransfer::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

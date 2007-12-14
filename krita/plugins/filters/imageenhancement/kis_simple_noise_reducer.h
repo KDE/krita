@@ -31,7 +31,7 @@ public:
    ~KisSimpleNoiseReducer();
 public:
     using KisFilter::process;
-    void process(KisFilterConstantProcessingInformation src,
+    void process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

@@ -202,7 +202,7 @@ KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
-void KisPerChannelFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisPerChannelFilter::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

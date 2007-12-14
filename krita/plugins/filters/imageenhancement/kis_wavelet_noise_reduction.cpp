@@ -55,7 +55,7 @@ KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const Kis
     return config;
 }
 
-void KisWaveletNoiseReduction::process(KisFilterConstantProcessingInformation src,
+void KisWaveletNoiseReduction::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

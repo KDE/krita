@@ -39,6 +39,7 @@
 #include "kis_transaction.h"
 #include "kis_iterators_pixel.h"
 #include "kis_clone_layer.h"
+#include "kis_filter_processing_information.h"
 
 class KisMergeVisitor : public KisNodeVisitor {
 public:
@@ -190,7 +191,6 @@ public:
             KisFilterConfiguration * cfg = layer->filter();
             if (!cfg) return false;
 
-
             KisFilterSP f = KisFilterRegistry::instance()->value( cfg->name() );
             if (!f) return false;
 
@@ -198,71 +198,31 @@ public:
             m_rc = f->enlargeRect(m_rc, cfg);
 
             KisSelectionSP selection = layer->selection();
-
-            // Copy of the projection -- use the copy-on-write trick. XXX NO COPY ON WRITE YET =(
-            //KisPaintDeviceSP tmp = new KisPaintDevice(*m_projection);
-            KisPaintDeviceSP tmp((KisPaintDevice*)0);
-            KisSelectionSP sel = selection;
-
-            // If there's a selection, only keep the selected bits
-            if (!selection.isNull()) {
-                tmp = new KisPaintDevice( m_projection->colorSpace() );
-
-                KisPainter gc(tmp);
-                QRect selectedRect = selection->selectedRect();
-                selectedRect &= m_rc;
-
-                if (selectedRect.width() == 0 || selectedRect.height() == 0) // Don't even try
-                    return true;
-
-                // Don't forget that we need to take into account the extended sourcing area as well
-                //selectedRect = f->enlargeRect(selectedRect, cfg);
-
-                tmp->setX(selection->x());
-                tmp->setY(selection->y());
-
-                // Indirect painting
-                if (tempTarget) {
-                    sel = new KisSelection();
-                    sel = paintIndirect(selection.data(), sel, layer, m_rc.left(), m_rc.top(),
-                                        m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
-                }
-
-                gc.bitBlt(selectedRect.x(), selectedRect.y(), COMPOSITE_COPY, m_projection,
-                          selectedRect.x(), selectedRect.y(),
-                          selectedRect.width(), selectedRect.height());
-                gc.end();
-            } else {
-                tmp = new KisPaintDevice(*m_projection);
-            }
+            KisPaintDeviceSP layerProjection = layer->projection();
+            selection->convertToQImage(0, 0, 0, m_rc.width(), m_rc.height()).save("e.png");
+            KisFilterConstProcessingInformation srcCfg(m_projection, m_rc.topLeft(), 0);
+            KisFilterProcessingInformation dstCfg(layerProjection, m_rc.topLeft(), 0);
 
             // Some filters will require usage of oldRawData, which is not available without
             // a transaction!
-            KisTransaction* cmd = new KisTransaction("", tmp);
+            KisTransaction* cmd = new KisTransaction("", layerProjection);
 
-            // Filter the temporary paint device -- remember, these are only the selected bits,
-            // if there was a selection.
-            f->process(tmp, m_rc, cfg);
-
+            m_projection->convertToQImage(0, 0, 0, m_rc.width(), m_rc.height()).save("q.png");
+            f->process(srcCfg, dstCfg, m_rc.size(), cfg);
+            layerProjection->convertToQImage(0, 0, 0, m_rc.width(), m_rc.height()).save("w.png");
             delete cmd;
 
             // Copy the filtered bits onto the projection
             KisPainter gc(m_projection);
             if (selection)
                 gc.bltSelection(m_rc.left(), m_rc.top(),
-                                COMPOSITE_OVER, tmp, sel, layer->opacity(),
+                                layer->compositeOp(), layerProjection, selection, layer->opacity(),
                                 m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
             else
                 gc.bitBlt(m_rc.left(), m_rc.top(),
-                          COMPOSITE_OVER, tmp, layer->opacity(),
+                          layer->compositeOp(), layerProjection, layer->opacity(),
                           m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
             gc.end();
-
-            // Copy the finished projection onto the cache
-            gc.begin(layer->cachedPaintDevice());
-            gc.bitBlt(m_rc.left(), m_rc.top(),
-                      COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
-                      m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
 
             layer->setClean( m_rc );
 

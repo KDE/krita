@@ -51,6 +51,7 @@ class KisFilterConfiguration;
             unlock();
         }
 
+ * XXX_NODE: also implement masks modifying the adj. layer's selection.
  */
 class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisIndirectPaintingSupport
 {

@@ -30,10 +30,13 @@
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_types.h"
+#include "kis_selection.h"
+#include "kis_datamanager.h"
+#include "kis_pixel_selection.h"
+#include "testutil.h"
 
 void KisAdjustmentLayerTest::testCreation()
 {
-
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
@@ -44,6 +47,39 @@ void KisAdjustmentLayerTest::testCreation()
     KisAdjustmentLayer test(image, "test", kfc, 0);
 }
 
+void KisAdjustmentLayerTest::testSetSelection()
+{
+    KisSelectionSP sel = new KisSelection();
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+    sel->getOrCreatePixelSelection()->select(QRect(10, 10, 200, 200), 128);
+    KisAdjustmentLayerSP l1 = new KisAdjustmentLayer(image, "bla", kfc, sel);
+    QCOMPARE(sel->selectedExactRect(), l1->selection()->selectedExactRect());
+}
 
-QTEST_KDEMAIN(KisAdjustmentLayerTest, GUI)
+void KisAdjustmentLayerTest::testInverted()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+    
+    KisSelectionSP sel2 = new KisSelection();
+    sel2->getOrCreatePixelSelection()->invert();
+    KisAdjustmentLayerSP l2 = new KisAdjustmentLayer(image, "bla", kfc, sel2);
+    QCOMPARE(sel2->selectedExactRect(), l2->selection()->selectedExactRect());
+
+    KisSelectionSP sel3 = new KisSelection();
+    sel3->getOrCreatePixelSelection()->select(QRect(50, -10, 800, 30), 128);
+    l2->setSelection(sel3);
+    
+}
+
+QTEST_KDEMAIN(KisAdjustmentLayerTest, GUI);
 #include "kis_adjustment_layer_test.moc"

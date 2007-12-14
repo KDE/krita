@@ -39,7 +39,7 @@ class KisScriptFilter : public QObject, public KisFilter {
 
         using KisFilter::process;
         
-        virtual void process(KisFilterConstantProcessingInformation srcInfo, KisFilterProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
+        virtual void process(KisFilterConstProcessingInformation srcInfo, KisFilterProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
     public Q_SLOTS:
         QString category() const;
     signals:

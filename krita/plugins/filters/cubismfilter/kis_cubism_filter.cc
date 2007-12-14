@@ -72,7 +72,7 @@ bool KisCubismFilter::workWith(const KoColorSpace* /*cs*/) const
 }
 
 
-void KisCubismFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisCubismFilter::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* configuration,

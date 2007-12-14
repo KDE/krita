@@ -29,9 +29,9 @@
  * on a paint device.
  * This one have only a const paint device and holds information about the source.
  */
-class KRITAIMAGE_EXPORT KisFilterConstantProcessingInformation {
+class KRITAIMAGE_EXPORT KisFilterConstProcessingInformation {
     public:
-        KisFilterConstantProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
+        KisFilterConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
         /**
          * @return the paint device
          */
@@ -51,7 +51,7 @@ class KRITAIMAGE_EXPORT KisFilterConstantProcessingInformation {
  * on a paint device.
  * This one can have a non const paint device and holds information about the destination.
  */
-class KRITAIMAGE_EXPORT KisFilterProcessingInformation : public KisFilterConstantProcessingInformation {
+class KRITAIMAGE_EXPORT KisFilterProcessingInformation : public KisFilterConstProcessingInformation {
     public:
         KisFilterProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
         /**

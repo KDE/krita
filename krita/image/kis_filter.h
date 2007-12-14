@@ -83,7 +83,7 @@ public:
      *        when filtering. Is _empty_ when all channels need to be filtered.
      * @param config the parameters of the filter
      */
-    virtual void process(KisFilterConstantProcessingInformation src,
+    virtual void process(KisFilterConstProcessingInformation src,
                          KisFilterProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config,
@@ -93,7 +93,7 @@ public:
     /**
      * Provided for convenience when no progress reporting is needed.
      */
-    virtual void process(KisFilterConstantProcessingInformation src,
+    virtual void process(KisFilterConstProcessingInformation src,
                          KisFilterProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config

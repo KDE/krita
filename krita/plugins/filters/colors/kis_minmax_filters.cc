@@ -80,7 +80,7 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), CategoryColors, i18n("M&aximize C
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-void KisFilterMax::process(KisFilterConstantProcessingInformation srcInfo,
+void KisFilterMax::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
@@ -139,7 +139,7 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), CategoryColors, i18n("M&inimize C
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-void KisFilterMin::process(KisFilterConstantProcessingInformation srcInfo,
+void KisFilterMin::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

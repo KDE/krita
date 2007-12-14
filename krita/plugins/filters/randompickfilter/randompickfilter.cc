@@ -74,7 +74,7 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), CategoryOther, i18n
 }
 
 
-void KisFilterRandomPick::process(KisFilterConstantProcessingInformation src,
+void KisFilterRandomPick::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

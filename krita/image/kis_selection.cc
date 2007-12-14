@@ -113,10 +113,17 @@ KisSelection::KisSelection(const KisSelection& rhs)
 {
     m_d->parentPaintDevice = rhs.m_d->parentPaintDevice;
     m_d->interestedInDirtyness = false;
-    // XXX: shouldn't we also clone the selection components on copy?
-    m_d->hasPixelSelection = false;
-    m_d->hasShapeSelection = false;
-    m_d->shapeSelection = 0;
+    if (rhs.m_d->hasPixelSelection) {
+        m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection.data());
+    }
+    m_d->hasPixelSelection = rhs.m_d->hasPixelSelection;
+    m_d->hasShapeSelection = rhs.m_d->hasShapeSelection;
+    if (rhs.m_d->hasShapeSelection) {
+        m_d->shapeSelection = 0; // XXX: define clone method for selection components!
+    }
+    else {
+        m_d->shapeSelection = 0;
+    }
 
 }
 

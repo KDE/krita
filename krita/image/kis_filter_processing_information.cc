@@ -21,7 +21,7 @@
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 
-struct KisFilterConstantProcessingInformation::Private
+struct KisFilterConstProcessingInformation::Private
 {
     Private() {}
     KisPaintDeviceSP device;
@@ -29,24 +29,24 @@ struct KisFilterConstantProcessingInformation::Private
     QPoint topLeft;
 };
 
-KisFilterConstantProcessingInformation::KisFilterConstantProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : d(new Private)
+KisFilterConstProcessingInformation::KisFilterConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : d(new Private)
 {
     d->device = device;
     d->selection = selection;
     d->topLeft = topLeft;
 }
 
-const KisPaintDeviceSP KisFilterConstantProcessingInformation::paintDevice() const
+const KisPaintDeviceSP KisFilterConstProcessingInformation::paintDevice() const
 {
     return d->device;
 }
 
-const KisSelectionSP KisFilterConstantProcessingInformation::selection() const
+const KisSelectionSP KisFilterConstProcessingInformation::selection() const
 {
     return d->selection;
 }
 
-const QPoint& KisFilterConstantProcessingInformation::topLeft() const
+const QPoint& KisFilterConstProcessingInformation::topLeft() const
 {
     return d->topLeft;
 }
@@ -56,7 +56,7 @@ struct KisFilterProcessingInformation::Private
     KisPaintDeviceSP device;
 };
 
-KisFilterProcessingInformation::KisFilterProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : KisFilterConstantProcessingInformation(device, topLeft, selection), d(new Private)
+KisFilterProcessingInformation::KisFilterProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : KisFilterConstProcessingInformation(device, topLeft, selection), d(new Private)
 {
     d->device = device;
 }

@@ -35,7 +35,8 @@
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
 #include "kis_filter.h"
-
+#include "kis_pixel_selection.h"
+#include "kis_datamanager.h"
 
 class KisAdjustmentLayer::Private
 {
@@ -43,7 +44,6 @@ public:
     bool showSelection;
     KisFilterConfiguration * filterConfig;
     KisSelectionSP selection;
-    KisSelectionSP selectionProjection;
     KisPaintDeviceSP cachedPaintDevice;
 };
 
@@ -67,7 +67,6 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     m_d->filterConfig = new KisFilterConfiguration(*rhs.m_d->filterConfig);
     if (rhs.m_d->selection) {
         m_d->selection = new KisSelection( *rhs.m_d->selection.data() );
-//        m_d->selection->setParentLayer(this);
         m_d->selection->setInterestedInDirtyness(true);
     }
     m_d->cachedPaintDevice = new KisPaintDevice( *rhs.m_d->cachedPaintDevice.data() );
@@ -146,20 +145,18 @@ KisSelectionSP KisAdjustmentLayer::selection() const
 
 void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
-    m_d->selection = new KisSelection();
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-
-    KisFillPainter gc(KisPaintDeviceSP(m_d->selection.data()));
-
     if (selection) {
-        gc.bitBlt(0, 0, cs->compositeOp(COMPOSITE_COPY), KisPaintDeviceSP(selection.data()),
-                  0, 0, image()->bounds().width(), image()->bounds().height());
+        m_d->selection = new KisSelection(*selection.data());
+//         KisFillPainter gc(KisPaintDeviceSP(m_d->selection.data()));
+//         gc.bitBlt(0, 0, COMPOSITE_COPY, selection,
+//                   0, 0, image()->bounds().width(), image()->bounds().height());
+//         gc.end();
+//         selection->getOrCreatePixelSelection()->dataManager()->setDefaultPixel(selection->dataManager()->defaultPixel());
     } else {
-        gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
+        m_d->selection = new KisSelection();
+        m_d->selection->getOrCreatePixelSelection()->invert();
     }
-
-    gc.end();
-
+    m_d->selection->updateProjection();
     m_d->selection->setInterestedInDirtyness(true);
 }
 

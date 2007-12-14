@@ -57,7 +57,7 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::Cate
 
 }
 
-void KisRoundCornersFilter::process(KisFilterConstantProcessingInformation src,
+void KisRoundCornersFilter::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

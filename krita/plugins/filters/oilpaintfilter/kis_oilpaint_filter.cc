@@ -55,7 +55,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter( id(), KisFilter::CategoryArt
     
 }
 
-void KisOilPaintFilter::process(KisFilterConstantProcessingInformation src,
+void KisOilPaintFilter::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

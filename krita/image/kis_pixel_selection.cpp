@@ -67,7 +67,7 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
     , KisSelectionComponent( rhs )
     , m_d( new Private )
 {
-    m_d->parentPaintDevice = rhs.m_d->parentPaintDevice;
+    m_d->parentPaintDevice = rhs.m_d->parentPaintDevice.data();
     m_d->interestedInDirtyness = rhs.m_d->interestedInDirtyness;
 
 }

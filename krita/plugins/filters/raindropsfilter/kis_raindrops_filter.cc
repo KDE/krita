@@ -75,7 +75,7 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::CategoryAr
  */
 
 
-void KisRainDropsFilter::process(KisFilterConstantProcessingInformation src,
+void KisRainDropsFilter::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

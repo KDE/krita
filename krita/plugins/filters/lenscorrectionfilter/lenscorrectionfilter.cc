@@ -97,7 +97,7 @@ KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidg
     return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterLensCorrection::process(KisFilterConstantProcessingInformation srcInfo,
+void KisFilterLensCorrection::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

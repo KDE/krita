@@ -53,7 +53,7 @@ void KisFilterJob::run()
     KisPaintDeviceSP dst = new KisPaintDevice( m_dev->colorSpace() );
     QRect marginRect = m_rc.adjusted( -m_margin, -m_margin, m_margin, m_margin );
 
-    m_filter->process( KisFilterConstantProcessingInformation( m_dev, marginRect.topLeft()),
+    m_filter->process( KisFilterConstProcessingInformation( m_dev, marginRect.topLeft()),
                         KisFilterProcessingInformation( dst, marginRect.topLeft() ),
                         marginRect.size(),
                         m_config,

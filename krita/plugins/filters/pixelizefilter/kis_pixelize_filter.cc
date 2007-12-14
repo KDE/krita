@@ -57,7 +57,7 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::CategoryArti
     setSupportsPreview( true );
 }
 
-void KisPixelizeFilter::process(KisFilterConstantProcessingInformation src,
+void KisPixelizeFilter::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

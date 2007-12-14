@@ -37,7 +37,7 @@ KisFilterConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidge
     return new KisHSVConfigWidget(parent);
 }
 
-void KisHSVAdjustmentFilter::process(KisFilterConstantProcessingInformation srcInfo,
+void KisHSVAdjustmentFilter::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

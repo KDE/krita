@@ -169,7 +169,7 @@ KisCImgFilter::KisCImgFilter()
 }
 
 
-void KisCImgFilter::process(KisFilterConstantProcessingInformation src,
+void KisCImgFilter::process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,

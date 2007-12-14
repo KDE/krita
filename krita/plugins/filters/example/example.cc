@@ -72,7 +72,7 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), CategoryAdjust, i18n("&Inve
     setSupportsIncrementalPainting(false);
 }
 
-void KisFilterInvert::process(KisFilterConstantProcessingInformation srcInfo,
+void KisFilterInvert::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

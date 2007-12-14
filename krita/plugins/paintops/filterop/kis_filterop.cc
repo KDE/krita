@@ -211,7 +211,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 #endif
 
     // Filter the paint device
-    filter->process( KisFilterConstantProcessingInformation( source(), QPoint(x,y)), KisFilterProcessingInformation(tmpDev, QPoint(0,0) ), QSize(maskWidth, maskHeight), m_settings->filterConfig());
+    filter->process( KisFilterConstProcessingInformation( source(), QPoint(x,y)), KisFilterProcessingInformation(tmpDev, QPoint(0,0) ), QSize(maskWidth, maskHeight), m_settings->filterConfig());
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 

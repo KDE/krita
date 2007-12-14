@@ -56,7 +56,7 @@ KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPai
     return config;
 }
 
-void KisFilterColorToAlpha::process(KisFilterConstantProcessingInformation srcInfo,
+void KisFilterColorToAlpha::process(KisFilterConstProcessingInformation srcInfo,
                  KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,

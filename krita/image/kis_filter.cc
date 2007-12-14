@@ -109,7 +109,7 @@ QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const 
     return rect;
 }
 
-void KisFilter::process(KisFilterConstantProcessingInformation src,
+void KisFilter::process(KisFilterConstProcessingInformation src,
                          KisFilterProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config) const

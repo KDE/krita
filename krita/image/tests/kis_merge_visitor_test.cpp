@@ -44,16 +44,17 @@
 
 void KisMergeVisitorTest::initTestCase()
 {
+    
+}
+
+void KisMergeVisitorTest::testMergePreview()
+{
     original = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
     colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
     image->lock(); // We don't want the automatic recomposition to kick in
     
-}
-
-void KisMergeVisitorTest::testMergePreview()
-{
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
     layer->paintDevice()->convertFromQImage( original, 0, 0, 0  );
 
@@ -87,6 +88,12 @@ void KisMergeVisitorTest::testMergePreview()
 }
 void KisMergeVisitorTest::testMergePreviewTwice()
 {
+    original = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
+    image->lock(); // We don't want the automatic recomposition to kick in
+
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
     layer->paintDevice()->convertFromQImage( original, 0, 0, 0  );
 
@@ -120,6 +127,12 @@ void KisMergeVisitorTest::testMergePreviewTwice()
 
 void KisMergeVisitorTest::visitPaintLayer()
 {
+    original = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
+    image->lock(); // We don't want the automatic recomposition to kick in
+
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
     layer->paintDevice()->convertFromQImage( original, 0, 0, 0  );
     KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
@@ -138,7 +151,12 @@ void KisMergeVisitorTest::visitPaintLayer()
 
 void KisMergeVisitorTest::visitGroupLayerWithOnlyPaintLayers()
 {
-    
+    original = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
+    image->lock(); // We don't want the automatic recomposition to kick in
+
     KisPaintLayerSP layer1 = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
     layer1->paintDevice()->convertFromQImage( original, 0, 0, 0  );
     layer1->setCompositeOp(colorSpace->compositeOp(COMPOSITE_OVER));
@@ -150,7 +168,7 @@ void KisMergeVisitorTest::visitGroupLayerWithOnlyPaintLayers()
     gc.end();
     layer2->setCompositeOp(colorSpace->compositeOp(COMPOSITE_OVER));
 
-    KisGroupLayerSP group = new KisGroupLayer(image, "test", OPACITY_OPAQUE);
+    KisGroupLayerSP group = new KisGroupLayer(image, "group_a", OPACITY_OPAQUE);
     image->addNode(group.data());
     image->addNode(layer1.data(), group.data());
     image->addNode(layer2.data(), group.data(), layer1.data());
@@ -173,10 +191,62 @@ void KisMergeVisitorTest::visitGroupLayerWithOnlyPaintLayers()
 
 void KisMergeVisitorTest::visitGroupLayerWithAnAdjustmentLayer()
 {
+    original = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
+    image->lock(); // We don't want the automatic recomposition to kick in
+
+    KisPaintLayerSP layer1 = new KisPaintLayer(image, "paint 1", OPACITY_OPAQUE);
+    layer1->paintDevice()->convertFromQImage( original, 0, 0, 0  );
+    layer1->setCompositeOp(colorSpace->compositeOp(COMPOSITE_OVER));
+    
+    KisPaintLayerSP layer2 = new KisPaintLayer(image, "paint 2", 128);
+    KoColor c(Qt::red, colorSpace);
+    KisFillPainter gc(layer2->paintDevice());
+    gc.fillRect(QRect(100, 100, 100, 100), c);
+    gc.end();
+    layer2->setCompositeOp(colorSpace->compositeOp(COMPOSITE_OVER));
+
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisSelectionSP sel = new KisSelection();
+    sel->getOrCreatePixelSelection()->select(QRect(100, 150, 200, 200)); // Make sure everything is selected
+    sel->updateProjection();
+    
+    KisAdjustmentLayerSP adjust = new KisAdjustmentLayer(image, "adjust", kfc, sel);
+    
+    KisGroupLayerSP group = new KisGroupLayer(image, "group", OPACITY_OPAQUE);
+    
+    image->addNode(group.data());
+    image->addNode(layer1.data(), group.data());
+    image->addNode(adjust.data(), group.data(), layer1.data());
+    image->addNode(layer2.data(), group.data(), adjust.data());
+
+    layer1->setDirty(original.rect());
+    KisPaintDeviceSP projection = new KisPaintDevice(colorSpace);
+    KisMergeVisitor v( projection, original.rect() );
+    group->accept( v );
+
+    QImage result = group->projection()->convertToQImage(0, 0, 0, original.width(), original.height());
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, result, QImage(QString(FILES_DATA_DIR) + QDir::separator() + "merge_visitor_4.1.png"))) {
+        result.save("merge_visitor_4.1-res.png");
+        QFAIL( QString( "Failed to merge three layers in one group, first different pixel: %1,%2 " )
+            .arg( errpoint.x() )
+            .arg( errpoint.y() )
+            .toAscii() );    
+    }
 }
 
 void KisMergeVisitorTest::visitAdjustmentLayer()
 {
+    original = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
+    image->lock(); // We don't want the automatic recomposition to kick in
+
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     KisSelectionSP sel = new KisSelection();
@@ -184,7 +254,6 @@ void KisMergeVisitorTest::visitAdjustmentLayer()
     sel->updateProjection();
     
     KisAdjustmentLayerSP adjust = new KisAdjustmentLayer(image, "test", kfc, sel);
-    adjust->selection()->convertToQImage(0, 0, 0, original.width(), original.height()).save("1111.png");
     adjust->setDirty();
     
     // Prepare a projection
@@ -193,8 +262,7 @@ void KisMergeVisitorTest::visitAdjustmentLayer()
 
     KisMergeVisitor v( projection, original.rect() );
     adjust->accept( v );
-    adjust->projection()->convertToQImage(0, 0, 0, original.width(), original.height()).save("1.png");
-
+    
     QImage result = projection->convertToQImage(0, 0, 0, original.width(), original.height());
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, result, inverted)) {

@@ -33,6 +33,21 @@
 
 namespace TestUtil {
 
+void dumpNodeStack( KisNodeSP node, QString prefix = QString( "\t" ) ) {
+    qDebug() << node->name();
+    KisNodeSP child = node->firstChild();
+    
+    while (child) {
+        
+        if (child->childCount() > 0) {
+            dumpNodeStack(child, prefix + "\t");
+        }
+        else {
+            qDebug() << prefix << child->name();
+        }
+        child = child->nextSibling();
+    }
+}
 
 struct TestProgressBar : public KoProgressProxy
 {

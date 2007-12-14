@@ -104,15 +104,6 @@ void KisNodeTest::testCreation()
     delete node;
 }
 
-void dumpNodeStack( KisNodeSP node, QString prefix = QString( "\t" ) ) {
-    for ( uint i = 0; i < node->childCount(); ++i ) {
-        if ( node->at( i )->parent() )
-        if ( node->at( i )->childCount() > 0 ) {
-            dumpNodeStack( node->at( i ), prefix + "\t" );
-        }
-    }
-
-}
 
 void KisNodeTest::testOrdering()
 {

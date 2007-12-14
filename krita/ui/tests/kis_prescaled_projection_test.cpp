@@ -171,8 +171,8 @@ void KisPrescaledProjectionTest::testCoordinateConversionRoundTrip()
     KoZoomHandler * viewConverter = new KoZoomHandler();
     viewConverter->setResolution(120, 120);
 
-    projection.setImage( image );
     projection.setViewConverter( viewConverter );
+    projection.setImage( image );
     projection.resizePrescaledImage( QSize( 100, 100 ) );
 
     QRect viewRect = projection.viewRectFromImagePixels( QRect( 0, 0, 100, 100 ) );
@@ -207,10 +207,10 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
     layer->paintDevice()->convertFromQImage( qimage, "");
 
     KisPrescaledProjection projection;
-    projection.setImage( image );
-
     KoZoomHandler * viewConverter = new KoZoomHandler();
     projection.setViewConverter( viewConverter );
+    projection.setImage( image );
+
     // pixel-for-pixel, at 100% zoom
     viewConverter->setResolution(image->xRes(), image->yRes());
 
@@ -237,10 +237,9 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
     layer->paintDevice()->convertFromQImage( qimage, "");
 
     KisPrescaledProjection projection;
-    projection.setImage( image );
-
     KoZoomHandler * viewConverter = new KoZoomHandler();
     projection.setViewConverter( viewConverter );
+    projection.setImage( image );
 
     testProjectionScenario( projection, viewConverter, "120dpi" );
 

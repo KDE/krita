@@ -238,6 +238,7 @@ private:
     // Try to use it as much as possible, especially with constants.
     void writeString( const QString& str );
 
+    // TODO check return value!!!
     inline void writeCString( const char* cstr ) {
         device()->write( cstr, qstrlen( cstr ) );
     }

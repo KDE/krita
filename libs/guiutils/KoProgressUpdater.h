@@ -98,8 +98,8 @@ protected:
 private:
     class Private;
     Private * const d;
-    Q_PRIVATE_SLOT(d, void update());
-    Q_PRIVATE_SLOT(d, void updateUi());
+    Q_PRIVATE_SLOT(d, void update())
+    Q_PRIVATE_SLOT(d, void updateUi())
 };
 
 

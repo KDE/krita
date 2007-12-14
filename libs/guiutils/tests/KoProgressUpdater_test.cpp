@@ -283,5 +283,5 @@ void KoProgressUpdaterTest::jobDone(ThreadWeaver::Job* job)
     ++jobsdone;
 }
 
-QTEST_KDEMAIN(KoProgressUpdaterTest, GUI);
+QTEST_KDEMAIN(KoProgressUpdaterTest, GUI)
 #include "KoProgressUpdater_test.moc"

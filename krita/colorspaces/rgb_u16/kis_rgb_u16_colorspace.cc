@@ -674,7 +674,7 @@ void KisRgbU16ColorSpace::compositeErase(Q_UINT8 *dst,
             Q_INT32 maskRowStride,
             Q_INT32 rows,
             Q_INT32 cols,
-            Q_UINT16 /*opacity*/)
+            Q_UINT16 opacity)
 {
     while (rows-- > 0)
     {
@@ -695,6 +695,8 @@ void KisRgbU16ColorSpace::compositeErase(Q_UINT8 *dst,
                 }
                 mask++;
             }
+            srcAlpha = UINT16_MULT( U16_OPACITY_OPAQUE - srcAlpha, opacity);
+            srcAlpha = U16_OPACITY_OPAQUE - srcAlpha;
             d->alpha = UINT16_MULT(srcAlpha, d->alpha);
         }
 

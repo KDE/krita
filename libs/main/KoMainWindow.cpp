@@ -246,7 +246,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
 #endif
 
     d->m_exportPdf  = new QAction(i18n("Export as PDF..."), this);
-    d->m_exportPdf->setIcon(KIcon("pdf"));
+    d->m_exportPdf->setIcon(KIcon("application-pdf"));
     actionCollection()->addAction("file_export_pdf", d->m_exportPdf );
     connect(d->m_exportPdf, SIGNAL(triggered()), this, SLOT(slotPrintAndSave()));
 

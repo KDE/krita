@@ -641,7 +641,9 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
     }
 
     // apply the list-style on the block for the defined level
-    listStyle->applyStyle(block, level);
+    if (parent.attributeNS ( KoXmlNS::text, "is-list-header", "false") != "true") {
+        listStyle->applyStyle(block, level);
+    }
 
     // Remove the first char. This seems to be needed else it crashes for whatever reason :-/
     int endPosition = cursor.position();

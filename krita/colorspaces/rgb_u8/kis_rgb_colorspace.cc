@@ -1306,7 +1306,7 @@ void KisRgbColorSpace::compositeErase(Q_UINT8 *dst,
             Q_INT32 maskRowStride,
             Q_INT32 rows,
             Q_INT32 cols,
-            Q_UINT8 /*opacity*/)
+            Q_UINT8 opacity )
 {
     Q_INT32 i;
     Q_UINT8 srcAlpha;
@@ -1327,6 +1327,8 @@ void KisRgbColorSpace::compositeErase(Q_UINT8 *dst,
                     srcAlpha = UINT8_BLEND(srcAlpha, OPACITY_OPAQUE, *mask);
                 mask++;
             }
+            srcAlpha = UINT8_MULT( OPACITY_OPAQUE - srcAlpha, opacity); 
+            srcAlpha = OPACITY_OPAQUE - srcAlpha; 
             d[PIXEL_ALPHA] = UINT8_MULT(srcAlpha, d[PIXEL_ALPHA]);
         }
 

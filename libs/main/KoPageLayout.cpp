@@ -44,6 +44,11 @@ void KoPageLayout::loadOasis(const KoXmlElement &style)
     {
         width = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-width", QString() ) );
         height = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-height", QString() ) );
+        KoPageLayout standard = standardLayout();
+        if (width == 0)
+            width = standard.width;
+        if (height == 0)
+            height = standard.height;
         if (properties.attributeNS( KoXmlNS::style, "print-orientation", QString())=="portrait")
             orientation=KoPageFormat::Portrait;
         else

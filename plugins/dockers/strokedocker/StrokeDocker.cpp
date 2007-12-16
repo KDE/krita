@@ -279,8 +279,9 @@ void StrokeDocker::selectionChanged()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    if( selection->count() )
-        setStroke( selection->firstSelectedShape()->border() );
+    KoShape * shape = selection->firstSelectedShape();
+    if( shape )
+        setStroke( shape->border() );
 }
 
 void StrokeDocker::setCanvas( KoCanvasBase *canvas )

@@ -79,6 +79,20 @@ class KoGenStyle;
  *   <li>through an associated tool,
  *   <li>through a factory
  * </ul>
+ * 
+ * <h1>Shape interaction notifications</h1>
+ * We had several notification methods that allow your shape to be notified of changes in other
+ * shapes positions or rotation etc.
+ * <ol><li>The most general is KoShape::shapeChanged().<br>
+ * a virtual method that you can use to check various changed to your shape made by tools or otherwise.</li>
+ * <li>for shape hierarchies the parent may receive a notification when a child was modified.
+ *  This is done though KoShapeContainerModel::childChanged()</li>
+ * <li>any shape that is at a similar position as another shape there is collision detection.
+ * You can register your shape to be sensitive to any changes like moving or whatever to
+ * <b>other</b> shapes that intersect yours.
+ * Such changes will then be notified to your shape using the method from (1) You should call
+ * KoShape::setCollisionDetection(bool) to enable this.
+ * </ol>
  */
 class FLAKE_EXPORT KoShape
 {

@@ -15,7 +15,7 @@ target_link_libraries(kis_node_model_test  ${KDE4_KDEUI_LIBS} koguiutils komain 
 
 set(kis_image_view_converter_test_SRCS kis_image_view_converter_test.cpp )
 
-kde4_add_unit_test(KisImageViewConverterTest TESTNAME krita-image-KisImageViewConverterTest  ${kis_image_view_converter_test_SRCS})
+kde4_add_unit_test(KisImageViewConverterTest TESTNAME krita-ui-KisImageViewConverterTest  ${kis_image_view_converter_test_SRCS})
 
 target_link_libraries(KisImageViewConverterTest  ${KDE4_KDEUI_LIBS} koguiutils komain kritaui ${QT_QTTEST_LIBRARY})
 

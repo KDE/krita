@@ -79,8 +79,7 @@ void KisUnsharpFilter::process(KisFilterConstProcessingInformation src,
 //     kDebug() <<" brush size =" << size <<"" << halfSize;
     KisAutobrushShape* kas = new KisAutobrushCircleShape(brushsize, brushsize, halfSize, halfSize);
 
-    QImage mask;
-    kas->createBrush(&mask);
+    QImage mask = kas->createBrush();
 //    mask.save("testmask.png", "PNG");
 
     KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask));

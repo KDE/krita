@@ -156,8 +156,7 @@ void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* co
     // Create a painter
     KisPainter p(stamp);
     KisAutobrushCircleShape cs(1, 1, 1.0, 1.0);
-    QImage img;
-    cs.createBrush(&img);
+    QImage img = cs.createBrush();
     p.setBrush( new KisAutobrushResource(img) );
     kDebug(41006) << KisPaintOpRegistry::instance();
     kDebug(41006) << KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &p, 0);

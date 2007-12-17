@@ -245,7 +245,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 
 }
 
-QTEST_KDEMAIN(KisPrescaledProjectionTest, GUI)
+QTEST_KDEMAIN(KisPrescaledProjectionTest, GUI);
 
 #include "kis_prescaled_projection_test.moc"
 

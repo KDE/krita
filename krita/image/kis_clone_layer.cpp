@@ -138,7 +138,6 @@ KisPaintDeviceSP KisCloneLayer::projection() const
 
     }
 
-
     // XXX: if there are no effect masks but x & y are different, create a
     // kispaintdevice that shares the data manager with the original
     // and set x and y different, return that

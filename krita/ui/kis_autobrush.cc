@@ -51,9 +51,7 @@ KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& cap
     spinBoxVertical->setMinimum(0);
     connect(spinBoxVertical,SIGNAL(valueChanged(int)),this,SLOT(spinBoxVerticalChanged(int)));
 
-    m_brsh = new QImage(1, 1, QImage::Format_RGB32);
-    Q_CHECK_PTR(m_brsh);
-
+    m_brush = QImage(1, 1, QImage::Format_RGB32);
     paramChanged();
 
 
@@ -88,10 +86,10 @@ void KisAutobrush::paramChanged()
         Q_CHECK_PTR(kas);
 
     }
-    kas->createBrush(m_brsh);
+    m_brush = kas->createBrush();
 
     QPixmap p;
-    QImage pi(*m_brsh);
+    QImage pi(m_brush);
     double coeff = 1.0;
     int bPw = brushPreview->width()-3;
     if(pi.width() > bPw)

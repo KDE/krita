@@ -145,7 +145,6 @@ void KisNodeManager::createNode( const QString & nodeType, KisNodeSP parent, Kis
 void KisNodeManager::activateNode( KisNodeSP node )
 {
     Q_ASSERT( node );
-
     // XXX: Set the selection on the shape manager to the active layer
     // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
     // with the parent of the active layer.
@@ -188,7 +187,6 @@ void KisNodeManager::activateNode( KisNodeSP node )
 
 void KisNodeManager::nodesUpdated()
 {
-
     KisNodeSP node = activeNode();
     if (!node) return;
 

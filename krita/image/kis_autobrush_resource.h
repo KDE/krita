@@ -36,7 +36,7 @@ class KRITAIMAGE_EXPORT KisAutobrushShape {
          */
         KisAutobrushShape(double w, double h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv)
         { }
-        void createBrush( QImage* img);
+        QImage createBrush();
         /**
          * @return the alpha value at the position (x,y)
          */

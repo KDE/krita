@@ -44,7 +44,6 @@
 
 void KisMergeVisitorTest::initTestCase()
 {
-    
 }
 
 void KisMergeVisitorTest::testMergePreview()
@@ -286,6 +285,12 @@ void KisMergeVisitorTest::visitAdjustmentLayer()
 
 void KisMergeVisitorTest::visitCloneLayer()
 {
+    original = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    inverted = QImage( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    image = new KisImage(0, original.width(), original.height(), colorSpace, "merge test");
+    image->lock(); // We don't want the automatic recomposition to kick in
+
 }
 
     

@@ -43,8 +43,10 @@ void KisFilesTest::testFiles()
     {
         if( not sourceFileInfo.isHidden())
         {
+            qDebug() << "handling " << sourceFileInfo.fileName();
             QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png" );
-            QVERIFY2(resultFileInfo.exists(), QString( "Result file %1 not found" ).arg(resultFileInfo.fileName()).toAscii().data() );
+            QVERIFY2(resultFileInfo.exists(),
+                     QString( "Result file %1 not found" ).arg(resultFileInfo.fileName()).toAscii().data() );
             KisDoc2 doc;
             doc.import( sourceFileInfo.absoluteFilePath() );
             QVERIFY(doc.image());
@@ -64,7 +66,7 @@ void KisFilesTest::testFiles()
             QImage sourceImg(tmpFile.fileName());
             QVERIFY(resultImg.width() == sourceImg.width());
             QVERIFY(resultImg.height() == sourceImg.height());
-            QVERIFY(resultImg.numBytes() == sourceImg.numBytes());
+            QCOMPARE(resultImg.numBytes(), sourceImg.numBytes());
             if(memcmp(resultImg.bits(), sourceImg.bits(), sourceImg.numBytes()) != 0)
             {
                 for(int i = 0; i < sourceImg.numBytes(); i+=4)

@@ -106,8 +106,7 @@ void KisBlurFilter::process(KisFilterConstProcessingInformation srcInfo,
             kas = new KisAutobrushCircleShape(width, height, hFade, vFade);
             break;
     }
-    QImage mask;
-    kas->createBrush(&mask);
+    QImage mask = kas->createBrush();
 
     mask.convertToFormat(QImage::Format_Mono);
 

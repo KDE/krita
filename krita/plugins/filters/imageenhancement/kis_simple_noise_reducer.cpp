@@ -91,8 +91,7 @@ XXX_PORT
     // Compute the blur mask
     KisAutobrushShape* kas = new KisAutobrushCircleShape(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
 
-    QImage mask;
-    kas->createBrush(&mask);
+    QImage mask = kas->createBrush();
 //    mask.save("testmask.png", "PNG");
 
     KisKernelSP kernel = KisKernel::fromQImage(mask);

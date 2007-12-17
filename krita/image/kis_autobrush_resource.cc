@@ -25,19 +25,20 @@
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"
 
-void KisAutobrushShape::createBrush( QImage* img)
+QImage KisAutobrushShape::createBrush()
 {
-    *img = QImage((int)(m_w+0.5), (int)(m_h+0.5), QImage::Format_ARGB32);
-    double centerX = img->width() * 0.5;
-    double centerY = img->height() * 0.5;
+    QImage img((int)(m_w+0.5), (int)(m_h+0.5), QImage::Format_ARGB32);
+    double centerX = img.width() * 0.5;
+    double centerY = img.height() * 0.5;
     for(int j = 0; j < m_h; j++)
     {
         for(int i = 0; i < m_w; i++)
         {
             qint8 v = valueAt( i - centerX, j - centerY);
-            img->setPixel( i, j, qRgb(v,v,v));
+            img.setPixel( i, j, qRgb(v,v,v));
         }
     }
+    return img;
 }
 
 KisAutobrushCircleShape::KisAutobrushCircleShape(double w, double h, double fh, double fv)
@@ -120,9 +121,8 @@ struct KisAutobrushResource::Private {
 KisAutobrushResource::KisAutobrushResource(KisAutobrushShape* as) : KisBrush(""), d(new Private)
 {
     d->shape = as;
-    QImage* img;
-    d->shape->createBrush( img );
-    setImage(*img);
+    QImage img = d->shape->createBrush();
+    setImage(img);
     setBrushType(MASK);
 }
 

@@ -56,9 +56,7 @@ protected:
     virtual void resizeEvent ( QResizeEvent * );
 
 private:
-    // using a pointer here is wrong; QImages are implicitly shared.
-    // so this will at minimum create memory leaks, or worse create crashes due to pointing to freed data.
-    QImage* m_brsh;
+    QImage m_brush;
     bool m_linkSize;
     bool m_linkFade;
 };

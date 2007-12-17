@@ -214,10 +214,14 @@ void KisLayerBox::updateUI()
             slotSetColorSpace(m_nodeManager->activePaintDevice()->colorSpace());
         else
             slotSetColorSpace(m_image->colorSpace());
-#if 0 // XXX_NODE
-        slotSetOpacity(active->opacity() * 100.0 / 255);
-        slotSetCompositeOp(active->compositeOp());
-#endif
+        if (active->inherits("KisMask")) {
+            active = active->parent(); // We need a layer to set opacity and composite op, which masks don't have
+        }
+        if (active->inherits("KisLayer")) {
+            KisLayerSP l = qobject_cast<KisLayer*>(active.data());
+            slotSetOpacity(l->opacity() * 100.0 / 255);
+            slotSetCompositeOp(l->compositeOp());
+        }
     }
 }
 

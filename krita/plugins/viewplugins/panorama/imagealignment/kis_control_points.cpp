@@ -81,9 +81,11 @@ void KisControlPoints::addMatches( const lMatches& matches, int frameRef, int fr
         } else {
             cp.frames.append(frameRef);
             cp.positions[frameRef] = QPointF( m.ref->x(), m.ref->y());
+            kDebug() << frameRef << " " << cp.positions[frameRef];
             cp.interestPoints[frameRef] = m.ref;
             cp.frames.append(frameMatch);
             cp.positions[frameMatch] = QPointF( m.match->x(), m.match->y());
+            kDebug() << frameMatch << " " << cp.positions[frameMatch];
             cp.interestPoints[frameMatch] = m.match;
             addControlPoint( cp );
         }

@@ -42,8 +42,8 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
                 {
                     int frameRef = *it;
                     int frameMatch = *it2;
-                    QPointF ref = cp.positions[0];
-                    QPointF match = cp.positions[1];
+                    QPointF ref = cp.positions[frameRef];
+                    QPointF match = cp.positions[frameMatch];
                     kDebug() << ref << " = " << frameRef << " ========= " << frameMatch << " = " << match;
                     m_functions.push_back(_TFunction_( m_xc, m_yc, m_norm, frameRef, ref.x(), ref.y(), frameMatch, match.x(), match.y() ) );
                 }

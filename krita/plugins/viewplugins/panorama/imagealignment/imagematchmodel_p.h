@@ -19,7 +19,11 @@
 
 class ImageMatchModel {
   public:
-    inline ImageMatchModel(std::vector<KisMatch> samples, void*) : m_isValid(false), m_fitComputed(false), m_matches(samples)
+     struct Params {
+         double threshold;
+     };
+  public:
+    inline ImageMatchModel(std::vector<KisMatch> samples, Params* params) : m_isValid(false), m_fitComputed(false), m_matches(samples), m_params(params)
     {
     }
     inline static uint nbFit() {
@@ -48,7 +52,7 @@ class ImageMatchModel {
       return m_fittingErrorSum;
     }
     inline double threshold() const {
-      return 20.0;
+      return m_params->threshold;
     }
     inline double fittingError(const KisMatch& m)
     {
@@ -116,6 +120,7 @@ class ImageMatchModel {
     double m_angle;
     std::vector<KisMatch> m_matches;
     Eigen::Matrix3d m_transfo;
+    Params* m_params;
 };
 
 #endif

@@ -29,20 +29,27 @@
 #include <kis_types.h>
 #include "kis_interest_points_detector.h"
 
+class KisImageAlignmentModel;
 
 class KisImageAlignment {
     public:
         struct ImageInfo {
+            ImageInfo() : referenceFrame(0)
+            {
+                transfoToFrame.loadIdentity();
+            }
             KisPaintDeviceSP device;
             QRect rect;
             lInterestPoints points;
+            Eigen::Matrix3d transfoToFrame; ///< transfo to the frame
+            ImageInfo* referenceFrame; ///< frame reference for which the transfo is given
         };
         struct Result {
             double a,b,c; // Distortion parameters
             Eigen::Matrix3d homography; ///< homography parameters
         };
     public:
-        KisImageAlignment(KisInterestPointsDetector* );
+        KisImageAlignment(const KisImageAlignmentModel*, KisInterestPointsDetector* );
         ~KisImageAlignment();
         std::vector<Result> align(QList<ImageInfo> info);
     private:

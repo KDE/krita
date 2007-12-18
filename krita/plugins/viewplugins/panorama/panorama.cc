@@ -47,6 +47,7 @@
 #include "harris_detector.h"
 #include "kis_images_blender.h"
 #include "kis_image_alignment.h"
+#include "models/kis_image_alignment_projective_model.h"
 
 #include "ui_wdgpanoramacreation.h"
 
@@ -106,8 +107,22 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
 
 //     addImage("/home/cyrille/H0010632.JPG");
 //     addImage("/home/cyrille/H0010633.JPG");
-    addImage("/home/cyrille/0.png");
-    addImage("/home/cyrille/1.png");
+//     addImage("/home/cyrille/0.roma.png");
+//     addImage("/home/cyrille/1.roma.png");
+/*    addImage("/home/cyrille/0.roma2.png");
+    addImage("/home/cyrille/1.roma2.png");
+    addImage("/home/cyrille/2.roma2.png");
+    addImage("/home/cyrille/3.roma2.png");*/
+//     addImage("/home/cyrille/0.montreal.2.png");
+//     addImage("/home/cyrille/1.montreal.2.png");
+//     addImage("/home/cyrille/2.montreal.2.png");
+//     addImage("/home/cyrille/0.montreal.png");
+//     addImage("/home/cyrille/1.montreal.png");
+//     addImage("/home/cyrille/2.montreal.png");
+    addImage("/home/cyrille/0.graffitis.png");
+    addImage("/home/cyrille/1.graffitis.png");
+    addImage("/home/cyrille/2.graffitis.png");
+    addImage("/home/cyrille/3.graffitis.png");
 //     addImage("/home/cyrille/0.a.png");
 //     addImage("/home/cyrille/1.a.png");
 
@@ -187,11 +202,28 @@ void PanoramaPlugin::slotPreview()
 
 void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect& )
 {
-    KisImageAlignment ia( KisInterestPointsDetector::interestPointDetector());
+    KisImageAlignment ia( new KisImageAlignmentProjectiveModel, KisInterestPointsDetector::interestPointDetector());
     std::vector< KisImageAlignment::Result > p = ia.align(images);
     std::cout << "Number of results = " << p.size() << std::endl;
     // blend
     QList<KisImagesBlender::LayerSource> sources;
+    for(int i = 0; i < p.size(); i++)
+    {
+        KisImagesBlender::LayerSource layerSource;
+        layerSource.layer = images[ i ].device;
+        layerSource.a = p[ i ].a;
+        layerSource.b = p[ i ].b;
+        layerSource.c = p[ i ].c;
+        layerSource.xc1 = images[ i ].rect.width()  * 0.5;
+        layerSource.xc2 = images[ i ].rect.width()  * 0.5;
+        layerSource.yc1 = images[ i ].rect.height() * 0.5;
+        layerSource.yc2 = images[ i ].rect.height() * 0.5;
+        layerSource.norm = (4.0 / ( images[ i ].rect.width() * images[ i ].rect.width() + images[ i ].rect.height() * images[ i ].rect.height() ) );
+        layerSource.homography = p[ i ].homography;
+        layerSource.rect = images[ i ].rect;
+        sources.push_back(layerSource);
+    }
+#if 0
     // First layer
     KisImagesBlender::LayerSource firstLayer;
     firstLayer.layer = images[0].device;
@@ -220,7 +252,7 @@ void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images,
     secondLayer.homography = p[1].homography;
     secondLayer.rect = images[1].rect;
     sources.push_back(secondLayer);
-
+#endif
     KisImagesBlender::blend(sources, dstdevice);
 }
 

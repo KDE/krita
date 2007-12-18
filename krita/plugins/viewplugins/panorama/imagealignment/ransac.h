@@ -50,7 +50,7 @@ class Ransac {
       }
       for(uint i = 0; i < m_iter; i++)
       {
-        std::cout << "Iteration " << i << " out of " << m_iter << std::endl;
+//         std::cerr << "Iteration " << i << " out of " << m_iter << std::endl;
         std::vector<_Tdata_> samples;
         // Initialize a random samples list
         for (uint is = 0 ; is < _Tmodel_::nbFit() ; ) {

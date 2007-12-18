@@ -19,6 +19,8 @@
 #ifndef _PANOPTIM_FUNCTIONS_H_
 #define _PANOPTIM_FUNCTIONS_H_
 
+#include <kdebug.h>
+
 #include "gmm/gmm_iter.h"
 #include "gmm/gmm_iter_solvers.h"
 #include "gmm/gmm_matrix.h"
@@ -387,35 +389,39 @@ class HomographySameDistortionFunction : public BaseFunction {
 class DoubleHomographySameDistortionFunction : public BaseFunction {
     public:
         enum indexes {
-            INDX_a, INDX_b, INDX_c, INDX_h11_1, INDX_h21_1, INDX_h31_1, INDX_h12_1, INDX_h22_1, INDX_h32_1, INDX_h13_1, INDX_h23_1, INDX_h11_2, INDX_h21_2, INDX_h31_2, INDX_h12_2, INDX_h22_2, INDX_h32_2, INDX_h13_2, INDX_h23_2, SIZEINDEXES
+            INDX_a, INDX_b, INDX_c, SIZEINDEXES
+        };
+        enum homographyIndexes {
+            INDX_h11, INDX_h21, INDX_h31, INDX_h12, INDX_h22, INDX_h32, INDX_h13, INDX_h23, SIZEHOMOGRAPHYINDEXES
         };
     public:
-        DoubleHomographySameDistortionFunction(const int idx[SIZEINDEXES], double xc, double yc, double norm, double i1, double j1, double i2, double j2) :
-            m_xc(xc), m_yc(yc), m_norm(norm), m_i1(i1), m_j1(j1), m_i2(i2), m_j2(j2)
+        DoubleHomographySameDistortionFunction(double xc, double yc, double norm, int frame1, double i1, double j1, int frame2, double i2, double j2) :
+            m_xc(xc), m_yc(yc), m_norm(norm), m_i1(i1), m_j1(j1), m_i2(i2), m_j2(j2), m_frame1(frame1), m_frame2(frame2)
         {
-            memcpy(m_idx, idx, SIZEINDEXES * sizeof(int));
         }
         void f(const std::vector<double>& parameters, double& res_f1, double& res_f2)
         {
-            double aim = parameters[ m_idx[ INDX_a ] ];
-            double bim = parameters[ m_idx[ INDX_b ] ];
-            double cim = parameters[ m_idx[ INDX_c ] ];
-            double h11_1 = parameters[ m_idx[ INDX_h11_1 ] ];
-            double h21_1 = parameters[ m_idx[ INDX_h21_1 ] ];
-            double h31_1 = parameters[ m_idx[ INDX_h31_1 ] ];
-            double h12_1 = parameters[ m_idx[ INDX_h12_1 ] ];
-            double h22_1 = parameters[ m_idx[ INDX_h22_1 ] ];
-            double h32_1 = parameters[ m_idx[ INDX_h32_1 ] ];
-            double h13_1 = parameters[ m_idx[ INDX_h13_1 ] ];
-            double h23_1 = parameters[ m_idx[ INDX_h23_1 ] ];
-            double h11_2 = parameters[ m_idx[ INDX_h11_2 ] ];
-            double h21_2 = parameters[ m_idx[ INDX_h21_2 ] ];
-            double h31_2 = parameters[ m_idx[ INDX_h31_2 ] ];
-            double h12_2 = parameters[ m_idx[ INDX_h12_2 ] ];
-            double h22_2 = parameters[ m_idx[ INDX_h22_2 ] ];
-            double h32_2 = parameters[ m_idx[ INDX_h32_2 ] ];
-            double h13_2 = parameters[ m_idx[ INDX_h13_2 ] ];
-            double h23_2 = parameters[ m_idx[ INDX_h23_2 ] ];
+            double aim = parameters[ INDX_a ];
+            double bim = parameters[ INDX_b ];
+            double cim = parameters[ INDX_c ];
+            int frame1start = m_frame1 * SIZEHOMOGRAPHYINDEXES + SIZEINDEXES;
+            double h11_1 = parameters[ INDX_h11 + frame1start ];
+            double h21_1 = parameters[ INDX_h21 + frame1start ];
+            double h31_1 = parameters[ INDX_h31 + frame1start ];
+            double h12_1 = parameters[ INDX_h12 + frame1start ];
+            double h22_1 = parameters[ INDX_h22 + frame1start ];
+            double h32_1 = parameters[ INDX_h32 + frame1start ];
+            double h13_1 = parameters[ INDX_h13 + frame1start ];
+            double h23_1 = parameters[ INDX_h23 + frame1start ];
+            int frame2start = m_frame2 * SIZEHOMOGRAPHYINDEXES + SIZEINDEXES;
+            double h11_2 = parameters[ INDX_h11 + frame2start ];
+            double h21_2 = parameters[ INDX_h21 + frame2start ];
+            double h31_2 = parameters[ INDX_h31 + frame2start ];
+            double h12_2 = parameters[ INDX_h12 + frame2start ];
+            double h22_2 = parameters[ INDX_h22 + frame2start ];
+            double h32_2 = parameters[ INDX_h32 + frame2start ];
+            double h13_2 = parameters[ INDX_h13 + frame2start ];
+            double h23_2 = parameters[ INDX_h23 + frame2start ];
             
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
@@ -435,25 +441,27 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
         }
         void jac(const std::vector<double>& parameters, gmm::row_matrix< gmm::wsvector<double> >& jt, int pos)
         {
-            double aim = parameters[ m_idx[ INDX_a ] ];
-            double bim = parameters[ m_idx[ INDX_b ] ];
-            double cim = parameters[ m_idx[ INDX_c ] ];
-            double h11_1 = parameters[ m_idx[ INDX_h11_1 ] ];
-            double h21_1 = parameters[ m_idx[ INDX_h21_1 ] ];
-            double h31_1 = parameters[ m_idx[ INDX_h31_1 ] ];
-            double h12_1 = parameters[ m_idx[ INDX_h12_1 ] ];
-            double h22_1 = parameters[ m_idx[ INDX_h22_1 ] ];
-            double h32_1 = parameters[ m_idx[ INDX_h32_1 ] ];
-            double h13_1 = parameters[ m_idx[ INDX_h13_1 ] ];
-            double h23_1 = parameters[ m_idx[ INDX_h23_1 ] ];
-            double h11_2 = parameters[ m_idx[ INDX_h11_2 ] ];
-            double h21_2 = parameters[ m_idx[ INDX_h21_2 ] ];
-            double h31_2 = parameters[ m_idx[ INDX_h31_2 ] ];
-            double h12_2 = parameters[ m_idx[ INDX_h12_2 ] ];
-            double h22_2 = parameters[ m_idx[ INDX_h22_2 ] ];
-            double h32_2 = parameters[ m_idx[ INDX_h32_2 ] ];
-            double h13_2 = parameters[ m_idx[ INDX_h13_2 ] ];
-            double h23_2 = parameters[ m_idx[ INDX_h23_2 ] ];
+            double aim = parameters[ INDX_a ];
+            double bim = parameters[ INDX_b ];
+            double cim = parameters[ INDX_c ];
+            int frame1start = m_frame1 * SIZEHOMOGRAPHYINDEXES + SIZEINDEXES;
+            double h11_1 = parameters[ INDX_h11 + frame1start ];
+            double h21_1 = parameters[ INDX_h21 + frame1start ];
+            double h31_1 = parameters[ INDX_h31 + frame1start ];
+            double h12_1 = parameters[ INDX_h12 + frame1start ];
+            double h22_1 = parameters[ INDX_h22 + frame1start ];
+            double h32_1 = parameters[ INDX_h32 + frame1start ];
+            double h13_1 = parameters[ INDX_h13 + frame1start ];
+            double h23_1 = parameters[ INDX_h23 + frame1start ];
+            int frame2start = m_frame2 * SIZEHOMOGRAPHYINDEXES + SIZEINDEXES;
+            double h11_2 = parameters[ INDX_h11 + frame2start ];
+            double h21_2 = parameters[ INDX_h21 + frame2start ];
+            double h31_2 = parameters[ INDX_h31 + frame2start ];
+            double h12_2 = parameters[ INDX_h12 + frame2start ];
+            double h22_2 = parameters[ INDX_h22 + frame2start ];
+            double h32_2 = parameters[ INDX_h32 + frame2start ];
+            double h13_2 = parameters[ INDX_h13 + frame2start ];
+            double h23_2 = parameters[ INDX_h23 + frame2start ];
             
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
@@ -487,62 +495,62 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             
             // Compute the jacobian
             // derivative of the first function
-            jt(pos, m_idx[ INDX_a ]) = (da2f1_1 * h11_2 + da2f2_1 * h21_1) * norm_1 - (da2f1_2 * h11_2 + da2f2_2 * h21_2) * norm_2;
-            jt(pos, m_idx[ INDX_b ]) = (db2f1_1 * h11_2 + db2f2_1 * h21_1) * norm_1 - (db2f1_2 * h11_2 + db2f2_2 * h21_2) * norm_2;
-            jt(pos, m_idx[ INDX_c ]) = (dc2f1_1 * h11_2 + dc2f2_1 * h21_1) * norm_1 - (dc2f1_2 * h11_2 + dc2f2_2 * h21_2) * norm_2;
+            jt(pos, INDX_a ) = (da2f1_1 * h11_1 + da2f2_1 * h21_1) * norm_1 - (da2f1_2 * h11_2 + da2f2_2 * h21_2) * norm_2;
+            jt(pos, INDX_b ) = (db2f1_1 * h11_1 + db2f2_1 * h21_1) * norm_1 - (db2f1_2 * h11_2 + db2f2_2 * h21_2) * norm_2;
+            jt(pos, INDX_c ) = (dc2f1_1 * h11_1 + dc2f2_1 * h21_1) * norm_1 - (dc2f1_2 * h11_2 + dc2f2_2 * h21_2) * norm_2;
             // Image 1
-#if 1
-            jt(pos, m_idx[ INDX_h11_1 ]) = (fx1)*norm_1; // dh11
-            jt(pos, m_idx[ INDX_h21_1 ]) = (fy1)*norm_1; // dh21
-            jt(pos, m_idx[ INDX_h31_1 ]) = norm_2; // dh31
-            jt(pos, m_idx[ INDX_h12_1 ]) = 0; // dh12
-            jt(pos, m_idx[ INDX_h22_1 ]) = 0; // dh22
-            jt(pos, m_idx[ INDX_h32_1 ]) = 0; // dh32
-            jt(pos, m_idx[ INDX_h13_1 ]) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fx1; 
-            jt(pos, m_idx[ INDX_h23_1 ]) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fy1;
+#if 0
+            jt(pos, INDX_h11_1 ]) = (fx1)*norm_1; // dh11
+            jt(pos, INDX_h21_1 ]) = (fy1)*norm_1; // dh21
+            jt(pos, INDX_h31_1 ]) = norm_1; // dh31
+            jt(pos, INDX_h12_1 ]) = 0; // dh12
+            jt(pos, INDX_h22_1 ]) = 0; // dh22
+            jt(pos, INDX_h32_1 ]) = 0; // dh32
+            jt(pos, INDX_h13_1 ]) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fx1; 
+            jt(pos, INDX_h23_1 ]) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fy1;
 #endif
             // Image 2
-            jt(pos, m_idx[ INDX_h11_2 ]) = -(fx2)*norm_2; // dh11
-            jt(pos, m_idx[ INDX_h21_2 ]) = -(fy2)*norm_2; // dh21
-            jt(pos, m_idx[ INDX_h31_2 ]) = -norm_2; // dh31
-            jt(pos, m_idx[ INDX_h12_2 ]) = 0; // dh12
-            jt(pos, m_idx[ INDX_h22_2 ]) = 0; // dh22
-            jt(pos, m_idx[ INDX_h32_2 ]) = 0; // dh32
-            jt(pos, m_idx[ INDX_h13_2 ]) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
-            jt(pos, m_idx[ INDX_h23_2 ]) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+            jt(pos, INDX_h11 + frame2start ) = -(fx2)*norm_2; // dh11
+            jt(pos, INDX_h21 + frame2start ) = -(fy2)*norm_2; // dh21
+            jt(pos, INDX_h31 + frame2start ) = -norm_2; // dh31
+            jt(pos, INDX_h12 + frame2start ) = 0; // dh12
+            jt(pos, INDX_h22 + frame2start ) = 0; // dh22
+            jt(pos, INDX_h32 + frame2start ) = 0; // dh32
+            jt(pos, INDX_h13 + frame2start ) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos, INDX_h23 + frame2start ) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
             // derivative of the second function
-            jt(pos + 1, m_idx[ INDX_a ]) = (da2f1_1 * h12_1 + da2f2_1 * h22_1) * norm_1
+            jt(pos + 1, INDX_a ) = (da2f1_1 * h12_1 + da2f2_1 * h22_1) * norm_1
                     - (da2f1_2 * h12_2 + da2f2_2 * h22_2) * norm_2;
-            jt(pos + 1, m_idx[ INDX_b ]) = (db2f1_1 * h12_1 + db2f2_1 * h22_1) * norm_1
+            jt(pos + 1, INDX_b ) = (db2f1_1 * h12_1 + db2f2_1 * h22_1) * norm_1
                     - (db2f1_2 * h12_2 + db2f2_2 * h22_2) * norm_2;
-            jt(pos + 1, m_idx[ INDX_c ]) = (dc2f1_1 * h12_1 + dc2f2_1 * h22_1) * norm_1
+            jt(pos + 1, INDX_c ) = (dc2f1_1 * h12_1 + dc2f2_1 * h22_1) * norm_1
                     - (dc2f1_2 * h12_2 + dc2f2_2 * h22_2) * norm_2;
             // Image 1
-#if 1
-            jt(pos + 1, m_idx[ INDX_h11_1 ]) = 0; // dh11
-            jt(pos + 1, m_idx[ INDX_h21_1 ]) = 0; // dh21
-            jt(pos + 1, m_idx[ INDX_h31_1 ]) = 0; // dh31
-            jt(pos + 1, m_idx[ INDX_h12_1 ]) = (fx1) * norm_1; // dh12
-            jt(pos + 1, m_idx[ INDX_h22_1 ]) = (fy1) * norm_1; // dh22
-            jt(pos + 1, m_idx[ INDX_h32_1 ]) = norm_1; // dh32
-            jt(pos + 1, m_idx[ INDX_h13_1 ]) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
-            jt(pos + 1, m_idx[ INDX_h23_1 ]) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+#if 0
+            jt(pos + 1, INDX_h11_1 ) = 0; // dh11
+            jt(pos + 1, INDX_h21_1 ) = 0; // dh21
+            jt(pos + 1, INDX_h31_1 ) = 0; // dh31
+            jt(pos + 1, INDX_h12_1 ) = (fx1) * norm_1; // dh12
+            jt(pos + 1, INDX_h22_1 ) = (fy1) * norm_1; // dh22
+            jt(pos + 1, INDX_h32_1 ) = norm_1; // dh32
+            jt(pos + 1, INDX_h13_1 ) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_1 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos + 1, INDX_h23_1 ) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_1 * fy2; // dh23 note: (-1) * (-1) = +1
 #endif
             // Image 2
-            jt(pos + 1, m_idx[ INDX_h11_2 ]) = 0; // dh11
-            jt(pos + 1, m_idx[ INDX_h21_2 ]) = 0; // dh21
-            jt(pos + 1, m_idx[ INDX_h31_2 ]) = 0; // dh31
-            jt(pos + 1, m_idx[ INDX_h12_2 ]) = -(fx2)*norm_2; // dh12
-            jt(pos + 1, m_idx[ INDX_h22_2 ]) = -(fy2)*norm_2; // dh22
-            jt(pos + 1, m_idx[ INDX_h32_2 ]) = -norm_2; // dh32
-            jt(pos + 1, m_idx[ INDX_h13_2 ]) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
-            jt(pos + 1, m_idx[ INDX_h23_2 ]) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+            jt(pos + 1, INDX_h11 + frame2start) = 0; // dh11
+            jt(pos + 1, INDX_h21 + frame2start) = 0; // dh21
+            jt(pos + 1, INDX_h31 + frame2start) = 0; // dh31
+            jt(pos + 1, INDX_h12 + frame2start) = -(fx2)*norm_2; // dh12
+            jt(pos + 1, INDX_h22 + frame2start) = -(fy2)*norm_2; // dh22
+            jt(pos + 1, INDX_h32 + frame2start) = -norm_2; // dh32
+            jt(pos + 1, INDX_h13 + frame2start) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos + 1, INDX_h23 + frame2start) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
         }
 //     private:
     public:
-        int m_idx[SIZEINDEXES];
         double m_xc, m_yc, m_norm, m_epsilon;
         double m_i1, m_j1, m_i2, m_j2;
+        int m_frame1, m_frame2;
 };
 
 

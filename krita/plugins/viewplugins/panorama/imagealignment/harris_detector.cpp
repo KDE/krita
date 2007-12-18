@@ -36,7 +36,7 @@
 
 #define DERIVATION_SIGMA 1.0
 #define CONVOLUTION_SIGMA 2.0
-#define THRESHOLD_LAMBDA 10.0
+#define THRESHOLD_LAMBDA 0.0
 #define FEATURES_QUANTITY 1000
 
 typedef KisGenericColorSpace<float, 8> KisEightFloatColorSpace;
@@ -166,6 +166,68 @@ class HarrisPoint : public KisInterestPoint {
     private:
         KisPaintDeviceSP m_device;
         double m_intensity, m_high, m_low;
+};
+
+class HarrisPoints {
+    public:
+        HarrisPoints(int hzones, int vzones, int width, int height, int nbPoints) : m_hzones(hzones), m_vzones(vzones), m_width(width), m_height(height), m_nbPoints(nbPoints / (hzones * vzones)), m_zoneWidth(m_width / m_hzones), m_zoneHeight( m_height / m_hzones), m_zones( new lInterestPoints[ m_hzones * m_vzones ] )
+        {
+        }
+        ~HarrisPoints()
+        {
+//             delete[] m_zones; // Crashes, why ?
+        }
+        lInterestPoints points() const
+        {
+            lInterestPoints points;
+            for(int i = 0; i < m_hzones * m_vzones; ++i)
+            {
+                points += m_zones[i];
+            }
+            return points;
+        }
+        void instertPoint(HarrisPoint* hp)
+        {
+            int u = (int)(hp->x() / m_zoneWidth );
+            int v = (int)(hp->y() / m_zoneHeight );
+            lInterestPoints &zone = m_zones[ u * m_hzones + v ];
+            if(zone.empty())
+            {
+                zone.push_back( hp );
+            } else {
+                if(zone.size() >= m_nbPoints && hp->low() > static_cast<HarrisPoint*>(zone.back())->low())
+                { // remove last element, the totalNumber stay equal to FEATURES_QUANTITY
+                    zone.pop_back();
+                }
+                if(zone.size() != m_nbPoints)
+                {
+                    lInterestPoints::iterator it;
+                    if(hp->low() < static_cast<HarrisPoint*>(zone.back())->low() )
+                    {
+                        zone.push_back(hp );
+                    } else {
+                        // insert the new corner at its right place
+                        bool inserted = false;
+                        for(it = zone.begin(); it != zone.end(); it++)
+                        {
+                            if( hp->low() >= static_cast<HarrisPoint*>(*it)->low())
+                            {
+    //kDebug(41006) <<"insert point";
+                                zone.insert(it, hp);
+                                inserted = true;
+                                break;
+                            }
+                        }
+                        if (!inserted) delete hp;
+                    }
+                } else { // hp wasn't added to the list, remove it
+                    delete hp;
+                }
+            }
+        }
+    private:
+        int m_hzones, m_vzones, m_width, m_height, m_nbPoints, m_zoneWidth, m_zoneHeight;
+        lInterestPoints* m_zones;
 };
 
 lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP device, const QRect& rect)
@@ -408,6 +470,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
 //                 kDebug(41006) << vitinfoDeviceRect.x() <<"" << vitinfoDeviceRect.y() <<"" << infoValue[INFO_XX] <<"" << infoValue[INFO_YY]  <<"" << infoValue[INFO_XY] <<"" << infoValue[INFO_HIGH] <<"" << infoValue[INFO_LOW] <<"" << trace <<"" << temp <<"" << det;
             }
         }
+        HarrisPoints zones(10, 10, rect.width(), rect.height(), FEATURES_QUANTITY );
         // Detect Harris Points
         {
             int margin = 8;
@@ -438,7 +501,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                             #if 0
                             points.push_back( hp );
                             #endif
-                            #if 1
+                            #if 0
                             if(points.empty())
                             {
                                 points.push_back( hp );
@@ -473,14 +536,16 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                                 }
                             }
                             #endif
+                            #if 1
+                            zones.instertPoint( hp );
+                            #endif
                         }
                     }
                 }
                 hitinfoDevice.nextRow();
             }
         }
-        kDebug(41006) <<"Harris detector has found :" << points.size() <<" harris points";
-    
+    points = zones.points();
     kDebug(41006) <<"Harris detector has found :" << points.size() <<" harris points";
     
     delete floatCs;

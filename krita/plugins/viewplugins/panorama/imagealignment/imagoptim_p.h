@@ -21,21 +21,49 @@
 
 #include "optimization.h"
 #include "imagoptim_functions.h"
+#include "kis_control_point.h"
+#include "kis_control_points.h"
+#include "kis_image_alignment_model_p.h"
+#include "matching.h"
+
 // For each image there is four parameters to estimate : translation (2 parameters) + distortion (2 parameters)
-template<class _TFunction_, int _TParamCount_>
-class PanoptimFunction {
+template<class _TFunction_>
+class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
   public:
-    PanoptimFunction(const lMatches & m, double xc, double yc, int width, int height) : m_matches(m), m_xc(xc), m_yc(yc), m_norm(4.0 / ( width * width + height * height ) ), m_epsilon(1e-3)
+    PanoptimFunction(const KisControlPoints& cps, double xc, double yc, int width, int height) : m_xc(xc), m_yc(yc), m_norm(4.0 / ( width * width + height * height ) ), m_epsilon(1e-3)
     {
-      int indx[_TParamCount_];
-      for(int i = 0; i < _TParamCount_; i++)
-      {
-        indx[i] = i;
-      }
+        foreach(KisControlPoint cp, cps.controlPoints())
+        {
+            for(QList<int>::iterator it = cp.frames.begin(); it != cp.frames.end(); ++it)
+            {
+                QList<int>::iterator it2 = it;
+                ++it2;
+                for(; it2 != cp.frames.end(); ++it2)
+                {
+                    int frameRef = *it;
+                    int frameMatch = *it2;
+                    QPointF ref = cp.positions[0];
+                    QPointF match = cp.positions[1];
+                    kDebug() << ref << " = " << frameRef << " ========= " << frameMatch << " = " << match;
+                    m_functions.push_back(_TFunction_( m_xc, m_yc, m_norm, frameRef, ref.x(), ref.y(), frameMatch, match.x(), match.y() ) );
+                }
+            }
+            
+/*            if( cp.frames.contains(0) and cp.frames.contains(1) )
+            {
+                QPointF ref = cp.positions[0];
+                QPointF match = cp.positions[1];
+                kDebug() << ref << " =========== " << match;
+                m_functions.push_back(_TFunction_( m_xc, m_yc, m_norm, 0, ref.x(), ref.y(), 1, match.x(), match.y() ) );
+            }*/
+        }
+        kDebug() << "Nb of functions is " << m_functions.size();
+#if 0
       for(lMatches::const_iterator it = m_matches.begin(); it != m_matches.end(); ++it)
       {
         m_functions.push_back(_TFunction_(indx, m_xc, m_yc, m_norm, it->ref->x(), it->ref->y(), it->match->x(), it->match->y()));
       }
+#endif
     }
   public:
     std::vector<double> values(const std::vector<double>& parameters)
@@ -71,10 +99,9 @@ class PanoptimFunction {
     }
     inline int count()
     {
-      return 2 * m_matches.size();
+      return 2 * m_functions.size();
     }
   private:
-    const lMatches& m_matches;
     std::vector<_TFunction_> m_functions;
     double m_xc, m_yc, m_norm;
     const double m_epsilon;

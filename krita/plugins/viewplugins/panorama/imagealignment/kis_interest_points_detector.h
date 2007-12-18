@@ -26,6 +26,10 @@
 
 #include <kis_types.h>
 
+class KisInterestPoint;
+
+typedef QList<KisInterestPoint*> lInterestPoints;
+
 class KisInterestPoint {
     public:
         KisInterestPoint(double x, double y);
@@ -35,11 +39,12 @@ class KisInterestPoint {
         virtual QString toString() const = 0;
         inline double x() const { return m_x; }
         inline double y() const { return m_y; }
+        inline void appendNeighbourgh( KisInterestPoint* point) { m_neighbourghood.append(point); }
+        const lInterestPoints& neighbourghood() const { return m_neighbourghood; }
     private:
         double m_x, m_y;
+        lInterestPoints m_neighbourghood;
 };
-
-typedef std::list<KisInterestPoint*> lInterestPoints;
 
 class KisInterestPointsDetector {
     public:

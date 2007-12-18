@@ -17,16 +17,18 @@
 #ifndef _HOMOGRAPHY_IMAGE_MATCH_MODEL_P_H_
 #define _HOMOGRAPHY_IMAGE_MATCH_MODEL_P_H_
 
-struct HomographyImageMatchModelStaticParams {
-    inline HomographyImageMatchModelStaticParams(int w, int h)
-        : width(w), height(h)
-    {}
-    int width, height;
-};
 
 class HomographyImageMatchModel {
     public:
-        inline HomographyImageMatchModel(std::vector<KisMatch> samples, HomographyImageMatchModelStaticParams* params) : m_isValid(false), m_fitComputed(false), m_matches(samples), m_width(params->width), m_height(params->height)
+        struct Params {
+            inline Params(int w, int h, double thres)
+                : width(w), height(h), threshold(thres)
+            {}
+            int width, height;
+            double threshold;
+        };
+    public:
+        inline HomographyImageMatchModel(std::vector<KisMatch> samples, Params* params) : m_isValid(false), m_fitComputed(false), m_matches(samples), m_width(params->width), m_height(params->height), m_threshold(params->threshold)
         {
         }
         /**
@@ -44,11 +46,11 @@ class HomographyImageMatchModel {
         }
         inline void addData(std::vector<KisMatch>::iterator begin, std::vector<KisMatch>::iterator end)
         {
-        for(std::vector<KisMatch>::iterator it = begin; it != end; it++)
-        {
-            m_matches.push_back(*it);
-        }
-        m_fitComputed = false;
+            for(std::vector<KisMatch>::iterator it = begin; it != end; it++)
+            {
+                m_matches.push_back(*it);
+            }
+            m_fitComputed = false;
         }
         inline double fittingErrorSum() {
         if(not m_fitComputed)
@@ -58,7 +60,7 @@ class HomographyImageMatchModel {
         return m_fittingErrorSum;
         }
         inline double threshold() const {
-            return 20.0;
+            return m_threshold;
         }
         inline double fittingError(const KisMatch& m)
         {
@@ -82,7 +84,9 @@ class HomographyImageMatchModel {
     private:
         void computeFitting()
         {
-            PanoptimFunction<HomographySameDistortionFunction, HomographySameDistortionFunction::SIZEINDEXES> f( m_matches, m_width * 0.5, m_height * 0.5, m_width, m_height );
+            KisControlPoints cps(2);
+            cps.addMatches( m_matches, 0, 1);
+            PanoptimFunction<HomographySameDistortionFunction, HomographySameDistortionFunction::SIZEINDEXES> f( cps, m_width * 0.5, m_height * 0.5, m_width, m_height );
             m_parameters.resize(HomographySameDistortionFunction::SIZEINDEXES);
             m_parameters[HomographySameDistortionFunction::INDX_a] = 0.0;
             m_parameters[HomographySameDistortionFunction::INDX_b] = 0.0;
@@ -107,9 +111,10 @@ class HomographyImageMatchModel {
         bool m_isValid;
         bool m_fitComputed;
         double m_fittingErrorSum;
-        std::vector<KisMatch> m_matches;
+        lMatches m_matches;
         std::vector<double> m_parameters;
         int m_width, m_height;
+        double m_threshold;
 };
 
 #endif

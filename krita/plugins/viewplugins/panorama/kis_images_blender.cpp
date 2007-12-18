@@ -64,7 +64,7 @@ void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device
     sources[i].accessor = new KisRandomSubAccessorPixel( sources[i].layer->createRandomSubAccessor() );
     sources[i].homography.computeInverse(&sources[i].invHomography);
   }
-  kDebug(41006) << resultRect;
+  kDebug(41006) << "resultRect = " << resultRect;
   KisHLineIteratorPixel hitDevice = device->createHLineIterator(resultRect.left(), resultRect.top(), resultRect.width());
   Eigen::Vector3d vec1,vec2;
   vec1(2) = 1.0;
@@ -80,8 +80,7 @@ void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device
     while(not hitDevice.isDone())
     {
       QPoint p(hitDevice.x(), hitDevice.y());
-//       for(int i = 0; i < sources.size(); i++)
-      for(int i = 1; i >= 0; i--)
+      for(int i = 0; i < sources.size(); i++)
       {
         if(sources[i].boundingBox.contains(p))
         {

@@ -309,7 +309,10 @@ void KisLayerManager::layerOpacity(double opacity, bool final)
     if (opacity == layer->opacity()) return;
 
     if (!final)
+    {
         layer->setOpacity( static_cast<int>( opacity ) );
+        layer->setDirty();
+    }
     else
     {
         m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), static_cast<int>( opacity )));

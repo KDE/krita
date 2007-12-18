@@ -43,11 +43,13 @@ KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpaci
 void KisLayerOpacityCommand::redo()
 {
     m_layer->setOpacity(m_newOpacity);
+    m_layer->setDirty();
 }
 
 void KisLayerOpacityCommand::undo()
 {
     m_layer->setOpacity(m_oldOpacity);
+    m_layer->setDirty();
 }
 
 
@@ -63,11 +65,13 @@ KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const K
 void KisLayerCompositeOpCommand::redo()
 {
     m_layer->setCompositeOp(m_newCompositeOp);
+    m_layer->setDirty();
 }
 
 void KisLayerCompositeOpCommand::undo()
 {
     m_layer->setCompositeOp(m_oldCompositeOp);
+    m_layer->setDirty();
 }
 
 

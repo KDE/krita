@@ -358,9 +358,9 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(child.data());
 
             if (l && l->hasEffectMasks())
-                child->setCompositeOp( cop->colorSpace()->compositeOp( COMPOSITE_OVER ) );
+                child->setCompositeOp( colorSpace()->compositeOp( COMPOSITE_OVER ) );
             else
-                child->setCompositeOp( cop->colorSpace()->compositeOp( COMPOSITE_COPY ) );
+                child->setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
 
             child->accept(visitor);
             child->setCompositeOp( cop );

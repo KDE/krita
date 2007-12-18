@@ -53,8 +53,7 @@ enum ColorSpaceIndependence {
 
 /**
  * Base class of the mix color operation. It's defined by
- * sum(colors[i] * weights[i]) / 255. You access the KoConvolutionOp
- *
+ * sum(colors[i] * weights[i]) / 255. You access the KoMixColorsOp
  * of a colorspace by calling KoColorSpace::mixColorsOp.
  */
 class KoMixColorsOp {

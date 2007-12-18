@@ -36,17 +36,19 @@
 
 #include <klocale.h>
 
+#include <KoColorSpace.h>
+#include <KoChannelInfo.h>
+#include <KoSegmentGradient.h>
+
 #include "kis_brush.h"
 #include "kis_debug_areas.h"
-#include "KoSegmentGradient.h"
 #include "kis_image.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_pattern.h"
-#include "KoColorSpace.h"
 #include "kis_types.h"
-
+#include "kis_random_accessor.h"
 #include "kis_selection.h"
 #include "kis_gradient_painter.h"
 
@@ -496,8 +498,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        qint32 width,
                                        qint32 height)
 {
-    Q_UNUSED( antiAliasThreshold );
-
     if (!m_gradient) return false;
 
     GradientShapeStrategy *shapeStrategy = 0;
@@ -558,14 +558,18 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     if (m_progressUpdater) m_progressUpdater->setProgress( 0 );
 
-
- /*   if (antiAliasThreshold < 1 - DBL_EPSILON) {
+    int totalPixels = width * height;
+    if (antiAliasThreshold < 1 - DBL_EPSILON) {
         totalPixels *= 2;
-    }*/
+    }
 
     KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary device for gradient"));
 
-    KoColor color(dev->colorSpace()) ;
+    int pixelsProcessed = 0;
+
+    const KoColorSpace * colorSpace = dev->colorSpace();
+    KoColor color(colorSpace);
+    qint32 pixelSize = colorSpace->pixelSize();
     KisHLineIteratorPixel hit = dev->createHLineIterator(startx, starty, width);
     for (int y = starty; y <= endy; y++) {
 
@@ -579,8 +583,8 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
             }
 
             m_gradient->colorAt(color, t);
-            memcpy(hit.rawData(), color.data(), color.colorSpace()->pixelSize()); // TODO: might be possible to use directly the paintdevice in the KoColor and avoid that memcpy
-
+            memcpy(hit.rawData(), color.data(), pixelSize);
+            
             ++hit;
         }
         hit.nextRow();
@@ -603,127 +607,178 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         }
     }
 
-/*    if (!if (m_progressUpdater) m_progressUpdater->interrupted() && antiAliasThreshold < 1 - DBL_EPSILON) {
+    if (!m_progressUpdater || (m_progressUpdater && !m_progressUpdater->interrupted())) {
+        // XXX: Enable after debugging
+        if ( false && antiAliasThreshold < 1 - DBL_EPSILON) {
 
-        if (m_progressUpdater) m_progressUpdater->setProgressStage(i18n("Anti-aliasing gradient..."), lastProgressPercent);
-        quint8 * layerPointer = layer.bits();
-        for (int y = starty; y <= endy; y++) {
-            for (int x = startx; x <= endx; x++) {
+            QList<KoChannelInfo *> channels = colorSpace->channels();
+            KisHLineIterator iter = dev->createHLineIterator(0, 0, 0);
+            KisRandomAccessor accessor = dev->createRandomAccessor(0, 0, 0);
+            double squareRootNumColorChannels = sqrt(colorSpace->colorChannelCount());
+            
+            for (int y = starty; y <= endy; y++) {
+                for (int x = startx; x <= endx; x++) {
+        
+                    double maxDistance = 0;
+                    quint8* thisPixel = colorSpace->allocPixelBuffer(1);
+                    memcpy(thisPixel, iter.rawData(), pixelSize);
+                    quint8 thisPixelOpacity = colorSpace->alpha(thisPixel);
 
-                double maxDistance = 0;
+                    // XXX: Move the distance computation into the colorspace when it works.
+                    for (int yOffset = -1; yOffset < 2; yOffset++) {
+                        for (int xOffset = -1; xOffset < 2; xOffset++) {
 
-                quint8 redThis = layerPointer[2];
-                quint8 greenThis = layerPointer[1];
-                quint8 blueThis = layerPointer[0];
-                quint8 thisPixelOpacity = layerPointer[3];
+                            if (xOffset != 0 || yOffset != 0) {
+                                int sampleX = x + xOffset;
+                                int sampleY = y + yOffset;
 
-                for (int yOffset = -1; yOffset < 2; yOffset++) {
-                    for (int xOffset = -1; xOffset < 2; xOffset++) {
+                                if (sampleX >= startx && sampleX <= endx && sampleY >= starty && sampleY <= endy) {
+                                    uint x = sampleX - startx;
+                                    uint y = sampleY - starty;
+                                    
+                                    accessor.moveTo(x, y);
+                                    quint8 * pixel = accessor.rawData();
+                                    quint8 opacity = colorSpace->alpha(pixel);
+    
+                                    double totalDistance = 0;
+                                    
+                                    foreach(KoChannelInfo * channel, channels) {
+                                        double d = 0;
+                                        int pos = channel->pos();
+                                        if (channel->channelType() == KoChannelInfo::COLOR) {
+                                            if (channel->channelValueType() == KoChannelInfo::UINT8) {
+                                                d = ((quint8)*(pixel + pos) * opacity - (quint8)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if ( channel->channelValueType() ==  KoChannelInfo::UINT16) {
+                                                d = ((quint16)*(pixel + pos) * opacity - (quint16)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if ( channel->channelValueType() == KoChannelInfo::UINT32 ) {
+                                                d = ((quint32)*(pixel + pos) * opacity - (quint32)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+#if 0 // Check how to use the half datatype                                                    
+                                            } else if ( channel->channelValueType() == KoChannelInfo::FLOAT16 ) {
+                                                d = ((quint8)*(pixel + pos) * opacity - (quint8)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+#endif                                                    
+                                            } else if ( channel->channelValueType() == KoChannelInfo::FLOAT32 ) {
+                                                d = ((float)*(pixel + pos) * opacity - (float)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if ( channel->channelValueType() == KoChannelInfo::FLOAT64 ) {
+                                                d = ((double)*(pixel + pos) * opacity - (double)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if ( channel->channelValueType() == KoChannelInfo::INT8 ) {
+                                                d = ((qint8)*(pixel + pos) * opacity - (qint8)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if ( channel->channelValueType() == KoChannelInfo::INT16 ) {
+                                                d = ((qint16)*(pixel + pos) * opacity - (qint16)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            }
+                                            
+                                        }
+                                        totalDistance += d * d;
+                                    }
+                                    double distance = sqrt(totalDistance) / squareRootNumColorChannels;
 
-                        if (xOffset != 0 || yOffset != 0) {
-                            int sampleX = x + xOffset;
-                            int sampleY = y + yOffset;
-
-                            if (sampleX >= startx && sampleX <= endx && sampleY >= starty && sampleY <= endy) {
-                                uint x = sampleX - startx;
-                                uint y = sampleY - starty;
-                                quint8 * pixelPos = layer.bits() + (y * width * 4) + (x * 4);
-                                quint8 red = *(pixelPos +2);
-                                quint8 green = *(pixelPos + 1);
-                                quint8 blue = *pixelPos;
-                                quint8 opacity = *(pixelPos + 3);
-
-                                double dRed = (red * opacity - redThis * thisPixelOpacity) / 65535.0;
-                                double dGreen = (green * opacity - greenThis * thisPixelOpacity) / 65535.0;
-                                double dBlue = (blue * opacity - blueThis * thisPixelOpacity) / 65535.0;
-
-                                #define SQRT_3 1.7320508
-
-                                double distance =dRed * dRed + dGreen * dGreen + dBlue * dBlue;
-
-                                if (distance > maxDistance) {
-                                    maxDistance = distance;
+                                    if (distance > maxDistance) {
+                                        maxDistance = distance;
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                if (maxDistance > 3.*antiAliasThreshold*antiAliasThreshold) {
-                    const int numSamples = 4;
+                    // XXX: Move this averaging code into the colorspace
+                    if (maxDistance > 3. * antiAliasThreshold*antiAliasThreshold) {
+                        const int numSamples = 4;
+                        
+                        QVector<quint32> channelTotals(colorSpace->channelCount());
+                        for (uint i = 0; i < colorSpace->channelCount(); ++i) {
+                            channelTotals[i] = 0;
+                        }
+                        quint32 totalOpacity = 0;
 
-                    int totalRed = 0;
-                    int totalGreen = 0;
-                    int totalBlue = 0;
-                    int totalOpacity = 0;
+                        for (int ySample = 0; ySample < numSamples; ySample++) {
+                            for (int xSample = 0; xSample < numSamples; xSample++) {
 
-                    for (int ySample = 0; ySample < numSamples; ySample++) {
-                        for (int xSample = 0; xSample < numSamples; xSample++) {
+                                double sampleWidth = 1.0 / numSamples;
 
-                            double sampleWidth = 1.0 / numSamples;
+                                double sampleX = x - 0.5 + (sampleWidth / 2) + xSample * sampleWidth;
+                                double sampleY = y - 0.5 + (sampleWidth / 2) + ySample * sampleWidth;
 
-                            double sampleX = x - 0.5 + (sampleWidth / 2) + xSample * sampleWidth;
-                            double sampleY = y - 0.5 + (sampleWidth / 2) + ySample * sampleWidth;
+                                double t = shapeStrategy->valueAt(sampleX, sampleY);
+                                t = repeatStrategy->valueAt(t);
 
-                            double t = shapeStrategy->valueAt(sampleX, sampleY);
-                            t = repeatStrategy->valueAt(t);
+                                if (reverseGradient) {
+                                    t = 1 - t;
+                                }
 
-                            if (reverseGradient) {
-                                t = 1 - t;
+                                KoColor color;
+                                m_gradient->colorAt(color, t);
+                                
+                                foreach(KoChannelInfo * channel, channels) {
+
+                                    int pos = channel->pos();
+                                    if (channel->channelType() == KoChannelInfo::COLOR) {
+                                        if (channel->channelValueType() == KoChannelInfo::UINT8) {
+                                            channelTotals[pos] += (quint8)*(color.data() + pos);
+                                        } else if ( channel->channelValueType() ==  KoChannelInfo::UINT16) {
+                                            channelTotals[pos] += (quint16)*(color.data() + pos);
+                                        } else if ( channel->channelValueType() == KoChannelInfo::UINT32 ) {
+                                            channelTotals[pos] += (quint32)*(color.data() + pos);
+#if 0 // Check how to use the half datatype
+                                        } else if ( channel->channelValueType() == KoChannelInfo::FLOAT16 ) {
+                                            channelTotals[pos] += (quint8)(color.data() + pos);
+#endif
+                                        } else if ( channel->channelValueType() == KoChannelInfo::FLOAT32 ) {
+                                            channelTotals[pos] += (float)*(color.data() + pos);
+                                        } else if ( channel->channelValueType() == KoChannelInfo::FLOAT64 ) {
+                                            channelTotals[pos] += (double)*(color.data() + pos);
+                                        } else if ( channel->channelValueType() == KoChannelInfo::INT8 ) {
+                                            channelTotals[pos] += (qint8)*(color.data() + pos);
+                                        } else if ( channel->channelValueType() == KoChannelInfo::INT16 ) {
+                                            channelTotals[pos] += (qint16)*(color.data() + pos);
+                                        }
+                                    }
+                                }
+                                totalOpacity += colorSpace->alpha(color.data());
                             }
+                        }
+                        accessor.moveTo(x - startx, y - starty);
+                        quint8 * pixel = accessor.rawData();
+                        foreach(KoChannelInfo * channel, channels) {
+                            if (channel->channelType() == KoChannelInfo::COLOR) {
+                                int pos = channel->pos();
+                                quint32 val = channelTotals[pos] / (numSamples * numSamples);
+                                memcpy(pixel + pos, &val, channel->size());
+                            }
+                        }
+                        colorSpace->setAlpha(pixel, totalOpacity, 1);
+                    }
 
-                            QColor color;
-                            quint8 opacity;
+                    pixelsProcessed++;
 
-                            m_gradient->colorAt(t, &color, &opacity);
+                    int progressPercent = (pixelsProcessed * 100) / totalPixels;
 
-                            totalRed += color.red();
-                            totalGreen += color.green();
-                            totalBlue += color.blue();
-                            totalOpacity += opacity;
+                    if (progressPercent > lastProgressPercent) {
+                        if (m_progressUpdater) m_progressUpdater->setProgress(progressPercent);
+                        lastProgressPercent = progressPercent;
+
+                        if (m_progressUpdater && m_progressUpdater->interrupted()) {
+                            break;
                         }
                     }
-
-                    int red = totalRed / (numSamples * numSamples);
-                    int green = totalGreen / (numSamples * numSamples);
-                    int blue = totalBlue / (numSamples * numSamples);
-                    int opacity = totalOpacity / (numSamples * numSamples);
-
-                    layer.setPixel(x - startx, y - starty, qRgba(red, green, blue, opacity));
+                    ++iter;
                 }
-
-                pixelsProcessed++;
-
-                int progressPercent = (pixelsProcessed * 100) / totalPixels;
-
-                if (progressPercent > lastProgressPercent) {
-                    if (m_progressUpdater) m_progressUpdater->setProgress(progressPercent);
-                    lastProgressPercent = progressPercent;
-
-                    if (if (m_progressUpdater) m_progressUpdater->interrupted()) {
-                        break;
-                    }
+                iter.nextRow();
+                if ( m_progressUpdater && m_progressUpdater->interrupted()) {
+                    break;
                 }
-                layerPointer += 4;
-            }
-
-            if (if (m_progressUpdater) m_progressUpdater->interrupted()) {
-                break;
             }
         }
-    }*/
+    }
 
-    if (m_progressUpdater) {
-        if(!m_progressUpdater->interrupted())
+    if (!m_progressUpdater || (m_progressUpdater && !m_progressUpdater->interrupted())) {
             bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
     }
-    else
-        bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
-
     delete shapeStrategy;
 
-    if (m_progressUpdater) m_progressUpdater->setProgress(100);
-
-return true;
-//    return !m_progressUpdater->interrupted();
+    if (m_progressUpdater) {
+        m_progressUpdater->setProgress(100);
+        return !m_progressUpdater->interrupted();
+    }
+    else {
+        return true;
+    }
 }

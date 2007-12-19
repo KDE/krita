@@ -53,6 +53,10 @@ class KoTextAnchor;
 class QTextCursor;
 //class QColor;
 
+/**
+ * The KoTextFrameLoader
+ * [this is placeholder API docs, please describe this class]
+ */
 class KOTEXT_EXPORT KoTextFrameLoader
 {
     public:

@@ -53,7 +53,7 @@ public:
     /// when the canvas controller wants us to change zoom
     void requestZoomBy(const double factor)
     {
-        double zoom = zoomHandler->zoomInPercent() / 100.0;
+        double zoom = zoomHandler->zoom();
         action->setZoom(factor*zoom);
         setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
         action->setEffectiveZoom(factor*zoom);

@@ -203,7 +203,6 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
-    kDebug(41007)  <<"###### KisLayerBox::updateUI" << m_nodeManager->activeNode();
 
     bnDelete->setEnabled(m_nodeManager->activeNode());
     bnRaise->setEnabled(m_nodeManager->activeNode() && (m_nodeManager->activeNode()->prevSibling() || m_nodeManager->activeNode()->parent()));
@@ -222,7 +221,6 @@ void KisLayerBox::updateUI()
         if (active->inherits("KisLayer")) {
             KisLayerSP l = qobject_cast<KisLayer*>(active.data());
             slotSetOpacity(l->opacity() * 100.0 / 255);
-            kDebug() << "############## compositeOp: " << l->compositeOp()->id();
             slotSetCompositeOp(l->compositeOp());
         }
     }
@@ -238,7 +236,6 @@ void KisLayerBox::setCurrentNode( KisNodeSP node )
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
-    kDebug() << "slotSetCompositeOp: " << compositeOp->id();
     cmbComposite->blockSignals(true);
     cmbComposite->setCurrent(compositeOp);
     cmbComposite->blockSignals(false);

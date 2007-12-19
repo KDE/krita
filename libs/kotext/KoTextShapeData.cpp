@@ -175,8 +175,7 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
         if( ! oasisContext.koDocument() )
             return false;
         owner = true;
-        loader = new KoTextLoader(new KoStyleManager);
-        loader->styleManager()->setParent(loader);
+        loader = new KoTextLoader(new KoStyleManager(loader));
         loaderContext = new KoTextLoadingContext(loader, oasisContext.koDocument(), oasisContext.stylesReader(), oasisContext.store());
     }
 

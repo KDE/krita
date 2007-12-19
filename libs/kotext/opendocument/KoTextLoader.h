@@ -108,8 +108,8 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         /**
         * Load the body from the \p bodyElem into the \p cursor .
         *
-        * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a \a TextShape
-        * instance does like to load an ODF element.
+        * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a TextShape
+        * instance likes to load an ODF element.
         */
         virtual void loadBody(KoTextLoadingContext& context, const KoXmlElement& bodyElem, QTextCursor& cursor);
 
@@ -166,12 +166,12 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         virtual void startBody(int total);
 
         /**
-        * This is called in loadBody on each item that is readed within the body.
+        * This is called in loadBody on each item that is read within the body.
         */
         virtual void processBody();
 
         /**
-        * This is called in loadBody once the body was readed.
+        * This is called in loadBody once the body was read.
         */
         virtual void endBody();
 

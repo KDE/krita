@@ -47,7 +47,7 @@ public:
      * @param styles reference to the KoOdfStylesReader parsed by KoDocument
      * @param store pointer to store, if available, for e.g. loading images.
      */
-    KoOasisLoadingContext( KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store );
+    explicit KoOasisLoadingContext( KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store );
     virtual ~KoOasisLoadingContext();
 
     KoDocument* koDocument() { return m_doc; }

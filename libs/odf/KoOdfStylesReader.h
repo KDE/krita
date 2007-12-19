@@ -36,7 +36,9 @@ class KoXmlWriter;
 class KOODF_EXPORT KoOdfStylesReader
 {
 public:
+    /// constructor
     KoOdfStylesReader();
+    /// destructor
     ~KoOdfStylesReader();
 
     /// Look into @p doc for styles and remember them

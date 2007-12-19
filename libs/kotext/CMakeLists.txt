@@ -5,6 +5,7 @@ include_directories( ${KOGUIUTILS_INCLUDES} ${KOMAIN_INCLUDES} )
 add_subdirectory( kohyphen ) 
 add_subdirectory( tests ) 
 add_subdirectory( styles/tests )
+add_subdirectory( opendocument/tests )
 
 
 # Need by kohyphen

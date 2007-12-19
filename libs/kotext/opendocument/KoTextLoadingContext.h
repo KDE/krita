@@ -64,7 +64,7 @@ public:
     * \param styles The styles used for loading.
     * \param store The storage backend we are reading from.
     */
-    KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store );
+    explicit KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store );
 
     /**
     * Destructor.

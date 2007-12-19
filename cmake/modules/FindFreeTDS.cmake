@@ -5,29 +5,21 @@
 #  FreeTDS_INCLUDE_DIR - the FreeTDS include directory
 #  FreeTDS_LIBRARIES - Link these to use FreeTDS
 
-if (FreeTDS_INCLUDE_DIR AND FreeTDS_LIBRARIES)
 
-   # Already in cache
-   set(FreeTDS_FOUND TRUE)
-
-else (FreeTDS_INCLUDE_DIR AND FreeTDS_LIBRARIES)
-
-  FIND_PATH(FreeTDS_INCLUDE_DIR NAMES sqldb.h sqlfront.h
-    ${_FreeTDSIncDir}
+FIND_PATH(FreeTDS_INCLUDE_DIR NAMES sqldb.h sqlfront.h
     /usr/include/
     /usr/local/include
-  )
+)
 
-  FIND_LIBRARY(FreeTDS_LIBRARIES NAMES tds sybdb
-    PATHS
-    ${_FreeTDSLinkDir}
-    /usr/lib
-    /usr/local/lib
-  )
+FIND_LIBRARY(FreeTDS_TDS_LIBRARIES NAMES tds )
 
-  include(FindPackageHandleStandardArgs)
-  FIND_PACKAGE_HANDLE_STANDARD_ARGS(FreeTDS DEFAULT_MSG FreeTDS_INCLUDE_DIR FreeTDS_LIBRARIES )
+FIND_LIBRARY(FreeTDS_SYBDB_LIBRARIES NAMES sybdb )
+  
+set(FreeTDS_LIBRARIES ${FreeTDS_SYBDB_LIBRARIES} ${FreeTDS_TDS_LIBRARIES} CACHE STRING "Libraries needed for sybase/mssql driver")
 
-  MARK_AS_ADVANCED(FreeTDS_INCLUDE_DIR FreeTDS_LIBRARIES)
+include(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(FreeTDS DEFAULT_MSG FreeTDS_INCLUDE_DIR FreeTDS_LIBRARIES )
 
-endif (FreeTDS_INCLUDE_DIR AND FreeTDS_LIBRARIES)
+MARK_AS_ADVANCED(FreeTDS_INCLUDE_DIR FreeTDS_LIBRARIES)
+
+

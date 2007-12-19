@@ -222,7 +222,7 @@ void KisCanvas2::createQPainterCanvas()
     m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
 
     connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), m_d->prescaledProjection, SLOT(updateSettings()));
-    connect( m_d->view->resourceProvider(), SIGNAL( sigDisplayProfileChanged( const KoColorProfile * profile ) ), m_d->prescaledProjection, SLOT( setMonitorProfile( const KoColorProfile * ) ) );
+    connect( m_d->view->resourceProvider(), SIGNAL( sigDisplayProfileChanged( const KoColorProfile * ) ), m_d->prescaledProjection, SLOT( setMonitorProfile( const KoColorProfile * ) ) );
 
     setCanvasWidget( canvasWidget );
 }

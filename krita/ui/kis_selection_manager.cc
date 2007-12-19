@@ -90,11 +90,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
       m_invert(0),
       m_toNewLayer(0),
       m_feather(0),
-      m_expand(0),
       m_smooth(0),
-      m_contract(0),
-      m_similar(0),
-      m_transform(0),
       m_load(0),
       m_save(0),
       m_fillForegroundColor(0),
@@ -202,26 +198,9 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 
-    m_expand  = new KAction(i18n("Expand..."), this);
-    collection->addAction("expand", m_expand );
-    connect(m_expand, SIGNAL(triggered()), this, SLOT(expand()));
-
     m_smooth  = new KAction(i18n("Smooth..."), this);
     collection->addAction("smooth", m_smooth );
     connect(m_smooth, SIGNAL(triggered()), this, SLOT(smooth()));
-
-    m_contract  = new KAction(i18n("Contract..."), this);
-    collection->addAction("contract", m_contract );
-    connect(m_contract, SIGNAL(triggered()), this, SLOT(contract()));
-
-    m_similar  = new KAction(i18n("Similar"), this);
-    collection->addAction("similar", m_similar );
-    connect(m_similar, SIGNAL(triggered()), this, SLOT(similar()));
-
-    m_transform  = new KAction(i18n("Transform..."), this);
-    collection->addAction("transform_selection", m_transform );
-    connect(m_transform, SIGNAL(triggered()), this, SLOT(transform()));
-
 
 //     m_load
 //         = new KAction(i18n("Load..."),
@@ -300,11 +279,7 @@ void KisSelectionManager::updateGUI()
 
     m_feather->setEnabled(enable);
 
-    m_expand->setEnabled(enable);
     m_smooth->setEnabled(enable);
-    m_contract->setEnabled(enable);
-    m_similar->setEnabled(enable);
-    m_transform->setEnabled(enable);
 //    m_load->setEnabled(enable);
 //    m_save->setEnabled(enable);
 

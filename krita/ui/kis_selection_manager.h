@@ -125,11 +125,7 @@ private:
     QAction *m_invert;
     QAction *m_toNewLayer;
     QAction *m_feather;
-    QAction *m_expand;
     QAction *m_smooth;
-    QAction *m_contract;
-    QAction *m_similar;
-    QAction *m_transform;
     QAction *m_load;
     QAction *m_save;
     QAction *m_fillForegroundColor;

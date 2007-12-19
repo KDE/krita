@@ -38,7 +38,7 @@ KoEmbeddedDocumentSaver::~KoEmbeddedDocumentSaver()
 {
 }
 
-void KoEmbeddedDocumentSaver::odfEmbeddedDocument( KoXmlWriter &writer, KoDocument * doc )
+void KoEmbeddedDocumentSaver::embedDocument( KoXmlWriter &writer, KoDocument * doc )
 {
     Q_ASSERT( doc );
     m_documents.append( doc );
@@ -69,7 +69,7 @@ void KoEmbeddedDocumentSaver::odfEmbeddedDocument( KoXmlWriter &writer, KoDocume
     writer.addAttribute( "xlink:href", /*"#" + */ref );
 }
 
-bool KoEmbeddedDocumentSaver::saveOdf( KoStore * store, KoXmlWriter * manifestWriter )
+bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments( KoStore * store, KoXmlWriter * manifestWriter )
 {
     foreach( KoDocument * doc, m_documents ) {
         QString path;

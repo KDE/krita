@@ -28,7 +28,7 @@ class KoStore;
 class KoXmlWriter;
 
 /**
- * This class is used to save embedded objects.
+ * This class is used to save embedded objects in ODF documents.
  */
 class KOMAIN_EXPORT KoEmbeddedDocumentSaver
 {
@@ -36,9 +36,18 @@ public:
     KoEmbeddedDocumentSaver();
     ~KoEmbeddedDocumentSaver();
 
-    void odfEmbeddedDocument( KoXmlWriter &writer, KoDocument * doc );
+    /**
+     * Adds the object specific attibutes to the tag, but does NOT 
+     * write the content of the embedded document. Saving of the
+     * embedded documents themselves is done in @ref save. This 
+     * function should be called from within KoDocument::saveOasis.
+     */
+    void embedDocument( KoXmlWriter &writer, KoDocument * doc );
 
-    bool saveOdf( KoStore * store, KoXmlWriter * manifestWriter );
+    /**
+     * Save all embedded documents to the store.
+     */
+    bool saveEmbeddedDocuments( KoStore * store, KoXmlWriter * manifestWriter );
 
 private:
     QList<KoDocument *> m_documents;

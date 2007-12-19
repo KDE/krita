@@ -129,11 +129,11 @@ signals:
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
     void sigBrushChanged(KisBrush * brush);
-    void sigGradientChanged(KoSegmentGradient * gradient);
-    void sigPatternChanged(KisPattern * pattern);
-    void sigPaintopChanged(KoID paintop, const KisPaintOpSettings *paintopSettings);
-    void sigLayerChanged( const KisLayerSP layer );
-    void sigDisplayProfileChanged( const KoColorProfile * profile );
+    void sigGradientChanged(KoSegmentGradient *);
+    void sigPatternChanged(KisPattern *);
+    void sigPaintopChanged(KoID paintop, const KisPaintOpSettings *);
+    void sigLayerChanged(const KisLayerSP);
+    void sigDisplayProfileChanged(const KoColorProfile *);
 
 private:
 

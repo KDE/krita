@@ -37,6 +37,7 @@ set(komain_LIB_SRCS
    KoViewAdaptor.cpp
    KoFrame.cpp
    KoContainerHandler.cpp
+   KoEmbeddedDocumentSaver.cpp
    KoDocumentChild.cpp
    KoDocumentInfoDlg.cpp
    KoFactory.cpp

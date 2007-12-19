@@ -110,18 +110,20 @@ KisLayerBox::KisLayerBox()
     bnViewMode->setIcon(KIcon("view-choose"));
     bnViewMode->setText(i18n("View mode"));
 
-    bnAdd->setToolTip(i18n("Create new layer"));
-
-    bnDelete->setToolTip(i18n("Remove current layer"));
-
-    bnRaise->setToolTip(i18n("Raise current layer"));
+    bnAdd->setIcon(SmallIcon("list-add"));
+    
+    bnDelete->setIcon(SmallIcon("list-remove"));
+    
     bnRaise->setEnabled(false);
-
+    bnRaise->setIcon(SmallIcon("go-up"));
+    
     bnLower->setEnabled(false);
-    bnLower->setToolTip(i18n("Lower current layer"));
+    bnLower->setIcon(SmallIcon("go-down"));
+    
+    bnProperties->setText("...");
 
-    bnProperties->setToolTip(i18n("Properties for layer"));
-
+    bnDuplicate->setIcon(SmallIcon("edit-copy"));
+        
     m_newLayerMenu = new KMenu(this);
     bnAdd->setMenu(m_newLayerMenu);
     bnAdd->setPopupMode(QToolButton::MenuButtonPopup);

@@ -511,7 +511,7 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
 
     // Don't go outside the image
     QRect alignedImageRect = imageRect.intersected( m_d->image->bounds() ).toAlignedRect();
-    alignedImageRect.setBottom( alignedImageRect.bottom() + 1); // FIXME <= it's a work around in a Qt bug (bouuuh) (reported to them see http://trolltech.com/developer/task-tracker/index_html?method=entry&id=187008 ) the returned .toAlignedRect() is one pixel too small
+    alignedImageRect.setBottom( alignedImageRect.bottom() + 1); // <= it's a work around in a Qt bug (bouuuh) (reported to them see http://trolltech.com/developer/task-tracker/index_html?method=entry&id=187008 ) the returned .toAlignedRect() is one pixel too small
     alignedImageRect.setRight( alignedImageRect.right() + 1);
 
     // the size of the rect after scaling

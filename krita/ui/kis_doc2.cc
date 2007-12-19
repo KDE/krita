@@ -390,15 +390,17 @@ KisImageSP KisDoc2::loadImage(const KoXmlElement& element)
 
         description = element.attribute("description");
 
-        if ((attr = element.attribute("x-res")).isNull())
-            xres = 100.0 / 72.0;
-        else
-            xres = attr.toDouble() / 72.0;
-
-        if ((attr = element.attribute("y-res")).isNull())
-            yres = 100.0 / 72.0;
-        else
-            yres = attr.toDouble() / 72.0;
+        xres = 100.0 / 72.0;
+        if (!(attr = element.attribute("x-res")).isNull()) {
+            if (attr.toDouble() > 1.0)
+                xres = attr.toDouble() / 72.0;
+        }
+        
+        yres = 100.0 / 72.0;
+        if (!(attr = element.attribute("y-res")).isNull()) {
+            if (attr.toDouble() > 1.0)
+                yres = attr.toDouble() / 72.0;
+        }
 
         if ((colorspacename = element.attribute("colorspacename")).isNull())
         {

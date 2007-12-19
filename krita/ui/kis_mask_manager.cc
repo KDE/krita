@@ -378,7 +378,7 @@ void KisMaskManager::mirrorMaskX()
 
     KisTransaction * t = 0;
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Mirror Layer X"), dev);
+        t = new KisTransaction(i18n("Mirror Mask X"), dev);
         Q_CHECK_PTR(t);
     }
 

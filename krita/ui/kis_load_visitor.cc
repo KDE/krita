@@ -63,7 +63,7 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
 
     QString location = m_external ? QString::null : m_uri;
     location += m_name + "/layers/" + m_layerFilenames[layer];
-
+    
     // Layer data
     if (m_store->open(location)) {
         if (!layer->paintDevice()->read(m_store)) {
@@ -74,6 +74,10 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
         }
 
         m_store->close();
+    }
+    else {
+        kError() << "No image data: that's an error!";
+        return false;
     }
 
     // icc profile

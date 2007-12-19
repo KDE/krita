@@ -146,6 +146,8 @@ public:
     KisImageSP image;
     KisShapeController * shapeController;
     KisNodeModel * nodeModel;
+    QString imageName; // used to be stored in the image, is now in the documentInfo block
+    QString imageComment; // used to be stored in the image, is now in the documentInfo block
 };
 
 
@@ -379,16 +381,19 @@ KisImageSP KisDoc2::loadImage(const KoXmlElement& element)
     const KoColorSpace * cs;
 
     if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
-        if ((name = element.attribute("name")).isNull())
+    
+        if ((m_d->imageName = element.attribute("name")).isNull())
             return KisImageSP(0);
+        
         if ((attr = element.attribute("width")).isNull())
             return KisImageSP(0);
         width = attr.toInt();
+        
         if ((attr = element.attribute("height")).isNull())
             return KisImageSP(0);
         height = attr.toInt();
 
-        description = element.attribute("description");
+        m_d->imageComment = element.attribute("description");
 
         xres = 100.0 / 72.0;
         if (!(attr = element.attribute("x-res")).isNull()) {
@@ -431,8 +436,7 @@ KisImageSP KisDoc2::loadImage(const KoXmlElement& element)
         Q_CHECK_PTR(img);
         img->lock();
         connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
-        documentInfo()->setAboutInfo("title", name);
-        documentInfo()->setAboutInfo("comment", description);
+        
         img->setResolution(xres, yres);
 
         loadLayers(element, img, img->rootLayer());
@@ -735,7 +739,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     setIOSteps(totalSteps);
 
     // Load the layers data
-    KisLoadVisitor visitor(img, store, m_d->layerFilenames, documentInfo()->aboutInfo("title"));
+    KisLoadVisitor visitor(img, store, m_d->layerFilenames, m_d->imageName);
 
     if(external)
         visitor.setExternalUri(uri);
@@ -744,7 +748,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     // annotations
     // exif
     location = external ? QString::null : uri;
-    location += documentInfo()->aboutInfo("title") + "/annotations/exif";
+    location += m_d->imageName + "/annotations/exif";
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
@@ -754,7 +758,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     }
     // icc profile
     location = external ? QString::null : uri;
-    location += documentInfo()->aboutInfo("title") + "/annotations/icc";
+    location += m_d->imageName + "/annotations/icc";
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
@@ -767,6 +771,10 @@ bool KisDoc2::completeLoading(KoStore *store)
 
     setModified( false );
     setUndo(true);
+
+    if (documentInfo()->aboutInfo("title").isNull()) documentInfo()->setAboutInfo("title", m_d->imageName);
+    if (documentInfo()->aboutInfo("comment").isNull()) documentInfo()->setAboutInfo("comment", m_d->imageComment);
+    
     return true;
 }
 

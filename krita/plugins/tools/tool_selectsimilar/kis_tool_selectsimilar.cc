@@ -169,7 +169,6 @@ useCursor(m_subtractCursor);
     }
 }
 
-#if 0
 void KisToolSelectSimilar::slotTimer()
 {
     int state = QApplication::keyboardModifiers() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
@@ -198,7 +197,6 @@ void KisToolSelectSimilar::setPickerCursor(selectionAction action)
 //             useCursor(m_subtractCursor);
 //     }
 }
-#endif
 
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 {

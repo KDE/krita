@@ -75,8 +75,8 @@ private:
     QCursor m_addCursor;
     QCursor m_subtractCursor;
 
-// private slots:
-//     void slotTimer();
+private slots:
+    void slotTimer();
 };
 
 class KisToolSelectSimilarFactory : public KoToolFactory {

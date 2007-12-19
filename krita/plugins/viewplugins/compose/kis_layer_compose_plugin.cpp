@@ -48,7 +48,7 @@ KisLayerComposePlugin::KisLayerComposePlugin(QObject *parent, const QStringList 
         m_view = (KisView2*) parent;
         KAction *action  = new KAction(i18n("Compose Layer..."), this);
         actionCollection()->addAction("layercompose", action );
-        connect(action, SIGNAL(triggered(bool) ), SLOT(slotSeparate()));
+        connect(action, SIGNAL(triggered(bool) ), SLOT(slotCompose()));
     }
 }
 

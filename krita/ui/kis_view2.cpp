@@ -604,7 +604,7 @@ void KisView2::connectCurrentImage()
         //connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
 
         if( m_d->statusBar ) {
-            connect(img.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile * )), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
 
@@ -620,8 +620,8 @@ void KisView2::connectCurrentImage()
 
         // Temporary forwarding of signals until these deprecated
         // signals are gone from KisImage
-        connect( img.data(), SIGNAL( sigColorSpaceChanged( KoColorSpace * ) ),
-                 m_d->layerManager, SIGNAL( currentColorSpaceChanged( KoColorSpace * ) ) );
+        connect( img.data(), SIGNAL( sigColorSpaceChanged(const KoColorSpace * ) ),
+                 m_d->layerManager, SIGNAL( currentColorSpaceChanged( const KoColorSpace * ) ) );
 
         connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
         connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));

@@ -258,7 +258,7 @@ void KisBirdEyeBox::setImage(KisImageSP image)
     if (m_image) {
         connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
         connect(m_image.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
-        connect(m_image.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace *)), SLOT(slotImageColorSpaceChanged(KoColorSpace *)));
+        connect(m_image.data(), SIGNAL(sigColorSpaceChanged( const KoColorSpace *)), SLOT(slotImageColorSpaceChanged( const KoColorSpace *)));
         m_birdEyePanel->slotUpdate(m_image->bounds());
         slotImageColorSpaceChanged(m_image->colorSpace());
     }

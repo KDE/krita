@@ -372,7 +372,7 @@ void KisLmsF32ColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KoCompositeOpList KisLmsF32ColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisLmsF32ColorSpace::compositeOps() const
 {
     KoCompositeOpList list;
 

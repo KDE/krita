@@ -680,7 +680,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     }
 
                     // XXX: Move this averaging code into the colorspace
-                    if (maxDistance > 3. * antiAliasThreshold*antiAliasThreshold) {
+                    if (maxDistance > 3. * antiAliasThreshold * antiAliasThreshold) {
                         const int numSamples = 4;
                         
                         QVector<quint32> channelTotals(colorSpace->channelCount());

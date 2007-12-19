@@ -367,7 +367,7 @@ QWidget* KisToolGradient::createOptionWidget()
 
     m_slAntiAliasThreshold = new KDoubleNumInput(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
-    m_slAntiAliasThreshold->setRange( 0, 1);
+    m_slAntiAliasThreshold->setRange( 0, 1, 0.01);
     m_slAntiAliasThreshold->setValue(m_antiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 

@@ -69,7 +69,7 @@ public:
                        qint32 renderingIntent,
                        float exposure = 0.0f);
 
-    virtual KoCompositeOpList userVisiblecompositeOps() const;
+    virtual KoCompositeOpList compositeOps() const;
 
 
 protected:

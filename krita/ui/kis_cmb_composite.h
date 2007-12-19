@@ -26,14 +26,8 @@
 #include "KoCompositeOp.h"
 
 /**
- * A combobox filled with the various composition strategies defined in kis_global.
- *
- * XXX: devise some kind of capabilities database for the various color strategies
- *
- * enum constant       Description CMYK  RGBA  GRAYA
- * 1    COMPOSITE_OVER Over        X     -     X
- *
- * But that's for later...
+ * A combobox filled with the various composition strategies
+ * associated with a certain colorspace.
  */
 
 class KRITAUI_EXPORT KisCmbComposite : public QComboBox

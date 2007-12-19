@@ -145,7 +145,7 @@ quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels) const
     return new quint8[pixelSize()*numPixels];
 }
 
-QList<KoCompositeOp*> KoColorSpace::userVisiblecompositeOps() const
+QList<KoCompositeOp*> KoColorSpace::compositeOps() const
 {
     return d->compositeOps.values();
 }
@@ -183,6 +183,7 @@ const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
     }
     return d->transfoToLABA16;
 }
+
 const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 {
     if(not d->transfoFromLABA16)

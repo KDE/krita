@@ -222,6 +222,7 @@ void KisLayerBox::updateUI()
         if (active->inherits("KisLayer")) {
             KisLayerSP l = qobject_cast<KisLayer*>(active.data());
             slotSetOpacity(l->opacity() * 100.0 / 255);
+            kDebug() << "############## compositeOp: " << l->compositeOp()->id();
             slotSetCompositeOp(l->compositeOp());
         }
     }
@@ -237,6 +238,7 @@ void KisLayerBox::setCurrentNode( KisNodeSP node )
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
+    kDebug() << "slotSetCompositeOp: " << compositeOp->id();
     cmbComposite->blockSignals(true);
     cmbComposite->setCurrent(compositeOp);
     cmbComposite->blockSignals(false);
@@ -245,7 +247,7 @@ void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 void KisLayerBox::slotSetColorSpace(const KoColorSpace * colorSpace)
 {
     cmbComposite->blockSignals(true);
-    cmbComposite->setCompositeOpList(colorSpace->userVisiblecompositeOps());
+    cmbComposite->setCompositeOpList(colorSpace->compositeOps());
     cmbComposite->blockSignals(false);
 }
 

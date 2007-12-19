@@ -280,7 +280,7 @@ public:
     /**
      * Returns the list of user-visible composite ops supported by this colorspace.
      */
-    virtual QList<KoCompositeOp*> userVisiblecompositeOps() const;
+    virtual QList<KoCompositeOp*> compositeOps() const;
 
     /**
      * Retrieve a single composite op from the ones this colorspace offers.
@@ -521,9 +521,10 @@ public:
      */
     virtual KoColorTransformation *createInvertTransformation() const = 0;
 
-    // XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?
     /**
-     * Get the difference between 2 colors, normalized in the range (0,255)
+     * Get the difference between 2 colors, normalized in the range (0,255). Only completely
+     * opaque and completely transparent are taken into account when computing the different;
+     * other transparency levels are not regarded when finding the difference.
      */
     virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;
 
@@ -653,7 +654,7 @@ public:
 
     /**
      * The backgroundfilters will be run periodically on the newly
-     * created paint device. XXX: Currently this uses times and not
+     * created paint device. XXX: Currently this uses timers and not
      * threads.
      */
     virtual QList<KisFilter*> createBackgroundFilters() const

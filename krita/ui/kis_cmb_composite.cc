@@ -25,6 +25,8 @@
 #include <KoCompositeOp.h>
 #include "kis_cmb_composite.h"
 
+static QStringList opsInOrder;
+
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
     : QComboBox(parent)
 {
@@ -32,6 +34,46 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
     setEditable(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
     connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
+    if (opsInOrder.isEmpty()) {
+        opsInOrder <<
+            COMPOSITE_OVER <<
+            COMPOSITE_ERASE <<
+            COMPOSITE_COPY <<
+            COMPOSITE_ALPHA_DARKEN <<
+            COMPOSITE_IN <<
+            COMPOSITE_OUT <<
+            COMPOSITE_ATOP <<
+            COMPOSITE_XOR <<
+            COMPOSITE_PLUS <<
+            COMPOSITE_MINUS <<
+            COMPOSITE_ADD <<
+            COMPOSITE_SUBTRACT <<
+            COMPOSITE_DIFF <<
+            COMPOSITE_MULT <<
+            COMPOSITE_DIVIDE <<
+            COMPOSITE_DODGE <<
+            COMPOSITE_BURN <<
+            COMPOSITE_BUMPMAP <<
+            COMPOSITE_CLEAR <<
+            COMPOSITE_DISSOLVE <<
+            COMPOSITE_DISPLACE <<
+            COMPOSITE_NO <<
+            COMPOSITE_DARKEN <<
+            COMPOSITE_LIGHTEN <<
+            COMPOSITE_HUE <<
+            COMPOSITE_SATURATION <<
+            COMPOSITE_VALUE <<
+            COMPOSITE_COLOR <<
+            COMPOSITE_COLORIZE <<
+            COMPOSITE_LUMINIZE <<
+            COMPOSITE_SCREEN <<
+            COMPOSITE_OVERLAY <<
+            COMPOSITE_UNDEF <<
+            COMPOSITE_COPY_RED <<
+            COMPOSITE_COPY_GREEN <<
+            COMPOSITE_COPY_BLUE <<
+            COMPOSITE_COPY_OPACITY;
+    }
 }
 
 KisCmbComposite::~KisCmbComposite()
@@ -41,10 +83,30 @@ KisCmbComposite::~KisCmbComposite()
 void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
 {
     QComboBox::clear();
-    m_list = list;
+    m_list.clear();
 
-    for(int i = 0; i < m_list.count(); ++i)
-        addItem(m_list.at(i)->description());
+    // First, insert all composite ops that we know about, in a nice order.
+    foreach (QString id, opsInOrder) {
+        foreach (KoCompositeOp* op, list) {
+            if ( op->id() == id ) {
+                m_list.append(op);
+                addItem(op->description());
+            }
+        }
+    }
+    // Then check for all given composite ops whether they are already inserted, and if not, add them at the end.
+    foreach(KoCompositeOp* op1, list) {
+        bool found = false; 
+        foreach(KoCompositeOp* op2, m_list) {
+            if (op1->id() == op2->id()) {
+                found = true;
+            }
+        }
+        if (!found && op1->userVisible()) {
+            m_list.append(op1);
+            addItem(op1->description());
+        }
+    }
 }
 
 KoCompositeOp * KisCmbComposite::currentItem() const
@@ -57,9 +119,13 @@ KoCompositeOp * KisCmbComposite::currentItem() const
 
 void KisCmbComposite::setCurrent(const KoCompositeOp* op)
 {
-    qint32 index = m_list.indexOf(const_cast<KoCompositeOp*>( op ));
-
-    if (index >= 0) {
+    int index = 0;
+    foreach( KoCompositeOp * op2, m_list) {
+        if (op->id() == op2->id())
+            break;
+        ++index;
+    }
+    if (index >= 0 && index < m_list.size() ) {
         QComboBox::setCurrentIndex(index);
     }
 }

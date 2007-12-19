@@ -103,6 +103,10 @@ public:
             if (!layer->visible())
                 return true;
 
+            bool first = false;
+            if (layer->prevSibling() == 0 and layer->parent() == layer->image()->root())
+                first = true;
+
             qint32 sx, sy, dx, dy, w, h;
 
             QRect rc = layer->paintDevice()->extent() & m_rc;
@@ -131,7 +135,11 @@ public:
                 source = paintIndirect(source, temp, layer, sx, sy, dx, dy, w, h);
             }
 
-            gc.bitBlt(dx, dy, layer->compositeOp(), source, layer->opacity(), sx, sy, w, h);
+            if (first)
+                gc.bitBlt(dx, dy, layer->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), sx, sy, w, h);
+            else
+                gc.bitBlt(dx, dy, layer->compositeOp(), source, layer->opacity(), sx, sy, w, h);
+                
 
             layer->setClean( rc );
 

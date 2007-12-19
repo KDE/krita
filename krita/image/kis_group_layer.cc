@@ -336,7 +336,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         first = true;
     }
 
-    //qDebug() << "first: " << first;
+    qDebug() << "first: " << first;
     
     KisMergeVisitor visitor(m_d->projection, rc);
 
@@ -344,36 +344,10 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     while(child)
     {
-        //qDebug() << "child: " << child->name();
-        if(first)
-        {
-            //qDebug() << "first for child " << child->name();
-            // Copy the lowest layer rather than compositing it with the background
-            // or an empty image. This means the layer's composite op is ignored,
-            // which is consistent with Photoshop and gimp.
-            const KoCompositeOp * cop = child->compositeOp();
-
-            // Composite Op copy doesn't take a mask/selection into account, so we need
-            // to make a difference between a paintlayer with a mask, and one without
-            KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(child.data());
-
-            if (l && l->hasEffectMasks())
-                child->setCompositeOp( colorSpace()->compositeOp( COMPOSITE_OVER ) );
-            else
-                child->setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
-
-            child->accept(visitor);
-            child->setCompositeOp( cop );
-            first = false;
-        }
-        else {
-            //qDebug() << "not first: " << child->name();
-            child->accept(visitor);
-        }
+        qDebug() << "child: " << child->name();
+        child->accept(visitor);
         child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
-
-    // XXX: Apply the masks!
 }
 
 #include "kis_group_layer.moc"

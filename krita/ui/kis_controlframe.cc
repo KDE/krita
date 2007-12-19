@@ -371,9 +371,6 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoSegmentGradient *)),
             this, SLOT(slotGradientChanged( KoSegmentGradient *)));
 
-    connect( m_gradientChooser, SIGNAL( importClicked() ), this, SLOT( importGradient() ) );
-
-
     m_gradientChooser->setCurrent( 0 );
     m_gradientMediator->setActiveItem( m_gradientChooser->currentItem() );
 }

@@ -73,10 +73,10 @@ templatedir = Dir.new( File.dirname( __FILE__  ) + "/templates/" + type)
 templatedir.each() { |x|
    if( x[0,1] != "." )
       dstname = x.clone
-      begin
-        dstname[type] = namelc
-      rescue Exception
-      end
+      dstname[type] = namelc if(dstname =~ /#{type}/)
+      dstname["APPNAMELC"] = namelc if(dstname =~ /APPNAMELC/)
+      dstname["APPNAMEUC"] = nameuc if(dstname =~ /APPNAMEUC/)
+      dstname["APPNAME"] = name if(dstname =~ /APPNAME/)
       srcf = File.new( templatedir.path() + "/" + x).readlines
       srcf = srcf.join
       srcf.gsub!(/%\{APPNAME\}/, name)

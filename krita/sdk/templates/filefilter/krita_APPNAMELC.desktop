@@ -1,0 +1,22 @@
+[Desktop Entry]
+Categories=Qt;KDE;Office;Graphics;
+Comment=
+Comment[en_US]=
+Encoding=UTF-8
+Exec=krita %u
+GenericName=Application for Drawing and Handling of Images
+GenericName[en_US]=Application for Drawing and Handling of Images
+Icon=krita
+MimeType=image/%{APPNAMELC}
+Name=Krita
+Name[en_US]=Krita
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-StartupType=multi
+X-DCOP-ServiceType=
+X-KDE-StartupNotify=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=

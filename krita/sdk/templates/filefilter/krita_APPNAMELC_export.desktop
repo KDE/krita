@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Krita %{APPNAMELC} Export Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=image/%{APPNAMELC}
+X-KDE-Import=application/x-krita
+X-KDE-Library=libkrita%{APPNAMELC}export
+X-KDE-Weight=1

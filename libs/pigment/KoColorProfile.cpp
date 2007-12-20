@@ -28,7 +28,7 @@ struct KoColorProfile::Private
     QString fileName;
 };
 
-KoColorProfile::KoColorProfile(QString fileName) : d(new Private)
+KoColorProfile::KoColorProfile(const QString &fileName) : d(new Private)
 {
 //     kDebug() <<" Profile filename =" << fileName;
     d->fileName = fileName;

@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_load_visitor.h"
+#include "kis_kra_load_visitor.h"
 
 #include <QRect>
 
@@ -37,7 +37,7 @@
 #include "kis_filter_configuration.h"
 #include "kis_datamanager.h"
 
-KisLoadVisitor::KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name) :
+KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name) :
     KisNodeVisitor(),
     m_layerFilenames(layerFilenames)
 {
@@ -47,18 +47,18 @@ KisLoadVisitor::KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, 
     m_name = name;
 }
 
-void KisLoadVisitor::setExternalUri(QString &uri)
+void KisKraLoadVisitor::setExternalUri(const QString &uri)
 {
     m_external = true;
     m_uri = uri;
 }
 
-bool KisLoadVisitor::visit( KisExternalLayer * )
+bool KisKraLoadVisitor::visit( KisExternalLayer * )
 {
     return true;
 }
 
-bool KisLoadVisitor::visit(KisPaintLayer *layer)
+bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 {        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
     QString location = m_external ? QString::null : m_uri;
@@ -120,9 +120,9 @@ bool KisLoadVisitor::visit(KisPaintLayer *layer)
 
 }
 
-bool KisLoadVisitor::visit(KisGroupLayer *layer)
+bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
-    KisLoadVisitor visitor(m_img, m_store, m_layerFilenames, m_name);
+    KisKraLoadVisitor visitor(m_img, m_store, m_layerFilenames, m_name);
 
     if(m_external)
         visitor.setExternalUri(m_uri);
@@ -133,7 +133,7 @@ bool KisLoadVisitor::visit(KisGroupLayer *layer)
     return true;
 }
 
-bool KisLoadVisitor::visit(KisAdjustmentLayer* layer)
+bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 {
     //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 

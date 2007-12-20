@@ -66,7 +66,8 @@ set(kritaui_LIB_SRCS
     kis_layer_manager.cc
     kis_layermap_visitor.cc
     kis_layer_box.cpp
-    kis_load_visitor.cc
+    kis_kra_load_visitor.cpp
+    kis_kra_loader.cpp
     kis_multi_bool_filter_widget.cc
     kis_multi_double_filter_widget.cc
     kis_multi_integer_filter_widget.cc

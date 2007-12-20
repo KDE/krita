@@ -61,11 +61,15 @@ private:
 
 class KisProjection::Private {
 public:
+
+    Private()
+        : regionLock( QMutex::Recursive )
+        {
+        }
+        
     KisImageWSP image;
 
-    QRegion dirtyRegion; // The Qt manual assures me that QRegion is
-                         // threadsafe... Let's hope that's really
-                         // true!
+    QRegion dirtyRegion;
     bool locked;
     Weaver * weaver;
     int updateRectSize;
@@ -73,6 +77,7 @@ public:
     bool useRegionOfInterest; // If false, update all dirty bits, if
                               // true, update only region of interest.
     bool useBoundingRectOfDirtyRegion;
+    QMutex regionLock;
 };
 
 
@@ -114,9 +119,11 @@ void KisProjection::lock()
 
 void KisProjection::unlock()
 {
+    QMutexLocker(&m_d->regionLock);
     m_d->locked = false;
+    
     QVector<QRect> regionRects = m_d->dirtyRegion.rects();
-
+    
     QVector<QRect>::iterator it = regionRects.begin();
     QVector<QRect>::iterator end = regionRects.end();
     while ( it != end ) {
@@ -140,15 +147,18 @@ bool KisProjection::upToDate(const QRect & rect)
 
 bool KisProjection::upToDate(const QRegion & region)
 {
+    QMutexLocker(&m_d->regionLock);
     return m_d->dirtyRegion.intersects( region );
 }
 
 void KisProjection::setRegionOfInterest( const QRect & roi )
 {
     if ( !m_d->roi.contains( roi ) ) {
+        QMutexLocker(&m_d->regionLock);
         QRegion region( roi );
         region -= QRegion( m_d->roi );
         // Get the overlap between the region of interest
+        
         QVector<QRect> rects = region.intersected( m_d->dirtyRegion ).rects();
         for ( int i = 0; i < rects.size(); ++i ) {
             scheduleRect( rects.at( i ) );
@@ -165,6 +175,7 @@ QRect KisProjection::regionOfInterest()
 
 void KisProjection::addDirtyRegion( const QRegion & region )
 {
+    QMutexLocker(&m_d->regionLock);
     m_d->dirtyRegion += region;
 
     if ( m_d->useBoundingRectOfDirtyRegion ) {
@@ -187,6 +198,7 @@ void KisProjection::addDirtyRegion( const QRegion & region )
 
 void KisProjection::addDirtyRect( const QRect & rect )
 {
+    QMutexLocker(&m_d->regionLock);
     m_d->dirtyRegion += QRegion( rect );
     if ( !m_d->locked ) {
         scheduleRect( rect );
@@ -195,6 +207,7 @@ void KisProjection::addDirtyRect( const QRect & rect )
 
 void KisProjection::slotUpdateUi( Job* job )
 {
+    QMutexLocker(&m_d->regionLock);
     ProjectionJob* pjob = static_cast<ProjectionJob*>( job );
     m_d->dirtyRegion -= QRegion( pjob->rect() );
     emit sigProjectionUpdated( pjob->rect() );
@@ -253,7 +266,7 @@ void KisProjection::updateSettings()
 
     m_d->updateRectSize = cfg.readEntry( "updaterectsize", 512 );
 
-    m_d->useBoundingRectOfDirtyRegion = cfg.readEntry( "use_bounding_rect_of_dirty_region", true );
+    m_d->useBoundingRectOfDirtyRegion = cfg.readEntry( "use_bounding_rect_of_dirty_region", false );
 
     m_d->useRegionOfInterest = cfg.readEntry( "use_region_of_interest", false );
 

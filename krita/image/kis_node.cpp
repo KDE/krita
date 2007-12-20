@@ -39,8 +39,7 @@ public:
     KisNodeGraphListener * graphListener;
     QList<KisNodeSP> nodes;
     QRegion dirtyRegion;
-    QMutex regionLock; // Qt says QRegion is thread-safe, but
-                       // experience proves otherwise.
+    QMutex regionLock;
 
 };
 
@@ -137,6 +136,7 @@ void KisNode::setClean()
 
 QRegion KisNode::dirtyRegion( const QRect & rc )
 {
+    QMutexLocker(&m_d->regionLock);
     return m_d->dirtyRegion.intersected( QRegion( rc) );
 }
 

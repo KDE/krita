@@ -1,5 +1,5 @@
 
-include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} )
+include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk )
 
 add_subdirectory( tests )
 
@@ -125,6 +125,9 @@ set(kritaui_LIB_SRCS
     kis_node_manager.cpp
     kis_selection_tool_helper.cpp
     kis_print_job.cpp
+# Open Raster TK
+    openrastertk/kis_open_raster_stack_load_visitor.cpp
+    openrastertk/kis_open_raster_stack_save_visitor.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

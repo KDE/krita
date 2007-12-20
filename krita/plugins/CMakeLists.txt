@@ -18,3 +18,8 @@ add_subdirectory( viewplugins )
 #    add_subdirectory( painterlyframework )
 #endif(HAVE_REQUIRED_GLPK_VERSION)
 
+find_package(GSL)
+
+if( GSL_FOUND )
+    add_subdirectory( painterlyframework )
+endif( GSL_FOUND )

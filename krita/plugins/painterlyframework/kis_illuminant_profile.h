@@ -20,27 +20,36 @@
 #ifndef KIS_ILLUMINANT_PROFILE_H_
 #define KIS_ILLUMINANT_PROFILE_H_
 
-#include "KoColorProfile.h"
+#include <KoColorProfile.h>
+#include <QString>
+
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
 
 class KisIlluminantProfile : public KoColorProfile {
 
     public:
-        KisIlluminantProfile(const QString &fileName);
+        KisIlluminantProfile(const QString &fileName = "");
         KisIlluminantProfile(const KisIlluminantProfile &profile);
         ~KisIlluminantProfile();
-        
+
         // KoColorProfile interface
         KoColorProfile *clone() const;
         bool load();
-        bool save(const QString &fileName);
-        bool valid() const;
-        bool isSuitableForOutput() const;
-        bool isSuitableForPrinting() const;
-        bool isSuitableForDisplay() const;
-        bool operator==(const KoColorProfile &op2) const;
-        
-        gsl_matrix *T() const;
-        gsl_vector *P() const;
+        bool save(const QString &fileName) { return false; } // TODO
+        bool valid() const { return m_valid; }
+        bool isSuitableForOutput() const { return true; }
+        bool isSuitableForPrinting() const { return true; }
+        bool isSuitableForDisplay() const { return true; }
+        bool operator==(const KoColorProfile &op2) const { return false; } // TODO
+
+        gsl_matrix *T() const { return m_T; }
+        gsl_vector *P() const { return m_P; }
+
+    private:
+        gsl_matrix *m_T;
+        gsl_vector *m_P;
+        bool m_valid;
 };
 
 #endif // KIS_ILLUMINANT_PROFILE_H_

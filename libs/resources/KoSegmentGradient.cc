@@ -101,7 +101,7 @@ bool KoSegmentGradient::init()
 
     if (nameDefinition.startsWith("Name: ")) {
         QString nameText = nameDefinition.right(nameDefinition.length() - 6);
-        setName(i18n(nameText.toAscii()));
+        setName(nameText);
 
         numSegmentsText = fileContent.readLine();
     }

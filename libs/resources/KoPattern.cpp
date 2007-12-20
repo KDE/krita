@@ -171,7 +171,7 @@ bool KoPattern::init(QByteArray& data)
         return false;
     }
 
-    setName(i18n(name));
+    setName(name);
 
     if (bh.width == 0 || bh.height == 0) {
         return false;

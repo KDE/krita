@@ -225,7 +225,7 @@ bool KisBrush::init()
                                   bh.header_size - sizeof(GimpBrushHeader));
     }
 
-    setName(i18n(name.toAscii())); // Ascii? And what with real UTF-8 chars?
+    setName(name);
 
     if (bh.width == 0 || bh.height == 0) {
         return false;

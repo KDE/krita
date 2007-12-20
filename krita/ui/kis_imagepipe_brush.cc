@@ -202,7 +202,7 @@ bool KisImagePipeBrush::init()
         line1.append(m_data[i]);
         i++;
     }
-    setName(i18n(QString::fromUtf8(line1, line1.size()).toAscii()));
+    setName(QString::fromUtf8(line1, line1.size()));
 
     i++; // Skip past the first newline
 

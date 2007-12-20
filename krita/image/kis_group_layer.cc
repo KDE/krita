@@ -322,8 +322,6 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     bool first = true; // The first layer in a stack needs special compositing
 
-
-
     if (!adjLayer.isNull()) {
         KisPainter gc(m_d->projection);
         gc.bitBlt(rc.left(), rc.top(),

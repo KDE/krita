@@ -188,13 +188,18 @@ public:
             if (!layer->visible())
                 return true;
 
+            QRect tmpRc = m_rc;
+            
             KisPaintDeviceSP tempTarget = layer->temporaryTarget();
+            kDebug() << "tempTarget: " << tempTarget;
             if (tempTarget) {
-                m_rc = (layer->extent() | tempTarget->extent()) & m_rc;
+                tmpRc = (layer->extent() | tempTarget->extent()) & tmpRc;
             }
 
-            if (m_rc.width() == 0 || m_rc.height() == 0) // Don't even try
+            if (tmpRc.width() == 0 || tmpRc.height() == 0) // Don't even try
                 return true;
+
+            kDebug() << "Filtering on " << tmpRc;
 
             KisFilterConfiguration * cfg = layer->filter();
             if (!cfg) return false;
@@ -203,36 +208,40 @@ public:
             if (!f) return false;
 
             // Possibly enlarge the rect that changed (like for convolution filters)
-            m_rc = f->enlargeRect(m_rc, cfg);
+            tmpRc = f->enlargeRect(tmpRc, cfg);
 
             KisSelectionSP selection = layer->selection();
             KisPaintDeviceSP layerProjection = layer->projection();
-            selection->convertToQImage(0, 0, 0, m_rc.width(), m_rc.height()).save("e.png");
-            KisFilterConstProcessingInformation srcCfg(m_projection, m_rc.topLeft(), 0);
-            KisFilterProcessingInformation dstCfg(layerProjection, m_rc.topLeft(), 0);
+
+            KisPainter gc1(layerProjection);
+            gc1.setCompositeOp(layerProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
+            gc1.bitBlt(m_rc.topLeft(), m_projection, m_rc);
+            gc1.end();
+                       
+            
+            
+            KisFilterConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
+            KisFilterProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
 
             // Some filters will require usage of oldRawData, which is not available without
             // a transaction!
             KisTransaction* cmd = new KisTransaction("", layerProjection);
-
-            m_projection->convertToQImage(0, 0, 0, m_rc.width(), m_rc.height()).save("q.png");
-            f->process(srcCfg, dstCfg, m_rc.size(), cfg);
-            layerProjection->convertToQImage(0, 0, 0, m_rc.width(), m_rc.height()).save("w.png");
+            f->process(srcCfg, dstCfg, tmpRc.size(), cfg);
             delete cmd;
 
             // Copy the filtered bits onto the projection
             KisPainter gc(m_projection);
             if (selection)
-                gc.bltSelection(m_rc.left(), m_rc.top(),
+                gc.bltSelection(tmpRc.left(), tmpRc.top(),
                                 layer->compositeOp(), layerProjection, selection, layer->opacity(),
-                                m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+                                tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
             else
-                gc.bitBlt(m_rc.left(), m_rc.top(),
+                gc.bitBlt(tmpRc.left(), tmpRc.top(),
                           layer->compositeOp(), layerProjection, layer->opacity(),
-                          m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+                          tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
             gc.end();
 
-            layer->setClean( m_rc );
+            layer->setClean( tmpRc  );
 
             return true;
         }

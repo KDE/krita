@@ -21,10 +21,37 @@
 
 #include "kis_kra_loader_test.h"
 
-#include "kis_kra_loader.h"
+#include <KoStore.h>
+#include <KoDocument.h>
+#include <KoDocumentInfo.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
+
+#include "kis_doc2.h"
+#include "kis_image.h"
 
 void KisKraLoaderTest::testLoading()
 {
+    KisDoc2 doc;
+    doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+    KisImageSP image = doc.image();
+    QCOMPARE( image->nlayers(), 12 );
+    QCOMPARE( doc.documentInfo()->aboutInfo("title"), QString("test image for loading"));
+    QCOMPARE( image->height(), 753 );
+    QCOMPARE( image->width(), 1000 );
+    QCOMPARE( image->colorSpace()->id(), KoColorSpaceRegistry::instance()->rgb8()->id() );
+
+    KisNodeSP node = image->root()->firstChild();
+    QVERIFY( node );
+    QCOMPARE( node->name(), QString("Background"));
+    QVERIFY( node->inherits("KisPaintLayer") );
+    
+    node = node->nextSibling();
+    QVERIFY( node );
+    QCOMPARE( node->name(), QString("Group 1"));
+    QVERIFY( node->inherits("KisGroupLayer") );
+    QCOMPARE( (int) node->childCount(), 2 );
+    
 }
 
 QTEST_KDEMAIN(KisKraLoaderTest, GUI);

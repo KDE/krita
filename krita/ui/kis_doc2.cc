@@ -298,7 +298,7 @@ bool KisDoc2::loadXML(QIODevice *, const KoXmlDocument& doc)
     m_d->conversionDepth = attr.toInt();
 
     if (!root.hasChildNodes()) {
-        return false; // XXX used to be: return slotNewImage();
+        return false;
     }
 
     setUndo(false);
@@ -433,6 +433,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
     
+    connect( m_d->image.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
     emit sigLoadingFinished();
         
     return true;

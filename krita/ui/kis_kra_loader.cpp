@@ -146,7 +146,6 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         img = new KisImage(m_d->document->undoAdapter(), width, height, cs, name);
         
         img->lock();
-        connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
         
         img->setResolution(xres, yres);
 
@@ -200,14 +199,14 @@ void KisKraLoader::loadBinaryData( KoStore * store, KisImageSP img, const QStrin
 
 void KisKraLoader::loadLayers(const KoXmlElement& element, KisImageSP img, KisGroupLayerSP parent)
 {
-    KoXmlNode node = element.firstChild();
+    KoXmlNode node = element.lastChild();
     KoXmlNode child;
 
     if(!node.isNull())
     {
         if (node.isElement()) {
             if (node.nodeName() == "LAYERS") {
-                for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
+                for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
                     KisLayerSP layer = loadLayer(child.toElement(), img);
 
                     if (!layer) {

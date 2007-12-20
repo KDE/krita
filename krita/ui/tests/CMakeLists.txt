@@ -57,3 +57,9 @@ kde4_add_unit_test(KisNodeActionTest TESTNAME krita-ui-KisNodeActionTest ${kis_n
 target_link_libraries(KisNodeActionTest  ${KDE4_KDEUI_LIBS} komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
 
 
+
+########### next target ###############
+
+set(kis_kra_loader_test_SRCS kis_kra_loader_test.cpp )
+kde4_add_unit_test(KisKraLoaderTest TESTNAME krita-image-KisKraLoaderTest ${kis_kra_loader_test_SRCS})
+target_link_libraries(KisKraLoaderTest  ${KDE4_KDEUI_LIBS} komain kritaimage kritaui ${QT_QTTEST_LIBRARY})

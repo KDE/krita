@@ -51,7 +51,7 @@ public:
 protected:
 
     /**
-     * Visit all child nodes of the given node until one node returns
+     * Visit all child nodes of the given node starting with the first one until one node returns
      * false. Then visitAll returns false, otherwise true.
      *
      * @param node the parent node whose children will be visited
@@ -69,6 +69,30 @@ protected:
             }
             return true;
         }
+
+
+
+    /**
+     * Visit all child nodes of the given node starting with the last one until one node returns
+     * false. Then visitAll returns false, otherwise true.
+     *
+     * @param node the parent node whose children will be visited
+     * @param breakOnFail break if one of the childs returns false on accept
+     * @return true if none of the childnodes returns false on
+     * accepting the visitor.
+     */
+    bool visitAllInverse( KisNode * node, bool breakOnFail = false )
+        {
+            KisNodeSP child = node->lastChild();
+            while (child) {
+                if ( !child->accept( *this ) ) {
+                    if ( breakOnFail )
+                        return false;
+                }
+                child = child->prevSibling();
+            }
+            return true;
+        }        
 };
 
 

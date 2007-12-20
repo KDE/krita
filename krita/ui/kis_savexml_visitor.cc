@@ -95,7 +95,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
 
-    return visitAll( layer );
+    return visitor.visitAllInverse( layer );
 }
 
 bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)

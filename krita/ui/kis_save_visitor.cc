@@ -119,12 +119,7 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
 
 bool KisSaveVisitor::visit(KisGroupLayer *layer)
 {
-    KisSaveVisitor visitor(m_img, m_store, m_count, m_name);
-
-    if(m_external)
-        visitor.setExternalUri(m_uri);
-
-    return visitAll( layer );
+    return visitAllInverse( layer );
 }
 
 bool KisSaveVisitor::visit(KisAdjustmentLayer* layer)

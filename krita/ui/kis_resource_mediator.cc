@@ -26,27 +26,34 @@
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
 
-KisResourceMediator::KisResourceMediator(KoResourceItemChooser *chooser,
+#include "kis_itemchooser.h"
+#include "kis_resourceserver_adapter.h"
+
+KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
+                     KisAbstractResourceServerAdapter* rServerAdapter,
                      QObject *parent,
                      const char *name)
-    : QObject(parent), m_chooser(chooser)
+    : QObject(parent), m_chooser(chooser), m_rServerAdapter(rServerAdapter)
 {
     setObjectName(name);
 
     Q_ASSERT(chooser);
+    Q_ASSERT(rServerAdapter);
     m_activeItem = 0;
 
+    QList<KoResource*> resources = rServerAdapter->resources();
+    foreach (KoResource* resource, resources)
+        addResourceItem(new KoResourceItem(resource));
+
     connect(m_chooser, SIGNAL(selected(QTableWidgetItem*)), SLOT(setActiveItem(QTableWidgetItem*)));
+    connect(m_chooser, SIGNAL(deleteClicked() ), this, SLOT( deleteActiveResource() ) );
+
+    connect(m_rServerAdapter, SIGNAL(resourceAdded(KoResource*) ), this, SLOT( rServerAddedResource(KoResource*) ) );
+    connect(m_rServerAdapter, SIGNAL(removingResource(KoResource*) ), this, SLOT( rServerRemovingResource(KoResource*) ) );
 }
 
 KisResourceMediator::~KisResourceMediator()
 {
-}
-
-void KisResourceMediator::addItems(const QList<KoResourceItem *>& items)
-{
-    foreach (KoResourceItem *item, items)
-        addResourceItem(item);
 }
 
 KoResource *KisResourceMediator::currentResource() const
@@ -96,6 +103,15 @@ void KisResourceMediator::setActiveItem(QTableWidgetItem *item)
     }
 }
 
+void KisResourceMediator::deleteActiveResource()
+{
+    KoResource* r = currentResource();
+    if(!itemFor(r))
+        return;
+
+    m_rServerAdapter->removeResource(r);
+}
+
 void KisResourceMediator::addResourceItem(KoResourceItem* item)
 {
     if (item->resource() && item->resource()->valid()) {
@@ -105,6 +121,30 @@ void KisResourceMediator::addResourceItem(KoResourceItem* item)
         m_chooser->addItem(item);
         if (m_activeItem == 0) setActiveItem(item);
     }
+}
+
+void KisResourceMediator::rServerAddedResource(KoResource *resource)
+{
+    if (resource && resource->valid()) {
+
+        KoResourceItem *item = new KoResourceItem(resource);
+        Q_CHECK_PTR(item);
+
+        addResourceItem(item);
+    }
+}
+
+void KisResourceMediator::rServerRemovingResource(KoResource *resource)
+{
+    KoResourceItem *item = itemFor(resource);
+    if(item)
+        removeResourceItem(item);
+}
+
+void KisResourceMediator::removeResourceItem(KoResourceItem* item)
+{
+    m_items.remove(item->resource());
+    m_chooser->removeItem(item);
 }
 
 #include "kis_resource_mediator.moc"

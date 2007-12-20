@@ -21,6 +21,7 @@
 #include <QVBoxLayout>
 
 #include <klocale.h>
+#include <kfiledialog.h>
 #include <KoResourceItemChooser.h>
 
 #include "KoColorSpace.h"
@@ -28,6 +29,7 @@
 #include "kis_global.h"
 #include "kis_icon_item.h"
 #include "kis_pattern.h"
+#include "kis_resourceserverprovider.h"
 
 KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : KisItemChooser(parent, name)
 {
@@ -40,6 +42,8 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : KisIte
 
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(chooserWidget(), 10);
+
+    connect( this, SIGNAL( importClicked() ), this, SLOT( slotImportPattern() ) );
 }
 
 KisPatternChooser::~KisPatternChooser()
@@ -57,6 +61,14 @@ void KisPatternChooser::update(QTableWidgetItem *item)
 
         m_lbName->setText(text);
     }
+}
+
+void KisPatternChooser::slotImportPattern()
+{
+    QString filter( "*.jpg *.gif *.png *.tif *.xpm *.bmp" );
+    QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Pattern to Add" ) );
+
+    KisResourceServerProvider::instance()->patternServer()->importResource(filename);
 }
 
 #include "kis_pattern_chooser.moc"

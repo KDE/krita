@@ -38,7 +38,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_custom_brush.h"
 #include "kis_resource_mediator.h"
-#include "kis_resourceserver.h"
+#include "kis_resourceserverprovider.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 
@@ -46,12 +46,14 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString&
     : KisWdgCustomBrush(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
-    m_mediator = 0;
     setWindowTitle(caption);
 
     m_brush = 0;
 
     preview->setScaledContents(true);
+
+    KoResourceServer<KisBrush>* rServer = KisResourceServerProvider::instance()->brushServer();
+    m_rServerAdapter = new KisResourceServerAdapter<KisBrush>(rServer);
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUseBrush()));
@@ -62,6 +64,7 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString&
 
 KisCustomBrush::~KisCustomBrush() {
     delete m_brush;
+    delete m_rServerAdapter;
 }
 
 void KisCustomBrush::showEvent(QShowEvent *) {
@@ -109,8 +112,8 @@ void KisCustomBrush::slotAddPredefined() {
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
-    if (m_server)
-        m_server->addResource(m_brush->clone());
+    if (m_rServerAdapter)
+        m_rServerAdapter->addResource(m_brush->clone());
 }
 
 void KisCustomBrush::slotUseBrush() {

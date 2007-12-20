@@ -22,6 +22,7 @@
 #include <QVBoxLayout>
 
 #include <klocale.h>
+#include <kfiledialog.h>
 #include <KoResourceItemChooser.h>
 
 #include "kis_view2.h"
@@ -30,6 +31,7 @@
 #include "KoSegmentGradient.h"
 #include "kis_autogradient.h"
 #include "kis_resource_provider.h"
+#include "kis_resourceserverprovider.h"
 
 #include "kis_gradient_chooser.h"
 
@@ -63,6 +65,8 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
     mainLayout->addWidget(chooserWidget(), 10);
     mainLayout->addWidget(m_customGradient, 10);
     setLayout(mainLayout);
+
+    connect( this, SIGNAL( importClicked() ), this, SLOT( slotImportGradient() ) );
 }
 
 KisGradientChooser::~KisGradientChooser()
@@ -80,6 +84,13 @@ void KisGradientChooser::update(QTableWidgetItem *item)
     }
 }
 
+void KisGradientChooser::slotImportGradient()
+{
+    QString filter( "*.ggr" );
+    QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Gradient to Add" ) );
+
+    KisResourceServerProvider::instance()->gradientServer()->importResource(filename);
+}
 
 #include "kis_gradient_chooser.moc"
 

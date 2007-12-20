@@ -171,6 +171,11 @@ public:
      */
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
+    /**
+     * @return default file extension for saving the brush
+     */
+    virtual QString defaultFileExtension() const;
+
 protected:
     void setWidth(qint32 w);
     void setHeight(qint32 h);

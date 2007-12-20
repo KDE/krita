@@ -24,10 +24,8 @@
 
 class KHBox;
 
-class KoResourceChooser;
+class KoResourceItemChooser;
 class QTableWidgetItem;
-
-typedef QList<QTableWidgetItem *> vQTableWidgetItem;
 
 class KisItemChooser : public QWidget {
 
@@ -42,12 +40,16 @@ public:
     void setCurrent(QTableWidgetItem *item);
     void setCurrent(int index);
 
+    void removeItem(KoResourceItem *item);
+
 public slots:
-    void addItem(QTableWidgetItem *item);
-    void addItems(const vQTableWidgetItem& items);
+    void addItem(KoResourceItem *item);
+    void addItems(const QList<KoResourceItem *>& items);
 
 signals:
     void selected(QTableWidgetItem *item);
+    void importClicked();
+    void deleteClicked();
 
 protected:
     virtual void update(QTableWidgetItem *item) = 0;
@@ -58,7 +60,7 @@ private slots:
 
 private:
     KHBox *m_frame;
-    KoResourceChooser *m_chooser;
+    KoResourceItemChooser *m_chooser;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

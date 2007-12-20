@@ -577,4 +577,9 @@ void KoStopGradient::parseSvgColor(QColor &color, const QString &s)
     }
 }
 
+QString KoStopGradient::defaultFileExtension() const
+{
+    return QString(".svg");
+}
+
 #include "KoStopGradient.moc"

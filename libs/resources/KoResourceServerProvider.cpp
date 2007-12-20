@@ -23,7 +23,6 @@
 
 #include <QFileInfo>
 #include <QStringList>
-#include <QThread>
 #include <QDir>
 
 #include <kdebug.h>
@@ -38,7 +37,7 @@ class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
 
 public:
 
-    GradientResourceServer() : KoResourceServer<KoAbstractGradient>()
+    GradientResourceServer(const QString& type) : KoResourceServer<KoAbstractGradient>(type)
     {
     }
 
@@ -60,37 +59,31 @@ private:
 
         return grad;
     }
-
-    /// Returns path where to save user defined gradients to
-    virtual QString saveLocation()
-    {
-        return KGlobal::mainComponent().dirs()->saveLocation("ko_gradients" );
-    }
 };
 
-class ResourceLoaderThread : public QThread {
+KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server, const QString & extensions)
+    : QThread()
+    , m_server(server)
+{
+    m_fileNames = getFileNames( extensions );
+}
 
-public:
+void KoResourceLoaderThread::run()
+{
+    m_server->loadResources(m_fileNames);
+}
 
-    ResourceLoaderThread(KoResourceServerBase * server, const QStringList & files)
-        : QThread()
-        , m_server(server)
-        , m_fileNames( files )
-    {
+QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
+{
+    QStringList extensionList = extensions.split(":");
+    QStringList fileNames;
+
+    foreach (QString extension, extensionList) {
+        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toAscii(), extension);
     }
+    return fileNames;
+}
 
-
-    void run()
-    {
-        m_server->loadResources(m_fileNames);
-    }
-
-private:
-
-    KoResourceServerBase * m_server;
-    QStringList m_fileNames;
-
-};
 
 KoResourceServerProvider *KoResourceServerProvider::m_singleton = 0;
 
@@ -104,16 +97,20 @@ KoResourceServerProvider::KoResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
-    m_patternServer = new KoResourceServer<KoPattern>();
-    ResourceLoaderThread t1 (m_patternServer, getFileNames("*.pat", "ko_patterns"));
+    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "krita/palettes/");
+    KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
+    KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+
+    m_patternServer = new KoResourceServer<KoPattern>("ko_patterns");
+    KoResourceLoaderThread t1 (m_patternServer, "*.pat");
     t1.start();
 
-    m_gradientServer = new GradientResourceServer();
-    ResourceLoaderThread t2 (m_gradientServer, getFileNames("*.kgr:*.svg:*.ggr", "ko_gradients"));
+    m_gradientServer = new GradientResourceServer("ko_gradients");
+    KoResourceLoaderThread t2 (m_gradientServer, "*.kgr:*.svg:*.ggr");
     t2.start();
 
-    m_paletteServer = new KoResourceServer<KoColorSet>();
-    ResourceLoaderThread t3 (m_paletteServer, getFileNames("*.gpl:*.pal:*.act", "kis_palettes") );
+    m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes");
+    KoResourceLoaderThread t3 (m_paletteServer, "*.gpl:*.pal:*.act");
     t3.start();
 
     t1.wait();
@@ -147,17 +144,5 @@ KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
 KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
 {
     return m_paletteServer;
-}
-
-
-QStringList KoResourceServerProvider::getFileNames( const QString & extensions, const QString & type )
-{
-    QStringList extensionList = extensions.split(":");
-    QStringList fileNames;
-
-    foreach (QString extension, extensionList) {
-        fileNames += KGlobal::mainComponent().dirs()->findAllResources(type.toAscii(), extension);
-    }
-    return fileNames;
 }
 

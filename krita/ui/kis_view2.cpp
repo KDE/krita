@@ -64,6 +64,7 @@
 #include <KoColorDocker.h>
 #include "KoColorSpaceRegistry.h"
 #include <KoDockRegistry.h>
+#include <KoResourceServerProvider.h>
 
 #include <kactioncollection.h>
 
@@ -94,7 +95,7 @@
 #include "kis_group_layer.h"
 #include "kis_custom_palette.h"
 #include "ui_wdgpalettechooser.h"
-#include "kis_resourceserver.h"
+#include "kis_resourceserverprovider.h"
 #include "kis_palette_docker.h"
 #include "kis_node_model.h"
 #include "kis_projection.h"
@@ -730,17 +731,7 @@ void KisView2::slotPreferences()
 
 void KisView2::slotEditPalette()
 {
-    KisResourceServerBase* srv = KisResourceServerRegistry::instance()->value("PaletteServer");
-    if (!srv) {
-        return;
-    }
-    QList<KoResource*> resources = srv->resources();
-    QList<KoColorSet*> palettes;
-
-    foreach (KoResource *resource, resources) {
-        KoColorSet* palette = dynamic_cast<KoColorSet*>(resource);
-        palettes.append(palette);
-    }
+    QList<KoColorSet*> palettes = KoResourceServerProvider::instance()->paletteServer()->resources();
 
     KDialog* base = new KDialog(this );
     base->setCaption(  i18n("Edit Palette") );

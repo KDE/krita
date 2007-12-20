@@ -99,7 +99,7 @@ private:
 
     KisAutobrush * m_autobrush;
     KisBrushChooser * m_brushChooser;
-    KoResourceItemChooser * m_gradientChooser;
+    KisGradientChooser * m_gradientChooser;
 
     KisPaintopBox * m_paintopBox;
 };

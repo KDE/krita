@@ -69,6 +69,9 @@ public:
     /// Returns if resource can be removed by the user
     bool removable() const;
 
+    /// Returns the default file extension which should be when saving the resource
+    virtual QString defaultFileExtension() const;
+
 public:
     QString filename() const;
     void setFilename(const QString& filename);

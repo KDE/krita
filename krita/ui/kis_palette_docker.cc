@@ -26,7 +26,6 @@
 #include "KoResource.h"
 #include "KoColorSet.h"
 #include "kis_palette_view.h"
-#include "kis_resourceserver.h"
 #include "kis_resource_provider.h"
 
 KisPaletteDocker::KisPaletteDocker( KisView2 * view )
@@ -49,9 +48,9 @@ KisPaletteDocker::KisPaletteDocker( KisView2 * view )
     connect(m_paletteView, SIGNAL(colorSelected(const KoColor &)),
             this, SLOT(colorSelected(const KoColor &)));
 */
-    KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
-    QList<KoResource*> resources = rServer->resources();
+//     KisResourceServerBase* rServer;
+//     rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
+//     QList<KoResource*> resources = rServer->resources();
 }
 
 KisPaletteDocker::~KisPaletteDocker()

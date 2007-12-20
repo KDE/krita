@@ -24,10 +24,28 @@
 
 #include <koresource_export.h>
 
+#include <QThread>
+
 #include "KoResourceServer.h"
 #include "KoPattern.h"
 #include "KoAbstractGradient.h"
 #include "KoColorSet.h"
+
+class KORESOURCES_EXPORT KoResourceLoaderThread : public QThread {
+
+public:
+
+    KoResourceLoaderThread(KoResourceServerBase * server, const QString & extensions);
+
+    void run();
+private:
+    QStringList getFileNames( const QString & extensions);
+
+    KoResourceServerBase * m_server;
+    QStringList m_fileNames;
+
+};
+
 
 class KORESOURCES_EXPORT KoResourceServerProvider
 {
@@ -43,8 +61,6 @@ private:
     KoResourceServerProvider();
     KoResourceServerProvider(const KoResourceServerProvider&);
     KoResourceServerProvider operator=(const KoResourceServerProvider&);
-
-    QStringList getFileNames( const QString & extensions, const QString & type );
 
     static KoResourceServerProvider *m_singleton;
     KoResourceServer<KoPattern>* m_patternServer;

@@ -85,5 +85,10 @@ bool KoResource::removable() const
     return d->removable;
 }
 
+QString KoResource::defaultFileExtension() const
+{
+    return QString();
+}
+
 #include "KoResource.moc"
 

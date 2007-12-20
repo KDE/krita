@@ -30,7 +30,7 @@
 #include "kis_paint_information.h"
 #include "kis_paintop_registry.h"
 #include "kis_recorded_action_factory_registry.h"
-#include "kis_resourceserver.h"
+#include "kis_resourceserverprovider.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 
@@ -153,12 +153,12 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
     // TODO: support for autobrush
     QString name = elt.attribute("name","");
     kDebug() << "Looking for brush " << name;
-    QList<KoResource*> resources = KisResourceServerRegistry::instance()->get("BrushServer")->resources();
-    foreach(KoResource* r, resources)
+    QList<KisBrush*> resources = KisResourceServerProvider::instance()->brushServer()->resources();
+    foreach(KisBrush* r, resources)
     {
         if(r->name() == name)
         {
-            return static_cast<KisBrush*>(r);
+            return r;
         }
     }
     kDebug() << "Brush " << name << " not found.";

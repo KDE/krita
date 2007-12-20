@@ -23,11 +23,11 @@
 #include <QShowEvent>
 
 #include "ui_wdgcustompattern.h"
+#include "kis_resourceserver_adapter.h"
 
 
 class KoResource;
 class KisView2;
-class KisResourceServerBase;
 class KisResourceMediator;
 
 class KisWdgCustomPattern : public QWidget, public Ui::KisWdgCustomPattern
@@ -44,10 +44,10 @@ class KisCustomPattern : public KisWdgCustomPattern
 public:
     KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view);
     virtual ~KisCustomPattern();
-    void setResourceServer(KisResourceServerBase* server) { m_server = server; }
 
 signals:
     void activatedResource(KoResource *);
+    void addPattern(KisPattern*);
 
 protected:
     virtual void showEvent(QShowEvent *);
@@ -62,8 +62,7 @@ private:
     void createPattern();
     KisView2* m_view;
     KisPattern* m_pattern;
-    KisResourceMediator* m_mediator;
-    KisResourceServerBase* m_server;
+    KisResourceServerAdapter<KisPattern>* m_rServerAdapter;
 };
 
 

@@ -42,7 +42,7 @@
 #include "KoCanvasBase.h"
 #include "kis_iterators_pixel.h"
 #include "KoColor.h"
-#include "kis_resourceserver.h"
+#include "KoResourceServerProvider.h"
 #include "KoColorSet.h"
 
 namespace {
@@ -236,23 +236,23 @@ QWidget* KisToolColorPicker::createOptionWidget()
     connect(m_optionsWidget->radius, SIGNAL(valueChanged(int)),
             SLOT(slotChangeRadius(int)));
 
-    KisResourceServerBase* srv = KisResourceServerRegistry::instance()->value("PaletteServer");
+    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
 
     if (!srv) {
         return m_optionsWidget;
     }
 
-    QList<KoResource*> palettes = srv->resources();
+    QList<KoColorSet*> palettes = srv->resources();
 
-    foreach (KoResource *resource, palettes) {
-        KoColorSet* palette = dynamic_cast<KoColorSet*>(resource);
+    foreach (KoColorSet *palette, palettes) {
         if (palette) {
             m_optionsWidget->cmbPalette->addItem(palette->name());
             m_palettes.append(palette);
         }
     }
 
-    connect(srv, SIGNAL(resourceAdded(KoResource*)), this, SLOT(slotAddPalette(KoResource*)));
+    //TODO
+    //connect(srv, SIGNAL(resourceAdded(KoResource*)), this, SLOT(slotAddPalette(KoResource*)));
 
     return m_optionsWidget;
 }

@@ -28,7 +28,12 @@
 #include <QList>
 #include <QFileInfo>
 
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kcomponentdata.h>
+
 #include "KoResource.h"
+#include "KoResourceServerObserver.h"
 
 #include "koresource_export.h"
 
@@ -39,16 +44,20 @@ class KoResource;
 class KORESOURCES_EXPORT KoResourceServerBase {
 
 public:
-    KoResourceServerBase() {}
+    KoResourceServerBase(const QString& type): m_type(type) {}
     virtual ~KoResourceServerBase() {}
 
     virtual void loadResources(QStringList filenames) = 0;
+    QString type() { return m_type; }
+
+private:
+    QString m_type;
 };
 
 template <class T> class KoResourceServer : public KoResourceServerBase {
 
 public:
-    KoResourceServer() : m_loaded(false) {}
+    KoResourceServer(const QString& type) : KoResourceServerBase(type), m_loaded(false) {}
     virtual ~KoResourceServer() {}
 
     void loadResources(QStringList filenames) {
@@ -91,6 +100,7 @@ public:
             return false;
 
         m_resources.append(resource);
+        notifyResourceAdded(resource);
 
         return true;
     }
@@ -106,6 +116,8 @@ public:
         if( ! file.remove() )
             return false;
 
+        notifyRemovingResource(resource);
+
         m_resources.removeAt( index );
         delete resource;
         return true;
@@ -118,16 +130,71 @@ public:
         return m_resources;
     }
 
+    /// Returns path where to save user defined and imported resources to
     virtual QString saveLocation() {
-        return QString();
+        return KGlobal::mainComponent().dirs()->saveLocation(type().toAscii());
+    }
+
+    T* importResource( const QString & filename ) {
+        QFileInfo fi( filename );
+        if( fi.exists() == false )
+            return 0;
+
+        T* resource = createResource( filename );
+        resource->load();
+        if(!resource->valid()){
+            kWarning(30009) << "Import failed! Resource is not valid";
+            delete resource;
+            return 0;
+         }
+
+         Q_ASSERT(!resource->defaultFileExtension().isEmpty());
+         Q_ASSERT(!saveLocation().isEmpty());
+
+        QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
+        resource->setFilename(newFilename);
+        if(!addResource(resource)) {
+            delete resource;
+            return 0;
+        }
+
+        return resource;
+    }
+
+    void addObserver(KoResourceServerObserver<T>* observer)
+    {
+        if(observer && !m_observers.contains(observer))
+            m_observers.append(observer);
+    }
+
+    void removeObserver(KoResourceServerObserver<T>* observer)
+    {
+        int index = m_observers.indexOf( observer );
+        if( index < 0 )
+            return;
+
+        m_observers.removeAt( index );
     }
 
 protected:
     virtual T* createResource( const QString & filename ) { return new T(filename); }
 
+    void notifyResourceAdded(T* resource)
+    {
+        foreach(KoResourceServerObserver<T>* observer, m_observers)
+            observer->resourceAdded(resource);
+    }
+
+    void notifyRemovingResource(T* resource)
+    {
+        foreach(KoResourceServerObserver<T>* observer, m_observers)
+            observer->removingResource(resource);
+    }
+
+
 private:
     QList<T*> m_resources;
-
+    QList<KoResourceServerObserver<T>*> m_observers;
     bool m_loaded;
 
 };

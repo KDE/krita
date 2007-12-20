@@ -267,6 +267,11 @@ QGradient* KoSegmentGradient::toQGradient() const
     return gradient;
 }
 
+QString KoSegmentGradient::defaultFileExtension() const
+{
+    return QString(".ggr");
+}
+
 KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor)
 {
     m_interpolator = 0;

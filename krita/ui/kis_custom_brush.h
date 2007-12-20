@@ -23,11 +23,10 @@
 #include <QShowEvent>
 
 #include "ui_wdgcustombrush.h"
+#include "kis_resourceserver_adapter.h"
 
 class KoResource;
 class KisView2;
-class KisResourceServerBase;
-class KisResourceMediator;
 
 class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
 {
@@ -43,8 +42,7 @@ class KisCustomBrush : public KisWdgCustomBrush
 public:
     KisCustomBrush(QWidget *parent, const char* name, const QString& caption, KisView2* view);
     virtual ~KisCustomBrush();
-    void setResourceServer(KisResourceServerBase* server) { m_server = server; }
-    
+
 public slots:
     void slotUseBrush();
 
@@ -63,8 +61,7 @@ private:
     void createBrush();
     KisView2* m_view;
     KisBrush* m_brush;
-    KisResourceMediator* m_mediator;
-    KisResourceServerBase* m_server;
+    KisResourceServerAdapter<KisBrush>* m_rServerAdapter;
 };
 
 

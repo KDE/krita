@@ -18,7 +18,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <KoResourceChooser.h>
+#include <KoResourceItemChooser.h>
 
 #include "kis_itemchooser.h"
 #include "kis_global.h"
@@ -30,10 +30,12 @@ KisItemChooser::KisItemChooser(QWidget *parent, const char *name)
     setObjectName(name);
 /*    m_frame = new QVBox(this);
     m_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
-    m_chooser = new KoResourceChooser(QSize(30,30), this);
+    m_chooser = new KoResourceItemChooser(this);
     m_chooser->setMinimumSize(200, 150);
 
-    QObject::connect(m_chooser, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(slotItemSelected(QTableWidgetItem*)));
+    connect( m_chooser, SIGNAL(selected(QTableWidgetItem*)), this, SLOT(slotItemSelected(QTableWidgetItem*)));
+    connect( m_chooser, SIGNAL( importClicked() ), this, SIGNAL( importClicked() ) );
+    connect( m_chooser, SIGNAL( deleteClicked() ), this, SIGNAL( deleteClicked() ) );
 }
 
 KisItemChooser::~KisItemChooser()
@@ -42,13 +44,18 @@ KisItemChooser::~KisItemChooser()
 
 void KisItemChooser::setCurrent(QTableWidgetItem *item)
 {
-    m_chooser->setCurrentItem(item);
+    m_chooser->setCurrent(item);
     update(item);
 }
 
 void KisItemChooser::setCurrent(int index)
 {
-    setCurrent(m_chooser->itemAt(index));
+    m_chooser->setCurrent(index);
+}
+
+void KisItemChooser::removeItem(KoResourceItem *item)
+{
+    m_chooser->removeItem(item);
 }
 
 QTableWidgetItem* KisItemChooser::currentItem()
@@ -62,14 +69,14 @@ void KisItemChooser::slotItemSelected(QTableWidgetItem *item)
     emit selected(currentItem());
 }
 
-void KisItemChooser::addItem(QTableWidgetItem *item)
+void KisItemChooser::addItem(KoResourceItem *item)
 {
     m_chooser->addItem(item);
 }
 
-void KisItemChooser::addItems(const vQTableWidgetItem& items)
+void KisItemChooser::addItems(const QList<KoResourceItem *>& items)
 {
-    foreach (QTableWidgetItem *item, items)
+    foreach (KoResourceItem *item, items)
         m_chooser->addItem(item);
 }
 

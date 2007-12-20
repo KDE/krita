@@ -241,6 +241,8 @@ public:
 
     virtual QGradient* toQGradient() const;
 
+    QString defaultFileExtension() const;
+
 protected:
     inline void pushSegment( KoGradientSegment* segment ) { m_segments.push_back(segment); }
     void setImage(const QImage& img);

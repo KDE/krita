@@ -49,6 +49,9 @@ public:
     KisGradientChooser(KisView2 * view, QWidget *parent = 0, const char *name = 0);
     virtual ~KisGradientChooser();
 
+private slots:
+    void slotImportGradient();
+
 protected:
     virtual void update(QTableWidgetItem *item);
 

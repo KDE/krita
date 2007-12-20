@@ -116,25 +116,7 @@ const KComponentData &KisFactory2::componentData()
         s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
         s_instance->dirs()->addResourceType("toolbars", "data", "koffice/toolbar/");
 
-        // Create spec
-
-        s_instance->dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
-        s_instance->dirs()->addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-        s_instance->dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
-
-        s_instance->dirs()->addResourceType("kis_patterns", "data", "krita/patterns/");
-        s_instance->dirs()->addResourceDir("kis_patterns", "/usr/share/create/patterns/gimp");
-        s_instance->dirs()->addResourceDir("kis_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
-
-        s_instance->dirs()->addResourceType("kis_gradients", "data", "krita/gradients/");
-        s_instance->dirs()->addResourceDir("kis_gradients", "/usr/share/create/gradients/gimp");
-        s_instance->dirs()->addResourceDir("kis_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
-
         s_instance->dirs()->addResourceType("kis_profiles", "data", "krita/profiles/");
-
-        s_instance->dirs()->addResourceType("kis_palettes", "data", "krita/palettes/");
-        s_instance->dirs()->addResourceDir("kis_palettes", "/usr/share/create/swatches");
-        s_instance->dirs()->addResourceDir("kis_palettes", QDir::homePath() + QString("/.create/swatches"));
 
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 

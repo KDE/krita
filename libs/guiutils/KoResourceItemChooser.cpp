@@ -149,7 +149,7 @@ void KoResourceItemChooser::itemSelected(QTableWidgetItem *item)
 {
     QAbstractButton * removeButton = m_buttonGroup->button( Button_Remove );
     if( removeButton )
-        removeButton->setEnabled( QFileInfo( static_cast<KoResourceItem*>(item)->resource()->filename() ).isWritable() );
+        removeButton->setEnabled( static_cast<KoResourceItem*>(item)->resource()->removable() );
 
     emit selected(currentItem());
 }

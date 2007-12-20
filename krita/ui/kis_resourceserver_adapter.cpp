@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,30 +15,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_PATTERN_CHOOSER_H_
-#define KIS_PATTERN_CHOOSER_H_
 
-#include "kis_itemchooser.h"
+#include "kis_resourceserver_adapter.h"
 
-class QLabel;
+#include "kdebug.h"
 
-class KisPatternChooser : public KisItemChooser {
+KisAbstractResourceServerAdapter::KisAbstractResourceServerAdapter()
+{
+}
 
-    Q_OBJECT
+KisAbstractResourceServerAdapter::~KisAbstractResourceServerAdapter()
+{
+}
 
-public:
-    KisPatternChooser(QWidget *parent = 0, const char *name = 0);
-    virtual ~KisPatternChooser();
+void KisAbstractResourceServerAdapter::emitResourceAdded(KoResource* resource)
+{
+    emit resourceAdded(resource);
+}
 
-private slots:
-    void slotImportPattern();
+void KisAbstractResourceServerAdapter::emitRemovingResource(KoResource* resource)
+{
+    emit removingResource(resource);
+}
 
-protected:
-    virtual void update(QTableWidgetItem *item);
-
-private:
-    QLabel *m_lbName;
-};
-
-#endif // KIS_PATTERN_CHOOSER_H_
-
+#include "kis_resourceserver_adapter.moc"

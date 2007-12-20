@@ -35,20 +35,21 @@
 #include "kis_paint_device.h"
 #include "kis_pattern.h"
 #include "kis_custom_pattern.h"
-#include "kis_resource_mediator.h"
-#include "kis_resourceserver.h"
+#include "kis_resourceserverprovider.h"
 #include "kis_paint_layer.h"
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view)
     : KisWdgCustomPattern(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
-    m_mediator = 0;
     setWindowTitle(caption);
 
     m_pattern = 0;
 
     preview->setScaledContents(true);
+
+    KoResourceServer<KisPattern>* rServer = KisResourceServerProvider::instance()->patternServer();
+    m_rServerAdapter = new KisResourceServerAdapter<KisPattern>(rServer);
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(patternButton, SIGNAL(pressed()), this, SLOT(slotUsePattern()));
@@ -57,6 +58,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
 KisCustomPattern::~KisCustomPattern() {
     delete m_pattern;
+    delete m_rServerAdapter;
 }
 
 void KisCustomPattern::showEvent(QShowEvent *) {
@@ -101,8 +103,8 @@ void KisCustomPattern::slotAddPredefined() {
 
     // Add it to the pattern server, so that it automatically gets to the mediators, and
     // so to the other pattern choosers can pick it up, if they want to
-    if (m_server)
-        m_server->addResource(m_pattern->clone());
+    if (m_rServerAdapter)
+        m_rServerAdapter->addResource(m_pattern->clone());
 }
 
 void KisCustomPattern::slotUsePattern() {

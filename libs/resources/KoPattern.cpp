@@ -294,4 +294,9 @@ KoPattern& KoPattern::operator=(const KoPattern& pattern)
     return *this; 
 }
 
+QString KoPattern::defaultFileExtension() const
+{
+    return QString(".pat");
+}
+
 #include "KoPattern.moc"

@@ -141,6 +141,8 @@ public:
 
     virtual KisImagePipeBrush* clone() const;
 
+    virtual QString defaultFileExtension() const;
+
 private:
     bool init();
     void setParasiteString(const QString& parasite);

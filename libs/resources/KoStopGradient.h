@@ -49,6 +49,8 @@ public:
     /// Creates KoStopGradient from a QGradient
     static KoStopGradient * fromQGradient( QGradient * gradient );
 
+    QString defaultFileExtension() const;
+
 protected:
     QList<KoGradientStop> m_stops;
     QPointF m_start;

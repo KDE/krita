@@ -36,15 +36,13 @@
 
 #include "kis_view2.h"
 #include "KoColorSet.h"
+#include "KoResourceServerProvider.h"
 #include "kis_custom_palette.h"
-#include "kis_resource_mediator.h"
-#include "kis_resourceserver.h"
 
 KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view)
     : KisWdgCustomPalette(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
-    m_server = 0;
     m_palette = 0;
     m_editMode = false;
     setWindowTitle(caption);
@@ -58,6 +56,10 @@ KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *paren
         paletteList->setCurrentRow(0);
         setPalette(m_palettes.value(paletteList->currentItem()));
     }
+
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    m_rServerAdapter = new KisResourceServerAdapter<KoColorSet>(rServer);
+
     connect(paletteList, SIGNAL(currentItemChanged( QListWidgetItem*, QListWidgetItem* )), this, SLOT(slotPaletteChanged( QListWidgetItem*, QListWidgetItem* )));
     connect(addColor, SIGNAL(pressed()), this, SLOT(slotAddNew()));
     connect(removeColor, SIGNAL(pressed()), this, SLOT(slotRemoveCurrent()));
@@ -65,6 +67,7 @@ KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *paren
 }
 
 KisCustomPalette::~KisCustomPalette() {
+    delete m_rServerAdapter;
 }
 
 void KisCustomPalette::setPalette(KoColorSet* p) {
@@ -141,8 +144,8 @@ void KisCustomPalette::slotAddPalette() {
     // Add it to the palette server, so that it automatically gets to the mediators, and
     // so to the other choosers can pick it up, if they want to
     // This probably leaks!
-    if (m_server)
-        m_server->addResource(palette);
+    if (m_rServerAdapter)
+        m_rServerAdapter->addResource(palette);
 
     QListWidgetItem* item = new QListWidgetItem(palette->name());
     paletteList->addItem(item);

@@ -38,7 +38,7 @@
 
 #include <kis_paint_layer.h>
 #include <kis_pattern.h>
-#include <kis_resourceserver.h>
+#include <kis_resourceserverprovider.h>
 #include <kis_view2.h>
 
 // kritacore
@@ -142,20 +142,20 @@ QObject* Module::createHSVColor(int hue, int saturation, int value)
 
 QObject* Module::pattern(const QString& patternname)
 {
-    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->value("PatternServer");
-    foreach(KoResource* res, rServer->resources())
-        if(res->name() == patternname)
-            return new Pattern(this, dynamic_cast<KisPattern*>(res), true);
+    KoResourceServer<KisPattern>* rServer = KisResourceServerProvider::instance()->patternServer();
+    foreach(KisPattern* pattern, rServer->resources())
+        if(pattern->name() == patternname)
+            return new Pattern(this, pattern, true);
     kWarning(41011) << QString("Unknown pattern \"%1\"").arg(patternname);
     return 0;
 }
 
 QObject* Module::brush(const QString& brushname)
 {
-    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->value("BrushServer");
-    foreach(KoResource* res, rServer->resources())
-        if(res->name() == brushname)
-            return new Brush(this, dynamic_cast<KisBrush*>(res), true);
+    KoResourceServer<KisBrush>* rServer = KisResourceServerProvider::instance()->brushServer();
+    foreach(KisBrush* brush, rServer->resources())
+        if(brush->name() == brushname)
+            return new Brush(this, brush, true);
     kWarning(41011) << QString("Unknown brush \"%1\"").arg(brushname);
     return 0;
 }

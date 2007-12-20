@@ -78,7 +78,7 @@ KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace) {
 
 KisPattern* KisPattern::clone() const
 {
-    KisPattern* pattern = new KisPattern("");
+    KisPattern* pattern = new KisPattern(filename());
     pattern->setImage(img());
     pattern->setName(name());
     return pattern;

@@ -44,9 +44,13 @@
 #include <KoDualColorButton.h>
 #include <KoSegmentGradient.h>
 #include <KoResourceItemChooser.h>
-#include <kfiledialog.h>
+#include <KoResourceServer.h>
 
-#include "kis_resourceserver.h"
+#include "kis_resourceserver_adapter.h"
+#include "kis_brush.h"
+#include "kis_imagepipe_brush.h"
+#include "kis_pattern.h"
+#include "kis_resourceserverprovider.h"
 #include "kis_resource_provider.h"
 #include "kis_controlframe.h"
 #include "kis_resource_mediator.h"
@@ -54,13 +58,14 @@
 #include "kis_brush.h"
 #include "kis_pattern.h"
 #include "kis_brush_chooser.h"
+#include "kis_gradient_chooser.h"
 #include "kis_view2.h"
 #include "kis_autobrush.h"
-//#include "kis_autogradient.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"
 #include "kis_custom_brush.h"
 #include "kis_custom_pattern.h"
+#include "kis_pattern_chooser.h"
 #ifdef HAVE_TEXT_BRUSH
 #include "kis_text_brush.h"
 #endif
@@ -222,7 +227,7 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
             m_view->resourceProvider(),
             SLOT(slotBrushActivated( KoResource* )));
 
-    KoResourceItemChooser * m_brushChooser = new KoResourceItemChooser(m_brushesTab);
+    m_brushChooser = new KisBrushChooser(m_brushesTab);
     m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
 
     KisCustomBrush* customBrushes = new KisCustomBrush(0, "custombrush",
@@ -247,36 +252,20 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
 
     m_brushChooserPopup->setLayout(l);
     m_brushChooser->setFont(m_font);
-    m_brushMediator = new KisResourceMediator( m_brushChooser, this);
+
+    KoResourceServer<KisBrush>* rServer = KisResourceServerProvider::instance()->brushServer();
+    KisResourceServerAdapter<KisBrush>* rServerAdapter;
+    rServerAdapter = new KisResourceServerAdapter<KisBrush>(rServer);
+
+    m_brushMediator = new KisResourceMediator( m_brushChooser, rServerAdapter, this);
     connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
             m_view->resourceProvider(), SLOT(slotBrushActivated(KoResource*)));
-
-    QList<KoResource*> resources;
-    QList<KoResourceItem*> items;
-
-    KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance()->value("ImagePipeBrushServer");
-    resources = rServer->resources();
-
-    foreach( KoResource* resource, resources ) {
-        items.append( new KoResourceItem( resource ) );
-    }
-    m_brushMediator->addItems(items);
-
-    rServer = KisResourceServerRegistry::instance()->value("BrushServer");
-    resources = rServer->resources();
-
-    foreach( KoResource* resource, resources ) {
-        items.append( new KoResourceItem( resource ) );
-    }
-    m_brushMediator->addItems(items);
 
     KisControlFrame::connect(view->resourceProvider(), SIGNAL(sigBrushChanged(KisBrush *)),
                              this, SLOT(slotBrushChanged( KisBrush *)));
 
     m_brushChooser->setCurrent( 0 );
     m_brushMediator->setActiveItem( m_brushChooser->currentItem() );
-//     customBrushes->setResourceServer(rServer);
 
     m_autobrush->activate();
 }
@@ -297,7 +286,7 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     m_patternsTab->setContentsMargins(1, 1, 1, 1);
     l2->addWidget( m_patternsTab );
 
-    KoResourceItemChooser * chooser = new KoResourceItemChooser(m_patternChooserPopup);
+    KisPatternChooser * chooser = new KisPatternChooser(m_patternChooserPopup);
     chooser->setFont(m_font);
     m_patternsTab->addTab(chooser, i18n("Patterns"));
 
@@ -306,7 +295,12 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     customPatterns->setFont(m_font);
     m_patternsTab->addTab( customPatterns, i18n("Custom Pattern"));
 
-    m_patternMediator = new KisResourceMediator( chooser, view);
+
+    KoResourceServer<KisPattern>* rServer = KisResourceServerProvider::instance()->patternServer();
+    KisResourceServerAdapter<KisPattern>* rServerAdapter;
+    rServerAdapter = new KisResourceServerAdapter<KisPattern>(rServer);
+
+    m_patternMediator = new KisResourceMediator( chooser, rServerAdapter, view);
 
     connect( m_patternMediator, SIGNAL(activatedResource(KoResource*)),
              view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
@@ -314,23 +308,14 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
             view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
-    KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance()->value("PatternServer");
-    QList<KoResource*> resources = rServer->resources();
-
-    QList<KoResourceItem*> items;
-    foreach( KoResource* resource, resources ) {
-        items.append( new KoResourceItem( resource ) );
-    }
-    m_patternMediator->addItems(items);
+    connect(customPatterns, SIGNAL(addPattern(KisPattern*)),
+            this, SLOT(slotAddPattern(KisPattern*)));
 
     connect( view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern *)),
              this, SLOT(slotPatternChanged( KisPattern *)));
 
     chooser->setCurrent( 0 );
     m_patternMediator->setActiveItem( chooser->currentItem() );
-
-//     customPatterns->setResourceServer(rServer);
 }
 
 
@@ -350,23 +335,17 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientTab->setContentsMargins(1, 1, 1, 1);
     l2->addWidget( m_gradientTab);
 
-    m_gradientChooser = new KoResourceItemChooser(m_gradientChooserPopup);
+    m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup);
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
-    m_gradientMediator = new KisResourceMediator( m_gradientChooser, view);
+    KoResourceServer<KoSegmentGradient>* rServer = KisResourceServerProvider::instance()->gradientServer();
+    KisResourceServerAdapter<KoSegmentGradient>* rServerAdapter;
+    rServerAdapter = new KisResourceServerAdapter<KoSegmentGradient>(rServer);
+
+    m_gradientMediator = new KisResourceMediator( m_gradientChooser, rServerAdapter, view);
     connect(m_gradientMediator, SIGNAL(activatedResource(KoResource*)),
             view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
-
-    KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance()->value("GradientServer");
-    QList<KoResource*> resources = rServer->resources();
-
-    QList<KoResourceItem*> items;
-    foreach( KoResource* resource, resources ) {
-        items.append( new KoResourceItem( resource ) );
-    }
-    m_gradientMediator->addItems(items);
 
     connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoSegmentGradient *)),
             this, SLOT(slotGradientChanged( KoSegmentGradient *)));

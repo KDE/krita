@@ -21,8 +21,10 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <klocale.h>
+#include <kfiledialog.h>
 
 #include <KoResourceItemChooser.h>
+#include "kis_resourceserverprovider.h"
 #include "kis_double_widget.h"
 #include "kis_brush_chooser.h"
 #include "kis_global.h"
@@ -58,6 +60,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->addWidget(m_slSpacing, 0, 1);
 
     spacingLayout->addWidget(m_chkColorMask, 1, 0, 1, 2);
+
+    connect( this, SIGNAL( importClicked() ), this, SLOT( slotImportBrush() ) );
 }
 
 KisBrushChooser::~KisBrushChooser()
@@ -100,6 +104,14 @@ void KisBrushChooser::update(QTableWidgetItem *item)
         m_chkColorMask->setChecked(brush->useColorAsMask());
         m_chkColorMask->setEnabled(brush->hasColor());
     }
+}
+
+void KisBrushChooser::slotImportBrush()
+{
+    QString filter( "*.gbr *.gih" );
+    QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Brush to Add" ) );
+
+    KisResourceServerProvider::instance()->brushServer()->importResource(filename);
 }
 
 #include "kis_brush_chooser.moc"

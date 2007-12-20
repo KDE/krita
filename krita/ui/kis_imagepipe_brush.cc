@@ -446,5 +446,10 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const {
     return c;
 }
 
+QString KisImagePipeBrush::defaultFileExtension() const
+{
+    return QString(".gih");
+}
+
 #include "kis_imagepipe_brush.moc"
 

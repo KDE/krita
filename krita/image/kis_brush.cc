@@ -1353,7 +1353,7 @@ void KisBrush::makeMaskImage() {
 }
 
 KisBrush* KisBrush::clone() const {
-    KisBrush* c = new KisBrush("");
+    KisBrush* c = new KisBrush(filename());
     c->d->spacing = d->spacing;
     c->d->useColorAsMask = d->useColorAsMask;
     c->d->hasColor = d->useColorAsMask;
@@ -1401,6 +1401,11 @@ void KisBrush::setBrushType(enumBrushType type)
 bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 {
     return true;
+}
+
+QString KisBrush::defaultFileExtension() const
+{
+    return QString(".gbr");
 }
 
 #include "kis_brush.moc"

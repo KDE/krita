@@ -47,6 +47,8 @@ public:
 
     void setImage(const QImage& img);
 
+    QString defaultFileExtension() const;
+
     KoPattern& operator=(const KoPattern& pattern);
 private:
     bool init(QByteArray& data);

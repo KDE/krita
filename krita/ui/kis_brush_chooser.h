@@ -40,6 +40,7 @@ protected:
 private slots:
     void slotSetItemSpacing(double spacing);
     void slotSetItemUseColorAsMask(bool);
+    void slotImportBrush();
 
 private:
     QLabel *m_lbName;

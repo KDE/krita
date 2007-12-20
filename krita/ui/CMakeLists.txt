@@ -88,7 +88,7 @@ set(kritaui_LIB_SRCS
     kis_recorded_paint_actions.cc
     kis_resource_mediator.cc
     kis_resource_provider.cc
-    kis_resourceserver.cc
+    kis_resourceserverprovider.cpp
     kis_save_visitor.cc
     kis_savexml_visitor.cc
     kis_selection_manager.cc
@@ -125,6 +125,7 @@ set(kritaui_LIB_SRCS
     kis_node_manager.cpp
     kis_selection_tool_helper.cpp
     kis_print_job.cpp
+    kis_resourceserver_adapter.cpp
 # Open Raster TK
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp

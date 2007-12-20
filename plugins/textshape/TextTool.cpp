@@ -902,6 +902,20 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     return QVariant();
 }
 
+void TextTool::inputMethodEvent (QInputMethodEvent * event) {
+    if (event->replacementLength() > 0) {
+        m_caret.setPosition(m_caret.position() + event->replacementStart());
+        for (int i = event->replacementLength(); i > 0; --i) {
+            m_caret.deleteChar();
+        }
+    }
+    if(! event->commitString().isEmpty()) {
+        QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
+        keyPressEvent(&ke);
+    }
+    event->accept();
+}
+
 void TextTool::ensureCursorVisible() {
     if(m_textShapeData->endPosition() < m_caret.position() || m_textShapeData->position() > m_caret.position()) {
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());

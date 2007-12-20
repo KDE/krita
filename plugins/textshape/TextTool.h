@@ -86,6 +86,8 @@ public:
     virtual QWidget *createOptionWidget();
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+    /// reimplemented from superclass
+    virtual void inputMethodEvent(QInputMethodEvent * event);
 
     void startTextEditingPlugin(const QString &pluginId);
 

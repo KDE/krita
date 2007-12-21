@@ -115,22 +115,30 @@ int KisNodeModel::columnCount(const QModelIndex&) const
 
 QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    //kDebug(41007) <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
+    kDebug(41007) <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
 
     if (!hasIndex(row, column, parent))
     {
         return QModelIndex();
     }
-
+    KisNodeSP parentNode;
+    
     if (!parent.isValid())
     {
-        return indexFromNode( m_d->image->root()->at( row ) );
+        int rowCount = m_d->image->root()->childCount() - 1;
+        kDebug() << "row count: " << rowCount << ", row: " << row << ", node: " << m_d->image->root()->at( rowCount - row );
+        return indexFromNode( m_d->image->root()->at( rowCount - row ) );
+
     }
 
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
+    parentNode = static_cast<KisNode*>(parent.internalPointer());
 
-    return createIndex(row, column, static_cast<KisNode*>(parent.internalPointer())->at(row).data());
+    int rowCount = parentNode->childCount() - 1;
+    // Now invert!
+    kDebug() << "row count: " << rowCount << ", row: " << row << ", node: " << parentNode->at(rowCount - row);
+    return createIndex(row, column, parentNode->at(rowCount - row).data());
 
 }
 

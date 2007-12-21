@@ -21,12 +21,16 @@
 #include <KoDocumentSectionModel.h>
 #include "krita_export.h"
 #include <kis_types.h>
+
 /**
  * KisNodeModel offers a Qt model-view compatible view on the node
  * hierarchy.
  *
  * Note that there's a discrepancy between the krita node tree model
  * and the model Qt wants to see: we hide the root node from Qt.
+ *
+ * The node model shows an inverse view on the layer tree: we want the first layer
+ * to show up at the bottom.
  */
 class KRITAUI_EXPORT KisNodeModel : public KoDocumentSectionModel
 {

@@ -40,6 +40,7 @@ class PanoramaPlugin : public KParts::Plugin
     private slots:
     
         void slotAddImages();
+        void removeImage();
         void slotCreatePanoramaLayer();
         void addImage(const QString& filename);
         void slotPreview();
@@ -50,5 +51,5 @@ class PanoramaPlugin : public KParts::Plugin
         KisView2 * m_view;
         Ui_WdgPanoramaCreation* m_wdgPanoramaCreation;
 };
-
 #endif // PanoramaPlugin_H
+

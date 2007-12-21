@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
-
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_config.h"
@@ -41,7 +40,7 @@
 #include "kis_paint_device.h"
 #include "kis_types.h"
 #include "kis_view2.h"
-
+#include "imageviewer.h"
 
 #include "imagoptim_functions.h"
 #include "harris_detector.h"
@@ -66,7 +65,7 @@ PanoramaPlugin::PanoramaPlugin(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/panorama.rc"), true);
 
-        KAction *action  = new KAction(i18n("New panorama layer"), this);
+        KAction *action  = new KAction(i18n("New Panorama Layer"), this);
         actionCollection()->addAction("PanoramaLayer", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotCreatePanoramaLayer()));
     }
@@ -96,12 +95,19 @@ void PanoramaPlugin::slotAddImages()
     }
 }
 
+void PanoramaPlugin::removeImage()
+{
+    delete m_wdgPanoramaCreation->listImages->takeItem(m_wdgPanoramaCreation->listImages->currentRow());
+}
+
 void PanoramaPlugin::slotCreatePanoramaLayer()
 {
     kDebug(41006) <<"Create a panorama layer";
     delete m_wdgPanoramaCreation;
     m_wdgPanoramaCreation = new Ui_WdgPanoramaCreation();
+    
     QDialog* dialog = new QDialog(m_view);
+    dialog->setCaption(i18n("Create Panorama Layer"));
     dialog->setModal(true);
     m_wdgPanoramaCreation->setupUi(dialog);
 
@@ -119,16 +125,17 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
 //     addImage("/home/cyrille/0.montreal.png");
 //     addImage("/home/cyrille/1.montreal.png");
 //     addImage("/home/cyrille/2.montreal.png");
-    addImage("/home/cyrille/0.graffitis.png");
-    addImage("/home/cyrille/1.graffitis.png");
-    addImage("/home/cyrille/2.graffitis.png");
-    addImage("/home/cyrille/3.graffitis.png");
+//    addImage("/home/cyrille/0.graffitis.png");
+//    addImage("/home/cyrille/1.graffitis.png");
+//    addImage("/home/cyrille/2.graffitis.png");
+//    addImage("/home/cyrille/3.graffitis.png");
 //     addImage("/home/cyrille/0.a.png");
 //     addImage("/home/cyrille/1.a.png");
 
     connect(m_wdgPanoramaCreation->pushButtonCancel, SIGNAL(released()), dialog, SLOT(reject ()));
     connect(m_wdgPanoramaCreation->pushButtonCreatePanorama, SIGNAL(released()), dialog, SLOT(accept ()));
     connect(m_wdgPanoramaCreation->pushButtonAddImages, SIGNAL(released()), this, SLOT(slotAddImages()));
+    connect(m_wdgPanoramaCreation->bnRemove, SIGNAL(released()), this, SLOT(slotRemoveImage()));
     connect(m_wdgPanoramaCreation->pushButtonPreview, SIGNAL(released()), this, SLOT(slotPreview()));
 
     if(dialog->exec()==QDialog::Accepted)
@@ -149,7 +156,6 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
             pi.rect = QRect(0,0, img->width(), img->height());
             images.push_back(pi);
         }
-
 
         KisPaintLayerSP layer = new KisPaintLayer(m_view->image(), i18n("Panorama Layer"), 255, images[0].device->colorSpace());
         Q_ASSERT(layer);
@@ -197,7 +203,8 @@ void PanoramaPlugin::slotPreview()
     createPanorama(images, dst, dstArea);
     QImage img = dst->convertToQImage(0,0.0);
     img = img.scaledToHeight(500);
-    m_wdgPanoramaCreation->labelPreview->setPixmap(QPixmap::fromImage(img));
+    m_wdgPanoramaCreation->wdgPreview->setImage(img);
+    //m_wdgPanoramaCreation->labelPreview->setPixmap(QPixmap::fromImage(img));
 }
 
 void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect& )
@@ -207,7 +214,7 @@ void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images,
     std::cout << "Number of results = " << p.size() << std::endl;
     // blend
     QList<KisImagesBlender::LayerSource> sources;
-    for(int i = 0; i < p.size(); i++)
+    for(int i = 0; i < (int)p.size(); i++)
     {
         KisImagesBlender::LayerSource layerSource;
         layerSource.layer = images[ i ].device;

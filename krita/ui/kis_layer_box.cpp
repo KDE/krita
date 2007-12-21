@@ -84,6 +84,8 @@ KisLayerBox::KisLayerBox()
     setMinimumSize(mainWidget->minimumSizeHint());
 
     listLayers->viewport()->installEventFilter(this);
+    listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    
     connect(listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
     connect(listLayers, SIGNAL(clicked(const QModelIndex&)), SLOT(slotNodeActivated(const QModelIndex&)));
@@ -176,12 +178,14 @@ void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNode
         m_image = img;
 
         updateUI();
+
+        listLayers->expandAll();
+        listLayers->scrollTo(m_nodeModel->indexFromNode(img->root()->firstChild()));
+        
     }
     else {
         listLayers->setModel(0);
     }
-
-    listLayers->expandAll();
 }
 
 bool KisLayerBox::eventFilter(QObject *o, QEvent *e)

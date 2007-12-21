@@ -29,9 +29,9 @@
 #include <gsl/gsl_vector.h>
 
 KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
-    : KoColorProfile(fileName), m_T(0), m_P(0)
+    : KoColorProfile(fileName), m_T(0), m_P(0), m_valid(false)
 {
-    m_valid = load();
+    load();
 }
 
 KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &profile)
@@ -61,7 +61,7 @@ KoColorProfile *KisIlluminantProfile::clone() const
     return (new KisIlluminantProfile(*this));
 }
 
-bool KisIlluminantProfile::load()
+bool KisIlluminantProfile::load() // TODO Info
 {
     if (fileName().isEmpty())
         return false;
@@ -106,6 +106,30 @@ bool KisIlluminantProfile::load()
             gsl_vector_set(m_P, i, c);
         }
     }
+
+    m_valid = true;
+    return true;
+}
+
+bool KisIlluminantProfile::save(const QString &fileName)
+{
+    if (!valid())
+        return false;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly))
+        return false;
+    QDataStream data(&file);
+
+    data << name();
+    data << m_T->size1 << m_T->size2;
+    for (int i = 0; i < m_T->size1; i++)
+        for (int j = 0; j < m_T->size2; j++)
+            data << gsl_matrix_get(m_T, i, j);
+
+    data << m_P->size;
+    for (int i = 0; i < m_P->size; i++)
+        data << gsl_vector_get(m_P, i);
 
     return true;
 }

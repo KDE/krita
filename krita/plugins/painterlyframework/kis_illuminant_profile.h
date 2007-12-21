@@ -36,12 +36,13 @@ class KisIlluminantProfile : public KoColorProfile {
         // KoColorProfile interface
         KoColorProfile *clone() const;
         bool load();
-        bool save(const QString &fileName) { return false; } // TODO
+        bool save(const QString &fileName);
         bool valid() const { return m_valid; }
         bool isSuitableForOutput() const { return true; }
         bool isSuitableForPrinting() const { return true; }
         bool isSuitableForDisplay() const { return true; }
-        bool operator==(const KoColorProfile &op2) const { return false; } // TODO
+        bool operator==(const KoColorProfile &op2) const
+            { return (name()+info() == op2.name()+op2.info()); }
 
         gsl_matrix *T() const { return m_T; }
         gsl_vector *P() const { return m_P; }

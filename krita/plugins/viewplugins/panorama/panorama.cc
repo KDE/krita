@@ -28,6 +28,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kurl.h>
+
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_config.h"
@@ -80,7 +82,8 @@ PanoramaPlugin::~PanoramaPlugin()
 
 void PanoramaPlugin::addImage(const QString& filename)
 {
-    m_wdgPanoramaCreation->listImages->addItem(filename);
+    QListWidgetItem* item = new QListWidgetItem(filename,
+                                                m_wdgPanoramaCreation->listImages);
 }
 
 void PanoramaPlugin::slotAddImages()
@@ -95,9 +98,32 @@ void PanoramaPlugin::slotAddImages()
     }
 }
 
-void PanoramaPlugin::removeImage()
+void PanoramaPlugin::slotRemoveImage()
 {
     delete m_wdgPanoramaCreation->listImages->takeItem(m_wdgPanoramaCreation->listImages->currentRow());
+}
+
+void PanoramaPlugin::slotImageUp()
+{
+    if (m_wdgPanoramaCreation->listImages->currentRow() == 0) return; 
+    QListWidgetItem * w = m_wdgPanoramaCreation->listImages->takeItem(m_wdgPanoramaCreation->listImages->currentRow());
+    m_wdgPanoramaCreation->listImages->insertItem(m_wdgPanoramaCreation->listImages->currentRow(), w);
+    m_wdgPanoramaCreation->listImages->setCurrentItem(w);
+}
+
+void PanoramaPlugin::slotImageDown()
+{
+    if (m_wdgPanoramaCreation->listImages->currentRow() == m_wdgPanoramaCreation->listImages->count() - 1) return;
+
+    int i = m_wdgPanoramaCreation->listImages->currentRow();
+        
+    QListWidgetItem * w = m_wdgPanoramaCreation->listImages->takeItem(m_wdgPanoramaCreation->listImages->currentRow());
+
+    if (i == 0) 
+        m_wdgPanoramaCreation->listImages->insertItem(m_wdgPanoramaCreation->listImages->currentRow() + 1, w);
+    else
+        m_wdgPanoramaCreation->listImages->insertItem(m_wdgPanoramaCreation->listImages->currentRow() + 2, w);
+    m_wdgPanoramaCreation->listImages->setCurrentItem(w);
 }
 
 void PanoramaPlugin::slotCreatePanoramaLayer()
@@ -134,10 +160,18 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
 
     connect(m_wdgPanoramaCreation->pushButtonCancel, SIGNAL(released()), dialog, SLOT(reject ()));
     connect(m_wdgPanoramaCreation->pushButtonCreatePanorama, SIGNAL(released()), dialog, SLOT(accept ()));
-    connect(m_wdgPanoramaCreation->pushButtonAddImages, SIGNAL(released()), this, SLOT(slotAddImages()));
+    connect(m_wdgPanoramaCreation->bnAdd, SIGNAL(released()), this, SLOT(slotAddImages()));
     connect(m_wdgPanoramaCreation->bnRemove, SIGNAL(released()), this, SLOT(slotRemoveImage()));
+    connect(m_wdgPanoramaCreation->bnUp, SIGNAL(released()), this, SLOT(slotImageUp()));
+    connect(m_wdgPanoramaCreation->bnDown, SIGNAL(released()), this, SLOT(slotImageDown()));
     connect(m_wdgPanoramaCreation->pushButtonPreview, SIGNAL(released()), this, SLOT(slotPreview()));
 
+
+    m_wdgPanoramaCreation->bnAdd->setIcon(SmallIcon("list-add"));
+    m_wdgPanoramaCreation->bnRemove->setIcon(SmallIcon("list-remove"));
+    m_wdgPanoramaCreation->bnUp->setIcon(SmallIcon("go-up"));
+    m_wdgPanoramaCreation->bnDown->setIcon(SmallIcon("go-down"));
+    
     if(dialog->exec()==QDialog::Accepted)
     {
 
@@ -177,8 +211,6 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     }
     delete dialog;
 }
-
-#include <kurl.h>
 
 void PanoramaPlugin::slotPreview()
 {

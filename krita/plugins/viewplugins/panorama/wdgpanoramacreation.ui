@@ -34,21 +34,36 @@
       </item>
       <item row="1" column="0" >
        <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
+        <item>
+         <widget class="QToolButton" name="bnAdd" >
+          <property name="toolTip" >
+           <string>Add one or more images to the panorama</string>
+          </property>
+          <property name="text" >
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="bnDown" >
+          <property name="toolTip" >
+           <string>Move an image down (that is, to the right)</string>
+          </property>
+          <property name="text" >
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="bnUp" >
+          <property name="toolTip" >
+           <string>Move an image up (that is, left)</string>
+          </property>
+          <property name="text" >
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <spacer>
           <property name="orientation" >
@@ -63,16 +78,12 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="bnRemove" >
-          <property name="text" >
-           <string>&amp;Remove image</string>
+         <widget class="QToolButton" name="bnRemove" >
+          <property name="toolTip" >
+           <string>Remove an image from the list</string>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButtonAddImages" >
           <property name="text" >
-           <string>&amp;Add image</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
@@ -181,6 +192,16 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>bnAdd</tabstop>
+  <tabstop>bnDown</tabstop>
+  <tabstop>bnUp</tabstop>
+  <tabstop>bnRemove</tabstop>
+  <tabstop>pushButtonPreview</tabstop>
+  <tabstop>pushButtonCreatePanorama</tabstop>
+  <tabstop>pushButtonCancel</tabstop>
+  <tabstop>listImages</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

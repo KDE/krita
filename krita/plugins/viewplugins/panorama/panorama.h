@@ -40,7 +40,9 @@ class PanoramaPlugin : public KParts::Plugin
     private slots:
     
         void slotAddImages();
-        void removeImage();
+        void slotRemoveImage();
+        void slotImageUp();
+        void slotImageDown();
         void slotCreatePanoramaLayer();
         void addImage(const QString& filename);
         void slotPreview();

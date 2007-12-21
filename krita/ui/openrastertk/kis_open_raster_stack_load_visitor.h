@@ -21,34 +21,33 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
-#include <KoXmlReader.h>
-
 #include <krita_export.h>
 
+class QDomElement;
+
 class KoStore;
-class KisPaintLayer;
-class KisGroupLayer;
+
 class KisAdjustmentLayer;
 class KisDoc2;
+class KisGroupLayer;
+class KisOpenRasterLoadContext;
+class KisPaintLayer;
 
 class KRITAUI_EXPORT KisOpenRasterStackLoadVisitor {
 public:
-    KisOpenRasterStackLoadVisitor(KisDoc2* doc, KoStore* os) : m_doc(doc), m_oasisStore(os) {}
-    virtual ~KisOpenRasterStackLoadVisitor() {}
+    KisOpenRasterStackLoadVisitor(KisDoc2* doc, KisOpenRasterLoadContext* orlc);
+    virtual ~KisOpenRasterStackLoadVisitor();
 
 public:
-    void loadImage(const KoXmlElement& elem);
-    void loadPaintLayer(const KoXmlElement& elem, KisPaintLayerSP pL);
-    void loadAdjustementLayer(const KoXmlElement& elem, KisAdjustmentLayerSP pL);
-    void loadGroupLayer(const KoXmlElement& elem, KisGroupLayerSP gL);
-    inline KisImageSP image() { return m_image; }
-    QMap<KisLayer *, QString>& layerFilenames() { return m_layerFilenames; }
+    void loadImage();
+    void loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL);
+    void loadAdjustementLayer(const QDomElement& elem, KisAdjustmentLayerSP pL);
+    void loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL);
+    KisImageSP image();
 private:
-    void loadLayerInfo(const KoXmlElement& elem, KisLayer* layer);
-    KisImageSP m_image;
-    KisDoc2* m_doc;
-    QMap<KisLayer *, QString> m_layerFilenames;
-    KoStore* m_oasisStore;
+    void loadLayerInfo(const QDomElement& elem, KisLayer* layer);
+    struct Private;
+    Private* const d;
 };
 
 

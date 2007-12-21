@@ -112,7 +112,7 @@ namespace {
 KisPNGConverter::KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
 //     Q_ASSERT(doc);
-    Q_ASSERT(adapter);
+//     Q_ASSERT(adapter);
 
     m_doc = doc;
     m_adapter = adapter;

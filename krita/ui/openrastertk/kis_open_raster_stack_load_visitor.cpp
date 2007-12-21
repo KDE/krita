@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,60 +38,86 @@
 
 #include "kis_doc2.h"
 
-void KisOpenRasterStackLoadVisitor::loadImage(const KoXmlElement& elem)
-{
-    m_image = new KisImage(m_doc->undoAdapter(), 100, 100, KoColorSpaceRegistry::instance()->colorSpace("RGBA",""), "OpenRaster Image (name)"); // TODO: take into account width and height parameters, and metadata, when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
+#include "kis_open_raster_load_context.h"
 
-    m_image->lock();
-    for (KoXmlNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
-        if (node.isElement() && node.nodeName() == "image:stack") { // it's the root layer !
-            KoXmlElement subelem = node.toElement();
-            loadGroupLayer(subelem, m_image->rootLayer());
+struct KisOpenRasterStackLoadVisitor::Private {
+    KisImageSP image;
+    KisDoc2* doc;
+    KisOpenRasterLoadContext* loadContext;
+};
+
+KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisDoc2* doc, KisOpenRasterLoadContext* orlc)
+    : d(new Private)
+{
+    d->doc = doc;
+    d->loadContext = orlc;
+}
+
+KisOpenRasterStackLoadVisitor::~KisOpenRasterStackLoadVisitor()
+{
+    delete d;
+}
+
+KisImageSP KisOpenRasterStackLoadVisitor::image()
+{
+    return d->image;
+}
+
+void KisOpenRasterStackLoadVisitor::loadImage()
+{
+    d->image = new KisImage(d->doc->undoAdapter(), 100, 100, KoColorSpaceRegistry::instance()->colorSpace("RGBA",""), "OpenRaster Image (name)"); // TODO: take into account width and height parameters, and metadata, when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
+
+    QDomDocument doc = d->loadContext->loadStack();
+    
+    d->image->lock();
+    for (QDomNode node = doc.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        if (node.isElement() && node.nodeName() == "stack") { // it's the root layer !
+            QDomElement subelem = node.toElement();
+            loadGroupLayer(subelem, d->image->rootLayer());
             return;
         }
     }
-    m_image->unlock();
-    m_image = KisImageSP(0);
+    d->image->unlock();
 }
 
-void KisOpenRasterStackLoadVisitor::loadLayerInfo(const KoXmlElement& elem, KisLayer* layer)
+void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer)
 {
     layer->setName(elem.attribute("name"));
     layer->setX(elem.attribute("x").toInt());
     layer->setY(elem.attribute("y").toInt());
 }
 
-void KisOpenRasterStackLoadVisitor::loadAdjustementLayer(const KoXmlElement& elem, KisAdjustmentLayerSP aL)
+void KisOpenRasterStackLoadVisitor::loadAdjustementLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
 {
     loadLayerInfo(elem, aL.data());
 }
 
-void KisOpenRasterStackLoadVisitor::loadPaintLayer(const KoXmlElement& elem, KisPaintLayerSP pL)
+void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
 {
     loadLayerInfo(elem, pL.data());
 
-    QString filename = m_layerFilenames[pL.data()];
     kDebug(41008) <<"Loading was unsuccessful";
 }
 
-void KisOpenRasterStackLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayerSP gL)
+void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
 {
+    kDebug(41008) << "Loading group layer";
     loadLayerInfo(elem, gL.data());
-    for (KoXmlNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
+    for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement())
         {
-            KoXmlElement subelem = node.toElement();
-            if(node.nodeName()== "image:stack")
+            QDomElement subelem = node.toElement();
+            if(node.nodeName()== "stack")
             {
                 quint8 opacity = 255;
                 if( not subelem.attribute("opacity").isNull())
                 {
                     opacity = subelem.attribute("opacity").toInt();
                 }
-                KisGroupLayerSP layer = new KisGroupLayer(m_image.data(), "", opacity);
-                m_image->addNode(layer.data(), gL.data(), gL->childCount() );
+                KisGroupLayerSP layer = new KisGroupLayer(d->image, "", opacity);
+                d->image->addNode(layer.data(), gL.data(), gL->childCount() );
                 loadGroupLayer(subelem, layer);
-            } else if(node.nodeName()== "image:layer")
+            } else if(node.nodeName()== "layer")
             {
                 QString filename = subelem.attribute("src");
                 if( not filename.isNull() )
@@ -101,27 +127,16 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const KoXmlElement& elem, Kis
                     {
                         opacity = subelem.attribute("opacity").toInt();
                     }
-//                     KisPaintLayerSP layer = new KisPaintLayer( m_image.data(), "", opacity); // TODO: support of colorspacess
-//                     m_layerFilenames[layer.data()] = srcAttr;
-                    if (m_oasisStore->open(filename) ) {
-                        KoStoreDevice io ( m_oasisStore );
-                        if ( !io.open( QIODevice::ReadOnly ) )
-                        {
-                            kDebug(41008) <<"Couldn't open for reading:" << filename;
-                //             return false;
-                        }
-                        KisPNGConverter pngConv(0, gL->image()->undoAdapter() );
-                        pngConv.buildImage( &io );
-                        io.close();
-                        m_oasisStore->close();
-                        KisPaintLayerSP layer = new KisPaintLayer( gL->image() , "", opacity, pngConv.image()->projection());
-                        m_image->addNode(layer.data(), gL.data(), gL->childCount() );
+                    KisPaintDeviceSP device = d->loadContext->loadDeviceData( filename );
+                    if( device)
+                    {
+                        KisPaintLayerSP layer = new KisPaintLayer( gL->image() , "", opacity, device);
+                        d->image->addNode(layer.data(), gL.data(), gL->childCount() );
                         loadPaintLayer(subelem, layer);
                         kDebug(41008) <<"Loading was successful";
-                //         return true;
                     }
                 }
-            } else if(node.nodeName()== "image:filter")
+            } else if(node.nodeName()== "filter")
             {
 
                 QString filterType = subelem.attribute("type");
@@ -133,9 +148,11 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const KoXmlElement& elem, Kis
                 }
                 KisFilterConfiguration * kfc = f->defaultConfiguration(0);
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer( gL->image() , "", kfc, KisSelectionSP(0));
-                m_image->addNode(layer.data(), gL.data(), gL->childCount() );
+                d->image->addNode(layer.data(), gL.data(), gL->childCount() );
                 loadAdjustementLayer(subelem, layer);
 
+            } else {
+                kDebug(41008) << "Unknown element : " << node.nodeName();
             }
         }
     }

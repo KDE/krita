@@ -180,8 +180,7 @@ void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNode
         updateUI();
 
         listLayers->expandAll();
-        listLayers->scrollTo(m_nodeModel->indexFromNode(img->root()->firstChild()));
-        
+        listLayers->scrollToBottom();
     }
     else {
         listLayers->setModel(0);
@@ -211,8 +210,13 @@ void KisLayerBox::updateUI()
     Q_ASSERT(! m_image.isNull());
 
     bnDelete->setEnabled(m_nodeManager->activeNode());
-    bnRaise->setEnabled(m_nodeManager->activeNode() && (m_nodeManager->activeNode()->prevSibling() || m_nodeManager->activeNode()->parent()));
-    bnLower->setEnabled(m_nodeManager->activeNode() && m_nodeManager->activeNode()->nextSibling());
+    bnRaise->setEnabled(    m_nodeManager->activeNode()
+                        && (m_nodeManager->activeNode()->nextSibling()
+                            || (   m_nodeManager->activeNode()->parent()
+                                && m_nodeManager->activeNode()->parent() != m_image->root())));
+    
+    bnLower->setEnabled(m_nodeManager->activeNode() && m_nodeManager->activeNode()->prevSibling());
+
     doubleOpacity->setEnabled(m_nodeManager->activeNode());
     cmbComposite->setEnabled(m_nodeManager->activeNode());
     if (KisNodeSP active = m_nodeManager->activeNode())

@@ -180,6 +180,8 @@ void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNode
     else {
         listLayers->setModel(0);
     }
+
+    listLayers->expandAll();
 }
 
 bool KisLayerBox::eventFilter(QObject *o, QEvent *e)

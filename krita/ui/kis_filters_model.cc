@@ -100,6 +100,23 @@ int KisFiltersModel::columnCount(const QModelIndex &parent) const
     return 1;
 }
 
+QModelIndex KisFiltersModel::indexForFilter( const QString& id )
+{
+    for(int i = 0; i < d->categoriesKeys.size(); i++)
+    {
+        KisFiltersModel::Private::Category& category = d->categories[ d->categoriesKeys[ i ] ];
+        for( int j = 0; j < category.filters.size(); j++)
+        {
+            KisFiltersModel::Private::Filter& filter = category.filters[j];
+            if(filter.id == id)
+            {
+                return index( j, i, index( i , 0, QModelIndex()));
+            }
+        }
+    }
+    return QModelIndex();
+}
+
 QModelIndex KisFiltersModel::index(int row, int column, const QModelIndex &parent) const
 {
 //     kDebug() << parent.isValid() << row << endl;

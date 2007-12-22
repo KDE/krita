@@ -38,7 +38,8 @@ class KisTreeViewPopup : public KisPopupButton {
     public:
         KisTreeViewPopup(QWidget* parent);
         void setModel(QAbstractItemModel* model);
-    protected slots:
+        void setCurrentFilterId( const QString& id );
+    public slots:
         void setCurrentIndex(const QModelIndex &);
     private:
         struct Private;

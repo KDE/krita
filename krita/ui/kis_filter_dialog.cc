@@ -109,6 +109,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
     kDebug() << "setFilter: " << f;
     d->currentFilter = f;
     delete d->currentCentralWidget;
+    d->uiFilterDialog.filtersSelector->setCurrentIndex( d->filtersModel->indexForFilter( f->id() ) );
     KisFilterConfigWidget* widget =
         d->currentFilter->createConfigurationWidget( d->uiFilterDialog.centralWidgetHolder, d->layer->paintDevice() );
     if( !widget )

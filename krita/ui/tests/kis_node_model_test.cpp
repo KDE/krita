@@ -35,6 +35,24 @@
 
 #include "kis_node_model_test.h"
 
+/*
+Image:
+
+    root
+        first
+        second
+        group 1
+            child
+
+node model
+
+        group1     0
+            child
+        second     1
+        first      2
+    (root) // root is invisible
+
+*/
 void kisnodemodel_test::testRowcount()
 {
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
@@ -60,7 +78,7 @@ void kisnodemodel_test::testRowcount()
 
     QVERIFY( model.rowCount() == 3 );
 
-    QModelIndex idx = model.index( 2, 0 );
+    QModelIndex idx = model.index( 0, 0 );
     kDebug() << "node: " << model.nodeFromIndex(idx);
     QVERIFY( idx.isValid() );
     QVERIFY( !idx.parent().isValid() );
@@ -68,6 +86,20 @@ void kisnodemodel_test::testRowcount()
     QVERIFY( model.rowCount(idx) == 1 );
 }
 
+
+/*
+image:
+
+    root
+        first
+        second
+
+mode:
+        
+        second 0
+        first  1
+
+*/
 void kisnodemodel_test::testModelIndex()
 {
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
@@ -86,22 +118,40 @@ void kisnodemodel_test::testModelIndex()
 
     KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace() );
     img->addNode(second.data());
-    QModelIndex idx2 = model.index( 1, 0 );
-
+    QModelIndex idx2 = model.index( 0, 0 );
+    QVERIFY( idx2 != idx );
+    idx = model.index( 1, 0 );
+    
     QVERIFY( idx2.isValid() );
     QVERIFY( !idx2.parent().isValid() );
     QVERIFY( idx2.internalPointer() == second.data() );
-    QVERIFY( idx2.sibling(0, 0) == idx );
-    QVERIFY( idx.sibling(1, 0) == idx2 );
+    QVERIFY( idx2.sibling(1, 0) == idx );
+    QVERIFY( idx.sibling(0, 0) == idx2 );
     QVERIFY( idx.model() == &model );
 
+
+/*
+image:
+
+    root
+        first
+        second
+        group
+            child
+
+mode:
+        group
+            child
+        second 0
+        first  1
+ */
     KisGroupLayerSP parent = new KisGroupLayer (img, "group 1", 200);
     img->addLayer( parent, img->rootLayer() );
 
     KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
     img->addLayer( child, parent );
 
-    QModelIndex parentIdx = model.index( 2, 0 );
+    QModelIndex parentIdx = model.index( 0, 0 );
 
     QVERIFY( parentIdx.isValid() );
     QVERIFY( !parentIdx.parent().isValid() );

@@ -102,3 +102,13 @@ void KisPlainColoring::colorAt(int x, int y, KoColor* c)
     }
     c->fromKoColor(*m_cachedColor);
 }
+
+void KisPlainColoring::applyColorTransformation(const KoColorTransformation* transfo)
+{
+    transfo->transform( m_color->data(), m_color->data(), 1 );
+}
+
+const KoColorSpace* KisPlainColoring::colorSpace() const
+{
+    return m_color->colorSpace();
+}

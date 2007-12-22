@@ -130,5 +130,5 @@ QRect KisDabShape::rect() const
     int width = m_brush->maskWidth( m_scaleX, m_rotate );
     int height = m_brush->maskHeight( m_scaleY, m_rotate );
     QPointF hotSpot = m_brush->hotSpot( m_scaleX, m_scaleY );
-    return QRect(-hotSpot.x(), -hotSpot.y(), width, height);
+    return QRect( (int)-hotSpot.x(), (int)-hotSpot.y(), width, height);
 }

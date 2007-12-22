@@ -26,6 +26,8 @@
 
 #include "kis_dynamic_transformable.h"
 
+class KoColorTransformation;
+
 class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
     public:
         virtual ~KisDynamicColoring();
@@ -33,6 +35,8 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
         virtual void selectColor(double mix) = 0;
         virtual KisDynamicColoring* clone() const = 0;
         virtual void darken(qint32 v) = 0;
+        virtual void applyColorTransformation(const KoColorTransformation* transfo) = 0;
+        virtual const KoColorSpace* colorSpace() const = 0;
         virtual void colorize(KisPaintDeviceSP) =0;
         virtual void colorAt(int x, int y, KoColor*) = 0;
 };
@@ -48,6 +52,8 @@ class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisDynamicColoring {
         virtual void resize(double , double );
         virtual void colorize(KisPaintDeviceSP);
         virtual void colorAt(int x, int y, KoColor*);
+        virtual void applyColorTransformation(const KoColorTransformation* transfo);
+        virtual const KoColorSpace* colorSpace() const;
     private:
         KoColor m_backGroundColor, m_foreGroundColor;
         KoColor* m_color;

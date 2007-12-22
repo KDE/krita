@@ -19,6 +19,8 @@
 
 #include <QDomNode>
 
+#include <KoColorSpace.h>
+
 #include "kis_properties_configuration.h"
 
 // Dynamic Brush lib includes
@@ -74,14 +76,32 @@ double KisBasicDynamicColoringProgram::mix(const KisPaintInformation& info) cons
     {
         return jitter( m_mixerJitter, m_mixerSensor->parameter( info ) );
     } else {
-        return 0.0;
+        return 1.0;
     }
 }
 
-void KisBasicDynamicColoringProgram::apply(KisDynamicColoring* coloring, const KisPaintInformation& adjustedInfo) const
+void KisBasicDynamicColoringProgram::apply(KisDynamicColoring* coloring, const KisPaintInformation& info) const
 {
-    Q_UNUSED(coloring);
-    Q_UNUSED(adjustedInfo);
+    QHash<QString, QVariant> params;
+    if(m_hueEnabled)
+    {
+        params["h"] = 2.0 * jitter( m_hueJitter, m_hueSensor->parameter( info ) ) - 1.0 ;
+    }
+    if(m_saturationEnabled)
+    {
+        params["s"] = 2.0 * jitter( m_saturationJitter, m_saturationSensor->parameter( info ) ) - 1.0 ;
+    }
+    if(m_brightnessEnabled)
+    {
+        params["v"] = 2.0 * jitter( m_brightnessJitter, m_brightnessSensor->parameter( info ) ) - 1.0 ;
+    }
+    KoColorTransformation* transfo = coloring->colorSpace()->createColorTransformation( "hsv_adjustment", params);
+    kDebug() << "transfo = " << transfo << params["h"] << " " << params["s"] << " " << params["v"];
+    if( transfo )
+    {
+        coloring->applyColorTransformation( transfo );
+    }
+    delete transfo;
 }
 
 QWidget* KisBasicDynamicColoringProgram::createEditor(QWidget* parent)

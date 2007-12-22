@@ -61,6 +61,23 @@ KisBasicDynamicColoringProgram::~KisBasicDynamicColoringProgram()
 {
 }
 
+inline double jitter(int amount, double v)
+{
+    v = (1.0 + (rand() - RAND_MAX / 2 ) * amount / (RAND_MAX * 50) ) * v;
+    if(v >= 1.0) v= 1.0;
+    return v;
+}
+
+double KisBasicDynamicColoringProgram::mix(const KisPaintInformation& info) const
+{
+    if(m_mixerEnabled)
+    {
+        return jitter( m_mixerJitter, m_mixerSensor->parameter( info ) );
+    } else {
+        return 0.0;
+    }
+}
+
 void KisBasicDynamicColoringProgram::apply(KisDynamicColoring* coloring, const KisPaintInformation& adjustedInfo) const
 {
     Q_UNUSED(coloring);

@@ -30,6 +30,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
     public:
         virtual ~KisDynamicColoring();
     public:
+        virtual void selectColor(double mix) = 0;
         virtual KisDynamicColoring* clone() const = 0;
         virtual void darken(qint32 v) = 0;
         virtual void colorize(KisPaintDeviceSP) =0;
@@ -38,17 +39,20 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
 
 class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisDynamicColoring {
     public:
-        KisPlainColoring(const KoColor& color);
+        KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor);
         virtual ~KisPlainColoring();
         virtual KisDynamicColoring* clone() const;
+        virtual void selectColor(double mix);
         virtual void darken(qint32 v);
         virtual void rotate(double );
         virtual void resize(double , double );
         virtual void colorize(KisPaintDeviceSP);
         virtual void colorAt(int x, int y, KoColor*);
     private:
-        KoColor m_color;
-        KoColor* m_cacheColor;
+        KoColor m_backGroundColor, m_foreGroundColor;
+        KoColor* m_color;
+        KoColor* m_cachedColor;
+        KoColor* m_cachedBackGroundColor;
 };
 
 #endif

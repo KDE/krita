@@ -24,25 +24,48 @@
 
 KisDynamicColoring::~KisDynamicColoring() { }
 
-KisPlainColoring::KisPlainColoring(const KoColor& color) : m_color(color), m_cacheColor(0)
+KisPlainColoring::KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor) : m_backGroundColor(backGroundColor), m_foreGroundColor(foreGroundColor), m_color(0), m_cachedColor(0), m_cachedBackGroundColor(0)
 {
 
 }
 
 KisPlainColoring::~KisPlainColoring()
 {
-    delete m_cacheColor;
+    delete m_color;
+    delete m_cachedColor;
+    delete m_cachedBackGroundColor;
 }
 
 KisDynamicColoring* KisPlainColoring::clone() const
 {
-    return new KisPlainColoring(m_color);
+    return new KisPlainColoring(m_backGroundColor, m_foreGroundColor);
+}
+
+void KisPlainColoring::selectColor(double mix)
+{
+    if(not m_color or not (*m_color->colorSpace() == *m_foreGroundColor.colorSpace()))
+    {
+        delete m_color;
+        m_color = new KoColor( m_foreGroundColor.colorSpace() );
+        delete m_cachedBackGroundColor;
+        m_cachedBackGroundColor = new KoColor( m_foreGroundColor.colorSpace() );
+        m_cachedBackGroundColor->fromKoColor( m_backGroundColor );
+    }
+
+    const quint8 * colors[2];
+    colors[0] = m_cachedBackGroundColor->data();
+    colors[1] = m_foreGroundColor.data();
+    int weight = (int)(mix * 255);
+    const quint8 weights[2] = { 255 - weight, weight };
+    
+    m_color->colorSpace()->mixColorsOp()->mixColors(colors, weights, 2, m_color->data());
+
 }
 
 void KisPlainColoring::darken(qint32 v)
 {
-    KoColorTransformation* transfo = m_color.colorSpace()->createDarkenAdjustement(v, false, 0.0);
-    transfo->transform( m_color.data(),  m_color.data(), 1);
+    KoColorTransformation* transfo = m_color->colorSpace()->createDarkenAdjustement(v, false, 0.0);
+    transfo->transform( m_color->data(),  m_color->data(), 1);
     delete transfo;
 }
 
@@ -55,13 +78,14 @@ void KisPlainColoring::resize(double , double ) {
 
 void KisPlainColoring::colorize(KisPaintDeviceSP dev )
 {
-    if(not m_cacheColor or not (*dev->colorSpace() == *m_cacheColor->colorSpace()))
+    if(not m_cachedColor or not (*dev->colorSpace() == *m_cachedColor->colorSpace()))
     {
-        if(m_cacheColor) delete m_cacheColor;
-        m_cacheColor = new KoColor( dev->colorSpace() );
-        m_cacheColor->fromKoColor(m_color);
+        if(m_cachedColor) delete m_cachedColor;
+        m_cachedColor = new KoColor( dev->colorSpace() );
+        m_cachedColor->fromKoColor(*m_color);
     }
-    dev->dataManager()->setDefaultPixel(  m_cacheColor->data());
+    
+    dev->dataManager()->setDefaultPixel(  m_cachedColor->data());
     dev->clear();
 }
 
@@ -70,11 +94,11 @@ void KisPlainColoring::colorAt(int x, int y, KoColor* c)
     Q_UNUSED( x );
     Q_UNUSED( y );
 
-    if(not m_cacheColor or not (*c->colorSpace() == *m_cacheColor->colorSpace()))
+    if(not m_cachedColor or not (*c->colorSpace() == *m_cachedColor->colorSpace()))
     {
-        if(m_cacheColor) delete m_cacheColor;
-        m_cacheColor = new KoColor( c->colorSpace() );
-        m_cacheColor->fromKoColor(m_color);
+        if(m_cachedColor) delete m_cachedColor;
+        m_cachedColor = new KoColor( c->colorSpace() );
+        m_cachedColor->fromKoColor(*m_color);
     }
-    c->fromKoColor(*m_cacheColor);
+    c->fromKoColor(*m_cachedColor);
 }

@@ -93,7 +93,7 @@ KisDynamicScattering KisBasicDynamicProgram::scattering( const KisPaintInformati
     if( m_enableCout )
     {
         double v = jitter( m_countJitter, m_countSensor->parameter( info ) );
-        count = ceil( m_countCount * v );
+        count = (int)ceil( m_countCount * v );
     }
     return KisDynamicScattering(count, distance);
 }

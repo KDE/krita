@@ -42,6 +42,10 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgram : public KisDynamicProgram 
     public:
         virtual ~KisDynamicColoringProgram();
         /**
+         * Mix color.
+         */
+        virtual double mix(const KisPaintInformation& ) const = 0;
+        /**
          * Apply the program on the shape and the coloring
          */
         virtual void apply(KisDynamicColoring* coloringsrc, const KisPaintInformation& ) const = 0;

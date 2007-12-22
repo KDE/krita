@@ -33,6 +33,7 @@ KisDynamicColoringProgram::~KisDynamicColoringProgram() { delete d; }
 class KisDynamicDummyColoringProgram : public KisDynamicProgram {
     public:
         KisDynamicDummyColoringProgram(const QString& name) : KisDynamicProgram(name, "dummy") { }
+        virtual double mix(const KisPaintInformation& ) const { return 1.0; }
         virtual void apply( KisDynamicColoring* , const KisPaintInformation& ) const { }
         virtual QWidget* createEditor(QWidget* ) { return 0; }
 };

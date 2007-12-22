@@ -124,7 +124,7 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
         }
     }
     // Init coloring
-    KisPlainColoring* coloringsrc = new KisPlainColoring( painter->paintColor() );
+    KisPlainColoring* coloringsrc = new KisPlainColoring( painter->backgroundColor() , painter->paintColor() );
     current->setColoring( coloringsrc );
 
     return current;
@@ -167,6 +167,7 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
         
         KisDynamicShape* dabsrc = m_brush->shape()->clone();
         KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
+        coloringsrc->selectColor( m_brush->coloringProgram()->mix( localInfo ) );
     
         m_brush->shapeProgram()->apply(dabsrc, localInfo);
         m_brush->coloringProgram()->apply(coloringsrc, localInfo);

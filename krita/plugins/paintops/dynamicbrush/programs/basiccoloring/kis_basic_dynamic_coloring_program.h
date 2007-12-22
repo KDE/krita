@@ -28,7 +28,8 @@ class KisBasicDynamicColoringProgram : public KisDynamicColoringProgram {
     public:
         KisBasicDynamicColoringProgram(const QString& name);
         virtual ~KisBasicDynamicColoringProgram();
-        virtual void apply(KisDynamicColoring* coloring, const KisPaintInformation& adjustedInfo) const;
+        virtual double mix(const KisPaintInformation& info) const;
+        virtual void apply(KisDynamicColoring* coloring, const KisPaintInformation& info) const;
         virtual QWidget* createEditor(QWidget* parent);
 
         using KisSerializableConfiguration::fromXML;

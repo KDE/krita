@@ -105,7 +105,15 @@ KisFilterDialog::~KisFilterDialog()
 
 void KisFilterDialog::setFilterIndex(const QModelIndex& idx)
 {
-    setFilter( const_cast<KisFilter*>(d->filtersModel->indexToFilter( idx )) );
+    KisFilter* filter = const_cast<KisFilter*>(d->filtersModel->indexToFilter( idx ));
+    if(filter)
+    {
+        setFilter( filter  );
+    } else {
+        bool v = d->uiFilterDialog.filtersSelector->blockSignals( true );
+        d->uiFilterDialog.filtersSelector->setCurrentIndex( d->filtersModel->indexForFilter( d->currentFilter->id() ) );
+        d->uiFilterDialog.filtersSelector->blockSignals( v );
+    }
 }
 
 void KisFilterDialog::setFilter(KisFilterSP f)

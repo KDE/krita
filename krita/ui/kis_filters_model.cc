@@ -167,3 +167,17 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
     }
     return QVariant();
 }
+
+Qt::ItemFlags KisFiltersModel::flags(const QModelIndex & index) const
+{
+    if(not index.isValid()) return 0;
+    
+    Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
+    Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
+    if(filter)
+    {
+        return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    } else {
+        return Qt::ItemIsEnabled;
+    }
+}

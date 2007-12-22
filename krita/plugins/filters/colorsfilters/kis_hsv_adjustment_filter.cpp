@@ -53,7 +53,7 @@ void KisHSVAdjustmentFilter::process(KisFilterConstProcessingInformation srcInfo
     QHash<QString, QVariant> params;
     if(config)
     {
-        params["h"] = config->getInt("h", 0);
+        params["h"] = config->getInt("h", 0) / 180.0;
         params["s"] = config->getInt("s", 0) * 0.01;
         params["v"] = config->getInt("v", 0) * 0.01;
     }

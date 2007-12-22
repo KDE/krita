@@ -81,7 +81,7 @@ class KisHSVAdjustement : public KoColorTransformation {
     typedef KoRgbTraits<_channel_type_> RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
     public:
-        KisHSVAdjustement(double _adj_h, double _adj_s, double _adj_v) : m_adj_h(_adj_h), m_adj_s(_adj_s), m_adj_v(_adj_v)
+        KisHSVAdjustement(double _adj_h, double _adj_s, double _adj_v) : m_adj_h(_adj_h), m_adj_s(_adj_s * 360), m_adj_v(_adj_v)
         {
         }
     public:

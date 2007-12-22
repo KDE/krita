@@ -1,7 +1,6 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -424,13 +423,13 @@ public:
      * Create a color conversion transformation.
      */
     virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
-    
+
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
      * and put the converted bytes into the prepared byte array *dst.
      *
      * Returns false if the conversion failed, true if it succeeded
-     * 
+     *
      * This function is not thread-safe. If you want to apply multiple conversion
      * in different threads at the same time, you need to create one color converter
      * per-thread using createColorConverter.
@@ -630,11 +629,11 @@ public:
     /**
      * Serialize this color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
-     * 
+     *
      * This function doesn't create the <color /> element but rather the <CMYK />,
      * <sRGB />, <RGB /> ... elements. It is assumed that colorElt is the <color />
      * element.
-     * 
+     *
      * @param pixel buffer to serialized
      * @param colorElt root element for the serialization, it is assumed that this
      *                 element is <color />
@@ -644,7 +643,7 @@ public:
     /**
      * Unserialize a color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
-     * 
+     *
      * @param pixel buffer where the color will be unserialized
      * @param elt the element to unserialize (<CMYK />, <sRGB />, <RGB />)
      * @return the unserialize color, or an empty color object if the function failed
@@ -659,7 +658,7 @@ public:
      */
     virtual QList<KisFilter*> createBackgroundFilters() const
         { return QList<KisFilter*>(); }
-    
+
     KoColorTransformation* createColorTransformation( QString id, QHash<QString, QVariant> parameters) const;
 protected:
     /**
@@ -748,15 +747,15 @@ public:
      * constructed by this functions are owned by the caller of the function
      */
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
-    
+
     /**
-     * This function will create a 
+     * This function will create a
      * @return a factory to create color conversion objects between two icc color spaces, or null,
      * if one of the color space is not ICC, or if the ICC engine can't handle the conversion.
      */
     virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const = 0;
     /**
-     *  @return 
+     *  @return
      */
     /**
      * Returns the default icc profile for use with this colorspace. This may be ""

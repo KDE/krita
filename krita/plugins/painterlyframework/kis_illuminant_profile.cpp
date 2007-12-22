@@ -123,12 +123,12 @@ bool KisIlluminantProfile::save(const QString &fileName)
 
     data << name();
     data << (int)m_T->size1 << (int)m_T->size2;
-    for (int i = 0; i < m_T->size1; i++)
-        for (int j = 0; j < m_T->size2; j++)
+    for (int i = 0; i < (int)m_T->size1; i++)
+        for (int j = 0; j < (int)m_T->size2; j++)
             data << gsl_matrix_get(m_T, i, j);
 
-    data << (int)m_P->size;
-    for (int i = 0; i < m_P->size; i++)
+    data << m_P->size;
+    for (int i = 0; i < (int)m_P->size; i++)
         data << gsl_vector_get(m_P, i);
 
     return true;

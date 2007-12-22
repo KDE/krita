@@ -113,9 +113,9 @@ KoResourceServerProvider::KoResourceServerProvider()
     KoResourceLoaderThread t3 (m_paletteServer, "*.gpl:*.pal:*.act");
     t3.start();
 
-    t1.wait();
-    t2.wait();
-    t3.wait();
+    //t1.wait();
+    //t2.wait();
+    //t3.wait();
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()

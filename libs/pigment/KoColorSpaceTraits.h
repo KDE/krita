@@ -254,13 +254,13 @@ struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
 template<typename _channels_type_>
 struct KoCmykTraits : public KoColorSpaceTrait<_channels_type_, 5,4> {
     typedef _channels_type_ channels_type;
-    static const qint32 c_pos = 2;
+    static const qint32 c_pos = 0;
     static const qint32 m_pos = 1;
-    static const qint32 y_pos = 0;
-    static const qint32 k_pos = 0;
+    static const qint32 y_pos = 2;
+    static const qint32 k_pos = 3;
 
     /**
-     * An RGB pixel
+     * An CMYK pixel
      */
     struct Pixel {
         channels_type cyan;

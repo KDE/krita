@@ -86,6 +86,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     
     d->layer->setPreviewMask( d->mask );
     d->uiFilterDialog.filtersSelector->setModel(d->filtersModel);
+    connect(d->uiFilterDialog.filtersSelector, SIGNAL(currentItemChanged(const QModelIndex &)), SLOT(setFilterIndex(const QModelIndex& )));
     connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )),
             SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
@@ -102,6 +103,11 @@ KisFilterDialog::~KisFilterDialog()
     delete d;
 }
 
+void KisFilterDialog::setFilterIndex(const QModelIndex& idx)
+{
+    setFilter( const_cast<KisFilter*>(d->filtersModel->indexToFilter( idx )) );
+}
+
 void KisFilterDialog::setFilter(KisFilterSP f)
 {
     Q_ASSERT(f);
@@ -109,7 +115,11 @@ void KisFilterDialog::setFilter(KisFilterSP f)
     kDebug() << "setFilter: " << f;
     d->currentFilter = f;
     delete d->currentCentralWidget;
-    d->uiFilterDialog.filtersSelector->setCurrentIndex( d->filtersModel->indexForFilter( f->id() ) );
+    {
+        bool v = d->uiFilterDialog.filtersSelector->blockSignals( true );
+        d->uiFilterDialog.filtersSelector->setCurrentIndex( d->filtersModel->indexForFilter( f->id() ) );
+        d->uiFilterDialog.filtersSelector->blockSignals( v );
+    }
     KisFilterConfigWidget* widget =
         d->currentFilter->createConfigurationWidget( d->uiFilterDialog.centralWidgetHolder, d->layer->paintDevice() );
     if( !widget )

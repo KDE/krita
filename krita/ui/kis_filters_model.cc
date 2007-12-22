@@ -117,6 +117,17 @@ QModelIndex KisFiltersModel::indexForFilter( const QString& id )
     return QModelIndex();
 }
 
+const KisFilter* KisFiltersModel::indexToFilter( const QModelIndex& idx)
+{
+    Private::Node* node = static_cast<Private::Node*>(idx.internalPointer());
+    Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
+    if(filter)
+    {
+        return filter->filter;
+    }
+    return 0;
+}
+
 QModelIndex KisFiltersModel::index(int row, int column, const QModelIndex &parent) const
 {
 //     kDebug() << parent.isValid() << row << endl;

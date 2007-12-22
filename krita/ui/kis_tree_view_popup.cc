@@ -51,6 +51,7 @@ void KisTreeViewPopup::setCurrentIndex(const QModelIndex& idx)
     double v = d->view->blockSignals( true );
     d->view->setCurrentIndex( idx );
     d->view->blockSignals( v );
+    emit( currentItemChanged( idx ) );
 }
 
 #include "kis_tree_view_popup.moc"

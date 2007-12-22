@@ -42,6 +42,7 @@ class KisFilterDialog : public QDialog {
         void apply();
         void close();
         void editConfigurations();
+        void setFilterIndex(const QModelIndex& );
     signals:
         void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);
     private:

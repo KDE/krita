@@ -33,6 +33,7 @@
 #include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
+#include "KoEmbeddedDocumentSaver.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 
@@ -927,7 +928,7 @@ bool KoDocument::saveChildren( KoStore* _store )
     return true;
 }
 
-bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter )
+bool KoDocument::saveChildrenOdf( SavingContext & documentContext )
 {
     //kDebug(30003)<<" checking children of doc='"<<url().url()<<"'";
     Q3PtrListIterator<KoDocumentChild> it( children() );
@@ -935,7 +936,7 @@ bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter 
         KoDocument* childDoc = it.current()->document();
         if ( childDoc && !it.current()->isDeleted() )
         {
-            if ( !it.current()->saveOasis( store, manifestWriter ) )
+            if ( !it.current()->saveOdf( documentContext ) )
                 return false;
             if ( !childDoc->isStoredExtern() && !isExporting () )
                 childDoc->setModified( false );
@@ -1041,18 +1042,20 @@ bool KoDocument::saveNativeFormat( const QString & file )
         kDebug(30003) <<"Saving to OASIS format";
         // Tell KoStore not to touch the file names
         store->disallowNameExpansion();
-        KoOdfWriteStore oasisStore( store );
-        KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
+        KoOdfWriteStore odfStore( store );
+        KoXmlWriter* manifestWriter = odfStore.manifestWriter( mimeType );
+        KoEmbeddedDocumentSaver embeddedSaver;
+        SavingContext documentContext( odfStore, embeddedSaver );
 
-        if ( !saveOasis( store, manifestWriter ) )
+        if ( !saveOdf( documentContext ) )
         {
-            kDebug(30003) <<"saveOasis failed";
+            kDebug(30003) <<"saveOdf failed";
             delete store;
             return false;
         }
 
         // Save embedded objects
-        if ( !saveChildrenOasis( store, manifestWriter ) )
+        if ( !saveChildrenOdf( documentContext ) )
         {
             kDebug(30003) <<"saveChildrenOasis failed";
             delete store;
@@ -1128,7 +1131,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
          }
 
         // Write out manifest file
-        if ( !oasisStore.closeManifestWriter() )
+        if ( !odfStore.closeManifestWriter() )
         {
             d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?", QString("META-INF/manifest.xml") );
             delete store;
@@ -2046,10 +2049,12 @@ bool KoDocument::addVersion( const QString& comment )
     kDebug(30003) <<"Saving to OASIS format";
     // Tell KoStore not to touch the file names
     store->disallowNameExpansion();
-    KoOdfWriteStore oasisStore( store );
-    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
+    KoOdfWriteStore odfStore( store );
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter( mimeType );
+    KoEmbeddedDocumentSaver embeddedSaver;
+    SavingContext documentContext( odfStore, embeddedSaver );
 
-    if ( !saveOasis( store, manifestWriter ) )
+    if ( !saveOdf( documentContext ) )
     {
       kDebug(30003) <<"saveOasis failed";
       delete store;
@@ -2057,7 +2062,7 @@ bool KoDocument::addVersion( const QString& comment )
     }
 
     // Save embedded objects
-    if ( !saveChildrenOasis( store, manifestWriter ) )
+    if ( !saveChildrenOdf( documentContext ) )
     {
       kDebug(30003) <<"saveChildrenOasis failed";
       delete store;
@@ -2065,7 +2070,7 @@ bool KoDocument::addVersion( const QString& comment )
     }
 
     // Write out manifest file
-    if ( !oasisStore.closeManifestWriter() )
+    if ( !odfStore.closeManifestWriter() )
     {
       d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?", QString("META-INF/manifest.xml") );
       delete store;

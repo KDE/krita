@@ -26,6 +26,8 @@
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoDocumentAdaptor.h>
+#include <KoDocument.h>
+#include <KoEmbeddedDocumentSaver.h>
 
 /************************************************************************************************
  * KoScriptingOdfReader
@@ -210,15 +212,16 @@ class KoScriptingOdfStore::Private
             //qDebug()<<"KoScriptingOdfStore::getByteArray() Reading ByteArray.";
             QBuffer buffer(&byteArray);
             KoStore* store = KoStore::createStore(&buffer, KoStore::Write, "KrossScript", KoStore::Tar);
-            KoOdfWriteStore oasisStore(store);
+            KoOdfWriteStore odfStore(store);
+            KoEmbeddedDocumentSaver embeddedSaver;
+            KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
             QByteArray mime = getMimeType();
-            KoXmlWriter* manifestWriter = mime.isNull() ? 0 : oasisStore.manifestWriter(mime);
-            if( ! document->saveOasis(store, manifestWriter) ) {
+            if( ! document->saveOdf( documentContext ) ) {
                 qWarning()<<"KoScriptingOdfStore::open() Failed to save Oasis to ByteArray";
                 byteArray = QByteArray();
             }
             //oasisStore.closeContentWriter();
-            oasisStore.closeManifestWriter();
+            odfStore.closeManifestWriter();
             delete store;
             return byteArray;
         }

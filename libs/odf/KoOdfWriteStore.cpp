@@ -181,6 +181,12 @@ KoXmlWriter* KoOdfWriteStore::manifestWriter( const char* mimeType )
     return d->manifestWriter;
 }
 
+KoXmlWriter* KoOdfWriteStore::manifestWriter()
+{
+    Q_ASSERT( d->manifestWriter );
+    return d->manifestWriter;
+}
+
 bool KoOdfWriteStore::closeManifestWriter()
 {
     Q_ASSERT(d->manifestWriter);

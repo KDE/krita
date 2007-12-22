@@ -23,12 +23,13 @@
 #include <komain_export.h>
 #include <KoXmlReader.h>
 
+#include "KoDocument.h"
+
 class KoView;
 class QDomDocument;
 class QDomElement;
 class KUrl;
 class KoStore;
-class KoDocument;
 class KoDocumentChildPrivate;
 class KoXmlWriter;
 
@@ -110,7 +111,7 @@ public:
    * Save an embedded object to an OASIS store.
    * This is called automatically by the parent KoDocument's saveOasis
    */
-  virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+  virtual bool saveOdf( KoDocument::SavingContext & documentContext );
 
   /**
    *  Parses the "object" tag. This does NOT mean creating the child documents.

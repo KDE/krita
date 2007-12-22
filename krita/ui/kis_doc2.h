@@ -71,7 +71,7 @@ public:
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
     virtual bool loadOdf( KoOdfReadStore & odfStore );
-    virtual bool saveOasis( KoStore*, KoXmlWriter* );
+    virtual bool saveOdf( SavingContext &documentContext );
     virtual bool loadChildren( KoStore* store);
     virtual bool loadXML(QIODevice *, const KoXmlDocument& doc);
     virtual QByteArray mimeType() const;

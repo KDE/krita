@@ -42,12 +42,14 @@ class QUndoCommand;
 
 class KoStore;
 class KoOdfReadStore;
+class KoOdfWriteStore;
 class KoMainWindow;
 class KoChild;
 class KoDocumentChild;
 class KoView;
 class KoDocumentInfo;
 class KoOpenPane;
+class KoEmbeddedDocumentSaver;
 
 
 class KoVersionInfo
@@ -75,6 +77,16 @@ class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart
     Q_PROPERTY( bool backupFile READ backupFile WRITE setBackupFile )
 
 public:
+    // context passed on saving to saveOdf
+    struct SavingContext {
+        SavingContext( KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver )
+        : odfStore( odfStore )
+        , embeddedSaver( embeddedSaver )
+        {}
+
+        KoOdfWriteStore & odfStore;
+        KoEmbeddedDocumentSaver & embeddedSaver;
+    };
 
     /**
      *  Constructor.
@@ -498,9 +510,9 @@ public:
 
     /**
      *  Reimplement this method to save the contents of your %KOffice document,
-     *  using the OASIS format.
+     *  using the ODF format.
      */
-    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter ) = 0;
+    virtual bool saveOdf( SavingContext & documentContext ) = 0;
 
     /**
      *  Reimplement this to save the contents of the %KOffice document into
@@ -1002,7 +1014,7 @@ protected:
      *  @see saveExternalChildren if you have external children.
      *  Returns true on success.
      */
-    virtual bool saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter );
+    virtual bool saveChildrenOdf( SavingContext & documentContext );
 
     /**
      *  Overload this function if you have to load additional files

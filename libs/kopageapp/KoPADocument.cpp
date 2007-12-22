@@ -121,15 +121,14 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     return true;
 }
 
-bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+bool KoPADocument::saveOdf( SavingContext & documentContext )
 {
-    KoOdfWriteStore oasisStore( store );
-    KoXmlWriter* contentWriter = oasisStore.contentWriter();
+    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
     if ( !contentWriter )
         return false;
 
     KoGenStyles mainStyles;
-    KoXmlWriter * bodyWriter = oasisStore.bodyWriter();
+    KoXmlWriter * bodyWriter = documentContext.odfStore.bodyWriter();
 
     KoPASavingContext paContext( *bodyWriter, mainStyles, 1, KoShapeSavingContext::Store );
 
@@ -139,12 +138,12 @@ bool KoPADocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     mainStyles.saveOdfAutomaticStyles( contentWriter, false );
 
-    oasisStore.closeContentWriter();
+    documentContext.odfStore.closeContentWriter();
 
     //add manifest line for content.xml
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    documentContext.odfStore.manifestWriter()->addManifestEntry( "content.xml", "text/xml" );
 
-    return mainStyles.saveOdfStylesDotXml( store, manifestWriter );
+    return mainStyles.saveOdfStylesDotXml( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() );
 }
 
 QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context )

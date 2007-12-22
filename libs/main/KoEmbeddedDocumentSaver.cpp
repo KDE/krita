@@ -24,6 +24,7 @@
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>
+#include <KoOdfWriteStore.h>
 
 #include "KoDocument.h"
 
@@ -69,8 +70,9 @@ void KoEmbeddedDocumentSaver::embedDocument( KoXmlWriter &writer, KoDocument * d
     writer.addAttribute( "xlink:href", /*"#" + */ref );
 }
 
-bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments( KoStore * store, KoXmlWriter * manifestWriter )
+bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments( KoDocument::SavingContext & documentContext )
 {
+    KoStore * store = documentContext.odfStore.store();
     foreach( KoDocument * doc, m_documents ) {
         QString path;
         if ( doc->isStoredExtern() ) {
@@ -96,7 +98,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments( KoStore * store, KoXmlWrite
                 store->pushDirectory();
                 store->enterDirectory( name );
 
-                if ( !doc->saveOasis( store, manifestWriter ) ) {
+                if ( !doc->saveOdf( documentContext ) ) {
                     kWarning(30003) << "KoEmbeddedDocumentSaver::saveEmbeddedDocuments failed";
                     return false;
                 }
@@ -123,7 +125,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments( KoStore * store, KoXmlWrite
         if ( mimetype.isEmpty() ) {
             mimetype = doc->nativeFormatMimeType();
         }
-        manifestWriter->addManifestEntry( path, mimetype );
+        documentContext.odfStore.manifestWriter()->addManifestEntry( path, mimetype );
     }
 
     return true;

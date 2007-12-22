@@ -21,9 +21,10 @@
 #define KOEMBEDDEDDOCUMENTSAVER_H
 
 #include <QList>
-#include <komain_export.h>
 
-class KoDocument;
+#include "KoDocument.h"
+#include "komain_export.h"
+
 class KoStore;
 class KoXmlWriter;
 
@@ -47,7 +48,7 @@ public:
     /**
      * Save all embedded documents to the store.
      */
-    bool saveEmbeddedDocuments( KoStore * store, KoXmlWriter * manifestWriter );
+    bool saveEmbeddedDocuments( KoDocument::SavingContext & documentContext );
 
 private:
     QList<KoDocument *> m_documents;

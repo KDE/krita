@@ -19,7 +19,8 @@
 */
 
 #include "KoDocumentChild.h"
-#include "KoOdfReadStore.h"
+#include <KoOdfReadStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoDocument.h>
 #include <KoQueryTrader.h>
 #include <KoXmlReader.h>
@@ -382,8 +383,9 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL, con
     return true;
 }
 
-bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+bool KoDocumentChild::saveOdf( KoDocument::SavingContext & documentContext )
 {
+    KoStore * store = documentContext.odfStore.store();
     QString path;
     if ( d->m_doc->isStoredExtern() )
     {
@@ -411,7 +413,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
             store->pushDirectory();
             store->enterDirectory( name );
 
-            if ( !d->m_doc->saveOasis( store, manifestWriter ) ) {
+            if ( !d->m_doc->saveOdf( documentContext ) ) {
                 kWarning(30003) << "KoDocumentChild::saveOasis failed";
                 return false;
             }
@@ -434,7 +436,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     QByteArray mimetype = d->m_doc->nativeOasisMimeType();
     if ( mimetype.isEmpty() )
         mimetype = d->m_doc->nativeFormatMimeType();
-    manifestWriter->addManifestEntry( path, mimetype );
+    documentContext.odfStore.manifestWriter()->addManifestEntry( path, mimetype );
 
     return true;
 }

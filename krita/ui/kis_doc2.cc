@@ -252,29 +252,27 @@ bool KisDoc2::loadOdf( KoOdfReadStore & odfStore )
 }
 
 
-bool KisDoc2::saveOasis( KoStore* store, KoXmlWriter* manifestWriter)
+bool KisDoc2::saveOdf( SavingContext &documentContext )
 {
+    KoXmlWriter* manifestWriter = documentContext.odfStore.manifestWriter();
     kDebug(41008) <<"saving with OpenRaster";
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-    KoOdfWriteStore* oasisStore =  new KoOdfWriteStore( store );
-    KoXmlWriter* contentWriter = oasisStore->contentWriter();
+    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
     if ( !contentWriter ) {
-        delete oasisStore;
         return false;
     }
 
     manifestWriter->addManifestEntry( "data/", "" );
-    KoXmlWriter* bodyWriter = oasisStore->bodyWriter();
+    KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
     // Save the structure
-    KisOasisSaveVisitor osv(oasisStore);
+    KisOasisSaveVisitor osv(&documentContext.odfStore);
     bodyWriter->startElement("office:body");
     m_d->image->rootLayer()->accept(osv);
     bodyWriter->endElement();
-    oasisStore->closeContentWriter();
+    documentContext.odfStore.closeContentWriter();
     // Sqve the data
-    KisOasisSaveDataVisitor osdv(oasisStore, manifestWriter);
+    KisOasisSaveDataVisitor osdv(&documentContext.odfStore, manifestWriter);
     m_d->image->rootLayer()->accept(osdv);
-    delete oasisStore;
     return true;
 }
 

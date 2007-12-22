@@ -51,7 +51,7 @@ public:
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
     bool loadOdf( KoOdfReadStore & odfStore );
 
-    bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+    bool saveOdf( SavingContext & documentContext );
 
     /**
      * Load master pages

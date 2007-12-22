@@ -32,6 +32,7 @@
 class KoShape;
 class KoXmlWriter;
 class KoGenStyles;
+class KoEmbeddedDocumentSaver;
 class KoShapeLayer;
 class KoStore;
 
@@ -73,10 +74,12 @@ public:
     /**
      * @brief Constructor
      * @param xmlWriter used for writing the xml
-     * @param mainStyles
+     * @param mainStyles for saving the styles
+     * @param embeddedSaver for saving embedded documents 
      * @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
      */
-    KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, SavingMode savingMode = Store );
+    KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
+                          KoEmbeddedDocumentSaver& embeddedSaver, SavingMode savingMode = Store );
     virtual ~KoShapeSavingContext();
 
     /**
@@ -102,6 +105,13 @@ public:
      * @return main styles 
      */
     KoGenStyles & mainStyles();
+
+    /**
+     * @brief Get the embedded document saver
+     *
+     * @return embedded document saver
+     */
+    KoEmbeddedDocumentSaver & embeddedSaver();
 
     /**
      * @brief Check if an option is set
@@ -174,6 +184,7 @@ private:
     int m_drawId;
 
     KoGenStyles& m_mainStyles;
+    KoEmbeddedDocumentSaver& m_embeddedSaver;
     SavingMode m_savingMode;
 };
 

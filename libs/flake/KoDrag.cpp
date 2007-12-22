@@ -30,6 +30,7 @@
 #include <KoGenStyles.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
 
 #include "KoDragOdfSaveHelper.h"
@@ -54,6 +55,7 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     Q_ASSERT( !store->bad() );
 
     KoOdfWriteStore oasisStore( store );
+    KoEmbeddedDocumentSaver embeddedSaver;
 
     KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
     KoXmlWriter* contentWriter = oasisStore.contentWriter();
@@ -65,7 +67,7 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
 
     KoGenStyles mainStyles;
     KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
-    KoShapeSavingContext * context = helper.context( bodyWriter, mainStyles );
+    KoShapeSavingContext * context = helper.context( bodyWriter, mainStyles, embeddedSaver );
 
     if ( !helper.writeBody() ) {
         return false;

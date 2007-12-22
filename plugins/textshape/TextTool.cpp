@@ -77,6 +77,7 @@
 #include <QTextLayout>
 #include <QUndoCommand>
 #include <KoGenStyles.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut) {
@@ -618,7 +619,8 @@ void TextTool::copy() const {
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter writer( &buffer );
     KoGenStyles mainStyles;
-    KoShapeSavingContext context (writer, mainStyles);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
     //writer.startDocument( "foobar" );
     m_textShapeData->saveOdf(context, from, to);
     //writer.endDocument();

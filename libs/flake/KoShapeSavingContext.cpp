@@ -31,11 +31,13 @@
 
 #include <QtCore/QTime>
 
-KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, SavingMode savingMode )
+KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
+                                            KoEmbeddedDocumentSaver& embeddedSaver, SavingMode savingMode )
 : m_xmlWriter( &xmlWriter )
 , m_savingOptions( 0 )
 , m_drawId( 0 )
 , m_mainStyles( mainStyles )
+, m_embeddedSaver( embeddedSaver )
 , m_savingMode( savingMode )
 {
 }
@@ -57,6 +59,11 @@ void KoShapeSavingContext::setXmlWriter( KoXmlWriter &_xmlWriter )
 KoGenStyles & KoShapeSavingContext::mainStyles()
 {
     return m_mainStyles;
+}
+
+KoEmbeddedDocumentSaver & KoShapeSavingContext::embeddedSaver()
+{
+    return m_embeddedSaver;
 }
 
 bool KoShapeSavingContext::isSet( ShapeSavingOption option ) const

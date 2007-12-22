@@ -24,7 +24,7 @@
 #include "kis_paint_device.h"
 
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
-    : KisFilter( id(), CategoryAdjust, i18n("&HSV Adujstement..."))
+    : KisFilter( id(), CategoryAdjust, i18n("&HSV Adjustment..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

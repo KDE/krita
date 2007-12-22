@@ -171,7 +171,7 @@ namespace Optimization {
      * @param iter maximal number of iterations
      * @param epsilon if the remain is below epsilon the function return
      * @param lambda0 the intial value of the damping parameter
-     * @param nu adjustement coefficient of the damping parameter
+     * @param nu adjustment coefficient of the damping parameter
      * @return the remain
      */
     template< class _TFunction_, typename _TType_  >

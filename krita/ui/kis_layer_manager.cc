@@ -603,6 +603,10 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, cons
 
     KisAdjustmentLayerSP l = new KisAdjustmentLayer(img, name, filter, selection);
     img->addNode(l.data(), parent, above.data());
+    if (l->selection())
+        l->setDirty(l->selection()->selectedExactRect());
+    else
+        l->setDirty(img->bounds());
 }
 
 
@@ -612,9 +616,7 @@ void KisLayerManager::layerRemove()
 
     if (img) {
         KisLayerSP layer = activeLayer();
-
         if (layer) {
-
             img->removeLayer(layer);
 
             if (layer->parent())
@@ -643,6 +645,7 @@ void KisLayerManager::layerDuplicate()
     img->addNode(dup.data(), active->parent(), active.data());
     if (dup) {
         activateLayer( dup );
+        dup->setDirty();
         m_view->canvas()->update();
     } else {
         KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -660,6 +663,7 @@ void KisLayerManager::layerRaise()
     layer = activeLayer();
 
     img->raiseLayer(layer);
+    layer->parent()->setDirty();
 }
 
 void KisLayerManager::layerLower()
@@ -673,6 +677,7 @@ void KisLayerManager::layerLower()
     layer = activeLayer();
 
     img->lowerLayer(layer);
+    layer->parent()->setDirty();
 }
 
 void KisLayerManager::layerFront()
@@ -685,6 +690,7 @@ void KisLayerManager::layerFront()
 
     layer = activeLayer();
     img->toTop(layer.data());
+    layer->parent()->setDirty();
 }
 
 void KisLayerManager::layerBack()
@@ -696,6 +702,7 @@ void KisLayerManager::layerBack()
 
     layer = activeLayer();
     img->toBottom(layer.data());
+    layer->parent()->setDirty();
 }
 
 void KisLayerManager::rotateLayer180()
@@ -730,6 +737,7 @@ void KisLayerManager::mirrorLayerX()
 
     m_doc->setModified(true);
     layersUpdated();
+    
     m_view->canvas()->update();
 }
 

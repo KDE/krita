@@ -22,9 +22,9 @@
 
 #include "KoColorTransformationFactory.h"
 
-class KisHSVAdjustementFactory : public KoColorTransformationFactory {
+class KisHSVAdjustmentFactory : public KoColorTransformationFactory {
     public:
-        KisHSVAdjustementFactory();
+        KisHSVAdjustmentFactory();
         virtual QList< QPair< KoID, KoID > > supportedModels() const;
         virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
 };

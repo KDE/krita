@@ -130,7 +130,7 @@ void KisShapeController::removeShape( KoShape* shape )
         }
     }
 
-#if 0 // This bites with recursive deleting of all children of the current node
+#if 0 // XXX This bites with recursive deleting of all children of the current node
     if ( KoShapeContainer * container = shape->parent() ) {
         kDebug(41007) <<"parent is" << container;
         container->removeChild( shape );

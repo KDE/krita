@@ -412,7 +412,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             return new KoInvertColorTransformation(this);
         }
 
-         virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const
+         virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, double compensation) const
         {
             return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>( shade, compensate, compensation) );
         }

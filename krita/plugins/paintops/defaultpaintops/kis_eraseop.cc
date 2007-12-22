@@ -85,7 +85,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info) )
         return;
     double scale = KisPaintOp::scaleForPressure( info.pressure() );
-    QPointF hotSpot = brush->hotSpot(scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     qint32 destX;

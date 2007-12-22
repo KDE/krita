@@ -423,7 +423,7 @@ void KisToolFreehand::paintOutline(const QPointF& point) {
         QPainter gc( canvas->canvasWidget() );
         QPen pen(Qt::SolidLine);
 
-        QPointF hotSpot = brush->hotSpot();
+        QPointF hotSpot = brush->hotSpot(1.0, 1.0);
 
         //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);

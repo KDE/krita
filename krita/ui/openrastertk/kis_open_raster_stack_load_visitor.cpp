@@ -87,7 +87,7 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
     layer->setY(elem.attribute("y").toInt());
 }
 
-void KisOpenRasterStackLoadVisitor::loadAdjustementLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
+void KisOpenRasterStackLoadVisitor::loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
 {
     loadLayerInfo(elem, aL.data());
 }
@@ -149,7 +149,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 KisFilterConfiguration * kfc = f->defaultConfiguration(0);
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer( gL->image() , "", kfc, KisSelectionSP(0));
                 d->image->addNode(layer.data(), gL.data(), gL->childCount() );
-                loadAdjustementLayer(subelem, layer);
+                loadAdjustmentLayer(subelem, layer);
 
             } else {
                 kDebug(41008) << "Unknown element : " << node.nodeName();

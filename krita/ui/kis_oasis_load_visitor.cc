@@ -61,7 +61,7 @@ void KisOasisLoadVisitor::loadLayerInfo(const KoXmlElement& elem, KisLayer* laye
     layer->setY(elem.attribute("y").toInt());
 }
 
-void KisOasisLoadVisitor::loadAdjustementLayer(const KoXmlElement& elem, KisAdjustmentLayerSP aL)
+void KisOasisLoadVisitor::loadAdjustmentLayer(const KoXmlElement& elem, KisAdjustmentLayerSP aL)
 {
     loadLayerInfo(elem, aL.data());
 }
@@ -134,7 +134,7 @@ void KisOasisLoadVisitor::loadGroupLayer(const KoXmlElement& elem, KisGroupLayer
                 KisFilterConfiguration * kfc = f->defaultConfiguration(0);
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer( gL->image() , "", kfc, KisSelectionSP(0));
                 m_image->addNode(layer.data(), gL.data(), gL->childCount() );
-                loadAdjustementLayer(subelem, layer);
+                loadAdjustmentLayer(subelem, layer);
 
             }
         }

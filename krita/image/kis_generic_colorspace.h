@@ -212,7 +212,7 @@ class KisGenericColorSpace : public KoColorSpace {
             return 0;
         }
 
-        virtual KoColorTransformation *createDarkenAdjustement(qint32 , bool , double ) const
+        virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , double ) const
         {
             return 0;
         }

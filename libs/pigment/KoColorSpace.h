@@ -512,7 +512,7 @@ public:
      * the compensation factor will be used to limit the darkening.
      *
      */
-    virtual KoColorTransformation *createDarkenAdjustement(qint32 shade, bool compensate, double compensation) const = 0;
+    virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, double compensation) const = 0;
 
 
     /**

@@ -1,6 +1,6 @@
 /* ============================================================
  * Copyright 2004-2005 by Gilles Caulier
- * Copyright 2005 by Casper Boemann (reworked to be generic)
+ * Copyright 2005 by Casper Boemann <cbr@boemann.dk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

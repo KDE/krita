@@ -142,8 +142,11 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
 
     connect(bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
-    connect(bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
-    connect(bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
+    // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
+    connect(bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked())); 
+    connect(bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
+    // END NOTE
+    
     connect(bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
     connect(doubleOpacity, SIGNAL(valueChanged(double, bool)), SIGNAL(sigOpacityChanged(double, bool)));

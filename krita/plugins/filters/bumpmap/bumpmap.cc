@@ -312,7 +312,7 @@ XXX_PORT
 
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), sel_w);
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), sel_w);
-    KoColorTransformation* darkenTransfo = srcCs->createDarkenAdjustement(shade, config->getBool("compensate", true), compensation);
+    KoColorTransformation* darkenTransfo = srcCs->createDarkenAdjustment(shade, config->getBool("compensate", true), compensation);
 
     for (int y = 0; y < sel_h; y++) {
 

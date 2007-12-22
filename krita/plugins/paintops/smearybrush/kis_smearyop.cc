@@ -119,7 +119,7 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
     kc.convertTo(colorSpace);
 
     double scale = KisPaintOp::scaleForPressure( info.pressure() );
-    QPointF hotSpot = brush->hotSpot(scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer

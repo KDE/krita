@@ -214,8 +214,8 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         return;
 
     KisPaintDeviceSP device = painter()->device();
-
-    QPointF hotSpot = brush->hotSpot( KisPaintOp::scaleForPressure( info.pressure() ) );
+    double pScale = KisPaintOp::scaleForPressure( info.pressure() );
+    QPointF hotSpot = brush->hotSpot( pScale, pScale );
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -250,7 +250,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         else
             darkenAmount = (qint32)(255  - 75 * scaleToCurve(info.pressure(), m_darkenCurve));
 
-        KoColorTransformation* transfo = darkened.colorSpace()->createDarkenAdjustement(darkenAmount, false, 0.0);
+        KoColorTransformation* transfo = darkened.colorSpace()->createDarkenAdjustment(darkenAmount, false, 0.0);
         transfo->transform(origColor.data(), darkened.data(), 1);
         painter()->setPaintColor(darkened);
         delete transfo;

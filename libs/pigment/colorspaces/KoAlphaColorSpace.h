@@ -137,7 +137,7 @@ public:
         kDebug() <<"Undefined operation in the alpha colorspace";
         return 0;
     }
-    virtual KoColorTransformation *createDarkenAdjustement(qint32 , bool , double ) const
+    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , double ) const
     {
         kDebug() <<"Undefined operation in the alpha colorspace";
         return 0;

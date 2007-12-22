@@ -37,7 +37,7 @@ public:
 public:
     void loadImage(const KoXmlElement& elem);
     void loadPaintLayer(const KoXmlElement& elem, KisPaintLayerSP pL);
-    void loadAdjustementLayer(const KoXmlElement& elem, KisAdjustmentLayerSP pL);
+    void loadAdjustmentLayer(const KoXmlElement& elem, KisAdjustmentLayerSP pL);
     void loadGroupLayer(const KoXmlElement& elem, KisGroupLayerSP gL);
     inline KisImageSP image() { return m_image; }
     QMap<KisLayer *, QString>& layerFilenames() { return m_layerFilenames; }

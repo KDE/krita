@@ -564,11 +564,6 @@ void KisBrush::setHotSpot(QPointF pt)
     d->hotSpot = QPointF(x, y);
 }
 
-QPointF KisBrush::hotSpot(double scale) const
-{
-    return hotSpot(scale, scale);
-}
-
 QPointF KisBrush::hotSpot(double scaleX, double scaleY) const
 {
     double w = width() * scaleX;

@@ -105,7 +105,6 @@ public:
     virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(QPointF);
-    KDE_DEPRECATED QPointF hotSpot(double scale = 1.0) const;
     QPointF hotSpot(double scaleX, double scaleY ) const;
 
     /**

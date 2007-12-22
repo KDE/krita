@@ -24,7 +24,7 @@
 
 #include <KoColorTransformationFactoryRegistry.h>
 
-#include "kis_hsv_adjustement.h"
+#include "kis_hsv_adjustment.h"
 
 typedef KGenericFactory<ExtensionsPlugin> ExtensionsPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( krita_colorspaces_extensions, ExtensionsPluginFactory( "krita" ) )
@@ -32,8 +32,7 @@ K_EXPORT_COMPONENT_FACTORY( krita_colorspaces_extensions, ExtensionsPluginFactor
 ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QStringList &)
 {
     Q_UNUSED( parent );
-    kDebug() << "Load Color Spaces Extension plug-in";
-    KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisHSVAdjustementFactory);
+    KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisHSVAdjustmentFactory);
 }
 
 ExtensionsPlugin::~ExtensionsPlugin()

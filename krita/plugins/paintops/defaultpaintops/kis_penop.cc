@@ -70,7 +70,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
         return;
 
     double scale = KisPaintOp::scaleForPressure( info.pressure() );
-    QPointF hotSpot = brush->hotSpot(scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     qint32 x = qRound(pt.x());

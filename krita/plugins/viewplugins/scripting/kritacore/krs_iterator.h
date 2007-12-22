@@ -238,7 +238,7 @@ class Iterator : public IteratorBase
 
         void darken(int shade, bool compensate, double compensation)
         {
-            KoColorTransformation* transfo = m_layer->colorSpace()->createDarkenAdjustement(shade, compensate, compensation);
+            KoColorTransformation* transfo = m_layer->colorSpace()->createDarkenAdjustment(shade, compensate, compensation);
             transfo->transform(m_it->rawData(), m_it->rawData(), 1);
             delete transfo;
         }

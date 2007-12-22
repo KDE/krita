@@ -213,12 +213,12 @@ public:
             KisSelectionSP selection = layer->selection();
             KisPaintDeviceSP layerProjection = layer->projection();
 
+            // It's necessary to copy the unselected pixels to the projection cache inside
+            // the adjustment layer to make the merge optimization in the grouplayer work.
             KisPainter gc1(layerProjection);
             gc1.setCompositeOp(layerProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
             gc1.bitBlt(m_rc.topLeft(), m_projection, m_rc);
             gc1.end();
-                       
-            
             
             KisFilterConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
             KisFilterProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);

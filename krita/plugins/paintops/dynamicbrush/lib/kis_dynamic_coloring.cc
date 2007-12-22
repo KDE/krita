@@ -64,7 +64,7 @@ void KisPlainColoring::selectColor(double mix)
 
 void KisPlainColoring::darken(qint32 v)
 {
-    KoColorTransformation* transfo = m_color->colorSpace()->createDarkenAdjustement(v, false, 0.0);
+    KoColorTransformation* transfo = m_color->colorSpace()->createDarkenAdjustment(v, false, 0.0);
     transfo->transform( m_color->data(),  m_color->data(), 1);
     delete transfo;
 }

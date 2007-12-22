@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_hsv_adjustement.h"
+#include "kis_hsv_adjustment.h"
 
 #include <config-openexr.h>
 #ifdef HAVE_OPENEXR
@@ -77,11 +77,11 @@ void clamp<float>( float* r, float* g, float* b)
 }
 
 template<typename _channel_type_>
-class KisHSVAdjustement : public KoColorTransformation {
+class KisHSVAdjustment : public KoColorTransformation {
     typedef KoRgbTraits<_channel_type_> RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
     public:
-        KisHSVAdjustement(double _adj_h, double _adj_s, double _adj_v) : m_adj_h(_adj_h* 180), m_adj_s(_adj_s ), m_adj_v(_adj_v)
+        KisHSVAdjustment(double _adj_h, double _adj_s, double _adj_v) : m_adj_h(_adj_h), m_adj_s(_adj_s), m_adj_v(_adj_v)
         {
         }
     public:
@@ -115,12 +115,12 @@ class KisHSVAdjustement : public KoColorTransformation {
 };
 
 
-KisHSVAdjustementFactory::KisHSVAdjustementFactory() : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment") )
+KisHSVAdjustmentFactory::KisHSVAdjustmentFactory() : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment") )
 {
     
 }
 
-QList< QPair< KoID, KoID > > KisHSVAdjustementFactory::supportedModels() const
+QList< QPair< KoID, KoID > > KisHSVAdjustmentFactory::supportedModels() const
 {
     QList< QPair< KoID, KoID > > l;
     l.append( QPair< KoID, KoID >( RGBAColorModelID , Integer8BitsColorDepthID ) );
@@ -130,7 +130,7 @@ QList< QPair< KoID, KoID > > KisHSVAdjustementFactory::supportedModels() const
     return l;
 }
 
-KoColorTransformation* KisHSVAdjustementFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
+KoColorTransformation* KisHSVAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
     double h = 0.0, s = 0.0, v = 0.0;
     if(parameters.contains("h"))
@@ -145,30 +145,29 @@ KoColorTransformation* KisHSVAdjustementFactory::createTransformation(const KoCo
     {
         v = parameters["v"].toDouble();
     }
-    kDebug() << " h = " << h << " s = " << s << " v = " << v;
     if( colorSpace->colorModelId() != RGBAColorModelID)
     {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustementFactory::createTransformation";
+        kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";
         return 0;
     }
     if( colorSpace->colorDepthId() == Integer8BitsColorDepthID )
     {
-        return new KisHSVAdjustement< quint8 >(h,s,v);
+        return new KisHSVAdjustment< quint8 >(h,s,v);
     } else if( colorSpace->colorDepthId() == Integer16BitsColorDepthID )
     {
-        return new KisHSVAdjustement< quint16 >(h,s,v);
+        return new KisHSVAdjustment< quint16 >(h,s,v);
     }
 #ifdef HAVE_OPENEXR
     else if( colorSpace->colorDepthId() == Float16BitsColorDepthID )
     {
-        return new KisHSVAdjustement< half >(h,s,v);
+        return new KisHSVAdjustment< half >(h,s,v);
     }
 #endif
     else if( colorSpace->colorDepthId() == Float32BitsColorDepthID )
     {
-        return new KisHSVAdjustement< float >(h,s,v);
+        return new KisHSVAdjustment< float >(h,s,v);
     } else {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustementFactory::createTransformation";
+        kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";
         return 0;
     }
 }

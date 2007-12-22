@@ -101,7 +101,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = 0;
 
     double scale = KisPaintOp::scaleForPressure( info.pressure() );
-    QPointF hotSpot = brush->hotSpot(scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     qint32 x;

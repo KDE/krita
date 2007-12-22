@@ -25,7 +25,7 @@
 
 #include <kis_filter.h>
 #include <kis_filter_registry.h>
-
+#include <kis_paint_device.h>
 
 struct KisFiltersModel::Private {
     struct Node {
@@ -57,10 +57,13 @@ struct KisFiltersModel::Private {
     
     QHash<QString, Category> categories;
     QList<QString> categoriesKeys;
+    KisPaintDeviceSP thumb;
+    QHash<const KisFilter*, QImage> previewCache;
 };
 
-KisFiltersModel::KisFiltersModel() : d(new Private)
+KisFiltersModel::KisFiltersModel(KisPaintDeviceSP thumb) : d(new Private)
 {
+    d->thumb = thumb;
     KisFilterRegistry* registry = KisFilterRegistry::instance();
     foreach(QString key, registry->keys())
     {
@@ -159,7 +162,27 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
 {
     if(index.isValid())
     {
-        if(role == Qt::DisplayRole)
+        if(role == Qt::DecorationRole)
+        {
+#if 0
+            Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
+            Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
+            if(filter)
+            {
+                if( not d->previewCache.contains( filter->filter ) )
+                {
+                    KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
+                    filter->filter->process(target, QRect(0,0,100,100), filter->filter->defaultConfiguration( d->thumb ) );
+                    d->previewCache[ filter->filter ] = target->convertToQImage(0, 0.0);
+                }
+                return d->previewCache[ filter->filter ];
+            } else {
+#endif
+                return QVariant();
+#if 0
+            }
+#endif
+        } else if(role == Qt::DisplayRole)
         {
             Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
             return QVariant(node->displayRole());

@@ -45,7 +45,7 @@ struct KisFilterDialog::Private {
         , layer(0)
         , mask(0)
         , currentBookmarkedFilterConfigurationsModel(0)
-        , filtersModel(new KisFiltersModel)
+        , filtersModel(0)
     {
     }
 
@@ -85,6 +85,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->mask->selection()->updateProjection();
     
     d->layer->setPreviewMask( d->mask );
+    d->filtersModel = new KisFiltersModel(d->thumb);
     d->uiFilterDialog.filtersSelector->setModel(d->filtersModel);
     connect(d->uiFilterDialog.filtersSelector, SIGNAL(currentItemChanged(const QModelIndex &)), SLOT(setFilterIndex(const QModelIndex& )));
     connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )),

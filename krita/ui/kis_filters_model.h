@@ -24,11 +24,13 @@
 
 #include <QAbstractItemModel>
 
+#include <kis_types.h>
+
 class KisFilter;
 
 class KisFiltersModel : public QAbstractItemModel {
     public:
-        KisFiltersModel();
+        KisFiltersModel(KisPaintDeviceSP thumb);
         virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
         virtual QModelIndex parent(const QModelIndex &child) const;
         QModelIndex indexForFilter( const QString& id );

@@ -48,6 +48,9 @@ void KisTreeViewPopup::setCurrentIndex(const QModelIndex& idx)
 {
     setText( idx.data(Qt::DisplayRole).toString() );
     hidePopupWidget();
+    double v = d->view->blockSignals( true );
+    d->view->setCurrentIndex( idx );
+    d->view->blockSignals( v );
 }
 
 #include "kis_tree_view_popup.moc"

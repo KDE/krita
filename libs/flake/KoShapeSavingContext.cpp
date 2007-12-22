@@ -40,13 +40,13 @@ KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles&
 {
 }
 
-KoShapeSavingContext::~KoShapeSavingContext() 
+KoShapeSavingContext::~KoShapeSavingContext()
 {
 }
 
-KoXmlWriter & KoShapeSavingContext::xmlWriter() 
+KoXmlWriter & KoShapeSavingContext::xmlWriter()
 {
-    return *m_xmlWriter; 
+    return *m_xmlWriter;
 }
 
 void KoShapeSavingContext::setXmlWriter( KoXmlWriter &_xmlWriter )
@@ -54,9 +54,9 @@ void KoShapeSavingContext::setXmlWriter( KoXmlWriter &_xmlWriter )
     m_xmlWriter = &_xmlWriter;
 }
 
-KoGenStyles & KoShapeSavingContext::mainStyles() 
+KoGenStyles & KoShapeSavingContext::mainStyles()
 {
-    return m_mainStyles; 
+    return m_mainStyles;
 }
 
 bool KoShapeSavingContext::isSet( ShapeSavingOption option ) const

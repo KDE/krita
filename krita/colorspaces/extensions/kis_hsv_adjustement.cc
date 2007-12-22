@@ -115,7 +115,7 @@ class KisHSVAdjustement : public KoColorTransformation {
 };
 
 
-KisHSVAdjustementFactory::KisHSVAdjustementFactory() : KoColorTransformationFactory("hsv_adjustement", i18n("HSV Adjustement") )
+KisHSVAdjustementFactory::KisHSVAdjustementFactory() : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment") )
 {
     
 }

@@ -32,6 +32,7 @@ K_EXPORT_COMPONENT_FACTORY( krita_colorspaces_extensions, ExtensionsPluginFactor
 ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QStringList &)
 {
     Q_UNUSED( parent );
+    kDebug() << "Load Color Spaces Extension plug-in";
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisHSVAdjustementFactory);
 }
 

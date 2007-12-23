@@ -179,7 +179,7 @@ void KoScriptingDocker::slotEnabledChanged(const QString& actionname)
 
 void KoScriptingDocker::slotDoubleClicked()
 {
-    //kDebug()<<"KoScriptingDocker::slotDoubleClicked()";
+    //kDebug(32010)<<"KoScriptingDocker::slotDoubleClicked()";
     d->view->slotRun();
 }
 
@@ -200,7 +200,7 @@ KoScriptingActionDocker::KoScriptingActionDocker(QWidget* parent, KoScriptingMod
     : QDockWidget(action->text(), parent)
     , d(new Private())
 {
-    kDebug();
+    kDebug(32010);
     d->module = module;
     d->action = action;
     d->action->addObject(this, "KoDocker", Kross::ChildrenInterface::AutoConnectSignals);
@@ -209,14 +209,14 @@ KoScriptingActionDocker::KoScriptingActionDocker(QWidget* parent, KoScriptingMod
 
 KoScriptingActionDocker::~KoScriptingActionDocker()
 {
-    kDebug();
+    kDebug(32010);
     d->action->finalize();
     delete d;
 }
 
 void KoScriptingActionDocker::slotVisibilityChanged(bool visible)
 {
-    kDebug()<<"visible="<<visible;
+    kDebug(32010)<<"visible="<<visible;
     if( visible ) {
         if( d->module && d->action->isFinalized() ) {
             //KoView* view = d->module->view();

@@ -303,7 +303,7 @@ void KoScriptManagerDialog::slotAccepted()
         QFile f(file);
         if( f.open(QIODevice::WriteOnly) )
             if( Kross::Manager::self().actionCollection()->writeXml(&f) )
-                kDebug()<<"KoScriptManagerDialog: Successfully saved file:"<<file;
+                kDebug(32010)<<"KoScriptManagerDialog: Successfully saved file:"<<file;
         f.close();
     }
 }

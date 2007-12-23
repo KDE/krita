@@ -205,7 +205,7 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent* event)
 
 bool KoScriptManagerAddScriptWidget::accept()
 {
-    kDebug()<<"ScriptManagerAddScriptWidget::accept()";
+    kDebug(32010)<<"ScriptManagerAddScriptWidget::accept()";
     Q_ASSERT( d->editor );
     Q_ASSERT( d->editor->action() );
     Q_ASSERT( d->wizard );
@@ -290,7 +290,7 @@ bool KoScriptManagerAddWizard::invokeWidgetMethod(const char* member)
     Q_ASSERT( item );
     bool ok = true;
     QMetaObject::invokeMethod(item->widget(), member, Q_RETURN_ARG(bool,ok));
-    kDebug()<<"ScriptManagerAddWizard::invokeWidgetMethod object="<<item->widget()->objectName()<<" member="<<member<<" ok="<<ok;
+    kDebug(32010)<<"ScriptManagerAddWizard::invokeWidgetMethod object="<<item->widget()->objectName()<<" member="<<member<<" ok="<<ok;
     return ok;
 }
 

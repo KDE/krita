@@ -37,7 +37,7 @@ KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QByteArray 
     m_pTar = new KTar( _filename, "application/x-gzip" );
 
     m_bGood = init( _mode ); // open the targz file and init some vars
-    kDebug()<<"appIdentification :"<<appIdentification;
+    kDebug(s_area)<<"appIdentification :"<<appIdentification;
     if ( m_bGood && _mode == Write )
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
@@ -101,13 +101,13 @@ KoTarStore::~KoTarStore()
 
 QByteArray KoTarStore::completeMagic( const QByteArray& appMimetype )
 {
-    kDebug()<<"QCString KoTarStore::completeMagic( const QCString& appMimetype )********************";
+    kDebug(s_area)<<"QCString KoTarStore::completeMagic( const QCString& appMimetype )********************";
     QByteArray res( "KOffice " );
     res += appMimetype;
     res += '\004'; // Two magic bytes to make the identification
     res += '\006'; // more reliable (DF)
-    kDebug()<<"sssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    kDebug()<<" return :!!!!!!!!!!!!!!! :"<<res;
+    kDebug(s_area)<<"sssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    kDebug(s_area)<<" return :!!!!!!!!!!!!!!! :"<<res;
     return res;
 }
 

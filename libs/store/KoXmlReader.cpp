@@ -227,6 +227,8 @@ static QDataStream& operator>>( QDataStream& s, KoXmlPackedItem& item )
 // the original implementation in http://liblzf.plan9.de/
 static int lzff_compress(const void* input, int length, void* output, int maxout)
 {
+  Q_UNUSED(maxout);
+
   const quint8* ip = (const quint8*) input;
   const quint8* ip_limit = ip + length - MAX_COPY -4;
   quint8* op = (quint8*) output;
@@ -2496,6 +2498,7 @@ KoXmlCDATASection::KoXmlCDATASection(): KoXmlText()
 }
 
 KoXmlCDATASection::KoXmlCDATASection( const KoXmlCDATASection& cdata )
+    : KoXmlText( cdata )
 {
    *this = cdata;
 }

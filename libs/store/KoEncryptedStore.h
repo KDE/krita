@@ -64,6 +64,9 @@ public:
     virtual bool isEncrypted( );
 
 protected:
+
+    using KoStore::init;
+
     virtual bool init( Mode mode, const QByteArray& appIdentification );
     virtual bool doFinalize( );
     virtual bool openWrite( const QString& name );

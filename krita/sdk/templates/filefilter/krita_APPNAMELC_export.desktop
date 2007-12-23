@@ -2,10 +2,13 @@
 Encoding=UTF-8
 Icon=
 Name=Krita %{APPNAMELC} Export Filter
+Name[el]=Φίλτρο εξαγωγής %{APPNAMELC} του Krita
 Name[ga]=Scagaire Easpórtála %{APPNAMELC}  Krita
+Name[ja]=Krita %{APPNAMELC} エクスポートフィルタ
 Name[pt]=Filtro de Exportação de %{APPNAMELC} para o Krita
-Name[pt_BR]=Filtro de Exportação de %{APPNAMELC} para o Krita
+Name[pt_BR]=Filtro de Exportação %{APPNAMELC} para o Krita
 Name[sv]=Krita %{APPNAMELC}-exportfilter
+Name[x-test]=xxKrita %{APPNAMELC} Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/%{APPNAMELC}

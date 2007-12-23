@@ -279,11 +279,11 @@ EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, Q
 			int oldHeight = it.current()->height();
 			int textHeight = srt.height()+KPROPEDITOR_ITEM_MARGIN;
 			int textLines = textHeight / d->baseRowHeight + (((textHeight % d->baseRowHeight) > 0) ? 1 : 0);
-			kDebug() <<" textLines:" << textLines;
+			kDebug(30007) <<" textLines:" << textLines;
 			if (textLines != newNumLines) {
 				dynamic_cast<EditorItem*>(it.current())->setHeight(newNumLines * d->baseRowHeight);
 			}
-			kDebug() << it.current()->text(0) <<":"  << oldHeight <<" ->" << newHeight;
+			kDebug(30007) << it.current()->text(0) <<":"  << oldHeight <<" ->" << newHeight;
 		}
 */
 }

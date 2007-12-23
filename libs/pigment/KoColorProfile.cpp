@@ -30,7 +30,7 @@ struct KoColorProfile::Private
 
 KoColorProfile::KoColorProfile(const QString &fileName) : d(new Private)
 {
-//     kDebug() <<" Profile filename =" << fileName;
+//     kDebug(DBG_PIGMENT) <<" Profile filename =" << fileName;
     d->fileName = fileName;
 }
 

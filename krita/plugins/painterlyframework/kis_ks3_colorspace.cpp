@@ -19,6 +19,7 @@
 
 #include "kis_ks3_colorspace.h"
 
+#include "ks_reflectance_converter.h"
 #include "kis_illuminant_profile.h"
 #include <KoColorProfile.h>
 
@@ -71,6 +72,8 @@ void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nP
     // 1 - convert raw bytes to quint16
     // 2 - find reflectances using the T matrix of the profile
     // 3 - convert reflectances to K/S
+
+
 }
 
 void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const

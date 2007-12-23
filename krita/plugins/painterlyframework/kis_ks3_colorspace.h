@@ -21,6 +21,7 @@
 #define KIS_KS3_COLORSPACE_H_
 
 #include "kis_ks_colorspace_traits.h"
+#include "ks_reflectance_converter.h"
 #include <KoIncompleteColorSpace.h>
 
 class KisIlluminantProfile;

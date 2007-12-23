@@ -47,8 +47,8 @@ class KisIlluminantProfile : public KoColorProfile {
         gsl_matrix_float *T() const { return m_T; }
         gsl_vector_float *P() const { return m_P; }
         int wavelenghts() const { return m_P->size; }
-        double Swhite() { return S_w; }
-        double Kblack() { return K_b; }
+        double Swhite() const { return S_w; }
+        double Kblack() const { return K_b; }
 
     private:
         gsl_matrix_float *m_T;

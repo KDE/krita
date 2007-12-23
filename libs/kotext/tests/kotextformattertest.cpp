@@ -59,7 +59,7 @@ public:
         if ( m_leftMargin ) {
             leftMargin = m_leftMargin;
             pageWidth = m_availableWidth - m_leftMargin;
-            kDebug() <<"adjustMargins: returning leftMargin=" << leftMargin <<" pageWidth=" << pageWidth;
+            kDebug(32500) <<"adjustMargins: returning leftMargin=" << leftMargin <<" pageWidth=" << pageWidth;
         } else
             pageWidth = m_availableWidth;
     }
@@ -81,7 +81,7 @@ KoTextFormatterTest::KoTextFormatterTest()
 
 void KoTextFormatterTest::speedTest()
 {
-    kDebug() ;
+    kDebug(32500) ;
     doc->clear(true);
     KoTextParag* parag = doc->firstParag();
     parag->append( "They burst into flames when it is time for them to die, and then they are reborn from the ashes" );
@@ -97,7 +97,7 @@ void KoTextFormatterTest::speedTest()
 
 void KoTextFormatterTest::noHeightTest()
 {
-    kDebug() ;
+    kDebug(32500) ;
     // We test the case of going past maxY - by setting the available height to 0
     // Expected result: the formatter 'aborts', i.e. no line-breaking, but still
     // goes over each character to set them all correctly; and usually KWord
@@ -114,7 +114,7 @@ void KoTextFormatterTest::noHeightTest()
 
 void KoTextFormatterTest::noWidthEverTest()
 {
-    kDebug() ;
+    kDebug(32500) ;
     // We test the case of formatting where there is no width (e.g. narrow
     // passage, or after last page).
     // Expected result: the formatter goes down until it finds more width
@@ -138,7 +138,7 @@ void KoTextFormatterTest::noWidthEverTest()
 
 void KoTextFormatterTest::tooWideChar()
 {
-    kDebug() ;
+    kDebug(32500) ;
     // We test the case of formatting where there is not enough width
     // for the character (e.g. a very large inline table, larger than the document).
     // Expected result: the formatter goes down until it finds more width,
@@ -157,7 +157,7 @@ void KoTextFormatterTest::tooWideChar()
 
 void KoTextFormatterTest::oneLineTest()
 {
-    kDebug() ;
+    kDebug(32500) ;
     // Normal case, only one line
     // Expected: the parag is as wide as the doc
     doc->setFlow( new TextFlow( 2000, 200 ) );
@@ -175,7 +175,7 @@ void KoTextFormatterTest::oneLineTest()
 
 void KoTextFormatterTest::counterAndBigChar()
 {
-    kDebug() ;
+    kDebug(32500) ;
     // Only one line, with a counter and a big char.
     // Bug #82609: the new height led to "formatting again" which restarted without taking the counter into account
     // Expected: the char starts after the counter

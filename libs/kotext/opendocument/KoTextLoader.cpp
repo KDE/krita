@@ -83,7 +83,7 @@ class KoTextLoader::Private
         ~Private() {
             delete frameLoader;
             qDeleteAll(listStyles);
-            kDebug() <<"Loading took" << (float)(dt.elapsed()) / 1000 <<" seconds";
+            kDebug(32500) <<"Loading took" << (float)(dt.elapsed()) / 1000 <<" seconds";
         }
 
         KoParagraphStyle *paragraphStyle(const QString &name) {

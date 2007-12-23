@@ -312,19 +312,19 @@ void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXml
                     break;
                 default:
                     QChar customBulletChar = bulletChar[0];
-                    kDebug() <<"Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 );
+                    kDebug(32500) <<"Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 );
                     /*
                     QString customBulletFont;
                     // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
                     if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
                     {
                         customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
-                        kDebug() <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString::null );
+                        kDebug(32500) <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString::null );
                     }
                     else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
                     {
                         customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null );
-                        kDebug() <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString::null );
+                        kDebug(32500) <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString::null );
                     }
                     // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                     */

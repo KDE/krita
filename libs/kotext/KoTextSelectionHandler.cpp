@@ -433,7 +433,7 @@ bool KoTextSelectionHandler::insertIndexMarker() {
 
 void KoTextSelectionHandler::addBookmark(const QString &name, KoShape *shape) {
     KoBookmark *bookmark = new KoBookmark(name, shape);
-    int startPos = -1, endPos = -1, caretPos;
+    int startPos = -1, endPos = -1, caretPos = -1;
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);

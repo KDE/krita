@@ -193,7 +193,7 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
 void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) const {
     KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
-    kDebug() << "The document is " << d->document;
+    kDebug(32500) << "The document is " << d->document;
 
     KoStyleManager *styleManager = 0;
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->document->documentLayout());

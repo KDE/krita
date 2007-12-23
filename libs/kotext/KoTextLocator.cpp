@@ -99,7 +99,7 @@ void KoTextLocator::updatePosition(const QTextDocument *document, QTextInlineObj
         d->dirty = true;
         d->document = document;
         d->cursorPosition = posInDocument;
-//kDebug() <<"KoTextLocator page:" << pageNumber() <<", chapter:" << chapter() <<", '" << word() <<"'";
+//kDebug(32500) <<"KoTextLocator page:" << pageNumber() <<", chapter:" << chapter() <<", '" << word() <<"'";
     }
 }
 

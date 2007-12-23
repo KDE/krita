@@ -435,6 +435,8 @@ QColor KoCharacterStyle::underlineColor () const {
 void KoCharacterStyle::setFontLetterSpacing(qreal spacing) {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->setProperty(QTextCharFormat::FontLetterSpacing, spacing);
+#else
+    Q_UNUSED(spacing);
 #endif
 }
 
@@ -449,6 +451,8 @@ qreal KoCharacterStyle::fontLetterSpacing() const {
 void KoCharacterStyle::setFontWordSpacing(qreal spacing) {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->setProperty(QTextCharFormat::FontWordSpacing, spacing);
+#else
+    Q_UNUSED(spacing);
 #endif
 }
 
@@ -765,7 +769,7 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
                     target->addProperty("fo:font-weight", boldness*10, KoGenStyle::TextType);
                 }
             } else {
-                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
             }
         } else if (key == QTextFormat::FontItalic) {
             if (d->stylesPrivate->value(key).toBool()) {
@@ -779,7 +783,7 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             if (ok) {
                 target->addProperty("style:text-underline-style", exportOasisLineStyle((KoCharacterStyle::LineStyle) style), KoGenStyle::TextType);
             } else {
-                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
             }
         } else if (key == UnderlineType) {
             bool ok = false;
@@ -787,7 +791,7 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             if (ok) {
                 target->addProperty("style:text-underline-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
             } else {
-                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
             }
         } else if (key == UnderlineColor) {
             QColor color = d->stylesPrivate->value(key).value<QColor>();
@@ -799,7 +803,7 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             if (ok) {
                 target->addProperty("style:text-line-through-style", exportOasisLineStyle((KoCharacterStyle::LineStyle) style), KoGenStyle::TextType);
             } else {
-                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
             }
         } else if (key == StrikeOutType) {
             bool ok = false;
@@ -807,7 +811,7 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             if (ok) {
                 target->addProperty("style:text-line-through-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
             } else {
-                kDebug() << "What is this ???" << d->stylesPrivate->value(key);
+                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
             }
         } else if (key == StrikeOutColor) {
             QColor color = d->stylesPrivate->value(key).value<QColor>();
@@ -820,7 +824,7 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
             else
                 target->addProperty("fo:background-color", brush.color().name(), KoGenStyle::TextType);
         } else {
-//             kDebug() << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
+//             kDebug(32500) << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
         }
     }
 }

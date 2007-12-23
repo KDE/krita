@@ -48,12 +48,12 @@ void TestKoColor::testForModel(QString model)
         kc.toXML(doc, elt);
         doc.appendChild(elt);
         KoColor kcu = KoColor::fromXML(elt.firstChildElement(), depthId.id(), QHash<QString,QString>());
-        QVERIFY2(*(kc.colorSpace()) == *(kcu.colorSpace()), QString("Not identical color space colorModelId = %1 depthId = %2").arg(model).arg(depthId.id()).latin1());
+        QVERIFY2(*(kc.colorSpace()) == *(kcu.colorSpace()), QString("Not identical color space colorModelId = %1 depthId = %2").arg(model).arg(depthId.id()).toLatin1());
         QColor qc2 = kc.toQColor();
         QColor qcu = kcu.toQColor();
-        QVERIFY2( nearEqualValue(qcu.red(), qc2.red()), QString("Unserialization failed colorModelId = %1 depthId = %2 red = %3 red = %4").arg(model).arg(depthId.id()).arg(qcu.red()).arg(qc2.red()).latin1());
-        QVERIFY2( nearEqualValue(qcu.green(), qc2.green()), QString("Unserialization failed colorModelId = %1 depthId = %2 green = %3 green = %4").arg(model).arg(depthId.id()).arg(qcu.green()).arg(qc2.green()).latin1());
-        QVERIFY2( nearEqualValue(qcu.blue(), qc2.blue()), QString("Unserialization failed colorModelId = %1 depthId = %2 blue = %3 blue = %4").arg(model).arg(depthId.id()).arg(qcu.blue()).arg(qc2.blue()).latin1());
+        QVERIFY2( nearEqualValue(qcu.red(), qc2.red()), QString("Unserialization failed colorModelId = %1 depthId = %2 red = %3 red = %4").arg(model).arg(depthId.id()).arg(qcu.red()).arg(qc2.red()).toLatin1());
+        QVERIFY2( nearEqualValue(qcu.green(), qc2.green()), QString("Unserialization failed colorModelId = %1 depthId = %2 green = %3 green = %4").arg(model).arg(depthId.id()).arg(qcu.green()).arg(qc2.green()).toLatin1());
+        QVERIFY2( nearEqualValue(qcu.blue(), qc2.blue()), QString("Unserialization failed colorModelId = %1 depthId = %2 blue = %3 blue = %4").arg(model).arg(depthId.id()).arg(qcu.blue()).arg(qc2.blue()).toLatin1());
     }
     
 }

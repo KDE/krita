@@ -27,4 +27,6 @@
 const quint8 OPACITY_TRANSPARENT = 0;
 const quint8 OPACITY_OPAQUE = UCHAR_MAX;
 
+#define DBG_PIGMENT 30008
+
 #endif

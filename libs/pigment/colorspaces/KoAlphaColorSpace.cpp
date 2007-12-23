@@ -410,9 +410,6 @@ bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
     // No lcms trickery here, we are only a opacity channel
     qint32 size = dstColorSpace->pixelSize();
 
-    quint32 j = 0;
-    quint32 i = 0;
-    
     memset(dst, 0, numPixels * size);
     dstColorSpace->applyInverseAlphaU8Mask(dst, src, numPixels);
 

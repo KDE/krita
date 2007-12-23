@@ -124,35 +124,35 @@ public:
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const
     {
         Q_UNUSED(transferValues);
-        kDebug() <<"Undefined operation in the alpha colorspace";
+        kWarning() << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
     virtual KoColorTransformation* createDesaturateAdjustment() const
     {
-        kDebug() <<"Undefined operation in the alpha colorspace";
+        kWarning() << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
     virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const
     {
-        kDebug() <<"Undefined operation in the alpha colorspace";
+        kWarning() << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
     virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , double ) const
     {
-        kDebug() <<"Undefined operation in the alpha colorspace";
+        kWarning() << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
     virtual void invertColor(quint8*, qint32) const
     {
-        kDebug() <<"Undefined operation in the alpha colorspace";
+        kWarning() << i18n("Undefined operation in the alpha colorspace");
     }
     virtual void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const
     {
-        kDebug() <<"Undefined operation in the alpha colorspace";
+        kWarning() << i18n("Undefined operation in the alpha colorspace");
     }
     virtual void colorFromXML( quint8* , const QDomElement& ) const
     {
-        kDebug() <<"Undefined operation in the alpha colorspace";
+        kWarning() << i18n("Undefined operation in the alpha colorspace");
     }
 
 public:

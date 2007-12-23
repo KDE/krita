@@ -93,10 +93,10 @@ void KoColorSpaceRegistry::init()
 
             profile->load();
             if (profile->valid()) {
-                kDebug(31000) << "Valid profile : " << profile->name();
+                kDebug(DBG_PIGMENT) << "Valid profile : " << profile->name();
                 d->profileMap[profile->name()] = profile;
             } else {
-                kDebug(31000) << "Invalid profile : " << profile->name();
+                kDebug(DBG_PIGMENT) << "Invalid profile : " << profile->name();
             }
         }
     }
@@ -124,7 +124,7 @@ void KoColorSpaceRegistry::init()
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
     KoColorProfile *defProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(hProfile);
-    kDebug(31000) << "Gray " << defProfile->name();
+    kDebug(DBG_PIGMENT) << "Gray " << defProfile->name();
     addProfile(defProfile);
 
     // Create the built-in colorspaces
@@ -246,14 +246,14 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         KoColorSpaceFactory *csf = value(csID);
         if(!csf)
         {
-            kDebug(31000) <<"Unknown color space type :" << csf;
+            kDebug(DBG_PIGMENT) <<"Unknown color space type :" << csf;
             return 0;
         }
 
         const KoColorProfile *p = profileByName(profileName);
         if(!p && !profileName.isEmpty())
         {
-            kDebug(31000) <<"Profile not found :" << profileName;
+            kDebug(DBG_PIGMENT) <<"Profile not found :" << profileName;
             return 0;
         }
         const KoColorSpace *cs = csf->createColorSpace( p);
@@ -286,7 +286,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             KoColorSpaceFactory *csf = value(csID);
             if(!csf)
             {
-                kDebug(31000) <<"Unknown color space type :" << csf;
+                kDebug(DBG_PIGMENT) <<"Unknown color space type :" << csf;
                 return 0;
             }
 

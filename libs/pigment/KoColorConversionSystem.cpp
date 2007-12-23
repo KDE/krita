@@ -61,7 +61,7 @@ KoColorConversionSystem::~KoColorConversionSystem()
 
 void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
 {
-    kDebug(31000) << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
+    kDebug(DBG_PIGMENT) << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
     QString modelId = csf->colorModelId().id();
     QString depthId = csf->colorDepthId().id();
     NodeKey key(modelId, depthId);
@@ -78,7 +78,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     // ICC Connection
     if(csNode->isIcc)
     { // Construct a link between this color space and all other ICC color space
-        kDebug(31000) << csf->id() << " is an ICC color space, connecting to others";
+        kDebug(DBG_PIGMENT) << csf->id() << " is an ICC color space, connecting to others";
         QList<Node*> nodes = d->graph.values();
         foreach(Node* node, nodes)
         {
@@ -103,14 +103,14 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     }
     // Construct a link for "custom" transformation
     QList<KoColorConversionTransformationFactory*> cctfs = csf->colorConversionLinks();
-    kDebug(31000) << csf->id() << " has " << cctfs.size() << " direct connections";
+    kDebug(DBG_PIGMENT) << csf->id() << " has " << cctfs.size() << " direct connections";
     foreach(KoColorConversionTransformationFactory* cctf, cctfs)
     {
         Node* srcNode = nodeFor(cctf->srcColorModelId(), cctf->srcColorDepthId());
         Q_ASSERT(srcNode);
         Node* dstNode = nodeFor(cctf->dstColorModelId(), cctf->dstColorDepthId());
         Q_ASSERT(dstNode);
-        kDebug(31000) << "Connecting " << srcNode->id() << " to " << dstNode->id();
+        kDebug(DBG_PIGMENT) << "Connecting " << srcNode->id() << " to " << dstNode->id();
         Q_ASSERT(srcNode == csNode or dstNode == csNode);
         // Check if the two nodes are allready connected
         Vertex* v = vertexBetween(srcNode, dstNode);
@@ -133,7 +133,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     if( not v)
     {
         v = createVertex(csNode, csNode);
-        kDebug(31000) << "No self to self color conversion, add the copy one";
+        kDebug(DBG_PIGMENT) << "No self to self color conversion, add the copy one";
         v->setFactoryFromSrc( new KoCopyColorConversionTransformationFactory(modelId, depthId));
     }
 }
@@ -235,16 +235,16 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
         const KoColorSpace* intermCS = defaultColorSpaceForNode( path->vertexes.first()->dstNode );
         mccTransfo->appendTransfo( path->vertexes.first()->factory()->createColorTransformation(srcColorSpace, intermCS, renderingIntent) );
         
-        kDebug(31000) << path->vertexes.first()->srcNode->id() << " to " << path->vertexes.first()->dstNode->id();
+        kDebug(DBG_PIGMENT) << path->vertexes.first()->srcNode->id() << " to " << path->vertexes.first()->dstNode->id();
         for(int i = 1; i < path->length() - 1; i++)
         {
             Vertex* v = path->vertexes[i];
-            kDebug(31000) << v->srcNode->id() << " to " << v->dstNode->id();
+            kDebug(DBG_PIGMENT) << v->srcNode->id() << " to " << v->dstNode->id();
             const KoColorSpace* intermCS2 = defaultColorSpaceForNode( v->dstNode );
             mccTransfo->appendTransfo( v->factory()->createColorTransformation(intermCS, intermCS2, renderingIntent) );
             intermCS = intermCS2;
         }
-        kDebug(31000) << path->vertexes.last()->srcNode->id() << " to " << path->vertexes.last()->dstNode->id();
+        kDebug(DBG_PIGMENT) << path->vertexes.last()->srcNode->id() << " to " << path->vertexes.last()->dstNode->id();
         mccTransfo->appendTransfo( path->vertexes.last()->factory()->createColorTransformation(intermCS, dstColorSpace, renderingIntent) );
         
     }
@@ -416,10 +416,10 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
     }
     if(lessWorsePath)
     {
-        kWarning(31000) << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found !";
+        kWarning(DBG_PIGMENT) << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found !";
         return lessWorsePath;
     } 
-    kError(31000) << "No path from " << srcNode->id() << " to " << dstNode->id() << " found !";
+    kError(DBG_PIGMENT) << "No path from " << srcNode->id() << " to " << dstNode->id() << " found !";
     return 0;
 }
 
@@ -435,7 +435,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 
 KoColorConversionSystem::Path* KoColorConversionSystem::findBestPath( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
-//     kDebug(31000) << "Find best path between " << srcNode->id() << " and " << dstNode->id();
+//     kDebug(DBG_PIGMENT) << "Find best path between " << srcNode->id() << " and " << dstNode->id();
     if(srcNode->isHdr and dstNode->isHdr)
     {
         return findBestPathImpl(srcNode, dstNode, false);

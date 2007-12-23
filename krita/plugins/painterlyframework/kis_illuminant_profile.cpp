@@ -96,7 +96,7 @@ bool KisIlluminantProfile::load() // TODO Info
         int l;
         double c;
         data >> l;
-        if ((size_t)l != 3*m_T->size2) {
+        if ((size_t)l != m_T->size2) {
             gsl_matrix_free(m_T); m_T = 0;
             return false;
         }

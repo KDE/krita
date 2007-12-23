@@ -22,11 +22,19 @@
 #include "kis_illuminant_profile.h"
 #include <KoColorProfile.h>
 
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_cblas.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
+
 KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
 : parent( "KS3CS" + p->name(),
           "KS 3 Color Space with profile " + p->name(),
           KoColorSpaceRegistry::instance()->rgb16("") )
 {
+    if (!profileIsCompatible(p))
+        return;
+
     m_profile = dynamic_cast<KisIlluminantProfile *>(p);
 
     // TODO Add channels
@@ -48,13 +56,20 @@ const KoColorProfile *KisKS3ColorSpace::profile() const
 
 bool KisKS3ColorSpace::profileIsCompatible(const KoColorProfile *profile) const
 {
-    if (!dynamic_cast<const KisIlluminantProfile *>(profile))
+    const KisIlluminantProfile *p = dynamic_cast<const KisIlluminantProfile *>(profile);
+    if (!p)
+        return false;
+    if (p->wavelenghts() != 3)
         return false;
     return true;
 }
 
 void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const
 {
+    // For each pixel we do this:
+    // 1 - convert raw bytes to quint16
+    // 2 - find reflectances using the T matrix of the profile
+    // 3 - convert reflectances to K/S
 }
 
 void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const

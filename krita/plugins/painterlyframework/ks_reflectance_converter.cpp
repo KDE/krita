@@ -30,7 +30,7 @@ KSReflectanceConverter::~KSReflectanceConverter()
 {
 }
 
-void KSReflectanceConverter::KS2Reflectance(float K, float S, float &R) const
+void KSReflectanceConverter::KSToReflectance(float K, float S, float &R) const
 {
     if (S == 0.0) {
         R = 0.0;
@@ -46,7 +46,7 @@ void KSReflectanceConverter::KS2Reflectance(float K, float S, float &R) const
     R = 1.0 + Q - sqrt( Q*Q + 2.0*Q );
 }
 
-void KSReflectanceConverter::Reflectance2KS(float R, float &K, float &S) const
+void KSReflectanceConverter::reflectanceToKS(float R, float &K, float &S) const
 {
     if ( R == 0.0 ) {
         K = 0.8 * K_b;

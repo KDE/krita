@@ -33,8 +33,6 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*(_wavelen_number
 
     inline static float &K(quint8* data, int wavelen)
     {
-        if (wavelen < -1 || wavelen >= _wavelen_number_)
-            return -1.0;
         float *d = parent::nativeArray(data);
         // User asked for K that's in the first [0 ... _wavelen_number_-1] positions
         return d[wavelen];
@@ -42,8 +40,6 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*(_wavelen_number
 
     inline static float &S(quint8* data, int wavelen)
     {
-        if (wavelen < -1 || wavelen >= _wavelen_number_)
-            return -1.0;
         float *d = parent::nativeArray(data);
         // User asked for S that's in the [ _wavelen_number_ ... 2*_wavelen_number_ - 1] positions
         return d[_wavelen_number_ + wavelen];

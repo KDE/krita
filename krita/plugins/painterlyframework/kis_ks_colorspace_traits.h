@@ -20,18 +20,22 @@
 #ifndef KIS_KS_COLORSPACE_TRAITS_H_
 #define KIS_KS_COLORSPACE_TRAITS_H_
 
+#include <KoColorSpaceTraits.h>
+
 template<int _wavelen_number_>
 struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*(_wavelen_number_)+1, 6> {
 
-    float K[_wavelen_number_];
-    float S[_wavelen_number_];
-    float opacity;
+    typedef KoColorSpaceTrait<float, 2*(_wavelen_number_)+1, 6> parent;
+
+    float m_K[_wavelen_number_];
+    float m_S[_wavelen_number_];
+    float m_opacity;
 
     inline static float &K(quint8* data, int wavelen)
     {
         if (wavelen < -1 || wavelen >= _wavelen_number_)
             return -1.0;
-        float *d = nativeArray(data);
+        float *d = parent::nativeArray(data);
         // User asked for K that's in the first [0 ... _wavelen_number_-1] positions
         return d[wavelen];
     }
@@ -40,13 +44,13 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*(_wavelen_number
     {
         if (wavelen < -1 || wavelen >= _wavelen_number_)
             return -1.0;
-        float *d = nativeArray(data);
+        float *d = parent::nativeArray(data);
         // User asked for S that's in the [ _wavelen_number_ ... 2*_wavelen_number_ - 1] positions
         return d[_wavelen_number_ + wavelen];
     }
 };
 
-typedef KisKS3ColorSpaceTrait KisKSColorSpaceTrait<3>;
-typedef KisKS9ColorSpaceTrait KisKSColorSpaceTrait<9>;
+typedef KisKSColorSpaceTrait<3> KisKS3ColorSpaceTrait;
+typedef KisKSColorSpaceTrait<9> KisKS9ColorSpaceTrait;
 
 #endif // KIS_KS_COLORSPACE_TRAITS_H_

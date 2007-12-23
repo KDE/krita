@@ -27,8 +27,8 @@ class KSReflectanceConverter {
         KSReflectanceConverter(float whiteS, float blackK);
         ~KSReflectanceConverter();
 
-        void KStoReflectance(float K, float S, float &R) const;
-        void ReflectancetoKS(float R, float &K, float &S) const;
+        void KS2Reflectance(float K, float S, float &R) const;
+        void Reflectance2KS(float R, float &K, float &S) const;
 
     private:
         float S_w, K_b;

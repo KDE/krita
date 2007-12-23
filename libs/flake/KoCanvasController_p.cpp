@@ -268,7 +268,7 @@ void Viewport::resetLayout()
     int resizeW = viewW;
     int resizeH = viewH;
 
-//     kDebug() <<"viewH:" << viewH << endl
+//     kDebug(30006) <<"viewH:" << viewH << endl
 //              << "docH: " << docH << endl
 //              << "viewW: " << viewW << endl
 //              << "docW: " << docW << endl;
@@ -338,8 +338,8 @@ void Viewport::resetLayout()
             m_canvas->setGeometry( moveX, moveY, resizeW, resizeH );
     }
 
-//     kDebug() <<"View port geom:" << geometry();
-//     kDebug() <<"Canvas widget geom:" << m_canvas->geometry();
+//     kDebug(30006) <<"View port geom:" << geometry();
+//     kDebug(30006) <<"Canvas widget geom:" << m_canvas->geometry();
 }
 
 #include "KoCanvasController_p.moc"

@@ -49,6 +49,7 @@ class KisKS3ColorSpace : public KoIncompleteColorSpace<KisKS3ColorSpaceTrait>
     private:
 
         KisIlluminantProfile *m_profile;
+        KSReflectanceConverter m_converter;
 
 };
 

@@ -36,6 +36,7 @@ KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
         return;
 
     m_profile = dynamic_cast<KisIlluminantProfile *>(p);
+    m_converter = KSReflectanceConverter(m_profile->Swhite(), m_profile->Kblack());
 
     // TODO Add channels
 }

@@ -353,7 +353,7 @@ QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack
 
     // read the pattern repeat style
     QString style = styleStack.property( KoXmlNS::style, "repeat" );
-    kDebug() <<"pattern style =" << style;
+    kDebug( 30003 ) <<"pattern style =" << style;
 
     QSize imageSize = picture.getOriginalSize();
 
@@ -385,9 +385,9 @@ QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack
         }
     }
 
-    kDebug() <<"shape size =" << size;
-    kDebug() <<"original image size =" << picture.getOriginalSize();
-    kDebug() <<"resulting image size =" << imageSize;
+    kDebug( 30003 ) <<"shape size =" << size;
+    kDebug( 30003 ) <<"original image size =" << picture.getOriginalSize();
+    kDebug( 30003 ) <<"resulting image size =" << imageSize;
 
     QBrush resultBrush( picture.generatePixmap( imageSize, true ) );
 
@@ -398,7 +398,7 @@ QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack
         {
             // align pattern to the given size
             QString align = styleStack.property( KoXmlNS::draw, "fill-image-ref-point" );
-            kDebug() <<"pattern align =" << align;
+            kDebug( 30003 ) <<"pattern align =" << align;
             if( align == "top-left" )
                 matrix.translate( 0, 0 );
             else if( align == "top" )

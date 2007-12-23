@@ -233,7 +233,7 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
         return;
 
     QSize screenSize( width, height );
-    //kDebug() <<"KoPictureEps::draw screenSize=" << screenSize.width() <<"x" << screenSize.height();
+    //kDebug( 30003 ) <<"KoPictureEps::draw screenSize=" << screenSize.width() <<"x" << screenSize.height();
 
     Q3PaintDeviceMetrics metrics (painter.device());
     kDebug(30003) <<"Metrics: X:" << metrics.logicalDpiX() <<" x Y:" << metrics.logicalDpiX() <<" (in KoPictureEps::draw)";

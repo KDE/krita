@@ -64,7 +64,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     if (d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
-    // kDebug() <<"KoPluginLoader::load" << serviceType << kBacktrace();
+    // kDebug( 30003 ) <<"KoPluginLoader::load" << serviceType << kBacktrace();
     d->loadedServiceTypes << serviceType;
     QString query = QString::fromLatin1("(Type == 'Service')");
     if(! versionString.isEmpty())

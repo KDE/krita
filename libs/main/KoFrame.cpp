@@ -263,7 +263,7 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
       // The other modes change the geometry so they call resizeEvent.
       // This one doesn't, so it has to emit geometryChangedby itself.
       emit geometryChanged();
-      //kDebug() <<"KoFrame::mouseMoveEvent koFrame position is" << x() <<"," << y();
+      //kDebug( 30003 ) <<"KoFrame::mouseMoveEvent koFrame position is" << x() <<"," << y();
   }
   else if ( d->m_mode == 1 )
   {

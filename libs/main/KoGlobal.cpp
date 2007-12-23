@@ -96,8 +96,8 @@ QFont KoGlobal::_defaultFont()
         Q_ASSERT( m_pointSize != -1 );
         font.setPointSize( m_pointSize );
     }
-    //kDebug()<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
-    //kDebug()<<"font.name() :"<<font.family ();
+    //kDebug( 30003 )<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
+    //kDebug( 30003 )<<"font.name() :"<<font.family ();
     return font;
 }
 
@@ -202,7 +202,7 @@ KConfig* KoGlobal::_kofficeConfig()
 
 void KoGlobal::setDPI( int x, int y )
 {
-    //kDebug() << x <<"," << y;
+    //kDebug( 30003 ) << x <<"," << y;
     KoGlobal* s = self();
     s->m_dpiX = x;
     s->m_dpiY = y;

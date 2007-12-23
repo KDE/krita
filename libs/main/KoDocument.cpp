@@ -226,7 +226,7 @@ KoBrowserExtension::KoBrowserExtension( KoDocument * doc )
 
 void KoBrowserExtension::print()
 {
-    kDebug() << "implement; KoBrowserExtension::print";
+    kDebug( 30003 ) << "implement; KoBrowserExtension::print";
 /*
     KoDocument * doc = static_cast<KoDocument *>( parent() );
     KoViewWrapperWidget * wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );

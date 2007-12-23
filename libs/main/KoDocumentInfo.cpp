@@ -308,7 +308,7 @@ bool KoDocumentInfo::loadOasisAboutInfo( const KoXmlNode& metaDoc )
         if( ! m_aboutTags.contains(tag) )
             continue;
 
-        //kDebug()<<"localName="<<e.localName();
+        //kDebug( 30003 )<<"localName="<<e.localName();
         if( tag == "keyword" ) {
             if ( !e.text().isEmpty() )
                 keywords << e.text();

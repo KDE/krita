@@ -44,6 +44,20 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*(_wavelen_number
         // User asked for S that's in the [ _wavelen_number_ ... 2*_wavelen_number_ - 1] positions
         return d[_wavelen_number_ + wavelen];
     }
+
+    inline static const float &K(const quint8* data, int wavelen)
+    {
+        const float *d = parent::nativeArray(data);
+        // User asked for K that's in the first [0 ... _wavelen_number_-1] positions
+        return d[wavelen];
+    }
+
+    inline static const float &S(const quint8* data, int wavelen)
+    {
+        const float *d = parent::nativeArray(data);
+        // User asked for S that's in the [ _wavelen_number_ ... 2*_wavelen_number_ - 1] positions
+        return d[_wavelen_number_ + wavelen];
+    }
 };
 
 typedef KisKSColorSpaceTrait<3> KisKS3ColorSpaceTrait;

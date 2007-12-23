@@ -653,7 +653,7 @@ void KoUniColorChooser::slotBSelected(bool s)
 
 void KoUniColorChooser::updateSelectorsR()
 {
-    //kDebug() <<"R selected";
+    //kDebug(30004)() <<"R selected";
 
     quint8 data[4];
     data[2] = m_RIn->value();
@@ -692,7 +692,7 @@ void KoUniColorChooser::updateSelectorsR()
 
 void KoUniColorChooser::updateSelectorsG()
 {
-    //kDebug() <<"G selected";
+    //kDebug(30004)() <<"G selected";
 
     quint8 data[4];
     data[2] = 255;
@@ -731,7 +731,7 @@ void KoUniColorChooser::updateSelectorsG()
 
 void KoUniColorChooser::updateSelectorsB()
 {
-    //kDebug() <<"B selected";
+    //kDebug(30004)() <<"B selected";
 
     quint8 data[4];
     data[2] = 0;

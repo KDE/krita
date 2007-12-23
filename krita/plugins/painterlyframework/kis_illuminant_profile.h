@@ -44,15 +44,16 @@ class KisIlluminantProfile : public KoColorProfile {
         bool operator==(const KoColorProfile &op2) const
             { return (name()+info() == op2.name()+op2.info()); }
 
-        gsl_matrix *T() const { return m_T; }
-        gsl_vector *P() const { return m_P; }
-
-        int wavelenghts() { return m_P->size; }
+        gsl_matrix_float *T() const { return m_T; }
+        gsl_vector_float *P() const { return m_P; }
+        int wavelenghts() const { return m_P->size; }
 
     private:
-        gsl_matrix *m_T;
-        gsl_vector *m_P;
+        gsl_matrix_float *m_T;
+        gsl_vector_float *m_P;
         bool m_valid;
+        float S_w, K_b;
+
 };
 
 #endif // KIS_ILLUMINANT_PROFILE_H_

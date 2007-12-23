@@ -28,8 +28,8 @@
 #include <gsl/gsl_vector.h>
 
 KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
-: parent( "KS3CS" + p->name(),
-          "KS 3 Color Space with profile " + p->name(),
+: parent( "ks3colorspace",
+          "KS Color Space - 3 wavelenghts",
           KoColorSpaceRegistry::instance()->rgb16("") )
 {
     if (!profileIsCompatible(p))
@@ -74,4 +74,9 @@ void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nP
 
 void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const
 {
+}
+
+bool KisKS3ColorSpace::operator==(const KoColorSpace& rhs) const
+{
+    return (rhs.id() == id()) && (*rhs.profile() == *profile());
 }

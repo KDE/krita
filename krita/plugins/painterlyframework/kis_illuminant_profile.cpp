@@ -41,19 +41,19 @@ KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &profile)
     setInfo(profile.info());
     m_valid = profile.valid();
     if (profile.valid()) {
-        m_T = gsl_matrix_alloc(profile.m_T->size1, profile.m_T->size2);
-        m_P = gsl_vector_alloc(profile.m_P->size);
-        gsl_matrix_memcpy(m_T, profile.m_T);
-        gsl_vector_memcpy(m_P, profile.m_P);
+        m_T = gsl_matrix_float_alloc(profile.m_T->size1, profile.m_T->size2);
+        m_P = gsl_vector_float_alloc(profile.m_P->size);
+        gsl_matrix_float_memcpy(m_T, profile.m_T);
+        gsl_vector_float_memcpy(m_P, profile.m_P);
     }
 }
 
 KisIlluminantProfile::~KisIlluminantProfile()
 {
     if (m_T)
-        gsl_matrix_free(m_T);
+        gsl_matrix_float_free(m_T);
     if (m_P)
-        gsl_vector_free(m_P);
+        gsl_vector_float_free(m_P);
 }
 
 KoColorProfile *KisIlluminantProfile::clone() const
@@ -83,11 +83,11 @@ bool KisIlluminantProfile::load() // TODO Info
         int m, n;
         double c;
         data >> m >> n;
-        m_T = gsl_matrix_alloc(m, n);
+        m_T = gsl_matrix_float_alloc(m, n);
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 data >> c;
-                gsl_matrix_set(m_T, i, j, c);
+                gsl_matrix_float_set(m_T, i, j, (float)c);
             }
         }
     }
@@ -97,14 +97,22 @@ bool KisIlluminantProfile::load() // TODO Info
         double c;
         data >> l;
         if ((size_t)l != m_T->size2) {
-            gsl_matrix_free(m_T); m_T = 0;
+            gsl_matrix_float_free(m_T); m_T = 0;
             return false;
         }
-        m_P = gsl_vector_alloc(l);
+        m_P = gsl_vector_float_alloc(l);
         for (int i = 0; i < l; i++) {
             data >> c;
-            gsl_vector_set(m_P, i, c);
+            gsl_vector_float_set(m_P, i, (float)c);
         }
+    }
+    {
+        // Scattering of white lead and absorption of black lead
+        double c;
+        data >> c;
+        S_w = (float)c;
+        data >> c;
+        K_b = (float)c;
     }
 
     m_valid = true;
@@ -125,11 +133,13 @@ bool KisIlluminantProfile::save(const QString &fileName)
     data << (int)m_T->size1 << (int)m_T->size2;
     for (int i = 0; i < (int)m_T->size1; i++)
         for (int j = 0; j < (int)m_T->size2; j++)
-            data << gsl_matrix_get(m_T, i, j);
+            data << (double)gsl_matrix_float_get(m_T, i, j);
 
     data << (int)m_P->size;
     for (int i = 0; i < (int)m_P->size; i++)
-        data << gsl_vector_get(m_P, i);
+        data << (double)gsl_vector_float_get(m_P, i);
+
+    data << (double)S_w << (double)K_b;
 
     return true;
 }

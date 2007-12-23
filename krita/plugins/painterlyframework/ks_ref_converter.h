@@ -17,11 +17,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KS_REF_CONVERSIONS_H_
-#define KS_REF_CONVERSIONS_H_
+#ifndef KS_REF_CONVERTER_H_
+#define KS_REF_CONVERTER_H_
 
 class KSReflectanceConverter {
 
+    public:
+        KSReflectanceConverter(float whiteS, float blackK);
+        ~KSReflectanceConverter();
+
+        void KStoReflectance(float K, float S, float &R);
+        void ReflectancetoKS(float R, float &K, float &S);
+
+    private:
+        float S_w, K_b;
+
 };
 
-#endif // KS_REF_CONVERSIONS_H_
+#endif // KS_REF_CONVERTER_H_

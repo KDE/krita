@@ -78,9 +78,7 @@ QVariant KisBookmarkedConfigurationsModel::data(const QModelIndex &index, int ro
 
 KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(const QModelIndex &index) const
 {
-//     kDebug() << index.isValid() << endl;
     if(not index.isValid()) return 0;
-//     kDebug() << index.row() << endl;
     switch(index.row())
     {
         case 0:
@@ -106,9 +104,9 @@ void KisBookmarkedConfigurationsModel::saveConfiguration(QString name, const Kis
     d->bookmarkManager->save(name, config);
     if(not d->configsKey.contains(name))
     {
-        beginInsertColumns(QModelIndex(), d->configsKey.count(), d->configsKey.count());
+        beginInsertRows(QModelIndex(), d->configsKey.count() + 2, d->configsKey.count() +2);
         d->configsKey << name;
-        endInsertColumns();
+        endInsertRows();
     }
 }
 
@@ -117,9 +115,9 @@ void KisBookmarkedConfigurationsModel::deleteIndex(const QModelIndex &index)
     if(not index.isValid() or index.row() < 2) return ;
     int idx = index.row() - 2;
     d->bookmarkManager->remove( d->configsKey[idx]);
-    beginRemoveColumns(QModelIndex(), idx, idx);
+    beginRemoveRows(QModelIndex(), idx + 2, idx + 2);
     d->configsKey.removeAt(idx);
-    endRemoveColumns();
+    endRemoveRows();
 }
 
 Qt::ItemFlags KisBookmarkedConfigurationsModel::flags(const QModelIndex & index) const

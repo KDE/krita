@@ -81,7 +81,6 @@ public: // KoCanvasBase implementation
      */
     KoShapeManager * shapeManager() const;
 
-
     /**
      * Return the shape manager associated with this canvas
      */

@@ -46,6 +46,10 @@
 #include "kis_view2.h"
 #include "kis_node.h"
 
+#include <KoTextDocumentLayout.h>
+#include <KoStyleManager.h>
+#include <KoTextShapeData.h>
+
 typedef QMap<KisNodeSP, KoShape*> KisNodeMap;
 
 class KisShapeController::Private
@@ -71,6 +75,8 @@ KisShapeController::~KisShapeController()
 {
     kDebug(41007) <<"Deleting the KisShapeController. There are" << m_d->nodeShapes.size() <<" shapes";
 /*
+    XXX: leak!
+    
     foreach( KoShape* shape, m_d->nodeShapes ) {
         removeShape( shape);
         delete shape; // XXX: What happes with stuff on the
@@ -229,6 +235,14 @@ void KisShapeController::addShape( KoShape* shape )
             KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
             canvas->globalShapeManager()->add(shape);
         }
+
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*> (shape->userData());
+        if (data) { // its a text shape.
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (data->document()->documentLayout());
+            if(layout) {
+                layout->setStyleManager(m_d->doc->styleManager());
+            }
+        }
     }
     else {
         kWarning() <<"Eeek -- we tried to add a krita layer shape without going through KisImage";
@@ -320,7 +334,7 @@ void KisShapeController::slotLayersChanged( KisGroupLayerSP rootLayer )
     setImage( m_d->image );
 }
 
-KoShape * KisShapeController::shapeForNode( KisNodeSP node )
+KoShape * KisShapeController::shapeForNode( KisNodeSP node ) const
 {
     if ( m_d->nodeShapes.contains( node) )
         return m_d->nodeShapes[node];

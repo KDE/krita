@@ -41,7 +41,7 @@ class KisView2;
 class KisChildDoc;
 class KisUndoAdapter;
 class KisNodeModel;
-
+class KoStyleManager;
 /**
  * The class that represents a Krita document containing content and
    settings.
@@ -116,7 +116,7 @@ public:
      */
     KisImageSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
 
-    KisImageSP image();
+    KisImageSP image() const;
 
     /**
      * Adds the specified child document to this document; this
@@ -135,15 +135,15 @@ public:
      */
     void setCurrentImage(KisImageSP image);
 
-    KisUndoAdapter * undoAdapter();
+    KisUndoAdapter * undoAdapter() const;
 
     /**
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeControllerBase * shapeController();
+    KoShapeControllerBase * shapeController() const;
 
-    KoShape * shapeForNode( KisNodeSP layer );
+    KoShape * shapeForNode( KisNodeSP layer ) const;
 
     /**
      * Add a node to the shape controller
@@ -154,7 +154,16 @@ public:
      * The layer model provides a light-weight Qt model-view
      * compatible model on the internal Krita image layer hierarchy.
      */
-    KisNodeModel * nodeModel();
+    KisNodeModel * nodeModel() const;
+
+    /**
+     * Returns the document-global text style manager for this document.
+     * All text shapes will use this style manager. When saving shape
+     * layers as odf documents, the styles need to be saved, too. Note:
+     * it is possible in ODF to save the styles in an external document that
+     * can be referenced from multiple odf documents.
+     */
+    KoStyleManager * styleManager() const;
 
 public slots:
     void slotImageUpdated();

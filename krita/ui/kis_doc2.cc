@@ -61,6 +61,7 @@
 #include <KoSelection.h>
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
+#include <KoStyleManager.h>
 
 // Krita Image
 #include <kis_adjustment_layer.h>
@@ -97,6 +98,7 @@
 #include "kis_shape_controller.h"
 #include "kis_node_model.h"
 #include "kis_kra_loader.h"
+
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -143,6 +145,8 @@ public:
     KisNodeModel * nodeModel;
 
     KisKraLoader * kraLoader;
+
+    KoStyleManager * styleManager;
 };
 
 
@@ -212,6 +216,7 @@ bool KisDoc2::init()
 //     }
 
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
+    m_d->styleManager = new KoStyleManager(this);
     m_d->nodeModel = new KisNodeModel( this );
 
     return true;
@@ -601,12 +606,12 @@ bool KisDoc2::undo() const
     return m_d->undoAdapter->undo();
 }
 
-KoShapeControllerBase * KisDoc2::shapeController()
+KoShapeControllerBase * KisDoc2::shapeController() const
 {
     return m_d->shapeController;
 }
 
-KoShape * KisDoc2::shapeForNode( KisNodeSP layer )
+KoShape * KisDoc2::shapeForNode( KisNodeSP layer ) const
 {
     return m_d->shapeController->shapeForNode( layer );
 }
@@ -618,9 +623,14 @@ KoShape * KisDoc2::addShape(const KisNodeSP node)
     return m_d->shapeController->shapeForNode( node );
 }
 
-KisNodeModel * KisDoc2::nodeModel()
+KisNodeModel * KisDoc2::nodeModel() const
 {
     return m_d->nodeModel;
+}
+
+KoStyleManager * KisDoc2::styleManager() const
+{
+    return m_d->styleManager;
 }
 
 void KisDoc2::setIOSteps(qint32 nsteps)
@@ -672,7 +682,7 @@ void KisDoc2::prepareForImport()
     setUndo(false);
 }
 
-KisImageSP KisDoc2::image()
+KisImageSP KisDoc2::image() const
 {
     return m_d->image;
 }
@@ -701,7 +711,7 @@ void KisDoc2::initEmpty()
     newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
 }
 
-KisUndoAdapter* KisDoc2::undoAdapter()
+KisUndoAdapter* KisDoc2::undoAdapter() const
 {
     return m_d->undoAdapter;
 }

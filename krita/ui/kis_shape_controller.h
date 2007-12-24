@@ -46,7 +46,7 @@ public:
     ~KisShapeController();
 
     void setImage( KisImageSP image );
-    KoShape * shapeForNode( KisNodeSP layer );
+    KoShape * shapeForNode( KisNodeSP layer ) const;
     void setInitialShapeForView( KisView2 * view );
 
 private:

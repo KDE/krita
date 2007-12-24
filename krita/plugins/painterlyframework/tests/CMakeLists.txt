@@ -25,7 +25,7 @@ kde4_add_unit_test(ChannelConverterTest
                    ${channel_converter_test_SRCS})
 
 target_link_libraries(ChannelConverterTest
-                      ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+                      ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
 
 ########### KisKS3ColorSpace Test ###############
 

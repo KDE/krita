@@ -71,15 +71,15 @@ void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
     }
     if ( R <= 0.5 ) {
         float Rw = m_whitening * R + m_basewhite;
-        float F  = ( 2.0 * R  ) / pow ( 1.0 - R , 2 );
-        float Fw = ( 2.0 * Rw ) / pow ( 1.0 - Rw, 2 );
+        float F  = ( 2.0 * R  ) / pow( 1.0 - R , 2 );
+        float Fw = ( 2.0 * Rw ) / pow( 1.0 - Rw, 2 );
         K = 0.07 * S_w / ( Fw - F ); // TODO Remove that 0.07
         S = K * F;
     }
     if ( R > 0.5 ) {
         float Rb = m_blackening * R;
-        float P  = pow ( 1.0 - R , 2 ) / ( 2.0 * R  );
-        float Pb = pow ( 1.0 - Rb, 2 ) / ( 2.0 * Rb );
+        float P  = pow( 1.0 - R , 2 ) / ( 2.0 * R  );
+        float Pb = pow( 1.0 - Rb, 2 ) / ( 2.0 * Rb );
         S = K_b / ( Pb - P );
         K = S * P;
     }

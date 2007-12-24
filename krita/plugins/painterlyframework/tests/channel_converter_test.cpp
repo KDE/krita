@@ -29,23 +29,46 @@ void ChannelConverterTest::testKSReflectance()
 {
     ChannelConverter c(1.0, 10.0);
     float K, S, R;
-
+/*
     // reflectanceToKS
     R = 0.0;
     c.reflectanceToKS(R, K, S);
+    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
     QCOMPARE(K, 9.0f);
     QCOMPARE(S, 0.0f);
 
+    R = 0.25;
+    c.reflectanceToKS(R, K, S);
+    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
+    QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
+
+    R = 0.4999999999999;
+    c.reflectanceToKS(R, K, S);
+    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
+    QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
+
+    R = 0.5000000000001;
+    c.reflectanceToKS(R, K, S);
+    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
+    QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
+
+    R = 0.75;
+    c.reflectanceToKS(R, K, S);
+    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
+    QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
+
     R = 1.0;
     c.reflectanceToKS(R, K, S);
+    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
     QCOMPARE(K, 0.0f);
     QCOMPARE(S, 0.9f);
+*/
 
-    for (int i = 1; i < 10; i++) {
-        R = (float)i * 0.1;
+    for (int i = 0; i < 100; i++) {
+        R = (float)i/100.0f;
         c.reflectanceToKS(R, K, S);
         qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
-        QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
+        QVERIFY((S/K) - (float)(R*2.0/pow(1-R,2)) < 1e-2);
     }
 
     // KSToReflectance

@@ -37,7 +37,6 @@ class ChannelConverter {
         float m_blackening;
         float m_whitening;
         float m_basewhite;
-
 };
 
 #endif // CHANNEL_CONVERTER_H_

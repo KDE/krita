@@ -60,6 +60,11 @@ public:
     * Constructor.
     *
     * \param loader The KoTextLoader instance the context belongs to.
+    * We need to pass on the \a TextLoader instance here since the loader need to be passed
+    * around between the different loadOdf(const KoXmlElement&, KoShapeLoadingContext&) calls.
+    * For that case the \a TextLoaderContext that inherits the \a KoOasisLoadingContext class
+    * got introduced and holds a pointer to the \a KoTextLoader and to the needed
+    * \a KoStyleManager instance.
     * \param doc The document we are loading the content into.
     * \param styles The styles used for loading.
     * \param store The storage backend we are reading from.

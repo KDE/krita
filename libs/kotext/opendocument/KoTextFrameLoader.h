@@ -54,8 +54,8 @@ class QTextCursor;
 //class QColor;
 
 /**
- * The KoTextFrameLoader
- * [this is placeholder API docs, please describe this class]
+ * The KoTextFrameLoader class is a helper class for the \a KoTextLoader and
+ * handles all the things related to loading frames.
  */
 class KOTEXT_EXPORT KoTextFrameLoader
 {
@@ -103,6 +103,9 @@ class KOTEXT_EXPORT KoTextFrameLoader
         */
         virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
 
+        /**
+         * Load the content of a text shape.
+         */
         virtual KoShape* loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
 
     private:

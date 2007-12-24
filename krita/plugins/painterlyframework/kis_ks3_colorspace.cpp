@@ -91,6 +91,11 @@ KisKS3ColorSpace::~KisKS3ColorSpace()
     gsl_vector_free(m_refvec);
 }
 
+bool KisKS3ColorSpace::operator==(const KoColorSpace& rhs) const
+{
+    return (rhs.id() == id()) && (*rhs.profile() == *profile());
+}
+
 KoColorProfile *KisKS3ColorSpace::profile()
 {
     return m_profile;
@@ -126,6 +131,8 @@ void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nP
         gsl_vector_set(m_rgbvec, 1, (double)srcU16[1]);
         gsl_vector_set(m_rgbvec, 2, (double)srcU16[0]);
 
+        // TODO Linearize rgb
+
         gsl_linalg_LU_solve(m_profile->T(), m_permutation, m_rgbvec, m_refvec);
         for (int i = 0; i < 3; i++)
             m_converter.reflectanceToKS((float)gsl_vector_get(m_refvec, i),
@@ -152,6 +159,8 @@ void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPix
         }
         gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
+        // TODO Apply gamma to rgb
+
         dstU16[2] = (quint16)gsl_vector_get(m_rgbvec, 0);
         dstU16[1] = (quint16)gsl_vector_get(m_rgbvec, 1);
         dstU16[0] = (quint16)gsl_vector_get(m_rgbvec, 2);
@@ -160,9 +169,4 @@ void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPix
         src += KisKS3ColorSpaceTrait::pixelSize;
         dstU16 += 4;
     }
-}
-
-bool KisKS3ColorSpace::operator==(const KoColorSpace& rhs) const
-{
-    return (rhs.id() == id()) && (*rhs.profile() == *profile());
 }

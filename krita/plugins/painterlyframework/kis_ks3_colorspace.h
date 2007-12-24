@@ -41,14 +41,14 @@ class KisKS3ColorSpace : public KoIncompleteColorSpace<KisKS3ColorSpaceTrait>
 
     public:
 
+        bool operator==(const KoColorSpace& rhs) const;
+
         KoColorProfile *profile();
         const KoColorProfile *profile() const;
         bool profileIsCompatible(const KoColorProfile *profile) const;
 
         void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
         void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
-
-        bool operator==(const KoColorSpace& rhs) const;
 
     private:
 

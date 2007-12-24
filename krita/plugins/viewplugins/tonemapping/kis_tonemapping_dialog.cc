@@ -24,6 +24,7 @@
 #include <kis_properties_configuration.h>
 
 // Krita/UI
+#include <kis_bookmarked_configuration_manager.h>
 #include <kis_bookmarked_configurations_editor.h>
 
 // Krita/Tone-Mapping
@@ -83,6 +84,9 @@ void KisToneMappingDialog::apply()
         d->layer->setChannelFlags( QBitArray() );
     }
     d->currentOperator->toneMap(d->layer->paintDevice(), config);
+    
+    d->currentOperator->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
+
     d->layer->setDirty();
     d->layer->image()->unlock();
     delete config;

@@ -25,6 +25,7 @@
 #include <KoIncompleteColorSpace.h>
 
 #include <gsl/gsl_linalg.h>
+#include <gsl/gsl_vector.h>
 
 class KisIlluminantProfile;
 class KoColorProfile;
@@ -56,6 +57,8 @@ class KisKS3ColorSpace : public KoIncompleteColorSpace<KisKS3ColorSpaceTrait>
 
         int m_s;
         gsl_permutation *m_permutation;
+        gsl_vector *m_rgbvec;
+        gsl_vector *m_refvec;
 
 };
 

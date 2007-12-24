@@ -52,6 +52,9 @@ KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
     m_permutation = gsl_permutation_alloc(3);
     gsl_linalg_LU_decomp(m_profile->T(), m_permutation, &m_s);
 
+    m_rgbvec = gsl_vector_alloc(3);
+    m_refvec = gsl_vector_alloc(3);
+
     for (quint32 i = 0; i < 2*3; i+=2) {
         addChannel(new KoChannelInfo(i18n("Absorption"),
                    i+0 * sizeof(float),
@@ -84,6 +87,8 @@ KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
 KisKS3ColorSpace::~KisKS3ColorSpace()
 {
     gsl_permutation_free(m_permutation);
+    gsl_vector_free(m_rgbvec);
+    gsl_vector_free(m_refvec);
 }
 
 KoColorProfile *KisKS3ColorSpace::profile()
@@ -115,17 +120,15 @@ void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nP
 
     const quint16 *srcU16 = reinterpret_cast<const quint16 *>(srcU8);
     quint8 *dst = dstU8;
-    gsl_vector *srcvec = gsl_vector_alloc(3);
-    gsl_vector *refvec = gsl_vector_alloc(3);
 
     for (quint32 pixel = 0; pixel < nPixels; pixel++) {
-        gsl_vector_set(srcvec, 0, (double)srcU16[2]);
-        gsl_vector_set(srcvec, 1, (double)srcU16[1]);
-        gsl_vector_set(srcvec, 2, (double)srcU16[0]);
+        gsl_vector_set(m_rgbvec, 0, (double)srcU16[2]);
+        gsl_vector_set(m_rgbvec, 1, (double)srcU16[1]);
+        gsl_vector_set(m_rgbvec, 2, (double)srcU16[0]);
 
-        gsl_linalg_LU_solve(m_profile->T(), m_permutation, srcvec, refvec);
+        gsl_linalg_LU_solve(m_profile->T(), m_permutation, m_rgbvec, m_refvec);
         for (int i = 0; i < 3; i++)
-            m_converter.reflectanceToKS((float)gsl_vector_get(refvec, i),
+            m_converter.reflectanceToKS((float)gsl_vector_get(m_refvec, i),
                                         KisKS3ColorSpaceTrait::K(dst, i),
                                         KisKS3ColorSpaceTrait::S(dst, i));
         KisKS3ColorSpaceTrait::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(srcU16[3]), 1);
@@ -133,38 +136,30 @@ void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nP
         srcU16 += 4;
         dst += KisKS3ColorSpaceTrait::pixelSize;
     }
-
-    gsl_vector_free(refvec);
-    gsl_vector_free(srcvec);
 }
 
 void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const
 {
     quint16 *dstU16 = reinterpret_cast<quint16 *>(dstU8);
     const quint8 *src = srcU8;
-    gsl_vector *dstvec = gsl_vector_alloc(3);
-    gsl_vector *refvec = gsl_vector_alloc(3);
 
     for (quint32 pixel = 0; pixel < nPixels; pixel++) {
         float c;
         for (int i = 0; i < 3; i++) {
             m_converter.KSToReflectance(KisKS3ColorSpaceTrait::K(src, i),
                                         KisKS3ColorSpaceTrait::S(src, i), c);
-            gsl_vector_set(refvec, i, (float)c);
+            gsl_vector_set(m_refvec, i, (float)c);
         }
-        gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), refvec, 0.0, dstvec);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
-        dstU16[2] = (quint16)gsl_vector_get(dstvec, 0);
-        dstU16[1] = (quint16)gsl_vector_get(dstvec, 1);
-        dstU16[0] = (quint16)gsl_vector_get(dstvec, 2);
+        dstU16[2] = (quint16)gsl_vector_get(m_rgbvec, 0);
+        dstU16[1] = (quint16)gsl_vector_get(m_rgbvec, 1);
+        dstU16[0] = (quint16)gsl_vector_get(m_rgbvec, 2);
         dstU16[3] = KoColorSpaceMaths<float,quint16>::scaleToA(KisKS3ColorSpaceTrait::alpha(src));
 
         src += KisKS3ColorSpaceTrait::pixelSize;
         dstU16 += 4;
     }
-
-    gsl_vector_free(refvec);
-    gsl_vector_free(dstvec);
 }
 
 bool KisKS3ColorSpace::operator==(const KoColorSpace& rhs) const

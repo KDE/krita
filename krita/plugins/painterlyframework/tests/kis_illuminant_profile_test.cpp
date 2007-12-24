@@ -21,8 +21,11 @@
 
 #include "kis_illuminant_profile_test.h"
 
+#include "kis_illuminant_profile.h"
+
 void KisIlluminantProfileTest::testLoading()
 {
+
 }
 
 void KisIlluminantProfileTest::testSaving()

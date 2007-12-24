@@ -34,6 +34,9 @@ class ChannelConverter {
 
     private:
         float S_w, K_b;
+        float m_blackening;
+        float m_whitening;
+        float m_basewhite;
 
 };
 

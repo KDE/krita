@@ -21,9 +21,20 @@
 
 #include "channel_converter.h"
 
+#define M_w 0.9f
+#define M_b 0.9f
+
 ChannelConverter::ChannelConverter(float whiteS, float blackK)
 : S_w(whiteS), K_b(blackK)
 {
+    float K;
+
+    K = K_b / ( M_w * S_w );
+    m_blackening = 1.0 + K - sqrt( K*K + 2.0*K );
+
+    K = M_b * K_b / S_w;
+    m_basewhite = 1.0 + K - sqrt( K*K + 2.0*K );
+    m_whitening = 1.0 - m_basewhite;
 }
 
 ChannelConverter::~ChannelConverter()
@@ -49,24 +60,24 @@ void ChannelConverter::KSToReflectance(float K, float S, float &R) const
 void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
 {
     if ( R == 0.0 ) {
-        K = 0.8 * K_b;
+        K = M_b * K_b;
         S = 0.0;
         return;
     }
     if ( R == 1.0 ) {
         K = 0.0;
-        S = 0.8 * S_w;
+        S = M_w * S_w;
         return;
     }
     if ( R <= 0.5 ) {
-        float Rw = ( 1.0 + R ) / 2.0;
+        float Rw = m_whitening * R + m_basewhite;
         float F  = ( 2.0 * R  ) / pow ( 1.0 - R , 2 );
         float Fw = ( 2.0 * Rw ) / pow ( 1.0 - Rw, 2 );
-        K = S_w / ( Fw - F );
+        K = 0.07 * S_w / ( Fw - F ); // TODO Remove that 0.07
         S = K * F;
     }
     if ( R > 0.5 ) {
-        float Rb = R / 2.0;
+        float Rb = m_blackening * R;
         float P  = pow ( 1.0 - R , 2 ) / ( 2.0 * R  );
         float Pb = pow ( 1.0 - Rb, 2 ) / ( 2.0 * Rb );
         S = K_b / ( Pb - P );

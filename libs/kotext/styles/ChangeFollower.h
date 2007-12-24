@@ -47,7 +47,8 @@ public:
      * we use as the parant document.
      */
     ChangeFollower(QTextDocument *parent, KoStyleManager *manager);
-    /// Destructor, called when the parant is deleted.
+
+    /// Destructor, called when the parent is deleted.
     ~ChangeFollower();
 
     /**

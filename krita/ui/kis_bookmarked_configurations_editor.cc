@@ -65,7 +65,7 @@ void KisBookmarkedConfigurationsEditor::currentConfigChanged(const QModelIndex& 
 
 void KisBookmarkedConfigurationsEditor::addCurrentConfiguration()
 {
-    d->model->saveConfiguration(i18n("New configuration"), d->currentConfig);
+    d->model->newConfiguration( ki18n("New configuration %1"), d->currentConfig);
 }
 
 void KisBookmarkedConfigurationsEditor::deleteConfiguration()

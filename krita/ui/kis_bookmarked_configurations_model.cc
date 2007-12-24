@@ -21,6 +21,7 @@
 #include <QList>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <KoID.h>
 
@@ -114,6 +115,11 @@ bool KisBookmarkedConfigurationsModel::isIndexDeletable(const QModelIndex &index
 {
     if(not index.isValid() or index.row() < 2) return false;
     return true;
+}
+
+void KisBookmarkedConfigurationsModel::newConfiguration(KLocalizedString baseName, const KisSerializableConfiguration* config)
+{
+    saveConfiguration( d->bookmarkManager->uniqueName( baseName), config );
 }
 
 void KisBookmarkedConfigurationsModel::saveConfiguration(QString name, const KisSerializableConfiguration* config)

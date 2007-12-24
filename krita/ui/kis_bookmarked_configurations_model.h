@@ -23,6 +23,8 @@
 
 #include <krita_export.h>
 
+class KLocalizedString;
+
 class KisBookmarkedConfigurationManager;
 class KisSerializableConfiguration;
 
@@ -61,7 +63,11 @@ class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListMode
          */
         Qt::ItemFlags flags(const QModelIndex & index) const;
         /**
-         * Add a configuration to the bookmark manager.
+         * Insert a new configuration.
+         */
+        virtual void newConfiguration(KLocalizedString baseName, const KisSerializableConfiguration* config);
+        /**
+         * Save a configuration to the bookmark manager.
          */
         virtual void saveConfiguration(QString name, const KisSerializableConfiguration* config);
         /**

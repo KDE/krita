@@ -76,6 +76,23 @@ QVariant KisBookmarkedConfigurationsModel::data(const QModelIndex &index, int ro
     return QVariant();
 }
 
+bool KisBookmarkedConfigurationsModel::setData ( const QModelIndex & index, const QVariant & value, int role )
+{
+    if( role == Qt::EditRole and index.row() >= 2)
+    {
+        QString name = value.toString();
+        int idx = index.row() - 2;
+        KisSerializableConfiguration* config = d->bookmarkManager->load( d->configsKey[idx] );
+        d->bookmarkManager->remove( d->configsKey[idx]);
+        d->bookmarkManager->save(name, config);
+        d->configsKey[idx] = name;
+
+        emit(dataChanged(index,index));
+        return true;
+    }
+    return false;
+}
+
 KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(const QModelIndex &index) const
 {
     if(not index.isValid()) return 0;

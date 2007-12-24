@@ -47,6 +47,7 @@ class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListMode
          * configuration.
          */
         virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+        virtual bool setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
         /**
          * @return the configuration at the given index
          */

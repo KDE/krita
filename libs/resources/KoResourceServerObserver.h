@@ -24,7 +24,7 @@
 
 /**
  * The KoResourceServerObserver class provides a interface to observe a KoResourceServer.
- * To recive notifications it needs to be added to the resource server.
+ * To receive notifications it needs to be added to the resource server.
  */
 template <class T> class KORESOURCES_EXPORT KoResourceServerObserver {
 

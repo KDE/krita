@@ -30,7 +30,7 @@ class KoParagraphStyle;
 class ChangeFollower;
 
 /**
- * Manages all character and pargraph styles for any number of documents.
+ * Manages all character and paragraph styles for any number of documents.
  */
 class KOTEXT_EXPORT KoStyleManager : public QObject {
     Q_OBJECT

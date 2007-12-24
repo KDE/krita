@@ -18,6 +18,13 @@
 #ifndef KIS_DEBUG_AREAS_H_
 #define KIS_DEBUG_AREAS_H_
 
+
+/**
+ * In krita code, include kis_debug.h instead of kdebug.h. Then use one of the areas #defined here
+ * instead of the raw numbers. Also, try not to check in code outside of tests that uses kDebug
+ * without an area.
+ */
+
 #define DBG_AREA_CORE 41001
 #define DBG_AREA_REGISTRY 40002
 #define DBG_AREA_TOOLS 41003

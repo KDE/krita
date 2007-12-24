@@ -18,8 +18,6 @@
 
 #include "kis_resourceserver_adapter.h"
 
-#include "kdebug.h"
-
 KisAbstractResourceServerAdapter::KisAbstractResourceServerAdapter()
 {
 }

@@ -25,7 +25,6 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
@@ -88,7 +87,6 @@ QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
 KoResourceServerProvider *KoResourceServerProvider::m_singleton = 0;
 
 KoResourceServerProvider::KoResourceServerProvider()
-: m_patternLoader(0), m_gradientLoader(0), m_paletteLoader(0)
 {
     KGlobal::mainComponent().dirs()->addResourceType("ko_patterns", "data", "krita/patterns/");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
@@ -103,59 +101,65 @@ KoResourceServerProvider::KoResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
     m_patternServer = new KoResourceServer<KoPattern>("ko_patterns");
+    patternThread = new KoResourceLoaderThread(m_patternServer, "*.pat");
+    connect(patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
+    patternThread->start();
+
     m_gradientServer = new GradientResourceServer("ko_gradients");
+    gradientThread = new KoResourceLoaderThread(m_gradientServer, "*.kgr:*.svg:*.ggr");
+    connect(gradientThread, SIGNAL(finished()), this, SLOT(gradientThreadDone()));
+    gradientThread->start();
+
     m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes");
+    paletteThread = new KoResourceLoaderThread(m_paletteServer, "*.gpl:*.pal:*.act");
+    connect(paletteThread, SIGNAL(finished()), this, SLOT(paletteThreadDone()));
+    paletteThread->start();
+
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
 {
-    delete m_patternLoader;
-    delete m_gradientLoader;
-    delete m_paletteLoader;
 }
 
 KoResourceServerProvider* KoResourceServerProvider::instance()
 {
-    if(KoResourceServerProvider::m_singleton == 0)
-    {
-        KoResourceServerProvider::m_singleton = new KoResourceServerProvider();
-    }
+     if(KoResourceServerProvider::m_singleton == 0)
+     {
+         KoResourceServerProvider::m_singleton = new KoResourceServerProvider();
+     }
     return KoResourceServerProvider::m_singleton;
 }
 
 KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer()
 {
-    if( ! m_patternLoader )
-    {
-        kDebug() << "start loading patterns";
-        m_patternLoader = new KoResourceLoaderThread(m_patternServer, "*.pat");
-        m_patternLoader->start();
-        m_patternLoader->wait();
-    }
     return m_patternServer;
 }
 
 KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
 {
-    if( ! m_gradientLoader )
-    {
-        kDebug() << "start loading gradients";
-        m_gradientLoader = new KoResourceLoaderThread(m_gradientServer, "*.kgr:*.svg:*.ggr");
-        m_gradientLoader->start();
-        m_gradientLoader->wait();
-    }
     return m_gradientServer;
 }
 
 KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
 {
-    if( ! m_paletteLoader )
-    {
-        kDebug() << "start loading palettes";
-        m_paletteLoader = new KoResourceLoaderThread(m_paletteServer, "*.gpl:*.pal:*.act");
-        m_paletteLoader->start();
-        m_paletteLoader->wait();
-    }
     return m_paletteServer;
 }
 
+
+void KoResourceServerProvider::paletteThreadDone()
+{
+    delete paletteThread;
+    paletteThread = 0;
+}
+
+void KoResourceServerProvider::patternThreadDone()
+{
+    delete patternThread;
+    patternThread = 0;
+}
+
+void KoResourceServerProvider::gradientThreadDone()
+{
+    delete gradientThread;
+    gradientThread = 0;
+}

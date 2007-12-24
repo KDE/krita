@@ -75,8 +75,8 @@
 #include "kis_view2.h"
 
 
-KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
-    : m_parent(parent),
+KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
+    : m_view(view),
       m_doc(doc),
       m_copy(0),
       m_cut(0),
@@ -121,7 +121,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * parent, KisDoc2 * doc)
     // current selection now (global or local).
     connect(timer, SIGNAL(timeout()), this, SLOT(selectionTimerEvent()));
 
-    KoSelection * selection = m_parent->canvasBase()->globalShapeManager()->selection();
+    KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
     Q_ASSERT( selection );
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
@@ -234,10 +234,10 @@ void KisSelectionManager::addSelectionAction(QAction * action)
 
 void KisSelectionManager::updateGUI()
 {
-    Q_ASSERT(m_parent);
+    Q_ASSERT(m_view);
     Q_ASSERT(m_clipboard);
 
-    if (m_parent == 0) {
+    if (m_view == 0) {
         // "Eek, no parent!
         return;
     }
@@ -247,14 +247,14 @@ void KisSelectionManager::updateGUI()
         return;
     }
 
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     KisLayerSP l;
     KisPaintDeviceSP dev;
 
     bool enable = false;
 
-    if (img && m_parent->activeDevice() && m_parent->activeLayer()) {
-        l = m_parent->activeLayer();
+    if (img && m_view->activeDevice() && m_view->activeLayer()) {
+        l = m_view->activeLayer();
 
         enable = l && l->selection() && !l->locked() && l->visible();
 #if 0 // XXX_SELECTION (how are we going to handle deselect and
@@ -310,16 +310,16 @@ void KisSelectionManager::updateGUI()
 
 void KisSelectionManager::updateStatusBar()
 {
-    if (m_parent && m_parent->statusBar()) {
-        m_parent->statusBar()->setSelection( m_parent->image() );
+    if (m_view && m_view->statusBar()) {
+        m_view->statusBar()->setSelection( m_view->image() );
     }
 }
 
 bool KisSelectionManager::selectionIsActive()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (img) {
-        if ( m_parent->selection() && m_parent->selection()->hasPixelSelection() ) {
+        if ( m_view->selection() && m_view->selection()->hasPixelSelection() ) {
             return true;
         }
     }
@@ -330,12 +330,12 @@ bool KisSelectionManager::selectionIsActive()
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 {
     // XXX_SELECTION: I doubt this is still working correctly
-    if (img == m_parent->image()) {
+    if (img == m_view->image()) {
 
         updateGUI();
         outline.clear();
 
-        if ( KisSelectionSP selection = m_parent->selection() ) {
+        if ( KisSelectionSP selection = m_view->selection() ) {
             if(selection->hasPixelSelection()) {
                 if(!timer->isActive())
                     timer->start ( 300 );
@@ -388,13 +388,13 @@ void KisSelectionManager::updateSimpleOutline()
 
 void KisSelectionManager::cut()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = m_parent->activeDevice();
+    KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
 
-    if ( !m_parent->selection() ) return;
+    if ( !m_view->selection() ) return;
 
     copy();
 
@@ -415,15 +415,15 @@ void KisSelectionManager::cut()
 
 void KisSelectionManager::copy()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if ( !img ) return;
 
-    if ( !m_parent->selection() ) return;
+    if ( !m_view->selection() ) return;
 
-    KisPaintDeviceSP dev = m_parent->activeDevice();
+    KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
 
-    KisSelectionSP selection = m_parent->selection();
+    KisSelectionSP selection = m_view->selection();
 
     QRect r = selection->selectedExactRect();
 
@@ -460,13 +460,13 @@ void KisSelectionManager::copy()
     }
 
     m_clipboard->setClip(clip);
-    imgSelectionChanged(m_parent->image());
+    imgSelectionChanged(m_view->image());
 }
 
 
 KisLayerSP KisSelectionManager::paste()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return KisLayerSP(0);
 
     KisPaintDeviceSP clip = m_clipboard->clip();
@@ -483,7 +483,7 @@ KisLayerSP KisSelectionManager::paste()
 
         //figure out where to position the clip
         // XXX: Fix this for internal points & zoom! (BSAR)
-        QWidget * w = m_parent->canvas();
+        QWidget * w = m_view->canvas();
         QPoint center = QPoint(w->width()/2, w->height()/2);
         QPoint bottomright = QPoint(w->width(), w->height());
         if(bottomright.x() > img->width())
@@ -501,8 +501,8 @@ KisLayerSP KisSelectionManager::paste()
   layer->convertTo(img->colorSpace());
 */
 	if(!img->addNode( layer ,
-                          m_parent->activeLayer()->parent(),
-                          m_parent->activeLayer().data() ) ) {
+                          m_view->activeLayer()->parent(),
+                          m_view->activeLayer().data() ) ) {
             return 0;
         }
 
@@ -550,44 +550,43 @@ void KisSelectionManager::pasteNew()
 
 void KisSelectionManager::selectAll()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
-
-    KisSelectedTransaction * t = 0;
 #if 0
+    KisSelectedTransaction * t = 0;
+
     if (img->undo()) t = new KisSelectedTransaction(i18n("Select All"), dev);
     Q_CHECK_PTR(t);
-
-    // XXX_SELECTION: create a new selection mask on the current layer
-    dev->selection()->getOrCreatePixelSelection()->clear();
-    dev->selection()->getOrCreatePixelSelection()->invert();
-    dev->setDirty(img->bounds());
 #endif
+
+    KisSelectionSP selection = m_view->selection();
+    if (!selection) {
+        selection = new KisSelection();
+        img->setGlobalSelection(selection);
+    }
+    selection->getOrCreatePixelSelection()->select(img->bounds());
+#if 0
     if (img->undo())
         img->undoAdapter()->addCommand(t);
+#endif        
 }
 
 void KisSelectionManager::deselect()
 {
-#if 0
+
     // XXX_SELECTION
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = m_parent->activeDevice();
-    if (!dev) return;
+    KisSelectionSP sel = m_view->selection();
+    if (!sel) return;
+#if 0
     KisSelectedTransaction * t = 0;
     if (img->undo()) t = new KisSelectedTransaction(i18n("Deselect"), dev);
     Q_CHECK_PTR(t);
-
-    // Make adjustment layers behave almost the same (except no reselect)
-    if (dynamic_cast<KisAdjustmentLayer*>(m_parent->activeLayer().data())) {
-        dev->clear();
-    } else {
-        dev->deselect();
-    }
-    dev->setDirty(img->bounds());
-
+#endif
+    sel->clear();
+#if 0
     if (img->undo())
         img->undoAdapter()->addCommand(t);
 #endif
@@ -596,35 +595,36 @@ void KisSelectionManager::deselect()
 
 void KisSelectionManager::clear()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = m_parent->activeDevice();
-    if (!dev) return;
+    KisSelectionSP sel = m_view->selection();
+    if (!sel) return;
 
-    if (!m_parent->selection()) return;
-
+#if 0 // XXX_SELECTION
     KisTransaction * t = 0;
 
     if (img->undo()) {
         t = new KisTransaction(i18n("Clear"), dev);
     }
-#if 0 // XXX_SELECTION
-    dev->clearSelection();
-    dev->setDirty(img->bounds());
 #endif
+
+    sel->clear();
+
+#if 0
     if (img->undo()) img->undoAdapter()->addCommand(t);
+#endif    
 }
 
 void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const QString& transactionText)
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = m_parent->activeDevice();
+    KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
 
-    KisSelectionSP selection = m_parent->selection();
+    KisSelectionSP selection = m_view->selection();
     if ( !selection ) return;
 
     KisPaintDeviceSP filled = new KisPaintDevice(dev->colorSpace());
@@ -634,7 +634,7 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
 
     if (fillWithPattern) {
         painter.fillRect(0, 0, img->width(), img->height(),
-                         m_parent->resourceProvider()->currentPattern());
+                         m_view->resourceProvider()->currentPattern());
     } else {
         painter.fillRect(0, 0, img->width(), img->height(), color);
     }
@@ -658,12 +658,12 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
 
 void KisSelectionManager::fillForegroundColor()
 {
-    fill(m_parent->resourceProvider()->fgColor(), false, i18n("Fill with Foreground Color"));
+    fill(m_view->resourceProvider()->fgColor(), false, i18n("Fill with Foreground Color"));
 }
 
 void KisSelectionManager::fillBackgroundColor()
 {
-    fill(m_parent->resourceProvider()->bgColor(), false, i18n("Fill with Background Color"));
+    fill(m_view->resourceProvider()->bgColor(), false, i18n("Fill with Background Color"));
 }
 
 void KisSelectionManager::fillPattern()
@@ -675,10 +675,10 @@ void KisSelectionManager::reselect()
 {
 
 #if 0 // XXX_SELECTION
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = m_parent->activeDevice();
+    KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
 
     KisSelectedTransaction * t = 0;
@@ -696,10 +696,10 @@ void KisSelectionManager::reselect()
 
 void KisSelectionManager::invert()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisSelectionSP selection = m_parent->selection();
+    KisSelectionSP selection = m_view->selection();
     if ( !selection ) return;
 
     KisPixelSelectionSP s = selection->getOrCreatePixelSelection();
@@ -724,10 +724,10 @@ void KisSelectionManager::invert()
 
 void KisSelectionManager::copySelectionToNewLayer()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisLayerSP layer = m_parent->activeLayer();
+    KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
     copy();
@@ -736,10 +736,10 @@ void KisSelectionManager::copySelectionToNewLayer()
 
 void KisSelectionManager::cutToNewLayer()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = m_parent->activeDevice();
+    KisPaintDeviceSP dev = m_view->activeDevice();
     if (!dev) return;
 
     cut();
@@ -750,16 +750,16 @@ void KisSelectionManager::cutToNewLayer()
 void KisSelectionManager::feather()
 {
 #if 0 // XXX_SELECTION
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
-    if (!m_parent->selection()) {
+    if (!m_view->selection()) {
         // activate it, but don't do anything with it
         dev->selection();
 
         return;
     }
 
-    KisPixelSelectionSP selection = m_parent->selection()->getOrCreatePixelSelection();
+    KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
     KisSelectedTransaction * t = 0;
     if (img->undo()) t = new KisSelectedTransaction(i18n("Feather..."), dev);
     Q_CHECK_PTR(t);
@@ -805,7 +805,7 @@ void KisSelectionManager::feather()
 void KisSelectionManager::toggleDisplaySelection()
 {
     // XXX_SELECTION: Re-activate later! (BSAR)
-    //m_parent->selectionDisplayToggled(displaySelection());
+    //m_view->selectionDisplayToggled(displaySelection());
 }
 
 bool KisSelectionManager::displaySelection()
@@ -818,11 +818,11 @@ bool KisSelectionManager::displaySelection()
 
 void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    if ( !m_parent->selection() ) return;
-    KisPixelSelectionSP selection = m_parent->selection()->getOrCreatePixelSelection();
+    if ( !m_view->selection() ) return;
+    KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
 
     //determine the layerSize
     QRect layerSize = img->bounds();
@@ -966,11 +966,11 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
 void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock)
 {
 
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    if ( !m_parent->selection() ) return;
-    KisPixelSelectionSP selection = m_parent->selection()->getOrCreatePixelSelection();
+    if ( !m_view->selection() ) return;
+    KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
 #if 0
     KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Shrink"), dev);
     Q_CHECK_PTR(t);
@@ -1133,15 +1133,15 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
 
 void KisSelectionManager::smooth()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if ( !img ) return;
 
-    if ( !m_parent->selection() ) return;
-    if ( !m_parent->activeLayer() ) return;
-    KisPixelSelectionSP selection = m_parent->selection()->getOrCreatePixelSelection();
+    if ( !m_view->selection() ) return;
+    if ( !m_view->activeLayer() ) return;
+    KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
 
     //determine the layerSize
-    QRect layerSize = m_parent->activeLayer()->exactBounds();
+    QRect layerSize = m_view->activeLayer()->exactBounds();
 
     quint8      *buf[3];
 
@@ -1200,13 +1200,13 @@ void KisSelectionManager::smooth()
 
 void KisSelectionManager::erode()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisSelectionSP selection = m_parent->selection();
+    KisSelectionSP selection = m_view->selection();
     if (!selection) return;
 
-    KisLayerSP layer = m_parent->activeLayer();
+    KisLayerSP layer = m_view->activeLayer();
     //determine the layerSize
     QRect layerSize = layer->exactBounds();
 
@@ -1273,13 +1273,13 @@ void KisSelectionManager::erode()
 
 void KisSelectionManager::dilate()
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisSelectionSP selection = m_parent->selection();
+    KisSelectionSP selection = m_view->selection();
     if ( !selection ) return;
 
-    KisLayerSP layer = m_parent->activeLayer();
+    KisLayerSP layer = m_view->activeLayer();
     if ( !layer ) return;
     //determine the layerSize
     QRect layerSize = layer->exactBounds();
@@ -1343,11 +1343,11 @@ void KisSelectionManager::dilate()
 
 void KisSelectionManager::border(qint32 xradius, qint32 yradius)
 {
-    KisImageSP img = m_parent->image();
+    KisImageSP img = m_view->image();
     if (!img) return;
 
-    if (!m_parent->selection()) return;
-    KisPixelSelectionSP selection = m_parent->selection()->getOrCreatePixelSelection();
+    if (!m_view->selection()) return;
+    KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
 
     //determine the layerSize
     QRect layerSize = img->bounds();
@@ -1676,28 +1676,28 @@ void KisSelectionManager::computeTransition (quint8* transition, quint8** buf, q
 
 void KisSelectionManager::selectionTimerEvent()
 {
-    KisSelectionSP selection = m_parent->selection();
+    KisSelectionSP selection = m_view->selection();
     if ( !selection ) return;
 
     if (selectionIsActive()) {
-        KisPaintDeviceSP dev = m_parent->activeDevice();
+        KisPaintDeviceSP dev = m_view->activeDevice();
         if(dev) {
             offset++;
             if(offset>7) offset = 0;
 
             QRect bound = selection->getOrCreatePixelSelection()->selectedRect();
-            double xRes = m_parent->image()->xRes();
-            double yRes = m_parent->image()->yRes();
+            double xRes = m_view->image()->xRes();
+            double yRes = m_view->image()->yRes();
             QRectF rect( int(bound.left()) / xRes, int(bound.top()) / yRes,
                          int(1 + bound.right()) / xRes, int(1 + bound.bottom()) / yRes);
-            m_parent->canvasBase()->updateCanvas(rect);
+            m_view->canvasBase()->updateCanvas(rect);
         }
     }
 }
 
 void KisSelectionManager::shapeSelectionChanged()
 {
-    KoShapeManager* shapeManager = m_parent->canvasBase()->globalShapeManager();
+    KoShapeManager* shapeManager = m_view->canvasBase()->globalShapeManager();
 
     KoSelection * selection = shapeManager->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
@@ -1717,14 +1717,14 @@ void KisSelectionManager::shapeSelectionChanged()
 
 void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    KisSelectionSP selection = m_parent->selection();
+    KisSelectionSP selection = m_view->selection();
     if (selection && selection->hasPixelSelection()) {
 
         double sx, sy;
         converter.zoom(&sx, &sy);
 
         QMatrix matrix;
-        matrix.scale(sx/m_parent->image()->xRes(), sy/m_parent->image()->yRes());
+        matrix.scale(sx/m_view->image()->xRes(), sy/m_view->image()->yRes());
 
         QMatrix oldWorldMatrix = gc.worldMatrix();
         gc.setWorldMatrix( matrix, true);
@@ -1737,7 +1737,7 @@ void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
 
         int i=0;
         gc.setPen(pen);
-        if(1/m_parent->image()->xRes()*sx<3)
+        if(1/m_view->image()->xRes()*sx<3)
             foreach(QPolygon polygon, simpleOutline)
             {
                 gc.drawPolygon(polygon);

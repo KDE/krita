@@ -37,7 +37,6 @@
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kactioncollection.h>

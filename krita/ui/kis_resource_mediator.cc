@@ -21,8 +21,6 @@
 #include <QList>
 #include <QTableWidgetItem>
 
-#include "kdebug.h"
-
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
 

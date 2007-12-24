@@ -36,7 +36,8 @@
 #include "KoResourceServerObserver.h"
 
 #include "koresource_export.h"
-
+#include <QMutex>
+#include <QMutexLocker>
 #include <KDebug>
 
 class KoResource;
@@ -52,15 +53,27 @@ public:
 
 private:
     QString m_type;
+
+protected:
+
+    QMutex loadLock;
+
 };
 
 template <class T> class KoResourceServer : public KoResourceServerBase {
 
 public:
-    KoResourceServer(const QString& type) : KoResourceServerBase(type), m_loaded(false) {}
-    virtual ~KoResourceServer() {}
+    KoResourceServer(const QString& type)
+        : KoResourceServerBase(type)
+        {
+        }
+        
+    virtual ~KoResourceServer()
+        {
+        }
 
     void loadResources(QStringList filenames) {
+        kDebug(30009) << "loading  resources for type " << type();
         QStringList uniqueFiles;
 
         while (!filenames.empty())
@@ -69,25 +82,28 @@ public:
             filenames.pop_front();
 
             QString fname = QFileInfo(front).fileName();
-            //ebug() << "Loading " << fname << "\n";
+            //kDebug(30009) << "Loading " << fname << " of type " << type();
             // XXX: Don't load resources with the same filename. Actually, we should look inside
             //      the resource to find out whether they are really the same, but for now this
             //      will prevent the same brush etc. showing up twice.
             if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
+                loadLock.lock();
                 uniqueFiles.append(fname);
                 T* resource = createResource(front);
                 if (resource->load() && resource->valid())
                 {
                     m_resources.append(resource);
+                    notifyResourceAdded(resource);
                     Q_CHECK_PTR(resource);
                 }
                 else {
                     delete resource;
                 }
+                loadLock.unlock();
             }
         }
-        m_loaded = true;
-}
+        kDebug(30009) << "done loading  resources for type " << type();
+    }
 
 
     /// Adds an already loaded resource to the server
@@ -124,10 +140,9 @@ public:
     }
 
     QList<T*> resources() {
-        if(!m_loaded) {
-            return QList<T*>();
-        }
+        loadLock.lock();
         return m_resources;
+        loadLock.unlock();
     }
 
     /// Returns path where to save user defined and imported resources to
@@ -181,8 +196,9 @@ protected:
 
     void notifyResourceAdded(T* resource)
     {
-        foreach(KoResourceServerObserver<T>* observer, m_observers)
+        foreach(KoResourceServerObserver<T>* observer, m_observers) {
             observer->resourceAdded(resource);
+        }
     }
 
     void notifyRemovingResource(T* resource)
@@ -195,7 +211,6 @@ protected:
 private:
     QList<T*> m_resources;
     QList<KoResourceServerObserver<T>*> m_observers;
-    bool m_loaded;
 
 };
 

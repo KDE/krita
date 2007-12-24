@@ -46,7 +46,7 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject {
 
 public:
 
-    KisSelectionManager(KisView2 * parent, KisDoc2 * doc);
+    KisSelectionManager(KisView2 * view, KisDoc2 * doc);
     virtual ~KisSelectionManager();
 
     void setup(KActionCollection * collection);
@@ -108,7 +108,7 @@ private:
 
     void updateSimpleOutline();
 
-    KisView2 * m_parent;
+    KisView2 * m_view;
     KisDoc2 * m_doc;
 
     KisClipboard * m_clipboard;

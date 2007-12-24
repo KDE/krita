@@ -36,8 +36,10 @@ class KisImagePipeBrush;
 class KoSegmentGradient;
 class KisPattern;
 
-class KRITAUI_EXPORT KisResourceServerProvider
+class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~KisResourceServerProvider();
 
@@ -55,6 +57,18 @@ private:
     KoResourceServer<KisBrush>* m_brushServer;
     KoResourceServer<KoSegmentGradient>* m_gradientServer;
     KoResourceServer<KisPattern>* m_patternServer;
+
+private slots:
+
+    void brushThreadDone();
+    void patternThreadDone();
+    void gradientThreadDone();
+
+private:
+    
+    QThread * brushThread;
+    QThread * gradientThread;
+    QThread * patternThread;
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

@@ -47,8 +47,10 @@ private:
 };
 
 
-class KORESOURCES_EXPORT KoResourceServerProvider
+class KORESOURCES_EXPORT KoResourceServerProvider : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~KoResourceServerProvider();
 
@@ -66,10 +68,18 @@ private:
     KoResourceServer<KoPattern>* m_patternServer;
     KoResourceServer<KoAbstractGradient>* m_gradientServer;
     KoResourceServer<KoColorSet>* m_paletteServer;
+    
+private slots:
 
-    KoResourceLoaderThread * m_patternLoader;
-    KoResourceLoaderThread * m_gradientLoader;
-    KoResourceLoaderThread * m_paletteLoader;
+    void paletteThreadDone();
+    void patternThreadDone();
+    void gradientThreadDone();
+
+private:
+    
+    QThread * paletteThread;
+    QThread * gradientThread;
+    QThread * patternThread;
 };
 
 #endif // KORESOURCESERVERPROVIDER_H

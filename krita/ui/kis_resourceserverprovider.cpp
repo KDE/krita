@@ -24,7 +24,6 @@
 
 #include <QDir>
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
@@ -83,21 +82,21 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_gradients", "/usr/share/create/gradients/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
+    m_gradientServer = new KoResourceServer<KoSegmentGradient>("kis_gradients");
+    gradientThread = new KoResourceLoaderThread(m_gradientServer, "*.ggr");
+    connect(gradientThread, SIGNAL(finished()), this, SLOT(gradientThreadDone()));
+    gradientThread->start();
+
     m_brushServer = new BrushResourceServer();
-    KoResourceLoaderThread t1 (m_brushServer, "*.gbr:*.gih");
-    t1.start();
+    brushThread = new KoResourceLoaderThread(m_brushServer, "*.gbr:*.gih");
+    connect(brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
+    brushThread->start();
 
     m_patternServer = new KoResourceServer<KisPattern>("kis_patterns");
-    KoResourceLoaderThread t2 (m_patternServer, "*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat");
-    t2.start();
+    patternThread = new KoResourceLoaderThread(m_patternServer, "*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat");
+    connect(patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
+    patternThread->start();
 
-    m_gradientServer = new KoResourceServer<KoSegmentGradient>("kis_gradients");
-    KoResourceLoaderThread t3 (m_gradientServer, "*.ggr");
-    t3.start();
-
-    t1.wait();
-    t2.wait();
-    t3.wait();
 }
 
 KisResourceServerProvider::~KisResourceServerProvider()
@@ -128,3 +127,24 @@ KoResourceServer<KisPattern>* KisResourceServerProvider::patternServer()
 {
     return m_patternServer;
 }
+
+void KisResourceServerProvider::brushThreadDone()
+{
+    delete brushThread;
+    brushThread = 0;
+}
+
+void KisResourceServerProvider::patternThreadDone()
+{
+    delete patternThread;
+    patternThread = 0;
+}
+
+void KisResourceServerProvider::gradientThreadDone()
+{
+    delete gradientThread;
+    gradientThread = 0;
+}
+
+
+#include "kis_resourceserverprovider.moc"

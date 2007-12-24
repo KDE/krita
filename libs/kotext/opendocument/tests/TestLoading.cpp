@@ -30,7 +30,9 @@ void TestLoading::testLoadLists1() {
     KoStore *store = KoStore::createStore(&device, KoStore::Read);
     KoTextLoadingContext context(&loader, doc, styles, store);
 
-    KoXmlElement bodyElem;
+    // see here also the KWOpenDocumentLoader::load() method in kword/part/*
+
+    KoXmlElement bodyElem; //=KoOdfReadStore(store).contentDoc()
     QTextDocument textdoc;
     QTextCursor textcursor(&textdoc);
     loader.loadBody(context, bodyElem, textcursor);

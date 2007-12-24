@@ -1,16 +1,39 @@
 #include "TestLoading.h"
 
+#include <QBuffer>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QDebug>
+
 // #include <QList>
 // #include <kcomponentdata.h>
+#include <KoStyleManager.h>
+#include <KoDocument.h>
+#include <KoOdfStylesReader.h>
+#include <KoStore.h>
+#include <KoOdfStylesReader.h>
+#include <KoTextLoader.h>
+#include <KoTextLoadingContext.h>
+#include <KoXmlReader.h>
 
 TestLoading::TestLoading() {
 }
 
 void TestLoading::testLoadLists1() {
-/*
-    KoStyleManager styleManager();
-    KoTextLoader(&styleManager);
-*/
+    KoStyleManager stylemanager;
+    KoTextLoader loader(&stylemanager);
+
+    KoDocument* doc = 0;//provide a impl of KoDocument for testing only? :-/
+    KoOdfStylesReader styles;
+    QByteArray byteArray;
+    QBuffer device(&byteArray);
+    KoStore *store = KoStore::createStore(&device, KoStore::Read);
+    KoTextLoadingContext context(&loader, doc, styles, store);
+
+    KoXmlElement bodyElem;
+    QTextDocument textdoc;
+    QTextCursor textcursor(&textdoc);
+    loader.loadBody(context, bodyElem, textcursor);
 }
 
 QTEST_MAIN(TestLoading)

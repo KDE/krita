@@ -21,8 +21,46 @@
 
 #include "channel_converter_test.h"
 
+#include "channel_converter.h"
+
 void ChannelConverterTest::testKSReflectance()
 {
+    ChannelConverter c(1.0, 10.0);
+    float K, S, R;
+
+    // reflectanceToKS
+    R = 0.0;
+    c.reflectanceToKS(R, K, S);
+    QCOMPARE((double)K, 8.0);
+    QCOMPARE((double)S, 0.0);
+
+    R = 1.0;
+    c.reflectanceToKS(R, K, S);
+    QCOMPARE((double)K, 0.0);
+    QVERIFY((S - 0.8) < 1e-6);
+
+    for (int i = 1; i < 10; i++) {
+        R = (float)i * 0.1;
+        c.reflectanceToKS(R, K, S);
+        qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
+    }
+
+    // KSToReflectance
+    K = 0.0;
+    c.KSToReflectance(K, S, R);
+    QCOMPARE((double)R, 1.0);
+
+    S = 0.0;
+    c.KSToReflectance(K, S, R);
+    QCOMPARE((double)R, 0.0);
+
+    for (int i = 1; i < 10; i++) {
+        K = (float)i * 0.1;
+        S = 1.0 - K;
+        c.KSToReflectance(K, S, R);
+        qDebug() << "K " << K << ", S " << S << "; R = " << R;
+        QVERIFY(R > 0.0 && R < 1.0);
+    }
 }
 
 void ChannelConverterTest::testRGBsRGB()

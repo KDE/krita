@@ -105,6 +105,7 @@ void KisToneMappingDialog::slotOperatorSelected(int index)
         {
             d->currentConfigurationWidget = widget;
             d->currentCentralWidget = widget;
+            d->currentConfigurationWidget->setConfiguration( tmop->defaultConfiguration() );
         } else {
             d->currentConfigurationWidget = 0;
             d->currentCentralWidget = new QLabel( i18n("No configuration option."), d->uiToneMappingDialog.centralWidgetHolder );

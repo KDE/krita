@@ -53,8 +53,22 @@ class KisToneMappingOperator {
          * @return the bookmark manager for this operator
          */
         KisBookmarkedConfigurationManager* bookmarkManager();
+        /**
+         * @return the bookmark manager for this operator
+         */
+        const KisBookmarkedConfigurationManager* bookmarkManager() const;
+        /**
+         * This function return the configuration set as the default by the user or the 
+         * default configuration from the filter writer as returned by factoryConfiguration.
+         * This configuration is used by default for the configuration widget and to the
+         * process function if there is no configuration widget.
+         * @return the default configuration of this widget
+         */
+        virtual KisPropertiesConfiguration * defaultConfiguration() const;
     protected:
         void applyLuminance(KisPaintDeviceSP src, KisPaintDeviceSP lumi, const QRect& r) const;
+        /// @return the default configuration as defined by whoever wrote the plugin
+        virtual KisPropertiesConfiguration* factoryConfiguration() const;
     private:
         QString configEntryGroup();
     private:

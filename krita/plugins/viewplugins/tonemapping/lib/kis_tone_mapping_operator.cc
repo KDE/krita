@@ -21,6 +21,7 @@
 
 #include <KoColorSpaceTraits.h>
 
+#include <kis_debug_areas.h>
 #include <kis_bookmarked_configuration_manager.h>
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
@@ -90,4 +91,31 @@ QString KisToneMappingOperator::configEntryGroup()
 KisBookmarkedConfigurationManager* KisToneMappingOperator::bookmarkManager()
 {
     return d->bookmarkManager;
+}
+
+const KisBookmarkedConfigurationManager* KisToneMappingOperator::bookmarkManager() const
+{
+    return d->bookmarkManager;
+}
+
+KisPropertiesConfiguration * KisToneMappingOperator::defaultConfiguration() const
+{
+    KisPropertiesConfiguration* fc = 0;
+    if(bookmarkManager())
+    {
+        fc = dynamic_cast<KisPropertiesConfiguration*>(bookmarkManager()->defaultConfiguration());
+    }
+    if(not fc )
+    {
+        kDebug( DBG_AREA_PLUGINS ) << "Factory configuration";
+        fc = factoryConfiguration();
+    } else {
+        kDebug( DBG_AREA_PLUGINS ) << "Bookmark manager configuration";
+    }
+    return fc;
+}
+
+KisPropertiesConfiguration* KisToneMappingOperator::factoryConfiguration() const
+{
+    return new KisPropertiesConfiguration( );
 }

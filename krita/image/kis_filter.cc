@@ -70,10 +70,10 @@ struct KisFilter::Private {
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
     : d(new Private)
 {
-    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
     d->id = id;
     d->category = category;
     d->entry = entry;
+    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
 }
 
 KisFilterConfiguration * KisFilter::factoryConfiguration(const KisPaintDeviceSP) const

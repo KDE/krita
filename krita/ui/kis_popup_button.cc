@@ -72,6 +72,11 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
     d->frameLayout->addWidget(d->popupWidget);
 }
 
+void KisPopupButton::setPopupWidgetWidth( int w )
+{
+    d->frame->resize( w, d->frame->height() );
+}
+
 void KisPopupButton::showPopupWidget()
 {
     if(d->popupWidget)

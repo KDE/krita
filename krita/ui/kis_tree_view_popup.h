@@ -43,6 +43,8 @@ class KisTreeViewPopup : public KisPopupButton {
         void currentItemChanged(const QModelIndex &);
     public slots:
         void setCurrentIndex(const QModelIndex &);
+    protected:
+        virtual void resizeEvent ( QResizeEvent * event );
     private:
         struct Private;
         Private* const d;

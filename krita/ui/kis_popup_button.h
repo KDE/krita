@@ -44,6 +44,11 @@ class KRITAUI_EXPORT KisPopupButton : public QPushButton {
          *          to allow the popup to be hidden
          */
         void setAllwaysVisible(bool v);
+        /**
+         * Set the width of the popup widget.
+         * @return new width of the popup widget
+         */
+        void setPopupWidgetWidth( int w );
     public slots:
         void showPopupWidget();
         void hidePopupWidget();

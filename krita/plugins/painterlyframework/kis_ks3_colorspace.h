@@ -21,7 +21,7 @@
 #define KIS_KS3_COLORSPACE_H_
 
 #include "kis_ks_colorspace_traits.h"
-#include "ks_reflectance_converter.h"
+#include "channel_converter.h"
 #include <KoIncompleteColorSpace.h>
 
 #include <gsl/gsl_linalg.h>
@@ -53,7 +53,7 @@ class KisKS3ColorSpace : public KoIncompleteColorSpace<KisKS3ColorSpaceTrait>
     private:
 
         KisIlluminantProfile *m_profile;
-        KSReflectanceConverter m_converter;
+        ChannelConverter m_converter;
 
         int m_s;
         gsl_permutation *m_permutation;

@@ -17,22 +17,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KS_REF_CONVERTER_H_
-#define KS_REF_CONVERTER_H_
+#include <qtest_kde.h>
 
-class KSReflectanceConverter {
+#include "channel_converter_test.h"
 
-    public:
-        KSReflectanceConverter() {}
-        KSReflectanceConverter(float whiteS, float blackK);
-        ~KSReflectanceConverter();
+void ChannelConverterTest::testKSReflectance()
+{
+}
 
-        void KSToReflectance(float K, float S, float &R) const;
-        void reflectanceToKS(float R, float &K, float &S) const;
+void ChannelConverterTest::testRGBsRGB()
+{
+}
 
-    private:
-        float S_w, K_b;
-
-};
-
-#endif // KS_REF_CONVERTER_H_
+QTEST_KDEMAIN(ChannelConverterTest, NoGUI)
+#include "channel_converter_test.moc"

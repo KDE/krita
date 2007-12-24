@@ -1,4 +1,4 @@
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 #################################################
 # Painterly Common Libraries
@@ -6,7 +6,7 @@
 set(kritapainterlycommon_PART_SRCS
     kis_illuminant_profile.cpp
     kis_ks3_colorspace.cpp
-    ks_reflectance_converter.cpp
+    channel_converter.cpp
 #   kis_rgbks_colorspace.cpp
 #   mathematics.cpp
     )

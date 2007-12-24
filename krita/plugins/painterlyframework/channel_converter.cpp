@@ -19,18 +19,18 @@
 
 #include <cmath>
 
-#include "ks_reflectance_converter.h"
+#include "channel_converter.h"
 
-KSReflectanceConverter::KSReflectanceConverter(float whiteS, float blackK)
+ChannelConverter::ChannelConverter(float whiteS, float blackK)
 : S_w(whiteS), K_b(blackK)
 {
 }
 
-KSReflectanceConverter::~KSReflectanceConverter()
+ChannelConverter::~ChannelConverter()
 {
 }
 
-void KSReflectanceConverter::KSToReflectance(float K, float S, float &R) const
+void ChannelConverter::KSToReflectance(float K, float S, float &R) const
 {
     if (S == 0.0) {
         R = 0.0;
@@ -46,7 +46,7 @@ void KSReflectanceConverter::KSToReflectance(float K, float S, float &R) const
     R = 1.0 + Q - sqrt( Q*Q + 2.0*Q );
 }
 
-void KSReflectanceConverter::reflectanceToKS(float R, float &K, float &S) const
+void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
 {
     if ( R == 0.0 ) {
         K = 0.8 * K_b;

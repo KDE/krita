@@ -19,7 +19,7 @@
 
 #include "kis_ks3_colorspace.h"
 
-#include "ks_reflectance_converter.h"
+#include "channel_converter.h"
 #include "kis_illuminant_profile.h"
 #include <KoColorSpaceMaths.h>
 #include <KoColorProfile.h>
@@ -47,7 +47,7 @@ KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
         return;
 
     m_profile = dynamic_cast<KisIlluminantProfile *>(p);
-    m_converter = KSReflectanceConverter(m_profile->Swhite(), m_profile->Kblack());
+    m_converter = ChannelConverter(m_profile->Swhite(), m_profile->Kblack());
 
     m_permutation = gsl_permutation_alloc(3);
     gsl_linalg_LU_decomp(m_profile->T(), m_permutation, &m_s);

@@ -65,6 +65,40 @@ void ChannelConverterTest::testKSReflectance()
 
 void ChannelConverterTest::testRGBsRGB()
 {
+    ChannelConverter c(1.0, 10.0);
+    float C, sC;
+
+    // RGBTosRGB
+    C = 1.0;
+    c.RGBTosRGB(C, sC);
+    QCOMPARE((double)sC, 1.0);
+
+    C = 0.0;
+    c.RGBTosRGB(C, sC);
+    QCOMPARE((double)sC, 0.0);
+
+    for (int i = 1; i < 10; i++) {
+        C = (float)i * 0.1;
+        c.RGBTosRGB(C, sC);
+        qDebug() << "Linear: " << C << "; corrected: " << sC;
+        QVERIFY(sC > 0.0 && sC < 1.0);
+    }
+
+    // sRGBToRGB
+    sC = 1.0;
+    c.sRGBToRGB(sC, C);
+    QCOMPARE((double)C, 1.0);
+
+    sC = 0.0;
+    c.sRGBToRGB(sC, C);
+    QCOMPARE((double)C, 0.0);
+
+    for (int i = 1; i < 10; i++) {
+        sC = (float)i * 0.1;
+        c.sRGBToRGB(sC, C);
+        qDebug() << "Corrected: " << sC << "; linear: " << C;
+        QVERIFY(C > 0.0 && C < 1.0);
+    }
 }
 
 QTEST_KDEMAIN(ChannelConverterTest, NoGUI)

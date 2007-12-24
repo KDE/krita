@@ -25,7 +25,7 @@
  * without an area.
  */
 
-#define DBG_AREA_CORE 41001
+#define DBG_AREA_IMAGE 41001
 #define DBG_AREA_REGISTRY 40002
 #define DBG_AREA_TOOLS 41003
 #define DBG_AREA_CMS 41004

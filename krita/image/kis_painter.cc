@@ -690,7 +690,7 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         // Currently unsupported, fall through
     case FillStyleStrokes:
         // Currently unsupported, fall through
-        kWarning(DBG_AREA_CORE) << "Unknown or unsupported fill style in fillPolygon\n";
+        kWarning(DBG_AREA_IMAGE) << "Unknown or unsupported fill style in fillPolygon\n";
     case FillStyleForegroundColor:
         fillPainter.fillRect(fillRect, paintColor(), OPACITY_OPAQUE);
         break;

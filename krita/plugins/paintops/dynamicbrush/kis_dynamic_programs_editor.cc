@@ -71,13 +71,13 @@ void KisDynamicProgramsEditor::addProgram()
     Q_ASSERT(factory);
     KisDynamicProgram* program = factory->program( m_bookmarksManager->uniqueName( ki18n("New program %1") ) );
     Q_ASSERT(program);
-    m_bookmarksManager->save(program->name(), program);
+    m_bookmarksModel->saveConfiguration(program->name(), program);
 }
 
 void KisDynamicProgramsEditor::saveCurrentProgram()
 {
     kDebug(41006) <<"saveCurrentProgram " << m_currentProgram->name();
-    m_bookmarksManager->save(m_currentProgram->name(), m_currentProgram);
+    m_bookmarksModel->saveConfiguration(m_currentProgram->name(), m_currentProgram);
 }
 
 #include "kis_dynamic_programs_editor.moc"

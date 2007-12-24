@@ -62,6 +62,7 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
     connect(d->uiToneMappingDialog.comboBoxOperators, SIGNAL(activated ( int )), SLOT(slotOperatorSelected(int )) );
     connect(d->uiToneMappingDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiToneMappingDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
+    connect(d->uiToneMappingDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiToneMappingDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
     connect(d->uiToneMappingDialog.comboBoxPresets, SIGNAL(activated ( int )), SLOT(slotBookmarkedToneMappingConfigurationSelected(int )) );
     connect(d->uiToneMappingDialog.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));

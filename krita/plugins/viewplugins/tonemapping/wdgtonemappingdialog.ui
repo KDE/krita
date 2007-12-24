@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>357</width>
-    <height>300</height>
+    <width>345</width>
+    <height>326</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -20,7 +20,14 @@
       </widget>
      </item>
      <item row="0" column="1" >
-      <widget class="QComboBox" name="comboBoxOperators" />
+      <widget class="QComboBox" name="comboBoxOperators" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0" >
       <widget class="QLabel" name="label_2" >
@@ -30,7 +37,14 @@
       </widget>
      </item>
      <item row="1" column="1" >
-      <widget class="QComboBox" name="comboBoxPresets" />
+      <widget class="QComboBox" name="comboBoxPresets" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
      <item row="1" column="2" >
       <widget class="QPushButton" name="pushButtonEditPressets" >
@@ -53,8 +67,8 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>91</width>
+         <height>30</height>
         </size>
        </property>
       </spacer>
@@ -63,6 +77,13 @@
       <widget class="QPushButton" name="pushButtonOk" >
        <property name="text" >
         <string>Ok</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonApply" >
+       <property name="text" >
+        <string>Apply</string>
        </property>
       </widget>
      </item>

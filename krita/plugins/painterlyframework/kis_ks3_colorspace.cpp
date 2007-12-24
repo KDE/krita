@@ -125,19 +125,20 @@ void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nP
 
     const quint16 *srcU16 = reinterpret_cast<const quint16 *>(srcU8);
     quint8 *dst = dstU8;
+    float c;
 
     for (quint32 pixel = 0; pixel < nPixels; pixel++) {
-        gsl_vector_set(m_rgbvec, 0, (double)srcU16[2]);
-        gsl_vector_set(m_rgbvec, 1, (double)srcU16[1]);
-        gsl_vector_set(m_rgbvec, 2, (double)srcU16[0]);
-
-        // TODO Linearize rgb
+        for (int i = 0; i < 3; i++) {
+            m_converter.sRGBToRGB((float)srcU16[2-i], c);
+            gsl_vector_set(m_rgbvec, i, (double)c);
+        }
 
         gsl_linalg_LU_solve(m_profile->T(), m_permutation, m_rgbvec, m_refvec);
         for (int i = 0; i < 3; i++)
             m_converter.reflectanceToKS((float)gsl_vector_get(m_refvec, i),
                                         KisKS3ColorSpaceTrait::K(dst, i),
                                         KisKS3ColorSpaceTrait::S(dst, i));
+
         KisKS3ColorSpaceTrait::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(srcU16[3]), 1);
 
         srcU16 += 4;
@@ -149,21 +150,20 @@ void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPix
 {
     quint16 *dstU16 = reinterpret_cast<quint16 *>(dstU8);
     const quint8 *src = srcU8;
+    float c;
 
     for (quint32 pixel = 0; pixel < nPixels; pixel++) {
-        float c;
         for (int i = 0; i < 3; i++) {
             m_converter.KSToReflectance(KisKS3ColorSpaceTrait::K(src, i),
                                         KisKS3ColorSpaceTrait::S(src, i), c);
-            gsl_vector_set(m_refvec, i, (float)c);
+            gsl_vector_set(m_refvec, i, (double)c);
         }
         gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
-        // TODO Apply gamma to rgb
-
-        dstU16[2] = (quint16)gsl_vector_get(m_rgbvec, 0);
-        dstU16[1] = (quint16)gsl_vector_get(m_rgbvec, 1);
-        dstU16[0] = (quint16)gsl_vector_get(m_rgbvec, 2);
+        for (int i = 0; i < 3; i++) {
+            m_converter.RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), c);
+            dstU16[2-i] = (quint16)c;
+        }
         dstU16[3] = KoColorSpaceMaths<float,quint16>::scaleToA(KisKS3ColorSpaceTrait::alpha(src));
 
         src += KisKS3ColorSpaceTrait::pixelSize;

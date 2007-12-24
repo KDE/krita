@@ -29,7 +29,8 @@ class ChannelConverter {
 
         void KSToReflectance(float K, float S, float &R) const;
         void reflectanceToKS(float R, float &K, float &S) const;
-        // TODO add normalized / gamma'ed sRGB conversions.
+        void RGBTosRGB(float C, float &sC) const;
+        void sRGBToRGB(float sC, float &C) const;
 
     private:
         float S_w, K_b;

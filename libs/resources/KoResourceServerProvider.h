@@ -66,6 +66,10 @@ private:
     KoResourceServer<KoPattern>* m_patternServer;
     KoResourceServer<KoAbstractGradient>* m_gradientServer;
     KoResourceServer<KoColorSet>* m_paletteServer;
+
+    KoResourceLoaderThread * m_patternLoader;
+    KoResourceLoaderThread * m_gradientLoader;
+    KoResourceLoaderThread * m_paletteLoader;
 };
 
 #endif // KORESOURCESERVERPROVIDER_H

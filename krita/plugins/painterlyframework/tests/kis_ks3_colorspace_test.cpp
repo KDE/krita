@@ -151,7 +151,8 @@ void KisKS3ColorSpaceTest::testMixing()
     cs->fromRgbA16(rgb1, kas1, 1);
     cs->fromRgbA16(rgb2, kas2, 1);
     for (int i = 0; i < 7; i++)
-        reinterpret_cast<float*>(kasm)[i] = (reinterpret_cast<float*>(kas1)[i] + reinterpret_cast<float*>(kas2)[i])/2.0;
+        reinterpret_cast<float*>(kasm)[i] = (reinterpret_cast<float*>(kas1)[i] +
+                                             reinterpret_cast<float*>(kas2)[i]) / 2.0;
     cs->toRgbA16(kasm, rgbm, 1);
     print_vector<float,7>(kasm, "BLUE + YELLOW IN KS:");
     print_vector<quint16,4>(rgbm, "BLUE + YELLOW BACK IN RBG:");

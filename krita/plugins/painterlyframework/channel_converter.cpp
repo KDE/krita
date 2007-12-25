@@ -21,20 +21,22 @@
 
 #include "channel_converter.h"
 
-#define M_w 0.9f
-#define M_b 0.9f
-
 ChannelConverter::ChannelConverter(float whiteS, float blackK)
-: S_w(whiteS), K_b(blackK)
+: Sw(whiteS), Kb(blackK)
 {
-    float K;
+    float Qw0, Qb1, alpha1, alpha2;
 
-    K = K_b / ( M_w * S_w );
-    m_blackening = 1.0 + K - sqrt( K*K + 2.0*K );
+    Qw0 = Kb / Sw;
+    Qb1 = Kb / Sw;
 
-    K = M_b * K_b / S_w;
-    m_basewhite = 1.0 + K - sqrt( K*K + 2.0*K );
-    m_whitening = 1.0 - m_basewhite;
+    w0 = 1.0 + Qw0 - sqrt( Qw0*Qw0 + 2.0*Qw0 );
+    wi = 1.0 - w0;
+    b1 = 1.0 + Qb1 - sqrt( Qb1*Qb1 + 2.0*Qb1 );
+
+    alpha1 = Sw / ( PHI(W(0.5)) - PHI(0.5) );
+    alpha2 = (Kb*PSI(0.5)) / (PSI(B(0.5))-PSI(0.5));
+
+    Ke = alpha1 / alpha2;
 }
 
 ChannelConverter::~ChannelConverter()
@@ -59,30 +61,11 @@ void ChannelConverter::KSToReflectance(float K, float S, float &R) const
 
 void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
 {
-    if ( R == 0.0 ) {
-        K = M_b * K_b;
-        S = 0.0;
-        return;
-    }
-    if ( R == 1.0 ) {
-        K = 0.0;
-        S = M_w * S_w;
-        return;
-    }
-    if ( R <= 0.5 ) {
-        float Rw = m_whitening * R + m_basewhite;
-        float F  = ( 2.0 * R  ) / pow( 1.0 - R , 2 );
-        float Fw = ( 2.0 * Rw ) / pow( 1.0 - Rw, 2 );
-        K = 0.07 * S_w / ( Fw - F ); // TODO Remove that 0.07
-        S = K * F;
-    }
-    if ( R > 0.5 ) {
-        float Rb = m_blackening * R;
-        float P  = pow( 1.0 - R , 2 ) / ( 2.0 * R  );
-        float Pb = pow( 1.0 - Rb, 2 ) / ( 2.0 * Rb );
-        S = K_b / ( Pb - P );
-        K = S * P;
-    }
+    if ( R <= 0.5 )
+        K = Sw / (PHI(W(R))-PHI(R));
+    if ( R > 0.5 )
+        K = Ke*Kb*PSI(R) / (PSI(B(R))-PSI(R));
+    S = K*PHI(R);
 }
 
 void ChannelConverter::RGBTosRGB(float C, float &sC) const

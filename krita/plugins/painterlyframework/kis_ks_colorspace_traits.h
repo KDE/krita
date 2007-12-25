@@ -60,7 +60,4 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*(_wavelen_number
     }
 };
 
-typedef KisKSColorSpaceTrait<3> KisKS3ColorSpaceTrait;
-typedef KisKSColorSpaceTrait<9> KisKS9ColorSpaceTrait;
-
 #endif // KIS_KS_COLORSPACE_TRAITS_H_

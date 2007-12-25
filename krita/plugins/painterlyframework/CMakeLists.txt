@@ -5,6 +5,7 @@ add_subdirectory(tests)
 
 set(kritapainterlycommon_PART_SRCS
     kis_illuminant_profile.cpp
+#   kis_ks_colorspace.cpp
     kis_ks3_colorspace.cpp
     channel_converter.cpp
 #   kis_rgbks_colorspace.cpp

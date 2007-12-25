@@ -385,6 +385,8 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL, con
 
 bool KoDocumentChild::saveOdf( KoDocument::SavingContext & documentContext )
 {
+    kDebug(30003) << "use KoEmbeddedDocumentSaver";
+    Q_ASSERT( false );
     KoStore * store = documentContext.odfStore.store();
     QString path;
     if ( d->m_doc->isStoredExtern() )
@@ -443,6 +445,9 @@ bool KoDocumentChild::saveOdf( KoDocument::SavingContext & documentContext )
 
 void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString& name )
 {
+    kDebug(30003) << "use KoEmbeddedDocumentSaver";
+    Q_ASSERT( false );
+
     if ( !d->m_doc->isStoredExtern() )
     {
         // set URL in document so that KoDocument::saveChildrenOasis will save

@@ -1055,9 +1055,9 @@ bool KoDocument::saveNativeFormat( const QString & file )
         }
 
         // Save embedded objects
-        if ( !saveChildrenOdf( documentContext ) )
+        if ( !embeddedSaver.saveEmbeddedDocuments( documentContext ) )
         {
-            kDebug(30003) <<"saveChildrenOasis failed";
+            kDebug(30003) <<"save embedded documents failed";
             delete store;
             return false;
         }
@@ -2056,15 +2056,15 @@ bool KoDocument::addVersion( const QString& comment )
 
     if ( !saveOdf( documentContext ) )
     {
-      kDebug(30003) <<"saveOasis failed";
+      kDebug(30003) <<"saveOdf failed";
       delete store;
       return false;
     }
 
     // Save embedded objects
-    if ( !saveChildrenOdf( documentContext ) )
+    if ( !embeddedSaver.saveEmbeddedDocuments( documentContext ) )
     {
-      kDebug(30003) <<"saveChildrenOasis failed";
+      kDebug(30003) <<"save embedded documents failed";
       delete store;
       return false;
     }

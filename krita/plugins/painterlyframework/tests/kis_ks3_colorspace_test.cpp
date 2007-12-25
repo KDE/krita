@@ -122,10 +122,66 @@ void KisKS3ColorSpaceTest::testToFromRgbA16()
     QVERIFY(rgb1[5] == rgb2[5]);
     QVERIFY(rgb1[6] == rgb2[6]);
     QVERIFY(rgb1[7] == rgb2[7]);
+
+    delete [] kas1;
+    delete [] rgb2;
+    delete cs;
+    delete p;
 }
 
 void KisKS3ColorSpaceTest::testMixing()
 {
+    KisIlluminantProfile *p = new KisIlluminantProfile("D653Test1_1.ill");
+    KisKS3ColorSpace *cs = new KisKS3ColorSpace(p);
+
+    quint8 *rgb1, *rgb2;
+    quint8 *kas1 = new quint8[cs->pixelSize()];
+    quint8 *kas2 = new quint8[cs->pixelSize()];
+    quint8 *kasm = new quint8[cs->pixelSize()];
+    quint8 *rgbm = new quint8[2*4];
+
+    quint32 val = 65535;
+    quint16 blue[4]   = { val, 0,   0,   val };
+    quint16 green[4]  = { 0,   val, 0,   val };
+    quint16 red[4]    = { 0,     0, val, val };
+    quint16 yellow[4] = { 0,   val, val, val };
+
+    rgb1 = reinterpret_cast<quint8*>(blue);
+    rgb2 = reinterpret_cast<quint8*>(yellow);
+    cs->fromRgbA16(rgb1, kas1, 1);
+    cs->fromRgbA16(rgb2, kas2, 1);
+    for (int i = 0; i < 7; i++)
+        reinterpret_cast<float*>(kasm)[i] = (reinterpret_cast<float*>(kas1)[i] + reinterpret_cast<float*>(kas2)[i])/2.0;
+    cs->toRgbA16(kasm, rgbm, 1);
+    print_vector<float,7>(kasm, "BLUE + YELLOW IN KS:");
+    print_vector<quint16,4>(rgbm, "BLUE + YELLOW BACK IN RBG:");
+
+    rgb1 = reinterpret_cast<quint8*>(blue);
+    rgb2 = reinterpret_cast<quint8*>(green);
+    cs->fromRgbA16(rgb1, kas1, 1);
+    cs->fromRgbA16(rgb2, kas2, 1);
+    for (int i = 0; i < 7; i++)
+        reinterpret_cast<float*>(kasm)[i] = (reinterpret_cast<float*>(kas1)[i] + reinterpret_cast<float*>(kas2)[i])/2.0;
+    cs->toRgbA16(kasm, rgbm, 1);
+    print_vector<float,7>(kasm, "BLUE + GREEN IN KS:");
+    print_vector<quint16,4>(rgbm, "BLUE + GREEN BACK IN RBG:");
+
+    rgb1 = reinterpret_cast<quint8*>(red);
+    rgb2 = reinterpret_cast<quint8*>(blue);
+    cs->fromRgbA16(rgb1, kas1, 1);
+    cs->fromRgbA16(rgb2, kas2, 1);
+    for (int i = 0; i < 7; i++)
+        reinterpret_cast<float*>(kasm)[i] = (reinterpret_cast<float*>(kas1)[i] + reinterpret_cast<float*>(kas2)[i])/2.0;
+    cs->toRgbA16(kasm, rgbm, 1);
+    print_vector<float,7>(kasm, "RED + BLUE IN KS:");
+    print_vector<quint16,4>(rgbm, "RED + BLUE BACK IN RBG:");
+
+    delete [] rgbm;
+    delete [] kasm;
+    delete [] kas2;
+    delete [] kas1;
+    delete cs;
+    delete p;
 }
 
 QTEST_KDEMAIN(KisKS3ColorSpaceTest, NoGUI)

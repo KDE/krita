@@ -29,8 +29,8 @@ class KisKS3ColorSpaceTest : public QObject
 private slots:
 
     void testConstructor();
-    void testFromRgbA16();
-    void testToRgbA16();
+    void testToFromRgbA16();
+    void testMixing();
 
 };
 

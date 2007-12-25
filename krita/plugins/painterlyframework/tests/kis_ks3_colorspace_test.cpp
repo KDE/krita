@@ -19,17 +19,112 @@
 
 #include <qtest_kde.h>
 
+#include <cstring>
+
 #include "kis_ks3_colorspace_test.h"
+#include "kis_ks3_colorspace.h"
+
+#include "kis_illuminant_profile.h"
 
 void KisKS3ColorSpaceTest::testConstructor()
 {
+    KisIlluminantProfile *p1 = new KisIlluminantProfile("D653Test.ill");
+    KisIlluminantProfile *p2 = new KisIlluminantProfile("D659Test.ill");
+    KisKS3ColorSpace *cs1 = new KisKS3ColorSpace(p1);
+    QVERIFY(cs1->profileIsCompatible(p2) == false);
+    delete cs1;
+    delete p2;
+    delete p1;
 }
 
-void KisKS3ColorSpaceTest::testFromRgbA16()
+template<typename type, int n>
+void print_vector(quint8 *v, const QString &text)
 {
+    QString vstr;
+    qDebug() << text;
+    for (int i = 0; i < n; i++)
+        vstr += QString::number(reinterpret_cast<type*>(v)[i]) + " ";
+    qDebug() << vstr;
 }
 
-void KisKS3ColorSpaceTest::testToRgbA16()
+void KisKS3ColorSpaceTest::testToFromRgbA16()
+{
+    KisIlluminantProfile *p = new KisIlluminantProfile("D653Test.ill");
+    KisKS3ColorSpace *cs = new KisKS3ColorSpace(p);
+
+    quint8 *rgb1;
+    quint8 *kas1 = new quint8[2*cs->pixelSize()];
+    quint8 *rgb2 = new quint8[2*8];
+
+    quint32 val = 65535;
+    quint16 blue[4]   = { val, 0,   0,   val };
+    quint16 green[4]  = { 0,   val, 0,   val };
+    quint16 red[4]    = { 0,     0, val, val };
+    quint16 yellow[4] = { 0,   val, val, val };
+
+    quint16 bluegreen[8] = { val, 0, 0, val, 0, val, 0, val };
+
+    rgb1 = reinterpret_cast<quint8*>(blue);
+    cs->fromRgbA16(rgb1, kas1, 1);
+    cs->toRgbA16(kas1, rgb2, 1);
+    print_vector<quint16, 4>(rgb1, "BLUE:");
+    print_vector<float, 7>(kas1, "BLUE IN KS:");
+    print_vector<quint16, 4>(rgb2, "BLUE AGAIN:");
+    QVERIFY(rgb1[0] == rgb2[0]);
+    QVERIFY(rgb1[1] == rgb2[1]);
+    QVERIFY(rgb1[2] == rgb2[2]);
+    QVERIFY(rgb1[3] == rgb2[3]);
+
+    rgb1 = reinterpret_cast<quint8*>(green);
+    cs->fromRgbA16(rgb1, kas1, 1);
+    cs->toRgbA16(kas1, rgb2, 1);
+    print_vector<quint16, 4>(rgb1, "GREEN:");
+    print_vector<float, 7>(kas1, "GREEN IN KS:");
+    print_vector<quint16, 4>(rgb2, "GREEN AGAIN:");
+    QVERIFY(rgb1[0] == rgb2[0]);
+    QVERIFY(rgb1[1] == rgb2[1]);
+    QVERIFY(rgb1[2] == rgb2[2]);
+    QVERIFY(rgb1[3] == rgb2[3]);
+
+    rgb1 = reinterpret_cast<quint8*>(red);
+    cs->fromRgbA16(rgb1, kas1, 1);
+    cs->toRgbA16(kas1, rgb2, 1);
+    print_vector<quint16, 4>(rgb1, "RED:");
+    print_vector<float, 7>(kas1, "RED IN KS:");
+    print_vector<quint16, 4>(rgb2, "RED AGAIN:");
+    QVERIFY(rgb1[0] == rgb2[0]);
+    QVERIFY(rgb1[1] == rgb2[1]);
+    QVERIFY(rgb1[2] == rgb2[2]);
+    QVERIFY(rgb1[3] == rgb2[3]);
+
+    rgb1 = reinterpret_cast<quint8*>(yellow);
+    cs->fromRgbA16(rgb1, kas1, 1);
+    cs->toRgbA16(kas1, rgb2, 1);
+    print_vector<quint16, 4>(rgb1, "YELLOW:");
+    print_vector<float, 7>(kas1, "YELLOW IN KS:");
+    print_vector<quint16, 4>(rgb2, "YELLOW AGAIN:");
+    QVERIFY(rgb1[0] == rgb2[0]);
+    QVERIFY(rgb1[1] == rgb2[1]);
+    QVERIFY(rgb1[2] == rgb2[2]);
+    QVERIFY(rgb1[3] == rgb2[3]);
+
+    rgb1 = reinterpret_cast<quint8*>(bluegreen);
+    cs->fromRgbA16(rgb1, kas1, 2);
+    cs->toRgbA16(kas1, rgb2, 2);
+    print_vector<quint16, 8>(rgb1, "BLUE AND GREEN:");
+    print_vector<float, 14>(kas1, "BLUE AND GREEN IN KS:");
+    print_vector<quint16, 8>(rgb2, "BLUE AND GREEN AGAIN:");
+    QVERIFY(rgb1[0] == rgb2[0]);
+    QVERIFY(rgb1[1] == rgb2[1]);
+    QVERIFY(rgb1[2] == rgb2[2]);
+    QVERIFY(rgb1[3] == rgb2[3]);
+    QVERIFY(rgb1[4] == rgb2[4]);
+    QVERIFY(rgb1[5] == rgb2[5]);
+    QVERIFY(rgb1[6] == rgb2[6]);
+    QVERIFY(rgb1[7] == rgb2[7]);
+}
+
+void KisKS3ColorSpaceTest::testMixing()
 {
 }
 

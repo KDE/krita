@@ -24,7 +24,7 @@
 #include "channel_converter.h"
 #include <KoIncompleteColorSpace.h>
 
-#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
 class KisIlluminantProfile;
@@ -47,6 +47,13 @@ class KisKS3ColorSpace : public KoIncompleteColorSpace<KisKS3ColorSpaceTrait>
         const KoColorProfile *profile() const;
         bool profileIsCompatible(const KoColorProfile *profile) const;
 
+        KoColorSpace* clone() const { return 0; }
+        KoID colorModelId() const { return KoID(); }
+        KoID colorDepthId() const { return KoID(); }
+        bool willDegrade(ColorSpaceIndependence) const { return true; }
+        void colorToXML(const quint8*, QDomDocument&, QDomElement&) const {}
+        void colorFromXML(quint8*, const QDomElement&) const {}
+
         void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
         void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
 
@@ -55,8 +62,7 @@ class KisKS3ColorSpace : public KoIncompleteColorSpace<KisKS3ColorSpaceTrait>
         KisIlluminantProfile *m_profile;
         ChannelConverter m_converter;
 
-        int m_s;
-        gsl_permutation *m_permutation;
+        gsl_matrix *m_inverse;
         gsl_vector *m_rgbvec;
         gsl_vector *m_refvec;
 

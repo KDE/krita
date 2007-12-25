@@ -33,7 +33,6 @@
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cblas.h>
-#include <gsl/gsl_errno.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
@@ -41,16 +40,13 @@
 KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
 : parent( "ks3colorspace",
           "KS Color Space - 3 wavelenghts",
-          KoColorSpaceRegistry::instance()->rgb16("") )
+          KoColorSpaceRegistry::instance()->rgb16("") ), m_inverse(0), m_rgbvec(0), m_refvec(0)
 {
     if (!profileIsCompatible(p))
         return;
 
     m_profile = dynamic_cast<KisIlluminantProfile *>(p);
     m_converter = ChannelConverter(m_profile->Swhite(), m_profile->Kblack());
-
-    m_permutation = gsl_permutation_alloc(3);
-    gsl_linalg_LU_decomp(m_profile->T(), m_permutation, &m_s);
 
     m_rgbvec = gsl_vector_alloc(3);
     m_refvec = gsl_vector_alloc(3);
@@ -82,13 +78,29 @@ KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
     addCompositeOp( new KoCompositeOpMultiply<KisKS3ColorSpaceTrait>(this) );
     addCompositeOp( new KoCompositeOpDivide<KisKS3ColorSpaceTrait>(this) );
     addCompositeOp( new KoCompositeOpBurn<KisKS3ColorSpaceTrait>(this) );
+
+    int s;
+    gsl_permutation *perm = gsl_permutation_alloc(3);
+    gsl_matrix *tmp = gsl_matrix_alloc(m_profile->T()->size1, m_profile->T()->size2);
+
+    m_inverse = gsl_matrix_alloc(tmp->size1, tmp->size2);
+
+    gsl_matrix_memcpy(tmp, m_profile->T());
+    gsl_linalg_LU_decomp(tmp, perm, &s);
+    gsl_linalg_LU_invert(tmp, perm, m_inverse);
+
+    gsl_permutation_free(perm);
+    gsl_matrix_free(tmp);
 }
 
 KisKS3ColorSpace::~KisKS3ColorSpace()
 {
-    gsl_permutation_free(m_permutation);
-    gsl_vector_free(m_rgbvec);
-    gsl_vector_free(m_refvec);
+    if (m_rgbvec)
+        gsl_vector_free(m_rgbvec);
+    if (m_refvec)
+        gsl_vector_free(m_refvec);
+    if (m_inverse)
+        gsl_matrix_free(m_inverse);
 }
 
 bool KisKS3ColorSpace::operator==(const KoColorSpace& rhs) const
@@ -116,6 +128,8 @@ bool KisKS3ColorSpace::profileIsCompatible(const KoColorProfile *profile) const
     return true;
 }
 
+#define NORM 65535.0f
+
 void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const
 {
     // For each pixel we do this:
@@ -127,13 +141,13 @@ void KisKS3ColorSpace::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nP
     quint8 *dst = dstU8;
     float c;
 
-    for (quint32 pixel = 0; pixel < nPixels; pixel++) {
+    for ( ; nPixels > 0; nPixels-- ) {
         for (int i = 0; i < 3; i++) {
-            m_converter.sRGBToRGB((float)srcU16[2-i], c);
+            m_converter.sRGBToRGB((float)srcU16[2-i]/NORM, c);
             gsl_vector_set(m_rgbvec, i, (double)c);
         }
 
-        gsl_linalg_LU_solve(m_profile->T(), m_permutation, m_rgbvec, m_refvec);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, m_inverse, m_rgbvec, 0.0, m_refvec);
         for (int i = 0; i < 3; i++)
             m_converter.reflectanceToKS((float)gsl_vector_get(m_refvec, i),
                                         KisKS3ColorSpaceTrait::K(dst, i),
@@ -152,7 +166,7 @@ void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPix
     const quint8 *src = srcU8;
     float c;
 
-    for (quint32 pixel = 0; pixel < nPixels; pixel++) {
+    for ( ; nPixels > 0; nPixels-- ) {
         for (int i = 0; i < 3; i++) {
             m_converter.KSToReflectance(KisKS3ColorSpaceTrait::K(src, i),
                                         KisKS3ColorSpaceTrait::S(src, i), c);
@@ -162,7 +176,7 @@ void KisKS3ColorSpace::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPix
 
         for (int i = 0; i < 3; i++) {
             m_converter.RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), c);
-            dstU16[2-i] = (quint16)c;
+            dstU16[2-i] = (quint16)(c * NORM);
         }
         dstU16[3] = KoColorSpaceMaths<float,quint16>::scaleToA(KisKS3ColorSpaceTrait::alpha(src));
 

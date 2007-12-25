@@ -26,10 +26,13 @@
 #include <QMimeData>
 #include <QString>
 
+#include <kdebug.h>
+
 #include <KoStore.h>
 #include <KoGenStyles.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
+#include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
 
@@ -54,38 +57,50 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
 
-    KoOdfWriteStore oasisStore( store );
+    KoOdfWriteStore odfStore( store );
     KoEmbeddedDocumentSaver embeddedSaver;
 
-    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
-    KoXmlWriter* contentWriter = oasisStore.contentWriter();
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter( mimeType );
+    KoXmlWriter* contentWriter = odfStore.contentWriter();
 
     // TODO delete store on all exits
     if ( !contentWriter ) {
+        delete store;
         return false;
     }
 
     KoGenStyles mainStyles;
-    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
+    KoXmlWriter* bodyWriter = odfStore.bodyWriter();
     KoShapeSavingContext * context = helper.context( bodyWriter, mainStyles, embeddedSaver );
 
     if ( !helper.writeBody() ) {
+        delete store;
         return false;
     }
 
     mainStyles.saveOdfAutomaticStyles( contentWriter, false );
 
-    oasisStore.closeContentWriter();
+    odfStore.closeContentWriter();
 
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
     if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) ) {
+        delete store;
+        return false;
+    }
+
+    // Save embedded objects
+    KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
+    if ( !embeddedSaver.saveEmbeddedDocuments( documentContext ) )
+    {
+        kDebug(30006) <<"save embedded documents failed";
+        delete store;
         return false;
     }
 
     // Write out manifest file
-    if ( !oasisStore.closeManifestWriter() ) {
+    if ( !odfStore.closeManifestWriter() ) {
         return false;
     }
 

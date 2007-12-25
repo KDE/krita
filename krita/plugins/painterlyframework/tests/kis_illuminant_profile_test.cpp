@@ -20,16 +20,96 @@
 #include <qtest_kde.h>
 
 #include "kis_illuminant_profile_test.h"
-
 #include "kis_illuminant_profile.h"
+
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
+
+#include <iostream>
+using namespace std;
+
+void gsl_print(const gsl_matrix *M, const char *name)
+{
+    cout << name << endl;
+    for (uint i = 0; i < M->size1; i++) {
+        cout << "\t";
+        for (uint j = 0; j < M->size2; j++) {
+            if (gsl_matrix_get(M, i, j) >= 0)
+                cout << " ";
+            cout << gsl_matrix_get(M, i, j) << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void gsl_print(const gsl_vector *V, const char *name)
+{
+    cout << name << endl;
+    cout << "\t";
+    for (uint i = 0; i < V->size; i++) {
+        if (gsl_vector_get(V, i) >= 0)
+            cout << " ";
+        cout << gsl_vector_get(V, i) << " ";
+    }
+    cout << endl;
+}
 
 void KisIlluminantProfileTest::testLoading()
 {
+    KisIlluminantProfile *p = new KisIlluminantProfile;
+    QVERIFY(p->valid() == false);
+    p->setFileName("D653Test.ill");
+    QVERIFY(p->valid() == false);
+    p->load();
+    QVERIFY(p->valid() == true);
+    QVERIFY(p->name() == "D65 3 Test Profile");
 
+    QVERIFY(p->wavelenghts() == 3);
+    QVERIFY(p->Swhite() == 1.0);
+    QVERIFY(p->Kblack() == 10.0);
+    gsl_print(p->T(), "Transformation matrix: ");
+    gsl_print(p->P(), "Positions vector: ");
+
+    KisIlluminantProfile *c = dynamic_cast<KisIlluminantProfile*>(p->clone());
+    delete p;
+    QVERIFY(c->valid() == true);
+    QVERIFY(c->name() == "D65 3 Test Profile");
+    QVERIFY(c->wavelenghts() == 3);
+    QVERIFY(c->Swhite() == 1.0);
+    QVERIFY(c->Kblack() == 10.0);
+    gsl_print(c->T(), "Transformation matrix: ");
+    gsl_print(c->P(), "Positions vector: ");
+    delete c;
+
+    p = new KisIlluminantProfile("D659Test.ill");
+    QVERIFY(p->valid() == true);
+    QVERIFY(p->name() == "D65 9 Test Profile");
+
+    QVERIFY(p->wavelenghts() == 9);
+    QVERIFY(p->Swhite() == 1.0);
+    QVERIFY(p->Kblack() == 10.0);
+    gsl_print(p->T(), "Transformation matrix: ");
+    gsl_print(p->P(), "Positions vector: ");
+    delete p;
 }
 
 void KisIlluminantProfileTest::testSaving()
 {
+    KisIlluminantProfile *p = new KisIlluminantProfile("D659Test.ill");
+    p->save("D659Save.ill");
+    delete p;
+    p = new KisIlluminantProfile("D659Save.ill");
+
+    QVERIFY(p->valid() == true);
+    QVERIFY(p->name() == "D65 9 Test Profile");
+
+    QVERIFY(p->wavelenghts() == 9);
+    QVERIFY(p->Swhite() == 1.0);
+    QVERIFY(p->Kblack() == 10.0);
+    gsl_print(p->T(), "Transformation matrix: ");
+    gsl_print(p->P(), "Positions vector: ");
+    delete p;
 }
 
 QTEST_KDEMAIN(KisIlluminantProfileTest, NoGUI)

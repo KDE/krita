@@ -17,21 +17,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KS_COLORSPACE_TEST_H_
-#define KIS_KS_COLORSPACE_TEST_H_
+#ifndef MIXING_TEST_H_
+#define MIXING_TEST_H_
 
 #include <QtTest/QtTest>
 
-class KisKSColorSpaceTest : public QObject
+class MixingTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+    private slots:
 
-    void testConstructor();
-    void testToFromRgbA16();
-    void testMixing();
+        void testMixing();
 
 };
 
-#endif // KIS_KS_COLORSPACE_TEST_H_
+#endif // MIXING_TEST_H_

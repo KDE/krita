@@ -16,22 +16,3 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-#ifndef KIS_KS_COLORSPACE_TEST_H_
-#define KIS_KS_COLORSPACE_TEST_H_
-
-#include <QtTest/QtTest>
-
-class KisKSColorSpaceTest : public QObject
-{
-    Q_OBJECT
-
-private slots:
-
-    void testConstructor();
-    void testToFromRgbA16();
-    void testMixing();
-
-};
-
-#endif // KIS_KS_COLORSPACE_TEST_H_

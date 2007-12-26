@@ -27,7 +27,7 @@
 
 #include "kis_illuminant_profile.h"
 
-void KisKS3ColorSpaceTest::testConstructor()
+void KisKSColorSpaceTest::testConstructor()
 {
     KisIlluminantProfile *p1 = new KisIlluminantProfile("D653Test.ill");
     KisIlluminantProfile *p2 = new KisIlluminantProfile("D659Test.ill");
@@ -50,7 +50,7 @@ void print_vector(quint8 *v, const QString &text)
 
 #define N 9
 
-void KisKS3ColorSpaceTest::testToFromRgbA16()
+void KisKSColorSpaceTest::testToFromRgbA16()
 {
     KisIlluminantProfile *p = new KisIlluminantProfile("D65"+QString::number(N)+"Test.ill");
     KisKSColorSpace<N> *cs = new KisKSColorSpace<N>(p);
@@ -133,7 +133,7 @@ void KisKS3ColorSpaceTest::testToFromRgbA16()
     delete p;
 }
 
-void KisKS3ColorSpaceTest::testMixing()
+void KisKSColorSpaceTest::testMixing()
 {
     KisIlluminantProfile *p = new KisIlluminantProfile("D65"+QString::number(N)+"Test.ill");
     KisKSColorSpace<N> *cs = new KisKSColorSpace<N>(p);

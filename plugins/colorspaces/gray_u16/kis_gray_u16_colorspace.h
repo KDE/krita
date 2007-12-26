@@ -17,7 +17,6 @@
  */
 #ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
 #define KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
-#include <QColor>
 
 #include <klocale.h>
 #include "pigment_gray_u16_export.h"

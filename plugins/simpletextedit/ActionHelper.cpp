@@ -19,7 +19,6 @@
 
 #include "ActionHelper.h"
 #include <QAction>
-#include <QDebug>
 
 ActionHelper::ActionHelper(QObject *parent, QAction *original, QAction *shadow, bool partOfGroup)
     : QObject(parent), m_original(original), m_shadow(shadow),

@@ -24,8 +24,7 @@
 #include <KoViewConverter.h>
 //   #include <KoShapeControllerBase.h>
 //
-//   #include <QDockWidget>
-//   #include <QRectF>
+//   //   #include <QRectF>
 //
 //   class KoTool;
 //   class KoShape;

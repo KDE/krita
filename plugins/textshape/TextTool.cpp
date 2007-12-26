@@ -70,11 +70,9 @@
 #include <QBuffer>
 #include <QClipboard>
 #include <QKeyEvent>
-#include <QMenu>
 #include <QPointer>
 #include <QTabWidget>
 #include <QTextBlock>
-#include <QTextLayout>
 #include <QUndoCommand>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>

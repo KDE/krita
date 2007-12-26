@@ -23,6 +23,7 @@
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTextLayout>
+#include <QTextCharFormat>
 
 #include <KLocale>
 #include <KDebug>

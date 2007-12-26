@@ -47,9 +47,7 @@
 #include <QLabel>
 #include <QRadioButton>
 #include <QWidget>
-#include <QToolTip>
 #include <QGridLayout>
-#include <QDockWidget>
 #include <QButtonGroup>
 
 class StrokeDocker::Private

@@ -21,13 +21,12 @@
 #ifndef SPELLCHECK_H
 #define SPELLCHECK_H
 
-#include <QTextCursor>
 #include <QQueue>
 
 #include <KoTextEditingPlugin.h>
 
 #include <sonnet/speller.h>
-
+#include <QTextCharFormat>
 class QTextDocument;
 class BgSpellCheck;
 

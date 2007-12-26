@@ -26,7 +26,6 @@
 
 #include <klocale.h>
 
-#include <QDebug>
 
 KoEllipseShapeFactory::KoEllipseShapeFactory( QObject *parent )
 : KoShapeFactory( parent, KoEllipseShapeId, i18n( "A ellipse shape" ) )

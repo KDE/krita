@@ -24,7 +24,6 @@
 
 #include <klocale.h>
 
-#include <QDebug>
 
 KoSpiralShapeFactory::KoSpiralShapeFactory( QObject *parent )
 : KoShapeFactory( parent, KoSpiralShapeId, i18n( "A spiral shape" ) )

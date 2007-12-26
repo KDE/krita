@@ -22,7 +22,6 @@
 
 #include <QTextDocument>
 #include <QTextBlock>
-
 #include <KDebug>
 
 BgSpellCheck::BgSpellCheck(const Speller &speller, QObject *parent):

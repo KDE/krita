@@ -95,4 +95,3 @@ int KeySignatureDialog::endBar()
     return widget.endBar->value() - 1;
 }
 
-#include "KeySignatureDialog.moc"

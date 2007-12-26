@@ -19,7 +19,6 @@
 #ifndef SIMPLEENTRY_TOOL_FACTORY
 #define SIMPLEENTRY_TOOL_FACTORY
 
-#include <QStringList>
 
 #include <KoToolFactory.h>
 

@@ -24,7 +24,6 @@
 #include <sonnet/speller.h>
 
 #include <QTextCursor>
-#include <QTextBlock>
 
 using namespace Sonnet;
 

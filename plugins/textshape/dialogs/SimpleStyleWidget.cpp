@@ -27,7 +27,6 @@
 #include <KDebug>
 
 #include <QTextLayout>
-#include <QTextOption>
 
 SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     : QWidget(parent),

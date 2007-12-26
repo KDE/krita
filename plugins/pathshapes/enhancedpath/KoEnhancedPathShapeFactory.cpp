@@ -28,7 +28,6 @@
 #include <klocale.h>
 
 #include <QString>
-#include <QMap>
 
 #include <math.h>
 

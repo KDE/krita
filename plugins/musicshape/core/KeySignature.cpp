@@ -136,4 +136,3 @@ int KeySignature::cancel(int pitch) const
 
 } // namespace MusicCore
 
-#include "KeySignature.moc"

@@ -20,7 +20,6 @@
 #define INFOVARIABLE_H
 
 #include <KoVariable.h>
-#include <QString>
 
 /**
  * This is a KoVariable for document information.

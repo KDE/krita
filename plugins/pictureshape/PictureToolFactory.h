@@ -20,7 +20,6 @@
 #ifndef PICTURE_TOOL_FACTORY
 #define PICTURE_TOOL_FACTORY
 
-#include <QStringList>
 
 #include <KoToolFactory.h>
 

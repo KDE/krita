@@ -26,7 +26,6 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include <QPainter>
 #include <math.h>
 
 KoStarShape::KoStarShape()

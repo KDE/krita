@@ -22,7 +22,6 @@
 #include <KoVariable.h>
 
 #include <QString>
-#include <QVariant>
 #include <QDateTime>
 
 /**

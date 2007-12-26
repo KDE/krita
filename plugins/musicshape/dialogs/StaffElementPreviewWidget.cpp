@@ -25,7 +25,6 @@
 #include "../core/Clef.h"
 
 #include <QPainter>
-#include <QPen>
 #include <QBrush>
 
 using namespace MusicCore;

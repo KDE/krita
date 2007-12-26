@@ -19,7 +19,6 @@
 #ifndef MUSIC_TOOL_FACTORY
 #define MUSIC_TOOL_FACTORY
 
-#include <QStringList>
 
 #include <KoToolFactory.h>
 

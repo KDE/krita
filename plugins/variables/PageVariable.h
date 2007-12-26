@@ -23,7 +23,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 
-#include <QString>
 
 /**
  * This is a KoVariable for page numbers.

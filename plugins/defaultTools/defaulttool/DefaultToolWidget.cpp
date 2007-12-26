@@ -29,7 +29,6 @@
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 
-#include <QPainter>
 #include <QSize>
 #include <QtGui/QRadioButton>
 #include <QtGui/QLabel>

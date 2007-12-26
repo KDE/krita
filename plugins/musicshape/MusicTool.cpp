@@ -17,14 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
-#include <QGridLayout>
-#include <QToolButton>
 #include <KTabWidget>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <KFileDialog>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>

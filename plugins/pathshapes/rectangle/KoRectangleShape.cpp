@@ -27,8 +27,6 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
-#include <QDebug>
-#include <QPainter>
 
 
 KoRectangleShape::KoRectangleShape()

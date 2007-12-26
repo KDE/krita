@@ -17,10 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
-#include <QGridLayout>
-#include <QToolButton>
-#include <QTabWidget>
-#include <QPair>
 #include <QMenu>
 #include <QBuffer>
 #include <QXmlStreamWriter>

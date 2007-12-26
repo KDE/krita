@@ -22,7 +22,6 @@
 
 #include <KoToolFactory.h>
 
-#include <QStringList>
 
 class DivineProportionToolFactory : public KoToolFactory {
     Q_OBJECT

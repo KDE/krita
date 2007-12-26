@@ -28,7 +28,6 @@
 #include <QTextList>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
-
 using namespace Lists;
 
 QString Lists::intToRoman( int n ) {

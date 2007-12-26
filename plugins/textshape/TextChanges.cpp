@@ -20,7 +20,6 @@
 #include "TextChanges.h"
 #include "TextChange.h"
 
-#include <QDebug>
 
 TextChanges::TextChanges()
     : m_root(0)

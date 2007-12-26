@@ -19,7 +19,6 @@
 #ifndef MUSIC_SHAPE_FACTORY
 #define MUSIC_SHAPE_FACTORY
 
-#include <QStringList>
 
 #include <KoShapeFactory.h>
 

@@ -19,10 +19,10 @@
 
 #include "AutocorrectConfigDialog.h"
 
-#include <QHeaderView>
 #include <KLocale>
 #include <KCharSelect>
 
+#include <QHeaderView>
 // #include <KoFontDia.h>
 
 AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)

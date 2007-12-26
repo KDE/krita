@@ -27,7 +27,6 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
-#include <QPainter>
 #include <math.h>
 
 KoEllipseShape::KoEllipseShape()

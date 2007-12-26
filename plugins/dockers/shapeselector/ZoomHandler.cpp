@@ -36,16 +36,10 @@
 //   #include <KoCanvasController.h>
 //   #include <KoProperties.h>
 //
-//   #include <QKeyEvent>
-//   #include <QPainter>
-//   #include <QMouseEvent>
-//   #include <QHelpEvent>
-//   #include <QPointF>
-//   #include <QToolTip>
-//   #include <QTimer>
-//   #include <QPainterPath>
-//   #include <QUndoCommand>
-//
+//   //   #include <QPainter>
+//   //   //   #include <QPointF>
+//   //   //   #include <QPainterPath>
+//   //
 //   #include <kdebug.h>
 //   #include <kicon.h>
 //   #include <klocale.h>

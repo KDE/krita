@@ -33,8 +33,6 @@
 #include <KoCreateShapesTool.h>
 #include <KoCanvasController.h>
 
-#include <QPainter>
-#include <QToolTip>
 #include <QTimer>
 #include <klocale.h>
 

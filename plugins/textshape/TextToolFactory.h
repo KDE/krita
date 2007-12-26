@@ -22,7 +22,6 @@
 
 #include <KoToolFactory.h>
 
-#include <QStringList>
 
 class TextToolFactory : public KoToolFactory {
     Q_OBJECT

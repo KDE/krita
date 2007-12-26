@@ -260,7 +260,9 @@ void KisKSColorSpace<_N_>::RGBToReflectance() const
     for (int i = 1; i < n; i++) {
         int prev = (int)gsl_vector_get(m_profile->P(), i-1);
         int curr = (int)gsl_vector_get(m_profile->P(), i);
+//         int prev = i-1, curr = i;
         gsl_matrix_set(data->Q, prev, prev, gsl_matrix_get(data->Q,prev,prev)+1.0);
+//         gsl_matrix_set(data->Q, prev, prev,  2.0);
         gsl_matrix_set(data->Q, curr, curr,  1.0);
         gsl_matrix_set(data->Q, prev, curr, -1.0);
         gsl_matrix_set(data->Q, curr, prev, -1.0);

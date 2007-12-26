@@ -21,8 +21,6 @@
 
 #include "channel_converter.h"
 
-#include <QDebug>
-
 ChannelConverter::ChannelConverter(float Kblack, float Sblack)
 : Kb(Kblack), Sb(Sblack)
 {

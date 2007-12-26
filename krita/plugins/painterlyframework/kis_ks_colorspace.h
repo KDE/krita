@@ -98,8 +98,6 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
 //            IMPLEMENTATION              //
 ////////////////////////////////////////////
 
-#define NORM 65535.0f
-
 template<int _N_>
 KisKSColorSpace<_N_>::KisKSColorSpace(KoColorProfile *p, const QString &id, const QString &name)
 : parent(id, name, KoColorSpaceRegistry::instance()->rgb16("")), m_rgbvec(0), m_refvec(0)
@@ -195,7 +193,7 @@ void KisKSColorSpace<_N_>::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint3
     for ( ; nPixels > 0; nPixels-- ) {
         // We need linear RGB values.
         for (int i = 0; i < 3; i++) {
-            m_converter.sRGBToRGB((float)srcU16[2-i]/NORM, c);
+            m_converter.sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(srcU16[2-i]), c);
             gsl_vector_set(m_rgbvec, i, (double)c);
         }
 
@@ -231,7 +229,7 @@ void KisKSColorSpace<_N_>::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 
 
         for (int i = 0; i < 3; i++) {
             m_converter.RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), c);
-            dstU16[2-i] = (quint16)(c * NORM);
+            dstU16[2-i] = KoColorSpaceMaths<float,quint16>::scaleToA(c);
         }
         dstU16[3] = KoColorSpaceMaths<float,quint16>::scaleToA(KisKSColorSpaceTrait<_N_>::alpha(src));
 
@@ -324,8 +322,6 @@ void KisKSColorSpace<_N_>::RGBToReflectance() const
     gsl_matrix_free(data->Q);
     delete data;
 }
-
-#undef NORM
 
 typedef KisKSColorSpace<9>  KisKS9ColorSpace;
 typedef KisKSColorSpace<12> KisKS12ColorSpace;

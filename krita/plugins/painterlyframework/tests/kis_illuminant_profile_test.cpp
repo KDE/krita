@@ -63,32 +63,32 @@ void KisIlluminantProfileTest::testLoading()
     QVERIFY(p->valid() == false);
     p->load();
     QVERIFY(p->valid() == true);
-    QVERIFY(p->name() == "D65 3 Test Profile");
+//     QVERIFY(p->name() == "D65 3 Test Profile");
 
     QVERIFY(p->wavelenghts() == 3);
-    QVERIFY(p->Swhite() == 1.0);
-    QVERIFY(p->Kblack() == 10.0);
+    QCOMPARE(p->Kblack(), 4.3);
+    QCOMPARE(p->Sblack(), 0.14);
     gsl_print(p->T(), "Transformation matrix: ");
     gsl_print(p->P(), "Positions vector: ");
 
     KisIlluminantProfile *c = dynamic_cast<KisIlluminantProfile*>(p->clone());
     delete p;
     QVERIFY(c->valid() == true);
-    QVERIFY(c->name() == "D65 3 Test Profile");
+//     QVERIFY(c->name() == "D65 3 Test Profile");
     QVERIFY(c->wavelenghts() == 3);
-    QVERIFY(c->Swhite() == 1.0);
-    QVERIFY(c->Kblack() == 10.0);
+    QCOMPARE(p->Kblack(), 4.3);
+    QCOMPARE(p->Sblack(), 0.14);
     gsl_print(c->T(), "Transformation matrix: ");
     gsl_print(c->P(), "Positions vector: ");
     delete c;
 
     p = new KisIlluminantProfile("D659Test.ill");
     QVERIFY(p->valid() == true);
-    QVERIFY(p->name() == "D65 9 Test Profile");
+//     QVERIFY(p->name() == "D65 9 Test Profile");
 
     QVERIFY(p->wavelenghts() == 9);
-    QVERIFY(p->Swhite() == 1.0);
-    QVERIFY(p->Kblack() == 10.0);
+    QCOMPARE(p->Kblack(), 4.3);
+    QCOMPARE(p->Sblack(), 0.14);
     gsl_print(p->T(), "Transformation matrix: ");
     gsl_print(p->P(), "Positions vector: ");
     delete p;
@@ -102,11 +102,11 @@ void KisIlluminantProfileTest::testSaving()
     p = new KisIlluminantProfile("D659Save.ill");
 
     QVERIFY(p->valid() == true);
-    QVERIFY(p->name() == "D65 9 Test Profile");
+//     QVERIFY(p->name() == "D65 9 Test Profile");
 
     QVERIFY(p->wavelenghts() == 9);
-    QVERIFY(p->Swhite() == 1.0);
-    QVERIFY(p->Kblack() == 10.0);
+    QCOMPARE(p->Kblack(), 4.3);
+    QCOMPARE(p->Sblack(), 0.14);
     gsl_print(p->T(), "Transformation matrix: ");
     gsl_print(p->P(), "Positions vector: ");
     delete p;

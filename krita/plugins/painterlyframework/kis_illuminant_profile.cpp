@@ -46,8 +46,8 @@ KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &profile)
         m_P = gsl_vector_alloc(profile.m_P->size);
         gsl_matrix_memcpy(m_T, profile.m_T);
         gsl_vector_memcpy(m_P, profile.m_P);
-        S_w = profile.S_w;
-        K_b = profile.K_b;
+        Kb = profile.Kb;
+        Sb = profile.Sb;
     }
 }
 
@@ -110,12 +110,12 @@ bool KisIlluminantProfile::load() // TODO Info
         }
     }
     {
-        // Scattering of white lead and absorption of black lead
+        // Absorption and scattering of standard black
         double c;
         data >> c;
-        S_w = (float)c;
+        Kb = c;
         data >> c;
-        K_b = (float)c;
+        Sb = c;
     }
 
     m_valid = true;
@@ -142,7 +142,7 @@ bool KisIlluminantProfile::save(const QString &fileName)
     for (int i = 0; i < (int)m_P->size; i++)
         data << (int)gsl_vector_get(m_P, i);
 
-    data << S_w << K_b;
+    data << Kb << Sb;
 
     return true;
 }

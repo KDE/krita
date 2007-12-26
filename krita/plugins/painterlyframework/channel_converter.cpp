@@ -23,27 +23,21 @@
 
 #include <QDebug>
 
-ChannelConverter::ChannelConverter(float whiteS, float blackK)
-: Sw(whiteS), Kb(blackK)
+ChannelConverter::ChannelConverter(float Kblack, float Sblack)
+: Kb(Kblack), Sb(Sblack)
 {
-    float Qw0, Qb1, alpha1, alpha2;
+    float A, q1, q2, k1, k2;
+    w0 = 1.0 + Kb - sqrt( Kb*Kb + 2.0*Kb );
+    A = 1.0 / ( PHI(W(0.5)) - PHI(0.5) );
 
-    Qw0 = Kb / Sw;
-    Qb1 = Kb / Sw;
+    q1 = 0.25 * ( 1.0 + Kb/A ) / ( 1.0 + 0.25*Sb/A );
+    q2 = Kb / ( 1.0 + Sb );
 
-    w0 = 1.0 + Qw0 - sqrt( Qw0*Qw0 + 2.0*Qw0 );
-    wi = 1.0 - w0;
-    b1 = 1.0 + Qb1 - sqrt( Qb1*Qb1 + 2.0*Qb1 );
+    k1 = (1.0 + q1 - sqrt( q1*q1 + 2.0*q1 )) * 2.0;
+    k2 = (1.0 + q2 - sqrt( q2*q2 + 2.0*q2 ));
 
-    alpha1 = Sw / ( PHI(W(0.5)) - PHI(0.5) );
-    alpha2 = (Kb*PSI(0.5)) / (PSI(B(0.5))-PSI(0.5));
-
-    Ke = alpha1/ alpha2;
-
-//     b1 = 5.25797;
-//     Ke = 0.17241;
-//     w0 = 0.045549;
-//     wi = 1.0 - w0;
+    b1 = 2.0*k1 - 1.0*k2;
+    b2 = 1.0*k2 - 1.0*k1;
 }
 
 ChannelConverter::~ChannelConverter()
@@ -69,11 +63,11 @@ void ChannelConverter::KSToReflectance(float K, float S, float &R) const
 void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
 {
     if ( R <= 0.5 ) {
-        K = Sw / (PHI(W(R))-PHI(R));
+        K = 1.0 / (PHI(W(R))-PHI(R));
         S = K * PHI(R);
     }
     if ( R > 0.5 ) {
-        S = Ke*Kb / (PSI(B(R))-PSI(R));
+        S = ( Kb - PSI(B(R))*Sb ) / ( PSI(B(R)) - PSI(R) );
         K = S * PSI(R);
     }
 }

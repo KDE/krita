@@ -33,16 +33,15 @@ class ChannelConverter {
         void sRGBToRGB(float sC, float &C) const;
 
     private:
-        float Sw, Kb; // TODO CHANGE
-        float w0, wi; // For whitening
-        float b1;     // For blackening
-        float Ke;     // To make S and K continuous in 0.5
+        float Kb, Sb;
+        float w0; // For whitening
+        float b1, b2; // For blackening and making K and S continuous in 0.5
 
         inline float PHI(float R) const { return (2.0*R)/((1.0-R)*(1.0-R)); }
         inline float PSI(float R) const { return  1.0/PHI(R); }
 
-        inline float W(float R) const { return wi*R + w0; }
-        inline float B(float R) const { return b1*R; }
+        inline float W(float R) const { return (1.0-w0)*R + w0; }
+        inline float B(float R) const { return (2.0*b2*R*R + b1*R); }
 };
 
 #endif // CHANNEL_CONVERTER_H_

@@ -106,7 +106,7 @@ KisKSColorSpace<_N_>::KisKSColorSpace(KoColorProfile *p, const QString &id, cons
         return;
 
     m_profile = dynamic_cast<KisIlluminantProfile *>(p);
-    m_converter = ChannelConverter(m_profile->Swhite(), m_profile->Kblack());
+    m_converter = ChannelConverter(m_profile->Kblack(), m_profile->Sblack());
 
     m_rgbvec = gsl_vector_alloc(3);
     m_refvec = gsl_vector_alloc(_N_);

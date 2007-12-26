@@ -27,7 +27,7 @@
 
 void ChannelConverterTest::testKSReflectance()
 {
-    ChannelConverter c(1.0, 10.0);
+    ChannelConverter c(4.3, 0.14);
     float K, S, R;
 /*
     // reflectanceToKS
@@ -95,7 +95,7 @@ void ChannelConverterTest::testKSReflectance()
 
 void ChannelConverterTest::testRGBsRGB()
 {
-    ChannelConverter c(1.0, 10.0);
+    ChannelConverter c(4.3, 0.14);
     float C, sC;
 
     // RGBTosRGB

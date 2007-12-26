@@ -47,14 +47,14 @@ class KisIlluminantProfile : public KoColorProfile {
         gsl_matrix *T() const { return m_T; }
         gsl_vector *P() const { return m_P; }
         int wavelenghts() const { return m_P->size; }
-        double Swhite() const { return S_w; } // TODO CHANGE
-        double Kblack() const { return K_b; } // TODO CHANGE
+        double Kblack() const { return Kb; }
+        double Sblack() const { return Sb; }
 
     private:
         gsl_matrix *m_T;
         gsl_vector *m_P;
         bool m_valid;
-        double S_w, K_b; // TODO CHANGE
+        double Kb, Sb;
 
 };
 

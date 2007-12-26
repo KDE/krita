@@ -189,11 +189,11 @@ void KoDocumentInfoDlg::initAboutTab()
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    QPixmap p = KIconLoader::global()->loadIcon( "personal", KIconLoader::Desktop, 48 );
+    QPixmap p = KIconLoader::global()->loadIcon( "user-identity", KIconLoader::Desktop, 48 );
     d->m_authorUi->lblAuthor->setPixmap( p );
-    p = KIconLoader::global()->loadIcon( "kaddressbook", KIconLoader::Small );
+    p = KIconLoader::global()->loadIcon( "office-address-book", KIconLoader::Small );
     d->m_authorUi->pbLoadKABC->setIcon( QIcon( p ) );
-    p= KIconLoader::global()->loadIcon( "draw-eraser", KIconLoader::Small );
+    p= KIconLoader::global()->loadIcon( "edit-delete", KIconLoader::Small );
     d->m_authorUi->pbDelete->setIcon( QIcon( p ) );
 
     d->m_authorUi->leFullName->setText( d->m_info->authorInfo( "creator" ) );

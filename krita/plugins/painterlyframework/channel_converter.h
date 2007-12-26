@@ -33,7 +33,7 @@ class ChannelConverter {
         void sRGBToRGB(float sC, float &C) const;
 
     private:
-        float Sw, Kb;
+        float Sw, Kb; // TODO CHANGE
         float w0, wi; // For whitening
         float b1;     // For blackening
         float Ke;     // To make S and K continuous in 0.5

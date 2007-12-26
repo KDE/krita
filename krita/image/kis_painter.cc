@@ -194,6 +194,7 @@ QRegion KisPainter::dirtyRegion()
 
 QRegion KisPainter::addDirtyRect(QRect r)
 {
+    Q_ASSERT(r.width() >= 0 || r.height() >= 0);
     if ( m_useBoundingDirtyRect ) {
         m_dirtyRect = m_dirtyRect.united( r );
         return QRegion( m_dirtyRect );

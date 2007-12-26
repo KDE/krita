@@ -219,7 +219,8 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         dist -= spacing;
     }
 
-    d->painter->addDirtyRect( QRect( pi1.pos().toPoint(), pi2.pos().toPoint() ) );
+    QRect r( pi1.pos().toPoint(), pi2.pos().toPoint() );
+    d->painter->addDirtyRect( r.normalized() );
 
     if (dist > 0)
         return dist;

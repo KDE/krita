@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SAVE_VISITOR_H_
-#define KIS_SAVE_VISITOR_H_
+#ifndef KIS_KRA_SAVE_VISITOR_H_
+#define KIS_KRA_SAVE_VISITOR_H_
 
 #include <QRect>
 #include "kis_types.h"
@@ -26,9 +26,9 @@
 
 class KoStore;
 
-class KisSaveVisitor : public KisNodeVisitor {
+class KisKraSaveVisitior : public KisNodeVisitor {
 public:
-    KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, QString name);
+    KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &count, QString name);
 
     using KisNodeVisitor::visit;
     
@@ -52,5 +52,5 @@ private:
     QString m_name;
 };
 
-#endif // KIS_SAVE_VISITOR_H_
+#endif // KIS_KRA_SAVE_VISITOR_H_
 

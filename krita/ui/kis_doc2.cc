@@ -88,7 +88,7 @@
 #include "kis_clipboard.h"
 #include "kis_config.h"
 #include "kis_custom_image_widget.h"
-#include "kis_save_visitor.h"
+#include "kis_kra_save_visitor.h"
 #include "kis_savexml_visitor.h"
 #include "kis_oasis_load_visitor.h"
 #include "kis_oasis_save_data_visitor.h"
@@ -378,7 +378,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     // Save the layers data
     quint32 count=0;
-    KisSaveVisitor visitor( img, store, count, documentInfo()->aboutInfo("title"));
+    KisKraSaveVisitior visitor( img, store, count, documentInfo()->aboutInfo("title"));
 
     if(external)
         visitor.setExternalUri(uri);

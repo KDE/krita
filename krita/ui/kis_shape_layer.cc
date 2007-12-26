@@ -27,13 +27,27 @@
 #include <QString>
 #include <QList>
 
+#include <ktemporaryfile.h>
 #include <kicon.h>
 
-#include <KoZoomHandler.h>
-#include <KoShapeContainer.h>
-#include <KoViewConverter.h>
-#include <KoShapeManager.h>
 #include <KoCompositeOp.h>
+#include <KoDocument.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoOasisLoadingContext.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfWriteStore.h>
+#include <KoPageLayout.h>
+#include <KoShapeContainer.h>
+#include <KoShapeLayer.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeManager.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeSavingContext.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoViewConverter.h>
+#include <KoXmlWriter.h>
+#include <KoShapeContainer.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -122,16 +136,6 @@ KisPaintDeviceSP KisShapeLayer::projection() const
     return m_d->projection;
 }
 
-bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
-{
-#ifdef __GNUC__
-    #warning "Implement KisShapeLayer::saveToXML"
-#endif
-    Q_UNUSED(doc);
-    Q_UNUSED(elem);
-    return false;
-}
-
 qint32 KisShapeLayer::x() const
 {
     return m_d->x;
@@ -176,6 +180,102 @@ bool KisShapeLayer::accept(KisNodeVisitor& visitor)
 KoShapeManager *KisShapeLayer::shapeManager() const
 {
     return m_d->canvas->shapeManager();
+}
+
+bool KisShapeLayer::saveOdf(KoStore * store) const
+{
+
+    QList<KoShape*> shapes = iterator();
+    qSort( shapes.begin(), shapes.end(), KoShape::compareShapeZIndex );
+
+    foreach(KoShape* shape, shapes ) {
+        kDebug() << "shape: " << shape->name();
+    }
+    
+    store->disallowNameExpansion();
+    KoOdfWriteStore odfStore( store );
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter( "application/vnd.oasis.opendocument.graphics" );
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
+    
+    if( !store->open( "content.xml" ) )
+        return false;
+    
+    KoStoreDevice storeDev( store );
+    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter( &storeDev, "office:document-content" );
+    
+    // for office:master-styles
+    KTemporaryFile masterStyles;
+    masterStyles.open();
+    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
+    
+    KoPageLayout page;
+    page.format = KoPageFormat::defaultFormat();
+    page.orientation = KoPageFormat::Portrait;
+    // XXX: this is in pixels -- should be in points?
+    page.width = image()->width();
+    page.height = image()->height();
+    
+    KoGenStyles mainStyles;
+    KoGenStyle pageLayout = page.saveOasis();
+    QString layoutName = mainStyles.lookup( pageLayout, "PL" );
+    KoGenStyle masterPage( KoGenStyle::StyleMaster );
+    masterPage.addAttribute( "style:page-layout-name", layoutName );
+    mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
+    
+    KTemporaryFile contentTmpFile;
+    contentTmpFile.open();
+    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
+    
+    contentTmpWriter.startElement( "office:body" );
+    contentTmpWriter.startElement( "office:drawing" );
+
+    KoShapeSavingContext shapeContext( contentTmpWriter, mainStyles, documentContext.embeddedSaver );
+
+    shapeContext.xmlWriter().startElement( "draw:page" );
+    shapeContext.xmlWriter().addAttribute( "draw:name", "" );
+    shapeContext.xmlWriter().addAttribute( "draw:id", "page1");
+    shapeContext.xmlWriter().addAttribute( "draw:master-page-name", "Default");
+
+    saveOdf(shapeContext);
+
+    shapeContext.xmlWriter().endElement(); // draw:page
+
+    contentTmpWriter.endElement(); // office:drawing
+    contentTmpWriter.endElement(); // office:body
+
+    mainStyles.saveOdfAutomaticStyles( docWriter, false );
+
+    // And now we can copy over the contents from the tempfile to the real one
+    contentTmpFile.seek(0);
+    docWriter->addCompleteElement( &contentTmpFile );
+
+    docWriter->endElement(); // Root element
+    docWriter->endDocument();
+    delete docWriter;
+
+    if( !store->close() )
+        return false;
+
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+
+    if ( ! mainStyles.saveOdfStylesDotXml( store, manifestWriter ) ) {
+        return false;
+    }
+   
+   manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+    if( ! shapeContext.saveImages( store, manifestWriter ) )
+        return false;
+
+    // Write out manifest file
+    if ( !odfStore.closeManifestWriter() )
+    {
+        kDebug(41001) << "closing manifestWriter failed";
+        return false;
+    }
+
+    return true;
 }
 
 #include "kis_shape_layer.moc"

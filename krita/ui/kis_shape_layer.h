@@ -32,7 +32,7 @@ class QRect;
 class QDomDocument;
 class QDomElement;
 class QString;
-
+class KoStore;
 class KoViewConverter;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
@@ -89,8 +89,6 @@ public:
         return 0;
     }
 
-    bool saveToXML(QDomDocument doc, QDomElement elem);
-
     qint32 x() const;
     void setX(qint32);
 
@@ -106,6 +104,10 @@ public:
     KoShapeManager *shapeManager() const;
 
 
+    using KoShapeLayer::saveOdf;
+    
+    bool saveOdf(KoStore * store) const;
+    
 private:
 
     class Private;

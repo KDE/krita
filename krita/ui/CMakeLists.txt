@@ -89,7 +89,7 @@ set(kritaui_LIB_SRCS
     kis_resource_mediator.cc
     kis_resource_provider.cc
     kis_resourceserverprovider.cpp
-    kis_save_visitor.cc
+    kis_kra_save_visitor.cpp
     kis_savexml_visitor.cc
     kis_selection_manager.cc
     kis_selection_options.cc

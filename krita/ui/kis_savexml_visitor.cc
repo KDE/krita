@@ -25,6 +25,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
+#include "kis_shape_layer.h"
 
 KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root) :
     KisNodeVisitor(),
@@ -35,9 +36,24 @@ KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quin
     m_elem = element;
 }
 
-bool KisSaveXmlVisitor::visit( KisExternalLayer * )
+bool KisSaveXmlVisitor::visit( KisExternalLayer * layer )
 {
-    return true;
+    if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+        QDomElement embeddedElement = m_doc.createElement("layer");
+        embeddedElement.setAttribute("name", shapeLayer->KisBaseNode::name());
+        // x and y are loaded from the shapes embedded in the layer
+        embeddedElement.setAttribute("x", shapeLayer->x());
+        embeddedElement.setAttribute("y", shapeLayer->y());
+        embeddedElement.setAttribute("opacity", shapeLayer->opacity());
+        embeddedElement.setAttribute("compositeop", shapeLayer->compositeOp()->id());
+        embeddedElement.setAttribute("visible", shapeLayer->visible());
+        embeddedElement.setAttribute("locked", shapeLayer->locked());
+        embeddedElement.setAttribute("layertype", "shapelayer");
+        embeddedElement.setAttribute("filename", QString("layer%1").arg(m_count));
+        m_elem.appendChild(embeddedElement);
+        m_count++;
+        return true;
+    }
 }
 
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)

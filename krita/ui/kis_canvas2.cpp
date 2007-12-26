@@ -123,6 +123,10 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     KoCanvasController *controller = canvasController();
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
+        // Avoids jumping and redrawing when changing zoom means the image fits in the area completely
+        controller->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        controller->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        
         controller->changeCanvasWidget(widget);
     }
 }

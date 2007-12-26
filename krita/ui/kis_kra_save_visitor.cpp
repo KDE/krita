@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_save_visitor.h>
+#include <kis_kra_save_visitor.h>
 
 #include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
@@ -30,8 +30,10 @@
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
+#include "kis_shape_layer.h"
 
-KisSaveVisitor::KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, QString name) :
+
+KisKraSaveVisitior::KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &count, QString name) :
     KisNodeVisitor(),
     m_count(count)
 {
@@ -41,18 +43,27 @@ KisSaveVisitor::KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, Q
     m_name = name;
 }
 
-void KisSaveVisitor::setExternalUri(QString &uri)
+void KisKraSaveVisitior::setExternalUri(QString &uri)
 {
     m_external = true;
     m_uri = uri;
 }
 
-bool KisSaveVisitor::visit( KisExternalLayer * )
+bool KisKraSaveVisitior::visit( KisExternalLayer * layer )
     {
-        return true;
+        bool result = false;
+        if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+            
+            QString location = m_external ? QString::null : m_uri;
+            m_store->pushDirectory();
+            m_store->enterDirectory( m_name + QString("/shapelayers/layer%1").arg(m_count) );
+            result = shapeLayer->saveOdf(m_store);
+            m_store->popDirectory();
+        }
+        return result;
     }
 
-bool KisSaveVisitor::visit(KisPaintLayer *layer)
+bool KisKraSaveVisitior::visit(KisPaintLayer *layer)
 {
     //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
@@ -117,12 +128,12 @@ bool KisSaveVisitor::visit(KisPaintLayer *layer)
     return true;
 }
 
-bool KisSaveVisitor::visit(KisGroupLayer *layer)
+bool KisKraSaveVisitior::visit(KisGroupLayer *layer)
 {
     return visitAllInverse( layer );
 }
 
-bool KisSaveVisitor::visit(KisAdjustmentLayer* layer)
+bool KisKraSaveVisitior::visit(KisAdjustmentLayer* layer)
 {
 
     if (layer->selection()) {

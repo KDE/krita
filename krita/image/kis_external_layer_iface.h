@@ -42,8 +42,6 @@ public:
     KisExternalLayer(KisImageSP img, const QString &name, quint8 opacity)
         : KisLayer(img, name, opacity) {}
     virtual QIcon icon() const { return KIcon("gear"); }
-    virtual bool saveToXML(QDomDocument doc, QDomElement elem) = 0;
-
 };
 
 #endif // KIS_EXTERNAL_IFACE_LAYER_IFACE_

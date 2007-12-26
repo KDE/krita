@@ -33,10 +33,10 @@ kde4_add_unit_test(ChannelConverterTest
 target_link_libraries(ChannelConverterTest
                       ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
 
-########### KisKS3ColorSpace Test ###############
+########### KisKSColorSpace Test ###############
 
-set(kis_ks3_colorspace_test_SRCS
-    kis_ks3_colorspace_test.cpp
+set(kis_ks_colorspace_test_SRCS
+    kis_ks_colorspace_test.cpp
     ../kis_illuminant_profile.cpp
     ../channel_converter.cpp
     ../kis_ks3_colorspace.cpp
@@ -44,9 +44,9 @@ set(kis_ks3_colorspace_test_SRCS
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
 
-kde4_add_unit_test(KisKS3ColorSpaceTest
-                   TESTNAME krita-plugins-KisKS3ColorSpaceTest
-                   ${kis_ks3_colorspace_test_SRCS})
+kde4_add_unit_test(KisKSColorSpaceTest
+                   TESTNAME krita-plugins-KisKSColorSpaceTest
+                   ${kis_ks_colorspace_test_SRCS})
 
-target_link_libraries(KisKS3ColorSpaceTest
+target_link_libraries(KisKSColorSpaceTest
        ${KDE4_KDEUI_LIBS} komain kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})

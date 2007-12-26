@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KS3_COLORSPACE_TEST_H_
-#define KIS_KS3_COLORSPACE_TEST_H_
+#ifndef KIS_KS_COLORSPACE_TEST_H_
+#define KIS_KS_COLORSPACE_TEST_H_
 
 #include <QtTest/QtTest>
 

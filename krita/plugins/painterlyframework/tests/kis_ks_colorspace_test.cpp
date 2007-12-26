@@ -21,9 +21,9 @@
 
 #include <cstring>
 
-#include "kis_ks3_colorspace_test.h"
-#include "kis_ks3_colorspace.h"
+#include "kis_ks_colorspace_test.h"
 #include "kis_ks_colorspace.h"
+#include "kis_ks3_colorspace.h"
 
 #include "kis_illuminant_profile.h"
 
@@ -193,4 +193,4 @@ void KisKS3ColorSpaceTest::testMixing()
 }
 
 QTEST_KDEMAIN(KisKS3ColorSpaceTest, NoGUI)
-#include "kis_ks3_colorspace_test.moc"
+#include "kis_ks_colorspace_test.moc"

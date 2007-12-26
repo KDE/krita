@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,6 +70,55 @@ namespace {
     // Needed, or the GIMP won't open it!
     quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
 }
+
+KisBrush::ColoringInformation::~ColoringInformation()
+{
+}
+
+KisBrush::PlainColoringInformation::PlainColoringInformation(const quint8* color) : m_color(color)
+{
+}
+
+KisBrush::PlainColoringInformation::~PlainColoringInformation()
+{
+}
+
+const quint8* KisBrush::PlainColoringInformation::color() const 
+{
+    return m_color;
+}
+
+void KisBrush::PlainColoringInformation::nextColumn()
+{
+}
+
+void KisBrush::PlainColoringInformation::nextRow()
+{
+}
+
+KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width) : m_source(source), m_iterator( new KisHLineConstIteratorPixel( m_source->createHLineConstIterator(0,0, width) ) )
+{
+}
+
+KisBrush::PaintDeviceColoringInformation::~PaintDeviceColoringInformation()
+{
+    delete m_iterator;
+}
+
+const quint8* KisBrush::PaintDeviceColoringInformation::color() const
+{
+    return m_iterator->oldRawData();
+}
+
+void KisBrush::PaintDeviceColoringInformation::nextColumn()
+{
+    ++(*m_iterator);
+}
+void KisBrush::PaintDeviceColoringInformation::nextRow()
+{
+   m_iterator->nextRow();
+}
+
 
 struct KisBrush::Private {
     QByteArray data;
@@ -404,7 +454,7 @@ QImage KisBrush::img() const
     return image;
 }
 
-void KisBrush::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
+void KisBrush::generateMask(KisPaintDeviceSP dst, ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info_, double subPixelX, double subPixelY) const
 {
     Q_UNUSED(angle);
     Q_UNUSED(info_);
@@ -449,6 +499,8 @@ void KisBrush::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double a
     
     const KoColorSpace* cs = dst->colorSpace();
     
+    quint32 pixelSize = cs->pixelSize();
+    
     quint8 * maskData = outputMask->data();
     qint32 maskWidth = outputMask->width();
     qint32 maskHeight = outputMask->height();
@@ -459,16 +511,40 @@ void KisBrush::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double a
     {
         while(! hiter.isDone())
         {
-            int hiterConseq = hiter.nConseqHPixels();
+            int hiterConseq = 1; //hiter.nConseqHPixels();
             cs->setAlpha( hiter.rawData(), OPACITY_OPAQUE, hiterConseq );
+            if(src)
+            {
+                memcpy( hiter.rawData(), src->color(), pixelSize);
+                src->nextColumn();
+            }
             cs->applyAlphaU8Mask( hiter.rawData(), maskData, hiterConseq);
             hiter += hiterConseq;
             maskData += hiterConseq;
         }
+        if(src) src->nextRow();
         hiter.nextRow();
     }
     
 }
+
+void KisBrush::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info , double subPixelX, double subPixelY ) const
+{
+    generateMask(dst, 0, scaleX, scaleY, angle, info, subPixelX, subPixelY );
+}
+
+void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY ) const
+{
+    PlainColoringInformation pci( color.data() );
+    generateMask(dst, &pci, scaleX, scaleY, angle, info, subPixelX, subPixelY );
+}
+
+void KisBrush::mask(KisPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY ) const
+{
+    PaintDeviceColoringInformation pdci( src, maskWidth(scaleX, angle) );
+    generateMask(dst, &pdci, scaleX, scaleY, angle, info, subPixelX, subPixelY );
+}
+
 
 KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
@@ -1291,7 +1367,7 @@ void KisBrush::generateBoundary() {
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
-        mask(dev, 1.0, 1.0, 0.0, KisPaintInformation() );
+        mask(dev, KoColor( dev->dataManager()->defaultPixel(), cs) , 1.0, 1.0, 0.0, KisPaintInformation() );
 #if 0
         KisQImagemaskSP amask = mask(KisPaintInformation());
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA",0);

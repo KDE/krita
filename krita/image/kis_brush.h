@@ -54,7 +54,35 @@ class KRITAIMAGE_EXPORT KisBrush : public KoResource {
   class ScaledBrush;
 
     Q_OBJECT
-
+protected:
+    class ColoringInformation {
+    public:
+        virtual ~ColoringInformation();
+        virtual const quint8* color() const = 0;
+        virtual void nextColumn() = 0;
+        virtual void nextRow() = 0;
+    };
+    class PlainColoringInformation : public ColoringInformation {
+    public:
+        PlainColoringInformation(const quint8* color);
+        virtual ~PlainColoringInformation();
+        virtual const quint8* color() const ;
+        virtual void nextColumn();
+        virtual void nextRow();
+    private:
+        const quint8* m_color;
+    };
+    class PaintDeviceColoringInformation : public ColoringInformation {
+    public:
+        PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width);
+        virtual ~PaintDeviceColoringInformation();
+        virtual const quint8* color() const ;
+        virtual void nextColumn();
+        virtual void nextRow();
+    private:
+        const KisPaintDeviceSP m_source;
+        KisHLineConstIteratorPixel* m_iterator;
+    };
 public:
 
     /// Construct brush to load filename later as brush
@@ -89,6 +117,7 @@ public:
      * 
      * @param dst the destination that will be draw on the image, and this function
      *            will edit its alpha channel
+     * @param src coloring information that will be copied on the dab, it can be null
      * @param scale a scale applied on the alpha mask
      * @param angle a rotation applied on the alpha mask
      * @param info the painting information (this is only and should only be used by
@@ -100,7 +129,10 @@ public:
      * @return a mask computed from the grey-level values of the
      * pixels in the brush.
      */
-    virtual void mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    virtual void generateMask(KisPaintDeviceSP dst, ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    void mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    void mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    void mask(KisPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
     virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 

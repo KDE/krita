@@ -121,8 +121,7 @@ public:
     /**
        @return the next mask in the pipe.
     */
-    virtual void mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
-    
+    virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
     virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 
     virtual bool useColorAsMask() const;

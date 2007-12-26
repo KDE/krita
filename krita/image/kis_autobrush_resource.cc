@@ -132,12 +132,13 @@ KisAutobrushResource::~KisAutobrushResource()
     delete d;
 }
 
-void KisAutobrushResource::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+void KisAutobrushResource::generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
     Q_UNUSED(info);
 
         // Generate the paint device from the mask
     const KoColorSpace* cs = dst->colorSpace();
+    quint32 pixelSize = cs->pixelSize();
     
     int dstWidth = maskWidth(scaleX, angle);
     int dstHeight = maskHeight(scaleY, angle);
@@ -150,6 +151,7 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, double scaleX, double scal
     double cosa = cos(angle);
     double sina = sin(angle);
     // Apply the alpha mask
+    
     KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, dstWidth);
     for (int y = 0; y < dstHeight; y++)
     {
@@ -167,6 +169,11 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, double scaleX, double scal
             double y_f = fabs( y - y_i );
             if( y_f < 0.0) { y_f *= -1.0; }
             double y_f_r = 1.0 - y_f;
+            if(src)
+            {
+                memcpy( hiter.rawData(), src->color(), pixelSize);
+                src->nextColumn();
+            }
             cs->setAlpha( hiter.rawData(),
                           OPACITY_OPAQUE - (
                                 x_f_r * y_f_r * d->shape->valueAt( x_i , y_i  ) + 
@@ -176,6 +183,7 @@ void KisAutobrushResource::mask(KisPaintDeviceSP dst, double scaleX, double scal
                                   , 1 );
             ++hiter;
         }
+        if(src) src->nextRow();
         hiter.nextRow();
     }
 

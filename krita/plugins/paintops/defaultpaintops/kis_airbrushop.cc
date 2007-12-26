@@ -119,8 +119,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
         dab = cachedDab( );
         KoColor color = painter()->paintColor();
         color.convertTo( dab->colorSpace() );
-        dab->dataManager()->setDefaultPixel( color.data() );
-        brush->mask(dab, scale, scale, 0.0, info, xFraction, yFraction);
+        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
     painter()->setDab(dab); // Cache dab for future paints in the painter.

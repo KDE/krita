@@ -182,12 +182,6 @@ KoShapeManager *KisShapeLayer::shapeManager() const
     return m_d->canvas->shapeManager();
 }
 
-bool KisShapeLayer::saveToXML(QDomDocument doc, QDomElement elem)
-{
-  //WARNING Implement me
-  return true;
-}
-
 bool KisShapeLayer::saveOdf(KoStore * store) const
 {
 

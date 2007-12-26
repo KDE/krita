@@ -103,8 +103,6 @@ public:
 
     KoShapeManager *shapeManager() const;
 
-    bool saveToXML(QDomDocument doc, QDomElement elem);
-
     using KoShapeLayer::saveOdf;
     
     bool saveOdf(KoStore * store) const;

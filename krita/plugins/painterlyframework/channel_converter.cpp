@@ -21,6 +21,8 @@
 
 #include "channel_converter.h"
 
+#include <QDebug>
+
 ChannelConverter::ChannelConverter(float whiteS, float blackK)
 : Sw(whiteS), Kb(blackK)
 {
@@ -36,7 +38,12 @@ ChannelConverter::ChannelConverter(float whiteS, float blackK)
     alpha1 = Sw / ( PHI(W(0.5)) - PHI(0.5) );
     alpha2 = (Kb*PSI(0.5)) / (PSI(B(0.5))-PSI(0.5));
 
-    Ke = alpha1 / alpha2;
+    Ke = alpha1/ alpha2;
+
+//     b1 = 5.25797;
+//     Ke = 0.17241;
+//     w0 = 0.045549;
+//     wi = 1.0 - w0;
 }
 
 ChannelConverter::~ChannelConverter()
@@ -61,11 +68,14 @@ void ChannelConverter::KSToReflectance(float K, float S, float &R) const
 
 void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
 {
-    if ( R <= 0.5 )
+    if ( R <= 0.5 ) {
         K = Sw / (PHI(W(R))-PHI(R));
-    if ( R > 0.5 )
-        K = Ke*Kb*PSI(R) / (PSI(B(R))-PSI(R));
-    S = K*PHI(R);
+        S = K * PHI(R);
+    }
+    if ( R > 0.5 ) {
+        S = Ke*Kb / (PSI(B(R))-PSI(R));
+        K = S * PSI(R);
+    }
 }
 
 void ChannelConverter::RGBTosRGB(float C, float &sC) const
@@ -74,6 +84,8 @@ void ChannelConverter::RGBTosRGB(float C, float &sC) const
         sC = 12.92 * C;
     else
         sC = 1.055 * pow( C, 1.0/2.4 ) - 0.055;
+
+//     sC = C;
 }
 
 void ChannelConverter::sRGBToRGB(float sC, float &C) const
@@ -82,4 +94,6 @@ void ChannelConverter::sRGBToRGB(float sC, float &C) const
         C = sC / 12.92;
     else
         C = pow( ( sC + 0.055 ) / 1.055, 2.4 );
+
+//     C = sC;
 }

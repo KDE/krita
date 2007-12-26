@@ -64,11 +64,14 @@ void ChannelConverterTest::testKSReflectance()
     QCOMPARE(S, 0.9f);
 */
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i <= 100; i++) {
         R = (float)i/100.0f;
         c.reflectanceToKS(R, K, S);
         qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
-        QCOMPARE((float)(S/K), (float)(R*2.0/pow(1-R,2)));
+        if ( i <= 50 )
+            QCOMPARE((float)(S/K), (float)(2.0*R*pow(1-R,-2)));
+        else
+            QCOMPARE((float)(K/S), (float)(0.5*pow(1-R, 2)/R));
     }
 
     // KSToReflectance

@@ -23,7 +23,7 @@
 #include <KoColorSpaceTraits.h>
 
 template<int _wavelen_number_>
-struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*(_wavelen_number_)+1, 6> {
+struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*_wavelen_number_+1, 2*_wavelen_number_> {
 
     typedef KoColorSpaceTrait<float, 2*(_wavelen_number_)+1, 6> parent;
 

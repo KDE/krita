@@ -61,7 +61,7 @@ KisKS3ColorSpace::~KisKS3ColorSpace()
         gsl_matrix_free(m_inverse);
 }
 
-void KisKS3ColorSpace::RGBToReflectance(gsl_vector *rgb, gsl_vector *ref) const
+void KisKS3ColorSpace::RGBToReflectance() const
 {
-    gsl_blas_dgemv(CblasNoTrans, 1.0, m_inverse, rgb, 0.0, ref);
+    gsl_blas_dgemv(CblasNoTrans, 1.0, m_inverse, m_rgbvec, 0.0, m_refvec);
 }

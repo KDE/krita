@@ -42,10 +42,9 @@ class KisKS3ColorSpace : public KisKSColorSpace<3>
         ~KisKS3ColorSpace();
 
     protected:
-        void RGBToReflectance(gsl_vector *rgb, gsl_vector *ref) const;
+        void RGBToReflectance() const;
 
     private:
-
         gsl_matrix *m_inverse;
 
 };

@@ -94,11 +94,11 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
         // Make sure we're in the right colorspace
 
         KoColor kc2(kc); // get rid of const
-        kc2.convertTo(m_device->colorSpace());
+        kc2.convertTo(device()->colorSpace());
         quint8 * data = kc2.data();
-        m_device->colorSpace()->setAlpha(data, opacity, 1);
+        device()->colorSpace()->setAlpha(data, opacity, 1);
 
-        m_device->fill(x1, y1, w, h, data);
+        device()->fill(x1, y1, w, h, data);
 
         addDirtyRect(QRect(x1, y1, w, h));
     }
@@ -107,11 +107,11 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
 void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPattern * pattern) {
     if (!pattern) return;
     if (!pattern->valid()) return;
-    if (!m_device) return;
+    if (!device()) return;
     if ( w < 1 ) return;
     if ( h < 1 ) return;
 
-    KisPaintDeviceSP patternLayer = pattern->image(m_device->colorSpace());
+    KisPaintDeviceSP patternLayer = pattern->image(device()->colorSpace());
 
     int sx, sy, sw, sh;
 
@@ -137,7 +137,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPatte
         while (x < x1 + w) {
             sw = qMin((x1 + w) - x, pattern->width() - sx);
 
-            bitBlt(x, y, m_compositeOp, patternLayer, m_opacity, sx, sy, sw, sh);
+            bitBlt(x, y, compositeOp(), patternLayer, opacity(), sx, sy, sw, sh);
             x += sw; sx = 0;
         }
 
@@ -153,10 +153,10 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP projecti
     genericFillStart(startX, startY, projection);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled_fillcolor"));
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->colorSpace(), "filled_fillcolor"));
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
-    painter.fillRect(0, 0, m_width, m_height, m_paintColor);
+    painter.fillRect(0, 0, m_width, m_height, paintColor());
     painter.end();
 
     genericFillEnd(filled);
@@ -166,10 +166,10 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP projec
     genericFillStart(startX, startY, projection);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled_fillpattern"));
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->colorSpace(), "filled_fillpattern"));
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
-    painter.fillRect(0, 0, m_width, m_height, m_pattern);
+    painter.fillRect(0, 0, m_width, m_height, pattern());
     painter.end();
 
     genericFillEnd(filled);
@@ -186,7 +186,7 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP p
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
-    if ( m_progressUpdater && m_progressUpdater->interrupted() ) {
+    if ( progressUpdater() && progressUpdater()->interrupted() ) {
         m_width = m_height = -1;
         return;
     }
@@ -194,10 +194,10 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     QRect rc = m_fillSelection->selectedExactRect();
 
     // Sets dirty!
-    bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_fillSelection, m_opacity,
+    bltSelection(rc.x(), rc.y(), compositeOp(), filled, m_fillSelection, opacity(),
                  rc.x(), rc.y(), rc.width(), rc.height());
 
-    if ( m_progressUpdater ) m_progressUpdater->setProgress(100);
+    if ( progressUpdater() ) progressUpdater()->setProgress(100);
 
     m_width = m_height = -1;
 }
@@ -214,8 +214,8 @@ typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection) {
 
     if (m_width < 0 || m_height < 0) {
-        if (m_selection && m_careForSelection) {
-            QRect rc = m_selection->selectedExactRect();
+        if (selection() && m_careForSelection) {
+            QRect rc = selection()->selectedExactRect();
             m_width = rc.width() - (startX - rc.x());
             m_height = rc.height() - (startY - rc.y());
         }
@@ -225,23 +225,23 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
-        return new KisSelection(m_device);
+        return new KisSelection(device());
 
     KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
 
     // sample merged?
     if (m_sampleMerged) {
         if (!projection) {
-            return new KisSelection(m_device);
+            return new KisSelection(device());
         }
         sourceDevice = projection;
     } else {
-        sourceDevice = m_device;
+        sourceDevice = device();
     }
 
     m_size = m_width * m_height;
 
-    KisSelectionSP selection = new KisSelection(m_device);
+    KisSelectionSP selection = new KisSelection(device());
     KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
     
     const KoColorSpace * colorSpace = pSel->colorSpace();
@@ -261,12 +261,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     memset(map, None, m_size * sizeof(Status));
 
     int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
-    if (m_progressUpdater) m_progressUpdater->setProgress(0);
+    if (progressUpdater()) progressUpdater()->setProgress(0);
 
-    bool hasSelection = m_careForSelection && m_selection;
+    bool hasSelection = m_careForSelection && this->selection();
     KisSelectionSP srcSel = KisSelectionSP(0);
     if (hasSelection) {
-        srcSel = m_selection;
+        srcSel = this->selection();
         if(!srcSel->hasPixelSelection())
             srcSel->setPixelSelection(new KisPixelSelection(sourceDevice));
     }
@@ -392,7 +392,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         if (m_size > 0) {
             progressPercent = (pixelsDone * 100) / m_size;
             if (progressPercent > currentPercent) {
-                if ( m_progressUpdater ) m_progressUpdater->setProgress(progressPercent);
+                if ( progressUpdater() ) progressUpdater()->setProgress(progressPercent);
                 currentPercent = progressPercent;
             }
         }

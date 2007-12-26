@@ -542,8 +542,8 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     //If the device has a selection only iterate over that selection
     QRect r;
-    if( m_selection ) {
-        r = m_selection->selectedExactRect();
+    if( selection() ) {
+        r = selection()->selectedExactRect();
         startx = r.x();
         starty = r.y();
         width = r.width();
@@ -556,7 +556,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     int linesProcessed = 0;
     int lastProgressPercent = 0;
 
-    if (m_progressUpdater) m_progressUpdater->setProgress( 0 );
+    if (progressUpdater()) progressUpdater()->setProgress( 0 );
 
     int totalPixels = width * height;
     if (antiAliasThreshold < 1 - DBL_EPSILON) {
@@ -594,20 +594,20 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         int progressPercent = (linesProcessed * 100) / height;
 
         if (progressPercent > lastProgressPercent) {
-            if (m_progressUpdater) m_progressUpdater->setProgress(progressPercent);
+            if (progressUpdater()) progressUpdater()->setProgress(progressPercent);
             lastProgressPercent = progressPercent;
 
-            if (m_progressUpdater && m_progressUpdater->interrupted()) {
+            if (progressUpdater() && progressUpdater()->interrupted()) {
                 break;
             }
         }
 
-        if (m_progressUpdater && m_progressUpdater->interrupted()) {
+        if (progressUpdater() && progressUpdater()->interrupted()) {
             break;
         }
     }
 
-    if (!m_progressUpdater || (m_progressUpdater && !m_progressUpdater->interrupted())) {
+    if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
         // XXX: Enable after debugging
         if ( false && antiAliasThreshold < 1 - DBL_EPSILON) {
 
@@ -752,31 +752,31 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     int progressPercent = (pixelsProcessed * 100) / totalPixels;
 
                     if (progressPercent > lastProgressPercent) {
-                        if (m_progressUpdater) m_progressUpdater->setProgress(progressPercent);
+                        if (progressUpdater()) progressUpdater()->setProgress(progressPercent);
                         lastProgressPercent = progressPercent;
 
-                        if (m_progressUpdater && m_progressUpdater->interrupted()) {
+                        if (progressUpdater() && progressUpdater()->interrupted()) {
                             break;
                         }
                     }
                     ++iter;
                 }
                 iter.nextRow();
-                if ( m_progressUpdater && m_progressUpdater->interrupted()) {
+                if ( progressUpdater() && progressUpdater()->interrupted()) {
                     break;
                 }
             }
         }
     }
 
-    if (!m_progressUpdater || (m_progressUpdater && !m_progressUpdater->interrupted())) {
-            bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
+    if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
+            bltSelection(startx, starty, compositeOp(), dev, opacity(), startx, starty, width, height);
     }
     delete shapeStrategy;
 
-    if (m_progressUpdater) {
-        m_progressUpdater->setProgress(100);
-        return !m_progressUpdater->interrupted();
+    if (progressUpdater()) {
+        progressUpdater()->setProgress(100);
+        return !progressUpdater()->interrupted();
     }
     else {
         return true;

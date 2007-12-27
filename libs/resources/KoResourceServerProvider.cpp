@@ -132,25 +132,16 @@ KoResourceServerProvider* KoResourceServerProvider::instance()
 
 KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer()
 {
-    if( patternThread )
-        patternThread->wait();
-
     return m_patternServer;
 }
 
 KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
 {
-    if( gradientThread )
-        gradientThread->wait();
-
     return m_gradientServer;
 }
 
 KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
 {
-    if( paletteThread )
-        paletteThread->wait();
-
     return m_paletteServer;
 }
 

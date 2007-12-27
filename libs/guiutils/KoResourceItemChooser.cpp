@@ -26,6 +26,7 @@
 #include <QFileInfo>
 
 #include <kiconloader.h>
+#include <klocale.h>
 
 #include "KoResourceChooser.h"
 #include "KoResource.h"
@@ -93,14 +94,14 @@ KoResourceItemChooser::KoResourceItemChooser( QWidget *parent )
 
     QPushButton *button = new QPushButton( this );
     button->setIcon( SmallIcon( "list-add" ) );
-//     button->setToolTip( i18n("Import pattern") );
+    button->setToolTip( i18n("Import") );
     button->setEnabled( true );
     m_buttonGroup->addButton( button, Button_Import );
     layout->addWidget( button, 1, 0 );
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon( "list-remove" ) );
-//     button->setToolTip( i18n("Delete pattern") );
+    button->setToolTip( i18n("Delete") );
     button->setEnabled( false );
     m_buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );

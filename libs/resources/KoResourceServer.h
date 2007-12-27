@@ -87,7 +87,7 @@ public:
             //      the resource to find out whether they are really the same, but for now this
             //      will prevent the same brush etc. showing up twice.
             if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
-                loadLock.lock();
+                //loadLock.lock();
                 uniqueFiles.append(fname);
                 T* resource = createResource(front);
                 if (resource->load() && resource->valid())
@@ -99,7 +99,7 @@ public:
                 else {
                     delete resource;
                 }
-                loadLock.unlock();
+                //loadLock.unlock();
             }
         }
         kDebug(30009) << "done loading  resources for type " << type();
@@ -140,9 +140,9 @@ public:
     }
 
     QList<T*> resources() {
-        loadLock.lock();
+        //loadLock.lock();
         return m_resources;
-        loadLock.unlock();
+        //loadLock.unlock();
     }
 
     /// Returns path where to save user defined and imported resources to
@@ -178,8 +178,10 @@ public:
 
     void addObserver(KoResourceServerObserver<T>* observer)
     {
+        //loadLock.lock();
         if(observer && !m_observers.contains(observer))
             m_observers.append(observer);
+        //loadLock.unlock();
     }
 
     void removeObserver(KoResourceServerObserver<T>* observer)

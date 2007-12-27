@@ -785,4 +785,10 @@ KoPrintJob * KisView2::createPrintJob()
     return new KisPrintJob(this);
 }
 
+KisNodeManager * KisView2::nodeManager()
+{
+    return m_d->nodeManager;
+}
+
+
 #include "kis_view2.moc"

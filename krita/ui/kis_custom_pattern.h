@@ -22,8 +22,9 @@
 #include <QObject>
 #include <QShowEvent>
 
+#include <KoResourceServerAdapter.h>
+
 #include "ui_wdgcustompattern.h"
-#include "kis_resourceserver_adapter.h"
 
 
 class KoResource;
@@ -62,7 +63,7 @@ private:
     void createPattern();
     KisView2* m_view;
     KisPattern* m_pattern;
-    KisResourceServerAdapter<KisPattern>* m_rServerAdapter;
+    KoResourceServerAdapter<KisPattern>* m_rServerAdapter;
 };
 
 

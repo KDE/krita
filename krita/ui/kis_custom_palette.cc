@@ -58,7 +58,7 @@ KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *paren
     }
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-    m_rServerAdapter = new KisResourceServerAdapter<KoColorSet>(rServer);
+    m_rServerAdapter = new KoResourceServerAdapter<KoColorSet>(rServer);
 
     connect(paletteList, SIGNAL(currentItemChanged( QListWidgetItem*, QListWidgetItem* )), this, SLOT(slotPaletteChanged( QListWidgetItem*, QListWidgetItem* )));
     connect(addColor, SIGNAL(pressed()), this, SLOT(slotAddNew()));

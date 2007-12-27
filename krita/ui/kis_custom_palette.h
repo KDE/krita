@@ -21,8 +21,9 @@
 
 #include <QObject>
 
+#include <KoResourceServerAdapter.h>
+
 #include "ui_wdgcustompalette.h"
-#include "kis_resourceserver_adapter.h"
 
 
 class KoResource;
@@ -60,7 +61,7 @@ private:
     KisView2* m_view;
     KoColorSet* m_palette;
     QMap<QListWidgetItem*, KoColorSet*> m_palettes;
-    KisResourceServerAdapter<KoColorSet>* m_rServerAdapter;
+    KoResourceServerAdapter<KoColorSet>* m_rServerAdapter;
 };
 
 

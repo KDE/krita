@@ -22,8 +22,9 @@
 #include <QObject>
 #include <QShowEvent>
 
+#include <KoResourceServerAdapter.h>
+
 #include "ui_wdgcustombrush.h"
-#include "kis_resourceserver_adapter.h"
 
 class KoResource;
 class KisView2;
@@ -61,7 +62,7 @@ private:
     void createBrush();
     KisView2* m_view;
     KisBrush* m_brush;
-    KisResourceServerAdapter<KisBrush>* m_rServerAdapter;
+    KoResourceServerAdapter<KisBrush>* m_rServerAdapter;
 };
 
 

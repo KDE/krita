@@ -44,8 +44,8 @@
 #include <KoSegmentGradient.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServer.h>
+#include <KoResourceServerAdapter.h>
 
-#include "kis_resourceserver_adapter.h"
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_pattern.h"
@@ -253,8 +253,8 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
     m_brushChooser->setFont(m_font);
 
     KoResourceServer<KisBrush>* rServer = KisResourceServerProvider::instance()->brushServer();
-    KisResourceServerAdapter<KisBrush>* rServerAdapter;
-    rServerAdapter = new KisResourceServerAdapter<KisBrush>(rServer);
+    KoResourceServerAdapter<KisBrush>* rServerAdapter;
+    rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
 
     m_brushMediator = new KisResourceMediator( m_brushChooser, rServerAdapter, this);
     connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
@@ -296,8 +296,8 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
 
 
     KoResourceServer<KisPattern>* rServer = KisResourceServerProvider::instance()->patternServer();
-    KisResourceServerAdapter<KisPattern>* rServerAdapter;
-    rServerAdapter = new KisResourceServerAdapter<KisPattern>(rServer);
+    KoResourceServerAdapter<KisPattern>* rServerAdapter;
+    rServerAdapter = new KoResourceServerAdapter<KisPattern>(rServer);
 
     m_patternMediator = new KisResourceMediator( chooser, rServerAdapter, view);
 
@@ -339,8 +339,8 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
     KoResourceServer<KoSegmentGradient>* rServer = KisResourceServerProvider::instance()->gradientServer();
-    KisResourceServerAdapter<KoSegmentGradient>* rServerAdapter;
-    rServerAdapter = new KisResourceServerAdapter<KoSegmentGradient>(rServer);
+    KoResourceServerAdapter<KoSegmentGradient>* rServerAdapter;
+    rServerAdapter = new KoResourceServerAdapter<KoSegmentGradient>(rServer);
 
     m_gradientMediator = new KisResourceMediator( m_gradientChooser, rServerAdapter, view);
     connect(m_gradientMediator, SIGNAL(activatedResource(KoResource*)),

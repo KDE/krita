@@ -23,12 +23,12 @@
 
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
+#include <KoResourceServerAdapter.h>
 
 #include "kis_itemchooser.h"
-#include "kis_resourceserver_adapter.h"
 
 KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
-                     KisAbstractResourceServerAdapter* rServerAdapter,
+                     KoAbstractResourceServerAdapter* rServerAdapter,
                      QObject *parent,
                      const char *name)
     : QObject(parent), m_chooser(chooser), m_rServerAdapter(rServerAdapter)

@@ -125,7 +125,6 @@ set(kritaui_LIB_SRCS
     kis_node_manager.cpp
     kis_selection_tool_helper.cpp
     kis_print_job.cpp
-    kis_resourceserver_adapter.cpp
 # Open Raster TK
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp

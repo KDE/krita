@@ -22,7 +22,7 @@
 #include "mixing_test.h"
 
 #include "kis_illuminant_profile.h"
-#include "kis_ks_colorspace.h"
+#include "kis_ks9_colorspace.h"
 
 #include <QImage>
 #include <QPainter>

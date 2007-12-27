@@ -22,15 +22,7 @@
 
 #include "channel_converter.h"
 #include "kis_illuminant_profile.h"
-#include <KoColorSpaceMaths.h>
 #include <KoColorProfile.h>
-
-#include "KoColorSpaceConstants.h"
-#include "compositeops/KoCompositeOpOver.h"
-#include "compositeops/KoCompositeOpErase.h"
-#include "compositeops/KoCompositeOpMultiply.h"
-#include "compositeops/KoCompositeOpDivide.h"
-#include "compositeops/KoCompositeOpBurn.h"
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cblas.h>

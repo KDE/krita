@@ -27,10 +27,10 @@ class ChannelConverter {
         ChannelConverter(float whiteS, float blackK);
         ~ChannelConverter();
 
-        void KSToReflectance(float K, float S, float &R) const;
-        void reflectanceToKS(float R, float &K, float &S) const;
-        void RGBTosRGB(float C, float &sC) const;
-        void sRGBToRGB(float sC, float &C) const;
+        inline void KSToReflectance(float K, float S, float &R) const;
+        inline void reflectanceToKS(float R, float &K, float &S) const;
+        inline void RGBTosRGB(float C, float &sC) const;
+        inline void sRGBToRGB(float sC, float &C) const;
 
     private:
         float Kb, Sb;
@@ -46,6 +46,48 @@ class ChannelConverter {
         inline float K(float R) const;
         inline float S(float R) const;
 };
+
+inline void ChannelConverter::KSToReflectance(float K, float S, float &R) const
+{
+    if (S == 0.0) {
+        R = 0.0;
+        return;
+    }
+
+    if (K == 0.0) {
+        R = 1.0;
+        return;
+    }
+
+    float Q = K/S;
+    R = 1.0 + Q - sqrt( Q*Q + 2.0*Q );
+}
+
+inline void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
+{
+    K = this->K(R);
+    S = this->S(R);
+}
+
+inline void ChannelConverter::RGBTosRGB(float C, float &sC) const
+{
+    //     if (C <= 0.0031308)
+    //         sC = 12.92 * C;
+    //     else
+    //         sC = 1.055 * pow( C, 1.0/2.4 ) - 0.055;
+
+    sC = C;
+}
+
+inline void ChannelConverter::sRGBToRGB(float sC, float &C) const
+{
+    //     if (sC <= 0.04045)
+    //         C = sC / 12.92;
+    //     else
+    //         C = pow( ( sC + 0.055 ) / 1.055, 2.4 );
+
+    C = sC;
+}
 
 inline float ChannelConverter::K(float R) const
 {

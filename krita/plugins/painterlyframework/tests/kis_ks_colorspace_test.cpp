@@ -22,7 +22,7 @@
 #include <cstring>
 
 #include "kis_ks_colorspace_test.h"
-#include "kis_ks_colorspace.h"
+#include "kis_ks9_colorspace.h"
 #include "kis_ks3_colorspace.h"
 
 #include "kis_illuminant_profile.h"
@@ -52,8 +52,8 @@ void print_vector(quint8 *v, const QString &text)
 
 void KisKSColorSpaceTest::testToFromRgbA16()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D65"+QString::number(N)+"Test.ill");
-    KisKSColorSpace<N> *cs = new KisKSColorSpace<N>(p);
+    KisIlluminantProfile *p = new KisIlluminantProfile("D659Test.ill");
+    KisKS9ColorSpace *cs = new KisKS9ColorSpace(p);
 //     KisKS3ColorSpace *cs = new KisKS3ColorSpace(p);
 
     quint8 *rgb1;
@@ -135,8 +135,8 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 
 void KisKSColorSpaceTest::testMixing()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D65"+QString::number(N)+"Test.ill");
-    KisKSColorSpace<N> *cs = new KisKSColorSpace<N>(p);
+    KisIlluminantProfile *p = new KisIlluminantProfile("D659Test.ill");
+    KisKS9ColorSpace *cs = new KisKS9ColorSpace(p);
 //     KisKS3ColorSpace *cs = new KisKS3ColorSpace(p);
 
     quint8 *rgb1, *rgb2;

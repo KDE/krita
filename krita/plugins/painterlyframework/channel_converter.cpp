@@ -51,10 +51,10 @@ ChannelConverter::ChannelConverter(float Kblack, float Sblack)
     // r0^2*b2 + r0*b1 + b0 = r0
     double marray[9] = { 1.0, 1.0, 1.0, 0.25, 0.5, 1.0, r0*r0, r0, 1.0 };
     double barray[3] = { k1, k2, r0 };
+    int s;
     gsl_matrix_view M = gsl_matrix_view_array(marray, 3, 3);
     gsl_vector_view b = gsl_vector_view_array(barray, 3);
     gsl_vector *x = gsl_vector_alloc(3);
-    int s;
     gsl_permutation *p = gsl_permutation_alloc(3);
     gsl_linalg_LU_decomp(&M.matrix, p, &s);
     gsl_linalg_LU_solve(&M.matrix, p, &b.vector, x);
@@ -65,7 +65,6 @@ ChannelConverter::ChannelConverter(float Kblack, float Sblack)
 
     gsl_permutation_free(p);
     gsl_vector_free(x);
-
 }
 
 ChannelConverter::~ChannelConverter()

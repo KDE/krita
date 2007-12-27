@@ -75,7 +75,7 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
     protected:
         /**
          * Overload this in subclasses if you want to accelerate the conversion
-         * (see KisKS3ColorSpace for instance). Use it with m_rgbvec and m_refvec.
+         * (see KisKS9ColorSpace for instance). Use it with m_rgbvec and m_refvec.
          */
         virtual void RGBToReflectance() const = 0;
 

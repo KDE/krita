@@ -44,7 +44,7 @@ class KisReinhard05OperatorConfigurationWidget : public KisToneMappingOperatorCo
         {
             widget.brightness->setValue(config->getDouble("Brightness", 0.0));
             widget.chromatic->setValue(config->getDouble("Chromatic", 0.0));
-            widget.light->setValue(config->getDouble("Light", 0.0));
+            widget.light->setValue(config->getDouble("Light", 1.0));
         }
         virtual KisPropertiesConfiguration* configuration() const
         {
@@ -87,6 +87,6 @@ void KisReinhard05Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfig
     pfs::Array2DImpl R( r, KoRgbTraits<float>::red_pos, device);
     pfs::Array2DImpl G( r, KoRgbTraits<float>::green_pos, device);
     pfs::Array2DImpl B( r, KoRgbTraits<float>::blue_pos, device);
-    tmo_reinhard05( &R, &G, &B, &Y, config->getDouble("Brightness", 0.0), config->getDouble("Chromatic", 0.0), config->getDouble("Light", 0.0) );
+    tmo_reinhard05( &R, &G, &B, &Y, config->getDouble("Brightness", 0.0), config->getDouble("Chromatic", 0.0), config->getDouble("Light", 1.0) );
     kDebug() << "Done !";
 }

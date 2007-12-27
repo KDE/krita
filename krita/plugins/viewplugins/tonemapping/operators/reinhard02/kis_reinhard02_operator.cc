@@ -43,11 +43,11 @@ class KisReinhard02OperatorConfigurationWidget : public KisToneMappingOperatorCo
         virtual void setConfiguration(KisPropertiesConfiguration* config)
         {
             widget.scales->setChecked(config->getBool("Scales", false));
-            widget.key->setValue(config->getDouble("Key", 0.0));
-            widget.phi->setValue(config->getDouble("Phi", 0.0));
-            widget.range->setValue(config->getDouble("Range", 0.0));
-            widget.lower->setValue(config->getDouble("Lower", 0.0));
-            widget.upper->setValue(config->getDouble("Upper", 0.0));
+            widget.key->setValue(config->getDouble("Key", 0.18));
+            widget.phi->setValue(config->getDouble("Phi", 1.0));
+            widget.range->setValue(config->getDouble("Range", 8.0));
+            widget.lower->setValue(config->getDouble("Lower", 1.0));
+            widget.upper->setValue(config->getDouble("Upper", 43.0));
             widget.timeCoherent->setChecked(config->getBool("TimeCoherent", false));
         }
         virtual KisPropertiesConfiguration* configuration() const
@@ -93,11 +93,11 @@ void KisReinhard02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfig
     pfs::Array2DImpl L (r.width(),r.height());
     kDebug() << "tmo_ashikhmin02";
     tmo_reinhard02(&Y, &L, config->getBool("Scales", false),
-                    config->getDouble("Key", 0.0),
-                    config->getDouble("Phi", 0.0),
-                    config->getDouble("Range", 0.0),
-                    config->getDouble("Lower", 0.0),
-                    config->getDouble("Upper", 0.0),
+                    config->getDouble("Key", 0.18),
+                    config->getDouble("Phi", 1.00),
+                    config->getDouble("Range", 8.0),
+                    config->getDouble("Lower", 1.0),
+                    config->getDouble("Upper", 43.0),
                     config->getBool("TimeCoherent", false));
     kDebug() << "Apply luminance";
     applyLuminance(device, L.device(), r);

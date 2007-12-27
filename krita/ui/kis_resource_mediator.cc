@@ -39,10 +39,6 @@ KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
     Q_ASSERT(rServerAdapter);
     m_activeItem = 0;
 
-    QList<KoResource*> resources = rServerAdapter->resources();
-    foreach (KoResource* resource, resources)
-        addResourceItem(new KoResourceItem(resource));
-
     connect(m_chooser, SIGNAL(selected(QTableWidgetItem*)), SLOT(setActiveItem(QTableWidgetItem*)));
     connect(m_chooser, SIGNAL(deleteClicked() ), this, SLOT( deleteActiveResource() ) );
 

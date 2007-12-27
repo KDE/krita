@@ -96,6 +96,17 @@ KisPaintDeviceSP KisNodeManager::activePaintDevice()
     }
 }
 
+const KoColorSpace* KisNodeManager::activeColorSpace()
+{
+    if ( m_d->maskManager->activeMask() ) {
+        return m_d->maskManager->activeDevice()->colorSpace();
+    }
+    else {
+        return m_d->layerManager->activeLayer()->parentLayer()->colorSpace();
+    }
+}
+
+
 KisLayerManager * KisNodeManager::layerManager()
 {
     return m_d->layerManager;

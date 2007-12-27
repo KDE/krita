@@ -62,6 +62,12 @@ public:
     /// Get the paint device the user wants to paint on now
     KisPaintDeviceSP activePaintDevice();
 
+    /**
+     * @return the active color space used for composition, meaning the color space
+     * of the active mask, or the color space of the parent of the active layer
+     */
+    const KoColorSpace* activeColorSpace();
+    
     /// Get the class that manages the layer user interface
     KisLayerManager * layerManager();
 

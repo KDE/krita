@@ -225,7 +225,7 @@ void KisLayerBox::updateUI()
     if (KisNodeSP active = m_nodeManager->activeNode())
     {
         if (m_nodeManager->activePaintDevice())
-            slotSetColorSpace(m_nodeManager->activePaintDevice()->colorSpace());
+            slotSetColorSpace(m_nodeManager->activeColorSpace());
         else
             slotSetColorSpace(m_image->colorSpace());
         if (active->inherits("KisMask")) {

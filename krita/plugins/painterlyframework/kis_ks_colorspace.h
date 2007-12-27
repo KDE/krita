@@ -50,7 +50,7 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
 
     public:
 
-        KisKSColorSpace(KoColorProfile *p, const QString &id = "kscolorspace", const QString &name = "KS Color Space");
+        KisKSColorSpace(KoColorProfile *p, const QString &id, const QString &name);
         virtual ~KisKSColorSpace();
 
     public:

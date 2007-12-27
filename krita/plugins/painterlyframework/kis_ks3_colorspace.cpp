@@ -33,6 +33,9 @@
 KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
 : parent(p, "ks3colorspace", "KS Color Space - 3 wavelenghts"), m_inverse(0)
 {
+    if (!profileIsCompatible(p))
+        return;
+
     int s;
     gsl_permutation *perm = gsl_permutation_alloc(3);
     gsl_matrix *tmp = gsl_matrix_alloc(m_profile->T()->size1, m_profile->T()->size2);

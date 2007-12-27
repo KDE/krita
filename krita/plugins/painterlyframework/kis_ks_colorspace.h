@@ -20,8 +20,6 @@
 #ifndef KIS_KS_COLORSPACE_H_
 #define KIS_KS_COLORSPACE_H_
 
-#include <cmath>
-
 #include <KoIncompleteColorSpace.h>
 
 #include "kis_ks_colorspace_traits.h"

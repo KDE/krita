@@ -20,6 +20,8 @@
 #ifndef CHANNEL_CONVERTER_H_
 #define CHANNEL_CONVERTER_H_
 
+#include <cmath>
+
 class ChannelConverter {
 
     public:
@@ -71,6 +73,7 @@ inline void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
 
 inline void ChannelConverter::RGBTosRGB(float C, float &sC) const
 {
+    // This is commented because we don't use profiles in toRgbaU16
     //     if (C <= 0.0031308)
     //         sC = 12.92 * C;
     //     else
@@ -81,6 +84,8 @@ inline void ChannelConverter::RGBTosRGB(float C, float &sC) const
 
 inline void ChannelConverter::sRGBToRGB(float sC, float &C) const
 {
+    // This is commented because we don't use profiles in fromRgbaU16
+
     //     if (sC <= 0.04045)
     //         C = sC / 12.92;
     //     else

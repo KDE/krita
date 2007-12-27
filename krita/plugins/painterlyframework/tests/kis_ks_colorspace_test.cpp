@@ -145,11 +145,11 @@ void KisKSColorSpaceTest::testMixing()
     quint8 *kasm = new quint8[cs->pixelSize()];
     quint8 *rgbm = new quint8[2*4];
 
-    quint32 val = 256<<4;
-    quint16 blue[4]   = { 3*val>>2, val>>2, 0,   val };
+    quint32 val = 65535;
+    quint16 blue[4]   = { val,   0, 0,   val };
     quint16 green[4]  = { 0,   val, 0,   val };
     quint16 red[4]    = { 0,     0, val, val };
-    quint16 yellow[4] = { 0,   val, val>>1, val };
+    quint16 yellow[4] = { 0,   val, val, val };
 
     rgb1 = reinterpret_cast<quint8*>(blue);
     rgb2 = reinterpret_cast<quint8*>(yellow);

@@ -238,6 +238,108 @@ void KisKSColorSpace<_N_>::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 
     }
 }
 
+#include <iostream>
+
+template<int _N_>
+void KisKSColorSpace<_N_>::RGBToReflectance() const
+{
+    int n = m_refvec->size + 1;
+    int me = 1; // m_rgbvec->size; // == 3
+    int mi = 6+2*n; // each reflectance is bounded between 0 and 1, two inequalities, and the transformation matrix
+
+    //// ALLOCATION
+    gsl_cqp_data *data = new gsl_cqp_data;
+    data->Q = gsl_matrix_calloc(n,n);
+    data->q = gsl_vector_calloc(n); // This will remain zero
+    data->A = gsl_matrix_calloc(me,n);
+    data->C = gsl_matrix_calloc(mi,n);
+    data->b = gsl_vector_calloc(me);
+    data->d = gsl_vector_calloc(mi);
+
+    //// INITIALIZATION
+    // The Q matrix represents this function:
+    // z = ( R_P[0] - R_P[1] )^2 + ( R_P[1] - R_P[2] )^2 + ... + ( R_P[n-2] - R_P[n-1] )^2
+    for (int i = 1; i < n-1; i++) {
+        int prev = (int)gsl_vector_get(m_profile->P(), i-1);
+        int curr = (int)gsl_vector_get(m_profile->P(), i);
+        //         int prev = i-1, curr = i;
+        gsl_matrix_set(data->Q, prev, prev, gsl_matrix_get(data->Q,prev,prev)+1.0);
+        //         gsl_matrix_set(data->Q, prev, prev,  2.0);
+        gsl_matrix_set(data->Q, curr, curr,  1.0);
+        gsl_matrix_set(data->Q, prev, curr, -1.0);
+        gsl_matrix_set(data->Q, curr, prev, -1.0);
+    }
+    gsl_matrix_set(data->Q, n-1, n-1, 1.0);
+
+    gsl_matrix_set(data->A, 0, n-1, 1.0);
+    gsl_vector_set(data->b, 0, 1.0);
+
+    gsl_matrix_view subm;
+    subm = gsl_matrix_submatrix(data->C, 0, 0, 3, n-1);
+    gsl_matrix_memcpy(&subm.matrix, m_profile->T());
+    subm = gsl_matrix_submatrix(data->C, 3, 0, 3, n-1);
+    gsl_matrix_memcpy(&subm.matrix, m_profile->T());
+    gsl_matrix_scale(&subm.matrix, -1.0);
+
+    for (int i = 0; i < 3; i++) {
+        gsl_vector_set(data->d, 0+i,  ( gsl_vector_get(m_rgbvec, i) - 0.0 ) );
+        gsl_vector_set(data->d, 3+i, -( gsl_vector_get(m_rgbvec, i) + 0.0 ) );
+    }
+
+    // The C matrix and d vector represent the inequalities that the variables must
+    // consider. In our case, they're: x_i >= 0, -x_i >= -1 (you can only define >= inequalities)
+    for (int i = 0; i < n-1; i++) {
+        int j = 6+2*i;
+        gsl_matrix_set(data->C, j+0, i,  1.0);
+        gsl_matrix_set(data->C, j+1, i, -1.0);
+
+        gsl_vector_set(data->d, j+0,  0.0);
+        gsl_vector_set(data->d, j+1, -1.0);
+    }
+
+    //// SOLVER INITIALIZATION
+    const size_t max_iter = 1000;
+    size_t iter=1;
+    int status;
+    const gsl_cqpminimizer_type *T;
+    gsl_cqpminimizer *s;
+
+    T = gsl_cqpminimizer_mg_pdip;
+    s = gsl_cqpminimizer_alloc(T, n, me, mi);
+    status = gsl_cqpminimizer_set(s, data);
+
+    do {
+        status = gsl_cqpminimizer_iterate(s);
+        status = gsl_cqpminimizer_test_convergence(s, 1e-10, 1e-10);
+
+        if(status != GSL_SUCCESS)
+            iter++;
+
+    } while(status == GSL_CONTINUE && iter<=max_iter);
+
+    for (int i = 0; i < n-1; i++) {
+        double curr = gsl_vector_get(gsl_cqpminimizer_x(s), i);
+
+        if (fabs(curr - 0.0) < 1e-6)
+            gsl_vector_set(m_refvec, i, 0.0);
+        else if (fabs(curr - 1.0) < 1e-6)
+            gsl_vector_set(m_refvec, i, 1.0);
+        else
+            gsl_vector_set(m_refvec, i, curr);
+    }
+
+    gsl_cqpminimizer_free(s);
+
+    gsl_vector_free(data->d);
+    gsl_vector_free(data->b);
+    gsl_matrix_free(data->C);
+    gsl_matrix_free(data->A);
+    gsl_vector_free(data->q);
+    gsl_matrix_free(data->Q);
+    delete data;
+}
+
+/*
 template<int _N_>
 void KisKSColorSpace<_N_>::RGBToReflectance() const
 {
@@ -324,7 +426,7 @@ void KisKSColorSpace<_N_>::RGBToReflectance() const
     gsl_matrix_free(data->Q);
     delete data;
 }
-
+*/
 typedef KisKSColorSpace<9>  KisKS9ColorSpace;
 typedef KisKSColorSpace<12> KisKS12ColorSpace;
 

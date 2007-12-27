@@ -136,7 +136,7 @@ public:
             }
 
             if (first)
-                gc.bitBlt(dx, dy, layer->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), sx, sy, w, h);
+                gc.bitBlt(dx, dy, m_projection->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), sx, sy, w, h);
             else
                 gc.bitBlt(dx, dy, layer->compositeOp(), source, layer->opacity(), sx, sy, w, h);
                 

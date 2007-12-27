@@ -204,10 +204,10 @@ void KisKSColorSpace<_N_>::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint3
                                          KisKSColorSpaceTrait<_N_>::K(dst, i),
                                          KisKSColorSpaceTrait<_N_>::S(dst, i));
 
-        KisKSColorSpaceTrait<_N_>::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(srcU16[3]), 1);
+        parent::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(srcU16[3]), 1);
 
         srcU16 += 4;
-        dst += KisKSColorSpaceTrait<_N_>::pixelSize;
+        dst += parent::pixelSize();
     }
 }
 
@@ -231,9 +231,9 @@ void KisKSColorSpace<_N_>::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 
             m_converter.RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), c);
             dstU16[2-i] = KoColorSpaceMaths<float,quint16>::scaleToA(c);
         }
-        dstU16[3] = KoColorSpaceMaths<float,quint16>::scaleToA(KisKSColorSpaceTrait<_N_>::alpha(src));
+        dstU16[3] = KoColorSpaceMaths<float,quint16>::scaleToA(parent::alpha(src));
 
-        src += KisKSColorSpaceTrait<_N_>::pixelSize;
+        src += parent::pixelSize();
         dstU16 += 4;
     }
 }

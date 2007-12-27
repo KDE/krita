@@ -192,5 +192,5 @@ void KisKSColorSpaceTest::testMixing()
     delete p;
 }
 
-QTEST_KDEMAIN(KisKS3ColorSpaceTest, NoGUI)
+QTEST_KDEMAIN(KisKSColorSpaceTest, NoGUI)
 #include "kis_ks_colorspace_test.moc"

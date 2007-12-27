@@ -50,3 +50,20 @@ kde4_add_unit_test(KisKSColorSpaceTest
 
 target_link_libraries(KisKSColorSpaceTest
        ${KDE4_KDEUI_LIBS} komain kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
+
+########### Mixing Test ###############
+
+set(mixing_test_SRCS
+    mixing_test.cpp
+    ../kis_illuminant_profile.cpp
+    ../channel_converter.cpp
+    ../cqp/cqpminimizer.c
+    ../cqp/initial_point.c
+    ../cqp/mg_pdip.c)
+
+kde4_add_unit_test(MixingTest
+                   TESTNAME krita-plugins-MixingTest
+                   ${mixing_test_SRCS})
+
+target_link_libraries(MixingTest
+       ${KDE4_KDEUI_LIBS} komain kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})

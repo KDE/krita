@@ -520,6 +520,7 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
 //         undoAdapter()->addCommand(new KisConvertLayerTypeCmd(KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_d->colorSpace));
 //     }
 
+    setDirty();
     delete oldColorSpace;
     delete weaver;
     // XXX: emit colorSpaceChanged(dstColorSpace);

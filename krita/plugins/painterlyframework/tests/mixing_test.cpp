@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QPicture>
 
+// Stress test, it doesn't do compares and the like... if you come to an end, then probably everything works ;-)
 void MixingTest::testMixing()
 {
     // These values are tied for blue - yellow mixing.

@@ -21,21 +21,53 @@
 
 #include "channel_converter.h"
 
+#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
+
 ChannelConverter::ChannelConverter(float Kblack, float Sblack)
 : Kb(Kblack), Sb(Sblack)
 {
-    float A, q1, q2, k1, k2;
-    w0 = 1.0 + Kb - sqrt( Kb*Kb + 2.0*Kb );
-    A = 1.0 / ( PHI(W(0.5)) - PHI(0.5) );
+    double q1, q2, k1, k2, D, Sh;
+    float r0; // Represent the reflectance of the reference black (no, it's not zero)
 
-    q1 = 0.25 * ( 1.0 + Kb/A ) / ( 1.0 + 0.25*Sb/A );
-    q2 = Kb / ( 1.0 + Sb );
+    KSToReflectance(Kb, Sb, r0);
+    q1 = Kb / ( 1.0 + Kb*PHI(r0) );
+    k1 = 1.0 + q1 - sqrt( q1*q1 + 2.0*q1 );
 
-    k1 = (1.0 + q1 - sqrt( q1*q1 + 2.0*q1 )) * 2.0;
-    k2 = (1.0 + q2 - sqrt( q2*q2 + 2.0*q2 ));
+    // First system: retrieve w1 and w0
+    // r0*w1 + w0 = k1
+    //    w1 + w0 = 1
+    D = r0 - 1.0;
+    w1 = (float) ( k1 - 1.0 ) / D;
+    w0 = (float) ( r0 - k1 ) / D;
 
-    b1 = 2.0*k1 - 1.0*k2;
-    b2 = 1.0*k2 - 1.0*k1;
+    Sh = S(0.5);
+    q1 = Kb / ( 1.0 + Sb );
+    q2 = 0.25 * ( 4.0*Kb + Sh ) / ( Sb + Sh );
+    k1 = 1.0 + q1 - sqrt( q1*q1 + 2.0*q1 );
+    k2 = 1.0 + q2 - sqrt( q2*q2 + 2.0*q2 );
+    // Second system: retrieve b2, b1 and b0
+    // b2 + b1 + b0 = k1
+    // b2/4 + b1/2 + b0 = k2
+    // r0^2*b2 + r0*b1 + b0 = r0
+    double marray[9] = { 1.0, 1.0, 1.0, 0.25, 0.5, 1.0, r0*r0, r0, 1.0 };
+    double barray[3] = { k1, k2, r0 };
+    gsl_matrix_view M = gsl_matrix_view_array(marray, 3, 3);
+    gsl_vector_view b = gsl_vector_view_array(barray, 3);
+    gsl_vector *x = gsl_vector_alloc(3);
+    int s;
+    gsl_permutation *p = gsl_permutation_alloc(3);
+    gsl_linalg_LU_decomp(&M.matrix, p, &s);
+    gsl_linalg_LU_solve(&M.matrix, p, &b.vector, x);
+
+    b2 = gsl_vector_get(x, 0);
+    b1 = gsl_vector_get(x, 1);
+    b0 = gsl_vector_get(x, 2);
+
+    gsl_permutation_free(p);
+    gsl_vector_free(x);
+
 }
 
 ChannelConverter::~ChannelConverter()
@@ -60,14 +92,8 @@ void ChannelConverter::KSToReflectance(float K, float S, float &R) const
 
 void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
 {
-    if ( R <= 0.5 ) {
-        K = 1.0 / (PHI(W(R))-PHI(R));
-        S = K * PHI(R);
-    }
-    if ( R > 0.5 ) {
-        S = ( Kb - PSI(B(R))*Sb ) / ( PSI(B(R)) - PSI(R) );
-        K = S * PSI(R);
-    }
+    K = this->K(R);
+    S = this->S(R);
 }
 
 void ChannelConverter::RGBTosRGB(float C, float &sC) const

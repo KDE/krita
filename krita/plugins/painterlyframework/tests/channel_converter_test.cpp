@@ -41,7 +41,7 @@ void ChannelConverterTest::testKSReflectance()
     c.reflectanceToKS(R, K, S);
     qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
     QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
-
+*/
     R = 0.4999999999999;
     c.reflectanceToKS(R, K, S);
     qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
@@ -51,7 +51,7 @@ void ChannelConverterTest::testKSReflectance()
     c.reflectanceToKS(R, K, S);
     qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
     QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
-
+/*
     R = 0.75;
     c.reflectanceToKS(R, K, S);
     qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;

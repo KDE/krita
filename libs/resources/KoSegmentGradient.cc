@@ -223,21 +223,19 @@ QImage KoSegmentGradient::generatePreview(int width, int height) const
     QImage img(width, height, QImage::Format_RGB32);
 
     KoColor c;
+    quint8 opacity;
     QColor color;
-    for (int y = 0; y < img.height(); y++) {
-        for (int x = 0; x < img.width(); x++) {
+    for (int x = 0; x < img.width(); x++) {
 
+        double t = static_cast<double>(x) / (img.width() - 1);
+        colorAt(c, t);
+        c.toQColor( &color, &opacity );
+        double alpha = static_cast<double>(opacity) / OPACITY_OPAQUE;
+
+        for (int y = 0; y < img.height(); y++) {
             int backgroundRed = 128 + 63 * ((x / 4 + y / 4) % 2);
             int backgroundGreen = backgroundRed;
             int backgroundBlue = backgroundRed;
-
-            quint8 opacity;
-            double t = static_cast<double>(x) / (img.width() - 1);
-
-            colorAt(c, t);
-            c.toQColor( &color, &opacity );
-
-            double alpha = static_cast<double>(opacity) / OPACITY_OPAQUE;
 
             int red = static_cast<int>((1 - alpha) * backgroundRed + alpha * color.red() + 0.5);
             int green = static_cast<int>((1 - alpha) * backgroundGreen + alpha * color.green() + 0.5);

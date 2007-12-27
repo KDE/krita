@@ -35,17 +35,19 @@
 #include <kgenericfactory.h>
 #include <kactioncollection.h>
 
-#include "kis_types.h"
+#include <KoColorSpaceRegistry.h>
+
 #include "kis_annotation.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
-#include "kis_image.h"
-#include "kis_layer.h"
 #include "kis_global.h"
+#include "kis_image.h"
+#include "kis_node_manager.h"
+#include "kis_layer.h"
+#include "kis_types.h"
 
 #include "kis_view2.h"
 #include "kis_paint_device.h"
-#include "KoColorSpaceRegistry.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 
@@ -128,6 +130,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev->convertTo(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
         QApplication::restoreOverrideCursor();
+        m_view->nodeManager()->nodesUpdated();
     }
     delete dlgColorSpaceConversion;
 }

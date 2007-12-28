@@ -25,6 +25,9 @@ set(kritatonemapping_PART_SRCS
 # Trilateral operator
     operators/trilateral/tmo_trilateral.cpp
     operators/trilateral/kis_trilateral_operator.cc
+# ICAM operator
+    operators/icam/tmo_icam.cpp
+    operators/icam/kis_icam_operator.cc
 )
 
 
@@ -33,6 +36,7 @@ kde4_add_ui_files(kritatonemapping_PART_SRCS
     operators/reinhard05/reinhard05_configuration_widget.ui
     operators/reinhard02/reinhard02_configuration_widget.ui
     operators/trilateral/trilateral_configuration_widget.ui
+    operators/icam/icam_configuration_widget.ui
     wdgtonemappingdialog.ui )
 
 kde4_add_plugin(kritatonemapping ${kritatonemapping_PART_SRCS})

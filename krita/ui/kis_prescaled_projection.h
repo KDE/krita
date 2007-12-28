@@ -175,11 +175,6 @@ public slots:
     void setMonitorProfile( const KoColorProfile * profile );
 
     /**
-     * Set the current HDR exposure
-     */
-    void setHDRExposure( float exposure );
-
-    /**
      * Set the current node
      */
     void setCurrentNode( const KisNodeSP node );

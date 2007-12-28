@@ -50,15 +50,13 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
     QString printerProfileName = cfg.printerProfile();
     const KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
 
-    double exposure = m_view->canvasBase()->resourceProvider()->resource(KisResourceProvider::HdrExposure ).toDouble();
-
     double scaleX = m_printer.resolution() / (72.0 * img->xRes());
     double scaleY = m_printer.resolution() / (72.0 * img->yRes());
 
     QRect r = img->bounds();
 
     gc.scale(scaleX, scaleY);
-    img->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile, exposure);
+    img->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile );
     if (removePolicy == DeleteWhenDone)
         deleteLater();
 }

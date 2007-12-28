@@ -114,6 +114,7 @@ void KisResourceProvider::setHDRExposure(float exposure)
     KisExposureVisitor eV(exposure);
     m_view->image()->rootLayer()->accept( eV );
     m_view->canvasBase()->updateCanvas();
+    m_view->canvasBase()->updateCanvasProjection( m_view->image()->bounds() );
 }
 
 

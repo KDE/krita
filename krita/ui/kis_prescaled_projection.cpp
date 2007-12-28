@@ -146,7 +146,6 @@ struct KisPrescaledProjection::Private
         , imageSize( 0, 0 )
         , viewConverter( 0 )
         , monitorProfile( 0 )
-        , exposure( 0.0 )
         {
             smoothingTimer.setSingleShot( true );
         }
@@ -180,7 +179,6 @@ struct KisPrescaledProjection::Private
     KisImageSP image;
     KoViewConverter * viewConverter;
     const KoColorProfile * monitorProfile;
-    float exposure;
     KisNodeSP currentNode;
     QTimer smoothingTimer;
     QRegion rectsToSmooth;
@@ -391,11 +389,6 @@ void KisPrescaledProjection::setMonitorProfile( const KoColorProfile * profile )
     m_d->monitorProfile = profile;
 }
 
-void KisPrescaledProjection::setHDRExposure( float exposure )
-{
-    m_d->exposure = exposure;
-}
-
 void KisPrescaledProjection::setCurrentNode( const KisNodeSP node )
 {
     m_d->currentNode = node;
@@ -561,7 +554,7 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
             kDebug(41010) << "smoothBetween100And200Percent" << endl;
             QImage img;
             if ( !m_d->cacheKisImageAsQImage ) {
-                img = m_d->image->convertToQImage( drawRect, 1.0 / scaleX, 1.0 / scaleY, m_d->monitorProfile, m_d->exposure );
+                img = m_d->image->convertToQImage( drawRect, 1.0 / scaleX, 1.0 / scaleY, m_d->monitorProfile );
                 gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
                 gc.drawImage( rcFromAligned.topLeft(), img );
             }
@@ -578,7 +571,7 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
             QImage img;
             // Get the image directly from the KisImage
             if ( m_d->useNearestNeighbour || !m_d->cacheKisImageAsQImage ) {
-                img = m_d->image->convertToQImage( alignedImageRect, 1.0, 1.0, m_d->monitorProfile, m_d->exposure );
+                img = m_d->image->convertToQImage( alignedImageRect, 1.0, 1.0, m_d->monitorProfile );
             }
             else {
                 // Crop the canvascache
@@ -621,7 +614,7 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
                 m_d->rectsToSmooth += rc;
                 m_d->smoothingTimer.start(50);
             }
-            QImage tmpImage = m_d->image->convertToQImage( drawRect, 1.0 / scaleX, 1.0 / scaleY, m_d->monitorProfile, m_d->exposure );
+            QImage tmpImage = m_d->image->convertToQImage( drawRect, 1.0 / scaleX, 1.0 / scaleY, m_d->monitorProfile);
             gc.drawImage( rcTopLeftUnscaled, tmpImage );
         }
         else {
@@ -629,7 +622,7 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
             // an unscaled QImage for this rect from KisImage.
             if ( !m_d->cacheKisImageAsQImage ) {
                 kDebug(41010) << " !m_d->cacheKisImageAsQImage";
-                croppedImage = m_d->image->convertToQImage( alignedImageRect.x(), alignedImageRect.y(), alignedImageRect.width(), alignedImageRect.height(), m_d->monitorProfile, m_d->exposure );
+                croppedImage = m_d->image->convertToQImage( alignedImageRect.x(), alignedImageRect.y(), alignedImageRect.width(), alignedImageRect.height(), m_d->monitorProfile );
             }
             QSize s( ceil(rcFromAligned.size().width()), ceil(rcFromAligned.size().height()) );
             double scaleXbis = rcFromAligned.width() / s.width();
@@ -703,8 +696,7 @@ void KisPrescaledProjection::updateUnscaledCache( const QRect & rc )
     p.setCompositionMode( QPainter::CompositionMode_Source );
 
     QImage updateImage = m_d->image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
-                                                     m_d->monitorProfile,
-                                                     m_d->exposure);
+                                                     m_d->monitorProfile);
 
     if ( m_d->showMask && m_d->drawMaskVisualisationOnUnscaledCanvasCache ) {
 

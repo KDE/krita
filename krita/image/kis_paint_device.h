@@ -294,9 +294,8 @@ public:
      * @param dstProfile RGB profile to use in conversion. May be 0, in which
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
-     * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, float exposure = 0.0f);
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -305,9 +304,8 @@ public:
      * @param dstProfile RGB profile to use in conversion. May be 0, in which
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
-     * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, float exposure = 0.0f);
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile);
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining

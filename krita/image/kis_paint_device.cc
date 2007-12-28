@@ -568,7 +568,7 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
    }
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, float exposure)
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
 {
     qint32 x1;
     qint32 y1;
@@ -584,12 +584,11 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, float
     w = rc.width();
     h = rc.height();
 
-    return convertToQImage(dstProfile, x1, y1, w, h, exposure);
+    return convertToQImage(dstProfile, x1, y1, w, h);
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, float exposure)
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h)
 {
-    Q_UNUSED(exposure);
     
     if (w < 0)
         return QImage();

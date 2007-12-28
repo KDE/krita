@@ -243,7 +243,7 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
                 if (m_imageTextureInternalFormat == GL_RGBA8) {
                     tileUpdateImage = m_image->convertToQImage(tileUpdateRect.x(), tileUpdateRect.y(),
                                                                tileUpdateRect.width(), tileUpdateRect.height(),
-                                                               m_monitorProfile, m_exposure);
+                                                               m_monitorProfile);
 
 #if 0 // XXX_SELECTION This is the old method of painting selections -- should be
       // ported to whatever Sven Langkamp is doing.

@@ -139,8 +139,8 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
 
 //     addImage("/home/cyrille/H0010632.JPG");
 //     addImage("/home/cyrille/H0010633.JPG");
-//     addImage("/home/cyrille/0.roma.png");
-//     addImage("/home/cyrille/1.roma.png");
+    addImage("/home/cyrille/0.roma.png");
+    addImage("/home/cyrille/1.roma.png");
 /*    addImage("/home/cyrille/0.roma2.png");
     addImage("/home/cyrille/1.roma2.png");
     addImage("/home/cyrille/2.roma2.png");
@@ -233,7 +233,7 @@ void PanoramaPlugin::slotPreview()
     KisPaintDeviceSP dst = new KisPaintDevice( images[0].device->colorSpace(), "panorama preview" );
     QRect dstArea;
     createPanorama(images, dst, dstArea);
-    QImage img = dst->convertToQImage(0,0.0);
+    QImage img = dst->convertToQImage(0);
     img = img.scaledToHeight(500);
     m_wdgPanoramaCreation->wdgPreview->setImage(img);
     //m_wdgPanoramaCreation->labelPreview->setPixmap(QPixmap::fromImage(img));

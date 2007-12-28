@@ -54,7 +54,7 @@ QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, 
         {
             KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
             d->filter->process(target, QRect(0,0,100,100), configuration(index));
-            d->previewCache[index.row()] = target->convertToQImage(0,0.0);
+            d->previewCache[index.row()] = target->convertToQImage( 0);
         }
         return d->previewCache[index.row()];
     } else {

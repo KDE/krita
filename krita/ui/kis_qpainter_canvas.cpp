@@ -59,16 +59,13 @@
 //#define USE_QT_SCALING
 
 
-#define NOT_DEFAULT_EXPOSURE 1e100
-
 class KisQPainterCanvas::Private {
 public:
     Private(const KoViewConverter *vc)
         : toolProxy(0),
           canvas(0),
           viewConverter(vc),
-          gridDrawer(0),
-          currentExposure( NOT_DEFAULT_EXPOSURE )
+          gridDrawer(0)
         {
         }
 
@@ -79,7 +76,6 @@ public:
     QBrush checkBrush;
     QPoint documentOffset;
     KisGridDrawer* gridDrawer;
-    double currentExposure;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
@@ -114,7 +110,6 @@ void KisQPainterCanvas::setPrescaledProjection( KisPrescaledProjectionSP prescal
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
-    m_d->prescaledProjection->setHDRExposure(m_d->canvas->view()->resourceProvider()->HDRExposure());
     QPixmap pm( ev->rect().size() );
 
     KisConfig cfg;
@@ -122,19 +117,6 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     kDebug(41010) <<"paintEvent: rect" << ev->rect() <<", doc offset:" << m_d->documentOffset;
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
-
-    if (img->colorSpace()->hasHighDynamicRange() &&
-        (m_d->currentExposure != m_d->canvas->view()->resourceProvider()->HDRExposure())) {
-        // XXX: If we had a dirty region we could just recomposite areas as
-        // they become visible.
-        // YYY: As soon as we start using
-        // KisProjection::setRegionOfInterest(), only the visible
-        // areas will be updated. (Boud)
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-        m_d->canvas->updateCanvasProjection(img->bounds());
-        QApplication::restoreOverrideCursor();
-        m_d->currentExposure = m_d->canvas->view()->resourceProvider()->HDRExposure();
-    }
 
     QTime t;
 

@@ -869,10 +869,9 @@ void KisImage::renderToPainter(qint32 srcX,
                                qint32 width,
                                qint32 height,
                                QPainter &painter,
-                               const KoColorProfile *  monitorProfile,
-                               float exposure)
+                               const KoColorProfile *  monitorProfile)
 {
-    QImage img = convertToQImage(srcX, srcY, width, height, monitorProfile, exposure);
+    QImage img = convertToQImage(srcX, srcY, width, height, monitorProfile);
     painter.drawImage(dstX, dstY, img, 0, 0, width, height);
 }
 
@@ -880,11 +879,10 @@ QImage KisImage::convertToQImage(qint32 x,
                                  qint32 y,
                                  qint32 w,
                                  qint32 h,
-                                 const KoColorProfile * profile,
-                                 float exposure)
+                                 const KoColorProfile * profile)
 {
     KisPaintDeviceSP dev = m_d->rootLayer->projection();
-    QImage img = dev->convertToQImage(const_cast<KoColorProfile*>( profile ), x, y, w, h, exposure);
+    QImage img = dev->convertToQImage(const_cast<KoColorProfile*>( profile ), x, y, w, h);
 
     if (!img.isNull()) {
 
@@ -911,10 +909,9 @@ QImage KisImage::convertToQImage(qint32 x,
 }
 
 
-QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, const KoColorProfile *profile, float exposure, KisSelectionSP mask)
+QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, const KoColorProfile *profile, KisSelectionSP mask)
 {
     Q_UNUSED( mask )
-    Q_UNUSED( exposure );
 
 #ifdef __GNUC__
     #warning "KisImage::convertToQImage: Implement direct rendering of current mask onto scaled image pixels"

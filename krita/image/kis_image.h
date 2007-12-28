@@ -75,8 +75,7 @@ public:
 
     /**
      * Paint the specified rect onto the painter, adjusting the colors
-     * using the given profile. The exposure setting is used if the image
-     * has a high dynamic range.
+     * using the given profile.
      */
     void renderToPainter(qint32 srcX,
                          qint32 srcY,
@@ -85,8 +84,7 @@ public:
                          qint32 width,
                          qint32 height,
                          QPainter &painter,
-                         const KoColorProfile *profile,
-                         float exposure = 0.0f);
+                         const KoColorProfile *profile);
 
     /**
      * Render the projection onto a QImage.
@@ -95,8 +93,7 @@ public:
                            qint32 y1,
                            qint32 width,
                            qint32 height,
-                           const KoColorProfile * profile,
-                           float exposure = 0.0f);
+                           const KoColorProfile * profile);
 
      /**
       * Render the projection scaled onto a QImage. Use this when
@@ -112,14 +109,12 @@ public:
       * @param xScale the X axis scale (1.0 == 100%)
       * @param yScale the Y axis scale (1.0 == 100%)
       * @param projection the display profile
-      * @param exposure the exposure (for hdr images)
       * @param mask the mask that will be rendered on top of the image
       * @return a qimage containing the sampled image pixels
       */
      QImage convertToQImage(const QRect& r,
                             const double xScale, const double yScale,
                             const KoColorProfile *profile,
-                            float exposure = 0.0f,
                             KisSelectionSP mask = 0);
 
     /**

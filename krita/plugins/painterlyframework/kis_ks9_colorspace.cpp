@@ -21,7 +21,7 @@
 #include "kis_illuminant_profile.h"
 
 KisKS9ColorSpace::KisKS9ColorSpace(KoColorProfile *p)
-: parent(p, "ks9colorspace", "KS Color Space - 9 wavelenghts"), m_data(0), m_s(0)
+: parent(p, "ks9colorspace", i18n("KS Color Space - 9 wavelenghts")), m_data(0), m_s(0)
 {
     if (!profileIsCompatible(p))
         return;

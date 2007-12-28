@@ -22,13 +22,13 @@
 
 #include <KoIncompleteColorSpace.h>
 
-#include "kis_ks_colorspace_traits.h"
 #include "channel_converter.h"
-
 #include "kis_illuminant_profile.h"
-#include <KoColorSpaceMaths.h>
+#include "kis_ks_colorspace_traits.h"
 
-#include "KoColorSpaceConstants.h"
+#include <KoColorModelStandardIds.h>
+#include <KoColorSpaceConstants.h>
+#include <KoColorSpaceMaths.h>
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpMultiply.h"
@@ -55,22 +55,20 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
 
     public:
 
-        virtual bool operator==(const KoColorSpace& rhs) const;
+        KoColorProfile *profile();
+        const KoColorProfile *profile() const;
+        bool profileIsCompatible(const KoColorProfile *profile) const;
+        KoID colorDepthId() const { return Float16BitsColorDepthID; }
+        void colorToXML(const quint8*, QDomDocument&, QDomElement&) const {} // TODO
+        void colorFromXML(quint8*, const QDomElement&) const {} // TODO
 
-        virtual KoColorProfile *profile();
-        virtual const KoColorProfile *profile() const;
-        virtual bool profileIsCompatible(const KoColorProfile *profile) const;
+        void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
+        void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
 
-        // TODO These need implementation!!!
+        // TODO These need to be pure virtual
         virtual KoColorSpace* clone() const { return 0; }
         virtual KoID colorModelId() const { return KoID(); }
-        virtual KoID colorDepthId() const { return KoID(); }
-        virtual bool willDegrade(ColorSpaceIndependence) const { return true; }
-        virtual void colorToXML(const quint8*, QDomDocument&, QDomElement&) const {}
-        virtual void colorFromXML(quint8*, const QDomElement&) const {}
-
-        virtual void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
-        virtual void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
+        virtual bool willDegrade(ColorSpaceIndependence) const { return false; } // TODO Depends on state
 
     protected:
         /**
@@ -142,12 +140,6 @@ KisKSColorSpace<_N_>::~KisKSColorSpace()
         gsl_vector_free(m_rgbvec);
     if (m_refvec)
         gsl_vector_free(m_refvec);
-}
-
-template<int _N_>
-bool KisKSColorSpace<_N_>::operator==(const KoColorSpace& rhs) const
-{
-    return (rhs.id() == parent::id()) && (*rhs.profile() == *profile());
 }
 
 template<int _N_>

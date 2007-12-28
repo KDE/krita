@@ -31,7 +31,7 @@
 #include <gsl/gsl_vector.h>
 
 KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
-: parent(p, "ks3colorspace", "KS Color Space - 3 wavelenghts"), m_inverse(0)
+: parent(p, "ks3colorspace", i18n("KS Color Space - 3 wavelenghts")), m_inverse(0)
 {
     if (!profileIsCompatible(p))
         return;

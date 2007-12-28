@@ -39,6 +39,8 @@ class KisKSLinColorSpace : public KisKSColorSpace<3>
         KisKSLinColorSpace(KoColorProfile *p);
         ~KisKSLinColorSpace();
 
+        KoID colorModelId() const { return KoID("KS3", i18n("3-pairs Absorption-Scattering")); }
+
     protected:
         void RGBToReflectance() const;
 

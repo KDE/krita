@@ -42,6 +42,8 @@ class KisKSQPColorSpace : public KisKSColorSpace<_N_>
         KisKSQPColorSpace(KoColorProfile *p);
         ~KisKSQPColorSpace();
 
+        KoID colorModelId() const;
+
     protected:
         void RGBToReflectance() const;
 
@@ -59,7 +61,7 @@ class KisKSQPColorSpace : public KisKSColorSpace<_N_>
 template<int _N_>
 KisKSQPColorSpace<_N_>::KisKSQPColorSpace(KoColorProfile *p)
 : parent(p, "ksqpcolorspace"+QString::number(_N_),
-          i18n(QString("KS Color Space with QP Conversion - %d wavelenghts").arg(_N_).toLatin1().data())),
+          i18n(QString("KS Color Space with QP Conversion - %d wavelenghts").arg(_N_).toUtf8().data())),
           m_data(0), m_s(0)
 {
     if (!parent::profileIsCompatible(p))
@@ -132,6 +134,13 @@ KisKSQPColorSpace<_N_>::~KisKSQPColorSpace()
     }
     if (m_s)
         gsl_cqpminimizer_free(m_s);
+}
+
+template<int _N_>
+KoID KisKSQPColorSpace<_N_>::colorModelId() const
+{
+    return KoID("KS"+QString::number(_N_),
+                 i18n(QString("%1-pairs Absorption-Scattering").arg(_N_).toUtf8().data()));
 }
 
 template<int _N_>

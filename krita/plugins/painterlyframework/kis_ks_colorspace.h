@@ -65,9 +65,9 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
         void fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
         void toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const;
 
+        virtual KoID colorModelId() const = 0;
         // TODO These need to be pure virtual
         virtual KoColorSpace* clone() const { return 0; }
-        virtual KoID colorModelId() const { return KoID(); }
         virtual bool willDegrade(ColorSpaceIndependence) const { return false; } // TODO Depends on state
 
     protected:

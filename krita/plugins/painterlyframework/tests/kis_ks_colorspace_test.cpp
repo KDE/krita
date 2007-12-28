@@ -22,8 +22,8 @@
 #include <cstring>
 
 #include "kis_ks_colorspace_test.h"
-#include "kis_ks9_colorspace.h"
-#include "kis_ks3_colorspace.h"
+#include "kis_ksqp_colorspace.h"
+#include "kis_kslin_colorspace.h"
 
 #include "kis_illuminant_profile.h"
 
@@ -31,8 +31,13 @@ void KisKSColorSpaceTest::testConstructor()
 {
     KisIlluminantProfile *p1 = new KisIlluminantProfile("D653Test.ill");
     KisIlluminantProfile *p2 = new KisIlluminantProfile("D659Test.ill");
-    KisKS3ColorSpace *cs1 = new KisKS3ColorSpace(p1);
+    KisKSLinColorSpace *cs1 = new KisKSLinColorSpace(p1);
+    KisKSQPColorSpace<9> *cs2 = new KisKSQPColorSpace<9>(p2);
+    QVERIFY(cs1->profileIsCompatible(p1) == true);
     QVERIFY(cs1->profileIsCompatible(p2) == false);
+    QVERIFY(cs2->profileIsCompatible(p1) == false);
+    QVERIFY(cs2->profileIsCompatible(p2) == true);
+    delete cs2;
     delete cs1;
     delete p2;
     delete p1;
@@ -52,9 +57,9 @@ void print_vector(quint8 *v, const QString &text)
 
 void KisKSColorSpaceTest::testToFromRgbA16()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D659Test.ill");
-    KisKS9ColorSpace *cs = new KisKS9ColorSpace(p);
-//     KisKS3ColorSpace *cs = new KisKS3ColorSpace(p);
+    KisIlluminantProfile *p = new KisIlluminantProfile("D65"+QString::number(N)+"Test.ill");
+    KisKSQPColorSpace<N> *cs = new KisKSQPColorSpace<N>(p);
+//     KisKSLinColorSpace *cs = new KisKSLinColorSpace(p);
 
     quint8 *rgb1;
     quint8 *kas1 = new quint8[2*cs->pixelSize()];
@@ -135,9 +140,9 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 
 void KisKSColorSpaceTest::testMixing()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D659Test.ill");
-    KisKS9ColorSpace *cs = new KisKS9ColorSpace(p);
-//     KisKS3ColorSpace *cs = new KisKS3ColorSpace(p);
+    KisIlluminantProfile *p = new KisIlluminantProfile("D65"+QString::number(N)+"Test.ill");
+    KisKSQPColorSpace<N> *cs = new KisKSQPColorSpace<N>(p);
+    //     KisKSLinColorSpace *cs = new KisKSLinColorSpace(p);
 
     quint8 *rgb1, *rgb2;
     quint8 *kas1 = new quint8[cs->pixelSize()];

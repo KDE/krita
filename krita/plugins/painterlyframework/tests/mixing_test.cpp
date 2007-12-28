@@ -22,7 +22,7 @@
 #include "mixing_test.h"
 
 #include "kis_illuminant_profile.h"
-#include "kis_ks9_colorspace.h"
+#include "kis_ksqp_colorspace.h"
 
 #include <QImage>
 #include <QPainter>
@@ -41,7 +41,7 @@ void MixingTest::testMixing()
     const int ncolor2 = (int)pow(T/step+1,2);
 
     KisIlluminantProfile *pr = new KisIlluminantProfile("D659Test.ill");
-    KisKS9ColorSpace *cs = new KisKS9ColorSpace(pr);
+    KisKSQPColorSpace<9> *cs = new KisKSQPColorSpace<9>(pr);
 
     QColor color1, color2, colorm;
     quint8 *data1 = new quint8[cs->pixelSize()];

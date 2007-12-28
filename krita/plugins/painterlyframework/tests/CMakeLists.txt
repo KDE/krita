@@ -39,8 +39,7 @@ set(kis_ks_colorspace_test_SRCS
     kis_ks_colorspace_test.cpp
     ../kis_illuminant_profile.cpp
     ../channel_converter.cpp
-    ../kis_ks3_colorspace.cpp
-    ../kis_ks9_colorspace.cpp
+    ../kis_kslin_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -58,7 +57,6 @@ set(mixing_test_SRCS
     mixing_test.cpp
     ../kis_illuminant_profile.cpp
     ../channel_converter.cpp
-    ../kis_ks9_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)

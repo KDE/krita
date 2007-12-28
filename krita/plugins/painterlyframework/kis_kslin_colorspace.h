@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KS3_COLORSPACE_H_
-#define KIS_KS3_COLORSPACE_H_
+#ifndef KIS_KSLIN_COLORSPACE_H_
+#define KIS_KSLIN_COLORSPACE_H_
 
 #include "kis_ks_colorspace_traits.h"
 #include "kis_ks_colorspace.h"
@@ -30,16 +30,14 @@
 class KisIlluminantProfile;
 class KoColorProfile;
 
-typedef KisKSColorSpaceTrait<3> KisKS3ColorSpaceTrait;
-
-class KisKS3ColorSpace : public KisKSColorSpace<3>
+class KisKSLinColorSpace : public KisKSColorSpace<3>
 {
     typedef KisKSColorSpace<3> parent;
 
     public:
 
-        KisKS3ColorSpace(KoColorProfile *p);
-        ~KisKS3ColorSpace();
+        KisKSLinColorSpace(KoColorProfile *p);
+        ~KisKSLinColorSpace();
 
     protected:
         void RGBToReflectance() const;
@@ -49,4 +47,4 @@ class KisKS3ColorSpace : public KisKSColorSpace<3>
 
 };
 
-#endif // KIS_KS3_COLORSPACE_H_
+#endif // KIS_KSLIN_COLORSPACE_H_

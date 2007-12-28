@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_ks3_colorspace.h"
+#include "kis_kslin_colorspace.h"
 #include "kis_ks_colorspace.h"
 
 #include "channel_converter.h"
@@ -30,8 +30,8 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
-KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
-: parent(p, "ks3colorspace", i18n("KS Color Space - 3 wavelenghts")), m_inverse(0)
+KisKSLinColorSpace::KisKSLinColorSpace(KoColorProfile *p)
+: parent(p, "kslincolorspace", i18n("KS Color Space with Linear Conversion")), m_inverse(0)
 {
     if (!profileIsCompatible(p))
         return;
@@ -50,13 +50,13 @@ KisKS3ColorSpace::KisKS3ColorSpace(KoColorProfile *p)
     gsl_matrix_free(tmp);
 }
 
-KisKS3ColorSpace::~KisKS3ColorSpace()
+KisKSLinColorSpace::~KisKSLinColorSpace()
 {
     if (m_inverse)
         gsl_matrix_free(m_inverse);
 }
 
-void KisKS3ColorSpace::RGBToReflectance() const
+void KisKSLinColorSpace::RGBToReflectance() const
 {
     gsl_blas_dgemv(CblasNoTrans, 1.0, m_inverse, m_rgbvec, 0.0, m_refvec);
 }

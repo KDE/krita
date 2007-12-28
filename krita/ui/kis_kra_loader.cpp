@@ -29,6 +29,7 @@
 #include "kis_config.h"
 #include "kis_kra_load_visitor.h"
 
+#include <kis_base_node.h>
 #include <kis_adjustment_layer.h>
 #include <kis_annotation.h>
 #include <kis_debug_areas.h>
@@ -42,6 +43,7 @@
 #include <kis_paint_device_action.h>
 #include <kis_paint_layer.h>
 #include <kis_selection.h>
+#include <kis_shape_layer.h>
 
 /**
  * Mime type for native file format
@@ -280,6 +282,9 @@ KisLayerSP KisKraLoader::loadLayer(const KoXmlElement& element, KisImageSP img)
     if(attr == "adjustmentlayer")
         return KisLayerSP(loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
 
+    if(attr == "shapelayer")
+        return KisLayerSP(loadShapeLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
+
     kWarning(DBG_AREA_FILE) <<"Specified layertype is not recognised";
     return KisLayerSP(0);
 }
@@ -398,20 +403,24 @@ KisAdjustmentLayerSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& eleme
 
 KisShapeLayerSP KisKraLoader::loadShapeLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp)
 {
-#ifdef __GNUC__
-#warning "Implement loading of shape layers!"
-#endif
-    Q_UNUSED(elem);
-    Q_UNUSED(img);
-    Q_UNUSED(name);
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    Q_UNUSED(opacity);
-    Q_UNUSED(visible);
-    Q_UNUSED(locked);
-    Q_UNUSED(compositeOp);
+    QString attr;
+    
+    KisShapeLayerSP layer = new KisShapeLayer(0, img.data(), name, opacity);
+    Q_CHECK_PTR(layer);
+    const KoCompositeOp * op = img->colorSpace()->compositeOp(compositeOp);
+    layer->setCompositeOp(op);
+    static_cast<KisBaseNode*>(layer.data())->setVisible(visible);
+    static_cast<KisBaseNode*>(layer.data())->setLocked(locked);
+    layer->setX(x);
+    layer->setY(y);
 
-    return KisShapeLayerSP();
+    if ((elem.attribute("filename")).isNull())
+        m_d->layerFilenames[layer.data()] = name;
+    else
+        m_d->layerFilenames[layer.data()] = QString(elem.attribute("filename"));
+
+    
+    return layer;
 }
 
 #include "kis_kra_loader.moc"

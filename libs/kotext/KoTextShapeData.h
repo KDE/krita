@@ -110,6 +110,7 @@ public:
      * @param margins the margins that shrink the text area.
      */
     void setShapeMargins(const KoInsets &margins);
+    
     /// returns the currently set margins for the shape.
     KoInsets shapeMargins() const;
 

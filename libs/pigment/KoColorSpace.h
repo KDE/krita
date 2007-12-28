@@ -237,12 +237,15 @@ public:
     //========== Identification ===============================================//
 
     /**
-     * ID for use in files and internally: unchanging name
+     * ID for use in files and internally: unchanging name. As the id must be unique
+     * it is usually the concatenation of the id of the color model and of the color
+     * depth, for instance "RGBA8" or "CMYKA16" or "XYZA32f".
      */
     virtual QString id() const;
 
     /**
-     * i18n name.
+     * User visible name which contains the name of the color model and of the color depth.
+     * For intance "RGBA (8-bits)" or "CMYKA (16-bits)".
      */
     virtual QString name() const;
 

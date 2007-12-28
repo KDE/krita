@@ -451,7 +451,8 @@ void KisView2::slotLoadingFinished()
 void KisView2::createGUI()
 {
     KoToolManager::instance()->addController(m_d->canvasController);
-
+    KoToolManager::instance()->registerTools( actionCollection(), m_d->canvasController );
+    
     // Remove the plugin dock widgets
     QList<QDockWidget*> dockWidgets = shell()->dockWidgets();
     foreach( QDockWidget * dockWidget, dockWidgets ) {

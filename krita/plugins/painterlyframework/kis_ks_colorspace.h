@@ -165,7 +165,7 @@ bool KisKSColorSpace<_N_>::profileIsCompatible(const KoColorProfile *profile) co
 }
 
 template<int _N_>
-void KisKSColorSpace<_N_>::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const
+void KisKSColorSpace<_N_>::fromRgbA16(const quint8 *srcU8, quint8 *dst, quint32 nPixels) const
 {
     // For each pixel we do this:
     // 1 - convert raw bytes to quint16
@@ -173,14 +173,12 @@ void KisKSColorSpace<_N_>::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint3
     // 3 - convert reflectances to K/S
 
     const quint16 *srcU16 = reinterpret_cast<const quint16 *>(srcU8);
-    quint8 *dst = dstU8;
-    float c;
 
     for ( ; nPixels > 0; nPixels-- ) {
         // We need linear RGB values.
         for (int i = 0; i < 3; i++) {
-            m_converter.sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(srcU16[2-i]), c);
-            gsl_vector_set(m_rgbvec, i, (double)c);
+//             m_converter.sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(srcU16[2-i]), c);
+            gsl_vector_set(m_rgbvec, i, KoColorSpaceMaths<quint16,double>::scaleToA(srcU16[2-i]));
         }
 
         RGBToReflectance();
@@ -198,10 +196,9 @@ void KisKSColorSpace<_N_>::fromRgbA16(const quint8 *srcU8, quint8 *dstU8, quint3
 }
 
 template<int _N_>
-void KisKSColorSpace<_N_>::toRgbA16(const quint8 *srcU8, quint8 *dstU8, quint32 nPixels) const
+void KisKSColorSpace<_N_>::toRgbA16(const quint8 *src, quint8 *dstU8, quint32 nPixels) const
 {
     quint16 *dstU16 = reinterpret_cast<quint16 *>(dstU8);
-    const quint8 *src = srcU8;
     float c;
 
     for ( ; nPixels > 0; nPixels-- ) {

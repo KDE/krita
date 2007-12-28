@@ -22,6 +22,8 @@
 // Krita/Image
 #include <kis_layer.h>
 #include <kis_properties_configuration.h>
+#include <kis_transaction.h>
+#include <kis_undo_adapter.h>
 
 // Krita/UI
 #include <kis_bookmarked_configuration_manager.h>
@@ -78,13 +80,18 @@ void KisToneMappingDialog::apply()
     d->layer->image()->lock();
     KisPropertiesConfiguration* config = (d->currentConfigurationWidget) ? d->currentConfigurationWidget->configuration() : new KisPropertiesConfiguration;
     const KoColorSpace* colorSpace = d->currentOperator->colorSpace();
+    
+    
     if( not(*d->layer->paintDevice()->colorSpace() == *colorSpace))
     {
         d->layer->paintDevice()->convertTo(colorSpace);
-//         d->layer->setCompositeOp( colorSpace->compositeOp( d->layer->compositeOp()->id() ) );
         d->layer->setChannelFlags( QBitArray() );
     }
+    KisTransaction * cmd = 0;
+    
+    if (d->layer->image()->undo()) cmd = new KisTransaction( d->currentOperator->name(), d->layer->paintDevice());
     d->currentOperator->toneMap(d->layer->paintDevice(), config);
+    if (cmd) d->layer->image()->undoAdapter()->addCommand(cmd);
     
     d->currentOperator->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
 

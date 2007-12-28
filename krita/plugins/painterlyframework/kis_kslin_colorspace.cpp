@@ -31,7 +31,7 @@
 #include <gsl/gsl_vector.h>
 
 KisKSLinColorSpace::KisKSLinColorSpace(KoColorProfile *p)
-: parent(p, "KS3LINEARF16", i18n("3-pairs Absorption-Scattering Linear (16 Bits Float)")), m_inverse(0)
+: parent(p, "KS3LINEARF32", i18n("3-pairs Absorption-Scattering Linear (32 Bits Float)")), m_inverse(0)
 {
     if (!profileIsCompatible(p))
         return;

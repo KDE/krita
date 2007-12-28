@@ -60,8 +60,8 @@ class KisKSQPColorSpace : public KisKSColorSpace<_N_>
 
 template<int _N_>
 KisKSQPColorSpace<_N_>::KisKSQPColorSpace(KoColorProfile *p)
-: parent(p, "KS"+QString::number(_N_)+"QPF16",
-          i18n(QString("%1-pairs Absorption-Scattering QP (16 Bits Float)").arg(_N_).toUtf8().data())),
+: parent(p, "KS"+QString::number(_N_)+"QPF32",
+          i18n(QString("%1-pairs Absorption-Scattering QP (32 Bits Float)").arg(_N_).toUtf8().data())),
           m_data(0), m_s(0)
 {
     if (!parent::profileIsCompatible(p))

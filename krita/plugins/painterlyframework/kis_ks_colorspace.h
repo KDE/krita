@@ -58,7 +58,7 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
         KoColorProfile *profile();
         const KoColorProfile *profile() const;
         bool profileIsCompatible(const KoColorProfile *profile) const;
-        KoID colorDepthId() const { return Float16BitsColorDepthID; }
+        KoID colorDepthId() const { return Float32BitsColorDepthID; }
         void colorToXML(const quint8*, QDomDocument&, QDomElement&) const {} // TODO
         void colorFromXML(quint8*, const QDomElement&) const {} // TODO
 

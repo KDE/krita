@@ -31,6 +31,7 @@ class KoShapeLayer;
 class KoShape;
 class KoShapeControllerBase;
 class KoImageCollection;
+class KoSharedLoadingData;
 
 /**
  * Context passed to shapes during loading.
@@ -90,6 +91,35 @@ public:
 
     /// Get the save z-indices
     const QMap<KoShape*, int> & shapeZIndices();
+
+    /**
+     * Add shared data
+     *
+     * This can be use to pass data between shapes on loading. E.g. The decoded text styles
+     * of the TextShape. With that the styles only have to be read once and can be used in 
+     * all shapes that also need them.
+     *
+     * The ownership of the added data is passed to teh context. The KoShapeLoadingContext will
+     * delete the added data when it is destroyed.
+     *
+     * Data inserted for a specific id will not be overwritten by calling addSharedData with 
+     * the same id again.
+     *
+     * You get an assertion when the id is already existing.
+     *
+     * @see KoSharedLoadingData
+     */
+    void addSharedData( const QString & id, KoSharedLoadingData * data );
+
+    /**
+     * Get the shared data.
+     *
+     * @see KoSharedLoadingData
+     *
+     * @param id The id used to identify the shared data.
+     * @return The shared data for the id or 0 if there is no shared data for the id.
+     */
+    KoSharedLoadingData * sharedData( const QString & id ) const;
 
 private:
     class Private;

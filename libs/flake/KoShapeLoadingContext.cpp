@@ -46,12 +46,18 @@ public:
             delete shape;
         }
         shapesForDocument.clear();
+
+        foreach ( KoSharedLoadingData * data, sharedData )
+        {
+            delete data;
+        }
     }
     KoOasisLoadingContext &context;
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
     QList<KoShape*> shapesForDocument;
     KoImageCollection * imageCollection;
+    QMap<QString, KoSharedLoadingData*> sharedData;
     QMap<KoShape*, int> zIndices;
     int zIndex;
 };
@@ -137,4 +143,27 @@ void KoShapeLoadingContext::addShapeZIndex( KoShape * shape, int index )
 const QMap<KoShape*, int> & KoShapeLoadingContext::shapeZIndices()
 {
     return d->zIndices;
+}
+
+void KoShapeLoadingContext::addSharedData( const QString & id, KoSharedLoadingData * data )
+{
+    QMap<QString, KoSharedLoadingData*>::iterator it( d->sharedData.find( id ) );
+    // data will not be overwritten
+    if ( it == d->sharedData.end() ) {
+        d->sharedData.insert( id, data );
+    }
+    else {
+        kWarning(30006) << "The id" << id << "is already registered. Data not inserted";
+        Q_ASSERT( it == d->sharedData.end() );
+    }
+}
+
+KoSharedLoadingData * KoShapeLoadingContext::sharedData( const QString & id ) const
+{
+    KoSharedLoadingData * data = 0;
+    QMap<QString, KoSharedLoadingData*>::const_iterator it( d->sharedData.find( id ) );
+    if ( it != d->sharedData.end() ) {
+        data = it.value();
+    }
+    return data;
 }

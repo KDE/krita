@@ -191,7 +191,7 @@ void KoOpenPane::initRecentDocs()
     d->m_sectionList->setSelected(item, true);
   }
 
-  updateSectionListMaxHeight();
+  //updateSectionListMaxHeight();
 }
 
 void KoOpenPane::initTemplates(const QString& templateType)
@@ -247,7 +247,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
     d->m_sectionList->setSelected(firstItem, true);
   }
 
-  updateSectionListMaxHeight();
+  //updateSectionListMaxHeight();
 }
 
 void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
@@ -265,7 +265,7 @@ void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
     d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
   }
 
-  updateSectionListMaxHeight();
+  //updateSectionListMaxHeight();
 }
 
 Q3ListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)

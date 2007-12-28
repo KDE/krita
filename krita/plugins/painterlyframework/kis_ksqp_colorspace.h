@@ -148,23 +148,13 @@ void KisKSQPColorSpace<_N_>::RGBToReflectance() const
         gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(parent::m_rgbvec, i) + 0.0 ) );
     }
 
-    //// SOLVER INITIALIZATION
-    const size_t max_iter = 100;
-    size_t iter = 1;
-    int status;
-
-    status = gsl_cqpminimizer_set(m_s, m_data);
+    gsl_cqpminimizer_set(m_s, m_data);
 
     do {
-        status = gsl_cqpminimizer_iterate(m_s);
-        status = gsl_cqpminimizer_test_convergence(m_s, 1e-10, 1e-10);
+        gsl_cqpminimizer_iterate(m_s);
+    } while (gsl_cqpminimizer_test_convergence(m_s, 1e-7, 1e-7) == GSL_CONTINUE);
 
-        if(status != GSL_SUCCESS)
-            iter++;
-
-    } while(status == GSL_CONTINUE && iter<=max_iter);
-
-    for (uint i = 0; i < parent::m_refvec->size; i++) {
+    for (uint i = 0; i < _N_; i++) {
         double curr = gsl_vector_get(gsl_cqpminimizer_x(m_s), i);
 
         if (fabs(curr - 0.0) < 1e-6)

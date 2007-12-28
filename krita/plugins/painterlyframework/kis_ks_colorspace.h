@@ -169,16 +169,15 @@ void KisKSColorSpace<_N_>::fromRgbA16(const quint8 *srcU8, quint8 *dst, quint32 
 {
     // For each pixel we do this:
     // 1 - convert raw bytes to quint16
-    // 2 - find reflectances solving a Quadratic Program over the transformation matrix of the profile.
+    // 2 - find reflectances using the transformation matrix of the profile.
     // 3 - convert reflectances to K/S
 
     const quint16 *srcU16 = reinterpret_cast<const quint16 *>(srcU8);
 
     for ( ; nPixels > 0; nPixels-- ) {
-        // We need linear RGB values.
         for (int i = 0; i < 3; i++) {
 //             m_converter.sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(srcU16[2-i]), c);
-            gsl_vector_set(m_rgbvec, i, KoColorSpaceMaths<quint16,double>::scaleToA(srcU16[2-i]));
+            gsl_vector_set(m_rgbvec, i, KoColorSpaceMaths<quint16,float>::scaleToA(srcU16[2-i]));
         }
 
         RGBToReflectance();
@@ -205,14 +204,14 @@ void KisKSColorSpace<_N_>::toRgbA16(const quint8 *src, quint8 *dstU8, quint32 nP
         for (int i = 0; i < _N_; i++) {
             m_converter.KSToReflectance(KisKSColorSpaceTrait<_N_>::K(src, i),
                                         KisKSColorSpaceTrait<_N_>::S(src, i), c);
-            gsl_vector_set(m_refvec, i, (double)c);
+            gsl_vector_set(m_refvec, i, c);
         }
 
         gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
         for (int i = 0; i < 3; i++) {
-            m_converter.RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), c);
-            dstU16[2-i] = KoColorSpaceMaths<float,quint16>::scaleToA(c);
+//             m_converter.RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), c);
+            dstU16[2-i] = KoColorSpaceMaths<float,quint16>::scaleToA(gsl_vector_get(m_rgbvec, i));
         }
         dstU16[3] = KoColorSpaceMaths<float,quint16>::scaleToA(parent::alpha(src));
 

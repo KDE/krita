@@ -50,7 +50,6 @@ class KisKSQPColorSpace : public KisKSColorSpace<_N_>
     private:
         gsl_cqp_data *m_data;
         gsl_cqpminimizer *m_s;
-        const gsl_cqpminimizer_type *m_T;
 
 };
 
@@ -116,8 +115,7 @@ KisKSQPColorSpace<_N_>::KisKSQPColorSpace(KoColorProfile *p)
         gsl_vector_set(m_data->d, j+1, -1.0);
     }
 
-    m_T = gsl_cqpminimizer_mg_pdip;
-    m_s = gsl_cqpminimizer_alloc(m_T, n, me, mi);
+    m_s = gsl_cqpminimizer_alloc(gsl_cqpminimizer_mg_pdip, n, me, mi);
 }
 
 template<int _N_>

@@ -23,7 +23,6 @@
 extern "C" {
     #include "cqp/gsl_cqp.h"
 }
-#include <cstdio>
 
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace_traits.h"

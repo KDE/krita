@@ -19,8 +19,6 @@
 
 #include <qtest_kde.h>
 
-#include <cstring>
-
 #include "kis_ks_colorspace_test.h"
 #include "kis_ksqp_colorspace.h"
 #include "kis_kslin_colorspace.h"

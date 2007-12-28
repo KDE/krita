@@ -74,8 +74,8 @@ KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QStrin
     layout->addWidget(m_scrollArea);
     widget.patchesFrame->setLayout(layout);
 
-    widget.add->setIcon(KIcon("edit-add"));
-    widget.remove->setIcon(KIcon("edit-delete"));
+    widget.add->setIcon(KIcon("list-add"));
+    widget.remove->setIcon(KIcon("list-remove"));
     widget.open->setIcon(KIcon("document-open"));
     widget.save->setIcon(KIcon("document-save"));
 

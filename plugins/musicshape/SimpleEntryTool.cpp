@@ -88,7 +88,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
 
-    QAction* addBars = new QAction(KIcon("edit-add"), i18n("Add measures"), this);
+    QAction* addBars = new QAction(KIcon("list-add"), i18n("Add measures"), this);
     addAction("add_bars", addBars);
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
 

@@ -38,7 +38,7 @@ StylesWidget::StylesWidget(Type type, QWidget *parent)
     connect(widget.deleteStyle, SIGNAL(pressed()), this, SLOT(deleteStyleClicked()));
     connect(widget.styleList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(editStyle(QListWidgetItem*)));
 
-    widget.newStyle->setIcon( KIcon("edit-add") );
+    widget.newStyle->setIcon( KIcon("list-add") );
     widget.deleteStyle->setIcon( KIcon("edit-delete") );
     widget.deleteStyle->setEnabled(false);
 }

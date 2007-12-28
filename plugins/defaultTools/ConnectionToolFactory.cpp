@@ -28,7 +28,7 @@ ConnectionToolFactory::ConnectionToolFactory(QObject *parent)
 {
     setToolTip (i18n("Connection creation tool"));
     setToolType (mainToolType());
-    setIcon ("connect-no");
+    setIcon ("network-connect");
     setPriority (9);
     setActivationShapeId("flake/always");
 }

@@ -54,15 +54,32 @@ public:
         : KoAbstractResourceServerAdapter()
         , m_resourceServer(resourceServer)
     {
-        m_resourceServer->addObserver(this);
+        if( m_resourceServer )
+            m_resourceServer->addObserver(this);
     }
 
     virtual ~KoResourceServerAdapter()
     {
-        m_resourceServer->removeObserver(this);
+        if( m_resourceServer )
+            m_resourceServer->removeObserver(this);
     }
 
-    QList<KoResource*> resources() {
+    void setResourceServer( KoResourceServer<T>* resourceServer )
+    {
+        if( m_resourceServer )
+            m_resourceServer->removeObserver( this );
+
+        m_resourceServer = resourceServer;
+
+        if( m_resourceServer )
+            m_resourceServer->addObserver(this);
+    }
+
+    QList<KoResource*> resources() 
+    {
+        if( ! m_resourceServer )
+            return QList<KoResource*>();
+
         QList<T*> serverResources = m_resourceServer->resources();
 
         QList<KoResource*> resources;
@@ -74,6 +91,9 @@ public:
 
     bool addResource(KoResource* resource)
     {
+        if( ! m_resourceServer )
+            return false;
+
         T* res = dynamic_cast<T*>(resource);
         if(res)
             return m_resourceServer->addResource(res);
@@ -83,6 +103,9 @@ public:
 
     bool removeResource(KoResource* resource)
     {
+        if( ! m_resourceServer )
+            return false;
+
         T* res = dynamic_cast<T*>(resource);
         if(res)
             return m_resourceServer->removeResource(res);
@@ -90,7 +113,11 @@ public:
         return false;
     }
 
-    KoResource* importResource( const QString & filename ) {
+    KoResource* importResource( const QString & filename )
+    {
+        if( ! m_resourceServer )
+            return 0;
+
         return m_resourceServer->importResource(filename);
     }
 

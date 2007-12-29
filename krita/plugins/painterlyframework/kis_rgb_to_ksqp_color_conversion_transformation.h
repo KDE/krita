@@ -110,8 +110,8 @@ protected:
     void RGBToReflectance() const
     {
         for (int i = 0; i < 3; i++) {
-            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(m_rgbvec, i) - 0.0 ) );
-            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(m_rgbvec, i) + 0.0 ) );
+            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(m_rgbvec, i) - 0.001 ) );
+            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(m_rgbvec, i) + 0.001 ) );
         }
 
         gsl_cqpminimizer_set(m_s, m_data);

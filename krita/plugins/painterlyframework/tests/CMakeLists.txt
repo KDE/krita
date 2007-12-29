@@ -37,8 +37,10 @@ target_link_libraries(ChannelConverterTest
 
 set(kis_ks_colorspace_test_SRCS
     kis_ks_colorspace_test.cpp
-    ../kis_illuminant_profile.cpp
     ../channel_converter.cpp
+    ../kis_illuminant_profile.cpp
+    ../kis_kslinear_colorspace.cpp
+    ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -54,8 +56,9 @@ target_link_libraries(KisKSColorSpaceTest
 
 set(mixing_test_SRCS
     mixing_test.cpp
-    ../kis_illuminant_profile.cpp
     ../channel_converter.cpp
+    ../kis_illuminant_profile.cpp
+    ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)

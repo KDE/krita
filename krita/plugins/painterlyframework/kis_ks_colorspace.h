@@ -109,6 +109,7 @@ KisKSColorSpace<_N_>::KisKSColorSpace(KoColorProfile *p, const QString &id, cons
 template<int _N_>
 KisKSColorSpace<_N_>::~KisKSColorSpace()
 {
+    delete m_profile;
 }
 
 template<int _N_>

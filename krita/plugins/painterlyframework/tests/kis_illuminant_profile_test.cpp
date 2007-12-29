@@ -22,6 +22,10 @@
 #include "kis_illuminant_profile_test.h"
 #include "kis_illuminant_profile.h"
 
+#include <KGlobal>
+#include <KLocale>
+#include <KStandardDirs>
+
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
@@ -57,9 +61,13 @@ void gsl_print(const gsl_vector *V, const char *name)
 
 void KisIlluminantProfileTest::testLoading()
 {
+    KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/color/illuminants/");
+    QString d653 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_3.ill",  KStandardDirs::Recursive)[0];
+    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
+
     KisIlluminantProfile *p = new KisIlluminantProfile;
     QVERIFY(p->valid() == false);
-    p->setFileName("D653Test.ill");
+    p->setFileName(d653);
     QVERIFY(p->valid() == false);
     p->load();
     QVERIFY(p->valid() == true);
@@ -82,7 +90,7 @@ void KisIlluminantProfileTest::testLoading()
     gsl_print(c->P(), "Positions vector: ");
     delete c;
 
-    p = new KisIlluminantProfile("D659Test.ill");
+    p = new KisIlluminantProfile(d659);
     QVERIFY(p->valid() == true);
 //     QVERIFY(p->name() == "D65 9 Test Profile");
 
@@ -96,7 +104,9 @@ void KisIlluminantProfileTest::testLoading()
 
 void KisIlluminantProfileTest::testSaving()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D659Test.ill");
+    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
+
+    KisIlluminantProfile *p = new KisIlluminantProfile(d659);
     p->save("D659Save.ill");
     delete p;
     p = new KisIlluminantProfile("D659Save.ill");

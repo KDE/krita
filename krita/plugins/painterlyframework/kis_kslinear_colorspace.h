@@ -24,6 +24,8 @@
 #include "kis_ks_colorspace_traits.h"
 #include "kis_ks_colorspace.h"
 
+#define KS3LINEARID KoID("KS3LINEAR", i18n("3-pairs Absorption-Scattering Linear"))
+
 class KisKSLinearColorSpace : public KisKSColorSpace<3>
 {
     typedef KisKSColorSpace<3> parent;
@@ -31,19 +33,59 @@ class KisKSLinearColorSpace : public KisKSColorSpace<3>
     public:
 
         KisKSLinearColorSpace(KoColorProfile *p) :
-        parent(p, "KS3LINEARF32", i18n("3-pairs Absorption-Scattering Linear (32 Bits Float)")) {}
+        parent(p, colorSpaceId(), i18n("3-pairs Absorption-Scattering Linear (32 Bits Float)")) {}
 
         ~KisKSLinearColorSpace() {}
 
         KoID colorModelId() const
         {
-            return KoID("KS3LINEAR", i18n("3-pairs Absorption-Scattering Linear"));
+            return KS3LINEARID;
         }
 
         KoColorSpace* clone() const
         {
             return new KisKSLinearColorSpace(const_cast<KoColorProfile*>(profile()));
         }
+
+        static QString colorSpaceId()
+        {
+            return "KS9QPF32";
+        }
+
+};
+
+class KisKSLinearColorSpaceFactory : public KoColorSpaceFactory
+{
+    public:
+        QString id() const { return KisKSLinearColorSpace::colorSpaceId(); }
+        QString name() const { return i18n("3-pairs Absorption-Scattering Linear (32 Bits Float)"); }
+        KoID colorModelId() const { return KS3LINEARID; }
+        KoID colorDepthId() const { return Float32BitsColorDepthID; }
+        bool userVisible() const { return true; }
+
+        int referenceDepth() const { return 32; }
+        bool isIcc() const { return false; }
+        bool isHdr() const { return false; }
+
+        QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+
+        KoColorConversionTransformationFactory *createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+        {
+            Q_UNUSED(_colorModelId);
+            Q_UNUSED(_colorDepthId);
+            return 0;
+        }
+
+        KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+            return new KisKSLinearColorSpace(const_cast<KoColorProfile*>(p));
+        }
+
+        bool profileIsCompatible(const KoColorProfile *profile) const
+        {
+            return KisKSLinearColorSpace(0).profileIsCompatible(profile);
+        }
+
+        QString defaultProfile() const { return ""; } // TODO
 };
 
 #endif // KIS_KSLINEAR_COLORSPACE_H_

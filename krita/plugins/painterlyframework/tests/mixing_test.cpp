@@ -29,8 +29,6 @@
 #include <QPainter>
 #include <QPicture>
 
-#include "kis_ks_to_rgb_color_conversion_transformation.h"
-
 // Stress test, it doesn't do compares and the like... if you come to an end, then probably everything works ;-)
 void MixingTest::testMixing()
 {

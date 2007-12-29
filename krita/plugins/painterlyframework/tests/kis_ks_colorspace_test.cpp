@@ -19,16 +19,25 @@
 
 #include <qtest_kde.h>
 
+#include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace_test.h"
 #include "kis_ksqp_colorspace.h"
 #include "kis_kslinear_colorspace.h"
 
-#include "kis_illuminant_profile.h"
+#include <KoColorSpaceRegistry.h>
+
+#include <KGlobal>
+#include <KLocale>
+#include <KStandardDirs>
 
 void KisKSColorSpaceTest::testConstructor()
 {
-    KisIlluminantProfile *p1 = new KisIlluminantProfile("D653Test.ill");
-    KisIlluminantProfile *p2 = new KisIlluminantProfile("D659Test.ill");
+    KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/color/illuminants/");
+    QString d653 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_3.ill",  KStandardDirs::Recursive)[0];
+    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
+
+    KisIlluminantProfile *p1 = new KisIlluminantProfile(d653);
+    KisIlluminantProfile *p2 = new KisIlluminantProfile(d659);
     KisKSLinearColorSpace *cs1 = new KisKSLinearColorSpace(p1);
     KisKSQPColorSpace *cs2 = new KisKSQPColorSpace(p2);
     QVERIFY(cs1->profileIsCompatible(p1) == true);
@@ -37,8 +46,6 @@ void KisKSColorSpaceTest::testConstructor()
     QVERIFY(cs2->profileIsCompatible(p2) == true);
     delete cs2;
     delete cs1;
-    delete p2;
-    delete p1;
 }
 
 template<typename type, int n>
@@ -55,9 +62,14 @@ void print_vector(quint8 *v, const QString &text)
 
 void KisKSColorSpaceTest::testToFromRgbA16()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D653Test.ill");
-    KisKSQPColorSpace *cs = new KisKSQPColorSpace(p);
-//     KisKSLinearColorSpace *cs = new KisKSLinearColorSpace(p);
+//     QString d653 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_3.ill",  KStandardDirs::Recursive)[0];
+//     KisIlluminantProfile *p = new KisIlluminantProfile(d653);
+//     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("KS3LINEAR", p);
+    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
+    KisIlluminantProfile *p = new KisIlluminantProfile(d659);
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace::colorSpaceId(), p->clone());
+    qDebug() << "Profile name: " << cs->profile()->name();
+    QVERIFY2(cs != 0, "Created colorspace");
 
     quint8 *rgb1;
     quint8 *kas1 = new quint8[2*cs->pixelSize()];
@@ -138,9 +150,12 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 
 void KisKSColorSpaceTest::testMixing()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D653Test.ill");
-    KisKSQPColorSpace *cs = new KisKSQPColorSpace(p);
-//     KisKSLinearColorSpace *cs = new KisKSLinearColorSpace(p);
+//     QString d653 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_3.ill",  KStandardDirs::Recursive)[0];
+//     KisIlluminantProfile *p = new KisIlluminantProfile(d653);
+//     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("KS3LINEAR", p);
+    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
+    KisIlluminantProfile *p = new KisIlluminantProfile(d659);
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("KS9QPF32", p);
 
     quint8 *rgb1, *rgb2;
     quint8 *kas1 = new quint8[cs->pixelSize()];
@@ -192,7 +207,6 @@ void KisKSColorSpaceTest::testMixing()
     delete [] kas2;
     delete [] kas1;
     delete cs;
-    delete p;
 }
 
 #undef N

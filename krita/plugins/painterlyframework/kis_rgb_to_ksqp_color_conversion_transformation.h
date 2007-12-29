@@ -142,7 +142,7 @@ class KisRGBToKSQPColorConversionTransformationFactory : public KoColorConversio
 
 public:
     KisRGBToKSQPColorConversionTransformationFactory()
-    : KoColorConversionTransformationFactory(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(),
+    : KoColorConversionTransformationFactory(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
                                              "KS9QP", Float32BitsColorDepthID.id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,

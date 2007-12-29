@@ -56,12 +56,12 @@ public:
         // 2 - find reflectances using the transformation matrix of the profile.
         // 3 - convert reflectances to K/S
 
-        const quint16 *src16 = reinterpret_cast<const quint16 *>(src8);
+        const float *src = reinterpret_cast<const float *>(src8);
         float c;
 
         for ( ; nPixels > 0; nPixels-- ) {
             for (int i = 0; i < 3; i++) {
-                m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src16[2-i]), c);
+                m_converter->sRGBToRGB(src[2-i], c);
                 gsl_vector_set(m_rgbvec, i, c);
             }
 
@@ -73,9 +73,9 @@ public:
                                                 KisKSColorSpaceTrait<_N_>::S(dst, i));
             }
 
-            KisKSColorSpaceTrait<_N_>::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(src16[3]), 1);
+            KisKSColorSpaceTrait<_N_>::setAlpha(dst, KoColorSpaceMaths<float,quint8>::scaleToA(src[3]), 1);
 
-            src16 += 4;
+            src += 4;
             dst += KisKSColorSpaceTrait<_N_>::pixelSize;
         }
     }

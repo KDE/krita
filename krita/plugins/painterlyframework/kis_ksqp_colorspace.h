@@ -42,7 +42,7 @@ class KisKSQPColorSpace : public KisKSColorSpace<9>
 
         KoColorSpace *clone() const
         {
-            return new KisKSQPColorSpace(const_cast<KoColorProfile*>(profile()));
+            return new KisKSQPColorSpace(profile()->clone());
         }
 
         static QString colorSpaceId()
@@ -75,7 +75,7 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
         }
 
         KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-            return new KisKSQPColorSpace(const_cast<KoColorProfile*>(p));
+            return new KisKSQPColorSpace(p->clone());
         }
 
         bool profileIsCompatible(const KoColorProfile *profile) const

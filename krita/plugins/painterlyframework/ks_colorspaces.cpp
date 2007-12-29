@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ks_float_colorspaces.h"
+#include "ks_colorspaces.h"
 
 #include "kis_illuminant_profile.h"
 #include "kis_kslinear_colorspace.h"
@@ -31,10 +31,10 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoBasicHistogramProducers.h>
 
-typedef KGenericFactory<KSFloatColorSpacesPlugin> KSFloatColorSpacesPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritakscolorspacesplugin, KSFloatColorSpacesPluginFactory("krita") )
+typedef KGenericFactory<KSColorSpacesPlugin> KSColorSpacesPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( kritakscolorspacesplugin, KSColorSpacesPluginFactory("krita") )
 
-KSFloatColorSpacesPlugin::KSFloatColorSpacesPlugin(QObject *parent, const QStringList &)
+KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
 : QObject(parent)
 {
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
@@ -56,7 +56,7 @@ KSFloatColorSpacesPlugin::KSFloatColorSpacesPlugin(QObject *parent, const QStrin
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-        (KoID("KSLINEARF32HISTO", i18n("3-pairs KS Linear Histogram")), colorSpaceKSLinear) );
+        (KoID("KS3LINEARF32HISTO", i18n("3-pairs KS Linear Histogram")), colorSpaceKSLinear) );
     }
 
     {
@@ -66,13 +66,13 @@ KSFloatColorSpacesPlugin::KSFloatColorSpacesPlugin(QObject *parent, const QStrin
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-        (KoID("KSQPF32HISTO", i18n("9-pairs KS QP Histogram")), colorSpaceKSQP) );
+        (KoID("KS9QPF32HISTO", i18n("9-pairs KS QP Histogram")), colorSpaceKSQP) );
     }
 
 }
 
-KSFloatColorSpacesPlugin::~KSFloatColorSpacesPlugin()
+KSColorSpacesPlugin::~KSColorSpacesPlugin()
 {
 }
 
-#include "ks_float_colorspaces.moc"
+#include "ks_colorspaces.moc"

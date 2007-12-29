@@ -41,7 +41,7 @@ public:
     : parent(srcCs, dstCs)
     {
         int n  = 9 + 1;
-        int me = 1; // m_rgbvec->size; // == 3
+        int me = 1;
         int mi = 6+2*n; // each reflectance is bounded between 0 and 1, two inequalities, and the transformation matrix
 
         //// ALLOCATION
@@ -116,7 +116,9 @@ protected:
 
         gsl_cqpminimizer_set(m_s, m_data);
 
+        int iter = 0;
         do {
+            if (++iter == 100) break;
             gsl_cqpminimizer_iterate(m_s);
         } while (gsl_cqpminimizer_test_convergence(m_s, 1e-7, 1e-7) == GSL_CONTINUE);
 

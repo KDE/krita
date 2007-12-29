@@ -62,22 +62,18 @@ void print_vector(quint8 *v, const QString &text)
 
 void KisKSColorSpaceTest::testToFromRgbA16()
 {
-//     QString d653 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_3.ill",  KStandardDirs::Recursive)[0];
-//     KisIlluminantProfile *p = new KisIlluminantProfile(d653);
-//     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("KS3LINEAR", p);
     QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
     const KisIlluminantProfile *profile = new KisIlluminantProfile(d659);
-    qDebug() << "profile address: " << profile;
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace::colorSpaceId(), profile);
     QVERIFY2(cs != 0, "Created colorspace");
     QVERIFY(cs->profileIsCompatible(profile));
-    QCOMPARE(cs->profile(), profile);
+//     QCOMPARE(cs->profile(), profile);
 
     quint8 *rgb1;
     quint8 *kas1 = new quint8[2*cs->pixelSize()];
     quint8 *rgb2 = new quint8[2*8];
 
-    quint32 val = 65535;
+    quint32 val = 12000;
     quint16 blue[4]   = { val,   0, 0,   val };
     quint16 green[4]  = { 0,   val, 0,   val };
     quint16 red[4]    = { 0,     0, val, val };
@@ -147,16 +143,16 @@ void KisKSColorSpaceTest::testToFromRgbA16()
     delete [] kas1;
     delete [] rgb2;
     delete cs;
+    delete profile;
 }
 
 void KisKSColorSpaceTest::testMixing()
 {
-//     QString d653 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_3.ill",  KStandardDirs::Recursive)[0];
-//     KisIlluminantProfile *p = new KisIlluminantProfile(d653);
-//     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("KS3LINEAR", p);
     QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
-    KisIlluminantProfile *p = new KisIlluminantProfile(d659);
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("KS9QPF32", p);
+    const KisIlluminantProfile *profile = new KisIlluminantProfile(d659);
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace::colorSpaceId(), profile);
+    QVERIFY2(cs != 0, "Created colorspace");
+    QVERIFY(cs->profileIsCompatible(profile));
 
     quint8 *rgb1, *rgb2;
     quint8 *kas1 = new quint8[cs->pixelSize()];
@@ -164,7 +160,7 @@ void KisKSColorSpaceTest::testMixing()
     quint8 *kasm = new quint8[cs->pixelSize()];
     quint8 *rgbm = new quint8[2*4];
 
-    quint32 val = 65535;
+    quint32 val = 12000;
     quint16 blue[4]   = { val,   0, 0,   val };
     quint16 green[4]  = { 0,   val, 0,   val };
     quint16 red[4]    = { 0,     0, val, val };
@@ -208,6 +204,7 @@ void KisKSColorSpaceTest::testMixing()
     delete [] kas2;
     delete [] kas1;
     delete cs;
+    delete profile;
 }
 
 #undef N

@@ -28,6 +28,8 @@
 
 #include <gsl/gsl_vector.h>
 
+#include <QDebug>
+
 template< int _N_ >
 class KisRGBToKSColorConversionTransformation : public KoColorConversionTransformation {
 typedef KoColorConversionTransformation parent;
@@ -36,7 +38,7 @@ public:
     KisRGBToKSColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs), m_rgbvec(0), m_refvec(0), m_converter(0), m_profile(0)
     {
-        m_profile = dynamic_cast<const KisIlluminantProfile*>(dstCs->profile());
+        m_profile = static_cast<const KisIlluminantProfile*>(dstCs->profile());
         m_converter = new ChannelConverter(m_profile->Kblack(), m_profile->Sblack());
         m_rgbvec = gsl_vector_calloc(3);
         m_refvec = gsl_vector_calloc(_N_);
@@ -61,8 +63,9 @@ public:
 
         for ( ; nPixels > 0; nPixels-- ) {
             for (int i = 0; i < 3; i++) {
-                m_converter->sRGBToRGB(src[2-i], c);
-                gsl_vector_set(m_rgbvec, i, c);
+                qDebug() << src[2-i];
+//                 m_converter->sRGBToRGB(src[2-i], c);
+                gsl_vector_set(m_rgbvec, i, src[2-i]);
             }
 
             RGBToReflectance();

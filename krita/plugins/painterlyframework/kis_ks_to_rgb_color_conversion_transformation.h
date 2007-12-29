@@ -42,7 +42,7 @@ public:
     KisKSToRGBColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs)
     {
-        m_profile = dynamic_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
+        m_profile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
         m_converter = new ChannelConverter(m_profile->Kblack(), m_profile->Sblack());
         m_rgbvec = gsl_vector_calloc(3);
         m_refvec = gsl_vector_calloc(_N_);
@@ -70,7 +70,7 @@ public:
             gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
             for (int i = 0; i < 3; i++) {
-                m_converter->RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), dst[2-i]);
+//                 m_converter->RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), dst[2-i]);
             }
             dst[3] = KisKSColorSpaceTrait<_N_>::alpha(src);
 

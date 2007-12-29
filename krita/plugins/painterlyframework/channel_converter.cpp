@@ -23,6 +23,8 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
+#include <QDebug>
+
 ChannelConverter::ChannelConverter(float Kblack, float Sblack)
 : Kb(Kblack), Sb(Sblack)
 {

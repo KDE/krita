@@ -17,18 +17,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KS_FLOAT_COLORSPACES_H_
-#define KS_FLOAT_COLORSPACES_H_
+#ifndef KS_COLORSPACES_H_
+#define KS_COLORSPACES_H_
 
 #include <QObject>
 
-class KSFloatColorSpacesPlugin : public QObject
+class KSColorSpacesPlugin : public QObject
 {
     Q_OBJECT
     public:
-        KSFloatColorSpacesPlugin(QObject *parent, const QStringList &);
-        ~KSFloatColorSpacesPlugin();
+        KSColorSpacesPlugin(QObject *parent, const QStringList &);
+        ~KSColorSpacesPlugin();
 
 };
 
-#endif // KS_FLOAT_COLORSPACES_H_
+#endif // KS_COLORSPACES_H_

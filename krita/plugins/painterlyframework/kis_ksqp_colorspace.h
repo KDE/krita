@@ -76,7 +76,6 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
 
         KoColorSpace *createColorSpace(const KoColorProfile *p) const
         {
-            Q_ASSERT(dynamic_cast<const KisIlluminantProfile *>(p));
             return new KisKSQPColorSpace(p->clone());
         }
 

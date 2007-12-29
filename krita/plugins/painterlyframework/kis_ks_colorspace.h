@@ -72,7 +72,7 @@ template<int _N_>
 KisKSColorSpace<_N_>::KisKSColorSpace(KoColorProfile *p, const QString &id, const QString &name)
 : parent(id, name, KoColorSpaceRegistry::instance()->rgb16(""))
 {
-    m_profile = dynamic_cast<KisIlluminantProfile *>(p);
+    m_profile = static_cast<KisIlluminantProfile *>(p);
     Q_ASSERT(m_profile);
 
     for (quint32 i = 0; i < 2*_N_; i+=2) {
@@ -125,9 +125,7 @@ const KoColorProfile *KisKSColorSpace<_N_>::profile() const
 template<int _N_>
 bool KisKSColorSpace<_N_>::profileIsCompatible(const KoColorProfile *profile) const
 {
-    const KisIlluminantProfile *p = dynamic_cast<const KisIlluminantProfile *>(profile);
-    if (!p)
-        return false;
+    const KisIlluminantProfile *p = static_cast<const KisIlluminantProfile *>(profile);
     if (p->wavelenghts() != _N_)
         return false;
     return true;

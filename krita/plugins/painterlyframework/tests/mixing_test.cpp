@@ -25,6 +25,10 @@
 #include "kis_illuminant_profile.h"
 #include "kis_ksqp_colorspace.h"
 
+#include <KGlobal>
+#include <KLocale>
+#include <KStandardDirs>
+
 #include <QImage>
 #include <QPainter>
 #include <QPicture>
@@ -41,8 +45,12 @@ void MixingTest::testMixing()
     const int ncolor1 = (int)pow(T/step+1,2);
     const int ncolor2 = (int)pow(T/step+1,2);
 
-    KisIlluminantProfile *pr = new KisIlluminantProfile("D659Test.ill");
-    KisKSQPColorSpace *cs = new KisKSQPColorSpace(pr);
+    KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/color/illuminants/");
+    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
+    const KisIlluminantProfile *profile = new KisIlluminantProfile(d659);
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace::colorSpaceId(), profile);
+    QVERIFY2(cs != 0, "Created colorspace");
+    QVERIFY(cs->profileIsCompatible(profile));
 
     QColor color1, color2, colorm;
     quint8 *data1 = new quint8[cs->pixelSize()];
@@ -92,7 +100,7 @@ void MixingTest::testMixing()
     delete [] data2;
     delete [] data1;
     delete cs;
-    delete pr;
+    delete profile;
 }
 
 QTEST_KDEMAIN(MixingTest, NoGUI)

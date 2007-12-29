@@ -164,7 +164,7 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
     {
         if(role == Qt::DecorationRole)
         {
-#if 0
+#if 1
             Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
             Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
             if(filter)
@@ -173,13 +173,13 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
                 {
                     KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
                     filter->filter->process(target, QRect(0,0,100,100), filter->filter->defaultConfiguration( d->thumb ) );
-                    d->previewCache[ filter->filter ] = target->convertToQImage(0, 0.0);
+                    d->previewCache[ filter->filter ] = target->convertToQImage(0);
                 }
                 return d->previewCache[ filter->filter ];
             } else {
 #endif
                 return QVariant();
-#if 0
+#if 1
             }
 #endif
         } else if(role == Qt::DisplayRole)

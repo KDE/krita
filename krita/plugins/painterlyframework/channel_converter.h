@@ -73,25 +73,22 @@ inline void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
 
 inline void ChannelConverter::RGBTosRGB(float C, float &sC) const
 {
-    // This is commented because we don't use profiles in toRgbaU16
-    //     if (C <= 0.0031308)
-    //         sC = 12.92 * C;
-    //     else
-    //         sC = 1.055 * pow( C, 1.0/2.4 ) - 0.055;
+    if (C <= 0.0031308)
+        sC = 12.92 * C;
+    else
+        sC = 1.055 * pow( C, 1.0/2.4 ) - 0.055;
 
-    sC = C;
+//     sC = C;
 }
 
 inline void ChannelConverter::sRGBToRGB(float sC, float &C) const
 {
-    // This is commented because we don't use profiles in fromRgbaU16
+    if (sC <= 0.04045)
+        C = sC / 12.92;
+    else
+        C = pow( ( sC + 0.055 ) / 1.055, 2.4 );
 
-    //     if (sC <= 0.04045)
-    //         C = sC / 12.92;
-    //     else
-    //         C = pow( ( sC + 0.055 ) / 1.055, 2.4 );
-
-    C = sC;
+//     C = sC;
 }
 
 inline float ChannelConverter::K(float R) const

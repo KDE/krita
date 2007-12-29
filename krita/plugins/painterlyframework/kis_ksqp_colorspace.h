@@ -20,42 +20,35 @@
 #ifndef KIS_KSQP_COLORSPACE_H_
 #define KIS_KSQP_COLORSPACE_H_
 
-extern "C" {
-    #include "cqp/gsl_cqp.h"
-}
-
-#include "kis_illuminant_profile.h"
-#include "kis_ks_colorspace_traits.h"
 #include "kis_ks_colorspace.h"
 
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
-
-template<int _N_>
-class KisKSQPColorSpace : public KisKSColorSpace<_N_>
+class KisKSQPColorSpace : public KisKSColorSpace<9>
 {
-    typedef KisKSColorSpace<_N_> parent;
+    typedef KisKSColorSpace<9> parent;
 
     public:
 
-        KisKSQPColorSpace(KoColorProfile *p);
-        ~KisKSQPColorSpace();
+        KisKSQPColorSpace(KoColorProfile *p)
+        : parent(p, "KS9QPF32",
+                 i18n("9-pairs Absorption-Scattering QP (32 Bits Float)")) {}
+        ~KisKSQPColorSpace() {}
 
-        KoID colorModelId() const;
+        KoID colorModelId() const
+        {
+            return KoID("KS9QP", i18n("%1-pairs Absorption-Scattering QP"));
+        }
 
-    protected:
-        void RGBToReflectance() const;
-
-    private:
-        gsl_cqp_data *m_data;
-        gsl_cqpminimizer *m_s;
+        KoColorSpace *clone() const
+        {
+            return new KisKSQPColorSpace(const_cast<KoColorProfile*>(profile()));
+        }
 
 };
 
 ////////////////////////////////////////////
 //            IMPLEMENTATION              //
 ////////////////////////////////////////////
-
+/*
 template<int _N_>
 KisKSQPColorSpace<_N_>::KisKSQPColorSpace(KoColorProfile *p)
 : parent(p, "KS"+QString::number(_N_)+"QPF32",
@@ -165,5 +158,5 @@ void KisKSQPColorSpace<_N_>::RGBToReflectance() const
             gsl_vector_set(parent::m_refvec, i, curr);
     }
 }
-
+*/
 #endif // KIS_KSQP_COLORSPACE_H_

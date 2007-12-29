@@ -17,36 +17,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KSLIN_COLORSPACE_H_
-#define KIS_KSLIN_COLORSPACE_H_
+#ifndef KIS_KSLINEAR_COLORSPACE_H_
+#define KIS_KSLINEAR_COLORSPACE_H_
 
+#include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace_traits.h"
 #include "kis_ks_colorspace.h"
-#include "channel_converter.h"
 
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
-
-class KisIlluminantProfile;
-class KoColorProfile;
-
-class KisKSLinColorSpace : public KisKSColorSpace<3>
+class KisKSLinearColorSpace : public KisKSColorSpace<3>
 {
     typedef KisKSColorSpace<3> parent;
 
     public:
 
-        KisKSLinColorSpace(KoColorProfile *p);
-        ~KisKSLinColorSpace();
+        KisKSLinearColorSpace(KoColorProfile *p) :
+        parent(p, "KS3LINEARF32", i18n("3-pairs Absorption-Scattering Linear (32 Bits Float)")) {}
 
-        KoID colorModelId() const { return KoID("KS3LINEAR", i18n("3-pairs Absorption-Scattering Linear")); }
+        ~KisKSLinearColorSpace() {}
 
-    protected:
-        void RGBToReflectance() const;
+        KoID colorModelId() const
+        {
+            return KoID("KS3LINEAR", i18n("3-pairs Absorption-Scattering Linear"));
+        }
 
-    private:
-        gsl_matrix *m_inverse;
-
+        KoColorSpace* clone() const
+        {
+            return new KisKSLinearColorSpace(const_cast<KoColorProfile*>(profile()));
+        }
 };
 
-#endif // KIS_KSLIN_COLORSPACE_H_
+#endif // KIS_KSLINEAR_COLORSPACE_H_

@@ -21,7 +21,7 @@
 
 #include "kis_ks_colorspace_test.h"
 #include "kis_ksqp_colorspace.h"
-#include "kis_kslin_colorspace.h"
+#include "kis_kslinear_colorspace.h"
 
 #include "kis_illuminant_profile.h"
 
@@ -29,8 +29,8 @@ void KisKSColorSpaceTest::testConstructor()
 {
     KisIlluminantProfile *p1 = new KisIlluminantProfile("D653Test.ill");
     KisIlluminantProfile *p2 = new KisIlluminantProfile("D659Test.ill");
-    KisKSLinColorSpace *cs1 = new KisKSLinColorSpace(p1);
-    KisKSQPColorSpace<9> *cs2 = new KisKSQPColorSpace<9>(p2);
+    KisKSLinearColorSpace *cs1 = new KisKSLinearColorSpace(p1);
+    KisKSQPColorSpace *cs2 = new KisKSQPColorSpace(p2);
     QVERIFY(cs1->profileIsCompatible(p1) == true);
     QVERIFY(cs1->profileIsCompatible(p2) == false);
     QVERIFY(cs2->profileIsCompatible(p1) == false);
@@ -55,9 +55,9 @@ void print_vector(quint8 *v, const QString &text)
 
 void KisKSColorSpaceTest::testToFromRgbA16()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D65"+QString::number(N)+"Test.ill");
-    KisKSQPColorSpace<N> *cs = new KisKSQPColorSpace<N>(p);
-//     KisKSLinColorSpace *cs = new KisKSLinColorSpace(p);
+    KisIlluminantProfile *p = new KisIlluminantProfile("D653Test.ill");
+    KisKSQPColorSpace *cs = new KisKSQPColorSpace(p);
+//     KisKSLinearColorSpace *cs = new KisKSLinearColorSpace(p);
 
     quint8 *rgb1;
     quint8 *kas1 = new quint8[2*cs->pixelSize()];
@@ -138,9 +138,9 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 
 void KisKSColorSpaceTest::testMixing()
 {
-    KisIlluminantProfile *p = new KisIlluminantProfile("D65"+QString::number(N)+"Test.ill");
-    KisKSQPColorSpace<N> *cs = new KisKSQPColorSpace<N>(p);
-    //     KisKSLinColorSpace *cs = new KisKSLinColorSpace(p);
+    KisIlluminantProfile *p = new KisIlluminantProfile("D653Test.ill");
+    KisKSQPColorSpace *cs = new KisKSQPColorSpace(p);
+//     KisKSLinearColorSpace *cs = new KisKSLinearColorSpace(p);
 
     quint8 *rgb1, *rgb2;
     quint8 *kas1 = new quint8[cs->pixelSize()];
@@ -194,6 +194,8 @@ void KisKSColorSpaceTest::testMixing()
     delete cs;
     delete p;
 }
+
+#undef N
 
 QTEST_KDEMAIN(KisKSColorSpaceTest, NoGUI)
 #include "kis_ks_colorspace_test.moc"

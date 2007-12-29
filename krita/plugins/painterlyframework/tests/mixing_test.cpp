@@ -18,6 +18,7 @@
  */
 
 #include <qtest_kde.h>
+#include <cmath>
 
 #include "mixing_test.h"
 
@@ -27,6 +28,8 @@
 #include <QImage>
 #include <QPainter>
 #include <QPicture>
+
+#include "kis_ks_to_rgb_color_conversion_transformation.h"
 
 // Stress test, it doesn't do compares and the like... if you come to an end, then probably everything works ;-)
 void MixingTest::testMixing()
@@ -41,7 +44,7 @@ void MixingTest::testMixing()
     const int ncolor2 = (int)pow(T/step+1,2);
 
     KisIlluminantProfile *pr = new KisIlluminantProfile("D659Test.ill");
-    KisKSQPColorSpace<9> *cs = new KisKSQPColorSpace<9>(pr);
+    KisKSQPColorSpace *cs = new KisKSQPColorSpace(pr);
 
     QColor color1, color2, colorm;
     quint8 *data1 = new quint8[cs->pixelSize()];

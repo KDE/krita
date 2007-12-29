@@ -37,6 +37,8 @@ public:
 
     virtual QGradient* toQGradient() const { return new QGradient(); }
 
+    virtual void colorAt(KoColor&, double t) const;
+
     void setColorSpace(KoColorSpace* colorSpace);
     const KoColorSpace * colorSpace() const;
 

@@ -20,6 +20,8 @@
 
 #include "KoStopGradient.h"
 
+#include <cfloat>
+
 #include <QColor>
 #include <QFile>
 #include <QDomDocument>
@@ -145,6 +147,43 @@ QGradient* KoStopGradient::toQGradient() const
         gradient->setColorAt( i->first , color );
     }
     return gradient;
+}
+
+void KoStopGradient::colorAt(KoColor& dst, double t) const
+{
+    QList<KoGradientStop>::const_iterator iter = m_stops.begin();
+    while( (iter != m_stops.end() || (iter+1) != m_stops.end()) && ( t > (iter+1)->first + DBL_EPSILON))
+        iter++;
+
+    if(iter == m_stops.end() || (iter+1) == m_stops.end()) {
+        dst.fromKoColor(m_stops.last().second);
+    }
+    else {
+        KoColor buffer(colorSpace());
+
+        KoGradientStop leftStop = *iter;
+        KoGradientStop rightStop = *(iter+1);
+
+        const quint8 *colors[2];
+        colors[0] = leftStop.second.data();
+        colors[1] = rightStop.second.data();
+
+        double localT;
+        double stopDistance = rightStop.first - leftStop.first;
+        if (stopDistance < DBL_EPSILON) {
+            localT = 0.5;
+        }
+        else {
+            localT = (t - leftStop.first)/stopDistance;
+        }
+        quint8 colorWeights[2];
+        colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
+        colorWeights[1] = 255 - colorWeights[0];
+
+        colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+
+        dst.fromKoColor(buffer);
+    }
 }
 
 KoStopGradient * KoStopGradient::fromQGradient( QGradient * gradient )

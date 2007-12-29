@@ -37,6 +37,11 @@ KoAbstractGradient::~KoAbstractGradient()
    delete d;
 }
 
+void KoAbstractGradient::colorAt(KoColor&, double t) const
+{
+    Q_UNUSED(t);
+}
+
 void KoAbstractGradient::setColorSpace(KoColorSpace* colorSpace)
 {
     d->colorSpace = colorSpace;

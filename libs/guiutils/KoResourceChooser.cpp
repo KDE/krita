@@ -78,6 +78,7 @@ KoResourceChooser::KoResourceChooser(QSize aIconSize, QWidget *parent)
     verticalHeader()->hide();
     setSelectionMode(QAbstractItemView::SingleSelection);
     installEventFilter(this);
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 KoResourceChooser::~KoResourceChooser()

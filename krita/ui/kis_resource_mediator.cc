@@ -44,6 +44,7 @@ KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
 
     connect(m_rServerAdapter, SIGNAL(resourceAdded(KoResource*) ), this, SLOT( rServerAddedResource(KoResource*) ) );
     connect(m_rServerAdapter, SIGNAL(removingResource(KoResource*) ), this, SLOT( rServerRemovingResource(KoResource*) ) );
+    m_rServerAdapter->connectToResourceServer();
 }
 
 KisResourceMediator::~KisResourceMediator()

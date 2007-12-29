@@ -33,10 +33,11 @@ public:
     KoAbstractResourceServerAdapter();
     virtual ~KoAbstractResourceServerAdapter();
 
-     virtual QList<KoResource*> resources() = 0;
-     virtual bool addResource(KoResource* resource) = 0;
-     virtual bool removeResource(KoResource* resource) = 0;
-     virtual KoResource* importResource( const QString & filename ) = 0;
+    virtual void connectToResourceServer() = 0;
+    virtual QList<KoResource*> resources() = 0;
+    virtual bool addResource(KoResource* resource) = 0;
+    virtual bool removeResource(KoResource* resource) = 0;
+    virtual KoResource* importResource( const QString & filename ) = 0;
 
 signals:
     void resourceAdded(KoResource*);
@@ -54,8 +55,6 @@ public:
         : KoAbstractResourceServerAdapter()
         , m_resourceServer(resourceServer)
     {
-        if( m_resourceServer )
-            m_resourceServer->addObserver(this);
     }
 
     virtual ~KoResourceServerAdapter()
@@ -64,13 +63,8 @@ public:
             m_resourceServer->removeObserver(this);
     }
 
-    void setResourceServer( KoResourceServer<T>* resourceServer )
+    void connectToResourceServer()
     {
-        if( m_resourceServer )
-            m_resourceServer->removeObserver( this );
-
-        m_resourceServer = resourceServer;
-
         if( m_resourceServer )
             m_resourceServer->addObserver(this);
     }

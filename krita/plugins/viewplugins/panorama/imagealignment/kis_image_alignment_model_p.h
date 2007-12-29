@@ -27,7 +27,7 @@ class KisImageAlignmentModel::OptimizationFunction {
     virtual ~OptimizationFunction();
     virtual std::vector<double> values(const std::vector<double>& parameters) =0;
     virtual gmm::row_matrix< gmm::rsvector<double> > jacobian(const std::vector<double>& parameters) = 0;
-    
+    virtual void removeOutlier(const std::vector<double>& parameters, double threshold) =0;
 };
 
 #endif

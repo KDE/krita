@@ -23,6 +23,7 @@
 #include "imagoptim_functions.h"
 #include "kis_control_point.h"
 #include "kis_control_points.h"
+#include "kis_debug_areas.h"
 #include "kis_image_alignment_model_p.h"
 #include "matching.h"
 
@@ -44,33 +45,38 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
                     int frameMatch = *it2;
                     QPointF ref = cp.positions[frameRef];
                     QPointF match = cp.positions[frameMatch];
-                    kDebug() << ref << " = " << frameRef << " ========= " << frameMatch << " = " << match;
+                    kDebug(DBG_AREA_PLUGINS) << ref << " = " << frameRef << " ========= " << frameMatch << " = " << match;
                     m_functions.push_back(_TFunction_( m_xc, m_yc, m_norm, frameRef, ref.x(), ref.y(), frameMatch, match.x(), match.y() ) );
                 }
             }
             
-/*            if( cp.frames.contains(0) and cp.frames.contains(1) )
-            {
-                QPointF ref = cp.positions[0];
-                QPointF match = cp.positions[1];
-                kDebug() << ref << " =========== " << match;
-                m_functions.push_back(_TFunction_( m_xc, m_yc, m_norm, 0, ref.x(), ref.y(), 1, match.x(), match.y() ) );
-            }*/
         }
-        kDebug() << "Nb of functions is " << m_functions.size();
-#if 0
-      for(lMatches::const_iterator it = m_matches.begin(); it != m_matches.end(); ++it)
-      {
-        m_functions.push_back(_TFunction_(indx, m_xc, m_yc, m_norm, it->ref->x(), it->ref->y(), it->match->x(), it->match->y()));
-      }
-#endif
+        kDebug(DBG_AREA_PLUGINS) << "Nb of functions is " << m_functions.size();
     }
   public:
+    void removeOutlier(const std::vector<double>& parameters, double threshold)
+    {
+        std::vector<double> values_ = values(parameters);
+        QList<_TFunction_> functions_;
+        
+        Q_ASSERT(2 * m_functions.size() == values_.size());
+        for(int i = 0; i < m_functions.size(); i++)
+        {
+            if( fabs(values_[ 2 * i + 1]) < threshold and fabs(values_[ 2 * i ]) < threshold)
+            {
+                kDebug(DBG_AREA_PLUGINS) << "Adding function " << i << " " << fabs(values_[ 2 * i ]) << " " << fabs(values_[ 2 * i + 1]);
+                functions_.push_back( m_functions[i] );
+            } else {
+                kDebug(DBG_AREA_PLUGINS) << "Rejected function " << i << " " << fabs(values_[ 2 * i ]) << " " << fabs(values_[ 2 * i + 1]);
+            }
+        }
+        m_functions = functions_;
+    }
     std::vector<double> values(const std::vector<double>& parameters)
     {
       std::vector<double> v;
       // Compute the values
-      for(typename std::vector<_TFunction_>::iterator it = m_functions.begin(); it != m_functions.end(); ++it)
+      for(typename QList<_TFunction_>::iterator it = m_functions.begin(); it != m_functions.end(); ++it)
       {
         double f1,f2;
         it->f(parameters, f1, f2);
@@ -87,7 +93,7 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
       
       // Compute the jacobian
       int pos = 0;
-      for(typename std::vector<_TFunction_>::iterator it = m_functions.begin(); it != m_functions.end(); ++it)
+      for(typename QList<_TFunction_>::iterator it = m_functions.begin(); it != m_functions.end(); ++it)
       {
         it->jac(parameters, jt, pos);
         pos += 2;
@@ -102,7 +108,7 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
       return 2 * m_functions.size();
     }
   private:
-    std::vector<_TFunction_> m_functions;
+    QList<_TFunction_> m_functions;
     double m_xc, m_yc, m_norm;
     const double m_epsilon;
 };

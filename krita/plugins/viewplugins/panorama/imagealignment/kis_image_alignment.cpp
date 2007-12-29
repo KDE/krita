@@ -111,6 +111,10 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
         for(; it2 != images.end(); ++it2, ++frameNbMatch)
         {
             lMatches mp = matching(it->points, it2->points);
+        for(lMatches::const_iterator itp = mp.begin(); itp != mp.end(); ++itp)
+        {
+            kDebug(41006) << "match = " << itp->ref->x() << " " << itp->ref->y() << " " << itp->match->x() << " " << itp->match->y();
+        }
             std::list<ImageMatchModel*> models = ransac.findModels( mp );
             if( models.empty() )
             {
@@ -123,22 +127,8 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
             }
         }
     }
-//     lMatches mp = matching(images[0].points, images[1].points);
-//     std::list<ImageMatchModel*> models = ransac.findModels( mp );
     if(true)
-//     if(not models.empty())
     {
-//         kDebug(41006) <<"Best model:" << (*models.begin())->fittingErrorSum() <<" with" << (*models.begin())->matches().size() <<" points";
-//         Eigen::Matrix3d transfo = recComputeTransfo( images[1].transfoToFrame, images[1].referenceFrame ); //(*models.begin())->transfo();
-//         kDebug(41006) <<"Translation :" << transfo(0,2) <<"" << transfo(1,2);
-#if 0
-        for(std::list<ImageMatchModel*>::iterator it = models.begin(); it != models.end(); it++)
-        {
-            kDebug(41006) <<" Error:" << (*it)->fittingErrorSum() <<" with" << (*it)->matches().size();
-        }
-#endif
-        
-        
         KisImageAlignmentModel::OptimizationFunction* f = d->model->createOptimizationFunction( controlPoints, width * 0.5, height * 0.5, width, height );
         p[DoubleHomographySameDistortionFunction::INDX_a] = 0.0;
         p[DoubleHomographySameDistortionFunction::INDX_b] = 0.0;
@@ -158,62 +148,35 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
             p[DoubleHomographySameDistortionFunction::INDX_h13 + frameStart] = 0.0;
             p[DoubleHomographySameDistortionFunction::INDX_h23 + frameStart] = 0.0;
         }
-#if 0
-        p[DoubleHomographySameDistortionFunction::INDX_h11 + frame1start] = 1.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h21 + frame1start] = 0.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h31 + frame1start] = 0.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h12 + frame1start] = 0.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h22 + frame1start] = 1.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h32 + frame1start] = 0.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h13 + frame1start] = 0.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h23 + frame1start] = 0.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h11 + frame2start] = 1.0; // transfo(0,0);
-        p[DoubleHomographySameDistortionFunction::INDX_h21 + frame2start] = 0.0; //transfo(0,1);
-        p[DoubleHomographySameDistortionFunction::INDX_h31 + frame2start] = transfo(0,2);
-        p[DoubleHomographySameDistortionFunction::INDX_h12 + frame2start] = 0.0; //transfo(1,0);
-        p[DoubleHomographySameDistortionFunction::INDX_h22 + frame2start] = 1.0; // transfo(1,1);
-        p[DoubleHomographySameDistortionFunction::INDX_h32 + frame2start] = transfo(1,2);
-        p[DoubleHomographySameDistortionFunction::INDX_h13 + frame2start] = 0.0;
-        p[DoubleHomographySameDistortionFunction::INDX_h23 + frame2start] = 0.0;
-#endif
-        
-        double r = Optimization::Algorithms::levenbergMarquardt(f, p, 300, 1e-12, 0.01, 10.0 );
-        kDebug(41006) <<"Remain =" << r;
-        for(uint i = 0; i < p.size(); i++)
+        double r;
         {
-            kDebug(41006) <<"p["<< i <<"]=" << p[i];
+            r = Optimization::Algorithms::levenbergMarquardt(f, p, 300, 1e-12, 0.01, 10.0 );
+            kDebug(41006) <<"Remain =" << r;
+            for(uint i = 0; i < p.size(); i++)
+            {
+                kDebug(41006) <<"p["<< i <<"]=" << p[i];
+            }
+            std::vector<double> remains = f->values(p);
+            std::cout << "Remains = " << remains << std::endl;
+        }
+        // Remove outliers and reoptimize
+        {
+            f->removeOutlier( p, r * 1.1 );
+            r = Optimization::Algorithms::levenbergMarquardt(f, p, 300, 1e-12, 0.01, 10.0 );
+            kDebug(41006) <<"Remain =" << r;
+            for(uint i = 0; i < p.size(); i++)
+            {
+                kDebug(41006) <<"p["<< i <<"]=" << p[i];
+            }
+            std::vector<double> remains = f->values(p);
+            std::cout << "Remains = " << remains << std::endl;
         }
     } else {
         kDebug(41006) <<"No models found";
         return std::vector<Result>();
     }
-#if 0
-    result[0].a = p[HomographySameDistortionFunction::INDX_a];
-    result[0].b = p[HomographySameDistortionFunction::INDX_b];
-    result[0].c = p[HomographySameDistortionFunction::INDX_c];
-    for(int i = 0; i < 3; i++)
-    {
-        for(int j = 0; j < 3; j++)
-        {
-            result[0].homography(i,j) = 0.0;
-        }
-        result[0].homography(i,i) = 1.0;
-    }
     
-    
-    result[1].a = p[HomographySameDistortionFunction::INDX_a];
-    result[1].b = p[HomographySameDistortionFunction::INDX_b];
-    result[1].c = p[HomographySameDistortionFunction::INDX_c];
-    result[1].homography(0,0) = p[HomographySameDistortionFunction::INDX_h11];
-    result[1].homography(0,1) = p[HomographySameDistortionFunction::INDX_h21];
-    result[1].homography(0,2) = p[HomographySameDistortionFunction::INDX_h31];
-    result[1].homography(1,0) = p[HomographySameDistortionFunction::INDX_h12];
-    result[1].homography(1,1) = p[HomographySameDistortionFunction::INDX_h22];
-    result[1].homography(1,2) = p[HomographySameDistortionFunction::INDX_h32];
-    result[1].homography(2,0) = p[HomographySameDistortionFunction::INDX_h13];
-    result[1].homography(2,1) = p[HomographySameDistortionFunction::INDX_h23];
-    result[1].homography(2,2) = 1.0;
-#endif
+    // Fill the result and the homographie
     for(int i = 0; i < images.size(); i++)
     {
         int frameStart = i * DoubleHomographySameDistortionFunction::SIZEHOMOGRAPHYINDEXES + DoubleHomographySameDistortionFunction::SIZEINDEXES;
@@ -230,32 +193,5 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
         result[i].homography(2,1) = p[DoubleHomographySameDistortionFunction::INDX_h23 + frameStart];
         result[i].homography(2,2) = 1.0;
     }
-#if 0
-    result[0].a = p[DoubleHomographySameDistortionFunction::INDX_a];
-    result[0].b = p[DoubleHomographySameDistortionFunction::INDX_b];
-    result[0].c = p[DoubleHomographySameDistortionFunction::INDX_c];
-    result[0].homography(0,0) = p[DoubleHomographySameDistortionFunction::INDX_h11 + frame1start];
-    result[0].homography(0,1) = p[DoubleHomographySameDistortionFunction::INDX_h21 + frame1start];
-    result[0].homography(0,2) = p[DoubleHomographySameDistortionFunction::INDX_h31 + frame1start];
-    result[0].homography(1,0) = p[DoubleHomographySameDistortionFunction::INDX_h12 + frame1start];
-    result[0].homography(1,1) = p[DoubleHomographySameDistortionFunction::INDX_h22 + frame1start];
-    result[0].homography(1,2) = p[DoubleHomographySameDistortionFunction::INDX_h32 + frame1start];
-    result[0].homography(2,0) = p[DoubleHomographySameDistortionFunction::INDX_h13 + frame1start];
-    result[0].homography(2,1) = p[DoubleHomographySameDistortionFunction::INDX_h23 + frame1start];
-    result[0].homography(2,2) = 1.0;
-    
-    result[1].a = p[DoubleHomographySameDistortionFunction::INDX_a];
-    result[1].b = p[DoubleHomographySameDistortionFunction::INDX_b];
-    result[1].c = p[DoubleHomographySameDistortionFunction::INDX_c];
-    result[1].homography(0,0) = p[DoubleHomographySameDistortionFunction::INDX_h11 + frame2start];
-    result[1].homography(0,1) = p[DoubleHomographySameDistortionFunction::INDX_h21 + frame2start];
-    result[1].homography(0,2) = p[DoubleHomographySameDistortionFunction::INDX_h31 + frame2start];
-    result[1].homography(1,0) = p[DoubleHomographySameDistortionFunction::INDX_h12 + frame2start];
-    result[1].homography(1,1) = p[DoubleHomographySameDistortionFunction::INDX_h22 + frame2start];
-    result[1].homography(1,2) = p[DoubleHomographySameDistortionFunction::INDX_h32 + frame2start];
-    result[1].homography(2,0) = p[DoubleHomographySameDistortionFunction::INDX_h13 + frame2start];
-    result[1].homography(2,1) = p[DoubleHomographySameDistortionFunction::INDX_h23 + frame2start];
-    result[1].homography(2,2) = 1.0;
-#endif
     return result;
 }

@@ -37,7 +37,7 @@
 #define DERIVATION_SIGMA 1.0
 #define CONVOLUTION_SIGMA 2.0
 #define THRESHOLD_LAMBDA 0.0
-#define FEATURES_QUANTITY 1000
+#define FEATURES_QUANTITY 2000
 
 typedef KisGenericColorSpace<float, 8> KisEightFloatColorSpace;
 
@@ -470,7 +470,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
 //                 kDebug(41006) << vitinfoDeviceRect.x() <<"" << vitinfoDeviceRect.y() <<"" << infoValue[INFO_XX] <<"" << infoValue[INFO_YY]  <<"" << infoValue[INFO_XY] <<"" << infoValue[INFO_HIGH] <<"" << infoValue[INFO_LOW] <<"" << trace <<"" << temp <<"" << det;
             }
         }
-        HarrisPoints zones(10, 10, rect.width(), rect.height(), FEATURES_QUANTITY );
+        HarrisPoints zones(3, 3, rect.width(), rect.height(), FEATURES_QUANTITY );
         // Detect Harris Points
         {
             int margin = 8;

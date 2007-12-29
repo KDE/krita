@@ -213,7 +213,8 @@ void KisAutoContrast::process(KisFilterConstProcessingInformation srcInfo,
                 quint8 *firstPixel = iter.rawData();
                 while(iter.selectedness()==MAX_SELECTED && maxpix)
                 {
-                    if (maxpix != 0)
+                    --maxpix;
+                    if (maxpix != 0) // just to be sure that the tile remain in memory
                         ++iter;
                     ++npix;
                 }

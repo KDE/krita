@@ -78,7 +78,7 @@ inline void ChannelConverter::RGBTosRGB(float C, float &sC) const
     else
         sC = 1.055 * pow( C, 1.0/2.4 ) - 0.055;
 
-//     sC = C;
+    sC = C;
 }
 
 inline void ChannelConverter::sRGBToRGB(float sC, float &C) const
@@ -88,7 +88,7 @@ inline void ChannelConverter::sRGBToRGB(float sC, float &C) const
     else
         C = pow( ( sC + 0.055 ) / 1.055, 2.4 );
 
-//     C = sC;
+    C = sC;
 }
 
 inline float ChannelConverter::K(float R) const

@@ -36,7 +36,7 @@ public:
     KisRGBToKSColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs), m_rgbvec(0), m_refvec(0), m_converter(0), m_profile(0)
     {
-        m_profile = dynamic_cast<const KisIlluminantProfile*>(parent::dstColorSpace()->profile());
+        m_profile = dynamic_cast<const KisIlluminantProfile*>(dstCs->profile());
         m_converter = new ChannelConverter(m_profile->Kblack(), m_profile->Sblack());
         m_rgbvec = gsl_vector_calloc(3);
         m_refvec = gsl_vector_calloc(_N_);

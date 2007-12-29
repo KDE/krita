@@ -66,10 +66,12 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 //     KisIlluminantProfile *p = new KisIlluminantProfile(d653);
 //     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("KS3LINEAR", p);
     QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
-    KisIlluminantProfile *p = new KisIlluminantProfile(d659);
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace::colorSpaceId(), p->clone());
-    qDebug() << "Profile name: " << cs->profile()->name();
+    const KoColorProfile *profile = new KisIlluminantProfile(d659);
+    Q_ASSERT(dynamic_cast<const KisIlluminantProfile *>(profile));
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace::colorSpaceId(), profile);
     QVERIFY2(cs != 0, "Created colorspace");
+    QVERIFY(cs->profileIsCompatible(profile));
+    QCOMPARE(cs->profile(), profile);
 
     quint8 *rgb1;
     quint8 *kas1 = new quint8[2*cs->pixelSize()];
@@ -145,7 +147,6 @@ void KisKSColorSpaceTest::testToFromRgbA16()
     delete [] kas1;
     delete [] rgb2;
     delete cs;
-    delete p;
 }
 
 void KisKSColorSpaceTest::testMixing()

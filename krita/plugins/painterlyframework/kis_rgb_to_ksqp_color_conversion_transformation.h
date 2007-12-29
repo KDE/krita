@@ -20,6 +20,7 @@
 #ifndef KIS_RGB_TO_KSQP_COLOR_CONVERSION_TRANSFORMATION_H_
 #define KIS_RGB_TO_KSQP_COLOR_CONVERSION_TRANSFORMATION_H_
 
+#include "kis_illuminant_profile.h"
 #include "kis_rgb_to_ks_color_conversion_transformation.h"
 
 #include <KoColorConversionTransformationFactory.h>

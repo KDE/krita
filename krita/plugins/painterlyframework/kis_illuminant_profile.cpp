@@ -36,10 +36,10 @@ KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
 }
 
 KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &profile)
-    : KoColorProfile(profile.fileName()), m_T(0), m_P(0)
+    : KoColorProfile(profile), m_T(0), m_P(0)
 {
-    setName(profile.name());
-    setInfo(profile.info());
+//     setName(profile.name());
+//     setInfo(profile.info());
     m_valid = profile.valid();
     if (profile.valid()) {
         m_T = gsl_matrix_alloc(profile.m_T->size1, profile.m_T->size2);
@@ -61,7 +61,7 @@ KisIlluminantProfile::~KisIlluminantProfile()
 
 KoColorProfile *KisIlluminantProfile::clone() const
 {
-    return (new KisIlluminantProfile(*this));
+    return new KisIlluminantProfile(*this);
 }
 
 bool KisIlluminantProfile::load() // TODO Info

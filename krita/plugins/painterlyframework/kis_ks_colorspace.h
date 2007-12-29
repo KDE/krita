@@ -72,10 +72,8 @@ template<int _N_>
 KisKSColorSpace<_N_>::KisKSColorSpace(KoColorProfile *p, const QString &id, const QString &name)
 : parent(id, name, KoColorSpaceRegistry::instance()->rgb16(""))
 {
-    if (!profileIsCompatible(p))
-        return;
-
     m_profile = dynamic_cast<KisIlluminantProfile *>(p);
+    Q_ASSERT(m_profile);
 
     for (quint32 i = 0; i < 2*_N_; i+=2) {
         parent::addChannel(new KoChannelInfo(i18n("Absorption"),
@@ -121,7 +119,7 @@ KoColorProfile *KisKSColorSpace<_N_>::profile()
 template<int _N_>
 const KoColorProfile *KisKSColorSpace<_N_>::profile() const
 {
-    return const_cast<const KisIlluminantProfile *>(m_profile);
+    return m_profile;
 }
 
 template<int _N_>

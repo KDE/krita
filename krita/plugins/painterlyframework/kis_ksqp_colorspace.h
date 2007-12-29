@@ -20,9 +20,10 @@
 #ifndef KIS_KSQP_COLORSPACE_H_
 #define KIS_KSQP_COLORSPACE_H_
 
+#include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
 
-#define KS9QPID KoID("KS9QP", i18n("%1-pairs Absorption-Scattering QP"))
+#define KS9QPID KoID("KS9QP", i18n("9-pairs Absorption-Scattering QP"))
 
 class KisKSQPColorSpace : public KisKSColorSpace<9>
 {
@@ -31,8 +32,7 @@ class KisKSQPColorSpace : public KisKSColorSpace<9>
     public:
 
         KisKSQPColorSpace(KoColorProfile *p)
-        : parent(p, colorSpaceId(),
-                 i18n("9-pairs Absorption-Scattering QP (32 Bits Float)")) {}
+        : parent(p, colorSpaceId(), i18n("9-pairs Absorption-Scattering QP (32 Bits Float)")) {}
         ~KisKSQPColorSpace() {}
 
         KoID colorModelId() const
@@ -74,7 +74,9 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
             return 0;
         }
 
-        KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+        KoColorSpace *createColorSpace(const KoColorProfile *p) const
+        {
+            Q_ASSERT(dynamic_cast<const KisIlluminantProfile *>(p));
             return new KisKSQPColorSpace(p->clone());
         }
 
@@ -83,7 +85,7 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
             return KisKSQPColorSpace(0).profileIsCompatible(profile);
         }
 
-        QString defaultProfile() const { return ""; } // TODO
+        QString defaultProfile() const { return "D-65 Illuminant Profile - 9 wavelenghts - Black [4.3,0.14]"; }
 };
 
 #endif // KIS_KSQP_COLORSPACE_H_

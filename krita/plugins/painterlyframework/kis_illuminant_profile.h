@@ -34,7 +34,7 @@ class KisIlluminantProfile : public KoColorProfile {
         ~KisIlluminantProfile();
 
         // KoColorProfile interface
-        KoColorProfile *clone() const;
+        virtual KoColorProfile *clone() const;
         bool load();
         bool save(const QString &fileName);
         bool valid() const { return m_valid; }

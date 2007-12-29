@@ -20,6 +20,7 @@
 #ifndef KIS_RGB_TO_KSLINEAR_COLOR_CONVERSION_TRANSFORMATION_H_
 #define KIS_RGB_TO_KSLINEAR_COLOR_CONVERSION_TRANSFORMATION_H_
 
+#include "kis_illuminant_profile.h"
 #include "kis_rgb_to_ks_color_conversion_transformation.h"
 
 #include <KoColorConversionTransformationFactory.h>
@@ -75,7 +76,7 @@ class KisRGBToKSLinearColorConversionTransformationFactory : public KoColorConve
 public:
     KisRGBToKSLinearColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
-                                                "KS3LINEAR", Float32BitsColorDepthID.id()) {}
+                                             "KS3LINEAR", Float32BitsColorDepthID.id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                const KoColorSpace* dstColorSpace,

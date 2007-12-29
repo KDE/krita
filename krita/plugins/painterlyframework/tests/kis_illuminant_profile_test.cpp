@@ -72,6 +72,7 @@ void KisIlluminantProfileTest::testLoading()
     p->load();
     QVERIFY(p->valid() == true);
 //     QVERIFY(p->name() == "D65 3 Test Profile");
+    qDebug() << "Profile name: " << p->name();
 
     QVERIFY(p->wavelenghts() == 3);
     QCOMPARE(p->Kblack(), 4.3);
@@ -83,9 +84,10 @@ void KisIlluminantProfileTest::testLoading()
     delete p;
     QVERIFY(c->valid() == true);
 //     QVERIFY(c->name() == "D65 3 Test Profile");
+    qDebug() << "Profile name: " << c->name();
     QVERIFY(c->wavelenghts() == 3);
-    QCOMPARE(p->Kblack(), 4.3);
-    QCOMPARE(p->Sblack(), 0.14);
+    QCOMPARE(c->Kblack(), 4.3);
+    QCOMPARE(c->Sblack(), 0.14);
     gsl_print(c->T(), "Transformation matrix: ");
     gsl_print(c->P(), "Positions vector: ");
     delete c;
@@ -93,6 +95,7 @@ void KisIlluminantProfileTest::testLoading()
     p = new KisIlluminantProfile(d659);
     QVERIFY(p->valid() == true);
 //     QVERIFY(p->name() == "D65 9 Test Profile");
+    qDebug() << "Profile name: " << p->name();
 
     QVERIFY(p->wavelenghts() == 9);
     QCOMPARE(p->Kblack(), 4.3);
@@ -113,6 +116,7 @@ void KisIlluminantProfileTest::testSaving()
 
     QVERIFY(p->valid() == true);
 //     QVERIFY(p->name() == "D65 9 Test Profile");
+    qDebug() << "Profile name: " << p->name();
 
     QVERIFY(p->wavelenghts() == 9);
     QCOMPARE(p->Kblack(), 4.3);

@@ -21,7 +21,7 @@
 
 #include "kis_layer_commands_test.h"
 
-#include "kis_layer_commands.h"
+#include "commands/kis_layer_commands.h"
 
 void KisLayerCommandsTest::testCreation()
 {

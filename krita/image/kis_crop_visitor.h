@@ -32,7 +32,7 @@
 #include "kis_selected_transaction.h"
 #include "kis_external_layer_iface.h"
 #include "kis_undo_adapter.h"
-#include "kis_layer_commands.h"
+#include "commands/kis_layer_commands.h"
 
 
 class KisCropVisitor : public KisNodeVisitor {

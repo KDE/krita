@@ -85,8 +85,6 @@ set(kritaimage_LIB_SRCS
    kis_perspective_math.cpp
    kis_mask.cc
    kis_effect_mask.cc
-   kis_image_commands.cc
-   kis_layer_commands.cc
    kis_undo_adapter.cc
    kis_transformation_mask.cpp
    kis_clone_layer.cpp
@@ -101,6 +99,8 @@ set(kritaimage_LIB_SRCS
    kis_selected_transaction.cc
    kis_transform_worker.cc
    kis_filter_job.cpp
+   commands/kis_image_commands.cc
+   commands/kis_layer_commands.cc
 )
 
 

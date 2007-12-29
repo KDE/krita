@@ -20,7 +20,7 @@
 
 #include "KoCompositeOp.h"
 
-#include "kis_layer_commands.h"
+#include "commands/kis_layer_commands.h"
 #include "kis_layer.h"
 
 KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :

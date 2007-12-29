@@ -69,15 +69,15 @@
 #include "kis_dlg_new_layer.h"
 #include "kis_doc2.h"
 #include "kis_filter_manager.h"
-#include "kis_image_commands.h"
-#include "kis_layer_commands.h"
+#include "commands/kis_image_commands.h"
+#include "commands/kis_layer_commands.h"
+#include "commands/kis_node_commands.h"
 #include "kis_resource_provider.h"
 #include "kis_selection_manager.h"
 #include "kis_statusbar.h"
 #include "kis_view2.h"
 #include "kis_zoom_manager.h"
 #include "kis_canvas2.h"
-#include <kis_node_commands.h>
 
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )

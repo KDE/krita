@@ -21,7 +21,7 @@
 
 #include "kis_image_commands_test.h"
 
-#include "kis_image_commands.h"
+#include "commands/kis_image_commands.h"
 
 void KisImageCommandsTest::testCreation()
 {

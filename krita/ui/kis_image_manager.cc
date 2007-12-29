@@ -41,7 +41,7 @@
 #include "kis_view2.h"
 #include "kis_doc2.h"
 #include "kis_dlg_image_properties.h"
-#include "kis_image_commands.h"
+#include "commands/kis_image_commands.h"
 
 KisImageManager::KisImageManager( KisView2 * view)
     : m_view( view )

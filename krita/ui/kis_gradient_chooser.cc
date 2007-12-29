@@ -23,15 +23,15 @@
 
 #include <klocale.h>
 #include <kfiledialog.h>
+#include <KoAbstractGradient.h>
 #include <KoResourceItemChooser.h>
+#include <KoResourceServerProvider.h>
 
 #include "kis_view2.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
-#include "KoSegmentGradient.h"
 #include "kis_autogradient.h"
 #include "kis_resource_provider.h"
-#include "kis_resourceserverprovider.h"
 
 #include "kis_gradient_chooser.h"
 
@@ -78,7 +78,7 @@ void KisGradientChooser::update(QTableWidgetItem *item)
     KoResourceItem *kisItem = static_cast<KoResourceItem *>(item);
 
     if (item) {
-        KoSegmentGradient *gradient = static_cast<KoSegmentGradient *>(kisItem->resource());
+        KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(kisItem->resource());
 
         m_lbName->setText(gradient->name());
     }
@@ -86,10 +86,10 @@ void KisGradientChooser::update(QTableWidgetItem *item)
 
 void KisGradientChooser::slotImportGradient()
 {
-    QString filter( "*.ggr" );
+    QString filter( "*.svg *.kgr *.ggr" );
     QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Gradient to Add" ) );
 
-    KisResourceServerProvider::instance()->gradientServer()->importResource(filename);
+    KoResourceServerProvider::instance()->gradientServer()->importResource(filename);
 }
 
 #include "kis_gradient_chooser.moc"

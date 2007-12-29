@@ -24,7 +24,7 @@
 #include <cfloat>
 
 #include <kdebug.h>
-#include <KoSegmentGradient.h>
+#include <KoAbstractGradient.h>
 
 #include "kis_opengl.h"
 #include "kis_opengl_fragment_shader.h"
@@ -216,7 +216,7 @@ KisOpenGLConicalSymetricGradientShader::KisOpenGLConicalSymetricGradientShader(K
 
 //-----------------------------------------------------------------------------
 
-KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KoSegmentGradient *gradient,
+KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KoAbstractGradient *gradient,
                                                    KisGradientPainter::enumGradientShape shape,
                                                    KisGradientPainter::enumGradientRepeat repeat,
                                                    bool reverseGradient,
@@ -260,7 +260,7 @@ KisOpenGLGradientProgram::~KisOpenGLGradientProgram()
     delete m_gradientShader;
 }
 
-void KisOpenGLGradientProgram::createGradientColorsTexture(const KoSegmentGradient *gradient,
+void KisOpenGLGradientProgram::createGradientColorsTexture(const KoAbstractGradient *gradient,
                                                            KisGradientPainter::enumGradientRepeat repeat,
                                                            bool reverseGradient,
                                                            const KoColorSpace *colorSpace,

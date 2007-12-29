@@ -38,7 +38,7 @@
 
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
-#include <KoSegmentGradient.h>
+#include <KoAbstractGradient.h>
 
 #include "kis_brush.h"
 #include "kis_debug_areas.h"

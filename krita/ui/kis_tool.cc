@@ -25,7 +25,7 @@
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
 #include <KoSelection.h>
-#include <KoSegmentGradient.h>
+#include <KoAbstractGradient.h>
 
 #include "kis_layer_shape.h"
 #include "kis_layer_container_shape.h"
@@ -58,7 +58,7 @@ struct KisTool::Private {
     // From the canvas resources
     KisBrush * currentBrush;
     KisPattern * currentPattern;
-    KoSegmentGradient * currentGradient;
+    KoAbstractGradient * currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
     KisComplexColor * currentComplexColor;
@@ -88,7 +88,7 @@ void KisTool::activate(bool )
     d->currentBgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
     d->currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentBrush ).value<void *>() );
     d->currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPattern).value<void *>() );
-    d->currentGradient = static_cast<KoSegmentGradient *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentGradient ).value<void *>() );
+    d->currentGradient = static_cast<KoAbstractGradient *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentGradient ).value<void *>() );
     d->currentComplexColor = static_cast<KisComplexColor *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentComplexColor ).value<void *>() );
     d->currentPaintOp = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintop ).value<KoID >().id();
     d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintopSettings ).value<void *>() );
@@ -123,7 +123,7 @@ void KisTool::resourceChanged( int key, const QVariant & v )
         d->currentPattern = static_cast<KisPattern *>( v.value<void *>() );
         break;
     case ( KisResourceProvider::CurrentGradient ):
-        d->currentGradient = static_cast<KoSegmentGradient *>( v.value<void *>() );
+        d->currentGradient = static_cast<KoAbstractGradient *>( v.value<void *>() );
         break;
     case ( KisResourceProvider::CurrentPaintop ):
         d->currentPaintOp = v.value<KoID >().id();
@@ -250,7 +250,7 @@ KisPattern * KisTool::currentPattern()
     return d->currentPattern;
 }
 
-KoSegmentGradient * KisTool::currentGradient()
+KoAbstractGradient * KisTool::currentGradient()
 {
     return d->currentGradient;
 }

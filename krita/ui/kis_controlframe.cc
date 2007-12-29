@@ -41,10 +41,11 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>
-#include <KoSegmentGradient.h>
+#include <KoAbstractGradient.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>
+#include <KoResourceServerProvider.h>
 
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
@@ -186,7 +187,7 @@ void KisControlFrame::slotPatternChanged(KisPattern * pattern)
 }
 
 
-void KisControlFrame::slotGradientChanged(KoSegmentGradient * gradient)
+void KisControlFrame::slotGradientChanged(KoAbstractGradient * gradient)
 {
         KoResourceItem *item;
         if (!gradient)
@@ -338,16 +339,16 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
-    KoResourceServer<KoSegmentGradient>* rServer = KisResourceServerProvider::instance()->gradientServer();
-    KoResourceServerAdapter<KoSegmentGradient>* rServerAdapter;
-    rServerAdapter = new KoResourceServerAdapter<KoSegmentGradient>(rServer);
+    KoResourceServer<KoAbstractGradient>* rServer = KoResourceServerProvider::instance()->gradientServer();
+    KoResourceServerAdapter<KoAbstractGradient>* rServerAdapter;
+    rServerAdapter = new KoResourceServerAdapter<KoAbstractGradient>(rServer);
 
     m_gradientMediator = new KisResourceMediator( m_gradientChooser, rServerAdapter, view);
     connect(m_gradientMediator, SIGNAL(activatedResource(KoResource*)),
             view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 
-    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoSegmentGradient *)),
-            this, SLOT(slotGradientChanged( KoSegmentGradient *)));
+    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient *)),
+            this, SLOT(slotGradientChanged( KoAbstractGradient *)));
 
     m_gradientChooser->setCurrent( 0 );
     m_gradientMediator->setActiveItem( m_gradientChooser->currentItem() );

@@ -27,7 +27,7 @@
 #include "kis_opengl_program.h"
 #include "kis_gradient_painter.h"
 
-class KoSegmentGradient;
+class KoAbstractGradient;
 class KisOpenGLGradientShader;
 class KoColorProfile;
 class KoColorSpace;
@@ -35,7 +35,7 @@ class KoColorSpace;
 class KRITAUI_EXPORT KisOpenGLGradientProgram : public KisOpenGLProgram
 {
 public:
-    KisOpenGLGradientProgram(const KoSegmentGradient *gradient,
+    KisOpenGLGradientProgram(const KoAbstractGradient *gradient,
                              KisGradientPainter::enumGradientShape shape,
                              KisGradientPainter::enumGradientRepeat repeat,
                              bool reverseGradient,
@@ -49,7 +49,7 @@ public:
     void activate(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd);
 
 private:
-    void createGradientColorsTexture(const KoSegmentGradient *gradient,
+    void createGradientColorsTexture(const KoAbstractGradient *gradient,
                                      KisGradientPainter::enumGradientRepeat repeat,
                                      bool reverseGradient,
                                      const KoColorSpace *colorSpace,

@@ -25,7 +25,7 @@
 #include <KoID.h>
 #include "colorprofiles/KoIccColorProfile.h"
 
-#include <KoSegmentGradient.h>
+#include <KoAbstractGradient.h>
 #include <kis_brush.h>
 #include <kis_pattern.h>
 #include <kis_layer.h>
@@ -130,9 +130,9 @@ KisPattern * KisResourceProvider::currentPattern() const
 }
 
 
-KoSegmentGradient* KisResourceProvider::currentGradient() const
+KoAbstractGradient* KisResourceProvider::currentGradient() const
 {
-    return static_cast<KoSegmentGradient*>( m_resourceProvider->resource( CurrentGradient ).value<void *>() );
+    return static_cast<KoAbstractGradient*>( m_resourceProvider->resource( CurrentGradient ).value<void *>() );
 }
 
 
@@ -207,7 +207,7 @@ void KisResourceProvider::slotPatternActivated(KoResource * res)
 void KisResourceProvider::slotGradientActivated(KoResource *res)
 {
 
-    KoSegmentGradient * gradient = dynamic_cast<KoSegmentGradient*>(res);
+    KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>(res);
     QVariant v = qVariantFromValue( ( void * ) gradient );
     m_resourceProvider->setResource( CurrentGradient, v );
     if (gradient) {
@@ -306,7 +306,7 @@ void KisResourceProvider::slotResourceChanged( int key, const QVariant & res )
         emit sigPatternChanged( static_cast<KisPattern *>( res.value<void *>() ) );
         break;
     case ( CurrentGradient ):
-        emit sigGradientChanged( static_cast<KoSegmentGradient *>( res.value<void *>() ) );
+        emit sigGradientChanged( static_cast<KoAbstractGradient *>( res.value<void *>() ) );
         break;
     case ( CurrentPaintop ):
         emit sigPaintopChanged(res.value<KoID >(), currentPaintopSettings());

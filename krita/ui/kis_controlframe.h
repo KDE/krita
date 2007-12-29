@@ -38,7 +38,7 @@ class KoResourceItem;
 class KisAutobrush;
 class KisBrush;
 class KisBrushChooser;
-class KoSegmentGradient;
+class KoAbstractGradient;
 class KisGradientChooser;
 class KoResourceItemChooser;
 class KisResourceMediator;
@@ -67,7 +67,7 @@ public slots:
 
     void slotBrushChanged(KisBrush * brush);
     void slotPatternChanged(KisPattern * pattern);
-    void slotGradientChanged(KoSegmentGradient * gradient);
+    void slotGradientChanged(KoAbstractGradient * gradient);
 
 private:
 

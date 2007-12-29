@@ -30,7 +30,7 @@
 
 #include <KoCanvasResourceProvider.h>
 #include <KoTool.h>
-#include <KoSegmentGradient.h>
+#include <KoAbstractGradient.h>
 
 #include <krita_export.h>
 

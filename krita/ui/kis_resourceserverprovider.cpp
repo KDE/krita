@@ -31,7 +31,6 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <KoSegmentGradient.h>
 
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
@@ -78,15 +77,6 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", "/usr/share/create/patterns/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("kis_gradients", "data", "krita/gradients/");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_gradients", "/usr/share/create/gradients/gimp");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
-
-    m_gradientServer = new KoResourceServer<KoSegmentGradient>("kis_gradients");
-    gradientThread = new KoResourceLoaderThread(m_gradientServer, "*.ggr");
-    connect(gradientThread, SIGNAL(finished()), this, SLOT(gradientThreadDone()));
-    gradientThread->start();
-
     m_brushServer = new BrushResourceServer();
     brushThread = new KoResourceLoaderThread(m_brushServer, "*.gbr:*.gih");
     connect(brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
@@ -118,11 +108,6 @@ KoResourceServer<KisBrush>* KisResourceServerProvider::brushServer()
     return m_brushServer;
 }
 
-KoResourceServer<KoSegmentGradient>* KisResourceServerProvider::gradientServer()
-{
-    return m_gradientServer;
-}
-
 KoResourceServer<KisPattern>* KisResourceServerProvider::patternServer()
 {
     return m_patternServer;
@@ -139,12 +124,5 @@ void KisResourceServerProvider::patternThreadDone()
     delete patternThread;
     patternThread = 0;
 }
-
-void KisResourceServerProvider::gradientThreadDone()
-{
-    delete gradientThread;
-    gradientThread = 0;
-}
-
 
 #include "kis_resourceserverprovider.moc"

@@ -82,7 +82,12 @@ class KisKSLinearColorSpaceFactory : public KoColorSpaceFactory
 
         bool profileIsCompatible(const KoColorProfile *profile) const
         {
-            return KisKSLinearColorSpace(0).profileIsCompatible(profile);
+            const KisIlluminantProfile *p = dynamic_cast<const KisIlluminantProfile *>(profile);
+            if (!p)
+                return false;
+            if (p->wavelenghts() != 3)
+                return false;
+            return true;
         }
 
         QString defaultProfile() const { return "D-65 Illuminant Profile - 9 wavelenghts - Black [4.3,0.14]"; }

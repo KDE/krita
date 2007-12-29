@@ -116,9 +116,7 @@ protected:
 
         gsl_cqpminimizer_set(m_s, m_data);
 
-        int iter = 0;
         do {
-            if (++iter == 100) break;
             gsl_cqpminimizer_iterate(m_s);
         } while (gsl_cqpminimizer_test_convergence(m_s, 1e-7, 1e-7) == GSL_CONTINUE);
 

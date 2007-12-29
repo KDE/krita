@@ -141,8 +141,9 @@ public:
 
     QList<T*> resources() {
         loadLock.lock();
-        return m_resources;
+        QList<T*> resourceList = m_resources;
         loadLock.unlock();
+        return resourceList;
     }
 
     /// Returns path where to save user defined and imported resources to

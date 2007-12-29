@@ -49,7 +49,7 @@ class KisKSLinearColorSpace : public KisKSColorSpace<3>
 
         static QString colorSpaceId()
         {
-            return "KS9QPF32";
+            return "KS3LINEAR";
         }
 
 };
@@ -85,7 +85,7 @@ class KisKSLinearColorSpaceFactory : public KoColorSpaceFactory
             return KisKSLinearColorSpace(0).profileIsCompatible(profile);
         }
 
-        QString defaultProfile() const { return ""; } // TODO
+        QString defaultProfile() const { return "D-65 Illuminant Profile - 9 wavelenghts - Black [4.3,0.14]"; }
 };
 
 #endif // KIS_KSLINEAR_COLORSPACE_H_

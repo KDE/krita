@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_illuminant_profile.h"
 #include "kis_kslinear_colorspace.h"
 
 #include "kis_rgb_to_kslinear_color_conversion_transformation.h"

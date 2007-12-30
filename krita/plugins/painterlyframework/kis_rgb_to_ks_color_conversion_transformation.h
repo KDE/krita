@@ -26,11 +26,27 @@
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace_traits.h"
 
-#include <QByteArray>
+
 #include <QHash>
 #include <QString>
 
 #include <gsl/gsl_vector.h>
+
+class RGBID {
+    public:
+        RGBID() {}
+        ~RGBID() {}
+        void set(const quint16 *rgb) { memmove(RGB, rgb, 8); }
+        int total() { return RGB[0]+RGB[1]+RGB[2]; }
+        bool operator==(const RGBID &op2) const { return (op2.RGB[0]==RGB[0]&&op2.RGB[1]==RGB[1]&&op2.RGB[2]==RGB[2]); }
+
+        quint16 RGB[3];
+};
+
+inline uint qHash(const RGBID &key)
+{
+    return qHash(key.RGB[0]^key.RGB[1]^key.RGB[2]);
+}
 
 template< int _N_ >
 class KisRGBToKSColorConversionTransformation : public KoColorConversionTransformation {
@@ -52,7 +68,7 @@ public:
         delete m_converter;
         gsl_vector_free(m_rgbvec);
         gsl_vector_free(m_refvec);
-        QHashIterator<QByteArray, float *> i(m_cache);
+        QHashIterator<RGBID, float *> i(m_cache);
         while (i.hasNext()) {
             i.next();
             delete [] i.value();
@@ -70,7 +86,7 @@ public:
         const int pixelSize = KisKSColorSpaceTrait<_N_>::pixelSize;
 
         for ( ; nPixels > 0; nPixels-- ) {
-            m_lookup = QByteArray::number(src[0])+QByteArray("-")+QByteArray::number(src[1])+QByteArray("-")+QByteArray::number(src[2]);
+            m_lookup.set(src);
             if (m_cache.contains(m_lookup)) {
                 memmove(dst, m_cache.value(m_lookup), pixelSize-4);
             } else {
@@ -78,9 +94,10 @@ public:
                     m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]), m_current);
                     gsl_vector_set(m_rgbvec, i, m_current);
                 }
-                if (src[0]+src[1]+src[2] == 0)
+
+                if (m_lookup.total() == 0)
                     gsl_vector_set_all(m_refvec, 0.0);
-                else if (src[0]+src[1]+src[2] == 3*65535)
+                else if (m_lookup.total() == 3*65535)
                     gsl_vector_set_all(m_refvec, 1.0);
                 else
                     RGBToReflectance();
@@ -91,7 +108,7 @@ public:
                                                 KisKSColorSpaceTrait<_N_>::S(dst, i));
                 }
                 if (m_cache.count() == 10000) {
-                    QHashIterator<QByteArray, float *> i(m_cache);
+                    QHashIterator<RGBID, float *> i(m_cache);
                     for (int j = 0; j < 7500; j++) {
                         i.next();
                         delete [] i.value();
@@ -120,9 +137,9 @@ protected:
     ChannelConverter *m_converter;
     const KisIlluminantProfile *m_profile;
 
-    mutable QHash<QByteArray, float *> m_cache;
+    mutable QHash<RGBID, float *> m_cache;
     mutable float m_current;
-    mutable QByteArray m_lookup;
+    mutable RGBID m_lookup;
 };
 
 #endif // KIS_RGB_TO_KS_COLOR_CONVERSION_TRANSFORMATION_H_

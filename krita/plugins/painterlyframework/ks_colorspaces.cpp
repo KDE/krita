@@ -40,24 +40,24 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
-    QString d653 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_3.ill",  KStandardDirs::Recursive)[0];
+//     QString d653 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_3.ill",  KStandardDirs::Recursive)[0];
     QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
 
-    KisIlluminantProfile *D65_3 = new KisIlluminantProfile(d653);
+//     KisIlluminantProfile *D65_3 = new KisIlluminantProfile(d653);
     KisIlluminantProfile *D65_9 = new KisIlluminantProfile(d659);
 
-    f->addProfile(D65_3);
+//     f->addProfile(D65_3);
     f->addProfile(D65_9);
 
-    {
-        KoColorSpace *colorSpaceKSLinear = new KisKSLinearColorSpace(D65_3->clone());
-        KoColorSpaceFactory *csf  = new KisKSLinearColorSpaceFactory();
-        Q_CHECK_PTR(colorSpaceKSLinear);
-        f->add(csf);
-        KoHistogramProducerFactoryRegistry::instance()->add(
-        new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-        (KoID("KS3LINEARF32HISTO", i18n("3-pairs KS Linear Histogram")), colorSpaceKSLinear) );
-    }
+//     {
+//         KoColorSpace *colorSpaceKSLinear = new KisKSLinearColorSpace(D65_3->clone());
+//         KoColorSpaceFactory *csf  = new KisKSLinearColorSpaceFactory();
+//         Q_CHECK_PTR(colorSpaceKSLinear);
+//         f->add(csf);
+//         KoHistogramProducerFactoryRegistry::instance()->add(
+//         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+//         (KoID("KS3LINEARF32HISTO", i18n("3-pairs KS Linear Histogram")), colorSpaceKSLinear) );
+//     }
 
     {
         KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace(D65_9->clone());

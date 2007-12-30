@@ -27,36 +27,38 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*_wavelen_number_
 
     typedef KoColorSpaceTrait<float, 2*(_wavelen_number_)+1, 6> parent;
 
-    float m_K[_wavelen_number_];
-    float m_S[_wavelen_number_];
+    struct {
+        float m_K;
+        float m_S;
+    } wavelenght[_wavelen_number_];
     float m_opacity;
 
     inline static float &K(quint8* data, int wavelen)
     {
         float *d = parent::nativeArray(data);
         // User asked for K that's in the first [0 ... _wavelen_number_-1] positions
-        return d[wavelen];
+        return d[2*wavelen+0];
     }
 
     inline static float &S(quint8* data, int wavelen)
     {
         float *d = parent::nativeArray(data);
         // User asked for S that's in the [ _wavelen_number_ ... 2*_wavelen_number_ - 1] positions
-        return d[_wavelen_number_ + wavelen];
+        return d[2*wavelen+1];
     }
 
     inline static const float &K(const quint8* data, int wavelen)
     {
         const float *d = parent::nativeArray(data);
         // User asked for K that's in the first [0 ... _wavelen_number_-1] positions
-        return d[wavelen];
+        return d[2*wavelen+0];
     }
 
     inline static const float &S(const quint8* data, int wavelen)
     {
         const float *d = parent::nativeArray(data);
         // User asked for S that's in the [ _wavelen_number_ ... 2*_wavelen_number_ - 1] positions
-        return d[_wavelen_number_ + wavelen];
+        return d[2*wavelen+1];
     }
 };
 

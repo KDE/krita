@@ -26,8 +26,6 @@
 #include <QApplication>
 #include <QLayout>
 #include <QPixmap>
-#include <Q3PtrList>
-#include <Q3VBoxLayout>
 #include <QFrame>
 #include <QResizeEvent>
 #include <QTableWidget>
@@ -262,13 +260,37 @@ void KoResourceChooser::removeItem( QTableWidgetItem * item )
 {
     if( ! item )
         return;
-    QTableWidgetItem * removeItem = takeItem( row( item ), column( item ) );
+
+    int removeRow = row( item );
+    int removeCol = column( item );
+
+    QTableWidgetItem * removeItem = takeItem( removeRow, removeCol );
     if( removeItem )
     {
         delete removeItem;
         d->m_itemCount--;
-        update();
+
+        // move all items after the deleted item one position forward
+        int currRowCount = rowCount();
+        int currColCount = columnCount();
+
+        int itemCount = currRowCount * currColCount;
+        int removeIndex = removeRow * currColCount + removeCol;
+        for( int index = removeIndex+1; index < itemCount; ++index )
+        {
+            int oldRow = index / currColCount;
+            int oldCol = index % currColCount;
+            int newIndex = index-1;
+            int newRow = newIndex / currColCount;
+            int newCol = newIndex % currColCount;
+
+            QTableWidgetItem * currItem = takeItem( oldRow, oldCol );
+            if( currItem )
+                setItem( newRow, newCol, currItem );
+        }
+
         setupItems();
+        update();
     }
 }
 

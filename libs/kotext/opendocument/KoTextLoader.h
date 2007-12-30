@@ -3,6 +3,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -89,21 +90,6 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
         * Load all styles. This includes the auto-styles and the custom-styles.
         */
         virtual void loadAllStyles(KoTextLoadingContext& context);
-
-        /**
-        * Load the settings.
-        */
-        virtual void loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settings);
-
-        /**
-        * Load the page layout.
-        */
-        virtual bool loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName);
-
-        /**
-        * Load the style of the masterpage.
-        */
-        virtual bool loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName);
 
         /**
         * Load the body from the \p bodyElem into the \p cursor .

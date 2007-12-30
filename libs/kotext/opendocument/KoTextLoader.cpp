@@ -276,35 +276,6 @@ void KoTextLoader::loadAllStyles(KoTextLoadingContext& context)
     }
 }
 
-void KoTextLoader::loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settings)
-{
-    #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadSettings";
-    #endif
-    Q_UNUSED(context);
-    Q_UNUSED(settings);
-}
-
-bool KoTextLoader::loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName)
-{
-    #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadPageLayout";
-    #endif
-    Q_UNUSED(context);
-    Q_UNUSED(masterPageName);
-    return true;
-}
-
-bool KoTextLoader::loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName)
-{
-    #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500)<<"KoTextLoader::loadMasterPageStyle";
-    #endif
-    Q_UNUSED(context);
-    Q_UNUSED(masterPageName);
-    return true;
-}
-
 //1.6: KoTextDocument::loadOasisText
 void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& bodyElem, QTextCursor& cursor)
 {

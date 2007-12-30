@@ -23,7 +23,7 @@
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
 
-#define KS9QPID KoID("KS9QP", i18n("9-pairs Absorption-Scattering QP"))
+#define KS9QPID KoID("KS9QP", i18n("Painterly Color Space"))
 
 class KisKSQPColorSpace : public KisKSColorSpace<9>
 {
@@ -32,7 +32,7 @@ class KisKSQPColorSpace : public KisKSColorSpace<9>
     public:
 
         KisKSQPColorSpace(KoColorProfile *p)
-        : parent(p, colorSpaceId(), i18n("9-pairs Absorption-Scattering QP (32 Bits Float)")) {}
+        : parent(p, colorSpaceId(), i18n("Painterly Color Space (32 Bits Float)")) {}
         ~KisKSQPColorSpace() {}
 
         KoID colorModelId() const
@@ -56,7 +56,7 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
         QString id() const { return KisKSQPColorSpace::colorSpaceId(); }
-        QString name() const { return i18n("9-pairs Absorption-Scattering QP (32 Bits Float)"); }
+        QString name() const { return i18n("Painterly Color Space (32 Bits Float)"); }
         KoID colorModelId() const { return KS9QPID; }
         KoID colorDepthId() const { return KSFloat32BitsColorDepthID; }
         bool userVisible() const { return true; }

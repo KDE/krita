@@ -26,6 +26,10 @@
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace_traits.h"
 
+#include <QByteArray>
+#include <QHash>
+#include <QString>
+
 #include <gsl/gsl_vector.h>
 
 template< int _N_ >
@@ -40,6 +44,7 @@ public:
         m_converter = new ChannelConverter(m_profile->Kblack(), m_profile->Sblack());
         m_rgbvec = gsl_vector_calloc(3);
         m_refvec = gsl_vector_calloc(_N_);
+        m_cache.reserve(10000);
     }
 
     ~KisRGBToKSColorConversionTransformation()
@@ -47,6 +52,11 @@ public:
         delete m_converter;
         gsl_vector_free(m_rgbvec);
         gsl_vector_free(m_refvec);
+        QHashIterator<QByteArray, float *> i(m_cache);
+        while (i.hasNext()) {
+            i.next();
+            delete [] i.value();
+        }
     }
 
     void transform(const quint8 *src8, quint8 *dst, qint32 nPixels) const
@@ -57,32 +67,46 @@ public:
         // 3 - convert reflectances to K/S
 
         const quint16 *src = reinterpret_cast<const quint16*>(src8);
-        float c, checkcolor = 0;
+        const int pixelSize = KisKSColorSpaceTrait<_N_>::pixelSize;
 
         for ( ; nPixels > 0; nPixels-- ) {
-            for (int i = 0; i < 3; i++) {
-                m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]), c);
-                gsl_vector_set(m_rgbvec, i, c);
-                checkcolor += c;
-            }
+            m_lookup = QByteArray::number(src[0])+QByteArray("-")+QByteArray::number(src[1])+QByteArray("-")+QByteArray::number(src[2]);
+            if (m_cache.contains(m_lookup)) {
+                memmove(dst, m_cache.value(m_lookup), pixelSize-4);
+            } else {
+                for (int i = 0; i < 3; i++) {
+                    m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]), m_current);
+                    gsl_vector_set(m_rgbvec, i, m_current);
+                }
+                if (src[0]+src[1]+src[2] == 0)
+                    gsl_vector_set_all(m_refvec, 0.0);
+                else if (src[0]+src[1]+src[2] == 3*65535)
+                    gsl_vector_set_all(m_refvec, 1.0);
+                else
+                    RGBToReflectance();
 
-            if (checkcolor <= 0.0)
-                gsl_vector_set_all(m_refvec, 0.0);
-            else if (checkcolor >= 3.0)
-                gsl_vector_set_all(m_refvec, 1.0);
-            else
-                RGBToReflectance();
-
-            for (int i = 0; i < _N_; i++) {
-                m_converter->reflectanceToKS((float)gsl_vector_get(m_refvec, i),
-                                             KisKSColorSpaceTrait<_N_>::K(dst, i),
-                                             KisKSColorSpaceTrait<_N_>::S(dst, i));
+                for (int i = 0; i < _N_; i++) {
+                    m_converter->reflectanceToKS((float)gsl_vector_get(m_refvec, i),
+                                                KisKSColorSpaceTrait<_N_>::K(dst, i),
+                                                KisKSColorSpaceTrait<_N_>::S(dst, i));
+                }
+                if (m_cache.count() == 10000) {
+                    QHashIterator<QByteArray, float *> i(m_cache);
+                    for (int j = 0; j < 7500; j++) {
+                        i.next();
+                        delete [] i.value();
+                        m_cache.remove(i.key());
+                    }
+                    m_cache.squeeze();
+                }
+                m_cache.insert(m_lookup, new float[pixelSize-4]);
+                memmove(m_cache.value(m_lookup), dst, pixelSize-4);
             }
 
             KisKSColorSpaceTrait<_N_>::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(src[3]), 1);
 
             src += 4;
-            dst += KisKSColorSpaceTrait<_N_>::pixelSize;
+            dst += pixelSize;
         }
     }
 
@@ -95,6 +119,10 @@ protected:
 
     ChannelConverter *m_converter;
     const KisIlluminantProfile *m_profile;
+
+    mutable QHash<QByteArray, float *> m_cache;
+    mutable float m_current;
+    mutable QByteArray m_lookup;
 };
 
 #endif // KIS_RGB_TO_KS_COLOR_CONVERSION_TRANSFORMATION_H_

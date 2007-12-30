@@ -131,7 +131,9 @@ const KoColorProfile *KisKSColorSpace<_N_>::profile() const
 template<int _N_>
 bool KisKSColorSpace<_N_>::profileIsCompatible(const KoColorProfile *profile) const
 {
-    const KisIlluminantProfile *p = static_cast<const KisIlluminantProfile *>(profile);
+    const KisIlluminantProfile *p = dynamic_cast<const KisIlluminantProfile *>(profile);
+    if (!p)
+        return false;
     if (p->wavelenghts() != _N_)
         return false;
     return true;

@@ -57,26 +57,26 @@ public:
     void transform(const quint8 *src, quint8 *dst8, qint32 nPixels) const
     {
         quint16 *dst = reinterpret_cast<quint16*>(dst8);
-        float c, checkcolor = 0;
 
         for ( ; nPixels > 0; nPixels-- ) {
+            m_checkcolor = 0;
             for (int i = 0; i < _N_; i++) {
                 m_converter->KSToReflectance(KisKSColorSpaceTrait<_N_>::K(src, i),
-                                             KisKSColorSpaceTrait<_N_>::S(src, i), c);
-                gsl_vector_set(m_refvec, i, c);
-                checkcolor += c;
+                                             KisKSColorSpaceTrait<_N_>::S(src, i), m_current);
+                gsl_vector_set(m_refvec, i, m_current);
+                m_checkcolor += m_current;
             }
 
-            if (checkcolor <= 0.0)
+            if (m_checkcolor <= 0.0)
                 gsl_vector_set_all(m_rgbvec, 0.0);
-            else if (checkcolor >= (float)_N_)
+            else if (m_checkcolor >= _N_)
                 gsl_vector_set_all(m_rgbvec, 1.0);
             else
                 gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
             for (int i = 0; i < 3; i++) {
-                m_converter->RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), c);
-                dst[2-i] = KoColorSpaceMaths<float,quint16>::scaleToA(c);
+                m_converter->RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), m_current);
+                dst[2-i] = KoColorSpaceMaths<float,quint16>::scaleToA(m_current);
             }
             dst[3] = KoColorSpaceMaths<float,quint16>::scaleToA(KisKSColorSpaceTrait<_N_>::alpha(src));
 
@@ -91,6 +91,9 @@ private:
 
     ChannelConverter *m_converter;
     const KisIlluminantProfile *m_profile;
+
+    mutable float m_current;
+    mutable float m_checkcolor;
 
 };
 

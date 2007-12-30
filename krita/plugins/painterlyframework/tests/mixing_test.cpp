@@ -45,7 +45,7 @@ void MixingTest::testMixing()
     const int ncolor1 = (int)pow(T/step+1,2);
     const int ncolor2 = (int)pow(T/step+1,2);
 
-    KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/color/illuminants/");
+    KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
     QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
     const KisIlluminantProfile *profile = new KisIlluminantProfile(d659);
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace::colorSpaceId(), profile);

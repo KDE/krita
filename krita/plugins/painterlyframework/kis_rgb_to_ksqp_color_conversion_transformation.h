@@ -110,15 +110,15 @@ protected:
     void RGBToReflectance() const
     {
         for (int i = 0; i < 3; i++) {
-            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(m_rgbvec, i) - 0.001 ) );
-            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(m_rgbvec, i) + 0.001 ) );
+            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(m_rgbvec, i) - 0.0 ) );
+            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(m_rgbvec, i) + 0.0 ) );
         }
 
         gsl_cqpminimizer_set(m_s, m_data);
 
         do {
             gsl_cqpminimizer_iterate(m_s);
-        } while (gsl_cqpminimizer_test_convergence(m_s, 1e-7, 1e-7) == GSL_CONTINUE);
+        } while (gsl_cqpminimizer_test_convergence(m_s, 1e-10, 1e-10) == GSL_CONTINUE);
 
         for (uint i = 0; i < 9; i++) {
             double curr = gsl_vector_get(gsl_cqpminimizer_x(m_s), i);
@@ -144,7 +144,7 @@ class KisRGBToKSQPColorConversionTransformationFactory : public KoColorConversio
 public:
     KisRGBToKSQPColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(),
-                                              "KS9QP", KSFloat32BitsColorDepthID.id()) {}
+                                             "KS9QP", KSFloat32BitsColorDepthID.id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                const KoColorSpace* dstColorSpace,

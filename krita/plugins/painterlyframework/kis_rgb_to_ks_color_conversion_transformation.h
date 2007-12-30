@@ -69,8 +69,8 @@ public:
 
             for (int i = 0; i < _N_; i++) {
                 m_converter->reflectanceToKS((float)gsl_vector_get(m_refvec, i),
-                                                KisKSColorSpaceTrait<_N_>::K(dst, i),
-                                                KisKSColorSpaceTrait<_N_>::S(dst, i));
+                                             KisKSColorSpaceTrait<_N_>::K(dst, i),
+                                             KisKSColorSpaceTrait<_N_>::S(dst, i));
             }
 
             KisKSColorSpaceTrait<_N_>::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(src[3]), 1);

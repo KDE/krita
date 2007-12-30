@@ -67,7 +67,6 @@ void KisKSColorSpaceTest::testToFromRgbA16()
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace::colorSpaceId(), profile);
     QVERIFY2(cs != 0, "Created colorspace");
     QVERIFY(cs->profileIsCompatible(profile));
-//     QCOMPARE(cs->profile(), profile);
 
     quint8 *rgb1;
     quint8 *kas1 = new quint8[2*cs->pixelSize()];
@@ -142,7 +141,6 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 
     delete [] kas1;
     delete [] rgb2;
-    delete cs;
     delete profile;
 }
 
@@ -172,7 +170,7 @@ void KisKSColorSpaceTest::testMixing()
     cs->fromRgbA16(rgb2, kas2, 1);
     for (int i = 0; i < 2*N+1; i++)
         reinterpret_cast<float*>(kasm)[i] = (reinterpret_cast<float*>(kas1)[i] +
-                                             reinterpret_cast<float*>(kas2)[i]) / 2.0;
+                                             reinterpret_cast<float*>(kas2)[i]);
     cs->toRgbA16(kasm, rgbm, 1);
     print_vector<float,2*N+1>(kasm, "BLUE + YELLOW IN KS:");
     print_vector<quint16,4>(rgbm, "BLUE + YELLOW BACK IN RBG:");
@@ -183,7 +181,7 @@ void KisKSColorSpaceTest::testMixing()
     cs->fromRgbA16(rgb2, kas2, 1);
     for (int i = 0; i < 2*N+1; i++)
         reinterpret_cast<float*>(kasm)[i] = (reinterpret_cast<float*>(kas1)[i] +
-                                             reinterpret_cast<float*>(kas2)[i]) / 2.0;
+                                             reinterpret_cast<float*>(kas2)[i]);
     cs->toRgbA16(kasm, rgbm, 1);
     print_vector<float,2*N+1>(kasm, "BLUE + GREEN IN KS:");
     print_vector<quint16,4>(rgbm, "BLUE + GREEN BACK IN RBG:");
@@ -194,7 +192,7 @@ void KisKSColorSpaceTest::testMixing()
     cs->fromRgbA16(rgb2, kas2, 1);
     for (int i = 0; i < 2*N+1; i++)
         reinterpret_cast<float*>(kasm)[i] = (reinterpret_cast<float*>(kas1)[i] +
-                                             reinterpret_cast<float*>(kas2)[i]) / 2.0;
+                                             reinterpret_cast<float*>(kas2)[i]);
     cs->toRgbA16(kasm, rgbm, 1);
     print_vector<float,2*N+1>(kasm, "RED + BLUE IN KS:");
     print_vector<quint16,4>(rgbm, "RED + BLUE BACK IN RBG:");
@@ -203,7 +201,6 @@ void KisKSColorSpaceTest::testMixing()
     delete [] kasm;
     delete [] kas2;
     delete [] kas1;
-    delete cs;
     delete profile;
 }
 

@@ -25,7 +25,6 @@
 #include "kis_ks_colorspace_traits.h"
 
 #include <KoColorConversionTransformation.h>
-
 #include <KoColorConversionTransformationFactory.h>
 
 #include <gsl/gsl_blas.h>
@@ -64,7 +63,7 @@ public:
             for (int i = 0; i < _N_; i++) {
                 m_converter->KSToReflectance(KisKSColorSpaceTrait<_N_>::K(src, i),
                                              KisKSColorSpaceTrait<_N_>::S(src, i), c);
-                                             gsl_vector_set(m_refvec, i, c);
+                gsl_vector_set(m_refvec, i, c);
             }
 
             gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);

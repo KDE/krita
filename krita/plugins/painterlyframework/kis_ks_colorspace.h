@@ -111,7 +111,7 @@ KisKSColorSpace<_N_>::KisKSColorSpace(KoColorProfile *p, const QString &id, cons
 template<int _N_>
 KisKSColorSpace<_N_>::~KisKSColorSpace()
 {
-    delete m_profile;
+//     delete m_profile;
 }
 
 template<int _N_>
@@ -134,5 +134,25 @@ bool KisKSColorSpace<_N_>::profileIsCompatible(const KoColorProfile *profile) co
         return false;
     return true;
 }
+/*
+template< int _N_ >
+void KisKSColorSpace<_N_>::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
+{
+    const typename _CSTraits::Pixel* p = reinterpret_cast<const typename _CSTraits::Pixel*>( pixel );
+    QDomElement labElt = doc.createElement( "RGB" );
+    labElt.setAttribute("r", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->red) );
+    labElt.setAttribute("g", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->green) );
+    labElt.setAttribute("b", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->blue) );
+    labElt.setAttribute("space", profile()->name() );
+    colorElt.appendChild( labElt );
+}
 
+void colorFromXML( quint8* pixel, const QDomElement& elt) const
+{
+    typename _CSTraits::Pixel* p = reinterpret_cast<typename _CSTraits::Pixel*>( pixel );
+    p->red = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("r").toDouble());
+    p->green = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p->blue = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+}
+*/
 #endif // KIS_KS_COLORSPACE_H_

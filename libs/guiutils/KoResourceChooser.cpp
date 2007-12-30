@@ -61,6 +61,7 @@ struct KoResourceChooser::Private
     int m_itemHeight;
     int m_itemCount;
     KoIconToolTip tip;
+    bool busyLayouting;
 };
 
 KoResourceChooser::KoResourceChooser(QSize aIconSize, QWidget *parent)
@@ -70,6 +71,8 @@ KoResourceChooser::KoResourceChooser(QSize aIconSize, QWidget *parent)
     d->m_itemCount = 0;
     d->m_itemWidth = aIconSize.width();
     d->m_itemHeight = aIconSize.height();
+    d->busyLayouting = false;
+
     setRowCount(1);
     setColumnCount(1);
     horizontalHeader()->hide();
@@ -124,6 +127,11 @@ void KoResourceChooser::resizeEvent(QResizeEvent *e)
 
 void KoResourceChooser::setupItems()
 {
+    if( d->busyLayouting )
+        return;
+
+    d->busyLayouting = true;
+
     int oldNColumns = columnCount();
     int nColumns = width( ) / d->m_itemWidth;
     if(nColumns == 0)
@@ -166,8 +174,8 @@ void KoResourceChooser::setupItems()
         // We are now not as wide as before so we must reorder from the top
 
         setRowCount(nRows);// make sure there is enough space for our reordering
-        int newRow = nRows - 1, newColumn = d->m_itemCount - newRow * nColumns,
-                      oldRow = oldNRows - 1, oldColumn = d->m_itemCount - oldRow * oldNColumns;
+        int newRow = nRows - 1, newColumn = d->m_itemCount - newRow * nColumns - 1,
+                      oldRow = oldNRows - 1, oldColumn = d->m_itemCount - oldRow * oldNColumns - 1;
         for(int i = 0; i < d->m_itemCount; i++)
         {
             QTableWidgetItem *theItem = takeItem(oldRow, oldColumn);
@@ -228,6 +236,8 @@ void KoResourceChooser::setupItems()
         setColumnWidth(i, d->m_itemWidth);
     for(int i = 0; i < nRows; i++)
         setRowHeight(i, d->m_itemHeight);
+
+    d->busyLayouting = false;
 }
 
 QTableWidgetItem *KoResourceChooser::itemAt(int index)

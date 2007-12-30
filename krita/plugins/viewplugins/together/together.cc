@@ -25,7 +25,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kfiledialog.h>
 #include <kgenericfactory.h>
 #include <klocale.h>

@@ -22,7 +22,7 @@
 #include <QVariant>
 #include <QStringList>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #ifdef Q_CC_MSVC
 #include <iso646.h>

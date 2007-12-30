@@ -21,12 +21,12 @@
 #include "KoColorSpace.h"
 #include "kis_selection.h"
 
-#include "kdebug.h"
+#include "kis_debug.h"
 
 KisTransparencyMask::KisTransparencyMask()
     : KisEffectMask()
 {
-    kDebug(41001) <<"Creating a transparency mask";
+    dbgImage <<"Creating a transparency mask";
 }
 
 KisTransparencyMask::~KisTransparencyMask()

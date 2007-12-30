@@ -86,7 +86,7 @@ KisDynamicShape* KisBristleShape::clone() const
 
 void KisBristleShape::resize(double xs, double ys)
 {
-    kDebug(41006) << xs <<"" << ys;
+    dbgPlugins << xs <<"" << ys;
     m_radius *= (xs + ys) * 0.5;
 }
 
@@ -124,13 +124,13 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
         it != m_paintBrush->m_bristles.end(); ++it)
     {
 //         m_paintBrush->bristlesPainter->setPaintColor( it->color );
-//         kDebug(41006) << it->color.toQColor();
+//         dbgPlugins << it->color.toQColor();
         double x = it->m_x * m_radius;
         double y = it->m_y * m_radius;
         QPointF pos( angleCos*x - angleSin*y , angleSin*x + angleCos*y );
-//         kDebug(41006) << pos;
+//         dbgPlugins << pos;
         pos += brushPos;
-//         kDebug(41006) << m_radius <<"" << pos <<"" << brushPos;
+//         dbgPlugins << m_radius <<"" << pos <<"" << brushPos;
         if( m_paintBrush->m_firstStroke)
         {
             m_paintBrush->bristlesPainter->paintLine( pos, pos );
@@ -150,7 +150,7 @@ void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* co
 
     double angleCos = cos(m_angle);
     double angleSin = sin(m_angle);
-    kDebug(41006) << angleCos <<"" << angleSin;
+    dbgPlugins << angleCos <<"" << angleSin;
     // Clear the stamp
     stamp->clear();
     // Create a painter
@@ -158,8 +158,8 @@ void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* co
     KisAutobrushCircleShape cs(1, 1, 1.0, 1.0);
     QImage img = cs.createBrush();
     p.setBrush( new KisAutobrushResource(img) );
-    kDebug(41006) << KisPaintOpRegistry::instance();
-    kDebug(41006) << KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &p, 0);
+    dbgPlugins << KisPaintOpRegistry::instance();
+    dbgPlugins << KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &p, 0);
     p.setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, &p, 0) );
     m_rect = QRect(0,0,0,0);
     for( QList< KisBristle >::iterator it = m_paintBrush->m_bristles.begin();
@@ -169,7 +169,7 @@ void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* co
         double x = it->m_x * m_radius;
         double y = it->m_y * m_radius;
         QPointF pos( angleCos*x - angleSin*y , angleSin*x + angleCos*y );
-//         kDebug(41006) << pos <<"" << pos2;
+//         dbgPlugins << pos <<"" << pos2;
        if( m_paintBrush->m_firstStroke)
         {
             p.paintLine( pos, 0.5, 1.0, 1.0, pos, 0.5, 1.0, 1.0);
@@ -182,6 +182,6 @@ void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* co
     m_paintBrush->m_firstStroke = false;
     m_rect = p.dirtyRegion() /*.boundingRect()*/;
 //     m_rect = QRect( m_radius, m_radius, 2.0 * m_radius, 2.0 * m_radius );
-    kDebug(41006) <<"Bristle shape rect:" << m_rect;
+    dbgPlugins <<"Bristle shape rect:" << m_rect;
 }
 #endif

@@ -22,7 +22,7 @@
 #include <QThread>
 
 #include <threadweaver/ThreadWeaver.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -41,12 +41,12 @@ public:
         , m_rc( rc )
         , m_rootLayer( layer )
         {
-            kDebug(41010) << "queing job for layer " << layer->name() << " on rect " << rc;
+            dbgRender << "queing job for layer " << layer->name() << " on rect " << rc;
         }
 
     void run()
         {
-            kDebug(41010) << "starting updateprojection for layer " << m_rootLayer->name() << " on rect " << m_rc;
+            dbgRender << "starting updateprojection for layer " << m_rootLayer->name() << " on rect " << m_rc;
             m_rootLayer->updateProjection( m_rc );
             // XXX: Also convert to QImage in the thread?
         }

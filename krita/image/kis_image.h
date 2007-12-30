@@ -25,7 +25,7 @@
 #include <QRegion>
 #include <QBitArray>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kurl.h>
 
 #include <KoColorConversionTransformation.h>

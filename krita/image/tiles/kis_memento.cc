@@ -18,7 +18,7 @@
 #include "kis_global.h"
 #include "kis_memento.h"
 #include "kis_tile.h"
-#include "kis_tile_global.h"
+#include "kis_debug.h"
 
 KisMemento::KisMemento(quint32 pixelSize)
 {

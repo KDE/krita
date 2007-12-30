@@ -28,7 +28,7 @@
 #include <QPixmap>
 #include <QMouseEvent>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kis_cursor.h>
 
 ImageViewer::ImageViewer(QWidget *widget, const char * name)

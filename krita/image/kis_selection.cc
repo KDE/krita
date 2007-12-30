@@ -35,7 +35,7 @@
 #include <KoIntegerMaths.h>
 #include <KoCompositeOp.h>
 
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"

@@ -17,7 +17,7 @@
  */
 #include "kis_filter.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <qdom.h>
 #include <QString>
 

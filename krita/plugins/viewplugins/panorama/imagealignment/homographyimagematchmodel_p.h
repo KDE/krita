@@ -104,7 +104,7 @@ class HomographyImageMatchModel {
             m_fitComputed = true;
             for(uint i = 0; i < m_parameters.size(); i++)
             {
-                kDebug(41006) <<"m_parameters["<< i <<"]=" << m_parameters[i];
+                dbgPlugins <<"m_parameters["<< i <<"]=" << m_parameters[i];
             }
         }
     private:

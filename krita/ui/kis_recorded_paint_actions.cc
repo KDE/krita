@@ -152,7 +152,7 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
 {
     // TODO: support for autobrush
     QString name = elt.attribute("name","");
-    kDebug() << "Looking for brush " << name;
+    dbgKrita << "Looking for brush " << name;
     QList<KisBrush*> resources = KisResourceServerProvider::instance()->brushServer()->resources();
     foreach(KisBrush* r, resources)
     {
@@ -161,7 +161,7 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
             return r;
         }
     }
-    kDebug() << "Brush " << name << " not found.";
+    dbgKrita << "Brush " << name << " not found.";
     return 0;
 }
 
@@ -241,7 +241,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     {
         brush = brushFromXML(brushElt);
     } else {
-        kDebug() << "Warning: no <Brush /> found";
+        dbgKrita << "Warning: no <Brush /> found";
     }
     
     QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
@@ -250,7 +250,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     {
         bC = KoColor::fromXML( backgroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
     } else {
-        kDebug() << "Warning: no <BackgroundColor /> found";
+        dbgKrita << "Warning: no <BackgroundColor /> found";
     }
     QDomElement foregroundColorElt = elt.firstChildElement("ForegroundColor");
     KoColor fC;
@@ -258,7 +258,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     {
         fC = KoColor::fromXML( foregroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
     } else {
-        kDebug() << "Warning: no <ForegroundColor /> found";
+        dbgKrita << "Warning: no <ForegroundColor /> found";
     }
     
     KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, layer, brush, paintOpId, fC, bC);
@@ -277,7 +277,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
             nWp = nWp.nextSibling();
         }
     } else {
-        kDebug() << "Warning: no <Waypoints /> found";
+        dbgKrita << "Warning: no <Waypoints /> found";
     }
     return rplpa;
 }
@@ -387,7 +387,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
     {
         brush = brushFromXML(brushElt);
     } else {
-        kDebug() << "Warning: no <Brush /> found";
+        dbgKrita << "Warning: no <Brush /> found";
     }
     QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
     KoColor bC;
@@ -395,7 +395,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
     {
         bC = KoColor::fromXML( backgroundColorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
     } else {
-        kDebug() << "Warning: no <BackgroundColor /> found";
+        dbgKrita << "Warning: no <BackgroundColor /> found";
     }
     QDomElement foregroundColorElt = elt.firstChildElement("ForegroundColor");
     KoColor fC;
@@ -403,7 +403,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
     {
         fC = KoColor::fromXML( foregroundColorElt.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
     } else {
-        kDebug() << "Warning: no <ForegroundColor /> found";
+        dbgKrita << "Warning: no <ForegroundColor /> found";
     }
     
     KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, layer, brush, paintOpId, fC, bC);
@@ -429,7 +429,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
             nWp = nWp.nextSibling();
         }
     } else {
-        kDebug() << "Warning: no <Waypoints /> found";
+        dbgKrita << "Warning: no <Waypoints /> found";
     }
     return rplpa;
 }

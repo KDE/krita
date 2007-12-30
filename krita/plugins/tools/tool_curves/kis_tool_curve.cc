@@ -27,7 +27,7 @@
 #include <QRect>
 #include <QPointF>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_global.h"
@@ -412,7 +412,7 @@ void KisToolCurve::commitCurve()
     else if (toolType() == TOOL_SELECT)
         selectCurve();
     else
-        kDebug(0) <<"NO SUPPORT FOR THIS TYPE OF TOOL";
+        dbgKrita <<"NO SUPPORT FOR THIS TYPE OF TOOL";
 
     m_curve->clear();
     m_curve->endActionOptions();
@@ -539,7 +539,7 @@ QWidget* KisToolCurve::createOptionWidget()
     else if (toolType() == TOOL_SELECT)
         return createSelectionOptionWidget(parent);
     else
-        kDebug(0) <<"NO SUPPORT FOR THIS TOOL TYPE";
+        dbgKrita <<"NO SUPPORT FOR THIS TOOL TYPE";
     return 0;
 }
 

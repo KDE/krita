@@ -20,7 +20,7 @@
 #include "bristle.h"
 #include "gauss.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #define RADIUS_INCRE 1.5
 #define DX .8

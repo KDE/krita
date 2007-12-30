@@ -90,9 +90,9 @@ XXX_PORT
     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 
 
-//     kDebug(41005) << size <<"" << maxrectsize <<"" << srcTopLeft.x() <<"" << srcTopLeft.y();
+//     dbgFilters << size <<"" << maxrectsize <<"" << srcTopLeft.x() <<"" << srcTopLeft.y();
 
-//     kDebug(41005) <<"Transforming...";
+//     dbgFilters <<"Transforming...";
     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = 0;
     KisMathToolbox::KisWavelet* wav = 0;
@@ -111,7 +111,7 @@ XXX_PORT
         return;
     }
 
-//     kDebug(41005) <<"Thresholding...";
+//     dbgFilters <<"Thresholding...";
     float* fin = wav->coeffs + wav->depth*wav->size*wav->size;
     setProgressStage( i18n("Thresholding") ,progress());
     for(float* it = wav->coeffs + wav->depth; it < fin; it++)
@@ -127,7 +127,7 @@ XXX_PORT
         incProgress();
     }
 
-//     kDebug(41005) <<"Untransforming...";
+//     dbgFilters <<"Untransforming...";
 
     setProgressStage( i18n("Fast wavelet untransformation") ,progress());
     mathToolbox->fastWaveletUntransformation( dst, QRect(dstTopLeft, areaSize ), wav, buff);

@@ -22,7 +22,7 @@
 
 #include <qtest_kde.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_image.h"
 #include "kis_types.h"
@@ -79,7 +79,7 @@ void kisnodemodel_test::testRowcount()
     QVERIFY( model.rowCount() == 3 );
 
     QModelIndex idx = model.index( 0, 0 );
-    kDebug() << "node: " << model.nodeFromIndex(idx);
+    dbgKrita << "node: " << model.nodeFromIndex(idx);
     QVERIFY( idx.isValid() );
     QVERIFY( !idx.parent().isValid() );
     QVERIFY( model.hasChildren( idx ) );
@@ -155,7 +155,7 @@ mode:
 
     QVERIFY( parentIdx.isValid() );
     QVERIFY( !parentIdx.parent().isValid() );
-    kDebug() << model.nodeFromIndex(parentIdx);
+    dbgKrita << model.nodeFromIndex(parentIdx);
     QVERIFY( parentIdx.internalPointer() == parent.data() );
     QVERIFY( model.hasChildren( parentIdx ) );
 

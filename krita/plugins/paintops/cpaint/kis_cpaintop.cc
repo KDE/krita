@@ -21,7 +21,7 @@
 #include <QPainter>
 #include <QColor>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoInputDevice.h>
 
@@ -69,7 +69,7 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
                                           KisImageSP image)
 {
     Q_UNUSED( image );
-    kDebug() << settings;
+    dbgKrita << settings;
     
     const KisCPaintOpSettings * cpaintOpSettings =
         dynamic_cast<const KisCPaintOpSettings*>( settings );

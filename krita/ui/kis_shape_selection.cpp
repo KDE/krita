@@ -29,7 +29,7 @@
 #include "kis_paint_device.h"
 #include "kis_shape_selection_model.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 KisShapeSelection::KisShapeSelection(KisImageSP image, KisSelectionSP selection)
     : KoShapeContainer(new KisShapeSelectionModel(image, selection, this))
@@ -165,7 +165,7 @@ void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r
     KisPainter painter(projection);
     painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, tmpMask, r.x(), r.y(), r.width(), r.height());
     painter.end();
-    kDebug(41010) << "Shape selection rendering: " << t.elapsed();
+    dbgRender << "Shape selection rendering: " << t.elapsed();
 }
 
 void KisShapeSelection::setDirty()

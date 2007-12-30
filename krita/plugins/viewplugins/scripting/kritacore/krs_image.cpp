@@ -21,7 +21,7 @@
 #include "krs_module.h"
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>

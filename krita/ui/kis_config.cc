@@ -19,7 +19,7 @@
 
 #include <kglobalsettings.h>
 #include <kglobal.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kconfig.h>
 #include <QFont>
 #include <QThread>

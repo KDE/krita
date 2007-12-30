@@ -22,7 +22,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kfiledialog.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -106,13 +106,13 @@ void BigBrotherPlugin::slotOpen()
         QFile f(filename);
         if(f.exists())
         {
-            kDebug() << f.open( QIODevice::ReadOnly);
+            dbgKrita << f.open( QIODevice::ReadOnly);
             QString err;
             int line, col;
             if(not doc.setContent(&f, &err, &line, &col))
             {
                 // TODO error message
-                kDebug() << err << " line = " << line << " col = " << col;
+                dbgKrita << err << " line = " << line << " col = " << col;
                 f.close();
                 return;
             }
@@ -127,7 +127,7 @@ void BigBrotherPlugin::slotOpen()
                 // TODO error message
             }
         } else {
-            kDebug() << "Unexistant file : " << filename;
+            dbgKrita << "Unexistant file : " << filename;
         }
     }
 }

@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <QIcon>
 #include <QImage>
 #include <QUndoCommand>
@@ -29,7 +29,7 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
@@ -141,13 +141,13 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         KisPainter gc( m_d->projection );
         gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
         foreach (QRect rect, dirty.rects() ) {
-//             kDebug() << "Resetting projection rc " << rect;
+//             dbgImage << "Resetting projection rc " << rect;
             gc.bitBlt( rect.topLeft(), m_d->paintDevice, rect );
         }
     }
 
     foreach ( QRect rect, dirty.rects() ) {
-//         kDebug() << "Applying effect masks on rc " << rect;
+//         dbgImage << "Applying effect masks on rc " << rect;
         applyEffectMasks( m_d->projection, rect );
     }
 }

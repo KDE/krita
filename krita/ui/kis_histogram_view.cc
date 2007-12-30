@@ -29,7 +29,7 @@
 #include <QMouseEvent>
 #include <QFrame>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"

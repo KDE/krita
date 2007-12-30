@@ -19,7 +19,7 @@
 
 #include "extensions_plugin.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 
 #include <KoColorTransformationFactoryRegistry.h>

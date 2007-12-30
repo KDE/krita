@@ -31,7 +31,7 @@
 #include <QEvent>
 #include <QVariant>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kicon.h>
 #include <klocale.h>
 #include <knuminput.h>

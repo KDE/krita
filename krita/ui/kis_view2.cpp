@@ -219,7 +219,7 @@ KisView2::~KisView2()
 
 void KisView2::dragEnterEvent(QDragEnterEvent *event)
 {
-    kDebug(41007) <<"KisView2::dragEnterEvent";
+    dbgUI <<"KisView2::dragEnterEvent";
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
     if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
@@ -443,7 +443,7 @@ void KisView2::slotLoadingFinished()
     m_d->zoomManager->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
     updateGUI();
-//     kDebug(41007) <<"image finished loading, active layer:" << img->activeLayer() <<", root layer:" << img->rootLayer();
+//     dbgUI <<"image finished loading, active layer:" << img->activeLayer() <<", root layer:" << img->rootLayer();
 
 }
 
@@ -599,7 +599,7 @@ void KisView2::connectCurrentImage()
 {
     KisImageSP img = image();
     if (img) {
-//         kDebug(41007) <<"Going to connect current image";
+//         dbgUI <<"Going to connect current image";
 
         connect(img.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_d->selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 

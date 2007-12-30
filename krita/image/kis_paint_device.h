@@ -27,7 +27,7 @@
 #include <QString>
 #include <QPaintDevice>
 
-#include "kdebug.h"
+#include "kis_debug.h"
 
 #include "KoColorSpace.h"
 #include "KoColor.h"

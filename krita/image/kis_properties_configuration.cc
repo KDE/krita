@@ -18,7 +18,7 @@
  */
 #include "kis_properties_configuration.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <qdom.h>
 #include <QString>
 
@@ -46,7 +46,7 @@ KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfig
 
 void KisPropertiesConfiguration::fromXML(const QString & s )
 {
-//     kDebug() << "From XML (s) !!!!" << endl;
+//     dbgImage << "From XML (s) !!!!" << endl;
     clearProperties();
 
     QDomDocument doc;

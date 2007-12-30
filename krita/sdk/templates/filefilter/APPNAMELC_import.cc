@@ -22,7 +22,7 @@ K_EXPORT_COMPONENT_FACTORY(libkrita%{APPNAMELC}import, ImportFactory("kofficefil
 
 KoFilter::ConversionStatus %{APPNAME}Import::convert(const QByteArray&, const QByteArray& to)
 {
-    kDebug(41008) <<"Importing using %{APPNAMEUC}Import!";
+    dbgFile <<"Importing using %{APPNAMEUC}Import!";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

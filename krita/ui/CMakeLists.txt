@@ -8,7 +8,6 @@ configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-proce
 include(kdefx.cmake)
 
 set(kritaui_LIB_SRCS
-    kis_node_action.cpp
     imageviewer.cc
     kcurve.cc
     kis_filters_listview.cc

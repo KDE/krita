@@ -73,7 +73,7 @@ KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer
 
 KisShapeController::~KisShapeController()
 {
-    kDebug(41007) <<"Deleting the KisShapeController. There are" << m_d->nodeShapes.size() <<" shapes";
+    dbgUI <<"Deleting the KisShapeController. There are" << m_d->nodeShapes.size() <<" shapes";
 /*
     XXX: leak!
     
@@ -138,7 +138,7 @@ void KisShapeController::removeShape( KoShape* shape )
 
 #if 0 // XXX This bites with recursive deleting of all children of the current node
     if ( KoShapeContainer * container = shape->parent() ) {
-        kDebug(41007) <<"parent is" << container;
+        dbgUI <<"parent is" << container;
         container->removeChild( shape );
 
         // If there are no longer children, remove the container
@@ -166,7 +166,7 @@ void KisShapeController::removeShape( KoShape* shape )
     KisNodeMap::iterator it = begin;
     while (it != end) {
         if (it.value() == shape ) {
-            kDebug() << "Going to delete node " << it.key() << " with shape " << it.value() << ", because it's the same as " << shape;
+            dbgKrita << "Going to delete node " << it.key() << " with shape " << it.value() << ", because it's the same as " << shape;
             m_d->nodeShapes.remove(it.key());
             break;
         }
@@ -200,9 +200,9 @@ void KisShapeController::addShape( KoShape* shape )
         // KisShapeLayer::KoShapeLayer::KoShapeContainer::KoShape.
 
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
-        kDebug(41007) <<"shape:" << shape;
-        kDebug(41007) <<"shape parent:" << shape->parent();
-        kDebug(41007) <<"shape layer:" << shapeLayer;
+        dbgUI <<"shape:" << shape;
+        dbgUI <<"shape parent:" << shape->parent();
+        dbgUI <<"shape layer:" << shapeLayer;
 
 //TODO this doesn't work with shape selections
 #if 0
@@ -212,7 +212,7 @@ void KisShapeController::addShape( KoShape* shape )
             // and add it on top of the image stack.
 
             KisLayerContainerShape * container = dynamic_cast<KisLayerContainerShape*>( m_d->image->rootLayer().data() );
-            kDebug(41007) <<"container:" << container;
+            dbgUI <<"container:" << container;
             shapeLayer = new KisShapeLayer(container,
                                            m_d->image,
                                            i18n( "Flake shapes %1", m_d->nameServer->number() ),
@@ -276,7 +276,7 @@ void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
 
     // Check whether the layer is already in the map
     if ( m_d->nodeShapes.contains( node ) ) {
-        kDebug(41007) <<"The document already contains node" << node->name();
+        dbgUI <<"The document already contains node" << node->name();
         return;
     }
 
@@ -286,7 +286,7 @@ void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
 
     KoShape * shape = 0;
 
-    kDebug(41007) << "Going to add node of type " << node->metaObject()->className();
+    dbgUI << "Going to add node of type " << node->metaObject()->className();
     if ( node->inherits("KisGroupLayer" ) ) {
         shape = new KisLayerContainerShape(parent, static_cast<KisGroupLayer*>(node.data()));
     }
@@ -315,15 +315,15 @@ void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
         canvas->shapeManager()->add(shape);
         canvas->canvasWidget()->update();
     }
-    kDebug(41007) << "Added " << node << " as shape " << shape << " to the document";
+    dbgUI << "Added " << node << " as shape " << shape << " to the document";
 }
 
 void KisShapeController::slotNodeRemoved( KisNode* parent, int index )
 {
     KisNodeSP node = parent->at( index );
-    kDebug() << "Going to remove node " << node << " from parent " << parent;
+    dbgKrita << "Going to remove node " << node << " from parent " << parent;
     KoShape * shape = shapeForNode( node );
-    kDebug() << "Going to remove node " << node << " from parent " << parent << "( shape: " << shape << ")";
+    dbgKrita << "Going to remove node " << node << " from parent " << parent << "( shape: " << shape << ")";
     removeShape( shapeForNode( node ) );
 }
 
@@ -339,7 +339,7 @@ KoShape * KisShapeController::shapeForNode( KisNodeSP node ) const
     if ( m_d->nodeShapes.contains( node) )
         return m_d->nodeShapes[node];
     else {
-        kDebug(41007) <<"KisShapeController::shapeForNode does not find a shape for node " << node << ", this should never happen!";
+        dbgUI <<"KisShapeController::shapeForNode does not find a shape for node " << node << ", this should never happen!";
         return 0;
     }
 }

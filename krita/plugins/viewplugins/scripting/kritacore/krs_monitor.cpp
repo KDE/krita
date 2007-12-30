@@ -18,7 +18,7 @@
  */
 
 #include "krs_monitor.h"
-//#include <kdebug.h>
+//#include <kis_debug.h>
 #include <kglobal.h>
 
 // #include <QApplication>

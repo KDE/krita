@@ -26,6 +26,7 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
    kis_filter_mask.cpp
+   kis_node_action.cpp
    kis_paintop_settings.cpp
    kis_base_node.cpp
    kis_node.cpp
@@ -114,7 +115,7 @@ install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 # Don't install the header files for now
-#install( FILES   kis_debug_areas.h kis_global.h kis_annotation.h
+#install( FILES   kis_debug.h kis_global.h kis_annotation.h
 #kis_shared_ptr_vector.h kis_undo_adapter.h kis_progress_subject.h
 #kis_progress_display_interface.h kis_adjustment_layer.h
 #  	kis_autobrush_resource.h

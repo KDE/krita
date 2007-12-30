@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -341,20 +341,20 @@ void KisTileManager::toSwap(TileInfo* info)
             if (ftruncate(tfile->tempFile->handle(), newsize)) {
                 // XXX make these maybe i18n()able and in an error box, but then through
                 // some kind of proxy such that we don't pollute this with GUI code
-                kWarning(DBG_AREA_TILES) <<"Resizing the temporary swapfile failed!";
+                kWarning(41004) <<"Resizing the temporary swapfile failed!";
                 // Be somewhat pollite and try to figure out why it failed
                 switch (errno) {
-                    case EIO: kWarning(DBG_AREA_TILES) <<"Error was E IO,"
+                    case EIO: kWarning(41004) <<"Error was E IO,"
                             << "possible reason is a disk error!" << endl; break;
-                    case EINVAL: kWarning(DBG_AREA_TILES) <<"Error was E INVAL,"
+                    case EINVAL: kWarning(41004) <<"Error was E INVAL,"
                             << "possible reason is that you are using more memory than "
                             << "the filesystem or disk can handle" << endl; break;
-                    default: kWarning(DBG_AREA_TILES) <<"Errno was:" << errno;
+                    default: kWarning(41004) <<"Errno was:" << errno;
                 }
-                kWarning(DBG_AREA_TILES) <<"The swapfile is:" << tfile->tempFile->fileName();
-                kWarning(DBG_AREA_TILES) <<"Will try to avoid using the swap any further";
+                kWarning(41004) <<"The swapfile is:" << tfile->tempFile->fileName();
+                kWarning(41004) <<"Will try to avoid using the swap any further";
 
-                kDebug(DBG_AREA_TILES) <<"Failed ftruncate info:"
+                dbgTiles <<"Failed ftruncate info:"
                         << "tried adding " << info->size << " bytes "
                         << "(rounded to pagesize: " << newsize << ") "
                         << "from a " << tfile->fileSize << " bytes file" << endl;
@@ -438,27 +438,27 @@ void KisTileManager::doSwapping()
 void KisTileManager::printInfo()
 {
 #ifndef DO_NOT_PRINT_INFO
-    kDebug(DBG_AREA_TILES) << m_bytesInMem <<" out of" << m_bytesTotal <<" bytes in memory";
-    kDebug(DBG_AREA_TILES) << m_currentInMem <<" out of" << m_tileMap.size() <<" tiles in memory";
-    kDebug(DBG_AREA_TILES) << m_files.size() <<" swap files in use";
-    kDebug(DBG_AREA_TILES) << m_swappableList.size() <<" elements in the swapable list";
-    kDebug(DBG_AREA_TILES) <<"Freelists information";
+    dbgTiles << m_bytesInMem <<" out of" << m_bytesTotal <<" bytes in memory";
+    dbgTiles << m_currentInMem <<" out of" << m_tileMap.size() <<" tiles in memory";
+    dbgTiles << m_files.size() <<" swap files in use";
+    dbgTiles << m_swappableList.size() <<" elements in the swapable list";
+    dbgTiles <<"Freelists information";
     for (int i = 0; i < m_freeLists.size(); i++) {
         if ( ! m_freeLists[i].empty() ) {
-            kDebug(DBG_AREA_TILES) << m_freeLists[i].size()
+            dbgTiles << m_freeLists[i].size()
                     << " elements in the freelist for pixelsize " << i << "\n";
         }
     }
-    kDebug(DBG_AREA_TILES) <<"Pool stats (" <<  m_tilesPerPool <<" tiles per pool)";
+    dbgTiles <<"Pool stats (" <<  m_tilesPerPool <<" tiles per pool)";
     for (int i = 0; i < 4; i++) {
         if (m_pools[i]) {
-            kDebug(DBG_AREA_TILES) <<"Pool" << i <<": Freelist count:" << m_poolFreeList[i].count()
+            dbgTiles <<"Pool" << i <<": Freelist count:" << m_poolFreeList[i].count()
                     << ", pixelSize: " << m_poolPixelSizes[i] << endl;
         }
     }
     if (m_swapForbidden)
-        kDebug(DBG_AREA_TILES) <<"Something was wrong with the swap, see above for details";
-    kDebug(DBG_AREA_TILES);
+        dbgTiles <<"Something was wrong with the swap, see above for details";
+    dbgTiles;
 #endif
 }
 
@@ -529,22 +529,22 @@ bool KisTileManager::kritaMmap(quint8*& result, void *start, size_t length,
 
             // Same here for warning and GUI
     if (result == (quint8*)-1) {
-        kWarning(DBG_AREA_TILES) <<"mmap failed: errno is" << errno <<"; we're probably going to crash very soon now...";
+        kWarning(41004) <<"mmap failed: errno is" << errno <<"; we're probably going to crash very soon now...";
 
         // Try to ignore what happened and carry on, but unlikely that we'll get
         // much further, since the file resizing went OK and this is memory-related...
         if (errno == ENOMEM) {
-            kWarning(DBG_AREA_TILES) <<"mmap failed with E NOMEM! This means that"
+            kWarning(41004) <<"mmap failed with E NOMEM! This means that"
                     << "either there are no more memory mappings available for Krita, "
                     << "or that there is no more memory available!" << endl;
         }
 
-        kWarning(DBG_AREA_TILES) <<"Trying to continue anyway (no guarantees)";
-        kWarning(DBG_AREA_TILES) <<"Will try to avoid using the swap any further";
-        kDebug(DBG_AREA_TILES) <<"Failed mmap info:"
+        kWarning(41004) <<"Trying to continue anyway (no guarantees)";
+        kWarning(41004) <<"Will try to avoid using the swap any further";
+        dbgTiles <<"Failed mmap info:"
                 << "tried mapping " << length << " bytes" << endl;
         if (!m_files.empty()) {
-            kDebug(DBG_AREA_TILES) <<"Probably to a" << m_files.back().fileSize <<" bytes file";
+            dbgTiles <<"Probably to a" << m_files.back().fileSize <<" bytes file";
         }
         printInfo();
 

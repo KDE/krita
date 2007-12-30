@@ -96,7 +96,7 @@ void KisBasicDynamicColoringProgram::apply(KisDynamicColoring* coloring, const K
         params["v"] = 2.0 * jitter( m_brightnessJitter, m_brightnessSensor->parameter( info ) ) - 1.0 ;
     }
     KoColorTransformation* transfo = coloring->colorSpace()->createColorTransformation( "hsv_adjustment", params);
-    kDebug() << "transfo = " << transfo << params["h"] << " " << params["s"] << " " << params["v"];
+    dbgKrita << "transfo = " << transfo << params["h"] << " " << params["s"] << " " << params["v"];
     if( transfo )
     {
         coloring->applyColorTransformation( transfo );

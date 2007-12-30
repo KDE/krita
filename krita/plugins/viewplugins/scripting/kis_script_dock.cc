@@ -24,7 +24,7 @@
 #include <QVariant>
 
 #include <kross/core/action.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <QApplication>
 #include <QEventLoop>
@@ -39,7 +39,7 @@ void Kikoo::timeout()
 {
     while(true)
     {
-        kDebug() << "C++ Event Loop";
+        dbgKrita << "C++ Event Loop";
         QApplication::instance()->processEvents(QEventLoop::AllEvents | QEventLoop::WaitForMoreEvents | QEventLoop::DeferredDeletion);
     }
 }

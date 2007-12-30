@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_dynamic_programs_editor.h"
 
@@ -54,7 +54,7 @@ KisDynamicProgramsEditor::~KisDynamicProgramsEditor()
 
 void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
 {
-    kDebug(41006) <<"program changed to" << text;
+    dbgPlugins <<"program changed to" << text;
     delete m_currentEditor;
     m_currentProgram = static_cast<KisDynamicProgram*>( m_bookmarksManager->load( text ) );
     Q_ASSERT(m_currentProgram);
@@ -76,7 +76,7 @@ void KisDynamicProgramsEditor::addProgram()
 
 void KisDynamicProgramsEditor::saveCurrentProgram()
 {
-    kDebug(41006) <<"saveCurrentProgram " << m_currentProgram->name();
+    dbgPlugins <<"saveCurrentProgram " << m_currentProgram->name();
     m_bookmarksModel->saveConfiguration(m_currentProgram->name(), m_currentProgram);
 }
 

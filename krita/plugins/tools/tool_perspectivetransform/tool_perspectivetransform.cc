@@ -26,7 +26,7 @@
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 
 #include <kis_global.h>
@@ -48,7 +48,7 @@ ToolPerspectiveTransform::ToolPerspectiveTransform(QObject *parent, const QStrin
 
     if ( parent->inherits("KoToolRegistry") )
     {
-        kDebug(41006) <<" add perspective transform tool to the registry";
+        dbgPlugins <<" add perspective transform tool to the registry";
         KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
         r->add(new KisToolPerspectiveTransformFactory());
     }

@@ -29,7 +29,7 @@
 #include <QGridLayout>
 #include <QSlider>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "KoPointerEvent.h"
@@ -70,7 +70,7 @@ void KisToolBrush::timeoutPaint()
     if (currentImage() && m_painter) {
         m_painter->paintAt( m_previousPaintInformation );
         QRegion r = m_painter->dirtyRegion();
-        kDebug(41006) <<"Timeout paint dirty region:" << r;
+        dbgPlugins <<"Timeout paint dirty region:" << r;
         currentLayer()->setDirty(r);
     }
 }

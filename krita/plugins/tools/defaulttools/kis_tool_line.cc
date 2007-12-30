@@ -24,7 +24,7 @@
 #include <QLayout>
 #include <QWidget>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_cursor.h"
@@ -154,7 +154,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
             } else {
                 // Remove the last remaining line.
                 // m_painter can be 0 here...!!!
-kDebug(41006) <<"do we ever go here";
+dbgPlugins <<"do we ever go here";
                 QRectF bound;
                 bound.setTopLeft(m_startPos);
                 bound.setBottomRight(m_endPos);

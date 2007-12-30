@@ -58,13 +58,13 @@ void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device
     v1 /= v1(2);
     pa.setPoint(3, QPoint((int)v1(0), (int)v1(1)));
 
-    kDebug(41006) << pa[0]<< pa[1]<< pa[2]<< pa[3];
+    dbgPlugins << pa[0]<< pa[1]<< pa[2]<< pa[3];
     sources[i].boundingBox = pa;
     resultRect |= sources[i].boundingBox.boundingRect();
     sources[i].accessor = new KisRandomSubAccessorPixel( sources[i].layer->createRandomSubAccessor() );
     sources[i].homography.computeInverse(&sources[i].invHomography);
   }
-  kDebug(41006) << "resultRect = " << resultRect;
+  dbgPlugins << "resultRect = " << resultRect;
   KisHLineIteratorPixel hitDevice = device->createHLineIterator(resultRect.left(), resultRect.top(), resultRect.width());
   Eigen::Vector3d vec1,vec2;
   vec1(2) = 1.0;
@@ -74,7 +74,7 @@ void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device
     int report = ((100 * (y - resultRect.top()) ) / resultRect.height());
     if( report != previousReport)
     {
-        kDebug(41006) << report;
+        dbgPlugins << report;
         previousReport = report;
     }
     while(not hitDevice.isDone())
@@ -96,7 +96,7 @@ void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device
           double ysrc = poly(sources[i].a, sources[i].b, sources[i].c, r2) * y2 + sources[i].yc1;
           sources[i].accessor->moveTo(xsrc, ysrc);
           sources[i].accessor->sampledRawData(hitDevice.rawData());
-//           kDebug(41006) << xsrc <<"" << ysrc <<" = src dst =" << hitDevice.x() <<"" << hitDevice.y() <<" a =" << sources[i].a <<"; b =" << sources[i].b <<"; c=" << sources[i].c <<"; v2 = [" << vec2(0) <<";" << vec2(1) <<"; 1.0 ]; r2 ="<< r2;
+//           dbgPlugins << xsrc <<"" << ysrc <<" = src dst =" << hitDevice.x() <<"" << hitDevice.y() <<" a =" << sources[i].a <<"; b =" << sources[i].b <<"; c=" << sources[i].c <<"; v2 = [" << vec2(0) <<";" << vec2(1) <<"; 1.0 ]; r2 ="<< r2;
           if(hitDevice.rawData()[0] != 0)
             break;
         }

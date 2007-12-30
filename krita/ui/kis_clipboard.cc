@@ -27,7 +27,7 @@
 
 #include <klocale.h>
 
-#include "kdebug.h"
+#include "kis_debug.h"
 
 #include "KoStore.h"
 #include <KoColorSpaceRegistry.h>

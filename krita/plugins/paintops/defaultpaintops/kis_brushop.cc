@@ -30,7 +30,7 @@
 #include <QHBoxLayout>
 #include <qtoolbutton.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "KoColorTransformation.h"
 

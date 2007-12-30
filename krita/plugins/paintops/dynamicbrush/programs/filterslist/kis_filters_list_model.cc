@@ -17,7 +17,7 @@
 
 #include "kis_filters_list_model.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_dynamic_transformation.h"
 #include "kis_dynamic_transformations_factory.h"
@@ -68,13 +68,13 @@ void KisFiltersListModel::setCurrentFilterType(const KoID & filterType)
 
 void KisFiltersListModel::addNewFilter()
 {
-    kDebug(41006) << "addNewFilter " << m_currentFilterType;
+    dbgPlugins << "addNewFilter " << m_currentFilterType;
     m_program->appendTransformation( KisDynamicTransformationsFactory::id2Transformation( m_currentFilterType ));
 }
 
 void KisFiltersListModel::deleteCurrentFilter()
 {
-    kDebug(41006) <<"Remove filter at" << m_currentTransformation;
+    dbgPlugins <<"Remove filter at" << m_currentTransformation;
     if( m_currentTransformation == -1)
         return;
     beginRemoveRows( createIndex(0, 0, 0), m_currentTransformation, m_currentTransformation);
@@ -85,7 +85,7 @@ void KisFiltersListModel::deleteCurrentFilter()
 
 void KisFiltersListModel::setCurrentFilter(const QModelIndex& midx)
 {
-    kDebug(41006) <<"Set current filter" << midx.row();
+    dbgPlugins <<"Set current filter" << midx.row();
     m_currentTransformation = midx.row();
 }
 

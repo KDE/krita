@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kglobalsettings.h>

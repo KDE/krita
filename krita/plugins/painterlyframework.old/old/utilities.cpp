@@ -267,9 +267,9 @@ void Cell::mixColorsUsingKS(const Cell &cell, float force)
         R_f = R_s + ( pow( T_s, 2 ) * R_c ) / ( 1 - R_s * R_c );
         T_f = ( T_s * T_c ) / ( 1 - R_s * R_c );
 
-        kDebug() << "Channel " << i + 1 << " CANVAS R: " << R_c << " T: " << T_c << endl;
-        kDebug() << "Channel " << i + 1 << " STROKE R: " << R_s << " T: " << T_s << endl;
-        kDebug() << "Channel " << i + 1 << " FINAL  R: " << R_f << " T: " << T_f << endl << "------------------------" << endl;
+        dbgKrita << "Channel " << i + 1 << " CANVAS R: " << R_c << " T: " << T_c << endl;
+        dbgKrita << "Channel " << i + 1 << " STROKE R: " << R_s << " T: " << T_s << endl;
+        dbgKrita << "Channel " << i + 1 << " FINAL  R: " << R_f << " T: " << T_f << endl << "------------------------" << endl;
 */
 
         if (f[i] < 0) f[i] = 0; if (f[i] > 1) f[i] = 1;
@@ -637,7 +637,7 @@ void Cell::mixColorsUsingRgb_2(const Cell &cell, float force)
     green = (long)(g_f*255);
     blue = (long)(b_f*255);
 
-//     kDebug() << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;
+//     dbgKrita << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;
 
     updateHlsCmy();
 }
@@ -683,7 +683,7 @@ void Cell::mixColorsUsingRgbAdditive(const Cell &cell, float force)
     green = (long)(g_f*255);
     blue = (long)(b_f*255);
 
-//     kDebug() << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;
+//     dbgKrita << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;
 
     updateHlsCmy();
 }
@@ -771,7 +771,7 @@ void Cell::mixColorsUsingCmy(const Cell &cell, float)
 
 void Cell::debug()
 {
-    kDebug(41006) << "WETNESS: " << wetness << endl
+    dbgPlugins << "WETNESS: " << wetness << endl
              << "VOLUME: " << volume << endl
              << "OPACITY: " << (int)opacity << endl
              << "RED: " << red << " GREEN: " << green << " BLUE: " << blue << endl;

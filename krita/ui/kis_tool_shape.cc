@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QGridLayout>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_tool_shape.h"

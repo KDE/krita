@@ -35,7 +35,7 @@
 #include <QString>
 #include <QVector>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <QColor>

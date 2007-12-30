@@ -22,7 +22,7 @@
 #include <krita_export.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <QString>
 
 #include "ui/kis_aboutdata.h"

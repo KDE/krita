@@ -20,7 +20,7 @@
 
 #include <map>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <kis_autobrush_resource.h>
 #include <kis_convolution_painter.h>
@@ -103,7 +103,7 @@ const KisInterestPoint* bestMatchFor( const KisInterestPoint* ip, const lInteres
 
 void matchingPropag( QList<const KisInterestPoint*>& allreadyMatchedRef, QList<const KisInterestPoint*>& allreadyMatchedMatch , lMatches& matchPoints, const lInterestPoints& pointsref, const lInterestPoints& pointsmatch, double thresholdFastMatch, double thresholdMatch )
 {
-//     kDebug() << "matchingPropag " << thresholdFastMatch << " " << thresholdMatch;
+//     dbgKrita << "matchingPropag " << thresholdFastMatch << " " << thresholdMatch;
     for(lInterestPoints::const_iterator it_ref = pointsref.begin(); it_ref != pointsref.end(); it_ref++)
     {
       if( not allreadyMatchedRef.contains( *it_ref ) )
@@ -119,7 +119,7 @@ void matchingPropag( QList<const KisInterestPoint*>& allreadyMatchedRef, QList<c
             matchPoints.push_back( m );
             allreadyMatchedRef.append( m.ref );
             allreadyMatchedMatch.append( m.match );
-//             kDebug() << m.ref->neighbourghood().size();
+//             dbgKrita << m.ref->neighbourghood().size();
             matchingPropag( allreadyMatchedRef, allreadyMatchedMatch, matchPoints, m.ref->neighbourghood(), m.match->neighbourghood(), 0.6, 0.6 );
         }
       }
@@ -137,7 +137,7 @@ lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& point
     // Simple matching
       matchingPropag( allreadyMatchedRef, allreadyMatchedMatch, matchPoints, pointsref,  pointsmatch, 0.8, 0.8 );
     
-    kDebug(41006) << matchPoints.size() <<" points were matched";
+    dbgPlugins << matchPoints.size() <<" points were matched";
     return matchPoints;
 }
 #endif
@@ -208,7 +208,7 @@ MatchHypothesis findSeed( const KisInterestPoint* ref, const lInterestPoints& po
                     {
                         qSort(angles);
                         double median = angles[ angles.size() / 2 ];
-                        kDebug(41006) << " preHypothesis : " << preHs.size() << " median = " << median;
+                        dbgPlugins << " preHypothesis : " << preHs.size() << " median = " << median;
                         MatchHypothesis currentHypo;
                         currentHypo.sumScore = 0.0;
                         foreach( MatchPreHypothesis mph, preHs )
@@ -219,7 +219,7 @@ MatchHypothesis findSeed( const KisInterestPoint* ref, const lInterestPoints& po
                                 currentHypo.allreadyMatchedRef.append( mph.ref );
                                 currentHypo.allreadyMatchedMatch.append( mph.match );
                                 currentHypo.sumScore += mph.score;
-                                kDebug() << currentHypo.sumScore << " " << mph.score;
+                                dbgKrita << currentHypo.sumScore << " " << mph.score;
                             }
                         }
                         // Possible match
@@ -227,14 +227,14 @@ MatchHypothesis findSeed( const KisInterestPoint* ref, const lInterestPoints& po
                         currentHypo.allreadyMatchedMatch.append( *it_match );
                         currentHypo.matches.push_back( KisMatch(ref, *it_match, score ) );
                         currentHypo.sumScore += score;
-                        kDebug() << currentHypo.sumScore << " " << score;
+                        dbgKrita << currentHypo.sumScore << " " << score;
                         currentHypo.angle = median;
                         if(currentHypo.sumScore > bestHypo.sumScore)
                         {
                             bestHypo = currentHypo;
                         }
                     } else {
-                        kDebug(41006) << " no preHypothesis : ";
+                        dbgPlugins << " no preHypothesis : ";
                     }
                 }
             }
@@ -279,7 +279,7 @@ lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& point
             MatchHypothesis hypo = findSeed(*it_ref, pointsmatch, allreadyMatchedRef, allreadyMatchedMatch );
             if( hypo.sumScore > (0.6 * 3) and fabs(hypo.angle) < 0.1 )
             {
-                kDebug(41066) << "Kept : " << hypo.angle << " " << hypo.sumScore << " " << hypo.matches.size();
+                dbgPlugins << "Kept : " << hypo.angle << " " << hypo.sumScore << " " << hypo.matches.size();
                 double score = hypo.sumScore;
                 lMatches seedMatches = hypo.matches;
                 for(lMatches::iterator it = seedMatches.begin();
@@ -288,7 +288,7 @@ lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& point
                 {
                     propageMatch( hypo, *it, allreadyMatchedRef, allreadyMatchedMatch );
                 }
-                kDebug(41066) << "After propagation : " << hypo.angle << " " << hypo.sumScore << " " << hypo.matches.size();
+                dbgPlugins << "After propagation : " << hypo.angle << " " << hypo.sumScore << " " << hypo.matches.size();
                 // Merge
                 allreadyMatchedRef += hypo.allreadyMatchedRef;
                 allreadyMatchedMatch += hypo.allreadyMatchedMatch;
@@ -301,7 +301,7 @@ lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& point
             }
         }
     }
-    kDebug() << "Nb of matches : " << matchPoints.size();
+    dbgKrita << "Nb of matches : " << matchPoints.size();
     return matchPoints;
 }
 

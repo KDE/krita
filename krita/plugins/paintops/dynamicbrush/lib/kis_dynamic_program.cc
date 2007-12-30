@@ -19,7 +19,7 @@
 
 #include <QDomElement>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 struct KisDynamicProgram::Private {
     QString name;

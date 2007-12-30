@@ -21,7 +21,7 @@
 #include <QString>
 #include <QMap>
 #include <QVariant>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 class QDomElement;
 class QDomDocument;

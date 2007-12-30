@@ -17,7 +17,7 @@
 #include "dynamicbrush.h"
 
 #include <kactioncollection.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>

@@ -73,7 +73,7 @@ void KisBlurFilter::process(KisFilterConstProcessingInformation srcInfo,
 
 
     if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
-//         kDebug() <<"src != dst";
+//         dbgKrita <<"src != dst";
         KisPainter gc(dst, dstInfo.selection());
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
@@ -95,7 +95,7 @@ void KisBlurFilter::process(KisFilterConstProcessingInformation srcInfo,
     int vFade = (halfHeight * strength) / 100;
 
     KisAutobrushShape* kas;
-//     kDebug() << width <<"" << height <<"" << hFade <<"" << vFade;
+//     dbgKrita << width <<"" << height <<"" << hFade <<"" << vFade;
     switch(shape)
     {
         case 1:

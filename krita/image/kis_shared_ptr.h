@@ -26,7 +26,7 @@
 #include <iso646.h>
 #endif
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <kis_shared_data.h>
 
@@ -131,14 +131,14 @@ class KisSharedPtr {
         inline T& operator*()
         {
             if ( !d )
-                kDebug() << kBacktrace();
+                dbgImage << kBacktrace();
             Q_ASSERT(d); return *d;
         }
 
         inline const T* operator->() const { Q_ASSERT(d); return d; }
         inline T* operator->() {
             if ( !d ) {
-                kDebug() << kBacktrace();
+                dbgImage << kBacktrace();
             }
 
             Q_ASSERT(d); return d;

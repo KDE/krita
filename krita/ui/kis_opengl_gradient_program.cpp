@@ -23,12 +23,12 @@
 
 #include <cfloat>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <KoAbstractGradient.h>
 
 #include "kis_opengl.h"
 #include "kis_opengl_fragment_shader.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 
 //-----------------------------------------------------------------------------
 
@@ -250,7 +250,7 @@ KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KoAbstractGradient *gra
 
     attachShader(m_gradientShader->shader());
     link();
-    kDebug(DBG_AREA_TOOLS) << getInfoLog();
+    dbgTools << getInfoLog();
 }
 
 KisOpenGLGradientProgram::~KisOpenGLGradientProgram()

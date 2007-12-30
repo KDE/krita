@@ -20,7 +20,7 @@
 
 #include <QList>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoID.h>
@@ -100,7 +100,7 @@ KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(co
     switch(index.row())
     {
         case 0:
-            kDebug() << "loading default" << endl;
+            dbgKrita << "loading default" << endl;
             return d->bookmarkManager->load( KisBookmarkedConfigurationManager::ConfigDefault.id() );
             break;
         case 1:

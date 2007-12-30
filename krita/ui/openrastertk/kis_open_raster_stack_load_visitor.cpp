@@ -96,12 +96,12 @@ void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisP
 {
     loadLayerInfo(elem, pL.data());
 
-    kDebug(41008) <<"Loading was unsuccessful";
+    dbgFile <<"Loading was unsuccessful";
 }
 
 void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
 {
-    kDebug(41008) << "Loading group layer";
+    dbgFile << "Loading group layer";
     loadLayerInfo(elem, gL.data());
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement())
@@ -133,7 +133,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                         KisPaintLayerSP layer = new KisPaintLayer( gL->image() , "", opacity, device);
                         d->image->addNode(layer.data(), gL.data(), gL->childCount() );
                         loadPaintLayer(subelem, layer);
-                        kDebug(41008) <<"Loading was successful";
+                        dbgFile <<"Loading was successful";
                     }
                 }
             } else if(node.nodeName()== "filter")
@@ -152,7 +152,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 loadAdjustmentLayer(subelem, layer);
 
             } else {
-                kDebug(41008) << "Unknown element : " << node.nodeName();
+                dbgFile << "Unknown element : " << node.nodeName();
             }
         }
     }

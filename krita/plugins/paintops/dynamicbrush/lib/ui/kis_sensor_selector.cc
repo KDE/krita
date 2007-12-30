@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_sensor_selector.h"
 
@@ -37,7 +37,7 @@ KisSensorSelector::KisSensorSelector(QWidget* parent) : QWidget(parent), m_curre
 void KisSensorSelector::setCurrent(KisDynamicSensor* sensor)
 {
     if(not sensor) return;
-    kDebug(41006) <<"setCurrent" << sensor <<"" << sensor->id();
+    dbgPlugins <<"setCurrent" << sensor <<"" << sensor->id();
     m_currentSensor = sensor;
     sensorSelectorUI->comboBoxSensor->setCurrent( sensor->id() );
     delete m_currentConfigWidget;

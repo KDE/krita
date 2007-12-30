@@ -27,7 +27,7 @@
 #include <QPointer>
 
 #include <kactioncollection.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kfiledialog.h>
 #include <kgenericfactory.h>
 #include <kiconloader.h>
@@ -74,7 +74,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
     , d(new Private())
 {
     d->view = dynamic_cast<KisView2*>(parent);
-    kDebug(41011) <<"ScriptingPart Ctor";
+    dbgScript <<"ScriptingPart Ctor";
     setComponentData(ScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
 #if 1
@@ -88,7 +88,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
             KisFilterRegistry::instance()->add( KisFilterSP(sf) );
 //             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
 //             if( ! factory ) continue;
-           kDebug(41011) <<"Adding scripting filters with id=" << sf->id();
+           dbgScript <<"Adding scripting filters with id=" << sf->id();
         }
     }
     if( actioncollection and (actioncollection2 = actioncollection->collection("dockers")) ) {
@@ -98,7 +98,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
             d->view->createDockWidget( &ksdf );
 //             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
 //             if( ! factory ) continue;
-           kDebug(41011) <<"Adding scripting dockers with id=" /*<< sf->id()*/;
+           dbgScript <<"Adding scripting dockers with id=" /*<< sf->id()*/;
         }
     }
 #endif
@@ -106,7 +106,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
 
 ScriptingPart::~ScriptingPart()
 {
-    kDebug(41011) <<"ScriptingPart Dtor";
+    dbgScript <<"ScriptingPart Dtor";
     delete d;
 }
 
@@ -121,7 +121,7 @@ void ScriptingPart::myFinished(Kross::Action*)
     #warning "ScriptingPart::myFinished: reimplement, somehow the view variable got lost here."
 #endif
 #if 0
-//     kDebug() <<"ScriptingPart::executionFinished";
+//     dbgKrita <<"ScriptingPart::executionFinished";
     d->view->document()->setModified(true);
 
     d->view->layerManager()->activeLayer()->setDirty();

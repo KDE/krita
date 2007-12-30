@@ -30,7 +30,7 @@
 
 #include <knuminput.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kaction.h>
 
 #include <KoColorConversions.h>

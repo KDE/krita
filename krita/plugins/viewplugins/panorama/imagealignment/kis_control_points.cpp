@@ -69,23 +69,23 @@ void KisControlPoints::addMatches( const lMatches& matches, int frameRef, int fr
         KisControlPoint cp( d->framesCount );
         if( findControlPoint( m.ref, frameRef, cp) )
         {
-            kDebug() << "bouuh " << cp.interestPoints[0] << " == " << m.ref << " " << cp.interestPoints[1] << " == "<< m.match;
+            dbgKrita << "bouuh " << cp.interestPoints[0] << " == " << m.ref << " " << cp.interestPoints[1] << " == "<< m.match;
             cp.frames.append(frameMatch);
             cp.positions[frameMatch] = QPointF( m.match->x(), m.match->y());
             cp.interestPoints[frameMatch] = m.match;
         } else if( findControlPoint( m.match, frameMatch, cp) ) {
-            kDebug() << "pas mieux";
+            dbgKrita << "pas mieux";
             cp.frames.append(frameRef);
             cp.positions[frameRef] = QPointF( m.ref->x(), m.ref->y());
             cp.interestPoints[frameRef] = m.ref;
         } else {
             cp.frames.append(frameRef);
             cp.positions[frameRef] = QPointF( m.ref->x(), m.ref->y());
-            kDebug() << frameRef << " " << cp.positions[frameRef];
+            dbgKrita << frameRef << " " << cp.positions[frameRef];
             cp.interestPoints[frameRef] = m.ref;
             cp.frames.append(frameMatch);
             cp.positions[frameMatch] = QPointF( m.match->x(), m.match->y());
-            kDebug() << frameMatch << " " << cp.positions[frameMatch];
+            dbgKrita << frameMatch << " " << cp.positions[frameMatch];
             cp.interestPoints[frameMatch] = m.match;
             addControlPoint( cp );
         }

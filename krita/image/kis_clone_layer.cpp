@@ -22,7 +22,7 @@
 #include <QString>
 
 #include <kicon.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoColorSpace.h>

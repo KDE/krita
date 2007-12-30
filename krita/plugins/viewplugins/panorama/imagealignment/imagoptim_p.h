@@ -23,7 +23,7 @@
 #include "imagoptim_functions.h"
 #include "kis_control_point.h"
 #include "kis_control_points.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_image_alignment_model_p.h"
 #include "matching.h"
 
@@ -45,13 +45,13 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
                     int frameMatch = *it2;
                     QPointF ref = cp.positions[frameRef];
                     QPointF match = cp.positions[frameMatch];
-                    kDebug(DBG_AREA_PLUGINS) << ref << " = " << frameRef << " ========= " << frameMatch << " = " << match;
+                    dbgPlugins << ref << " = " << frameRef << " ========= " << frameMatch << " = " << match;
                     m_functions.push_back(_TFunction_( m_xc, m_yc, m_norm, frameRef, ref.x(), ref.y(), frameMatch, match.x(), match.y() ) );
                 }
             }
             
         }
-        kDebug(DBG_AREA_PLUGINS) << "Nb of functions is " << m_functions.size();
+        dbgPlugins << "Nb of functions is " << m_functions.size();
     }
   public:
     void removeOutlier(const std::vector<double>& parameters, double threshold)
@@ -64,10 +64,10 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
         {
             if( fabs(values_[ 2 * i + 1]) < threshold and fabs(values_[ 2 * i ]) < threshold)
             {
-                kDebug(DBG_AREA_PLUGINS) << "Adding function " << i << " " << fabs(values_[ 2 * i ]) << " " << fabs(values_[ 2 * i + 1]);
+                dbgPlugins << "Adding function " << i << " " << fabs(values_[ 2 * i ]) << " " << fabs(values_[ 2 * i + 1]);
                 functions_.push_back( m_functions[i] );
             } else {
-                kDebug(DBG_AREA_PLUGINS) << "Rejected function " << i << " " << fabs(values_[ 2 * i ]) << " " << fabs(values_[ 2 * i + 1]);
+                dbgPlugins << "Rejected function " << i << " " << fabs(values_[ 2 * i ]) << " " << fabs(values_[ 2 * i + 1]);
             }
         }
         m_functions = functions_;
@@ -82,7 +82,7 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
         it->f(parameters, f1, f2);
         v.push_back(f1);
         v.push_back(f2);
-//         kDebug(41006) << f1 <<" = f1 f2 =" << f2 <<"" << it->m_i1 <<"" << it->m_j1 <<"" << it->m_i2 <<"" << it->m_j2;
+//         dbgPlugins << f1 <<" = f1 f2 =" << f2 <<"" << it->m_i1 <<"" << it->m_j1 <<"" << it->m_i2 <<"" << it->m_j2;
       }
       return v;
     }

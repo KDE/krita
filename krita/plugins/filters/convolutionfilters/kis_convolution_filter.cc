@@ -21,7 +21,7 @@
 #include "kis_convolution_filter.h"
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoCompositeOp.h>
 
@@ -54,7 +54,7 @@ void KisConvolutionFilter::process(KisFilterConstProcessingInformation srcInfo,
     Q_ASSERT(dst != 0);
 
     if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
-//         kDebug() <<"src != dst";
+//         dbgKrita <<"src != dst";
         KisPainter gc(dst);
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();

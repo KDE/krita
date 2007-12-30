@@ -30,7 +30,7 @@
 #include <QLayout>
 #include <QVBoxLayout>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoPointerEvent.h>

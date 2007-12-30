@@ -32,7 +32,7 @@
 #include <QCursor>
 #include <QWheelEvent>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
 

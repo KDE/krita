@@ -27,7 +27,7 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #define IMAGE_WIDTH 128
 #define IMAGE_HEIGHT 128

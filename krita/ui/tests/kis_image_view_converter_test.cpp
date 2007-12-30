@@ -18,7 +18,7 @@
 
 #include <QApplication>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <qtest_kde.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

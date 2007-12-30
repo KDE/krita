@@ -26,7 +26,7 @@
 #include <QPolygon>
 #include <QPaintEvent>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kaction.h>

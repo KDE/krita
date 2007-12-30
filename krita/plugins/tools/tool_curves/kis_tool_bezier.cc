@@ -28,7 +28,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <knuminput.h>
 
 #include "kis_global.h"
@@ -209,7 +209,7 @@ KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
 /*
     it = pushPoint(point,true,false,BEZIERENDHINT);
     if (count() > 1) {
-	kDebug(0) <<"QUI";
+	dbgKrita <<"QUI";
         addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
     }
 

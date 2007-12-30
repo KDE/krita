@@ -22,7 +22,7 @@
 #include <QTime>
 #include <QLabel>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "KoUnit.h"
 #include "KoZoomHandler.h"

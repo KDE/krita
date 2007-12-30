@@ -19,7 +19,7 @@
 #include <qtest_kde.h>
 #include "kis_selection_test.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <QRect>
 
 #include <KoColorSpace.h>

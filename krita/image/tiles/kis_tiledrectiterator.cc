@@ -17,9 +17,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-#include <kdebug.h>
+#include <kis_debug.h>
 
-#include "kis_tile_global.h"
+#include "kis_debug.h"
 #include "kis_tilediterator.h"
 
 KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  qint32 nleft,

@@ -31,10 +31,10 @@
 #include <QRect>
 #include <QVector>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoCanvasBase.h>
 #include <kis_global.h>

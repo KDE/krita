@@ -18,7 +18,7 @@
 
 #include "kis_meta_data_store.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_meta_data_entry.h"
 #include "kis_meta_data_schema.h"
@@ -75,7 +75,7 @@ bool Store::addEntry(const Entry& entry)
 {
     if(d->entries.contains(entry.qualifiedName()) and d->entries[entry.qualifiedName()].isValid() )
     {
-        kDebug(41001) <<"Entry" << entry.qualifiedName() <<" allready exist in the store, can't be included twice";
+        dbgImage <<"Entry" << entry.qualifiedName() <<" allready exist in the store, can't be included twice";
         return false;
     }
     d->entries.insert(entry.qualifiedName(), entry);
@@ -144,20 +144,20 @@ QHash<QString, Entry>::const_iterator Store::end() const
 
 void Store::debugDump() const
 {
-    kDebug(41001) <<"=== Dumping MetaData Store ===";
-/*    kDebug(41001) <<" - Schemas";
+    dbgImage <<"=== Dumping MetaData Store ===";
+/*    dbgImage <<" - Schemas";
     foreach(Schema* s, d->uri2Schema)
     {
-        kDebug(41001) << *s;
+        dbgImage << *s;
     }*/
-    kDebug(41001) <<" - Metadata (there are" << d->entries.size() <<" entries)";
+    dbgImage <<" - Metadata (there are" << d->entries.size() <<" entries)";
     foreach(const Entry& e, d->entries)
     {
         if(e.isValid())
         {
-            //kDebug(41001) << e;
+            //dbgImage << e;
         } else {
-            kDebug(41001) <<"Invalid entry";
+            dbgImage <<"Invalid entry";
         }
     }
 }

@@ -25,7 +25,7 @@
 
 #include <QImage>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_lms_f32_colorspace.h"

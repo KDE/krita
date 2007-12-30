@@ -24,7 +24,7 @@
 
 #include <qrect.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <QWidget>
 

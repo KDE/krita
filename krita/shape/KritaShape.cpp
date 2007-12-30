@@ -24,7 +24,7 @@
 #include <QCoreApplication>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>

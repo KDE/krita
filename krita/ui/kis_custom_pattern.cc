@@ -17,7 +17,7 @@
  */
 
 #include <KoImageResource.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <QLabel>
 #include <QImage>
 #include <QPushButton>

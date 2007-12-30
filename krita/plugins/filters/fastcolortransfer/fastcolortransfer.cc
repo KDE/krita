@@ -95,7 +95,7 @@ XXX_PORT
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-//     kDebug() <<"Start transferring color";
+//     dbgKrita <<"Start transferring color";
     QVariant value;
     QString fileName;
     if (config && config->getProperty("filename", value))
@@ -103,7 +103,7 @@ XXX_PORT
         fileName = value.toString();
     } else {
         // XXX: Make this a warning message box!
-//         kDebug() <<"No file name for the reference image was specified.";
+//         dbgKrita <<"No file name for the reference image was specified.";
         return;
     }
 
@@ -119,7 +119,7 @@ XXX_PORT
     }
     if(!ref)
     {
-//         kDebug() <<"No reference image was specified.";
+//         dbgKrita <<"No reference image was specified.";
         return;
     }
 
@@ -127,7 +127,7 @@ XXX_PORT
     KoColorSpace* labCS = KoColorSpaceRegistry::instance()->colorSpace(KoID("LABA"),"");
     if(!labCS)
     {
-//         kDebug() <<"The LAB colorspace is not available.";
+//         dbgKrita <<"The LAB colorspace is not available.";
         return;
     }
     KoColorSpace* oldCS = src->colorSpace();
@@ -160,7 +160,7 @@ XXX_PORT
     sigmaL_src *= totalSize;
     sigmaA_src *= totalSize;
     sigmaB_src *= totalSize;
-//     kDebug() << totalSize <<"" << meanL_src <<"" << meanA_src <<"" << meanB_src <<"" << sigmaL_src <<"" << sigmaA_src <<"" << sigmaB_src;
+//     dbgKrita << totalSize <<"" << meanL_src <<"" << meanA_src <<"" << meanB_src <<"" << sigmaL_src <<"" << sigmaA_src <<"" << sigmaB_src;
     // Compute the means and sigmas of src
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
@@ -186,7 +186,7 @@ XXX_PORT
     sigmaL_ref *= totalSize;
     sigmaA_ref *= totalSize;
     sigmaB_ref *= totalSize;
-//     kDebug() << totalSize <<"" << meanL_ref <<"" << meanA_ref <<"" << meanB_ref <<"" << sigmaL_ref <<"" << sigmaA_ref <<"" << sigmaB_ref;
+//     dbgKrita << totalSize <<"" << meanL_ref <<"" << meanA_ref <<"" << meanB_ref <<"" << sigmaL_ref <<"" << sigmaA_ref <<"" << sigmaB_ref;
 
     // Transfer colors
     dst->convertTo(labCS); // FIXME: DON'T CONVERT to LAB !
@@ -194,7 +194,7 @@ XXX_PORT
         double coefL = sqrt((sigmaL_ref - meanL_ref * meanL_ref) / (sigmaL_src - meanL_src * meanL_src));
         double coefA = sqrt((sigmaA_ref - meanA_ref * meanA_ref) / (sigmaA_src - meanA_src * meanA_src));
         double coefB = sqrt((sigmaB_ref - meanB_ref * meanB_ref) / (sigmaB_src - meanB_src * meanB_src));
-//         kDebug() << coefL <<"" << coefA <<"" << coefB;
+//         dbgKrita << coefL <<"" << coefA <<"" << coefB;
         KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
         while(!dstIt.isDone())
         {

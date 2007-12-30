@@ -28,7 +28,7 @@
 
 #include <knuminput.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_types.h"
 #include "kis_histogram.h"

@@ -19,7 +19,7 @@
 #include <QObject>
 #include <QRect>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoProgressUpdater.h>
 #include <KoColorSpace.h>

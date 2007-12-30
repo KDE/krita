@@ -32,7 +32,7 @@
 #include <QMessageBox>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <kis_image.h>
 #include <kis_paint_device.h>

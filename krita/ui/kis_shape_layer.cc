@@ -108,7 +108,7 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 
 void KisShapeLayer::addChild(KoShape *object)
 {
-    kDebug(41001) <<"KisShapeLayer::addChild";
+    dbgImage <<"KisShapeLayer::addChild";
     KoShapeLayer::addChild( object );
     m_d->canvas->shapeManager()->add( object );
 
@@ -128,7 +128,7 @@ QIcon KisShapeLayer::icon() const
 
 void KisShapeLayer::updateProjection(const QRect& r)
 {
-    kDebug(41001) <<"KisShapeLayer::updateProjection()" << r;
+    dbgImage <<"KisShapeLayer::updateProjection()" << r;
 }
 
 KisPaintDeviceSP KisShapeLayer::projection() const
@@ -189,7 +189,7 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
     qSort( shapes.begin(), shapes.end(), KoShape::compareShapeZIndex );
 
     foreach(KoShape* shape, shapes ) {
-        kDebug() << "shape: " << shape->name();
+        dbgKrita << "shape: " << shape->name();
     }
     
     store->disallowNameExpansion();
@@ -271,7 +271,7 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
     // Write out manifest file
     if ( !odfStore.closeManifestWriter() )
     {
-        kDebug(41001) << "closing manifestWriter failed";
+        dbgImage << "closing manifestWriter failed";
         return false;
     }
 

@@ -34,7 +34,7 @@
 #include <knuminput.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <knumvalidator.h>
 
 #include "kis_int_spinbox_p.h"

@@ -27,7 +27,7 @@
 #include <QRect>
 #include <QVBoxLayout>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <klocale.h>

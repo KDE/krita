@@ -30,7 +30,7 @@
 #include <QStringList>
 #include <QTextStream>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <krandom.h>
 

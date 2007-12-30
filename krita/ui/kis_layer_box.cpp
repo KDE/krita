@@ -23,7 +23,6 @@
 
 #include "kis_layer_box.h"
 
-#include <QtDebug>
 #include <QToolButton>
 #include <QLayout>
 #include <QMouseEvent>
@@ -40,7 +39,7 @@
 #include <QList>
 #include <QVector>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kglobal.h>
 #include <kmenu.h>
 #include <kmessagebox.h>

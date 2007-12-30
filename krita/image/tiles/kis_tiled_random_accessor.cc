@@ -17,7 +17,7 @@
  */
 #include "kis_tiled_random_accessor.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 const quint32 KisTiledRandomAccessor::CACHESIZE = 4; // Define the number of tiles we keep in cache
 
@@ -107,7 +107,7 @@ quint8 * KisTiledRandomAccessor::rawData() const
 const quint8 * KisTiledRandomAccessor::oldRawData() const
 {
 #ifdef DEBUG
-    kWarning(!m_ktm->hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
+    kWarning(!m_ktm->hasCurrentMemento(), 41004) << "Accessing oldRawData() when no transaction is in progress.\n";
 #endif
     return m_oldData;
 }

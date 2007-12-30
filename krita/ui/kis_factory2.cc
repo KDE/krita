@@ -22,7 +22,7 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <klocale.h>

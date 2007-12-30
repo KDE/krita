@@ -23,7 +23,7 @@
 #include <QImage>
 #include <QAction>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <KFileDialog>

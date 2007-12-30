@@ -33,7 +33,7 @@
 #include <QTime>
 #include <kicon.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kglobalsettings.h>
 #include <kaction.h>
 #include <ktoolbar.h>

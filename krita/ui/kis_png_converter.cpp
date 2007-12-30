@@ -264,10 +264,10 @@ void _flush_fn(png_structp png_ptr)
 
 KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 {
-    kDebug(41008) << "Start decoding PNG File";
+    dbgFile << "Start decoding PNG File";
     if(not iod->open(QIODevice::ReadOnly))
     {
-        kDebug(41008) << "Failed to open PNG File";
+        dbgFile << "Failed to open PNG File";
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -340,7 +340,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_uint_32 width, height;
     int color_nb_bits, color_type, interlace_type;
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, NULL, NULL);
-    kDebug(41008) << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
+    dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
     // swap byteorder on little endian machines.
     #ifndef WORDS_BIGENDIAN
     if (color_nb_bits > 8 )
@@ -373,24 +373,24 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             profile = new KoIccColorProfile(profile_rawdata);
             Q_CHECK_PTR(profile);
             if (profile) {
-//                 kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
+//                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
                 if(!profile->isSuitableForOutput())
                 {
-                    kDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
+                    dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
                 }
             }
         } else {
-            kDebug(41008) << "Profile isn't ICC, skiped.";
+            dbgFile << "Profile isn't ICC, skiped.";
         }
     } else {
-        kDebug(41008) << "no embedded profile, will use the default profile";
+        dbgFile << "no embedded profile, will use the default profile";
     }
 
     // Retrieve a pointer to the colorspace
     const KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
-        kDebug(41008) << "image has embedded profile: " << profile -> name() << "\n";
+        dbgFile << "image has embedded profile: " << profile -> name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
     }
     else
@@ -420,10 +420,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if(m_doc)
     {
         KoDocumentInfo * info = m_doc->documentInfo();
-        kDebug(41008) << "There are " << num_comments << " comments in the text";
+        dbgFile << "There are " << num_comments << " comments in the text";
         for(int i = 0; i < num_comments; i++)
         {
-            kDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text;
+            dbgFile << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text;
             if(QString::compare(text_ptr[i].key, "title") == 0)
             {
                     info->setAboutInfo("title", text_ptr[i].text);
@@ -452,7 +452,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     {
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
-        kDebug(41008) << "bad alloc: " << e.what();
+        dbgFile << "bad alloc: " << e.what();
         // Free only the already allocated png_byte instances.
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return (KisImageBuilder_RESULT_FAILURE);
@@ -610,7 +610,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
 KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
 {
-    kDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri;
+    dbgFile << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri;
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
@@ -627,7 +627,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
         uriTF.setPath( tmpFile );
 
         // open the file
-        kDebug(41008) << QFile::encodeName(uriTF.path()) << " " << uriTF.path() << " " << uriTF;
+        dbgFile << QFile::encodeName(uriTF.path()) << " " << uriTF.path() << " " << uriTF;
         QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
         if (fp->exists())
         {
@@ -651,7 +651,7 @@ KisImageSP KisPNGConverter::image()
 
 KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
-    kDebug(41008) << "Start writing PNG File " << uri;
+    dbgFile << "Start writing PNG File " << uri;
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
@@ -670,7 +670,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 {
     if(not iodevice->open(QIODevice::WriteOnly))
     {
-        kDebug(41008) << "Failed to open PNG File for writting";
+        dbgFile << "Failed to open PNG File for writting";
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -769,7 +769,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
         }
         if(!toomuchcolor)
         {
-            kDebug(41008) << "Found a palette of " << num_palette << " colors";
+            dbgFile << "Found a palette of " << num_palette << " colors";
             color_type = PNG_COLOR_TYPE_PALETTE;
             if( num_palette <= 2)
             {
@@ -807,16 +807,16 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
         if (!(*it) || (*it) -> type() == QString()) {
-            kDebug(41008) << "Warning: empty annotation";
+            dbgFile << "Warning: empty annotation";
             ++it;
             continue;
         }
 
-        kDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size();
+        dbgFile << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size();
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
-            kDebug(41008) << "can't save this annotation : " << (*it) -> type();
+            dbgFile << "can't save this annotation : " << (*it) -> type();
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().toAscii());

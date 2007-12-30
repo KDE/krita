@@ -57,7 +57,7 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorFuzzy();
     }
     
-    kDebug(41006) <<"Unknown transform parameter :" << id.id();
+    dbgPlugins <<"Unknown transform parameter :" << id.id();
     return 0;
 }
 

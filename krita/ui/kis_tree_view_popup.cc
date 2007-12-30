@@ -23,7 +23,7 @@
 #include <QResizeEvent>
 #include <QTreeView>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 struct KisTreeViewPopup::Private {
     QTreeView* view;

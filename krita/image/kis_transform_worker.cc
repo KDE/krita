@@ -19,7 +19,7 @@
  */
 #include <klocale.h>
 
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 #include "kis_transform_worker.h"

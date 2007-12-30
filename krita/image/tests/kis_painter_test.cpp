@@ -19,7 +19,7 @@
 #include <qtest_kde.h>
 #include "kis_painter_test.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <QRect>
 #include <QTime>
 
@@ -40,7 +40,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( const KoC
 
     foreach( QString csId, csIds ) {
 
-        kDebug() <<"Testing with" << csId;
+        dbgImage <<"Testing with" << csId;
 
         QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {
@@ -49,7 +49,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( const KoC
                 if ( cs ) ( this->*funcPtr )( cs );
             }
             else {
-                kDebug() <<"Cannot bitBlt for cs" << csId;
+                dbgImage <<"Cannot bitBlt for cs" << csId;
             }
         }
         else {
@@ -59,7 +59,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)( const KoC
                     if ( cs ) ( this->*funcPtr )( cs );
                 }
                 else {
-                    kDebug() <<"Cannot bitBlt for cs" << csId;
+                    dbgImage <<"Cannot bitBlt for cs" << csId;
                 }
             }
 

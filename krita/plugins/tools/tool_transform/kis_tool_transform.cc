@@ -28,7 +28,7 @@
 #include <QComboBox>
 #include <QApplication>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <klocale.h>

@@ -19,7 +19,7 @@
 
 #include <QDomElement>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_dynamic_scattering.h"
 
@@ -82,7 +82,7 @@ KisSerializableConfiguration* KisDynamicShapeProgramsFactory::create(const QDomE
     QString type = e.attribute("type", "");
     QString name = e.attribute("name", "");
     KisDynamicShapeProgramFactory* factory = KisDynamicShapeProgramFactoryRegistry::instance()->value( type );
-    kDebug() << "Type is : " << type;
+    dbgKrita << "Type is : " << type;
     Q_ASSERT(factory);
     KisDynamicShapeProgram* program = factory->shapeProgram( name );
     Q_ASSERT(program);

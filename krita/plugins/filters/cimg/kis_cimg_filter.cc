@@ -32,7 +32,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
@@ -214,7 +214,7 @@ void KisCImgFilter::process(KisFilterConstProcessingInformation src,
             ++it;
         }
     } else {
-//         kDebug() <<"The RGB16 colorspace is not available, will work in 8bit.";
+//         dbgKrita <<"The RGB16 colorspace is not available, will work in 8bit.";
         KisRectConstIteratorPixel it = src->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
         while (!it.isDone()) {
 

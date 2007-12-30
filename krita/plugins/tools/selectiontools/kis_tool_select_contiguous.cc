@@ -30,7 +30,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>

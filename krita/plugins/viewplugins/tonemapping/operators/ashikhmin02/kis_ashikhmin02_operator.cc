@@ -84,14 +84,14 @@ KoColorSpace* KisAshikhmin02Operator::colorSpace() const
 void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
     QRect r = device->exactBounds();
-    kDebug() << "Tonemaping with Ashikhmin02 operator on " << r;
+    dbgKrita << "Tonemaping with Ashikhmin02 operator on " << r;
     bool simple = config->getBool("Simple", false);
     double lC = config->getDouble("LocalContrastThreshold", 0.5);
     int eqn = config->getInt("Equation", 2);
     if(eqn != 2 or eqn !=4) eqn = 2;
     
     // Compute luminance
-    kDebug() << "Compute luminance";
+    dbgKrita << "Compute luminance";
     double avLum = 0.0;
     double maxLum = 0.0f;
     double minLum = 0.0f;
@@ -111,10 +111,10 @@ void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfi
     pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
     
     pfs::Array2DImpl L (r.width(),r.height());
-    kDebug() << "tmo_ashikhmin02";
+    dbgKrita << "tmo_ashikhmin02";
    tmo_ashikhmin02(&Y, &L, maxLum, minLum, avLum, simple, lC, eqn);
     
-    kDebug() << "Apply luminance";
+    dbgKrita << "Apply luminance";
     applyLuminance(device, L.device(), r);
-    kDebug() << "Finished";
+    dbgKrita << "Finished";
 }

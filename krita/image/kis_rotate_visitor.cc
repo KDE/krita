@@ -20,7 +20,7 @@
 #include <QMatrix>
 #include <QRect>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoCompositeOp.h>

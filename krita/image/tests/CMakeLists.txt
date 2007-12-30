@@ -552,3 +552,9 @@ target_link_libraries(KisFilterConfigWidgetTest  ${KDE4_KDEUI_LIBS} komain krita
 set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
 kde4_add_unit_test(KisFilterJobTest TESTNAME krita-image-KisFilterJobTest ${kis_filter_job_test_SRCS})
 target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+set(kis_node_action_test_SRCS kis_node_action_test.cpp)
+kde4_add_unit_test(KisNodeActionTest TESTNAME krita-image-KisNodeActionTest ${kis_node_action_test_SRCS})
+target_link_libraries(KisNodeActionTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
+

@@ -34,7 +34,7 @@
 #include <QList>
 
 // KDE
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -66,7 +66,7 @@
 // Krita Image
 #include <kis_adjustment_layer.h>
 #include <kis_annotation.h>
-#include <kis_debug_areas.h>
+#include <kis_debug.h>
 #include <kis_external_layer_iface.h>
 #include <kis_fill_painter.h>
 #include <kis_filter.h>
@@ -238,7 +238,7 @@ QDomDocument KisDoc2::saveXML()
 
 bool KisDoc2::loadOdf( KoOdfReadStore & odfStore )
 {
-    kDebug(41008) <<"loading with OpenRaster";
+    dbgFile <<"loading with OpenRaster";
     KoXmlNode root = odfStore.contentDoc().documentElement();
     for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "office:body") {
@@ -260,7 +260,7 @@ bool KisDoc2::loadOdf( KoOdfReadStore & odfStore )
 bool KisDoc2::saveOdf( SavingContext &documentContext )
 {
     KoXmlWriter* manifestWriter = documentContext.odfStore.manifestWriter();
-    kDebug(41008) <<"saving with OpenRaster";
+    dbgFile <<"saving with OpenRaster";
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
     if ( !contentWriter ) {

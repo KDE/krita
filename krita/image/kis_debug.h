@@ -18,24 +18,24 @@
 #ifndef KIS_DEBUG_AREAS_H_
 #define KIS_DEBUG_AREAS_H_
 
+#include <kdebug.h>
 
 /**
  * In krita code, include kis_debug.h instead of kdebug.h. Then use one of the areas #defined here
  * instead of the raw numbers. Also, try not to check in code outside of tests that uses kDebug
  * without an area.
  */
-
-#define DBG_AREA_IMAGE 41001
-#define DBG_AREA_REGISTRY 40002
-#define DBG_AREA_TOOLS 41003
-#define DBG_AREA_CMS 41004
-#define DBG_AREA_FILTERS 41005
-#define DBG_AREA_PLUGINS 41006
-#define DBG_AREA_UI 41007
-#define DBG_AREA_FILE 41008
-#define DBG_AREA_MATH 41009
-#define DBG_AREA_RENDER 41010
-#define DBG_AREA_SCRIPT 41011
-
+#define dbgKrita kDebug(41000) // For temporary debug lines, where you'd have used dbgKrita before.
+#define dbgImage kDebug(41001)
+#define dbgRegistry kDebug(41002)
+#define dbgTools kDebug(41003)
+#define dbgTiles kDebug(41004)
+#define dbgFilters kDebug(41005)
+#define dbgPlugins kDebug(41006)
+#define dbgUI kDebug(41007)
+#define dbgFile kDebug(41008)
+#define dbgMath kDebug(41009)
+#define dbgRender kDebug(41010)
+#define dbgScript kDebug(41011)
 
 #endif

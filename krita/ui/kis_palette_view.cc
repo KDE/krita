@@ -21,7 +21,7 @@
 
 #include <kiconloader.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kcolordialog.h> // KColorCells
 
 

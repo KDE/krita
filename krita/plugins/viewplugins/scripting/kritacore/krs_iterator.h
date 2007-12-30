@@ -261,7 +261,7 @@ class Iterator : public IteratorBase
                 case KoChannelInfo::FLOAT32:
                     return *((float*) data);
                 default:
-                    kDebug(41011) <<"Unsupported data format in script";
+                    dbgScript <<"Unsupported data format in script";
                     return QVariant();
             }
         }
@@ -280,7 +280,7 @@ class Iterator : public IteratorBase
                     *((float*) data) = value.toDouble();
                     break;
                 default:
-                    kDebug(41011) <<"Unsupported data format in script";
+                    dbgScript <<"Unsupported data format in script";
                     break;
             }
         }

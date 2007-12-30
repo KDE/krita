@@ -16,9 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <assert.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
-#include "kis_tile_global.h"
+#include "kis_debug.h"
 #include "kis_tile.h"
 #include "kis_tileddatamanager.h"
 #include "kis_tilemanager.h"
@@ -144,7 +144,7 @@ void KisTile::addReader() const
     if (m_nReadlock++ == 0)
         KisTileManager::instance()->ensureTileLoaded(this);
     else if (m_nReadlock < 0) {
-        kDebug(41000) << m_nReadlock;
+        dbgTiles << m_nReadlock;
         assert(0);
     }
     assert(m_data);

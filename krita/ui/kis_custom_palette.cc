@@ -32,7 +32,7 @@
 #include <kinputdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_view2.h"
 #include "KoColorSet.h"

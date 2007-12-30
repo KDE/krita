@@ -37,7 +37,7 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( const K
 
     foreach( QString csId, csIds ) {
 
-        kDebug() <<"Testing with" << csId;
+        dbgImage <<"Testing with" << csId;
 
         QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {

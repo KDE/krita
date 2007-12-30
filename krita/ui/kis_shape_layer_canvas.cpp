@@ -28,7 +28,7 @@
 #include <KoCompositeOp.h>
 #include <KoSelection.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 //#define DEBUG_REPAINT
 
@@ -78,7 +78,7 @@ KoShapeManager *KisShapeLayerCanvas::shapeManager() const
 
 void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
-    kDebug(41001) <<"KisShapeLayerCanvas::updateCanvas()" << rc;
+    dbgImage <<"KisShapeLayerCanvas::updateCanvas()" << rc;
 
     QRect r = m_viewConverter->documentToView(rc).toRect();
     r.adjust(-2, -2, 2, 2); // for antialias

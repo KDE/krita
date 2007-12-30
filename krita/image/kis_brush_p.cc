@@ -20,7 +20,7 @@
 #include <QImage>
 #include <QVector>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoColorSpace.h>
 

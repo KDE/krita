@@ -76,17 +76,17 @@ const KoColorSpace* KisReinhard05Operator::colorSpace() const
 
 void KisReinhard05Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
-    kDebug() << "Create a copy of the paint device as XYZAF32";
+    dbgKrita << "Create a copy of the paint device as XYZAF32";
     QRect r = device->exactBounds();
     const KoColorSpace* XYZACs = KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
     Q_ASSERT(XYZACs);
     KisPaintDeviceSP deviceXYZ = new KisPaintDevice(*device);
     deviceXYZ->convertTo(XYZACs);
-    kDebug() << "Tone map using reinhard05";
+    dbgKrita << "Tone map using reinhard05";
     pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
     pfs::Array2DImpl R( r, KoRgbTraits<float>::red_pos, device);
     pfs::Array2DImpl G( r, KoRgbTraits<float>::green_pos, device);
     pfs::Array2DImpl B( r, KoRgbTraits<float>::blue_pos, device);
     tmo_reinhard05( &R, &G, &B, &Y, config->getDouble("Brightness", 0.0), config->getDouble("Chromatic", 0.0), config->getDouble("Light", 1.0) );
-    kDebug() << "Done !";
+    dbgKrita << "Done !";
 }

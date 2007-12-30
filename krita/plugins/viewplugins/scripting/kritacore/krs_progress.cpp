@@ -20,7 +20,7 @@
 
 #include "krs_progress.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoProgressUpdater.h>
 #include <kis_view2.h>

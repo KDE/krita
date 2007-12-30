@@ -18,7 +18,7 @@
 #include "kis_node_facade.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node.h"
-#include <kdebug.h>
+#include <kis_debug.h>
 
 class KisNodeFacade::Private
 {

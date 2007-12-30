@@ -19,7 +19,7 @@
 #include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 
 #include <kis_paintop_registry.h>
@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY(kritacpaintbrush, CPaintBrushFactory("krita"))
 CPaintBrush::CPaintBrush(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    kDebug(41006) <<">>>>>>>>>>>>>>> loading cpaint";
+    dbgPlugins <<">>>>>>>>>>>>>>> loading cpaint";
     setComponentData(CPaintBrushFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();

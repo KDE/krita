@@ -102,7 +102,7 @@ void KisToneMappingDialog::apply()
 
 void KisToneMappingDialog::slotOperatorSelected(int index)
 {
-    kDebug() << "slotOperatorSelected(" << index << ")";
+    dbgKrita << "slotOperatorSelected(" << index << ")";
     QModelIndex modelIndex = d->operatorsModel->index(index,0);
     KisToneMappingOperator* tmop = d->operatorsModel->get( modelIndex );
     if( tmop)

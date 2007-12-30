@@ -23,7 +23,7 @@
 
 #include <kio/job.h>
 
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include <KoPattern.h>
 #include <krita_export.h>
 #include "kis_types.h"

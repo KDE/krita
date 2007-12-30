@@ -24,7 +24,7 @@
 #include <QMessageBox>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 
 KisGlslWidget::KisGlslWidget(KisPaintDeviceSP device, QWidget *parent) : QGLWidget(parent), m_device(device)

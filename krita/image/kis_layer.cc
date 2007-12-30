@@ -25,7 +25,7 @@
 
 #include <KoProperties.h>
 
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -156,13 +156,13 @@ void KisLayer::setTemporary(bool t)
 
 const KoCompositeOp * KisLayer::compositeOp() const
 {
-    //kDebug() << m_d->compositeOp->description();
+    //dbgImage << m_d->compositeOp->description();
     return m_d->compositeOp;
 }
 
 void KisLayer::setCompositeOp(const KoCompositeOp* compositeOp)
 {
-    //kDebug() << "old: " <<  m_d->compositeOp->description() << ", new: " << compositeOp->description();
+    //dbgImage << "old: " <<  m_d->compositeOp->description() << ", new: " << compositeOp->description();
     if (m_d->compositeOp != compositeOp)
     {
        m_d->compositeOp = const_cast<KoCompositeOp*>( compositeOp );

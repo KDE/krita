@@ -22,7 +22,7 @@
 #include <math.h>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <kis_cmb_idlist.h>
 #include <kis_filter_strategy.h>

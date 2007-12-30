@@ -19,7 +19,7 @@
  */
 #include <QApplication>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>

@@ -35,11 +35,11 @@
 #include <QRect>
 #include <QString>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_brush.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"

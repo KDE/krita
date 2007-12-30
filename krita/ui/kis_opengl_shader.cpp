@@ -23,11 +23,11 @@
 
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_factory2.h"
 #include "kis_opengl.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 
 KisOpenGLShader::KisOpenGLShader(GLenum shaderType)
 {
@@ -39,7 +39,7 @@ KisOpenGLShader::KisOpenGLShader(GLenum shaderType)
     KIS_OPENGL_PRINT_ERROR();
 
     if (m_shader == 0) {
-        kDebug(DBG_AREA_UI) <<"Failed to create shader";
+        dbgUI <<"Failed to create shader";
     }
 }
 
@@ -70,8 +70,8 @@ void KisOpenGLShader::loadSourceCode(GLsizei numSourceCodeStrings, const GLcharA
         if (compiled) {
             m_valid = true;
         } else {
-            kDebug(DBG_AREA_UI) <<"Failed to compile shader";
-            kDebug(DBG_AREA_UI) <<"Info log:" << getInfoLog();
+            dbgUI <<"Failed to compile shader";
+            dbgUI <<"Info log:" << getInfoLog();
         }
     }
 }
@@ -81,14 +81,14 @@ void KisOpenGLShader::loadSourceCode(QString sourceCodeFilename)
     QString fullFilename = KisFactory2::componentData().dirs()->findResource("kis_shaders", sourceCodeFilename);
 
     if (fullFilename.isNull()) {
-        kDebug(DBG_AREA_UI) <<"Failed to find shader source code file:" << sourceCodeFilename;
+        dbgUI <<"Failed to find shader source code file:" << sourceCodeFilename;
         return;
     }
 
     QFile sourceCodeFile(fullFilename);
 
     if (!sourceCodeFile.open(IO_ReadOnly)) {
-        kDebug(DBG_AREA_UI) <<"Unable to open shader source code file:" << fullFilename;
+        dbgUI <<"Unable to open shader source code file:" << fullFilename;
         return;
     }
 
@@ -106,7 +106,7 @@ void KisOpenGLShader::loadSourceCode(QString sourceCodeFilename)
     }
 
     if (sourceCodeStrings.isEmpty()) {
-        kDebug(DBG_AREA_UI) <<"Shader source code file is empty:" << fullFilename;
+        dbgUI <<"Shader source code file is empty:" << fullFilename;
         return;
     }
 
@@ -125,7 +125,7 @@ void KisOpenGLShader::loadSourceCode(QVector<QString> sourceCodeStrings)
     }
 
     if (sourceCodeStrings.isEmpty()) {
-        kDebug(DBG_AREA_UI) <<"Shader source code vector is empty";
+        dbgUI <<"Shader source code vector is empty";
         return;
     }
 

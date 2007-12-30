@@ -20,7 +20,7 @@
 
 #ifdef HAVE_OPENGL
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <ksharedptr.h>
 
 #include <QGLWidget>
@@ -42,7 +42,7 @@
 #include "kis_selection.h"
 #include "kis_opengl.h"
 #include "kis_config.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 
 #ifdef HAVE_GLEW
 #include "kis_opengl_hdr_exposure_program.h"
@@ -76,7 +76,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
 
 KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageSP image, KoColorProfile *monitorProfile)
 {
-    kDebug(DBG_AREA_UI) <<"Creating KisOpenGLImageTextures";
+    dbgUI <<"Creating KisOpenGLImageTextures";
 
     m_image = image;
     m_monitorProfile = monitorProfile;
@@ -104,7 +104,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageSP image, KoColorProfile 
 
 KisOpenGLImageTextures::~KisOpenGLImageTextures()
 {
-    kDebug(DBG_AREA_UI) <<"Destroying KisOpenGLImageTextures";
+    dbgUI <<"Destroying KisOpenGLImageTextures";
 
     ImageTexturesMap::iterator it = imageTexturesMap.find(m_image);
 
@@ -113,7 +113,7 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
         KisOpenGLImageTextures *textures = (*it).second;
 
         if (textures == this) {
-            kDebug(DBG_AREA_UI) <<"Removing shared image context from map";
+            dbgUI <<"Removing shared image context from map";
             imageTexturesMap.erase(m_image);
         }
     }
@@ -134,7 +134,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageSP ima
 
         if (it != imageTexturesMap.end()) {
 
-            kDebug(DBG_AREA_UI) <<"Sharing image textures from map";
+            dbgUI <<"Sharing image textures from map";
 
             KisOpenGLImageTexturesSP textures = (*it).second;
             textures->setMonitorProfile(monitorProfile);
@@ -144,12 +144,12 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageSP ima
             KisOpenGLImageTextures *imageTextures = new KisOpenGLImageTextures(image, monitorProfile);
             imageTexturesMap[image] = imageTextures;
 
-            kDebug(DBG_AREA_UI) <<"Added shareable textures to map";
+            dbgUI <<"Added shareable textures to map";
 
             return imageTextures;
         }
     } else {
-        kDebug(DBG_AREA_UI) <<"Creating non-shareable image textures";
+        dbgUI <<"Creating non-shareable image textures";
 
         return new KisOpenGLImageTextures(image, monitorProfile);
     }
@@ -205,7 +205,7 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
 
 void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
 {
-    kDebug(DBG_AREA_UI) <<"updateImageTextureTiles" << rect;
+    dbgUI <<"updateImageTextureTiles" << rect;
 
     QRect updateRect = rect & m_image->bounds();
 
@@ -424,7 +424,7 @@ void KisOpenGLImageTextures::createHDRExposureProgramIfCan()
 {
 #ifdef HAVE_GLEW
     if (HDRExposureProgram == 0 && KisOpenGL::hasShadingLanguage()) {
-        kDebug(DBG_AREA_UI) <<"Creating shared HDR exposure program";
+        dbgUI <<"Creating shared HDR exposure program";
         HDRExposureProgram = new KisOpenGLHDRExposureProgram();
         Q_CHECK_PTR(HDRExposureProgram);
     }
@@ -493,7 +493,7 @@ void KisOpenGLImageTextures::setImageTextureFormat()
     QString colorSpaceId = m_image->colorSpace()->id();
     m_usingHDRExposureProgram = false;
 
-    kDebug(DBG_AREA_UI) <<"Choosing texture format:";
+    dbgUI <<"Choosing texture format:";
 
     if (imageCanUseHDRExposureProgram(m_image)) {
 
@@ -501,18 +501,18 @@ void KisOpenGLImageTextures::setImageTextureFormat()
 
             if (GLEW_ARB_texture_float) {
                 m_imageTextureInternalFormat = GL_RGBA16F_ARB;
-                kDebug(DBG_AREA_UI) <<"Using ARB half";
+                dbgUI <<"Using ARB half";
             } else {
                 Q_ASSERT(GLEW_ATI_texture_float);
                 m_imageTextureInternalFormat = GL_RGBA_FLOAT16_ATI;
-                kDebug(DBG_AREA_UI) <<"Using ATI half";
+                dbgUI <<"Using ATI half";
             }
 
             if (GLEW_ARB_half_float_pixel) {
-                kDebug(DBG_AREA_UI) <<"Pixel type half";
+                dbgUI <<"Pixel type half";
                 m_imageTextureType = GL_HALF_FLOAT_ARB;
             } else {
-                kDebug(DBG_AREA_UI) <<"Pixel type float";
+                dbgUI <<"Pixel type float";
                 m_imageTextureType = GL_FLOAT;
             }
 
@@ -522,18 +522,18 @@ void KisOpenGLImageTextures::setImageTextureFormat()
 
             if (GLEW_ARB_texture_float) {
                 m_imageTextureInternalFormat = GL_RGBA32F_ARB;
-                kDebug(DBG_AREA_UI) <<"Using ARB float";
+                dbgUI <<"Using ARB float";
             } else {
                 Q_ASSERT(GLEW_ATI_texture_float);
                 m_imageTextureInternalFormat = GL_RGBA_FLOAT32_ATI;
-                kDebug(DBG_AREA_UI) <<"Using ATI float";
+                dbgUI <<"Using ATI float";
             }
 
             m_imageTextureType = GL_FLOAT;
             m_usingHDRExposureProgram = true;
         }
     } else {
-        kDebug(DBG_AREA_UI) <<"Using unsigned byte";
+        dbgUI <<"Using unsigned byte";
     }
 #endif
 }

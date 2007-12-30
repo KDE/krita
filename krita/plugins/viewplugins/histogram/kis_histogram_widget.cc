@@ -25,7 +25,7 @@
 #include <QPushButton>
 #include <qscrollbar.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "KoChannelInfo.h"
 #include "kis_histogram_view.h"

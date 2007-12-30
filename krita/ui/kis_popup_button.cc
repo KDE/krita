@@ -22,7 +22,7 @@
 #include <QFrame>
 #include <QHBoxLayout>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 struct KisPopupButton::Private {
     Private() : frame(0), frameLayout(0), popupWidget(0) {}

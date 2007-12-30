@@ -30,7 +30,7 @@
 #include <QPointF>
 #include <Q3ValueList>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kaction.h>

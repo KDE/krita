@@ -32,7 +32,7 @@
 #include <kis_base_node.h>
 #include <kis_adjustment_layer.h>
 #include <kis_annotation.h>
-#include <kis_debug_areas.h>
+#include <kis_debug.h>
 #include <kis_external_layer_iface.h>
 #include <kis_filter.h>
 #include <kis_filter_registry.h>
@@ -141,7 +141,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         if (cs == 0) {
-            kWarning(DBG_AREA_FILE) <<"Could not open colorspace";
+            kWarning(41008) <<"Could not open colorspace";
             return KisImageSP(0);
         }
 
@@ -212,7 +212,7 @@ void KisKraLoader::loadLayers(const KoXmlElement& element, KisImageSP img, KisGr
                     KisLayerSP layer = loadLayer(child.toElement(), img);
 
                     if (!layer) {
-                        kWarning(DBG_AREA_FILE) <<"Could not load layer";
+                        kWarning(41008) <<"Could not load layer";
                     }
                     else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of layers.
@@ -285,7 +285,7 @@ KisLayerSP KisKraLoader::loadLayer(const KoXmlElement& element, KisImageSP img)
     if(attr == "shapelayer")
         return KisLayerSP(loadShapeLayer(element, img, name, x, y, opacity, visible, locked, compositeOpName).data());
 
-    kWarning(DBG_AREA_FILE) <<"Specified layertype is not recognised";
+    kWarning(41008) <<"Specified layertype is not recognised";
     return KisLayerSP(0);
 }
 
@@ -368,13 +368,13 @@ KisAdjustmentLayerSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& eleme
 
     if ((filtername = element.attribute("filtername")).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
-        kWarning(DBG_AREA_FILE) <<"No filter in adjustment layer";
+        kWarning(41008) <<"No filter in adjustment layer";
         return KisAdjustmentLayerSP(0);
     }
 
     KisFilterSP f = KisFilterRegistry::instance()->value(filtername);
     if (!f) {
-        kWarning(DBG_AREA_FILE) <<"No filter for filtername" << filtername <<"";
+        kWarning(41008) <<"No filter for filtername" << filtername <<"";
         return KisAdjustmentLayerSP(0); // XXX: We don't have this filter. We should warn about it!
     }
 

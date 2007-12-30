@@ -18,7 +18,7 @@
 
 #include <QDomElement>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoIntegerMaths.h>

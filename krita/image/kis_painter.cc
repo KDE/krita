@@ -33,7 +33,7 @@
 #include <QStringList>
 #include <QUndoCommand>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
@@ -44,7 +44,7 @@
 
 #include "kis_brush.h"
 #include "kis_complex_color.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_filter.h"
 #include "kis_layer.h"
@@ -118,6 +118,7 @@ KisPainter::KisPainter(KisPaintDeviceSP device, KisSelectionSP selection)
     init();
     Q_ASSERT(device);
     begin(device);
+    d->selection = selection;
 }
 
 void KisPainter::init()
@@ -792,7 +793,7 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         // Currently unsupported, fall through
     case FillStyleStrokes:
         // Currently unsupported, fall through
-        kWarning(DBG_AREA_IMAGE) << "Unknown or unsupported fill style in fillPolygon\n";
+        kWarning(41001) << "Unknown or unsupported fill style in fillPolygon\n";
     case FillStyleForegroundColor:
         fillPainter.fillRect(fillRect, paintColor(), OPACITY_OPAQUE);
         break;

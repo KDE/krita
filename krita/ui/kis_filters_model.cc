@@ -133,7 +133,7 @@ const KisFilter* KisFiltersModel::indexToFilter( const QModelIndex& idx)
 
 QModelIndex KisFiltersModel::index(int row, int column, const QModelIndex &parent) const
 {
-//     kDebug() << parent.isValid() << row << endl;
+//     dbgKrita << parent.isValid() << row << endl;
     if(parent.isValid())
     {
         Private::Category* category = static_cast<Private::Category*>(parent.internalPointer());

@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 
 #include "kis_view2.h"

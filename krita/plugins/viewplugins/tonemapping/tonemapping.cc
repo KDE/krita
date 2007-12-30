@@ -21,7 +21,7 @@
 
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

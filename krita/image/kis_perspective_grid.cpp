@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_perspective_grid.h"
 
@@ -36,19 +36,19 @@ bool KisSubPerspectiveGrid::contains(const QPointF p) const
     return true;
 #if 0
     KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( topLeft().data(), topRight().data() );
-//     kDebug(41001) << p.y() <<"" << (p.x() * d1.a + d1.b);
+//     dbgImage << p.y() <<"" << (p.x() * d1.a + d1.b);
     if( p.y() >= p.x() * d1.a + d1.b)
     {
         d1 = KisPerspectiveMath::computeLineEquation( topRight().data(), bottomRight().data() );
-//         kDebug(41001) << p.y() <<"" << (p.x() * d1.a + d1.b);
+//         dbgImage << p.y() <<"" << (p.x() * d1.a + d1.b);
         if( p.y() >= p.x() * d1.a + d1.b)
         {
             d1 = KisPerspectiveMath::computeLineEquation( bottomRight().data(), bottomLeft().data() );
-//             kDebug(41001) << p.y() <<"" << (p.x() * d1.a + d1.b);
+//             dbgImage << p.y() <<"" << (p.x() * d1.a + d1.b);
             if( p.y() <= p.x() * d1.a + d1.b)
             {
                 d1 = KisPerspectiveMath::computeLineEquation( bottomLeft().data(), topLeft().data() );
-//                 kDebug(41001) << p.y() <<"" << (p.x() * d1.a + d1.b);
+//                 dbgImage << p.y() <<"" << (p.x() * d1.a + d1.b);
                 if( p.y() <= p.x() * d1.a + d1.b)
                 {
                     return true;

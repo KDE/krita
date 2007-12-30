@@ -23,7 +23,7 @@
 
 #include <QPainter>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_painter.h"

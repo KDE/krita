@@ -27,7 +27,7 @@
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 
 #include <KoColorTransformation.h>
@@ -119,7 +119,7 @@ void KisFilterInvert::process(KisFilterConstProcessingInformation srcInfo,
         srcIt.nextRow();
         dstIt.nextRow();
     }
-    kDebug(41006) <<"Per-pixel isSelected():" << t.elapsed() <<" ms";
+    dbgPlugins <<"Per-pixel isSelected():" << t.elapsed() <<" ms";
 
 #if 0
     t.restart();
@@ -170,7 +170,7 @@ void KisFilterInvert::process(KisFilterConstProcessingInformation srcInfo,
         srcIt.nextRow();
         dstIt.nextRow();
     }
-    kDebug(41006) <<"Consecutive pixels:" << t.elapsed() <<" ms";
+    dbgPlugins <<"Consecutive pixels:" << t.elapsed() <<" ms";
 
 #endif
     delete inverter;

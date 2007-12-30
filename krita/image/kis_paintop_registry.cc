@@ -18,7 +18,7 @@
 #include <QPixmap>
 #include <QWidget>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -35,7 +35,7 @@
 #include "kis_paintop.h"
 #include "kis_painter.h"
 #include "KoID.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "KoColorSpace.h"
 #include "kis_layer.h"
 #include "kis_image.h"
@@ -92,7 +92,7 @@ bool KisPaintOpRegistry::userVisible(const KoID & id, const KoColorSpace* cs) co
 
     KisPaintOpFactorySP f = value(id.id());
     if (!f) {
-        kDebug(DBG_AREA_REGISTRY) <<"No paintop" << id.id() <<"";
+        dbgRegistry <<"No paintop" << id.id() <<"";
         return false;
     }
     return f->userVisible(cs);
@@ -104,7 +104,7 @@ QString KisPaintOpRegistry::pixmap(const KoID & id) const
     KisPaintOpFactorySP f = value(id.id());
 
     if (!f) {
-        kDebug(DBG_AREA_REGISTRY) <<"No paintop" << id.id() <<"";
+        dbgRegistry <<"No paintop" << id.id() <<"";
         return "";
     }
 

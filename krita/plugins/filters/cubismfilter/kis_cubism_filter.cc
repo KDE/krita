@@ -32,7 +32,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
@@ -107,7 +107,7 @@ void KisCubismFilter::process(KisFilterConstProcessingInformation srcInfo,
         gc.bitBlt(0, 0, COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
 
-//         kDebug() << src->colorSpace()->id().id();
+//         dbgKrita << src->colorSpace()->id().id();
         cubism(dev, QPoint(0, 0), dev, QPoint(0, 0), size, tileSize, tileSaturation);
 
         gc.begin(dst, dstInfo.selection());
@@ -115,7 +115,7 @@ void KisCubismFilter::process(KisFilterConstProcessingInformation srcInfo,
         gc.end();
 //         if (src->image()) src->image()->unlock();
 
-//         kDebug() << src->colorSpace()->id().id();
+//         dbgKrita << src->colorSpace()->id().id();
     }
 }
 

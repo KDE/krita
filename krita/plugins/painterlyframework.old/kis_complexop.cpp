@@ -18,7 +18,7 @@
 
 #include <QVector>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_brush.h"
 #include "kis_complex_color.h"

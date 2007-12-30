@@ -17,7 +17,7 @@
  */
  
 #include "kis_autobrush_resource.h"
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <math.h>
 
 #include <KoColor.h>

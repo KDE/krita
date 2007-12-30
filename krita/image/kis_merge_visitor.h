@@ -191,7 +191,7 @@ public:
             QRect tmpRc = m_rc;
             
             KisPaintDeviceSP tempTarget = layer->temporaryTarget();
-            kDebug() << "tempTarget: " << tempTarget;
+            dbgImage << "tempTarget: " << tempTarget;
             if (tempTarget) {
                 tmpRc = (layer->extent() | tempTarget->extent()) & tmpRc;
             }
@@ -199,7 +199,7 @@ public:
             if (tmpRc.width() == 0 || tmpRc.height() == 0) // Don't even try
                 return true;
 
-            kDebug() << "Filtering on " << tmpRc;
+            dbgImage << "Filtering on " << tmpRc;
 
             KisFilterConfiguration * cfg = layer->filter();
             if (!cfg) return false;

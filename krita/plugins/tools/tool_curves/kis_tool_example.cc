@@ -24,7 +24,7 @@
 #include <qrect.h>
 #include <QPointF>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kaction.h>

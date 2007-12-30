@@ -70,7 +70,7 @@ void KisFiltersListDynamicProgram::apply(KisDynamicShape* shape, KisDynamicColor
 }
 
 void KisFiltersListDynamicProgram::appendTransformation(KisDynamicTransformation* transfo) {
-    kDebug(41006) << "Append transfo : " << transfo->name();
+    dbgPlugins << "Append transfo : " << transfo->name();
     m_transformations.append(transfo);
     emit(programChanged());
 }

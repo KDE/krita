@@ -28,7 +28,7 @@
 #include <QDesktopWidget>
 
 #include <kcolorcombo.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpaceRegistry.h>

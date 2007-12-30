@@ -26,9 +26,9 @@
 #include <QLayout>
 #include <QGridLayout>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <knuminput.h>
 
 #include "KoCanvasBase.h"

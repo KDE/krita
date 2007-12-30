@@ -26,7 +26,7 @@
 #include <qpoint.h>
 
 #include <kcombobox.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>

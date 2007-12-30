@@ -121,7 +121,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 {
     Q_ASSERT(f);
     setWindowTitle(f->name());
-    kDebug() << "setFilter: " << f;
+    dbgKrita << "setFilter: " << f;
     d->currentFilter = f;
     delete d->currentCentralWidget;
     {
@@ -155,7 +155,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 
 void KisFilterDialog::updatePreview()
 {
-    kDebug() <<">>>>  KisFilterDialog::updatePreview()";
+    dbgKrita <<">>>>  KisFilterDialog::updatePreview()";
 
     if ( !d->currentFilter ) return;
 

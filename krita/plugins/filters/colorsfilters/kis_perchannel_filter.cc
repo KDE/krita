@@ -231,7 +231,7 @@ void KisPerChannelFilter::process(KisFilterConstProcessingInformation srcInfo,
         delete configBC->adjustment;
         configBC->adjustment =
                 src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
-//         kDebug() << configBC->adjustment;
+//         dbgKrita << configBC->adjustment;
         configBC->oldCs = src->colorSpace();
         configBC->dirty = false;
     }

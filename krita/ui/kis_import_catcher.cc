@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_import_catcher.h"
 #include "kis_types.h"

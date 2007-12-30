@@ -18,12 +18,12 @@
 
 #include <q3valuevector.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoStore.h>
 
 #include "kis_global.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
 #include "kis_memento.h"

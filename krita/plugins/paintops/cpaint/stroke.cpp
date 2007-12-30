@@ -20,7 +20,7 @@
 #include <QPainter>
 #include <QRect>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoColor.h>
 
@@ -88,7 +88,7 @@ void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, do
 
     KisVector2D step(0, 0);
 
-    //kDebug() << "drawLine " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << ". Width: " << width << ", dist: " << dist << endl;
+    //dbgKrita << "drawLine " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << ". Width: " << width << ", dist: " << dist << endl;
 
     while (dist >= 1) {
         step += dragVec;

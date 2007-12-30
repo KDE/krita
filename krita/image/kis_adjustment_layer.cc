@@ -17,13 +17,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kicon.h>
 #include <QImage>
 
 #include <klocale.h>
 
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"

@@ -53,7 +53,7 @@ void KisFilesTest::testFiles()
             QString id = doc.image()->colorSpace()->id();
             if(id != "GRAYA" and id != "GRAYA16" and id != "RGBA" and id != "RGBA16")
             {
-              kDebug() << "Images need conversion";
+              dbgKrita << "Images need conversion";
               doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
             }
             KTemporaryFile tmpFile;

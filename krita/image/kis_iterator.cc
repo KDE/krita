@@ -19,7 +19,7 @@
 
 #include <qglobal.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_iterator.h"
 #include "kis_datamanager.h"

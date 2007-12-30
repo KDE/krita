@@ -19,7 +19,7 @@
 #include <QRect>
 #include <QPointF>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include "kis_curve_framework.h"
 
 using namespace std;

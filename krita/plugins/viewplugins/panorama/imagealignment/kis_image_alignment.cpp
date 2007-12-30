@@ -73,12 +73,12 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
     std::vector<double> p( images.size() * DoubleHomographySameDistortionFunction::SIZEHOMOGRAPHYINDEXES + DoubleHomographySameDistortionFunction::SIZEINDEXES );
     int width = 1000; // TODO TMP variable
     int height = 1000; // TODO TMP variable
-    kDebug(41006) <<"Creating panorama with" << images.size() <<" images";
-    kDebug(41006) <<"Detecting interest points";
+    dbgPlugins <<"Creating panorama with" << images.size() <<" images";
+    dbgPlugins <<"Detecting interest points";
     const KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
     if(not graycs)
     {
-        kDebug(41006) <<"Gray 8bit is not installed."; // TODO: message box
+        dbgPlugins <<"Gray 8bit is not installed."; // TODO: message box
         return std::vector<Result>();
     }
     // Interest point detection
@@ -93,7 +93,7 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
 #if 1
         for(lInterestPoints::const_iterator itp = it->points.begin(); itp != it->points.end(); ++itp)
         {
-          kDebug(41006) <<"ip =" << (*itp)->x() <<"" << (*itp)->y() /* <<"" << (*itp)->toString() */;
+          dbgPlugins <<"ip =" << (*itp)->x() <<"" << (*itp)->y() /* <<"" << (*itp)->toString() */;
         }
 #endif
     }
@@ -114,15 +114,15 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
 #if 1
             for(lMatches::const_iterator itp = mp.begin(); itp != mp.end(); ++itp)
             {
-                kDebug(41006) << "match = " << itp->ref->x() << " " << itp->ref->y() << " " << itp->match->x() << " " << itp->match->y();
+                dbgPlugins << "match = " << itp->ref->x() << " " << itp->ref->y() << " " << itp->match->x() << " " << itp->match->y();
             }
 #endif
             std::list<ImageMatchModel*> models = ransac.findModels( mp );
             if( models.empty() )
             {
-                kDebug(41006) << "No model found";
+                dbgPlugins << "No model found";
             } else {
-                kDebug(41006) <<"Best model:" << (*models.begin())->fittingErrorSum() <<" with" << (*models.begin())->matches().size() <<" points";
+                dbgPlugins <<"Best model:" << (*models.begin())->fittingErrorSum() <<" with" << (*models.begin())->matches().size() <<" points";
                 it2->transfoToFrame = (*models.begin())->transfo();
                 it2->referenceFrame = &(*it);
                 controlPoints.addMatches( (*models.begin())->matches(), frameNbRef, frameNbMatch );
@@ -139,7 +139,7 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
         {
             Eigen::Matrix3d transfo = recComputeTransfo( images[i].transfoToFrame,  images[i].referenceFrame );
             Eigen::Matrix3d transfo2ref = images[i].transfoToFrame;
-            kDebug(41006) << i << " " << &(images[i]) << " Translation : " << transfo(0,2) << " " << transfo(1,2) << " Reference translation : " << transfo2ref(0,2) << " " << transfo2ref(1,2);
+            dbgPlugins << i << " " << &(images[i]) << " Translation : " << transfo(0,2) << " " << transfo(1,2) << " Reference translation : " << transfo2ref(0,2) << " " << transfo2ref(1,2);
             int frameStart = i * DoubleHomographySameDistortionFunction::SIZEHOMOGRAPHYINDEXES + DoubleHomographySameDistortionFunction::SIZEINDEXES;
             p[DoubleHomographySameDistortionFunction::INDX_h11 + frameStart] = transfo(0,0);
             p[DoubleHomographySameDistortionFunction::INDX_h21 + frameStart] = transfo(0,1);
@@ -153,10 +153,10 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
         double r;
         {
             r = Optimization::Algorithms::levenbergMarquardt(f, p, 300, 1e-12, 0.01, 10.0 );
-            kDebug(41006) <<"Remain =" << r;
+            dbgPlugins <<"Remain =" << r;
             for(uint i = 0; i < p.size(); i++)
             {
-                kDebug(41006) <<"p["<< i <<"]=" << p[i];
+                dbgPlugins <<"p["<< i <<"]=" << p[i];
             }
             std::vector<double> remains = f->values(p);
             std::cout << "Remains = " << remains << std::endl;
@@ -166,17 +166,17 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
         {
             f->removeOutlier( p, r * 1.1 );
             r = Optimization::Algorithms::levenbergMarquardt(f, p, 300, 1e-12, 0.01, 10.0 );
-            kDebug(41006) <<"Remain =" << r;
+            dbgPlugins <<"Remain =" << r;
             for(uint i = 0; i < p.size(); i++)
             {
-                kDebug(41006) <<"p["<< i <<"]=" << p[i];
+                dbgPlugins <<"p["<< i <<"]=" << p[i];
             }
             std::vector<double> remains = f->values(p);
             std::cout << "Remains = " << remains << std::endl;
         }
 #endif
     } else {
-        kDebug(41006) <<"No models found";
+        dbgPlugins <<"No models found";
         return std::vector<Result>();
     }
     

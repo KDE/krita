@@ -20,7 +20,7 @@
 
 #include <QDomNode>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_image.h"
@@ -88,19 +88,19 @@ void KisMacro::fromXML(const QDomElement& docElem)
             QString id = elt.attribute("id", "");
             if(not id.isNull())
             {
-                kDebug() << "Reconstruct : " << id << endl; // the node really is an element.
+                dbgImage << "Reconstruct : " << id << endl; // the node really is an element.
                 KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
                 if(raf)
                 {
                     d->actions.append( raf->fromXML( d->image, elt) );
                 } else {
-                    kDebug() << "Unknown action : " << id << endl;
+                    dbgImage << "Unknown action : " << id << endl;
                 }
             } else {
-                kDebug() << "Invalid recorded action: null id";
+                dbgImage << "Invalid recorded action: null id";
             }
         } else {
-            kDebug() << "Unknown element " << elt.tagName() << (elt.tagName() == "RecordedAction");
+            dbgImage << "Unknown element " << elt.tagName() << (elt.tagName() == "RecordedAction");
         }
         node = node.nextSibling();
     }

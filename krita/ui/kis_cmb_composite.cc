@@ -21,7 +21,7 @@
 #include <QComboBox>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <KoCompositeOp.h>
 #include "kis_cmb_composite.h"
 

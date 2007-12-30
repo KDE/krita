@@ -19,7 +19,7 @@
 
 #include <QDomElement>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 struct KisDynamicColoringProgram::Private {
 };
@@ -77,7 +77,7 @@ KisSerializableConfiguration* KisDynamicColoringProgramsFactory::create(const QD
     QString type = e.attribute("type", "");
     QString name = e.attribute("name", "");
     KisDynamicColoringProgramFactory* factory = KisDynamicColoringProgramFactoryRegistry::instance()->value( type );
-    kDebug() << "Type is : " << type;
+    dbgKrita << "Type is : " << type;
     Q_ASSERT(factory);
     KisDynamicColoringProgram* program = factory->coloringProgram( name );
     Q_ASSERT(program);

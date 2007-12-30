@@ -22,7 +22,7 @@
 #include <QImage>
 #include <QVector>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <QPoint>
 #include <QPolygon>
 
@@ -30,7 +30,7 @@
 #include "KoIntegerMaths.h"
 
 #include "kis_layer.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_types.h"
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"

@@ -21,7 +21,7 @@
 
 #include <KoColorSpaceTraits.h>
 
-#include <kis_debug_areas.h>
+#include <kis_debug.h>
 #include <kis_bookmarked_configuration_manager.h>
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
@@ -107,10 +107,10 @@ KisPropertiesConfiguration * KisToneMappingOperator::defaultConfiguration() cons
     }
     if(not fc )
     {
-        kDebug( DBG_AREA_PLUGINS ) << "Factory configuration";
+        dbgPlugins << "Factory configuration";
         fc = factoryConfiguration();
     } else {
-        kDebug( DBG_AREA_PLUGINS ) << "Bookmark manager configuration";
+        dbgPlugins << "Bookmark manager configuration";
     }
     return fc;
 }

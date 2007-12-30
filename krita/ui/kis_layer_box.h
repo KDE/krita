@@ -28,7 +28,7 @@
 #include <QList>
 #include <QDockWidget>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoColorSpace.h>
 #include <KoDockFactory.h>

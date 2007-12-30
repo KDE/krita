@@ -23,7 +23,7 @@
 
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
-#include <kdebug.h>
+#include <kis_debug.h>
 
 class KisPolygon;
 

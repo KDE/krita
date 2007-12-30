@@ -31,7 +31,7 @@ K_EXPORT_COMPONENT_FACTORY(libkrita%{APPNAMELC}export, ExportFactory("kofficefil
 
 KoFilter::ConversionStatus %{APPNAME}Export::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(41008) <<"%{APPNAMEUC} export! From:" << from <<", To:" << to <<"";
+    dbgFile <<"%{APPNAMEUC} export! From:" << from <<", To:" << to <<"";
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -59,10 +59,10 @@ KoFilter::ConversionStatus %{APPNAME}Export::convert(const QByteArray& from, con
     KisImageBuilder_Result res;
 
     if ( (res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
-        kDebug(41008) <<"success !";
+        dbgFile <<"success !";
         return KoFilter::OK;
     }
-    kDebug(41008) <<" Result =" << res;
+    dbgFile <<" Result =" << res;
     return KoFilter::InternalError;
 }
 

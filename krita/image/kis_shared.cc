@@ -19,7 +19,7 @@
 #include <kis_shared.h>
 #include <kis_shared_data.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
         
 KisShared::KisShared() : dataPtr(new KisSharedData())
 {

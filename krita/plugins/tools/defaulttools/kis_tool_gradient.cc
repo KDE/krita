@@ -35,7 +35,7 @@
 #include <QLayout>
 #include <QCheckBox>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
 
@@ -126,8 +126,8 @@ void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter
                                                 normalisedGradientVectorStart + normalisedGradientVector);
 
 //                     glValidateProgramARB(m_gradientProgram->handle());
-//                     kDebug(DBG_AREA_TOOLS) <<"Validate:";
-//                     kDebug(DBG_AREA_TOOLS) << m_gradientProgram->getInfoLog();
+//                     dbgTools <<"Validate:";
+//                     dbgTools << m_gradientProgram->getInfoLog();
 
 
                     glBegin(GL_QUADS);

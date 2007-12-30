@@ -19,7 +19,7 @@
 
 #include <kdialog.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "ui_FiltersListDynamicProgramEditor.h"
 
@@ -69,7 +69,7 @@ void KisFiltersListDynamicProgramEditor::setCurrentFilter(const QModelIndex& ind
         m_currentFilterEditor = 0;
     }
     m_currentFilterEditor = m_program->transfoAt( index.row() )->createConfigWidget(  m_filtersListDynamicProgramEditor->groupBoxProperties );
-    kDebug(41006) << m_currentFilterEditor;
+    dbgPlugins << m_currentFilterEditor;
     if(m_currentFilterEditor)
     {
         m_filtersListDynamicProgramEditor->widgetNoProperties->setVisible(false);         m_filtersListDynamicProgramEditor->gridLayout->addWidget( m_currentFilterEditor, 0,0,1,1);

@@ -17,7 +17,7 @@
  */
 #include "kis_image_view_converter.h"
 
-// #include <kdebug.h>
+// #include <kis_debug.h>
 
 KisImageViewConverter::KisImageViewConverter(const KisImageSP image)
     : m_image(image)

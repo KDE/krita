@@ -25,10 +25,10 @@
 #include <QSpinBox>
 
 #include <kaction.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <knuminput.h>
 
 #include <KoPointerEvent.h>

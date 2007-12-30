@@ -21,7 +21,7 @@
 #include <math.h>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "dlg_rotateimage.h"
 

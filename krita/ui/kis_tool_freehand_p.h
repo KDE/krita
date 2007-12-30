@@ -27,7 +27,7 @@
 #include <QQueue>
 #include <QMutexLocker>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kis_paint_information.h>
 
 #ifdef Q_CC_MSVC
@@ -126,7 +126,7 @@ public:
     virtual void run()
         {
             QMutexLocker lockRunning(&m_mutex_running);
-            kDebug(41007) <<"run";
+            dbgUI <<"run";
             while(not m_finish or not empty() )
             {
                 FreehandPaintJob* nextJob = 0;
@@ -137,7 +137,7 @@ public:
                         nextJob = m_queue.dequeue();
                     }
                 }
-                kDebug(41007) <<"nextJob =" << nextJob;
+                dbgUI <<"nextJob =" << nextJob;
                 if(nextJob)
                 {
                     nextJob->run();
@@ -145,12 +145,12 @@ public:
                     msleep(1);
                 }
             }
-            kDebug(41007) <<"finish running";
+            dbgUI <<"finish running";
         }
         void postJob(FreehandPaintJob* job)
         {
             QMutexLocker lock(&m_mutex_queue);
-            kDebug(41007) <<"push job =" << job;
+            dbgUI <<"push job =" << job;
             m_queue.enqueue(job);
         }
         void finish() {

@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_entry.h>
@@ -63,12 +63,12 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         QDomDocument document;
         if(not document.setContent(&xmlFile, false, &errMsg, &errLine, &errCol))
         {
-            kDebug(41006) <<"Error reading XML at line" << errLine <<" column" << errCol <<" :" << errMsg;
+            dbgPlugins <<"Error reading XML at line" << errLine <<" column" << errCol <<" :" << errMsg;
         }
         QDomElement rootElement = document.documentElement();
         if(rootElement.tagName() != "MetaDataEditor")
         {
-            kDebug(41006) <<"Invalid XML file";
+            dbgPlugins <<"Invalid XML file";
         }
         
         const QString uiFileName = rootElement.attribute("uiFile");
@@ -83,7 +83,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         QWidget *widget = dynamic_cast<QWidget*>(loader.load(&uiFile, this));
         if(widget ==0)
         {
-            kDebug(41006) <<"Failed to load ui file" << uiFileName;
+            dbgPlugins <<"Failed to load ui file" << uiFileName;
             continue;
         }
         uiFile.close();
@@ -108,7 +108,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                 {
                     if( not d->store->hasEntry( schema, entryName))
                     {
-                        kDebug(41006) <<" Store doesn't have yet entry :" << entryName <<" in" << schemaUri  <<" ==" << schema->generateQualifiedName(entryName);
+                        dbgPlugins <<" Store doesn't have yet entry :" << entryName <<" in" << schemaUri  <<" ==" << schema->generateQualifiedName(entryName);
                     }
                     KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
                     KisEntryEditor* ee = 0;
@@ -128,10 +128,10 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                     }
                     d->entryEditors.insert(&value, ee);
                 } else {
-                    kDebug(41006) <<"Unknown schema :" << schemaUri;
+                    dbgPlugins <<"Unknown schema :" << schemaUri;
                 }
             } else {
-                kDebug(41006) <<"Unknown object :" << editorName;
+                dbgPlugins <<"Unknown object :" << editorName;
             }
         }
         xmlFile.close();

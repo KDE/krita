@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 
 #include "KoToolRegistry.h"

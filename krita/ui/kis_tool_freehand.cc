@@ -29,7 +29,7 @@
 #include <QThread>
 #include <QWidget>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoPointerEvent.h>
@@ -260,7 +260,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     }
     m_previousTangent = QPointF(0,0);
     m_previousDrag = QPointF(0,0);
-/*    kDebug(41007) <<"target:" << m_target <<"(" << m_target->name() <<" )"
+/*    dbgUI <<"target:" << m_target <<"(" << m_target->name() <<" )"
       << " source: " << m_source << "( " << m_source->name() << " )"
       << ", incremental " << m_paintIncremental
       << ", paint on selection: " << m_paintOnSelection
@@ -366,7 +366,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
 {
     m_paintJobs.append(job);
-    kDebug(41007) << "Queue length:" << m_executor->queueLength();
+    dbgUI << "Queue length:" << m_executor->queueLength();
     m_executor->postJob(job);
 }
 

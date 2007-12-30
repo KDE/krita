@@ -29,7 +29,7 @@
 #include <QClipboard>
 #include <QColor>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <klocale.h>
@@ -50,7 +50,7 @@
 #include "kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_convolution_painter.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_doc2.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
@@ -1750,8 +1750,8 @@ void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
                 i++;
             }
 
-        kDebug(41010) <<"Polygons :" << i;
-        kDebug(41010) <<"Painting marching ants :" << t.elapsed();
+        dbgRender <<"Polygons :" << i;
+        dbgRender <<"Painting marching ants :" << t.elapsed();
 
         gc.setWorldMatrix( oldWorldMatrix);
     }

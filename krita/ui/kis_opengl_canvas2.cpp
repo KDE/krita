@@ -30,7 +30,7 @@
 #include <QPaintEvent>
 #include <QPoint>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kxmlguifactory.h>
 
 #include "KoToolProxy.h"
@@ -46,7 +46,7 @@
 #include "kis_view2.h"
 #include "kis_resource_provider.h"
 #include "kis_config.h"
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_selection_manager.h"
 #include "kis_grid_drawer.h"
 
@@ -79,9 +79,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
     if (isSharing()) {
-        kDebug(DBG_AREA_UI) <<"Created QGLWidget with sharing";
+        dbgUI <<"Created QGLWidget with sharing";
     } else {
-        kDebug(DBG_AREA_UI) <<"Created QGLWidget with no sharing";
+        dbgUI <<"Created QGLWidget with no sharing";
     }
 }
 
@@ -330,7 +330,7 @@ void KisOpenGLCanvas2::keyReleaseEvent (QKeyEvent *e) {
 
 void KisOpenGLCanvas2::tabletEvent( QTabletEvent *e )
 {
-    kDebug(41010) <<"tablet event:" << e->pressure();
+    dbgRender <<"tablet event:" << e->pressure();
     QPointF pos = e->pos() + (e->hiResGlobalPos() - e->globalPos());
     pos += m_d->documentOffset;
     m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );

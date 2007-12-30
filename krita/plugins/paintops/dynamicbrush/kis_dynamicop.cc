@@ -24,7 +24,7 @@
 #include <QRect>
 #include <QWidget>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

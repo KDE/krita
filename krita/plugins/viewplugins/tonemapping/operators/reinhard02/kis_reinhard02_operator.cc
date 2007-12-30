@@ -86,12 +86,12 @@ void KisReinhard02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfig
 {
     Q_ASSERT( *device->colorSpace() == *colorSpace() );
     QRect r = device->exactBounds();
-    kDebug() << "Tonemaping with Reinhard02 operator on " << r;
+    dbgKrita << "Tonemaping with Reinhard02 operator on " << r;
     
     pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
     
     pfs::Array2DImpl L (r.width(),r.height());
-    kDebug() << "tmo_ashikhmin02";
+    dbgKrita << "tmo_ashikhmin02";
     tmo_reinhard02(&Y, &L, config->getBool("Scales", false),
                     config->getDouble("Key", 0.18),
                     config->getDouble("Phi", 1.00),
@@ -99,7 +99,7 @@ void KisReinhard02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfig
                     config->getDouble("Lower", 1.0),
                     config->getDouble("Upper", 43.0),
                     config->getBool("TimeCoherent", false));
-    kDebug() << "Apply luminance";
+    dbgKrita << "Apply luminance";
     applyLuminance(device, L.device(), r);
-    kDebug() << "Done";
+    dbgKrita << "Done";
 }

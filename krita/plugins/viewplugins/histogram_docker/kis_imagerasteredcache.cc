@@ -22,7 +22,7 @@
 
 #include <QApplication>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <kis_global.h>
 #include <kis_types.h>

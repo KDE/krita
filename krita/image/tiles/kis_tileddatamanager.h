@@ -25,7 +25,7 @@
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
 
-#include "kis_tile_global.h"
+#include "kis_debug.h"
 #include "kis_tile.h"
 #include "kis_memento.h"
 #include "krita_export.h"

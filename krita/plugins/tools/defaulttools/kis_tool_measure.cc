@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QComboBox>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "kis_tool_measure.h"

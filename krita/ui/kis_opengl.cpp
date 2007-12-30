@@ -38,9 +38,9 @@
 
 #include <QGLWidget>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 
 QGLWidget *KisOpenGL::SharedContextWidget = 0;
 
@@ -48,7 +48,7 @@ void KisOpenGL::createContext()
 {
     Q_ASSERT(SharedContextWidget == 0);
 
-    kDebug(DBG_AREA_UI) <<"Creating shared context widget";
+    dbgUI <<"Creating shared context widget";
 
     SharedContextWidget = new QGLWidget();//KisOpenGLCanvasFormat);
     SharedContextWidget->makeCurrent();
@@ -73,9 +73,9 @@ void KisOpenGL::initGlew()
 #ifdef HAVE_GLEW
     GLenum err = glewInit();
     if (GLEW_OK != err) {
-        kDebug(DBG_AREA_UI) <<"glewInit error:" << (const char *)glewGetErrorString(err);
+        dbgUI <<"glewInit error:" << (const char *)glewGetErrorString(err);
     } else {
-        kDebug(DBG_AREA_UI) <<"Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
+        dbgUI <<"Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
     }
 #endif
 }
@@ -90,10 +90,10 @@ bool KisOpenGL::hasShadingLanguage()
 
         if (GLEW_ARB_shader_objects && GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader
             && GLEW_ARB_shading_language_100) {
-            kDebug(DBG_AREA_UI) <<"Check: have opengl shading extensions";
+            dbgUI <<"Check: have opengl shading extensions";
             haveShadingLanguage = true;
         } else {
-            kDebug(DBG_AREA_UI) <<"Check: don't have opengl shading extensions";
+            dbgUI <<"Check: don't have opengl shading extensions";
         }
     }
 #endif
@@ -106,13 +106,13 @@ void KisOpenGL::printError(const char *file, int line)
 
     while (glErr != GL_NO_ERROR) {
 
-        kDebug(DBG_AREA_UI) <<"glError:" << (const char *)gluErrorString(glErr);
+        dbgUI <<"glError:" << (const char *)gluErrorString(glErr);
 
         if (file != 0) {
             if (line != -1) {
-                kDebug(DBG_AREA_UI) <<" at" << file <<" line" << line;
+                dbgUI <<" at" << file <<" line" << line;
             } else {
-                kDebug(DBG_AREA_UI) <<" in" << file;
+                dbgUI <<" in" << file;
             }
         }
 

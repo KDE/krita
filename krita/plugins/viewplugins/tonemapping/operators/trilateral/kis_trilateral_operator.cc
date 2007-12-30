@@ -80,18 +80,18 @@ void KisTrilateralOperator::toneMap(KisPaintDeviceSP device, KisPropertiesConfig
 {
     Q_ASSERT( *device->colorSpace() == *colorSpace() );
     QRect r = device->exactBounds();
-    kDebug() << "Tonemaping with Trilateral operator on " << r;
+    dbgKrita << "Tonemaping with Trilateral operator on " << r;
     
     pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
     
     pfs::Array2DImpl L (r.width(),r.height());
-    kDebug() << "tmo_ashikhmin02";
+    dbgKrita << "tmo_ashikhmin02";
     tmo_trilateral(&Y, &L,
                     config->getDouble("Contrast", 5.0),
                     config->getDouble("Sigma", 21.0),
                     config->getDouble("Shift", 0.0),
                     config->getDouble("Saturation", 1.0) );
-    kDebug() << "Apply luminance";
+    dbgKrita << "Apply luminance";
     applyLuminance(device, L.device(), r);
-    kDebug() << "Done";
+    dbgKrita << "Done";
 }

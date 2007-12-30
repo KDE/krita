@@ -21,7 +21,7 @@
 #include "kis_painterly_overlay.h"
 #include "kis_painterly_overlay_colorspace.h"
 #include "kis_types.h"
-#include <kdebug.h>
+#include <kis_debug.h>
 
 
 void KisPainterlyOverlayTest::testConstructor()

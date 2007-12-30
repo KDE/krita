@@ -22,7 +22,7 @@
 #ifndef KIS_DOC_2_H_
 #define KIS_DOC_2_H_
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoDocument.h>
 

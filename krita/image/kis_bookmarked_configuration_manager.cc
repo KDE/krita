@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoID.h>
 
@@ -34,7 +34,7 @@
 #include <iso646.h>
 #endif
 
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include "kis_serializable_configuration.h"
 
 const KoID KisBookmarkedConfigurationManager::ConfigDefault = KoID("Default", i18n("Default"));
@@ -71,13 +71,13 @@ KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(QString co
     doc.setContent( cfg.readEntry<QString>(configname, "") );
     QDomElement e = doc.documentElement();
     KisSerializableConfiguration* config = d->configFactory->create(e);
-    kDebug() << config << endl;
+    dbgImage << config << endl;
     return config;
 }
 
 void KisBookmarkedConfigurationManager::save(QString configname, const KisSerializableConfiguration* config)
 {
-    kDebug(DBG_AREA_IMAGE) << "Saving configuration " << config << " to " << configname;
+    dbgImage << "Saving configuration " << config << " to " << configname;
     if(not config) return;
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
     cfg.writeEntry(configname,config->toXML());

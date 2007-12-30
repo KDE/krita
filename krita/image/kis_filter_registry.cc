@@ -19,14 +19,14 @@
 #include <QString>
 
 #include <kaction.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
 #include <kparts/componentfactory.h>
-#include "kis_debug_areas.h"
+#include "kis_debug.h"
 #include <math.h>
 #include "kis_types.h"
 #include "kis_filter_registry.h"
@@ -53,7 +53,7 @@ KisFilterRegistry::KisFilterRegistry()
         KParts::Plugin* plugin =
              KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
         if ( !plugin ) {
-            kDebug(41006) <<"found plugin" << service->property("Name").toString() <<"," << errCode <<"";
+            dbgPlugins <<"found plugin" << service->property("Name").toString() <<"," << errCode <<"";
             if( errCode == KLibLoader::ErrNoLibrary)
             {
                 kWarning(41006) <<" Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();

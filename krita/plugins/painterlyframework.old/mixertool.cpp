@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>

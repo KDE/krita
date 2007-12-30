@@ -28,7 +28,7 @@
 #include <QImage>
 #include <QPoint>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoColor.h>

@@ -19,7 +19,7 @@
 #include <QComboBox>
 #include <QVBoxLayout>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_view2.h"
 #include "kis_palette_docker.h"

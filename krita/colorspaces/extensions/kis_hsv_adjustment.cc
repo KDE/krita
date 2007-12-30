@@ -24,7 +24,7 @@
 #include <half.h>
 #endif
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoColorConversions.h>

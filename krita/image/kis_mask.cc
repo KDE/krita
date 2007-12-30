@@ -17,7 +17,7 @@
  */
 #include "kis_mask.h"
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <klocale.h>
 
 #include "KoColorSpaceRegistry.h"

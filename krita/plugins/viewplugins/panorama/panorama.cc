@@ -23,7 +23,7 @@
 
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -87,9 +87,9 @@ void PanoramaPlugin::addImage(const QString& filename)
 
 void PanoramaPlugin::slotAddImages()
 {
-//     kDebug(41006) <<"Add image";
+//     dbgPlugins <<"Add image";
     QStringList openfiles = KFileDialog::getOpenFileNames(KUrl(),"*", m_view);
-//     kDebug(41006) << openfiles.size() <<" files selected for inclusion";
+//     dbgPlugins << openfiles.size() <<" files selected for inclusion";
     QString filename;
     foreach(filename, openfiles)
     {
@@ -127,7 +127,7 @@ void PanoramaPlugin::slotImageDown()
 
 void PanoramaPlugin::slotCreatePanoramaLayer()
 {
-    kDebug(41006) <<"Create a panorama layer";
+    dbgPlugins <<"Create a panorama layer";
     delete m_wdgPanoramaCreation;
     m_wdgPanoramaCreation = new Ui_WdgPanoramaCreation();
     
@@ -178,7 +178,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
         for(int i = 0; i < m_wdgPanoramaCreation->listImages->count(); i++)
         {
             QString fileName = m_wdgPanoramaCreation->listImages->item(i)->text();
-            kDebug(41006) <<"Loading fileName" << fileName;
+            dbgPlugins <<"Loading fileName" << fileName;
             KisDoc2 d;
             d.import(fileName);
             KisImageAlignment::ImageInfo pi;
@@ -217,7 +217,7 @@ void PanoramaPlugin::slotPreview()
     for(int i = 0; i < m_wdgPanoramaCreation->listImages->count(); i++)
     {
         QString fileName = m_wdgPanoramaCreation->listImages->item(i)->text();
-        kDebug(41006) <<"Loading fileName" << fileName;
+        dbgPlugins <<"Loading fileName" << fileName;
         KisDoc2 d;
         d.import(fileName);
         KisImageAlignment::ImageInfo pi;

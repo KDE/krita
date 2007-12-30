@@ -76,7 +76,7 @@ void KisUnsharpFilter::process(KisFilterConstProcessingInformation src,
     double amount = (config->getProperty("amount", value)) ? value.toDouble() : 0.5;
     uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 10;
 
-//     kDebug() <<" brush size =" << size <<"" << halfSize;
+//     dbgKrita <<" brush size =" << size <<"" << halfSize;
     KisAutobrushShape* kas = new KisAutobrushCircleShape(brushsize, brushsize, halfSize, halfSize);
 
     QImage mask = kas->createBrush();

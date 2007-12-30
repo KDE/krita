@@ -19,7 +19,7 @@
  */
 #include <QStringList>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kgenericfactory.h>
 
 #include <kis_tool.h>

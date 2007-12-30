@@ -32,7 +32,7 @@
 #include <QApplication>
 #include <QMenu>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kxmlguifactory.h>
 
 #include <KoColorProfile.h>
@@ -114,7 +114,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     KisConfig cfg;
 
-    kDebug(41010) <<"paintEvent: rect" << ev->rect() <<", doc offset:" << m_d->documentOffset;
+    dbgRender <<"paintEvent: rect" << ev->rect() <<", doc offset:" << m_d->documentOffset;
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
@@ -150,16 +150,16 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
             }
             gc.save();
             gc.translate(-m_d->documentOffset );
-            kDebug(41010) << "qpainter canvas fillRect: " << fillRect;
+            dbgRender << "qpainter canvas fillRect: " << fillRect;
             gc.fillRect( fillRect, m_d->checkBrush );
             gc.restore();
         }
         else {
             // Checks
-            kDebug(41010) << "qpainter canvas fillRect: " << ev->rect();
+            dbgRender << "qpainter canvas fillRect: " << ev->rect();
             gc.fillRect(ev->rect(), m_d->checkBrush );
         }
-        kDebug(41010) <<"Painting checks:" << t.elapsed();
+        dbgRender <<"Painting checks:" << t.elapsed();
     }
     t.restart();
     gc.setCompositionMode( QPainter::CompositionMode_SourceOver );
@@ -170,7 +170,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     else {
         gc.drawImage( ev->rect(), m_d->prescaledProjection->prescaledQImage(), ev->rect() );
     }
-    kDebug(41010) <<"Drawing image:" << t.elapsed();
+    dbgRender <<"Drawing image:" << t.elapsed();
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random()%255, random()%255, random()%255, 150);
@@ -192,7 +192,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     QPainter gc2( this );
     t.restart();
     gc2.drawPixmap( ev->rect().topLeft(), pm );
-    kDebug(41010 ) <<"Drawing pixmap on widget:" << t.elapsed();
+    dbgRender <<"Drawing pixmap on widget:" << t.elapsed();
 }
 
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
@@ -240,7 +240,7 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
 
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
 {
-    kDebug(41010) <<"tablet event:" << e->pressure();
+    dbgRender <<"tablet event:" << e->pressure();
     QPointF pos = e->pos() + (e->hiResGlobalPos() - e->globalPos());
     pos += m_d->documentOffset;
     m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
@@ -274,7 +274,7 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 
 void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 {
-    kDebug(41010) << "KisQPainterCanvas::documentOffsetMoved " << pt;
+    dbgRender << "KisQPainterCanvas::documentOffsetMoved " << pt;
     m_d->documentOffset = pt;
     m_d->prescaledProjection->documentOffsetMoved( pt );
     update();
@@ -282,7 +282,7 @@ void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
 
 void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 {
-    kDebug(41010) << "KisQPainterCanvas::resizeEvent : " << e->size();
+    dbgRender << "KisQPainterCanvas::resizeEvent : " << e->size();
     m_d->prescaledProjection->resizePrescaledImage( e->size() );
 }
 

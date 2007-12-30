@@ -82,12 +82,12 @@ void KisIcamOperator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguratio
 {
     Q_ASSERT( *device->colorSpace() == *colorSpace() );
     QRect r = device->exactBounds();
-    kDebug() << "Tonemaping with Icam operator on " << r;
+    dbgKrita << "Tonemaping with Icam operator on " << r;
     
     pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
     
     pfs::Array2DImpl L (r.width(),r.height());
-    kDebug() << "tmo_ashikhmin02";
+    dbgKrita << "tmo_ashikhmin02";
     icam::tmo_icam(&Y, &L,
                     config->getDouble("Variance", -0.1),
                     config->getDouble("Variance2", -0.3),
@@ -95,7 +95,7 @@ void KisIcamOperator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguratio
                     config->getDouble("Prescaling", 1000.0),
                     config->getDouble("Percentile", 0.01),
                     config->getBool("Independence", false) );
-    kDebug() << "Apply luminance";
+    dbgKrita << "Apply luminance";
     applyLuminance(device, L.device(), r);
-    kDebug() << "Done";
+    dbgKrita << "Done";
 }

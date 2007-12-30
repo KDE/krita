@@ -82,8 +82,7 @@ PanoramaPlugin::~PanoramaPlugin()
 
 void PanoramaPlugin::addImage(const QString& filename)
 {
-    QListWidgetItem* item = new QListWidgetItem(filename,
-                                                m_wdgPanoramaCreation->listImages);
+    new QListWidgetItem(filename, m_wdgPanoramaCreation->listImages);
 }
 
 void PanoramaPlugin::slotAddImages()
@@ -133,7 +132,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     m_wdgPanoramaCreation = new Ui_WdgPanoramaCreation();
     
     QDialog* dialog = new QDialog(m_view);
-    dialog->setCaption(i18n("Create Panorama Layer"));
+    dialog->setWindowTitle(i18n("Create Panorama Layer"));
     dialog->setModal(true);
     m_wdgPanoramaCreation->setupUi(dialog);
 

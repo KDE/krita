@@ -500,16 +500,17 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             jt(pos, INDX_c ) = (dc2f1_1 * h11_1 + dc2f2_1 * h21_1) * norm_1 - (dc2f1_2 * h11_2 + dc2f2_2 * h21_2) * norm_2;
             // Image 1
 #if 0
-            jt(pos, INDX_h11_1 ]) = (fx1)*norm_1; // dh11
-            jt(pos, INDX_h21_1 ]) = (fy1)*norm_1; // dh21
-            jt(pos, INDX_h31_1 ]) = norm_1; // dh31
-            jt(pos, INDX_h12_1 ]) = 0; // dh12
-            jt(pos, INDX_h22_1 ]) = 0; // dh22
-            jt(pos, INDX_h32_1 ]) = 0; // dh32
-            jt(pos, INDX_h13_1 ]) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fx1; 
-            jt(pos, INDX_h23_1 ]) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fy1;
+            jt(pos, INDX_h11 + frame1start ) = (fx1)*norm_1; // dh11
+            jt(pos, INDX_h21 + frame1start ) = (fy1)*norm_1; // dh21
+            jt(pos, INDX_h31 + frame1start ) = norm_1; // dh31
+            jt(pos, INDX_h12 + frame1start ) = 0; // dh12
+            jt(pos, INDX_h22 + frame1start ) = 0; // dh22
+            jt(pos, INDX_h32 + frame1start ) = 0; // dh32
+            jt(pos, INDX_h13 + frame1start ) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fx1; 
+            jt(pos, INDX_h23 + frame1start ) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fy1;
 #endif
             // Image 2
+#if 1
             jt(pos, INDX_h11 + frame2start ) = -(fx2)*norm_2; // dh11
             jt(pos, INDX_h21 + frame2start ) = -(fy2)*norm_2; // dh21
             jt(pos, INDX_h31 + frame2start ) = -norm_2; // dh31
@@ -518,6 +519,7 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             jt(pos, INDX_h32 + frame2start ) = 0; // dh32
             jt(pos, INDX_h13 + frame2start ) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
             jt(pos, INDX_h23 + frame2start ) = (h11_2 * fx2 + h21_2 * fy2 + h31_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+#endif
             // derivative of the second function
             jt(pos + 1, INDX_a ) = (da2f1_1 * h12_1 + da2f2_1 * h22_1) * norm_1
                     - (da2f1_2 * h12_2 + da2f2_2 * h22_2) * norm_2;
@@ -527,16 +529,17 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
                     - (dc2f1_2 * h12_2 + dc2f2_2 * h22_2) * norm_2;
             // Image 1
 #if 0
-            jt(pos + 1, INDX_h11_1 ) = 0; // dh11
-            jt(pos + 1, INDX_h21_1 ) = 0; // dh21
-            jt(pos + 1, INDX_h31_1 ) = 0; // dh31
-            jt(pos + 1, INDX_h12_1 ) = (fx1) * norm_1; // dh12
-            jt(pos + 1, INDX_h22_1 ) = (fy1) * norm_1; // dh22
-            jt(pos + 1, INDX_h32_1 ) = norm_1; // dh32
-            jt(pos + 1, INDX_h13_1 ) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_1 * fx2; // dh13 note: (-1) * (-1) = +1
-            jt(pos + 1, INDX_h23_1 ) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_1 * fy2; // dh23 note: (-1) * (-1) = +1
+            jt(pos + 1, INDX_h11 + frame1start ) = 0; // dh11
+            jt(pos + 1, INDX_h21 + frame1start ) = 0; // dh21
+            jt(pos + 1, INDX_h31 + frame1start ) = 0; // dh31
+            jt(pos + 1, INDX_h12 + frame1start ) = (fx1) * norm_1; // dh12
+            jt(pos + 1, INDX_h22 + frame1start ) = (fy1) * norm_1; // dh22
+            jt(pos + 1, INDX_h32 + frame1start ) = norm_1; // dh32
+            jt(pos + 1, INDX_h13 + frame1start ) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_1 * fx2; // dh13 note: (-1) * (-1) = +1
+            jt(pos + 1, INDX_h23 + frame1start ) = -(h12_1 * fx1 + h22_1 * fy1 + h32_1) * norm_1 * norm_1 * fy2; // dh23 note: (-1) * (-1) = +1
 #endif
             // Image 2
+#if 1
             jt(pos + 1, INDX_h11 + frame2start) = 0; // dh11
             jt(pos + 1, INDX_h21 + frame2start) = 0; // dh21
             jt(pos + 1, INDX_h31 + frame2start) = 0; // dh31
@@ -545,6 +548,7 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             jt(pos + 1, INDX_h32 + frame2start) = -norm_2; // dh32
             jt(pos + 1, INDX_h13 + frame2start) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fx2; // dh13 note: (-1) * (-1) = +1
             jt(pos + 1, INDX_h23 + frame2start) = (h12_2 * fx2 + h22_2 * fy2 + h32_2) * norm_2 * norm_2 * fy2; // dh23 note: (-1) * (-1) = +1
+#endif
         }
 //     private:
     public:

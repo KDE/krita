@@ -141,20 +141,20 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
 //     addImage("/home/cyrille/H0010633.JPG");
 //     addImage("/home/cyrille/0.roma.png");
 //     addImage("/home/cyrille/1.roma.png");
-/*    addImage("/home/cyrille/0.roma2.png");
+    addImage("/home/cyrille/0.roma2.png");
     addImage("/home/cyrille/1.roma2.png");
     addImage("/home/cyrille/2.roma2.png");
-    addImage("/home/cyrille/3.roma2.png");*/
+    addImage("/home/cyrille/3.roma2.png");
 //     addImage("/home/cyrille/0.montreal.2.png");
 //     addImage("/home/cyrille/1.montreal.2.png");
 //     addImage("/home/cyrille/2.montreal.2.png");
-//     addImage("/home/cyrille/0.montreal.png");
-//     addImage("/home/cyrille/1.montreal.png");
-//     addImage("/home/cyrille/2.montreal.png");
-   addImage("/home/cyrille/0.graffitis.png");
+/*    addImage("/home/cyrille/0.montreal.png");
+    addImage("/home/cyrille/1.montreal.png");
+    addImage("/home/cyrille/2.montreal.png");*/
+/*   addImage("/home/cyrille/0.graffitis.png");
    addImage("/home/cyrille/1.graffitis.png");
    addImage("/home/cyrille/2.graffitis.png");
-   addImage("/home/cyrille/3.graffitis.png");
+   addImage("/home/cyrille/3.graffitis.png");*/
 //     addImage("/home/cyrille/0.a.png");
 //     addImage("/home/cyrille/1.a.png");
 

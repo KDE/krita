@@ -470,7 +470,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
 //                 kDebug(41006) << vitinfoDeviceRect.x() <<"" << vitinfoDeviceRect.y() <<"" << infoValue[INFO_XX] <<"" << infoValue[INFO_YY]  <<"" << infoValue[INFO_XY] <<"" << infoValue[INFO_HIGH] <<"" << infoValue[INFO_LOW] <<"" << trace <<"" << temp <<"" << det;
             }
         }
-        HarrisPoints zones(3, 3, rect.width(), rect.height(), FEATURES_QUANTITY );
+        HarrisPoints zones(5, 5, rect.width(), rect.height(), FEATURES_QUANTITY );
         // Detect Harris Points
         {
             int margin = 8;

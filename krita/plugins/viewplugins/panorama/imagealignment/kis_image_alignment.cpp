@@ -111,10 +111,12 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
         for(; it2 != images.end(); ++it2, ++frameNbMatch)
         {
             lMatches mp = matching(it->points, it2->points);
-        for(lMatches::const_iterator itp = mp.begin(); itp != mp.end(); ++itp)
-        {
-            kDebug(41006) << "match = " << itp->ref->x() << " " << itp->ref->y() << " " << itp->match->x() << " " << itp->match->y();
-        }
+#if 1
+            for(lMatches::const_iterator itp = mp.begin(); itp != mp.end(); ++itp)
+            {
+                kDebug(41006) << "match = " << itp->ref->x() << " " << itp->ref->y() << " " << itp->match->x() << " " << itp->match->y();
+            }
+#endif
             std::list<ImageMatchModel*> models = ransac.findModels( mp );
             if( models.empty() )
             {
@@ -159,6 +161,7 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
             std::vector<double> remains = f->values(p);
             std::cout << "Remains = " << remains << std::endl;
         }
+#if 1
         // Remove outliers and reoptimize
         {
             f->removeOutlier( p, r * 1.1 );
@@ -171,6 +174,7 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
             std::vector<double> remains = f->values(p);
             std::cout << "Remains = " << remains << std::endl;
         }
+#endif
     } else {
         kDebug(41006) <<"No models found";
         return std::vector<Result>();

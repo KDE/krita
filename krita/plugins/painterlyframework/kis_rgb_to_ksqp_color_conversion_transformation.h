@@ -118,7 +118,7 @@ protected:
 
         do {
             gsl_cqpminimizer_iterate(m_s);
-        } while (gsl_cqpminimizer_test_convergence(m_s, 1e-10, 1e-10) == GSL_CONTINUE);
+        } while (gsl_cqpminimizer_test_convergence(m_s, 1e-7, 1e-7) == GSL_CONTINUE);
 
         for (uint i = 0; i < 9; i++) {
             double curr = gsl_vector_get(gsl_cqpminimizer_x(m_s), i);

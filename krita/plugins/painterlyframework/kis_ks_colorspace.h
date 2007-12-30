@@ -33,6 +33,8 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
+#include <QDomElement>
+
 #define KSFloat32BitsColorDepthID KoID("KSF32", i18n("32 Bits Float"))
 
 template<int _N_>
@@ -51,8 +53,8 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
         const KoColorProfile *profile() const;
         bool profileIsCompatible(const KoColorProfile *profile) const;
 
-        void colorToXML(const quint8*, QDomDocument&, QDomElement&) const {} // TODO
-        void colorFromXML(quint8*, const QDomElement&) const {} // TODO
+        void colorToXML(const quint8*, QDomDocument&, QDomElement&) const; // {} // TODO
+        void colorFromXML(quint8*, const QDomElement&) const; // {} // TODO
 
         KoID colorDepthId() const { return KSFloat32BitsColorDepthID; }
 
@@ -134,25 +136,26 @@ bool KisKSColorSpace<_N_>::profileIsCompatible(const KoColorProfile *profile) co
         return false;
     return true;
 }
-/*
+
 template< int _N_ >
 void KisKSColorSpace<_N_>::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const typename _CSTraits::Pixel* p = reinterpret_cast<const typename _CSTraits::Pixel*>( pixel );
-    QDomElement labElt = doc.createElement( "RGB" );
-    labElt.setAttribute("r", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->red) );
-    labElt.setAttribute("g", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->green) );
-    labElt.setAttribute("b", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->blue) );
-    labElt.setAttribute("space", profile()->name() );
-    colorElt.appendChild( labElt );
+    QDomElement labElt = doc.createElement("KS"+QString::number(_N_));
+    for (int i = 0; i < _N_; i++) {
+        labElt.setAttribute("K"+QString::number(i), (double)KisKSColorSpaceTrait<_N_>::K(pixel,i));
+        labElt.setAttribute("S"+QString::number(i), (double)KisKSColorSpaceTrait<_N_>::S(pixel,i));
+    }
+    labElt.setAttribute("space", profile()->name());
+    colorElt.appendChild(labElt);
 }
 
-void colorFromXML( quint8* pixel, const QDomElement& elt) const
+template< int _N_ >
+void KisKSColorSpace<_N_>::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    typename _CSTraits::Pixel* p = reinterpret_cast<typename _CSTraits::Pixel*>( pixel );
-    p->red = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("r").toDouble());
-    p->green = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("g").toDouble());
-    p->blue = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    for (int i = 0; i < _N_; i++) {
+        KisKSColorSpaceTrait<_N_>::K(pixel,i) = elt.attribute("K"+QString::number(i)).toFloat();
+        KisKSColorSpaceTrait<_N_>::S(pixel,i) = elt.attribute("S"+QString::number(i)).toFloat();
+    }
 }
-*/
+
 #endif // KIS_KS_COLORSPACE_H_

@@ -57,15 +57,21 @@ public:
         // 3 - convert reflectances to K/S
 
         const quint16 *src = reinterpret_cast<const quint16*>(src8);
-        float c;
+        float c, checkcolor = 0;
 
         for ( ; nPixels > 0; nPixels-- ) {
             for (int i = 0; i < 3; i++) {
                 m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]), c);
                 gsl_vector_set(m_rgbvec, i, c);
+                checkcolor += c;
             }
 
-            RGBToReflectance();
+            if (checkcolor <= 0.0)
+                gsl_vector_set_all(m_refvec, 0.0);
+            else if (checkcolor >= 3.0)
+                gsl_vector_set_all(m_refvec, 1.0);
+            else
+                RGBToReflectance();
 
             for (int i = 0; i < _N_; i++) {
                 m_converter->reflectanceToKS((float)gsl_vector_get(m_refvec, i),

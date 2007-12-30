@@ -76,7 +76,7 @@ void KisKSColorSpaceTest::testToFromRgbA16()
     quint16 blue[4]   = { val,   0, 0,   val };
     quint16 green[4]  = { 0,   val, 0,   val };
     quint16 red[4]    = { 0,     0, val, val };
-    quint16 yellow[4] = { 0,   val, val, val };
+    quint16 yellow[4] = { val, val, val, val };
 
     quint16 bluegreen[8] = { val, 0, 0, val, 0, val, 0, val };
 

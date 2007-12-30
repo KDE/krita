@@ -57,16 +57,22 @@ public:
     void transform(const quint8 *src, quint8 *dst8, qint32 nPixels) const
     {
         quint16 *dst = reinterpret_cast<quint16*>(dst8);
-        float c;
+        float c, checkcolor = 0;
 
         for ( ; nPixels > 0; nPixels-- ) {
             for (int i = 0; i < _N_; i++) {
                 m_converter->KSToReflectance(KisKSColorSpaceTrait<_N_>::K(src, i),
                                              KisKSColorSpaceTrait<_N_>::S(src, i), c);
                 gsl_vector_set(m_refvec, i, c);
+                checkcolor += c;
             }
 
-            gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
+            if (checkcolor <= 0.0)
+                gsl_vector_set_all(m_rgbvec, 0.0);
+            else if (checkcolor >= (float)_N_)
+                gsl_vector_set_all(m_rgbvec, 1.0);
+            else
+                gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
             for (int i = 0; i < 3; i++) {
                 m_converter->RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), c);

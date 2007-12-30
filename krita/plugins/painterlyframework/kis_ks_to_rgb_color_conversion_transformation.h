@@ -94,7 +94,7 @@ class KisKSToRGBColorConversionTransformationFactory : public KoColorConversionT
 
 public:
     KisKSToRGBColorConversionTransformationFactory(const QString &srcId)
-    : KoColorConversionTransformationFactory(srcId, Float32BitsColorDepthID.id(),
+    : KoColorConversionTransformationFactory(srcId, KSFloat32BitsColorDepthID.id(),
                                               RGBAColorModelID.id(), Integer16BitsColorDepthID.id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,

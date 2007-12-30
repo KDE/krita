@@ -49,7 +49,7 @@ class KisKSLinearColorSpace : public KisKSColorSpace<3>
 
         static QString colorSpaceId()
         {
-            return "KS3LINEAR";
+            return "KS3LINEARF32";
         }
 
 };
@@ -60,7 +60,7 @@ class KisKSLinearColorSpaceFactory : public KoColorSpaceFactory
         QString id() const { return KisKSLinearColorSpace::colorSpaceId(); }
         QString name() const { return i18n("3-pairs Absorption-Scattering Linear (32 Bits Float)"); }
         KoID colorModelId() const { return KS3LINEARID; }
-        KoID colorDepthId() const { return Float32BitsColorDepthID; }
+        KoID colorDepthId() const { return KSFloat32BitsColorDepthID; }
         bool userVisible() const { return true; }
 
         int referenceDepth() const { return 32; }

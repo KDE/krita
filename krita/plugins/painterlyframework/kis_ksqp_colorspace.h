@@ -58,7 +58,7 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
         QString id() const { return KisKSQPColorSpace::colorSpaceId(); }
         QString name() const { return i18n("9-pairs Absorption-Scattering QP (32 Bits Float)"); }
         KoID colorModelId() const { return KS9QPID; }
-        KoID colorDepthId() const { return Float32BitsColorDepthID; }
+        KoID colorDepthId() const { return KSFloat32BitsColorDepthID; }
         bool userVisible() const { return true; }
 
         int referenceDepth() const { return 32; }

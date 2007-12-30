@@ -33,6 +33,8 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
+#define KSFloat32BitsColorDepthID KoID("KSF32", i18n("32 Bits Float"))
+
 template<int _N_>
 class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_> >
 {
@@ -52,7 +54,7 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
         void colorToXML(const quint8*, QDomDocument&, QDomElement&) const {} // TODO
         void colorFromXML(quint8*, const QDomElement&) const {} // TODO
 
-        KoID colorDepthId() const { return Float32BitsColorDepthID; }
+        KoID colorDepthId() const { return KSFloat32BitsColorDepthID; }
 
         virtual KoID colorModelId() const = 0;
         virtual KoColorSpace* clone() const = 0;
@@ -61,6 +63,8 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_N_>
     private:
 
         KisIlluminantProfile *m_profile;
+
+    public:
 
 };
 

@@ -52,7 +52,7 @@ public:
     QPointF convertScreenPos(const QPointF &point);
 
     /**
-     * Set the shape's text to be demot text or not.
+     * Set the shape's text to be demo text or not.
      * If true, replace the content with an lorem ipsum demo text and don't complain
      *   when there is not enough space at the end
      * If false; remove the demo text again.

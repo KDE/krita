@@ -33,27 +33,27 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<TYPE, 2*_wavelen_number_+
     } wavelenght[_wavelen_number_];
     TYPE m_opacity;
 
-    inline static float &K(quint8* data, const quint32 wavelen)
+    inline static TYPE &K(quint8* data, const quint32 wavelen)
     {
-        float *d = reinterpret_cast<float *>(data);
+        TYPE *d = reinterpret_cast<TYPE *>(data);
         return d[2*wavelen+0];
     }
 
-    inline static float &S(quint8* data, const quint32 wavelen)
+    inline static TYPE &S(quint8* data, const quint32 wavelen)
     {
-        float *d = reinterpret_cast<float *>(data);
+        TYPE *d = reinterpret_cast<TYPE *>(data);
         return d[2*wavelen+1];
     }
 
-    inline static const float &K(const quint8* data, const quint32 wavelen)
+    inline static const TYPE &K(const quint8* data, const quint32 wavelen)
     {
-        const float *d = reinterpret_cast<const float *>(data);
+        const TYPE *d = reinterpret_cast<const TYPE *>(data);
         return d[2*wavelen+0];
     }
 
-    inline static const float &S(const quint8* data, const quint32 wavelen)
+    inline static const TYPE &S(const quint8* data, const quint32 wavelen)
     {
-        const float *d = reinterpret_cast<const float *>(data);
+        const TYPE *d = reinterpret_cast<const TYPE *>(data);
         return d[2*wavelen+1];
     }
 };

@@ -30,6 +30,10 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoBasicHistogramProducers.h>
 
+#ifdef HAVE_OPENEXR
+#include "half.h"
+#endif
+
 typedef KGenericFactory<KSColorSpacesPlugin> KSColorSpacesPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritakscolorspacesplugin, KSColorSpacesPluginFactory("krita") )
 
@@ -59,8 +63,20 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-        (KoID("KSQP9F32HISTO", i18n("9-pairs KS QP Histogram")), colorSpaceKSQP) );
+        (KoID("KSQP9F32HISTO", i18n("9-pairs KS QP F32 Histogram")), colorSpaceKSQP) );
     }
+
+#ifdef HAVE_OPENEXR
+    {
+        KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace<half,9>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSQPColorSpaceFactory<half,9>();
+        Q_CHECK_PTR(colorSpaceKSQP);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+        new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+        (KoID("KSQP9F16HISTO", i18n("9-pairs KS QP Half Histogram")), colorSpaceKSQP) );
+    }
+#endif
 
 }
 

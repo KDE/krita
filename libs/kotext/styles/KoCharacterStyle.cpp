@@ -17,14 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoCharacterStyle.h"
-#include "opendocument/KoTextLoadingContext.h"
 
 #include "Styles_p.h"
 
 #include <QTextBlock>
 #include <QTextCursor>
 
-#include <KoStyleStack.h>
+#include <KoOasisLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
@@ -478,7 +477,7 @@ bool KoCharacterStyle::hasProperty(int key) const {
 }
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
-void KoCharacterStyle::loadOasis(KoTextLoadingContext& context) {
+void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
     // The fo:color attribute specifies the foreground color of text.

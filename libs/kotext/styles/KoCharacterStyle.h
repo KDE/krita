@@ -29,7 +29,7 @@
 class StylePrivate;
 class QTextBlock;
 class KoStyleStack;
-class KoTextLoadingContext;
+class KoOasisLoadingContext;
 class KoGenStyle;
 
 /**
@@ -228,15 +228,15 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOasis(KoTextLoadingContext& context);
+    void loadOasis(KoOasisLoadingContext& context);
 
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;
 
     bool operator==( const KoCharacterStyle &other ) const;
-    
+
     void removeDuplicates ( const KoCharacterStyle &other );
-    
+
     void saveOdf ( KoGenStyle *target );
 private:
     class Private;

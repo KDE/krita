@@ -20,7 +20,6 @@
 #include "ks_colorspaces.h"
 
 #include "kis_illuminant_profile.h"
-#include "kis_kslinear_colorspace.h"
 #include "kis_ksqp_colorspace.h"
 
 #include <KGenericFactory>

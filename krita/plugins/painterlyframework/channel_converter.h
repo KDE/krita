@@ -31,8 +31,8 @@ class ChannelConverter {
 
         inline void KSToReflectance(float K, float S, float &R) const;
         inline void reflectanceToKS(float R, float &K, float &S) const;
-        inline void RGBTosRGB(float C, float &sC) const;
-        inline void sRGBToRGB(float sC, float &C) const;
+//         inline void RGBTosRGB(float C, float &sC) const;
+//         inline void sRGBToRGB(float sC, float &C) const;
 
     private:
         float Kb, Sb;
@@ -70,7 +70,7 @@ inline void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
     K = this->K(R);
     S = this->S(R);
 }
-
+/*
 inline void ChannelConverter::RGBTosRGB(float C, float &sC) const
 {
 //     if (C <= 0.0031308)
@@ -90,7 +90,7 @@ inline void ChannelConverter::sRGBToRGB(float sC, float &C) const
 
     C = sC;
 }
-
+*/
 inline float ChannelConverter::K(float R) const
 {
     if (R <= 0.5)

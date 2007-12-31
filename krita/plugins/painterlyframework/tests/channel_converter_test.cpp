@@ -92,7 +92,7 @@ void ChannelConverterTest::testKSReflectance()
         QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
     }
 }
-
+/*
 void ChannelConverterTest::testRGBsRGB()
 {
     ChannelConverter c(4.3, 0.14);
@@ -130,6 +130,6 @@ void ChannelConverterTest::testRGBsRGB()
         QVERIFY(C > 0.0 && C < 1.0);
     }
 }
-
+*/
 QTEST_KDEMAIN(ChannelConverterTest, NoGUI)
 #include "channel_converter_test.moc"

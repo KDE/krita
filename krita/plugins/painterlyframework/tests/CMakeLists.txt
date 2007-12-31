@@ -8,7 +8,6 @@ set(kis_illuminant_profile_test_SRCS
     ../ks_colorspaces.cpp
     ../channel_converter.cpp
     ../kis_illuminant_profile.cpp
-    ../kis_kslinear_colorspace.cpp
     ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
@@ -27,7 +26,6 @@ set(channel_converter_test_SRCS
     ../ks_colorspaces.cpp
     ../channel_converter.cpp
     ../kis_illuminant_profile.cpp
-    ../kis_kslinear_colorspace.cpp
     ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
@@ -46,7 +44,6 @@ set(kis_ks_colorspace_test_SRCS
     ../ks_colorspaces.cpp
     ../channel_converter.cpp
     ../kis_illuminant_profile.cpp
-    ../kis_kslinear_colorspace.cpp
     ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
@@ -65,7 +62,6 @@ set(mixing_test_SRCS
     ../ks_colorspaces.cpp
     ../channel_converter.cpp
     ../kis_illuminant_profile.cpp
-    ../kis_kslinear_colorspace.cpp
     ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c

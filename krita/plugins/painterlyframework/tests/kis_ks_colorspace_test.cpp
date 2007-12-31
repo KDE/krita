@@ -22,7 +22,6 @@
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace_test.h"
 #include "kis_ksqp_colorspace.h"
-#include "kis_kslinear_colorspace.h"
 
 #include <KoColorSpaceRegistry.h>
 
@@ -38,14 +37,10 @@ void KisKSColorSpaceTest::testConstructor()
 
     KisIlluminantProfile *p1 = new KisIlluminantProfile(d653);
     KisIlluminantProfile *p2 = new KisIlluminantProfile(d659);
-    KisKSLinearColorSpace *cs1 = new KisKSLinearColorSpace(p1);
-    KisKSQPColorSpace *cs2 = new KisKSQPColorSpace(p2);
-    QVERIFY(cs1->profileIsCompatible(p1) == true);
-    QVERIFY(cs1->profileIsCompatible(p2) == false);
-    QVERIFY(cs2->profileIsCompatible(p1) == false);
-    QVERIFY(cs2->profileIsCompatible(p2) == true);
-    delete cs2;
-    delete cs1;
+    KisKSQPColorSpace *cs = new KisKSQPColorSpace(p2);
+    QVERIFY(cs->profileIsCompatible(p1) == false);
+    QVERIFY(cs->profileIsCompatible(p2) == true);
+    delete cs;
 }
 
 template<typename type, int n>

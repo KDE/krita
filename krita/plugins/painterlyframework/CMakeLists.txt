@@ -8,7 +8,6 @@ set(kritakscolorspacesplugin_PART_SRCS
     ks_colorspaces.cpp
     channel_converter.cpp
     kis_illuminant_profile.cpp
-    kis_kslinear_colorspace.cpp
     kis_ksqp_colorspace.cpp
     cqp/cqpminimizer.c
     cqp/initial_point.c

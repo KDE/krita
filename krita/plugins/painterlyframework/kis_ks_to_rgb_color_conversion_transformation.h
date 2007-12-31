@@ -75,8 +75,8 @@ public:
                 gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
             for (int i = 0; i < 3; i++) {
-                m_converter->RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), m_current);
-                dst[2-i] = KoColorSpaceMaths<float,quint16>::scaleToA(m_current);
+//                 m_converter->RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), m_current);
+                dst[2-i] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, i));
             }
             dst[3] = KoColorSpaceMaths<float,quint16>::scaleToA(KisKSColorSpaceTrait<_N_>::alpha(src));
 

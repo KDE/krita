@@ -89,7 +89,7 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
             return true;
         }
 
-        QString defaultProfile() const { return "D-65 Illuminant Profile - 9 wavelenghts - Black [4.3,0.14]"; }
+        QString defaultProfile() const { return "D-65 Illuminant Profile - 9 wavelenghts - Black [11.0,0.35]"; }
 };
 
 #endif // KIS_KSQP_COLORSPACE_H_

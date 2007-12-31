@@ -114,8 +114,8 @@ public:
 
                 // Do normal computations
                 for (int i = 0; i < 3; i++) {
-                    m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]), m_current);
-                    gsl_vector_set(m_rgbvec, i, m_current);
+//                     m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]), m_current);
+                    gsl_vector_set(m_rgbvec, i, KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]));
                 }
 
                 // Avoid calculations of black and white
@@ -167,7 +167,7 @@ protected:
     const KisIlluminantProfile *m_profile;
 
     mutable QHash<RGBID, float *> m_cache;
-    mutable float m_current;
+//     mutable float m_current;
     mutable RGBID m_lookup;
 };
 

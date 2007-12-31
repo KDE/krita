@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KS Linear and QP Color Models (32-bit Float)
+Name[pt_BR]=Modelos de Cor KS Linear e QP (Flutuante de 32-bits)
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritakscolorspacesplugin

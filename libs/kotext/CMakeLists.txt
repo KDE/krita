@@ -59,6 +59,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     styles/KoListLevelProperties.cpp
     styles/ChangeFollower.cpp
 
+    opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextLoader.cpp
     opendocument/KoTextFrameLoader.cpp
     opendocument/KoTextLoadingContext.cpp

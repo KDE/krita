@@ -21,35 +21,106 @@
 #define CHANNEL_CONVERTER_H_
 
 #include <cmath>
+#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
 
+template< typename TYPE >
 class ChannelConverter {
 
     public:
         ChannelConverter() {}
-        ChannelConverter(float whiteS, float blackK);
+        ChannelConverter(const double &Kblack, const double &Sblack);
         ~ChannelConverter();
 
-        inline void KSToReflectance(float K, float S, float &R) const;
-        inline void reflectanceToKS(float R, float &K, float &S) const;
-//         inline void RGBTosRGB(float C, float &sC) const;
-//         inline void sRGBToRGB(float sC, float &C) const;
+        inline void KSToReflectance(const TYPE &K, const TYPE &S, double &R) const;
+        inline void reflectanceToKS(const double &R, TYPE &K, TYPE &S) const;
 
     private:
-        float Kb, Sb;
-        float w0, w1; // For whitening
-        float b0, b1, b2; // For blackening and making K and S continuous in 0.5
+        double Kb, Sb;
+        double w0, w1; // For whitening
+        double b0, b1, b2; // For blackening and making K and S continuous in 0.5
 
-        inline float PHI(float R) const { return (2.0*R)/((1.0-R)*(1.0-R)); }
-        inline float PSI(float R) const { return ((1.0-R)*(1.0-R))/(2.0*R); }
+        inline double PHI(const double &R) const { return (2.0*R)/((1.0-R)*(1.0-R)); }
+        inline double PSI(const double &R) const { return ((1.0-R)*(1.0-R))/(2.0*R); }
 
-        inline float W(float R) const { return w1*R + w0; }
-        inline float B(float R) const { return b2*R*R + b1*R + b0; }
+        inline double W(const double &R) const { return w1*R + w0; }
+        inline double B(const double &R) const { return b2*R*R + b1*R + b0; }
 
-        inline float K(float R) const;
-        inline float S(float R) const;
+        inline double K(const double &R) const;
+        inline double S(const double &R) const;
 };
 
-inline void ChannelConverter::KSToReflectance(float K, float S, float &R) const
+template< typename TYPE >
+ChannelConverter<TYPE>::ChannelConverter(const double &Kblack, const double &Sblack)
+: Kb(Kblack), Sb(Sblack)
+{
+    double q1, q2, k1, k2, D, Sh;
+    double r0; // Represent the reflectance of the reference black (no, it's not zero)
+
+    KSToReflectance(Kb, Sb, r0);
+    q1 = Kb / ( 1.0 + Kb*PHI(r0) );
+    k1 = 1.0 + q1 - sqrt( q1*q1 + 2.0*q1 );
+
+    // First system: retrieve w1 and w0
+    // r0*w1 + w0 = k1
+    //    w1 + w0 = 1
+    D = r0 - 1.0;
+    w1 = ( k1 - 1.0 ) / D;
+    w0 = ( r0 - k1 ) / D;
+
+    Sh = S(0.5);
+    q1 = Kb / ( 1.0 + Sb );
+    q2 = 0.25 * ( 4.0*Kb + Sh ) / ( Sb + Sh );
+    k1 = 1.0 + q1 - sqrt( q1*q1 + 2.0*q1 );
+    k2 = 1.0 + q2 - sqrt( q2*q2 + 2.0*q2 );
+    // Second system: retrieve b2, b1 and b0
+    // b2 + b1 + b0 = k1
+    // b2/4 + b1/2 + b0 = k2
+    // r0^2*b2 + r0*b1 + b0 = r0
+    double marray[9] = { 1.0, 1.0, 1.0, 0.25, 0.5, 1.0, r0*r0, r0, 1.0 };
+    double barray[3] = { k1, k2, r0 };
+    int s;
+    gsl_matrix_view M = gsl_matrix_view_array(marray, 3, 3);
+    gsl_vector_view b = gsl_vector_view_array(barray, 3);
+    gsl_vector *x = gsl_vector_alloc(3);
+    gsl_permutation *p = gsl_permutation_alloc(3);
+    gsl_linalg_LU_decomp(&M.matrix, p, &s);
+    gsl_linalg_LU_solve(&M.matrix, p, &b.vector, x);
+
+    b2 = gsl_vector_get(x, 0);
+    b1 = gsl_vector_get(x, 1);
+    b0 = gsl_vector_get(x, 2);
+
+    gsl_permutation_free(p);
+    gsl_vector_free(x);
+}
+
+template< typename TYPE >
+ChannelConverter<TYPE>::~ChannelConverter()
+{
+}
+
+template< typename TYPE >
+inline double ChannelConverter<TYPE>::K(const double &R) const
+{
+    if (R <= 0.5)
+        return ( 1.0 / (PHI(W(R))-PHI(R)) );
+    else
+        return ( S(R)*PSI(R) );
+}
+
+template< typename TYPE >
+inline double ChannelConverter<TYPE>::S(const double &R) const
+{
+    if (R > 0.5)
+        return ( Kb - Sb*PSI(B(R)) ) / ( PSI(B(R)) - PSI(R) );
+    else
+        return ( K(R)*PHI(R) );
+}
+
+template< typename TYPE >
+inline void ChannelConverter<TYPE>::KSToReflectance(const TYPE &K, const TYPE &S, double &R) const
 {
     if (S == 0.0) {
         R = 0.0;
@@ -61,50 +132,15 @@ inline void ChannelConverter::KSToReflectance(float K, float S, float &R) const
         return;
     }
 
-    float Q = K/S;
+    const double Q = (double)(K/S);
     R = 1.0 + Q - sqrt( Q*Q + 2.0*Q );
 }
 
-inline void ChannelConverter::reflectanceToKS(float R, float &K, float &S) const
+template< typename TYPE >
+inline void ChannelConverter<TYPE>::reflectanceToKS(const double &R, TYPE &K, TYPE &S) const
 {
-    K = this->K(R);
-    S = this->S(R);
-}
-/*
-inline void ChannelConverter::RGBTosRGB(float C, float &sC) const
-{
-//     if (C <= 0.0031308)
-//         sC = 12.92 * C;
-//     else
-//         sC = 1.055 * pow( C, 1.0/2.4 ) - 0.055;
-
-    sC = C;
-}
-
-inline void ChannelConverter::sRGBToRGB(float sC, float &C) const
-{
-//     if (sC <= 0.04045)
-//         C = sC / 12.92;
-//     else
-//         C = pow( ( sC + 0.055 ) / 1.055, 2.4 );
-
-    C = sC;
-}
-*/
-inline float ChannelConverter::K(float R) const
-{
-    if (R <= 0.5)
-        return ( 1.0 / (PHI(W(R))-PHI(R)) );
-    else
-        return ( S(R)*PSI(R) );
-}
-
-inline float ChannelConverter::S(float R) const
-{
-    if (R > 0.5)
-        return ( Kb - Sb*PSI(B(R)) ) / ( PSI(B(R)) - PSI(R) );
-    else
-        return ( K(R)*PHI(R) );
+    K = (TYPE)(this->K(R));
+    S = (TYPE)(this->S(R));
 }
 
 #endif // CHANNEL_CONVERTER_H_

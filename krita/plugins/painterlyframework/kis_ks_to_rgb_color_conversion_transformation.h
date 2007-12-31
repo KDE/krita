@@ -22,7 +22,7 @@
 
 #include "channel_converter.h"
 #include "kis_illuminant_profile.h"
-#include "kis_ks_colorspace_traits.h"
+#include "kis_ks_colorspace.h"
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
@@ -32,9 +32,11 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
-template< int _N_ >
+template< typename _TYPE_, int _N_ >
 class KisKSToRGBColorConversionTransformation : public KoColorConversionTransformation {
+
 typedef KoColorConversionTransformation parent;
+typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
 
 public:
 
@@ -42,8 +44,8 @@ public:
     : parent(srcCs, dstCs)
     {
         m_profile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
-        m_converter = new ChannelConverter(m_profile->Kblack(), m_profile->Sblack());
-        m_rgbvec = gsl_vector_calloc(3);
+        m_converter = new ChannelConverter<_TYPE_>(m_profile->Kblack(), m_profile->Sblack());
+        m_rgbvec = gsl_vector_calloc( 3 );
         m_refvec = gsl_vector_calloc(_N_);
     }
 
@@ -61,8 +63,7 @@ public:
         for ( ; nPixels > 0; nPixels-- ) {
             m_checkcolor = 0;
             for (int i = 0; i < _N_; i++) {
-                m_converter->KSToReflectance(KisKSColorSpaceTrait<_N_>::K(src, i),
-                                             KisKSColorSpaceTrait<_N_>::S(src, i), m_current);
+                m_converter->KSToReflectance(CSTrait::K(src, i), CSTrait::S(src, i), m_current);
                 gsl_vector_set(m_refvec, i, m_current);
                 m_checkcolor += m_current;
             }
@@ -74,13 +75,12 @@ public:
             else
                 gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
 
-            for (int i = 0; i < 3; i++) {
-//                 m_converter->RGBTosRGB((float)gsl_vector_get(m_rgbvec, i), m_current);
+            for (int i = 0; i < 3; i++)
                 dst[2-i] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, i));
-            }
-            dst[3] = KoColorSpaceMaths<float,quint16>::scaleToA(KisKSColorSpaceTrait<_N_>::alpha(src));
 
-            src += KisKSColorSpaceTrait<_N_>::pixelSize;
+            dst[3] = KoColorSpaceMaths<_TYPE_,quint16>::scaleToA(CSTrait::alpha(src));
+
+            src += CSTrait::pixelSize;
             dst += 4;
         }
     }
@@ -89,21 +89,22 @@ private:
     gsl_vector *m_rgbvec;
     gsl_vector *m_refvec;
 
-    ChannelConverter *m_converter;
+    ChannelConverter<_TYPE_> *m_converter;
     const KisIlluminantProfile *m_profile;
 
-    mutable float m_current;
-    mutable float m_checkcolor;
+    mutable double m_current;
+    mutable double m_checkcolor;
 
 };
 
-template< int _N_ >
+template< typename _TYPE_, int _N_ >
 class KisKSToRGBColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
 
 public:
-    KisKSToRGBColorConversionTransformationFactory(const QString &srcId)
-    : KoColorConversionTransformationFactory(srcId, KSFloat32BitsColorDepthID.id(),
-                                              RGBAColorModelID.id(), Integer16BitsColorDepthID.id()) {}
+    KisKSToRGBColorConversionTransformationFactory(const QString &convid)
+    : KoColorConversionTransformationFactory("KS"+convid+QString::number(_N_),
+                                             KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(),
+                                             RGBAColorModelID.id(), Integer16BitsColorDepthID.id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                const KoColorSpace* dstColorSpace,
@@ -112,7 +113,7 @@ public:
         Q_UNUSED(renderingIntent);
         Q_ASSERT(canBeSource(srcColorSpace));
         Q_ASSERT(canBeDestination(dstColorSpace));
-        return new KisKSToRGBColorConversionTransformation<_N_>(srcColorSpace, dstColorSpace);
+        return new KisKSToRGBColorConversionTransformation<_TYPE_,_N_>(srcColorSpace, dstColorSpace);
     }
 
     bool conserveColorInformation() const { return true; }

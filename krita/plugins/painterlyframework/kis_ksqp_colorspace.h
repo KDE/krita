@@ -23,49 +23,70 @@
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
 
-#define KS9QPID KoID("KS9QP", i18n("Painterly Color Space"))
+#include "kis_rgb_to_ksqp_color_conversion_transformation.h"
+#include "kis_ks_to_rgb_color_conversion_transformation.h"
 
-class KisKSQPColorSpace : public KisKSColorSpace<9>
+template< typename _TYPE_, quint32 _N_ >
+class KisKSQPColorSpace : public KisKSColorSpace< _TYPE_,_N_ >
 {
-    typedef KisKSColorSpace<9> parent;
+    typedef KisKSColorSpace< _TYPE_,_N_ > parent;
 
     public:
 
-        KisKSQPColorSpace(KoColorProfile *p)
-        : parent(p, colorSpaceId(), i18n("Painterly Color Space (32 Bits Float)")) {}
+        KisKSQPColorSpace(KoColorProfile *p) : parent(p, ColorSpaceId().id(), ColorSpaceId().name()) {}
         ~KisKSQPColorSpace() {}
-
-        KoID colorModelId() const
-        {
-            return KS9QPID;
-        }
 
         KoColorSpace *clone() const
         {
-            return new KisKSQPColorSpace(profile()->clone());
+            return new KisKSQPColorSpace<_TYPE_,_N_>(parent::profile()->clone());
         }
 
-        static QString colorSpaceId()
+        KoID colorModelId() const
         {
-            return "KS9QPF32";
+            return ColorModelId();
+        }
+
+    public: // static
+
+        static KoID ColorSpaceId()
+        {
+            return KoID(ColorModelId().id()+parent::ColorDepthId().id(),
+                        ColorModelId().name()+" ("+parent::ColorDepthId().name()+")");
+        }
+
+        static KoID ColorModelId()
+        {
+            QByteArray name = QString("Painterly Color Space QP, precision %1").arg(_N_).toUtf8();
+            return KoID("KSQP"+QString::number(_N_), i18n(name.data()));
         }
 
 };
 
+template< typename _TYPE_, quint32 _N_ >
 class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-        QString id() const { return KisKSQPColorSpace::colorSpaceId(); }
-        QString name() const { return i18n("Painterly Color Space (32 Bits Float)"); }
-        KoID colorModelId() const { return KS9QPID; }
-        KoID colorDepthId() const { return KSFloat32BitsColorDepthID; }
+        QString id() const { return KisKSQPColorSpace<_TYPE_,_N_>::ColorSpaceId().id(); }
+        QString name() const { return KisKSQPColorSpace<_TYPE_,_N_>::ColorSpaceId().name(); }
+        KoID colorModelId() const { return KisKSQPColorSpace<_TYPE_,_N_>::ColorModelId(); }
+        KoID colorDepthId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorDepthId(); }
         bool userVisible() const { return true; }
 
-        int referenceDepth() const { return 32; }
+        int referenceDepth() const { return sizeof(_TYPE_)*8; }
         bool isIcc() const { return false; }
         bool isHdr() const { return false; }
 
-        QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+        QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
+        {
+            QList<KoColorConversionTransformationFactory*> list;
+
+            // RGB to KS
+            list.append(new KisRGBToKSQPColorConversionTransformationFactory<_TYPE_,_N_>);
+            // KS to RGB
+            list.append(new KisKSToRGBColorConversionTransformationFactory<_TYPE_,_N_>("QP"));
+
+            return list;
+        }
 
         KoColorConversionTransformationFactory *createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
         {
@@ -76,7 +97,7 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
 
         KoColorSpace *createColorSpace(const KoColorProfile *p) const
         {
-            return new KisKSQPColorSpace(p->clone());
+            return new KisKSQPColorSpace<_TYPE_,_N_>(p->clone());
         }
 
         bool profileIsCompatible(const KoColorProfile *profile) const
@@ -84,12 +105,15 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
             const KisIlluminantProfile *p = dynamic_cast<const KisIlluminantProfile *>(profile);
             if (!p)
                 return false;
-            if (p->wavelenghts() != 9)
+            if (p->wavelenghts() != _N_)
                 return false;
             return true;
         }
 
-        QString defaultProfile() const { return "D-65 Illuminant Profile - 9 wavelenghts - Black [11.0,0.35]"; }
+        QString defaultProfile() const
+        {
+            return QString("D-65 Illuminant Profile - "+QString::number(_N_)+" wavelenghts - Black [11.0,0.35]");
+        }
 };
 
 #endif // KIS_KSQP_COLORSPACE_H_

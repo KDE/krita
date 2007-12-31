@@ -36,25 +36,30 @@ K_EXPORT_COMPONENT_FACTORY( kritakscolorspacesplugin, KSColorSpacesPluginFactory
 KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
 : QObject(parent)
 {
+    QStringList list;
+    QString curr;
+    KisIlluminantProfile *ill;
+
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
-
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
-    QStringList d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9*.ill",  KStandardDirs::Recursive);
+    list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.ill",  KStandardDirs::Recursive);
 
-    KisIlluminantProfile *D65_9;
-    foreach(QString d65, d659) {
-        D65_9 = new KisIlluminantProfile(d65);
-        f->addProfile(D65_9);
+    foreach(curr, list) {
+        ill = new KisIlluminantProfile(curr);
+        f->addProfile(ill);
     }
 
+    curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_2.ill",  KStandardDirs::Recursive)[0];
+    ill  = new KisIlluminantProfile(curr);
+
     {
-        KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace(D65_9->clone());
-        KoColorSpaceFactory *csf  = new KisKSQPColorSpaceFactory();
+        KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace<float,9>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSQPColorSpaceFactory<float,9>();
         Q_CHECK_PTR(colorSpaceKSQP);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-        (KoID("KS9QPF32HISTO", i18n("9-pairs KS QP Histogram")), colorSpaceKSQP) );
+        (KoID("KSQP9F32HISTO", i18n("9-pairs KS QP Histogram")), colorSpaceKSQP) );
     }
 
 }

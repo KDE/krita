@@ -22,42 +22,38 @@
 
 #include <KoColorSpaceTraits.h>
 
-template<int _wavelen_number_>
-struct KisKSColorSpaceTrait : public KoColorSpaceTrait<float, 2*_wavelen_number_+1, 2*_wavelen_number_> {
+template< typename TYPE, quint32 _wavelen_number_ >
+struct KisKSColorSpaceTrait : public KoColorSpaceTrait<TYPE, 2*_wavelen_number_+1, 2*_wavelen_number_> {
 
-    typedef KoColorSpaceTrait<float, 2*(_wavelen_number_)+1, 6> parent;
+    typedef KoColorSpaceTrait<TYPE, 2*(_wavelen_number_)+1, 6> parent;
 
     struct {
-        float m_K;
-        float m_S;
+        TYPE m_K;
+        TYPE m_S;
     } wavelenght[_wavelen_number_];
-    float m_opacity;
+    TYPE m_opacity;
 
-    inline static float &K(quint8* data, int wavelen)
+    inline static float &K(quint8* data, const quint32 wavelen)
     {
-        float *d = parent::nativeArray(data);
-        // User asked for K that's in the first [0 ... _wavelen_number_-1] positions
+        float *d = reinterpret_cast<float *>(data);
         return d[2*wavelen+0];
     }
 
-    inline static float &S(quint8* data, int wavelen)
+    inline static float &S(quint8* data, const quint32 wavelen)
     {
-        float *d = parent::nativeArray(data);
-        // User asked for S that's in the [ _wavelen_number_ ... 2*_wavelen_number_ - 1] positions
+        float *d = reinterpret_cast<float *>(data);
         return d[2*wavelen+1];
     }
 
-    inline static const float &K(const quint8* data, int wavelen)
+    inline static const float &K(const quint8* data, const quint32 wavelen)
     {
-        const float *d = parent::nativeArray(data);
-        // User asked for K that's in the first [0 ... _wavelen_number_-1] positions
+        const float *d = reinterpret_cast<const float *>(data);
         return d[2*wavelen+0];
     }
 
-    inline static const float &S(const quint8* data, int wavelen)
+    inline static const float &S(const quint8* data, const quint32 wavelen)
     {
-        const float *d = parent::nativeArray(data);
-        // User asked for S that's in the [ _wavelen_number_ ... 2*_wavelen_number_ - 1] positions
+        const float *d = reinterpret_cast<const float *>(data);
         return d[2*wavelen+1];
     }
 };

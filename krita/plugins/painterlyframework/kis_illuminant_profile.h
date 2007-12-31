@@ -42,7 +42,7 @@ class KisIlluminantProfile : public KoColorProfile {
         bool isSuitableForPrinting() const { return true; }
         bool isSuitableForDisplay() const { return true; }
         bool operator==(const KoColorProfile &op2) const
-            { return (name()+info() == op2.name()+op2.info()); }
+            { return (name() == op2.name()); }
 
         gsl_matrix *T() const { return m_T; }
         gsl_vector *P() const { return m_P; }

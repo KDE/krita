@@ -22,7 +22,6 @@
 
 #include "kis_illuminant_profile.h"
 #include "kis_rgb_to_ks_color_conversion_transformation.h"
-
 #include <KoColorConversionTransformationFactory.h>
 
 extern "C" {
@@ -32,15 +31,17 @@ extern "C" {
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
-class KisRGBToKSQPColorConversionTransformation : public KisRGBToKSColorConversionTransformation<9> {
-typedef KisRGBToKSColorConversionTransformation<9> parent;
+template< typename _TYPE_, int _N_ >
+class KisRGBToKSQPColorConversionTransformation : public KisRGBToKSColorConversionTransformation< _TYPE_,_N_ > {
+
+typedef KisRGBToKSColorConversionTransformation< _TYPE_,_N_ > parent;
 
 public:
 
     KisRGBToKSQPColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs)
     {
-        int n  = 9 + 1;
+        int n  = _N_ + 1;
         int me = 1;
         int mi = 6+2*n; // each reflectance is bounded between 0 and 1, two inequalities, and the transformation matrix
 
@@ -57,8 +58,8 @@ public:
         // The Q matrix represents this function:
         // z = ( R_P[0] - R_P[1] )^2 + ( R_P[1] - R_P[2] )^2 + ... + ( R_P[n-2] - R_P[n-1] )^2
         for (int i = 1; i < n-1; i++) {
-            int prev = (int)gsl_vector_get(m_profile->P(), i-1);
-            int curr = (int)gsl_vector_get(m_profile->P(), i);
+            int prev = (int)gsl_vector_get(parent::m_profile->P(), i-1);
+            int curr = (int)gsl_vector_get(parent::m_profile->P(), i);
             //         int prev = i-1, curr = i;
             gsl_matrix_set(m_data->Q, prev, prev, gsl_matrix_get(m_data->Q,prev,prev)+1.0);
             //         gsl_matrix_set(m_data->Q, prev, prev,  2.0);
@@ -73,9 +74,9 @@ public:
 
         gsl_matrix_view subm;
         subm = gsl_matrix_submatrix(m_data->C, 0, 0, 3, n-1);
-        gsl_matrix_memcpy(&subm.matrix, m_profile->T());
+        gsl_matrix_memcpy(&subm.matrix, parent::m_profile->T());
         subm = gsl_matrix_submatrix(m_data->C, 3, 0, 3, n-1);
-        gsl_matrix_memcpy(&subm.matrix, m_profile->T());
+        gsl_matrix_memcpy(&subm.matrix, parent::m_profile->T());
         gsl_matrix_scale(&subm.matrix, -1.0);
 
         // The C matrix and d vector represent the inequalities that the variables must
@@ -110,8 +111,8 @@ protected:
     void RGBToReflectance() const
     {
         for (int i = 0; i < 3; i++) {
-            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(m_rgbvec, i) - 0.0 ) );
-            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(m_rgbvec, i) + 0.0 ) );
+            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(parent::m_rgbvec, i) - 0.0 ) );
+            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(parent::m_rgbvec, i) + 0.0 ) );
         }
 
         gsl_cqpminimizer_set(m_s, m_data);
@@ -120,15 +121,15 @@ protected:
             gsl_cqpminimizer_iterate(m_s);
         } while (gsl_cqpminimizer_test_convergence(m_s, 1e-7, 1e-7) == GSL_CONTINUE);
 
-        for (uint i = 0; i < 9; i++) {
+        for (uint i = 0; i < _N_; i++) {
             double curr = gsl_vector_get(gsl_cqpminimizer_x(m_s), i);
 
             if (fabs(curr - 0.0) < 1e-7)
-                gsl_vector_set(m_refvec, i, 0.0);
+                gsl_vector_set(parent::m_refvec, i, 0.0);
             else if (fabs(curr - 1.0) < 1e-7)
-                gsl_vector_set(m_refvec, i, 1.0);
+                gsl_vector_set(parent::m_refvec, i, 1.0);
             else
-                gsl_vector_set(m_refvec, i, curr);
+                gsl_vector_set(parent::m_refvec, i, curr);
         }
     }
 
@@ -139,12 +140,13 @@ private:
 
 };
 
+template< typename _TYPE_, int _N_ >
 class KisRGBToKSQPColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
 
 public:
     KisRGBToKSQPColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(),
-                                             "KS9QP", KSFloat32BitsColorDepthID.id()) {}
+                                             "KSQP9", KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                const KoColorSpace* dstColorSpace,
@@ -153,7 +155,7 @@ public:
         Q_UNUSED(renderingIntent);
         Q_ASSERT(canBeSource(srcColorSpace));
         Q_ASSERT(canBeDestination(dstColorSpace));
-        return new KisRGBToKSQPColorConversionTransformation(srcColorSpace, dstColorSpace);
+        return new KisRGBToKSQPColorConversionTransformation<_TYPE_,_N_>(srcColorSpace, dstColorSpace);
     }
 
     bool conserveColorInformation() const { return true; }

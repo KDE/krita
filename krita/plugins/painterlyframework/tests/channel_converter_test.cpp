@@ -27,109 +27,47 @@
 
 void ChannelConverterTest::testKSReflectance()
 {
-    ChannelConverter c(4.3, 0.14);
-    float K, S, R;
-/*
-    // reflectanceToKS
-    R = 0.0;
-    c.reflectanceToKS(R, K, S);
-    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
-    QCOMPARE(K, 9.0f);
-    QCOMPARE(S, 0.0f);
+    ChannelConverter<double> c(4.3, 0.14);
+    double K, S, R;
 
-    R = 0.25;
-    c.reflectanceToKS(R, K, S);
-    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
-    QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
-*/
     R = 0.4999999999999;
     c.reflectanceToKS(R, K, S);
     qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
-    QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
+    QCOMPARE((S/K), (R*2.0/pow(1-R,2)));
 
     R = 0.5000000000001;
     c.reflectanceToKS(R, K, S);
     qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
-    QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
-/*
-    R = 0.75;
-    c.reflectanceToKS(R, K, S);
-    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
-    QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
-
-    R = 1.0;
-    c.reflectanceToKS(R, K, S);
-    qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
-    QCOMPARE(K, 0.0f);
-    QCOMPARE(S, 0.9f);
-*/
+    QCOMPARE((S/K), (R*2.0/pow(1-R,2)));
 
     for (int i = 0; i <= 100; i++) {
-        R = (float)i/100.0f;
+        R = (double)i/100.0;
         c.reflectanceToKS(R, K, S);
         qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
         if ( i <= 50 )
-            QCOMPARE((float)(S/K), (float)(2.0*R*pow(1-R,-2)));
+            QCOMPARE((S/K), (2.0*R*pow(1-R,-2)));
         else
-            QCOMPARE((float)(K/S), (float)(0.5*pow(1-R, 2)/R));
+            QCOMPARE((K/S), (0.5*pow(1-R, 2)/R));
     }
 
     // KSToReflectance
     K = 0.0;
     c.KSToReflectance(K, S, R);
-    QCOMPARE(R, 1.0f);
+    QCOMPARE(R, 1.0);
 
     S = 0.0;
     c.KSToReflectance(K, S, R);
-    QCOMPARE(R, 0.0f);
+    QCOMPARE(R, 0.0);
 
     for (int i = 1; i < 10; i++) {
-        K = (float)i * 0.1;
+        K = i * 0.1;
         S = 1.0 - K;
         c.KSToReflectance(K, S, R);
         qDebug() << "K " << K << ", S " << S << "; R = " << R;
         QVERIFY(R > 0.0 && R < 1.0);
-        QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
+        QCOMPARE((S/K), (R*2.0/pow(1-R,2)));
     }
 }
-/*
-void ChannelConverterTest::testRGBsRGB()
-{
-    ChannelConverter c(4.3, 0.14);
-    float C, sC;
 
-    // RGBTosRGB
-    C = 1.0;
-    c.RGBTosRGB(C, sC);
-    QCOMPARE((double)sC, 1.0);
-
-    C = 0.0;
-    c.RGBTosRGB(C, sC);
-    QCOMPARE((double)sC, 0.0);
-
-    for (int i = 1; i < 10; i++) {
-        C = (float)i * 0.1;
-        c.RGBTosRGB(C, sC);
-        qDebug() << "Linear: " << C << "; corrected: " << sC;
-        QVERIFY(sC > 0.0 && sC < 1.0);
-    }
-
-    // sRGBToRGB
-    sC = 1.0;
-    c.sRGBToRGB(sC, C);
-    QCOMPARE((double)C, 1.0);
-
-    sC = 0.0;
-    c.sRGBToRGB(sC, C);
-    QCOMPARE((double)C, 0.0);
-
-    for (int i = 1; i < 10; i++) {
-        sC = (float)i * 0.1;
-        c.sRGBToRGB(sC, C);
-        qDebug() << "Corrected: " << sC << "; linear: " << C;
-        QVERIFY(C > 0.0 && C < 1.0);
-    }
-}
-*/
 QTEST_KDEMAIN(ChannelConverterTest, NoGUI)
 #include "channel_converter_test.moc"

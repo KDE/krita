@@ -5,10 +5,7 @@ include_directories( ${KOMAIN_INCLUDES} "../" )
 
 set(kis_illuminant_profile_test_SRCS
     kis_illuminant_profile_test.cpp
-    ../ks_colorspaces.cpp
-    ../channel_converter.cpp
     ../kis_illuminant_profile.cpp
-    ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -23,10 +20,6 @@ target_link_libraries(KisIlluminantProfileTest pigmentcms ${KDE4_KDEUI_LIBS} ${G
 
 set(channel_converter_test_SRCS
     channel_converter_test.cpp
-    ../ks_colorspaces.cpp
-    ../channel_converter.cpp
-    ../kis_illuminant_profile.cpp
-    ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -41,10 +34,7 @@ target_link_libraries(ChannelConverterTest pigmentcms ${KDE4_KDEUI_LIBS} ${GSL_L
 
 set(kis_ks_colorspace_test_SRCS
     kis_ks_colorspace_test.cpp
-    ../ks_colorspaces.cpp
-    ../channel_converter.cpp
     ../kis_illuminant_profile.cpp
-    ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -59,10 +49,7 @@ target_link_libraries(KisKSColorSpaceTest pigmentcms ${KDE4_KDEUI_LIBS} ${GSL_LI
 
 set(mixing_test_SRCS
     mixing_test.cpp
-    ../ks_colorspaces.cpp
-    ../channel_converter.cpp
     ../kis_illuminant_profile.cpp
-    ../kis_ksqp_colorspace.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)

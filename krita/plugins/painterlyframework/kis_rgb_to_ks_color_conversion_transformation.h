@@ -24,8 +24,7 @@
 
 #include "channel_converter.h"
 #include "kis_illuminant_profile.h"
-#include "kis_ks_colorspace_traits.h"
-
+#include "kis_ks_colorspace.h"
 
 #include <QHash>
 #include <QString>
@@ -63,17 +62,19 @@ inline uint qHash(const RGBID &key)
     return qHash(key.RGB[0]^key.RGB[1]^key.RGB[2]);
 }
 
-template< int _N_ >
+template< typename _TYPE_, int _N_ >
 class KisRGBToKSColorConversionTransformation : public KoColorConversionTransformation {
+
 typedef KoColorConversionTransformation parent;
+typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
 
 public:
     KisRGBToKSColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs), m_rgbvec(0), m_refvec(0), m_converter(0), m_profile(0)
     {
         m_profile = static_cast<const KisIlluminantProfile*>(dstCs->profile());
-        m_converter = new ChannelConverter(m_profile->Kblack(), m_profile->Sblack());
-        m_rgbvec = gsl_vector_calloc(3);
+        m_converter = new ChannelConverter<_TYPE_>(m_profile->Kblack(), m_profile->Sblack());
+        m_rgbvec = gsl_vector_calloc( 3 );
         m_refvec = gsl_vector_calloc(_N_);
         m_cache.reserve(20000);
     }
@@ -85,7 +86,7 @@ public:
         gsl_vector_free(m_refvec);
 
         // We need to manually delete the items
-        QHashIterator<RGBID, float *> i(m_cache);
+        QHashIterator<RGBID, _TYPE_*> i(m_cache);
         while (i.hasNext()) {
             i.next();
             delete [] i.value();
@@ -100,7 +101,7 @@ public:
         // 3 - convert reflectances to K/S
 
         const quint16 *src = reinterpret_cast<const quint16*>(src8);
-        const int pixelSize = KisKSColorSpaceTrait<_N_>::pixelSize;
+        const int pixelSize = CSTrait::pixelSize;
 
         for ( ; nPixels > 0; nPixels-- ) {
             // Load for the lookup
@@ -113,10 +114,8 @@ public:
             } else {
 
                 // Do normal computations
-                for (int i = 0; i < 3; i++) {
-//                     m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]), m_current);
-                    gsl_vector_set(m_rgbvec, i, KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]));
-                }
+                for (int i = 0; i < 3; i++)
+                    gsl_vector_set(m_rgbvec, i, KoColorSpaceMaths<quint16,double>::scaleToA(src[2-i]));
 
                 // Avoid calculations of black and white
                 if (m_lookup.total() == 0)
@@ -127,17 +126,17 @@ public:
                     RGBToReflectance();
 
                 for (int i = 0; i < _N_; i++) {
-                    m_converter->reflectanceToKS((float)gsl_vector_get(m_refvec, i),
-                                                KisKSColorSpaceTrait<_N_>::K(dst, i),
-                                                KisKSColorSpaceTrait<_N_>::S(dst, i));
+                    m_converter->reflectanceToKS(gsl_vector_get(m_refvec, i),
+                                                 CSTrait::K(dst, i),
+                                                 CSTrait::S(dst, i));
                 }
 
                 // Add the new color conversion to the cache
-                m_cache.insert(m_lookup, new float[pixelSize-4]);
+                m_cache.insert(m_lookup, new _TYPE_[pixelSize-4]);
                 memmove(m_cache.value(m_lookup), dst, pixelSize-4);
             }
 
-            KisKSColorSpaceTrait<_N_>::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(src[3]), 1);
+            CSTrait::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(src[3]), 1);
 
             src += 4;
             dst += pixelSize;
@@ -145,7 +144,7 @@ public:
 
         // If the cache contains too many elements, erase the first 15000
         if (m_cache.count() >= 19000) {
-            QHashIterator<RGBID, float *> i(m_cache);
+            QHashIterator<RGBID, _TYPE_*> i(m_cache);
             for (int j = 0; j < 15000; j++) {
                 i.next();
                 delete [] i.value();
@@ -163,11 +162,10 @@ protected:
     gsl_vector *m_rgbvec;
     gsl_vector *m_refvec;
 
-    ChannelConverter *m_converter;
+    ChannelConverter<_TYPE_> *m_converter;
     const KisIlluminantProfile *m_profile;
 
-    mutable QHash<RGBID, float *> m_cache;
-//     mutable float m_current;
+    mutable QHash<RGBID, _TYPE_*> m_cache;
     mutable RGBID m_lookup;
 };
 

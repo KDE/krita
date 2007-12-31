@@ -557,6 +557,7 @@ fprintf (stderr, "\t before indep=false low-pass-filter\n");
   lin_luminance_range (rgb_image, cvts.xmax, cvts.ymax, &lum_min, &lum_max);
   set_res             ((int)1e6);
   hist = lin_histogram(rgb_image, cvts.xmax, cvts.ymax, lum_min, lum_max);
+  if(!hist) return;
   perc_luminance_adjust (hist, &lum_min, &lum_max, cvts.xmax, cvts.ymax, percentile);
  
 

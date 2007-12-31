@@ -1192,10 +1192,50 @@ void KoParagraphStyle::saveOdf ( KoGenStyle *target ) {
                 if (!direction.isEmpty())
                     target->addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
             }
-        } else {
-            //kDebug(32500) << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
+        } else if (key == KoParagraphStyle::BreakBefore) {
+            if (breakBefore())
+                target->addProperty("fo:breaf-before", "page", KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::BreakAfter) {
+            if (breakBefore())
+                target->addProperty("fo:breaf-after", "page", KoGenStyle::ParagraphType);
+        } else if (key == QTextFormat::BackgroundBrush) {
+            QBrush backBrush = background();
+            if (backBrush.style() != Qt::NoBrush)
+                target->addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
+            else
+                target->addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
+        // Padding
+        } else if (key == KoParagraphStyle::LeftPadding) {
+            target->addAttributePt("fo:padding-left", leftPadding());
+        } else if (key == KoParagraphStyle::RightPadding) {
+            target->addAttributePt("fo:padding-right", rightPadding());
+        } else if (key == KoParagraphStyle::TopPadding) {
+            target->addAttributePt("fo:padding-top", topPadding());
+        } else if (key == KoParagraphStyle::BottomPadding) {
+            target->addAttributePt("fo:padding-bottom", bottomPadding());
+        // Margin
+        } else if (key == QTextFormat::BlockLeftMargin) {
+            target->addAttributePt("fo:margin-left", leftMargin());
+        } else if (key == QTextFormat::BlockRightMargin) {
+            target->addAttributePt("fo:margin-right", rightMargin());
+        } else if (key == QTextFormat::BlockTopMargin) {
+            target->addAttributePt("fo:margin-top", topMargin());
+        } else if (key == QTextFormat::BlockBottomMargin) {
+            target->addAttributePt("fo:margin-bottom", bottomMargin());
+        // Line spacing
+        } else if (key == KoParagraphStyle::MinimumLineHeight) {
+            target->addAttributePt("style:line-height-at-least", minimumLineHeight());
+        } else if (key == KoParagraphStyle::LineSpacing) {
+            target->addAttributePt("style:line-spacing", lineSpacing());
+        } else if (key == KoParagraphStyle::PercentLineHeight) {
+            target->addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::FixedLineHeight) {
+            target->addAttributePt("fo:line-height", lineHeightAbsolute());
+        } else if (key == QTextFormat::TextIndent) {
+            target->addAttributePt("fo:text-indent", textIndent());
         }
     }
+    // TODO : save border information
 }
 
 #include "KoParagraphStyle.moc"

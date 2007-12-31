@@ -767,8 +767,6 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
                     // Remember : Qt and CSS/XSL doesn't have the same scale...
                     target->addProperty("fo:font-weight", boldness*10, KoGenStyle::TextType);
                 }
-            } else {
-                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
             }
         } else if (key == QTextFormat::FontItalic) {
             if (d->stylesPrivate->value(key).toBool()) {
@@ -779,19 +777,13 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
         } else if (key == UnderlineStyle) {
             bool ok = false;
             int style = d->stylesPrivate->value(key).toInt(&ok);
-            if (ok) {
+            if (ok)
                 target->addProperty("style:text-underline-style", exportOasisLineStyle((KoCharacterStyle::LineStyle) style), KoGenStyle::TextType);
-            } else {
-                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
-            }
         } else if (key == UnderlineType) {
             bool ok = false;
             int type = d->stylesPrivate->value(key).toInt(&ok);
-            if (ok) {
+            if (ok)
                 target->addProperty("style:text-underline-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
-            } else {
-                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
-            }
         } else if (key == UnderlineColor) {
             QColor color = d->stylesPrivate->value(key).value<QColor>();
             if (color.isValid())
@@ -799,33 +791,55 @@ void KoCharacterStyle::saveOdf ( KoGenStyle *target ) {
         } else if (key == StrikeOutStyle) {
             bool ok = false;
             int style = d->stylesPrivate->value(key).toInt(&ok);
-            if (ok) {
+            if (ok)
                 target->addProperty("style:text-line-through-style", exportOasisLineStyle((KoCharacterStyle::LineStyle) style), KoGenStyle::TextType);
-            } else {
-                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
-            }
         } else if (key == StrikeOutType) {
             bool ok = false;
             int type = d->stylesPrivate->value(key).toInt(&ok);
-            if (ok) {
+            if (ok)
                 target->addProperty("style:text-line-through-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
-            } else {
-                kDebug(32500) << "What is this ???" << d->stylesPrivate->value(key);
-            }
         } else if (key == StrikeOutColor) {
             QColor color = d->stylesPrivate->value(key).value<QColor>();
             if (color.isValid())
                 target->addProperty("style:text-line-through-color", color.name(), KoGenStyle::TextType);
-        }  else if (key == QTextFormat::BackgroundBrush) {
+        } else if (key == QTextFormat::BackgroundBrush) {
             QBrush brush = d->stylesPrivate->value(key).value<QBrush>();
             if (brush.style() == Qt::NoBrush)
                 target->addProperty("fo:background-color", "transparent", KoGenStyle::TextType);
             else
                 target->addProperty("fo:background-color", brush.color().name(), KoGenStyle::TextType);
-        } else {
-//             kDebug(32500) << "Storing the key " << key << "=>" << d->stylesPrivate->value(key);
+        } else if (key == QTextFormat::ForegroundBrush) {
+            QBrush brush = d->stylesPrivate->value(key).value<QBrush>();
+            if (brush.style() == Qt::NoBrush)
+                target->addProperty("fo:color", "transparent", KoGenStyle::TextType);
+            else
+                target->addProperty("fo:color", brush.color().name(), KoGenStyle::TextType);
+        } else if (key == QTextFormat::TextVerticalAlignment) {
+            if (verticalAlignment() == QTextCharFormat::AlignSuperScript)
+                target->addProperty("style:text-position", "super", KoGenStyle::TextType);
+            else if (verticalAlignment() == QTextCharFormat::AlignSubScript)
+                target->addProperty("style:text-position", "sub", KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::TransformText) {
+            Transform transform = (Transform) d->stylesPrivate->value(key).value<int>();
+            switch (transform) {
+                case SmallCaps:
+                    target->addProperty("fo:font-variant", "small-caps", KoGenStyle::TextType);
+                    break;
+                case AllUppercase:
+                    target->addProperty("fo:text-transform", "uppercase", KoGenStyle::TextType);
+                    break;
+                case AllLowercase:
+                    target->addProperty("fo:text-transform", "lowercase", KoGenStyle::TextType);
+                    break;
+                case Capitalize:
+                    target->addProperty("fo:text-transform", "capitalize", KoGenStyle::TextType);
+                    break;
+            }
+        } else if (key == QTextFormat::FontPointSize) {
+            target->addAttributePt("fo:font-size", fontPointSize());
         }
     }
+    //TODO: font name and family
 }
 
 #include "KoCharacterStyle.moc"

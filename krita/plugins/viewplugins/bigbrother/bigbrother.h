@@ -20,6 +20,8 @@
 
 #include <kparts/plugin.h>
 
+class QAction;
+class KisMacro;
 class KisView2;
 
 /**
@@ -34,13 +36,19 @@ public:
 
 private slots:
 
-    void slotReplay();
     void slotSave();
-    void slotOpen();
+    void slotOpenPlay();
+    void slotStartRecordingMacro();
+    void slotStopRecordingMacro();
 
+private:
+    void saveMacro(const KisMacro* macro);
 private:
 
     KisView2 * m_view;
+    KisMacro * m_recorder;
+    KAction* m_startRecordingMacroAction;
+    KAction* m_stopRecordingMacroAction;
 
 };
 

@@ -22,7 +22,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kis_debug.h>
 #include <kfiledialog.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -31,6 +30,7 @@
 #include <kis_action_recorder.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
+#include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
 #include <kis_recorded_action.h>
@@ -43,7 +43,7 @@ K_EXPORT_COMPONENT_FACTORY( kritabigbrother, BigBrotherPluginFactory( "krita" ) 
 
 
 BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : KParts::Plugin(parent), m_recorder(0)
 {
     if ( parent->inherits("KisView2") )
     {
@@ -53,51 +53,39 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/bigbrother.rc"), true);
 
-        // Replay recording action
-        KAction* action  = new KAction(i18n("Replay"), this);
-        actionCollection()->addAction("Recording_Replay", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotReplay()));
+        KAction* action = 0;
+        // Open and play action
+        action  = new KAction(KIcon("media-playback-start"), i18n("Open and play..."), this);
+        actionCollection()->addAction("Recording_Open_Play", action );
+        connect(action, SIGNAL(triggered()), this, SLOT(slotOpenPlay()));
         // Save recorded action
-        action  = new KAction(i18n("Save"), this);
-        actionCollection()->addAction("Recording_Save", action );
+        action  = new KAction(i18n("Save all actions"), this);
+        actionCollection()->addAction("Recording_Global_Save", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotSave()));
+        // Start recording action
+        m_startRecordingMacroAction = new KAction(KIcon("media-record"), i18n("Start recording macro"), this);
+        actionCollection()->addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction );
+        connect(m_startRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStartRecordingMacro()));
         // Save recorded action
-        action  = new KAction(i18n("Open"), this);
-        actionCollection()->addAction("Recording_Open", action );
-        connect(action, SIGNAL(triggered()), this, SLOT(slotOpen()));
+        m_stopRecordingMacroAction  = new KAction(KIcon("media-playback-stop"), i18n("Stop recording actions"), this);
+        actionCollection()->addAction("Recording_Stop_Recording_Macro", m_stopRecordingMacroAction );
+        connect(m_stopRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStopRecordingMacro()));
+        m_stopRecordingMacroAction->setEnabled( false );
     }
 }
 
 BigBrotherPlugin::~BigBrotherPlugin()
 {
     m_view = 0;
-}
-
-void BigBrotherPlugin::slotReplay()
-{
-    m_view->image()->actionRecorder()->play();
+    delete m_recorder;
 }
 
 void BigBrotherPlugin::slotSave()
 {
-    QString filename = KFileDialog::getSaveFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
-    if(not filename.isNull())
-    {
-        QDomDocument doc;
-        QDomElement e = doc.createElement("RecordedActions");
-        
-        m_view->image()->actionRecorder()->toXML(doc, e);
-        
-        doc.appendChild(e);
-        QFile f(filename);
-        f.open( QIODevice::WriteOnly);
-        QTextStream stream(&f);
-        doc.save(stream,2);
-        f.close();
-    }
+    saveMacro( m_view->image()->actionRecorder() );
 }
 
-void BigBrotherPlugin::slotOpen()
+void BigBrotherPlugin::slotOpenPlay()
 {
     QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
     if(not filename.isNull())
@@ -106,13 +94,13 @@ void BigBrotherPlugin::slotOpen()
         QFile f(filename);
         if(f.exists())
         {
-            dbgKrita << f.open( QIODevice::ReadOnly);
+            dbgPlugins << f.open( QIODevice::ReadOnly);
             QString err;
             int line, col;
             if(not doc.setContent(&f, &err, &line, &col))
             {
                 // TODO error message
-                dbgKrita << err << " line = " << line << " col = " << col;
+                dbgPlugins << err << " line = " << line << " col = " << col;
                 f.close();
                 return;
             }
@@ -127,8 +115,54 @@ void BigBrotherPlugin::slotOpen()
                 // TODO error message
             }
         } else {
-            dbgKrita << "Unexistant file : " << filename;
+            dbgPlugins << "Unexistant file : " << filename;
         }
+    }
+}
+
+void BigBrotherPlugin::slotStartRecordingMacro()
+{
+    dbgPlugins << "Start recording macro";
+    if( m_recorder ) return;
+    // Alternate actions
+    m_startRecordingMacroAction->setEnabled( false );
+    m_stopRecordingMacroAction->setEnabled( true );
+    
+    // Create recorder
+    m_recorder = new KisMacro(m_view->image());
+    connect(m_view->image()->actionRecorder(), SIGNAL(addedAction(const KisRecordedAction&)), m_recorder, SLOT(addAction(const KisRecordedAction&)));
+}
+
+void BigBrotherPlugin::slotStopRecordingMacro()
+{
+    dbgPlugins << "Stop recording macro";
+    if( not m_recorder ) return;
+    // Alternate actions
+    m_startRecordingMacroAction->setEnabled( true );
+    m_stopRecordingMacroAction->setEnabled( false );
+    // Save the macro
+    saveMacro( m_recorder );
+    // Delete recorder
+    delete m_recorder;
+    m_recorder = 0;
+}
+
+void BigBrotherPlugin::saveMacro(const KisMacro* macro)
+{
+    QString filename = KFileDialog::getSaveFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
+    if(not filename.isNull())
+    {
+        QDomDocument doc;
+        QDomElement e = doc.createElement("RecordedActions");
+        
+        macro->toXML(doc, e);
+        
+        doc.appendChild(e);
+        QFile f(filename);
+        f.open( QIODevice::WriteOnly);
+        QTextStream stream(&f);
+        doc.save(stream,2);
+        f.close();
     }
 }
 

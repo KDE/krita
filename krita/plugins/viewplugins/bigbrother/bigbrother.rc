@@ -3,9 +3,12 @@
 <MenuBar>
     <Menu name="Tools"><text>&amp;Tools</text>
         <Menu name="Recording"><text>&amp;Recording</text>
-            <Action name="Recording_Replay"/>
-            <Action name="Recording_Save"/>
-            <Action name="Recording_Open"/>
+            <Action name="Recording_Open_Play"/>
+            <Separator/>
+            <Action name="Recording_Global_Save"/>
+            <Separator/>
+            <Action name="Recording_Start_Recording_Macro"/>
+            <Action name="Recording_Stop_Recording_Macro"/>
         </Menu>
     </Menu>
 </MenuBar>

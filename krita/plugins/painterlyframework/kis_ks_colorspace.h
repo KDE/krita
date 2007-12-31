@@ -68,13 +68,16 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYP
             QString id;
             QByteArray name;
 
-            if (sizeof(_TYPE_) == 4) {
-                id = QString("F32");
-                name = QString("32 Bits Float").toUtf8();
-            }
-            if (sizeof(_TYPE_) == 2) {
-                id = QString("F16");
-                name = QString("16 Bits Float").toUtf8();
+            switch (KoColorSpaceMathsTraits<_TYPE_>::channelValueType) {
+                case KoChannelInfo::FLOAT32:
+                    id = QString("F32");
+                    name = QString("32 Bits Float").toUtf8();
+                    break;
+                case KoChannelInfo::FLOAT16:
+                    id = QString("F16");
+                    name = QString("16 Bits Float").toUtf8();
+                    break;
+                default: break;
             }
 
             return KoID(id, i18n(name.data()));
@@ -162,8 +165,8 @@ void KisKSColorSpace<_TYPE_,_N_>::colorToXML(const quint8 *pixel, QDomDocument &
 {
     QDomElement labElt = doc.createElement("KS"+QString::number(_N_));
     for (uint i = 0; i < _N_; i++) {
-        labElt.setAttribute("K"+QString::number(i), (double)CSTrait::K(pixel,i));
-        labElt.setAttribute("S"+QString::number(i), (double)CSTrait::S(pixel,i));
+        labElt.setAttribute("K"+QString::number(i), KoColorSpaceMaths<_TYPE_,double>::scaleToA(CSTrait::K(pixel,i)));
+        labElt.setAttribute("S"+QString::number(i), KoColorSpaceMaths<_TYPE_,double>::scaleToA(CSTrait::S(pixel,i)));
     }
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
@@ -173,8 +176,8 @@ template< typename _TYPE_, quint32 _N_ >
 void KisKSColorSpace<_TYPE_,_N_>::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     for (uint i = 0; i < _N_; i++) {
-        CSTrait::K(pixel,i) = elt.attribute("K"+QString::number(i)).toFloat();
-        CSTrait::S(pixel,i) = elt.attribute("S"+QString::number(i)).toFloat();
+        CSTrait::K(pixel,i) = KoColorSpaceMaths<double,_TYPE_>::scaleToA(elt.attribute("K"+QString::number(i)).toDouble());
+        CSTrait::S(pixel,i) = KoColorSpaceMaths<double,_TYPE_>::scaleToA(elt.attribute("S"+QString::number(i)).toDouble());
     }
 }
 

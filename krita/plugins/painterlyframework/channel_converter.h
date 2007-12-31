@@ -25,7 +25,9 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
-template< typename TYPE >
+#include <KoColorSpaceMaths.h>
+
+template< typename _TYPE_ >
 class ChannelConverter {
 
     public:
@@ -33,8 +35,8 @@ class ChannelConverter {
         ChannelConverter(const double &Kblack, const double &Sblack);
         ~ChannelConverter();
 
-        inline void KSToReflectance(const TYPE &K, const TYPE &S, double &R) const;
-        inline void reflectanceToKS(const double &R, TYPE &K, TYPE &S) const;
+        inline void KSToReflectance(const _TYPE_ &K, const _TYPE_ &S, double &R) const;
+        inline void reflectanceToKS(const double &R, _TYPE_ &K, _TYPE_ &S) const;
 
     private:
         double Kb, Sb;
@@ -51,14 +53,15 @@ class ChannelConverter {
         inline double S(const double &R) const;
 };
 
-template< typename TYPE >
-ChannelConverter<TYPE>::ChannelConverter(const double &Kblack, const double &Sblack)
+template< typename _TYPE_ >
+ChannelConverter<_TYPE_>::ChannelConverter(const double &Kblack, const double &Sblack)
 : Kb(Kblack), Sb(Sblack)
 {
     double q1, q2, k1, k2, D, Sh;
     double r0; // Represent the reflectance of the reference black (no, it's not zero)
 
-    KSToReflectance(Kb, Sb, r0);
+    KSToReflectance(KoColorSpaceMaths<double,_TYPE_>::scaleToA(Kb),
+                    KoColorSpaceMaths<double,_TYPE_>::scaleToA(Sb), r0);
     q1 = Kb / ( 1.0 + Kb*PHI(r0) );
     k1 = 1.0 + q1 - sqrt( q1*q1 + 2.0*q1 );
 
@@ -96,13 +99,13 @@ ChannelConverter<TYPE>::ChannelConverter(const double &Kblack, const double &Sbl
     gsl_vector_free(x);
 }
 
-template< typename TYPE >
-ChannelConverter<TYPE>::~ChannelConverter()
+template< typename _TYPE_ >
+ChannelConverter<_TYPE_>::~ChannelConverter()
 {
 }
 
-template< typename TYPE >
-inline double ChannelConverter<TYPE>::K(const double &R) const
+template< typename _TYPE_ >
+inline double ChannelConverter<_TYPE_>::K(const double &R) const
 {
     if (R <= 0.5)
         return ( 1.0 / (PHI(W(R))-PHI(R)) );
@@ -110,8 +113,8 @@ inline double ChannelConverter<TYPE>::K(const double &R) const
         return ( S(R)*PSI(R) );
 }
 
-template< typename TYPE >
-inline double ChannelConverter<TYPE>::S(const double &R) const
+template< typename _TYPE_ >
+inline double ChannelConverter<_TYPE_>::S(const double &R) const
 {
     if (R > 0.5)
         return ( Kb - Sb*PSI(B(R)) ) / ( PSI(B(R)) - PSI(R) );
@@ -119,28 +122,30 @@ inline double ChannelConverter<TYPE>::S(const double &R) const
         return ( K(R)*PHI(R) );
 }
 
-template< typename TYPE >
-inline void ChannelConverter<TYPE>::KSToReflectance(const TYPE &K, const TYPE &S, double &R) const
+template< typename _TYPE_ >
+inline void ChannelConverter<_TYPE_>::KSToReflectance(const _TYPE_ &K, const _TYPE_ &S, double &R) const
 {
-    if (S == 0.0) {
+    double k = KoColorSpaceMaths<_TYPE_,double>::scaleToA(K);
+    double s = KoColorSpaceMaths<_TYPE_,double>::scaleToA(S);
+    if (s == 0.0) {
         R = 0.0;
         return;
     }
 
-    if (K == 0.0) {
+    if (k == 0.0) {
         R = 1.0;
         return;
     }
 
-    const double Q = (double)(K/S);
+    const double Q = k/s;
     R = 1.0 + Q - sqrt( Q*Q + 2.0*Q );
 }
 
-template< typename TYPE >
-inline void ChannelConverter<TYPE>::reflectanceToKS(const double &R, TYPE &K, TYPE &S) const
+template< typename _TYPE_ >
+inline void ChannelConverter<_TYPE_>::reflectanceToKS(const double &R, _TYPE_ &K, _TYPE_ &S) const
 {
-    K = (TYPE)(this->K(R));
-    S = (TYPE)(this->S(R));
+    K = KoColorSpaceMaths<double,_TYPE_>::scaleToA(this->K(R));
+    S = KoColorSpaceMaths<double,_TYPE_>::scaleToA(this->S(R));
 }
 
 #endif // CHANNEL_CONVERTER_H_

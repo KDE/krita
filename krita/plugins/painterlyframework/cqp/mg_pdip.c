@@ -72,8 +72,17 @@ typedef struct
 
 	double data_norm; /* norm of the problem data */
 
-}
-mg_pdip_state;
+    gsl_permutation * p;
+
+    gsl_vector * delta;
+    gsl_vector * delta_s;
+
+    gsl_vector * r_zs;
+
+    gsl_vector * delta_gondzio;
+    gsl_vector * delta_s_gondzio;
+
+} mg_pdip_state;
 
 static int
 mg_pdip_alloc (void *vstate, size_t n, size_t me, size_t mi)
@@ -100,6 +109,57 @@ mg_pdip_alloc (void *vstate, size_t n, size_t me, size_t mi)
 		gsl_vector_free(state->s);
 		GSL_ERROR_VAL ("failed to initialize space for right-hand side of the KKT-System", GSL_ENOMEM, 0);
 	}
+
+
+    state->p = gsl_permutation_alloc(state->kkt_matrix->size1);
+    if(state->p == 0)
+    {
+        GSL_ERROR_VAL ("failed to initialize space for permutation vector", GSL_ENOMEM, 0);
+    }
+
+    state->delta = gsl_vector_alloc(state->kkt_matrix->size2);
+    if(state->delta == 0)
+    {
+        gsl_permutation_free(state->p);
+        GSL_ERROR_VAL ("failed to initialize space for predictor step", GSL_ENOMEM, 0);
+    }
+    state->delta_gondzio = gsl_vector_alloc(state->kkt_matrix->size2);
+    if(state->delta_gondzio == 0)
+    {
+        gsl_vector_free(state->delta);
+        gsl_permutation_free(state->p);
+        GSL_ERROR_VAL ("failed to initialize space for predictor step", GSL_ENOMEM, 0);
+    }
+
+    state->delta_s_gondzio = gsl_vector_alloc(mi);
+    if(state->delta_s_gondzio == 0)
+    {
+        gsl_vector_free(state->delta_gondzio);
+        gsl_vector_free(state->delta);
+        gsl_permutation_free(state->p);
+        GSL_ERROR_VAL ("failed to initialize space for LM s", GSL_ENOMEM, 0);
+    }
+
+    state->delta_s = gsl_vector_alloc(mi);
+    if(state->delta_s == 0)
+    {
+        gsl_vector_free(state->delta_s_gondzio);
+        gsl_vector_free(state->delta_gondzio);
+        gsl_vector_free(state->delta);
+        gsl_permutation_free(state->p);
+        GSL_ERROR_VAL ("failed to initialize space for LM s", GSL_ENOMEM, 0);
+    }
+
+    state->r_zs = gsl_vector_alloc(mi);
+    if(state->r_zs == 0)
+    {
+        gsl_vector_free(state->delta_s);
+        gsl_vector_free(state->delta_s_gondzio);
+        gsl_vector_free(state->delta_gondzio);
+        gsl_vector_free(state->delta);
+        gsl_permutation_free(state->p);
+        GSL_ERROR_VAL ("failed to initialize space for LM s", GSL_ENOMEM, 0);
+    }
 
 	return GSL_SUCCESS;
 }
@@ -199,66 +259,12 @@ mg_pdip_iterate (void *vstate, const gsl_cqp_data *cqp, gsl_vector *x, gsl_vecto
 
 	mg_pdip_state *state = (mg_pdip_state *) vstate;
 
-	gsl_permutation * p;
-
-	gsl_vector * delta;
-	gsl_vector * delta_s;
-
-	gsl_vector * r_zs;
-
-	gsl_vector * delta_gondzio;
-	gsl_vector * delta_s_gondzio;
-
-
-	p = gsl_permutation_alloc(state->kkt_matrix->size1);
-	if(p == 0)
-	{
-		GSL_ERROR_VAL ("failed to initialize space for permutation vector", GSL_ENOMEM, 0);
-	}
-
-	delta = gsl_vector_alloc(state->kkt_matrix->size2);
-	if(delta == 0)
-	{
-		gsl_permutation_free(p);
-		GSL_ERROR_VAL ("failed to initialize space for predictor step", GSL_ENOMEM, 0);
-	}
-	delta_gondzio = gsl_vector_alloc(state->kkt_matrix->size2);
-	if(delta_gondzio == 0)
-	{
-		gsl_vector_free(delta);
-		gsl_permutation_free(p);
-		GSL_ERROR_VAL ("failed to initialize space for predictor step", GSL_ENOMEM, 0);
-	}
-
-	delta_s_gondzio = gsl_vector_alloc(z->size);
-	if(delta_s_gondzio == 0)
-	{
-		gsl_vector_free(delta_gondzio);
-		gsl_vector_free(delta);
-		gsl_permutation_free(p);
-		GSL_ERROR_VAL ("failed to initialize space for LM s", GSL_ENOMEM, 0);
-	}
-
-	delta_s = gsl_vector_alloc(z->size);
-	if(delta_s == 0)
-	{
-		gsl_vector_free(delta_s_gondzio);
-		gsl_vector_free(delta_gondzio);
-		gsl_vector_free(delta);
-		gsl_permutation_free(p);
-		GSL_ERROR_VAL ("failed to initialize space for LM s", GSL_ENOMEM, 0);
-	}
-
-	r_zs = gsl_vector_alloc(z->size);
-	if(r_zs == 0)
-	{
-		gsl_vector_free(delta_s);
-		gsl_vector_free(delta_s_gondzio);
-		gsl_vector_free(delta_gondzio);
-		gsl_vector_free(delta);
-		gsl_permutation_free(p);
-		GSL_ERROR_VAL ("failed to initialize space for LM s", GSL_ENOMEM, 0);
-	}
+	gsl_permutation * p = state->p;
+    gsl_vector * delta = state->delta;
+    gsl_vector * delta_s = state->delta_s;
+    gsl_vector * r_zs = state->r_zs;
+    gsl_vector * delta_gondzio = state->delta_gondzio;
+    gsl_vector * delta_s_gondzio = state->delta_s_gondzio;
 
 	/* the right-hand side of the KKT-system: r = -(r_Q, r_A, r_C+Z^{-1}*r_zs) */
 	/* the vecors of variables: delta = (delta_x, -delta_y, -delta_z) */
@@ -453,14 +459,6 @@ mg_pdip_iterate (void *vstate, const gsl_cqp_data *cqp, gsl_vector *x, gsl_vecto
 		printf("\nduality gap: %e\n",*gap);
 	}
 
-	gsl_permutation_free(p);
-	gsl_vector_free(delta);
-	gsl_vector_free(delta_s_gondzio);
-    gsl_vector_free(delta_gondzio);
-	gsl_vector_free(delta_s);
-	gsl_vector_free(r_zs);
-
-
   return GSL_SUCCESS;
 }
 
@@ -472,6 +470,13 @@ mg_pdip_free (void *vstate)
 	gsl_vector_free(state->s);
 	gsl_matrix_free(state->kkt_matrix);
 	gsl_vector_free(state->r);
+
+    gsl_permutation_free(state->p);
+    gsl_vector_free(state->delta);
+    gsl_vector_free(state->delta_s_gondzio);
+    gsl_vector_free(state->delta_gondzio);
+    gsl_vector_free(state->delta_s);
+    gsl_vector_free(state->r_zs);
 }
 
 /*

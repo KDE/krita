@@ -36,9 +36,24 @@ class RGBID {
     public:
         RGBID() {}
         ~RGBID() {}
-        void set(const quint16 *rgb) { memmove(RGB, rgb, 8); }
-        int total() { return RGB[0]+RGB[1]+RGB[2]; }
-        bool operator==(const RGBID &op2) const { return (op2.RGB[0]==RGB[0]&&op2.RGB[1]==RGB[1]&&op2.RGB[2]==RGB[2]); }
+        void set(const quint16 *rgb)
+        {
+            memmove(RGB, rgb, 8);
+        }
+        int total()
+        {
+            return RGB[0]+RGB[1]+RGB[2];
+        }
+        bool operator==(const RGBID &op2) const
+        {
+            return ( op2.RGB[0] == RGB[0] &&
+                     op2.RGB[1] == RGB[1] &&
+                     op2.RGB[2] == RGB[2] );
+        }
+
+        friend uint qHash(const RGBID &key);
+
+    private:
 
         quint16 RGB[3];
 };
@@ -60,7 +75,7 @@ public:
         m_converter = new ChannelConverter(m_profile->Kblack(), m_profile->Sblack());
         m_rgbvec = gsl_vector_calloc(3);
         m_refvec = gsl_vector_calloc(_N_);
-        m_cache.reserve(10000);
+        m_cache.reserve(20000);
     }
 
     ~KisRGBToKSColorConversionTransformation()
@@ -68,6 +83,8 @@ public:
         delete m_converter;
         gsl_vector_free(m_rgbvec);
         gsl_vector_free(m_refvec);
+
+        // We need to manually delete the items
         QHashIterator<RGBID, float *> i(m_cache);
         while (i.hasNext()) {
             i.next();
@@ -86,15 +103,22 @@ public:
         const int pixelSize = KisKSColorSpaceTrait<_N_>::pixelSize;
 
         for ( ; nPixels > 0; nPixels-- ) {
+            // Load for the lookup
             m_lookup.set(src);
+            // Check if the item is in the cache
             if (m_cache.contains(m_lookup)) {
+
                 memmove(dst, m_cache.value(m_lookup), pixelSize-4);
+
             } else {
+
+                // Do normal computations
                 for (int i = 0; i < 3; i++) {
                     m_converter->sRGBToRGB(KoColorSpaceMaths<quint16,float>::scaleToA(src[2-i]), m_current);
                     gsl_vector_set(m_rgbvec, i, m_current);
                 }
 
+                // Avoid calculations of black and white
                 if (m_lookup.total() == 0)
                     gsl_vector_set_all(m_refvec, 0.0);
                 else if (m_lookup.total() == 3*65535)
@@ -107,15 +131,8 @@ public:
                                                 KisKSColorSpaceTrait<_N_>::K(dst, i),
                                                 KisKSColorSpaceTrait<_N_>::S(dst, i));
                 }
-                if (m_cache.count() == 10000) {
-                    QHashIterator<RGBID, float *> i(m_cache);
-                    for (int j = 0; j < 7500; j++) {
-                        i.next();
-                        delete [] i.value();
-                        m_cache.remove(i.key());
-                    }
-                    m_cache.squeeze();
-                }
+
+                // Add the new color conversion to the cache
                 m_cache.insert(m_lookup, new float[pixelSize-4]);
                 memmove(m_cache.value(m_lookup), dst, pixelSize-4);
             }
@@ -125,6 +142,18 @@ public:
             src += 4;
             dst += pixelSize;
         }
+
+        // If the cache contains too many elements, erase the first 15000
+        if (m_cache.count() >= 19000) {
+            QHashIterator<RGBID, float *> i(m_cache);
+            for (int j = 0; j < 15000; j++) {
+                i.next();
+                delete [] i.value();
+                m_cache.remove(i.key());
+            }
+            m_cache.squeeze();
+        }
+
     }
 
 protected:

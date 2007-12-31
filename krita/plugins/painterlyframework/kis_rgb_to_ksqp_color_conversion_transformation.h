@@ -123,9 +123,9 @@ protected:
         for (uint i = 0; i < 9; i++) {
             double curr = gsl_vector_get(gsl_cqpminimizer_x(m_s), i);
 
-            if (fabs(curr - 0.0) < 1e-6)
+            if (fabs(curr - 0.0) < 1e-7)
                 gsl_vector_set(m_refvec, i, 0.0);
-            else if (fabs(curr - 1.0) < 1e-6)
+            else if (fabs(curr - 1.0) < 1e-7)
                 gsl_vector_set(m_refvec, i, 1.0);
             else
                 gsl_vector_set(m_refvec, i, curr);

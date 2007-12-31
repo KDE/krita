@@ -29,7 +29,7 @@ class KoSharedLoadingData
 {
 public:
     KoSharedLoadingData() {}
-    virtual KoSharedLoadingData() {}
+    virtual ~KoSharedLoadingData() {}
 };
 
 #endif /* KOSHAREDLOADINGDATA_H */

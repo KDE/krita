@@ -202,11 +202,11 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs );
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    KAction * action  = new KAction(KIcon("view_left_right"), i18n("Flip on &X Axis"), this);
+    KAction * action  = new KAction(KIcon("view-split-left-right"), i18n("Flip on &X Axis"), this);
     actionCollection->addAction("mirrorLayerX", action );
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerX()));
 
-    action  = new KAction(KIcon("view_top_bottom"), i18n("Flip on &Y Axis"), this);
+    action  = new KAction(KIcon("view-split-top-bottom"), i18n("Flip on &Y Axis"), this);
     actionCollection->addAction("mirrorLayerY", action );
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerY()));
 

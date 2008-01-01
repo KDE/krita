@@ -124,8 +124,8 @@ inline double ChannelConverter<_TYPE_>::S(const double &R) const
 template< typename _TYPE_ >
 inline void ChannelConverter<_TYPE_>::KSToReflectance(const _TYPE_ &K, const _TYPE_ &S, double &R) const
 {
-    double k = KoColorSpaceMaths<_TYPE_,double>::scaleToA(K);
-    double s = KoColorSpaceMaths<_TYPE_,double>::scaleToA(S);
+    const double k = KoColorSpaceMaths<_TYPE_,double>::scaleToA(K);
+    const double s = KoColorSpaceMaths<_TYPE_,double>::scaleToA(S);
     if (s == 0.0) {
         R = 0.0;
         return;

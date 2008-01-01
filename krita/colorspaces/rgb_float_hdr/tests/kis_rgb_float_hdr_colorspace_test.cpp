@@ -73,13 +73,13 @@ quint16 f32ChannelToU16Channel(float f32Channel, float exposure)
     return floatToU16(exposedChannel);
 }
 
-U16Pixel F32PixelToU16Pixel(const F32Pixel f32Pixel, float exposure)
+U16Pixel F32PixelToU16Pixel(const F32Pixel f32Pixel, const KoHdrColorProfile* profile)
 {
     U16Pixel u16Pixel;
 
-    u16Pixel.red = f32ChannelToU16Channel(f32Pixel.red, exposure);
-    u16Pixel.green = f32ChannelToU16Channel(f32Pixel.green, exposure);
-    u16Pixel.blue = f32ChannelToU16Channel(f32Pixel.blue, exposure);
+    u16Pixel.red = profile->channelToDisplay( f32Pixel.red );
+    u16Pixel.green = profile->channelToDisplay( f32Pixel.green );
+    u16Pixel.blue = profile->channelToDisplay( f32Pixel.blue );
     u16Pixel.alpha = floatToU16(f32Pixel.alpha);
 
     return u16Pixel;
@@ -129,12 +129,10 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
     f32Pixels[1].blue = 0.18;
     f32Pixels[1].alpha = 1.0;
 
-    const float exposure = 1.0;
-
     U16Pixel u16Pixels[numPixelsToConvert];
 
     for (int pixel = 0; pixel < numPixelsToConvert; pixel++) {
-        u16Pixels[pixel] = F32PixelToU16Pixel(f32Pixels[pixel], exposure);
+        u16Pixels[pixel] = F32PixelToU16Pixel(f32Pixels[pixel], dynamic_cast<const KoHdrColorProfile*>(colorSpace->profile()));
     }
 
     KoIccColorProfile *destinationProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
@@ -161,7 +159,7 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
     U8Pixel u8Pixels[numPixelsToConvert];
 
     cmsDoTransform(transform, &u16Pixels, &u8Pixels, numPixelsToConvert);
-
+    
     for (int pixel = 0; pixel < numPixelsToConvert; pixel++) {
         u8Pixels[pixel].alpha = floatToU8(f32Pixels[pixel].alpha);
     }

@@ -123,7 +123,7 @@ void KisShapeLayer::removeChild(KoShape *object)
 
 QIcon KisShapeLayer::icon() const
 {
-    return KIcon("gear");
+    return KIcon("bookmark");
 }
 
 void KisShapeLayer::updateProjection(const QRect& r)

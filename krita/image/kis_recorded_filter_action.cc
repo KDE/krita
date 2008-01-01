@@ -79,6 +79,7 @@ void KisRecordedFilterAction::play(KisUndoAdapter* adapter) const
     }
 
     d->filter->process( dev, rect, kfc);
+    dev->setDirty( rect );
     if (adapter) adapter->addCommand( cmd );
 }
 

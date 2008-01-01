@@ -60,8 +60,7 @@ ChannelConverter<_TYPE_>::ChannelConverter(const double &Kblack, const double &S
     double q1, q2, k1, k2, D, Sh;
     double r0; // Represent the reflectance of the reference black (no, it's not zero)
 
-    KSToReflectance(KoColorSpaceMaths<double,_TYPE_>::scaleToA(Kb),
-                    KoColorSpaceMaths<double,_TYPE_>::scaleToA(Sb), r0);
+    r0 = 1.0 + (Kb/Sb) - sqrt( (Kb/Sb)*(Kb/Sb) + 2.0*(Kb/Sb) );
     q1 = Kb / ( 1.0 + Kb*PHI(r0) );
     k1 = 1.0 + q1 - sqrt( q1*q1 + 2.0*q1 );
 

@@ -63,7 +63,9 @@ void KisFilesTest::testFiles()
             doc.setOutputMimeType("image/png");
             doc.saveAs( "file://" + tmpFile.fileName());
             QImage resultImg(resultFileInfo.absoluteFilePath());
+            resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
             QImage sourceImg(tmpFile.fileName());
+            sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
             QVERIFY(resultImg.width() == sourceImg.width());
             QVERIFY(resultImg.height() == sourceImg.height());
             QCOMPARE(resultImg.numBytes(), sourceImg.numBytes());

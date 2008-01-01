@@ -136,6 +136,7 @@ void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
     KisTransaction * cmd = 0;
     if (adapter) cmd = new KisTransaction("", layer()->paintDevice());
     KisPainter painter( layer()->paintDevice());
+    Q_ASSERT(brush());
     painter.setBrush( brush() );
     painter.setPaintOp( KisPaintOpRegistry::instance()->paintOp( paintOpId(), (KisPaintOpSettings*)0, &painter, layer()->image() ) );
     

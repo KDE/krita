@@ -37,13 +37,15 @@
 void MixingTest::testMixing()
 {
     // These values are tied for blue - yellow mixing.
+    const int T1 = 0;
+    const int T2 = 16;
     const int T = 16;
     const int step = 2;
     const int base = 256/T;
     const int basewidth = 16;
 
-    const int ncolor1 = (int)pow(T/step+1,2);
-    const int ncolor2 = (int)pow(T/step+1,2);
+    const int ncolor1 = (int)pow((T2-T1)/step+1,2);
+    const int ncolor2 = (int)pow((T2-T1)/step+1,2);
 
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
     QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_high.ill",  KStandardDirs::Recursive)[0];
@@ -61,13 +63,13 @@ void MixingTest::testMixing()
     QPainter p;
     int currx, curry = 0;
     QImage image(basewidth*3*ncolor2, basewidth*ncolor1, QImage::Format_ARGB32);
-    for (int i1 = 0; i1 <= 0; i1+=step) {
-        for (int j1 = 0; j1 <= T; j1+=step) {
-            for (int k1 = 0; k1 <= T; k1+=step) {
+    for (int i1 = T1; i1 <= T1; i1+=step) {
+        for (int j1 = T1; j1 <= T2; j1+=step) {
+            for (int k1 = T1; k1 <= T2; k1+=step) {
                 currx = 0;
-                for (int i2 = 0; i2 <= T; i2+=step) {
-                    for (int j2 = 0; j2 <= T; j2+=step) {
-                        for (int k2 = 0; k2 <= 0; k2+=step) {
+                for (int i2 = T1; i2 <= T2; i2+=step) {
+                    for (int j2 = T1; j2 <= T2; j2+=step) {
+                        for (int k2 = T1; k2 <= T1; k2+=step) {
                             color1 = QColor(base*i1?base*i1-1:0,base*j1?base*j1-1:0,base*k1?base*k1-1:0);
                             color2 = QColor(base*i2?base*i2-1:0,base*j2?base*j2-1:0,base*k2?base*k2-1:0);
                             cs->fromQColor(color1, data1);

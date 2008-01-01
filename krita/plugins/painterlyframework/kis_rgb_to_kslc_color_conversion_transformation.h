@@ -42,15 +42,15 @@ public:
     : parent(srcCs, dstCs)
     {
         // Calculate primaries
-        m_red = gsl_vector_calloc(_N_);
+        m_red   = gsl_vector_calloc(_N_);
         m_green = gsl_vector_calloc(_N_);
-        m_blue = gsl_vector_calloc(_N_);
+        m_blue  = gsl_vector_calloc(_N_);
 
         // First: red
         gsl_vector_set(parent::m_rgbvec, 0, 1.0);
         gsl_vector_set(parent::m_rgbvec, 1, 0.0);
         gsl_vector_set(parent::m_rgbvec, 2, 0.0);
-        parent::RGBToReflectance(); //buildPrimary();
+        parent::RGBToReflectance();
         for (int i = 0; i < _N_; i++)
             gsl_vector_set(m_red, i, gsl_vector_get(parent::m_refvec, i));
 
@@ -63,7 +63,7 @@ public:
         gsl_vector_set(parent::m_rgbvec, 0, 0.0);
         gsl_vector_set(parent::m_rgbvec, 1, 0.0);
         gsl_vector_set(parent::m_rgbvec, 2, 1.0);
-        parent::RGBToReflectance(); //buildPrimary();
+        parent::RGBToReflectance();
         for (int i = 0; i < _N_; i++)
             gsl_vector_set(m_blue, i, gsl_vector_get(parent::m_refvec, i));
 

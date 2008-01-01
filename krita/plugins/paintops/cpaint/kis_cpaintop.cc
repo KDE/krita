@@ -167,11 +167,11 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
 
     sampleCount++;
     Sample * newSample = new Sample;
-    newSample->setPressure ( info.pressure() * 500 );
-    newSample->setX ( info.pos().x() );
-    newSample->setY ( info.pos().y() );
-    newSample->setTiltX ( info.xTilt() );
-    newSample->setTiltY ( info.yTilt() );
+    newSample->setPressure ( (int)( info.pressure() * 500 ) );
+    newSample->setX ( (int)info.pos().x() );
+    newSample->setY ( (int)info.pos().y() );
+    newSample->setTiltX ( (int)info.xTilt() );
+    newSample->setTiltY ( (int)info.yTilt() );
 
 
     if ( newStrokeFlag ) {

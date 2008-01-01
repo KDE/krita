@@ -49,6 +49,7 @@
 
 KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings *_settings, KisPainter * _painter, KisImageSP _image)
 {
+    Q_UNUSED(_image);
     const KisFilterOpSettings* settings = dynamic_cast<const KisFilterOpSettings*>(_settings);
     Q_ASSERT(settings);
     KisPaintOp * op = new KisFilterOp(settings, _painter);

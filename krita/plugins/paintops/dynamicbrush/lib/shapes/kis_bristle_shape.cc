@@ -29,7 +29,7 @@
 struct KisBristle {
     KisBristle(double x, double y) : m_x(x), m_y(y), m_lastX(0.0), m_lastY(0.0)
     {
-        color = KoColor( QColor( (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8());
+        color = KoColor( QColor( (int) (255.0*rand()) / RAND_MAX, (int) (255.0*rand()) / RAND_MAX, (int) (255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8());
     }
     // Position in the paintbrush
     double m_x, m_y;
@@ -102,7 +102,7 @@ void KisBristleShape::startPainting(KisPainter* _painter)
     m_paintBrush->bristlesPainter = new KisPainter(painter()->device() );
     m_paintBrush->bristlesPainter->setBrush( new KisAutobrushResource(kacs) );
     m_paintBrush->bristlesPainter->setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, m_paintBrush->bristlesPainter, 0) );
-    m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX, (255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8()) );
+    m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (int)(255.0*rand()) / RAND_MAX, (int)(255.0*rand()) / RAND_MAX, (int)(255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8()) );
 
 }
 

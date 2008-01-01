@@ -23,40 +23,50 @@ class QDomDocument;
 
 #include "krita_export.h"
 
+/**
+ * This is an interface for object that are serializable and unserializable.
+ * It can be used together with the factory in case the type of objects is also
+ * unknown at creation time.
+ */
 class KRITAIMAGE_EXPORT KisSerializableConfiguration {
     public:
 
         virtual ~KisSerializableConfiguration() {};
 
         /**
-        * Fill the object from the XML encoded representation in s.
-        * This function use the "OpenRaster" style XML.
-        */
+         * Fill the object from the XML encoded representation in s.
+         */
         virtual void fromXML(const QString&);
 
         /**
-        * Fill the object from the XML encoded representation in s.
-        * This function use the "OpenRaster" style XML.
-        */
+         * Fill the object from the XML encoded representation in s.
+         */
         virtual void fromXML(const QDomElement&) = 0;
         
         /**
-        * Create a serialized version of this object
-        * This function use the "OpenRaster" style XML.
-        */
+         * Create a serialized version of this object
+         */
         virtual void toXML(QDomDocument&, QDomElement&) const = 0;
 
         /**
-        * Create a serialized version of this object
-        * This function use the "OpenRaster" style XML.
-        */
+         * Create a serialized version of this object
+         */
         virtual QString toXML() const;
 };
 
+/**
+ * This is an interface for a factory of serializable configuration objects.
+ */
 class KRITAIMAGE_EXPORT KisSerializableConfigurationFactory {
     public:
         virtual ~KisSerializableConfigurationFactory();
+        /**
+         * @return an empty object with a sane default configuration
+         */
         virtual KisSerializableConfiguration* createDefault() =0;
+        /**
+         * @return an unserialied version of the configuration
+         */
         virtual KisSerializableConfiguration* create(const QDomElement&) =0;
 };
 

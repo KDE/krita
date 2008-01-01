@@ -66,7 +66,11 @@ public:
     const double* darkenCurve() const { return m_darkenCurve; }
 
     virtual QWidget *widget() const { return m_optionsWidget; }
-
+    
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+public:
+    
 private slots:
     void slotCustomCurves();
 

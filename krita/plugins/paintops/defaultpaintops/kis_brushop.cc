@@ -27,25 +27,26 @@
 #include <QLayout>
 #include <QLabel>
 #include <QCheckBox>
+#include <QDomElement>
 #include <QHBoxLayout>
 #include <qtoolbutton.h>
 
 #include <kis_debug.h>
 
-#include "KoColorTransformation.h"
+#include <KoColorTransformation.h>
+#include <KoInputDevice.h>
 
-#include "kcurve.h"
-#include "kis_brush.h"
-#include "kis_global.h"
-#include "kis_paint_device.h"
-
+#include <kcurve.h>
+#include <kis_brush.h>
+#include <kis_brushop.h>
 #include <kis_datamanager.h>
-#include "kis_painter.h"
-#include "kis_types.h"
-#include "kis_paintop.h"
-#include "KoInputDevice.h"
-#include "kis_selection.h"
-#include "kis_brushop.h"
+#include <kis_global.h>
+#include <kis_paint_device.h>
+#include <kis_painter.h>
+#include <kis_paintop.h>
+#include <kis_properties_configuration.h>
+#include <kis_selection.h>
+
 #include "ui_kis_dlgbrushcurvecontrol.h"
 
 KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings,
@@ -61,7 +62,7 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings,
 }
 
 KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
-    : KisPaintOpSettings(parent)
+    : KisPaintOpSettings()
 {
     m_optionsWidget = new QWidget(parent);
     m_optionsWidget->setObjectName("brush option widget");
@@ -141,6 +142,56 @@ bool KisBrushOpSettings::varyOpacity() const
 bool KisBrushOpSettings::varyDarken() const
 {
     return m_darken->isChecked();
+}
+
+void KisBrushOpSettings::fromXML(const QDomElement& elt)
+{
+    QDomElement e = elt.firstChildElement("Params");
+    if(not e.isNull())
+    {
+        KisPropertiesConfiguration kpc;
+        kpc.fromXML(e);
+        m_size->setChecked( kpc.getBool( "PressureSize", false) );
+        m_opacity->setChecked( kpc.getBool( "PressureOpacity", false) );
+        m_darken->setChecked( kpc.getBool( "PressureDarken", false) );
+        m_customSize = kpc.getBool( "CustomSize", false);
+        m_customOpacity = kpc.getBool( "CustomOpacity", false);
+        m_customDarken = kpc.getBool( "CustomDarken", false);
+        for(int i = 0; i < 256; i++)
+        {
+            if( m_customSize )
+                m_sizeCurve[i] = kpc.getDouble( QString("SizeCurve%0").arg(i), i / 255.0 );
+            if( m_customOpacity )
+                m_opacityCurve[i] = kpc.getDouble( QString("OpacityCurve%0").arg(i), i / 255.0 );
+            if( m_customDarken )
+                m_opacityCurve[i] = kpc.getDouble( QString("DarkenCurve%0").arg(i), i / 255.0 );
+        }
+    }
+}
+
+void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
+{
+    KisPropertiesConfiguration kpc;
+    kpc.setProperty("PressureSize", m_size->isChecked());
+    kpc.setProperty("PressureOpacity", m_opacity->isChecked());
+    kpc.setProperty("PressureDarken", m_darken->isChecked());
+    kpc.setProperty("CustomSize", m_customSize);
+    kpc.setProperty("CustomOpacity", m_customOpacity);
+    kpc.setProperty("CustomDarken", m_customDarken);
+    
+    for(int i = 0; i < 256; i++)
+    {
+        if( m_customSize )
+            kpc.setProperty( QString("SizeCurve%0").arg(i), m_sizeCurve[i] );
+        if( m_customOpacity )
+            kpc.setProperty( QString("OpacityCurve%0").arg(i), m_opacityCurve[i] );
+        if( m_customDarken )
+            kpc.setProperty( QString("DarkenCurve%0").arg(i), m_darkenCurve[i] );
+    }
+    
+    QDomElement paramsElt = doc.createElement( "Params" );
+    rootElt.appendChild( paramsElt );
+    kpc.toXML( doc, paramsElt);
 }
 
 KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)

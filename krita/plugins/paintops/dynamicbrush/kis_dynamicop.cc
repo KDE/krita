@@ -18,6 +18,7 @@
 
 #include <QAbstractItemView>
 #include <QCheckBox>
+#include <QDomElement>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLayout>
@@ -74,7 +75,7 @@ KisPaintOpSettings *KisDynamicOpFactory::settings(QWidget * parent, const KoInpu
 
 KisDynamicOpSettings::KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
         QObject(parent),
-        KisPaintOpSettings(parent),
+        KisPaintOpSettings(),
         m_optionsWidget(new QWidget(parent)),
         m_uiOptions(new Ui_DynamicBrushOptions()),
         m_shapeBookmarksModel(new KisBookmarkedConfigurationsModel(shapeBookmarksManager)),
@@ -128,6 +129,44 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
     current->setColoring( coloringsrc );
 
     return current;
+}
+
+void KisDynamicOpSettings::fromXML(const QDomElement& elt)
+{
+    m_uiOptions->comboBoxShapes->setCurrentIndex( elt.attribute("shapeType", "0" ).toInt() );
+    m_uiOptions->comboBoxColoring->setCurrentIndex( elt.attribute("coloringType", "0" ).toInt() );
+    // XXX: load the shape program / coloring program
+}
+
+void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
+{
+    rootElt.setAttribute( "shapeType", m_uiOptions->comboBoxShapes->currentIndex() );
+    rootElt.setAttribute( "coloringType", m_uiOptions->comboBoxColoring->currentIndex() );
+    // Save shape program
+    QDomElement shapeElt = doc.createElement( "Shape" );
+    rootElt.appendChild( shapeElt );
+    
+    QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
+            m_uiOptions->comboBoxShapePrograms->currentIndex(),0);
+    KisDynamicShapeProgram* shapeProgram = static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration( shapeModelIndex ) );
+    Q_ASSERT(shapeProgram);
+    
+    shapeProgram->toXML( doc, shapeElt );
+    
+    delete shapeProgram;
+    
+    // Save Coloring program
+    QDomElement coloringElt = doc.createElement( "Coloring" );
+    rootElt.appendChild( coloringElt );
+    
+    QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
+            m_uiOptions->comboBoxColoringPrograms->currentIndex(),0);
+    KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration( coloringModelIndex ) );
+    Q_ASSERT(coloringProgram);
+    
+    coloringProgram->toXML( doc, coloringElt );
+    
+    delete coloringProgram;
 }
 
 KisDynamicOp::KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter *painter)

@@ -57,6 +57,8 @@ class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
         virtual QWidget *widget() const { return m_optionsWidget; }
         /// @return a brush with the current shapes, coloring and program
         KisDynamicBrush* createBrush(KisPainter *painter) const;
+        virtual void fromXML(const QDomElement&);
+        virtual void toXML(QDomDocument&, QDomElement&) const;
     private:
         QWidget* m_optionsWidget;
         Ui_DynamicBrushOptions* m_uiOptions;

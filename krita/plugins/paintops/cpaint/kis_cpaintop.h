@@ -66,6 +66,9 @@ public:
 
     QWidget * widget() const { return m_optionsWidget; }
 
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+
 private slots:
 
     void resetCurrentBrush();

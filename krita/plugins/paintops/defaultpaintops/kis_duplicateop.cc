@@ -22,7 +22,8 @@
 
 #include "kis_duplicateop.h"
 
-#include <qrect.h>
+#include <QDomElement>
+#include <QRect>
 
 #include <kis_debug.h>
 
@@ -64,7 +65,7 @@ KisPaintOpSettings *KisDuplicateOpFactory::settings(QWidget * parent, const KoIn
 
 KisDuplicateOpSettings::KisDuplicateOpSettings(QWidget* parent, KisImageSP image) :
         QObject(parent),
-        KisPaintOpSettings(parent),
+        KisPaintOpSettings(),
         m_optionsWidget(new QWidget(parent)),
         m_uiOptions(new Ui_DuplicateOpOptionsWidget()),
         m_image(image),
@@ -114,6 +115,22 @@ bool KisDuplicateOpSettings::healing() const
 bool KisDuplicateOpSettings::perspectiveCorrection() const
 {
     return m_uiOptions->cbPerspective->isChecked();
+}
+
+void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
+{
+    m_uiOptions->cbHealing->setChecked( elt.attribute("Healing", "0" ).toInt() );
+    m_uiOptions->cbPerspective->setChecked( elt.attribute("PerspectiveCorrection", "0" ).toInt() );
+    m_offset.setX( elt.attribute("OffsetX", "0.0" ).toDouble() );
+    m_offset.setY( elt.attribute("OffsetY", "0.0" ).toDouble() );
+}
+
+void KisDuplicateOpSettings::toXML(QDomDocument&, QDomElement& elt) const
+{
+    elt.setAttribute( "OffsetX", QString::number( m_offset.x() ));
+    elt.setAttribute( "OffsetY", QString::number( m_offset.y() ));
+    elt.setAttribute( "Healing", QString::number( m_uiOptions->cbHealing->isChecked() ) );
+    elt.setAttribute( "PerspectiveCorrection", QString::number( m_uiOptions->cbPerspective->isChecked() ) );
 }
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image)

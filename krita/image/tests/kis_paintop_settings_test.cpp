@@ -25,7 +25,7 @@
 
 void KisPaintopSettingsTest::testCreation()
 {
-    KisPaintOpSettings test;
+//     KisPaintOpSettings test;
 }
 
 

@@ -22,6 +22,7 @@
 
 #include "kis_filterop.h"
 
+#include <QDomElement>
 #include <QRect>
 
 #include <kis_debug.h>
@@ -64,7 +65,7 @@ KisPaintOpSettings *KisFilterOpFactory::settings(QWidget * parent, const KoInput
 
 KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
         QObject(parent),
-        KisPaintOpSettings(parent),
+        KisPaintOpSettings(),
         m_optionsWidget(new QWidget(parent)),
         m_uiOptions(new Ui_FilterOpOptions()),
         m_currentFilterConfigWidget(0)
@@ -128,7 +129,7 @@ void KisFilterOpSettings::setCurrentFilter(const KoID & id)
     }
 }
 
-KisFilterSP KisFilterOpSettings::filter() const
+const KisFilterSP KisFilterOpSettings::filter() const
 {
     return m_currentFilter;
 }
@@ -137,6 +138,39 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
     if(not m_currentFilterConfigWidget) return 0;
     return m_currentFilterConfigWidget->configuration();
+}
+
+void KisFilterOpSettings::fromXML(const QDomElement& elt)
+{
+    QDomElement e = elt.firstChildElement( "Filter" );
+    if( not e.isNull() )
+    {
+        QString filterName = e.attribute("name");
+        m_currentFilter = KisFilterRegistry::instance()->get(filterName);
+        if(m_currentFilter)
+        {
+            delete m_currentFilterConfigWidget;
+            m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(m_optionsWidget, m_paintDevice );
+            KisFilterConfiguration * kfc = m_currentFilter->defaultConfiguration(m_paintDevice);
+            if(kfc and m_currentFilterConfigWidget)
+            {
+                kfc->fromXML( e );
+                m_currentFilterConfigWidget->setConfiguration( kfc );
+            }
+        }
+    }
+}
+
+void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
+{
+    QDomElement filterElt = doc.createElement( "Filter" );
+    rootElt.appendChild( filterElt );
+    if( m_currentFilterConfigWidget )
+    {
+        KisFilterConfiguration* config = m_currentFilterConfigWidget->configuration();
+        config->toXML( doc, filterElt );
+        delete config;
+    }
 }
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings* settings, KisPainter * painter)

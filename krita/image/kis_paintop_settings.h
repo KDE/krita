@@ -20,21 +20,22 @@
 #define KIS_PAINTOP_SETTINGS_H_
 
 #include "kis_types.h"
-#include <KoPointerEvent.h>
-#include <QWidget>
 #include "krita_export.h"
-#include "kis_layer.h"
+
+#include "kis_serializable_configuration.h"
+
+class QWidget;
+class KoPointerEvent;
 
 /**
  * This class is used to cache the settings (and the associated widget) for a paintop
  * between two creation. There is one KisPaintOpSettings per input device (mouse, tablet, etc...).
  */
-class KRITAIMAGE_EXPORT KisPaintOpSettings {
+class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisSerializableConfiguration {
 
 public:
-    KisPaintOpSettings() {}
-    KisPaintOpSettings(QWidget *parent) { Q_UNUSED(parent); }
-    virtual ~KisPaintOpSettings() {}
+    KisPaintOpSettings();
+    virtual ~KisPaintOpSettings();
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
@@ -46,24 +47,23 @@ public:
 
     /**
      * Call this function when the layer is changed
+     * Why is it KDE_DEPRECATED ?
      */
-    virtual void KDE_DEPRECATED setLayer(KisLayerSP layer )
-        {
-            m_layer = layer;
-        }
+    virtual void KDE_DEPRECATED setLayer(KisLayerSP layer );
 
     /**
      * @return a pointer to the widget displaying the settings
      */
-    virtual QWidget *widget() const { return 0; }
+    virtual QWidget *widget() const;
     /**
      * Call this function when the paint op is selected or the tool is activated
      */
     virtual void activate();
 
-protected:
+private:
+    struct Private;
+    Private* const d;
 
-    KisLayerSP m_layer;
 };
 
 #endif

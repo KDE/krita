@@ -53,15 +53,17 @@ class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
         KisFilterOpSettings(QWidget* parent);
         virtual ~KisFilterOpSettings();
         virtual QWidget *widget() const { return m_optionsWidget; }
-        KisFilterSP filter() const;
+        const KisFilterSP filter() const;
         KisFilterConfiguration* filterConfig() const;
         virtual void setLayer( KisLayerSP layer );
+        virtual void fromXML(const QDomElement&);
+        virtual void toXML(QDomDocument&, QDomElement&) const;
     protected slots:
         void setCurrentFilter(const KoID &);
     private:
         QWidget* m_optionsWidget;
         Ui_FilterOpOptions* m_uiOptions;
-        KisFilterSP m_currentFilter;
+        const KisFilterSP m_currentFilter;
         KisPaintDeviceSP m_paintDevice;
         KisFilterConfigWidget* m_currentFilterConfigWidget;
 };

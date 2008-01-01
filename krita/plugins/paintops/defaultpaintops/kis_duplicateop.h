@@ -54,6 +54,9 @@ class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
         QPointF offset() const { return m_offset; }
         bool healing() const;
         bool perspectiveCorrection() const;
+        
+        virtual void fromXML(const QDomElement&);
+        virtual void toXML(QDomDocument&, QDomElement&) const;
     private:
         QWidget* m_optionsWidget;
         Ui_DuplicateOpOptionsWidget* m_uiOptions;

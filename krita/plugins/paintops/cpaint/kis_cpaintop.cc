@@ -16,10 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QRect>
-#include <QComboBox>
-#include <QPainter>
 #include <QColor>
+#include <QComboBox>
+#include <QDomElement>
+#include <QPainter>
+#include <QRect>
 
 #include <kis_debug.h>
 
@@ -101,7 +102,7 @@ KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInput
 //=================
 
 KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush*> brushes)
-    : KisPaintOpSettings( parent )
+    : KisPaintOpSettings( )
 {
     m_brushes = brushes;
     m_optionsWidget = new QWidget( parent );
@@ -137,6 +138,19 @@ void KisCPaintOpSettings::resetCurrentBrush()
     b->addInk();
 }
 
+void KisCPaintOpSettings::fromXML(const QDomElement& elt)
+{
+    m_options->cmbBrush->setCurrentIndex( elt.attribute("brush", "0" ).toInt() );
+    m_options->intInk->setValue( elt.attribute("ink", "0" ).toInt() );
+    m_options->intWater->setValue( elt.attribute("water", "0" ).toInt() );
+}
+
+void KisCPaintOpSettings::toXML(QDomDocument& /*doc*/, QDomElement& elt) const
+{
+    elt.setAttribute("brush", QString::number(brush()));
+    elt.setAttribute("ink", QString::number(ink()));
+    elt.setAttribute("water", QString::number(water()));
+}
 
 //=================
 

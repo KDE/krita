@@ -18,6 +18,23 @@
 
 #include "kis_paintop_settings.h"
 
+#include <KoPointerEvent.h>
+#include <QWidget>
+
+#include "kis_layer.h"
+
+struct KisPaintOpSettings::Private {
+    KisLayerSP layer;
+};
+
+KisPaintOpSettings::KisPaintOpSettings() : d(new Private)
+{
+}
+KisPaintOpSettings::~KisPaintOpSettings()
+{
+    delete d;
+}
+
 void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
 {
   e->ignore();
@@ -26,3 +43,14 @@ void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
 void KisPaintOpSettings::activate()
 {
 }
+
+QWidget* KisPaintOpSettings::widget() const
+{
+    return 0;
+}
+
+void KDE_DEPRECATED KisPaintOpSettings::setLayer(KisLayerSP layer )
+{
+    d->layer = layer;
+}
+

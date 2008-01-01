@@ -96,6 +96,15 @@ public:
     void toQColor(QColor *c) const;
     /// a convenience method for the above.
     QColor toQColor() const;
+    
+    /**
+     * Convenient function to set the opacity of the color.
+     */
+    void setOpacity(quint8 alpha );
+    /**
+     * Convenient function that return the opacity of the color
+     */
+    quint8 opacity() const;
 
 // what about making the next two methods static factory methods?
     /// Convenient function for converting from a QColor

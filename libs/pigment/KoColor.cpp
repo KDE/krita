@@ -264,6 +264,15 @@ void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
     d->colorSpace->colorToXML( d->data, doc, colorElt);
 }
 
+void KoColor::setOpacity(quint8 alpha )
+{
+    d->colorSpace->setAlpha( d->data, alpha, 1);
+}
+quint8 KoColor::opacity() const
+{
+    d->colorSpace->alpha( d->data );
+}
+
 KoColor KoColor::fromXML(const QDomElement& elt, QString bitDepthId, QHash<QString, QString> aliases)
 {
     QString modelId;

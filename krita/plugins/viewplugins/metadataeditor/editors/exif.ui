@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>465</width>
-    <height>446</height>
+    <width>545</width>
+    <height>483</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -19,31 +19,33 @@
       <attribute name="title" >
        <string>Exposure</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QHBoxLayout" >
        <item>
-        <layout class="QHBoxLayout" >
-         <item>
+        <layout class="QGridLayout" >
+         <item row="0" column="0" >
           <widget class="QLabel" name="label" >
            <property name="text" >
             <string>Brightness value:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editBrightnessValue</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="0" column="1" >
           <widget class="QLineEdit" name="editBrightnessValue" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="1" column="0" >
           <widget class="QLabel" name="label_2" >
            <property name="text" >
             <string>ISO:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editISO</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="1" >
           <widget class="QSpinBox" name="editISO" >
            <property name="maximum" >
             <number>3600</number>
@@ -56,32 +58,30 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="2" column="0" >
           <widget class="QLabel" name="label_16" >
            <property name="text" >
             <string>Exposure time:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editExposureTime</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="1" >
           <widget class="QLineEdit" name="editExposureTime" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="3" column="0" >
           <widget class="QLabel" name="label_3" >
            <property name="text" >
             <string>Exposure mode:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editExposureMode</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="3" column="1" >
           <widget class="QComboBox" name="editExposureMode" >
            <item>
             <property name="text" >
@@ -100,18 +100,17 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="4" column="0" >
           <widget class="QLabel" name="label_14" >
            <property name="text" >
             <string>Exposure program:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editExposureProgram</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="4" column="1" >
           <widget class="QComboBox" name="editExposureProgram" >
            <item>
             <property name="text" >
@@ -160,90 +159,85 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="5" column="0" >
           <widget class="QLabel" name="label_7" >
            <property name="text" >
             <string>Exposure index:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editExposureIndex</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="5" column="1" >
           <widget class="QLineEdit" name="editExposureIndex" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="6" column="0" >
           <widget class="QLabel" name="label_10" >
            <property name="text" >
             <string>Exposure bias:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editExposureBiasValue</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="6" column="1" >
           <widget class="QLineEdit" name="editExposureBiasValue" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="7" column="0" >
           <widget class="QLabel" name="label_9" >
            <property name="text" >
             <string>Aperture:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editApertureValue</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="7" column="1" >
           <widget class="QLineEdit" name="editApertureValue" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="8" column="0" >
           <widget class="QLabel" name="label_8" >
            <property name="text" >
             <string>Shutter speed:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editShutterSpeedValue</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="8" column="1" >
           <widget class="QLineEdit" name="editShutterSpeedValue" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="9" column="0" >
           <widget class="QLabel" name="label_25" >
            <property name="text" >
             <string>F Number:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editFNumber</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="9" column="1" >
           <widget class="QLineEdit" name="editFNumber" />
          </item>
+         <item row="10" column="0" colspan="2" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>517</width>
+             <height>51</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -251,17 +245,20 @@
       <attribute name="title" >
        <string>Lens</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QHBoxLayout" >
        <item>
-        <layout class="QHBoxLayout" >
-         <item>
+        <layout class="QGridLayout" >
+         <item row="0" column="0" >
           <widget class="QLabel" name="label_6" >
            <property name="text" >
             <string>Focal lenght:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editFocalLength</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="0" column="1" >
           <widget class="QSpinBox" name="editFocalLength" >
            <property name="maximum" >
             <number>1000</number>
@@ -274,18 +271,17 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="1" column="0" >
           <widget class="QLabel" name="label_5" >
            <property name="text" >
             <string>Focal lenght (35mm equivalent):</string>
            </property>
+           <property name="buddy" >
+            <cstring>editFocalLengthIn35mmFilm</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="1" >
           <widget class="QSpinBox" name="editFocalLengthIn35mmFilm" >
            <property name="maximum" >
             <number>1000</number>
@@ -298,34 +294,33 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="2" column="0" >
           <widget class="QLabel" name="label_12" >
            <property name="text" >
             <string>Max aperture:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editMaxApertureValue</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="1" >
           <widget class="QLineEdit" name="editMaxApertureValue" />
          </item>
+         <item row="3" column="0" colspan="2" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>517</width>
+             <height>101</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -333,31 +328,33 @@
       <attribute name="title" >
        <string>Autofocus</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QHBoxLayout" >
        <item>
-        <layout class="QHBoxLayout" >
-         <item>
+        <layout class="QGridLayout" >
+         <item row="0" column="0" >
           <widget class="QLabel" name="label_17" >
            <property name="text" >
             <string>Subject distance:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editSubjectDistance</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="0" column="1" >
           <widget class="QLineEdit" name="editSubjectDistance" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="1" column="0" >
           <widget class="QLabel" name="label_11" >
            <property name="text" >
             <string>Metering mode:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editMeteringMode</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="1" >
           <widget class="QComboBox" name="editMeteringMode" >
            <item>
             <property name="text" >
@@ -401,18 +398,17 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="2" column="0" >
           <widget class="QLabel" name="label_24" >
            <property name="text" >
             <string>Distance range:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editSubjectDistanceRange</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="1" >
           <widget class="QComboBox" name="editSubjectDistanceRange" >
            <item>
             <property name="text" >
@@ -436,20 +432,20 @@
            </item>
           </widget>
          </item>
+         <item row="3" column="0" colspan="2" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>517</width>
+             <height>151</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -457,24 +453,27 @@
       <attribute name="title" >
        <string>Flash</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QHBoxLayout" >
        <item>
-        <widget class="QCheckBox" name="editFlashFired" >
-         <property name="text" >
-          <string>Fired</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+        <layout class="QGridLayout" >
+         <item row="0" column="0" colspan="2" >
+          <widget class="QCheckBox" name="editFlashFired" >
+           <property name="text" >
+            <string>Fired</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
           <widget class="QLabel" name="label_22" >
            <property name="text" >
             <string>Strobe return:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editStrobeReturn</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="1" >
           <widget class="QComboBox" name="editStrobeReturn" >
            <item>
             <property name="text" >
@@ -498,18 +497,17 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="2" column="0" >
           <widget class="QLabel" name="label_21" >
            <property name="text" >
             <string>Mode:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editFlashMode</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="1" >
           <widget class="QComboBox" name="editFlashMode" >
            <item>
             <property name="text" >
@@ -533,48 +531,47 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="editFlashFunction" >
-         <property name="text" >
-          <string>Function</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="editFlashRedEyeMode" >
-         <property name="text" >
-          <string>Red-eye removal</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="3" column="0" colspan="2" >
+          <widget class="QCheckBox" name="editFlashFunction" >
+           <property name="text" >
+            <string>Function</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="2" >
+          <widget class="QCheckBox" name="editFlashRedEyeMode" >
+           <property name="text" >
+            <string>Red-eye removal</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0" >
           <widget class="QLabel" name="label_23" >
            <property name="text" >
             <string>Flash energy:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editFlashEnergy</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="5" column="1" >
           <widget class="QLineEdit" name="editFlashEnergy" />
          </item>
+         <item row="6" column="0" colspan="2" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>517</width>
+             <height>91</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -582,18 +579,27 @@
       <attribute name="title" >
        <string>Postprocessing</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QHBoxLayout" >
        <item>
-        <layout class="QHBoxLayout" >
-         <item>
+        <layout class="QGridLayout" >
+         <item row="0" column="0" >
           <widget class="QLabel" name="label_13" >
            <property name="text" >
             <string>Gain control:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editGainControl</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="0" column="1" >
           <widget class="QComboBox" name="editGainControl" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <item>
             <property name="text" >
              <string>None</string>
@@ -621,18 +627,17 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="1" column="0" >
           <widget class="QLabel" name="label_15" >
            <property name="text" >
             <string>Light source:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editLightSource</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="1" >
           <widget class="QComboBox" name="editLightSource" >
            <item>
             <property name="text" >
@@ -766,18 +771,17 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="2" column="0" >
           <widget class="QLabel" name="label_18" >
            <property name="text" >
             <string>Sharpness:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editSharpness</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="1" >
           <widget class="QComboBox" name="editSharpness" >
            <item>
             <property name="text" >
@@ -796,18 +800,17 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="3" column="0" >
           <widget class="QLabel" name="label_20" >
            <property name="text" >
             <string>Contrast:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editContrast</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="3" column="1" >
           <widget class="QComboBox" name="editContrast" >
            <item>
             <property name="text" >
@@ -826,18 +829,17 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="4" column="0" >
           <widget class="QLabel" name="label_28" >
            <property name="text" >
             <string>White balance:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editWhiteBalance</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="4" column="1" >
           <widget class="QComboBox" name="editWhiteBalance" >
            <item>
             <property name="text" >
@@ -851,20 +853,20 @@
            </item>
           </widget>
          </item>
+         <item row="5" column="0" colspan="2" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>517</width>
+             <height>91</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -872,17 +874,20 @@
       <attribute name="title" >
        <string>Misc</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QHBoxLayout" >
        <item>
-        <layout class="QHBoxLayout" >
-         <item>
+        <layout class="QGridLayout" >
+         <item row="0" column="0" >
           <widget class="QLabel" name="label_4" >
            <property name="text" >
             <string>Scene capture type:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editSceneCaptureType</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="0" column="1" >
           <widget class="QComboBox" name="editSceneCaptureType" >
            <item>
             <property name="text" >
@@ -906,46 +911,43 @@
            </item>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="1" column="0" >
           <widget class="QLabel" name="label_19" >
            <property name="text" >
             <string>Maker:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editMake</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="1" >
           <widget class="QLineEdit" name="editMake" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="2" column="0" >
           <widget class="QLabel" name="label_26" >
            <property name="text" >
             <string>Model:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editModel</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="1" >
           <widget class="QLineEdit" name="editModel" />
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <item>
+         <item row="3" column="0" >
           <widget class="QLabel" name="label_27" >
            <property name="text" >
             <string>Sensing method type:</string>
            </property>
+           <property name="buddy" >
+            <cstring>editSensingMethod</cstring>
+           </property>
           </widget>
          </item>
-         <item>
+         <item row="3" column="1" >
           <widget class="QComboBox" name="editSensingMethod" >
            <item>
             <property name="text" >
@@ -989,20 +991,20 @@
            </item>
           </widget>
          </item>
+         <item row="4" column="0" colspan="2" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>517</width>
+             <height>71</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>

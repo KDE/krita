@@ -63,9 +63,8 @@ public:
         for ( ; nPixels > 0; nPixels-- ) {
             m_checkcolor = 0;
             for (int i = 0; i < _N_; i++) {
-                m_converter->KSToReflectance(CSTrait::K(src, i), CSTrait::S(src, i), m_current);
-                gsl_vector_set(m_refvec, i, m_current);
-                m_checkcolor += m_current;
+                gsl_vector_set(m_refvec, i, m_converter->KSToReflectance(CSTrait::K(src, i), CSTrait::S(src, i)));
+                m_checkcolor += gsl_vector_get(m_refvec, i);
             }
 
             if (m_checkcolor <= 0.0)
@@ -92,7 +91,6 @@ private:
     ChannelConverter<_TYPE_> *m_converter;
     const KisIlluminantProfile *m_profile;
 
-    mutable double m_current;
     mutable double m_checkcolor;
 
 };

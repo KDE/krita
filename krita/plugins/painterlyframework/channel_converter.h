@@ -35,9 +35,12 @@ class ChannelConverter {
         ChannelConverter(const double &Kblack, const double &Sblack);
         ~ChannelConverter();
 
-        inline void KSToReflectance(const _TYPE_ &K, const _TYPE_ &S, double &R) const;
         inline void reflectanceToKS(const double &R, _TYPE_ &K, _TYPE_ &S) const;
-
+        inline double KSToReflectance(const _TYPE_ &K, const _TYPE_ &S) const;
+/*
+        inline double sRGBToRGB(const quint16 &sCi) const;
+        inline quint16 RGBTosRGB(const double &C) const;
+*/
     private:
         double Kb, Sb;
         double w0, w1; // For whitening
@@ -122,22 +125,18 @@ inline double ChannelConverter<_TYPE_>::S(const double &R) const
 }
 
 template< typename _TYPE_ >
-inline void ChannelConverter<_TYPE_>::KSToReflectance(const _TYPE_ &K, const _TYPE_ &S, double &R) const
+inline double ChannelConverter<_TYPE_>::KSToReflectance(const _TYPE_ &K, const _TYPE_ &S) const
 {
     const double k = KoColorSpaceMaths<_TYPE_,double>::scaleToA(K);
     const double s = KoColorSpaceMaths<_TYPE_,double>::scaleToA(S);
-    if (s == 0.0) {
-        R = 0.0;
-        return;
-    }
+    if (s == 0.0)
+        return 0.0;
 
-    if (k == 0.0) {
-        R = 1.0;
-        return;
-    }
+    if (k == 0.0)
+        return 1.0;
 
     const double Q = k/s;
-    R = 1.0 + Q - sqrt( Q*Q + 2.0*Q );
+    return ( 1.0 + Q - sqrt( Q*Q + 2.0*Q ) );
 }
 
 template< typename _TYPE_ >
@@ -146,5 +145,24 @@ inline void ChannelConverter<_TYPE_>::reflectanceToKS(const double &R, _TYPE_ &K
     K = KoColorSpaceMaths<double,_TYPE_>::scaleToA(this->K(R));
     S = KoColorSpaceMaths<double,_TYPE_>::scaleToA(this->S(R));
 }
+/*
+template< typename _TYPE_ >
+inline double ChannelConverter<_TYPE_>::sRGBToRGB(const quint16 &sCi) const
+{
+    const double sC = KoColorSpaceMaths<quint16,double>::scaleToA(sCi);
+    if (sC <= 0.04045)
+        return ( sC / 12.92 );
+    else
+        return ( pow( ( sC + 0.055 ) / 1.055, 2.4 ) );
+}
 
+template< typename _TYPE_ >
+inline quint16 ChannelConverter<_TYPE_>::RGBTosRGB(const double &C) const
+{
+    if (C <= 0.0031308)
+        return KoColorSpaceMaths<double,quint16>::scaleToA( 12.92 * C );
+    else
+        return KoColorSpaceMaths<double,quint16>::scaleToA( 1.055 * pow( C, 1.0/2.4 ) - 0.055 );
+}
+*/
 #endif // CHANNEL_CONVERTER_H_

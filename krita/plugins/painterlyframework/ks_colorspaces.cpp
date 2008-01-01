@@ -53,9 +53,21 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
         f->addProfile(ill);
     }
 
-    curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_2.ill",  KStandardDirs::Recursive)[0];
+    curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_6_high.ill",  KStandardDirs::Recursive)[0];
     ill  = new KisIlluminantProfile(curr);
+    {
+        KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace<float,6>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSQPColorSpaceFactory<float,6>();
+        Q_CHECK_PTR(colorSpaceKSQP);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+        new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+        (KoID("KSQP6F32HISTO", i18n("6-pairs KS QP F32 Histogram")), colorSpaceKSQP) );
+    }
+    delete ill;
 
+    curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_high.ill",  KStandardDirs::Recursive)[0];
+    ill  = new KisIlluminantProfile(curr);
     {
         KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace<float,9>(ill->clone());
         KoColorSpaceFactory *csf  = new KisKSQPColorSpaceFactory<float,9>();
@@ -65,7 +77,6 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
         (KoID("KSQP9F32HISTO", i18n("9-pairs KS QP F32 Histogram")), colorSpaceKSQP) );
     }
-
 #ifdef HAVE_OPENEXR
     {
         KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace<half,9>(ill->clone());
@@ -77,6 +88,7 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
         (KoID("KSQP9F16HISTO", i18n("9-pairs KS QP Half Histogram")), colorSpaceKSQP) );
     }
 #endif
+    delete ill;
 
 }
 

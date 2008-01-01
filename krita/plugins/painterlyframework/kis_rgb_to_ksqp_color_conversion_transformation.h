@@ -111,8 +111,8 @@ protected:
     void RGBToReflectance() const
     {
         for (int i = 0; i < 3; i++) {
-            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(parent::m_rgbvec, i) - 0.0 ) );
-            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(parent::m_rgbvec, i) + 0.0 ) );
+            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(parent::m_rgbvec, i) - 0.0000 ) );
+            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(parent::m_rgbvec, i) + 0.0000 ) );
         }
 
         gsl_cqpminimizer_set(m_s, m_data);
@@ -124,9 +124,9 @@ protected:
         for (uint i = 0; i < _N_; i++) {
             double curr = gsl_vector_get(gsl_cqpminimizer_x(m_s), i);
 
-            if (fabs(curr - 0.0) < 1e-7)
+            if (fabs(curr - 0.0) < 1e-6)
                 gsl_vector_set(parent::m_refvec, i, 0.0);
-            else if (fabs(curr - 1.0) < 1e-7)
+            else if (fabs(curr - 1.0) < 1e-6)
                 gsl_vector_set(parent::m_refvec, i, 1.0);
             else
                 gsl_vector_set(parent::m_refvec, i, curr);
@@ -146,7 +146,7 @@ class KisRGBToKSQPColorConversionTransformationFactory : public KoColorConversio
 public:
     KisRGBToKSQPColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(),
-                                             "KSQP9", KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id()) {}
+                                             "KSQP"+QString::number(_N_), KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                const KoColorSpace* dstColorSpace,

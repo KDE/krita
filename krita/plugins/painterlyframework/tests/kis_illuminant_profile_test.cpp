@@ -62,7 +62,7 @@ void gsl_print(const gsl_vector *V, const char *name)
 void KisIlluminantProfileTest::testLoading()
 {
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
-    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
+    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_low.ill",  KStandardDirs::Recursive)[0];
 
     KisIlluminantProfile *p = new KisIlluminantProfile;
     QVERIFY(p->valid() == false);
@@ -81,7 +81,7 @@ void KisIlluminantProfileTest::testLoading()
 
 void KisIlluminantProfileTest::testSaving()
 {
-    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9.ill",  KStandardDirs::Recursive)[0];
+    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_low.ill",  KStandardDirs::Recursive)[0];
 
     KisIlluminantProfile *p = new KisIlluminantProfile(d659);
     p->save("D659Save.ill");

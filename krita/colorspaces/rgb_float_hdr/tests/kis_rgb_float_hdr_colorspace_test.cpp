@@ -224,7 +224,9 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
 
     const double gamma = 1.0;
 
-    KoIccColorProfile *profile = new KoIccColorProfile(chromaticities, gamma);
+    KoIccColorProfile *iccProfile = new KoIccColorProfile(chromaticities, gamma);
+    KoHdrColorProfile *profile = new KoHdrColorProfile("lcms virtual RGB profile - Rec. 709 Linear", "");
+    hdrProfile->setIccColorProfile( iccProfile );
 
     KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory);

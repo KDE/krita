@@ -64,6 +64,17 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
         (KoID("KSQP6F32HISTO", i18n("6-pairs KS QP F32 Histogram")), colorSpaceKSQP) );
     }
+#ifdef HAVE_OPENEXR
+    {
+        KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace<half,6>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSQPColorSpaceFactory<half,6>();
+        Q_CHECK_PTR(colorSpaceKSQP);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+        new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+        (KoID("KSQP6F16HISTO", i18n("6-pairs KS QP Half Histogram")), colorSpaceKSQP) );
+    }
+#endif
     delete ill;
 
     curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_high.ill",  KStandardDirs::Recursive)[0];

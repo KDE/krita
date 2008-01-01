@@ -106,12 +106,13 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
 
     const double gamma = 1.0;
 
-    KoIccColorProfile *profile = new KoIccColorProfile(chromaticities, gamma);
+    KoIccColorProfile *iccProfile = new KoIccColorProfile(chromaticities, gamma, "lcms virtual RGB profile - Rec. 709 Linear");
+    KoHdrColorProfile *profile = new KoHdrColorProfile("lcms virtual RGB profile - Rec. 709 Linear", "");
+    profile->setIccColorProfile( iccProfile );
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, profile);
     QVERIFY2(colorSpace != 0, "Created colorspace");
 
-    QCOMPARE(colorSpace->profile(), profile);
     QVERIFY(colorSpace->profileIsCompatible(profile));
 
     const int numPixelsToConvert = 2;
@@ -144,7 +145,7 @@ void KisRgbFloatHDRColorSpaceTest::testProfile()
     const int renderingIntent = INTENT_PERCEPTUAL;
     const DWORD flags = cmsFLAGS_NOTPRECALC;
 
-    cmsHTRANSFORM transform = cmsCreateTransform(profile->asLcms()->lcmsProfile(), 
+    cmsHTRANSFORM transform = cmsCreateTransform(profile->iccProfile()->asLcms()->lcmsProfile(), 
                                                  inputFormat, 
                                                  destinationLcmsProfile, 
                                                  outputFormat, 
@@ -224,7 +225,7 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
 
     const double gamma = 1.0;
 
-    KoIccColorProfile *iccProfile = new KoIccColorProfile(chromaticities, gamma);
+    KoIccColorProfile *iccProfile = new KoIccColorProfile(chromaticities, gamma, "lcms virtual RGB profile - Rec. 709 Linear");
     KoHdrColorProfile *profile = new KoHdrColorProfile("lcms virtual RGB profile - Rec. 709 Linear", "");
     profile->setIccColorProfile( iccProfile );
 
@@ -237,9 +238,11 @@ void KisRgbFloatHDRColorSpaceTest::testFactory()
     QVERIFY2(colorSpace != 0, "Created colorspace");
     QVERIFY2(colorSpace->profile() != 0, "Has a profile by default");
 
-    const KoIccColorProfile *lcmsProfile = static_cast<const KoIccColorProfile *>(colorSpace->profile());
+    const KoHdrColorProfile *hdrProfile = dynamic_cast<const KoHdrColorProfile *>(colorSpace->profile());
+    
+    QVERIFY(hdrProfile);
 
-    LPGAMMATABLE redGamma = cmsReadICCGamma(lcmsProfile->asLcms()->lcmsProfile(), icSigRedTRCTag);
+    LPGAMMATABLE redGamma = cmsReadICCGamma( hdrProfile->iccProfile()->asLcms()->lcmsProfile(), icSigRedTRCTag);
 
     QCOMPARE(testRound(cmsEstimateGamma(redGamma)), gamma);
 }

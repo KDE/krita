@@ -25,6 +25,7 @@
 
 #include "kis_paintop.h"
 #include <klocale.h>
+#include <QDialog>
 
 class QWidget;
 class QCheckBox;

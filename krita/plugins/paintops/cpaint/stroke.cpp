@@ -129,8 +129,8 @@ void Stroke::drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, d
     
     double ypxl1 = static_cast<int>(yend); // Remove the fractional part the fast way
 
-    dev->setPixel(xpxl1, ypxl1, Qt::black, (1 - modf(yend, &tmp)) * xgap);
-    dev->setPixel(xpxl1, ypxl1 + 1, Qt::black, modf(yend, &tmp) * xgap);
+    dev->setPixel( (qint32)xpxl1, (qint32)ypxl1, Qt::black, (qint32) ( (1 - modf(yend, &tmp)) * xgap) );
+    dev->setPixel( (qint32)xpxl1, (qint32)ypxl1 + 1, Qt::black, (qint32) ( modf(yend, &tmp) * xgap) );
 
     double intery = yend + gradient; // first y-intersection for the main loop
 
@@ -142,13 +142,13 @@ void Stroke::drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, d
     double xpxl2 = xend;  // this will be used in the main loop
     double ypxl2 = static_cast<int>(yend);
     
-    dev->setPixel(xpxl2, ypxl2, Qt::black, (1 - modf(yend, &tmp)) * xgap);
-    dev->setPixel(xpxl2, ypxl2 + 1, Qt::black, modf(yend, &tmp) * xgap);
+    dev->setPixel( (qint32)xpxl2, (qint32)ypxl2, Qt::black, (qint32) ( (1 - modf(yend, &tmp)) * xgap) );
+    dev->setPixel( (qint32)xpxl2, (qint32)ypxl2 + 1, Qt::black, (qint32) ( modf(yend, &tmp) * xgap) );
 
     // main loop
-    for (int x = xpxl1 + 1; x < xpxl2; ++x) {
-        dev->setPixel(x, static_cast<int>(intery), Qt::black, (1 - modf(intery, &tmp)));
-        dev->setPixel(x, static_cast<int>(intery) + 1, Qt::black, modf(intery, &tmp));
+    for (int x =  (qint32)(xpxl1 + 1); x < xpxl2; ++x) {
+        dev->setPixel(x, static_cast<int>(intery), Qt::black, (qint32)(1 - modf(intery, &tmp)));
+        dev->setPixel(x, static_cast<int>(intery) + 1, Qt::black, (qint32)modf(intery, &tmp));
         intery = intery + gradient;
     }
     

@@ -92,6 +92,7 @@ void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt) const
     KisFilterConfiguration * kfc = d->filter->defaultConfiguration(d->layer->paintDevice());
     if(kfc)
     {
+        kfc->fromXML( d->config );
         QDomElement filterConfigElt = doc.createElement( "Params");
         kfc->toXML(doc, filterConfigElt);
         elt.appendChild(filterConfigElt);

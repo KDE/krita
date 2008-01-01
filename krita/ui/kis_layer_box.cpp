@@ -92,9 +92,9 @@ KisLayerBox::KisLayerBox()
     QActionGroup *group = new QActionGroup( this );
     QList<QAction*> actions;
 
-    actions << m_viewModeMenu->addAction(KIcon("fileview-text"),
+    actions << m_viewModeMenu->addAction(KIcon("view-list-text"),
                i18n("Minimal View"), this, SLOT(slotMinimalView()));
-    actions << m_viewModeMenu->addAction(KIcon("fileview-detailed"),
+    actions << m_viewModeMenu->addAction(KIcon("view-list-details"),
                i18n("Detailed View"), this, SLOT(slotDetailedView()));
     actions << m_viewModeMenu->addAction(KIcon("view-preview"),
                i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
@@ -132,7 +132,7 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewPaintLayer()));
     m_newLayerMenu->addAction(KIcon("folder-new"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
-    m_newLayerMenu->addAction(KIcon("bookmark"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
+    m_newLayerMenu->addAction(KIcon("bookmark-new"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
@@ -284,7 +284,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         sub->addAction(KIcon("document-new"), i18n("&Paint Layer"), this, SLOT(slotNewPaintLayer()));
         sub->addAction(KIcon("folder-new"), i18n("&Group Layer"), this, SLOT(slotNewGroupLayer()));
         sub->addAction(KIcon("edit-copy"), i18n("&Clone Layer"), this, SLOT(slotNewCloneLayer()));
-        sub->addAction(KIcon("bookmark"), i18n("&Shape Layer"), this, SLOT(slotNewShapeLayer()));
+        sub->addAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this, SLOT(slotNewShapeLayer()));
         sub->addAction(KIcon("view-filter"), i18n("&Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
         menu.addSeparator();
         sub->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
@@ -298,7 +298,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewPaintLayer()));
         menu.addAction(KIcon("folder-new"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
         menu.addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
-        menu.addAction(KIcon("bookmark"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
+        menu.addAction(KIcon("bookmark-new"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
         menu.addAction(KIcon("view-filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
         menu.addSeparator();
         menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));

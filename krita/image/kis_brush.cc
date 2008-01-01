@@ -267,12 +267,12 @@ bool KisBrush::init()
         // Version 1 has no magic number or spacing, so the name
         // is at a different offset. Character encoding is undefined.
         const char *text = d->data.constData()+sizeof(GimpBrushV1Header);
-        name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
+        name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header) - 1);
     } else {
         // ### Version = 3->cinepaint; may be float16 data!
         // Version >=2: UTF-8 encoding is used
         name = QString::fromUtf8(d->data.constData()+sizeof(GimpBrushHeader),
-                                  bh.header_size - sizeof(GimpBrushHeader));
+                                  bh.header_size - sizeof(GimpBrushHeader) - 1);
     }
 
     setName(name);

@@ -76,7 +76,7 @@ public:
         m_converter = new ChannelConverter<_TYPE_>(m_profile->Kblack(), m_profile->Sblack());
         m_rgbvec = gsl_vector_calloc( 3 );
         m_refvec = gsl_vector_calloc(_N_);
-        m_cache.reserve(20000);
+        m_useCache = true;
     }
 
     ~KisRGBToKSColorConversionTransformation()
@@ -107,7 +107,7 @@ public:
             // Load for the lookup
             m_lookup.set(src);
             // Check if the item is in the cache
-            if (m_cache.contains(m_lookup)) {
+            if (m_useCache && m_cache.contains(m_lookup)) {
 
                 memmove(dst, m_cache.value(m_lookup), pixelSize-4);
 
@@ -143,7 +143,7 @@ public:
         }
 
         // If the cache contains too many elements, erase the first 15000
-        if (m_cache.count() >= 19000) {
+        if (m_useCache && m_cache.count() >= 19000) {
             QHashIterator<RGBID, _TYPE_*> i(m_cache);
             for (int j = 0; j < 15000; j++) {
                 i.next();
@@ -167,6 +167,8 @@ protected:
 
     mutable QHash<RGBID, _TYPE_*> m_cache;
     mutable RGBID m_lookup;
+
+    bool m_useCache;
 };
 
 #endif // KIS_RGB_TO_KS_COLOR_CONVERSION_TRANSFORMATION_H_

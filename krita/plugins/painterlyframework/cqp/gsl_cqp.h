@@ -18,15 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef GSL_CQP_H_
+#define GSL_CQP_H_
+
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 
 typedef struct
 {
 	/* objective function: 0.5*(x^t)Qx+(q^t)x */
-	gsl_matrix * Q; 
+	gsl_matrix * Q;
 	gsl_vector * q;
-	
+
 	/* constraints: Ax=b; Cx>=d */
 	gsl_matrix * A;
 	gsl_vector * b;
@@ -44,7 +47,7 @@ typedef struct
               double *gap, double *residuals_norm, double *data_norm, double *inf_barrier, double *inf_barrier_min);
 	int (*iterate) (void *state, const gsl_cqp_data * cqp, gsl_vector *x, gsl_vector *y, gsl_vector *z,
                   double *gap, double *residuals_norm, double *inf_barrier, double *inf_barrier_min);
-	
+
 	/*  int (*restart) (void *state); */
 	void (*free) (void *state);
 }
@@ -53,19 +56,19 @@ gsl_cqpminimizer_type;
 typedef struct
 {
 	const gsl_cqpminimizer_type * type;
-	
+
 	gsl_cqp_data * cqp;
 	gsl_vector * x;
-	/* Lagrange-multipliers */ 
+	/* Lagrange-multipliers */
 	gsl_vector * y; /*corresponding to Ax=b */
 	gsl_vector * z; /*corresponding to CX>=d */
-	
+
 	double gap;
 	double residuals_norm;
 	double data_norm;
 	double quantity_of_infeasibility;
 	double quantity_of_infeasibility_min;
-	
+
 	void *state;
 }
 gsl_cqpminimizer;
@@ -122,3 +125,5 @@ gsl_cqpminimizer_minimum (gsl_cqpminimizer * minimizer);
 
 GSL_VAR const gsl_cqpminimizer_type *gsl_cqpminimizer_mg_pdip;
 /*GSL_VAR const gsl_cqpminimizer_type *gsl_cqpminimizer_pdip_mpc_eqc;*/
+
+#endif // GSL_CQP_H_

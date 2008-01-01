@@ -23,7 +23,7 @@
 #include "mixing_test.h"
 
 #include "kis_illuminant_profile.h"
-#include "kis_ksqp_colorspace.h"
+#include "kis_kslc_colorspace.h"
 
 #include <KGlobal>
 #include <KLocale>
@@ -48,7 +48,7 @@ void MixingTest::testMixing()
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
     QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_6_high.ill",  KStandardDirs::Recursive)[0];
     const KisIlluminantProfile *profile = new KisIlluminantProfile(d659);
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSQPColorSpace<float,6>::ColorSpaceId().id(), profile);
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KisKSLCColorSpace<float,6>::ColorSpaceId().id(), profile);
     QVERIFY2(cs != 0, "Created colorspace");
     QVERIFY(cs->profileIsCompatible(profile));
 
@@ -72,7 +72,7 @@ void MixingTest::testMixing()
                             color2 = QColor(base*i2?base*i2-1:0,base*j2?base*j2-1:0,base*k2?base*k2-1:0);
                             cs->fromQColor(color1, data1);
                             cs->fromQColor(color2, data2);
-                            for (int i = 0; i < 2*6+1; i++)
+                            for (int i = 0; i < 2*9+1; i++)
                                 reinterpret_cast<float*>(datam)[i] =
                                     (reinterpret_cast<float*>(data1)[i] +
                                      reinterpret_cast<float*>(data2)[i]) / 2.0;

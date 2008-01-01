@@ -20,6 +20,7 @@
 #include "ks_colorspaces.h"
 
 #include "kis_illuminant_profile.h"
+#include "kis_kslc_colorspace.h"
 #include "kis_ksqp_colorspace.h"
 
 #include <KGenericFactory>
@@ -77,30 +78,78 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
 #endif
     delete ill;
 
-    curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_high.ill",  KStandardDirs::Recursive)[0];
+    curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_6_high.ill",  KStandardDirs::Recursive)[0];
     ill  = new KisIlluminantProfile(curr);
     {
-        KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace<float,9>(ill->clone());
-        KoColorSpaceFactory *csf  = new KisKSQPColorSpaceFactory<float,9>();
-        Q_CHECK_PTR(colorSpaceKSQP);
+        KoColorSpace *colorSpaceKS = new KisKSLCColorSpace<float,6>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSLCColorSpaceFactory<float,6>();
+        Q_CHECK_PTR(colorSpaceKS);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-        (KoID("KSQP9F32HISTO", i18n("9-pairs KS QP F32 Histogram")), colorSpaceKSQP) );
+        (KoID("KSLC6F32HISTO", i18n("6-pairs KS LC F32 Histogram")), colorSpaceKS) );
     }
 #ifdef HAVE_OPENEXR
     {
-        KoColorSpace *colorSpaceKSQP = new KisKSQPColorSpace<half,9>(ill->clone());
-        KoColorSpaceFactory *csf  = new KisKSQPColorSpaceFactory<half,9>();
-        Q_CHECK_PTR(colorSpaceKSQP);
+        KoColorSpace *colorSpaceKS = new KisKSLCColorSpace<half,6>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSLCColorSpaceFactory<half,6>();
+        Q_CHECK_PTR(colorSpaceKS);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-        (KoID("KSQP9F16HISTO", i18n("9-pairs KS QP Half Histogram")), colorSpaceKSQP) );
+        (KoID("KSLC6F16HISTO", i18n("6-pairs KS LC Half Histogram")), colorSpaceKS) );
     }
 #endif
     delete ill;
 
+    curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_high.ill",  KStandardDirs::Recursive)[0];
+    ill  = new KisIlluminantProfile(curr);
+    {
+        KoColorSpace *colorSpaceKS = new KisKSLCColorSpace<float,9>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSLCColorSpaceFactory<float,9>();
+        Q_CHECK_PTR(colorSpaceKS);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+        new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+        (KoID("KSLC9F32HISTO", i18n("9-pairs KS LC F32 Histogram")), colorSpaceKS) );
+    }
+#ifdef HAVE_OPENEXR
+    {
+        KoColorSpace *colorSpaceKS = new KisKSLCColorSpace<half,9>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSLCColorSpaceFactory<half,9>();
+        Q_CHECK_PTR(colorSpaceKS);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+        new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+        (KoID("KSLC9F16HISTO", i18n("9-pairs KS LC Half Histogram")), colorSpaceKS) );
+    }
+#endif
+    delete ill;
+/*
+    curr = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_12_high.ill",  KStandardDirs::Recursive)[0];
+    ill  = new KisIlluminantProfile(curr);
+    {
+        KoColorSpace *colorSpaceKS = new KisKSLCColorSpace<float,12>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSLCColorSpaceFactory<float,12>();
+        Q_CHECK_PTR(colorSpaceKS);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+        new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+        (KoID("KSLC12F32HISTO", i18n("12-pairs KS LC F32 Histogram")), colorSpaceKS) );
+    }
+    #ifdef HAVE_OPENEXR
+    {
+        KoColorSpace *colorSpaceKS = new KisKSLCColorSpace<half,12>(ill->clone());
+        KoColorSpaceFactory *csf  = new KisKSLCColorSpaceFactory<half,12>();
+        Q_CHECK_PTR(colorSpaceKS);
+        f->add(csf);
+        KoHistogramProducerFactoryRegistry::instance()->add(
+        new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+        (KoID("KSLC12F16HISTO", i18n("12-pairs KS LC Half Histogram")), colorSpaceKS) );
+    }
+    #endif
+    delete ill;
+*/
 }
 
 KSColorSpacesPlugin::~KSColorSpacesPlugin()

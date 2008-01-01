@@ -17,29 +17,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KSQP_COLORSPACE_H_
-#define KIS_KSQP_COLORSPACE_H_
+#ifndef KIS_KSLC_COLORSPACE_H_
+#define KIS_KSLC_COLORSPACE_H_
 
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
 
-#include "kis_rgb_to_ksqp_color_conversion_transformation.h"
 #include "kis_rgb_to_kslc_color_conversion_transformation.h"
 #include "kis_ks_to_rgb_color_conversion_transformation.h"
 
 template< typename _TYPE_, quint32 _N_ >
-class KisKSQPColorSpace : public KisKSColorSpace< _TYPE_,_N_ >
+class KisKSLCColorSpace : public KisKSColorSpace< _TYPE_,_N_ >
 {
     typedef KisKSColorSpace< _TYPE_,_N_ > parent;
 
     public:
 
-        KisKSQPColorSpace(KoColorProfile *p) : parent(p, ColorSpaceId().id(), ColorSpaceId().name()) {}
-        ~KisKSQPColorSpace() {}
+        KisKSLCColorSpace(KoColorProfile *p) : parent(p, ColorSpaceId().id(), ColorSpaceId().name()) {}
+        ~KisKSLCColorSpace() {}
 
         KoColorSpace *clone() const
         {
-            return new KisKSQPColorSpace<_TYPE_,_N_>(parent::profile()->clone());
+            return new KisKSLCColorSpace<_TYPE_,_N_>(parent::profile()->clone());
         }
 
         KoID colorModelId() const
@@ -57,19 +56,19 @@ class KisKSQPColorSpace : public KisKSColorSpace< _TYPE_,_N_ >
 
         static KoID ColorModelId()
         {
-            QByteArray name = QString("Painterly Color Space QP, precision %1").arg(_N_).toUtf8();
-            return KoID("KSQP"+QString::number(_N_), i18n(name.data()));
+            QByteArray name = QString("Painterly Color Space LC, precision %1").arg(_N_).toUtf8();
+            return KoID("KSLC"+QString::number(_N_), i18n(name.data()));
         }
 
 };
 
 template< typename _TYPE_, quint32 _N_ >
-class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
+class KisKSLCColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-        QString id() const { return KisKSQPColorSpace<_TYPE_,_N_>::ColorSpaceId().id(); }
-        QString name() const { return KisKSQPColorSpace<_TYPE_,_N_>::ColorSpaceId().name(); }
-        KoID colorModelId() const { return KisKSQPColorSpace<_TYPE_,_N_>::ColorModelId(); }
+        QString id() const { return KisKSLCColorSpace<_TYPE_,_N_>::ColorSpaceId().id(); }
+        QString name() const { return KisKSLCColorSpace<_TYPE_,_N_>::ColorSpaceId().name(); }
+        KoID colorModelId() const { return KisKSLCColorSpace<_TYPE_,_N_>::ColorModelId(); }
         KoID colorDepthId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorDepthId(); }
         bool userVisible() const { return true; }
 
@@ -82,9 +81,9 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
             QList<KoColorConversionTransformationFactory*> list;
 
             // RGB to KS
-            list.append(new KisRGBToKSQPColorConversionTransformationFactory<_TYPE_,_N_>);
+            list.append(new KisRGBToKSLCColorConversionTransformationFactory<_TYPE_,_N_>);
             // KS to RGB
-            list.append(new KisKSToRGBColorConversionTransformationFactory<_TYPE_,_N_>("QP"));
+            list.append(new KisKSToRGBColorConversionTransformationFactory<_TYPE_,_N_>("LC"));
 
             return list;
         }
@@ -98,7 +97,7 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
 
         KoColorSpace *createColorSpace(const KoColorProfile *p) const
         {
-            return new KisKSQPColorSpace<_TYPE_,_N_>(p->clone());
+            return new KisKSLCColorSpace<_TYPE_,_N_>(p->clone());
         }
 
         bool profileIsCompatible(const KoColorProfile *profile) const
@@ -117,4 +116,4 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
         }
 };
 
-#endif // KIS_KSQP_COLORSPACE_H_
+#endif // KIS_KSLC_COLORSPACE_H_

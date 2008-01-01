@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_RGB_TO_KSQP_COLOR_CONVERSION_TRANSFORMATION_H_
-#define KIS_RGB_TO_KSQP_COLOR_CONVERSION_TRANSFORMATION_H_
+#ifndef KIS_RGB_TO_KSLC_COLOR_CONVERSION_TRANSFORMATION_H_
+#define KIS_RGB_TO_KSLC_COLOR_CONVERSION_TRANSFORMATION_H_
 
 #include "kis_illuminant_profile.h"
 #include "kis_rgb_to_ks_color_conversion_transformation.h"
@@ -32,13 +32,13 @@ extern "C" {
 #include <gsl/gsl_vector.h>
 
 template< typename _TYPE_, int _N_ >
-class KisRGBToKSQPColorConversionTransformation : public KisRGBToKSColorConversionTransformation< _TYPE_,_N_ > {
+class KisRGBToKSLCColorConversionTransformation : public KisRGBToKSColorConversionTransformation< _TYPE_,_N_ > {
 
 typedef KisRGBToKSColorConversionTransformation< _TYPE_,_N_ > parent;
 
 public:
 
-    KisRGBToKSQPColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
+    KisRGBToKSLCColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs)
     {
         int n  = _N_ + 1;
@@ -60,9 +60,7 @@ public:
         for (int i = 1; i < n-1; i++) {
             int prev = (int)gsl_vector_get(parent::m_profile->P(), i-1);
             int curr = (int)gsl_vector_get(parent::m_profile->P(), i);
-//             int prev = i-1, curr = i;
             gsl_matrix_set(m_data->Q, prev, prev, gsl_matrix_get(m_data->Q,prev,prev)+1.0);
-//             gsl_matrix_set(m_data->Q, prev, prev,  2.0);
             gsl_matrix_set(m_data->Q, curr, curr,  1.0);
             gsl_matrix_set(m_data->Q, prev, curr, -1.0);
             gsl_matrix_set(m_data->Q, curr, prev, -1.0);
@@ -91,9 +89,41 @@ public:
         }
 
         m_s = gsl_cqpminimizer_alloc(gsl_cqpminimizer_mg_pdip, n, me, mi);
+
+        // Calculate primaries
+        m_red = gsl_vector_calloc(_N_);
+        m_green = gsl_vector_calloc(_N_);
+        m_blue = gsl_vector_calloc(_N_);
+
+        // First: red
+        gsl_vector_set(parent::m_rgbvec, 0, 1.0);
+        gsl_vector_set(parent::m_rgbvec, 1, 0.0);
+        gsl_vector_set(parent::m_rgbvec, 2, 0.0);
+        buildPrimary();
+        for (int i = 0; i < _N_; i++)
+            gsl_vector_set(m_red, i, gsl_vector_get(parent::m_refvec, i));
+
+        // Second: blue: the reflectance can't be again in the interval [0, 1],
+        // we need to be in the interval [0, 1-red]
+        for (int i = 0; i < n-1; i++) {
+            int j = 6+2*i;
+            gsl_vector_set(m_data->d, j+1, -(1.0 - gsl_vector_get(m_red, i)));
+        }
+        gsl_vector_set(parent::m_rgbvec, 0, 0.0);
+        gsl_vector_set(parent::m_rgbvec, 1, 0.0);
+        gsl_vector_set(parent::m_rgbvec, 2, 1.0);
+        buildPrimary();
+        for (int i = 0; i < _N_; i++)
+            gsl_vector_set(m_blue, i, gsl_vector_get(parent::m_refvec, i));
+
+        // Third: green; simply remove blue and red from pure white.
+        for (int i = 0; i < _N_; i++)
+            gsl_vector_set(m_green, i, 1.0 - ( gsl_vector_get(m_red, i) + gsl_vector_get(m_blue, i) ) );
+
+        parent::m_useCache = false;
     }
 
-    ~KisRGBToKSQPColorConversionTransformation()
+    ~KisRGBToKSLCColorConversionTransformation()
     {
         gsl_vector_free(m_data->d);
         gsl_vector_free(m_data->b);
@@ -104,15 +134,35 @@ public:
         delete m_data;
 
         gsl_cqpminimizer_free(m_s);
+
+        gsl_vector_free(m_red);
+        gsl_vector_free(m_green);
+        gsl_vector_free(m_blue);
     }
 
 protected:
 
     void RGBToReflectance() const
     {
+        for (int i = 0; i < _N_; i++) {
+            double curr = gsl_vector_get(parent::m_rgbvec, 0) * gsl_vector_get(m_red,   i) +
+                          gsl_vector_get(parent::m_rgbvec, 1) * gsl_vector_get(m_green, i) +
+                          gsl_vector_get(parent::m_rgbvec, 2) * gsl_vector_get(m_blue,  i);
+
+            if (fabs(curr - 0.0) < 1e-6)
+                gsl_vector_set(parent::m_refvec, i, 0.0);
+            else if (fabs(curr - 1.0) < 1e-6)
+                gsl_vector_set(parent::m_refvec, i, 1.0);
+            else
+                gsl_vector_set(parent::m_refvec, i, curr);
+        }
+    }
+
+    void buildPrimary() const
+    {
         for (int i = 0; i < 3; i++) {
-            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(parent::m_rgbvec, i) - 0.0000 ) );
-            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(parent::m_rgbvec, i) + 0.0000 ) );
+            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(parent::m_rgbvec, i) ) );
+            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(parent::m_rgbvec, i) ) );
         }
 
         gsl_cqpminimizer_set(m_s, m_data);
@@ -138,15 +188,17 @@ private:
     gsl_cqp_data *m_data;
     gsl_cqpminimizer *m_s;
 
+    gsl_vector *m_red, *m_green, *m_blue;
+
 };
 
 template< typename _TYPE_, int _N_ >
-class KisRGBToKSQPColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
+class KisRGBToKSLCColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
 
 public:
-    KisRGBToKSQPColorConversionTransformationFactory()
+    KisRGBToKSLCColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(),
-                                             "KSQP"+QString::number(_N_), KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id()) {}
+                                             "KSLC"+QString::number(_N_), KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                const KoColorSpace* dstColorSpace,
@@ -155,7 +207,7 @@ public:
         Q_UNUSED(renderingIntent);
         Q_ASSERT(canBeSource(srcColorSpace));
         Q_ASSERT(canBeDestination(dstColorSpace));
-        return new KisRGBToKSQPColorConversionTransformation<_TYPE_,_N_>(srcColorSpace, dstColorSpace);
+        return new KisRGBToKSLCColorConversionTransformation<_TYPE_,_N_>(srcColorSpace, dstColorSpace);
     }
 
     bool conserveColorInformation() const { return true; }

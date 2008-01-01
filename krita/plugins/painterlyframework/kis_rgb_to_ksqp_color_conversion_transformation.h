@@ -108,7 +108,7 @@ public:
 
 protected:
 
-    void RGBToReflectance() const
+    virtual void RGBToReflectance() const
     {
         for (int i = 0; i < 3; i++) {
             gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(parent::m_rgbvec, i) - 0.0000 ) );
@@ -133,7 +133,7 @@ protected:
         }
     }
 
-private:
+protected:
 
     gsl_cqp_data *m_data;
     gsl_cqpminimizer *m_s;

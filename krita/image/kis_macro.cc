@@ -59,6 +59,7 @@ void KisMacro::addAction(const KisRecordedAction& action)
 
 void KisMacro::play()
 {
+    dbgImage << "Start playing macro with " << d->actions.size() << " actions";
     KisUndoAdapter* undoAdapter = 0;
     if(d->image->undo())
     {
@@ -69,6 +70,7 @@ void KisMacro::play()
     for( QList<KisRecordedAction*>::iterator it = d->actions.begin();
          it != d->actions.end(); ++it)
     {
+        dbgImage << "Play action : " << (*it)->name();
         (*it)->play(undoAdapter);
     }
     

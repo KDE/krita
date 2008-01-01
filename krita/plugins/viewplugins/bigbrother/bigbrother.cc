@@ -108,9 +108,12 @@ void BigBrotherPlugin::slotOpenPlay()
             QDomElement docElem = doc.documentElement();
             if(not docElem.isNull() and docElem.tagName() == "RecordedActions")
             {
+                dbgPlugins << "Load the macro";
                 KisMacro m(m_view->image());
                 m.fromXML(docElem);
+                dbgPlugins << "Play the macro";
                 m.play();
+                dbgPlugins << "Finished";
             } else {
                 // TODO error message
             }

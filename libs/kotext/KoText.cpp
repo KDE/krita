@@ -37,7 +37,7 @@ QStringList KoText::underlineStyleList() {
     lst <<"_ _ _ _ _ _"; // dot
     lst <<"___ _ ___ _"; // dash_dot
     lst <<"___ _ _ ___"; // dash_dot_dot
-    lst <<"~~~~~~~"; // weavy lines
+    lst <<"~~~~~~~"; // wavy lines
     return lst;
 }
 

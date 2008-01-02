@@ -1095,9 +1095,22 @@ void KoMainWindow::saveWindowSettings()
         //kDebug(30003) <<"KoMainWindow::saveWindowSettings";
         saveWindowSize( config->group( "MainWindow" ) );
         d->m_windowSizeDirty = false;
+        
         // Save toolbar position into the config file of the app, under the doc's component name
+        KConfigGroup group = KGlobal::config()->group( rootDocument()->componentData().componentName() );
         //kDebug(30003) <<"KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's componentData=" << rootDocument()->componentData().componentName();
-        saveMainWindowSettings( KGlobal::config()->group( rootDocument()->componentData().componentName() ) );
+        saveMainWindowSettings( group );
+
+        // Save collapsable state of dock widgets
+        for (QMap<QString, QDockWidget*>::const_iterator i = d->m_dockWidgetMap.constBegin();
+                i != d->m_dockWidgetMap.constEnd(); ++i) {
+            if (i.value()->widget()) {
+                kDebug() << "key:" << i.key() << "value:" << *i;
+                KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
+                dockGroup.writeEntry( "Collapsed", i.value()->widget()->isHidden() );
+            }
+        }
+        
         KGlobal::config()->sync();
         resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
     }

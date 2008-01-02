@@ -76,7 +76,14 @@ class KoTextLoader::Private
         int lastElapsed;
         QTime dt;
 
-        explicit Private() : stylemanager(0), frameLoader(0) {
+        QString currentListStyleName;
+        int currentListLevel;
+
+        explicit Private()
+        : stylemanager(0)
+        , frameLoader(0)
+        , currentListLevel( 1 )
+        {
             bodyProgressTotal = bodyProgressValue = lastElapsed = 0;
             dt.start();
         }
@@ -630,14 +637,14 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
     QString styleName;
     if ( parent.hasAttributeNS( KoXmlNS::text, "style-name" ) ) {
         styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
-        context.setCurrentListStyleName(styleName);
+        d->currentListStyleName = styleName;
     }
     else {
         // If this attribute is not included and therefore no list style is specified, one of the following actions is taken:
         // * If the list is contained within another list, the list style defaults to the style of the surrounding list.
         // * If there is no list style specified for the surrounding list, but the list contains paragraphs that have paragraph styles attached specifying a list style, this list style is used for any of these paragraphs.
         // * An application specific default list style is applied to any other paragraphs.
-        styleName = context.currentListStyleName();
+        styleName = d->currentListStyleName;
     }
 
     // Get the KoListStyle the name may reference to
@@ -646,11 +653,11 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
         listStyle = new KoListStyle();
         listStyle->setName(styleName);
         d->addStyle(listStyle);
-        context.setCurrentListStyleName(styleName);
+        d->currentListStyleName = styleName;
     }
 
     // The level specifies the level of the list style.
-    int level = context.currentListLevel();
+    int level = d->currentListLevel;
 
     // Set the style and create the textlist
     QTextListFormat listformat;
@@ -668,7 +675,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
     QTextBlock prev = cursor.block();
 
     // increment list level by one for nested lists.
-    context.setCurrentListLevel(level + 1);
+    d->currentListLevel = level + 1;
 
     // Iterate over list items and add them to the textlist
     KoXmlElement e;
@@ -706,7 +713,7 @@ void KoTextLoader::loadList(KoTextLoadingContext& context, const KoXmlElement& p
     }
 
     // set the list level back to the previous value
-    context.setCurrentListLevel(level);
+    d->currentListLevel = level;
     /*
     // add the new blocks to the list
     QTextBlock current = cursor.block();

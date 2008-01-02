@@ -81,28 +81,6 @@ public:
     */
     KoTextLoader* loader() const;
 
-    /**
-    * \return the name of the current list-style. This will return QString::null if
-    * there was no current list-style defined or the name of a list-style which
-    * should be known within our \a KoStyleManager .
-    */
-    QString currentListStyleName() const;
-
-    /**
-    * Set the name of the current list-style to \p stylename .
-    */
-    void setCurrentListStyleName(const QString& stylename);
-
-    /**
-    * \return the current list-level. This should return >=1.
-    */
-    int currentListLevel() const;
-
-    /**
-    * Set the current list-level to \p level .
-    */
-    void setCurrentListLevel(int level);
-
 #if 0 //1.6:
     KoVariableCollection& variableCollection() { return m_varColl; }
 

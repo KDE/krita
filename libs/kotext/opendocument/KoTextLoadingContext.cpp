@@ -29,15 +29,12 @@ class KoTextLoadingContext::Private
 {
     public:
         KoTextLoader* loader;
-        QString currentListStyleName;
-        int currentListLevel;
 };
 
 KoTextLoadingContext::KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store )
     : KoOasisLoadingContext( doc, stylesReader, store ), d(new Private())
 {
     d->loader = loader;
-    d->currentListLevel = 1; // default list level is always 1
 }
 
 KoTextLoadingContext::~KoTextLoadingContext()
@@ -48,26 +45,6 @@ KoTextLoadingContext::~KoTextLoadingContext()
 KoTextLoader* KoTextLoadingContext::loader() const
 {
     return d->loader;
-}
-
-QString KoTextLoadingContext::currentListStyleName() const
-{
-    return d->currentListStyleName;
-}
-
-void KoTextLoadingContext::setCurrentListStyleName(const QString& stylename)
-{
-    d->currentListStyleName = stylename;
-}
-
-int KoTextLoadingContext::currentListLevel() const
-{
-    return d->currentListLevel;
-}
-
-void KoTextLoadingContext::setCurrentListLevel(int level)
-{
-    d->currentListLevel = level;
 }
 
 #if 0 //1.6:

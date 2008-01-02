@@ -19,7 +19,6 @@
 
 #include "KoListLevelProperties.h"
 #include "Styles_p.h"
-#include "opendocument/KoTextLoadingContext.h"
 //#include "KoTextBlockData.h"
 
 //#include <QTextCursor>
@@ -258,8 +257,8 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
     return llp;
 }
 
-void KoListLevelProperties::loadOasis(KoTextLoadingContext& context, const KoXmlElement& style) {
-
+void KoListLevelProperties::loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style)
+{
     Q_UNUSED( context );
 
     // The text:level attribute specifies the level of the number list

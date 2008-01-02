@@ -20,7 +20,6 @@
 #include "KoListStyle.h"
 #include "KoListLevelProperties.h"
 #include "KoTextBlockData.h"
-#include "opendocument/KoTextLoadingContext.h"
 
 #include <KoStyleStack.h>
 #include <KoOdfStylesReader.h>
@@ -202,7 +201,7 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     return answer;
 }
 
-void KoListStyle::loadOasis(KoTextLoadingContext& context, const KoXmlElement& style)
+void KoListStyle::loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style)
 {
     //kDebug(32500)<<"KoListStyle::loadOasis style.localName="<<style.localName();
     //KoStyleStack &styleStack = context.styleStack();

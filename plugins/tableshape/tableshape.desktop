@@ -1,0 +1,20 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Table Shape
+Name[ca]=Forma d'imatge
+Name[de]=Bild-Objekt
+Name[el]=Σχήμα εικόνας
+Name[es]=Forma de imagen
+Name[fi]=Kuvahahmo
+Name[ga]=Giuirléid Phictiúir
+Name[ne]=तस्बीर आकार
+Name[pt]=Forma de Imagem
+Name[pt_BR]=Forma de Imagem
+Name[sv]=Bildform
+Name[x-test]=xxTable Shapexx
+Name[zh_TW]=圖片元件
+ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=tableshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

@@ -1398,6 +1398,7 @@ void KoMainWindow::slotPrintAndSave() {
     dialog->setMode(KFile::File);
     dialog->setCaption( i18n("Write PDF") );
     if(dialog->exec()!=QDialog::Accepted) {
+        // TODO warn when overwriting
         delete dialog;
         delete printJob;
         return;

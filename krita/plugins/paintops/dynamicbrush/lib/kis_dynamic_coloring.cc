@@ -24,15 +24,79 @@
 
 KisDynamicColoring::~KisDynamicColoring() { }
 
-KisPlainColoring::KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor) : m_backGroundColor(backGroundColor), m_foreGroundColor(foreGroundColor), m_color(0), m_cachedColor(0), m_cachedBackGroundColor(0)
+KisUniformColoring::KisUniformColoring() : m_color(0), m_cachedColor(0)
 {
+    
+}
 
+KisUniformColoring::~KisUniformColoring()
+{
+    delete m_color;
+    delete m_cachedColor;
+}
+
+void KisUniformColoring::darken(qint32 v)
+{
+    KoColorTransformation* transfo = m_color->colorSpace()->createDarkenAdjustment(v, false, 0.0);
+    transfo->transform( m_color->data(),  m_color->data(), 1);
+    delete transfo;
+}
+
+void KisUniformColoring::rotate(double )
+{}
+
+void KisUniformColoring::resize(double , double ) {
+    // Do nothing as plain color doesn't have size
+}
+
+void KisUniformColoring::colorize(KisPaintDeviceSP dev )
+{
+    if(not m_cachedColor or not (*dev->colorSpace() == *m_cachedColor->colorSpace()))
+    {
+        if(m_cachedColor) delete m_cachedColor;
+        m_cachedColor = new KoColor( dev->colorSpace() );
+        m_cachedColor->fromKoColor(*m_color);
+    }
+    
+    dev->dataManager()->setDefaultPixel(  m_cachedColor->data());
+    dev->clear();
+}
+
+void KisUniformColoring::colorAt(int x, int y, KoColor* c)
+{
+    Q_UNUSED( x );
+    Q_UNUSED( y );
+
+    if(not m_cachedColor or not (*c->colorSpace() == *m_cachedColor->colorSpace()))
+    {
+        if(m_cachedColor) delete m_cachedColor;
+        m_cachedColor = new KoColor( c->colorSpace() );
+        m_cachedColor->fromKoColor(*m_color);
+    }
+    c->fromKoColor(*m_cachedColor);
+}
+
+void KisUniformColoring::applyColorTransformation(const KoColorTransformation* transfo)
+{
+    transfo->transform( m_color->data(), m_color->data(), 1 );
+}
+
+const KoColorSpace* KisUniformColoring::colorSpace() const
+{
+    return m_color->colorSpace();
+}
+
+//-------------------------------------------------//
+//---------------- KisPlainColoring ---------------//
+//-------------------------------------------------//
+
+KisPlainColoring::KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor) : m_backGroundColor(backGroundColor), m_foreGroundColor(foreGroundColor), m_cachedBackGroundColor(0)
+{
+    
 }
 
 KisPlainColoring::~KisPlainColoring()
 {
-    delete m_color;
-    delete m_cachedColor;
     delete m_cachedBackGroundColor;
 }
 
@@ -62,53 +126,3 @@ void KisPlainColoring::selectColor(double mix)
 
 }
 
-void KisPlainColoring::darken(qint32 v)
-{
-    KoColorTransformation* transfo = m_color->colorSpace()->createDarkenAdjustment(v, false, 0.0);
-    transfo->transform( m_color->data(),  m_color->data(), 1);
-    delete transfo;
-}
-
-void KisPlainColoring::rotate(double )
-{}
-
-void KisPlainColoring::resize(double , double ) {
-    // Do nothing as plain color doesn't have size
-}
-
-void KisPlainColoring::colorize(KisPaintDeviceSP dev )
-{
-    if(not m_cachedColor or not (*dev->colorSpace() == *m_cachedColor->colorSpace()))
-    {
-        if(m_cachedColor) delete m_cachedColor;
-        m_cachedColor = new KoColor( dev->colorSpace() );
-        m_cachedColor->fromKoColor(*m_color);
-    }
-    
-    dev->dataManager()->setDefaultPixel(  m_cachedColor->data());
-    dev->clear();
-}
-
-void KisPlainColoring::colorAt(int x, int y, KoColor* c)
-{
-    Q_UNUSED( x );
-    Q_UNUSED( y );
-
-    if(not m_cachedColor or not (*c->colorSpace() == *m_cachedColor->colorSpace()))
-    {
-        if(m_cachedColor) delete m_cachedColor;
-        m_cachedColor = new KoColor( c->colorSpace() );
-        m_cachedColor->fromKoColor(*m_color);
-    }
-    c->fromKoColor(*m_cachedColor);
-}
-
-void KisPlainColoring::applyColorTransformation(const KoColorTransformation* transfo)
-{
-    transfo->transform( m_color->data(), m_color->data(), 1 );
-}
-
-const KoColorSpace* KisPlainColoring::colorSpace() const
-{
-    return m_color->colorSpace();
-}

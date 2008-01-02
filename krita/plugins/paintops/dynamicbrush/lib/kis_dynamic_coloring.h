@@ -41,24 +41,52 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
         virtual void colorAt(int x, int y, KoColor*) = 0;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisDynamicColoring {
+class KisUniformColoring : public KisDynamicColoring {
+    public:
+        KisUniformColoring();
+        virtual ~KisUniformColoring();
+        virtual void darken(qint32 v);
+        virtual void rotate(double );
+        virtual void resize(double , double );
+        virtual void applyColorTransformation(const KoColorTransformation* transfo);
+        virtual const KoColorSpace* colorSpace() const;
+        virtual void colorize(KisPaintDeviceSP);
+        virtual void colorAt(int x, int y, KoColor*);
+    protected:
+        KoColor* m_color;
+    private:
+        KoColor* m_cachedColor;
+};
+
+class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisUniformColoring {
     public:
         KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor);
         virtual ~KisPlainColoring();
         virtual KisDynamicColoring* clone() const;
         virtual void selectColor(double mix);
-        virtual void darken(qint32 v);
-        virtual void rotate(double );
-        virtual void resize(double , double );
-        virtual void colorize(KisPaintDeviceSP);
-        virtual void colorAt(int x, int y, KoColor*);
-        virtual void applyColorTransformation(const KoColorTransformation* transfo);
-        virtual const KoColorSpace* colorSpace() const;
     private:
         KoColor m_backGroundColor, m_foreGroundColor;
-        KoColor* m_color;
-        KoColor* m_cachedColor;
         KoColor* m_cachedBackGroundColor;
 };
+
+// class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisUniformColoring {
+//     public:
+//         KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor);
+//         virtual ~KisPlainColoring();
+//         virtual KisDynamicColoring* clone() const;
+//         virtual void selectColor(double mix);
+//         virtual void darken(qint32 v);
+//         virtual void rotate(double );
+//         virtual void resize(double , double );
+//         virtual void colorize(KisPaintDeviceSP);
+//         virtual void colorAt(int x, int y, KoColor*);
+//         virtual void applyColorTransformation(const KoColorTransformation* transfo);
+//         virtual const KoColorSpace* colorSpace() const;
+//     private:
+//         KoColor m_backGroundColor, m_foreGroundColor;
+//         KoColor* m_color;
+//         KoColor* m_cachedColor;
+//         KoColor* m_cachedBackGroundColor;
+// };
 
 #endif

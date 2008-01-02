@@ -25,7 +25,7 @@
 
 namespace KisMetaData {
 
-   class KRITAIMAGE_EXPORT FilterRegistryModel : KoGenericRegistryModel<Filter*> {
+   class KRITAIMAGE_EXPORT FilterRegistryModel : public KoGenericRegistryModel<Filter*> {
        public:
            FilterRegistryModel();
            ~FilterRegistryModel();

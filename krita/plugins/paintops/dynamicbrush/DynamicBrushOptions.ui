@@ -55,6 +55,11 @@
        <string>Plain</string>
       </property>
      </item>
+     <item>
+      <property name="text" >
+       <string>Gradient</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item>

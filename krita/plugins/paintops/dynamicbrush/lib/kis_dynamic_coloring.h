@@ -26,6 +26,7 @@
 
 #include "kis_dynamic_transformable.h"
 
+class KoAbstractGradient;
 class KoColorTransformation;
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
@@ -69,24 +70,15 @@ class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisUniformColoring {
         KoColor* m_cachedBackGroundColor;
 };
 
-// class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisUniformColoring {
-//     public:
-//         KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor);
-//         virtual ~KisPlainColoring();
-//         virtual KisDynamicColoring* clone() const;
-//         virtual void selectColor(double mix);
-//         virtual void darken(qint32 v);
-//         virtual void rotate(double );
-//         virtual void resize(double , double );
-//         virtual void colorize(KisPaintDeviceSP);
-//         virtual void colorAt(int x, int y, KoColor*);
-//         virtual void applyColorTransformation(const KoColorTransformation* transfo);
-//         virtual const KoColorSpace* colorSpace() const;
-//     private:
-//         KoColor m_backGroundColor, m_foreGroundColor;
-//         KoColor* m_color;
-//         KoColor* m_cachedColor;
-//         KoColor* m_cachedBackGroundColor;
-// };
+class DYNAMIC_BRUSH_EXPORT KisGradientColoring : public KisUniformColoring {
+    public:
+        KisGradientColoring(const KoAbstractGradient* gradient, const KoColorSpace* workingCS );
+        virtual ~KisGradientColoring();
+        virtual KisDynamicColoring* clone() const;
+        virtual void selectColor(double mix);
+    private:
+        const KoAbstractGradient* m_gradient;
+        const KoColorSpace* m_colorSpace;
+};
 
 #endif

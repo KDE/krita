@@ -125,9 +125,18 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
         }
     }
     // Init coloring
-    KisPlainColoring* coloringsrc = new KisPlainColoring( painter->backgroundColor() , painter->paintColor() );
-    current->setColoring( coloringsrc );
-
+    switch(m_uiOptions->comboBoxColoring->currentIndex())
+    {
+        case 1:
+            current->setColoring( new KisGradientColoring( painter->gradient() , painter->paintColor().colorSpace() ) );
+            break;
+        default:
+        case 0:
+        {
+            current->setColoring( new KisPlainColoring( painter->backgroundColor() , painter->paintColor() ) );
+        }
+    }
+    
     return current;
 }
 

@@ -19,6 +19,7 @@
 
 #include <kis_paint_device.h>
 
+#include <KoAbstractGradient.h>
 #include <KoColorTransformation.h>
 #include <kis_datamanager.h>
 
@@ -126,3 +127,25 @@ void KisPlainColoring::selectColor(double mix)
 
 }
 
+//-------------------------------------------------//
+//--------------- KisGradientColoring -------------//
+//-------------------------------------------------//
+
+KisGradientColoring::KisGradientColoring(const KoAbstractGradient* gradient, const KoColorSpace* workingCS  ) : m_gradient(gradient), m_colorSpace( workingCS )
+{
+    m_color = new KoColor( workingCS );
+}
+
+KisGradientColoring::~KisGradientColoring()
+{
+}
+
+KisDynamicColoring* KisGradientColoring::clone() const
+{
+    return new KisGradientColoring(m_gradient, m_colorSpace);
+}
+
+void KisGradientColoring::selectColor(double mix)
+{
+    m_gradient->colorAt( *m_color, mix );
+}

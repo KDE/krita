@@ -37,6 +37,7 @@
 #include <QTextCursor>
 #include <QTextTable>
 #include <QTextTableFormat>
+#include <QTextTableCell>
 
 TableShape::TableShape()
     : m_textDocument( new QTextDocument() )
@@ -47,7 +48,8 @@ TableShape::TableShape()
 TableShape::~TableShape() {
 }
 
-void TableShape::paint( QPainter& painter, const KoViewConverter& converter ) {
+void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
+{
 }
 
 void TableShape::saveOdf( KoShapeSavingContext & context ) const
@@ -68,4 +70,15 @@ void TableShape::createExampleData()
     QTextCursor cursor(m_textDocument);
     cursor.movePosition(QTextCursor::Start);
     QTextTable *table = cursor.insertTable(ROWS, COLUMNS, tableFormat);
+    
+    QTextTableCell curCell = table->cellAt(0,0);
+    
+    qDebug() << "Is the first cursor pos in the table also the first cursor pos in the document? " << cursor.position() << ", " << curCell.firstCursorPosition().position();
+    
+    cursor = curCell.firstCursorPosition();
+    cursor.insertText("Hello World");
+
+    curCell = table->cellAt(0,2);
+    cursor = curCell.firstCursorPosition();
+    cursor.insertText("Bonjour Monde!");
 }

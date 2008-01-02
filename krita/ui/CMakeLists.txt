@@ -70,9 +70,6 @@ set(kritaui_LIB_SRCS
     kis_multi_bool_filter_widget.cc
     kis_multi_double_filter_widget.cc
     kis_multi_integer_filter_widget.cc
-    kis_oasis_load_visitor.cc
-    kis_oasis_save_data_visitor.cc
-    kis_oasis_save_visitor.cc
     kis_opengl.cpp
     kis_opengl_canvas2.cpp
     kis_opengl_image_textures.cpp

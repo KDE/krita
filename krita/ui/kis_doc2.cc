@@ -90,9 +90,6 @@
 #include "kis_custom_image_widget.h"
 #include "kis_kra_save_visitor.h"
 #include "kis_savexml_visitor.h"
-#include "kis_oasis_load_visitor.h"
-#include "kis_oasis_save_data_visitor.h"
-#include "kis_oasis_save_visitor.h"
 #include "kis_canvas2.h"
 #include "kis_undo_adapter.h"
 #include "kis_shape_controller.h"
@@ -238,47 +235,13 @@ QDomDocument KisDoc2::saveXML()
 
 bool KisDoc2::loadOdf( KoOdfReadStore & odfStore )
 {
-    dbgFile <<"loading with OpenRaster";
-    KoXmlNode root = odfStore.contentDoc().documentElement();
-    for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
-        if (node.isElement() && node.nodeName() == "office:body") {
-            KoXmlElement elem = node.toElement();
-            KisOasisLoadVisitor olv(this,odfStore.store());
-            olv.loadImage(elem);
-            if (!olv.image() )
-                return false;
-
-            setCurrentImage( olv.image() );
-
-            return true;
-        }
-    }
     return false;
 }
 
 
 bool KisDoc2::saveOdf( SavingContext &documentContext )
 {
-    KoXmlWriter* manifestWriter = documentContext.odfStore.manifestWriter();
-    dbgFile <<"saving with OpenRaster";
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
-    if ( !contentWriter ) {
-        return false;
-    }
-
-    manifestWriter->addManifestEntry( "data/", "" );
-    KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
-    // Save the structure
-    KisOasisSaveVisitor osv(&documentContext.odfStore);
-    bodyWriter->startElement("office:body");
-    m_d->image->rootLayer()->accept(osv);
-    bodyWriter->endElement();
-    documentContext.odfStore.closeContentWriter();
-    // Sqve the data
-    KisOasisSaveDataVisitor osdv(&documentContext.odfStore, manifestWriter);
-    m_d->image->rootLayer()->accept(osdv);
-    return true;
+    return false;
 }
 
 bool KisDoc2::loadXML(QIODevice *, const KoXmlDocument& doc)

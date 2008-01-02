@@ -7,7 +7,7 @@ Proof-of-concept read-only table
     - Fixed size (table and cells)
     - No split on different pages
  * Render a table on the text shape
- * ODF load / save
+ * ODF loading
 
 Make it slightly usable for a viewer (still read-only)
  * Merge cells
@@ -18,3 +18,4 @@ Make it slightly usable for a viewer (still read-only)
 Make it usable for kword (editable)
  * table tool
     - Edit rows/columns
+ * ODF saving

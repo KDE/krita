@@ -25,6 +25,7 @@
 #define TABLESHAPEID "TableShape"
 
 class KoImageData;
+class QTextDocument;
 
 class TableShape : public KoShape
 {
@@ -40,7 +41,8 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 private:
-    KoImageData *m_imageData;
+    QTextDocument * m_textDocument;
+    
 };
 
 

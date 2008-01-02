@@ -449,7 +449,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, const QPoint& srcTopLeft, Kis
 
 }
 
-KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size"), "tileSize" ) );

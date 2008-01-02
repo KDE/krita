@@ -413,21 +413,18 @@ XXX_PORT
 #endif
 }
 
-KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
-    KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(this, dev, parent);
-
+    KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(dev, parent);
 
     return w;
 }
 
 
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, const KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f)
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f)
     : KisFilterConfigWidget(parent, f),
-      m_filter(filter),
       m_device(dev)
 {
-    Q_ASSERT(m_filter);
     Q_ASSERT(m_device);
 
     m_page = new BumpmapWidget(this);

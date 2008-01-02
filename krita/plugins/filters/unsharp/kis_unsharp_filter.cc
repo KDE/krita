@@ -40,9 +40,9 @@ KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), CategoryEnhance, i18n("&U
         setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP )
+KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP ) const
 {
-    return new KisWdgUnsharp(this, parent);
+    return new KisWdgUnsharp(parent);
 }
 
 KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDeviceSP) const

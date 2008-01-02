@@ -32,7 +32,7 @@ class Ui_WdgFastColorTransfer;
 class KisWdgFastColorTransfer : public KisFilterConfigWidget
 {
     public:
-        KisWdgFastColorTransfer(KisFilter* nfilter, QWidget * parent);
+        KisWdgFastColorTransfer(QWidget * parent);
         ~KisWdgFastColorTransfer();
         virtual void setConfiguration(KisFilterConfiguration*);
         inline const Ui_WdgFastColorTransfer* widget() const { return m_widget; }

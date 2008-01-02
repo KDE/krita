@@ -129,7 +129,7 @@ XXX_PORT
 #endif
 }
 
-KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);

@@ -40,7 +40,7 @@ public:
     
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };
 
 #endif

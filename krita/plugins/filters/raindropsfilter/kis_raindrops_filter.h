@@ -61,7 +61,7 @@ public:
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRainDropsFilterConfiguration( 30, 80, 20)); return list; }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* configuration(QWidget*);
 private:
     bool** CreateBoolArray (uint Columns, uint Rows);

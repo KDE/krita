@@ -46,7 +46,7 @@ public:
     static inline KoID id() { return KoID("colortransfer", i18n("Color Transfer")); }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 

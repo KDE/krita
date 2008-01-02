@@ -40,7 +40,7 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP)
+KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 0, 255, 50, i18n("Threshold"), "threshold" ) );

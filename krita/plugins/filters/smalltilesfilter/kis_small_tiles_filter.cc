@@ -149,7 +149,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
 #endif
 }
 
-KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of tiles"), "smalltiles" ) );

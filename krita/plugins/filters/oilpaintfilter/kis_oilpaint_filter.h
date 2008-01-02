@@ -60,7 +60,7 @@ public:
     
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
     public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration * configuration(QWidget*);
     virtual KisFilterConfiguration * configuration() { return new KisOilPaintFilterConfiguration( 1, 30); }
 

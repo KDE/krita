@@ -242,7 +242,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
 }
 
 
-KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size"), "brushSize" ) );

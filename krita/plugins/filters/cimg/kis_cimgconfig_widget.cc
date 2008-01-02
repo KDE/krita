@@ -29,10 +29,9 @@
 #include "kis_cimgconfig_widget.h"
 #include "kis_cimg_filter.h"
 
-KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, Qt::WFlags f)
+KisCImgconfigWidget::KisCImgconfigWidget(QWidget * parent, Qt::WFlags f)
     : KisFilterConfigWidget(parent, f)
 {
-    Q_UNUSED(nfilter);
     m_page = new WdgCImg(this);
     Q_CHECK_PTR(m_page);
 

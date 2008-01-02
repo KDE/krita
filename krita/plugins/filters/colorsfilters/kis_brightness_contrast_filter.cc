@@ -170,7 +170,7 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
     
 }
 
-KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     return new KisBrightnessContrastConfigWidget(parent, dev);
 }

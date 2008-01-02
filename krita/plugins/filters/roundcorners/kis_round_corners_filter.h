@@ -55,7 +55,7 @@ public:
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
         { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRoundCornersFilterConfiguration(30)); return list; }
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* configuration(QWidget*);
     virtual KisFilterConfiguration * configuration() { return new KisRoundCornersFilterConfiguration( 30 ); }
 private:

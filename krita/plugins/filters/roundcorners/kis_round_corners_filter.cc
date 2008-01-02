@@ -170,7 +170,7 @@ XXX_PORT
 #endif
 }
 
-KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius"), "radius" ) );

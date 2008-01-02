@@ -49,7 +49,7 @@ class KisFilterNoise : public KisFilter
         ) const;
     static inline KoID id() { return KoID("noise", i18n("Noise")); }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };
 
 #endif

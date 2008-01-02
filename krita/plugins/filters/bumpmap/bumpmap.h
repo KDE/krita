@@ -83,7 +83,7 @@ public:
         ) const;
 
     
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
@@ -92,7 +92,7 @@ class KisBumpmapConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(KisFilter * filter, const KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f = 0 );
+    KisBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f = 0 );
     virtual ~KisBumpmapConfigWidget() {}
 
     void setConfiguration(KisFilterConfiguration * config);
@@ -102,7 +102,6 @@ public:
 
 private:
 
-    KisFilter * m_filter;
     KisPaintDeviceSP m_device;
 
 };

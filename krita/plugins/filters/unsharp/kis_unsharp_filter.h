@@ -40,7 +40,7 @@ public:
 
     static inline KoID id() { return KoID("unsharpmask", i18n("Unsharp Mask")); }
     
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 

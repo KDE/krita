@@ -62,7 +62,7 @@ public:
             return list;
         }
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* configuration(QWidget*);
     virtual KisFilterConfiguration * configuration();
 };

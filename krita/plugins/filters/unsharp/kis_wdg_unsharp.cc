@@ -30,7 +30,7 @@
 
 #include "ui_wdgunsharp.h"
 
-KisWdgUnsharp::KisWdgUnsharp( KisFilter* , QWidget * parent) : KisFilterConfigWidget ( parent )
+KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisFilterConfigWidget ( parent )
 {
     m_widget = new Ui_WdgUnsharp();
     m_widget->setupUi(this);

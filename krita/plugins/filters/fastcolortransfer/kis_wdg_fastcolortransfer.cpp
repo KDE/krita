@@ -26,10 +26,8 @@
 
 #include "ui_wdgfastcolortransfer.h"
 
-KisWdgFastColorTransfer::KisWdgFastColorTransfer(KisFilter* nfilter, QWidget * parent) : KisFilterConfigWidget ( parent )
+KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisFilterConfigWidget ( parent )
 {
-    Q_UNUSED(nfilter);
-
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
     connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(const QString&)), this, SIGNAL(sigPleaseUpdatePreview()));

@@ -46,7 +46,7 @@ public:
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const;
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
     static inline KoID id() { return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); }
 

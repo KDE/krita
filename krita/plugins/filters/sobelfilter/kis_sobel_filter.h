@@ -41,7 +41,7 @@ public:
     static inline KoID id() { return KoID("sobel", i18n("Sobel")); }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 private:
     void prepareRow (const KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h) const;
 };

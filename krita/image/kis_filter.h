@@ -88,7 +88,7 @@ public:
                          const QSize& size,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater
-        ) const = 0; // STOP REMOVING THE CONST
+        ) const = 0;
 
     /**
      * Provided for convenience when no progress reporting is needed.
@@ -97,20 +97,20 @@ public:
                          KisFilterProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config
-        ) const; // STOP REMOVING THE CONST
+        ) const;
 
 
     /**
      * Provided for convenience only when source and destination are the same
      */
     void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater) const; // STOP REMOVING THE CONST
+                 KoUpdater* progressUpdater) const;
 
     /**
      * Provided for convenience only when source and destination are the same and no progress reporting
      * is necessary.
      */
-    void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config) const; // STOP REMOVING THE CONST
+    void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config) const;
     
 public:
     /**
@@ -120,7 +120,7 @@ public:
      * configuration widget.
      * @return the default configuration of this widget
      */
-    virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const; // STOP REMOVING THE CONST
+    virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
 
     /**
      * @return the bookmark manager for this filter
@@ -130,14 +130,14 @@ public:
     /**
      * @return the bookmark manager for this filter
      */
-    const KisBookmarkedConfigurationManager* bookmarkManager() const; // STOP REMOVING THE CONST
+    const KisBookmarkedConfigurationManager* bookmarkManager() const;
 
     /**
      * Used when threading is used -- the overlap margin is passed to the
      * filter to use to compute pixels, but the margin is not pasted into the
      * resulting image. Use this for convolution filters, for instance.
      */
-    virtual int overlapMarginNeeded( const KisFilterConfiguration* = 0 ) const // STOP REMOVING THE CONST
+    virtual int overlapMarginNeeded( const KisFilterConfiguration* = 0 ) const
     { return 0; }
 
      /**
@@ -147,7 +147,7 @@ public:
      * might be bigger. Use this function to determine that rect.
      * The default implementation makes a guess using overlapMarginNeeded.
       */
-    virtual QRect enlargeRect(QRect rect, const KisFilterConfiguration* = 0) const; // STOP REMOVING THE CONST
+    virtual QRect enlargeRect(QRect rect, const KisFilterConfiguration* = 0) const;
 
     /**
      * Determine if this filter can work with this colorSpace. For instance, some
@@ -159,18 +159,18 @@ public:
      *
      * @param cs the colorspace that we want to know this filter works with
      */
-    virtual bool workWith(const KoColorSpace* cs) const // STOP REMOVING THE CONST
+    virtual bool workWith(const KoColorSpace* cs) const
     { Q_UNUSED(cs); return true; }
 
     /// @return Unique identification for this filter
-    QString id() const; // STOP REMOVING THE CONST
-    QString name() const; // STOP REMOVING THE CONST
+    QString id() const;
+    QString name() const;
 
     /// @return the submenu in the filters menu does filter want to go?
-    KoID menuCategory() const; // STOP REMOVING THE CONST
+    KoID menuCategory() const;
 
     /// @return the i18n'ed string this filter wants to show itself in the menu
-    QString menuEntry() const; // STOP REMOVING THE CONST
+    QString menuEntry() const;
 
     /**
      * Create the configuration widget for this filter.
@@ -178,32 +178,32 @@ public:
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const; // STOP REMOVING THE CONST
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const;
     // "Support" functions
 public:
     /**
      * If true, this filter can be used in painting tools as a paint operation
      */
-    bool supportsPainting() const; // STOP REMOVING THE CONST
+    bool supportsPainting() const;
 
     /// This filter can be displayed in a preview dialog
-    bool supportsPreview() const; // STOP REMOVING THE CONST
+    bool supportsPreview() const;
 
     /// This filter can be used in adjustment layers
-    bool supportsAdjustmentLayers() const; // STOP REMOVING THE CONST
+    bool supportsAdjustmentLayers() const;
 
     /**
      * Can this filter work incrementally when painting, or do we need to work
      * on the state as it was before painting started. The former is faster.
      */
-    bool supportsIncrementalPainting() const; // STOP REMOVING THE CONST
+    bool supportsIncrementalPainting() const;
 
     /**
      * This filter supports cutting up the work area and filtering
      * each chunk in a separate thread. Filters that need access to the
      * whole area for correct computations should return false.
      */
-    bool supportsThreading() const; // STOP REMOVING THE CONST
+    bool supportsThreading() const;
     
     /**
      * Determine the colorspace independence of this filter.
@@ -211,7 +211,7 @@ public:
      *
      * @return the degree of independence
      */
-    ColorSpaceIndependence colorSpaceIndependence() const; // STOP REMOVING THE CONST
+    ColorSpaceIndependence colorSpaceIndependence() const;
 
 protected:
 
@@ -228,10 +228,10 @@ protected:
     
     void setBookmarkManager(KisBookmarkedConfigurationManager* );
     /// @return the name of config group in KConfig
-    QString configEntryGroup() const; // STOP REMOVING THE CONST
+    QString configEntryGroup() const;
 
     /// @return the default configuration as defined by whoever wrote the plugin
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const; // STOP REMOVING THE CONST
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
 private:
     struct Private;

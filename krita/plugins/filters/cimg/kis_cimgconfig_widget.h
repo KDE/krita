@@ -23,7 +23,6 @@
 #define _KIS_CIMGCONFIG_WIDGET_
 
 #include "ui_wdg_cimg.h"
-#include "kis_cimg_filter.h"
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 
@@ -41,7 +40,7 @@ class KisCImgconfigWidget : public KisFilterConfigWidget {
 
 public:
 
-    KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent = 0, Qt::WFlags f = 0 );
+    KisCImgconfigWidget(QWidget * parent = 0, Qt::WFlags f = 0 );
     virtual ~KisCImgconfigWidget() {}
 
 public:

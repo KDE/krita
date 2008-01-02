@@ -39,7 +39,7 @@ public:
     static inline KoID id() { return KoID("emboss", i18n("Emboss")); }
     
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 protected:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 

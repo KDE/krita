@@ -167,7 +167,7 @@ XXX_PORT
 #endif
 }
 
-KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/)
+KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width"), "pixelWidth" ) );

@@ -44,7 +44,7 @@ public:
     
     virtual bool workWith(const KoColorSpace* cs) const; 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 protected:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 private:

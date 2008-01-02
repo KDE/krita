@@ -49,6 +49,9 @@ QVariant FilterRegistryModel::data(const QModelIndex &index, int role ) const
         {
             if(d->enabled[index.row()]) return Qt::Checked;
             else return Qt::Unchecked;
+        } else if( role == Qt::ToolTipRole )
+        {
+            return get( index )->description();
         }
     }
     return KoGenericRegistryModel<Filter*>::data(index, role);

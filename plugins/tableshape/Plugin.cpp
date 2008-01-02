@@ -32,7 +32,7 @@ Plugin::Plugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add( new TableShapeFactory(parent) );
-    KoToolRegistry::instance()->add( new TableToolFactory(parent) );
+    //KoToolRegistry::instance()->add( new TableToolFactory(parent) );
 }
 
 #include "Plugin.moc"

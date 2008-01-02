@@ -67,7 +67,7 @@ public:
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
         KoUpdater updater = updaters.at(index-1);
-        const bool doSave = painter;
+        const bool doSave = painter == 0;
         if (painter)
             painter->save();
         if(! stop)
@@ -228,8 +228,14 @@ bool KoPrintingDialog::isStopped() const {
 void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
     d->removePolicy = removePolicy;
     if (d->pages.isEmpty()) { // auto-fill from min/max
-        for (int i=d->printer->fromPage(); i <= d->printer->toPage(); i++)
-            d->pages.append(i);
+        if (d->printer->fromPage() == 0) { // all pages, no range.
+            for (int i=documentFirstPage(); i <= documentLastPage(); i++)
+                d->pages.append(i);
+        }
+        else {
+            for (int i=d->printer->fromPage(); i <= d->printer->toPage(); i++)
+                d->pages.append(i);
+        }
     }
     if (d->pages.isEmpty()) {
         kWarning(30004) << "KoPrintingDialog::startPrinting: No pages to print, did you forget to call setPageRange()?";

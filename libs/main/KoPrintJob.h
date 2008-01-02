@@ -59,6 +59,9 @@ public:
     /// retuns will be shown in the print dialog.
     virtual QList<QWidget*> createOptionWidgets() const = 0;
 
+    virtual int documentFirstPage() const { return 1; }
+    virtual int documentLastPage() const { return 1; }
+
 public slots:
     /**
      * This is called every time the job should be executed.

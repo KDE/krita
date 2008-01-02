@@ -74,7 +74,7 @@ public slots:
 
 private slots:
     void slotButtonClicked( int button );
-    void itemSelected(QTableWidgetItem * item);
+    void selectionChanged();
 
 private:
     enum Buttons { Button_Import, Button_Remove };

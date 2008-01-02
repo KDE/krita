@@ -27,6 +27,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "KoResourceChooser.h"
 #include "KoResource.h"
@@ -83,7 +84,8 @@ KoResourceItemChooser::KoResourceItemChooser( QWidget *parent )
     //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     m_chooser = new KoResourceChooser( QSize(32,32), this);
     m_chooser->setIconSize( QSize(30,30) );
-    connect( m_chooser, SIGNAL(itemClicked( QTableWidgetItem * ) ), this, SLOT( itemSelected( QTableWidgetItem * )));
+
+    connect( m_chooser, SIGNAL(itemClicked( QTableWidgetItem * ) ), this, SIGNAL( selected( QTableWidgetItem * )));
     connect( m_chooser, SIGNAL(itemDoubleClicked( QTableWidgetItem * ) ), this, SIGNAL( itemDoubleClicked( QTableWidgetItem* ) ) );
 
     m_buttonGroup = new QButtonGroup( this );
@@ -106,6 +108,7 @@ KoResourceItemChooser::KoResourceItemChooser( QWidget *parent )
     m_buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );
 
+    connect( m_chooser, SIGNAL(itemSelectionChanged() ), this, SLOT( selectionChanged()));
     connect( m_buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
 
     layout->setColumnStretch( 0, 1 );
@@ -146,15 +149,6 @@ QTableWidgetItem* KoResourceItemChooser::currentItem()
     return m_chooser->currentItem();
 }
 
-void KoResourceItemChooser::itemSelected(QTableWidgetItem *item)
-{
-    QAbstractButton * removeButton = m_buttonGroup->button( Button_Remove );
-    if( removeButton )
-        removeButton->setEnabled( static_cast<KoResourceItem*>(item)->resource()->removable() );
-
-    emit selected(currentItem());
-}
-
 void KoResourceItemChooser::addItem(KoResourceItem *item)
 {
     m_chooser->addItem(item);
@@ -177,6 +171,17 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         emit importClicked();
     else if( button == Button_Remove )
         emit deleteClicked();
+}
+
+void KoResourceItemChooser::selectionChanged()
+{
+    QAbstractButton * removeButton = m_buttonGroup->button( Button_Remove );
+    if( removeButton ) {
+        if(currentItem())
+            removeButton->setEnabled( static_cast<KoResourceItem*>(currentItem())->resource()->removable() );
+        else
+            removeButton->setEnabled(false);
+    }
 }
 
 #include "KoResourceItemChooser.moc"

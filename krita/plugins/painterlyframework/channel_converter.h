@@ -50,7 +50,7 @@ class ChannelConverter {
         inline double PSI(const double &R) const { return ((1.0-R)*(1.0-R))/(2.0*R); }
 
         inline double W(const double &R) const { return w1*R + w0; }
-        inline double B(const double &R) const { return b2*R*R + b1*R + b0; }
+        inline double B(const double &R) const { return b2/R + b1*R + b0; }
 
         inline double K(const double &R) const;
         inline double S(const double &R) const;
@@ -81,9 +81,9 @@ ChannelConverter<_TYPE_>::ChannelConverter(const double &Kblack, const double &S
     k2 = 1.0 + q2 - sqrt( q2*q2 + 2.0*q2 );
     // Second system: retrieve b2, b1 and b0
     // b2 + b1 + b0 = k1
-    // b2/4 + b1/2 + b0 = k2
-    // r0^2*b2 + r0*b1 + b0 = r0
-    double marray[9] = { 1.0, 1.0, 1.0, 0.25, 0.5, 1.0, r0*r0, r0, 1.0 };
+    // 4*b2 + b1/2 + b0 = k2
+    // b2/r0 + b1/r0 + b0 = r0
+    double marray[9] = { 1.0, 1.0, 1.0, 4.0, 0.5, 1.0, 1.0/r0, r0, 1.0 };
     double barray[3] = { k1, k2, r0 };
     int s;
     gsl_matrix_view M = gsl_matrix_view_array(marray, 3, 3);

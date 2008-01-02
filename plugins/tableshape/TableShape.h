@@ -41,6 +41,9 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 private:
+
+    void createExampleData();
+
     QTextDocument * m_textDocument;
     
 };

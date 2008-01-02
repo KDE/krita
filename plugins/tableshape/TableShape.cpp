@@ -29,13 +29,19 @@
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
-#include <QTextDocument>
+
 #include <QPainter>
 #include <kdebug.h>
+
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextTable>
+#include <QTextTableFormat>
 
 TableShape::TableShape()
     : m_textDocument( new QTextDocument() )
 {
+    createExampleData();
 }
 
 TableShape::~TableShape() {
@@ -50,5 +56,16 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool TableShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    
     return true;
+}
+
+void TableShape::createExampleData()
+{
+    const int ROWS = 10;
+    const int COLUMNS = 3;
+    QTextTableFormat tableFormat;
+    QTextCursor cursor(m_textDocument);
+    cursor.movePosition(QTextCursor::Start);
+    QTextTable *table = cursor.insertTable(ROWS, COLUMNS, tableFormat);
 }

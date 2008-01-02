@@ -302,6 +302,9 @@ public slots:
      */
     void slotExportFile();
 
+    void slotProgress(int value);
+
+
 protected: // protected methods are mostly for koshell, it's the only one deriving from KoMainWindow
 
     /**
@@ -374,10 +377,18 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
      */
     void saveRecentFiles();
 
-    KRecentFilesAction *recentAction() const { return m_recent; }
+    KRecentFilesAction *recentAction() const;
+
+protected slots:
+    virtual void slotActivePartChanged( KParts::Part *newPart );
+
+private slots:
+    void slotLoadCompleted();
+    void slotLoadCanceled (const QString &);
+    void slotSaveCompleted();
+    void slotSaveCanceled(const QString &);
 
 private:
-
     /**
      * Asks the user if they really want to save the document.
      * Called only if outputFormat != nativeFormat.
@@ -388,23 +399,8 @@ private:
 
     void saveWindowSettings();
 
-    KRecentFilesAction *m_recent;
-
-protected slots:
-    virtual void slotActivePartChanged( KParts::Part *newPart );
-
-public slots:
-    void slotProgress(int value);
-
-private slots:
-    void slotLoadCompleted();
-    void slotLoadCanceled (const QString &);
-    void slotSaveCompleted();
-    void slotSaveCanceled(const QString &);
-
 private:
     KoMainWindowPrivate * const d;
-
 };
 
 #endif

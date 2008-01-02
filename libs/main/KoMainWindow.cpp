@@ -200,6 +200,7 @@ public:
   QAction *m_versionsfile;
   QAction *m_importFile;
   QAction *m_exportFile;
+    KRecentFilesAction *recent;
 
   bool m_isImporting;
   bool m_isExporting;
@@ -237,7 +238,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
-    m_recent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection() );
+    d->recent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection() );
     d->m_paSave = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT( slotFileSave() ));
     d->m_paSaveAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT( slotFileSaveAs() ));
     d->m_paPrint = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT( slotFilePrint() ));
@@ -344,7 +345,7 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
 
     // Load list of recent files
     KSharedConfigPtr config = componentData.isValid() ? componentData.config() : KGlobal::config();
-    m_recent->loadEntries( config->group( "RecentFiles" ) );
+    d->recent->loadEntries( config->group( "RecentFiles" ) );
 
     createShellGUI();
     d->bMainWindowGUIBuilt = true;
@@ -543,7 +544,7 @@ void KoMainWindow::addRecentURL( const KUrl& url )
             KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
 
         if ( ok )
-            m_recent->addUrl( url );
+            d->recent->addUrl( url );
         saveRecentFiles();
     }
 }
@@ -553,7 +554,7 @@ void KoMainWindow::saveRecentFiles()
     // Save list of recent files
     KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
     kDebug(30003) << this <<" Saving recent files list into config. componentData()=" << componentData().componentName();
-    m_recent->saveEntries( config->group( "RecentFiles" ) );
+    d->recent->saveEntries( config->group( "RecentFiles" ) );
     config->sync();
 
     // Tell all windows to reload their list, after saving
@@ -565,7 +566,7 @@ void KoMainWindow::saveRecentFiles()
 void KoMainWindow::reloadRecentFileList()
 {
     KSharedConfigPtr config = componentData().isValid() ? componentData().config() : KGlobal::config();
-    m_recent->loadEntries( config->group( "RecentFiles" ) );
+    d->recent->loadEntries( config->group( "RecentFiles" ) );
 }
 
 KoDocument* KoMainWindow::createDoc() const
@@ -633,7 +634,7 @@ bool KoMainWindow::openDocument( const KUrl & url )
     if ( !KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0) )
     {
         KMessageBox::error(0L, i18n("The file %1 does not exist.", url.url()) );
-        m_recent->removeUrl(url); //remove the file from the recent-opened-file-list
+        d->recent->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
         return false;
     }
@@ -1706,7 +1707,7 @@ QLabel * KoMainWindow::statusBarLabel()
 
 void KoMainWindow::setMaxRecentItems(uint _number)
 {
-        m_recent->setMaxItems( _number );
+    d->recent->setMaxItems( _number );
 }
 
 void KoMainWindow::slotEmailFile()
@@ -1893,6 +1894,11 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 QList<QDockWidget*> KoMainWindow::dockWidgets()
 {
     return d->m_dockWidgetMap.values();
+}
+
+KRecentFilesAction *KoMainWindow::recentAction() const
+{
+    return d->recent;
 }
 
 #include "KoMainWindow.moc"

@@ -100,6 +100,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc
    metadata/kis_meta_data_filter_registry.cc
+   metadata/kis_meta_data_filter_registry_model.cc
    kis_selected_transaction.cc
    kis_transform_worker.cc
    kis_filter_job.cpp

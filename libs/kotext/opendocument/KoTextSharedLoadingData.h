@@ -26,10 +26,11 @@
 #include "styles/KoListLevelProperties.h"
 
 class QString;
+class KoOasisLoadingContext;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class KoListStyle;
-class KoShapeLoadingContext;
+class KoStyleManager;
 
 /**
  * This class is used to cache the loaded styles so that they have to be loaded only once
@@ -43,21 +44,53 @@ public:
     KoTextSharedLoadingData();
     virtual ~KoTextSharedLoadingData();
 
-    bool loadOdfStyles( KoShapeLoadingContext & context );
+    /**
+     * Load the styles
+     *
+     * If your application uses a style manager call this function from you application with insertOfficeStyles = true 
+     * to load the custom styles into the style manager before the rest of the loading is started.
+     *
+     * @param context The shape loading context.
+     * @param styleManager The style manager too use.
+     * @param insertOfficeStyles If true the office:styles are inserted into the style manager.
+     */
+    bool loadOdfStyles( KoOasisLoadingContext & context, KoStyleManager * styleManager, bool insertOfficeStyles = false );
 
+    /**
+     * Get the paragraph style for the given name
+     *
+     * The name is the style:name given in the file
+     *
+     * @param name The name of the style to get
+     * @return The paragraph style for the given name or 0 if not found
+     */
     KoParagraphStyle * paragraphStyle( const QString &name );
 
+    /**
+     * Get the character style for the given name
+     *
+     * The name is the style:name given in the file
+     *
+     * @param name The name of the style to get
+     * @return The character style for the given name or 0 if not found
+     */
     KoCharacterStyle * characterStyle( const QString &name );
 
-    KoListStyle * listStyle(const QString &name);
+    KoListStyle * listStyle( const QString &name );
 
     KoListLevelProperties outlineLevel( int level, const KoListLevelProperties& defaultprops = KoListLevelProperties() );
 
-    // Get the document styles which should be displayed in the style manager (office:styles)
-    QList<KoParagraphStyle *> documentParagraphStyles();
-    QList<KoCharacterStyle *> documentCharacterStyles();
-
 private:
+    // helper functions for loading of paragraph styles
+    void addParagraphStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements,
+                             KoStyleManager *styleManager, bool insertOfficeStyles = false );
+    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements );
+
+    // helper functions for loading of character styles
+    void addCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements,
+                             KoStyleManager *styleManager, bool insertOfficeStyles = false );
+    QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements );
+
     class Private;
     Private * const d;
 };

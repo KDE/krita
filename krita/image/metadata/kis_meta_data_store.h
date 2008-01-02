@@ -74,6 +74,26 @@ namespace KisMetaData {
             Entry& getEntry(const KisMetaData::Schema* schema, QString entryName);
             
             /**
+             * Remove an entry.
+             * @param entryKey the entryKey as the qualified name of the entry
+             */
+            void removeEntry(QString entryKey);
+            
+            /**
+             * Remove an entry.
+             * @param uri the uri of the schema
+             * @param entryName the name of the entry
+             */
+            void removeEntry(QString uri, QString entryName);
+            
+            /**
+             * Remove an entry.
+             * @param schema the schema
+             * @param entryName the name of the entry
+             */
+            void removeEntry(const KisMetaData::Schema* schema, QString entryName);
+            
+            /**
              * @return true if the store contains this entry
              */
             bool hasEntry(QString entryKey);

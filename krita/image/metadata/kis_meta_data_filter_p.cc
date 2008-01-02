@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,9 @@
 #include "kis_meta_data_filter_p.h"
 
 #include <klocale.h>
+
+#include "kis_meta_data_schema.h"
+#include "kis_meta_data_store.h"
 
 #include "kis_debug.h"
 
@@ -45,11 +48,23 @@ QString AnonymizerFilter::name()
 
 QString AnonymizerFilter::description()
 {
-    return i18n("Remove information about author,...");
+    return i18n("Remove personal information: author, location...");
 }
 
 void AnonymizerFilter::filter(KisMetaData::Store* store)
 {
     Q_UNUSED(store);
     dbgImage << "Anonymize a store";
+    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+    store->removeEntry( dcSchema, "contributor");
+    store->removeEntry( dcSchema, "creator");
+    store->removeEntry( dcSchema, "publisher");
+    store->removeEntry( dcSchema, "rights");
+    
+    const KisMetaData::Schema* psSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::PhotoshopSchemaUri);
+    store->removeEntry( psSchema, "AuthorsPosition");
+    store->removeEntry( psSchema, "CaptionWriter");
+    store->removeEntry( psSchema, "Credit");
+    store->removeEntry( psSchema, "City");
+    store->removeEntry( psSchema, "Country");
 }

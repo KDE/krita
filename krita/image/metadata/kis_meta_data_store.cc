@@ -111,6 +111,23 @@ Entry& Store::getEntry(const KisMetaData::Schema* schema, QString entryName)
     return getEntry(schema->generateQualifiedName( entryName ));
 }
 
+void Store::removeEntry(QString entryKey)
+{
+    d->entries.remove(entryKey);
+}
+
+void Store::removeEntry(QString uri, QString entryName)
+{
+    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
+    Q_ASSERT(schema);
+    removeEntry(schema, entryName );
+}
+
+void Store::removeEntry(const KisMetaData::Schema* schema, QString entryName)
+{
+    removeEntry(schema->generateQualifiedName( entryName ));
+}
+
 bool Store::hasEntry(QString uri, QString entryName)
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);

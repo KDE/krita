@@ -25,16 +25,23 @@
 
 namespace KisMetaData {
 
-   class KRITAIMAGE_EXPORT FilterRegistryModel : public KoGenericRegistryModel<Filter*> {
-       public:
-           FilterRegistryModel();
-           ~FilterRegistryModel();
-       public:
-            QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-           virtual Qt::ItemFlags flags ( const QModelIndex & index ) const;
-       private:
-           struct Private;
-           Private* const d;
+    /**
+     * Use this model to display a list of filters (KisMetaData::Filter) that can be
+     * enabled or disabled.
+     */
+    class KRITAIMAGE_EXPORT FilterRegistryModel : public KoGenericRegistryModel<Filter*> {
+        public:
+            FilterRegistryModel();
+            ~FilterRegistryModel();
+        public:
+            virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+            virtual Qt::ItemFlags flags ( const QModelIndex & index ) const;
+            virtual bool setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+            /// @return a list of filters that are enabled
+            QList<Filter*> enabledFilters() const;
+        private:
+            struct Private;
+            Private* const d;
    };
 
 };

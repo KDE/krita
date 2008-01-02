@@ -18,16 +18,22 @@
 
 #include "kis_meta_data_filter_registry_model.h"
 
+#include "kis_debug.h"
+
 using namespace KisMetaData;
 
 struct FilterRegistryModel::Private {
-    
+    QList<bool> enabled;
 };
 
 FilterRegistryModel::FilterRegistryModel()
     : KoGenericRegistryModel<Filter*>( FilterRegistry::instance() ), d(new Private)
 {
-    
+    QList<QString> keys = FilterRegistry::instance()->keys();
+    for(int i = 0; i < keys.size(); i++)
+    {
+        d->enabled.append( FilterRegistry::instance()->get( keys[i] )->defaultEnabled() );
+    }
 }
 
 FilterRegistryModel::~FilterRegistryModel()
@@ -41,13 +47,40 @@ QVariant FilterRegistryModel::data(const QModelIndex &index, int role ) const
     {
         if( role == Qt::CheckStateRole)
         {
-            return get(index)->defaultEnabled();
+            if(d->enabled[index.row()]) return Qt::Checked;
+            else return Qt::Unchecked;
         }
     }
     return KoGenericRegistryModel<Filter*>::data(index, role);
 }
 
+bool FilterRegistryModel::setData ( const QModelIndex & index, const QVariant & value, int role )
+{
+    if( index.isValid())
+    {
+        if( role == Qt::CheckStateRole )
+        {
+            d->enabled[index.row()]= value.toBool();
+        }
+    }
+    return KoGenericRegistryModel<Filter*>::setData(index, value, role);
+}
+
 Qt::ItemFlags FilterRegistryModel::flags( const QModelIndex & ) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+}
+
+QList<Filter*> FilterRegistryModel::enabledFilters() const
+{
+    QList<Filter*> enabledFilters;
+    QList<QString> keys = FilterRegistry::instance()->keys();
+    for(int i = 0; i < keys.size(); i++)
+    {
+        if(d->enabled[i])
+        {
+            enabledFilters.append( FilterRegistry::instance()->get( keys[i] ) );
+        }
+    }
+    return enabledFilters;
 }

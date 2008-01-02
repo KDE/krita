@@ -16,32 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_META_DATA_FILTER_H_
-#define _KIS_META_DATA_FILTER_H_
-
-#include <krita_export.h>
+#include "kis_meta_data_filter.h"
 
 namespace KisMetaData {
-    class Store;
-    /**
-     * This class is a base class for filtering a meta data store to alter some
-     * information. For instance, remove author information or change edition
-     * date.
-     */
-    class Filter {
+    class AnonymizerFilter : public Filter {
         public:
-            virtual ~Filter();
-            /// @return the id of this filter
-            virtual QString id() = 0;
-            /// @return the name of this filter
-            virtual QString name() = 0;
-            /// @return a description of this filter
-            virtual QString description() = 0;
+            virtual ~AnonymizerFilter();
+            virtual QString id();
+            virtual QString name();
+            virtual QString description();
             /**
              * Apply a filter on a meta data store.
              */
-            virtual void filter(KisMetaData::Store*) = 0;
+            virtual void filter(KisMetaData::Store*);
+            
     };
 }
-
-#endif

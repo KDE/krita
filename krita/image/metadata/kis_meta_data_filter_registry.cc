@@ -16,11 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_meta_data_filter.h"
+#include "kis_meta_data_filter_registry.h"
+
+#include "kis_meta_data_filter_p.h"
 
 using namespace KisMetaData;
 
-Filter::~Filter()
+FilterRegistry *FilterRegistry::s_singleton = 0;
+
+FilterRegistry::FilterRegistry()
 {
+    add( new AnonymizerFilter() );
+}
+
+FilterRegistry::FilterRegistry(const FilterRegistry&) : KoGenericRegistry<KisMetaData::Filter*>()
+{
+}
+
+FilterRegistry& FilterRegistry::operator=(const FilterRegistry& )
+{
+    return *this;
+}
+
+FilterRegistry::~FilterRegistry()
+{
+}
+
+FilterRegistry* FilterRegistry::instance()
+{
+    if(not s_singleton)
+    {
+        s_singleton = new FilterRegistry();
+    }
+    return s_singleton;
 }
 

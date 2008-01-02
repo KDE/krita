@@ -16,11 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_meta_data_filter.h"
+#include "kis_meta_data_filter_p.h"
+
+#include <klocale.h>
 
 using namespace KisMetaData;
 
-Filter::~Filter()
+AnonymizerFilter::~AnonymizerFilter()
 {
 }
 
+QString AnonymizerFilter::id()
+{
+    return "Anonymizer";
+}
+
+QString AnonymizerFilter::name()
+{
+    return i18n("Anonymizer");
+}
+
+QString AnonymizerFilter::description()
+{
+    return i18n("Remove information about author,...");
+}
+
+void AnonymizerFilter::filter(KisMetaData::Store* store)
+{
+    Q_UNUSED(store);
+}

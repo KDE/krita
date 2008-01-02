@@ -51,10 +51,10 @@ public:
      * to load the custom styles into the style manager before the rest of the loading is started.
      *
      * @param context The shape loading context.
-     * @param styleManager The style manager too use.
+     * @param styleManager The style manager too use or 0 if you don't have a style manager.
      * @param insertOfficeStyles If true the office:styles are inserted into the style manager.
      */
-    bool loadOdfStyles( KoOasisLoadingContext & context, KoStyleManager * styleManager, bool insertOfficeStyles = false );
+    void loadOdfStyles( KoOasisLoadingContext & context, KoStyleManager * styleManager, bool insertOfficeStyles = false );
 
     /**
      * Get the paragraph style for the given name
@@ -90,6 +90,10 @@ private:
     void addCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements,
                              KoStyleManager *styleManager, bool insertOfficeStyles = false );
     QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements );
+
+    // helper functions for loading of list styles
+    void addListStyles( KoOasisLoadingContext & context );
+    void addOutlineStyles( KoOasisLoadingContext & context );
 
     class Private;
     Private * const d;

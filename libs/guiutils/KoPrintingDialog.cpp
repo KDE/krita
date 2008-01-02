@@ -67,10 +67,16 @@ public:
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
         KoUpdater updater = updaters.at(index-1);
-        painter->save();
+        const bool doSave = painter;
+        if (painter)
+            painter->save();
         if(! stop)
             parent->preparePage(pageNumber);
         updater.setProgress(50);
+        if (painter == 0)
+            painter = new QPainter(printer);
+        if (doSave)
+            painter->save(); // make sure we saved to match the restore later on.
 
         QList<KoShape*> shapes = parent->shapesOnPage(pageNumber);
         if (shapes.isEmpty()) {
@@ -210,7 +216,8 @@ void KoPrintingDialog::setPageRange(const QList<int> &pages) {
 }
 
 QPainter & KoPrintingDialog::painter() const {
-    Q_ASSERT(d->painter);
+    if (d->painter == 0)
+        d->painter = new QPainter(d->printer);
     return *d->painter;
 }
 
@@ -232,7 +239,8 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
     d->dialog->show();
     if(d->index == 0 && d->pages.count() > 0 && d->printer) {
         d->stop = false;
-        d->painter = new QPainter(d->printer);
+        delete d->painter;
+        d->painter = 0;
         d->zoomer.setZoomAndResolution(100, d->printer->resolution(), d->printer->resolution());
         d->progress->start();
         for(int i=0; i < d->pages.count(); i++)

@@ -26,6 +26,7 @@
 
 class KoImageData;
 class QTextDocument;
+class QTextTable;
 
 class TableShape : public KoShape
 {
@@ -43,8 +44,15 @@ public:
 private:
 
     void createExampleData();
-
+    void initTableFrames();
+    void recalculateCellPositions();
+    void recalculateCellHeights(int row, int column);
+    
+    QTextTable * m_table;
     QTextDocument * m_textDocument;
+
+    class TableCellFrame;
+    QVector< QVector<TableCellFrame*> > m_tableFrames;
     
 };
 

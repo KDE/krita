@@ -364,7 +364,7 @@ void Layout::nextShape() {
     if(shape == 0)
         return;
     m_data->setDocumentOffset(m_y);
-    m_data->faul(); // make dirty since this one needs relayout at this point.
+    m_data->foul(); // make dirty since this one needs relayout at this point.
     m_textShape = dynamic_cast<TextShape*>(shape);
     Q_ASSERT(m_textShape);
     if(m_textShape->hasFootnoteDocument())

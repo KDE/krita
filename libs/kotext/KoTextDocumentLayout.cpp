@@ -126,7 +126,7 @@ void KoTextDocumentLayout::addShape(KoShape *shape) {
 
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
     if(data) {
-        data->faul();
+        data->foul();
         m_state->reset();
     }
 }
@@ -229,7 +229,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         Q_ASSERT(data);
         if(data && data->position() <= position && data->endPosition() >= position) {
             // found our (first) shape to re-layout
-            data->faul();
+            data->foul();
             m_state->reset();
             scheduleLayout();
             return;
@@ -239,7 +239,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     KoShape *shape = shapes().last();
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
     Q_ASSERT(data);
-    data->faul();
+    data->foul();
     m_state->reset();
     scheduleLayout();
 }

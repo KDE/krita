@@ -65,6 +65,7 @@ public:
 
     /// set the layoutState for this document layout
     void setLayout(LayoutState *layout);
+
     /// return if this document layout has a proper layoutState object.
     bool hasLayouter() const;
 
@@ -83,12 +84,16 @@ public:
      * correctly
      */
     virtual QSizeF documentSize () const;
+
     /// Draws the layout on the given painter with the given context.
     virtual void draw ( QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context );
+
     /// Draws the layout on the given painter with the given context, and pass the zoom.
     void draw ( QPainter * painter, const KoTextDocumentLayout::PaintContext & context);
+
     /// Returns the bounding rectacle of frame. Returns the bounding rectangle of frame.
     virtual QRectF frameBoundingRect ( QTextFrame * frame ) const;
+
     /**
      * Returns the cursor postion for the given point with the accuracy
      * specified. Returns -1 to indicate failure if no valid cursor position
@@ -97,6 +102,7 @@ public:
      * @param accuracy if Qt::ExactHit this method will return -1 when not actaully hitting any text
      */
     virtual int hitTest ( const QPointF & point, Qt::HitTestAccuracy accuracy ) const;
+
     /// reimplemented to always return 1
     virtual int pageCount () const;
 

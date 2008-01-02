@@ -25,15 +25,21 @@
 #include <flake_export.h>
 
 /**
- * helper class to disable any screen conversion as thats done in flake.
+ * Helper class to disable any screen conversion as that is done in flake.
+ *
  * Flake has the property that all content is always defined in pts. And only when it
  * is displayed is it converted to the proper zoom and resolution.
+ *
  * This is in contradiction to the normal behavior of Qt fonts which automatically
  * applies DPI on creation.  So this is where this special paint device comes in.
+ *
  * Usage;
+ *
  * For all QFont() and QFontMetrics constructors add an instance of this PaintDevice
- * to the constructor if those fonts are to be used for painting in a KoShape inherting
+ * to the constructor if those fonts are to be used for painting in a KoShape inheriting
  * class.
+ *
+ * Note: never try to actually paint on this paint device, since that will noisily crash.
  */
 class FLAKE_EXPORT KoPostscriptPaintDevice : public QPaintDevice {
 public:

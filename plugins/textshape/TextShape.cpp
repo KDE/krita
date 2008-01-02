@@ -134,7 +134,7 @@ QPointF TextShape::convertScreenPos(const QPointF &point) {
 
 void TextShape::shapeChanged(ChangeType type) {
     if(type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
-        m_textShapeData->faul();
+        m_textShapeData->foul();
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
         if(lay)
             lay->interruptLayout();

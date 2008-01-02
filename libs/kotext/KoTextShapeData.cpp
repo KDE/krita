@@ -115,7 +115,7 @@ void KoTextShapeData::setEndPosition(int position) {
     d->endPosition = position;
 }
 
-void KoTextShapeData::faul() {
+void KoTextShapeData::foul() {
     d->dirty = true;
 }
 

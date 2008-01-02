@@ -99,7 +99,7 @@ void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType
 
         KoTextShapeData *data  = dynamic_cast<KoTextShapeData*> (child->parent()->userData());
         Q_ASSERT(data);
-        data->faul();
+        data->foul();
 
         KoTextDocumentLayout *lay= dynamic_cast<KoTextDocumentLayout*> (data->document()->documentLayout());
         if(lay)

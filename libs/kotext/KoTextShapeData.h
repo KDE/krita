@@ -95,9 +95,11 @@ public:
     void setEndPosition(int position);
 
     /// mark shape as dirty triggering a re-layout of its text.
-    void faul();
+    void foul();
+    
     /// mark shape as not-dirty
     void wipe();
+
     /// return if the shape is marked dirty and its text content needs to be relayout
     bool isDirty() const;
 

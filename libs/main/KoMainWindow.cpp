@@ -1105,7 +1105,6 @@ void KoMainWindow::saveWindowSettings()
         for (QMap<QString, QDockWidget*>::const_iterator i = d->m_dockWidgetMap.constBegin();
                 i != d->m_dockWidgetMap.constEnd(); ++i) {
             if (i.value()->widget()) {
-                kDebug() << "key:" << i.key() << "value:" << *i;
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
                 dockGroup.writeEntry( "Collapsed", i.value()->widget()->isHidden() );
             }

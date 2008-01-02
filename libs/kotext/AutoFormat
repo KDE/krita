@@ -2,12 +2,12 @@ Autoformat feature:
 kword and kpresenter have autoformat feature:
 -> Simple autocorrection :
 	-> Convert first letter of a sentence automatically to uppercase
-	-> Convert two uppercasecharacters to one uppercase and one lowercase
-	-> Auto format Url => when we write http://www.kde.org it replaces
-	by a link variable, we detect a url all word we start by http:// ftp://
+	-> Convert two uppercase characters to one uppercase and one lowercase
+	-> Auto format Url => when we write http://www.kde.org it is replaced 
+	by a link variable, we detect as an url all words started by http:// ftp://
 	mailto: news:/
 	-> Suppress double space
-	-> Suppress space at the beginning and the end of paragraph
+	-> Suppress space at the beginning and the end of a paragraph
 	-> Automatically do bold and underline formatting => when we write
 	*kde* => it replace by <bold>kde</bold> and when we write _kde_
 	it replaces by <underline>kde</underline>
@@ -23,7 +23,7 @@ kword and kpresenter have autoformat feature:
 	-> we can replace double quotes and simple quotes by specific
 	characters.
 -> Advanced autocorrection:
-	-> we can define word which will replace by a other word 
+	-> we can define a word which will be replaced by another word 
 	=> for example koffices by koffice, or microsoft by linux
 ->Exception:
 	-> we can define list of exception word:
@@ -46,7 +46,7 @@ kword and kpresenter have autoformat feature:
 
 -2002-03-27- koffice 1.1post.
 Laurent Montel <lmontel@mandrakesoft.com>
-Be carefull my english is not good, so you can change all you want in this file.
+Be careful my English is not good, so you can change all you want in this file.
 
 
 

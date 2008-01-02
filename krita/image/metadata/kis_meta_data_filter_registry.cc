@@ -27,6 +27,7 @@ FilterRegistry *FilterRegistry::s_singleton = 0;
 FilterRegistry::FilterRegistry()
 {
     add( new AnonymizerFilter() );
+    add( new ToolInfoFilter() );
 }
 
 FilterRegistry::FilterRegistry(const FilterRegistry&) : KoGenericRegistry<KisMetaData::Filter*>()

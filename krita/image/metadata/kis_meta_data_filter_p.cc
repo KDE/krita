@@ -18,10 +18,17 @@
 
 #include "kis_meta_data_filter_p.h"
 
-#include <klocale.h>
+#include <QDate>
 
+#include <klocale.h>
+#include <kofficeversion.h>
+
+#include "kis_aboutdata.h"
+
+#include "kis_meta_data_entry.h"
 #include "kis_meta_data_schema.h"
 #include "kis_meta_data_store.h"
+#include "kis_meta_data_value.h"
 
 #include "kis_debug.h"
 
@@ -67,4 +74,43 @@ void AnonymizerFilter::filter(KisMetaData::Store* store)
     store->removeEntry( psSchema, "Credit");
     store->removeEntry( psSchema, "City");
     store->removeEntry( psSchema, "Country");
+}
+
+//------------------------------------//
+//---------- ToolInfoFilter ----------//
+//------------------------------------//
+
+ToolInfoFilter::~ToolInfoFilter()
+{
+}
+
+bool ToolInfoFilter::defaultEnabled()
+{
+    return true;
+}
+
+QString ToolInfoFilter::id()
+{
+    return "ToolInfo";
+}
+
+QString ToolInfoFilter::name()
+{
+    return i18n("Tool information");
+}
+
+QString ToolInfoFilter::description()
+{
+    return i18n("Add the name of the tool used for creation and the modification date");
+}
+
+void ToolInfoFilter::filter(KisMetaData::Store* store)
+{
+    const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
+    store->getEntry( xmpSchema, "ModifyDate").value() = Value( QDate::currentDate() );
+    store->getEntry( xmpSchema, "MetadataDate").value() = Value( QDate::currentDate() );
+    if(not store->hasEntry( xmpSchema, "CreatorTool") )
+    {
+        store->getEntry( xmpSchema, "CreatorTool").value() = Value( i18n("Krita %1", QString(KOFFICE_VERSION_STRING) )  );
+    }
 }

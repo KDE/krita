@@ -19,6 +19,9 @@
 #include "kis_meta_data_filter.h"
 
 namespace KisMetaData {
+    /**
+     * Filter that remove personal data in a meta store.
+     */
     class AnonymizerFilter : public Filter {
         public:
             virtual ~AnonymizerFilter();
@@ -26,9 +29,19 @@ namespace KisMetaData {
             virtual QString name();
             virtual QString description();
             virtual bool defaultEnabled();
-            /**
-             * Apply a filter on a meta data store.
-             */
+            virtual void filter(KisMetaData::Store*);
+    };
+    /**
+     * Filter that add the name of the creation program and the date
+     * of the last modificiation.
+     */
+    class ToolInfoFilter : public Filter {
+        public:
+            virtual ~ToolInfoFilter();
+            virtual QString id();
+            virtual QString name();
+            virtual QString description();
+            virtual bool defaultEnabled();
             virtual void filter(KisMetaData::Store*);
     };
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -29,6 +29,9 @@ namespace KisMetaData {
        public:
            FilterRegistryModel();
            ~FilterRegistryModel();
+       public:
+            QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+           virtual Qt::ItemFlags flags ( const QModelIndex & index ) const;
        private:
            struct Private;
            Private* const d;

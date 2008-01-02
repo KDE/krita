@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +31,8 @@ namespace KisMetaData {
     class Filter {
         public:
             virtual ~Filter();
+            /// @return true if the filter is enabled by default when exporting
+            virtual bool defaultEnabled() = 0;
             /// @return the id of this filter
             virtual QString id() = 0;
             /// @return the name of this filter

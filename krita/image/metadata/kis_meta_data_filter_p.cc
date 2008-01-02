@@ -26,6 +26,11 @@ AnonymizerFilter::~AnonymizerFilter()
 {
 }
 
+bool AnonymizerFilter::defaultEnabled()
+{
+    return false;
+}
+
 QString AnonymizerFilter::id()
 {
     return "Anonymizer";

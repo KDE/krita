@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +25,7 @@ namespace KisMetaData {
             virtual QString id();
             virtual QString name();
             virtual QString description();
+            virtual bool defaultEnabled();
             /**
              * Apply a filter on a meta data store.
              */

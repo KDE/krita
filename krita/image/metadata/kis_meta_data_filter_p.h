@@ -30,6 +30,5 @@ namespace KisMetaData {
              * Apply a filter on a meta data store.
              */
             virtual void filter(KisMetaData::Store*);
-            
     };
 }

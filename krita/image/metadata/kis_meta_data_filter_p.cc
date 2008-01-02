@@ -20,6 +20,8 @@
 
 #include <klocale.h>
 
+#include "kis_debug.h"
+
 using namespace KisMetaData;
 
 AnonymizerFilter::~AnonymizerFilter()
@@ -49,4 +51,5 @@ QString AnonymizerFilter::description()
 void AnonymizerFilter::filter(KisMetaData::Store* store)
 {
     Q_UNUSED(store);
+    dbgImage << "Anonymize a store";
 }

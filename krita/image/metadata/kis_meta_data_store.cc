@@ -21,6 +21,7 @@
 #include <kis_debug.h>
 
 #include "kis_meta_data_entry.h"
+#include "kis_meta_data_filter.h"
 #include "kis_meta_data_schema.h"
 #include "kis_meta_data_value.h"
 
@@ -159,5 +160,14 @@ void Store::debugDump() const
         } else {
             dbgImage <<"Invalid entry";
         }
+    }
+}
+
+void Store::applyFilters( QList<Filter*> filters )
+{
+    dbgImage << "Apply " << filters.size() << " filters";
+    foreach( Filter* filter, filters)
+    {
+        filter->filter(this);
     }
 }

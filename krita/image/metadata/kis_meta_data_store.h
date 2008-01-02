@@ -27,6 +27,7 @@
 namespace KisMetaData {
     class Schema;
     class Entry;
+    class Filter;
     class Value;
     /**
      * This class holds the list of metadata entries and schemas.
@@ -110,6 +111,10 @@ namespace KisMetaData {
              * Dump on kdDebug the metadata store.
              */
             void debugDump() const;
+            /**
+             * Apply a list of filters on a store
+             */
+            void applyFilters( QList<Filter*> filters );
         private:
             Private* const d;
     };

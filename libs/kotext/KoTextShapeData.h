@@ -34,11 +34,12 @@ class KoShapeSavingContext;
 
 /**
  * The data store that is held by each KoTextShape instance.
- * This is a separe object to allow KWord proper to use this class' api and
+ * This is a separate object to allow KWord proper to use this class' API and
  * access the internals of the text shape.
- * This class holds a Document pointer and is build so multiple shapes (and thus
- * multiple instances of this shape data) can share one document by providing a
- * different view on (a different part of) the document.
+ *
+ * This class holds a QTextDocument pointer and is built so multiple shapes (and thus
+ * multiple instances of this shape data) can share one QTextDocument by providing a
+ * different view on (a different part of) the QTextDocument.
  */
 class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData {
     Q_OBJECT

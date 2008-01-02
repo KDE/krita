@@ -24,6 +24,11 @@
 #include <QAbstractListModel>
 #include "KoGenericRegistry.h"
 
+/**
+ * This is a model that you can use to display the content of a registry.
+ * 
+ * @param T is the type of the data in the registry
+ */
 template<typename T>
 class KoGenericRegistryModel : public QAbstractListModel {
     public:

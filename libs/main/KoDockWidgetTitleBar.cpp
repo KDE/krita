@@ -244,7 +244,7 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
 void KoDockWidgetTitleBar::setCollapsed(bool collapsed)
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
-    if (q && q->isVisible() == collapsed)
+    if (q && q->widget() && q->widget()->isHidden() != collapsed)
         d->toggleCollapsed();
 }
 
@@ -260,8 +260,8 @@ void KoDockWidgetTitleBar::Private::toggleCollapsed()
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
     if (q == 0) // there does not *have* to be anything on the dockwidget.
         return;
-    q->widget()->setVisible(!q->widget()->isVisible());
-    collapseButton->setIcon(q->widget()->isVisible() ? openIcon : closeIcon);
+    q->widget()->setVisible(q->widget()->isHidden());
+    collapseButton->setIcon(q->widget()->isHidden() ? closeIcon : openIcon);
 }
 
 void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatures)

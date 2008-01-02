@@ -52,9 +52,6 @@ public:
         GradientRepeatAlternate
     };
 
-    void setGradient(KoAbstractGradient& gradient) { m_gradient = &gradient; }
-    void setGradient(KoAbstractGradient* gradient) { m_gradient = gradient; }
-
     /**
      * Paint a gradient in the rect between startx, starty, width and height.
      * XXX: What does the returned bool mean?
@@ -70,11 +67,6 @@ public:
                qint32 starty,
                qint32 width,
                qint32 height);
-
-
-private:
-    KoAbstractGradient *m_gradient;
-
 
 };
 #endif //KIS_GRADIENT_PAINTER_H_

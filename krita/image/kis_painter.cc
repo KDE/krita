@@ -96,6 +96,7 @@ struct KisPainter::Private {
     const KoCompositeOp * compositeOp;
     QBitArray channelFlags;
     bool useBoundingDirtyRect;
+    KoAbstractGradient* gradient;
 };
 
 KisPainter::KisPainter()
@@ -138,6 +139,7 @@ void KisPainter::init()
     d->antiAliasPolygonFill = true;
     d->bounds = QRect();
     d->progressUpdater = 0;
+    d->gradient = 0;
 
     KConfigGroup cfg = KGlobal::config()->group("");
     d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
@@ -927,3 +929,12 @@ void KisPainter::setSelection(KisSelectionSP selection) { d->selection = selecti
 KisSelectionSP KisPainter::selection() { return d->selection; }
 
 KoUpdater * KisPainter::progressUpdater() { return d->progressUpdater; }
+
+void KisPainter::setGradient(KoAbstractGradient* gradient)
+{
+    d->gradient = gradient;
+}
+KoAbstractGradient* KisPainter::gradient()
+{
+    return d->gradient;
+}

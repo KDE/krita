@@ -36,6 +36,9 @@
 class QUndoCommand;
 class QRect;
 class QStringList;
+
+class KoAbstractGradient;
+
 class KisTransaction;
 class KisBrush;
 class KisComplexColor;
@@ -529,6 +532,10 @@ public:
      * @return the selection set on this painter.
      */
     KisSelectionSP selection();
+
+    void setGradient(KoAbstractGradient* gradient);
+    KoAbstractGradient* gradient();
+
 
 protected:
     /// Initialize, set everything to '0' or defaults

@@ -471,19 +471,16 @@ namespace {
 
 KisGradientPainter::KisGradientPainter()
     : KisPainter()
-    , m_gradient( 0 )
 {
 }
 
 KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device)
     : KisPainter(device)
-    , m_gradient(0)
 {
 }
 
 KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device, KisSelectionSP selection)
     : KisPainter( device, selection )
-    , m_gradient( 0 )
 {
 }
 
@@ -498,7 +495,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        qint32 width,
                                        qint32 height)
 {
-    if (!m_gradient) return false;
+    if (!gradient()) return false;
 
     GradientShapeStrategy *shapeStrategy = 0;
 
@@ -582,7 +579,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                 t = 1 - t;
             }
 
-            m_gradient->colorAt(color, t);
+            gradient()->colorAt(color, t);
             memcpy(hit.rawData(), color.data(), pixelSize);
             
             ++hit;
@@ -705,7 +702,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                 }
 
                                 KoColor color;
-                                m_gradient->colorAt(color, t);
+                                gradient()->colorAt(color, t);
                                 
                                 foreach(KoChannelInfo * channel, channels) {
 

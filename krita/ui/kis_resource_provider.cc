@@ -188,10 +188,7 @@ void KisResourceProvider::slotBrushActivated(KoResource *res)
     KisBrush * brush = dynamic_cast<KisBrush*>(res);
     QVariant v = qVariantFromValue( ( void * ) brush );
     m_resourceProvider->setResource( CurrentBrush, v );
-    if (brush )
-    {
-        emit sigBrushChanged(brush);
-    }
+    emit sigBrushChanged(brush);
 }
 
 void KisResourceProvider::slotPatternActivated(KoResource * res)
@@ -199,9 +196,7 @@ void KisResourceProvider::slotPatternActivated(KoResource * res)
     KisPattern * pattern = dynamic_cast<KisPattern*>(res);
     QVariant v = qVariantFromValue( ( void * ) pattern );
     m_resourceProvider->setResource( CurrentPattern, v );
-    if (pattern) {
-        emit sigPatternChanged(pattern);
-    }
+    emit sigPatternChanged(pattern);
 }
 
 void KisResourceProvider::slotGradientActivated(KoResource *res)
@@ -210,9 +205,7 @@ void KisResourceProvider::slotGradientActivated(KoResource *res)
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>(res);
     QVariant v = qVariantFromValue( ( void * ) gradient );
     m_resourceProvider->setResource( CurrentGradient, v );
-    if (gradient) {
-        emit sigGradientChanged(gradient);
-    }
+    emit sigGradientChanged(gradient);
 }
 
 void KisResourceProvider::slotPaintopActivated(const KoID & paintop,

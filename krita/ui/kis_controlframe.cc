@@ -144,60 +144,60 @@ KisControlFrame::KisControlFrame( KXmlGuiWindow * /*window*/, KisView2 * view, c
 
 void KisControlFrame::slotSetBrush(QTableWidgetItem *item)
 {
-    if (item)
-        m_brushWidget->slotSetItem(*item);
+    m_brushWidget->slotSetItem(*item);
 }
 
 void KisControlFrame::slotSetPattern(QTableWidgetItem *item)
 {
-    if (item)
-        m_patternWidget->slotSetItem(*item);
+    m_patternWidget->slotSetItem(*item);
 }
 
 void KisControlFrame::slotSetGradient(QTableWidgetItem *item)
 {
-    if (item)
-        m_gradientWidget->slotSetItem(*item);
+    m_gradientWidget->slotSetItem(*item);
 }
 
 void KisControlFrame::slotBrushChanged(KisBrush * brush)
 {
-        KoResourceItem *item;
-
+    KoResourceItem *item;
+    if(brush) {
         if((item = m_brushMediator->itemFor(brush)))
         {
                 slotSetBrush(item);
         } else {
                 slotSetBrush( new KoResourceItem(brush) );
         }
-
+    }
+    else
+        slotSetBrush(0);
 }
 
 void KisControlFrame::slotPatternChanged(KisPattern * pattern)
 {
-        KoResourceItem *item;
-        if (!pattern)
-                return;
-
+    KoResourceItem *item;
+    if (pattern) {
         if ( (item = m_patternMediator->itemFor(pattern)) )
                 slotSetPattern(item);
         else
                 slotSetPattern( new KoResourceItem(pattern) );
-
+    }
+    else
+        slotSetPattern(0);
 }
 
 
 void KisControlFrame::slotGradientChanged(KoAbstractGradient * gradient)
 {
-        KoResourceItem *item;
-        if (!gradient)
-                return;
-
+    KoResourceItem *item;
+    if (gradient) {
         if ( (item = m_gradientMediator->itemFor(gradient)) )
                 slotSetGradient(item);
         else
                 slotSetGradient( new KoResourceItem(gradient) );
-
+    }
+    else {
+        slotSetGradient(0);
+    }
 }
 
 void KisControlFrame::createBrushesChooser(KisView2 * view)

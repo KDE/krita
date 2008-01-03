@@ -69,7 +69,6 @@ private:
     KisItemChooser *m_chooser;
     KoAbstractResourceServerAdapter* m_rServerAdapter;
     QMap<KoResource*, KoResourceItem*> m_items;
-    QTableWidgetItem *m_activeItem;
 };
 
 #endif // KIS_RESOURCE_MEDIATOR_H_

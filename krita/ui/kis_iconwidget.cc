@@ -37,16 +37,17 @@ void KisIconWidget::slotSetItem(QTableWidgetItem& item)
 
 void KisIconWidget::paintEvent(QPaintEvent *)
 {
+    QPainter p(this);
+    qint32 cw = width();
+    qint32 ch = height();
     if (m_item) {
-        QPainter p(this);
-
         m_item->icon().paint(&p, 0, 0, 24, 24);
-        qint32 cw = width();
-        qint32 ch = height();
-
-        p.setPen(Qt::gray);
-        p.drawRect(0, 0, cw + 1, ch + 1);
     }
+    else {
+        p.fillRect( 0, 0, cw, ch, Qt::white);
+    }
+    p.setPen(Qt::gray);
+    p.drawRect(0, 0, cw + 1, ch + 1);
 }
 
 #include "kis_iconwidget.moc"

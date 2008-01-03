@@ -54,6 +54,7 @@ bool KisSaveXmlVisitor::visit( KisExternalLayer * layer )
         m_count++;
         return true;
     }
+    return false;
 }
 
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)

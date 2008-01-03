@@ -30,12 +30,12 @@ void ChannelConverterTest::testKSReflectance()
     ChannelConverter<float> c(4.3, 0.14);
     float K, S; double R;
 
-    R = 0.4999999999999;
+    R = c.Rh()-(1e-8);
     c.reflectanceToKS(R, K, S);
     qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
     QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));
 
-    R = 0.5000000000001;
+    R = c.Rh()+(1e-8);
     c.reflectanceToKS(R, K, S);
     qDebug() << "Reflectance " << R << "; K = " << K << ", S = " << S;
     QCOMPARE((S/K), (float)(R*2.0/pow(1-R,2)));

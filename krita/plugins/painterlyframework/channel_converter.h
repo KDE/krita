@@ -41,8 +41,11 @@ class ChannelConverter {
         inline double sRGBToRGB(const quint16 &sCi) const;
         inline quint16 RGBTosRGB(const double &C) const;
 */
+
+        inline double Rh() { return rh; } // For test purpose only.
     private:
         double Kb, Sb;
+        double rh;
         double w0, w1; // For whitening
         double b0, b1, b2; // For blackening and making K and S continuous in 0.5
 
@@ -61,7 +64,7 @@ ChannelConverter<_TYPE_>::ChannelConverter(const double &Kblack, const double &S
 : Kb(Kblack), Sb(Sblack)
 {
     double q1, q2, k1, k2, D, Sh;
-    double r0; // Represent the reflectance of the reference black (no, it's not zero)
+    double r0;
 
     r0 = 1.0 + (Kb/Sb) - sqrt( (Kb/Sb)*(Kb/Sb) + 2.0*(Kb/Sb) );
     q1 = Kb / ( 1.0 + Kb*PHI(r0) );
@@ -74,16 +77,19 @@ ChannelConverter<_TYPE_>::ChannelConverter(const double &Kblack, const double &S
     w1 = ( k1 - 1.0 ) / D;
     w0 = ( r0 - k1 ) / D;
 
-    Sh = S(0.5);
+    rh = W(r0);
+//     rh = 0.5;
+
+    Sh = S(rh);
     q1 = Kb / ( 1.0 + Sb );
-    q2 = 0.25 * ( 4.0*Kb + Sh ) / ( Sb + Sh );
+    q2 = PSI(rh) * ( PHI(rh)*Kb + Sh ) / ( Sb + Sh );
     k1 = 1.0 + q1 - sqrt( q1*q1 + 2.0*q1 );
     k2 = 1.0 + q2 - sqrt( q2*q2 + 2.0*q2 );
     // Second system: retrieve b2, b1 and b0
     // b2 + b1 + b0 = k1
-    // 4*b2 + b1/2 + b0 = k2
-    // b2/r0 + b1/r0 + b0 = r0
-    double marray[9] = { 1.0, 1.0, 1.0, 4.0, 0.5, 1.0, 1.0/r0, r0, 1.0 };
+    // b2/rh + b1*rh + b0 = k2
+    // b2/r0 + b1*r0 + b0 = r0
+    double marray[9] = { 1.0, 1.0, 1.0, 1.0/rh, rh, 1.0, 1.0/r0, r0, 1.0 };
     double barray[3] = { k1, k2, r0 };
     int s;
     gsl_matrix_view M = gsl_matrix_view_array(marray, 3, 3);
@@ -99,6 +105,10 @@ ChannelConverter<_TYPE_>::ChannelConverter(const double &Kblack, const double &S
 
     gsl_permutation_free(p);
     gsl_vector_free(x);
+
+    qDebug() << "W(0) =" << W(0);
+    qDebug() << "W(r0) =" << W(r0);
+    qDebug() << "B(1) =" << B(1);
 }
 
 template< typename _TYPE_ >
@@ -109,7 +119,7 @@ ChannelConverter<_TYPE_>::~ChannelConverter()
 template< typename _TYPE_ >
 inline double ChannelConverter<_TYPE_>::K(const double &R) const
 {
-    if (R <= 0.5)
+    if (R <= rh)
         return ( 1.0 / (PHI(W(R))-PHI(R)) );
     else
         return ( S(R)*PSI(R) );
@@ -118,7 +128,7 @@ inline double ChannelConverter<_TYPE_>::K(const double &R) const
 template< typename _TYPE_ >
 inline double ChannelConverter<_TYPE_>::S(const double &R) const
 {
-    if (R > 0.5)
+    if (R > rh)
         return ( Kb - Sb*PSI(B(R)) ) / ( PSI(B(R)) - PSI(R) );
     else
         return ( K(R)*PHI(R) );

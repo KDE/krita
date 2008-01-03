@@ -1,5 +1,7 @@
-/* This file is part of the KDE project
+/* This file is part of the KDE project.
+ *
  * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2008 Inge Wallin     <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

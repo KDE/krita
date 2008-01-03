@@ -85,6 +85,12 @@ public:
      * Returns the duration of this musical elements in ticks.
      */
     int length() const;
+    
+    /**
+     * Returns the beatline of this element. This is an x position relative to the start of the element.
+     */
+    double beatline() const;
+    
 public slots:
     /**
      * Sets the x position of this musical element.
@@ -116,6 +122,8 @@ protected slots:
      * @param height the new height of this musical element
      */
     void setHeight(double height);
+    
+    void setBeatline(double beatline);
 signals:
     void xChanged(double x);
     void yChanged(double y);

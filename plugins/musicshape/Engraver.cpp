@@ -288,7 +288,7 @@ void Engraver::engraveBar(Bar* bar)
     for (int s = 0; s < simultanities.size(); s++) {
         Simultanity& sim = simultanities[s];
         foreach (VoiceElement* ve, sim.voiceElements) {
-            ve->setX(curx);
+            ve->setX(curx - ve->beatline());
         }
         curx += sim.space * noteHeadSize;
     }

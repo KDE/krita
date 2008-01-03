@@ -187,11 +187,14 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, Voice* vo
     if (me->staff()) top += me->staff()->top();
     if (m_debug) {
         painter.setPen(QPen(Qt::blue));
-        painter.drawLine(pos + QPointF(me->x() * xScale, top + me->y() - 10), pos + QPointF(me->x() * xScale, top + me->y() + me->height() + 10));
-        painter.drawLine(pos + QPointF(me->x() * xScale + me->width(), top + me->y() - 10), pos + QPointF(me->x() * xScale + me->width(), top + me->y() + me->height() + 10));
+        painter.drawLine(pos + QPointF(me->x() * xScale, top + me->y() - 4), pos + QPointF(me->x() * xScale, top + me->y() + me->height() + 4));
+        painter.drawLine(pos + QPointF(me->x() * xScale + me->width(), top + me->y() - 4), pos + QPointF(me->x() * xScale + me->width(), top + me->y() + me->height() + 4));
 
-        painter.drawLine(pos + QPointF(me->x() * xScale - 10, top + me->y()), pos + QPointF(me->x() * xScale + me->width() + 10, top + me->y()));
-        painter.drawLine(pos + QPointF(me->x() * xScale - 10, top + me->y() + me->height()), pos + QPointF(me->x() * xScale + me->width() + 10, top + me->y() + me->height()));
+        painter.drawLine(pos + QPointF(me->x() * xScale - 4, top + me->y()), pos + QPointF(me->x() * xScale + me->width() + 4, top + me->y()));
+        painter.drawLine(pos + QPointF(me->x() * xScale - 4, top + me->y() + me->height()), pos + QPointF(me->x() * xScale + me->width() + 4, top + me->y() + me->height()));
+        
+        painter.setPen(QPen(Qt::red));
+        painter.drawLine(pos + QPointF(me->x() * xScale + me->beatline(), top + me->y() - 10), pos + QPointF(me->x() * xScale + me->beatline(), top + me->y() + me->height() + 10));
     }
 
     // TODO: make this less hacky

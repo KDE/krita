@@ -30,6 +30,7 @@ public:
     double width;
     double height;
     VoiceBar* voiceBar;
+    double beatline;
 };
 
 VoiceElement::VoiceElement(int length) : d(new Private)
@@ -41,6 +42,7 @@ VoiceElement::VoiceElement(int length) : d(new Private)
     d->width = 0;
     d->height = 0;
     d->voiceBar = 0;
+    d->beatline = 0;
 }
 
 VoiceElement::~VoiceElement()
@@ -126,6 +128,16 @@ void VoiceElement::setLength(int length)
     if (d->length == length) return;
     d->length = length;
     emit lengthChanged(length);
+}
+
+double VoiceElement::beatline() const
+{
+    return d->beatline;
+}
+
+void VoiceElement::setBeatline(double beatline)
+{
+    d->beatline = beatline;
 }
 
 } // namespace MusicCore

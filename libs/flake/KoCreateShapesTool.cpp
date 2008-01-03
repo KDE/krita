@@ -58,6 +58,10 @@ void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event ) {
     emit KoTool::done();
 }
 
+void KoCreateShapesTool::activate( bool ) {
+    useCursor( Qt::ArrowCursor, true );
+}
+
 void KoCreateShapesTool::setShapeId( const QString &id ) {
     d->shapeId = id;
 }

@@ -47,6 +47,7 @@ public:
     /// destructor
     virtual ~KoCreateShapesTool();
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void activate( bool temporary = false );
 
     void paint( QPainter &painter, const KoViewConverter &converter );
 

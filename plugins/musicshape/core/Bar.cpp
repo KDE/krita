@@ -32,7 +32,8 @@ public:
     QHash<Voice*, VoiceBar*> voices;
     QPointF position;
     double size;
-    double desiredSize;
+    double naturalSize;
+    double sizeFactor;
     double prefix;
     QPointF prefixPosition;
     QList<StaffElement*> staffElements;
@@ -40,7 +41,7 @@ public:
 
 Bar::Bar(Sheet* sheet) : QObject(sheet), d(new Private)
 {
-    setDesiredSize(100);
+    setSize(100);
     d->prefix = 0;
 }
 
@@ -91,17 +92,9 @@ void Bar::setSize(double size)
     emit sizeChanged(size);
 }
 
-double Bar::desiredSize() const
+double Bar::naturalSize() const
 {
-    return d->desiredSize;
-}
-
-void Bar::setDesiredSize(double size)
-{
-    if (d->desiredSize == size && d->size == size) return;
-    d->desiredSize = size;
-    setSize(size);
-    emit desiredSizeChanged(size);
+    return d->size;
 }
 
 double Bar::prefix() const
@@ -122,11 +115,6 @@ QPointF Bar::prefixPosition() const
 void Bar::setPrefixPosition(const QPointF& position)
 {
     d->prefixPosition = position;
-}
-
-double Bar::scale() const
-{
-    return d->size / d->desiredSize;
 }
 
 int Bar::staffElementCount(Staff* staff) const

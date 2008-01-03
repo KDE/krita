@@ -480,7 +480,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     if (inPrefix) {
         point = QPointF(p.x() - bar->prefixPosition().x() - bar->prefix(), yrel - closestStaff->top());
     } else {
-        point = QPointF((p.x() - bar->position().x()) / bar->scale(), yrel - closestStaff->top());
+        point = QPointF(p.x() - bar->position().x(), yrel - closestStaff->top());
     }
 
     if (event->button() == Qt::RightButton) {
@@ -584,7 +584,7 @@ void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
         if (inPrefix) {
             point = QPointF(p.x() - bar->prefixPosition().x() - bar->prefix(), yrel - closestStaff->top());
         } else {
-            point = QPointF((p.x() - bar->position().x()) / bar->scale(), yrel - closestStaff->top());
+            point = QPointF(p.x() - bar->position().x(), yrel - closestStaff->top());
         }
         
         m_activeAction->mouseMove(closestStaff, barIdx, point);

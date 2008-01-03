@@ -82,7 +82,7 @@ void StaffElementPreviewWidget::paintEvent(QPaintEvent * event)
      
     MusicRenderer::RenderState state;
     state.clef = m_clef;
-    m_renderer->renderStaffElement(painter, m_element, QPointF(20.0 + m_clef->width(), -10.0), state, 0);
+    m_renderer->renderStaffElement(painter, m_element, QPointF(20.0 + m_clef->width(), -10.0), state);
 }
 
 

@@ -115,17 +115,11 @@ public:
     /**
      * Returns the desired size of this bar. The desired size is the space all the elements in this bar would ideally use.
      */
-    double desiredSize() const;
     double naturalSize() const;
     
     double sizeFactor() const;
     double desiredSizeFactor() const;
     
-    /**
-     * Returns the horizontal scale of this bar. The scale is the size divided by the desired size.
-     */
-    double scale() const;
-
     /**
      * Returns the number of staff elements in the given staff in this bar.
      */
@@ -165,11 +159,6 @@ public slots:
      * @param size the new size of the bar
      */
     void setSize(double size);
-
-    /**
-     * Sets the desired size of the bar.
-     */
-    void setDesiredSize(double size);
 signals:
     /**
      * This signal is emitted when the position of the bar is changed.
@@ -180,11 +169,6 @@ signals:
      * This signal is emitted when the size of the bar is changed.
      */
     void sizeChanged(double size);
-    
-    /**
-     * This signal is emitted when the desired size of the bar is changed.
-     */
-    void desiredSizeChanged(double size);
 private:
     class Private;
     Private * const d;

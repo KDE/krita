@@ -131,13 +131,12 @@ public:
     virtual double height() const;
     virtual double width() const;
     
-    double stemX(double xScale=0) const;
-    double centerX(double xScale=0) const;
-    double xScaled(double xScale=0) const;
+    double stemX() const;
+    double centerX() const;
     double topNoteY() const;
     double bottomNoteY() const;
-    double stemEndY(double xScale=0, bool interpolateBeams = true) const;
-    double beamDirection(double xScale) const;
+    double stemEndY(bool interpolateBeams = true) const;
+    double beamDirection() const;
 
     StemDirection stemDirection() const;
     StemDirection desiredStemDirection() const;

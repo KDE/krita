@@ -77,7 +77,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
     for (int i = firstBar; i < sheet->barCount(); i++) {
         Bar* bar = sheet->bar(i);
         bool prefixPlaced = false;
-        if (i > 0 && p.x() + bar->desiredSize() + bar->prefix() - indent > lineWidth) {
+        if (i > 0 && p.x() + bar->naturalSize() + bar->prefix() - indent > lineWidth) {
             // scale all sizes
             // first calculate the total scalable width and total fixed width of all preceding bars
             double scalable = 0, fixed = 0;
@@ -137,13 +137,13 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
 
                 // some code depends on having the position of the next bar
                 sheet->bar(i)->setPosition(p + QPointF(bar->prefix(), 0), !prefixPlaced);
-                sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
+                sheet->bar(i)->setSize(sheet->bar(i)->naturalSize());
 
                 break;
             }
         }
         sheet->bar(i)->setPosition(p + QPointF(bar->prefix(), 0), !prefixPlaced);
-        sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
+        sheet->bar(i)->setSize(sheet->bar(i)->naturalSize());
         p.setX(p.x() + sheet->bar(i)->size() + bar->prefix());
     }
     if (*lastSystem == -1) *lastSystem = curSystem;
@@ -462,7 +462,7 @@ void Engraver::engraveBar(Bar* bar)
         x = maxEnd;
     }
     if (curx < 50) curx = 50;
-    bar->setDesiredSize(curx);
+    bar->setSize(curx);
 
     // finally calculate correct stem lengths for all beamed groups of notes
     foreach (VoiceBar* vb, voices) {
@@ -479,7 +479,7 @@ void Engraver::engraveBar(Bar* bar)
                     if (chord->beamStart(0) == c) {
                         chord->setStemLength(chord->desiredStemLength());
                         chords.append(chord);
-                        stemEnds.append(QPointF(chord->stemX(1), chord->stemEndY(1, false)));
+                        stemEnds.append(QPointF(chord->stemX(), chord->stemEndY(false)));
                     }
                     if (chord == c->beamEnd(0)) {
                         break;

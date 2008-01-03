@@ -17,8 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
+// Local
 #include "TableShape.h"
 
+// Qt
+#include <QPainter>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextTable>
+#include <QTextTableFormat>
+#include <QTextTableCell>
+
+// KDE
+#include <kdebug.h>
+
+// KOffice
 #include <KoImageData.h>
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
@@ -26,18 +39,12 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOasisLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
+#include <KoOdfStylesReader.h>
 
-#include <QPainter>
-#include <kdebug.h>
-
-#include <QTextDocument>
-#include <QTextCursor>
-#include <QTextTable>
-#include <QTextTableFormat>
-#include <QTextTableCell>
 
 /**
  * The size of a layouted cell in Postscript points. We're doing row-first,
@@ -52,8 +59,8 @@ struct TableShape::TableCellFrame {
 
 
 TableShape::TableShape()
-    : m_textDocument( new QTextDocument() )
-    , m_table(0)
+    : m_table(0)
+    , m_textDocument( new QTextDocument() )
 {
     createExampleData();
 }
@@ -63,14 +70,69 @@ TableShape::~TableShape() {
 
 void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
+    Q_UNUSED( painter );
+    Q_UNUSED( converter );
 }
 
 void TableShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    Q_UNUSED( context );
 }
 
-bool TableShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool TableShape::loadOdf( const KoXmlElement    &tableElement,
+                          KoShapeLoadingContext &context )
 {
+    // FIXME: Get the table name (table:name)
+
+    // Get the table style for this table. 
+    // This is an attribute of table:table.
+    QString  tableStyleName = tableElement.attributeNS( KoXmlNS::table,
+                                                        "style-name",
+                                                        "" );
+    const KoXmlElement *tableStyleElement
+        = context.koLoadingContext().stylesReader().findStyle( tableStyleName,
+                                                               "table" );
+
+    QString       text;
+    KoXmlElement  e;
+    forEachElement( e, tableElement ) {
+
+        // Only handle table rows for now.
+        if ( e.localName() != "table-row" 
+             || e.namespaceURI() != KoXmlNS::table )
+            continue;
+
+        // We now know it's a table row.  Loop through all the cells.
+        KoXmlElement  cell;
+        forEachElement( cell, e ) {
+            
+            // Only handle table cells for now.
+            if ( cell.localName() != "table-cell" 
+                 || e.namespaceURI() != KoXmlNS::table )
+                continue;
+
+            // FIXME: Get cell attribute  table:style-name
+            // FIXME: Get cell attribute  office:value-type
+
+            // FIXME: For now, support ONE text paragraph, instead of
+            //        the full ODF spec.
+            KoXmlElement  textElement = cell.namedItemNS( KoXmlNS::text, "p" ).toElement();
+            if ( textElement.isNull() )
+                continue;
+
+            // Enter text into cell.
+            KoXmlText t = textElement.toText();
+            if (!t.isNull())
+                text += t.data();
+
+        } // table:table-cell
+
+    } // table:table-row
+
+    // Get the column styles.
+    // FIXME
+
+    // Get the rows
     
     return true;
 }
@@ -82,27 +144,27 @@ void TableShape::createExampleData()
     QTextTableFormat tableFormat;
     QTextCursor cursor(m_textDocument);
     cursor.movePosition(QTextCursor::Start);
-    QTextTable m_table = cursor.insertTable(ROWS, COLUMNS, tableFormat);
+    m_table = cursor.insertTable(ROWS, COLUMNS, tableFormat);
     
-    QTextTableCell curCell = table->cellAt(0,0);
+    QTextTableCell curCell = m_table->cellAt(0,0);
     
     qDebug() << "Is the first cursor pos in the table also the first cursor pos in the document? " << cursor.position() << ", " << curCell.firstCursorPosition().position();
     
     cursor = curCell.firstCursorPosition();
     QTextCharFormat charFormat;
-    charFormat->setFont(QFont("Times", 10, QFont::Bold));
+    charFormat.setFont(QFont("Times", 10, QFont::Bold));
     cursor.insertText("Hello World");
     cursor = curCell.firstCursorPosition();
     cursor.select(QTextCursor::LineUnderCursor);
-    cursor->setCharFormat(charFormat);
+    cursor.setCharFormat(charFormat);
 
-    charFormat->setFont(QFont("Helvetica", 20, QFont::Italic));
-    curCell = table->cellAt(0,2);
+    charFormat.setFont(QFont("Helvetica", 20, QFont::Normal, true)); // italic
+    curCell = m_table->cellAt(0,2);
     cursor = curCell.firstCursorPosition();
     cursor.insertText("Bonjour Monde!");
     cursor = curCell.firstCursorPosition();
     cursor.select(QTextCursor::LineUnderCursor);
-    cursor->setCharFormat(charFormat);
+    cursor.setCharFormat(charFormat);
     
     initTableFrames();
 }
@@ -123,20 +185,25 @@ void TableShape::recalculateCellPositions()
     }
 }
 
-void TableShape::recalculateCellHeights(int row, int column)
+double TableShape::recalculateCellHeight(int row, int column)
 {
+    Q_UNUSED( row );
+    Q_UNUSED( column );
+
+    // FIXME
+    return 10.0;
 }
 
 void TableShape::initTableFrames()
 {
     if (!m_table) return;
 
-    QSize shapeSize = size();
+    QSize shapeSize = QSize();
     float widthInPoints = shapeSize.width() / m_table->columns();
-    m_tableFrames.resize(m_table.rows());
+    m_tableFrames.resize( m_table->rows() );
     
     for (int row = 0; row < m_table->rows(); ++row) {
-        m_tableFrames[row].resize(m_table.columns());
+        m_tableFrames[row].resize(m_table->columns());
         for (int column = 0; column < m_table->columns(); ++column) {
             TableCellFrame * frame = new TableCellFrame();
             frame->height = 0;

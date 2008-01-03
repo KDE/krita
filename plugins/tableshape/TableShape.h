@@ -39,17 +39,18 @@ public:
     // reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf( const KoXmlElement    &element, 
+                          KoShapeLoadingContext &context );
 
 private:
 
     void createExampleData();
     void initTableFrames();
     void recalculateCellPositions();
-    void recalculateCellHeights(int row, int column);
+    double recalculateCellHeight(int row, int column);
     
-    QTextTable * m_table;
-    QTextDocument * m_textDocument;
+    QTextTable     *m_table;
+    QTextDocument  *m_textDocument;
 
     class TableCellFrame;
     QVector< QVector<TableCellFrame*> > m_tableFrames;

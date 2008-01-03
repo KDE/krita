@@ -28,7 +28,7 @@ TextToolFactory::TextToolFactory(QObject *parent)
 {
     setToolTip (i18n("Text editing tool"));
     setToolType (dynamicToolType());
-    setIcon ("text");
+    setIcon ("draw-text");
     setPriority (1);
     setActivationShapeId (TextShape_SHAPEID);
 }

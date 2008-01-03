@@ -312,7 +312,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect(action, SIGNAL(triggered()), this, SLOT( addBookmark() ));
 
     action = new QAction(i18n("Select Bookmark..."), this);
-    //action->setIcon(KIcon("bookmark"));
+    //action->setIcon(KIcon("bookmarks"));
     action->setShortcut( Qt::CTRL+ Qt::Key_G);
     addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT( selectBookmark() ));

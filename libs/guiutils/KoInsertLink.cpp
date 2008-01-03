@@ -72,7 +72,7 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
   {
       page = new KVBox();
       p4=addPage(page, i18n("Bookmark"));
-      p4->setIcon( KIcon(BarIcon("bookmark",KIconLoader::SizeMedium)) );
+      p4->setIcon( KIcon(BarIcon("bookmarks",KIconLoader::SizeMedium)) );
       bookmarkLink = new  bookmarkLinkPage(page );
       connect(bookmarkLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
   }

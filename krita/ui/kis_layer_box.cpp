@@ -136,7 +136,7 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
-    m_newLayerMenu->addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+    m_newLayerMenu->addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
     m_newLayerMenu->addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
 
@@ -288,7 +288,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         sub->addAction(KIcon("view-filter"), i18n("&Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
         menu.addSeparator();
         sub->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
-        sub->addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+        sub->addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
         sub->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
         sub->addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
 
@@ -302,7 +302,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(KIcon("view-filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
         menu.addSeparator();
         menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
-        menu.addAction(KIcon("bookmark"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+        menu.addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
         menu.addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
         menu.addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
     }

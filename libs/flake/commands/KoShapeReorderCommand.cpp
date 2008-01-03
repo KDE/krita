@@ -64,6 +64,8 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         // since two indexes can not collide we may need to change the zIndex of a number
         // of other shapes in the stack as well.
         QList<KoShape*> sortedShapes( manager->shapesAt(shape->boundingRect(), false) );
+        if( sortedShapes.count() == 0 )
+            continue;
         qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
         if(move == BringToFront) {
             KoShape *top = *(--sortedShapes.end());
@@ -77,8 +79,10 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         }
         else {
             QList<KoShape*>::Iterator iter = sortedShapes.begin();
-            while((*iter) != shape)
+            while((*iter) != shape && iter != sortedShapes.end())
                 iter++;
+            if( iter == sortedShapes.end() )
+                continue;
 
             if(move == RaiseShape) {
                 if(++iter == sortedShapes.end()) continue; // already at top

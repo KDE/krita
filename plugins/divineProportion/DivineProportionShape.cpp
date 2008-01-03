@@ -55,13 +55,8 @@ void DivineProportionShape::paintDecorations(QPainter &painter, const KoViewConv
 void DivineProportionShape::draw(QPainter &painter) {
     painter.setPen(QPen(QColor(172, 196, 206)));
     QRectF rect(QPointF(0,0), size());
-    bool top, left;
-    switch(m_orientation) {
-        case BottomRight: top = false, left = false; break;
-        case BottomLeft: top = false, left = true; break;
-        case TopRight: top = true, left = false; break;
-        case TopLeft: top = true, left = true; break;
-    }
+    bool top = (m_orientation == TopRight || m_orientation == TopLeft);
+    bool left = (m_orientation == BottomLeft || m_orientation == TopLeft);
     divideVertical(painter, rect, top, left);
 
     painter.setPen(QPen(QColor(173, 123, 134)));

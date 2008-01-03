@@ -105,10 +105,6 @@ ChannelConverter<_TYPE_>::ChannelConverter(const double &Kblack, const double &S
 
     gsl_permutation_free(p);
     gsl_vector_free(x);
-
-    qDebug() << "W(0) =" << W(0);
-    qDebug() << "W(r0) =" << W(r0);
-    qDebug() << "B(1) =" << B(1);
 }
 
 template< typename _TYPE_ >

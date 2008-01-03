@@ -24,6 +24,7 @@
 
 #include <QList>
 #include "styles/KoListLevelProperties.h"
+#include "kotext_export.h"
 
 class QString;
 class KoOasisLoadingContext;
@@ -38,7 +39,7 @@ class KoStyleManager;
  * When a text shape is loaded it checks if the KoTextSharedLoadingData is already there. 
  * If not it is created.
  */
-class KoTextSharedLoadingData : KoSharedLoadingData
+class KOTEXT_EXPORT KoTextSharedLoadingData : public KoSharedLoadingData
 {
 public:
     KoTextSharedLoadingData();

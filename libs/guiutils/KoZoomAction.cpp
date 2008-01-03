@@ -90,6 +90,7 @@ void KoZoomAction::setZoom( double zoom )
 {
     setEffectiveZoom(zoom);
     regenerateItems( zoom, true );
+    updateWidgets( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
 
 void KoZoomAction::triggered( const QString& text )
@@ -375,6 +376,12 @@ void KoZoomAction::ExtLineEdit::focusOutEvent ( QFocusEvent * event )
 {
     QLineEdit::focusOutEvent(event);
     emit lostFocus();
+}
+
+void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
+{
+    setCurrentAction(KoZoomMode::toString(mode));
+    updateWidgets(mode, 1);
 }
 
 #include "KoZoomAction.moc"

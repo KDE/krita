@@ -142,7 +142,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
     {
         zoom = (d->canvasController->viewport()->size().width() - 2*d->fitMargin)
                          / (d->zoomHandler->resolutionX() * d->pageSize.width());
-        d->action->setCurrentAction(KoZoomMode::toString(mode));
+        d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     }
     else if(mode == KoZoomMode::ZOOM_PAGE)
@@ -152,7 +152,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
         zoom = qMin(zoom, (d->canvasController->viewport()->size().height() - 2*d->fitMargin)
                      / (d->zoomHandler->resolutionY() * d->pageSize.height()));
 
-        d->action->setCurrentAction(KoZoomMode::toString(mode));
+        d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     }
 

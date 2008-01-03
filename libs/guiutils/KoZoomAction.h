@@ -88,6 +88,11 @@ public slots:
    */
   void setEffectiveZoom(double zoom);
 
+  /**
+   * Change the selected zoom mode.
+   */
+  void setSelectedZoomMode( KoZoomMode::Mode mode );
+
 protected slots:
 
   void triggered( const QString& text );

@@ -116,6 +116,10 @@ public:
      * Returns the desired size of this bar. The desired size is the space all the elements in this bar would ideally use.
      */
     double desiredSize() const;
+    double naturalSize() const;
+    
+    double sizeFactor() const;
+    double desiredSizeFactor() const;
     
     /**
      * Returns the horizontal scale of this bar. The scale is the size divided by the desired size.

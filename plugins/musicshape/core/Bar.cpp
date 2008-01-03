@@ -203,6 +203,11 @@ void Bar::removeStaffElement(StaffElement* element, bool deleteElement)
     }
 }
 
+double Bar::sizeFactor() const
+{
+    return 2.0; // number of noteheads of space to associate with shortest note in a measure
+}
+
 } // namespace MusicCore
 
 #include "Bar.moc"

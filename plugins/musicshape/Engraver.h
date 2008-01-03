@@ -33,11 +33,11 @@ namespace MusicCore {
  * withing staff systems.
  */
 class Engraver {
-    public:
-        Engraver();
-        void engraveSheet(MusicCore::Sheet* sheet, int firstSystem, QSizeF size, bool engraveBars = true, int* lastSystem=0);
-        void engraveBar(MusicCore::Bar* bar);
-        void rebeamBar(MusicCore::Part* part, MusicCore::VoiceBar* bar);
+public:
+    Engraver();
+    void engraveSheet(MusicCore::Sheet* sheet, int firstSystem, QSizeF size, bool engraveBars = true, int* lastSystem=0);
+    void engraveBar(MusicCore::Bar* bar);
+    void rebeamBar(MusicCore::Part* part, MusicCore::VoiceBar* bar);
 };
 
 #endif // MUSIC_ENGRAVER_H

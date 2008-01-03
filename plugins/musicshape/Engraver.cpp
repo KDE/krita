@@ -32,6 +32,7 @@
 #include "core/Note.h"
 
 #include <limits.h>
+#include <math.h>
 
 #include <QtCore/QList>
 #include <QtCore/QVarLengthArray>
@@ -53,7 +54,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
     }
 
     kDebug() << "Engraving from firstSystem:" << firstSystem << "firstBar:" << firstBar;
-    
+
     if (engraveBars) {
         // engrave all bars in the sheet
         for (int i = firstBar; i < sheet->barCount(); i++) {
@@ -92,8 +93,8 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
             double factor = (lineWidth - fixed) / scalable;
             QPointF sp = sheet->bar(lastStart)->position() - QPointF(sheet->bar(lastStart)->prefix(), 0);
             for (int j = lastStart; j < i; j++) {
-                sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
-                sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
+                //sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
+                //sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
                 sp.setX(sp.x() + sheet->bar(j)->size() + sheet->bar(j)->prefix());
             }
             lastStart = i;
@@ -109,7 +110,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
 
             indent = 0;
             QList<Clef*> clefs;
-            // Extra space for clef/key signature repeating            
+            // Extra space for clef/key signature repeating
             for (int partIdx = 0; partIdx < sheet->partCount(); partIdx++) {
                 Part* part = sheet->part(partIdx);
                 for (int staffIdx = 0; staffIdx < part->staffCount(); staffIdx++) {
@@ -130,7 +131,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
             sheet->staffSystem(curSystem)->setClefs(clefs);
             lineWidth = size.width() - indent;
             p.setX(indent - bar->prefix());
-            
+
             if (p.y() + sheet->staffSystem(curSystem)->height() >= size.height()) {
                 *lastSystem = curSystem-1;
 
@@ -157,8 +158,8 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
         double factor = (lineWidth - fixed) / scalable;
         QPointF sp = sheet->bar(lastStart)->position() - QPointF(sheet->bar(lastStart)->prefix(), 0);
         for (int j = lastStart; j < sheet->barCount(); j++) {
-            sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
-            sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
+            //sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
+            //sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
             sp.setX(sp.x() + sheet->bar(j)->size() + sheet->bar(j)->prefix());
         }
     }
@@ -166,10 +167,131 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
     sheet->setStaffSystemCount(curSystem+1);
 }
 
+struct Simultanity {
+    int startTime;
+    int duration; ///< the duration of this simultanity (as in the startTime of the next one minus start time of this one)
+    int minChordDuration; ///< the duration of the shortest note not yet finished at this time
+    double space;
+    QList<VoiceElement*> voiceElements;
+    Simultanity(int time) : startTime(time), duration(0), minChordDuration(0), space(0) {}
+};
+
+static void collectSimultanities(Sheet* sheet, int barIdx, QList<Simultanity>& simultanities, int& shortestNote)
+{
+    Bar* bar = sheet->bar(barIdx);
+
+    // collect all voices in all parts
+    QList<VoiceBar*> voices;
+    QList<int> voiceIds;
+    for (int p = 0; p < sheet->partCount(); p++) {
+        Part* part = sheet->part(p);
+        for (int v = 0; v < part->voiceCount(); v++) {
+            voices.append(bar->voice(part->voice(v)));
+            voiceIds.append(v);
+        }
+    }
+
+    QVarLengthArray<int> nextTime(voices.size());
+    QVarLengthArray<int> nextIndex(voices.size());
+    // initialize stuff to 0
+    for (int i = 0; i < voices.size(); i++) {
+        nextTime[i] = 0;
+        nextIndex[i] = 0;
+    }
+
+    QMultiMap<Staff*, VoiceBar*> staffVoices;
+    foreach (VoiceBar* vb, voices) {
+        for (int e = 0; e < vb->elementCount(); e++) {
+            Staff* s = vb->element(e)->staff();
+            if (!staffVoices.contains(s, vb)) staffVoices.insert(s, vb);
+        }
+    }
+
+    shortestNote = INT_MAX;
+    // loop until all elements are placed
+    for (;;) {
+        // find earliest start time
+        int time = INT_MAX;
+        for (int i = 0; i < voices.size(); i++) {
+            if (nextIndex[i] < voices[i]->elementCount()) {
+                if (nextTime[i] < time) time = nextTime[i];
+            }
+        }
+
+        // none found, break
+        if (time == INT_MAX) break;
+
+        // now add the correct items to a new simultanity
+        Simultanity sim(time);
+        for (int i = 0; i < voices.size(); i++) {
+            if (nextTime[i] == time && nextIndex[i] < voices[i]->elementCount()) {
+                sim.voiceElements.append(voices[i]->element(nextIndex[i]));
+                nextTime[i] += voices[i]->element(nextIndex[i])->length();
+                shortestNote = qMin(shortestNote, voices[i]->element(nextIndex[i])->length());
+                nextIndex[i]++;
+            }
+        }
+
+        // figure out the length of the shortest note with index = nextIndex[i]-1
+        int minLength = INT_MAX;
+        for (int i = 0; i < voices.size(); i++) {
+            if (nextIndex[i] && nextTime[i] > time) {
+                minLength = qMin(minLength, voices[i]->element(nextIndex[i]-1)->length());
+            }
+        }
+        sim.minChordDuration = minLength;
+
+        simultanities.append(sim);
+    }
+
+    // now fill in the duration of the simultanities
+    for (int i = 0; i < simultanities.size() - 1; i++) {
+        simultanities[i].duration = simultanities[i+1].startTime - simultanities[i].startTime;
+    }
+    if (simultanities.size()) {
+        Simultanity& sim = simultanities[simultanities.size() - 1];
+        sim.duration = 0;
+        for (int i = 0; i < sim.voiceElements.size(); i++) {
+            sim.duration = qMax(sim.duration, sim.voiceElements[i]->length());
+        }
+    }
+}
+
 void Engraver::engraveBar(Bar* bar)
 {
+
     Sheet* sheet = bar->sheet();
     int barIdx = sheet->indexOfBar(bar);
+
+    QList<Simultanity> simultanities;
+    int shortestNoteLength; // 'm' in the formula
+    // collect simultanities
+    collectSimultanities(sheet, barIdx, simultanities, shortestNoteLength);
+
+    // 'T' in the formula
+    double baseFactor = bar->sizeFactor() - log2((double) qMin(shortestNoteLength, (int) Note8Length) / WholeLength);
+
+    // assign space to simultanities according to durations
+    for (int i = 0; i < simultanities.size(); i++) {
+        Simultanity& sim = simultanities[i];
+
+        double scaleFactor = (double) sim.duration / sim.minChordDuration; // 'e' in the formula
+        if (scaleFactor > 1) scaleFactor = 1;
+        double duration = (double) sim.duration / WholeLength;
+        sim.space = scaleFactor * ( log2(duration) + baseFactor );
+    }
+
+    // give voice elements positions according to space assigned
+    double noteHeadSize = 7.0;
+
+    double curx = 15.0;
+    for (int s = 0; s < simultanities.size(); s++) {
+        Simultanity& sim = simultanities[s];
+        foreach (VoiceElement* ve, sim.voiceElements) {
+            ve->setX(curx);
+        }
+        curx += sim.space * noteHeadSize;
+    }
 
     // collect all voices in all parts
     QList<VoiceBar*> voices;
@@ -183,7 +305,6 @@ void Engraver::engraveBar(Bar* bar)
         }
     }
 
-    
     QVarLengthArray<int> nextTime(voices.size());
     QVarLengthArray<int> nextIndex(voices.size());
     // initialize stuff to 0
@@ -209,7 +330,7 @@ void Engraver::engraveBar(Bar* bar)
             }
         }
     }
-    
+
     QMultiMap<Staff*, VoiceBar*> staffVoices;
     foreach (VoiceBar* vb, voices) {
         for (int e = 0; e < vb->elementCount(); e++) {
@@ -260,7 +381,7 @@ void Engraver::engraveBar(Bar* bar)
             }
             endOfPrefix = true;
         }
-                
+
         // none found, break
         if (time == INT_MAX) break;
 
@@ -327,9 +448,9 @@ void Engraver::engraveBar(Bar* bar)
                             }
                         }
                     }
-                    
+
                     double xpos = x + 15;
-                    voices[i]->element(nextIndex[i])->setX(xpos);
+                    //voices[i]->element(nextIndex[i])->setX(xpos);
                     double xend = voices[i]->element(nextIndex[i])->width() + xpos;
                     if (xend > maxEnd) maxEnd = xend;
                     nextTime[i] += voices[i]->element(nextIndex[i])->length();
@@ -340,9 +461,9 @@ void Engraver::engraveBar(Bar* bar)
 
         x = maxEnd;
     }
-    if (x < 30) x = 30;
-    bar->setDesiredSize(x + 15);
-    
+    if (curx < 50) curx = 50;
+    bar->setDesiredSize(curx);
+
     // finally calculate correct stem lengths for all beamed groups of notes
     foreach (VoiceBar* vb, voices) {
         for (int i = 0; i < vb->elementCount(); i++) {
@@ -373,7 +494,7 @@ void Engraver::engraveBar(Bar* bar)
                         stemEnds[j].setY(-stemEnds[j].y());
                     }
                 }
-                
+
                 // now somehow fit a line through all those points...
                 double bestError = 1e99;
                 double bestK = 0, bestL = 0;
@@ -383,9 +504,9 @@ void Engraver::engraveBar(Bar* bar)
                         // line is in form of k*x + l
                         double k = (stemEnds[b].y() - stemEnds[a].y()) / (stemEnds[b].x() - stemEnds[a].x());
                         double l = stemEnds[a].y() - (stemEnds[a].x() * k);
-                        
+
                         //kDebug() << "a:" << stemEnds[a] << ", b:" << stemEnds[b] << ", k:" << k << ", l:" << l;
-                        
+
                         //for (int j = 0; j < stemEnds.size(); j++) {
                         //    kDebug() << "    " << stemEnds[j] << "; " << (k * stemEnds[j].x() + l);
                         //}
@@ -410,9 +531,9 @@ void Engraver::engraveBar(Bar* bar)
                         }
                     }
                 }
-                
+
                 //kDebug() << "bestError:" << bestError << "bestK:" << bestK << "bestL:" << bestL;
-                
+
                 c->setStemLength(c->desiredStemLength() + bestL / c->staff()->lineSpacing());
                 Chord* endChord = c->beamEnd(0);
                 double endY = stemEnds[stemEnds.size()-1].x() * bestK + bestL;
@@ -429,11 +550,11 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
     Bar* bar = vb->bar();
     TimeSignature* ts = part->staff(0)->lastTimeSignatureChange(bar);
     if (!ts) return;
-    
+
     QList<int> beats = ts->beatLengths();
     int nextBeat = 0;
     int passedBeats = 0;
-    
+
     int curTime = 0;
     int beamStartTime = 0;
     for (int i = 0, beamStart = -1; i < vb->elementCount(); i++) {
@@ -441,7 +562,7 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
         Chord* c = dynamic_cast<Chord*>(ve);
         if (!c) continue;
         curTime += ve->length();
-        
+
         if (c->duration() <= EighthNote && beamStart < 0) {
             beamStart = i;
             beamStartTime = curTime - ve->length();
@@ -449,21 +570,21 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                 c->setBeam(b, c, c, BeamFlag);
             }
         }
-        
+
         int beatEnd = beats[nextBeat] + passedBeats;
         if (curTime >= beatEnd || c->noteCount() == 0 || c->duration() > EighthNote || i == vb->elementCount()-1) {
             int beamEnd = i;
             if (c->duration() > EighthNote || c->noteCount() == 0) {
                 beamEnd--;
             }
-            
+
             if (beamEnd > beamStart && beamStart >= 0) {
                 Chord* sChord = dynamic_cast<Chord*>(vb->element(beamStart));
                 Chord* eChord = dynamic_cast<Chord*>(vb->element(beamEnd));
-                
+
                 int start[6] = {-1, -1, -1, -1, -1, -1};
                 int startTime[6];
-                
+
                 for (int j = beamStart, beamTime = beamStartTime; j <= beamEnd; j++) {
                     Chord* chord = dynamic_cast<Chord*>(vb->element(j));
                     if (chord) {
@@ -499,7 +620,7 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                             }
                             factor /= 2;
                         }
-                        
+
                         chord->setBeam(0, sChord, eChord);
                         beamTime += chord->length();
                     }
@@ -530,7 +651,7 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                     factor /= 2;
                 }
             }
-            
+
             beamStart = -1;
             while (curTime >= beatEnd) {
                 passedBeats += beats[nextBeat];

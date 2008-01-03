@@ -72,7 +72,10 @@ public:
             painter->save();
         if(! stop)
             parent->preparePage(pageNumber);
-        updater.setProgress(50);
+        updater.setProgress(45);
+        if (index > 1)
+            printer->newPage();
+        updater.setProgress(55);
         if (painter == 0)
             painter = new QPainter(printer);
         if (doSave)
@@ -82,7 +85,7 @@ public:
         if (shapes.isEmpty()) {
             kDebug(30004) <<"Printing page" << pageNumber << "I notice there are no shapes on this page";
         } else {
-            const int progressPart = 50 / shapes.count();
+            const int progressPart = 45 / shapes.count();
             foreach(KoShape *shape, shapes) {
                 kDebug(30004) <<"Calling waitUntilReady on shape (" << shape <<")";
                 if(! stop)
@@ -112,7 +115,6 @@ public:
         painter->restore();
 
         if(!stop && index < pages.count()) {
-            printer->newPage();
             pageNumber->setText(i18n("Printing page %1", QString::number(pages[index])));
             action->execute(pages[index++]);
             return;

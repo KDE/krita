@@ -49,6 +49,10 @@ class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
 
+namespace KisMetaData {
+    class MergeStrategy;
+}
+
 /**
  * This is the image class, it contains a tree of KisLayer stack and meta information about the image. And it also provides some functions
  * to manipulate the whole image.
@@ -407,7 +411,7 @@ public:
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.
      */
-    void mergeLayer(KisLayerSP l);
+    void mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy );
 
     QRect bounds() const;
 

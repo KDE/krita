@@ -27,7 +27,7 @@ struct FilterRegistryModel::Private {
 };
 
 FilterRegistryModel::FilterRegistryModel()
-    : KoGenericRegistryModel<Filter*>( FilterRegistry::instance() ), d(new Private)
+    : KoGenericRegistryModel<const Filter*>( FilterRegistry::instance() ), d(new Private)
 {
     QList<QString> keys = FilterRegistry::instance()->keys();
     for(int i = 0; i < keys.size(); i++)
@@ -54,7 +54,7 @@ QVariant FilterRegistryModel::data(const QModelIndex &index, int role ) const
             return get( index )->description();
         }
     }
-    return KoGenericRegistryModel<Filter*>::data(index, role);
+    return KoGenericRegistryModel<const Filter*>::data(index, role);
 }
 
 bool FilterRegistryModel::setData ( const QModelIndex & index, const QVariant & value, int role )
@@ -66,7 +66,7 @@ bool FilterRegistryModel::setData ( const QModelIndex & index, const QVariant & 
             d->enabled[index.row()]= value.toBool();
         }
     }
-    return KoGenericRegistryModel<Filter*>::setData(index, value, role);
+    return KoGenericRegistryModel<const Filter*>::setData(index, value, role);
 }
 
 Qt::ItemFlags FilterRegistryModel::flags( const QModelIndex & ) const
@@ -74,9 +74,9 @@ Qt::ItemFlags FilterRegistryModel::flags( const QModelIndex & ) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
 }
 
-QList<Filter*> FilterRegistryModel::enabledFilters() const
+QList<const Filter*> FilterRegistryModel::enabledFilters() const
 {
-    QList<Filter*> enabledFilters;
+    QList<const Filter*> enabledFilters;
     QList<QString> keys = FilterRegistry::instance()->keys();
     for(int i = 0; i < keys.size(); i++)
     {

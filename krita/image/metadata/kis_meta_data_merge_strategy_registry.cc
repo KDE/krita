@@ -16,39 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_meta_data_filter_registry.h"
+#include "kis_meta_data_merge_strategy_registry.h"
 
-#include "kis_meta_data_filter_p.h"
+#include "kis_meta_data_merge_strategy_p.h"
 
 using namespace KisMetaData;
 
-FilterRegistry *FilterRegistry::s_singleton = 0;
+MergeStrategyRegistry *MergeStrategyRegistry::s_singleton = 0;
 
-FilterRegistry::FilterRegistry()
+MergeStrategyRegistry::MergeStrategyRegistry()
 {
-    add( new AnonymizerFilter() );
-    add( new ToolInfoFilter() );
+    add( new DropMergeStrategy() );
+    add( new PriorityToFirstMergeStrategy() );
+    add( new OnlyIdenticalMergeStrategy() );
 }
 
-FilterRegistry::FilterRegistry(const FilterRegistry&)
-    : KoGenericRegistry<const KisMetaData::Filter*>()
+MergeStrategyRegistry::MergeStrategyRegistry(const MergeStrategyRegistry&) : KoGenericRegistry<const KisMetaData::MergeStrategy*>()
 {
 }
 
-FilterRegistry& FilterRegistry::operator=(const FilterRegistry& )
+MergeStrategyRegistry& MergeStrategyRegistry::operator=(const MergeStrategyRegistry& )
 {
     return *this;
 }
 
-FilterRegistry::~FilterRegistry()
+MergeStrategyRegistry::~MergeStrategyRegistry()
 {
 }
 
-FilterRegistry* FilterRegistry::instance()
+MergeStrategyRegistry* MergeStrategyRegistry::instance()
 {
     if(not s_singleton)
     {
-        s_singleton = new FilterRegistry();
+        s_singleton = new MergeStrategyRegistry();
     }
     return s_singleton;
 }

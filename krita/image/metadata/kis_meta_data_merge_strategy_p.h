@@ -16,32 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_meta_data_filter.h"
+#include "kis_meta_data_merge_strategy.h"
 
 namespace KisMetaData {
     /**
-     * Filter that remove personal data in a meta store.
+     * This strategy drop all meta data.
      */
-    class AnonymizerFilter : public Filter {
+    class DropMergeStrategy : public MergeStrategy {
         public:
-            virtual ~AnonymizerFilter();
+            DropMergeStrategy();
+            virtual ~DropMergeStrategy();
             virtual QString id() const;
             virtual QString name() const;
             virtual QString description() const;
-            virtual bool defaultEnabled() const;
-            virtual void filter(KisMetaData::Store*) const;
+            virtual void merge(Store* dst, QList<const Store*> srcs) const;
     };
-    /**
-     * Filter that add the name of the creation program and the date
-     * of the last modificiation.
-     */
-    class ToolInfoFilter : public Filter {
+    class PriorityToFirstMergeStrategy : public MergeStrategy {
         public:
-            virtual ~ToolInfoFilter();
+            PriorityToFirstMergeStrategy();
+            virtual ~PriorityToFirstMergeStrategy();
             virtual QString id() const;
             virtual QString name() const;
             virtual QString description() const;
-            virtual bool defaultEnabled() const;
-            virtual void filter(KisMetaData::Store*) const;
+            virtual void merge(Store* dst, QList<const Store*> srcs) const;
+    };
+    class OnlyIdenticalMergeStrategy : public MergeStrategy {
+        public:
+            OnlyIdenticalMergeStrategy();
+            virtual ~OnlyIdenticalMergeStrategy();
+            virtual QString id() const;
+            virtual QString name() const;
+            virtual QString description() const;
+            virtual void merge(Store* dst, QList<const Store*> srcs) const;
     };
 }

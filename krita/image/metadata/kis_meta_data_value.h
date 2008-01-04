@@ -33,6 +33,10 @@ namespace KisMetaData {
         {}
         quint32 numerator;
         quint32 denominator;
+        bool operator==(const UnsignedRational& ur) const
+        {
+            return numerator == ur.numerator and denominator == ur.denominator;
+        }
     };
     
     struct SignedRational {
@@ -40,6 +44,10 @@ namespace KisMetaData {
         {}
         qint32 numerator;
         qint32 denominator;
+        bool operator==(const SignedRational& ur) const
+        {
+            return numerator == ur.numerator and denominator == ur.denominator;
+        }
     };
     /**
      * Value is build on top of QVariant to extend it to support the various type,
@@ -121,6 +129,8 @@ namespace KisMetaData {
              */
             QMap<QString, KisMetaData::Value> asStructure() const;
             QMap<QString, KisMetaData::Value>* asStructure();
+        public:
+            bool operator==(const Value& ) const;
         private:
             Private* const d;
     };

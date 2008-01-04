@@ -91,7 +91,7 @@ set(kritaimage_LIB_SRCS
    kis_clone_layer.cpp
    kis_pixel_selection.cpp
    kis_transparency_mask.cc
-   kis_selection_mask.cpp	
+   kis_selection_mask.cpp
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc
    metadata/kis_meta_data_schema.cc
@@ -101,6 +101,9 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_filter_p.cc
    metadata/kis_meta_data_filter_registry.cc
    metadata/kis_meta_data_filter_registry_model.cc
+   metadata/kis_meta_data_merge_strategy.cc
+   metadata/kis_meta_data_merge_strategy_p.cc
+   metadata/kis_meta_data_merge_strategy_registry.cc
    kis_selected_transaction.cc
    kis_transform_worker.cc
    kis_filter_job.cpp

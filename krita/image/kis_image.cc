@@ -69,6 +69,8 @@
 #include "kis_types.h"
 #include "kis_crop_visitor.h"
 
+#include "kis_meta_data_merge_strategy.h"
+
 class KisImage::KisImagePrivate {
 public:
     KoColor backgroundColor;
@@ -835,7 +837,7 @@ void KisImage::flatten()
 }
 
 
-void KisImage::mergeLayer(KisLayerSP layer)
+void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
     KisPaintLayer *newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(newLayer);
@@ -848,6 +850,11 @@ void KisImage::mergeLayer(KisLayerSP layer)
     KisMergeVisitor visitor(newLayer->paintDevice(), rc);
     layer->nextSibling()->accept(visitor);
     layer->accept(visitor);
+    
+    QList<const KisMetaData::Store*> srcs;
+    srcs.append( static_cast<KisLayer*>(layer->nextSibling().data())->metaData());
+    srcs.append( layer->metaData());
+    strategy->merge( newLayer->metaData(), srcs );
 
     removeNode(layer->nextSibling());
     addNode(newLayer, layer->parent(), layer.data());

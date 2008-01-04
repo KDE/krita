@@ -78,6 +78,7 @@
 #include "kis_view2.h"
 #include "kis_zoom_manager.h"
 #include "kis_canvas2.h"
+#include "kis_meta_data_merge_strategy_chooser_widget.h"
 
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
@@ -873,8 +874,11 @@ void KisLayerManager::mergeLayer()
 
     KisLayerSP layer = activeLayer();
     if (!layer) return;
+    
+    const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog( m_view );
+    if(!strategy) return;
 
-    img->mergeLayer(layer);
+    img->mergeLayer(layer, strategy);
     m_view->updateGUI();
 
 }

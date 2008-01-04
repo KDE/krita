@@ -1,5 +1,5 @@
 
-include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk )
+include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata )
 
 add_subdirectory( tests )
 
@@ -67,6 +67,7 @@ set(kritaui_LIB_SRCS
     kis_layer_box.cpp
     kis_kra_load_visitor.cpp
     kis_kra_loader.cpp
+    kis_meta_data_merge_strategy_chooser_widget.cc
     kis_multi_bool_filter_widget.cc
     kis_multi_double_filter_widget.cc
     kis_multi_integer_filter_widget.cc
@@ -173,6 +174,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgmaskfromselection.ui
     wdgmasksource.ui
     wdgfilterdialog.ui
+    wdgmetadatamergestrategychooser.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

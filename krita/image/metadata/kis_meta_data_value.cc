@@ -286,3 +286,27 @@ QDebug operator<<(QDebug dbg, const Value &v)
     }
     return dbg.space();
 }
+
+bool Value::operator==(const Value& rhs ) const
+{
+    if( d->type != rhs.d->type) return false;
+    switch(d->type)
+    {
+        case Value::Invalid:
+            return true;
+        case Value::Variant:
+            return asVariant() == rhs.asVariant();
+        case Value::OrderedArray:
+        case Value::UnorderedArray:
+        case Value::AlternativeArray:
+        case Value::LangArray:
+            return asArray() == rhs.asArray();
+        case Value::Structure:
+            return asStructure() == rhs.asStructure();
+        case Value::SignedRational:
+            return asSignedRational() == rhs.asSignedRational();
+        case Value::UnsignedRational:
+            return asUnsignedRational() == rhs.asUnsignedRational();
+    }
+    
+}

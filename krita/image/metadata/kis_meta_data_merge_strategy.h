@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -16,34 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_META_DATA_FILTER_H_
-#define _KIS_META_DATA_FILTER_H_
+#ifndef _KIS_META_DATA_MERGE_STRATEGY_H_
+#define _KIS_META_DATA_MERGE_STRATEGY_H_
+
+#include <QList>
 
 #include <krita_export.h>
+
+class QString;
 
 namespace KisMetaData {
     class Store;
     /**
-     * This class is a base class for filtering a meta data store to alter some
-     * information. For instance, remove author information or change edition
-     * date.
+     * This is an interface which serves as a base class for meta data store merge strategy.
      */
-    class Filter {
+    class KRITAIMAGE_EXPORT MergeStrategy {
         public:
-            virtual ~Filter();
-            /// @return true if the filter is enabled by default when exporting
-            virtual bool defaultEnabled() const = 0;
-            /// @return the id of this filter
+            virtual ~MergeStrategy();
+            /// @return the id of this merge strategy
             virtual QString id() const = 0;
-            /// @return the name of this filter
+            /// @return the name of this merge strategy
             virtual QString name() const = 0;
-            /// @return a description of this filter
+            /// @return a description of this merge strategy
             virtual QString description() const = 0;
             /**
-             * Apply a filter on a meta data store.
+             * Call this function to merge a list of meta data stores in one.
+             * @param dst the destination store
+             * @param srcs the list of source meta data store
              */
-            virtual void filter(KisMetaData::Store*) const = 0;
+            virtual void merge(Store* dst, QList<const Store*> srcs) const = 0;
     };
-}
+    
+};
+
 
 #endif

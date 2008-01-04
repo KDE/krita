@@ -74,6 +74,25 @@ namespace KisMetaData {
             Entry& getEntry(const KisMetaData::Schema* schema, QString entryName);
             
             /**
+             * Give access to a metadata entry
+             * @param entryKey the entryKey as the qualified name of the entry
+             */
+            const Entry& getEntry(QString entryKey) const;
+            /**
+             * Give access to a metadata entry
+             * @param uri the uri of the schema
+             * @param entryName the name of the entry
+             */
+            const Entry& getEntry(QString uri, QString entryName) const;
+            
+            /**
+             * Give access to a metadata entry
+             * @param schema the schema
+             * @param entryName the name of the entry
+             */
+            const Entry& getEntry(const KisMetaData::Schema* schema, QString entryName) const;
+            
+            /**
              * Remove an entry.
              * @param entryKey the entryKey as the qualified name of the entry
              */
@@ -96,22 +115,22 @@ namespace KisMetaData {
             /**
              * @return true if the store contains this entry
              */
-            bool hasEntry(QString entryKey);
+            bool hasEntry(QString entryKey) const;
             /**
              * @return true if the store contains this entry
              */
-            bool hasEntry(const KisMetaData::Schema* schema, QString entryName);
+            bool hasEntry(const KisMetaData::Schema* schema, QString entryName) const;
             /**
              * @return true if the store contains this entry
              */
-            bool hasEntry(QString uri, QString entryName);
+            bool hasEntry(QString uri, QString entryName) const;
             /**
              * Return the value associated with this entry name and uri.
              * @param uri
              * @param entryName
              * @return the value
              */
-            const Value& getValue(QString uri, QString entryName);
+            const Value& getValue(QString uri, QString entryName) const;
             
             QHash<QString, Entry>::const_iterator begin() const;
             QHash<QString, Entry>::const_iterator end() const;
@@ -134,7 +153,12 @@ namespace KisMetaData {
             /**
              * Apply a list of filters on a store
              */
-            void applyFilters( QList<Filter*> filters );
+            void applyFilters( QList<const Filter*> filters );
+            
+            /**
+             * @return the list of keys
+             */
+            QList<QString> keys() const;
         private:
             Private* const d;
     };

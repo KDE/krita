@@ -16,27 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_META_DATA_FILTER_REGISTRY_H_
-#define _KIS_META_DATA_FILTER_REGISTRY_H_
+#ifndef _KIS_META_DATA_MERGE_STRATEGY_REGISTRY_H_
+#define _KIS_META_DATA_MERGE_STRATEGY_REGISTRY_H_
 
 #include <krita_export.h>
 
 #include "KoGenericRegistry.h"
-#include "kis_meta_data_filter.h"
+#include "kis_meta_data_merge_strategy.h"
 
 namespace KisMetaData {
 
-    class KRITAIMAGE_EXPORT FilterRegistry : public KoGenericRegistry<const KisMetaData::Filter*>
+    class KRITAIMAGE_EXPORT MergeStrategyRegistry : public KoGenericRegistry<const KisMetaData::MergeStrategy*>
     {
         public:
-            virtual ~FilterRegistry();
-            static FilterRegistry* instance();
+            virtual ~MergeStrategyRegistry();
+            static MergeStrategyRegistry* instance();
         private:
-            FilterRegistry();
-            FilterRegistry(const FilterRegistry&);
-            FilterRegistry& operator=(const FilterRegistry&);
+            MergeStrategyRegistry();
+            MergeStrategyRegistry(const MergeStrategyRegistry&);
+            MergeStrategyRegistry& operator=(const MergeStrategyRegistry&);
         private:
-            static FilterRegistry *s_singleton;
+            static MergeStrategyRegistry *s_singleton;
     };
 
 }

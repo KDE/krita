@@ -38,27 +38,27 @@ AnonymizerFilter::~AnonymizerFilter()
 {
 }
 
-bool AnonymizerFilter::defaultEnabled()
+bool AnonymizerFilter::defaultEnabled() const
 {
     return false;
 }
 
-QString AnonymizerFilter::id()
+QString AnonymizerFilter::id() const
 {
     return "Anonymizer";
 }
 
-QString AnonymizerFilter::name()
+QString AnonymizerFilter::name() const
 {
     return i18n("Anonymizer");
 }
 
-QString AnonymizerFilter::description()
+QString AnonymizerFilter::description() const
 {
     return i18n("Remove personal information: author, location...");
 }
 
-void AnonymizerFilter::filter(KisMetaData::Store* store)
+void AnonymizerFilter::filter(KisMetaData::Store* store) const
 {
     Q_UNUSED(store);
     dbgImage << "Anonymize a store";
@@ -84,27 +84,27 @@ ToolInfoFilter::~ToolInfoFilter()
 {
 }
 
-bool ToolInfoFilter::defaultEnabled()
+bool ToolInfoFilter::defaultEnabled() const
 {
     return true;
 }
 
-QString ToolInfoFilter::id()
+QString ToolInfoFilter::id() const
 {
     return "ToolInfo";
 }
 
-QString ToolInfoFilter::name()
+QString ToolInfoFilter::name() const
 {
     return i18n("Tool information");
 }
 
-QString ToolInfoFilter::description()
+QString ToolInfoFilter::description() const
 {
     return i18n("Add the name of the tool used for creation and the modification date");
 }
 
-void ToolInfoFilter::filter(KisMetaData::Store* store)
+void ToolInfoFilter::filter(KisMetaData::Store* store) const
 {
     const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
     store->getEntry( xmpSchema, "ModifyDate").value() = Value( QDate::currentDate() );

@@ -111,6 +111,24 @@ Entry& Store::getEntry(const KisMetaData::Schema* schema, QString entryName)
     return getEntry(schema->generateQualifiedName( entryName ));
 }
 
+
+const Entry& Store::getEntry(QString entryKey) const
+{
+    return d->entries[entryKey];
+}
+
+const Entry& Store::getEntry(QString uri, QString entryName) const
+{
+    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
+    Q_ASSERT(schema);
+    return getEntry(schema, entryName );
+}
+
+const Entry& Store::getEntry(const KisMetaData::Schema* schema, QString entryName) const
+{
+    return getEntry(schema->generateQualifiedName( entryName ));
+}
+
 void Store::removeEntry(QString entryKey)
 {
     d->entries.remove(entryKey);
@@ -128,24 +146,24 @@ void Store::removeEntry(const KisMetaData::Schema* schema, QString entryName)
     removeEntry(schema->generateQualifiedName( entryName ));
 }
 
-bool Store::hasEntry(QString uri, QString entryName)
+bool Store::hasEntry(QString uri, QString entryName) const
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
     Q_ASSERT(schema);
     return hasEntry(schema, entryName );
 }
 
-bool Store::hasEntry(const KisMetaData::Schema* schema, QString entryName)
+bool Store::hasEntry(const KisMetaData::Schema* schema, QString entryName) const
 {
     return hasEntry(schema->generateQualifiedName(entryName ));
 }
 
-bool Store::hasEntry(QString entryKey)
+bool Store::hasEntry(QString entryKey) const
 {
     return d->entries.keys().contains( entryKey );
 }
 
-const Value& Store::getValue(QString uri, QString entryName)
+const Value& Store::getValue(QString uri, QString entryName) const
 {
     return getEntry(uri, entryName).value();
 }
@@ -180,11 +198,16 @@ void Store::debugDump() const
     }
 }
 
-void Store::applyFilters( QList<Filter*> filters )
+void Store::applyFilters( QList<const Filter*> filters )
 {
     dbgImage << "Apply " << filters.size() << " filters";
-    foreach( Filter* filter, filters)
+    foreach( const Filter* filter, filters)
     {
         filter->filter(this);
     }
+}
+
+QList<QString> Store::keys() const
+{
+    return d->entries.keys();
 }

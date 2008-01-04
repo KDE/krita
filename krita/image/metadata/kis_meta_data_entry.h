@@ -63,13 +63,13 @@ namespace KisMetaData {
              */
             const KisMetaData::Value& value() const;
             /**
-             * @return true if this entry is valid
-             */
-            bool isValid() const;
-            /**
              * @return the value of this entry
              */
             KisMetaData::Value& value();
+            /**
+             * @return true if this entry is valid
+             */
+            bool isValid() const;
             /**
              * Affect the content of entry to this entry if entry is valid
              */

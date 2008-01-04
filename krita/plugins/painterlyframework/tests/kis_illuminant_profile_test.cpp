@@ -18,13 +18,16 @@
  */
 
 #include <qtest_kde.h>
-
 #include "kis_illuminant_profile_test.h"
+
 #include "kis_illuminant_profile.h"
 
 #include <KGlobal>
 #include <KLocale>
 #include <KStandardDirs>
+
+#include <QString>
+#include <QStringList>
 
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
@@ -59,44 +62,77 @@ void gsl_print(const gsl_vector *V, const char *name)
     cout << endl;
 }
 
-void KisIlluminantProfileTest::testLoading()
+void KisIlluminantProfileTest::initTestCase()
 {
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
-    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_low.ill",  KStandardDirs::Recursive)[0];
+    list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.ill",  KStandardDirs::Recursive);
+}
 
-    KisIlluminantProfile *p = new KisIlluminantProfile;
-    QVERIFY(p->valid() == false);
-    p->setFileName(d659);
-    QVERIFY(p->valid() == false);
-    p->load();
-    QVERIFY(p->valid() == true);
-    qDebug() << "Profile name: " << p->name();
-    QVERIFY(p->wavelenghts() == 9);
-    QCOMPARE(p->Kblack(), 4.3);
-    QCOMPARE(p->Sblack(), 0.14);
-    gsl_print(p->T(), "Transformation matrix: ");
-    gsl_print(p->P(), "Positions vector: ");
-    delete p;
+void KisIlluminantProfileTest::testLoading()
+{
+    QString d9low = list.filter("9_low")[0];
+    QString d9high = list.filter("9_high")[0];
+
+    KisIlluminantProfile *p1 = new KisIlluminantProfile;
+    QVERIFY(p1->valid() == false);
+    p1->setFileName(d9low);
+    QVERIFY(p1->valid() == false);
+    p1->load();
+    QVERIFY(p1->valid() == true);
+    QVERIFY(p1->wavelenghts() == 9);
+    QCOMPARE(p1->Kblack(), 4.3);
+    QCOMPARE(p1->Sblack(), 0.14);
+    gsl_print(p1->T(), "Transformation matrix: ");
+    gsl_print(p1->P(), "Positions vector: ");
+
+    KisIlluminantProfile *p2 = dynamic_cast<KisIlluminantProfile*>(p1->clone());
+    delete p1;
+    QVERIFY(p2->valid() == true);
+    QVERIFY(p2->wavelenghts() == 9);
+    QCOMPARE(p2->Kblack(), 4.3);
+    QCOMPARE(p2->Sblack(), 0.14);
+    gsl_print(p2->T(), "Transformation matrix: ");
+    gsl_print(p2->P(), "Positions vector: ");
+
+    p2->setFileName(d9high);
+    QVERIFY(p2->valid() == true);
+    p2->load();
+    QVERIFY(p2->valid() == true);
+    QVERIFY(p2->wavelenghts() == 9);
+    QCOMPARE(p2->Kblack(), 11.0);
+    QCOMPARE(p2->Sblack(), 0.35);
+    gsl_print(p2->T(), "Transformation matrix: ");
+    gsl_print(p2->P(), "Positions vector: ");
+
+    delete p2;
+
+    p1 = new KisIlluminantProfile(d9low);
+    QVERIFY(p2->valid() == true);
+    QVERIFY(p2->wavelenghts() == 9);
+    QCOMPARE(p2->Kblack(), 4.3);
+    QCOMPARE(p2->Sblack(), 0.14);
+    gsl_print(p2->T(), "Transformation matrix: ");
+    gsl_print(p2->P(), "Positions vector: ");
+
+    delete p1;
 }
 
 void KisIlluminantProfileTest::testSaving()
 {
-    QString d659 = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_9_low.ill",  KStandardDirs::Recursive)[0];
+    QString d659 = list.filter("9_low")[0];
 
     KisIlluminantProfile *p = new KisIlluminantProfile(d659);
     p->save("D659Save.ill");
     delete p;
+
     p = new KisIlluminantProfile("D659Save.ill");
-
     QVERIFY(p->valid() == true);
-//     QVERIFY(p->name() == "D65 9 Test Profile");
-    qDebug() << "Profile name: " << p->name();
-
     QVERIFY(p->wavelenghts() == 9);
     QCOMPARE(p->Kblack(), 4.3);
     QCOMPARE(p->Sblack(), 0.14);
     gsl_print(p->T(), "Transformation matrix: ");
     gsl_print(p->P(), "Positions vector: ");
+
     delete p;
 }
 

@@ -134,7 +134,7 @@ public:
                 memmove(m_cache.value(m_lookup), dst, pixelSize-4);
             }
 
-            CSTrait::setAlpha(dst, KoColorSpaceMaths<quint16,quint8>::scaleToA(src[3]), 1);
+            CSTrait::nativealpha(dst) = KoColorSpaceMaths<quint16,float>::scaleToA(src[3]);
 
             src += 4;
             dst += pixelSize;

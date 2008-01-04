@@ -21,16 +21,22 @@
 #define KIS_KS_COLORSPACE_TEST_H_
 
 #include <QtTest/QtTest>
+#include <QStringList>
 
 class KisKSColorSpaceTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+    private slots:
 
-    void testConstructor();
-    void testToFromRgbA16();
-    void testMixing();
+        void initTestCase();
+        void testConstructor();
+        void testRegistry();
+        void testToFromRgbA16();
+
+    private:
+
+        QStringList list;
 
 };
 

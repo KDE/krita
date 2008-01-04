@@ -45,6 +45,11 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_wavelen_number
         return d[2*wavelen+1];
     }
 
+    inline static _TYPE_ &nativealpha(quint8* data)
+    {
+        return reinterpret_cast<_TYPE_ *>(data)[2*_wavelen_number_];
+    }
+
     inline static const _TYPE_ &K(const quint8* data, const quint32 wavelen)
     {
         const _TYPE_ *d = reinterpret_cast<const _TYPE_ *>(data);
@@ -55,6 +60,11 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_wavelen_number
     {
         const _TYPE_ *d = reinterpret_cast<const _TYPE_ *>(data);
         return d[2*wavelen+1];
+    }
+
+    inline static const _TYPE_ &nativealpha(const quint8* data)
+    {
+        return reinterpret_cast<const _TYPE_ *>(data)[2*_wavelen_number_];
     }
 };
 

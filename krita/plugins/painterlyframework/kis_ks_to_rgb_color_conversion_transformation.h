@@ -77,7 +77,7 @@ public:
             for (int i = 0; i < 3; i++)
                 dst[2-i] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, i));
 
-            dst[3] = KoColorSpaceMaths<_TYPE_,quint16>::scaleToA(CSTrait::alpha(src));
+            dst[3] = KoColorSpaceMaths<_TYPE_,quint16>::scaleToA(CSTrait::nativealpha(src));
 
             src += CSTrait::pixelSize;
             dst += 4;

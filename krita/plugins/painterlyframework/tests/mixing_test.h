@@ -21,7 +21,7 @@
 #define MIXING_TEST_H_
 
 #include <QtTest/QtTest>
-#include <QString>
+#include <QStringList>
 
 class MixingTest : public QObject
 {
@@ -30,18 +30,12 @@ class MixingTest : public QObject
     private slots:
 
         void initTestCase();
-        void testMixing();
+        void testMixing1();
         void testMixing2();
 
     private:
-        QString illuminant;
-        static const quint32 N = 9;
+        QStringList list;
 
 };
-
-void MixingTest::initTestCase()
-{
-    illuminant = "D65_9_low.ill";
-}
 
 #endif // MIXING_TEST_H_

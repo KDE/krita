@@ -74,6 +74,13 @@ bool KisIlluminantProfile::load()
     QDataStream data(&file);
 
     {
+        // Clear previous data
+        if (m_T)
+            gsl_matrix_free(m_T);
+        if (m_P)
+            gsl_vector_free(m_P);
+    }
+    {
         // Profile name
         QString name;
         data >> name;

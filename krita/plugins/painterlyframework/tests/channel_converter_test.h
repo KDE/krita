@@ -29,7 +29,6 @@ class ChannelConverterTest : public QObject
 private slots:
 
     void testKSReflectance();
-//     void testRGBsRGB();
 
 };
 

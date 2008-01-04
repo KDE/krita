@@ -21,15 +21,21 @@
 #define KIS_ILLUMINANT_PROFILE_TEST_H_
 
 #include <QtTest/QtTest>
+#include <QStringList>
 
 class KisIlluminantProfileTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+    private slots:
 
-    void testLoading();
-    void testSaving();
+        void initTestCase();
+        void testLoading();
+        void testSaving();
+
+    private:
+
+        QStringList list;
 
 };
 

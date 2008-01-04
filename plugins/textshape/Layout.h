@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef LAYOUTHELPER_H
-#define LAYOUTHELPER_H
+#ifndef LAYOUT_H
+#define LAYOUT_H
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextBlockData.h>

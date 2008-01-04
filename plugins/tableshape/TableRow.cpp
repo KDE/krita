@@ -18,18 +18,37 @@
  */
 #include "TableRow.h"
 
-TableRow::TableRow()
+#include <QList>
+
+#include "TableCell.h"
+
+class TableRow::Private
 {
+public:
+
+    QList<TableCell*> cells;
+};
+
+TableRow::TableRow( int columns )
+    : d( new Private() )
+{
+    for (int i = 0; i < columns; ++i) {
+        TableCell * cell = new TableCell();
+        d->cells.append(cell);
+    }
 }
 
 
 TableRow::~TableRow()
 {
+    delete d;
 }
 
 TableRow::TableRow(const TableRow & rhs)
     : QObject()
+    , d( new Private() )
 {
+    Q_UNUSED(rhs);
 }
 
 #include "TableRow.moc"

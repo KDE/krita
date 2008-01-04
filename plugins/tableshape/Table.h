@@ -19,9 +19,9 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include <QObject>
 #include <QTextTable>
 
+class QTextDocument;
 /**
  * A table can contain any number of rows. In a table, all cells in a columns
  * share the same left edge position. Cells can be merged with other cells,
@@ -32,15 +32,22 @@
  *
  * It is possible to place any shape in a table: this may be trick ODF-wise, though.
  */
-class Table : public QObject, public QTextTable {
+class Table : public QTextTable {
+
+    Q_OBJECT
 
 public:
     
-    Table();
+    Table( QTextDocument * document );
 
     virtual ~Table();
 
     Table(const Table & rhs);
+
+private:
+    
+    class Private;
+    Private * const d;
     
 };
 

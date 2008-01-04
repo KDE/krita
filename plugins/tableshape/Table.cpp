@@ -19,19 +19,27 @@
 
 #include "Table.h"
 
-Table::Table()
+class Table::Private
+{
+    public:
+};
+
+Table::Table( QTextDocument * document )
+    : QTextTable( document )
+    , d (new Private() )
 {
 }
 
 
 Table::~Table()
 {
+    delete d;
 }
 
 
 Table::Table(const Table & rhs)
-    : QObject()
-    , QTextTable(rhs)
+    : QTextTable( rhs.document() )
+    , d( new Private() )
 {
 }
 

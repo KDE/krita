@@ -31,11 +31,17 @@ class TableRow : public QObject {
 Q_OBJECT
 
 public:
-    TableRow();
+
+    /**
+     * create a new table row.
+     *
+     * @param columns the number of columns this row will have
+     */
+    TableRow( int columns = 4 );
 
     virtual ~TableRow();
 
-    const TableRow(const TableRow & rhs);
+    TableRow(const TableRow & rhs);
 
 signals:
 
@@ -43,7 +49,8 @@ signals:
 
 private:
 
-
+    class Private;
+    Private * const d;
 };
 
 #endif

@@ -1,0 +1,15 @@
+TableShape Design Notes
+
+A tableshape should be able to be spread over multiple pages
+
+A tableshape's text is contained in a QTextDocument, which can
+be shared with other text and table shapes
+
+A tableshape can be nested: tables inside tables are possible
+
+A cell is a shape; if the shape is a text-shape, it can share the QTextDocument with the other cells in the shape and other text and table shapes outside the current table shape.
+
+Every row in a table always has the same number of columns
+
+All cells in a column have the same left-edge position
+

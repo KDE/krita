@@ -126,9 +126,7 @@ public:
                     RGBToReflectance();
 
                 for (int i = 0; i < _N_; i++) {
-                    m_converter->reflectanceToKS(gsl_vector_get(m_refvec, i),
-                                                 CSTrait::K(dst, i),
-                                                 CSTrait::S(dst, i));
+                    m_converter->reflectanceToKS(gsl_vector_get(m_refvec,i), CSTrait::K(dst,i), CSTrait::S(dst,i));
                 }
 
                 // Add the new color conversion to the cache

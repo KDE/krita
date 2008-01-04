@@ -71,7 +71,7 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
         QString name() const { return KisKSQPColorSpace<_TYPE_,_N_>::ColorSpaceId().name(); }
         KoID colorModelId() const { return KisKSQPColorSpace<_TYPE_,_N_>::ColorModelId(); }
         KoID colorDepthId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorDepthId(); }
-        bool userVisible() const { return true; }
+        bool userVisible() const { return _N_>=9; }
 
         int referenceDepth() const { return sizeof(_TYPE_)*8; }
         bool isIcc() const { return false; }

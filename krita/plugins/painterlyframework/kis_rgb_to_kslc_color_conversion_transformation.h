@@ -51,21 +51,19 @@ public:
         gsl_vector_set(parent::m_rgbvec, 1, 0.0);
         gsl_vector_set(parent::m_rgbvec, 2, 0.0);
         parent::RGBToReflectance();
-        for (int i = 0; i < _N_; i++)
-            gsl_vector_set(m_red, i, gsl_vector_get(parent::m_refvec, i));
+        gsl_vector_memcpy(m_red, parent::m_refvec);
 
         // Second: blue: the reflectance can't be again in the interval [0, 1],
         // we need to be in the interval [0, 1-red]
         for (int i = 0; i < _N_; i++) {
-            int j = 6+2*i;
+            int j = 2*i;
             gsl_vector_set(parent::m_data->d, j+1, -(1.0 - gsl_vector_get(m_red, i)));
         }
         gsl_vector_set(parent::m_rgbvec, 0, 0.0);
         gsl_vector_set(parent::m_rgbvec, 1, 0.0);
         gsl_vector_set(parent::m_rgbvec, 2, 1.0);
         parent::RGBToReflectance();
-        for (int i = 0; i < _N_; i++)
-            gsl_vector_set(m_blue, i, gsl_vector_get(parent::m_refvec, i));
+        gsl_vector_memcpy(m_blue, parent::m_refvec);
 
         // Third: green; simply remove blue and red from pure white.
         for (int i = 0; i < _N_; i++)
@@ -86,16 +84,10 @@ protected:
     void RGBToReflectance() const
     {
         for (int i = 0; i < _N_; i++) {
-            double curr = gsl_vector_get(parent::m_rgbvec, 0) * gsl_vector_get(m_red,   i) +
-                          gsl_vector_get(parent::m_rgbvec, 1) * gsl_vector_get(m_green, i) +
-                          gsl_vector_get(parent::m_rgbvec, 2) * gsl_vector_get(m_blue,  i);
-
-            if (fabs(curr - 0.0) < 1e-6)
-                gsl_vector_set(parent::m_refvec, i, 0.0);
-            else if (fabs(curr - 1.0) < 1e-6)
-                gsl_vector_set(parent::m_refvec, i, 1.0);
-            else
-                gsl_vector_set(parent::m_refvec, i, curr);
+            gsl_vector_set(parent::m_refvec, i,
+                           gsl_vector_get(parent::m_rgbvec, 0) * gsl_vector_get(m_red,   i) +
+                           gsl_vector_get(parent::m_rgbvec, 1) * gsl_vector_get(m_green, i) +
+                           gsl_vector_get(parent::m_rgbvec, 2) * gsl_vector_get(m_blue,  i));
         }
     }
 

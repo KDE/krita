@@ -41,9 +41,9 @@ public:
     KisRGBToKSQPColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs)
     {
-        int n  = _N_ + 1; // More one fake binding
-        int me = 1; // Add a fake binding
-        int mi = 6+2*n; // each reflectance is bounded between 0 and 1, two inequalities, and the transformation matrix
+        int n  = _N_;
+        int me = 3;
+        int mi = 2*n; // each reflectance is bounded between 0 and 1, two inequalities, and the transformation matrix
 
         //// ALLOCATION
         m_data = new gsl_cqp_data;
@@ -57,32 +57,21 @@ public:
         //// INITIALIZATION
         // The Q matrix represents this function:
         // z = ( R_P[0] - R_P[1] )^2 + ( R_P[1] - R_P[2] )^2 + ... + ( R_P[n-2] - R_P[n-1] )^2
-        for (int i = 1; i < n-1; i++) {
+        for (int i = 1; i < n; i++) {
             int prev = (int)gsl_vector_get(parent::m_profile->P(), i-1);
             int curr = (int)gsl_vector_get(parent::m_profile->P(), i);
-//             int prev = i-1, curr = i;
             gsl_matrix_set(m_data->Q, prev, prev, gsl_matrix_get(m_data->Q,prev,prev)+1.0);
-//             gsl_matrix_set(m_data->Q, prev, prev,  2.0);
             gsl_matrix_set(m_data->Q, curr, curr,  1.0);
             gsl_matrix_set(m_data->Q, prev, curr, -1.0);
             gsl_matrix_set(m_data->Q, curr, prev, -1.0);
         }
-        gsl_matrix_set(m_data->Q, n-1, n-1, 1.0);
 
-        gsl_matrix_set(m_data->A, 0, n-1, 1.0);
-        gsl_vector_set(m_data->b, 0, 1.0);
-
-        gsl_matrix_view subm;
-        subm = gsl_matrix_submatrix(m_data->C, 0, 0, 3, n-1);
-        gsl_matrix_memcpy(&subm.matrix, parent::m_profile->T());
-        subm = gsl_matrix_submatrix(m_data->C, 3, 0, 3, n-1);
-        gsl_matrix_memcpy(&subm.matrix, parent::m_profile->T());
-        gsl_matrix_scale(&subm.matrix, -1.0);
+        gsl_matrix_memcpy(m_data->A, parent::m_profile->T());
 
         // The C matrix and d vector represent the inequalities that the variables must
         // consider. In our case, they're: x_i >= 0, -x_i >= -1 (you can only define >= inequalities)
-        for (int i = 0; i < n-1; i++) {
-            int j = 6+2*i;
+        for (int i = 0; i < n; i++) {
+            int j = 2*i;
             gsl_matrix_set(m_data->C, j+0, i,  1.0);
             gsl_matrix_set(m_data->C, j+1, i, -1.0);
 
@@ -110,27 +99,15 @@ protected:
 
     virtual void RGBToReflectance() const
     {
-        for (int i = 0; i < 3; i++) {
-            gsl_vector_set(m_data->d, 0+i,  ( gsl_vector_get(parent::m_rgbvec, i) - 0.0000 ) );
-            gsl_vector_set(m_data->d, 3+i, -( gsl_vector_get(parent::m_rgbvec, i) + 0.0000 ) );
-        }
+        gsl_vector_memcpy(m_data->b, parent::m_rgbvec);
 
         gsl_cqpminimizer_set(m_s, m_data);
 
         do {
             gsl_cqpminimizer_iterate(m_s);
-        } while (gsl_cqpminimizer_test_convergence(m_s, 1e-7, 1e-7) == GSL_CONTINUE);
+        } while (gsl_cqpminimizer_test_convergence(m_s, 1e-4, 1e-4) == GSL_CONTINUE);
 
-        for (uint i = 0; i < _N_; i++) {
-            double curr = gsl_vector_get(gsl_cqpminimizer_x(m_s), i);
-
-            if (fabs(curr - 0.0) < 1e-6)
-                gsl_vector_set(parent::m_refvec, i, 0.0);
-            else if (fabs(curr - 1.0) < 1e-6)
-                gsl_vector_set(parent::m_refvec, i, 1.0);
-            else
-                gsl_vector_set(parent::m_refvec, i, curr);
-        }
+        gsl_vector_memcpy(parent::m_refvec, gsl_cqpminimizer_x(m_s));
     }
 
 protected:

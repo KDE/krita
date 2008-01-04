@@ -14,3 +14,13 @@ Every row in a table always has the same number of columns
 All cells in a column have the same left-edge position
 
 A cell is based on QTextTableCell
+
+A tableshape is like a complicated textshape: it can be part of the flow
+of a document, it contains a pointer to a QTextDocument.
+
+For kword, the table shape needs to be in a KWTableFrame, which is
+part of a KW(Text?)FrameSet. It is loaded in KWord through KoTextFrameLoader.
+(Is it just me, or is the way text data gets loaded in KWord quite
+the opposite of what we had in mind with flake?). It needs a KoTextShapeData
+object to get at the QTextDocument. What do we do with the layout?
+

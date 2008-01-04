@@ -127,6 +127,11 @@ public:
 KoShape::KoShape()
     : d(new Private(this))
 {
+    d->connectors.append( QPointF( 0.5, 0.0 ) );
+    d->connectors.append( QPointF( 1.0, 0.5 ) );
+    d->connectors.append( QPointF( 0.5, 1.0 ) );
+    d->connectors.append( QPointF( 0.0, 0.5 ) );
+
     notifyChanged();
 }
 
@@ -197,21 +202,12 @@ void KoShape::setShear( double sx, double sy )
 
 void KoShape::setSize( const QSizeF &newSize )
 {
-    QSizeF s( size() );
-    if(s == newSize)
+    QSizeF oldSize( size() );
+    if(oldSize == newSize )
         return;
-
-    double fx = newSize.width() / s.width();
-    double fy = newSize.height() / s.height();
 
     d->size = newSize;
 
-    for ( int i = 0; i < d->connectors.size(); ++i )
-    {
-        QPointF &point = d->connectors[i];
-        point.setX(point.x() * fx);
-        point.setY(point.y() * fy);
-    }
     notifyChanged();
     d->shapeChanged(SizeChanged);
 }
@@ -499,7 +495,9 @@ QPointF KoShape::position() const {
 }
 
 void KoShape::addConnectionPoint( const QPointF &point ) {
-    d->connectors.append( point );
+    QSizeF s = size();
+    // convert glue point from shape coordinates to factors of size
+    d->connectors.append( QPointF( point.x() / s.width(), point.y() / s.height() ) );
 }
 
 QList<QPointF> KoShape::connectors() const {
@@ -507,7 +505,13 @@ QList<QPointF> KoShape::connectors() const {
 }
 
 QList<QPointF> KoShape::connectionPoints() const {
-    return d->connectors.toList();
+    QList<QPointF> points;
+    QSizeF s = size();
+    // convert glue points to shape coordinates
+    foreach( QPointF cp, d->connectors )
+        points.append( QPointF( s.width() * cp.x(), s.height() * cp.y() ) );
+
+    return points;
 }
 
 void KoShape::setBackground ( const QBrush & brush ) {

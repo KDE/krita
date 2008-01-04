@@ -63,6 +63,10 @@ KoConnectionShape::KoConnectionShape()
 
     d->points = *m_subpaths[0];
     updatePath( QSizeF( 140, 140 ) );
+
+    int connectionPointCount = connectionPoints().size();
+    for( int i = 0; i < connectionPointCount; ++i )
+        removeConnectionPoint( 0 );
 }
 
 KoConnectionShape::~KoConnectionShape()

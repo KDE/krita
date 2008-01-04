@@ -46,7 +46,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoOdfStylesReader.h>
-
+#include <KoTextShapeData.h>
 
 /**
  * The size of a layouted cell in Postscript points. We're doing row-first,
@@ -64,7 +64,9 @@ TableShape::TableShape()
     : m_table(0)
     , m_textDocument( new QTextDocument() )
 {
-    createExampleData();
+    
+    m_textShapeData = new KoTextShapeData();
+    setUserData(m_textShapeData);
 }
 
 TableShape::~TableShape() {

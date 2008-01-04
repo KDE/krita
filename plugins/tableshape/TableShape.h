@@ -24,11 +24,13 @@
 
 #include <KoShape.h>
 
-#define TABLESHAPEID "TableShape"
+#define TABLESHAPEID "TableShapeID"
 
-class KoImageData;
+
 class QTextDocument;
 class QTextTable;
+
+class KoTextShapeData;
 
 class TableShape : public KoShape
 {
@@ -51,9 +53,9 @@ private:
     void recalculateCellPositions();
     double recalculateCellHeight(int row, int column);
     
-    QTextTable     *m_table;
-    QTextDocument  *m_textDocument;
-
+    QTextTable     * m_table;
+    QTextDocument  * m_textDocument;
+    KoTextShapeData * m_textShapeData;
     class TableCellFrame;
     QVector< QVector<TableCellFrame*> > m_tableFrames;
     

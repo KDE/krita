@@ -1,4 +1,4 @@
-include_directories( ${KOGUIUTILS_INCLUDES} )
+include_directories( ${KOGUIUTILS_INCLUDES}  ${KOTEXT_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
@@ -15,7 +15,7 @@ SET (tableshape_LIB_SRCS
 
 kde4_add_plugin(tableshape ${tableshape_LIB_SRCS})
 
-target_link_libraries(tableshape flake koguiutils)
+target_link_libraries(tableshape flake koguiutils kotext)
 install(TARGETS tableshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

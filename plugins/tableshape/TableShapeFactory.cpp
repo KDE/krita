@@ -22,14 +22,14 @@
 #include "TableShape.h"
 #include <KoXmlNS.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 TableShapeFactory::TableShapeFactory( QObject* parent)
     : KoShapeFactory( parent, TABLESHAPEID, i18n( "Table Shape" ) )
 {
     setToolTip( i18n( "A shape which displays a table" ) );
     ///@todo setIcon( "tableshape" );
-    setIcon( "image" );
-    setOdfElementNames( KoXmlNS::draw, QStringList( "image" ) );
+    setOdfElementNames( KoXmlNS::draw, QStringList( "table" ) );
     setLoadingPriority( 1 );
 }
 

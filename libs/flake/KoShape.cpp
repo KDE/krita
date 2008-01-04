@@ -61,6 +61,7 @@ public:
         zIndex( 0 ),
         parent( 0 ),
         visible( true ),
+        printable( true ),
         locked( false ),
         keepAspect( false ),
         selectable( true ),
@@ -107,6 +108,7 @@ public:
     KoShapeContainer *parent;
 
     bool visible;
+    bool printable;
     bool locked;
     bool keepAspect;
     bool selectable;
@@ -520,6 +522,16 @@ void KoShape::setVisible(bool on) {
 
 bool KoShape::isVisible() const {
     return d->visible;
+}
+
+void KoShape::setPrintable(bool on)
+{
+    d->printable = on;
+}
+    
+bool KoShape::isPrintable() const
+{
+    return d->printable;
 }
 
 void KoShape::setSelectable(bool selectable) {

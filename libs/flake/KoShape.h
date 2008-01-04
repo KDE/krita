@@ -351,19 +351,38 @@ public:
 
     /**
      * Changes the Shape to be visible or invisible.
-     * Being visible means being painted and printed, as well as being used for
+     * Being visible means being painted, as well as being used for
      *   things like guidelines or searches.
      * @param on when true; set the shape to be visible.
      */
     void setVisible(bool on);
     /**
      * Returns current visibility state of this shape.
-     * Being visible means being painted and printed, as well as being used for
+     * Being visible means being painted, as well as being used for
      *   things like guidelines or searches.
      * @return current visibility state of this shape.
      */
     bool isVisible() const;
 
+    /**
+     * Changes the shape to be printable or not. The default is true.
+     *
+     * If a Shape's print flag is true, the shape will be printed. If
+     * false, the shape will not be printed. If a shape is not visible (@see isVisible),
+     * it isPrinted will return false, too. 
+     */
+    void setPrintable(bool on);
+
+    /**
+     * Returns the current printable state of this shape.
+     *
+     * A shape can be visible but not printable, not printable and not visible
+     * or visible and printable, but not invisible and still printable.
+     *
+     * @return current printable state of this shape.
+     */
+    bool isPrintable() const;
+    
     /**
      * Makes it possible for the user to select this shape.
      * This parameter defaults to true.

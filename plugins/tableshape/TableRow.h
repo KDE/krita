@@ -43,6 +43,12 @@ public:
 
     TableRow(const TableRow & rhs);
 
+    /// Set a soft page break -- if true, a page break is desired
+    /// before the current row.
+    void setSoftPageBreak(bool on);
+
+    bool softPageBreak() const;
+
 signals:
 
     void rowHeightChanged(float height);

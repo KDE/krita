@@ -27,6 +27,7 @@ class TableRow::Private
 public:
 
     QList<TableCell*> cells;
+    bool softPageBreak;
 };
 
 TableRow::TableRow( int columns )
@@ -49,6 +50,16 @@ TableRow::TableRow(const TableRow & rhs)
     , d( new Private() )
 {
     Q_UNUSED(rhs);
+}
+
+void TableRow::setSoftPageBreak(bool on)
+{
+    d->softPageBreak = on;
+}
+
+bool TableRow::softPageBreak() const
+{
+    return d->softPageBreak;
 }
 
 #include "TableRow.moc"

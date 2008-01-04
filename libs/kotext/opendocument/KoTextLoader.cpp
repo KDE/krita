@@ -57,7 +57,6 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QTextList>
-#include <QTextTable>
 #include <QTime>
 #include <klocale.h>
 #include <kdebug.h>
@@ -323,6 +322,8 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                 }
             } else if( tag.namespaceURI() == KoXmlNS::table ) {
                 if ( localName == "table" ) {
+                    loadFrame(context, tag, cursor);
+#if 0 // Loading is done by the table shape
                     cursor.insertText("\n");
                     cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
                     QTextTable *tbl = cursor.insertTable(1, 1);
@@ -377,6 +378,7 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
                     }
                     cursor = tbl->lastCursorPosition ();
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+#endif                    
                 }
                 else {
                     kWarning(32500)<<"KoTextLoader::loadBody unhandled table::"<<localName;

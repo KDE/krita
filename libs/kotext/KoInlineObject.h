@@ -36,8 +36,11 @@ class KoShapeSavingContext;
 
 /**
  * Base class for all inline-text-objects.
- * In a KoTextShape you can insert objects that move with the text. They are essentially anchored to a specific
- * position in the text, as one character.
+ *
+ * In a KoTextShape you can insert objects that move with the text.
+ * They are essentially anchored to a specific position in the text, as
+ * one character.
+ *
  * @see KoInlineTextObjectManager
  */
 class KOTEXT_EXPORT KoInlineObject {

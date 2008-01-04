@@ -402,6 +402,13 @@ void KoShape::copySettings(const KoShape *shape) {
         addConnectionPoint(point);
     d->zIndex = shape->zIndex();
     d->visible = shape->isVisible();
+    
+    // Ensure printable is true by default
+    if (!d->visible)
+        d->printable = true;
+    else
+        d->printable = shape->isPrintable();
+        
     d->locked = shape->isLocked();
     d->keepAspect = shape->keepAspectRatio();
     d->localMatrix = shape->d->localMatrix;
@@ -531,7 +538,10 @@ void KoShape::setPrintable(bool on)
     
 bool KoShape::isPrintable() const
 {
-    return d->printable;
+    if (d->visible)
+        return d->printable;
+    else
+        return false;
 }
 
 void KoShape::setSelectable(bool selectable) {

@@ -44,10 +44,15 @@ public:
     TableRow(const TableRow & rhs);
 
     /// Set a soft page break -- if true, a page break is desired
-    /// before the current row.
+    /// before the current row. (2.3.1, text:soft-page-break)
     void setSoftPageBreak(bool on);
-
     bool softPageBreak() const;
+
+    /// Set the number of times this row must be displayed. See the
+    /// odf spec, 8.1.2, number-rows-repeated
+    void setRepeat(int repeat);
+    int repeat() const;
+
 
 signals:
 

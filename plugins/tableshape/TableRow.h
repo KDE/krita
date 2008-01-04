@@ -32,6 +32,12 @@ Q_OBJECT
 
 public:
 
+    enum Visibility {
+        Visible,
+        Collapse,
+        Filter
+    };
+
     /**
      * create a new table row.
      *
@@ -53,6 +59,10 @@ public:
     void setRepeat(int repeat);
     int repeat() const;
 
+    /// Set the visibility of this row as per 8.1.2, table:visibility
+    void setVisibility(const QString & visibility);
+    void setVisibility(Visibility visibility);
+    Visibility visibility() const;
 
 signals:
 

@@ -26,8 +26,17 @@ class TableRow::Private
 {
 public:
 
+    Private()
+        {
+            softPageBreak = false;
+            repeated = 0;
+            visibility = Visible;
+        }
+
     QList<TableCell*> cells;
     bool softPageBreak;
+    int repeated;
+    Visibility visibility;
 };
 
 TableRow::TableRow( int columns )
@@ -60,6 +69,38 @@ void TableRow::setSoftPageBreak(bool on)
 bool TableRow::softPageBreak() const
 {
     return d->softPageBreak;
+}
+
+void TableRow::setRepeat(int repeat)
+{
+    d->repeated = repeat;
+}
+
+int TableRow::repeat() const
+{
+    return d->repeated;
+}
+void TableRow::setVisibility(const QString & visibility)
+{
+    if (visibility == "collapse") {
+        d->visibility = Collapse;
+    }
+    else if (visibility == "filter") {
+        d->visibility = Filter;
+    }
+    else {
+        d->visibility = Visible;
+    }
+}
+
+void TableRow::setVisibility(Visibility visibility)
+{
+    d->visibility = visibility;
+}
+
+TableRow::Visibility TableRow::visibility() const
+{
+    return d->visibility;
 }
 
 #include "TableRow.moc"

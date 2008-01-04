@@ -23,6 +23,7 @@
 #include "kis_debug.h"
 
 #include "kis_meta_data_entry.h"
+#include "kis_meta_data_schema.h"
 #include "kis_meta_data_store.h"
 #include "kis_meta_data_value.h"
 
@@ -54,10 +55,11 @@ QString DropMergeStrategy::description() const
     return i18n("Drop all meta data");
 }
 
-void DropMergeStrategy::merge(Store* dst, QList<const Store*> srcs) const
+void DropMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double> score) const
 {
     Q_UNUSED(dst);
     Q_UNUSED(srcs);
+    Q_UNUSED(score);
     dbgImage << "Drop meta data";
 }
 
@@ -87,8 +89,9 @@ QString PriorityToFirstMergeStrategy::description() const
     return i18n("Use in priority the meta data from the layers at the bottom of the stack.");
 }
 
-void PriorityToFirstMergeStrategy::merge(Store* dst, QList<const Store*> srcs) const
+void PriorityToFirstMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double> score) const
 {
+    Q_UNUSED(score);
     dbgImage << "Priority to first meta data";
     
     foreach( const Store* store, srcs )
@@ -96,7 +99,7 @@ void PriorityToFirstMergeStrategy::merge(Store* dst, QList<const Store*> srcs) c
         QList<QString> keys = store->keys();
         foreach(QString key, keys)
         {
-            if( not dst->hasEntry( key ) )
+            if( not dst->containsEntry( key ) )
             {
                 dst->addEntry( store->getEntry( key ) );
             }
@@ -133,8 +136,9 @@ QString OnlyIdenticalMergeStrategy::description() const
     return i18n("Keep only meta data that are identical");
 }
 
-void OnlyIdenticalMergeStrategy::merge(Store* dst, QList<const Store*> srcs) const
+void OnlyIdenticalMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double> score) const
 {
+    Q_UNUSED(score);
     dbgImage << "OnlyIdenticalMergeStrategy";
     dbgImage << "Priority to first meta data";
     
@@ -143,10 +147,11 @@ void OnlyIdenticalMergeStrategy::merge(Store* dst, QList<const Store*> srcs) con
     foreach(QString key, keys)
     {
         bool keep = true;
-        const Value& v = srcs[0]->getEntry(key).value();
+        const Entry& e = srcs[0]->getEntry(key);
+        const Value& v = e.value();
         foreach( const Store* store, srcs )
         {
-            if( not( store->hasEntry( key ) and store->getEntry( key ).value() == v ) )
+            if( not( store->containsEntry( key ) and e.value() == v ) )
             {
                 keep = false;
                 break;
@@ -154,7 +159,167 @@ void OnlyIdenticalMergeStrategy::merge(Store* dst, QList<const Store*> srcs) con
         }
         if(keep)
         {
-            dst->addEntry( srcs[0]->getEntry( key ) );
+            dst->addEntry( e );
         }
     }
+}
+
+//-------------------------------------------//
+//------------ SmartMergeStrategy -----------//
+//-------------------------------------------//
+
+SmartMergeStrategy::SmartMergeStrategy()
+{
+}
+
+SmartMergeStrategy::~SmartMergeStrategy()
+{
+}
+
+QString SmartMergeStrategy::id() const
+{
+    return "Smart";
+}
+QString SmartMergeStrategy::name() const
+{
+    return i18n("Smart");
+}
+
+QString SmartMergeStrategy::description() const
+{
+    return i18n("This merge strategy attempt to find the best solution for merging, for instance by merging list of authors together, or keeping photographic information that are identical...");
+}
+
+struct ScoreValue {
+    double score;
+    Value value;
+};
+
+Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> scores, QString key ) const
+{
+    QList<ScoreValue> scoreValues;
+    for(int i = 0; i < srcs.size(); i++)
+    {
+        if( srcs[i]->containsEntry( key ) )
+        {
+            const Value& nv = srcs[i]->getEntry( key ).value();
+            if( nv.type() != Value::Invalid )
+            {
+                bool found = false;
+                for(int j = 0; j < scoreValues.size(); j++)
+                {
+                    ScoreValue& sv = scoreValues[j];
+                    if(sv.value == nv )
+                    {
+                        found = true;
+                        sv.score += scores[i];
+                        break;
+                    }
+                }
+                if( not found )
+                {
+                    ScoreValue sv;
+                    sv.score = scores[i];
+                    sv.value = nv;
+                    scoreValues.append(sv);
+                }
+            }
+        }
+    }
+    Q_ASSERT(scoreValues.size() >= 1 );
+    const ScoreValue* bestSv = 0;
+    double bestScore = -1.0;
+    foreach(const ScoreValue& sv, scoreValues)
+    {
+        if(sv.score > bestScore)
+        {
+            bestScore = sv.score;
+            bestSv = &sv;
+        }
+    }
+    Q_ASSERT(bestSv);
+    return bestSv->value;
+}
+
+void SmartMergeStrategy::mergeEntry(Store* dst, QList<const Store*> srcs, const KisMetaData::Schema* schema, QString identifier) const
+{
+    Value v(QList<Value>(), Value::OrderedArray );
+    foreach(const Store* store, srcs)
+    {
+        v += store->getEntry(schema, identifier).value();
+    }
+    dst->getEntry(schema, identifier).value() = v;
+}
+
+void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double> scores) const
+{
+    dbgImage << "Smart merging of meta data";
+    Q_ASSERT(srcs.size() == scores.size());
+    Q_ASSERT(srcs.size() > 0 );
+    if(srcs.size() == 1)
+    {
+        dst->copyFrom( srcs[0] );
+    }
+    // Initialize some schema
+    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+//     const KisMetaData::Schema* psSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::PhotoshopSchemaUri);
+    const KisMetaData::Schema* XMPRightsSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPRightsSchemaUri);
+    const KisMetaData::Schema* XMPSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
+    // Sort the stores and scores
+    {
+        QMultiMap<double, const Store*> scores2srcs;
+        for(int i = 0; i < scores.size(); ++i)
+        {
+            scores2srcs.insert( scores[i], srcs[i] );
+        }
+        srcs = scores2srcs.values();
+        scores = scores2srcs.keys();
+    }
+    
+    // First attempt to see if one of the store has a higher score than the others
+    if(scores[0] > 2 * scores[1])
+    { // One of the store has a higher importance than the other ones
+        dst->copyFrom( srcs[0] );
+    } else {
+        // Merge exif info
+        
+        
+        // Election
+        foreach(const Store* store, srcs)
+        {
+            QList<QString> keys = store->keys();
+            foreach(QString key, keys)
+            {
+                if(not dst->containsEntry( key ) )
+                {
+                    dst->getEntry( key ).value() = election( srcs, scores, key);
+                }
+            }
+        }
+        
+        // Compute rating
+        double rating = 0.0;
+        double norm = 0.0;
+        for(int i = 0; i < srcs.size(); i++)
+        {
+            const Store* store = srcs[i];
+            if( store->containsEntry( XMPSchema, "Rating") )
+            {
+                double score = scores[i];
+                rating += score * store->getEntry( XMPSchema, "Rating").value().asVariant().toDouble();
+                norm += score;
+            }
+        }
+        if(norm > 0.01)
+        {
+            dst->getEntry( XMPSchema, "Rating").value() = QVariant( (int)(rating / norm ) );
+        }
+    }
+    // Merge the list of authors and keywords and other stuff
+    mergeEntry(dst, srcs, dcSchema, "contributor");
+    mergeEntry(dst, srcs, dcSchema, "creator");
+    mergeEntry(dst, srcs, dcSchema, "publisher");
+    mergeEntry(dst, srcs, dcSchema, "subject");
+    mergeEntry(dst, srcs, XMPRightsSchema, "Owner");
+    mergeEntry(dst, srcs, XMPSchema, "Identifier");
 }

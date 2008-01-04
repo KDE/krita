@@ -29,6 +29,7 @@ MergeStrategyRegistry::MergeStrategyRegistry()
     add( new DropMergeStrategy() );
     add( new PriorityToFirstMergeStrategy() );
     add( new OnlyIdenticalMergeStrategy() );
+    add( new SmartMergeStrategy() );
 }
 
 MergeStrategyRegistry::MergeStrategyRegistry(const MergeStrategyRegistry&) : KoGenericRegistry<const KisMetaData::MergeStrategy*>()

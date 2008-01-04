@@ -42,7 +42,7 @@ namespace KisMetaData {
              * @param namespacePrefix
              * @param value
              */
-            Entry(QString name, const KisMetaData::Schema* schema, const KisMetaData::Value& value);
+            Entry(const KisMetaData::Schema* schema, QString name, const KisMetaData::Value& value);
             Entry(const Entry&);
             ~Entry();
             /**

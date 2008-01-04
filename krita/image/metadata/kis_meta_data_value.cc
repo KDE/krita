@@ -18,6 +18,9 @@
 
 #include "kis_meta_data_value.h"
 
+#include <QDate>
+#include <QPoint>
+#include <QPointF>
 #include <QRegExp>
 #include <QVariant>
 #include <QStringList>
@@ -308,5 +311,138 @@ bool Value::operator==(const Value& rhs ) const
         case Value::UnsignedRational:
             return asUnsignedRational() == rhs.asUnsignedRational();
     }
-    
+    return false;
+}
+
+Value& Value::operator+=(const Value& v )
+{
+    switch( d->type )
+    {
+        case Value::Invalid:
+            Q_ASSERT( v.type() == Value::Invalid);
+            break;
+        case Value::Variant:
+            Q_ASSERT( v.type() == Value::Variant);
+            {
+                QVariant v1 = d->value.variant;
+                QVariant v2 = v.d->value.variant;
+                Q_ASSERT( v2.canConvert( v1.type() ) );
+                switch( v1.type() )
+                {
+                    default:
+                        break;
+                    case QVariant::Date:
+                    {
+                        QDate date;
+                        date.fromJulianDay( v1.toDate().toJulianDay()
+                                          + v2.toDate().toJulianDay() );
+                        *d->value.variant = date;
+                    }
+                        break;
+                    case QVariant::DateTime:
+                    {
+                        QDateTime dt;
+                        dt.fromTime_t(
+                                  v1.toDateTime().toTime_t()
+                                + v2.toDateTime().toTime_t() );
+                        *d->value.variant = dt;
+                    }
+                        break;
+                    case QVariant::Double:
+                        *d->value.variant = v1.toDouble() + v2.toDouble();
+                        break;
+                    case QVariant::Int:
+                        *d->value.variant = v1.toInt() + v2.toInt();
+                        break;
+                    case QVariant::List:
+                        *d->value.variant = v1.toList() + v2.toList();
+                        break;
+                    case QVariant::LongLong:
+                        *d->value.variant = v1.toLongLong() + v2.toLongLong();
+                        break;
+                    case QVariant::Point:
+                        *d->value.variant = v1.toPoint() + v2.toPoint();
+                        break;
+                    case QVariant::PointF:
+                        *d->value.variant = v1.toPointF() + v2.toPointF();
+                        break;
+                    case QVariant::String:
+                        *d->value.variant = v1.toString() + v2.toString();
+                        break;
+                    case QVariant::StringList:
+                        *d->value.variant = v1.toStringList() + v2.toStringList();
+                        break;
+                    case QVariant::Time:
+                    {
+                        QTime t1 = v1.toTime();
+                        QTime t2 = v2.toTime();
+                        int h = t1.hour() + t2.hour();
+                        int m = t1.minute() + t2.minute();
+                        int s = t1.second() + t2.second();
+                        int ms = t1.msec() + t2.msec();
+                        if( ms > 999) { ms -= 999; s++; }
+                        if( s > 60) { s -= 60; m++; }
+                        if( m > 60) { m -= 60; h++; }
+                        if( h > 24) { h -= 24; }
+                        *d->value.variant = QTime( h, m, s, ms );
+                    }
+                        break;
+                    case QVariant::UInt:
+                        *d->value.variant = v1.toUInt() + v2.toUInt();
+                        break;
+                    case QVariant::ULongLong:
+                        *d->value.variant = v1.toULongLong() + v2.toULongLong();
+                        break;
+                }
+                
+            }
+            break;
+        case Value::OrderedArray:
+        case Value::UnorderedArray:
+        case Value::AlternativeArray:
+        {
+            if( v.isArray() )
+            {
+                *(d->value.array) += *(v.d->value.array);
+            } else {
+                d->value.array->append( v );
+            }
+        }
+            break;
+        case Value::LangArray:
+        {
+            Q_ASSERT( v.type() == Value::LangArray);
+        }
+            break;
+        case Value::Structure:
+        {
+            Q_ASSERT( v.type() == Value::Structure);
+            break;
+        }
+        case Value::SignedRational:
+        {
+            Q_ASSERT( v.type() == Value::SignedRational);
+            d->value.signedRational->numerator =
+                ( d->value.signedRational->numerator 
+                    * v.d->value.signedRational->denominator )
+              + ( v.d->value.signedRational->numerator
+                    * d->value.signedRational->denominator );
+            d->value.signedRational->denominator *= v.d->value.signedRational->denominator;
+            break;
+        }
+        case Value::UnsignedRational:
+        {
+            Q_ASSERT( v.type() == Value::UnsignedRational);
+            d->value.unsignedRational->numerator =
+                ( d->value.unsignedRational->numerator 
+                    * v.d->value.unsignedRational->denominator )
+              + ( v.d->value.unsignedRational->numerator
+                    * d->value.unsignedRational->denominator );
+            d->value.unsignedRational->denominator *=
+                    v.d->value.unsignedRational->denominator;
+            break;
+        }
+            break;
+    }
+    return *this;
 }

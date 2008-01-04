@@ -106,7 +106,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                 const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(schemaUri);
                 if(schema)
                 {
-                    if( not d->store->hasEntry( schema, entryName))
+                    if( not d->store->containsEntry( schema, entryName))
                     {
                         dbgPlugins <<" Store doesn't have yet entry :" << entryName <<" in" << schemaUri  <<" ==" << schema->generateQualifiedName(entryName);
                     }

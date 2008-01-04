@@ -113,18 +113,6 @@ namespace KisMetaData {
             void removeEntry(const KisMetaData::Schema* schema, QString entryName);
             
             /**
-             * @return true if the store contains this entry
-             */
-            bool hasEntry(QString entryKey) const;
-            /**
-             * @return true if the store contains this entry
-             */
-            bool hasEntry(const KisMetaData::Schema* schema, QString entryName) const;
-            /**
-             * @return true if the store contains this entry
-             */
-            bool hasEntry(QString uri, QString entryName) const;
-            /**
              * Return the value associated with this entry name and uri.
              * @param uri
              * @param entryName
@@ -140,6 +128,10 @@ namespace KisMetaData {
              * @return true if an entry with the given key exist in the store
              */
             bool containsEntry(QString entryKey) const;
+            /**
+             * @return true if the store contains this entry
+             */
+            bool containsEntry(const KisMetaData::Schema* schema, QString entryName) const;
             /**
              * @param uri
              * @param entryName

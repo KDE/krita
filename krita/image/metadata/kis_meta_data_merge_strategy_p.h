@@ -18,7 +18,11 @@
 
 #include "kis_meta_data_merge_strategy.h"
 
+class QString;
+
 namespace KisMetaData {
+    class Schema;
+    class Value;
     /**
      * This strategy drop all meta data.
      */
@@ -29,7 +33,7 @@ namespace KisMetaData {
             virtual QString id() const;
             virtual QString name() const;
             virtual QString description() const;
-            virtual void merge(Store* dst, QList<const Store*> srcs) const;
+            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
     };
     class PriorityToFirstMergeStrategy : public MergeStrategy {
         public:
@@ -38,7 +42,7 @@ namespace KisMetaData {
             virtual QString id() const;
             virtual QString name() const;
             virtual QString description() const;
-            virtual void merge(Store* dst, QList<const Store*> srcs) const;
+            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
     };
     class OnlyIdenticalMergeStrategy : public MergeStrategy {
         public:
@@ -47,6 +51,21 @@ namespace KisMetaData {
             virtual QString id() const;
             virtual QString name() const;
             virtual QString description() const;
-            virtual void merge(Store* dst, QList<const Store*> srcs) const;
+            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+    };
+    class SmartMergeStrategy : public MergeStrategy {
+        public:
+            SmartMergeStrategy();
+            virtual ~SmartMergeStrategy();
+            virtual QString id() const;
+            virtual QString name() const;
+            virtual QString description() const;
+            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+        protected:
+            /**
+             * Merge multiple entries in one.
+             */
+            void mergeEntry(Store* dst, QList<const Store*> srcs, const Schema* schema, QString identifier) const;
+            Value election(QList<const Store*> srcs, QList<double> score, QString key ) const;
     };
 }

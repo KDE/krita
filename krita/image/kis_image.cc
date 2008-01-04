@@ -842,7 +842,10 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
     KisPaintLayer *newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(newLayer);
 
-    QRect rc = layer->extent() | layer->nextSibling()->extent();
+    QRect layerExtent = layer->extent();
+    QRect layerNextSiblingExtent = layer->nextSibling()->extent();
+    
+    QRect rc = layerExtent | layerNextSiblingExtent;
 
     undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
@@ -851,10 +854,17 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
     layer->nextSibling()->accept(visitor);
     layer->accept(visitor);
     
+    // Merge meta data
     QList<const KisMetaData::Store*> srcs;
     srcs.append( static_cast<KisLayer*>(layer->nextSibling().data())->metaData());
     srcs.append( layer->metaData());
-    strategy->merge( newLayer->metaData(), srcs );
+    QList<double> scores;
+    int layerNextSiblingArea = layerNextSiblingExtent.width() * layerNextSiblingExtent.height();
+    int layerArea = layerExtent.width() * layerExtent.height();
+    double norm = qMax( layerNextSiblingArea, layerArea );
+    scores.append( layerNextSiblingArea / norm );
+    scores.append( layerArea / norm );
+    strategy->merge( newLayer->metaData(), srcs, scores );
 
     removeNode(layer->nextSibling());
     addNode(newLayer, layer->parent(), layer.data());

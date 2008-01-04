@@ -45,7 +45,7 @@ Entry::Entry() :
     d->valid = false;
 }
 
-Entry::Entry(QString name, const Schema* schema, const Value& value) :
+Entry::Entry(const Schema* schema, QString name, const Value& value) :
         d(new Private)
 {
     d->name = name;

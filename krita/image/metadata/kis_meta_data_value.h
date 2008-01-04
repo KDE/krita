@@ -93,7 +93,7 @@ namespace KisMetaData {
              */
             double asDouble() const;
             /**
-             * @return the value as a double, or null if it's not possible, rationals are evaluated
+             * @return the value as an integer, or null if it's not possible, rationals are evaluated
              */
             int asInteger() const;
             /**
@@ -131,6 +131,7 @@ namespace KisMetaData {
             QMap<QString, KisMetaData::Value>* asStructure();
         public:
             bool operator==(const Value& ) const;
+            Value& operator+=(const Value& );
         private:
             Private* const d;
     };

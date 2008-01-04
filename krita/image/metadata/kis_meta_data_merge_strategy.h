@@ -44,10 +44,9 @@ namespace KisMetaData {
              * @param dst the destination store
              * @param srcs the list of source meta data store
              */
-            virtual void merge(Store* dst, QList<const Store*> srcs) const = 0;
+            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const = 0;
     };
     
 };
-
 
 #endif

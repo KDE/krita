@@ -60,7 +60,6 @@ QString AnonymizerFilter::description() const
 
 void AnonymizerFilter::filter(KisMetaData::Store* store) const
 {
-    Q_UNUSED(store);
     dbgImage << "Anonymize a store";
     const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
     store->removeEntry( dcSchema, "contributor");
@@ -109,7 +108,7 @@ void ToolInfoFilter::filter(KisMetaData::Store* store) const
     const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
     store->getEntry( xmpSchema, "ModifyDate").value() = Value( QDate::currentDate() );
     store->getEntry( xmpSchema, "MetadataDate").value() = Value( QDate::currentDate() );
-    if(not store->hasEntry( xmpSchema, "CreatorTool") )
+    if(not store->containsEntry( xmpSchema, "CreatorTool") )
     {
         store->getEntry( xmpSchema, "CreatorTool").value() = Value( i18n("Krita %1", QString(KOFFICE_VERSION_STRING) )  );
     }

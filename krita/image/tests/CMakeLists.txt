@@ -1,5 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
+include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata )
 ########### next target ###############
 
 
@@ -558,3 +558,9 @@ set(kis_node_action_test_SRCS kis_node_action_test.cpp)
 kde4_add_unit_test(KisNodeActionTest TESTNAME krita-image-KisNodeActionTest ${kis_node_action_test_SRCS})
 target_link_libraries(KisNodeActionTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
 
+
+########### next target ###############
+
+set(kis_meta_data_test_SRCS kis_meta_data_test.cpp )
+kde4_add_unit_test(KisMetaDataTest TESTNAME krita-image-KisMetaDataTest ${kis_meta_data_test_SRCS})
+target_link_libraries(KisMetaDataTest ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})

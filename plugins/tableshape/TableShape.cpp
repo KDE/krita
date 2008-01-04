@@ -99,6 +99,8 @@ bool TableShape::loadOdf( const KoXmlElement    &tableElement,
     KoXmlElement  e;
     forEachElement( e, tableElement ) {
 
+        kDebug() << e.localName();
+        
         // Only handle table rows for now.
         if ( e.localName() != "table-row" 
              || e.namespaceURI() != KoXmlNS::table )

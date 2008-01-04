@@ -46,6 +46,6 @@ KoShape* TableShapeFactory::createShape( const KoProperties* params ) const
 
 bool TableShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw );
+    return ( e.localName() == "table" && e.namespaceURI() == KoXmlNS::draw );
 }
 

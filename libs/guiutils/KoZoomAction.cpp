@@ -332,7 +332,8 @@ void KoZoomAction::zoomModeButtonClicked(int id)
 void KoZoomAction::updateWidgets(KoZoomMode::Mode mode, double zoom)
 {
     if(mode != KoZoomMode::ZOOM_CONSTANT) {
-        d->zoomButtonGroup->button(mode)->setChecked(true);
+        if (d->zoomButtonGroup)
+            d->zoomButtonGroup->button(mode)->setChecked(true);
     } else {
         QAbstractButton* button = 0;
         if (d->zoomButtonGroup)

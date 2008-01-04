@@ -334,7 +334,9 @@ void KoZoomAction::updateWidgets(KoZoomMode::Mode mode, double zoom)
     if(mode != KoZoomMode::ZOOM_CONSTANT) {
         d->zoomButtonGroup->button(mode)->setChecked(true);
     } else {
-        QAbstractButton* button = d->zoomButtonGroup->checkedButton();
+        QAbstractButton* button = 0;
+        if (d->zoomButtonGroup)
+            button = d->zoomButtonGroup->checkedButton();
 
         if(button) {
             // Let's work around not being able to uncheck when exclusive

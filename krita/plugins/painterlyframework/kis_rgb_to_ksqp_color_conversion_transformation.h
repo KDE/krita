@@ -41,8 +41,8 @@ public:
     KisRGBToKSQPColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs)
     {
-        int n  = _N_ + 1;
-        int me = 1;
+        int n  = _N_ + 1; // More one fake binding
+        int me = 1; // Add a fake binding
         int mi = 6+2*n; // each reflectance is bounded between 0 and 1, two inequalities, and the transformation matrix
 
         //// ALLOCATION

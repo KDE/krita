@@ -33,11 +33,6 @@
 #include <QPainter>
 #include <QPicture>
 
-void MixingTest::initTestCase()
-{
-    illuminant = "D65_9_low.ill";
-}
-
 // Stress test, it doesn't do compares and the like... if you come to an end, then probably everything works ;-)
 void MixingTest::testMixing()
 {

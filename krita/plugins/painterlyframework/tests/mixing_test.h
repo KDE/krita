@@ -39,4 +39,9 @@ class MixingTest : public QObject
 
 };
 
+void MixingTest::initTestCase()
+{
+    illuminant = "D65_9_low.ill";
+}
+
 #endif // MIXING_TEST_H_

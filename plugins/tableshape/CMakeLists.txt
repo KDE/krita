@@ -8,6 +8,7 @@ SET (tableshape_LIB_SRCS
     TableTool.cpp
     TableToolFactory.cpp
     Plugin.cpp
+    TableCell.cpp
 )
 
 kde4_add_plugin(tableshape ${tableshape_LIB_SRCS})

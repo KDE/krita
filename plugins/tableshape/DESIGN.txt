@@ -13,3 +13,4 @@ Every row in a table always has the same number of columns
 
 All cells in a column have the same left-edge position
 
+A cell is based on QTextTableCell

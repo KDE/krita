@@ -93,6 +93,27 @@ using namespace KoProperty;
     "................................................",
     "................................................"};
     //! @internal
+    static const char *dot[]={
+    "48 16 2 1",
+    ". c None",
+    "# c #000000",
+    "................................................",
+    "................................................",
+    "................................................",
+    "................................................",
+    "................................................",
+    "................................................",
+    "................................................",
+    ".##..##..##..##..##..##..##..##..##..##..##..##.",
+    ".##..##..##..##..##..##..##..##..##..##..##..##.",
+    "................................................",
+    "................................................",
+    "................................................",
+    "................................................",
+    "................................................",
+    "................................................",
+    "................................................"};
+    //! @internal
     static const char *dashdot[]={
     "48 16 2 1",
     ". c None",
@@ -151,6 +172,7 @@ LineStyleEdit::LineStyleEdit(Property *property, QWidget *parent)
 	m_edit->addItem(QIcon(QPixmap(nopen)), "");
 	m_edit->addItem(QIcon(QPixmap(solid)), "");
 	m_edit->addItem(QIcon(QPixmap(dash)), "");
+	m_edit->addItem(QIcon(QPixmap(dot)), "");
 	m_edit->addItem(QIcon(QPixmap(dashdot)), "");
 	m_edit->addItem(QIcon(QPixmap(dashdotdot)), "");
 
@@ -193,19 +215,22 @@ LineStyleEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, cons
 
 	QPixmap px;
 	switch (value.toInt()) {
-	case 0:
+	case Qt::NoPen:
 		px = QPixmap(nopen);
 		break;
-	case 1:
+	case Qt::SolidLine:
 		px = QPixmap(solid);
 		break;
-	case 2:
+	case Qt::DashLine:
 		px = QPixmap(dash);
 		break;
-	case 3:
+	case Qt::DotLine:
+		px = QPixmap(dot);
+		break;
+	case Qt::DashDotLine:
 		px = QPixmap(dashdot);
 		break;
-	case 4:
+	case Qt::DashDotDotLine:
 		px = QPixmap(dashdotdot);
 		break;
 	default:

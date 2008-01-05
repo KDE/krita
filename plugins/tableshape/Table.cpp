@@ -18,16 +18,20 @@
  */
 
 #include "Table.h"
+#include "DDEData.h"
 
 class Table::Private
 {
-    public:
+public:
+
+    QVector<DDEData*> ddeConnections;
 };
 
 Table::Table( QTextDocument * document )
     : QTextTable( document )
     , d (new Private() )
 {
+
 }
 
 
@@ -41,6 +45,17 @@ Table::Table(const Table & rhs)
     : QTextTable( rhs.document() )
     , d( new Private() )
 {
+}
+
+
+void Table::addDDEConnection(DDEData * data)
+{
+    d->ddeConnections.append(data);
+}
+
+QVector<DDEData*> Table::ddeConnections() const
+{
+    return d->ddeConnections;
 }
 
 #include "Table.moc"

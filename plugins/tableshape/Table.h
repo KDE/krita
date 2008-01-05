@@ -21,6 +21,8 @@
 
 #include <QTextTable>
 
+struct DDEData;
+
 class QTextDocument;
 /**
  * A table can contain any number of rows. In a table, all cells in a columns
@@ -43,6 +45,16 @@ public:
     virtual ~Table();
 
     Table(const Table & rhs);
+
+    /**
+     * For roundtrip purposes, don't forget the DDE data.
+     */
+    void addDDEConnection(DDEData * data);
+
+    /**
+     * Return all dde connections defined for this table.
+     */
+     QVector<DDEData*> ddeConnections() const;
 
 private:
     

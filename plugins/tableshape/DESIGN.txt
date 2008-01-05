@@ -24,3 +24,7 @@ part of a KW(Text?)FrameSet. It is loaded in KWord through KoTextFrameLoader.
 the opposite of what we had in mind with flake?). It needs a KoTextShapeData
 object to get at the QTextDocument. What do we do with the layout?
 
+
+Query: should the tableshape be a shape or a shape container?
+
+

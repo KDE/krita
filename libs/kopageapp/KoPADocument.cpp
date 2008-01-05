@@ -21,7 +21,6 @@
 #include "KoPADocument.h"
 
 #include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOdfStylesReader.h>

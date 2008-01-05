@@ -137,6 +137,7 @@ KoShape::KoShape()
 
 KoShape::~KoShape()
 {
+    d->shapeChanged( Deleted );
     delete d;
 }
 

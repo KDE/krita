@@ -106,7 +106,8 @@ public:
         SizeChanged,    ///< used after a setSize()
         GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
         ParentChanged,   ///< used after a setParent()
-        CollisionDetected ///< used when another shape moved in our boundingrect
+        CollisionDetected, ///< used when another shape moved in our boundingrect
+        Deleted ///< the shape was deleted
     };
 
     /**

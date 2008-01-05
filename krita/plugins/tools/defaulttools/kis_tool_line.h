@@ -84,7 +84,7 @@ public:
             setToolType(TOOL_TYPE_SHAPE);
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority( 1 );
-            setIcon("tool_line");
+            setIcon("krita_tool_line");
             setInputDeviceAgnostic(false);
         }
 

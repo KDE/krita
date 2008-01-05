@@ -77,7 +77,7 @@ public:
             setToolTip( i18n( "Draw an ellipse" ) );
             setToolType( TOOL_TYPE_SHAPE );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "tool_ellipse" );
+            setIcon( "krita_tool_ellipse" );
             setPriority( 3 );
             setInputDeviceAgnostic(false);
         }

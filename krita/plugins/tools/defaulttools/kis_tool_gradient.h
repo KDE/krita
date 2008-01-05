@@ -118,7 +118,7 @@ public:
         {
             setToolTip( i18n( "Draw a gradient." ) );
             setToolType( TOOL_TYPE_FILL );
-            setIcon( "tool_gradient" );
+            setIcon( "krita_tool_gradient" );
             setShortcut( KShortcut( Qt::Key_G ) );
             setPriority( 13 );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );

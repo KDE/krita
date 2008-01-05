@@ -89,7 +89,7 @@ public:
 
             setToolType( TOOL_TYPE_SHAPE );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "tool_rectangle" );
+            setIcon( "krita_tool_rectangle" );
             //setShortcut( Qt::Key_F6 );
             setPriority( 2 );
             setInputDeviceAgnostic(false);

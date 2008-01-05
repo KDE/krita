@@ -95,7 +95,7 @@ public:
             setToolTip( i18n( "Fill a contiguous area of color with a color, or fill a selection." ) );
             setToolType( TOOL_TYPE_FILL );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "fill-color" );
+            setIcon( "krita_tool_color_fill" );
             //setShortcut( QKeySequence( Qt::Key_F ) );
             setPriority( 12 );
             setInputDeviceAgnostic(false);

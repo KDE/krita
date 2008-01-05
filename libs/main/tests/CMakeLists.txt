@@ -29,14 +29,6 @@ target_link_libraries(filter_graph  ${KDE4_KDECORE_LIBS} komain )
 
 ########### next target ###############
 
-set(kooasisstoretest_SRCS kooasisstoretest.cpp )
-
-
-kde4_add_unit_test(kooasisstoretest TESTNAME libs-komain-kooasisstoretest ${kooasisstoretest_SRCS})
-
-target_link_libraries(kooasisstoretest  ${KDE4_KDECORE_LIBS} komain )
-
-########### next target ###############
 
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
 

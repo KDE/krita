@@ -691,8 +691,25 @@ QString KoShape::saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) c
 
 void KoShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    styleStack.save();
+
+    // fill the style stack with the shapes style
+    if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    {
+        context.koLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
+        styleStack.setTypeProperties( "graphic" );
+    }
+    else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
+    {
+        context.koLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
+        styleStack.setTypeProperties( "presentation" );
+    }
+
     setBackground( loadOdfFill( element, context ) );
     setBorder( loadOdfStroke( element, context ) );
+
+    styleStack.restore();
 }
 
 bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes )
@@ -748,19 +765,14 @@ QString KoShape::getStyleProperty( const char *property, const KoXmlElement & el
 {
     KoStyleStack &styleStack = context.koLoadingContext().styleStack();
     QString value;
+
     if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        // fill the style stack with the shapes style
-        context.koLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
-        styleStack.setTypeProperties( "graphic" );
         if( styleStack.hasProperty( KoXmlNS::draw, property ) )
             value = styleStack.property( KoXmlNS::draw, property );
     }
     else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
     {
-        // fill the style stack with the shapes style
-        context.koLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
-        styleStack.setTypeProperties( "presentation" );
         if ( styleStack.hasProperty( KoXmlNS::presentation, property ) )
             value = styleStack.property( KoXmlNS::presentation, property );
     }

@@ -213,6 +213,7 @@ class KoScriptingOdfStore::Private
             QBuffer buffer(&byteArray);
             KoStore* store = KoStore::createStore(&buffer, KoStore::Write, "KrossScript", KoStore::Tar);
             KoOdfWriteStore odfStore(store);
+            odfStore.manifestWriter("");
             KoEmbeddedDocumentSaver embeddedSaver;
             KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
             QByteArray mime = getMimeType();

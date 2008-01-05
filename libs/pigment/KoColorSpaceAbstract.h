@@ -173,7 +173,8 @@ class KoMixColorsOpImpl : public KoMixColorsOp {
 
 template<class _CSTraits>
 class KoConvolutionOpImpl : public KoConvolutionOp {
-
+    typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
+    typedef typename _CSTraits::channels_type channels_type;
 public:
 
     KoConvolutionOpImpl() { }
@@ -184,37 +185,65 @@ public:
         {
 
             // Create and initialize to 0 the array of totals
-            typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totals[_CSTraits::channels_nb];
+            compositetype totals[_CSTraits::channels_nb];
 
-            qint32 totalAlpha = 0;
+            qint32 totalWeight = 0;
+            qint32 totalWeightTransparent = 0;
 
             memset(totals, 0, sizeof(typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype) * _CSTraits::channels_nb);
 
             for (;nPixels--; colors++, kernelValues++)
             {
-                const typename _CSTraits::channels_type* color = _CSTraits::nativeArray(*colors);
-                quint8 alphaTimesWeight =  KoColorSpaceMaths<quint8>::multiply(_CSTraits::alpha(*colors), *kernelValues);
-                for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                qint32 weight = *kernelValues;
+                const channels_type* color = _CSTraits::nativeArray(*colors);
+                if( weight != 0 )
                 {
-                    totals[i] += color[i] * alphaTimesWeight;
+                    if( _CSTraits::alpha( *colors ) == 0 )
+                    {
+                        totalWeightTransparent += weight;
+                    } else {
+                        for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                        {
+                            totals[i] += color[i] * weight;
+                        }
+                    }
+                    totalWeight += weight;
                 }
-                totalAlpha += alphaTimesWeight;
             }
 
             typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
 
             if ( channelFlags.isEmpty() ) {
                 // Do all channels
-
-                for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                if(totalWeightTransparent == 0)
                 {
-                    typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / factor + offset;
-                    dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min,
-                                            KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
+                    for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                    {
+                        compositetype v = totals[i] / factor + offset;
+                        dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                 KoColorSpaceMathsTraits<channels_type>::max );
+                    }
+                } else if(totalWeightTransparent != totalWeight ) {
+                    if(totalWeight == factor)
+                    {
+                        Q_INT64 a = ( totalWeight - totalWeightTransparent );
+                        for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                        {
+                            compositetype v = totals[i] / a + offset;
+                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                        KoColorSpaceMathsTraits<channels_type>::max );
+                        }
+                    } else {
+                        double a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use double as it easily saturate
+                        for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                        {
+                            compositetype v = (compositetype)( totals[i] * a + offset );
+                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                        KoColorSpaceMathsTraits<channels_type>::max );
+                        }
+                    }
                 }
-                _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1); // TODO: not bit depth independent
-            }
-            else {
+            } else {
                 // Do only the selected channels. Keep track of the
                 // alpha pos, too, since that determines what
                 // we do, exactly.
@@ -227,12 +256,12 @@ public:
                 for ( int i = 0; i < j; ++i ) {
                     if ( channelFlags.testBit( i ) ) {
                         if ( i == _CSTraits::alpha_pos ) {
-                            _CSTraits::setAlpha(dst, CLAMP((totalAlpha/ factor) + offset, 0, 0xFF ),1); // TODO: not bit depth independent
+                            _CSTraits::setAlpha(dst, CLAMP((totalWeight/ factor) + offset, 0, 0xFF ),1); // TODO: not bit depth independent
                         }
                         else {
-                            typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / factor + offset;
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::min,
-                                                    KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max);
+                            compositetype v = totals[i] / factor + offset;
+                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                    KoColorSpaceMathsTraits<channels_type>::max);
                         }
                     }
 

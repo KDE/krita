@@ -50,21 +50,12 @@ void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const ch
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttributeNS( nsURI, attrName ) ) {
         const QString styleName = object.attributeNS( nsURI, attrName, QString() );
-        const KoXmlElement* style = 0;
-        bool isStyleAutoStyle = false;
-        if ( m_useStylesAutoStyles ) {
-            // When loading something from styles.xml, look into the styles.xml auto styles first
-            style = m_stylesReader.findStyleAutoStyle( styleName, family );
-            // and fallback to looking at styles(), which includes the user styles from styles.xml
-            if ( style )
-                isStyleAutoStyle = true;
-        }
-        if ( !style )
-            style = m_stylesReader.findStyle( styleName, family );
+        const KoXmlElement * style = m_stylesReader.findStyle( styleName, family, m_useStylesAutoStyles );
+
         if ( style )
-            addStyles( style, family, isStyleAutoStyle );
+            addStyles( style, family, m_useStylesAutoStyles );
         else
-            kWarning(32500) << "fillStyleStack: no style named " << styleName << " found.";
+            kWarning(32500) << "style" << styleName << "not found in" << ( m_useStylesAutoStyles ? "styles.xml" : "content.xml" );
     }
 }
 
@@ -72,17 +63,12 @@ void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* fa
 {
     Q_ASSERT( style );
     if ( !style ) return;
+
     // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) ) {
         const QString parentStyleName = style->attributeNS( KoXmlNS::style, "parent-style-name", QString() );
-        const KoXmlElement* parentStyle = 0;
-        if ( usingStylesAutoStyles ) {
-            // When loading something from styles.xml, look into the styles.xml auto styles first
-            parentStyle = m_stylesReader.findStyleAutoStyle( parentStyleName, family );
-            // and fallback to looking at styles(), which includes the user styles from styles.xml
-        }
-        if ( !parentStyle )
-            parentStyle = m_stylesReader.findStyle( parentStyleName, family );
+        const KoXmlElement* parentStyle = m_stylesReader.findStyle( parentStyleName, family, usingStylesAutoStyles );
+
         if ( parentStyle )
             addStyles( parentStyle, family, usingStylesAutoStyles );
         else

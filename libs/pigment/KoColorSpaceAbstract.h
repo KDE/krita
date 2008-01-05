@@ -213,60 +213,46 @@ public:
 
             typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
 
-            if ( channelFlags.isEmpty() ) {
-                // Do all channels
-                if(totalWeightTransparent == 0)
+            bool allChannels = channelFlags.isEmpty();
+            Q_ASSERT( allChannels or channelFlags.size() == (int)_CSTraits::channels_nb );
+            if(totalWeightTransparent == 0)
+            {
+                for(uint i = 0; i < _CSTraits::channels_nb; i++)
                 {
+                    compositetype v = totals[i] / factor + offset;
+                    if( allChannels or channelFlags.testBit( i ) )
+                    {
+                        dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                    KoColorSpaceMathsTraits<channels_type>::max );
+                    }
+                }
+            } else if(totalWeightTransparent != totalWeight ) {
+                if(totalWeight == factor)
+                {
+                    Q_INT64 a = ( totalWeight - totalWeightTransparent );
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
-                        compositetype v = totals[i] / factor + offset;
-                        dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                 KoColorSpaceMathsTraits<channels_type>::max );
+                        compositetype v = totals[i] / a + offset;
+                        if( allChannels or channelFlags.testBit( i ) )
+                        {
+                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                        KoColorSpaceMathsTraits<channels_type>::max );
+                        }
                     }
-                } else if(totalWeightTransparent != totalWeight ) {
-                    if(totalWeight == factor)
+                } else {
+                    double a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use double as it easily saturate
+                    for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
-                        Q_INT64 a = ( totalWeight - totalWeightTransparent );
-                        for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                        compositetype v = (compositetype)( totals[i] * a + offset );
+                        if( allChannels or channelFlags.testBit( i ) )
                         {
-                            compositetype v = totals[i] / a + offset;
                             dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                        KoColorSpaceMathsTraits<channels_type>::max );
-                        }
-                    } else {
-                        double a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use double as it easily saturate
-                        for(uint i = 0; i < _CSTraits::channels_nb; i++)
-                        {
-                            compositetype v = (compositetype)( totals[i] * a + offset );
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                        KoColorSpaceMathsTraits<channels_type>::max );
+                                                     KoColorSpaceMathsTraits<channels_type>::max );
                         }
                     }
-                }
-            } else {
-                // Do only the selected channels. Keep track of the
-                // alpha pos, too, since that determines what
-                // we do, exactly.
-                // XXX: This can, no doubt, be optimized in clever
-                // ways. (BSAR)
-
-                int j = channelFlags.size();
-                Q_ASSERT( j == (int)_CSTraits::channels_nb );
-
-                for ( int i = 0; i < j; ++i ) {
-                    if ( channelFlags.testBit( i ) ) {
-                        if ( i == _CSTraits::alpha_pos ) {
-                            _CSTraits::setAlpha(dst, CLAMP((totalWeight/ factor) + offset, 0, 0xFF ),1); // TODO: not bit depth independent
-                        }
-                        else {
-                            compositetype v = totals[i] / factor + offset;
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                    KoColorSpaceMathsTraits<channels_type>::max);
-                        }
-                    }
-
                 }
             }
+
         }
 };
 

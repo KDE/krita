@@ -21,7 +21,11 @@
 #define MIXING_TEST_H_
 
 #include <QtTest/QtTest>
+
+#include <KoColorSpace.h>
+
 #include <QStringList>
+#include <QVector>
 
 class MixingTest : public QObject
 {
@@ -34,6 +38,7 @@ class MixingTest : public QObject
         void testMixing2();
 
     private:
+        QVector<const KoColorSpace*> css;
         QStringList list;
 
 };

@@ -105,14 +105,14 @@ KisKSColorSpace<_TYPE_,_N_>::KisKSColorSpace(KoColorProfile *p, const QString &i
 
     for (quint32 i = 0; i < 2*_N_; i+=2) {
         parent::addChannel(new KoChannelInfo(i18n("Absorption"),
-                           i+0 * sizeof(channelSize),
+                           i+0 * channelSize,
                            KoChannelInfo::COLOR,
                            channelValueType,
                            channelSize,
                            QColor(0,0,255)));
 
         parent::addChannel(new KoChannelInfo(i18n("Scattering"),
-                           i+1 * sizeof(channelSize),
+                           i+1 * channelSize,
                            KoChannelInfo::COLOR,
                            channelValueType,
                            channelSize,
@@ -120,7 +120,7 @@ KisKSColorSpace<_TYPE_,_N_>::KisKSColorSpace(KoColorProfile *p, const QString &i
     }
 
     parent::addChannel(new KoChannelInfo(i18n("Alpha"),
-                       2*_N_ * sizeof(channelSize),
+                       2*_N_ * channelSize,
                        KoChannelInfo::ALPHA,
                        channelValueType,
                        channelSize,

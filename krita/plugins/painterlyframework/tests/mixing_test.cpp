@@ -45,11 +45,24 @@ void MixingTest::initTestCase()
 {
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
     list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.ill",  KStandardDirs::Recursive);
+
+    KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
+    foreach(QString ill6, list.filter("_6_")) {
+        css.append(f->colorSpace(KisKSLCColorSpace<float,6>::ColorSpaceId().id(),new KisIlluminantProfile(ill6)));
+        css.append(f->colorSpace(KisKSQPColorSpace<float,6>::ColorSpaceId().id(),new KisIlluminantProfile(ill6)));
+    }
+    foreach(QString ill9, list.filter("_9_")) {
+        css.append(f->colorSpace(KisKSLCColorSpace<float,9>::ColorSpaceId().id(),new KisIlluminantProfile(ill9)));
+        css.append(f->colorSpace(KisKSQPColorSpace<float,9>::ColorSpaceId().id(),new KisIlluminantProfile(ill9)));
+    }
 }
 
 void MixingTest::testMixing1()
 {
-
+    foreach(const KoColorSpace *cs, css) {
+        qDebug() << "Current Color Space:" << cs->name();
+        qDebug() << "with profile:" << cs->profile()->name();
+    }
 }
 
 void MixingTest::testMixing2()

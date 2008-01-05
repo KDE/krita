@@ -111,7 +111,7 @@ class KOTEXT_EXPORT KoTextFrameLoader
         /**
          * Load the content of a table shape.
          */
-         virtual KoShape * loadTableShape(KoTextLoadingContext& context, const KoXmlElement* frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
+         virtual KoShape * loadTableShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
 
     private:
         /// \internal d-pointer class.

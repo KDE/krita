@@ -145,7 +145,7 @@ KoShape* KoTextFrameLoader::loadTextShape(KoTextLoadingContext& context, const K
 }
 
 
-KoShape * KoTextFrameLoader::loadTableShape(KoTextLoadingContext& context, const KoXmlElement* frameElem, const KoXmlElement& textElem, QTextCursor& cursor)
+KoShape * KoTextFrameLoader::loadTableShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor)
 {
     Q_UNUSED(context);
     Q_UNUSED(frameElem);

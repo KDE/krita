@@ -27,43 +27,39 @@
  */
 
 #include <stdlib.h>
-#include <vector>
 
-#include <QPoint>
-#include <QLayout>
+#include <QButtonGroup>
 #include <QComboBox>
 #include <QCheckBox>
-#include <QButtonGroup>
-#include <QString>
-#include <QPushButton>
-#include <QLineEdit>
 #include <QHBoxLayout>
-#include <q3valuevector.h>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPoint>
+#include <QPushButton>
+#include <QString>
 
-#include <knuminput.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kis_debug.h>
 #include <kgenericfactory.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <knuminput.h>
+#include <kstandarddirs.h>
 
 #include <KoColorTransformation.h>
+#include <KoIntegerMaths.h>
+#include <KoProgressUpdater.h>
 
+#include <kis_debug.h>
 #include <kis_doc2.h>
+#include <kis_filter_registry.h>
+#include <kis_global.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_filter_registry.h>
-#include <kis_global.h>
+#include <kis_selection.h>
 #include <kis_types.h>
-#include <kis_layer.h>
-#include <kis_paint_layer.h>
-#include <kis_group_layer.h>
-#include <kis_adjustment_layer.h>
 
-#include <KoIntegerMaths.h>
 
 #include "bumpmap.h"
 
@@ -137,20 +133,18 @@ KisFilterConfiguration* KisFilterBumpmap::factoryConfiguration(const KisPaintDev
 }
 
 
-void KisFilterBumpmap::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisFilterBumpmap::process(KisFilterConstProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
-#if 0
-XXX_PORT
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    
     if (!src) return;
     if (!dst) return;
     if (!config) return;
@@ -272,7 +266,8 @@ XXX_PORT
     qint32 bm_w = bmRect.width();
     qint32 bm_x = bmRect.x();
 
-    setProgressTotalSteps(sel_h);
+    int cost = size.height();
+    int count = 0;
 
     // ------------------- Map the bumps
     qint32 yofs1, yofs2, yofs3;
@@ -292,7 +287,7 @@ XXX_PORT
 
     // ---------------------- Load initial three bumpmap scanlines
 
-    KoColorSpace * srcCs = src->colorSpace();
+    const KoColorSpace * srcCs = src->colorSpace();
     QList<KoChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
@@ -310,8 +305,8 @@ XXX_PORT
 
     qint32 xofs1, xofs2, xofs3, shade = 0, ndotl, nx, ny;
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), sel_w);
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), sel_w);
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), sel_w, srcInfo.selection());
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), sel_w, dstInfo.selection());
     KoColorTransformation* darkenTransfo = srcCs->createDarkenAdjustment(shade, config->getBool("compensate", true), compensation);
 
     for (int y = 0; y < sel_h; y++) {
@@ -326,7 +321,7 @@ XXX_PORT
 
         qint32 x = 0;
         //while (x < sel_w || cancelRequested()) {
-        while (!srcIt.isDone() && !cancelRequested()) {
+        while (!srcIt.isDone() && !( progressUpdater && progressUpdater->interrupted()) ) {
             if (srcIt.isSelected()) {
                 // Calculate surface normal from bumpmap
                 if (config->getBool("tiled", true) || row_in_bumpmap &&
@@ -401,16 +396,13 @@ XXX_PORT
 
             convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->getInt("waterlevel", 0));
         }
-
-        incProgress();
+        if(progressUpdater) progressUpdater->setProgress( (++count) / cost);
     }
     delete darkenTransfo;
 
     delete [] bm_row1;
     delete [] bm_row2;
     delete [] bm_row3;
-    setProgressDone();
-#endif
 }
 
 KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
@@ -428,6 +420,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidg
     Q_ASSERT(m_device);
 
     m_page = new BumpmapWidget(this);
+    
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 

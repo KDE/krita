@@ -55,7 +55,8 @@ public:
     bool softPageBreak() const;
 
     /// Set the number of times this row must be displayed. See the
-    /// odf spec, 8.1.2, number-rows-repeated
+    /// odf spec, 8.1.2, number-rows-repeated. The default is 1,
+    /// which means no repeat.
     void setRepeat(int repeat);
     int repeat() const;
 

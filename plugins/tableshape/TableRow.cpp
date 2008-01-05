@@ -29,7 +29,7 @@ public:
     Private()
         {
             softPageBreak = false;
-            repeated = 0;
+            repeated = 1;
             visibility = Visible;
         }
 
@@ -80,6 +80,7 @@ int TableRow::repeat() const
 {
     return d->repeated;
 }
+
 void TableRow::setVisibility(const QString & visibility)
 {
     if (visibility == "collapse") {

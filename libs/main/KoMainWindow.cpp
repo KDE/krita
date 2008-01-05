@@ -1389,22 +1389,20 @@ void KoMainWindow::slotFilePrintPreview() {
 void KoMainWindow::slotPrintAndSave() {
     if ( !rootView() )
         return;
+    KFileDialog dialog(KUrl("kfiledialog:///SaveDialog/"), QString::fromLatin1("*.pdf *.ps"), this);
+    dialog.setObjectName( "print file" );
+    dialog.setMode(KFile::File);
+    dialog.setCaption( i18n("Write PDF") );
+    if(dialog.exec()!=QDialog::Accepted)
+        return;
+    KUrl url( dialog.selectedUrl() );
+    // TODO warn when overwriting
+
     KoPrintJob *printJob = rootView()->createPrintJob();
     if (printJob == 0)
         return;
     d->applyDefaultSettings(printJob->printer());
-    KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///SaveDialog/"), QString::fromLatin1("*.pdf *.ps"), this);
-    dialog->setObjectName( "print file" );
-    dialog->setMode(KFile::File);
-    dialog->setCaption( i18n("Write PDF") );
-    if(dialog->exec()!=QDialog::Accepted) {
-        // TODO warn when overwriting
-        delete dialog;
-        delete printJob;
-        return;
-    }
-    KUrl url( dialog->selectedUrl() );
-    delete dialog;
+
     // TODO for remote files we have to first save locally and then upload.
     printJob->printer().setOutputFileName(url.toLocalFile());
     printJob->startPrinting( KoPrintJob::DeleteWhenDone );

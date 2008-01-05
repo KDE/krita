@@ -31,7 +31,7 @@
 const KoID KisFilter::CategoryAdjust = KoID("adjust_filters", i18n("Adjust"));
 const KoID KisFilter::CategoryArtistic = KoID("artistic_filters", i18n("Artistic"));
 const KoID KisFilter::CategoryBlur = KoID("blur_filters", i18n("Blur"));
-const KoID KisFilter::CategoryColors = KoID("colors_filters", i18n("Colors"));
+const KoID KisFilter::CategoryColors = KoID("color_filters", i18n("Colors"));
 const KoID KisFilter::CategoryEdgeDetection = KoID("edge_filters", i18n("Edge Detection"));
 const KoID KisFilter::CategoryEmboss = KoID("emboss_filters", i18n("Emboss"));
 const KoID KisFilter::CategoryEnhance = KoID("enhance_filters", i18n("Enhance"));

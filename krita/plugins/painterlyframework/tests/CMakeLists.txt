@@ -14,7 +14,8 @@ kde4_add_unit_test(KisIlluminantProfileTest
                    TESTNAME krita-plugins-KisIlluminantProfileTest
                    ${kis_illuminant_profile_test_SRCS})
 
-target_link_libraries(KisIlluminantProfileTest pigmentcms ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisIlluminantProfileTest
+    komain kritaimage ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
 
 ########### ChannelConverter Test ###############
 
@@ -28,7 +29,8 @@ kde4_add_unit_test(ChannelConverterTest
                    TESTNAME krita-plugins-ChannelConverterTest
                    ${channel_converter_test_SRCS})
 
-target_link_libraries(ChannelConverterTest pigmentcms ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
+target_link_libraries(ChannelConverterTest
+    komain kritaimage ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
 
 ########### KisKSColorSpace Test ###############
 
@@ -43,7 +45,8 @@ kde4_add_unit_test(KisKSColorSpaceTest
                    TESTNAME krita-plugins-KisKSColorSpaceTest
                    ${kis_ks_colorspace_test_SRCS})
 
-target_link_libraries(KisKSColorSpaceTest pigmentcms ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisKSColorSpaceTest
+    komain kritaimage ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
 
 ########### Mixing Test ###############
 
@@ -58,4 +61,5 @@ kde4_add_unit_test(MixingTest
                    TESTNAME krita-plugins-MixingTest
                    ${mixing_test_SRCS})
 
-target_link_libraries(MixingTest pigmentcms ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})
+target_link_libraries(MixingTest
+    komain kritaimage ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTTEST_LIBRARY})

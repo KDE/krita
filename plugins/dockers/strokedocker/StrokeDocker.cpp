@@ -184,7 +184,10 @@ void StrokeDocker::applyChanges()
     KoLineBorder * newBorder = new KoLineBorder(d->border);
     KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
     if( oldBorder )
+    {
         newBorder->setColor( oldBorder->color() );
+        newBorder->setLineBrush( oldBorder->lineBrush() );
+    }
 
     KoShapeBorderCommand *cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
     canvasController->canvas()->addCommand( cmd );

@@ -36,7 +36,7 @@ public:
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const;
-    static inline KoID id() { return KoID("emboss", i18n("Emboss")); }
+    static inline KoID id() { return KoID("emboss", i18n("Emboss with Variable Depth")); }
     
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;

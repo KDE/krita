@@ -92,7 +92,7 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
     Q_ASSERT(dst != 0);
     
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 embossdepth = config->getInt("depth",30);
+    quint32 embossdepth = config ?  config->getInt("depth",30) : 30;
 
     //the actual filter function from digikam. It needs a pointer to a quint8 array
     //with the actual pixel data.
@@ -104,27 +104,26 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
     int Height = size.height();
 
     int totalCost = Height / 100;
+    if(totalCost == 0) totalCost = 1;
 
     KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
     QColor color1;
     QColor color2;
-    quint8 opacity = 0;
-
-    for (int y = 0 ; ! progressUpdater->interrupted() && (y < Height) ; ++y)
+    quint8 opacity;
+    for (int y = 0 ; not(progressUpdater and progressUpdater->interrupted()) and (y < Height) ; ++y)
     {
         KisRandomConstAccessorPixel acc = src->createRandomConstAccessor(srcTopLeft.x(), srcTopLeft.y());
 
-        for (int x = 0 ; progressUpdater->interrupted() && (x < Width) ; ++x, ++it, ++dstIt)
+        for (int x = 0 ; not(progressUpdater and progressUpdater->interrupted()) and (x < Width) ; ++x, ++it, ++dstIt)
         {
             if (dstIt.isSelected()) {
 
 // FIXME: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
 
-                opacity = 0;
 
-                src->colorSpace()->toQColor(it.oldRawData(), &color1);
-                acc.moveTo(srcTopLeft.x() + x + Lim_Max(x, 1, Width), srcTopLeft.y() + y + Lim_Max(y, 1, Height) );
+                src->colorSpace()->toQColor( it.oldRawData(), &color1, &opacity);
+                 acc.moveTo(srcTopLeft.x() + x + Lim_Max(x, 1, Width), srcTopLeft.y() + y + Lim_Max(y, 1, Height) );
 
                 src->colorSpace()->toQColor(acc.oldRawData(), &color2);
 
@@ -139,9 +138,8 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
         }
         it.nextRow();
         dstIt.nextRow();
-        progressUpdater->setProgress(y / totalCost);
+        if(progressUpdater) progressUpdater->setProgress(y / totalCost);
     }
-
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

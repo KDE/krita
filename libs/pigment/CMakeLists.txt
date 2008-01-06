@@ -38,6 +38,7 @@ set(pigmentcms_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoHistogramProducer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoLcmsColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionCache.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoMultipleColorConversionTransformation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoIccColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoHdrColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfileContainer.cpp

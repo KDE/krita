@@ -17,52 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-class KoMultipleColorConversionTransformation : public KoColorConversionTransformation {
-    public:
-        KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_maxPixelSize(qMax(srcCs->pixelSize(), dstCs->pixelSize()))
-        {
-            
-        }
-        ~KoMultipleColorConversionTransformation()
-        {
-            foreach(KoColorConversionTransformation* transfo, m_transfos)
-            {
-                delete transfo;
-            }
-        }
-        void appendTransfo(KoColorConversionTransformation* transfo)
-        {
-            m_transfos.append( transfo );
-            m_maxPixelSize = qMax(m_maxPixelSize, transfo->srcColorSpace()->pixelSize());
-            m_maxPixelSize = qMax(m_maxPixelSize, transfo->dstColorSpace()->pixelSize());
-        }
-        virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
-        {
-            Q_ASSERT(m_transfos.size() > 1); // Be sure to have a more than one transformation
-            quint8 *buff1 = new quint8[m_maxPixelSize*nPixels];
-            quint8 *buff2 = 0;
-            if(m_transfos.size() > 2)
-            {
-                buff2 = new quint8[m_maxPixelSize*nPixels]; // a second buffer is needed
-            }
-            m_transfos.first()->transform( src, buff1, nPixels);
-            int lastIndex = m_transfos.size() - 2;
-            for( int i = 1; i <= lastIndex; i++)
-            {
-                m_transfos[i]->transform( buff1, buff2, nPixels);
-                quint8* tmp = buff1;
-                buff1 = buff2;
-                buff2 = tmp;
-            }
-            m_transfos.last()->transform( buff1, dst, nPixels);
-            delete buff2;
-            delete buff1;
-        }
-    private:
-        QList<KoColorConversionTransformation*> m_transfos;
-        quint32 m_maxPixelSize;
-};
-
 struct KoColorConversionSystem::Node {
     Node() : isIcc(false), isHdr(false), isInitialized(false), referenceDepth(0), isGray(false), canBeCrossed(true), colorSpaceFactory(0) {}
     void init( const KoColorSpaceFactory* _colorSpaceFactory)

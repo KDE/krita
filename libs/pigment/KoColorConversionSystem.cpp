@@ -31,6 +31,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoColorModelStandardIds.h"
 #include "KoCopyColorConversionTransformation.h"
+#include "KoMultipleColorConversionTransformation.h"
 
 #include "KoColorConversionSystem_p.h"
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@ class KoLineBorder::Private {
 public:
     QColor color;
     QPen pen;
+    QBrush brush;
 };
 
 KoLineBorder::KoLineBorder()
@@ -47,6 +48,7 @@ KoLineBorder::KoLineBorder( const KoLineBorder & other )
 {
     d->color = other.d->color;
     d->pen = other.d->pen;
+    d->brush = other.d->brush;
 }
 
 KoLineBorder::KoLineBorder(double lineWidth, const QColor &color)
@@ -68,6 +70,7 @@ KoLineBorder& KoLineBorder::operator = ( const KoLineBorder &rhs )
 
     d->pen = rhs.d->pen;
     d->color = rhs.d->color;
+    d->brush = rhs.d->brush;
 
     return *this;
 }
@@ -145,8 +148,14 @@ bool KoLineBorder::hasTransparency() {
 void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) {
     KoShape::applyConversion( painter, converter );
 
-    d->pen.setColor(d->color);
-    painter.strokePath( shape->outline(), d->pen );
+    QPen pen = d->pen;
+
+    if( d->brush.gradient() )
+        pen.setBrush( d->brush );
+    else
+        pen.setColor(d->color);
+
+    painter.strokePath( shape->outline(), pen );
 }
 
 void KoLineBorder::setCapStyle( Qt::PenCapStyle style ) {
@@ -209,3 +218,12 @@ QVector<qreal> KoLineBorder::lineDashes() const
     return d->pen.dashPattern();
 }
 
+void KoLineBorder::setLineBrush( const QBrush & brush )
+{
+    d->brush = brush;
+}
+
+QBrush KoLineBorder::lineBrush() const
+{
+    return d->brush;
+}

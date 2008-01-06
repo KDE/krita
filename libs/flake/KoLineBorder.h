@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -79,8 +79,13 @@ public:
 
     /// Returns the color
     const QColor & color() const;
-    /// Stes the color
+    /// Sets the color
     void setColor( const QColor & color );
+
+    /// Sets the strokes brush used to fill strokes of this border
+    void setLineBrush( const QBrush & brush );
+    /// Returns the strokes brush
+    QBrush lineBrush() const;
 
     virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext &context );
     virtual void borderInsets(const KoShape *shape, KoInsets &insets);

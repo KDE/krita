@@ -103,8 +103,10 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
     int Width = size.width();
     int Height = size.height();
 
-    int totalCost = Height / 100;
-    if(totalCost == 0) totalCost = 1;
+    if( progressUpdater )
+    {
+        progressUpdater->setRange(0, Height );
+    }
 
     KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
@@ -138,7 +140,7 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
         }
         it.nextRow();
         dstIt.nextRow();
-        if(progressUpdater) progressUpdater->setProgress(y / totalCost);
+        if(progressUpdater) progressUpdater->setValue(y);
     }
 }
 

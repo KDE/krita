@@ -3,7 +3,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,147 +25,111 @@
 #define KOTEXTLOADER_H
 
 #include <QObject>
-#include <KoStore.h>
-#include <KoXmlReader.h>
 
-//#include "KoText.h"
 #include "kotext_export.h"
 
-//class KWDocument;
-//class KWTextFrameSet;
-//class KWFrameSet;
-//class KWFrame;
-//class KWPageSettings;
-//class KWPageManager;
-//class KWTextFrameSet;
-
-//class KoParagraphStyle;
-//class KoCharacterStyle;
-//class KoStore;
-class KoTextLoadingContext;
-class KoStyleManager;
-class KoShape;
-class KoImageCollection;
-class KoImageData;
-class KoTextAnchor;
+class KoXmlElement;
+class KoShapeLoadingContext;
 
 class QTextCursor;
-//class QColor;
 
 /**
- * The KoTextLoader loads content from OpenDocument XML to the
- * scribe text-engine using QTextCursor objects.
- *
- * This class that has a lot of the OpenDocument (ODF) loading code
- * for e.g. KWord.
+ * The KoTextLoader loads is use to load text for one and only one textdocument or shape
+ * to the scribe text-engine using QTextCursor objects. So if you have two shape 2 different
+ * KoTextLoader are used for that. Also if you have a frame with text inside a text a new
+ * KoTextLoader is used.
  */
 class KOTEXT_EXPORT KoTextLoader : public QObject
 {
-        Q_OBJECT
-    public:
+    Q_OBJECT
+public:
 
-        /**
-        * Constructor.
-        * \param stylemanager the \a KoStyleManager instance the loader
-        * should use.
-        */
-        explicit KoTextLoader(KoStyleManager* stylemanager);
+    /**
+    * Constructor.
+    *
+    * @param context The context the KoTextLoader is called in
+    */
+    explicit KoTextLoader( KoShapeLoadingContext & context );
 
-        /**
-        * Destructor.
-        */
-        virtual ~KoTextLoader();
+    /**
+    * Destructor.
+    */
+    ~KoTextLoader();
 
-        /**
-        * \return the \a KoStyleManager instance this loader uses.
-        */
-        KoStyleManager* styleManager() const;
+    /**
+    * Load the body from the \p element into the \p cursor .
+    *
+    * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a TextShape
+    * instance likes to load an ODF element.
+    */
+    void loadBody( const KoXmlElement& element, QTextCursor& cursor );
 
-        /**
-        * Load the list of styles.
-        */
-        virtual void loadStyles(KoTextLoadingContext& context, QList<KoXmlElement*> styleElements);
+Q_SIGNALS:
 
-        /**
-        * Load all styles. This includes the auto-styles and the custom-styles.
-        */
-        virtual void loadAllStyles(KoTextLoadingContext& context);
+    /**
+    * This signal is emitted during loading with a percentage within 1-100 range
+    * \param percent the progress as a percentage
+    */
+    void sigProgress(int percent);
 
-        /**
-        * Load the body from the \p bodyElem into the \p cursor .
-        *
-        * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a TextShape
-        * instance likes to load an ODF element.
-        */
-        virtual void loadBody(KoTextLoadingContext& context, const KoXmlElement& bodyElem, QTextCursor& cursor);
+private:
 
-        /**
-        * Load the paragraph from the \p paragraphElem into the \p cursor .
-        */
-        virtual void loadParagraph(KoTextLoadingContext& context, const KoXmlElement& paragraphElem, QTextCursor& cursor);
+    /**
+    * Load the paragraph from the \p element into the \p cursor .
+    */
+    void loadParagraph( const KoXmlElement& element, QTextCursor& cursor );
 
-        /**
-        * Load the heading from the \p headingElem into the \p cursor .
-        */
-        virtual void loadHeading(KoTextLoadingContext& context, const KoXmlElement& headingElem, QTextCursor& cursor);
+    /**
+    * Load the heading from the \p element into the \p cursor .
+    */
+    void loadHeading( const KoXmlElement& element, QTextCursor& cursor );
 
-        /**
-        * Load the list from the \p listElem into the \p cursor .
-        */
-        virtual void loadList(KoTextLoadingContext& context, const KoXmlElement& listElem, QTextCursor& cursor);
+    /**
+    * Load the list from the \p element into the \p cursor .
+    */
+    void loadList( const KoXmlElement& element, QTextCursor& cursor );
 
-        /**
-        * Load the section from the \p sectionElem into the \p cursor .
-        */
-        virtual void loadSection(KoTextLoadingContext& context, const KoXmlElement& sectionElem, QTextCursor& cursor);
+    /**
+    * Load the section from the \p element into the \p cursor .
+    */
+    void loadSection( const KoXmlElement& element, QTextCursor& cursor );
 
-        /**
-        * Load the span from the \p spanElem into the \p cursor .
-        */
-        virtual void loadSpan(KoTextLoadingContext& context, const KoXmlElement& spanElem, QTextCursor& cursor, bool* stripLeadingSpace);
+    /**
+    * Load the span from the \p element into the \p cursor .
+    */
+    void loadSpan( const KoXmlElement& element, QTextCursor& cursor, bool* stripLeadingSpace );
 
-        /**
-        * Load the frame element \p frameElem into the \p cursor .
-        *
-        * This method does normaly something like at the example above with an
-        * own implementation of \a KoTextFrameLoader to handle frames.
-        * \code
-        * KoTextFrameLoader frameloader(this);
-        * frameloader.loadFrame(context, parent, cursor);
-        * \endcode
-        */
-        virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
+    /**
+    * Load the frame element \p element into the \p cursor .
+    *
+    * This method does normaly something like at the example above with an
+    * own implementation of \a KoTextFrameLoader to handle frames.
+    * \code
+    * KoTextFrameLoader frameloader(this);
+    * frameloader.loadFrame(context, parent, cursor);
+    * \endcode
+    */
+    void loadFrame( const KoXmlElement& element, QTextCursor& cursor );
 
-    Q_SIGNALS:
+    /**
+    * This is called in loadBody before reading the body starts.
+    */
+    void startBody(int total);
 
-        /**
-        * This signal is emitted during loading with a percentage within 1-100 range
-        * \param percent the progress as a percentage
-        */
-        void sigProgress(int percent);
+    /**
+    * This is called in loadBody on each item that is read within the body.
+    */
+    void processBody();
 
-    protected:
+    /**
+    * This is called in loadBody once the body was read.
+    */
+    void endBody();
 
-        /**
-        * This is called in loadBody before reading the body starts.
-        */
-        virtual void startBody(int total);
-
-        /**
-        * This is called in loadBody on each item that is read within the body.
-        */
-        virtual void processBody();
-
-        /**
-        * This is called in loadBody once the body was read.
-        */
-        virtual void endBody();
-
-    private:
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif

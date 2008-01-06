@@ -3,7 +3,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -73,14 +73,19 @@ void KoTextSharedLoadingData::loadOdfStyles( KoOasisLoadingContext & context, Ko
 {
     // add paragraph styles
     addParagraphStyles( context, context.stylesReader().autoStyles( "paragraph" ).values(), styleManager );
-    addParagraphStyles( context, context.stylesReader().autoStyles( "paragraph", true ).values(), styleManager );
+    //addParagraphStyles( context, context.stylesReader().autoStyles( "paragraph", true ).values(), styleManager );
     // only add styles of office:styles to the style manager
     addParagraphStyles( context, context.stylesReader().customStyles( "paragraph" ).values(), styleManager, insertOfficeStyles );
 
     addCharacterStyles( context, context.stylesReader().autoStyles( "text" ).values(), styleManager );
-    addCharacterStyles( context, context.stylesReader().autoStyles( "text", true ).values(), styleManager );
+    //addCharacterStyles( context, context.stylesReader().autoStyles( "text", true ).values(), styleManager );
     // only add styles of office:styles to the style manager
     addCharacterStyles( context, context.stylesReader().customStyles( "text" ).values(), styleManager, insertOfficeStyles );
+
+    addListStyles( context );
+    addOutlineStyles( context );
+
+    kDebug(32500) << "paragraph styles" << d->paragraphStyles.count() << "character styles" << d->characterStyles.count();
 }
 
 void KoTextSharedLoadingData::addParagraphStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements,

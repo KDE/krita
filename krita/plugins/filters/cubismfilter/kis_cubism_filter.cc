@@ -90,7 +90,7 @@ void KisCubismFilter::process(KisFilterConstProcessingInformation srcInfo,
     Q_ASSERT(configuration);
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 tileSize = configuration->getInt("tileSize");
+    quint32 tileSize = configuration->getInt("tileSize", 1);
     quint32 tileSaturation = configuration->getInt("tileSaturation");
 
     const KoColorSpace * cs = src->colorSpace();

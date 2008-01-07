@@ -21,6 +21,8 @@
 #include "../MusicShape.h"
 
 #include "../core/Note.h"
+#include "../core/Chord.h"
+#include "../core/VoiceBar.h"
 
 #include <klocale.h>
 
@@ -33,11 +35,13 @@ ToggleTiedNoteCommand::ToggleTiedNoteCommand(MusicShape* shape, MusicCore::Note*
 void ToggleTiedNoteCommand::redo()
 {
     m_note->setStartTie(!m_note->isStartTie());
+    m_note->chord()->voiceBar()->updateAccidentals();
     m_shape->update();
 }
 
 void ToggleTiedNoteCommand::undo()
 {
     m_note->setStartTie(!m_note->isStartTie());
+    m_note->chord()->voiceBar()->updateAccidentals();
     m_shape->update();
 }

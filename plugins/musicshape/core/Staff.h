@@ -107,6 +107,8 @@ public:
     TimeSignature* lastTimeSignatureChange(int bar);
     TimeSignature* lastTimeSignatureChange(Bar* bar);
 
+    void updateAccidentals(int fromBar = 0);
+    void updateAccidentals(Bar* fromBar);
 public slots:
     /**
      * Set the spacing between this staff and the staff above it.

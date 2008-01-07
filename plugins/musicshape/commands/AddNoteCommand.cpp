@@ -20,6 +20,7 @@
 
 #include "../core/Note.h"
 #include "../core/Chord.h"
+#include "../core/VoiceBar.h"
 #include "../MusicShape.h"
 
 #include <klocale.h>
@@ -41,7 +42,7 @@ AddNoteCommand::AddNoteCommand(MusicShape* shape, Chord* chord, Staff* staff, Du
         setText(i18n("Set chord duration"));
     } else {
         setText(i18n("Add note"));
-        m_note = new Note(staff, pitch, accidentals);
+        m_note = new Note(m_chord, staff, pitch, accidentals);
     }
 }
 
@@ -52,6 +53,7 @@ void AddNoteCommand::redo()
     if (m_note) {
         m_chord->addNote(m_note);
     }
+    m_chord->voiceBar()->updateAccidentals();
     m_shape->engrave();
     m_shape->update();
 
@@ -64,6 +66,7 @@ void AddNoteCommand::undo()
     if (m_note) {
         m_chord->removeNote(m_note, false);
     }
+    m_chord->voiceBar()->updateAccidentals();
     m_shape->engrave();
     m_shape->update();
 }

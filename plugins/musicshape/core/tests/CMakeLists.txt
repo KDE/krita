@@ -20,6 +20,8 @@ set(SheetTest_test_SRCS
     ../VoiceElement.cpp
     ../KeySignature.cpp
     ../TimeSignature.cpp
+    ../Note.cpp
+    ../Chord.cpp
 )
 
 kde4_add_unit_test(SheetTest TESTNAME shapes-musicshape-SheetTest ${SheetTest_test_SRCS})
@@ -44,6 +46,8 @@ set(VoiceBarTest_test_SRCS
     ../Clef.cpp
     ../KeySignature.cpp
     ../TimeSignature.cpp
+    ../Note.cpp
+    ../Chord.cpp
 )
 
 kde4_add_unit_test(VoiceBarTest TESTNAME shapes-musicshape-VoiceBarTest ${VoiceBarTest_test_SRCS})

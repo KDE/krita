@@ -21,6 +21,9 @@
 #include "../core/StaffElement.h"
 #include "../core/Clef.h"
 #include "../core/Bar.h"
+#include "../core/KeySignature.h"
+#include "../core/Staff.h"
+
 #include "../MusicShape.h"
 
 using namespace MusicCore;
@@ -38,6 +41,9 @@ RemoveStaffElementCommand::RemoveStaffElementCommand(MusicShape* shape, StaffEle
 void RemoveStaffElementCommand::redo()
 {
     m_bar->removeStaffElement(m_element, false);
+    if (dynamic_cast<KeySignature*>(m_element)) {
+        m_element->staff()->updateAccidentals(m_bar);
+    }
     m_shape->engrave();
     m_shape->update();
 }
@@ -45,6 +51,9 @@ void RemoveStaffElementCommand::redo()
 void RemoveStaffElementCommand::undo()
 {
     m_bar->addStaffElement(m_element, m_index);
+    if (dynamic_cast<KeySignature*>(m_element)) {
+        m_element->staff()->updateAccidentals(m_bar);
+    }
     m_shape->engrave();
     m_shape->update();
 }

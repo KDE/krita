@@ -21,6 +21,8 @@
 #include "../MusicShape.h"
 
 #include "../core/Note.h"
+#include "../core/Chord.h"
+#include "../core/VoiceBar.h"
 
 #include <klocale.h>
 
@@ -33,11 +35,13 @@ SetAccidentalsCommand::SetAccidentalsCommand(MusicShape* shape, MusicCore::Note*
 void SetAccidentalsCommand::redo()
 {
     m_note->setAccidentals(m_newAccidentals);
+    m_note->chord()->voiceBar()->updateAccidentals();
     m_shape->update();
 }
 
 void SetAccidentalsCommand::undo()
 {
     m_note->setAccidentals(m_oldAccidentals);
+    m_note->chord()->voiceBar()->updateAccidentals();
     m_shape->update();
 }

@@ -24,6 +24,7 @@
 namespace MusicCore {
 
 class Staff;
+class Chord;
 
 /**
  * This class represents one note in a chord. You should not add the same note instance to more than one chord, nor
@@ -40,7 +41,7 @@ public:
      * @param pitch the pitch of the new note
      * @param accidentals the accidentals of the new note
      */
-    Note(Staff* staff, int pitch, int accidentals = 0);
+    Note(Chord* chord, Staff* staff, int pitch, int accidentals = 0);
 
     /**
      * Destructor.
@@ -51,9 +52,11 @@ public:
      * Returns the staff for this note.
      */
     Staff* staff();
-    
+
     void setStaff(Staff* staff);
 
+    Chord* chord();
+    
     /**
      * Returns the pitch for this note.
      */
@@ -65,7 +68,10 @@ public:
     int accidentals() const;
 
     void setAccidentals(int accidentals);
-    
+
+    bool drawAccidentals() const;
+    void setDrawAccidentals(bool drawAccidentals);
+
     bool isStartTie() const;
     void setStartTie(bool startTie);
 private:

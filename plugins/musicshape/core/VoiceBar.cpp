@@ -19,6 +19,10 @@
 #include "VoiceBar.h"
 #include "VoiceElement.h"
 #include "Bar.h"
+#include "Chord.h"
+#include "Note.h"
+#include "KeySignature.h"
+#include "Staff.h"
 
 #include <QtCore/QList>
 
@@ -68,6 +72,7 @@ void VoiceBar::addElement(VoiceElement* element)
     Q_ASSERT( element );
     d->elements.append(element);
     element->setVoiceBar(this);
+    updateAccidentals();
 }
 
 void VoiceBar::insertElement(VoiceElement* element, int before)
@@ -76,6 +81,7 @@ void VoiceBar::insertElement(VoiceElement* element, int before)
     Q_ASSERT( before >= 0 && before <= elementCount() );
     d->elements.insert(before, element);
     element->setVoiceBar(this);
+    updateAccidentals();
 }
 
 void VoiceBar::insertElement(VoiceElement* element, VoiceElement* before)
@@ -94,6 +100,7 @@ void VoiceBar::removeElement(int index, bool deleteElement)
     if (deleteElement) {
         delete e;
     }
+    updateAccidentals();
 }
 
 void VoiceBar::removeElement(VoiceElement* element, bool deleteElement)
@@ -102,6 +109,37 @@ void VoiceBar::removeElement(VoiceElement* element, bool deleteElement)
     int index = d->elements.indexOf(element);
     Q_ASSERT( index != -1 );
     removeElement(index, deleteElement);
+}
+
+void VoiceBar::updateAccidentals()
+{
+    // this isn't the best way I think, but just implement a O(N^2) algorithm for now :)
+
+    for (int e = 0; e < elementCount(); e++) {
+        Chord* c = dynamic_cast<Chord*>(element(e));
+        if (!c) continue;
+        for (int nid = 0; nid < c->noteCount(); nid++) {
+            Note* note = c->note(nid);
+            Staff* s = note->staff();
+            
+            KeySignature* ks = s->lastKeySignatureChange(bar());
+            int curAccidentals = 0;
+            if (ks) curAccidentals = ks->accidentals(note->pitch());
+            // next check the bar for the last previous note in the same voice with the same pitch
+            for (int eid = 0; eid < e; eid++) {
+                Chord* c2 = dynamic_cast<Chord*>(element(eid));
+                if (!c2) continue;
+                for (int nid2 = 0; nid2 < c2->noteCount(); nid2++) {
+                    Note* n = c2->note(nid2);
+                    if (n->staff() != s) continue;
+                    if (note->pitch() == n->pitch()) {
+                        curAccidentals = n->accidentals();
+                    }
+                }
+            }
+            note->setDrawAccidentals(curAccidentals != note->accidentals());
+        }
+    }
 }
 
 } // namespace MusicCore

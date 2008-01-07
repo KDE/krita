@@ -43,6 +43,7 @@ public:
     virtual void undo();
 private:
     MusicShape* m_shape;
+    MusicCore::Staff* m_staff;
     QList<QPair<MusicCore::Bar*, MusicCore::KeySignature*> > m_newKeySignatures, m_oldKeySignatures;
 };
 

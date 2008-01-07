@@ -103,6 +103,8 @@ public:
      * @param deleteElement should the element not only be removed but also deleted
      */
     void removeElement(VoiceElement* element, bool deleteElement = true);
+    
+    void updateAccidentals();
 private:
     class Private;
     Private * const d;

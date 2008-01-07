@@ -77,14 +77,13 @@ Chord::Chord(Duration duration, int dots) : VoiceElement(), d(new Private)
     d->dots = dots;
     d->stemLength = calcStemLength(duration);
     d->stemDirection = StemUp;
-    
+
     int baseLength = durationToTicks(duration);
     int length = baseLength;
     for (int i = 0; i < dots; i++) {
         length += baseLength >> (i+1);
     }
     setLength(length);
-    setWidth(7 + (3 * dots + (dots ? 2 : 0)));
 }
 
 Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
@@ -101,7 +100,6 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
     }
     setLength(length);
     setStaff(staff);
-    setWidth(7 + (3 * dots + (dots ? 2 : 0)));
 }
 
 Chord::~Chord()
@@ -112,24 +110,34 @@ Chord::~Chord()
 double Chord::width() const
 {
     double w = 7;
-    
+
     int lastPitch = INT_MIN;
     bool hasConflict = false;
+    bool haveAccidentals = false;
+
     foreach (Note* n, d->notes) {
         int pitch = n->pitch();
         if (pitch == lastPitch+1) {
             hasConflict = true;
-            break;
         }
         lastPitch = pitch;
+
+        if (n->drawAccidentals()) {
+            haveAccidentals = true;
+        }
     }
-    
+
     if (hasConflict) w += 6;
-    
+
     if (d->dots) {
         w += 2 + 3*d->dots;
     }
-    
+
+    if (haveAccidentals) {
+        w += 10;
+    }
+    const_cast<Chord*>(this)->setBeatline(haveAccidentals ? 10.0 : 0.0);
+
     return w;
 }
 
@@ -183,7 +191,7 @@ Note* Chord::note(int index) const
 
 Note* Chord::addNote(Staff* staff, int pitch, int accidentals)
 {
-    Note *n = new Note(staff, pitch, accidentals);
+    Note *n = new Note(this, staff, pitch, accidentals);
     addNote(n);
     return n;
 }
@@ -299,14 +307,14 @@ double Chord::topNoteY() const
     if (d->notes.size() == 0) {
         return staff()->lineSpacing() * 2 + staff()->top();
     }
-    
+
     double top = 1e9;
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
-    
+
     foreach (Note* n, d->notes) {
         int line = 10;
         if (clef) line = clef->pitchToLine(n->pitch());
-        
+
         Staff* s = n->staff();
         double y = s->top() + line * s->lineSpacing() / 2;
         if (y < top) top = y;
@@ -319,14 +327,14 @@ double Chord::bottomNoteY() const
     if (d->notes.size() == 0) {
         return staff()->lineSpacing() * 2 + staff()->top();
     }
-    
+
     double bottom = -1e9;
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
-    
+
     foreach (Note* n, d->notes) {
         int line = 10;
         if (clef) line = clef->pitchToLine(n->pitch());
-        
+
         Staff* s = n->staff();
         double y = s->top() + line * s->lineSpacing() / 2;
         if (y > bottom) bottom = y;
@@ -337,16 +345,16 @@ double Chord::bottomNoteY() const
 double Chord::stemEndY(bool interpolateBeams) const
 {
     if (d->notes.size() == 0) return staff()->center();
-    
+
     if (beamType(0) == BeamContinue && interpolateBeams) {
         // in the middle of a beam, interpolate stem length from beam
         double sx = beamStart(0)->stemX(), ex = beamEnd(0)->stemX();
         double sy = beamStart(0)->stemEndY(), ey = beamEnd(0)->stemEndY();
         double dydx = (ey-sy) / (ex-sx);
-        
+
         return (stemX() - sx) * dydx + sy;
     }
-    
+
     Staff* topStaff = NULL;
     Staff* bottomStaff = NULL;
     double top = 1e9, bottom = -1e9;
@@ -355,7 +363,7 @@ double Chord::stemEndY(bool interpolateBeams) const
     foreach (Note* n, d->notes) {
         int line = 10;
         if (clef) line = clef->pitchToLine(n->pitch());
-        
+
         Staff* s = n->staff();
         double y = s->top() + line * s->lineSpacing() / 2;
         if (y > bottom) {
@@ -367,10 +375,10 @@ double Chord::stemEndY(bool interpolateBeams) const
             topStaff = s;
         }
     }
-    
+
     Q_ASSERT( topStaff );
     Q_ASSERT( bottomStaff );
-    
+
     if (stemDirection() == StemUp) {
         return top - topStaff->lineSpacing() * stemLength();
     } else {
@@ -383,7 +391,7 @@ double Chord::beamDirection() const
     if (beamType(0) == BeamStart || beamType(0) == BeamEnd || beamType(0) == BeamContinue) {
         double sx = beamStart(0)->stemX(), ex = beamEnd(0)->stemX();
         double sy = beamStart(0)->stemEndY(), ey = beamEnd(0)->stemEndY();
-        double dydx = (ey-sy) / (ex-sx);        
+        double dydx = (ey-sy) / (ex-sx);
         return dydx;
     } else {
         return 0;
@@ -405,7 +413,7 @@ StemDirection Chord::desiredStemDirection() const
     VoiceBar* vb = voiceBar();
     Bar* bar = vb->bar();
     int barIdx = bar->sheet()->indexOfBar(bar);
-    
+
     int topLine = 0, bottomLine = 0;
     double topy = 1e9, bottomy = -1e9;
     for (int n = 0; n < noteCount(); n++) {
@@ -421,10 +429,10 @@ StemDirection Chord::desiredStemDirection() const
         if (ypos > bottomy) {
             bottomy = ypos;
             bottomLine = line;
-        }        
+        }
     }
     double center = (bottomLine + topLine) * 0.5;
-    return (center < 4 ? StemDown : StemUp);    
+    return (center < 4 ? StemDown : StemUp);
 }
 
 double Chord::stemLength() const
@@ -451,7 +459,7 @@ int Chord::beamCount() const
         case SixteenthNote:             return 2;
         case EighthNote:                return 1;
         default:                        return 0;
-    }            
+    }
 }
 
 const Chord* Chord::beamStart(int index) const

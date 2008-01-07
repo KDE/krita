@@ -33,7 +33,7 @@ using namespace MusicCore;
 typedef QPair<Bar*, KeySignature*> BarKeySignaturePair;
 
 SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int bar, RegionType type, Staff* staff, int accidentals)
-    : m_shape(shape)
+    : m_shape(shape), m_staff(staff)
 {
     setText(i18n("Change key signature"));
     Sheet* sheet = shape->sheet();
@@ -80,7 +80,7 @@ SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int bar, Regio
 }
 
 SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int startBar, int endBar, MusicCore::Staff* staff, int accidentals)
-    : m_shape(shape)
+    : m_shape(shape), m_staff(staff)
 {
     setText(i18n("Change key signature"));
     Sheet* sheet = shape->sheet();
@@ -148,6 +148,11 @@ void SetKeySignatureCommand::redo()
     foreach (BarKeySignaturePair p, m_newKeySignatures) {
         p.first->addStaffElement(p.second);
     }
+    if (m_staff) {
+        m_staff->updateAccidentals();
+    } else {
+        m_shape->sheet()->updateAccidentals();
+    }
     m_shape->engrave();
     m_shape->update();
 }
@@ -159,6 +164,11 @@ void SetKeySignatureCommand::undo()
     }
     foreach (BarKeySignaturePair p, m_oldKeySignatures) {
         p.first->addStaffElement(p.second);
+    }
+    if (m_staff) {
+        m_staff->updateAccidentals();
+    } else {
+        m_shape->sheet()->updateAccidentals();
     }
     m_shape->engrave();
     m_shape->update();

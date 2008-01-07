@@ -19,6 +19,7 @@
 #include "RemoveNoteCommand.h"
 #include "../core/Chord.h"
 #include "../core/Note.h"
+#include "../core/VoiceBar.h"
 #include "../MusicShape.h"
 
 #include <klocale.h>
@@ -34,6 +35,7 @@ RemoveNoteCommand::RemoveNoteCommand(MusicShape* shape, Chord* chord, Note* note
 void RemoveNoteCommand::redo()
 {
     m_chord->removeNote(m_note, false);
+    m_chord->voiceBar()->updateAccidentals();
     m_shape->engrave();
     m_shape->update();
 }
@@ -41,6 +43,7 @@ void RemoveNoteCommand::redo()
 void RemoveNoteCommand::undo()
 {
     m_chord->addNote(m_note);
+    m_chord->voiceBar()->updateAccidentals();
     m_shape->engrave();
     m_shape->update();
 }

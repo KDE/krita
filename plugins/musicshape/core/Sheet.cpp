@@ -244,6 +244,15 @@ int Sheet::staffSystemCount()
     return d->staffSystems.size();
 }
 
+void Sheet::updateAccidentals()
+{
+    foreach (Part* part, d->parts) {
+        for (int i = 0; i < part->staffCount(); i++) {
+            part->staff(i)->updateAccidentals();
+        }
+    }
+}
+
 } // namespace MusicCore
 
 #include "Sheet.moc"

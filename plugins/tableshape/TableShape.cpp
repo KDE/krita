@@ -48,11 +48,13 @@
 #include <KoOdfStylesReader.h>
 #include <KoTextShapeData.h>
 
+#include "Table.h"
+
 TableShape::TableShape()
-    : m_table(0)
+    : m_table( 0 )
     , m_textDocument( new QTextDocument() )
 {
-    
+    m_table = new Table( m_textDocument, this );
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
 }
@@ -60,7 +62,7 @@ TableShape::TableShape()
 TableShape::~TableShape() {
 }
 
-void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
+void TableShape::paintComponent( QPainter& painter, const KoViewConverter& converter )
 {
     Q_UNUSED( painter );
     Q_UNUSED( converter );

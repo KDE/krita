@@ -24,6 +24,11 @@
 struct DDEData;
 
 class QTextDocument;
+class TableShape;
+class TableColumn;
+class TableRow;
+class TableCell;
+
 /**
  * A table can contain any number of rows. In a table, all cells in a columns
  * share the same left edge position. Cells can be merged with other cells,
@@ -33,6 +38,9 @@ class QTextDocument;
  * share this QTextDocument.
  *
  * It is possible to place any shape in a table: this may be trick ODF-wise, though.
+ *
+ * It is possible for TableShapes to share the same Table instance, for instance,
+ * for pagination.
  */
 class Table : public QTextTable {
 
@@ -40,7 +48,7 @@ class Table : public QTextTable {
 
 public:
     
-    Table( QTextDocument * document );
+    Table( QTextDocument * document, TableShape * shape );
 
     virtual ~Table();
 
@@ -56,6 +64,52 @@ public:
      */
      QVector<DDEData*> ddeConnections() const;
 
+
+     /**
+      * Return a vector with all columns in this table. Columns do not contain cells: rows
+      * contain cells. Columns contain default styles for cells.
+      */
+     QVector<TableColumn*> columns() const;
+
+     /**
+      * Create a new column at the specified point. If the table is already populated,
+      * create empty cells in all rows at the specified point.
+      */
+     TableColumn * createColumn(int pos);
+
+     /**
+      * Remove the column at the specified position. The cells in all rows in this
+      * table at pos will be removed. This may possibly uncover covered cells.
+      */
+     void removeColumn(int pos);
+
+     /**
+      * return a vector with all rows in this table. Rows contain cells.
+      */
+     QVector<TableRow*> rows() const;
+
+     /**
+      * Create a new row at the specified point. This will cause a relayout of all
+      * rows below the new row (athough that might be optimized by just shifting
+      * the position of all shapes in those rows).
+      */
+      TableRow * createRow(int pos);
+
+      /**
+       * Remove the row at the specified point. All cells and shapes in this row
+       * will be removed. All cells merges cells in this row covered will be uncovered.
+       * All rows below this row will shift upwards.
+       */
+      void removeRow(int pos);
+      
+      /**
+       * Return the cell at the specified row, col position, or 0 if the position is
+       * out of range.
+       */
+      TableCell * cell(int row, int col) const;
+
+      
+      
 private:
     
     class Private;

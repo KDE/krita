@@ -44,7 +44,8 @@ public:
     TableCell(const TableCell & rhs);
 
     /**
-     * @return the shape that contains the contents for this cell.
+     * @return the shape that contains the contents for this cell. May be 0
+     * if no shape exists for this cell; the cell is empty in that case.
      */
     KoShape * shape() const;
 
@@ -57,6 +58,17 @@ public:
      * @return the newly created shape, or 0 if no shape could be created.
      */
     KoShape * createShape( const QString & shapeId );
+
+    /**
+     * @return true if this cell is covered by another (merged) cell. See 
+     */ 
+    bool covered() const;
+
+    /**
+     * set the cell to covered -- this cell is covered by another cell and its
+     * contents do not show up
+     */
+    void setCovered(bool covered);
 
 signals:
 

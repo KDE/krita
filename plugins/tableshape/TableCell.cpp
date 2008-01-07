@@ -29,15 +29,16 @@ public:
     Private()
         {
             shape = 0;
+            covered = false;
         }
         
     ~Private()
         {
-            delete shape;
             shape = 0;
         }
 
     KoShape * shape;
+    bool covered;
 
 };
 
@@ -77,5 +78,14 @@ KoShape * TableCell::createShape( const QString & shapeId )
     return d->shape;
 }
 
+bool TableCell::covered() const
+{
+    return d->covered;
+}
+
+void TableCell::setCovered(bool covered)
+{
+    d->covered = covered;
+}
 
 #include "TableCell.moc"

@@ -22,19 +22,23 @@
 #include "DDEData.h"
 #include "TableRow.h"
 #include "TableColumn.h"
+#include "TableShape.h"
 
 class Table::Private
 {
 public:
+    
     QVector<TableColumn*> columns;
     QVector<TableRow*> rows;
     QVector<DDEData*> ddeConnections;
+    TableShape * tableShape;
 };
 
-Table::Table( QTextDocument * document )
+Table::Table( QTextDocument * document, TableShape * tableShape )
     : QTextTable( document )
     , d (new Private() )
 {
+    d->tableShape = tableShape;
 }
 
 
@@ -42,7 +46,6 @@ Table::~Table()
 {
     delete d;
 }
-
 
 Table::Table(const Table & rhs)
     : QTextTable( rhs.document() )

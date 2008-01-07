@@ -22,24 +22,24 @@
 #ifndef TABLESHAPE_H
 #define TABLESHAPE_H
 
-#include <KoShape.h>
+#include <KoShapeContainer.h>
 
 #define TABLESHAPEID "TableShapeID"
 
 
 class QTextDocument;
 class QTextTable;
-
 class KoTextShapeData;
+class Table;
 
-class TableShape : public KoShape
+class TableShape : public KoShapeContainer
 {
 public:
     explicit TableShape();
     virtual ~TableShape();
 
     // reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void paintComponent( QPainter& painter, const KoViewConverter& converter );
     // reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented
@@ -48,11 +48,9 @@ public:
 
 private:
 
-    QTextTable     * m_table;
+    Table * m_table;
     QTextDocument  * m_textDocument;
     KoTextShapeData * m_textShapeData;
-    class TableCellFrame;
-    QVector< QVector<TableCellFrame*> > m_tableFrames;
     
 };
 

@@ -51,6 +51,8 @@ void KisWdgFastColorTransfer::setConfiguration(KisFilterConfiguration* config)
 KisFilterConfiguration* KisWdgFastColorTransfer::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
-    config->setProperty("filename", this->widget()->fileNameURLRequester->url() );
+    QString url = this->widget()->fileNameURLRequester->url().url();
+    dbgPlugins << "Filename : " << this->widget()->fileNameURLRequester->url() << " = " << url;
+    config->setProperty("filename", url );
     return config;
 }

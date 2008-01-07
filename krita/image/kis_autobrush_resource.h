@@ -41,6 +41,7 @@ class KRITAIMAGE_EXPORT KisAutobrushShape {
          * @return the alpha value at the position (x,y)
          */
         virtual quint8 valueAt(double x, double y) =0;
+        virtual void toXML(QDomDocument& , QDomElement&) const;
     protected:
         double m_w, m_h;
         double m_fh, m_fv;
@@ -54,6 +55,7 @@ class KRITAIMAGE_EXPORT KisAutobrushCircleShape : public KisAutobrushShape {
 		virtual ~KisAutobrushCircleShape(){}
         KisAutobrushCircleShape(double w, double h, double fh, double fv);
         virtual quint8 valueAt(double x, double y);
+        virtual void toXML(QDomDocument& , QDomElement&) const;
     private:
         double norme(double a, double b)
         {
@@ -73,6 +75,7 @@ class KRITAIMAGE_EXPORT KisAutobrushRectShape : public KisAutobrushShape {
 		virtual ~KisAutobrushRectShape() {}
         KisAutobrushRectShape(double w, double h, double fh, double fv);
         virtual quint8 valueAt(double x, double y);
+        virtual void toXML(QDomDocument& , QDomElement&) const;
     private:
         double m_xcenter, m_ycenter, m_c;
 };
@@ -86,6 +89,7 @@ class KRITAIMAGE_EXPORT KisAutobrushResource : public KisBrush
         virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     public:
         virtual bool load() { return false; }
+        virtual void toXML(QDomDocument& , QDomElement&) const;
     private:
         struct Private;
         Private* const d;

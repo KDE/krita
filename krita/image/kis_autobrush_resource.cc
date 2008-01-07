@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 #include "kis_autobrush_resource.h"
 #include <kis_debug.h>
 #include <math.h>
+
+#include <QDomElement>
 
 #include <KoColor.h>
 
@@ -40,6 +42,15 @@ QImage KisAutobrushShape::createBrush()
     }
     return img;
 }
+
+void KisAutobrushShape::toXML(QDomDocument& , QDomElement& e) const
+{
+    e.setAttribute( "autobrush_width", m_w );
+    e.setAttribute( "autobrush_height", m_h );
+    e.setAttribute( "autobrush_hfade", m_fh );
+    e.setAttribute( "autobrush_vfade", m_fv );
+}
+
 
 KisAutobrushCircleShape::KisAutobrushCircleShape(double w, double h, double fh, double fv)
     : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
@@ -89,6 +100,13 @@ quint8 KisAutobrushCircleShape::valueAt(double x, double y)
     }
 }
 
+void KisAutobrushCircleShape::toXML(QDomDocument& d, QDomElement& e) const
+{
+    KisAutobrushShape::toXML(d,e);
+    e.setAttribute( "autobrush_type", "circle" );
+}
+
+
 KisAutobrushRectShape::KisAutobrushRectShape(double w, double h, double fh, double fv)
     : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
         m_xcenter ( w / 2.0 ),
@@ -112,6 +130,12 @@ quint8 KisAutobrushRectShape::valueAt(double x, double y)
     else {
         return 0;
     }
+}
+
+void KisAutobrushRectShape::toXML(QDomDocument& d, QDomElement& e) const
+{
+    KisAutobrushShape::toXML(d,e);
+    e.setAttribute( "autobrush_type", "rect" );
 }
 
 struct KisAutobrushResource::Private {
@@ -188,4 +212,11 @@ void KisAutobrushResource::generateMask(KisPaintDeviceSP dst, KisBrush::Coloring
     }
 
 
+}
+
+void KisAutobrushResource::toXML(QDomDocument& doc, QDomElement& e) const
+{
+    KisBrush::toXML(doc,e);
+    e.setAttribute( "type", "autobrush" );
+    d->shape->toXML(doc, e);
 }

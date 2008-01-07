@@ -48,11 +48,6 @@ public:
 
 private:
 
-    void createExampleData();
-    void initTableFrames();
-    void recalculateCellPositions();
-    double recalculateCellHeight(int row, int column);
-    
     QTextTable     * m_table;
     QTextDocument  * m_textDocument;
     KoTextShapeData * m_textShapeData;

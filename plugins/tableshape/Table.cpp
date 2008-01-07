@@ -18,12 +18,16 @@
  */
 
 #include "Table.h"
+
 #include "DDEData.h"
+#include "TableRow.h"
+#include "TableColumn.h"
 
 class Table::Private
 {
 public:
-
+    QVector<TableColumn*> columns;
+    QVector<TableRow*> rows;
     QVector<DDEData*> ddeConnections;
 };
 
@@ -31,7 +35,6 @@ Table::Table( QTextDocument * document )
     : QTextTable( document )
     , d (new Private() )
 {
-
 }
 
 

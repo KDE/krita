@@ -48,18 +48,6 @@
 #include <KoOdfStylesReader.h>
 #include <KoTextShapeData.h>
 
-/**
- * The size of a layouted cell in Postscript points. We're doing row-first,
- * so, cell heights change with content, but not width.
- */
-struct TableShape::TableCellFrame {
-    double width;    // width as set by the document/user
-    double height;   // height as determined by the number of lines of text
-    double spacing; // space between cells
-    double padding; // space between contents and cell border
-};
-
-
 TableShape::TableShape()
     : m_table(0)
     , m_textDocument( new QTextDocument() )
@@ -143,80 +131,5 @@ bool TableShape::loadOdf( const KoXmlElement    &tableElement,
     return true;
 }
 
-void TableShape::createExampleData()
-{
-    const int ROWS = 10;
-    const int COLUMNS = 3;
-    QTextTableFormat tableFormat;
-    QTextCursor cursor(m_textDocument);
-    cursor.movePosition(QTextCursor::Start);
-    m_table = cursor.insertTable(ROWS, COLUMNS, tableFormat);
-    
-    QTextTableCell curCell = m_table->cellAt(0,0);
-    
-    qDebug() << "Is the first cursor pos in the table also the first cursor pos in the document? " << cursor.position() << ", " << curCell.firstCursorPosition().position();
-    
-    cursor = curCell.firstCursorPosition();
-    QTextCharFormat charFormat;
-    charFormat.setFont(QFont("Times", 10, QFont::Bold));
-    cursor.insertText("Hello World");
-    cursor = curCell.firstCursorPosition();
-    cursor.select(QTextCursor::LineUnderCursor);
-    cursor.setCharFormat(charFormat);
 
-    charFormat.setFont(QFont("Helvetica", 20, QFont::Normal, true)); // italic
-    curCell = m_table->cellAt(0,2);
-    cursor = curCell.firstCursorPosition();
-    cursor.insertText("Bonjour Monde!");
-    cursor = curCell.firstCursorPosition();
-    cursor.select(QTextCursor::LineUnderCursor);
-    cursor.setCharFormat(charFormat);
-    
-    initTableFrames();
-}
 
-void TableShape::recalculateCellPositions()
-{
-    if (!m_table) return;
-    
-    for (int row = 0; row < m_table->rows(); ++row) {
-        double maxHeight = 0;
-        for (int column = 0; column < m_table->columns(); ++column) {
-            double height = recalculateCellHeight(row, column);
-            if (height > maxHeight) maxHeight = height;
-        }
-        for (int column = 0; column < m_table->columns(); ++column) {
-            
-        }
-    }
-}
-
-double TableShape::recalculateCellHeight(int row, int column)
-{
-    Q_UNUSED( row );
-    Q_UNUSED( column );
-
-    // FIXME
-    return 10.0;
-}
-
-void TableShape::initTableFrames()
-{
-    if (!m_table) return;
-
-    QSize shapeSize = QSize();
-    float widthInPoints = shapeSize.width() / m_table->columns();
-    m_tableFrames.resize( m_table->rows() );
-    
-    for (int row = 0; row < m_table->rows(); ++row) {
-        m_tableFrames[row].resize(m_table->columns());
-        for (int column = 0; column < m_table->columns(); ++column) {
-            TableCellFrame * frame = new TableCellFrame();
-            frame->height = 0;
-            frame->width = widthInPoints;
-            frame->spacing = 0;
-            frame->padding = 1;
-            m_tableFrames[row][column] = frame;
-        }
-    }
-}

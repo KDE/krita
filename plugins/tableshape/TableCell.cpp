@@ -21,6 +21,7 @@
 
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeContainer.h>
 
 class TableCell::Private
 {
@@ -50,6 +51,7 @@ TableCell::TableCell()
 
 TableCell::~TableCell()
 {
+    d->shape->parent()->removeChild(d->shape);
     delete d;
 }
 

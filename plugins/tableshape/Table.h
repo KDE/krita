@@ -62,14 +62,14 @@ public:
     /**
      * Return all dde connections defined for this table.
      */
-     QVector<DDEData*> ddeConnections() const;
+     QList<DDEData*> ddeConnections() const;
 
 
      /**
       * Return a vector with all columns in this table. Columns do not contain cells: rows
       * contain cells. Columns contain default styles for cells.
       */
-     QVector<TableColumn*> columns() const;
+     QList<TableColumn*> columns() const;
 
      /**
       * Create a new column at the specified point. If the table is already populated,
@@ -86,7 +86,7 @@ public:
      /**
       * return a vector with all rows in this table. Rows contain cells.
       */
-     QVector<TableRow*> rows() const;
+     QList<TableRow*> rows() const;
 
      /**
       * Create a new row at the specified point. This will cause a relayout of all
@@ -106,7 +106,7 @@ public:
        * Return the cell at the specified row, col position, or 0 if the position is
        * out of range.
        */
-      TableCell * cell(int row, int col) const;
+      TableCell * cellAt(int row, int col) const;
 
       
       

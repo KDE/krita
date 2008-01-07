@@ -23,14 +23,15 @@
 #include "TableRow.h"
 #include "TableColumn.h"
 #include "TableShape.h"
+#include "TableCell.h"
 
 class Table::Private
 {
 public:
     
-    QVector<TableColumn*> columns;
-    QVector<TableRow*> rows;
-    QVector<DDEData*> ddeConnections;
+    QList<TableColumn*> columns;
+    QList<TableRow*> rows;
+    QList<DDEData*> ddeConnections;
     TableShape * tableShape;
 };
 
@@ -59,9 +60,77 @@ void Table::addDDEConnection(DDEData * data)
     d->ddeConnections.append(data);
 }
 
-QVector<DDEData*> Table::ddeConnections() const
+QList<DDEData*> Table::ddeConnections() const
 {
     return d->ddeConnections;
+}
+
+QList<TableColumn*> Table::columns() const
+{
+    return d->columns;
+}
+
+TableColumn * Table::createColumn(int pos)
+{
+    QTextTable::insertColumns(pos - 1, 1);
+    
+    TableColumn * column = new TableColumn();
+    if (pos > d->columns.size() || pos < 0) pos = d->columns.size();
+    d->columns.insert(pos, column);
+    if (d->rows.size() > 0) {
+        foreach (TableRow * row, d->rows) {
+            TableCell * cell = row->createCell(pos);
+            KoShape * shape = cell->createShape("TextShapeID");
+            shape->setParent(d->tableShape);
+        }
+    }
+    
+    return column;
+}
+
+void Table::removeColumn(int pos)
+{
+    if (pos > d->columns.size() || pos < 0) return;
+    if (d->rows.size() > 0) {
+        foreach(TableRow * row, d->rows) {
+            row->removeCell(pos);
+        }
+    }
+    // and qt takes care of the document
+    QTextTable::removeColumns(pos - 1, 1);
+}
+
+QList<TableRow*> Table::rows() const
+{
+    return d->rows;
+}
+
+TableRow * Table::createRow(int pos)
+{
+    if (pos > d->rows.size() || pos < 0 ) pos = d->rows.size();
+    
+    QTextTable::insertRows(pos -1, 1);
+    TableRow * row = new TableRow(d->columns.size());
+    d->rows.insert(pos, row);
+
+    return row;
+}
+
+void Table::removeRow(int pos)
+{
+    if (pos > d->rows.size() || pos < 0) return;
+    TableRow * row = d->rows.takeAt(pos);
+    delete row;
+    QTextTable::removeRows(pos - 1, 1);
+    
+}
+
+TableCell * Table::cellAt(int row, int col) const
+{
+    if (row < 0 || row >= d->rows.size()) return 0;
+    if (col < 0 || col >= d->columns.size()) return 0;
+
+    return d->rows[row]->cellAt(col);
 }
 
 #include "Table.moc"

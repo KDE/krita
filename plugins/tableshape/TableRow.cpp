@@ -51,6 +51,9 @@ TableRow::TableRow( int columns )
 
 TableRow::~TableRow()
 {
+    foreach (TableCell * cell, d->cells) {
+        delete cell;
+    }
     delete d;
 }
 
@@ -59,6 +62,34 @@ TableRow::TableRow(const TableRow & rhs)
     , d( new Private() )
 {
     Q_UNUSED(rhs);
+}
+
+
+TableCell * TableRow::createCell( int pos )
+{
+   if ( pos > d->cells.size() || pos < 0 ) {
+        pos = d->cells.size();
+   }
+   TableCell * cell = new TableCell();
+   d->cells.insert( pos, cell );
+   return cell;
+}
+
+TableCell * TableRow::cellAt( int pos )
+{
+    if (d->cells.isEmpty()) return 0;
+    if (pos >= d->cells.size() || pos < 0) return 0;
+    
+    return d->cells[pos];
+}
+
+void TableRow::removeCell( int pos )
+{
+   if (d->cells.isEmpty()) return;
+   if (pos >= d->cells.size() || pos < 0) return;
+
+   TableCell * cell = d->cells.takeAt(pos);
+   delete cell;
 }
 
 void TableRow::setSoftPageBreak(bool on)

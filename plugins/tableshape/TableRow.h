@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+class TableCell;
+
 /**
  * A table row contains a row of cells. A row has a certain height,
  * which is the greatest hight of those cells in a row that are not merged
@@ -48,6 +50,25 @@ public:
     virtual ~TableRow();
 
     TableRow(const TableRow & rhs);
+
+    /**
+     * create an empty cell in the specified position. The cell does
+     * not have a shape and no contents. If no position is specified,
+     * the cell is appended.
+     */
+    TableCell * createCell( int pos = -1);
+
+    /**
+     * Get a pointer to the cell at the specified position. If the position
+     * is outside the range or the row is empty, return 0.
+     */
+    TableCell * cellAt( int pos );
+
+    /**
+     * remove the cell at the specified position. If the position
+     * is outside the range or the row is empty, do nothing.
+     */
+    void removeCell( int pos );
 
     /// Set a soft page break -- if true, a page break is desired
     /// before the current row. (2.3.1, text:soft-page-break)

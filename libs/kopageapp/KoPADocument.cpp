@@ -110,7 +110,9 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
         return false;
     }
 
+    loadingContext.setUseStylesAutoStyles( true );
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
+    loadingContext.setUseStylesAutoStyles( false );
     d->pages = loadOdfPages( body, paContext );
     if ( d->pages.size() > 1 ) {
         setActionEnabled( KoPAView::ActionDeletePage, false );

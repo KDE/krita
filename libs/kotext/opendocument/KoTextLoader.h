@@ -38,6 +38,9 @@ class QTextCursor;
  * to the scribe text-engine using QTextCursor objects. So if you have two shape 2 different
  * KoTextLoader are used for that. Also if you have a frame with text inside a text a new
  * KoTextLoader is used.
+ * If you want to use the KoTextLoader for text that needs styles from styles.xml. e.g.
+ * test shapes on master pages, you need to set KoOasisLoadingContext::setUseStylesAutoStyles( true ).
+ * Don't forget to unset it if´you later want to load text that needs content.xml.
  */
 class KOTEXT_EXPORT KoTextLoader : public QObject
 {

@@ -34,6 +34,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoShape.h>
+#include <KoOasisLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoImageData.h>
 #include <KoTextAnchor.h>
@@ -67,6 +68,9 @@ class KoTextLoader::Private
     public:
         KoShapeLoadingContext & context;
         KoTextSharedLoadingData * textSharedData;
+        // store it here so that you don't need to get it all the time from 
+        // the KoOasisLoadingContext.
+        bool stylesDotXml;
 
         int bodyProgressTotal;
         int bodyProgressValue;
@@ -79,6 +83,7 @@ class KoTextLoader::Private
         explicit Private( KoShapeLoadingContext & context )
         : context( context )
         , textSharedData( 0 )
+        , stylesDotXml( context.koLoadingContext().useStylesAutoStyles() )
         , bodyProgressTotal( 0 )
         , bodyProgressValue( 0 )
         , lastElapsed( 0 )
@@ -443,7 +448,7 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
     // TODO use the default style name a default value?
     QString styleName = element.attributeNS( KoXmlNS::text, "style-name", QString() );
 
-    KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName );
+    KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName, d->stylesDotXml );
 
     if ( paragraphStyle ) {
         QTextBlock block = cursor.block();
@@ -659,7 +664,7 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     QTextBlock block = cursor.block();
 
     // Set the paragraph-style on the block
-    KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName );
+    KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName, d->stylesDotXml );
     if( paragraphStyle ) {
         paragraphStyle->applyStyle( block );
     }
@@ -1278,7 +1283,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
 
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
-            KoCharacterStyle * characterStyle = d->textSharedData->characterStyle( styleName );
+            KoCharacterStyle * characterStyle = d->textSharedData->characterStyle( styleName, d->stylesDotXml );
             if ( characterStyle ) {
                 characterStyle->applyStyle( &cursor );
             }

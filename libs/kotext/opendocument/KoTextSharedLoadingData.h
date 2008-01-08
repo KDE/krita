@@ -65,9 +65,10 @@ public:
      * The name is the style:name given in the file
      *
      * @param name The name of the style to get
+     * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
      * @return The paragraph style for the given name or 0 if not found
      */
-    KoParagraphStyle * paragraphStyle( const QString &name );
+    KoParagraphStyle * paragraphStyle( const QString &name, bool stylesDotXml );
 
     /**
      * Get the character style for the given name
@@ -75,22 +76,27 @@ public:
      * The name is the style:name given in the file
      *
      * @param name The name of the style to get
+     * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
      * @return The character style for the given name or 0 if not found
      */
-    KoCharacterStyle * characterStyle( const QString &name );
+    KoCharacterStyle * characterStyle( const QString &name, bool stylesDotXml );
 
     KoListStyle * listStyle( const QString &name );
 
     KoListLevelProperties outlineLevel( int level, const KoListLevelProperties& defaultprops = KoListLevelProperties() );
 
 private:
+    enum StyleType {
+        ContextDotXml = 1,
+        StylesDotXml = 2
+    };
     // helper functions for loading of paragraph styles
-    void addParagraphStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements,
+    void addParagraphStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
                              KoStyleManager *styleManager, bool insertOfficeStyles = false );
     QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements );
 
     // helper functions for loading of character styles
-    void addCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements,
+    void addCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
                              KoStyleManager *styleManager, bool insertOfficeStyles = false );
     QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements );
 

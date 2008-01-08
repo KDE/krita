@@ -214,8 +214,8 @@ QList<QPointF> KoEnhancedPathCommand::pointsFromParameters()
     QList<QPointF> points;
     QPointF p;
 
-    uint paramCount = m_parameters.count();
-    for( uint i = 0; i < paramCount; i+=2 )
+    int paramCount = m_parameters.count();
+    for( int i = 0; i < paramCount - 1; i+=2 )
     {
         p.setX( m_parameters[i]->evaluate() );
         p.setY( m_parameters[i+1]->evaluate() );

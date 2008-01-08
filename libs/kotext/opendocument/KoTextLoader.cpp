@@ -1344,44 +1344,41 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
         {
             loadFrame( ts, cursor );
         }
-        else if ( isTextNS && ( localName == "date" || localName == "time" ) )
-        {
-#if 0 // commented out for now
+        else if ( isTextNS && ( localName == "date" || localName == "time" ) ) {
             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
             if ( layout ) {
                 KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
                 if ( textObjectManager ) {
                     KoVariableManager *varManager = textObjectManager->variableManager();
-                    if (varManager) {
-                        if (KoInlineObjectRegistry::instance()->contains("date")) {
-                            KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->value("date");
-                            if (dateFactory) {
-                                QString dataStyle = ts.attributeNS(KoXmlNS::style, "data-style-name");
-                                QString dateFormat = "";
-                                if (!dataStyle.isEmpty()) {
-                                    if (context.stylesReader().dataFormats().contains(dataStyle)) {
-                                        KoOdfNumberStyles::NumericStyleFormat dataFormat = context.stylesReader().dataFormats().value(dataStyle);
-                                        dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
-                                    }
+                    if ( varManager ) {
+                        KoInlineObjectFactory *dateFactory = KoInlineObjectRegistry::instance()->value( "date" );
+                        if ( dateFactory ) {
+                            QString dataStyle = ts.attributeNS( KoXmlNS::style, "data-style-name" );
+                            QString dateFormat = "";
+                            if ( !dataStyle.isEmpty() ) {
+                                if ( d->context.koLoadingContext().stylesReader().dataFormats().contains( dataStyle ) ) {
+                                    KoOdfNumberStyles::NumericStyleFormat dataFormat = d->context.koLoadingContext().stylesReader().dataFormats().value( dataStyle );
+                                    dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
                                 }
-                                KoProperties dateProperties;
-                                dateProperties.setProperty("fixed", QVariant(ts.attributeNS(KoXmlNS::text, "fixed") == "true"));
-                                dateProperties.setProperty("time", ts.attributeNS(KoXmlNS::text, localName + "-value"));
-                                dateProperties.setProperty("definition", dateFormat);
-                                dateProperties.setProperty("adjust", ts.attributeNS(KoXmlNS::text, localName + "-adjust"));
-                                if (dateFormat.isEmpty())
-                                    dateProperties.setProperty("displayType", localName);
-                                else
-                                    dateProperties.setProperty("displayType", "custom");
-
-                                KoInlineObject *dateObject = dateFactory->createInlineObject(&dateProperties);
-                                textObjectManager->insertInlineObject(cursor, dateObject);
                             }
+                            KoProperties dateProperties;
+                            dateProperties.setProperty( "fixed", QVariant( ts.attributeNS( KoXmlNS::text, "fixed" ) == "true"));
+                            dateProperties.setProperty( "time", ts.attributeNS( KoXmlNS::text, localName + "-value" ) );
+                            dateProperties.setProperty( "definition", dateFormat );
+                            dateProperties.setProperty( "adjust", ts.attributeNS( KoXmlNS::text, localName + "-adjust" ) );
+                            if ( dateFormat.isEmpty() ) {
+                                dateProperties.setProperty( "displayType", localName );
+                            }
+                            else {
+                                dateProperties.setProperty( "displayType", "custom" );
+                            }
+
+                            KoInlineObject *dateObject = dateFactory->createInlineObject( &dateProperties );
+                            textObjectManager->insertInlineObject( cursor, dateObject );
                         }
                     }
                 }
             }
-#endif
         }
         else if ( isTextNS && (localName == "page-count" || localName == "page-number") ) 
         {

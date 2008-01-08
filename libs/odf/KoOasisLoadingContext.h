@@ -94,7 +94,7 @@ public:
     /// Set to true while loading headers and footers, to remember to use auto styles
     /// from styles.xml
     void setUseStylesAutoStyles( bool useStylesAutoStyles ) { m_useStylesAutoStyles = useStylesAutoStyles; }
-    //bool useStylesAutoStyles() const { return m_useStylesAutoStyles; }
+    bool useStylesAutoStyles() const { return m_useStylesAutoStyles; }
 
 private:
     void parseMeta() const;

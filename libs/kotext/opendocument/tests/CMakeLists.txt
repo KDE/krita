@@ -6,6 +6,6 @@ include_directories( ${KOTEXT_INCLUDES} )
 
 set(TestLoading_test_SRCS TestLoading.cpp)
 kde4_add_unit_test(TestLoading TESTNAME kotext-odf-TestLoading  ${TestLoading_test_SRCS})
-target_link_libraries(TestLoading kwordprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestLoading kotext ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############

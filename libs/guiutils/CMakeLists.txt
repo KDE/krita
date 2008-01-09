@@ -63,6 +63,7 @@ set(koguiutils_LIB_SRCS
    KoProgressBar.cpp
    KoPositionSelector.cpp
    KoResourceItemChooser.cpp
+    KoCheckerBoardPainter.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS

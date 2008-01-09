@@ -43,13 +43,16 @@ QTextDocument *KoDocumentSectionToolTip::createDocument( const QModelIndex &inde
     QString name = index.data( Qt::DisplayRole ).toString();
     Model::PropertyList properties = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
     QString rows;
+    const QString row = QString( "<tr><td align=\"right\">%1:</td><td align=\"left\">%2</td></tr>" );
+    QString value;
     for( int i = 0, n = properties.count(); i < n; ++i )
     {
-        const QString row = QString( "<tr><td align=\"right\">%1</td><td align=\"left\">%2</td></tr>" );
-        const QString value = properties[i].isMutable
-                      ? ( properties[i].state.toBool() ? i18n( "Yes" ) : i18n( "No" ) )
-                      : properties[i].state.toString();
-        rows.append( row.arg( i18n( "%1:", properties[i].name ) ).arg( value ) );
+        if( properties[i].isMutable )
+            value = properties[i].state.toBool() ? i18n( "Yes" ) : i18n( "No" );
+        else
+            value = properties[i].state.toString();
+
+        rows.append( row.arg( properties[i].name ).arg( value ) );
     }
 
     rows = QString( "<table>%1</table>" ).arg( rows );

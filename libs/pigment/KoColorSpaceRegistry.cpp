@@ -20,6 +20,8 @@
 
 #include "KoColorSpaceRegistry.h"
 
+#include <QHash>
+
 #include <QStringList>
 #include <QDir>
 
@@ -46,14 +48,16 @@
 #include "colorspaces/KoRgbU8ColorSpace.h"
 
 struct KoColorSpaceRegistry::Private {
-    QMap<QString, KoColorProfile * > profileMap;
-    QMap<QString, const KoColorSpace * > csMap;
+    QHash<QString, KoColorProfile * > profileMap;
+    QHash<QString, const KoColorSpace * > csMap;
     typedef QList<KisPaintDeviceAction *> PaintActionList;
-    QMap<QString, PaintActionList> paintDevActionMap;
+    QHash<QString, PaintActionList> paintDevActionMap;
     const KoColorSpace *alphaCs;
     KoColorConversionSystem *colorConversionSystem;
     KoColorConversionCache* colorConversionCache;
     static KoColorSpaceRegistry *singleton;
+    const KoColorSpace *rgbU8sRGB;
+    const KoColorSpace *lab16sLAB;
 };
 
 KoColorSpaceRegistry *KoColorSpaceRegistry::Private::singleton = 0;
@@ -71,6 +75,8 @@ KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 
 void KoColorSpaceRegistry::init()
 {
+    d->rgbU8sRGB = 0;
+    d->lab16sLAB = 0;
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
     // prepare a list of the profiles
@@ -141,7 +147,6 @@ void KoColorSpaceRegistry::init()
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
     configExtensions.group = "koffice";
     KoPluginLoader::instance()->load("KOffice/ColorSpaceExtension","[X-Pigment-MinVersion] <= 0", configExtensions);
-
 }
 
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
@@ -187,7 +192,7 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFac
 {
     QList<const KoColorProfile *>  profiles;
 
-    QMap<QString, KoColorProfile * >::Iterator it;
+    QHash<QString, KoColorProfile * >::Iterator it;
     for (it = d->profileMap.begin(); it != d->profileMap.end(); ++it) {
         KoColorProfile *  profile = it.value();
         if(csf->profileIsCompatible(profile))
@@ -311,11 +316,27 @@ const KoColorSpace * KoColorSpaceRegistry::alpha8()
 
 const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 {
+    if( profileName == "" )
+    {
+        if(not d->rgbU8sRGB)
+        {
+            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
+        }
+        return d->rgbU8sRGB;
+    }
     return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
 }
 
 const KoColorSpace * KoColorSpaceRegistry::rgb8(const KoColorProfile * profile)
 {
+    if(profile == 0 )
+    {
+        if(not d->rgbU8sRGB)
+        {
+            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
+        }
+        return d->rgbU8sRGB;
+    }
     return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
 }
 
@@ -331,11 +352,27 @@ const KoColorSpace * KoColorSpaceRegistry::rgb16(const KoColorProfile * profile)
 
 const KoColorSpace * KoColorSpaceRegistry::lab16(const QString &profileName)
 {
+    if( profileName == "" )
+    {
+        if(not d->lab16sLAB)
+        {
+            d->lab16sLAB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
+        }
+        return d->lab16sLAB;
+    }
     return colorSpace(KoLabColorSpace::colorSpaceId(), profileName);
 }
 
 const KoColorSpace * KoColorSpaceRegistry::lab16(const KoColorProfile * profile)
 {
+    if( profile == 0 )
+    {
+        if(not d->lab16sLAB)
+        {
+            d->lab16sLAB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
+        }
+        return d->lab16sLAB;
+    }
     return colorSpace(KoLabColorSpace::colorSpaceId(), profile);
 }
 

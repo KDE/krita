@@ -22,7 +22,6 @@
 #define KOCOLORSPACEFACTORYREGISTRY_H
 
 #include <QObject>
-#include <QMap>
 #include <QList>
 #include <QString>
 #include <pigment_export.h>

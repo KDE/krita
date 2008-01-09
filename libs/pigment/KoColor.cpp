@@ -47,7 +47,7 @@ public:
 KoColor::KoColor()
     : d(new Private())
 {
-    d->colorSpace = KoColorSpaceRegistry::instance()->colorSpace("LABA",0);
+    d->colorSpace = KoColorSpaceRegistry::instance()->lab16(0);
     d->data = new quint8[d->colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
     d->colorSpace->setAlpha(d->data, OPACITY_OPAQUE, 1);

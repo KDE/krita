@@ -1,15 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Painterly Color Spaces (LC and QP conversions, 32- and 16- Bits Float channels)
-Name[el]=Χρωματικό μοντέλο KS Linear και QP (32 bit δεκαδικοί)
-Name[es]=Modelos KS Lineal y QP Color (32-bit flotante)
-Name[et]=KS Linear ja QP värvimudelid (32-bitine murdarv)
-Name[gl]=Modelos de Cores KS Linear e QP (32-bit Vírgula flutuante)
-Name[km]=លីនេអ៊ែរ KS និង​ម៉ូដែល​ពណ៌​ QP (៣២ ប៊ីត ទសភាគ)
-Name[pt]=Modelos de Cores QP e Linear KS (v. flutuante de 32-bits)
-Name[pt_BR]=Modelos de Cor KS Linear e QP (Flutuante de 32-bits)
-Name[sv]=KS linjär- och QP-färgmodeller (32-bitars flyttal)
-Name[zh_TW]=KS 線性與 QP 色彩模型 (32-bit 浮點數)
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritakscolorspacesplugin

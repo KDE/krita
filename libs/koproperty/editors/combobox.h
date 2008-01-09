@@ -51,6 +51,7 @@ class KOPROPERTY_EXPORT ComboBox : public Widget
 
 		KComboBox *m_edit;
 		bool m_setValueEnabled : 1;
+		bool m_extraValueAllowed;
 };
 
 }

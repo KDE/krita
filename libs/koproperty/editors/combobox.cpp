@@ -43,8 +43,22 @@ ComboBox::ComboBox(Property *property, QWidget *parent)
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);
+	m_extraValueAllowed = false;
+	
+	if (property->option("extraValueAllowed").toBool())
+	{
+		m_extraValueAllowed = true;
+	}
+	
+	if (m_extraValueAllowed)
+	{
+		m_edit->setEditable(true);
+	}
+	else
+	{
+		m_edit->setEditable(false);
+	}
 
-	m_edit->setEditable(false);
 	m_edit->setInsertPolicy(QComboBox::NoInsert);
 	m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
 	m_edit->setAutoCompletion(true);
@@ -71,8 +85,13 @@ ComboBox::value() const
 		return QVariant();
 	}
 	const int idx = m_edit->currentIndex();
-	if (idx<0 || idx>=(int)property()->listData()->keys.count())
-		return QVariant();
+	kDebug(30007) <<"**********" <<idx;
+	if (idx<0 || idx>=(int)property()->listData()->keys.count() || property()->listData()->names[idx] != m_edit->currentText().trimmed())
+	{
+		if (!m_extraValueAllowed || m_edit->currentText().isEmpty())
+			return QVariant();
+		return QVariant(m_edit->currentText().trimmed());//trimmed 4 safety
+	}
 	return QVariant( property()->listData()->keys[idx] );
 //	if(property()->listData() && property()->listData()->contains(m_edit->currentText()))
 //		return (*(property()->valueList()))[m_edit->currentText()];
@@ -94,9 +113,15 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 		m_edit->setCurrentIndex(idx);
 	}
 	else {
-		if (idx<0) {
+		if (idx<0) 
+		{	
+			if (m_extraValueAllowed)
+			{
+				m_edit->setCurrentIndex(-1);
+				m_edit->setEditText(value.toString());
+			}
 			kopropertywarn << "ComboBox::setValue(): NO SUCH KEY '" << value.toString() 
-				<< "' (property '" << property()->name() << "')" << endl;
+					<< "' (property '" << property()->name() << "')" << endl;
 		} else {
 			QStringList list;
 			for (int i=0; i<m_edit->count(); i++)
@@ -127,6 +152,12 @@ ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 		const int idx = property()->listData()->keys.indexOf( value );
 		if (idx>=0)
 			txt = property()->listData()->names[ idx ];
+		else if (m_edit->isEditable())
+			txt = m_edit->currentText();
+	}
+	else if (m_edit->isEditable())
+	{
+		txt = m_edit->currentText();
 	}
 
 	Widget::drawViewer(p, cg, r, txt); //keyForValue(value));

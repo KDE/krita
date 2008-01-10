@@ -54,6 +54,7 @@ class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
     public:
         KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeConfigurationManager, KisBookmarkedConfigurationManager* coloringConfigurationManager);
         virtual ~KisDynamicOpSettings();
+        virtual KisPaintOpSettings* clone() const;
         virtual QWidget *widget() const { return m_optionsWidget; }
         /// @return a brush with the current shapes, coloring and program
         KisDynamicBrush* createBrush(KisPainter *painter) const;

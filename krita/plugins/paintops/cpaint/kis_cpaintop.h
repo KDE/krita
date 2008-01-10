@@ -44,6 +44,7 @@ public:
     virtual QString id() const { return "paintCPaint"; }
     virtual QString name() const { return i18n("Chinese Brush"); }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettings *settings(KisImageSP image);
 
 private:
 
@@ -59,7 +60,9 @@ Q_OBJECT
 public:
     KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*> m_brushes);
     virtual ~KisCPaintOpSettings() {}
-
+    
+    virtual KisPaintOpSettings* clone() const;
+    
     int brush() const;
     int ink() const;
     int water() const;

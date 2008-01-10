@@ -164,7 +164,7 @@ void KisBrushOpSettings::fromXML(const QDomElement& elt)
             if( m_customOpacity )
                 m_opacityCurve[i] = kpc.getDouble( QString("OpacityCurve%0").arg(i), i / 255.0 );
             if( m_customDarken )
-                m_opacityCurve[i] = kpc.getDouble( QString("DarkenCurve%0").arg(i), i / 255.0 );
+                m_darkenCurve[i] = kpc.getDouble( QString("DarkenCurve%0").arg(i), i / 255.0 );
         }
     }
 }
@@ -194,6 +194,22 @@ void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     kpc.toXML( doc, paramsElt);
 }
 
+
+KisPaintOpSettings* KisBrushOpSettings::clone() const
+{
+    KisBrushOpSettings* s = new KisBrushOpSettings(0);
+    s->m_size->setChecked( m_size->isChecked() );
+    s->m_opacity->setChecked( m_opacity->isChecked() );
+    s->m_darken->setChecked( m_darken->isChecked() );
+    s->m_customSize = m_customSize;
+    s->m_customOpacity = m_customOpacity;
+    s->m_customDarken = m_customDarken;
+    memcpy(s->m_sizeCurve, m_sizeCurve, 256*sizeof(double));
+    memcpy(s->m_opacityCurve, m_opacityCurve, 256*sizeof(double));
+    memcpy(s->m_darkenCurve, m_darkenCurve, 256*sizeof(double));
+    return s;
+}
+
 KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
 {
     if (inputDevice == KoInputDevice::mouse()) {
@@ -203,6 +219,12 @@ KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputD
         return new KisBrushOpSettings(parent);
     }
 }
+
+KisPaintOpSettings* KisBrushOpFactory::settings(KisImageSP image)
+{
+    return new KisBrushOpSettings(0);
+}
+
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
     : KisPaintOp(painter)

@@ -99,6 +99,12 @@ KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInput
     return new KisCPaintOpSettings( parent,  m_brushes);
 }
 
+KisPaintOpSettings *KisCPaintOpFactory::settings(KisImageSP image)
+{
+    Q_UNUSED( image );
+    return new KisCPaintOpSettings( 0,  m_brushes);
+}
+
 //=================
 
 KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush*> brushes)
@@ -115,6 +121,14 @@ KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush
     connect( m_options->bnInk, SIGNAL( clicked() ), this, SLOT( resetCurrentBrush() ) );
 }
 
+KisPaintOpSettings* KisCPaintOpSettings::clone() const
+{
+    KisCPaintOpSettings* s = new KisCPaintOpSettings(0, m_brushes);
+    s->m_options->intInk->setValue( ink() );
+    s->m_options->intWater->setValue( water() );
+    s->m_options->cmbBrush->setCurrentIndex( brush() );
+    return s;
+}
 
 int KisCPaintOpSettings::brush() const
 {

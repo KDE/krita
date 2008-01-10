@@ -92,12 +92,13 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     splitCoordinate(pos.x() - hotSpot.x(), &x, &xFraction);
     splitCoordinate(pos.y() - hotSpot.y(), &y, &yFraction);
 
-    coloringsrc->colorize( m_dab );
-    m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);
-
     QRect dabRect = QRect(0, 0, m_brush->maskWidth(m_scaleX, m_rotate),
                           m_brush->maskHeight(m_scaleY, m_rotate));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+    
+    coloringsrc->colorize( m_dab, dabRect );
+    m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);
+
 
 
     if ( painter()->bounds().isValid() ) {

@@ -266,6 +266,12 @@ KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInp
     return 0;
 }
 
+KisPaintOpSettings* KisPaintOpFactory::settings(KisImageSP image)
+{
+    return 0;
+}
+
+
 QString KisPaintOpFactory::pixmap()
 {
     return "";

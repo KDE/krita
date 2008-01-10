@@ -158,6 +158,7 @@ public:
      * device.
      */
     virtual KisPaintOpSettings* settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettings* settings(KisImageSP image);
 
 };
 #endif // KIS_PAINTOP_H_

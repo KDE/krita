@@ -42,12 +42,14 @@ public:
     virtual QString name() const { return i18n("Duplicate"); }
     virtual QString pixmap() { return "krita-duplicate.png"; }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettings* settings(KisImageSP image);
 };
 
 class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
     public:
         KisDuplicateOpSettings(QWidget* parent, KisImageSP image);
         virtual ~KisDuplicateOpSettings();
+        virtual KisPaintOpSettings* clone() const;
         virtual QWidget *widget() const { return m_optionsWidget; }
         virtual void mousePressEvent(KoPointerEvent *e);
         virtual void activate();

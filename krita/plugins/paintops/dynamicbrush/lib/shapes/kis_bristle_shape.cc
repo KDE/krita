@@ -20,6 +20,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_autobrush_resource.h>
+#include <kis_dynamic_coloring.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
@@ -29,13 +30,11 @@
 struct KisBristle {
     KisBristle(double x, double y) : m_x(x), m_y(y), m_lastX(0.0), m_lastY(0.0)
     {
-        color = KoColor( QColor( (int) (255.0*rand()) / RAND_MAX, (int) (255.0*rand()) / RAND_MAX, (int) (255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8());
     }
     // Position in the paintbrush
     double m_x, m_y;
     // Last drawn position
     double m_lastX, m_lastY;
-    KoColor color;
 };
 
 struct KisPaintBrush : public KisShared {
@@ -102,7 +101,8 @@ void KisBristleShape::startPainting(KisPainter* _painter)
     m_paintBrush->bristlesPainter = new KisPainter(painter()->device() );
     m_paintBrush->bristlesPainter->setBrush( new KisAutobrushResource(kacs) );
     m_paintBrush->bristlesPainter->setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, m_paintBrush->bristlesPainter, 0) );
-    m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (int)(255.0*rand()) / RAND_MAX, (int)(255.0*rand()) / RAND_MAX, (int)(255.0*rand()) / RAND_MAX ), KoColorSpaceRegistry::instance()->rgb8()) );
+    dbgPlugins << (int)((255.0*rand()) / RAND_MAX) << " " << (int)((255.0*rand()) / RAND_MAX) << " " << (int)((255.0*rand()) / RAND_MAX );
+    m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX )), KoColorSpaceRegistry::instance()->rgb8()) );
 
 }
 
@@ -120,17 +120,18 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
 
     double angleCos = cos(m_angle);
     double angleSin = sin(m_angle);
+    KoColor color( m_paintBrush->bristlesPainter->device()->colorSpace() );
     for( QList< KisBristle >::iterator it = m_paintBrush->m_bristles.begin();
         it != m_paintBrush->m_bristles.end(); ++it)
     {
-//         m_paintBrush->bristlesPainter->setPaintColor( it->color );
-//         dbgPlugins << it->color.toQColor();
         double x = it->m_x * m_radius;
         double y = it->m_y * m_radius;
         QPointF pos( angleCos*x - angleSin*y , angleSin*x + angleCos*y );
 //         dbgPlugins << pos;
         pos += brushPos;
 //         dbgPlugins << m_radius <<"" << pos <<"" << brushPos;
+        coloringsrc->colorAt( (int)pos.x(), (int)pos.y(), &color );
+        m_paintBrush->bristlesPainter->setPaintColor( color );
         if( m_paintBrush->m_firstStroke)
         {
             m_paintBrush->bristlesPainter->paintLine( pos, pos );

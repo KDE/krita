@@ -24,6 +24,7 @@
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
 
+#include "kis_autobrush_resource.h"
 #include "kis_brush.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
@@ -40,6 +41,7 @@ class KisRecordedPaintActionFactory : public KisRecordedActionFactory {
         virtual ~KisRecordedPaintActionFactory(){}
     protected:
         KisBrush* brushFromXML(const QDomElement& elt);
+        KisPaintOpSettings* settingsFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image);
 };
 
 class KisRecordedPolyLinePaintActionFactory : public KisRecordedPaintActionFactory {
@@ -75,15 +77,20 @@ struct KisRecordedPaintAction::Private {
     KisLayerSP layer;
     KisBrush* brush;
     QString paintOpId;
+    KisPaintOpSettings *settings;
     KoColor foregroundColor;
     KoColor backgroundColor;
 };
 
-KisRecordedPaintAction::KisRecordedPaintAction(QString name, QString id, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor) : KisRecordedAction(name, id), d(new Private)
+KisRecordedPaintAction::KisRecordedPaintAction(QString name, QString id, KisLayerSP layer, KisBrush* brush, QString paintOpId, const KisPaintOpSettings *settings, KoColor foregroundColor, KoColor backgroundColor) : KisRecordedAction(name, id), d(new Private)
 {
     d->layer = layer;
     d->brush = brush;
     d->paintOpId = paintOpId;
+    if(settings)
+    {
+        d->settings = settings->clone();
+    }
     d->foregroundColor = foregroundColor;
     d->backgroundColor = backgroundColor;
 }
@@ -95,6 +102,7 @@ KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs
 
 KisRecordedPaintAction::~KisRecordedPaintAction()
 {
+    delete d->settings;
     delete d;
 }
 
@@ -103,13 +111,20 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
     KisRecordedAction::toXML(doc, elt);
     elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));
     elt.setAttribute("paintop", d->paintOpId);
+    // Paintop settings
+    if(d->settings)
+    {
+        QDomElement settingsElt = doc.createElement( "PaintOpSettings" );
+        d->settings->toXML( doc, settingsElt);
+        elt.appendChild( settingsElt );
+    }
     // Brush
     QDomElement ressourceElt = doc.createElement( "Brush");
-    d->brush->toXML(doc, ressourceElt);
-    elt.appendChild(ressourceElt);
+    d->brush->toXML( doc, ressourceElt);
+    elt.appendChild( ressourceElt);
     // ForegroundColor
     QDomElement foregroundColorElt = doc.createElement( "ForegroundColor" );
-    d->foregroundColor.toXML(doc, foregroundColorElt );
+    d->foregroundColor.toXML( doc, foregroundColorElt );
     elt.appendChild( foregroundColorElt );
     // BackgroundColor
     QDomElement backgroundColorElt = doc.createElement( "BackgroundColor" );
@@ -153,18 +168,45 @@ void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
 KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
 {
     // TODO: support for autobrush
+    
     QString name = elt.attribute("name","");
-    dbgUI << "Looking for brush " << name;
-    QList<KisBrush*> resources = KisResourceServerProvider::instance()->brushServer()->resources();
-    foreach(KisBrush* r, resources)
+    QString type = elt.attribute("type","");
+    if( type == "autobrush")
     {
-        if(r->name() == name)
+        double width = elt.attribute("autobrush_width","1.0").toDouble();
+        double height = elt.attribute("autobrush_height","1.0").toDouble();
+        double hfade = elt.attribute("autobrush_hfade","1.0").toDouble();
+        double vfade = elt.attribute("autobrush_vfade","1.0").toDouble();
+        QString typeShape = elt.attribute("autobrush_type", "circle");
+        if(typeShape == "circle")
         {
-            return r;
+            return new KisAutobrushResource(new KisAutobrushCircleShape(width, height, hfade, vfade) );
+        } else {
+            return new KisAutobrushResource(new KisAutobrushRectShape(width, height, hfade, vfade) );
+        }
+    } else {
+        dbgUI << "Looking for brush " << name;
+        QList<KisBrush*> resources = KisResourceServerProvider::instance()->brushServer()->resources();
+        foreach(KisBrush* r, resources)
+        {
+            if(r->name() == name)
+            {
+                return r;
+            }
         }
     }
-    dbgUI << "Brush " << name << " not found.";
-    return 0;
+    dbgUI << "Brush " << name << " of type " << type << " not found.";
+    return new KisAutobrushResource(new KisAutobrushCircleShape(1.0, 1.0, 0.0, 0.0) );
+}
+
+KisPaintOpSettings* KisRecordedPaintActionFactory::settingsFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image)
+{
+    KisPaintOpSettings* settings = KisPaintOpRegistry::instance()->get( paintOpId)->settings(image);
+    if(settings)
+    {
+        settings->fromXML( elt );
+    }
+    return settings;
 }
 
 //--- KisRecordedPolyLinePaintAction ---//
@@ -173,8 +215,8 @@ struct KisRecordedPolyLinePaintAction::Private {
     QList<KisPaintInformation> infos;
 };
 
-KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor)
-    : KisRecordedPaintAction(name, "PolyLinePaintAction", layer, brush, paintOpId, foregroundColor, backgroundColor), d(new Private)
+KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId, const KisPaintOpSettings *settings, KoColor foregroundColor, KoColor backgroundColor)
+    : KisRecordedPaintAction(name, "PolyLinePaintAction", layer, brush, paintOpId, settings, foregroundColor, backgroundColor), d(new Private)
 {
 }
 
@@ -238,6 +280,16 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     QString name = elt.attribute("name");
     KisLayerSP layer = KisRecordedActionFactory::indexPathToLayer(img, elt.attribute("layer"));
     QString paintOpId = elt.attribute("paintop");
+    
+    KisPaintOpSettings* settings = 0;
+    QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
+    if(not settingsElt.isNull())
+    {
+        settings = settingsFromXML(paintOpId, settingsElt, img);
+    } else {
+        dbgUI << "No <PaintOpSettings /> found";
+    }
+    
     KisBrush* brush = 0;
     
     QDomElement brushElt = elt.firstChildElement("Brush");
@@ -269,7 +321,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
         dbgUI << "Warning: no <ForegroundColor /> found";
     }
     
-    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, layer, brush, paintOpId, fC, bC);
+    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, layer, brush, paintOpId, settings, fC, bC);
     
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if(not wpElt.isNull())
@@ -303,8 +355,8 @@ struct KisRecordedBezierCurvePaintAction::Private {
     QList<BezierCurveSlice> infos;
 };
 
-KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId, KoColor foregroundColor, KoColor backgroundColor)
-    : KisRecordedPaintAction(name, "BezierCurvePaintAction", layer, brush, paintOpId, foregroundColor, backgroundColor), d(new Private)
+KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(QString name, KisLayerSP layer, KisBrush* brush, QString paintOpId, const KisPaintOpSettings *settings, KoColor foregroundColor, KoColor backgroundColor)
+    : KisRecordedPaintAction(name, "BezierCurvePaintAction", layer, brush, paintOpId, settings, foregroundColor, backgroundColor), d(new Private)
 {
 }
 
@@ -390,6 +442,16 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
     QString name = elt.attribute("name");
     KisLayerSP layer = KisRecordedActionFactory::indexPathToLayer(img, elt.attribute("layer"));
     QString paintOpId = elt.attribute("paintop");
+    
+    KisPaintOpSettings* settings = 0;
+    QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
+    if(not settingsElt.isNull())
+    {
+        settings = settingsFromXML(paintOpId, settingsElt, img);
+    } else {
+        dbgUI << "No <PaintOpSettings /> found";
+    }
+
     KisBrush* brush = 0;
     
     QDomElement brushElt = elt.firstChildElement("Brush");
@@ -421,7 +483,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
         dbgUI << "Warning: no <ForegroundColor /> found";
     }
     
-    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, layer, brush, paintOpId, fC, bC);
+    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, layer, brush, paintOpId, settings, fC, bC);
     
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if(not wpElt.isNull())

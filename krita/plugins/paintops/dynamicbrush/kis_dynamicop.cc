@@ -93,10 +93,15 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
     delete m_coloringBookmarksModel;
 }
 
+
+KisPaintOpSettings* KisDynamicOpSettings::clone() const
+{
+    return new KisDynamicOpSettings(0, m_shapeBookmarksModel->bookmarkedConfigurationManager(), m_coloringBookmarksModel->bookmarkedConfigurationManager());
+}
+
 // TEMP
 #include <kis_dynamic_brush.h>
 // TEMP
-
 KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
@@ -127,6 +132,12 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
     // Init coloring
     switch(m_uiOptions->comboBoxColoring->currentIndex())
     {
+        case 3:
+            current->setColoring( new KisTotalRandomColoring() );
+            break;
+        case 2:
+            current->setColoring( new KisUniformRandomColoring() );
+            break;
         case 1:
             current->setColoring( new KisGradientColoring( painter->gradient() , painter->paintColor().colorSpace() ) );
             break;

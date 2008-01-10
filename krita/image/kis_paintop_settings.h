@@ -29,7 +29,8 @@ class KoPointerEvent;
 
 /**
  * This class is used to cache the settings (and the associated widget) for a paintop
- * between two creation. There is one KisPaintOpSettings per input device (mouse, tablet, etc...).
+ * between two creation. There is one KisPaintOpSettings per input device (mouse, tablet,
+ * etc...).
  */
 class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisSerializableConfiguration {
 
@@ -45,6 +46,8 @@ public:
      */
     virtual void mousePressEvent(KoPointerEvent *e);
 
+    virtual KisPaintOpSettings* clone() const = 0;
+    
     /**
      * Call this function when the layer is changed
      * Why is it KDE_DEPRECATED ?

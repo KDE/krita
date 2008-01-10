@@ -63,6 +63,11 @@ KisPaintOpSettings *KisFilterOpFactory::settings(QWidget * parent, const KoInput
     return new KisFilterOpSettings(parent);
 }
 
+KisPaintOpSettings* KisFilterOpFactory::settings(KisImageSP image)
+{
+    return new KisFilterOpSettings(0);
+}
+
 KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
         QObject(parent),
         KisPaintOpSettings(),
@@ -138,6 +143,18 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
     if(not m_currentFilterConfigWidget) return 0;
     return m_currentFilterConfigWidget->configuration();
+}
+
+KisPaintOpSettings* KisFilterOpSettings::clone() const
+{
+    KisFilterOpSettings* s = new KisFilterOpSettings(0);
+    s->m_paintDevice = m_paintDevice;
+    s->setCurrentFilter( KoID(m_currentFilter->id()) );
+    if(s->m_currentFilterConfigWidget and m_currentFilterConfigWidget)
+    {
+        s->m_currentFilterConfigWidget->setConfiguration( m_currentFilterConfigWidget->configuration() );
+    }
+    return s;
 }
 
 void KisFilterOpSettings::fromXML(const QDomElement& elt)

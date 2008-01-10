@@ -20,6 +20,7 @@
 #include <kis_paint_device.h>
 
 #include <KoAbstractGradient.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColorTransformation.h>
 #include <kis_datamanager.h>
 
@@ -50,8 +51,9 @@ void KisUniformColoring::resize(double , double ) {
     // Do nothing as plain color doesn't have size
 }
 
-void KisUniformColoring::colorize(KisPaintDeviceSP dev )
+void KisUniformColoring::colorize(KisPaintDeviceSP dev, const QRect& size)
 {
+    Q_UNUSED(size);
     if(not m_cachedColor or not (*dev->colorSpace() == *m_cachedColor->colorSpace()))
     {
         if(m_cachedColor) delete m_cachedColor;
@@ -149,3 +151,88 @@ void KisGradientColoring::selectColor(double mix)
 {
     m_gradient->colorAt( *m_color, mix );
 }
+
+//-------------------------------------------------//
+//--------------- KisGradientColoring -------------//
+//-------------------------------------------------//
+
+KisUniformRandomColoring::KisUniformRandomColoring( )
+{
+    m_color = new KoColor( );
+}
+
+KisUniformRandomColoring::~KisUniformRandomColoring()
+{
+}
+
+KisDynamicColoring* KisUniformRandomColoring::clone() const
+{
+    return new KisUniformRandomColoring();
+}
+
+void KisUniformRandomColoring::selectColor(double mix)
+{
+    Q_UNUSED(mix);
+    m_color->fromQColor( QColor( (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX ) ) );
+}
+
+
+//------------------------------------------------------//
+//--------------- KisTotalRandomColoring ---------------//
+//------------------------------------------------------//
+
+KisTotalRandomColoring::KisTotalRandomColoring() : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+{
+    
+}
+
+KisTotalRandomColoring::~KisTotalRandomColoring()
+{
+}
+
+void KisTotalRandomColoring::selectColor(double )
+{
+}
+
+KisDynamicColoring* KisTotalRandomColoring::clone() const
+{
+    return new KisTotalRandomColoring;
+}
+
+void KisTotalRandomColoring::darken(qint32 ) {}
+void KisTotalRandomColoring::applyColorTransformation(const KoColorTransformation* ) {}
+const KoColorSpace* KisTotalRandomColoring::colorSpace() const
+{
+    return m_colorSpace;
+}
+void KisTotalRandomColoring::colorize(KisPaintDeviceSP dev, const QRect& rect)
+{
+    KoColor kc (dev->colorSpace());
+    
+    QColor qc;
+    
+    int pixelSize = dev->colorSpace()->pixelSize();
+    
+    KisHLineIteratorPixel it = dev->createHLineIterator( rect.x(), rect.y(), rect.width(), 0);
+    for(int y = 0; y < rect.height(); y++)
+    {
+        while(not it.isDone())
+        {
+            qc.setRgb( (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX ) );
+            kc.fromQColor( qc);
+            memcpy(it.rawData(), kc.data(), pixelSize);
+            ++it;
+        }
+        it.nextRow();
+    }
+    
+}
+void KisTotalRandomColoring::colorAt(int x, int y, KoColor* c)
+{
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    c->fromQColor( QColor( (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX ) ) );
+}
+
+void KisTotalRandomColoring::rotate(double ){}
+void KisTotalRandomColoring::resize(double , double ) {}

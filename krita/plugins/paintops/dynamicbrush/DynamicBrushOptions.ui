@@ -60,6 +60,16 @@
        <string>Gradient</string>
       </property>
      </item>
+     <item>
+      <property name="text" >
+       <string>Uniform random</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Total random</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item>

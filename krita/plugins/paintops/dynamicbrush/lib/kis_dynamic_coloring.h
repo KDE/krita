@@ -38,7 +38,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
         virtual void darken(qint32 v) = 0;
         virtual void applyColorTransformation(const KoColorTransformation* transfo) = 0;
         virtual const KoColorSpace* colorSpace() const = 0;
-        virtual void colorize(KisPaintDeviceSP) =0;
+        virtual void colorize(KisPaintDeviceSP, const QRect& rect) =0;
         virtual void colorAt(int x, int y, KoColor*) = 0;
 };
 
@@ -51,7 +51,7 @@ class KisUniformColoring : public KisDynamicColoring {
         virtual void resize(double , double );
         virtual void applyColorTransformation(const KoColorTransformation* transfo);
         virtual const KoColorSpace* colorSpace() const;
-        virtual void colorize(KisPaintDeviceSP);
+        virtual void colorize(KisPaintDeviceSP, const QRect& rect);
         virtual void colorAt(int x, int y, KoColor*);
     protected:
         KoColor* m_color;
@@ -78,6 +78,32 @@ class DYNAMIC_BRUSH_EXPORT KisGradientColoring : public KisUniformColoring {
         virtual void selectColor(double mix);
     private:
         const KoAbstractGradient* m_gradient;
+        const KoColorSpace* m_colorSpace;
+};
+
+class DYNAMIC_BRUSH_EXPORT KisUniformRandomColoring : public KisUniformColoring {
+    public:
+        KisUniformRandomColoring();
+        virtual ~KisUniformRandomColoring();
+        virtual KisDynamicColoring* clone() const;
+        virtual void selectColor(double mix);
+};
+
+class DYNAMIC_BRUSH_EXPORT KisTotalRandomColoring : public KisDynamicColoring {
+    public:
+        KisTotalRandomColoring();
+        virtual ~KisTotalRandomColoring();
+    public:
+        virtual void selectColor(double mix);
+        virtual KisDynamicColoring* clone() const;
+        virtual void darken(qint32 v);
+        virtual void applyColorTransformation(const KoColorTransformation* transfo);
+        virtual const KoColorSpace* colorSpace() const;
+        virtual void colorize(KisPaintDeviceSP, const QRect& rect);
+        virtual void colorAt(int x, int y, KoColor*);
+        virtual void rotate(double r);
+        virtual void resize(double xs, double ys);
+    private:
         const KoColorSpace* m_colorSpace;
 };
 

@@ -1,5 +1,7 @@
 include_directories( ${KOGUIUTILS_INCLUDES}  ${KOTEXT_INCLUDES} )
 
+add_subdirectory( tests )
+
 ########### Flake Plugin library ###############
 
 SET (tableshape_LIB_SRCS

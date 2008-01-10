@@ -246,8 +246,13 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
         quint32 numPixels,
         KoColorConversionTransformation::Intent renderingIntent) const
 {
-    KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent);
-    cct.transformation()->transform(src, dst, numPixels);
+    if( *this == *dstColorSpace)
+    {
+        memcpy( dst, src, numPixels * sizeof(quint8) * pixelSize());
+    } else {
+        KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent);
+        cct.transformation()->transform(src, dst, numPixels);
+    }
     return true;
 }
 
@@ -307,7 +312,6 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const KoCompositeOp * op,
                           const QBitArray & channelFlags) const
 {
-    kDebug(DBG_PIGMENT) << "Composite op is for color space " << op->colorSpace()->id() << " and this is " << id();
     Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 while this is %2" ).arg( op->colorSpace()->id() ).arg(id()).toLatin1() );
 
     if (rows <= 0 || cols <= 0)

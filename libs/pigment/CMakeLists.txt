@@ -61,6 +61,21 @@ set_target_properties(pigmentcms PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
 install(TARGETS pigmentcms  DESTINATION ${LIB_INSTALL_DIR})
 
-install( FILES  KoColorSpaceRegistry.h KoChannelInfo.h      KoColor.h      KoColorSpace.h      KoCompositeOp.h      KoColorProfile.h  KoBasicHistogramProducers.h KoBasicHistogramProducers.h DESTINATION ${INCLUDE_INSTALL_DIR})
+install( FILES 
+         KoBasicHistogramProducers.h
+         KoChannelInfo.h
+         KoColor.h
+         KoColorConversionTransformation.h
+         KoColorConversionTransformationFactory.h
+         KoColorModelStandardIds.h
+         KoColorProfile.h
+         KoColorSpace.h
+         KoColorSpaceRegistry.h
+         KoColorTransformationFactory.h
+         KoColorTransformationFactoryRegistry.h
+         KoCompositeOp.h
+         KoHistogramProducer.h
+         DESTINATION ${INCLUDE_INSTALL_DIR})
+
 install( FILES  pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 

@@ -28,3 +28,4 @@ object to get at the QTextDocument. What do we do with the layout?
 Query: should the tableshape be a shape or a shape container?
 
 
+Note: table cells must be reversed in rtl languages!

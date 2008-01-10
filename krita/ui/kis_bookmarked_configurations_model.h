@@ -40,6 +40,10 @@ class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListMode
         KisBookmarkedConfigurationsModel(KisBookmarkedConfigurationManager*);
         ~KisBookmarkedConfigurationsModel();
         /**
+         * @return  the bookmarked configuration manager associated with this model.
+         */
+        KisBookmarkedConfigurationManager* bookmarkedConfigurationManager();
+        /**
          * @return the number of configurations (the minimum is allways 2, the default
          * configuration and the last used configuration are allways present)
          */

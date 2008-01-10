@@ -50,6 +50,11 @@ KisBookmarkedConfigurationsModel::~KisBookmarkedConfigurationsModel()
     delete d;
 }
 
+KisBookmarkedConfigurationManager* KisBookmarkedConfigurationsModel::bookmarkedConfigurationManager()
+{
+    return d->bookmarkManager;
+}
+
 int KisBookmarkedConfigurationsModel::rowCount(const QModelIndex &parent ) const
 {
     Q_UNUSED(parent);

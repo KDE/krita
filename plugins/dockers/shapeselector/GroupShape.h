@@ -31,6 +31,8 @@ public:
     virtual QString toolTip();
 
     virtual QString groupId() const;
+protected:
+    virtual KoShape * cloneShape() const { return 0; }
 
 private:
     KoShapeFactory *m_shapeFactory;

@@ -37,6 +37,12 @@ DivineProportionShape::DivineProportionShape()
 DivineProportionShape::~DivineProportionShape() {
 }
 
+KoShape * DivineProportionShape::cloneShape() const
+{
+    // TODO implement cloning
+    return 0;
+}
+
 void DivineProportionShape::paint(QPainter &painter, const KoViewConverter &converter) {
     if(m_printable) {
         applyConversion(painter, converter);

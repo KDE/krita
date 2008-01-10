@@ -35,6 +35,12 @@ KoShapeGroup::KoShapeGroup()
     setSize( QSizeF(0,0) );
 }
 
+KoShape * KoShapeGroup::cloneShape() const
+{
+    // TODO implement cloning
+    return 0;
+}
+
 void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter) {
     Q_UNUSED(painter);
     Q_UNUSED(converter);

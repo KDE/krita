@@ -79,6 +79,12 @@ TextShape::~TextShape() {
     delete m_footnotes;
 }
 
+KoShape * TextShape::cloneShape() const
+{
+    // TODO implement cloning
+    return 0;
+}
+
 void TextShape::setDemoText(bool on) {
     if(on) {
         QTextCursor cursor (m_textShapeData->document());

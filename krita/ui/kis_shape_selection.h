@@ -54,6 +54,8 @@ public:
 protected:
     virtual QPainterPath selectionOutline();
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
 
 private slots:
     void repaintTimerEvent();

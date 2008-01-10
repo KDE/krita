@@ -50,6 +50,12 @@ KoSelection::~KoSelection()
     delete d;
 }
 
+KoShape * KoSelection::cloneShape() const
+{
+    // selection should not be cloned
+    return 0;
+}
+
 void KoSelection::paint( QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter);

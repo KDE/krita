@@ -31,6 +31,7 @@ public:
 
     virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return true; }
     virtual void saveOdf(KoShapeSavingContext&) const {}
+    virtual KoShape * cloneShape() const { return 0; }
 };
 
 #endif

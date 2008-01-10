@@ -44,6 +44,10 @@ public:
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+
+private:
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
 };
 
 #endif // __KOSHAPELAYER_H__

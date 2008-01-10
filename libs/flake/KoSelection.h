@@ -121,6 +121,8 @@ private:
     void selectGroupChilds( KoShapeGroup *group );
     virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
 
     QRectF sizeRect() const;
 

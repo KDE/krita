@@ -43,6 +43,12 @@ PictureShape::PictureShape()
 PictureShape::~PictureShape() {
 }
 
+KoShape * PictureShape::cloneShape() const
+{
+    // TODO implement cloning
+    return 0;
+}
+
 void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) {
     if(m_imageData != userData())
         m_imageData = dynamic_cast<KoImageData*> (userData());

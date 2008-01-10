@@ -48,6 +48,12 @@ KisLayerContainerShape::~KisLayerContainerShape()
     delete m_d;
 }
 
+KoShape * KisLayerContainerShape::cloneShape() const
+{
+    // TODO implement cloning
+    return 0;
+}
+
 KisLayerSP KisLayerContainerShape::groupLayer()
 {
     return m_d->groupLayer;

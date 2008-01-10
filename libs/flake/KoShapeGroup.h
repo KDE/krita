@@ -56,6 +56,8 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 private:
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
 
     void childCountChanged();
 };

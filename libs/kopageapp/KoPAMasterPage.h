@@ -46,6 +46,9 @@ protected:
     /// Reimplemented from KoPageBase
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
 
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
+
     KoPageLayout m_pageLayout;
 };
 

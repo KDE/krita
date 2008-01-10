@@ -50,6 +50,7 @@ class KoShapeSavingContext;
 class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
+class KoShapeControllerBase;
 
 /**
  *
@@ -664,6 +665,15 @@ public:
     /// Removes as shape depending on this shape
     void removeDependee( KoShape * shape );
 
+    /**
+     * Creates a clone of this shape.
+     *
+     * Deriving shapes have to implement the proteced abstract clone
+     * function which does create the specific shape instance and
+     * copies the shapes data.
+     */
+    KoShape * clone( KoShapeControllerBase * base ) const;
+
 protected:
 
 /* ** loading saving helper methods */
@@ -781,6 +791,9 @@ protected:
      * This is typically called only from the destructor of the KoShapeConnection class.
      */
     void removeConnection(KoShapeConnection *connection);
+
+    /// Deriving shapes have to implement that to support cloning
+    virtual KoShape * cloneShape() const = 0;
 
 private:
     friend class KoShapeManager;

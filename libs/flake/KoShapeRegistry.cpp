@@ -69,6 +69,11 @@ public:
         shape->setZIndex( zIndex() );
         shape->setName( name() );
     }
+
+    virtual KoShape * cloneShape() const
+    {
+        return 0;
+    }
 };
 
 

@@ -48,6 +48,9 @@ public:
 
 private:
 
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
+
     Table * m_table;
     QTextDocument  * m_textDocument;
     KoTextShapeData * m_textShapeData;

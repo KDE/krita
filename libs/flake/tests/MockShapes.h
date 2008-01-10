@@ -21,6 +21,7 @@ public:
     }
     virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
+    virtual KoShape * cloneShape() const { return 0; }
     int paintedCount;
 };
 
@@ -37,6 +38,7 @@ public:
 
     virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
+    virtual KoShape * cloneShape() const { return 0; }
     int paintedCount;
 };
 

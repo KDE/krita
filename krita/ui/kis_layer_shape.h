@@ -60,6 +60,9 @@ public:
 
 private:
 
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
+
     class Private;
     Private * const m_d;
 };

@@ -145,6 +145,8 @@ KoView::KoView( KoDocument *document, QWidget *parent )
   //kDebug(30003) <<"KoView::KoView" << this;
   d->m_doc = document;
   KParts::PartBase::setPartObject( this );
+  // Set the documents component as active else one can't reach it from plugins
+  KGlobal::setActiveComponent(document->componentData());
 
   setFocusPolicy( Qt::StrongFocus );
 

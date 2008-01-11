@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>590</width>
-    <height>545</height>
+    <width>470</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -14,166 +14,102 @@
   </property>
   <layout class="QVBoxLayout" >
    <item>
-    <widget class="QLabel" name="lblName" >
-     <property name="text" >
-      <string>&amp;Name:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>txtName</cstring>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="txtName" >
-     <property name="text" >
-      <string>untitled-1</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QLabel" name="lblName" >
+       <property name="text" >
+        <string>&amp;Name:</string>
+       </property>
+       <property name="buddy" >
+        <cstring>txtName</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="txtName" >
+       <property name="text" >
+        <string>untitled-1</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QGroupBox" name="grpImage" >
      <property name="title" >
       <string>Image Size</string>
      </property>
-     <layout class="QHBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <item>
-       <layout class="QVBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="lblWidth" >
+        <property name="text" >
+         <string>Width:</string>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="lblWidth" >
-          <property name="text" >
-           <string>Width:</string>
-          </property>
-          <property name="alignment" >
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblHeight" >
-          <property name="text" >
-           <string>Height:</string>
-          </property>
-          <property name="alignment" >
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="buddy" >
-           <cstring></cstring>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       </widget>
       </item>
-      <item>
-       <layout class="QVBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
+      <item row="0" column="1" >
+       <widget class="QDoubleSpinBox" name="doubleWidth" >
+        <property name="minimumSize" >
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
+        <property name="decimals" >
+         <number>2</number>
         </property>
-        <property name="topMargin" >
-         <number>0</number>
+        <property name="maximum" >
+         <double>100000000.000000000000000</double>
         </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QDoubleSpinBox" name="doubleWidth" >
-          <property name="minimumSize" >
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="decimals" >
-           <number>2</number>
-          </property>
-          <property name="maximum" >
-           <double>100000000.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="doubleHeight" >
-          <property name="minimumSize" >
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximum" >
-           <double>100000000.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       </widget>
       </item>
-      <item>
-       <layout class="QVBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QComboBox" name="cmbWidthUnit" />
-        </item>
-        <item>
-         <widget class="QComboBox" name="cmbHeightUnit" />
-        </item>
-       </layout>
+      <item row="0" column="2" >
+       <widget class="QComboBox" name="cmbWidthUnit" />
       </item>
-      <item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="lblHeight" >
+        <property name="text" >
+         <string>Height:</string>
+        </property>
+        <property name="buddy" >
+         <cstring></cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QDoubleSpinBox" name="doubleHeight" >
+        <property name="minimumSize" >
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximum" >
+         <double>100000000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QComboBox" name="cmbHeightUnit" />
+      </item>
+      <item row="1" column="3" >
+       <widget class="QPushButton" name="bnScreenSize" >
+        <property name="toolTip" >
+         <string>Set Width and Height to screen resolution.</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Screen size</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
        <widget class="QLabel" name="lblResolution" >
         <property name="text" >
          <string>Resolution:</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="2" column="1" >
        <widget class="QDoubleSpinBox" name="doubleResolution" >
         <property name="minimumSize" >
          <size>
@@ -186,32 +122,6 @@
         </property>
         <property name="maximum" >
          <double>99999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>191</width>
-          <height>61</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="bnScreenSize" >
-        <property name="toolTip" >
-         <string>Set Width and Height to screen resolution.</string>
-        </property>
-        <property name="text" >
-         <string>&amp;Screen size</string>
         </property>
        </widget>
       </item>

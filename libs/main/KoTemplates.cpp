@@ -211,32 +211,29 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const {
 void KoTemplateTree::readGroups() {
 
     QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
-    for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {
+    foreach(QString dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
-        QDir dir(*it);
+        QDir dir(dirName);
         // avoid the annoying warning
         if(!dir.exists())
             continue;
-        dir.setFilter(QDir::Dirs);
-        QStringList templateDirs=dir.entryList();
-        for(QStringList::ConstIterator tdirIt=templateDirs.begin(); tdirIt!=templateDirs.end(); ++tdirIt) {
-            if(*tdirIt=="." || *tdirIt=="..") // we don't want to check those dirs :)
-                continue;
-            QDir templateDir(*it+*tdirIt);
-            QString name=*tdirIt;
+        QStringList templateDirs=dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        foreach(QString templateDirName, templateDirs) {
+            QDir templateDir(dirName+templateDirName);
+            QString name = templateDirName;
             QString defaultTab;
             int sortingWeight = 1000;
             if(templateDir.exists(".directory")) {
-                KDesktopFile config(templateDir.absolutePath()+"/.directory");
+                KDesktopFile config(templateDir.absoluteFilePath(".directory"));
                 KConfigGroup dg = config.desktopGroup();
                 name=dg.readEntry("Name");
                 defaultTab=dg.readEntry("X-KDE-DefaultTab");
                 sortingWeight=dg.readEntry("X-KDE-SortingWeight", 1000);
                 //kDebug( 30003 ) <<"name:" << name;
             }
-            KoTemplateGroup *g=new KoTemplateGroup(name, *it+*tdirIt+QChar('/'), sortingWeight);
+            KoTemplateGroup *g = new KoTemplateGroup(name, templateDir.absolutePath() + QDir::separator(), sortingWeight);
             add(g);
-            if(defaultTab=="true")
+            if(defaultTab == "true")
                 m_defaultGroup=g;
         }
     }

@@ -34,6 +34,7 @@ class KoShape;
 class KoProperties;
 class KoShapeConfigFactory;
 class KoShapeConfigWidgetBase;
+class KoShapeControllerBase;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
 #define SHAPEID_MIMETYPE "application/x-flake-shapeId"
@@ -98,22 +99,48 @@ public:
     virtual ~KoShapeFactory();
 
     /**
-     * This method should be implemented by factories to create a shape that the user
-     * gets when doing a base insert. For example from a script.  The created shape
-     * should have its values set to good defaults that the user can then adjust further if
-     * needed.  Including the KoShape:setShapeId(), with the Id from this factory
-     * The default shape position is not relevant, it will be moved by the caller.
+     * This method should be calles to create a shape that the user gets when doing a base insert. 
+     * For example from a script or during loading. 
+     *
+     * This will call shapeCreated on the shapeController when one was given. You should make
+     * sure to pass a shapeController so that all works as expected. However in some cases it 
+     * is ok to not pass the shapeController e.g. when it is only a temporary shape that will 
+     * not be inserted in the document.
+     * The shapeController can then set thinks that e.g. need to be available during loading of 
+     * the shape.
+     * This method internally calls createDefaultShape();
+     *
+     * @param shapeController The shape controller for which the shape is created. 
+     *
      * @return a new shape
+     *
+     * @see KoShapeFactory::createDefaultShape
+     * @see KoShapeControllerBase::shapeCreated
      */
-    virtual KoShape * createDefaultShape() const = 0;
+    KoShape * createDefaultShape( KoShapeControllerBase * shapeController );
+
     /**
-     * This method should be implemented by factories to create a shape based on a set of
-     * properties that are specifically made for this shape-type.
-     * This method should also set this factories shapeId on the shape using KoShape::setShapeId()
+     * This method should be called to create a shape based on a set of properties that are 
+     * specifically made for this shape-type.
+     *
+     * This will call shapeCreated on the shapeController when one was given. You should make
+     * sure to pass a shapeController so that all works as expected. However in some cases it 
+     * is ok to not pass the shapeController e.g. when it is only a temporary shape that will 
+     * not be inserted in the document.
+     * The shapeController can then set thinks that e.g. need to be available during loading of 
+     * the shape.
+     * This method internally calls createShape( params );
+     *
+     * @param shapeController The shape controller for which the shape is created. 
+     *
      * @return a new shape
+     *
+     * @see KoShapeFactory::createShape
      * @see KoShapeTemplate::properties
+     * @see KoShapeControllerBase::shapeCreated
      */
-    virtual KoShape * createShape(const KoProperties * params) const = 0;
+    KoShape * createShape(const KoProperties * params, KoShapeControllerBase *shapeController );
+
     /**
      * Create a list of option panels to show on creating a new shape.
      * The shape type this factory creates may have general or specific setting panels
@@ -191,6 +218,25 @@ public:
     virtual bool supports(const KoXmlElement & e) const;
 
 protected:
+
+    /**
+     * This method should be implemented by factories to create a shape that the user
+     * gets when doing a base insert. For example from a script.  The created shape
+     * should have its values set to good defaults that the user can then adjust further if
+     * needed.  Including the KoShape:setShapeId(), with the Id from this factory
+     * The default shape position is not relevant, it will be moved by the caller.
+     * @return a new shape
+     */
+    virtual KoShape * createDefaultShape() const = 0;
+
+    /**
+     * This method should be implemented by factories to create a shape based on a set of
+     * properties that are specifically made for this shape-type.
+     * This method should also set this factories shapeId on the shape using KoShape::setShapeId()
+     * @return a new shape
+     * @see KoShapeTemplate::properties
+     */
+    virtual KoShape * createShape(const KoProperties * params) const = 0;
 
     /**
      * Add a template with the properties of a speficic type of shape this factory can generate

@@ -49,7 +49,7 @@ void TestKoShapeFactory::testPriority()
 void TestKoShapeFactory::testCreateDefaultShape()
 {
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
-    KoShape * shape = factory->createDefaultShape();
+    KoShape * shape = factory->createDefaultShape( 0 );
     QVERIFY( shape != 0 );
     delete shape;
     delete factory;
@@ -58,7 +58,7 @@ void TestKoShapeFactory::testCreateDefaultShape()
 void TestKoShapeFactory::testCreateShape()
 {
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
-    KoShape * shape = factory->createShape( 0 );
+    KoShape * shape = factory->createShape( 0, 0 );
     QVERIFY( shape != 0 );
     delete shape;
     delete factory;
@@ -109,7 +109,7 @@ void TestKoShapeFactory::testOdfElement()
     QVERIFY( pathElement.tagName() == "path" );
     QCOMPARE( factory->supports( pathElement ), true );
 
-    KoShape * shape = factory->createDefaultShape( );
+    KoShape * shape = factory->createDefaultShape( 0 );
     QVERIFY( shape );
 
     // XXX: When loading is implemented, these no doubt have to be

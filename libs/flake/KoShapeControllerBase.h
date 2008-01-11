@@ -48,6 +48,15 @@ public:
      * @param shape the shape to remove
      */
     virtual void removeShape( KoShape* shape ) = 0;
+
+    /**
+     * This method gets called after a shape is created. It can be used to set data in the shape that
+     * is needed during loading e.g. KoStyleManager for the TextShape or to set application/shape specific 
+     * data. The default implementation is empty so that only applications that want to use this have 
+     * to reimplement the method.
+     * @param shape the newly created shape
+     */
+    virtual void shapeCreated( KoShape* shape ) {}
 };
 
 #endif

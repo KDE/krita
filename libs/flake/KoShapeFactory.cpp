@@ -20,6 +20,7 @@
 
 #include "KoShapeFactory.h"
 #include <KoProperties.h>
+#include "KoShapeControllerBase.h"
 
 class KoShapeFactory::Private {
 public:
@@ -57,6 +58,24 @@ KoShapeFactory::KoShapeFactory(QObject *parent, const QString &id, const QString
 
 KoShapeFactory::~KoShapeFactory() {
     delete d;
+}
+
+KoShape * KoShapeFactory::createDefaultShape( KoShapeControllerBase * shapeController )
+{
+    KoShape * shape = createDefaultShape();
+    if ( shapeController ) {
+        shapeController->shapeCreated( shape );
+    }
+    return shape;
+}
+
+KoShape * KoShapeFactory::createShape( const KoProperties * params, KoShapeControllerBase *shapeController )
+{
+    KoShape * shape = createShape( params );
+    if ( shapeController ) {
+        shapeController->shapeCreated( shape );
+    }
+    return shape;
 }
 
 QString KoShapeFactory::toolTip() const {

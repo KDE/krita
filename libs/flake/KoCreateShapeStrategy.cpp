@@ -39,9 +39,9 @@ KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvas
         const KoProperties *props = parent->shapeProperties();
         KoShape *shape;
         if(props)
-            shape = factory->createShape(props);
+            shape = factory->createShape( props, 0 );
         else
-            shape = factory->createDefaultShape();
+            shape = factory->createDefaultShape( 0 );
 
         m_outline = shape->outline();
         m_outlineBoundingRect = m_outline.boundingRect();
@@ -61,9 +61,9 @@ QUndoCommand* KoCreateShapeStrategy::createCommand() {
     const KoProperties *props = parent->shapeProperties();
     KoShape *shape;
     if(props)
-        shape = factory->createShape(props);
+        shape = factory->createShape( props, 0 );
     else
-        shape = factory->createDefaultShape();
+        shape = factory->createDefaultShape( 0 );
     if( shape->shapeId().isEmpty() )
         shape->setShapeId(factory->id());
     QRectF rect = selectRect();

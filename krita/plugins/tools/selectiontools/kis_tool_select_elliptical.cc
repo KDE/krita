@@ -187,7 +187,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 KoShape* shape;
                 KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoEllipseShape");
                 if(rectFactory) {
-                    shape = rectFactory->createDefaultShape();
+                    shape = rectFactory->createDefaultShape( 0 );
                     shape->setSize(documentRect.size());
                     shape->setPosition(documentRect.topLeft());
                 }

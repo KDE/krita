@@ -217,7 +217,7 @@ KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & element, Ko
         KoShapeFactory * factory = factories[i];
         if ( factory->supports( element ) ) {
 
-            KoShape * shape = factory->createDefaultShape();
+            KoShape * shape = factory->createDefaultShape( 0 );
 
             if( shape->shapeId().isEmpty() )
                 shape->setShapeId(factory->id());

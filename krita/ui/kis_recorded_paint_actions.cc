@@ -87,10 +87,7 @@ KisRecordedPaintAction::KisRecordedPaintAction(QString name, QString id, KisLaye
     d->layer = layer;
     d->brush = brush;
     d->paintOpId = paintOpId;
-    if(settings)
-    {
-        d->settings = settings->clone();
-    }
+    d->settings = settings ? d->settings = settings->clone() : 0;
     d->foregroundColor = foregroundColor;
     d->backgroundColor = backgroundColor;
 }

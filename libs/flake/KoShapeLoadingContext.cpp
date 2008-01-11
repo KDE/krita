@@ -22,6 +22,7 @@
 #include "KoShapeControllerBase.h"
 #include "KoShape.h"
 #include "KoShapeContainer.h"
+#include "KoSharedLoadingData.h"
 
 #include <kdebug.h>
 

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Painterly Color Spaces (LC and QP conversions, 32- and 16- Bits Float channels)
+Name[km]=ចន្លោះ​ពណ៌​នៃ​រូបភាព (ការ​បម្លែង LC និង QP, ឆានែល​លំហូរ ៣២- និង ១៦- ប៊ីត)
+Name[zh_TW]=繪圖色彩空間（LC 與 QP 轉換，32 與 16 位元浮動色頻）
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritakscolorspacesplugin

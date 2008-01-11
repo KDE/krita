@@ -30,6 +30,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 #include <KoTextShapeData.h>
+#include <KoTextSharedLoadingData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoShapeStyleWriter.h>
@@ -109,6 +110,11 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
         kError() << "No office:" << odfTagName( false ) << " tag found!" << endl;
         return false;
     }
+
+    // Load text styles before the corresponding text shapes try to use them!
+    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
+    sharedData->loadOdfStyles( loadingContext, d->styleManager, true );
+    paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     loadingContext.setUseStylesAutoStyles( true );
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );

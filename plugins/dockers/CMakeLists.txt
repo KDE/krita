@@ -3,21 +3,17 @@ project(kofficedockers)
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 set(kofficedockers_SRCS
-    shapeselector/ShapeSelector.cpp
-    shapeselector/ShapeSelectorFactory.cpp
-    shapeselector/GroupShape.cpp
-    shapeselector/IconShape.cpp
-    shapeselector/TemplateShape.cpp
-    shapeselector/ZoomHandler.cpp
-    shapeselector/Canvas.cpp
-    shapeselector/FolderShape.cpp
-    shapeselector/FolderShapeModel.cpp
 
     strokedocker/StrokeDocker.cpp
     strokedocker/StrokeDockerFactory.cpp
 
     shapeproperties/ShapePropertiesDocker.cpp
     shapeproperties/ShapePropertiesDockerFactory.cpp
+
+    shapecollection/KoCollectionShapeFactory.cpp
+    shapecollection/KoShapeCollectionDocker.cpp
+    shapecollection/KoCollectionItemModel.cpp
+    shapecollection/KoOdfCollectionLoader.cpp
 
     Plugin.cpp
 )

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,25 +16,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "strokedocker/StrokeDockerFactory.h"
-#include "shapeproperties/ShapePropertiesDockerFactory.h"
-#include "shapecollection/KoShapeCollectionDocker.h"
+#ifndef KOCOLLECTIONSHAPEFACTORY_H
+#define KOCOLLECTIONSHAPEFACTORY_H
 
-#include <KoDockRegistry.h>
+#include <KoShapeFactory.h>
 
-#include <kgenericfactory.h>
-
-K_EXPORT_COMPONENT_FACTORY(kofficedockers, KGenericFactory<Plugin>( "koffice-dockers" ) )
-
-Plugin::Plugin( QObject *parent, const QStringList& )
-    : QObject(parent)
+class KoCollectionShapeFactory : public KoShapeFactory
 {
-    Q_UNUSED(parent);
-    KoDockRegistry::instance()->add( new StrokeDockerFactory() );
-    KoDockRegistry::instance()->add( new ShapePropertiesDockerFactory() );
-    KoDockRegistry::instance()->add( new KoShapeCollectionDockerFactory() );
-}
+    Q_OBJECT
+    public:
+        KoCollectionShapeFactory(QObject *parent, const QString &id, KoShape* shape);
+        ~KoCollectionShapeFactory();
 
-#include "Plugin.moc"
+        virtual KoShape* createDefaultShape() const;
+        virtual KoShape* createShape(const KoProperties* params) const;
 
+    private:
+        KoShape* m_shape;
+};
+
+#endif //KOCOLLECTIONSHAPEFACTORY_H

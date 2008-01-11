@@ -39,7 +39,6 @@
 #include "styles/KoParagraphStyle.h"
 #include "KoTextDocumentLayout.h"
 
-#include "opendocument/KoTextLoadingContext.h"
 #include "opendocument/KoTextLoader.h"
 
 class KoTextShapeData::Private {

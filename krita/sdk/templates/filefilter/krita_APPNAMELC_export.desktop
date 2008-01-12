@@ -12,6 +12,7 @@ Name[km]=តម្រង​នាំចេញ​របស់ Krita %{APPNAMELC}�
 Name[pt]=Filtro de Exportação de %{APPNAMELC} para o Krita
 Name[pt_BR]=Filtro de Exportação %{APPNAMELC} para o Krita
 Name[sv]=Krita %{APPNAMELC}-exportfilter
+Name[uk]=Фільтр експорту %{APPNAMELC} для Krita
 Name[x-test]=xxKrita %{APPNAMELC} Export Filterxx
 Name[zh_TW]=Krita %{APPNAMELC} 匯出過濾程式
 ServiceTypes=KOfficeFilter

@@ -14,6 +14,7 @@ Name[ne]=केडीई कार्यालय डकर प्लगइन
 Name[pt]='Plugin' Acoplável do KOffice
 Name[pt_BR]=Plugin Acoplável do KOffice
 Name[sv]=Koffice dockningsinsticksprogram
+Name[uk]=Втулка Docker для KOffice
 Name[x-test]=xxKOffice Docker Pluginxx
 Name[zh_TW]=KOffice 嵌入外掛程式
 Type=ServiceType

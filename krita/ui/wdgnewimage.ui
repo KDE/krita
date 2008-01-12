@@ -5,15 +5,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>470</width>
-    <height>506</height>
+    <width>514</width>
+    <height>625</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>New Image</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <item>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
     <layout class="QHBoxLayout" >
      <item>
       <widget class="QLabel" name="lblName" >
@@ -34,7 +34,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0" >
     <widget class="QGroupBox" name="grpImage" >
      <property name="title" >
       <string>Image Size</string>
@@ -66,6 +66,16 @@
       <item row="0" column="2" >
        <widget class="QComboBox" name="cmbWidthUnit" />
       </item>
+      <item rowspan="2" row="0" column="3" >
+       <widget class="QPushButton" name="bnScreenSize" >
+        <property name="toolTip" >
+         <string>Set Width and Height to screen resolution.</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Screen size</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="lblHeight" >
         <property name="text" >
@@ -91,16 +101,6 @@
       </item>
       <item row="1" column="2" >
        <widget class="QComboBox" name="cmbHeightUnit" />
-      </item>
-      <item row="1" column="3" >
-       <widget class="QPushButton" name="bnScreenSize" >
-        <property name="toolTip" >
-         <string>Set Width and Height to screen resolution.</string>
-        </property>
-        <property name="text" >
-         <string>&amp;Screen size</string>
-        </property>
-       </widget>
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="lblResolution" >
@@ -128,7 +128,7 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0" >
     <widget class="QGroupBox" name="grpMode" >
      <property name="title" >
       <string>Color</string>
@@ -140,7 +140,7 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="3" column="0" >
     <widget class="QGroupBox" name="grpContents" >
      <property name="title" >
       <string>Contents</string>
@@ -176,6 +176,186 @@
       </item>
       <item row="0" column="1" >
        <widget class="KColorCombo" name="cmbColor" >
+        <item>
+         <property name="text" >
+          <string>Custom...</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Custom...</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string/>
+         </property>
+        </item>
         <item>
          <property name="text" >
           <string>Custom...</string>
@@ -640,7 +820,7 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="4" column="0" >
     <layout class="QHBoxLayout" >
      <property name="spacing" >
       <number>6</number>

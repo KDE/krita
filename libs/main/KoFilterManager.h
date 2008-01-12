@@ -57,6 +57,11 @@ public:
      */
     explicit KoFilterManager( KoDocument* document );
     /**
+     * Create a filter manager for the Shape Collection docker.
+     * @param mimeType the mimetype to import to.
+     */
+    explicit KoFilterManager( const QByteArray& mimeType );
+    /**
      * Create a filter manager for a filter which wants to embed something.
      * The url it passes is the file to convert, obviously. You cannot use
      * the @ref import() method -- use @ref exp0rt() to convert the file to

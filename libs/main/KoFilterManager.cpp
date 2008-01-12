@@ -47,6 +47,7 @@ class KoFilterManager::Private
 {
 public:
     bool m_batch;
+    QByteArray m_importMimeType;
 };
 
 
@@ -140,6 +141,13 @@ KoFilterManager::KoFilterManager( const QString& url, const QByteArray& mimetype
     d -> m_batch = false;
 }
 
+KoFilterManager::KoFilterManager( const QByteArray& mimeType ) :
+    m_document( 0 ), m_parentChain( 0 ), m_graph( "" ), d( new Private )
+{
+    d -> m_batch = false;
+    d -> m_importMimeType = mimeType;
+}
+
 KoFilterManager::~KoFilterManager()
 {
     delete d;
@@ -211,7 +219,9 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
             ++i;
         }
     }
-    else {
+    else if( !d->m_importMimeType.isEmpty() ) {
+        chain = m_graph.chain( this, d->m_importMimeType );
+    } else {
         kError(s_area) << "You aren't supposed to use import() from a filter!" << endl;
         status = KoFilter::UsageError;
         return QString();

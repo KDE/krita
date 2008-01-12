@@ -35,19 +35,6 @@ public:
     {}
     ~Private()
     {
-        if( shapesForDocument.count() )
-            kWarning(30006) << "KoShapeLoadingContext: there are loaded shapes not added to the document";
-        // the collected shapes were not added to a document
-        // so we remove them from their parents and delete them
-        // to not leak any memory
-        foreach( KoShape * shape, shapesForDocument )
-        {
-            if( shape->parent() )
-                shape->parent()->removeChild( shape );
-            delete shape;
-        }
-        shapesForDocument.clear();
-
         foreach ( KoSharedLoadingData * data, sharedData )
         {
             delete data;
@@ -56,7 +43,6 @@ public:
     KoOasisLoadingContext &context;
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
-    QList<KoShape*> shapesForDocument;
     KoImageCollection * imageCollection;
     QMap<QString, KoSharedLoadingData*> sharedData;
     QMap<KoShape*, int> zIndices;
@@ -96,24 +82,6 @@ void KoShapeLoadingContext::addShapeId( KoShape * shape, const QString & id )
 KoShape * KoShapeLoadingContext::shapeById( const QString & id )
 {
    return d->drawIds.value( id, 0 );
-}
-
-void KoShapeLoadingContext::addShapeToDocument( KoShape * shape )
-{
-    d->shapesForDocument.append( shape );
-}
-
-void KoShapeLoadingContext::transferShapesToDocument( KoShapeControllerBase * controller )
-{
-    if( ! controller )
-        return;
-
-    // add all the shapes collected during loading to the shape controller
-    foreach( KoShape * shape, d->shapesForDocument )
-        controller->addShape( shape );
-
-    // the shape controller now owns the shapes, so we can clear the list
-    d->shapesForDocument.clear();
 }
 
 void KoShapeLoadingContext::setImageCollection( KoImageCollection * imageCollection )

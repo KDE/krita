@@ -81,8 +81,6 @@ bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
         if( shape )
         {
             addChild( shape );
-            // add shape to context for later adding to the document
-            context.addShapeToDocument( shape );
         }
     }
 

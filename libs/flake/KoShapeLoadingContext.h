@@ -63,12 +63,6 @@ public:
     /// return the shape formerly registered using addShapeId()
     KoShape * shapeById( const QString & id );
 
-    /// Adds a shape to the context for later adding to the document
-    void addShapeToDocument( KoShape * shape );
-
-    /// Transfers ownership of all collected shapes during loading to the shape controller.
-    void transferShapesToDocument( KoShapeControllerBase * controller );
-
     /// Sets the image collection used for loading images
     void setImageCollection( KoImageCollection * imageCollection );
 

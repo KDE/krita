@@ -41,7 +41,7 @@ public:
 
     ~TableCell();
 
-    TableCell(const TableCell & rhs);
+
 
     /**
      * @return the shape that contains the contents for this cell. May be 0
@@ -83,6 +83,8 @@ private:
     class Private;
     Private * const d;
 
+    // Private, since we cannot clone shapes, we cannot copy-construct table cells
+    TableCell(const TableCell & rhs);
 };
 
 #endif

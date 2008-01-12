@@ -1,6 +1,10 @@
                   TODO file for the texttable shape
                   =================================
 
+Datamodel
+
+* should be able to fit all ODF text table data, except for formula's
+* does not need to be able to handle MS Word variable column width per row tables
 
 Proof-of-concept read-only table
  * Support small tables with a fixed number of rows and columns

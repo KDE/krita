@@ -55,15 +55,6 @@ TableCell::~TableCell()
     delete d;
 }
 
-TableCell::TableCell(const TableCell & rhs)
-    : QObject()
-    , QTextTableCell(rhs)
-    , d( new Private())
-    {
-        // XXX: Can we copy or clone a shape?
-        //d->shape = KoShape(rhs.d->shape);
-    }
-
 KoShape * TableCell::shape( ) const
 {
     return d->shape;

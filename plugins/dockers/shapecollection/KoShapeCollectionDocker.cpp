@@ -342,10 +342,11 @@ QIcon KoShapeCollectionDocker::generateShapeIcon(KoShape* shape)
     double diffy = 30 / converter.documentToViewY(shape->size().height());
     converter.setZoom(qMin(diffx, diffy));
 
-    QPixmap pixmap(converter.documentToViewX(shape->size().width()), converter.documentToViewY(shape->size().height()));
+    QPixmap pixmap(qRound(converter.documentToViewX(shape->size().width())) + 2, qRound(converter.documentToViewY(shape->size().height())) + 2);
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.translate(1, 1);
     shape->paint(painter, converter);
     painter.end();
 

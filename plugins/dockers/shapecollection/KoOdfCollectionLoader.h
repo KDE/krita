@@ -21,6 +21,8 @@
 
 #include <KoDom.h>
 
+#include <kurl.h>
+
 #include <QObject>
 #include <QList>
 #include <QStringList>
@@ -30,6 +32,7 @@ class KoOasisLoadingContext;
 class KoShapeLoadingContext;
 class QTimer;
 class KoShape;
+class KoFilterManager;
 
 class KoOdfCollectionLoader : public QObject
 {
@@ -45,6 +48,8 @@ class KoOdfCollectionLoader : public QObject
 
     protected:
         void nextFile();
+        void loadNativeFile(const QString& path);
+        QString findMimeTypeByUrl(const KUrl& url);
 
     protected slots:
         void loadShape();
@@ -60,6 +65,7 @@ class KoOdfCollectionLoader : public QObject
         QList<KoShape*> m_shapeList;
         QString m_path;
         QStringList m_fileList;
+        KoFilterManager* m_filterManager;
 
     signals:
         /**

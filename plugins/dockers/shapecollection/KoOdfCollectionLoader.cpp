@@ -26,12 +26,17 @@
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
+#include <KoFilterManager.h>
+#include <KoOdf.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kmimetype.h>s
 
 #include <QTimer>
 #include <QDir>
+#include <QFile>
+#include <QByteArray>
 
 KoOdfCollectionLoader::KoOdfCollectionLoader(const QString& path, QObject* parent)
     : QObject(parent)
@@ -40,6 +45,7 @@ KoOdfCollectionLoader::KoOdfCollectionLoader(const QString& path, QObject* paren
     m_odfStore = 0;
     m_shapeLoadingContext = 0;
     m_loadingContext = 0;
+    m_filterManager = 0;
 
     m_loadingTimer = new QTimer(this);
     m_loadingTimer->setInterval(0);
@@ -49,6 +55,8 @@ KoOdfCollectionLoader::KoOdfCollectionLoader(const QString& path, QObject* paren
 
 KoOdfCollectionLoader::~KoOdfCollectionLoader()
 {
+    delete m_filterManager;
+    m_filterManager = 0;
     delete m_shapeLoadingContext;
     delete m_loadingContext;
     m_shapeLoadingContext = 0;
@@ -65,7 +73,7 @@ KoOdfCollectionLoader::~KoOdfCollectionLoader()
 void KoOdfCollectionLoader::load()
 {
     QDir dir(m_path);
-    m_fileList = dir.entryList(QStringList() << "*.odg", QDir::Files);
+    m_fileList = dir.entryList(QStringList() << "*.odg" << "*.svg", QDir::Files);
 
     if(m_fileList.isEmpty())
     {
@@ -116,6 +124,99 @@ void KoOdfCollectionLoader::loadShape()
 
 void KoOdfCollectionLoader::nextFile()
 {
+    QString file = m_fileList.takeFirst();
+    QString filepath = m_path + file;
+    KUrl u;
+    u.setPath(filepath);
+    QString mimetype = findMimeTypeByUrl(u);
+
+    QString importedFile = filepath;
+
+    if(mimetype != KoOdf::mimeType(KoOdf::Graphics))
+    {
+        if(!m_filterManager)
+            m_filterManager = new KoFilterManager(QByteArray(KoOdf::mimeType(KoOdf::Graphics)));
+        KoFilter::ConversionStatus status;
+        importedFile = m_filterManager->import(filepath, status);
+        kDebug() << "File:" << filepath << "Import:" << importedFile;
+
+        if(status != KoFilter::OK)
+        {
+            QString msg;
+
+            switch(status)
+            {
+                case KoFilter::OK: break;
+
+                case KoFilter::CreationError:
+                    msg = i18n( "Creation error" ); break;
+
+                case KoFilter::FileNotFound:
+                    msg = i18n( "File not found" ); break;
+
+                case KoFilter::StorageCreationError:
+                    msg = i18n( "Cannot create storage" ); break;
+
+                case KoFilter::BadMimeType:
+                    msg = i18n( "Bad MIME type" ); break;
+
+                case KoFilter::EmbeddedDocError:
+                    msg = i18n( "Error in embedded document" ); break;
+
+                case KoFilter::WrongFormat:
+                    msg = i18n( "Format not recognized" ); break;
+
+                case KoFilter::NotImplemented:
+                    msg = i18n( "Not implemented" ); break;
+
+                case KoFilter::ParsingError:
+                    msg = i18n( "Parsing error" ); break;
+
+                case KoFilter::PasswordProtected:
+                    msg = i18n( "Document is password protected" ); break;
+
+                case KoFilter::InternalError:
+                case KoFilter::UnexpectedEOF:
+                case KoFilter::UnexpectedOpcode:
+                case KoFilter::StupidError: // ?? what is this ??
+                case KoFilter::UsageError:
+                    msg = i18n( "Internal error" ); break;
+
+                case KoFilter::OutOfMemory:
+                    msg = i18n( "Out of memory" ); break;
+
+                case KoFilter::UserCancelled:
+                case KoFilter::BadConversionGraph:
+                    // intentionally we do not prompt the error message here
+                    break;
+
+                    default: msg = i18n( "Unknown error" ); break;
+            }
+
+            if(!msg.isEmpty())
+            {
+                QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, filepath));
+                emit loadingFailed(errorMsg);
+            }
+
+            return;
+        }
+    }
+
+    if(!importedFile.isEmpty()) // Something to load (tmp or native file) ?
+    {
+        loadNativeFile(importedFile);
+        if (importedFile != filepath)
+        {
+            QFile::remove(importedFile);
+        }
+    } else {
+        emit loadingFailed(i18n("Failed to import the file: %1", filepath));
+    }
+}
+
+void KoOdfCollectionLoader::loadNativeFile(const QString& path)
+{
     delete m_shapeLoadingContext;
     delete m_loadingContext;
     m_shapeLoadingContext = 0;
@@ -128,8 +229,7 @@ void KoOdfCollectionLoader::nextFile()
         m_odfStore = 0;
     }
 
-    QString file = m_fileList.takeFirst();
-    KoStore* store = KoStore::createStore(m_path + file, KoStore::Read);
+    KoStore* store = KoStore::createStore(path, KoStore::Read);
 
     if(store->bad())
     {
@@ -156,7 +256,7 @@ void KoOdfCollectionLoader::nextFile()
 
     if (realBody.isNull()) {
         kError() << "No body tag found!" << endl;
-        emit loadingFailed(i18n("No body tag found in file: %1", file));
+        emit loadingFailed(i18n("No body tag found in file: %1", path));
         return;
     }
 
@@ -164,7 +264,7 @@ void KoOdfCollectionLoader::nextFile()
 
     if (m_body.isNull()) {
         kError() << "No office:drawing tag found!" << endl;
-        emit loadingFailed(i18n("No office:drawing tag found in file: %1", file));
+        emit loadingFailed(i18n("No office:drawing tag found in file: %1", path));
         return;
     }
 
@@ -172,7 +272,7 @@ void KoOdfCollectionLoader::nextFile()
 
     if (m_page.isNull()) {
         kError() << "No shapes found!" << endl;
-        emit loadingFailed(i18n("No shapes found in file: %1", file));
+        emit loadingFailed(i18n("No shapes found in file: %1", path));
         return;
     }
 
@@ -180,11 +280,44 @@ void KoOdfCollectionLoader::nextFile()
 
     if (m_shape.isNull()) {
         kError() << "No shapes found!" << endl;
-        emit loadingFailed(i18n("No shapes found in file: %1", file));
+        emit loadingFailed(i18n("No shapes found in file: %1", path));
         return;
     }
 
     m_loadingTimer->start();
+}
+
+QString KoOdfCollectionLoader::findMimeTypeByUrl(const KUrl& url)
+{
+    //
+    // The following code was copied from KoDocument::openFile()
+    //
+    QString typeName = KMimeType::findByUrl(url, 0, true)->name();
+
+    // Allow to open backup files, don't keep the mimetype application/x-trash.
+    if (typeName == "application/x-trash")
+    {
+        QString path = url.path();
+        KMimeType::Ptr mime = KMimeType::mimeType(typeName);
+        QStringList patterns = mime ? mime->patterns() : QStringList();
+
+        // Find the extension that makes it a backup file, and remove it
+        for(QStringList::Iterator it = patterns.begin(); it != patterns.end(); ++it) {
+            QString ext = *it;
+            if (!ext.isEmpty() && ext[0] == '*')
+            {
+                ext.remove(0, 1);
+                if (path.endsWith(ext)) {
+                    path.truncate(path.length() - ext.length());
+                    break;
+                }
+            }
+        }
+
+        typeName = KMimeType::findByPath(path, 0, true)->name();
+    }
+
+    return typeName;
 }
 
 #include "KoOdfCollectionLoader.moc"

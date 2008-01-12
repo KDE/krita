@@ -1375,6 +1375,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
 
                             KoInlineObject *dateObject = dateFactory->createInlineObject( &dateProperties );
                             textObjectManager->insertInlineObject( cursor, dateObject );
+                            *stripLeadingSpace = false;
                         }
                     }
                 }

@@ -98,14 +98,12 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     m_addCollectionButton->setToolTip(i18n("Open Shape Collection"));
     m_addCollectionButton->setPopupMode(QToolButton::InstantPopup);
 
-    buildAddCollectionMenu();
-
     m_closeCollectionButton = new QToolButton (mainWidget);
     mainLayout->addWidget(m_closeCollectionButton, 0, 2);
     m_closeCollectionButton->setIcon(SmallIcon("list-remove"));
     m_closeCollectionButton->setIconSize(QSize(16, 16));
     m_closeCollectionButton->setToolTip(i18n("Close Shape Collection"));
-    
+
     connect(m_closeCollectionButton, SIGNAL(clicked()),
             this, SLOT(removeCurrentCollection()));
 
@@ -114,6 +112,10 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
         m_collectionsCombo->setVisible(false);
         m_addCollectionButton->setVisible(false);
         m_closeCollectionButton->setVisible(false);
+    }
+    else
+    {
+        buildAddCollectionMenu();
     }
 
     m_collectionView = new QListView (mainWidget);
@@ -340,7 +342,7 @@ QIcon KoShapeCollectionDocker::generateShapeIcon(KoShape* shape)
     double diffy = 30 / converter.documentToViewY(shape->size().height());
     converter.setZoom(qMin(diffx, diffy));
 
-    QPixmap pixmap(32, 32);
+    QPixmap pixmap(converter.documentToViewX(shape->size().width()), converter.documentToViewY(shape->size().height()));
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);

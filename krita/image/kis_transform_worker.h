@@ -61,8 +61,11 @@ private:
     double  m_xscale, m_yscale;
     double  m_xshear, m_yshear, m_rotation;
     qint32  m_xtranslate, m_ytranslate;
-    KoUpdater *m_progress;
+    KoUpdater *m_progressUpdater;
     KisFilterStrategy *m_filter;
+    int m_progressTotalSteps;
+    int m_progressStep;
+    int m_lastProgressReport;
 
     bool m_fixBorderAlpha;
 };

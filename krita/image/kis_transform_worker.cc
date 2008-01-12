@@ -46,7 +46,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
     m_rotation = rotation,
     m_xtranslate = xtranslate;
     m_ytranslate = ytranslate;
-    m_progress = progress;
+    m_progressUpdater = progress;
     m_filter = filter;
     m_fixBorderAlpha = fixBorderAlpha;
 }
@@ -59,45 +59,24 @@ KisTransformWorker::~KisTransformWorker()
 
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-#if 0 // XXX_SELECTION
-    KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
 
-    if(src->hasSelection())
-    {
-        r = src->selection()->selectedExactRect();
-        dstSelection = dst->selection();
-    }
-    else
-    {
-        r = src->exactBounds();
-        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
-    }
+    r = src->exactBounds();
 
     KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
     KisHLineIterator vit = dst->createHLineIterator(r.x(), r.top(), r.width());
-    KisHLineIterator dstSelIt = dstSelection->createHLineIterator(r.x(), r.top(), r.width());
     for (qint32 i = 0; i < r.height(); ++i) {
-            while (!hit.isDone()) {
-            if (hit.isSelected())  {
-                memcpy(vit.rawData(), hit.rawData(), pixelSize);
+        while (!hit.isDone()) {
+            memcpy(vit.rawData(), hit.rawData(), pixelSize);
 
-                // XXX: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha(hit.rawData(), 0, 1);
-            }
-            *(dstSelIt.rawData()) = hit.selectedness();
             ++hit;
             ++vit;
-            ++dstSelIt;
         }
         hit.nextRow();
         vit.nextRow();
-        dstSelIt.nextRow();
-
+/*
         //progress info
         m_progressStep += r.width();
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
@@ -108,49 +87,28 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         if (m_progressUpdater->interrupted()) {
             break;
         }
-    }
-#endif
+ */   }
 }
 
 void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-#if 0
-    KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
 
-    if(src->hasSelection())
-    {
-        r = src->selection()->selectedExactRect();
-        dstSelection = dst->selection();
-    }
-    else
-    {
-        r = src->exactBounds();
-        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
-    }
+    r = src->exactBounds();
 
     for (qint32 y = r.bottom(); y >= r.top(); --y) {
         KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
         KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width());
-        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(-y, r.x(), r.width());
 
-            while (!hit.isDone()) {
-            if (hit.isSelected())  {
-                memcpy(vit.rawData(), hit.rawData(), pixelSize);
+        while (!hit.isDone()) {
+            memcpy(vit.rawData(), hit.rawData(), pixelSize);
 
-                // XXX: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha(hit.rawData(), 0, 1);
-            }
-            *(dstSelIt.rawData()) = hit.selectedness();
             ++hit;
             ++vit;
-            ++dstSelIt;
         }
-
+/*
         //progress info
         m_progressStep += r.width();
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
@@ -161,56 +119,32 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
         if (m_progressUpdater->interrupted()) {
             break;
         }
-    }
-#endif
+*/    }
 }
 
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-
-#if 0
-    KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
 
-    if(src->hasSelection())
-    {
-        r = src->selection()->selectedExactRect();
-        dstSelection = dst->selection();
-    }
-    else
-    {
-        r = src->exactBounds();
-        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
-    }
-    qint32 x = 0;
+    r = src->exactBounds();
 
     KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
 
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
         // Read the horizontal line from back to front, write onto the vertical column
         KisVLineIterator vit = dst->createVLineIterator(y, -r.x() - r.width(), r.width());
-        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(y, -r.x() - r.width(), r.width());
 
         hit += r.width() - 1;
         while (!vit.isDone()) {
-            if (hit.isSelected()) {
-                memcpy(vit.rawData(), hit.rawData(), pixelSize);
+            memcpy(vit.rawData(), hit.rawData(), pixelSize);
 
-                // XXX: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha(hit.rawData(), 0, 1);
-            }
-            *(dstSelIt.rawData()) = hit.selectedness();
             --hit;
             ++vit;
-            ++dstSelIt;
         }
         hit.nextRow();
-        ++x;
-
+/*
         //progress info
         m_progressStep += r.width();
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
@@ -221,53 +155,30 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
         if (m_progressUpdater->interrupted()) {
             break;
         }
-    }
-#endif
+ */   }
 }
 
 void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-
-#if 0
-    KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
 
-    if(src->hasSelection())
-    {
-        r = src->selection()->selectedExactRect();
-        dstSelection = dst->selection();
-    }
-    else
-    {
-        r = src->exactBounds();
-        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
-    }
+    r = src->exactBounds();
 
     KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.top(), r.width());
 
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
         KisHLineIterator dstIt = dst->createHLineIterator(-r.x() - r.width(), -y, r.width());
-        KisHLineIterator dstSelIt = dstSelection->createHLineIterator(-r.x() - r.width(), -y, r.width());
 
         srcIt += r.width() - 1;
         while (!dstIt.isDone()) {
-            if (srcIt.isSelected())  {
-                memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
-
-                // XXX: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha(srcIt.rawData(), 0, 1);
-            }
-            *(dstSelIt.rawData()) = srcIt.selectedness();
+            memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
             --srcIt;
             ++dstIt;
-            ++dstSelIt;
         }
         srcIt.nextRow();
-
+/*
         //progress info
         m_progressStep += r.width();
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
@@ -278,8 +189,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         if (m_progressUpdater->interrupted()) {
             break;
         }
-    }
-#endif
+*/    }
 }
 
 template <class iter> iter createIterator(KisPaintDevice *dev, qint32 start, qint32 lineNum, qint32 len);
@@ -301,50 +211,21 @@ template <class iter> void calcDimensions (KisPaintDevice *dev, qint32 &srcStart
 template <> void calcDimensions <KisHLineIteratorPixel>
 (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
 {
-    Q_UNUSED(dev);
-    Q_UNUSED(srcStart);
-    Q_UNUSED(srcLen);
-    Q_UNUSED(firstLine);
-    Q_UNUSED(numLines);
-#if 0
-    if(dev->hasSelection())
-    {
-        QRect r = dev->selection()->selectedExactRect();
-        r.getRect(&srcStart, &firstLine, &srcLen, &numLines);
-    }
-    else {
-        QRect rc = dev->exactBounds();
-        srcStart = rc.x();
-        firstLine = rc.y();
-        srcLen = rc.width();
-        numLines = rc.height();
-    }
-#endif
+    QRect rc = dev->exactBounds();
+    srcStart = rc.x();
+    firstLine = rc.y();
+    srcLen = rc.width();
+    numLines = rc.height();
 }
 
 template <> void calcDimensions <KisVLineIteratorPixel>
 (KisPaintDevice *dev, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines)
 {
-
-    Q_UNUSED(dev);
-    Q_UNUSED(srcStart);
-    Q_UNUSED(srcLen);
-    Q_UNUSED(firstLine);
-    Q_UNUSED(numLines);
-#if 0
-    if(dev->hasSelection())
-    {
-        QRect r = dev->selection()->selectedExactRect();
-        r.getRect(&firstLine, &srcStart, &numLines, &srcLen);
-    }
-    else {
-        QRect rc = dev->exactBounds();
-        firstLine = rc.x();
-        srcStart = rc.y();
-        numLines= rc.width();
-        srcLen = rc.height();
-    }
-#endif
+    QRect rc = dev->exactBounds();
+    firstLine = rc.x();
+    srcStart = rc.y();
+    numLines= rc.width();
+    srcLen = rc.height();
 }
 
 struct FilterValues
@@ -359,30 +240,16 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
                                        double floatscale, double shear, qint32 dx,
                                        KisFilterStrategy *filterStrategy, bool fixBorderAlpha)
 {
-
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(floatscale);
-    Q_UNUSED(shear);
-    Q_UNUSED(dx);
-    Q_UNUSED(filterStrategy);
-    Q_UNUSED(fixBorderAlpha);
-#if 0
     qint32 lineNum,srcStart,firstLine,srcLen,numLines;
     qint32 center, begin, end;    /* filter calculation variables */
     quint8 *data;
     quint8 pixelSize = src->pixelSize();
-    KisSelectionSP dstSelection;
     KoColorSpace * cs = src->colorSpace();
     KoMixColorsOp * mixOp = cs->mixColorsOp();
     qint32 scale;
     qint32 scaleDenom;
     qint32 shearFracOffset;
 
-    if(src->hasSelection())
-        dstSelection = dst->selection();
-    else
-        dstSelection = KisSelectionSP(new KisSelection(KisPaintDeviceSP(dst))); // essentially a dummy to be deleted
 
     calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
 
@@ -422,9 +289,6 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 
     quint8 *tmpLine = new quint8[(srcLen +2*extraLen)* pixelSize];
     Q_CHECK_PTR(tmpLine);
-
-    quint8 *tmpSel = new quint8[srcLen+2*extraLen];
-    Q_CHECK_PTR(tmpSel);
 
     //allocate space for colors
     const quint8 **colors = new const quint8 *[2*support+1];
@@ -499,22 +363,11 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 
             data = srcIt.rawData();
             memcpy(&tmpLine[i*pixelSize], data, pixelSize);
-
-            if(srcIt.isSelected())
-            {
-                // XXX: Should set alpha = alpha*(1-selectedness)
-                cs->setAlpha(data, 0, 1);
-                tmpSel[i] = 255;
-            }
-            else {
-                tmpSel[i] = 0;
-            }
             ++srcIt;
             i++;
         }
 
         T dstIt = createIterator <T>(dst, dstStart, lineNum, dstLen);
-        T dstSelIt = createIterator <T>(dstSelection.data(), dstStart, lineNum, dstLen);
 
         i=0;
         while(!dstIt.isDone())
@@ -540,31 +393,23 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
             end = (center + support)>>8; // takes floor
 
 ////printf("sup=%d begin=%d end=%d",support,begin,end);
-            quint8 selectedness = tmpSel[center>>8];
-            if(selectedness)
+            int num=0;
+            for(int srcpos = begin; srcpos <= end; ++srcpos)
             {
-                int num=0;
-                for(int srcpos = begin; srcpos <= end; ++srcpos)
-                {
-                    colors[num] = &tmpLine[srcpos*pixelSize];
-                    num++;
-                }
-                data = dstIt.rawData();
-                mixOp->mixColors(colors, filterWeights[center&255].weight, filterWeights[center&255].numWeights, data);
-
-                //possibly fix the alpha of the border if user wants it
-                if(fixBorderAlpha && (i==0 || i==dstLen-1))
-                    cs->setAlpha(data, cs->alpha(&tmpLine[(center>>8)*pixelSize]), 1);
-
-                data = dstSelIt.rawData();
-                *data = selectedness;
+                colors[num] = &tmpLine[srcpos*pixelSize];
+                num++;
             }
+            data = dstIt.rawData();
+            mixOp->mixColors(colors, filterWeights[center&255].weight, filterWeights[center&255].numWeights, data);
 
-            ++dstSelIt;
+            //possibly fix the alpha of the border if user wants it
+            if(fixBorderAlpha && (i==0 || i==dstLen-1))
+                cs->setAlpha(data, cs->alpha(&tmpLine[(center>>8)*pixelSize]), 1);
+
             ++dstIt;
             i++;
         }
-
+/*
         //progress info
         m_progressStep += dstLen;
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
@@ -575,25 +420,19 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         if (m_progressUpdater->interrupted()) {
             break;
         }
-    }
+*/    }
     delete [] colors;
     delete [] tmpLine;
-    delete [] tmpSel;
     delete [] filterWeights;
-#endif
 }
 
 bool KisTransformWorker::run()
 {
-#if 0
+//return false;
     //progress info
     m_progressTotalSteps = 0;
     m_progressStep = 0;
-    QRect r;
-    if( m_sourceSelection )
-        r = m_sourceSelection->selectedExactRect();
-    else
-        r = m_dev->exactBounds();
+    QRect r = m_dev->exactBounds();
 
     KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev1"));
     KisPaintDeviceSP tmpdev2 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2"));
@@ -684,43 +523,37 @@ bool KisTransformWorker::run()
             rotateNone(srcdev, tmpdev1);
             srcdev = tmpdev1;
         }
-        if(m_dev->hasSelection())
-            m_dev->selection()->clear();
 
         srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);
         rotateNone(srcdev, m_dev);
 
         //progress info
-        m_progressUpdater->setProgress(100);
+//        m_progressUpdater->setProgress(100);
 
+        return false;
         return m_progressUpdater->interrupted();
     }
-
+/*
     if ( m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
     }
-
+*/
     transformPass <KisHLineIteratorPixel>(srcdev.data(), tmpdev2.data(), xscale, yscale*xshear, 0, m_filter, m_fixBorderAlpha);
-    if(m_dev->hasSelection())
-        m_dev->selection()->clear();
-
+/*
     if ( m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
     }
-
+*/
      // Now do the second pass
      transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter, m_fixBorderAlpha);
-
-    if(m_dev->hasSelection())
-        m_dev->selection()->clear();
-
+/*
     if ( m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
     }
-
+*/
     if(xshear!=0.0)
         transformPass <KisHLineIteratorPixel>(tmpdev3.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter, m_fixBorderAlpha);
      else
@@ -730,12 +563,11 @@ bool KisTransformWorker::run()
          rotateNone(tmpdev3, m_dev);
      }
 
-    m_dev->setDirty();
+    //CBRm_dev->setDirty();
 
     //progress info
-    m_progressUpdater->setProgress(100);
+//    m_progressUpdater->setProgress(100);
 
-    return m_progressUpdater->interrupted();
-#endif
+//    return m_progressUpdater->interrupted();
     return false;
 }

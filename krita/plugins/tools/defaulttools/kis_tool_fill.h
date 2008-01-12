@@ -68,7 +68,6 @@ private:
     QPointF m_startPos;
     int m_threshold;
     qint32 m_depth;
-    KisLayerSP m_lay;
     quint8* m_oldColor, *m_color;
     KisPainter *m_painter;
     KisFillPainter *m_fillPainter;

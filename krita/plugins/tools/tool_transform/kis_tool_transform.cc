@@ -61,7 +61,7 @@
 
 namespace {
     class TransformCmd : public KisSelectedTransaction {
-        typedef KisSelectedTransaction super;
+        typedef KisSelectedTransaction KisTool;
 
     public:
         TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
@@ -85,7 +85,7 @@ namespace {
     };
 
     TransformCmd::TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight) :
-        super(i18n("Transform"), device)
+        KisTool(i18n("Transform"), device)
         , m_scaleX(scaleX)
         , m_scaleY(scaleY)
         , m_translate(translate)
@@ -118,17 +118,17 @@ namespace {
 
     void TransformCmd::redo()
     {
-        super::redo();
+        KisTool::redo();
     }
 
     void TransformCmd::undo()
     {
-        super::undo();
+        KisTool::undo();
     }
 }
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
-    : super(canvas)
+    : KisTool(canvas, KisCursor::rotateCursor())
     , m_canvas(canvas)
 {
     setObjectName("tool_transform");
@@ -167,7 +167,7 @@ void KisToolTransform::activate(bool temporary)
 {
     Q_UNUSED(temporary);
 
-    if( m_currentLayer && m_currentLayer->paintDevice() )
+    if( currentLayer() && currentLayer()->paintDevice() )
     {
         //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
         //m_subject->undoAdapter()->setCommandHistoryListener( this );
@@ -189,20 +189,20 @@ void KisToolTransform::activate(bool temporary)
             m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
         }
     }
-    m_currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    currentLayer() = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
 }
 
 void KisToolTransform::initHandles()
 {
     int x,y,w,h;
 
-    KisPaintDeviceSP dev = m_currentLayer->paintDevice();
+    KisPaintDeviceSP dev = currentLayer()->paintDevice();
 
     // Create a lazy copy of the current state
     m_origDevice = new KisPaintDevice(*dev.data());
     Q_ASSERT(m_origDevice);
 
-    KisSelectionSP selection = m_currentLayer->selection();
+    KisSelectionSP selection = currentLayer()->selection();
     if(selection)
     {
         QRect r = selection->selectedExactRect();
@@ -229,7 +229,7 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 {
     KisImageSP img = image();
 
-    if (img && m_currentLayer->paintDevice() && e->button() == Qt::LeftButton) {
+    if (img && currentLayer()->paintDevice() && e->button() == Qt::LeftButton) {
         QPointF mousePos = QPointF(e->point.x() * img->xRes(), e->point.y() * img->yRes());
         switch(m_function)
         {
@@ -654,21 +654,21 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolTransform::transform()
 {
-    if (!image() || !m_currentLayer->paintDevice())
+    if (!image() || !currentLayer()->paintDevice())
         return;
 
     QPointF t = m_translate - rot(m_originalCenter.x() * m_scaleX, m_originalCenter.y() * m_scaleY);
     //KoUpdater *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
-    TransformCmd * transaction = new TransformCmd(this, m_currentLayer->paintDevice(), m_scaleX,
+    TransformCmd * transaction = new TransformCmd(this, currentLayer()->paintDevice(), m_scaleX,
                                                   m_scaleY, m_translate, m_a, m_origSelection, m_originalTopLeft, m_originalBottomRight);
 
     // Copy the original state back.
     QRect rc = m_origDevice->extent();
     rc = rc.normalized();
-    m_currentLayer->paintDevice()->clear();
-    KisPainter gc(m_currentLayer->paintDevice());
+    currentLayer()->paintDevice()->clear();
+    KisPainter gc(currentLayer()->paintDevice());
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
     gc.end();
 
@@ -678,19 +678,19 @@ void KisToolTransform::transform()
         QRect rc = m_origSelection->selectedRect();
         rc = rc.normalized();
         // XXX_SELECTION This used to create a new selection!
-        if ( m_currentLayer->selection() ) m_currentLayer->selection()->clear();
-        KisPainter sgc(KisPaintDeviceSP(m_currentLayer->selection().data()));
+        if ( currentLayer()->selection() ) currentLayer()->selection()->clear();
+        KisPainter sgc(KisPaintDeviceSP(currentLayer()->selection().data()));
         sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, KisPaintDeviceSP(m_origSelection.data()), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
     }
     else
-        if(m_currentLayer->selection())
-            m_currentLayer->selection()->clear();
+        if(currentLayer()->selection())
+            currentLayer()->selection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    KisTransformWorker worker(m_currentLayer->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), 0/*progress*/, m_filter);
+    KisTransformWorker worker(currentLayer()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), 0/*progress*/, m_filter);
     worker.run();
 
 // XXX_PROGRESS, XXX_LAYERS
@@ -702,7 +702,7 @@ void KisToolTransform::transform()
 //         return;
 //     }
 
-    m_currentLayer->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
+    currentLayer()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()

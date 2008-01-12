@@ -711,14 +711,14 @@ QRect KisPrescaledProjection::viewRectFromImagePixels( const QRect & rc )
     
     QRect viewRect = m_d->viewConverter->documentToView(docRect).toAlignedRect();
     viewRect = viewRect.translated( -m_d->documentOffset );
-    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasSize.width(), m_d->canvasSize.width() ) );
+    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasSize.width(), m_d->canvasSize.height() ) );
 
     return viewRect;
 }
 
 QRect KisPrescaledProjection::imageRectFromViewPortPixels( const QRect & viewportRect )
 {
-    QRect intersectedRect = viewportRect.intersected( QRect( 0, 0, m_d->canvasSize.width(), m_d->canvasSize.width() ) );
+    QRect intersectedRect = viewportRect.intersected( QRect( 0, 0, m_d->canvasSize.width(), m_d->canvasSize.height() ) );
     QRect translatedRect = intersectedRect.translated( -m_d->documentOffset );
     QRectF docRect = m_d->viewConverter->viewToDocument( translatedRect );
 

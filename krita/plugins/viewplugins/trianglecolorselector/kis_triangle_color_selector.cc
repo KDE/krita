@@ -29,11 +29,15 @@ struct KisTriangleColorSelector::Private {
     QPixmap wheelPixmap;
     QPixmap trianglePixmap;
     int hue;
+    int saturation;
+    int value;
 };
 
 KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
 {
     d->hue = 0;
+    d->saturation = 0;
+    d->value = 0;
 }
 
 KisTriangleColorSelector::~KisTriangleColorSelector()
@@ -47,14 +51,49 @@ void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
     QPainter p(this);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
     p.setRenderHint(QPainter::Antialiasing);
-    int sizeWheel = qMin(width(), height());
-    double xpos = sizeWheel * 0.5;
-    double ypos = sizeWheel * 0.5;
+    int sizeColorSelector_ = qMin(width(), height());
+    double xpos = sizeColorSelector_ * 0.5;
+    double ypos = sizeColorSelector_ * 0.5;
+    double wheelWidth_ = 0.5 * sizeColorSelector_ * wheelWidth();
     QPointF pos(xpos, ypos);
     p.translate(QPointF( 0.5*width(), 0.5*height()  ) );
+    // Draw the wheel
     p.drawPixmap( -pos, d->wheelPixmap );
+    // Draw the triangle
+    p.save();
     p.rotate( hue() + 150 );
-    p.drawPixmap( -pos /*+ QPointF(1.0, 1.0)*/, d->trianglePixmap );
+    p.drawPixmap( -pos , d->trianglePixmap );
+    // Draw selectors
+    p.restore();
+    // Draw value,saturation selector
+    //   Compute coordinates
+    {
+        double vs_selector_ypos_ = value() / 255.0;
+        double center_ = 0.5 * sizeColorSelector_;
+        double radius_ = center_ * (1.0 - wheelWidth());
+        double lt_ = 3.0 / sqrt(3.0) * radius_; // Length of triangle
+        double ht_ = lt_ * sqrt(3.0) * 0.5;
+        double triangle_bottom_ = ht_ + wheelWidth_; // bottom of the triangle
+        double ls_ = (1.0 - vs_selector_ypos_) * lt_; // length of the saturation on the triangle
+        double vs_selector_xpos_ = ls_ * (saturation() / 255.0 - 0.5);
+        // Draw it
+        p.save();
+        p.setPen( QPen( Qt::white, 1.0) );
+        p.rotate( hue() + 90 );
+        p.drawEllipse( QRectF( -1.5 + vs_selector_xpos_,
+                               -1.5 + (ypos - triangle_bottom_) + vs_selector_ypos_ * ht_,
+                                3.0 , 3.0 ));
+    }
+    p.restore();
+    // Draw Hue selector
+    p.save();
+    p.setPen( QPen( Qt::white, 1.0) );
+    p.rotate( hue() - 90 );
+    double hueSelectorWidth_ = 0.8;
+    double hueSelectorOffset_ = 0.5 *( 1.0 - hueSelectorWidth_) * wheelWidth_;
+    double hueSelectorSize_ = 0.8 * wheelWidth_ ;
+    p.drawRect( QRectF( -1.5, -ypos + hueSelectorOffset_, 3.0, hueSelectorSize_ ));
+    p.restore();
     p.end();
 }
 
@@ -70,6 +109,26 @@ void KisTriangleColorSelector::setHue(int h)
     update();
 }
 
+int KisTriangleColorSelector::value() const
+{
+    return d->value;
+}
+
+void KisTriangleColorSelector::setValue(int v)
+{
+    d->value = v;
+}
+
+int KisTriangleColorSelector::saturation() const
+{
+    return d->saturation;
+}
+
+void KisTriangleColorSelector::setSaturation(int s)
+{
+    d->saturation = s;
+}
+
 void KisTriangleColorSelector::incHue()
 {
     int nh = d->hue + 1;
@@ -78,6 +137,18 @@ void KisTriangleColorSelector::incHue()
         nh = 0;
     }
     setHue(nh);
+    int nv = d->value + 1;
+    if(nv > 255)
+    {
+        nv = 0;
+    }
+    setValue(nv);
+    int ns = d->saturation - 1;
+    if(ns < 0)
+    {
+        ns = 255;
+    }
+    setSaturation(ns);
 }
 
 

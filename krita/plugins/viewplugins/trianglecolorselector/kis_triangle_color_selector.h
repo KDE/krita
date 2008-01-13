@@ -28,11 +28,16 @@ class KisTriangleColorSelector : public QWidget {
     protected:
         void paintEvent( QPaintEvent * event );
         void resizeEvent( QResizeEvent * event );
+    public:
+        int hue() const;
+        int value() const;
+        int saturation() const;
     protected:
         double wheelWidth() const;
-        int hue() const;
     public slots:
         void setHue(int h);
+        void setValue(int v);
+        void setSaturation(int s);
         void incHue();
     private:
         void generateTriangle();

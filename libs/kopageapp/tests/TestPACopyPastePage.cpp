@@ -89,8 +89,8 @@ void TestPACopyPastePage::copyPasteSinglePage()
     pages.append( page1 );
     copyAndPaste( &doc, pages, page1 );
 
-    QVERIFY( doc.pages( true ).size() == 1 );
-    QVERIFY( doc.pages( false ).size() == 2 );
+    QCOMPARE( doc.pages( true ).size(), 1 );
+    QCOMPARE( doc.pages( false ).size(), 2 );
     QVERIFY( doc.pages( false ).front() == page1 );
 
     KoPAPageBase * page2 = doc.pages( false ).last();
@@ -98,8 +98,8 @@ void TestPACopyPastePage::copyPasteSinglePage()
 
     copyAndPaste( &doc, pages, page1 );
 
-    QVERIFY( doc.pages( true ).size() == 1 );
-    QVERIFY( doc.pages( false ).size() == 3 );
+    QCOMPARE( doc.pages( true ).size(), 1 );
+    QCOMPARE( doc.pages( false ).size(), 3 );
     QVERIFY( doc.pages( false )[0] == page1 );
     QVERIFY( doc.pages( false )[2] == page2 );
 
@@ -112,8 +112,8 @@ void TestPACopyPastePage::copyPasteSinglePage()
 
     copyAndPaste( &doc, pages, 0 );
 
-    QVERIFY( doc.pages( true ).size() == 1 );
-    QVERIFY( doc.pages( false ).size() == 4 );
+    QCOMPARE( doc.pages( true ).size(), 1 );
+    QCOMPARE( doc.pages( false ).size(), 4 );
     QVERIFY( doc.pages( false )[1] == page1 );
     QVERIFY( doc.pages( false )[2] == page3 );
     QVERIFY( doc.pages( false )[3] == page2 );
@@ -122,9 +122,9 @@ void TestPACopyPastePage::copyPasteSinglePage()
     addShape( master1 );
     paste( &doc, data, page1 );
 
-    QVERIFY( doc.pages( true ).size() == 2 );
+    QCOMPARE( doc.pages( true ).size(), 2 );
     QVERIFY( doc.pages( true )[0] == master1 );
-    QVERIFY( doc.pages( false ).size() == 5 );
+    QCOMPARE( doc.pages( false ).size(), 5 );
     QVERIFY( doc.pages( false )[1] == page1 );
     QVERIFY( doc.pages( false )[3] == page3 );
     QVERIFY( doc.pages( false )[4] == page2 );
@@ -146,16 +146,16 @@ void TestPACopyPastePage::copyPasteSingleMasterPage()
     pages.append( master1 );
     copyAndPaste( &doc, pages, master1 );
 
-    QVERIFY( doc.pages( false ).size() == 1 );
-    QVERIFY( doc.pages( true ).size() == 2 );
+    QCOMPARE( doc.pages( false ).size(), 1 );
+    QCOMPARE( doc.pages( true ).size(), 2 );
     QVERIFY( doc.pages( true ).front() == master1 );
 
     KoPAPageBase * master2 = doc.pages( true )[1];
 
     copyAndPaste( &doc, pages, master1 );
 
-    QVERIFY( doc.pages( false ).size() == 1 );
-    QVERIFY( doc.pages( true ).size() == 3 );
+    QCOMPARE( doc.pages( false ).size(), 1 );
+    QCOMPARE( doc.pages( true ).size(), 3 );
     QVERIFY( doc.pages( true )[0] == master1 );
     QVERIFY( doc.pages( true )[2] == master2 );
 
@@ -167,8 +167,8 @@ void TestPACopyPastePage::copyPasteSingleMasterPage()
 
     copyAndPaste( &doc, pages, 0 );
 
-    QVERIFY( doc.pages( false ).size() == 1 );
-    QVERIFY( doc.pages( true ).size() == 4 );
+    QCOMPARE( doc.pages( false ).size(), 1 );
+    QCOMPARE( doc.pages( true ).size(), 4 );
     QVERIFY( doc.pages( true )[1] == master1 );
     QVERIFY( doc.pages( true )[2] == master3 );
     QVERIFY( doc.pages( true )[3] == master2 );
@@ -200,8 +200,8 @@ void TestPACopyPastePage::copyPasteMuliplePages()
     pages.append( page2 );
     copyAndPaste( &doc, pages, page2 );
 
-    QVERIFY( doc.pages( true ).size() == 2 );
-    QVERIFY( doc.pages( false ).size() == 5 );
+    QCOMPARE( doc.pages( true ).size(), 2 );
+    QCOMPARE( doc.pages( false ).size(), 5 );
     QVERIFY( doc.pages( false )[0] == page1 );
     QVERIFY( doc.pages( false )[1] == page2 );
     QVERIFY( doc.pages( false )[4] == page3 );
@@ -218,7 +218,7 @@ void TestPACopyPastePage::copyPasteMuliplePages()
     masterPages.append( master1 );
     copyAndPaste( &doc, masterPages, master2 );
 
-    QVERIFY( doc.pages( true ).size() == 3 );
+    QCOMPARE( doc.pages( true ).size(), 3 );
     QVERIFY( doc.pages( true )[0] == master1 );
     QVERIFY( doc.pages( true )[1] == master2 );
 
@@ -233,8 +233,8 @@ void TestPACopyPastePage::copyPasteMuliplePages()
     addShape( master2 );
     paste( &doc, data, page6 );
 
-    QVERIFY( doc.pages( true ).size() == 4 );
-    QVERIFY( doc.pages( false ).size() == 9 );
+    QCOMPARE( doc.pages( true ).size(), 4 );
+    QCOMPARE( doc.pages( false ).size(), 9 );
     QVERIFY( doc.pages( false )[0] == page1 );
     QVERIFY( doc.pages( false )[1] == page2 );
     QVERIFY( doc.pages( false )[2] == page4 );

@@ -49,7 +49,7 @@ public:
         setWidget( m_colorSelector );
         QTimer* t = new QTimer;
         t->connect(t, SIGNAL(timeout()), m_colorSelector, SLOT(incHue()));
-        t->start(1000);
+        t->start(100);
     }
 private:
     KisTriangleColorSelector* m_colorSelector;

@@ -243,8 +243,8 @@ void KisTriangleColorSelector::generateWheel()
 {
     QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
     double center = 0.5 * d->sizeColorSelector;
-    double normExt = pow2(center);
-    double normInt = pow2(center * (1.0 - d->wheelWidthProportion));
+    double normExt = qAbs(center);
+    double normInt = qAbs(center * (1.0 - d->wheelWidthProportion));
     for(int y = 0; y < d->sizeColorSelector; y++)
     {
         double yc = y - center;
@@ -252,14 +252,23 @@ void KisTriangleColorSelector::generateWheel()
         for(int x = 0; x < d->sizeColorSelector; x++)
         {
             double xc = x - center;
-            double norm = pow2( xc ) + y2;
-            if( norm <= normExt and norm >= normInt )
+            double norm = sqrt(pow2( xc ) + y2);
+            if( norm <= normExt + 1.0 and norm >= normInt - 1.0 )
             {
+                double acoef = 1.0;
+                if(norm > normExt ) acoef = (1.0 + normExt - norm);
+                else if(norm < normInt ) acoef = (1.0 - normInt + norm);
+                if(acoef < 1.0) dbgKrita << acoef;
                 double angle = atan2(yc, xc);
                 int h = (int)((180 * angle / M_PI) + 180);
                 int r,g,b;
                 hsv_to_rgb(h, 255, 255, &r, &g, &b);
-                img.setPixel(x,y, qRgb(r, g, b));
+                if( acoef < 0.999)
+                {
+                    img.setPixel(x,y, qRgba( (int)(r * acoef), (int)(g * acoef), (int)(b * acoef), (int)(255 * acoef)));
+                } else {
+                    img.setPixel(x,y, qRgba(r, g, b, 255 ));
+                }
             } else {
                 img.setPixel(x,y, qRgba(0,0,0,0));
             }

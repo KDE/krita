@@ -1173,3 +1173,33 @@ void KoPathShape::setFillRule( Qt::FillRule fillRule )
 {
     d->fillRule = fillRule;
 }
+
+KoPathShape * KoPathShape::fromQPainterPath( const QPainterPath &path )
+{
+    KoPathShape * shape = new KoPathShape();
+
+    int elementCount = path.elementCount();
+    for( int i = 0; i < elementCount; i++ )
+    {
+        QPainterPath::Element element = path.elementAt( i );
+        switch( element.type )
+        {
+            case QPainterPath::MoveToElement:
+                shape->moveTo( QPointF( element.x, element.y ) );
+                break;
+            case QPainterPath::LineToElement:
+                shape->lineTo( QPointF( element.x, element.y ) );
+                break;
+            case QPainterPath::CurveToElement:
+                shape->curveTo( QPointF( element.x, element.y ),
+                                QPointF( path.elementAt(i+1).x, path.elementAt(i+1).y),
+                                         QPointF( path.elementAt(i+2).x, path.elementAt(i+2).y) );
+                break;
+            default:
+                continue;
+        }
+    }
+
+    shape->normalize();
+    return shape;
+}

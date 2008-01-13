@@ -131,6 +131,8 @@ int KisTriangleColorSelector::value() const
 void KisTriangleColorSelector::setValue(int v)
 {
     d->value = v;
+    generateTriangle();
+    update();
 }
 
 int KisTriangleColorSelector::saturation() const
@@ -141,6 +143,24 @@ int KisTriangleColorSelector::saturation() const
 void KisTriangleColorSelector::setSaturation(int s)
 {
     d->saturation = s;
+    generateTriangle();
+    update();
+}
+
+void KisTriangleColorSelector::setHSV(int h, int v, int s)
+{
+    d->hue = h;
+    d->value = v;
+    d->saturation = s;
+    generateTriangle();
+    update();
+}
+
+void KisTriangleColorSelector::setQColor(const QColor& c)
+{
+    rgb_to_hsv( c.red(), c.green(), c.blue(), &d->hue, &d->value, &d->saturation );
+    generateTriangle();
+    update();
 }
 
 void KisTriangleColorSelector::incHue()
@@ -194,13 +214,24 @@ void KisTriangleColorSelector::generateTriangle()
         for(int x = 0; x < d->sizeColorSelector; x++)
         {
             double s = 255 * (x - startx_) / ls_;
-            if(v < 0.0 or v > 255.0 or s < 0.0 or s > 255.0 )
+            if(v < -1.0 or v > 256.0 or s < -1.0 or s > 256.0 )
             {
                 img.setPixel(x,y, qRgba(0,0,0,0));
             } else {
+                double va = 1.0, sa = 1.0;
+                if( v < 0.0) { va = 1.0 + v; v = 0; }
+                else if( v > 255.0 ) { va = 256.0 - v; v = 255; }
+                if( s < 0.0) { sa = 1.0 + s; s = 0; }
+                else if( s > 255.0 ) { sa = 256.0 - s; s = 255; }
                 int r,g,b;
                 hsv_to_rgb(hue_, (int)s, (int)v, &r, &g, &b);
-                img.setPixel(x,y, qRgb(r,g,b));
+                double coef = va * sa;
+                if( coef < 0.999)
+                {
+                    img.setPixel(x,y, qRgba( (int)(r * coef), (int)(g * coef), (int)(b * coef), (int)(255 * coef)));
+                } else {
+                    img.setPixel(x,y, qRgba(r, g, b, 255 ));
+                }
             }
         }
     }

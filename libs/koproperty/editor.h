@@ -60,6 +60,10 @@ class EditorItem;
      Widget::value() returns null QVariant. This option is used for example in the "defaultValue"
      property for a field of type boolean (in Kexi Table Designer). Third, "null" value 
      of the property means there is no "defaultValue" specified. </li>
+    <li>
+     extraValueAllowed: Allow the user to manually enter a value into a combobox
+     that isnt in the list.  The entered text will be returned as opposed to a matching key.
+    </li>
     </ul>
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>

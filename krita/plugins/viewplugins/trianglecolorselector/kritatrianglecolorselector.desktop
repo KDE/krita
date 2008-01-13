@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=TriangleColorSelector
+Name[pt_BR]=%{NOME_APLICATIVO}
+Name[x-test]=xxTriangleColorSelectorxx
+Comment=TriangleColorSelector
+Comment[pt_BR]=%{NOME_APLICATIVO}
+Comment[x-test]=xxTriangleColorSelectorxx
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritatrianglecolorselector
+X-Krita-Version=3

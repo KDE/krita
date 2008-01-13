@@ -17,6 +17,7 @@ add_subdirectory( bracketing2hdr )
 add_subdirectory( metadataeditor )
 add_subdirectory( bigbrother )
 add_subdirectory( tonemapping )
+add_subdirectory( trianglecolorselector )
 
 find_package(GMM)
 

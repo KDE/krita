@@ -27,10 +27,13 @@
 
 struct KisTriangleColorSelector::Private {
     QPixmap wheelPixmap;
+    QPixmap trianglePixmap;
+    int hue;
 };
 
 KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
 {
+    d->hue = 0;
 }
 
 KisTriangleColorSelector::~KisTriangleColorSelector()
@@ -42,20 +45,94 @@ void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
 {
     Q_UNUSED(event);
     QPainter p(this);
+    p.setRenderHint(QPainter::SmoothPixmapTransform);
+    p.setRenderHint(QPainter::Antialiasing);
     int sizeWheel = qMin(width(), height());
-    p.drawPixmap( (width()-sizeWheel) / 2, (height()-sizeWheel) / 2, d->wheelPixmap);
+    double xpos = sizeWheel * 0.5;
+    double ypos = sizeWheel * 0.5;
+    QPointF pos(xpos, ypos);
+    p.translate(QPointF( 0.5*width(), 0.5*height()  ) );
+    p.drawPixmap( -pos, d->wheelPixmap );
+    p.rotate( hue() + 150 );
+    p.drawPixmap( -pos /*+ QPointF(1.0, 1.0)*/, d->trianglePixmap );
     p.end();
 }
+
+int KisTriangleColorSelector::hue() const
+{
+    return d->hue;
+}
+
+void KisTriangleColorSelector::setHue(int h)
+{
+    d->hue = h;
+    generateTriangle();
+    update();
+}
+
+void KisTriangleColorSelector::incHue()
+{
+    int nh = d->hue + 1;
+    if(nh > 360)
+    {
+        nh = 0;
+    }
+    setHue(nh);
+}
+
 
 void KisTriangleColorSelector::resizeEvent( QResizeEvent * event )
 {
     QWidget::resizeEvent( event );
     generateWheel();
+    generateTriangle();
 }
 
 inline double pow2(double v)
 {
     return v*v;
+}
+
+double KisTriangleColorSelector::wheelWidth() const
+{
+    return 0.3;
+}
+
+void KisTriangleColorSelector::generateTriangle()
+{
+    int size_ = qMin(width(), height());
+    QImage img(size_, size_, QImage::Format_ARGB32_Premultiplied);
+    double center_ = 0.5 * size_;
+    double radius_ = center_ * (1.0 - wheelWidth());
+    double wheelWidth_ = wheelWidth() * center_;
+    // Length of triangle
+    double lt_ = 3.0 / sqrt(3.0) * radius_;
+    double ht_ = lt_ * sqrt(3.0) * 0.5;
+    double bottom_ = ht_ + wheelWidth_;
+    double top_ = wheelWidth_;
+    int hue_ = hue();
+    
+    for(int y = 0; y < size_; y++)
+    {
+        double ynormalize = (top_ - y ) / ( top_ - bottom_ );
+        double v = 255 * ynormalize;
+        double ls_ = (ynormalize) * lt_;
+        double startx_ = center_ - 0.5 * ls_;
+        for(int x = 0; x < size_; x++)
+        {
+            double s = 255 * (x - startx_) / ls_;
+            if(v < 0.0 or v > 255.0 or s < 0.0 or s > 255.0 )
+            {
+                img.setPixel(x,y, qRgba(0,0,0,0));
+            } else {
+                int r,g,b;
+                hsv_to_rgb(hue_, (int)s, (int)v, &r, &g, &b);
+                img.setPixel(x,y, qRgb(r,g,b));
+            }
+        }
+    }
+    
+    d->trianglePixmap = QPixmap::fromImage(img);
 }
 
 void KisTriangleColorSelector::generateWheel()
@@ -64,7 +141,7 @@ void KisTriangleColorSelector::generateWheel()
     QImage img(size,size, QImage::Format_ARGB32_Premultiplied);
     double center = 0.5 * size;
     double normExt = pow2(center);
-    double normInt = pow2(center * 0.7);
+    double normInt = pow2(center * (1.0 - wheelWidth()));
     for(int y = 0; y < size; y++)
     {
         double yc = y - center;
@@ -87,3 +164,5 @@ void KisTriangleColorSelector::generateWheel()
     }
     d->wheelPixmap = QPixmap::fromImage(img);
 }
+
+#include "kis_triangle_color_selector.moc"

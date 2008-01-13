@@ -21,13 +21,21 @@
 #include <QWidget>
 
 class KisTriangleColorSelector : public QWidget {
+    Q_OBJECT
     public:
         KisTriangleColorSelector(QWidget* parent);
         ~KisTriangleColorSelector();
     protected:
         void paintEvent( QPaintEvent * event );
         void resizeEvent( QResizeEvent * event );
+    protected:
+        double wheelWidth() const;
+        int hue() const;
+    public slots:
+        void setHue(int h);
+        void incHue();
     private:
+        void generateTriangle();
         void generateWheel();
     private:
         struct Private;

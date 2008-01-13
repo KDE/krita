@@ -19,6 +19,8 @@
 
 #include <stdlib.h>
 
+#include <QTimer>
+
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
@@ -45,6 +47,9 @@ public:
     {
         m_colorSelector = new KisTriangleColorSelector(this);
         setWidget( m_colorSelector );
+        QTimer* t = new QTimer;
+        t->connect(t, SIGNAL(timeout()), m_colorSelector, SLOT(incHue()));
+        t->start(100);
     }
 private:
     KisTriangleColorSelector* m_colorSelector;
@@ -70,6 +75,7 @@ public:
     virtual QDockWidget* createDockWidget()
     {
         KisTriangleColorSelectorDock * dockWidget = new KisTriangleColorSelectorDock(m_view);
+        
         dockWidget->setObjectName(id());
 
         return dockWidget;

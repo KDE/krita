@@ -26,6 +26,7 @@ KoPASavingContext::KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainS
 : KoShapeSavingContext( xmlWriter, mainStyles, embeddedSaver, savingMode )
 , m_page( page )
 , m_masterPageIndex( 0 )
+, m_clearDrawIds( false )
 {
 }
 
@@ -66,4 +67,14 @@ void KoPASavingContext::incrementPage()
 int KoPASavingContext::page()
 {
     return m_page;
+}
+
+void KoPASavingContext::setClearDrawIds( bool clear )
+{
+    m_clearDrawIds = clear;
+}
+
+bool KoPASavingContext::isSetClearDrawIds()
+{
+    return m_clearDrawIds;
 }

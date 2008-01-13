@@ -68,6 +68,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
         savingContext.addOption( KoShapeSavingContext::UniqueMasterPages );
         QList<KoPAPageBase*> emptyList;
         QList<KoPAPageBase*> existingMasterPages = m_doc->pages( true );
+        savingContext.setClearDrawIds( true );
         m_doc->saveOasisPages( savingContext, emptyList, existingMasterPages );
 
         QMap<QString, KoPAMasterPage*> masterPageNames;

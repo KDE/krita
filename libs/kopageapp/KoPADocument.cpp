@@ -191,6 +191,9 @@ bool KoPADocument::saveOasisPages( KoPASavingContext &paContext, QList<KoPAPageB
 
     // save master pages
     foreach( KoPAPageBase *page, masterPages ) {
+        if ( paContext.isSetClearDrawIds() ) {
+            paContext.clearDrawIds();
+        }
         page->saveOdf( paContext );
     }
 

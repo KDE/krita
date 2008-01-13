@@ -153,6 +153,16 @@ public:
     const QString drawId( const KoShape * shape, bool insert = true );
 
     /**
+     * @brief Clear out all given draw ids
+     *
+     * This is needed for checking if master pages are the same. In normal saving
+     * this should not be called.
+     *
+     * @see KoPAPastePage::process
+     */
+    void clearDrawIds();
+
+    /**
      * Adds a layer to save into a layer-set in styles.xml according to 9.1.2/9.1.3 odf spec
      * @param layer the layer to save
      */

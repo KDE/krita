@@ -94,10 +94,25 @@ public:
      */
     int page();
 
+    /**
+     * @brief Set the clearDrawIds flag
+     *
+     * @see KoPAPastePage::process
+     */
+    void setClearDrawIds( bool clear );
+
+    /**
+     * @brief Get the clearDrawIds flag
+     *
+     * @see KoPAPastePage::process
+     */
+    bool isSetClearDrawIds();
+
 private:
     QMap<const KoPAMasterPage *, QString> m_masterPageNames;
     int m_page;
     int m_masterPageIndex;
+    bool m_clearDrawIds;
 };
 
 #endif /* KOPASAVINGCONTEXT_H */

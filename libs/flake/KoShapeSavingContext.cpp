@@ -104,6 +104,12 @@ const QString KoShapeSavingContext::drawId( const KoShape * shape, bool insert )
     return it.value();
 }
 
+void KoShapeSavingContext::clearDrawIds()
+{
+    m_drawIds.clear();
+    m_drawId = 0;
+}
+
 void KoShapeSavingContext::addLayerForSaving( const KoShapeLayer * layer )
 {
     if( layer && ! m_layers.contains( layer ) )

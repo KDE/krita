@@ -55,6 +55,7 @@ KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(pa
     d->value = 0;
     setMouseTracking( true );
     updateTriangleCircleParameters();
+            setHSV( d->hue, 0, 0);
 }
 
 KisTriangleColorSelector::~KisTriangleColorSelector()
@@ -98,14 +99,14 @@ void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
     //   Compute coordinates
     {
         double vs_selector_ypos_ = value() / 255.0;
-        double ls_ = (1.0 - vs_selector_ypos_) * d->triangleLenght; // length of the saturation on the triangle
+        double ls_ = (vs_selector_ypos_) * d->triangleLenght; // length of the saturation on the triangle
         double vs_selector_xpos_ = ls_ * (saturation() / 255.0 - 0.5);
         // Draw it
         p.save();
         p.setPen( QPen( Qt::white, 1.0) );
-        p.rotate( hue() + 90 );
+        p.rotate( hue() + 150 );
         p.drawEllipse( QRectF( -1.5 + vs_selector_xpos_,
-                               -1.5 + (d->centerColorSelector - d->triangleBottom) + vs_selector_ypos_ * d->triangleHeight,
+                               -1.5 - (d->centerColorSelector - d->triangleTop) + vs_selector_ypos_ * d->triangleHeight,
                                 3.0 , 3.0 ));
     }
     p.restore();
@@ -300,6 +301,7 @@ void KisTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
 
 void KisTriangleColorSelector::selectColorAt(int _x, int _y)
 {
+#if 0
     double x = _x - 0.5*width();
     double y = _y - 0.5*height();
     // Check if the click is inside the wheel
@@ -309,7 +311,7 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y)
         setHue( (int)(atan2(y, x) * 180 / M_PI ) + 180);
     } else {
     // Compute the s and v value, if they are in range, use them
-        double rotation = -(hue() - 90) * M_PI / 180;
+        double rotation = -(hue() + 90) * M_PI / 180;
         double cr = cos(rotation);
         double sr = sin(rotation);
         double x1 = x * cr - y * sr; // <- now x1 gives the saturation
@@ -317,15 +319,19 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y)
         double ynormalize = (y1 - d->triangleTop ) / ( d->triangleTop - d->triangleBottom ) + 0.05; // WTF is the 0.05 needed ?
         if( ynormalize >= 0.0 and ynormalize <= 1.0)
         {
+//                 setHSV( d->hue, 0.5 * 255, ynormalize * 255);
+#if 0
             double ls_ = (1.0 - ynormalize) * d->triangleLenght; // length of the saturation on the triangle
             double sat = 1.0 -( x1 / ls_ + 0.5) ;
             if(sat >= 0.0 and sat <= 1.0)
             {
                 setHSV( d->hue, ynormalize * 255, sat * 255);
             }
-            dbgKrita << color();
+#endif
+//             dbgKrita << color() << (ynormalize ) << (sat ) << x1 << y1 << x << y ;
         }
     }
+#endif
 }
 
 #include "kis_triangle_color_selector.moc"

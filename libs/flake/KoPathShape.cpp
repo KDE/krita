@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -425,8 +425,8 @@ QPointF KoPathShape::position() const
 void KoPathShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
-    double zoomX = newSize.width() / oldSize.width(); 
-    double zoomY = newSize.height() / oldSize.height(); 
+    double zoomX = oldSize.width() == 0.0 ? 1.0 : newSize.width() / oldSize.width();
+    double zoomY = oldSize.height() == 0.0 ? 1.0 : newSize.height() / oldSize.height();
     QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
     //qDebug() << "setSize" << zoomX << "," << zoomY << "," << newSize;

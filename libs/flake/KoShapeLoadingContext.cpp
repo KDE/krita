@@ -19,7 +19,6 @@
 */
 
 #include "KoShapeLoadingContext.h"
-#include "KoShapeControllerBase.h"
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoSharedLoadingData.h"

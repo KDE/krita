@@ -19,8 +19,6 @@
 
 #include <math.h>
 
-#include <kis_debug.h>
-
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
@@ -55,7 +53,6 @@ KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(pa
     d->value = 0;
     setMouseTracking( true );
     updateTriangleCircleParameters();
-            setHSV( d->hue, 0, 0);
 }
 
 KisTriangleColorSelector::~KisTriangleColorSelector()
@@ -161,7 +158,7 @@ void KisTriangleColorSelector::setSaturation(int s)
     update();
 }
 
-void KisTriangleColorSelector::setHSV(int h, int v, int s)
+void KisTriangleColorSelector::setHSV(int h, int s, int v)
 {
     d->hue = h;
     d->value = v;
@@ -301,7 +298,6 @@ void KisTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
 
 void KisTriangleColorSelector::selectColorAt(int _x, int _y)
 {
-#if 0
     double x = _x - 0.5*width();
     double y = _y - 0.5*height();
     // Check if the click is inside the wheel
@@ -309,29 +305,27 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y)
     if(norm < d->wheelNormExt and norm > d->wheelNormInt)
     {
         setHue( (int)(atan2(y, x) * 180 / M_PI ) + 180);
+        update();
     } else {
     // Compute the s and v value, if they are in range, use them
-        double rotation = -(hue() + 90) * M_PI / 180;
+        double rotation = -(hue() + 150) * M_PI / 180;
         double cr = cos(rotation);
         double sr = sin(rotation);
         double x1 = x * cr - y * sr; // <- now x1 gives the saturation
         double y1 = x * sr + y * cr; // <- now y1 gives the value
-        double ynormalize = (y1 - d->triangleTop ) / ( d->triangleTop - d->triangleBottom ) + 0.05; // WTF is the 0.05 needed ?
+        y1 += d->wheelNormExt;
+        double ynormalize = (d->triangleTop - y1 ) / ( d->triangleTop - d->triangleBottom );
         if( ynormalize >= 0.0 and ynormalize <= 1.0)
         {
-//                 setHSV( d->hue, 0.5 * 255, ynormalize * 255);
-#if 0
-            double ls_ = (1.0 - ynormalize) * d->triangleLenght; // length of the saturation on the triangle
-            double sat = 1.0 -( x1 / ls_ + 0.5) ;
+            double ls_ = (ynormalize) * d->triangleLenght; // length of the saturation on the triangle
+            double sat = ( x1 / ls_ + 0.5) ;
             if(sat >= 0.0 and sat <= 1.0)
             {
-                setHSV( d->hue, ynormalize * 255, sat * 255);
+                setHSV( d->hue, sat * 255, ynormalize * 255);
             }
-#endif
-//             dbgKrita << color() << (ynormalize ) << (sat ) << x1 << y1 << x << y ;
         }
+        update();
     }
-#endif
 }
 
 #include "kis_triangle_color_selector.moc"

@@ -40,7 +40,7 @@ class KisTriangleColorSelector : public QWidget {
         void setHue(int h);
         void setValue(int v);
         void setSaturation(int s);
-        void setHSV(int h, int v, int s);
+        void setHSV(int h, int s, int v);
         void setQColor(const QColor& );
     signals:
         void colorChanged(const QColor& );

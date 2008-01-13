@@ -21,6 +21,7 @@
 
 #include <kis_debug.h>
 
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
 #include <KoColorConversions.h>
@@ -35,11 +36,15 @@ struct KisTriangleColorSelector::Private {
     double centerColorSelector;
     double wheelWidthProportion;
     double wheelWidth;
+    double wheelNormExt;
+    double wheelNormInt;
     double wheelInnerRadius;
     double triangleLenght;
     double triangleHeight;
     double triangleBottom;
     double triangleTop;
+    double normExt;
+    double normInt;
 };
 
 KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -47,6 +52,7 @@ KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(pa
     d->hue = 0;
     d->saturation = 0;
     d->value = 0;
+    setMouseTracking( true );
     updateTriangleCircleParameters();
 }
 
@@ -61,6 +67,8 @@ void KisTriangleColorSelector::updateTriangleCircleParameters()
     d->centerColorSelector = 0.5 * d->sizeColorSelector;
     d->wheelWidthProportion = 0.3;
     d->wheelWidth = d->centerColorSelector * d->wheelWidthProportion;
+    d->wheelNormExt = qAbs( d->centerColorSelector );
+    d->wheelNormInt = qAbs( d->centerColorSelector * (1.0 - d->wheelWidthProportion));
     d->wheelInnerRadius = d->centerColorSelector * (1.0 - d->wheelWidthProportion);
     d->triangleLenght = 3.0 / sqrt(3.0) * d->wheelInnerRadius;
     d->triangleHeight = d->triangleLenght * sqrt(3.0) * 0.5;
@@ -163,29 +171,6 @@ void KisTriangleColorSelector::setQColor(const QColor& c)
     update();
 }
 
-void KisTriangleColorSelector::incHue()
-{
-    int nh = d->hue + 1;
-    if(nh > 360)
-    {
-        nh = 0;
-    }
-    setHue(nh);
-    int nv = d->value + 1;
-    if(nv > 255)
-    {
-        nv = 0;
-    }
-    setValue(nv);
-    int ns = d->saturation - 1;
-    if(ns < 0)
-    {
-        ns = 255;
-    }
-    setSaturation(ns);
-}
-
-
 void KisTriangleColorSelector::resizeEvent( QResizeEvent * event )
 {
     QWidget::resizeEvent( event );
@@ -242,23 +227,19 @@ void KisTriangleColorSelector::generateTriangle()
 void KisTriangleColorSelector::generateWheel()
 {
     QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
-    double center = 0.5 * d->sizeColorSelector;
-    double normExt = qAbs(center);
-    double normInt = qAbs(center * (1.0 - d->wheelWidthProportion));
     for(int y = 0; y < d->sizeColorSelector; y++)
     {
-        double yc = y - center;
+        double yc = y - d->centerColorSelector;
         double y2 = pow2( yc );
         for(int x = 0; x < d->sizeColorSelector; x++)
         {
-            double xc = x - center;
+            double xc = x - d->centerColorSelector;
             double norm = sqrt(pow2( xc ) + y2);
-            if( norm <= normExt + 1.0 and norm >= normInt - 1.0 )
+            if( norm <= d->wheelNormExt + 1.0 and norm >= d->wheelNormInt - 1.0 )
             {
                 double acoef = 1.0;
-                if(norm > normExt ) acoef = (1.0 + normExt - norm);
-                else if(norm < normInt ) acoef = (1.0 - normInt + norm);
-                if(acoef < 1.0) dbgKrita << acoef;
+                if(norm > d->wheelNormExt ) acoef = (1.0 + d->wheelNormExt - norm);
+                else if(norm < d->wheelNormInt ) acoef = (1.0 - d->wheelNormInt + norm);
                 double angle = atan2(yc, xc);
                 int h = (int)((180 * angle / M_PI) + 180);
                 int r,g,b;
@@ -275,6 +256,47 @@ void KisTriangleColorSelector::generateWheel()
         }
     }
     d->wheelPixmap = QPixmap::fromImage(img);
+}
+
+void KisTriangleColorSelector::mouseReleaseEvent( QMouseEvent * event )
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        selectColorAt( event->x(), event->y());
+    }
+    QWidget::mouseReleaseEvent( event );
+}
+
+void KisTriangleColorSelector::mousePressEvent( QMouseEvent * event )
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        selectColorAt( event->x(), event->y());
+    }
+    QWidget::mousePressEvent( event );
+}
+
+void KisTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
+{
+    if(event->buttons() & Qt::LeftButton)
+    {
+        selectColorAt( event->x(), event->y());
+    }
+    QWidget::mouseMoveEvent( event );
+}
+
+void KisTriangleColorSelector::selectColorAt(int _x, int _y)
+{
+    double x = _x - 0.5*width();
+    double y = _y - 0.5*height();
+    // Check if the click is inside the wheel
+    double norm = sqrt( x * x + y * y);
+    if(norm < d->wheelNormExt and norm > d->wheelNormInt)
+    {
+        setHue( (int)(atan2(y, x) * 180 / M_PI ) + 180);
+    } else {
+    // Compute the s and v value, if they are in range, use them
+    }
 }
 
 #include "kis_triangle_color_selector.moc"

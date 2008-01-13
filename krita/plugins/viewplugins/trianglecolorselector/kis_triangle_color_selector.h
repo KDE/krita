@@ -25,9 +25,12 @@ class KisTriangleColorSelector : public QWidget {
     public:
         KisTriangleColorSelector(QWidget* parent);
         ~KisTriangleColorSelector();
-    protected:
+    protected: // events
         void paintEvent( QPaintEvent * event );
         void resizeEvent( QResizeEvent * event );
+        void mouseReleaseEvent( QMouseEvent * event );
+        void mousePressEvent( QMouseEvent * event );
+        void mouseMoveEvent( QMouseEvent * event );
     public:
         int hue() const;
         int value() const;
@@ -38,11 +41,11 @@ class KisTriangleColorSelector : public QWidget {
         void setSaturation(int s);
         void setHSV(int h, int v, int s);
         void setQColor(const QColor& );
-        void incHue();
     private:
         void generateTriangle();
         void generateWheel();
         void updateTriangleCircleParameters();
+        void selectColorAt(int x, int y);
     private:
         struct Private;
         Private* const d;

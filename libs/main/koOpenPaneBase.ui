@@ -10,72 +10,32 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
-   </property>
    <item>
     <widget class="QSplitter" name="m_splitter" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="layoutWidget" >
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
-        <number>6</number>
+     <widget class="K3ListView" name="m_sectionList" >
+      <property name="enabled" >
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize" >
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="allColumnsShowFocus" >
+       <bool>true</bool>
+      </property>
+      <property name="shadeSortColumn" >
+       <bool>false</bool>
+      </property>
+      <column>
+       <property name="text" >
+        <string/>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="K3ListView" name="m_sectionList" >
-         <property name="enabled" >
-          <bool>true</bool>
-         </property>
-         <property name="allColumnsShowFocus" >
-          <bool>true</bool>
-         </property>
-         <property name="resizeMode" >
-          <enum>Q3ListView::LastColumn</enum>
-         </property>
-         <property name="shadeSortColumn" >
-          <bool>false</bool>
-         </property>
-         <column>
-          <property name="text" >
-           <string/>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item>
-        <widget class="KPushButton" name="m_openExistingButton" >
-         <property name="text" >
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      </column>
      </widget>
      <widget class="QStackedWidget" name="m_widgetStack" >
       <property name="sizePolicy" >
@@ -98,11 +58,6 @@
    <class>K3ListView</class>
    <extends>Q3ListView</extends>
    <header>k3listview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

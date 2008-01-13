@@ -2753,7 +2753,7 @@ KoOpenPane* KoDocument::createOpenPane( QWidget* parent, const KComponentData &c
     KoOpenPane* openPane = new KoOpenPane( parent, componentData, templateType );
     QWidget *customDoc = createCustomDocumentWidget(openPane);
     if(customDoc) {
-        openPane->setCustomDocumentWidget( customDoc );
+        openPane->addCustomDocumentWidget( customDoc );
         connect( customDoc, SIGNAL( documentSelected() ), this, SLOT( startCustomDocument() ) );
     }
     openPane->show();

@@ -35,6 +35,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <k3listview.h>
+#include <kfilewidget.h>
 
 #include "KoFilterManager.h"
 #include "KoTemplates.h"
@@ -43,6 +44,7 @@
 #include "KoTemplatesPane.h"
 #include "KoRecentDocumentsPane.h"
 #include "ui_koOpenPaneBase.h"
+#include "KoExistingDocumentPane.h"
 
 #include <limits.h>
 #include <kconfiggroup.h>
@@ -94,6 +96,7 @@ class KoOpenPanePrivate : public Ui_KoOpenPaneBase
     }
 
     KComponentData m_componentData;
+    int m_freeCustomWidgetIndex;
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, const QString& templateType)
@@ -114,11 +117,17 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
   connect(d->m_sectionList, SIGNAL(returnPressed(Q3ListViewItem*)),
           this, SLOT(itemClicked(Q3ListViewItem*)));
 
-  KGuiItem openExistingGItem(i18n("Open Existing Document..."), "document-open");
-  d->m_openExistingButton->setGuiItem(openExistingGItem);
-  connect(d->m_openExistingButton, SIGNAL(clicked()), this, SLOT(showOpenFileDialog()));
-
   initRecentDocs();
+  initExistingFilesPane();
+
+  KoSectionListItem* separator = new KoSectionListItem(d->m_sectionList, "", 3);
+  separator->setEnabled(false);
+
+  d->m_freeCustomWidgetIndex = 4;
+
+  separator = new KoSectionListItem(d->m_sectionList, "", 999);
+  separator->setEnabled(false);
+
   initTemplates(templateType);
 
   KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(d->m_sectionList->selectedItem());
@@ -147,30 +156,11 @@ KoOpenPane::~KoOpenPane()
   if(item) {
     if(!qobject_cast<KoDetailsPane*>(d->m_widgetStack->widget(item->widgetIndex()))) {
       KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
-      cfgGrp.writeEntry("LastReturnType", "Custom");
+      cfgGrp.writeEntry("LastReturnType", item->text(0));
     }
   }
 
   delete d;
-}
-
-void KoOpenPane::showOpenFileDialog()
-{
-  const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
-      KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
-
-  if (mimeFilter.isEmpty())
-  {
-      kDebug(30003) <<"No mime types found!";
-      return;
-  }
-  KUrl url = KFileDialog::getOpenUrl(KUrl("kfiledialog:///OpenDialog"), mimeFilter.join(" "), this);
-
-  if(!url.isEmpty()) {
-    KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
-    cfgGrp.writeEntry("LastReturnType", "File");
-    emit openExistingFile(url);
-  }
 }
 
 void KoOpenPane::initRecentDocs()
@@ -183,9 +173,6 @@ void KoOpenPane::initRecentDocs()
           this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
   connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
           recentDocPane, SLOT(resizeSplitter(KoDetailsPane*, const QList<int>&)));
-
-  KoSectionListItem* separator = new KoSectionListItem(d->m_sectionList, "", 1);
-  separator->setEnabled(false);
 
   if(d->m_componentData.config()->hasGroup("RecentFiles")) {
     d->m_sectionList->setSelected(item, true);
@@ -250,16 +237,19 @@ void KoOpenPane::initTemplates(const QString& templateType)
   //updateSectionListMaxHeight();
 }
 
-void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
+void KoOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title, const QString& icon) {
   Q_ASSERT(widget);
-  KoSectionListItem* separator = new KoSectionListItem(d->m_sectionList, "", INT_MAX-1);
-  separator->setEnabled(false);
 
-  Q3ListViewItem* item = addPane(i18n("Custom Document"), QString(), widget, INT_MAX);
+  QString realtitle = title;
 
+  if(realtitle.isEmpty())
+      realtitle = i18n("Custom Document");
+
+  Q3ListViewItem* item = addPane(realtitle, icon, widget, d->m_freeCustomWidgetIndex);
+  ++d->m_freeCustomWidgetIndex;
   KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
 
-  if(cfgGrp.readEntry("LastReturnType") == "Custom") {
+  if(cfgGrp.readEntry("LastReturnType") == realtitle) {
     d->m_sectionList->setSelected(item, true);
     KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
     d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
@@ -337,6 +327,22 @@ void KoOpenPane::updateSectionListMaxHeight()
   totalHeight += 4;
   QSize sizeHint = d->m_sectionList->sizeHint();
   d->m_sectionList->setFixedHeight(totalHeight);
+}
+
+void KoOpenPane::initExistingFilesPane()
+{
+    KoExistingDocumentPane* widget = new KoExistingDocumentPane(this);
+    connect(widget, SIGNAL(openExistingUrl(const KUrl&)),
+            this, SIGNAL(openExistingFile(const KUrl&)));
+    Q3ListViewItem* item = addPane(i18n("Open Document"), "document-open", widget, 2);
+
+    KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
+
+    if(cfgGrp.readEntry("LastReturnType") == i18n("Open Document")) {
+        d->m_sectionList->setSelected(item, true);
+        KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
+        d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
+    }
 }
 
 #include "KoOpenPane.moc"

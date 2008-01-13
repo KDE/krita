@@ -65,6 +65,7 @@ set(komain_LIB_SRCS
     KoDockRegistry.cpp
     KoDockWidgetTitleBar.cpp
     KoPrintJob.cpp
+    KoExistingDocumentPane.cpp
 )
 
 
@@ -140,7 +141,6 @@ install( FILES
     KoPageLayout.h 
     KoVersionDialog.h 
     kkbdaccessextensions.h 
-    KoOpenPane.h 
     KoRTree.h
     threadAction/KoJobsListPolicy.h
     threadAction/KoExecutePolicy.h

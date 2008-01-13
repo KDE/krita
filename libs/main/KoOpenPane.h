@@ -54,12 +54,12 @@ class KoOpenPane : public QWidget
      * provided settings, the widget showing these gets set here.
      * @see KoDocument::createCustomDocumentWidget()
      * @param widget the widget.
+     * @param title the title shown in the sidebar
+     * @param icon the icon shown in the sidebar
      */
-    void setCustomDocumentWidget(QWidget *widget);
+    void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
 
   protected slots:
-    void showOpenFileDialog();
-
     void selectionChanged(Q3ListViewItem* item);
     void itemClicked(Q3ListViewItem* item);
 
@@ -83,6 +83,7 @@ class KoOpenPane : public QWidget
       * @param templateType the template-type (group) that should be selected on creation.
       */
     void initTemplates(const QString& templateType);
+    void initExistingFilesPane();
 
     void updateSectionListMaxHeight();
 

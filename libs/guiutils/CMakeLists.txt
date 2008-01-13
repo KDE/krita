@@ -19,7 +19,6 @@ set(koguiutils_LIB_SRCS
    KoGuideLineDia.cpp 
    KoGuides.cpp 
    KoImageResource.cpp
-#   KoInsertLink.cpp
    KoItemToolTip.cpp
    KoPartSelectDia.cpp
    KoPartSelectAction.cpp
@@ -28,7 +27,6 @@ set(koguiutils_LIB_SRCS
 #   KoShapeGeometry.cpp
    KoSliderCombo.cpp
    KoTabBar.cpp
-#   KoTabChooser.cpp
 #   KoTemplateChooseDia.cpp
    KoTemplateCreateDia.cpp
    KoToolBox.cpp
@@ -64,6 +62,7 @@ set(koguiutils_LIB_SRCS
    KoPositionSelector.cpp
    KoResourceItemChooser.cpp
     KoCheckerBoardPainter.cpp
+   KoSelectShapeAction.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS
@@ -102,7 +101,6 @@ install(
 #    KoPictureFilePreview.h
     KoRuler.h
     KoTabBar.h
-#    KoTabChooser.h
     KoTabulator.h
 #    KoTemplateChooseDia.h
     KoTemplateCreateDia.h

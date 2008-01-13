@@ -31,6 +31,15 @@ struct KisTriangleColorSelector::Private {
     int hue;
     int saturation;
     int value;
+    int sizeColorSelector;
+    double centerColorSelector;
+    double wheelWidthProportion;
+    double wheelWidth;
+    double wheelInnerRadius;
+    double triangleLenght;
+    double triangleHeight;
+    double triangleBottom;
+    double triangleTop;
 };
 
 KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -38,11 +47,25 @@ KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(pa
     d->hue = 0;
     d->saturation = 0;
     d->value = 0;
+    updateTriangleCircleParameters();
 }
 
 KisTriangleColorSelector::~KisTriangleColorSelector()
 {
     delete d;
+}
+
+void KisTriangleColorSelector::updateTriangleCircleParameters()
+{
+    d->sizeColorSelector = qMin(width(), height());
+    d->centerColorSelector = 0.5 * d->sizeColorSelector;
+    d->wheelWidthProportion = 0.3;
+    d->wheelWidth = d->centerColorSelector * d->wheelWidthProportion;
+    d->wheelInnerRadius = d->centerColorSelector * (1.0 - d->wheelWidthProportion);
+    d->triangleLenght = 3.0 / sqrt(3.0) * d->wheelInnerRadius;
+    d->triangleHeight = d->triangleLenght * sqrt(3.0) * 0.5;
+    d->triangleBottom = d->triangleHeight + d->wheelWidth;
+    d->triangleTop = d->wheelWidth;
 }
 
 void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
@@ -51,11 +74,7 @@ void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
     QPainter p(this);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
     p.setRenderHint(QPainter::Antialiasing);
-    int sizeColorSelector_ = qMin(width(), height());
-    double xpos = sizeColorSelector_ * 0.5;
-    double ypos = sizeColorSelector_ * 0.5;
-    double wheelWidth_ = 0.5 * sizeColorSelector_ * wheelWidth();
-    QPointF pos(xpos, ypos);
+    QPointF pos(d->centerColorSelector, d->centerColorSelector);
     p.translate(QPointF( 0.5*width(), 0.5*height()  ) );
     // Draw the wheel
     p.drawPixmap( -pos, d->wheelPixmap );
@@ -69,19 +88,14 @@ void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
     //   Compute coordinates
     {
         double vs_selector_ypos_ = value() / 255.0;
-        double center_ = 0.5 * sizeColorSelector_;
-        double radius_ = center_ * (1.0 - wheelWidth());
-        double lt_ = 3.0 / sqrt(3.0) * radius_; // Length of triangle
-        double ht_ = lt_ * sqrt(3.0) * 0.5;
-        double triangle_bottom_ = ht_ + wheelWidth_; // bottom of the triangle
-        double ls_ = (1.0 - vs_selector_ypos_) * lt_; // length of the saturation on the triangle
+        double ls_ = (1.0 - vs_selector_ypos_) * d->triangleLenght; // length of the saturation on the triangle
         double vs_selector_xpos_ = ls_ * (saturation() / 255.0 - 0.5);
         // Draw it
         p.save();
         p.setPen( QPen( Qt::white, 1.0) );
         p.rotate( hue() + 90 );
         p.drawEllipse( QRectF( -1.5 + vs_selector_xpos_,
-                               -1.5 + (ypos - triangle_bottom_) + vs_selector_ypos_ * ht_,
+                               -1.5 + (d->centerColorSelector - d->triangleBottom) + vs_selector_ypos_ * d->triangleHeight,
                                 3.0 , 3.0 ));
     }
     p.restore();
@@ -90,9 +104,9 @@ void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
     p.setPen( QPen( Qt::white, 1.0) );
     p.rotate( hue() - 90 );
     double hueSelectorWidth_ = 0.8;
-    double hueSelectorOffset_ = 0.5 *( 1.0 - hueSelectorWidth_) * wheelWidth_;
-    double hueSelectorSize_ = 0.8 * wheelWidth_ ;
-    p.drawRect( QRectF( -1.5, -ypos + hueSelectorOffset_, 3.0, hueSelectorSize_ ));
+    double hueSelectorOffset_ = 0.5 *( 1.0 - hueSelectorWidth_) * d->wheelWidth;
+    double hueSelectorSize_ = 0.8 * d->wheelWidth;
+    p.drawRect( QRectF( -1.5, -d->centerColorSelector + hueSelectorOffset_, 3.0, hueSelectorSize_ ));
     p.restore();
     p.end();
 }
@@ -155,6 +169,7 @@ void KisTriangleColorSelector::incHue()
 void KisTriangleColorSelector::resizeEvent( QResizeEvent * event )
 {
     QWidget::resizeEvent( event );
+    updateTriangleCircleParameters();
     generateWheel();
     generateTriangle();
 }
@@ -164,32 +179,19 @@ inline double pow2(double v)
     return v*v;
 }
 
-double KisTriangleColorSelector::wheelWidth() const
-{
-    return 0.3;
-}
-
 void KisTriangleColorSelector::generateTriangle()
 {
-    int size_ = qMin(width(), height());
-    QImage img(size_, size_, QImage::Format_ARGB32_Premultiplied);
-    double center_ = 0.5 * size_;
-    double radius_ = center_ * (1.0 - wheelWidth());
-    double wheelWidth_ = wheelWidth() * center_;
+    QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
     // Length of triangle
-    double lt_ = 3.0 / sqrt(3.0) * radius_;
-    double ht_ = lt_ * sqrt(3.0) * 0.5;
-    double bottom_ = ht_ + wheelWidth_;
-    double top_ = wheelWidth_;
     int hue_ = hue();
     
-    for(int y = 0; y < size_; y++)
+    for(int y = 0; y < d->sizeColorSelector; y++)
     {
-        double ynormalize = (top_ - y ) / ( top_ - bottom_ );
+        double ynormalize = ( d->triangleTop - y ) / ( d->triangleTop - d->triangleBottom );
         double v = 255 * ynormalize;
-        double ls_ = (ynormalize) * lt_;
-        double startx_ = center_ - 0.5 * ls_;
-        for(int x = 0; x < size_; x++)
+        double ls_ = (ynormalize) * d->triangleLenght;
+        double startx_ = d->centerColorSelector - 0.5 * ls_;
+        for(int x = 0; x < d->sizeColorSelector; x++)
         {
             double s = 255 * (x - startx_) / ls_;
             if(v < 0.0 or v > 255.0 or s < 0.0 or s > 255.0 )
@@ -208,16 +210,15 @@ void KisTriangleColorSelector::generateTriangle()
 
 void KisTriangleColorSelector::generateWheel()
 {
-    int size = qMin(width(), height());
-    QImage img(size,size, QImage::Format_ARGB32_Premultiplied);
-    double center = 0.5 * size;
+    QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
+    double center = 0.5 * d->sizeColorSelector;
     double normExt = pow2(center);
-    double normInt = pow2(center * (1.0 - wheelWidth()));
-    for(int y = 0; y < size; y++)
+    double normInt = pow2(center * (1.0 - d->wheelWidthProportion));
+    for(int y = 0; y < d->sizeColorSelector; y++)
     {
         double yc = y - center;
         double y2 = pow2( yc );
-        for(int x = 0; x < size; x++)
+        for(int x = 0; x < d->sizeColorSelector; x++)
         {
             double xc = x - center;
             double norm = pow2( xc ) + y2;

@@ -32,8 +32,6 @@ class KisTriangleColorSelector : public QWidget {
         int hue() const;
         int value() const;
         int saturation() const;
-    protected:
-        double wheelWidth() const;
     public slots:
         void setHue(int h);
         void setValue(int v);
@@ -42,6 +40,7 @@ class KisTriangleColorSelector : public QWidget {
     private:
         void generateTriangle();
         void generateWheel();
+        void updateTriangleCircleParameters();
     private:
         struct Private;
         Private* const d;

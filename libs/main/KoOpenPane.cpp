@@ -94,11 +94,13 @@ class KoOpenPanePrivate : public Ui_KoOpenPaneBase
       Ui_KoOpenPaneBase()
     {
         m_customWidgetsSeparator = 0;
+        m_templatesSeparator = 0;
     }
 
     KComponentData m_componentData;
     int m_freeCustomWidgetIndex;
     KoSectionListItem* m_customWidgetsSeparator;
+    KoSectionListItem* m_templatesSeparator;
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, const QString& templateType)
@@ -121,13 +123,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
 
   initRecentDocs();
   initExistingFilesPane();
+  initTemplates(templateType);
 
   d->m_freeCustomWidgetIndex = 4;
-
-  KoSectionListItem* separator = new KoSectionListItem(d->m_sectionList, "", 999);
-  separator->setEnabled(false);
-
-  initTemplates(templateType);
 
   KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(d->m_sectionList->selectedItem());
 
@@ -193,6 +191,12 @@ void KoOpenPane::initTemplates(const QString& templateType)
     for (KoTemplateGroup *group = templateTree.first(); group != 0L; group = templateTree.next()) {
       if (group->isHidden()) {
         continue;
+      }
+
+      if (!d->m_templatesSeparator)
+      {
+        d->m_templatesSeparator = new KoSectionListItem(d->m_sectionList, "", 999);
+        d->m_templatesSeparator->setEnabled(false);
       }
 
       KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_componentData, group->name(),

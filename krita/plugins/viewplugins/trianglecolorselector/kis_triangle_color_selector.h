@@ -35,12 +35,15 @@ class KisTriangleColorSelector : public QWidget {
         int hue() const;
         int value() const;
         int saturation() const;
+        QColor color() const;
     public slots:
         void setHue(int h);
         void setValue(int v);
         void setSaturation(int s);
         void setHSV(int h, int v, int s);
         void setQColor(const QColor& );
+    signals:
+        void colorChanged(const QColor& );
     private:
         void generateTriangle();
         void generateWheel();

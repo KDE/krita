@@ -1,5 +1,5 @@
 
-set(kritatrianglecolorselector_PART_SRCS trianglecolorselector.cc kis_triangle_color_selector.cc )
+set(kritatrianglecolorselector_PART_SRCS trianglecolorselector.cc kis_triangle_color_selector.cc kis_triangle_color_selector_dock.cc )
 
 
 # kde4_add_ui_files(kritatrianglecolorselector_PART_SRCS myuifile.ui )

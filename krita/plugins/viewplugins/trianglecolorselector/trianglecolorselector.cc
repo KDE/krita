@@ -37,20 +37,10 @@
 #include "kis_view2.h"
 
 #include "kis_triangle_color_selector.h"
+#include "kis_triangle_color_selector_dock.h"
 
 typedef KGenericFactory<TriangleColorSelectorPlugin> TriangleColorSelectorPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatrianglecolorselector, TriangleColorSelectorPluginFactory( "krita" ) )
-
-class KisTriangleColorSelectorDock : public QDockWidget {
-public:
-    KisTriangleColorSelectorDock( KisView2 *view ) : QDockWidget(i18n("Triangle Color Selector"))
-    {
-        m_colorSelector = new KisTriangleColorSelector(this);
-        setWidget( m_colorSelector );
-    }
-private:
-    KisTriangleColorSelector* m_colorSelector;
-};
 
 class KisTriangleColorSelectorDockFactory : public KoDockFactory {
 public:

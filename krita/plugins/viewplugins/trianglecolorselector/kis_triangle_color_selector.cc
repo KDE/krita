@@ -39,6 +39,7 @@ struct KisTriangleColorSelector::Private {
     double wheelNormExt;
     double wheelNormInt;
     double wheelInnerRadius;
+    double triangleRadius;
     double triangleLenght;
     double triangleHeight;
     double triangleBottom;
@@ -70,10 +71,11 @@ void KisTriangleColorSelector::updateTriangleCircleParameters()
     d->wheelNormExt = qAbs( d->centerColorSelector );
     d->wheelNormInt = qAbs( d->centerColorSelector * (1.0 - d->wheelWidthProportion));
     d->wheelInnerRadius = d->centerColorSelector * (1.0 - d->wheelWidthProportion);
-    d->triangleLenght = 3.0 / sqrt(3.0) * d->wheelInnerRadius;
+    d->triangleRadius = d->wheelInnerRadius * 0.9;
+    d->triangleLenght = 3.0 / sqrt(3.0) * d->triangleRadius;
     d->triangleHeight = d->triangleLenght * sqrt(3.0) * 0.5;
-    d->triangleBottom = d->triangleHeight + d->wheelWidth;
-    d->triangleTop = d->wheelWidth;
+    d->triangleTop = 0.5 * d->sizeColorSelector - d->triangleRadius;
+    d->triangleBottom = d->triangleHeight + d->triangleTop;
 }
 
 void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
@@ -127,6 +129,7 @@ int KisTriangleColorSelector::hue() const
 void KisTriangleColorSelector::setHue(int h)
 {
     d->hue = h;
+    emit(colorChanged(color()));
     generateTriangle();
     update();
 }
@@ -139,6 +142,7 @@ int KisTriangleColorSelector::value() const
 void KisTriangleColorSelector::setValue(int v)
 {
     d->value = v;
+    emit(colorChanged(color()));
     generateTriangle();
     update();
 }
@@ -151,6 +155,7 @@ int KisTriangleColorSelector::saturation() const
 void KisTriangleColorSelector::setSaturation(int s)
 {
     d->saturation = s;
+    emit(colorChanged(color()));
     generateTriangle();
     update();
 }
@@ -160,13 +165,21 @@ void KisTriangleColorSelector::setHSV(int h, int v, int s)
     d->hue = h;
     d->value = v;
     d->saturation = s;
+    emit(colorChanged(color()));
     generateTriangle();
     update();
 }
 
+QColor KisTriangleColorSelector::color() const
+{
+    int r,g,b;
+    hsv_to_rgb( d->hue, d->saturation, d->value, &r, &g, &b);
+    return QColor(r,g,b);
+}
+
 void KisTriangleColorSelector::setQColor(const QColor& c)
 {
-    rgb_to_hsv( c.red(), c.green(), c.blue(), &d->hue, &d->value, &d->saturation );
+    rgb_to_hsv( c.red(), c.green(), c.blue(), &d->hue, &d->saturation, &d->value);
     generateTriangle();
     update();
 }
@@ -310,6 +323,7 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y)
             {
                 setHSV( d->hue, ynormalize * 255, sat * 255);
             }
+            dbgKrita << color();
         }
     }
 }

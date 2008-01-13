@@ -93,10 +93,12 @@ class KoOpenPanePrivate : public Ui_KoOpenPaneBase
     KoOpenPanePrivate() :
       Ui_KoOpenPaneBase()
     {
+        m_customWidgetsSeparator = 0;
     }
 
     KComponentData m_componentData;
     int m_freeCustomWidgetIndex;
+    KoSectionListItem* m_customWidgetsSeparator;
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, const QString& templateType)
@@ -120,12 +122,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
   initRecentDocs();
   initExistingFilesPane();
 
-  KoSectionListItem* separator = new KoSectionListItem(d->m_sectionList, "", 3);
-  separator->setEnabled(false);
-
   d->m_freeCustomWidgetIndex = 4;
 
-  separator = new KoSectionListItem(d->m_sectionList, "", 999);
+  KoSectionListItem* separator = new KoSectionListItem(d->m_sectionList, "", 999);
   separator->setEnabled(false);
 
   initTemplates(templateType);
@@ -240,10 +239,16 @@ void KoOpenPane::initTemplates(const QString& templateType)
 void KoOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title, const QString& icon) {
   Q_ASSERT(widget);
 
+  if(!d->m_customWidgetsSeparator)
+  {
+    d->m_customWidgetsSeparator = new KoSectionListItem(d->m_sectionList, "", 3);
+    d->m_customWidgetsSeparator->setEnabled(false);
+  }
+
   QString realtitle = title;
 
   if(realtitle.isEmpty())
-      realtitle = i18n("Custom Document");
+    realtitle = i18n("Custom Document");
 
   Q3ListViewItem* item = addPane(realtitle, icon, widget, d->m_freeCustomWidgetIndex);
   ++d->m_freeCustomWidgetIndex;

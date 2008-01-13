@@ -296,6 +296,21 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y)
         setHue( (int)(atan2(y, x) * 180 / M_PI ) + 180);
     } else {
     // Compute the s and v value, if they are in range, use them
+        double rotation = -(hue() - 90) * M_PI / 180;
+        double cr = cos(rotation);
+        double sr = sin(rotation);
+        double x1 = x * cr - y * sr; // <- now x1 gives the saturation
+        double y1 = x * sr + y * cr; // <- now y1 gives the value
+        double ynormalize = (y1 - d->triangleTop ) / ( d->triangleTop - d->triangleBottom ) + 0.05; // WTF is the 0.05 needed ?
+        if( ynormalize >= 0.0 and ynormalize <= 1.0)
+        {
+            double ls_ = (1.0 - ynormalize) * d->triangleLenght; // length of the saturation on the triangle
+            double sat = 1.0 -( x1 / ls_ + 0.5) ;
+            if(sat >= 0.0 and sat <= 1.0)
+            {
+                setHSV( d->hue, ynormalize * 255, sat * 255);
+            }
+        }
     }
 }
 

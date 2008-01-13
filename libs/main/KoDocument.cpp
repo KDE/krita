@@ -2751,10 +2751,11 @@ KoOpenPane* KoDocument::createOpenPane( QWidget* parent, const KComponentData &c
                                         const QString& templateType )
 {
     KoOpenPane* openPane = new KoOpenPane( parent, componentData, templateType );
-    QWidget *customDoc = createCustomDocumentWidget(openPane);
-    if(customDoc) {
-        openPane->addCustomDocumentWidget( customDoc );
-        connect( customDoc, SIGNAL( documentSelected() ), this, SLOT( startCustomDocument() ) );
+    QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
+    foreach(CustomDocumentWidgetItem item, widgetList)
+    {
+        openPane->addCustomDocumentWidget( item.widget, item.title, item.icon );
+        connect( item.widget, SIGNAL( documentSelected() ), this, SLOT( startCustomDocument() ) );
     }
     openPane->show();
 
@@ -2795,8 +2796,8 @@ void KoDocument::deleteOpenPaneDelayed()
     d->m_startUpWidget = 0;
 }
 
-QWidget* KoDocument::createCustomDocumentWidget(QWidget * /*parent*/) {
-    return 0;
+QList<KoDocument::CustomDocumentWidgetItem> KoDocument::createCustomDocumentWidgets(QWidget * /*parent*/) {
+    return QList<CustomDocumentWidgetItem>();
 }
 
 bool KoDocument::showEmbedInitDialog(QWidget* parent)

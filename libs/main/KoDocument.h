@@ -939,6 +939,18 @@ protected slots:
     void deleteOpenPaneDelayed();
 
 protected:
+    /**
+     * Struct used in the list created by createCustomDocumentWidgets()
+     */
+    struct CustomDocumentWidgetItem
+    {
+        /// Pointer to the custom document widget
+        QWidget* widget;
+        /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
+        QString title;
+        /// icon used in the sidebar. If left empty it will use the unknown icon
+        QString icon;
+    };
 
     /**
         Generate a name for the document.
@@ -976,8 +988,9 @@ protected:
      * After initializing the widget should emit a signal called 'documentSelected()' which
      * will remove the startupWidget and show the document.
      * @param parent the parent of the to be created widget.
+     * @return a list of KoDocument::CustomDocumentWidgetItem.
      */
-    virtual QWidget* createCustomDocumentWidget(QWidget *parent);
+    virtual QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
      *  OLD XML method. For OASIS just call KoDocumentChild::loadOasisDocument

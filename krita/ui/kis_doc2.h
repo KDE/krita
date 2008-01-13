@@ -75,7 +75,7 @@ public:
     virtual bool loadChildren( KoStore* store);
     virtual bool loadXML(QIODevice *, const KoXmlDocument& doc);
     virtual QByteArray mimeType() const;
-    virtual QWidget* createCustomDocumentWidget(QWidget *parent);
+    virtual QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
     
     virtual KParts::Part * hitTest(QWidget * w, const QPoint& pt)
         {

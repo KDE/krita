@@ -405,7 +405,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     return true;
 }
 
-QWidget* KisDoc2::createCustomDocumentWidget(QWidget *parent)
+QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets(QWidget *parent)
 {
     KisConfig cfg;
 
@@ -419,8 +419,13 @@ QWidget* KisDoc2::createCustomDocumentWidget(QWidget *parent)
         h = sz.height();
         clipAvailable = true;
     }
-    return new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
-    return 0;
+
+    QList<KoDocument::CustomDocumentWidgetItem> widgetList;
+    KoDocument::CustomDocumentWidgetItem item;
+    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
+    widgetList << item;
+
+    return widgetList;
 }
 
 

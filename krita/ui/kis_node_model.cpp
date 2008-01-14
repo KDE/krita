@@ -131,7 +131,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
     if (!parent.isValid())
     {
         int rowCount = m_d->image->root()->childCount() - 1;
-        dbgKrita << "row count: " << rowCount << ", row: " << row << ", node: " << m_d->image->root()->at( rowCount - row );
+        dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << m_d->image->root()->at( rowCount - row );
         return indexFromNode( m_d->image->root()->at( rowCount - row ) );
 
     }
@@ -142,7 +142,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 
     int rowCount = parentNode->childCount() - 1;
     // Now invert!
-    dbgKrita << "row count: " << rowCount << ", row: " << row << ", node: " << parentNode->at(rowCount - row);
+    dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << parentNode->at(rowCount - row);
     return createIndex(row, column, parentNode->at(rowCount - row).data());
 
 }

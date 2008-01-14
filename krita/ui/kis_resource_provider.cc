@@ -257,7 +257,7 @@ void KisResourceProvider::slotLayerActivated( const KisLayerSP l )
     QVariant v;
     v.setValue( l );
     m_resourceProvider->setResource( CurrentKritaLayer, v );
-
+    emit sigLayerChanged( currentLayer() );
 }
 
 void KisResourceProvider::slotNodeActivated( const KisNodeSP node )
@@ -307,6 +307,8 @@ void KisResourceProvider::slotResourceChanged( int key, const QVariant & res )
     case ( CurrentPaintopSettings ):
         emit sigPaintopChanged(currentPaintop(), currentPaintopSettings() );
         break;
+    case ( CurrentKritaLayer ) :
+        emit sigLayerChanged( currentLayer() );
     default:
         ;
         // Do nothing

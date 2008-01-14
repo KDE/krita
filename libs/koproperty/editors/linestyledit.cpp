@@ -27,6 +27,7 @@
 #include <QLayout>
 #include <QVariant>
 #include <QHBoxLayout>
+#include <kcolorscheme.h>
 
 using namespace KoProperty;
 
@@ -167,6 +168,12 @@ LineStyleEdit::LineStyleEdit(Property *property, QWidget *parent)
 	m_edit = new QComboBox(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
+	KColorScheme cs(QPalette::Active);
+	QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+	m_edit->setStyleSheet(QString("QComboBox { \
+			border: 1px solid %1; \
+			border-radius: 0px; \
+			padding: 0 0px; }").arg(focus.name()));
 	l->addWidget(m_edit);
 
 	m_edit->addItem(QIcon(QPixmap(nopen)), "");

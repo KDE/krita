@@ -26,6 +26,7 @@
 #include <QPainter>
 
 #include <kcolorcombo.h>
+#include <kcolorscheme.h>
 
 using namespace KoProperty;
 
@@ -40,6 +41,15 @@ ColorButton::ColorButton(Property *property, QWidget *parent)
 	connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
+	
+	//TODO when a stylesheet is set and you click on 'custom' it segfaults!!
+	//KColorScheme cs(QPalette::Active);
+	//QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+	//m_edit->setStyleSheet(QString("QComboBox { \
+	//		border: 1px solid %1; \
+	//		border-radius: 0px; \
+	//		padding: 0 15px; }").arg(focus.name()));
+
 	l->addWidget(m_edit);
 	setFocusWidget(m_edit);
 }

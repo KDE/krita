@@ -24,6 +24,7 @@
 #include <QLineEdit>
 #include <QVariant>
 #include <QHBoxLayout>
+#include <kcolorscheme.h>
 
 using namespace KoProperty;
 
@@ -38,6 +39,13 @@ StringEdit::StringEdit(Property *property, QWidget *parent)
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 //	m_edit->setMargin(1);
 	m_edit->setMinimumHeight(5);
+	KColorScheme cs(QPalette::Active);
+	QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+	m_edit->setStyleSheet(QString("QLineEdit { \
+			border: 1px solid %1; \
+			border-radius: 0px; \
+			padding: 0 0px; }").arg(focus.name()));
+
 	l->addWidget(m_edit);
 	setFocusWidget(m_edit);
 

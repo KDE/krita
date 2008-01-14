@@ -30,6 +30,7 @@
 #include <QEvent>
 #include <QLineEdit>
 
+#include <kcolorscheme.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -107,6 +108,13 @@ IntEdit::IntEdit(Property *property, QWidget *parent)
 	if (!minValueText.isNull())
 		m_edit->setSpecialValueText(minValueText.toString());
 	m_edit->setMinimumHeight(5);
+	KColorScheme cs(QPalette::Active);
+	QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+	m_edit->setStyleSheet(QString("QSpinBox { \
+			border: 1px solid %1; \
+			border-radius: 0px; \
+			padding: 0 15px;}").arg(focus.name()));
+	
 	setEditor(m_edit);
 
 	setLeavesTheSpaceForRevertButton(true);
@@ -275,6 +283,12 @@ DoubleEdit::DoubleEdit(Property *property, QWidget *parent)
 		m_edit->setSpecialValueText(minValueText.toString());
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
+	KColorScheme cs(QPalette::Active);
+	QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+	m_edit->setStyleSheet(QString("QDoubleSpinBox { \
+			border: 1px solid %1; \
+			border-radius: 0px; \
+			padding: 0 15px;}").arg(focus.name()));
 	setEditor(m_edit);
 
 	setLeavesTheSpaceForRevertButton(true);

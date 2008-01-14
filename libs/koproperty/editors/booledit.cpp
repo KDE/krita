@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+
+#/* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
    Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
@@ -26,6 +27,7 @@
 #include <klocale.h>
 #include <kcombobox.h>
 #include <kdebug.h>
+#include <kcolorscheme.h>
 
 #include <QToolButton>
 #include <QPainter>
@@ -48,7 +50,13 @@ BoolEdit::BoolEdit(Property *property, QWidget *parent)
     //we're not using layout to because of problems with button size
     m_toggle->move(0, 0);
     m_toggle->resize(width(), height());
-
+    KColorScheme cs(QPalette::Active);
+    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+    m_toggle->setStyleSheet(QString("QToolButton { \
+		    border: 1px solid %1; \
+		    border-radius: 0px; \
+		    padding: 0 0px; }").arg(focus.name()));
+    
     setFocusWidget(m_toggle);
     connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
 }

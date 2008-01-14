@@ -45,6 +45,7 @@ class KisTriangleColorSelector : public QWidget {
     signals:
         void colorChanged(const QColor& );
     private:
+        void tellColorChanged();
         void generateTriangle();
         void generateWheel();
         void updateTriangleCircleParameters();

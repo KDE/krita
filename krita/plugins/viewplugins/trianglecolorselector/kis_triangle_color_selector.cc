@@ -19,6 +19,8 @@
 
 #include <math.h>
 
+#include <kis_debug.h>
+
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
@@ -44,6 +46,7 @@ struct KisTriangleColorSelector::Private {
     double triangleTop;
     double normExt;
     double normInt;
+    bool updateAllowed;
 };
 
 KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -51,6 +54,7 @@ KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(pa
     d->hue = 0;
     d->saturation = 0;
     d->value = 0;
+    d->updateAllowed = true;
     setMouseTracking( true );
     updateTriangleCircleParameters();
 }
@@ -78,6 +82,7 @@ void KisTriangleColorSelector::updateTriangleCircleParameters()
 
 void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
 {
+    dbgKrita << d->hue;
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
@@ -126,8 +131,9 @@ int KisTriangleColorSelector::hue() const
 
 void KisTriangleColorSelector::setHue(int h)
 {
+    h = qBound(0, h, 360);
     d->hue = h;
-    emit(colorChanged(color()));
+    tellColorChanged();
     generateTriangle();
     update();
 }
@@ -139,8 +145,9 @@ int KisTriangleColorSelector::value() const
 
 void KisTriangleColorSelector::setValue(int v)
 {
+    v = qBound(0, v, 255);
     d->value = v;
-    emit(colorChanged(color()));
+    tellColorChanged();
     generateTriangle();
     update();
 }
@@ -152,18 +159,22 @@ int KisTriangleColorSelector::saturation() const
 
 void KisTriangleColorSelector::setSaturation(int s)
 {
+    s = qBound(0, s, 255);
     d->saturation = s;
-    emit(colorChanged(color()));
+    tellColorChanged();
     generateTriangle();
     update();
 }
 
 void KisTriangleColorSelector::setHSV(int h, int s, int v)
 {
+    h = qBound(0, h, 360);
+    s = qBound(0, s, 255);
+    v = qBound(0, v, 255);
     d->hue = h;
     d->value = v;
     d->saturation = s;
-    emit(colorChanged(color()));
+    tellColorChanged();
     generateTriangle();
     update();
 }
@@ -177,9 +188,12 @@ QColor KisTriangleColorSelector::color() const
 
 void KisTriangleColorSelector::setQColor(const QColor& c)
 {
-    rgb_to_hsv( c.red(), c.green(), c.blue(), &d->hue, &d->saturation, &d->value);
-    generateTriangle();
-    update();
+    if(d->updateAllowed)
+    {
+        rgb_to_hsv( c.red(), c.green(), c.blue(), &d->hue, &d->saturation, &d->value);
+        generateTriangle();
+        update();
+    }
 }
 
 void KisTriangleColorSelector::resizeEvent( QResizeEvent * event )
@@ -193,6 +207,13 @@ void KisTriangleColorSelector::resizeEvent( QResizeEvent * event )
 inline double pow2(double v)
 {
     return v*v;
+}
+
+void KisTriangleColorSelector::tellColorChanged()
+{
+    d->updateAllowed = false;
+    emit(colorChanged(color()));
+    d->updateAllowed = true;
 }
 
 void KisTriangleColorSelector::generateTriangle()

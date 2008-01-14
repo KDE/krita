@@ -28,12 +28,19 @@ KisTriangleColorSelectorDock::KisTriangleColorSelectorDock( KisView2 *view ) : Q
 {
     m_colorSelector = new KisTriangleColorSelector(this);
     setWidget( m_colorSelector );
-    connect(m_colorSelector, SIGNAL(colorChanged(const QColor&)), this, SLOT(setColor(const QColor&)));
+    connect(m_colorSelector, SIGNAL(colorChanged(const QColor&)), this, SLOT(colorChangedProxy(const QColor&)));
+    connect( m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(setColorProxy(const KoColor&)));
 }
 
-void KisTriangleColorSelectorDock::setColor(const QColor& c)
+void KisTriangleColorSelectorDock::colorChangedProxy(const QColor& c)
 {
     m_view->resourceProvider()->setFGColor( KoColor( c , KoColorSpaceRegistry::instance()->rgb8() ) );
 }
+
+void KisTriangleColorSelectorDock::setColorProxy( const KoColor& c )
+{
+    m_colorSelector->setQColor( c.toQColor() );
+}
+
 
 #include "kis_triangle_color_selector_dock.moc"

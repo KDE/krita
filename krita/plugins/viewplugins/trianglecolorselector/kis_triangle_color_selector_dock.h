@@ -20,6 +20,7 @@
 
 #include <QDockWidget>
 
+class KoColor;
 class KisView2;
 class KisTriangleColorSelector;
 
@@ -28,7 +29,8 @@ class KisTriangleColorSelectorDock : public QDockWidget {
     public:
         KisTriangleColorSelectorDock( KisView2 *view );
     public slots:
-        void setColor(const QColor&);
+        void colorChangedProxy(const QColor&);
+        void setColorProxy( const KoColor& );
 private:
     KisTriangleColorSelector* m_colorSelector;
     KisView2* m_view;

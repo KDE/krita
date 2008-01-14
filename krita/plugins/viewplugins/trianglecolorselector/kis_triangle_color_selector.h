@@ -49,7 +49,7 @@ class KisTriangleColorSelector : public QWidget {
         void generateTriangle();
         void generateWheel();
         void updateTriangleCircleParameters();
-        void selectColorAt(int x, int y);
+        void selectColorAt(int x, int y, bool checkInWheel = true);
     private:
         struct Private;
         Private* const d;

@@ -32,6 +32,7 @@ KoColorDocker::KoColorDocker(bool showOpacitySlider)
     setWindowTitle( i18n( "Color Chooser" ) );
 
     m_colorChooser = new KoUniColorChooser( this, showOpacitySlider );
+    m_colorChooser->changeLayout(KoUniColorChooser::SimpleLayout);
     setWidget( m_colorChooser );
     setMinimumWidth( 194 );
 }

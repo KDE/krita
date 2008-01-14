@@ -53,42 +53,42 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
 
     // HSV
     m_HLabel = new QLabel("H:", this);
-    m_HLabel->setFixedSize(10, 18);
+    //m_HLabel->setFixedSize(10, 18);
     m_HLabel->setEnabled(false);
     m_SLabel = new QLabel("S:", this);
-    m_SLabel->setFixedSize(10, 18);
+    //m_SLabel->setFixedSize(10, 18);
     m_SLabel->setEnabled(false);
     m_VLabel = new QLabel("V:", this);
-    m_VLabel->setFixedSize(10, 18);
+    //m_VLabel->setFixedSize(10, 18);
     m_VLabel->setEnabled(false);
 
     // RGB
     m_RLabel = new QLabel("R:", this);
-    m_RLabel->setFixedSize(10, 18);
+    //m_RLabel->setFixedSize(10, 18);
     m_GLabel = new QLabel("G:", this);
-    m_GLabel->setFixedSize(10, 18);
+    //m_GLabel->setFixedSize(10, 18);
     m_BLabel = new QLabel("B:", this);
-    m_BLabel->setFixedSize(10, 18);
+    //m_BLabel->setFixedSize(10, 18);
 
     // CMYK
     if ( cmykColorSpace() ) {
         m_CLabel = new QLabel("C:", this);
-        m_CLabel->setFixedSize(10, 18);
+        //m_CLabel->setFixedSize(10, 18);
         m_MLabel = new QLabel("M:", this);
-        m_MLabel->setFixedSize(10, 18);
+       // m_MLabel->setFixedSize(10, 18);
         m_YLabel = new QLabel("Y:", this);
-        m_YLabel->setFixedSize(10, 18);
+        //m_YLabel->setFixedSize(10, 18);
         m_KLabel = new QLabel("K:", this);
-        m_KLabel->setFixedSize(10, 18);
+        //m_KLabel->setFixedSize(10, 18);
     }
 
     // LAB
     m_LLabel = new QLabel("L:", this);
-    m_LLabel->setFixedSize(10, 18);
+    //m_LLabel->setFixedSize(10, 18);
     m_aLabel = new QLabel("a:", this);
-    m_aLabel->setFixedSize(10, 18);
+    //m_aLabel->setFixedSize(10, 18);
     m_bLabel = new QLabel("b:", this);
-    m_bLabel->setFixedSize(10, 18);
+    //m_bLabel->setFixedSize(10, 18);
 
     /* setup sradio buttons */
     m_HRB = new QRadioButton(this);
@@ -108,7 +108,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_HIn->setMinimum(0);
     m_HIn->setMaximum(359);   // Is this correct? 359?
     m_HIn->setSingleStep(1);
-    m_HIn->setFixedSize(40, 18);
+//    m_HIn->setFixedSize(40, 18);
     m_HIn->setFocusPolicy( Qt::ClickFocus );
     m_HIn->setToolTip( i18n( "Hue" ) );
     m_HIn->setEnabled(false);
@@ -117,7 +117,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_SIn->setMinimum(0);
     m_SIn->setMaximum(255);
     m_SIn->setSingleStep(1);
-    m_SIn->setFixedSize(40, 18);
+    //m_SIn->setFixedSize(40, 18);
     m_SIn->setFocusPolicy( Qt::ClickFocus );
     m_SIn->setToolTip( i18n( "Saturation" ) );
     m_SIn->setEnabled(false);
@@ -126,7 +126,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_VIn->setMinimum(0);
     m_VIn->setMaximum(255);
     m_VIn->setSingleStep(1);
-    m_VIn->setFixedSize(40, 18);
+    //m_VIn->setFixedSize(40, 18);
     m_VIn->setFocusPolicy( Qt::ClickFocus );
     m_VIn->setToolTip( i18n( "Value (brightness)" ) );
     m_VIn->setEnabled(false);
@@ -135,7 +135,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_RIn->setMinimum(0);
     m_RIn->setMaximum(255);
     m_RIn->setSingleStep(1);
-    m_RIn->setFixedSize(40, 18);
+    //m_RIn->setFixedSize(40, 18);
     m_RIn->setFocusPolicy( Qt::ClickFocus );
     m_RIn->setToolTip( i18n( "Red" ) );
 
@@ -143,7 +143,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_GIn->setMinimum(0);
     m_GIn->setMaximum(255);
     m_GIn->setSingleStep(1);
-    m_GIn->setFixedSize(40, 18);
+    //m_GIn->setFixedSize(40, 18);
     m_GIn->setFocusPolicy( Qt::ClickFocus );
     m_GIn->setToolTip( i18n( "Green" ) );
 
@@ -151,7 +151,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_BIn->setMinimum(0);
     m_BIn->setMaximum(255);
     m_BIn->setSingleStep(1);
-    m_BIn->setFixedSize(40, 18);
+    //m_BIn->setFixedSize(40, 18);
     m_BIn->setFocusPolicy( Qt::ClickFocus );
     m_BIn->setToolTip( i18n( "Blue" ) );
 
@@ -160,7 +160,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
         m_CIn->setMinimum(0);
         m_CIn->setMaximum(255);
         m_CIn->setSingleStep(1);
-        m_CIn->setFixedSize(40, 18);
+        //m_CIn->setFixedSize(40, 18);
         m_CIn->setFocusPolicy( Qt::ClickFocus );
         m_CIn->setToolTip( i18n( "Cyan" ) );
 
@@ -168,7 +168,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
         m_MIn->setMinimum(0);
         m_MIn->setMaximum(255);
         m_MIn->setSingleStep(1);
-        m_MIn->setFixedSize(40, 18);
+        //m_MIn->setFixedSize(40, 18);
         m_MIn->setFocusPolicy( Qt::ClickFocus );
         m_MIn->setToolTip( i18n( "Magenta" ) );
 
@@ -176,7 +176,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
         m_YIn->setMinimum(0);
         m_YIn->setMaximum(255);
         m_YIn->setSingleStep(1);
-        m_YIn->setFixedSize(40, 18);
+        //m_YIn->setFixedSize(40, 18);
         m_YIn->setFocusPolicy( Qt::ClickFocus );
         m_YIn->setToolTip( i18n( "Yellow" ) );
 
@@ -184,7 +184,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
         m_KIn->setMinimum(0);
         m_KIn->setMaximum(255);
         m_KIn->setSingleStep(1);
-        m_KIn->setFixedSize(40, 18);
+        //m_KIn->setFixedSize(40, 18);
         m_KIn->setFocusPolicy( Qt::ClickFocus );
         m_KIn->setToolTip( i18n( "Black" ) );
     }
@@ -193,7 +193,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_LIn->setMinimum(0);
     m_LIn->setMaximum(100);
     m_LIn->setSingleStep(1);
-    m_LIn->setFixedSize(40, 18);
+    //m_LIn->setFixedSize(40, 18);
     m_LIn->setFocusPolicy( Qt::ClickFocus );
     m_LIn->setToolTip( i18n( "Lightness" ) );
 
@@ -201,7 +201,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_aIn->setMinimum(0);
     m_aIn->setMaximum(255);
     m_aIn->setSingleStep(1);
-    m_aIn->setFixedSize(40, 18);
+    //m_aIn->setFixedSize(40, 18);
     m_aIn->setFocusPolicy( Qt::ClickFocus );
     m_aIn->setToolTip( i18n( "Green to magenta*" ) );
 
@@ -209,7 +209,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     m_bIn->setMinimum(0);
     m_bIn->setMaximum(255);
     m_bIn->setSingleStep(1);
-    m_bIn->setFixedSize(40, 18);
+    //m_bIn->setFixedSize(40, 18);
     m_bIn->setFocusPolicy( Qt::ClickFocus );
     m_bIn->setToolTip( i18n( "Blue to yellow" ) );
 

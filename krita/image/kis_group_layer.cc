@@ -90,7 +90,7 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
     return m_d->projection->colorSpace();
 }
 
-KoColorSpace * KisGroupLayer::colorSpace()
+KoColorSpace * KisGroupLayer::colorSpace() 
 {
     // Due to virtual void resetProjection(KisPaintDeviceSP to =
     // 0), the colorspace of the group layer can be different from the

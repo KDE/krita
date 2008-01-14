@@ -82,7 +82,7 @@ KisLayer::~KisLayer()
     delete m_d;
 }
 
-const KoColorSpace * KisLayer::colorSpace()
+const KoColorSpace * KisLayer::colorSpace() const
 {
 	if (m_d->image)
     	return m_d->image->colorSpace();

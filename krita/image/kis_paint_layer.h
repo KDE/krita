@@ -52,7 +52,7 @@ public:
 
     bool allowAsChild( KisNodeSP ) const;
 
-    const KoColorSpace * colorSpace();
+    const KoColorSpace * colorSpace() const;
 
     /**
      * Update the projection for the specified rect r, whether that rect is dirty

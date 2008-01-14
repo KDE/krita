@@ -67,7 +67,7 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
-    virtual const KoColorSpace * colorSpace();
+    virtual const KoColorSpace * colorSpace() const;
 
     /**
      * Ask the layer to assemble its data & apply all the effect masks

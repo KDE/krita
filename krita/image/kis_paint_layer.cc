@@ -167,7 +167,7 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
     return l;
 }
 
-const KoColorSpace * KisPaintLayer::colorSpace()
+const KoColorSpace * KisPaintLayer::colorSpace() const
 {
     return m_d->paintDevice->colorSpace();
 }

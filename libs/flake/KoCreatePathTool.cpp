@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,8 +30,9 @@
 #include "KoSelection.h"
 #include "KoShapeController.h"
 #include "KoCanvasResourceProvider.h"
+#include <KoColor.h>
 
-#include <QPainter>
+#include <QtGui/QPainter>
 
 
 KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
@@ -39,6 +41,7 @@ KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
 , m_activePoint( 0 )
 , m_firstPoint( 0 )
 , m_handleRadius( 3 )
+, m_mouseOverFirstPoint(false)
 {
 }
 
@@ -50,7 +53,6 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
 {
     if ( m_shape )
     {
-        //qDebug() << "KoCreatePathTool::paint" << m_shape;
         painter.save();
         painter.setMatrix( m_shape->absoluteTransformation( &converter ) * painter.matrix() );
 
@@ -65,15 +67,21 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
         }
 
         KoShape::applyConversion( painter, converter );
-        painter.setBrush( Qt::white ); //TODO make configurable
         painter.setPen( Qt::blue );
+
+        // check if we have to color the first point
+        if( m_mouseOverFirstPoint )
+            painter.setBrush( Qt::red ); // //TODO make configurable
+        else
+            painter.setBrush( Qt::white ); //TODO make configurable
 
         QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
         m_firstPoint->paint( painter, handle.size(), KoPathPoint::Node );
 
+        painter.setBrush( Qt::white ); //TODO make configurable
+
         if ( m_activePoint->activeControlPoint1() || m_activePoint->activeControlPoint2() )
         {
-            //TODO use the same handle size as configured in the PathTool
             m_activePoint->paint( painter, handle.size(), 
                                   KoPathPoint::ControlPoint1 | KoPathPoint::ControlPoint2, 
                                   !m_activePoint->activeControlPoint1() );
@@ -85,7 +93,6 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
 {
-    //qDebug() << "KoCreatePathTool::mousePressEvent" << m_shape << "point = " << event->point;
     if ( m_shape )
     {
         // the path shape gets closed by clicking on the first point
@@ -107,7 +114,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         m_shape = new KoPathShape();
         m_shape->setShapeId( KoPathShapeId );
         // TODO take properties from the resource provider
-        m_shape->setBorder( new KoLineBorder( 1, Qt::black ) );
+        m_shape->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
         m_activePoint = m_shape->moveTo( event->point );
         m_firstPoint = m_activePoint;
         m_canvas->updateCanvas( m_shape->boundingRect() );
@@ -117,12 +124,12 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
 void KoCreatePathTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
     Q_UNUSED(event);
-    //qDebug() << "KoCreatePathTool::mouseDoubleClickEvent" << m_shape << "point = " << event->point;
+
     if ( m_shape )
     {
         // the first click of the double click created a new point which has the be removed again
         m_shape->removePoint( m_shape->pathPointIndex( m_activePoint ) );
-        
+
         addPathShape();
     }
 }
@@ -131,7 +138,8 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
 {
     if ( m_shape )
     {
-        //qDebug() << "KoCreatePathTool::mouseMoveEvent" << m_shape << "point = " << event->point;
+        m_mouseOverFirstPoint = handleRect( m_firstPoint->point() ).contains( event->point );
+
         m_canvas->updateCanvas( m_shape->boundingRect() );
         repaintAdjusted( m_activePoint->boundingRect( false ) );
         if ( event->buttons() & Qt::LeftButton )
@@ -150,11 +158,12 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
             m_canvas->updateCanvas( m_shape->boundingRect() );
         }
     }
+    else
+        m_mouseOverFirstPoint = false;
 }
 
 void KoCreatePathTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-    //qDebug() << "KoCreatePathTool::mouseReleaseEvent" << m_shape << "point = " << event->point;
     if ( m_shape )
     {
         repaintAdjusted( m_activePoint->boundingRect( false ) );

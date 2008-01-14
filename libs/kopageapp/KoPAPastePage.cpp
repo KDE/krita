@@ -42,7 +42,7 @@ KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
 {
     KoOasisLoadingContext loadingContext( m_doc, odfStore.styles(), odfStore.store() );
-    KoPALoadingContext paContext( loadingContext );
+    KoPALoadingContext paContext( loadingContext, m_doc );
 
     QList<KoPAPageBase *> masterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );
     QList<KoPAPageBase *> pages( m_doc->loadOdfPages( body, paContext ) );

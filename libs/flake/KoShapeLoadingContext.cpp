@@ -27,10 +27,11 @@
 
 class KoShapeLoadingContext::Private {
 public:
-    Private(KoOasisLoadingContext &c)
+    Private( KoOasisLoadingContext &c, KoShapeControllerBase * sc )
     : context( c )
     , imageCollection( 0 )
     , zIndex( 0 )
+    , shapeController( sc )
     {}
     ~Private()
     {
@@ -46,10 +47,11 @@ public:
     QMap<QString, KoSharedLoadingData*> sharedData;
     QMap<KoShape*, int> zIndices;
     int zIndex;
+    KoShapeControllerBase * shapeController;
 };
 
-KoShapeLoadingContext::KoShapeLoadingContext( KoOasisLoadingContext & context )
-: d( new Private(context))
+KoShapeLoadingContext::KoShapeLoadingContext( KoOasisLoadingContext & context, KoShapeControllerBase * shapeController )
+: d( new Private( context, shapeController ) )
 {
 }
 

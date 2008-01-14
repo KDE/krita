@@ -147,3 +147,8 @@ void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeContr
 {
     d->shapeController = shapeControllerBase;
 }
+
+KoShapeControllerBase * KoShapeController::shapeControllerBase()
+{
+    return d->shapeController;
+}

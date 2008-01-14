@@ -47,7 +47,7 @@ KoCollectionShapeFactory::~KoCollectionShapeFactory()
     delete m_shape;
 }
 
-KoShape* KoCollectionShapeFactory::createDefaultShape() const
+KoShape* KoCollectionShapeFactory::createDefaultShape( KoShapeControllerBase * shapeController )
 {
     QList<KoShape*> shapes;
 
@@ -90,7 +90,7 @@ KoShape* KoCollectionShapeFactory::createDefaultShape() const
         }
 
         KoOasisLoadingContext loadingContext(0, odfStore.styles(), odfStore.store());
-        KoShapeLoadingContext context(loadingContext);
+        KoShapeLoadingContext context(loadingContext, shapeController);
 
         KoXmlElement element;
 
@@ -108,8 +108,23 @@ KoShape* KoCollectionShapeFactory::createDefaultShape() const
     return shape;
 }
 
-KoShape* KoCollectionShapeFactory::createShape(const KoProperties* params) const
+KoShape* KoCollectionShapeFactory::createShape( const KoProperties* params, KoShapeControllerBase * shapeController )
 {
     Q_UNUSED(params)
     return createDefaultShape();
+}
+
+KoShape* KoCollectionShapeFactory::createDefaultShape() const
+{
+    // this code should never be reached as createDefaultShape( KoShapeControllerBase * ) is reimplemented
+    Q_ASSERT( false );
+    return 0;
+}
+
+KoShape* KoCollectionShapeFactory::createShape(const KoProperties* params) const
+{
+    Q_UNUSED( params );
+    // this code should never be reached as createDefaultShape( KoShapeControllerBase * ) is reimplemented
+    Q_ASSERT( false );
+    return 0;
 }

@@ -117,7 +117,7 @@ public:
      * @see KoShapeFactory::createDefaultShape
      * @see KoShapeControllerBase::shapeCreated
      */
-    KoShape * createDefaultShape( KoShapeControllerBase * shapeController );
+    virtual KoShape * createDefaultShape( KoShapeControllerBase * shapeController );
 
     /**
      * This method should be called to create a shape based on a set of properties that are 
@@ -139,7 +139,7 @@ public:
      * @see KoShapeTemplate::properties
      * @see KoShapeControllerBase::shapeCreated
      */
-    KoShape * createShape(const KoProperties * params, KoShapeControllerBase *shapeController );
+    virtual KoShape * createShape(const KoProperties * params, KoShapeControllerBase *shapeController );
 
     /**
      * Create a list of option panels to show on creating a new shape.

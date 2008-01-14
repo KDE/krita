@@ -103,6 +103,12 @@ public:
     void setShapeControllerBase(KoShapeControllerBase* shapeControllerBase);
 
 private:
+    /**
+     * @breif Get the shapeControllerBase
+     */
+    KoShapeControllerBase * shapeControllerBase();
+
+    friend class KoShapePaste;
     class Private;
     Private * const d;
 };

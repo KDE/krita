@@ -249,7 +249,8 @@ void KoOdfCollectionLoader::loadNativeFile(const QString& path)
     }
 
     KoOasisLoadingContext* m_loadingContext = new KoOasisLoadingContext(0, m_odfStore->styles(), m_odfStore->store());
-    m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext);
+    // it ok here to pass 0 as shape controller as we don't have a document
+    m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, 0);
 
     KoXmlElement content = m_odfStore->contentDoc().documentElement();
     KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );

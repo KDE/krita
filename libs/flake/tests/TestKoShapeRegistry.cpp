@@ -79,7 +79,7 @@ void TestKoShapeRegistry::testCreateShapes()
     // sensibly filled.
     KoOdfStylesReader stylesReader;
     KoOasisLoadingContext oasisContext(0, stylesReader, 0);
-    KoShapeLoadingContext shapeContext( oasisContext );
+    KoShapeLoadingContext shapeContext( oasisContext, 0 );
 
     KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
     QVERIFY( shape == 0 );
@@ -126,7 +126,7 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     // sensibly filled.
     KoOdfStylesReader stylesReader;
     KoOasisLoadingContext oasisContext(0, stylesReader, 0);
-    KoShapeLoadingContext shapeContext( oasisContext );
+    KoShapeLoadingContext shapeContext( oasisContext, 0 );
 
     KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
     QVERIFY( shape == 0 );

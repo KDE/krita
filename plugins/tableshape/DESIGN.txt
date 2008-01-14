@@ -29,3 +29,12 @@ Query: should the tableshape be a shape or a shape container?
 
 Note: MS Word tables do have variable column widths per row -- see shaheed's remarks on IRC
 Note: table cells must be reversed in rtl languages!
+
+
+Styles: styles are loaded separately and can be retrieved from the KoStyleManager.
+On loading, the right style needs to get retrieved from the manager and applied to the
+right range as defined by a QTextCursor on the QTextDocument in the table shape. 
+
+On saving, the style id needs to be retrieved from the QTextFormat entries
+in the QTextDocument and saved out as references to the (already existing)
+style entries in the styles section of the document.

@@ -14,6 +14,7 @@ SET (tableshape_LIB_SRCS
     TableRow.cpp
     Table.cpp
     TableColumn.cpp
+    TableStyle.cpp
 )
 
 kde4_add_plugin(tableshape ${tableshape_LIB_SRCS})

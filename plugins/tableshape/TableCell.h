@@ -41,8 +41,6 @@ public:
 
     ~TableCell();
 
-
-
     /**
      * @return the shape that contains the contents for this cell. May be 0
      * if no shape exists for this cell; the cell is empty in that case.

@@ -41,6 +41,17 @@ class TableCell;
  *
  * It is possible for TableShapes to share the same Table instance, for instance,
  * for pagination.
+ *
+ * Only for spreadsheet, apparently:
+ *
+ *  - table-source (pivot tables)
+ *  - table-scenario (8.3.3)
+ *  - office-forms (chapter 11)
+ *
+ * XXX: What about this?
+ *  - table-shapes (8.3.4: The <table:shapes> element contains all graphic shapes with
+ *                         an anchor on the table this element is a child of. It is a container
+ *                         element and does not have any associated attributes.)
  */
 class Table : public QTextTable {
 
@@ -64,49 +75,48 @@ public:
      */
      QList<DDEData*> ddeConnections() const;
 
+   /**
+    * Return a vector with all columns in this table. Columns do not contain cells: rows
+    * contain cells. Columns contain default styles for cells.
+    */
+    QList<TableColumn*> columns() const;
 
-     /**
-      * Return a vector with all columns in this table. Columns do not contain cells: rows
-      * contain cells. Columns contain default styles for cells.
-      */
-     QList<TableColumn*> columns() const;
+    /**
+    * Create a new column at the specified point. If the table is already populated,
+    * create empty cells in all rows at the specified point.
+    */
+    TableColumn * createColumn(int pos);
 
-     /**
-      * Create a new column at the specified point. If the table is already populated,
-      * create empty cells in all rows at the specified point.
-      */
-     TableColumn * createColumn(int pos);
+    /**
+    * Remove the column at the specified position. The cells in all rows in this
+    * table at pos will be removed. This may possibly uncover covered cells.
+    */
+    void removeColumn(int pos);
 
-     /**
-      * Remove the column at the specified position. The cells in all rows in this
-      * table at pos will be removed. This may possibly uncover covered cells.
-      */
-     void removeColumn(int pos);
+    /**
+    * return a vector with all rows in this table. Rows contain cells.
+    */
+    QList<TableRow*> rows() const;
 
-     /**
-      * return a vector with all rows in this table. Rows contain cells.
-      */
-     QList<TableRow*> rows() const;
+    /**
+    * Create a new row at the specified point. This will cause a relayout of all
+    * rows below the new row (athough that might be optimized by just shifting
+    * the position of all shapes in those rows).
+    */
+    TableRow * createRow(int pos);
 
-     /**
-      * Create a new row at the specified point. This will cause a relayout of all
-      * rows below the new row (athough that might be optimized by just shifting
-      * the position of all shapes in those rows).
-      */
-      TableRow * createRow(int pos);
+    /**
+    * Remove the row at the specified point. All cells and shapes in this row
+    * will be removed. All cells merges cells in this row covered will be uncovered.
+    * All rows below this row will shift upwards.
+    */
+    void removeRow(int pos);
 
-      /**
-       * Remove the row at the specified point. All cells and shapes in this row
-       * will be removed. All cells merges cells in this row covered will be uncovered.
-       * All rows below this row will shift upwards.
-       */
-      void removeRow(int pos);
-      
-      /**
-       * Return the cell at the specified row, col position, or 0 if the position is
-       * out of range.
-       */
-      TableCell * cellAt(int row, int col) const;
+    /**
+    * Return the cell at the specified row, col position, or 0 if the position is
+    * out of range.
+    */
+    TableCell * cellAt(int row, int col) const;
 
       
       

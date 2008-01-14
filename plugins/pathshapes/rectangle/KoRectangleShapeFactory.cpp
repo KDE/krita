@@ -53,7 +53,7 @@ KoShape * KoRectangleShapeFactory::createDefaultShape() const
 KoShape * KoRectangleShapeFactory::createShape( const KoProperties * params ) const 
 {
     Q_UNUSED(params);
-    return new KoRectangleShape();
+    return createDefaultShape();
 }
 
 bool KoRectangleShapeFactory::supports(const KoXmlElement & e) const

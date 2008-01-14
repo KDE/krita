@@ -49,7 +49,7 @@ KoShape * KoPathShapeFactory::createDefaultShape() const {
 
 KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {
     Q_UNUSED(params);
-    return new KoPathShape();
+    return createDefaultShape();
 }
 
 bool KoPathShapeFactory::supports(const KoXmlElement & e) const

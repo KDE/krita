@@ -1,5 +1,4 @@
-
-#/* This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
    Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>

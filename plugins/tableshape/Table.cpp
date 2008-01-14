@@ -33,6 +33,7 @@ public:
     QList<TableRow*> rows;
     QList<DDEData*> ddeConnections;
     TableShape * tableShape;
+    
 };
 
 Table::Table( QTextDocument * document, TableShape * tableShape )

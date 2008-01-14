@@ -82,40 +82,40 @@ public:
     QList<TableColumn*> columns() const;
 
     /**
-    * Create a new column at the specified point. If the table is already populated,
-    * create empty cells in all rows at the specified point.
-    */
+     * Create a new column at the specified point. If the table is already populated,
+     * create empty cells in all rows at the specified point.
+     */
     TableColumn * createColumn(int pos);
 
     /**
-    * Remove the column at the specified position. The cells in all rows in this
-    * table at pos will be removed. This may possibly uncover covered cells.
-    */
+     * Remove the column at the specified position. The cells in all rows in this
+     * table at pos will be removed. This may possibly uncover covered cells.
+     */
     void removeColumn(int pos);
 
     /**
-    * return a vector with all rows in this table. Rows contain cells.
-    */
+     * return a vector with all rows in this table. Rows contain cells.
+     */
     QList<TableRow*> rows() const;
 
     /**
-    * Create a new row at the specified point. This will cause a relayout of all
-    * rows below the new row (athough that might be optimized by just shifting
-    * the position of all shapes in those rows).
-    */
+     * Create a new row at the specified point. This will cause a relayout of all
+     * rows below the new row (athough that might be optimized by just shifting
+     * the position of all shapes in those rows).
+     */
     TableRow * createRow(int pos);
 
     /**
-    * Remove the row at the specified point. All cells and shapes in this row
-    * will be removed. All cells merges cells in this row covered will be uncovered.
-    * All rows below this row will shift upwards.
-    */
+     * Remove the row at the specified point. All cells and shapes in this row
+     * will be removed. All cells merges cells in this row covered will be uncovered.
+     * All rows below this row will shift upwards.
+     */
     void removeRow(int pos);
 
     /**
-    * Return the cell at the specified row, col position, or 0 if the position is
-    * out of range.
-    */
+     * Return the cell at the specified row, col position, or 0 if the position is
+     * out of range.
+     */
     TableCell * cellAt(int row, int col) const;
 
       

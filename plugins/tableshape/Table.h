@@ -75,6 +75,26 @@ public:
      */
      QList<DDEData*> ddeConnections() const;
 
+    /**
+     * set the hash for the password with which the table is protected
+     */
+    void setProtectionHash( const QString & hash );
+
+    QString protectionHash() const;
+
+    /**
+     * The table:protected attribute specifies whether or not a table is protected from
+     * editing. If the table is protected, the table:protection-key attribute can specify
+     * a password to prevent a user from resetting the protection flag to enable editing.
+     * If a table is protected, all of the table elements and the cell elements with a
+     * style:cell-protect attribute set to true are protected.
+     *
+     * XXX: is our style system flexible enough to handle the cell-protect property?
+     */
+    void setProtected(bool isProtected);
+    bool isProtected() const;
+
+
    /**
     * Return a vector with all columns in this table. Columns do not contain cells: rows
     * contain cells. Columns contain default styles for cells.

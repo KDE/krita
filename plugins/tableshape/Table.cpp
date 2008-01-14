@@ -33,6 +33,8 @@ public:
     QList<TableRow*> rows;
     QList<DDEData*> ddeConnections;
     TableShape * tableShape;
+    QString protectionHash;
+    bool isProtected;
     
 };
 
@@ -64,6 +66,26 @@ void Table::addDDEConnection(DDEData * data)
 QList<DDEData*> Table::ddeConnections() const
 {
     return d->ddeConnections;
+}
+
+void Table::setProtectionHash( const QString & hash )
+{
+    d->protectionHash = hash;
+}
+
+QString Table::protectionHash() const
+{
+    return d->protectionHash;
+}
+
+void Table::setProtected(bool isProtected)
+{
+    d->isProtected = isProtected;
+}
+
+bool Table::isProtected() const
+{
+    return d->isProtected;
 }
 
 QList<TableColumn*> Table::columns() const

@@ -18,6 +18,7 @@ add_subdirectory( metadataeditor )
 add_subdirectory( bigbrother )
 add_subdirectory( tonemapping )
 add_subdirectory( trianglecolorselector )
+add_subdirectory( specificcolorselector )
 
 find_package(GMM)
 

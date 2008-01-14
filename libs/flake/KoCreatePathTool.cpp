@@ -171,6 +171,14 @@ void KoCreatePathTool::mouseReleaseEvent( KoPointerEvent *event )
     }
 }
 
+void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
+{
+    if( event->key() == Qt::Key_Escape )
+        emit done();
+    else
+        event->ignore();
+}
+
 void KoCreatePathTool::activate( bool temporary )
 {
     Q_UNUSED( temporary );
@@ -178,6 +186,19 @@ void KoCreatePathTool::activate( bool temporary )
 
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
+}
+
+void KoCreatePathTool::deactivate()
+{
+    if( m_shape )
+    {
+        m_canvas->updateCanvas( handleRect( m_firstPoint->point() ) );
+        m_canvas->updateCanvas( m_shape->boundingRect() );
+        delete m_shape;
+        m_shape = 0;
+        m_firstPoint = 0;
+        m_activePoint = 0;
+    }
 }
 
 void KoCreatePathTool::resourceChanged( int key, const QVariant & res )

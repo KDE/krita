@@ -49,9 +49,11 @@ public:
     void mouseDoubleClickEvent( KoPointerEvent *event );
     void mouseMoveEvent( KoPointerEvent *event );
     void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void keyPressEvent(QKeyEvent *event);
 
 public slots:
     void activate( bool temporary = false );
+    virtual void deactivate();
     void resourceChanged( int key, const QVariant & res );
 
 protected:

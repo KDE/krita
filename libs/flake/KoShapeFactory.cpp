@@ -63,7 +63,7 @@ KoShapeFactory::~KoShapeFactory() {
 KoShape * KoShapeFactory::createDefaultShape( KoShapeControllerBase * shapeController )
 {
     KoShape * shape = createDefaultShape();
-    if ( shape || shapeController ) {
+    if ( shape && shapeController ) {
         shapeController->shapeCreated( shape );
     }
     return shape;

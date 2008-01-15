@@ -93,6 +93,16 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
 {
+    if( (event->buttons() & Qt::RightButton) && m_shape )
+    {
+        // repaint the shape before removing the last point
+        m_canvas->updateCanvas( m_shape->boundingRect() );
+        m_shape->removePoint( m_shape->pathPointIndex( m_activePoint ) );
+
+        addPathShape();
+        return;
+    }
+
     if ( m_shape )
     {
         // the path shape gets closed by clicking on the first point
@@ -136,39 +146,40 @@ void KoCreatePathTool::mouseDoubleClickEvent( KoPointerEvent *event )
 
 void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    if ( m_shape )
+    if ( ! m_shape )
     {
-        m_mouseOverFirstPoint = handleRect( m_firstPoint->point() ).contains( event->point );
+        m_mouseOverFirstPoint = false;
+        return;
+    }
 
+    m_mouseOverFirstPoint = handleRect( m_firstPoint->point() ).contains( event->point );
+
+    m_canvas->updateCanvas( m_shape->boundingRect() );
+    repaintAdjusted( m_activePoint->boundingRect( false ) );
+    if ( event->buttons() & Qt::LeftButton )
+    {
+        m_activePoint->setControlPoint2( event->point );
+        if ( m_activePoint->properties() & KoPathPoint::CanHaveControlPoint1 )
+        {
+            m_activePoint->setControlPoint1( m_activePoint->point() + ( m_activePoint->point() - event->point ) );
+        }
         m_canvas->updateCanvas( m_shape->boundingRect() );
         repaintAdjusted( m_activePoint->boundingRect( false ) );
-        if ( event->buttons() & Qt::LeftButton )
-        {
-            m_activePoint->setControlPoint2( event->point );
-            if ( m_activePoint->properties() & KoPathPoint::CanHaveControlPoint1 )
-            {
-                m_activePoint->setControlPoint1( m_activePoint->point() + ( m_activePoint->point() - event->point ) );
-            }
-            m_canvas->updateCanvas( m_shape->boundingRect() );
-            repaintAdjusted( m_activePoint->boundingRect( false ) );
-        }
-        else
-        {
-            m_activePoint->setPoint( event->point );
-            m_canvas->updateCanvas( m_shape->boundingRect() );
-        }
     }
     else
-        m_mouseOverFirstPoint = false;
+    {
+        m_activePoint->setPoint( event->point );
+        m_canvas->updateCanvas( m_shape->boundingRect() );
+    }
 }
 
 void KoCreatePathTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-    if ( m_shape )
-    {
-        repaintAdjusted( m_activePoint->boundingRect( false ) );
-        m_activePoint = m_shape->lineTo( event->point );
-    }
+    if ( ! m_shape || (event->buttons() & Qt::RightButton) )
+        return;
+
+    repaintAdjusted( m_activePoint->boundingRect( false ) );
+    m_activePoint = m_shape->lineTo( event->point );
 }
 
 void KoCreatePathTool::keyPressEvent(QKeyEvent *event)

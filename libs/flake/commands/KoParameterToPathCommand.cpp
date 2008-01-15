@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ KoParameterToPathCommand::KoParameterToPathCommand( KoParameterShape *shape, QUn
 , m_newPointsActive( false )
 {
     m_shapes.append( shape );
-
+    initialize();
     setText( i18n( "Convert to Path" ) );
 }
 
@@ -36,25 +36,7 @@ KoParameterToPathCommand::KoParameterToPathCommand( const QList<KoParameterShape
 , m_shapes( shapes )
 , m_newPointsActive( false )
 {
-    foreach( KoParameterShape *shape, m_shapes )
-    {
-        KoSubpathList subpaths = shape->m_subpaths;
-        KoSubpathList newSubpaths;
-        // make a deep copy of the subpaths
-        KoSubpathList::const_iterator pathIt( subpaths.begin() );
-        for (  ; pathIt != subpaths.end(); ++pathIt )
-        {
-            KoSubpath * newSubpath = new KoSubpath();
-            newSubpaths.append( newSubpath );
-            KoSubpath::const_iterator it(  (  *pathIt )->begin() );
-            for (  ; it != (  *pathIt )->end(); ++it )
-            {
-                newSubpath->append( new KoPathPoint( **it ) );
-            }
-        }
-        m_oldSubpaths.append( subpaths );
-        m_newSubpaths.append( newSubpaths );
-    }
+    initialize();
     setText( i18n( "Convert to Path" ) );
 }
 
@@ -113,4 +95,27 @@ void KoParameterToPathCommand::undo()
         parameterShape->update();
     }
     m_newPointsActive = false;
+}
+
+void KoParameterToPathCommand::initialize()
+{
+    foreach( KoParameterShape *shape, m_shapes )
+    {
+        KoSubpathList subpaths = shape->m_subpaths;
+        KoSubpathList newSubpaths;
+        // make a deep copy of the subpaths
+        KoSubpathList::const_iterator pathIt( subpaths.begin() );
+        for (  ; pathIt != subpaths.end(); ++pathIt )
+        {
+            KoSubpath * newSubpath = new KoSubpath();
+            newSubpaths.append( newSubpath );
+            KoSubpath::const_iterator it(  (  *pathIt )->begin() );
+            for (  ; it != (  *pathIt )->end(); ++it )
+            {
+                newSubpath->append( new KoPathPoint( **it ) );
+            }
+        }
+        m_oldSubpaths.append( subpaths );
+        m_newSubpaths.append( newSubpaths );
+    }
 }

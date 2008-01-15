@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -26,10 +26,12 @@
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
 
+#include <flake_export.h>
+
 class KoParameterShape;
 
 /// The undo / redo command for changing a KoParameterShape into a KoPathShape
-class KoParameterToPathCommand : public QUndoCommand
+class FLAKE_EXPORT KoParameterToPathCommand : public QUndoCommand
 {
 public:
     /**
@@ -51,6 +53,7 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
+    void initialize();
     QList<KoParameterShape*> m_shapes;
     QList<KoSubpathList> m_oldSubpaths;
     QList<KoSubpathList> m_newSubpaths;

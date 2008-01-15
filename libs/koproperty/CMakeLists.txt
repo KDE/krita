@@ -2,7 +2,7 @@
 
 add_subdirectory( test )
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${KOMAIN_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${CMAKE_SOURCE_DIR}/libs/guiutils ${KOMAIN_INCLUDES} )
 
 
 set(libkopropertyeditors_SRCS
@@ -42,7 +42,7 @@ set(koproperty_LIB_SRCS ${libkopropertyeditors_SRCS}
 
 kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
 
-target_link_libraries(koproperty ${KDE4_KDE3SUPPORT_LIBS} )
+target_link_libraries(koproperty koguiutils ${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koproperty  DESTINATION ${LIB_INSTALL_DIR})

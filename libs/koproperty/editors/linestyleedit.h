@@ -23,7 +23,8 @@
 
 #include "../widget.h"
 
-class QComboBox;
+#include <libs/guiutils/KoLineStyleSelector.h>
+class KoLineStyleSelector;
 
 namespace KoProperty {
 
@@ -47,7 +48,7 @@ class KOPROPERTY_EXPORT LineStyleEdit : public Widget
 		void slotValueChanged(int value);
 
 	private:
-		QComboBox *m_edit;
+		KoLineStyleSelector *m_edit;
 };
 
 }

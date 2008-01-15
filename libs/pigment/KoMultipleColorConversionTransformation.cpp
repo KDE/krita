@@ -66,6 +66,6 @@ void KoMultipleColorConversionTransformation::transform(const quint8 *src, quint
         buff2 = tmp;
     }
     d->transfos.last()->transform( buff1, dst, nPixels);
-    delete buff2;
-    delete buff1;
+    delete [] buff2;
+    delete [] buff1;
 }

@@ -41,6 +41,7 @@ public:
 
 Bar::Bar(Sheet* sheet) : QObject(sheet), d(new Private)
 {
+    d->size = 0;
     setSize(100);
     d->prefix = 0;
 }

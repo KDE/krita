@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@
 #include <math.h>
 #include <klocale.h>
 
-ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
+ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, Qt::MouseButtons buttons)
 : KoInteractionStrategy(tool, canvas)
 , m_initialBoundingRect()
 , m_start(clicked)
@@ -48,12 +48,16 @@ ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, co
             m_initialBoundingRect = m_initialBoundingRect.united( shape->boundingRect() );
         m_oldTransforms << shape->transformation();
     }
+
+    if( buttons & Qt::LeftButton )
+        m_rotationCenter = m_initialBoundingRect.center();
+    else
+        m_rotationCenter = canvas->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
 }
 
 void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
-    QPointF center = m_initialBoundingRect.center();
-    double angle = atan2( point.y() - center.y(), point.x() - center.x() ) -
-        atan2( m_start.y() - center.y(), m_start.x() - center.x() );
+    double angle = atan2( point.y() - m_rotationCenter.y(), point.x() - m_rotationCenter.x() ) -
+        atan2( m_start.y() - m_rotationCenter.y(), m_start.x() - m_rotationCenter.x() );
     angle = angle / M_PI * 180;  // convert to degrees.
     if(modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
         // limit to 45 degree angles
@@ -66,9 +70,9 @@ void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     }
 
     QMatrix matrix;
-    matrix.translate(center.x(), center.y());
+    matrix.translate(m_rotationCenter.x(), m_rotationCenter.y());
     matrix.rotate(angle);
-    matrix.translate(-center.x(), -center.y());
+    matrix.translate(-m_rotationCenter.x(), -m_rotationCenter.y());
 
     QMatrix applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
@@ -91,7 +95,7 @@ void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &conve
     painter.setBrush( QBrush(Qt::red));
     painter.setRenderHint( QPainter::Antialiasing, true );
     QRectF circle( 0, 0, 5, 5 );
-    circle.moveCenter( converter.documentToView( m_initialBoundingRect.center() ) );
+    circle.moveCenter( converter.documentToView( m_rotationCenter ) );
     painter.drawEllipse( circle );
 }
 

@@ -58,6 +58,11 @@ void SelectionDecorator::setHotPosition( KoFlake::Position hotPosition )
     m_hotPosition = hotPosition;
 }
 
+KoFlake::Position SelectionDecorator::hotPosition()
+{
+    return m_hotPosition;
+}
+
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter) {
     QPen pen( Qt::green );
     QPolygonF outline;

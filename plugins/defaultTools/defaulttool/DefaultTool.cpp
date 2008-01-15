@@ -2,6 +2,7 @@
 
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -761,8 +762,8 @@ void DefaultTool::updateHotPosition( KoFlake::Position hotPosition )
 }
 
 KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
-    if((event->buttons() & Qt::LeftButton) == 0)
-        return 0;  // Nothing to do for middle/right mouse button
+    if( event->buttons() & Qt::MidButton )
+        return 0;  // Nothing to do for middle mouse button
 
     KoShapeManager *shapeManager = m_canvas->shapeManager();
     KoSelection *select = shapeManager->selection();
@@ -779,17 +780,26 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
     if(editableShape && (event->modifiers() == Qt::NoModifier )) {
         // manipulation of selected shapes goes first
         if(handle != KoFlake::NoHandle) {
-            if(insideSelection)
-                return new ShapeResizeStrategy(this, m_canvas, event->point, handle);
-            if(handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
+            if( event->buttons() == Qt::LeftButton ) {
+                // resizing or shearing only with left mouse button
+                if(insideSelection)
+                    return new ShapeResizeStrategy(this, m_canvas, event->point, handle);
+                if(handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
                         handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle)
-                return new ShapeShearStrategy(this, m_canvas, event->point, handle);
-            return new ShapeRotateStrategy(this, m_canvas, event->point);
+                    return new ShapeShearStrategy(this, m_canvas, event->point, handle);
+            }
+            // rotating is allowed for rigth mouse button too
+            if( handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
+                handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle )
+                return new ShapeRotateStrategy(this, m_canvas, event->point, event->buttons() );
         }
         // This is wrong now when there is a single rotated object as you get it also when pressing outside of the object
         if(select->boundingRect().contains(event->point))
             return new ShapeMoveStrategy(this, m_canvas, event->point);
     }
+
+    if((event->buttons() & Qt::LeftButton) == 0)
+        return 0;  // Nothing to do for middle/right mouse button
 
     KoShape * object( shapeManager->shapeAt( event->point, (event->modifiers() & Qt::ShiftModifier) ? KoFlake::NextUnselected : KoFlake::ShapeOnTop ) );
     if( !object && handle == KoFlake::NoHandle) {

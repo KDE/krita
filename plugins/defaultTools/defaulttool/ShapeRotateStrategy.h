@@ -41,7 +41,7 @@ public:
      * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
-    ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked );
+    ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, Qt::MouseButtons buttons );
     virtual ~ShapeRotateStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
@@ -54,6 +54,7 @@ private:
     QPointF m_start;
     QMatrix m_rotationMatrix;
     QList<QMatrix> m_oldTransforms;
+    QPointF m_rotationCenter;
 };
 
 #endif

@@ -65,6 +65,9 @@ public:
     /// Sets the hot position to highlight
     static void setHotPosition( KoFlake::Position hotPosition );
 
+    /// Returns the hot position
+    static KoFlake::Position hotPosition();
+
 private:
     bool m_rotationHandles, m_shearHandles;
     KoFlake::SelectionHandle m_arrows;

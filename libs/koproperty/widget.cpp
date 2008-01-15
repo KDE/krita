@@ -28,6 +28,7 @@
 
 #include <k3listview.h>
 #include <kdebug.h>
+#include <kcolorscheme.h>
 
 using namespace KoProperty;
 
@@ -226,6 +227,46 @@ void
 Widget::setVisibleFlag(bool visible)
 {
 	d->visibleFlag = visible;
+}
+
+void 
+Widget::setPlainWidgetStyle(QWidget* w)
+{
+	QString styleSheet;
+	KColorScheme cs(QPalette::Active);
+	QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+	
+	if (w->inherits("QComboBox"))
+	{
+		styleSheet = QString("QComboBox { \
+				border: 1px solid %1; \
+				border-radius: 0px; \
+				padding: 0px 18px; }").arg(focus.name());
+	}
+	else if (w->inherits("QLineEdit"))
+	{
+		styleSheet = QString("QLineEdit { \
+				border: 1px solid %1; \
+				border-radius: 0px; \
+				padding: 0 0px; }").arg(focus.name());
+	}
+	else if(w->inherits("QSpinBox"))
+	{
+		styleSheet = QString("QSpinBox { \
+				border: 1px solid %1; \
+				border-radius: 0px; \
+				padding: 0 15px;}").arg(focus.name());
+	}
+	else if(w->inherits("QDoubleSpinBox"))
+	{
+		styleSheet = QString("QDoubleSpinBox { \
+				border: 1px solid %1; \
+				border-radius: 0px; \
+				padding: 0 15px;}").arg(focus.name());
+	}
+	
+	if (!styleSheet.isEmpty())
+		w->setStyleSheet(w->styleSheet() + styleSheet);
 }
 
 #include "widget.moc"

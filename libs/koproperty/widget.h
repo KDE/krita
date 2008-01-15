@@ -114,6 +114,8 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		 By default widgets are visible. */
 		void setVisibleFlag(bool visible);
 
+		/*! Sets a stylesheet that will remove thick borders from the widget @a w to make it more usable as the property editor item.*/
+		void setPlainWidgetStyle(QWidget* w);
 	protected:
 		WidgetPrivate * const d;
 };

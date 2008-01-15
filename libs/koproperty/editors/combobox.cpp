@@ -27,7 +27,6 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kcolorscheme.h>
 
 #include "property.h"
 
@@ -43,13 +42,8 @@ ComboBox::ComboBox(Property *property, QWidget *parent)
 	m_edit = new KComboBox(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
-	KColorScheme cs(QPalette::Active);
-	QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-	m_edit->setStyleSheet(QString("QComboBox { \
-			border: 1px solid %1; \
-			border-radius: 0px; \
-			padding: 0 0px; }").arg(focus.name()));
-
+	setPlainWidgetStyle(m_edit);
+	
 	l->addWidget(m_edit);
 	m_extraValueAllowed = false;
 	

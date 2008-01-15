@@ -48,6 +48,12 @@ KoIccColorProfile::Data::Data(QByteArray rawData) : d(new Private)
     d->rawData = rawData;
 }
 
+
+KoIccColorProfile::Data::~Data()
+{
+    delete d;
+}
+
 QByteArray KoIccColorProfile::Data::rawData()
 {
     return d->rawData;

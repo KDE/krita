@@ -41,6 +41,7 @@ class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile {
             public:
                 Data();
                 Data(QByteArray rawData);
+                ~Data();
                 QByteArray rawData();
                 void setRawData(QByteArray );
             private:

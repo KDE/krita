@@ -137,3 +137,8 @@ KoSharedLoadingData * KoShapeLoadingContext::sharedData( const QString & id ) co
     }
     return data;
 }
+
+KoShapeControllerBase * KoShapeLoadingContext::shapeController() const
+{
+    return d->shapeController;
+}

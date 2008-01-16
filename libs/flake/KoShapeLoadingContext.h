@@ -118,6 +118,13 @@ public:
     KoSharedLoadingData * sharedData( const QString & id ) const;
 
 private:
+    /**
+     * Get the shape controller
+     *
+     * @see KoShapeControllerBase::shapeCreated
+     */
+    KoShapeControllerBase * shapeController() const;
+
     // to allow only the KoShapeRegistry access to the KoShapeControllerBase
     friend class KoShapeRegistry;
     class Private;

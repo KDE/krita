@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SpecificColorSelector
+Name[zh_TW]=指定顏色選擇器
 Comment=SpecificColorSelector
+Comment[zh_TW]=指定顏色選擇器
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaspecificcolorselector

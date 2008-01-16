@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=TriangleColorSelector
+Name[it]=Selettore triangolare del colore
 Name[zh_TW]=三角型顏色選擇器
 Comment=TriangleColorSelector
+Comment[it]=Selettore triangolare del colore
 Comment[zh_TW]=三角型顏色選擇器
 ServiceTypes=Krita/ViewPlugin
 Type=Service

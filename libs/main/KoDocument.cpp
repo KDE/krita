@@ -2253,7 +2253,7 @@ void KoDocument::setTitleModified( const QString &caption, bool mod )
     Q3PtrListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )
     {
-        it.current()->updateCaption();
+        it.current()->updateCaption(caption, mod);
         it.current()->updateReloadFileAction(this);
         it.current()->updateVersionsFileAction(this);
     }

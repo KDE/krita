@@ -19,6 +19,7 @@ add_subdirectory( bigbrother )
 add_subdirectory( tonemapping )
 add_subdirectory( trianglecolorselector )
 add_subdirectory( specificcolorselector )
+add_subdirectory( smallcolorselector )
 
 find_package(GMM)
 

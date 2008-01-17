@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,6 +40,18 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand( const QList<KoShape*> &shape
 , d(new Private(brush))
 {
     d->shapes = shapes;
+    foreach( KoShape *shape, d->shapes )
+        d->oldBrushes.append( shape->background() );
+
+    setText( i18n( "Set background" ) );
+}
+
+KoShapeBackgroundCommand::KoShapeBackgroundCommand( KoShape * shape, const QBrush &brush, QUndoCommand *parent )
+: QUndoCommand( parent )
+, d(new Private(brush))
+{
+    d->shapes.append( shape );
+    d->oldBrushes.append( shape->background() );
 
     setText( i18n( "Set background" ) );
 }
@@ -50,7 +63,6 @@ KoShapeBackgroundCommand::~KoShapeBackgroundCommand() {
 void KoShapeBackgroundCommand::redo () {
     QUndoCommand::redo();
     foreach( KoShape *shape, d->shapes ) {
-        d->oldBrushes.append( shape->background() );
         shape->setBackground( d->newBrush );
         shape->update();
     }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,6 +39,15 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeBackgroundCommand( const QList<KoShape*> &shapes, const QBrush &brush, QUndoCommand *parent = 0 );
+
+     /**
+     * Command to set a new shape background.
+     * @param shape a single shape that should get the new background.
+     * @param brush the new background brush
+     * @param parent the parent command used for macro commands
+     */
+    KoShapeBackgroundCommand( KoShape * shape, const QBrush &brush, QUndoCommand *parent = 0 );
+
     virtual ~KoShapeBackgroundCommand();
     /// redo the command
     void redo ();

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,6 +47,14 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeBorderCommand( const QList<KoShape*> &shapes, const QList<KoShapeBorderModel*> &borders, QUndoCommand *parent = 0 );
+
+    /**
+     * Command to set a new shape border.
+     * @param shapes a single shape that should get the new border.
+     * @param border the new border
+     * @param parent the parent command used for macro commands
+     */
+    KoShapeBorderCommand( KoShape* shape, KoShapeBorderModel *border, QUndoCommand *parent = 0 );
 
     virtual ~KoShapeBorderCommand();
     /// redo the command

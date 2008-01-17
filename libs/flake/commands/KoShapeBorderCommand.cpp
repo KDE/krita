@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -69,6 +69,17 @@ KoShapeBorderCommand::KoShapeBorderCommand( const QList<KoShape*> &shapes,
     // save old borders
     foreach( KoShape *shape, shapes )
         d->oldBorders.append( shape->border() );
+
+    setText( i18n( "Set border" ) );
+}
+
+KoShapeBorderCommand::KoShapeBorderCommand( KoShape* shape, KoShapeBorderModel *border, QUndoCommand *parent )
+: QUndoCommand( parent )
+, d(new Private())
+{
+    d->shapes.append( shape );
+    d->newBorders.append( border );
+    d->oldBorders.append( shape->border() );
 
     setText( i18n( "Set border" ) );
 }

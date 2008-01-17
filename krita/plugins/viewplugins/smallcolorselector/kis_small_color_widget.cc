@@ -33,11 +33,16 @@ struct KisSmallColorWidget::Private
     int rubberHeight;
     int margin;
     int hue;
+    int value;
+    int saturation;
 };
 
 KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(new Private)
 {
     setMinimumHeight(50);
+    d->hue = 200;
+    d->value = 40;
+    d->saturation = 70;
 }
 
 KisSmallColorWidget::~KisSmallColorWidget()
@@ -50,12 +55,34 @@ int KisSmallColorWidget::hue() const
     return d->hue;
 }
 
+int KisSmallColorWidget::value() const
+{
+    return d->value;
+}
+
+int KisSmallColorWidget::saturation() const
+{
+    return d->saturation;
+}
+
 void KisSmallColorWidget::paintEvent( QPaintEvent * event )
 {
     Q_UNUSED(event);
     QPainter p(this);
     p.drawPixmap( 0, 0, d->rubberPixmap );
     p.drawPixmap( width() - d->rectangleWidth, 0 , d->squarePixmap );
+    // Draw Hue handle
+    p.save();
+    p.setPen( QPen( Qt::white, 1.0) );
+    p.translate( (d->hue * d->rubberWidth) / 360.0 , 0.0 );
+    p.drawRect( QRectF( -1.5, 0 , 3.0, height()));
+    p.restore();
+    // Draw Saturation / Value handle
+    p.save();
+    p.setPen( QPen( Qt::white, 1.0) );
+    p.translate( d->saturation * d->rectangleWidth / 255.0 + width() - d->rectangleWidth,
+                 d->value * d->rectangleHeight / 255.0 );
+    p.drawRect( QRectF( -1.5, -1.5, 3.0, 3.0 ) );
     p.end();
 }
 

@@ -29,6 +29,8 @@ class KisSmallColorWidget : public QWidget {
         void resizeEvent( QResizeEvent * event );
     public:
         int hue() const;
+        int value() const;
+        int saturation() const;
     private:
         void updateParameters();
         void generateRubber();

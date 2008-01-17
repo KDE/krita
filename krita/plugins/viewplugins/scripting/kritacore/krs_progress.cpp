@@ -50,8 +50,12 @@ void Progress::activateAsSubject()
 
 void Progress::updateProgress(int progressPerCent)
 {
-    if( m_mainwin )
-        m_mainwin->slotProgress(progressPerCent);
+    if( m_mainwin ) {
+        if( m_progressSteps == m_progressTotalSteps )
+            m_mainwin->slotProgress(-1);
+        else
+            m_mainwin->slotProgress(progressPerCent);
+    }
 }
 
 void Progress::setProgressTotalSteps(uint totalSteps)

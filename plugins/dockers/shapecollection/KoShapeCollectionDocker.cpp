@@ -176,7 +176,7 @@ void KoShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index
     if(canvasController) {
         KoCreateShapesTool* tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
         QString id = m_collectionView->model()->data(index, Qt::UserRole).toString();
-        KoProperties* properties = (KoProperties*)m_collectionView->model()->data(index, Qt::UserRole + 1).toInt();
+        KoProperties* properties = static_cast<KoCollectionItemModel*>(m_collectionView->model())->properties(index);
         tool->setShapeId(id);
         tool->setShapeProperties(properties);
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);

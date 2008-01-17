@@ -32,6 +32,9 @@ KoCollectionItemModel::KoCollectionItemModel(QObject* parent)
 
 QVariant KoCollectionItemModel::data(const QModelIndex& index, int role) const
 {
+    if (!index.isValid() || index.row() > m_shapeTemplateList.count ())
+        return QVariant();
+
     switch(role)
     {
         case Qt::ToolTipRole:
@@ -108,6 +111,14 @@ Qt::ItemFlags KoCollectionItemModel::flags(const QModelIndex& index) const
         return QAbstractListModel::flags(index) | Qt::ItemIsDragEnabled;
 
     return QAbstractListModel::flags(index);
+}
+
+KoProperties* KoCollectionItemModel::properties(const QModelIndex& index) const
+{
+    if (!index.isValid() || index.row() > m_shapeTemplateList.count())
+        return 0;
+
+    return m_shapeTemplateList[index.row()].properties;
 }
 
 #include "KoCollectionItemModel.moc"

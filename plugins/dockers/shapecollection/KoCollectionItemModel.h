@@ -61,6 +61,8 @@ class KoCollectionItemModel : public QAbstractListModel
         void setShapeTemplateList(const QList<KoCollectionItem>& newlist);
         QList<KoCollectionItem> shapeTemplateList () const { return m_shapeTemplateList; }
 
+        KoProperties* properties(const QModelIndex& index) const;
+
     private:
         QList<KoCollectionItem> m_shapeTemplateList;
 };

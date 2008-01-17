@@ -16,25 +16,38 @@
  */
 
 #ifndef _SMALLCOLORSELECTOR_WIDGET_H_
-#define _SMALLCOLORSELECTOR_DOCK_H_
+#define _SMALLCOLORSELECTOR_WIDGET_H_
 
 #include <QWidget>
 
 class KisSmallColorWidget : public QWidget {
+        Q_OBJECT
     public:
         KisSmallColorWidget(QWidget* parent);
         ~KisSmallColorWidget();
     public:
         void paintEvent( QPaintEvent * event );
         void resizeEvent( QResizeEvent * event );
+        void mouseReleaseEvent( QMouseEvent * event );
+        void mousePressEvent( QMouseEvent * event );
+        void mouseMoveEvent( QMouseEvent * event );
     public:
         int hue() const;
         int value() const;
         int saturation() const;
+        QColor color() const;
+    public slots:
+        void setHue(int h);
+        void setHSV(int h, int s, int v);
+        void setQColor(const QColor& );
+    signals:
+        void colorChanged(const QColor& );
     private:
+        void tellColorChanged();
         void updateParameters();
         void generateRubber();
         void generateSquare();
+        void selectColorAt(int _x, int _y);
     private:
         struct Private;
         Private* const d;

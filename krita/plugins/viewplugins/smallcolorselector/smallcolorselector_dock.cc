@@ -20,11 +20,24 @@
 #include <kis_view2.h>
 
 #include "kis_small_color_widget.h"
+#include "kis_resource_provider.h"
 
 SmallColorSelectorDock::SmallColorSelectorDock( KisView2 *view ) : QDockWidget(i18n("Small Color Selector")), m_view(view)
 {
     m_smallColorWidget = new KisSmallColorWidget(this);
     setWidget( m_smallColorWidget );
+    connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)), this, SLOT(colorChangedProxy(const QColor&)));
+    connect( m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(setColorProxy(const KoColor&)));
+}
+
+void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
+{
+    m_view->resourceProvider()->setFGColor( KoColor( c , KoColorSpaceRegistry::instance()->rgb8() ) );
+}
+
+void SmallColorSelectorDock::setColorProxy( const KoColor& c )
+{
+    m_smallColorWidget->setQColor( c.toQColor() );
 }
 
 #include "smallcolorselector_dock.moc"

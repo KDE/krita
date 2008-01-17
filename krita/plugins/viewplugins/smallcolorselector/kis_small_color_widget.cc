@@ -17,6 +17,7 @@
 
 #include "kis_small_color_widget.h"
 
+#include <QMouseEvent>
 #include <QPixmap>
 #include <QPainter>
 
@@ -35,14 +36,16 @@ struct KisSmallColorWidget::Private
     int hue;
     int value;
     int saturation;
+    bool updateAllowed;
 };
 
 KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(new Private)
 {
     setMinimumHeight(50);
-    d->hue = 200;
-    d->value = 40;
-    d->saturation = 70;
+    d->hue = 0;
+    d->value = 0;
+    d->saturation = 0;
+    d->updateAllowed = true;
 }
 
 KisSmallColorWidget::~KisSmallColorWidget()
@@ -63,6 +66,52 @@ int KisSmallColorWidget::value() const
 int KisSmallColorWidget::saturation() const
 {
     return d->saturation;
+}
+
+QColor KisSmallColorWidget::color() const
+{
+    int r,g,b;
+    hsv_to_rgb( d->hue, d->saturation, d->value, &r, &g, &b);
+    return QColor(r,g,b);
+}
+
+void KisSmallColorWidget::setHue(int h)
+{
+    h = qBound(0, h, 360);
+    d->hue = h;
+    tellColorChanged();
+    generateSquare();
+    update();
+}
+
+void KisSmallColorWidget::setHSV(int h, int s, int v)
+{
+    h = qBound(0, h, 360);
+    s = qBound(0, s, 255);
+    v = qBound(0, v, 255);
+    d->hue = h;
+    d->value = v;
+    d->saturation = s;
+    tellColorChanged();
+    generateSquare();
+    update();
+}
+
+void KisSmallColorWidget::setQColor(const QColor& c)
+{
+    if(d->updateAllowed)
+    {
+        rgb_to_hsv( c.red(), c.green(), c.blue(), &d->hue, &d->saturation, &d->value);
+        generateSquare();
+        update();
+    }
+}
+
+void KisSmallColorWidget::tellColorChanged()
+{
+    d->updateAllowed = false;
+    emit(colorChanged(color()));
+    d->updateAllowed = true;
 }
 
 void KisSmallColorWidget::paintEvent( QPaintEvent * event )
@@ -137,3 +186,44 @@ void KisSmallColorWidget::generateSquare()
     }
     d->squarePixmap = QPixmap::fromImage(img);
 }
+
+void KisSmallColorWidget::mouseReleaseEvent( QMouseEvent * event )
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        selectColorAt( event->x(), event->y());
+    }
+    QWidget::mouseReleaseEvent( event );
+}
+
+void KisSmallColorWidget::mousePressEvent( QMouseEvent * event )
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        selectColorAt( event->x(), event->y());
+    }
+    QWidget::mousePressEvent( event );
+}
+
+void KisSmallColorWidget::mouseMoveEvent( QMouseEvent * event )
+{
+    if(event->buttons() & Qt::LeftButton)
+    {
+        selectColorAt( event->x(), event->y());
+    }
+    QWidget::mouseMoveEvent( event );
+}
+
+void KisSmallColorWidget::selectColorAt(int _x, int _y)
+{
+    if( _x < d->rubberWidth )
+    {
+        setHue( (_x * 360.0) / d->rubberWidth );
+        update();
+    } else if(_x > width() - d->rectangleWidth ) {
+        setHSV( d->hue, ( _x - width() + d->rectangleWidth ) * 255 / d->rectangleWidth, (_y * 255 ) / d->rectangleHeight );
+        update();
+    }
+}
+
+#include "kis_small_color_widget.moc"

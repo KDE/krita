@@ -22,11 +22,15 @@
 
 class KisSmallColorWidget;
 class KisView2;
+class KoColor;
 
 class SmallColorSelectorDock : public QDockWidget {
     Q_OBJECT
     public:
         SmallColorSelectorDock( KisView2 *view );
+    public slots:
+        void colorChangedProxy(const QColor&);
+        void setColorProxy( const KoColor& );
 private:
     KisSmallColorWidget* m_smallColorWidget;
     KisView2* m_view;

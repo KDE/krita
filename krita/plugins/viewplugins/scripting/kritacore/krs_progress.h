@@ -33,6 +33,25 @@ class Module;
 /**
  * The Progress object enables displaying of a progressbar
  * in Krita to visualize the progress your script makes.
+ *
+ * Example (in Python) :
+ * @code
+ * import Krita
+ * progress = Krita.progress()
+ * progress.setProgressTotalSteps(100)
+ * for i in range(100):
+ *     progress.incProgress()
+ * @endcode
+ *
+ * Example (in Ruby) :
+ * @code
+ * require 'Krita'
+ * progress = Krita.progress()
+ * progress.setProgressTotalSteps(100)
+ * for i in 0..100
+ *   progress.incProgress()
+ * end
+ * @endcode
  */
 class KROSSKRITACORE_EXPORT Progress : public QObject
 {

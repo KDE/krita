@@ -39,6 +39,10 @@
 
 #include <kdebug.h>
 
+#ifndef log2
+# define log2(x) (log(x) / M_LN2)
+#endif
+
 using namespace MusicCore;
 
 Engraver::Engraver()

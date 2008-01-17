@@ -26,6 +26,11 @@
 #include <QPixmap>
 #include <KoColorConversions.h>
 
+enum CurrentHandle {
+    NoHandle,
+    HueHandle,
+    ValueSaturationHandle };
+
 struct KisTriangleColorSelector::Private {
     QPixmap wheelPixmap;
     QPixmap trianglePixmap;
@@ -47,10 +52,13 @@ struct KisTriangleColorSelector::Private {
     double normExt;
     double normInt;
     bool updateAllowed;
+    CurrentHandle handle;
 };
 
 KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
 {
+    setMinimumHeight( 100 );
+    setMinimumWidth( 100 );
     d->hue = 0;
     d->saturation = 0;
     d->value = 0;
@@ -82,7 +90,6 @@ void KisTriangleColorSelector::updateTriangleCircleParameters()
 
 void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
 {
-    dbgKrita << d->hue;
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
@@ -295,6 +302,7 @@ void KisTriangleColorSelector::mouseReleaseEvent( QMouseEvent * event )
     if(event->button() == Qt::LeftButton)
     {
         selectColorAt( event->x(), event->y());
+        d->handle = NoHandle;
     }
     QWidget::mouseReleaseEvent( event );
 }
@@ -303,6 +311,7 @@ void KisTriangleColorSelector::mousePressEvent( QMouseEvent * event )
 {
     if(event->button() == Qt::LeftButton)
     {
+        d->handle = NoHandle;
         selectColorAt( event->x(), event->y());
     }
     QWidget::mousePressEvent( event );
@@ -323,7 +332,9 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
     double y = _y - 0.5*height();
     // Check if the click is inside the wheel
     double norm = sqrt( x * x + y * y);
-    if ( !checkInWheel || ((norm < d->wheelNormExt) && (norm > d->wheelNormInt)) ) {
+    if ( ( (norm < d->wheelNormExt) and (norm > d->wheelNormInt) and d->handle == NoHandle ) 
+         or d->handle == HueHandle ) {
+        d->handle = HueHandle;
         setHue( (int)(atan2(y, x) * 180 / M_PI ) + 180);
         update();
     }
@@ -336,11 +347,12 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
         double y1 = x * sr + y * cr; // <- now y1 gives the value
         y1 += d->wheelNormExt;
         double ynormalize = (d->triangleTop - y1 ) / ( d->triangleTop - d->triangleBottom );
-        if( ynormalize >= 0.0 and ynormalize <= 1.0)
+        if( (ynormalize >= 0.0 and ynormalize <= 1.0 ) or d->handle == ValueSaturationHandle)
         {
+            d->handle = ValueSaturationHandle;
             double ls_ = (ynormalize) * d->triangleLength; // length of the saturation on the triangle
             double sat = ( x1 / ls_ + 0.5) ;
-            if(sat >= 0.0 and sat <= 1.0)
+            if((sat >= 0.0 and sat <= 1.0) or d->handle == ValueSaturationHandle)
             {
                 setHSV( d->hue, sat * 255, ynormalize * 255);
             }

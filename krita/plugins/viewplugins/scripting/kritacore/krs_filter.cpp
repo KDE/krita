@@ -22,18 +22,37 @@
 
 #include <kis_filter.h>
 #include <kis_paint_layer.h>
+#include <kis_filter_configuration.h>
+#include <kis_bookmarked_configuration_manager.h>
 
 using namespace Scripting;
 
 Filter::Filter(Module* module, KisFilter* filter)
     : QObject(module)
     , m_filter(filter)
+    , m_config(0)
 {
     setObjectName("KritaFilter");
 }
 
 Filter::~Filter()
 {
+    delete m_config;
+    m_config = 0;
+}
+
+KisFilterConfiguration* Filter::config()
+{
+    /*
+    KisBookmarkedConfigurationManager* bm = m_filter->bookmarkManager();
+    Q_ASSERT(bm);
+    KisFilterConfiguration* c = dynamic_cast<KisFilterConfiguration*>( bm->defaultConfiguration() );
+    if( c )
+        return c;
+    */
+    if( ! m_config )
+        m_config = new KisFilterConfiguration(m_filter->id(), 0);
+    return m_config;
 }
 
 const QString Filter::name()
@@ -43,35 +62,27 @@ const QString Filter::name()
 
 const QVariant Filter::property(const QString& name)
 {
-    Q_UNUSED(name);
-    QVariant value;
-//     return m_filter->configuration()->getProperty(name, value) ? value : QVariant();
-    return value;
+    return config()->getProperty(name);
 }
 
 void Filter::setProperty(const QString& name, const QVariant& value)
 {
-    Q_UNUSED(name);
-    Q_UNUSED(value);
-//     m_filter->configuration()->setProperty(name, value);
+    config()->setProperty(name, value);
 }
 
 QVariantMap Filter::properties()
 {
-//     return m_filter->configuration()->getProperties();
-     return QVariantMap();
+     return config()->getProperties();
 }
 
 void Filter::fromXML(const QString& xml)
 {
-    Q_UNUSED(xml);
-//     m_filter->configuration()->fromXML( xml );
+    config()->fromLegacyXML(xml);
 }
 
 const QString Filter::toXML()
 {
-//     return m_filter->configuration()->toString();
-     return QString::null;
+    return config()->toLegacyXML();
 }
 
 bool Filter::process(QObject* layer)
@@ -93,7 +104,9 @@ bool Filter::process(QObject* layer)
 //     } else {
         rect = r1;
 //     }
-    m_filter->process(paintDevice->paintDevice(), rect, 0/*m_filter->configuration()*/);
+
+    //m_filter->process(paintDevice->paintDevice(), rect, config()); //sebsauer, 20080117: crashes with filterstest.rb
+    m_filter->process(paintDevice->paintDevice(), rect, m_config ? config() : 0);
     return true;
 }
 
@@ -106,7 +119,9 @@ bool Filter::process(QObject* layer, int x, int y, int width, int height)
         return false;
     }
     QRect rect(x, y, width, height);
-    m_filter->process(paintDevice->paintDevice(), rect, 0/*m_filter->configuration()*/);
+
+    //m_filter->process(paintDevice->paintDevice(), rect, config()); //sebsauer, 20080117: crashes with filterstest.rb
+    m_filter->process(paintDevice->paintDevice(), rect, m_config ? config() : 0);
     return true;
 }
 

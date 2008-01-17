@@ -23,6 +23,7 @@
 #include <QVariant>
 
 class KisFilter;
+class KisFilterConfiguration;
 
 namespace Scripting {
 
@@ -65,6 +66,7 @@ class Filter : public QObject
     public:
         Filter(Module* module, KisFilter*);
         ~Filter();
+        KisFilterConfiguration* config();
 
     public slots:
 
@@ -157,6 +159,7 @@ class Filter : public QObject
 
     private:
         KisFilter* m_filter;
+        KisFilterConfiguration* m_config;
 };
 
 }

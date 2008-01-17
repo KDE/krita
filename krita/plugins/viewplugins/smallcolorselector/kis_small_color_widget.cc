@@ -110,6 +110,7 @@ void KisSmallColorWidget::setQColor(const QColor& c)
     if(d->updateAllowed)
     {
         rgb_to_hsv( c.red(), c.green(), c.blue(), &d->hue, &d->saturation, &d->value);
+        d->hue = qBound(0, d->hue, 360);
         generateSquare();
         update();
     }

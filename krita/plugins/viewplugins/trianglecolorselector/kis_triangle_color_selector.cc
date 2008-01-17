@@ -53,6 +53,7 @@ struct KisTriangleColorSelector::Private {
     double normInt;
     bool updateAllowed;
     CurrentHandle handle;
+    double triangleHandleSize;
 };
 
 KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -86,6 +87,7 @@ void KisTriangleColorSelector::updateTriangleCircleParameters()
     d->triangleHeight = d->triangleLength * sqrt(3.0) * 0.5;
     d->triangleTop = 0.5 * d->sizeColorSelector - d->triangleRadius;
     d->triangleBottom = d->triangleHeight + d->triangleTop;
+    d->triangleHandleSize = 10.0;
 }
 
 void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
@@ -113,10 +115,11 @@ void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
         // Draw it
         p.save();
         p.setPen( QPen( Qt::white, 1.0) );
+        p.setBrush( color() );
         p.rotate( hue() + 150 );
-        p.drawEllipse( QRectF( -1.5 + vs_selector_xpos_,
-                               -1.5 - (d->centerColorSelector - d->triangleTop) + vs_selector_ypos_ * d->triangleHeight,
-                                3.0 , 3.0 ));
+        p.drawEllipse( QRectF( -d->triangleHandleSize*0.5 + vs_selector_xpos_,
+                               -d->triangleHandleSize*0.5 - (d->centerColorSelector - d->triangleTop) + vs_selector_ypos_ * d->triangleHeight,
+                                d->triangleHandleSize , d->triangleHandleSize ));
     }
     p.restore();
     // Draw Hue selector

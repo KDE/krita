@@ -23,6 +23,11 @@
 
 #include <KoColorConversions.h>
 
+enum CurrentHandle {
+    NoHandle,
+    HueHandle,
+    ValueSaturationHandle };
+
 struct KisSmallColorWidget::Private
 {
     QPixmap rubberPixmap;
@@ -38,6 +43,7 @@ struct KisSmallColorWidget::Private
     int saturation;
     bool updateAllowed;
     double squareHandleSize;
+    CurrentHandle handle;
 };
 
 KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(new Private)
@@ -47,6 +53,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(n
     d->value = 0;
     d->saturation = 0;
     d->updateAllowed = true;
+    d->handle = NoHandle;
 }
 
 KisSmallColorWidget::~KisSmallColorWidget()
@@ -196,6 +203,7 @@ void KisSmallColorWidget::mouseReleaseEvent( QMouseEvent * event )
     if(event->button() == Qt::LeftButton)
     {
         selectColorAt( event->x(), event->y());
+        d->handle = NoHandle;
     }
     QWidget::mouseReleaseEvent( event );
 }
@@ -204,6 +212,7 @@ void KisSmallColorWidget::mousePressEvent( QMouseEvent * event )
 {
     if(event->button() == Qt::LeftButton)
     {
+        d->handle = NoHandle;
         selectColorAt( event->x(), event->y());
     }
     QWidget::mousePressEvent( event );
@@ -220,11 +229,13 @@ void KisSmallColorWidget::mouseMoveEvent( QMouseEvent * event )
 
 void KisSmallColorWidget::selectColorAt(int _x, int _y)
 {
-    if( _x < d->rubberWidth )
+    if( (_x < d->rubberWidth and d->handle == NoHandle ) or d->handle == HueHandle  )
     {
+        d->handle = HueHandle;
         setHue( (_x * 360.0) / d->rubberWidth );
         update();
-    } else if(_x > width() - d->rectangleWidth ) {
+    } else if( (_x > width() - d->rectangleWidth and d->handle == NoHandle ) or d->handle == ValueSaturationHandle ) {
+        d->handle = ValueSaturationHandle;
         setHSV( d->hue, ( _x - width() + d->rectangleWidth ) * 255 / d->rectangleWidth, (_y * 255 ) / d->rectangleHeight );
         update();
     }

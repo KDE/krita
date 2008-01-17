@@ -37,6 +37,7 @@ struct KisSmallColorWidget::Private
     int value;
     int saturation;
     bool updateAllowed;
+    double squareHandleSize;
 };
 
 KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(new Private)
@@ -118,6 +119,7 @@ void KisSmallColorWidget::paintEvent( QPaintEvent * event )
 {
     Q_UNUSED(event);
     QPainter p(this);
+    p.setRenderHint(QPainter::Antialiasing);
     p.drawPixmap( 0, 0, d->rubberPixmap );
     p.drawPixmap( width() - d->rectangleWidth, 0 , d->squarePixmap );
     // Draw Hue handle
@@ -129,9 +131,10 @@ void KisSmallColorWidget::paintEvent( QPaintEvent * event )
     // Draw Saturation / Value handle
     p.save();
     p.setPen( QPen( Qt::white, 1.0) );
+    p.setBrush( color() );
     p.translate( d->saturation * d->rectangleWidth / 255.0 + width() - d->rectangleWidth,
                  d->value * d->rectangleHeight / 255.0 );
-    p.drawRect( QRectF( -1.5, -1.5, 3.0, 3.0 ) );
+    p.drawEllipse( QRectF( -d->squareHandleSize * 0.5, -d->squareHandleSize * 0.5, d->squareHandleSize, d->squareHandleSize ) );
     p.end();
 }
 
@@ -152,6 +155,7 @@ void KisSmallColorWidget::updateParameters()
     d->rectangleHeight = height();
     d->rubberWidth = width() - d->rectangleWidth - d->margin;
     d->rubberHeight = height();
+    d->squareHandleSize = 10.0;
 }
 
 void KisSmallColorWidget::generateRubber()

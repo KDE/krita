@@ -1,5 +1,3 @@
-#if 0
-
 /*
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
@@ -21,27 +19,31 @@
 #ifndef KRITACOREPROGRESS_H
 #define KRITACOREPROGRESS_H
 
-
 #include "krosskritacore_export.h"
 
+#include <QObject>
+
 class KisView2;
+class KoMainWindow;
 
 namespace Scripting {
+
+class Module;
 
 /**
  * The Progress object enables displaying of a progressbar
  * in Krita to visualize the progress your script makes.
  */
-class KROSSKRITACORE_EXPORT Progress : public KisProgressSubject
+class KROSSKRITACORE_EXPORT Progress : public QObject
 {
         Q_OBJECT
     public:
-        Progress(KisView2* view);
+        Progress(Module* module, KisView2* view);
         virtual ~Progress();
 
     public:
         void activateAsSubject();
-        
+        void updateProgress(int progressPerCent);
 
     public slots:
 
@@ -81,17 +83,13 @@ class KROSSKRITACORE_EXPORT Progress : public KisProgressSubject
          */
         void progressDone();
 
-        //inline void setPackagePath(QString path) { m_packagePath = path; }
-        //inline QString packagePath() { return m_packagePath; }
-
     private:
-        KisView2 * m_view;
+        Module* m_module;
+        KisView2* m_view;
+        KoMainWindow* m_mainwin;
         uint m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
-        //QString m_packagePath;
 };
 
 }
-
-#endif
 
 #endif

@@ -1,5 +1,3 @@
-#if 0
-
 /*
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
@@ -19,18 +17,23 @@
  */
 
 #include "krs_progress.h"
+#include "krs_module.h"
 
 #include <kis_debug.h>
 
-#include <KoProgressUpdater.h>
+#include <KoMainWindow.h>
+//#include <KoProgressUpdater.h>
 #include <kis_view2.h>
 
 using namespace Scripting;
 
-Progress::Progress(KisView2* view)
-    : m_view(view)
+Progress::Progress(Module* module, KisView2* view)
+    : QObject()
+    , m_module(module)
+    , m_view(view)
     , m_progressTotalSteps(0)
 {
+    m_mainwin = m_view ? m_view->shell() : 0;
 }
 
 Progress::~Progress()
@@ -45,6 +48,12 @@ void Progress::activateAsSubject()
     m_progressTotalSteps = 100; // let's us 100 as default (=100%)
 }
 
+void Progress::updateProgress(int progressPerCent)
+{
+    if( m_mainwin )
+        m_mainwin->slotProgress(progressPerCent);
+}
+
 void Progress::setProgressTotalSteps(uint totalSteps)
 {
     if(m_progressTotalSteps < 1)
@@ -53,7 +62,7 @@ void Progress::setProgressTotalSteps(uint totalSteps)
     m_progressTotalSteps = totalSteps > 1 ? totalSteps : 1;
     m_progressSteps = 0;
     m_lastProgressPerCent = 0;
-    m_progressUpdater->setProgress(0);
+    updateProgress(0);
 }
 
 void Progress::setProgress(uint progress)
@@ -67,7 +76,7 @@ void Progress::setProgress(uint progress)
     if (progressPerCent != m_lastProgressPerCent) {
 
         m_lastProgressPerCent = progressPerCent;
-        m_progressUpdater->setProgress(progressPerCent);
+        updateProgress(progressPerCent);
     }
 }
 
@@ -83,15 +92,14 @@ void Progress::setProgressStage(const QString& stage, uint progress)
 
     uint progressPerCent = (progress * 100) / m_progressTotalSteps;
     m_lastProgressPerCent = progress;
-    m_progressUpdater->setProgressStage( stage, progressPerCent);
+    //TODO m_progressUpdater->setProgressStage( stage, progressPerCent);
+    updateProgress(progressPerCent);
 }
 
 void Progress::progressDone()
 {
     m_progressTotalSteps = 0;
-    m_progressUpdater->setProgress(100);
+    updateProgress(100);
 }
 
 #include "krs_progress.moc"
-
-#endif

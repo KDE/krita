@@ -30,7 +30,7 @@ class KoProgressProxy;
  * using KisThreadedApplicator) and unlocks the node when the action
  * is done.
  */
-class KRITAUI_EXPORT KisNodeAction : public KoAction
+class KRITAIMAGE_EXPORT KisNodeAction : public KoAction
 {
 
 Q_OBJECT

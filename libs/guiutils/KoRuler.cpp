@@ -1020,7 +1020,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         emit hotSpotChanged(d->hotspots[d->currentIndex].id, newPos);
         break;
     case KoRulerPrivate::None:
-        d->mouseCoordinate = (d->orientation == Qt::Horizontal ?  pos.x() : pos.y()) - d->offset;
+        d->mouseCoordinate = (d->orientation == Qt::Horizontal ?  pos.x() : pos.y());
         int hotSpotIndex = d->hotSpotIndex(pos);
         if (hotSpotIndex >= 0) {
             setCursor(QCursor( d->orientation == Qt::Horizontal ? Qt::SplitHCursor : Qt::SplitVCursor ));

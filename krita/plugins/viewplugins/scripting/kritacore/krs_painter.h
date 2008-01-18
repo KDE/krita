@@ -36,6 +36,30 @@ class PaintDevice;
 
 /**
  * The painter enables drawing to a \a PaintDevice object.
+ *
+ * Ruby sample that paints a sky :
+ * @code
+ * require "Krita"
+ * image = Krita.image()
+ * width = image.width()
+ * height = image.height()
+ * layer = image.createPaintLayer("Sky",255).paintDevice()
+ * layer.beginPainting("sky")
+ * painter = layer.createPainter()
+ * painter.setStrokeStyle(1)
+ * painter.setFillStyle(1)
+ * painter.setPaintOp("paintbrush")
+ * painter.setPaintColor( Krita.createRGBColor(24,24,24) )
+ * painter.paintRect(0.0,0.0, width, height, 0.5)
+ * painter.setPaintColor( Krita.createRGBColor(255,255,255) )
+ * for i in 1..60
+ *   size = rand() * 4
+ *   size = 1 if(size < 1)
+ *   painter.setBrush(Krita.createCircleBrush(size,size,size/2+1,size/2+1))
+ *   painter.paintAt(rand()*width, rand()*height, 0.5)
+ * end
+ * layer.endPainting()
+ * @endcode
  */
 class Painter : public QObject
 {

@@ -41,7 +41,6 @@ class Image : public QObject
 
     public slots:
 
-
         /**
          * Return the width of the image.
          */
@@ -81,10 +80,17 @@ class Image : public QObject
          * This function takes four arguments :
          *  - the new width of the image.
          *  - the new height of the image.
-         *  - x-position (if you don't need this, set it to 0).
-         *  - y-position (if you don't need this, set it to 0).
+         *  - x-position
+         *  - y-position
+         *
+         * Example (in Ruby) :
+         * @code
+         * require 'Krita'
+         * image = Krita.image()
+         * image.resize(image.width()/2, image.height()/2)
+         * @endcode
          */
-        void resize(int width, int height, int x, int y);
+        void resize(int width, int height, int x = 0, int y = 0);
 
         /**
          * Scale an image.
@@ -98,6 +104,13 @@ class Image : public QObject
          * Rotate the image.
          * This function takes one argument :
          *  - the angle.
+         *
+         * Example (in Ruby) :
+         * @code
+         * require 'Krita'
+         * image = Krita.image()
+         * image.rotate(180.0)
+         * @endcode
          */
         void rotate(double angle);
 

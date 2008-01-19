@@ -47,6 +47,18 @@
 #include <klocale.h>
 #include <QPainter>
 #include <QAction>
+#include <QtGui/QBitmap>
+
+static unsigned char needle_bits[] = {
+    0x00, 0x00, 0x10, 0x00, 0x20, 0x00, 0x60, 0x00, 0xc0, 0x00, 0xc0, 0x01,
+    0x80, 0x03, 0x80, 0x07, 0x00, 0x0f, 0x00, 0x1f, 0x00, 0x3e, 0x00, 0x7e,
+    0x00, 0x7c, 0x00, 0x1c, 0x00, 0x18, 0x00, 0x00};
+
+static unsigned char needle_move_bits[] = {
+    0x00, 0x00, 0x10, 0x00, 0x20, 0x00, 0x60, 0x00, 0xc0, 0x00, 0xc0, 0x01,
+    0x80, 0x03, 0x80, 0x07, 0x10, 0x0f, 0x38, 0x1f, 0x54, 0x3e, 0xfe, 0x7e,
+    0x54, 0x7c, 0x38, 0x1c, 0x10, 0x18, 0x00, 0x00};
+
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
 : KoTool(canvas)
@@ -115,6 +127,17 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     connect( m_actionConvertToPath, SIGNAL( triggered() ), this, SLOT( convertToPath() ) );
 
     connect( points, SIGNAL(triggered(QAction*)), this, SLOT( pointTypeChanged( QAction* ) ) );
+
+
+    QBitmap b = QBitmap::fromData( QSize(16, 16), needle_bits );
+    QBitmap m = b.createHeuristicMask( false );
+
+    m_selectCursor = QCursor( b, m, 2, 0 );
+
+    b = QBitmap::fromData( QSize(16, 16), needle_move_bits );
+    m = b.createHeuristicMask( false );
+
+    m_moveCursor = QCursor( b, m, 2, 0 );
 }
 
 KoPathTool::~KoPathTool() {
@@ -387,7 +410,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
             int handleId = parameterShape->handleIdAt( roi );
             if ( handleId != -1 )
             {
-                useCursor(Qt::SizeAllCursor);
+                useCursor(m_moveCursor);
                 if(m_activeHandle)
                     m_activeHandle->repaint();
                 delete m_activeHandle;
@@ -426,7 +449,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
                 else if( p->properties() & KoPathPoint::HasControlPoint2 && roi.contains( p->controlPoint2() ) )
                     type = KoPathPoint::ControlPoint2;
 
-                useCursor(Qt::SizeAllCursor);
+                useCursor( m_moveCursor );
 
                 ActivePointHandle *prev = dynamic_cast<ActivePointHandle*> (m_activeHandle);
                 if(prev && prev->m_activePoint == p && prev->m_activePointType == type)
@@ -442,7 +465,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
         }
     }
 
-    useCursor(Qt::ArrowCursor);
+    useCursor( m_selectCursor );
     if(m_activeHandle)
         m_activeHandle->repaint();
     delete m_activeHandle;
@@ -576,7 +599,7 @@ void KoPathTool::activate (bool temporary) {
         emit done();
         return;
     }
-    useCursor(Qt::ArrowCursor, true);
+    useCursor( m_selectCursor, true );
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
     updateOptionsWidget();
     updateActions();

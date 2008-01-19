@@ -314,6 +314,9 @@ private:
     QAction *m_actionJoinSegment;
     QAction *m_actionMergePoints;
     QAction *m_actionConvertToPath;
+
+    QCursor m_selectCursor;
+    QCursor m_moveCursor;
 };
 
 #endif

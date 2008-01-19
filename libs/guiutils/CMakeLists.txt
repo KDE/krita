@@ -25,7 +25,6 @@ set(koguiutils_LIB_SRCS
    KoRuler.cpp
    KoSliderCombo.cpp
    KoTabBar.cpp
-#   KoTemplateChooseDia.cpp
    KoTemplateCreateDia.cpp
    KoToolBox.cpp
     KoUnitDoubleSpinBox.cpp
@@ -97,7 +96,6 @@ install(
     KoRuler.h
     KoTabBar.h
     KoTabulator.h
-#    KoTemplateChooseDia.h
     KoTemplateCreateDia.h
     KoUnitDoubleSpinBox.h
     KoZoomAction.h

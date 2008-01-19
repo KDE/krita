@@ -363,6 +363,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 
             data = srcIt.rawData();
             memcpy(&tmpLine[i*pixelSize], data, pixelSize);
+            cs->setAlpha(data,0,1);
             ++srcIt;
             i++;
         }
@@ -435,8 +436,6 @@ bool KisTransformWorker::run()
     QRect r = m_dev->exactBounds();
 
     KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev1"));
-    KisPaintDeviceSP tmpdev2 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2"));
-    KisPaintDeviceSP tmpdev3 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2"));
     KisPaintDeviceSP srcdev = m_dev;
 
     double xscale = m_xscale;
@@ -500,14 +499,17 @@ bool KisTransformWorker::run()
             break;
         case 1:
             rotateRight90(srcdev, tmpdev1);
+            srcdev->clear();
             srcdev = tmpdev1;
             break;
         case 2:
             rotate180(srcdev, tmpdev1);
+            srcdev->clear();
             srcdev = tmpdev1;
             break;
         case 3:
             rotateLeft90(srcdev, tmpdev1);
+            srcdev->clear();
             srcdev = tmpdev1;
             break;
     }
@@ -517,16 +519,14 @@ bool KisTransformWorker::run()
     {
         if(rotQuadrant==0)
         {
-            // Though not necessary in the general case because we
-            // make several passes We need to move (not just copy) the
-            // data to a temp dev so we can move them back
-            rotateNone(srcdev, tmpdev1);
-            srcdev = tmpdev1;
+            // When we didn't move the m_dev to a temp device we can simply just move its coords
+            srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);
         }
-
-        srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);
-        rotateNone(srcdev, m_dev);
-
+        else
+        {
+            srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);
+            rotateNone(srcdev, m_dev); //copy it back
+        }
         //progress info
 //        m_progressUpdater->setProgress(100);
 
@@ -539,7 +539,7 @@ bool KisTransformWorker::run()
         return false;
     }
 */
-    transformPass <KisHLineIteratorPixel>(srcdev.data(), tmpdev2.data(), xscale, yscale*xshear, 0, m_filter, m_fixBorderAlpha);
+    transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale*xshear, 0, m_filter, m_fixBorderAlpha);
 /*
     if ( m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
@@ -547,7 +547,7 @@ bool KisTransformWorker::run()
     }
 */
      // Now do the second pass
-     transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter, m_fixBorderAlpha);
+     transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, yshear, ytranslate, m_filter, m_fixBorderAlpha);
 /*
     if ( m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
@@ -555,13 +555,14 @@ bool KisTransformWorker::run()
     }
 */
     if(xshear!=0.0)
-        transformPass <KisHLineIteratorPixel>(tmpdev3.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter, m_fixBorderAlpha);
-     else
-     {
-         // No need to filter again when we are only scaling
-         tmpdev3->move(tmpdev3->x() + xtranslate, tmpdev3->y());
-         rotateNone(tmpdev3, m_dev);
-     }
+        transformPass <KisHLineIteratorPixel>(srcdev.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter, m_fixBorderAlpha);
+    else
+    {
+        // No need to filter again when we are only scaling
+        srcdev->move(srcdev->x() + xtranslate, srcdev->y());
+        if(rotQuadrant!=0)  // no need to copy back if we havn't copied the device in the first place
+            rotateNone(srcdev, m_dev);
+    }
 
     //CBRm_dev->setDirty();
 

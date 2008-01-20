@@ -65,7 +65,7 @@ public:
      * @param nColors the number of pixels in the colors array
      * @param dst the destination pixel
      */
-    virtual void mixColors(const quint8 * const*colors, const quint8 *weights, quint32 nColors, quint8 *dst) const = 0;
+    virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
 };
 
 /**

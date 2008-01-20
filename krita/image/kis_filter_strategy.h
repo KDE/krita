@@ -36,13 +36,13 @@ class KRITAIMAGE_EXPORT KisFilterStrategy
         QString id() {return m_id.id();}
         QString name() {return m_id.name();}
         virtual double valueAt(double /*t*/) const {return 0;}
-        virtual quint32 intValueAt(qint32 t) const {return quint32(255*valueAt(t/256.0));}
+        virtual qint32 intValueAt(qint32 t) const {return qint32(255*valueAt(t/256.0));}
         double support() { return supportVal;}
-        quint32 intSupport() { return intSupportVal;}
+        qint32 intSupport() { return intSupportVal;}
         virtual bool boxSpecial() { return false;}
     protected:
         double supportVal;
-        quint32 intSupportVal;
+        qint32 intSupportVal;
         KoID m_id;
 };
 
@@ -53,7 +53,7 @@ class KRITAIMAGE_EXPORT KisHermiteFilterStrategy : public KisFilterStrategy
             {supportVal = 1.0; intSupportVal = 256;}
         virtual ~KisHermiteFilterStrategy() {}
 
-        virtual quint32 intValueAt(qint32 t) const;
+        virtual qint32 intValueAt(qint32 t) const;
         virtual double valueAt(double t) const;
 };
 
@@ -64,7 +64,7 @@ class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
              {supportVal = 0.5; intSupportVal = 128;}
         virtual ~KisBoxFilterStrategy() {}
 
-        virtual quint32 intValueAt(qint32 t) const;
+        virtual qint32 intValueAt(qint32 t) const;
         virtual double valueAt(double t) const;
         virtual bool boxSpecial() { return true;}
 };
@@ -76,7 +76,7 @@ class KRITAIMAGE_EXPORT KisTriangleFilterStrategy : public KisFilterStrategy
             {supportVal = 1.0; intSupportVal = 256;}
         virtual ~KisTriangleFilterStrategy() {}
 
-        virtual quint32 intValueAt(qint32 t) const;
+        virtual qint32 intValueAt(qint32 t) const;
         virtual double valueAt(double t) const;
 };
 

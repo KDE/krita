@@ -75,7 +75,7 @@ void KoColorSlider::drawContents( QPainter *painter )
 
         double t = static_cast<double>(x) / (contentsRect_.width() - 1);
 
-        quint8 colorWeights[2];
+        qint16 colorWeights[2];
         colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
         colorWeights[1] = 255 - colorWeights[0];
 
@@ -93,7 +93,7 @@ void KoColorSlider::drawContents( QPainter *painter )
 
         double t = static_cast<double>(y) / (contentsRect_.height() - 1);
 
-        quint8 colorWeights[2];
+        qint16 colorWeights[2];
         colorWeights[0] = static_cast<quint8>((t) * 255 + 0.5);
         colorWeights[1] = 255 - colorWeights[0];
 

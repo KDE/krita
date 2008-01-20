@@ -176,7 +176,7 @@ void KoStopGradient::colorAt(KoColor& dst, double t) const
         else {
             localT = (t - leftStop.first)/stopDistance;
         }
-        quint8 colorWeights[2];
+        qint16 colorWeights[2];
         colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
         colorWeights[1] = 255 - colorWeights[0];
 

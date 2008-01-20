@@ -7,14 +7,14 @@
 #include "KoColorSpaceTraits.h"
 
 template <class T>
-T mixOpExpectedAlpha(T alpha1, T alpha2, const quint8 *weights)
+T mixOpExpectedAlpha(T alpha1, T alpha2, const qint16 *weights)
 {
     const int sumOfWeights = 255;
     return (weights[0] * alpha1 + weights[1] * alpha2) / sumOfWeights;
 }
 
 template <class T>
-T mixOpExpectedColor(T color1, T alpha1, T color2, T alpha2, const quint8 *weights)
+T mixOpExpectedColor(T color1, T alpha1, T color2, T alpha2, const qint16 *weights)
 {
     const int sumOfWeights = 255;
     const T newAlpha = mixOpExpectedAlpha(alpha1, alpha2, weights);
@@ -27,7 +27,7 @@ T mixOpExpectedColor(T color1, T alpha1, T color2, T alpha2, const quint8 *weigh
 }
 
 template <class T>
-T mixOpNoAlphaExpectedColor(T color1, T color2, const quint8 *weights)
+T mixOpNoAlphaExpectedColor(T color1, T color2, const qint16 *weights)
 {
     const int sumOfWeights = 255;
     return ((weights[0] * color1) + (weights[1] * color2)) / sumOfWeights;
@@ -55,7 +55,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8()
     pixel2[ALPHA_CHANNEL] = 0;
 
     const quint8 *pixelPtrs[2];
-    quint8 weights[2];
+    qint16 weights[2];
 
     pixelPtrs[0] = pixel1;
     pixelPtrs[1] = pixel2;
@@ -161,7 +161,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
     pixel2[ALPHA_CHANNEL] = 0.0;
 
     const quint8 *pixelPtrs[2];
-    quint8 weights[2];
+    qint16 weights[2];
 
     pixelPtrs[0] = reinterpret_cast<const quint8 *>(pixel1);
     pixelPtrs[1] = reinterpret_cast<const quint8 *>(pixel2);
@@ -285,7 +285,7 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
     pixel2[COLOR_CHANNEL_2] = 0;
 
     const quint8 *pixelPtrs[2];
-    quint8 weights[2];
+    qint16 weights[2];
 
     pixelPtrs[0] = pixel1;
     pixelPtrs[1] = pixel2;

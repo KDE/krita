@@ -231,7 +231,7 @@ template <> void calcDimensions <KisVLineIteratorPixel>
 struct FilterValues
 {
     quint8 numWeights;
-    quint8 *weight;
+    qint16 *weight;
     ~FilterValues() {delete [] weight;}
 };
 
@@ -302,12 +302,12 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         qint32 span = ((center + support)>>8) - begin + 1; // takes floor to get end. Subtracts begin to get span
         qint32 t = (((begin<<8) - center) * invfscale)>>8;
         qint32 dt = invfscale;
-        filterWeights[center].weight = new quint8[span];
+        filterWeights[center].weight = new qint16[span];
 
-        quint32 sum=0;
+        qint32 sum=0;
         for(int num = 0; num<span; ++num)
         {
-            quint32 tmpw = filterStrategy->intValueAt(t) * invfscale;
+            qint32 tmpw = filterStrategy->intValueAt(t) * invfscale;
 
             tmpw >>=8;
             filterWeights[center].weight[num] = tmpw;

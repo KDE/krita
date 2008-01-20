@@ -120,7 +120,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
 
             quint8* data = new quint8[pixelSize];
             quint8** pixels = new quint8*[counts[m_radius]];
-            quint8* weights = new quint8[counts[m_radius]];
+            qint16* weights = new qint16[counts[m_radius]];
 
             int i = 0;
             // dummy init

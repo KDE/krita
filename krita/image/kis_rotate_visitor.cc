@@ -316,7 +316,7 @@ KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
         displacementInt = (qint32)(floor(displacement));
         weight = displacement - displacementInt;
 
-        quint8 pixelWeights[2];
+        qint16 pixelWeights[2];
 
         pixelWeights[0] = static_cast<quint8>(weight * 255 + 0.5);
         pixelWeights[1] = 255 - pixelWeights[0];
@@ -366,7 +366,7 @@ KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
         displacementInt = (qint32)(floor(displacement));
         weight = displacement - displacementInt;
 
-        quint8 pixelWeights[2];
+        qint16 pixelWeights[2];
 
         pixelWeights[0] = static_cast<quint8>(weight * 255 + 0.5);
         pixelWeights[1] = 255 - pixelWeights[0];

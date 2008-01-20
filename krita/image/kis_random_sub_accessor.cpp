@@ -38,7 +38,7 @@ KisRandomSubAccessorPixel::~KisRandomSubAccessorPixel()
 void KisRandomSubAccessorPixel::sampledOldRawData(quint8* dst)
 {
     const quint8* pixels[4];
-    quint8 weights[4];
+    qint16 weights[4];
     int x = (int)floor(m_currentPoint.x());
     int y = (int)floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;
@@ -63,7 +63,7 @@ void KisRandomSubAccessorPixel::sampledOldRawData(quint8* dst)
 void KisRandomSubAccessorPixel::sampledRawData(quint8* dst)
 {
     const quint8* pixels[4];
-    quint8 weights[4];
+    qint16 weights[4];
     int x = (int)floor(m_currentPoint.x());
     int y = (int)floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;

@@ -510,7 +510,7 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, dou
     colors[0] = start.data();
     colors[1] = end.data();
 
-    quint8 colorWeights[2];
+    qint16 colorWeights[2];
     colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
     colorWeights[1] = 255 - colorWeights[0];
 

@@ -103,7 +103,7 @@ class KoMixColorsOpImpl : public KoMixColorsOp {
         {
         }
         virtual ~KoMixColorsOpImpl() { }
-        virtual void mixColors(const quint8 * const* colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
+        virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const
         {
             // Create and initialize to 0 the array of totals
             typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totals[_CSTraits::channels_nb];

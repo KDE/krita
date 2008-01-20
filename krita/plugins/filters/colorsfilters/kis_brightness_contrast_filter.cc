@@ -265,7 +265,7 @@ void KisBrightnessContrastFilter::process(KisFilterConstProcessingInformation sr
                 // adjust, but since it's partially selected we also only partially adjust
                 configBC->m_adjustment->transform(iter.oldRawData(), iter.rawData(), 1);
                 const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-                quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 mixOp->mixColors(pixels, weights, 2, iter.rawData());
                 ++iter;
                 pixelsProcessed++;

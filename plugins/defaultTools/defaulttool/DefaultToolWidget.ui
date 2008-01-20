@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>244</width>
+    <width>188</width>
     <height>372</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
     <item row="0" column="0" >
      <widget class="QLabel" name="label" >
       <property name="text" >
-       <string>Corner:</string>
+       <string>Base point:</string>
       </property>
      </widget>
     </item>
@@ -44,16 +44,6 @@
      </widget>
     </item>
     <item row="1" column="1" >
-     <widget class="KoUnitDoubleSpinBox" name="positionXSpinBox" >
-      <property name="minimum" >
-       <double>-10000.000000000000000</double>
-      </property>
-      <property name="maximum" >
-       <double>10000.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" >
      <widget class="QLabel" name="positionYLabel" >
       <property name="sizePolicy" >
        <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
@@ -69,6 +59,16 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="0" >
+     <widget class="KoUnitDoubleSpinBox" name="positionXSpinBox" >
+      <property name="minimum" >
+       <double>-10000.000000000000000</double>
+      </property>
+      <property name="maximum" >
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="1" >
      <widget class="KoUnitDoubleSpinBox" name="positionYSpinBox" >
       <property name="minimum" >
@@ -79,20 +79,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0" colspan="3" >
-     <widget class="Line" name="line" >
-      <property name="minimumSize" >
-       <size>
-        <width>0</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" >
+    <item row="3" column="0" >
      <widget class="QLabel" name="widthLabel" >
       <property name="text" >
        <string>Width:</string>
@@ -102,39 +89,23 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1" >
-     <widget class="KoUnitDoubleSpinBox" name="widthSpinBox" >
-      <property name="minimum" >
-       <double>-10000.000000000000000</double>
-      </property>
-      <property name="maximum" >
-       <double>10000.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item rowspan="2" row="4" column="2" >
-     <widget class="KoAspectButton" native="1" name="aspectButton" >
-      <property name="minimumSize" >
-       <size>
-        <width>10</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>10</width>
-        <height>30</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" >
+    <item rowspan="2" row="3" column="1" >
      <widget class="QLabel" name="heightLabel" >
       <property name="text" >
        <string>Height:</string>
       </property>
       <property name="buddy" >
        <cstring>heightSpinBox</cstring>
+      </property>
+     </widget>
+    </item>
+    <item rowspan="2" row="4" column="0" >
+     <widget class="KoUnitDoubleSpinBox" name="widthSpinBox" >
+      <property name="minimum" >
+       <double>-10000.000000000000000</double>
+      </property>
+      <property name="maximum" >
+       <double>10000.000000000000000</double>
       </property>
      </widget>
     </item>
@@ -148,15 +119,22 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1" >
+    <item row="6" column="0" colspan="2" >
+     <widget class="QCheckBox" name="aspectButton" >
+      <property name="text" >
+       <string>Keep aspect ratio</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="2" >
      <spacer>
       <property name="orientation" >
        <enum>Qt::Vertical</enum>
       </property>
       <property name="sizeHint" >
        <size>
-        <width>20</width>
-        <height>61</height>
+        <width>86</width>
+        <height>171</height>
        </size>
       </property>
      </spacer>
@@ -343,17 +321,34 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QWidget</extends>
-   <header>KoAspectButton.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KoUnitDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>KoUnitDoubleSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>positionXSpinBox</tabstop>
+  <tabstop>positionYSpinBox</tabstop>
+  <tabstop>widthSpinBox</tabstop>
+  <tabstop>heightSpinBox</tabstop>
+  <tabstop>aspectButton</tabstop>
+  <tabstop>bringToFront</tabstop>
+  <tabstop>raiseLevel</tabstop>
+  <tabstop>lowerLevel</tabstop>
+  <tabstop>sendBack</tabstop>
+  <tabstop>leftAlign</tabstop>
+  <tabstop>hCenterAlign</tabstop>
+  <tabstop>rightAlign</tabstop>
+  <tabstop>topAlign</tabstop>
+  <tabstop>vCenterAlign</tabstop>
+  <tabstop>bottomAlign</tabstop>
+  <tabstop>rotateCombo</tabstop>
+  <tabstop>rotateButton</tabstop>
+  <tabstop>scaleCombo</tabstop>
+  <tabstop>scaleButton</tabstop>
+  <tabstop>shearCombo</tabstop>
+  <tabstop>shearButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

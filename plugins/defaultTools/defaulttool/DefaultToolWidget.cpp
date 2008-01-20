@@ -32,6 +32,7 @@
 #include <QSize>
 #include <QtGui/QRadioButton>
 #include <QtGui/QLabel>
+#include <QCheckBox>
 
 DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
                                     QWidget* parent ) : QTabWidget( parent )
@@ -71,7 +72,7 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     hCenterAlign->setDefaultAction( m_tool->action( "object_align_horizontal_center" ) );
     leftAlign->setDefaultAction( m_tool->action( "object_align_horizontal_left" ) );
 
-    aspectButton->setKeepAspectRatio( false );
+    aspectButton->setChecked( false );
 
     updatePosition();
     updateSize();
@@ -133,9 +134,8 @@ void DefaultToolWidget::updateSize()
     if( selectionCount )
         selSize = selection->boundingRect().size();
 
-    widthSpinBox->setEnabled( selectionCount );
-    heightSpinBox->setEnabled( selectionCount );
-    aspectButton->setEnabled( selectionCount );
+    geometryTab->setEnabled( selectionCount );
+    advancedTab->setEnabled( selectionCount );
 
     widthSpinBox->blockSignals(true);
     heightSpinBox->blockSignals(true);
@@ -152,7 +152,7 @@ void DefaultToolWidget::sizeHasChanged()
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
     QRectF rect = selection->boundingRect();
 
-    if( aspectButton->keepAspectRatio() )
+    if( aspectButton->isChecked() )
     {
         double aspect = rect.width() / rect.height();
         if( rect.width() != newSize.width() )

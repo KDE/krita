@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Grid
+ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritatoolgrid
+X-Krita-Version=3

@@ -86,6 +86,7 @@ public:
 
     QRectF convertToPt( const QRectF &rect );
 
+    QPointF viewToPixel(const QPointF &viewCoord);
     /// Convert an integer pixel coordinate into a view coordinate.
     /// The view coordinate is at the centre of the pixel.
     QPointF pixelToView(const QPoint &pixelCoord);

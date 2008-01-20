@@ -157,6 +157,14 @@ QPoint KisTool::convertToIntPixelCoord( KoPointerEvent *e )
     return image()->documentToIntPixel(e->point);
 }
 
+QPointF KisTool::viewToPixel(const QPointF &viewCoord)
+{
+    if (!image())
+        return viewCoord;
+
+    return image()->documentToPixel( m_canvas->viewConverter()->viewToDocument( viewCoord) );
+}
+
 QRectF KisTool::convertToPt( const QRectF &rect )
 {
     if (!image())

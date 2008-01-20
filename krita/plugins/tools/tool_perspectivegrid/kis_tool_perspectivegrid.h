@@ -4,15 +4,15 @@
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License.
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
@@ -24,7 +24,9 @@
 #include <kis_tool.h>
 #include <KoToolFactory.h>
 
-class KisToolPerspectiveGrid : public KisPaint {
+class KisCanvas2;
+
+class KisToolPerspectiveGrid : public KisTool {
     Q_OBJECT
     enum PerspectiveGridEditionMode {
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
@@ -32,18 +34,16 @@ class KisToolPerspectiveGrid : public KisPaint {
         MODE_DRAGING_NODE, // In this mode one node is translated
         MODE_DRAGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
     };
-    typedef KisToolNonPaint super;
+    typedef KisTool super;
 public:
-    KisToolPerspectiveGrid();
+    KisToolPerspectiveGrid(KoCanvasBase * canvas);
     virtual ~KisToolPerspectiveGrid();
 
     //
     // KisToolPaint interface
     //
 
-    virtual void setup(KActionCollection *collection);
     virtual quint32 priority() { return 3; }
-    virtual enumToolType toolType() { return TOOL_VIEW; }
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -52,34 +52,34 @@ public:
 //     virtual QWidget* optionWidget();
 
 public slots:
-    virtual void activate();
+    virtual void activate(bool temp = false);
     void deactivate();
 
 protected:
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
+    
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
     void drawGridCreation(QPainter& gc);
-    void drawGridCreation();
     void drawGrid(QPainter& gc);
-    void drawGrid();
 
 private:
-    void drawSmallRectangle(QPainter& gc, QPoint p);
-    bool mouseNear(const QPoint& mousep, const QPoint point);
+    void drawSmallRectangle(QPainter& gc, const QPointF& p);
+    bool mouseNear(const QPointF& mousep, const QPointF& point);
+    KisPerspectiveGridNodeSP nodeNearPoint( KisSubPerspectiveGrid* grid, QPointF point);
 
 protected:
     QPointF m_dragStart;
     QPointF m_dragEnd;
 
     bool m_dragging;
+    bool m_hasMoveAfterFirstTime;
 private:
     typedef QVector<QPointF> QPointFVector;
 
     QPointFVector m_points;
     PerspectiveGridEditionMode m_mode;
     qint32 m_handleSize, m_handleHalfSize;
-    KisPerspectiveGridNodeSP m_selectedNode1, m_selectedNode2;
-
+    KisPerspectiveGridNodeSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
+    KisCanvas2* m_canvas;
 };
 
 

@@ -5,7 +5,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -46,12 +46,8 @@ ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QStringList &)
 {
     setComponentData(ToolPerspectiveGridFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-        r->add(KoToolFactorySP(new KisToolPerspectiveGridFactory()));
-    }
-
+    KoToolRegistry * r = KoToolRegistry::instance();
+    r->add(new KisToolPerspectiveGridFactory(r, QStringList()));
 }
 
 ToolPerspectiveGrid::~ToolPerspectiveGrid()

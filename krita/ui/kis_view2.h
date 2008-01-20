@@ -45,6 +45,8 @@ class KisZoomManager;
 class KisImageManager;
 class KisNodeManager;
 class KisMaskManager;
+class KisPerspectiveGridManager;
+class KisGridManager;
 
 /**
  * Krita view class
@@ -158,6 +160,9 @@ public:  // Krita specific interfaces
     void disconnectCurrentImage();
 
     virtual KoPrintJob * createPrintJob();
+    
+    KisGridManager * gridManager();
+    KisPerspectiveGridManager* perspectiveGridManager();
 
 private slots:
 

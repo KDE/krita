@@ -792,5 +792,14 @@ KisNodeManager * KisView2::nodeManager()
     return m_d->nodeManager;
 }
 
+KisPerspectiveGridManager* KisView2::perspectiveGridManager()
+{
+    return m_d->perspectiveGridManager;
+}
+
+KisGridManager * KisView2::gridManager()
+{
+    return m_d->gridManager;
+}
 
 #include "kis_view2.moc"

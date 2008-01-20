@@ -33,6 +33,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent) 
 {
     m_layout = new QVBoxLayout(this);
     setColorSpace( KoColorSpaceRegistry::instance()->rgb8());
+    m_updateAllowed= true;
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
@@ -87,11 +88,14 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 
 void KisSpecificColorSelectorWidget::update()
 {
-    emit(colorChanged(m_color));
+    if(m_updateAllowed)
+        emit(colorChanged(m_color));
 }
 
 void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
 {
+    m_updateAllowed = false;
     m_color.fromKoColor( c );
     emit(updated());
+    m_updateAllowed = true;
 }

@@ -44,6 +44,7 @@ class KisSpecificColorSelectorWidget : public QWidget {
         const KoColorSpace* m_colorSpace;
         QVBoxLayout *m_layout;
         KoColor m_color;
+        bool m_updateAllowed;
 };
 
 #endif

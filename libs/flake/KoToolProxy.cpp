@@ -302,6 +302,13 @@ bool KoToolProxy::paste() {
     return false;
 }
 
+QStringList KoToolProxy::supportedPasteMimeTypes() const {
+    if (d->activeTool)
+        return d->activeTool->supportedPasteMimeTypes();
+
+    return QStringList();
+}
+
 QList<QAction*> KoToolProxy::popupActionList() const {
     if (d->activeTool)
         return d->activeTool->popupActionList();

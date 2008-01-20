@@ -38,6 +38,7 @@ class KoPAViewMode;
 class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
+class QAction;
 
 /// Creates a view with a KoPACanvas and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView
@@ -121,6 +122,9 @@ protected:
     /// Returns the document structure docker
     KoPADocumentStructureDocker* documentStructureDocker() const;
 
+    /// Called when receiving a PartActivateEvent
+    virtual void partActivateEvent(KParts::PartActivateEvent* event);
+
 protected slots:
     void viewSnapToGrid();
     void viewGrid();
@@ -154,6 +158,9 @@ protected slots:
     /// Delete the current page
     void deletePage();
 
+    /// Called when the clipboard changed
+    virtual void clipboardDataChanged();
+
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
@@ -168,6 +175,7 @@ private:
     KoZoomController * m_zoomController;
     KoZoomHandler m_zoomHandler;
 
+    QAction *m_editPaste;
     KAction *m_deleteSelectionAction;
 
     KToggleAction *m_actionViewSnapToGrid;

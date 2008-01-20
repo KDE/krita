@@ -65,6 +65,7 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
+#include <kparts/event.h>
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
@@ -171,7 +172,10 @@ void KoPAView::initActions()
 {
     actionCollection()->addAction( KStandardAction::Cut, "edit_cut", this, SLOT( editCut() ) );
     actionCollection()->addAction( KStandardAction::Copy, "edit_copy", this, SLOT( editCopy() ) );
-    actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
+    m_editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
+    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
+    connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
+    clipboardDataChanged();
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
@@ -493,6 +497,39 @@ void KoPAView::setActionEnabled( int actions, bool enable )
 KoPADocumentStructureDocker* KoPAView::documentStructureDocker() const
 {
     return m_documentStructureDocker;
+}
+
+void KoPAView::clipboardDataChanged()
+{
+    const QMimeData* data = QApplication::clipboard()->mimeData();
+    bool paste = false;
+
+    if (data)
+    {
+        QStringList mimeTypes = m_canvas->toolProxy()->supportedPasteMimeTypes();
+        mimeTypes << KoOdf::mimeType( KoOdf::Graphics );
+        mimeTypes << KoOdf::mimeType( KoOdf::Presentation );
+
+        foreach(QString mimeType, mimeTypes)
+        {
+            if ( data->hasFormat( mimeType ) ) {
+                paste = true;
+                break;
+            }
+        }
+
+    }
+
+    m_editPaste->setEnabled(paste);
+}
+
+void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
+{
+    if((event->widget() == this) && event->activated()) {
+        clipboardDataChanged();
+    }
+
+    KoView::partActivateEvent(event);
 }
 
 #include "KoPAView.moc"

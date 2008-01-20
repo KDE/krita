@@ -546,6 +546,13 @@ bool DefaultTool::paste()
     return success;
 }
 
+QStringList DefaultTool::supportedPasteMimeTypes() const
+{
+    QStringList list;
+    list << KoOdf::mimeType( KoOdf::Text );
+    return list;
+}
+
 KoSelection *DefaultTool::koSelection() {
     Q_ASSERT(m_canvas);
     Q_ASSERT(m_canvas->shapeManager());

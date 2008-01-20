@@ -101,6 +101,8 @@ public:
     void copy() const;
     /// Forwarded to the current KoTool
     bool paste();
+    /// Forwarded to the current KoTool
+    QStringList supportedPasteMimeTypes() const;
     /// Set the new active tool.
     void setActiveTool(KoTool *tool);
 

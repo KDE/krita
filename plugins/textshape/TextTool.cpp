@@ -655,6 +655,12 @@ bool TextTool::paste() {
     return true;
 }
 
+QStringList TextTool::supportedPasteMimeTypes() const {
+    QStringList list;
+    list << "text/plain" << "text/html" << "application/vnd.oasis.opendocument.text";
+    return list;
+}
+
 int TextTool::pointToPosition(const QPointF & point) const {
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);

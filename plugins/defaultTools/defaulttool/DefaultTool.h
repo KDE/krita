@@ -69,6 +69,8 @@ public:
 
     ///reimplemented
     virtual bool paste();
+    ///reimplemented
+    virtual QStringList supportedPasteMimeTypes() const;
 
     /**
      * Returns which selection handle is at params point (or NoHandle if none).

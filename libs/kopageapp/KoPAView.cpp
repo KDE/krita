@@ -43,6 +43,7 @@
 #include <KoShapeLayer.h>
 #include <KoRulerController.h>
 #include <KoDrag.h>
+#include <KoShapeDeleteCommand.h>
 
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
@@ -171,6 +172,14 @@ void KoPAView::initActions()
     actionCollection()->addAction( KStandardAction::Cut, "edit_cut", this, SLOT( editCut() ) );
     actionCollection()->addAction( KStandardAction::Copy, "edit_copy", this, SLOT( editCopy() ) );
     actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
+    actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
+    actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
+
+    m_deleteSelectionAction = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    actionCollection()->addAction("edit_delete", m_deleteSelectionAction );
+    m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
+    m_deleteSelectionAction->setEnabled(false);
+    connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
 
     m_actionViewShowGrid  = new KToggleAction(i18n("Show &Grid"), this);
     actionCollection()->addAction("view_grid", m_actionViewShowGrid );
@@ -246,6 +255,55 @@ void KoPAView::editPaste()
             }
         }
     }
+}
+
+void KoPAView::editDeleteSelection()
+{
+    KoSelection* selection = kopaCanvas()->shapeManager()->selection();
+    if( !selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    if( selectedShapes.count() < 1)
+        return;
+    selection->deselectAll();
+
+    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( kopaDocument(), selectedShapes );
+    kopaCanvas()->addCommand( cmd );
+    kopaCanvas()->update();
+}
+
+void KoPAView::editSelectAll()
+{
+    KoSelection* selection = kopaCanvas()->shapeManager()->selection();
+    if( !selection )
+        return;
+
+    QList<KoShape*> shapes = activePage()->iterator();
+
+    foreach( KoShape *shape, shapes ) {
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
+
+        if ( layer ) {
+            QList<KoShape*> layerShapes( layer->iterator() );
+            foreach( KoShape *layerShape, layerShapes ) {
+                selection->select( layerShape );
+                layerShape->update();
+            }
+        }
+    }
+
+    selectionChanged();
+}
+
+void KoPAView::editDeselectAll()
+{
+    KoSelection* selection = kopaCanvas()->shapeManager()->selection();
+    if( selection )
+        selection->deselectAll();
+
+    selectionChanged();
+    kopaCanvas()->update();
 }
 
 void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, double zoom )
@@ -376,9 +434,11 @@ void KoPAView::selectionChanged()
         m_verticalRuler->setShowSelectionBorders(true);
         m_horizontalRuler->updateSelectionBorders(boundingRect.x(), boundingRect.right());
         m_verticalRuler->updateSelectionBorders(boundingRect.y(), boundingRect.bottom());
+        m_deleteSelectionAction->setEnabled(true);
     } else {
         m_horizontalRuler->setShowSelectionBorders(false);
         m_verticalRuler->setShowSelectionBorders(false);
+        m_deleteSelectionAction->setEnabled(false);
     }
 }
 

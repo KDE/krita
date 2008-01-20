@@ -129,6 +129,9 @@ protected slots:
     void editCut();
     void editCopy();
     void editPaste();
+    void editDeleteSelection();
+    void editSelectAll();
+    void editDeselectAll();
 
     /// Change the current view mode to work on master pages
     void setMasterMode( bool master );
@@ -164,6 +167,8 @@ private:
     KoCanvasController * m_canvasController;
     KoZoomController * m_zoomController;
     KoZoomHandler m_zoomHandler;
+
+    KAction *m_deleteSelectionAction;
 
     KToggleAction *m_actionViewSnapToGrid;
     KToggleAction *m_actionViewShowGrid;

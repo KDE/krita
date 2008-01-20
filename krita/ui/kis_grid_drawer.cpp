@@ -58,9 +58,12 @@ Qt::PenStyle KisGridDrawer::gs2style(quint32 s)
     }
 }
 
+#define pixelToView(point) \
+    m_viewConverter->documentToView(image->pixelToDocument(point))
+
+
 void KisGridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid)
 {
-    Q_UNUSED(image);
     Q_UNUSED(wr);
 
     KisConfig cfg;
@@ -90,19 +93,23 @@ void KisGridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const
         QPointF pol1 = *grid->topRight() + i * v12;
         KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( &pol1, &vertVanishingPoint );
         QPointF pol1b =  KisPerspectiveMath::computeIntersection(d1,d34);
-        drawLine( pol1.toPoint(), pol1b.toPoint() );
+        drawLine( pixelToView(pol1.toPoint()), pixelToView(pol1b.toPoint() ));
 
         QPointF pol2 = *grid->bottomRight() + i * v23;
         KisPerspectiveMath::LineEquation d2 = KisPerspectiveMath::computeLineEquation( &pol2, &horizVanishingPoint );
         QPointF pol2b = KisPerspectiveMath::computeIntersection(d2,d41);
-        drawLine( pol2.toPoint(), pol2b.toPoint() );
+        drawLine( pixelToView(pol2.toPoint()), pixelToView(pol2b.toPoint()) );
     }
     setPen(mainPen);
-    drawLine( *grid->topLeft().data(), *grid->topRight().data() );
-    drawLine( *grid->topRight().data(), *grid->bottomRight().data() );
-    drawLine( *grid->bottomRight().data(), *grid->bottomLeft().data() );
-    drawLine( *grid->bottomLeft().data(), *grid->topLeft().data() );
+    drawLine( pixelToView( *grid->topLeft()), pixelToView(  *grid->topRight() ) );
+    drawLine( pixelToView( *grid->topRight()), pixelToView( *grid->bottomRight()) );
+    drawLine( pixelToView( *grid->bottomRight()), pixelToView( *grid->bottomLeft()) );
+    drawLine( pixelToView( *grid->bottomLeft()), pixelToView( *grid->topLeft()) );
 }
+
+#undef pixelToView
+#define pixelToView(point) \
+    m_viewConverter->documentToView( m_doc->image()->pixelToDocument(point))
 
 void KisGridDrawer::drawGrid(const QRectF& area)
 {
@@ -113,18 +120,20 @@ void KisGridDrawer::drawGrid(const QRectF& area)
 
     quint32 offsetx = cfg.getGridOffsetX();
     quint32 offsety = cfg.getGridOffsetY();
-    double hspacing = m_doc->gridData().gridX();
-    double vspacing = m_doc->gridData().gridY();
+    quint32 hspacing = cfg.getGridHSpacing(); // m_doc->gridData().gridX(); // use koffice grid when KOffice grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
+    quint32 vspacing = cfg.getGridVSpacing(); // m_doc->gridData().gridY(); // use koffice grid when KOffice grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
     quint32 subdivision = cfg.getGridSubdivisions() - 1;
-    //double ihspsub = hspacing / (double)subdivision;
-    //double ivspsub = hspacing / (double)subdivision;
 
     // Draw vertical line
     QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
     QPen subdivisionPen = QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
-    quint32 i = 0;
-    double x = offsetx;
-    while( x <= area.right())
+    quint32 i = subdivision - (offsetx / hspacing) % (subdivision+1);
+    
+    QPointF bottomRight = m_doc->image()->documentToPixel( area.bottomRight() );
+    QPointF topLeft = m_doc->image()->documentToPixel( area.topLeft() );
+    
+    double x = offsetx % hspacing;
+    while( x <= bottomRight.x())
     {
         if( i == subdivision )
         {
@@ -134,18 +143,18 @@ void KisGridDrawer::drawGrid(const QRectF& area)
             setPen(subdivisionPen);
             i++;
         }
-        if( x >= area.x() )
+        if( x >= topLeft.x() )
         {
             // Always draw the full line otherwise the line stippling varies
             // with the location of area and we get glitchy patterns.
-            drawLine( m_viewConverter->documentToView( QPointF( x, area.top() ) ), m_viewConverter->documentToView( QPointF( x, area.bottom() ) ) );
+            drawLine( pixelToView( QPointF( x, topLeft.y() ) ), pixelToView( QPointF( x, bottomRight.y() ) ) );
         }
         x += hspacing;
     }
     // Draw horizontal line
-    i = 0;
-    double y = offsety;
-    while( y <= area.bottom())
+    i = subdivision - (offsety / vspacing) % (subdivision +1);
+    double y = offsety % vspacing;
+    while( y <= bottomRight.y())
     {
         if( i == subdivision )
         {
@@ -155,9 +164,9 @@ void KisGridDrawer::drawGrid(const QRectF& area)
             setPen(subdivisionPen);
             i++;
         }
-        if( y >= area.y() )
+        if( y >= topLeft.y() )
         {
-            drawLine( m_viewConverter->documentToView( QPointF( area.left(), y ) ), m_viewConverter->documentToView( QPointF( area.right(), y ) ) );
+            drawLine( pixelToView( QPointF( topLeft.x(), y ) ), pixelToView( QPointF( bottomRight.x(), y ) ) );
         }
         y += vspacing;
     }
@@ -167,12 +176,6 @@ QPainterGridDrawer::QPainterGridDrawer(KisDoc2* doc, const KoViewConverter * vie
     : KisGridDrawer(doc, viewConverter),
       m_painter(0)
 {
-}
-
-void QPainterGridDrawer::draw(QPainter *p, const QRectF &area)
-{
-    m_painter = p;
-    drawGrid(area);
 }
 
 OpenGLGridDrawer::OpenGLGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)

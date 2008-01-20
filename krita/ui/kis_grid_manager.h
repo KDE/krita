@@ -25,13 +25,14 @@
 #include <QPainter>
 
 #include "kis_types.h"
+#include <krita_export.h>
 
 class KisView2;
 class KActionCollection;
 class KToggleAction;
 class KAction;
 
-class KisGridManager : public QObject
+class KRITAUI_EXPORT KisGridManager : public QObject
 {
     Q_OBJECT
     public:
@@ -40,6 +41,7 @@ class KisGridManager : public QObject
     public:
         void setup(KActionCollection * collection);
 
+        void setGridVisible( bool v);
     public slots:
 
         void updateGUI();

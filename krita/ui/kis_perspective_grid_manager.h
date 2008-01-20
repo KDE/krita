@@ -24,12 +24,14 @@
 #include <QObject>
 #include <QPainter>
 
+#include <krita_export.h>
+
 class KAction;
 class KActionCollection;
 class KToggleAction;
 class KisView2;
 
-class KisPerspectiveGridManager : public QObject
+class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
 {
     Q_OBJECT
     public:

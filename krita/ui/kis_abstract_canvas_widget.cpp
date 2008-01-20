@@ -60,7 +60,7 @@ void KisAbstractCanvasWidget::drawDecorations( QPainter & gc, bool ants, bool gr
     // ask the guides, grids, etc to paint themselves
     if ( grids ) {
         gc.save();
-        gridDrawer->draw(&gc, canvas->viewConverter()->viewToDocument(clipRect));
+        gridDrawer->drawGrid( canvas->viewConverter()->viewToDocument(clipRect));
         gc.restore();
     }
 

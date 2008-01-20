@@ -54,6 +54,7 @@
 #include "kis_grid_drawer.h"
 #include "kis_selection_manager.h"
 #include "kis_selection.h"
+#include "kis_perspective_grid_manager.h"
 
 //#define DEBUG_REPAINT
 //#define USE_QT_SCALING
@@ -75,7 +76,7 @@ public:
     const KoViewConverter * viewConverter;
     QBrush checkBrush;
     QPoint documentOffset;
-    KisGridDrawer* gridDrawer;
+    QPainterGridDrawer* gridDrawer;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
@@ -185,7 +186,10 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     bool drawGrids = true;
     bool drawTools = true;
 
+    m_d->gridDrawer->setPainter( &gc );
     drawDecorations(gc, drawAnts, drawGrids, drawTools, m_d->documentOffset, ev->rect(), m_d->canvas, m_d->gridDrawer );
+    m_d->gridDrawer->setPainter( 0 );
+    m_d->canvas->view()->perspectiveGridManager()->drawGrid( ev->rect(), &gc, false);
 
     gc.end();
 

@@ -100,6 +100,11 @@ void KisGridManager::updateGUI()
 
 }
 
+void KisGridManager::setGridVisible( bool v)
+{
+    m_view->document()->gridData().setShowGrid( v );
+}
+
 void KisGridManager::toggleGrid()
 {
     m_view->document()->gridData().setShowGrid( !m_view->document()->gridData().showGrid() );

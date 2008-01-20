@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=%{APPNAME}
+ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritatool%{APPNAMELC}
+X-Krita-Version=3

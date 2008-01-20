@@ -69,6 +69,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
                 {
                     input = new KisFloatColorInput(this, channel, &m_color);
                 }
+                    break;
                 default:
                     Q_ASSERT(false);
                     input = 0;

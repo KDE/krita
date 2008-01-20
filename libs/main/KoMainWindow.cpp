@@ -227,9 +227,12 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
              this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
 
     if ( componentData.isValid() )
+    {
         setComponentData( componentData, false ); // don't load plugins! we don't want
-    // the part's plugins with this shell, even though we are using the
-    // part's componentData! (Simon)
+                                                  // the part's plugins with this shell, even though we are using the
+                                                  // part's componentData! (Simon)
+        KGlobal::setActiveComponent( componentData );
+    }
 
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources( "data", "koffice/koffice_shell.rc" );
@@ -1890,7 +1893,7 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
         if (rootDocument()) {
             KConfigGroup group = KGlobal::config()->group( rootDocument()->componentData().componentName() ).group( "DockWidget " + factory->id() );
             collapsed = group.readEntry( "Collapsed", collapsed );
-        }        
+        }
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
         d->m_dockWidgetMap.insert( factory->id(), dockWidget );

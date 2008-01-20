@@ -145,8 +145,6 @@ KoView::KoView( KoDocument *document, QWidget *parent )
   //kDebug(30003) <<"KoView::KoView" << this;
   d->m_doc = document;
   KParts::PartBase::setPartObject( this );
-  // Set the documents component as active else one can't reach it from plugins
-  KGlobal::setActiveComponent(document->componentData());
 
   setFocusPolicy( Qt::StrongFocus );
 
@@ -481,26 +479,6 @@ void KoView::removeStatusBarItem( QWidget * widget )
         }
     if ( it == d->m_statusBarItems.end() )
         kWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget;
-}
-
-QDockWidget * KoView::createDock(const QString & title, QWidget * w)
-{
-    kDebug(30003) <<"Creating palette" << title;
-    QDockWidget * d = new QDockWidget(title, mainWindow());
-    d->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    d->setWidget(w);
-
-    KConfigGroup group(KGlobal::config(), "");
-    QFont dockWidgetFont = KGlobalSettings::generalFont();
-    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
-    dockWidgetFont.setPointSizeF(pointSize);
-    d->setFont(dockWidgetFont);
-
-    d->setObjectName(title);
-    mainWindow()->addDockWidget(Qt::RightDockWidgetArea, d);
-
-    return d;
 }
 
 

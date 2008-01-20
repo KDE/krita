@@ -348,17 +348,6 @@ public:
   void showAllStatusBarItems( bool show );
 
   /**
-   * Add a new dock widget.
-   *
-   * @deprecated Use the factory method instead
-   *
-   * @param title Title of the docker
-   * @param w     Widget that's to be embedded (may be 0)
-   * @return the dock widget itself
-   */
-   KDE_DEPRECATED QDockWidget * createDock(const QString & title, QWidget * w);
-
-  /**
    * You have to implement this method and disable/enable certain functionality (actions for example) in
    * your view to allow/disallow editing of the document.
    */

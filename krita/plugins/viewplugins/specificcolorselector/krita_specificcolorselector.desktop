@@ -1,8 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SpecificColorSelector
+Name[it]=Selettore di colore specifico
+Name[sv]=Specifik färgväljare
 Name[zh_TW]=指定顏色選擇器
 Comment=SpecificColorSelector
+Comment[it]=Selettore di colore specifico
+Comment[sv]=Specifik färgväljare
 Comment[zh_TW]=指定顏色選擇器
 ServiceTypes=Krita/ViewPlugin
 Type=Service

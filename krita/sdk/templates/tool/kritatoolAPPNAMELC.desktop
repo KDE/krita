@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
+Name[pt_BR]=%{NOME_APLICATIVO}
+Name[x-test]=xx%{APPNAME}xx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatool%{APPNAMELC}

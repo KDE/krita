@@ -17,7 +17,6 @@ Name[ne]=फ्लेक प्लगइन
 Name[pt]='Plugin' do Flake
 Name[pt_BR]=Plugin do Flake
 Name[sv]=Flake-insticksprogram
-Name[uk]=Втулок Flake
 Name[x-test]=xxFlake Pluginxx
 Name[zh_TW]=Flake 外掛程式
 Type=ServiceType

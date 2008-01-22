@@ -32,7 +32,6 @@ Name[sl]=Pretvorba barvnega prostora
 Name[sr]=Претварање простора боја
 Name[sr@latin]=Pretvaranje prostora boja
 Name[sv]=Färgrymdskonvertering
-Name[uk]=Перетворення простору кольорів
 Name[x-test]=xxColorspace Conversionxx
 Name[zh_TW]=色彩空間轉換
 ServiceTypes=Krita/ViewPlugin

@@ -191,7 +191,7 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
 #endif
 }
 
-void HorizontalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
+void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
     double numberStep = d->numberStepForUnit(); // number step in unit
     QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
@@ -406,7 +406,7 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     return rectangle;
 }
 
-void VerticalPaintingStrategy::drawRulerStripes(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
+void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
     double numberStep = d->numberStepForUnit(); // number step in unit
     int numberStepPixel = qRound(d->viewConverter->documentToViewY( d->unit.fromUserValue(numberStep)));
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
@@ -523,6 +523,72 @@ QSize VerticalPaintingStrategy::sizeHint() {
     return size;
 }
 
+
+void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const double start, const double end) {
+
+    // Don't draw too short lines
+    if (qMax(start, end) - qMin(start, end) < 1)
+        return;
+
+    painter.save();
+    painter.translate(d->offset, d->ruler->height() / 2);
+    painter.setPen(d->ruler->palette().color(QPalette::Text));
+    painter.setBrush(d->ruler->palette().color(QPalette::Text));
+
+    QLineF line(QPointF(d->viewConverter->documentToViewX(start), 0),
+            QPointF(d->viewConverter->documentToViewX(end), 0));
+    QPointF midPoint = line.pointAt(0.5);
+
+    // Draw the label text
+    QFont font = KGlobalSettings::smallestReadableFont();
+    font.setPointSize(6);
+    QFontMetrics fontMetrics(font);
+    QString label = d->unit.toUserStringValue(
+            d->viewConverter->viewToDocumentX(line.length())) + " " + KoUnit::unitName(d->unit);
+    QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.width(label)/2,
+            midPoint.y() + fontMetrics.ascent()/2);
+    painter.setFont(font);
+    painter.drawText(labelPosition, label);
+
+    // Draw the arrow lines
+    double arrowLength = (line.length() - fontMetrics.width(label)) / 2 - 2;
+    arrowLength = qMax(0.0, arrowLength);
+    QLineF startArrow(line.p1(), line.pointAt(arrowLength / line.length()));
+    QLineF endArrow(line.p2(), line.pointAt(1.0 - arrowLength / line.length()));
+    painter.drawLine(startArrow);
+    painter.drawLine(endArrow);
+
+    // Draw the arrow heads
+    QPolygonF arrowHead;
+    arrowHead << line.p1() << QPointF(line.x1()+3, line.y1()-3)
+        << QPointF(line.x1()+3, line.y1()+3);
+    painter.drawPolygon(arrowHead);
+    arrowHead.clear();
+    arrowHead << line.p2() << QPointF(line.x2()-3, line.y2()-3)
+        << QPointF(line.x2()-3, line.y2()+3);
+    painter.drawPolygon(arrowHead);
+
+    painter.restore();
+}
+
+void HorizontalDistancesPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF&) {
+    QList<double> points;
+    points << 0.0;
+    points << d->activeRangeStart + d->paragraphIndent + d->firstLineIndent;
+    points << d->activeRangeStart + d->paragraphIndent;
+    points << d->activeRangeEnd - d->endIndent;
+    points << d->activeRangeStart;
+    points << d->activeRangeEnd;
+    points << d->rulerLength;
+    qSort(points.begin(), points.end());
+    QListIterator<double> i(points);
+    i.next();
+    while (i.hasNext() && i.hasPrevious()) {
+        drawDistanceLine(d, painter, i.peekPrevious(), i.peekNext());
+        i.next();
+    }
+}
+
 KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::Orientation o)
     : unit(KoUnit(KoUnit::Point)),
     orientation(o),
@@ -546,8 +612,10 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     selected(None),
     selectOffset(0),
     tabChooser(0),
-    paintingStrategy(o == Qt::Horizontal ?
+    normalPaintingStrategy(o == Qt::Horizontal ?
             (PaintingStrategy*)new HorizontalPaintingStrategy() : (PaintingStrategy*)new VerticalPaintingStrategy()),
+    distancesPaintingStrategy((PaintingStrategy*)new HorizontalDistancesPaintingStrategy()),
+    paintingStrategy(normalPaintingStrategy),
     ruler(parent)
 {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
@@ -558,7 +626,8 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
 
 KoRulerPrivate::~KoRulerPrivate()
 {
-    delete paintingStrategy;
+    delete normalPaintingStrategy;
+    delete distancesPaintingStrategy;
 }
 
 double KoRulerPrivate::numberStepForUnit() const
@@ -701,7 +770,7 @@ void KoRuler::paintEvent(QPaintEvent* event)
     QRectF rectangle = d->paintingStrategy->drawBackground(d, painter);
     painter.restore();
     painter.save();
-    d->paintingStrategy->drawRulerStripes(d, painter, rectangle);
+    d->paintingStrategy->drawMeasurements(d, painter, rectangle);
     painter.restore();
     if (d->showIndents) {
         painter.save();
@@ -917,6 +986,11 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         update();
     }
 #endif
+    if (d->orientation == Qt::Horizontal && (ev->modifiers() & Qt::ShiftModifier) &&
+            (d->selected == KoRulerPrivate::FirstLineIndent ||
+             d->selected == KoRulerPrivate::ParagraphIndent ||
+             d->selected == KoRulerPrivate::EndIndent))
+        d->paintingStrategy = d->distancesPaintingStrategy;
 }
 
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
@@ -929,6 +1003,7 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
     if( d->selected == KoRulerPrivate::Tab)
         emit tabsChanged(true);
 
+    d->paintingStrategy = d->normalPaintingStrategy;
     d->selected = KoRulerPrivate::None;
 }
 
@@ -946,8 +1021,13 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->firstLineIndent = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
                 - d->offset) - d->activeRangeStart - d->paragraphIndent;
-        if( ! (ev->modifiers() & Qt::ShiftModifier))
+        if( ! (ev->modifiers() & Qt::ShiftModifier)) {
             d->firstLineIndent = d->doSnapping(d->firstLineIndent);
+            d->paintingStrategy = d->normalPaintingStrategy;
+        } else {
+            if (d->orientation == Qt::Horizontal)
+                d->paintingStrategy = d->distancesPaintingStrategy;
+        }
 
         emit indentsChanged(false);
         break;
@@ -958,8 +1038,14 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->paragraphIndent = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
                 - d->offset) - d->activeRangeStart;
-        if( ! (ev->modifiers() & Qt::ShiftModifier))
+        if( ! (ev->modifiers() & Qt::ShiftModifier)) {
             d->paragraphIndent = d->doSnapping(d->paragraphIndent);
+            d->paintingStrategy = d->normalPaintingStrategy;
+        } else {
+            if (d->orientation == Qt::Horizontal)
+                d->paintingStrategy = d->distancesPaintingStrategy;
+        }
+
         if (d->paragraphIndent < 0)
             d->paragraphIndent = 0;
         if (d->paragraphIndent + d->endIndent > activeLength)
@@ -973,8 +1059,14 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->endIndent = d->activeRangeEnd - d->viewConverter->viewToDocumentX(pos.x()
                  + d->selectOffset - d->offset);
-        if( ! (ev->modifiers() & Qt::ShiftModifier))
+        if( ! (ev->modifiers() & Qt::ShiftModifier)) {
             d->endIndent = d->doSnapping(d->endIndent);
+            d->paintingStrategy = d->normalPaintingStrategy;
+        } else {
+            if (d->orientation == Qt::Horizontal)
+                d->paintingStrategy = d->distancesPaintingStrategy;
+        }
+
         if (d->endIndent < 0)
             d->endIndent = 0;
         if (d->paragraphIndent + d->endIndent > activeLength)

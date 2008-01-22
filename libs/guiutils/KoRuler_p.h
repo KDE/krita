@@ -42,7 +42,7 @@ public:
 
     virtual QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter) = 0;
     virtual void drawTabs(const KoRulerPrivate *ruler, QPainter &painter) = 0;
-    virtual void drawRulerStripes(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) = 0;
+    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) = 0;
     virtual void drawIndents(const KoRulerPrivate *ruler, QPainter &painter) = 0;
     virtual QSize sizeHint() = 0;
 
@@ -54,7 +54,7 @@ public:
 
     virtual QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter);
     virtual void drawTabs(const KoRulerPrivate *ruler, QPainter &painter);
-    virtual void drawRulerStripes(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
+    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
     virtual void drawIndents(const KoRulerPrivate *ruler, QPainter &painter);
     virtual QSize sizeHint();
 
@@ -68,12 +68,22 @@ public:
 
     virtual QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter);
     virtual void drawTabs(const KoRulerPrivate *, QPainter &) {}
-    virtual void drawRulerStripes(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
+    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
     virtual void drawIndents(const KoRulerPrivate *, QPainter &) { }
     virtual QSize sizeHint();
 
 private:
     double lengthInPixel;
+};
+
+class HorizontalDistancesPaintingStrategy : public HorizontalPaintingStrategy {
+public:
+    HorizontalDistancesPaintingStrategy() {}
+
+    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
+
+private:
+    void drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const double start, const double end);
 };
 
 class KoRulerPrivate {
@@ -127,7 +137,14 @@ public:
     QList<QAction*> popupActions;
 
     RulerTabChooser *tabChooser;
-    PaintingStrategy * const paintingStrategy;
+
+    // Cached painting strategies
+    PaintingStrategy * normalPaintingStrategy;
+    PaintingStrategy * distancesPaintingStrategy;
+
+    // Current painting strategy
+    PaintingStrategy * paintingStrategy;
+
     KoRuler *ruler;
 
     double numberStepForUnit() const;

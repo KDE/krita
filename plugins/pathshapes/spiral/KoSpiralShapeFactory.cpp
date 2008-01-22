@@ -46,7 +46,7 @@ KoShape * KoSpiralShapeFactory::createDefaultShape() const
 KoShape * KoSpiralShapeFactory::createShape( const KoProperties * params ) const
 {
     Q_UNUSED(params);
-    return new KoSpiralShape();
+    return createDefaultShape();
 }
 
 QList<KoShapeConfigWidgetBase*> KoSpiralShapeFactory::createShapeOptionPanels()

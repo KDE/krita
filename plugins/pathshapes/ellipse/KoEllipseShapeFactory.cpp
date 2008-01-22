@@ -57,7 +57,7 @@ KoShape * KoEllipseShapeFactory::createDefaultShape() const
 KoShape * KoEllipseShapeFactory::createShape( const KoProperties * params ) const
 {
     Q_UNUSED(params);
-    return new KoEllipseShape();
+    return createDefaultShape();
 }
 
 bool KoEllipseShapeFactory::supports(const KoXmlElement & e) const

@@ -28,6 +28,12 @@
 #include "KoPAViewMode.h"
 #include "KoPAPage.h"
 
+#include <kxmlguifactory.h>
+
+#include <QAction>
+#include <QMenu>
+#include <QMouseEvent>
+
 KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 : QWidget( view )
 , KoCanvasBase( doc )
@@ -131,6 +137,12 @@ void KoPACanvas::tabletEvent( QTabletEvent *event )
 void KoPACanvas::mousePressEvent( QMouseEvent *event )
 {
     m_view->viewMode()->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+
+    if(!event->isAccepted() && event->button() == Qt::RightButton)
+    {
+        showContextMenu( event->globalPos(), toolProxy()->popupActionList() );
+        event->setAccepted( true );
+    }
 }
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
@@ -197,6 +209,16 @@ void KoPACanvas::inputMethodEvent(QInputMethodEvent *event)
 void KoPACanvas::resizeEvent( QResizeEvent * event )
 {
     emit sizeChanged( event->size() );
+}
+
+void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList )
+{
+    m_view->unplugActionList( "toolproxy_action_list" );
+    m_view->plugActionList( "toolproxy_action_list", actionList );
+    QMenu *menu = dynamic_cast<QMenu*>( m_view->factory()->container( "default_canvas_popup", m_view ) );
+
+    if( menu )
+        menu->exec( globalPos );
 }
 
 #include "KoPACanvas.moc"

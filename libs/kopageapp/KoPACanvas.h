@@ -21,12 +21,14 @@
 #define KOPACANVAS_H
 
 #include <QWidget>
+#include <QList>
 #include <KoCanvasBase.h>
 
 #include "kopageapp_export.h"
 
 class KoPAView;
 class KoPADocument;
+class QAction;
 
 /// Widget that shows a KoPAPage
 class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoCanvasBase
@@ -100,6 +102,13 @@ protected:
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
     void resizeEvent( QResizeEvent * event );
+
+    /**
+     * Shows the default context menu
+     * @param globalPos global position to show the menu at.
+     * @param actionList action list to be inserted into the menu
+     */
+    void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
 
     KoPAView * m_view;
     KoPADocument * m_doc;

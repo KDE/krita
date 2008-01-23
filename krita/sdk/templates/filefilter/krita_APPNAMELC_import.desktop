@@ -13,6 +13,7 @@ Name[km]=តម្រង​នាំចូល​សម្រាប់ Krita %{AP
 Name[pt]=Filtro de Importação de %{APPNAMELC} para o Krita
 Name[pt_BR]=Filtro de Importação %{APPNAMELC} para o Krita
 Name[sv]=Krita %{APPNAMELC}-importfilter
+Name[uk]=Фільтр імпорту %{APPNAMELC} у Krita
 Name[x-test]=xxKrita %{APPNAMELC} Import Filterxx
 Name[zh_TW]=Krita %{APPNAMELC} 匯入過濾程式
 ServiceTypes=KOfficeFilter

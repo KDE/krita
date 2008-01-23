@@ -14,6 +14,7 @@ Name[ne]=Glsl फिल्टर प्लगइन
 Name[pt]='Plugin' do Filtro GlSl
 Name[pt_BR]=Plugin do Filtro Glsl
 Name[sv]=GLSL-filterinsticksprogram
+Name[uk]=Втулок фільтра Glsl
 Name[x-test]=xxGlsl Filter Pluginxx
 Name[zh_TW]=Glsl 過濾器外掛程式
 ServiceTypes=Krita/ViewPlugin

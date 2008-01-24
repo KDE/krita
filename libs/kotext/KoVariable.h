@@ -29,7 +29,9 @@
 
 class QTextInlineObject;
 class QTextDocument;
+class KoXmlElement;
 class KoShape;
+class KoShapeLoadingContext;
 class KoProperties;
 class QWidget;
 class KoVariableManager;
@@ -74,6 +76,11 @@ public:
      * Note that all manipulations should have a direct effect on the variable itself.
      */
     virtual QWidget *createOptionsWidget() { return 0; }
+
+    /**
+     * TODO make abstract when it is implemented in all variables
+     */
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context ) {}
 
 protected:
     /**

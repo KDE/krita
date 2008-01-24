@@ -41,6 +41,8 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
+    KoVariableFactory.cpp
+    KoVariableRegistry.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoTextAnchor.cpp

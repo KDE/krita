@@ -2825,7 +2825,8 @@ QList<KoVersionInfo> & KoDocument::versionList()
 
 void KoDocument::addCommand(QUndoCommand* command)
 {
-    d->m_undoStack->push( command );
+    if( command )
+        d->m_undoStack->push( command );
 }
 
 void KoDocument::beginMacro( const QString & text )

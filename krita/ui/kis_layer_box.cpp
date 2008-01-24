@@ -3,7 +3,6 @@
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -210,7 +209,6 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
-
     bnDelete->setEnabled(m_nodeManager->activeNode());
     bnRaise->setEnabled(    m_nodeManager->activeNode()
                         && (m_nodeManager->activeNode()->nextSibling()
@@ -224,9 +222,9 @@ void KisLayerBox::updateUI()
     if (KisNodeSP active = m_nodeManager->activeNode())
     {
         if (m_nodeManager->activePaintDevice())
-            slotSetColorSpace(m_nodeManager->activeColorSpace());
+            slotFillCompositeOps(m_nodeManager->activeColorSpace());
         else
-            slotSetColorSpace(m_image->colorSpace());
+            slotFillCompositeOps(m_image->colorSpace());
         if (active->inherits("KisMask")) {
             active = active->parent(); // We need a layer to set opacity and composite op, which masks don't have
         }
@@ -253,7 +251,7 @@ void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
     cmbComposite->blockSignals(false);
 }
 
-void KisLayerBox::slotSetColorSpace(const KoColorSpace * colorSpace)
+void KisLayerBox::slotFillCompositeOps(const KoColorSpace * colorSpace)
 {
     cmbComposite->blockSignals(true);
     cmbComposite->setCompositeOpList(colorSpace->compositeOps());
@@ -487,9 +485,11 @@ void KisLayerBox::slotRaiseClicked()
     else
     {
         for (int i = 0, n = l.count(); i < n; ++i)
-            if (KisNodeSP li = m_nodeModel->nodeFromIndex(l[i]))
-                if (li->prevSibling())
+            if (KisNodeSP li = m_nodeModel->nodeFromIndex(l[i])) {
+                if (li->prevSibling()) {
                     m_image->moveNode(li, li->parent(), li->prevSibling());
+                }
+            }
     }
 
     if( !l.isEmpty() )

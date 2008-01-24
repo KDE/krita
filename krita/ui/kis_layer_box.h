@@ -69,7 +69,7 @@ public slots:
 
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);
-    void slotSetColorSpace(const KoColorSpace * colorSpace);
+    void slotFillCompositeOps(const KoColorSpace * colorSpace);
     void updateUI();
     void setCurrentNode( KisNodeSP node );
 

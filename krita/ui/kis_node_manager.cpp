@@ -98,11 +98,19 @@ KisPaintDeviceSP KisNodeManager::activePaintDevice()
 
 const KoColorSpace* KisNodeManager::activeColorSpace()
 {
-    if ( m_d->maskManager->activeMask() ) {
+    Q_ASSERT(m_d->maskManager);
+    
+    if ( m_d->maskManager->activeDevice() ) {
+        Q_ASSERT(m_d->maskManager->activeDevice());
         return m_d->maskManager->activeDevice()->colorSpace();
     }
     else {
-        return m_d->layerManager->activeLayer()->parentLayer()->colorSpace();
+        Q_ASSERT(m_d->layerManager);
+        Q_ASSERT(m_d->layerManager->activeLayer());
+        if(m_d->layerManager->activeLayer()->parentLayer())
+            return m_d->layerManager->activeLayer()->parentLayer()->colorSpace();
+        else
+            return m_d->view->image()->colorSpace();
     }
 }
 

@@ -220,7 +220,7 @@ public:
                 for(uint i = 0; i < _CSTraits::channels_nb; i++)
                 {
                     compositetype v = totals[i] / factor + offset;
-                    if( allChannels or channelFlags.testBit( i ) )
+                    if( (allChannels and i != _CSTraits::alpha_pos ) or (not allChannels and channelFlags.testBit( i ) ) )
                     {
                         dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
                                                     KoColorSpaceMathsTraits<channels_type>::max );

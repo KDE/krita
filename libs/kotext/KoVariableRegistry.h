@@ -40,7 +40,7 @@ class QAction;
  * @see KoInlineObject
  * @see KoVariable
  */
-class KOTEXT_EXPORT KoVariableRegistry : KoGenericRegistry<KoVariableFactory*>
+class KOTEXT_EXPORT KoVariableRegistry : public KoGenericRegistry<KoVariableFactory*>
 {
 public:
     class Singleton;

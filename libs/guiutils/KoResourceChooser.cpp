@@ -72,6 +72,7 @@ KoResourceChooser::KoResourceChooser(QSize aIconSize, QWidget *parent)
     d->m_itemWidth = aIconSize.width();
     d->m_itemHeight = aIconSize.height();
     d->busyLayouting = false;
+    QTableWidget::setIconSize( aIconSize );
 
     setRowCount(1);
     setColumnCount(1);
@@ -252,6 +253,7 @@ void KoResourceChooser::setIconSize ( const QSize & size )
     d->m_itemWidth = size.width();
     d->m_itemHeight = size.height();
     QTableWidget::setIconSize(size);
+    setupItems();
 }
 
 // adds an item to the end

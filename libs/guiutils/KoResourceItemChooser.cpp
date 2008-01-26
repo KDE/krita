@@ -144,6 +144,11 @@ void KoResourceItemChooser::setIconSize(const QSize& size)
     m_chooser->setIconSize(size);
 }
 
+QSize KoResourceItemChooser::iconSize() const
+{
+    return m_chooser->iconSize();
+}
+
 QTableWidgetItem* KoResourceItemChooser::currentItem()
 {
     return m_chooser->currentItem();
@@ -182,6 +187,17 @@ void KoResourceItemChooser::selectionChanged()
         else
             removeButton->setEnabled(false);
     }
+}
+
+void KoResourceItemChooser::showButtons( bool show )
+{
+    foreach( QAbstractButton * button, m_buttonGroup->buttons() )
+        show ? button->show() : button->hide();
+}
+
+QSize KoResourceItemChooser::viewportSize()
+{
+    return m_chooser->viewport()->size();
 }
 
 #include "KoResourceItemChooser.moc"

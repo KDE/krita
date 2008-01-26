@@ -60,7 +60,8 @@ public:
 
     void clear();
     void setIconSize(const QSize& size);
-
+    QSize iconSize() const;
+    void showButtons( bool show );
 signals:
     void selected(QTableWidgetItem *item);
     void itemDoubleClicked( QTableWidgetItem* item);
@@ -76,6 +77,8 @@ private slots:
     void slotButtonClicked( int button );
     void selectionChanged();
 
+protected:
+    QSize viewportSize();
 private:
     enum Buttons { Button_Import, Button_Remove };
 

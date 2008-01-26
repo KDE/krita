@@ -134,7 +134,7 @@ void KoResourceChooser::setupItems()
     d->busyLayouting = true;
 
     int oldNColumns = columnCount();
-    int nColumns = width( ) / d->m_itemWidth;
+    int nColumns = viewport()->width( ) / d->m_itemWidth;
     if(nColumns == 0)
         nColumns = 1;
 

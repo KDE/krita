@@ -49,6 +49,13 @@ public:
      * Constructor.
      */
     explicit DateVariable( DateType type );
+    virtual ~DateVariable();
+
+    ///reimplemented
+    void saveOdf( KoShapeSavingContext & context );
+
+    ///reimplemented
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
     void setProperties( const KoProperties *props );
 
@@ -71,6 +78,7 @@ public:
 
 private:
     void update();
+    void adjustTime( const QString & adjustTime );
 
     DateType m_type;
     DisplayType m_displayType;

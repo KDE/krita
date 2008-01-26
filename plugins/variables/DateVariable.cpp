@@ -22,6 +22,11 @@
 #include "FixedDateFormat.h"
 
 #include <KoProperties.h>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOasisLoadingContext.h>
+#include <KoOdfStylesReader.h>
 
 DateVariable::DateVariable(DateType type)
 : KoVariable()
@@ -33,6 +38,65 @@ DateVariable::DateVariable(DateType type)
 , m_secsOffset(0)
 {
     m_time = QDateTime::currentDateTime();
+}
+
+DateVariable::~DateVariable()
+{
+}
+
+void DateVariable::saveOdf( KoShapeSavingContext & context )
+{
+    // TODO
+}
+
+bool DateVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    const QString localName( element.localName() );
+    QString dateFormat = "";
+    QString dataStyle = element.attributeNS( KoXmlNS::style, "data-style-name" );
+    if ( !dataStyle.isEmpty() ) {
+        if ( context.koLoadingContext().stylesReader().dataFormats().contains( dataStyle ) ) {
+            KoOdfNumberStyles::NumericStyleFormat dataFormat = context.koLoadingContext().stylesReader().dataFormats().value( dataStyle );
+            dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
+        }
+    }
+
+    //dateProperties.setProperty("fixed", QVariant(element.attributeNS(KoXmlNS::text, "fixed") == "true"));
+    if ( element.attributeNS( KoXmlNS::text, "fixed", "false" ) == "true" ) {
+        m_type = Fixed;
+    }
+    else {
+        // zagge: I don't know if this 100% correct to what is written in odf 6.7.2 
+        // this is just a port of the old code
+        m_type = AutoUpdate;
+    }
+
+    //dateProperties.setProperty("time", element.attributeNS(KoXmlNS::text, localName + "-value"));
+    const QString value( element.attributeNS(KoXmlNS::text, localName + "-value", "" ) );
+    if ( !value.isEmpty() ) {
+        m_time = QDateTime::fromString( value, Qt::ISODate );
+    }
+    else {
+        //TODO see 6.2.1 Date Fields
+    }
+
+    //dateProperties.setProperty("definition", dateFormat);
+    m_definition = dateFormat;
+
+    if ( dateFormat.isEmpty() )
+        if ( localName == "time" ) {
+            m_displayType = Time;
+        }
+        else {
+            m_displayType = Date;
+        }
+    else {
+        m_displayType = Custom;
+    }
+
+    //dateProperties.setProperty("adjust", element.attributeNS(KoXmlNS::text, localName + "-adjust"));
+    const QString adjust( element.attributeNS( KoXmlNS::text, localName + "-adjust", "" ) );
+    adjustTime( adjust );
 }
 
 void DateVariable::setProperties(const KoProperties *props)
@@ -51,54 +115,7 @@ void DateVariable::setProperties(const KoProperties *props)
         m_displayType = Date;
     else if (displayTypeProp == "time")
         m_displayType = Time;
-    QString adjustTime = props->stringProperty("adjust");
-    if (!adjustTime.isEmpty()) {
-        m_daysOffset = 0;
-        m_monthsOffset = 0;
-        m_yearsOffset = 0;
-        m_secsOffset = 0;
-        int multiplier = 1;
-        if (adjustTime.contains("-"))
-            multiplier = -1;
-        QString timePart, datePart;
-        QStringList parts = adjustTime.mid(adjustTime.indexOf('P') + 1).split('T');
-        datePart = parts[0];
-        if (parts.size() > 1)
-            timePart = parts[1];
-        QRegExp rx("([0-9]+)([DHMSY])");
-        int value;
-        bool valueOk;
-        if (!timePart.isEmpty()) {
-            int pos = 0;
-            while ((pos = rx.indexIn(timePart, pos)) != -1) {
-                value = rx.cap(1).toInt(&valueOk);
-                if (valueOk) {
-                    if (rx.cap(2) == "H")
-                        m_secsOffset += multiplier * 3600 * value;
-                    else if (rx.cap(2) == "M")
-                        m_secsOffset += multiplier * 60 * value;
-                    else if (rx.cap(2) == "S")
-                        m_secsOffset += multiplier * value;
-                }
-                pos += rx.matchedLength();
-            }
-        }
-        if (!datePart.isEmpty()) {
-            int pos = 0;
-            while ((pos = rx.indexIn(datePart, pos)) != -1) {
-                value = rx.cap(1).toInt(&valueOk);
-                if (valueOk) {
-                    if (rx.cap(2) == "Y")
-                        m_yearsOffset += multiplier * value;
-                    else if (rx.cap(2) == "M")
-                        m_monthsOffset += multiplier * value;
-                    else if (rx.cap(2) == "D")
-                        m_daysOffset += multiplier * value;
-                }
-                pos += rx.matchedLength();
-            }
-        }
-    }
+    adjustTime( props->stringProperty("adjust") );
     update();
 }
 
@@ -166,5 +183,65 @@ void DateVariable::update()
         case Date:
             setValue(target.date().toString(Qt::LocalDate));
             break;
+    }
+}
+
+void DateVariable::adjustTime( const QString & value )
+{
+    if (!value.isEmpty()) {
+        m_daysOffset = 0;
+        m_monthsOffset = 0;
+        m_yearsOffset = 0;
+        m_secsOffset = 0;
+        int multiplier = 1;
+        if ( value.contains("-") ) {
+            multiplier = -1;
+        }
+        QString timePart;
+        QString datePart;
+        QStringList parts = value.mid( value.indexOf('P') + 1 ).split('T');
+        datePart = parts[0];
+        if ( parts.size() > 1 ) {
+            timePart = parts[1];
+        }
+        QRegExp rx("([0-9]+)([DHMSY])");
+        int value;
+        bool valueOk;
+        if (!timePart.isEmpty()) {
+            int pos = 0;
+            while ((pos = rx.indexIn(timePart, pos)) != -1) {
+                value = rx.cap(1).toInt(&valueOk);
+                if (valueOk) {
+                    if (rx.cap(2) == "H") {
+                        m_secsOffset += multiplier * 3600 * value;
+                    }
+                    else if (rx.cap(2) == "M") {
+                        m_secsOffset += multiplier * 60 * value;
+                    }
+                    else if (rx.cap(2) == "S") {
+                        m_secsOffset += multiplier * value;
+                    }
+                }
+                pos += rx.matchedLength();
+            }
+        }
+        if (!datePart.isEmpty()) {
+            int pos = 0;
+            while ( ( pos = rx.indexIn( datePart, pos ) ) != -1 ) {
+                value = rx.cap(1).toInt(&valueOk);
+                if (valueOk) {
+                    if (rx.cap(2) == "Y") {
+                        m_yearsOffset += multiplier * value;
+                    }
+                    else if (rx.cap(2) == "M") {
+                        m_monthsOffset += multiplier * value;
+                    }
+                    else if (rx.cap(2) == "D") {
+                        m_daysOffset += multiplier * value;
+                    }
+                }
+                pos += rx.matchedLength();
+            }
+        }
     }
 }

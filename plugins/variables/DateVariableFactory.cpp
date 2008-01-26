@@ -22,6 +22,7 @@
 #include "DateVariable.h"
 
 #include <KoProperties.h>
+#include <KoXmlNS.h>
 
 #include <klocale.h>
 
@@ -36,6 +37,10 @@ DateVariableFactory::DateVariableFactory()
     props->setProperty("definition", "dd/MM/yy");
     var.properties = props;
     addTemplate(var);
+
+    QStringList elementNames;
+    elementNames << "date" << "time";
+    setOdfElementNames( KoXmlNS::text, elementNames );
 }
 
 DateVariableFactory::~DateVariableFactory()
@@ -52,5 +57,6 @@ KoVariable * DateVariableFactory::createVariable( const KoProperties *properties
 
 KoVariable * DateVariableFactory::createVariable() const
 {
-    // TODO
+    DateVariable *var = new DateVariable( DateVariable::Fixed );
+    return var;
 }

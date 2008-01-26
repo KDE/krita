@@ -23,6 +23,7 @@
 #include <KoProperties.h>
 #include <kdebug.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 InfoVariable::InfoVariable()
@@ -55,4 +56,21 @@ void InfoVariable::saveOdf (KoShapeSavingContext & context) {
         writer->addTextNode(value());
         writer->endElement();
     }
+}
+
+bool InfoVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    const QString localName( element.localName() );
+
+    if ( localName == "title" ) {
+        m_type = KoInlineObject::Title;
+    }
+    else if ( localName == "subject" ) {
+        m_type = KoInlineObject::Subject;
+    }
+    else if ( localName == "keywords" ) {
+        m_type = KoInlineObject::Keywords;
+    }
+
+    return true;
 }

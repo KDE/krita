@@ -37,7 +37,11 @@ public:
 
     void propertyChanged(Property property, const QVariant &value);
 
-    void saveOdf (KoShapeSavingContext & context);
+    ///reimplemented
+    void saveOdf( KoShapeSavingContext & context );
+
+    ///reimplemented
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
 private:
     KoInlineObject::Property m_type;

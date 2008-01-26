@@ -19,14 +19,21 @@
  */
 
 #include "InfoVariableFactory.h"
-#include "InfoVariable.h"
 
 #include <KoProperties.h>
+#include <KoXmlNS.h>
 #include <kdebug.h>
+
+#include <QStringList>
+
+#include "InfoVariable.h"
 
 InfoVariableFactory::InfoVariableFactory()
 : KoVariableFactory( "info" )
 {
+    QStringList elementNames;
+    elementNames << "keywords" << "subject" << "title";
+    setOdfElementNames( KoXmlNS::text, elementNames );
 }
 
 InfoVariableFactory::~InfoVariableFactory()
@@ -42,5 +49,5 @@ KoVariable * InfoVariableFactory::createVariable( const KoProperties *properties
 
 KoVariable * InfoVariableFactory::createVariable() const
 {
-    //TODO
+    return new InfoVariable();
 }

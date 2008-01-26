@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,20 +21,20 @@
 #define PAGEVARIABLE_H
 
 #include <KoVariable.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
 
+class KoShapeSavingContext;
 
 /**
  * This is a KoVariable for page numbers.
  */
-class PageVariable : public KoVariable {
+class PageVariable : public KoVariable
+{
 public:
     enum PageType {
         PageCount,
         PageNumber
     };
-    
+
     /**
      * Constructor.
      */
@@ -42,11 +43,11 @@ public:
     void setProperties(const KoProperties *props);
 
     void propertyChanged(Property property, const QVariant &value);
-   
+
     void saveOdf (KoShapeSavingContext & context);
 private:
     void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
-    
+
     PageType m_type;
 };
 

@@ -109,8 +109,7 @@ QList<QAction*> KoVariableRegistry::createInsertVariableActions( KoCanvasBase *h
     QList<QAction*> answer;
     foreach( KoVariableFactory * factory, values()) {
         foreach( KoVariableTemplate templ, factory->templates() ) {
-            // TODO 
-            //answer.append( new InsertVariableAction( host, factory, templ ) );
+            answer.append( new InsertVariableAction( host, factory, templ ) );
         }
     }
     return answer;

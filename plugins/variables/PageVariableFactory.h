@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,18 +21,18 @@
 #ifndef KO_PAGE_VARIABLE_FACTORY
 #define KO_PAGE_VARIABLE_FACTORY
 
-#include <KoInlineObjectFactory.h>
+#include <KoVariableFactory.h>
 
-class KoVariable;
-
-class PageVariableFactory : public KoInlineObjectFactory {
+class PageVariableFactory : public KoVariableFactory
+{
 public:
-    explicit PageVariableFactory(QObject *parent);
-    ~PageVariableFactory() {}
+    PageVariableFactory();
+    ~PageVariableFactory();
 
-    KoInlineObject *createInlineObject(const KoProperties *properties) const;
-
-    ObjectType type() const { return TextVariable; }
+    /// reimplemented
+    KoVariable * createVariable(const KoProperties *properties) const;
+    /// reimplemented
+    KoVariable * createVariable() const;
 };
 
 #endif

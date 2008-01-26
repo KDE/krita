@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,17 +23,17 @@
 #include "InfoVariableFactory.h"
 #include <kgenericfactory.h>
 
-#include <KoInlineObjectRegistry.h>
+#include <KoVariableRegistry.h>
 
 K_EXPORT_COMPONENT_FACTORY(textvariables,
                            KGenericFactory<VariablesPlugin>( "VariablesPlugin" ) )
 
 VariablesPlugin::VariablesPlugin( QObject *parent, const QStringList& )
-    : QObject(parent)
+: QObject(parent)
 {
-    KoInlineObjectRegistry::instance()->add( new PageVariableFactory( parent));
-    KoInlineObjectRegistry::instance()->add( new DateVariableFactory( parent));
-    KoInlineObjectRegistry::instance()->add( new InfoVariableFactory( parent));
+    KoVariableRegistry::instance()->add( new PageVariableFactory() );
+    KoVariableRegistry::instance()->add( new DateVariableFactory() );
+    KoVariableRegistry::instance()->add( new InfoVariableFactory() );
 }
 
 #include "VariablesPlugin.moc"

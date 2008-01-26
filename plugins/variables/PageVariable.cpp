@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,10 +20,12 @@
 
 #include "PageVariable.h"
 
+#include <KoXmlWriter.h>
 #include <KoProperties.h>
 #include <kdebug.h>
 #include <KoTextShapeData.h>
 #include <KoShape.h>
+#include <KoShapeSavingContext.h>
 
 PageVariable::PageVariable()
     : KoVariable(true),

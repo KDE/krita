@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,13 +31,14 @@
  * is used as text.  This class is pretty boring in that it has just a setValue() to alter the
  * text shown; we depend on plugin writers to create more exciting ways to update variables.
  */
-class DateVariable : public KoVariable {
+class DateVariable : public KoVariable
+{
 public:
     enum DateType {
         Fixed,
         AutoUpdate
     };
-    
+
     enum DisplayType {
         Date,
         Time,
@@ -46,9 +48,9 @@ public:
     /**
      * Constructor.
      */
-    explicit DateVariable(DateType type);
+    explicit DateVariable( DateType type );
 
-    void setProperties(const KoProperties *props);
+    void setProperties( const KoProperties *props );
 
     QWidget *createOptionsWidget();
 
@@ -57,13 +59,13 @@ public:
 
     int daysOffset() const { return m_daysOffset; }
     void setDaysOffset(int daysOffset);
-    
+
     int monthsOffset() const { return m_monthsOffset; }
     void setMonthsOffset(int monthsOffset);
-    
+
     int yearsOffset() const { return m_yearsOffset; }
     void setYearsOffset(int yearsOffset);
-    
+
     int secsOffset() const { return m_secsOffset; }
     void setSecsOffset(int secsOffset);
 
@@ -74,7 +76,10 @@ private:
     DisplayType m_displayType;
     QString m_definition;
     QDateTime m_time;
-    int m_daysOffset, m_monthsOffset, m_yearsOffset, m_secsOffset;
+    int m_daysOffset;
+    int m_monthsOffset;
+    int m_yearsOffset;
+    int m_secsOffset;
 };
 
 #endif

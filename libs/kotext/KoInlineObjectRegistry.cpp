@@ -53,7 +53,7 @@ QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase
         KoInlineObjectFactory *factory = value(key);
         if(factory->type() == KoInlineObjectFactory::TextVariable) {
             foreach(KoInlineObjectTemplate templ, factory->templates()) {
-                answer.append(new InsertVariableAction(host, factory, templ));
+                //answer.append(new InsertVariableAction(host, factory, templ));
             }
         }
     }

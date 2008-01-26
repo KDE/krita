@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,18 +21,19 @@
 #ifndef KO_DATE_VARIABLE_FACTORY
 #define KO_DATE_VARIABLE_FACTORY
 
-#include <KoInlineObjectFactory.h>
+#include <KoVariableFactory.h>
 
-class KoVariable;
-
-class DateVariableFactory : public KoInlineObjectFactory {
+class DateVariableFactory : public KoVariableFactory
+{
 public:
-    explicit DateVariableFactory(QObject *parent);
-    ~DateVariableFactory() {}
+    DateVariableFactory();
+    ~DateVariableFactory();
 
-    KoInlineObject *createInlineObject(const KoProperties *properties) const;
+    /// reimplemented
+    KoVariable * createVariable( const KoProperties *properties ) const;
 
-    ObjectType type() const { return TextVariable; }
+    /// reimplemented
+    KoVariable * createVariable() const;
 };
 
 #endif

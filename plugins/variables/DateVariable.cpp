@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,18 +24,19 @@
 #include <KoProperties.h>
 
 DateVariable::DateVariable(DateType type)
-    : KoVariable(),
-    m_type(type),
-    m_displayType(Custom),
-    m_daysOffset(0),
-    m_monthsOffset(0),
-    m_yearsOffset(0),
-    m_secsOffset(0)
+: KoVariable()
+, m_type(type)
+, m_displayType(Custom)
+, m_daysOffset(0)
+, m_monthsOffset(0)
+, m_yearsOffset(0)
+, m_secsOffset(0)
 {
     m_time = QDateTime::currentDateTime();
 }
 
-void DateVariable::setProperties(const KoProperties *props) {
+void DateVariable::setProperties(const KoProperties *props)
+{
     m_definition = props->stringProperty("definition");
     if (!props->stringProperty("time").isEmpty())
         m_time = QDateTime::fromString(props->stringProperty("time"), Qt::ISODate);
@@ -100,7 +102,8 @@ void DateVariable::setProperties(const KoProperties *props) {
     update();
 }
 
-QWidget *DateVariable::createOptionsWidget() {
+QWidget *DateVariable::createOptionsWidget()
+{
     switch(m_type) {
         case Fixed:
             return new FixedDateFormat(this);
@@ -108,32 +111,38 @@ QWidget *DateVariable::createOptionsWidget() {
     return 0;
 }
 
-void DateVariable::setDefinition(const QString &definition) {
+void DateVariable::setDefinition(const QString &definition)
+{
     m_definition = definition;
     update();
 }
 
-void DateVariable::setSecsOffset(int offset) {
+void DateVariable::setSecsOffset(int offset)
+{
     m_secsOffset = offset;
     update();
 }
 
-void DateVariable::setDaysOffset(int offset) {
+void DateVariable::setDaysOffset(int offset)
+{
     m_daysOffset = offset;
     update();
 }
 
-void DateVariable::setMonthsOffset(int offset) {
+void DateVariable::setMonthsOffset(int offset)
+{
     m_monthsOffset = offset;
     update();
 }
 
-void DateVariable::setYearsOffset(int offset) {
+void DateVariable::setYearsOffset(int offset)
+{
     m_yearsOffset = offset;
     update();
 }
 
-void DateVariable::update() {
+void DateVariable::update()
+{
     QDateTime target;
     switch(m_type) {
         case Fixed:

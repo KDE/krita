@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +24,23 @@
 #include <KoProperties.h>
 #include <kdebug.h>
 
-InfoVariableFactory::InfoVariableFactory(QObject *parent)
-    : KoInlineObjectFactory(parent, "info")
+InfoVariableFactory::InfoVariableFactory()
+: KoVariableFactory( "info" )
 {
 }
 
-KoInlineObject *InfoVariableFactory::createInlineObject(const KoProperties *properties) const {
-    InfoVariable *var = new InfoVariable;
+InfoVariableFactory::~InfoVariableFactory()
+{
+}
+
+KoVariable * InfoVariableFactory::createVariable( const KoProperties *properties ) const
+{
+    InfoVariable *var = new InfoVariable();
     var->setProperties(properties);
     return var;
+}
+
+KoVariable * InfoVariableFactory::createVariable() const
+{
+    //TODO
 }

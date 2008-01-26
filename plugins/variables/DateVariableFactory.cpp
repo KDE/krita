@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,10 +25,10 @@
 
 #include <klocale.h>
 
-DateVariableFactory::DateVariableFactory(QObject *parent)
-    : KoInlineObjectFactory(parent, "date")
+DateVariableFactory::DateVariableFactory()
+: KoVariableFactory( "date" )
 {
-    KoInlineObjectTemplate var;
+    KoVariableTemplate var;
     var.id = "fixed";
     var.name = i18n("Fixed");
     KoProperties *props = new KoProperties();
@@ -37,9 +38,19 @@ DateVariableFactory::DateVariableFactory(QObject *parent)
     addTemplate(var);
 }
 
-KoInlineObject *DateVariableFactory::createInlineObject(const KoProperties *properties) const {
+DateVariableFactory::~DateVariableFactory()
+{
+}
+
+KoVariable * DateVariableFactory::createVariable( const KoProperties *properties ) const
+{
     DateVariable *var = new DateVariable(static_cast<DateVariable::DateType>
             (properties->intProperty("id", DateVariable::Fixed)));
     var->setProperties(properties);
     return var;
+}
+
+KoVariable * DateVariableFactory::createVariable() const
+{
+    // TODO
 }

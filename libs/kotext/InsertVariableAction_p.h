@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,20 +20,23 @@
 #ifndef INSERTVARIABLEACTION_H
 #define INSERTVARIABLEACTION_H
 
-#include "KoInlineObjectFactory.h"
 #include "InsertVariableActionBase_p.h"
 
 class KoCanvasBase;
+class KoProperties;
+class KoVariableFactory;
+class KoVariableTemplate;
 
 /// \internal
-class InsertVariableAction : public InsertVariableActionBase {
+class InsertVariableAction : public InsertVariableActionBase
+{
 public:
-    InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactory *factory, const KoInlineObjectTemplate &templ);
+    InsertVariableAction( KoCanvasBase *base, KoVariableFactory *factory, const KoVariableTemplate &templ );
 
 private:
-    virtual KoVariable *createVariable();
+    virtual KoVariable * createVariable();
 
-    KoInlineObjectFactory *const m_factory;
+    KoVariableFactory *const m_factory;
     const QString m_templateId;
     const KoProperties *const m_properties;
 };

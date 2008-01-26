@@ -20,6 +20,7 @@
 
 #include "PageVariable.h"
 
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoProperties.h>
 #include <kdebug.h>
@@ -58,7 +59,8 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
     }
 }
 
-void PageVariable::saveOdf (KoShapeSavingContext & context) {
+void PageVariable::saveOdf( KoShapeSavingContext & context )
+{
     KoXmlWriter *writer = &context.xmlWriter();
     if (m_type == PageCount) {
         // <text:page-count>3</text:page-count>
@@ -71,5 +73,18 @@ void PageVariable::saveOdf (KoShapeSavingContext & context) {
         writer->addAttribute("text:select-page", "current");
         writer->addTextNode(value());
         writer->endElement();
+    }
+}
+
+bool PageVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    Q_UNUSED( context );
+    const QString localName( element.localName() );
+    if ( localName == "page-count" ) {
+        m_type = PageCount;
+    }
+    else {
+        m_type = PageNumber;
+        // TODO there are different parts of select-page
     }
 }

@@ -22,6 +22,8 @@
 #include "PageVariable.h"
 
 #include <KoProperties.h>
+#include <KoXmlNS.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -43,6 +45,10 @@ PageVariableFactory::PageVariableFactory()
     props->setProperty("count", false);
     var2.properties = props;
     addTemplate(var2);
+
+    QStringList elementNames;
+    elementNames << "page-count" << "page-number";
+    setOdfElementNames( KoXmlNS::text, elementNames );
 }
 
 PageVariableFactory::~PageVariableFactory()
@@ -58,5 +64,5 @@ KoVariable * PageVariableFactory::createVariable(const KoProperties *properties)
 
 KoVariable * PageVariableFactory::createVariable() const
 {
-    //TODO
+    return new PageVariable();
 }

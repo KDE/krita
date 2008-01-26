@@ -2,5 +2,6 @@
 Name=RGB
 Name[cy]=CGwGl (RGB)
 Name[fr]=RVB
+Name[wa]=RVB (rodje, vert, bleu)
 Name[x-test]=xxRGBxx
 X-KDE-DefaultTab=true

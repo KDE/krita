@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=tonemapping
+Name[ca]=mapejat de tons
 Name[el]=αντιστοίχηση τόνου
 Name[es]=asignación de tonos
 Name[gl]=tonemapping 
@@ -11,6 +12,7 @@ Name[pt_BR]=mapeamento de tons
 Name[sv]=Tonavbildning
 Name[x-test]=xxtonemappingxx
 Comment=tonemapping
+Comment[ca]=mapejat de tons
 Comment[el]=αντιστοίχηση τόνου
 Comment[es]=asignación de tonos
 Comment[it]=Mappa dei toni

@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SmallColorSelector
+Name[ca]=SelectorDeColorPetit
 Name[it]=Piccolo selettore del colore
 Name[sv]=Liten färgväljare
 Name[zh_TW]=小型顏色選擇器
 Comment=SmallColorSelector
+Comment[ca]=SelectorDeColorPetit
 Comment[it]=Piccolo selettore del colore
 Comment[sv]=Liten färgväljare
 Comment[zh_TW]=小型顏色選擇器

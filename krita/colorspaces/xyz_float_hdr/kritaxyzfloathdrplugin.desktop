@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=XYZ (float 16-bit and 32-bit HDR) Color Model
+Name[ca]=Model de color XYZ (float 16-bits i HDR 32-bits)
 Name[de]=XYZ-Farbmodell (16-bit und 32-bit Fließkomma HDR)
 Name[el]=Χρωματικό μοντέλο XYZ (16-bit και 32-bit HDR δεκαδικοί)
 Name[es]=Modelo de color XYZ (coma flotante de 16 bits y 32 bits HDR)
@@ -15,6 +16,7 @@ Name[sv]=XYZ-färgmodell (16-bitars flyttal och 32-bitars HDR)
 Name[x-test]=xxXYZ (float 16-bit and 32-bit HDR) Color Modelxx
 Name[zh_TW]=XYZ（浮點 16 位元與 32 位元 HDR）色彩模型
 Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range XYZ images
+Comment[ca]=Model de color per a 16 bits i 32 bits per canal en punt flotant per a imatges XYZ d'alt rang dinàmic
 Comment[de]=Farbmodell für 16-bit und 32-bit pro Kanal in Fließkomma für High-Dynamic Range XYZ-Bilder
 Comment[el]=Χρωματικό μοντέλο για 16-bit και 32-bit δεκαδικούς ανά κανάλι για εικόνες XYZ υψηλού δυναμικού εύρους (HDR)
 Comment[es]=Modelo de color para imágenes XYZ de intervalo muy dinámico de 16 y 32 bits por canal en coma flotante

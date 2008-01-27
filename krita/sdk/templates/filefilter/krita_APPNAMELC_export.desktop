@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Krita %{APPNAMELC} Export Filter
+Name[ca]=Filtre d'exportació %{APPNAMELC} per al Krita
 Name[el]=Φίλτρο εξαγωγής %{APPNAMELC} του Krita
 Name[es]=Krita %{APPNAMELC} filtro de exportación
 Name[et]=Krita %{APPNAMELC} ekspordifilter

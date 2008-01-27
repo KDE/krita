@@ -40,6 +40,7 @@ public:
     virtual KoColorSpace* clone() const;
     virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
     virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+    virtual quint8 intensity8(const quint8 * src) const;
 
     /**
      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 

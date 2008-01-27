@@ -322,6 +322,7 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
         {
             d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
         }
+        Q_ASSERT( d->rgbU8sRGB);
         return d->rgbU8sRGB;
     }
     return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
@@ -335,6 +336,7 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const KoColorProfile * profile)
         {
             d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
         }
+        Q_ASSERT( d->rgbU8sRGB);
         return d->rgbU8sRGB;
     }
     return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
@@ -356,7 +358,7 @@ const KoColorSpace * KoColorSpaceRegistry::lab16(const QString &profileName)
     {
         if(not d->lab16sLAB)
         {
-            d->lab16sLAB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
+            d->lab16sLAB = colorSpace(KoLabColorSpace::colorSpaceId(), profileName);
         }
         return d->lab16sLAB;
     }
@@ -369,8 +371,9 @@ const KoColorSpace * KoColorSpaceRegistry::lab16(const KoColorProfile * profile)
     {
         if(not d->lab16sLAB)
         {
-            d->lab16sLAB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
+            d->lab16sLAB = colorSpace(KoLabColorSpace::colorSpaceId(), profile);
         }
+        Q_ASSERT( d->lab16sLAB );
         return d->lab16sLAB;
     }
     return colorSpace(KoLabColorSpace::colorSpaceId(), profile);

@@ -126,7 +126,10 @@ public:
 template<class T> class KoBasicHistogramProducerFactory : public KoHistogramProducerFactory {
 public:
     KoBasicHistogramProducerFactory(const KoID& id, const KoColorSpace *colorSpace)
-        : KoHistogramProducerFactory(id), m_cs(colorSpace) {}
+        : KoHistogramProducerFactory(id), m_cs(colorSpace)
+    {
+        Q_ASSERT(colorSpace);
+    }
     virtual ~KoBasicHistogramProducerFactory() {}
     virtual KoHistogramProducerSP generate() { return KoHistogramProducerSP(new T(KoID(id(), name()), m_cs)); }
     virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const { return colorSpace->id() == m_cs->id(); }

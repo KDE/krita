@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <vector>
 
+#include <QDateTime>
 #include <QPoint>
 #include <QSpinBox>
 
@@ -42,6 +43,7 @@
 #include <kis_filter_registry.h>
 #include <kis_filter.h>
 #include <kis_global.h>
+#include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
 #include <KoProgressUpdater.h>
@@ -75,29 +77,32 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::CategoryAr
  */
 
 
-void KisRainDropsFilter::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisRainDropsFilter::process(KisFilterConstProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
 
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_UNUSED( config );
+    Q_ASSERT(!src.isNull());
+    Q_ASSERT(!dst.isNull());
     
-#if 0
-XXX_PORT
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 DropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
-    quint32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
-    quint32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
+    quint32 DropSize = config->getInt("dropSize", 80);
+    quint32 number = config->getInt("number", 80);
+    quint32 fishEyes = config->getInt("fishEyes", 30);
 
-    setProgressTotalSteps(number);
-    setProgressStage(i18n("Applying oilpaint filter..."),0);
+    if( progressUpdater )
+    {
+        progressUpdater->setRange(0, size.width() * size.height() );
+    }
+    int count = 0;
 
     if (fishEyes <= 0) fishEyes = 1;
 
@@ -126,11 +131,12 @@ XXX_PORT
 
     bool      FindAnother = false;              // To search for good coordinates
 
-    KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = src->colorSpace();
 
 
     // XXX: move the seed to the config, so the filter can be used as
     // and adjustment filter (boud).
+    // And use a thread-safe random number generator
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
 
@@ -138,15 +144,15 @@ XXX_PORT
 
     // Init booleen Matrix.
 
-    for (i = 0 ; !cancelRequested() && (i < Width) ; ++i)
+    for (i = 0 ; (i < Width) and not(progressUpdater and progressUpdater->interrupted()) ; ++i)
     {
-        for (j = 0 ; !cancelRequested() && (j < Height) ; ++j)
+        for (j = 0 ; (j < Height) and not(progressUpdater and progressUpdater->interrupted()); ++j)
         {
             BoolMatrix[i][j] = false;
         }
     }
 
-    for (int NumBlurs = 0 ; !cancelRequested() && (NumBlurs <= number) ; ++NumBlurs)
+    for (int NumBlurs = 0 ; (NumBlurs <= number) and not(progressUpdater and progressUpdater->interrupted()); ++NumBlurs)
     {
         NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
         halfSize = NewSize / 2;
@@ -164,15 +170,15 @@ XXX_PORT
             if (BoolMatrix[y][x])
                 FindAnother = true;
             else
-                for (i = x - halfSize ; !cancelRequested() && (i <= x + halfSize) ; i++)
-                    for (j = y - halfSize ; !cancelRequested() && (j <= y + halfSize) ; j++)
+                for (i = x - halfSize ; (i <= x + halfSize) and not(progressUpdater and progressUpdater->interrupted()); i++)
+                    for (j = y - halfSize ; (j <= y + halfSize) and not(progressUpdater and progressUpdater->interrupted()); j++)
                         if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
                             if (BoolMatrix[j][i])
                                 FindAnother = true;
 
             Counter++;
         }
-        while (!cancelRequested() && (FindAnother && (Counter < 10000)) );
+        while ((FindAnother && (Counter < 10000) and not(progressUpdater and progressUpdater->interrupted())) );
 
         if (Counter >= 10000)
         {
@@ -180,9 +186,9 @@ XXX_PORT
             break;
         }
 
-        for (i = -1 * halfSize ; !cancelRequested() && (i < NewSize - halfSize) ; i++)
+        for (i = -1 * halfSize ; (i < NewSize - halfSize) and not(progressUpdater and progressUpdater->interrupted()); i++)
         {
-            for (j = -1 * halfSize ; !cancelRequested() && (j < NewSize - halfSize) ; j++)
+            for (j = -1 * halfSize ; (j < NewSize - halfSize) and not(progressUpdater and progressUpdater->interrupted()); j++)
             {
                 r = sqrt (i * i + j * j);
                 a = atan2 (i, j);
@@ -272,7 +278,7 @@ XXX_PORT
 
                             QColor originalColor;
 
-                            KisHLineConstIterator oldIt = src->createHLineConstIterator(srcTopLeft.x() + l, srcTopLeft.y() + k, 1);
+                            KisHLineConstIterator oldIt = src->createHLineConstIterator(srcTopLeft.x() + l, srcTopLeft.y() + k, 1, srcInfo.selection() );
                             cs->toQColor(oldIt.oldRawData(), &originalColor);
 
                             int newRed = CLAMP(originalColor.red() + Bright, 0, quint8_MAX);
@@ -282,7 +288,7 @@ XXX_PORT
                             QColor newColor;
                             newColor.setRgb(newRed, newGreen, newBlue);
 
-                            KisHLineIterator dstIt = dst->createHLineIterator(dstTopLeft.x() + n, dstTopLeft.y() + m, 1);
+                            KisHLineIterator dstIt = dst->createHLineIterator(dstTopLeft.x() + n, dstTopLeft.y() + m, 1, dstInfo.selection());
                             cs->fromQColor(newColor, dstIt.rawData());
                         }
                     }
@@ -292,9 +298,9 @@ XXX_PORT
 
         BlurRadius = NewSize / 25 + 1;
 
-        for (i = -1 * halfSize - BlurRadius ; !cancelRequested() && (i < NewSize - halfSize + BlurRadius) ; i++)
+        for (i = -1 * halfSize - BlurRadius ; (i < NewSize - halfSize + BlurRadius) and not(progressUpdater and progressUpdater->interrupted()) ; i++)
         {
-            for (j = -1 * halfSize - BlurRadius ; !cancelRequested() && (j < NewSize - halfSize + BlurRadius) ; j++)
+            for (j = -1 * halfSize - BlurRadius ; (j < NewSize - halfSize + BlurRadius) and not(progressUpdater and progressUpdater->interrupted()); j++)
             {
                 r = sqrt (i * i + j * j);
 
@@ -337,13 +343,10 @@ XXX_PORT
             }
         }
 
-        setProgress(NumBlurs);
+        if(progressUpdater) progressUpdater->setValue( ++count );
     }
 
     FreeBoolArray (BoolMatrix, Width);
-
-    setProgressDone();
-#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -355,7 +358,7 @@ XXX_PORT
  *
  * Theory            => An easy to undestand 'for' statement
  */
-void KisRainDropsFilter::FreeBoolArray (bool** lpbArray, uint Columns)
+void KisRainDropsFilter::FreeBoolArray (bool** lpbArray, uint Columns) const
 {
     for (uint i = 0; i < Columns; ++i)
         free (lpbArray[i]);
@@ -371,7 +374,7 @@ void KisRainDropsFilter::FreeBoolArray (bool** lpbArray, uint Columns)
  * Theory            => Using 'for' statement, we can alloc multiple dinamic arrays
  *                      To create more dimentions, just add some 'for's, ok?
  */
-bool** KisRainDropsFilter::CreateBoolArray (uint Columns, uint Rows)
+bool** KisRainDropsFilter::CreateBoolArray (uint Columns, uint Rows) const
 {
     bool** lpbArray = NULL;
     lpbArray = (bool**) malloc (Columns * sizeof (bool*));
@@ -403,7 +406,7 @@ bool** KisRainDropsFilter::CreateBoolArray (uint Columns, uint Rows)
  *                      so, this function analize the value and limits to this range
  */
 
-uchar KisRainDropsFilter::LimitValues (int ColorValue)
+uchar KisRainDropsFilter::LimitValues (int ColorValue) const
 {
     if (ColorValue > 255)        // MAX = 255
         ColorValue = 255;
@@ -421,13 +424,11 @@ KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* p
     return new KisMultiIntegerFilterWidget(id().name(), parent, id().id(), param );
 }
 
-KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisRainDropsFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisRainDropsFilterConfiguration( 30, 80, 20);
-    } else {
-        return new KisRainDropsFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ) );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    config->setProperty("dropsize", 80 );
+    config->setProperty("number", 80 );
+    config->setProperty("fishEyes", 30 );
+    return config;
 }

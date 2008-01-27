@@ -24,20 +24,6 @@
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 
-class KisPixelizeFilterConfiguration : public KisFilterConfiguration
-{
-public:
-    KisPixelizeFilterConfiguration(quint32 pixelWidth, quint32 pixelHeight)
-        : KisFilterConfiguration( "pixelize", 1 )
-        {
-            setProperty("pixelWidth", pixelWidth);
-            setProperty("pixelHeight", pixelHeight);
-        }
-public:
-    inline quint32 pixelWidth() { return getInt("pixelWidth"); }
-    inline quint32 pixelHeight() {return getInt("pixelHeight"); }
-};
-
 class KisPixelizeFilter : public KisFilter
 {
 public:
@@ -54,17 +40,9 @@ public:
                  
     static inline KoID id() { return KoID("pixelize", i18n("Pixelize")); }
     
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-        {
-            std::list<KisFilterConfiguration*> list;
-            list.insert(list.begin(),
-            new KisPixelizeFilterConfiguration(10,10));
-            return list;
-        }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration();
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 #endif

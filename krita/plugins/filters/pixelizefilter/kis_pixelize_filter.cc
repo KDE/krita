@@ -33,18 +33,20 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include <KoProgressUpdater.h>
+
+#include <kis_debug.h>
 #include <kis_doc2.h>
+#include <kis_filter_registry.h>
+#include <kis_global.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_filter_registry.h>
-#include <kis_global.h>
+#include <kis_selection.h>
 #include <kis_types.h>
-#include <KoProgressUpdater.h>
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_pixelize_filter.h"
@@ -57,21 +59,17 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::CategoryArti
     setSupportsPreview( true );
 }
 
-void KisPixelizeFilter::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisPixelizeFilter::process(KisFilterConstProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
-                 const KisFilterConfiguration* config,
+                 const KisFilterConfiguration* configuration,
                  KoUpdater* progressUpdater
         ) const
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
-#if 0
-XXX_PORT
-// FIXME THIS FILTER DOESN'T WORK WELL IF SRC != DST !!!
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     Q_ASSERT( src );
     Q_ASSERT( dst );
     Q_ASSERT( configuration );
@@ -81,8 +79,10 @@ XXX_PORT
     qint32 height = size.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 pixelWidth = ((KisPixelizeFilterConfiguration*)configuration)->pixelWidth();
-    quint32 pixelHeight = ((KisPixelizeFilterConfiguration*)configuration)->pixelHeight();
+    quint32 pixelWidth = configuration->getInt( "pixelWidth", 10 );
+    quint32 pixelHeight = configuration->getInt( "pixelHeight", 10);
+    if( pixelWidth == 0) pixelWidth = 1;
+    if( pixelHeight == 0) pixelHeight = 1;
 
     qint32 pixelSize = src->pixelSize();
     Q3MemArray<qint32> average(  pixelSize );
@@ -102,8 +102,10 @@ XXX_PORT
         numY++;
     }
 
-    setProgressTotalSteps( numX * numY );
-    setProgressStage(i18n("Applying pixelize filter..."),0);
+    if( progressUpdater )
+    {
+        progressUpdater->setRange(0, size.width() * size.height() );
+    }
 
     qint32 numberOfPixelsProcessed = 0;
 
@@ -124,7 +126,7 @@ XXX_PORT
             count = 0;
 
             //read
-            KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h);
+            KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h, srcInfo.selection() );
             while( ! srcIt.isDone() ) {
                 if(srcIt.isSelected())
                 {
@@ -144,27 +146,22 @@ XXX_PORT
                     average[i] /= count;
             }
             //write
-            srcIt = src->createRectConstIterator(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h);
-            KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x() + x, dstTopLeft.y() + y, w, h );
-            while( ! srcIt.isDone() )
+            KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x() + x, dstTopLeft.y() + y, w, h, dstInfo.selection() );
+            while( ! dstIt.isDone() )
             {
-                if(srcIt.isSelected())
+                if(dstIt.isSelected())
                 {
                     for( int i = 0; i < pixelSize; i++)
                     {
                         dstIt.rawData()[i] = average[i];
                     }
                 }
-                ++srcIt;
                 ++dstIt;
             }
-            numberOfPixelsProcessed++;
-            setProgress(numberOfPixelsProcessed);
+            if(progressUpdater) progressUpdater->setValue( ++numberOfPixelsProcessed );
         }
     }
 
-    setProgressDone();
-#endif
 }
 
 KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/) const
@@ -175,18 +172,10 @@ KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* pa
     return new KisMultiIntegerFilterWidget( id().id(),  parent,  id().id(),  param );
 }
 
-KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisPixelizeFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisPixelizeFilterConfiguration( 10, 10);
-    } else {
-        return new KisPixelizeFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-    }
-}
-
-KisFilterConfiguration * KisPixelizeFilter::configuration()
-{
-    return new KisPixelizeFilterConfiguration(10, 10);
+    KisFilterConfiguration* config = new KisFilterConfiguration("pixelize", 1);
+    config->setProperty("pixelWidth", 10 );
+    config->setProperty("pixelHeight", 10 );
+    return config;
 }

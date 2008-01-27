@@ -25,18 +25,6 @@
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 
-class KisRoundCornersFilterConfiguration : public KisFilterConfiguration
-{
-public:
-    KisRoundCornersFilterConfiguration(qint32 radius)
-        : KisFilterConfiguration( "roundcorners", 1 )
-    {
-        setProperty("radius", radius);
-    }
-public:
-    inline qint32 radius() { return getInt("radius"); }
-};
-
 class KisRoundCornersFilter : public KisFilter
 {
 public:
@@ -51,13 +39,9 @@ public:
                  KoUpdater* progressUpdater
         ) const;
     static inline KoID id() { return KoID("roundcorners", i18n("Round Corners")); }
-    
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-        { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRoundCornersFilterConfiguration(30)); return list; }
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return new KisRoundCornersFilterConfiguration( 30 ); }
 private:
 };
 

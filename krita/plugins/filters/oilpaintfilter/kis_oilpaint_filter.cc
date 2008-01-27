@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  * ported from digikam, Copyright 2004 by Gilles Caulier,
  * Original Oilpaint algorithm copyrighted 2004 by
@@ -55,24 +56,20 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter( id(), KisFilter::CategoryArt
     
 }
 
-void KisOilPaintFilter::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisOilPaintFilter::process(KisFilterConstProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
-#if 0
-XXX_PORT
-    if (!configuration) {
-        kWarning() << "No configuration object for oilpaint filter\n";
-        return;
-    }
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(!src.isNull());
+    Q_ASSERT(!dst.isNull());
+#if 1
 
     Q_UNUSED(dst);
 
@@ -80,8 +77,8 @@ XXX_PORT
     qint32 height = size.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
-    quint32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
+    quint32 brushSize = config->getInt("brushSize", 1);
+    quint32 smooth = config->getInt("smooth", 30);
 
 
     OilPaint(src, dst, srcTopLeft, dstTopLeft, width, height, brushSize, smooth);
@@ -102,7 +99,7 @@ XXX_PORT
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness)
+void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness) const
 {
 //     setProgressTotalSteps(h);
 //     setProgressStage(i18n("Applying oilpaint filter..."),0);
@@ -119,8 +116,9 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
 
             if (it.isSelected()) {
 
-                uint color = MostFrequentColor(src, bounds, it.x(), it.y(), BrushSize, Smoothness);
-                dst->colorSpace()->fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), dstIt.rawData());
+//                 uint color = 
+                MostFrequentColor(src, dstIt.rawData(), bounds, it.x(), it.y(), BrushSize, Smoothness);
+//                 dst->colorSpace()->fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), dstIt.rawData());
             }
 
             ++it;
@@ -150,95 +148,94 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
  *                     the center of this matrix and find the most frequenty color
  */
 
-uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bounds, int X, int Y, int Radius, int Intensity)
+void KisOilPaintFilter::MostFrequentColor (const KisPaintDeviceSP src, quint8* dst, const QRect& bounds, int X, int Y, int Radius, int Intensity) const
 {
-        uint color;
+    uint color;
     uint I;
 
-        double Scale = Intensity / 255.0;
+    double Scale = Intensity / 255.0;
 
-        // Alloc some arrays to be used
-        uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
-        uint  *AverageColorR  = new uint[(Intensity + 1)  * sizeof (uint)];
-        uint  *AverageColorG  = new uint[(Intensity + 1)  * sizeof (uint)];
-        uint  *AverageColorB  = new uint[(Intensity + 1)  * sizeof (uint)];
+    // Alloc some arrays to be used
+    uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
+    
+    const KoColorSpace* cs = src->colorSpace();
+    
+    
+    QVector<float> channel(cs->channelCount());
+    QVector<float>* AverageChannels = new QVector<float>[(Intensity + 1)];
+    
+    // Erase the array
+    memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
 
-        // Erase the array
-        memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
-
-        /*for (i = 0; i <= Intensity; ++i)
-      IntensityCount[i] = 0;*/
-
-    KisRectConstIteratorPixel it = src->createRectConstIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1);
+    int startx = qMax( X - Radius, bounds.left() );
+    int starty = qMax( Y - Radius, bounds.top()  );
+    int width = (2 * Radius) + 1;
+    if( ( startx + width - 1 ) > bounds.right() ) width = bounds.right() - startx + 1;
+    Q_ASSERT( ( startx + width - 1 ) <= bounds.right() );
+    int height = (2 * Radius) + 1;
+    if( ( starty + height ) > bounds.bottom() ) height = bounds.bottom() - starty + 1;
+    Q_ASSERT( ( starty + height - 1 ) <= bounds.bottom() );
+    KisRectConstIteratorPixel it = src->createRectConstIterator(startx, starty, width, height);
 
     while (!it.isDone()) {
 
-        if (bounds.contains(it.x(), it.y())) {
+        cs->normalisedChannelsValue(it.rawData(), channel);
 
-// XXX: COLORSPACE_INDEPENDENCE
+        // Swapping red and blue here is done because that gives the same
+        // output as digikam, even though it might be interpreted as a bug
+        // in both applications.
+        cs->normalisedChannelsValue( it.rawData(), channel);
 
-            QColor c;
-            src->colorSpace()->toQColor(it.rawData(), &c);
+        I = (uint)(cs->intensity8( it.rawData() ) * Scale);
+        IntensityCount[I]++;
 
-            // Swapping red and blue here is done because that gives the same
-            // output as digikam, even though it might be interpreted as a bug
-            // in both applications.
-            int b = c.red();
-            int g = c.green();
-            int r = c.blue();
-
-            I = (uint)(GetIntensity (r, g, b) * Scale);
-            IntensityCount[I]++;
-
-            if (IntensityCount[I] == 1)
+        if (IntensityCount[I] == 1)
+        {
+            AverageChannels[I] = channel;
+        }
+        else
+        {
+            for(int i = 0; i < channel.size(); i++)
             {
-                AverageColorR[I] = r;
-                AverageColorG[I] = g;
-                AverageColorB[I] = b;
-            }
-            else
-            {
-                AverageColorR[I] += r;
-                AverageColorG[I] += g;
-                AverageColorB[I] += b;
+                AverageChannels[I][i] += channel[i];
             }
         }
 
         ++it;
     }
 
-        I = 0;
-        int MaxInstance = 0;
+    I = 0;
+    int MaxInstance = 0;
 
-        for (int i = 0 ; i <= Intensity ; ++i)
-        {
+    for (int i = 0 ; i <= Intensity ; ++i)
+    {
         if (IntensityCount[i] > MaxInstance)
-                {
+        {
             I = i;
             MaxInstance = IntensityCount[i];
-                }
         }
+    }
 
-        int R, G, B;
-        if (MaxInstance != 0) {
-            R = AverageColorR[I] / MaxInstance;
-            G = AverageColorG[I] / MaxInstance;
-            B = AverageColorB[I] / MaxInstance;
-        } else {
-            R = 0;
-            G = 0;
-            B = 0;
+    if (MaxInstance != 0) {
+        channel = AverageChannels[I];
+        for(int i = 0; i < channel.size(); i++)
+        {
+            channel[i] /= MaxInstance;
         }
+        cs->fromNormalisedChannelsValue( dst, channel );
+    } else {
+        memset(dst, 0, cs->pixelSize() );
+        cs->setAlpha( dst, 255, 1);
+    }
 
     // Swap red and blue back to get the correct color.
-        color = qRgb (B, G, R);
+//     color = qRgb (B, G, R);
 
-        delete [] IntensityCount;        // free all the arrays
-        delete [] AverageColorR;
-        delete [] AverageColorG;
-        delete [] AverageColorB;
-
-        return (color);                    // return the most frequenty color
+    delete [] IntensityCount;        // free all the arrays
+    delete [] AverageChannels;
+/*    delete [] AverageColorR;
+    delete [] AverageColorG;
+    delete [] AverageColorB;*/
 }
 
 
@@ -250,21 +247,10 @@ KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* pa
     return new KisMultiIntegerFilterWidget( id().id(),  parent,  id().id(),  param );
 }
 
-KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisOilPaintFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisOilPaintFilterConfiguration( 1, 30);
-    } else {
-        return new KisOilPaintFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    config->setProperty("brushSize", 1 );
+    config->setProperty("smooth", 30 );
+    return config;
 }
-
-std::list<KisFilterConfiguration*> KisOilPaintFilter::listOfExamplesConfiguration(KisPaintDeviceSP )
-{
-    std::list<KisFilterConfiguration*> list;
-    list.insert(list.begin(), new KisOilPaintFilterConfiguration( 1, 30));
-    return list;
-}
-

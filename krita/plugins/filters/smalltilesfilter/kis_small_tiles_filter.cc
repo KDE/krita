@@ -30,21 +30,19 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kis_debug.h>
 #include <kgenericfactory.h>
-#include <knuminput.h>
+
+#include <KoProgressUpdater.h>
 
 #include <kis_painter.h>
 #include <kis_doc2.h>
+#include <kis_debug.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <KoProgressUpdater.h>
 #include <kis_paint_device.h>
 #include <kis_filter_strategy.h>
 #include <kis_painter.h>
@@ -54,22 +52,6 @@
 #include "kis_small_tiles_filter.h"
 
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
-
-void KisSmallTilesFilterConfiguration::fromXML(const QString & s)
-{
-    KisFilterConfiguration::fromXML(s);
-    m_numberOfTiles = getInt("numberOfTiles");
-}
-
-QString KisSmallTilesFilterConfiguration::toString()
-{
-    clearProperties();
-    setProperty("numberOfTiles()", m_numberOfTiles);
-
-    return KisFilterConfiguration::toLegacyXML();
-}
-
 KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Small Tiles..."))
 {
     setSupportsPainting( true );
@@ -77,31 +59,22 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::Category
     setSupportsIncrementalPainting( false );
 }
 
-void KisSmallTilesFilter::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisSmallTilesFilter::process(KisFilterConstProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
-#if 0
-XXX_PORT
-        //read the filter configuration values from the KisFilterConfiguration object
-        quint32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();
-
-/*        createSmallTiles(src, dst, rect, numberOfTiles);
-#endif
-}
-
-void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, quint32 numberOfTiles)
-{*/
-    if (!src) return;
-    if (!dst) return;
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(!src.isNull());
+    Q_ASSERT(!dst.isNull());
+    
+    //read the filter configuration values from the KisFilterConfiguration object
+    quint32 numberOfTiles = config->getInt( "numberOfTiles", 2);
 
     QRect srcRect = src->exactBounds();
 
@@ -109,8 +82,8 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     int h = static_cast<int>(srcRect.height() / numberOfTiles);
 
     KisPaintDeviceSP tile = KisPaintDeviceSP(0);
-    if (src->hasSelection()) {
-        KisPaintDeviceSP tmp = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "selected bit"));
+    if (srcInfo.selection()) {
+        KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace(), "selected bit");
         KisPainter gc(tmp);
         gc.bltSelection(0, 0, COMPOSITE_COPY, src, OPACITY_OPAQUE, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         tile = tmp->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
@@ -120,33 +93,34 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     }
     if (tile.isNull()) return;
 
-    KisPaintDeviceSP scratch = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace()));
+    // XXX: does anyone knows why we need a temporary device ?
+    KisPaintDeviceSP scratch = new KisPaintDevice(src->colorSpace());
 
     KisPainter gc(scratch);
 
-    setProgressTotalSteps(numberOfTiles);
+    if( progressUpdater )
+    {
+        progressUpdater->setRange(0, numberOfTiles );
+    }
 
     for (uint y = 0; y < numberOfTiles; ++y) {
         for (uint x = 0; x < numberOfTiles; ++x) {
             // XXX make composite op and opacity configurable
             gc.bitBlt( w * x, h * y, COMPOSITE_COPY, tile, 0, 0, w, h);
-            setProgress(y);
+            if(progressUpdater) progressUpdater->setValue( y );
         }
     }
     gc.end();
 
     gc.begin(dst);
-    if (src->hasSelection()) {
-        gc.bltSelection(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_OVER, scratch, src->selection(), OPACITY_OPAQUE, 0, 0, size.width(), size.height() );
+    if (srcInfo.selection()) {
+        gc.bltSelection(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_OVER, scratch, srcInfo.selection(), OPACITY_OPAQUE, 0, 0, size.width(), size.height() );
     }
     else {
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_OVER, scratch, OPACITY_OPAQUE, 0, 0, size.width(), size.height() );
     }
-    setProgressDone();
     gc.end();
 
-    setProgressDone();
-#endif
 }
 
 KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/) const
@@ -157,13 +131,9 @@ KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* 
 
 }
 
-KisFilterConfiguration* KisSmallTilesFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisSmallTilesFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-    if( widget == 0 )
-    {
-        return new KisSmallTilesFilterConfiguration( 2 );
-    } else {
-        return new KisSmallTilesFilterConfiguration( widget->valueAt( 0 ) );
-    }
+    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    config->setProperty("smalltiles", 2 );
+    return config;
 }

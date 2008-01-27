@@ -24,31 +24,12 @@
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 
-class KisOilPaintFilterConfiguration : public KisFilterConfiguration
-{
-
-public:
-
-    KisOilPaintFilterConfiguration(quint32 brushSize, quint32 smooth)
-        : KisFilterConfiguration( "oilpaint", 1 )
-        {
-            setProperty("brushSize", brushSize);
-            setProperty("smooth", smooth);
-        }
-public:
-
-    inline quint32 brushSize() { return getInt("brushSize"); }
-    inline quint32 smooth() {return getInt("smooth"); }
-
-};
-
-
 class KisOilPaintFilter : public KisFilter
 {
 public:
     KisOilPaintFilter();
 public:
-    using KisFilter::process;
+//     using KisFilter::process;
     
     void process(KisFilterConstProcessingInformation src,
                  KisFilterProcessingInformation dst,
@@ -58,18 +39,13 @@ public:
         ) const;
     static inline KoID id() { return KoID("oilpaint", i18n("Oilpaint")); }
     
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
-    public:
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return new KisOilPaintFilterConfiguration( 1, 30); }
 
 private:
-    void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness);
-    uint MostFrequentColor(KisPaintDeviceSP, const QRect& bounds, int X, int Y, int Radius, int Intensity);
-    // Function to calcule the color intensity and return the luminance (Y)
-    // component of YIQ color model.
-    inline uint GetIntensity(uint Red, uint Green, uint Blue) { return ((uint)(Red * 0.3 + Green * 0.59 + Blue * 0.11)); }
+    void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness) const;
+    void MostFrequentColor(const KisPaintDeviceSP src, quint8* dst, const QRect& bounds, int X, int Y, int Radius, int Intensity) const;
 };
 
 #endif

@@ -21,10 +21,13 @@
 
 #include <cmath>
 
+#include <KoProgressUpdater.h>
+
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_math_toolbox.h>
 #include <kis_multi_double_filter_widget.h>
+#include <kis_multi_integer_filter_widget.h>
 #include <kis_paint_device.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
@@ -55,20 +58,20 @@ KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const Kis
     return config;
 }
 
-void KisWaveletNoiseReduction::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
-                 const QSize& size,
+void KisWaveletNoiseReduction::process(KisFilterConstProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
+                 const QSize& areaSize,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
-#if 0
-XXX_PORT
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(!src.isNull());
+    Q_ASSERT(!dst.isNull());
+    // TODO take selections into account
     float threshold;
 
     if(!config)
@@ -86,16 +89,22 @@ XXX_PORT
 
     KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->get( src->colorSpace()->mathToolboxId().id() );
     QRect srcRect(srcTopLeft, areaSize);
-    setProgressTotalSteps(mathToolbox->fastWaveletTotalSteps(srcRect) * 2 + size*size*depth );
-    connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
+    
+    if( progressUpdater )
+    {
+        progressUpdater->setRange(0, mathToolbox->fastWaveletTotalSteps(srcRect) * 2 + size*size*depth );
+    }
+    int count = 0;
+//     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 
 
 //     dbgFilters << size <<"" << maxrectsize <<"" << srcTopLeft.x() <<"" << srcTopLeft.y();
 
 //     dbgFilters <<"Transforming...";
-    setProgressStage( i18n("Fast wavelet transformation") ,progress());
+//     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = 0;
     KisMathToolbox::KisWavelet* wav = 0;
+    
     try {
         buff = mathToolbox->initWavelet(src, srcRect);
     } catch(std::bad_alloc)
@@ -113,7 +122,7 @@ XXX_PORT
 
 //     dbgFilters <<"Thresholding...";
     float* fin = wav->coeffs + wav->depth*wav->size*wav->size;
-    setProgressStage( i18n("Thresholding") ,progress());
+    
     for(float* it = wav->coeffs + wav->depth; it < fin; it++)
     {
         if( *it > threshold)
@@ -124,18 +133,14 @@ XXX_PORT
         } else {
             *it = 0.;
         }
-        incProgress();
+        if(progressUpdater) progressUpdater->setValue( ++count );
     }
 
 //     dbgFilters <<"Untransforming...";
 
-    setProgressStage( i18n("Fast wavelet untransformation") ,progress());
     mathToolbox->fastWaveletUntransformation( dst, QRect(dstTopLeft, areaSize ), wav, buff);
 
     delete wav;
     delete buff;
-    disconnect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
-
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
+//     disconnect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 }

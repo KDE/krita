@@ -263,13 +263,10 @@ void KisPerChannelFilter::process(KisFilterConstProcessingInformation srcInfo,
                 while(iter.selectedness()==MIN_SELECTED && maxpix)
                 {
                     --maxpix;
-                    if (maxpix != 0)
-                        ++iter;
-
+                    ++iter;
                     ++npix;
                 }
                 pixelsProcessed += npix;
-                ++iter;
                 break;
 
             case MAX_SELECTED:
@@ -278,12 +275,14 @@ void KisPerChannelFilter::process(KisFilterConstProcessingInformation srcInfo,
                 while(iter.selectedness()==MAX_SELECTED && maxpix)
                 {
                     --maxpix;
-                    ++iter;
+                    if (maxpix != 0)
+                        ++iter;
                     ++npix;
                 }
                 // adjust
                 adj->transform(firstPixel, firstPixel, npix);
                 pixelsProcessed += npix;
+                ++iter;
                 break;
             }
 

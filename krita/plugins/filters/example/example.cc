@@ -87,8 +87,10 @@ void KisFilterInvert::process(KisFilterConstProcessingInformation srcInfo,
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 
-    int cost = (size.width() * size.height()) / 100;
-    if( cost == 0 ) cost = 1;
+    if( progressUpdater )
+    {
+        progressUpdater->setRange(0, size.width() * size.height() );
+    }
     int count = 0;
 
     const KoColorSpace * cs = src->colorSpace();
@@ -106,15 +108,14 @@ void KisFilterInvert::process(KisFilterConstProcessingInformation srcInfo,
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
-    for ( int row = 0; row < size.height(); ++row ) {
-        while ( !srcIt.isDone() ) {
+    for ( int row = 0; row < size.height() and not(progressUpdater and progressUpdater->interrupted()); ++row ) {
+        while ( !srcIt.isDone() and not(progressUpdater and progressUpdater->interrupted()) ) {
             if ( srcIt.isSelected() ) {
                 inverter->transform( srcIt.oldRawData(), dstIt.rawData(), 1);
             }
             ++srcIt;
             ++dstIt;
-            if(progressUpdater) progressUpdater->setProgress( (++count) / cost);
-
+            if(progressUpdater) progressUpdater->setValue( ++count );
         }
         srcIt.nextRow();
         dstIt.nextRow();

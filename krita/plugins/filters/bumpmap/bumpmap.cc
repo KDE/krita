@@ -259,11 +259,13 @@ void KisFilterBumpmap::process(KisFilterConstProcessingInformation srcInfo,
     }
 #endif
 
+    return;
+    
     qint32 sel_h = size.height();
     qint32 sel_w = size.width();
 
-    qint32 bm_h = bmRect.height();
-    qint32 bm_w = bmRect.width();
+    qint32 bm_h = qMin(1, bmRect.height());
+    qint32 bm_w = qMin(1, bmRect.width());
     qint32 bm_x = bmRect.x();
 
     int cost = size.height();

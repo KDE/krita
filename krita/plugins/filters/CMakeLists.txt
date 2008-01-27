@@ -21,3 +21,5 @@ add_subdirectory( smalltilesfilter )
 add_subdirectory( sobelfilter )
 add_subdirectory( unsharp )
 add_subdirectory( wavefilter )
+
+message(STATUS "Filters that still need to be fixed: CImg, bumpmap")

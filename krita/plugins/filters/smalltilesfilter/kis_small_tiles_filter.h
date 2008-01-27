@@ -25,25 +25,6 @@
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 
-class KisSmallTilesFilterConfiguration : public KisFilterConfiguration
-{
-public:
-    KisSmallTilesFilterConfiguration(quint32 numberOfTiles)
-        : KisFilterConfiguration( "smalltiles", 1 )
-        , m_numberOfTiles(numberOfTiles) {}
-
-    using KisFilterConfiguration::fromXML;
-    
-    virtual void fromXML( const QString&  );
-    virtual QString toString();
-
-public:
-    inline quint32 numberOfTiles() { return m_numberOfTiles; }
-
-private:
-    quint32 m_numberOfTiles;
-};
-
 class KisSmallTilesFilter : public KisFilter
 {
 
@@ -61,20 +42,11 @@ public:
         ) const;
     static inline KoID id() { return KoID("smalltiles", i18n("Small Tiles")); }
     
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-        {
-          std::list<KisFilterConfiguration*> list;
-          list.insert(list.begin(), new KisSmallTilesFilterConfiguration(2));
-          return list;
-        }
+    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() { return new KisSmallTilesFilterConfiguration( 2 ); }
 
-private:
-    void createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, quint32 numberOfTiles);
 };
 
 #endif

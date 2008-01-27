@@ -19,6 +19,7 @@
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+#include <KoProgressUpdater.h>
 
 #include <kis_iterators_pixel.h>
 #include <kis_autobrush_resource.h>
@@ -62,37 +63,40 @@ inline int ABS(int v)
     return v;
 }
 
-void KisSimpleNoiseReducer::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisSimpleNoiseReducer::process(KisFilterConstProcessingInformation srcInfo,
+                 KisFilterProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const
 {
-    Q_UNUSED(src);
-    Q_UNUSED(dst);
-    Q_UNUSED(size);
-    Q_UNUSED(config);
-    Q_UNUSED(progressUpdater);
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
+    Q_ASSERT(!src.isNull());
+    Q_ASSERT(!dst.isNull());
     
-#if 0
-XXX_PORT
     int threshold, windowsize;
     if(config ==0)
     {
         config = defaultConfiguration(src);
     }
+    if( progressUpdater )
+    {
+        progressUpdater->setRange(0, size.width() * size.height() );
+    }
+    int count = 0;
 
     threshold = config->getInt("threshold", 50);
     windowsize = config->getInt("windowsize", 1);
 
-    KoColorSpace* cs = src->colorSpace();
+    const KoColorSpace* cs = src->colorSpace();
 
     // Compute the blur mask
     KisAutobrushShape* kas = new KisAutobrushCircleShape(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
 
     QImage mask = kas->createBrush();
-//    mask.save("testmask.png", "PNG");
 
     KisKernelSP kernel = KisKernel::fromQImage(mask);
 
@@ -101,28 +105,30 @@ XXX_PORT
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
-    if (painter.cancelRequested()) {
-        progressUpdater->cancel();
+    if (progressUpdater and progressUpdater->interrupted()) {
+        return;
     }
 
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width() );
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection() );
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection() );
     KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
 
-    for( int j = 0; j < size.height(); j++)
+    for( int j = 0; j < size.height() and not(progressUpdater and progressUpdater->interrupted()); j++)
     {
-        while( ! srcIt.isDone() )
+        while( not srcIt.isDone() and not(progressUpdater and progressUpdater->interrupted()) )
         {
             if(srcIt.isSelected())
             {
                 quint8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
                 if( diff > threshold)
                 {
-                    cs->bitBlt( dstIt.rawData(), 0, cs, intermIt.rawData(), 0, 0, 0, 255, 1, 1, cs->compositeOp(COMPOSITE_COPY) );
+                    memcpy(dstIt.rawData(), intermIt.rawData(), cs->pixelSize());
+                } else {
+                    memcpy(dstIt.rawData(), srcIt.oldRawData(), cs->pixelSize());
                 }
             }
-            incProgress();
+            if(progressUpdater) progressUpdater->setValue( ++count );
             ++srcIt;
             ++dstIt;
             ++intermIt;
@@ -132,7 +138,5 @@ XXX_PORT
         intermIt.nextRow();
     }
 
-    setProgressDone(); // Must be called even if you don't really support progression
-#endif
 }
 

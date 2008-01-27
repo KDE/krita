@@ -270,7 +270,7 @@ void KoColor::setOpacity(quint8 alpha )
 }
 quint8 KoColor::opacity() const
 {
-    d->colorSpace->alpha( d->data );
+    return d->colorSpace->alpha( d->data );
 }
 
 KoColor KoColor::fromXML(const QDomElement& elt, QString bitDepthId, QHash<QString, QString> aliases)

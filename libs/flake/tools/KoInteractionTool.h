@@ -23,7 +23,7 @@
 #define KOINTERACTIONTOOL_H
 
 #include "KoTool.h"
-#include "flake_export.h"
+#include <flake_export.h>
 
 class KoInteractionStrategy;
 class KoShape;

@@ -22,7 +22,7 @@
 #define KOPATHPOINTMOVESTRATEGY_H
 
 #include <QPointF>
-#include <KoInteractionStrategy.h>
+#include "KoInteractionStrategy.h"
 
 
 class KoPathTool;

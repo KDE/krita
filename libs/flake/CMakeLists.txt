@@ -13,8 +13,6 @@ set(flake_SRCS
     KoCanvasBase.cpp
     KoCanvasObserver.cpp
     KoCanvasResourceProvider.cpp
-    KoInteractionStrategy.cpp
-    KoInteractionTool.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoSelection.cpp
@@ -24,30 +22,16 @@ set(flake_SRCS
     KoShapeConnection.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
-    KoShapeRubberSelectStrategy.cpp
     KoTool.cpp
     KoCanvasController.cpp
     KoCanvasController_p.cpp
-    KoCreateShapeStrategy.cpp
-    KoCreateShapesTool.cpp
     KoShapeRegistry.cpp
     KoToolFactory.cpp
-    KoCreateShapesToolFactory.cpp
     KoPathShapeFactory.cpp
     KoShapeFactory.cpp
     KoShapeUserData.cpp
-    KoCreatePathTool.cpp
-    KoCreatePathToolFactory.cpp
-    KoPathToolFactory.cpp
-    PathToolOptionWidget.cpp
-    KoPathTool.cpp
-    KoPathPointRubberSelectStrategy.cpp
-    KoPathPointMoveStrategy.cpp
-    KoPathConnectionPointStrategy.cpp
-    KoPathControlPointMoveStrategy.cpp
     KoPointGroup.cpp
     KoParameterShape.cpp
-    KoParameterChangeStrategy.cpp
     KoPointerEvent.cpp
     KoShapeController.cpp
     KoToolSelection.cpp
@@ -60,11 +44,6 @@ set(flake_SRCS
     KoToolProxy.cpp
     KoShapeSavingContext.cpp
     KoShapeLoadingContext.cpp
-    KoPanTool.cpp
-    KoPanToolFactory.cpp
-    KoZoomTool.cpp
-    KoZoomToolFactory.cpp
-    KoZoomStrategy.cpp
     KoSvgPathParser.cpp
     KoPathShapeLoader.cpp
     ShapeDeleter_p.cpp
@@ -115,10 +94,31 @@ set(flake_SRCS
     commands/KoPathFillRuleCommand.cpp
     commands/KoConnectionShapeTypeCommand.cpp
     commands/KoPathReverseCommand.cpp
+    tools/KoCreatePathTool.cpp
+    tools/KoCreatePathToolFactory.cpp
+    tools/KoCreateShapeStrategy.cpp
+    tools/KoPathToolFactory.cpp
+    tools/KoPathTool.cpp
+    tools/PathToolOptionWidget.cpp
+    tools/KoPathPointRubberSelectStrategy.cpp
+    tools/KoPathPointMoveStrategy.cpp
+    tools/KoPathConnectionPointStrategy.cpp
+    tools/KoPathControlPointMoveStrategy.cpp
+    tools/KoParameterChangeStrategy.cpp
+    tools/KoZoomTool.cpp
+    tools/KoZoomToolFactory.cpp
+    tools/KoZoomStrategy.cpp
+    tools/KoPanTool.cpp
+    tools/KoPanToolFactory.cpp
+    tools/KoInteractionTool.cpp
+    tools/KoInteractionStrategy.cpp
+    tools/KoCreateShapesTool.cpp
+    tools/KoCreateShapesToolFactory.cpp
+    tools/KoShapeRubberSelectStrategy.cpp
 )
 
 kde4_add_ui_files(flake_SRCS
-    PathToolOptionWidgetBase.ui
+    tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
 )
 

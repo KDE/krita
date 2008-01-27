@@ -21,7 +21,7 @@
 #define KOPATHPARAMETERCHANGESTRATEGY_H
 
 #include <QPointF>
-#include <KoInteractionStrategy.h>
+#include "KoInteractionStrategy.h"
 
 class KoParameterShape;
 

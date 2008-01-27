@@ -92,7 +92,7 @@ set(KOMAIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/libs/main/
 # pigment depends on komain and lcms
 set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/pigment ${CMAKE_SOURCE_DIR}/libs/pigment/colorspaces ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles ${LCMS_INCLUDE_DIR} )
 # flake depends on komain
-set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake ${CMAKE_SOURCE_DIR}/libs/flake/commands ${CMAKE_BINARY_DIR}/libs/flake)
+set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake ${CMAKE_SOURCE_DIR}/libs/flake/commands ${CMAKE_SOURCE_DIR}/libs/flake/tools ${CMAKE_BINARY_DIR}/libs/flake)
 # koresources depends on pigment
 set(KORESOURCES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/resources ${CMAKE_BINARY_DIR}/libs/resources ${PIGMENT_INCLUDES})
 # koguiutils depends on komain, flake and pigment

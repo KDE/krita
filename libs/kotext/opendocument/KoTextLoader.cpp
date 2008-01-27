@@ -39,9 +39,10 @@
 #include <KoImageData.h>
 #include <KoTextAnchor.h>
 #include <KoTextDocumentLayout.h>
+#include <KoVariable.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoInlineObjectRegistry.h>
+#include <KoVariableRegistry.h>
 #include <KoProperties.h>
 
 #include "styles/KoStyleManager.h"
@@ -1344,6 +1345,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
         {
             loadFrame( ts, cursor );
         }
+#if 0
         else if ( isTextNS && ( localName == "date" || localName == "time" ) ) {
             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
             if ( layout ) {
@@ -1435,8 +1437,23 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             }
 #endif
         }
+#endif
         else
         {
+            KoVariable * var = KoVariableRegistry::instance()->createFromOdf( ts, d->context );
+
+            if ( var ) {
+                KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
+                if ( layout ) {
+                    KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                    if ( textObjectManager ) {
+                        KoVariableManager *varManager = textObjectManager->variableManager();
+                        if ( varManager ) {
+                            textObjectManager->insertInlineObject( cursor, var );
+                        }
+                    }
+                }
+            }
 #if 0 //1.6:
             bool handled = false;
             // Check if it's a variable

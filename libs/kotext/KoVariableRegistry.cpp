@@ -46,6 +46,7 @@ public:
 KoVariableRegistry::KoVariableRegistry()
 :d( new Private() )
 {
+    init();
 }
 
 KoVariableRegistry::~KoVariableRegistry()
@@ -56,24 +57,25 @@ KoVariableRegistry::~KoVariableRegistry()
 void KoVariableRegistry::init()
 {
     KoPluginLoader::PluginsConfig config;
-    config.whiteList = "TextInlinePlugins";
-    config.blacklist = "TextInlinePluginsDisabled";
+    config.whiteList = "TextVariablePlugins";
+    config.blacklist = "TextVariablePluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-InlineObject"),
+    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/TextVariable"),
                                       QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 
-    foreach ( KoVariableFactory * factory, values() ) {
+    QList<KoVariableFactory*> factories = values();
+    kDebug(32500) << "factories count" << factories.size();
+    foreach ( KoVariableFactory * factory, factories ) {
+        kDebug(32500) << factory->id();
         QString nameSpace = factory->odfNameSpace();
-        if ( nameSpace.isEmpty() || factory->odfElementNames().isEmpty() )
-        {
-            kDebug(32500) <<"Shape factory" << factory->id() <<" does not have odfNameSpace defined, ignoring";
+        if ( nameSpace.isEmpty() || factory->odfElementNames().isEmpty() ) {
+            kDebug(32500) <<"Variable factory" << factory->id() <<" does not have odfNameSpace defined, ignoring";
         }
         else {
             foreach( QString elementName, factory->odfElementNames() ) {
-
                 d->factories.insert( QPair<QString, QString>( nameSpace, elementName ), factory );
 
-                kDebug(32500) <<"Inserting factory" << factory->id() <<" for"
+                kDebug(32500) <<"Inserting variable factory" << factory->id() <<" for"
                               << nameSpace << ":" << elementName;
             }
         }

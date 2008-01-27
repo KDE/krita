@@ -66,7 +66,7 @@ KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double nini
 KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QString filterid, QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam)
     : KisFilterConfigWidget( parent ), m_filterid(filterid)
 {
-    qint32 m_nbdoubleWidgets = dwparam.size();
+    m_nbdoubleWidgets = dwparam.size();
 
     this->setWindowTitle(caption);
 
@@ -96,13 +96,15 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QString filterid, QWidget
 
 void KisMultiDoubleFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
-
     if ( !config ) return;
 
     for (int i = 0; i < m_nbdoubleWidgets ; ++i) {
-        double val = config->getDouble(m_doubleWidgets[i]->objectName());
-        m_doubleWidgets[i]->setValue(val);
-        m_doubleWidgets[i]->cancelDelayedSignal();
+        KisDelayedActionDoubleInput *  w = m_doubleWidgets[i];
+        if (w) {
+            double val = config->getDouble(m_doubleWidgets[i]->objectName());
+            m_doubleWidgets[i]->setValue(val);
+            m_doubleWidgets[i]->cancelDelayedSignal();
+        }
     }
 }
 

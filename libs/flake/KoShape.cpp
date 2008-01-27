@@ -517,6 +517,8 @@ QList<QPointF> KoShape::connectionPoints() const {
 
 void KoShape::setBackground ( const QBrush & brush ) {
     d->backgroundBrush = brush;
+    d->shapeChanged(BackgroundChanged);
+    notifyChanged();
 }
 
 QBrush KoShape::background() const {
@@ -611,6 +613,8 @@ void KoShape::setBorder(KoShapeBorderModel *border) {
     d->border = border;
     if(d->border)
         d->border->addUser();
+    d->shapeChanged(BorderChanged);
+    notifyChanged();
 }
 
 const QMatrix& KoShape::matrix() const {

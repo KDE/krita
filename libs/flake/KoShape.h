@@ -108,7 +108,9 @@ public:
         GenericMatrixChange,    ///< used after the matrix was changed without knowing which property explicitly changed
         ParentChanged,   ///< used after a setParent()
         CollisionDetected, ///< used when another shape moved in our boundingrect
-        Deleted ///< the shape was deleted
+        Deleted, ///< the shape was deleted
+        BorderChanged, ///< the shapes border has changed
+        BackgroundChanged ///< the shapes background has changed
     };
 
     /**

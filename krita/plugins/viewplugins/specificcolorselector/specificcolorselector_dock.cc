@@ -26,7 +26,7 @@
 
 #include "kis_specific_color_selector_widget.h"
 
-SpecificColorSelectorDock::SpecificColorSelectorDock( KisView2 *view ) : QDockWidget(i18n("Specific color selector")), m_view(view)
+SpecificColorSelectorDock::SpecificColorSelectorDock( KisView2 *view ) : QDockWidget(i18n("Specific Color Selector")), m_view(view)
 {
     m_colorSelector = new KisSpecificColorSelectorWidget(this);
     setWidget( m_colorSelector );

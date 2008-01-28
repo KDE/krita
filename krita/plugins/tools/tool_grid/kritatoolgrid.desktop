@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Grid
 Name[ca]=Graella
 Name[el]=Κάνναβος
+Name[it]=Reticolo
 Name[sv]=Rutnät
 Name[zh_TW]=格線
 ServiceTypes=Krita/Tool

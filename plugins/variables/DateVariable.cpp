@@ -97,6 +97,7 @@ bool DateVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     //dateProperties.setProperty("adjust", element.attributeNS(KoXmlNS::text, localName + "-adjust"));
     const QString adjust( element.attributeNS( KoXmlNS::text, localName + "-adjust", "" ) );
     adjustTime( adjust );
+    update();
 }
 
 void DateVariable::setProperties(const KoProperties *props)

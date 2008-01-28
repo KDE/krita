@@ -32,7 +32,12 @@
 class KoVariableRegistry::Singleton
 {
 public:
+    Singleton()
+    : initDone( false )
+    {}
+
     KoVariableRegistry q;
+    bool initDone;
 };
 
 K_GLOBAL_STATIC( KoVariableRegistry::Singleton, singleton )
@@ -46,7 +51,6 @@ public:
 KoVariableRegistry::KoVariableRegistry()
 :d( new Private() )
 {
-    init();
 }
 
 KoVariableRegistry::~KoVariableRegistry()
@@ -60,7 +64,7 @@ void KoVariableRegistry::init()
     config.whiteList = "TextVariablePlugins";
     config.blacklist = "TextVariablePluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/TextVariable"),
+    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-Variable"),
                                       QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 
     QList<KoVariableFactory*> factories = values();
@@ -85,7 +89,12 @@ void KoVariableRegistry::init()
 
 KoVariableRegistry* KoVariableRegistry::instance()
 {
-    return &( singleton->q );
+    KoVariableRegistry * registry = &( singleton->q );
+    if ( ! singleton->initDone ) {
+        singleton->initDone = true;
+        registry->init();
+    }
+    return registry;
 }
 
 KoVariable * KoVariableRegistry::createFromOdf( const KoXmlElement & e, KoShapeLoadingContext & context ) const

@@ -34,7 +34,6 @@
 
 #include "kis_types.h"
 #include "kis_global.h"
-#include "kis_image.h"
 #include <kis_shared.h>
 #include "kis_iterators_pixel.h"
 
@@ -46,7 +45,6 @@ class QPoint;
 
 class KoStore;
 
-class KisImage;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;

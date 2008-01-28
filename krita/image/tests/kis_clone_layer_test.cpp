@@ -25,6 +25,7 @@
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
+#include "kis_image.h"
 
 void KisCloneLayerTest::testCreation()
 {

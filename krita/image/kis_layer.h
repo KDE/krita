@@ -33,6 +33,7 @@
 #include "kis_types.h"
 #include "kis_node.h"
 #include "kis_paint_device.h"
+#include "kis_image.h"
 
 class QIcon;
 class QBitArray;

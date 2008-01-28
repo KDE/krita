@@ -22,6 +22,7 @@
 #include <QString>
 
 
+#include "kis_image.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"

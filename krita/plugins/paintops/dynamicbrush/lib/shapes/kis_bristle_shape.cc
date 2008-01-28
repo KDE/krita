@@ -25,6 +25,7 @@
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
 #include <kis_shared.h>
+#include <kis_image.h>
 
 
 struct KisBristle {

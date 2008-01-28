@@ -26,6 +26,7 @@
 #include <KoColorProfile.h>
 #include <KoProgressUpdater.h>
 #include "kis_paint_device.h"
+#include "kis_node.h"
 
 /**
  * Routines that are useful for writing efficient tests

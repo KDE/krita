@@ -104,7 +104,7 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 {
     setObjectName(name);
     Q_ASSERT( colorSpace );
-
+ 
     m_d->x = 0;
     m_d->y = 0;
 

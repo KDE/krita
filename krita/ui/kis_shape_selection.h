@@ -31,6 +31,7 @@ class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeContainer
     Q_OBJECT
 
 public:
+
     KisShapeSelection(KisImageSP image, KisSelectionSP selection);
     virtual ~KisShapeSelection();
 
@@ -80,6 +81,10 @@ class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
+
+    using KoShapeFactory::createDefaultShape;
+    using KoShapeFactory::createShape;
+
     KisShapeSelectionFactory( QObject* parent);
     ~KisShapeSelectionFactory() {}
 

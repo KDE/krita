@@ -1454,6 +1454,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
                     }
                 }
             }
+            else {
 #if 0 //1.6:
             bool handled = false;
             // Check if it's a variable
@@ -1472,7 +1473,8 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
                 }
             }
 #else
-            kDebug(32500) <<"Node '" << localName << "' unhandled";
+                kDebug(32500) <<"Node '" << localName << "' unhandled";
+            }
 #endif
         }
     }

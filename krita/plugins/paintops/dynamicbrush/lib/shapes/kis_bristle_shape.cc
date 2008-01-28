@@ -132,6 +132,7 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
         pos += brushPos;
 //         dbgPlugins << m_radius <<"" << pos <<"" << brushPos;
         coloringsrc->colorAt( (int)pos.x(), (int)pos.y(), &color );
+        Q_ASSERT(m_paintBrush->bristlesPainter);
         m_paintBrush->bristlesPainter->setPaintColor( color );
         if( m_paintBrush->m_firstStroke)
         {

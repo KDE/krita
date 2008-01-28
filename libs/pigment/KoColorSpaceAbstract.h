@@ -417,8 +417,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
         virtual quint8 intensity8(const quint8 * src) const
         {
             QColor c;
-            quint8 opacity;
-            const_cast<KoColorSpaceAbstract<_CSTraits> *>(this)->toQColor(src, &c, &opacity);
+            const_cast<KoColorSpaceAbstract<_CSTraits> *>(this)->toQColor(src, &c );
             return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
         }
 

@@ -151,28 +151,14 @@ class KisRgbFloatHDRColorSpace : public KoIncompleteColorSpace<_CSTraits>
             dst[ _CSTraits::red_pos ] = EXPOSURE_CORRECTED_UINT8_TO_FLOAT(c.red());
             dst[ _CSTraits::green_pos ] = EXPOSURE_CORRECTED_UINT8_TO_FLOAT(c.green());
             dst[ _CSTraits::blue_pos ] = EXPOSURE_CORRECTED_UINT8_TO_FLOAT(c.blue());
-        }
-
-        virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, const KoColorProfile * /*profile*/) const
-        {
-            typename _CSTraits::channels_type* dst = _CSTraits::nativeArray(dstU8);
-            dst[ _CSTraits::red_pos ] = EXPOSURE_CORRECTED_UINT8_TO_FLOAT(c.red());
-            dst[ _CSTraits::green_pos ] = EXPOSURE_CORRECTED_UINT8_TO_FLOAT(c.green());
-            dst[ _CSTraits::blue_pos ] = EXPOSURE_CORRECTED_UINT8_TO_FLOAT(c.blue());
-            dst[ _CSTraits::alpha_pos ] = UINT8_TO_FLOAT(opacity);
+            dst[ _CSTraits::alpha_pos ] = UINT8_TO_FLOAT(c.alpha());
         }
 
         virtual void toQColor(const quint8 *srcU8, QColor *c, const KoColorProfile * /*profile*/) const
         {
             const typename _CSTraits::channels_type* src = _CSTraits::nativeArray(srcU8);
             c->setRgb(EXPOSURE_CORRECTED_FLOAT_TO_UINT8(src[_CSTraits::red_pos]), EXPOSURE_CORRECTED_FLOAT_TO_UINT8(src[_CSTraits::green_pos]), EXPOSURE_CORRECTED_FLOAT_TO_UINT8(src[_CSTraits::blue_pos]));
-        }
-
-        virtual void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, const KoColorProfile * /*profile*/) const
-        {
-            const typename _CSTraits::channels_type* src = _CSTraits::nativeArray(srcU8);
-            c->setRgb(EXPOSURE_CORRECTED_FLOAT_TO_UINT8(src[_CSTraits::red_pos]), EXPOSURE_CORRECTED_FLOAT_TO_UINT8(src[_CSTraits::green_pos]), EXPOSURE_CORRECTED_FLOAT_TO_UINT8(src[_CSTraits::blue_pos]));
-            *opacity = FLOAT_TO_UINT8(src[_CSTraits::alpha_pos]);
+            c->setAlpha(FLOAT_TO_UINT8(src[_CSTraits::alpha_pos]));
         }
 
         quint8 difference(const quint8 *src1U8, const quint8 *src2U8)

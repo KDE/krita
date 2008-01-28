@@ -90,7 +90,9 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
 
     KisPaintDeviceSP src = new KisPaintDevice( cs, "src" );
-    src->fill( 0, 0, 20, 20, KoColor( Qt::red, 128, cs ).data() );
+    KoColor c( Qt::red, cs );
+    c.setOpacity( 128 );
+    src->fill( 0, 0, 20, 20, c.data() );
 
     QCOMPARE( src->exactBounds(), QRect( 0, 0, 20, 20 ) );
 
@@ -156,11 +158,10 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
         // this colorspace
         if ( channel->channelType() == KoChannelInfo::ALPHA ) {
             QColor c;
-            quint8 alpha;
 
-            dst->pixel( 13, 13, &c, &alpha );
+            dst->pixel( 13, 13, &c );
 
-            QCOMPARE( ( int ) alpha, ( int ) OPACITY_TRANSPARENT );
+            QCOMPARE( ( int ) c.alpha(), ( int ) OPACITY_TRANSPARENT );
         }
     }
 }

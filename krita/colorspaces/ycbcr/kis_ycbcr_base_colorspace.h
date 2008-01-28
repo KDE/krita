@@ -53,18 +53,7 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
             dst->Y = _CSTraits::computeY( red, green, blue);
             dst->Cb = _CSTraits::computeCb( red, green, blue);
             dst->Cr = _CSTraits::computeCr( red, green, blue);
-        }
-
-        virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, const KoColorProfile * /*profile*/) const
-        {
-            typename _CSTraits::Pixel *dst = reinterpret_cast<typename _CSTraits::Pixel *>(dstU8);
-            typename _CSTraits::channels_type red = UINT8_TO_NATIVE(c.red());
-            typename _CSTraits::channels_type green = UINT8_TO_NATIVE(c.green());
-            typename _CSTraits::channels_type blue = UINT8_TO_NATIVE(c.blue());
-            dst->Y = _CSTraits::computeY( red, green, blue);
-            dst->Cb = _CSTraits::computeCb( red, green, blue);
-            dst->Cr = _CSTraits::computeCr( red, green, blue);
-            dst->alpha = UINT8_TO_NATIVE(opacity);
+            dst->alpha = UINT8_TO_NATIVE(c.alpha());
         }
 
         virtual void toQColor(const quint8 *srcU8, QColor *c, const KoColorProfile * /*profile*/) const
@@ -74,17 +63,9 @@ class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
                 NATIVE_TO_UINT8(_CSTraits::computeRed( src->Y, src->Cb, src->Cr)),
                 NATIVE_TO_UINT8(_CSTraits::computeGreen( src->Y, src->Cb, src->Cr)),
                 NATIVE_TO_UINT8(_CSTraits::computeBlue( src->Y, src->Cb, src->Cr) ) );
+            c->setAlpha( NATIVE_TO_UINT8(src->alpha) );
         }
 
-        virtual void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, const KoColorProfile * /*profile*/) const
-        {
-            const typename _CSTraits::Pixel* src = reinterpret_cast<const typename _CSTraits::Pixel *>(srcU8);
-            c->setRgb(
-                NATIVE_TO_UINT8(_CSTraits::computeRed( src->Y, src->Cb, src->Cr)),
-                NATIVE_TO_UINT8(_CSTraits::computeGreen( src->Y, src->Cb, src->Cr)),
-                NATIVE_TO_UINT8(_CSTraits::computeBlue( src->Y, src->Cb, src->Cr) ) );
-            *opacity = NATIVE_TO_UINT8(src->alpha);
-        }
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
         {
             const typename _CSTraits::Pixel* p = reinterpret_cast<const typename _CSTraits::Pixel*>( pixel );

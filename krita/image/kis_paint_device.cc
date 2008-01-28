@@ -116,7 +116,8 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
     m_d->nChannels = m_d->colorSpace->channelCount();
 
     quint8 *defaultPixel = new quint8[ m_d->pixelSize ];
-    m_d->colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defaultPixel);
+    m_d->colorSpace->fromQColor(Qt::black, defaultPixel);
+    m_d->colorSpace->setAlpha( defaultPixel, OPACITY_TRANSPARENT, 1 );
 
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;
@@ -824,7 +825,7 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
     }
 }
 
-bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c, quint8 *opacity)
+bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c)
 {
     KisHLineConstIteratorPixel iter = createHLineIterator(x, y, 1);
 
@@ -832,7 +833,7 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c, quint8 *opacity)
 
     if (!pix) return false;
 
-    colorSpace()->toQColor(pix, c, opacity);
+    colorSpace()->toQColor(pix, c);
 
     return true;
 }
@@ -851,11 +852,11 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc)
     return true;
 }
 
-bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c, quint8  opacity)
+bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);
 
-    colorSpace()->fromQColor(c, opacity, iter.rawData());
+    colorSpace()->fromQColor(c, iter.rawData());
 
     return true;
 }

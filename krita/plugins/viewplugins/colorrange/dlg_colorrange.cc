@@ -292,7 +292,6 @@ void DlgColorRange::slotSelectClicked()
     qint32 x, y, w, h;
     m_dev->exactBounds(x, y, w, h);
     const KoColorSpace * cs = m_dev->colorSpace();
-    quint8 opacity;
 
     KisHLineConstIterator hiter = m_dev->createHLineConstIterator(x, y, w);
     KisHLineIterator selIter = m_selection ->createHLineIterator(x, y, w);
@@ -301,9 +300,9 @@ void DlgColorRange::slotSelectClicked()
         while (!hiter.isDone()) {
             QColor c;
 
-            cs->toQColor(hiter.rawData(), &c, &opacity);
+            cs->toQColor(hiter.rawData(), &c);
             // Don't try to select transparent pixels.
-            if (opacity > OPACITY_TRANSPARENT) {
+            if (c.alpha() > OPACITY_TRANSPARENT) {
                 quint8 match = matchColors(c, m_currentAction);
 
                 if (match) {

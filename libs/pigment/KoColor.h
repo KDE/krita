@@ -48,10 +48,6 @@ public:
     /// is assumed to have the current monitor profile.
     KoColor(const QColor & color, const KoColorSpace * colorSpace);
 
-    /// Create a KoColor from a QColor. The QColor is immediately converted to native. The QColor
-    /// is assumed to have the current monitor profile.
-    KoColor(const QColor & color, quint8 alpha, const KoColorSpace * colorSpace);
-
     /// Create a KoColor using a native color strategy. The data is copied.
     KoColor(const quint8 * data, const KoColorSpace * colorSpace);
 
@@ -87,11 +83,6 @@ public:
     /// Don't convert the color if src and this have the same colorspace.
     void fromKoColor(const KoColor& src);
 
-    /**
-     * Returns a QColor version of the color after converting it to rgb8.
-     * This is equivalent to using color->colorSpace()->toQColor(color->data(), &c, &a);
-     */
-    void toQColor(QColor *c, quint8 *opacity) const;
     /// a convenience method for the above.
     void toQColor(QColor *c) const;
     /// a convenience method for the above.
@@ -109,8 +100,6 @@ public:
 // what about making the next two methods static factory methods?
     /// Convenient function for converting from a QColor
     void fromQColor(const QColor& c) const;
-    /// Convenient function for converting from a QColor and setting the opacity
-    void fromQColor(const QColor& c, quint8 opacity) const;
 
     /**
      * @return the buffer associated with this color object to be used with the

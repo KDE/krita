@@ -241,13 +241,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 cmsDoTransform(d->lastFromRGB, d->qcolordata, dst, 1);
             }
 
-            this->setAlpha(dst, OPACITY_OPAQUE, 1);
-        }
-
-        virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, const KoColorProfile * profile=0) const
-        {
-            this->fromQColor(color, dst, profile);
-            this->setAlpha(dst, opacity, 1);
+            this->setAlpha(dst, color.alpha() , 1);
         }
 
         virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * koprofile =0) const
@@ -268,13 +262,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 cmsDoTransform(d->lastToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
             }
             c->setRgb(d->qcolordata[2], d->qcolordata[1], d->qcolordata[0]);
+            c->setAlpha( this->alpha(src) );
         }
 
-        virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, const KoColorProfile * profile =0) const
-        {
-            this->toQColor(src, c, profile);
-            *opacity = this->alpha(src);
-        }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                 const KoColorProfile *dstProfile,
                 KoColorConversionTransformation::Intent renderingIntent) const

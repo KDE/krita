@@ -361,25 +361,14 @@ KoAlphaColorSpace::~KoAlphaColorSpace()
 {
 }
 
-void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
-    dst[PIXEL_MASK] = OPACITY_OPAQUE;
+    dst[PIXEL_MASK] = c.alpha();
 }
 
-void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
 {
-    dst[PIXEL_MASK] = opacity;
-}
-
-void KoAlphaColorSpace::toQColor(const quint8 * /*src*/, QColor *c, const KoColorProfile * /*profile*/) const
-{
-    c->setRgb(255, 255, 255);
-}
-
-void KoAlphaColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, const KoColorProfile * /*profile*/) const
-{
-    c->setRgb(255, 255, 255);
-    *opacity = src[PIXEL_MASK];
+    c->setRgba(255, 255, 255, src[PIXEL_MASK]);
 }
 
 quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) const

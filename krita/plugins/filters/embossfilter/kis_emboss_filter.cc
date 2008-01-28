@@ -112,7 +112,6 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
     QColor color1;
     QColor color2;
-    quint8 opacity;
     for (int y = 0 ; not(progressUpdater and progressUpdater->interrupted()) and (y < Height) ; ++y)
     {
         KisRandomConstAccessorPixel acc = src->createRandomConstAccessor(srcTopLeft.x(), srcTopLeft.y());
@@ -124,7 +123,7 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
 // FIXME: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
 
 
-                src->colorSpace()->toQColor( it.oldRawData(), &color1, &opacity);
+                src->colorSpace()->toQColor( it.oldRawData(), &color1 );
                  acc.moveTo(srcTopLeft.x() + x + Lim_Max(x, 1, Width), srcTopLeft.y() + y + Lim_Max(y, 1, Height) );
 
                 src->colorSpace()->toQColor(acc.oldRawData(), &color2);
@@ -135,7 +134,7 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
 
                 Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
 
-                dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray), opacity, dstIt.rawData());
+                dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), dstIt.rawData());
             }
         }
         it.nextRow();

@@ -329,7 +329,7 @@ public:
      *
      * @return true if the operation was successful.
      */
-    bool pixel(qint32 x, qint32 y, QColor *c, quint8 *opacity);
+    bool pixel(qint32 x, qint32 y, QColor *c);
 
 
     /**
@@ -358,7 +358,7 @@ public:
      * @return true if the operation was successful
      *
      */
-    bool setPixel(qint32 x, qint32 y, const QColor& c, quint8 opacity);
+    bool setPixel(qint32 x, qint32 y, const QColor& c);
 
     bool setPixel(qint32 x, qint32 y, const KoColor& kc);
 

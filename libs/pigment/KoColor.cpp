@@ -77,20 +77,7 @@ KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
 
-    d->colorSpace->fromQColor(color, OPACITY_OPAQUE, d->data);
-}
-
-
-KoColor::KoColor(const QColor & color, quint8 alpha, const KoColorSpace * colorSpace)
-    : d(new Private())
-{
-    d->colorSpace = colorSpace;
-    Q_ASSERT(color.isValid());
-    Q_ASSERT(colorSpace);
-    d->data = new quint8[colorSpace->pixelSize()];
-    memset(d->data, 0, d->colorSpace->pixelSize());
-
-    d->colorSpace->fromQColor(color, alpha, d->data);
+    d->colorSpace->fromQColor(color, d->data);
 }
 
 KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
@@ -180,13 +167,6 @@ void KoColor::toQColor(QColor *c) const
     }
 }
 
-void KoColor::toQColor(QColor *c, quint8 *opacity) const
-{
-    if (d->colorSpace && d->data) {
-        d->colorSpace->toQColor(d->data, c, opacity);
-    }
-}
-
 QColor KoColor::toQColor() const
 {
     QColor c;
@@ -198,13 +178,6 @@ void KoColor::fromQColor(const QColor& c) const
 {
     if (d->colorSpace && d->data) {
         d->colorSpace->fromQColor(c, d->data);
-    }
-}
-
-void KoColor::fromQColor(const QColor& c, quint8 opacity) const
-{
-    if (d->colorSpace && d->data) {
-        d->colorSpace->fromQColor(c, opacity, d->data);
     }
 }
 

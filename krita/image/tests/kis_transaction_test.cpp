@@ -41,12 +41,10 @@ void KisTransactionTest::testUndo()
     dev->fill( 512, 0, 512, 512, pixel );
 
     QColor c1;
-    quint8 opacity1;
-    dev->pixel( 5, 5, &c1, &opacity1 );
+    dev->pixel( 5, 5, &c1 );
 
     QColor c2;
-    quint8 opacity2;
-    dev->pixel( 517, 5, &c2, &opacity2 );
+    dev->pixel( 517, 5, &c2 );
 
     QVERIFY( c1 == Qt::white );
     QVERIFY( c2 == Qt::black );
@@ -56,8 +54,8 @@ void KisTransactionTest::testUndo()
 
     t.undo();
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
-    dev->pixel( 517, 5, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c1 );
+    dev->pixel( 517, 5, &c2 );
 
     QVERIFY( c1 == Qt::white );
     QVERIFY( c2 == Qt::black );
@@ -77,12 +75,10 @@ void KisTransactionTest::testRedo()
     dev->fill( 512, 0, 512, 512, pixel );
 
     QColor c1;
-    quint8 opacity1;
-    dev->pixel( 5, 5, &c1, &opacity1 );
+    dev->pixel( 5, 5, &c1 );
 
     QColor c2;
-    quint8 opacity2;
-    dev->pixel( 517, 5, &c2, &opacity2 );
+    dev->pixel( 517, 5, &c2 );
 
     QVERIFY( c1 == Qt::white );
     QVERIFY( c2 == Qt::black );
@@ -93,8 +89,8 @@ void KisTransactionTest::testRedo()
     t.undo();
     t.redo();
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
-    dev->pixel( 517, 5, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c1 );
+    dev->pixel( 517, 5, &c2 );
 
     QVERIFY( c1 == Qt::black );
     QVERIFY( c2 == Qt::white );

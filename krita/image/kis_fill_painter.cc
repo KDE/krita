@@ -299,9 +299,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         KisHLineIteratorPixel selIt = pSel->createHLineIterator(0, y, m_width);
         selIt += x;
         if (m_fuzzy)
-            colorSpace->fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
+        {
+            colorSpace->fromQColor(Qt::white, selIt.rawData());
+            colorSpace->setAlpha( selIt.rawData(), MAX_SELECTED - diff, 1 );
+        }
         else
-            colorSpace->fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
+            colorSpace->fromQColor(Qt::white, selIt.rawData());
 
         if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
             map[m_width * (y - 1) + x] = Added;
@@ -331,9 +334,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             }
 
             if (m_fuzzy)
-                colorSpace->fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
+            {
+                colorSpace->fromQColor(Qt::white, selIt.rawData());
+                colorSpace->setAlpha( selIt.rawData(), MAX_SELECTED - diff, 1);
+            }
             else
-                colorSpace->fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
+                colorSpace->fromQColor(Qt::white, selIt.rawData());
 
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
@@ -371,9 +377,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             }
 
             if (m_fuzzy)
-                colorSpace->fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
+            {
+                colorSpace->fromQColor(Qt::white, selIt.rawData());
+                colorSpace->setAlpha( selIt.rawData(), MAX_SELECTED - diff, 1);
+            }
             else
-                colorSpace->fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
+                colorSpace->fromQColor(Qt::white, selIt.rawData());
 
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;

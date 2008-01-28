@@ -254,14 +254,14 @@ QImage KisAdjustmentLayer::createThumbnail(qint32 w, qint32 h)
         w = qint32(double(srcw) / srch * h);
 
     QColor c;
-    quint8 opacity;
     QImage img(w, h, QImage::Format_RGB32);
 
     for (qint32 y=0; y < h; ++y) {
         qint32 iY = (y * srch ) / h;
         for (qint32 x=0; x < w; ++x) {
             qint32 iX = (x * srcw ) / w;
-            m_d->selection->pixel(iX, iY, &c, &opacity);
+            m_d->selection->pixel(iX, iY, &c );
+            quint8 opacity = c.alpha();
             img.setPixel(x, y, qRgb(opacity, opacity, opacity));
         }
     }

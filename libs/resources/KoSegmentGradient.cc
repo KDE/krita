@@ -223,14 +223,13 @@ QImage KoSegmentGradient::generatePreview(int width, int height) const
     QImage img(width, height, QImage::Format_RGB32);
 
     KoColor c;
-    quint8 opacity;
     QColor color;
     for (int x = 0; x < img.width(); x++) {
 
         double t = static_cast<double>(x) / (img.width() - 1);
         colorAt(c, t);
-        c.toQColor( &color, &opacity );
-        double alpha = static_cast<double>(opacity) / OPACITY_OPAQUE;
+        c.toQColor( &color );
+        double alpha = static_cast<double>(color.alpha()) / OPACITY_OPAQUE;
 
         for (int y = 0; y < img.height(); y++) {
             int backgroundRed = 128 + 63 * ((x / 4 + y / 4) % 2);
@@ -255,11 +254,9 @@ QGradient* KoSegmentGradient::toQGradient() const
     QColor color;
     quint8 opacity;
     foreach(KoGradientSegment* segment, m_segments) {
-        segment->startColor().toQColor(&color, &opacity);
-        color.setAlpha(opacity);
+        segment->startColor().toQColor(&color);
         gradient->setColorAt( segment->startOffset() , color );
-        segment->endColor().toQColor(&color, &opacity);
-        color.setAlpha(opacity);
+        segment->endColor().toQColor(&color);
         gradient->setColorAt( segment->endOffset() , color );
     }
     return gradient;
@@ -538,11 +535,9 @@ void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, d
 {
     QColor sc;
     QColor ec;
-    quint8 startOpacity;
-    quint8 endOpacity;
 
-    start.toQColor( &sc, &startOpacity);
-    end.toQColor( &ec, &endOpacity);
+    start.toQColor( &sc);
+    end.toQColor( &ec);
 
     int s = static_cast<int>(sc.saturation() + t * (ec.saturation() - sc.saturation()) + 0.5);
     int v = static_cast<int>(sc.value() + t * (ec.value() - sc.value()) + 0.5);
@@ -559,11 +554,12 @@ void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, d
         }
     }
     // XXX: added an explicit cast. Is this correct?
-    quint8 opacity = static_cast<quint8>(startOpacity + t * (endOpacity - startOpacity));
+    quint8 opacity = static_cast<quint8>(sc.alpha() + t * (ec.alpha() - sc.alpha()));
 
     QColor result;
     result.setHsv( h, s, v);
-    dst.fromQColor(result, opacity);
+    result.setAlpha( opacity );
+    dst.fromQColor(result);
 }
 
 KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy() :
@@ -586,11 +582,9 @@ void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, 
 {
     QColor sc;
     QColor se;
-    quint8 startOpacity;
-    quint8 endOpacity;
 
-    start.toQColor( &sc, &startOpacity);
-    end.toQColor( &se, &endOpacity);
+    start.toQColor( &sc);
+    end.toQColor( &se);
 
     int s = static_cast<int>(sc.saturation() + t * (se.saturation() - sc.saturation()) + 0.5);
     int v = static_cast<int>(sc.value() + t * (se.value() - sc.value()) + 0.5);
@@ -607,11 +601,12 @@ void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, 
         }
     }
     // XXX: Added an explicit static cast
-    quint8 opacity = static_cast<quint8>(startOpacity + t * (endOpacity - startOpacity));
+    quint8 opacity = static_cast<quint8>(sc.alpha() + t * (se.alpha() - sc.alpha()));
 
     QColor result;
     result.setHsv( h, s, v);
-    dst.fromQColor( result, opacity);
+    result.setAlpha( opacity );
+    dst.fromQColor( result );
 }
 
 KoGradientSegment::LinearInterpolationStrategy *KoGradientSegment::LinearInterpolationStrategy::instance()

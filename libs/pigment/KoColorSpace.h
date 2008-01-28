@@ -328,18 +328,6 @@ public:
     virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const = 0;
 
     /**
-     * The fromQColor methods take a given color defined as an RGB QColor
-     * and fills a byte array with the corresponding color in the
-     * the colorspace managed by this strategy.
-     *
-     * @param color the QColor that will be used to fill dst
-     * @param opacity the opacity of the color
-     * @param dst a pointer to a pixel
-     * @param profile the optional profile that describes the color values of QColor
-     */
-    virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, const KoColorProfile * profile = 0) const = 0;
-
-    /**
      * The toQColor methods take a byte array that is at least pixelSize() long
      * and converts the contents to a QColor, using the given profile as a source
      * profile and the optional profile as a destination profile.
@@ -349,18 +337,6 @@ public:
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const = 0;
-
-    /**
-     * The toQColor methods take a byte array that is at least pixelSize() long
-     * and converts the contents to a QColor, using the given profile as a source
-     * profile and the option profile as a destination profile.
-     *
-     * @param src a pointer to the source pixel
-     * @param c the QColor that will be filled with the color at src
-     * @param opacity a pointer to a byte that will be filled with the opacity a src
-     * @param profile the optional profile that describes the color in c, for instance the monitor profile
-     */
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, const KoColorProfile * profile = 0) const = 0;
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.

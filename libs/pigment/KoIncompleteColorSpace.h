@@ -59,13 +59,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             m_qcolordata[1] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.green() );
             m_qcolordata[0] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.blue() );
             this->fromRgbA16((const quint8*)m_qcolordata, dst, 1);
-        }
-
-        virtual void fromQColor(const QColor& color, quint8 opacity, quint8 *dst, const KoColorProfile * profile=0) const
-        {
-            Q_UNUSED(profile);
-            this->fromQColor(color, dst, profile);
-            this->setAlpha(dst, opacity, 1);
+            this->setAlpha(dst, color.alpha(), 1);
         }
 
         virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile =0) const
@@ -76,14 +70,9 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
                 KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[2]),
                 KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[1]),
                 KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[0]) );
+            c->setAlpha( this->alpha(src) );
         }
 
-        virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, const KoColorProfile * profile =0) const
-        {
-            Q_UNUSED(profile);
-            this->toQColor( src, c, profile);
-            *opacity = this->alpha(src);
-        }
         virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                 const KoColorProfile *dstProfile, KoColorConversionTransformation::Intent renderingIntent) const
 

@@ -136,19 +136,19 @@ void KisPaintDeviceTest::testGeometry()
     quint8 opacity;
 
     dev->clear( QRect( 50, 50, 50, 50 ) );
-    dev->pixel( 80, 80, &c, &opacity );
+    dev->pixel( 80, 80, &c );
     QVERIFY( c == Qt::black );
-    QVERIFY( opacity == OPACITY_TRANSPARENT );
+    QVERIFY( c.alpha() == OPACITY_TRANSPARENT );
 
     dev->fill( 0, 0, 512, 512, pixel);
-    dev->pixel( 80, 80, &c, &opacity );
+    dev->pixel( 80, 80, &c );
     QVERIFY( c == Qt::white );
-    QVERIFY( opacity == OPACITY_OPAQUE );
+    QVERIFY( c.alpha() == OPACITY_OPAQUE );
 
     dev->clear();
-    dev->pixel( 80, 80, &c, &opacity );
+    dev->pixel( 80, 80, &c );
     QVERIFY( c == Qt::black );
-    QVERIFY( opacity == OPACITY_TRANSPARENT );
+    QVERIFY( c.alpha() == OPACITY_TRANSPARENT );
 
     // XXX: No idea why we get this extent and bounds after a clear --
     // but I want to know as soon as possible if this behaviour
@@ -332,15 +332,16 @@ void KisPaintDeviceTest::testPixel()
     QColor c = Qt::red;
     quint8 opacity = 125;
 
-    dev->setPixel( 5, 5, c, opacity );
+    c.setAlpha( opacity );
+    dev->setPixel( 5, 5, c );
 
     QColor c2;
     quint8 opacity2;
 
-    dev->pixel( 5, 5, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c2 );
 
     QVERIFY( c == c2 );
-    QVERIFY( opacity2 == opacity2 );
+    QVERIFY( opacity == c2.alpha() );
 
 }
 
@@ -394,20 +395,18 @@ void KisPaintDeviceTest::testMirror()
     dev->fill( 512, 0, 512, 512, pixel );
 
     QColor c1;
-    quint8 opacity1;
-    dev->pixel( 5, 5, &c1, &opacity1 );
+    dev->pixel( 5, 5, &c1 );
 
     QColor c2;
-    quint8 opacity2;
-    dev->pixel( 517, 5, &c2, &opacity2 );
+    dev->pixel( 517, 5, &c2 );
 
     QVERIFY( c1 == Qt::white );
     QVERIFY( c2 == Qt::black );
 
     dev->mirrorX();
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
-    dev->pixel( 517, 5, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c1 );
+    dev->pixel( 517, 5, &c2 );
 
     QVERIFY( c1 == Qt::black );
     QVERIFY( c2 == Qt::white );
@@ -418,8 +417,8 @@ void KisPaintDeviceTest::testMirror()
     cs->fromQColor( Qt::black, pixel );
     dev->fill( 0, 512, 512, 512, pixel );
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
-    dev->pixel( 5, 517, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c1 );
+    dev->pixel( 5, 517, &c2 );
 
     QVERIFY( c1 == Qt::white );
     QVERIFY( c2 == Qt::black );
@@ -427,8 +426,8 @@ void KisPaintDeviceTest::testMirror()
     dev->mirrorY();
     dev->convertToQImage(0, 0, 0, 1024, 512).save( "mirror.png" );
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
-    dev->pixel( 5, 517, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c1 );
+    dev->pixel( 5, 517, &c2 );
 
     QVERIFY( c1 == Qt::black );
     QVERIFY( c2 == Qt::white );
@@ -457,12 +456,10 @@ void KisPaintDeviceTest::testMirrorTransaction()
     dev->fill( 512, 0, 512, 512, pixel );
 
     QColor c1;
-    quint8 opacity1;
-    dev->pixel( 5, 5, &c1, &opacity1 );
+    dev->pixel( 5, 5, &c1 );
 
     QColor c2;
-    quint8 opacity2;
-    dev->pixel( 517, 5, &c2, &opacity2 );
+    dev->pixel( 517, 5, &c2 );
 
     QVERIFY( c1 == Qt::white );
     QVERIFY( c2 == Qt::black );
@@ -471,8 +468,8 @@ void KisPaintDeviceTest::testMirrorTransaction()
     KisTransaction t( "mirror", dev, 0 );
     dev->mirrorX();
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
-    dev->pixel( 517, 5, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c1 );
+    dev->pixel( 517, 5, &c2 );
 
     dev->convertToQImage( 0, 0, 0, 1024, 512 ).save( "mirror.png" );
     QVERIFY( c1 == Qt::black );
@@ -484,16 +481,16 @@ void KisPaintDeviceTest::testMirrorTransaction()
     cs->fromQColor( Qt::black, pixel );
     dev->fill( 0, 512, 512, 512, pixel );
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
-    dev->pixel( 5, 517, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c1 );
+    dev->pixel( 5, 517, &c2 );
 
     QVERIFY( c1 == Qt::white );
     QVERIFY( c2 == Qt::black );
 
     dev->mirrorY();
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
-    dev->pixel( 5, 517, &c2, &opacity2 );
+    dev->pixel( 5, 5, &c1 );
+    dev->pixel( 5, 517, &c2 );
 
     QVERIFY( c1 == Qt::black );
     QVERIFY( c2 == Qt::white );
@@ -514,12 +511,11 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     KisPaintDeviceSP dev = new KisPaintDevice( cs );
 
     quint8* pixel = cs->allocPixelBuffer( 1 );
-    cs->fromQColor( QColor( 255, 200, 155), 100, pixel );
+    cs->fromQColor( QColor( 255, 200, 155, 100), pixel );
     dev->fill( 0, 0, 5000, 5000, pixel);
 
     QColor c1;
-    quint8 opacity1;
-    dev->pixel( 5, 5, &c1, &opacity1 );
+    dev->pixel( 5, 5, &c1 );
 
     QVector<quint8*> planes = dev->readPlanarBytes( 500, 500, 100, 100 );
     QVector<quint8*> swappedPlanes;
@@ -542,19 +538,19 @@ void KisPaintDeviceTest::testPlanarReadWrite()
 
     dev->convertToQImage(0, 0, 0, 5000, 5000).save( "planar.png" );
 
-    dev->pixel( 5, 5, &c1, &opacity1 );
+    dev->pixel( 5, 5, &c1 );
 
     QVERIFY( c1.red() == 200 );
     QVERIFY( c1.green() == 255 );
     QVERIFY( c1.blue() == 100);
-    QVERIFY( opacity1 == 155 );
+    QVERIFY( c1.alpha() == 155 );
 
-    dev->pixel( 75, 50, &c1, &opacity1 );
+    dev->pixel( 75, 50, &c1 );
 
     QVERIFY( c1.red() == 200 );
     QVERIFY( c1.green() == 255 );
     QVERIFY( c1.blue() == 100);
-    QVERIFY( opacity1 == 155 );
+    QVERIFY( c1.alpha() == 155 );
 }
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)

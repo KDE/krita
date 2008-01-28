@@ -81,7 +81,7 @@ public:
     /**
      * TODO make abstract when it is implemented in all variables
      */
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context ) {}
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context ) {}
 
 protected:
     /**

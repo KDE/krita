@@ -31,8 +31,8 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoTextEditingPlugin.cpp
 
     KoInlineTextObjectManager.cpp
-    KoInlineObjectFactory.cpp
-    KoInlineObjectRegistry.cpp
+#KoInlineObjectFactory.cpp
+#KoInlineObjectRegistry.cpp
     InsertVariableActionBase.cpp
     InsertVariableAction.cpp
     InsertNamedVariableAction.cpp

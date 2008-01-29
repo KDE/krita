@@ -48,7 +48,7 @@ public:
     virtual ~SnapGuide();
 
     /// snaps the mouse position, returns if mouse was snapped
-    QPointF snap( const QPointF &mousePosition, double maxSnapDistance );
+    QPointF snap( const QPointF &mousePosition );
 
     /// paints the guide
     void paint( QPainter &painter, const KoViewConverter &converter );
@@ -62,6 +62,21 @@ public:
     /// enables the strategies used for snapping 
     void enableSnapStrategies( int strategies );
 
+    /// returns the enabled snap strategies
+    int enabledSnapStrategies() const;
+
+    /// enables the snapping guides
+    void enableSnapping( bool on );
+
+    /// returns if snapping is enabled
+    bool isSnapping() const;
+
+    /// sets the snap distances in pixels
+    void setSnapDistance( int distance );
+
+    /// returns the snap distance in pixels
+    int snapDistance() const;
+
 protected:
     KoCanvasBase * m_canvas;
     KoPathShape * m_path;
@@ -70,6 +85,8 @@ protected:
     SnapStrategy * m_currentStrategy;
 
     int m_usedStrategies;
+    bool m_active;
+    int m_snapDistance;
 };
 
 class SnapStrategy

@@ -21,6 +21,7 @@
 
 #include "KoCreatePathTool.h"
 #include "SnapGuide.h"
+#include "SnapGuideConfigWidget.h"
 
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
@@ -31,6 +32,8 @@
 #include "KoSelection.h"
 #include "KoShapeController.h"
 #include "KoCanvasResourceProvider.h"
+#include "SnapGuideConfigWidget.h"
+
 #include <KoColor.h>
 
 #include <QtGui/QPainter>
@@ -120,11 +123,9 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         }
         else
         {
-            double snapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( 10, 10 ) ).width();
-
             m_canvas->updateCanvas( m_snapGuide->boundingRect() );
 
-            m_activePoint->setPoint( m_snapGuide->snap( event->point, snapDistance ) );
+            m_activePoint->setPoint( m_snapGuide->snap( event->point ) );
             m_activePoint->setProperty(KoPathPoint::CanHaveControlPoint2);
 
             m_canvas->updateCanvas( m_shape->boundingRect() );
@@ -182,10 +183,8 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     }
     else
     {
-        double snapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( 10, 10 ) ).width();
-
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-        m_activePoint->setPoint( m_snapGuide->snap( event->point, snapDistance ) );
+        m_activePoint->setPoint( m_snapGuide->snap( event->point ) );
         m_canvas->updateCanvas( m_shape->boundingRect() );
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
     }
@@ -276,4 +275,9 @@ QRectF KoCreatePathTool::handleRect( const QPointF &p )
 void KoCreatePathTool::repaintAdjusted( const QRectF &rect )
 {
     m_canvas->updateCanvas( rect.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius ) );
+}
+
+QWidget * KoCreatePathTool::createOptionWidget() {
+    SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_snapGuide);
+    return widget;
 }

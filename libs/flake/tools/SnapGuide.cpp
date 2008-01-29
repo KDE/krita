@@ -30,6 +30,7 @@
 
 SnapGuide::SnapGuide( KoCanvasBase * canvas )
     : m_canvas(canvas), m_path(0), m_currentStrategy(0)
+    , m_active(true), m_snapDistance(10)
 {
     m_strategies.append( new NodeSnapStrategy() );
     m_strategies.append( new OrthogonalSnapStrategy() );
@@ -49,8 +50,36 @@ void SnapGuide::enableSnapStrategies( int strategies )
     m_usedStrategies = strategies;
 }
 
-QPointF SnapGuide::snap( const QPointF &mousePosition, double maxSnapDistance )
+int SnapGuide::enabledSnapStrategies() const
 {
+    return m_usedStrategies;
+}
+
+void SnapGuide::enableSnapping( bool on )
+{
+    m_active = on;
+}
+
+bool SnapGuide::isSnapping() const
+{
+    return m_active;
+}
+
+void SnapGuide::setSnapDistance( int distance )
+{
+    m_snapDistance = qAbs( distance );
+}
+
+int SnapGuide::snapDistance() const
+{
+    return m_snapDistance;
+}
+
+QPointF SnapGuide::snap( const QPointF &mousePosition )
+{
+    if( ! m_active )
+        return mousePosition;
+
     QMatrix m = m_path->absoluteTransformation(0);
 
     QList<QPointF> pathPoints;
@@ -77,6 +106,7 @@ QPointF SnapGuide::snap( const QPointF &mousePosition, double maxSnapDistance )
 
     m_currentStrategy = 0;
 
+    double maxSnapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( m_snapDistance, m_snapDistance ) ).width();
     foreach( SnapStrategy * strategy, m_strategies )
     {
         if( m_usedStrategies & strategy->type() )
@@ -239,7 +269,7 @@ bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, QList<QPointF
 
     if( minDistance < HUGE_VAL )
     {
-        QRectF ellipse( -maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance );
+        QRectF ellipse( -10, -10, 10, 10 );
         ellipse.moveCenter( snappedPoint );
         decoration.addEllipse( ellipse );
     }

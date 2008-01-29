@@ -43,8 +43,9 @@ KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
 , m_firstPoint( 0 )
 , m_handleRadius( 3 )
 , m_mouseOverFirstPoint(false)
-, m_snapGuide(0)
+, m_snapGuide( new SnapGuide(canvas) )
 {
+    m_snapGuide->enableSnapStrategies( SnapGuide::Orthogonal|SnapGuide::Node );
 }
 
 KoCreatePathTool::~KoCreatePathTool()
@@ -90,8 +91,7 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
                                   !m_activePoint->activeControlPoint1() );
         }
 
-        if( m_snapGuide )
-            m_snapGuide->paint( painter, converter );
+        m_snapGuide->paint( painter, converter );
 
         painter.restore();
     }
@@ -121,17 +121,14 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         else
         {
             double snapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( 10, 10 ) ).width();
-            QPointF snappedPos = event->point;
-            if( m_snapGuide )
-            {
-                m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-                snappedPos = m_snapGuide->snap( event->point, snapDistance );
-            }
-            m_activePoint->setPoint( snappedPos );
+
+            m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+
+            m_activePoint->setPoint( m_snapGuide->snap( event->point, snapDistance ) );
             m_activePoint->setProperty(KoPathPoint::CanHaveControlPoint2);
+
             m_canvas->updateCanvas( m_shape->boundingRect() );
-            if( m_snapGuide )
-                m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+            m_canvas->updateCanvas( m_snapGuide->boundingRect() );
         }
     }
     else
@@ -143,7 +140,8 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         m_activePoint = m_shape->moveTo( event->point );
         m_firstPoint = m_activePoint;
         m_canvas->updateCanvas( m_shape->boundingRect() );
-        m_snapGuide = new OrthogonalSnapGuide( m_shape );
+
+        m_snapGuide->setPathShape( m_shape );
     }
 }
 
@@ -185,16 +183,11 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     else
     {
         double snapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( 10, 10 ) ).width();
-        QPointF snappedPos = event->point;
-        if( m_snapGuide )
-        {
-            m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-            snappedPos = m_snapGuide->snap( event->point, snapDistance );
-        }
-        m_activePoint->setPoint( snappedPos );
+
+        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+        m_activePoint->setPoint( m_snapGuide->snap( event->point, snapDistance ) );
         m_canvas->updateCanvas( m_shape->boundingRect() );
-        if( m_snapGuide )
-            m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
     }
 }
 
@@ -273,9 +266,6 @@ void KoCreatePathTool::addPathShape()
         m_canvas->updateCanvas( pathShape->boundingRect() );
         delete pathShape;
     }
-
-    delete m_snapGuide;
-    m_snapGuide = 0;
 }
 
 QRectF KoCreatePathTool::handleRect( const QPointF &p ) 

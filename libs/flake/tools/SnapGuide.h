@@ -28,12 +28,23 @@
 
 class KoPathShape;
 class KoViewConverter;
+class KoCanvasBase;
 class QPainter;
+class SnapStrategy;
+class KoCanvasBase;
 
 class SnapGuide
 {
 public:
-    SnapGuide( KoPathShape * path );
+    /// the different possible snap types
+    enum SnapType {
+        Orthogonal = 1,
+        Node = 2
+    };
+
+    /// Creates the snap guide to work on the given canvas
+    SnapGuide( KoCanvasBase * canvas );
+
     virtual ~SnapGuide();
 
     /// snaps the mouse position, returns if mouse was snapped
@@ -45,21 +56,66 @@ public:
     /// returns the bounding rect of the guide
     QRectF boundingRect();
 
+    /// Sets an additional path shape to snap to (useful when creating a path)
+    void setPathShape( KoPathShape * path );
+
+    /// enables the strategies used for snapping 
+    void enableSnapStrategies( int strategies );
+
 protected:
-    // snaps mouse position to given path point
-    virtual QPointF snapToPoints( const QPointF &mousePosition, QList<QPointF> &pathPoints, double maxSnapDistance ) = 0;
-
-    double fastDistance( const QPointF &p1, const QPointF &p2 );
-
+    KoCanvasBase * m_canvas;
     KoPathShape * m_path;
-    QPainterPath m_lineGuide;
+
+    QList<SnapStrategy*> m_strategies;
+    SnapStrategy * m_currentStrategy;
+
+    int m_usedStrategies;
 };
 
-class OrthogonalSnapGuide : public SnapGuide
+class SnapStrategy
 {
 public:
-    OrthogonalSnapGuide( KoPathShape * path );
-    virtual QPointF snapToPoints( const QPointF &mousePosition, QList<QPointF> &pathPoints, double maxSnapDistance );
+    SnapStrategy( SnapGuide::SnapType type );
+    virtual ~SnapStrategy() {};
+
+    virtual bool snapToPoints( const QPointF &mousePosition, QList<QPointF> &pathPoints, double maxSnapDistance ) = 0;
+
+    /// returns the current snap strategy decoration
+    QPainterPath decoration() const;
+
+    /// returns the strategies type
+    SnapGuide::SnapType type() const;
+
+    static double fastDistance( const QPointF &p1, const QPointF &p2 );
+
+    /// returns the snapped position form the last call to snapToPoints
+    QPointF snappedPosition() const;
+
+protected:
+    /// sets the current snap strategy decoration
+    void setDecoration( const QPainterPath &decoration );
+
+    /// sets the current snapped position
+    void setSnappedPosition( const QPointF &position );
+
+private:
+    QPainterPath m_decoration;
+    SnapGuide::SnapType m_snapType;
+    QPointF m_snappedPosition;
+};
+
+class OrthogonalSnapStrategy : public SnapStrategy
+{
+public:
+    OrthogonalSnapStrategy();
+    virtual bool snapToPoints( const QPointF &mousePosition, QList<QPointF> &pathPoints, double maxSnapDistance );
+};
+
+class NodeSnapStrategy : public SnapStrategy
+{
+public:
+    NodeSnapStrategy();
+    virtual bool snapToPoints( const QPointF &mousePosition, QList<QPointF> &pathPoints, double maxSnapDistance );
 };
 
 #endif // SNAPGUIDE_H

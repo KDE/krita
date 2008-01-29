@@ -20,14 +20,12 @@
 
 #include "kis_random_accessor.h"
 
-#include "kis_tiled_random_accessor.h"
-
-KisRandomConstAccessor::KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable) : m_offsetx(offsetx), m_offsety(offsety)
+KisRandomConstAccessor::KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable) : m_offsetx(offsetx), m_offsety(offsety)
 {
     m_accessor = new KisTiledRandomAccessor(ktm, x, y, writable);
 }
 
-KisRandomConstAccessor::KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety) : m_offsetx(offsetx), m_offsety(offsety)
+KisRandomConstAccessor::KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety) : m_offsetx(offsetx), m_offsety(offsety)
 {
     m_accessor = new KisTiledRandomAccessor(ktm, x, y, false);
 }

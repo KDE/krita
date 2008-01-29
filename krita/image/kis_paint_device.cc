@@ -112,6 +112,8 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 
     m_d->colorSpace = colorSpace->clone();
 
+    Q_ASSERT(m_d->colorSpace);
+
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
 

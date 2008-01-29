@@ -5,6 +5,11 @@ add_subdirectory( tiles )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
+# Chose a tiles backend (comment out the next line to enable the new system):
+set(USE_OLD_TILESYSTEM 1)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-tiles.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/../config-tiles.h) ### WRONG PLACE???
+
+if(USE_OLD_TILESYSTEM)
 set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiled_random_accessor.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc
@@ -17,6 +22,23 @@ set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilemanager.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile_compressor.cc
 )
+else(USE_OLD_TILESYSTEM)
+set(libkritatile_SRCS
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiled_random_accessor.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiledvlineiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiledhlineiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tileddatamanager.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tile.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilediterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiledrectiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_memento.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tile_compressor.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilestore.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilestorememory.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tileswapper.cc
+)
+add_subdirectory( tiles_new )
+endif(USE_OLD_TILESYSTEM)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata

@@ -24,11 +24,15 @@
 #include <kis_shared_ptr.h>
 #include <krita_export.h>
 #include <kis_global.h>
-#include "kis_tiled_random_accessor.h"
+
+#include "config-tiles.h" // For the next define
+#ifdef USE_OLD_TILESYSTEM
+#include "tiles/kis_tiled_random_accessor.h"
+#else
+#include "tiles_new/kis_tiled_random_accessor.h"
+#endif
 
 typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
-
-class KisTiledDataManager;
 
 /**
  * Gives a random access to the pixels of an image. Use the moveTo
@@ -40,11 +44,11 @@ class KRITAIMAGE_EXPORT KisRandomConstAccessor
 
     friend class KisRandomAccessor;
 
-    KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable);
+    KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable);
 
 public:
 
-    KisRandomConstAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety);
+    KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety);
 
     KisRandomConstAccessor(const KisRandomConstAccessor& rhs);
 
@@ -77,7 +81,7 @@ class KRITAIMAGE_EXPORT KisRandomAccessor : public KisRandomConstAccessor
 
 public:
 
-    KisRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety)
+    KisRandomAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety)
         : KisRandomConstAccessor(ktm,x,y,offsetx, offsety, true)
         {
         }
@@ -163,8 +167,8 @@ class KisRandomAccessorPixelBase : public T, public KisRandomAccessorPixelTrait<
 
 public:
 
-    KisRandomAccessorPixelBase(KisTiledDataManager *ktm,
-                               KisTiledDataManager *ktmSelect,
+    KisRandomAccessorPixelBase(KisDataManager *ktm,
+                               KisDataManager *ktmSelect,
                                qint32 x, qint32 y, qint32 offsetx, qint32 offsety)
         : T( ktm, x, y, offsetx, offsety)
         , KisRandomAccessorPixelTrait<T, TSelect>( this,

@@ -897,7 +897,7 @@ bool PreferencesDialog::editPreferences()
         cfg.setUpdateAllOfQpainterCanvas( dialog->m_performanceSettings->chkUpdateAllOfQPainterCanvas->isChecked() );
         cfg.setUseNearestNeighbour( dialog->m_performanceSettings->chkUseNearestNeighbour->isChecked() );
         // let the tile manager know
-        KisTileManager::instance()->configChanged();
+        //KisTileManager::instance()->configChanged();
 
         dialog->m_tabletSettings->applySettings();
 

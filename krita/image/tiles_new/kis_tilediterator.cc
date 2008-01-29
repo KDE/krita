@@ -19,7 +19,7 @@
 */
 #include <kis_debug.h>
 
-#include "kis_debug.h"
+#include "kis_tile_global.h"
 #include "kis_tilediterator.h"
 
 KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
@@ -104,7 +104,7 @@ const quint8 * KisTiledIterator::oldRawData() const
 #ifdef DEBUG
     // Warn if we're misusing oldRawData(). If there's no memento, oldRawData is the same
     // as rawData().
-    kWarning(!m_ktm->hasCurrentMemento(), 41004) << "Accessing oldRawData() when no transaction is in progress.\n";
+    kWarning(!m_ktm->hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
 #endif
     return m_oldData + m_offset;
 }

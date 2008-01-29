@@ -19,7 +19,7 @@
 #include "KoInlineTextObjectManager.h"
 #include "InsertNamedVariableAction_p.h"
 #include "InsertTextReferenceAction_p.h"
-#include "KoInlineObjectRegistry.h"
+#include "KoVariableRegistry.h"
 #include "KoTextLocator.h"
 #include "KoBookmark.h"
 
@@ -163,7 +163,7 @@ void KoInlineTextObjectManager::removeProperty(KoInlineObject::Property key) {
 }
 
 QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasBase *host) const {
-    QList<QAction *> answer = KoInlineObjectRegistry::instance()->createInsertVariableActions(host);
+    QList<QAction *> answer = KoVariableRegistry::instance()->createInsertVariableActions(host);
     int i=0;
     foreach(QString name, m_variableManager.variables()) {
         answer.insert(i++, new InsertNamedVariableAction(host, this, name));

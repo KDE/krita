@@ -23,8 +23,10 @@
 
 #include <KoProperties.h>
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOdfStylesReader.h>
 
@@ -46,7 +48,25 @@ DateVariable::~DateVariable()
 
 void DateVariable::saveOdf( KoShapeSavingContext & context )
 {
-    // TODO
+    // TODO support data-style-name
+    KoXmlWriter *writer = &context.xmlWriter();
+    if (m_displayType == Time) {
+        writer->startElement("text:time", false);
+    } else {
+        writer->startElement("text:date", false);
+    }
+    if (m_type == Fixed) {
+        writer->addAttribute("text:fixed", true);
+    } else {
+        writer->addAttribute("text:fixed", false);
+    }
+    if (m_type == Time) {
+        writer->addAttribute("text:time-value", m_time.toString(Qt::ISODate));
+    } else {
+        writer->addAttribute("text:date-value", m_time.toString(Qt::ISODate));
+    }
+    writer->addTextNode(value());
+    writer->endElement();
 }
 
 bool DateVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
@@ -66,8 +86,6 @@ bool DateVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
         m_type = Fixed;
     }
     else {
-        // zagge: I don't know if this 100% correct to what is written in odf 6.7.2 
-        // this is just a port of the old code
         m_type = AutoUpdate;
     }
 

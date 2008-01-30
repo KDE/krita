@@ -76,6 +76,7 @@ KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisV
 
 KisFilterHandler::~KisFilterHandler()
 {
+    delete m_d;
 }
 
 void KisFilterHandler::showDialog()

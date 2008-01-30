@@ -73,6 +73,14 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
 
 KoColorSpace::~KoColorSpace()
 {
+    foreach(KoCompositeOp* op, d->compositeOps.values())
+    {
+        delete op;
+    }
+    foreach(KoChannelInfo * channel, d->channels)
+    {
+        delete channel;
+    }
     KoColorSpaceRegistry::instance()->colorConversionCache()->colorSpaceIsDestroyed(this);
     delete d->mixColorsOp;
     delete d->convolutionOp;

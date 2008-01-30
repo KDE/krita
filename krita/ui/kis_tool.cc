@@ -78,6 +78,7 @@ KisTool::KisTool( KoCanvasBase * canvas, const QCursor & cursor )
 
 KisTool::~KisTool()
 {
+    delete d;
 }
 
 void KisTool::activate(bool )

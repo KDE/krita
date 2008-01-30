@@ -189,6 +189,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             cmsDeleteTransform( d->defaultFromRGB );
             cmsDeleteTransform( d->defaultToRGB );
             delete d->colorProfile;
+            delete d->qcolordata;
             delete d;
         }
 

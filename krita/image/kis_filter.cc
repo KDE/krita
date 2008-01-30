@@ -76,6 +76,12 @@ KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entr
     setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
 }
 
+KisFilter::~KisFilter()
+{
+    delete d->bookmarkManager;
+    delete d;
+}
+
 KisFilterConfiguration * KisFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     return new KisFilterConfiguration(id(), 0);

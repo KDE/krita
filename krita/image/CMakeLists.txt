@@ -96,6 +96,7 @@ set(kritaimage_LIB_SRCS
    kis_properties_configuration.cc
    kis_random_accessor.cpp
    kis_random_sub_accessor.cpp
+   kis_random_generator.cc
    kis_rotate_visitor.cc
    kis_selection.cc
    kis_serializable_configuration.cc

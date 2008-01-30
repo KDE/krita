@@ -564,3 +564,9 @@ target_link_libraries(KisNodeActionTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${
 set(kis_meta_data_test_SRCS kis_meta_data_test.cpp )
 kde4_add_unit_test(KisMetaDataTest TESTNAME krita-image-KisMetaDataTest ${kis_meta_data_test_SRCS})
 target_link_libraries(KisMetaDataTest ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_random_generator_test_SRCS kis_random_generator_test.cpp )
+kde4_add_unit_test(KisRandomGeneratorTest TESTNAME krita-image-KisRandomGeneratorTest ${kis_random_generator_test_SRCS})
+target_link_libraries(KisRandomGeneratorTest ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})

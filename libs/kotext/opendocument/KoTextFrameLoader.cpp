@@ -43,7 +43,6 @@
 #include <KoTextDocumentLayout.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoInlineObjectRegistry.h>
 #include <KoProperties.h>
 #include <KoVariable.h>
 

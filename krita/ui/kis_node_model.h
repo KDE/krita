@@ -63,7 +63,7 @@ signals:
 
     void nodeActivated( KisNodeSP );
 
-public slots:
+private slots:
 
     void beginInsertNodes( KisNode * parent, int index );
     void endInsertNodes( KisNode * parent, int index );

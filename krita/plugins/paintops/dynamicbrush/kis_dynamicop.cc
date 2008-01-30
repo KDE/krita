@@ -231,6 +231,8 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
         m_brush->shapeProgram()->apply(dabsrc, localInfo);
         m_brush->coloringProgram()->apply(coloringsrc, localInfo);
         dabsrc->paintAt(localInfo.pos(), localInfo, coloringsrc );
+        delete dabsrc;
+        delete coloringsrc;
     }
 
 

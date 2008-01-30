@@ -44,6 +44,10 @@ class KoLcmsColorConversionTransformation : public KoColorConversionTransformati
                             dstProfile,
                             renderingIntent);
         }
+        ~KoLcmsColorConversionTransformation()
+        {
+            cmsDeleteTransform( m_transform );
+        }
     public:
         virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
         {
@@ -181,6 +185,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         }
         virtual ~KoLcmsColorSpace()
         {
+            cmsCloseProfile(d->lastFromRGB);
+            cmsDeleteTransform( d->defaultFromRGB );
+            cmsDeleteTransform( d->defaultToRGB );
             delete d->colorProfile;
             delete d;
         }

@@ -97,6 +97,7 @@ void KisBristleShape::rotate(double r)
 
 void KisBristleShape::startPainting(KisPainter* _painter)
 {
+    dbgPlugins << "startPainting";
     KisDynamicShape::startPainting(_painter);
     KisAutobrushCircleShape* kacs = new KisAutobrushCircleShape(1, 1, 1.0, 1.0);
     m_paintBrush->bristlesPainter = new KisPainter(painter()->device() );
@@ -109,6 +110,7 @@ void KisBristleShape::startPainting(KisPainter* _painter)
 
 void KisBristleShape::endPainting()
 {
+    dbgPlugins << "endPainting";
     KisDynamicShape::endPainting();
     m_paintBrush->bristlesPainter = 0;
     delete m_paintBrush->bristlesPainter;
@@ -122,6 +124,7 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
     double angleCos = cos(m_angle);
     double angleSin = sin(m_angle);
     KoColor color( m_paintBrush->bristlesPainter->device()->colorSpace() );
+    dbgPlugins << "paintAt painter : " << m_paintBrush->bristlesPainter;
     for( QList< KisBristle >::iterator it = m_paintBrush->m_bristles.begin();
         it != m_paintBrush->m_bristles.end(); ++it)
     {

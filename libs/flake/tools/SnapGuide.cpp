@@ -22,6 +22,7 @@
 #include <KoPathPoint.h>
 #include <KoViewConverter.h>
 #include <KoCanvasBase.h>
+#include <KoShapeManager.h>
 
 #include <QtGui/QPainter>
 
@@ -29,7 +30,7 @@
 
 
 SnapGuide::SnapGuide( KoCanvasBase * canvas )
-    : m_canvas(canvas), m_path(0), m_currentStrategy(0)
+    : m_canvas(canvas), m_extraShape(0), m_currentStrategy(0)
     , m_active(true), m_snapDistance(10)
 {
     m_strategies.append( new NodeSnapStrategy() );
@@ -40,9 +41,14 @@ SnapGuide::~SnapGuide()
 {
 }
 
-void SnapGuide::setPathShape( KoPathShape * path )
+void SnapGuide::setExtraShape( KoShape * shape )
 {
-    m_path = path;
+    m_extraShape = shape;
+}
+
+KoShape * SnapGuide::extraShape() const
+{
+    return m_extraShape;
 }
 
 void SnapGuide::enableSnapStrategies( int strategies )
@@ -80,27 +86,7 @@ QPointF SnapGuide::snap( const QPointF &mousePosition )
     if( ! m_active )
         return mousePosition;
 
-    QMatrix m = m_path->absoluteTransformation(0);
-
-    QList<QPointF> pathPoints;
-
-    int subpathCount = m_path->subpathCount();
-    for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
-    {
-        int pointCount = m_path->pointCountSubpath( subpathIndex );
-        for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
-        {
-            KoPathPoint * p = m_path->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex )  );
-            if( ! p )
-                continue;
-
-            pathPoints.append( m.map( p->point() ) );
-        }
-    }
-
-    // do not use the last point we are currently placing when in the
-    // create path tool TODO make it configurable
-    pathPoints.pop_back();
+    SnapProxy proxy( this );
 
     double minDistance = HUGE_VAL;
 
@@ -111,7 +97,7 @@ QPointF SnapGuide::snap( const QPointF &mousePosition )
     {
         if( m_usedStrategies & strategy->type() )
         {
-            if( ! strategy->snapToPoints( mousePosition, pathPoints, maxSnapDistance ) )
+            if( ! strategy->snapToPoints( mousePosition, &proxy, maxSnapDistance ) )
                 continue;
 
             QPointF snapCandidate = strategy->snappedPosition();
@@ -135,9 +121,9 @@ QRectF SnapGuide::boundingRect()
     QRectF rect;
 
     if( m_currentStrategy )
-        rect = m_currentStrategy->decoration().boundingRect().adjusted( -2, -2, 2, 2 );
+        rect = m_currentStrategy->decoration().boundingRect();
 
-    return rect;
+    return rect.adjusted( -2, -2, 2, 2 );
 }
 
 void SnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
@@ -151,6 +137,91 @@ void SnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
     painter.setBrush( Qt::NoBrush );
     painter.drawPath( m_currentStrategy->decoration() );
 }
+
+KoCanvasBase * SnapGuide::canvas() const
+{
+    return m_canvas;
+}
+
+/////////////////////////////////////////////////////////
+// snap proxy
+/////////////////////////////////////////////////////////
+
+SnapProxy::SnapProxy( SnapGuide * snapGuide )
+    : m_snapGuide(snapGuide)
+{
+}
+
+QList<QPointF> SnapProxy::pointsInRect( const QRectF &rect )
+{
+    QList<QPointF> points;
+    QList<KoShape*> shapes = shapesInRect( rect );
+    foreach( KoShape * shape, shapes )
+    {
+        foreach( QPointF point, pointsFromShape( shape ) )
+        {
+            if( rect.contains( point ) )
+                points.append( point );
+        }
+    }
+
+    return points;
+}
+
+QList<KoShape*> SnapProxy::shapesInRect( const QRectF &rect )
+{
+    QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapesAt( rect );
+
+    if( m_snapGuide->extraShape() )
+    {
+        QRectF bound = m_snapGuide->extraShape()->boundingRect();
+        if( rect.intersects( bound ) || rect.contains( bound ) )
+            shapes.append( m_snapGuide->extraShape() );
+    }
+    return shapes;
+}
+
+QList<QPointF> SnapProxy::pointsFromShape( KoShape * shape )
+{
+    QList<QPointF> pathPoints;
+
+    KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+    if( ! path )
+        return pathPoints;
+
+    QMatrix m = path->absoluteTransformation(0);
+
+    int subpathCount = path->subpathCount();
+    for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
+    {
+        int pointCount = path->pointCountSubpath( subpathIndex );
+        for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
+        {
+            KoPathPoint * p = path->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex )  );
+            if( ! p )
+                continue;
+
+            pathPoints.append( m.map( p->point() ) );
+        }
+    }
+
+    if( shape == m_snapGuide->extraShape() )
+        pathPoints.removeLast();
+
+    return pathPoints;
+}
+
+QList<KoShape*> SnapProxy::shapes()
+{
+    QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapes();
+    if( m_snapGuide->extraShape() )
+        shapes.append( m_snapGuide->extraShape() );
+    return shapes;
+}
+
+/////////////////////////////////////////////////////////
+// snap strategies
+/////////////////////////////////////////////////////////
 
 SnapStrategy::SnapStrategy( SnapGuide::SnapType type )
     : m_snapType(type)
@@ -194,27 +265,33 @@ OrthogonalSnapStrategy::OrthogonalSnapStrategy()
 {
 }
 
-bool OrthogonalSnapStrategy::snapToPoints( const QPointF &mousePosition, QList<QPointF> &pathPoints, double maxSnapDistance )
+bool OrthogonalSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance )
 {
     QPointF horzSnap, vertSnap;
     double minVertDist = HUGE_VAL;
     double minHorzDist = HUGE_VAL;
 
-    foreach( QPointF point, pathPoints )
+    QList<KoShape*> shapes = proxy->shapes();
+    foreach( KoShape * shape, shapes )
     {
-        double dx = fabs( point.x() - mousePosition.x() );
-        if( dx < minHorzDist && dx < maxSnapDistance )
+        QList<QPointF> points = proxy->pointsFromShape( shape );
+        foreach( QPointF point, points )
         {
-            minHorzDist = dx;
-            horzSnap = point;
-        }
-        double dy = fabs( point.y() - mousePosition.y() );
-        if( dy < minVertDist && dy < maxSnapDistance )
-        {
-            minVertDist = dy;
-            vertSnap = point;
+            double dx = fabs( point.x() - mousePosition.x() );
+            if( dx < minHorzDist && dx < maxSnapDistance )
+            {
+                minHorzDist = dx;
+                horzSnap = point;
+            }
+            double dy = fabs( point.y() - mousePosition.y() );
+            if( dy < minVertDist && dy < maxSnapDistance )
+            {
+                minVertDist = dy;
+                vertSnap = point;
+            }
         }
     }
+
     QPointF snappedPoint = mousePosition;
 
     if( minHorzDist < HUGE_VAL )
@@ -247,14 +324,18 @@ NodeSnapStrategy::NodeSnapStrategy()
 {
 }
 
-bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, QList<QPointF> &pathPoints, double maxSnapDistance )
+bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance )
 {
     double maxDistance = maxSnapDistance*maxSnapDistance;
     double minDistance = HUGE_VAL;
 
+    QRectF rect( -maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance );
+    rect.moveCenter( mousePosition );
+    QList<QPointF> points = proxy->pointsInRect( rect );
+
     QPointF snappedPoint = mousePosition;
 
-    foreach( QPointF point, pathPoints )
+    foreach( QPointF point, points )
     {
         QPointF diffVec = mousePosition-point;
         double distance = diffVec.x()*diffVec.x() + diffVec.y()*diffVec.y();

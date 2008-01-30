@@ -94,10 +94,13 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
                                   !m_activePoint->activeControlPoint1() );
         }
 
-        m_snapGuide->paint( painter, converter );
-
         painter.restore();
     }
+
+    painter.save();
+    KoShape::applyConversion( painter, converter );
+    m_snapGuide->paint( painter, converter );
+    painter.restore();
 }
 
 void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
@@ -138,11 +141,13 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         m_shape->setShapeId( KoPathShapeId );
         // TODO take properties from the resource provider
         m_shape->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
-        m_activePoint = m_shape->moveTo( event->point );
+        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+        m_activePoint = m_shape->moveTo( m_snapGuide->snap( event->point ) );
         m_firstPoint = m_activePoint;
         m_canvas->updateCanvas( m_shape->boundingRect() );
+        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
 
-        m_snapGuide->setPathShape( m_shape );
+        m_snapGuide->setExtraShape( m_shape );
     }
 }
 
@@ -163,6 +168,10 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
 {
     if ( ! m_shape )
     {
+        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+        m_snapGuide->snap( event->point );
+        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+
         m_mouseOverFirstPoint = false;
         return;
     }
@@ -246,6 +255,8 @@ void KoCreatePathTool::resourceChanged( int key, const QVariant & res )
 void KoCreatePathTool::addPathShape()
 {
     m_shape->normalize();
+
+    m_snapGuide->setExtraShape(0);
 
     // this is done so that nothing happens when the mouseReleaseEvent for the this event is received 
     KoPathShape *pathShape = m_shape;

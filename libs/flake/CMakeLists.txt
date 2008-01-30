@@ -116,11 +116,13 @@ set(flake_SRCS
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/SnapGuide.cpp
+    tools/SnapGuideConfigWidget.cpp
 )
 
 kde4_add_ui_files(flake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
+    tools/SnapGuideConfigWidget.ui
 )
 
 

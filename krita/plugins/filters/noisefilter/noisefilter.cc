@@ -42,6 +42,7 @@
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
+#include <kis_random_generator.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 
@@ -112,14 +113,14 @@ void KisFilterNoise::process(KisFilterConstProcessingInformation srcInfo,
     const KoColorSpace * cs = src->colorSpace();
 
     QVariant value;
-    int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
-    int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
+    int level = (config and config->getProperty("level", value)) ? value.toInt() : 50;
+    int opacity = (config and config->getProperty("opacity", value)) ? value.toInt() : 100;
 
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
     quint8* interm = new quint8[ cs->pixelSize() ];
-    qint32 threshold = (RAND_MAX / 100) * (100 - level);
+    double threshold = (100.0 - level) * 0.01;
 
     qint16 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
@@ -127,16 +128,38 @@ void KisFilterNoise::process(KisFilterConstProcessingInformation srcInfo,
     pixels[0] = interm;
 
     KoMixColorsOp * mixOp = cs->mixColorsOp();
+    
+    int seedThreshold = rand();
+    int seedRed = rand();
+    int seedGreen = rand();
+    int seedBlue = rand();
+    
+    if( config )
+    {
+        seedThreshold = config->getInt( "seedThreshold", seedThreshold);
+        const_cast<KisFilterConfiguration*>( config )->setProperty("seedThreshold", seedThreshold );
+        seedRed = config->getInt( "seedRed", seedRed);
+        const_cast<KisFilterConfiguration*>( config )->setProperty("seedRed", seedRed );
+        seedGreen = config->getInt( "seedGreen", seedGreen);
+        const_cast<KisFilterConfiguration*>( config )->setProperty("seedGreen", seedGreen );
+        seedThreshold = config->getInt( "seedBlue", seedBlue);
+        const_cast<KisFilterConfiguration*>( config )->setProperty("seedBlue", seedBlue );
+    }
+    
+    KisRandomGenerator randt(seedThreshold);
+    KisRandomGenerator randr(seedRed);
+    KisRandomGenerator randg(seedGreen);
+    KisRandomGenerator randb(seedBlue);
 
     for ( int row = 0; row < size.height() and not(progressUpdater and progressUpdater->interrupted()); ++row ) {
         while(!srcIt.isDone() and not(progressUpdater and progressUpdater->interrupted()))
         {
-            if(rand() > threshold)
+            if(randt.doubleRandomAt( srcIt.x(), srcIt.y()) > threshold)
             {
                 // XXX: Added static_cast to get rid of warnings
-                QColor c = qRgb(static_cast<int>((double)rand()/RAND_MAX * 255),
-                                static_cast<int>((double)rand()/RAND_MAX * 255),
-                                static_cast<int>((double)rand()/RAND_MAX * 255));
+                QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt( srcIt.x(), srcIt.y()) * 255),
+                                static_cast<int>((double)randg.doubleRandomAt( srcIt.x(), srcIt.y()) * 255),
+                                static_cast<int>((double)randb.doubleRandomAt( srcIt.x(), srcIt.y()) * 255));
                 cs->fromQColor( c, interm, 0 );
                 pixels[1] = srcIt.oldRawData();
                 mixOp->mixColors( pixels, weights, 2, dstIt.rawData() );

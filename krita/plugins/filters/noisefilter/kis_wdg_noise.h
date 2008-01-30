@@ -38,6 +38,7 @@ class KisWdgNoise : public KisFilterConfigWidget
         virtual KisFilterConfiguration* configuration() const;
     private:
         Ui_WdgNoiseOptions* m_widget;
+        int m_seedThreshold, m_seedRed, m_seedGreen, m_seedBlue;
 };
 
 #endif

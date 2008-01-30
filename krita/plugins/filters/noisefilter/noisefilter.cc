@@ -137,13 +137,9 @@ void KisFilterNoise::process(KisFilterConstProcessingInformation srcInfo,
     if( config )
     {
         seedThreshold = config->getInt( "seedThreshold", seedThreshold);
-        const_cast<KisFilterConfiguration*>( config )->setProperty("seedThreshold", seedThreshold );
         seedRed = config->getInt( "seedRed", seedRed);
-        const_cast<KisFilterConfiguration*>( config )->setProperty("seedRed", seedRed );
         seedGreen = config->getInt( "seedGreen", seedGreen);
-        const_cast<KisFilterConfiguration*>( config )->setProperty("seedGreen", seedGreen );
         seedThreshold = config->getInt( "seedBlue", seedBlue);
-        const_cast<KisFilterConfiguration*>( config )->setProperty("seedBlue", seedBlue );
     }
     
     KisRandomGenerator randt(seedThreshold);

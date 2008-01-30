@@ -34,6 +34,10 @@ KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent)
 
     connect( widget()->intLevel, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     connect( widget()->intOpacity, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    m_seedThreshold = rand();
+    m_seedRed = rand();
+    m_seedGreen = rand();
+    m_seedBlue = rand();
 }
 
 KisWdgNoise::~KisWdgNoise()
@@ -58,6 +62,10 @@ KisFilterConfiguration* KisWdgNoise::configuration() const
     KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
     config->setProperty("level", this->widget()->intLevel->value() );
     config->setProperty("opacity", this->widget()->intOpacity->value() );
+    config->setProperty("seedThreshold", m_seedThreshold );
+    config->setProperty("seedRed", m_seedRed );
+    config->setProperty("seedGreen", m_seedGreen );
+    config->setProperty("seedBlue", m_seedBlue );
     return config;
 }
 

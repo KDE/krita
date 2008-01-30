@@ -306,15 +306,13 @@ void KisOpenGLGradientProgram::createGradientColorsTexture(const KoAbstractGradi
 
         KoColor texelColor(colorSpace);
         QColor texelRGB;
-        quint8 texelOpacity;
 
         gradient->colorAt(texelColor, t);
-        texelColor.colorSpace()->toQColor(texelColor.data(), &texelRGB, &texelOpacity, monitorProfile);
-        texelOpacity = qRound(texelOpacity * opacity);
+        texelColor.colorSpace()->toQColor(texelColor.data(), &texelRGB, monitorProfile);
         gradientColorsArray[texelIndex] = qRgba(texelRGB.red(), 
                                                 texelRGB.green(), 
                                                 texelRGB.blue(), 
-                                                texelOpacity);
+                                                qRound(texelRGB.alpha() * opacity));
     }
 
     KIS_OPENGL_CLEAR_ERROR();

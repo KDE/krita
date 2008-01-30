@@ -35,6 +35,9 @@ KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent)
     connect( widget()->intLevel, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     connect( widget()->intWindowSize, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     connect( widget()->intOpacity, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    m_seedH = rand();
+    m_seedV = rand();
+    m_seedThreshold = rand();
 }
 
 KisWdgRandomPick::~KisWdgRandomPick()
@@ -65,6 +68,9 @@ KisFilterConfiguration* KisWdgRandomPick::configuration() const
     config->setProperty("level", this->widget()->intLevel->value() );
     config->setProperty("windowsize", this->widget()->intWindowSize->value() );
     config->setProperty("opacity", this->widget()->intOpacity->value() );
+    config->setProperty("seedH", m_seedH );
+    config->setProperty("seedV", m_seedV );
+    config->setProperty("seedThreshold", m_seedThreshold );
     return config;
 }
 

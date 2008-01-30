@@ -38,6 +38,7 @@ class KisWdgRandomPick : public KisFilterConfigWidget
         virtual KisFilterConfiguration* configuration() const;
     private:
         Ui_WdgRandomPickOptions* m_widget;
+        int m_seedH, m_seedV, m_seedThreshold;
 };
 
 #endif

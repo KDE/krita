@@ -43,6 +43,7 @@
 #include <kis_layer.h>
 #include <kis_paint_device.h>
 #include <kis_random_accessor.h>
+#include <kis_random_generator.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 
@@ -104,11 +105,25 @@ void KisFilterRandomPick::process(KisFilterConstProcessingInformation srcInfo,
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
 
+    int seedThreshold = rand();
+    int seedH = rand();
+    int seedV = rand();
+    
+    if( config )
+    {
+        seedThreshold = config->getInt( "seedThreshold", seedThreshold);
+        seedH = config->getInt( "seedH", seedH);
+        seedV = config->getInt( "seedV", seedV);
+    }
+    KisRandomGenerator randT(seedThreshold);
+    KisRandomGenerator randH(seedH);
+    KisRandomGenerator randV(seedV);
+
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisRandomConstAccessorPixel srcRA = src->createRandomConstAccessor(0, 0, srcInfo.selection());
 
-    qint32 threshold = (RAND_MAX / 100) * (100 - level);
+    double threshold = (100 - level) / 100.0;
 
     qint16 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
@@ -118,10 +133,10 @@ void KisFilterRandomPick::process(KisFilterConstProcessingInformation srcInfo,
     {
         while(!srcIt.isDone())
         {
-            if(rand() > threshold)
+            if(randT.doubleRandomAt( srcIt.x(), srcIt.y() ) > threshold)
             {
-                int x = static_cast<int>(srcIt.x() + 2.5 * rand() / RAND_MAX);
-                int y = static_cast<int>(srcIt.y() +  2.5 * rand() / RAND_MAX);
+                int x = static_cast<int>(srcIt.x() + 2.5 * randH.doubleRandomAt( srcIt.x(), srcIt.y()) );
+                int y = static_cast<int>(srcIt.y() +  2.5 * randH.doubleRandomAt( srcIt.x(), srcIt.y()));
                 srcRA.moveTo( x, y);
                 pixels[0] = srcRA.oldRawData();
                 pixels[1] = srcIt.oldRawData();

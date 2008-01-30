@@ -23,15 +23,14 @@
 #include <QtCore/QPointF>
 #include <QtCore/QList>
 #include <QtCore/QRectF>
-#include <QtCore/QPair>
 #include <QtGui/QPainterPath>
 
+class SnapStrategy;
 class KoShape;
 class KoPathShape;
 class KoViewConverter;
 class KoCanvasBase;
 class QPainter;
-class SnapStrategy;
 class KoCanvasBase;
 
 class SnapGuide
@@ -107,7 +106,7 @@ public:
     /// returns list of shape in given rectangle in document coordinates
     QList<KoShape*> shapesInRect( const QRectF &rect );
 
-    /// returns list of points from given shape
+    /// returns list Guideof points from given shape
     QList<QPointF> pointsFromShape( KoShape * shape );
 
     /// returns list of all shapes
@@ -115,52 +114,6 @@ public:
 
 private:
     SnapGuide * m_snapGuide;
-};
-
-class SnapStrategy
-{
-public:
-    SnapStrategy( SnapGuide::SnapType type );
-    virtual ~SnapStrategy() {};
-
-    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance ) = 0;
-
-    /// returns the current snap strategy decoration
-    QPainterPath decoration() const;
-
-    /// returns the strategies type
-    SnapGuide::SnapType type() const;
-
-    static double fastDistance( const QPointF &p1, const QPointF &p2 );
-
-    /// returns the snapped position form the last call to snapToPoints
-    QPointF snappedPosition() const;
-
-protected:
-    /// sets the current snap strategy decoration
-    void setDecoration( const QPainterPath &decoration );
-
-    /// sets the current snapped position
-    void setSnappedPosition( const QPointF &position );
-
-private:
-    QPainterPath m_decoration;
-    SnapGuide::SnapType m_snapType;
-    QPointF m_snappedPosition;
-};
-
-class OrthogonalSnapStrategy : public SnapStrategy
-{
-public:
-    OrthogonalSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
-};
-
-class NodeSnapStrategy : public SnapStrategy
-{
-public:
-    NodeSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
 };
 
 #endif // SNAPGUIDE_H

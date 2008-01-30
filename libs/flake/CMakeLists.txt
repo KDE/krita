@@ -116,6 +116,7 @@ set(flake_SRCS
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/SnapGuide.cpp
+    tools/SnapStrategy.cpp
     tools/SnapGuideConfigWidget.cpp
 )
 

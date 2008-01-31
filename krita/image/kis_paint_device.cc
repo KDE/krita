@@ -866,16 +866,16 @@ bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c)
 bool KisPaintDevice::setPixel(qint32 x, qint32 y, const KoColor& kc)
 {
     const quint8 * pix;
+    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);
     if (kc.colorSpace() != m_d->colorSpace) {
         KoColor kc2 (kc, m_d->colorSpace);
         pix = kc2.data();
+        memcpy(iter.rawData(), pix, m_d->colorSpace->pixelSize());
     }
     else {
         pix = kc.data();
+        memcpy(iter.rawData(), pix, m_d->colorSpace->pixelSize());
     }
-
-    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);
-    memcpy(iter.rawData(), pix, m_d->colorSpace->pixelSize());
 
     return true;
 }

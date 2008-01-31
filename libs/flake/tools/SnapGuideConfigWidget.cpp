@@ -19,22 +19,26 @@
 
 #include "SnapGuideConfigWidget.h"
 #include "SnapGuide.h"
+#include "SnapStrategy.h"
 
 SnapGuideConfigWidget::SnapGuideConfigWidget( SnapGuide * snapGuide, QWidget * parent )
     :QWidget(parent), m_snapGuide(snapGuide)
 {
     widget.setupUi(this);
 
-    if( snapGuide->enabledSnapStrategies() & SnapGuide::Orthogonal )
+    if( snapGuide->enabledSnapStrategies() & SnapStrategy::Orthogonal )
         widget.orthogonalSnapGuide->setCheckState( Qt::Checked );
-    if( snapGuide->enabledSnapStrategies() & SnapGuide::Node )
+    if( snapGuide->enabledSnapStrategies() & SnapStrategy::Node )
         widget.nodeSnapGuide->setCheckState( Qt::Checked );
+    if( snapGuide->enabledSnapStrategies() & SnapStrategy::Extension )
+        widget.extensionSnapGuide->setCheckState( Qt::Checked );
 
     widget.snapDistance->setValue( m_snapGuide->snapDistance() );
 
     connect( widget.useSnapGuides, SIGNAL(stateChanged(int)), this, SLOT(snappingEnabled(int)));
     connect( widget.orthogonalSnapGuide, SIGNAL(stateChanged(int)), this, SLOT(strategyChanged()));
     connect( widget.nodeSnapGuide, SIGNAL(stateChanged(int)), this, SLOT(strategyChanged()));
+    connect( widget.extensionSnapGuide, SIGNAL(stateChanged(int)), this, SLOT(strategyChanged()));
     connect( widget.snapDistance, SIGNAL(valueChanged(int)), this, SLOT(distanceChanged(int)));
 
     widget.useSnapGuides->setCheckState( snapGuide->isSnapping() ? Qt::Checked : Qt::Unchecked );
@@ -54,9 +58,11 @@ void SnapGuideConfigWidget::strategyChanged()
 {
     int strategies = 0;
     if( widget.orthogonalSnapGuide->checkState() == Qt::Checked )
-        strategies |= SnapGuide::Orthogonal;
+        strategies |= SnapStrategy::Orthogonal;
     if( widget.nodeSnapGuide->checkState() == Qt::Checked )
-        strategies |= SnapGuide::Node;
+        strategies |= SnapStrategy::Node;
+    if( widget.extensionSnapGuide->checkState() == Qt::Checked )
+        strategies |= SnapStrategy::Extension;
 
     m_snapGuide->enableSnapStrategies( strategies );
 }

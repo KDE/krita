@@ -25,10 +25,19 @@
 #include <QtCore/QPointF>
 #include <QtGui/QPainterPath>
 
+class KoPathPoint;
+
 class SnapStrategy
 {
 public:
-    SnapStrategy( SnapGuide::SnapType type );
+    /// the different possible snap types
+    enum SnapType {
+        Orthogonal = 1,
+        Node = 2,
+        Extension = 4
+    };
+
+    SnapStrategy( SnapType type );
     virtual ~SnapStrategy() {};
 
     virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance ) = 0;
@@ -37,7 +46,7 @@ public:
     QPainterPath decoration() const;
 
     /// returns the strategies type
-    SnapGuide::SnapType type() const;
+    SnapType type() const;
 
     static double fastDistance( const QPointF &p1, const QPointF &p2 );
 
@@ -53,7 +62,7 @@ protected:
 
 private:
     QPainterPath m_decoration;
-    SnapGuide::SnapType m_snapType;
+    SnapType m_snapType;
     QPointF m_snappedPosition;
 };
 
@@ -69,6 +78,17 @@ class NodeSnapStrategy : public SnapStrategy
 public:
     NodeSnapStrategy();
     virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
+};
+
+class ExtensionSnapStrategy : public SnapStrategy
+{
+public:
+    ExtensionSnapStrategy();
+    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
+private:
+    double project( const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point );
+    QPointF extensionDirection( KoPathPoint * point, const QMatrix &matrix );
+    bool snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix );
 };
 
 #endif // SNAPSTRATEGY_H

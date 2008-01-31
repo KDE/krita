@@ -18,11 +18,13 @@
  */
 
 #include "SnapStrategy.h"
+#include <KoPathShape.h>
+#include <KoPathPoint.h>
 
 #include <math.h>
 
 
-SnapStrategy::SnapStrategy( SnapGuide::SnapType type )
+SnapStrategy::SnapStrategy( SnapStrategy::SnapType type )
     : m_snapType(type)
 {
 }
@@ -47,7 +49,7 @@ void SnapStrategy::setSnappedPosition( const QPointF &position )
     m_snappedPosition= position;
 }
 
-SnapGuide::SnapType SnapStrategy::type() const
+SnapStrategy::SnapType SnapStrategy::type() const
 {
     return m_snapType;
 }
@@ -60,7 +62,7 @@ double SnapStrategy::fastDistance( const QPointF &p1, const QPointF &p2 )
 }
 
 OrthogonalSnapStrategy::OrthogonalSnapStrategy()
-    : SnapStrategy( SnapGuide::Orthogonal )
+    : SnapStrategy( SnapStrategy::Orthogonal )
 {
 }
 
@@ -119,7 +121,7 @@ bool OrthogonalSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapPro
 }
 
 NodeSnapStrategy::NodeSnapStrategy()
-    : SnapStrategy( SnapGuide::Node )
+    : SnapStrategy( SnapStrategy::Node )
 {
 }
 
@@ -136,8 +138,7 @@ bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * p
 
     foreach( QPointF point, points )
     {
-        QPointF diffVec = mousePosition-point;
-        double distance = diffVec.x()*diffVec.x() + diffVec.y()*diffVec.y();
+        double distance = fastDistance( mousePosition, point );
         if( distance < maxDistance && distance < minDistance )
         {
             snappedPoint = point;
@@ -158,4 +159,140 @@ bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * p
     setSnappedPosition( snappedPoint );
 
     return (minDistance < HUGE_VAL);
+}
+
+ExtensionSnapStrategy::ExtensionSnapStrategy()
+    : SnapStrategy( SnapStrategy::Extension )
+{
+}
+
+bool ExtensionSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance )
+{
+    double maxDistance = maxSnapDistance*maxSnapDistance;
+    double minDistance = HUGE_VAL;
+
+    QPointF snappedPoint = mousePosition;
+    QPointF startPoint;
+
+    QList<KoShape*> shapes = proxy->shapes( true );
+    foreach( KoShape * shape, shapes )
+    {
+        KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+        if( ! path )
+            continue;
+
+        QMatrix matrix = path->absoluteTransformation(0);
+
+        int subpathCount = path->subpathCount();
+        for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
+        {
+            if( path->isClosedSubpath( subpathIndex ) )
+                continue;
+
+            int pointCount = path->pointCountSubpath( subpathIndex );
+
+            // check the extension from the start point
+            KoPathPoint * first = path->pointByIndex( KoPathPointIndex( subpathIndex, 0 )  );
+            QPointF firstSnapPosition = mousePosition;
+            if( snapToExtension( firstSnapPosition, first, matrix ) )
+            {
+                double distance = fastDistance( firstSnapPosition, mousePosition );
+                if( distance < maxDistance && distance < minDistance )
+                {
+                    minDistance = distance;
+                    snappedPoint = firstSnapPosition;
+                    startPoint = matrix.map( first->point() );
+                }
+            }
+
+            // now check the extension from the last point
+            KoPathPoint * last = path->pointByIndex( KoPathPointIndex( subpathIndex, pointCount-1 )  );
+            QPointF lastSnapPosition = mousePosition;
+            if( snapToExtension( lastSnapPosition, last, matrix ) )
+            {
+                double distance = fastDistance( lastSnapPosition, mousePosition );
+                if( distance < maxDistance && distance < minDistance )
+                {
+                    minDistance = distance;
+                    snappedPoint = lastSnapPosition;
+                    startPoint = matrix.map( last->point() );
+                }
+            }
+        }
+    }
+
+    QPainterPath decoration;
+
+    if( minDistance < HUGE_VAL )
+    {
+        decoration.moveTo( startPoint );
+        decoration.lineTo( snappedPoint );
+    }
+
+    setDecoration( decoration );
+    setSnappedPosition( snappedPoint );
+
+    return (minDistance < HUGE_VAL);
+}
+
+bool ExtensionSnapStrategy::snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix )
+{
+    QPointF direction = extensionDirection( point, matrix );
+    QPointF extensionStart = matrix.map( point->point() );
+    QPointF extensionStop = matrix.map( point->point() ) + direction;
+    float posOnExtension = project( extensionStart, extensionStop, position );
+    if( posOnExtension < 0.0 )
+        return false;
+
+    position = extensionStart + posOnExtension * direction;
+    return true;
+}
+
+double ExtensionSnapStrategy::project( const QPointF &lineStart, const QPointF &lineEnd, const QPointF &point )
+{
+    QPointF diff = lineEnd - lineStart;
+    QPointF relPoint = point - lineStart;
+    double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+    diff /= diffLength;
+    // project mouse position relative to stop position on extension line
+    double scalar = relPoint.x()*diff.x() + relPoint.y()*diff.y();
+    return scalar /= diffLength;
+}
+
+QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QMatrix &matrix )
+{
+    KoPathShape * path = point->parent();
+    KoPathPointIndex index = path->pathPointIndex( point );
+
+    /// check if it is a start point
+    if( point->properties() & KoPathPoint::StartSubpath )
+    {
+        if( point->properties() & KoPathPoint::HasControlPoint2 )
+        {
+            return matrix.map(point->point()) - matrix.map(point->controlPoint2());
+        }
+        else
+        {
+            KoPathPoint * next = path->pointByIndex( KoPathPointIndex( index.first, index.second+1 ) );
+            if( next->properties() & KoPathPoint::HasControlPoint1 )
+                return matrix.map(point->point()) - matrix.map(next->controlPoint1());
+            else
+                return matrix.map(point->point()) - matrix.map(next->point());
+        }
+    }
+    else
+    {
+        if( point->properties() & KoPathPoint::HasControlPoint1 )
+        {
+            return matrix.map(point->point()) - matrix.map(point->controlPoint1());
+        }
+        else
+        {
+            KoPathPoint * prev = path->pointByIndex( KoPathPointIndex( index.first, index.second-1 ) );
+            if( prev->properties() & KoPathPoint::HasControlPoint2 )
+                return matrix.map(point->point()) - matrix.map(prev->controlPoint2());
+            else
+                return matrix.map(point->point()) - matrix.map(prev->point());
+        }
+    }
 }

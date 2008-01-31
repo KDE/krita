@@ -21,6 +21,7 @@
 
 #include "KoCreatePathTool.h"
 #include "SnapGuide.h"
+#include "SnapStrategy.h"
 #include "SnapGuideConfigWidget.h"
 
 #include "KoPathShape.h"
@@ -48,7 +49,8 @@ KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
 , m_mouseOverFirstPoint(false)
 , m_snapGuide( new SnapGuide(canvas) )
 {
-    m_snapGuide->enableSnapStrategies( SnapGuide::Orthogonal|SnapGuide::Node );
+    m_snapGuide->enableSnapStrategies( SnapStrategy::Orthogonal|SnapStrategy::Node|SnapStrategy::Extension );
+    //m_snapGuide->enableSnapStrategies( SnapStrategy::Node|SnapStrategy::Extension );
 }
 
 KoCreatePathTool::~KoCreatePathTool()
@@ -147,7 +149,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         m_canvas->updateCanvas( m_shape->boundingRect() );
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
 
-        m_snapGuide->setExtraShape( m_shape );
+        m_snapGuide->setEditedShape( m_shape );
     }
 }
 
@@ -256,7 +258,7 @@ void KoCreatePathTool::addPathShape()
 {
     m_shape->normalize();
 
-    m_snapGuide->setExtraShape(0);
+    m_snapGuide->setEditedShape(0);
 
     // this is done so that nothing happens when the mouseReleaseEvent for the this event is received 
     KoPathShape *pathShape = m_shape;

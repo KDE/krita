@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>255</width>
-    <height>187</height>
+    <height>229</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -38,16 +38,23 @@
        </widget>
       </item>
       <item row="2" column="0" colspan="2" >
+       <widget class="QCheckBox" name="extensionSnapGuide" >
+        <property name="text" >
+         <string>Enable Extension Guide</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2" >
        <widget class="QLabel" name="label" >
         <property name="text" >
          <string>Snap Distance (px)</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
+      <item row="4" column="0" >
        <widget class="QSpinBox" name="snapDistance" />
       </item>
-      <item row="3" column="1" >
+      <item row="4" column="1" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
@@ -60,7 +67,7 @@
         </property>
        </spacer>
       </item>
-      <item row="4" column="0" >
+      <item row="5" column="0" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Vertical</enum>

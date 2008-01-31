@@ -32,25 +32,26 @@
 
 
 SnapGuide::SnapGuide( KoCanvasBase * canvas )
-    : m_canvas(canvas), m_extraShape(0), m_currentStrategy(0)
+    : m_canvas(canvas), m_editedShape(0), m_currentStrategy(0)
     , m_active(true), m_snapDistance(10)
 {
     m_strategies.append( new NodeSnapStrategy() );
     m_strategies.append( new OrthogonalSnapStrategy() );
+    m_strategies.append( new ExtensionSnapStrategy() );
 }
 
 SnapGuide::~SnapGuide()
 {
 }
 
-void SnapGuide::setExtraShape( KoShape * shape )
+void SnapGuide::setEditedShape( KoShape * shape )
 {
-    m_extraShape = shape;
+    m_editedShape = shape;
 }
 
-KoShape * SnapGuide::extraShape() const
+KoShape * SnapGuide::editedShape() const
 {
-    return m_extraShape;
+    return m_editedShape;
 }
 
 void SnapGuide::enableSnapStrategies( int strategies )
@@ -130,7 +131,7 @@ QRectF SnapGuide::boundingRect()
 
 void SnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
 {
-    if( ! m_currentStrategy )
+    if( ! m_currentStrategy || ! m_active )
         return;
 
     QPen pen( Qt::red );
@@ -174,11 +175,11 @@ QList<KoShape*> SnapProxy::shapesInRect( const QRectF &rect )
 {
     QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapesAt( rect );
 
-    if( m_snapGuide->extraShape() )
+    if( m_snapGuide->editedShape() )
     {
-        QRectF bound = m_snapGuide->extraShape()->boundingRect();
+        QRectF bound = m_snapGuide->editedShape()->boundingRect();
         if( rect.intersects( bound ) || rect.contains( bound ) )
-            shapes.append( m_snapGuide->extraShape() );
+            shapes.append( m_snapGuide->editedShape() );
     }
     return shapes;
 }
@@ -207,16 +208,16 @@ QList<QPointF> SnapProxy::pointsFromShape( KoShape * shape )
         }
     }
 
-    if( shape == m_snapGuide->extraShape() )
+    if( shape == m_snapGuide->editedShape() )
         pathPoints.removeLast();
 
     return pathPoints;
 }
 
-QList<KoShape*> SnapProxy::shapes()
+QList<KoShape*> SnapProxy::shapes( bool omitEditedShape )
 {
     QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapes();
-    if( m_snapGuide->extraShape() )
-        shapes.append( m_snapGuide->extraShape() );
+    if( ! omitEditedShape && m_snapGuide->editedShape() )
+        shapes.append( m_snapGuide->editedShape() );
     return shapes;
 }

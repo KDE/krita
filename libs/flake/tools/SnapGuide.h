@@ -36,11 +36,6 @@ class KoCanvasBase;
 class SnapGuide
 {
 public:
-    /// the different possible snap types
-    enum SnapType {
-        Orthogonal = 1,
-        Node = 2
-    };
 
     /// Creates the snap guide to work on the given canvas
     SnapGuide( KoCanvasBase * canvas );
@@ -57,10 +52,10 @@ public:
     QRectF boundingRect();
 
     /// Adds an additional shape to snap to (useful when creating a path)
-    void setExtraShape( KoShape * shape );
+    void setEditedShape( KoShape * shape );
 
     /// returns the extra shapes to use
-    KoShape * extraShape() const;
+    KoShape * editedShape() const;
 
     /// enables the strategies used for snapping 
     void enableSnapStrategies( int strategies );
@@ -85,7 +80,7 @@ public:
 
 private:
     KoCanvasBase * m_canvas;
-    KoShape * m_extraShape;
+    KoShape * m_editedShape;
 
     QList<SnapStrategy*> m_strategies;
     SnapStrategy * m_currentStrategy;
@@ -110,7 +105,7 @@ public:
     QList<QPointF> pointsFromShape( KoShape * shape );
 
     /// returns list of all shapes
-    QList<KoShape*> shapes();
+    QList<KoShape*> shapes( bool omitEditedShape = false );
 
 private:
     SnapGuide * m_snapGuide;

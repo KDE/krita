@@ -899,6 +899,7 @@ QImage KisImage::convertToQImage(qint32 x,
                                  const KoColorProfile * profile)
 {
     KisPaintDeviceSP dev = m_d->rootLayer->projection();
+    if(!dev) return QImage();
     QImage img = dev->convertToQImage(const_cast<KoColorProfile*>( profile ), x, y, w, h);
 
     if (!img.isNull()) {

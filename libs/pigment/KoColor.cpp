@@ -64,6 +64,7 @@ KoColor::KoColor(const KoColorSpace * colorSpace)
 
 KoColor::~KoColor()
 {
+    delete d->data;
     delete d;
 }
 

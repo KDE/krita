@@ -100,7 +100,7 @@ void KisToolBezierPaint::setup(KActionCollection *collection)
                                objectName());
         Q_CHECK_PTR(m_action);
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Draw cubic beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
+        m_action->setToolTip(i18n("Draw cubic Beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
         m_action->setActionGroup(actionGroup());
 
         m_ownAction = true;

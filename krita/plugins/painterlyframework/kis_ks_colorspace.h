@@ -155,8 +155,9 @@ template< typename _TYPE_, quint32 _N_ >
 bool KisKSColorSpace<_TYPE_,_N_>::profileIsCompatible(const KoColorProfile *profile) const
 {
     const KisIlluminantProfile *p = static_cast<const KisIlluminantProfile *>(profile);
-    if (p->wavelenghts() != _N_)
+    if (p->wavelengths() != _N_) {
         return false;
+    }
     return true;
 }
 

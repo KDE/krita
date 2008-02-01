@@ -48,7 +48,7 @@ public:
     KisToolExampleFactory(QObject *parent, const QStringList&)
         : KoToolFactory(parent, "KisToolExample", i18n( "Example curves tool" ))
         {
-            setToolTip( i18n( "Exanmple tool for the curves framework" ) );
+            setToolTip( i18n( "Example tool for the curves framework" ) );
             setToolType( TOOL_TYPE_SHAPE );
             setIcon( "tool-example" );
             setPriority( 0 );

@@ -61,7 +61,7 @@ class KisWaveCurve {
 class KisSinusoidalWaveCurve : public KisWaveCurve {
     public:
 
-        KisSinusoidalWaveCurve(int amplitude, int wavelenght, int shift) : m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift)
+        KisSinusoidalWaveCurve(int amplitude, int wavelength, int shift) : m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift)
         {
         }
 
@@ -78,7 +78,7 @@ class KisSinusoidalWaveCurve : public KisWaveCurve {
 class KisTriangleWaveCurve : public KisWaveCurve {
     public:
 
-        KisTriangleWaveCurve(int amplitude, int wavelenght, int shift) :  m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift)
+        KisTriangleWaveCurve(int amplitude, int wavelength, int shift) :  m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift)
         {
         }
 

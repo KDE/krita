@@ -104,16 +104,15 @@ class KisKSQPColorSpaceFactory : public KoColorSpaceFactory
         bool profileIsCompatible(const KoColorProfile *profile) const
         {
             const KisIlluminantProfile *p = dynamic_cast<const KisIlluminantProfile *>(profile);
-            if (!p)
+            if ((!p) || (p->wavelengths() != _N_)) {
                 return false;
-            if (p->wavelenghts() != _N_)
-                return false;
+            }
             return true;
         }
 
         QString defaultProfile() const
         {
-            return QString("D-65 Illuminant Profile - "+QString::number(_N_)+" wavelenghts - Black [11.0,0.35]");
+            return QString("D-65 Illuminant Profile - " + QString::number(_N_) + " wavelengths - Black [11.0,0.35]");
         }
 };
 

@@ -251,7 +251,7 @@
          <item row="0" column="0" >
           <widget class="QLabel" name="label_6" >
            <property name="text" >
-            <string>Focal lenght:</string>
+            <string>Focal length:</string>
            </property>
            <property name="buddy" >
             <cstring>editFocalLength</cstring>
@@ -274,7 +274,7 @@
          <item row="1" column="0" >
           <widget class="QLabel" name="label_5" >
            <property name="text" >
-            <string>Focal lenght (35mm equivalent):</string>
+            <string>Focal length (35mm equivalent):</string>
            </property>
            <property name="buddy" >
             <cstring>editFocalLengthIn35mmFilm</cstring>

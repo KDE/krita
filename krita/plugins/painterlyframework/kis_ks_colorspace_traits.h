@@ -30,7 +30,7 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_wavelen_number
     struct {
         _TYPE_ m_K;
         _TYPE_ m_S;
-    } wavelenght[_wavelen_number_];
+    } wavelength[_wavelen_number_];
     _TYPE_ m_opacity;
 
     inline static _TYPE_ &K(quint8* data, const quint32 wavelen)

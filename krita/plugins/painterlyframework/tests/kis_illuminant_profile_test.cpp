@@ -79,7 +79,7 @@ void KisIlluminantProfileTest::testLoading()
     QVERIFY(p1->valid() == false);
     p1->load();
     QVERIFY(p1->valid() == true);
-    QVERIFY(p1->wavelenghts() == 9);
+    QVERIFY(p1->wavelengths() == 9);
     QCOMPARE(p1->Kblack(), 4.3);
     QCOMPARE(p1->Sblack(), 0.14);
     gsl_print(p1->T(), "Transformation matrix: ");
@@ -88,7 +88,7 @@ void KisIlluminantProfileTest::testLoading()
     KisIlluminantProfile *p2 = dynamic_cast<KisIlluminantProfile*>(p1->clone());
     delete p1;
     QVERIFY(p2->valid() == true);
-    QVERIFY(p2->wavelenghts() == 9);
+    QVERIFY(p2->wavelengths() == 9);
     QCOMPARE(p2->Kblack(), 4.3);
     QCOMPARE(p2->Sblack(), 0.14);
     gsl_print(p2->T(), "Transformation matrix: ");
@@ -98,7 +98,7 @@ void KisIlluminantProfileTest::testLoading()
     QVERIFY(p2->valid() == true);
     p2->load();
     QVERIFY(p2->valid() == true);
-    QVERIFY(p2->wavelenghts() == 9);
+    QVERIFY(p2->wavelengths() == 9);
     QCOMPARE(p2->Kblack(), 11.0);
     QCOMPARE(p2->Sblack(), 0.35);
     gsl_print(p2->T(), "Transformation matrix: ");
@@ -108,7 +108,7 @@ void KisIlluminantProfileTest::testLoading()
 
     p1 = new KisIlluminantProfile(d9low);
     QVERIFY(p2->valid() == true);
-    QVERIFY(p2->wavelenghts() == 9);
+    QVERIFY(p2->wavelengths() == 9);
     QCOMPARE(p2->Kblack(), 4.3);
     QCOMPARE(p2->Sblack(), 0.14);
     gsl_print(p2->T(), "Transformation matrix: ");
@@ -127,7 +127,7 @@ void KisIlluminantProfileTest::testSaving()
 
     p = new KisIlluminantProfile("D659Save.ill");
     QVERIFY(p->valid() == true);
-    QVERIFY(p->wavelenghts() == 9);
+    QVERIFY(p->wavelengths() == 9);
     QCOMPARE(p->Kblack(), 4.3);
     QCOMPARE(p->Sblack(), 0.14);
     gsl_print(p->T(), "Transformation matrix: ");

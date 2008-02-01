@@ -110,7 +110,7 @@ public:
     KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&)
         : KoToolFactory(parent, "KisToolPerspectiveTransform", i18n( "Perspective Transform" ))
         {
-            setToolTip( i18n( "Transform the perspectival appearance3 of a layer or a selection" ) );
+            setToolTip( i18n( "Transform the perspective appearance of a layer or a selection" ) );
             setToolType( TOOL_TYPE_TRANSFORM );
             setIcon( "tool_perspectivetransform" );
             setPriority( 0 );

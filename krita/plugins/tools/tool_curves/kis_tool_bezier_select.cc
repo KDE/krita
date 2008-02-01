@@ -88,7 +88,7 @@ void KisToolBezierSelect::setup(KActionCollection *collection)
                                objectName());
         Q_CHECK_PTR(m_action);
         connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
-        m_action->setToolTip(i18n("Select areas of the image with bezier paths."));
+        m_action->setToolTip(i18n("Select areas of the image with Bezier paths."));
         m_action->setActionGroup(actionGroup());
 
         m_ownAction = true;

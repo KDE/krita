@@ -31,7 +31,7 @@
 
 
 KisGrayU16ColorSpace ::KisGrayU16ColorSpace(KoColorProfile *p) :
-            KoLcmsColorSpace<GrayU16Traits>("GRAYU16", i18n("Grayscale 16-bit integer/channel)"), TYPE_GRAY_16, icSigGrayData, p)
+            KoLcmsColorSpace<GrayU16Traits>("GRAYU16", i18n("Grayscale (16-bit integer/channel)"), TYPE_GRAY_16, icSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
 

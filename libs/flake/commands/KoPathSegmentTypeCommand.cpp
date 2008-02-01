@@ -30,31 +30,31 @@ KoPathSegmentTypeCommand::KoPathSegmentTypeCommand( const QList<KoPathPointData>
     for ( ; it != pointDataList.end(); ++it )
     {
         KoPathSegment segment = it->m_pathShape->segmentByIndex( it->m_pointIndex );
-        if ( segment.first && segment.second )
+        if ( segment.isValid() )
         {
             if ( m_segmentType == Curve )
             {
-                if ( segment.first->activeControlPoint2() || segment.second->activeControlPoint1() )
+                if ( segment.first()->activeControlPoint2() || segment.second()->activeControlPoint1() )
                     continue;
             }
             else 
             {
-                if ( ! segment.first->activeControlPoint2() && ! segment.second->activeControlPoint1() )
+                if ( ! segment.first()->activeControlPoint2() && ! segment.second()->activeControlPoint1() )
                     continue;
             }
 
             m_pointDataList.append( *it );
             SegmentTypeData segmentData;
 
-            KoPathShape * pathShape = segment.first->parent();
+            KoPathShape * pathShape = segment.first()->parent();
 
             if ( m_segmentType == Curve )
             {
-                segmentData.m_controlPoint2 = pathShape->shapeToDocument( segment.first->controlPoint2() );
-                segmentData.m_controlPoint1 = pathShape->shapeToDocument( segment.second->controlPoint1() );
+                segmentData.m_controlPoint2 = pathShape->shapeToDocument( segment.first()->controlPoint2() );
+                segmentData.m_controlPoint1 = pathShape->shapeToDocument( segment.second()->controlPoint1() );
             }
-            segmentData.m_properties2 = segment.first->properties();
-            segmentData.m_properties1 = segment.second->properties();
+            segmentData.m_properties2 = segment.first()->properties();
+            segmentData.m_properties1 = segment.second()->properties();
             m_segmentData.append( segmentData );
         }
     }
@@ -86,16 +86,16 @@ void KoPathSegmentTypeCommand::redo()
 
         if ( m_segmentType == Curve )
         {
-            QPointF pointDiff = segment.second->point() - segment.first->point();
-            segment.first->setControlPoint2( segment.first->point() + pointDiff / 3.0 );
-            segment.second->setControlPoint1( segment.first->point() + pointDiff * 2.0 / 3.0 );
-            segment.first->setProperties( segment.first->properties() | KoPathPoint::HasControlPoint2 );
-            segment.second->setProperties( segment.second->properties() | KoPathPoint::HasControlPoint1 );
+            QPointF pointDiff = segment.second()->point() - segment.first()->point();
+            segment.first()->setControlPoint2( segment.first()->point() + pointDiff / 3.0 );
+            segment.second()->setControlPoint1( segment.first()->point() + pointDiff * 2.0 / 3.0 );
+            segment.first()->setProperties( segment.first()->properties() | KoPathPoint::HasControlPoint2 );
+            segment.second()->setProperties( segment.second()->properties() | KoPathPoint::HasControlPoint1 );
         }
         else
         {
-            segment.first->setProperties( segment.first->properties() & ~KoPathPoint::HasControlPoint2 );
-            segment.second->setProperties( segment.second->properties() & ~KoPathPoint::HasControlPoint1 );
+            segment.first()->setProperties( segment.first()->properties() & ~KoPathPoint::HasControlPoint2 );
+            segment.second()->setProperties( segment.second()->properties() & ~KoPathPoint::HasControlPoint1 );
         }
 
         pathShape->normalize();
@@ -114,11 +114,11 @@ void KoPathSegmentTypeCommand::undo()
         const SegmentTypeData segmentData( m_segmentData.at( i ) );
         if ( m_segmentType == Curve )
         {
-            segment.first->setControlPoint2( pd.m_pathShape->documentToShape( segmentData.m_controlPoint2 ) );
-            segment.second->setControlPoint1( pd.m_pathShape->documentToShape( segmentData.m_controlPoint1 ) );
+            segment.first()->setControlPoint2( pd.m_pathShape->documentToShape( segmentData.m_controlPoint2 ) );
+            segment.second()->setControlPoint1( pd.m_pathShape->documentToShape( segmentData.m_controlPoint1 ) );
         }
-        segment.first->setProperties( segmentData.m_properties2 );
-        segment.second->setProperties( segmentData.m_properties1 );
+        segment.first()->setProperties( segmentData.m_properties2 );
+        segment.second()->setProperties( segmentData.m_properties1 );
 
         pd.m_pathShape->normalize();
         pd.m_pathShape->update();

@@ -80,6 +80,20 @@ KoPathPoint& KoPathPoint::operator=( const KoPathPoint &rhs )
     return (*this);
 }
 
+bool KoPathPoint::operator == ( const KoPathPoint &rhs ) const
+{
+    if( d->point != rhs.d->point )
+        return false;
+    if( d->controlPoint1 != rhs.d->controlPoint1 )
+        return false;
+    if( d->controlPoint2 != rhs.d->controlPoint2 )
+        return false;
+    if( d->properties != rhs.d->properties )
+        return false;
+
+    return true;
+}
+
 void KoPathPoint::setPoint( const QPointF & point ) 
 {
     d->point = point;

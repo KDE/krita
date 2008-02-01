@@ -40,18 +40,18 @@ KoPathPointInsertCommand::KoPathPointInsertCommand( const QList<KoPathPointData>
         KoPathSegment segment = pathShape->segmentByIndex( it->m_pointIndex );
 
         // should not happen but to be sure
-        if ( !segment.first || !segment.second )
+        if ( ! segment.isValid() )
             continue;
 
         m_pointDataList.append( *it );
-        if ( segment.first->activeControlPoint2() || segment.second->activeControlPoint1() )
+        if ( segment.first()->activeControlPoint2() || segment.second()->activeControlPoint1() )
         {
             QPointF q[4] =
             {
-               segment.first->point(),
-               segment.first->activeControlPoint2() ? segment.first->controlPoint2() : segment.first->point(),
-               segment.second->activeControlPoint1() ? segment.second->controlPoint1() : segment.second->point(),
-               segment.second->point()
+               segment.first()->point(),
+               segment.first()->activeControlPoint2() ? segment.first()->controlPoint2() : segment.first()->point(),
+               segment.second()->activeControlPoint1() ? segment.second()->controlPoint1() : segment.second()->point(),
+               segment.second()->point()
             };
 
             QPointF p[3];
@@ -74,9 +74,9 @@ KoPathPointInsertCommand::KoPathPointInsertCommand( const QList<KoPathPointData>
         }
         else
         {
-            QPointF splitPointPos = segment.first->point() + insertPosition * ( segment.second->point() - segment.first->point());
+            QPointF splitPointPos = segment.first()->point() + insertPosition * ( segment.second()->point() - segment.first()->point());
             m_points.append( new KoPathPoint( pathShape, splitPointPos, KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 ) );
-            m_controlPoints.append( QPair<QPointF, QPointF>( segment.first->controlPoint2(), segment.second->controlPoint1() ) );
+            m_controlPoints.append( QPair<QPointF, QPointF>( segment.first()->controlPoint2(), segment.second()->controlPoint1() ) );
         }
     }
 }
@@ -101,18 +101,18 @@ void KoPathPointInsertCommand::redo()
 
         ++pointData.m_pointIndex.second;
 
-        if ( segment.first->activeControlPoint2() )
+        if ( segment.first()->activeControlPoint2() )
         {
-            QPointF controlPoint2 = segment.first->controlPoint2();
+            QPointF controlPoint2 = segment.first()->controlPoint2();
             qSwap( controlPoint2, m_controlPoints[i].first );
-            segment.first->setControlPoint2( controlPoint2 );
+            segment.first()->setControlPoint2( controlPoint2 );
         }
 
-        if ( segment.second->activeControlPoint1() )
+        if ( segment.second()->activeControlPoint1() )
         {
-            QPointF controlPoint1 = segment.second->controlPoint1();
+            QPointF controlPoint1 = segment.second()->controlPoint1();
             qSwap( controlPoint1, m_controlPoints[i].second );
-            segment.second->setControlPoint1( controlPoint1 );
+            segment.second()->setControlPoint1( controlPoint1 );
         }
 
         pathShape->insertPoint( m_points.at( i ), pointData.m_pointIndex );

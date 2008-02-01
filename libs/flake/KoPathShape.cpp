@@ -694,8 +694,7 @@ KoPathSegment KoPathShape::segmentByIndex( const KoPathPointIndex &pointIndex ) 
 
         if ( index < subpath->size() )
         {
-            segment.first = point;
-            segment.second = subpath->at( index );
+            segment = KoPathSegment( point, subpath->at( index ) );
         }
     }
     return segment;

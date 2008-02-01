@@ -27,6 +27,7 @@
 #include <QMap>
 
 #include "KoShape.h"
+#include "KoPathSegment.h"
 
 #define KoPathShapeId "KoPathShape"
 
@@ -41,8 +42,6 @@ typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
 /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
 typedef QList<KoPathPoint *> KoSubpath;
 typedef QList<KoSubpath *> KoSubpathList;
-/// A KoPathSegment is a pair two neighboring KoPathPoints 
-typedef QPair<KoPathPoint*,KoPathPoint*> KoPathSegment;
 /// The position of a path point within a path shape
 typedef QPair<KoSubpath*, int> KoPointPosition;
 /**

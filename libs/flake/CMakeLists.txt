@@ -15,6 +15,7 @@ set(flake_SRCS
     KoCanvasResourceProvider.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
+    KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
     KoShapeContainer.cpp

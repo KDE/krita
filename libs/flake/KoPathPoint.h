@@ -90,6 +90,9 @@ public:
      */
     KoPathPoint& operator=( const KoPathPoint &rhs );
 
+    /// Compare operator
+    bool operator == ( const KoPathPoint &rhs ) const;
+
     /**
      * @brief Destructor
      */
@@ -239,6 +242,7 @@ public:
      * are not changed.
      */
     void reverse();
+
 protected:
     friend class KoPointGroup;
     friend class KoPathShape;

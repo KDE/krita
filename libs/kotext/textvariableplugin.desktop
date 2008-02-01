@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Variable Plugin
+Name[it]=Plugin per le variabili di testo
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-Variable
 Comment=A plugin that contains text variables
+Comment[it]=Un plugin contenente variabili di testo
 [PropertyDef::X-KoText-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

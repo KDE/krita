@@ -24,7 +24,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"

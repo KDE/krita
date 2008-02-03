@@ -19,7 +19,6 @@
 #ifndef KOOASISLOADINGCONTEXT_H
 #define KOOASISLOADINGCONTEXT_H
 
-class KoDocument;
 class KoOdfStylesReader;
 class KoStore;
 
@@ -34,23 +33,21 @@ class KoStore;
  *
  * @author David Faure <faure@kde.org>
  */
-class KOODF_EXPORT KoOasisLoadingContext
+class KOODF_EXPORT KoOdfLoadingContext
 {
 public:
     /**
      * Stores reference to the KoOdfStylesReader and stored passed by
      * KoDocument. Make sure that the KoOdfStylesReader instance outlives
-     * this KoOasisLoadingContext instance. (This is the case during
+     * this KoOdfLoadingContext instance. (This is the case during
      * loading, when using the KoOdfStylesReader given by KoDocument)
      *
-     * @param doc the KoDocument being loaded
      * @param styles reference to the KoOdfStylesReader parsed by KoDocument
      * @param store pointer to store, if available, for e.g. loading images.
      */
-    explicit KoOasisLoadingContext( KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store );
-    virtual ~KoOasisLoadingContext();
+    explicit KoOdfLoadingContext( KoOdfStylesReader& stylesReader, KoStore* store );
+    virtual ~KoOdfLoadingContext();
 
-    KoDocument* koDocument() { return m_doc; }
     KoStore* store() { return m_store; }
 
     KoOdfStylesReader& stylesReader() { return m_stylesReader; }
@@ -100,7 +97,6 @@ private:
     void parseMeta() const;
 
 private:
-    KoDocument* m_doc;
     KoStore* m_store;
     KoOdfStylesReader& m_stylesReader;
     KoStyleStack m_styleStack;

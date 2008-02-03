@@ -22,7 +22,7 @@
 
 #include "KoTextLoadingContext.h"
 #include "KoTextLoader.h"
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 
 /// \internal d-pointer class.
 class KoTextLoadingContext::Private
@@ -31,8 +31,8 @@ class KoTextLoadingContext::Private
         KoTextLoader* loader;
 };
 
-KoTextLoadingContext::KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store )
-    : KoOasisLoadingContext( doc, stylesReader, store ), d(new Private())
+KoTextLoadingContext::KoTextLoadingContext( KoTextLoader* loader, KoOdfStylesReader& stylesReader, KoStore* store )
+    : KoOdfLoadingContext( stylesReader, store ), d(new Private())
 {
     d->loader = loader;
 }

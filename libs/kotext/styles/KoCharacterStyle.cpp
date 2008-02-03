@@ -23,7 +23,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
@@ -477,7 +477,7 @@ bool KoCharacterStyle::hasProperty(int key) const {
 }
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
-void KoCharacterStyle::loadOasis(KoOasisLoadingContext& context) {
+void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
     // The fo:color attribute specifies the foreground color of text.

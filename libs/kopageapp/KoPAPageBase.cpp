@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 #include <KoShapeSavingContext.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
 #include <KoGenStyle.h>

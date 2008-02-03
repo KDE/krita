@@ -201,7 +201,7 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     return answer;
 }
 
-void KoListStyle::loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style)
+void KoListStyle::loadOasis(KoOdfLoadingContext& context, const KoXmlElement& style)
 {
     //kDebug(32500)<<"KoListStyle::loadOasis style.localName="<<style.localName();
     //KoStyleStack &styleStack = context.styleStack();

@@ -22,7 +22,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 
 #include "KoCanvasBase.h"
@@ -61,7 +61,7 @@ KoShapePaste::~KoShapePaste()
 
 bool KoShapePaste::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
 {
-    KoOasisLoadingContext loadingContext( d->doc, odfStore.styles(), odfStore.store() );
+    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
     KoShapeLoadingContext context( loadingContext, d->canvas->shapeController()->shapeControllerBase() );
 
     context.setZIndex( d->zIndex );

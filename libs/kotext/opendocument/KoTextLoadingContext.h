@@ -25,14 +25,14 @@
 
 #include "kotext_export.h"
 
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 
 class KoTextLoader;
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
  *
- * This class extends the \a KoOasisLoadingContext class with KoText specific
+ * This class extends the \a KoOdfLoadingContext class with KoText specific
  * functionality like for example handling of lists.
  *
  * The context is used within the \a KoTextLoader class to provide additional
@@ -44,15 +44,15 @@ class KoTextLoader;
  * \code
  * KoStyleManager *stylemanager = new KoStyleManager();
  * KoTextLoader *loader = new KoTextLoader(stylemanager);
- * KoDocument* doc = oasisContext.koDocument();
- * KoOdfStylesReader& styles = oasisContext.stylesReader();
- * KoStore *store = oasisContext.store()
+ * KoDocument* doc = odfContext.koDocument();
+ * KoOdfStylesReader& styles = odfContext.stylesReader();
+ * KoStore *store = odfContext.store()
  * KoTextLoadingContext *loaderContext = new KoTextLoadingContext(loader, doc, styles, store);
  * QTextCursor cursor( document() );
  * loader->loadBody(*loaderContext, element, cursor); // load the body from the ODF KoXmlElement.
  * \endcode
  */
-class KOTEXT_EXPORT KoTextLoadingContext : public KoOasisLoadingContext
+class KOTEXT_EXPORT KoTextLoadingContext : public KoOdfLoadingContext
 {
 public:
 
@@ -62,14 +62,14 @@ public:
     * \param loader The KoTextLoader instance the context belongs to.
     * We need to pass on the \a TextLoader instance here since the loader need to be passed
     * around between the different loadOdf(const KoXmlElement&, KoShapeLoadingContext&) calls.
-    * For that case the \a TextLoaderContext that inherits the \a KoOasisLoadingContext class
+    * For that case the \a TextLoaderContext that inherits the \a KoOdfLoadingContext class
     * got introduced and holds a pointer to the \a KoTextLoader and to the needed
     * \a KoStyleManager instance.
-    * \param doc The document we are loading the content into.
+    * \param loader The loader used for loading the content.
     * \param styles The styles used for loading.
     * \param store The storage backend we are reading from.
     */
-    explicit KoTextLoadingContext( KoTextLoader* loader, KoDocument* doc, KoOdfStylesReader& stylesReader, KoStore* store );
+    explicit KoTextLoadingContext( KoTextLoader* loader, KoOdfStylesReader& stylesReader, KoStore* store );
 
     /**
     * Destructor.

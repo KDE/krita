@@ -39,7 +39,7 @@
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>

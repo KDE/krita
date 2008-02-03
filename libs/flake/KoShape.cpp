@@ -45,7 +45,7 @@
 #include <KoUnit.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 
 #include <QPainter>
 #include <QVariant>

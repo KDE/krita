@@ -26,7 +26,7 @@
 
 #include <flake_export.h>
 
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 class KoShapeLayer;
 class KoShape;
 class KoShapeControllerBase;
@@ -47,13 +47,13 @@ public:
      * @param shapeController the shape controller. This is used to call KoShapeControllerBase::shapeCreated
      *        during loading. Please leave 0 only when you are 100% sure you don't need it.
      */
-    KoShapeLoadingContext( KoOasisLoadingContext & context, KoShapeControllerBase * shapeController );
+    KoShapeLoadingContext( KoOdfLoadingContext & context, KoShapeControllerBase * shapeController );
 
     /// destructor
     ~KoShapeLoadingContext();
 
     /// return the embedded loading context
-    KoOasisLoadingContext & koLoadingContext();
+    KoOdfLoadingContext & koLoadingContext();
 
     /// Returns layer referenced by given name
     KoShapeLayer * layer( const QString & layerName );

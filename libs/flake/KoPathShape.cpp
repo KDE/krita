@@ -34,7 +34,7 @@
 #include <KoUnit.h>
 #include <KoGenStyle.h>
 #include <KoStyleStack.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 
 #include <KDebug>
 #include <QtGui/QPainter>

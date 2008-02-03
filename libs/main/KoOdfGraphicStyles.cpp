@@ -35,7 +35,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include "KoOasisLoadingContext.h"
+#include "KoOdfLoadingContext.h"
 #include "KoOdfStylesReader.h"
 #include "KoPictureShared.h"
 
@@ -320,7 +320,7 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
     return resultBrush;
 }
 
-QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack, KoOasisLoadingContext & context, const QSizeF &size )
+QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size )
 {
     QString styleName = styleStack.property( KoXmlNS::draw, "fill-image-name" );
 

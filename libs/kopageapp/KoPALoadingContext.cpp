@@ -23,7 +23,7 @@
 
 #include "KoPAMasterPage.h"
 
-KoPALoadingContext::KoPALoadingContext( KoOasisLoadingContext &context, KoShapeControllerBase * shapeController )
+KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, KoShapeControllerBase * shapeController )
 : KoShapeLoadingContext( context, shapeController )
 {
 }

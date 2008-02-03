@@ -31,7 +31,7 @@
 #include "kopageapp_export.h"
 
 struct KoPageLayout;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 class KoGenStyle;
 class KoShape;
 class KoPALoadingContext;

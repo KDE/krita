@@ -26,7 +26,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 #include <KoTextShapeData.h>
@@ -93,7 +93,7 @@ bool KoPADocument::loadXML( QIODevice *, const KoXmlDocument & doc )
 bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
 {
     emit sigProgress( 0 );
-    KoOasisLoadingContext loadingContext( this, odfStore.styles(), odfStore.store() );
+    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
     KoPALoadingContext paContext( loadingContext, this );
 
     KoXmlElement content = odfStore.contentDoc().documentElement();

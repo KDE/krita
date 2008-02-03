@@ -27,7 +27,7 @@
 
 class KoShapeLoadingContext::Private {
 public:
-    Private( KoOasisLoadingContext &c, KoShapeControllerBase * sc )
+    Private( KoOdfLoadingContext &c, KoShapeControllerBase * sc )
     : context( c )
     , imageCollection( 0 )
     , zIndex( 0 )
@@ -40,7 +40,7 @@ public:
             delete data;
         }
     }
-    KoOasisLoadingContext &context;
+    KoOdfLoadingContext &context;
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
     KoImageCollection * imageCollection;
@@ -50,7 +50,7 @@ public:
     KoShapeControllerBase * shapeController;
 };
 
-KoShapeLoadingContext::KoShapeLoadingContext( KoOasisLoadingContext & context, KoShapeControllerBase * shapeController )
+KoShapeLoadingContext::KoShapeLoadingContext( KoOdfLoadingContext & context, KoShapeControllerBase * shapeController )
 : d( new Private( context, shapeController ) )
 {
 }
@@ -60,7 +60,7 @@ KoShapeLoadingContext::~KoShapeLoadingContext()
     delete d;
 }
 
-KoOasisLoadingContext & KoShapeLoadingContext::koLoadingContext()
+KoOdfLoadingContext & KoShapeLoadingContext::koLoadingContext()
 {
     return d->context;
 }

@@ -34,7 +34,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoShape.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoImageData.h>
 #include <KoTextAnchor.h>
@@ -70,7 +70,7 @@ class KoTextLoader::Private
         KoShapeLoadingContext & context;
         KoTextSharedLoadingData * textSharedData;
         // store it here so that you don't need to get it all the time from 
-        // the KoOasisLoadingContext.
+        // the KoOdfLoadingContext.
         bool stylesDotXml;
 
         int bodyProgressTotal;

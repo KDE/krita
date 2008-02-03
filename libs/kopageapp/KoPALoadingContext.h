@@ -38,7 +38,7 @@ public:
      * @param context Context for loading oasis docs.
      * @param context The shape contoller.
      */
-     KoPALoadingContext( KoOasisLoadingContext &context, KoShapeControllerBase * shapeController );
+     KoPALoadingContext( KoOdfLoadingContext &context, KoShapeControllerBase * shapeController );
 
     /**
      * Get the master page with the name @p name.

@@ -35,7 +35,7 @@ class KoGenStyles;
 class KoStyleStack;
 
 class KoOdfStylesReader;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 
 class KOMAIN_EXPORT KoOdfGraphicStyles
 {
@@ -51,7 +51,7 @@ public:
     static QBrush loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOdfStylesReader & stylesReader, const QSizeF &size );
 
     /// Loads pattern style from style stack and oasisstyle adapted to the given size
-    static QBrush loadOasisPatternStyle( const KoStyleStack &styleStack, KoOasisLoadingContext & context, const QSizeF &size );
+    static QBrush loadOasisPatternStyle( const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size );
 
     static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader );
 

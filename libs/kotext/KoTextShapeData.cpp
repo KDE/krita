@@ -29,7 +29,7 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
 
 #include "KoInlineObject.h"

@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoOasisLoadingContext.h"
+#include "KoOdfLoadingContext.h"
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
@@ -24,14 +24,16 @@
 #include <kdebug.h>
 #include <KoDom.h>
 
-class KoOasisLoadingContext::Private
+class KoOdfLoadingContext::Private
 {
 };
 
-KoOasisLoadingContext::KoOasisLoadingContext( KoDocument* doc,
-                                              KoOdfStylesReader& stylesReader, KoStore* store )
-    : m_doc( doc ), m_store( store ), m_stylesReader( stylesReader ),
-      m_metaXmlParsed( false ), m_useStylesAutoStyles( false ), d( 0 )
+KoOdfLoadingContext::KoOdfLoadingContext( KoOdfStylesReader& stylesReader, KoStore* store )
+: m_store( store )
+, m_stylesReader( stylesReader )
+, m_metaXmlParsed( false )
+, m_useStylesAutoStyles( false )
+, d( 0 )
 {
     // Ideally this should be done by KoDocument and passed as argument here...
     KoOdfReadStore oasisStore( store );
@@ -40,12 +42,12 @@ KoOasisLoadingContext::KoOasisLoadingContext( KoDocument* doc,
 }
 
 
-KoOasisLoadingContext::~KoOasisLoadingContext()
+KoOdfLoadingContext::~KoOdfLoadingContext()
 {
     delete d;
 }
 
-void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const char* nsURI, const char* attrName, const char* family )
+void KoOdfLoadingContext::fillStyleStack( const KoXmlElement& object, const char* nsURI, const char* attrName, const char* family )
 {
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttributeNS( nsURI, attrName ) ) {
@@ -59,7 +61,7 @@ void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const ch
     }
 }
 
-void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* family, bool usingStylesAutoStyles )
+void KoOdfLoadingContext::addStyles( const KoXmlElement* style, const char* family, bool usingStylesAutoStyles )
 {
     Q_ASSERT( style );
     if ( !style ) return;
@@ -86,13 +88,13 @@ void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* fa
     m_styleStack.push( *style );
 }
 
-QString KoOasisLoadingContext::generator() const
+QString KoOdfLoadingContext::generator() const
 {
     parseMeta();
     return m_generator;
 }
 
-void KoOasisLoadingContext::parseMeta() const
+void KoOdfLoadingContext::parseMeta() const
 {
     if ( !m_metaXmlParsed && m_store )
     {

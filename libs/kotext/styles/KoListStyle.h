@@ -29,7 +29,7 @@
 #include <KoXmlReader.h>
 
 class KoListLevelProperties;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 
 /**
  * This class groups all styling-options for lists.
@@ -179,7 +179,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style = KoXmlElement());
+    void loadOasis(KoOdfLoadingContext& context, const KoXmlElement& style = KoXmlElement());
 
 protected:
     friend class KoParagraphStyle;

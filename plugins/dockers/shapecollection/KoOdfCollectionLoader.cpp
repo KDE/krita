@@ -21,7 +21,7 @@
 
 #include <KoStore.h>
 #include <KoOdfReadStore.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
@@ -248,7 +248,7 @@ void KoOdfCollectionLoader::loadNativeFile(const QString& path)
         return;
     }
 
-    KoOasisLoadingContext* m_loadingContext = new KoOasisLoadingContext(0, m_odfStore->styles(), m_odfStore->store());
+    KoOdfLoadingContext* m_loadingContext = new KoOdfLoadingContext(m_odfStore->styles(), m_odfStore->store());
     // it ok here to pass 0 as shape controller as we don't have a document
     m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, 0);
 

@@ -28,7 +28,7 @@
 #include <KoXmlReader.h>
 
 class KoListStyle;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 
 class KOTEXT_EXPORT KoListLevelProperties {
 public:
@@ -117,7 +117,7 @@ public:
     /**
      * Load the properties from the \p style using the OpenDocument format.
      */
-    void loadOasis(KoOasisLoadingContext& context, const KoXmlElement& style);
+    void loadOasis(KoOdfLoadingContext& context, const KoXmlElement& style);
 
 private:
     void setProperty(int key, const QVariant &value);

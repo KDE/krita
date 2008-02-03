@@ -25,7 +25,7 @@
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>

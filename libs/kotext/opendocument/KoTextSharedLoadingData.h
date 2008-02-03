@@ -27,7 +27,7 @@
 #include "kotext_export.h"
 
 class QString;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class KoListStyle;
@@ -57,7 +57,7 @@ public:
      * @param styleManager The style manager too use or 0 if you don't have a style manager.
      * @param insertOfficeStyles If true the office:styles are inserted into the style manager.
      */
-    void loadOdfStyles( KoOasisLoadingContext & context, KoStyleManager * styleManager, bool insertOfficeStyles = false );
+    void loadOdfStyles( KoOdfLoadingContext & context, KoStyleManager * styleManager, bool insertOfficeStyles = false );
 
     /**
      * Get the paragraph style for the given name
@@ -91,18 +91,18 @@ private:
         StylesDotXml = 2
     };
     // helper functions for loading of paragraph styles
-    void addParagraphStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
                              KoStyleManager *styleManager, bool insertOfficeStyles = false );
-    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements );
+    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements );
 
     // helper functions for loading of character styles
-    void addCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
                              KoStyleManager *styleManager, bool insertOfficeStyles = false );
-    QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles( KoOasisLoadingContext & context, QList<KoXmlElement*> styleElements );
+    QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements );
 
     // helper functions for loading of list styles
-    void addListStyles( KoOasisLoadingContext & context );
-    void addOutlineStyles( KoOasisLoadingContext & context );
+    void addListStyles( KoOdfLoadingContext & context );
+    void addOutlineStyles( KoOdfLoadingContext & context );
 
     class Private;
     Private * const d;

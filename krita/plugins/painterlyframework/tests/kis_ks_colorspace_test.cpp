@@ -98,7 +98,7 @@ void KisKSColorSpaceTest::testRegistry()
 
     KisIlluminantProfile *p6 = new KisIlluminantProfile(d656);
     KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
-
+/*
     // First, load a colorspace with his default profile
     cs = f->colorSpace(KisKSLCColorSpace<float,6>::ColorSpaceId().id(),0);
     QVERIFY2(cs != 0, "ColorSpace LC6 loaded");
@@ -112,7 +112,7 @@ void KisKSColorSpaceTest::testRegistry()
     cs = f->colorSpace(KisKSQPColorSpace<float,9>::ColorSpaceId().id(),0);
     QVERIFY2(cs != 0, "ColorSpace QP9 loaded");
     QVERIFY(cs->profile() != 0);
-
+*/
     // Now with a profile
     cs = f->colorSpace(KisKSLCColorSpace<float,6>::ColorSpaceId().id(), p6);
     QVERIFY2(cs != 0, "ColorSpace LC6 loaded");

@@ -78,7 +78,7 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
             continue;
         KoHistogramProducerFactoryRegistry::instance()->add(
             new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID(cs->id()+"HISTO", i18n(QString("%1 Histogram").arg(cs->name()).toUtf8().data())), cs->clone()));
+            (KoID(cs->id()+"HISTO", i18n("%1 Histogram", cs->name())), cs->clone()));
     }
 }
 

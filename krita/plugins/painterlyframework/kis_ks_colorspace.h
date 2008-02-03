@@ -66,21 +66,21 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYP
         static KoID ColorDepthId()
         {
             QString id;
-            QByteArray name;
+            QString name;
 
             switch (KoColorSpaceMathsTraits<_TYPE_>::channelValueType) {
                 case KoChannelInfo::FLOAT32:
                     id = QString("F32");
-                    name = QString("32 Bits Float").toUtf8();
+                    name = i18n("32 Bits Float");
                     break;
                 case KoChannelInfo::FLOAT16:
                     id = QString("F16");
-                    name = QString("16 Bits Float").toUtf8();
+                    name = i18n("16 Bits Float");
                     break;
                 default: break;
             }
 
-            return KoID(id, i18n(name.data()));
+            return KoID(id, name);
         }
 
     private:

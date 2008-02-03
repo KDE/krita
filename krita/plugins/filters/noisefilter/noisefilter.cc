@@ -83,6 +83,10 @@ KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDevic
     KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
     config->setProperty("level", 50 );
     config->setProperty("opacity", 100 );
+    config->setProperty("seedThreshold", rand() );
+    config->setProperty("seedRed", rand() );
+    config->setProperty("seedGreen", rand() );
+    config->setProperty("seedBlue", rand() );
     return config;
 }
 

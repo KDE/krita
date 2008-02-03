@@ -1,4 +1,4 @@
-# - Try to find the WPD graphics library
+# - Try to find the libwpd (WordPerfect library)
 # Once done this will define
 #
 #  WPD_FOUND - system has WPD

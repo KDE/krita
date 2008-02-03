@@ -143,14 +143,22 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     dialog->setModal(true);
     m_wdgPanoramaCreation->setupUi(dialog);
 
+/*    addImage("/home/cyrille/0.fontromeu.png");
+    addImage("/home/cyrille/1.fontromeu.png");
+    addImage("/home/cyrille/2.fontromeu.png");
+    addImage("/home/cyrille/3.fontromeu.png");*/
+    addImage("/home/cyrille/H0014717.JPG");
+    addImage("/home/cyrille/H0014718.JPG");
+    addImage("/home/cyrille/H0014719.JPG");
+    addImage("/home/cyrille/H0014720.JPG");
 //     addImage("/home/cyrille/H0010632.JPG");
 //     addImage("/home/cyrille/H0010633.JPG");
 //     addImage("/home/cyrille/0.roma.png");
 //     addImage("/home/cyrille/1.roma.png");
-    addImage("/home/cyrille/0.roma2.png");
-    addImage("/home/cyrille/1.roma2.png");
-    addImage("/home/cyrille/2.roma2.png");
-    addImage("/home/cyrille/3.roma2.png");
+//     addImage("/home/cyrille/0.roma2.png");
+//     addImage("/home/cyrille/1.roma2.png");
+//     addImage("/home/cyrille/2.roma2.png");
+//     addImage("/home/cyrille/3.roma2.png");
 //     addImage("/home/cyrille/0.montreal.2.png");
 //     addImage("/home/cyrille/1.montreal.2.png");
 //     addImage("/home/cyrille/2.montreal.2.png");
@@ -191,13 +199,15 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
             KisImageAlignment::ImageInfo pi;
             KisImageSP img = d.image();
             if(not img) break;
-//             img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
-            pi.device = img->projection();
-            pi.rect = QRect(0,0, img->width(), img->height());
+            pi.bigDevice = new KisPaintDevice( *img->projection() );
+            pi.bigRect = QRect(0,0, img->width(), img->height());
+            img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
+            pi.smallDevice = img->projection();
+            pi.smallRect = QRect(0,0, img->width(), img->height());
             images.push_back(pi);
         }
 
-        KisPaintLayerSP layer = new KisPaintLayer(m_view->image(), i18n("Panorama Layer"), OPACITY_OPAQUE, images[0].device->colorSpace());
+        KisPaintLayerSP layer = new KisPaintLayer(m_view->image(), i18n("Panorama Layer"), OPACITY_OPAQUE, images[0].bigDevice->colorSpace());
         Q_ASSERT(layer);
         KisGroupLayerSP parent;
         KisLayerSP above;
@@ -230,13 +240,14 @@ void PanoramaPlugin::slotPreview()
         KisImageAlignment::ImageInfo pi;
         KisImageSP img = d.image();
         if(not img) break;
-//         img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
-//         img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisMitchellFilterStrategy );
-        pi.device = img->projection();
-        pi.rect = QRect(0,0, img->width(), img->height());
+        img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
+        pi.bigDevice = img->projection();
+        pi.bigRect = QRect(0,0, img->width(), img->height());
+        pi.smallDevice = pi.bigDevice;
+        pi.smallRect = QRect(0,0, img->width(), img->height());
         images.push_back(pi);
     }
-    KisPaintDeviceSP dst = new KisPaintDevice( images[0].device->colorSpace(), "panorama preview" );
+    KisPaintDeviceSP dst = new KisPaintDevice( images[0].bigDevice->colorSpace(), "panorama preview" );
     QRect dstArea;
     createPanorama(images, dst, dstArea);
     QImage img = dst->convertToQImage(0);
@@ -255,49 +266,19 @@ void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images,
     for(int i = 0; i < (int)p.size(); i++)
     {
         KisImagesBlender::LayerSource layerSource;
-        layerSource.layer = images[ i ].device;
+        layerSource.layer = images[ i ].bigDevice;
         layerSource.a = p[ i ].a;
         layerSource.b = p[ i ].b;
         layerSource.c = p[ i ].c;
-        layerSource.xc1 = images[ i ].rect.width()  * 0.5;
-        layerSource.xc2 = images[ i ].rect.width()  * 0.5;
-        layerSource.yc1 = images[ i ].rect.height() * 0.5;
-        layerSource.yc2 = images[ i ].rect.height() * 0.5;
-        layerSource.norm = (4.0 / ( images[ i ].rect.width() * images[ i ].rect.width() + images[ i ].rect.height() * images[ i ].rect.height() ) );
+        layerSource.xc1 = images[ i ].bigRect.width()  * 0.5;
+        layerSource.xc2 = images[ i ].bigRect.width()  * 0.5;
+        layerSource.yc1 = images[ i ].bigRect.height() * 0.5;
+        layerSource.yc2 = images[ i ].bigRect.height() * 0.5;
+        layerSource.norm = (4.0 / ( images[ i ].bigRect.width() * images[ i ].bigRect.width() + images[ i ].bigRect.height() * images[ i ].bigRect.height() ) );
         layerSource.homography = p[ i ].homography;
-        layerSource.rect = images[ i ].rect;
+        layerSource.rect = images[ i ].bigRect;
         sources.push_back(layerSource);
     }
-#if 0
-    // First layer
-    KisImagesBlender::LayerSource firstLayer;
-    firstLayer.layer = images[0].device;
-    firstLayer.a = p[0].a;
-    firstLayer.b = p[0].b;
-    firstLayer.c = p[0].c;
-    firstLayer.xc1 = images[0].rect.width()  * 0.5;
-    firstLayer.xc2 = images[0].rect.width()  * 0.5;
-    firstLayer.yc1 = images[0].rect.height() * 0.5;
-    firstLayer.yc2 = images[0].rect.height() * 0.5;
-    firstLayer.norm = (4.0 / ( images[0].rect.width() * images[0].rect.width() + images[0].rect.height() * images[0].rect.height() ) );
-    firstLayer.homography = p[0].homography;
-    firstLayer.rect = images[0].rect;
-    sources.push_back(firstLayer);
-    // Second Layer
-    KisImagesBlender::LayerSource secondLayer;
-    secondLayer.layer = images[1].device;
-    secondLayer.a = p[1].a;
-    secondLayer.b = p[1].b;
-    secondLayer.c = p[1].c;
-    secondLayer.xc1 = images[1].rect.width()  * 0.5;
-    secondLayer.xc2 = images[1].rect.width()  * 0.5;
-    secondLayer.yc1 = images[1].rect.height() * 0.5;
-    secondLayer.yc2 = images[1].rect.height() * 0.5;
-    secondLayer.norm = (4.0 / ( images[1].rect.width() * images[1].rect.width() + images[1].rect.height() * images[1].rect.height() ) );
-    secondLayer.homography = p[1].homography;
-    secondLayer.rect = images[1].rect;
-    sources.push_back(secondLayer);
-#endif
     KisImagesBlender::blend(sources, dstdevice);
 }
 

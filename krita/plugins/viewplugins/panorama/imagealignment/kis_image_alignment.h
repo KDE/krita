@@ -38,8 +38,10 @@ class KisImageAlignment {
             {
                 transfoToFrame.loadIdentity();
             }
-            KisPaintDeviceSP device;
-            QRect rect;
+            KisPaintDeviceSP bigDevice;
+            KisPaintDeviceSP smallDevice;
+            QRect bigRect;
+            QRect smallRect;
             lInterestPoints points;
             Eigen::Matrix3d transfoToFrame; ///< transfo to the frame
             ImageInfo* referenceFrame; ///< frame reference for which the transfo is given

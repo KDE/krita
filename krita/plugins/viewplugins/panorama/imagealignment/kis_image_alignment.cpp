@@ -84,13 +84,14 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
     // Interest point detection
     for(QList<KisImageAlignment::ImageInfo>::iterator it = images.begin(); it != images.end(); ++it)
     {
-        KisPaintDeviceSP graydevice = new KisPaintDevice(*(it->device));
+        dbgPlugins << "Detection on rectangle : " << it->smallRect;
+        KisPaintDeviceSP graydevice = new KisPaintDevice(*(it->smallDevice));
         graydevice->convertTo(graycs);
-        it->points = KisInterestPointsDetector::interestPointDetector()->computeInterestPoints(graydevice, it->rect);
-        width = it->rect.width();
-        height = it->rect.height();
+        it->points = KisInterestPointsDetector::interestPointDetector()->computeInterestPoints(graydevice, it->smallRect);
+        width = it->smallRect.width();
+        height = it->smallRect.height();
         prepareGroups(it->points, 20.0);
-#if 1
+#if 0
         for(lInterestPoints::const_iterator itp = it->points.begin(); itp != it->points.end(); ++itp)
         {
           dbgPlugins <<"ip =" << (*itp)->x() <<"" << (*itp)->y() /* <<"" << (*itp)->toString() */;
@@ -180,6 +181,39 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
         return std::vector<Result>();
     }
     
+    // Scale the results of the first optimization
+    for(int i = 0; i < images.size(); i++)
+    {
+        int frameStart = i * DoubleHomographySameDistortionFunction::SIZEHOMOGRAPHYINDEXES + DoubleHomographySameDistortionFunction::SIZEINDEXES;
+        
+        Eigen::Matrix3d homography;
+        homography(0,0) = p[DoubleHomographySameDistortionFunction::INDX_h11 + frameStart];
+        homography(0,1) = p[DoubleHomographySameDistortionFunction::INDX_h21 + frameStart];
+        homography(0,2) = p[DoubleHomographySameDistortionFunction::INDX_h31 + frameStart];
+        homography(1,0) = p[DoubleHomographySameDistortionFunction::INDX_h12 + frameStart];
+        homography(1,1) = p[DoubleHomographySameDistortionFunction::INDX_h22 + frameStart];
+        homography(1,2) = p[DoubleHomographySameDistortionFunction::INDX_h32 + frameStart];
+        homography(2,0) = p[DoubleHomographySameDistortionFunction::INDX_h13 + frameStart];
+        homography(2,1) = p[DoubleHomographySameDistortionFunction::INDX_h23 + frameStart];
+        homography(2,2) = 1.0;
+        std::cout << " homography [ " << i << " ] = " << homography << std::endl;
+        
+        double scale = images[i].bigRect.width() / (double)images[i].smallRect.width();
+//         p[DoubleHomographySameDistortionFunction::INDX_h11 + frameStart] /= scale;
+//         p[DoubleHomographySameDistortionFunction::INDX_h21 + frameStart] /= scale;
+        p[DoubleHomographySameDistortionFunction::INDX_h31 + frameStart] *= scale;
+//         p[DoubleHomographySameDistortionFunction::INDX_h12 + frameStart] /= scale;
+//         p[DoubleHomographySameDistortionFunction::INDX_h22 + frameStart] /= scale;
+        p[DoubleHomographySameDistortionFunction::INDX_h32 + frameStart] *= scale;
+        p[DoubleHomographySameDistortionFunction::INDX_h13 + frameStart] /= scale;
+        p[DoubleHomographySameDistortionFunction::INDX_h23 + frameStart] /= scale;
+    }
+#if 1
+        p[DoubleHomographySameDistortionFunction::INDX_a] = 0.0;
+        p[DoubleHomographySameDistortionFunction::INDX_b] = 0.0;
+        p[DoubleHomographySameDistortionFunction::INDX_c] = 0.0;
+#endif
+    
     // Fill the result and the homographie
     for(int i = 0; i < images.size(); i++)
     {
@@ -196,6 +230,7 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
         result[i].homography(2,0) = p[DoubleHomographySameDistortionFunction::INDX_h13 + frameStart];
         result[i].homography(2,1) = p[DoubleHomographySameDistortionFunction::INDX_h23 + frameStart];
         result[i].homography(2,2) = 1.0;
+        std::cout << " homography [ " << i << " ] = " << result[i].homography << std::endl;
     }
     return result;
 }

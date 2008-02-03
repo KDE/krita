@@ -24,6 +24,7 @@
 // From krita/image
 #include <kis_filter.h>
 #include <kis_filter_config_widget.h>
+#include <kis_filter_configuration.h>
 #include <kis_filter_mask.h>
 #include <kis_layer.h>
 #include <kis_selection.h>

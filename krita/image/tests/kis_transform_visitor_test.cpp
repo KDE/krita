@@ -30,6 +30,9 @@
 #include "kis_image.h"
 #include "kis_filter_strategy.h"
 #include "testutil.h"
+#include "kis_image.h"
+
+
 void KisTransformVisitorTest::testCreation()
 {
     TestUtil::TestProgressBar bar;

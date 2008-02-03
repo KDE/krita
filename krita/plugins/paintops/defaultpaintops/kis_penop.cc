@@ -25,6 +25,9 @@
 
 #include <kis_debug.h>
 
+#include <KoColor.h>
+#include <KoColorSpace.h>
+
 #include "kis_brush.h"
 #include <kis_datamanager.h>
 #include "kis_global.h"

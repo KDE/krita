@@ -21,6 +21,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_doc2.h>
 #include <kis_layer.h>
+#include <kis_paint_device.h>
 
 #include "krs_image.h"
 #include "krs_paint_device.h"

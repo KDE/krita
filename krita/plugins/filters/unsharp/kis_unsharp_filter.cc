@@ -26,7 +26,10 @@
 #include <kis_autobrush_resource.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
-
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
+#include <KoProgressUpdater.h>
+#include <kis_paint_device.h>
 
 #include "kis_wdg_unsharp.h"
 #include "ui_wdgunsharp.h"

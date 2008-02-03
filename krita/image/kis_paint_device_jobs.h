@@ -23,7 +23,6 @@
 #include <threadweaver/ThreadWeaver.h>
 #include <threadweaver/Job.h>
 #include <KoColorSpace.h>
-#include <kis_paint_device.h>
 
 using namespace ThreadWeaver;
 

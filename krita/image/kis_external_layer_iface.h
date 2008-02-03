@@ -24,14 +24,11 @@
 #include "kis_types.h"
 
 #include "kis_layer.h"
-#include "kis_image.h"
 
 class QString;
 class QIcon;
 class QDomDocument;
 class QDomElement;
-
-
 
 /**
    A base interface for layers that are implemented outside the Krita

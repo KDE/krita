@@ -19,9 +19,9 @@
 #define KIS_DATAMANAGER_H_
 
 #include <qglobal.h>
-#include <QRect>
 #include "kis_memento.h"
 
+class QRect;
 class KoStore;
 
 

@@ -28,6 +28,10 @@
 #include "kis_painter.h"
 #include "kis_convolution_painter.h"
 #include "KoProgressUpdater.h"
+#include <kis_filter_configuration.h>
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+#include <kis_filter_processing_information.h>
 
 KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
     : KisFilter( id, category, entry )

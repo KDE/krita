@@ -20,24 +20,25 @@
 #ifndef KIS_PAINTER_H_
 #define KIS_PAINTER_H_
 
-#include <QBitArray>
+#include <KoColorSpaceConstants.h>
 
-#include "KoColor.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
-
-#include <KoColorSpace.h>
-#include <KoProgressUpdater.h>
-#include "kis_selection.h"
 
 #include <krita_export.h>
 
+class QRegion;
 class QUndoCommand;
 class QRect;
+class QRectF;
 class QStringList;
+class QBitArray;
+class QPainterPath;
 
 class KoAbstractGradient;
+class KoUpdater;
+class KoColor;
+class KoCompositeOp;
 
 class KisTransaction;
 class KisBrush;

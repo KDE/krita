@@ -22,24 +22,26 @@
 
 #include <QString>
 
-#include <kis_shared.h>
 #include <klocale.h>
 
-#include <KoColorSpace.h>
+#include "KoID.h"
+#include "KoColorSpace.h"
 
 #include "kis_types.h"
-#include "KoID.h"
+#include "kis_shared.h"
+
 #include "krita_export.h"
 
-#include "kis_filter_processing_information.h"
-
-class KoColorSpace;
-class KisBookmarkedConfigurationManager;
-class KoUpdater;
-class KisFilterConfigWidget;
-class KisFilterConfiguration;
 class QWidget;
+
 class KoUpdater;
+class KoUpdater;
+
+class KisBookmarkedConfigurationManager;
+class KisFilterConfiguration;
+class KisFilterConfigWidget;
+class KisFilterProcessingInformation;
+class KisFilterConstProcessingInformation;
 
 /**
  * Basic interface of a Krita filter.

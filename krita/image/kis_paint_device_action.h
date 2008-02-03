@@ -18,7 +18,7 @@
 #ifndef KIS_PAINTDEV_ACTION_H_
 #define KIS_PAINTDEV_ACTION_H_
 
-#include "kis_paint_device.h"
+#include "kis_types.h"
 class QString;
 
 /**

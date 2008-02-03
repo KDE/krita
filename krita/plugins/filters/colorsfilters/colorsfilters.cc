@@ -39,7 +39,10 @@
 #include "KoBasicHistogramProducers.h"
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
-
+#include <kis_filter_configuration.h>
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+#include <kis_filter_processing_information.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -53,6 +56,10 @@
 #include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
 #include "kis_filter_registry.h"
+#include <kis_painter.h>
+#include <KoProgressUpdater.h>
+#include <KoColorSpaceConstants.h>
+#include <KoCompositeOp.h>
 
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) )

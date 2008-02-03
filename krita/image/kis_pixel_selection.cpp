@@ -26,8 +26,10 @@
 #include <QPoint>
 #include <QPolygon>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoIntegerMaths.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
+#include <KoIntegerMaths.h>
+#include <KoCompositeOp.h>
 
 #include "kis_layer.h"
 #include "kis_debug.h"

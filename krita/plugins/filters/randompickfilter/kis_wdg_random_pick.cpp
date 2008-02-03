@@ -24,6 +24,8 @@
 
 #include <knuminput.h>
 
+#include <kis_filter_configuration.h>
+
 #include "ui_wdgrandompickoptions.h"
 
 KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent)

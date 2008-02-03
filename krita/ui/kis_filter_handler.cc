@@ -34,6 +34,8 @@
 #include <kis_filter_processing_information.h>
 #include <kis_layer.h>
 #include <kis_recorded_filter_action.h>
+#include <kis_selection.h>
+#include <kis_image.h>
 
 #include "kis_statusbar.h"
 #include "kis_doc2.h"

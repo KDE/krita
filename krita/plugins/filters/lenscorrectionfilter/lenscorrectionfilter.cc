@@ -48,6 +48,8 @@
 #include <kis_random_sub_accessor.h>
 #include <kis_selection.h>
 #include <kis_types.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
 
 #include "kis_wdg_lens_correction.h"
 #include "ui_wdglenscorrectionoptions.h"

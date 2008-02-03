@@ -7,6 +7,7 @@ set(kritadefaultpaintops_PART_SRCS
 	kis_duplicateop.cc
 	kis_eraseop.cc
 	kis_penop.cc
+#    kis_smudgeop.cc   
     )
 
 kde4_add_ui_files(kritadefaultpaintops_PART_SRCS kis_dlgbrushcurvecontrol.ui DuplicateOpOptionsWidget.ui )

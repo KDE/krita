@@ -30,9 +30,12 @@
 #include <QWidget>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 #include <KoPointerEvent.h>
 #include <KoInputDevice.h>
+#include <KoCompositeOp.h>
 
+#include "kis_image.h"
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"

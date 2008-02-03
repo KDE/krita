@@ -21,7 +21,8 @@
 #include "kis_types.h"
 #include "kis_base_node.h"
 #include "krita_export.h"
-#include <KoProperties.h>
+
+class KoProperties;
 
 class KisNodeVisitor;
 class KisNodeGraphListener;

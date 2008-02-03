@@ -31,7 +31,13 @@
 #include <kurl.h>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOp.h>
+#include <KoColorSpaceConstants.h>
 
+#include <kis_paint_layer.h>
+#include <kis_image.h>
+#include <kis_group_layer.h>
+#include <kis_layer.h>
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_doc2.h"
@@ -43,6 +49,7 @@
 #include "kis_types.h"
 #include "kis_view2.h"
 #include "imageviewer.h"
+#include <kis_image.h>
 
 #include "imagoptim_functions.h"
 #include "harris_detector.h"

@@ -19,7 +19,11 @@
 #ifndef KIS_FILTER_JOB_H
 #define KIS_FILTER_JOB_H
 
+#include "krita_export.h"
+
+#include "kis_types.h"
 #include "kis_threaded_applicator.h"
+
 #include "krita_export.h"
 
 class KisFilter;
@@ -28,8 +32,6 @@ class QObject;
 class QRect;
 class KoUpdater;
 
-#include "kis_types.h"
-#include "krita_export.h"
 class KRITAIMAGE_EXPORT KisFilterJob : public KisJob {
 public:
 

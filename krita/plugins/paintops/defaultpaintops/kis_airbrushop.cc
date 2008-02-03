@@ -22,6 +22,8 @@
 
 #include <QRect>
 
+#include <KoColor.h>
+
 #include <kis_debug.h>
 
 #include "kis_brush.h"

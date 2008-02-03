@@ -47,6 +47,9 @@
 #include <kis_filter_strategy.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
+#include <KoCompositeOp.h>
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_small_tiles_filter.h"

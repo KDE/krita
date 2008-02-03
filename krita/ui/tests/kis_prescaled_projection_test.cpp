@@ -26,7 +26,10 @@
 
 #include <KoZoomHandler.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOp.h>
+#include <KoColorSpaceConstants.h>
 
+#include <kis_paint_device.h>
 #include <kis_types.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>

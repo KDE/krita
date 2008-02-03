@@ -31,6 +31,7 @@
 #include <kis_filter_registry.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
+#include <kis_paint_device.h>
 
 // krita/ui
 #include "kis_filter_handler.h"

@@ -18,6 +18,7 @@
 #ifndef KIS_DYNAMICOP_H_
 #define KIS_DYNAMICOP_H_
 
+#include <kis_paintop_settings.h>
 #include "kis_paintop.h"
 #include <QString>
 #include <klocale.h>

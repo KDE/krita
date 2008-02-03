@@ -24,8 +24,6 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 
-#include "kis_paint_layer.h"
-
 class KoColorSpace;
 
 /**
@@ -119,9 +117,7 @@ public:
     */
     KisPaintDeviceSP projection() const;
 
-    KisPaintDeviceSP paintDevice() const {
-        return 0;
-    }
+    KisPaintDeviceSP paintDevice() const;
 
     /**
      *  Update the given rect of the projection paint device.

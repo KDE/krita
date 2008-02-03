@@ -46,6 +46,8 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
 #include "kis_wdg_wave.h"
 #include "ui_wdgwaveoptions.h"
 

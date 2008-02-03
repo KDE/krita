@@ -23,7 +23,6 @@
 
 #include "kis_types.h"
 #include "kis_node.h"
-#include "kis_paint_device.h"
 #include "kis_global.h"
 
 #include <krita_export.h>

@@ -24,6 +24,8 @@
 
 #include <knuminput.h>
 
+#include <kis_filter_configuration.h>
+
 #include "ui_wdgnoiseoptions.h"
 
 KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent)

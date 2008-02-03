@@ -19,7 +19,6 @@
 #define KIS_NAMESERVER_H_
 
 #include <QString>
-#include "kis_global.h"
 #include <krita_export.h>
 
 class KRITAIMAGE_EXPORT KisNameServer {

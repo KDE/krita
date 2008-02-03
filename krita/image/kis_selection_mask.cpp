@@ -19,6 +19,7 @@
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
 #include "kis_fill_painter.h"
 #include "kis_image.h"
 #include <KoCompositeOp.h>

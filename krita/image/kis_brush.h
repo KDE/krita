@@ -23,20 +23,18 @@
 #include <QImage>
 #include <QVector>
 
-
-
 #include "kis_types.h"
+#include "kis_paint_information.h"
 
 #include "KoResource.h"
-#include "kis_paint_information.h"
 
 #include "krita_export.h"
 
 class QString;
 class QPoint;
 class QIODevice;
-class KoColor;
 
+class KoColor;
 class KoColorSpace;
 
 class KisBoundary;

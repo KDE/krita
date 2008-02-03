@@ -23,6 +23,9 @@
 
 #include <qspinbox.h>
 
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
+
 #include "ui_wdgwaveoptions.h"
 
 KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent)

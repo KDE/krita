@@ -34,10 +34,11 @@
 #include <QFile>
 #include <QTextStream>
 
-#include <kis_debug.h>
+#include "KoColor.h"
+#include "KoColorSpace.h"
 #include <klocale.h>
 
-#include "KoColor.h"
+#include "kis_debug.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 

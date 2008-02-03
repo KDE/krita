@@ -23,6 +23,8 @@
 #include <QGLFramebufferObject>
 #include <QMessageBox>
 
+#include <KoColorSpace.h>
+
 #include <klocale.h>
 #include <kis_debug.h>
 

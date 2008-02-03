@@ -26,6 +26,11 @@
 
 #include <kis_convolution_painter.h>
 #include "convolutionfilters.h"
+#include <kis_filter_configuration.h>
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+#include <kis_filter_processing_information.h>
+#include <KoProgressUpdater.h>
 
 KisKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
                           qint32 i3, qint32 i4, qint32 i5,

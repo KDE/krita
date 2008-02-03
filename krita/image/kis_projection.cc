@@ -20,6 +20,7 @@
 #include <QRegion>
 #include <QRect>
 #include <QThread>
+#include <QMutex>
 
 #include <threadweaver/ThreadWeaver.h>
 #include <kis_debug.h>

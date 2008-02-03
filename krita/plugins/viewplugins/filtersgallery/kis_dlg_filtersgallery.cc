@@ -35,7 +35,7 @@
 #include <kis_view2.h>
 #include <kis_canvas2.h>
 #include <kis_layer_manager.h>
-
+#include <kis_image.h>
 #include <kis_filter_config_widget.h>
 
 namespace Krita {

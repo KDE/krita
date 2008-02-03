@@ -22,7 +22,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
-
+#include <KoColorSpace.h>
+    
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 

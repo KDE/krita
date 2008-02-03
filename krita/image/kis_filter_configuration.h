@@ -20,8 +20,6 @@
 
 #include "kis_properties_configuration.h"
 
-#include <QBitArray>
-
 #include "kis_types.h"
 #include "krita_export.h"
 

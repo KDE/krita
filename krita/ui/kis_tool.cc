@@ -43,7 +43,7 @@
 #include <kis_brush.h>
 #include <kis_pattern.h>
 #include "kis_resource_provider.h"
-
+#include <kis_paintop_settings.h>
 #include "kis_canvas2.h"
 #include "kis_tool.h"
 

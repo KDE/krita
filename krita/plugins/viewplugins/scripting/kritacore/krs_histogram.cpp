@@ -20,6 +20,8 @@
 #include "krs_const_paint_device.h"
 
 #include <kis_paint_layer.h>
+#include <kis_paint_device.h>
+#include <kis_image.h>
 
 #ifdef min
 #undef min

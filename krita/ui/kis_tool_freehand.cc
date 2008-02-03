@@ -48,6 +48,7 @@
 #include <kis_paintop.h>
 #include <kis_recorded_paint_actions.h>
 #include <kis_selection.h>
+#include <kis_paintop_settings.h>
 
 // Krita/ui
 #include "kis_boundary_painter.h"

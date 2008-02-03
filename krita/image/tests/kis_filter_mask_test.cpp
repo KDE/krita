@@ -30,6 +30,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_types.h"
+#include "kis_image.h"
 
 #include "kis_filter_mask_test.h"
 #include "testutil.h"

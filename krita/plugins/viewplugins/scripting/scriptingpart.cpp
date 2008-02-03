@@ -50,6 +50,7 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_doc2.h>
+#include <kis_paint_device.h>
 // kritacore
 #include "kritacore/krs_module.h"
 #include "kritacore/krs_monitor.h"

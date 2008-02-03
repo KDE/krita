@@ -18,6 +18,8 @@
 #ifndef KIS_CHANGE_PROFILE_VISITOR_H_
 #define KIS_CHANGE_PROFILE_VISITOR_H_
 
+#include "KoColorSpace.h"
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"

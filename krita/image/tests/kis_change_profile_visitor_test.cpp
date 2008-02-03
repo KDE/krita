@@ -24,6 +24,7 @@
 #include "kis_change_profile_visitor.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
+#include "kis_image.h"
 
 void KisChangeProfileVisitorTest::testCreation()
 {

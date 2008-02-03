@@ -31,6 +31,7 @@
 #include "kis_paint_device.h"
 #include "kis_filter_processing_information.h"
 #include "kis_painter.h"
+#include "kis_selection.h"
 
 KisFilterJob::KisFilterJob( const KisFilter* filter,
                             const KisFilterConfiguration * config,

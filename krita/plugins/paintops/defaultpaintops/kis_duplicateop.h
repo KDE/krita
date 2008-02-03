@@ -23,10 +23,14 @@
 #ifndef KIS_DUPLICATEOP_H_
 #define KIS_DUPLICATEOP_H_
 
+#include <QDomElement>
+#include <QDomDocument>
+
 #include "kis_paintop.h"
 #include <QString>
 #include <klocale.h>
 
+#include "kis_paintop_settings.h"
 class QPointF;
 class KisPainter;
 class Ui_DuplicateOpOptionsWidget;

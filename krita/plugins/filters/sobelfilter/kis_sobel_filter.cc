@@ -47,6 +47,8 @@
 #include <kis_types.h>
 #include <kis_paint_device.h>
 #include <KoProgressUpdater.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
 
 #include "kis_multi_bool_filter_widget.h"
 #include "kis_sobel_filter.h"

@@ -28,6 +28,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
+#include <kis_paint_device.h>
 #include <kgenericfactory.h>
 
 #include <kis_global.h>

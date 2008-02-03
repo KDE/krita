@@ -30,6 +30,9 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
+
 #include <kis_cursor.h>
 #include <kis_selection_manager.h>
 #include <kis_image.h>

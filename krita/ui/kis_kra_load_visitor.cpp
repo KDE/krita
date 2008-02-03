@@ -24,6 +24,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
+#include <KoColorSpace.h>
 
 // kritaimage
 #include "kis_types.h"

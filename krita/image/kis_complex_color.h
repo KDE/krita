@@ -20,14 +20,13 @@
 #ifndef KIS_COMPLEX_COLOR_H_
 #define KIS_COMPLEX_COLOR_H_
 
-#include <QPoint>
 
-#include "KoColor.h"
-#include "KoColorSpace.h"
-
-#include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_painterly_overlay_colorspace.h"
+#include <KoColor.h>
+
+class QPoint;
+class KoColorSpace;
 
 /**
  * XXX: Add dox

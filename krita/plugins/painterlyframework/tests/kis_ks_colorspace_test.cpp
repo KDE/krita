@@ -206,5 +206,5 @@ void KisKSColorSpaceTest::testToFromRgbA16()
     }
 }
 
-QTEST_KDEMAIN(KisKSColorSpaceTest, NoGUI)
+QTEST_KDEMAIN(KisKSColorSpaceTest, GUI)
 #include "kis_ks_colorspace_test.moc"

@@ -23,6 +23,8 @@
 
 #include "kis_gradient_painter.h"
 
+#include "kis_paint_device.h"
+
 void KisGradientPainterTest::testCreation()
 {
     KisGradientPainter test;

@@ -18,6 +18,9 @@
 
 #include <QRect>
 
+#include <KoColor.h>
+#include <KoColorSpace.h>
+
 #include <kis_debug.h>
 
 #include "kis_brush.h"

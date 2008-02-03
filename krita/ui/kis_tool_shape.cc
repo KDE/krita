@@ -26,6 +26,7 @@
 #include <klocale.h>
 
 #include "kis_tool_shape.h"
+#include <kis_paint_device.h>
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
     : KisToolPaint(canvas, cursor)

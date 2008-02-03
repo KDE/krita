@@ -18,13 +18,14 @@
 #ifndef KIS_CONVOLUTION_PAINTER_H_
 #define KIS_CONVOLUTION_PAINTER_H_
 
-#include <QImage>
-
+#include "kis_shared.h"
 #include "kis_shared_ptr.h"
 #include "kis_types.h"
 #include "kis_painter.h"
-
+#include "kis_image.h"
 #include "krita_export.h"
+
+class QImage;
 
 enum KisConvolutionBorderOp {
     BORDER_DEFAULT_FILL = 0, // Use the default pixel to make up for the missing pixels on the border or the pixel that lies beyond
@@ -36,7 +37,6 @@ enum KisConvolutionBorderOp {
 
 class KisKernel;
 typedef KisSharedPtr<KisKernel> KisKernelSP;
-
 class KRITAIMAGE_EXPORT KisKernel : public KisShared
 {
 
@@ -55,6 +55,7 @@ public:
     static KisKernelSP fromQImage(const QImage& img);
 
 };
+
 
 
 class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter

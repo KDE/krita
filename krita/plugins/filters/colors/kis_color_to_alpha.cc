@@ -30,6 +30,8 @@
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
 
 #include "ui_wdgcolortoalphabase.h"
 #include "kis_wdg_color_to_alpha.h"

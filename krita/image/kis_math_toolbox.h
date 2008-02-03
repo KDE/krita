@@ -22,13 +22,13 @@
 #define KIS_MATH_TOOLBOX_H
 
 #include <QObject>
-
-// typedef unsigned int uint;
+#include <QRect>
 
 #include <KoGenericRegistry.h>
-#include "kis_paint_device.h"
-#include "kis_types.h"
+#include <KoColorSpace.h>
 
+#include "kis_types.h"
+#include "kis_paint_device.h"
 #include <new>
 
 class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
@@ -64,7 +64,7 @@ public:
 
     KisMathToolbox(KoID id);
 
-    ~KisMathToolbox();
+    virtual ~KisMathToolbox();
 
 public:
 

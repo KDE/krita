@@ -29,6 +29,7 @@
 #include "kis_paint_device.h"
 #include "kis_shape_selection_model.h"
 #include "kis_image.h"
+#include "kis_selection.h"
 
 #include <kis_debug.h>
 

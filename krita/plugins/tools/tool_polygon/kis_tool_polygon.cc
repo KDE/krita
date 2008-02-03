@@ -34,7 +34,9 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 
+#include <kis_selection.h>
 #include "kis_painter.h"
+#include <kis_paint_device.h>
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
 

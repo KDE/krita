@@ -20,7 +20,8 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoProperties.h>
 
 #include "kis_types.h"
 #include "kis_paint_device.h"

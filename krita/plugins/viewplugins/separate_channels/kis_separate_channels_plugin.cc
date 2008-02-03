@@ -28,6 +28,7 @@
 #include <kactioncollection.h>
 
 #include <KoProgressUpdater.h>
+#include <KoColorSpace.h>
 
 #include <kis_view2.h>
 #include <kis_types.h>

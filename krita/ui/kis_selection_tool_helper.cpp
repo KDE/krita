@@ -25,6 +25,7 @@
 
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"
+#include "kis_image.h"
 
 KisSelectionToolHelper::KisSelectionToolHelper( KoShapeController* shapeController, KisLayerSP layer, const QString& name)
     : m_shapeController(shapeController)

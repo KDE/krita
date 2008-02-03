@@ -1,9 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,97 +16,102 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_BRUSHOP_H_
-#define KIS_BRUSHOP_H_
+#ifndef KIS_SMUDGEOP_H_
+#define KIS_SMUDGEOP_H_
+
+#include <QDialog>
 
 #include "kis_paintop.h"
+#include <qobject.h>
 #include <klocale.h>
-#include <QDialog>
-#include <KoColorSpace.h>
-
-#include <kis_paintop_settings.h>
-
 
 class QWidget;
 class QCheckBox;
 class QLabel;
-class QPointF;
+class QSlider;
+class KisPoint;
 class KisPainter;
 class KCurve;
 namespace Ui { class WdgBrushCurveControl; }
 
-class KisBrushOpFactory : public KisPaintOpFactory  {
+
+class KisSmudgeOpFactory : public KisPaintOpFactory  {
 
 public:
-    KisBrushOpFactory() {}
-    virtual ~KisBrushOpFactory() {}
+    KisSmudgeOpFactory() {}
+    virtual ~KisSmudgeOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "paintbrush"; }
-    virtual QString name() const { return i18n("Pixel Brush"); }
-    virtual QString pixmap() { return "krita-paintbrush.png"; }
+    virtual QString id() const { return "smudge"; }
+    virtual QString name() const { return i18n("Smudge Brush"); }
+    virtual QString pixmap() { return "paintbrush.png"; }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettings* settings(KisImageSP image);
 };
 
-class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
+class KisSmudgeOpSettings : public QObject, public KisPaintOpSettings {
+    
     Q_OBJECT
 
 public:
-    KisBrushOpSettings(QWidget *parent);
-    virtual KisPaintOpSettings* clone() const;
+    KisSmudgeOpSettings(QWidget *parent, bool isTablet);
 
+    int rate() const;
+    bool varyRate() const;
     bool varySize() const;
     bool varyOpacity() const;
-    bool varyDarken() const;
 
+    bool customRate() const { return m_customRate; }
     bool customSize() const { return m_customSize; }
     bool customOpacity() const { return m_customOpacity; }
-    bool customDarken() const { return m_customDarken; }
+    const double* rateCurve() const { return m_rateCurve; }
     const double* sizeCurve() const { return m_sizeCurve; }
     const double* opacityCurve() const { return m_opacityCurve; }
-    const double* darkenCurve() const { return m_darkenCurve; }
 
-    virtual QWidget *widget() const { return m_optionsWidget; }
-    
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
-public:
-    
+
+    virtual QWidget *widget() const { return m_optionsWidget; }
+
+
 private slots:
+    
     void slotCustomCurves();
 
 private:
     void transferCurve(KCurve* curve, double* target);
     QWidget *m_optionsWidget;
+    QLabel* m_rateLabel;
+    QSlider* m_rateSlider;
     QLabel * m_pressureVariation;
+    QCheckBox * m_rate;
     QCheckBox * m_size;
     QCheckBox * m_opacity;
-    QCheckBox * m_darken;
     Ui::WdgBrushCurveControl* m_curveControl;
     QDialog* m_curveControlWidget;
-
+    
     bool m_customSize;
+    bool m_customRate;
     bool m_customOpacity;
-    bool m_customDarken;
+    double m_rateCurve[256];
     double m_sizeCurve[256];
     double m_opacityCurve[256];
-    double m_darkenCurve[256];
 };
 
-class KisBrushOp : public KisPaintOp {
+class KisSmudgeOp : public KisPaintOp {
 
 public:
 
-    KisBrushOp(const KisBrushOpSettings *settings, KisPainter * painter);
-    virtual ~KisBrushOp();
+    KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter * painter);
+    virtual ~KisSmudgeOp();
 
     void paintAt(const KisPaintInformation& info);
-    virtual double paintLine(const KisPaintInformation &pi1,
+    double paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,
                              double savedDist = -1);
 
+    int rate() { return (m_rate * 255) / 100; }
 private:
+    KisPaintDeviceSP m_target, m_srcdev;
     inline double scaleToCurve(double pressure, double* curve) const {
         int offset = int(255.0 * pressure);
         if (offset < 0)
@@ -119,15 +120,17 @@ private:
             offset =  255; // Was: clamp(..., 0, 255);
         return curve[offset];
     }
+    bool m_firstRun;
+    int m_rate;
+    bool m_pressureRate;
     bool m_pressureSize;
     bool m_pressureOpacity;
-    bool m_pressureDarken;
+    bool m_customRate;
     bool m_customSize;
     bool m_customOpacity;
-    bool m_customDarken;
+    double m_rateCurve[256];
     double m_sizeCurve[256];
     double m_opacityCurve[256];
-    double m_darkenCurve[256];
 };
 
 #endif // KIS_BRUSHOP_H_

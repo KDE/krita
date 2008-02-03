@@ -28,7 +28,7 @@
 #include "kis_resource_provider.h"
 #include "kis_paintop_registry.h"
 #include "kis_brush.h"
-
+#include "kis_selection.h"
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
     : KoCreatePathTool(canvas)

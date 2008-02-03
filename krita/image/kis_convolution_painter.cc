@@ -40,6 +40,8 @@
 
 #include <QColor>
 
+#include <KoProgressUpdater.h>
+
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_image.h"

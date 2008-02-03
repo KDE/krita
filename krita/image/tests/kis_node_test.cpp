@@ -25,6 +25,7 @@
 #include "kis_global.h"
 #include "kis_node.h"
 #include "kis_node_graph_listener.h"
+#include <KoProperties.h>
 
 class TestGraphListener : public KisNodeGraphListener
 {

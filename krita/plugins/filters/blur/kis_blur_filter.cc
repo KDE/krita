@@ -31,6 +31,10 @@
 
 #include "kis_wdg_blur.h"
 #include "ui_wdgblur.h"
+#include <kis_filter_configuration.h>
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+#include <kis_filter_processing_information.h>
 
 KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
 {

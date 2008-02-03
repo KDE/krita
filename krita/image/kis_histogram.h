@@ -21,10 +21,10 @@
 
 #include <QVector>
 
+#include "KoHistogramProducer.h"
+
 #include "kis_shared.h"
 #include "kis_types.h"
-#include "KoColorSpace.h"
-#include "KoHistogramProducer.h"
 
 enum enumHistogramType {
     LINEAR,

@@ -85,9 +85,7 @@ public:
 
     // Retrieve the projection for
     KisPaintDeviceSP projection() const;
-    KisPaintDeviceSP paintDevice() const {
-        return 0;
-    }
+    KisPaintDeviceSP paintDevice() const;
 
     qint32 x() const;
     void setX(qint32);

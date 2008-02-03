@@ -40,8 +40,9 @@
 #include "QPainter"
 #include "kis_cursor.h"
 #include "kis_int_spinbox.h"
-
+#include "kis_paint_device.h"
 #include "kis_tool_star.h"
+#include "kis_selection.h"
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
     : super(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),

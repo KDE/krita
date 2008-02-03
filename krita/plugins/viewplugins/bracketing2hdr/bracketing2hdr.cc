@@ -32,6 +32,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
+#include <KoColorSpace.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"

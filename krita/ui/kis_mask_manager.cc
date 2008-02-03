@@ -48,6 +48,10 @@
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 #include "kis_paint_device.h"
+#include "kis_image.h"
+#include <KoCompositeOp.h>
+#include <KoColorSpace.h>
+#include <KoColor.h>
 
 KisMaskManager::KisMaskManager( KisView2 * view)
     : m_view( view )

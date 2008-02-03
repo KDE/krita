@@ -23,6 +23,7 @@
 
 #include "kis_paintop.h"
 #include "kis_painter.h"
+#include "kis_paint_device.h"
 
 class TestPaintOp : public KisPaintOp
 {

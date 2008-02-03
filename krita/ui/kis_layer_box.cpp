@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
+ *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify

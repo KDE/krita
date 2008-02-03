@@ -22,6 +22,7 @@
 #include "kis_extent_visitor_test.h"
 
 #include "kis_extent_visitor.h"
+#include "kis_image.h"
 
 void KisExtentVisitorTest::testCreation()
 {

@@ -22,6 +22,8 @@
 #include "kis_crop_visitor_test.h"
 
 #include "kis_crop_visitor.h"
+#include "kis_image.h"
+#include "kis_paint_device.h"
 
 void KisCropVisitorTest::testCreation()
 {

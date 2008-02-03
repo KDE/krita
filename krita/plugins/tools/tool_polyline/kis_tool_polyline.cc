@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kis_debug.h>
 #include <knuminput.h>
-
+#include <kis_selection.h>
 #include "KoCanvasBase.h"
 #include "kis_painter.h"
 #include "KoPointerEvent.h"

@@ -35,6 +35,7 @@
 #include <kgenericfactory.h>
 #include <kactioncollection.h>
 
+#include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_annotation.h"

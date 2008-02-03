@@ -25,6 +25,7 @@
 #include <kis_node.h>
 #include <kis_node_action.h>
 #include <QCoreApplication>
+#include <KoColorSpaceConstants.h>
 //#include "kis_simple_node_action.h"
 
 struct TestProgressBar : public KoProgressProxy

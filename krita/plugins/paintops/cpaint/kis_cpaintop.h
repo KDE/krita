@@ -25,7 +25,7 @@
 
 #include <KoColor.h>
 #include <kis_paintop.h>
-
+#include <kis_paintop_settings.h>
 #include "ui_wdgcpaintoptions.h"
 
 class QPointF;

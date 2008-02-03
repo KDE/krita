@@ -27,12 +27,15 @@
 #include <kis_iterators_pixel.h>
 #include <kis_transaction.h>
 #include <kis_math_toolbox.h>
+#include <kis_paint_device.h>
 
 #include "krs_image.h"
 #include "krs_const_iterator.h"
 #include "krs_histogram.h"
 #include "krs_painter.h"
 #include "krs_wavelet.h"
+
+
 
 using namespace Scripting;
 

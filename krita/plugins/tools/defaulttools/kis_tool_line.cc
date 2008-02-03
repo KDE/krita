@@ -27,6 +27,9 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+
 #include "kis_cursor.h"
 #include "kis_painter.h"
 #include "kis_tool_line.h"

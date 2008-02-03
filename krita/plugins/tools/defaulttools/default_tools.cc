@@ -25,7 +25,7 @@
 #include <kis_tool.h>
 #include <KoToolRegistry.h>
 #include "default_tools.h"
-
+#include "kis_paint_device.h"
 #include "kis_tool_fill.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_freehand.h"

@@ -22,6 +22,7 @@
 #include "kis_convolution_painter_test.h"
 
 #include "kis_convolution_painter.h"
+#include "kis_paint_device.h"
 
 void KisConvolutionPainterTest::testCreation()
 {

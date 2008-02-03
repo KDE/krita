@@ -27,18 +27,16 @@
 
 #include "krita_export.h"
 
-#include "KoCompositeOp.h"
 #include "KoDocumentSectionModel.h"
 
 #include "kis_types.h"
 #include "kis_node.h"
-#include "kis_paint_device.h"
-#include "kis_image.h"
 
 class QIcon;
 class QBitArray;
-class KisGroupLayer;
 class KoColorSpace;
+class KoCompositeOp;
+class KisGroupLayer;
 class KisNodeVisitor;
 
 namespace KisMetaData {

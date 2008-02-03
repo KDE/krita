@@ -35,6 +35,7 @@
 
 #include <klocale.h>
 
+#include "KoUnit.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "KoColorConversionTransformation.h"

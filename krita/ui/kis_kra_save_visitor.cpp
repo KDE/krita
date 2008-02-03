@@ -21,6 +21,7 @@
 
 #include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
+#include <KoColorSpace.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"

@@ -24,7 +24,6 @@
 
 #include "kis_paint_device.h"
 #include "kis_painterly_overlay_colorspace.h"
-#include "kis_node.h"
 
 #include <krita_export.h>
 

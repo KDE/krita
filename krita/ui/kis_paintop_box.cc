@@ -47,6 +47,7 @@
 #include <kis_layer.h>
 #include <kis_factory2.h>
 #include <kis_layer_manager.h>
+#include <kis_paintop_settings.h>
 
 KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * name)
     : QWidget(parent),

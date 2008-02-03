@@ -34,6 +34,7 @@
 #include <kis_filter_strategy.h>
 #include <kis_shear_visitor.h>
 #include <kis_transform_worker.h>
+#include <kis_paint_device.h>
 
 #include "kis_layer_manager.h"
 #include "kis_statusbar.h"
@@ -42,6 +43,7 @@
 #include "kis_doc2.h"
 #include "kis_dlg_image_properties.h"
 #include "commands/kis_image_commands.h"
+
 
 KisImageManager::KisImageManager( KisView2 * view)
     : m_view( view )

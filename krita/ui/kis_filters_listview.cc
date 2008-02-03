@@ -27,6 +27,7 @@
 #include <QPixmap>
 #include <QListWidgetItem>
 #include <QListWidget>
+#include <QThread>
 
 #include <threadweaver/Job.h>
 

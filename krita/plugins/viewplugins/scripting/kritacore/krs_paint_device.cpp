@@ -29,6 +29,7 @@
 #include <kis_transaction.h>
 #include <kis_math_toolbox.h>
 #include <kis_undo_adapter.h>
+#include <kis_image.h>
 
 #include "krs_iterator.h"
 #include "krs_histogram.h"

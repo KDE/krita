@@ -23,6 +23,7 @@
 #include <qlayout.h>
 
 #include <knuminput.h>
+#include <kis_filter_configuration.h>
 
 #include "ui_wdglenscorrectionoptions.h"
 

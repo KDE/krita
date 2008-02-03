@@ -25,7 +25,6 @@
 
 #include <kis_shared.h>
 
-
 #include <KoColorSpace.h>
 
 #include "kis_global.h"

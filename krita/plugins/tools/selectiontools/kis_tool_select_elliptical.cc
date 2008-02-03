@@ -35,6 +35,8 @@
 #include <KoPathShape.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include "kis_cursor.h"
 #include "kis_image.h"

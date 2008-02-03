@@ -23,6 +23,7 @@
 #include <QDomElement>
 
 #include <KoColor.h>
+#include <KoColorSpace.h>
 
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"

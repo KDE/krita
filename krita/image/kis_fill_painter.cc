@@ -38,6 +38,8 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoProgressUpdater.h>
+
 #include "kis_brush.h"
 #include "kis_debug.h"
 #include "kis_image.h"

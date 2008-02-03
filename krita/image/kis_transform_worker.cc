@@ -19,11 +19,13 @@
  */
 #include <klocale.h>
 
-#include "kis_debug.h"
+#include <KoProgressUpdater.h>
+#include <KoColorSpace.h>
+
 #include "kis_paint_device.h"
+#include "kis_debug.h"
 #include "kis_selection.h"
 #include "kis_transform_worker.h"
-#include "KoProgressUpdater.h"
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 #include "kis_layer.h"

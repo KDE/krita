@@ -28,6 +28,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
+#include <KoCompositeOp.h>
 
 #include "kis_debug.h"
 #include "kis_image.h"

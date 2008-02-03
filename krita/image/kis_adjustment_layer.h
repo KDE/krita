@@ -20,13 +20,11 @@
 
 #include <QObject>
 #include "kis_types.h"
-#include "kis_paint_device.h"
-#include "kis_node_visitor.h"
 #include "kis_layer.h"
-#include "KoCompositeOp.h"
 #include <krita_export.h>
 
 class KisFilterConfiguration;
+class KisNodeVisitor;
 
 /**
  * Class that contains a KisFilter and optionally a KisSelection. The combination

@@ -34,6 +34,7 @@
 #include <kis_adjustment_layer.h>
 #include <kis_transformation_mask.h>
 #include <kis_filter_mask.h>
+#include <kis_image.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
 

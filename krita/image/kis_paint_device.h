@@ -29,12 +29,11 @@
 
 #include "kis_debug.h"
 
-#include "KoColorSpace.h"
-#include "KoColor.h"
+#include <KoColorConversionTransformation.h>
 
 #include "kis_types.h"
 #include "kis_global.h"
-#include <kis_shared.h>
+#include "kis_shared.h"
 #include "kis_iterators_pixel.h"
 
 #include <krita_export.h>
@@ -44,6 +43,10 @@ class QImage;
 class QPoint;
 
 class KoStore;
+class KoColorSpace;
+class KoColor;
+class KoColorProfile;
+class KoColor;
 
 class KisRandomSubAccessorPixel;
 class KisDataManager;

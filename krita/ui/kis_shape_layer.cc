@@ -278,4 +278,8 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
     return true;
 }
 
+KisPaintDeviceSP KisShapeLayer::paintDevice() const
+{
+    return 0;
+}
 #include "kis_shape_layer.moc"

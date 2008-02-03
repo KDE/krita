@@ -19,8 +19,10 @@
 #define _KIS_FILTER_CONFIG_WIDGET_H_
 
 #include <QWidget>
-#include "kis_filter_configuration.h"
 #include <krita_export.h>
+
+
+class KisFilterConfiguration;
 
 /**
  * Empty base class. Filters can build their own configuration widgets that

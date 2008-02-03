@@ -43,6 +43,7 @@
 #include "kis_painter.h"
 #include "kis_tool_brush.h"
 #include "kis_boundary.h"
+#include "kis_paint_device.h"
 #include "kis_layer.h"
 
 #define MAXIMUM_SMOOTHNESS 1000

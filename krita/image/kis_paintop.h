@@ -27,7 +27,7 @@
 #include "kis_types.h"
 
 #include <krita_export.h>
-#include "kis_paintop_settings.h"
+
 class QWidget;
 
 class QPointF;
@@ -38,7 +38,7 @@ class KoPointerEvent;
 class KisQImagemask;
 class KisPainter;
 class KisPaintInformation;
-
+class KisPaintOpSettings;
 /**
  * KisPaintOp are use by tools to draw on a paint device.
  */

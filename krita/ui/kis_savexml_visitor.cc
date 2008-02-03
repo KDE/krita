@@ -26,6 +26,9 @@
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_shape_layer.h"
+#include <KoCompositeOp.h>
+#include <kis_paint_device.h>
+#include <KoColorSpace.h>
 
 KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root) :
     KisNodeVisitor(),

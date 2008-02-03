@@ -34,6 +34,7 @@
 #include "kis_layer.h"
 #include <kis_statusbar.h>
 
+#include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
 #include "kis_dropshadow_plugin.h"
 #include "kis_dropshadow.h"

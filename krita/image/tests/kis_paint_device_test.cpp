@@ -35,6 +35,7 @@
 #include "kis_global.h"
 #include "testutil.h"
 #include "kis_transaction.h"
+#include "kis_image.h"
 
 void KisPaintDeviceTest::testCreation()
 {

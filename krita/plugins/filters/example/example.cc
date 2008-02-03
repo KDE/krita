@@ -33,6 +33,7 @@
 #include <KoColorTransformation.h>
 #include <KoProgressUpdater.h>
 
+#include <kis_filter_processing_information.h>
 #include <kis_types.h>
 #include <kis_selection.h>
 #include <kis_image.h>

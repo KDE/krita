@@ -25,6 +25,8 @@
 #include <klocale.h>
 
 #include <KoColorTransformation.h>
+#include <KoChannelInfo.h>
+#include <KoColorSpace.h>
 
 #include "krs_paint_device.h"
 

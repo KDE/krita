@@ -21,12 +21,13 @@
 
 #include <QRect>
 
-#include "kis_selection.h"
 
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
+
 #include "kis_painter.h"
 #include "kis_types.h"
+#include "kis_selection.h"
 
 #include <krita_export.h>
 

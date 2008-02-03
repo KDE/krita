@@ -21,7 +21,6 @@
 
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_paint_device.h"
 
 class KoColorSpace;
 

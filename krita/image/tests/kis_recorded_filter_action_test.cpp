@@ -28,6 +28,8 @@
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
+#include "kis_image.h"
+#include "kis_paint_device.h"
 
 void KisRecordedFilterActionTest::testCreation()
 {

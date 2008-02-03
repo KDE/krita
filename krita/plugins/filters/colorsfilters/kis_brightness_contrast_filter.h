@@ -26,7 +26,11 @@
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 #include "ui_wdg_brightness_contrast.h"
-
+#include <kis_filter_configuration.h>
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+#include <kis_filter_processing_information.h>
+#include <KoProgressUpdater.h>
 class QWidget;
 class KoColorTransformation;
 

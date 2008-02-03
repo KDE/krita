@@ -29,6 +29,7 @@
 
 #include "kis_debug.h"
 
+#include "KoColorSpace.h"
 #include "KoStore.h"
 #include <KoColorSpaceRegistry.h>
 #include <colorprofiles/KoIccColorProfile.h>

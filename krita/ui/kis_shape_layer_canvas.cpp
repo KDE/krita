@@ -18,10 +18,14 @@
 
 #include "kis_shape_layer_canvas.h"
 
+#include <QPainter>
+
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
+#include <KoColorSpace.h>
 
 #include <kis_paint_device.h>
+#include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_painter.h>
 #include <kis_shape_layer.h>

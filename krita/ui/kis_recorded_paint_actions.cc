@@ -34,6 +34,9 @@
 #include "kis_resourceserverprovider.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
+#include "kis_paintop_settings.h"
+#include "kis_paint_device.h"
+#include "kis_image.h"
 
 class KisRecordedPaintActionFactory : public KisRecordedActionFactory {
     public:

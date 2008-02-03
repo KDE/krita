@@ -23,7 +23,7 @@
 #include <KoColorSpaceRegistry.h>
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_colorspace_convert_visitor_test.h"
-
+#include "kis_image.h"
 
 void KisColorSpaceConvertVisitorTest::testCreation()
 {

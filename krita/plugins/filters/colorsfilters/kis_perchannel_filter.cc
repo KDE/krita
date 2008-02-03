@@ -30,12 +30,17 @@
 #include "KoColorTransformation.h"
 #include "KoCompositeOp.h"
 #include "KoID.h"
+#include <KoProgressUpdater.h>
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 #include "kis_perchannel_filter.h"
-#include "kis_paint_device.h"
+#include <kis_filter_configuration.h>
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+#include <kis_filter_processing_information.h>
+
 #include "kis_iterators_pixel.h"
 #include "kcurve.h"
 #include "kis_histogram.h"

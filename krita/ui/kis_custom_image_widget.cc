@@ -30,6 +30,7 @@
 #include <kcolorcombo.h>
 #include <kis_debug.h>
 
+#include <KoCompositeOp.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>

@@ -26,6 +26,7 @@
 #include "krosskritacore_export.h"
 
 class KisDoc2;
+class KisPaintDevice;
 
 namespace Scripting {
 

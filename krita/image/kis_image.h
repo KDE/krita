@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,11 +26,9 @@
 #include <QRegion>
 #include <QBitArray>
 
-#include <kis_debug.h>
 #include <kurl.h>
 
 #include <KoColorConversionTransformation.h>
-#include "KoUnit.h"
 
 #include "kis_global.h"
 #include "kis_types.h"

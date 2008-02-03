@@ -37,6 +37,7 @@
 #include "kis_filter.h"
 #include "kis_pixel_selection.h"
 #include "kis_datamanager.h"
+#include "kis_node_visitor.h"
 
 class KisAdjustmentLayer::Private
 {

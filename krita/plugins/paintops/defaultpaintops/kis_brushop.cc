@@ -34,6 +34,7 @@
 #include <kis_debug.h>
 
 #include <KoColorTransformation.h>
+#include <KoColor.h>
 #include <KoInputDevice.h>
 
 #include <kcurve.h>

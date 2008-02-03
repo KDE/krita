@@ -24,13 +24,14 @@
 #include <QBitArray>
 
 #include <KoProperties.h>
+#include <KoCompositeOp.h>
+#include <KoColorSpace.h>
 
 #include "kis_debug.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
-
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
 #include "kis_transparency_mask.h"

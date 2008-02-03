@@ -24,7 +24,7 @@
 
 #include <kis_types.h>
 #include <kis_group_layer.h>
-
+#include <kis_image.h>
 
 class KisLayerContainerShape::Private
 {

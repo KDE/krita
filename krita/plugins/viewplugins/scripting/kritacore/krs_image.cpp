@@ -25,6 +25,8 @@
 
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
+
 #include <kis_image.h>
 #include <kis_filter_strategy.h>
 #include <kis_group_layer.h>

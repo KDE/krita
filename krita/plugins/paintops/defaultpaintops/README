@@ -1,3 +1,0 @@
-Default implementations of the paintop interface. These may
-some day become plugins. New paintops should be created as
-plugins.

@@ -41,6 +41,7 @@
 #include "kis_view2.h"
 #include "kis_statusbar.h"
 #include "kis_transaction.h"
+#include <kis_image.h>
 
 namespace Krita {
 namespace Plugins {

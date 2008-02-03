@@ -28,6 +28,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_transaction.h>
+#include <kis_paint_device.h>
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 

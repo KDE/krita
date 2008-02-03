@@ -26,6 +26,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <kis_selection.h>
 #include "kis_painter.h"
 #include "kis_tool_ellipse.h"
 #include "KoPointerEvent.h"

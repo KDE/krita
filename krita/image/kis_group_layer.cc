@@ -164,6 +164,12 @@ KisPaintDeviceSP KisGroupLayer::projection() const
     return m_d->projection;
 }
 
+KisPaintDeviceSP KisGroupLayer::paintDevice() const
+{
+    return 0;
+}
+
+
 QRect KisGroupLayer::extent() const
 {
     QRect groupExtent;

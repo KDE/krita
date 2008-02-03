@@ -52,6 +52,7 @@
 #include "kis_resource_provider.h"
 #include "kis_config.h"
 #include "kis_layer.h"
+#include <kis_selection.h>
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
 #include "kis_opengl.h"

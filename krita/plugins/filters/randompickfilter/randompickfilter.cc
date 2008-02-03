@@ -46,6 +46,8 @@
 #include <kis_random_generator.h>
 #include <kis_selection.h>
 #include <kis_types.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
 
 #include "kis_wdg_random_pick.h"
 #include "ui_wdgrandompickoptions.h"

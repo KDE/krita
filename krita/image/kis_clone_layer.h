@@ -20,13 +20,12 @@
 
 #include <QObject>
 #include "kis_types.h"
-#include "kis_paint_device.h"
-#include "kis_node_visitor.h"
 #include "kis_layer.h"
-#include "KoCompositeOp.h"
 
 #include <krita_export.h>
 
+class KisNodeVisitor;
+class KoCompositeOp;
 
 enum CopyLayerType
 {

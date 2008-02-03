@@ -33,6 +33,8 @@
 #include "kis_external_layer_iface.h"
 #include "kis_undo_adapter.h"
 #include "commands/kis_layer_commands.h"
+#include "kis_image.h"
+#include "kis_paint_device.h"
 
 
 class KisCropVisitor : public KisNodeVisitor {

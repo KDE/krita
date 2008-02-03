@@ -33,6 +33,8 @@
 #include "kis_cursor.h"
 #include "kis_layer.h"
 #include "KoCanvasBase.h"
+#include <kis_selection.h>
+#include <kis_paint_device.h>
 
 KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
     : KisToolShape(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6)),

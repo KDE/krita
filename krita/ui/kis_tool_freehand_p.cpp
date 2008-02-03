@@ -23,6 +23,7 @@
 
 #include <kis_painter.h>
 #include <kis_paint_information.h>
+#include <kis_paint_device.h>
 
 FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand,
                                    KisPainter* painter,

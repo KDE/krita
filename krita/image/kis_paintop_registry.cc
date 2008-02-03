@@ -29,14 +29,16 @@
 
 #include <KoGenericRegistry.h>
 #include <KoPluginLoader.h>
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
+#include <KoID.h>
 
 #include "kis_types.h"
 #include "kis_paintop_registry.h"
+#include "kis_paint_device.h"
 #include "kis_paintop.h"
 #include "kis_painter.h"
-#include "KoID.h"
 #include "kis_debug.h"
-#include "KoColorSpace.h"
 #include "kis_layer.h"
 #include "kis_image.h"
 

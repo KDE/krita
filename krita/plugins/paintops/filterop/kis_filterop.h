@@ -24,6 +24,7 @@
 #define KIS_FILTEROP_H_
 
 #include "kis_paintop.h"
+#include <kis_paintop_settings.h>
 #include <QString>
 #include <klocale.h>
 

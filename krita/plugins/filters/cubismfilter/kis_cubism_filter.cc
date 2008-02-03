@@ -47,7 +47,11 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <KoProgressUpdater.h>
-
+#include <kis_filter_configuration.h>
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+#include <kis_filter_processing_information.h>
+#include <KoCompositeOp.h>
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_cubism_filter.h"

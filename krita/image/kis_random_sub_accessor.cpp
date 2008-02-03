@@ -20,6 +20,8 @@
 
 #include "kis_random_sub_accessor.h"
 
+#include <KoColorSpace.h>
+
 #include "kis_paint_device.h"
 
 KisRandomSubAccessorPixel::KisRandomSubAccessorPixel(const KisPaintDeviceSP device)

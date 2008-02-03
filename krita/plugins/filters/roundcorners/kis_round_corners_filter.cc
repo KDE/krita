@@ -42,6 +42,8 @@
 #include <kis_layer.h>
 #include <kis_multi_integer_filter_widget.h>
 #include <kis_selection.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_processing_information.h>
 #include <kis_types.h>
 
 #include "kis_round_corners_filter.h"

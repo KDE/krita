@@ -24,6 +24,7 @@
 #include <klocale.h>
 
 #include <KoCompositeOp.h>
+#include <KoColorSpace.h>
 
 #include "kis_paint_device.h"
 #include "kis_rotate_visitor.h"

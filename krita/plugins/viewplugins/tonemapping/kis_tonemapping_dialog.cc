@@ -18,12 +18,15 @@
 #include "kis_tonemapping_dialog.h"
 
 #include <KoGenericRegistryModel.h>
+#include <KoColorSpace.h>
 
 // Krita/Image
 #include <kis_layer.h>
 #include <kis_properties_configuration.h>
 #include <kis_transaction.h>
 #include <kis_undo_adapter.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
 
 // Krita/UI
 #include <kis_bookmarked_configuration_manager.h>

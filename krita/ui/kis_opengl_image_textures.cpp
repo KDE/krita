@@ -31,6 +31,7 @@
 #include <half.h>
 #endif
 
+#include <KoColorSpace.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoIntegerMaths.h"

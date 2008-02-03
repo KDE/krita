@@ -695,18 +695,18 @@ QString KoShape::saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) c
 
 void KoShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
     // fill the style stack with the shapes style
     if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        context.koLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
+        context.odfLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
         styleStack.setTypeProperties( "graphic" );
     }
     else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
     {
-        context.koLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
+        context.odfLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
         styleStack.setTypeProperties( "presentation" );
     }
 
@@ -767,7 +767,7 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
 
 QString KoShape::getStyleProperty( const char *property, const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString value;
 
     if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
@@ -786,25 +786,25 @@ QString KoShape::getStyleProperty( const char *property, const KoXmlElement & el
 
 QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString fill = getStyleProperty( "fill", element, context );
     if ( fill == "solid" || fill == "hatch" )
-        return KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.koLoadingContext().stylesReader() );
+        return KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
     else if( fill == "gradient" )
-        return KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.koLoadingContext().stylesReader(), size() );
+        return KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), size() );
     else if( fill == "bitmap" )
-        return KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.koLoadingContext(), size() );
+        return KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), size() );
 
     return QBrush();
 }
 
 KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString stroke = getStyleProperty( "stroke", element, context );
     if( stroke == "solid" || stroke == "dash" )
     {
-        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle( styleStack, stroke, context.koLoadingContext().stylesReader() );
+        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
 
         KoLineBorder * border = new KoLineBorder();
         border->setLineWidth( pen.widthF() );

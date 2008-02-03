@@ -84,7 +84,7 @@ class KoTextLoader::Private
         explicit Private( KoShapeLoadingContext & context )
         : context( context )
         , textSharedData( 0 )
-        , stylesDotXml( context.koLoadingContext().useStylesAutoStyles() )
+        , stylesDotXml( context.odfLoadingContext().useStylesAutoStyles() )
         , bodyProgressTotal( 0 )
         , bodyProgressValue( 0 )
         , lastElapsed( 0 )
@@ -115,7 +115,7 @@ KoTextLoader::KoTextLoader( KoShapeLoadingContext & context )
     if ( !d->textSharedData ) {
         d->textSharedData = new KoTextSharedLoadingData();
         // TODO pass style manager so that on copy and paste we can recognice the same styles
-        d->textSharedData->loadOdfStyles( context.koLoadingContext(), 0 );
+        d->textSharedData->loadOdfStyles( context.odfLoadingContext(), 0 );
         if ( !sharedData ) {
             context.addSharedData( KOTEXT_SHARED_LOADING_ID, d->textSharedData );
         }

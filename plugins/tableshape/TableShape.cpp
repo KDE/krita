@@ -90,7 +90,7 @@ bool TableShape::loadOdf( const KoXmlElement    &tableElement,
                                                         "style-name",
                                                         "" );
     const KoXmlElement *tableStyleElement
-        = context.koLoadingContext().stylesReader().findStyle( tableStyleName,
+        = context.odfLoadingContext().stylesReader().findStyle( tableStyleName,
                                                                "table" );
 
     QString       text;

@@ -185,9 +185,9 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     {
         KoShapeGroup * group = new KoShapeGroup();
 
-        context.koLoadingContext().styleStack().save();
+        context.odfLoadingContext().styleStack().save();
         bool loaded = group->loadOdf( e, context );
-        context.koLoadingContext().styleStack().restore();
+        context.odfLoadingContext().styleStack().restore();
 
         if( loaded )
             return group;
@@ -222,9 +222,9 @@ KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & element, Ko
             if( shape->shapeId().isEmpty() )
                 shape->setShapeId(factory->id());
 
-            context.koLoadingContext().styleStack().save();
+            context.odfLoadingContext().styleStack().save();
             bool loaded = shape->loadOdf( element, context );
-            context.koLoadingContext().styleStack().restore();
+            context.odfLoadingContext().styleStack().restore();
 
             if( loaded )
                 return shape;

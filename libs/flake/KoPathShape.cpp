@@ -149,7 +149,7 @@ QString KoPathShape::saveStyle( KoGenStyle &style, KoShapeSavingContext &context
 void KoPathShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
     KoShape::loadStyle( element, context );
-    KoStyleStack &styleStack = context.koLoadingContext().styleStack();
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     if ( styleStack.hasProperty( KoXmlNS::svg, "fill-rule" ) )
     {
         QString rule = styleStack.property( KoXmlNS::svg, "fill-rule" );

@@ -60,7 +60,7 @@ KoShapeLoadingContext::~KoShapeLoadingContext()
     delete d;
 }
 
-KoOdfLoadingContext & KoShapeLoadingContext::koLoadingContext()
+KoOdfLoadingContext & KoShapeLoadingContext::odfLoadingContext()
 {
     return d->context;
 }

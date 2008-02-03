@@ -53,7 +53,7 @@ public:
     ~KoShapeLoadingContext();
 
     /// return the embedded loading context
-    KoOdfLoadingContext & koLoadingContext();
+    KoOdfLoadingContext & odfLoadingContext();
 
     /// Returns layer referenced by given name
     KoShapeLayer * layer( const QString & layerName );

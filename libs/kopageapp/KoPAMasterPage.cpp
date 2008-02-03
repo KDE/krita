@@ -85,7 +85,7 @@ void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingCon
         setName( element.attributeNS( KoXmlNS::style, "name" ) );
     }
     QString pageLayoutName = element.attributeNS( KoXmlNS::style, "page-layout-name" );
-    const KoOdfStylesReader& styles = loadingContext.koLoadingContext().stylesReader();
+    const KoOdfStylesReader& styles = loadingContext.odfLoadingContext().stylesReader();
     const KoXmlElement* masterPageStyle = styles.findStyle( pageLayoutName );
     KoPageLayout pageLayout = KoPageLayout::standardLayout();
 

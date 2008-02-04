@@ -23,7 +23,8 @@
 
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
-
+#include <KoCompositeOp.h>
+#include <KoColorSpace.h>
 #include "kis_autobrush_resource.h"
 #include "kis_brush.h"
 #include "kis_layer.h"

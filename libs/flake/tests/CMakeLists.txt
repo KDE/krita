@@ -91,4 +91,10 @@ set(TestShapeReorderCommand_test_SRCS TestShapeReorderCommand.cpp )
 kde4_add_unit_test(TestShapeReorderCommand TESTNAME libs-flake-TestShapeReorderCommand  ${TestShapeReorderCommand_test_SRCS})
 target_link_libraries(TestShapeReorderCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestPathSegment_test_SRCS TestPathSegment.cpp )
+kde4_add_unit_test(TestPathSegment TESTNAME libs-flake-TestPathSegment ${TestPathSegment_test_SRCS})
+target_link_libraries(TestPathSegment  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
 ########### end ###############

@@ -127,7 +127,7 @@ public:
         {
             QMutexLocker lockRunning(&m_mutex_running);
             dbgUI <<"run";
-            while(not m_finish or not empty() )
+            while(!m_finish or !isEmpty() )
             {
                 FreehandPaintJob* nextJob = 0;
                 {
@@ -157,7 +157,7 @@ public:
             m_finish = true;
             QMutexLocker lockRunning(&m_mutex_running);
         }
-        bool empty() {
+        bool isEmpty() {
             QMutexLocker lock(&m_mutex_queue);
             return m_queue.size() == 0;
         }

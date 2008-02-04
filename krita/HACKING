@@ -90,4 +90,10 @@ Slots and signals
 
 	Prefix slots with slot and signals with sig: slotUpdateSelection, sigSelectionUpdated.
 
+Boolean operators
+
+    Use the standard !, !=, ==, && etc style, not the "not", "and" etc. style. Keep krita code
+    using one, easily recognizable, C++ style.
+
+
 Boudewijn Rempt

@@ -100,15 +100,13 @@ void KisNode::setDirty(const QRect & rc)
 
 void KisNode::setDirty( const QRegion & region)
 {
-    QMutexLocker(&m_d->regionLock);
-
     if ( region.isEmpty() ) return;
-
     // If we're dirty, our parent is dirty, if we've got a parent
     if (m_d->parent) {
         m_d->parent->setDirty(region);
     }
 
+    QMutexLocker(&m_d->regionLock);
     m_d->dirtyRegion += region;
 }
 

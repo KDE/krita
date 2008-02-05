@@ -38,6 +38,7 @@ SnapGuide::SnapGuide( KoCanvasBase * canvas )
     m_strategies.append( new NodeSnapStrategy() );
     m_strategies.append( new OrthogonalSnapStrategy() );
     m_strategies.append( new ExtensionSnapStrategy() );
+    m_strategies.append( new IntersectionSnapStrategy() );
 }
 
 SnapGuide::~SnapGuide()
@@ -171,11 +172,11 @@ QList<QPointF> SnapProxy::pointsInRect( const QRectF &rect )
     return points;
 }
 
-QList<KoShape*> SnapProxy::shapesInRect( const QRectF &rect )
+QList<KoShape*> SnapProxy::shapesInRect( const QRectF &rect, bool omitEditedShape )
 {
     QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapesAt( rect );
 
-    if( m_snapGuide->editedShape() )
+    if( ! omitEditedShape && m_snapGuide->editedShape() )
     {
         QRectF bound = m_snapGuide->editedShape()->boundingRect();
         if( rect.intersects( bound ) || rect.contains( bound ) )

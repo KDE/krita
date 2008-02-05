@@ -99,7 +99,7 @@ public:
     QList<QPointF> pointsInRect( const QRectF &rect );
 
     /// returns list of shape in given rectangle in document coordinates
-    QList<KoShape*> shapesInRect( const QRectF &rect );
+    QList<KoShape*> shapesInRect( const QRectF &rect, bool omitEditedShape = false );
 
     /// returns list Guideof points from given shape
     QList<QPointF> pointsFromShape( KoShape * shape );

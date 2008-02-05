@@ -20,7 +20,7 @@
 #include "SnapStrategy.h"
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
-
+//#include <kdebug.h>
 #include <math.h>
 
 
@@ -295,4 +295,75 @@ QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QM
                 return matrix.map(point->point()) - matrix.map(prev->point());
         }
     }
+}
+
+IntersectionSnapStrategy::IntersectionSnapStrategy()
+    : SnapStrategy( SnapStrategy::Intersection )
+{
+}
+
+bool IntersectionSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance )
+{
+    double maxDistance = maxSnapDistance*maxSnapDistance;
+    double minDistance = HUGE_VAL;
+
+    QRectF rect( -maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance );
+    rect.moveCenter( mousePosition );
+    QList<KoShape*> shapes = proxy->shapesInRect( rect, true );
+
+    QList<KoPathSegment> segments;
+    foreach( KoShape * shape, shapes )
+    {
+        KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+        if( ! path )
+            continue;
+
+        QMatrix m = shape->absoluteTransformation(0);
+        // transform segments to document coordinates
+        foreach( KoPathSegment s, path->segmentsAt( path->documentToShape( rect ) ) )
+        {
+            segments.append( s.mapped( m ) );
+        }
+    }
+    QPointF snappedPoint = mousePosition;
+
+    //kDebug() << "found" << segments.count() << "segments in roi";
+
+    int segmentCount = segments.count();
+    for( int i = 0; i < segmentCount; ++i )
+    {
+        KoPathSegment s1 = segments[i];
+        for( int j = i+1; j < segmentCount; ++j )
+        {
+            QList<QPointF> isects = s1.intersections( segments[j] );
+            //kDebug() << isects.count() << "intersections found";
+            foreach( QPointF point, isects )
+            {
+                if( ! rect.contains( point ) )
+                    continue;
+                double distance = fastDistance( mousePosition, point );
+                if( distance < maxDistance && distance < minDistance )
+                {
+                    snappedPoint = point;
+                    minDistance = distance;
+                }
+            }
+        }
+    }
+
+    QPainterPath decoration;
+
+    //kDebug() << "min distance =" << minDistance;
+
+    if( minDistance < HUGE_VAL )
+    {
+        QRectF rectangle( -10, -10, 10, 10 );
+        rectangle.moveCenter( snappedPoint );
+        decoration.addRect( rectangle );
+    }
+
+    setDecoration( decoration );
+    setSnappedPosition( snappedPoint );
+
+    return (minDistance < HUGE_VAL);
 }

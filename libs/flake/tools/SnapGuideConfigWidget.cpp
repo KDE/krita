@@ -32,6 +32,8 @@ SnapGuideConfigWidget::SnapGuideConfigWidget( SnapGuide * snapGuide, QWidget * p
         widget.nodeSnapGuide->setCheckState( Qt::Checked );
     if( snapGuide->enabledSnapStrategies() & SnapStrategy::Extension )
         widget.extensionSnapGuide->setCheckState( Qt::Checked );
+    if( snapGuide->enabledSnapStrategies() & SnapStrategy::Intersection )
+        widget.intersectionSnapGuide->setCheckState( Qt::Checked );
 
     widget.snapDistance->setValue( m_snapGuide->snapDistance() );
 
@@ -39,6 +41,7 @@ SnapGuideConfigWidget::SnapGuideConfigWidget( SnapGuide * snapGuide, QWidget * p
     connect( widget.orthogonalSnapGuide, SIGNAL(stateChanged(int)), this, SLOT(strategyChanged()));
     connect( widget.nodeSnapGuide, SIGNAL(stateChanged(int)), this, SLOT(strategyChanged()));
     connect( widget.extensionSnapGuide, SIGNAL(stateChanged(int)), this, SLOT(strategyChanged()));
+    connect( widget.intersectionSnapGuide, SIGNAL(stateChanged(int)), this, SLOT(strategyChanged()));
     connect( widget.snapDistance, SIGNAL(valueChanged(int)), this, SLOT(distanceChanged(int)));
 
     widget.useSnapGuides->setCheckState( snapGuide->isSnapping() ? Qt::Checked : Qt::Unchecked );
@@ -63,6 +66,8 @@ void SnapGuideConfigWidget::strategyChanged()
         strategies |= SnapStrategy::Node;
     if( widget.extensionSnapGuide->checkState() == Qt::Checked )
         strategies |= SnapStrategy::Extension;
+    if( widget.intersectionSnapGuide->checkState() == Qt::Checked )
+        strategies |= SnapStrategy::Intersection;
 
     m_snapGuide->enableSnapStrategies( strategies );
 }

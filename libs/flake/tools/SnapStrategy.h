@@ -34,7 +34,8 @@ public:
     enum SnapType {
         Orthogonal = 1,
         Node = 2,
-        Extension = 4
+        Extension = 4,
+        Intersection = 8
     };
 
     SnapStrategy( SnapType type );
@@ -91,4 +92,10 @@ private:
     bool snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix );
 };
 
+class IntersectionSnapStrategy : public SnapStrategy
+{
+public:
+    IntersectionSnapStrategy();
+    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
+};
 #endif // SNAPSTRATEGY_H

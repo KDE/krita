@@ -27,6 +27,7 @@
 #include <QtCore/QRectF>
 
 class KoPathPoint;
+class QMatrix;
 
 /// A KoPathSegment consist of two neighboring KoPathPoints
 class FLAKE_EXPORT KoPathSegment
@@ -93,6 +94,9 @@ public:
 
     /// Returns the control point bounding rect
     QRectF controlPointRect() const;
+
+    /// Returns transformed segment
+    KoPathSegment mapped( const QMatrix & matrix ) const;
 
 private:
     /// calculates signed distance of given point from segment chord

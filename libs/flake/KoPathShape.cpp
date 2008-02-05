@@ -649,6 +649,32 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
     return result;
 }
 
+QList<KoPathSegment> KoPathShape::segmentsAt( const QRectF &r )
+{
+    QList<KoPathSegment> segments;
+    int subpathCount = m_subpaths.count();
+    for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
+    {
+        KoSubpath * subpath = m_subpaths[subpathIndex];
+        int pointCount = subpath[subpathIndex].count();
+        bool subpathClosed = isClosedSubpath( subpathIndex );
+        for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
+        {
+            if( pointIndex == (pointCount-1) && ! subpathClosed )
+                break;
+            KoPathSegment s( subpath->at( pointIndex ), subpath->at( (pointIndex+1)%pointCount ) );
+            QRectF controlRect = s.controlPointRect();
+            if( ! r.intersects( controlRect ) && ! controlRect.contains( r ) )
+                continue;
+            QRectF bound = s.boundingRect();
+            if( ! r.intersects( bound ) && ! bound.contains( r ) )
+                continue;
+
+            segments.append( s );
+        }
+    }
+    return segments;
+}
 
 KoPathPointIndex KoPathShape::pathPointIndex( const KoPathPoint *point ) const
 {

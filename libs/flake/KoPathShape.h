@@ -186,6 +186,13 @@ public:
     QList<KoPathPoint*> pointsAt( const QRectF &r );
 
     /**
+     * @brief Returns the list of path segments within the given rectangle.
+     * @param r the rectangle the requested segments are in
+     * @return list of segments within the rectangle
+     */
+    QList<KoPathSegment> segmentsAt( const QRectF &r );
+
+    /**
      * @brief Get the path point index of a point
      *
      * @param point for which you want to get the info

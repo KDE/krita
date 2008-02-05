@@ -50,7 +50,7 @@ KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
 , m_snapGuide( new SnapGuide(canvas) )
 {
     m_snapGuide->enableSnapStrategies( SnapStrategy::Orthogonal|SnapStrategy::Node|SnapStrategy::Extension );
-    //m_snapGuide->enableSnapStrategies( SnapStrategy::Node|SnapStrategy::Extension );
+    m_snapGuide->enableSnapStrategies( SnapStrategy::Intersection );
 }
 
 KoCreatePathTool::~KoCreatePathTool()
@@ -225,10 +225,12 @@ void KoCreatePathTool::activate( bool temporary )
 
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
+    m_snapGuide->setEditedShape( 0 );
 }
 
 void KoCreatePathTool::deactivate()
 {
+    m_snapGuide->setEditedShape( 0 );
     if( m_shape )
     {
         m_canvas->updateCanvas( handleRect( m_firstPoint->point() ) );

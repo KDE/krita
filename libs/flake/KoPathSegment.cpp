@@ -21,6 +21,7 @@
 #include "KoPathPoint.h"
 #include <kdebug.h>
 #include <QtGui/QPainterPath>
+#include <QtGui/QMatrix>
 #include <math.h>
 
 class KoPathSegment::Private
@@ -199,6 +200,16 @@ QRectF KoPathSegment::controlPointRect() const
         bbox.setTop( qMin( bbox.top(), p.y() ) );
         bbox.setBottom( qMax( bbox.bottom(), p.y() ) );
     }
+
+    if( degree() == 1 )
+    {
+        // adjust bounding rect of horizontal and vertical lines
+        if( bbox.height() == 0.0 )
+            bbox.setHeight( 0.1 );
+        if( bbox.width() == 0.0 )
+            bbox.setWidth( 0.1 );
+    }
+
     return bbox;
 }
 
@@ -574,7 +585,7 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
         isects += segment.intersections( parts.first );
         isects += segment.intersections( parts.second );
     }
-    else if( qAbs(tmin - tmax) < 1e-6 )
+    else if( qAbs(tmin - tmax) < 1e-5 )
     {
         //kDebug(30006) << "Yay, we found an intersection";
         // the inteval is pretty small now, just calculate the intersection at this point
@@ -591,6 +602,19 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
     }
 
     return isects;
+}
+
+KoPathSegment KoPathSegment::mapped( const QMatrix &matrix ) const
+{
+    if( ! isValid() )
+        return *this;
+
+    KoPathPoint * p1 = new KoPathPoint( *d->first );
+    KoPathPoint * p2 = new KoPathPoint( *d->second );
+    p1->map( matrix );
+    p2->map( matrix );
+
+    return KoPathSegment( p1, p2 );
 }
 
 qreal KoPathSegment::distanceFromChord( const QPointF &point ) const

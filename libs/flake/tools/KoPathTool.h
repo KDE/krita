@@ -66,6 +66,9 @@ public:
     /// reimplemented
     virtual void deactivate();
 
+    /// reimplemented
+    virtual void deleteSelection();
+
 signals:
     void typeChanged(int types);
     void pathChanged(KoPathShape* path);

@@ -697,6 +697,11 @@ QRectF KoPathTool::handleRect( const QPointF &p ) {
     return QRectF( p.x()-m_handleRadius, p.y()-m_handleRadius, 2*m_handleRadius, 2*m_handleRadius );
 }
 
+void KoPathTool::deleteSelection()
+{
+    removePoints();
+}
+
 void KoPathTool::ActivePointHandle::paint( QPainter &painter, const KoViewConverter &converter )
 {
     painter.save();

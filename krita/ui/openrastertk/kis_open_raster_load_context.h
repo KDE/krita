@@ -19,14 +19,15 @@
 #ifndef _KIS_OPEN_RASTER_LOAD_CONTEXT_H_
 #define _KIS_OPEN_RASTER_LOAD_CONTEXT_H_
 
-#include <kis_types.h>
-
+class QString;
 class QDomDocument;
+
+#include <kis_types.h>
 
 class KisOpenRasterLoadContext {
     public:
         virtual ~KisOpenRasterLoadContext() {}
-        virtual KisPaintDeviceSP loadDeviceData( QString fileName) = 0;
+        virtual KisPaintDeviceSP loadDeviceData( const QString & fileName) = 0;
         virtual QDomDocument loadStack() = 0;
 };
 

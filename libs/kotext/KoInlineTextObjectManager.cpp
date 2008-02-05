@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +26,6 @@
 
 #include <QTextCursor>
 #include <QPainter>
-#include <kdebug.h>
 
 KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
     : QObject(parent),
@@ -50,7 +50,9 @@ KoInlineObject *KoInlineTextObjectManager::inlineTextObject(int id) const {
 }
 
 void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObject *object) {
-    QTextCharFormat cf;
+    QTextCharFormat oldCf = cursor.charFormat();
+    // create a new format out of the old so that the current formating is also used for the inserted object
+    QTextCharFormat cf( oldCf );
     cf.setObjectType(1001);
     cf.setProperty(InlineInstanceId, ++m_lastObjectId);
     cursor.insertText(QString(0xFFFC), cf);
@@ -70,6 +72,8 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
             (bookmark->type() == KoBookmark::StartBookmark || bookmark->type() == KoBookmark::SinglePosition))
         m_bookmarkManager.insert(bookmark->name(), bookmark);
 
+    // reset to use old format so that the InlineInstanceId is no longer set.
+    cursor.setCharFormat( oldCf );
 }
 
 bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor) {

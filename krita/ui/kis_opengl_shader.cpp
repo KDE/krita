@@ -76,7 +76,7 @@ void KisOpenGLShader::loadSourceCode(GLsizei numSourceCodeStrings, const GLcharA
     }
 }
 
-void KisOpenGLShader::loadSourceCode(QString sourceCodeFilename)
+void KisOpenGLShader::loadSourceCode(const QString & sourceCodeFilename)
 {
     QString fullFilename = KisFactory2::componentData().dirs()->findResource("kis_shaders", sourceCodeFilename);
 

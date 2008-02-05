@@ -103,7 +103,7 @@ QString KisRecordedActionFactory::name() const
     return QString();
 }
 
-KisLayerSP KisRecordedActionFactory::indexPathToLayer(KisImageSP img, QString path)
+KisLayerSP KisRecordedActionFactory::indexPathToLayer(KisImageSP img, const QString & path)
 {
     QStringList indexes = path.split("\\");
     KisNodeSP current = (img->rootLayer()->at(indexes[0].toUInt()));

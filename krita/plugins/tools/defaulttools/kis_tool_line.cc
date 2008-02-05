@@ -133,7 +133,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_painter = new KisPainter( device, currentLayer()->selection() );
                 Q_CHECK_PTR(m_painter);
 
-                m_painter->beginTransaction(i18n("Line"));
+                m_painter->beginTransaction(i18nc("a straight drawn line", "Line"));
 
                 m_painter->setPaintColor(currentFgColor());
                 m_painter->setBrush(currentBrush());

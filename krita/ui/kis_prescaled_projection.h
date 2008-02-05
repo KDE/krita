@@ -167,7 +167,7 @@ public slots:
      * Resize the prescaled image. The size is given in canvas
      * widget pixels.
      */
-    void resizePrescaledImage( QSize newSize );
+    void resizePrescaledImage( const QSize & newSize );
 
     /**
      * Set the current monitor profile

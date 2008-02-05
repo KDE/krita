@@ -132,7 +132,7 @@ KisFiltersListDynamicProgramFactory::KisFiltersListDynamicProgramFactory() :
 {
 }
 
-KisDynamicProgram* KisFiltersListDynamicProgramFactory::program(QString name)
+KisDynamicProgram* KisFiltersListDynamicProgramFactory::program(const QString & name)
 {
     return new KisFiltersListDynamicProgram(name);
 }

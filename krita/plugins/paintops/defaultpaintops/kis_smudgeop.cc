@@ -74,7 +74,7 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
         m_opacity = new QCheckBox(i18n("Opacity"), m_optionsWidget);
         m_rate =  new QCheckBox(i18n("Rate"), m_optionsWidget);
         m_curveControl = new Ui::WdgBrushCurveControl();
-        m_curveControlWidget = new QDialog(m_optionsWidget);
+        m_curveControlWidget = new KDialog(m_optionsWidget);
         m_curveControl->setupUi(m_curveControlWidget);
         // We abuse the darken curve here for rate
         m_curveControl->tabWidget->setTabLabel(m_curveControl->tabWidget->page(2), i18n("Rate"));
@@ -101,7 +101,7 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
 }
 
 void KisSmudgeOpSettings::slotCustomCurves() {
-    if (m_curveControlWidget->exec() == QDialog::Accepted) {
+    if (m_curveControlWidget->exec() == KDialog::Accepted) {
         m_customRate = m_curveControl->darkenCheckbox->isChecked();
         m_customSize = m_curveControl->sizeCheckbox->isChecked();
         m_customOpacity = m_curveControl->opacityCheckbox->isChecked();

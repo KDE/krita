@@ -71,11 +71,11 @@ int KoGenericRegistryModel<T>::rowCount(const QModelIndex &/*parent*/) const
 template<typename T>
 QVariant KoGenericRegistryModel<T>::data(const QModelIndex &index, int role) const
 {
-    if(not index.isValid())
+    if(!index.isValid())
     {
         return QVariant();
     }
-    if(role == Qt::DisplayRole or role == Qt::EditRole)
+    if(role == Qt::DisplayRole || role == Qt::EditRole)
     {
         return QVariant( get(index)->name() );
     }

@@ -327,13 +327,10 @@ QPoint KisComplexColor::setCenter(int x, int y)
     return oldCenter;
 }
 
-QPoint KisComplexColor::setCenter(QPoint p)
+QPoint KisComplexColor::setCenter(const QPoint & p)
 {
     QPoint oldCenter = m_center;
-
-    absolute(&p);
-    m_center = p;
-
+    m_center = absolute(p);
     return oldCenter;
 }
 
@@ -384,13 +381,16 @@ void KisComplexColor::absolute(int *x, int *y)
     Q_ASSERT(*x < absRight() && *y < absBottom());
 }
 
-void KisComplexColor::absolute(QPoint *p)
+QPoint KisComplexColor::absolute(const QPoint & p)
 {
-    int x = p->x();
-    int y = p->y();
+    QPoint p2;
+    int x = p.x();
+    int y = p.y();
     absolute(&x,&y);
-    p->setX(x);
-    p->setY(y);
+    p2.setX(x);
+    p2.setY(y);
+
+    return p2;
 }
 
 void KisComplexColor::translate()

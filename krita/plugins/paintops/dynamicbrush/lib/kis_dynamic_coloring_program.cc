@@ -44,7 +44,7 @@ class KisDynamicDummyColoringProgram : public KisDynamicProgram {
 struct KisDynamicColoringProgramFactory::Private {
 };
 
-KisDynamicColoringProgramFactory::KisDynamicColoringProgramFactory(QString id, QString name) : KisDynamicProgramFactory(id, name), d(0)
+KisDynamicColoringProgramFactory::KisDynamicColoringProgramFactory(const QString & id, const QString & name) : KisDynamicProgramFactory(id, name), d(0)
 {
 }
 
@@ -53,7 +53,7 @@ KisDynamicColoringProgramFactory::~KisDynamicColoringProgramFactory()
     delete d;
 }
 
-KisDynamicProgram* KisDynamicColoringProgramFactory::program(QString name) const
+KisDynamicProgram* KisDynamicColoringProgramFactory::program(const QString & name) const
 {
     return coloringProgram(name);
 }

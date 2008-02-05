@@ -110,19 +110,19 @@ void KisNode::setDirty( const QRegion & region)
     m_d->dirtyRegion += region;
 }
 
-bool KisNode::isDirty()
+bool KisNode::isDirty() const
 {
     QMutexLocker(&m_d->regionLock);
     return !m_d->dirtyRegion.isEmpty();
 }
 
-bool KisNode::isDirty( const QRect & rect )
+bool KisNode::isDirty( const QRect & rect ) const
 {
     QMutexLocker(&m_d->regionLock);
     return m_d->dirtyRegion.intersects( rect );
 }
 
-void KisNode::setClean( QRect rc )
+void KisNode::setClean( const QRect & rc )
 {
     QMutexLocker(&m_d->regionLock);
     m_d->dirtyRegion -= QRegion( rc );
@@ -205,7 +205,7 @@ int KisNode::index( const KisNodeSP node ) const
     return -1;
 }
 
-QList<KisNodeSP> KisNode::childNodes( QStringList nodeTypes, const KoProperties & properties ) const
+QList<KisNodeSP> KisNode::childNodes( const QStringList & nodeTypes, const KoProperties & properties ) const
 {
 //     if ( nodeTypes.isEmpty() && properties.isEmpty() )
 //         return m_d->nodes;

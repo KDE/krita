@@ -30,10 +30,6 @@
 #include <kis_debug.h>
 #include <kis_paint_information.h>
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 class KisToolFreehand;
 class KisPainter;
 
@@ -125,9 +121,8 @@ public:
 
     virtual void run()
         {
-            QMutexLocker lockRunning(&m_mutex_running);
             dbgUI <<"run";
-            while(!m_finish or !isEmpty() )
+                while(!m_finish || !isEmpty() )
             {
                 FreehandPaintJob* nextJob = 0;
                 {
@@ -155,7 +150,7 @@ public:
         }
         void finish() {
             m_finish = true;
-            QMutexLocker lockRunning(&m_mutex_running);
+            this->wait();
         }
         bool isEmpty() {
             QMutexLocker lock(&m_mutex_queue);
@@ -172,7 +167,6 @@ public:
     private:
         QQueue<FreehandPaintJob* > m_queue;
         QMutex m_mutex_queue;
-        QMutex m_mutex_running;
         bool m_finish;
 };
 

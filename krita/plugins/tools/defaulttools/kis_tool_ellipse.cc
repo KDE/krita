@@ -20,20 +20,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_tool_ellipse.h"
 
 #include <QPainter>
 
 #include <kis_debug.h>
 #include <klocale.h>
 
-#include <kis_selection.h>
-#include "kis_painter.h"
-#include "kis_tool_ellipse.h"
 #include "KoPointerEvent.h"
-#include "kis_paintop_registry.h"
-#include "kis_cursor.h"
-#include "KoCanvasBase.h"
-#include "kis_layer.h"
+#include <KoCanvasBase.h>
+
+#include <kis_selection.h>
+#include <kis_painter.h>
+#include <kis_paintop_registry.h>
+#include <kis_cursor.h>
+#include <kis_layer.h>
 
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
     : KisToolShape(canvas, KisCursor::load("tool_ellipse_cursor.png", 6, 6)),

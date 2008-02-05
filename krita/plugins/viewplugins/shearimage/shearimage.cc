@@ -1,7 +1,7 @@
 /*
  * shearimage.cc -- Part of Krita
  *
- * Copyright (c) 2004 Michael Thaler
+ * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

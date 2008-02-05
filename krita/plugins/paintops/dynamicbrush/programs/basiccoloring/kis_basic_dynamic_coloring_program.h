@@ -81,7 +81,7 @@ class KisBasicDynamicColoringProgram : public KisDynamicColoringProgram {
 class KisBasicDynamicColoringProgramFactory : public KisDynamicColoringProgramFactory {
     public:
         KisBasicDynamicColoringProgramFactory();
-        virtual KisDynamicColoringProgram* coloringProgram(QString name) const;
+        virtual KisDynamicColoringProgram* coloringProgram(const QString & name) const;
 };
 
 #endif

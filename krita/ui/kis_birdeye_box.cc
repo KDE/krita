@@ -1,5 +1,4 @@
 /*
- *  Copyright (c) 2004 Kivio Team
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -128,7 +127,7 @@ namespace {
                     return QSize(m_image->width(), m_image->height());
                 }
 
-            virtual QImage image(QRect r, QSize thumbnailSize)
+            virtual QImage image(const QRect & r, const QSize & thumbnailSize)
                 {
                     if (!m_image || r.isEmpty() || thumbnailSize.width() == 0 || thumbnailSize.height() == 0) {
                         return QImage();
@@ -277,7 +276,7 @@ void KisBirdEyeBox::slotDocCommandExecuted()
 #endif
 }
 
-void KisBirdEyeBox::slotImageUpdated(QRect r)
+void KisBirdEyeBox::slotImageUpdated(const QRect & r)
 {
     m_dirtyRegion |= r;
 }

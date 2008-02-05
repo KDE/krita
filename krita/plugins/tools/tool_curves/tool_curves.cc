@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "tool_curves.h"
 
 #include <stdlib.h>
 
@@ -32,7 +33,7 @@
 #include <kis_types.h>
 #include <KoToolRegistry.h>
 
-#include "tool_curves.h"
+
 #include "kis_tool_bezier_paint.h"
 #include "kis_tool_bezier_select.h"
 #include "kis_tool_moutline.h"

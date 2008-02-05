@@ -73,7 +73,7 @@ class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListMode
         /**
          * Save a configuration to the bookmark manager.
          */
-        virtual void saveConfiguration(QString name, const KisSerializableConfiguration* config);
+        virtual void saveConfiguration(const QString & name, const KisSerializableConfiguration* config);
         /**
          * Delete the configuration at the given index. (if possible)
          */

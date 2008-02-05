@@ -43,8 +43,11 @@ public:
     void setup(KActionCollection * ac);
     void updateGUI();
     void setLastFilterHandler(KisFilterHandler* handler);
-public slots:
-    void insertFilter(QString name);
+
+private slots:
+    
+    void insertFilter(const QString & name);
+    
 private:
     struct Private;
     Private * const d;

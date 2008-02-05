@@ -23,7 +23,7 @@
 #include <QLayout>
 #include <QWidget>
 #include <QLabel>
-#include <QComboBox>
+#include <kcombobox.h>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -57,7 +57,7 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
     m_angleLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     optionLayout->addWidget(m_angleLabel, 1, 1);
 
-    QComboBox* unitBox = new QComboBox(this);
+    KComboBox* unitBox = new KComboBox(this);
     unitBox->addItems( KoUnit::listOfUnitName(false) );
     connect(unitBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
     unitBox->setCurrentIndex(KoUnit::Pixel);

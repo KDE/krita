@@ -17,36 +17,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_tool_example.h"
 
-
-#include <qpainter.h>
-#include <qlayout.h>
-#include <qrect.h>
+#include <QPainter>
+#include <QLayout>
+#include <QRect>
 #include <QPointF>
 
-#include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 
-#include "kis_global.h"
-//#include "kis_doc2.h"
-#include "kis_painter.h"
+#include "KoPointerEvent.h"
 
-#include "kis_canvas_subject.h"
-#include "kis_canvas_controller.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "kis_paintop_registry.h"
-#include "kis_cursor.h"
-
-#include "kis_canvas.h"
+#include <kis_global.h>
+#include <kis_painter.h>
+#include <kis_debug.h>
+#include <kis_canvas_subject.h>
+#include <kis_canvas_controller.h>
+#include <kis_paintop_registry.h>
+#include <kis_cursor.h>
+#include <kis_canvas.h>
 
 #include "kis_curve_framework.h"
-
-#include "kis_tool_example.h"
 
 
 class KisCurveExample : public KisCurve {

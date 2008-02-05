@@ -75,10 +75,10 @@ void KisFilterManager::setup(KActionCollection * ac)
     for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
         insertFilter(*it);
     }
-    connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(QString)));
+    connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(const QString &)));
 }
 
-void KisFilterManager::insertFilter(QString name)
+void KisFilterManager::insertFilter(const QString & name)
 {
     Q_ASSERT(d->actionCollection);
     KisFilterSP f = KisFilterRegistry::instance()->value( name );
@@ -90,7 +90,7 @@ void KisFilterManager::insertFilter(QString name)
     }
     KoID category = f->menuCategory();
     KActionMenu* actionMenu = d->filterActionMenus[ category.id() ];
-    if(not actionMenu)
+    if(!actionMenu)
     {
         actionMenu = new KActionMenu(category.name(), this);
         d->actionCollection->addAction(category.id(), actionMenu );
@@ -115,14 +115,14 @@ void KisFilterManager::updateGUI()
     KisLayerSP layer = d->view->activeLayer();
     KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>( layer.data()));
 
-    bool enable = player and (not layer->locked()) and layer->visible();
+    bool enable = player && (!layer->locked()) && layer->visible();
 
     d->reapplyAction->setEnabled(enable);
 
     for(QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
         it != d->filters2Action.end(); ++it)
     {
-        if(player and it.key()->workWith( player->paintDevice()->colorSpace() ))
+        if(player && it.key()->workWith( player->paintDevice()->colorSpace() ))
         {
             it.value()->setEnabled(enable);
         } else {

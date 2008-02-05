@@ -146,7 +146,7 @@ namespace Optimization {
     /**
      * Perform an optimization following Gauss Newton algorithm
      * @param f functions
-     * @param parameters intial guess of the parameters value
+     * @param parameters initial guess of the parameters value
      * @param iter maximal number of iterations
      * @param epsilon if the remain is below epsilon the function return
      * @param gamma the coeficient apply to the derivative
@@ -157,7 +157,7 @@ namespace Optimization {
     /**
      * Perform an optimization following Gauss Newton algorithm
      * @param f functions
-     * @param parameters intial guess of the parameters value
+     * @param parameters initial guess of the parameters value
      * @param iter maximal number of iterations
      * @param epsilon if the remain is below epsilon the function return
      * @return the remain
@@ -167,10 +167,10 @@ namespace Optimization {
     /**
      * Perform an optimization following Levenberg Marquardt algorithm
      * @param f functions
-     * @param parameters intial guess of the parameters value
+     * @param parameters initial guess of the parameters value
      * @param iter maximal number of iterations
      * @param epsilon if the remain is below epsilon the function return
-     * @param lambda0 the intial value of the damping parameter
+     * @param lambda0 the initial value of the damping parameter
      * @param nu adjustment coefficient of the damping parameter
      * @return the remain
      */
@@ -384,7 +384,7 @@ namespace Optimization {
         } else {
           lambda *= nu;
         }
-        if(lambda == 0.0 or lambda >= 1.0e200)
+        if(lambda == 0.0 || lambda >= 1.0e200)
         {
           lambda = lambda0;
 //           return previousremain;

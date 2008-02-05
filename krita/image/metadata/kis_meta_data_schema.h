@@ -47,12 +47,12 @@ namespace KisMetaData {
         static const QString IPTCSchemaUri;
         static const QString PhotoshopSchemaUri;
     private:
-        Schema(QString _uri, QString _ns);
+        Schema(const QString & _uri, const QString & _ns);
 
     public:
         QString uri() const;
         QString prefix() const;
-        QString generateQualifiedName(QString) const;
+        QString generateQualifiedName(const QString &) const;
     private:
         Private* const d;
     };
@@ -66,23 +66,23 @@ namespace KisMetaData {
          * @param uri the name of the schema
          * @param prefix the namespace prefix used for this schema
          * @return the schema associated with the uri (it can return 0, if no schema exist
-         * for the uri, but the prefix was allready used, and it can be an allready existing
-         * schema if the uri was allready included)
+         * for the uri, but the prefix was already used, and it can be an already existing
+         * schema if the uri was already included)
          */
-        const KisMetaData::Schema* create(QString uri, QString prefix);
+        const KisMetaData::Schema* create(const QString & uri, const QString & prefix);
         /**
          * @return the schema for this uri
          */
-        const Schema* schemaFromUri(QString uri) const;
+        const Schema* schemaFromUri(const QString & uri) const;
         /**
          * @return the schema for this prefix
          */
-        const Schema* schemaFromPrefix(QString prefix) const;
+        const Schema* schemaFromPrefix(const QString & prefix) const;
         /**
          * Return an instance of the SchemaRegistry.
          * Creates an instance if that has never happened before and returns
          * the singleton instance.
-         * Intialize it with default schemas.
+         * Initialize it with default schemas.
          */
         static KisMetaData::SchemaRegistry* instance();
     private:

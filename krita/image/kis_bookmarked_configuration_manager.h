@@ -38,20 +38,20 @@ class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager {
          * @param configEntryGroup name of the configuration entry with the
          * bookmarked configurations.
          */
-        KisBookmarkedConfigurationManager(QString configEntryGroup, KisSerializableConfigurationFactory*);
+        KisBookmarkedConfigurationManager(const QString & configEntryGroup, KisSerializableConfigurationFactory*);
         ~KisBookmarkedConfigurationManager();
         /**
          * Load the configuration.
          */
-        KisSerializableConfiguration* load(QString configname) const;
+        KisSerializableConfiguration* load(const QString & configname) const;
         /**
          * Save the configuration.
          */
-        void save(QString configname, const KisSerializableConfiguration*);
+        void save(const QString & configname, const KisSerializableConfiguration*);
         /**
-         * @return true if the configuration configname exist
+         * @return true if the configuration configname exists
          */
-        bool exist(QString configname) const;
+        bool exists(const QString & configname) const;
         /**
          * @return the list of the names of configurations.
          */
@@ -63,7 +63,7 @@ class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager {
         /**
          * Remove a bookmarked configuration
          */
-        void remove(QString name);
+        void remove(const QString & name);
         /**
          * Generate an unique name, for instance when the user is creating a new
          * entry.
@@ -72,7 +72,7 @@ class KRITAIMAGE_EXPORT KisBookmarkedConfigurationManager {
          *      will return the string where %1 will be replaced by the lowest number
          *      and be inexistant in the lists of configuration
          */
-        QString uniqueName(KLocalizedString base);
+        QString uniqueName(const KLocalizedString & base);
     private:
         QString configEntryGroup() const;
     private:

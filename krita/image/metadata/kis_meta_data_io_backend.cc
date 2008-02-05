@@ -18,10 +18,6 @@
 
 #include "kis_meta_data_io_backend.h"
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 using namespace KisMetaData;
 
 
@@ -38,7 +34,7 @@ IOBackendRegistry::IOBackendRegistry() : d(new Private)
 
 IOBackendRegistry* IOBackendRegistry::instance()
 {
-    if(not Private::s_instance)
+    if(!Private::s_instance)
     {
        Private::s_instance = new IOBackendRegistry;
     }

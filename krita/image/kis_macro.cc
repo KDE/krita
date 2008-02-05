@@ -84,11 +84,11 @@ void KisMacro::fromXML(const QDomElement& docElem)
 {
     d->actions.clear();
     QDomNode node = docElem.firstChild();
-    while(not node.isNull()) {
+    while(!node.isNull()) {
         QDomElement elt = node.toElement(); // try to convert the node to an element.
-        if(not elt.isNull() and elt.tagName() == "RecordedAction") {
+        if(!elt.isNull() && elt.tagName() == "RecordedAction") {
             QString id = elt.attribute("id", "");
-            if(not id.isNull())
+            if(!id.isNull())
             {
                 dbgImage << "Reconstruct : " << id << endl; // the node really is an element.
                 KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);

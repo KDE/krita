@@ -235,12 +235,14 @@ QDomDocument KisDoc2::saveXML()
 
 bool KisDoc2::loadOdf( KoOdfReadStore & odfStore )
 {
+    Q_UNUSED(odfStore);
     return false;
 }
 
 
 bool KisDoc2::saveOdf( SavingContext &documentContext )
 {
+    Q_UNUSED(documentContext);
     return false;
 }
 
@@ -366,7 +368,7 @@ bool KisDoc2::completeSaving(KoStore *store)
         if (profile)
         {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (iccprofile and !iccprofile->rawData().isEmpty())
+            if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }
 

@@ -47,7 +47,7 @@ class KisFiltersListDynamicProgram : public KisDynamicProgram {
 class KisFiltersListDynamicProgramFactory : public KisDynamicProgramFactory {
     public:
         KisFiltersListDynamicProgramFactory();
-        virtual KisDynamicProgram* program(QString name);
+        virtual KisDynamicProgram* program(const QString & name);
 };
 
 #endif

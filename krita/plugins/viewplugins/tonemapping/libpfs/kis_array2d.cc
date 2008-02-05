@@ -66,20 +66,24 @@ Array2DImpl::~Array2DImpl()
 }
 
 int Array2DImpl::getCols() const
-{ return d->cols; }
+{
+    return d->cols;
+}
 
 int Array2DImpl::getRows() const
-{ return d->rows; }
+{
+    return d->rows;
+}
 
 int Array2DImpl::colToDevice(int col) const
 {
-    Q_ASSERT(col >= 0 and col < d->cols);
+    Q_ASSERT(col >= 0 && col < d->cols);
     return col + d->sx;
 }
 
 int Array2DImpl::rowToDevice(int row) const
 {
-    Q_ASSERT(row >= 0 and row < d->rows);
+    Q_ASSERT(row >= 0 && row < d->rows);
     return row + d->sy;
 }
 

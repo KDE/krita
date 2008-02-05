@@ -215,7 +215,14 @@ void KisCubismFilter::convertSegment (qint32 x1, qint32 y1, qint32 x2, qint32  y
 
 #define USE_READABLE_BUT_SLOW_CODE
 
-void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint dstTopLeft, const QSize& size, KisPolygon* poly, const quint8* col, quint8* dest) const
+void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
+    const QPoint& srcTopLeft,
+    KisPaintDeviceSP dst,
+    const QPoint & dstTopLeft,
+    const QSize& size,
+    KisPolygon* poly,
+    const quint8* col,
+    quint8* dest) const
 // void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, const quint8* col, quint8* /*s*/, QRect rect) const
 {
     Q_UNUSED(srcTopLeft);
@@ -381,7 +388,13 @@ void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src, const QPoint& srcTopLe
     delete[] maxScanlines;
 }
 
-void KisCubismFilter::cubism(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint dstTopLeft, const QSize& size, quint32 tileSize, quint32 tileSaturation) const
+void KisCubismFilter::cubism(KisPaintDeviceSP src,
+    const QPoint& srcTopLeft,
+    KisPaintDeviceSP dst,
+    const QPoint& dstTopLeft,
+    const QSize& size,
+    quint32 tileSize,
+    quint32 tileSaturation) const
 {
     Q_ASSERT(src);
     Q_ASSERT(dst);

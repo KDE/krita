@@ -39,7 +39,7 @@ struct Schema::Private {
     QString prefix;
 };
 
-Schema::Schema(QString _uri, QString _ns) : d(new Private)
+Schema::Schema(const QString & _uri, const QString & _ns) : d(new Private)
 {
     d->uri = _uri;
     d->prefix = _ns;
@@ -60,9 +60,9 @@ QString Schema::prefix() const
     return d->prefix;
 }
 
-QString Schema::generateQualifiedName(QString name) const
+QString Schema::generateQualifiedName(const QString & name) const
 {
-    return prefix() + ":" + name;
+    return prefix() + ':' + name;
 }
 
 QDebug operator<<(QDebug dbg, const KisMetaData::Schema &c)
@@ -104,17 +104,17 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
 }
 
 
-const Schema* SchemaRegistry::schemaFromUri(QString uri) const
+const Schema* SchemaRegistry::schemaFromUri(const QString & uri) const
 {
     return d->uri2Schema[uri];
 }
 
-const Schema* SchemaRegistry::schemaFromPrefix(QString prefix) const
+const Schema* SchemaRegistry::schemaFromPrefix(const QString & prefix) const
 {
     return d->prefix2Schema[prefix];
 }
 
-const Schema* SchemaRegistry::create(QString uri, QString prefix)
+const Schema* SchemaRegistry::create(const QString & uri, const QString & prefix)
 {
     // First search for the schema
     const Schema* schema = schemaFromUri(uri);
@@ -126,7 +126,7 @@ const Schema* SchemaRegistry::create(QString uri, QString prefix)
     schema = schemaFromPrefix(prefix);
     if(schema)
     {
-        return 0; // A schema with the same prefix allready exist
+        return 0; // A schema with the same prefix already exist
     }
     // The schema doesn't exist yet, create it
     Schema* nschema = new Schema(uri, prefix);

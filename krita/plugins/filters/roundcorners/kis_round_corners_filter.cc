@@ -104,7 +104,7 @@ void KisRoundCornersFilter::process(KisFilterConstProcessingInformation srcInfo,
     for (qint32 y = 0; y < size.height(); y++)
     {
         qint32 x = dstTopLeft.x();
-        while( not srcIt.isDone() )
+        while( !srcIt.isDone() )
         {
             if(srcIt.isSelected())
             {

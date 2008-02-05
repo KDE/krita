@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2000 Clara Chan
+ * Copyright (c) 2000 Clara Chan <x@unknown.com>
  * Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  * This program is free software; you can redistribute it and/or modify

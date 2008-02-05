@@ -23,9 +23,10 @@
 
 #include <QHash>
 #include <QWidget>
-#include <QComboBox>
 #include <QList>
 #include <QPixmap>
+
+#include <kcombobox.h>
 
 #include <KoInputDevice.h>
 

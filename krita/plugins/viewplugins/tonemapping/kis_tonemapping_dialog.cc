@@ -85,7 +85,7 @@ void KisToneMappingDialog::apply()
     const KoColorSpace* colorSpace = d->currentOperator->colorSpace();
     
     
-    if( not(*d->layer->paintDevice()->colorSpace() == *colorSpace))
+    if( !(*d->layer->paintDevice()->colorSpace() == *colorSpace))
     {
         d->layer->paintDevice()->convertTo(colorSpace);
         d->layer->setChannelFlags( QBitArray() );

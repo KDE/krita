@@ -36,8 +36,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "kis_cursor.h"
 #include "kis_vec.h"
 #include "kis_selection.h"

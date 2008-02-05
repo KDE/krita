@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Adrian Page
+ *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

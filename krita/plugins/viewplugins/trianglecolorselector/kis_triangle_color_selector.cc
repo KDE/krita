@@ -202,7 +202,7 @@ void KisTriangleColorSelector::setQColor(const QColor& c)
     {
         int hue;
         rgb_to_hsv( c.red(), c.green(), c.blue(), &hue, &d->saturation, &d->value);
-        if( hue >= 0 and hue <= 360)
+        if( hue >= 0 && hue <= 360)
             d->hue = hue;
         generateTriangle();
         update();
@@ -244,7 +244,7 @@ void KisTriangleColorSelector::generateTriangle()
         for(int x = 0; x < d->sizeColorSelector; x++)
         {
             double s = 255 * (x - startx_) / ls_;
-            if(v < -1.0 or v > 256.0 or s < -1.0 or s > 256.0 )
+            if(v < -1.0 || v > 256.0 || s < -1.0 || s > 256.0 )
             {
                 img.setPixel(x,y, qRgba(0,0,0,0));
             } else {
@@ -280,7 +280,7 @@ void KisTriangleColorSelector::generateWheel()
         {
             double xc = x - d->centerColorSelector;
             double norm = sqrt(pow2( xc ) + y2);
-            if( norm <= d->wheelNormExt + 1.0 and norm >= d->wheelNormInt - 1.0 )
+            if( norm <= d->wheelNormExt + 1.0 && norm >= d->wheelNormInt - 1.0 )
             {
                 double acoef = 1.0;
                 if(norm > d->wheelNormExt ) acoef = (1.0 + d->wheelNormExt - norm);
@@ -338,8 +338,8 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
     double y = _y - 0.5*height();
     // Check if the click is inside the wheel
     double norm = sqrt( x * x + y * y);
-    if ( ( (norm < d->wheelNormExt) and (norm > d->wheelNormInt) and d->handle == NoHandle ) 
-         or d->handle == HueHandle ) {
+    if ( ( (norm < d->wheelNormExt) && (norm > d->wheelNormInt) && d->handle == NoHandle )
+         || d->handle == HueHandle ) {
         d->handle = HueHandle;
         setHue( (int)(atan2(y, x) * 180 / M_PI ) + 180);
         update();
@@ -353,12 +353,12 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
         double y1 = x * sr + y * cr; // <- now y1 gives the value
         y1 += d->wheelNormExt;
         double ynormalize = (d->triangleTop - y1 ) / ( d->triangleTop - d->triangleBottom );
-        if( (ynormalize >= 0.0 and ynormalize <= 1.0 ) or d->handle == ValueSaturationHandle)
+        if( (ynormalize >= 0.0 && ynormalize <= 1.0 ) || d->handle == ValueSaturationHandle)
         {
             d->handle = ValueSaturationHandle;
             double ls_ = (ynormalize) * d->triangleLength; // length of the saturation on the triangle
             double sat = ( x1 / ls_ + 0.5) ;
-            if((sat >= 0.0 and sat <= 1.0) or d->handle == ValueSaturationHandle)
+            if((sat >= 0.0 && sat <= 1.0) || d->handle == ValueSaturationHandle)
             {
                 setHSV( d->hue, sat * 255, ynormalize * 255);
             }

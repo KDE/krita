@@ -143,7 +143,7 @@ public:
      * node type, so you need to override it for all leaf classes in
      * the node inheritance hierarchy.
      *
-     * return false if the visitor could not succesfully act on this
+     * return false if the visitor could not successfully act on this
      * node instance.
      */
     virtual bool accept(KisNodeVisitor &)

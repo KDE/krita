@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- * ported from digikam, Copyright 2004 by Gilles Caulier,
+ * ported from digikam, copyrighted 2004 by Gilles Caulier,
  * Original RainDrops algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
  *
@@ -146,15 +146,15 @@ void KisRainDropsFilter::process(KisFilterConstProcessingInformation srcInfo,
 
     // Init booleen Matrix.
 
-    for (i = 0 ; (i < Width) and not(progressUpdater and progressUpdater->interrupted()) ; ++i)
+    for (i = 0 ; (i < Width) && !(progressUpdater && progressUpdater->interrupted()) ; ++i)
     {
-        for (j = 0 ; (j < Height) and not(progressUpdater and progressUpdater->interrupted()); ++j)
+        for (j = 0 ; (j < Height) && !(progressUpdater && progressUpdater->interrupted()); ++j)
         {
             BoolMatrix[i][j] = false;
         }
     }
 
-    for (int NumBlurs = 0 ; (NumBlurs <= number) and not(progressUpdater and progressUpdater->interrupted()); ++NumBlurs)
+    for (int NumBlurs = 0; (NumBlurs <= number) && !(progressUpdater && progressUpdater->interrupted()); ++NumBlurs)
     {
         NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
         halfSize = NewSize / 2;
@@ -172,15 +172,15 @@ void KisRainDropsFilter::process(KisFilterConstProcessingInformation srcInfo,
             if (BoolMatrix[y][x])
                 FindAnother = true;
             else
-                for (i = x - halfSize ; (i <= x + halfSize) and not(progressUpdater and progressUpdater->interrupted()); i++)
-                    for (j = y - halfSize ; (j <= y + halfSize) and not(progressUpdater and progressUpdater->interrupted()); j++)
+                for (i = x - halfSize ; (i <= x + halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++)
+                    for (j = y - halfSize ; (j <= y + halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++)
                         if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
                             if (BoolMatrix[j][i])
                                 FindAnother = true;
 
             Counter++;
         }
-        while ((FindAnother && (Counter < 10000) and not(progressUpdater and progressUpdater->interrupted())) );
+        while ((FindAnother && (Counter < 10000) && !(progressUpdater && progressUpdater->interrupted())) );
 
         if (Counter >= 10000)
         {
@@ -188,9 +188,9 @@ void KisRainDropsFilter::process(KisFilterConstProcessingInformation srcInfo,
             break;
         }
 
-        for (i = -1 * halfSize ; (i < NewSize - halfSize) and not(progressUpdater and progressUpdater->interrupted()); i++)
+        for (i = -1 * halfSize ; (i < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++)
         {
-            for (j = -1 * halfSize ; (j < NewSize - halfSize) and not(progressUpdater and progressUpdater->interrupted()); j++)
+            for (j = -1 * halfSize ; (j < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++)
             {
                 r = sqrt (i * i + j * j);
                 a = atan2 (i, j);
@@ -300,9 +300,11 @@ void KisRainDropsFilter::process(KisFilterConstProcessingInformation srcInfo,
 
         BlurRadius = NewSize / 25 + 1;
 
-        for (i = -1 * halfSize - BlurRadius ; (i < NewSize - halfSize + BlurRadius) and not(progressUpdater and progressUpdater->interrupted()) ; i++)
+        for (i = -1 * halfSize - BlurRadius ; (i < NewSize - halfSize + BlurRadius) && !(progressUpdater && progressUpdater->interrupted()) ; i++)
         {
-            for (j = -1 * halfSize - BlurRadius ; (j < NewSize - halfSize + BlurRadius) and not(progressUpdater and progressUpdater->interrupted()); j++)
+            for (j = -1 * halfSize - BlurRadius;
+                ((j < NewSize - halfSize + BlurRadius) && !(progressUpdater && progressUpdater->interrupted()));
+                ++j)
             {
                 r = sqrt (i * i + j * j);
 

@@ -56,10 +56,10 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgram : public KisDynamicProgram 
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramFactory : public KisDynamicProgramFactory {
     public:
-        KisDynamicColoringProgramFactory(QString id, QString name);
+        KisDynamicColoringProgramFactory(const QString & id, const QString & name);
         virtual ~KisDynamicColoringProgramFactory();
-        virtual KisDynamicProgram* program(QString name) const;
-        virtual KisDynamicColoringProgram* coloringProgram(QString name) const = 0;
+        virtual KisDynamicProgram* program(const QString & name) const;
+        virtual KisDynamicColoringProgram* coloringProgram(const QString & name) const = 0;
     private:
         struct Private;
         Private* const d;

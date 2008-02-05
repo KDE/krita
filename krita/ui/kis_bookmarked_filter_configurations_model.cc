@@ -44,13 +44,13 @@ KisBookmarkedFilterConfigurationsModel::~KisBookmarkedFilterConfigurationsModel(
 
 QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, int role) const
 {
-    if(not index.isValid())
+    if(!index.isValid())
     {
         return QVariant();
     }
     if(role == Qt::DecorationRole)
     {
-        if(not d->previewCache.contains(index.row()))
+        if(!d->previewCache.contains(index.row()))
         {
             KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
             d->filter->process(target, QRect(0,0,100,100), configuration(index));

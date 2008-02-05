@@ -54,8 +54,8 @@ private:
         double randomDoubleNumber(double lowestNumber, double highestNumber)  const;
         double   calcAlphaBlend(double *vec, double oneOverDist, double x, double y) const;
         void convertSegment(qint32 x1, qint32 y1, qint32 x2, qint32  y2, qint32 offset, qint32* min, qint32* max, qint32 xmin, qint32 xmax) const;
-        void fillPolyColor(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint dstTopLeft, const QSize& size, KisPolygon* poly, const quint8* col, quint8* dest) const;
-        void cubism(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint dstTopLeft, const QSize& size, quint32 tileSize, quint32 tileSaturation) const;
+        void fillPolyColor(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint & dstTopLeft, const QSize& size, KisPolygon* poly, const quint8* col, quint8* dest) const;
+        void cubism(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint & dstTopLeft, const QSize& size, quint32 tileSize, quint32 tileSaturation) const;
 
 };
 

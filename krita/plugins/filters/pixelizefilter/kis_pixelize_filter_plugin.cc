@@ -17,13 +17,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_pixelize_filter_plugin.h"
 
 #include <kgenericfactory.h>
-#include "kis_paint_device.h"
-#include "kis_pixelize_filter_plugin.h"
+
+#include <kis_paint_device.h>
+#include <kis_global.h>
+#include <kis_filter_registry.h>
+
 #include "kis_pixelize_filter.h"
-#include "kis_global.h"
-#include "kis_filter_registry.h"
+
 typedef KGenericFactory<KisPixelizeFilterPlugin> KisPixelizeFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritapixelizefilter, KisPixelizeFilterPluginFactory( "krita" ) )
 

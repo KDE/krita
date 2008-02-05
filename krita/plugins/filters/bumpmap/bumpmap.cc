@@ -19,7 +19,7 @@
  *
  *
  * This implementation completely and utterly based on the gimp's bumpmap.c,
- * copyright:
+ *
  * Copyright (C) 1997 Federico Mena Quintero <federico@nuclecu.unam.mx>
  * Copyright (C) 1997-2000 Jens Lautenbacher <jtl@gimp.org>
  * Copyright (C) 2000 Sven Neumann <sven@gimp.org>

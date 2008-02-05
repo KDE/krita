@@ -77,7 +77,7 @@ void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device
         dbgPlugins << report;
         previousReport = report;
     }
-    while(not hitDevice.isDone())
+    while(!hitDevice.isDone())
     {
       QPoint p(hitDevice.x(), hitDevice.y());
       for(int i = 0; i < sources.size(); i++)

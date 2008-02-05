@@ -64,6 +64,7 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
+    Q_UNUSED(cs);
 
     r = src->exactBounds();
 
@@ -97,7 +98,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
     qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
-
+    Q_UNUSED(cs);
     r = src->exactBounds();
 
     for (qint32 y = r.bottom(); y >= r.top(); --y) {
@@ -129,7 +130,7 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
     qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
-
+    Q_UNUSED(cs);
     r = src->exactBounds();
 
     KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), r.top(), r.width());
@@ -165,7 +166,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     qint32 pixelSize = src->pixelSize();
     QRect r;
     KoColorSpace *cs = src->colorSpace();
-
+    Q_UNUSED(cs);
     r = src->exactBounds();
 
     KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.top(), r.width());

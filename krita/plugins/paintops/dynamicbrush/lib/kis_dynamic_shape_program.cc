@@ -49,7 +49,7 @@ class KisDynamicDummyShapeProgram : public KisDynamicShapeProgram {
 struct KisDynamicShapeProgramFactory::Private {
 };
 
-KisDynamicShapeProgramFactory::KisDynamicShapeProgramFactory(QString id, QString name) : KisDynamicProgramFactory(id, name), d(0)
+KisDynamicShapeProgramFactory::KisDynamicShapeProgramFactory(const QString & id, const QString & name) : KisDynamicProgramFactory(id, name), d(0)
 {
 }
 
@@ -58,7 +58,7 @@ KisDynamicShapeProgramFactory::~KisDynamicShapeProgramFactory()
     delete d;
 }
 
-KisDynamicProgram* KisDynamicShapeProgramFactory::program(QString name) const
+KisDynamicProgram* KisDynamicShapeProgramFactory::program(const QString & name) const
 {
     return shapeProgram(name);
 }

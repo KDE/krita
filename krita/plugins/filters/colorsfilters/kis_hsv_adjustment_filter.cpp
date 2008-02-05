@@ -61,7 +61,7 @@ void KisHSVAdjustmentFilter::process(KisFilterConstProcessingInformation srcInfo
         params["v"] = config->getInt("v", 0) * 0.01;
     }
     KoColorTransformation* transfo = src->colorSpace()->createColorTransformation( "hsv_adjustment", params);
-    if( not transfo )
+    if( !transfo )
     {
         kError() << "hsv_adjustment transformation is unavailable, go check your installation";
         return;

@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_tool_moutline.h"
 
 #include <math.h>
 #include <set>
@@ -41,8 +42,6 @@
 //#include "kis_doc2.h"
 #include "kis_painter.h"
 #include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
-#include "KoPointerEvent.h"
 #include "kis_cursor.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
@@ -52,7 +51,7 @@
 #include "kis_convolution_painter.h"
 #include "kis_canvas.h"
 
-#include "kis_tool_moutline.h"
+
 
 using namespace std;
 

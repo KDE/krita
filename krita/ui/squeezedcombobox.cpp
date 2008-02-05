@@ -3,7 +3,7 @@
  * Date  : 2005-01-01
  * Description :
  *
- * Copyright 2005 by Tom Albers
+ * Copyright 2005 by Tom Albers <tomalbers@kde.nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

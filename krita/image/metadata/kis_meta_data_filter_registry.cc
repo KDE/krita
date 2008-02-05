@@ -46,7 +46,7 @@ FilterRegistry::~FilterRegistry()
 
 FilterRegistry* FilterRegistry::instance()
 {
-    if(not s_singleton)
+    if(!s_singleton)
     {
         s_singleton = new FilterRegistry();
     }

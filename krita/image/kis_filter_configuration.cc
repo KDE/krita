@@ -113,7 +113,7 @@ void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
     }
 }
 
-void KisFilterConfiguration::fromLegacyXML(QString s)
+void KisFilterConfiguration::fromLegacyXML(const QString & s)
 {
     clearProperties();
 

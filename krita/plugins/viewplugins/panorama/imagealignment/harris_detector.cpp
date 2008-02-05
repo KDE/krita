@@ -113,7 +113,7 @@ class HarrisPoint : public KisInterestPoint {
                 KisHLineConstIterator it2 = ip2->device()->createHLineConstIterator(ip2->x() - ZNCC_HALF_WINDOW_SIZE, ip2->y() - ZNCC_HALF_WINDOW_SIZE, ZNCC_WINDOW_SIZE);
                 for(int j = 0; j < ZNCC_WINDOW_SIZE; j++)
                 {
-                    while(not it1.isDone())
+                    while(!it1.isDone())
                     {
                         mean1 += *it1.oldRawData();
                         mean2 += *it2.oldRawData();
@@ -136,7 +136,7 @@ class HarrisPoint : public KisInterestPoint {
                 KisHLineConstIterator it2 = ip2->device()->createHLineConstIterator(ip2->x() - ZNCC_HALF_WINDOW_SIZE, ip2->y() - ZNCC_HALF_WINDOW_SIZE, ZNCC_WINDOW_SIZE);
                 for(int j = 0; j < ZNCC_WINDOW_SIZE; j++)
                 {
-                    while(not it1.isDone())
+                    while(!it1.isDone())
                     {
                         double v1 = *it1.oldRawData();
                         double v2 = *it2.oldRawData();
@@ -187,7 +187,7 @@ class HarrisPoints {
             }
             return points;
         }
-        void instertPoint(HarrisPoint* hp)
+        void insertPoint(HarrisPoint* hp)
         {
             int u = (int)(hp->x() / m_zoneWidth );
             int v = (int)(hp->y() / m_zoneHeight );
@@ -273,7 +273,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                 ++hitDevice;
                 pixelvalue[RIGHT] = *hitDevice.rawData();
                 ++hitDevice;
-                while(not hitDevice.isDone())
+                while(!hitDevice.isDone())
                 {
                     pixelvalue[RIGHTRIGHT] = *hitDevice.rawData();
                     float* infoValues = reinterpret_cast<float*>(hitinfoDevice.rawData());
@@ -318,7 +318,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                 haddValue[RIGHT] = infoValue[INFO_HADD];
                 ++vitinfoDeviceRead;
                 
-                while(not vitinfoDevice.isDone())
+                while(!vitinfoDevice.isDone())
                 {
                     infoValue = reinterpret_cast<const float*>(vitinfoDeviceRead.oldRawData());
                     hdiffValue[RIGHTRIGHT] = infoValue[INFO_HDIFF];
@@ -369,7 +369,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
             ++hitDevice;
             memcpy(pixelvalue[RIGHT], hitDevice.rawData(), 6*sizeof(float));
             ++hitDevice;
-            while(not hitDevice.isDone())
+            while(!hitDevice.isDone())
             {
                 memcpy(pixelvalue[RIGHTRIGHT], hitDevice.rawData(), 6*sizeof(float));
                 float* infoValues = reinterpret_cast<float*>(hitinfoDevice.rawData());
@@ -408,7 +408,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
             ++vitinfoDeviceRead;
             memcpy(infoValue[BOTTOM], vitinfoDeviceRead.oldRawData(), 6*sizeof(float));
             ++vitinfoDeviceRead;
-            while(not vitinfoDevice.isDone())
+            while(!vitinfoDevice.isDone())
             {
                 memcpy(infoValue[BOTTOMBOTTOM], vitinfoDeviceRead.oldRawData(), 6*sizeof(float));
                 float* dst = reinterpret_cast<float*>(vitinfoDevice.rawData());
@@ -538,7 +538,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                             }
                             #endif
                             #if 1
-                            zones.instertPoint( hp );
+                            zones.insertPoint( hp );
                             #endif
                         }
                     }
@@ -547,7 +547,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
             }
         }
     points = zones.points();
-    dbgPlugins <<"Harris detector has found :" << points.size() <<" harris points";
+    dbgPlugins << "Harris detector has found :" << points.size() << " harris points";
     
     delete floatCs;
     return points;

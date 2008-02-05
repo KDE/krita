@@ -38,3 +38,4 @@ Brush::~Brush()
         delete m_brush;
     }
 }
+#include "krs_brush.moc"

@@ -119,8 +119,8 @@ void KisFilterNoise::process(KisFilterConstProcessingInformation srcInfo,
     const KoColorSpace * cs = src->colorSpace();
 
     QVariant value;
-    int level = (config and config->getProperty("level", value)) ? value.toInt() : 50;
-    int opacity = (config and config->getProperty("opacity", value)) ? value.toInt() : 100;
+    int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
+    int opacity = (config &&config->getProperty("opacity", value)) ? value.toInt() : 100;
 
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
@@ -153,8 +153,8 @@ void KisFilterNoise::process(KisFilterConstProcessingInformation srcInfo,
     KisRandomGenerator randg(seedGreen);
     KisRandomGenerator randb(seedBlue);
 
-    for ( int row = 0; row < size.height() and not(progressUpdater and progressUpdater->interrupted()); ++row ) {
-        while(!srcIt.isDone() and not(progressUpdater and progressUpdater->interrupted()))
+    for ( int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row ) {
+        while(!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted()))
         {
             if(randt.doubleRandomAt( srcIt.x(), srcIt.y()) > threshold)
             {

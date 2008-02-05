@@ -1,7 +1,7 @@
 /*
  * rotateimage.cc -- Part of Krita
  *
- * Copyright (c) 2004 Michael Thaler
+ * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,15 +66,15 @@ true);
         actionCollection()->addAction("rotateimage", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage()));
 
-        action  = new KAction(KIcon("object-rotate-left"), i18n("Right 90°"), this);
+        action  = new KAction(KIcon("object-rotate-left"), i18nc("rotate image 90 degrees to the right", "Right 90°"), this);
         actionCollection()->addAction("rotateImageCW90", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage90()));
 
-        action  = new KAction(i18n("1&80°"), this);
+        action  = new KAction(i18nc("rotate image 180 degrees to the right", "1&80°"), this);
         actionCollection()->addAction("rotateImage180", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage180()));
 
-        action  = new KAction(KIcon("object-rotate-right"), i18n("Left 90°"), this);
+        action  = new KAction(KIcon("object-rotate-right"), i18nc("rotate image 90 degrees to the left", "Left 90°"), this);
         actionCollection()->addAction("rotateImageCCW90", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
 
@@ -82,15 +82,15 @@ true);
         actionCollection()->addAction("rotatelayer", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateLayer()));
 
-        action  = new KAction(i18n("1&80°"), this);
+        action  = new KAction(i18nc("rotate the layer 180 degrees", "1&80°"), this);
         actionCollection()->addAction("rotateLayer180", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayer180()));
 
-        action  = new KAction(KIcon("object-rotate-right"), i18n("Right 90°"), this);
+        action  = new KAction(KIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Right 90°"), this);
         actionCollection()->addAction("rotateLayerCCW90", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerLeft90()));
 
-        action  = new KAction(KIcon("object-rotate-left"), i18n("Left 90°"), this);
+        action  = new KAction(KIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Left 90°"), this);
         actionCollection()->addAction("rotateLayerCW90", action );
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerRight90()));
     }

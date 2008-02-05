@@ -84,7 +84,7 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     l->addWidget(m_darken);
 
     m_curveControl = new Ui::WdgBrushCurveControl();
-    m_curveControlWidget = new QDialog(m_optionsWidget);
+    m_curveControlWidget = new KDialog(m_optionsWidget);
     m_curveControl->setupUi(m_curveControlWidget);
 
     QToolButton* moreButton = new QToolButton(m_optionsWidget);
@@ -100,7 +100,7 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
 }
 
 void KisBrushOpSettings::slotCustomCurves() {
-    if (m_curveControlWidget->exec() == QDialog::Accepted) {
+    if (m_curveControlWidget->exec() == KDialog::Accepted) {
         m_customSize = m_curveControl->sizeCheckbox->isChecked();
         m_customOpacity = m_curveControl->opacityCheckbox->isChecked();
         m_customDarken = m_curveControl->darkenCheckbox->isChecked();
@@ -148,7 +148,7 @@ bool KisBrushOpSettings::varyDarken() const
 void KisBrushOpSettings::fromXML(const QDomElement& elt)
 {
     QDomElement e = elt.firstChildElement("Params");
-    if(not e.isNull())
+    if(!e.isNull())
     {
         KisPropertiesConfiguration kpc;
         kpc.fromXML(e);

@@ -1,7 +1,6 @@
 /*
  *  kis_tool_gradient.cc - part of Krita
  *
- *  Copyright (c) 2000 John Califf
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004-2007 Adrian Page <adrian@pagenet.plus.com>
@@ -38,6 +37,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kcombobox.h>
 
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
@@ -337,26 +337,26 @@ QWidget* KisToolGradient::createOptionWidget()
     m_lbShape = new QLabel(i18n("Shape:"), widget);
     m_lbRepeat = new QLabel(i18n("Repeat:"), widget);
 
-    m_ckReverse = new QCheckBox(i18n("Reverse"), widget);
+    m_ckReverse = new QCheckBox(i18nc("the gradient will be drawn with the color order reversed","Reverse"), widget);
     m_ckReverse->setObjectName("reverse_check");
     connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
 
-    m_cmbShape = new QComboBox(widget);
+    m_cmbShape = new KComboBox(widget);
     m_cmbShape->setObjectName("shape_combo");
     connect(m_cmbShape, SIGNAL(activated(int)), this, SLOT(slotSetShape(int)));
-    m_cmbShape->addItem(i18n("Linear"));
-    m_cmbShape->addItem(i18n("Bi-Linear"));
-    m_cmbShape->addItem(i18n("Radial"));
-    m_cmbShape->addItem(i18n("Square"));
-    m_cmbShape->addItem(i18n("Conical"));
-    m_cmbShape->addItem(i18n("Conical Symmetric"));
+    m_cmbShape->addItem(i18nc("the gradient will be drawn linearly", "Linear"));
+    m_cmbShape->addItem(i18nc("the gradient will be drawn bilinearly", "Bi-Linear"));
+    m_cmbShape->addItem(i18nc("the gradient will be drawn radially", "Radial"));
+    m_cmbShape->addItem(i18nc("the gradient will be drawn in a square around a centre", "Square"));
+    m_cmbShape->addItem(i18nc("the gradient will be drawn as an assymmetric cone", "Conical"));
+    m_cmbShape->addItem(i18nc("the gradient will be drawn as a symmetric cone", "Conical Symmetric"));
 
-    m_cmbRepeat = new QComboBox(widget);
+    m_cmbRepeat = new KComboBox(widget);
     m_cmbRepeat->setObjectName("repeat_combo");
     connect(m_cmbRepeat, SIGNAL(activated(int)), this, SLOT(slotSetRepeat(int)));
-    m_cmbRepeat->addItem(i18n("None"));
-    m_cmbRepeat->addItem(i18n("Forwards"));
-    m_cmbRepeat->addItem(i18n("Alternating"));
+    m_cmbRepeat->addItem(i18nc("The gradient will not repeat", "None"));
+    m_cmbRepeat->addItem(i18nc("The gradient will repeat forwards","Forwards"));
+    m_cmbRepeat->addItem(i18nc("The gradient will repeat alternatingly", "Alternating"));
 
     addOptionWidgetOption(m_cmbShape, m_lbShape);
 

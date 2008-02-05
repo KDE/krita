@@ -32,6 +32,8 @@ class Module;
  */
 class Brush : public QObject
 {
+Q_OBJECT
+
     public:
         /**
          * @param sharedBrush tell if the brush should be deleted or not when this object is deleted

@@ -94,7 +94,7 @@ KisFilterConfiguration * KisFilter::defaultConfiguration(const KisPaintDeviceSP 
     {
         fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
     }
-    if(not fc or not fc->isCompatible(pd) )
+    if(!fc || !fc->isCompatible(pd) )
     {
         fc = factoryConfiguration(pd);
     }
@@ -106,13 +106,14 @@ KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, const Ki
     return 0;
 }
 
-QRect KisFilter::enlargeRect(QRect rect, const KisFilterConfiguration* c) const {
+QRect KisFilter::enlargeRect(const QRect & rect, const KisFilterConfiguration* c) const {
+    QRect rc = rect;
     int margin = overlapMarginNeeded(c);
-    rect.setLeft(rect.left() - margin);
-    rect.setTop(rect.top() - margin);
-    rect.setRight(rect.right() + margin);
-    rect.setBottom(rect.bottom() + margin);
-    return rect;
+    rc.setLeft(rect.left() - margin);
+    rc.setTop(rect.top() - margin);
+    rc.setRight(rect.right() + margin);
+    rc.setBottom(rect.bottom() + margin);
+    return rc;
 }
 
 void KisFilter::process(KisFilterConstProcessingInformation src,

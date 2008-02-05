@@ -65,9 +65,6 @@ protected:
     KisPainter *m_painter;
 };
 
-
-#include "KoToolFactory.h"
-
 class KisToolEllipseFactory : public KoToolFactory {
 
 public:

@@ -92,7 +92,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
            dbgScript <<"Adding scripting filters with id=" << sf->id();
         }
     }
-    if( actioncollection and (actioncollection2 = actioncollection->collection("dockers")) ) {
+    if( actioncollection && (actioncollection2 = actioncollection->collection("dockers")) ) {
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
             KisScriptDockFactory ksdf(action);

@@ -62,7 +62,7 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
     while (!n.isNull()) {
         // We don't nest elements in filter configuration. For now...
         QDomElement e = n.toElement();
-        if (not e.isNull()) {
+        if (!e.isNull()) {
             if (e.tagName() == "param") {
                 // XXX Convert the variant pro-actively to the right type?
                 d->properties[e.attribute("name")] = QVariant(e.text());

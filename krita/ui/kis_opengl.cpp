@@ -93,7 +93,7 @@ bool KisOpenGL::hasShadingLanguage()
             dbgUI <<"Check: have opengl shading extensions";
             haveShadingLanguage = true;
         } else {
-            dbgUI <<"Check: don't have opengl shading extensions";
+            dbgUI <<"Check: we do not have opengl shading extensions";
         }
     }
 #endif

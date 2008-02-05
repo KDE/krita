@@ -56,7 +56,7 @@ struct KisDynamicProgramFactory::Private {
     QString name;
 };
 
-KisDynamicProgramFactory::KisDynamicProgramFactory(QString id, QString name) :d(new Private)
+KisDynamicProgramFactory::KisDynamicProgramFactory(const QString & id, const QString & name) :d(new Private)
 {
     d->id = id;
     d->name = name;

@@ -28,7 +28,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramFactoryRegistry : public KoGene
         KisDynamicShapeProgramFactoryRegistry();
     public:
         static KisDynamicShapeProgramFactoryRegistry* instance();
-        virtual KisDynamicProgramFactory* programFactory(QString id) const;
+        virtual KisDynamicProgramFactory* programFactory(const QString & id) const;
         virtual QList<KoID> programTypes() const;
     private:
         struct Private;

@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_polygon.h"
 
 #include <math.h>
 
@@ -40,7 +41,6 @@
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
 
-#include "kis_tool_polygon.h"
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
         : super(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6)),

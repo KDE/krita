@@ -109,8 +109,8 @@ void KisFilterInvert::process(KisFilterConstProcessingInformation srcInfo,
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
-    for ( int row = 0; row < size.height() and not(progressUpdater and progressUpdater->interrupted()); ++row ) {
-        while ( !srcIt.isDone() and not(progressUpdater and progressUpdater->interrupted()) ) {
+    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row ) {
+        while ( !srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted()) ) {
             if ( srcIt.isSelected() ) {
                 inverter->transform( srcIt.oldRawData(), dstIt.rawData(), 1);
             }

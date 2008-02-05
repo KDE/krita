@@ -41,7 +41,7 @@ void KisFilesTest::testFiles()
     QDir dirResults ( QString(FILES_DATA_DIR) + "/results" );
     foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList())
     {
-        if( not sourceFileInfo.isHidden())
+        if( !sourceFileInfo.isHidden())
         {
             qDebug() << "handling " << sourceFileInfo.fileName();
             QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png" );
@@ -51,7 +51,7 @@ void KisFilesTest::testFiles()
             doc.import( sourceFileInfo.absoluteFilePath() );
             QVERIFY(doc.image());
             QString id = doc.image()->colorSpace()->id();
-            if(id != "GRAYA" and id != "GRAYA16" and id != "RGBA" and id != "RGBA16")
+            if(id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16")
             {
               dbgKrita << "Images need conversion";
               doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
@@ -73,7 +73,7 @@ void KisFilesTest::testFiles()
             {
                 for(int i = 0; i < sourceImg.numBytes(); i+=4)
                 {
-                    if( resultImg.bits()[i + 3] == sourceImg.bits()[i + 3] and resultImg.bits()[i + 3] != 0 )
+                    if( resultImg.bits()[i + 3] == sourceImg.bits()[i + 3] && resultImg.bits()[i + 3] != 0 )
                     {
                         for(int j = 0; j < 4; j++ )
                         {

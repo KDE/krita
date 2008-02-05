@@ -4,7 +4,7 @@
  * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
- * ported from digikam, Copyright 2004 by Gilles Caulier,
+ * ported from digikam, Copyrighted by Gilles Caulier,
  * Original Oilpaint algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
  *
@@ -247,7 +247,7 @@ KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* pa
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size"), "brushSize" ) );
-    param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth"), "smooth" ) );
+    param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18nc("smooth out the painting strokes the filter creates", "Smooth"), "smooth" ) );
     return new KisMultiIntegerFilterWidget( id().id(),  parent,  id().id(),  param );
 }
 

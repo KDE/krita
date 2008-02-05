@@ -31,7 +31,7 @@ class KisPreviewDialog: public KDialog {
     Q_OBJECT
 
 public:
-    KisPreviewDialog(QWidget* parent = 0, const char* name = 0, const QString caption = QString());
+    KisPreviewDialog(QWidget* parent = 0, const char* name = 0, const QString & caption = QString());
     ~KisPreviewDialog();
 
     KisPreviewWidget* previewWidget() { return m_preview; }

@@ -67,11 +67,11 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public QObject, public KisSeriali
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory {
     public:
-        KisDynamicProgramFactory(QString id, QString name);
+        KisDynamicProgramFactory(const QString & id, const QString & name);
         virtual ~KisDynamicProgramFactory();
         QString id() const;
         QString name() const;
-        virtual KisDynamicProgram* program(QString name) const = 0;
+        virtual KisDynamicProgram* program(const QString & name) const = 0;
     private:
         struct Private;
         Private* const d;
@@ -80,7 +80,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory {
 class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactoryRegistry {
     public:
         virtual ~KisDynamicProgramFactoryRegistry();
-        virtual KisDynamicProgramFactory* programFactory(QString id) const =0;
+        virtual KisDynamicProgramFactory* programFactory(const QString & id) const =0;
         virtual QList<KoID> programTypes() const =0;
 };
 

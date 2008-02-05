@@ -22,10 +22,6 @@
 
 #include <qglobal.h>
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 #include <kis_debug.h>
 
 #include <kis_shared_data.h>
@@ -210,7 +206,7 @@ class KisWeakSharedPtr {
             return *this;
         }
 
-        inline operator const T* () const { Q_ASSERT(not d or( dataPtr and dataPtr->valid)); return d; }
+        inline operator const T* () const { Q_ASSERT(!d ||( dataPtr && dataPtr->valid)); return d; }
 
         template< class T2> inline operator KisWeakSharedPtr<T2>() const { return KisWeakSharedPtr<T2>(d); }
 
@@ -220,7 +216,7 @@ class KisWeakSharedPtr {
         * @return the pointer
         */
         inline T* data() {
-            Q_ASSERT(not d or( dataPtr and dataPtr->valid));
+            Q_ASSERT(!d ||( dataPtr && dataPtr->valid));
             return d;
         }
 
@@ -230,7 +226,7 @@ class KisWeakSharedPtr {
         * @return the pointer
         */
         inline const T* data() const {
-            Q_ASSERT(not d or( dataPtr and dataPtr->valid));
+            Q_ASSERT(!d ||( dataPtr && dataPtr->valid));
             return d;
         }
 
@@ -239,12 +235,12 @@ class KisWeakSharedPtr {
         * to this pointer are deleted, resulting in a segmentation fault. Use with care.
         * @return a const pointer to the shared object.
         */
-        inline const T* constData() const { Q_ASSERT(not d or( dataPtr and dataPtr->valid)); return d; }
+        inline const T* constData() const { Q_ASSERT(!d ||( dataPtr && dataPtr->valid)); return d; }
 
-        inline const T& operator*() const { Q_ASSERT(d and dataPtr and dataPtr->valid); return *d; }
-        inline T& operator*() { Q_ASSERT(d and dataPtr and dataPtr->valid); return *d; }
-        inline const T* operator->() const { Q_ASSERT(d and dataPtr and dataPtr->valid); return d; }
-        inline T* operator->() { Q_ASSERT(d and dataPtr and dataPtr->valid); return d; }
+        inline const T& operator*() const { Q_ASSERT(d && dataPtr && dataPtr->valid); return *d; }
+        inline T& operator*() { Q_ASSERT(d && dataPtr && dataPtr->valid); return *d; }
+        inline const T* operator->() const { Q_ASSERT(d && dataPtr && dataPtr->valid); return d; }
+        inline T* operator->() { Q_ASSERT(d && dataPtr && dataPtr->valid); return d; }
 
         /**
         * @return true if the pointer is null
@@ -255,7 +251,7 @@ class KisWeakSharedPtr {
          * @return true if the weak pointer points to a valid pointer and false if
          *         the data has been deleted or is null
          */
-        inline bool isValid() const { return d and dataPtr and dataPtr->valid; }
+        inline bool isValid() const { return d && dataPtr && dataPtr->valid; }
     private:
         void attach(T* nd)
         {
@@ -272,7 +268,7 @@ template <class T>
 Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
  : d(o.d)
 {
-    Q_ASSERT(not o.dataPtr or ( o.dataPtr and o.dataPtr->valid));
+    Q_ASSERT(!o.dataPtr || ( o.dataPtr && o.dataPtr->valid));
     if(d) d->ref.ref();
 }
 

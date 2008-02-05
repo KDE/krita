@@ -152,7 +152,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
 {
     if(m_wdgBracketing2HDR) delete m_wdgBracketing2HDR;
     m_wdgBracketing2HDR = new Ui_WdgBracketing2HDR();
-    QDialog* dialog = new QDialog(m_view);
+    KDialog* dialog = new KDialog(m_view);
     dialog->setModal(true);
     m_wdgBracketing2HDR->setupUi(dialog);
     connect(m_wdgBracketing2HDR->pushButtonCancel, SIGNAL(released()), dialog, SLOT(reject ()));
@@ -163,7 +163,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
     if(dialog->exec()==QDialog::Accepted)
     {
         dbgPlugins <<"Start creating the HDR layer";
-        if( not m_cameraResponseIsComputed)
+        if( !m_cameraResponseIsComputed)
         {
             computeCameraResponse();
         }
@@ -502,14 +502,14 @@ void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
     for(int i = 0; i < numberOfInputLevels(); i ++ )
     {
         redCurve->addPoint(i, m_intensityR[i]);
-        min = QMIN(min, m_intensityR[i]);
-        max = QMAX(max, m_intensityR[i]);
+        min = qMin(min, m_intensityR[i]);
+        max = qMax(max, m_intensityR[i]);
         greenCurve->addPoint(i, m_intensityG[i]);
-        min = QMIN(min, m_intensityG[i]);
-        max = QMAX(max, m_intensityG[i]);
+        min = qMin(min, m_intensityG[i]);
+        max = qMax(max, m_intensityG[i]);
         blueCurve->addPoint(i, m_intensityB[i]);
-        min = QMIN(min, m_intensityB[i]);
-        max = QMAX(max, m_intensityB[i]);
+        min = qMin(min, m_intensityB[i]);
+        max = qMax(max, m_intensityB[i]);
 //         dbgPlugins << i <<"" << m_intensityR[i] <<"" << m_intensityG[i] <<"" << m_intensityB[i];
     }
     m_wdgBracketing2HDR->plotWidget->addPlotObject(redCurve);
@@ -537,7 +537,7 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         f.apexBrightness = 2.0 * log(f.aperture ) + log( 1.0 / f.exposure) - log( f.sensitivity / 3.125 );
         f.apexBrightness /= log(2.0);
         f.apexBrightness = 1.0 / ( powf(2.0, f.apexBrightness) );// * ( 1.0592f * 11.4f / 3.125f ) ); // TODO: the magic number is apparrently dependent of the camera, this value is taken from pfscalibrate, this need to be configurable (it is the reflected-light meter calibration constant)
-        if( i >=  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 and i <  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 + 1)
+        if( i >=  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 && i <  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 + 1)
         {
             apexNorm = f.apexBrightness;
         }

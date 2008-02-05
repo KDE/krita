@@ -27,10 +27,6 @@
 
 #include <kis_debug.h>
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 using namespace KisMetaData;
 
 struct Value::Private {
@@ -60,7 +56,7 @@ Value::Value(const QVariant& variant) : d(new Private)
 
 Value::Value(const QList<Value>& array, ValueType type) : d(new Private)
 {
-    Q_ASSERT(type == OrderedArray or type == UnorderedArray or type == AlternativeArray or type == LangArray);
+    Q_ASSERT(type == OrderedArray || type == UnorderedArray || type == AlternativeArray || type == LangArray);
     d->value.array = new QList<Value>( array );
     d->type = type; // TODO: I am hesitating about LangArray to keep them as array or convert them to maps
 }
@@ -91,7 +87,7 @@ Value::Value(const Value& v) : d(new Private)
 
 Value& Value::operator=(const Value& v)
 {
-    Q_ASSERT(d->type == Invalid or d->type == v.d->type);
+    Q_ASSERT(d->type == Invalid || d->type == v.d->type);
     d->type = v.d->type;
     switch(d->type)
     {
@@ -240,7 +236,7 @@ QList<Value> Value::asArray() const
 
 bool Value::isArray() const
 {
-    return type() == OrderedArray or type() == UnorderedArray or type() == AlternativeArray;
+    return type() == OrderedArray || type() == UnorderedArray || type() == AlternativeArray;
 }
 
 QMap<QString, KisMetaData::Value> Value::asStructure() const

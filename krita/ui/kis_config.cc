@@ -352,7 +352,7 @@ QColor KisConfig::getGridMainColor()
     return m_cfg.readEntry("gridmaincolor", col);
 }
 
-void KisConfig::setGridMainColor(QColor v)
+void KisConfig::setGridMainColor(const QColor & v)
 {
     m_cfg.writeEntry("gridmaincolor", v);
 }
@@ -363,7 +363,7 @@ QColor KisConfig::getGridSubdivisionColor()
     return m_cfg.readEntry("gridsubdivisioncolor",col);
 }
 
-void KisConfig::setGridSubdivisionColor(QColor v)
+void KisConfig::setGridSubdivisionColor(const QColor & v)
 {
     m_cfg.writeEntry("gridsubdivisioncolor", v);
 }
@@ -449,7 +449,7 @@ QColor KisConfig::checkersColor()
     return m_cfg.readEntry("checkerscolor", col);
 }
 
-void KisConfig::setCheckersColor(QColor v)
+void KisConfig::setCheckersColor(const QColor & v)
 {
     m_cfg.writeEntry("checkerscolor", v);
 }

@@ -28,7 +28,7 @@
 #define PREVIEW_HEIGHT 64
 
 
-void KisAutogradientResource::createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right )
+void KisAutogradientResource::createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const QColor & left, const QColor & right )
 {
     pushSegment(new KoGradientSegment(interpolation, colorInterpolation, startOffset, middleOffset, endOffset, KoColor( left, colorSpace() ), KoColor( right, colorSpace() )));
 

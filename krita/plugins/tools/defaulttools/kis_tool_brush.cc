@@ -154,7 +154,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkDirect->setChecked(true);
     connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
 
-    m_chkSmooth = new QCheckBox(i18n("Smooth"), optionWidget);
+    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smooth"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");
     m_chkSmooth->setChecked(false);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));

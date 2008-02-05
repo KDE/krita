@@ -22,6 +22,8 @@
 #ifndef KOSHAPECONTROLLERBASE_H
 #define KOSHAPECONTROLLERBASE_H
 
+#include <QtGlobal>
+
 class KoShape;
 
 /**
@@ -56,7 +58,7 @@ public:
      * to reimplement the method.
      * @param shape the newly created shape
      */
-    virtual void shapeCreated( KoShape* shape ) {}
+    virtual void shapeCreated( KoShape* shape ) { Q_UNUSED(shape); }
 };
 
 #endif

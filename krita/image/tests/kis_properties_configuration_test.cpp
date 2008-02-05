@@ -21,10 +21,6 @@
 #include <qtest_kde.h>
 #include "kis_properties_configuration.h"
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 KisPropertiesConfigurationTest::KisPropertiesConfigurationTest() :
     v1(10), v2("hello"), v3(1242.0), v4(true)
 {
@@ -74,7 +70,7 @@ void KisPropertiesConfigurationTest::testConfig(KisPropertiesConfiguration* conf
     QVERIFY( config->getInt("v1", 0) == v1);
     QVERIFY( config->getString("v2", "") == v2);
     QVERIFY( config->getDouble("v3", 0.0) == v3);
-    QVERIFY( config->getBool("v4", not v4) == v4);
+    QVERIFY( config->getBool("v4", !v4) == v4);
 }
 
 QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI)

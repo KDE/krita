@@ -138,7 +138,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     delete m_wdgPanoramaCreation;
     m_wdgPanoramaCreation = new Ui_WdgPanoramaCreation();
     
-    QDialog* dialog = new QDialog(m_view);
+    KDialog* dialog = new KDialog(m_view);
     dialog->setWindowTitle(i18n("Create Panorama Layer"));
     dialog->setModal(true);
     m_wdgPanoramaCreation->setupUi(dialog);
@@ -186,7 +186,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     m_wdgPanoramaCreation->bnUp->setIcon(SmallIcon("go-up"));
     m_wdgPanoramaCreation->bnDown->setIcon(SmallIcon("go-down"));
     
-    if(dialog->exec()==QDialog::Accepted)
+    if(dialog->exec()==KDialog::Accepted)
     {
 
         QList<KisImageAlignment::ImageInfo> images;
@@ -198,7 +198,11 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
             d.import(fileName);
             KisImageAlignment::ImageInfo pi;
             KisImageSP img = d.image();
-            if(not img) break;
+
+            if (!img) {
+                break;
+            }
+            
             pi.bigDevice = new KisPaintDevice( *img->projection() );
             pi.bigRect = QRect(0,0, img->width(), img->height());
             img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
@@ -239,7 +243,11 @@ void PanoramaPlugin::slotPreview()
         d.import(fileName);
         KisImageAlignment::ImageInfo pi;
         KisImageSP img = d.image();
-        if(not img) break;
+
+        if (!img) {
+            break;
+        }
+        
         img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
         pi.bigDevice = img->projection();
         pi.bigRect = QRect(0,0, img->width(), img->height());

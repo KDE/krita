@@ -1,4 +1,4 @@
-/*
+    /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@ namespace KisMetaData {
     class KRITAIMAGE_EXPORT IOBackend {
         public:
             /**
-             * Tell wether the backend input/ouput from/to binary data
+             * Tell wether the backend input/output from/to binary data
              * or text (XML or RDF) data.
              */
             enum BackendType {
@@ -57,7 +57,7 @@ namespace KisMetaData {
             /**
              * @param store the list of metadata to save
              * @param ioDevice the device to where the metadata will be saved
-             * @return true if the save was successfull
+             * @return true if the save was successful
              */
             virtual bool saveTo(Store* store, QIODevice* ioDevice) const = 0;
             /**
@@ -73,7 +73,7 @@ namespace KisMetaData {
             /**
              * @param store the list of metadata to load
              * @param ioDevice the device from where the metadata will be loaded
-             * @return true if the load was successfull
+             * @return true if the load was successful
              */
             virtual bool loadFrom(Store* store, QIODevice* ioDevice) const = 0;
     };

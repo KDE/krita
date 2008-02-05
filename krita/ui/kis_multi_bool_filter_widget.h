@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiBoolFilterWidget(QString filterid, QWidget * parent,  const QString & caption, vKisBoolWidgetParam iwparam);
+    KisMultiBoolFilterWidget(const QString & filterid, QWidget * parent,  const QString & caption, vKisBoolWidgetParam iwparam);
     virtual void setConfiguration(KisFilterConfiguration * cfg);
     virtual KisFilterConfiguration* configuration() const;
 public:

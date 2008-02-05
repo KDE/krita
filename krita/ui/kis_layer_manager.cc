@@ -176,22 +176,22 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_layerHide->setCheckedState(KGuiItem(i18n("&Show")));
     m_layerHide->setChecked(false);
 
-    m_layerRaise  = new KAction(KIcon("raise"), i18n("Raise"), this);
+    m_layerRaise  = new KAction(KIcon("1uparrow"), i18n("Raise"), this);
     actionCollection->addAction("raiselayer", m_layerRaise );
     m_layerRaise->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_BracketRight));
     connect(m_layerRaise, SIGNAL(triggered()), this, SLOT(layerRaise()));
 
-    m_layerLower  = new KAction(KIcon("lower"), i18n("Lower"), this);
+    m_layerLower  = new KAction(KIcon("1downarrow"), i18n("Lower"), this);
     actionCollection->addAction("lowerlayer", m_layerLower );
     m_layerLower->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_BracketLeft));
     connect(m_layerLower, SIGNAL(triggered()), this, SLOT(layerLower()));
 
-    m_layerTop  = new KAction(KIcon("bring_forward"), i18n("To Top"), this);
+    m_layerTop  = new KAction(KIcon("2uparrow"), i18n("To Top"), this);
     actionCollection->addAction("toplayer", m_layerTop );
     m_layerTop->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketRight));
     connect(m_layerTop, SIGNAL(triggered()), this, SLOT(layerFront()));
 
-    m_layerBottom  = new KAction(KIcon("send_backward"), i18n("To Bottom"), this);
+    m_layerBottom  = new KAction(KIcon("2downarrow"), i18n("To Bottom"), this);
     actionCollection->addAction("bottomlayer", m_layerBottom );
     m_layerBottom->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketLeft));
     connect(m_layerBottom, SIGNAL(triggered()), this, SLOT(layerBack()));
@@ -899,7 +899,7 @@ void KisLayerManager::saveLayerAsImage()
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
     QString mimelist = listMimeFilter.join(" ");
 
-    KFileDialog fd (KUrl(QString::null), mimelist, m_view);
+    KFileDialog fd (KUrl(QString()), mimelist, m_view);
     fd.setObjectName("Export Layer");
     fd.setCaption(i18n("Export Layer"));
     fd.setMimeFilter(listMimeFilter);

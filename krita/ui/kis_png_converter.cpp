@@ -266,7 +266,7 @@ void _flush_fn(png_structp png_ptr)
 KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 {
     dbgFile << "Start decoding PNG File";
-    if(not iod->open(QIODevice::ReadOnly))
+    if(!iod->open(QIODevice::ReadOnly))
     {
         dbgFile << "Failed to open PNG File";
         return (KisImageBuilder_RESULT_FAILURE);
@@ -381,7 +381,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 }
             }
         } else {
-            dbgFile << "Profile isn't ICC, skiped.";
+            dbgFile << "Profile isn not ICC, skiped.";
         }
     } else {
         dbgFile << "no embedded profile, will use the default profile";
@@ -494,7 +494,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             // XXX we hardcode icc, this is correct for lcms?
             // XXX productName(), or just "ICC Profile"?
             KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
-            if ( iccprofile and !iccprofile->rawData().isEmpty())
+            if ( iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
             m_img -> addAnnotation( annotation );
         }
@@ -669,7 +669,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP im
 
 KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
-    if(not iodevice->open(QIODevice::WriteOnly))
+    if(!iodevice->open(QIODevice::WriteOnly))
     {
         dbgFile << "Failed to open PNG File for writting";
         return (KisImageBuilder_RESULT_FAILURE);
@@ -817,7 +817,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
-            dbgFile << "can't save this annotation : " << (*it) -> type();
+            dbgFile << "cannot save this annotation : " << (*it) -> type();
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().toAscii());

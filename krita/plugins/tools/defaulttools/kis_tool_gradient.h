@@ -26,16 +26,16 @@
 
 #include <kshortcut.h>
 
-#include "KoToolFactory.h"
+#include <KoToolFactory.h>
 
-#include "kis_tool_paint.h"
-#include "kis_global.h"
-#include "kis_types.h"
-#include "kis_gradient_painter.h"
-#include "kis_layer_shape.h"
+#include <kis_tool_paint.h>
+#include <kis_global.h>
+#include <kis_types.h>
+#include <kis_gradient_painter.h>
+#include <kis_layer_shape.h>
 
-#include "config-opengl.h"
-#include "config-glew.h"
+#include <config-opengl.h>
+#include <config-glew.h>
 
 class KisOpenGLGradientProgram;
 
@@ -46,7 +46,7 @@ class QLabel;
 class QPoint;
 class QWidget;
 class QCheckBox;
-class QComboBox;
+class KComboBox;
 class KisToolGradient : public KisToolPaint {
 
     Q_OBJECT
@@ -97,8 +97,8 @@ private:
     QLabel *m_lbShape;
     QLabel *m_lbRepeat;
     QCheckBox *m_ckReverse;
-    QComboBox *m_cmbShape;
-    QComboBox *m_cmbRepeat;
+    KComboBox *m_cmbShape;
+    KComboBox *m_cmbRepeat;
     QLabel *m_lbAntiAliasThreshold;
     KDoubleNumInput *m_slAntiAliasThreshold;
 

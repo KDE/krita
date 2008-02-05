@@ -20,6 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_pixelize_filter.h"
 
 #include <stdlib.h>
 #include <vector>
@@ -51,9 +52,7 @@
 #include <kis_filter_processing_information.h>
 
 #include "kis_multi_integer_filter_widget.h"
-#include "kis_pixelize_filter.h"
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
 
 KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Pixelize..."))
 {
@@ -114,12 +113,12 @@ void KisPixelizeFilter::process(KisFilterConstProcessingInformation srcInfo,
     for (qint32 y = 0; y < height; y += pixelHeight - ((srcTopLeft.y() + y) % pixelHeight))
     {
         qint32 h = pixelHeight - ( ( srcTopLeft.y() + y) % pixelHeight);
-        h = MIN(h, height - y);
+        h = qMin(h, height - y);
 
         for (qint32 x = 0; x < width; x += pixelWidth - ( (srcTopLeft.x() + x) % pixelWidth))
         {
             qint32 w = pixelWidth - ( (srcTopLeft.x() + x) % pixelWidth);
-            w = MIN(w, width - x);
+            w = qMin(w, width - x);
 
             for (qint32 i = 0; i < pixelSize; i++)
             {

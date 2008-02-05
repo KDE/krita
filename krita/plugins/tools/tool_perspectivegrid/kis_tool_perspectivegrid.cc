@@ -118,12 +118,12 @@ KisPerspectiveGridNodeSP KisToolPerspectiveGrid::nodeNearPoint( KisSubPerspectiv
 void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
 {
     KisPerspectiveGrid* pGrid = m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid();
-    if(!pGrid->hasSubGrids() and m_mode != MODE_CREATION)
+    if(!pGrid->hasSubGrids() && m_mode != MODE_CREATION)
     { // it's possible that the perspectiv grid was cleared
         m_mode = MODE_CREATION;
         m_points.clear();
     }
-    if( m_mode == MODE_CREATION and event->button() == Qt::LeftButton)
+    if( m_mode == MODE_CREATION && event->button() == Qt::LeftButton)
     {
         m_dragging = true;
 
@@ -139,7 +139,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
             m_hasMoveAfterFirstTime = true;
         }
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-    } else if(m_mode == MODE_EDITING and event->button() == Qt::LeftButton){
+    } else if(m_mode == MODE_EDITING && event->button() == Qt::LeftButton){
         // Look for the handle which was pressed
         QPointF mousep = viewToPixel( event->pos() );
         for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
@@ -203,7 +203,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 dbgPlugins << " PRESS DELETE ICON";
                 pGrid->deleteSubGrid( grid );
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                if( not pGrid->hasSubGrids() )
+                if( !pGrid->hasSubGrids() )
                 {
                     m_mode = MODE_CREATION;
                     m_points.clear();
@@ -251,7 +251,7 @@ void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
         KisSubPerspectiveGrid* grid = *it;
         if( m_higlightedNode = nodeNearPoint(grid, mousep))
         {
-            if( m_higlightedNode == m_selectedNode1 or m_higlightedNode == m_selectedNode2)
+            if( m_higlightedNode == m_selectedNode1 || m_higlightedNode == m_selectedNode2)
             {
                 m_higlightedNode = 0;
             } else {
@@ -260,7 +260,7 @@ void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
             }
         }
     }
-    if(wasHiglightedNode and not m_higlightedNode)
+    if(wasHiglightedNode && !m_higlightedNode)
     {
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     }
@@ -271,7 +271,7 @@ void KisToolPerspectiveGrid::mouseReleaseEvent(KoPointerEvent *event)
 
     if( m_mode == MODE_CREATION  )
     {
-        if (m_dragging and event->button() == Qt::LeftButton and m_hasMoveAfterFirstTime)  {
+        if (m_dragging && event->button() == Qt::LeftButton && m_hasMoveAfterFirstTime)  {
             m_points.append ( m_dragEnd);
             if( m_points.size() == 4)
             { // wow we have a grid, isn't that cool ?
@@ -290,7 +290,7 @@ void KisToolPerspectiveGrid::mouseReleaseEvent(KoPointerEvent *event)
     } else {
         m_mode = MODE_EDITING;
         // Check if there is a need for merging two nodes
-        if(m_higlightedNode and m_selectedNode2 == 0)
+        if(m_higlightedNode && m_selectedNode2 == 0)
         {
             m_higlightedNode->mergeWith( m_selectedNode1 );
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
@@ -407,7 +407,7 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
         gc.drawPixmap( iconDeletePos - QPointF(16, 16), iconDelete.pixmap(32,32) );
         // Draw Vanishing point
         QPointF tbVpf = grid->topBottomVanishingPoint();
-        if( fabs(tbVpf.x()) < 30000000. and fabs(tbVpf.y()) < 30000000.)
+        if( fabs(tbVpf.x()) < 30000000. && fabs(tbVpf.y()) < 30000000.)
         {
             QPointF tbVp = pixelToView(tbVpf);
             gc.drawLine( tbVp.x() - m_handleHalfSize, tbVp.y() - m_handleHalfSize, tbVp.x() + m_handleHalfSize, tbVp.y() + m_handleHalfSize);
@@ -415,7 +415,7 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
         }
         // Draw Vanishing Point
         QPointF lrVpf = grid->leftRightVanishingPoint();
-        if( fabs(lrVpf.x()) < 30000000. and fabs(lrVpf.y()) < 30000000.)
+        if( fabs(lrVpf.x()) < 30000000. && fabs(lrVpf.y()) < 30000000.)
         { // Don't display it, if it is too far, or you get funny results
             QPointF lrVp = pixelToView(lrVpf);
             gc.drawLine( lrVp.x() - m_handleHalfSize, lrVp.y() - m_handleHalfSize, lrVp.x() + m_handleHalfSize, lrVp.y() + m_handleHalfSize);

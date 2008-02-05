@@ -120,9 +120,9 @@ public:
     quint32 getGridSubdivisionStyle();
     void setGridSubdivisionStyle(quint32 v);
     QColor getGridMainColor();
-    void setGridMainColor(QColor v);
+    void setGridMainColor(const QColor & v);
     QColor getGridSubdivisionColor();
-    void setGridSubdivisionColor(QColor v);
+    void setGridSubdivisionColor(const QColor & v);
     quint32 getGridHSpacing();
     void setGridHSpacing(quint32 v);
     quint32 getGridVSpacing();
@@ -141,7 +141,7 @@ public:
     void setScrollingCheckers(bool scollCheckers);
 
     QColor checkersColor();
-    void setCheckersColor(QColor v);
+    void setCheckersColor(const QColor & v);
 
     int numProjectionThreads();
     void setNumProjectThreads( int num );

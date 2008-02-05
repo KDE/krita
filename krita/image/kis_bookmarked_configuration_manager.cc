@@ -30,10 +30,6 @@
 
 #include <KoID.h>
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 #include "kis_debug.h"
 #include "kis_serializable_configuration.h"
 
@@ -45,7 +41,7 @@ struct KisBookmarkedConfigurationManager::Private {
     KisSerializableConfigurationFactory* configFactory;
 };
 
-KisBookmarkedConfigurationManager::KisBookmarkedConfigurationManager(QString configEntryGroup, KisSerializableConfigurationFactory* configFactory) : d(new Private)
+KisBookmarkedConfigurationManager::KisBookmarkedConfigurationManager(const QString & configEntryGroup, KisSerializableConfigurationFactory* configFactory) : d(new Private)
 {
     d->configEntryGroup = configEntryGroup;
     d->configFactory = configFactory;
@@ -56,9 +52,9 @@ KisBookmarkedConfigurationManager::~KisBookmarkedConfigurationManager()
     delete d;
 }
 
-KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(QString configname) const
+KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(const QString & configname) const
 {
-    if(not exist(configname))
+    if(!exists(configname))
     {
         if(configname == ConfigDefault.id())
             return d->configFactory->createDefault();
@@ -75,15 +71,15 @@ KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(QString co
     return config;
 }
 
-void KisBookmarkedConfigurationManager::save(QString configname, const KisSerializableConfiguration* config)
+void KisBookmarkedConfigurationManager::save(const QString & configname, const KisSerializableConfiguration* config)
 {
     dbgImage << "Saving configuration " << config << " to " << configname;
-    if(not config) return;
+    if(!config) return;
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
     cfg.writeEntry(configname,config->toXML());
 }
 
-bool KisBookmarkedConfigurationManager::exist(QString configname) const
+bool KisBookmarkedConfigurationManager::exists(const QString & configname) const
 {
     KSharedConfig::Ptr cfg = KGlobal::config();
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
@@ -98,7 +94,7 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
     QList<QString> configsKey;
     foreach(QString key, keys)
     {
-        if(key != ConfigDefault.id() and key != ConfigLastUsed.id())
+        if(key != ConfigDefault.id() && key != ConfigLastUsed.id())
         {
             configsKey << key;
         }
@@ -108,11 +104,11 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
 
 KisSerializableConfiguration* KisBookmarkedConfigurationManager::defaultConfiguration() const
 {
-    if(exist(KisBookmarkedConfigurationManager::ConfigDefault.id()))
+    if(exists(KisBookmarkedConfigurationManager::ConfigDefault.id()))
     {
         return load(KisBookmarkedConfigurationManager::ConfigDefault.id());
     }
-    if(exist(KisBookmarkedConfigurationManager::ConfigLastUsed.id()))
+    if(exists(KisBookmarkedConfigurationManager::ConfigLastUsed.id()))
     {
         return load(KisBookmarkedConfigurationManager::ConfigLastUsed.id());
     }
@@ -124,14 +120,14 @@ QString KisBookmarkedConfigurationManager::configEntryGroup() const
     return d->configEntryGroup;
 }
 
-void KisBookmarkedConfigurationManager::remove(QString name)
+void KisBookmarkedConfigurationManager::remove(const QString & name)
 {
     KSharedConfig::Ptr cfg = KGlobal::config();
     KConfigGroup group = cfg->group(configEntryGroup());
     group.deleteEntry(name);
 }
 
-QString KisBookmarkedConfigurationManager::uniqueName(KLocalizedString base)
+QString KisBookmarkedConfigurationManager::uniqueName(const KLocalizedString & base)
 {
 #ifndef QT_NO_DEBUG
     QString prev;
@@ -140,7 +136,7 @@ QString KisBookmarkedConfigurationManager::uniqueName(KLocalizedString base)
     while(true)
     {
         QString cur = base.subs(nb++).toString();
-        if(not exist(cur)) return cur;
+        if(!exists(cur)) return cur;
 #ifndef QT_NO_DEBUG
         Q_ASSERT(prev != cur);
         prev = cur;

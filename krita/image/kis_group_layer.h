@@ -98,7 +98,7 @@ public:
 
     /**
        Clear the projection or create a projection from the specified
-       paint devide.
+       paint divide.
 
        Warning: will copy from to, if !0,
 

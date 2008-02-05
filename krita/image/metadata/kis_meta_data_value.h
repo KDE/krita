@@ -35,7 +35,7 @@ namespace KisMetaData {
         quint32 denominator;
         bool operator==(const UnsignedRational& ur) const
         {
-            return numerator == ur.numerator and denominator == ur.denominator;
+            return numerator == ur.numerator && denominator == ur.denominator;
         }
     };
     
@@ -46,12 +46,12 @@ namespace KisMetaData {
         qint32 denominator;
         bool operator==(const SignedRational& ur) const
         {
-            return numerator == ur.numerator and denominator == ur.denominator;
+            return numerator == ur.numerator && denominator == ur.denominator;
         }
     };
     /**
-     * Value is build on top of QVariant to extend it to support the various type,
-     * and extension throught properties qualifier.
+     * Value is build on top of QVariant to extend it to support the various types
+     * and extensions through property qualifiers.
      */
     class KRITAIMAGE_EXPORT Value {
         struct Private;

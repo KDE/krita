@@ -22,7 +22,7 @@
 #define KIS_CMB_COMPOSITE_H_
 
 #include <krita_export.h>
-#include "qcombobox.h"
+#include "kcombobox.h"
 #include "KoCompositeOp.h"
 
 /**
@@ -30,7 +30,7 @@
  * associated with a certain colorspace.
  */
 
-class KRITAUI_EXPORT KisCmbComposite : public QComboBox
+class KRITAUI_EXPORT KisCmbComposite : public KComboBox
 {
 
     Q_OBJECT

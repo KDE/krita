@@ -51,7 +51,7 @@ void prepareGroups(lInterestPoints& pointsref, double maxDistance)
     for( lInterestPoints::iterator point2 = pointsref.begin();
          point2 != pointsref.end(); ++point2)
     {
-      if( *point != *point2 and distancePoint(*point, *point2) < maxDistance )
+      if( *point != *point2 && distancePoint(*point, *point2) < maxDistance )
       {
         (*point)->appendNeighbourgh( *point2 );
       }
@@ -68,7 +68,7 @@ const KisInterestPoint* bestMatchFor( const KisInterestPoint* ip, const lInteres
         if( ip->fastCompare(*it_match) > thresholdFastMatch)
         {
             double score = ip->compare(*it_match);
-            if(score > thresholdMatch and score > bestScore)
+            if(score > thresholdMatch && score > bestScore)
             {
                 bestScore = score;
                 bestPoint = *it_match;
@@ -84,7 +84,7 @@ const KisInterestPoint* bestMatchFor( const KisInterestPoint* ip, const lInteres
             if(bestPoint->fastCompare( *it_ref2) > thresholdFastMatch)
             {
                 double score = bestPoint->compare(*it_ref2);
-                if(score >= bestScore and score > bestScore2)
+                if(score >= bestScore && score > bestScore2)
                 {
                     bestPoint2 = *it_ref2;
                     bestScore2 = score;
@@ -180,7 +180,7 @@ MatchHypothesis findSeed( const KisInterestPoint* ref, const lInterestPoints& po
     for(lInterestPoints::const_iterator it_match = pointsmatch.begin();
         it_match != pointsmatch.end(); it_match++)
     {
-        if( not allreadyMatchedMatch.contains( *it_match ) )
+        if( !allreadyMatchedMatch.contains( *it_match ) )
         {
             if( (*it_match)->fastCompare( ref ) > 0.9)
             {
@@ -193,11 +193,11 @@ MatchHypothesis findSeed( const KisInterestPoint* ref, const lInterestPoints& po
                         it_ref_group != ref->neighbourghood().end();
                         ++it_ref_group)
                     {
-                        if( not allreadyMatchedRef.contains( *it_ref_group) )
+                        if( !allreadyMatchedRef.contains( *it_ref_group) )
                         {
                             double score;
                             const KisInterestPoint* ip = bestMatchFor( *it_ref_group, ref->neighbourghood(), (*it_match)->neighbourghood(), score, 0.6, 0.6);
-                            if( ip and not allreadyMatchedMatch.contains( ip ) )
+                            if( ip && !allreadyMatchedMatch.contains( ip ) )
                             {
                                 double angle = diffAngle( atan2( (*it_ref_group)->y() - ref->y(), (*it_ref_group)->x() - ref->x() ), atan2( ip->y() - (*it_match)->y(), ip->x() - (*it_match)->x() ) );
                                 preHs.append( MatchPreHypothesis( *it_ref_group, ip, angle, score) );
@@ -205,7 +205,7 @@ MatchHypothesis findSeed( const KisInterestPoint* ref, const lInterestPoints& po
                             }
                         }
                     }
-                    if(not angles.empty())
+                    if(!angles.empty())
                     {
                         qSort(angles);
                         double median = angles[ angles.size() / 2 ];
@@ -250,11 +250,11 @@ void propageMatch( MatchHypothesis& hypo, const KisMatch& seedMatch, const QList
     it_ref_group != seedMatch.ref->neighbourghood().end();
     ++it_ref_group)
     {
-        if( not allreadyMatchedRef.contains( *it_ref_group) and not hypo.allreadyMatchedRef.contains( *it_ref_group)  )
+        if( !allreadyMatchedRef.contains( *it_ref_group) && !hypo.allreadyMatchedRef.contains( *it_ref_group)  )
         {
             double score;
             const KisInterestPoint* ip = bestMatchFor( *it_ref_group, seedMatch.ref->neighbourghood(), seedMatch.match->neighbourghood(), score, 0.6, 0.6);
-            if( ip and not allreadyMatchedMatch.contains( ip ) and not hypo.allreadyMatchedMatch.contains( ip ) )
+            if( ip && !allreadyMatchedMatch.contains( ip ) && !hypo.allreadyMatchedMatch.contains( ip ) )
             {
                 KisMatch m( *it_ref_group, ip, score );
                 hypo.matches.push_back( m );
@@ -275,10 +275,10 @@ lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& point
     QList<const KisInterestPoint*> allreadyMatchedMatch;
     for(lInterestPoints::const_iterator it_ref = pointsref.begin(); it_ref != pointsref.end(); it_ref++)
     {
-        if( not allreadyMatchedRef.contains( *it_ref ) )
+        if( !allreadyMatchedRef.contains( *it_ref ) )
         {
             MatchHypothesis hypo = findSeed(*it_ref, pointsmatch, allreadyMatchedRef, allreadyMatchedMatch );
-            if( hypo.sumScore > (0.6 * 3) and fabs(hypo.angle) < 0.1 )
+            if( hypo.sumScore > (0.6 * 3) && fabs(hypo.angle) < 0.1 )
             {
                 dbgPlugins << "Kept : " << hypo.angle << " " << hypo.sumScore << " " << hypo.matches.size();
                 double score = hypo.sumScore;

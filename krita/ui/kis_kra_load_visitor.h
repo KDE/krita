@@ -33,7 +33,7 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name);
+    KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, const QString & name);
 
 public:
     void setExternalUri(const QString &uri);

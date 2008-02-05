@@ -36,7 +36,7 @@ KisDynamicShapeProgramFactoryRegistry* KisDynamicShapeProgramFactoryRegistry::in
     return Private::instance;
 }
 
-KisDynamicProgramFactory* KisDynamicShapeProgramFactoryRegistry::programFactory(QString id) const
+KisDynamicProgramFactory* KisDynamicShapeProgramFactoryRegistry::programFactory(const QString & id) const
 {
     return get(id);
 }

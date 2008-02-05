@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_bezier_paint.h"
 
 #include <QPainter>
 #include <QLayout>
@@ -50,7 +51,6 @@
 #include "kis_canvas_subject.h"
 
 #include "kis_curve_framework.h"
-#include "kis_tool_bezier_paint.h"
 
 KisToolBezierPaint::KisToolBezierPaint()
     : super(i18n("Bezier Painting Tool"))

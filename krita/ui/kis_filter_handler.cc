@@ -123,7 +123,7 @@ void KisFilterHandler::reapply()
 void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
 {
     dbgUI <<"Applying a filter";
-    if( not layer ) return;
+    if( !layer ) return;
 
     m_d->dev = layer->paintDevice();
 

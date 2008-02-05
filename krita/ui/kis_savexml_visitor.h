@@ -28,7 +28,7 @@
 
 class KisSaveXmlVisitor : public KisNodeVisitor {
 public:
-    KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root=false);
+    KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root=false);
 
     using KisNodeVisitor::visit;
 

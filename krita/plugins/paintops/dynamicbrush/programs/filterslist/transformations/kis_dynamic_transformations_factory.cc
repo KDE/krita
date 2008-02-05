@@ -24,7 +24,7 @@
 #include "kis_rotation_transformation.h"
 #include "kis_size_transformation.h"
 
-KisDynamicTransformation* KisDynamicTransformationsFactory::id2Transformation(QString id)
+KisDynamicTransformation* KisDynamicTransformationsFactory::id2Transformation(const QString & id)
 {
     if(id == KisDynamicTransformation::SizeTransformationID.id())
     {

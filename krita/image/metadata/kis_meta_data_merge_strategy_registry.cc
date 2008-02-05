@@ -47,7 +47,7 @@ MergeStrategyRegistry::~MergeStrategyRegistry()
 
 MergeStrategyRegistry* MergeStrategyRegistry::instance()
 {
-    if(not s_singleton)
+    if(!s_singleton)
     {
         s_singleton = new MergeStrategyRegistry();
     }

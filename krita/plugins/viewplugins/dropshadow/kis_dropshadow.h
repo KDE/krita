@@ -43,7 +43,7 @@ public:
     KisDropshadow(KisView2 * view);
     virtual ~KisDropshadow() {}
 
-    void dropshadow(KoUpdater * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize);
+    void dropshadow(KoUpdater * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, const QColor & color, quint8 opacity, bool allowResize);
 
 private:
     void gaussianblur (KoUpdater * progress, KisPaintDeviceSP src, KisPaintDeviceSP dst,

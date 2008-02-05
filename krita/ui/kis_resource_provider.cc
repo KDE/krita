@@ -262,6 +262,7 @@ void KisResourceProvider::slotLayerActivated( const KisLayerSP l )
 
 void KisResourceProvider::slotNodeActivated( const KisNodeSP node )
 {
+    Q_UNUSED(node);
     // XXX_NODE: implement!
 }
 

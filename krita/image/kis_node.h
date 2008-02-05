@@ -22,6 +22,7 @@
 #include "kis_base_node.h"
 #include "krita_export.h"
 
+class QStringList;
 class KoProperties;
 
 class KisNodeVisitor;
@@ -102,18 +103,18 @@ public:
     /**
      * @return true if any part of this layer has been marked dirty
      */
-    bool isDirty();
+    bool isDirty() const;
 
     /**
      *  @return true if the given rect overlaps with the dirty region
      *  of this node
      */
-    bool isDirty( const QRect & rect );
+    bool isDirty( const QRect & rect ) const;
 
     /**
      * Mark the specified area as clean
      */
-    void setClean( QRect rc );
+    void setClean( const QRect & rc );
 
     /**
      * Mark the whole layer as clean
@@ -205,7 +206,7 @@ public: // Graph methods
      * @param properties. if not empty, only nodes for which
      * KisNodeBase::check(properties) returns true will be returned.
      */
-    QList<KisNodeSP> childNodes( QStringList nodeTypes, const KoProperties & properties ) const;
+    QList<KisNodeSP> childNodes( const QStringList & nodeTypes, const KoProperties & properties ) const;
 
 
 protected:

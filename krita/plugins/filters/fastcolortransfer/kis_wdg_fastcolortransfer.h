@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_WDG_COLORTRANSFER_H
-#define KIS_WDG_COLORTRANSFER_H
+#ifndef KIS_WDG_FAST_COLORTRANSFER_H
+#define KIS_WDG_FAST COLORTRANSFER_H
 
 #include <kis_filter_config_widget.h>
 

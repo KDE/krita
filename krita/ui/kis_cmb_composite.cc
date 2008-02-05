@@ -18,8 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QComboBox>
-
 #include <klocale.h>
 #include <kis_debug.h>
 #include <KoCompositeOp.h>
@@ -28,7 +26,7 @@
 static QStringList opsInOrder;
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
-    : QComboBox(parent)
+    : KComboBox(parent)
 {
     setObjectName(name);
     setEditable(false);
@@ -82,7 +80,7 @@ KisCmbComposite::~KisCmbComposite()
 
 void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
 {
-    QComboBox::clear();
+    KComboBox::clear();
     m_list.clear();
 
     // First, insert all composite ops that we know about, in a nice order.
@@ -111,7 +109,7 @@ void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
 
 KoCompositeOp * KisCmbComposite::currentItem() const
 {
-    qint32 i = QComboBox::currentIndex();
+    qint32 i = KComboBox::currentIndex();
     if (i > m_list.count() - 1) return 0;
 
     return m_list[i];
@@ -126,7 +124,7 @@ void KisCmbComposite::setCurrent(const KoCompositeOp* op)
         ++index;
     }
     if (index >= 0 && index < m_list.size() ) {
-        QComboBox::setCurrentIndex(index);
+        KComboBox::setCurrentIndex(index);
     }
 }
 
@@ -134,7 +132,7 @@ void KisCmbComposite::setCurrent(const QString & s)
 {
     for (int i = 0; i < m_list.count(); ++i) {
         if (m_list.at(i)->id() == s) {
-            QComboBox::setCurrentIndex(i);
+            KComboBox::setCurrentIndex(i);
             break;
         }
     }

@@ -91,7 +91,7 @@ public:
      * Generate a background texture from the given QImage. This is used for the checker
      * pattern on which the image is rendered.
      */
-    void generateBackgroundTexture(QImage checkImage);
+    void generateBackgroundTexture(const QImage & checkImage);
 
     /**
      * The background texture.

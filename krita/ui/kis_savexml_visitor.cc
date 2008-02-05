@@ -30,7 +30,7 @@
 #include <kis_paint_device.h>
 #include <KoColorSpace.h>
 
-KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root) :
+KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root) :
     KisNodeVisitor(),
     m_doc(doc),
     m_count(count),

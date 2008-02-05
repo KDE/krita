@@ -158,7 +158,7 @@ void KisSelection::clear(const QRect& r)
 }
 
 
-bool KisSelection::isTotallyUnselected(QRect r) const
+bool KisSelection::isTotallyUnselected(const QRect & r) const
 {
     if(*(dataManager()->defaultPixel()) != MIN_SELECTED)
         return false;
@@ -166,7 +166,7 @@ bool KisSelection::isTotallyUnselected(QRect r) const
     return ! r.intersects(sr);
 }
 
-bool KisSelection::isProbablyTotallyUnselected(QRect r) const
+bool KisSelection::isProbablyTotallyUnselected(const QRect & r) const
 {
     if(*(dataManager()->defaultPixel()) != MIN_SELECTED)
         return false;

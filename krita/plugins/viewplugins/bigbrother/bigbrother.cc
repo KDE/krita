@@ -88,7 +88,7 @@ void BigBrotherPlugin::slotSave()
 void BigBrotherPlugin::slotOpenPlay()
 {
     QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
-    if(not filename.isNull())
+    if(!filename.isNull())
     {
         QDomDocument doc;
         QFile f(filename);
@@ -97,7 +97,7 @@ void BigBrotherPlugin::slotOpenPlay()
             dbgPlugins << f.open( QIODevice::ReadOnly);
             QString err;
             int line, col;
-            if(not doc.setContent(&f, &err, &line, &col))
+            if(!doc.setContent(&f, &err, &line, &col))
             {
                 // TODO error message
                 dbgPlugins << err << " line = " << line << " col = " << col;
@@ -106,7 +106,7 @@ void BigBrotherPlugin::slotOpenPlay()
             }
             f.close();
             QDomElement docElem = doc.documentElement();
-            if(not docElem.isNull() and docElem.tagName() == "RecordedActions")
+            if(!docElem.isNull() && docElem.tagName() == "RecordedActions")
             {
                 dbgPlugins << "Load the macro";
                 KisMacro m(m_view->image());
@@ -139,7 +139,7 @@ void BigBrotherPlugin::slotStartRecordingMacro()
 void BigBrotherPlugin::slotStopRecordingMacro()
 {
     dbgPlugins << "Stop recording macro";
-    if( not m_recorder ) return;
+    if( !m_recorder ) return;
     // Alternate actions
     m_startRecordingMacroAction->setEnabled( true );
     m_stopRecordingMacroAction->setEnabled( false );
@@ -153,7 +153,7 @@ void BigBrotherPlugin::slotStopRecordingMacro()
 void BigBrotherPlugin::saveMacro(const KisMacro* macro)
 {
     QString filename = KFileDialog::getSaveFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
-    if(not filename.isNull())
+    if(!filename.isNull())
     {
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");

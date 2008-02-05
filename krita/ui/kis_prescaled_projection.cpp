@@ -467,7 +467,7 @@ void KisPrescaledProjection::preScale( const QRect & rc )
 
 }
 
-void KisPrescaledProjection::resizePrescaledImage( QSize newSize )
+void KisPrescaledProjection::resizePrescaledImage( const QSize & newSize )
 {
 
     QSize oldSize;

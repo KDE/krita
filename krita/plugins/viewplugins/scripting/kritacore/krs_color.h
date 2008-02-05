@@ -30,6 +30,8 @@ namespace Scripting {
  */
 class Color : public QObject
 {
+Q_OBJECT
+
     public:
         Color(int x, int y, int z, QColor::Spec colorSpec);
         virtual ~Color();

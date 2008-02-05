@@ -136,7 +136,7 @@ public:
      * Convenience method that uses the opacity and composite op set
      * in the painter. If nothing is set, opaque and OVER are assumed.
      */
-    void bitBlt(QPoint pos, const KisPaintDeviceSP src, QRect srcRect );
+    void bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect );
 
     /**
      * Overloaded function of the previous which differs that you can pass the composite op using
@@ -220,7 +220,7 @@ public:
      * Convenience method that uses the opacity and composite op set
      * in the painter. If noting is set, opaque and OVER are assumed.
      */
-    void bltSelection(QPoint pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, QRect srcRect );
+    void bltSelection(const QPoint & pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, const QRect & srcRect );
 
     /**
      * Overloaded function of the previous that takes a KisSelection
@@ -521,7 +521,7 @@ public:
     /**
      * Add the r to the current dirty rect, and return the dirtyRegion after adding r to it.
      */
-    QRegion addDirtyRect(QRect r);
+    QRegion addDirtyRect(const QRect & r);
 
     /**
      * Reset the selection to the given selection. All painter actions will be

@@ -50,7 +50,7 @@ public:
 
 public:
 
-    virtual void fromLegacyXML(QString);
+    virtual void fromLegacyXML(const QString &);
     virtual void fromLegacyXML(const QDomElement&);
     virtual QString toLegacyXML() const;
     virtual void toLegacyXML(QDomDocument&, QDomElement&) const;

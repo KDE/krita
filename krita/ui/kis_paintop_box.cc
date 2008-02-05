@@ -62,7 +62,7 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     setWindowTitle(i18n("Painter's Toolchest"));
     m_optionWidget = 0;
 
-    m_cmbPaintops = new QComboBox(this);
+    m_cmbPaintops = new KComboBox(this);
     m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
     m_cmbPaintops->setToolTip(i18n("Artist's materials"));

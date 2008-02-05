@@ -166,7 +166,7 @@ void KisShapeController::removeShape( KoShape* shape )
     KisNodeMap::iterator it = begin;
     while (it != end) {
         if (it.value() == shape ) {
-            dbgKrita << "Going to delete node " << it.key() << " with shape " << it.value() << ", because it's the same as " << shape;
+            dbgKrita << "Going to delete node " << it.key() << " with shape " << it.value() << ", because it is the same as " << shape;
             m_d->nodeShapes.remove(it.key());
             break;
         }

@@ -1,5 +1,5 @@
 /*
- *  tool_bezier.h -- part of Krita
+ *  tool_curves.h -- part of Krita
  *
  *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *
@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TOOL_BEZIER_H_
-#define TOOL_BEZIER_H_
+#ifndef TOOL_CURVES_H
+#define TOOL_CURVES_H
 
 #include <kparts/plugin.h>
 

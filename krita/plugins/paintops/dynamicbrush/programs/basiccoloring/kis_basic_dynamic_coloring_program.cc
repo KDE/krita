@@ -115,7 +115,7 @@ void KisBasicDynamicColoringProgram::fromXML(const QDomElement& elt)
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();
-        if (not e.isNull()) {
+        if (!e.isNull()) {
             if( e.tagName() == "params")
             {
                 KisPropertiesConfiguration kpc;
@@ -320,11 +320,11 @@ void KisBasicDynamicColoringProgram::setBrightnessSensor(KisDynamicSensor* s)
 //--- KisBasicDynamicColoringProgramFactory ---//
 
 KisBasicDynamicColoringProgramFactory::KisBasicDynamicColoringProgramFactory() :
-    KisDynamicColoringProgramFactory("basiccoloring", i18n("Basic"))
+    KisDynamicColoringProgramFactory("basiccoloring", i18nc("basic dynamically coloring paint brush", "Basic"))
 {
 }
 
-KisDynamicColoringProgram* KisBasicDynamicColoringProgramFactory::coloringProgram(QString name) const
+KisDynamicColoringProgram* KisBasicDynamicColoringProgramFactory::coloringProgram(const QString & name) const
 {
     return new KisBasicDynamicColoringProgram(name);
 }

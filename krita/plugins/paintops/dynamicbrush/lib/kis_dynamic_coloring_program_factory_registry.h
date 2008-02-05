@@ -28,7 +28,7 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramFactoryRegistry : public KoG
         KisDynamicColoringProgramFactoryRegistry();
     public:
         static KisDynamicColoringProgramFactoryRegistry* instance();
-        virtual KisDynamicProgramFactory* programFactory(QString id) const;
+        virtual KisDynamicProgramFactory* programFactory(const QString & id) const;
         virtual QList<KoID> programTypes() const;
     private:
         struct Private;

@@ -25,6 +25,8 @@
 #include <KoSegmentGradient.h>
 #include <krita_export.h>
 
+class QColor;
+
 class KRITAIMAGE_EXPORT KisAutogradientResource 
     : public KoSegmentGradient
 {
@@ -34,7 +36,7 @@ public:
 
 public:
 
-    void createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right );
+    void createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const QColor & left, const QColor & right );
 
     const QList<double> getHandlePositions() const;
     const QList<double> getMiddleHandlePositions() const;

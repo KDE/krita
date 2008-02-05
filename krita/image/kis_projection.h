@@ -120,7 +120,7 @@ private slots:
     void addDirtyRegion( const QRegion & region );
 
     /**
-     * Add the specfied rect to the recomposition queue
+     * Add the specified rect to the recomposition queue
      */
     void addDirtyRect( const QRect & rect );
 

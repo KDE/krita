@@ -34,7 +34,7 @@
 #include "kis_shape_layer.h"
 
 
-KisKraSaveVisitior::KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &count, QString name) :
+KisKraSaveVisitior::KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &count, const QString & name) :
     KisNodeVisitor(),
     m_count(count)
 {
@@ -89,7 +89,7 @@ bool KisKraSaveVisitior::visit(KisPaintLayer *layer)
         if (profile)
         {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (iccprofile and !iccprofile->rawData().isEmpty())
+            if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }
 

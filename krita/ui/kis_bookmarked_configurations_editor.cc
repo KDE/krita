@@ -22,10 +22,6 @@
 
 #include "kis_bookmarked_configurations_model.h"
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 struct KisBookmarkedConfigurationsEditor::Private {
     Ui_WdgBookmarkedConfigurationsEditor editorUi;
     KisBookmarkedConfigurationsModel* model;
@@ -47,7 +43,7 @@ KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* pa
     connect(d->editorUi.pushButtonDelete,SIGNAL(pressed()), SLOT(deleteConfiguration()));
     connect(d->editorUi.pushButtonBookmarkCurrent,SIGNAL(pressed()), SLOT(addCurrentConfiguration()));
     
-    if(not d->currentConfig)
+    if(!d->currentConfig)
     {
         d->editorUi.pushButtonBookmarkCurrent->setEnabled(false);
     }

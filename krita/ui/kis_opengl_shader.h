@@ -76,7 +76,7 @@ public:
      *
      * @param sourceCodeFilename The file to read the source code from
      */
-    void loadSourceCode(QString sourceCodeFilename);
+    void loadSourceCode(const QString & sourceCodeFilename);
 
     /**
      * Returns the handle for this shader object.

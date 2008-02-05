@@ -28,7 +28,7 @@ class KoStore;
 
 class KisKraSaveVisitior : public KisNodeVisitor {
 public:
-    KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &count, QString name);
+    KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &count, const QString & name);
 
     using KisNodeVisitor::visit;
     

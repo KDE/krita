@@ -289,7 +289,7 @@ KoToolProxy * KisOpenGLCanvas2::toolProxy() {
     return m_d->toolProxy;
 }
 
-void KisOpenGLCanvas2::documentOffsetMoved( QPoint pt )
+void KisOpenGLCanvas2::documentOffsetMoved( const QPoint & pt )
 {
     m_d->documentOffset = pt;
     updateGL();

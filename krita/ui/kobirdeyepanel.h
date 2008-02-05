@@ -212,12 +212,12 @@ protected slots:
 protected:
     void setZoom(int zoom);
             
-    void handleMouseMove(QPoint);
-    void handleMouseMoveAction(QPoint);
-    void handleMousePress(QPoint);
+    void handleMouseMove(const QPoint &);
+    void handleMouseMoveAction(const QPoint &);
+    void handleMousePress(const QPoint &);
     void fitThumbnailToView();
     void renderView();
-    void resizeViewEvent(QSize size);
+    void resizeViewEvent(const QSize & size);
     void paintViewEvent(QPaintEvent *e);
     void makeThumbnailRectVisible(const QRect& r);
 
@@ -233,7 +233,7 @@ protected:
     /*
      * Returns the drag handle type at point p in thumbnail coordinates.
      */
-    enumDragHandle dragHandleAt(QPoint p);
+    enumDragHandle dragHandleAt(const QPoint & p);
 
     /**
      * Returns the rectangle in the thumbnail covered by the given document rectangle.

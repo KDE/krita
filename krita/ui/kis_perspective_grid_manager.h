@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
         void setup(KActionCollection * collection);
         /** Redraw the perspective grid for the current image of the view using the specified painter
          */
-        void drawGrid(QRect wr, QPainter *p, bool openGL = false);
+        void drawGrid(const QRect & wr, QPainter *p, bool openGL = false);
         /**
          * Call this function to start editing the grid, to disable display
          */

@@ -314,7 +314,7 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
     }
 }
 
-void KisOpenGLImageTextures::generateBackgroundTexture(QImage checkImage)
+void KisOpenGLImageTextures::generateBackgroundTexture(const QImage & checkImage)
 {
     KisOpenGL::makeContextCurrent();
 

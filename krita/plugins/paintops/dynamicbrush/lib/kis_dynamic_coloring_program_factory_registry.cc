@@ -36,7 +36,7 @@ KisDynamicColoringProgramFactoryRegistry* KisDynamicColoringProgramFactoryRegist
     return Private::instance;
 }
 
-KisDynamicProgramFactory* KisDynamicColoringProgramFactoryRegistry::programFactory(QString id) const
+KisDynamicProgramFactory* KisDynamicColoringProgramFactoryRegistry::programFactory(const QString & id) const
 {
     return get(id);
 }

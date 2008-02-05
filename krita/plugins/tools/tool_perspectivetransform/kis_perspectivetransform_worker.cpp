@@ -113,3 +113,4 @@ void KisPerspectiveTransformWorker::run()
         }
     }
 }
+#include "kis_perspectivetransform_worker.moc"

@@ -1,5 +1,4 @@
 /*
- *  Copyright (c) 2004 Kivio Team
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -46,7 +45,7 @@ public:
 
 public slots:
     void slotDocCommandExecuted();
-    void slotImageUpdated(QRect r);
+    void slotImageUpdated(const QRect & r);
     void slotImageSizeChanged(qint32 w, qint32 h);
     void slotImageColorSpaceChanged(const KoColorSpace *cs);
 

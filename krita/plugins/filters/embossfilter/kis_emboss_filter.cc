@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- * ported from digikam, Copyright 2004 by Gilles Caulier,
+ * ported from digikam, Copyrighted 2004 Gilles Caulier,
  * Original Emboss algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
  *
@@ -21,6 +21,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_emboss_filter.h"
 
 #include <stdlib.h>
 #include <vector>
@@ -43,7 +44,6 @@
 #include <kis_random_accessor.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
-#include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_filter_configuration.h>
@@ -51,7 +51,6 @@
 #include <kis_filter_processing_information.h>
 
 #include "kis_multi_integer_filter_widget.h"
-#include "kis_emboss_filter.h"
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), CategoryEmboss, i18n("&Emboss with Variable Depth..."))
 {
@@ -115,11 +114,11 @@ void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
     QColor color1;
     QColor color2;
-    for (int y = 0 ; not(progressUpdater and progressUpdater->interrupted()) and (y < Height) ; ++y)
+    for (int y = 0; !(progressUpdater && progressUpdater->interrupted()) && (y < Height); ++y)
     {
         KisRandomConstAccessorPixel acc = src->createRandomConstAccessor(srcTopLeft.x(), srcTopLeft.y());
 
-        for (int x = 0 ; not(progressUpdater and progressUpdater->interrupted()) and (x < Width) ; ++x, ++it, ++dstIt)
+        for (int x = 0; !(progressUpdater && progressUpdater->interrupted()) && (x < Width); ++x, ++it, ++dstIt)
         {
             if (dstIt.isSelected()) {
 

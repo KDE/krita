@@ -34,3 +34,5 @@ Color::Color(int x, int y, int z, QColor::Spec colorSpec)
 Color::~Color()
 {
 }
+
+#include "krs_color.moc"

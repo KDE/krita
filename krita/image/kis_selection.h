@@ -125,14 +125,14 @@ public:
     /**
      * Tests if the the rect is totally outside the selection.
      */
-    bool isTotallyUnselected(QRect r) const;
+    bool isTotallyUnselected(const QRect & r) const;
 
     /**
      * Tests if the the rect is totally outside the selection, but
      * uses selectedRect instead of selectedRect, and this is faster
      * (but might deliver false positives!)
      */
-    bool isProbablyTotallyUnselected(QRect r) const;
+    bool isProbablyTotallyUnselected(const QRect & r) const;
 
     /**
      * Rough, but fastish way of determining the area

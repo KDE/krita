@@ -91,7 +91,7 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 
 bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
 {
-    if(not oldCs) return false;
+    if(!oldCs) return false;
     return *dev->colorSpace() == *oldCs;
 }
 
@@ -256,7 +256,7 @@ void KisPerChannelFilter::process(KisFilterConstProcessingInformation srcInfo,
     if( totalCost == 0 ) totalCost = 1;
     qint32 pixelsProcessed = 0;
 
-    while( not iter.isDone()  and (progressUpdater and not progressUpdater->interrupted()))
+    while( !iter.isDone()  && (progressUpdater && !progressUpdater->interrupted()))
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();

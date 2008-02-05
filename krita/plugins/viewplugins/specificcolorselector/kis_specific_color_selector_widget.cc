@@ -42,7 +42,7 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 {
-    if(m_colorSpace and *m_colorSpace == *cs) return;
+    if(m_colorSpace && *m_colorSpace == *cs) return;
     m_colorSpace = KoColorSpaceRegistry::instance()->colorSpace( cs->id(), cs->profile() );
     m_color = KoColor( m_color, m_colorSpace );
     foreach(KisColorInput* input, m_inputs)

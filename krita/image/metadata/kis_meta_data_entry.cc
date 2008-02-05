@@ -25,10 +25,6 @@
 #include "kis_meta_data_value.h"
 #include "kis_meta_data_schema.h"
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 using namespace KisMetaData;
 
 struct Entry::Private {
@@ -109,7 +105,7 @@ Entry& Entry::operator=(const Entry& e)
 {
     if(e.isValid())
     {
-        Q_ASSERT( not isValid() or *this == e);
+        Q_ASSERT( !isValid() || *this == e);
         d->name = e.d->name;
         d->schema = e.d->schema;
         d->value = e.d->value;

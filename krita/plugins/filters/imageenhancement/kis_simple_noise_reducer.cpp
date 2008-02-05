@@ -107,7 +107,7 @@ void KisSimpleNoiseReducer::process(KisFilterConstProcessingInformation srcInfo,
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
-    if (progressUpdater and progressUpdater->interrupted()) {
+    if (progressUpdater && progressUpdater->interrupted()) {
         return;
     }
 
@@ -116,21 +116,22 @@ void KisSimpleNoiseReducer::process(KisFilterConstProcessingInformation srcInfo,
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection() );
     KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
 
-    for( int j = 0; j < size.height() and not(progressUpdater and progressUpdater->interrupted()); j++)
+    for (int j = 0; j < size.height() && !(progressUpdater && progressUpdater->interrupted()); j++)
     {
-        while( not srcIt.isDone() and not(progressUpdater and progressUpdater->interrupted()) )
+        while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted()) )
         {
-            if(srcIt.isSelected())
+            if (srcIt.isSelected())
             {
                 quint8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
                 if( diff > threshold)
                 {
                     memcpy(dstIt.rawData(), intermIt.rawData(), cs->pixelSize());
-                } else {
+                }
+                else {
                     memcpy(dstIt.rawData(), srcIt.oldRawData(), cs->pixelSize());
                 }
             }
-            if(progressUpdater) progressUpdater->setValue( ++count );
+            if (progressUpdater) progressUpdater->setValue( ++count );
             ++srcIt;
             ++dstIt;
             ++intermIt;

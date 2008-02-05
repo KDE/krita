@@ -99,7 +99,7 @@ void PriorityToFirstMergeStrategy::merge(Store* dst, QList<const Store*> srcs, Q
         QList<QString> keys = store->keys();
         foreach(QString key, keys)
         {
-            if( not dst->containsEntry( key ) )
+            if( !dst->containsEntry( key ) )
             {
                 dst->addEntry( store->getEntry( key ) );
             }
@@ -151,7 +151,7 @@ void OnlyIdenticalMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QLi
         const Value& v = e.value();
         foreach( const Store* store, srcs )
         {
-            if( not( store->containsEntry( key ) and e.value() == v ) )
+            if( !( store->containsEntry( key ) && e.value() == v ) )
             {
                 keep = false;
                 break;
@@ -195,7 +195,7 @@ struct ScoreValue {
     Value value;
 };
 
-Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> scores, QString key ) const
+Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> scores, const QString & key ) const
 {
     QList<ScoreValue> scoreValues;
     for(int i = 0; i < srcs.size(); i++)
@@ -216,7 +216,7 @@ Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> score
                         break;
                     }
                 }
-                if( not found )
+                if( !found )
                 {
                     ScoreValue sv;
                     sv.score = scores[i];
@@ -241,7 +241,7 @@ Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> score
     return bestSv->value;
 }
 
-void SmartMergeStrategy::mergeEntry(Store* dst, QList<const Store*> srcs, const KisMetaData::Schema* schema, QString identifier) const
+void SmartMergeStrategy::mergeEntry(Store* dst, QList<const Store*> srcs, const KisMetaData::Schema* schema, const QString & identifier) const
 {
     Value v(QList<Value>(), Value::OrderedArray );
     foreach(const Store* store, srcs)
@@ -290,7 +290,7 @@ void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<doubl
             QList<QString> keys = store->keys();
             foreach(QString key, keys)
             {
-                if(not dst->containsEntry( key ) )
+                if(!dst->containsEntry( key ) )
                 {
                     dst->getEntry( key ).value() = election( srcs, scores, key);
                 }

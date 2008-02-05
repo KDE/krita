@@ -25,10 +25,6 @@
 #include "kis_meta_data_schema.h"
 #include "kis_meta_data_value.h"
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 using namespace KisMetaData;
 
 uint qHash(const Entry& e)
@@ -74,9 +70,9 @@ void Store::copyFrom(const Store* store)
 
 bool Store::addEntry(const Entry& entry)
 {
-    if(d->entries.contains(entry.qualifiedName()) and d->entries[entry.qualifiedName()].isValid() )
+    if(d->entries.contains(entry.qualifiedName()) && d->entries[entry.qualifiedName()].isValid() )
     {
-        dbgImage <<"Entry" << entry.qualifiedName() <<" allready exist in the store, can't be included twice";
+        dbgImage <<"Entry" << entry.qualifiedName() <<" already exists in the store, cannot be included twice";
         return false;
     }
     d->entries.insert(entry.qualifiedName(), entry);
@@ -88,75 +84,75 @@ bool Store::empty() const
     return d->entries.empty();
 }
 
-bool Store::containsEntry(QString entryKey) const
+bool Store::containsEntry(const QString & entryKey) const
 {
     return d->entries.keys().contains( entryKey );
 }
 
-bool Store::containsEntry(QString uri, QString entryName) const
+bool Store::containsEntry(const QString & uri, const QString & entryName) const
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
     return containsEntry(schema->generateQualifiedName(entryName));
 }
 
-bool Store::containsEntry(const KisMetaData::Schema* schema, QString entryName) const
+bool Store::containsEntry(const KisMetaData::Schema* schema, const QString & entryName) const
 {
     return containsEntry(schema->generateQualifiedName(entryName ));
 }
 
-Entry& Store::getEntry(QString entryKey)
+Entry& Store::getEntry(const QString & entryKey)
 {
     return d->entries[entryKey];
 }
 
-Entry& Store::getEntry(QString uri, QString entryName)
+Entry& Store::getEntry(const QString & uri, const QString & entryName)
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
     Q_ASSERT(schema);
     return getEntry(schema, entryName );
 }
 
-Entry& Store::getEntry(const KisMetaData::Schema* schema, QString entryName)
+Entry& Store::getEntry(const KisMetaData::Schema* schema, const QString & entryName)
 {
     return getEntry(schema->generateQualifiedName( entryName ));
 }
 
 
-const Entry& Store::getEntry(QString entryKey) const
+const Entry& Store::getEntry(const QString & entryKey) const
 {
     return d->entries[entryKey];
 }
 
-const Entry& Store::getEntry(QString uri, QString entryName) const
+const Entry& Store::getEntry(const QString & uri, const QString & entryName) const
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
     Q_ASSERT(schema);
     return getEntry(schema, entryName );
 }
 
-const Entry& Store::getEntry(const KisMetaData::Schema* schema, QString entryName) const
+const Entry& Store::getEntry(const KisMetaData::Schema* schema, const QString & entryName) const
 {
     return getEntry(schema->generateQualifiedName( entryName ));
 }
 
-void Store::removeEntry(QString entryKey)
+void Store::removeEntry(const QString & entryKey)
 {
     d->entries.remove(entryKey);
 }
 
-void Store::removeEntry(QString uri, QString entryName)
+void Store::removeEntry(const QString & uri, const QString & entryName)
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
     Q_ASSERT(schema);
     removeEntry(schema, entryName );
 }
 
-void Store::removeEntry(const KisMetaData::Schema* schema, QString entryName)
+void Store::removeEntry(const KisMetaData::Schema* schema, const QString & entryName)
 {
     removeEntry(schema->generateQualifiedName( entryName ));
 }
 
-const Value& Store::getValue(QString uri, QString entryName) const
+const Value& Store::getValue(const QString & uri, const QString & entryName) const
 {
     return getEntry(uri, entryName).value();
 }
@@ -191,7 +187,7 @@ void Store::debugDump() const
     }
 }
 
-void Store::applyFilters( QList<const Filter*> filters )
+void Store::applyFilters( const QList<const Filter*> & filters )
 {
     dbgImage << "Apply " << filters.size() << " filters";
     foreach( const Filter* filter, filters)

@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#include "kis_tool_bezier_select.h"
 
 #include <QPainter>
 #include <QLayout>
@@ -50,7 +50,7 @@
 #include "kis_canvas_subject.h"
 
 #include "kis_curve_framework.h"
-#include "kis_tool_bezier_select.h"
+
 
 KisToolBezierSelect::KisToolBezierSelect()
     : super(i18n("Bezier Selection Tool"))

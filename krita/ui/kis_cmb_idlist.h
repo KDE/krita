@@ -21,7 +21,7 @@
 #ifndef KIS_CMB_IDLIST_H_
 #define KIS_CMB_IDLIST_H_
 
-#include "qcombobox.h"
+#include "kcombobox.h"
 
 #include "KoID.h"
 #include <krita_export.h>
@@ -31,7 +31,7 @@
  * descriptive (i18n'ed) text is displayed, but the various
  * signals return a KoID.
  */
-class KRITAUI_EXPORT KisCmbIDList : public QComboBox
+class KRITAUI_EXPORT KisCmbIDList : public KComboBox
 {
     Q_OBJECT
 

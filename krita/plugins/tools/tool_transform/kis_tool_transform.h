@@ -83,8 +83,8 @@ private:
     void recalcOutline();
     QPointF rot(double x, double y) { return QPointF(m_cosa*x - m_sina*y, m_sina*x + m_cosa*y);}
     QPointF invrot(double x, double y) { return QPointF(m_cosa*x + m_sina*y, -m_sina*x + m_cosa*y);}
-    int det(QPointF v,QPointF w);
-    double distsq(QPointF v,QPointF w);
+    int det(const QPointF & v, const QPointF & w);
+    double distsq(const QPointF & v, const QPointF & w);
     void setFunctionalCursor();
     void initHandles();
 

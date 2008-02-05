@@ -89,7 +89,7 @@ KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
     }
     m_uiOptions->filtersList->setIDList( l2 );
     connect(m_uiOptions->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
-    if(not l2.empty())
+    if(!l2.empty())
     {
         setCurrentFilter( l2.first() );
     }
@@ -141,7 +141,7 @@ const KisFilterSP KisFilterOpSettings::filter() const
 
 KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
-    if(not m_currentFilterConfigWidget) return 0;
+    if(!m_currentFilterConfigWidget) return 0;
     return m_currentFilterConfigWidget->configuration();
 }
 
@@ -150,7 +150,7 @@ KisPaintOpSettings* KisFilterOpSettings::clone() const
     KisFilterOpSettings* s = new KisFilterOpSettings(0);
     s->m_paintDevice = m_paintDevice;
     s->setCurrentFilter( KoID(m_currentFilter->id()) );
-    if(s->m_currentFilterConfigWidget and m_currentFilterConfigWidget)
+    if(s->m_currentFilterConfigWidget && m_currentFilterConfigWidget)
     {
         s->m_currentFilterConfigWidget->setConfiguration( m_currentFilterConfigWidget->configuration() );
     }
@@ -160,7 +160,7 @@ KisPaintOpSettings* KisFilterOpSettings::clone() const
 void KisFilterOpSettings::fromXML(const QDomElement& elt)
 {
     QDomElement e = elt.firstChildElement( "Filter" );
-    if( not e.isNull() )
+    if( !e.isNull() )
     {
         QString filterName = e.attribute("name");
         m_currentFilter = KisFilterRegistry::instance()->get(filterName);
@@ -169,7 +169,7 @@ void KisFilterOpSettings::fromXML(const QDomElement& elt)
             delete m_currentFilterConfigWidget;
             m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(m_optionsWidget, m_paintDevice );
             KisFilterConfiguration * kfc = m_currentFilter->defaultConfiguration(m_paintDevice);
-            if(kfc and m_currentFilterConfigWidget)
+            if(kfc && m_currentFilterConfigWidget)
             {
                 kfc->fromXML( e );
                 m_currentFilterConfigWidget->setConfiguration( kfc );
@@ -201,24 +201,24 @@ KisFilterOp::~KisFilterOp()
 
 void KisFilterOp::paintAt(const KisPaintInformation& info)
 {
-    if (not painter())
+    if (!painter())
     {
       return;
     }
 
     KisFilterSP filter = m_settings->filter();
-    if (not filter)
+    if (!filter)
     {
       return;
     }
 
-    if ( not source() )
+    if (!source() )
     {
       return;
     }
 
     KisBrush * brush = painter()->brush();
-    if (not brush) return;
+    if (!brush) return;
 
     const KoColorSpace * colorSpace = source()->colorSpace();
 

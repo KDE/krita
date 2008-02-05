@@ -77,9 +77,9 @@ class KisToolLineFactory : public KoToolFactory {
 public:
 
     KisToolLineFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaShape/KisToolLine", i18n( "Line" ))
+        : KoToolFactory(parent, "KritaShape/KisToolLine", i18nc( "straigh line drawing tool", "Line" ))
         {
-            setToolTip(i18n("Draw a line with the current brush"));
+            setToolTip(i18n("Draw a straight line with the current brush"));
             // Temporarily
             setToolType(TOOL_TYPE_SHAPE);
             setActivationShapeId( KIS_LAYER_SHAPE_ID );

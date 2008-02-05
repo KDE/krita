@@ -82,9 +82,9 @@ public:
     void invert();
 
     /**
-     * Set the specfied rect to MIN_SELECTED.
+     * Set the specified rect to MIN_SELECTED.
      */
-    void clear(QRect r);
+    void clear(const QRect & r);
 
     /**
      * Reset the entire selection. The selectedRect and selectedExactRect
@@ -114,13 +114,13 @@ public:
     void intersectSelection(KisPixelSelectionSP selection);
 
     /// Tests if the the rect is totally outside the selection
-    bool isTotallyUnselected(QRect r) const;
+    bool isTotallyUnselected(const QRect & r) const;
 
     /**
      * Tests if the the rect is totally outside the selection, but uses selectedRect
      * instead of selectedRect, and this is faster (but might deliver false positives!)
      */
-    bool isProbablyTotallyUnselected(QRect r) const;
+    bool isProbablyTotallyUnselected(const QRect & r) const;
 
     /**
      * Rough, but fastish way of determining the area

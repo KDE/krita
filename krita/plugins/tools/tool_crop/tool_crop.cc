@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_tool_crop.h"
+
 #include <stdlib.h>
 #include <vector>
 
@@ -35,7 +37,7 @@
 #include <KoToolRegistry.h>
 
 #include "tool_crop.h"
-#include "kis_tool_crop.h"
+
 
 
 typedef KGenericFactory<ToolCrop> ToolCropFactory;

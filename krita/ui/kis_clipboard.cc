@@ -116,7 +116,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
         if (profile)
         {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (iccprofile and !iccprofile->rawData().isEmpty())
+            if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
         }
         if (annotation) {

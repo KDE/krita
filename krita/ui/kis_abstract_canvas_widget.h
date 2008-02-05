@@ -41,7 +41,7 @@ public:
 
     virtual KoToolProxy * toolProxy() = 0;
 
-    virtual void documentOffsetMoved( QPoint ) = 0;
+    virtual void documentOffsetMoved( const QPoint &) = 0;
 
     /**
      * Draw the specified decorations on the view.

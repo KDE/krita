@@ -32,9 +32,9 @@ class QWidget;
 class KisPaintInformation;
 class KisSensorSelector;
 
-const KoID FuzzyId("fuzzy", i18n("Fuzzy"));
-const KoID SpeedId("speed", i18n("Speed"));
-const KoID TimeId("time", i18n("Time"));
+const KoID FuzzyId("fuzzy", i18nc("parameter of the dynamic sensor that determines fuzziness", "Fuzzy"));
+const KoID SpeedId("speed", i18nc("parameter of the dynamic sensor that determines the speed","Speed"));
+const KoID TimeId("time", i18nc("parameter of the dynamic sensor that determines the time","Time"));
 const KoID DrawingAngleId("drawingangle", i18n("Drawing angle"));
 const KoID PressureId("pressure", i18n("Pressure"));
 const KoID XTiltId ("xtilt", i18n("X-Tilt"));

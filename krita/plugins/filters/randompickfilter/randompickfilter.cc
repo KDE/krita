@@ -131,7 +131,7 @@ void KisFilterRandomPick::process(KisFilterConstProcessingInformation srcInfo,
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
     const quint8* pixels[2];
     KoMixColorsOp * mixOp = cs->mixColorsOp();
-    for ( int row = 0; row < size.height() and not(progressUpdater and progressUpdater->interrupted()); ++row )
+    for ( int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row )
     {
         while(!srcIt.isDone())
         {

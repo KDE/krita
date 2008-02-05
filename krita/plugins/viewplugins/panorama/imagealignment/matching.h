@@ -34,7 +34,7 @@ struct KisMatch {
     const KisInterestPoint* match;
     double strength;
     inline bool operator==(const KisMatch& m) const {
-        return ref == m.ref and match == m.match;
+        return ref == m.ref && match == m.match;
     }
 };
 

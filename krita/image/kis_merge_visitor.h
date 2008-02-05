@@ -106,7 +106,7 @@ public:
                 return true;
 
             bool first = false;
-            if (layer->prevSibling() == 0 and layer->parent() == layer->image()->root())
+            if (layer->prevSibling() == 0 && layer->parent() == layer->image()->root())
                 first = true;
 
             qint32 sx, sy, dx, dy, w, h;

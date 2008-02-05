@@ -21,10 +21,6 @@
 #include "kis_recorded_paint_actions.h"
 #include "kis_recorded_filter_action.h"
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 struct KisRecordedActionFactoryRegistry::Private {
     static KisRecordedActionFactoryRegistry* instance;
 };
@@ -33,7 +29,7 @@ KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::Private::ins
 
 KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::instance()
 {
-    if(not Private::instance)
+    if(!Private::instance)
     {
         Private::instance = new KisRecordedActionFactoryRegistry;
     }

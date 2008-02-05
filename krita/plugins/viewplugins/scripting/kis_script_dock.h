@@ -41,6 +41,9 @@ class Kikoo : public QObject
 };
 
 class KisScriptDockFactory : public QObject, public KoDockFactory {
+
+Q_OBJECT
+
     public:
         KisScriptDockFactory(Kross::Action* act);
         virtual QString id() const;

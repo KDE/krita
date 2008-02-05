@@ -134,7 +134,7 @@ void KisPerspectiveGridManager::stopEdition()
 //       m_view->updateCanvas();
 }
 
-void KisPerspectiveGridManager::drawGrid(QRect wr, QPainter *p, bool openGL )
+void KisPerspectiveGridManager::drawGrid(const QRect & wr, QPainter *p, bool openGL )
 {
     Q_UNUSED( wr );
     Q_UNUSED( p );

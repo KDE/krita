@@ -93,7 +93,7 @@ class KisBasicDynamicProgram : public KisDynamicShapeProgram {
 class KisBasicDynamicProgramFactory : public KisDynamicShapeProgramFactory {
     public:
         KisBasicDynamicProgramFactory();
-        virtual KisDynamicShapeProgram* shapeProgram(QString name) const;
+        virtual KisDynamicShapeProgram* shapeProgram(const QString & name) const;
 };
 
 #endif

@@ -214,7 +214,7 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
     }
 }
 
-void KisPixelSelection::clear(QRect r)
+void KisPixelSelection::clear(const QRect & r)
 {
     if (*(m_datamanager->defaultPixel()) != MIN_SELECTED) {
         KisFillPainter painter(KisPaintDeviceSP(this));
@@ -249,7 +249,7 @@ void KisPixelSelection::invert()
     m_datamanager->setDefaultPixel(&defPixel);
 }
 
-bool KisPixelSelection::isTotallyUnselected(QRect r) const
+bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
 {
     if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
         return false;
@@ -257,7 +257,7 @@ bool KisPixelSelection::isTotallyUnselected(QRect r) const
     return ! r.intersects(sr);
 }
 
-bool KisPixelSelection::isProbablyTotallyUnselected(QRect r) const
+bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
 {
     if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
         return false;

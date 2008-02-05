@@ -73,7 +73,7 @@ public:
     void setProperty(const QPoint &p, const int t, const float v);
     float setScaling(float s);
     QPoint setCenter(int x, int y);
-    QPoint setCenter(QPoint p);
+    QPoint setCenter(const QPoint & p);
 
     KisPaintDeviceSP dab(int w, int h);
 
@@ -83,7 +83,7 @@ private:
     void scale(QPoint *p);
 
     void absolute(int *x, int *y);
-    void absolute(QPoint *p);
+    QPoint absolute(const QPoint & p);
 
     int absLeft();
     int absTop();

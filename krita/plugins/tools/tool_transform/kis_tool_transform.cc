@@ -271,15 +271,15 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
     }
 }
 
-int KisToolTransform::det(QPointF v,QPointF w)
+int KisToolTransform::det(const QPointF & v, const QPointF & w)
 {
     return int(v.x()*w.y()-v.y()*w.x());
 }
 
-double KisToolTransform::distsq(QPointF v,QPointF w)
+double KisToolTransform::distsq(const QPointF & v, const QPointF & w)
 {
-    v -= w;
-    return v.x()*v.x() + v.y()*v.y();
+    QPointF v2 = v - w;
+    return v2.x()*v2.x() + v2.y()*v2.y();
 }
 
 void KisToolTransform::setFunctionalCursor()

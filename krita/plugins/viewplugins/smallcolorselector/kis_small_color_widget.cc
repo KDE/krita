@@ -111,8 +111,9 @@ void KisSmallColorWidget::setQColor(const QColor& c)
     {
         int hue;
         rgb_to_hsv( c.red(), c.green(), c.blue(), &hue, &d->saturation, &d->value);
-        if( hue >= 0 and hue <= 360)
+        if (hue >= 0 && hue <= 360) {
             d->hue = hue;
+        }
         generateSquare();
         update();
     }
@@ -232,12 +233,13 @@ void KisSmallColorWidget::mouseMoveEvent( QMouseEvent * event )
 
 void KisSmallColorWidget::selectColorAt(int _x, int _y)
 {
-    if( (_x < d->rubberWidth and d->handle == NoHandle ) or d->handle == HueHandle  )
+    if ( (_x < d->rubberWidth && d->handle == NoHandle ) || d->handle == HueHandle  )
     {
         d->handle = HueHandle;
         setHue( (_x * 360.0) / d->rubberWidth );
         update();
-    } else if( (_x > width() - d->rectangleWidth and d->handle == NoHandle ) or d->handle == ValueSaturationHandle ) {
+    }
+    else if( (_x > width() - d->rectangleWidth && d->handle == NoHandle ) || d->handle == ValueSaturationHandle ) {
         d->handle = ValueSaturationHandle;
         setHSV( d->hue, ( _x - width() + d->rectangleWidth ) * 255 / d->rectangleWidth, (_y * 255 ) / d->rectangleHeight );
         update();

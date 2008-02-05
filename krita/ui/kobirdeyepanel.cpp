@@ -371,7 +371,7 @@ bool KoBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
     return m_page->eventFilter(o, ev);
 }
 
-KoBirdEyePanel::enumDragHandle KoBirdEyePanel::dragHandleAt(QPoint p)
+KoBirdEyePanel::enumDragHandle KoBirdEyePanel::dragHandleAt(const QPoint & p)
 {
     QRect left = QRect(m_visibleAreaInThumbnail.left()-1, m_visibleAreaInThumbnail.top()-1, 3, m_visibleAreaInThumbnail.height()+2);
     QRect right = QRect(m_visibleAreaInThumbnail.right()-1, m_visibleAreaInThumbnail.top()-1, 3, m_visibleAreaInThumbnail.height()+2);
@@ -401,7 +401,7 @@ KoBirdEyePanel::enumDragHandle KoBirdEyePanel::dragHandleAt(QPoint p)
     return DragHandleNone;
 }
 
-void KoBirdEyePanel::handleMouseMove(QPoint p)
+void KoBirdEyePanel::handleMouseMove(const QPoint & p)
 {
     QCursor cursor;
 
@@ -430,7 +430,7 @@ void KoBirdEyePanel::handleMouseMove(QPoint p)
     m_page->view->setCursor(cursor);
 }
 
-void KoBirdEyePanel::handleMouseMoveAction(QPoint p)
+void KoBirdEyePanel::handleMouseMoveAction(const QPoint & p)
 {
     if (m_dragging) {
 
@@ -471,7 +471,7 @@ void KoBirdEyePanel::handleMouseMoveAction(QPoint p)
     }
 }
 
-void KoBirdEyePanel::handleMousePress(QPoint p)
+void KoBirdEyePanel::handleMousePress(const QPoint & p)
 {
     if (!m_dragging) {
 
@@ -554,11 +554,13 @@ void KoBirdEyePanel::makeThumbnailRectVisible(const QRect& r)
     m_zoomListener->zoomTo(docRect.center().x(), docRect.center().y(), zoomFactor);
 }
 
-void KoBirdEyePanel::resizeViewEvent(QSize size)
+void KoBirdEyePanel::resizeViewEvent(const QSize & size)
 {
     if(!size.isValid())
-        size = QSize(1,1);
-    m_viewBuffer = QPixmap(size);
+        m_viewBuffer = QPixmap(QSize(1,1));
+    else
+        m_viewBuffer = QPixmap(size);
+        
     fitThumbnailToView();
     slotUpdate(QRect(0, 0, m_documentSize.width(), m_documentSize.height()));
 }

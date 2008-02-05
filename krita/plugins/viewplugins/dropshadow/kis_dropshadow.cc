@@ -3,8 +3,8 @@
  *
  * Copyright (c) 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- * The gaussian blur algoithm is ported from gimo
- * Copyright (C) 1995 Spencer Kimball and Peter Mattis
+ * The gaussian blur algoithm is ported from gimp
+ *   Copyright (C) 1995 Spencer Kimball and Peter Mattis <x@y.com> // For krazy
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,8 +66,16 @@ KisDropshadow::KisDropshadow(KisView2 * view)
 {
 }
 
-void KisDropshadow::dropshadow(KoUpdater * progressUpdater, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize)
+void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
+    qint32 xoffset,
+    qint32 yoffset,
+    qint32 blurradius,
+    const QColor & c,
+    quint8 opacity,
+    bool allowResize)
 {
+    QColor color = c;
+    
     KisImageSP image = m_view->image();
     if (!image) return;
 

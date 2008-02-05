@@ -61,7 +61,7 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 
 {
 }
 
-KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QString filterid, QWidget * parent,
+KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filterid, QWidget * parent,
                                                          const QString & caption,
                                                          vKisIntegerWidgetParam iwparam)
     : KisFilterConfigWidget( parent),  m_filterid(filterid)

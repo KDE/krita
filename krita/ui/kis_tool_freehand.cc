@@ -131,7 +131,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         {
             QPointF dragVec = info.pos() - m_previousPaintInformation.pos();
             QPointF newTangent;
-            if( m_previousDrag.y() == 0.0 and m_previousDrag.x() == 0.0 )
+            if( m_previousDrag.y() == 0.0 && m_previousDrag.x() == 0.0 )
             {
                 newTangent = dragVec;
             } else {
@@ -324,7 +324,7 @@ void KisToolFreehand::endPaint()
         m_painter = 0;
         notifyModified();
     }
-    if(not m_paintJobs.empty())
+    if(!m_paintJobs.empty())
     {
         foreach(FreehandPaintJob* job , m_paintJobs)
         {

@@ -57,10 +57,10 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgram : public KisDynamicProgram {
 
 class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramFactory : public KisDynamicProgramFactory  {
     public:
-        KisDynamicShapeProgramFactory(QString id, QString name);
+        KisDynamicShapeProgramFactory(const QString & id, const QString & name);
         virtual ~KisDynamicShapeProgramFactory();
-        virtual KisDynamicProgram* program(QString name) const;
-        virtual KisDynamicShapeProgram* shapeProgram(QString name) const = 0;
+        virtual KisDynamicProgram* program(const QString & name) const;
+        virtual KisDynamicShapeProgram* shapeProgram(const QString & name) const = 0;
     private:
         struct Private;
         Private* const d;

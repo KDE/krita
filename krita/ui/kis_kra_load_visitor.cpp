@@ -38,7 +38,7 @@
 #include "kis_filter_configuration.h"
 #include "kis_datamanager.h"
 
-KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, QString name) :
+KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, const QString & name) :
     KisNodeVisitor(),
     m_layerFilenames(layerFilenames)
 {

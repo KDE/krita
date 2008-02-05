@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#include "kis_tool_crop.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -34,7 +34,6 @@
 #include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kis_debug.h>
 
 #include <KoCanvasBase.h>
 #include <kis_global.h>
@@ -48,7 +47,7 @@
 #include <kis_layer.h>
 #include <kis_crop_visitor.h>
 
-#include "kis_tool_crop.h"
+
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     : super(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))

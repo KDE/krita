@@ -69,7 +69,7 @@ KisFiltersModel::KisFiltersModel(KisPaintDeviceSP thumb) : d(new Private)
     {
         KisFilterSP filter = registry->get(key);
         Q_ASSERT(filter);
-        if(not d->categories.contains( filter->menuCategory().id() ) )
+        if(!d->categories.contains( filter->menuCategory().id() ) )
         {
             Private::Category cat;
             cat.id = filter->menuCategory().id();
@@ -146,7 +146,7 @@ QModelIndex KisFiltersModel::index(int row, int column, const QModelIndex &paren
 
 QModelIndex KisFiltersModel::parent(const QModelIndex &child) const
 {
-    if(not child.isValid())
+    if(!child.isValid())
         return QModelIndex();
     Private::Node* node = static_cast<Private::Node*>(child.internalPointer());
     Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
@@ -169,7 +169,7 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
             Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
             if(filter)
             {
-                if( not d->previewCache.contains( filter->filter ) )
+                if( !d->previewCache.contains( filter->filter ) )
                 {
                     KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
                     filter->filter->process(target, QRect(0,0,100,100), filter->filter->defaultConfiguration( d->thumb ) );
@@ -193,7 +193,7 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KisFiltersModel::flags(const QModelIndex & index) const
 {
-    if(not index.isValid()) return 0;
+    if(!index.isValid()) return 0;
     
     Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
     Private::Filter* filter = dynamic_cast<Private::Filter*>(node);

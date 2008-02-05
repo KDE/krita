@@ -149,7 +149,7 @@ public:
      * might be bigger. Use this function to determine that rect.
      * The default implementation makes a guess using overlapMarginNeeded.
       */
-    virtual QRect enlargeRect(QRect rect, const KisFilterConfiguration* = 0) const;
+    virtual QRect enlargeRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
 
     /**
      * Determine if this filter can work with this colorSpace. For instance, some

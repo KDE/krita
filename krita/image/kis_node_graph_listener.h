@@ -64,7 +64,7 @@ public:
 
     /**
      * Inform the model we're done moving the node: it has been
-     * removed and added succesfully
+     * removed and added successfully
      */
     virtual void nodeHasBeenMoved( KisNode * parent, int oldIndex, int newIndex ) = 0;
 };

@@ -132,7 +132,7 @@ useCursor(m_subtractCursor);
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
-        if (not (currentImage() ))
+        if (!currentImage())
             return;
 
         KisPaintDeviceSP dev = currentLayer()->paintDevice();

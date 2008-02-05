@@ -230,7 +230,7 @@ QRegion KisPainter::dirtyRegion()
 }
 
 
-QRegion KisPainter::addDirtyRect(QRect r)
+QRegion KisPainter::addDirtyRect(const QRect & r)
 {
     Q_ASSERT(r.width() >= 0 || r.height() >= 0);
     if ( d->useBoundingDirtyRect ) {
@@ -269,7 +269,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     bitBlt(dx, dy, d->colorSpace->compositeOp(op), src, opacity, sx, sy, sw, sh);
 }
 
-void KisPainter::bitBlt(QPoint pos, const KisPaintDeviceSP src, QRect srcRect )
+void KisPainter::bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect )
 {
     bitBlt( pos.x(), pos.y(), d->compositeOp, src, d->opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
 }
@@ -389,7 +389,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     }
 }
 
-void KisPainter::bltSelection(QPoint pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, QRect srcRect )
+void KisPainter::bltSelection(const QPoint & pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, const QRect & srcRect )
 {
     bltSelection( pos.x(), pos.y(), d->compositeOp, src, selDev, d->opacity, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height() );
 }

@@ -99,7 +99,7 @@ void KisFilterFastColorTransfer::process(KisFilterConstProcessingInformation src
     dbgPlugins <<"Start transferring color";
     QVariant value;
     QString fileName;
-    if (config and config->getProperty("filename", value))
+    if (config && config->getProperty("filename", value))
     {
         fileName = value.toString();
     } else {
@@ -152,7 +152,7 @@ void KisFilterFastColorTransfer::process(KisFilterConstProcessingInformation src
     double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
     double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
     KisRectConstIteratorPixel srcLABIt = srcLAB->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection() );
-    while(not srcLABIt.isDone() and not(progressUpdater and progressUpdater->interrupted()))
+    while(!srcLABIt.isDone() && !(progressUpdater && progressUpdater->interrupted()))
     {
         const quint16* data = reinterpret_cast<const quint16*>(srcLABIt.oldRawData());
         quint32 L = data[0];
@@ -180,7 +180,7 @@ void KisFilterFastColorTransfer::process(KisFilterConstProcessingInformation src
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
     KisRectConstIteratorPixel refIt = ref->createRectConstIterator(0, 0, importedImage->width(), importedImage->height());
-    while(not refIt.isDone() and not(progressUpdater and progressUpdater->interrupted()))
+    while(!refIt.isDone() && !(progressUpdater && progressUpdater->interrupted()))
     {
         const quint16* data = reinterpret_cast<const quint16*>(refIt.oldRawData());
         quint32 L = data[0];
@@ -213,9 +213,9 @@ void KisFilterFastColorTransfer::process(KisFilterConstProcessingInformation src
         KisHLineConstIteratorPixel srcLABIt = srcLAB->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection() );
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection() );
         quint16 labPixel[4];
-        for(int y = 0; y < size.height() and not(progressUpdater and progressUpdater->interrupted()); ++y)
+        for(int y = 0; y < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++y)
         {
-            while( not dstIt.isDone() )
+            while( !dstIt.isDone() )
             {
                 const quint16* data = reinterpret_cast<const quint16*>(srcLABIt.oldRawData());
                 labPixel[0] = (quint16)CLAMP( ( (double)data[0] - meanL_src) * coefL + meanL_ref, 0., 65535.);

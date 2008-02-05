@@ -65,7 +65,7 @@ namespace KisMetaData {
             /**
              * Merge multiple entries in one.
              */
-            void mergeEntry(Store* dst, QList<const Store*> srcs, const Schema* schema, QString identifier) const;
-            Value election(QList<const Store*> srcs, QList<double> score, QString key ) const;
+            void mergeEntry(Store* dst, QList<const Store*> srcs, const Schema* schema, const QString & identifier) const;
+            Value election(QList<const Store*> srcs, QList<double> score, const QString & key ) const;
     };
 }

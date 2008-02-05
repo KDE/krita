@@ -222,7 +222,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
         virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
             const KoIccColorProfile* p = dynamic_cast<const KoIccColorProfile*>(profile);
-            return (p and p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
+            return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
         }
 
         virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * koprofile=0) const
@@ -468,7 +468,7 @@ class PIGMENTCMS_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, pr
         virtual bool profileIsCompatible(const KoColorProfile* profile) const
         {
             const KoIccColorProfile* p = dynamic_cast<const KoIccColorProfile*>(profile);
-            return (p and p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
+            return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
         }
         virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const;
         virtual bool isIcc() const { return true; }

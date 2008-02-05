@@ -18,8 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QComboBox>
-
 #include <klocale.h>
 #include <kis_debug.h>
 
@@ -27,7 +25,7 @@
 #include "kis_cmb_idlist.h"
 
 KisCmbIDList::KisCmbIDList(QWidget * parent, const char * name)
-    : QComboBox(parent)
+    : KComboBox(parent)
 {
     setObjectName(name);
     setEditable(false);
@@ -51,7 +49,7 @@ void KisCmbIDList::setIDList(const QList<KoID>  & list)
 
 KoID KisCmbIDList::currentItem() const
 {
-    qint32 i = QComboBox::currentIndex();
+    qint32 i = KComboBox::currentIndex();
     if (i > m_list.count() - 1) return KoID();
 
     return m_list[i];
@@ -62,12 +60,12 @@ void KisCmbIDList::setCurrent(const KoID id)
     qint32 index = m_list.indexOf(id);
 
     if (index >= 0) {
-        QComboBox::setCurrentIndex(index);
+        KComboBox::setCurrentIndex(index);
     }
     else {
         m_list.push_back(id);
         addItem(id.name());
-        QComboBox::setCurrentIndex(m_list.count() - 1);
+        KComboBox::setCurrentIndex(m_list.count() - 1);
     }
 }
 
@@ -75,7 +73,7 @@ void KisCmbIDList::setCurrent(const QString & s)
 {
     for (qint32 i = 0; i < m_list.count(); ++i) {
         if (m_list.at(i).id() == s) {
-            QComboBox::setCurrentIndex(i);
+            KComboBox::setCurrentIndex(i);
             break;
         }
     }

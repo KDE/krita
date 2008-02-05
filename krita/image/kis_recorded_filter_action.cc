@@ -124,7 +124,7 @@ KisRecordedAction* KisRecordedFilterActionFactory::fromXML(KisImageSP img, const
     {
         KisFilterConfiguration* config = filter->defaultConfiguration(layer->paintDevice());
         QDomElement paramsElt = elt.firstChildElement("Params");
-        if(config and not paramsElt.isNull())
+        if(config && !paramsElt.isNull())
         {
             config->fromXML(paramsElt);
         }

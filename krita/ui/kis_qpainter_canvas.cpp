@@ -276,7 +276,7 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
     return m_d->toolProxy;
 }
 
-void KisQPainterCanvas::documentOffsetMoved( QPoint pt )
+void KisQPainterCanvas::documentOffsetMoved( const QPoint & pt )
 {
     dbgRender << "KisQPainterCanvas::documentOffsetMoved " << pt;
     m_d->documentOffset = pt;

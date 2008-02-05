@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 1982 Donald H. House
- * Copyright (c) 1989 Robert Allen
+ * Copyright (c) 1982 Donald H. House <x@unknown.com>
+ * Copyright (c) 1989 Robert Allen <x@unknown.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

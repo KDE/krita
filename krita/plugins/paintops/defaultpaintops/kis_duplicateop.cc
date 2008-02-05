@@ -195,8 +195,8 @@ double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h
 
 void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
-    if (not painter()) return;
-    if (not m_duplicateStartIsSet)
+    if (!painter()) return;
+    if (!m_duplicateStartIsSet)
     {
         m_duplicateStartIsSet = true;
         m_duplicateStart = info.pos();
@@ -416,3 +416,4 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_srcdev, painter()->opacity(), sx, sy, sw, sh);
 }
+#include "kis_duplicateop.moc"

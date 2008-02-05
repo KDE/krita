@@ -28,6 +28,9 @@ class KoUpdater;
 
 class KisPerspectiveTransformWorker : public QObject
 {
+
+Q_OBJECT
+
     public:
         KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress);
     

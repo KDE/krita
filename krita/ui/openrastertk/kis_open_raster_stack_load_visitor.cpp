@@ -110,7 +110,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
             if(node.nodeName()== "stack")
             {
                 quint8 opacity = 255;
-                if( not subelem.attribute("opacity").isNull())
+                if( !subelem.attribute("opacity").isNull())
                 {
                     opacity = subelem.attribute("opacity").toInt();
                 }
@@ -120,10 +120,10 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
             } else if(node.nodeName()== "layer")
             {
                 QString filename = subelem.attribute("src");
-                if( not filename.isNull() )
+                if( !filename.isNull() )
                 {
                     quint8 opacity = 255;
-                    if( not subelem.attribute("opacity").isNull())
+                    if( !subelem.attribute("opacity").isNull())
                     {
                         opacity = subelem.attribute("opacity").toInt();
                     }
@@ -142,7 +142,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 QString filterType = subelem.attribute("type");
                 QStringList filterTypeSplit = filterType.split(":");
                 KisFilterSP f = 0;
-                if(filterTypeSplit[0] == "applications" and filterTypeSplit[1] == "krita")
+                if(filterTypeSplit[0] == "applications" && filterTypeSplit[1] == "krita")
                 {
                     f = KisFilterRegistry::instance()->value(filterTypeSplit[2]);
                 }

@@ -64,7 +64,7 @@ void KisMetaDataTest::testRationals()
         QCOMPARE( sr.denominator, -14);
         KisMetaData::SignedRational sr2(14, 10);
         QVERIFY( sr == sr);
-        QVERIFY( not(sr == sr2));
+        QVERIFY( !(sr == sr2));
     }
     {
         KisMetaData::UnsignedRational sr(10, 14);
@@ -72,7 +72,7 @@ void KisMetaDataTest::testRationals()
         QCOMPARE( sr.denominator, (unsigned int)14);
         KisMetaData::UnsignedRational sr2(14, 10);
         QVERIFY( sr == sr);
-        QVERIFY( not(sr == sr2));
+        QVERIFY( !(sr == sr2));
     }
 }
 
@@ -173,7 +173,7 @@ void KisMetaDataTest::testValueCopy()
     QVERIFY(schema); \
     QCOMPARE(schema->uri(), KisMetaData::Schema::uriStr); \
     QCOMPARE(schema, SchemaRegistry::instance()->schemaFromPrefix(schema->prefix()) ); \
-    QVERIFY( not SchemaRegistry::instance()->create("http://tartampion.com", schema->prefix())); \
+    QVERIFY( !SchemaRegistry::instance()->create("http://tartampion.com", schema->prefix())); \
     QCOMPARE(schema, SchemaRegistry::instance()->create(KisMetaData::Schema::uriStr, "tartampion")); \
     QCOMPARE(schema->prefix() + ":hello", schema->generateQualifiedName("hello")); \
 }
@@ -210,13 +210,13 @@ void KisMetaDataTest::testStore()
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
     Store s;
     Entry e(schema, "test", createIntegerValue());
-    QVERIFY(not s.containsEntry(schema, "test" ) );
+    QVERIFY(!s.containsEntry(schema, "test" ) );
     s.addEntry( e );
     QVERIFY(s.containsEntry(schema, "test" ) );
     QVERIFY(s.containsEntry(e.qualifiedName() ) );
     QVERIFY(s.containsEntry(KisMetaData::Schema::TIFFSchemaUri, "test" ) );
     s.removeEntry(schema, "test");
-    QVERIFY(not s.containsEntry(schema, "test" ) );
+    QVERIFY(!s.containsEntry(schema, "test" ) );
 }
 
 void KisMetaDataTest::testFilters()
@@ -240,15 +240,15 @@ void KisMetaDataTest::testFilters()
         QList<const KisMetaData::Filter*> filters;
         filters << filter;
         s.applyFilters( filters );
-        QVERIFY(not s.containsEntry( dcSchema, "contributor") );
-        QVERIFY(not s.containsEntry( dcSchema, "creator") );
-        QVERIFY(not s.containsEntry( dcSchema, "publisher") );
-        QVERIFY(not s.containsEntry( dcSchema, "rights") );
-        QVERIFY(not s.containsEntry( psSchema, "AuthorsPosition") );
-        QVERIFY(not s.containsEntry( psSchema, "CaptionWriter") );
-        QVERIFY(not s.containsEntry( psSchema, "Credit") );
-        QVERIFY(not s.containsEntry( psSchema, "City") );
-        QVERIFY(not s.containsEntry( psSchema, "Country") );
+        QVERIFY(!s.containsEntry( dcSchema, "contributor") );
+        QVERIFY(!s.containsEntry( dcSchema, "creator") );
+        QVERIFY(!s.containsEntry( dcSchema, "publisher") );
+        QVERIFY(!s.containsEntry( dcSchema, "rights") );
+        QVERIFY(!s.containsEntry( psSchema, "AuthorsPosition") );
+        QVERIFY(!s.containsEntry( psSchema, "CaptionWriter") );
+        QVERIFY(!s.containsEntry( psSchema, "Credit") );
+        QVERIFY(!s.containsEntry( psSchema, "City") );
+        QVERIFY(!s.containsEntry( psSchema, "Country") );
     }
 }
 

@@ -50,6 +50,6 @@ void KisLabelCursorPos::enter()
 void KisLabelCursorPos::leave()
 {
     m_doUpdates = false;
-    setText(QString::null);
+    setText(QString());
 }
 

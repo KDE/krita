@@ -99,7 +99,7 @@ public: // KisAbstractCanvasWidget
 
     KoToolProxy * toolProxy();
 
-    void documentOffsetMoved( QPoint );
+    void documentOffsetMoved( const QPoint & );
 
 private:
 

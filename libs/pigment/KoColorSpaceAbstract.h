@@ -214,26 +214,28 @@ public:
             typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
 
             bool allChannels = channelFlags.isEmpty();
-            Q_ASSERT( allChannels or channelFlags.size() == (int)_CSTraits::channels_nb );
+            Q_ASSERT( allChannels || channelFlags.size() == (int)_CSTraits::channels_nb );
             if(totalWeightTransparent == 0)
             {
-                for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                for (uint i = 0; i < _CSTraits::channels_nb; i++)
                 {
                     compositetype v = totals[i] / factor + offset;
-                    if( (allChannels and i != _CSTraits::alpha_pos ) or (not allChannels and channelFlags.testBit( i ) ) )
+                    if (   (allChannels && i != _CSTraits::alpha_pos ) 
+                        || (!allChannels && channelFlags.testBit( i ) ) )
                     {
                         dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
                                                     KoColorSpaceMathsTraits<channels_type>::max );
                     }
                 }
-            } else if(totalWeightTransparent != totalWeight ) {
+            }
+            else if (totalWeightTransparent != totalWeight ) {
                 if(totalWeight == factor)
                 {
                     Q_INT64 a = ( totalWeight - totalWeightTransparent );
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
                         compositetype v = totals[i] / a + offset;
-                        if( allChannels or channelFlags.testBit( i ) )
+                        if( allChannels || channelFlags.testBit( i ) )
                         {
                             dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
                                                         KoColorSpaceMathsTraits<channels_type>::max );
@@ -244,7 +246,7 @@ public:
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
                         compositetype v = (compositetype)( totals[i] * a + offset );
-                        if( allChannels or channelFlags.testBit( i ) )
+                        if( allChannels || channelFlags.testBit( i ) )
                         {
                             dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
                                                      KoColorSpaceMathsTraits<channels_type>::max );

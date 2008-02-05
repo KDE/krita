@@ -13,23 +13,12 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( together )
 add_subdirectory( scripting ) # TODO: port it to the change of KisFilter
-add_subdirectory( bracketing2hdr )
-add_subdirectory( metadataeditor )
 add_subdirectory( bigbrother )
-add_subdirectory( tonemapping )
 add_subdirectory( trianglecolorselector )
 add_subdirectory( specificcolorselector )
 add_subdirectory( smallcolorselector )
 
 find_package(GMM)
-
-macro_log_feature(EIGEN_FOUND "Eigen" "The Krita panorama plugin will not be built" "http://eigen.tuxfamily.org" FALSE "")
-macro_log_feature(GMM_FOUND "GMM" "The Krita panorama plugin will not be built" "Available from kdesupport" FALSE "")
-
-# current gmm version in kdesupport does not work with msvc
-if(EIGEN_FOUND AND GMM_FOUND AND NOT MSVC)
-    add_subdirectory( panorama )
-endif(EIGEN_FOUND AND GMM_FOUND AND NOT MSVC)
 
 macro_optional_find_package(GLUT)
 

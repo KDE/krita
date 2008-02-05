@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritatonemapping" version="1">
-<MenuBar>
-    <Menu name="Layer"><text>&amp;Layer</text>
-		<Action name="tonemapping"/>
-    </Menu>
-</MenuBar>
-</kpartgui>

@@ -1,0 +1,102 @@
+<ui version="4.0" >
+ <class>DynamicBrushOptions</class>
+ <widget class="QWidget" name="DynamicBrushOptions" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>679</width>
+    <height>61</height>
+   </rect>
+  </property>
+  <layout class="QHBoxLayout" >
+   <item>
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Shape:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBoxShapes" >
+     <item>
+      <property name="text" >
+       <string>Brush</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Bristles</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Program:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBoxShapePrograms" />
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>Coloring:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBoxColoring" >
+     <item>
+      <property name="text" >
+       <string>Plain</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Gradient</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Uniform random</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Total random</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_4" >
+     <property name="text" >
+      <string>Program:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBoxColoringPrograms" />
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>51</width>
+       <height>43</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

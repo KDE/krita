@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritapanorama" version="1">
+<MenuBar>
+  <Menu name="Layer"><text>&amp;Layer</text>
+    <Menu name="LayerNew"><text>New</text>
+      <Action name="PanoramaLayer"/>
+    </Menu>
+  </Menu>
+</MenuBar>
+</kpartgui>

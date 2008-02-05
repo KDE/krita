@@ -83,6 +83,8 @@ public:
     void inputMethodEvent(QInputMethodEvent *event);
     /// Forwarded to the current KoTool
     QList<QAction*> popupActionList() const;
+    ///
+    void deleteSelection();
 
     /**
      * Retrieves the entire collection of actions for the active tool

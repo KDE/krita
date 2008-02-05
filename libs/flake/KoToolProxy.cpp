@@ -315,4 +315,9 @@ QList<QAction*> KoToolProxy::popupActionList() const {
     return QList<QAction*>();
 }
 
+void KoToolProxy::deleteSelection() {
+    if (d->activeTool)
+        return d->activeTool->deleteSelection();
+}
+
 #include <KoToolProxy.moc>

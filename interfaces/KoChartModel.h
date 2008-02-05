@@ -20,6 +20,8 @@
 #ifndef KO_CHART_MODEL
 #define KO_CHART_MODEL
 
+#include <QAbstractTableModel>
+
 namespace KoChart {
 
 /**

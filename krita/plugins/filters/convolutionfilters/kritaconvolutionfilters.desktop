@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=Convolution Filters
 Name[bg]=Изкривяващи филтри
-Name[ca]=Filtres de Convolotion
+Name[ca]=Filtres de convolució
 Name[cy]=Hidlau cordeddiadau
 Name[da]=Foldningsfilter
 Name[de]=Faltungsfilter
@@ -37,7 +37,7 @@ Name[uk]=Фільтри згортки
 Name[zh_TW]=皺褶過濾器
 Comment=Convolution filters
 Comment[bg]=Изкривяващи филтри
-Comment[ca]=Filtres de Convolution
+Comment[ca]=Filtres de convolució
 Comment[cy]=Hidlau cordeddiadau
 Comment[da]=Foldningsfilter
 Comment[de]=Faltungsfilter

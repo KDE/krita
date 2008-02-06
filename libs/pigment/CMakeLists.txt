@@ -71,6 +71,7 @@ install( FILES
          KoColorModelStandardIds.h
          KoColorProfile.h
          KoColorSpace.h
+         KoColorSpaceAbstract.h
          KoColorSpaceConstants.h
          KoColorSpaceMaths.h
          KoColorSpaceRegistry.h
@@ -79,7 +80,9 @@ install( FILES
          KoColorTransformationFactory.h
          KoColorTransformationFactoryRegistry.h
          KoCompositeOp.h
+         KoFallBackColorTransformation.h
          KoIntegerMaths.h
+         KoLabDarkenColorTransformation.h
          KoHistogramProducer.h
          DESTINATION ${INCLUDE_INSTALL_DIR})
 

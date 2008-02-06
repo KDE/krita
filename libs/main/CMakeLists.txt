@@ -118,6 +118,7 @@ install( FILES
     KoGlobal.h
     KoID.h
     KoGenericRegistry.h
+    KoGenericRegistryModel.h
     KoGridData.h
     KoGuidesData.h
     KoDocument.h 

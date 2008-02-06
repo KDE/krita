@@ -231,7 +231,7 @@ public:
             else if (totalWeightTransparent != totalWeight ) {
                 if(totalWeight == factor)
                 {
-                    Q_INT64 a = ( totalWeight - totalWeightTransparent );
+                    qint64 a = ( totalWeight - totalWeightTransparent );
                     for(uint i = 0; i < _CSTraits::channels_nb; i++)
                     {
                         compositetype v = totals[i] / a + offset;

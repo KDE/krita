@@ -71,6 +71,7 @@ install( FILES
          KoColorModelStandardIds.h
          KoColorProfile.h
          KoColorSpace.h
+         KoColorSpaceConstants.h
          KoColorSpaceRegistry.h
          KoColorTransformation.h
          KoColorTransformationFactory.h

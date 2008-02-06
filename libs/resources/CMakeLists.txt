@@ -21,3 +21,16 @@ target_link_libraries(koresources  ${KDE4_KDECORE_LIBS} pigmentcms)
 set_target_properties(koresources PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koresources  DESTINATION ${LIB_INSTALL_DIR})
 
+install( FILES 
+         koresource_export.h
+         KoAbstractGradient.h
+         KoColorSet.h
+         KoPattern.h
+         KoResource.h
+         KoResourceServer.h
+         KoResourceServerObserver.h
+         KoResourceServerProvider.h
+         KoSegmentGradient.h
+         KoStopGradient.h
+         DESTINATION ${INCLUDE_INSTALL_DIR})
+

@@ -25,13 +25,8 @@
 #include <krita_export.h>
 #include <kis_global.h>
 
-#include "config-tiles.h" // For the next define
-#ifdef USE_OLD_TILESYSTEM
-#include "tiles/kis_tiled_random_accessor.h"
-#else
-#include "tiles_new/kis_tiled_random_accessor.h"
-#endif
-
+class KisDataManager;
+class KisTiledRandomAccessor;
 typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
 
 /**

@@ -20,6 +20,15 @@
 
 #include "kis_random_accessor.h"
 
+#include "config-tiles.h" // For the next define
+#ifdef USE_OLD_TILESYSTEM
+#include "tiles/kis_tiled_random_accessor.h"
+#else
+#include "tiles_new/kis_tiled_random_accessor.h"
+#endif
+
+typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
+
 KisRandomConstAccessor::KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable) : m_offsetx(offsetx), m_offsety(offsety)
 {
     m_accessor = new KisTiledRandomAccessor(ktm, x, y, writable);

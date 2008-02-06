@@ -184,6 +184,17 @@ public:
     virtual void clear();
 
     /**
+     * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
+     * caller still owns the pointer.
+     */
+    void setDefaultPixel(const quint8 *defPixel);
+
+    /**
+     * Get a pointer to the default pixel.
+     */
+    const quint8 *defaultPixel() const;
+
+    /**
      * Clear the given rectangle to transparent black. This does not take the selection
      * into account.
      */

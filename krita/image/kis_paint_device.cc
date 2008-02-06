@@ -303,6 +303,16 @@ void KisPaintDevice::crop(const QRect & r)
     m_datamanager->setExtent(rc);
 }
 
+void KisPaintDevice::setDefaultPixel(const quint8 *defPixel)
+{
+  m_datamanager->setDefaultPixel( defPixel );
+}
+
+const quint8 *KisPaintDevice::defaultPixel() const
+{
+    return m_datamanager->defaultPixel();
+}
+
 void KisPaintDevice::clear()
 {
     m_datamanager->clear();

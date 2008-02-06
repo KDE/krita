@@ -62,6 +62,7 @@ set_target_properties(pigmentcms PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install(TARGETS pigmentcms  DESTINATION ${LIB_INSTALL_DIR})
 
 install( FILES 
+         pigment_export.h
          KoBasicHistogramProducers.h
          KoChannelInfo.h
          KoColor.h
@@ -71,6 +72,7 @@ install( FILES
          KoColorProfile.h
          KoColorSpace.h
          KoColorSpaceRegistry.h
+         KoColorTransformation.h
          KoColorTransformationFactory.h
          KoColorTransformationFactoryRegistry.h
          KoCompositeOp.h

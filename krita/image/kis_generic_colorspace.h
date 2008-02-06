@@ -58,7 +58,7 @@ class KisGenericColorSpace : public KoColorSpace {
 
                 while (nColors--)
                 {
-                    Q_INT32 weight = *kernelValues;
+                    qint32 weight = *kernelValues;
 
                     if (weight != 0) {
                         for(uint i = 0; i < _nbchannels; i++)

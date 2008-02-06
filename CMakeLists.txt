@@ -181,3 +181,7 @@ message( STATUS "Re-add koshell when ported")
 MACRO_DISPLAY_FEATURE_LOG()
 
 ADD_CUSTOM_TARGET(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+install( FILES
+         ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h
+         DESTINATION ${INCLUDE_INSTALL_DIR})

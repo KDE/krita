@@ -143,3 +143,12 @@ set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SO
 install(TARGETS flake  DESTINATION ${LIB_INSTALL_DIR})
 install( FILES flake.desktop flaketool.desktop flakeshape.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
+install(
+    FILES
+    flake_export.h
+    KoInputDevice.h
+    KoToolManager.h
+    KoCanvasObserver.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}
+)

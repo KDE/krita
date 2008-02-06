@@ -94,18 +94,19 @@ install(
     KoPartSelectAction.h
     KoPartSelectDia.h
     KoRuler.h
+    KoShapePainter.h
     KoTabBar.h
     KoTabulator.h
     KoTemplateCreateDia.h
+    KoToolBox.h
+    KoToolBoxFactory.h
+    KoToolDocker.h
+    KoToolDockerFactory.h
     KoUnitDoubleSpinBox.h
     KoZoomAction.h
     KoZoomController.h
     KoZoomHandler.h
     KoZoomMode.h
-    KoToolBoxFactory.h
-    KoToolDocker.h
-    KoToolDockerFactory.h
-    KoShapePainter.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 )

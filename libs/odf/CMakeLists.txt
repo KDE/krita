@@ -34,6 +34,7 @@ install(TARGETS koodf DESTINATION ${LIB_INSTALL_DIR} )
 
 
 install( FILES
+    koodf_export.h
     KoOdf.h
     KoXmlNS.h
     KoDom.h

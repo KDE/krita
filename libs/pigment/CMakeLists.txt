@@ -72,11 +72,14 @@ install( FILES
          KoColorProfile.h
          KoColorSpace.h
          KoColorSpaceConstants.h
+         KoColorSpaceMaths.h
          KoColorSpaceRegistry.h
+         KoColorSpaceTraits.h
          KoColorTransformation.h
          KoColorTransformationFactory.h
          KoColorTransformationFactoryRegistry.h
          KoCompositeOp.h
+         KoIntegerMaths.h
          KoHistogramProducer.h
          DESTINATION ${INCLUDE_INSTALL_DIR})
 

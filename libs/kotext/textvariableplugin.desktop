@@ -4,6 +4,7 @@ Name=Text Variable Plugin
 Name[it]=Plugin per le variabili di testo
 Name[pt]='Plugin' de Variáveis de Texto
 Name[pt_BR]='Plugin' de Variáveis de Texto
+Name[tr]=Metin Değişkeni Eklentisi
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-Variable
 Comment=A plugin that contains text variables

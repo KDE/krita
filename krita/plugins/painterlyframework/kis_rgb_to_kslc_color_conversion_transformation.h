@@ -103,7 +103,7 @@ class KisRGBToKSLCColorConversionTransformationFactory : public KoColorConversio
 public:
     KisRGBToKSLCColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(),
-                                             "KSLC"+QString::number(_N_), KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id()) {}
+                                             QString("KSLC%1").arg(_N_), KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id()) {}
 
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                const KoColorSpace* dstColorSpace,

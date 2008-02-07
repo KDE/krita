@@ -107,12 +107,12 @@ void KisIlluminantProfileTest::testLoading()
     delete p2;
 
     p1 = new KisIlluminantProfile(d9low);
-    QVERIFY(p2->valid() == true);
-    QVERIFY(p2->wavelengths() == 9);
-    QCOMPARE(p2->Kblack(), 4.3);
-    QCOMPARE(p2->Sblack(), 0.14);
-    gsl_print(p2->T(), "Transformation matrix: ");
-    gsl_print(p2->P(), "Positions vector: ");
+    QVERIFY(p1->valid() == true);
+    QVERIFY(p1->wavelengths() == 9);
+    QCOMPARE(p1->Kblack(), 4.3);
+    QCOMPARE(p1->Sblack(), 0.14);
+    gsl_print(p1->T(), "Transformation matrix: ");
+    gsl_print(p1->P(), "Positions vector: ");
 
     delete p1;
 }

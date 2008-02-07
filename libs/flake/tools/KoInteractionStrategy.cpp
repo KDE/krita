@@ -55,9 +55,21 @@ void KoInteractionStrategy::applyGrid(QPointF &point) {
     double gridX, gridY;
     m_canvas->gridSize(&gridX, &gridY);
 
-    // This is a problem when calling applyGrid twice, we get 1 less than the time before.
-    point.setX( static_cast<int>( point.x() / gridX + 1e-10 ) * gridX );
-    point.setY( static_cast<int>( point.y() / gridY + 1e-10 ) * gridY );
+    // we want to snap to the nearest grid point, so calculate
+    // the grid rows/columns before and after the points position
+    int col = static_cast<int>( point.x() / gridX + 1e-10 );
+    int nextCol = col+1;
+    int row = static_cast<int>( point.y() / gridY + 1e-10 );
+    int nextRow = row + 1;
+
+    // now check which grid line has less distance to the point
+    if( qAbs( col * gridX - point.x() ) > qAbs( nextCol * gridX - point.x() ) )
+        col = nextCol;
+    if( qAbs( row * gridY - point.y() ) > qAbs( nextRow * gridY - point.y() ) )
+        row = nextRow;
+
+    point.setX( col * gridX );
+    point.setY( row * gridY );
 }
 
 QPointF KoInteractionStrategy::snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers ) {

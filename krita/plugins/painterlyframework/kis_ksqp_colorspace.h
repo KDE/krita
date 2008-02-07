@@ -57,8 +57,8 @@ class KisKSQPColorSpace : public KisKSColorSpace< _TYPE_,_N_ >
 
         static KoID ColorModelId()
         {
-            QString name = i18n("Painterly Color Space QP, precision %1", _N_);
-            return KoID(QString("KSQP") + _N_, name);
+            QString name = i18n("Painterly Color Space QP, precision %1", QString::number(_N_));
+            return KoID(QString("KSQP%1").arg(_N_), name);
         }
 
 };

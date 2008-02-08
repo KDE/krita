@@ -130,7 +130,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         {
             m_canvas->updateCanvas( m_snapGuide->boundingRect() );
 
-            m_activePoint->setPoint( m_snapGuide->snap( event->point ) );
+            m_activePoint->setPoint( m_snapGuide->snap( event->point, event->modifiers() ) );
             m_activePoint->setProperty(KoPathPoint::CanHaveControlPoint2);
 
             m_canvas->updateCanvas( m_shape->boundingRect() );
@@ -144,7 +144,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         // TODO take properties from the resource provider
         m_shape->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-        m_activePoint = m_shape->moveTo( m_snapGuide->snap( event->point ) );
+        m_activePoint = m_shape->moveTo( m_snapGuide->snap( event->point, event->modifiers() ) );
         m_firstPoint = m_activePoint;
         m_canvas->updateCanvas( m_shape->boundingRect() );
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
@@ -171,7 +171,7 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     if ( ! m_shape )
     {
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-        m_snapGuide->snap( event->point );
+        m_snapGuide->snap( event->point, event->modifiers() );
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
 
         m_mouseOverFirstPoint = false;
@@ -195,7 +195,7 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     else
     {
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-        m_activePoint->setPoint( m_snapGuide->snap( event->point ) );
+        m_activePoint->setPoint( m_snapGuide->snap( event->point, event->modifiers() ) );
         m_canvas->updateCanvas( m_shape->boundingRect() );
         m_canvas->updateCanvas( m_snapGuide->boundingRect() );
     }

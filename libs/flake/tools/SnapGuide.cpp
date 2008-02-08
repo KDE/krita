@@ -85,16 +85,16 @@ int SnapGuide::snapDistance() const
     return m_snapDistance;
 }
 
-QPointF SnapGuide::snap( const QPointF &mousePosition )
+QPointF SnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers modifiers )
 {
-    if( ! m_active )
+    m_currentStrategy = 0;
+
+    if( ! m_active || (modifiers & Qt::ShiftModifier) )
         return mousePosition;
 
     SnapProxy proxy( this );
 
     double minDistance = HUGE_VAL;
-
-    m_currentStrategy = 0;
 
     double maxSnapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( m_snapDistance, m_snapDistance ) ).width();
     foreach( SnapStrategy * strategy, m_strategies )

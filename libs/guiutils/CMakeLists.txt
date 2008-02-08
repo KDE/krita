@@ -96,7 +96,7 @@ install(
     KoRuler.h
     KoShapePainter.h
     KoTabBar.h
-    KoTabulator.h
+#    KoTabulator.h
     KoTemplateCreateDia.h
     KoToolBox.h
     KoToolBoxFactory.h

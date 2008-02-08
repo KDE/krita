@@ -41,7 +41,7 @@
 
 #define DefaultFormat KoStore::Zip
 
-const int KoStore::s_area = s_area;
+const int KoStore::s_area = 30002;
 
 KoStore::Backend KoStore::determineBackend( QIODevice* dev )
 {

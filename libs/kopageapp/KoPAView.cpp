@@ -271,18 +271,7 @@ void KoPAView::editPaste()
 
 void KoPAView::editDeleteSelection()
 {
-    KoSelection* selection = kopaCanvas()->shapeManager()->selection();
-    if( !selection )
-        return;
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes();
-    if( selectedShapes.count() < 1)
-        return;
-    selection->deselectAll();
-
-    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( kopaDocument(), selectedShapes );
-    kopaCanvas()->addCommand( cmd );
-    kopaCanvas()->update();
+    m_canvas->toolProxy()->deleteSelection();
 }
 
 void KoPAView::editSelectAll()

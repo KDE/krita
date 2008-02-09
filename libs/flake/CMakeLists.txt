@@ -127,7 +127,7 @@ set(flake_SRCS
 kde4_add_ui_files(flake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
-    tools/SnapGuideConfigWidget.ui
+    SnapGuideConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 

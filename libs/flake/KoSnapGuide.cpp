@@ -33,8 +33,9 @@
 
 KoSnapGuide::KoSnapGuide( KoCanvasBase * canvas )
     : m_canvas(canvas), m_editedShape(0), m_currentStrategy(0)
-    , m_active(true), m_snapDistance(10)
+    , m_usedStrategies(0), m_active(true), m_snapDistance(10)
 {
+    m_strategies.append( new GridSnapStrategy() );
     m_strategies.append( new NodeSnapStrategy() );
     m_strategies.append( new OrthogonalSnapStrategy() );
     m_strategies.append( new ExtensionSnapStrategy() );
@@ -97,9 +98,10 @@ QPointF KoSnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers m
     double minDistance = HUGE_VAL;
 
     double maxSnapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( m_snapDistance, m_snapDistance ) ).width();
+
     foreach( KoSnapStrategy * strategy, m_strategies )
     {
-        if( m_usedStrategies & strategy->type() )
+        if( m_usedStrategies & strategy->type() || strategy->type() == KoSnapStrategy::Grid )
         {
             if( ! strategy->snapToPoints( mousePosition, &proxy, maxSnapDistance ) )
                 continue;
@@ -235,4 +237,9 @@ QList<KoShape*> KoSnapProxy::shapes( bool omitEditedShape )
     if( ! omitEditedShape && m_snapGuide->editedShape() )
         shapes.append( m_snapGuide->editedShape() );
     return shapes;
+}
+
+KoCanvasBase * KoSnapProxy::canvas()
+{
+    return m_snapGuide->canvas();
 }

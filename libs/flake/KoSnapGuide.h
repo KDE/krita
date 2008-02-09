@@ -115,6 +115,9 @@ public:
     /// returns list of all shapes
     QList<KoShape*> shapes( bool omitEditedShape = false );
 
+    /// returns canvas we are working on
+    KoCanvasBase * canvas();
+
 private:
     KoSnapGuide * m_snapGuide;
 };

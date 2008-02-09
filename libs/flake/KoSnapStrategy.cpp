@@ -20,6 +20,8 @@
 #include "KoSnapStrategy.h"
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
+#include <KoCanvasBase.h>
+
 //#include <kdebug.h>
 #include <math.h>
 
@@ -366,4 +368,65 @@ bool IntersectionSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSna
     setSnappedPosition( snappedPoint );
 
     return (minDistance < HUGE_VAL);
+}
+
+GridSnapStrategy::GridSnapStrategy()
+    : KoSnapStrategy( KoSnapStrategy::Grid )
+{
+}
+
+bool GridSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+{
+    if( ! proxy->canvas()->snapToGrid() )
+        return false;
+
+    // The 1e-10 here is a workaround for some weird division problem.
+    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
+    // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
+    double gridX, gridY;
+    proxy->canvas()->gridSize(&gridX, &gridY);
+
+    // we want to snap to the nearest grid point, so calculate
+    // the grid rows/columns before and after the points position
+    int col = static_cast<int>( mousePosition.x() / gridX + 1e-10 );
+    int nextCol = col+1;
+    int row = static_cast<int>( mousePosition.y() / gridY + 1e-10 );
+    int nextRow = row + 1;
+
+    // now check which grid line has less distance to the point
+    qreal distToCol = qAbs( col * gridX - mousePosition.x() );
+    qreal distToNextCol = qAbs( nextCol * gridX - mousePosition.x() );
+    if( distToCol > distToNextCol )
+    {
+        col = nextCol;
+        distToCol = distToNextCol;
+    }
+
+    qreal distToRow = qAbs( row * gridY - mousePosition.y() );
+    qreal distToNextRow = qAbs( nextRow * gridY - mousePosition.y() );
+    if( distToRow > distToNextRow )
+    {
+        row = nextRow;
+        distToRow = distToNextRow;
+    }
+
+    QPointF snappedPoint = mousePosition;
+    QPainterPath decoration;
+
+    qreal distance = distToCol*distToCol+distToRow*distToRow;
+    qreal maxDistance = maxSnapDistance*maxSnapDistance;
+    // now check if we are inside the snap distance
+    if( distance < maxDistance )
+    {
+        snappedPoint = QPointF( col * gridX, row * gridY );
+        decoration.moveTo( snappedPoint-QPointF(10,0) );
+        decoration.lineTo( snappedPoint+QPointF(10,0) );
+        decoration.moveTo( snappedPoint-QPointF(0,10) );
+        decoration.lineTo( snappedPoint+QPointF(0,10) );
+    }
+
+    setDecoration( decoration );
+    setSnappedPosition( snappedPoint );
+
+    return (distance<maxDistance);
 }

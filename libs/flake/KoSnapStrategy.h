@@ -35,7 +35,8 @@ public:
         Orthogonal = 1,
         Node = 2,
         Extension = 4,
-        Intersection = 8
+        Intersection = 8,
+        Grid = 16
     };
 
     KoSnapStrategy( SnapType type );
@@ -67,6 +68,7 @@ private:
     QPointF m_snappedPosition;
 };
 
+/// snaps to x- or y-coordinates of path points
 class OrthogonalSnapStrategy : public KoSnapStrategy
 {
 public:
@@ -74,6 +76,7 @@ public:
     virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
 
+/// snaps to path points
 class NodeSnapStrategy : public KoSnapStrategy
 {
 public:
@@ -81,6 +84,7 @@ public:
     virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
 
+/// snaps extension lines of path shapes
 class ExtensionSnapStrategy : public KoSnapStrategy
 {
 public:
@@ -92,10 +96,20 @@ private:
     bool snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix );
 };
 
+/// snaps to intersections of shapes
 class IntersectionSnapStrategy : public KoSnapStrategy
 {
 public:
     IntersectionSnapStrategy();
     virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
+
+/// snaps to the canvas grid
+class GridSnapStrategy : public KoSnapStrategy
+{
+public:
+    GridSnapStrategy();
+    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+};
+
 #endif // KOSNAPSTRATEGY_H

@@ -40,9 +40,8 @@ KoPathPointMoveStrategy::~KoPathPointMoveStrategy()
 
 void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
-    QPointF newPosition = snapToGrid( mouseLocation, modifiers );
     m_tool->canvas()->updateCanvas( m_tool->snapGuide()->boundingRect() );
-    newPosition = m_tool->snapGuide()->snap( mouseLocation, modifiers );
+    QPointF newPosition = m_tool->snapGuide()->snap( mouseLocation, modifiers );
     m_tool->canvas()->updateCanvas( m_tool->snapGuide()->boundingRect() );
     QPointF move = newPosition - m_originalPosition;
 

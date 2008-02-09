@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -629,6 +630,14 @@ void TextTool::copy() const {
 kDebug() <<"output:" << QString::fromUtf8(bytes);
 }
 
+void TextTool::deleteSelection()
+{
+    if ( !m_selectionHandler.deleteInlineObjects( false ) || m_caret.hasSelection() ) {
+        m_caret.deleteChar();
+    }
+    editingPluginEvents();
+}
+
 bool TextTool::paste() {
     const QMimeData *data = QApplication::clipboard()->mimeData();
 
@@ -744,6 +753,8 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     else if(event->key() == Qt::Key_Delete) {
         if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
             m_caret.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        // the event only gets through when the Del is not used in the app
+        // if the app forwards Del then deleteSelection is used
         if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection())
             m_caret.deleteChar();
         editingPluginEvents();

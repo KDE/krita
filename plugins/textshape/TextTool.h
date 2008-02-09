@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -75,6 +76,8 @@ public:
     virtual void deactivate();
     /// reimplemented from superclass
     virtual void copy() const;
+    ///reimplemented
+    virtual void deleteSelection();
     /// reimplemented from superclass
     virtual bool paste();
     /// reimplemented from superclass

@@ -87,5 +87,5 @@ void Scan::slotShowImage(const QImage &img)
     if(!view)
 	return;
 
-    emit view->embeddImage(temp.fileName());
+    emit view->embedImage(temp.fileName());
 }

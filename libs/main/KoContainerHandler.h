@@ -116,7 +116,7 @@ public:
     KoContainerHandler( KoView* view, QWidget* widget );
     ~KoContainerHandler();
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted if the user wants to open the popup menu for some
      * child object.

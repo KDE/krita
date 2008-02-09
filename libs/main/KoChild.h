@@ -263,7 +263,7 @@ public:
    */
   virtual Gadget gadgetHitTest( const QPoint& p );
 
-signals:
+Q_SIGNALS:
 
   /**
    * Emitted every time this child changes, but only if this child is not

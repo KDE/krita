@@ -2050,7 +2050,10 @@ bool KoDocument::addVersion( const QString& comment )
     // Tell KoStore not to touch the file names
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore( store );
+
     KoXmlWriter* manifestWriter = odfStore.manifestWriter( mimeType );
+    Q_UNUSED(manifestWriter); // XXX why?
+    
     KoEmbeddedDocumentSaver embeddedSaver;
     SavingContext documentContext( odfStore, embeddedSaver );
 

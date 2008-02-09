@@ -377,7 +377,7 @@ public:
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions();
 
-public slots:
+public Q_SLOTS:
     /**
      * Slot to create a new view around the contained @ref #koDocument.
      */
@@ -438,7 +438,7 @@ protected:
   */
   QString newObjectName();
 
-signals:
+Q_SIGNALS:
   void activated( bool active );
   void selected( bool select );
 
@@ -464,12 +464,12 @@ signals:
     * the embedding of an image into the current
     * document. Used e.g. by the scan-plugin
   */
-  void embeddImage(const QString &filename);
+  void embedImage(const QString &filename);
 
 #undef signals
 #define signals protected
 
-protected slots:
+protected Q_SLOTS:
   virtual void slotChildActivated( bool a );
   virtual void slotChildChanged( KoDocumentChild *child );
   virtual void slotAutoScroll( );

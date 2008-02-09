@@ -139,7 +139,7 @@ public:
      */
     bool getBatchMode ( void ) const;
 
-signals:
+Q_SIGNALS:
     void sigProgress( int );
 
 private:

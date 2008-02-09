@@ -33,6 +33,7 @@ TestColorConversionSystem::TestColorConversionSystem()
     {
         foreach( KoID depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces))
         {
+                
             listModels.append( pStrStr( modelId.id(), depthId.id() ) );
         }
     }
@@ -56,6 +57,16 @@ void TestColorConversionSystem::testGoodConnections()
     {
         foreach( pStrStr dstCS, listModels)
         {
+        
+            if (   srcCS.first.startsWith("KSQP")
+                || srcCS.first.startsWith("KSLC")
+                || dstCS.first.startsWith("KSQP")
+                || dstCS.first.startsWith("KSLC")
+                )
+            {
+                continue; // We don't test these, since they cannot be converted without loss.
+            }
+            
             QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.first, srcCS.second , dstCS.first, dstCS.second) , QString("No good path between %1 / %2 and %3 / %4").arg(srcCS.first).arg(srcCS.second).arg(dstCS.first).arg(dstCS.second).latin1() );
         }
     }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2007, 2008 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,7 +48,7 @@ QString BgSpellCheck::fetchMoreText()
     int position = m_cursor.selectionStart();
 
     // checking should end here
-    if (position >= m_endPosition && m_endPosition > 0) return QString();
+    if (position >= m_endPosition) return QString();
 
     // check whether we can move to next word (moveNextWord)
     // and whether we are keep selecting the same word again and again (samePosition)

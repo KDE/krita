@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2007, 2008 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -63,7 +63,6 @@ void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 
     QTextCursor cursor(document);
     selectWord(cursor, cursorPosition);
-    highlightMisspelled(cursor.selectedText(), cursor.anchor(), false);
     m_bgSpellCheck->start(m_document, cursor.anchor(), cursor.position());
 }
 

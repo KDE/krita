@@ -98,7 +98,7 @@ protected:
     virtual void preparePage(int pageNumber);
 
     /**
-     * This is a similar method to preparePage(), but is guarenteed to be called in the Ui thread.
+     * This is a similar method to preparePage(), but is guaranteed to be called in the Ui thread.
      * @param pageNumber the number of the page to prepare.
      * @see isStopped()
      */

@@ -109,7 +109,7 @@ public:
     /// returns list of shape in given rectangle in document coordinates
     QList<KoShape*> shapesInRect( const QRectF &rect, bool omitEditedShape = false );
 
-    /// returns list Guideof points from given shape
+    /// returns list of points from given shape
     QList<QPointF> pointsFromShape( KoShape * shape );
 
     /// returns list of all shapes

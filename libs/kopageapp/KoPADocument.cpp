@@ -48,6 +48,8 @@
 #include "KoPALoadingContext.h"
 
 #include <kdebug.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include <typeinfo>
 
@@ -58,6 +60,7 @@ public:
     QList<KoPAPageBase*> masterPages;
     KoInlineTextObjectManager *inlineTextObjectManager;
     KoStyleManager *styleManager;
+    bool rulersVisible;
 };
 
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
@@ -66,10 +69,13 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
 {
     d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
     d->styleManager = new KoStyleManager(this);
+
+    loadConfig();
 }
 
 KoPADocument::~KoPADocument()
 {
+    saveConfig();
     qDeleteAll( d->pages );
     qDeleteAll( d->masterPages );
     delete d;
@@ -455,6 +461,88 @@ KoPAMasterPage * KoPADocument::newMasterPage()
 /// return the inlineTextObjectManager for this document.
 KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const {
     return d->inlineTextObjectManager;
+}
+
+void KoPADocument::loadConfig()
+{
+    KSharedConfigPtr config = componentData().config();
+
+    if( config->hasGroup( "Grid" ) )
+    {
+        KoGridData defGrid;
+        KConfigGroup configGroup = config->group( "Grid" );
+        bool showGrid = configGroup.readEntry<bool>( "ShowGrid", defGrid.showGrid() );
+        gridData().setShowGrid(showGrid);
+        bool snapToGrid = configGroup.readEntry<bool>( "SnapToGrid", defGrid.snapToGrid() );
+        gridData().setSnapToGrid(snapToGrid);
+        double spacingX = configGroup.readEntry<double>( "SpacingX", defGrid.gridX() );
+        double spacingY = configGroup.readEntry<double>( "SpacingY", defGrid.gridY() );
+        gridData().setGrid( spacingX, spacingY );
+        QColor color = configGroup.readEntry( "Color", defGrid.gridColor() );
+        gridData().setGridColor( color );
+    }
+
+    if( config->hasGroup( "Interface" ) )
+    {
+        KConfigGroup configGroup = config->group( "Interface" );
+        bool showRulers = configGroup.readEntry<bool>( "ShowRulers", true);
+        setRulersVisible(showRulers);
+    }
+}
+
+void KoPADocument::saveConfig()
+{
+    KSharedConfigPtr config = componentData().config();
+    KConfigGroup configGroup = config->group( "Grid" );
+    KoGridData defGrid;
+
+    bool showGrid = gridData().showGrid();
+    if ((showGrid == defGrid.showGrid()) && !configGroup.hasDefault("ShowGrid"))
+        configGroup.revertToDefault("ShowGrid");
+    else
+        configGroup.writeEntry("ShowGrid", showGrid);
+
+    bool snapToGrid = gridData().snapToGrid();
+    if ((snapToGrid == defGrid.snapToGrid()) && !configGroup.hasDefault("SnapToGrid"))
+        configGroup.revertToDefault("SnapToGrid");
+    else
+        configGroup.writeEntry("SnapToGrid", snapToGrid);
+
+    double spacingX = gridData().gridX();
+    if ((spacingX == defGrid.gridX()) && !configGroup.hasDefault("SpacingX"))
+        configGroup.revertToDefault("SpacingX");
+    else
+        configGroup.writeEntry("SpacingX", spacingX);
+
+    double spacingY = gridData().gridY();
+    if ((spacingY == defGrid.gridY()) && !configGroup.hasDefault("SpacingY"))
+        configGroup.revertToDefault("SpacingY");
+    else
+        configGroup.writeEntry("SpacingY", spacingY);
+
+    QColor color = gridData().gridColor();
+    if ((color == defGrid.gridColor()) && !configGroup.hasDefault("Color"))
+        configGroup.revertToDefault("Color");
+    else
+        configGroup.writeEntry("Color", color);
+
+    configGroup = config->group( "Interface" );
+
+    bool showRulers = rulersVisible();
+    if ((showRulers == true) && !configGroup.hasDefault("ShowRulers"))
+        configGroup.revertToDefault("ShowRulers");
+    else
+        configGroup.writeEntry("ShowRulers", showRulers);
+}
+
+void KoPADocument::setRulersVisible(bool visible)
+{
+    d->rulersVisible = visible;
+}
+
+bool KoPADocument::rulersVisible() const
+{
+    return d->rulersVisible;
 }
 
 

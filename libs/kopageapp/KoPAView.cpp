@@ -186,10 +186,14 @@ void KoPAView::initActions()
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
 
     m_actionViewShowGrid  = new KToggleAction(i18n("Show &Grid"), this);
+    m_actionViewShowGrid->setChecked(m_doc->gridData().showGrid());
     actionCollection()->addAction("view_grid", m_actionViewShowGrid );
+    connect( m_actionViewShowGrid, SIGNAL( triggered( bool ) ), this, SLOT (viewGrid( bool )));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
+    m_actionViewSnapToGrid->setChecked(m_doc->gridData().snapToGrid());
     actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
+    connect( m_actionViewSnapToGrid, SIGNAL( triggered( bool ) ), this, SLOT (viewSnapToGrid( bool )));
 
     m_actionViewShowMasterPages = new KToggleAction(i18n( "Show Master Pages" ), this );
     actionCollection()->addAction( "view_masterpages", m_actionViewShowMasterPages );
@@ -199,7 +203,7 @@ void KoPAView::initActions()
     actionCollection()->addAction("view_rulers", m_viewRulers );
     m_viewRulers->setToolTip(i18n("Show/hide the view's rulers"));
     connect(m_viewRulers, SIGNAL(triggered(bool)), this, SLOT(setShowRulers(bool)));
-    setShowRulers(true);
+    setShowRulers(m_doc->rulersVisible());
 
     m_actionInsertPage = new KAction( i18n( "Insert Page" ), this );
     actionCollection()->addAction( "edit_insertpage", m_actionInsertPage );
@@ -225,12 +229,16 @@ void KoPAView::initActions()
     actionCollection()->addAction("insert_variable", actionMenu);
 }
 
-void KoPAView::viewSnapToGrid()
+void KoPAView::viewSnapToGrid(bool snap)
 {
+    m_doc->gridData().setSnapToGrid(snap);
+    m_actionViewSnapToGrid->setChecked(snap);
 }
 
-void KoPAView::viewGrid()
+void KoPAView::viewGrid(bool show)
 {
+    m_doc->gridData().setShowGrid(show);
+    m_actionViewShowGrid->setChecked(show);
 }
 
 void KoPAView::editCut()
@@ -452,6 +460,7 @@ void KoPAView::setShowRulers(bool show)
     m_verticalRuler->setVisible(show);
 
     m_viewRulers->setChecked(show);
+    m_doc->setRulersVisible(show);
 }
 
 void KoPAView::insertPage()

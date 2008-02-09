@@ -126,8 +126,8 @@ protected:
     virtual void partActivateEvent(KParts::PartActivateEvent* event);
 
 protected slots:
-    void viewSnapToGrid();
-    void viewGrid();
+    void viewSnapToGrid(bool snap);
+    void viewGrid(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, double zoom );
 
     void editCut();

@@ -158,6 +158,9 @@ public:
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
+    void setRulersVisible(bool visible);
+    bool rulersVisible() const;
+
 protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
     virtual const char *odfTagName( bool withNamespace ) = 0;
@@ -195,6 +198,11 @@ protected:
      * @param enable new state of the actions
      */
     void setActionEnabled( int actions, bool enable );
+
+    /// Load the configuration
+    void loadConfig();
+    /// Save the configuration
+    void saveConfig();
 
 private:
     class Private;

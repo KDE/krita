@@ -25,7 +25,7 @@ class KoGridData::Private {
 public:
     Private()
      :snapToGrid(false),
-      showGrid(true),
+      showGrid(false),
       gridX(MM_TO_POINT(5.0)),
       gridY(MM_TO_POINT(5.0)),
       gridColor(Qt::lightGray)

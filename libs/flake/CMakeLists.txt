@@ -62,6 +62,9 @@ set(flake_SRCS
     KoConnectionShape.cpp
     KoConnectionShapeFactory.cpp
     KoConnectionShapeConfigWidget.cpp
+    KoSnapGuide.cpp
+    KoSnapStrategy.cpp
+    SnapGuideConfigWidget.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -119,9 +122,6 @@ set(flake_SRCS
     tools/KoCreateShapesTool.cpp
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
-    tools/SnapGuide.cpp
-    tools/SnapStrategy.cpp
-    tools/SnapGuideConfigWidget.cpp
 )
 
 kde4_add_ui_files(flake_SRCS

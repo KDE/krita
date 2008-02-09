@@ -31,7 +31,7 @@ class QButtonGroup;
 class KoCanvasBase;
 class KoInteractionStrategy;
 class KoPathToolHandle;
-class SnapGuide;
+class KoSnapGuide;
 
 class QAction;
 
@@ -77,7 +77,7 @@ public:
     void repaint( const QRectF &repaintRect );
 
     /// Returns the tools snap guide
-    SnapGuide * snapGuide();
+    KoSnapGuide * snapGuide();
 
 signals:
     void typeChanged(int types);
@@ -136,7 +136,7 @@ private:
     QCursor m_selectCursor;
     QCursor m_moveCursor;
 
-    SnapGuide * m_snapGuide;
+    KoSnapGuide * m_snapGuide;
 };
 
 #endif

@@ -39,8 +39,8 @@
 #include "KoPathPointRubberSelectStrategy.h"
 #include "PathToolOptionWidget.h"
 #include "KoConnectionShape.h"
-#include "SnapGuide.h"
-#include "SnapStrategy.h"
+#include "KoSnapGuide.h"
+#include "KoSnapStrategy.h"
 #include "SnapGuideConfigWidget.h"
 
 #include <KIcon>
@@ -68,7 +68,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 , m_handleRadius( 3 )
 , m_pointSelection( this )
 , m_currentStrategy(0)
-, m_snapGuide( new SnapGuide(canvas) )
+, m_snapGuide( new KoSnapGuide(canvas) )
 {
     QActionGroup *points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive( true );
@@ -142,7 +142,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
     m_moveCursor = QCursor( b, m, 2, 0 );
 
-    m_snapGuide->enableSnapStrategies( SnapStrategy::Node|SnapStrategy::Orthogonal );
+    m_snapGuide->enableSnapStrategies( KoSnapStrategy::Node|KoSnapStrategy::Orthogonal );
 }
 
 KoPathTool::~KoPathTool() {
@@ -716,7 +716,7 @@ KoToolSelection * KoPathTool::selection()
     return &m_pointSelection;
 }
 
-SnapGuide * KoPathTool::snapGuide()
+KoSnapGuide * KoPathTool::snapGuide()
 {
     return m_snapGuide;
 }

@@ -17,17 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SNAPSTRATEGY_H
-#define SNAPSTRATEGY_H
+#ifndef KOSNAPSTRATEGY_H
+#define KOSNAPSTRATEGY_H
 
-#include "SnapGuide.h"
+#include "KoSnapGuide.h"
 
 #include <QtCore/QPointF>
 #include <QtGui/QPainterPath>
 
 class KoPathPoint;
 
-class SnapStrategy
+class KoSnapStrategy
 {
 public:
     /// the different possible snap types
@@ -38,10 +38,10 @@ public:
         Intersection = 8
     };
 
-    SnapStrategy( SnapType type );
-    virtual ~SnapStrategy() {};
+    KoSnapStrategy( SnapType type );
+    virtual ~KoSnapStrategy() {};
 
-    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance ) = 0;
+    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance ) = 0;
 
     /// returns the current snap strategy decoration
     QPainterPath decoration() const;
@@ -67,35 +67,35 @@ private:
     QPointF m_snappedPosition;
 };
 
-class OrthogonalSnapStrategy : public SnapStrategy
+class OrthogonalSnapStrategy : public KoSnapStrategy
 {
 public:
     OrthogonalSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
+    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
 
-class NodeSnapStrategy : public SnapStrategy
+class NodeSnapStrategy : public KoSnapStrategy
 {
 public:
     NodeSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
+    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
 
-class ExtensionSnapStrategy : public SnapStrategy
+class ExtensionSnapStrategy : public KoSnapStrategy
 {
 public:
     ExtensionSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
+    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 private:
     double project( const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point );
     QPointF extensionDirection( KoPathPoint * point, const QMatrix &matrix );
     bool snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix );
 };
 
-class IntersectionSnapStrategy : public SnapStrategy
+class IntersectionSnapStrategy : public KoSnapStrategy
 {
 public:
     IntersectionSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance );
+    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
-#endif // SNAPSTRATEGY_H
+#endif // KOSNAPSTRATEGY_H

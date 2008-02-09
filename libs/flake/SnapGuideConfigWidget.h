@@ -24,14 +24,14 @@
 
 #include <QtGui/QWidget>
 
-class SnapGuide;
+class KoSnapGuide;
 
 class SnapGuideConfigWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit SnapGuideConfigWidget( SnapGuide * snapGuide, QWidget *parent = 0);
+    explicit SnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget *parent = 0);
     ~SnapGuideConfigWidget();
 private slots:
     void snappingEnabled( int state );
@@ -39,7 +39,7 @@ private slots:
     void distanceChanged( int distance );
 private:
     Ui_SnapGuideConfigWidget widget;
-    SnapGuide * m_snapGuide;
+    KoSnapGuide * m_snapGuide;
 };
 
 #endif // SNAPGUIDECONFIGWIDGET_H

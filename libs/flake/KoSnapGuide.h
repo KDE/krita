@@ -17,15 +17,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SNAPGUIDE_H
-#define SNAPGUIDE_H
+#ifndef KOSNAPGUIDE_H
+#define KOSNAPGUIDE_H
 
 #include <QtCore/QPointF>
 #include <QtCore/QList>
 #include <QtCore/QRectF>
 #include <QtGui/QPainterPath>
 
-class SnapStrategy;
+class KoSnapStrategy;
 class KoShape;
 class KoPathShape;
 class KoPathPoint;
@@ -34,14 +34,14 @@ class KoCanvasBase;
 class QPainter;
 class KoCanvasBase;
 
-class SnapGuide
+class KoSnapGuide
 {
 public:
 
     /// Creates the snap guide to work on the given canvas
-    SnapGuide( KoCanvasBase * canvas );
+    KoSnapGuide( KoCanvasBase * canvas );
 
-    virtual ~SnapGuide();
+    virtual ~KoSnapGuide();
 
     /// snaps the mouse position, returns if mouse was snapped
     QPointF snap( const QPointF &mousePosition, Qt::KeyboardModifiers modifiers );
@@ -89,8 +89,8 @@ private:
     KoCanvasBase * m_canvas;
     KoShape * m_editedShape;
 
-    QList<SnapStrategy*> m_strategies;
-    SnapStrategy * m_currentStrategy;
+    QList<KoSnapStrategy*> m_strategies;
+    KoSnapStrategy * m_currentStrategy;
 
     int m_usedStrategies;
     bool m_active;
@@ -98,10 +98,10 @@ private:
     QList<KoPathPoint*> m_ignoredPoints;
 };
 
-class SnapProxy
+class KoSnapProxy
 {
 public:
-    SnapProxy( SnapGuide * snapGuide );
+    KoSnapProxy( KoSnapGuide * snapGuide );
 
     /// returns list of points in given rectangle in document coordinates
     QList<QPointF> pointsInRect( const QRectF &rect );
@@ -116,7 +116,7 @@ public:
     QList<KoShape*> shapes( bool omitEditedShape = false );
 
 private:
-    SnapGuide * m_snapGuide;
+    KoSnapGuide * m_snapGuide;
 };
 
-#endif // SNAPGUIDE_H
+#endif // KOSNAPGUIDE_H

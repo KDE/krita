@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SnapGuide.h"
-#include "SnapStrategy.h"
+#include "KoSnapGuide.h"
+#include "KoSnapStrategy.h"
 
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
@@ -31,7 +31,7 @@
 #include <math.h>
 
 
-SnapGuide::SnapGuide( KoCanvasBase * canvas )
+KoSnapGuide::KoSnapGuide( KoCanvasBase * canvas )
     : m_canvas(canvas), m_editedShape(0), m_currentStrategy(0)
     , m_active(true), m_snapDistance(10)
 {
@@ -41,63 +41,63 @@ SnapGuide::SnapGuide( KoCanvasBase * canvas )
     m_strategies.append( new IntersectionSnapStrategy() );
 }
 
-SnapGuide::~SnapGuide()
+KoSnapGuide::~KoSnapGuide()
 {
 }
 
-void SnapGuide::setEditedShape( KoShape * shape )
+void KoSnapGuide::setEditedShape( KoShape * shape )
 {
     m_editedShape = shape;
 }
 
-KoShape * SnapGuide::editedShape() const
+KoShape * KoSnapGuide::editedShape() const
 {
     return m_editedShape;
 }
 
-void SnapGuide::enableSnapStrategies( int strategies )
+void KoSnapGuide::enableSnapStrategies( int strategies )
 {
     m_usedStrategies = strategies;
 }
 
-int SnapGuide::enabledSnapStrategies() const
+int KoSnapGuide::enabledSnapStrategies() const
 {
     return m_usedStrategies;
 }
 
-void SnapGuide::enableSnapping( bool on )
+void KoSnapGuide::enableSnapping( bool on )
 {
     m_active = on;
 }
 
-bool SnapGuide::isSnapping() const
+bool KoSnapGuide::isSnapping() const
 {
     return m_active;
 }
 
-void SnapGuide::setSnapDistance( int distance )
+void KoSnapGuide::setSnapDistance( int distance )
 {
     m_snapDistance = qAbs( distance );
 }
 
-int SnapGuide::snapDistance() const
+int KoSnapGuide::snapDistance() const
 {
     return m_snapDistance;
 }
 
-QPointF SnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers modifiers )
+QPointF KoSnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers modifiers )
 {
     m_currentStrategy = 0;
 
     if( ! m_active || (modifiers & Qt::ShiftModifier) )
         return mousePosition;
 
-    SnapProxy proxy( this );
+    KoSnapProxy proxy( this );
 
     double minDistance = HUGE_VAL;
 
     double maxSnapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( m_snapDistance, m_snapDistance ) ).width();
-    foreach( SnapStrategy * strategy, m_strategies )
+    foreach( KoSnapStrategy * strategy, m_strategies )
     {
         if( m_usedStrategies & strategy->type() )
         {
@@ -105,7 +105,7 @@ QPointF SnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers mod
                 continue;
 
             QPointF snapCandidate = strategy->snappedPosition();
-            double distance = SnapStrategy::fastDistance( snapCandidate, mousePosition );
+            double distance = KoSnapStrategy::fastDistance( snapCandidate, mousePosition );
             if( distance < minDistance )
             {
                 m_currentStrategy = strategy;
@@ -120,7 +120,7 @@ QPointF SnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers mod
     return m_currentStrategy->snappedPosition();
 }
 
-QRectF SnapGuide::boundingRect()
+QRectF KoSnapGuide::boundingRect()
 {
     QRectF rect;
 
@@ -130,7 +130,7 @@ QRectF SnapGuide::boundingRect()
     return rect.adjusted( -2, -2, 2, 2 );
 }
 
-void SnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
+void KoSnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
 {
     Q_UNUSED(converter);
     
@@ -144,17 +144,17 @@ void SnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
     painter.drawPath( m_currentStrategy->decoration() );
 }
 
-KoCanvasBase * SnapGuide::canvas() const
+KoCanvasBase * KoSnapGuide::canvas() const
 {
     return m_canvas;
 }
 
-void SnapGuide::setIgnoredPathPoints( const QList<KoPathPoint*> &ignoredPoints )
+void KoSnapGuide::setIgnoredPathPoints( const QList<KoPathPoint*> &ignoredPoints )
 {
     m_ignoredPoints = ignoredPoints;
 }
 
-QList<KoPathPoint*> SnapGuide::ignoredPathPoints() const
+QList<KoPathPoint*> KoSnapGuide::ignoredPathPoints() const
 {
     return m_ignoredPoints;
 }
@@ -163,12 +163,12 @@ QList<KoPathPoint*> SnapGuide::ignoredPathPoints() const
 // snap proxy
 /////////////////////////////////////////////////////////
 
-SnapProxy::SnapProxy( SnapGuide * snapGuide )
+KoSnapProxy::KoSnapProxy( KoSnapGuide * snapGuide )
     : m_snapGuide(snapGuide)
 {
 }
 
-QList<QPointF> SnapProxy::pointsInRect( const QRectF &rect )
+QList<QPointF> KoSnapProxy::pointsInRect( const QRectF &rect )
 {
     QList<QPointF> points;
     QList<KoShape*> shapes = shapesInRect( rect );
@@ -184,7 +184,7 @@ QList<QPointF> SnapProxy::pointsInRect( const QRectF &rect )
     return points;
 }
 
-QList<KoShape*> SnapProxy::shapesInRect( const QRectF &rect, bool omitEditedShape )
+QList<KoShape*> KoSnapProxy::shapesInRect( const QRectF &rect, bool omitEditedShape )
 {
     QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapesAt( rect );
 
@@ -197,7 +197,7 @@ QList<KoShape*> SnapProxy::shapesInRect( const QRectF &rect, bool omitEditedShap
     return shapes;
 }
 
-QList<QPointF> SnapProxy::pointsFromShape( KoShape * shape )
+QList<QPointF> KoSnapProxy::pointsFromShape( KoShape * shape )
 {
     QList<QPointF> pathPoints;
 
@@ -229,7 +229,7 @@ QList<QPointF> SnapProxy::pointsFromShape( KoShape * shape )
     return pathPoints;
 }
 
-QList<KoShape*> SnapProxy::shapes( bool omitEditedShape )
+QList<KoShape*> KoSnapProxy::shapes( bool omitEditedShape )
 {
     QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapes();
     if( ! omitEditedShape && m_snapGuide->editedShape() )

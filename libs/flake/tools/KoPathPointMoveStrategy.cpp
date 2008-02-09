@@ -24,7 +24,7 @@
 #include "commands/KoPathPointMoveCommand.h"
 #include "KoPathTool.h"
 #include "KoPathToolSelection.h"
-#include "SnapGuide.h"
+#include "KoSnapGuide.h"
 #include <KoCanvasBase.h>
 
 KoPathPointMoveStrategy::KoPathPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &pos )

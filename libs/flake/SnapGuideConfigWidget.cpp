@@ -18,21 +18,21 @@
  */
 
 #include "SnapGuideConfigWidget.h"
-#include "SnapGuide.h"
-#include "SnapStrategy.h"
+#include "KoSnapGuide.h"
+#include "KoSnapStrategy.h"
 
-SnapGuideConfigWidget::SnapGuideConfigWidget( SnapGuide * snapGuide, QWidget * parent )
+SnapGuideConfigWidget::SnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget * parent )
     :QWidget(parent), m_snapGuide(snapGuide)
 {
     widget.setupUi(this);
 
-    if( snapGuide->enabledSnapStrategies() & SnapStrategy::Orthogonal )
+    if( snapGuide->enabledSnapStrategies() & KoSnapStrategy::Orthogonal )
         widget.orthogonalSnapGuide->setCheckState( Qt::Checked );
-    if( snapGuide->enabledSnapStrategies() & SnapStrategy::Node )
+    if( snapGuide->enabledSnapStrategies() & KoSnapStrategy::Node )
         widget.nodeSnapGuide->setCheckState( Qt::Checked );
-    if( snapGuide->enabledSnapStrategies() & SnapStrategy::Extension )
+    if( snapGuide->enabledSnapStrategies() & KoSnapStrategy::Extension )
         widget.extensionSnapGuide->setCheckState( Qt::Checked );
-    if( snapGuide->enabledSnapStrategies() & SnapStrategy::Intersection )
+    if( snapGuide->enabledSnapStrategies() & KoSnapStrategy::Intersection )
         widget.intersectionSnapGuide->setCheckState( Qt::Checked );
 
     widget.snapDistance->setValue( m_snapGuide->snapDistance() );
@@ -61,13 +61,13 @@ void SnapGuideConfigWidget::strategyChanged()
 {
     int strategies = 0;
     if( widget.orthogonalSnapGuide->checkState() == Qt::Checked )
-        strategies |= SnapStrategy::Orthogonal;
+        strategies |= KoSnapStrategy::Orthogonal;
     if( widget.nodeSnapGuide->checkState() == Qt::Checked )
-        strategies |= SnapStrategy::Node;
+        strategies |= KoSnapStrategy::Node;
     if( widget.extensionSnapGuide->checkState() == Qt::Checked )
-        strategies |= SnapStrategy::Extension;
+        strategies |= KoSnapStrategy::Extension;
     if( widget.intersectionSnapGuide->checkState() == Qt::Checked )
-        strategies |= SnapStrategy::Intersection;
+        strategies |= KoSnapStrategy::Intersection;
 
     m_snapGuide->enableSnapStrategies( strategies );
 }

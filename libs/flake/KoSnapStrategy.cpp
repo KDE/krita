@@ -17,44 +17,44 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SnapStrategy.h"
+#include "KoSnapStrategy.h"
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
 //#include <kdebug.h>
 #include <math.h>
 
 
-SnapStrategy::SnapStrategy( SnapStrategy::SnapType type )
+KoSnapStrategy::KoSnapStrategy( KoSnapStrategy::SnapType type )
     : m_snapType(type)
 {
 }
 
-QPainterPath SnapStrategy::decoration() const
+QPainterPath KoSnapStrategy::decoration() const
 {
     return m_decoration;
 }
 
-void SnapStrategy::setDecoration( const QPainterPath &decoration )
+void KoSnapStrategy::setDecoration( const QPainterPath &decoration )
 {
     m_decoration = decoration;
 }
 
-QPointF SnapStrategy::snappedPosition() const
+QPointF KoSnapStrategy::snappedPosition() const
 {
     return m_snappedPosition;
 }
 
-void SnapStrategy::setSnappedPosition( const QPointF &position )
+void KoSnapStrategy::setSnappedPosition( const QPointF &position )
 {
     m_snappedPosition= position;
 }
 
-SnapStrategy::SnapType SnapStrategy::type() const
+KoSnapStrategy::SnapType KoSnapStrategy::type() const
 {
     return m_snapType;
 }
 
-double SnapStrategy::fastDistance( const QPointF &p1, const QPointF &p2 )
+double KoSnapStrategy::fastDistance( const QPointF &p1, const QPointF &p2 )
 {
     double dx = p1.x()-p2.x();
     double dy = p1.y()-p2.y();
@@ -62,11 +62,11 @@ double SnapStrategy::fastDistance( const QPointF &p1, const QPointF &p2 )
 }
 
 OrthogonalSnapStrategy::OrthogonalSnapStrategy()
-    : SnapStrategy( SnapStrategy::Orthogonal )
+    : KoSnapStrategy( KoSnapStrategy::Orthogonal )
 {
 }
 
-bool OrthogonalSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance )
+bool OrthogonalSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     QPointF horzSnap, vertSnap;
     double minVertDist = HUGE_VAL;
@@ -121,11 +121,11 @@ bool OrthogonalSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapPro
 }
 
 NodeSnapStrategy::NodeSnapStrategy()
-    : SnapStrategy( SnapStrategy::Node )
+    : KoSnapStrategy( KoSnapStrategy::Node )
 {
 }
 
-bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance )
+bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     double maxDistance = maxSnapDistance*maxSnapDistance;
     double minDistance = HUGE_VAL;
@@ -162,11 +162,11 @@ bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * p
 }
 
 ExtensionSnapStrategy::ExtensionSnapStrategy()
-    : SnapStrategy( SnapStrategy::Extension )
+    : KoSnapStrategy( KoSnapStrategy::Extension )
 {
 }
 
-bool ExtensionSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance )
+bool ExtensionSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     double maxDistance = maxSnapDistance*maxSnapDistance;
     double minDistance = HUGE_VAL;
@@ -298,11 +298,11 @@ QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QM
 }
 
 IntersectionSnapStrategy::IntersectionSnapStrategy()
-    : SnapStrategy( SnapStrategy::Intersection )
+    : KoSnapStrategy( KoSnapStrategy::Intersection )
 {
 }
 
-bool IntersectionSnapStrategy::snapToPoints( const QPointF &mousePosition, SnapProxy * proxy, double maxSnapDistance )
+bool IntersectionSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     double maxDistance = maxSnapDistance*maxSnapDistance;
     double minDistance = HUGE_VAL;

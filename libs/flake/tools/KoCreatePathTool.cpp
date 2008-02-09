@@ -20,8 +20,8 @@
  */
 
 #include "KoCreatePathTool.h"
-#include "SnapGuide.h"
-#include "SnapStrategy.h"
+#include "KoSnapGuide.h"
+#include "KoSnapStrategy.h"
 #include "SnapGuideConfigWidget.h"
 
 #include "KoPathShape.h"
@@ -33,7 +33,6 @@
 #include "KoSelection.h"
 #include "KoShapeController.h"
 #include "KoCanvasResourceProvider.h"
-#include "SnapGuideConfigWidget.h"
 
 #include <KoColor.h>
 
@@ -47,10 +46,9 @@ KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
 , m_firstPoint( 0 )
 , m_handleRadius( 3 )
 , m_mouseOverFirstPoint(false)
-, m_snapGuide( new SnapGuide(canvas) )
+, m_snapGuide( new KoSnapGuide(canvas) )
 {
-    m_snapGuide->enableSnapStrategies( SnapStrategy::Orthogonal|SnapStrategy::Node|SnapStrategy::Extension );
-    m_snapGuide->enableSnapStrategies( SnapStrategy::Intersection );
+    m_snapGuide->enableSnapStrategies( KoSnapStrategy::Orthogonal|KoSnapStrategy::Node );
 }
 
 KoCreatePathTool::~KoCreatePathTool()

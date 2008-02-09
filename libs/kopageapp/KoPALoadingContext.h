@@ -36,7 +36,7 @@ public:
      * Constructor.
      *
      * @param context Context for loading oasis docs.
-     * @param context The shape contoller.
+     * @param context The shape controller.
      */
      KoPALoadingContext( KoOdfLoadingContext &context, KoShapeControllerBase * shapeController );
 

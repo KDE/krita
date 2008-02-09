@@ -36,7 +36,7 @@ class KoTextLoader;
  * functionality like for example handling of lists.
  *
  * The context is used within the \a KoTextLoader class to provide additional
- * state informations like the \a KoDocument and the \a KoStore we operate on.
+ * state information like the \a KoDocument and the \a KoStore we operate on.
  *
  * In the \a KoTextShapeData::loadOdf() method the \a KoTextLoader is used
  * with a KoTextLoadingContext instance like this;

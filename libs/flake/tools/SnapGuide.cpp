@@ -132,6 +132,8 @@ QRectF SnapGuide::boundingRect()
 
 void SnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
 {
+    Q_UNUSED(converter);
+    
     if( ! m_currentStrategy || ! m_active )
         return;
 

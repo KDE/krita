@@ -110,6 +110,7 @@ set(flake_SRCS
     tools/KoParameterChangeStrategy.cpp
     tools/KoZoomTool.cpp
     tools/KoZoomToolFactory.cpp
+    tools/KoZoomToolWidget.cpp
     tools/KoZoomStrategy.cpp
     tools/KoPanTool.cpp
     tools/KoPanToolFactory.cpp
@@ -127,6 +128,7 @@ kde4_add_ui_files(flake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
     tools/SnapGuideConfigWidget.ui
+    tools/KoZoomToolWidget.ui
 )
 
 

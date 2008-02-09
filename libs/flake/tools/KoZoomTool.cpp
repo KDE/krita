@@ -21,6 +21,7 @@
 
 #include "KoZoomTool.h"
 #include "KoZoomStrategy.h"
+#include "KoZoomToolWidget.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
@@ -100,3 +101,9 @@ void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
 KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event) {
     return new KoZoomStrategy(this, m_controller, event->point);
 }
+
+QWidget* KoZoomTool::createOptionWidget()
+{
+    return new KoZoomToolWidget();
+}
+

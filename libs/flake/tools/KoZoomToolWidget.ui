@@ -1,0 +1,41 @@
+<ui version="4.0" >
+ <class>ZoomToolWidget</class>
+ <widget class="QWidget" name="ZoomToolWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>212</width>
+    <height>261</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QRadioButton" name="zoomInButton" >
+     <property name="text" >
+      <string>Zoom In</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QRadioButton" name="zoomOutButton" >
+     <property name="text" >
+      <string>Zoom Out</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QLabel" name="birdEyeLabel" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

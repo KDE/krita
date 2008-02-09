@@ -22,6 +22,7 @@
 
 #include "KoCanvasBase.h"
 #include "KoPathTool.h"
+#include "KoPathToolSelection.h"
 
 KoPathPointRubberSelectStrategy::KoPathPointRubberSelectStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &clicked )
 : KoShapeRubberSelectStrategy( tool, canvas, clicked )
@@ -29,8 +30,12 @@ KoPathPointRubberSelectStrategy::KoPathPointRubberSelectStrategy( KoPathTool *to
 {}
 
 void KoPathPointRubberSelectStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) 
-{ 
-    m_tool->selectPoints( selectRect(), !( modifiers & Qt::ControlModifier ) ); 
+{
+    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
+    if( ! selection )
+        return;
+
+    selection->selectPoints( selectRect(), !( modifiers & Qt::ControlModifier ) ); 
     m_canvas->updateCanvas( selectRect().normalized() );
-    m_tool->m_pointSelection.repaint();
+    selection->repaint();
 }

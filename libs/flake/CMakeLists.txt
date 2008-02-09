@@ -100,6 +100,8 @@ set(flake_SRCS
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
+    tools/KoPathToolSelection.cpp
+    tools/KoPathToolHandle.cpp
     tools/PathToolOptionWidget.cpp
     tools/KoPathPointRubberSelectStrategy.cpp
     tools/KoPathPointMoveStrategy.cpp

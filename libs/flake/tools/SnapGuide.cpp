@@ -147,6 +147,16 @@ KoCanvasBase * SnapGuide::canvas() const
     return m_canvas;
 }
 
+void SnapGuide::setIgnoredPathPoints( const QList<KoPathPoint*> &ignoredPoints )
+{
+    m_ignoredPoints = ignoredPoints;
+}
+
+QList<KoPathPoint*> SnapGuide::ignoredPathPoints() const
+{
+    return m_ignoredPoints;
+}
+
 /////////////////////////////////////////////////////////
 // snap proxy
 /////////////////////////////////////////////////////////
@@ -195,6 +205,8 @@ QList<QPointF> SnapProxy::pointsFromShape( KoShape * shape )
 
     QMatrix m = path->absoluteTransformation(0);
 
+    QList<KoPathPoint*> ignoredPoints = m_snapGuide->ignoredPathPoints();
+
     int subpathCount = path->subpathCount();
     for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
     {
@@ -202,7 +214,7 @@ QList<QPointF> SnapProxy::pointsFromShape( KoShape * shape )
         for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
         {
             KoPathPoint * p = path->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex )  );
-            if( ! p )
+            if( ! p || ignoredPoints.contains( p ) )
                 continue;
 
             pathPoints.append( m.map( p->point() ) );

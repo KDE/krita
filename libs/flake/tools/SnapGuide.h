@@ -28,6 +28,7 @@
 class SnapStrategy;
 class KoShape;
 class KoPathShape;
+class KoPathPoint;
 class KoViewConverter;
 class KoCanvasBase;
 class QPainter;
@@ -78,6 +79,12 @@ public:
     /// returns the canvas the snap guide is working on
     KoCanvasBase * canvas() const;
 
+    /// Sets a list of path points to ignore
+    void setIgnoredPathPoints( const QList<KoPathPoint*> &ignoredPoints );
+
+    /// Returns list of ignored points
+    QList<KoPathPoint*> ignoredPathPoints() const;
+
 private:
     KoCanvasBase * m_canvas;
     KoShape * m_editedShape;
@@ -88,6 +95,7 @@ private:
     int m_usedStrategies;
     bool m_active;
     int m_snapDistance;
+    QList<KoPathPoint*> m_ignoredPoints;
 };
 
 class SnapProxy

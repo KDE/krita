@@ -21,6 +21,7 @@
 #include <QPainterPath>
 #include "../KoPathShape.h"
 #include "../tools/KoPathTool.h"
+#include "../tools/KoPathToolSelection.h"
 #include "../KoPathPointData.h"
 #include "MockShapes.h"
 
@@ -52,7 +53,7 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
     MockCanvas canvas;
     KoPathTool tool( &canvas );
     QVERIFY( 1 == 1 );
-    KoPathTool::KoPathPointSelection pps( &tool );
+    KoPathToolSelection pps( &tool );
     pps.add( point11, false );
     pps.add( point12, false );
     pps.add( point13, false );

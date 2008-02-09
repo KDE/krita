@@ -20,6 +20,10 @@
 
 #include "KoGridData.h"
 #include "KoUnit.h"
+#include "KoViewConverter.h"
+
+#include <QPainter>
+#include <QRectF>
 
 class KoGridData::Private {
 public:
@@ -93,4 +97,41 @@ void KoGridData::setShowGrid ( bool showGrid )
   d->showGrid = showGrid;
 }
 
+void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
+{
+    if( ! showGrid() )
+        return;
+
+    painter.setPen( gridColor() );
+
+    double x = 0.0;
+    do {
+        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
+                          converter.documentToView( QPointF( x, area.bottom() ) ) );
+        x += gridX();
+    } while( x <= area.right() );
+
+    x = - gridX();
+    while( x >= area.left() )
+    {
+        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
+                          converter.documentToView( QPointF( x, area.bottom() ) ) );
+        x -= gridX();
+    };
+
+    double y = 0.0;
+    do {
+        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ),
+                          converter.documentToView( QPointF( area.right(), y ) ) );
+        y += gridY();
+    } while( y <= area.bottom() );
+
+    y = - gridY();
+    while( y >= area.top() )
+    {
+        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ),
+                          converter.documentToView( QPointF( area.right(), y ) ) );
+        y -= gridY();
+    };
+}
 

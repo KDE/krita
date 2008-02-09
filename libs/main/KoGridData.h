@@ -24,6 +24,10 @@
 #include <komain_export.h>
 #include <QColor>
 
+class QPainter;
+class QRectF;
+class KoViewConverter;
+
 /**
  * This class stores application-data for display-grids.
  * Things like grid colors, distances and snap to grid are saved here.
@@ -93,6 +97,14 @@ public:
      void saveOasisSettings( KoXmlWriter &settingsWriter );
      void loadOasisSettings(const QDomDocument&settingsDoc);
 #endif
+
+    /**
+      * Paint the grid
+      * @param painter the painter
+      * @param converter the view converter
+      * @param area the area in need of updating
+     */
+     void paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const;
 
 private:
     class Private;

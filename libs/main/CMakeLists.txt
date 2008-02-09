@@ -151,5 +151,6 @@ install( FILES
     KoDockFactory.h
     KoViewChild.h
     komain_export.h
+    KoViewConverter.h
 DESTINATION ${INCLUDE_INSTALL_DIR})
 

@@ -56,15 +56,6 @@ public:
 
     virtual bool masterMode();
 
-protected:
-    /**
-     * Paint the snap grid
-     * @param painter the painter
-     * @param converter the view converter
-     * @param area the area in need of updating
-     */
-    void paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area);
-
 private:
     /// if true it works on master pages, if false on normal pages
     bool m_masterMode;

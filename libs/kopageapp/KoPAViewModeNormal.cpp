@@ -50,52 +50,10 @@ void KoPAViewModeNormal::paintEvent( QPaintEvent* event )
     QRectF clipRect = event->rect().translated( m_canvas->documentOffset() );
     painter.setClipRect( clipRect );
 
-    paintGrid( painter, *(m_view->viewConverter()), clipRect );
+    m_canvas->document()->gridData().paintGrid( painter, *(m_view->viewConverter()), clipRect );
     m_canvas->masterShapeManager()->paint( painter, *( m_view->viewConverter() ), false );
     m_canvas->shapeManager()->paint( painter, *( m_view->viewConverter() ), false );
     m_toolProxy->paint( painter, *( m_view->viewConverter() ) );
-}
-
-void KoPAViewModeNormal::paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area)
-{
-    if( ! m_canvas->document()->gridData().showGrid() )
-        return;
-
-    painter.setPen( m_canvas->document()->gridData().gridColor() );
-
-    double gridX = m_canvas->document()->gridData().gridX();
-
-    double x = 0.0;
-    do {
-        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
-                          converter.documentToView( QPointF( x, area.bottom() ) ) );
-        x += gridX;
-    } while( x <= area.right() );
-
-    x = - gridX;
-    while( x >= area.left() )
-    {
-        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
-                          converter.documentToView( QPointF( x, area.bottom() ) ) );
-        x -= gridX;
-    };
-
-    double gridY = m_canvas->document()->gridData().gridY();
-
-    double y = 0.0;
-    do {
-        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ),
-                          converter.documentToView( QPointF( area.right(), y ) ) );
-        y += gridY;
-    } while( y <= area.bottom() );
-
-    y = - gridY;
-    while( y >= area.top() )
-    {
-        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ),
-                          converter.documentToView( QPointF( area.right(), y ) ) );
-        y -= gridY;
-    };
 }
 
 void KoPAViewModeNormal::tabletEvent( QTabletEvent *event, const QPointF &point )

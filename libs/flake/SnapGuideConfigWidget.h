@@ -25,6 +25,7 @@
 #include <QtGui/QWidget>
 
 class KoSnapGuide;
+class QShowEvent;
 
 class SnapGuideConfigWidget : public QWidget
 {
@@ -37,7 +38,10 @@ private slots:
     void snappingEnabled( int state );
     void strategyChanged();
     void distanceChanged( int distance );
+    void updateControls();
 private:
+    virtual void showEvent( QShowEvent * event );
+
     Ui_SnapGuideConfigWidget widget;
     KoSnapGuide * m_snapGuide;
 };

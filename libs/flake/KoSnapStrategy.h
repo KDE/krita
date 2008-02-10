@@ -20,12 +20,11 @@
 #ifndef KOSNAPSTRATEGY_H
 #define KOSNAPSTRATEGY_H
 
-#include "KoSnapGuide.h"
-
 #include <QtCore/QPointF>
 #include <QtGui/QPainterPath>
 
 class KoPathPoint;
+class KoSnapProxy;
 
 class KoSnapStrategy
 {

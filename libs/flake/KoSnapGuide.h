@@ -86,6 +86,9 @@ public:
     /// Returns list of ignored points
     QList<KoPathPoint*> ignoredPathPoints() const;
 
+    /// Resets the snap guide
+    void reset();
+
 private:
     KoCanvasBase * m_canvas;
     KoShape * m_editedShape;

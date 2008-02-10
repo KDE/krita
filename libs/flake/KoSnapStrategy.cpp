@@ -18,6 +18,7 @@
  */
 
 #include "KoSnapStrategy.h"
+#include "KoSnapGuide.h"
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
 #include <KoCanvasBase.h>

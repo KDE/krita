@@ -40,7 +40,6 @@
 #include "PathToolOptionWidget.h"
 #include "KoConnectionShape.h"
 #include "KoSnapGuide.h"
-#include "KoSnapStrategy.h"
 #include "SnapGuideConfigWidget.h"
 
 #include <KIcon>
@@ -68,7 +67,6 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 , m_handleRadius( 3 )
 , m_pointSelection( this )
 , m_currentStrategy(0)
-, m_snapGuide( new KoSnapGuide(canvas) )
 {
     QActionGroup *points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive( true );
@@ -141,12 +139,9 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     m = b.createHeuristicMask( false );
 
     m_moveCursor = QCursor( b, m, 2, 0 );
-
-    m_snapGuide->enableSnapStrategies( KoSnapStrategy::Node|KoSnapStrategy::Orthogonal );
 }
 
 KoPathTool::~KoPathTool() {
-    delete m_snapGuide;
 }
 
 QWidget * KoPathTool::createOptionWidget() 
@@ -158,7 +153,7 @@ QWidget * KoPathTool::createOptionWidget()
     //connect(this, SIGNAL(pathChanged(KoPathShape*)), widget, SLOT(setSelectedPath(KoPathShape*)));
     updateOptionsWidget();
 
-    SnapGuideConfigWidget * snapOptions = new SnapGuideConfigWidget( m_snapGuide, widget );
+    SnapGuideConfigWidget * snapOptions = new SnapGuideConfigWidget( m_canvas->snapGuide(), widget );
     widget->addTab( toolOptions, i18n("Default") );
     widget->addTab( snapOptions, i18n("Snap Guides") );
 
@@ -367,7 +362,7 @@ void KoPathTool::paint( QPainter &painter, const KoViewConverter &converter) {
     {
         painter.save();
         KoShape::applyConversion( painter, converter );
-        m_snapGuide->paint( painter, converter );
+        m_canvas->snapGuide()->paint( painter, converter );
         painter.restore();
     }
 }
@@ -599,6 +594,7 @@ void KoPathTool::activate (bool temporary) {
     Q_UNUSED(temporary);
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
+    m_canvas->snapGuide()->reset();
 
     repaintDecorations();
     QList<KoPathShape*> selectedShapes;
@@ -669,6 +665,7 @@ void KoPathTool::deactivate() {
     m_activeHandle = 0;
     delete m_currentStrategy;
     m_currentStrategy = 0;
+    m_canvas->snapGuide()->reset();
 }
 
 void KoPathTool::resourceChanged( int key, const QVariant & res )
@@ -692,7 +689,7 @@ void KoPathTool::resourceChanged( int key, const QVariant & res )
 void KoPathTool::pointSelectionChanged()
 {
     updateActions();
-    m_snapGuide->setIgnoredPathPoints( m_pointSelection.selectedPoints().toList() );
+    m_canvas->snapGuide()->setIgnoredPathPoints( m_pointSelection.selectedPoints().toList() );
 }
 
 void KoPathTool::repaint( const QRectF &repaintRect ) {
@@ -714,11 +711,6 @@ void KoPathTool::deleteSelection()
 KoToolSelection * KoPathTool::selection()
 {
     return &m_pointSelection;
-}
-
-KoSnapGuide * KoPathTool::snapGuide()
-{
-    return m_snapGuide;
 }
 
 #include "KoPathTool.moc"

@@ -40,9 +40,9 @@ KoPathPointMoveStrategy::~KoPathPointMoveStrategy()
 
 void KoPathPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
-    m_tool->canvas()->updateCanvas( m_tool->snapGuide()->boundingRect() );
-    QPointF newPosition = m_tool->snapGuide()->snap( mouseLocation, modifiers );
-    m_tool->canvas()->updateCanvas( m_tool->snapGuide()->boundingRect() );
+    m_tool->canvas()->updateCanvas( m_tool->canvas()->snapGuide()->boundingRect() );
+    QPointF newPosition = m_tool->canvas()->snapGuide()->snap( mouseLocation, modifiers );
+    m_tool->canvas()->updateCanvas( m_tool->canvas()->snapGuide()->boundingRect() );
     QPointF move = newPosition - m_originalPosition;
 
     if(modifiers & Qt::ControlModifier) { // limit change to one direction only.
@@ -68,7 +68,7 @@ void KoPathPointMoveStrategy::finishInteraction( Qt::KeyboardModifiers modifiers
 
 QUndoCommand* KoPathPointMoveStrategy::createCommand()
 {
-    m_tool->canvas()->updateCanvas( m_tool->snapGuide()->boundingRect() );
+    m_tool->canvas()->updateCanvas( m_tool->canvas()->snapGuide()->boundingRect() );
 
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
     if( ! selection )

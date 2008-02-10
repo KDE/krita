@@ -19,6 +19,8 @@
  */
 
 #include "KoPathControlPointMoveStrategy.h"
+#include "KoCanvasBase.h"
+#include "KoSnapGuide.h"
 
 #include "KoPathTool.h"
 #include "commands/KoPathControlPointMoveCommand.h"
@@ -39,7 +41,7 @@ KoPathControlPointMoveStrategy::~KoPathControlPointMoveStrategy()
 
 void KoPathControlPointMoveStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
-    QPointF docPoint = snapToGrid( mouseLocation, modifiers );
+    QPointF docPoint = m_tool->canvas()->snapGuide()->snap( mouseLocation, modifiers );
     QPointF move = docPoint - m_lastPosition;
     // as the last position can change when the top left is changed we have
     // to save it in document pos and not in shape pos

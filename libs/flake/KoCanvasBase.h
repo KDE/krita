@@ -42,6 +42,7 @@ class KoShapeController;
 class KoShapeControllerBase;
 class KoCanvasController;
 class KoShape;
+class KoSnapGuide;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -175,6 +176,11 @@ public:
      * @param rect the rectangle to make visible
      */
     virtual void ensureVisible(const QRectF &rect);
+
+    /**
+     * Returns the snap guide of the canvas
+     */
+    KoSnapGuide * snapGuide() const;
 
 protected:
     friend class KoCanvasController;

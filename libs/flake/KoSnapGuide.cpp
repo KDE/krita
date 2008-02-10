@@ -161,6 +161,13 @@ QList<KoPathPoint*> KoSnapGuide::ignoredPathPoints() const
     return m_ignoredPoints;
 }
 
+void KoSnapGuide::reset()
+{
+    m_currentStrategy = 0;
+    m_editedShape = 0;
+    m_ignoredPoints.clear();
+}
+
 /////////////////////////////////////////////////////////
 // snap proxy
 /////////////////////////////////////////////////////////

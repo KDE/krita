@@ -27,7 +27,6 @@
 class KoPathShape;
 class KoPathPoint;
 class QRectF;
-class KoSnapGuide;
 
 #define KoCreatePathTool_ID "CreatePathTool"
 
@@ -73,8 +72,6 @@ private:
     KoPathPoint *m_firstPoint;
     int m_handleRadius;
     bool m_mouseOverFirstPoint;
-
-    KoSnapGuide * m_snapGuide;
 };
 #endif
 

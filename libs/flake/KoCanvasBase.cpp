@@ -22,6 +22,7 @@
 #include "KoCanvasResourceProvider.h"
 #include "KoShapeController.h"
 #include "KoCanvasController.h"
+#include "KoSnapGuide.h"
 
 #include <KGlobal>
 #include <KConfigGroup>
@@ -34,11 +35,13 @@ public:
     ~Private() {
         delete shapeController;
         delete resourceProvider;
+        delete snapGuide;
     }
     KoShapeController *shapeController;
     KoCanvasResourceProvider * resourceProvider;
     KoCanvasController *controller;
     bool isAntialiased : 1;
+    KoSnapGuide * snapGuide;
 };
 
 KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
@@ -48,6 +51,7 @@ KoCanvasBase::KoCanvasBase( KoShapeControllerBase * shapeControllerBase )
     d->isAntialiased = cfg.readEntry("antialiasing", true);
     d->resourceProvider = new KoCanvasResourceProvider(0);
     d->shapeController = new KoShapeController( this, shapeControllerBase );
+    d->snapGuide = new KoSnapGuide( this );
 }
 
 KoCanvasBase::~KoCanvasBase()
@@ -85,4 +89,9 @@ void KoCanvasBase::clipToDocument(const KoShape *, QPointF &) const {
 bool KoCanvasBase::isAntialiased() const
 {
     return d->isAntialiased;
+}
+
+KoSnapGuide * KoCanvasBase::snapGuide() const
+{
+    return d->snapGuide;
 }

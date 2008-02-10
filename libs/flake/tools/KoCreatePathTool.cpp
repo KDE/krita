@@ -21,7 +21,6 @@
 
 #include "KoCreatePathTool.h"
 #include "KoSnapGuide.h"
-#include "KoSnapStrategy.h"
 #include "SnapGuideConfigWidget.h"
 
 #include "KoPathShape.h"
@@ -46,14 +45,11 @@ KoCreatePathTool::KoCreatePathTool( KoCanvasBase * canvas )
 , m_firstPoint( 0 )
 , m_handleRadius( 3 )
 , m_mouseOverFirstPoint(false)
-, m_snapGuide( new KoSnapGuide(canvas) )
 {
-    m_snapGuide->enableSnapStrategies( KoSnapStrategy::Orthogonal|KoSnapStrategy::Node );
 }
 
 KoCreatePathTool::~KoCreatePathTool()
 {
-    delete m_snapGuide;
 }
 
 void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converter )
@@ -99,7 +95,7 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
 
     painter.save();
     KoShape::applyConversion( painter, converter );
-    m_snapGuide->paint( painter, converter );
+    m_canvas->snapGuide()->paint( painter, converter );
     painter.restore();
 }
 
@@ -126,13 +122,13 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         }
         else
         {
-            m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+            m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
 
-            m_activePoint->setPoint( m_snapGuide->snap( event->point, event->modifiers() ) );
+            m_activePoint->setPoint( m_canvas->snapGuide()->snap( event->point, event->modifiers() ) );
             m_activePoint->setProperty(KoPathPoint::CanHaveControlPoint2);
 
             m_canvas->updateCanvas( m_shape->boundingRect() );
-            m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+            m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
         }
     }
     else
@@ -141,13 +137,13 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         m_shape->setShapeId( KoPathShapeId );
         // TODO take properties from the resource provider
         m_shape->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
-        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-        m_activePoint = m_shape->moveTo( m_snapGuide->snap( event->point, event->modifiers() ) );
+        m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
+        m_activePoint = m_shape->moveTo( m_canvas->snapGuide()->snap( event->point, event->modifiers() ) );
         m_firstPoint = m_activePoint;
         m_canvas->updateCanvas( m_shape->boundingRect() );
-        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+        m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
 
-        m_snapGuide->setEditedShape( m_shape );
+        m_canvas->snapGuide()->setEditedShape( m_shape );
     }
 }
 
@@ -168,9 +164,9 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
 {
     if ( ! m_shape )
     {
-        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-        m_snapGuide->snap( event->point, event->modifiers() );
-        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+        m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
+        m_canvas->snapGuide()->snap( event->point, event->modifiers() );
+        m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
 
         m_mouseOverFirstPoint = false;
         return;
@@ -192,10 +188,10 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     }
     else
     {
-        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
-        m_activePoint->setPoint( m_snapGuide->snap( event->point, event->modifiers() ) );
+        m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
+        m_activePoint->setPoint( m_canvas->snapGuide()->snap( event->point, event->modifiers() ) );
         m_canvas->updateCanvas( m_shape->boundingRect() );
-        m_canvas->updateCanvas( m_snapGuide->boundingRect() );
+        m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
     }
 }
 
@@ -223,12 +219,12 @@ void KoCreatePathTool::activate( bool temporary )
 
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
-    m_snapGuide->setEditedShape( 0 );
+    m_canvas->snapGuide()->reset();
 }
 
 void KoCreatePathTool::deactivate()
 {
-    m_snapGuide->setEditedShape( 0 );
+    m_canvas->snapGuide()->reset();
     if( m_shape )
     {
         m_canvas->updateCanvas( handleRect( m_firstPoint->point() ) );
@@ -258,7 +254,7 @@ void KoCreatePathTool::addPathShape()
 {
     m_shape->normalize();
 
-    m_snapGuide->setEditedShape(0);
+    m_canvas->snapGuide()->setEditedShape(0);
 
     // this is done so that nothing happens when the mouseReleaseEvent for the this event is received 
     KoPathShape *pathShape = m_shape;
@@ -291,6 +287,6 @@ void KoCreatePathTool::repaintAdjusted( const QRectF &rect )
 }
 
 QWidget * KoCreatePathTool::createOptionWidget() {
-    SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_snapGuide);
+    SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_canvas->snapGuide());
     return widget;
 }

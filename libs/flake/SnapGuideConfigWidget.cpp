@@ -26,16 +26,7 @@ SnapGuideConfigWidget::SnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget *
 {
     widget.setupUi(this);
 
-    if( snapGuide->enabledSnapStrategies() & KoSnapStrategy::Orthogonal )
-        widget.orthogonalSnapGuide->setCheckState( Qt::Checked );
-    if( snapGuide->enabledSnapStrategies() & KoSnapStrategy::Node )
-        widget.nodeSnapGuide->setCheckState( Qt::Checked );
-    if( snapGuide->enabledSnapStrategies() & KoSnapStrategy::Extension )
-        widget.extensionSnapGuide->setCheckState( Qt::Checked );
-    if( snapGuide->enabledSnapStrategies() & KoSnapStrategy::Intersection )
-        widget.intersectionSnapGuide->setCheckState( Qt::Checked );
-
-    widget.snapDistance->setValue( m_snapGuide->snapDistance() );
+    updateControls();
 
     connect( widget.useSnapGuides, SIGNAL(stateChanged(int)), this, SLOT(snappingEnabled(int)));
     connect( widget.orthogonalSnapGuide, SIGNAL(stateChanged(int)), this, SLOT(strategyChanged()));
@@ -75,6 +66,34 @@ void SnapGuideConfigWidget::strategyChanged()
 void SnapGuideConfigWidget::distanceChanged( int distance )
 {
     m_snapGuide->setSnapDistance( distance );
+}
+
+void SnapGuideConfigWidget::updateControls()
+{
+    if( m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Orthogonal )
+        widget.orthogonalSnapGuide->setCheckState( Qt::Checked );
+    else
+        widget.orthogonalSnapGuide->setCheckState( Qt::Unchecked );
+    if( m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Node )
+        widget.nodeSnapGuide->setCheckState( Qt::Checked );
+    else
+        widget.nodeSnapGuide->setCheckState( Qt::Unchecked );
+    if( m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Extension )
+        widget.extensionSnapGuide->setCheckState( Qt::Checked );
+    else
+        widget.extensionSnapGuide->setCheckState( Qt::Unchecked );
+    if( m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Intersection )
+        widget.intersectionSnapGuide->setCheckState( Qt::Checked );
+    else
+        widget.intersectionSnapGuide->setCheckState( Qt::Unchecked );
+
+    widget.snapDistance->setValue( m_snapGuide->snapDistance() );
+}
+
+void SnapGuideConfigWidget::showEvent( QShowEvent * event )
+{
+    Q_UNUSED(event);
+    updateControls();
 }
 
 #include "SnapGuideConfigWidget.moc"

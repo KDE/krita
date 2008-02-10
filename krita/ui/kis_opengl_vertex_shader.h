@@ -22,6 +22,9 @@
 
 #include "kis_opengl_shader.h"
 
+#include <QVector>
+#include <QString>
+
 /**
  * An encapsulation of an OpenGL Shading Language vertex shader object.
  */

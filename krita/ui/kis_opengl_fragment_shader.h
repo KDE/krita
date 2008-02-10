@@ -19,6 +19,7 @@
 #define KIS_OPENGL_FRAGMENT_SHADER_H_
 
 #include <QString>
+#include <QVector>
 
 #include "krita_export.h"
 #include "kis_opengl_shader.h"

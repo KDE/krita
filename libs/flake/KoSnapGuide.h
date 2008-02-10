@@ -20,6 +20,7 @@
 #ifndef KOSNAPGUIDE_H
 #define KOSNAPGUIDE_H
 
+#include <KoPathSegment.h>
 #include <QtCore/QPointF>
 #include <QtCore/QList>
 #include <QtCore/QRectF>
@@ -111,6 +112,9 @@ public:
 
     /// returns list of points from given shape
     QList<QPointF> pointsFromShape( KoShape * shape );
+
+    /// returns list of points in given rectangle in document coordinates
+    QList<KoPathSegment> segmentsInRect( const QRectF &rect );
 
     /// returns list of all shapes
     QList<KoShape*> shapes( bool omitEditedShape = false );

@@ -68,7 +68,7 @@ OrthogonalSnapStrategy::OrthogonalSnapStrategy()
 {
 }
 
-bool OrthogonalSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool OrthogonalSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     QPointF horzSnap, vertSnap;
     double minVertDist = HUGE_VAL;
@@ -127,7 +127,7 @@ NodeSnapStrategy::NodeSnapStrategy()
 {
 }
 
-bool NodeSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool NodeSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     double maxDistance = maxSnapDistance*maxSnapDistance;
     double minDistance = HUGE_VAL;
@@ -168,7 +168,7 @@ ExtensionSnapStrategy::ExtensionSnapStrategy()
 {
 }
 
-bool ExtensionSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     double maxDistance = maxSnapDistance*maxSnapDistance;
     double minDistance = HUGE_VAL;
@@ -304,31 +304,16 @@ IntersectionSnapStrategy::IntersectionSnapStrategy()
 {
 }
 
-bool IntersectionSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool IntersectionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     double maxDistance = maxSnapDistance*maxSnapDistance;
     double minDistance = HUGE_VAL;
 
     QRectF rect( -maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance );
     rect.moveCenter( mousePosition );
-    QList<KoShape*> shapes = proxy->shapesInRect( rect, true );
-
-    QList<KoPathSegment> segments;
-    foreach( KoShape * shape, shapes )
-    {
-        KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-        if( ! path )
-            continue;
-
-        QMatrix m = shape->absoluteTransformation(0);
-        // transform segments to document coordinates
-        foreach( KoPathSegment s, path->segmentsAt( path->documentToShape( rect ) ) )
-        {
-            segments.append( s.mapped( m ) );
-        }
-    }
     QPointF snappedPoint = mousePosition;
 
+    QList<KoPathSegment> segments = proxy->segmentsInRect( rect );
     //kDebug() << "found" << segments.count() << "segments in roi";
 
     int segmentCount = segments.count();
@@ -375,7 +360,7 @@ GridSnapStrategy::GridSnapStrategy()
 {
 }
 
-bool GridSnapStrategy::snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
 {
     if( ! proxy->canvas()->snapToGrid() )
         return false;

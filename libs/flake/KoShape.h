@@ -32,6 +32,7 @@
 #include <QBrush>
 
 #include <KoXmlReaderForward.h>
+#include <KoSnapData.h>
 
 #include "flake_export.h"
 
@@ -614,6 +615,34 @@ public:
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
 
     /**
+     * @brief Transforms point from shape coordinates to document coordinates
+     * @param point in shape coordinates
+     * @return point in document coordinates
+     */
+    QPointF shapeToDocument( const QPointF &point ) const;
+
+    /**
+     * @brief Transforms rect from shape coordinates to document coordinates
+     * @param rect in shape coordinates
+     * @return rect in document coordinates
+     */
+    QRectF shapeToDocument( const QRectF &rect ) const;
+
+    /**
+     * @brief Transforms point from document coordinates to shape coordinates
+     * @param point in document coordinates
+     * @return point in shape coordinates
+     */
+    QPointF documentToShape( const QPointF &point ) const;
+
+    /**
+     * @brief Transform rect from document coordinates to shape coordinates
+     * @param rect in document coordinates
+     * @return rect in shape coordinates
+     */
+    QRectF documentToShape( const QRectF &rect ) const;
+
+    /**
      * Return all the connections made to or from this shape.
      */
     QList<KoShapeConnection*> connections() const;
@@ -675,6 +704,9 @@ public:
      * copies the shapes data.
      */
     KoShape * clone( KoShapeControllerBase * base ) const;
+
+    /// Returns additional snap data the shape wants to have snapping to
+    virtual KoSnapData snapData() const;
 
 protected:
 

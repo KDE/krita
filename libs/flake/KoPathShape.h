@@ -388,42 +388,6 @@ public:
 #endif
 
     /**
-     * @brief transform point from shape coordinates to document coordinates
-     *
-     * @param point in shape coordinates
-     *
-     * @return point in document coordinates
-     */
-    QPointF shapeToDocument( const QPointF &point ) const;
-
-    /**
-     * @brief transform rect from shape coordinates to document coordinates
-     *
-     * @param rect in shape coordinates
-     *
-     * @return rect in document coordinates
-     */
-    QRectF shapeToDocument( const QRectF &rect ) const;
-
-    /**
-     * @brief transform point from world coordinates to document coordinates
-     *
-     * @param point in document coordinates
-     *
-     * @return point in shape coordinates
-     */
-    QPointF documentToShape( const QPointF &point ) const;
-
-    /**
-     * @brief transform rect from world coordinates to document coordinates
-     *
-     * @param rect in document coordinates
-     *
-     * @return rect in shape coordinates
-     */
-    QRectF documentToShape( const QRectF &rect ) const;
-
-    /**
      * Returns the specific path shape id.
      *
      * Path shape derived shapes have a different shape id which link them

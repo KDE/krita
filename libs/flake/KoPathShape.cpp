@@ -286,27 +286,6 @@ void KoPathShape::debugPath()
 }
 #endif
 
-QPointF KoPathShape::shapeToDocument( const QPointF &point ) const
-{
-    return absoluteTransformation(0).map( point );
-}
-
-QRectF KoPathShape::shapeToDocument( const QRectF &rect ) const 
-{
-    return absoluteTransformation(0).mapRect( rect );
-}
-
-QPointF KoPathShape::documentToShape( const QPointF &point ) const
-{
-    return absoluteTransformation(0).inverted().map( point );
-}
-
-QRectF KoPathShape::documentToShape( const QRectF &rect ) const 
-{
-    return absoluteTransformation(0).inverted().mapRect( rect );
-}
-
-
 void KoPathShape::paintPoints( QPainter &painter, const KoViewConverter &converter, int handleRadius )
 {
     applyConversion( painter, converter );

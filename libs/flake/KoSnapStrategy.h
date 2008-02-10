@@ -42,7 +42,7 @@ public:
     KoSnapStrategy( SnapType type );
     virtual ~KoSnapStrategy() {};
 
-    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance ) = 0;
+    virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance ) = 0;
 
     /// returns the current snap strategy decoration
     QPainterPath decoration() const;
@@ -73,7 +73,7 @@ class OrthogonalSnapStrategy : public KoSnapStrategy
 {
 public:
     OrthogonalSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
 
 /// snaps to path points
@@ -81,7 +81,7 @@ class NodeSnapStrategy : public KoSnapStrategy
 {
 public:
     NodeSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
 
 /// snaps extension lines of path shapes
@@ -89,7 +89,7 @@ class ExtensionSnapStrategy : public KoSnapStrategy
 {
 public:
     ExtensionSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 private:
     double project( const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point );
     QPointF extensionDirection( KoPathPoint * point, const QMatrix &matrix );
@@ -101,7 +101,7 @@ class IntersectionSnapStrategy : public KoSnapStrategy
 {
 public:
     IntersectionSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
 
 /// snaps to the canvas grid
@@ -109,7 +109,7 @@ class GridSnapStrategy : public KoSnapStrategy
 {
 public:
     GridSnapStrategy();
-    virtual bool snapToPoints( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
 };
 
 #endif // KOSNAPSTRATEGY_H

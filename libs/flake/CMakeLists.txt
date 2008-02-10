@@ -64,6 +64,7 @@ set(flake_SRCS
     KoConnectionShapeConfigWidget.cpp
     KoSnapGuide.cpp
     KoSnapStrategy.cpp
+    KoSnapData.cpp
     SnapGuideConfigWidget.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp

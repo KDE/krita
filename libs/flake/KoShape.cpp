@@ -1002,6 +1002,27 @@ void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converte
     painter.scale(zoomX, zoomY);
 }
 
+QPointF KoShape::shapeToDocument( const QPointF &point ) const
+{
+    return absoluteTransformation(0).map( point );
+}
+
+QRectF KoShape::shapeToDocument( const QRectF &rect ) const 
+{
+    return absoluteTransformation(0).mapRect( rect );
+}
+
+QPointF KoShape::documentToShape( const QPointF &point ) const
+{
+    return absoluteTransformation(0).inverted().map( point );
+}
+
+QRectF KoShape::documentToShape( const QRectF &rect ) const
+{
+    return absoluteTransformation(0).inverted().mapRect( rect );
+}
+
+
 void KoShape::addDependee( KoShape * shape )
 {
     if( ! d->dependees.contains( shape ) )
@@ -1019,4 +1040,9 @@ void KoShape::notifyShapeChanged( KoShape * shape, ChangeType type )
 {
     Q_UNUSED( shape );
     Q_UNUSED( type );
+}
+
+KoSnapData KoShape::snapData() const
+{
+    return KoSnapData();
 }

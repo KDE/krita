@@ -103,7 +103,7 @@ QPointF KoSnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers m
     {
         if( m_usedStrategies & strategy->type() || strategy->type() == KoSnapStrategy::Grid )
         {
-            if( ! strategy->snapToPoints( mousePosition, &proxy, maxSnapDistance ) )
+            if( ! strategy->snap( mousePosition, &proxy, maxSnapDistance ) )
                 continue;
 
             QPointF snapCandidate = strategy->snappedPosition();
@@ -135,7 +135,7 @@ QRectF KoSnapGuide::boundingRect()
 void KoSnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
 {
     Q_UNUSED(converter);
-    
+
     if( ! m_currentStrategy || ! m_active )
         return;
 
@@ -205,7 +205,10 @@ QList<QPointF> KoSnapProxy::pointsFromShape( KoShape * shape )
 
     KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
     if( ! path )
-        return pathPoints;
+    {
+        // return the special snap points of the shape
+        return shape->snapData().snapPoints();
+    }
 
     QMatrix m = path->absoluteTransformation(0);
 
@@ -229,6 +232,44 @@ QList<QPointF> KoSnapProxy::pointsFromShape( KoShape * shape )
         pathPoints.removeLast();
 
     return pathPoints;
+}
+
+QList<KoPathSegment> KoSnapProxy::segmentsInRect( const QRectF &rect )
+{
+    QList<KoShape*> shapes = shapesInRect( rect, true );
+
+    QList<KoPathSegment> segments;
+    foreach( KoShape * shape, shapes )
+    {
+        QList<KoPathSegment> shapeSegments;
+        QRectF rectOnShape = shape->documentToShape( rect );
+        KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+        if( path )
+        {
+            shapeSegments = path->segmentsAt( rectOnShape );
+        }
+        else
+        {
+            foreach( KoPathSegment s, shape->snapData().snapSegments() )
+            {
+                QRectF controlRect = s.controlPointRect();
+                if( ! rect.intersects( controlRect ) && ! controlRect.contains( rect ) )
+                    continue;
+                QRectF bound = s.boundingRect();
+                if( ! rect.intersects( bound ) && ! bound.contains( rect ) )
+                    continue;
+                shapeSegments.append( s );
+            }
+        }
+
+        QMatrix m = shape->absoluteTransformation(0);
+        // transform segments to document coordinates
+        foreach( KoPathSegment s, shapeSegments )
+        {
+            segments.append( s.mapped( m ) );
+        }
+    }
+    return segments;
 }
 
 QList<KoShape*> KoSnapProxy::shapes( bool omitEditedShape )

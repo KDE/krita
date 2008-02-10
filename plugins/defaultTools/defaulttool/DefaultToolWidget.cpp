@@ -78,10 +78,14 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
 
     aspectButton->setChecked( false );
 
-    connect( rotateButton, SIGNAL( clicked() ), this, SLOT ( rotationChanged() ) );
-    connect( shearXButton, SIGNAL( clicked() ), this, SLOT ( shearXChanged() ) );
-    connect( shearYButton, SIGNAL( clicked() ), this, SLOT ( shearYChanged() ) );
-    connect( scaleButton, SIGNAL( clicked() ), this, SLOT ( scaleChanged() ) );
+    connect( rotateButton, SIGNAL( clicked() ), this, SLOT( rotationChanged() ) );
+    connect( shearXButton, SIGNAL( clicked() ), this, SLOT( shearXChanged() ) );
+    connect( shearYButton, SIGNAL( clicked() ), this, SLOT( shearYChanged() ) );
+    connect( scaleXButton, SIGNAL( clicked() ), this, SLOT( scaleXChanged() ) );
+    connect( scaleYButton, SIGNAL( clicked() ), this, SLOT( scaleYChanged() ) );
+    connect( scaleAspectCheckBox, SIGNAL( toggled( bool ) ), scaleYSpinBox, SLOT( setDisabled( bool ) ) );
+    connect( scaleAspectCheckBox, SIGNAL( toggled( bool ) ), scaleYButton, SLOT( setDisabled( bool ) ) );
+    connect( resetButton, SIGNAL( clicked() ), this, SLOT( resetTransformations() ) );
 
     updatePosition();
     updateSize();
@@ -225,6 +229,8 @@ void DefaultToolWidget::setUnit( const KoUnit &unit )
     positionYSpinBox->setUnit( unit );
     widthSpinBox->setUnit( unit );
     heightSpinBox->setUnit( unit );
+    shearXSpinBox->setUnit( unit );
+    shearYSpinBox->setUnit( unit );
 }
 
 void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
@@ -267,14 +273,15 @@ void DefaultToolWidget::rotationChanged()
 
 void DefaultToolWidget::shearXChanged()
 {
-    QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    KoSelection* selection = m_tool->canvas()->shapeManager()->selection();
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
     QList<QMatrix> oldTransforms;
 
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
 
-    double shearX = shearXSpinBox->value();
-    QPointF basePoint = m_tool->canvas()->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
+    double shearX = shearXSpinBox->value() / selection->size().height();
+    QPointF basePoint = selection->absolutePosition( SelectionDecorator::hotPosition() );
     QMatrix matrix;
     matrix.translate(basePoint.x(), basePoint.y());
     matrix.shear(shearX, 0.0);
@@ -286,7 +293,7 @@ void DefaultToolWidget::shearXChanged()
         shape->update();
     }
 
-    m_tool->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
+    selection->applyAbsoluteTransformation( matrix );
     QList<QMatrix> newTransforms;
 
     foreach( KoShape* shape, selectedShapes )
@@ -299,14 +306,15 @@ void DefaultToolWidget::shearXChanged()
 
 void DefaultToolWidget::shearYChanged()
 {
-    QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    KoSelection* selection = m_tool->canvas()->shapeManager()->selection();
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
     QList<QMatrix> oldTransforms;
 
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
 
-    double shearY = shearYSpinBox->value();
-    QPointF basePoint = m_tool->canvas()->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
+    double shearY = shearYSpinBox->value() / selection->size().width();
+    QPointF basePoint = selection->absolutePosition( SelectionDecorator::hotPosition() );
     QMatrix matrix;
     matrix.translate(basePoint.x(), basePoint.y());
     matrix.shear(0.0, shearY);
@@ -318,7 +326,7 @@ void DefaultToolWidget::shearYChanged()
         shape->update();
     }
 
-    m_tool->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
+    selection->applyAbsoluteTransformation( matrix );
     QList<QMatrix> newTransforms;
 
     foreach( KoShape* shape, selectedShapes )
@@ -329,7 +337,7 @@ void DefaultToolWidget::shearYChanged()
     m_tool->canvas()->addCommand( cmd );
 }
 
-void DefaultToolWidget::scaleChanged()
+void DefaultToolWidget::scaleXChanged()
 {
     QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
     QList<QMatrix> oldTransforms;
@@ -337,11 +345,16 @@ void DefaultToolWidget::scaleChanged()
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
 
-    double scale = scaleSpinBox->value();
+    double scale = scaleXSpinBox->value() * 0.01; // Input is in per cent
     QPointF basePoint = m_tool->canvas()->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
     QMatrix matrix;
     matrix.translate(basePoint.x(), basePoint.y());
-    matrix.scale(scale, scale);
+
+    if(scaleAspectCheckBox->isChecked())
+        matrix.scale(scale, scale);
+    else
+        matrix.scale(scale, 1.0);
+
     matrix.translate(-basePoint.x(), -basePoint.y());
 
     foreach( KoShape * shape, selectedShapes ) {
@@ -358,6 +371,65 @@ void DefaultToolWidget::scaleChanged()
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
     cmd->setText( i18n("Scale") );
+    m_tool->canvas()->addCommand( cmd );
+}
+
+void DefaultToolWidget::scaleYChanged()
+{
+    QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<QMatrix> oldTransforms;
+
+    foreach( KoShape* shape, selectedShapes )
+        oldTransforms << shape->transformation();
+
+    double scale = scaleYSpinBox->value() * 0.01; // Input is in per cent
+    QPointF basePoint = m_tool->canvas()->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
+    QMatrix matrix;
+    matrix.translate(basePoint.x(), basePoint.y());
+    matrix.scale(1.0, scale);
+    matrix.translate(-basePoint.x(), -basePoint.y());
+
+    foreach( KoShape * shape, selectedShapes ) {
+        shape->update();
+        shape->applyAbsoluteTransformation( matrix );
+        shape->update();
+    }
+
+    m_tool->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
+    QList<QMatrix> newTransforms;
+
+    foreach( KoShape* shape, selectedShapes )
+        newTransforms << shape->transformation();
+
+    KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
+    cmd->setText( i18n("Scale") );
+    m_tool->canvas()->addCommand( cmd );
+}
+
+void DefaultToolWidget::resetTransformations()
+{
+    QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<QMatrix> oldTransforms;
+
+    foreach( KoShape* shape, selectedShapes )
+        oldTransforms << shape->transformation();
+
+    QMatrix matrix;
+
+    foreach( KoShape * shape, selectedShapes ) {
+        shape->update();
+        shape->setTransformation( matrix );
+        shape->update();
+    }
+
+    m_tool->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
+    QList<QMatrix> newTransforms;
+
+    foreach( KoShape* shape, selectedShapes )
+        newTransforms << shape->transformation();
+
+    KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
+    cmd->setText( i18n("Reset Transformations") );
     m_tool->canvas()->addCommand( cmd );
 }
 

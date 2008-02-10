@@ -48,7 +48,9 @@ private slots:
     void rotationChanged();
     void shearXChanged();
     void shearYChanged();
-    void scaleChanged();
+    void scaleXChanged();
+    void scaleYChanged();
+    void resetTransformations();
 
 private:
     KoInteractionTool* m_tool;

@@ -572,10 +572,6 @@ void TextTool::setShapeData(KoTextShapeData *data) {
     }
     if(m_spellcheckPlugin)
         m_spellcheckPlugin->checkSection(m_textShapeData->document(), 0, 0);
-
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
-    if(lay && lay->styleManager() == 0) // this means there is no (ko)document-wide stylemanager.
-        lay->setStyleManager( new KoStyleManager(m_textShapeData));
 }
 
 void TextTool::updateSelectionHandler() {

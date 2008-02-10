@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1003,8 +1004,8 @@ double Layout::findFootnote(const QTextLine &line) {
     return 0;
 }
 
-void Layout::setStyleManager(KoStyleManager *sm) {
-    delete m_styleManager;
+void Layout::setStyleManager(KoStyleManager *sm)
+{
     m_styleManager = sm;
 }
 

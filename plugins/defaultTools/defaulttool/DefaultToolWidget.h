@@ -45,6 +45,10 @@ private slots:
     void updateSize();
     void sizeHasChanged();
     void resourceChanged( int key, const QVariant & res );
+    void rotationChanged();
+    void shearXChanged();
+    void shearYChanged();
+    void scaleChanged();
 
 private:
     KoInteractionTool* m_tool;

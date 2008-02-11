@@ -241,6 +241,9 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
 bool ExtensionSnapStrategy::snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix )
 {
     QPointF direction = extensionDirection( point, matrix );
+    if( direction.isNull() )
+        return false;
+
     QPointF extensionStart = matrix.map( point->point() );
     QPointF extensionStop = matrix.map( point->point() ) + direction;
     float posOnExtension = project( extensionStart, extensionStop, position );
@@ -256,6 +259,9 @@ double ExtensionSnapStrategy::project( const QPointF &lineStart, const QPointF &
     QPointF diff = lineEnd - lineStart;
     QPointF relPoint = point - lineStart;
     double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+    if( diffLength == 0.0 )
+        return 0.0;
+
     diff /= diffLength;
     // project mouse position relative to stop position on extension line
     double scalar = relPoint.x()*diff.x() + relPoint.y()*diff.y();

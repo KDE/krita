@@ -99,14 +99,14 @@ public:
     virtual ~KoShapeFactory();
 
     /**
-     * This method should be calles to create a shape that the user gets when doing a base insert. 
+     * This method should be called to create a shape that the user gets when doing a base insert. 
      * For example from a script or during loading. 
      *
      * This will call shapeCreated on the shapeController when one was given. You should make
      * sure to pass a shapeController so that all works as expected. However in some cases it 
      * is ok to not pass the shapeController e.g. when it is only a temporary shape that will 
      * not be inserted in the document.
-     * The shapeController can then set thinks that e.g. need to be available during loading of 
+     * The shapeController can then set things that e.g. need to be available during loading of 
      * the shape.
      * This method internally calls createDefaultShape();
      *
@@ -127,7 +127,7 @@ public:
      * sure to pass a shapeController so that all works as expected. However in some cases it 
      * is ok to not pass the shapeController e.g. when it is only a temporary shape that will 
      * not be inserted in the document.
-     * The shapeController can then set thinks that e.g. need to be available during loading of 
+     * The shapeController can then set things that e.g. need to be available during loading of 
      * the shape.
      * This method internally calls createShape( params );
      *

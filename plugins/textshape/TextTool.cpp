@@ -1171,11 +1171,11 @@ KoToolSelection* TextTool::selection() {
 QWidget *TextTool::createOptionWidget() {
     QTabWidget *widget = new QTabWidget();
     SimpleStyleWidget *ssw = new SimpleStyleWidget(this, widget);
-    widget->addTab(ssw, i18n("Style"));
+    widget->addTab(ssw, i18n("Abc")); // XXX: Replace with icon
     StylesWidget *paragTab = new StylesWidget(StylesWidget::ParagraphStyle, widget);
-    widget->addTab(paragTab, i18n("Paragraph"));
+    widget->addTab(paragTab, i18n("¶")); // XXX: Replace with icon
     StylesWidget *charTab =new StylesWidget(StylesWidget::CharacterStyle, widget);
-    widget->addTab(charTab, i18n("Character"));
+    widget->addTab(charTab, i18n("T")); // XXX: Replace with icon
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), ssw, SLOT(setCurrentBlock(const QTextBlock&)));
@@ -1558,15 +1558,17 @@ bool TextTool::isBidiDocument() const {
 void TextTool::updateParagraphDirection(const QVariant &variant) {
     int position = variant.toInt();
     KoTextShapeData *data = m_textShapeData;
-    if(data == 0) // tools is deactivated already
+    if(data == 0) // tool is deactivated already
         return;
     m_updateParagDirection.block = data->document()->findBlock(position);
     m_updateParagDirection.direction = KoText::AutoDirection;
     if(! m_updateParagDirection.block.isValid())
         return;
     QTextBlockFormat format = m_updateParagDirection.block.blockFormat();
-    KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
-                KoParagraphStyle::TextProgressionDirection));
+    
+    KoText::Direction dir =
+        static_cast<KoText::Direction> (format.intProperty( KoParagraphStyle::TextProgressionDirection));
+        
     if(dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom ||
             dir == KoText::PerhapsRightLeftTopBottom) {
         bool rtl = isRightToLeft(m_updateParagDirection.block.text());

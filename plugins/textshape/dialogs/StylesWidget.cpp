@@ -37,6 +37,7 @@ StylesWidget::StylesWidget(Type type, QWidget *parent)
     connect(widget.newStyle, SIGNAL(pressed()), this, SLOT(newStyleClicked()));
     connect(widget.deleteStyle, SIGNAL(pressed()), this, SLOT(deleteStyleClicked()));
     connect(widget.styleList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(editStyle(QListWidgetItem*)));
+    connect(widget.modifyStyle, SIGNAL(pressed()), this, SLOT(editStyle()));
 
     widget.newStyle->setIcon( KIcon("list-add") );
     widget.deleteStyle->setIcon( KIcon("edit-delete") );
@@ -152,7 +153,7 @@ void StylesWidget::newStyleClicked() {
 void StylesWidget::deleteStyleClicked() {
     QListWidgetItem *item = widget.styleList->currentItem();
     Q_ASSERT(item);
-    int row = widget.styleList->row(item);
+    
     int styleId = item->data(99).toInt();
     if(m_type == CharacterStyle) {
         KoCharacterStyle *style = m_styleManager->characterStyle(styleId);
@@ -166,7 +167,13 @@ void StylesWidget::deleteStyleClicked() {
     }
 }
 
+void StylesWidget::editStyle()
+{
+    editStyle(widget.styleList->currentItem());
+}
+
 void StylesWidget::editStyle(QListWidgetItem *item) {
+
     QWidget *widget = 0;
     if(m_type == CharacterStyle) {
         //KoCharacterStyle *style = m_styleManager->characterStyle(item->data(99).toInt());

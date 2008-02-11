@@ -84,8 +84,8 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
             this, SIGNAL(aspectModeChanged(bool)));
 
     actionCollection->addAction("view_zoom", d->action);
-    actionCollection->addAction(KStandardAction::ZoomIn,  "zood->in", d->action, SLOT(zoomIn()));
-    actionCollection->addAction(KStandardAction::ZoomOut,  "zood->out", d->action, SLOT(zoomOut()));
+    actionCollection->addAction(KStandardAction::ZoomIn,  "zoom_in", d->action, SLOT(zoomIn()));
+    actionCollection->addAction(KStandardAction::ZoomOut,  "zoom_out", d->action, SLOT(zoomOut()));
 
     connect(d->canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize() ) );
 

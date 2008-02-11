@@ -196,17 +196,17 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     QString generatedName;
                     if (paragStyle == (*originalParagraphStyle)) {
                         // This is the real, unmodified character style.
-                        KoGenStyle test(KoGenStyle::StyleUser, "paragraph");
-                        test.setAutoStyleInStylesDotXml(true);
-                        originalParagraphStyle->saveOdf(&test);
-                        generatedName = context.mainStyles().lookup(test, internalName);
+                        KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
+                        originalParagraphStyle->saveOdf(style);
+                        generatedName = context.mainStyles().lookup(style, internalName);
                     } else {
                         // There are manual changes... We'll have to store them then
-                        KoGenStyle test(KoGenStyle::StyleAuto, "paragraph", internalName);
-                        test.setAutoStyleInStylesDotXml(false);
+                        KoGenStyle style(KoGenStyle::StyleAuto, "paragraph", internalName);
+                        // TODO this needs to check if false or true is needed
+                        style.setAutoStyleInStylesDotXml(false);
                         paragStyle.removeDuplicates(*originalParagraphStyle);
-                        paragStyle.saveOdf(&test);
-                        generatedName = context.mainStyles().lookup(test, "P");
+                        paragStyle.saveOdf(style);
+                        generatedName = context.mainStyles().lookup(style, "P");
                     }
                     styleNames[allFormats.indexOf(textFormat)] = generatedName;
                 } else if (textFormat.type() == QTextFormat::CharFormat) {
@@ -224,10 +224,9 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
                     if (charStyle == (*originalCharStyle)) {
                         // This is the real, unmodified character style.
-                        KoGenStyle test(KoGenStyle::StyleUser, "text");
-                        test.setAutoStyleInStylesDotXml(true);
-                        originalCharStyle->saveOdf(&test);
-                        generatedName = context.mainStyles().lookup(test, internalName);
+                        KoGenStyle style(KoGenStyle::StyleUser, "text");
+                        originalCharStyle->saveOdf(style);
+                        generatedName = context.mainStyles().lookup(style, internalName);
                         // Check whether it is the default char format...
                         if (styleManager->defaultParagraphStyle()) {
                             KoParagraphStyle *defaultParagraph = styleManager->defaultParagraphStyle();
@@ -236,11 +235,11 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                         }
                     } else {
                         // There are manual changes... We'll have to store them then
-                        KoGenStyle test(KoGenStyle::StyleAuto, "text", internalName);
-                        test.setAutoStyleInStylesDotXml(false);
+                        KoGenStyle style(KoGenStyle::StyleAuto, "text", internalName);
+                        style.setAutoStyleInStylesDotXml(false);
                         charStyle.removeDuplicates(*originalCharStyle);
-                        charStyle.saveOdf(&test);
-                        generatedName = context.mainStyles().lookup(test, "T");
+                        charStyle.saveOdf(style);
+                        generatedName = context.mainStyles().lookup(style, "T");
                     }
                     styleNames[allFormats.indexOf(textFormat)] = generatedName;
                 } else {

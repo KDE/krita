@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 class KoCharacterStyle;
 class KoParagraphStyle;
 class ChangeFollower;
+class KoGenStyles;
 
 /**
  * Manages all character and paragraph styles for any number of documents.
@@ -45,6 +47,13 @@ public:
      * Destructor.
      */
     virtual ~KoStyleManager();
+
+    // load is not needed as it is done in KoTextSharedLoadingData
+
+    /**
+     * Save document styles
+     */
+    void saveOdf( KoGenStyles& mainStyles );
 
     /**
      * Add a new style, automatically giving it a new styleId.

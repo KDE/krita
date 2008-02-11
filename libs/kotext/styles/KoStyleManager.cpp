@@ -22,6 +22,9 @@
 #include "KoCharacterStyle.h"
 #include "ChangeFollower.h"
 
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
+
 #include <QTimer>
 #include <kdebug.h>
 #include <klocale.h>
@@ -55,13 +58,28 @@ KoStyleManager::KoStyleManager(QObject *parent)
     d->standard->setRightMargin(0);
     d->standard->setTextIndent(0);
     d->standard->setAlignment(Qt::AlignLeft);
-    d->standard->setName( i18n("[No Paragraph Style]"));
-    d->standard->characterStyle()->setName(i18n("[No Character Style]"));
+    d->standard->setName( i18n("Standard"));
+    d->standard->characterStyle()->setName(i18n("Standard"));
     add(d->standard);
 }
 
 KoStyleManager::~KoStyleManager() {
     delete d;
+}
+
+void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
+{
+    foreach ( KoParagraphStyle *paragraphStyle, d->paragStyles ) {
+        KoGenStyle style( KoGenStyle::StyleUser, "paragraph" );
+        paragraphStyle->saveOdf( style );
+        mainStyles.lookup( style, "P" );
+    }
+
+    foreach ( KoCharacterStyle *characterStyle, d->charStyles ) {
+        KoGenStyle style( KoGenStyle::StyleUser, "text" );
+        characterStyle->saveOdf( style );
+        mainStyles.lookup( style, "T" );
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style) {

@@ -1,21 +1,22 @@
 /* This file is part of the KDE project
-* Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Library General Public
-* License as published by the Free Software Foundation; either
-* version 2 of the License, or (at your option) any later version.
-*
-* This library is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* Library General Public License for more details.
-*
-* You should have received a copy of the GNU Library General Public License
-* along with this library; see the file COPYING.LIB.  If not, write to
-* the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301, USA.
-*/
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
@@ -1152,7 +1153,9 @@ void KoParagraphStyle::removeDuplicates ( const KoParagraphStyle &other ) {
     this->d->stylesPrivate->removeDuplicates(other.d->stylesPrivate);
 }
 
-void KoParagraphStyle::saveOdf ( KoGenStyle *target ) {
+void KoParagraphStyle::saveOdf( KoGenStyle & style )
+{
+    style.addAttribute( "style:display-name", d->name );
     QList<int> keys = d->stylesPrivate->keys();
     foreach (int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
@@ -1175,7 +1178,7 @@ void KoParagraphStyle::saveOdf ( KoGenStyle *target ) {
                 else if (alignment == Qt::AlignJustify)
                     align = "justify";
                 if (!align.isEmpty())
-                    target->addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
+                    style.addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
             }
         } else if (key == KoParagraphStyle::TextProgressionDirection) {
             int directionValue = 0;
@@ -1190,49 +1193,49 @@ void KoParagraphStyle::saveOdf ( KoGenStyle *target ) {
                 else if (directionValue == KoText::TopBottomRightLeft)
                     direction = "tb";
                 if (!direction.isEmpty())
-                    target->addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
+                    style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
             }
         } else if (key == KoParagraphStyle::BreakBefore) {
             if (breakBefore())
-                target->addProperty("fo:breaf-before", "page", KoGenStyle::ParagraphType);
+                style.addProperty("fo:breaf-before", "page", KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BreakAfter) {
             if (breakBefore())
-                target->addProperty("fo:breaf-after", "page", KoGenStyle::ParagraphType);
+                style.addProperty("fo:breaf-after", "page", KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)
-                target->addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
+                style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
             else
-                target->addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
+                style.addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
         // Padding
         } else if (key == KoParagraphStyle::LeftPadding) {
-            target->addAttributePt("fo:padding-left", leftPadding());
+            style.addAttributePt("fo:padding-left", leftPadding());
         } else if (key == KoParagraphStyle::RightPadding) {
-            target->addAttributePt("fo:padding-right", rightPadding());
+            style.addAttributePt("fo:padding-right", rightPadding());
         } else if (key == KoParagraphStyle::TopPadding) {
-            target->addAttributePt("fo:padding-top", topPadding());
+            style.addAttributePt("fo:padding-top", topPadding());
         } else if (key == KoParagraphStyle::BottomPadding) {
-            target->addAttributePt("fo:padding-bottom", bottomPadding());
+            style.addAttributePt("fo:padding-bottom", bottomPadding());
         // Margin
         } else if (key == QTextFormat::BlockLeftMargin) {
-            target->addAttributePt("fo:margin-left", leftMargin());
+            style.addAttributePt("fo:margin-left", leftMargin());
         } else if (key == QTextFormat::BlockRightMargin) {
-            target->addAttributePt("fo:margin-right", rightMargin());
+            style.addAttributePt("fo:margin-right", rightMargin());
         } else if (key == QTextFormat::BlockTopMargin) {
-            target->addAttributePt("fo:margin-top", topMargin());
+            style.addAttributePt("fo:margin-top", topMargin());
         } else if (key == QTextFormat::BlockBottomMargin) {
-            target->addAttributePt("fo:margin-bottom", bottomMargin());
+            style.addAttributePt("fo:margin-bottom", bottomMargin());
         // Line spacing
         } else if (key == KoParagraphStyle::MinimumLineHeight) {
-            target->addAttributePt("style:line-height-at-least", minimumLineHeight());
+            style.addAttributePt("style:line-height-at-least", minimumLineHeight());
         } else if (key == KoParagraphStyle::LineSpacing) {
-            target->addAttributePt("style:line-spacing", lineSpacing());
+            style.addAttributePt("style:line-spacing", lineSpacing());
         } else if (key == KoParagraphStyle::PercentLineHeight) {
-            target->addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
+            style.addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::FixedLineHeight) {
-            target->addAttributePt("fo:line-height", lineHeightAbsolute());
+            style.addAttributePt("fo:line-height", lineHeightAbsolute());
         } else if (key == QTextFormat::TextIndent) {
-            target->addAttributePt("fo:text-indent", textIndent());
+            style.addAttributePt("fo:text-indent", textIndent());
         }
     }
     // TODO : save border information

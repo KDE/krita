@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -481,12 +482,13 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     static KoParagraphStyle *fromBlock(const QTextBlock &block);
 
     void remove(int key);
-    
+
     bool operator==( const KoParagraphStyle &other ) const;
-    
+
     void removeDuplicates ( const KoParagraphStyle &other );
-    
-    void saveOdf ( KoGenStyle *target );
+
+    void saveOdf( KoGenStyle &style );
+
 private:
     void setProperty(int key, const QVariant &value);
     double propertyDouble(int key) const;

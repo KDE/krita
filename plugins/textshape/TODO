@@ -1,10 +1,14 @@
 Text Tool 
 
 * add ... buttons to avoid depending on double click as only way to start modifying styles
+* reposition buttons to new, modify, spacer, delete, so they're the same as in the layer box
+* add button for text color?
 * fix saving of styles
 * add font/size combobox to the first page
 * add label to show current para/char style name
-
+* changing a bullet style should apply the style to all paragraphs in the selection
+* bullet style should go to a separate tab
+* make tab headings glyphs
 
 
 Text Shape

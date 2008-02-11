@@ -231,6 +231,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     group->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     d->slider = new QSlider(Qt::Horizontal);
+    d->slider->setToolTip(i18n("Zoom"));
     d->slider->setMinimum(0);
     d->slider->setMaximum(32);
     d->slider->setValue(16);
@@ -241,6 +242,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
 
     QValidator *validator = new QDoubleValidator(1.0, 1600.0, 0, this);
     d->number = new ExtLineEdit("100", group);
+    d->number->setToolTip(i18n("Zoom"));
     d->number->setValidator(validator);
     d->number->setMaxLength(5);
     d->number->setMaximumWidth(40);
@@ -249,7 +251,9 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     d->number->hide();
 
     QLabel *pctLabel = new QLabel("% ");
+    pctLabel->setToolTip(i18n("Zoom"));
     QLabel *numLabel = new QLabel("100");
+    numLabel->setToolTip(i18n("Zoom"));
     numLabel->setMaximumWidth(40);
     numLabel->setMinimumWidth(40);
     numLabel->setIndent(5);

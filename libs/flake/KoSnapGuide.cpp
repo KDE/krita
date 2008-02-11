@@ -161,11 +161,22 @@ QList<KoPathPoint*> KoSnapGuide::ignoredPathPoints() const
     return m_ignoredPoints;
 }
 
+void KoSnapGuide::setIgnoredShapes( const QList<KoShape*> &ignoredShapes )
+{
+    m_ignoredShapes = ignoredShapes;
+}
+
+QList<KoShape*> KoSnapGuide::ignoredShapes() const
+{
+    return m_ignoredShapes;
+}
+
 void KoSnapGuide::reset()
 {
     m_currentStrategy = 0;
     m_editedShape = 0;
     m_ignoredPoints.clear();
+    m_ignoredShapes.clear();
 }
 
 /////////////////////////////////////////////////////////
@@ -196,7 +207,12 @@ QList<QPointF> KoSnapProxy::pointsInRect( const QRectF &rect )
 QList<KoShape*> KoSnapProxy::shapesInRect( const QRectF &rect, bool omitEditedShape )
 {
     QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapesAt( rect );
-
+    foreach( KoShape * shape, m_snapGuide->ignoredShapes() )
+    {
+        int index = shapes.indexOf( shape );
+        if( index >= 0 )
+            shapes.removeAt( index );
+    }
     if( ! omitEditedShape && m_snapGuide->editedShape() )
     {
         QRectF bound = m_snapGuide->editedShape()->boundingRect();
@@ -244,6 +260,7 @@ QList<QPointF> KoSnapProxy::pointsFromShape( KoShape * shape )
 QList<KoPathSegment> KoSnapProxy::segmentsInRect( const QRectF &rect )
 {
     QList<KoShape*> shapes = shapesInRect( rect, true );
+    QList<KoPathPoint*> ignoredPoints = m_snapGuide->ignoredPathPoints();
 
     QList<KoPathSegment> segments;
     foreach( KoShape * shape, shapes )
@@ -273,6 +290,8 @@ QList<KoPathSegment> KoSnapProxy::segmentsInRect( const QRectF &rect )
         // transform segments to document coordinates
         foreach( KoPathSegment s, shapeSegments )
         {
+            if( ignoredPoints.contains( s.first() ) || ignoredPoints.contains( s.second() ) )
+                continue;
             segments.append( s.mapped( m ) );
         }
     }
@@ -282,6 +301,12 @@ QList<KoPathSegment> KoSnapProxy::segmentsInRect( const QRectF &rect )
 QList<KoShape*> KoSnapProxy::shapes( bool omitEditedShape )
 {
     QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapes();
+    foreach( KoShape * shape, m_snapGuide->ignoredShapes() )
+    {
+        int index = shapes.indexOf( shape );
+        if( index >= 0 )
+            shapes.removeAt( index );
+    }
     if( ! omitEditedShape && m_snapGuide->editedShape() )
         shapes.append( m_snapGuide->editedShape() );
     return shapes;

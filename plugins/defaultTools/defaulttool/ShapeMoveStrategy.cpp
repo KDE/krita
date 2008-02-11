@@ -28,10 +28,10 @@
 #include <KoShapeContainerModel.h>
 #include <KoCanvasResourceProvider.h>
 #include <commands/KoShapeMoveCommand.h>
+#include <KoSnapGuide.h>
 
 ShapeMoveStrategy::ShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoInteractionStrategy(tool, canvas)
-, m_initialTopLeft(99999, 99999)
 , m_start(clicked)
 {
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
@@ -44,24 +44,32 @@ ShapeMoveStrategy::ShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const 
         m_newPositions << shape->position();
         boundingRect = boundingRect.unite( shape->boundingRect() );
     }
-    m_initialTopLeft = boundingRect.topLeft();
-    m_initialSelectionPosition = canvas->shapeManager()->selection()->position();
+    KoSelection * selection = m_canvas->shapeManager()->selection();
+    m_initialOffset = selection->absolutePosition( SelectionDecorator::hotPosition() ) - m_start;
+    m_initialSelectionPosition = selection->position();
+    m_canvas->snapGuide()->setIgnoredShapes( selection->selectedShapes( KoFlake::FullSelection ) );
 }
 
-void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
-    if(m_selectedShapes.isEmpty()) return;
+void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) 
+{
+    if(m_selectedShapes.isEmpty())
+        return;
     QPointF diff = point - m_start;
-    if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0) {
-        QPointF newPos = m_initialTopLeft + diff;
-        applyGrid(newPos);
-        diff = newPos - m_initialTopLeft;
-    }
+
     if(modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
         // keep x or y position unchanged
         if(qAbs(diff.x()) < qAbs(diff.y()))
             diff.setX(0);
         else
             diff.setY(0);
+    }
+    else
+    {
+        QPointF positionToSnap = point + m_initialOffset;
+        m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
+        QPointF snappedPosition = m_canvas->snapGuide()->snap( positionToSnap, modifiers );
+        m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
+        diff = snappedPosition - m_initialOffset - m_start;
     }
 
     Q_ASSERT(m_newPositions.count());
@@ -84,6 +92,7 @@ void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifi
 }
 
 QUndoCommand* ShapeMoveStrategy::createCommand() {
+    m_canvas->snapGuide()->reset();
     if(m_diff.x() == 0 && m_diff.y() == 0)
         return 0;
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);

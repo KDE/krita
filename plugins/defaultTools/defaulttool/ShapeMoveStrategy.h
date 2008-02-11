@@ -52,7 +52,7 @@ public:
 private:
     QList<QPointF> m_previousPositions;
     QList<QPointF> m_newPositions;
-    QPointF m_initialTopLeft, m_start, m_diff, m_initialSelectionPosition;
+    QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
 };
 
 #endif

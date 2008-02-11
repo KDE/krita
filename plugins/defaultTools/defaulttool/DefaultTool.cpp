@@ -44,6 +44,7 @@
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
+#include <KoSnapGuide.h>
 
 #include <QAction>
 #include <QKeyEvent>
@@ -388,6 +389,10 @@ void DefaultTool::paint( QPainter &painter, const KoViewConverter &converter) {
         decorator.setHotPosition( m_hotPosition );
         decorator.paint(painter, converter);
     }
+    painter.save();
+    KoShape::applyConversion( painter, converter );
+    m_canvas->snapGuide()->paint( painter, converter );
+    painter.restore();
 }
 
 void DefaultTool::mousePressEvent( KoPointerEvent *event ) {

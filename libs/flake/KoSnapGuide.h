@@ -20,6 +20,8 @@
 #ifndef KOSNAPGUIDE_H
 #define KOSNAPGUIDE_H
 
+#include "flake_export.h"
+
 #include <KoPathSegment.h>
 #include <QtCore/QPointF>
 #include <QtCore/QList>
@@ -35,7 +37,7 @@ class KoCanvasBase;
 class QPainter;
 class KoCanvasBase;
 
-class KoSnapGuide
+class FLAKE_EXPORT KoSnapGuide
 {
 public:
 
@@ -86,6 +88,12 @@ public:
     /// Returns list of ignored points
     QList<KoPathPoint*> ignoredPathPoints() const;
 
+    /// Sets list of ignored shapes
+    void setIgnoredShapes( const QList<KoShape*> &ignoredShapes );
+
+    /// Returns list of ignored shapes
+    QList<KoShape*> ignoredShapes() const;
+
     /// Resets the snap guide
     void reset();
 
@@ -100,6 +108,7 @@ private:
     bool m_active;
     int m_snapDistance;
     QList<KoPathPoint*> m_ignoredPoints;
+    QList<KoShape*> m_ignoredShapes;
 };
 
 class KoSnapProxy

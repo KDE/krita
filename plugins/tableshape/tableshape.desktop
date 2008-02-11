@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Table Shape
 Name[bg]=Форма на таблица
 Name[ca]=Forma de taula
@@ -20,7 +19,7 @@ Name[tr]=Tablo Şekli
 Name[uk]=Форма таблиці
 Name[x-test]=xxTable Shapexx
 Name[zh_TW]=表格元件
-ServiceTypes=KOffice/Shape
+X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=tableshape
 X-Flake-MinVersion=0

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Selection Tools
 Name[bg]=Инструмент за маркиране
 Name[br]=Ostilhoù choazh
@@ -45,7 +44,7 @@ Name[uz]=Танлаш воситалари
 Name[x-test]=xxSelection Toolsxx
 Name[zh_CN]=选择工具
 Name[zh_TW]=選取區工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritaselectiontools
 X-Krita-Version=3

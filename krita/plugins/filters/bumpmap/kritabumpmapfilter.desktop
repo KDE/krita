@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Bumpmap Filter
 Name[bg]=Филтър Bumpmap
 Name[ca]=Filtre Bumpmap
@@ -68,7 +67,7 @@ Comment[tr]=Bumpmap filtresi
 Comment[uk]=Фільтр рельєфу
 Comment[x-test]=xxBumpmap filterxx
 Comment[zh_TW]=Bumpmap 的過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritabumpmap
 X-Krita-Version=3

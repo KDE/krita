@@ -1,6 +1,5 @@
 [Desktop Entry]
-Encoding=UTF-8
-Type=ServiceType
+Type=X-KDE-ServiceType
 X-KDE-ServiceType=Krita/ViewPlugin
 Comment=GUI functionality for Krita
 Comment[bg]=ГПИ функционалност за Krita

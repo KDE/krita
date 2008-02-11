@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Inline Text Object Plugin
 Name[ca]=Connector d'objecte de text a la línia
 Name[de]=Mitfließendes-Textobjekt-Modul
@@ -17,7 +16,7 @@ Name[sv]=Insticksprogram för flytande textobjekt
 Name[uk]=Втулок рядкового текстового об’єкта
 Name[x-test]=xxInline Text Object Pluginxx
 Name[zh_TW]=內含文字物件外掛程式
-Type=ServiceType
+Type=X-KDE-ServiceType
 X-KDE-ServiceType=KOffice/Text-InlineObject
 Comment=Definition of a text object
 Comment[ca]=Definició d'objecte de text

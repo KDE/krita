@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=SmallColorSelector
 Name[ca]=SelectorDeColorPetit
 Name[it]=Piccolo selettore del colore
@@ -16,7 +15,7 @@ Comment[pt_BR]=Selector de Cores Pequeno
 Comment[sv]=Liten färgväljare
 Comment[uk]=Мала палітра кольорів
 Comment[zh_TW]=小型顏色選擇器
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritasmallcolorselector
 X-Krita-Version=3

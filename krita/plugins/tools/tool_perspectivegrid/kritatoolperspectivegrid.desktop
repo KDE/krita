@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Perspective Grid Tool
 Name[bg]=Инструмент мрежа
 Name[ca]=Eina de graella de perspectiva
@@ -31,7 +30,7 @@ Name[sv]=Perspektivrutnätsverktyg
 Name[uk]=Засіб ґратки перспективи
 Name[x-test]=xxPerspective Grid Toolxx
 Name[zh_TW]=透視格工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivegrid
 X-Krita-Version=3

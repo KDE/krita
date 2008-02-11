@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Convolution Filters (Extension)
 Name[bg]=Изкривяващи филтри (разширения)
@@ -34,7 +33,7 @@ Name[tr]=Kıvrılma Filtreleri (Eklenti)
 Name[uk]=Фільтри згортки (розширення)
 Name[x-test]=xxConvolution Filters (Extension)xx
 Name[zh_TW]=皺褶過濾器（延伸）
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritablurfilter
 X-Krita-Version=3

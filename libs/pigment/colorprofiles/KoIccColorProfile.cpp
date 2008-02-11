@@ -59,7 +59,7 @@ QByteArray KoIccColorProfile::Data::rawData()
     return d->rawData;
 }
 
-void KoIccColorProfile::Data::setRawData(QByteArray rawData)
+void KoIccColorProfile::Data::setRawData(const QByteArray & rawData)
 {
     d->rawData = rawData;
 }
@@ -238,7 +238,7 @@ bool KoIccColorProfile::save()
 
 bool KoIccColorProfile::init()
 {
-    if(not d->shared->lcmsProfile)
+    if(!d->shared->lcmsProfile)
     {
         d->shared->lcmsProfile = new KoLcmsColorProfileContainer(d->shared->data);
     }

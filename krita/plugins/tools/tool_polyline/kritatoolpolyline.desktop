@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Polyline Tool
 Name[bg]=Инструмент съставна линия
 Name[br]=Ostilh lieslinenn
@@ -42,7 +41,7 @@ Name[uz]=Кўпбурчак асбоби
 Name[x-test]=xxPolyline Toolxx
 Name[zh_CN]=折线工具
 Name[zh_TW]=任意線工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolyline
 X-Krita-Version=3

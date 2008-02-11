@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Autocorrection plugin
 Name[ca]=Connector d'autocorrecció
 Name[de]=Autokorrektur-Modul
@@ -21,7 +20,7 @@ Name[uk]=Втулок автовиправлення
 Name[x-test]=xxAutocorrection pluginxx
 Name[zh_CN]=自动更正插件
 Name[zh_TW]=自動修正外掛程式
-ServiceTypes=KOffice/Text-EditingPlugin
+X-KDE-ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
 X-KoText-MinVersion=0
 X-KoText-PluginVersion=1

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=CMYK Color Model (16-bit integer)
 Name[bg]=Цветови модел CMYK (16 бита)
 Name[ca]=Model de color CMYK (enters de 16 bits)
@@ -76,7 +75,7 @@ Comment[uk]=Модель кольору з 16-бітним цілим число
 Comment[x-test]=xxColor model for 16-bit integer per channel CMYK imagesxx
 Comment[zh_CN]=16 位整数每通道 CYMK 图像的色彩模型
 Comment[zh_TW]=每色頻為 16-bit 的 CMYK 圖片色彩模型
-ServiceTypes=KOffice/ColorSpace
+X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=krita_cmyk_u16_plugin
 X-Pigment-MinVersion=0

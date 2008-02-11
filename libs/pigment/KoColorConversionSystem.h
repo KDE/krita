@@ -33,7 +33,7 @@ class KoID;
 /**
  * This class hold the logic related to pigment's Color Conversion System. It's
  * basically a graph containing all the possible color transformation between
- * the color spaces. The most usefull functions are createColorConverter to create
+ * the color spaces. The most useful functions are createColorConverter to create
  * a color conversion between two color spaces, and insertColorSpace which is called
  * by KoColorSpaceRegistry each time a new color space is added to the registry.
  *

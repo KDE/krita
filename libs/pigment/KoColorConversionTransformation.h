@@ -35,7 +35,7 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformation : KoColorTransformation{
         struct Private;
     public:
         /**
-         * Possible value for the intent of a color conversion (usefull only for ICC
+         * Possible value for the intent of a color conversion (useful only for ICC
          * transformations)
          */
         enum Intent {
@@ -57,7 +57,7 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformation : KoColorTransformation{
          */
         const KoColorSpace* dstColorSpace() const;
         /**
-         * @return the rendering intent of this transformation (this is only usefull
+         * @return the rendering intent of this transformation (this is only useful
          * for ICC transformations)
          */
         Intent renderingIntent();

@@ -90,7 +90,7 @@ KoColorSpace::~KoColorSpace()
 bool KoColorSpace::operator==(const KoColorSpace& rhs) const {
     const KoColorProfile* p1 = rhs.profile();
     const KoColorProfile* p2 = profile();
-    return id() == rhs.id() and ((p1 == p2) or (*p1 == *p2 ));
+    return id() == rhs.id() && ((p1 == p2) || (*p1 == *p2 ));
 }
 
 QString KoColorSpace::id() const {return d->id;}
@@ -186,7 +186,7 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 
 const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 {
-    if(not d->transfoToLABA16)
+    if(!d->transfoToLABA16)
     {
         d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16("") ) ;
     }
@@ -195,7 +195,7 @@ const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 
 const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 {
-    if(not d->transfoFromLABA16)
+    if(!d->transfoFromLABA16)
     {
         d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->lab16("") , this ) ;
     }
@@ -203,7 +203,7 @@ const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 }
 const KoColorConversionTransformation* KoColorSpace::toRgbA16Converter() const
 {
-    if(not d->transfoToRGBA16)
+    if(!d->transfoToRGBA16)
     {
         d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( this, KoColorSpaceRegistry::instance()->rgb16("") ) ;
     }
@@ -211,7 +211,7 @@ const KoColorConversionTransformation* KoColorSpace::toRgbA16Converter() const
 }
 const KoColorConversionTransformation* KoColorSpace::fromRgbA16Converter() const
 {
-    if(not d->transfoFromRGBA16)
+    if(!d->transfoFromRGBA16)
     {
         d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->rgb16("") , this ) ;
     }
@@ -423,10 +423,10 @@ QVector<quint8> * KoColorSpace::threadLocalConversionCache(quint32 size) const
     return ba;
 }
 
-KoColorTransformation* KoColorSpace::createColorTransformation( QString id, QHash<QString, QVariant> parameters) const
+KoColorTransformation* KoColorSpace::createColorTransformation( const QString & id, const QHash<QString, QVariant> & parameters) const
 {
     KoColorTransformationFactory* factory = KoColorTransformationFactoryRegistry::instance()->get( id );
-    if(not factory) return 0;
+    if(!factory) return 0;
     QPair<KoID, KoID> model( colorModelId(), colorDepthId() );
     QList< QPair<KoID, KoID> > models = factory->supportedModels();
     if(models.contains(model))

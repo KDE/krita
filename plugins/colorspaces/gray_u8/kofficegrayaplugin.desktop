@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Grayscale Color Model with Alpha
 Name[ca]=Model de color d'escala de grisos amb alfa
 Name[de]=Graustufen-Farbmodell mit Alphakanal
@@ -59,7 +58,7 @@ Comment[uk]=Модель кольору зображень відтінків с
 Comment[x-test]=xxColor model for 8-bit grayscale imagesxx
 Comment[zh_CN]=8 位灰度图像的色彩模型
 Comment[zh_TW]=8-bit 灰階圖片的色彩模型
-ServiceTypes=KOffice/ColorSpace
+X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kofficegrayau8plugin
 X-Pigment-MinVersion=0

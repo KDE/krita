@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Chinese Brush
 Name[ca]=Pinzell xinès
 Name[de]=Chinesischer Pinsel
@@ -40,7 +39,7 @@ Comment[uk]=Китайський пензель
 Comment[x-test]=xxChinese Brushxx
 Comment[zh_CN]=毛笔
 Comment[zh_TW]=毛筆刷
-ServiceTypes=Krita/Paintop
+X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacpaintbrush
 X-Krita-Version=3

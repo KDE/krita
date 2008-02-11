@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Select Similar Colors Tool
 Name[bg]=Инструмент за маркиране на подобни цветове
 Name[ca]=Selecciona eines de colors similars
@@ -37,7 +36,7 @@ Name[uk]=Засіб вибору подібних кольорів
 Name[x-test]=xxSelect Similar Colors Toolxx
 Name[zh_CN]=选择相似颜色工具
 Name[zh_TW]=選取近似色彩工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolselectsimilar
 X-Krita-Version=3

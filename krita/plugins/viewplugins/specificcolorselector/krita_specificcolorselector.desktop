@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=SpecificColorSelector
 Name[ca]=SelectorDeColorEspecific
 Name[it]=Selettore di colore specifico
@@ -16,7 +15,7 @@ Comment[pt_BR]=Selector de Cores Específico
 Comment[sv]=Specifik färgväljare
 Comment[uk]=Особлива палітра кольорів
 Comment[zh_TW]=指定顏色選擇器
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaspecificcolorselector
 X-Krita-Version=3

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Krita %{APPNAMELC} Import Filter
 Name[ca]=Filtre d'importació %{APPNAMELC} per al Krita
@@ -17,7 +16,7 @@ Name[tr]=Krita %{APPNAMELC} Alma Filtresi
 Name[uk]=Фільтр імпорту %{APPNAMELC} у Krita
 Name[x-test]=xxKrita %{APPNAMELC} Import Filterxx
 Name[zh_TW]=Krita %{APPNAMELC} 匯入過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/%{APPNAMELC}

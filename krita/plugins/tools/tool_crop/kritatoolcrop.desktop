@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Crop Tool
 Name[bg]=Инструмент за изрязване
 Name[br]=Ostilh krennañ
@@ -42,7 +41,7 @@ Name[uk]=Засіб обрізування
 Name[x-test]=xxCrop Toolxx
 Name[zh_CN]=裁剪工具
 Name[zh_TW]=剪裁工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolcrop
 X-Krita-Version=3

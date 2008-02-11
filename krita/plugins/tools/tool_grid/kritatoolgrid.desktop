@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Grid
 Name[ca]=Graella
 Name[el]=Κάνναβος
@@ -10,7 +9,7 @@ Name[sv]=Rutnät
 Name[tr]=Izgara
 Name[uk]=Ґратка
 Name[zh_TW]=格線
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolgrid
 X-Krita-Version=3

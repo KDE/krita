@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Smeary Brush
 Name[ca]=Pinzell viscós
 Name[de]=Schmieriger Pinsel
@@ -34,7 +33,7 @@ Comment[sv]=Smetig pensel
 Comment[uk]=Розмитий пензель
 Comment[x-test]=xxSmeary brushxx
 Comment[zh_TW]=油畫筆刷
-ServiceTypes=Krita/Paintop
+X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasmearybrush
 X-Krita-Version=3

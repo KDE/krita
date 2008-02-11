@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=DivineProportion Shape
 Name[ca]=Forma de proporció divina
 Name[de]=Göttliche-Teilung-Objekt
@@ -18,7 +17,7 @@ Name[sv]=Gudomlig proportionsform
 Name[uk]=Втулок Золотої пропорції
 Name[x-test]=xxDivineProportion Shapexx
 Name[zh_TW]=DivineProportion 元件
-ServiceTypes=KOffice/Flake
+X-KDE-ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=divineproportionshape
 X-Flake-MinVersion=0

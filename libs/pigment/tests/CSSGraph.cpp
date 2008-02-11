@@ -84,51 +84,51 @@ int main(int argc, char** argv)
         QString srcColorDepth = args->getOption("src-color-depth");
         QString dstColorModel = args->getOption("dst-color-model");
         QString dstColorDepth = args->getOption("dst-color-depth");
-        if( srcColorModel == "" or srcColorDepth == "")
-        {
+        if (srcColorModel == "" || srcColorDepth == "") {
             kError() << "src-color-model and src-color-depth must be specified for the graph bestpath";
             exit(EXIT_FAILURE);
         }
-        if( dstColorModel != "" and dstColorDepth == "")
-        {
+        if (dstColorModel != "" && dstColorDepth == "") {
             dstColorDepth = srcColorDepth;
-        } else if( dstColorModel == "" and dstColorDepth != "")
-        {
+        }
+        else if (dstColorModel == "" && dstColorDepth != "") {
             dstColorModel = srcColorModel;
         }
-        if( dstColorModel == "" and dstColorDepth == "")
-        {
-            kDebug() << "TODO";
+        if (dstColorModel == "" && dstColorDepth == "") {
+            // XXX: do something here?
             exit(EXIT_SUCCESS);
-        } else {
+        }
+        else {
             dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot(srcColorModel, srcColorDepth, dstColorModel, dstColorDepth);
         }
     } else {
         kError() << "Unknow graph type : " << graphType.toLatin1();
         exit(EXIT_FAILURE);
     }
-    if(outputType == "dot")
-    {
+    
+    if (outputType == "dot") {
         QFile file(outputFileName);
-        if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
             exit(EXIT_FAILURE);
         QTextStream out(&file);
         out << dot;
-    } else if(outputType == "ps")
-    {
+    }
+    else if (outputType == "ps") {
         QTemporaryFile file;
-        if (not file.open())
+        if (!file.open()) {
             exit(EXIT_FAILURE);
+        }
         QTextStream out(&file);
         out << dot;
         QString cmd = QString("dot -Tps %1 -o %2").arg(file.fileName()).arg(outputFileName);
         file.close();
-//         kDebug() << cmd;
-        if(QProcess::execute(cmd) != 0)
+
+        if (QProcess::execute(cmd) != 0)
         {
-            kError() << "An error has occured when executing : '" << cmd << "' it's most likely that the command 'dot' is missing, and that you should install graphviz (from http://www.graphiz.org)";
+            kError() << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
         }
-    } else {
+    }
+    else {
         kDebug() << "Unknow output type : " << outputType;
         exit(EXIT_FAILURE);
     }

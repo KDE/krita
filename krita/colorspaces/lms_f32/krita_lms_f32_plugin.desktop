@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=LMS Color Model (32-bit float)
 Name[bg]=Цветови модел LMS (32 бита)
 Name[ca]=Model de color LMS (paleta de 32 bits)
@@ -72,7 +71,7 @@ Comment[sv]=Färgmodell för LMS-konrymd (Långa, mellanliggande och korta vågl
 Comment[uk]=Модель кольорів для конусного простору LMS (довгі середні і короткі довжини кольорів)
 Comment[x-test]=xxColor model for LMS cone space (Long Middle and Short wavelengths)xx
 Comment[zh_TW]=LMS cone space 顏色模式（Long Middle and Short 波長）
-ServiceTypes=KOffice/ColorSpace
+X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=krita_lms_f32_plugin
 X-Pigment-MinVersion=0

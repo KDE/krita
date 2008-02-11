@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Default Paint Operations
 Name[bg]=Операции за рисуване по подразбиране
 Name[ca]=Operacions de pintura per omissió
@@ -84,7 +83,7 @@ Comment[uz]=Андоза чизиш амаллари
 Comment[x-test]=xxDefault paint operationsxx
 Comment[zh_CN]=默认绘图操作
 Comment[zh_TW]=預設繪圖操作
-ServiceTypes=Krita/Paintop
+X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadefaultpaintops
 X-Krita-Version=3

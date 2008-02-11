@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Dropshadow
 Name[bg]=Сянка
 Name[ca]=Gota d'ombra
@@ -33,7 +32,7 @@ Name[uk]=Тінь
 Name[uz]=Соя тушириш
 Name[x-test]=xxDropshadowxx
 Name[zh_CN]=阴影
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadropshadow
 X-Krita-Version=3

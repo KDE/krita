@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=CMYK Color Model
 Name[bg]=Цветови модел CMYK
 Name[br]=Gobari al livioù CMYK
@@ -85,7 +84,7 @@ Comment[uk]=Модель кольору CMYK для зображень 8-біт/
 Comment[x-test]=xxColor model for 8-bit/channel CMYK imagesxx
 Comment[zh_CN]=八位/通道 CMYK 图像的色彩模型
 Comment[zh_TW]=8-bit/色頻的 CMYK 圖片色彩模型
-ServiceTypes=KOffice/ColorSpace
+X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritacmykplugin
 X-Pigment-MinVersion=0

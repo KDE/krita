@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Filters Gallery
 Name[bg]=Галерия с филтри
 Name[ca]=Galeria de filtres
@@ -39,7 +38,7 @@ Name[uz]=Филтерлар тўплами
 Name[x-test]=xxFilters Galleryxx
 Name[zh_CN]=滤镜库
 Name[zh_TW]=濾鏡畫廊
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritafiltersgallery
 X-Krita-Version=3

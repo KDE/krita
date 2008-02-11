@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Modify Selection
 Name[bg]=Промяна на маркираното
 Name[br]=Kemmañ an dibab
@@ -36,7 +35,7 @@ Name[tr]=Seçimi Düzenle
 Name[uk]=Зміна виділення
 Name[x-test]=xxModify Selectionxx
 Name[zh_TW]=變更選取
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection
 X-Krita-Version=3

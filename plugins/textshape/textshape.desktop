@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Text Shape
 Name[ca]=Forma de text
 Name[de]=Text-Objekt
@@ -18,7 +17,7 @@ Name[sv]=Textform
 Name[uk]=Форма-текст
 Name[x-test]=xxText Shapexx
 Name[zh_TW]=文字元件
-ServiceTypes=KOffice/Flake
+X-KDE-ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=textshape
 X-Flake-MinVersion=0

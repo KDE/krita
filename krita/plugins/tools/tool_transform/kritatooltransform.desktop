@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Transform Tool
 Name[bg]=Инструмент за трансформиране
 Name[br]=Ostilh treuzfurmiñ
@@ -41,7 +40,7 @@ Name[uz]=Айлантириш асбоби
 Name[x-test]=xxTransform Toolxx
 Name[zh_CN]=变形工具
 Name[zh_TW]=變形工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooltransform
 X-Krita-Version=3

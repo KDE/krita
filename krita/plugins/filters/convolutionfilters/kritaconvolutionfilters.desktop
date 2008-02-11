@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Convolution Filters
 Name[bg]=Изкривяващи филтри
 Name[ca]=Filtres de Convolotion
@@ -72,7 +71,7 @@ Comment[tr]=Renk Filtreleri
 Comment[uk]=Фільтри згортки
 Comment[x-test]=xxConvolution filtersxx
 Comment[zh_TW]=皺褶過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaconvolutionfilters
 X-Krita-Version=3

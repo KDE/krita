@@ -146,7 +146,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<double> {
 /**
  * This class defines some elementary operations used by various color
  * space. It's intended to be generic, but some specialization exists
- * either for optimization or just for beeing buildable.
+ * either for optimization or just for being buildable.
  * 
  * @param _T some numerical type with an existing trait
  * @param _Tdst some other numerical type with an existing trait, it is

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Raindrops Filter
 Name[bg]=Филтър за дъждовни капки
 Name[ca]=Filtre de gotes de pluja
@@ -72,7 +71,7 @@ Comment[uk]=Фільтр дощових крапель
 Comment[uz]=Ёмғир томчилари филтери
 Comment[x-test]=xxRaindrops filterxx
 Comment[zh_TW]=雨滴過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaraindropsfilter
 X-Krita-Version=3

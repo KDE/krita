@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Color Filters (Extension)
 Name[bg]=Цветови филтри (разширения)
@@ -36,7 +35,7 @@ Name[uk]=Фільтри кольору (розширення)
 Name[uz]=Ранг филтерлари (кенгайтма)
 Name[x-test]=xxColor Filters (Extension)xx
 Name[zh_TW]=色彩過濾器（延伸）
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaextensioncolorsfilters
 X-Krita-Version=3

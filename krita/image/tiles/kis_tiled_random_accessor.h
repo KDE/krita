@@ -28,6 +28,7 @@
 class KisTile;
 
 class KisTiledRandomAccessor : public KisShared {
+
     struct KisTileInfo {
         KisTile* tile;
         KisTile* oldtile;
@@ -35,7 +36,9 @@ class KisTiledRandomAccessor : public KisShared {
         const quint8* oldData;
         qint32 area_x1, area_y1, area_x2, area_y2;
     };
+    
     public:
+    
         KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable);
         KisTiledRandomAccessor(const KisTiledRandomAccessor& lhs);
         ~KisTiledRandomAccessor();

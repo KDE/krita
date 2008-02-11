@@ -128,6 +128,7 @@ public:
      * @param doc is the document containing colorElt
      */
     void toXML(QDomDocument& doc, QDomElement& colorElt) const;
+    
     /**
      * Unserialize a color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
@@ -142,7 +143,7 @@ public:
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */
-    static KoColor fromXML(const QDomElement& elt, QString bitDepthId, QHash<QString, QString> aliases);
+    static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases);
     
 #ifndef NODEBUG
     /// use kDebug calls to print internal info

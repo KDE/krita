@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Shape definition
 Name[ca]=Definició de forma
 Name[de]=Objektdefinition
@@ -17,7 +16,7 @@ Name[tr]=Şekil tanımlaması
 Name[uk]=Визначення форми
 Name[x-test]=xxShape definitionxx
 Name[zh_TW]=元件定義
-Type=ServiceType
+Type=X-KDE-ServiceType
 X-KDE-ServiceType=KOffice/Shape
 Comment=Definition of a flake shape object
 Comment[ca]=Definició d'un objecte amb forma de floc

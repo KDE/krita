@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Small Tiles Filter
 Name[bg]=Филтър "малки плочки"
 Name[br]=Sil teoloù bihan
@@ -34,7 +33,7 @@ Name[sv]=Smårutorsfilter
 Name[uk]=Фільтр маленьких плиток
 Name[x-test]=xxSmall Tiles Filterxx
 Name[zh_TW]=小塊拼貼過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasmalltilesfilter
 X-Krita-Version=3

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Scripting plugin
 Name[bg]=Приставка за скриптове
 Name[ca]=Connector de seqüenciació
@@ -76,7 +75,7 @@ Comment[uz]=Скриптларни ишга туширишга рухсат бе
 Comment[x-test]=xxAllow execution of scriptsxx
 Comment[zh_CN]=允许执行脚本
 Comment[zh_TW]=允許執行命令稿
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascripting
 X-Krita-Version=3

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Emboss Filter
 Name[bg]=Релефен филтър
 Name[ca]=Filtre d'Emboss
@@ -66,7 +65,7 @@ Comment[sv]=Relieffilter
 Comment[uk]=Фільтр барельєфу
 Comment[x-test]=xxEmboss filterxx
 Comment[zh_TW]=浮雕過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaembossfilter
 X-Krita-Version=3

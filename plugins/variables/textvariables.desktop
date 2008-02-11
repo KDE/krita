@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Text Variables
 Name[ca]=Variables de text
@@ -20,7 +19,7 @@ Name[tr]=Metin Değişkenleri
 Name[uk]=Текстові змінні
 Name[x-test]=xxText Variablesxx
 Name[zh_TW]=文字變數
-ServiceTypes=KOffice/Text-Variable
+X-KDE-ServiceTypes=KOffice/Text-Variable
 Type=Service
 X-KDE-Library=textvariables
 X-KoText-MinVersion=0

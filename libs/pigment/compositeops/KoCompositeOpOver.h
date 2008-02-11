@@ -54,7 +54,7 @@ class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
             } else {
                 for(uint i = 0; i <  _CSTraits::channels_nb; i++)
                 {
-                    if( (int)i != _CSTraits::alpha_pos && (  channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
+                    if( (uint)i != _CSTraits::alpha_pos && (  channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
                         dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], srcBlend);
                 }
             }

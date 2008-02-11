@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Cubism Filter
 Name[bg]=Кубичен филтър
 Name[ca]=Filtre de cubisme
@@ -78,7 +77,7 @@ Comment[uk]=Фільтр кубізму
 Comment[uz]=Кубизм филтери
 Comment[x-test]=xxCubism filterxx
 Comment[zh_TW]=立體過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacubismfilter
 X-Krita-Version=3

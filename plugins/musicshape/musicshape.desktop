@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Music Shape
 Name[ca]=Forma de música
 Name[de]=Musik-Objekt
@@ -18,7 +17,7 @@ Name[sv]=Musikform
 Name[uk]=Музична форма
 Name[x-test]=xxMusic Shapexx
 Name[zh_TW]=音樂元件
-ServiceTypes=KOffice/Shape
+X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=musicshape
 X-Flake-MinVersion=0

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Colorspace Conversion
 Name[bg]=Цветово обръщане
 Name[ca]=Conversió d'espai de color
@@ -34,7 +33,7 @@ Name[sv]=Färgrymdskonvertering
 Name[uk]=Перетворення простору кольорів
 Name[x-test]=xxColorspace Conversionxx
 Name[zh_TW]=色彩空間轉換
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorspaceconversion
 X-Krita-Version=3

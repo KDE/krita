@@ -638,7 +638,7 @@ public:
     virtual QList<KisFilter*> createBackgroundFilters() const
         { return QList<KisFilter*>(); }
 
-    KoColorTransformation* createColorTransformation( QString id, QHash<QString, QVariant> parameters) const;
+    KoColorTransformation* createColorTransformation( const QString & id, const QHash<QString, QVariant> & parameters) const;
 protected:
     /**
      * Use this function in the constructor of your colorspace to add the information about a channel.
@@ -718,7 +718,7 @@ public:
      * each channel, it's usually the higest bit depth. This value is used by the Color
      * Conversion System to check if a lost of bit depth during a color conversion is
      * acceptable, for instance when converting from RGB32bit to XYZ16bit, it's acceptable to go
-     * throught a conversion to RGB16bit, while it's not the case for RGB32bit to XYZ32bit.
+     * through a conversion to RGB16bit, while it's not the case for RGB32bit to XYZ32bit.
      */
     virtual int referenceDepth() const = 0;
     /**

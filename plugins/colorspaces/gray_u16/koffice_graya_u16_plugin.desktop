@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Grayscale Color Model with Alpha Channel (16-bit integer)
 Name[ca]=Model de color d'escala de grisos amb canal alfa (enters de 16 bits)
 Name[de]=Graustufen-Farbmodell mit Alphakanal (16-bit Ganzzahl)
@@ -54,7 +53,7 @@ Comment[uk]=Модель кольору для зображень відтінк
 Comment[x-test]=xxColor model for 16-bit integer per channel Grayscale imagesxx
 Comment[zh_CN]=每通道 16 位整数的灰度图像色彩模型
 Comment[zh_TW]=每色頻為 16-bit 的灰階圖片色彩模型
-ServiceTypes=KOffice/ColorSpace
+X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=koffice_graya_u16_plugin
 X-Pigment-MinVersion=0

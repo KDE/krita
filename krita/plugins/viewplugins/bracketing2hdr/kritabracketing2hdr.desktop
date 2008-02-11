@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Bracketing2HDR
 Name[de]=BelichtungsreiheZuHDR
 Name[el]=Εγκυβωτισμός σε HDR
@@ -12,7 +11,7 @@ Comment[el]=Εγκυβωτισμός σε HDR
 Comment[it]=Da esposizione a forcella a HDR
 Comment[sv]=Gaffling till HDR
 Comment[x-test]=xxBracketing2HDRxx
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritabracketing2hdr
 X-Krita-Version=3

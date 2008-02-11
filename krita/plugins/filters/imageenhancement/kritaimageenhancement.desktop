@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Enhancement Filters
 Name[bg]=Филтри за подобрения
 Name[ca]=Filtres de millora
@@ -73,7 +72,7 @@ Comment[uk]=Покращання якості зображення
 Comment[uz]=Расмнинг сифатини ошириш
 Comment[x-test]=xxEnhance the quality of an imagexx
 Comment[zh_TW]=增強圖片的品質
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaimageenhancement
 X-Krita-Version=3

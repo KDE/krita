@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Histogram Docker
 Name[ca]=Amarrador d'histograma
 Name[cy]=Bachydd Histogram
@@ -33,7 +32,7 @@ Name[uk]=Швартувальник гістограм
 Name[uz]=Гистограмма панели
 Name[x-test]=xxHistogram Dockerxx
 Name[zh_TW]=直方圖停駐點
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogramdocker
 X-Krita-Version=3

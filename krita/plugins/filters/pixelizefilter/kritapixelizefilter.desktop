@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Pixelize Filter
 Name[bg]=Филтър Pixelize
 Name[ca]=Filtre de pixelació
@@ -77,7 +76,7 @@ Comment[uk]=Фільтр пікселювання
 Comment[uz]=Пикселлаштириш филтери
 Comment[x-test]=xxPixelize filterxx
 Comment[zh_TW]=像素化過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritapixelizefilter
 X-Krita-Version=3

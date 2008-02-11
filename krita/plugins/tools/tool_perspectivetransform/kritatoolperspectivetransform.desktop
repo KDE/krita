@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Perspective transform Tool
 Name[bg]=Инструмент трансформиране
@@ -33,7 +32,7 @@ Name[sv]=Perspektivtransformverktyg
 Name[uk]=Засіб перспективи
 Name[x-test]=xxPerspective transform Toolxx
 Name[zh_TW]=透視轉換工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivetransform
 X-Krita-Version=3

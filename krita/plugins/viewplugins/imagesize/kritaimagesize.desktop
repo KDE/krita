@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Image Resize and Scale Plugin
 Name[bg]=Приставка за оразмеряване
 Name[ca]=Connector de redimensionament i escala d'imatge
@@ -34,7 +33,7 @@ Name[tr]=Resim yeniden Boyutlandırma ve Ölçekleme Eklentisi
 Name[uk]=Втулок зміни розміру та масштабування зображень
 Name[x-test]=xxImage Resize and Scale Pluginxx
 Name[zh_TW]=圖片大小與縮放外掛程式
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimagesize
 X-Krita-Version=3

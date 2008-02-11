@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Invert Filter
 Name[bg]=Инвертиращ филтър
 Name[ca]=Inverteix filtre
@@ -73,7 +72,7 @@ Comment[uk]=Інвертація кольорів зображення
 Comment[uz]=Расмнинг рангларини тескарисига алмаштириш
 Comment[x-test]=xxInvert the colors of an imagexx
 Comment[zh_TW]=倒轉圖片的色彩
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaexample
 X-Krita-Version=3

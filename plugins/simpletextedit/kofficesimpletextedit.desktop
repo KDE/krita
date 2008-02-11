@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Simple Text Edit
 Name[ca]=Edició de text simple
 Name[el]=Απλή επεξεργασία κειμένου
@@ -30,7 +29,7 @@ Comment[sv]=Enkel dockningstexteditor
 Comment[uk]=Зв’язка простої зміни тексту
 Comment[x-test]=xxSimpler Text Edit dockerxx
 Comment[zh_TW]=簡單文字編輯嵌入器
-ServiceTypes=KOffice/Dock
+X-KDE-ServiceTypes=KOffice/Dock
 Type=Service
 X-KDE-Library=kofficesimpletextedit
 X-Flake-MinVersion=0

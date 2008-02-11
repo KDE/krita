@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Complex Brush
 Name[ca]=Pinzell complex
 Name[de]=Komplexer Pinsel
@@ -31,7 +30,7 @@ Comment[sv]=En pensel med komplex färgladdning
 Comment[uk]=Пензель зі складним вмістом кольорів
 Comment[x-test]=xxA brush with complex color loadingxx
 Comment[zh_TW]=有複色的筆刷
-ServiceTypes=Krita/Paintop
+X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacomplexbrush
 X-Krita-Version=3

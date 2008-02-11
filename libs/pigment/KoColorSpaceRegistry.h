@@ -112,9 +112,7 @@ public:
      * @param id the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<const KoColorProfile *>  profilesFor(KoID id) {
-        return profilesFor(id.id());
-    }
+    QList<const KoColorProfile *>  profilesFor(KoID id);
 
     /**
      * Return the list of profiles for a colorspace with the argument id.
@@ -132,9 +130,7 @@ public:
      * @param profileName the name of the KoColorProfile to be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    const KoColorSpace *  colorSpace(const KoID &csID, const QString & profileName) {
-        return colorSpace(csID.id(), profileName);
-    }
+    const KoColorSpace *  colorSpace(const KoID &csID, const QString & profileName);
 
     /**
      * Return a colorspace that works with the parameter profile.
@@ -157,7 +153,7 @@ public:
      * @param colorDepthId id of the color depth
      * @return the id of the wanted colorspace, or "" if no colorspace correspond to those ids
      */
-    QString colorSpaceId(QString colorModelId, QString colorDepthId);
+    QString colorSpaceId(const QString & colorModelId, const QString & colorDepthId);
     /**
      * It's a convenient function that behave like the above.
      * Return the id of the colorspace that have the defined colorModelId with colorDepthId.
@@ -238,7 +234,7 @@ public:
     /**
      * @return the list of available color models for the given colorModelId
      */
-    QList<KoID> colorDepthList(QString colorModelId, ColorSpaceListVisibility option ) const;
+    QList<KoID> colorDepthList(const QString & colorModelId, ColorSpaceListVisibility option ) const;
     
     /**
      * @return the color conversion system use by the registry and the color
@@ -252,8 +248,11 @@ public:
     KoColorConversionCache* colorConversionCache() const;
     
 private:
-    bool isCached(QString csId, QString profileName) const;
-    QString idsToCacheName(QString csId, QString profileName) const;
+
+    bool isCached(const QString & csId, const QString & profileName) const;
+    
+    QString idsToCacheName(const QString & csId, const QString & profileName) const;
+    
 private:
     KoColorSpaceRegistry();
     KoColorSpaceRegistry(const KoColorSpaceRegistry&);

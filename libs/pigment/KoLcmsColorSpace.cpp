@@ -48,7 +48,7 @@ KoLcmsColorConversionTransformationFactory::KoLcmsColorConversionTransformationF
     Q_ASSERT(m_srcColorSpaceType);
     m_dstColorSpaceType = computeColorSpaceType( _dstModelId, _dstDepthId);
     Q_ASSERT(m_dstColorSpaceType);
-    m_conserveColorInformation = not (_dstModelId == GrayAColorModelID.id() or _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
+    m_conserveColorInformation = !(_dstModelId == GrayAColorModelID.id() || _dstModelId == GrayColorModelID.id()); // color information is lost when converting to Grayscale
 }
 
 KoColorConversionTransformation* KoLcmsColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
@@ -63,7 +63,7 @@ bool KoLcmsColorConversionTransformationFactory::conserveColorInformation() cons
 
 bool KoLcmsColorConversionTransformationFactory::conserveDynamicRange() const
 {
-    return false; // LCMS color transformation allways lose dynamic range
+    return false; // LCMS color transformation always loses dynamic range
 }
 
 quint32 KoLcmsColorConversionTransformationFactory::computeColorSpaceType(QString _modelId, QString _depthId)

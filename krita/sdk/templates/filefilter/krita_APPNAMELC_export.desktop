@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Krita %{APPNAMELC} Export Filter
 Name[ca]=Filtre d'exportació %{APPNAMELC} per al Krita
@@ -17,7 +16,7 @@ Name[tr]=Krita %{APPNAMELC} Aktarma Filtresi
 Name[uk]=Фільтр експорту %{APPNAMELC} для Krita
 Name[x-test]=xxKrita %{APPNAMELC} Export Filterxx
 Name[zh_TW]=Krita %{APPNAMELC} 匯出過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/%{APPNAMELC}
 X-KDE-Import=application/x-krita

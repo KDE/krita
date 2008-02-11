@@ -30,7 +30,6 @@
 #include "KoColorSpaceRegistry.h"
 
 
-
 class KoColor::Private {
 public:
     Private() : data(0), colorSpace(0) {}
@@ -246,7 +245,7 @@ quint8 KoColor::opacity() const
     return d->colorSpace->alpha( d->data );
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, QString bitDepthId, QHash<QString, QString> aliases)
+KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases)
 {
     QString modelId;
     if(elt.tagName() == "CMYK")
@@ -273,16 +272,16 @@ KoColor KoColor::fromXML(const QDomElement& elt, QString bitDepthId, QHash<QStri
         {
             profileName = aliases.value(profileName);
         }
-        if( not KoColorSpaceRegistry::instance()->profileByName( profileName))
+        if( !KoColorSpaceRegistry::instance()->profileByName( profileName))
         {
             profileName = "";
         }
     }
     QString csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, bitDepthId);
-    if(csId == "")
+    if(csId.isEmpty())
     {
         QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces );
-        if(not list.empty())
+        if(!list.empty())
         {
             csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, list[0].id());
         }

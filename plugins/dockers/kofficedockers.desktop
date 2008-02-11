@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KOffice Dockers plugin
 Name[ca]=Connector KOffice Dockers
 Name[de]=KOffice Docker-Modul
@@ -18,7 +17,7 @@ Name[tr]=KOffice Dockers eklentisi
 Name[uk]=Втулок прив’язок KOffice
 Name[x-test]=xxKOffice Dockers pluginxx
 Name[zh_TW]=KOffice 嵌入外掛程式
-ServiceTypes=KOffice/Dock
+X-KDE-ServiceTypes=KOffice/Dock
 Type=Service
 X-KDE-Library=kofficedockers
 X-Flake-MinVersion=0

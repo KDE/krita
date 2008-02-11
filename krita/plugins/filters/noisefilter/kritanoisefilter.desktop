@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Noise Filter
 Name[bg]=Шумов филтър
 Name[ca]=Filtre de soroll
@@ -70,7 +69,7 @@ Comment[sv]=Lägg till brus i en bild
 Comment[uk]=Додавання шуму в зображення
 Comment[x-test]=xxAdd noise to an imagexx
 Comment[zh_TW]=在圖片中增加雜訊
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritanoisefilter
 X-Krita-Version=3

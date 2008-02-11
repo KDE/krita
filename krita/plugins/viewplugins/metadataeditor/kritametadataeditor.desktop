@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=metadataeditor
 Name[de]=Metadateneditor
 Name[el]=επεξεργαστής μεταδεδομένων
@@ -32,7 +31,7 @@ Comment[tr]=metadata düzenleyici
 Comment[uk]=Редактор метаданих
 Comment[x-test]=xxmetadataeditorxx
 Comment[zh_TW]=中繼資料編輯器
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritametadataeditor
 X-Krita-Version=3

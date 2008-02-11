@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=panorama
 Name[bg]=Панорама
 Name[de]=Panorama
@@ -28,7 +27,7 @@ Comment[pt]=Panorama
 Comment[sv]=Panorama
 Comment[uk]=панорама
 Comment[x-test]=xxpanoramaxx
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritapanorama
 X-Krita-Version=3

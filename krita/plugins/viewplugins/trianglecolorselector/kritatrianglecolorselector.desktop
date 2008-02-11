@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=TriangleColorSelector
 Name[ca]=SelectorTriangularDeColor
 Name[it]=Selettore triangolare del colore
@@ -16,7 +15,7 @@ Comment[pt_BR]=Selector de Cores Triangular
 Comment[sv]=Triangulär färgväljare
 Comment[uk]=Трикутна палітра кольорів
 Comment[zh_TW]=三角型顏色選擇器
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritatrianglecolorselector
 X-Krita-Version=3

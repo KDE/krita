@@ -16,8 +16,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __koffice_kchart_h__
-#define __koffice_kchart_h__
+#ifndef __koChart_h__
+#define __koChart_h__
 
 #include <QtCore/QVariant>
 

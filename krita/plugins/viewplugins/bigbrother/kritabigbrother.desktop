@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=bigbrother
 Name[ca]=grangermà
 Name[el]=μεγάλος αδερφός
@@ -17,7 +16,7 @@ Comment[it]=Grande fratello
 Comment[sv]=Storebror
 Comment[uk]=Великий брат
 Comment[x-test]=xxbigbrotherxx
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritabigbrother
 X-Krita-Version=3

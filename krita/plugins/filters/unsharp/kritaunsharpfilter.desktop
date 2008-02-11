@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Image enhancement Filters (Extension)
 Name[bg]=Филтри за подобрения (разширения)
@@ -34,7 +33,7 @@ Name[uk]=Фільтри покращання зображення (розшир�
 Name[uz]=Расмнинг сифатини ошириш филтерлари (кенгайтма)
 Name[x-test]=xxImage enhancement Filters (Extension)xx
 Name[zh_TW]=增強過濾器（延伸）
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaunsharpfilter
 X-Krita-Version=3

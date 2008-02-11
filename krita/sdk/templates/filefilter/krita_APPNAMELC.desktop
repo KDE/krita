@@ -1,7 +1,6 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
 Comment=
-Encoding=UTF-8
 Exec=krita %u
 GenericName=Application for Drawing and Handling of Images
 GenericName[bg]=Приложение за рисуване и обработка на изображения
@@ -53,7 +52,7 @@ Terminal=false
 TerminalOptions=
 Type=Application
 X-DBUS-StartupType=multi
-X-DCOP-ServiceType=
+X-DCOP-X-KDE-ServiceType=
 X-KDE-StartupNotify=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=

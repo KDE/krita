@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=YCbCr (integer 8-bit and 16-bit) Color Model
 Name[ca]=Model de color YCbCr (enters de 8-bits i 16-bits)
 Name[de]=YCbCr-Farbmodell (8-bit und 16-bit Ganzzahl)
@@ -35,7 +34,7 @@ Comment[sv]=Färgmodell för YCbCr-bilder med 8-bitars och 16-bitars heltal per 
 Comment[uk]=Модель кольорів для зображень YCbCr з 8 бітами або 16 бітами на канал
 Comment[x-test]=xxColor model for 8-bit and 16-bit per channel for YCbCr imagesxx
 Comment[zh_TW]=每色頻為 8-bit 與 16-bit 的 YCbCr 圖片色彩模型
-ServiceTypes=KOffice/ColorSpace
+X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritaycbcrplugin
 X-Pigment-MinVersion=0

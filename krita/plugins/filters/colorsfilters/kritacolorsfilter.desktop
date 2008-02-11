@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Color Filters
 Name[bg]=Цветови филтри
 Name[br]=Siloù liv
@@ -85,7 +84,7 @@ Comment[uz]=Ранг филтерлари
 Comment[x-test]=xxColor filtersxx
 Comment[zh_CN]=颜色滤镜
 Comment[zh_TW]=色彩過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacolorsfilters
 X-Krita-Version=3

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Polygon Tool
 Name[bg]=Инструмент многоъгълник
 Name[br]=Ostilh liestueg
@@ -45,7 +44,7 @@ Name[uz]=Плигон воситаси
 Name[x-test]=xxPolygon Toolxx
 Name[zh_CN]=多边形工具
 Name[zh_TW]=多邊形工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolygon
 X-Krita-Version=3

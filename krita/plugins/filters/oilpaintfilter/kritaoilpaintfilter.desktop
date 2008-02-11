@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Oilpaint Filter
 Name[bg]=Филтър маслена боя
 Name[ca]=Filtre de pintura a l'oli
@@ -73,7 +72,7 @@ Comment[tr]=Yağlı boya filtresi
 Comment[uk]=Фільтр олійних фарб
 Comment[x-test]=xxOilpaint filterxx
 Comment[zh_TW]=油畫過濾器
-ServiceTypes=Krita/Filter
+X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaoilpaintfilter
 X-Krita-Version=3

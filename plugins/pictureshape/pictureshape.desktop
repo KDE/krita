@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Picture Shape
 Name[ca]=Forma d'imatge
 Name[de]=Bild-Objekt
@@ -17,7 +16,7 @@ Name[sv]=Bildform
 Name[uk]=Форма-зображення
 Name[x-test]=xxPicture Shapexx
 Name[zh_TW]=圖片元件
-ServiceTypes=KOffice/Shape
+X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=pictureshape
 X-Flake-MinVersion=0

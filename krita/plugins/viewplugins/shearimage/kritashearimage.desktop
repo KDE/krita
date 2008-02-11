@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Shear Image Plugin
 Name[bg]=Приставка за отрязване на изображение
 Name[ca]=Connector de tall d'imatge
@@ -31,7 +30,7 @@ Name[sv]=Insticksprogram för skjuva bild
 Name[uk]=Втулок перекошення зображення
 Name[x-test]=xxShear Image Pluginxx
 Name[zh_TW]=修剪圖片外掛程式
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritashearimage
 X-Krita-Version=3

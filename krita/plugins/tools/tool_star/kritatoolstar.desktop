@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Star Tool
 Name[bg]=Инструмент звезда
 Name[br]=Ostilh steredenn
@@ -45,7 +44,7 @@ Name[uz]=Юлдуз воситаси
 Name[x-test]=xxStar Toolxx
 Name[zh_CN]=星形工具
 Name[zh_TW]=星形工具
-ServiceTypes=Krita/Tool
+X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolstar
 X-Krita-Version=3

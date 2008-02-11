@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=SpellCheck plugin
 Name[ca]=Connector d'ortografia
 Name[de]=Rechtschreibprüfung-Modul
@@ -18,7 +17,7 @@ Name[uk]=Втулок перевірки правопису
 Name[x-test]=xxSpellCheck pluginxx
 Name[zh_CN]=拼写检查插件
 Name[zh_TW]=拼字檢查外掛程式
-ServiceTypes=KOffice/Text-EditingPlugin
+X-KDE-ServiceTypes=KOffice/Text-EditingPlugin
 Type=Service
 X-KDE-Library=spellcheck
 X-KoText-MinVersion=0

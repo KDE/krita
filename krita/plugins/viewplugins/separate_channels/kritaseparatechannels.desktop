@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Separate Channels Plugin
 Name[bg]=Приставка за отделен канал
 Name[ca]=Connector de canals separats
@@ -36,7 +35,7 @@ Name[uz]=Каналларни ажратиш учун плагин
 Name[x-test]=xxSeparate Channels Pluginxx
 Name[zh_CN]=独立通道插件
 Name[zh_TW]=分離色頻外掛程式
-ServiceTypes=Krita/ViewPlugin
+X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaseparatechannels
 X-Krita-Version=3

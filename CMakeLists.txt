@@ -1,6 +1,8 @@
 project(koffice)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-operator-names")
+
 
 # define the generic version of the KOffice libraries here
 # this makes it easy to advance it when the next KOffice release comes

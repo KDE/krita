@@ -15,6 +15,7 @@ Name[pt]='Plugin' de Módulos Acopláveis para o KOffice
 Name[pt_BR]=Plugin de Módulos Acopláveis para o KOffice
 Name[sv]=Koffice dockningsinsticksprogram
 Name[tr]=KOffice Dockers eklentisi
+Name[uk]=Втулок прив’язок KOffice
 Name[x-test]=xxKOffice Dockers pluginxx
 Name[zh_TW]=KOffice 嵌入外掛程式
 ServiceTypes=KOffice/Dock

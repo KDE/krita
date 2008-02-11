@@ -14,6 +14,7 @@ Name[ne]=केडीई कार्यालय पाठ उपकरणक�
 Name[pt]='Plugin' de edição de texto para o KOffice
 Name[pt_BR]=Plugin de edição de texto para o KOffice
 Name[sv]=Insticksprogram med textredigering för Koffice textverktyg
+Name[uk]=Втулок редагування тексту для текстового редактора KOffice
 Name[x-test]=xxText Editing plugin for the KOffce texttoolxx
 Name[zh_TW]=KOffice 文字工具的文字編輯外掛程式
 Type=ServiceType
@@ -31,6 +32,7 @@ Comment[ne]=पाठ सम्पादन प्लगइनको परि�
 Comment[pt]=Definição de um 'plugin' de edição de texto
 Comment[pt_BR]=Definição de um plugin de edição de texto
 Comment[sv]=Definition av ett Insticksprogram för textredigering
+Comment[uk]=Визначення втулка для зміни тексту
 Comment[x-test]=xxDefinition of a text-editing pluginxx
 Comment[zh_TW]=文字編輯外掛程式定義
 [PropertyDef::X-KoText-MinVersion]

@@ -14,6 +14,7 @@ Name[pt]=Definição da forma
 Name[pt_BR]=Definição da forma
 Name[sv]=Formdefinition
 Name[tr]=Şekil tanımlaması
+Name[uk]=Визначення форми
 Name[x-test]=xxShape definitionxx
 Name[zh_TW]=元件定義
 Type=ServiceType
@@ -31,6 +32,7 @@ Comment[ne]=फ्लेक आकार वस्तुको परिभा�
 Comment[pt]=Definição de um objecto de forma do Flake
 Comment[pt_BR]=Definição de um objeto de forma do Flake
 Comment[sv]=Definition av ett formobjekt i Flake
+Comment[uk]=Визначення об’єкта елемента форми
 Comment[x-test]=xxDefinition of a flake shape objectxx
 Comment[zh_TW]=Flake 元件物件定義
 [PropertyDef::X-Flake-MinVersion]

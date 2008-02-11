@@ -14,6 +14,7 @@ Name[ne]=इनलाइन पाठ वस्तु प्लगइन
 Name[pt]='Plugin' do Objecto Incorporado de Texto
 Name[pt_BR]=Plugin do Objeto Incorporado de Texto
 Name[sv]=Insticksprogram för flytande textobjekt
+Name[uk]=Втулок рядкового текстового об’єкта
 Name[x-test]=xxInline Text Object Pluginxx
 Name[zh_TW]=內含文字物件外掛程式
 Type=ServiceType
@@ -32,6 +33,7 @@ Comment[pt]=Definição de um objecto de texto
 Comment[pt_BR]=Definição de um objeto de texto
 Comment[sv]=Definition av ett textobjekt
 Comment[tr]=Bir metin nesnesinin tanımı
+Comment[uk]=Визначення текстового об’єкта
 Comment[x-test]=xxDefinition of a text objectxx
 Comment[zh_TW]=定義文字物件
 [PropertyDef::X-KoText-MinVersion]

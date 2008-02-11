@@ -14,6 +14,7 @@ Name[pt]=Definição do contorno da forma
 Name[pt_BR]=Definição do contorno da forma
 Name[sv]=Formkantdefinition
 Name[tr]=Şekil kenarlığı tanımlaması
+Name[uk]=Визначення границі форми
 Name[x-test]=xxShape border definitionxx
 Name[zh_TW]=元件邊框定義
 Type=ServiceType
@@ -30,6 +31,7 @@ Comment[it]=Definizione del bordo di una forma di Flake
 Comment[pt]=Definição do contorno de uma forma do Flake
 Comment[pt_BR]=Definição do contorno de uma forma do Flake
 Comment[sv]=Definition av en formkant i Flake
+Comment[uk]=Визначення елемента границі форми
 Comment[x-test]=xxDefinition of a flake shape borderxx
 Comment[zh_TW]=Flake 元件邊框定義
 [PropertyDef::X-Flake-Version]

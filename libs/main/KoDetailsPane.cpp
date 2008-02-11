@@ -122,7 +122,7 @@ void KoDetailsPane::openFile()
 void KoDetailsPane::changePalette()
 {
   QPalette p = qApp ? qApp->palette() : palette();
-  p.setBrush(QColorGroup::Base, p.brush(QPalette::Normal, QColorGroup::Background));
+  p.setBrush(QColorGroup::Base, QColor(Qt::transparent));
   p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
   m_detailsLabel->setPalette(p);
 }

@@ -1,5 +1,5 @@
 [Desktop Entry]
-Type=X-KDE-ServiceType
+Type=ServiceType
 X-KDE-ServiceType=Krita/Tool
 Comment=Tool plugin for Krita
 Comment[bg]=Приставка за инструмент за Krita

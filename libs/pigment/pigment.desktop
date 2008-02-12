@@ -1,5 +1,5 @@
 [Desktop Entry]
-Type=X-KDE-ServiceType
+Type=ServiceType
 X-KDE-ServiceType=KOffice/ColorSpace
 Comment=A module implementing a complete colorspace for use with Pigment Color Manipulation System
 Comment[ca]=Un mòdul que implementa un espai de colors complet per a usar-lo amb el Sistema de Manipulació Pigment Color

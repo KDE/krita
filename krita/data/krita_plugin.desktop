@@ -1,5 +1,5 @@
 [Desktop Entry]
-Type=X-KDE-ServiceType
+Type=ServiceType
 X-KDE-ServiceType=Krita/ViewPlugin
 Comment=GUI functionality for Krita
 Comment[bg]=ГПИ функционалност за Krita

@@ -1,4 +1,3 @@
-include_directories(${CMAKE_SOURCE_DIR}/krita/ui/obsolete/)
 add_subdirectory( blur )
 add_subdirectory( bumpmap )
 add_subdirectory( cimg )

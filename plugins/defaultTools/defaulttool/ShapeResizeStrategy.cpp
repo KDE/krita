@@ -27,6 +27,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
+#include <KoSnapGuide.h>
 
 #include <klocale.h>
 
@@ -63,30 +64,37 @@ ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
 
     switch(direction) {
         case KoFlake::TopMiddleHandle:
+            m_start = 0.5 * (shp->absolutePosition(KoFlake::TopLeftCorner) + shp->absolutePosition(KoFlake::TopRightCorner) );
             m_top = true; m_bottom = false; m_left = false; m_right = false; break;
         case KoFlake::TopRightHandle:
+            m_start = shp->absolutePosition(KoFlake::TopRightCorner);
             m_top = true; m_bottom = false; m_left = false; m_right = true; break;
         case KoFlake::RightMiddleHandle:
+            m_start = 0.5 * ( shp->absolutePosition(KoFlake::TopRightCorner) + shp->absolutePosition(KoFlake::BottomRightCorner) );
             m_top = false; m_bottom = false; m_left = false; m_right = true; break;
         case KoFlake::BottomRightHandle:
+            m_start = shp->absolutePosition(KoFlake::BottomRightCorner);
             m_top = false; m_bottom = true; m_left = false; m_right = true; break;
         case KoFlake::BottomMiddleHandle:
+            m_start = 0.5 * ( shp->absolutePosition(KoFlake::BottomRightCorner) + shp->absolutePosition(KoFlake::BottomLeftCorner) );
             m_top = false; m_bottom = true; m_left = false; m_right = false; break;
         case KoFlake::BottomLeftHandle:
+            m_start = shp->absolutePosition(KoFlake::BottomLeftCorner);
             m_top = false; m_bottom = true; m_left = true; m_right = false; break;
         case KoFlake::LeftMiddleHandle:
+            m_start = 0.5 * ( shp->absolutePosition(KoFlake::BottomLeftCorner) + shp->absolutePosition(KoFlake::TopLeftCorner) );
             m_top = false; m_bottom = false; m_left = true; m_right = false; break;
         case KoFlake::TopLeftHandle:
+            m_start = shp->absolutePosition(KoFlake::TopLeftCorner);
             m_top = true; m_bottom = false; m_left = true; m_right = false; break;
         default:
              Q_ASSERT(0); // illegal 'corner'
     }
 }
 
-void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
-    QPointF newPos = point;
-    if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0)
-        applyGrid(newPos);
+void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) 
+{
+    QPointF newPos = m_canvas->snapGuide()->snap( point, modifiers );
 
     bool keepAspect = modifiers & Qt::AltModifier;
     foreach(KoShape *shape, m_selectedShapes)

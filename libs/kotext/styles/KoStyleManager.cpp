@@ -26,6 +26,7 @@
 #include <KoGenStyles.h>
 
 #include <QTimer>
+#include <QUrl>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -70,15 +71,25 @@ KoStyleManager::~KoStyleManager() {
 void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
 {
     foreach ( KoParagraphStyle *paragraphStyle, d->paragStyles ) {
+        QString name( QString( QUrl::toPercentEncoding( paragraphStyle->name(), "", " " ) ).replace( "%", "_" ) );
+        if ( name.isEmpty() ) {
+            name = "P";
+        }
+
         KoGenStyle style( KoGenStyle::StyleUser, "paragraph" );
         paragraphStyle->saveOdf( style );
-        mainStyles.lookup( style, "P" );
+        mainStyles.lookup( style, name );
     }
 
     foreach ( KoCharacterStyle *characterStyle, d->charStyles ) {
+        QString name( QString( QUrl::toPercentEncoding( characterStyle->name(), "", " " ) ).replace( "%", "_" ) );
+        if ( name.isEmpty() ) {
+            name = "T";
+        }
+
         KoGenStyle style( KoGenStyle::StyleUser, "text" );
         characterStyle->saveOdf( style );
-        mainStyles.lookup( style, "T" );
+        mainStyles.lookup( style, name );
     }
 }
 

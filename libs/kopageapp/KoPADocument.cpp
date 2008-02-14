@@ -379,9 +379,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, int index )
 
     pages.insert( index, page );
 
-    if ( pages.size() == 2 ) {
-        setActionEnabled( KoPAView::ActionDeletePage, true );
-    }
+    setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
 }
 
 void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
@@ -404,11 +402,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
 
     pages.insert( index, page );
 
-    if ( pages.size() == 2 ) {
-        setActionEnabled( KoPAView::ActionDeletePage, true );
-    }
-
-    // move active view to new page
+    setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
 }
 
 int KoPADocument::takePage( KoPAPageBase *page )

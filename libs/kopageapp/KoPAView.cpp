@@ -466,6 +466,8 @@ void KoPAView::insertPage()
 
     KoPAPageInsertCommand * command = new KoPAPageInsertCommand( m_doc, page, m_activePage );
     m_canvas->addCommand( command );
+
+    updateActivePage(page);
 }
 
 void KoPAView::copyPage()

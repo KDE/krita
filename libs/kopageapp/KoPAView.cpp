@@ -205,7 +205,7 @@ void KoPAView::initActions()
     connect(m_viewRulers, SIGNAL(triggered(bool)), this, SLOT(setShowRulers(bool)));
     setShowRulers(m_doc->rulersVisible());
 
-    m_actionInsertPage = new KAction( i18n( "Insert Page" ), this );
+    m_actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
     actionCollection()->addAction( "edit_insertpage", m_actionInsertPage );
     m_actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
     m_actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );

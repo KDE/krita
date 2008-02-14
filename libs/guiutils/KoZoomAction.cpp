@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 #include "KoZoomAction.h"
-#include "KoZoomAction_p.h"
 #include "KoZoomMode.h"
+#include "KoZoomInput.h"
 
 #include <QString>
 #include <QLocale>
@@ -49,10 +49,9 @@ class KoZoomAction::Private
 {
 public:
     KoZoomMode::Modes zoomModes;
-    ExtLineEdit *number;
     QSlider *slider;
     double sliderLookup[33];
-    QButtonGroup* zoomButtonGroup;
+    KoZoomInput* input;
 
     double effectiveZoom;
     bool doSpecialAspectMode;
@@ -64,9 +63,8 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bo
 {
     d->zoomModes = zoomModes;
     d->slider = 0;
-    d->number = 0;
-    d->zoomButtonGroup = 0;
     d->doSpecialAspectMode = doSpecialAspectMode;
+    d->input = 0;
 
     setIcon(KIcon("zoom-original"));
     setEditable( true );
@@ -90,7 +88,6 @@ void KoZoomAction::setZoom( double zoom )
 {
     setEffectiveZoom(zoom);
     regenerateItems( zoom, true );
-    updateWidgets( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
 
 void KoZoomAction::triggered( const QString& text )
@@ -166,12 +163,21 @@ void KoZoomAction::regenerateItems(const double zoom, bool asCurrent)
 
     setItems( values );
 
+    if(d->input)
+        d->input->setZoomLevels(values);
+
     if(asCurrent)
     {
+        QString valueString;
         if(zoom*100>10.0)
-            setCurrentAction(i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 0)));
+            valueString = i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 0));
         else
-            setCurrentAction(i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 1)));
+            valueString = i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 1));
+
+        setCurrentAction(valueString);
+
+        if(d->input)
+            d->input->setCurrentZoomLevel(valueString);
     }
 }
 
@@ -180,16 +186,6 @@ void KoZoomAction::sliderValueChanged(int value)
     setZoom(d->sliderLookup[value]);
 
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, d->sliderLookup[value] );
-}
-
-void KoZoomAction::numberValueChanged()
-{
-    kDebug(30004) <<"number widget has changed to" << d->number->text();
-
-    double zoom = d->number->text().toDouble()/100.0;
-    setZoom(zoom);
-
-    emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
 
 void KoZoomAction::zoomIn()
@@ -229,6 +225,14 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
 
     QWidget * group = new QWidget(_parent);
     group->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    QHBoxLayout *layout = new QHBoxLayout(group);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+
+    d->input = new KoZoomInput(group);
+    regenerateItems( d->effectiveZoom );
+    connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));
+    layout->addWidget(d->input);
 
     d->slider = new QSlider(Qt::Horizontal);
     d->slider->setToolTip(i18n("Zoom"));
@@ -239,119 +243,22 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     d->slider->setPageStep(1);
     d->slider->setMinimumWidth(80);
     d->slider->setMaximumWidth(80);
+    layout->addWidget(d->slider);
 
-    QValidator *validator = new QDoubleValidator(1.0, 1600.0, 0, this);
-    d->number = new ExtLineEdit("100", group);
-    d->number->setToolTip(i18n("Zoom"));
-    d->number->setValidator(validator);
-    d->number->setMaxLength(5);
-    d->number->setMaximumWidth(40);
-    d->number->setMaximumHeight(22);
-    d->number->setAlignment(Qt::AlignRight);
-    d->number->hide();
-
-    QLabel *pctLabel = new QLabel("% ");
-    pctLabel->setToolTip(i18n("Zoom"));
-    QLabel *numLabel = new QLabel("100");
-    numLabel->setToolTip(i18n("Zoom"));
-    numLabel->setMaximumWidth(40);
-    numLabel->setMinimumWidth(40);
-    numLabel->setIndent(5);
-    numLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    numLabel->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    QGridLayout *layout = new QGridLayout();
-    int radios=0;
-    d->zoomButtonGroup = new QButtonGroup(group);
-    d->zoomButtonGroup->setExclusive(true);
-
-    if(d->zoomModes & KoZoomMode::ZOOM_WIDTH)
-    {
-        QToolButton * fitWidthButton = new QToolButton(group);
-        d->zoomButtonGroup->addButton(fitWidthButton, KoZoomMode::ZOOM_WIDTH);
-        layout->addWidget(fitWidthButton, 0, radios);
-        fitWidthButton->setIcon(KIcon("zoom-width").pixmap(22));
-        fitWidthButton->setCheckable(true);
-        fitWidthButton->setAutoRaise(true);
-        fitWidthButton->setToolTip(i18n("Fit to width"));
-        radios++;
-    }
-    if(d->zoomModes & KoZoomMode::ZOOM_PAGE)
-    {
-        QToolButton * fitPageButton = new QToolButton(group);
-        d->zoomButtonGroup->addButton(fitPageButton, KoZoomMode::ZOOM_PAGE);
-        layout->addWidget(fitPageButton, 0, radios);
-        fitPageButton->setIcon(KIcon("zoom-page").pixmap(22));
-        fitPageButton->setCheckable(true);
-        fitPageButton->setAutoRaise(true);
-        fitPageButton->setToolTip(i18n("Fit to page/canvas"));
-        radios++;
-    }
-
-
-    QToolButton * aspectButton = 0;
     if(d->doSpecialAspectMode)
     {
-        aspectButton = new QToolButton(group);
+        QToolButton * aspectButton = new QToolButton(group);
         aspectButton->setIcon(KIcon("zoom-pixels").pixmap(22));
         aspectButton->setCheckable(true);
         aspectButton->setAutoRaise(true);
         aspectButton->setToolTip(i18n("Use same aspect as pixels"));
         connect(aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
+        layout->addWidget(aspectButton);
     }
-
-    layout->addWidget(d->number, 0, radios);
-    layout->addWidget(numLabel, 0, radios);
-    layout->addWidget(pctLabel, 0, radios+1);
-    layout->addWidget(d->slider, 0, radios+2);
-    if(d->doSpecialAspectMode)
-        layout->addWidget(aspectButton, 0, radios+3);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-
-    group->setLayout(layout);
 
     connect(d->slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
-    connect(d->number, SIGNAL(returnPressed()), this, SLOT(numberValueChanged()));
-    connect(d->number, SIGNAL(returnPressed()), numLabel, SLOT(show()));
-    connect(d->number, SIGNAL(returnPressed()), d->number, SLOT(hide()));
-    connect(d->number, SIGNAL(lostFocus()), numLabel, SLOT(show()));
-    connect(d->number, SIGNAL(lostFocus()), d->number, SLOT(hide()));
-    connect(d->number, SIGNAL(textChanged(const QString & )), numLabel, SLOT(setText(const QString & )));
-    connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), d->number, SLOT(show()));
-    connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), d->number, SLOT(selectAll()));
-    connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), d->number, SLOT(setFocus()));
-    connect(numLabel, SIGNAL(customContextMenuRequested(const QPoint &)), numLabel, SLOT(hide()));
-    connect(d->zoomButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(zoomModeButtonClicked(int)));
-    connect(this, SIGNAL(zoomChanged(KoZoomMode::Mode, double)), this, SLOT(updateWidgets(KoZoomMode::Mode, double)));
 
     return group;
-}
-
-void KoZoomAction::zoomModeButtonClicked(int id)
-{
-    triggered(KoZoomMode::toString(static_cast<KoZoomMode::Mode>(id)));
-}
-
-void KoZoomAction::updateWidgets(KoZoomMode::Mode mode, double zoom)
-{
-    if(mode != KoZoomMode::ZOOM_CONSTANT) {
-        if (d->zoomButtonGroup)
-            d->zoomButtonGroup->button(mode)->setChecked(true);
-    } else {
-        QAbstractButton* button = 0;
-        if (d->zoomButtonGroup)
-            button = d->zoomButtonGroup->checkedButton();
-
-        if(button) {
-            // Let's work around not being able to uncheck when exclusive
-            d->zoomButtonGroup->setExclusive(false);
-            button->setChecked(false);
-            d->zoomButtonGroup->setExclusive(true);
-        }
-
-        setEffectiveZoom(zoom);
-    }
 }
 
 void KoZoomAction::setEffectiveZoom(double zoom)
@@ -359,9 +266,6 @@ void KoZoomAction::setEffectiveZoom(double zoom)
     if(d->effectiveZoom == zoom)
         return;
     d->effectiveZoom = zoom;
-
-    if(d->number)
-        d->number->setText(KGlobal::locale()->formatNumber(zoom*100, 0));
 
     if(d->slider) {
         int i = 0;
@@ -374,22 +278,13 @@ void KoZoomAction::setEffectiveZoom(double zoom)
     }
 }
 
-KoZoomAction::ExtLineEdit::ExtLineEdit ( const QString & contents, QWidget * parent) :
-   QLineEdit(contents, parent)
-{
-}
-
-void KoZoomAction::ExtLineEdit::focusOutEvent ( QFocusEvent * event )
-{
-    QLineEdit::focusOutEvent(event);
-    emit lostFocus();
-}
-
 void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
 {
-    setCurrentAction(KoZoomMode::toString(mode));
-    updateWidgets(mode, 1);
+    QString modeString(KoZoomMode::toString(mode));
+    setCurrentAction(modeString);
+
+    if (d->input)
+        d->input->setCurrentZoomLevel(modeString);
 }
 
 #include "KoZoomAction.moc"
-#include "KoZoomAction_p.moc"

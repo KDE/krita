@@ -60,6 +60,7 @@ set(koguiutils_LIB_SRCS
    KoResourceItemChooser.cpp
     KoCheckerBoardPainter.cpp
    KoSelectShapeAction.cpp
+   KoZoomInput.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS

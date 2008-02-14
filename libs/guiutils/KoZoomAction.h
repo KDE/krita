@@ -97,9 +97,6 @@ protected slots:
 
   void triggered( const QString& text );
   void sliderValueChanged(int value);
-  void numberValueChanged();
-  void zoomModeButtonClicked(int id);
-  void updateWidgets(KoZoomMode::Mode mode, double zoom);
 
 signals:
 
@@ -122,8 +119,6 @@ protected:
 
     /// Regenerates the action's items
     void regenerateItems( const double zoom, bool asCurrent = false );
-
-    class ExtLineEdit;
 
 private:
     Q_DISABLE_COPY( KoZoomAction )

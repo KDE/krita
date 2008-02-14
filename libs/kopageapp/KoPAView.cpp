@@ -218,6 +218,7 @@ void KoPAView::initActions()
     connect( m_actionCopyPage, SIGNAL( triggered() ), this, SLOT( copyPage() ) );
 
     m_actionDeletePage = new KAction( i18n( "Delete Page" ), this );
+    m_actionDeletePage->setEnabled( m_doc->pageCount() > 1 );
     actionCollection()->addAction( "edit_deletepage", m_actionDeletePage );
     m_actionDeletePage->setToolTip( i18n( "Delete a new page after the current one" ) );
     m_actionDeletePage->setWhatsThis( i18n( "Delete a new page after the current one" ) );

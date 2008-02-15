@@ -19,7 +19,7 @@
 #ifndef SIMPLESTYLEWIDGET_H
 #define SIMPLESTYLEWIDGET_H
 
-#include <ui_SimpleStyleWidget.h>
+#include <ui_SimpleStyleWidget_2.h>
 
 #include <QWidget>
 #include <QTextBlock>
@@ -35,10 +35,13 @@ public:
 public slots:
     void setCurrentBlock(const QTextBlock &block);
     void setStyleManager(KoStyleManager *sm);
+    void setCurrentFormat(const QTextCharFormat& format);
 
 private slots:
     void listStyleChanged(int row);
     void directionChangeRequested();
+    void fontChanged(const QFont& font);
+    void fontSizeChanged(int size);
 
 private:
     enum DirectionButtonState {

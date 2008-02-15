@@ -49,7 +49,7 @@ SET ( textshape_SRCS
 )
 
 kde4_add_ui_files(textshape_SRCS
-    dialogs/SimpleStyleWidget.ui
+    dialogs/SimpleStyleWidget_2.ui
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui

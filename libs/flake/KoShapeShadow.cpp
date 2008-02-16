@@ -1,0 +1,125 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#include "KoShapeShadow.h"
+#include "KoShape.h"
+#include "KoInsets.h"
+#include <KoGenStyle.h>
+#include <QtGui/QPainter>
+
+class KoShapeShadow::Private
+{
+public:
+    Private()
+    : offset(10,10), color(Qt::black), visible(true), refCount(0)
+    {
+    }
+    QPointF offset;
+    QColor color;
+    bool visible;
+    int refCount;
+};
+
+KoShapeShadow::KoShapeShadow()
+    : d( new Private() )
+{
+}
+
+KoShapeShadow::~KoShapeShadow()
+{
+    delete d;
+}
+
+void KoShapeShadow::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
+{
+    style.addProperty( "draw:shadow", d->visible ? "visible" : "hidden" );
+    style.addProperty( "draw:shadow-color", d->color.name() );
+    if( d->color.alphaF() != 1.0 )
+        style.addProperty( "draw:shadow-opacity", QString("%1%").arg( d->color.alphaF() * 100.0 ) );
+    style.addProperty( "draw:shadow-offset-x", QString("%1pt").arg( d->offset.x() ) );
+    style.addProperty( "draw:shadow-offset-y", QString("%1pt").arg( d->offset.y() ) );
+}
+
+void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+{
+    KoShape::applyConversion( painter, converter );
+
+    painter.setPen( Qt::NoPen );
+    painter.setBrush( QBrush(d->color) );
+    QMatrix tm;
+    tm.translate( d->offset.x(), d->offset.y() );
+    QMatrix tr = shape->absoluteTransformation(&converter);
+    painter.setMatrix( tr * tm * tr.inverted() * painter.matrix() );
+    painter.drawPath( shape->outline() );
+}
+
+void KoShapeShadow::setOffset( const QPointF & offset )
+{
+    d->offset = offset;
+}
+
+QPointF KoShapeShadow::offset() const
+{
+    return d->offset;
+}
+
+void KoShapeShadow::setColor( const QColor &color )
+{
+    d->color = color;
+}
+
+QColor KoShapeShadow::color() const
+{
+    return d->color;
+}
+
+void KoShapeShadow::setVisibility( bool visible )
+{
+    d->visible = visible;
+}
+
+bool KoShapeShadow::isVisible() const
+{
+    return d->visible;
+}
+
+void KoShapeShadow::insets( const KoShape *shape, KoInsets &insets )
+{
+    Q_UNUSED( shape );
+
+    insets.left = ( d->offset.x() < 0.0 ) ? qAbs(d->offset.x()) : 0.0;
+    insets.top = ( d->offset.y() < 0.0 ) ? qAbs(d->offset.y()) : 0.0;
+    insets.right = ( d->offset.x() > 0.0 ) ? d->offset.x() : 0.0;
+    insets.bottom = ( d->offset.y() > 0.0 ) ? d->offset.y() : 0.0;
+}
+
+void KoShapeShadow::addUser()
+{
+    d->refCount++;
+}
+
+int KoShapeShadow::removeUser()
+{
+    return --d->refCount;
+}
+
+int KoShapeShadow::useCount() const
+{
+    return d->refCount;
+}

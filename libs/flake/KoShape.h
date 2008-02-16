@@ -52,6 +52,7 @@ class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
 class KoShapeControllerBase;
+class KoShapeShadow;
 
 /**
  *
@@ -111,7 +112,8 @@ public:
         CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
         BorderChanged, ///< the shapes border has changed
-        BackgroundChanged ///< the shapes background has changed
+        BackgroundChanged, ///< the shapes background has changed
+        ShadowChanged ///< the shapes shadow has changed
     };
 
     /**
@@ -479,6 +481,12 @@ public:
      */
     KoInsets borderInsets() const;
 
+    /// Sets the new shadow, removing the old one
+    void setShadow( KoShapeShadow * shadow );
+
+    /// Returns the currently set shadow or 0 if there is now shadow set
+    KoShapeShadow * shadow() const;
+
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
      * keep the width/hight ratio intact so as not to distort shapes that rely on that
@@ -779,6 +787,9 @@ protected:
 
     /// Loads the stroke style
     KoShapeBorderModel * loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context );
+
+    /// Loads the shadow style
+    KoShapeShadow * loadOdfShadow( const KoXmlElement & element, KoShapeLoadingContext & context );
 
     /**
      * Fills the style stack and returns the value of the given style property (e.g fill, stroke).

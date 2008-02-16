@@ -31,6 +31,7 @@
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
 #include "KoShapeManagerPaintingStrategy.h"
+#include "KoShapeShadow.h"
 
 #include <QPainter>
 #include <kdebug.h>
@@ -237,6 +238,12 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
 
 void KoShapeManager::paintShape( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
 {
+    if( shape->shadow() )
+    {
+        painter.save();
+        shape->shadow()->paint( shape, painter, converter );
+        painter.restore();
+    }
     painter.save();
     shape->paint( painter, converter );
     painter.restore();

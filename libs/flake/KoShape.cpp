@@ -37,6 +37,7 @@
 #include "KoLineBorder.h"
 #include "ShapeDeleter_p.h"
 #include "KoShapeStyleWriter.h"
+#include "KoShapeShadow.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -70,7 +71,8 @@ public:
         appData(0),
         backgroundBrush(Qt::NoBrush),
         border(0),
-        me(shape)
+        me(shape),
+        shadow(0)
     {
     }
 
@@ -86,6 +88,8 @@ public:
             if(border->useCount() == 0)
                 delete border;
         }
+        if( shadow && shadow->removeUser() == 0 )
+            delete shadow;
     }
 
     void shapeChanged(ChangeType type) {
@@ -122,6 +126,7 @@ public:
     QList<KoShapeConnection*> connections;
     KoShape *me;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
+    KoShapeShadow * shadow; ///< the current shape shadow
 };
 
 KoShape::KoShape()
@@ -232,13 +237,25 @@ bool KoShape::hitTest( const QPointF &position ) const
         return false;
 
     QPointF point = absoluteTransformation(0).inverted().map( position );
-    KoInsets insets(0, 0, 0, 0);
+    QRectF bb( QPointF(), size() );
     if(d->border)
+    {
+        KoInsets insets;
         d->border->borderInsets(this, insets);
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
+    if( bb.contains( point ) )
+        return true;
 
-    QSizeF s( size() );
-    return point.x() >= -insets.left && point.x() <= s.width() + insets.right &&
-           point.y() >= -insets.top && point.y() <= s.height() + insets.bottom;
+    // if there is no shadow we can as well just leave
+    if( ! d->shadow )
+        return false;
+
+    // the shadow has an offset to the shape, so we simply
+    // check if the position minus the shadow offset hits the shape
+    point = absoluteTransformation(0).inverted().map( position-d->shadow->offset() );
+
+    return bb.contains( point );
 }
 
 QRectF KoShape::boundingRect() const
@@ -249,7 +266,14 @@ QRectF KoShape::boundingRect() const
         d->border->borderInsets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
-    return absoluteTransformation(0).mapRect( bb );
+    bb = absoluteTransformation(0).mapRect( bb );
+    if( d->shadow )
+    {
+        KoInsets insets;
+        d->shadow->insets( this, insets );
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
+    return bb;
 }
 
 QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const {
@@ -617,6 +641,22 @@ void KoShape::setBorder(KoShapeBorderModel *border) {
     notifyChanged();
 }
 
+void KoShape::setShadow( KoShapeShadow * shadow )
+{
+    if( d->shadow )
+        d->shadow->removeUser();
+    d->shadow = shadow;
+    if( d->shadow )
+        d->shadow->addUser();
+    d->shapeChanged(ShadowChanged);
+    notifyChanged();
+}
+
+KoShapeShadow * KoShape::shadow() const
+{
+    return d->shadow;
+}
+
 const QMatrix& KoShape::matrix() const {
     return d->localMatrix;
 }
@@ -687,6 +727,9 @@ QString KoShape::saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) c
     {
         b->fillStyle( style, context );
     }
+    KoShapeShadow * s = shadow();
+    if( s )
+        s->fillStyle( style, context );
 
     KoShapeStyleWriter styleWriter( context );
 
@@ -712,6 +755,7 @@ void KoShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &co
 
     setBackground( loadOdfFill( element, context ) );
     setBorder( loadOdfStroke( element, context ) );
+    setShadow( loadOdfShadow( element, context ) );
 
     styleStack.restore();
 }
@@ -816,6 +860,28 @@ KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoSha
     }
     else
         return 0;
+}
+
+KoShapeShadow * KoShape::loadOdfShadow( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    QString stroke = getStyleProperty( "shadow", element, context );
+    if( stroke == "visible" || stroke == "hidden" )
+    {
+        KoShapeShadow * shadow = new KoShapeShadow();
+        QColor shadowColor( styleStack.property( KoXmlNS::draw, "shadow-color" ) );
+        qreal offsetX = KoUnit::parseValue( styleStack.property( KoXmlNS::draw, "shadow-offset-x" ) );
+        qreal offsetY = KoUnit::parseValue( styleStack.property( KoXmlNS::draw, "shadow-offset-y" ) );
+        shadow->setOffset( QPointF( offsetX, offsetY ) );
+
+        QString opacity = styleStack.property( KoXmlNS::draw, "shadow-opacity" );
+        if( ! opacity.isEmpty() && opacity.right( 1 ) == "%" )
+            shadowColor.setAlphaF( opacity.left( opacity.length()-1 ).toFloat() / 100.0 );
+        shadow->setColor( shadowColor );
+
+        return shadow;
+    }
+    return 0;
 }
 
 QMatrix KoShape::parseOdfTransform( const QString &transform )

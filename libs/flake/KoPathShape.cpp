@@ -27,6 +27,7 @@
 #include "KoPathShapeLoader.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
+#include "KoShapeShadow.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -385,7 +386,14 @@ QRectF KoPathShape::boundingRect() const
         bb.adjust( -inset.left, -inset.top, inset.right, inset.bottom );
     }
     //qDebug() << "KoPathShape::boundingRect = " << bb;
-    return absoluteTransformation( 0 ).mapRect( bb );
+    bb = absoluteTransformation( 0 ).mapRect( bb );
+    if( shadow() )
+    {
+        KoInsets insets;
+        shadow()->insets( this, insets );
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
+    return bb;
 }
 
 

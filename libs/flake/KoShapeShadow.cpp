@@ -60,8 +60,9 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
 {
     KoShape::applyConversion( painter, converter );
 
-    painter.setPen( Qt::NoPen );
-    painter.setBrush( QBrush(d->color) );
+    painter.setPen( d->color );
+    if( shape->background().style() != Qt::NoBrush )
+        painter.setBrush( QBrush(d->color) );
     QMatrix tm;
     tm.translate( d->offset.x(), d->offset.y() );
     QMatrix tr = shape->absoluteTransformation(&converter);

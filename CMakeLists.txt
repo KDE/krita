@@ -19,6 +19,8 @@ find_package(ZLIB REQUIRED)
 find_package(KdepimLibs REQUIRED)
 find_package(LCMS REQUIRED)
 find_package(PNG REQUIRED)
+find_package(CreateResources)
+message( STATUS "Create Resources will be required in the final release")
 find_package(Eigen)
 macro_optional_find_package(Blitz)
 

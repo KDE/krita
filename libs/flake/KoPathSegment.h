@@ -38,7 +38,7 @@ public:
     * It takes ownership of the path points which do not have a
     * parent path shape set.
     */
-    KoPathSegment( KoPathPoint * first = 0, KoPathPoint * second = 0);
+    explicit KoPathSegment( KoPathPoint * first = 0, KoPathPoint * second = 0);
 
     /// Constructs segment by copying another segment
     KoPathSegment( const KoPathSegment & segment );

@@ -36,7 +36,7 @@ public:
      * @param paths the list of paths to reverse
      * @param parent the parent command used for macro commands
      */
-    KoPathReverseCommand( const QList<KoPathShape*> &paths, QUndoCommand *parent = 0 );
+    explicit KoPathReverseCommand( const QList<KoPathShape*> &paths, QUndoCommand *parent = 0 );
     virtual ~KoPathReverseCommand();
     /// redo the command
     void redo();

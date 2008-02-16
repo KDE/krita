@@ -18,15 +18,6 @@ In the plugins/defaultTools/ConnectorTool:
 * Allow to insert multi-lines much the same way Kivio did previously.
 * Create and use an undo command for inserting the connection and the points.
 
-== More Advanced ==
-* Add shadow to a KoShape
-  - shadow properties as described by the odf spec are (offsetx, offsety, color, opacity)
-    -> maybe have a KoShapeShadow class to hold these
-  - painting done in the shape itself. The angle is set in the document space, not in the shape-coordianate system
-  - on insert into the rTree (KoShapeManager) extend the boudingrect with shadow (note that KoShapeManager is
-    a friend of KoShape).
-
-
 Some suggestions discussed on IRC:
 - mouse wheel for zoom in and out, middle mouse button for panning in the default tool
 - better grouping of flake tools

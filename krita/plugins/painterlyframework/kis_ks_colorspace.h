@@ -35,15 +35,15 @@
 
 #include <QDomElement>
 
-template< typename _TYPE_, quint32 _N_ >
+template< typename _TYPE_, int _N_ >
 class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYPE_,_N_> >
 {
-    typedef KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYPE_,_N_> > parent;
     typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
+    typedef KoIncompleteColorSpace< CSTrait > parent;
 
     public:
 
-        KisKSColorSpace(KoColorProfile *p, const QString &id, const QString &name);
+        KisKSColorSpace(KoColorProfile *p);
         virtual ~KisKSColorSpace();
 
     public:
@@ -56,12 +56,21 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYP
         void colorFromXML(quint8*, const QDomElement&) const;
 
         virtual KoColorSpace* clone() const = 0;
-        virtual KoID colorModelId() const = 0;
 
         bool willDegrade(ColorSpaceIndependence) const { return false; }
-        KoID colorDepthId() const { return ColorDepthId(); }
+
+        KoID colorModelId() const
+            { return ColorModelId(); }
+        KoID colorDepthId() const
+            { return ColorDepthId(); }
 
     public: // static
+
+        static KoID ColorModelId()
+        {
+            return KoID( QString("KS%1").arg(_N_),
+                         i18n("Painterly Color Space - precision %1", _N_) );
+        }
 
         static KoID ColorDepthId()
         {
@@ -83,28 +92,27 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYP
             return KoID(id, name);
         }
 
+        static KoID ColorSpaceId()
+        {
+            return KoID(ColorModelId().id()      +     ColorDepthId().id(),
+                        ColorModelId().name() + " (" + ColorDepthId().name() + ")" );
+        }
+
     private:
 
         KisIlluminantProfile *m_profile;
 
 };
 
-// Little macro - in order to use this, you've to define a KoID ColorModelId() method in your class.
-
-#define COLORSPACEIDMACRO \
-    static KoID ColorSpaceId() \
-    { \
-        return KoID(ColorModelId().id()      +     parent::ColorDepthId().id(), \
-                    ColorModelId().name() + " (" + parent::ColorDepthId().name() + ")" ); \
-    }
-
 ////////////////////////////////////////////
 //            IMPLEMENTATION              //
 ////////////////////////////////////////////
 
-template< typename _TYPE_, quint32 _N_ >
-KisKSColorSpace<_TYPE_,_N_>::KisKSColorSpace(KoColorProfile *p, const QString &id, const QString &name)
-: parent(id, name, KoColorSpaceRegistry::instance()->rgb16(""))
+template< typename _TYPE_, int _N_ >
+KisKSColorSpace<_TYPE_,_N_>::KisKSColorSpace(KoColorProfile *p)
+: parent( ColorSpaceId().id(),
+          ColorSpaceId().name(),
+          KoColorSpaceRegistry::instance()->rgb16("") )
 {
     Q_ASSERT(p);
     m_profile = static_cast<KisIlluminantProfile *>(p);
@@ -112,28 +120,28 @@ KisKSColorSpace<_TYPE_,_N_>::KisKSColorSpace(KoColorProfile *p, const QString &i
     const KoChannelInfo::enumChannelValueType channelValueType = KoColorSpaceMathsTraits<_TYPE_>::channelValueType;
     const int channelSize = sizeof(_TYPE_);
 
-    for (quint32 i = 0; i < 2*_N_; i+=2) {
-        parent::addChannel(new KoChannelInfo(i18n("Absorption"),
-                           i+0 * channelSize,
-                           KoChannelInfo::COLOR,
-                           channelValueType,
-                           channelSize,
-                           QColor(0,0,255)));
+    for (int i = 0; i < 2*_N_; i+=2) {
+        parent::addChannel( new KoChannelInfo( i18n("Absorption"),
+                                               i+0 * channelSize,
+                                               KoChannelInfo::COLOR,
+                                               channelValueType,
+                                               channelSize,
+                                               QColor(0,0,255) ) );
 
-        parent::addChannel(new KoChannelInfo(i18n("Scattering"),
-                           i+1 * channelSize,
-                           KoChannelInfo::COLOR,
-                           channelValueType,
-                           channelSize,
-                           QColor(255,0,0)));
+        parent::addChannel( new KoChannelInfo( i18n("Scattering"),
+                                               i+1 * channelSize,
+                                               KoChannelInfo::COLOR,
+                                               channelValueType,
+                                               channelSize,
+                                               QColor(255,0,0) ) );
     }
 
-    parent::addChannel(new KoChannelInfo(i18n("Alpha"),
-                       2*_N_ * channelSize,
-                       KoChannelInfo::ALPHA,
-                       channelValueType,
-                       channelSize,
-                       QColor(0,255,0)));
+    parent::addChannel( new KoChannelInfo( i18n("Alpha"),
+                                           2*_N_ * channelSize,
+                                           KoChannelInfo::ALPHA,
+                                           channelValueType,
+                                           channelSize,
+                                           QColor(0,255,0) ) );
 
     addCompositeOp( new KoCompositeOpOver< CSTrait >(this) );
     addCompositeOp( new KoCompositeOpErase< CSTrait >(this) );
@@ -142,25 +150,25 @@ KisKSColorSpace<_TYPE_,_N_>::KisKSColorSpace(KoColorProfile *p, const QString &i
     addCompositeOp( new KoCompositeOpBurn< CSTrait >(this) );
 }
 
-template< typename _TYPE_, quint32 _N_ >
+template< typename _TYPE_, int _N_ >
 KisKSColorSpace<_TYPE_,_N_>::~KisKSColorSpace()
 {
     delete m_profile;
 }
 
-template< typename _TYPE_, quint32 _N_ >
+template< typename _TYPE_, int _N_ >
 KoColorProfile *KisKSColorSpace<_TYPE_,_N_>::profile()
 {
     return m_profile;
 }
 
-template< typename _TYPE_, quint32 _N_ >
+template< typename _TYPE_, int _N_ >
 const KoColorProfile *KisKSColorSpace<_TYPE_,_N_>::profile() const
 {
     return m_profile;
 }
 
-template< typename _TYPE_, quint32 _N_ >
+template< typename _TYPE_, int _N_ >
 bool KisKSColorSpace<_TYPE_,_N_>::profileIsCompatible(const KoColorProfile *profile) const
 {
     const KisIlluminantProfile *p = static_cast<const KisIlluminantProfile *>(profile);
@@ -170,11 +178,11 @@ bool KisKSColorSpace<_TYPE_,_N_>::profileIsCompatible(const KoColorProfile *prof
     return true;
 }
 
-template< typename _TYPE_, quint32 _N_ >
+template< typename _TYPE_, int _N_ >
 void KisKSColorSpace<_TYPE_,_N_>::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
     QDomElement labElt = doc.createElement(QString("KS%1").arg(_N_));
-    for (uint i = 0; i < _N_; i++) {
+    for (int i = 0; i < _N_; i++) {
         labElt.setAttribute(QString("K%1").arg(i), KoColorSpaceMaths<_TYPE_,double>::scaleToA(CSTrait::K(pixel,i)));
         labElt.setAttribute(QString("S%1").arg(i), KoColorSpaceMaths<_TYPE_,double>::scaleToA(CSTrait::S(pixel,i)));
     }
@@ -182,10 +190,10 @@ void KisKSColorSpace<_TYPE_,_N_>::colorToXML(const quint8 *pixel, QDomDocument &
     colorElt.appendChild(labElt);
 }
 
-template< typename _TYPE_, quint32 _N_ >
+template< typename _TYPE_, int _N_ >
 void KisKSColorSpace<_TYPE_,_N_>::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    for (uint i = 0; i < _N_; i++) {
+    for (int i = 0; i < _N_; i++) {
         CSTrait::K(pixel,i) = KoColorSpaceMaths<double,_TYPE_>::scaleToA(elt.attribute(QString("K%1").arg(i)).toDouble());
         CSTrait::S(pixel,i) = KoColorSpaceMaths<double,_TYPE_>::scaleToA(elt.attribute(QString("S%1").arg(i)).toDouble());
     }

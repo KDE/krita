@@ -21,8 +21,10 @@
 #include "kis_ks_colorspace_test.h"
 
 #include "kis_illuminant_profile.h"
-#include "kis_ksqp_colorspace.h"
-#include "kis_kslc_colorspace.h"
+#include "kis_illuminant_profile_qp.h"
+
+#include "kis_ks_colorspace.h"
+#include "kis_ksf32_colorspace.h"
 
 #include <KoColorSpaceRegistry.h>
 
@@ -58,23 +60,11 @@ void KisKSColorSpaceTest::testConstructor()
     QString d656 = list.filter("6_high")[0];
     QString d659 = list.filter("9_high")[0];
 
-    KisIlluminantProfile *p6 = new KisIlluminantProfile(d656);
-    KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
+    KisIlluminantProfile *p6 = new KisIlluminantProfileQP(d656);
+    KisIlluminantProfile *p9 = new KisIlluminantProfileQP(d659);
 
-    KisKSColorSpace<float,6> *cs6 = new KisKSQPColorSpace<float,6>(p6->clone());
-    KisKSColorSpace<float,9> *cs9 = new KisKSQPColorSpace<float,9>(p9->clone());
-
-    QVERIFY(cs6->profileIsCompatible(p9) == false);
-    QVERIFY(cs6->profileIsCompatible(p6) == true);
-
-    QVERIFY(cs9->profileIsCompatible(p6) == false);
-    QVERIFY(cs9->profileIsCompatible(p9) == true);
-
-    delete cs6;
-    delete cs9;
-
-    cs6 = new KisKSLCColorSpace<float,6>(p6->clone());
-    cs9 = new KisKSLCColorSpace<float,9>(p9->clone());
+    KisKSF32ColorSpace<6> *cs6 = new KisKSF32ColorSpace<6>(p6->clone());
+    KisKSF32ColorSpace<9> *cs9 = new KisKSF32ColorSpace<9>(p9->clone());
 
     QVERIFY(cs6->profileIsCompatible(p9) == false);
     QVERIFY(cs6->profileIsCompatible(p6) == true);
@@ -96,46 +86,36 @@ void KisKSColorSpaceTest::testRegistry()
     QString d656 = list.filter("6_high")[0];
     QString d659 = list.filter("9_high")[0];
 
-    KisIlluminantProfile *p6 = new KisIlluminantProfile(d656);
-    KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
-/*
+    KisIlluminantProfile *p6 = new KisIlluminantProfileQP(d656);
+    KisIlluminantProfile *p9 = new KisIlluminantProfileQP(d659);
+
     // First, load a colorspace with his default profile
-    cs = f->colorSpace(KisKSLCColorSpace<float,6>::ColorSpaceId().id(),0);
-    QVERIFY2(cs != 0, "ColorSpace LC6 loaded");
+    cs = f->colorSpace(KisKSColorSpace<float,6>::ColorSpaceId().id(),0);
+    QVERIFY2(cs != 0, "ColorSpace KS6 loaded");
     QVERIFY(cs->profile() != 0);
-    cs = f->colorSpace(KisKSLCColorSpace<float,9>::ColorSpaceId().id(),0);
-    QVERIFY2(cs != 0, "ColorSpace LC9 loaded");
+    cs = f->colorSpace(KisKSColorSpace<float,9>::ColorSpaceId().id(),0);
+    QVERIFY2(cs != 0, "ColorSpace KS9 loaded");
     QVERIFY(cs->profile() != 0);
-    cs = f->colorSpace(KisKSQPColorSpace<float,6>::ColorSpaceId().id(),0);
-    QVERIFY2(cs != 0, "ColorSpace QP6 loaded");
-    QVERIFY(cs->profile() != 0);
-    cs = f->colorSpace(KisKSQPColorSpace<float,9>::ColorSpaceId().id(),0);
-    QVERIFY2(cs != 0, "ColorSpace QP9 loaded");
-    QVERIFY(cs->profile() != 0);
-*/
+
     // Now with a profile
-    cs = f->colorSpace(KisKSLCColorSpace<float,6>::ColorSpaceId().id(), p6);
-    QVERIFY2(cs != 0, "ColorSpace LC6 loaded");
-    cs = f->colorSpace(KisKSLCColorSpace<float,9>::ColorSpaceId().id(), p9);
-    QVERIFY2(cs != 0, "ColorSpace LC9 loaded");
-    cs = f->colorSpace(KisKSQPColorSpace<float,6>::ColorSpaceId().id(), p6);
-    QVERIFY2(cs != 0, "ColorSpace QP6 loaded");
-    cs = f->colorSpace(KisKSQPColorSpace<float,9>::ColorSpaceId().id(), p9);
-    QVERIFY2(cs != 0, "ColorSpace QP9 loaded");
+    cs = f->colorSpace(KisKSColorSpace<float,6>::ColorSpaceId().id(), p6);
+    QVERIFY2(cs != 0, "ColorSpace KS6 loaded - with custom profile");
+    cs = f->colorSpace(KisKSColorSpace<float,9>::ColorSpaceId().id(), p9);
+    QVERIFY2(cs != 0, "ColorSpace KS9 loaded - with custom profile");
 }
 
 void KisKSColorSpaceTest::testToFromRgbA16()
 {
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
     QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSLCColorSpace<float,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSLCColorSpace<float,9>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSQPColorSpace<float,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSQPColorSpace<float,9>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSColorSpace<float,6>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSColorSpace<float,9>::ColorSpaceId().id(),0));
 
     quint16 red  [4] = { 0x0000, 0x0000, 0xFFFF, 0xFFFF };
     quint16 green[4] = { 0x0000, 0xFFFF, 0x0000, 0xFFFF };
     quint16 blue [4] = { 0xFFFF, 0x0000, 0x0000, 0xFFFF };
+    quint16 white[4] = { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF };
+    quint16 black[4] = { 0     , 0     , 0     , 0      };
     quint16 random[4] = { rand()%0xFFFF, rand()%0xFFFF, rand()%0xFFFF, rand()%0xFFFF };
     quint8 *curr;
 
@@ -187,6 +167,32 @@ void KisKSColorSpaceTest::testToFromRgbA16()
         print_vector<quint16>(4, curr, "BLUE ARRAY:");
         print_vector<float>(n, data, "BLUE PIXEL:");
         print_vector<quint16>(4, back8, "BLUE ARRAY BACK:");
+        #endif
+
+        curr = reinterpret_cast<quint8*>(white);
+        cs->fromRgbA16(curr, data, 1);
+        cs->toRgbA16(data, back8, 1);
+        QVERIFY(back[0]-white[0] <= 2);
+        QVERIFY(back[1]-white[1] <= 2);
+        QVERIFY(back[2]-white[2] <= 2);
+        QVERIFY(back[3]-white[3] <= 2);
+        #ifdef VERBOSE
+        print_vector<quint16>(4, curr, "WHITE ARRAY:");
+        print_vector<float>(n, data, "WHITE PIXEL:");
+        print_vector<quint16>(4, back8, "WHITE ARRAY BACK:");
+        #endif
+
+        curr = reinterpret_cast<quint8*>(black);
+        cs->fromRgbA16(curr, data, 1);
+        cs->toRgbA16(data, back8, 1);
+        QVERIFY(back[0]-black[0] <= 2);
+        QVERIFY(back[1]-black[1] <= 2);
+        QVERIFY(back[2]-black[2] <= 2);
+        QVERIFY(back[3]-black[3] <= 2);
+        #ifdef VERBOSE
+        print_vector<quint16>(4, curr, "BLACK ARRAY:");
+        print_vector<float>(n, data, "BLACK PIXEL:");
+        print_vector<quint16>(4, back8, "BLACK ARRAY BACK:");
         #endif
 
         curr = reinterpret_cast<quint8*>(random);

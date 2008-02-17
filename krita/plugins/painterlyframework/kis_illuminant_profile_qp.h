@@ -17,28 +17,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ILLUMINANT_PROFILE_TEST_H_
-#define KIS_ILLUMINANT_PROFILE_TEST_H_
+#ifndef KIS_ILLUMINANT_PROFILE_QP_H_
+#define KIS_ILLUMINANT_PROFILE_QP_H_
 
-#include <QtTest/QtTest>
-#include <QStringList>
+#include "kis_illuminant_profile.h"
 
-class KisIlluminantProfileTest : public QObject
-{
-    Q_OBJECT
+#include <QString>
 
-    private slots:
+extern "C" {
+    #include "cqp/gsl_cqp.h"
+}
 
-        void initTestCase();
-        void testLoading();
-        void testSaving();
+class KisIlluminantProfileQP : public KisIlluminantProfile {
+    typedef KisIlluminantProfile parent;
 
-        // TODO: void testFromToRgb();
+    public:
+        // REMEMBER TO CALL setName in subclasses!
+        KisIlluminantProfileQP(const QString &fileName = "");
+        ~KisIlluminantProfileQP();
+
+        virtual KoColorProfile *clone() const { return new KisIlluminantProfileQP(fileName()); }
+        virtual bool load();
+
+    protected:
+        virtual void rgbToReflectance() const;
+
+    protected:
+
+        gsl_cqp_data *m_data;
+        gsl_cqpminimizer *m_s;
 
     private:
-
-        QStringList list;
+        void deleteAll();
 
 };
 
-#endif // KIS_ILLUMINANT_PROFILE_TEST_H_
+#endif // KIS_ILLUMINANT_PROFILE_QP_H_

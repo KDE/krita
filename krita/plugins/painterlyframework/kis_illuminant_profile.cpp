@@ -25,45 +25,27 @@
 #include <QFile>
 #include <QString>
 
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_cblas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
 KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
-    : KoColorProfile(fileName), m_T(0), m_P(0), m_valid(false)
+    : KoColorProfile(fileName), m_T(0), m_P(0), m_rgbvec(0), m_refvec(0), m_ksvec(0), m_converter(0)
 {
-    load();
-}
 
-KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &profile)
-    : KoColorProfile(profile), m_T(0), m_P(0)
-{
-    m_valid = profile.valid();
-    if (profile.valid()) {
-        m_T = gsl_matrix_alloc(profile.m_T->size1, profile.m_T->size2);
-        m_P = gsl_vector_alloc(profile.m_P->size);
-        gsl_matrix_memcpy(m_T, profile.m_T);
-        gsl_vector_memcpy(m_P, profile.m_P);
-        Kb = profile.Kb;
-        Sb = profile.Sb;
-    }
 }
 
 KisIlluminantProfile::~KisIlluminantProfile()
 {
-    if (m_T)
-        gsl_matrix_free(m_T);
-    if (m_P)
-        gsl_vector_free(m_P);
-}
-
-KoColorProfile *KisIlluminantProfile::clone() const
-{
-    return new KisIlluminantProfile(*this);
+    deleteAll();
 }
 
 bool KisIlluminantProfile::load()
 {
+    m_valid = false;
+
     if (fileName().isEmpty())
         return false;
 
@@ -73,18 +55,13 @@ bool KisIlluminantProfile::load()
 
     QDataStream data(&file);
 
+    deleteAll();
+
     {
-        // Clear previous data
-        if (m_T)
-            gsl_matrix_free(m_T);
-        if (m_P)
-            gsl_vector_free(m_P);
-    }
-    {
-        // Profile name
-        QString name;
-        data >> name;
-        setName(name);
+        // Illuminant name
+        QString illuminant;
+        data >> illuminant;
+        m_illuminant = illuminant;
     }
     {
         // T matrix
@@ -123,7 +100,12 @@ bool KisIlluminantProfile::load()
         Sb = c;
     }
 
+    // Initialize the reflectance vector and channel converter
+    m_refvec = gsl_vector_calloc(wavelengths());
+    m_converter = new ChannelConverter<double>(Kb, Sb);
+
     m_valid = true;
+
     return true;
 }
 
@@ -137,7 +119,7 @@ bool KisIlluminantProfile::save(const QString &fileName)
         return false;
     QDataStream data(&file);
 
-    data << name();
+    data << m_illuminant;
     data << (int)m_T->size1 << (int)m_T->size2;
     for (int i = 0; i < (int)m_T->size1; i++)
         for (int j = 0; j < (int)m_T->size2; j++)
@@ -150,4 +132,75 @@ bool KisIlluminantProfile::save(const QString &fileName)
     data << Kb << Sb;
 
     return true;
+}
+
+void KisIlluminantProfile::fromRgb(gsl_vector *rgbvec, gsl_vector *ksvec) const
+{
+    // TODO: add cache!
+    m_rgbvec = rgbvec;
+    m_ksvec = ksvec;
+
+    rgbToReflectance();
+    reflectanceToKS();
+
+    m_rgbvec = 0;
+    m_ksvec = 0;
+}
+
+void KisIlluminantProfile::toRgb(gsl_vector *ksvec, gsl_vector *rgbvec) const
+{
+    m_ksvec = ksvec;
+    m_rgbvec = rgbvec;
+
+    KSToReflectance();
+    reflectanceToRgb();
+
+    m_rgbvec = 0;
+    m_ksvec = 0;
+}
+
+void KisIlluminantProfile::reflectanceToKS() const
+{
+    for (int i = 0; i < wavelengths(); i++) {
+        m_converter->reflectanceToKS( gsl_vector_get(m_refvec,i),
+                                      *gsl_vector_ptr(m_ksvec,2*i+0),
+                                      *gsl_vector_ptr(m_ksvec,2*i+1) );
+    }
+}
+
+void KisIlluminantProfile::KSToReflectance() const
+{
+    for (int i = 0; i < wavelengths(); i++) {
+        gsl_vector_set(m_refvec, i, m_converter->KSToReflectance( gsl_vector_get(m_ksvec, 2*i+0),
+                                                                  gsl_vector_get(m_ksvec, 2*i+1) ) );
+    }
+}
+
+void KisIlluminantProfile::reflectanceToRgb() const
+{
+
+    double min, max;
+    gsl_vector_minmax(m_refvec, &min, &max);
+    if (min == 1.0) {
+        gsl_vector_set_all(m_rgbvec, 1.0);
+        return;
+    }
+    if (max == 0.0) {
+        gsl_vector_set_all(m_rgbvec, 0.0);
+        return;
+    }
+
+    gsl_blas_dgemv(CblasNoTrans, 1.0, m_T, m_refvec, 0.0, m_rgbvec);
+}
+
+void KisIlluminantProfile::deleteAll()
+{
+    if (m_T)
+        gsl_matrix_free(m_T);
+    if (m_P)
+        gsl_vector_free(m_P);
+    if (m_refvec)
+        gsl_vector_free(m_refvec);
+    if (m_converter)
+        delete m_converter;
 }

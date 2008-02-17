@@ -41,42 +41,35 @@ typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
 public:
 
     KisKSToRGBColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
-    : parent(srcCs, dstCs)
+    : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_profile(0)
     {
         m_profile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
-        m_converter = new ChannelConverter<_TYPE_>(m_profile->Kblack(), m_profile->Sblack());
-        m_rgbvec = gsl_vector_calloc( 3 );
-        m_refvec = gsl_vector_calloc(_N_);
+        m_rgbvec = gsl_vector_calloc(  3  );
+        m_ksvec  = gsl_vector_calloc(2*_N_);
     }
 
     ~KisKSToRGBColorConversionTransformation()
     {
-        delete m_converter;
         gsl_vector_free(m_rgbvec);
-        gsl_vector_free(m_refvec);
+        gsl_vector_free(m_ksvec);
     }
 
-    void transform(const quint8 *src, quint8 *dst8, qint32 nPixels) const
+    void transform(const quint8 *src, quint8 *dst8, int nPixels) const
     {
         quint16 *dst = reinterpret_cast<quint16*>(dst8);
 
         for ( ; nPixels > 0; nPixels-- ) {
-            m_checkcolor = 0;
+
             for (int i = 0; i < _N_; i++) {
-                gsl_vector_set(m_refvec, i, m_converter->KSToReflectance(CSTrait::K(src, i), CSTrait::S(src, i)));
-                m_checkcolor += gsl_vector_get(m_refvec, i);
+                gsl_vector_set(m_ksvec, 2*i+0, KoColorSpaceMaths<_TYPE_,double>::scaleToA(CSTrait::K(src,i)));
+                gsl_vector_set(m_ksvec, 2*i+1, KoColorSpaceMaths<_TYPE_,double>::scaleToA(CSTrait::S(src,i)));
             }
 
-            if (m_checkcolor <= 0.0)
-                gsl_vector_set_all(m_rgbvec, 0.0);
-            else if (m_checkcolor >= _N_)
-                gsl_vector_set_all(m_rgbvec, 1.0);
-            else
-                gsl_blas_dgemv(CblasNoTrans, 1.0, m_profile->T(), m_refvec, 0.0, m_rgbvec);
+            m_profile->toRgb(m_ksvec, m_rgbvec);
 
-            for (int i = 0; i < 3; i++)
-                dst[2-i] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, i));
-
+            dst[0] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, 2));
+            dst[1] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, 1));
+            dst[2] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, 0));
             dst[3] = KoColorSpaceMaths<_TYPE_,quint16>::scaleToA(CSTrait::nativealpha(src));
 
             src += CSTrait::pixelSize;
@@ -86,12 +79,9 @@ public:
 
 private:
     gsl_vector *m_rgbvec;
-    gsl_vector *m_refvec;
+    gsl_vector *m_ksvec;
 
-    ChannelConverter<_TYPE_> *m_converter;
     const KisIlluminantProfile *m_profile;
-
-    mutable double m_checkcolor;
 
 };
 
@@ -99,14 +89,15 @@ template< typename _TYPE_, int _N_ >
 class KisKSToRGBColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
 
 public:
-    KisKSToRGBColorConversionTransformationFactory(const QString &convid)
-    : KoColorConversionTransformationFactory("KS"+convid+QString::number(_N_),
-                                             KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(),
-                                             RGBAColorModelID.id(), Integer16BitsColorDepthID.id()) {}
+    KisKSToRGBColorConversionTransformationFactory()
+    : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
+                                              KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(),
+                                              RGBAColorModelID.id(),
+                                              Integer16BitsColorDepthID.id() ) { return; }
 
-    KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
-                                                               const KoColorSpace* dstColorSpace,
-                                                               KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
+    KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
+                                                                const KoColorSpace* dstColorSpace,
+                                                                KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
     {
         Q_UNUSED(renderingIntent);
         Q_ASSERT(canBeSource(srcColorSpace));

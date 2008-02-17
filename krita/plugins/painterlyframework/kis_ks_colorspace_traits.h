@@ -22,24 +22,24 @@
 
 #include <KoColorSpaceTraits.h>
 
-template< typename _TYPE_, quint32 _wavelen_number_ >
-struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_wavelen_number_+1, 2*_wavelen_number_> {
+template< typename _TYPE_, int _N_ >
+struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_N_+1, 2*_N_> {
 
-    typedef KoColorSpaceTrait<_TYPE_, 2*(_wavelen_number_)+1, 6> parent;
+    typedef KoColorSpaceTrait<_TYPE_, 2*(_N_)+1, 6> parent;
 
     struct {
         _TYPE_ m_K;
         _TYPE_ m_S;
-    } wavelength[_wavelen_number_];
+    } wavelength[_N_];
     _TYPE_ m_opacity;
 
-    inline static _TYPE_ &K(quint8* data, const quint32 wavelen)
+    inline static _TYPE_ &K(quint8* data, const int wavelen)
     {
         _TYPE_ *d = reinterpret_cast<_TYPE_ *>(data);
         return d[2*wavelen+0];
     }
 
-    inline static _TYPE_ &S(quint8* data, const quint32 wavelen)
+    inline static _TYPE_ &S(quint8* data, const int wavelen)
     {
         _TYPE_ *d = reinterpret_cast<_TYPE_ *>(data);
         return d[2*wavelen+1];
@@ -47,16 +47,16 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_wavelen_number
 
     inline static _TYPE_ &nativealpha(quint8* data)
     {
-        return reinterpret_cast<_TYPE_ *>(data)[2*_wavelen_number_];
+        return reinterpret_cast<_TYPE_ *>(data)[2*_N_];
     }
 
-    inline static const _TYPE_ &K(const quint8* data, const quint32 wavelen)
+    inline static const _TYPE_ &K(const quint8* data, const int wavelen)
     {
         const _TYPE_ *d = reinterpret_cast<const _TYPE_ *>(data);
         return d[2*wavelen+0];
     }
 
-    inline static const _TYPE_ &S(const quint8* data, const quint32 wavelen)
+    inline static const _TYPE_ &S(const quint8* data, const int wavelen)
     {
         const _TYPE_ *d = reinterpret_cast<const _TYPE_ *>(data);
         return d[2*wavelen+1];
@@ -64,7 +64,7 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_wavelen_number
 
     inline static const _TYPE_ &nativealpha(const quint8* data)
     {
-        return reinterpret_cast<const _TYPE_ *>(data)[2*_wavelen_number_];
+        return reinterpret_cast<const _TYPE_ *>(data)[2*_N_];
     }
 };
 

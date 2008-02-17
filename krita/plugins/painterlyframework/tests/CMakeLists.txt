@@ -6,6 +6,7 @@ include_directories( ${KOMAIN_INCLUDES} "../" )
 set(kis_illuminant_profile_test_SRCS
     kis_illuminant_profile_test.cpp
     ../kis_illuminant_profile.cpp
+    ../kis_illuminant_profile_qp.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -37,6 +38,7 @@ target_link_libraries(ChannelConverterTest
 set(kis_ks_colorspace_test_SRCS
     kis_ks_colorspace_test.cpp
     ../kis_illuminant_profile.cpp
+    ../kis_illuminant_profile_qp.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -53,6 +55,7 @@ target_link_libraries(KisKSColorSpaceTest
 set(mixing_test_SRCS
     mixing_test.cpp
     ../kis_illuminant_profile.cpp
+    ../kis_illuminant_profile_qp.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)

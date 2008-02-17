@@ -20,8 +20,10 @@
 #include "ks_colorspaces.h"
 
 #include "kis_illuminant_profile.h"
-#include "kis_kslc_colorspace.h"
-#include "kis_ksqp_colorspace.h"
+#include "kis_illuminant_profile_qp.h"
+
+#include "kis_ks_colorspace.h"
+#include "kis_ksf32_colorspace.h"
 
 #include <KGenericFactory>
 #include <KGlobal>
@@ -33,6 +35,7 @@
 
 #ifdef HAVE_OPENEXR
 #include "half.h"
+#include "kis_ksf16_colorspace.h"
 #endif
 
 typedef KGenericFactory<KSColorSpacesPlugin> KSColorSpacesPluginFactory;
@@ -48,29 +51,21 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.ill",  KStandardDirs::Recursive);
 
     foreach(QString curr, list)
-        f->addProfile(new KisIlluminantProfile(curr));
+        f->addProfile(new KisIlluminantProfileQP(curr));
 
-    f->add(new KisKSLCColorSpaceFactory<float,6>);
-    f->add(new KisKSLCColorSpaceFactory<float,9>);
-    f->add(new KisKSQPColorSpaceFactory<float,6>);
-    f->add(new KisKSQPColorSpaceFactory<float,9>);
+    f->add(new KisKSF32ColorSpaceFactory<6>);
+    f->add(new KisKSF32ColorSpaceFactory<9>);
 #ifdef HAVE_OPENEXR
-    f->add(new KisKSLCColorSpaceFactory<half,6>);
-    f->add(new KisKSLCColorSpaceFactory<half,9>);
-    f->add(new KisKSQPColorSpaceFactory<half,6>);
-    f->add(new KisKSQPColorSpaceFactory<half,9>);
+    f->add(new KisKSF16ColorSpaceFactory<6>);
+    f->add(new KisKSF16ColorSpaceFactory<9>);
 #endif
 
     QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSLCColorSpace<float,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSLCColorSpace<float,9>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSQPColorSpace<float,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSQPColorSpace<float,9>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSColorSpace<float,6>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSColorSpace<float,9>::ColorSpaceId().id(),0));
 #ifdef HAVE_OPENEXR
-    css.append(f->colorSpace(KisKSLCColorSpace<half,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSLCColorSpace<half,9>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSQPColorSpace<half,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSQPColorSpace<half,9>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSColorSpace<half,6>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSColorSpace<half,9>::ColorSpaceId().id(),0));
 #endif
 
     foreach(const KoColorSpace *cs, css) {

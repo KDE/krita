@@ -26,35 +26,68 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
+#include "channel_converter.h"
+
 class KisIlluminantProfile : public KoColorProfile {
 
     public:
+        // REMEMBER TO CALL setName in subclasses!
         KisIlluminantProfile(const QString &fileName = "");
-        KisIlluminantProfile(const KisIlluminantProfile &profile);
-        ~KisIlluminantProfile();
+        virtual ~KisIlluminantProfile();
 
+        // Repeat here from KoColorProfile, to remember it in subclasses
+        virtual KoColorProfile *clone() const = 0;
+
+        ///////////////////////////////////////////////////
         // KoColorProfile interface
-        KoColorProfile *clone() const;
-        bool load();
+
+        virtual bool load();
         bool save(const QString &fileName);
+
         bool valid() const { return m_valid; }
-        bool isSuitableForOutput() const { return true; }
+        bool isSuitableForOutput() const   { return true; }
         bool isSuitableForPrinting() const { return true; }
-        bool isSuitableForDisplay() const { return true; }
+        bool isSuitableForDisplay() const  { return true; }
         bool operator==(const KoColorProfile &op2) const
             { return (name() == op2.name()); }
 
-        gsl_matrix *T() const { return m_T; }
-        gsl_vector *P() const { return m_P; }
-        int wavelengths() const { return m_P->size; }
-        double Kblack() const { return Kb; }
-        double Sblack() const { return Sb; }
+        ///////////////////////////////////////////////////
 
-    private:
+        // INTROSPECTION
+        QString illuminant() const { return m_illuminant; }
+        int wavelengths() const { return m_P->size; }
+
+        // UTILITY
+        void fromRgb(gsl_vector *rgbvec, gsl_vector *ksvec) const;
+        void toRgb(gsl_vector *ksvec, gsl_vector *rgbvec) const;
+
+    protected:
+        virtual void rgbToReflectance() const = 0;
+
+        virtual void reflectanceToRgb() const;
+        virtual void reflectanceToKS() const;
+        virtual void KSToReflectance() const;
+
+    protected:
+
         gsl_matrix *m_T;
         gsl_vector *m_P;
-        bool m_valid;
         double Kb, Sb;
+
+        // Temporary
+        mutable gsl_vector *m_rgbvec;
+        mutable gsl_vector *m_refvec;
+        mutable gsl_vector *m_ksvec;
+
+        ChannelConverter<double> *m_converter;
+
+    private:
+        void deleteAll();
+
+    private:
+
+        QString m_illuminant;
+        bool m_valid;
 
 };
 

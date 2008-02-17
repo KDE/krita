@@ -151,6 +151,29 @@ inline void ChannelConverter<_TYPE_>::reflectanceToKS(const double &R, _TYPE_ &K
     K = KoColorSpaceMaths<double,_TYPE_>::scaleToA(this->K(R));
     S = KoColorSpaceMaths<double,_TYPE_>::scaleToA(this->S(R));
 }
+
+
+// SPECIALIZATIONS
+template<>
+inline double ChannelConverter<double>::KSToReflectance(const double &K, const double &S) const
+{
+    if (S == 0.0)
+        return 0.0;
+
+    if (K == 0.0)
+        return 1.0;
+
+    const double Q = K/S;
+    return ( 1.0 + Q - sqrt( Q*Q + 2.0*Q ) );
+}
+
+template<>
+inline void ChannelConverter<double>::reflectanceToKS(const double &R, double &K, double &S) const
+{
+    K = this->K(R);
+    S = this->S(R);
+}
+
 /*
 template< typename _TYPE_ >
 inline double ChannelConverter<_TYPE_>::sRGBToRGB(const quint16 &sCi) const

@@ -7,6 +7,7 @@ add_subdirectory(tests)
 set(kritakscolorspacesplugin_PART_SRCS
     ks_colorspaces.cpp
     kis_illuminant_profile.cpp
+    kis_illuminant_profile_qp.cpp
     cqp/cqpminimizer.c
     cqp/initial_point.c
     cqp/mg_pdip.c)

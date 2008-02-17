@@ -52,9 +52,9 @@ class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
             if (srcBlend == NATIVE_OPACITY_OPAQUE) {
                 memcpy(dstN, srcN, pixelSize);
             } else {
-                for(uint i = 0; i <  _CSTraits::channels_nb; i++)
+                for(int i = 0; (uint)i <  _CSTraits::channels_nb; i++)
                 {
-                    if( (uint)i != _CSTraits::alpha_pos && (  channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
+                    if( i != _CSTraits::alpha_pos && (  channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
                         dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], srcBlend);
                 }
             }

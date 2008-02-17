@@ -63,9 +63,9 @@ class CompositeCopy : public KoCompositeOp {
             Q_UNUSED( maskRowStart );
             Q_UNUSED( maskRowStride );
             Q_UNUSED( channelFlags );
-            
+
             qint32 srcInc = (srcRowStride == 0) ? 0 : colorSpace()->pixelSize();
-            
+
             quint8 *dst = dstRowStart;
             const quint8 *src = srcRowStart;
             const KoColorSpace* cs = colorSpace();
@@ -220,7 +220,7 @@ public:
                 for (uint i = 0; i < _CSTraits::channels_nb; i++)
                 {
                     compositetype v = totals[i] / factor + offset;
-                    if (   (allChannels && i != _CSTraits::alpha_pos ) 
+                    if (   (allChannels && i != (uint)_CSTraits::alpha_pos )
                         || (!allChannels && channelFlags.testBit( i ) ) )
                     {
                         dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
@@ -373,7 +373,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
         {
             return _CSTraits::alpha(U8_pixel);
         }
-        
+
         virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
         {
             _CSTraits::setAlpha(pixels, alpha, nPixels);

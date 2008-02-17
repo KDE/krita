@@ -43,7 +43,7 @@ struct KoColorSpaceTrait {
     static const quint32 channels_nb = _channels_nb_;
     /// the position of the alpha channel in the channels of the pixel (or -1 if no alpha
     /// channel.
-    static const quint32 alpha_pos = _alpha_pos_;
+    static const qint32 alpha_pos = _alpha_pos_;
     /// the number of bit for each channel
     static const int depth = KoColorSpaceMathsTraits<_channels_type_>::bits;
     /**

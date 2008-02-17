@@ -61,11 +61,11 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
 #endif
 
     QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSColorSpace<float,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSColorSpace<float,9>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),0));
 #ifdef HAVE_OPENEXR
-    css.append(f->colorSpace(KisKSColorSpace<half,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSColorSpace<half,9>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF16ColorSpace<6>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF16ColorSpace<9>::ColorSpaceId().id(),0));
 #endif
 
     foreach(const KoColorSpace *cs, css) {

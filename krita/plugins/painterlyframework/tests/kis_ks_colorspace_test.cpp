@@ -90,17 +90,17 @@ void KisKSColorSpaceTest::testRegistry()
     KisIlluminantProfile *p9 = new KisIlluminantProfileQP(d659);
 
     // First, load a colorspace with his default profile
-    cs = f->colorSpace(KisKSColorSpace<float,6>::ColorSpaceId().id(),0);
+    cs = f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),0);
     QVERIFY2(cs != 0, "ColorSpace KS6 loaded");
     QVERIFY(cs->profile() != 0);
-    cs = f->colorSpace(KisKSColorSpace<float,9>::ColorSpaceId().id(),0);
+    cs = f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),0);
     QVERIFY2(cs != 0, "ColorSpace KS9 loaded");
     QVERIFY(cs->profile() != 0);
 
     // Now with a profile
-    cs = f->colorSpace(KisKSColorSpace<float,6>::ColorSpaceId().id(), p6);
+    cs = f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(), p6);
     QVERIFY2(cs != 0, "ColorSpace KS6 loaded - with custom profile");
-    cs = f->colorSpace(KisKSColorSpace<float,9>::ColorSpaceId().id(), p9);
+    cs = f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(), p9);
     QVERIFY2(cs != 0, "ColorSpace KS9 loaded - with custom profile");
 }
 
@@ -108,8 +108,8 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 {
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
     QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSColorSpace<float,6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSColorSpace<float,9>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),0));
 
     quint16 red  [4] = { 0x0000, 0x0000, 0xFFFF, 0xFFFF };
     quint16 green[4] = { 0x0000, 0xFFFF, 0x0000, 0xFFFF };

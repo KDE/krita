@@ -69,7 +69,7 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYP
         static KoID ColorModelId()
         {
             return KoID( QString("KS%1").arg(_N_),
-                         i18n("Painterly Color Space - precision %1", _N_) );
+                         i18n("Painterly Color Space, %1 wavelengths", _N_) );
         }
 
         static KoID ColorDepthId()

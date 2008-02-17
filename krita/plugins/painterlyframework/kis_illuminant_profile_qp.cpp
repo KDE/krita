@@ -91,6 +91,7 @@ bool KisIlluminantProfileQP::load()
 
 void KisIlluminantProfileQP::rgbToReflectance() const
 {
+    // Avoid calculation of black and white
     double min, max;
     gsl_vector_minmax(m_rgbvec, &min, &max);
     if (min == 1.0) {

@@ -47,10 +47,10 @@ template< int _N_ >
 class KisKSF32ColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-        QString id() const { return KisKSColorSpace<float,_N_>::ColorSpaceId().id(); }
-        QString name() const { return KisKSColorSpace<float,_N_>::ColorSpaceId().name(); }
-        KoID colorModelId() const { return KisKSColorSpace<float,_N_>::ColorModelId(); }
-        KoID colorDepthId() const { return KisKSColorSpace<float,_N_>::ColorDepthId(); }
+        QString id() const { return KisKSF32ColorSpace<_N_>::ColorSpaceId().id(); }
+        QString name() const { return KisKSF32ColorSpace<_N_>::ColorSpaceId().name(); }
+        KoID colorModelId() const { return KisKSF32ColorSpace<_N_>::ColorModelId(); }
+        KoID colorDepthId() const { return KisKSF32ColorSpace<_N_>::ColorDepthId(); }
         bool userVisible() const { return _N_>=9; }
 
         int referenceDepth() const { return sizeof(float)*8; }

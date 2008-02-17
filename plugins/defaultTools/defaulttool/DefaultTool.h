@@ -98,8 +98,6 @@ private slots:
     void selectionMoveUp();
     void selectionMoveDown();
 
-    void updateHotPosition( KoFlake::Position hotPosition );
-
 public: // Events
 
     virtual void mousePressEvent( KoPointerEvent *event );
@@ -123,11 +121,14 @@ private:
 
     void selectionAlign(KoShapeAlignCommand::Align align);
     void selectionReorder(KoShapeReorderCommand::MoveShapeType order );
+    bool moveSelection( int direction, Qt::KeyboardModifiers modifiers );
 
     QRectF handlesSize();
 
     // convenience method;
     KoSelection * koSelection();
+
+    void resourceChanged( int key, const QVariant & res );
 
 
     KoFlake::SelectionHandle m_lastHandle;

@@ -47,7 +47,8 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
 
     setUnit( m_tool->canvas()->unit() );
 
-    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), this, SLOT( updatePosition() ) );
+    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), 
+        this, SLOT( positionSelected(KoFlake::Position) ) );
 
     connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
     connect( positionYSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
@@ -91,6 +92,12 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     updateSize();
 }
 
+void DefaultToolWidget::positionSelected( KoFlake::Position position )
+{
+    m_tool->canvas()->resourceProvider()->setResource( KoCanvasResource::HotPosition, QVariant(position) );
+    updatePosition();
+}
+
 void DefaultToolWidget::updatePosition()
 {
     QPointF selPosition( 0, 0 );
@@ -109,8 +116,6 @@ void DefaultToolWidget::updatePosition()
     positionYSpinBox->changeValue( selPosition.y() );
     positionXSpinBox->blockSignals(false);
     positionYSpinBox->blockSignals(false);
-
-    emit hotPositionChanged( position );
 }
 
 void DefaultToolWidget::positionHasChanged()
@@ -237,6 +242,14 @@ void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
 {
     if( key == KoCanvasResource::Unit )
         setUnit( m_tool->canvas()->unit() );
+    else if( key == KoCanvasResource::HotPosition )
+    {
+        if( res.toInt() != positionSelector->position() )
+        {
+            positionSelector->setPosition( static_cast<KoFlake::Position>( res.toInt() ) );
+            updatePosition();
+        }
+    }
 }
 
 void DefaultToolWidget::rotationChanged()

@@ -35,11 +35,9 @@ public:
 
     /// Sets the unit used by the unit aware child widgets
     void setUnit( const KoUnit &unit );
-signals:
-    /// emits whenever the hot (selected) position changes
-    void hotPositionChanged( KoFlake::Position hotPosition );
 
 private slots:
+    void positionSelected( KoFlake::Position position );
     void updatePosition();
     void positionHasChanged();
     void updateSize();

@@ -454,52 +454,77 @@ void DefaultTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
             KoToolManager::instance()->preferredToolForSelection(shapes));
 }
 
+bool DefaultTool::moveSelection( int direction, Qt::KeyboardModifiers modifiers )
+{
+    double x=0.0, y=0.0;
+    if(direction == Qt::Key_Left)
+        x=-0.5;
+    else if(direction == Qt::Key_Right)
+        x=0.5;
+    else if(direction == Qt::Key_Up)
+        y=-0.5;
+    else if(direction == Qt::Key_Down)
+        y=0.5;
+
+    if(x != 0.0 || y != 0.0) { // actually move
+        if((modifiers & Qt::ShiftModifier) == 0) { // no shift used
+            x *= 10;
+            y *= 10;
+        }
+
+        QList<QPointF> prevPos;
+        QList<QPointF> newPos;
+        QList<KoShape*> shapes;
+        foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
+            if(shape->isLocked())
+                continue;
+            shapes.append(shape);
+            QPointF p = shape->position();
+            prevPos.append(p);
+            p.setX(p.x() + x);
+            p.setY(p.y() + y);
+            newPos.append(p);
+        }
+        if(shapes.count() > 0) {
+            // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
+            if(m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
+                m_moveCommand = 0;
+            if(m_moveCommand) { // alter previous instead of creating new one.
+                m_moveCommand->setNewPositions(newPos);
+                m_moveCommand->redo();
+            } else {
+                m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
+                m_canvas->addCommand(m_moveCommand);
+            }
+            m_lastUsedMoveCommand = QTime::currentTime();
+            return true;
+        }
+    }
+    return false;
+}
+
 void DefaultTool::keyPressEvent(QKeyEvent *event) {
     KoInteractionTool::keyPressEvent(event);
     if(m_currentStrategy == 0) {
-        double x=0.0, y=0.0;
-        if(event->key() == Qt::Key_Left)
-            x=-0.5;
-        else if(event->key() == Qt::Key_Right)
-            x=0.5;
-        else if(event->key() == Qt::Key_Up)
-            y=-0.5;
-        else if(event->key() == Qt::Key_Down)
-            y=0.5;
-
-        if(x != 0.0 || y != 0.0) { // actually move
-            if((event->modifiers() & Qt::ShiftModifier) == 0) { // no shift used
-                x *= 10;
-                y *= 10;
-            }
-
-            QList<QPointF> prevPos;
-            QList<QPointF> newPos;
-            QList<KoShape*> shapes;
-            foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
-                if(shape->isLocked())
-                    continue;
-                shapes.append(shape);
-                QPointF p = shape->position();
-                prevPos.append(p);
-                p.setX(p.x() + x);
-                p.setY(p.y() + y);
-                newPos.append(p);
-            }
-            if(shapes.count() > 0) {
-                // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
-                if(m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
-                    m_moveCommand = 0;
-                if(m_moveCommand) { // alter previous instead of creating new one.
-                    m_moveCommand->setNewPositions(newPos);
-                    m_moveCommand->redo();
-                } else {
-                    m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
-                    m_canvas->addCommand(m_moveCommand);
-                }
-                m_lastUsedMoveCommand = QTime::currentTime();
+        switch( event->key() )
+        {
+            case Qt::Key_Left:
+            case Qt::Key_Right:
+            case Qt::Key_Up:
+            case Qt::Key_Down:
+                if( moveSelection( event->key(), event->modifiers() ) )
+                    event->accept();
+                break;
+            case Qt::Key_1:
+            case Qt::Key_2:
+            case Qt::Key_3:
+            case Qt::Key_4:
+            case Qt::Key_5:
+                m_canvas->resourceProvider()->setResource( KoCanvasResource::HotPosition, event->key()-Qt::Key_1 );
                 event->accept();
-            }
+                break;
+            default:
+                return;
         }
     }
 }
@@ -762,20 +787,19 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order )
 }
 
 QWidget* DefaultTool::createOptionWidget() {
-    DefaultToolWidget * w = new DefaultToolWidget( this );
-    connect( w, SIGNAL( hotPositionChanged( KoFlake::Position ) ), this, SLOT( updateHotPosition( KoFlake::Position ) ) );
-    return w;
+    return new DefaultToolWidget( this );
 }
 
-void DefaultTool::updateHotPosition( KoFlake::Position hotPosition )
+void DefaultTool::resourceChanged( int key, const QVariant & res )
 {
-    m_hotPosition = hotPosition;
-    repaintDecorations();
+    if( key == KoCanvasResource::HotPosition )
+    {
+        m_hotPosition = static_cast<KoFlake::Position>( res.toInt() );
+        repaintDecorations();
+    }
 }
 
 KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
-    if( event->buttons() & Qt::MidButton )
-        return 0;  // Nothing to do for middle mouse button
 
     KoShapeManager *shapeManager = m_canvas->shapeManager();
     KoSelection *select = shapeManager->selection();
@@ -787,6 +811,39 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
             editableShape = true;
             break;
         }
+    }
+
+    if( event->buttons() & Qt::MidButton )
+    {
+        // change the hot selection position when middle clicking on a handle
+        KoFlake::Position newHotPosition = m_hotPosition;
+        switch( handle )
+        {
+            case KoFlake::TopLeftHandle:
+                newHotPosition = KoFlake::TopLeftCorner;
+                break;
+            case KoFlake::TopRightHandle:
+                newHotPosition = KoFlake::TopRightCorner;
+                break;
+            case KoFlake::BottomLeftHandle:
+                newHotPosition = KoFlake::BottomLeftCorner;
+                break;
+            case KoFlake::BottomRightHandle:
+                newHotPosition = KoFlake::BottomRightCorner;
+                break;
+            default:
+            {
+                // check if we had hit the center point
+                const KoViewConverter * converter = m_canvas->viewConverter();
+                QPointF pt = converter->documentToView(event->point-select->absolutePosition());
+                if( qAbs(pt.x()) < HANDLE_DISTANCE && qAbs(pt.y()) < HANDLE_DISTANCE)
+                    newHotPosition = KoFlake::CenteredPosition;
+                break;
+            }
+        }
+        if( m_hotPosition != newHotPosition )
+            m_canvas->resourceProvider()->setResource( KoCanvasResource::HotPosition, newHotPosition );
+        return 0;
     }
 
     if(editableShape && (event->modifiers() == Qt::NoModifier )) {

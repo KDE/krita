@@ -233,6 +233,12 @@ KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage ) const
     }
 }
 
+int KoPADocument::pageIndex( KoPAPageBase * page ) const
+{
+    const QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? d->masterPages : d->pages;
+    return pages.indexOf( page );
+}
+
 KoPAPageBase* KoPADocument::pageByNavigation( KoPAPageBase * currentPage, KoPageApp::PageNavigation pageNavigation ) const
 {
     const QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( currentPage ) ? d->masterPages : d->pages;

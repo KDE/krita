@@ -87,6 +87,15 @@ public:
     KoPAPageBase* pageByIndex( int index, bool masterPage ) const;
 
     /**
+     * Get the index of th page
+     *
+     * @param page The page you want to get the index for
+     *
+     * @return The index of the page or -1 if the page is not found
+     */
+    int pageIndex( KoPAPageBase * page ) const;
+
+    /**
      * Get page by navigation
      *
      * @param currentPage the current page

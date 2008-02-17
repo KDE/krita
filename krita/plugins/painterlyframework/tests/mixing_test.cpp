@@ -36,9 +36,9 @@
 #include <QString>
 #include <QStringList>
 
-void mix(const quint32 N, const float *data1, float c1, const float *data2, float c2, float *datam)
+void mix(int N, const float *data1, float c1, const float *data2, float c2, float *datam)
 {
-    for (uint i = 0; i < 2*N; i++)
+    for (int i = 0; i < 2*N; i++)
         datam[i] = c1*data1[i] + c2*data2[i];
     datam[2*N] = 1;
 }

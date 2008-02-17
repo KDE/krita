@@ -25,6 +25,7 @@
 
 #include "kis_rgb_to_ks_color_conversion_transformation.h"
 #include "kis_ks_to_rgb_color_conversion_transformation.h"
+#include "kis_ks_to_ks_color_conversion_transformation.h"
 
 #include "half.h"
 
@@ -46,18 +47,9 @@ class KisKSF16ColorSpace : public KisKSColorSpace< half,_N_ >
 };
 
 template< int _N_ >
-class KisKSF16ColorSpaceFactory : public KoColorSpaceFactory
+class KisKSF16ColorSpaceFactory : public KisKSColorSpaceFactory<half,_N_>
 {
     public:
-        QString id() const { return KisKSF16ColorSpace<_N_>::ColorSpaceId().id(); }
-        QString name() const { return KisKSF16ColorSpace<_N_>::ColorSpaceId().name(); }
-        KoID colorModelId() const { return KisKSF16ColorSpace<_N_>::ColorModelId(); }
-        KoID colorDepthId() const { return KisKSF16ColorSpace<_N_>::ColorDepthId(); }
-        bool userVisible() const { return _N_>=9; }
-
-        int referenceDepth() const { return sizeof(half)*8; }
-        bool isIcc() const { return false; }
-        bool isHdr() const { return false; }
 
         QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
         {
@@ -67,16 +59,10 @@ class KisKSF16ColorSpaceFactory : public KoColorSpaceFactory
             list.append(new KisRGBToKSColorConversionTransformationFactory<half,_N_>);
             list.append(new KisKSToRGBColorConversionTransformationFactory<half,_N_>);
 
-            // To / From F32 TODO
+            // From F32
+            list.append(new KisKSToKSColorConversionTransformationFactory<float,half,_N_>);
 
             return list;
-        }
-
-        KoColorConversionTransformationFactory *createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
-        {
-            Q_UNUSED(_colorModelId);
-            Q_UNUSED(_colorDepthId);
-            return 0;
         }
 
         KoColorSpace *createColorSpace(const KoColorProfile *p) const
@@ -84,19 +70,6 @@ class KisKSF16ColorSpaceFactory : public KoColorSpaceFactory
             return new KisKSF16ColorSpace<_N_>(p->clone());
         }
 
-        bool profileIsCompatible(const KoColorProfile *profile) const
-        {
-            const KisIlluminantProfile *p = dynamic_cast<const KisIlluminantProfile *>(profile);
-            if ((!p) || (p->wavelengths() != _N_)) {
-                return false;
-            }
-            return true;
-        }
-
-        QString defaultProfile() const
-        {
-            return QString("D-65 Illuminant Profile - " + QString::number(_N_) + " wavelengths - Black [11.0,0.35] - QP");
-        }
 };
 
 #endif // KIS_KSF16_COLORSPACE_H_

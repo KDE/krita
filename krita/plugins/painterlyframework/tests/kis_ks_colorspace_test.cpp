@@ -122,7 +122,7 @@ void KisKSColorSpaceTest::testToFromRgbA16()
     quint16 back[4];
     quint8 *back8 = reinterpret_cast<quint8*>(back);
 
-//     #define VERBOSE
+    #define VERBOSE
     foreach(const KoColorSpace *cs, css) {
         qDebug() << "Current CS:" << cs->name();
         quint8 *data = new quint8[cs->pixelSize()];

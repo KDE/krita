@@ -48,13 +48,13 @@ class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
          * clone it before.
          */
         void setIccColorProfile(KoIccColorProfile* profile);
-    
+
         virtual KoColorProfile* clone() const;
         virtual bool valid() const;
         virtual bool isSuitableForOutput() const;
         virtual bool isSuitableForPrinting() const;
         virtual bool isSuitableForDisplay() const;
-        
+
         /**
          * @return the current exposure
          */
@@ -69,6 +69,9 @@ class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
     public:
         quint16 channelToDisplay(double value) const;
         double displayToChannel(quint16 value) const;
+
+        double channelToDisplayDouble(double value) const;
+        double displayToChannelDouble(double value) const;
     private:
         struct Private;
         Private* const d;

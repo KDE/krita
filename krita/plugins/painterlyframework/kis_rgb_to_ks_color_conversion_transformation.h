@@ -56,14 +56,13 @@ public:
         // 2 - find reflectances using the transformation matrix of the profile.
         // 3 - convert reflectances to K/S
 
-        const float *src = reinterpret_cast<const float*>(src8);
+        const quint16 *src = reinterpret_cast<const quint16*>(src8);
         const int pixelSize = CSTrait::pixelSize;
 
         for ( ; nPixels > 0; nPixels-- ) {
-            // Do not conserve exposure information
-            gsl_vector_set(m_rgbvec, 0, src[2] > 1.0 ? 1.0 : src[2]);
-            gsl_vector_set(m_rgbvec, 1, src[1] > 1.0 ? 1.0 : src[1]);
-            gsl_vector_set(m_rgbvec, 2, src[0] > 1.0 ? 1.0 : src[0]);
+            gsl_vector_set(m_rgbvec, 0, KoColorSpaceMaths<quint16,double>::scaleToA(src[2]));
+            gsl_vector_set(m_rgbvec, 1, KoColorSpaceMaths<quint16,double>::scaleToA(src[1]));
+            gsl_vector_set(m_rgbvec, 2, KoColorSpaceMaths<quint16,double>::scaleToA(src[0]));
 
             m_profile->fromRgb(m_rgbvec, m_ksvec);
 
@@ -71,7 +70,7 @@ public:
                 CSTrait::K(dst,i) = KoColorSpaceMaths<double,_TYPE_>::scaleToA(gsl_vector_get(m_ksvec,2*i+0));
                 CSTrait::S(dst,i) = KoColorSpaceMaths<double,_TYPE_>::scaleToA(gsl_vector_get(m_ksvec,2*i+1));
             }
-            CSTrait::nativealpha(dst) = KoColorSpaceMaths<float,_TYPE_>::scaleToA(src[3]);
+            CSTrait::nativealpha(dst) = KoColorSpaceMaths<quint16,_TYPE_>::scaleToA(src[3]);
 
             src += 4;
             dst += pixelSize;
@@ -91,7 +90,7 @@ class KisRGBToKSColorConversionTransformationFactory : public KoColorConversionT
 public:
     KisRGBToKSColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory( RGBAColorModelID.id(),
-                                              Float32BitsColorDepthID.id(),
+                                              Integer16BitsColorDepthID.id(),
                                               QString("KS%1").arg(_N_),
                                               KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id() ) { return; }
 

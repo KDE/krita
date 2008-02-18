@@ -28,13 +28,13 @@
 #include "kis_view2.h"
 #include "kis_image.h"
 #include "krita_export.h"
-#include "kis_complex_color.h"
 
 class KisPaintOpSettings;
 class KisBrush;
 class KoAbstractGradient;
 class KisPattern;
 class KoResource;
+class KisComplexColor;
 
 /**
    KisResourceProvider contains the per-view current settings that

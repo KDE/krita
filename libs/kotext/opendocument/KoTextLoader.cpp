@@ -1047,7 +1047,7 @@ void KoTextLoader::loadSpan(KoTextLoadingContext& context, const KoXmlElement& p
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
                 kDebug(32500) <<"  <text> localName=" << localName <<" parent.localName="<<parent.localName()<<" text=" << text;
             #endif
-            text = normalizeWhitespace(text.replace('\n', QChar(0x2028)), *stripLeadingSpace);
+            text = normalizeWhitespace(text.replace('\n', QChar(QChar::LineSeparator)), *stripLeadingSpace);
 
             if ( text.isEmpty() )
                 *stripLeadingSpace = false;
@@ -1266,7 +1266,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
                 kDebug(32500) <<"  <text> localName=" << localName <<" parent.localName="<<element.localName()<<" text=" << text;
             #endif
-            text = normalizeWhitespace( text.replace('\n', QChar(0x2028)), *stripLeadingSpace );
+            text = normalizeWhitespace( text.replace('\n', QChar(QChar::LineSeparator)), *stripLeadingSpace );
 
             if ( text.isEmpty() )
                 *stripLeadingSpace = false;

@@ -3,6 +3,7 @@ Name=Text Variable Plugin
 Name[it]=Plugin per le variabili di testo
 Name[pt]='Plugin' de Variáveis de Texto
 Name[pt_BR]='Plugin' de Variáveis de Texto
+Name[sv]=Textvariabler
 Name[tr]=Metin Değişkeni Eklentisi
 Name[uk]=Втулок текстової змінної
 Type=ServiceType
@@ -11,6 +12,7 @@ Comment=A plugin that contains text variables
 Comment[it]=Un plugin contenente variabili di testo
 Comment[pt]=Um 'plugin' que contém variáveis de texto
 Comment[pt_BR]=Um 'plugin' que contém variáveis de texto
+Comment[sv]=Ett insticksprogram som innehåller textvariabler
 Comment[uk]=Втулок, що містить текстові змінні
 [PropertyDef::X-KoText-MinVersion]
 Type=int

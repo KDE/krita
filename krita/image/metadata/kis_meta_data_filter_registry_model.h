@@ -44,6 +44,6 @@ namespace KisMetaData {
             Private* const d;
    };
 
-};
+}
 
 #endif

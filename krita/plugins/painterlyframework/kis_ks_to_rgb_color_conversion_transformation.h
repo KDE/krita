@@ -26,6 +26,7 @@
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
+#include <KoHdrColorProfile.h>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cblas.h>
@@ -41,9 +42,10 @@ typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
 public:
 
     KisKSToRGBColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
-    : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_profile(0)
+    : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0), m_dstProfile(0)
     {
-        m_profile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
+        m_srcProfile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
+        m_dstProfile = dynamic_cast<const KoHdrColorProfile*>(dstColorSpace()->profile());
         m_rgbvec = gsl_vector_calloc(  3  );
         m_ksvec  = gsl_vector_calloc(2*_N_);
     }
@@ -56,32 +58,35 @@ public:
 
     void transform(const quint8 *src, quint8 *dst8, int nPixels) const
     {
-        quint16 *dst = reinterpret_cast<quint16*>(dst8);
+        float *dst = reinterpret_cast<float*>(dst8);
 
         for ( ; nPixels > 0; nPixels-- ) {
 
             for (int i = 0; i < _N_; i++) {
-                gsl_vector_set(m_ksvec, 2*i+0, KoColorSpaceMaths<_TYPE_,double>::scaleToA(CSTrait::K(src,i)));
-                gsl_vector_set(m_ksvec, 2*i+1, KoColorSpaceMaths<_TYPE_,double>::scaleToA(CSTrait::S(src,i)));
+                gsl_vector_set(m_ksvec, 2*i+0, (double)CSTrait::K(src,i));
+                gsl_vector_set(m_ksvec, 2*i+1, (double)CSTrait::S(src,i));
             }
 
-            m_profile->toRgb(m_ksvec, m_rgbvec);
+            m_srcProfile->toRgb(m_ksvec, m_rgbvec);
 
-            dst[0] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, 2));
-            dst[1] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, 1));
-            dst[2] = KoColorSpaceMaths<double,quint16>::scaleToA(gsl_vector_get(m_rgbvec, 0));
-            dst[3] = KoColorSpaceMaths<_TYPE_,quint16>::scaleToA(CSTrait::nativealpha(src));
+            dst[0] = (float)m_dstProfile->displayToChannelDouble(gsl_vector_get(m_rgbvec, 2));
+            dst[1] = (float)m_dstProfile->displayToChannelDouble(gsl_vector_get(m_rgbvec, 1));
+            dst[2] = (float)m_dstProfile->displayToChannelDouble(gsl_vector_get(m_rgbvec, 0));
+            dst[3] = (float)CSTrait::nativealpha(src);
 
             src += CSTrait::pixelSize;
             dst += 4;
+
         }
+
     }
 
 private:
     gsl_vector *m_rgbvec;
     gsl_vector *m_ksvec;
 
-    const KisIlluminantProfile *m_profile;
+    const KisIlluminantProfile *m_srcProfile;
+    const KoHdrColorProfile *m_dstProfile;
 
 };
 
@@ -93,7 +98,7 @@ public:
     : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
                                               KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(),
                                               RGBAColorModelID.id(),
-                                              Integer16BitsColorDepthID.id() ) { return; }
+                                              Float32BitsColorDepthID.id() ) { return; }
 
     KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
                                                                 const KoColorSpace* dstColorSpace,

@@ -47,6 +47,6 @@ namespace KisMetaData {
             virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const = 0;
     };
     
-};
+}
 
 #endif

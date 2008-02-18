@@ -484,7 +484,7 @@ bool KoTextSelectionHandler::deleteInlineObjects(bool backward) {
         int position = cursor.position();
         const QChar *data = selected.constData();
         for (int i = 0; i < selected.length(); i++) {
-            if (data->unicode() == 0xFFFC) {
+            if (data->unicode() == QChar::ObjectReplacementCharacter) {
                 found = true;
                 cursor.setPosition(position);
                 object = manager->inlineTextObject(cursor);

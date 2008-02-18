@@ -40,9 +40,6 @@ class QAction;
  * insert a placeholder in the text and if you add the KoInlineTextObjectManager to the
  * KoTextDocumentLayout for that specific textDocument, your inline text object will get painted
  * properly.
- *
- * The placeholder is WCH_EMBEDDING, which has the official Unicode value 0xFFFC, and is apparently
- * a windows standard.
  */
 class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject {
     Q_OBJECT

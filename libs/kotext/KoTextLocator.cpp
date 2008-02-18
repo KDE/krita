@@ -120,7 +120,7 @@ QString KoTextLocator::chapter() const {
     if(d->chapterPosition < 0)
         return QString();
     QTextBlock block = d->document->findBlock(d->chapterPosition);
-    return block.text().remove(0xFFFC);
+    return block.text().remove(QChar::ObjectReplacementCharacter);
 }
 
 KoTextBlockData *KoTextLocator::chapterBlockData() const {
@@ -147,7 +147,7 @@ QString KoTextLocator::word() const {
     cursor.setPosition(d->cursorPosition);
     cursor.movePosition(QTextCursor::NextWord);
     cursor.movePosition(QTextCursor::WordLeft, QTextCursor::KeepAnchor);
-    return cursor.selectedText().trimmed().remove(0xFFFC);
+    return cursor.selectedText().trimmed().remove(QChar::ObjectReplacementCharacter);
 }
 
 void KoTextLocator::addListener(KoTextReference *reference) {

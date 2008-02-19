@@ -49,6 +49,7 @@ public:
         offset(0.0),
         position(-1),
         endPosition(-1),
+        pageNumber(-1),
         direction(KoText::AutoDirection)
     {
     }

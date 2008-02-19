@@ -31,8 +31,8 @@ class KoDragOdfSaveHelper;
  * Class for simplifying adding a odf to the clip board
  *
  * For saving the odf a KoDragOdfSaveHelper class is used.
- * It implents the writing of the body of the document. The
- * setOdf takes care of saving styles and all the other 
+ * It implements the writing of the body of the document. The
+ * setOdf takes care of saving styles and all the other
  * common stuff.
  */
 class FLAKE_EXPORT KoDrag

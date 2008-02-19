@@ -36,7 +36,7 @@ class KoShapeLoadingContext;
  * <p>If you have a set of shapes, that together make up a bigger shape it is often
  * useful to group them together so the user will perceive the different shapes as
  * actually being one.  This means that if the user clicks on one object, all objects
- * in the group will be selected at ones, making the tools that works on
+ * in the group will be selected at once, making the tools that works on
  * selections alter all of them at the same time.
  * <p>Note that while this object is also a shape, it is not actually visible.
  */

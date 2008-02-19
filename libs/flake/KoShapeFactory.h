@@ -50,6 +50,7 @@ struct FLAKE_EXPORT KoShapeTemplate {
         name="";
         toolTip="";
         icon="";
+        properties = 0;
     }
     QString id;         ///< The id of the shape
     QString name;       ///< The name to be shown for this template

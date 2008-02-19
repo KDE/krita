@@ -41,9 +41,10 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
     d->widget.shadowAngle->setValue( 45.0 );
     d->widget.shadowAngle->setMinimum( 0.0 );
     d->widget.shadowAngle->setMaximum( 360.0 );
-    visibilityChanged();
+    d->widget.shadowOptions->setEnabled( false );
 
     connect( d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(visibilityChanged()) );
+    connect( d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SIGNAL(shadowVisibilityChanged(bool)) );
     connect( d->widget.shadowColor, SIGNAL(changed(const QColor&)), 
         this, SIGNAL(shadowColorChanged(const QColor&)));
     connect( d->widget.shadowAngle, SIGNAL(valueChanged(double,bool)), this, SLOT(offsetChanged()));

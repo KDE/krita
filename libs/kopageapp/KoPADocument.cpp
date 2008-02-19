@@ -130,7 +130,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
         setActionEnabled( KoPAView::ActionDeletePage, false );
     }
 
-    emit sigProgress( 100 );
+    emit sigProgress( -1 );
     return true;
 }
 

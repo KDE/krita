@@ -53,7 +53,7 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     QTextCharFormat oldCf = cursor.charFormat();
     // create a new format out of the old so that the current formating is also used for the inserted object
     QTextCharFormat cf( oldCf );
-    cf.setObjectType(1001);
+    cf.setObjectType(QTextFormat::UserObject + 1);
     cf.setProperty(InlineInstanceId, ++m_lastObjectId);
     cursor.insertText(QString(QChar::ObjectReplacementCharacter), cf);
     object->setId(m_lastObjectId);

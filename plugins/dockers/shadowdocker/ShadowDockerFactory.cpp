@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,26 +16,28 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "strokedocker/StrokeDockerFactory.h"
-#include "shapeproperties/ShapePropertiesDockerFactory.h"
-#include "shapecollection/KoShapeCollectionDocker.h"
-#include "shadowdocker/ShadowDockerFactory.h"
-#include <KoDockRegistry.h>
 
-#include <kgenericfactory.h>
+#include "ShadowDockerFactory.h"
+#include "ShadowDocker.h"
 
-K_EXPORT_COMPONENT_FACTORY(kofficedockers, KGenericFactory<Plugin>( "koffice-dockers" ) )
-
-Plugin::Plugin( QObject *parent, const QStringList& )
-    : QObject(parent)
+ShadowDockerFactory::ShadowDockerFactory()
 {
-    Q_UNUSED(parent);
-    KoDockRegistry::instance()->add( new StrokeDockerFactory() );
-    KoDockRegistry::instance()->add( new ShapePropertiesDockerFactory() );
-    KoDockRegistry::instance()->add( new KoShapeCollectionDockerFactory() );
-    KoDockRegistry::instance()->add( new ShadowDockerFactory() );
 }
 
-#include "Plugin.moc"
+QString ShadowDockerFactory::id() const
+{
+    return QString("Shadow Properties");
+}
 
+QDockWidget* ShadowDockerFactory::createDockWidget()
+{
+    ShadowDocker* widget = new ShadowDocker();
+    widget->setObjectName(id());
+
+    return widget;
+}
+
+KoDockFactory::DockPosition ShadowDockerFactory::defaultDockPosition() const
+{
+    return DockMinimized;
+}

@@ -1,0 +1,80 @@
+<ui version="4.0" >
+ <class>KoShadowConfigWidget</class>
+ <widget class="QWidget" name="KoShadowConfigWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>284</width>
+    <height>162</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2" >
+   <item row="0" column="0" >
+    <widget class="QCheckBox" name="shadowVisible" >
+     <property name="text" >
+      <string>Show Shadow</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QWidget" native="1" name="shadowOptions" >
+     <layout class="QGridLayout" name="gridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Shadow Angle:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="KoSliderCombo" name="shadowAngle" />
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>Shadow Offset:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="shadowOffset" />
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="text" >
+         <string>Shadow Color:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="KColorButton" name="shadowColor" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoSliderCombo</class>
+   <extends>QComboBox</extends>
+   <header location="global" >KoSliderCombo.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoUnitDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global" >KoUnitDoubleSpinBox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

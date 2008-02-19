@@ -61,6 +61,7 @@ set(koguiutils_LIB_SRCS
     KoCheckerBoardPainter.cpp
    KoSelectShapeAction.cpp
    KoZoomInput.cpp
+    KoShadowConfigWidget.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS
@@ -69,6 +70,7 @@ kde4_add_ui_files( koguiutils_LIB_SRCS
     #KoPageLayoutColumns.ui
     #KoPageLayoutHeaderBase.ui
     KoEditColorSet.ui
+    KoShadowConfigWidget.ui
 )
 
 kde4_add_library(koguiutils SHARED ${koguiutils_LIB_SRCS})

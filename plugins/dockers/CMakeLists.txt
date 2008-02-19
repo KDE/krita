@@ -15,6 +15,9 @@ set(kofficedockers_SRCS
     shapecollection/KoCollectionItemModel.cpp
     shapecollection/KoOdfCollectionLoader.cpp
 
+    shadowdocker/ShadowDocker.cpp
+    shadowdocker/ShadowDockerFactory.cpp
+
     Plugin.cpp
 )
 

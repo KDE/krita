@@ -28,6 +28,15 @@ class KoShapeContainer;
 class QAbstractItemModel;
 class KoViewConverter;
 
+/**
+ * Model class for the document structure widget (dsw). The dsw can
+ * show the structure of a document as a three, as thumbnails or as
+ * a list.
+ *
+ * XXX: implement beginInsertRows, endInsertRows, beginRemoveRows
+ *      and endRemoveRows to make the widget react to page insertions
+ *      and deletions.
+ */
 class KoPADocumentModel : public KoDocumentSectionModel
 {
 public:

@@ -60,6 +60,9 @@ bool KisIlluminantProfileLC::load()
 
         gsl_vector_set(tmp, 2, 1); // BLUE
         m_rgbvec = tmp;
+        // Here, we set the interval of reflectance to be between 0 and (1 - red)
+        // Why? Because we want to obtain green as 1 - red - blue
+        // so that the linear combination works: white is then red + green + white = 1
         for (int i = 0; i < wavelengths(); i++)
             gsl_vector_set(m_data->d, 2*i+1, -(1.0-gsl_vector_get(m_red,i)));
         parent::rgbToReflectance();

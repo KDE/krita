@@ -54,10 +54,9 @@ public:
     virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext &context ) = 0;
 
     /**
-     * Return a new borderInsets object filled with the size around the shape that this
+     * Return a borderInsets object filled with the size around the shape that this
      * border takes.
      * @param shape the shape the insets will be calculated for
-     * Note that the KoInsets is a new object that you are responsible to delete afterwards.
      */
     KoInsets borderInsets(const KoShape *shape);
     /**

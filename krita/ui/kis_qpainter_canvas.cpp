@@ -287,7 +287,17 @@ void KisQPainterCanvas::documentOffsetMoved( const QPoint & pt )
 void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
 {
     dbgRender << "KisQPainterCanvas::resizeEvent : " << e->size();
-    m_d->prescaledProjection->resizePrescaledImage( e->size() );
+    QSize size( e->size() );
+    if (size.width() <= 0) {
+        size.setWidth(1);
+    }
+    if (size.height() <= 0) {
+        size.setHeight(1);
+    }
+    if (size != e->size()) {
+        dbgRender << "Adjusted resize event to" << size;
+    }
+    m_d->prescaledProjection->resizePrescaledImage( size );
 }
 
 #include "kis_qpainter_canvas.moc"

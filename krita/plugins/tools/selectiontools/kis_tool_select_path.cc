@@ -29,6 +29,8 @@
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoPointerEvent.h>
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"

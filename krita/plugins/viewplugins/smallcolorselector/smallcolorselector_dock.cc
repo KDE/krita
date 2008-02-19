@@ -22,6 +22,8 @@
 #include "kis_small_color_widget.h"
 #include "kis_resource_provider.h"
 
+#include <KoColorSpaceRegistry.h>
+
 SmallColorSelectorDock::SmallColorSelectorDock( KisView2 *view ) : QDockWidget(i18n("Small Color Selector")), m_view(view)
 {
     m_smallColorWidget = new KisSmallColorWidget(this);

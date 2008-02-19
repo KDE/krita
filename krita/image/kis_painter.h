@@ -24,6 +24,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_paint_device.h"
 
 #include <krita_export.h>
 

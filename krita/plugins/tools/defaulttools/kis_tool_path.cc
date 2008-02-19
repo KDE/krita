@@ -21,6 +21,8 @@
 #include <klocale.h>
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"

@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QColor>
+#include <QTimer>
 
 #include <kis_debug.h>
 #include <kaction.h>
@@ -45,6 +46,8 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoLineBorder.h>
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_canvas2.h"

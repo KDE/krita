@@ -7,6 +7,7 @@ set(kis_illuminant_profile_test_SRCS
     kis_illuminant_profile_test.cpp
     ../kis_illuminant_profile.cpp
     ../kis_illuminant_profile_qp.cpp
+    ../kis_illuminant_profile_lc.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -39,6 +40,7 @@ set(kis_ks_colorspace_test_SRCS
     kis_ks_colorspace_test.cpp
     ../kis_illuminant_profile.cpp
     ../kis_illuminant_profile_qp.cpp
+    ../kis_illuminant_profile_lc.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)
@@ -56,6 +58,7 @@ set(mixing_test_SRCS
     mixing_test.cpp
     ../kis_illuminant_profile.cpp
     ../kis_illuminant_profile_qp.cpp
+    ../kis_illuminant_profile_lc.cpp
     ../cqp/cqpminimizer.c
     ../cqp/initial_point.c
     ../cqp/mg_pdip.c)

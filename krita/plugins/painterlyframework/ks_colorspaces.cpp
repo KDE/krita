@@ -21,6 +21,7 @@
 
 #include "kis_illuminant_profile.h"
 #include "kis_illuminant_profile_qp.h"
+#include "kis_illuminant_profile_lc.h"
 
 #include "kis_ks_colorspace.h"
 #include "kis_ksf32_colorspace.h"
@@ -50,8 +51,17 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
     list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.ill",  KStandardDirs::Recursive);
 
-    foreach(QString curr, list)
-        f->addProfile(new KisIlluminantProfileQP(curr));
+    KisIlluminantProfile *p;
+    foreach(QString curr, list) {
+        p = new KisIlluminantProfileQP(curr);
+        p->load();
+        f->addProfile(p);
+    }
+    foreach(QString curr, list) {
+        p = new KisIlluminantProfileLC(curr);
+        p->load();
+        f->addProfile(p);
+    }
 
     f->add(new KisKSF32ColorSpaceFactory<6>);
     f->add(new KisKSF32ColorSpaceFactory<9>);

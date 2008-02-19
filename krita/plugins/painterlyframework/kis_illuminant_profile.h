@@ -31,8 +31,7 @@
 class KisIlluminantProfile : public KoColorProfile {
 
     public:
-        // REMEMBER TO CALL setName in subclasses!
-        KisIlluminantProfile(const QString &fileName = "");
+        KisIlluminantProfile(const QString &fileName, const QString &algorithm);
         virtual ~KisIlluminantProfile();
 
         // Repeat here from KoColorProfile, to remember it in subclasses
@@ -55,7 +54,8 @@ class KisIlluminantProfile : public KoColorProfile {
 
         // INTROSPECTION
         QString illuminant() const { return m_illuminant; }
-        int wavelengths() const { return m_P->size; }
+        QString algorithm() const { return m_algorithm; }
+        int wavelengths() const { if (m_valid) return m_P->size; else return -1; }
 
         // UTILITY
         void fromRgb(gsl_vector *rgbvec, gsl_vector *ksvec) const;
@@ -82,11 +82,12 @@ class KisIlluminantProfile : public KoColorProfile {
         ChannelConverter<double> *m_converter;
 
     private:
-        void deleteAll();
+        void reset();
 
     private:
 
         QString m_illuminant;
+        QString m_algorithm;
         bool m_valid;
 
 };

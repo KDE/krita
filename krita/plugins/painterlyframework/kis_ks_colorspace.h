@@ -236,7 +236,7 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
 
         virtual QString defaultProfile() const
         {
-            return QString("D-65 Illuminant Profile - %1 wavelengths - Black [11.0,0.35] - QP").arg(_N_);
+            return QString("D-65 Illuminant Profile - %1 wavelengths - Black [11.0,0.35] - LC").arg(_N_);
         }
 };
 

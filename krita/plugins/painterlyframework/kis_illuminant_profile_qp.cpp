@@ -26,25 +26,23 @@
 #include <gsl/gsl_vector.h>
 
 KisIlluminantProfileQP::KisIlluminantProfileQP(const QString &fileName)
-    : parent(fileName), m_data(0), m_s(0)
+    : parent(fileName, "QP"), m_data(0), m_s(0)
 {
-    load();
+
 }
 
 KisIlluminantProfileQP::~KisIlluminantProfileQP()
 {
-    deleteAll();
+    reset();
 }
 
 bool KisIlluminantProfileQP::load()
 {
+    reset();
+
     bool success;
 
     if (success = parent::load()) {
-        setName(QString("%1 - QP").arg(illuminant()));
-
-        deleteAll();
-
         int n  = wavelengths();
         int me = 3;
         int mi = 2*n; // each reflectance is bounded between 0 and 1, two inequalities, and the transformation matrix
@@ -114,7 +112,7 @@ void KisIlluminantProfileQP::rgbToReflectance() const
     gsl_vector_memcpy(parent::m_refvec, gsl_cqpminimizer_x(m_s));
 }
 
-void KisIlluminantProfileQP::deleteAll()
+void KisIlluminantProfileQP::reset()
 {
     if (m_data) {
         gsl_vector_free(m_data->d);

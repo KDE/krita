@@ -17,46 +17,47 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ILLUMINANT_PROFILE_QP_H_
-#define KIS_ILLUMINANT_PROFILE_QP_H_
+#ifndef KIS_ILLUMINANT_PROFILE_LC_H_
+#define KIS_ILLUMINANT_PROFILE_LC_H_
 
-#include "kis_illuminant_profile.h"
+#include "kis_illuminant_profile_qp.h"
 
 #include <QString>
 
 extern "C" {
     #include "cqp/gsl_cqp.h"
 }
+#include <gsl/gsl_vector.h>
 
-class KisIlluminantProfileQP : public KisIlluminantProfile {
-    typedef KisIlluminantProfile parent;
+class KisIlluminantProfileLC : public KisIlluminantProfileQP {
+    typedef KisIlluminantProfileQP parent;
 
     public:
-        // REMEMBER TO CALL setName in subclasses!
-        KisIlluminantProfileQP(const QString &fileName = "");
-        ~KisIlluminantProfileQP();
+        KisIlluminantProfileLC(const QString &fileName = "");
+        ~KisIlluminantProfileLC();
 
-        virtual KoColorProfile *clone() const
+        KoColorProfile *clone() const
         {
-            KoColorProfile *p = new KisIlluminantProfileQP(fileName());
+            KoColorProfile *p = new KisIlluminantProfileLC(fileName());
             if (valid())
                 p->load();
             return p;
         }
 
-        virtual bool load();
+        bool load();
 
     protected:
-        virtual void rgbToReflectance() const;
+        void rgbToReflectance() const;
 
     protected:
 
-        gsl_cqp_data *m_data;
-        gsl_cqpminimizer *m_s;
+        gsl_vector *m_red;
+        gsl_vector *m_green;
+        gsl_vector *m_blue;
 
     private:
         void reset();
 
 };
 
-#endif // KIS_ILLUMINANT_PROFILE_QP_H_
+#endif // KIS_ILLUMINANT_PROFILE_LC_H_

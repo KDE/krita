@@ -62,6 +62,8 @@ void KisKSColorSpaceTest::testConstructor()
 
     KisIlluminantProfile *p6 = new KisIlluminantProfileQP(d656);
     KisIlluminantProfile *p9 = new KisIlluminantProfileQP(d659);
+    p6->load();
+    p9->load();
 
     KisKSF32ColorSpace<6> *cs6 = new KisKSF32ColorSpace<6>(p6->clone());
     KisKSF32ColorSpace<9> *cs9 = new KisKSF32ColorSpace<9>(p9->clone());
@@ -88,6 +90,8 @@ void KisKSColorSpaceTest::testRegistry()
 
     KisIlluminantProfile *p6 = new KisIlluminantProfileQP(d656);
     KisIlluminantProfile *p9 = new KisIlluminantProfileQP(d659);
+    p6->load();
+    p9->load();
 
     // First, load a colorspace with his default profile
     cs = f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),0);

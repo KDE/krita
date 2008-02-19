@@ -153,7 +153,7 @@ inline void ChannelConverter<_TYPE_>::reflectanceToKS(const double &R, _TYPE_ &K
 }
 
 
-// SPECIALIZATIONS
+// SPECIALIZATIONS FOR DOUBLE
 template<>
 inline double ChannelConverter<double>::KSToReflectance(const double &K, const double &S) const
 {

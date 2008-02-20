@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoFilterChain.h>
-#include <KoFilterManager.h>
-#include <kcomponentdata.h>
+#include "KoFilterChain.h"
+#include "KoFilterManager.h"
+#include "kcomponentdata.h"
 #include <kdebug.h>
 //Added by qt3to4:
 #include <Q3CString>

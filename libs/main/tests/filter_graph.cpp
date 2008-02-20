@@ -20,9 +20,9 @@
 #include <QFile>
 #include <QByteArray>
 #include <QList>
-#include <KoQueryTrader.h>
-#include <KoFilterManager.h>
-#include <kcomponentdata.h>
+#include "KoQueryTrader.h"
+#include "KoFilterManager.h"
+#include "kcomponentdata.h"
 #include <kdebug.h>
 
 int main( int /*argc*/, char ** /*argv*/ )

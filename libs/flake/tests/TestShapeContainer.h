@@ -9,6 +9,7 @@ class TestShapeContainer : public QObject
 private slots:
     // tests
     void testModel();
+    void testSetParent();
 
 };
 

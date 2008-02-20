@@ -353,6 +353,8 @@ void KoShape::setParent(KoShapeContainer *parent) {
     if(d->parent == parent)
         return;
     if(parent && dynamic_cast<KoShape*>(parent) != this) {
+        if (d->parent)
+            d->parent->removeChild(this);
         d->parent = parent;
         parent->addChild(this);
     }

@@ -140,7 +140,7 @@ void KoShapeContainer::addChild(KoShape *shape) {
         return;
     if(d->children == 0)
         d->children = new ChildrenData();
-    if( shape->parent() )
+    if( shape->parent() && shape->parent() != this)
         shape->parent()->removeChild( shape );
     d->children->add(shape);
     shape->setParent(this);

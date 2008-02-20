@@ -38,5 +38,29 @@ void TestShapeContainer::testModel() {
     QCOMPARE(model->proposeMoveCalled(), 0);
 }
 
+void TestShapeContainer::testSetParent()
+{
+    MockContainerModel *model1 = new MockContainerModel();
+    MockContainer container1(model1);
+    MockContainerModel *model2 = new MockContainerModel();
+    MockContainer container2(model2);
+    MockShape shape;
+    // init test
+    QCOMPARE(model1->iterator().count(), 0);
+    QCOMPARE(model2->iterator().count(), 0);
+
+    shape.setParent(&container1);
+    QCOMPARE(model1->iterator().count(), 1);
+    QCOMPARE(model2->iterator().count(), 0);
+    QCOMPARE(shape.parent(), &container1);
+
+    shape.setParent(&container2);
+    QCOMPARE(model1->iterator().count(), 0);
+    QCOMPARE(container1.iterator().count(), 0);
+    QCOMPARE(model2->iterator().count(), 1);
+    QCOMPARE(container2.iterator().count(), 1);
+    QCOMPARE(shape.parent(), &container2);
+}
+
 QTEST_MAIN(TestShapeContainer)
 #include "TestShapeContainer.moc"

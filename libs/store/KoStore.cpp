@@ -20,6 +20,7 @@
 */
 
 #include "KoStore.h"
+
 #include "KoTarStore.h"
 #include "KoZipStore.h"
 #include "KoDirectoryStore.h"

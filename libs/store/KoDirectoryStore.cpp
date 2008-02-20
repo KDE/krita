@@ -18,6 +18,7 @@
 */
 
 #include "KoDirectoryStore.h"
+
 #include <QFile>
 #include <QDir>
 #include <kdebug.h>

@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kodomtest.h"
+
 #include "KoXmlReader.h"
 
 static QString const KoXmlNS_office( "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
 static QString const KoXmlNS_text( "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
-
-#include "kodomtest.h"
 
 //static void debugElemNS( const QDomElement& elem )
 //{

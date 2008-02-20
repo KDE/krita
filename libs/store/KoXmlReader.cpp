@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "KoXmlReader.h"
+
 /*
   This is a memory-efficient DOM implementation for KOffice. See the API 
   documentation for details.
@@ -66,7 +68,7 @@
  
  */
 
-#include "KoXmlReader.h"
+
 
 #include <QTextCodec>
 #include <QTextDecoder>

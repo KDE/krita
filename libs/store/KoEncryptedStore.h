@@ -20,7 +20,6 @@
 #ifndef KoEncryptedStore_h
 #define KoEncryptedStore_h
 
-
 #include "KoStoreBase.h"
 #include <QHash>
 #include <QtCrypto>

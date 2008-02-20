@@ -150,8 +150,8 @@ public:
     double numberStepForUnit() const;
     /// @return The rounding of value to the nearest multiple of stepValue
     double doSnapping(const double value) const;
-    Selection selectionAtPosition(const QPoint pos, int *selectOffset = 0);
-    int hotSpotIndex(const QPoint pos);
+    Selection selectionAtPosition(const QPoint & pos, int *selectOffset = 0);
+    int hotSpotIndex(const QPoint & pos);
 
     friend class VerticalPaintingStrategy;
     friend class HorizontalPaintingStrategy;

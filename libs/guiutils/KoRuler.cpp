@@ -22,6 +22,7 @@
 */
 
 #include "KoRuler.h"
+
 #include "KoRuler_p.h"
 
 #include <klocale.h>
@@ -653,7 +654,7 @@ double KoRulerPrivate::doSnapping(const double value) const
     return numberStep * qRound(value / numberStep);
 }
 
-KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint pos, int *selectOffset ) {
+KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint & pos, int *selectOffset ) {
     const int height = ruler->height();
     if (rightToLeft) {
         int x = int(viewConverter->documentToViewX(activeRangeEnd - firstLineIndent - paragraphIndent) + offset);
@@ -703,7 +704,7 @@ KoRulerPrivate::Selection KoRulerPrivate::selectionAtPosition(const QPoint pos, 
     return KoRulerPrivate::None;
 }
 
-int KoRulerPrivate::hotSpotIndex(const QPoint pos) {
+int KoRulerPrivate::hotSpotIndex(const QPoint & pos) {
     for(int counter = 0; counter < hotspots.count(); counter++) {
         bool hit;
         if (orientation == Qt::Horizontal)

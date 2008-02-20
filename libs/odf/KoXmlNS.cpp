@@ -43,3 +43,4 @@ const char* const KoXmlNS::VL = "http://openoffice.org/2001/versions-list";
 const char* const KoXmlNS::smil = "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0";
 
 const char* const KoXmlNS::koffice = "http://www.koffice.org/2005/";
+

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "rtreetestapp.h"
+
 #include <QApplication>
 #include <QtGui>
 #include <QPainterPath>
@@ -23,7 +25,7 @@
 #include <QPoint>
 #include <QPointF>
 #include <QDebug>
-#include "rtreetestapp.h"
+
 #include "Tool.h"
 
 int main(int argc, char *argv[])

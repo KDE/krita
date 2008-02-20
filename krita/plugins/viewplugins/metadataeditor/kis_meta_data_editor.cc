@@ -96,7 +96,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             const QString editorName = elem.attribute("editorName");
             const QString schemaUri = elem.attribute("schemaUri");
             const QString entryName = elem.attribute("entryName");
-            const QString editorSignal = "2"+elem.attribute("editorSignal");
+            const QString editorSignal = '2' + elem.attribute("editorSignal");
             const QString propertyName = elem.attribute("propertyName");
             const QString structureField = elem.attribute("structureField");
             
@@ -108,7 +108,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                 {
                     if( not d->store->containsEntry( schema, entryName))
                     {
-                        dbgPlugins <<" Store doesn't have yet entry :" << entryName <<" in" << schemaUri  <<" ==" << schema->generateQualifiedName(entryName);
+                        dbgPlugins <<" Store does not have yet entry :" << entryName <<" in" << schemaUri  <<" ==" << schema->generateQualifiedName(entryName);
                     }
                     KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
                     KisEntryEditor* ee = 0;
@@ -137,7 +137,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         xmlFile.close();
 
         KPageWidgetItem *page = new KPageWidgetItem( widget, pageName );
-        if(iconName != "")
+        if(!iconName.isEmpty())
         {
             page->setIcon( KIcon( iconName ) );
         }

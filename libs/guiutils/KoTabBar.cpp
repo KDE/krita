@@ -665,15 +665,15 @@ void KoTabBar::paintEvent( QPaintEvent* )
         return;
     }
 
+    d->layoutTabs();
+    d->updateButtons();
+
     QPainter painter(this);
     if( !d->reverseLayout )
          painter.translate( d->offset, 0 );
 
     if( !d->reverseLayout )
         painter.translate( 5, 0 );
-
-    d->layoutTabs();
-    d->updateButtons();
 
     // draw first all non-active, visible tabs
     for( int c = d->tabRects.count()-1; c>=0; c-- )

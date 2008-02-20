@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Custom Brush
+Comment=Custom brush
+X-KDE-ServiceTypes=Krita/Brush
+Type=Service
+X-KDE-Library=kritacustombrush
+X-Krita-Version=3
+

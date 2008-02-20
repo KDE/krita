@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Text Brush
+Comment=Text brush
+X-KDE-ServiceTypes=Krita/Brush
+Type=Service
+X-KDE-Library=kritatextbrush
+X-Krita-Version=3
+

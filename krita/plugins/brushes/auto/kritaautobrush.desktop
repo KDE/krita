@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=User-Definable Brush
+Comment=User-Definable brush
+X-KDE-ServiceTypes=Krita/Brush
+Type=Service
+X-KDE-Library=kritaautobrush
+X-Krita-Version=3
+

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Imagehose Brush
+Comment=Imagehose brush
+X-KDE-ServiceTypes=Krita/Brush
+Type=Service
+X-KDE-Library=kritaimagepipebrush
+X-Krita-Version=3
+

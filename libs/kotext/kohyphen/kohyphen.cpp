@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.                                               *
  ******************************************************************************/
 
+#include "kohyphen.h"
+
 #include <qdom.h>
 #include <QFile>
 #include <QTextCodec>
@@ -28,8 +30,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <k3staticdeleter.h>
-
-#include "kohyphen.h"
 #include <kdebug.h>
 
 

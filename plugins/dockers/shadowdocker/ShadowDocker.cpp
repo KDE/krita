@@ -25,6 +25,7 @@
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
 #include <KoShadowConfigWidget.h>
+#include <KoShapeShadowCommand.h>
 #include <klocale.h>
 
 class ShadowDocker::Private
@@ -85,7 +86,9 @@ void ShadowDocker::setCanvas( KoCanvasBase *canvas )
     d->canvas = canvas;
     if( canvas )
     {
-        connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ),
+        connect( canvas->shapeManager(), SIGNAL( selectionChanged() ),
+            this, SLOT( selectionChanged() ) );
+        connect( canvas->shapeManager(), SIGNAL( selectionContentChanged() ),
             this, SLOT( selectionChanged() ) );
         d->widget->setUnit( canvas->unit() );
     }
@@ -98,25 +101,11 @@ void ShadowDocker::shadowChanged()
     if( ! shape )
         return;
 
-    /// TODO use a command here
-
-    KoShapeShadow * oldShadow = shape->shadow();
-    if( ! oldShadow && ! d->widget->shadowVisible() )
-        return;
-
-    KoShapeShadow * newShadow = 0;
-    if( ! oldShadow )
-        newShadow = new KoShapeShadow();
-    else
-        newShadow = oldShadow;
-
-    shape->update();
+    KoShapeShadow * newShadow = new KoShapeShadow();
     newShadow->setVisibility( d->widget->shadowVisible() );
     newShadow->setColor( d->widget->shadowColor() );
     newShadow->setOffset( d->widget->shadowOffset() );
-    if( ! oldShadow )
-        shape->setShadow( newShadow );
-    shape->update();
+    d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(), newShadow ) );
 }
 
 #include "ShadowDocker.moc"

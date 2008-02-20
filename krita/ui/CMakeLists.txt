@@ -143,38 +143,38 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
-    wdgautobrush.ui
-    wdgautogradient.ui
-    wdggeneralsettings.ui
-    wdgperformancesettings.ui
-    wdggridsettings.ui
-    wdgbirdeye.ui
-    wdgbookmarkedconfigurationseditor.ui
-    wdgapplyprofile.ui
-    wdgcustombrush.ui
-    wdgcustompattern.ui
-    wdglayerproperties.ui
-    wdgcolorsettings.ui
-    wdgcolorspaceselector.ui
-    wdgdisplaysettings.ui
-    wdgpressuresettings.ui
-    wdgtabletdevicesettings.ui
-    wdgtabletsettings.ui
-    kis_previewwidgetbase.ui
-    kis_matrix_widget.ui
-    wdglayerbox.ui
-    wdgpalettechooser.ui
-    wdgselectionoptions.ui
-    wdgshapeoptions.ui
-    wdgcustompalette.ui
-    wdgtextbrush.ui
-    wdgnewimage.ui
-    wdgimageproperties.ui
-    wdgtransformationeffect.ui
-    wdgmaskfromselection.ui
-    wdgmasksource.ui
-    wdgfilterdialog.ui
-    wdgmetadatamergestrategychooser.ui
+    forms/wdgautobrush.ui
+    forms/wdgautogradient.ui
+    forms/wdggeneralsettings.ui
+    forms/wdgperformancesettings.ui
+    forms/wdggridsettings.ui
+    forms/wdgbirdeye.ui
+    forms/wdgbookmarkedconfigurationseditor.ui
+    forms/wdgapplyprofile.ui
+    forms/wdgcustombrush.ui
+    forms/wdgcustompattern.ui
+    forms/wdglayerproperties.ui
+    forms/wdgcolorsettings.ui
+    forms/wdgcolorspaceselector.ui
+    forms/wdgdisplaysettings.ui
+    forms/wdgpressuresettings.ui
+    forms/wdgtabletdevicesettings.ui
+    forms/wdgtabletsettings.ui
+    forms/kis_previewwidgetbase.ui
+    forms/kis_matrix_widget.ui
+    forms/wdglayerbox.ui
+    forms/wdgpalettechooser.ui
+    forms/wdgselectionoptions.ui
+    forms/wdgshapeoptions.ui
+    forms/wdgcustompalette.ui
+    forms/wdgtextbrush.ui
+    forms/wdgnewimage.ui
+    forms/wdgimageproperties.ui
+    forms/wdgtransformationeffect.ui
+    forms/wdgmaskfromselection.ui
+    forms/wdgmasksource.ui
+    forms/wdgfilterdialog.ui
+    forms/wdgmetadatamergestrategychooser.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

@@ -417,3 +417,4 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_srcdev, painter()->opacity(), sx, sy, sw, sh);
 }
 #include "kis_duplicateop.moc"
+

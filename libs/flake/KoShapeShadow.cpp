@@ -20,6 +20,7 @@
 #include "KoShapeShadow.h"
 #include "KoShape.h"
 #include "KoInsets.h"
+#include "KoPathShape.h"
 #include <KoGenStyle.h>
 #include <QtGui/QPainter>
 
@@ -70,7 +71,11 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     tm.translate( d->offset.x(), d->offset.y() );
     QMatrix tr = shape->absoluteTransformation(&converter);
     painter.setMatrix( tr * tm * tr.inverted() * painter.matrix() );
-    painter.drawPath( shape->outline() );
+    QPainterPath path( shape->outline() );
+    KoPathShape * pathShape = dynamic_cast<KoPathShape*>( shape );
+    if( pathShape )
+        path.setFillRule( pathShape->fillRule() );
+    painter.drawPath( path );
 }
 
 void KoShapeShadow::setOffset( const QPointF & offset )

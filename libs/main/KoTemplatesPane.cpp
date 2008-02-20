@@ -18,6 +18,7 @@
 */
 
 #include "KoTemplatesPane.h"
+
 #include "KoTemplates.h"
 
 #include <QStandardItemModel>

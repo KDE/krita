@@ -17,8 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoFrame.h>
-#include <KoView.h>
+#include "KoFrame.h"
+
+#include "KoView.h"
 
 #include <QPainter>
 //Added by qt3to4:

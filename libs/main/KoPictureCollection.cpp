@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoPictureCollection.h"
+
 #include <Q3ValueList>
 
 #include <kdebug.h>
@@ -28,7 +30,7 @@
 #include <KoXmlWriter.h>
 
 #include "KoPicture.h"
-#include "KoPictureCollection.h"
+
 
 //#define DEBUG_PICTURES
 

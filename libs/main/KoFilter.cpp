@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoFilter.h>
+#include "KoFilter.h"
 
 #include <QFile>
 //Added by qt3to4:
@@ -26,7 +26,8 @@
 #include <kmimetype.h>
 #include <ktemporaryfile.h>
 #include <kdebug.h>
-#include <KoFilterManager.h>
+
+#include "KoFilterManager.h"
 
 
 class KoFilter::Private

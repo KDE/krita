@@ -19,6 +19,7 @@
 */
 
 #include "KoFileDialog.h"
+
 #include "KoDocument.h"
 #include <kfilefiltercombo.h>
 #include <klocale.h>

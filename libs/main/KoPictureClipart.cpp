@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoPictureClipart.h"
+
 #include <QBuffer>
 #include <QPainter>
 #include <QPixmap>
@@ -28,7 +30,7 @@
 
 #include "KoPictureKey.h"
 #include "KoPictureBase.h"
-#include "KoPictureClipart.h"
+
 
 KoPictureClipart::KoPictureClipart(void) : m_clipart(KoPictureType::formatVersionQPicture)
 {

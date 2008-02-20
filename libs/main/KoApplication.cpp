@@ -18,6 +18,7 @@
 */
 
 #include "KoApplication.h"
+
 #include "KoGlobal.h"
 #include "KoApplicationAdaptor.h"
 

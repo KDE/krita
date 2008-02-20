@@ -18,6 +18,7 @@
  */
 
 #include "KoExecutePolicy.h"
+
 #include "KoExecutePolicy_p.h"
 #include "KoAction.h"
 #include "ActionJob_p.h"

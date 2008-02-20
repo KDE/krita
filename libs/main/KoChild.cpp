@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoChild.h>
+#include "KoChild.h"
 
 #include <QPainter>
 //Added by qt3to4:

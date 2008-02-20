@@ -19,6 +19,7 @@
 */
 
 #include "KoGridData.h"
+
 #include "KoUnit.h"
 #include "KoViewConverter.h"
 

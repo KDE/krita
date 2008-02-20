@@ -19,6 +19,7 @@
 */
 
 #include "KoPictureImage.h"
+
 #include "KoPictureKey.h"
 
 #include <kdebug.h>

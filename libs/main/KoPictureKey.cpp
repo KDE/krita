@@ -19,13 +19,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoPictureKey.h"
+
 #include <QDateTime>
 #include <QFileInfo>
 #include <qdom.h>
 
 #include <kdebug.h>
 
-#include "KoPictureKey.h"
+
 
 static void resetDateTimeToEpoch(QDateTime& dt)
 {

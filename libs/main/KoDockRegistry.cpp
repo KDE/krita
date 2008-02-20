@@ -18,6 +18,7 @@
  */
 
 #include "KoDockRegistry.h"
+
 #include "KoPluginLoader.h"
 
 #include <k3staticdeleter.h>

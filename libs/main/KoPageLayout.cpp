@@ -19,7 +19,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
 #include "KoPageLayout.h"
+
 #include "KoDom.h"
 #include "KoXmlNS.h"
 #include "KoUnit.h"

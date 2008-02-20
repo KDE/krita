@@ -17,8 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoFactory.h>
-
+#include "KoFactory.h"
 
 class KoFactory::KoFactoryPrivate
 {

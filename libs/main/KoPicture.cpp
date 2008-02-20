@@ -19,6 +19,7 @@
 */
 
 #include "KoPicture.h"
+
 #include "KoPictureKey.h"
 #include "KoPictureShared.h"
 #include "KoPictureBase.h"

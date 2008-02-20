@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoPictureEps.h"
+
 #include <unistd.h>
 #include <stdio.h>
 
@@ -41,7 +43,6 @@
 
 #include "KoPictureKey.h"
 #include "KoPictureBase.h"
-#include "KoPictureEps.h"
 
 
 KoPictureEps::KoPictureEps(void) : m_psStreamStart(0), m_psStreamLength(0), m_cacheIsInFastMode(true)

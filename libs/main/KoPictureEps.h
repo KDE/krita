@@ -24,8 +24,11 @@
 //Added by qt3to4:
 #include <QPixmap>
 
+#include <KoPictureBase.h>
+
 class QPainter;
 class QSize;
+
 
 // TODO: fix documentation
 

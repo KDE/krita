@@ -18,6 +18,7 @@
 */
 
 #include "KoContainerHandler.h"
+
 #include <KoView.h>
 #include <math.h>
 #include <kcursor.h>

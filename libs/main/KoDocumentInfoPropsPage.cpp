@@ -19,6 +19,7 @@
 */
 
 #include "KoDocumentInfoPropsPage.h"
+
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
 #include <KoXmlReader.h>

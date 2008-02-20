@@ -19,6 +19,7 @@
 */
 
 #include "KoDocumentAdaptor.h"
+
 #include "KoDocument.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"

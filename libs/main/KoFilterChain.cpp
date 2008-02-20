@@ -17,6 +17,7 @@
 */
 
 #include "KoFilterChain.h"
+
 #include "KoFilterManager.h"  // KoFilterManager::filterAvailable, private API
 #include "KoQueryTrader.h"
 #include "KoDocument.h"

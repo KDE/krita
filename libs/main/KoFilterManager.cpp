@@ -19,9 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include "KoFilterManager_p.h"
 #include "KoFilterManager.h"
+#include "KoFilterManager_p.h"
 
 #include <QFile>
 #include <QLabel>

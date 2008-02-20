@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoPictureShared.h"
+
 #include <QFile>
 #include <QImageReader>
 #include <QImageWriter>
@@ -36,7 +38,7 @@
 #include "KoPictureImage.h"
 #include "KoPictureEps.h"
 #include "KoPictureClipart.h"
-#include "KoPictureShared.h"
+
 #include <kcodecs.h>
 
 

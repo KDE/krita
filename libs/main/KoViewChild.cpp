@@ -23,10 +23,10 @@
 
 #include <kdebug.h>
 
-#include <KoView.h>
-#include <KoFrame.h>
-#include <KoDocumentChild.h>
-#include <KoDocument.h>
+#include "KoView.h"
+#include "KoFrame.h"
+#include "KoDocumentChild.h"
+#include "KoDocument.h"
 
 class KoViewChild::KoViewChildPrivate
 {

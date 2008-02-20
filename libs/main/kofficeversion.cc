@@ -19,6 +19,12 @@
 
 #include "kofficeversion.h"
 
+
+
+
+
+
+
 unsigned int KOffice::version()
 {
     return KOFFICE_VERSION;

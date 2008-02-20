@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoTemplates.h"
+
 #include <KoTemplates.h>
 
 #include <QDir>

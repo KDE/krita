@@ -20,6 +20,7 @@
 */
 
 #include "KoMainWindow.h"
+
 #include "KoView.h"
 #include "KoDocument.h"
 #include "KoFilterManager.h"

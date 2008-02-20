@@ -19,6 +19,7 @@
 */
 
 #include "KoDocumentInfo.h"
+
 #include "KoDom.h"
 #include "KoDocument.h"
 #include "kofficeversion.h"

@@ -19,6 +19,7 @@
 */
 
 #include "KoQueryTrader.h"
+
 #include "KoDocument.h"
 #include "KoFilter.h"
 

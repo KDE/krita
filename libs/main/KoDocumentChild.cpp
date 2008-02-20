@@ -19,6 +19,7 @@
 */
 
 #include "KoDocumentChild.h"
+
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoDocument.h>

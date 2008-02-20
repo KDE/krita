@@ -18,8 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// local directory
 #include "KoView.h"
+
+// local directory
+
 #include "KoView_p.h"
 #include "KoDockRegistry.h"
 #include "KoDocument.h"

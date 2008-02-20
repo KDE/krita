@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoDocument_p.h"
 #include "KoDocument.h"
+#include "KoDocument_p.h"
 
 #include "KoDom.h"
 #include "KoDocumentAdaptor.h"

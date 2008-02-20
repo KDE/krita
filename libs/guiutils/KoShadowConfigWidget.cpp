@@ -80,7 +80,7 @@ void KoShadowConfigWidget::setShadowOffset( const QPointF &offset )
     d->widget.shadowAngle->blockSignals(false);
 
     d->widget.shadowOffset->blockSignals(true);
-    d->widget.shadowOffset->setValue( length );
+    d->widget.shadowOffset->changeValue( length );
     d->widget.shadowOffset->blockSignals(false);
 }
 

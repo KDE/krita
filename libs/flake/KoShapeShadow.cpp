@@ -58,6 +58,9 @@ void KoShapeShadow::fillStyle( KoGenStyle &style, KoShapeSavingContext &context 
 
 void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
+    if( ! d->visible )
+        return;
+
     KoShape::applyConversion( painter, converter );
 
     painter.setPen( d->color );
@@ -102,6 +105,9 @@ bool KoShapeShadow::isVisible() const
 
 void KoShapeShadow::insets( const KoShape *shape, KoInsets &insets )
 {
+    if( ! d->visible )
+        return;
+
     Q_UNUSED( shape );
 
     insets.left = ( d->offset.x() < 0.0 ) ? qAbs(d->offset.x()) : 0.0;

@@ -94,7 +94,9 @@ QPointF KoShadowConfigWidget::shadowOffset() const
 
 void KoShadowConfigWidget::setShadowVisible( bool visible )
 {
+    d->widget.shadowVisible->blockSignals(true);
     d->widget.shadowVisible->setChecked(visible);
+    d->widget.shadowVisible->blockSignals(false);
     visibilityChanged();
 }
 

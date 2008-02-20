@@ -139,10 +139,11 @@ typedef KisSharedPtr<KisHistogram> KisHistogramSP;
 class KisPaintOpFactory;
 typedef KisSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
 
-typedef QVector<QPoint> vKisSegments;
+class KisBrushFactory;
+typedef KisSharedPtr<KisBrushFactory> KisBrushFactorySP;
+typedef KisSharedPtrVector<KisBrushFactory> vKisBrushFactorySP;
 
-//class KisGuide;
-//typedef KisSharedPtr<KisGuide> KisGuideSP;
+typedef QVector<QPoint> vKisSegments;
 
 class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;

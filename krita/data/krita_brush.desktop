@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/Brush
+Comment=Brush plugin for Krita
+[PropertyDef::X-Krita-Version]
+Type=int

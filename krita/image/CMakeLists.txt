@@ -47,6 +47,7 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_brush_registry.cpp
    kis_filter_mask.cpp
    kis_node_action.cpp
    kis_paintop_settings.cpp

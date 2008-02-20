@@ -24,6 +24,7 @@
 #include <QVector>
 
 #include "kis_types.h"
+#include "kis_shared.h"
 #include "kis_paint_information.h"
 
 #include "KoResource.h"
@@ -48,11 +49,42 @@ enum enumBrushType {
     AIRBRUSH
 };
 
+class KisBrush;
+
+/**
+ * A brush factory can create a new brush instance based
+ * on a filename and a brush id or just a brush id.
+ */
+class KRITAIMAGE_EXPORT KisBrushFactory : public KisShared {
+
+public:
+
+    KisBrushFactory() {}
+    virtual ~KisBrushFactory() {}
+
+    virtual KisBrush * createBrush() const = 0;
+    virtual KisBrush * createBrush( const QString & fileName ) const = 0;
+    virtual KisBrush * createBrush( const QString& filename,
+                                    const QByteArray & data,
+                                    qint32 & dataPos) const = 0;
+
+    /// Load brush from the specified paint device, in the specified region
+    virtual KisBrush * createBrush (KisPaintDeviceSP image, int x, int y, int w, int h) const = 0;
+
+    /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
+    virtual KisBrush* createBrush(const QImage& image, const QString& name = QString("")) const = 0;
+
+};
+
+
 class KRITAIMAGE_EXPORT KisBrush : public KoResource {
+
   class ScaledBrush;
 
     Q_OBJECT
+    
 protected:
+
     class ColoringInformation {
     public:
         virtual ~ColoringInformation();
@@ -60,6 +92,7 @@ protected:
         virtual void nextColumn() = 0;
         virtual void nextRow() = 0;
     };
+    
     class PlainColoringInformation : public ColoringInformation {
     public:
         PlainColoringInformation(const quint8* color);
@@ -70,6 +103,7 @@ protected:
     private:
         const quint8* m_color;
     };
+    
     class PaintDeviceColoringInformation : public ColoringInformation {
     public:
         PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width);
@@ -81,6 +115,7 @@ protected:
         const KisPaintDeviceSP m_source;
         KisHLineConstIteratorPixel* m_iterator;
     };
+    
 public:
 
     /// Construct brush to load filename later as brush
@@ -128,13 +163,18 @@ public:
      * pixels in the brush.
      */
     virtual void generateMask(KisPaintDeviceSP dst, ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+    
     void mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+
     void mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+
     void mask(KisPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+
     // XXX: return non-tiled simple buffer
     virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(QPointF);
+
     QPointF hotSpot(double scaleX, double scaleY ) const;
 
     /**
@@ -143,14 +183,17 @@ public:
      *                of the brush.
      */
     void setSpacing(double spacing);
+
     /**
      * @return the spacing between two strokes for this brush
      */
     double spacing() const;
+
     /**
      * @return the horizontal spacing
      */
     double xSpacing(double scale = 1.0) const;
+
     /**
      * @return the vertical spacing
      */
@@ -160,28 +203,33 @@ public:
      * @return the width of the mask for the given scale
      */
     qint32 maskWidth(double scale, double angle) const;
+
     /**
      * @return the height of the mask for the given scale
      */
     qint32 maskHeight(double scale, double angle) const;
 
     virtual void setUseColorAsMask(bool useColorAsMask);
+
     virtual bool useColorAsMask() const;
+
     virtual bool hasColor() const;
 
     virtual void makeMaskImage();
+
     /**
      * @return the width (for scale == 1.0)
      */
     qint32 width() const;
+
     /**
      * @return the height (for scale == 1.0)
      */
     qint32 height() const;
 
+
     virtual enumBrushType brushType() const;
 
-    //QImage outline(double pressure = PRESSURE_DEFAULT);
     virtual KisBoundary boundary();
 
     /**
@@ -212,7 +260,6 @@ protected:
     void setBrushType(enumBrushType type);
 
 private:
-
 
     bool init();
     bool initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, int h);

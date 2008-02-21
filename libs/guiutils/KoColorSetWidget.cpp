@@ -99,7 +99,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
 {
     // TODO: don't hardcode default location of palettes
     QList<KoColorSet *> palettes;
-    QString defaultPalette("krita/palettes/Default.gpl");
+    QString defaultPalette("krita/palettes/40_Colors.gpl");
     QString dir = KGlobal::dirs()->findResourceDir("data", defaultPalette);
     QDir loc = dir + "krita/palettes/";
     loc.setNameFilters(QStringList("*.gpl"));
@@ -192,8 +192,8 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     setLayout(d->mainLayout);
 
-    // Use Default.gpl for testing
-    QString defaultPalette("krita/palettes/Default.gpl");
+    // Use 40_Colors.gpl for testing
+    QString defaultPalette("krita/palettes/40_Colors.gpl");
     QString dir = KGlobal::dirs()->findResourceDir("data", defaultPalette);
     KoColorSet *colorSet = new KoColorSet(dir.append(defaultPalette));
     colorSet->load();

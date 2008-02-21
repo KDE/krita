@@ -57,15 +57,18 @@ KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QStrin
     // FIXME no need to handcode the QScrollArea if designer can add QScrollArea (Qt 4.4?)
     m_scrollArea = new QScrollArea(widget.patchesFrame);
 
+    int index = 0;
     foreach (KoColorSet *set, m_colorSets) {
         if (set->name() == activePalette) {
             m_activeColorSet = set;
-            int index = widget.selector->findText(set->name());
+            index = widget.selector->findText(set->name());
             widget.selector->setCurrentIndex(index);
         }
     }
-    if (!m_activeColorSet && !palettes.isEmpty())
+    if (!m_activeColorSet && !palettes.isEmpty()) {
         m_activeColorSet = palettes.first();
+        index = widget.selector->findText(m_activeColorSet->name());
+    }
 
     m_scrollArea->setMinimumWidth(16*(12+2));
 
@@ -80,6 +83,7 @@ KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QStrin
     widget.save->setIcon(KIcon("document-save"));
 
     setEnabled(m_activeColorSet != 0);
+    setActiveColorSet(index);
 
     connect(widget.add, SIGNAL(clicked()), this, SLOT(addColor()));
     connect(widget.remove, SIGNAL(clicked()), this, SLOT(removeColor()));

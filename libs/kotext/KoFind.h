@@ -58,6 +58,7 @@ private:
     Q_PRIVATE_SLOT(d, void findPreviousActivated() )
     Q_PRIVATE_SLOT(d, void replaceActivated() )
     Q_PRIVATE_SLOT(d, void startFind() )
+    Q_PRIVATE_SLOT(d, void startReplace() )
 };
 
 #endif

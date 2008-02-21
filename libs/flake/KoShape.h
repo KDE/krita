@@ -41,7 +41,6 @@ class QRectF;
 class QPainterPath;
 
 class KoShapeContainer;
-class KoShapeConnection;
 class KoShapeBorderModel;
 class KoShapeManager;
 class KoShapeUserData;
@@ -651,11 +650,6 @@ public:
     QRectF documentToShape( const QRectF &rect ) const;
 
     /**
-     * Return all the connections made to or from this shape.
-     */
-    QList<KoShapeConnection*> connections() const;
-
-    /**
      * Returns the name of the shape.
      * @return the shapes name
      */
@@ -824,18 +818,6 @@ protected:
 
     /// return the current matrix that contains the rotation/scale/position of this shape
     const QMatrix& matrix() const;
-
-    friend class KoShapeConnection;
-    /**
-     * Add a connection to the list of connections of this shape.
-     * This is typically called only from the constructor of the KoShapeConnection class.
-     */
-    void addConnection(KoShapeConnection *connection);
-    /**
-     * Remove a connection to the list of connections of this shape.
-     * This is typically called only from the destructor of the KoShapeConnection class.
-     */
-    void removeConnection(KoShapeConnection *connection);
 
     /// Deriving shapes have to implement that to support cloning
     virtual KoShape * cloneShape() const = 0;

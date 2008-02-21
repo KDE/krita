@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include "ConnectionToolFactory.h"
 #include "defaulttool/DefaultToolFactory.h"
 
 #include <KoShapeRegistry.h>
@@ -30,7 +29,6 @@ K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "koffice-defau
 Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
     KoToolRegistry::instance()->add(new DefaultToolFactory(parent));
 }
 

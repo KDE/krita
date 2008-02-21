@@ -33,7 +33,6 @@ class KoShape;
 class KoSelection;
 class KoViewConverter;
 class KoCanvasBase;
-class KoShapeConnection;
 class KoPointerEvent;
 class KoShapeManagerPaintingStrategy;
 
@@ -139,12 +138,6 @@ public:
      * @param shape the shape to updated its position in the tree.
      */
     void notifyShapeChanged( KoShape * shape );
-
-    /**
-     * Add a shape connection to the manager so it can be taken into account for drawing purposes.
-     * Note that this is typically called by the shape instance only.
-     */
-    void addShapeConnection(KoShapeConnection *connection);
 
     /**
      * Switch to editing the shape that is at the position of the event.

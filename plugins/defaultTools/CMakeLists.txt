@@ -9,8 +9,6 @@ add_subdirectory(pics)
 
 SET ( defaulttools_SRCS
     Plugin.cpp
-    ConnectionTool.cpp
-    ConnectionToolFactory.cpp
     defaulttool/DefaultTool.cpp
     defaulttool/DefaultToolFactory.cpp
     defaulttool/DefaultToolWidget.cpp

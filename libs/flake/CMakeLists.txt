@@ -20,7 +20,6 @@ set(flake_SRCS
     KoShape.cpp
     KoShapeContainer.cpp
     KoShapeGroup.cpp
-    KoShapeConnection.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
     KoTool.cpp

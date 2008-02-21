@@ -123,7 +123,6 @@ public:
     KoShapeApplicationData *appData;
     QBrush backgroundBrush; ///< Stands for the background color / fill etc.
     KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
-    QList<KoShapeConnection*> connections;
     KoShape *me;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
@@ -661,20 +660,6 @@ KoShapeShadow * KoShape::shadow() const
 
 const QMatrix& KoShape::matrix() const {
     return d->localMatrix;
-}
-
-void KoShape::addConnection(KoShapeConnection *connection) {
-    d->connections.append(connection);
-    foreach(KoShapeManager *sm, d->shapeManagers)
-        sm->addShapeConnection( connection );
-}
-
-void KoShape::removeConnection(KoShapeConnection *connection) {
-    d->connections.removeAll(connection);
-}
-
-QList<KoShapeConnection*> KoShape::connections() const {
-    return d->connections;
 }
 
 void KoShape::removeConnectionPoint( int index )

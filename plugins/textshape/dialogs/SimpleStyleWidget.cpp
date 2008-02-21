@@ -50,6 +50,8 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
         widget.alignRight->setDefaultAction(tool->action("format_alignright"));
     }
 
+    widget.textColor->setDefaultAction(tool->action("format_textcolor"));
+    widget.backgroundColor->setDefaultAction(tool->action("format_backgroundcolor"));
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
     widget.alignBlock->setDefaultAction(tool->action("format_alignblock"));
     widget.superscript->setDefaultAction(tool->action("format_super"));

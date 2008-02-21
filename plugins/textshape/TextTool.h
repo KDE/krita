@@ -157,6 +157,8 @@ private slots:
     void showStyleManager();
     /// change color of a selected text
     void setTextColor(const KoColor &color);
+    /// change background color of a selected text
+    void setBackgroundColor(const KoColor &color);
 
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();
@@ -231,6 +233,7 @@ private:
     KFontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
     KoColorSetAction *m_actionFormatTextColor;
+    KoColorSetAction *m_actionFormatBackgroundColor;
 
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
     KoTextEditingPlugin *m_spellcheckPlugin;

@@ -330,8 +330,12 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect( m_actionFormatFontSize, SIGNAL(fontSizeChanged( int )), &m_selectionHandler, SLOT(setFontSize(int)) );
 
     m_actionFormatTextColor = new KoColorSetAction(this);
-    addAction("format_color", m_actionFormatTextColor);
+    addAction("format_textcolor", m_actionFormatTextColor);
     connect(m_actionFormatTextColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setTextColor(const KoColor &)) );
+
+    m_actionFormatBackgroundColor = new KoColorSetAction(this);
+    addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
+    connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)) );
 
     action = new QAction(i18n("Default Format"), this);
     addAction("text_default", action);
@@ -1697,6 +1701,10 @@ void TextTool::setTextColor(const KoColor &color)
     m_selectionHandler.setTextColor(color.toQColor());
 }
 
+void TextTool::setBackgroundColor(const KoColor &color)
+{
+    m_selectionHandler.setTextBackgroundColor(color.toQColor());
+}
 
 void TextTool::startKeyPressMacro() {
 /* we have a little state machine here;

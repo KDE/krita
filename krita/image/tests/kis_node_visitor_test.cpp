@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_node_visitor_test.h"
 
+#include <qtest_kde.h>
 #include "kis_node_visitor.h"
 
 void KisNodeVisitorTest::testCreation()

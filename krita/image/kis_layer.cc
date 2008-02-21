@@ -17,6 +17,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_layer.h"
+
+
 #include <kicon.h>
 #include <klocale.h>
 #include <QIcon>
@@ -30,7 +33,7 @@
 #include "kis_debug.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
-#include "kis_layer.h"
+
 #include "kis_painter.h"
 #include "kis_mask.h"
 #include "kis_effect_mask.h"

@@ -17,11 +17,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_histogram.h"
+
 #include <kis_debug.h>
 #include <QVector>
 
 #include "kis_types.h"
-#include "kis_histogram.h"
+
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"

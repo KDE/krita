@@ -17,7 +17,6 @@
  */
 
 #include "kis_macro.h"
-
 #include <QDomNode>
 
 #include <kis_debug.h>

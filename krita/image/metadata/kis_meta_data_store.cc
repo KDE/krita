@@ -17,7 +17,6 @@
  */
 
 #include "kis_meta_data_store.h"
-
 #include <kis_debug.h>
 
 #include "kis_meta_data_entry.h"

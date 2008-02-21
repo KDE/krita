@@ -16,13 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_layer_test.h"
 #include <qtest_kde.h>
 
 #include <QRect>
 #include <QIcon>
 #include <QBitArray>
-
-#include "kis_layer_test.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

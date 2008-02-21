@@ -17,7 +17,6 @@
  */
 
 #include "kis_recorded_action.h"
-
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>

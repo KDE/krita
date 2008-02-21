@@ -16,9 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tile_sharing_tester.h"
 #include <qtest_kde.h>
 
-#include "kis_tile_sharing_tester.h"
+
 #include "kis_global.h"
 
 // ### HACK so that we can easily test the internals

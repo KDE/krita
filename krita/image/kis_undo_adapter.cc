@@ -17,6 +17,8 @@
  */
 
 #include "kis_undo_adapter.h"
+
+
 #include "KoDocument.h"
 
 KisUndoAdapter::KisUndoAdapter(KoDocument* doc): m_doc(doc)

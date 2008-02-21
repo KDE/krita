@@ -22,7 +22,6 @@
  */
 
 #include "kis_selection.h"
-
 #include <QImage>
 #include <QVector>
 #include <QRect>

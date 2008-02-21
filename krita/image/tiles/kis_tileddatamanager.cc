@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tileddatamanager.h"
+
 #include <q3valuevector.h>
 
 #include <kis_debug.h>
@@ -24,7 +26,7 @@
 
 #include "kis_global.h"
 #include "kis_debug.h"
-#include "kis_tileddatamanager.h"
+
 #include "kis_tile.h"
 #include "kis_memento.h"
 #include "kis_tilemanager.h"

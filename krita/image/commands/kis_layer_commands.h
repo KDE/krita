@@ -21,6 +21,9 @@
 
 #include <krita_export.h>
 #include <QUndoCommand>
+#include <QRect>
+#include <QPoint>
+
 #include "kis_types.h"
 
 class KoCompositeOp;

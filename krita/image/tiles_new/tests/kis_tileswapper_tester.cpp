@@ -16,11 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tileswapper_tester.h"
 #include <qtest_kde.h>
 
 #include <unistd.h> // sleep(3), usleep(3)
 
-#include "kis_tileswapper_tester.h"
+
 #include "kis_global.h"
 
 // ### HACK so that we can easily test the internals

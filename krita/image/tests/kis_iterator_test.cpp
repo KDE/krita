@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_iterator_test.h"
 #include <QApplication>
 
 #include <qtest_kde.h>
@@ -28,7 +29,7 @@
 #include "kis_random_accessor.h"
 #include "kis_random_sub_accessor.h"
 
-#include "kis_iterator_test.h"
+
 #include "kis_paint_device.h"
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)( const KoColorSpace*cs ) )

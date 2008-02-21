@@ -20,6 +20,7 @@
 
 #include "kis_basic_math_toolbox.h"
 
+
 KisBasicMathToolbox::KisBasicMathToolbox()
     : KisMathToolbox(KoID("Basic"))
 {

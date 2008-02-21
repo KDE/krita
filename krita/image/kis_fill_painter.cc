@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_fill_painter.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <cfloat>
@@ -52,7 +54,7 @@
 #include "kis_types.h"
 
 #include "kis_pixel_selection.h"
-#include "kis_fill_painter.h"
+
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
 #include "KoColor.h"

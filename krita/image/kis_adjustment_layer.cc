@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_adjustment_layer.h"
+
 #include <kis_debug.h>
 #include <kicon.h>
 #include <QImage>
@@ -27,7 +29,7 @@
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_adjustment_layer.h"
+
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
 #include "kis_selection.h"

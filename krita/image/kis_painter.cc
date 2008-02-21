@@ -19,6 +19,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_painter.h"
 #include <stdlib.h>
 #include <string.h>
 #include <cfloat>
@@ -49,7 +51,7 @@
 #include "kis_filter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_painter.h"
+
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -173,10 +175,6 @@ void KisPainter::begin( KisPaintDeviceSP device, KisSelectionSP selection )
     d->compositeOp = d->colorSpace->compositeOp( COMPOSITE_OVER );
     d->pixelSize = device->pixelSize();
 }
-
-
-
-
 QUndoCommand *KisPainter::end()
 {
     return endTransaction();

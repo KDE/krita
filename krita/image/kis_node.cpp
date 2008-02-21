@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_node.h"
 
 #include <QList>
@@ -74,11 +75,7 @@ KisNode::~KisNode()
 bool KisNode::accept(KisNodeVisitor &v)
 {
     return v.visit( this );
-}
-
-
-
-KisNodeGraphListener * KisNode::graphListener() const
+}KisNodeGraphListener * KisNode::graphListener() const
 {
     return m_d->graphListener;
 }

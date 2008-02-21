@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tileswapper.h"
+
 #include <QCoreApplication>
 #include <QMutexLocker>
 #include <QEvent>
@@ -39,7 +41,7 @@
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
 #include "kis_tilestorememory.h"
-#include "kis_tileswapper.h"
+
 
 KisTileSwapper* KisTileSwapper::m_singleton = 0;
 static K3StaticDeleter<KisTileSwapper> staticDeleter;

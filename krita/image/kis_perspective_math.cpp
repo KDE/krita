@@ -20,6 +20,7 @@
 
 #include "kis_perspective_math.h"
 
+
 #include <QRect>
 
 #if 1
@@ -464,11 +465,7 @@ namespace math { // TODO: use eigen
             for (j=i+1;j<n;j++) sum -= a[i][j]*b[j];
             b[i]=sum/a[i][i];
         }
-    }
-
-
-
-}
+    }}
 #endif
 
 double* KisPerspectiveMath::computeMatrixTransfo( const QPointF& topLeft1, const QPointF& topRight1, const QPointF& bottomLeft1, const QPointF& bottomRight1 , const QPointF& topLeft2, const QPointF& topRight2, const QPointF& bottomLeft2, const QPointF& bottomRight2)

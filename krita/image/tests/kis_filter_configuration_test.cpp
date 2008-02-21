@@ -16,11 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_filter_configuration_test.h"
 #include <QApplication>
 #include <qtest_kde.h>
 #include <kis_debug.h>
 
-#include "kis_filter_configuration_test.h"
+
 #include "../kis_filter_configuration.h"
 
 void KisFilterConfigurationTest::testCreation()

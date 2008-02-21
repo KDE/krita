@@ -17,7 +17,6 @@
  */
 
 #include "kis_meta_data_merge_strategy_p.h"
-
 #include <klocale.h>
 
 #include "kis_debug.h"
@@ -106,10 +105,6 @@ void PriorityToFirstMergeStrategy::merge(Store* dst, QList<const Store*> srcs, Q
         }
     }
 }
-
-
-
-
 //-------------------------------------------//
 //------ OnlyIdenticalMergeStrategy ---------//
 //-------------------------------------------//

@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_generic_colorspace_test.h"
 
+#include <qtest_kde.h>
 #include "kis_generic_colorspace.h"
 
 void KisGenericColorSpaceTest::testCreation()

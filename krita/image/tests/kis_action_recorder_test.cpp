@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_action_recorder_test.h"
 
+#include <qtest_kde.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_types.h"

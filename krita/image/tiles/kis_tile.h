@@ -21,6 +21,7 @@
 #include <qglobal.h>
 #include <QRect>
 #include <QMutex>
+#include <QByteArray>
 
 class KisTiledDataManager;
 class KisTiledIterator;

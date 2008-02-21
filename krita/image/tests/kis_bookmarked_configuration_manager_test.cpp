@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_bookmarked_configuration_manager_test.h"
 
+#include <qtest_kde.h>
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_serializable_configuration.h"
 

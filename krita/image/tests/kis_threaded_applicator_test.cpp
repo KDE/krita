@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_threaded_applicator_test.h"
 #include <qtest_kde.h>
 
 #include <KoProgressUpdater.h>
@@ -24,7 +25,7 @@
 
 #include "kis_image.h"
 #include "kis_paint_layer.h"
-#include "kis_threaded_applicator_test.h"
+
 #include "kis_threaded_applicator.h"
 #include "testutil.h"
 

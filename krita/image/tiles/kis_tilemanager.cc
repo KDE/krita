@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tilemanager.h"
+
 #include <kis_debug.h>
 
 #include <sys/mman.h>
@@ -38,7 +40,7 @@
 
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
-#include "kis_tilemanager.h"
+
 
 #define DO_NOT_PRINT_INFO
 

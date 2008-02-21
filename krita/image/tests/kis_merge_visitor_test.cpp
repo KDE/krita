@@ -16,9 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_merge_visitor_test.h"
 #include <qtest_kde.h>
 
-#include "kis_merge_visitor_test.h"
+
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 

@@ -21,7 +21,6 @@
  */
 
 #include "kis_paintop.h"
-
 #include <QWidget>
 
 #include <QString>
@@ -34,7 +33,7 @@
 #include "kis_layer.h"
 #include "kis_brush.h"
 #include "kis_types.h"
-#include "kis_paintop.h"
+
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"

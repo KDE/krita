@@ -16,10 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_mask_test.h"
 
 #include <qtest_kde.h>
 
-#include "kis_mask_test.h"
+
 #include "kis_node.h"
 #include "kis_mask.h"
 #include "kis_selection.h"

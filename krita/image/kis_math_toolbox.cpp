@@ -19,6 +19,7 @@
  */
 
 #include "kis_math_toolbox.h"
+
 #include "config-openexr.h"
 
 #ifdef HAVE_OPENEXR

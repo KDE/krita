@@ -17,7 +17,6 @@
  */
 
 #include "kis_filter_processing_information.h"
-
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 

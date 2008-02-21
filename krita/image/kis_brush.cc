@@ -22,7 +22,6 @@
  */
 
 #include "kis_brush.h"
-
 #include <QDomElement>
 #include <QFile>
 #include <QImage>

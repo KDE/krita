@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_legacy_importer.h"
+
 #include <kis_legacy_importer.h>
 
 /*

@@ -17,7 +17,6 @@
  */
 
 #include "kis_meta_data_merge_strategy_registry.h"
-
 #include "kis_meta_data_merge_strategy_p.h"
 
 using namespace KisMetaData;

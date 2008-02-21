@@ -16,8 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qtest_kde.h>
 #include "kis_painterly_overlay_test.h"
+#include <qtest_kde.h>
+
 #include "kis_painterly_overlay.h"
 #include "kis_painterly_overlay_colorspace.h"
 #include "kis_types.h"

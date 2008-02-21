@@ -16,10 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_count_visitor_test.h"
 #include <qtest_kde.h>
 #include <QStringList>
 #include <KoProperties.h>
-#include "kis_count_visitor_test.h"
+
 #include "kis_node_facade.h"
 
 #include "kis_types.h"

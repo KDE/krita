@@ -17,7 +17,6 @@
  */
 
 #include "kis_meta_data_value.h"
-
 #include <QDate>
 #include <QPoint>
 #include <QPointF>

@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_boundary.h"
 #include <QPixmap>
 #include <QPainter>
 #include <QList>
@@ -22,7 +24,7 @@
 #include "KoColorSpace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
-#include "kis_boundary.h"
+
 KisBoundary::KisBoundary(KisPaintDeviceSP dev) {
     m_device = dev;
     m_fuzzyness = 255 / 2;

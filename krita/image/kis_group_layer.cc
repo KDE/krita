@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_group_layer.h"
+
 #include <kglobal.h>
 #include <kicon.h>
 #include <kconfiggroup.h>
@@ -27,7 +29,7 @@
 
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_group_layer.h"
+
 #include "kis_node_visitor.h"
 #include "kis_debug.h"
 #include "kis_image.h"

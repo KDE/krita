@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_boundary_test.h"
 
+#include <qtest_kde.h>
 #include "kis_boundary.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"

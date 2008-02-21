@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_convolution_painter.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <cfloat>
@@ -53,8 +55,6 @@
 #include "kis_types.h"
 
 #include "kis_selection.h"
-#include "kis_convolution_painter.h"
-
 
 KisKernelSP KisKernel::fromQImage(const QImage& img)
 {

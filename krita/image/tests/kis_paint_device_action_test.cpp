@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_paint_device_action_test.h"
 
+#include <qtest_kde.h>
 #include "kis_paint_device_action.h"
 
 class TestAction : public KisPaintDeviceAction

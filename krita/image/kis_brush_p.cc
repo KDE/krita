@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_brush_p.h"
+
 #include <cfloat>
 #include <QImage>
 #include <QVector>
@@ -25,7 +27,7 @@
 #include <KoColorSpace.h>
 
 #include "kis_global.h"
-#include "kis_brush_p.h"
+
 
 KisBrush::ScaledBrush::ScaledBrush()
 {
@@ -116,11 +118,7 @@ qint32 KisQImagemask::width() const
 qint32 KisQImagemask::height() const
 {
     return m_height;
-}
-
-
-
-void KisQImagemask::copyAlpha(const QImage& img)
+}void KisQImagemask::copyAlpha(const QImage& img)
 {
     for (int y = 0; y < img.height(); y++) {
         for (int x = 0; x < img.width(); x++) {

@@ -16,9 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tiled_data_tester.h"
 #include <qtest_kde.h>
 
-#include "kis_tiled_data_tester.h"
+
 #include "kis_datamanager.h"
 #include "kis_global.h"
 
@@ -48,6 +49,4 @@ void KisTiledDataTester::allTests()
 }
 QTEST_KDEMAIN(KisTiledDataTester, NoGUI)
 #include "kis_tiled_data_tester.moc"
-
-
 

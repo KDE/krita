@@ -16,11 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_paint_device_test.h"
 #include <qtest_kde.h>
 
 #include <QTime>
-
-#include "kis_paint_device_test.h"
 
 #include <KoStore.h>
 #include <KoColorSpace.h>

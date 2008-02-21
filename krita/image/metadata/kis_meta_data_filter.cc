@@ -17,7 +17,6 @@
  */
 
 #include "kis_meta_data_filter.h"
-
 using namespace KisMetaData;
 
 Filter::~Filter()

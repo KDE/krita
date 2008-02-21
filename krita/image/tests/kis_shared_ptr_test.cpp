@@ -16,9 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_shared_ptr_test.h"
 #include <qtest_kde.h>
 
-#include "kis_shared_ptr_test.h"
+
 #include "kis_shared_ptr.h"
 #include "kis_shared_ptr_vector.h"
 #include "kis_shared.h"

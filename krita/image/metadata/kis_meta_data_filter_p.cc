@@ -17,7 +17,6 @@
  */
 
 #include "kis_meta_data_filter_p.h"
-
 #include <QDate>
 
 #include <klocale.h>

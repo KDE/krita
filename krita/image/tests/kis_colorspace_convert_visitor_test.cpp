@@ -16,13 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_colorspace_convert_visitor_test.h"
 
 #include <qtest_kde.h>
 #include <KoColorTransformation.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_colorspace_convert_visitor.h"
-#include "kis_colorspace_convert_visitor_test.h"
+
 #include "kis_image.h"
 
 void KisColorSpaceConvertVisitorTest::testCreation()

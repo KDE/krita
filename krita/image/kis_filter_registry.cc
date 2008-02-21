@@ -16,6 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_filter_registry.h"
 #include <QString>
 
 #include <kaction.h>
@@ -29,7 +31,7 @@
 #include "kis_debug.h"
 #include <math.h>
 #include "kis_types.h"
-#include "kis_filter_registry.h"
+
 #include "kis_paint_device.h"
 #include "kis_filter.h"
 

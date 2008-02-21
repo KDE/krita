@@ -19,7 +19,6 @@
  */
 
 #include "kis_random_generator.h"
-
 #include <stdlib.h>
 #include <math.h>
 

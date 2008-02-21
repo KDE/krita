@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_meta_data_test.h"
 
+#include <qtest_kde.h>
 #include "kis_meta_data_entry.h"
 #include "kis_meta_data_filter_registry.h"
 #include "kis_meta_data_value.h"

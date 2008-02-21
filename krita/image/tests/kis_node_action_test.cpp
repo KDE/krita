@@ -15,10 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qtest_kde.h>
 
 #include "kis_node_action_test.h"
-
+#include <qtest_kde.h>
 #include <KoProgressUpdater.h>
 #include <kis_paint_layer.h>
 #include <kis_image.h>

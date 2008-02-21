@@ -17,7 +17,6 @@
  */
 
 #include "kis_recorded_filter_action.h"
-
 #include <QDomElement>
 #include <QString>
 

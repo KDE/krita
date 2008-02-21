@@ -17,7 +17,6 @@
  */
 
 #include "kis_meta_data_entry.h"
-
 #include <QString>
 
 #include <kis_debug.h>

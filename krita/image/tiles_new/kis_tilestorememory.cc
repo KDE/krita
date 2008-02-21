@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tilestorememory.h"
+
 #include <kis_debug.h>
 
 #include <sys/mman.h>
@@ -37,7 +39,7 @@
 
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
-#include "kis_tilestorememory.h"
+
 #include "kis_tileswapper.h"
 
 #define DO_NOT_PRINT_INFO
@@ -328,6 +330,3 @@ void KisTileStoreMemory::reclaimTileToPool(quint8* data, qint32 pixelSize) {
     }
 }
 #endif
-
-
-

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tilestore.h"
+
 #include <kis_debug.h>
 
 #include <sys/mman.h>
@@ -28,7 +30,7 @@
 #include <cassert>
 
 #include "kis_tile.h"
-#include "kis_tilestore.h"
+
 
 // Basic implementation of all functions (a swapless memory tilestore)
 

@@ -16,6 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#include "kis_filter_job.h"
 #include <QObject>
 #include <QRect>
 
@@ -25,7 +27,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
-#include "kis_filter_job.h"
+
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 #include "kis_paint_device.h"

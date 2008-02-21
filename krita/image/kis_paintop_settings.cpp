@@ -18,6 +18,7 @@
 
 #include "kis_paintop_settings.h"
 
+
 #include <KoPointerEvent.h>
 #include <QWidget>
 

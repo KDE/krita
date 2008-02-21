@@ -17,12 +17,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KoColorSpaceRegistry.h"
-#include "KoColorSpace.h"
-
 #include "kis_autogradient_resource.h"
 
-
+#include "KoColorSpaceRegistry.h"
+#include "KoColorSpace.h"
 // FIXME: use the same #define as in kis_gradient.cc, probably best customizable?
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64

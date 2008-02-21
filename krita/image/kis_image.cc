@@ -16,7 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_image.h"
+
 #include <config-endian.h> // WORDS_BIGENDIAN
 
 #include <stdlib.h>
@@ -106,10 +108,6 @@ public:
     KisSelectionSP globalSelection; // XXX_SELECTION: Use the selection from the root layer for this
 
 };
-
-
-
-
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
     : QObject(0)
     , KisShared()
@@ -144,19 +142,11 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->globalSelection = 0;
         m_d->projection = new KisProjection( this );
         setRootLayer( static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data()) );
-        m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied
-
-
-
-        m_d->nserver = new KisNameServer(rhs.m_d->nserver->currentSeed() + 1);
+        m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied        m_d->nserver = new KisNameServer(rhs.m_d->nserver->currentSeed() + 1);
         Q_CHECK_PTR(m_d->nserver);
 
     }
-}
-
-
-
-KisImage::~KisImage()
+}KisImage::~KisImage()
 {
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
@@ -471,11 +461,7 @@ void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrateg
             m_d->adapter->endMacro();
         }
     }
-}
-
-
-
-void KisImage::rotate(double radians, KoUpdater *progress)
+}void KisImage::rotate(double radians, KoUpdater *progress)
 {
     lock();
 

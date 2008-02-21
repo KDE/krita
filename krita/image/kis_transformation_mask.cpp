@@ -16,9 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_transformation_mask.h"
-
 #include "kis_selection.h"
 #include "kis_paint_device.h"
 #include "kis_transform_worker.h"

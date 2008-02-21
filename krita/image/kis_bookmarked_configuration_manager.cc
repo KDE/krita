@@ -17,7 +17,6 @@
  */
 
 #include "kis_bookmarked_configuration_manager.h"
-
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>

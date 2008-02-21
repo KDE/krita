@@ -17,10 +17,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-#include <kis_debug.h>
 
-#include "kis_debug.h"
 #include "kis_tilediterator.h"
+#include "kis_debug.h"
 
 KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  qint32 x, qint32 y, qint32 w, bool writable) :
     KisTiledIterator(ndevice),

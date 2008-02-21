@@ -19,6 +19,7 @@
 
 #include "kis_pixel_selection.h"
 
+
 #include <QImage>
 #include <QVector>
 
@@ -415,11 +416,7 @@ QVector<QPolygon> KisPixelSelection::outline()
     delete[] marks;
 
     return paths;
-}
-
-
-
-bool KisPixelSelection::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight )
+}bool KisPixelSelection::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight )
 {
     quint8 defaultPixel = *(m_datamanager->defaultPixel());
     if(buffer[y*bufWidth+x] == defaultPixel)

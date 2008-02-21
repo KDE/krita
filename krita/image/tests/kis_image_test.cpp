@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_image_test.h"
 #include <QApplication>
 
 #include <qtest_kde.h>
@@ -23,7 +24,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
-#include "kis_image_test.h"
+
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"

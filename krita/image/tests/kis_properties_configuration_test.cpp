@@ -18,6 +18,7 @@
 
 #include "kis_properties_configuration_test.h"
 
+
 #include <qtest_kde.h>
 #include "kis_properties_configuration.h"
 

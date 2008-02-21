@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_recorded_action_factory_registry_test.h"
 
+#include <qtest_kde.h>
 #include "kis_recorded_action_factory_registry.h"
 
 void KisRecordedActionFactoryRegistryTest::testCreation()

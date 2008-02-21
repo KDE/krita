@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <qtest_kde.h>
-
 #include "kis_image_commands_test.h"
 
+#include <qtest_kde.h>
 #include "commands/kis_image_commands.h"
 
 void KisImageCommandsTest::testCreation()

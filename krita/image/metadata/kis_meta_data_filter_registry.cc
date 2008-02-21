@@ -17,7 +17,6 @@
  */
 
 #include "kis_meta_data_filter_registry.h"
-
 #include "kis_meta_data_filter_p.h"
 
 using namespace KisMetaData;

@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_complex_color.h"
 #include <QPoint>
 
 #include <KDebug>
@@ -32,7 +33,6 @@
 #include "kis_painterly_overlay.h"
 #include "kis_random_accessor.h"
 
-#include "kis_complex_color.h"
 
 const PropertyCell hardDefault = {
     0.7,

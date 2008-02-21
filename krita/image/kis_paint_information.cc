@@ -17,7 +17,6 @@
  */
 
 #include "kis_paint_information.h"
-
 #include <QDomElement>
 
 struct KisPaintInformation::Private {

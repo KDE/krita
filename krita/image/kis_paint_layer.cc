@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_paint_layer.h"
+
 #include <kis_debug.h>
 #include <QIcon>
 #include <QImage>
@@ -32,7 +34,7 @@
 
 #include "kis_debug.h"
 #include "kis_image.h"
-#include "kis_paint_layer.h"
+
 #include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
@@ -184,11 +186,7 @@ QImage KisPaintLayer::createThumbnail(qint32 w, qint32 h)
 bool KisPaintLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
-}
-
-
-
-/// Returns the paintDevice that accompanies this layer
+}/// Returns the paintDevice that accompanies this layer
 KisPaintDeviceSP KisPaintLayer::paintDevice() const
 {
     return m_d->paintDevice;

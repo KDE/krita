@@ -20,6 +20,7 @@
 
 #include "kis_random_accessor.h"
 
+
 #include "config-tiles.h" // For the next define
 #ifdef USE_OLD_TILESYSTEM
 #include "tiles/kis_tiled_random_accessor.h"

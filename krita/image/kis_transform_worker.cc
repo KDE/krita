@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_transform_worker.h"
 #include <klocale.h>
 
 #include <KoProgressUpdater.h>
@@ -25,7 +27,7 @@
 #include "kis_paint_device.h"
 #include "kis_debug.h"
 #include "kis_selection.h"
-#include "kis_transform_worker.h"
+
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 #include "kis_layer.h"
@@ -55,11 +57,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
 
 KisTransformWorker::~KisTransformWorker()
 {
-}
-
-
-
-void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+}void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     qint32 pixelSize = src->pixelSize();
     QRect r;

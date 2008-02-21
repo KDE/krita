@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_rotate_visitor.h"
 #include <math.h>
 #include <QApplication>
 #include <QMatrix>
@@ -27,7 +29,7 @@
 #include <KoColorSpace.h>
 
 #include "kis_paint_device.h"
-#include "kis_rotate_visitor.h"
+
 #include "KoProgressUpdater.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
@@ -426,11 +428,7 @@ void KisRotateVisitor::setProgressDone()
     if (!m_progressUpdater) return;
 
     m_progressUpdater->setProgress(100);
-}
-
-
-
-KisRotateVisitor::KisRotateVisitor( KoUpdater * progressUpdater )
+}KisRotateVisitor::KisRotateVisitor( KoUpdater * progressUpdater )
     : m_progressUpdater(progressUpdater)
 {
 }

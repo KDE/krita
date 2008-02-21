@@ -16,11 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_node_test.h"
 #include <qtest_kde.h>
 #include <limits.h>
-
-#include "kis_node_test.h"
-
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_node.h"

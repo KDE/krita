@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_gradient_painter.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <cfloat>
@@ -51,7 +53,7 @@
 #include "kis_types.h"
 #include "kis_random_accessor.h"
 #include "kis_selection.h"
-#include "kis_gradient_painter.h"
+
 
 #include "KoColorSpaceRegistry.h"
 

@@ -18,6 +18,7 @@
 
 #include "kis_clone_layer.h"
 
+
 #include <QImage>
 #include <QString>
 

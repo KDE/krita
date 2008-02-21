@@ -70,62 +70,83 @@ public:
             document = static_cast<QTextDocument*> (variant.value<void*>());
             lastKnownPosition = QTextCursor(); // make invalid
         }
-        else if(findDialog && (key == KoText::CurrentTextPosition || key == KoText::CurrentTextAnchor)) {
+        else if (key == KoText::CurrentTextPosition || key == KoText::CurrentTextAnchor) {
             const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
             const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
-            findDialog->setHasSelection(selectionEnd != selectionStart);
+            if (findDialog)
+                findDialog->setHasSelection(selectionEnd != selectionStart);
+            if (replaceDialog)
+                replaceDialog->setHasSelection(selectionEnd != selectionStart);
         }
     }
     void findActivated() {
         lastKnownPosition = QTextCursor();
+        lastDialogUsed = FindDialog;
         if(findDialog) {
             findDialog->show();
             KWindowSystem::activateWindow( findDialog->winId() );
+            if (replaceDialog && lastDialogUsed == ReplaceDialog)
+                findDialog->setFindHistory(replaceDialog->findHistory());
             return;
         }
         findDialog = new NonClosingFindDialog(widget);
-        findDialog->setOptions(KFind::FromCursor);
-        const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
-        const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
-        findDialog->setHasSelection(selectionEnd != selectionStart);
+        if (replaceDialog)
+            findDialog->setFindHistory(replaceDialog->findHistory()); // copy find history from replace dialog
+        else {
+            findDialog->setOptions(KFind::FromCursor);
+            const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
+            const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
+            findDialog->setHasSelection(selectionEnd != selectionStart);
+        }
         connect( findDialog, SIGNAL(okClicked()), parent, SLOT(startFind()) );
         findDialog->show();
 
         findNext->setEnabled(true);
         findPrev->setEnabled(true);
-
     }
     void findNextActivated() {
-        Q_ASSERT(findDialog);
-        findDialog->setOptions( (findDialog->options() | KFind::FindBackwards) ^ KFind::FindBackwards);
-        parseSettingsAndFind(false);
+        if (lastDialogUsed == FindDialog) {
+            Q_ASSERT(findDialog);
+            findDialog->setOptions( (findDialog->options() | KFind::FindBackwards) ^ KFind::FindBackwards);
+            parseSettingsAndFind(false);
+        }
+        else {
+            Q_ASSERT(replaceDialog);
+            replaceDialog->setOptions( (replaceDialog->options() | KFind::FindBackwards) ^ KFind::FindBackwards);
+            parseSettingsAndFind(true);
+        }
     }
     void findPreviousActivated() {
-        Q_ASSERT(findDialog);
-        findDialog->setOptions( findDialog->options() | KFind::FindBackwards);
-        parseSettingsAndFind(false);
+        if (lastDialogUsed == ReplaceDialog) {
+            Q_ASSERT(findDialog);
+            findDialog->setOptions( findDialog->options() | KFind::FindBackwards);
+            parseSettingsAndFind(false);
+        }
+        else {
+            Q_ASSERT(replaceDialog);
+            replaceDialog->setOptions( replaceDialog->options() | KFind::FindBackwards);
+            parseSettingsAndFind(true);
+        }
     }
     void replaceActivated() {
-        lastDialogUsed = 1;
+        lastDialogUsed = ReplaceDialog;
         if (replaceDialog) {
             replaceDialog->show();
             KWindowSystem::activateWindow( replaceDialog->winId() );
-            if (findDialog && lastDialogUsed == 0) {
-                replaceDialog->setOptions(findDialog->options()); // copy options from find dialog
+            if (findDialog && lastDialogUsed == FindDialog)
                 replaceDialog->setFindHistory(findDialog->findHistory());
-            }
             return;
         }
         replaceDialog = new KReplaceDialog(widget);
         if (findDialog)
-            replaceDialog->setOptions(findDialog->options()); // copy options from find dialog
+            replaceDialog->setFindHistory(findDialog->findHistory()); // copy history from find dialog
         else {
             replaceDialog->setOptions(KFind::FromCursor);
             const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
             const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
             replaceDialog->setHasSelection(selectionEnd != selectionStart);
-            connect( replaceDialog, SIGNAL(okClicked()), parent, SLOT(startReplace()) );
         }
+        connect( replaceDialog, SIGNAL(okClicked()), parent, SLOT(startReplace()) );
         replaceDialog->show();
 
         findNext->setEnabled(true);
@@ -140,8 +161,6 @@ public:
 
     void startReplace() {
         parseSettingsAndFind(true);
-
-        // QTimer::singleShot(0, replaceDialog, SLOT(show()));
     }
 
     void parseSettingsAndFind(bool replace) {
@@ -196,28 +215,36 @@ public:
 
         // do the replacement
         if (replace && !cursor.isNull() && cursor.selectionEnd() > cursor.selectionStart()) {
-            replaced++;
-            if ((options && KReplaceDialog::PromptOnReplace) != 0) {
+            if ((options & KReplaceDialog::PromptOnReplace) != 0) {
                 provider->setResource(KoText::CurrentTextPosition, cursor.position());
                 provider->setResource(KoText::CurrentTextAnchor, cursor.anchor());
                 provider->clearResource(KoText::SelectedTextPosition);
                 provider->clearResource(KoText::SelectedTextAnchor);
-                
+             
+                // TODO: not only Yes and No, but Yes, Skip, No and Cancel
                 int value = KMessageBox::questionYesNo(widget,
                         i18n("Replace %1 with %2?", replaceDialog->pattern(), replaceDialog->replacement()));
-                if (value == KMessageBox::Yes)
+                if (value == KMessageBox::Yes) {
+                    replaced++;
                     cursor.insertText(replaceDialog->replacement());
+                }
             }
-            else
+            else {
+                replaced++;
                 cursor.insertText(replaceDialog->replacement());
+            }
             lastKnownPosition = cursor;
 
-            if (!(restarted && cursor.position() > startedPosition || cursor.position() == -1))
+            if (!(restarted && cursor.position() > startedPosition || cursor.position() == -1)) {
+                kDebug() << "inside if";
+                lastKnownPosition = cursor;
                 parseSettingsAndFind(replace);
+                return;
+            }
         }
 
         if((selectedText && cursor.position() > selectionEnd || // end of selection
-                cursor.position() == -1 && !restarted) && startedPosition <= lastKnownPosition.position()) { // end of doc
+                cursor.position() == -1 && !restarted) && startedPosition <= lastKnownPosition.position() && !replace) { // end of doc
             // restart
             lastKnownPosition.setPosition(0);
             restarted = true;
@@ -231,14 +258,18 @@ public:
                 if (replaced == 0)
                     KMessageBox::information(widget, i18n("Found no match\n\nNo text was replaced"));
                 else {
+                    restarted = false;
                     int value = KMessageBox::questionYesNo(widget,
                             i18np("1 replacement made\n\nDo you want to restart search from the beginning?",
                                   "%1 replacements made\n\nDo you want to restart search from the beginning?", replaced));
-                    if (value == KMessageBox::Cancel) {
+                    replaced = 0;
+                    if (value == KMessageBox::No) {
                         restarted = false;
                         return;
                     }
-                    replaced = 0;
+                    lastKnownPosition.setPosition(0);
+                    parseSettingsAndFind(replace);
+                    return;
                 }
             }
             else
@@ -261,6 +292,7 @@ public:
         matches++;
     }
 
+    enum { FindDialog = 0, ReplaceDialog };
     KoCanvasResourceProvider *provider;
     QWidget *widget;
     KFindDialog *findDialog;

@@ -79,7 +79,7 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
         // We abuse the darken curve here for rate
         m_curveControl->tabWidget->setTabLabel(m_curveControl->tabWidget->page(2), i18n("Rate"));
         m_curveControl->tabWidget->setTabToolTip(m_curveControl->tabWidget->page(2),
-                i18n("Modifies the rate. Bottom is 0% of the rate top is 100% of the original rate."));
+                i18n("Modifies the rate. Bottom is 0&#37; of the rate, top is 100&#37; of the original rate."));
         QToolButton* moreButton = new QToolButton(m_optionsWidget);
         moreButton->setArrowType(Qt::UpArrow);
         moreButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

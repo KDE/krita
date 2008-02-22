@@ -45,9 +45,9 @@ public:
     void setAvailableSize()
     {
         if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
-            setZoom(KoZoomMode::ZOOM_WIDTH, 0);
+            setZoom(KoZoomMode::ZOOM_WIDTH, -1);
         if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
-            setZoom(KoZoomMode::ZOOM_PAGE, 0);
+            setZoom(KoZoomMode::ZOOM_PAGE, -1);
     }
 
     /// when the canvas controller wants us to change zoom

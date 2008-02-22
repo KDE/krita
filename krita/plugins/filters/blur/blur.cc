@@ -19,7 +19,6 @@
  */
 
 #include "blur.h"
-
 #include <kgenericfactory.h>
 
 #include "kis_blur_filter.h"

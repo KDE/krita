@@ -19,7 +19,6 @@
  */
 
 #include "kis_color_to_alpha.h"
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 

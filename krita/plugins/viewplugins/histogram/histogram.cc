@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "histogram.h"
+
 
 #include <math.h>
 
@@ -43,7 +45,7 @@
 #include <kis_view2.h>
 #include <kis_selection.h>
 
-#include "histogram.h"
+
 #include "dlg_histogram.h"
 #include "KoColorSpace.h"
 #include "kis_histogram.h"

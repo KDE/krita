@@ -26,6 +26,8 @@
  *
  */
 
+#include "bumpmap.h"
+
 #include <stdlib.h>
 
 #include <QButtonGroup>
@@ -63,10 +65,6 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_filter_processing_information.h>
-
-
-#include "bumpmap.h"
-
 #define MOD(x, y)                                               \
     ((x) < 0 ? ((y) - 1 - ((y) - 1 - (x)) % (y)) : (x) % (y))
 

@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "stroke.h"
 #include <math.h>
 
 #include <QPainter>
@@ -30,7 +32,7 @@
 
 #include "brush.h"
 #include "bristle.h"
-#include "stroke.h"
+
 #include "sample.h"
 
 
@@ -225,10 +227,5 @@ bool Stroke::testThreshold ( int i, double pressure, double tx, double ty )
     else
         return 0;
 }
-
-
-
-
-
 
 

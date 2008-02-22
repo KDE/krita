@@ -18,6 +18,7 @@
 
 #include "krs_module.h"
 
+
 #include <kis_debug.h>
 
 #include <QApplication>

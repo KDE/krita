@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_dlg_image_properties.h"
+
 #include <QPushButton>
 #include <QRadioButton>
 #include <QLayout>
@@ -33,9 +35,6 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoID.h"
-
-
-#include "kis_dlg_image_properties.h"
 #include "kis_types.h"
 #include "kis_image.h"
 

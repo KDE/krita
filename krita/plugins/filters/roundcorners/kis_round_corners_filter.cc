@@ -21,6 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_round_corners_filter.h"
+
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -45,8 +47,6 @@
 #include <kis_filter_configuration.h>
 #include <kis_filter_processing_information.h>
 #include <kis_types.h>
-
-#include "kis_round_corners_filter.h"
 
 KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Round Corners..."))
 {

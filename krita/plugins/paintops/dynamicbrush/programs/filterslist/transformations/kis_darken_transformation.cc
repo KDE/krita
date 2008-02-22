@@ -16,7 +16,6 @@
  */
 
 #include "kis_darken_transformation.h"
-
 #include "kis_dynamic_coloring.h"
 #include "kis_dynamic_sensor.h"
 

@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "colorrange.h"
+
 
 #include <math.h>
 
@@ -43,7 +45,7 @@
 #include "kis_view2.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
-#include "colorrange.h"
+
 #include "dlg_colorrange.h"
 
 typedef KGenericFactory<ColorRange> ColorRangeFactory;

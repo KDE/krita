@@ -19,6 +19,7 @@
 
 #include "kis_kra_loader.h"
 
+
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoIccColorProfile.h>

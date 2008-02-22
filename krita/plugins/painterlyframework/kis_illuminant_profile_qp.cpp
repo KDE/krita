@@ -19,6 +19,7 @@
 
 #include "kis_illuminant_profile_qp.h"
 
+
 #include <QString>
 
 #include <gsl/gsl_linalg.h>

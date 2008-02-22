@@ -21,12 +21,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_polygon.h"
+
 #include <math.h>
 #include <q3valuevector.h>
-
-
-
-#include "kis_polygon.h"
 
 void KisPolygon::addPoint(double x, double y)
 {

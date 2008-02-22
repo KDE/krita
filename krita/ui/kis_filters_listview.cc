@@ -21,7 +21,6 @@
  */
 
 #include "kis_filters_listview.h"
-
 #include <QApplication>
 #include <QPainter>
 #include <QPixmap>
@@ -221,11 +220,7 @@ void KisFiltersListView::buildPreviews()
     }
     m_weaver->finish();
     QApplication::restoreOverrideCursor();
-}
-
-
-
-void KisFiltersListView::setPaintDevice(KisPaintDeviceSP pd)
+}void KisFiltersListView::setPaintDevice(KisPaintDeviceSP pd)
 {
     if( pd != m_original)
     {

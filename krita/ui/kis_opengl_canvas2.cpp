@@ -18,6 +18,7 @@
 
 #include "kis_opengl_canvas2.h"
 
+
 #ifdef HAVE_OPENGL
 
 #include <QtOpenGL>

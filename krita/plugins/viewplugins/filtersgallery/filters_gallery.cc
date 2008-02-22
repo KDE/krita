@@ -20,7 +20,6 @@
  */
 
 #include "filters_gallery.h"
-
 #include <QApplication>
 
 #include <kis_debug.h>

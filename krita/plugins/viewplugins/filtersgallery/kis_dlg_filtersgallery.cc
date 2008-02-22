@@ -20,7 +20,6 @@
  */
 
 #include "kis_dlg_filtersgallery.h"
-
 #include <QLayout>
 #include <QLabel>
 #include <QDateTime>

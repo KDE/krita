@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "complexbrush.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -26,8 +27,6 @@
 #include "kis_paintop_registry.h"
 
 #include "kis_complexop.h"
-
-#include "complexbrush.h"
 
 typedef KGenericFactory<ComplexBrush> ComplexBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacomplexbrush, ComplexBrushFactory("krita"))

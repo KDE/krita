@@ -17,6 +17,7 @@
  */
 
 #include "kis_channelflags_widget.h"
+
 #include <QBitArray>
 #include <QScrollArea>
 #include <QWidget>

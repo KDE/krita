@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_separate_channels_plugin.h"
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -38,7 +40,7 @@
 #include <kis_statusbar.h>
 #include <kis_layer_manager.h>
 
-#include "kis_separate_channels_plugin.h"
+
 #include "kis_channel_separator.h"
 #include "dlg_separate.h"
 

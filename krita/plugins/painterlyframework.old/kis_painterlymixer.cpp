@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kis_painterlymixer.h"
 #include <QButtonGroup>
 #include <QColor>
 #include <QGridLayout>
@@ -55,8 +56,6 @@
 
 #include "colorspot.h"
 #include "mixertool.h"
-
-#include "kis_painterlymixer.h"
 
 KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     : QWidget(parent), m_view(view), m_resources(view->resourceProvider())

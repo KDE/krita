@@ -17,6 +17,7 @@
  */
 
 #include "krs_filter.h"
+
 #include "krs_module.h"
 #include "krs_paint_device.h"
 

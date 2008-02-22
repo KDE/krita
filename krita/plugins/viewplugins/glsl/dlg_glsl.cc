@@ -17,7 +17,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "dlg_glsl.h"
+
 
 #include <GL/glew.h>
 
@@ -71,11 +73,7 @@ DlgGlsl::DlgGlsl( KisView2 *  parent,
     QVBoxLayout *vbox = new QVBoxLayout;
 
     m_d->scrollArea = new QScrollArea;
-    m_d->scrollArea->setBackgroundRole(QPalette::Dark);
-
-
-
-    m_d->glslview = new KisGlslWidget(m_d->view->activeLayer()->paintDevice());
+    m_d->scrollArea->setBackgroundRole(QPalette::Dark);    m_d->glslview = new KisGlslWidget(m_d->view->activeLayer()->paintDevice());
     m_d->glslview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     //m_d->scrollArea->setWidget(m_d->glslview);
     vbox->addWidget( m_d->glslview);

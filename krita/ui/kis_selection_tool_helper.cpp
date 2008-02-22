@@ -18,6 +18,7 @@
 
 #include "kis_selection_tool_helper.h"
 
+
 #include <QUndoCommand>
 
 #include <KoShapeController.h>

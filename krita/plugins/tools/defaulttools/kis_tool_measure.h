@@ -20,6 +20,9 @@
 #ifndef KIS_TOOL_MEASURE_H_
 #define KIS_TOOL_MEASURE_H_
 
+#include <QWidget>
+#include <QLabel>
+
 #include <KoUnit.h>
 
 #include "kis_tool.h"

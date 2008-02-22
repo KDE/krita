@@ -18,6 +18,7 @@
 
 #include "kis_opengl_image_textures.h"
 
+
 #ifdef HAVE_OPENGL
 
 #include <kis_debug.h>

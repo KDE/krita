@@ -20,7 +20,6 @@
  */
 
 #include "kis_filters_model.h"
-
 #include <QPixmap>
 
 #include <kis_filter.h>

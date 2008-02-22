@@ -3,6 +3,7 @@
  * @brief Tone map luminance channel using icam model
  */
 
+#include "tmo_icam.h"
 #include <config.h>
 
 #include <stdlib.h>
@@ -173,11 +174,7 @@ void perc_luminance_adjust (double *hist, double *lum_min, double *lum_max,
 
   *lum_min = L1;
   *lum_max = L99;
-}
-
-
-
-void color_convert (COLOR **image, double matrix[][3], int width, int height)
+}void color_convert (COLOR **image, double matrix[][3], int width, int height)
 {
   int       x, y, i, j;
   double    result[3];
@@ -570,11 +567,7 @@ fprintf (stderr, "\t before indep=false low-pass-filter\n");
 
 /*
  * Miscellaneous functions
- */
-
-
-
-void allocate_memory (int width, int height)
+ */void allocate_memory (int width, int height)
 {
   int y;
 

@@ -19,7 +19,6 @@
  */
 
 #include "kis_blur_filter.h"
-
 #include <kcombobox.h>
 #include <knuminput.h>
 

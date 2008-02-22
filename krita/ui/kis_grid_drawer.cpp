@@ -20,6 +20,7 @@
 
 #include "kis_grid_drawer.h"
 
+
 #include <config-opengl.h>
 
 #ifdef HAVE_OPENGL

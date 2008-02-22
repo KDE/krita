@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_tool.h"
 #include <QCursor>
 
 #include <KoCanvasBase.h>
@@ -45,7 +47,7 @@
 #include "kis_resource_provider.h"
 #include <kis_paintop_settings.h>
 #include "kis_canvas2.h"
-#include "kis_tool.h"
+
 
 struct KisTool::Private {
     Private() : currentBrush(0),
@@ -100,11 +102,7 @@ void KisTool::activate(bool )
     d->currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
     d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisResourceProvider::HdrExposure ).toDouble() );
     d->currentImage = image();
-}
-
-
-
-void KisTool::deactivate()
+}void KisTool::deactivate()
 {
 }
 

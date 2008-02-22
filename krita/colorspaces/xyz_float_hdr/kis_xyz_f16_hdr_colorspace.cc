@@ -17,3 +17,5 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kis_xyz_f16_hdr_colorspace.h"
+

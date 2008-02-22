@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_pattern_chooser.h"
+
 #include <QLabel>
 #include <QLayout>
 #include <QVBoxLayout>
@@ -25,7 +27,7 @@
 #include <KoResourceItemChooser.h>
 
 #include "KoColorSpace.h"
-#include "kis_pattern_chooser.h"
+
 #include "kis_global.h"
 #include "kis_icon_item.h"
 #include "kis_pattern.h"

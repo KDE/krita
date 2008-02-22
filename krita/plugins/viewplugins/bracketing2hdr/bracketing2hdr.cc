@@ -17,7 +17,6 @@
  */
 
 #include "bracketing2hdr.h"
-
 #include <stdlib.h>
 
 #include <kis_debug.h>

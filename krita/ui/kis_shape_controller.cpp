@@ -18,6 +18,7 @@
 
 #include "kis_shape_controller.h"
 
+
 #include <klocale.h>
 
 #include <KoShape.h>

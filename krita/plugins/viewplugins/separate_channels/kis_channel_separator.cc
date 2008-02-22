@@ -20,6 +20,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_channel_separator.h"
 #include <limits.h>
 
 #include <stdlib.h>
@@ -57,8 +59,6 @@
 #include <kis_paint_device.h>
 #include <KoChannelInfo.h>
 #include <kis_layer_manager.h>
-
-#include "kis_channel_separator.h"
 
 KisChannelSeparator::KisChannelSeparator(KisView2 * view)
     : m_view(view)

@@ -16,13 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "KritaShapeToolFactory.h"
 #include <klocale.h>
 
 #include "KritaShape.h"
 #include "KritaShapeTool.h"
-
-#include "KritaShapeToolFactory.h"
-
 
 KritaShapeToolFactory::KritaShapeToolFactory( QObject* parent, const QStringList& )
     : KoToolFactory( parent, "KritaShapeToolFactoryId", i18n( "KritaShape Tool" ) )

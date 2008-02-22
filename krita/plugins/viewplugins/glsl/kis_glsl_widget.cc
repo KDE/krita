@@ -19,7 +19,6 @@
  */
 
 #include "kis_glsl_widget.h"
-
 #include <QGLFramebufferObject>
 #include <QMessageBox>
 

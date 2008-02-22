@@ -18,6 +18,7 @@
  *
  * ============================================================ */
 
+#include "squeezedcombobox.h"
 /** @file squeezedcombobox.cpp */
 
 // Qt includes.
@@ -29,11 +30,6 @@
 #include <QApplication>
 #include <QToolTip>
 #include <QResizeEvent>
-
-// Local includes.
-
-#include "squeezedcombobox.h"
-
 
 SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
     : QComboBox(parent)

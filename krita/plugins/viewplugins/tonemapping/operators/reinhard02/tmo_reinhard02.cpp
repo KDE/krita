@@ -15,6 +15,7 @@
  * $Id$
  */
 
+#include "tmo_reinhard02.h"
 #include <config.h>
 
 #include <stdlib.h>
@@ -76,11 +77,7 @@ static zomplex  *image_fft, *coeff;
 #define SIGMA_I(i)       (sigma_0 + ((double)i/(double)range)*(sigma_1 - sigma_0))
 #define S_I(i)           (exp (SIGMA_I(i)))
 #define V2(x,y,i)        (V1(x,y,i+1))
-#define ACTIVITY(x,y,i)  ((V1(x,y,i) - V2(x,y,i)) / (((key * pow (2., phi))/(S_I(i)*S_I(i))) + V1(x,y,i)))
-
-
-
-/**
+#define ACTIVITY(x,y,i)  ((V1(x,y,i) - V2(x,y,i)) / (((key * pow (2., phi))/(S_I(i)*S_I(i))) + V1(x,y,i)))/**
  * Used to achieve temporal coherence
  */
 template<class T>
@@ -304,11 +301,7 @@ void compute_fourier_convolution ()
   free (image_fft);
 }
 
-#endif // #ifdef HAVE_ZFFT
-
-
-
-/*
+#endif // #ifdef HAVE_ZFFT/*
  * Tonemapping routines
  */
 

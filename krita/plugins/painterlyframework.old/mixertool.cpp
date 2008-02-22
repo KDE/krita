@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "mixertool.h"
 #include <kis_debug.h>
 
 #include <KoCanvasBase.h>
@@ -39,11 +40,7 @@
 #include "kis_resource_provider.h"
 
 #include "mathematics.h"
-#include "mixercanvas.h"
-
-#include "mixertool.h"
-
-MixerTool::MixerTool(MixerCanvas *mixer, KisResourceProvider *rp)
+#include "mixercanvas.h"MixerTool::MixerTool(MixerCanvas *mixer, KisResourceProvider *rp)
     : KisToolFreehand(mixer, QCursor(), "Mixer Wrapper Tool"), m_mixer(mixer), m_resources(rp)
 {
     activate();

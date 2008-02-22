@@ -17,11 +17,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "channel_converter_test.h"
 #include <qtest_kde.h>
 
 #include <cmath>
-
-#include "channel_converter_test.h"
 
 #include "channel_converter.h"
 

@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "convolutionfilters.h"
+
 #include <stdlib.h>
 
 #include <klocale.h>
@@ -25,7 +27,7 @@
 #include <kgenericfactory.h>
 
 #include <kis_convolution_painter.h>
-#include "convolutionfilters.h"
+
 #include <kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -56,11 +58,7 @@ KisKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
     kernel->data[8] = i8;
 
     return kernel;
-}
-
-
-
-typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
+}typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFactory( "krita" ) )
 
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QStringList &)

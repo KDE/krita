@@ -16,7 +16,6 @@
  */
 
 #include "kis_tone_mapping_operator.h"
-
 #include <QString>
 
 #include <KoColorSpaceTraits.h>

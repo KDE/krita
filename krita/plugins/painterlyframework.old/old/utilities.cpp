@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "utilities.h"
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -37,9 +38,6 @@
 #include "kis_volume_mask.h"
 #include "kis_viscosity_mask.h"
 #include "kis_wetness_mask.h"
-
-#include "utilities.h"
-
 using namespace std;
 
 #define THICKNESS 1

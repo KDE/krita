@@ -17,6 +17,7 @@
  */
 
 #include "kis_opengl.h"
+
 #include "config-glew.h"
 
 #ifdef HAVE_OPENGL

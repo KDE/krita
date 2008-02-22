@@ -52,7 +52,7 @@ class BaseFunction {
             }
             if( r2 < 0 )
             {
-                dbgPlugins <<"r2 can't be of negative value, r2 =" << r2 <<" a =" << a <<" b =" << b <<" r1 =" << r1;
+                dbgPlugins <<"r2 cannot be of negative value, r2 =" << r2 <<" a =" << a <<" b =" << b <<" r1 =" << r1;
                 return 0.0;
             }
             // Compute t2

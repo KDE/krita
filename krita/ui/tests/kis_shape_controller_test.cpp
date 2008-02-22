@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_shape_controller_test.h"
 #include <QTest>
 #include <QCoreApplication>
 #include <QSignalSpy>
@@ -39,8 +40,6 @@
 #include "kis_shape_controller.h"
 #include "kis_types.h"
 #include "kis_transparency_mask.h"
-
-#include "kis_shape_controller_test.h"
 
 void KisShapeControllerTest::testSetImage()
 {

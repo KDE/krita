@@ -18,7 +18,6 @@
  */
 
 #include "kis_tree_view_popup.h"
-
 #include <QHeaderView>
 #include <QResizeEvent>
 #include <QTreeView>

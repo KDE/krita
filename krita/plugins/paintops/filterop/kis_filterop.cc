@@ -21,7 +21,6 @@
  */
 
 #include "kis_filterop.h"
-
 #include <QDomElement>
 #include <QRect>
 

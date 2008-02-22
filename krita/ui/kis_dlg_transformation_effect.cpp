@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_dlg_transformation_effect.h"
 
 #include <QGridLayout>
@@ -68,7 +69,5 @@ KisDlgTransformationEffect::KisDlgTransformationEffect(const QString & maskName,
     m_transformEffectWidget->cmbFilter->setCurrent(filterId);
 
 }
-
-
 
 #include "kis_dlg_transformation_effect.moc"

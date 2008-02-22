@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_custom_pattern.h"
+
 #include <KoImageResource.h>
 #include <kis_debug.h>
 #include <QLabel>
@@ -34,7 +36,7 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_pattern.h"
-#include "kis_custom_pattern.h"
+
 #include "kis_resourceserverprovider.h"
 #include "kis_paint_layer.h"
 

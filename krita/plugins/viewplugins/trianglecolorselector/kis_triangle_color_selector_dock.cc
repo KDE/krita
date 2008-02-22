@@ -16,7 +16,6 @@
  */
 
 #include "kis_triangle_color_selector_dock.h"
-
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_view2.h>

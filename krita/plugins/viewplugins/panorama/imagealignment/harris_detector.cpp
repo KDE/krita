@@ -18,6 +18,7 @@
 
 #include "harris_detector.h"
 
+
 #include <map>
 
 #include <kis_debug.h>

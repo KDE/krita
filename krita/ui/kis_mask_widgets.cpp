@@ -17,4 +17,5 @@
  */
 
 #include "kis_mask_widgets.h"
+
 #include "kis_mask_widgets.moc"

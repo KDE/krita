@@ -16,7 +16,6 @@
  */
 
 #include "kis_filters_list_model.h"
-
 #include <kis_debug.h>
 
 #include "kis_dynamic_transformation.h"

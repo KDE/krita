@@ -20,6 +20,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_dropshadow.h"
 #include <limits.h>
 
 #include <stdlib.h>
@@ -56,7 +58,7 @@
 #include <kis_convolution_painter.h>
 #include <commands/kis_layer_commands.h>
 #include <kis_layer_manager.h>
-#include "kis_dropshadow.h"
+
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))

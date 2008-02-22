@@ -16,7 +16,6 @@
  */
 
 #include "kis_size_transformation.h"
-
 #include <KoIntegerMaths.h>
 
 #include "kis_dynamic_shape.h"

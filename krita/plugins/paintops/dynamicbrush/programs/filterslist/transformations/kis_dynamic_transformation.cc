@@ -16,7 +16,6 @@
  */
 
 #include "kis_dynamic_transformation.h"
-
 #include <QDomElement>
 
 #include <klocale.h>

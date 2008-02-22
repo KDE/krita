@@ -18,6 +18,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_tool_freehand_p.h"
 #include "kis_tool_freehand.h"
 
@@ -40,12 +41,7 @@ FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand,
 
 FreehandPaintJob::~FreehandPaintJob()
 {
-}
-
-
-
-
-FreehandPaintLineJob::FreehandPaintLineJob(KisToolFreehand* toolFreeHand,
+}FreehandPaintLineJob::FreehandPaintLineJob(KisToolFreehand* toolFreeHand,
                                            KisPainter* painter,
                                            const KisPaintInformation & pi1,
                                            const KisPaintInformation & pi2,
@@ -63,11 +59,7 @@ void FreehandPaintLineJob::run()
     m_dragDist = (m_previousPaintJob) ? m_dragDist = m_previousPaintJob->dragDist() : 0.0;
     m_dragDist = m_painter->paintLine(m_pi1, m_pi2, m_dragDist);
     m_toolFreeHand->setDirty( m_painter->dirtyRegion() );
-}
-
-
-
-FreehandPaintBezierJob::FreehandPaintBezierJob(KisToolFreehand* toolFreeHand,
+}FreehandPaintBezierJob::FreehandPaintBezierJob(KisToolFreehand* toolFreeHand,
                                                KisPainter* painter,
                                                const KisPaintInformation & pi1,
                                                const QPointF& control1,

@@ -17,7 +17,6 @@
  */
 
 #include "kis_exposure_visitor.h"
-
 #include <KoColorSpace.h>
 #include <KoHdrColorProfile.h>
 

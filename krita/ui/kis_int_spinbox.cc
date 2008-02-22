@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_int_spinbox.h"
+
 #include <QTimer>
 #include <QApplication>
 #include <QSize>
@@ -38,8 +40,6 @@
 #include <knumvalidator.h>
 
 #include "kis_int_spinbox_p.h"
-#include "kis_int_spinbox.h"
-
 
 class KisIntSpinbox::KisIntSpinboxPrivate {
 public:

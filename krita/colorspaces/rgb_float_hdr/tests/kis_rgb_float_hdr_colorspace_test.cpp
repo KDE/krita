@@ -1,6 +1,7 @@
 
-#include "kis_rgb_float_hdr_colorspace_test.h"
 
+
+#include "kis_rgb_float_hdr_colorspace_test.h"
 #include <cmath>
 
 #include <qtest_kde.h>

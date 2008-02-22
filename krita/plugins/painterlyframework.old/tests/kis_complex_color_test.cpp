@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kis_complex_color_test.h"
 #include <qtest_kde.h>
 #include <limits.h>
 
@@ -26,7 +27,7 @@
 #include "KoColorSpace.h"
 
 #include "kis_complex_color.h"
-#include "kis_complex_color_test.h"
+
 #include "kis_rgbks_colorspace.h"
 
 #include "kis_types.h"

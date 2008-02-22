@@ -18,6 +18,7 @@
 
 #include "krs_paint_layer.h"
 
+
 #include <KoColorSpaceRegistry.h>
 #include <kis_doc2.h>
 #include <kis_layer.h>

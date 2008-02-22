@@ -25,6 +25,9 @@
 
 #include <QLabel>
 #include <QWidget>
+
+#include <klocale.h>
+
 #include "kis_paintop.h"
 
 class QPointF;

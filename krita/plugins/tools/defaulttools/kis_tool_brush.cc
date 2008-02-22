@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_tool_brush.h"
 #include <QEvent>
 #include <QLabel>
 #include <QLayout>
@@ -41,7 +43,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
 #include "kis_painter.h"
-#include "kis_tool_brush.h"
+
 #include "kis_boundary.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"

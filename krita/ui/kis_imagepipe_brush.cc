@@ -18,7 +18,6 @@
  */
 
 #include "kis_imagepipe_brush.h"
-
 #include <math.h>
 #include <limits.h>
 

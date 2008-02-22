@@ -19,6 +19,7 @@
 
 #include "kis_hsv_adjustment_filter.h"
 
+
 #include <KoProgressUpdater.h>
 
 #include <kis_filter_configuration.h>

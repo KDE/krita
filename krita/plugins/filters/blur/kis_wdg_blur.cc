@@ -19,7 +19,6 @@
  */
 
 #include "kis_wdg_blur.h"
-
 #include <QLayout>
 #include <QToolButton>
 #include <QIcon>

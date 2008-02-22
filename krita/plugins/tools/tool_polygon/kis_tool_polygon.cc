@@ -19,7 +19,6 @@
  */
 
 #include "kis_tool_polygon.h"
-
 #include <math.h>
 
 #include <QPainter>

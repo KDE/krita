@@ -18,7 +18,6 @@
  */
 
 #include "kis_icam_operator.h"
-
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>

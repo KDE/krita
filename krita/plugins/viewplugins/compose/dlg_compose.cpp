@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "dlg_compose.h"
 #include <QRadioButton>
 #include <QCheckBox>
 #include <q3buttongroup.h>
@@ -30,9 +31,6 @@
 #include <kis_debug.h>
 
 #include <kis_image.h>
-
-#include "dlg_compose.h"
-
 
 DlgCompose::DlgCompose( KisImageSP image, QWidget *  parent )
     : KDialog (parent),
@@ -53,11 +51,7 @@ DlgCompose::DlgCompose( KisImageSP image, QWidget *  parent )
 
 DlgCompose::~DlgCompose()
 {
-}
-
-
-
-// SLOTS
+}// SLOTS
 
 void DlgCompose::okClicked()
 {

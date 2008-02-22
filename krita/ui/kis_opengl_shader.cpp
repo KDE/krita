@@ -18,6 +18,7 @@
 
 #include "kis_opengl_shader.h"
 
+
 #include <QFile>
 #include <QVector>
 

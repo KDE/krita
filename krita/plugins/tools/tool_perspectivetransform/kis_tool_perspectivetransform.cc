@@ -22,7 +22,6 @@
  */
 
 #include "kis_tool_perspectivetransform.h"
-
 #include <QPainter>
 #include <QPen>
 #include <QPushButton>

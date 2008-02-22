@@ -16,7 +16,6 @@
  */
 
 #include "specificcolorselector_dock.h"
-
 #include <kis_layer.h>
 #include <kis_view2.h>
 

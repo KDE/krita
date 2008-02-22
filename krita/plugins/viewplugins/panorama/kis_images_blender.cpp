@@ -16,15 +16,12 @@
 
 #include "kis_images_blender.h"
 
+
 #include <QPolygon>
 
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
-#include <kis_random_sub_accessor.h>
-
-
-
-void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device)
+#include <kis_random_sub_accessor.h>void KisImagesBlender::blend(QList<LayerSource> sources, KisPaintDeviceSP device)
 {
   Eigen::Vector3d v,v1;
   v(2) = 1.0;

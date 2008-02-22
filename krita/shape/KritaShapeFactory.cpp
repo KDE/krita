@@ -15,6 +15,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+#include "KritaShapeFactory.h"
 #include <QStringList>
 
 #include <kurl.h>
@@ -26,11 +28,7 @@
 #include <KoShapeRegistry.h>
 
 #include "KritaShape.h"
-#include "KritaShapeToolFactory.h"
-
-#include "KritaShapeFactory.h"
-
-K_EXPORT_COMPONENT_FACTORY( kritashape, KGenericFactory<KritaShapePlugin>( "krita" ) )
+#include "KritaShapeToolFactory.h"K_EXPORT_COMPONENT_FACTORY( kritashape, KGenericFactory<KritaShapePlugin>( "krita" ) )
 
     KritaShapePlugin::KritaShapePlugin( QObject * parent,  const QStringList & list )
 {

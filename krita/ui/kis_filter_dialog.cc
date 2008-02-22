@@ -18,7 +18,6 @@
  */
 
 #include "kis_filter_dialog.h"
-
 #include <QTreeView>
 
 // From krita/image

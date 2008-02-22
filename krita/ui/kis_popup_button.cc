@@ -18,7 +18,6 @@
  */
 
 #include "kis_popup_button.h"
-
 #include <QFrame>
 #include <QHBoxLayout>
 

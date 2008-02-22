@@ -21,6 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_sobel_filter.h"
+
 #include <stdlib.h>
 #include <vector>
 
@@ -51,7 +53,7 @@
 #include <kis_filter_processing_information.h>
 
 #include "kis_multi_bool_filter_widget.h"
-#include "kis_sobel_filter.h"
+
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 

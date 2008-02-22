@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_dropshadow_plugin.h"
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -36,7 +38,7 @@
 
 #include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
-#include "kis_dropshadow_plugin.h"
+
 #include "kis_dropshadow.h"
 #include "dlg_dropshadow.h"
 

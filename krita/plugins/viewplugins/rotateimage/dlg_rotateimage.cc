@@ -18,13 +18,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "dlg_rotateimage.h"
+
 #include <math.h>
 
 #include <klocale.h>
 #include <kis_debug.h>
-
-#include "dlg_rotateimage.h"
-
 DlgRotateImage::DlgRotateImage( QWidget *  parent,
                 const char * name)
     : super (parent)

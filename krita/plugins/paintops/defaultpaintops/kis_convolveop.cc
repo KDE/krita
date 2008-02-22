@@ -19,6 +19,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_convolveop.h"
 #include <QRect>
 
 #include <kis_debug.h>
@@ -31,9 +33,6 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
-#include "kis_convolveop.h"
-
-
 KisPaintOp * KisConvolveOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
     KisPaintOp * op = new KisConvolveOp(painter);

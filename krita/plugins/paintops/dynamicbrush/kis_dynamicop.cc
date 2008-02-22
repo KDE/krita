@@ -14,7 +14,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_dynamicop.h"
+
 
 #include <QAbstractItemView>
 #include <QCheckBox>
@@ -234,10 +236,6 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
         delete dabsrc;
         delete coloringsrc;
     }
-
-
-
-
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 }

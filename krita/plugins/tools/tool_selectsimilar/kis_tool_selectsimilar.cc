@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_selectsimilar.h"
+
 #include <QPoint>
 #include <QLayout>
 #include <QCheckBox>
@@ -46,8 +48,6 @@
 #include <kis_selected_transaction.h>
 #include <kis_canvas2.h>
 #include <kis_pixel_selection.h>
-
-#include "kis_tool_selectsimilar.h"
 
 void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness, selectionAction mode)
 {
@@ -85,11 +85,7 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
         selIter.nextRow();
     }
 
-}
-
-
-
-KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
+}KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_similar_selection_plus_cursor.png", 6, 6))
 {
     m_addCursor = KisCursor::load("tool_similar_selection_plus_cursor.png", 1, 21);

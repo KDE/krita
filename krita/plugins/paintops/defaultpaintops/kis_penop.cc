@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_penop.h"
+
 
 #include <QRect>
 
@@ -40,10 +42,6 @@
 #include "kis_iterator.h"
 #include "kis_selection.h"
 #include "kis_iterators_pixel.h"
-
-#include "kis_penop.h"
-
-
 KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED( image );

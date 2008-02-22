@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kcurve.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -43,8 +45,6 @@
 #include <klocale.h>
 
 // Local includes.
-
-#include "kcurve.h"
 
 KCurve::KCurve(QWidget *parent, Qt::WFlags f)
             : QWidget(parent, f)

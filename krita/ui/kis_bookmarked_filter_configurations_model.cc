@@ -17,7 +17,6 @@
  */
 
 #include "kis_bookmarked_filter_configurations_model.h"
-
 #include <QPixmap>
 
 #include <kis_filter.h>

@@ -22,7 +22,6 @@
  */
 
 #include "kis_tool_select_polygonal.h"
-
 #include <QApplication>
 #include <QPainter>
 #include <QRegion>

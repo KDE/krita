@@ -18,7 +18,6 @@
 */
 
 #include "kis_xyz_f32_hdr_colorspace.h"
-
 #include <KoColorConversionTransformationFactory.h>
 #include <KoScaleColorConversionTransformation.h>
 #include "kis_xyz_to_lab_color_conversion_transformation.h"

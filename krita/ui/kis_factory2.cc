@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_factory2.h"
 #include <lcms.h>
 
 #include <QStringList>
@@ -41,14 +43,10 @@
 
 #include "kis_shape_selection.h"
 #include "kis_doc2.h"
-#include "kis_factory2.h"
+
 
 KAboutData* KisFactory2::s_aboutData = 0;
-KComponentData* KisFactory2::s_instance = 0;
-
-
-
-KisFactory2::KisFactory2( QObject* parent )
+KComponentData* KisFactory2::s_instance = 0;KisFactory2::KisFactory2( QObject* parent )
     : KoFactory( parent )
 {
     s_aboutData = newKritaAboutData();
@@ -121,11 +119,7 @@ const KComponentData &KisFactory2::componentData()
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 
         // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");
-
-
-
-    }
+        KIconLoader::global()->addAppDir("koffice");    }
 
     return *s_instance;
 }

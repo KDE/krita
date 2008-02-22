@@ -18,7 +18,6 @@
 */
 
 #include "extensions_plugin.h"
-
 #include <kis_debug.h>
 #include <kgenericfactory.h>
 

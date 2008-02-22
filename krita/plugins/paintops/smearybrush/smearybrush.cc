@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "smearybrush.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -26,8 +28,6 @@
 
 #include "kis_smearyop.h"
 #include "kis_paintop_registry.h"
-
-#include "smearybrush.h"
 
 typedef KGenericFactory<SmearyBrush> SmearyBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritasmearybrush, SmearyBrushFactory("krita"))

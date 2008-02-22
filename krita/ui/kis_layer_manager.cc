@@ -17,7 +17,6 @@
  */
 
 #include "kis_layer_manager.h"
-
 #include <QRect>
 #include <QApplication>
 #include <QCursor>
@@ -411,10 +410,6 @@ void KisLayerManager::layerProperties()
     }
 
 }
-
-
-
-
 
 void KisLayerManager::layerAdd()
 {
@@ -931,11 +926,7 @@ void KisLayerManager::saveLayerAsImage()
 
     d.setOutputMimeType(mimefilter.toLatin1());
     d.exp0rt(url);
-}
-
-
-
-bool KisLayerManager::activeLayerHasSelection()
+}bool KisLayerManager::activeLayerHasSelection()
 {
     return ( activeLayer()->selection() != 0 );
 }

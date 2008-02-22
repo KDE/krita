@@ -17,7 +17,6 @@
  */
 
 #include "kis_multi_double_filter_widget.h"
-
 #include <QLabel>
 #include <QLayout>
 #include <QTimer>

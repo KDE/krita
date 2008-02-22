@@ -24,15 +24,14 @@
 
 #include <QMenu>
 #include <QKeyEvent>
-
-#include <ktoolbar.h>
+#include <QObject>
 
 class QWidget;
 class QTabWidget;
+class QTableWidgetItem;
 
 class KToolBar;
 
-class QTableWidgetItem;
 class KoResourceItem;
 
 class KisAutobrush;
@@ -45,18 +44,22 @@ class KisResourceMediator;
 class KisPaintopBox;
 class KisView2;
 class KisIconWidget;
-
+class KisPattern;
+class KXmlGuiWindow;
 
 /**
  *   Control Frame - status display with access to
  *   color selector, brushes, patterns, and preview
  */
-class KisControlFrame : public QObject  //: public KToolBar
+class KisControlFrame : public QObject 
 {
     Q_OBJECT
 
 public:
-    KisControlFrame(KXmlGuiWindow * window, KisView2 * view, const char *name = 0 );
+
+    KisControlFrame(KXmlGuiWindow * window, 
+        KisView2 * view, 
+        const char *name = 0 );
     virtual ~KisControlFrame() {}
 
 public slots:

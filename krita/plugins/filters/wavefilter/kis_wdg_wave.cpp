@@ -19,8 +19,6 @@
  */
 
 #include "kis_wdg_wave.h"
-
-
 #include <qspinbox.h>
 
 #include <kis_filter_configuration.h>

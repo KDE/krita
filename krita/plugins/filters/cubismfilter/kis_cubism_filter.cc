@@ -21,6 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_cubism_filter.h"
+
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
@@ -54,7 +56,7 @@
 #include <KoCompositeOp.h>
 
 #include "kis_multi_integer_filter_widget.h"
-#include "kis_cubism_filter.h"
+
 #include "kis_polygon.h"
 
 

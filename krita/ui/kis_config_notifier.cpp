@@ -18,6 +18,7 @@
 
 #include "kis_config_notifier.h"
 
+
 KisConfigNotifier *KisConfigNotifier::s_instance = 0;
 
 KisConfigNotifier::KisConfigNotifier()

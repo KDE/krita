@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_ks_colorspace.h"
 #include <lcms.h>
 
 #include <QString>
@@ -36,8 +37,6 @@
 
 #include "kis_illuminant_profile.h"
 #include "mathematics.h"
-
-#include "kis_ks_colorspace.h"
 
 KisKSColorSpace::KisKSColorSpace(KoColorProfile *p)
     : KoIncompleteColorSpace<KSTraits>("kscolorspace", "", KoColorSpaceRegistry::instance(), KoColorSpaceRegistry::instance()->rgb16(""))

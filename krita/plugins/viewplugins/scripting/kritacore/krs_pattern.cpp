@@ -17,6 +17,7 @@
  */
 
 #include "krs_pattern.h"
+
 #include "krs_module.h"
 
 #include <kis_pattern.h>

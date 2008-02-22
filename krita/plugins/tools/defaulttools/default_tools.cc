@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "default_tools.h"
 #include <QStringList>
 
 #include <kis_debug.h>
@@ -24,7 +26,7 @@
 
 #include <kis_tool.h>
 #include <KoToolRegistry.h>
-#include "default_tools.h"
+
 #include "kis_paint_device.h"
 #include "kis_tool_fill.h"
 #include "kis_tool_brush.h"

@@ -19,13 +19,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_double_widget.h"
+
 #include <QLayout>
 #include <QSlider>
 #include <QHBoxLayout>
 
 #include <knuminput.h>
-
-#include "kis_double_widget.h"
 
 KisDoubleWidget::KisDoubleWidget(QWidget* parent, const char* name)
   : QWidget(parent)

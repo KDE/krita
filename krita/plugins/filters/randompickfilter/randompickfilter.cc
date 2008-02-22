@@ -19,7 +19,6 @@
  */
 
 #include "randompickfilter.h"
-
 #include <stdlib.h>
 #include <vector>
 

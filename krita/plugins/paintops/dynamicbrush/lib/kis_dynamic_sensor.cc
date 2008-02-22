@@ -16,7 +16,6 @@
  */
 
 #include "kis_dynamic_sensor.h"
-
 #include <QDomElement>
 
 #include "sensors/kis_dynamic_sensors.h"

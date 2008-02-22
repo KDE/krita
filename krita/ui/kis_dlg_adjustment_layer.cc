@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_dlg_adjustment_layer.h"
 #include <klocale.h>
 
 #include <QGroupBox>
@@ -25,7 +27,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 
-#include "kis_dlg_adjustment_layer.h"
+
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 #include "kis_filter_configuration.h"

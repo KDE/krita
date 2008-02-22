@@ -16,7 +16,6 @@
  */
 
 #include "trianglecolorselector.h"
-
 #include <stdlib.h>
 
 #include <QTimer>

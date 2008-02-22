@@ -17,7 +17,6 @@
  */
 
 #include "kis_bookmarked_configurations_editor.h"
-
 #include "ui_wdgbookmarkedconfigurationseditor.h"
 
 #include "kis_bookmarked_configurations_model.h"

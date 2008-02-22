@@ -20,6 +20,7 @@
 
 #include "kis_wdg_random_pick.h"
 
+
 #include <qlayout.h>
 
 #include <knuminput.h>

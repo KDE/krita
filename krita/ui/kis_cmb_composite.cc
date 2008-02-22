@@ -18,10 +18,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_cmb_composite.h"
+
 #include <klocale.h>
 #include <kis_debug.h>
 #include <KoCompositeOp.h>
-#include "kis_cmb_composite.h"
+
 
 static QStringList opsInOrder;
 

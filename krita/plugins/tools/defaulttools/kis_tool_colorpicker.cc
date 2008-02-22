@@ -16,6 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_tool_colorpicker.h"
 #include <string.h>
 
 #include <QPoint>
@@ -36,7 +38,7 @@
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
-#include "kis_tool_colorpicker.h"
+
 #include "kis_tool_colorpicker.moc"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"

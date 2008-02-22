@@ -17,6 +17,7 @@
  */
 
 #include "krs_paint_device.h"
+
 #include "krs_image.h"
 
 #include <QBuffer>

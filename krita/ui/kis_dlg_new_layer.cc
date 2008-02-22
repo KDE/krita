@@ -18,6 +18,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_dlg_new_layer.h"
 #include <QGroupBox>
 #include <QLabel>
 #include <QLayout>
@@ -32,7 +34,7 @@
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
-#include "kis_dlg_new_layer.h"
+
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
@@ -40,7 +42,7 @@
 #include "kis_int_spinbox.h"
 #include "kis_dlg_layer_properties.h"
 
-NewLayerDialog::NewLayerDialog(const KoID colorSpaceID,
+NewLayerDialog::NewLayerDialog(const KoID & colorSpaceID,
                    const QString & profilename,
                    const QString & deviceName,
                    QWidget *parent,

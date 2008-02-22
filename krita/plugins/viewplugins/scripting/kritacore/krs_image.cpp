@@ -17,6 +17,7 @@
  */
 
 #include "krs_image.h"
+
 #include "krs_paint_layer.h"
 #include "krs_module.h"
 

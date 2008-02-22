@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_gradient_chooser.h"
+
 #include <QLabel>
 #include <QLayout>
 #include <QPushButton>
@@ -32,8 +34,6 @@
 #include "kis_icon_item.h"
 #include "kis_autogradient.h"
 #include "kis_resource_provider.h"
-
-#include "kis_gradient_chooser.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * parent, const char *name)
     : KDialog(parent)

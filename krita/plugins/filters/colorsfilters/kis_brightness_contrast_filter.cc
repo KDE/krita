@@ -19,6 +19,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_brightness_contrast_filter.h"
+
 #include <math.h>
 
 #include <klocale.h>
@@ -39,7 +41,7 @@
 #include "KoCompositeOp.h"
 
 #include "kis_filter_config_widget.h"
-#include "kis_brightness_contrast_filter.h"
+
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"

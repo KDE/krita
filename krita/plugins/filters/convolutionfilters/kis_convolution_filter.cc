@@ -19,7 +19,6 @@
  */
 
 #include "kis_convolution_filter.h"
-
 #include <klocale.h>
 #include <kis_debug.h>
 

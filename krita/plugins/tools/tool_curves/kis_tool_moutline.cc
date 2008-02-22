@@ -17,7 +17,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_tool_moutline.h"
+
 
 #include <math.h>
 #include <set>
@@ -50,9 +52,6 @@
 #include "kis_paintop_registry.h"
 #include "kis_convolution_painter.h"
 #include "kis_canvas.h"
-
-
-
 using namespace std;
 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))

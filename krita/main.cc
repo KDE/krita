@@ -17,6 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  */
+
 #include <kcmdlineargs.h>
 #include <KoApplication.h>
 #include <krita_export.h>

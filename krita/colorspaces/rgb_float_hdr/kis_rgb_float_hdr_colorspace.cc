@@ -17,3 +17,5 @@
  */
 
 #include "kis_rgb_float_hdr_colorspace.h"
+
+

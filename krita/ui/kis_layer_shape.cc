@@ -17,7 +17,6 @@
  */
 
 #include "kis_layer_shape.h"
-
 #include <kis_types.h>
 #include <kis_layer.h>
 #include <kis_image.h>

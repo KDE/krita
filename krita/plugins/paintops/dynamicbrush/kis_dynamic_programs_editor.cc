@@ -15,10 +15,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_debug.h>
-
 #include "kis_dynamic_programs_editor.h"
 
+#include <kis_debug.h>
 #include <QVBoxLayout>
 
 #include <kis_bookmarked_configuration_manager.h>

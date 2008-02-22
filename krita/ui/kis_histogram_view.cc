@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_histogram_view.h"
+
 #include <math.h>
 
 #include <QPainter>
@@ -39,7 +41,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_histogram_view.h"
+
 #include "kis_paint_device.h"
 
 KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags f)

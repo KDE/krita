@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "mixercanvas.h"
 #include <QFrame>
 
 #include <KDebug>
@@ -41,11 +42,7 @@
 #include "kis_resource_provider.h"
 
 #include "colorspot.h"
-#include "mixertool.h"
-
-#include "mixercanvas.h"
-
-MixerCanvas::MixerCanvas(QWidget *parent)
+#include "mixertool.h"MixerCanvas::MixerCanvas(QWidget *parent)
     : QFrame(parent), KoCanvasBase(0), m_toolProxy(0)
 {
     m_dirty = false;

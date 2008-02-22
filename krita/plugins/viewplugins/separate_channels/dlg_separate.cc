@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "dlg_separate.h"
+
 #include <QRadioButton>
 #include <QCheckBox>
 #include <q3buttongroup.h>
@@ -28,9 +30,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kis_debug.h>
-
-#include "dlg_separate.h"
-
 DlgSeparate::DlgSeparate( const QString & imageCS,
                           const QString & layerCS,
                           QWidget *  parent,
@@ -61,11 +60,7 @@ DlgSeparate::DlgSeparate( const QString & imageCS,
 DlgSeparate::~DlgSeparate()
 {
     delete m_page;
-}
-
-
-
-enumSepAlphaOptions DlgSeparate::getAlphaOptions()
+}enumSepAlphaOptions DlgSeparate::getAlphaOptions()
 {
     return (enumSepAlphaOptions)m_page->grpAlpha->selectedId();
 }

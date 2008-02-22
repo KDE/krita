@@ -25,16 +25,18 @@
 #include <KoID.h>
 #include <KoCanvasResourceProvider.h>
 
-#include "kis_view2.h"
-#include "kis_image.h"
+//#include "kis_view2.h"
+#include "kis_types.h"
 #include "krita_export.h"
 
+class KisView2;
 class KisPaintOpSettings;
 class KisBrush;
 class KoAbstractGradient;
 class KisPattern;
 class KoResource;
 class KisComplexColor;
+class KoCanvasBase;
 
 /**
    KisResourceProvider contains the per-view current settings that

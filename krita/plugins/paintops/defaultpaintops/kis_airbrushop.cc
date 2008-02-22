@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_airbrushop.h"
+
 #include <QRect>
 
 #include <KoColor.h>
@@ -33,7 +35,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
-#include "kis_airbrushop.h"
+
 #include "kis_datamanager.h"
 
 KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)

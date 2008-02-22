@@ -18,6 +18,7 @@
 
 #include "kis_opengl_program.h"
 
+
 #include <QtOpenGL>
 #include <QWidget>
 #include <QPointF>

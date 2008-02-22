@@ -18,13 +18,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QThread>
-#include <QApplication>
-#include <QEvent>
-
 #include "kis_accumulating_producer.h"
 
-static const int EmitCompletedType = QEvent::User + 1;
+#include <QThread>
+#include <QApplication>
+#include <QEvent>static const int EmitCompletedType = QEvent::User + 1;
 
 /**
  * The threaded producer definition in c++ file because this is really an internal affair.

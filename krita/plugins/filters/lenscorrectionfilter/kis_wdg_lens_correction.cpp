@@ -20,6 +20,7 @@
 
 #include "kis_wdg_lens_correction.h"
 
+
 #include <qlayout.h>
 
 #include <knuminput.h>

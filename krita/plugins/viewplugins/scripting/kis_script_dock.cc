@@ -19,7 +19,6 @@
  */
 
 #include "kis_script_dock.h"
-
 #include <QDockWidget>
 #include <QVariant>
 

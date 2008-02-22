@@ -18,6 +18,7 @@
 
 #include "kis_opengl_fragment_shader.h"
 
+
 #include <GL/glew.h>
 
 KisOpenGLFragmentShader::KisOpenGLFragmentShader(const QString& sourceCodeFilename)

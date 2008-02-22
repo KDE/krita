@@ -18,7 +18,6 @@
 */
 
 #include "xyz_float_hdr.h"
-
 #include "config-openexr.h"
 
 #include <klocale.h>

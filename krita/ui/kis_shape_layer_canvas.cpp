@@ -18,6 +18,7 @@
 
 #include "kis_shape_layer_canvas.h"
 
+
 #include <QPainter>
 
 #include <KoShapeManager.h>

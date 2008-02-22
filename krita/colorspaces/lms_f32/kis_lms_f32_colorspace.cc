@@ -20,6 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "kis_lms_f32_colorspace.h"
+
 #include <limits.h>
 #include <lcms.h>
 
@@ -28,7 +30,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-#include "kis_lms_f32_colorspace.h"
+
 #include "kis_color_conversions.h"
 
 namespace {

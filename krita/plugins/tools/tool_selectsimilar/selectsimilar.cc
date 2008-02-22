@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "selectsimilar.h"
 #include <math.h>
 
 #include <stdlib.h>
@@ -34,7 +36,7 @@
 
 #include <KoToolRegistry.h>
 
-#include "selectsimilar.h"
+
 #include "kis_tool_selectsimilar.h"
 
 typedef KGenericFactory<SelectSimilar> SelectSimilarFactory;

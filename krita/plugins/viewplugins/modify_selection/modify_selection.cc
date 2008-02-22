@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "modify_selection.h"
+
 
 #include <math.h>
 
@@ -46,7 +48,7 @@
 #include "kis_selection_manager.h"
 #include "kis_transaction.h"
 
-#include "modify_selection.h"
+
 #include "dlg_grow_selection.h"
 #include "dlg_shrink_selection.h"
 #include "dlg_border_selection.h"

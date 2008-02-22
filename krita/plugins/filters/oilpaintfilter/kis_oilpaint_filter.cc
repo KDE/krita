@@ -23,6 +23,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_oilpaint_filter.h"
+
 #include <stdlib.h>
 #include <vector>
 
@@ -51,7 +53,7 @@
 #include <kis_paint_device.h>
 
 #include "kis_multi_integer_filter_widget.h"
-#include "kis_oilpaint_filter.h"
+
 
 KisOilPaintFilter::KisOilPaintFilter() : KisFilter( id(), KisFilter::CategoryArtistic, i18n("&Oilpaint...") )
 {

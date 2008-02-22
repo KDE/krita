@@ -18,7 +18,6 @@
 
 #include "kis_qpainter_canvas.h"
 
-#include "kis_canvas2.h"
 
 #include <QPaintEvent>
 #include <QRect>
@@ -46,7 +45,8 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 
-
+#include "kis_view2.h"
+#include "kis_canvas2.h"
 #include "kis_prescaled_projection.h"
 #include "kis_config.h"
 #include "kis_resource_provider.h"

@@ -16,7 +16,6 @@
  */
 
 #include "kis_filters_list_dynamic_program.h"
-
 #include <QDomNode>
 #include <QWidget>
 

@@ -21,6 +21,8 @@
 
 #include <KoTool.h>
 
+class KritaShape;
+
 class KritaShapeTool : public KoTool
 {
     Q_OBJECT

@@ -16,7 +16,6 @@
  */
 
 #include "kis_small_color_widget.h"
-
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QPainter>

@@ -18,7 +18,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_cursor.h"
+
 
 #include <QBitmap>
 #include <QCursor>
@@ -160,11 +162,7 @@ QCursor KisCursor::pickerMinusCursor()
     QBitmap picker_mask = picker_bitmap.createHeuristicMask( false );
 
     return QCursor( picker_bitmap, picker_mask, 1, 22 );
-}
-
-
-
-QCursor KisCursor::penCursor()
+}QCursor KisCursor::penCursor()
 {
     static unsigned char pen_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x1c, 0x00, 0x00, 0x3a, 0x00, 0x00, 0x7d,

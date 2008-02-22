@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_prescaled_projection_test.h"
 #include <QTest>
 #include <QCoreApplication>
 
@@ -35,7 +36,7 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 
-#include "kis_prescaled_projection_test.h"
+
 #include "kis_prescaled_projection.h"
 
 

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_text_brush.h"
+
 #include <QFontMetrics>
 #include <QPainter>
 #include <QSpinBox>
@@ -25,8 +27,6 @@
 
 #include <kfontdialog.h>
 #include <klineedit.h>
-
-#include "kis_text_brush.h"
 
 void KisTextBrushResource::updateBrush()
 {

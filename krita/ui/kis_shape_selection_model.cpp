@@ -16,10 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_shape_selection_model.h"
 #include "kis_debug.h"
 
 #include "KoShapeContainer.h"
-#include "kis_shape_selection_model.h"
+
 #include "kis_paint_device.h"
 #include "kis_shape_selection.h"
 #include "kis_selection.h"

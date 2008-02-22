@@ -17,10 +17,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "xyz_u16_plugin.h"
+
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoBasicHistogramProducers.h>
-#include "xyz_u16_plugin.h"
+
 #include "kis_xyz_u16_colorspace.h"
 
 typedef KGenericFactory<XYZU16Plugin> XYZU16PluginFactory;

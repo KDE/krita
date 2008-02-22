@@ -23,6 +23,7 @@
 
 #include "kis_layer_box.h"
 
+
 #include <QToolButton>
 #include <QLayout>
 #include <QMouseEvent>

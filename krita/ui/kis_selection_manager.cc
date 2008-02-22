@@ -19,12 +19,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_dlg_apply_profile.h" // If this isn't first, I get
-                                   // errors in qslider.h. Weird... (BSAR)
 
 #include "kis_selection_manager.h"
-
-
+#include "kis_dlg_apply_profile.h" // If this isn't first, I get
+                                   // errors in qslider.h. Weird... (BSAR)
 #include <QApplication>
 #include <QClipboard>
 #include <QColor>

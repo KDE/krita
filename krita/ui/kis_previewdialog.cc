@@ -17,13 +17,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_previewdialog.h"
 #include <QFrame>
 #include <QLayout>
 
 #include <khbox.h>
 
 #include "kis_previewwidget.h"
-#include "kis_previewdialog.h"
+
 
 KisPreviewDialog::KisPreviewDialog(QWidget *  parent, const char * name, const QString & caption)
     : KDialog(parent)

@@ -19,7 +19,6 @@
  */
 
 #include "fastcolortransfer.h"
-
 #include <kgenericfactory.h>
 #include <kurlrequester.h>
 

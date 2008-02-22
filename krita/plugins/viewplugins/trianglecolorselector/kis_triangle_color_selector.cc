@@ -16,7 +16,6 @@
  */
 
 #include "kis_triangle_color_selector.h"
-
 #include <math.h>
 
 #include <kis_debug.h>

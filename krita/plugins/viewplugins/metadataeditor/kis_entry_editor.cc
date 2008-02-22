@@ -17,7 +17,6 @@
  */
 
 #include "kis_entry_editor.h"
-
 #include <QString>
 #include <QVariant>
 

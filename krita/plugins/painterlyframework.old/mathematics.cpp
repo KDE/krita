@@ -17,16 +17,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "mathematics.h"
 #include <cmath>
 #include <cstdio>
 
 extern "C" {
     #include <glpk.h>
-}
-
-#include "mathematics.h"
-
-namespace maths {
+}namespace maths {
 
 const double MATH_THICKNESS = 1.0;
 const double MATH_LIM_SUP = 1.0 - 3.90625e-3;

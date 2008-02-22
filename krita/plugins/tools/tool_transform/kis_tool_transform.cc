@@ -19,6 +19,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_transform.h"
+
 
 #include <QPainter>
 #include <QPen>
@@ -52,7 +54,7 @@
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
 #include <kis_transform_worker.h>
-#include "kis_tool_transform.h"
+
 #include "kis_layer_shape.h"
 #include "kis_mask_shape.h"
 #include "kis_layer_container_shape.h"

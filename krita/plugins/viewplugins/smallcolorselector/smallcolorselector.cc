@@ -16,7 +16,6 @@
  */
 
 #include "smallcolorselector.h"
-
 #include <stdlib.h>
 
 #include <QTimer>

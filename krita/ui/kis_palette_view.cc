@@ -19,6 +19,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_palette_view.h"
+
 #include <kiconloader.h>
 
 #include <kis_debug.h>
@@ -27,7 +29,7 @@
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
-#include "kis_palette_view.h"
+
 #include "KoResource.h"
 #include "KoColorSet.h"
 

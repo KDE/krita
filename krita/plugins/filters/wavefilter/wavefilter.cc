@@ -19,7 +19,6 @@
  */
 
 #include "wavefilter.h"
-
 #include <stdlib.h>
 #include <vector>
 
@@ -92,11 +91,7 @@ class KisTriangleWaveCurve : public KisWaveCurve {
         }
     private:
         int m_amplitude, m_wavelength, m_shift;
-};
-
-
-
-KritaWaveFilter::KritaWaveFilter(QObject *parent, const QStringList &)
+};KritaWaveFilter::KritaWaveFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(KritaWaveFilterFactory::componentData());

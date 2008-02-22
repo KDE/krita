@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_birdeye_box.h"
+
 #include <lcms.h>
 
 #include <QLayout>
@@ -32,7 +34,7 @@
 
 #include "kis_view2.h"
 #include "kis_doc2.h"
-#include "kis_birdeye_box.h"
+
 #include "kis_double_widget.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"

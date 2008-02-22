@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "rotateimage.h"
+
 
 #include <math.h>
 
@@ -45,7 +47,7 @@
 #include <kis_image_manager.h>
 #include <kis_layer_manager.h>
 
-#include "rotateimage.h"
+
 #include "dlg_rotateimage.h"
 
 typedef KGenericFactory<RotateImage> RotateImageFactory;

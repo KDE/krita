@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_custom_palette.h"
+
 #include <KoImageResource.h>
 #include <QLineEdit>
 #include <QImage>
@@ -37,7 +39,7 @@
 #include "kis_view2.h"
 #include "KoColorSet.h"
 #include "KoResourceServerProvider.h"
-#include "kis_custom_palette.h"
+
 
 KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view)
     : KisWdgCustomPalette(parent, name), m_view(view)

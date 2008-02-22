@@ -19,7 +19,6 @@
  */
 
 #include "kis_tool_bezier_paint.h"
-
 #include <QPainter>
 #include <QLayout>
 #include <QRect>

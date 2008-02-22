@@ -16,6 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "KritaShapeTool.h"
 #include <QPainter>
 #include <QGridLayout>
 #include <QToolButton>
@@ -35,7 +36,7 @@
 
 #include "KritaShape.h"
 
-#include "KritaShapeTool.h"
+
 #include "KritaShapeTool.moc"
 
 KritaShapeTool::KritaShapeTool( KoCanvasBase* canvas )

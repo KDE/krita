@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_dlg_preferences.h"
+
 #include <config-opengl.h>
 #include <config-glew.h>
 
@@ -59,7 +61,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "kis_cursor.h"
 #include "kis_config.h"
-#include "kis_dlg_preferences.h"
+
 #include "kis_factory2.h"
 #include "KoID.h"
 

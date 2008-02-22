@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "defaultpaintops_plugin.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -34,8 +36,6 @@
 //#include "kis_smudgeop.h"
 #include "kis_global.h"
 #include "kis_paintop_registry.h"
-
-#include "defaultpaintops_plugin.h"
 
 typedef KGenericFactory<DefaultPaintOpsPlugin> DefaultPaintOpsPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( "krita" ) )

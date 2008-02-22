@@ -18,7 +18,6 @@
 */
 
 #include "kis_hsv_adjustment.h"
-
 #include <config-openexr.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>

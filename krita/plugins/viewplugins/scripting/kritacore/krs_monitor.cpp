@@ -18,6 +18,7 @@
  */
 
 #include "krs_monitor.h"
+
 //#include <kis_debug.h>
 #include <kglobal.h>
 

@@ -17,7 +17,6 @@
  */
 
 #include "kis_color_space_selector.h"
-
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

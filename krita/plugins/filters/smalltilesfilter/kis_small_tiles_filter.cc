@@ -21,6 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_small_tiles_filter.h"
+
 #include <stdlib.h>
 #include <vector>
 
@@ -52,8 +54,6 @@
 #include <KoCompositeOp.h>
 
 #include "kis_multi_integer_filter_widget.h"
-#include "kis_small_tiles_filter.h"
-
 
 KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Small Tiles..."))
 {

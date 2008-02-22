@@ -16,7 +16,6 @@
  */
 
 #include "kis_dynamic_brush_registry.h"
-
 #include <klocale.h>
 
 #include "kis_dynamic_brush.h"

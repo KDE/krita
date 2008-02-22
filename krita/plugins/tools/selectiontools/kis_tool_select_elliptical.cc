@@ -20,7 +20,6 @@
  */
 
 #include "kis_tool_select_elliptical.h"
-
 #include <QApplication>
 #include <QPainter>
 #include <QPen>
@@ -250,7 +249,5 @@ QWidget* KisToolSelectElliptical::optionWidget()
 {
         return m_optWidget;
 }
-
-
 
 #include "kis_tool_select_elliptical.moc"

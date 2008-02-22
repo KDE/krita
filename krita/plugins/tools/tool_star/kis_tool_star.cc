@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_star.h"
+
 
 #include <math.h>
 
@@ -41,7 +43,7 @@
 #include "kis_cursor.h"
 #include "kis_int_spinbox.h"
 #include "kis_paint_device.h"
-#include "kis_tool_star.h"
+
 #include "kis_selection.h"
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)

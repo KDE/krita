@@ -15,9 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_tone_mapping_operators_registry.h"
-
-struct KisToneMappingOperatorsRegistry::Private
+#include "kis_tone_mapping_operators_registry.h"struct KisToneMappingOperatorsRegistry::Private
 {
     static KisToneMappingOperatorsRegistry* s_instance;
 };

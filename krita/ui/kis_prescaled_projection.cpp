@@ -19,6 +19,7 @@
 
 #include "kis_prescaled_projection.h"
 
+
 #include <QImage>
 #include <QPixmap>
 #include <QColor>

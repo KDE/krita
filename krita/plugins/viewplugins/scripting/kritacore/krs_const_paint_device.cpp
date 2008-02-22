@@ -18,6 +18,7 @@
 
 #include "krs_const_paint_device.h"
 
+
 #include <QBuffer>
 #include <klocale.h>
 
@@ -34,9 +35,6 @@
 #include "krs_histogram.h"
 #include "krs_painter.h"
 #include "krs_wavelet.h"
-
-
-
 using namespace Scripting;
 
 ConstPaintDevice::ConstPaintDevice(KisPaintDeviceSP device, KisDoc2* doc)

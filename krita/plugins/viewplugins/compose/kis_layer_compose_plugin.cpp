@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_layer_compose_plugin.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -33,7 +34,7 @@
 #include <kis_statusbar.h>
 #include <kis_layer_manager.h>
 
-#include "kis_layer_compose_plugin.h"
+
 #include "dlg_compose.h"
 
 K_EXPORT_COMPONENT_FACTORY( kritalayercompose, KGenericFactory<KisLayerComposePlugin>( "krita" ) )

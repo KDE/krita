@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_previewwidget.h"
+
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QPainter>
@@ -50,7 +52,7 @@
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 
-#include "kis_previewwidget.h"
+
 #include "imageviewer.h"
 
 KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
@@ -70,11 +72,7 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 
     connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
     btnZoomOneToOne->setIcon(KIcon("zoom-original"));
-    connect(btnZoomOneToOne, SIGNAL(clicked()), this, SLOT(zoomOneToOne()));
-
-
-
-/*    kToolBar1->insertLineSeparator();
+    connect(btnZoomOneToOne, SIGNAL(clicked()), this, SLOT(zoomOneToOne()));/*    kToolBar1->insertLineSeparator();
     kToolBar1->insertButton("reload",2, true, i18n("Update"));
     connect(kToolBar1->getButton(2),SIGNAL(clicked()),this,SLOT(forceUpdate()));
 

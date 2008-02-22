@@ -16,7 +16,6 @@
  */
 
 #include "kis_dab_shape.h"
-
 #include <kis_autobrush_resource.h>
 #include <kis_datamanager.h>
 #include <kis_iterators_pixel.h>
@@ -97,11 +96,7 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
     
     coloringsrc->colorize( m_dab, dabRect );
-    m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);
-
-
-
-    if ( painter()->bounds().isValid() ) {
+    m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);    if ( painter()->bounds().isValid() ) {
         dstRect &= painter()->bounds();
     }
 

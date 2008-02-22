@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_illuminant_profile.h"
 #include <cstdlib>
 #include <QFile>
 #include <QString>
@@ -25,8 +26,6 @@
 #include <KDebug>
 
 #include "KoColorProfile.h"
-
-#include "kis_illuminant_profile.h"
 
 KisIlluminantProfile::KisIlluminantProfile(QString fileName) : KoColorProfile(fileName)
 {

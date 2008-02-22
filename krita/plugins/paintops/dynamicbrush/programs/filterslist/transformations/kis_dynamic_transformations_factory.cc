@@ -16,7 +16,6 @@
  */
 
 #include "kis_dynamic_transformations_factory.h"
-
 #include <QDomElement>
 
 #include "kis_darken_transformation.h"

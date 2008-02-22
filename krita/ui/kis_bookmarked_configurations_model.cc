@@ -17,7 +17,6 @@
  */
 
 #include "kis_bookmarked_configurations_model.h"
-
 #include <QList>
 
 #include <kis_debug.h>

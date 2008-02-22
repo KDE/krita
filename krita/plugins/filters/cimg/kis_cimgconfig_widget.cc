@@ -19,6 +19,8 @@
  *
  * Ported from the CImg Gimp plugin by Victor Stinner and David Tschumperlé.
  */
+
+#include "kis_cimgconfig_widget.h"
 #include <QLayout>
 #include <QCheckBox>
 #include <QPushButton>
@@ -26,7 +28,7 @@
 
 #include <knuminput.h>
 
-#include "kis_cimgconfig_widget.h"
+
 #include "kis_cimg_filter.h"
 
 KisCImgconfigWidget::KisCImgconfigWidget(QWidget * parent, Qt::WFlags f)

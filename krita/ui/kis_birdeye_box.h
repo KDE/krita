@@ -22,6 +22,8 @@
 #include <QWidget>
 #include <QLabel>
 
+#include <QDockWidget>
+
 #include <KoDockFactory.h>
 
 #include "kis_types.h"

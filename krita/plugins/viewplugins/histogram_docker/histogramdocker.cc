@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "histogramdocker.h"
 #include <QMenu>
 #include <QDockWidget>
 
@@ -38,7 +40,7 @@
 #include "kis_view2.h"
 #include <kis_histogram_view.h>
 
-#include "histogramdocker.h"
+
 #include "kis_imagerasteredcache.h"
 #include "kis_accumulating_producer.h"
 

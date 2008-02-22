@@ -16,11 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_strategy_colorspace_grayscale_tester.h"
 #include <kunittest/runner.h>
 #include <kunittest/module.h>
 
 #include "kis_factory.h"
-#include "kis_strategy_colorspace_grayscale_tester.h"
+
 #include "kis_gray_colorspace.h"
 
 using namespace KUnitTest;

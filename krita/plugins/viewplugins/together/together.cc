@@ -17,7 +17,6 @@
  */
 
 #include "together.h"
-
 #include <stdlib.h>
 
 #include <QApplication>

@@ -18,6 +18,7 @@
 
 #include "krs_color.h"
 
+
 using namespace Scripting;
 
 Color::Color(int x, int y, int z, QColor::Spec colorSpec)

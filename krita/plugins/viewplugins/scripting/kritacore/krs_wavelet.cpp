@@ -20,6 +20,7 @@
 
 #include "krs_wavelet.h"
 
+
 #include <klocale.h>
 
 #include <kis_math_toolbox.h>

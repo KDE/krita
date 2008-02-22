@@ -16,7 +16,6 @@
  */
 
 #include "kis_dynamic_brush.h"
-
 #include <klocale.h>
 
 #include <KoColorSpaceRegistry.h>

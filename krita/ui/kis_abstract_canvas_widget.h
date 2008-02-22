@@ -18,6 +18,8 @@
 #ifndef _KIS_ABSTRACT_CANVAS_WIDGET_
 #define _KIS_ABSTRACT_CANVAS_WIDGET_
 
+#include <Qt>
+
 class QWidget;
 class QRect;
 class QPoint;

@@ -17,6 +17,7 @@
 
 #include "kis_control_points.h"
 
+
 #include "kis_control_point.h"
 #include "kis_interest_points_detector.h"
 

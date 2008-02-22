@@ -16,7 +16,6 @@
  */
 
 #include "kis_dynamic_program.h"
-
 #include <QDomElement>
 
 #include <kis_debug.h>

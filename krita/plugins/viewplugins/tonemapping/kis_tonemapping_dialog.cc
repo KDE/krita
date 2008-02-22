@@ -16,7 +16,6 @@
  */
 
 #include "kis_tonemapping_dialog.h"
-
 #include <KoGenericRegistryModel.h>
 #include <KoColorSpace.h>
 

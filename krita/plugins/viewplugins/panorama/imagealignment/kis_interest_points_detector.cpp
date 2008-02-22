@@ -18,6 +18,7 @@
 
 #include "kis_interest_points_detector.h"
 
+
 KisInterestPointsDetector* KisInterestPointsDetector::s_interestPointDetector = 0;
 int KisInterestPointsDetector::s_interestPointDetectorPriority = -1;
 

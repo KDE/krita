@@ -16,7 +16,6 @@
  */
 
 #include "kis_specific_color_selector_widget.h"
-
 #include <QLabel>
 #include <QVBoxLayout>
 

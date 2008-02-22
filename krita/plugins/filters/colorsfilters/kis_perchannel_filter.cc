@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_perchannel_filter.h"
 #include <QLayout>
 #include <QPixmap>
 #include <QPainter>
@@ -35,7 +37,7 @@
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
-#include "kis_perchannel_filter.h"
+
 #include <kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>

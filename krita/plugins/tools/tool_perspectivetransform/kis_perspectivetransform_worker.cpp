@@ -19,6 +19,7 @@
 
 #include "kis_perspectivetransform_worker.h"
 
+
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_perspective_math.h"

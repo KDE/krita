@@ -18,6 +18,7 @@
 
 #include "kis_shape_selection.h"
 
+
 #include <QPainter>
 #include <QTimer>
 

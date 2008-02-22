@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_rgbks_colorspace.h"
 #include <QString>
 
 #include <klocale.h>
@@ -32,8 +33,6 @@
 #include "compositeops/KoCompositeOpBurn.h"
 
 #include "mathematics.h"
-
-#include "kis_rgbks_colorspace.h"
 
 KisRGBKSColorSpace::KisRGBKSColorSpace()
     : KoIncompleteColorSpace<RGBKSTraits>("rgbkscolorspace", "RGB/KS ColorSpace (Float)", KoColorSpaceRegistry::instance(), KoColorSpaceRegistry::instance()->rgb16(""))

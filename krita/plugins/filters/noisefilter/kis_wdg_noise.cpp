@@ -20,6 +20,7 @@
 
 #include "kis_wdg_noise.h"
 
+
 #include <qlayout.h>
 
 #include <knuminput.h>

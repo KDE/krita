@@ -25,6 +25,7 @@
 class KHBox;
 
 class KoResourceItemChooser;
+class KoResourceItem;
 class QTableWidgetItem;
 
 class KisItemChooser : public QWidget {

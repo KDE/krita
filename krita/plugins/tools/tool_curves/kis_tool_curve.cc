@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_curve.h"
+
 #include <math.h>
 #include <limits.h>
 
@@ -45,7 +47,7 @@
 #include "kis_canvas.h"
 
 #include "kis_curve_framework.h"
-#include "kis_tool_curve.h"
+
 
 QRect KisToolCurve::pivotRect (const QPointF& pos)
 {

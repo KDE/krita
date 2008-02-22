@@ -19,6 +19,7 @@
 
 #include "kis_kra_load_visitor.h"
 
+
 #include <QRect>
 
 #include <KoColorSpaceRegistry.h>

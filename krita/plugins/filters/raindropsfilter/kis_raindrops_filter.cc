@@ -22,6 +22,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_raindrops_filter.h"
+
 #include <stdlib.h>
 #include <vector>
 
@@ -51,7 +53,7 @@
 #include <kis_filter_processing_information.h>
 
 #include "kis_multi_integer_filter_widget.h"
-#include "kis_raindrops_filter.h"
+
 
 KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Raindrops..."))
 {

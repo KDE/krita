@@ -18,6 +18,7 @@
 
 #include "kis_node_manager.h"
 
+
 #include <kactioncollection.h>
 
 #include <KoSelection.h>
@@ -30,6 +31,7 @@
 #include <kis_selection.h>
 #include <kis_layer.h>
 #include <kis_mask.h>
+#include <kis_image.h>
 
 #include "kis_canvas2.h"
 #include "kis_resource_provider.h"

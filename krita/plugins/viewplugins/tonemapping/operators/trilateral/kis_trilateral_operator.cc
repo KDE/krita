@@ -18,7 +18,6 @@
  */
 
 #include "kis_trilateral_operator.h"
-
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>

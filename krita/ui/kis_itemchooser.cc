@@ -16,11 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_itemchooser.h"
+
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <KoResourceItemChooser.h>
 
-#include "kis_itemchooser.h"
+
 #include "kis_global.h"
 #include "kis_icon_item.h"
 

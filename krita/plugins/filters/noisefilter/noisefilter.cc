@@ -19,7 +19,6 @@
  */
 
 #include "noisefilter.h"
-
 #include <stdlib.h>
 #include <vector>
 

@@ -15,6 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
 #include "kis_image_alignment_model.h"
+
 #include "kis_image_alignment_model_p.h"
 
 KisImageAlignmentModel::~KisImageAlignmentModel()

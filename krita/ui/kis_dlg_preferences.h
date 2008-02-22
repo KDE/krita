@@ -25,6 +25,8 @@
 
 #include <kpagedialog.h>
 
+#include "kis_global.h"
+
 #ifdef EXTENDED_X11_TABLET_SUPPORT
 #include "kis_canvas2.h"
 #endif

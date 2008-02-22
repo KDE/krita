@@ -19,6 +19,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "dlg_dropshadow.h"
+
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
@@ -30,8 +32,6 @@
 #include <knuminput.h>
 #include <kis_debug.h>
 #include <kcolorbutton.h>
-
-#include "dlg_dropshadow.h"
 
 DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
                           const QString & /*layerCS*/,

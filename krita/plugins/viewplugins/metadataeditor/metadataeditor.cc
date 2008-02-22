@@ -17,7 +17,6 @@
  */
 
 #include "metadataeditor.h"
-
 #include <stdlib.h>
 
 #include <QDialog>

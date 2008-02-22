@@ -17,7 +17,6 @@
  */
 
 #include "kis_recorded_paint_actions.h"
-
 #include <QDomDocument>
 #include <QDomElement>
 

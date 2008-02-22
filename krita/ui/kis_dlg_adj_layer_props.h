@@ -26,6 +26,9 @@ class KisFilter;
 class KisFilterConfiguration;
 class KisFilterConfigWidget;
 class KisImage;
+class KisAdjustmentLayer;
+
+#include "kis_types.h"
 
 /**
  * Create a new adjustment layer.

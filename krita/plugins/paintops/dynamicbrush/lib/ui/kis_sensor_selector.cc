@@ -15,14 +15,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_debug.h>
-
 #include "kis_sensor_selector.h"
 
+#include <kis_debug.h>
 #include <QHBoxLayout>
-
 #include "kis_dynamic_sensor.h"
-
 #include "ui_SensorSelector.h"
 
 KisSensorSelector::KisSensorSelector(QWidget* parent) : QWidget(parent), m_currentConfigWidget(0), m_currentSensor(0)

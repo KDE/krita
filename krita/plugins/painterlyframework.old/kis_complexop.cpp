@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_complexop.h"
 #include <QVector>
 
 #include <kis_debug.h>
@@ -35,8 +36,6 @@
 #include "kis_selection.h"
 
 #include "mathematics.h"
-
-#include "kis_complexop.h"
 
 KisComplexOp::KisComplexOp(KisPainter * painter)
     : super(painter)

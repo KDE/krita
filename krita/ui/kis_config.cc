@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_config.h"
 #include <limits.h>
 
 #include <kglobalsettings.h>
@@ -27,7 +29,7 @@
 #include <lcms.h>
 
 #include "kis_global.h"
-#include "kis_config.h"
+
 
 namespace {
     const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi

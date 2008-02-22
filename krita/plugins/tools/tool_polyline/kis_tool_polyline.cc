@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_polyline.h"
+
 
 #include <math.h>
 
@@ -37,9 +39,6 @@
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
-
-#include "kis_tool_polyline.h"
-
 KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
         : super(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6)),
           m_dragging (false)

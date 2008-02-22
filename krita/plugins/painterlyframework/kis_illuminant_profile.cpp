@@ -19,6 +19,7 @@
 
 #include "kis_illuminant_profile.h"
 
+
 #include <KoColorProfile.h>
 
 #include <QDataStream>

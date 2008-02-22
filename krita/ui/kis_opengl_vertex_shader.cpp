@@ -18,6 +18,7 @@
 
 #include "kis_opengl_vertex_shader.h"
 
+
 #include <GL/glew.h>
 
 KisOpenGLVertexShader::KisOpenGLVertexShader(const QString& sourceCodeFilename)

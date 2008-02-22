@@ -19,7 +19,6 @@
  */
 
 #include "kis_wdg_unsharp.h"
-
 #include <qlayout.h>
 #include <qtoolbutton.h>
 

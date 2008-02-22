@@ -20,6 +20,7 @@
 
 #include "kis_perspective_grid_manager.h"
 
+
 #include <kaction.h>
 #include <klocale.h>
 #include <kmessagebox.h>

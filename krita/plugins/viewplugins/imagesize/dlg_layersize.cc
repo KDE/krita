@@ -19,17 +19,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "dlg_layersize.h"
+
 #include <math.h>
 
 #include <klocale.h>
 #include <kis_debug.h>
 
 #include <kis_cmb_idlist.h>
-#include <kis_filter_strategy.h>
-
-#include "dlg_layersize.h"
-
-// XXX: I'm really real bad at arithmetic, let alone math. Here
+#include <kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
 DlgLayerSize::DlgLayerSize( QWidget *  parent,
                 const char * name)

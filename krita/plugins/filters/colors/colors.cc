@@ -19,7 +19,6 @@
  */
 
 #include "colors.h"
-
 #include <kgenericfactory.h>
 
 #include "kis_minmax_filters.h"

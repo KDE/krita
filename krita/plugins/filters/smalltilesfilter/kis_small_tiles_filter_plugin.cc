@@ -18,8 +18,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kgenericfactory.h>
 #include "kis_small_tiles_filter_plugin.h"
+
+#include <kgenericfactory.h>
+
 #include "kis_small_tiles_filter.h"
 #include "kis_global.h"
 #include "kis_filter_registry.h"

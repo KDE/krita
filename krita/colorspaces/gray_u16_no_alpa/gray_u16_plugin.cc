@@ -19,11 +19,13 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+#include "gray_u16_plugin.h"
+
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoBasicHistogramProducers.h>
 
-#include "gray_u16_plugin.h"
+
 #include "kis_gray_u16_colorspace.h"
 
 typedef KGenericFactory<GRAYU16Plugin> GRAYU16PluginFactory;

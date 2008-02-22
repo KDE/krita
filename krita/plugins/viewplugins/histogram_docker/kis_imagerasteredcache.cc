@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_imagerasteredcache.h"
+
 #include <cmath>
 
 #include <QApplication>
@@ -27,8 +29,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view2.h>
-
-#include "kis_imagerasteredcache.h"
 
 KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)
     : m_observer(o->createNew(0, 0, 0, 0)), m_view(view)

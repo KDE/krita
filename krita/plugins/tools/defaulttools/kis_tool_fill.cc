@@ -20,6 +20,8 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+#include "kis_tool_fill.h"
+
 #include <kis_debug.h>
 #include <klocale.h>
 #include <QLabel>
@@ -37,7 +39,7 @@
 #include "kis_painter.h"
 #include "kis_tool_brush.h"
 #include "kis_cmb_composite.h"
-#include "kis_tool_fill.h"
+
 #include "KoColorSpace.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"

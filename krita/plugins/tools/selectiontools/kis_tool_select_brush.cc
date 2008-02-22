@@ -19,7 +19,6 @@
  */
 
 #include "kis_tool_select_brush.h"
-
 #include <QEvent>
 #include <QLabel>
 #include <QLayout>

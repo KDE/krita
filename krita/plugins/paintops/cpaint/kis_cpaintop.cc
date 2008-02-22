@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_cpaintop.h"
+
 #include <QColor>
 #include <QComboBox>
 #include <QDomElement>
@@ -39,7 +41,7 @@
 
 #include <kis_int_spinbox.h>
 
-#include "kis_cpaintop.h"
+
 #include "ui_wdgcpaintoptions.h"
 #include "brush.h"
 #include "qtoolbutton.h"
@@ -183,11 +185,7 @@ KisCPaintOp::KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, Ki
 KisCPaintOp::~KisCPaintOp()
 {
     delete m_stroke;
-}
-
-
-
-void KisCPaintOp::paintAt(const KisPaintInformation& info)
+}void KisCPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return;
 

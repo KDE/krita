@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_shape.h"
+
 #include <QWidget>
 #include <QLayout>
 #include <QComboBox>
@@ -25,7 +27,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-#include "kis_tool_shape.h"
+
 #include <kis_paint_device.h>
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)

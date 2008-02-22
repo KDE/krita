@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "dlg_colorrange.h"
 #include <QApplication>
 #include <QPushButton>
 #include <QCheckBox>
@@ -47,8 +49,6 @@
 #include <kis_view2.h>
 #include <kis_selected_transaction.h>
 #include <kis_cursor.h>
-
-#include "dlg_colorrange.h"
 
 namespace {
 
@@ -109,11 +109,7 @@ quint32 matchColors(const QColor & c, enumAction action)
     int b = c.blue();
 
     int h, s, v;
-    rgb_to_hsv(r, g, b, &h, &s, &v);
-
-
-
-    // XXX: Map the degree in which the colors conform to the requirement
+    rgb_to_hsv(r, g, b, &h, &s, &v);    // XXX: Map the degree in which the colors conform to the requirement
     //      to a range of selectedness between 0 and 255
 
     // XXX: Implement out-of-gamut using lcms
@@ -169,11 +165,7 @@ quint32 matchColors(const QColor & c, enumAction action)
     };
 
     return MIN_SELECTED;
-}
-
-
-
-DlgColorRange::DlgColorRange( KisView2 * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
+}DlgColorRange::DlgColorRange( KisView2 * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
     : super (parent)
 {
     setCaption( i18n("Color Range") );

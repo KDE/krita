@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_histogram_widget.h"
+
 #include <QPainter>
 #include <QPixmap>
 #include <QLabel>
@@ -29,7 +31,7 @@
 
 #include "KoChannelInfo.h"
 #include "kis_histogram_view.h"
-#include "kis_histogram_widget.h"
+
 #include "kis_histogram.h"
 #include "kis_global.h"
 #include "kis_types.h"

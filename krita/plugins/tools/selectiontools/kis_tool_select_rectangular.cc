@@ -22,6 +22,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_select_rectangular.h"
+
 #include <QApplication>
 #include <QPainter>
 #include <QPen>
@@ -41,7 +43,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
-#include "kis_tool_select_rectangular.h"
+
 #include "KoPointerEvent.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
@@ -260,8 +262,4 @@ QWidget* KisToolSelectRectangular::optionWidget()
 {
         return m_optWidget;
 }
-
-
-
-
 #include "kis_tool_select_rectangular.moc"

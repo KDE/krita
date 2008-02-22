@@ -17,7 +17,6 @@
  */
 
 #include "kis_tool_path.h"
-
 #include <klocale.h>
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>

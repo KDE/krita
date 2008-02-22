@@ -16,14 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_rgb_f16_hdr_colorspace.h"
+
 #include <lcms.h>
 
 #include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoColorSpaceRegistry.h>
-
-#include "kis_rgb_f16_hdr_colorspace.h"
 
 KisRgbF16HDRColorSpace::KisRgbF16HDRColorSpace( KoColorProfile *p)
 : KisRgbFloatHDRColorSpace<RgbF16Traits>(colorSpaceId(), i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"), p)

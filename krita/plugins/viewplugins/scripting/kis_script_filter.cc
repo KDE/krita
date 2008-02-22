@@ -19,6 +19,8 @@
  */
 
 #include "kis_script_filter.h"
+
+
 #include <kis_paint_device.h>
 
 // kdelibs/kross

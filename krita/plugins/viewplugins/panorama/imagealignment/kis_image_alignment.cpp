@@ -19,6 +19,7 @@
 
 #include "kis_image_alignment.h"
 
+
 #include <eigen/vector.h>
 
 #include <KoColorSpace.h>

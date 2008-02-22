@@ -21,9 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_doc2.h"
-
-// Qt
+#include "kis_doc2.h"// Qt
 #include <QApplication>
 #include <qdom.h>
 #include <QImage>

@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "shearimage.h"
+
 
 #include <math.h>
 
@@ -43,7 +45,7 @@
 #include <kis_layer_manager.h>
 #include <kis_image_manager.h>
 
-#include "shearimage.h"
+
 #include "dlg_shearimage.h"
 
 typedef KGenericFactory<ShearImage> ShearImageFactory;

@@ -16,7 +16,6 @@
  */
 
 #include "kis_dynamic_coloring.h"
-
 #include <kis_paint_device.h>
 
 #include <KoAbstractGradient.h>

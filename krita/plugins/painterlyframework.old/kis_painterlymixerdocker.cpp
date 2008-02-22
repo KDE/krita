@@ -19,6 +19,7 @@
 */
 
 #include "kis_painterlymixerdocker.h"
+
 #include "kis_painterlymixer.h"
 
 #include <klocale.h>

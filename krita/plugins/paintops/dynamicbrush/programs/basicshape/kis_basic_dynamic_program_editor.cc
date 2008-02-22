@@ -16,7 +16,6 @@
  */
 
 #include "kis_basic_dynamic_program_editor.h"
-
 #include <kdialog.h>
 #include <klocale.h>
 

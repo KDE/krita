@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "cpaintbrush.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -26,8 +28,6 @@
 
 #include "kis_cpaintop.h"
 #include "kis_paintop_registry.h"
-
-#include "cpaintbrush.h"
 
 typedef KGenericFactory<CPaintBrush> CPaintBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacpaintbrush, CPaintBrushFactory("krita"))

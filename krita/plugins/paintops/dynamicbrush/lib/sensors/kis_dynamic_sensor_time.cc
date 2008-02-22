@@ -15,13 +15,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_debug.h>
-
-#include <QDomElement>
-
 #include "kis_dynamic_sensor_time.h"
 
-#include "ui_SensorTimeConfiguration.h"
+#include <kis_debug.h>
+
+#include <QDomElement>#include "ui_SensorTimeConfiguration.h"
 
 #include "kis_paint_information.h"
 #include "kis_sensor_selector.h"

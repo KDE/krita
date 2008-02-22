@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "dlg_histogram.h"
+
 #include <QPushButton>
 #include <QCheckBox>
 #include <QSlider>
@@ -35,7 +37,7 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 
-#include "dlg_histogram.h"
+
 #include "kis_histogram_widget.h"
 
 

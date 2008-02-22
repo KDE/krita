@@ -16,7 +16,6 @@
  */
 
 #include "kis_ycbcr_u8_colorspace.h"
-
 #include <QImage>
 #include <QColor>
 

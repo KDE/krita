@@ -17,13 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "kis_png_converter.h"
 // A big thank to Glenn Randers-Pehrson for his wonderful
 // documentation of libpng available at
-// http://www.libpng.org/pub/png/libpng-1.2.5-manual.html
-
-#include "kis_png_converter.h"
-
-#include <config-endian.h> // WORDS_BIGENDIAN
+// http://www.libpng.org/pub/png/libpng-1.2.5-manual.html#include <config-endian.h> // WORDS_BIGENDIAN
 
 #include <limits.h>
 #include <stdio.h>

@@ -20,6 +20,7 @@
 
 #include "kis_wdg_fastcolortransfer.h"
 
+
 #include <qlayout.h>
 
 #include <kurlrequester.h>

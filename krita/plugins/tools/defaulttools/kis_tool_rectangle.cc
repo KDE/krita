@@ -21,6 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_rectangle.h"
+
 #include <QPainter>
 
 #include <kis_debug.h>
@@ -29,7 +31,7 @@
 #include "KoPointerEvent.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
-#include "kis_tool_rectangle.h"
+
 #include "kis_cursor.h"
 #include "kis_layer.h"
 #include "KoCanvasBase.h"

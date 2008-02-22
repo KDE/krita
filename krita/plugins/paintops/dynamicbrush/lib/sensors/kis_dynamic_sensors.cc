@@ -16,7 +16,6 @@
  */
 
 #include "kis_dynamic_sensors.h"
-
 KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
 {
     

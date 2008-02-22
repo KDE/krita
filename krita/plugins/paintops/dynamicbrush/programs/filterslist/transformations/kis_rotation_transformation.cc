@@ -16,7 +16,6 @@
  */
 
 #include "kis_rotation_transformation.h"
-
 #include <math.h>
 
 #include <QDomElement>

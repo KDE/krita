@@ -22,7 +22,6 @@
  */
 
 #include "lenscorrectionfilter.h"
-
 #include <stdlib.h>
 #include <vector>
 

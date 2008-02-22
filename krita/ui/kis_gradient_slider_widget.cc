@@ -18,7 +18,6 @@
  */
 
 #include "kis_gradient_slider_widget.h"
-
 #include <QPainter>
 #include <QContextMenuEvent>
 #include <QPixmap>

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_gray_colorspace.h"
+
 #include <QDomElement>
 
 #include <kis_debug.h>
@@ -24,7 +26,7 @@
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_gray_colorspace.h"
+
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 

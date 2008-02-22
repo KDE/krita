@@ -19,7 +19,6 @@
  */
 
 #include "kis_minmax_filters.h"
-
 #include <KoProgressUpdater.h>
 
 #include <kis_iterators_pixel.h>

@@ -19,7 +19,6 @@
  */
 
 #include "unsharp.h"
-
 #include <kgenericfactory.h>
 
 #include "kis_unsharp_filter.h"

@@ -21,12 +21,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "lms_f32_plugin.h"
+
 #include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
-#include "lms_f32_plugin.h"
+
 #include "kis_lms_f32_colorspace.h"
 
 typedef KGenericFactory<LMSF32Plugin> LMSF32PluginFactory;

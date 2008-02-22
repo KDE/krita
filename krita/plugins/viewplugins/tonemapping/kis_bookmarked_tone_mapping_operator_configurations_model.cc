@@ -16,7 +16,6 @@
  */
 
 #include "kis_bookmarked_tone_mapping_operator_configurations_model.h"
-
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 

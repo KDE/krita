@@ -4,6 +4,7 @@
 
  */
 
+#include "pfstmo_trilateral.h"
 #include <config.h>
 
 #include <iostream>

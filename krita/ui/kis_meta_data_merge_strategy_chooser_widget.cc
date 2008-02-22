@@ -18,7 +18,6 @@
  */
 
 #include "kis_meta_data_merge_strategy_chooser_widget.h"
-
 #include <kis_debug.h>
 #include <kis_meta_data_merge_strategy_registry.h>
 

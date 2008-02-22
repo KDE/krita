@@ -15,7 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_dlg_apply_profile.h"
+
 
 #include <QComboBox>
 #include <QButtonGroup>
@@ -31,9 +33,6 @@
 #include "kis_config.h"
 #include "kis_factory2.h"
 #include "kis_types.h"
-
-
-
 #include "squeezedcombobox.h"
 
 

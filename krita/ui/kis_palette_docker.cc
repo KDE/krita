@@ -16,13 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_palette_docker.h"
+
 #include <QComboBox>
 #include <QVBoxLayout>
 
 #include <kis_debug.h>
 
 #include "kis_view2.h"
-#include "kis_palette_docker.h"
+
 #include "KoResource.h"
 #include "KoColorSet.h"
 #include "kis_palette_view.h"

@@ -17,7 +17,6 @@
  */
 
 #include "panorama.h"
-
 #include <stdlib.h>
 #include <algorithm>
 

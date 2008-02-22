@@ -17,10 +17,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_iconwidget.h"
+
 #include <QPainter>
 #include <QIcon>
 #include <QTableWidgetItem>
-#include "kis_iconwidget.h"
+
 
 KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
     : KisPopupButton(parent)

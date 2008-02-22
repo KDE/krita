@@ -31,15 +31,12 @@
  * $Id$
  */
 
+#include "tmo_reinhard05.h"
 #include <config.h>
 
 #include <iostream>
 #include <math.h>
-#include <array2d.h>
-
-#include "tmo_reinhard05.h"
-
-#include <assert.h>
+#include <array2d.h>#include <assert.h>
 
 
 void tmo_reinhard05( pfs::Array2D* R, pfs::Array2D* G, pfs::Array2D* B, 

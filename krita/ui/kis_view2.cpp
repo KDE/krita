@@ -22,8 +22,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qprinter.h>
+
 #include "kis_view2.h"
+#include <qprinter.h>
+
 
 #include <QGridLayout>
 #include <QRect>
@@ -295,11 +297,7 @@ void KisView2::slotChildActivated(bool a) {
 void KisView2::canvasAddChild(KoViewChild *child) {
     KoView::canvasAddChild(child);
     connect(this, SIGNAL(viewTransformationsChanged()), child, SLOT(reposition()));
-}
-
-
-
-KisImageSP KisView2::image()
+}KisImageSP KisView2::image()
 {
     return m_d->doc->image();
 }

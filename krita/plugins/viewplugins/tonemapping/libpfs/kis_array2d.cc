@@ -18,7 +18,6 @@
 */
 
 #include "kis_array2d.h"
-
 #include <QRect>
 
 #include "kis_generic_colorspace.h"

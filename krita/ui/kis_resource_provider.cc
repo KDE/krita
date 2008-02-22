@@ -17,7 +17,6 @@
  */
 
 #include "kis_resource_provider.h"
-
 #include <QImage>
 #include <QPainter>
 
@@ -29,9 +28,10 @@
 #include <kis_brush.h>
 #include <kis_pattern.h>
 #include <kis_layer.h>
+#include <kis_image.h>
+#include <kis_group_layer.h>
 
 #include "kis_exposure_visitor.h"
-#include "kis_group_layer.h"
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "kis_canvas2.h"

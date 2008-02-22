@@ -18,6 +18,7 @@
 
 #include "kis_opengl_gradient_program.h"
 
+
 #include <GL/glew.h>
 #include <QGLWidget>
 

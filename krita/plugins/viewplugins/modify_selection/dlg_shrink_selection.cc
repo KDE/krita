@@ -18,13 +18,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "dlg_shrink_selection.h"
+
 #include <math.h>
 
 #include <klocale.h>
 #include <kis_debug.h>
-
-#include "dlg_shrink_selection.h"
-
 DlgShrinkSelection::DlgShrinkSelection( QWidget *  parent, const char * name) : super (parent)
 {
     setCaption( i18n("Shrink Selection") );

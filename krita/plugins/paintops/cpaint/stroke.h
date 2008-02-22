@@ -25,10 +25,10 @@
 #include <QVector>
 
 #include <kis_types.h>
-
+#include <KoColor.h>
 class Brush;
 class Sample;
-class KoColor;
+
 class QRect;
 
 

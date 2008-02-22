@@ -36,6 +36,7 @@
 
  */
 
+#include "tmo_trilateral.h"
 /**
  * @file tmo_trilateral.cpp
  * @brief Tone map luminance channel using trilateral filter model
@@ -88,11 +89,7 @@ void compute_gradients (double **x_grad, double **y_grad, int width, int height)
       x_grad[y][x] = luminance[y][x + (x < width - 1)]  - luminance[y][x];
       y_grad[y][x] = luminance[y + (y < height - 1)][x] - luminance[y][x];
     }
-}
-
-
-
-void bilateral_filter (double **x_grad, double **y_grad,
+}void bilateral_filter (double **x_grad, double **y_grad,
 		       double **x_smooth, double **y_smooth,
 		       double sigma_c, double sigma_r, int filter_size)
 {
@@ -262,11 +259,7 @@ void compress_base (double **base, int width, int height)
   for (y = 0; y < height; y++)
     for (x = 0; x < width; x++)
       base[y][x] = minval + base_value + (base[y][x] - minval) * factor;
-}
-
-
-
-///////////////////////////////////
+}///////////////////////////////////
 void tonemap_image2 ()
 {
 ////////////////////////////////

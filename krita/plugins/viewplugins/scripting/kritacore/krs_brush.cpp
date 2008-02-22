@@ -17,6 +17,7 @@
  */
 
 #include "krs_brush.h"
+
 #include "krs_module.h"
 
 #include <kis_brush.h>

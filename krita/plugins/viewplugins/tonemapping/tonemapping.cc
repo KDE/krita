@@ -16,7 +16,6 @@
  */
 
 #include "tonemapping.h"
-
 #include <stdlib.h>
 
 #include <kactioncollection.h>

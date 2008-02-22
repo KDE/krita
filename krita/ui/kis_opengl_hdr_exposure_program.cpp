@@ -18,6 +18,7 @@
 
 #include "kis_opengl_hdr_exposure_program.h"
 
+
 #include <cmath>
 
 #include "kis_opengl.h"

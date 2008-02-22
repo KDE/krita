@@ -17,7 +17,6 @@
  */
 
 #include "kis_resource_mediator.h"
-
 #include <QList>
 #include <QTableWidgetItem>
 

@@ -28,6 +28,7 @@
 
 class KoResource;
 class KisView2;
+class KisBrush;
 
 class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
 {

@@ -21,7 +21,6 @@
  */
 
 #include "kis_tool_select_contiguous.h"
-
 #include <QPainter>
 #include <QLayout>
 #include <QLabel>

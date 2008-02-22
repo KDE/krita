@@ -19,6 +19,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_tool_freehand.h"
 #include <QEvent>
 #include <QLabel>
 #include <QLayout>
@@ -54,7 +56,7 @@
 #include "kis_boundary_painter.h"
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
-#include "kis_tool_freehand.h"
+
 #include "kis_tool_freehand_p.h"
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
@@ -181,11 +183,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
     }
-}
-
-
-
-void KisToolFreehand::initPaint(KoPointerEvent *)
+}void KisToolFreehand::initPaint(KoPointerEvent *)
 {
     if (!currentLayer() || !currentLayer()->paintDevice())
         return;

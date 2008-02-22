@@ -17,15 +17,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "colorspot.h"
 #include <QColor>
 #include <QToolButton>
 
 #include "KoColor.h"
-#include "KoColorSpace.h"
-
-#include "colorspot.h"
-
-ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : QToolButton(parent)
+#include "KoColorSpace.h"ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : QToolButton(parent)
 {
     m_color = color;
 

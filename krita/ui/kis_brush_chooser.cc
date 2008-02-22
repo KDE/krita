@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_brush_chooser.h"
 #include <QLabel>
 #include <QLayout>
 #include <QCheckBox>
@@ -26,7 +28,7 @@
 #include <KoResourceItemChooser.h>
 #include "kis_resourceserverprovider.h"
 #include "kis_double_widget.h"
-#include "kis_brush_chooser.h"
+
 #include "kis_global.h"
 #include "kis_brush.h"
 

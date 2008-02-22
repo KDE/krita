@@ -17,6 +17,5 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_int_spinbox_p.h"
 #include "kis_int_spinbox_p.moc"

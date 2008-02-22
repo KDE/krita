@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#include "imageenhancement.h"
 #include <stdlib.h>
 #include <vector>
 
@@ -38,9 +40,6 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-
-#include "imageenhancement.h"
-
 #include "kis_simple_noise_reducer.h"
 #include "kis_wavelet_noise_reduction.h"
 

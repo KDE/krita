@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_eraseop.h"
+
 #include <QRect>
 
 #include <KoCompositeOp.h>
@@ -36,7 +38,7 @@
 #include "kis_iterators_pixel.h"
 #include "KoColorSpace.h"
 #include "kis_selection.h"
-#include "kis_eraseop.h"
+
 
 KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
 {

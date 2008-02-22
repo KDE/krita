@@ -19,13 +19,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "painterlymixer.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kis_debug.h>
 #include <kgenericfactory.h>
 
 #include "kis_view2.h"
-#include "painterlymixer.h"
+
 #include "kis_painterlymixerdocker.h"
 
 typedef KGenericFactory<PainterlyMixer> PainterlyMixerFactory;

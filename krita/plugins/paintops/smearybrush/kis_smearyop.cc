@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_smearyop.h"
+
 #include <QRect>
 
 #include <KoColor.h>
@@ -33,10 +35,6 @@
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
-#include "kis_smearyop.h"
-
-
-
 const qint32 STARTING_PAINTLOAD = 100;
 const qint32 CANVAS_WETNESS = 10;
 const qint32 NUMBER_OF_TUFTS = 16;
@@ -85,11 +83,7 @@ public:
     qint32 m_paintload;
     KoColor m_color;
 
-};
-
-
-
-KisSmearyOp::KisSmearyOp(KisPainter * painter)
+};KisSmearyOp::KisSmearyOp(KisPainter * painter)
     : KisPaintOp(painter)
 {
     for (int i = 0; i < NUMBER_OF_TUFTS / 2; ++i) {

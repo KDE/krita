@@ -21,6 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_controlframe.h"
+
 #include <stdlib.h>
 
 #include <QApplication>
@@ -52,7 +54,7 @@
 #include "kis_pattern.h"
 #include "kis_resourceserverprovider.h"
 #include "kis_resource_provider.h"
-#include "kis_controlframe.h"
+
 #include "kis_resource_mediator.h"
 #include "kis_iconwidget.h"
 #include "kis_brush.h"

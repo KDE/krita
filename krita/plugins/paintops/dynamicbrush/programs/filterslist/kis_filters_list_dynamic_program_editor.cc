@@ -16,7 +16,6 @@
  */
 
 #include "kis_filters_list_dynamic_program_editor.h"
-
 #include <kdialog.h>
 #include <klocale.h>
 #include <kis_debug.h>

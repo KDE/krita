@@ -16,7 +16,6 @@
  */
 
 #include "kis_bristle_shape.h"
-
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_autobrush_resource.h>

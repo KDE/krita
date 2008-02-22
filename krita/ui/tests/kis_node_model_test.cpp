@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_node_model_test.h"
 #include <QTest>
 #include <QCoreApplication>
 
@@ -31,11 +32,7 @@
 #include "kis_node_model.h"
 #include "KoColorSpace.h"
 #include "KoCompositeOp.h"
-#include "KoColorSpaceRegistry.h"
-
-#include "kis_node_model_test.h"
-
-/*
+#include "KoColorSpaceRegistry.h"/*
 Image:
 
     root

@@ -16,7 +16,6 @@
  */
 
 #include "specificcolorselector.h"
-
 #include <stdlib.h>
 
 #include <QTimer>

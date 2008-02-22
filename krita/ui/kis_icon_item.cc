@@ -17,11 +17,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_icon_item.h"
+
 #include <kis_debug.h>
 
 #include "KoResource.h"
 #include "kis_global.h"
-#include "kis_icon_item.h"
+
 #include "KoResourceChooser.h"
 
 #include <QPixmap>

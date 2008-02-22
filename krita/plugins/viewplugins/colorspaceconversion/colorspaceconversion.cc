@@ -17,6 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "colorspaceconversion.h"
 #include <stdlib.h>
 
 #include <QRadioButton>
@@ -52,7 +54,7 @@
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 
-#include "colorspaceconversion.h"
+
 #include "dlg_colorspaceconversion.h"
 
 typedef KGenericFactory<ColorSpaceConversion> ColorSpaceConversionFactory;

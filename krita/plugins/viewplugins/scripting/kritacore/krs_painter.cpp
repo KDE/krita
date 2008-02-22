@@ -17,6 +17,7 @@
  */
 
 #include "krs_painter.h"
+
 #include "krs_paint_device.h"
 #include "krs_brush.h"
 #include "krs_color.h"

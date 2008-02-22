@@ -26,13 +26,10 @@
  * $Id: tmo_ashikhmin02.cpp,v 1.6 2004/11/16 13:40:46 yoshida Exp $
  */
 
+#include "tmo_ashikhmin02.h"
 #include <iostream>
 #include <math.h>
-#include <array2d.h>
-
-#include "tmo_ashikhmin02.h"
-
-#include <assert.h>
+#include <array2d.h>#include <assert.h>
 
 #include "pyramid.h"
 

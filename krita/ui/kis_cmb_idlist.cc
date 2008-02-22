@@ -18,11 +18,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_cmb_idlist.h"
+
 #include <klocale.h>
 #include <kis_debug.h>
 
 #include "KoID.h"
-#include "kis_cmb_idlist.h"
+
 
 KisCmbIDList::KisCmbIDList(QWidget * parent, const char * name)
     : KComboBox(parent)
@@ -94,8 +96,6 @@ void KisCmbIDList::slotIDHighlighted(int i)
     emit highlighted(m_list[i]);
 
 }
-
-
 
 #include "kis_cmb_idlist.moc"
 

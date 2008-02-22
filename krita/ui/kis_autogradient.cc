@@ -18,7 +18,6 @@
  */
 
 #include "kis_autogradient.h"
-
 #include <QPainter>
 #include <QComboBox>
 

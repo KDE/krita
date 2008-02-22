@@ -16,13 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_selection_options.h"
+
 #include <QWidget>
 #include <QRadioButton>
 #include <QComboBox>
 #include <QVBoxLayout>
 #include <QLayout>
 
-#include "kis_selection_options.h"
+
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_image.h"

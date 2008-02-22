@@ -16,7 +16,6 @@
  */
 
 #include "kis_basic_dynamic_coloring_program.h"
-
 #include <QDomNode>
 
 #include <KoColorSpace.h>

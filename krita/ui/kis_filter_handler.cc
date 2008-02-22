@@ -18,7 +18,6 @@
  */
 
 #include "kis_filter_handler.h"
-
 #include <QApplication>
 #include <QRect>
 #include <kmessagebox.h>

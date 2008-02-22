@@ -16,7 +16,6 @@
  */
 
 #include "bigbrother.h"
-
 #include <stdlib.h>
 
 #include <kaction.h>

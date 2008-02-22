@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_line.h"
+
 #include <QPainter>
 #include <QLayout>
 #include <QWidget>
@@ -32,7 +34,7 @@
 
 #include "kis_cursor.h"
 #include "kis_painter.h"
-#include "kis_tool_line.h"
+
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
 #include "QPainter"

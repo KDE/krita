@@ -19,6 +19,7 @@
 
 #include "kis_wavelet_noise_reduction.h"
 
+
 #include <cmath>
 
 #include <KoProgressUpdater.h>

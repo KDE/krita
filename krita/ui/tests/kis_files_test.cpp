@@ -18,6 +18,7 @@
 
 #include "kis_files_test.h"
 
+
 #include <QTest>
 #include <QCoreApplication>
 

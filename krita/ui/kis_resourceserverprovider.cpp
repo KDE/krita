@@ -22,6 +22,7 @@
 
 #include "kis_resourceserverprovider.h"
 
+
 #include <QDir>
 
 #include <kglobal.h>

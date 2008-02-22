@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_abstract_canvas_widget.h"
 #include <QImage>
 #include <QPainter>
 
@@ -23,7 +24,7 @@
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
 
-#include "kis_abstract_canvas_widget.h"
+
 #include "kis_config.h"
 #include "kis_canvas2.h"
 #include "kis_view2.h"

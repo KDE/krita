@@ -15,9 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_dynamic_shape_program_factory_registry.h"
-
-struct KisDynamicShapeProgramFactoryRegistry::Private {
+#include "kis_dynamic_shape_program_factory_registry.h"struct KisDynamicShapeProgramFactoryRegistry::Private {
     static KisDynamicShapeProgramFactoryRegistry* instance;
 };
 

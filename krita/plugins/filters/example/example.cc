@@ -16,6 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "example.h"
 #include <stdlib.h>
 #include <vector>
 
@@ -41,10 +43,6 @@
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
-
-// #include <kmessagebox.h>
-
-#include "example.h"
 
 typedef KGenericFactory<KritaExample> KritaExampleFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )

@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "imagesize.h"
+
 
 #include <math.h>
 
@@ -52,7 +54,7 @@
 #include <kis_layer_manager.h>
 #include <kis_transform_visitor.h>
 
-#include "imagesize.h"
+
 #include "dlg_imagesize.h"
 #include "dlg_layersize.h"
 #include "kis_filter_strategy.h"

@@ -19,7 +19,6 @@
  */
 
 #include "kis_tool_select_eraser.h"
-
 #include <QEvent>
 #include <QLabel>
 #include <QLayout>

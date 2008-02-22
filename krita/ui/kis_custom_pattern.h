@@ -26,7 +26,7 @@
 
 #include "ui_wdgcustompattern.h"
 
-
+class KisPattern;
 class KoResource;
 class KisView2;
 class KisResourceMediator;

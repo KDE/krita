@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "dlg_colorspaceconversion.h"
+
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
@@ -34,11 +36,7 @@
 #include "KoID.h"
 
 #include "kis_cmb_idlist.h"
-#include "squeezedcombobox.h"
-
-#include "dlg_colorspaceconversion.h"
-
-// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shiped with KOffice are expected to have a good path, but better warn the user in case
+#include "squeezedcombobox.h"// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shiped with KOffice are expected to have a good path, but better warn the user in case
 
 DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
                           const char * name)

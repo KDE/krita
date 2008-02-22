@@ -17,6 +17,7 @@
  */
 
 #include "krs_histogram.h"
+
 #include "krs_const_paint_device.h"
 
 #include <kis_paint_layer.h>

@@ -18,7 +18,6 @@
  */
 
 #include "kis_ashikhmin02_operator.h"
-
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 

@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_reflectance_colorspace.h"
 #include <lcms.h>
 
 #include <QString>
@@ -34,11 +35,7 @@
 #include "compositeops/KoCompositeOpBurn.h"
 
 #include "kis_illuminant_profile.h"
-#include "mathematics.h"
-
-#include "kis_reflectance_colorspace.h"
-
-const double g_D50[3][10] = {
+#include "mathematics.h"const double g_D50[3][10] = {
 	{
 		2.1863050424163649830392765205377969550681882537901401519775390625e-06,
 		0.000256734345183300236188650433888369661872275173664093017578125,

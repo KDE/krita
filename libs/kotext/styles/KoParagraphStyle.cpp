@@ -1155,7 +1155,10 @@ void KoParagraphStyle::removeDuplicates ( const KoParagraphStyle &other ) {
 
 void KoParagraphStyle::saveOdf( KoGenStyle & style )
 {
-    style.addAttribute( "style:display-name", d->name );
+    // only custom style have a displayname. automatic styles don't have a name set.
+    if ( !d->name.isEmpty() ) {
+        style.addAttribute( "style:display-name", d->name );
+    }
     QList<int> keys = d->stylesPrivate->keys();
     foreach (int key, keys) {
         if (key == QTextFormat::BlockAlignment) {

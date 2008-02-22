@@ -35,6 +35,7 @@
 
 #include <KoUnit.h>
 #include <KoStyleStack.h>
+#include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
 class KoParagraphStyle::Private {
@@ -773,8 +774,39 @@ QBrush KoParagraphStyle::background() const {
     return qvariant_cast<QBrush>(variant);
 }
 
+void KoParagraphStyle::loadOdf( const KoXmlElement* element, KoOdfLoadingContext & context )
+{
+    d->name = element->attributeNS( KoXmlNS::style, "display-name", QString() );
+    // if no style:display-name is given us the style:name 
+    if ( d->name.isEmpty() ) {
+        d->name = element->attributeNS( KoXmlNS::style, "name", QString() );
+    }
 
-void KoParagraphStyle::loadOasis(KoStyleStack& styleStack) {
+#if 0 //1.6:
+    // OOo hack:
+    //m_bOutline = name.startsWith( "Heading" );
+    // real OASIS solution:
+    bool m_bOutline = element->hasAttributeNS( KoXmlNS::style, "default-outline-level" );
+#endif
+    context.styleStack().save();
+    context.addStyles( element, "paragraph" ); // Load all parents - only because we don't support inheritance.
+
+    //setParent( d->stylemanager->defaultParagraphStyle() );
+
+    //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
+    context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
+    loadOdfProperties( context.styleStack() ); // load the KoParagraphStyle from the stylestack
+
+    //1.6: KoTextFormat::load
+    KoCharacterStyle *charstyle = characterStyle();
+    context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+    charstyle->loadOasis( context ); // load the KoCharacterStyle from the stylestack
+
+    context.styleStack().restore();
+}
+
+void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
+{
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
 
     if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) ) { // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode

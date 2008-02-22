@@ -129,39 +129,9 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
         Q_ASSERT( styleElem );
         Q_ASSERT( !styleElem->isNull() );
 
-        //1.6: KoParagStyle::loadStyle
         QString name = styleElem->attributeNS( KoXmlNS::style, "name", QString() );
-        QString displayName = styleElem->attributeNS( KoXmlNS::style, "display-name", QString() );
-        if ( displayName.isEmpty() ) {
-            displayName = name;
-        }
-
-        kDebug(32500) << "styleName =" << name << "styleDisplayName =" << displayName;
-
-#if 0 //1.6:
-        // OOo hack:
-        //m_bOutline = name.startsWith( "Heading" );
-        // real OASIS solution:
-        bool m_bOutline = styleElem->hasAttributeNS( KoXmlNS::style, "default-outline-level" );
-#endif
-        context.styleStack().save();
-        context.addStyles( styleElem, "paragraph" ); // Load all parents - only because we don't support inheritance.
-
         KoParagraphStyle *parastyle = new KoParagraphStyle();
-        parastyle->setName( displayName );
-        //parastyle->setParent( d->stylemanager->defaultParagraphStyle() );
-
-        //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
-        context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
-        parastyle->loadOasis( context.styleStack() ); // load the KoParagraphStyle from the stylestack
-
-        //1.6: KoTextFormat::load
-        KoCharacterStyle *charstyle = parastyle->characterStyle();
-        context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-        charstyle->loadOasis( context ); // load the KoCharacterStyle from the stylestack
-
-        context.styleStack().restore();
-
+        parastyle->loadOdf( styleElem, context );
         paragraphStyles.append( QPair<QString, KoParagraphStyle *>( name, parastyle ) );
     }
     return paragraphStyles;

@@ -34,6 +34,8 @@ class KoListStyle;
 class QTextBlock;
 class KoStyleStack;
 class KoGenStyle;
+class KoXmlElement;
+class KoOdfLoadingContext;
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -473,12 +475,6 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
      */
     void removeListStyle();
 
-    /**
-     * Load the style from the \a KoStyleStack style stack using the
-     * OpenDocument format.
-     */
-    void loadOasis(KoStyleStack& styleStack);
-
     static KoParagraphStyle *fromBlock(const QTextBlock &block);
 
     void remove(int key);
@@ -487,9 +483,23 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
 
     void removeDuplicates ( const KoParagraphStyle &other );
 
+    /**
+     * Load the style form the element
+     *
+     * @param context the odf loading context
+     * @param element the element containing the 
+     */
+    void loadOdf( const KoXmlElement* element, KoOdfLoadingContext & context );
+
     void saveOdf( KoGenStyle &style );
 
 private:
+    /**
+     * Load the style from the \a KoStyleStack style stack using the
+     * OpenDocument format.
+     */
+    void loadOdfProperties( KoStyleStack& styleStack );
+
     void setProperty(int key, const QVariant &value);
     double propertyDouble(int key) const;
     int propertyInt(int key) const;

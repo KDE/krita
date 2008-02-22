@@ -516,6 +516,14 @@ void KoCanvasController::setPreferredCenter( const QPoint &viewPoint )
     recenterPreferred();
 }
 
+QPoint KoCanvasController::preferredCenter() const
+{
+    QPoint center;
+    center.setX( qRound( m_d->preferredCenterFractionX * m_d->documentSize.width() ) );
+    center.setY( qRound( m_d->preferredCenterFractionY * m_d->documentSize.height() ) );
+    return center;
+}
+
 void KoCanvasController::paintEvent( QPaintEvent * event )
 {
     QPainter gc( viewport() );

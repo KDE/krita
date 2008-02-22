@@ -214,6 +214,9 @@ public:
      */
     void setPreferredCenter( const QPoint &viewPoint );
 
+    /// Returns the currently set preferred center point in pixels
+    QPoint preferredCenter() const;
+
     /**
      * Move the canvas over the x and y distance of the parameter distance
      * @param distance the distance in pixels.  A positive distance means moving the canvas up/left.

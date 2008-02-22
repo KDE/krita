@@ -33,7 +33,7 @@ class KisIlluminantProfileQP : public KisIlluminantProfile {
 
     public:
         // REMEMBER TO CALL setName in subclasses!
-        KisIlluminantProfileQP(const QString &fileName = "");
+        KisIlluminantProfileQP(const QString &fileName = "", const QString &algorithm = "QP");
         ~KisIlluminantProfileQP();
 
         virtual KoColorProfile *clone() const

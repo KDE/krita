@@ -26,7 +26,7 @@
 #include <gsl/gsl_vector.h>
 
 KisIlluminantProfileLC::KisIlluminantProfileLC(const QString &fileName)
-    : parent(fileName), m_red(0), m_green(0), m_blue(0)
+    : parent(fileName, "LC"), m_red(0), m_green(0), m_blue(0)
 {
 
 }
@@ -43,9 +43,6 @@ bool KisIlluminantProfileLC::load()
     bool success;
 
     if (success = parent::load()) {
-        // HACK set the name manually
-        setName(QString("%1 - LC").arg(illuminant()));
-
         m_red = gsl_vector_calloc(wavelengths());
         m_green = gsl_vector_calloc(wavelengths());
         m_blue = gsl_vector_calloc(wavelengths());
@@ -80,6 +77,7 @@ bool KisIlluminantProfileLC::load()
 
 void KisIlluminantProfileLC::rgbToReflectance() const
 {
+    // Each reflectance is a linear combination of three base colors.
     for (int i = 0; i < wavelengths(); i++) {
         gsl_vector_set(m_refvec, i, gsl_vector_get(m_rgbvec, 0) * gsl_vector_get(m_red, i) +
                                     gsl_vector_get(m_rgbvec, 1) * gsl_vector_get(m_green, i) +

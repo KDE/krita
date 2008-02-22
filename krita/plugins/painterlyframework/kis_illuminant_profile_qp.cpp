@@ -25,8 +25,8 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
-KisIlluminantProfileQP::KisIlluminantProfileQP(const QString &fileName)
-    : parent(fileName, "QP"), m_data(0), m_s(0)
+KisIlluminantProfileQP::KisIlluminantProfileQP(const QString &fileName, const QString &algorithm)
+    : parent(fileName, algorithm), m_data(0), m_s(0)
 {
 
 }

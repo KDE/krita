@@ -2,5 +2,8 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Brush
 Comment=Brush plugin for Krita
+Comment[it]=Plugin pennello di Krita
+Comment[pt]='Plugin' de pincéis do Krita
+Comment[pt_BR]='Plugin' de pincéis do Krita
 [PropertyDef::X-Krita-Version]
 Type=int

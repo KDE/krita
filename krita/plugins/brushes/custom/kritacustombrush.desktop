@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=Custom Brush
+Name[it]=Pennello configurabile
+Name[pt]=Pincel Personalizado
+Name[pt_BR]=Pincel Personalizado
 Comment=Custom brush
+Comment[it]=Pennello configurabile
+Comment[pt]=Pincel personalizado
+Comment[pt_BR]=Pincel personalizado
 X-KDE-ServiceTypes=Krita/Brush
 Type=Service
 X-KDE-Library=kritacustombrush

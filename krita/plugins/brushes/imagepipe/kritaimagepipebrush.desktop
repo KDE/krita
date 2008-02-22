@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=Imagehose Brush
+Name[it]=Pennello animato
+Name[pt]=Pincel de Imagem
+Name[pt_BR]=Pincel de Imagem
 Comment=Imagehose brush
+Comment[it]=Pennello animato
+Comment[pt]=Pincel de imagem
+Comment[pt_BR]=Pincel de imagem
 X-KDE-ServiceTypes=Krita/Brush
 Type=Service
 X-KDE-Library=kritaimagepipebrush

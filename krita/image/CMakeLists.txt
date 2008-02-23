@@ -62,7 +62,7 @@ set(kritaimage_LIB_SRCS
    kis_projection.cc
    kis_adjustment_layer.cc
    kis_brush_p.cc
-   kis_autobrush_resource.cc
+   kis_auto_brush.cpp
    kis_autogradient_resource.cc
    kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc

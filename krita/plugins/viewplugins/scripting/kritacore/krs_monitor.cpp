@@ -30,7 +30,7 @@
 // #include <KoColorSpaceRegistry.h>
 
 // krita
-// #include <kis_autobrush_resource.h>
+// #include <kis_auto_brush.h>
 // #include <kis_brush.h>
 // #include <kis_doc2.h>
 // #include <kis_filter.h>

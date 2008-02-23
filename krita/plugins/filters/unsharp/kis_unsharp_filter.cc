@@ -25,7 +25,7 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 
-#include <kis_autobrush_resource.h>
+#include <kis_auto_brush.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
 #include <kis_filter_configuration.h>

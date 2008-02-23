@@ -80,11 +80,11 @@ class KRITAIMAGE_EXPORT KisAutobrushRectShape : public KisAutobrushShape {
         double m_xcenter, m_ycenter, m_c;
 };
 
-class KRITAIMAGE_EXPORT KisAutobrushResource : public KisBrush
+class KRITAIMAGE_EXPORT KisAutoBrush : public KisBrush
 {
     public:
-        KisAutobrushResource(KisAutobrushShape* img);
-        virtual ~KisAutobrushResource();
+        KisAutoBrush(KisAutobrushShape* img);
+        virtual ~KisAutoBrush();
     public:
         virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
     public:

@@ -24,7 +24,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpace.h>
-#include "kis_autobrush_resource.h"
+#include "kis_auto_brush.h"
 #include "kis_brush.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
@@ -230,9 +230,9 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
         QString typeShape = elt.attribute("autobrush_type", "circle");
         if(typeShape == "circle")
         {
-            return new KisAutobrushResource(new KisAutobrushCircleShape(width, height, hfade, vfade) );
+            return new KisAutoBrush(new KisAutobrushCircleShape(width, height, hfade, vfade) );
         } else {
-            return new KisAutobrushResource(new KisAutobrushRectShape(width, height, hfade, vfade) );
+            return new KisAutoBrush(new KisAutobrushRectShape(width, height, hfade, vfade) );
         }
     } else {
         dbgUI << "Looking for brush " << name;
@@ -246,7 +246,7 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
         }
     }
     dbgUI << "Brush " << name << " of type " << type << " not found.";
-    return new KisAutobrushResource(new KisAutobrushCircleShape(1.0, 1.0, 0.0, 0.0) );
+    return new KisAutoBrush(new KisAutobrushCircleShape(1.0, 1.0, 0.0, 0.0) );
 }
 
 KisPaintOpSettings* KisRecordedPaintActionFactory::settingsFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image)

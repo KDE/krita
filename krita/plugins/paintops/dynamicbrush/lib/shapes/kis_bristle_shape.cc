@@ -18,7 +18,7 @@
 #include "kis_bristle_shape.h"
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_autobrush_resource.h>
+#include <kis_auto_brush.h>
 #include <kis_dynamic_coloring.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
@@ -100,7 +100,7 @@ void KisBristleShape::startPainting(KisPainter* _painter)
     KisDynamicShape::startPainting(_painter);
     KisAutobrushCircleShape* kacs = new KisAutobrushCircleShape(1, 1, 1.0, 1.0);
     m_paintBrush->bristlesPainter = new KisPainter(painter()->device() );
-    m_paintBrush->bristlesPainter->setBrush( new KisAutobrushResource(kacs) );
+    m_paintBrush->bristlesPainter->setBrush( new KisAutoBrush(kacs) );
     m_paintBrush->bristlesPainter->setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, m_paintBrush->bristlesPainter, 0) );
     dbgPlugins << (int)((255.0*rand()) / RAND_MAX) << " " << (int)((255.0*rand()) / RAND_MAX) << " " << (int)((255.0*rand()) / RAND_MAX );
     m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX )), KoColorSpaceRegistry::instance()->rgb8()) );
@@ -162,7 +162,7 @@ void KisBristleShape::createStamp(KisPaintDeviceSP stamp, KisDynamicColoring* co
     KisPainter p(stamp);
     KisAutobrushCircleShape cs(1, 1, 1.0, 1.0);
     QImage img = cs.createBrush();
-    p.setBrush( new KisAutobrushResource(img) );
+    p.setBrush( new KisAutoBrush(img) );
     dbgPlugins << KisPaintOpRegistry::instance();
     dbgPlugins << KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &p, 0);
     p.setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, &p, 0) );

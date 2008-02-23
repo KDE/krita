@@ -11,7 +11,6 @@ set(kritaui_LIB_SRCS
     imageviewer.cc
     kcurve.cc
     kis_filters_listview.cc
-    kis_autobrush.cc
     kis_autogradient.cc
     kis_birdeye_box.cc
     kis_bookmarked_configurations_editor.cc
@@ -122,6 +121,7 @@ set(kritaui_LIB_SRCS
     kis_node_manager.cpp
     kis_selection_tool_helper.cpp
     kis_print_job.cpp
+    kis_auto_brush_widget.cpp
 # Open Raster TK
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp

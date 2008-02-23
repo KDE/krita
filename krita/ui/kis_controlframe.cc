@@ -62,7 +62,7 @@
 #include "kis_brush_chooser.h"
 #include "kis_gradient_chooser.h"
 #include "kis_view2.h"
-#include "kis_autobrush.h"
+#include "kis_auto_brush_widget.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"
 #include "kis_custom_brush.h"
@@ -221,10 +221,10 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
 
     l->addWidget(m_brushesTab);
 
-    KisAutobrush * m_autobrush = new KisAutobrush(0, "autobrush", i18n("Autobrush"));
-    m_brushesTab->addTab( m_autobrush, i18n("Autobrush"));
+    KisAutoBrushWidget * m_autoBrushWidget = new KisAutoBrushWidget(0, "autobrush", i18n("Autobrush"));
+    m_brushesTab->addTab( m_autoBrushWidget, i18n("Autobrush"));
 
-    connect(m_autobrush,
+    connect(m_autoBrushWidget,
             SIGNAL(activatedResource(KoResource*)),
             m_view->resourceProvider(),
             SLOT(slotBrushActivated( KoResource* )));
@@ -269,7 +269,7 @@ void KisControlFrame::createBrushesChooser(KisView2 * view)
     m_brushChooser->setCurrent( 0 );
     m_brushMediator->setActiveItem( m_brushChooser->currentItem() );
 
-    m_autobrush->activate();
+    m_autoBrushWidget->activate();
 }
 
 void KisControlFrame::createPatternsChooser(KisView2 * view)

@@ -32,7 +32,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_autobrush_resource.h>
+#include <kis_auto_brush.h>
 #include <kis_bookmarked_configuration_manager.h>
 #include <kis_bookmarked_configurations_model.h>
 #include <kis_brush.h>

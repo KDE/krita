@@ -183,9 +183,9 @@ target_link_libraries(KisAnnotationTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${
 
 ########### next target ###############
 
-set(kis_autobrush_resource_test_SRCS kis_autobrush_resource_test.cpp )
-kde4_add_unit_test(KisAutobrushResourceTest TESTNAME krita-image-KisAutobrushResourceTest ${kis_autobrush_resource_test_SRCS})
-target_link_libraries(KisAutobrushResourceTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
+set(kis_auto_brush_test_SRCS kis_auto_brush_test.cpp )
+kde4_add_unit_test(KisAutobrushTest TESTNAME krita-image-KisAutobrushTest ${kis_auto_brush_test_SRCS})
+target_link_libraries(KisAutobrushTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

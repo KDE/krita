@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CUSTOM_BRUSH_H
-#define CUSTOM_BRUSH_H
+#include "kis_auto_brush_test.h"
 
-#include <kparts/plugin.h>
+#include <qtest_kde.h>
+#include "kis_auto_brush.h"
 
-/**
- * A plugin wrapper that adds the custom brush paintop
- */
-class CustomBrush : public KParts::Plugin
+void KisAutoBrushTest::testCreation()
 {
-    Q_OBJECT
-public:
-    CustomBrush(QObject *parent, const QStringList &);
-    virtual ~CustomBrush();
-};
+    KisAutobrushCircleShape circle(10, 10, 1.0, 1.0);
+    KisAutobrushRectShape rect(10, 10, 1.0, 1.0);
+}
 
-#endif // CUSTOM_BRUSH_H
+QTEST_KDEMAIN(KisAutoBrushTest, GUI)
+#include "kis_auto_brush_test.moc"

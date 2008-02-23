@@ -34,7 +34,7 @@ class KToolBar;
 
 class KoResourceItem;
 
-class KisAutobrush;
+class KisAutoBrushWidget;
 class KisBrush;
 class KisBrushChooser;
 class KoAbstractGradient;
@@ -99,8 +99,7 @@ private:
     KisResourceMediator *m_patternMediator;
     KisResourceMediator *m_gradientMediator;
 
-
-    KisAutobrush * m_autobrush;
+    KisAutoBrushWidget * m_autoBrushWidget;
     KisBrushChooser * m_brushChooser;
     KisGradientChooser * m_gradientChooser;
 

@@ -24,7 +24,7 @@
 
 #include <KoCompositeOp.h>
 
-#include <kis_autobrush_resource.h>
+#include <kis_auto_brush.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
 

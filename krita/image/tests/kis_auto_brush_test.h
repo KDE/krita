@@ -21,7 +21,7 @@
 
 #include <QtTest/QtTest>
 
-class KisAutobrushResourceTest : public QObject
+class KisAutoBrushTest : public QObject
 {
     Q_OBJECT
 private slots:

@@ -29,7 +29,7 @@
 #include <KoColorSpaceRegistry.h>
 
 // krita
-#include <kis_autobrush_resource.h>
+#include <kis_auto_brush.h>
 #include <kis_brush.h>
 #include <kis_doc2.h>
 #include <kis_filter.h>
@@ -163,14 +163,14 @@ QObject* Module::brush(const QString& brushname)
 QObject* Module::createCircleBrush(uint w, uint h, uint hf, uint vf)
 {
     KisAutobrushShape* kas = new KisAutobrushCircleShape(qMax(1u,w), qMax(1u,h), hf, vf);
-    KisAutobrushResource *thing = new KisAutobrushResource(kas);
+    KisAutoBrush *thing = new KisAutoBrush(kas);
     return new Brush(this, thing, false);
 }
 
 QObject* Module::createRectBrush(uint w, uint h, uint hf, uint vf)
 {
     KisAutobrushShape* kas = new KisAutobrushRectShape(qMax(1u,w), qMax(1u,h), hf, vf);
-    KisAutobrushResource *thing = new KisAutobrushResource(kas);
+    KisAutoBrush *thing = new KisAutoBrush(kas);
     return new Brush(this, thing, false);
 }
 

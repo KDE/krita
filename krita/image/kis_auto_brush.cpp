@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_autobrush_resource.h"
+#include "kis_auto_brush.h"
  
 
 #include <kis_debug.h>
@@ -141,11 +141,11 @@ void KisAutobrushRectShape::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute( "autobrush_type", "rect" );
 }
 
-struct KisAutobrushResource::Private {
+struct KisAutoBrush::Private {
     KisAutobrushShape* shape;
 };
 
-KisAutobrushResource::KisAutobrushResource(KisAutobrushShape* as) : KisBrush(""), d(new Private)
+KisAutoBrush::KisAutoBrush(KisAutobrushShape* as) : KisBrush(""), d(new Private)
 {
     d->shape = as;
     QImage img = d->shape->createBrush();
@@ -153,13 +153,13 @@ KisAutobrushResource::KisAutobrushResource(KisAutobrushShape* as) : KisBrush("")
     setBrushType(MASK);
 }
 
-KisAutobrushResource::~KisAutobrushResource()
+KisAutoBrush::~KisAutoBrush()
 {
     delete d->shape;
     delete d;
 }
 
-void KisAutobrushResource::generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
+void KisAutoBrush::generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY ) const
 {
     Q_UNUSED(info);
 
@@ -217,7 +217,7 @@ void KisAutobrushResource::generateMask(KisPaintDeviceSP dst, KisBrush::Coloring
 
 }
 
-void KisAutobrushResource::toXML(QDomDocument& doc, QDomElement& e) const
+void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisBrush::toXML(doc,e);
     e.setAttribute( "type", "autobrush" );

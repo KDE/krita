@@ -16,7 +16,7 @@
  */
 
 #include "kis_dab_shape.h"
-#include <kis_autobrush_resource.h>
+#include <kis_auto_brush.h>
 #include <kis_datamanager.h>
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>

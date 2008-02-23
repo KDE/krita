@@ -23,7 +23,7 @@
 
 #include <kis_debug.h>
 
-#include <kis_autobrush_resource.h>
+#include <kis_auto_brush.h>
 #include <kis_convolution_painter.h>
 #include <kis_generic_colorspace.h>
 #include <kis_iterators_pixel.h>

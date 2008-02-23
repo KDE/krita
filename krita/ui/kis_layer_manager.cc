@@ -545,37 +545,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 
     KisLayerSP l = activeLayer();
 
-    KisPaintDeviceSP dev;
-
-    //  Argh! I hate having to cast, cast and cast again to see what
-    //  kind of a layer I've got!
-
-    // XXX: When the layer projection refactor is done, fix this!
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
-    if (pl) {
-        dev = pl->paintDevice();
-    }
-    else {
-        KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
-        if (gl) {
-            dev = gl->projection();
-        }
-        else {
-            KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(l.data());
-            if (al) {
-                dev = al->cachedPaintDevice();
-            }
-            else {
-                KisShapeLayer * sl = dynamic_cast<KisShapeLayer*>( l.data() );
-                if ( sl ) {
-                    dev = sl->projection();
-                }
-                else {
-                    return;
-                }
-            }
-        }
-    }
+    KisPaintDeviceSP dev = l->projection();
 
     KisDlgAdjustmentLayer dlg(dev, img->nextLayerName(), i18n("New Adjustment Layer"), m_view, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {

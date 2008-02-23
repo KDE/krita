@@ -71,21 +71,31 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( QWidget* parent, KoDocumentInfo* docInfo )
 
     setCaption( i18n( "Document Information" ) );
     setInitialSize( QSize( 500, 500 ) );
-    setFaceType( KPageDialog::Tabbed );
+    setFaceType( KPageDialog::List );
     setButtons( KDialog::Ok|KDialog::Cancel );
     setDefaultButton( KDialog::Ok );
 
     d->m_aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();
     d->m_aboutUi->setupUi( infodlg );
-    addPage( infodlg, i18n( "General" ) );
+    KPageWidgetItem *page = new KPageWidgetItem( infodlg, i18n( "General" ) );
+    page->setHeader( i18n( "General" ) );
+    KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
+    KMimeType::Ptr mime = KMimeType::mimeType( doc->mimeType() );
+    if ( ! mime )
+        mime = KMimeType::defaultMimeTypePtr();
+    page->setIcon( KIcon( KIconLoader::global()->loadMimeTypeIcon(mime->iconName(), KIconLoader::Desktop, 48 ) ) );
+    addPage( page );
 
     initAboutTab();
 
     d->m_authorUi = new Ui::KoDocumentInfoAuthorWidget();
     QWidget *authordlg = new QWidget();
     d->m_authorUi->setupUi( authordlg );
-    addPage( authordlg, i18n( "Author" ) );
+    page = new KPageWidgetItem( authordlg, i18n( "Author" ) );
+    page->setHeader( i18n( "Author" ) );
+    page->setIcon( KIcon( "user-identity" ) );
+    addPage( page );
 
     initAuthorTab();
 
@@ -112,14 +122,7 @@ void KoDocumentInfoDlg::initAboutTab()
     if( !doc )
         return;
 
-    d->m_aboutUi->leFileName->setText( doc->localFilePath() );
-    d->m_aboutUi->leFileName->setReadOnly( true );
-    
-    KMimeType::Ptr mime = KMimeType::mimeType( doc->mimeType() );
-    if ( ! mime )
-        mime = KMimeType::defaultMimeTypePtr();
-    QPixmap p = KIconLoader::global()->loadMimeTypeIcon(mime->iconName(), KIconLoader::Desktop, 48 );
-    d->m_aboutUi->lblPixmap->setPixmap( p );
+    d->m_aboutUi->filePathLabel->setText( doc->localFilePath() );
 
     d->m_aboutUi->leTitle->setText( d->m_info->aboutInfo( "title" ) );
     d->m_aboutUi->leSubject->setText( d->m_info->aboutInfo( "subject" ) );
@@ -189,9 +192,7 @@ void KoDocumentInfoDlg::initAboutTab()
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    QPixmap p = KIconLoader::global()->loadIcon( "user-identity", KIconLoader::Desktop, 48 );
-    d->m_authorUi->lblAuthor->setPixmap( p );
-    p = KIconLoader::global()->loadIcon( "office-address-book", KIconLoader::Small );
+    QPixmap p = KIconLoader::global()->loadIcon( "office-address-book", KIconLoader::Small );
     d->m_authorUi->pbLoadKABC->setIcon( QIcon( p ) );
     p= KIconLoader::global()->loadIcon( "edit-delete", KIconLoader::Small );
     d->m_authorUi->pbDelete->setIcon( QIcon( p ) );

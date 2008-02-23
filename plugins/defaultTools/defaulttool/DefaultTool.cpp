@@ -102,6 +102,9 @@ DefaultTool::DefaultTool( KoCanvasBase *canvas )
     m_sizeCursors[5] = Qt::SizeBDiagCursor;
     m_sizeCursors[6] = Qt::SizeHorCursor;
     m_sizeCursors[7] = Qt::SizeFDiagCursor;
+
+    KoShapeManager * manager = canvas->shapeManager();
+    connect( manager, SIGNAL( selectionChanged() ), this, SLOT( updateActions() ) );
 }
 
 DefaultTool::~DefaultTool()
@@ -895,6 +898,37 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
         return new ShapeMoveStrategy(this, m_canvas, event->point);
     }
     return 0;
+}
+
+void DefaultTool::updateActions()
+{
+    if (!koSelection())
+    {
+        action( "object_move_totop" )->setEnabled(false);
+        action( "object_move_up" )->setEnabled(false);
+        action( "object_move_down" )->setEnabled(false);
+        action( "object_move_tobottom" )->setEnabled(false);
+        action( "object_align_horizontal_left" )->setEnabled(false);
+        action( "object_align_horizontal_center" )->setEnabled(false);
+        action( "object_align_horizontal_right" )->setEnabled(false);
+        action( "object_align_vertical_top" )->setEnabled(false);
+        action( "object_align_vertical_center" )->setEnabled(false);
+        action( "object_align_vertical_bottom" )->setEnabled(false);
+        return;
+    }
+
+    bool enable = koSelection()->count () > 0;
+    action( "object_move_totop" )->setEnabled(enable);
+    action( "object_move_up" )->setEnabled(enable);
+    action( "object_move_down" )->setEnabled(enable);
+    action( "object_move_tobottom" )->setEnabled(enable);
+    enable = koSelection()->count () > 1;
+    action( "object_align_horizontal_left" )->setEnabled(enable);
+    action( "object_align_horizontal_center" )->setEnabled(enable);
+    action( "object_align_horizontal_right" )->setEnabled(enable);
+    action( "object_align_vertical_top" )->setEnabled(enable);
+    action( "object_align_vertical_center" )->setEnabled(enable);
+    action( "object_align_vertical_bottom" )->setEnabled(enable);
 }
 
 #include "DefaultTool.moc"

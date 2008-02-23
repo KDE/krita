@@ -98,6 +98,9 @@ private slots:
     void selectionMoveUp();
     void selectionMoveDown();
 
+    /// Update actions on selection change
+    void updateActions();
+
 public: // Events
 
     virtual void mousePressEvent( KoPointerEvent *event );

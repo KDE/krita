@@ -206,23 +206,28 @@ void KoPAView::initActions()
     setShowRulers(m_doc->rulersVisible());
 
     m_actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
-    actionCollection()->addAction( "edit_insertpage", m_actionInsertPage );
+    actionCollection()->addAction( "page_insertpage", m_actionInsertPage );
     m_actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
     m_actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
     connect( m_actionInsertPage, SIGNAL( triggered() ), this, SLOT( insertPage() ) );
 
     m_actionCopyPage = new KAction( i18n( "Copy Page" ), this );
-    actionCollection()->addAction( "edit_copypage", m_actionCopyPage );
+    actionCollection()->addAction( "page_copypage", m_actionCopyPage );
     m_actionCopyPage->setToolTip( i18n( "Copy the current page" ) );
     m_actionCopyPage->setWhatsThis( i18n( "Copy the current page" ) );
     connect( m_actionCopyPage, SIGNAL( triggered() ), this, SLOT( copyPage() ) );
 
     m_actionDeletePage = new KAction( i18n( "Delete Page" ), this );
     m_actionDeletePage->setEnabled( m_doc->pageCount() > 1 );
-    actionCollection()->addAction( "edit_deletepage", m_actionDeletePage );
+    actionCollection()->addAction( "page_deletepage", m_actionDeletePage );
     m_actionDeletePage->setToolTip( i18n( "Delete a new page after the current one" ) );
     m_actionDeletePage->setWhatsThis( i18n( "Delete a new page after the current one" ) );
     connect( m_actionDeletePage, SIGNAL( triggered() ), this, SLOT( deletePage() ) );
+
+    actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
+    actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
+    actionCollection()->addAction(KStandardAction::FirstPage,  "page_first", this, SLOT(goToFirstPage()));
+    actionCollection()->addAction(KStandardAction::LastPage,  "page_last", this, SLOT(goToLastPage()));
 
     KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
     foreach(QAction *action, m_doc->inlineTextObjectManager()->createInsertVariableActions(m_canvas))
@@ -363,6 +368,8 @@ void KoPAView::updateActivePage( KoPAPageBase * page )
     m_zoomController->setDocumentSize( pageSize );
 
     m_canvas->update();
+
+    updatePageNavigationActions();
 
     emit activePageChanged();
 }
@@ -531,6 +538,41 @@ void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
     }
 
     KoView::partActivateEvent(event);
+}
+
+void KoPAView::goToPreviousPage()
+{
+    KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PagePrevious);
+    updateActivePage(page);
+}
+
+void KoPAView::goToNextPage()
+{
+    KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PageNext);
+    updateActivePage(page);
+}
+
+void KoPAView::goToFirstPage()
+{
+    KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PageFirst);
+    updateActivePage(page);
+}
+
+void KoPAView::goToLastPage()
+{
+    KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PageLast);
+    updateActivePage(page);
+}
+
+void KoPAView::updatePageNavigationActions()
+{
+    int index = m_doc->pageIndex(activePage());
+    int pageCount = m_doc->pages(m_viewMode->masterMode()).count();
+
+    actionCollection()->action("page_previous")->setEnabled(index > 0);
+    actionCollection()->action("page_first")->setEnabled(index > 0);
+    actionCollection()->action("page_next")->setEnabled(index < pageCount - 1);
+    actionCollection()->action("page_last")->setEnabled(index < pageCount - 1);
 }
 
 #include "KoPAView.moc"

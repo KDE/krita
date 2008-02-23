@@ -125,6 +125,9 @@ protected:
     /// Called when receiving a PartActivateEvent
     virtual void partActivateEvent(KParts::PartActivateEvent* event);
 
+    /// Update page navigation actions
+    void updatePageNavigationActions();
+
 protected slots:
     void viewSnapToGrid(bool snap);
     void viewGrid(bool show);
@@ -160,6 +163,15 @@ protected slots:
 
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();
+
+    /// Go to the previous page
+    void goToPreviousPage();
+    /// Go to the next page
+    void goToNextPage();
+    /// Go to the first page
+    void goToFirstPage();
+    /// Go to the last page
+    void goToLastPage();
 
 protected:
     KoPADocument *m_doc;

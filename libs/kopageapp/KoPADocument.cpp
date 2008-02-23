@@ -37,7 +37,6 @@
 #include <KoStyleManager.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
-#include <KoDom.h>
 #include <KoXmlNS.h>
 
 #include "KoPACanvas.h"
@@ -103,14 +102,14 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     KoPALoadingContext paContext( loadingContext, this );
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
-    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
     if ( realBody.isNull() ) {
         kError() << "No body tag found!" << endl;
         return false;
     }
 
-    KoXmlElement body = KoDom::namedItemNS(realBody, KoXmlNS::office, odfTagName( false ));
+    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, odfTagName( false ));
 
     if ( body.isNull() ) {
         kError() << "No office:" << odfTagName( false ) << " tag found!" << endl;

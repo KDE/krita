@@ -18,7 +18,6 @@
 
 #include <KoXmlReader.h>
 #include <KoOasisSettings.h>
-#include <KoDom.h>
 #include <kdebug.h>
 #include <assert.h>
 #include <QString>

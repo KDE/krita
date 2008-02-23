@@ -22,7 +22,6 @@
 
 #include "KoPageLayout.h"
 
-#include "KoDom.h"
 #include "KoXmlNS.h"
 #include "KoUnit.h"
 
@@ -41,7 +40,7 @@ KoGenStyle KoPageLayout::saveOasis() const
 
 void KoPageLayout::loadOasis(const KoXmlElement &style)
 {
-    KoXmlElement properties( KoDom::namedItemNS( style, KoXmlNS::style, "page-layout-properties" ) );
+    KoXmlElement properties( KoXml::namedItemNS( style, KoXmlNS::style, "page-layout-properties" ) );
     if ( !properties.isNull() )
     {
         width = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-width", QString() ) );

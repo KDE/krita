@@ -27,7 +27,6 @@
 // koffice
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
-#include <KoDom.h>
 #include <KoXmlReader.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -523,7 +522,7 @@ void KoTextLoader::loadHeading(KoTextLoadingContext& context, const KoXmlElement
 
     /*
     //1.6: KoOasisContext::pushOutlineListLevelStyle
-    //KoXmlElement outlineStyle = KoDom::namedItemNS( stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
+    //KoXmlElement outlineStyle = KoXml::namedItemNS( stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
     KoListStyle* listStyle = 0;
     if( level > 0 ) {
         listStyle = new KoListStyle();

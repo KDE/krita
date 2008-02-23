@@ -18,7 +18,6 @@
 
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
-#include <KoDom.h>
 #include <kdebug.h>
 #include <assert.h>
 //Added by qt3to4:

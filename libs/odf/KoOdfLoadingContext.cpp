@@ -22,7 +22,6 @@
 #include <KoStore.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
-#include <KoDom.h>
 
 class KoOdfLoadingContext::Private
 {
@@ -104,9 +103,9 @@ void KoOdfLoadingContext::parseMeta() const
             KoOdfReadStore oasisStore( m_store );
             QString errorMsg;
             if ( oasisStore.loadAndParse( "meta.xml", metaDoc, errorMsg ) ) {
-                KoXmlNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
-                KoXmlNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
-                KoXmlElement generator = KoDom::namedItemNS( office, KoXmlNS::meta, "generator" );
+                KoXmlNode meta   = KoXml::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
+                KoXmlNode office = KoXml::namedItemNS( meta, KoXmlNS::office, "meta" );
+                KoXmlElement generator = KoXml::namedItemNS( office, KoXmlNS::meta, "generator" );
                 if ( !generator.isNull() )
                     m_generator = generator.text();
             }

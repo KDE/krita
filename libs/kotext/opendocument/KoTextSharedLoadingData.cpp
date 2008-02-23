@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-#include <KoDom.h>
+#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
@@ -212,7 +212,7 @@ void KoTextSharedLoadingData::addListStyles( KoOdfLoadingContext & context )
 void KoTextSharedLoadingData::addOutlineStyles( KoOdfLoadingContext & context )
 {
     // outline-styles used e.g. for headers
-    KoXmlElement outlineStyle = KoDom::namedItemNS( context.stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
+    KoXmlElement outlineStyle = KoXml::namedItemNS( context.stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
     KoXmlElement tag;
     forEachElement( tag, outlineStyle )
     {

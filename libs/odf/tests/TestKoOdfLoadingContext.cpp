@@ -22,7 +22,7 @@
 #include <QBuffer>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <KoDom.h>
+#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
@@ -116,11 +116,11 @@ void TestKoOdfLoadingContext::testFillStyleStack()
     KoOdfLoadingContext context( readStore.styles(), readStore.store() );
 
     KoXmlElement content = readStore.contentDoc().documentElement();
-    KoXmlElement realBody( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
     QVERIFY( realBody.isNull() == false );
 
-    KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "text" );
+    KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, "text" );
     QVERIFY( body.isNull() == false );
 
     KoXmlElement tag;

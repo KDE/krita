@@ -19,7 +19,6 @@
 
 #include "KoOdfStylesReader.h"
 
-#include "KoDom.h"
 #include "KoGenStyles.h"
 #include "KoXmlNS.h"
 #include "KoUnit.h"
@@ -77,7 +76,7 @@ void KoOdfStylesReader::createStyleMap( const KoXmlDocument& doc, bool stylesDot
 {
    const KoXmlElement docElement  = doc.documentElement();
     // We used to have the office:version check here, but better let the apps do that
-    KoXmlElement fontStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "font-face-decls" );
+    KoXmlElement fontStyles = KoXml::namedItemNS( docElement, KoXmlNS::office, "font-face-decls" );
 
     if ( !fontStyles.isNull() ) {
         //kDebug(30003) <<"Starting reading in font-face-decls...";
@@ -87,7 +86,7 @@ void KoOdfStylesReader::createStyleMap( const KoXmlDocument& doc, bool stylesDot
 
     //kDebug(30003) <<"Starting reading in office:automatic-styles. stylesDotXml=" << stylesDotXml;
 
-    KoXmlElement autoStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "automatic-styles" );
+    KoXmlElement autoStyles = KoXml::namedItemNS( docElement, KoXmlNS::office, "automatic-styles" );
     if ( !autoStyles.isNull() ) {
         insertStyles( autoStyles, stylesDotXml ? AutomaticInStyles : AutomaticInContent );
     }// else
@@ -96,7 +95,7 @@ void KoOdfStylesReader::createStyleMap( const KoXmlDocument& doc, bool stylesDot
 
     //kDebug(30003) <<"Reading in master styles";
 
-    KoXmlNode masterStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "master-styles" );
+    KoXmlNode masterStyles = KoXml::namedItemNS( docElement, KoXmlNS::office, "master-styles" );
     if ( !masterStyles.isNull() ) {
         KoXmlElement master;
         forEachElement( master, masterStyles )
@@ -118,7 +117,7 @@ void KoOdfStylesReader::createStyleMap( const KoXmlDocument& doc, bool stylesDot
 
     kDebug(30003) <<"Starting reading in office:styles";
 
-    const KoXmlElement officeStyle = KoDom::namedItemNS( docElement, KoXmlNS::office, "styles" );
+    const KoXmlElement officeStyle = KoXml::namedItemNS( docElement, KoXmlNS::office, "styles" );
     if ( !officeStyle.isNull() ) {
         d->officeStyle = officeStyle;
         insertOfficeStyles( officeStyle );

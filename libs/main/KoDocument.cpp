@@ -22,7 +22,6 @@
 #include "KoDocument.h"
 #include "KoDocument_p.h"
 
-#include "KoDom.h"
 #include "KoDocumentAdaptor.h"
 #include "KoGlobal.h"
 #include "KoDocumentChild.h"
@@ -1945,7 +1944,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
         KoOdfReadStore oasisStore( store );
         if ( oasisStore.loadAndParse( "VersionList.xml", versionInfo, d->lastErrorMessage ) )
         {
-            KoXmlNode list = KoDom::namedItemNS( versionInfo, KoXmlNS::VL, "version-list" );
+            KoXmlNode list = KoXml::namedItemNS( versionInfo, KoXmlNS::VL, "version-list" );
             KoXmlElement e;
             forEachElement( e, list )
             {

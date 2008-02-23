@@ -31,7 +31,6 @@
 #include <KoOdfStylesReader.h>
 #include <KoOasisSettings.h>
 #include <KoXmlNS.h>
-#include <KoDom.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <KoShapeRegistry.h>

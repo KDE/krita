@@ -20,7 +20,6 @@
 
 #include "KoStyleStack.h"
 #include "KoUnit.h"
-#include "KoDom.h"
 #include "KoXmlNS.h"
 
 #include <kdebug.h>
@@ -106,7 +105,7 @@ QString KoStyleStack::property( const char* nsURI, const char* name, const char*
     while ( it != m_stack.begin() )
     {
         --it;
-        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( properties.hasAttributeNS( nsURI, name ) )
             return properties.attributeNS( nsURI, name, QString() );
         if ( detail && properties.hasAttributeNS( nsURI, fullName ) )
@@ -127,7 +126,7 @@ bool KoStyleStack::hasProperty( const char* nsURI, const char* name, const char*
     while ( it != m_stack.begin() )
     {
         --it;
-        const KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        const KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( properties.hasAttributeNS( nsURI, name ) ||
              ( detail && properties.hasAttributeNS( nsURI, fullName ) ) )
             return true;
@@ -146,7 +145,7 @@ double KoStyleStack::fontSize(const double defaultFontPointSize) const
     while ( it != m_stack.begin() )
     {
         --it;
-        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
+        KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
         if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
             const QString value = properties.attributeNS( m_foNSURI, name, QString() );
             if ( value.endsWith( '%' ) ) {
@@ -172,8 +171,8 @@ bool KoStyleStack::hasChildNode( const char* nsURI, const char* localName ) cons
     while ( it != m_stack.begin() )
     {
         --it;
-        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
-        if ( !KoDom::namedItemNS( properties, nsURI, localName ).isNull() )
+        KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        if ( !KoXml::namedItemNS( properties, nsURI, localName ).isNull() )
             return true;
     }
 
@@ -187,8 +186,8 @@ KoXmlElement KoStyleStack::childNode( const char* nsURI, const char* localName) 
     while ( it != m_stack.begin() )
     {
         --it;
-        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
-        KoXmlElement e = KoDom::namedItemNS( properties, nsURI, localName );
+        KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        KoXmlElement e = KoXml::namedItemNS( properties, nsURI, localName );
         if ( !e.isNull() )
             return e;
     }

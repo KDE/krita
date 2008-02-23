@@ -19,7 +19,6 @@
 
 #include "KoOasisSettings.h"
 #include "KoXmlNS.h"
-#include "KoDom.h"
 #include <kdebug.h>
 
 class KoOasisSettings::Private
@@ -27,7 +26,7 @@ class KoOasisSettings::Private
 };
 
 KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc )
-    : m_settingsElement( KoDom::namedItemNS( doc.documentElement(), KoXmlNS::office, "settings" ) ),
+    : m_settingsElement( KoXml::namedItemNS( doc.documentElement(), KoXmlNS::office, "settings" ) ),
       m_configNSURI( KoXmlNS::config )
     , d( 0 )
 {
@@ -37,7 +36,7 @@ KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc )
 }
 
 KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI )
-    : m_settingsElement( KoDom::namedItemNS( doc.documentElement(), officeNSURI, "settings" ) ),
+    : m_settingsElement( KoXml::namedItemNS( doc.documentElement(), officeNSURI, "settings" ) ),
       m_configNSURI( configNSURI )
     , d( 0 )
 {

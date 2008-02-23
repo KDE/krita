@@ -20,7 +20,6 @@
 
 #include "KoDocumentInfo.h"
 
-#include "KoDom.h"
 #include "KoDocument.h"
 #include "kofficeversion.h"
 #include "KoOdfWriteStore.h"
@@ -74,8 +73,8 @@ bool KoDocumentInfo::load( const KoXmlDocument& doc )
 
 bool KoDocumentInfo::loadOasis( const KoXmlDocument& metaDoc )
 {
-    KoXmlNode t = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
-    KoXmlNode office = KoDom::namedItemNS( t, KoXmlNS::office, "meta" );
+    KoXmlNode t = KoXml::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
+    KoXmlNode office = KoXml::namedItemNS( t, KoXmlNS::office, "meta" );
 
     if( office.isNull() )
         return false;
@@ -198,7 +197,7 @@ bool KoDocumentInfo::saveOasisAuthorInfo( KoXmlWriter &xmlWriter )
 
 bool KoDocumentInfo::loadOasisAuthorInfo( const KoXmlNode& metaDoc )
 {
-    KoXmlElement e = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "creator" );
+    KoXmlElement e = KoXml::namedItemNS( metaDoc, KoXmlNS::dc, "creator" );
     if ( !e.isNull() && !e.text().isEmpty() )
         setAuthorInfo( "creator", e.text() );
 
@@ -316,13 +315,13 @@ bool KoDocumentInfo::loadOasisAboutInfo( const KoXmlNode& metaDoc )
         }
         else if( tag == "title" || tag == "description" || tag == "subject" || tag == "date" )
         {
-            KoXmlElement e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, tag.toLatin1().constData() );
+            KoXmlElement e  = KoXml::namedItemNS( metaDoc, KoXmlNS::dc, tag.toLatin1().constData() );
             if ( !e.isNull() && !e.text().isEmpty() )
                 setAboutInfo( tag, e.text() );
         }
         else
         {
-            KoXmlElement e  = KoDom::namedItemNS( metaDoc, KoXmlNS::meta, tag.toLatin1().constData() );
+            KoXmlElement e  = KoXml::namedItemNS( metaDoc, KoXmlNS::meta, tag.toLatin1().constData() );
             if ( !e.isNull() && !e.text().isEmpty() )
                 setAboutInfo( tag, e.text() );
         }

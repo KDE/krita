@@ -253,7 +253,7 @@ void KoOdfCollectionLoader::loadNativeFile(const QString& path)
     m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, 0);
 
     KoXmlElement content = m_odfStore->contentDoc().documentElement();
-    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
     if (realBody.isNull()) {
         kError() << "No body tag found!" << endl;
@@ -261,7 +261,7 @@ void KoOdfCollectionLoader::loadNativeFile(const QString& path)
         return;
     }
 
-    m_body = KoDom::namedItemNS(realBody, KoXmlNS::office, "drawing");
+    m_body = KoXml::namedItemNS(realBody, KoXmlNS::office, "drawing");
 
     if (m_body.isNull()) {
         kError() << "No office:drawing tag found!" << endl;

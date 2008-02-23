@@ -24,7 +24,6 @@
 #include <KoShapeOdfSaveHelper.h>
 #include <KoOdf.h>
 #include <KoShapePaste.h>
-#include <KoDom.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStore.h>
@@ -75,14 +74,14 @@ KoShape* KoCollectionShapeFactory::createDefaultShape( KoShapeControllerBase * s
         }
 
         KoXmlElement content = odfStore.contentDoc().documentElement();
-        KoXmlElement realBody( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+        KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
         if ( realBody.isNull() ) {
             kError() << "No body tag found!" << endl;
             return 0;
         }
 
-        KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( KoOdf::Text, false ) );
+        KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( KoOdf::Text, false ) );
 
         if ( body.isNull() ) {
             kError() << "No" << KoOdf::bodyContentElement(KoOdf::Text, true ) << "tag found!" << endl;

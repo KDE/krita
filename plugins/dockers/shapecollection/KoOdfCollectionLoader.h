@@ -19,9 +19,9 @@
 #ifndef KOODFCOLLECTIONLOADER_H
 #define KOODFCOLLECTIONLOADER_H
 
-#include <KoDom.h>
-
 #include <kurl.h>
+
+#include <KoXmlReader.h>
 
 #include <QObject>
 #include <QList>

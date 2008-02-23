@@ -25,7 +25,7 @@
 #include <kgenericfactory.h>
 
 #include <kis_brush_registry.h>
-#include "kis_autobrush.h"
+#include "kis_auto_brush_widget.h"
 
 
 typedef KGenericFactory<AutoBrush> AutoBrushFactory;

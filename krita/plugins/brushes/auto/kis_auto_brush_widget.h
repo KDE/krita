@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_AUTOBRUSH_H_
-#define _KIS_AUTOBRUSH_H_
+#ifndef _KIS_AUTO_BRUSH_WIDGET_H_
+#define _KIS_AUTO_BRUSH_WIDGET_H_
 
 #include <QObject>
 #include <QResizeEvent>
@@ -33,11 +33,11 @@ class KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrush
         KisWdgAutobrush(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
 };
 
-class KisAutobrush : public KisWdgAutobrush
+class KisAutoBrushWidget : public KisWdgAutobrush
 {
     Q_OBJECT
 public:
-    KisAutobrush(QWidget *parent, const char* name, const QString& caption);
+    KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption);
     void activate();
 
 signals:

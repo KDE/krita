@@ -1,6 +1,6 @@
 set(kritaautobrush_PART_SRCS
     autobrush.cpp
-    kis_autobrush.cc
+    kis_auto_brush_widget.cc
     )
 kde4_add_plugin(kritaautobrush ${kritaautobrush_PART_SRCS})
 target_link_libraries(kritaautobrush kritaui)

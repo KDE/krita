@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
  
-#include "kis_autobrush.h"
+#include "kis_auto_brush_widget.h"
 #include <KoImageResource.h>
 #include <kis_debug.h>
 #include <QSpinBox>
@@ -28,7 +28,7 @@
 #include <QResizeEvent>
 
 
-KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
+KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
 {
     setWindowTitle(caption);
 
@@ -59,18 +59,18 @@ KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& cap
 
 }
 
-void KisAutobrush::resizeEvent ( QResizeEvent * )
+void KisAutoBrushWidget::resizeEvent ( QResizeEvent * )
 {
     brushPreview->setMinimumHeight(brushPreview->width()); // dirty hack !
     brushPreview->setMaximumHeight(brushPreview->width()); // dirty hack !
 }
 
-void KisAutobrush::activate()
+void KisAutoBrushWidget::activate()
 {
     paramChanged();
 }
 
-void KisAutobrush::paramChanged()
+void KisAutoBrushWidget::paramChanged()
 {
     qint32 fh = qMin( spinBoxWidth->value()/2, spinBoxHorizontal->value() ) ;
     qint32 fv = qMin( spinBoxHeigth->value()/2, spinBoxVertical->value() );
@@ -113,7 +113,7 @@ void KisAutobrush::paramChanged()
 
     emit(activatedResource(resource));
 }
-void KisAutobrush::spinBoxWidthChanged(int a)
+void KisAutoBrushWidget::spinBoxWidthChanged(int a)
 {
     spinBoxHorizontal->setMaximum(a/2);
     if(m_linkSize)
@@ -123,7 +123,7 @@ void KisAutobrush::spinBoxWidthChanged(int a)
     }
     this->paramChanged();
 }
-void KisAutobrush::spinBoxHeigthChanged(int a)
+void KisAutoBrushWidget::spinBoxHeigthChanged(int a)
 {
     spinBoxVertical->setMaximum(a/2);
     if(m_linkSize)
@@ -133,20 +133,20 @@ void KisAutobrush::spinBoxHeigthChanged(int a)
     }
     this->paramChanged();
 }
-void KisAutobrush::spinBoxHorizontalChanged(int a)
+void KisAutoBrushWidget::spinBoxHorizontalChanged(int a)
 {
     if(m_linkFade)
         spinBoxVertical->setValue(a);
     this->paramChanged();
 }
-void KisAutobrush::spinBoxVerticalChanged(int a)
+void KisAutoBrushWidget::spinBoxVerticalChanged(int a)
 {
     if(m_linkFade)
         spinBoxHorizontal->setValue(a);
     this->paramChanged();
 }
 
-void KisAutobrush::linkSizeToggled(bool b)
+void KisAutoBrushWidget::linkSizeToggled(bool b)
 {
     m_linkSize = b;
 
@@ -159,7 +159,7 @@ void KisAutobrush::linkSizeToggled(bool b)
     }
 }
 
-void KisAutobrush::linkFadeToggled(bool b)
+void KisAutoBrushWidget::linkFadeToggled(bool b)
 {
     m_linkFade = b;
 

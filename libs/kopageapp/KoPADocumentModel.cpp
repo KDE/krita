@@ -46,10 +46,11 @@
 
 
 
-KoPADocumentModel::KoPADocumentModel( KoPADocument *document )
-: m_document( document )
+KoPADocumentModel::KoPADocumentModel( QObject* parent, KoPADocument *document )
+: KoDocumentSectionModel( parent )
 , m_lastContainer( 0 )
 {
+    setDocument( document );
     setSupportedDragActions( Qt::MoveAction );
 }
 
@@ -544,6 +545,15 @@ QModelIndex KoPADocumentModel::parentIndexFromShape( const KoShape * child )
 void KoPADocumentModel::setDocument( KoPADocument* document )
 {
     m_document = document;
+
+    if ( m_document )
+    {
+        connect( m_document, SIGNAL(pageAdded( KoPAPageBase* ) ), this, SLOT( update() ) );
+        connect( m_document, SIGNAL(pageRemoved( KoPAPageBase* ) ), this, SLOT( update() ) );
+        connect( m_document, SIGNAL(shapeAdded( KoShape* ) ), this, SLOT( update() ) );
+        connect( m_document, SIGNAL(shapeRemoved( KoShape* ) ), this, SLOT( update() ) );
+    }
+
     update();
 }
 

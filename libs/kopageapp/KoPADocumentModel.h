@@ -39,12 +39,11 @@ class KoViewConverter;
  */
 class KoPADocumentModel : public KoDocumentSectionModel
 {
+    Q_OBJECT
 public:
     /// Constructs a new document section model using the specified documents data
-    KoPADocumentModel( KoPADocument *document = 0 );
-    /// Triggers an update of the complete model
-    void update();
-    
+    KoPADocumentModel( QObject* parent, KoPADocument *document = 0 );
+
     /// Set the document used in the model
     void setDocument(KoPADocument* document);
 
@@ -60,6 +59,11 @@ public:
     virtual QStringList mimeTypes() const;
     virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
+
+public slots:
+    /// Triggers an update of the complete model
+    void update();
+
 private:
     /// Returns properties of the given shape
     PropertyList properties( KoShape* shape ) const;

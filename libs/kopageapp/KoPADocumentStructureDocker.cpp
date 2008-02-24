@@ -47,7 +47,7 @@
 #include <kmessagebox.h>
 
 #include <QtGui/QGridLayout>
-#include <QtGui/QPushButton>
+#include <QtGui/QToolButton>
 #include <QtGui/QButtonGroup>
 
 enum ButtonIds
@@ -78,6 +78,7 @@ QDockWidget* KoPADocumentStructureDockerFactory::createDockWidget()
 
 KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
     : QDockWidget( parent )
+    , KoCanvasObserver()
     , m_canvas( 0 )
     , m_model( 0 )
 {
@@ -85,43 +86,44 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
 
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
-    layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, 4 );
+    layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, -1 );
     m_sectionView->setDisplayMode( KoDocumentSectionView::DetailedMode );
     QButtonGroup *buttonGroup = new QButtonGroup( mainWidget );
     buttonGroup->setExclusive( false );
 
-    QPushButton *button = new QPushButton( mainWidget );
+    QToolButton *button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "list-add" ) );
     button->setToolTip( i18n("Add a new layer") );
     buttonGroup->addButton( button, Button_New );
     layout->addWidget( button, 1, 0 );
 
-    button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "arrow-up" ) );
-    button->setToolTip( i18n("Raise selected objects") );
-    buttonGroup->addButton( button, Button_Raise );
-    layout->addWidget( button, 1, 1 );
-
-    button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "arrow-down" ) );
-    button->setToolTip( i18n("Lower selected objects") );
-    buttonGroup->addButton( button, Button_Lower );
-    layout->addWidget( button, 1, 2 );
-
-    button = new QPushButton( mainWidget );
+    button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "list-remove" ) );
     button->setToolTip( i18n("Delete selected objects") );
     buttonGroup->addButton( button, Button_Delete );
+    layout->addWidget( button, 1, 1 );
+
+    button = new QToolButton( mainWidget );
+    button->setIcon( SmallIcon( "arrow-up" ) );
+    button->setToolTip( i18n("Raise selected objects") );
+    buttonGroup->addButton( button, Button_Raise );
     layout->addWidget( button, 1, 3 );
+
+    button = new QToolButton( mainWidget );
+    button->setIcon( SmallIcon( "arrow-down" ) );
+    button->setToolTip( i18n("Lower selected objects") );
+    buttonGroup->addButton( button, Button_Lower );
+    layout->addWidget( button, 1, 4 );
 
     layout->setSpacing( 0 );
     layout->setMargin( 3 );
+    layout->setColumnStretch( 2, 10 );
 
     setWidget( mainWidget );
 
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
-    m_model = new KoPADocumentModel();
+    m_model = new KoPADocumentModel( this );
     m_sectionView->setItemsExpandable( true );
     m_sectionView->setModel( m_model );
     m_sectionView->setDisplayMode( KoDocumentSectionView::MinimalMode );
@@ -134,7 +136,6 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
 
 KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
 {
-    delete m_model;
 }
 
 void KoPADocumentStructureDocker::updateView()
@@ -344,9 +345,9 @@ void KoPADocumentStructureDocker::extractSelectedLayersAndShapes( QList<KoPAPage
     }
 }
 
-void KoPADocumentStructureDocker::setCanvas( KoCanvasBase* canvas) 
-{ 
-    m_canvas = static_cast<KoPACanvas*> ( canvas ); 
+void KoPADocumentStructureDocker::setCanvas( KoCanvasBase* canvas )
+{
+    m_canvas = static_cast<KoPACanvas*> ( canvas );
     m_model->setDocument( m_canvas->document() );
 }
 

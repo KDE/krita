@@ -309,6 +309,8 @@ void KoPADocument::addShape( KoShape * shape )
         }
     }
 
+    emit shapeAdded( shape );
+
     postAddShape( page, shape );
 }
 
@@ -340,6 +342,8 @@ void KoPADocument::removeShape( KoShape *shape )
             }
         }
     }
+
+    emit shapeRemoved( shape );
 
     postRemoveShape( page, shape );
 }
@@ -385,6 +389,8 @@ void KoPADocument::insertPage( KoPAPageBase* page, int index )
     pages.insert( index, page );
 
     setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
+
+    emit pageAdded( page );
 }
 
 void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
@@ -408,6 +414,8 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
     pages.insert( index, page );
 
     setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
+
+    emit pageAdded( page );
 }
 
 int KoPADocument::takePage( KoPAPageBase *page )
@@ -439,6 +447,9 @@ int KoPADocument::takePage( KoPAPageBase *page )
     if ( pages.size() == 1 ) {
         setActionEnabled( KoPAView::ActionDeletePage, false );
     }
+
+    emit pageRemoved( page );
+
     return index;
 }
 

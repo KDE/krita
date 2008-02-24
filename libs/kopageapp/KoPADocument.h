@@ -170,6 +170,12 @@ public:
     void setRulersVisible(bool visible);
     bool rulersVisible() const;
 
+signals:
+    void shapeAdded(KoShape* shape);
+    void shapeRemoved(KoShape* shape);
+    void pageAdded(KoPAPageBase* page);
+    void pageRemoved(KoPAPageBase* page);
+
 protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
     virtual const char *odfTagName( bool withNamespace ) = 0;

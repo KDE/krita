@@ -45,13 +45,12 @@ public:
     QString palette() const;
 
 protected slots:
-    void colorSelected( const KoColor& color );
+    void colorSelected( const KoColor& color, bool final );
 
 protected:
     void readNamedColor( void );
 
 protected:
-    //KisPaletteView* m_paletteView;
     KoColorSet *m_currentPalette;
     KisView2 * m_view;
 };

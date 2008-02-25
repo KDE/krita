@@ -42,26 +42,23 @@ KisPaletteDocker::KisPaletteDocker( KisView2 * view )
 
     QVBoxLayout *layout = new QVBoxLayout( mainWidget );
 
-   // m_paletteView = new KisPaletteView(this, 0, mMinWidth, mCols);
-    layout->addWidget( new KoColorSetWidget(this) );
+    KoColorSetWidget* chooser = new KoColorSetWidget(this);
+    layout->addWidget( chooser );
 
     //setFixedSize(sizeHint());
-/*
-    connect(m_paletteView, SIGNAL(colorSelected(const KoColor &)),
-            this, SLOT(colorSelected(const KoColor &)));
-*/
-//     KisResourceServerBase* rServer;
-//     rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
-//     QList<KoResource*> resources = rServer->resources();
+
+    connect(chooser, SIGNAL(colorChanged(const KoColor&, bool)),
+            this, SLOT(colorSelected(const KoColor&, bool)));
 }
 
 KisPaletteDocker::~KisPaletteDocker()
 {
 }
 
-void KisPaletteDocker::colorSelected( const KoColor& color )
+void KisPaletteDocker::colorSelected( const KoColor& color, bool final )
 {
-    m_view->resourceProvider()->setFGColor(color);
+    if(final)
+        m_view->resourceProvider()->setFGColor(color);
 }
 
 QString KisPaletteDockerFactory::id() const

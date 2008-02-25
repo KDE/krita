@@ -27,7 +27,7 @@
 
 #include "KoResource.h"
 #include "KoColorSet.h"
-#include "kis_palette_view.h"
+#include "KoColorSetWidget.h"
 #include "kis_resource_provider.h"
 
 KisPaletteDocker::KisPaletteDocker( KisView2 * view )
@@ -40,10 +40,10 @@ KisPaletteDocker::KisPaletteDocker( KisView2 * view )
 
     m_currentPalette = 0;
 
-//    QVBoxLayout *layout = new QVBoxLayout( mainWidget );
+    QVBoxLayout *layout = new QVBoxLayout( mainWidget );
 
-    //m_paletteView = new KisPaletteView(this, 0, mMinWidth, mCols);
-    //layout->addWidget( m_paletteView );
+   // m_paletteView = new KisPaletteView(this, 0, mMinWidth, mCols);
+    layout->addWidget( new KoColorSetWidget(this) );
 
     //setFixedSize(sizeHint());
 /*

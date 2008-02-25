@@ -42,6 +42,8 @@
 #include <KoColorPatch.h>
 #include <KoEditColorSetDialog.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
 
 class KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
@@ -97,18 +99,8 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
 {
-    // TODO: don't hardcode default location of palettes
-    QList<KoColorSet *> palettes;
-    QString defaultPalette("krita/palettes/40_Colors.gpl");
-    QString dir = KGlobal::dirs()->findResourceDir("data", defaultPalette);
-    QDir loc = dir + "krita/palettes/";
-    loc.setNameFilters(QStringList("*.gpl"));
-    QStringList entryList = loc.entryList(QDir::Files);
-    QStringList::iterator it;
-    for (it = entryList.begin(); it != entryList.end(); ++it) {
-        (*it).prepend(dir + "krita/palettes/");
-        palettes.append(new KoColorSet(*it));
-    }
+    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+    QList<KoColorSet*> palettes = srv->resources();
 
     Q_ASSERT(colorSet);
     KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);

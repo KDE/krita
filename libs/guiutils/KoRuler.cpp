@@ -501,7 +501,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     }
 
     // Draw the mouse indicator
-    const int mouseCoord = d->mouseCoordinate - start - d->offset;
+    const int mouseCoord = d->mouseCoordinate - start;
     if (d->selected == KoRulerPrivate::None || d->selected == KoRulerPrivate::HotSpot) {
         const qreal left = rectangle.left() + 1;
         const qreal right = rectangle.right() -1;
@@ -1115,7 +1115,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         emit hotSpotChanged(d->hotspots[d->currentIndex].id, newPos);
         break;
     case KoRulerPrivate::None:
-        d->mouseCoordinate = (d->orientation == Qt::Horizontal ?  pos.x() : pos.y());
+        d->mouseCoordinate = (d->orientation == Qt::Horizontal ?  pos.x() : pos.y()) - d->offset;
         int hotSpotIndex = d->hotSpotIndex(pos);
         if (hotSpotIndex >= 0) {
             setCursor(QCursor( d->orientation == Qt::Horizontal ? Qt::SplitHCursor : Qt::SplitVCursor ));

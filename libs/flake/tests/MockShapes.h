@@ -9,6 +9,7 @@
 
 #include "kdebug.h"
 
+class KoImageCollection;
 
 class MockShape : public KoShape {
 public:
@@ -98,6 +99,10 @@ public:
     bool contains(  KoShape* shape )
     {
         return m_shapes.contains( shape );
+    }
+    QMap<QString, KoDataCenter *>  dataCenterMap(  )
+    {
+        return QMap<QString, KoDataCenter *>();
     }
 private:
     QSet<KoShape * > m_shapes;

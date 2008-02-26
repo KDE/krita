@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,8 +20,11 @@
  */
 
 #include "KoShapeFactory.h"
+#include "KoShape.h"
 #include <KoProperties.h>
 #include "KoShapeControllerBase.h"
+
+#include <kdebug.h>
 
 class KoShapeFactory::Private {
 public:
@@ -64,7 +68,7 @@ KoShape * KoShapeFactory::createDefaultShape( KoShapeControllerBase * shapeContr
 {
     KoShape * shape = createDefaultShape();
     if ( shape && shapeController ) {
-        shapeController->shapeCreated( shape );
+        shape->init( shapeController->dataCenterMap() );
     }
     return shape;
 }
@@ -73,7 +77,7 @@ KoShape * KoShapeFactory::createShape( const KoProperties * params, KoShapeContr
 {
     KoShape * shape = createShape( params );
     if ( shape && shapeController ) {
-        shapeController->shapeCreated( shape );
+        shape->init( shapeController->dataCenterMap() );
     }
     return shape;
 }

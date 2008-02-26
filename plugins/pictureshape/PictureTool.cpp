@@ -20,9 +20,17 @@
 #include "PictureTool.h"
 #include "PictureShape.h"
 
+#include <QToolButton>
+#include <QGridLayout>
+#include <KLocale>
+#include <KIconLoader>
+#include <KUrl>
+#include <KFileDialog>
+
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoPointerEvent.h>
 
 PictureTool::PictureTool( KoCanvasBase* canvas )
     : KoTool( canvas ),
@@ -56,7 +64,7 @@ void PictureTool::deactivate()
 
 QWidget * PictureTool::createOptionWidget()
 {
-/*
+
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout( optionWidget );
 
@@ -69,17 +77,29 @@ QWidget * PictureTool::createOptionWidget()
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotChangeUrl() ) );
 
     return optionWidget;
-*/
+
     return 0;
 }
 
 void PictureTool::slotChangeUrl()
 {
-/*
+
   kDebug()<<" PictureTool::slotChangeUrl";
   KUrl url = KFileDialog::getOpenUrl();
   if(!url.isEmpty() && m_pictureshape)
-    m_pictureshape->setCurrentUrl(url);
+    m_pictureshape->loadFromUrl(url);
+}
+
+void PictureTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+    if(m_canvas->shapeManager()->shapeAt(event->point) != m_pictureshape) {
+        event->ignore(); // allow the event to be used by another
+        return;
+    }
+
+    slotChangeUrl();
+/*
+    repaintSelection();
+    updateSelectionHandler();
 */
 }
 

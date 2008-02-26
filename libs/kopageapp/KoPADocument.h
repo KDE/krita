@@ -69,6 +69,13 @@ public:
      */
     QList<KoPAPageBase *> loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context );
 
+    /// reimplemented
+    virtual bool completeLoading( KoStore* store );
+
+    /// reimplemented
+    virtual bool completeSaving( KoStore* store );
+
+
     /**
      * Save pages
      *
@@ -169,6 +176,8 @@ public:
 
     void setRulersVisible(bool visible);
     bool rulersVisible() const;
+
+    QMap<QString, KoDataCenter *>  dataCenterMap(  );
 
 signals:
     void shapeAdded(KoShape* shape);

@@ -29,6 +29,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
+#include <KoShapeRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoTextDocumentLayout.h>
@@ -38,6 +39,7 @@
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 #include <KoXmlNS.h>
+#include <KoDataCenter.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
@@ -60,6 +62,7 @@ public:
     KoInlineTextObjectManager *inlineTextObjectManager;
     KoStyleManager *styleManager;
     bool rulersVisible;
+    QMap<QString, KoDataCenter *>  dataCenterMap;
 };
 
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
@@ -69,6 +72,13 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
     d->styleManager = new KoStyleManager(this);
 
+    // Ask every shapefactory to populate the dataCenterMap
+    foreach(QString id, KoShapeRegistry::instance()->keys())
+    {
+        KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+        shapeFactory->populateDataCenterMap(d->dataCenterMap);
+    }
+
     loadConfig();
 }
 
@@ -77,6 +87,7 @@ KoPADocument::~KoPADocument()
     saveConfig();
     qDeleteAll( d->pages );
     qDeleteAll( d->masterPages );
+    qDeleteAll( d->dataCenterMap );
     delete d;
 }
 
@@ -133,6 +144,16 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     return true;
 }
 
+bool KoPADocument::completeLoading( KoStore* store )
+{
+    bool ok=true;
+    foreach(KoDataCenter *dataCenter, d->dataCenterMap)
+    {
+        ok = ok && dataCenter->completeLoading(store);
+    }
+    return ok;
+}
+
 bool KoPADocument::saveOdf( SavingContext & documentContext )
 {
     KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
@@ -156,6 +177,16 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
     documentContext.odfStore.manifestWriter()->addManifestEntry( "content.xml", "text/xml" );
 
     return mainStyles.saveOdfStylesDotXml( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() );
+}
+
+bool KoPADocument::completeSaving( KoStore* store )
+{
+    bool ok=true;
+    foreach(KoDataCenter *dataCenter, d->dataCenterMap)
+    {
+        ok = ok && dataCenter->completeSaving(store);
+    }
+    return ok;
 }
 
 QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context )
@@ -352,6 +383,11 @@ void KoPADocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
 {
     Q_UNUSED( page );
     Q_UNUSED( shape );
+}
+
+QMap<QString, KoDataCenter *> KoPADocument::dataCenterMap()
+{
+    return d->dataCenterMap;
 }
 
 KoPAPageBase * KoPADocument::pageByShape( KoShape * shape ) const

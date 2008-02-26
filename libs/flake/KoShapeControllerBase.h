@@ -2,6 +2,7 @@
 
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,8 +24,11 @@
 #define KOSHAPECONTROLLERBASE_H
 
 #include <QtGlobal>
-
+#include <QMap>
+ 
 class KoShape;
+class KoImageCollection;
+class KoDataCenter;
 
 /**
  * The shape controller is an abstract interface that the applications class
@@ -52,13 +56,11 @@ public:
     virtual void removeShape( KoShape* shape ) = 0;
 
     /**
-     * This method gets called after a shape is created. It can be used to set data in the shape that
-     * is needed during loading e.g. KoStyleManager for the TextShape or to set application/shape specific 
-     * data. The default implementation is empty so that only applications that want to use this have 
-     * to reimplement the method.
-     * @param shape the newly created shape
+     * This method returns a map of KoDataCenter classes.
+     * Typically some class-factories have created DataCenters and added them to this map.
+     * This map is started from scratch with each new document (ehem KoShapeControllerBase)
      */
-    virtual void shapeCreated( KoShape* shape ) { Q_UNUSED(shape); }
+    virtual QMap<QString, KoDataCenter *>  dataCenterMap(  ) = 0;
 };
 
 #endif

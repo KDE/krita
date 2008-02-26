@@ -131,6 +131,14 @@ public:
      */
     bool loadFromFile(QIODevice *device);
 
+    /**
+     * Save the image data to the param device.
+     * The full file is saved.
+     * @para device the device that is used to get the data from.
+     * @return returns true if load was successful.
+     */
+    bool saveToFile(QIODevice *device);
+
     bool operator==(const KoImageData &other) {
         return other.d == d;
     }

@@ -20,11 +20,14 @@
 #ifndef PICTURESHAPE_H
 #define PICTURESHAPE_H
 
+#include <QPixmap>
 #include <KoShape.h>
 
 #define PICTURESHAPEID "PictureShape"
 
 class KoImageData;
+class KoImageCollection;
+class KUrl;
 
 class PictureShape : public KoShape
 {
@@ -39,10 +42,17 @@ public:
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
+    /// Load data from a file - data will be saved in odf - the referenced file is not modified
+    bool loadFromUrl( KUrl & );
+
+    /// reimplemented
+    void init(QMap<QString, KoDataCenter *>  dataCenterMap);
+
 private:
     /// reimplemented from KoShape
     virtual KoShape * cloneShape() const;
 
+    KoImageCollection *m_imageCollection,;
     KoImageData *m_imageData;
 };
 

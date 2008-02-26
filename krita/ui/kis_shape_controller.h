@@ -19,6 +19,7 @@
 #define KIS_SHAPE_CONTROLLER
 
 #include <QObject>
+#include <QMap>
 
 #include <KoShapeControllerBase.h>
 
@@ -30,6 +31,7 @@ class KoShape;
 class KisView2;
 class KisDoc2;
 class KisNameServer;
+class KoDataCenter;
 
 /**
  * KisShapeController keeps track of new layers, shapes, masks and
@@ -48,6 +50,7 @@ public:
     void setImage( KisImageSP image );
     KoShape * shapeForNode( KisNodeSP layer ) const;
     void setInitialShapeForView( KisView2 * view );
+    QMap<QString, KoDataCenter *> dataCenterMap();
 
 private:
 

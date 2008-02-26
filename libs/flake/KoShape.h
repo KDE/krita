@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
+   Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
@@ -29,6 +29,7 @@
 #include <QMatrix>
 #include <QVector>
 #include <QSet>
+#include <QMap>
 #include <QBrush>
 
 #include <KoXmlReaderForward.h>
@@ -51,6 +52,7 @@ class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
 class KoShapeControllerBase;
+class KoDataCenter;
 class KoShapeShadow;
 
 /**
@@ -177,6 +179,13 @@ public:
      * an element you can call this method to write all relevant properties.
      */
     void saveOdfFrameAttributes( KoShapeSavingContext & context ) const;
+
+    /**
+     * After the shape has been created this method is called so it can get access to any DataCenter it
+     * might want.
+     * The default implementation does nothing.
+     */
+    virtual void init( QMap<QString, KoDataCenter *> dataCenterMap ) {Q_UNUSED(dataCenterMap)};
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.

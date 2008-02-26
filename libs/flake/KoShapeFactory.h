@@ -25,6 +25,7 @@
 #include <QString>
 #include <QWidget>
 #include <QList>
+#include <QMap>
 
 #include <flake_export.h>
 
@@ -35,6 +36,7 @@ class KoProperties;
 class KoShapeConfigFactory;
 class KoShapeConfigWidgetBase;
 class KoShapeControllerBase;
+class KoDataCenter;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
 #define SHAPEID_MIMETYPE "application/x-flake-shapeId"
@@ -177,6 +179,12 @@ public:
      */
     const QList<KoShapeConfigFactory*> &panelFactories();
 
+    /**
+     * pouplates the dataCenterMap with any datacenters the shapes might need.
+     * The dfault implementation does nothing
+     * @param dataCenterMap The map which the shapeControllerBase owns. 
+     */
+    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) {Q_UNUSED(dataCenterMap)}
     /**
      * return the id for the shape this factory creates.
      * @return the id for the shape this factory creates.

@@ -34,6 +34,8 @@ public:
     virtual void paint( QPainter& , const KoViewConverter& ) {}
     /// reimplemented from KoTool
     virtual void mousePressEvent( KoPointerEvent* ) {}
+    /// reimplemented from superclass
+    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
     /// reimplemented from KoTool
     virtual void mouseMoveEvent( KoPointerEvent* ) {}
     /// reimplemented from KoTool

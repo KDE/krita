@@ -21,13 +21,15 @@
 
 #include "koguiutils_export.h"
 
+#include <KoDataCenter.h>
+
 class KoImageData;
 class KoStore;
 
 /**
  * An collection of KoImageData objects to allow loading and saving them all together to the KoStore.
  */
-class KOGUIUTILS_EXPORT KoImageCollection {
+class KOGUIUTILS_EXPORT KoImageCollection : public KoDataCenter {
 public:
     /// constructor
     KoImageCollection();
@@ -37,7 +39,13 @@ public:
      * Load all images from the store which have a recognized KoImageData::storeHref().
      * @return returns true if load was successful (no images failed).
      */
-    bool loadFromStore(KoStore *store);
+    bool completeLoading(KoStore *store);
+
+    /**
+     * Save all images to the store which have a recognized KoImageData::storeHref().
+     * @return returns true if save was successful (no images failed).
+     */
+    bool completeSaving(KoStore *store);
 
 protected:
     friend class KoImageData;

@@ -132,6 +132,12 @@ QString KoImageData::storeHref() const {
     return d->storeHref;
 }
 
+bool KoImageData::saveToFile(QIODevice *device)
+{
+    Q_ASSERT(false);
+    return d->image.save(device);
+}
+
 bool KoImageData::loadFromFile(QIODevice *device) {
     struct Finally {
         Finally(QIODevice *d) : device (d), bytes(0) {}

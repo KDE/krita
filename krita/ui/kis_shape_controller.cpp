@@ -24,6 +24,7 @@
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
+#include <KoShapeRegistry.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoView.h>
@@ -50,6 +51,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoTextShapeData.h>
+#include <KoDataCenter.h>
 
 typedef QMap<KisNodeSP, KoShape*> KisNodeMap;
 
@@ -60,6 +62,7 @@ public:
     KisNodeMap nodeShapes; // maps from krita/image layers to shapes
     KisDoc2 * doc;
     KisNameServer * nameServer;
+    QMap<QString, KoDataCenter *>  dataCenterMap;
 };
 
 KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer )
@@ -69,6 +72,14 @@ KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer
     m_d->doc = doc;
     m_d->nameServer = nameServer;
     m_d->image = 0;
+/*
+    // Ask every shapefactory to populate the dataCenterMap
+    foreach(QString id, KoShapeRegistry::instance()->keys())
+    {
+        KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+        shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
+    }
+*/
 }
 
 
@@ -85,6 +96,8 @@ KisShapeController::~KisShapeController()
     }
     m_d->nodeShapes.clear();
 */
+    qDeleteAll( m_d->dataCenterMap );
+
     delete m_d;
 }
 
@@ -250,6 +263,11 @@ void KisShapeController::addShape( KoShape* shape )
     }
 
     m_d->doc->setModified( true );
+}
+
+QMap<QString, KoDataCenter *> KisShapeController::dataCenterMap()
+{
+    return m_d->dataCenterMap;
 }
 
 

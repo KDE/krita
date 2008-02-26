@@ -22,7 +22,11 @@
 
 #include "PictureShape.h"
 #include <KoXmlNS.h>
+#include "KoShapeControllerBase.h"
+#include "KoImageCollection.h"
+
 #include <klocale.h>
+#include <kdebug.h>
 
 PictureShapeFactory::PictureShapeFactory( QObject* parent)
     : KoShapeFactory( parent, PICTURESHAPEID, i18n( "Picture Shape" ) )
@@ -50,3 +54,8 @@ bool PictureShapeFactory::supports(const KoXmlElement & e) const
     return ( e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw );
 }
 
+void PictureShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) 
+{
+    KoImageCollection *imgCol = new KoImageCollection();
+    dataCenterMap["ImageCollection"] = imgCol;
+}

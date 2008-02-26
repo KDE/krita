@@ -50,13 +50,18 @@ KoShape * PictureShape::cloneShape() const
 }
 
 void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) {
+    QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
+
     if(m_imageData != userData())
         m_imageData = dynamic_cast<KoImageData*> (userData());
+
     if(m_imageData == 0)
+    {
+	painter.fillRect(target, QColor(Qt::gray));
         return;
+    }
 
     QPixmap pm = m_imageData->pixmap();
-    QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
     painter.drawPixmap(target.toRect(), pm, QRect(0, 0, pm.width(), pm.height()));
 }
 
@@ -92,14 +97,30 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     Q_UNUSED(context);
 
     // the frame attributes are loaded outside in the shape registry
-    if( context.imageCollection() )
+    if( m_imageCollection)//context.imageCollection() )
     {
         const QString href = element.attribute("href");
 
-        KoImageData * data = new KoImageData( context.imageCollection() );
+        KoImageData * data = new KoImageData( m_imageCollection);//context.imageCollection() );
         data->setStoreHref( href );
         setUserData( data );
     }
 
     return true;
+}
+
+bool PictureShape::loadFromUrl( KUrl &url )
+{
+    KoImageData * data = new KoImageData( m_imageCollection );
+    QImage img(url.path());
+    data->setImage(img);
+    setUserData( data );
+    setSize(QSizeF(DM_TO_POINT(img.width() / (double) img.dotsPerMeterX() * 10.0),
+DM_TO_POINT(img.height() / (double) img.dotsPerMeterY() * 10.0)  ));
+    return true;
+}
+
+void PictureShape::init(QMap<QString, KoDataCenter *>  dataCenterMap)
+{
+    m_imageCollection = (KoImageCollection *)dataCenterMap["ImageCollection"];
 }

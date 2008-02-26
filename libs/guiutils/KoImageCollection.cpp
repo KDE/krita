@@ -51,11 +51,23 @@ void KoImageCollection::removeImage(KoImageData *image) {
     }
 }
 
-bool KoImageCollection::loadFromStore(KoStore *store) {
+bool KoImageCollection::completeLoading(KoStore *store) {
     foreach(KoImageData *image, d->images) {
         if(! store->open(image->storeHref()))
             return false;
         bool ok = image->loadFromFile(new KoStoreDevice(store));
+        store->close();
+        if(! ok)
+            return false;
+    }
+    return true;
+}
+
+bool KoImageCollection::completeSaving(KoStore *store) {
+    foreach(KoImageData *image, d->images) {
+        if(! store->open(image->storeHref()))
+            return false;
+        bool ok = image->saveToFile(new KoStoreDevice(store));
         store->close();
         if(! ok)
             return false;

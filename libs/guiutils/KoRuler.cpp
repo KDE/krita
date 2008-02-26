@@ -198,6 +198,10 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
     const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
+
+    if (numberStepPixel == 0 || numberStep == 0)
+        return;
+
     // Calc the longest text length
     int textLength = 0;
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
@@ -208,8 +212,6 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     }
     textLength += 4;  // Add some padding
 
-    if (numberStepPixel == 0 || numberStep == 0)
-        return;
     // Change number step so all digits fits
     while(textLength > numberStepPixel) {
         numberStepPixel += numberStepPixel;

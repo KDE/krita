@@ -84,6 +84,7 @@ KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QStrin
 
     setEnabled(m_activeColorSet != 0);
     setActiveColorSet(index);
+    widget.remove->setEnabled(false); // initially no color selected
 
     connect(widget.add, SIGNAL(clicked()), this, SLOT(addColor()));
     connect(widget.remove, SIGNAL(clicked()), this, SLOT(removeColor()));
@@ -114,6 +115,7 @@ void KoEditColorSet::setActiveColorSet(int index)
     m_activeColorSet = m_colorSets.value(index);
     setEnabled(m_activeColorSet != 0);
     if (m_activeColorSet) {
+        widget.remove->setEnabled(false);
         for (int i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             patch->setColor(m_activeColorSet->getColor(i).color);
@@ -136,6 +138,7 @@ void KoEditColorSet::setTextLabel(KoColorPatch *patch)
     m_activePatch = patch;
     m_activePatch->setFrameShape(QFrame::Panel);
     m_activePatch->setFrameShadow(QFrame::Raised);
+    widget.remove->setEnabled(true);
 }
 
 void KoEditColorSet::addColor()

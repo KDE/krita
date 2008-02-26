@@ -372,7 +372,7 @@ void KisNodeTest::testDirtyRegion()
     QVERIFY( rects[2] == QRect(50, 100, 100, 50) );
 }
 
-QTEST_KDEMAIN(KisNodeTest, NoGUI);
+QTEST_KDEMAIN(KisNodeTest, NoGUI)
 #include "kis_node_test.moc"
 
 

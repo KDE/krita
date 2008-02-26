@@ -250,5 +250,5 @@ void KisMetaDataTest::testFilters()
     }
 }
 
-QTEST_KDEMAIN(KisMetaDataTest, GUI);
+QTEST_KDEMAIN(KisMetaDataTest, GUI)
 #include "kis_meta_data_test.moc"

@@ -219,6 +219,6 @@ void KisPixelSelectionTest::testExactRectWithParent()
     QCOMPARE(sel->selectedRect(), QRect(0, 0, 256, 192));
 }
 
-QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI);
+QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)
 #include "kis_pixel_selection_test.moc"
 

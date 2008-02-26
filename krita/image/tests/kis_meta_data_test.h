@@ -23,7 +23,7 @@
 
 namespace KisMetaData {
     class Value;
-};
+}
 
 class KisMetaDataTest : public QObject
 {

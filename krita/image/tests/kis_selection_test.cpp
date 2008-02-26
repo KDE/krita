@@ -171,7 +171,7 @@ void KisSelectionTest::testCopy()
     }
 }
 
-QTEST_KDEMAIN(KisSelectionTest, NoGUI);
+QTEST_KDEMAIN(KisSelectionTest, NoGUI)
 #include "kis_selection_test.moc"
 
 

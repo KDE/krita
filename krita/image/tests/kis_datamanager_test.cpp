@@ -100,5 +100,5 @@ void KisDataManagerTest::testThreadedWriteAccess() {}
 
 void KisDataManagerTest::testThreadedReadWriteAccess() {}
 
-QTEST_KDEMAIN(KisDataManagerTest, GUI);
+QTEST_KDEMAIN(KisDataManagerTest, GUI)
 #include "kis_datamanager_test.moc"

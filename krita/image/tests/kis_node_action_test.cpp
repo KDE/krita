@@ -76,5 +76,5 @@ void KisNodeActionTest::testExecution()
 }
 
 
-QTEST_KDEMAIN(KisNodeActionTest, GUI);
+QTEST_KDEMAIN(KisNodeActionTest, GUI)
 #include "kis_node_action_test.moc"

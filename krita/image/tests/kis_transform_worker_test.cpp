@@ -42,5 +42,5 @@ void KisTransformWorkerTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisTransformWorkerTest, GUI);
+QTEST_KDEMAIN(KisTransformWorkerTest, GUI)
 #include "kis_transform_worker_test.moc"

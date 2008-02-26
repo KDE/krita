@@ -32,7 +32,7 @@ class KoStore;
  */
 class KisKraLoader : public QObject {
 
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
 

@@ -85,5 +85,5 @@ void KisFilterJobTest::testInWeaver()
     }
 }
 
-QTEST_KDEMAIN(KisFilterJobTest, GUI);
+QTEST_KDEMAIN(KisFilterJobTest, GUI)
 #include "kis_filter_job_test.moc"

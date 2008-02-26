@@ -52,5 +52,5 @@ void KisKraLoaderTest::testLoading()
     
 }
 
-QTEST_KDEMAIN(KisKraLoaderTest, GUI);
+QTEST_KDEMAIN(KisKraLoaderTest, GUI)
 #include "kis_kra_loader_test.moc"

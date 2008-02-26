@@ -63,7 +63,7 @@ private slots:
 
 private:
     
-    Q_DISABLE_COPY(KisShapeSelection);
+    Q_DISABLE_COPY(KisShapeSelection)
 
     void renderSelection(KisSelection* projection, const QRect& r);
 

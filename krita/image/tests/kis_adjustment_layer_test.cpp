@@ -82,5 +82,5 @@ void KisAdjustmentLayerTest::testInverted()
     
 }
 
-QTEST_KDEMAIN(KisAdjustmentLayerTest, GUI);
+QTEST_KDEMAIN(KisAdjustmentLayerTest, GUI)
 #include "kis_adjustment_layer_test.moc"

@@ -27,5 +27,5 @@ void KisTransformationMaskTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisTransformationMaskTest, GUI);
+QTEST_KDEMAIN(KisTransformationMaskTest, GUI)
 #include "kis_transformation_mask_test.moc"

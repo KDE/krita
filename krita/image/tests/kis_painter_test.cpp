@@ -330,7 +330,7 @@ void KisPainterTest::checkPerformance()
     qDebug() << "selection: " << t.elapsed();
 }
 
-QTEST_KDEMAIN(KisPainterTest, NoGUI);
+QTEST_KDEMAIN(KisPainterTest, NoGUI)
 #include "kis_painter_test.moc"
 
 

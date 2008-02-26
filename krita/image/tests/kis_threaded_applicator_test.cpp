@@ -101,7 +101,7 @@ void KisThreadedApplicatorTest::testApplication()
     }
 }
 
-QTEST_KDEMAIN(KisThreadedApplicatorTest, NoGUI);
+QTEST_KDEMAIN(KisThreadedApplicatorTest, NoGUI)
 #include "kis_threaded_applicator_test.moc"
 
 

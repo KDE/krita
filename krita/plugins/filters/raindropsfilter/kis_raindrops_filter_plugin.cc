@@ -22,7 +22,7 @@
 
 #include <kgenericfactory.h>
 
-#include <kis_filter_registry.h>
+#include <filter/kis_filter_registry.h>
 
 
 #include "kis_raindrops_filter.h"

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_filter_job.h"
+#include "filter/kis_filter_job.h"
 #include <QObject>
 #include <QRect>
 
@@ -28,10 +28,10 @@
 #include <KoCompositeOp.h>
 
 
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
 #include "kis_paint_device.h"
-#include "kis_filter_processing_information.h"
+#include "filter/kis_filter_processing_information.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 

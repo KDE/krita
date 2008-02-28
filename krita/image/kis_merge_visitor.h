@@ -34,14 +34,14 @@
 #include "kis_adjustment_layer.h"
 #include "kis_external_layer_iface.h"
 #include "kis_paint_layer.h"
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
 #include "kis_iterators_pixel.h"
 #include "kis_clone_layer.h"
-#include "kis_filter_processing_information.h"
+#include "filter/kis_filter_processing_information.h"
 
 class KisMergeVisitor : public KisNodeVisitor {
 public:

@@ -51,7 +51,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_selected_transaction.h>
 #include <kis_selection.h>
-#include <kis_filter_strategy.h>
+#include <filter/kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
 #include <kis_transform_worker.h>
 

@@ -32,8 +32,8 @@
 #include <kis_auto_brush.h>
 #include <kis_brush.h>
 #include <kis_doc2.h>
-#include <kis_filter.h>
-#include <kis_filter_registry.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 

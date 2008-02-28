@@ -40,7 +40,7 @@
 #include "KoColorTransformation.h"
 #include "KoCompositeOp.h"
 
-#include "kis_filter_config_widget.h"
+#include "filter/kis_filter_config_widget.h"
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_paint_device.h"

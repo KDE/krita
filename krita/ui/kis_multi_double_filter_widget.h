@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <knuminput.h>
-#include <kis_filter_config_widget.h>
+#include <filter/kis_filter_config_widget.h>
 #include "krita_export.h"
 
 class KisDelayedActionDoubleInput : public KDoubleNumInput

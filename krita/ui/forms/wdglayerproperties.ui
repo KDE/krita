@@ -10,22 +10,10 @@
    </rect>
   </property>
   <layout class="QGridLayout" >
-   <property name="leftMargin" >
+   <property name="margin" >
     <number>9</number>
    </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>6</number>
-   </property>
-   <property name="verticalSpacing" >
+   <property name="spacing" >
     <number>6</number>
    </property>
    <item row="0" column="0" colspan="2" >
@@ -95,113 +83,6 @@
      <property name="title" >
       <string>&amp;Active Channels</string>
      </property>
-    </widget>
-   </item>
-   <item row="5" column="4" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
-      <string>Painterly overlays</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>6</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="chkWetness" >
-        <property name="toolTip" >
-         <string>Keeps track of how much liquid there's on the paper.</string>
-        </property>
-        <property name="text" >
-         <string>Wetness</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="QCheckBox" name="chkHeight" >
-        <property name="toolTip" >
-         <string>Represents the texture of your canvas</string>
-        </property>
-        <property name="text" >
-         <string>Height</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QCheckBox" name="chkGravity" >
-        <property name="toolTip" >
-         <string>Direction and strength of the gravity -- determines which way your wet paint flows</string>
-        </property>
-        <property name="text" >
-         <string>Gravity</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QCheckBox" name="chkMixability" >
-        <property name="toolTip" >
-         <string>How well the colors mix with other colors</string>
-        </property>
-        <property name="text" >
-         <string>Mixability</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QCheckBox" name="chkAdsorbency" >
-        <property name="toolTip" >
-         <string>Determines how fast your wet paint is adsorbed into the paper</string>
-        </property>
-        <property name="text" >
-         <string>Adsorbency</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
-       <widget class="QCheckBox" name="chkViscosity" >
-        <property name="toolTip" >
-         <string>How sticky your paint is.</string>
-        </property>
-        <property name="text" >
-         <string>Viscosity</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" >
-       <widget class="QCheckBox" name="chkVolume" >
-        <property name="toolTip" >
-         <string>Keeps track of the build-up of material</string>
-        </property>
-        <property name="text" >
-         <string>Paint volume</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" >
-       <widget class="QCheckBox" name="chkPermaDry" >
-        <property name="toolTip" >
-         <string>A second layer for completely dry and unerasable paint</string>
-        </property>
-        <property name="text" >
-         <string>Permapaint</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>

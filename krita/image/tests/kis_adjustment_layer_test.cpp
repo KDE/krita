@@ -25,9 +25,9 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_adjustment_layer.h"
-#include "kis_filter_configuration.h"
-#include "kis_filter.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_types.h"

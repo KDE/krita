@@ -23,7 +23,7 @@
 
 #include "kis_unsharp_filter.h"
 
-#include <kis_filter_registry.h>
+#include <filter/kis_filter_registry.h>
 
 typedef KGenericFactory<UnsharpPlugin> UnsharpPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaunsharpfilter, UnsharpPluginFactory( "krita" ) )

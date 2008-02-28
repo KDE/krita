@@ -22,7 +22,7 @@
 #include <kis_debug.h>
 
 
-#include "../kis_filter_configuration.h"
+#include "../filter/kis_filter_configuration.h"
 
 void KisFilterConfigurationTest::testCreation()
 {

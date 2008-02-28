@@ -44,9 +44,9 @@
 #include <kis_clone_layer.h>
 #include <kis_shape_layer.h>
 #include <kis_adjustment_layer.h>
-#include <kis_filter.h>
-#include <kis_filter_configuration.h>
-#include <kis_filter_strategy.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_strategy.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>

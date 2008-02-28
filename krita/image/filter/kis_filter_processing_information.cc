@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_filter_processing_information.h"
+#include "filter/kis_filter_processing_information.h"
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 

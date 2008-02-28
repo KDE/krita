@@ -16,15 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_recorded_filter_action.h"
+#include "filter/kis_recorded_filter_action.h"
 #include <QDomElement>
 #include <QString>
 
 
 #include "kis_image.h"
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"

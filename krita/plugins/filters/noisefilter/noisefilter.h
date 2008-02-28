@@ -22,7 +22,7 @@
 #define NOISEFILTER_H
 
 #include <kparts/plugin.h>
-#include "kis_filter.h"
+#include "filter/kis_filter.h"
 
 class KisFilterConfigWidget;
 

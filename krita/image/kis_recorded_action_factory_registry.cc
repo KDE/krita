@@ -18,7 +18,7 @@
 
 #include "kis_recorded_action_factory_registry.h"
 #include "kis_recorded_paint_actions.h"
-#include "kis_recorded_filter_action.h"
+#include "filter/kis_recorded_filter_action.h"
 
 struct KisRecordedActionFactoryRegistry::Private {
     static KisRecordedActionFactoryRegistry* instance;

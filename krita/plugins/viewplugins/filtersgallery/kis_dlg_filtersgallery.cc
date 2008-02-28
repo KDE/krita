@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QDateTime>
 
-#include <kis_filter.h>
+#include <filter/kis_filter.h>
 #include <kis_filters_listview.h>
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
@@ -35,7 +35,7 @@
 #include <kis_canvas2.h>
 #include <kis_layer_manager.h>
 #include <kis_image.h>
-#include <kis_filter_config_widget.h>
+#include <filter/kis_filter_config_widget.h>
 
 namespace Krita {
 namespace Plugins {

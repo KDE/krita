@@ -22,7 +22,7 @@
 #include <kgenericfactory.h>
 
 #include "kis_blur_filter.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_registry.h"
 
 typedef KGenericFactory<BlurFilterPlugin> BlurFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritablurfilter, BlurFilterPluginFactory( "krita" ) )

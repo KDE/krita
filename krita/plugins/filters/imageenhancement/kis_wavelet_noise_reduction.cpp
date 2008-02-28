@@ -30,8 +30,8 @@
 #include <kis_multi_double_filter_widget.h>
 #include <kis_multi_integer_filter_widget.h>
 #include <kis_paint_device.h>
-#include <kis_filter_configuration.h>
-#include <kis_filter_processing_information.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_processing_information.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
     : KisFilter(id(), CategoryEnhance, i18n("&Wavelet Noise Reducer"))

@@ -21,7 +21,7 @@
 #ifndef KIS_WDG_FAST_COLORTRANSFER_H
 #define KIS_WDG_FAST COLORTRANSFER_H
 
-#include <kis_filter_config_widget.h>
+#include <filter/kis_filter_config_widget.h>
 
 class KisFilter;
 class Ui_WdgFastColorTransfer;

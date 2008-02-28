@@ -23,8 +23,8 @@
 #include <QGridLayout>
 
 #include <knuminput.h>
-#include <kis_filter_config_widget.h>
-#include <kis_filter_configuration.h>
+#include <filter/kis_filter_config_widget.h>
+#include <filter/kis_filter_configuration.h>
 #include <klocale.h>
 
 KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)

@@ -26,7 +26,7 @@
 #include <kurlrequester.h>
 
 #include "ui_wdgfastcolortransfer.h"
-#include <kis_filter_configuration.h>
+#include <filter/kis_filter_configuration.h>
 KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisFilterConfigWidget ( parent )
 {
     m_widget = new Ui_WdgFastColorTransfer();

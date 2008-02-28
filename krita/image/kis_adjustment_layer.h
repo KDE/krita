@@ -72,7 +72,17 @@ public:
     bool allowAsChild( KisNodeSP ) const;
 
     void updateProjection(const QRect& r);
+    
+    /**
+     * return the final result of the layer and all masks
+     */
     KisPaintDeviceSP projection() const;
+    
+    /**
+     * return paint device that the user can paint on. For paint layers,
+     * this is the basic, wet painting device, for adjustment layers it's
+     * the selection.
+     */
     KisPaintDeviceSP paintDevice() const;
 
     QIcon icon() const;

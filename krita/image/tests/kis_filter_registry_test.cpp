@@ -19,7 +19,7 @@
 #include "kis_filter_registry_test.h"
 
 #include <qtest_kde.h>
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_registry.h"
 
 void KisFilterRegistryTest::testCreation()
 {

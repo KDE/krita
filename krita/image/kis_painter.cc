@@ -48,7 +48,7 @@
 #include "kis_complex_color.h"
 #include "kis_debug.h"
 #include "kis_image.h"
-#include "kis_filter.h"
+#include "filter/kis_filter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 

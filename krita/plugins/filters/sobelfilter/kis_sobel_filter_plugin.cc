@@ -23,7 +23,7 @@
 #include <kgenericfactory.h>
 
 #include "kis_sobel_filter.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_global.h"
 
 typedef KGenericFactory<KisSobelFilterPlugin> KisSobelFilterPluginFactory;

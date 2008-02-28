@@ -21,7 +21,7 @@
 #ifndef KIS_BLUR_FILTER_H
 #define KIS_BLUR_FILTER_H
 
-#include "kis_filter.h"
+#include "filter/kis_filter.h"
 
 class KisUnsharpFilter : public KisFilter
 {

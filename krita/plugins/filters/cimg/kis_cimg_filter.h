@@ -21,12 +21,12 @@
 #ifndef _KIS_CIMG_FILTER_H_
 #define _KIS_CIMG_FILTER_H_
 
-#include "kis_filter.h"
-#include "kis_filter_config_widget.h"
-#include <kis_filter_configuration.h>
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_config_widget.h"
+#include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
-#include <kis_filter_processing_information.h>
+#include <filter/kis_filter_processing_information.h>
 #include "CImg.h"
 
 class KisCImgFilterConfiguration : public KisFilterConfiguration

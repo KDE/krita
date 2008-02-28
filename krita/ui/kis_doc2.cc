@@ -67,8 +67,8 @@
 #include <kis_debug.h>
 #include <kis_external_layer_iface.h>
 #include <kis_fill_painter.h>
-#include <kis_filter.h>
-#include <kis_filter_registry.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>

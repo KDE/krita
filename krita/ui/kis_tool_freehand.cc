@@ -310,7 +310,6 @@ void KisToolFreehand::endPaint()
                 KisIndirectPaintingSupport* layer =
                     dynamic_cast<KisIndirectPaintingSupport*>(currentLayer().data());
                 layer->setTemporaryTarget(0);
-                kDebug() << " painter.dirtyRegion() = " << painter.dirtyRegion();
                 m_source->setDirty(painter.dirtyRegion());
 
                 m_canvas->addCommand(painter.endTransaction());
@@ -374,7 +373,6 @@ void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*p
 void KisToolFreehand::setDirty(const QRegion& region)
 {
 //     QRect r( 10, 4, -2, -4);
-//     kDebug(DBG_AREA_UI) << "region = " << region << " " << r.width() << " " << r.height() << " " << r.left() ;
 //     QRegion region2;
 //     region2 += r;
 //     kDebug(DBG_AREA_UI) << region2;
@@ -387,11 +385,9 @@ void KisToolFreehand::setDirty(const QRegion& region)
         // XXX: How to do this hack with regions?
         // r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
         m_target->setDirty(region);
-//         kDebug(DBG_AREA_UI) << m_tempLayer->dirtyRegion( QRect(-20000, -20000, 400000, 400000) );
     }
     if (!m_paintIncremental) {
         m_incrementalDirtyRegion += region;
-//         kDebug(DBG_AREA_UI) << "m_incrementalDirtyRegion = " << m_incrementalDirtyRegion;
     }
 }
 

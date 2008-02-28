@@ -249,5 +249,50 @@ void KisNodeManager::duplicateActiveNode( KisNodeSP node )
     }
 }
 
+void KisNodeManager::raiseNode()
+{
+    KisNodeSP node = activeNode();
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layerRaise();
+    }
+    else if (node->inherits("KisMask")) {
+        m_d->maskManager->duplicateMask();
+    }
+}
+
+void KisNodeManager::lowerNode()
+{
+    KisNodeSP node = activeNode();
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layerLower();
+    }
+    else if (node->inherits("KisMask")) {
+        m_d->maskManager->lowerMask();
+    }
+}
+    
+void KisNodeManager::nodeToTop()
+{
+    KisNodeSP node = activeNode();
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layerLower();
+    }
+    else if (node->inherits("KisMask")) {
+        m_d->maskManager->maskToTop();
+    }
+}
+
+void KisNodeManager::nodeToBottom()
+{
+    KisNodeSP node = activeNode();
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layerBack();
+    }
+    else if (node->inherits("KisMask")) {
+        m_d->maskManager->maskToBottom();
+    }
+}
+    
+
 #include "kis_node_manager.moc"
 

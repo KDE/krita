@@ -18,7 +18,6 @@
 
 #include "kis_filter_manager.h"
 
-
 #include "kis_filter_manager.moc"
 
 #include <QHash>
@@ -29,8 +28,8 @@
 #include <KoID.h>
 
 // krita/image
-#include <kis_filter.h>
-#include <kis_filter_registry.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>

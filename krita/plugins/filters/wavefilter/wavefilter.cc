@@ -38,15 +38,15 @@
 
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
-#include <kis_filter_registry.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_layer.h>
 #include <kis_random_sub_accessor.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
-#include <kis_filter_configuration.h>
-#include <kis_filter_processing_information.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_processing_information.h>
 #include "kis_wdg_wave.h"
 #include "ui_wdgwaveoptions.h"
 

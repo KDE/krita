@@ -21,7 +21,7 @@
 #ifndef KIS_COLOR_TO_ALPHA_H_
 #define KIS_COLOR_TO_ALPHA_H_
 
-#include "kis_filter.h"
+#include "filter/kis_filter.h"
 
 class KisFilterColorToAlpha : public KisFilter {
 

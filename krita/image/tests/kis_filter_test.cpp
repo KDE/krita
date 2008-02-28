@@ -19,11 +19,11 @@
 #include "kis_filter_test.h"
 
 #include <qtest_kde.h>
-#include "kis_filter_configuration.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
-#include "kis_filter_processing_information.h"
-#include "kis_filter.h"
+#include "filter/kis_filter_processing_information.h"
+#include "filter/kis_filter.h"
 #include "testutil.h"
 #include "kis_threaded_applicator.h"
 #include "kis_selection.h"

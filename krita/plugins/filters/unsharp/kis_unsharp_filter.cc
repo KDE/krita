@@ -28,8 +28,8 @@
 #include <kis_auto_brush.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
-#include <kis_filter_configuration.h>
-#include <kis_filter_processing_information.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_processing_information.h>
 #include <KoProgressUpdater.h>
 #include <kis_paint_device.h>
 

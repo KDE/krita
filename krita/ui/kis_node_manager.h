@@ -87,6 +87,31 @@ public slots:
     void nodeOpacityChanged( double opacity, bool final);
     void nodeCompositeOpChanged( const KoCompositeOp* op );
     void duplicateActiveNode( KisNodeSP node );
+    
+    /**
+     * move the active node up the nodestack.
+     */
+    void raiseNode();
+    
+    /**
+     * move the active node down the nodestack
+     */
+    void lowerNode();
+    
+    /**
+     * move the activenode to the top-most position of the nodestack
+     * If the node is a mask, the stack is limited to the set of masks
+     * belonging to the current layer.
+     */
+    void nodeToTop();
+
+    /**
+     * move the activenode to the bottom-most position of the nodestack
+     * If the node is a mask, the stack is limited to the set of masks
+     * belonging to the current layer.     
+     */
+    void nodeToBottom();
+    
 private:
 
     struct Private;

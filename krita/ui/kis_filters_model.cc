@@ -22,8 +22,8 @@
 #include "kis_filters_model.h"
 #include <QPixmap>
 
-#include <kis_filter.h>
-#include <kis_filter_registry.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_paint_device.h>
 
 struct KisFiltersModel::Private {

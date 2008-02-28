@@ -67,7 +67,6 @@ static QMutex tempMutex;
 KisTileSwapper::KisTileSwapper()
     : m_swapQueueLock(QMutex::Recursive)
 {
-    kDebug()  << QThread::currentThread();
     Q_ASSERT(KisTileSwapper::m_singleton == 0);
     //KisTileSwapper::m_singleton = this;
     m_swapForbidden = false;
@@ -75,7 +74,6 @@ KisTileSwapper::KisTileSwapper()
 }
 
 KisTileSwapper::~KisTileSwapper() {
-    kDebug() << "";
     // Wait on ourself to stop...(this is called from the MAIN THREAD)
     m_stopThread = true;
     m_waitLock.lock();
@@ -243,8 +241,6 @@ void KisTileSwapper::addTileDataToSwapFile(KisTile::SharedTileData* tileData) { 
             tempFile->tempFile->open();
             tempFile->fileSize = 0;
 
-            kDebug() << "Added KTemporaryFile at " << tempFile->tempFile->fileName();
-
             tempFiles->vector.push_back(tempFile);
         } else {
             // The back vector here has a file that is small enough, use it!
@@ -390,7 +386,6 @@ void KisTileSwapper::fromSwappableList(KisTile::SharedTileData* tileData) { // #
     assert(memInfo->isInSwappableList);
     Q_ASSERT(memInfo->isInSwappableList);
     Q_ASSERT(memInfo->isSwappable);
-    kDebug() << tileData->timesLockedInMemory;
     // It's per definition 1 or 2 at this point: if it is added to the swappablelist, it is forced to 1, if we no load it again ->
     // + 1, but if we now want to delete it or actually swap it out, it's still 0
     Q_ASSERT(tileData->timesLockedInMemory == 1 || tileData->timesLockedInMemory == 2);

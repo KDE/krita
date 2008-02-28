@@ -25,7 +25,7 @@
 
 #include "ui_kis_wdg_filtersgallery.h"
 
-#include <kis_filter_config_widget.h>
+#include <filter/kis_filter_config_widget.h>
 
 class QListWidgetItem;
 class QLabel;

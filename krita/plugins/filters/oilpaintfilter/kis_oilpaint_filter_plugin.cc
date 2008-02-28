@@ -24,7 +24,7 @@
 
 #include "kis_oilpaint_filter.h"
 #include "kis_global.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_registry.h"
 typedef KGenericFactory<KisOilPaintFilterPlugin> KisOilPaintFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaoilpaintfilter, KisOilPaintFilterPluginFactory( "krita" ) )
 

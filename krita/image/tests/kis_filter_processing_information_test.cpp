@@ -24,7 +24,7 @@
 #include "kis_paint_device.h"
 #include "kis_types.h"
 #include "kis_selection.h"
-#include "kis_filter_processing_information.h"
+#include "filter/kis_filter_processing_information.h"
 
 void KisFilterProcessingInformationTest::testCreation()
 {

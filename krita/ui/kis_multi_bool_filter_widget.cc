@@ -21,7 +21,7 @@
 #include <QLayout>
 #include <QCheckBox>
 #include <QVBoxLayout>
-#include <kis_filter_configuration.h>
+#include <filter/kis_filter_configuration.h>
 
 #include <klocale.h>
 

@@ -22,7 +22,7 @@
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_transform_worker.h"
-#include "kis_filter_strategy.h"
+#include "filter/kis_filter_strategy.h"
 #include "kis_undo_adapter.h"
 #include "kis_transaction.h"
 #include "kis_rotate_visitor.h"

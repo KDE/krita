@@ -26,8 +26,8 @@
 #include <kparts/plugin.h>
 
 #include <kis_types.h>
-#include <kis_filter.h>
-#include "kis_filter_config_widget.h"
+#include <filter/kis_filter.h>
+#include "filter/kis_filter_config_widget.h"
 
 #include "ui_wdgbumpmap.h"
 

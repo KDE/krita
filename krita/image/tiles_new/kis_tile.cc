@@ -131,8 +131,6 @@ KisTile::KisTile(const KisTile& rhs)
 
 KisTile::~KisTile()
 {
-    kDebug() << "Deregistering" << this;
-
     m_tileData->lock.lock();
 
     if ( (m_tileData->tiles.size() == 1) && (m_tileData->timesLockedInMemory == 0) ) { // We are the last tile refering to this shared tile data
@@ -197,7 +195,6 @@ void KisTile::addReader() const
 
         m_tileData->lock.unlock(); // ### Here, or before?
     } else if (m_nReadlock < 0) {
-        kDebug(41000) << m_nReadlock;
         assert(0);
     }
     assert(m_tileData->data);

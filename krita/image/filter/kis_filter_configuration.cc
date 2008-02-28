@@ -16,14 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_filter_configuration.h"
-#include "kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter.h"
 
 #include <kis_debug.h>
 #include <qdom.h>
 #include <QString>
 
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_painter.h"
@@ -31,7 +31,7 @@
 #include "KoID.h"
 #include "kis_types.h"
 
-#include "kis_filter_config_widget.h"
+#include "filter/kis_filter_config_widget.h"
 
 struct KisFilterConfiguration::Private {
     QString name;

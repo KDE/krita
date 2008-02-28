@@ -2,7 +2,7 @@
 #define _%{APPNAMEUC}_H_
 
 #include <kparts/plugin.h>
-#include "kis_filter.h"
+#include "filter/kis_filter.h"
 
 class %{APPNAME}Plugin : public KParts::Plugin
 {

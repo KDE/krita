@@ -81,7 +81,6 @@ KisTileStoreMemory::KisTileStoreMemory()
 
     counter = 0;
 
-    kDebug() << "Added a new memory store!";
 }
 
 KisTileStoreMemory::~KisTileStoreMemory() {

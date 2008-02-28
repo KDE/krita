@@ -51,7 +51,7 @@
 #include <KoPointerEvent.h>
 #include <KoPointerEvent.h>
 #include <kis_selection.h>
-#include <kis_filter_strategy.h>
+#include <filter/kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
 #include <kis_perspectivetransform_worker.h>
 

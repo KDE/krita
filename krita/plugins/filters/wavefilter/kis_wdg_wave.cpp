@@ -21,8 +21,8 @@
 #include "kis_wdg_wave.h"
 #include <qspinbox.h>
 
-#include <kis_filter_configuration.h>
-#include <kis_filter_processing_information.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_processing_information.h>
 
 #include "ui_wdgwaveoptions.h"
 

@@ -42,7 +42,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_config.h>
-#include <kis_filter_strategy.h>
+#include <filter/kis_filter_strategy.h>
 #include <kis_global.h>
 #include <kis_image.h>
 #include <kis_layer.h>

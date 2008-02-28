@@ -42,9 +42,9 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
-#include "kis_filter.h"
-#include "kis_filter_registry.h"
-#include "kis_filter_strategy.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "filter/kis_filter_strategy.h"
 
 using namespace ThreadWeaver;
 

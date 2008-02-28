@@ -28,7 +28,7 @@
 #include <KoID.h>
 
 #include "kis_transaction.h"
-#include "kis_filter_configuration.h"
+#include "filter/kis_filter_configuration.h"
 #include "commands/kis_node_commands.h"
 #include "kis_dlg_transformation_effect.h"
 #include <kis_undo_adapter.h>

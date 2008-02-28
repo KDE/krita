@@ -22,8 +22,8 @@
 #define _KIS_SCRIPT_FILTER_H_
 
 #include <QObject>
-#include "kis_filter.h"
-#include "kis_filter_processing_information.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_processing_information.h"
 
 #include "kritacore/krs_paint_device.h"
 

@@ -21,7 +21,7 @@
 #ifndef KIS_MINMAX_FILTERS_H
 #define KIS_MINMAX_FILTERS_H
 
-#include "kis_filter.h"
+#include "filter/kis_filter.h"
 
 class KisFilterMax : public KisFilter
 {

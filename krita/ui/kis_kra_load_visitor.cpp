@@ -36,7 +36,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
-#include "kis_filter_configuration.h"
+#include "filter/kis_filter_configuration.h"
 #include "kis_datamanager.h"
 
 KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, const QString & name) :

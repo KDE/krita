@@ -24,7 +24,7 @@
 
 #include "kis_round_corners_filter.h"
 #include "kis_global.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_registry.h"
 typedef KGenericFactory<KisRoundCornersFilterPlugin> KisRoundCornersFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaroundcornersfilter, KisRoundCornersFilterPluginFactory( "krita" ) )
 

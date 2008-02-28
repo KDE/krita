@@ -22,10 +22,10 @@
 
 #include <kgenericfactory.h>
 
-#include <kis_filter.h>
+#include <filter/kis_filter.h>
 
 #include "kis_cimg_filter.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_registry.h"
 
 typedef KGenericFactory<KisCImgPlugin> KisCImgPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacimg, KisCImgPluginFactory( "krita" ) )

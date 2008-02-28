@@ -31,9 +31,9 @@
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
 #include "kis_external_layer_iface.h"
-#include "kis_filter_configuration.h"
-#include "kis_filter_registry.h"
-#include "kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
+#include "filter/kis_filter.h"
 
 
 // XXX: Make undoable (used to be in KisPaintDevice, should be in

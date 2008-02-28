@@ -21,7 +21,7 @@
 #ifndef _KIS_WDG_COLOR_TO_ALPHA_H_
 #define _KIS_WDG_COLOR_TO_ALPHA_H_
 
-#include <kis_filter_config_widget.h>
+#include <filter/kis_filter_config_widget.h>
 
 class KisFilter;
 class Ui_WdgColorToAlphaBase;

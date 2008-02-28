@@ -57,7 +57,7 @@
 
 #include "dlg_imagesize.h"
 #include "dlg_layersize.h"
-#include "kis_filter_strategy.h"
+#include "filter/kis_filter_strategy.h"
 
 typedef KGenericFactory<ImageSize> ImageSizeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )

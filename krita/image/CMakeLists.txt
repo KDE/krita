@@ -56,7 +56,6 @@ set(kritaimage_LIB_SRCS
    kis_node_facade.cpp
    kis_action_recorder.cc
    kis_recorded_action.cc
-   kis_recorded_filter_action.cc
    kis_recorded_action_factory_registry.cc
    kis_threaded_applicator.cpp
    kis_projection.cc
@@ -73,12 +72,6 @@ set(kritaimage_LIB_SRCS
    kis_painterly_overlay.cpp
    kis_painterly_overlay_colorspace.cpp
    kis_fill_painter.cc
-   kis_filter.cc
-   kis_filter_registry.cc
-   kis_filter_processing_information.cc
-   kis_filter_strategy.cc
-   kis_filter_configuration.cc
-   kis_filter_config_widget.cc
    kis_gradient_painter.cc
    kis_histogram.cc
    kis_image.cc
@@ -105,7 +98,6 @@ set(kritaimage_LIB_SRCS
    kis_transaction.cc
    kis_vec.cc
    kis_math_toolbox.cpp
-   kis_filter_strategy.h
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
    kis_mask.cc
@@ -130,9 +122,17 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_merge_strategy_registry.cc
    kis_selected_transaction.cc
    kis_transform_worker.cc
-   kis_filter_job.cpp
    commands/kis_image_commands.cc
    commands/kis_layer_commands.cc
+   filter/kis_filter_job.cpp
+   kis_filter_mask.cpp
+   filter/kis_filter.cc
+   filter/kis_filter_configuration.cc
+   filter/kis_filter_config_widget.cc
+   filter/kis_filter_processing_information.cc
+   filter/kis_filter_registry.cc
+   filter/kis_filter_strategy.cc
+   filter/kis_recorded_filter_action.cc
 )
 
 

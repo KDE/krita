@@ -25,7 +25,7 @@
 
 #include <kis_paint_device.h>
 #include <kis_global.h>
-#include <kis_filter_registry.h>
+#include <filter/kis_filter_registry.h>
 
 #include "kis_pixelize_filter.h"
 

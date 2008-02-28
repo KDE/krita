@@ -476,44 +476,12 @@ void KisLayerBox::slotRmClicked()
 
 void KisLayerBox::slotRaiseClicked()
 {
-    QModelIndexList l = selectedNodes();
-
-    KisNodeSP layer = m_nodeModel->nodeFromIndex(l.first());
-    if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_image->root())
-    {
-        if (KisGroupLayerSP grandparent = dynamic_cast<KisGroupLayer* >( layer->parent()->parent().data() ) )
-            m_image->moveNode(layer, grandparent, layer->parent());
-    }
-    else
-    {
-        for (int i = 0, n = l.count(); i < n; ++i)
-            if (KisNodeSP li = m_nodeModel->nodeFromIndex(l[i])) {
-                if (li->prevSibling()) {
-                    m_image->moveNode(li, li->parent(), li->prevSibling());
-                }
-            }
-    }
-
-    if( !l.isEmpty() )
-        listLayers->scrollTo( l.first() );
+    m_nodeManager->raiseNode();
 }
 
 void KisLayerBox::slotLowerClicked()
 {
-    QModelIndexList l = selectedNodes();
-
-    for (int i = l.count() - 1; i >= 0; --i)
-        if (KisNodeSP layer = m_nodeModel->nodeFromIndex(l[i]))
-            if (layer->nextSibling())
-            {
-                if (layer->nextSibling()->nextSibling())
-                    m_image->moveNode(layer, layer->parent(), layer->nextSibling()->nextSibling());
-                else
-                    m_image->moveNode(layer, layer->parent(), KisLayerSP(0));
-            }
-
-    if( !l.isEmpty() )
-        listLayers->scrollTo( l.last() );
+    m_nodeManager->lowerNode();
 }
 
 void KisLayerBox::slotPropertiesClicked()

@@ -28,8 +28,8 @@
 
 // Includes from krita/image
 #include <kis_adjustment_layer.h>
-#include <kis_filter.h>
-#include <kis_filter_registry.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 

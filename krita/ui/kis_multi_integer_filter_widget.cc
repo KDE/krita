@@ -21,7 +21,7 @@
 #include <QLayout>
 #include <QTimer>
 #include <QGridLayout>
-#include <kis_filter_configuration.h>
+#include <filter/kis_filter_configuration.h>
 #include <knuminput.h>
 #include <klocale.h>
 

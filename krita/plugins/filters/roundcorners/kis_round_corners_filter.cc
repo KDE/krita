@@ -37,15 +37,15 @@
 
 #include <kis_debug.h>
 #include <kis_doc2.h>
-#include <kis_filter_registry.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_multi_integer_filter_widget.h>
 #include <kis_selection.h>
-#include <kis_filter_configuration.h>
-#include <kis_filter_processing_information.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_processing_information.h>
 #include <kis_types.h>
 
 KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Round Corners..."))

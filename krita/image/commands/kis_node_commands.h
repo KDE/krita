@@ -21,7 +21,7 @@
 #include <krita_export.h>
 #include <QUndoCommand>
 #include "kis_types.h"
-#include "kis_filter_configuration.h"
+#include "filter/kis_filter_configuration.h"
 
 template <typename T>
 class KisChangeFilterCmd : public QUndoCommand {

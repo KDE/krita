@@ -21,8 +21,8 @@
 #include <qtest_kde.h>
 
 
-#include "kis_filter_configuration.h"
-#include "kis_filter_config_widget.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_config_widget.h"
 
 class TestWidget : public KisFilterConfigWidget
 {

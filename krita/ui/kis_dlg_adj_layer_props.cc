@@ -26,11 +26,11 @@
 #include <klineedit.h>
 #include <klocale.h>
 
-#include "kis_filter_config_widget.h"
+#include "filter/kis_filter_config_widget.h"
 #include "kis_transaction.h"
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_filters_listview.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -39,8 +39,8 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
 
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
                                          KisFilterConfiguration * configuration,

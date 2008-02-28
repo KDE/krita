@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include <kis_filter.h>
+#include <filter/kis_filter.h>
 
 #define BEST_WAVELET_THRESHOLD_VALUE 7.0
 

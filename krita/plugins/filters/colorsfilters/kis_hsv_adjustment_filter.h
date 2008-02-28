@@ -23,8 +23,8 @@
 
 #include <QList>
 
-#include "kis_filter.h"
-#include "kis_filter_config_widget.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_config_widget.h"
 #include "ui_wdg_hsv_adjustment.h"
 
 class QWidget;

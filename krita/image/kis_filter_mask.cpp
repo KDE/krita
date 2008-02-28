@@ -18,11 +18,11 @@
  */
 
 #include "kis_filter_mask.h"
-#include "kis_filter.h"
-#include "kis_filter_configuration.h"
-#include "kis_filter_registry.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
-#include "kis_filter_processing_information.h"
+#include "filter/kis_filter_processing_information.h"
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private {
 public:

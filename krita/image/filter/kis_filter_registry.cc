@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_filter_registry.h"
+#include "filter/kis_filter_registry.h"
 #include <QString>
 
 #include <kaction.h>
@@ -33,7 +33,7 @@
 #include "kis_types.h"
 
 #include "kis_paint_device.h"
-#include "kis_filter.h"
+#include "filter/kis_filter.h"
 
 KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
 

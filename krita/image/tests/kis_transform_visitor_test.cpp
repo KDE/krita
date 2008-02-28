@@ -26,7 +26,7 @@
 #include <KoColorSpaceRegistry.h>
 #include "kis_types.h"
 #include "kis_image.h"
-#include "kis_filter_strategy.h"
+#include "filter/kis_filter_strategy.h"
 #include "testutil.h"
 #include "kis_image.h"
 

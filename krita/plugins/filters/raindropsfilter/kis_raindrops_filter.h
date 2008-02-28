@@ -21,8 +21,8 @@
 #ifndef _KIS_RAINDROPS_FILTER_H_
 #define _KIS_RAINDROPS_FILTER_H_
 
-#include "kis_filter.h"
-#include "kis_filter_config_widget.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_config_widget.h"
 #include "kis_paint_device.h"
 
 class KisRainDropsFilter : public KisFilter

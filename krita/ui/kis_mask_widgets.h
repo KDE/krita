@@ -22,7 +22,7 @@
 #include "ui_wdgtransformationeffect.h"
 #include "ui_wdgmasksource.h"
 #include "ui_wdgmaskfromselection.h"
-#include <kis_filter_strategy.h>
+#include <filter/kis_filter_strategy.h>
 #include "kis_cmb_idlist.h"
 
 #include <QCheckBox>

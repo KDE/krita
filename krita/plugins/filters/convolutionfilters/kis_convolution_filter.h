@@ -21,9 +21,9 @@
 #ifndef _KIS_CONVOLUTION_FILTER_H_
 #define _KIS_CONVOLUTION_FILTER_H_
 
-#include "kis_filter.h"
-#include "kis_filter_registry.h"
-#include "kis_filter_configuration.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "filter/kis_filter_configuration.h"
 #include "kis_convolution_painter.h"
 
 class KisConvolutionFilter : public KisFilter {

@@ -21,7 +21,7 @@
 #ifndef KIS_WDG_WAVE_H
 #define KIS_WDG_WAVE_H
 
-#include <kis_filter_config_widget.h>
+#include <filter/kis_filter_config_widget.h>
 
 class Ui_WdgWaveOptions;
 class KisFilter;

@@ -43,8 +43,8 @@ include_directories( ${KOTEXT_INCLUDES} )
 ########### next target ###############
 
 set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
-kde4_add_unit_test(TestDocumentLayout TESTNAME libs-kotext-TestDocumentLayout  ${TestDocumentLayout_test_SRCS})
-target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
+kde4_add_unit_test(TestDocumentLayout1 TESTNAME libs-kotext-TestDocumentLayout  ${TestDocumentLayout_test_SRCS})
+target_link_libraries(TestDocumentLayout1 kotext ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

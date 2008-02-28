@@ -22,7 +22,7 @@
 #include <qspinbox.h>
 
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "ui_wdgwaveoptions.h"
 

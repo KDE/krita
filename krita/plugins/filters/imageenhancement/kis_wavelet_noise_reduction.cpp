@@ -31,7 +31,7 @@
 #include <kis_multi_integer_filter_widget.h>
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
     : KisFilter(id(), CategoryEnhance, i18n("&Wavelet Noise Reducer"))
@@ -61,8 +61,8 @@ KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const Kis
     return config;
 }
 
-void KisWaveletNoiseReduction::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisWaveletNoiseReduction::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& areaSize,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

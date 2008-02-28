@@ -151,6 +151,9 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 class KisFilter;
 typedef KisSharedPtr<KisFilter> KisFilterSP;
 
+class KisGenerator;
+typedef KisSharedPtr<KisGenerator> KisGeneratorSP;
+
 class KisAnnotation;
 typedef KisSharedPtr<KisAnnotation> KisAnnotationSP;
 typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;

@@ -49,7 +49,7 @@
 #include <KoProgressUpdater.h>
 
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <kis_paint_device.h>
 
 #include "kis_multi_integer_filter_widget.h"
@@ -62,8 +62,8 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter( id(), KisFilter::CategoryArt
     
 }
 
-void KisOilPaintFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisOilPaintFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

@@ -25,7 +25,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 typedef void (*funcMaxMin)(const quint8* , quint8* , uint );
 
@@ -81,8 +81,8 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), CategoryColors, i18n("M&aximize C
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-void KisFilterMax::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterMax::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
@@ -140,8 +140,8 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), CategoryColors, i18n("M&inimize C
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-void KisFilterMin::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterMin::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

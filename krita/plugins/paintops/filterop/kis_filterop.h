@@ -37,7 +37,7 @@ class KoID;
 
 class KisFilterOpFactory  : public KisPaintOpFactory  {
 
-public:
+    public:
     KisFilterOpFactory() {}
     virtual ~KisFilterOpFactory() {}
 
@@ -50,25 +50,33 @@ public:
 };
 
 class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
-    Q_OBJECT
-    public:
-        KisFilterOpSettings(QWidget* parent);
-        virtual ~KisFilterOpSettings();
-        virtual KisPaintOpSettings* clone() const;
-        virtual QWidget *widget() const { return m_optionsWidget; }
-        const KisFilterSP filter() const;
-        KisFilterConfiguration* filterConfig() const;
-        virtual void setLayer( KisLayerSP layer );
-        virtual void fromXML(const QDomElement&);
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-    protected slots:
-        void setCurrentFilter(const KoID &);
-    private:
-        QWidget* m_optionsWidget;
-        Ui_FilterOpOptions* m_uiOptions;
-        const KisFilterSP m_currentFilter;
-        KisPaintDeviceSP m_paintDevice;
-        KisFilterConfigWidget* m_currentFilterConfigWidget;
+
+Q_OBJECT
+
+public:
+	
+    KisFilterOpSettings(QWidget* parent);
+    virtual ~KisFilterOpSettings();
+    virtual KisPaintOpSettings* clone() const;
+    virtual QWidget *widget() const { return m_optionsWidget; }
+    const KisFilterSP filter() const;
+    KisFilterConfiguration* filterConfig() const;
+    virtual void setLayer( KisLayerSP layer );
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+  
+protected slots:
+
+    void setCurrentFilter(const KoID &);
+
+private:
+
+    QWidget* m_optionsWidget;
+    Ui_FilterOpOptions* m_uiOptions;
+    const KisFilterSP m_currentFilter;
+    KisPaintDeviceSP m_paintDevice;
+    KisFilterConfigWidget* m_currentFilterConfigWidget;
+
 };
 
 class KisFilterOp : public KisPaintOp {
@@ -79,8 +87,11 @@ public:
     virtual ~KisFilterOp();
 
     void paintAt(const KisPaintInformation& info);
+
 private:
+    
     const KisFilterOpSettings* m_settings;
+    KisPaintDeviceSP m_tmpDevice;
 };
 
 

@@ -27,7 +27,7 @@
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "ui_wdgunsharp.h"
 

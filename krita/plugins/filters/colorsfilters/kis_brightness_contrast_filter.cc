@@ -191,8 +191,8 @@ bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs) const
 }
 
 
-void KisBrightnessContrastFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

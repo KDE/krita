@@ -41,7 +41,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "kis_iterators_pixel.h"
 #include "kcurve.h"
@@ -209,8 +209,8 @@ KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
-void KisPerChannelFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

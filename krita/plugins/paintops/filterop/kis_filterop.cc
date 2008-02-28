@@ -37,7 +37,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter_config_widget.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_layer.h>
 #include <kis_types.h>
@@ -96,9 +96,9 @@ KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
 
 void KisFilterOpSettings::setLayer( KisLayerSP layer )
 {
-    if(layer)
-    {
+    if (layer) {
         m_paintDevice = layer->paintDevice();
+
         // The "not m_currentFilterConfigWidget" is a corner case
         // which happen because the first configuration settings is
         // created before any layer is selected in the view
@@ -192,6 +192,7 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 KisFilterOp::KisFilterOp(const KisFilterOpSettings* settings, KisPainter * painter)
     : KisPaintOp(painter), m_settings(settings)
 {
+    m_tmpDevice = new KisPaintDevice(source()->colorSpace(), "tmp");
 }
 
 KisFilterOp::~KisFilterOp()
@@ -236,55 +237,22 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    // Filters always work with a mask, never with an image; that
-    // wouldn't be useful at all.
-//     KisQImagemaskSP mask = brush->mask(info, xFraction, yFraction);
-
     painter()->setPressure(info.pressure());
 
     qint32 maskWidth = brush->maskWidth(scale, 0.0);
     qint32 maskHeight = brush->maskHeight(scale, 0.0);
 
-    // Create a temporary paint device
-    KisPaintDeviceSP tmpDev = new KisPaintDevice(colorSpace, "filterop tmpdev");
-    Q_CHECK_PTR(tmpDev);
-
-    // Copy the layer data onto the new paint device
-#if 0
-    KisPainter p( tmpDev );
-    p.bitBlt( 0,  0,  colorSpace->compositeOp(COMPOSITE_COPY), source(), OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
+    m_tmpDevice->clear();
 
     // Filter the paint device
-    filter->disableProgress();
-    QRect r( 0, 0, maskWidth, maskHeight );
-    filter->process( tmpDev, r, m_settings->filterConfig());
-    filter->enableProgress();
-#endif
-
-    // Filter the paint device
-    filter->process( KisFilterConstProcessingInformation( source(), QPoint(x,y)), KisFilterProcessingInformation(tmpDev, QPoint(0,0) ), QSize(maskWidth, maskHeight), m_settings->filterConfig());
+    filter->process( KisConstProcessingInformation( source(), QPoint(x,y)), 
+		     KisProcessingInformation(m_tmpDevice, QPoint(0,0) ),
+		     QSize(maskWidth, maskHeight), 
+		     m_settings->filterConfig(), 0 );
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
+    brush->mask(m_tmpDevice, scale, scale, 0.0, info, xFraction, yFraction);
 
-    brush->mask(tmpDev, scale, scale, 0.0, info, xFraction, yFraction);
-    
-#if 0
-    KisHLineIterator hiter = tmpDev->createHLineIterator(0, 0, maskWidth);
-
-    for (int y = 0; y < maskHeight; y++)
-    {
-        int x=0;
-        while(! hiter.isDone())
-        {
-            quint8 alpha = mask->alphaAt( x++, y );
-            colorSpace->setAlpha(hiter.rawData(), alpha, 1);
-
-            ++hiter;
-        }
-        hiter.nextRow();
-
-    }
-#endif
 
     // Blit the paint device onto the layer
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
@@ -300,7 +268,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), tmpDev, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_tmpDevice, painter()->opacity(), sx, sy, sw, sh);
 }
 
 #include "kis_filterop.moc"

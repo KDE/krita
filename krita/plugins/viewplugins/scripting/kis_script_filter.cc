@@ -50,7 +50,7 @@ QString KisScriptFilter::category() const
     return d->action->property("category").toString();
 }
 
-void KisScriptFilter::process(KisFilterConstProcessingInformation srcInfo, KisFilterProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const
+void KisScriptFilter::process(KisConstProcessingInformation srcInfo, KisProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const
 {
     Q_UNUSED(config);
     d->action->trigger();

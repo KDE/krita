@@ -45,7 +45,7 @@
 #include <kis_multi_integer_filter_widget.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <kis_types.h>
 
 KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Round Corners..."))
@@ -55,8 +55,8 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::Cate
 
 }
 
-void KisRoundCornersFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisRoundCornersFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

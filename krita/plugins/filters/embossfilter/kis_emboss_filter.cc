@@ -50,7 +50,7 @@
 #include <kis_types.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "kis_multi_integer_filter_widget.h"
 
@@ -81,8 +81,8 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void KisEmbossFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

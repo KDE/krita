@@ -64,7 +64,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #define MOD(x, y)                                               \
     ((x) < 0 ? ((y) - 1 - ((y) - 1 - (x)) % (y)) : (x) % (y))
 
@@ -135,8 +135,8 @@ KisFilterConfiguration* KisFilterBumpmap::factoryConfiguration(const KisPaintDev
 }
 
 
-void KisFilterBumpmap::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

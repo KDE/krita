@@ -77,8 +77,8 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const;
     
     using KisFilter::process;
-    void process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+    void process(KisConstProcessingInformation src,
+                 KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

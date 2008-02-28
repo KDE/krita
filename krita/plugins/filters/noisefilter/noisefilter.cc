@@ -45,7 +45,7 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "kis_wdg_noise.h"
 #include "ui_wdgnoiseoptions.h"
@@ -95,8 +95,8 @@ KisFilterConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* paren
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterNoise::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterNoise::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

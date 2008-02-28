@@ -1,7 +1,5 @@
 /*
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "filter/kis_filter_registry.h"
+#include "generator/kis_generator_registry.h"
+
 #include <QString>
 
 #include <kaction.h>
@@ -29,21 +28,22 @@
 #include <kservicetypetrader.h>
 
 #include <kparts/componentfactory.h>
-#include "kis_debug.h"
 #include <math.h>
+
+#include "kis_debug.h"
 #include "kis_types.h"
 
 #include "kis_paint_device.h"
-#include "filter/kis_filter.h"
+#include "generator/kis_generator.h"
 
-KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
+KisGeneratorRegistry *KisGeneratorRegistry::m_singleton = 0;
 
-KisFilterRegistry::KisFilterRegistry()
+KisGeneratorRegistry::KisGeneratorRegistry()
 {
-    Q_ASSERT(KisFilterRegistry::m_singleton == 0);
-    KisFilterRegistry::m_singleton = this;
+    Q_ASSERT(KisGeneratorRegistry::m_singleton == 0);
+    KisGeneratorRegistry::m_singleton = this;
 
-    KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Filter"),
+    KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Generator"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 3)"));
 
@@ -66,28 +66,28 @@ KisFilterRegistry::KisFilterRegistry()
     }
 }
 
-KisFilterRegistry::~KisFilterRegistry()
+KisGeneratorRegistry::~KisGeneratorRegistry()
 {
 }
 
-KisFilterRegistry* KisFilterRegistry::instance()
+KisGeneratorRegistry* KisGeneratorRegistry::instance()
 {
-    if(KisFilterRegistry::m_singleton == 0)
+    if(KisGeneratorRegistry::m_singleton == 0)
     {
-        KisFilterRegistry::m_singleton = new KisFilterRegistry();
+        KisGeneratorRegistry::m_singleton = new KisGeneratorRegistry();
     }
-    return KisFilterRegistry::m_singleton;
+    return KisGeneratorRegistry::m_singleton;
 }
 
-void KisFilterRegistry::add(KisFilterSP item)
+void KisGeneratorRegistry::add(KisGeneratorSP item)
 {
     add(item->id(), item);
 }
 
-void KisFilterRegistry::add(const QString &id, KisFilterSP item)
+void KisGeneratorRegistry::add(const QString &id, KisGeneratorSP item)
 {
-    KoGenericRegistry<KisFilterSP>::add(id, item);
-    emit(filterAdded(id));
+    KoGenericRegistry<KisGeneratorSP>::add(id, item);
+    emit(generatorAdded(id));
 }
 
-#include "kis_filter_registry.moc"
+#include "kis_generator_registry.moc"

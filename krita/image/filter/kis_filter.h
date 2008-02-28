@@ -28,25 +28,17 @@
 #include "KoColorSpace.h"
 
 #include "kis_types.h"
-#include "kis_shared.h"
+#include "kis_base_processor.h"
 
 #include "krita_export.h"
 
-class QWidget;
-
-class KoUpdater;
-class KoUpdater;
-
-class KisBookmarkedConfigurationManager;
-class KisFilterConfiguration;
-class KisFilterConfigWidget;
-class KisFilterProcessingInformation;
-class KisFilterConstProcessingInformation;
+class KisConstProcessingInformation;
+class KisProcessingInformation;
 
 /**
  * Basic interface of a Krita filter.
  */
-class KRITAIMAGE_EXPORT KisFilter : public KisShared {
+class KRITAIMAGE_EXPORT KisFilter : public KisBaseProcessor {
 
 public:
     static const KoID CategoryAdjust;
@@ -59,6 +51,7 @@ public:
     static const KoID CategoryMap;
     static const KoID CategoryNonPhotorealistic;
     static const KoID CategoryOther;
+    
 public:
 
     /**
@@ -76,17 +69,13 @@ public:
      * colorspace? (bsar)
      *
      * @param src the source paint device
-     * @param srcTopLeft the top left coordinate where the filter starts to be applied
      * @param dst the destination paint device
-     * @param dstTopLeft he top left coordinate for the destination paint device
      * @param size the size of the area that is filtered
-     * @param channelFlags an array of bits that indicated which
-     *        channels must be excluded and which channels must be included
-     *        when filtering. Is _empty_ when all channels need to be filtered.
      * @param config the parameters of the filter
+     * @param progressUpdater to pass on the progress the filter is making
      */
-    virtual void process(KisFilterConstProcessingInformation src,
-                         KisFilterProcessingInformation dst,
+    virtual void process(KisConstProcessingInformation src,
+                         KisProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater
@@ -95,8 +84,8 @@ public:
     /**
      * Provided for convenience when no progress reporting is needed.
      */
-    virtual void process(KisFilterConstProcessingInformation src,
-                         KisFilterProcessingInformation dst,
+    virtual void process(KisConstProcessingInformation src,
+                         KisProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config
         ) const;
@@ -113,131 +102,14 @@ public:
      * is necessary.
      */
     void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config) const;
-    
-public:
-    /**
-     * This function return the configuration set as the default by the user or the default configuration from
-     * the filter writer as returned by factoryConfiguration.
-     * This configuration is used by default for the configuration widget and to the process function if there is no
-     * configuration widget.
-     * @return the default configuration of this widget
-     */
-    virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
 
-    /**
-     * @return the bookmark manager for this filter
-     */
-    KisBookmarkedConfigurationManager* bookmarkManager();
 
-    /**
-     * @return the bookmark manager for this filter
-     */
-    const KisBookmarkedConfigurationManager* bookmarkManager() const;
-
-    /**
-     * Used when threading is used -- the overlap margin is passed to the
-     * filter to use to compute pixels, but the margin is not pasted into the
-     * resulting image. Use this for convolution filters, for instance.
-     */
-    virtual int overlapMarginNeeded( const KisFilterConfiguration* = 0 ) const
-    { return 0; }
-
-     /**
-     * Similar to overlapMarginNeeded: some filters will alter a lot of pixels that are
-     * near to each other at the same time. So when you changed a single rectangle
-     * in a device, the actual rectangle that will feel the influence of this change
-     * might be bigger. Use this function to determine that rect.
-     * The default implementation makes a guess using overlapMarginNeeded.
-      */
-    virtual QRect enlargeRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
-
-    /**
-     * Determine if this filter can work with this colorSpace. For instance, some
-     * colorspaces don't depend on lcms, and cannot do certain tasks. The colorsfilters
-     * are problems here.
-     * BSAR: I'm still not convinced that this is the right approach. I think that every
-     * colorspace should implement the api fully; and that the filter should simply call
-     * that api. After all, you don't need lcms to desaturate.
-     *
-     * @param cs the colorspace that we want to know this filter works with
-     */
-    virtual bool workWith(const KoColorSpace* cs) const
-    { Q_UNUSED(cs); return true; }
-
-    /// @return Unique identification for this filter
-    QString id() const;
-    QString name() const;
-
-    /// @return the submenu in the filters menu does filter want to go?
-    KoID menuCategory() const;
-
-    /// @return the i18n'ed string this filter wants to show itself in the menu
-    QString menuEntry() const;
-
-    /**
-     * Create the configuration widget for this filter.
-     *
-     * @param parent the Qt owner widget of this widget
-     * @param dev the paintdevice this filter will act on
-     */
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const;
-    // "Support" functions
-public:
-    /**
-     * If true, this filter can be used in painting tools as a paint operation
-     */
-    bool supportsPainting() const;
-
-    /// This filter can be displayed in a preview dialog
-    bool supportsPreview() const;
-
-    /// This filter can be used in adjustment layers
-    bool supportsAdjustmentLayers() const;
-
-    /**
-     * Can this filter work incrementally when painting, or do we need to work
-     * on the state as it was before painting started. The former is faster.
-     */
-    bool supportsIncrementalPainting() const;
-
-    /**
-     * This filter supports cutting up the work area and filtering
-     * each chunk in a separate thread. Filters that need access to the
-     * whole area for correct computations should return false.
-     */
-    bool supportsThreading() const;
-    
-    /**
-     * Determine the colorspace independence of this filter.
-     * @see ColorSpaceIndependence
-     *
-     * @return the degree of independence
-     */
-    ColorSpaceIndependence colorSpaceIndependence() const;
+    bool workWith(const KoColorSpace* cs) const;
 
 protected:
 
-    void setSupportsPainting(bool v);
-    void setSupportsPreview(bool v);
-    void setSupportsAdjustmentLayers(bool v);
-    void setSupportsIncrementalPainting(bool v);
-    void setSupportsThreading(bool v);
-    void setColorSpaceIndependence(ColorSpaceIndependence v);
-    
-protected:
-
-    
-    
-    void setBookmarkManager(KisBookmarkedConfigurationManager* );
-    /// @return the name of config group in KConfig
     QString configEntryGroup() const;
 
-    /// @return the default configuration as defined by whoever wrote the plugin
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-
-private:
-    struct Private;
-    Private* const d;
 };
 
 

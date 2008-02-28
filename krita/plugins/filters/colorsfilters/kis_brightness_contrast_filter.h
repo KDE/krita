@@ -29,7 +29,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
 class QWidget;
 class KoColorTransformation;
@@ -71,8 +71,8 @@ public:
 public:
     using KisFilter::process;
 
-    void process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+    void process(KisConstProcessingInformation src,
+                 KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

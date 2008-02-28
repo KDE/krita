@@ -46,7 +46,7 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "kis_wdg_random_pick.h"
 #include "ui_wdgrandompickoptions.h"
@@ -79,8 +79,8 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), CategoryOther, i18n
 }
 
 
-void KisFilterRandomPick::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterRandomPick::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

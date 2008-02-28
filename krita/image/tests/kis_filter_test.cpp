@@ -22,7 +22,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
-#include "filter/kis_filter_processing_information.h"
+#include "kis_processing_information.h"
 #include "filter/kis_filter.h"
 #include "testutil.h"
 #include "kis_threaded_applicator.h"
@@ -40,8 +40,8 @@ public:
  
     using KisFilter::process;
  
-    void process(KisFilterConstProcessingInformation src,
-                         KisFilterProcessingInformation dst,
+    void process(KisConstProcessingInformation src,
+                         KisProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater) const
@@ -75,8 +75,8 @@ void KisFilterTest::testSingleThreaded()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT( kfc );
 
-    KisFilterConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
-    KisFilterProcessingInformation dst( dev, QPoint(0, 0), 0 );
+    KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
+    KisProcessingInformation dst( dev, QPoint(0, 0), 0 );
     
     f->process(src, dst, qimg.size(), kfc);
 
@@ -107,8 +107,8 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT( kfc );
 
-    KisFilterConstProcessingInformation srcCfg( src,  QPoint(0, 0), sel );
-    KisFilterProcessingInformation dstCfg( dst, QPoint(0, 0), sel );
+    KisConstProcessingInformation srcCfg( src,  QPoint(0, 0), sel );
+    KisProcessingInformation dstCfg( dst, QPoint(0, 0), sel );
     
     f->process(srcCfg, dstCfg, qimg.size(), kfc);
 

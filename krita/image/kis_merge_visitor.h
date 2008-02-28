@@ -41,7 +41,7 @@
 #include "kis_transaction.h"
 #include "kis_iterators_pixel.h"
 #include "kis_clone_layer.h"
-#include "filter/kis_filter_processing_information.h"
+#include "kis_processing_information.h"
 
 class KisMergeVisitor : public KisNodeVisitor {
 public:
@@ -222,8 +222,8 @@ public:
             gc1.bitBlt(m_rc.topLeft(), m_projection, m_rc);
             gc1.end();
             
-            KisFilterConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
-            KisFilterProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
+            KisConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
+            KisProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
 
             // Some filters will require usage of oldRawData, which is not available without
             // a transaction!

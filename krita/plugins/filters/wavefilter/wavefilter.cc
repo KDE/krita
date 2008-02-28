@@ -46,7 +46,7 @@
 #include <kis_types.h>
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include "kis_wdg_wave.h"
 #include "ui_wdgwaveoptions.h"
 
@@ -136,8 +136,8 @@ KisFilterConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterWave::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterWave::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

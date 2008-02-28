@@ -32,7 +32,7 @@
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "kis_wdg_fastcolortransfer.h"
 #include "ui_wdgfastcolortransfer.h"
@@ -81,8 +81,8 @@ KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const K
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisFilterFastColorTransfer::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

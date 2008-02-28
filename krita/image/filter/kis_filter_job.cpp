@@ -31,7 +31,7 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_paint_device.h"
-#include "filter/kis_filter_processing_information.h"
+#include "kis_processing_information.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 
@@ -56,8 +56,8 @@ void KisFilterJob::run()
     KisPaintDeviceSP dst = new KisPaintDevice( m_dev->colorSpace() );
     QRect marginRect = m_rc.adjusted( -m_margin, -m_margin, m_margin, m_margin );
 
-    m_filter->process( KisFilterConstProcessingInformation( m_dev, marginRect.topLeft()),
-                        KisFilterProcessingInformation( dst, marginRect.topLeft() ),
+    m_filter->process( KisConstProcessingInformation( m_dev, marginRect.topLeft()),
+                        KisProcessingInformation( dst, marginRect.topLeft() ),
                         marginRect.size(),
                         m_config,
                         m_updater );

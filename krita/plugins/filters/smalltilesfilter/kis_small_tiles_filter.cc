@@ -50,7 +50,7 @@
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <KoCompositeOp.h>
 
 #include "kis_multi_integer_filter_widget.h"
@@ -62,8 +62,8 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::Category
     setSupportsIncrementalPainting( false );
 }
 
-void KisSmallTilesFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

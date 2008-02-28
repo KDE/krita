@@ -169,8 +169,8 @@ KisCImgFilter::KisCImgFilter()
 }
 
 
-void KisCImgFilter::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisCImgFilter::process(KisConstProcessingInformation src,
+                 KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

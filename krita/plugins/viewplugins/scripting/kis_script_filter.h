@@ -23,7 +23,7 @@
 
 #include <QObject>
 #include "filter/kis_filter.h"
-#include "filter/kis_filter_processing_information.h"
+#include "kis_processing_information.h"
 
 #include "kritacore/krs_paint_device.h"
 
@@ -39,7 +39,7 @@ class KisScriptFilter : public QObject, public KisFilter {
 
         using KisFilter::process;
         
-        virtual void process(KisFilterConstProcessingInformation srcInfo, KisFilterProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
+        virtual void process(KisConstProcessingInformation srcInfo, KisProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
     public Q_SLOTS:
         QString category() const;
     signals:

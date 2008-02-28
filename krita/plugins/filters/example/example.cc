@@ -35,7 +35,7 @@
 #include <KoColorTransformation.h>
 #include <KoProgressUpdater.h>
 
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <kis_types.h>
 #include <kis_selection.h>
 #include <kis_image.h>
@@ -71,8 +71,8 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), CategoryAdjust, i18n("&Inve
     setSupportsIncrementalPainting(false);
 }
 
-void KisFilterInvert::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

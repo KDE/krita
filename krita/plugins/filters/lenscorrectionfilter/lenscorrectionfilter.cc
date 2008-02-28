@@ -48,7 +48,7 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "kis_wdg_lens_correction.h"
 #include "ui_wdglenscorrectionoptions.h"
@@ -98,8 +98,8 @@ KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidg
     return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterLensCorrection::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterLensCorrection::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

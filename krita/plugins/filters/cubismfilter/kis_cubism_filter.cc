@@ -52,7 +52,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <KoCompositeOp.h>
 
 #include "kis_multi_integer_filter_widget.h"
@@ -78,8 +78,8 @@ bool KisCubismFilter::workWith(const KoColorSpace* /*cs*/) const
 }
 
 
-void KisCubismFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* configuration,
                  KoUpdater* progressUpdater

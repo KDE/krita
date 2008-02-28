@@ -44,7 +44,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -103,8 +103,8 @@ bool KisAutoContrast::workWith(const KoColorSpace* cs) const
     return (cs->profile() != 0);
 }
 
-void KisAutoContrast::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
@@ -271,8 +271,8 @@ bool KisDesaturateFilter::workWith(const KoColorSpace* cs) const
     return (cs->profile() != 0);
 }
 
-void KisDesaturateFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisDesaturateFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

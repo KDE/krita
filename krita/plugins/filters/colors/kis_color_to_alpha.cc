@@ -30,7 +30,7 @@
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "ui_wdgcolortoalphabase.h"
 #include "kis_wdg_color_to_alpha.h"
@@ -57,8 +57,8 @@ KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPai
     return config;
 }
 
-void KisFilterColorToAlpha::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

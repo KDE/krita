@@ -22,7 +22,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
-#include "filter/kis_filter_processing_information.h"
+#include "kis_processing_information.h"
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private {
 public:
@@ -77,8 +77,8 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 
     selection()->updateProjection(rc);
 
-    KisFilterConstProcessingInformation src( projection,  rc.topLeft(), selection() );
-    KisFilterProcessingInformation dst( projection, rc.topLeft(), selection() );
+    KisConstProcessingInformation src( projection,  rc.topLeft(), selection() );
+    KisProcessingInformation dst( projection, rc.topLeft(), selection() );
 
     KisFilterSP filter = KisFilterRegistry::instance()->value( m_d->filterConfig->name() );
     if (!filter) {

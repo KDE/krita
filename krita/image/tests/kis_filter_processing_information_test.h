@@ -21,7 +21,7 @@
 
 #include <QtTest/QtTest>
 
-class KisFilterProcessingInformationTest : public QObject
+class KisProcessingInformationTest : public QObject
 {
     Q_OBJECT
 private slots:

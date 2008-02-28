@@ -29,7 +29,7 @@
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
 #include <kis_paint_device.h>
 
@@ -59,8 +59,8 @@ KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDev
     return config;
 }
 
-void KisUnsharpFilter::process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+void KisUnsharpFilter::process(KisConstProcessingInformation src,
+                 KisProcessingInformation dst,
                  const QSize& areaSize,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

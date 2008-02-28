@@ -50,7 +50,7 @@
 #include <kis_paint_device.h>
 #include <KoProgressUpdater.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_processing_information.h>
+#include <kis_processing_information.h>
 
 #include "kis_multi_bool_filter_widget.h"
 
@@ -100,8 +100,8 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::process(KisFilterConstProcessingInformation srcInfo,
-                 KisFilterProcessingInformation dstInfo,
+void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
+                 KisProcessingInformation dstInfo,
                  const QSize& size,
                  const KisFilterConfiguration* configuration,
                  KoUpdater* progressUpdater

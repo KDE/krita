@@ -47,92 +47,95 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
-   kis_brush_registry.cpp
-   kis_filter_mask.cpp
-   kis_node_action.cpp
-   kis_paintop_settings.cpp
-   kis_base_node.cpp
-   kis_node.cpp
-   kis_node_facade.cpp
+   commands/kis_image_commands.cc
+   commands/kis_layer_commands.cc
+   filter/kis_filter.cc
+   filter/kis_filter_configuration.cc
+   filter/kis_filter_config_widget.cc
+   filter/kis_filter_job.cpp
+   kis_processing_information.cpp
+   filter/kis_filter_registry.cc
+   filter/kis_filter_strategy.cc
+   filter/kis_recorded_filter_action.cc
    kis_action_recorder.cc
-   kis_recorded_action.cc
-   kis_recorded_action_factory_registry.cc
-   kis_threaded_applicator.cpp
-   kis_projection.cc
    kis_adjustment_layer.cc
-   kis_brush_p.cc
    kis_auto_brush.cpp
    kis_autogradient_resource.cc
+   kis_base_node.cpp
+   kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
    kis_boundary.cc
    kis_brush.cc
+   kis_brush_p.cc
+   kis_brush_registry.cpp
+   kis_clone_layer.cpp
    kis_complex_color.cpp
    kis_convolution_painter.cc
-   kis_painterly_overlay.cpp
-   kis_painterly_overlay_colorspace.cpp
+   kis_effect_mask.cc
    kis_fill_painter.cc
+   kis_filter_mask.cpp
+   kis_filter_mask.cpp
    kis_gradient_painter.cc
+   kis_group_layer.cc
    kis_histogram.cc
    kis_image.cc
    kis_iterator.cc
    kis_layer.cc
    kis_macro.cc
-   kis_group_layer.cc
-   kis_paint_layer.cc
+   kis_mask.cc
+   kis_math_toolbox.cpp
    kis_name_server.cpp
+   kis_node_action.cpp
+   kis_node.cpp
+   kis_node_facade.cpp
    kis_paint_device.cc
    kis_painter.cc
+   kis_painterly_overlay_colorspace.cpp
+   kis_painterly_overlay.cpp
+   kis_paint_information.cc
+   kis_paint_layer.cc
    kis_paintop.cc
    kis_paintop_registry.cc
-   kis_paint_information.cc
+   kis_paintop_settings.cpp
    kis_pattern.cc
-   kis_properties_configuration.cc
-   kis_random_accessor.cpp
-   kis_random_sub_accessor.cpp
-   kis_random_generator.cc
-   kis_rotate_visitor.cc
-   kis_selection.cc
-   kis_serializable_configuration.cc
-   kis_shared.cc
-   kis_transaction.cc
-   kis_vec.cc
-   kis_math_toolbox.cpp
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
-   kis_mask.cc
-   kis_effect_mask.cc
-   kis_undo_adapter.cc
-   kis_transformation_mask.cpp
-   kis_clone_layer.cpp
    kis_pixel_selection.cpp
-   kis_transparency_mask.cc
+   kis_projection.cc
+   kis_properties_configuration.cc
+   kis_random_accessor.cpp
+   kis_random_generator.cc
+   kis_random_sub_accessor.cpp
+   kis_recorded_action.cc
+   kis_recorded_action_factory_registry.cc
+   kis_rotate_visitor.cc
+   kis_selected_transaction.cc
+   kis_selection.cc
    kis_selection_mask.cpp
-   metadata/kis_meta_data_store.cc
-   metadata/kis_meta_data_value.cc
-   metadata/kis_meta_data_schema.cc
-   metadata/kis_meta_data_io_backend.cc
+   kis_serializable_configuration.cc
+   kis_shared.cc
+   kis_threaded_applicator.cpp
+   kis_transaction.cc
+   kis_transformation_mask.cpp
+   kis_transform_worker.cc
+   kis_transparency_mask.cc
+   kis_undo_adapter.cc
+   kis_vec.cc
+   generator/kis_generator.cpp
+   generator/kis_generator_registry.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc
    metadata/kis_meta_data_filter_registry.cc
    metadata/kis_meta_data_filter_registry_model.cc
+   metadata/kis_meta_data_io_backend.cc
    metadata/kis_meta_data_merge_strategy.cc
    metadata/kis_meta_data_merge_strategy_p.cc
    metadata/kis_meta_data_merge_strategy_registry.cc
-   kis_selected_transaction.cc
-   kis_transform_worker.cc
-   commands/kis_image_commands.cc
-   commands/kis_layer_commands.cc
-   filter/kis_filter_job.cpp
-   kis_filter_mask.cpp
-   filter/kis_filter.cc
-   filter/kis_filter_configuration.cc
-   filter/kis_filter_config_widget.cc
-   filter/kis_filter_processing_information.cc
-   filter/kis_filter_registry.cc
-   filter/kis_filter_strategy.cc
-   filter/kis_recorded_filter_action.cc
+   metadata/kis_meta_data_schema.cc
+   metadata/kis_meta_data_store.cc
+   metadata/kis_meta_data_value.cc
 )
 
 

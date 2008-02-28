@@ -30,8 +30,8 @@ class KisRainDropsFilter : public KisFilter
 public:
     KisRainDropsFilter();
 public:
-    void process(KisFilterConstProcessingInformation src,
-                 KisFilterProcessingInformation dst,
+    void process(KisConstProcessingInformation src,
+                 KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater

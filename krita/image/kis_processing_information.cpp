@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "filter/kis_filter_processing_information.h"
+#include "kis_processing_information.h"
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 
-struct KisFilterConstProcessingInformation::Private
+struct KisConstProcessingInformation::Private
 {
     Private() {}
     KisPaintDeviceSP device;
@@ -28,39 +28,39 @@ struct KisFilterConstProcessingInformation::Private
     QPoint topLeft;
 };
 
-KisFilterConstProcessingInformation::KisFilterConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : d(new Private)
+KisConstProcessingInformation::KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : d(new Private)
 {
     d->device = device;
     d->selection = selection;
     d->topLeft = topLeft;
 }
 
-const KisPaintDeviceSP KisFilterConstProcessingInformation::paintDevice() const
+const KisPaintDeviceSP KisConstProcessingInformation::paintDevice() const
 {
     return d->device;
 }
 
-const KisSelectionSP KisFilterConstProcessingInformation::selection() const
+const KisSelectionSP KisConstProcessingInformation::selection() const
 {
     return d->selection;
 }
 
-const QPoint& KisFilterConstProcessingInformation::topLeft() const
+const QPoint& KisConstProcessingInformation::topLeft() const
 {
     return d->topLeft;
 }
 
-struct KisFilterProcessingInformation::Private
+struct KisProcessingInformation::Private
 {
     KisPaintDeviceSP device;
 };
 
-KisFilterProcessingInformation::KisFilterProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : KisFilterConstProcessingInformation(device, topLeft, selection), d(new Private)
+KisProcessingInformation::KisProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : KisConstProcessingInformation(device, topLeft, selection), d(new Private)
 {
     d->device = device;
 }
 
-KisPaintDeviceSP KisFilterProcessingInformation::paintDevice()
+KisPaintDeviceSP KisProcessingInformation::paintDevice()
 {
     return d->device;
 }

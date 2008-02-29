@@ -199,7 +199,7 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
 
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 
-    while( ! iter.isDone()  && !progressUpdater->interrupted())
+    while( ! iter.isDone()  && !(progressUpdater && progressUpdater->interrupted()) )
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();
@@ -244,7 +244,7 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
                 pixelsProcessed++;
                 break;
         }
-        progressUpdater->setProgress(pixelsProcessed / totalCost);
+        if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
     delete adj;
 }
@@ -301,7 +301,7 @@ void KisDesaturateFilter::process(KisConstProcessingInformation srcInfo,
     qint32 pixelsProcessed = 0;
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 
-    while( ! iter.isDone()  && !progressUpdater->interrupted())
+    while( ! iter.isDone()  && !(progressUpdater && progressUpdater->interrupted()))
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();
@@ -346,6 +346,6 @@ void KisDesaturateFilter::process(KisConstProcessingInformation srcInfo,
                 pixelsProcessed++;
                 break;
         }
-        progressUpdater->setProgress(pixelsProcessed / totalCost);
+        if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
 }

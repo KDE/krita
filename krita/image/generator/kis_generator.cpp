@@ -29,15 +29,6 @@
 #include "kis_selection.h"
 #include "kis_types.h"
 
-struct DummyProgressBar : public KoProgressProxy
-{
-    int max;
-    int maximum() const { return max; }
-    void setValue( int ) {}
-    void setRange( int, int maximum ) { max = maximum; }
-    void setFormat( const QString & ) {}
-};
-    
 KisGenerator::KisGenerator(const KoID& id, const KoID & category, const QString & entry)
     : KisBaseProcessor(id, category, entry)
 {
@@ -53,14 +44,10 @@ void KisGenerator::generate(KisProcessingInformation dst,
                           const KisFilterConfiguration* config
         ) const
 {
-    DummyProgressBar bar;
-    KoProgressUpdater pu(&bar);
-    pu.start();
-    KoUpdater updater = pu.startSubtask();
-    generate(dst, size, config, &updater);
+    generate(dst, size, config, 0);
 }        
 
-KoColorSpace * KisGenerator::colorSpace()
+const KoColorSpace * KisGenerator::colorSpace()
 {
     return 0;
 }

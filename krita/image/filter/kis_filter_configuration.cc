@@ -140,7 +140,7 @@ bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const
     return true;
 }
 
-QBitArray KisFilterConfiguration::channelFlags()
+QBitArray KisFilterConfiguration::channelFlags() const
 {
     return d->channelFlags;
 }

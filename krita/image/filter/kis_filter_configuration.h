@@ -78,12 +78,12 @@ public:
      * alone. It is up to the filter to decide whether channels that
      * are to be left alone are copied to the dest file or not.
      */
-    QBitArray channelFlags();
+    QBitArray channelFlags() const;
 
     /**
      * Set the channel flags. An empty array is allowed; that means
      * that all channels are to be filtered. Filters can optimize on
-     * that.
+     * that. The array must be in the order of the pixel layout.
      */
     void setChannelFlags(QBitArray channelFlags);
 

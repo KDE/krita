@@ -168,6 +168,6 @@ void KisFilterLensCorrection::process(KisConstProcessingInformation srcInfo,
         cs->fromLabA16( (quint8*)lab, dstIt.rawData(), 1);
 
         ++dstIt;
-        if(progressUpdater) progressUpdater->setProgress( (++count) / cost);
+        if (progressUpdater) progressUpdater->setProgress( (++count) / cost);
     }
 }

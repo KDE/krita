@@ -76,7 +76,7 @@ public:
      * If so, this function returns in instance of that colorspace, else
      * it return 0.
      */
-    virtual KoColorSpace * colorSpace();
+    virtual const KoColorSpace * colorSpace();
     
 protected:
 

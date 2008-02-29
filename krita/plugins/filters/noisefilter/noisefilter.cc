@@ -129,6 +129,7 @@ void KisFilterNoise::process(KisConstProcessingInformation srcInfo,
 
     qint16 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
+    
     const quint8* pixels[2];
     pixels[0] = interm;
 

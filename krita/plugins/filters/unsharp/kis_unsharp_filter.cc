@@ -100,7 +100,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     painter.beginTransaction("convolution step");
     painter.applyMatrix(kernel, src.topLeft().x(), src.topLeft().y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
 
-    if (progressUpdater->interrupted()) {
+    if (progressUpdater && progressUpdater->interrupted()) {
         return;
     }
 
@@ -144,7 +144,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
             ++intermIt;
         }
         
-        if (progressUpdater->interrupted()) {
+        if (progressUpdater && progressUpdater->interrupted()) {
             return;
         }
         srcIt.nextRow();
@@ -155,5 +155,5 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     delete colors[1];
 
 
-    progressUpdater->setProgress(100);
+    if (progressUpdater) progressUpdater->setProgress(100);
 }

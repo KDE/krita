@@ -199,7 +199,7 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
             }
             dstIt.nextRow();
         }
-        if(progressUpdater) progressUpdater->setProgress( row / cost);
+        if (progressUpdater) progressUpdater->setProgress( row / cost);
     }
 
     delete[] prevRow;

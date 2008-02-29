@@ -20,8 +20,6 @@
 
 #include <QString>
 
-#include <KoProgressUpdater.h>
-
 #include "kis_bookmarked_configuration_manager.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_processing_information.h"
@@ -41,15 +39,6 @@ const KoID KisFilter::CategoryNonPhotorealistic = KoID("nonphotorealistic_filter
 const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
 
 
-struct DummyProgressBar : public KoProgressProxy
-{
-    int max;
-    int maximum() const { return max; }
-    void setValue( int ) {}
-    void setRange( int, int maximum ) { max = maximum; }
-    void setFormat( const QString & ) {}
-};
-
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
     : KisBaseProcessor(id, category, entry)
 {
@@ -65,11 +54,7 @@ void KisFilter::process(KisConstProcessingInformation src,
                          const QSize& size,
                          const KisFilterConfiguration* config) const
 {
-    DummyProgressBar bar;
-    KoProgressUpdater pu(&bar);
-    pu.start();
-    KoUpdater updater = pu.startSubtask();
-    process(src, dst, size, config, &updater);
+    process(src, dst, size, config, 0);
 }
 
 void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
@@ -81,13 +66,8 @@ void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFil
 
 void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config) const
 {
-    DummyProgressBar bar;
-    KoProgressUpdater pu(&bar);
-    pu.start();
-    KoUpdater updater = pu.startSubtask();
-    
     KisProcessingInformation info(device, rect.topLeft());
-    process(info, info, rect.size(), config, &updater);
+    process(info, info, rect.size(), config, 0);
 }
 
 QString KisFilter::configEntryGroup() const

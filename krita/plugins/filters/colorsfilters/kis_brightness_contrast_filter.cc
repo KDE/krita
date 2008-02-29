@@ -228,7 +228,7 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
     if( totalCost == 0 ) totalCost = 1;
     qint32 pixelsProcessed = 0;
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
-    while( ! iter.isDone()  && !progressUpdater->interrupted())
+    while( ! iter.isDone()  && !(progressUpdater && progressUpdater->interrupted()))
     {
         quint32 npix=0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();

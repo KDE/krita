@@ -154,18 +154,19 @@ if(SHOULD_BUILD_KPRESENTER)
     macro_optional_add_subdirectory(kpresenter)
 endif(SHOULD_BUILD_KPRESENTER)
 
-macro_optional_add_subdirectory(kdgantt)
-macro_optional_add_subdirectory(kchart)
+#macro_optional_add_subdirectory(kdgantt)
+#macro_optional_add_subdirectory(kchart)
 
 FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
 
 macro_log_feature(BZIP2_EXECUTABLE "bzip2" "bzip2 program is necessary to compile kexi. kexi will not be built" "http://www.bzip.org" FALSE "")
 
 if( BZIP2_EXECUTABLE )
-  macro_optional_add_subdirectory(kexi)
+#  macro_optional_add_subdirectory(kexi)
 endif( BZIP2_EXECUTABLE )
 
 macro_optional_add_subdirectory(kformula)
+macro_optional_add_subdirectory(kool)
 macro_optional_add_subdirectory(kivio)
 #macro_optional_add_subdirectory(koshell)
 macro_optional_add_subdirectory(kounavail)

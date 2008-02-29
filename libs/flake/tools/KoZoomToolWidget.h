@@ -23,14 +23,19 @@
 #include <QPixmap>
 #include "ui_KoZoomToolWidget.h"
 
+class KoZoomTool;
+
 class KoZoomToolWidget : public QWidget, Ui::ZoomToolWidget {
     Q_OBJECT
 public:
-    explicit KoZoomToolWidget( QWidget *parent = 0 );
+    explicit KoZoomToolWidget( KoZoomTool* tool, QWidget *parent = 0 );
     ~KoZoomToolWidget();
 
 protected:
     bool eventFilter( QObject* object, QEvent* event );
+
+private slots:
+    void changeZoomMode();
 
 private:
     void paintBirdEye();
@@ -38,6 +43,7 @@ private:
     bool m_dirtyThumbnail;
     QRect m_birdEyeRect;
     QPixmap m_thumbnail;
+    KoZoomTool* m_tool;
 };
 
 #endif

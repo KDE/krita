@@ -104,6 +104,6 @@ KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event) {
 
 QWidget* KoZoomTool::createOptionWidget()
 {
-    return new KoZoomToolWidget();
+    return new KoZoomToolWidget( this );
 }
 

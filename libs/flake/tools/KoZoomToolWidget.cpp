@@ -22,14 +22,15 @@
 #include <QMouseEvent>
 #include <kicon.h>
 
-KoZoomToolWidget::KoZoomToolWidget( QWidget* parent ) : QWidget( parent )
+KoZoomToolWidget::KoZoomToolWidget( KoZoomTool* tool, QWidget* parent )
+                : QWidget( parent ), m_tool( tool )
 {
     setupUi( this );
     m_dirtyThumbnail = true;
     birdEyeLabel->installEventFilter( this );
 
-    zoomInButton->setIcon( KIcon( "zoom-original" ) );
-    zoomOutButton->setIcon( KIcon( "zoom-original" ) );
+    zoomInButton->setIcon( KIcon( "zoom-in" ) );
+    zoomOutButton->setIcon( KIcon( "zoom-out" ) );
 }
 
 KoZoomToolWidget::~KoZoomToolWidget()
@@ -41,7 +42,7 @@ void KoZoomToolWidget::paintBirdEye()
     QPainter p;
     if( m_dirtyThumbnail ) {
         m_thumbnail = QPixmap( birdEyeLabel->size() );
-        m_thumbnail.fill( birdEyeLabel->palette().dark().color() );
+//        m_thumbnail.fill( birdEyeLabel->palette().dark().color() );
         p.begin( &m_thumbnail );
         // TODO fill in code to paint a thumbnail of the current document
         p.end();
@@ -64,6 +65,7 @@ bool KoZoomToolWidget::eventFilter( QObject* object, QEvent* event )
         else if( event->type() == QEvent::MouseMove ) {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent*>( event );
             if( mouseEvent->buttons() | Qt::LeftButton ) {
+                // m_tool->canvasController()->pan
                 // TODO implement panning
             }
             return true;
@@ -76,6 +78,10 @@ bool KoZoomToolWidget::eventFilter( QObject* object, QEvent* event )
     }
     else
         return QWidget::eventFilter( object, event );
+}
+
+void KoZoomToolWidget::changeZoomMode()
+{
 }
 
 #include <KoZoomToolWidget.moc>

@@ -83,6 +83,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
             }
         }
     }
+    m_layout->addSpacerItem(new QSpacerItem(10, 10,  QSizePolicy::Minimum, QSizePolicy::Expanding));
 }
 
 void KisSpecificColorSelectorWidget::update()

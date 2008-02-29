@@ -28,8 +28,9 @@ class KisFilterManager;
 class KisLayer;
 class KisView2;
 class QRect;
+
 /**
- *
+ * Show the dialog for a certain filter and apply the filters
  */
 class KisFilterHandler : public QObject {
 

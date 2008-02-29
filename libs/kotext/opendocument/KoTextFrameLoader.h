@@ -27,31 +27,14 @@
 #include <KoStore.h>
 #include <KoXmlReader.h>
 
-//#include "KoText.h"
 #include "kotext_export.h"
 
-//class KWDocument;
-//class KWTextFrameSet;
-//class KWFrameSet;
-//class KWFrame;
-//class KWPageSettings;
-//class KWPageManager;
-//class KWTextFrameSet;
-
-//class KoParagraphStyle;
-//class KoCharacterStyle;
-//class KoStore;
 class KoTextLoader;
 class KoTextLoadingContext;
-//class KoStyleManager;
 class KoShape;
-//class KoImageCollection;
-//class KoImageData;
 class KoTextAnchor;
 
-//class QDomDocument;
 class QTextCursor;
-//class QColor;
 
 /**
  * The KoTextFrameLoader class is a helper class for the \a KoTextLoader and

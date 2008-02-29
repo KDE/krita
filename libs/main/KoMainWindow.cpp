@@ -1869,17 +1869,24 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent( this );
+        
         Qt::DockWidgetArea side = Qt::RightDockWidgetArea;
         bool visible = true;
+        
         switch(factory->defaultDockPosition()) {
             case KoDockFactory::DockTornOff:
                 dockWidget->setFloating(true); // position nicely?
                 break;
-            case KoDockFactory::DockTop: side = Qt::TopDockWidgetArea; break;
-            case KoDockFactory::DockLeft: side = Qt::LeftDockWidgetArea; break;
-            case KoDockFactory::DockBottom: side = Qt::BottomDockWidgetArea; break;
-            case KoDockFactory::DockRight: side = Qt::RightDockWidgetArea; break;
-            case KoDockFactory::DockMinimized: visible = false; break;
+            case KoDockFactory::DockTop: 
+                side = Qt::TopDockWidgetArea; break;
+            case KoDockFactory::DockLeft: 
+                side = Qt::LeftDockWidgetArea; break;
+            case KoDockFactory::DockBottom: 
+                side = Qt::BottomDockWidgetArea; break;
+            case KoDockFactory::DockRight: 
+                side = Qt::RightDockWidgetArea; break;
+            case KoDockFactory::DockMinimized: 
+                visible = false; break;
             default:;
         }
 

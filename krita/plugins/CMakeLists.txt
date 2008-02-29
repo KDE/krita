@@ -3,6 +3,7 @@ add_subdirectory( paintops )
 add_subdirectory( tools )
 add_subdirectory( viewplugins )
 #add_subdirectory( brushes )
+add_subdirectory( generators )
 
 find_package(GSL)
 

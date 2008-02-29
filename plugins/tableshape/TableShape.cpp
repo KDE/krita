@@ -83,7 +83,10 @@ bool TableShape::loadOdf( const KoXmlElement    &tableElement,
                           KoShapeLoadingContext &context )
 {
     // FIXME: Get the table name (table:name)
-
+    QString tableName = tableElement.attributeNS( KoXmlNS::table,
+                                                        "name",
+                                                        "" );
+    qDebug() << tableName;
     // Get the table style for this table. 
     // This is an attribute of table:table.
     QString  tableStyleName = tableElement.attributeNS( KoXmlNS::table,

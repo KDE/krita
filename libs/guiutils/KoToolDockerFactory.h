@@ -39,6 +39,12 @@ public:
     virtual QString id() const;
     /// reimplemented from parent
     QDockWidget* createDockWidget();
+    
+    
+    DockPosition defaultDockPosition() const
+    {
+        return DockRight;
+    }
 };
 
 #endif

@@ -23,9 +23,6 @@
 #include "KoTextFrameLoader.h"
 #include "KoTextLoader.h"
 #include "KoTextLoadingContext.h"
-//#include "KWDocument.h"
-//#include "frames/KWTextFrameSet.h"
-//#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoOdfStylesReader.h>
@@ -68,7 +65,6 @@ class KoTextFrameLoader::Private
 {
     public:
         KoTextLoader* loader;
-        //QList<KoTextAnchor*> anchors;
 };
 
 KoTextFrameLoader::KoTextFrameLoader(KoTextLoader* loader)

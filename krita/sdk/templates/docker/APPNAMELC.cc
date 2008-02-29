@@ -50,6 +50,10 @@ public:
         return dockWidget;
     }
 
+    DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
 private:
     KisView2 * m_view;
 

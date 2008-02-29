@@ -35,11 +35,13 @@ class QTextCursor;
 
 /**
  * The KoTextLoader loads is use to load text for one and only one textdocument or shape
- * to the scribe text-engine using QTextCursor objects. So if you have two shape 2 different
+ * to the scribe text-engine using QTextCursor objects. So if you have two shapes 2 different
  * KoTextLoader are used for that. Also if you have a frame with text inside a text a new
  * KoTextLoader is used.
+ *
  * If you want to use the KoTextLoader for text that needs styles from styles.xml. e.g.
  * test shapes on master pages, you need to set KoOdfLoadingContext::setUseStylesAutoStyles( true ).
+ *
  * Don't forget to unset it if you later want to load text that needs content.xml.
  */
 class KOTEXT_EXPORT KoTextLoader : public QObject
@@ -101,6 +103,10 @@ private:
     * Load the span from the \p element into the \p cursor .
     */
     void loadSpan( const KoXmlElement& element, QTextCursor& cursor, bool* stripLeadingSpace );
+
+    /**
+     * Load the table from the \p element into the \p cursor. The table and its contents are placed in a
+     * new shape and 
 
     /**
     * Load the frame element \p element into the \p cursor .

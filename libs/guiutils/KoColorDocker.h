@@ -59,6 +59,8 @@ public:
 
     QString id() const;
     QDockWidget * createDockWidget();
+    virtual KoDockFactory::DockPosition defaultDockPosition() const;
+    
 private:
 
     bool m_showOpacitySlider;

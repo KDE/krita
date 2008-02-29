@@ -65,6 +65,11 @@ public:
 
         return dockWidget;
     }
+    
+    DockPosition defaultDockPosition() const
+    {
+        return DockRight;
+    }
 
 private:
     KisView2 * m_view;

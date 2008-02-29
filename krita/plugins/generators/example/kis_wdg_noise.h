@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,42 +18,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_SCRIPT_DOCK_H_
-#define _KIS_SCRIPT_DOCK_H_
+#ifndef KIS_WDG_NOISE_H
+#define KIS_WDG_NOISE_H
 
-#include <KoDockFactory.h>
-#include <QObject>
-#include <QTimer>
+#include <filter/kis_filter_config_widget.h>
 
-namespace Kross {
-    class Action;
-}
+class Ui_WdgNoiseOptions;
 
-class Kikoo : public QObject
+class KisWdgNoise : public KisFilterConfigWidget
 {
     Q_OBJECT
     public:
-        Kikoo();
-    private slots:
-        void timeout();
-    private:
-        QTimer timer;
-};
-
-class KisScriptDockFactory : public QObject, public KoDockFactory {
-
-Q_OBJECT
-
+        KisWdgNoise(QWidget* parent = 0);
+        ~KisWdgNoise();
     public:
-        KisScriptDockFactory(Kross::Action* act);
-        virtual QString id() const;
-        virtual QDockWidget* createDockWidget();
-        DockPosition defaultDockPosition() const
-        {
-            return DockMinimized;
-        }        
+        inline const Ui_WdgNoiseOptions* widget() const { return m_widget; }
+        virtual void setConfiguration(KisFilterConfiguration*);
+        virtual KisFilterConfiguration* configuration() const;
     private:
-        Kross::Action* m_action;
+        Ui_WdgNoiseOptions* m_widget;
+        int m_seedAlpha, m_seedRed, m_seedGreen, m_seedBlue;
 };
 
 #endif
+

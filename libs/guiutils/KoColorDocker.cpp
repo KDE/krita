@@ -54,6 +54,11 @@ QDockWidget* KoColorDockerFactory::createDockWidget()
     return widget;
 }
 
+KoDockFactory::DockPosition KoColorDockerFactory::defaultDockPosition() const
+{
+    return DockMinimized;
+}
+
 
 #include "KoColorDocker.moc"
 

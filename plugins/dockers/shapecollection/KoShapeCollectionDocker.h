@@ -33,6 +33,10 @@ class KoShapeCollectionDockerFactory : public KoDockFactory
 
         virtual QString id() const;
         virtual QDockWidget* createDockWidget();
+        DockPosition defaultDockPosition() const
+        {
+            return DockRight;
+        }
 };
 
 class KoCollectionItemModel;

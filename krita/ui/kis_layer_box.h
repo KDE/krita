@@ -139,6 +139,11 @@ public:
 
             return dockWidget;
         }
+        
+    DockPosition defaultDockPosition() const
+    {
+        return DockRight;
+    }        
 };
 
 

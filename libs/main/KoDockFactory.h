@@ -50,10 +50,11 @@ public:
     virtual QString id() const = 0;
 
     /// @return the dock widget area the widget should appear in by default
-    virtual DockPosition defaultDockPosition() const { return DockRight; }
+    virtual DockPosition defaultDockPosition() const = 0;
 
     /// Returns true if the dock widget should get a collapsable header.
     virtual bool isCollapsable() const { return true; }
+    
     /**
      * In case the docker is collapsable, returns true if the dock widget
      * will start collapsed by default.

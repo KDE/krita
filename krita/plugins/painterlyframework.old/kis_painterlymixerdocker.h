@@ -48,6 +48,10 @@ public:
 
     QString id() const;
     QDockWidget *createDockWidget();
+    DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
 
 private:
     KisView2 *m_view;

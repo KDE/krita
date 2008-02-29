@@ -169,6 +169,8 @@ public:
      * @param alpha if true, set all alpha channels to true
      * @param substance if true, set all substance channels to true
      * @param substrate if true, set all substrate channels to true
+     *
+     * XXX: Define the order!
      */
     QBitArray channelFlags(bool color = true, bool alpha = false, bool substance = false, bool substrate = false) const;
 

@@ -38,6 +38,11 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
+    
+    DockPosition defaultDockPosition() const
+    {
+        return DockRight;
+    }
 
 private:
     KoPACanvas* m_canvas;

@@ -31,24 +31,33 @@
  */
 template<typename T>
 class KoGenericRegistryModel : public QAbstractListModel {
+
     public:
+    
         KoGenericRegistryModel(KoGenericRegistry<T>* registry);
+        
         virtual ~KoGenericRegistryModel();
+        
     public:
+    
         /**
          * @return the number of elements in the registry
          */
         virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+        
         /**
          * When role == Qt::DisplayRole, this function will return the name of the
          * element.
          */
         virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+        
         /**
          * @return the element at the given index
          */
         T get(const QModelIndex &index) const;
+        
     private:
+    
         KoGenericRegistry<T>* m_registry;
 };
 
@@ -68,6 +77,7 @@ int KoGenericRegistryModel<T>::rowCount(const QModelIndex &/*parent*/) const
 {
     return m_registry->keys().size();
 }
+
 template<typename T>
 QVariant KoGenericRegistryModel<T>::data(const QModelIndex &index, int role) const
 {

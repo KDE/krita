@@ -67,6 +67,12 @@ public:
         return dockWidget;
     }
 
+    KoDockFactory::DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
+
+
 private:
     KisView2 * m_view;
 

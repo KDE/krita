@@ -540,8 +540,6 @@ void KoCsvImportDialog::Private::fillTable()
         const QString header = dialog->m_sheet->horizontalHeader()->label(column);
         if ( formatList.contains( header ) )
             dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Generic"));
-
-        dialog->m_sheet->adjustColumn(column);
     }
     fillComboBox();
 

@@ -17,6 +17,7 @@ add_subdirectory( bigbrother )
 add_subdirectory( trianglecolorselector )
 add_subdirectory( specificcolorselector )
 add_subdirectory( smallcolorselector )
+add_subdirectory( metadataeditor )
 
 find_package(GMM)
 

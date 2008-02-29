@@ -61,7 +61,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         int errLine, errCol;
         
         QDomDocument document;
-        if(not document.setContent(&xmlFile, false, &errMsg, &errLine, &errCol))
+        if(!document.setContent(&xmlFile, false, &errMsg, &errLine, &errCol))
         {
             dbgPlugins <<"Error reading XML at line" << errLine <<" column" << errCol <<" :" << errMsg;
         }
@@ -92,7 +92,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         const int size = list.size();
         for(int i = 0; i < size; ++i) {
             QDomElement elem = list.item(i).toElement();
-            if( elem.isNull() or elem.tagName() != "EntryEditor" ) continue;
+            if( elem.isNull() || elem.tagName() != "EntryEditor" ) continue;
             const QString editorName = elem.attribute("editorName");
             const QString schemaUri = elem.attribute("schemaUri");
             const QString entryName = elem.attribute("entryName");
@@ -106,13 +106,13 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                 const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(schemaUri);
                 if(schema)
                 {
-                    if( not d->store->containsEntry( schema, entryName))
+                    if(!d->store->containsEntry( schema, entryName))
                     {
                         dbgPlugins <<" Store does not have yet entry :" << entryName <<" in" << schemaUri  <<" ==" << schema->generateQualifiedName(entryName);
                     }
                     KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
                     KisEntryEditor* ee = 0;
-                    if( value.type() == KisMetaData::Value::Structure and not structureField.isEmpty())
+                    if( value.type() == KisMetaData::Value::Structure && !structureField.isEmpty())
                     {
                         QMap<QString, KisMetaData::Value>* structure = value.asStructure();
                         ee = new KisEntryEditor( obj, &(*structure)[ structureField ], propertyName);

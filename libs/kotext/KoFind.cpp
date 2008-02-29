@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -65,7 +66,8 @@ public:
     {
     }
 
-    void resourceChanged(int key, const QVariant &variant) {
+    void resourceChanged(int key, const QVariant &variant)
+    {
         if(key == KoText::CurrentTextDocument) {
             document = static_cast<QTextDocument*> (variant.value<void*>());
             lastKnownPosition = QTextCursor(); // make invalid
@@ -79,7 +81,9 @@ public:
                 replaceDialog->setHasSelection(selectionEnd != selectionStart);
         }
     }
-    void findActivated() {
+
+    void findActivated()
+    {
         lastKnownPosition = QTextCursor();
         lastDialogUsed = FindDialog;
         if(findDialog) {
@@ -104,31 +108,23 @@ public:
         findNext->setEnabled(true);
         findPrev->setEnabled(true);
     }
-    void findNextActivated() {
-        if (lastDialogUsed == FindDialog) {
-            Q_ASSERT(findDialog);
-            findDialog->setOptions( (findDialog->options() | KFind::FindBackwards) ^ KFind::FindBackwards);
-            parseSettingsAndFind(false);
-        }
-        else {
-            Q_ASSERT(replaceDialog);
-            replaceDialog->setOptions( (replaceDialog->options() | KFind::FindBackwards) ^ KFind::FindBackwards);
-            parseSettingsAndFind(true);
-        }
+
+    void findNextActivated()
+    {
+        Q_ASSERT(findDialog);
+        findDialog->setOptions( (findDialog->options() | KFind::FindBackwards) ^ KFind::FindBackwards);
+        parseSettingsAndFind(false);
     }
-    void findPreviousActivated() {
-        if (lastDialogUsed == ReplaceDialog) {
-            Q_ASSERT(findDialog);
-            findDialog->setOptions( findDialog->options() | KFind::FindBackwards);
-            parseSettingsAndFind(false);
-        }
-        else {
-            Q_ASSERT(replaceDialog);
-            replaceDialog->setOptions( replaceDialog->options() | KFind::FindBackwards);
-            parseSettingsAndFind(true);
-        }
+
+    void findPreviousActivated()
+    {
+        Q_ASSERT(findDialog);
+        findDialog->setOptions( findDialog->options() | KFind::FindBackwards);
+        parseSettingsAndFind(false);
     }
-    void replaceActivated() {
+
+    void replaceActivated()
+    {
         lastDialogUsed = ReplaceDialog;
         if (replaceDialog) {
             replaceDialog->show();
@@ -149,26 +145,31 @@ public:
         connect( replaceDialog, SIGNAL(okClicked()), parent, SLOT(startReplace()) );
         replaceDialog->show();
 
+        // this leads to a crash when the find dialog was not used before
         findNext->setEnabled(true);
         findPrev->setEnabled(true);
     }
 
-    void startFind() { // executed when the user presses the 'find' button.
+    // executed when the user presses the 'find' button.
+    void startFind()
+    {
         parseSettingsAndFind(false);
 
         QTimer::singleShot(0, findDialog, SLOT(show())); // show the findDialog again.
     }
 
-    void startReplace() {
+    void startReplace()
+    {
+        replaceDialog->hide(); // We don't want the replace dialog to keep popping up
         parseSettingsAndFind(true);
     }
 
-    void parseSettingsAndFind(bool replace) {
+    void parseSettingsAndFind(bool replace)
+    {
         if(document == 0)
             return;
         long options;
         if (replace) {
-            replaceDialog->hide(); // We don't want the replace dialog to keep popping up
             options = replaceDialog->options();
         }
         else
@@ -181,6 +182,7 @@ public:
             flags |= QTextDocument::FindCaseSensitively;
         if((options & KFind::FindBackwards) != 0)
             flags |= QTextDocument::FindBackward;
+
         if(lastKnownPosition.isNull()) {
             lastKnownPosition = QTextCursor(document);
             if((options & KFind::FromCursor) != 0)
@@ -189,10 +191,11 @@ public:
             restarted = false;
             matches = 0;
         }
+
         const bool selectedText = (options & KFind::SelectedText) != 0;
         int selectionStart=0;
         int selectionEnd=0;
-        if(selectedText) {
+        if (selectedText) {
             selectionStart = provider->intResource(KoText::CurrentTextPosition);
             selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
             if(selectionEnd < selectionStart)
@@ -204,14 +207,16 @@ public:
             }
         }
 
-        QTextCursor cursor;
         QRegExp regExp;
-        if(options & KFind::RegularExpression)
-            regExp = QRegExp(replace ? replaceDialog->pattern() : findDialog->pattern());
-        if(!regExp.isEmpty() && regExp.isValid())
+        QString pattern = replace ? replaceDialog->pattern() : findDialog->pattern();
+        if (options & KFind::RegularExpression)
+            regExp = QRegExp(pattern);
+
+        QTextCursor cursor;
+        if (!regExp.isEmpty() && regExp.isValid())
             cursor = document->find(regExp, lastKnownPosition, flags);
         else
-            cursor = document->find(replace ? replaceDialog->pattern() : findDialog->pattern(), lastKnownPosition, flags);
+            cursor = document->find(pattern, lastKnownPosition, flags);
 
         // do the replacement
         if (replace && !cursor.isNull() && cursor.selectionEnd() > cursor.selectionStart()) {
@@ -220,7 +225,7 @@ public:
                 provider->setResource(KoText::CurrentTextAnchor, cursor.anchor());
                 provider->clearResource(KoText::SelectedTextPosition);
                 provider->clearResource(KoText::SelectedTextAnchor);
-             
+
                 // TODO: not only Yes and No, but Yes, Skip, No and Cancel
                 int value = KMessageBox::questionYesNo(widget,
                         i18n("Replace %1 with %2?", replaceDialog->pattern(), replaceDialog->replacement()));
@@ -235,7 +240,7 @@ public:
             }
             lastKnownPosition = cursor;
 
-            if (!(restarted && cursor.position() > startedPosition || cursor.position() == -1)) {
+            if (!(restarted && cursor.position() > startedPosition || cursor.isNull())) {
                 kDebug() << "inside if";
                 lastKnownPosition = cursor;
                 parseSettingsAndFind(replace);
@@ -244,7 +249,7 @@ public:
         }
 
         if((selectedText && cursor.position() > selectionEnd || // end of selection
-                cursor.position() == -1 && !restarted) && startedPosition <= lastKnownPosition.position() && !replace) { // end of doc
+                cursor.isNull() && !restarted) && startedPosition <= lastKnownPosition.position() && !replace) { // end of doc
             // restart
             lastKnownPosition.setPosition(0);
             restarted = true;
@@ -252,7 +257,7 @@ public:
             return;
         }
 
-        if(restarted && cursor.position() > startedPosition || cursor.position() == -1) { // looped round.
+        if(restarted && cursor.position() > startedPosition || cursor.isNull()) { // looped round.
             matches = 0;
             if (replace) {
                 if (replaced == 0)

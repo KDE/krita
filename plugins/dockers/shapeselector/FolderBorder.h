@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FOLDERSHAPE_H
-#define FOLDERSHAPE_H
+#ifndef FOLDERBORDER_H
+#define FOLDERBORDER_H
 
-#include <KoShapeContainer.h>
+#include <KoShapeBorderModel.h>
 
-#define FOLDERSHAPE_MIMETYPE "application/x-flake-shapeSelector-folder"
-
-class FolderShape : public KoShapeContainer {
+class FolderBorder : public KoShapeBorderModel
+{
 public:
-    FolderShape();
-
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
-
-    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return true; }
-    virtual void saveOdf(KoShapeSavingContext&) const {}
-    virtual KoShape * cloneShape() const { return 0; }
-    virtual void setSize( const QSizeF &size );
-
+    FolderBorder();
+    virtual void fillStyle(KoGenStyle &, KoShapeSavingContext &) {}
+    virtual void borderInsets(const KoShape *shape, KoInsets &insets);
+    virtual bool hasTransparency();
+    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 };
 
 #endif

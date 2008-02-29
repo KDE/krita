@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,36 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FOLDERSHAPE_H
-#define FOLDERSHAPE_H
+#ifndef RESIZEFOLDER_H
+#define RESIZEFOLDER_H
 
-#include <KoShapeContainer.h>
+#include "InteractionStrategy.h"
 
-#define FOLDERSHAPE_MIMETYPE "application/x-flake-shapeSelector-folder"
+#include <QSizeF>
 
-class FolderShape : public KoShapeContainer {
+class Canvas;
+class FolderShape;
+
+class ResizeFolderStrategy : public InteractionStrategy {
 public:
-    FolderShape();
+    ResizeFolderStrategy(Canvas *canvas, FolderShape *clickedFolder, KoPointerEvent &event);
 
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
 
-    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return true; }
-    virtual void saveOdf(KoShapeSavingContext&) const {}
-    virtual KoShape * cloneShape() const { return 0; }
-    virtual void setSize( const QSizeF &size );
+private:
+    enum ScaleRole {
+        MoveLeftBorder,
+        MoveRightBorder,
+        MoveBottomBorder,
+        ScaleShape
+    };
 
+    Canvas *m_canvas;
+    FolderShape *m_folder;
+    QPointF m_startPosition;
+    QPointF m_folderStartPosition;
+    QSizeF m_startSize;
+    ScaleRole m_scaleRole;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,65 +19,38 @@
  */
 
 #include "ShapeSelector.h"
-#include "GroupShape.h"
 #include "IconShape.h"
 #include "TemplateShape.h"
 #include "Canvas.h"
 #include "FolderShape.h"
 
 #include <KoShapeManager.h>
-#include <KoShapeRegistry.h>
 #include <KoToolManager.h>
-#include <KoShapeFactory.h>
 #include <KoSelection.h>
 #include <KoCreateShapesTool.h>
 #include <KoCanvasController.h>
 
-#include <QTimer>
-#include <klocale.h>
+#include <QFile>
+#include <KLocale>
+#include <KMessageBox>
+#include <kio/netaccess.h>
 
 // ************** ShapeSelector ************
 ShapeSelector::ShapeSelector(QWidget *parent)
-: QDockWidget(i18n("Shapes"), parent)
+: QDockWidget(i18n("Shapes"), parent),
+    m_canvas(new Canvas(this))
 {
     setObjectName("ShapeSelector");
-    m_canvas = new Canvas(this);
     setWidget(m_canvas);
-    m_shapeManager = new KoShapeManager(m_canvas);
-//     setMinimumSize(30, 30);
-    m_mainFolder = new FolderShape();
-
-    QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
     connect(m_canvas, SIGNAL(resized(const QSize&)), this, SLOT(setSize(const QSize &)));
 }
 
-ShapeSelector::~ShapeSelector() {
-    delete m_shapeManager;
-    delete m_canvas;
-}
-
-void ShapeSelector::loadShapeTypes() {
-    m_mainFolder->setSize(m_canvas->size());
-    qreal maxHeight = 0;
-
-    foreach(QString id, KoShapeRegistry::instance()->keys()) {
-        KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
-        bool oneAdded=false;
-        foreach(KoShapeTemplate shapeTemplate, factory->templates()) {
-            oneAdded=true;
-            TemplateShape *shape = new TemplateShape(shapeTemplate);
-            m_mainFolder->addChild(shape);
-            maxHeight = qMax(maxHeight, shape->size().height());
-        }
-        if(!oneAdded)
-            m_mainFolder->addChild(new GroupShape(factory));
-    }
-    m_shapeManager->add(m_mainFolder);
-    m_canvas->setMinimumSize(qRound(maxHeight) + 10, qRound(maxHeight) + 10);
+ShapeSelector::~ShapeSelector()
+{
 }
 
 void ShapeSelector::itemSelected() {
-    KoShape *koShape = m_shapeManager->selection()->firstSelectedShape();
+    KoShape *koShape = m_canvas->itemStore()->shapeManager()->selection()->firstSelectedShape();
     if(koShape == 0)
         return;
     IconShape *shape= dynamic_cast<IconShape*> (koShape);
@@ -92,37 +65,43 @@ void ShapeSelector::itemSelected() {
     }
 }
 
-void ShapeSelector::add(KoShape *shape) {
-    int x=5, y=5; // 5 = gap
-    int w = (int) shape->size().width();
-    int maxHeight = 0;
-    bool ok=true; // lets be optimistic ;)
-    do {
-        int rowHeight=0;
-        ok=true;
-        foreach(const KoShape *shape, m_shapeManager->shapes()) {
-            if(shape->position().y() > y || shape->position().y() + shape->size().height() < y)
-                continue; // other row.
-            rowHeight = qMax(rowHeight, qRound(shape->size().height()));
-            x = qMax(x, qRound(shape->position().x() + shape->size().width()) + 5); // 5=gap
-            if(x + w > width()) { // next row
-                y += rowHeight + 5; // 5 = gap
-                x = 5;
-                ok=false;
-                break;
-            }
-        }
-
-        maxHeight = qMax(maxHeight, rowHeight);
-    } while(! ok);
-    shape->setPosition(QPointF(x, y));
-
-    m_shapeManager->add(shape);
-    m_canvas->setMinimumSize(maxHeight + 10, maxHeight + 10);
+void ShapeSelector::setSize(const QSize &size) {
+    if (m_canvas->itemStore()->mainFolder())
+        m_canvas->itemStore()->mainFolder()->setSize(QSizeF(size));
 }
 
-void ShapeSelector::setSize(const QSize &size) {
-    m_mainFolder->setSize(QSizeF(size));
+void ShapeSelector::addItems(const KUrl &url, FolderShape *targetFolder)
+{
+    QString localFile;
+    if( KIO::NetAccess::download( url, localFile, this ) )
+    {
+        QFile file(localFile);
+        addItems(file, targetFolder);
+        KIO::NetAccess::removeTempFile( localFile );
+    } else {
+        KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
+    }
+}
+
+void ShapeSelector::addItems(QFile &file, FolderShape *targetFolder)
+{
+    QDomDocument doc;
+    if (doc.setContent(&file)) {
+        if (targetFolder == 0)
+            targetFolder = m_canvas->itemStore()->folders()[0];
+
+        QDomElement root = doc.firstChildElement();
+        QDomElement element = root.firstChildElement();
+        while(!element.isNull()) {
+            if (element.tagName() == "template") {
+                TemplateShape *ts = TemplateShape::createShape(element);
+                targetFolder->addChild(ts);
+                m_canvas->itemStore()->addShape(ts);
+            }
+            element = root.nextSiblingElement();
+        }
+    }
+    file.close();
 }
 
 #include "ShapeSelector.moc"

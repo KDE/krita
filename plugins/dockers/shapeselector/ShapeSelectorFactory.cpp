@@ -33,7 +33,7 @@ QString ShapeSelectorFactory::id() const
 
 KoDockFactory::DockPosition ShapeSelectorFactory::defaultDockPosition() const
 {
-    return DockBottom;
+    return DockRight;
 }
 
 QDockWidget* ShapeSelectorFactory::createDockWidget()

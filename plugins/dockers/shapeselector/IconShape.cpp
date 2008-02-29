@@ -19,18 +19,22 @@
 
 #include "IconShape.h"
 
+#include <KoViewConverter.h>
+
 #include <QPainter>
 #include <KIcon>
-
-#include "KoViewConverter.h"
 
 IconShape::IconShape(const QString &icon) {
     m_icon = KIcon(icon).pixmap(22);
     setSize(m_icon.size());
 }
 
+IconShape::~IconShape()
+{
+}
+
 void IconShape::paint(QPainter &painter, const KoViewConverter &converter) {
-    Q_UNUSED(converter);
+    applyConversion(painter, converter);
     painter.drawPixmap(QRect( QPoint(0,0), m_icon.size()), m_icon);
 }
 

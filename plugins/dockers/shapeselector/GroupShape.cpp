@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,8 @@
 #include <KoShapeFactory.h>
 #include <KoCreateShapesTool.h>
 
+#include <QDomElement>
+
 GroupShape::GroupShape(KoShapeFactory *shapeFactory)
     : IconShape(shapeFactory->icon())
 {
@@ -40,3 +42,8 @@ QString GroupShape::toolTip() {
 QString GroupShape::groupId() const {
     return m_shapeFactory->id();
 }
+
+void GroupShape::save(QDomElement &root)
+{
+}
+

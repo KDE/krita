@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,14 +21,15 @@
 #ifndef SHAPESELECTOR_H
 #define SHAPESELECTOR_H
 
-#include "ZoomHandler.h"
+#include "ItemStore.h"
 
 #include <QDockWidget>
 
+class FolderShape;
 class Canvas;
 class KoShape;
-class KoShapeManager;
-class FolderShape;
+class KUrl;
+class QFile;
 
 /**
  * The shape selector shows a widget that holds templates and clipboard data
@@ -40,20 +41,16 @@ public:
     explicit ShapeSelector(QWidget *parent = 0);
     ~ShapeSelector();
 
+    void addItems(const KUrl &url, FolderShape *targetFolder = 0);
+    void addItems(QFile &file, FolderShape *targetFolder = 0);
+    void setMainFolder(FolderShape *main);
+
 private slots:
-    void loadShapeTypes();
     void setSize(const QSize &size);
-
-private:
     void itemSelected();
-    void add(KoShape *item);
 
 private:
-    friend class Canvas;
-
-    KoShapeManager *m_shapeManager;
     Canvas *m_canvas;
-    FolderShape *m_mainFolder;
 };
 
 #endif

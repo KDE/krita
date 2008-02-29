@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FOLDERSHAPE_H
-#define FOLDERSHAPE_H
+#ifndef INTERACTIONSTRATEGY_H
+#define INTERACTIONSTRATEGY_H
 
-#include <KoShapeContainer.h>
+#include <QPointF>
 
-#define FOLDERSHAPE_MIMETYPE "application/x-flake-shapeSelector-folder"
+class KoPointerEvent;
 
-class FolderShape : public KoShapeContainer {
+class InteractionStrategy {
 public:
-    FolderShape();
+    InteractionStrategy() {}
+    virtual ~InteractionStrategy() {}
 
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
-
-    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return true; }
-    virtual void saveOdf(KoShapeSavingContext&) const {}
-    virtual KoShape * cloneShape() const { return 0; }
-    virtual void setSize( const QSizeF &size );
-
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) = 0;
+    virtual void cancelInteraction() { }
+    virtual void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED(modifiers); }
 };
 
 #endif

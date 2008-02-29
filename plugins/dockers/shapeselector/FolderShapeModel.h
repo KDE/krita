@@ -37,6 +37,8 @@ public:
     virtual void containerChanged(KoShapeContainer *container);
     virtual void childChanged(KoShape *child, KoShape::ChangeType type);
 
+    void folderResized();
+
 private:
     QList<KoShape*> m_icons;
     FolderShape *m_parent;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FOLDERSHAPE_H
-#define FOLDERSHAPE_H
+#ifndef ITEMSTORE_H
+#define ITEMSTORE_H
 
-#include <KoShapeContainer.h>
+#include <QList>
+#include <QRectF>
 
-#define FOLDERSHAPE_MIMETYPE "application/x-flake-shapeSelector-folder"
+class KoShapeManager;
+class KoShape;
+class FolderShape;
 
-class FolderShape : public KoShapeContainer {
+class ItemStore {
 public:
-    FolderShape();
+    ItemStore(KoShapeManager *shapeManager);
+    ~ItemStore();
 
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    void addFolder(FolderShape *folder);
+    void removeFolder(FolderShape *folder);
+    QList<FolderShape*> folders() const;
+    void addShape(KoShape *shape);
+    void removeShape(KoShape *shape);
+    QList<KoShape*> shapes() const;
 
-    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return true; }
-    virtual void saveOdf(KoShapeSavingContext&) const {}
-    virtual KoShape * cloneShape() const { return 0; }
-    virtual void setSize( const QSizeF &size );
+    FolderShape * mainFolder() const;
 
+    QRectF loadShapeTypes();
+    KoShapeManager *shapeManager() const { return m_shapeManager; }
+
+private:
+    KoShapeManager *m_shapeManager;
 };
 
 #endif

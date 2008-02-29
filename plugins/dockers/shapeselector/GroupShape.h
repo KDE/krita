@@ -28,6 +28,7 @@ public:
     GroupShape(KoShapeFactory *shapeFactory);
 
     virtual void visit(KoCreateShapesTool *tool);
+    virtual void save(QDomElement &root);
     virtual QString toolTip();
 
     virtual QString groupId() const;

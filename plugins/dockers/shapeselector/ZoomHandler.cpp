@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,73 +18,81 @@
  */
 
 #include "ZoomHandler.h"
-//   #include "shapeselector/GroupShape.h"
-//   #include "shapeselector/IconShape.h"
-//   #include "shapeselector/TemplateShape.h"
-//
-//   #include <KoShapeManager.h>
-//   #include <KoPointerEvent.h>
-//   #include <KoShapeRegistry.h>
-//   #include <KoToolManager.h>
-//   #include <KoShapeFactory.h>
-//   #include <KoShape.h>
-//   #include <KoShapeContainer.h>
-//   #include <KoInteractionTool.h>
-//   #include <KoShapeMoveStrategy.h>
-//   #include <KoCreateShapesTool.h>
-//   #include <KoShapeController.h>
-//   #include <KoCanvasController.h>
-//   #include <KoProperties.h>
-//
-//   //   #include <QPainter>
-//   //   //   #include <QPointF>
-//   //   //   #include <QPainterPath>
-//   //
-//   #include <kdebug.h>
-//   #include <kicon.h>
-//   #include <klocale.h>
+
+ZoomHandler::ZoomHandler()
+    : m_zoomLevel(1.0)
+{
+}
 
 QPointF ZoomHandler::documentToView (const QPointF &documentPoint) const {
-    return documentPoint;
+    if (m_zoomLevel == 1.0)
+        return documentPoint;
+    return QPointF(documentToViewX(documentPoint.x()), documentToViewY(documentPoint.y()));
 }
 
 QPointF ZoomHandler::viewToDocument (const QPointF &viewPoint) const {
-    return viewPoint;
+    if (m_zoomLevel == 1.0)
+        return viewPoint;
+    return QPointF(viewToDocumentX(viewPoint.x()), viewToDocumentY(viewPoint.y()));
 }
 
 QRectF ZoomHandler::documentToView (const QRectF &documentRect) const {
-    return documentRect;
+    if (m_zoomLevel == 1.0)
+        return documentRect;
+    return QRectF(documentToView(documentRect.topLeft()), documentToView(documentRect.size()));
 }
 
 QRectF ZoomHandler::viewToDocument (const QRectF &viewRect) const {
-    return viewRect;
+    if (m_zoomLevel == 1.0)
+        return viewRect;
+    return QRectF(viewToDocument(viewRect.topLeft()), viewToDocument(viewRect.size()));
 }
 
 QSizeF ZoomHandler::documentToView (const QSizeF &documentSize) const {
-    return documentSize;
+    if (m_zoomLevel == 1.0)
+        return documentSize;
+    return QSizeF(documentToViewX(documentSize.width()), documentToViewY(documentSize.height()));
 }
 
 QSizeF ZoomHandler::viewToDocument (const QSizeF &viewSize) const {
-    return viewSize;
+    if (m_zoomLevel == 1.0)
+        return viewSize;
+    return QSizeF(viewToDocumentX(viewSize.width()), viewToDocumentY(viewSize.height()));
 }
 
 void ZoomHandler::zoom (double *zoomX, double *zoomY) const {
-    *zoomX = 1.0;
-    *zoomY = 1.0;
+    *zoomX = m_zoomLevel;
+    *zoomY = m_zoomLevel;
 }
 
 double ZoomHandler::documentToViewX (double documentX) const {
-    return documentX;
+    return documentX * m_zoomLevel;
 }
 
 double ZoomHandler::documentToViewY (double documentY) const {
-    return documentY;
+    return documentY * m_zoomLevel;
 }
 
 double ZoomHandler::viewToDocumentX (double viewX) const {
-    return viewX;
+    return viewX / m_zoomLevel;
 }
 
 double ZoomHandler::viewToDocumentY (double viewY) const {
-    return viewY;
+    return viewY / m_zoomLevel;
 }
+
+void ZoomHandler::setZoomIndex(int zoomIndex)
+{
+    qreal newZoom = 1.0;
+    for(int i = 1; i < zoomIndex; i++)
+        newZoom *= 2;
+    for(int i = 1; i > zoomIndex; i--)
+        newZoom /= 2;
+    m_zoomLevel = newZoom;
+}
+
+void ZoomHandler::setAbsoluteZoom(qreal zoom)
+{
+    m_zoomLevel = zoom;
+}
+

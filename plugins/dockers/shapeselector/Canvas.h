@@ -22,24 +22,35 @@
 #define CANVAS_H
 
 #include "ZoomHandler.h"
+#include "ItemStore.h"
 
 #include <KoCanvasBase.h>
 #include <KoShapeControllerBase.h>
 
-class QUndoCommand;
+#include <QList>
+#include <QClipboard>
+
+class ClipboardProxyShape;
 class ShapeSelector;
+class InteractionStrategy;
+class FolderShape;
 class KoShapeManager;
+class QUndoCommand;
+class QPointF;
+class QAction;
+class QMenu;
 
 class DummyShapeController : public KoShapeControllerBase {
 public:
     void addShape( KoShape* ) {}
     void removeShape( KoShape* ) {}
+    QMap<QString, KoDataCenter *>  dataCenterMap()  { return QMap<QString,KoDataCenter*>(); }
 };
 
 class Canvas : public QWidget, public KoCanvasBase {
     Q_OBJECT
 public:
-    explicit Canvas(ShapeSelector *parent);
+    Canvas(ShapeSelector *parent);
     void gridSize (double *horizontal, double *vertical) const;
     bool snapToGrid() const { return false; }
     void addCommand (QUndoCommand *command);
@@ -50,9 +61,32 @@ public:
     QWidget *canvasWidget ();
     KoUnit unit() const { return KoUnit(KoUnit::Millimeter); }
     void updateInputMethodInfo() {}
+    ItemStore *itemStore() { return &m_itemStore; }
+
+    /**
+     * zooms in to a higher magnification level
+     */
+    void zoomIn(const QPointF &center);
+    /// zooms out to a lower magnification level
+    void zoomOut(const QPointF &center);
+    /**
+     * returns the current zoom level index.
+     * The index is a simple way to map zoom levels to certain steps of zooming.
+     * Zoom index 1 equals 100% zoom, 2 is 200% and 3 is 400%, while index of 0 equals 50%, -1: 25% etc.
+     */
+    int zoomIndex();
+
+    QAction * popup(QMenu *menu, const QPointF &docCoordinate);
+
+    void moveDocumentOffset(const QPointF &offset);
 
 signals:
     void resized(const QSize &newSize);
+
+private slots:
+    void loadShapeTypes();
+    void focusChanged(QWidget *old, QWidget *now);
+    void clipboardChanged();
 
 protected: // event handlers
     virtual void mouseMoveEvent(QMouseEvent *e);
@@ -64,12 +98,19 @@ protected: // event handlers
     virtual void dropEvent(QDropEvent *e);
     virtual bool event(QEvent *e);
     virtual void resizeEvent (QResizeEvent *e);
+    virtual void keyPressEvent( QKeyEvent *e );
+    virtual void keyReleaseEvent (QKeyEvent *e);
 
 private:
     DummyShapeController m_shapeController;
     ZoomHandler m_converter;
     ShapeSelector *m_parent;
-    bool m_emitItemSelected;
+    InteractionStrategy *m_currentStrategy;
+    QPointF m_lastPoint, m_displayOffset;
+    int m_zoomIndex;
+    ItemStore m_itemStore;
+    QWidget *m_previousFocusOwner;
+    ClipboardProxyShape *m_currentClipboard;
 };
 
 #endif

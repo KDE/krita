@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,13 +25,16 @@
 
 class TemplateShape : public IconShape {
 public:
-    TemplateShape(KoShapeTemplate shapeTemplate);
+    TemplateShape(const KoShapeTemplate &shapeTemplate);
 
     virtual void visit(KoCreateShapesTool *tool);
+    virtual void save(QDomElement &root);
 
     virtual QString toolTip();
 
     const KoShapeTemplate &shapeTemplate() const { return m_shapeTemplate; }
+
+    static TemplateShape *createShape(const QDomElement &element);
 protected:
     virtual KoShape * cloneShape() const { return 0; }
 

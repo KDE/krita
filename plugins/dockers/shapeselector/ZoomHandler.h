@@ -20,22 +20,12 @@
 #ifndef ZOOMHANDLER_H
 #define ZOOMHANDLER_H
 
-//   #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
-//   #include <KoShapeControllerBase.h>
-//
-//   //   #include <QRectF>
-//
-//   class KoTool;
-//   class KoShape;
-//   class KoViewConverter;
-//   class QUndoCommand;
-//   class KoCanvasController;
-//   class KoShapeManager;
-//   class QKeyEvent;
-//   class QPainter;
 
 class ZoomHandler : public KoViewConverter {
+public:
+    ZoomHandler();
+
     /// reimplemented from superclass
     virtual QPointF documentToView (const QPointF &documentPoint) const;
     /// reimplemented from superclass
@@ -58,6 +48,12 @@ class ZoomHandler : public KoViewConverter {
     virtual double viewToDocumentX (double viewX) const;
     /// reimplemented from superclass
     virtual double viewToDocumentY (double viewY) const;
+
+    void setZoomIndex(int zoomIndex);
+    void setAbsoluteZoom(qreal zoom);
+
+private:
+    qreal m_zoomLevel; // 1.0 is 100%
 };
 
 #endif

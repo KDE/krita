@@ -50,8 +50,14 @@ QList<KoShape *> FolderShapeModel::iterator() const {
     return m_icons;
 }
 
-void FolderShapeModel::containerChanged(KoShapeContainer *container) {
-    int x=5, y=5; // 5 = gap
+void FolderShapeModel::containerChanged(KoShapeContainer *container)
+{
+    Q_UNUSED(container);
+}
+
+void FolderShapeModel::folderResized()
+{
+    int x = 5, y = 5;
     const double width = m_parent->size().width();
     int rowHeight=0;
     foreach(KoShape *shape, m_icons) {
@@ -60,21 +66,25 @@ void FolderShapeModel::containerChanged(KoShapeContainer *container) {
             y += rowHeight + 5; // 5 = gap
             x = 5;
         }
+        shape->update();
         shape->setPosition(QPointF(x, y));
+        shape->update();
 
         rowHeight = qMax(rowHeight, qRound(size.height()));
-        x += size.width() + 5;
+        x += (int)size.width() + 5;
     }
 }
 
 void FolderShapeModel::childChanged(KoShape *child, KoShape::ChangeType type) {
+    Q_UNUSED(child);
+    Q_UNUSED(type);
 }
 
 void FolderShapeModel::add(KoShape *shape) {
-    int x=5, y=5; // 5 = gap
-    int w = (int) shape->size().width();
+    int x = 5, y = 5;
+    const int w = (int) shape->size().width();
     const double width = m_parent->size().width();
-    bool ok=true; // lets be optimistic ;)
+    bool ok;
     do {
         int rowHeight=0;
         ok=true;

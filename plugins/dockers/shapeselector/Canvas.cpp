@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,40 +18,70 @@
  */
 
 #include "Canvas.h"
-#include "ShapeSelector.h"
-#include "GroupShape.h"
-#include "TemplateShape.h"
+#include "ClipboardProxyShape.h"
+#include "DragCanvasStrategy.h"
 #include "FolderShape.h"
+#include "IconShape.h"
+#include "MoveFolderStrategy.h"
+#include "ResizeFolderStrategy.h"
+#include "RightClickStrategy.h"
+#include "SelectStrategy.h"
+#include "ShapeSelector.h"
 
 #include <KoShapeManager.h>
+#include <KoPointerEvent.h>
+#include <KoInsets.h>
 #include <KoSelection.h>
-#include <KoProperties.h>
+#include <KoShapeFactory.h> // for the mimetype defines etc
+#include <KoStore.h>
+#include <KoOdfReadStore.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeRegistry.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 
 #include <QMouseEvent>
+#include <QBuffer>
 #include <QToolTip>
 #include <QUndoCommand>
 #include <QPainter>
+#include <QMenu>
+#include <QTimer>
+#include <QApplication>
 
-#include <kdebug.h>
+#include <KUrl>
 
 Canvas::Canvas(ShapeSelector *parent)
-: QWidget(parent)
-, KoCanvasBase( &m_shapeController )
-, m_parent(parent)
-, m_emitItemSelected(false)
+    : QWidget(parent),
+    KoCanvasBase( &m_shapeController ),
+    m_parent(parent),
+    m_currentStrategy(0),
+    m_zoomIndex(1),
+    m_itemStore(new KoShapeManager(this)),
+    m_previousFocusOwner(0),
+    m_currentClipboard(0)
 {
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Base);
     setAcceptDrops(true);
+    setMinimumSize(32, 42); // based on the fact that an IconShape is 22x22
+    QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
+
+    connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*, QWidget*)),
+        this, SLOT(focusChanged(QWidget*, QWidget*)));
+    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
 }
 
 void Canvas::gridSize (double *, double *) const {
 }
 
 void Canvas::updateCanvas (const QRectF &rc) {
-    QRect rect = rc.toRect();
-    rect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
-    update(rect);
+    QRectF zoomedRect = rc;
+    zoomedRect.moveTopLeft(zoomedRect.topLeft() - m_displayOffset);
+    QRectF clipRect = m_converter.documentToView(zoomedRect);
+    clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
+    update(clipRect.toRect());
 }
 
 void  Canvas::addCommand (QUndoCommand *command) {
@@ -60,102 +89,128 @@ void  Canvas::addCommand (QUndoCommand *command) {
     delete command;
 }
 
+void Canvas::zoomIn(const QPointF &center)
+{
+    m_converter.setZoomIndex(++m_zoomIndex);
+    QSizeF docSize = m_converter.viewToDocument(size());
+    m_displayOffset = QPointF(center.x() - docSize.width() / 2.0, center.y() - docSize.height() / 2.0);
+    update();
+}
+
+void Canvas::zoomOut(const QPointF &center)
+{
+    m_converter.setZoomIndex(--m_zoomIndex);
+    QSizeF docSize = m_converter.viewToDocument(size());
+    m_displayOffset = QPointF(center.x() - docSize.width() / 2.0, center.y() - docSize.height() / 2.0);
+    update();
+}
+
+QAction * Canvas::popup(QMenu *menu, const QPointF &docCoordinate)
+{
+    return menu->exec(mapToGlobal(m_converter.documentToView(docCoordinate - m_displayOffset).toPoint()));
+}
+
+void Canvas::moveDocumentOffset(const QPointF &offset)
+{
+    m_displayOffset -= offset;
+    QPointF distance = m_converter.documentToView(offset);
+    scroll(qRound(distance.x()), qRound(distance.y()));
+}
+
 // event handlers
 void Canvas::mousePressEvent(QMouseEvent *event) {
-    KoShape *clickedShape = shapeManager()->shapeAt(event->pos());
-    foreach(KoShape *shape, shapeManager()->selection()->selectedShapes())
-        shape->update();
-    shapeManager()->selection()->deselectAll();
-    m_emitItemSelected = false;
-    if(clickedShape == 0)
-        return;
-    m_emitItemSelected = true;
-    shapeManager()->selection()->select(clickedShape);
-    clickedShape->update();
+    KoPointerEvent pe(event, m_displayOffset + m_converter.viewToDocument(event->pos()));
+    m_lastPoint = pe.point;
+    KoShape *clickedShape = 0;
+    foreach(KoShape *shape, shapeManager()->shapesAt(QRectF(pe.point, QSizeF(1,1)))) {
+        FolderShape *folder = dynamic_cast<FolderShape*> (shape);
+        if ((event->buttons() & Qt::LeftButton) && m_itemStore.mainFolder() == 0 && folder) {
+            QPointF localPoint = pe.point - folder->position();
+            KoInsets insets = folder->borderInsets();
+            if (localPoint.x() <= 5 || localPoint.x() >= folder->size().width() - 10
+                || localPoint.y() >= folder->size().height() - 5) {
+                m_currentStrategy = new ResizeFolderStrategy(this, folder, pe);
+                return;
+            }
+            if (localPoint.y() <= 0) {
+                m_currentStrategy = new MoveFolderStrategy(this, folder, pe);
+                return;
+            }
+            continue;
+        }
+        else if (folder && (event->buttons() & Qt::RightButton)) {
+            m_currentStrategy = new RightClickStrategy(this, folder, pe);
+            return;
+        }
+        if (folder == 0) {
+            clickedShape = shape;
+            break;
+        }
+    }
+    if(event->buttons() == Qt::LeftButton) {
+        if (clickedShape) {
+            SelectStrategy *ss = new SelectStrategy(this, clickedShape, pe);
+            connect (ss, SIGNAL(itemSelected()), m_parent, SLOT(itemSelected()));
+            m_currentStrategy = ss;
+        }
+        else if (m_itemStore.mainFolder() == 0)
+            m_currentStrategy = new DragCanvasStrategy(this, pe);
+    }
+    else if(event->buttons() == Qt::RightButton)
+        m_currentStrategy = new RightClickStrategy(this, clickedShape, pe);
+    else
+        event->ignore();
+
+    if (m_currentStrategy)
+        setFocusPolicy(Qt::ClickFocus);
 }
 
 void Canvas::tabletEvent(QTabletEvent *event) {
-    event->ignore();
+    event->ignore(); // if not accepted it will fall through and be offered as a mouseMoveEvent
     if(event->type() != QEvent::TabletMove)
         return;
     KoShape *clickedShape = shapeManager()->selection()->firstSelectedShape();
-    if(clickedShape == 0) {
-        event->accept();
-        return;
+    if(clickedShape) {
+        QPoint distance = m_converter.documentToView(clickedShape->position()).toPoint() - event->pos();
+        if(qAbs(distance.x()) < 15 && qAbs(distance.y()) < 15) // filter out tablet events that don't move enough
+            event->accept();
     }
-    QPointF distance = clickedShape->position() - event->pos();
-    if(qAbs(distance.x()) < 15 && qAbs(distance.y()) < 15)
-        event->accept();
-
-    // if not accepted it will fall through and be offered as a mouseMoveEvent
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent *event) {
-    KoShape *clickedShape = shapeManager()->selection()->firstSelectedShape();
-    if(clickedShape == 0)
-        return;
-    QPointF distance = clickedShape->position() - event->pos();
-    if(qAbs(distance.x()) < 5 && qAbs(distance.y()) < 5)
-        return;
-
-    // start drag
-    QString mimeType;
-    QByteArray itemData;
-    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-    TemplateShape *templateShape = dynamic_cast<TemplateShape*> (clickedShape);
-    if(templateShape) {
-        dataStream << templateShape->shapeTemplate().id;
-        KoProperties *props = templateShape->shapeTemplate().properties;
-        if(props)
-            dataStream << props->store(); // is a QString
-        else
-            dataStream << QString();
-        mimeType = SHAPETEMPLATE_MIMETYPE;
-    }
-    else {
-        GroupShape *group = dynamic_cast<GroupShape*> (clickedShape);
-        if(group) {
-            dataStream << group->groupId();
-            mimeType = SHAPEID_MIMETYPE;
-        }
-        else if(dynamic_cast<FolderShape*> (clickedShape)) {
-            dataStream << QString();
-            mimeType = FOLDERSHAPE_MIMETYPE;
-        } else {
-            kWarning() << "Unimplemented drag for this type!\n";
-            return;
-        }
-    }
-    QPointF offset(event->pos() - clickedShape->absolutePosition(KoFlake::TopLeftCorner));
-    dataStream << offset;
-
-    QMimeData *mimeData = new QMimeData;
-    mimeData->setData(mimeType, itemData);
-
-    QDrag *drag = new QDrag(this);
-    drag->setMimeData(mimeData);
-    IconShape *iconShape = dynamic_cast<IconShape*> (clickedShape);
-    if(iconShape)
-        drag->setPixmap(iconShape->pixmap());
-    drag->setHotSpot(offset.toPoint());
-
-    if(drag->start(Qt::CopyAction | Qt::MoveAction) != Qt::MoveAction)
-        m_emitItemSelected = false;
+    m_lastPoint = m_displayOffset + m_converter.viewToDocument(event->pos());
+    if (m_currentStrategy)
+        m_currentStrategy->handleMouseMove(m_lastPoint, event->modifiers());
+    else
+        event->ignore();
 }
 
 void  Canvas::dragEnterEvent(QDragEnterEvent *event) {
     if (event->source() == this && (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
                 event->mimeData()->hasFormat(SHAPEID_MIMETYPE) ||
+                event->mimeData()->hasFormat(OASIS_MIME) ||
                 event->mimeData()->hasFormat(FOLDERSHAPE_MIMETYPE))) {
         event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+    else if (event->mimeData()->hasFormat("text/uri-list")) {
+        event->setDropAction(Qt::CopyAction);
         event->accept();
     }
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent *event) {
-    Q_UNUSED(event);
-    if(m_emitItemSelected)
-        m_parent->itemSelected();
+    m_lastPoint = m_displayOffset + m_converter.viewToDocument(event->pos());
+    if (m_currentStrategy == 0) {
+        event->ignore();
+        return;
+    }
+    m_currentStrategy->finishInteraction(event->modifiers());
+    delete m_currentStrategy;
+    m_currentStrategy = 0;
+    if (hasFocus() && m_previousFocusOwner)
+        m_previousFocusOwner->setFocus();
+    setFocusPolicy(Qt::NoFocus);
 }
 
 void  Canvas::dropEvent(QDropEvent *event) {
@@ -167,9 +222,31 @@ void  Canvas::dropEvent(QDropEvent *event) {
         isTemplate = false;
         itemData = event->mimeData()->data(SHAPEID_MIMETYPE);
     }
-    else { // FOLDERSHAPE_MIMETYPE
+    else if (event->mimeData()->hasFormat(FOLDERSHAPE_MIMETYPE)) {
         isTemplate = false;
         itemData = event->mimeData()->data(FOLDERSHAPE_MIMETYPE);
+    }
+    else if (event->mimeData()->hasFormat(OASIS_MIME)) {
+        isTemplate = false;
+        itemData = event->mimeData()->data(OASIS_MIME);
+    }
+    else { // "text/uri-list"
+        QRectF hitArea(m_displayOffset + viewConverter()->viewToDocument(event->pos()), QSizeF(1,1));
+        FolderShape *folder = 0;
+        foreach(KoShape *shape, shapeManager()->shapesAt(hitArea)) {
+            folder = dynamic_cast<FolderShape*> (shape);
+            if (folder) break;
+        }
+        QByteArray urls = event->mimeData()->data("text/uri-list");
+        foreach(QString file, QString(urls).split("\n")) {
+            file = file.trimmed();
+            if (file.isEmpty())
+                break;
+            m_parent->addItems(KUrl(file.trimmed()), folder);
+        }
+        event->setDropAction(Qt::CopyAction);
+        event->accept();
+        return;
     }
     QDataStream dataStream(&itemData, QIODevice::ReadOnly);
     QString dummy;
@@ -186,13 +263,14 @@ void  Canvas::dropEvent(QDropEvent *event) {
 
     event->setDropAction(Qt::MoveAction);
     event->accept();
+    QPointF point = m_displayOffset + m_converter.viewToDocument(event->pos());
     foreach(KoShape *shape, shapeManager()->selection()->selectedShapes()) {
         shape->update();
         if(dynamic_cast<FolderShape*>(shape)) { // is a folder
-            shape->setPosition(event->pos() - offset);
+            shape->setPosition(point - offset);
         }
         else { // is an icon.
-            QList<KoShape*> shapes = shapeManager()->shapesAt(QRectF(event->pos() - offset, QSizeF(0.1, 0.1)));
+            QList<KoShape*> shapes = shapeManager()->shapesAt(QRectF(point - offset, QSizeF(0.1, 0.1)));
             foreach(KoShape *s, shapes) {
                 FolderShape *folder = dynamic_cast<FolderShape*>(s);
                 if(folder) {
@@ -202,10 +280,10 @@ void  Canvas::dropEvent(QDropEvent *event) {
                 }
             }
             if(shapes.count())
-                shape->setPosition(event->pos() - offset - shape->parent()->position());
+                shape->setPosition(point - offset - shape->parent()->position());
             else {
                 shape->setParent(0);
-                shape->setPosition(event->pos() - offset);
+                shape->setPosition(point - offset);
             }
         }
         shape->update();
@@ -214,26 +292,33 @@ void  Canvas::dropEvent(QDropEvent *event) {
 
 void Canvas::paintEvent(QPaintEvent * e) {
     QPainter painter( this );
-    painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect(e->rect());
+    double zoomX, zoomY;
+    m_converter.zoom(&zoomX, &zoomY);
 
+    painter.save();
+    painter.scale(zoomX, zoomY);
+    painter.translate(-m_displayOffset);
     QPen pen(Qt::blue); // TODO use the kde-wide 'selected' color.
-    pen.setWidth(1);
+    pen.setWidth(0); // a cosmetic pen
     foreach(KoShape *shape, shapeManager()->selection()->selectedShapes()) {
         painter.save();
-        qreal shapeX = shape->position().x(), shapeY = shape->position().y();
+        QPointF pos = shape->position();
         KoShape* parent = shape->parent ();
         while(parent)
         {
-            shapeX += parent->position().x();
-            shapeY += parent->position().y();
+            pos += parent->position();
             parent = parent->parent();
         }
-        painter.translate(shapeX, shapeY);
+        painter.translate(pos.x(), pos.y());
         painter.strokePath(shape->outline(), pen);
         painter.restore();
     }
-    m_parent->m_shapeManager->paint( painter, *(viewConverter()), false );
+    painter.restore();
+    QPointF offset = m_converter.documentToView(m_displayOffset);
+    painter.translate(-offset);
+    painter.setRenderHint(QPainter::Antialiasing);
+    shapeManager()->paint( painter, *(viewConverter()), false );
     painter.end();
 }
 
@@ -242,7 +327,7 @@ bool Canvas::event(QEvent *e) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 
         const QPointF pos(helpEvent->x(), helpEvent->y());
-        IconShape *is = dynamic_cast<IconShape*> (m_parent->m_shapeManager->shapeAt(pos));
+        IconShape *is = dynamic_cast<IconShape*> (shapeManager()->shapeAt(pos));
         if(is)
             QToolTip::showText(helpEvent->globalPos(), is->toolTip(), this);
         else
@@ -255,13 +340,111 @@ void Canvas::resizeEvent (QResizeEvent *event) {
     emit resized(event->size());
 }
 
+void Canvas::keyPressEvent(QKeyEvent *event)
+{
+    event->ignore();
+    if(m_currentStrategy &&
+       (event->key() == Qt::Key_Control ||
+            event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
+            event->key() == Qt::Key_Meta)) {
+        m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
+        event->accept();
+    }
+}
+
+void Canvas::keyReleaseEvent (QKeyEvent *event)
+{
+    if(m_currentStrategy == 0) { // catch all cases where no current strategy is needed
+    }
+    else if(event->key() == Qt::Key_Escape) {
+        m_currentStrategy->cancelInteraction();
+        delete m_currentStrategy;
+        m_currentStrategy = 0;
+        event->accept();
+        if (hasFocus() && m_previousFocusOwner)
+            m_previousFocusOwner->setFocus();
+        setFocusPolicy(Qt::NoFocus);
+    }
+    else if(event->key() == Qt::Key_Control ||
+            event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
+            event->key() == Qt::Key_Meta) {
+        m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
+    }
+}
+
+void Canvas::focusChanged(QWidget *old, QWidget *now)
+{
+    if (now == this)
+        m_previousFocusOwner = old;
+}
+
 // getters
 KoShapeManager * Canvas::shapeManager() const {
-    return m_parent->m_shapeManager;
+    return m_itemStore.shapeManager();
 }
 
 QWidget *Canvas::canvasWidget () {
     return m_parent;
+}
+
+int Canvas::zoomIndex()
+{
+    return m_zoomIndex;
+}
+
+// slots
+void Canvas::loadShapeTypes()
+{
+    QRectF bounds = m_itemStore.loadShapeTypes();
+    if (m_itemStore.mainFolder()) {
+        m_itemStore.mainFolder()->setPosition(QPointF());
+        m_itemStore.mainFolder()->setSize(size());
+    }
+    else if (!bounds.contains(0, 0)) {
+        m_displayOffset = bounds.topLeft();
+        update();
+    }
+}
+
+void Canvas::clipboardChanged()
+{
+    const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    if (data->hasFormat(OASIS_MIME)) {
+        QByteArray bytes = data->data(OASIS_MIME);
+        QBuffer buffer(&bytes);
+        KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
+        KoOdfReadStore odfStore(store);
+        QString error;
+        if (! odfStore.loadAndParse(error)) {
+            kWarning() << "could not parse clipboard data;" << error;
+            return;
+        }
+        KoXmlElement root = odfStore.contentDoc().documentElement();
+        KoXmlNode body = root.namedItemNS("urn:oasis:names:tc:opendocument:xmlns:office:1.0", "body");
+        KoXmlNode text = body.namedItemNS("urn:oasis:names:tc:opendocument:xmlns:office:1.0", "text");
+        KoXmlNode item = text.firstChild();
+        while (! item.isElement()) {
+            item = item.nextSibling();
+            if (item.isNull()) { // no more children.
+                kWarning() << "Clipboard Odf-Xml does not seem to contain a useful element";
+                return;
+            }
+        }
+
+        KoOdfStylesReader reader;
+        KoOdfLoadingContext context(reader, store);
+        KoShapeLoadingContext context2(context, &m_shapeController);
+        KoShape *clipboardShape = KoShapeRegistry::instance()->createShapeFromOdf(item.toElement(), context2);
+        if (clipboardShape) {
+            if (m_currentClipboard) {
+                m_itemStore.removeShape(m_currentClipboard);
+                delete m_currentClipboard;
+            }
+            m_currentClipboard = new ClipboardProxyShape(clipboardShape, bytes);
+            m_itemStore.addShape(m_currentClipboard);
+        }
+        return;
+    }
 }
 
 #include <Canvas.moc>

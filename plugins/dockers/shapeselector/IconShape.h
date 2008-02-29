@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,19 +22,29 @@
 #include <KoShape.h>
 
 class KoCreateShapesTool;
+class QDomElement;
 
 class IconShape : public KoShape {
 public:
     IconShape(const QString &icon);
+    virtual ~IconShape();
 
+    /**
+     * This method is called when the user selects this item to be created later.
+     * The implementation should set all its options on the KoCreateShapesTool instance.
+     */
     virtual void visit(KoCreateShapesTool *tool) = 0;
+    /**
+     * Return the tooltip that should be shown when the user hovers over this item.
+     */
     virtual QString toolTip() = 0;
+    virtual void save(QDomElement &root) = 0;
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext & ) const {}
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
-
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    /// reimplemented
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     QPixmap pixmap() const { return m_icon; }
 

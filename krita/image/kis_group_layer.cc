@@ -251,8 +251,6 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     // Get the first layer in this group to start compositing with
     KisLayerSP child = dynamic_cast<KisLayer*>( lastChild().data() );
 
-    //qDebug() << "last child: " << child->name();
-    
     // No child -- clear the projection. Without children, a group layer is empty.
     if (!child)
         m_d->projection->clear();
@@ -272,7 +270,6 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     // if it's found, and if we have found an adj. layer before the the dirty layer,
     // composite from the first adjustment layer searching back from the first dirty layer
     while (child) {
-        //qDebug() << "looking for starting point " << child->name();
         KisAdjustmentLayerSP tmpAdjLayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(child.data()));
         if (tmpAdjLayer) {
             if (gotPaintLayer) {
@@ -324,8 +321,6 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         return;
     }
 
-    //qDebug() << "startWith = " << startWith->name();
-    
     m_d->projection->clear( rc );
 
     bool first = true; // The first layer in a stack needs special compositing
@@ -342,15 +337,12 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         first = true;
     }
 
-    qDebug() << "first: " << first;
-    
     KisMergeVisitor visitor(m_d->projection, rc);
 
     child = startWith;
 
     while(child)
     {
-        qDebug() << "child: " << child->name();
         child->accept(visitor);
         child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }

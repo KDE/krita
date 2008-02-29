@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ *  Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,16 +54,11 @@ bool KoProperties::isEmpty() const
     return d->properties.isEmpty();
 }
 
-bool KoProperties::load(const QString & s)
+void  KoProperties::load(const QDomElement &root)
 {
-
-    QDomDocument doc;
-
-    if ( !doc.setContent( s ) )
-        return false;
     d->properties.clear();
 
-    QDomElement e = doc.documentElement();
+    QDomElement e = root;
     QDomNode n = e.firstChild();
 
     while (!n.isNull()) {
@@ -82,17 +77,22 @@ bool KoProperties::load(const QString & s)
         }
         n = n.nextSibling();
     }
+}
+
+bool KoProperties::load(const QString & s)
+{
+    QDomDocument doc;
+
+    if ( !doc.setContent( s ) )
+        return false;
+    load(doc.documentElement());
 
     return true;
 }
 
-QString KoProperties::store( const QString & s )
+void KoProperties::save( QDomElement &root ) const
 {
-    QDomDocument doc = QDomDocument( s );
-    QDomElement root = doc.createElement( s );
-
-    doc.appendChild( root );
-
+    QDomDocument doc = root.ownerDocument();
     QMap<QString, QVariant>::Iterator it;
     for ( it = d->properties.begin(); it != d->properties.end(); ++it ) {
         QDomElement e = doc.createElement( "property" );
@@ -107,9 +107,16 @@ QString KoProperties::store( const QString & s )
         e.appendChild(text);
         root.appendChild(e);
     }
+}
 
+QString KoProperties::store( const QString & s )
+{
+    QDomDocument doc = QDomDocument( s );
+    QDomElement root = doc.createElement( s );
+    doc.appendChild( root );
+
+    save(root);
     return doc.toString();
-
 }
 
 QString KoProperties::store()

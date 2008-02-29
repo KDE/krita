@@ -25,6 +25,8 @@
 #include <QVariant>
 #include "komain_export.h"
 
+class QDomElement;
+
 
 /**
  * A KoProperties is the (de-)serializable representation of
@@ -46,6 +48,15 @@ public:
     ~KoProperties();
 
 public:
+
+    /**
+     * Fill the properties object from the XML dom node.
+     *
+     * load() does not touch existing properties if loading fails.
+     *
+     * @param root the root node of the properties subtree.
+     */
+    void load(const QDomElement &root);
 
     /**
      * Fill the properties object from the XML encoded
@@ -71,16 +82,18 @@ public:
     bool isEmpty() const;
 
     /**
-     * Create a serialized version of this properties
+     * Create a serialized version of this properties as XML.
      * @return the string version of this properties object
      */
     QString store();
 
     /**
-     * Create a serialized version of these properties with @param
-     * root as the root element.
+     * @brief Create a serialized version of these properties (as XML) with root as the root element.
+     * @param root as the root element in the generated XML.
      */
     QString store( const QString & root );
+
+    void save(QDomElement &root) const;
 
     /**
      * Set the property with name to value.

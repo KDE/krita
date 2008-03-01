@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kotext_export.h"
 
 class KoShape;
+class KoShapeSavingContext;
 
 /**
  * A document can store a set of cursor positions/selected cursor locations which can be
@@ -57,6 +58,8 @@ public:
 
     virtual ~KoBookmark();
 
+    /// reimplemented from super
+    void saveOdf(KoShapeSavingContext &context);
     /// reimplemented from super
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
             int posInDocument, const QTextCharFormat &format);

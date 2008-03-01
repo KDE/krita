@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,8 @@
 #include "KoBookmark.h"
 
 #include <KoShape.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 
 #include <QTextDocument>
 #include <QTextInlineObject>
@@ -53,6 +55,21 @@ KoBookmark::KoBookmark(const QString &name, KoShape *shape)
 KoBookmark::~KoBookmark()
 {
     delete d;
+}
+
+void KoBookmark::saveOdf(KoShapeSavingContext &context)
+{
+    KoXmlWriter *writer = &context.xmlWriter();
+    QString nodeName;
+    if (d->type == SinglePosition)
+        nodeName = "text:bookmark";
+    else if (d->type == StartBookmark)
+        nodeName = "text:bookmark-start";
+    else if (d->type == EndBookmark)
+        nodeName = "text:bookmark-end";
+    writer->startElement(nodeName.toLatin1(), false);
+    writer->addAttribute("text:name", d->name.toLatin1());
+    writer->endElement();
 }
 
 void KoBookmark::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {

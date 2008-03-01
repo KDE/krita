@@ -154,8 +154,8 @@ if(SHOULD_BUILD_KPRESENTER)
     macro_optional_add_subdirectory(kpresenter)
 endif(SHOULD_BUILD_KPRESENTER)
 
-#macro_optional_add_subdirectory(kdgantt)
-#macro_optional_add_subdirectory(kchart)
+macro_optional_add_subdirectory(kdgantt)
+macro_optional_add_subdirectory(kchart)
 
 FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
 

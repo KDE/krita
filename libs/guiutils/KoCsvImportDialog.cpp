@@ -531,6 +531,8 @@ void KoCsvImportDialog::Private::fillTable()
     columnsAdjusted = true;
     adjustRows( row - startRow );
     adjustCols( maxColumn - startCol );
+    dialog->m_rowEnd->setMaximum( dialog->m_sheet->numRows() );
+    dialog->m_rowEnd->setValue( dialog->m_sheet->numRows() );
     dialog->m_colEnd->setMaximum( maxColumn );
     if ( endCol == -1 )
       dialog->m_colEnd->setValue( maxColumn );

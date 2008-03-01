@@ -1360,6 +1360,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
                     else if (localName == "bookmark-start")
                         bookmark->setType(KoBookmark::StartBookmark);
                     else if (localName == "bookmark-end") {
+                        bookmark->setType(KoBookmark::EndBookmark);
                         KoBookmark *startBookmark = layout->inlineObjectTextManager()->bookmarkManager()->retrieveBookmark(bookmarkName);
                         startBookmark->setEndBookmark(bookmark);
                     }

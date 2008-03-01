@@ -32,12 +32,11 @@ public:
     ShapeSelectorFactory();
 
     virtual QString id() const;
-    KoDockFactory::DockPosition defaultDockPosition() const;
     QDockWidget* createDockWidget();
     DockPosition defaultDockPosition() const
     {
         return DockRight;
-    }    
+    }
 };
 
 #endif

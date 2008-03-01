@@ -31,11 +31,6 @@ QString ShapeSelectorFactory::id() const
     return QString("ShapeSelector");
 }
 
-KoDockFactory::DockPosition ShapeSelectorFactory::defaultDockPosition() const
-{
-    return DockRight;
-}
-
 QDockWidget* ShapeSelectorFactory::createDockWidget()
 {
     return new ShapeSelector();

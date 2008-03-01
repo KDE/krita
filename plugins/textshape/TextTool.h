@@ -36,7 +36,6 @@ class KoStyleManager;
 class KoTextEditingPlugin;
 class KoColor;
 class KoColorSetAction;
-class KoBookmarkManager;
 class UndoTextCommand;
 class InsertCharacter;
 class ChangeTracker;
@@ -143,10 +142,6 @@ private slots:
     void textDefaultFormat();
     /// see KoTextSelectionHandler::insertIndexMarker
     void insertIndexMarker();
-    /// insert a bookmark on current text cursor location or selection
-    void addBookmark();
-    /// go to previously bookmarked text cursor location or selection
-    void selectBookmark();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
     /// When enabled, make the change tracker record changes made while typing
@@ -167,9 +162,6 @@ private slots:
     void startMacro(const QString &title);
     /// slot to call when a series of commands has ended that together should be 1 undo action.
     void stopMacro();
-
-    /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
-    void deleteBookmark(const QString &name);
 
     /// show the insert special character docker.
     void insertSpecialCharacter();
@@ -209,7 +201,6 @@ private:
     QTextCursor m_caret;
     ChangeTracker *m_changeTracker;
     KoTextSelectionHandler m_selectionHandler;
-    KoBookmarkManager *m_bookmarkManager;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
     bool m_trackChanges;

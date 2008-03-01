@@ -50,8 +50,6 @@
 #include <KoTextEditingRegistry.h>
 #include <KoTextEditingFactory.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoBookmark.h>
-#include <KoBookmarkManager.h>
 #include <KoListStyle.h>
 #include <KoStyleManager.h>
 #include <KoXmlWriter.h>
@@ -305,18 +303,6 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     addAction("line_break", action );
     action->setShortcut( Qt::SHIFT+Qt::Key_Return);
     connect(action, SIGNAL(triggered()), this, SLOT( lineBreak() ));
-
-    action = new QAction(i18n("Bookmark..."), this);
-    //action->setIcon(KIcon("bookmark-new"));
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_G );
-    addAction("add_bookmark", action);
-    connect(action, SIGNAL(triggered()), this, SLOT( addBookmark() ));
-
-    action = new QAction(i18n("Select Bookmark..."), this);
-    //action->setIcon(KIcon("bookmarks"));
-    action->setShortcut( Qt::CTRL+ Qt::Key_G);
-    addAction("select_bookmark", action);
-    connect(action, SIGNAL(triggered()), this, SLOT( selectBookmark() ));
 
     action  = new QAction(i18n("Font..."), this);
     addAction("format_font", action );
@@ -1348,128 +1334,6 @@ void TextTool::textDefaultFormat() {
 void TextTool::insertIndexMarker() {
     // TODO handle result when we figure out how to report errors from a tool.
     m_selectionHandler.insertIndexMarker();
-}
-
-void TextTool::addBookmark() {
-    QString name, suggestedName;
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineObjectTextManager());
-    KoBookmarkManager *manager = layout->inlineObjectTextManager()->bookmarkManager();
-    if (m_caret.hasSelection())
-        suggestedName = m_caret.selectedText();
-
-    CreateNewBookmarkDialog *dia = new CreateNewBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
-    if (dia->exec() == QDialog::Accepted) {
-        name = dia->newBookmarkName();
-    }
-    else {
-        delete dia;
-        return;
-    }
-    delete dia;
-
-    m_selectionHandler.addBookmark(name, m_textShape);
-}
-
-void TextTool::selectBookmark() {
-    QString name;
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineObjectTextManager());
-    KoBookmarkManager *manager = layout->inlineObjectTextManager()->bookmarkManager();
-
-    SelectBookmarkDialog *dia = new SelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
-    connect( dia, SIGNAL( nameChanged(const QString &, const QString &) ),
-            manager, SLOT( rename(const QString &, const QString &) ) );
-    connect( dia, SIGNAL( bookmarkDeleted(const QString &) ),
-            this, SLOT( deleteBookmark(const QString &) ) );
-    if (dia->exec() == QDialog::Accepted) {
-        name = dia->selectedBookmarkName();
-    }
-    else {
-        delete dia;
-        return;
-    }
-    delete dia;
-
-    if (m_caret.hasSelection())
-        repaintSelection(m_caret.position(), m_caret.anchor()); // erase selection
-    else
-        repaintCaret();
-
-    KoBookmark *bookmark = manager->retrieveBookmark(name);
-    KoShape *shape = bookmark->shape();
-    if (!(shape == m_textShape)) {
-        m_textShape = static_cast<TextShape *>(shape);
-        setShapeData(m_textShape->textShapeData());
-        updateSelectionHandler();
-    }
-
-    if (bookmark->hasSelection()) {
-        m_caret.setPosition(bookmark->position());
-        m_caret.setPosition(bookmark->endBookmark()->position() + 1, QTextCursor::KeepAnchor);
-        repaintSelection(m_caret.selectionStart(), m_caret.selectionEnd());
-    }
-    else {
-        m_caret.setPosition(bookmark->position() + 1);
-        repaintCaret();
-    }
-    ensureCursorVisible();
-}
-
-void TextTool::deleteBookmark(const QString &name) {
-    if (!name.isNull()) {
-        TextShape *prevShape = m_textShape;
-        QTextCursor copyCursor = m_caret;
-        int startPosition;
-        int endPosition = -1;
-
-        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());
-        Q_ASSERT(layout);
-        Q_ASSERT(layout->inlineObjectTextManager());
-        KoBookmarkManager *manager = layout->inlineObjectTextManager()->bookmarkManager();
-        KoBookmark *bookmark = manager->retrieveBookmark(name);
-
-        KoShape *shape = bookmark->shape();
-        if (!(shape == m_textShape)) {
-            m_textShape = static_cast<TextShape *>(shape);
-            setShapeData(m_textShape->textShapeData());
-            updateSelectionHandler();
-        }
-
-        if (bookmark->hasSelection()) {
-            KoBookmark *endBookmark = bookmark->endBookmark();
-            endPosition = endBookmark->position() - 1;
-        }
-
-        m_caret.setPosition(bookmark->position());
-        m_selectionHandler.deleteInlineObjects(false);
-
-        if (endPosition != -1) {
-            m_caret.setPosition(endPosition);
-            m_selectionHandler.deleteInlineObjects(false);
-        }
-
-        startPosition = copyCursor.selectionStart();
-        endPosition = copyCursor.selectionEnd();
-
-        // restore cursor / selection to original position
-        if (!(prevShape == m_textShape)) {
-            m_textShape = prevShape;
-            setShapeData(m_textShape->textShapeData());
-            updateSelectionHandler();
-        }
-        m_caret.setPosition(startPosition);
-
-        if (startPosition != endPosition) {
-            m_caret.setPosition(endPosition, QTextCursor::KeepAnchor);
-            repaintSelection(startPosition, endPosition);
-        }
-        else {
-            repaintCaret();
-        }
-    }
 }
 
 void TextTool::formatParagraph() {

@@ -25,8 +25,6 @@
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
-#include "dialogs/CreateNewBookmarkDialog.h"
-#include "dialogs/SelectBookmarkDialog.h"
 #include "dialogs/InsertCharacter.h"
 #include "dialogs/FontDia.h"
 #include "commands/TextCommandBase.h"

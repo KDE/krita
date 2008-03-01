@@ -35,8 +35,6 @@ SET ( textshape_SRCS
     dialogs/CharacterHighlighting.cpp
     dialogs/CharacterDecorations.cpp
     dialogs/CharacterStyleOptions.cpp
-    dialogs/CreateNewBookmarkDialog.cpp
-    dialogs/SelectBookmarkDialog.cpp
     dialogs/InsertCharacter.cpp
     dialogs/FontDia.cpp
     dialogs/FontLayoutTab.cpp
@@ -61,8 +59,6 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/CharacterDecorations.ui
     dialogs/CharacterHighlighting.ui
     dialogs/CharacterStyleOptions.ui
-    dialogs/CreateNewBookmark.ui
-    dialogs/SelectBookmark.ui
 
     dialogs/FontDecorations.ui
     dialogs/FontLayoutTab.ui

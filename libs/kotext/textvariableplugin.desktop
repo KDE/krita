@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Text Variable Plugin
+Name[el]=Πρόσθετο μεταβλητής κειμένου
 Name[it]=Plugin per le variabili di testo
 Name[pt]='Plugin' de Variáveis de Texto
 Name[pt_BR]='Plugin' de Variáveis de Texto
@@ -10,6 +11,7 @@ Name[zh_TW]=文字變數外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-Variable
 Comment=A plugin that contains text variables
+Comment[el]=Ένα πρόσθετο που περιέχει μεταβλητές κειμένου
 Comment[it]=Un plugin contenente variabili di testo
 Comment[pt]=Um 'plugin' que contém variáveis de texto
 Comment[pt_BR]=Um 'plugin' que contém variáveis de texto

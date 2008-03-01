@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Text Brush
+Name[el]=Πινέλο κειμένου
 Name[ga]=Scuab Théacs
 Name[it]=Pennello di testo
 Name[pt]=Pincel de Texto
@@ -7,6 +8,7 @@ Name[pt_BR]=Pincel de Texto
 Name[uk]=Текстовий пензель
 Name[zh_TW]=文字筆刷
 Comment=Text brush
+Comment[el]=Πινέλο κειμένου
 Comment[ga]=Scuab théacs
 Comment[it]=Pennello di testo
 Comment[pt]=Pincel de texto

@@ -64,7 +64,6 @@ public:
     void loadSettings();
     void saveSettings();
     void fillTable();
-    void fillComboBox();
     void setText(int row, int col, const QString& text);
     void adjustRows(int iRows);
     void adjustCols(int iCols);
@@ -531,11 +530,6 @@ void KoCsvImportDialog::Private::fillTable()
     columnsAdjusted = true;
     adjustRows( row - startRow );
     adjustCols( maxColumn - startCol );
-    dialog->m_rowEnd->setMaximum( dialog->m_sheet->numRows() );
-    dialog->m_rowEnd->setValue( dialog->m_sheet->numRows() );
-    dialog->m_colEnd->setMaximum( maxColumn );
-    if ( endCol == -1 )
-      dialog->m_colEnd->setValue( maxColumn );
 
     for (column = 0; column < dialog->m_sheet->numCols(); ++column)
     {
@@ -543,32 +537,20 @@ void KoCsvImportDialog::Private::fillTable()
         if ( formatList.contains( header ) )
             dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Generic"));
     }
-    fillComboBox();
-
-    qApp->restoreOverrideCursor();
-}
-
-void KoCsvImportDialog::Private::fillComboBox()
-{
-    if (endRow == -1)
-        dialog->m_rowEnd->setValue(dialog->m_sheet->numRows());
-    else
-        dialog->m_rowEnd->setValue(endRow);
-
-    if (endCol == -1)
-        dialog->m_colEnd->setValue(dialog->m_sheet->numCols());
-    else
-        dialog->m_colEnd->setValue(endCol);
-
-    dialog->m_rowEnd->setMinimum(1);
-    dialog->m_colEnd->setMinimum(1);
-    dialog->m_rowEnd->setMaximum(dialog->m_sheet->numRows());
-    dialog->m_colEnd->setMaximum(dialog->m_sheet->numCols());
 
     dialog->m_rowStart->setMinimum(1);
     dialog->m_colStart->setMinimum(1);
-    dialog->m_rowStart->setMaximum(dialog->m_sheet->numRows());
-    dialog->m_colStart->setMaximum(dialog->m_sheet->numCols());
+    dialog->m_rowStart->setMaximum(row);
+    dialog->m_colStart->setMaximum(maxColumn);
+
+    dialog->m_rowEnd->setMinimum(1);
+    dialog->m_colEnd->setMinimum(1);
+    dialog->m_rowEnd->setMaximum(row);
+    dialog->m_colEnd->setMaximum(maxColumn);
+    dialog->m_rowEnd->setValue(endRow == -1 ? row : endRow);
+    dialog->m_colEnd->setValue(endCol == -1 ? maxColumn : endCol);
+
+    qApp->restoreOverrideCursor();
 }
 
 KoCsvImportDialog::DataType KoCsvImportDialog::dataType(int col) const

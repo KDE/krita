@@ -38,7 +38,10 @@
 #include <KoImageData.h>
 #include <KoTextAnchor.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextShapeData.h>
 #include <KoVariable.h>
+#include <KoBookmark.h>
+#include <KoBookmarkManager.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoVariableRegistry.h>
@@ -1333,6 +1336,36 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             //QTextCharFormat emptyCf;
             //cursor.insertBlock(emptyTbf, emptyCf);
             cursor.insertText( "\n" );
+        }
+        // text:bookmark, text:bookmark-start and text:bookmark-end
+        else if ( isTextNS &&  (localName == "bookmark" || localName == "bookmark-start" || localName == "bookmark-end") )
+        {
+            QString bookmarkName = ts.attribute("name");
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
+            KoShape *textShape = 0;
+            if (layout) {
+                // FIXME: maybe better way to know current text shape being loaded?
+                foreach (KoShape *shape, layout->shapes()) {
+                    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+                    if (data && data->document() == cursor.block().document()) {
+                        textShape = shape;
+                        break;
+                    }
+                }
+                if (textShape) {
+                    KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                    KoBookmark *bookmark = new KoBookmark(bookmarkName, textShape);
+                    if (localName == "bookmark")
+                        bookmark->setType(KoBookmark::SinglePosition);
+                    else if (localName == "bookmark-start")
+                        bookmark->setType(KoBookmark::StartBookmark);
+                    else if (localName == "bookmark-end") {
+                        KoBookmark *startBookmark = layout->inlineObjectTextManager()->bookmarkManager()->retrieveBookmark(bookmarkName);
+                        startBookmark->setEndBookmark(bookmark);
+                    }
+                    layout->inlineObjectTextManager()->insertInlineObject(cursor, bookmark);
+                }
+            }
         }
         else if ( isTextNS && localName == "number" ) // text:number
         {

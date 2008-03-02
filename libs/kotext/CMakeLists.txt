@@ -1,5 +1,6 @@
 
 
+
 include_directories( ${KOGUIUTILS_INCLUDES} ${KOMAIN_INCLUDES} )
 
 add_subdirectory( kohyphen ) 
@@ -51,6 +52,9 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoBookmarkManager.cpp
     KoInlineNote.cpp
     KoRulerController.cpp
+    FindDirection_p.cpp
+    KoFindStrategy.cpp
+    KoReplaceStrategy.cpp
     KoFind.cpp
 
     styles/Styles_p.cpp

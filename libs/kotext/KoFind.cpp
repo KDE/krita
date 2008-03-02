@@ -40,276 +40,248 @@
 
 #include <KDebug>
 
-class NonClosingFindDialog : public KFindDialog {
-public:
-    NonClosingFindDialog(QWidget *parent) : KFindDialog(parent) {}
+#include "FindDirection_p.h"
+#include "KoFindStrategy.h"
+#include "KoReplaceStrategy.h"
 
-    virtual void accept() {}
+class InUse
+{
+public:
+    InUse( bool & variable )
+    : m_variable( variable )
+    {
+        m_variable = true;
+    }
+    ~InUse()
+    {
+        m_variable = false;
+    }
+
+private:
+    bool & m_variable;
 };
 
 class KoFind::Private {
 public:
     Private(KoFind *find, KoCanvasResourceProvider *crp, QWidget *w)
         :provider(crp),
-        widget(w),
-        findDialog(0),
-        replaceDialog(0),
-        parent(find),
+        findStrategy(w),
+        replaceStrategy(w),
+        strategy(&findStrategy),
         findNext(0),
         findPrev(0),
         document(0),
-        startedPosition(-1),
-        matches(0),
-        replaced(0),
         restarted(false),
-        lastDialogUsed(0)
+        start( false ),
+        inFind( false ),
+        findDirection( 0 ),
+        findForward( crp ),
+        findBackward( crp )
     {
+        connect( findStrategy.dialog(), SIGNAL( okClicked() ), find, SLOT( startFind() ) );
+        connect( replaceStrategy.dialog(), SIGNAL( okClicked() ), find, SLOT( startReplace() ) );
     }
 
     void resourceChanged(int key, const QVariant &variant)
     {
         if(key == KoText::CurrentTextDocument) {
             document = static_cast<QTextDocument*> (variant.value<void*>());
-            lastKnownPosition = QTextCursor(); // make invalid
+            if ( !inFind ) {
+                start = true;
+            }
         }
         else if (key == KoText::CurrentTextPosition || key == KoText::CurrentTextAnchor) {
-            const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
-            const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
-            if (findDialog)
-                findDialog->setHasSelection(selectionEnd != selectionStart);
-            if (replaceDialog)
-                replaceDialog->setHasSelection(selectionEnd != selectionStart);
+            if ( !inFind ) {
+                const int selectionStart = provider->intResource( KoText::CurrentTextPosition );
+                const int selectionEnd = provider->intResource( KoText::CurrentTextAnchor );
+                findStrategy.dialog()->setHasSelection( selectionEnd != selectionStart );
+                replaceStrategy.dialog()->setHasSelection( selectionEnd != selectionStart );
+
+                start = true;
+                provider->clearResource( KoText::SelectedTextPosition );
+                provider->clearResource( KoText::SelectedTextAnchor );
+            }
         }
     }
 
     void findActivated()
     {
-        lastKnownPosition = QTextCursor();
-        lastDialogUsed = FindDialog;
-        if(findDialog) {
-            findDialog->show();
-            KWindowSystem::activateWindow( findDialog->winId() );
-            if (replaceDialog && lastDialogUsed == ReplaceDialog)
-                findDialog->setFindHistory(replaceDialog->findHistory());
-            return;
-        }
-        findDialog = new NonClosingFindDialog(widget);
-        if (replaceDialog)
-            findDialog->setFindHistory(replaceDialog->findHistory()); // copy find history from replace dialog
-        else {
-            findDialog->setOptions(KFind::FromCursor);
-            const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
-            const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
-            findDialog->setHasSelection(selectionEnd != selectionStart);
-        }
-        connect( findDialog, SIGNAL(okClicked()), parent, SLOT(startFind()) );
-        findDialog->show();
+        start = true;
 
-        findNext->setEnabled(true);
-        findPrev->setEnabled(true);
+        findStrategy.dialog()->setFindHistory( strategy->dialog()->findHistory() );
+
+        strategy = &findStrategy;
+
+        strategy->dialog()->show();
+        KWindowSystem::activateWindow( strategy->dialog()->winId() );
+
+        findNext->setEnabled( true );
+        findPrev->setEnabled( true );
     }
 
     void findNextActivated()
     {
-        Q_ASSERT(findDialog);
-        findDialog->setOptions( (findDialog->options() | KFind::FindBackwards) ^ KFind::FindBackwards);
-        parseSettingsAndFind(false);
+        Q_ASSERT( strategy );
+        findStrategy.dialog()->setOptions( (strategy->dialog()->options() | KFind::FindBackwards ) ^ KFind::FindBackwards );
+        strategy = &findStrategy;
+        parseSettingsAndFind();
     }
 
     void findPreviousActivated()
     {
-        Q_ASSERT(findDialog);
-        findDialog->setOptions( findDialog->options() | KFind::FindBackwards);
-        parseSettingsAndFind(false);
+        Q_ASSERT( strategy );
+        findStrategy.dialog()->setOptions( strategy->dialog()->options() | KFind::FindBackwards );
+        strategy = &findStrategy;
+        parseSettingsAndFind();
     }
 
     void replaceActivated()
     {
-        lastDialogUsed = ReplaceDialog;
-        if (replaceDialog) {
-            replaceDialog->show();
-            KWindowSystem::activateWindow( replaceDialog->winId() );
-            if (findDialog && lastDialogUsed == FindDialog)
-                replaceDialog->setFindHistory(findDialog->findHistory());
-            return;
-        }
-        replaceDialog = new KReplaceDialog(widget);
-        if (findDialog)
-            replaceDialog->setFindHistory(findDialog->findHistory()); // copy history from find dialog
-        else {
-            replaceDialog->setOptions(KFind::FromCursor);
-            const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
-            const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
-            replaceDialog->setHasSelection(selectionEnd != selectionStart);
-        }
-        connect( replaceDialog, SIGNAL(okClicked()), parent, SLOT(startReplace()) );
-        replaceDialog->show();
+        start = true;
 
-        // this leads to a crash when the find dialog was not used before
-        findNext->setEnabled(true);
-        findPrev->setEnabled(true);
+        replaceStrategy.dialog()->setFindHistory( strategy->dialog()->findHistory() );
+
+        strategy = &replaceStrategy;
+
+        strategy->dialog()->show();
+        KWindowSystem::activateWindow( strategy->dialog()->winId() );
     }
 
     // executed when the user presses the 'find' button.
     void startFind()
     {
-        parseSettingsAndFind(false);
+        parseSettingsAndFind();
 
-        QTimer::singleShot(0, findDialog, SLOT(show())); // show the findDialog again.
+        QTimer::singleShot(0, findStrategy.dialog(), SLOT(show())); // show the findDialog again.
     }
 
     void startReplace()
     {
-        replaceDialog->hide(); // We don't want the replace dialog to keep popping up
-        parseSettingsAndFind(true);
+        replaceStrategy.dialog()->hide(); // We don't want the replace dialog to keep popping up
+        parseSettingsAndFind();
     }
 
-    void parseSettingsAndFind(bool replace)
+    void parseSettingsAndFind()
     {
         if(document == 0)
             return;
-        long options;
-        if (replace) {
-            options = replaceDialog->options();
-        }
-        else
-            options = findDialog->options();
+
+        InUse used( inFind );
+
+        long options = strategy->dialog()->options();
 
         QTextDocument::FindFlags flags;
-        if((options & KFind::WholeWordsOnly) != 0)
+        if ( ( options & KFind::WholeWordsOnly ) != 0 ) {
             flags |= QTextDocument::FindWholeWords;
-        if((options & KFind::CaseSensitive) != 0)
+        }
+        if ( ( options & KFind::CaseSensitive ) != 0 ) {
             flags |= QTextDocument::FindCaseSensitively;
-        if((options & KFind::FindBackwards) != 0)
+        }
+        if ( ( options & KFind::FindBackwards ) != 0 ) {
             flags |= QTextDocument::FindBackward;
-
-        if(lastKnownPosition.isNull()) {
-            lastKnownPosition = QTextCursor(document);
-            if((options & KFind::FromCursor) != 0)
-                lastKnownPosition.setPosition(provider->intResource(KoText::CurrentTextPosition));
-            startedPosition = lastKnownPosition.position();
-            restarted = false;
-            matches = 0;
+            findDirection = &findBackward;
+        }
+        else {
+            findDirection = &findForward;
         }
 
-        const bool selectedText = (options & KFind::SelectedText) != 0;
-        int selectionStart=0;
-        int selectionEnd=0;
-        if (selectedText) {
-            selectionStart = provider->intResource(KoText::CurrentTextPosition);
-            selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
-            if(selectionEnd < selectionStart)
-                qSwap(selectionStart, selectionEnd);
+        const bool selectedText = ( options & KFind::SelectedText) != 0;
 
-            if(lastKnownPosition.position() < selectionStart || lastKnownPosition.position() > selectionEnd) {
-                lastKnownPosition.setPosition(selectionStart);
-                startedPosition = selectionStart;
+        if ( start ) {
+            start = false;
+            restarted = false;
+            strategy->reset();
+            lastKnownPosition = QTextCursor( document );
+            if ( selectedText ) {
+                int selectionStart = provider->intResource( KoText::CurrentTextPosition );
+                int selectionEnd = provider->intResource( KoText::CurrentTextAnchor );
+                if ( selectionEnd < selectionStart ) {
+                    qSwap( selectionStart, selectionEnd );
+                }
+                // TODO the SelectedTextPosition and SelectedTextAnchor are not highlighted yet
+                // it would be cool to have the highlighted ligher when searching in selected text
+                provider->setResource( KoText::SelectedTextPosition, selectionStart );
+                provider->setResource( KoText::SelectedTextAnchor, selectionEnd );
+                if ( ( options & KFind::FindBackwards ) != 0 ) {
+                    lastKnownPosition.setPosition( selectionEnd );
+                    endPosition.setPosition( selectionStart );
+                }
+                else {
+                    lastKnownPosition.setPosition( selectionStart );
+                    endPosition.setPosition( selectionEnd );
+                }
+                startPosition = lastKnownPosition;
             }
+            else {
+                if ( ( options & KFind::FromCursor ) != 0 ) {
+                    lastKnownPosition.setPosition( provider->intResource(KoText::CurrentTextPosition ) );
+                }
+                else {
+                    lastKnownPosition.setPosition( 0 );
+                }
+                endPosition = lastKnownPosition;
+                startPosition = lastKnownPosition;
+            }
+            //kDebug() << "start" << lastKnownPosition.position();
         }
 
         QRegExp regExp;
-        QString pattern = replace ? replaceDialog->pattern() : findDialog->pattern();
-        if (options & KFind::RegularExpression)
-            regExp = QRegExp(pattern);
+        QString pattern = strategy->dialog()->pattern();
+        if ( options & KFind::RegularExpression ) {
+            regExp = QRegExp( pattern );
+        }
 
         QTextCursor cursor;
-        if (!regExp.isEmpty() && regExp.isValid())
-            cursor = document->find(regExp, lastKnownPosition, flags);
-        else
-            cursor = document->find(pattern, lastKnownPosition, flags);
-
-        // do the replacement
-        if (replace && !cursor.isNull() && cursor.selectionEnd() > cursor.selectionStart()) {
-            if ((options & KReplaceDialog::PromptOnReplace) != 0) {
-                provider->setResource(KoText::CurrentTextPosition, cursor.position());
-                provider->setResource(KoText::CurrentTextAnchor, cursor.anchor());
-                provider->clearResource(KoText::SelectedTextPosition);
-                provider->clearResource(KoText::SelectedTextAnchor);
-
-                // TODO: not only Yes and No, but Yes, Skip, No and Cancel
-                int value = KMessageBox::questionYesNo(widget,
-                        i18n("Replace %1 with %2?", replaceDialog->pattern(), replaceDialog->replacement()));
-                if (value == KMessageBox::Yes) {
-                    replaced++;
-                    cursor.insertText(replaceDialog->replacement());
-                }
-            }
-            else {
-                replaced++;
-                cursor.insertText(replaceDialog->replacement());
-            }
-            lastKnownPosition = cursor;
-
-            if (!(restarted && cursor.position() > startedPosition || cursor.isNull())) {
-                kDebug() << "inside if";
-                lastKnownPosition = cursor;
-                parseSettingsAndFind(replace);
-                return;
-            }
-        }
-
-        if((selectedText && cursor.position() > selectionEnd || // end of selection
-                cursor.isNull() && !restarted) && startedPosition <= lastKnownPosition.position() && !replace) { // end of doc
-            // restart
-            lastKnownPosition.setPosition(0);
-            restarted = true;
-            parseSettingsAndFind(replace);
-            return;
-        }
-
-        if(restarted && cursor.position() > startedPosition || cursor.isNull()) { // looped round.
-            matches = 0;
-            if (replace) {
-                if (replaced == 0)
-                    KMessageBox::information(widget, i18n("Found no match\n\nNo text was replaced"));
-                else {
-                    restarted = false;
-                    int value = KMessageBox::questionYesNo(widget,
-                            i18np("1 replacement made\n\nDo you want to restart search from the beginning?",
-                                  "%1 replacements made\n\nDo you want to restart search from the beginning?", replaced));
-                    replaced = 0;
-                    if (value == KMessageBox::No) {
-                        restarted = false;
-                        return;
-                    }
-                    lastKnownPosition.setPosition(0);
-                    parseSettingsAndFind(replace);
-                    return;
-                }
-            }
-            else
-                KMessageBox::information(findDialog, matches?i18np("Found 1 match", "Found %1 matches", matches):i18n("Found no match"));
-            restarted = false; // allow to restart again.
-            return;
-        }
-
-        if(selectedText) {
-            provider->setResource(KoText::SelectedTextPosition, cursor.position());
-            provider->setResource(KoText::SelectedTextAnchor, cursor.anchor());
+        if ( !regExp.isEmpty() && regExp.isValid() ) {
+            cursor = document->find( regExp, lastKnownPosition, flags );
         }
         else {
-            provider->setResource(KoText::CurrentTextPosition, cursor.position());
-            provider->setResource(KoText::CurrentTextAnchor, cursor.anchor());
-            provider->clearResource(KoText::SelectedTextPosition);
-            provider->clearResource(KoText::SelectedTextAnchor);
+            cursor = document->find( pattern, lastKnownPosition, flags );
         }
-        lastKnownPosition = cursor;
-        matches++;
+
+        //kDebug() << "r" << restarted << "c > e" << ( cursor > endPosition ) << "e" << cursor.atEnd() << "n" << cursor.isNull();
+        if ( ( restarted || selectedText ) && ( cursor.isNull() || findDirection->positionReached( cursor, endPosition ) ) ) {
+            restarted = false;
+            strategy->displayFinalDialog();
+            lastKnownPosition = startPosition;
+            return;
+        }
+        else if ( cursor.isNull() ) {
+            // TODO go to next document
+            restarted = true;
+            findDirection->positionCursor( lastKnownPosition );
+            // restart from the beginning
+            parseSettingsAndFind();
+            return;
+        }
+        else {
+            // found something
+            bool goOn = strategy->foundMatch( cursor, findDirection );
+            lastKnownPosition = cursor;
+            if ( goOn ) {
+                parseSettingsAndFind();
+            }
+        }
     }
 
-    enum { FindDialog = 0, ReplaceDialog };
     KoCanvasResourceProvider *provider;
-    QWidget *widget;
-    KFindDialog *findDialog;
-    KReplaceDialog *replaceDialog;
-    KoFind *parent;
-    QAction *findNext, *findPrev;
+    KoFindStrategy findStrategy;
+    KoReplaceStrategy replaceStrategy;
+    KoFindStrategyBase * strategy;
+
+    QAction *findNext;
+    QAction *findPrev;
 
     QTextDocument *document;
-    int startedPosition, matches, replaced;
     QTextCursor lastKnownPosition;
     bool restarted;
-    int lastDialogUsed;
+    bool start;
+    bool inFind;
+    QTextCursor startPosition;
+    QTextCursor endPosition;
+    FindDirection * findDirection;
+    FindForward findForward;
+    FindBackward findBackward;
 };
 
 KoFind::KoFind(QWidget *parent, KoCanvasResourceProvider *provider, KActionCollection *ac)

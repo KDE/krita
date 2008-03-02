@@ -35,10 +35,6 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     m_directionButtonState(Auto)
 {
     widget.setupUi(this);
-    widget.toolBar->addAction(tool->action("format_bold"));
-    widget.toolBar->addAction(tool->action("format_italic"));
-    widget.toolBar->addAction(tool->action("format_strike"));
-    widget.toolBar->addAction(tool->action("format_underline"));
     widget.bold->setDefaultAction(tool->action("format_bold"));
     widget.italic->setDefaultAction(tool->action("format_italic"));
     widget.strikeOut->setDefaultAction(tool->action("format_strike"));

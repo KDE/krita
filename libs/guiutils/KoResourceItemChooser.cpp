@@ -24,6 +24,7 @@
 #include <QButtonGroup>
 #include <QPushButton>
 #include <QFileInfo>
+#include <QPainter>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -49,15 +50,19 @@ QImage KoResourceItem::thumbnail( const QSize &thumbSize ) const
 {
     QSize imgSize = m_resource->img().size();
 
-    double scaleW = static_cast<double>( thumbSize.width() ) / static_cast<double>( imgSize.width() );
-    double scaleH = static_cast<double>( thumbSize.height() ) / static_cast<double>( imgSize.height() );
+    if(imgSize.height() > thumbSize.height() || imgSize.width() > thumbSize.width()) {
+        double scaleW = static_cast<double>( thumbSize.width() ) / static_cast<double>( imgSize.width() );
+        double scaleH = static_cast<double>( thumbSize.height() ) / static_cast<double>( imgSize.height() );
 
-    double scale = qMin( scaleW, scaleH );
+        double scale = qMin( scaleW, scaleH );
 
-    int thumbW = static_cast<int>( imgSize.width() * scale );
-    int thumbH = static_cast<int>( imgSize.height() * scale );
+        int thumbW = static_cast<int>( imgSize.width() * scale );
+        int thumbH = static_cast<int>( imgSize.height() * scale );
 
-    return m_resource->img().scaled( thumbW, thumbH, Qt::IgnoreAspectRatio );
+        return m_resource->img().scaled( thumbW, thumbH, Qt::IgnoreAspectRatio );
+    }
+    else
+        return m_resource->img();
 }
 
 KoResource *KoResourceItem::resource() const
@@ -82,8 +87,8 @@ KoResourceItemChooser::KoResourceItemChooser( QWidget *parent )
     // only serves as beautifier for the iconchooser
     //frame = new QHBox( this );
     //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    m_chooser = new KoResourceChooser( QSize(32,32), this);
-    m_chooser->setIconSize( QSize(30,30) );
+    m_chooser = new KoResourceChooser( QSize(30,30), this);
+//     m_chooser->setIconSize( QSize(30,30) );
 
     connect( m_chooser, SIGNAL(itemClicked( QTableWidgetItem * ) ), this, SIGNAL( selected( QTableWidgetItem * )));
     connect( m_chooser, SIGNAL(itemDoubleClicked( QTableWidgetItem * ) ), this, SIGNAL( itemDoubleClicked( QTableWidgetItem* ) ) );

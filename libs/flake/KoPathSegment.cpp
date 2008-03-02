@@ -257,7 +257,7 @@ QRectF KoPathSegment::boundingRect() const
         r(t) = (P2 - 2*P1 + P0) * t^2 + (2*P1 - 2*P0) * t + P0
 
         Setting r(t) to zero and using the x and y coordinates of differences of
-        successive control points lets us find the paramters t, where the original 
+        successive control points lets us find the parameters t, where the original 
         bezier curve has a minimum or a maximum.
         */
 

@@ -107,7 +107,7 @@ private:
 
     /**
      * The DeCasteljau algorithm for parameter t.
-     * @param t the paramter to evaluate at
+     * @param t the parameter to evaluate at
      * @param p1 the new control point of the segment start
      * @param p2 the first control point at t
      * @param p3 the new point at t

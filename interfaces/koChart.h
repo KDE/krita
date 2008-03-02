@@ -84,6 +84,8 @@ namespace KoChart
 
         virtual void setModel( QAbstractItemModel* model, 
                                bool takeOwnershipOfModel = false ) = 0;
+        virtual void setFirstRowIsLabel( bool isLabel ) = 0;
+        virtual void setFirstColumnIsLabel( bool isLabel ) = 0;
     };
 }
 

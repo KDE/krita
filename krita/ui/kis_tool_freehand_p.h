@@ -121,8 +121,7 @@ public:
 
     virtual void run()
         {
-            dbgUI <<"run";
-                while(!m_finish || !isEmpty() )
+            while(!m_finish || !isEmpty() )
             {
                 FreehandPaintJob* nextJob = 0;
                 {
@@ -132,20 +131,17 @@ public:
                         nextJob = m_queue.dequeue();
                     }
                 }
-                dbgUI <<"nextJob =" << nextJob;
-                if(nextJob)
+                if ( nextJob )
                 {
                     nextJob->run();
                 } else {
                     msleep(1);
                 }
             }
-            dbgUI <<"finish running";
         }
         void postJob(FreehandPaintJob* job)
         {
             QMutexLocker lock(&m_mutex_queue);
-            dbgUI <<"push job =" << job;
             m_queue.enqueue(job);
         }
         void finish() {

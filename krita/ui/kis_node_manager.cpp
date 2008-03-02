@@ -251,17 +251,8 @@ void KisNodeManager::duplicateActiveNode( KisNodeSP node )
 
 void KisNodeManager::raiseNode()
 {
-    KisNodeSP node = activeNode();
-    if (node->inherits("KisLayer")) {
-        m_d->layerManager->layerRaise();
-    }
-    else if (node->inherits("KisMask")) {
-        m_d->maskManager->duplicateMask();
-    }
-}
-
-void KisNodeManager::lowerNode()
-{
+    // The user sees the layer stack topsy-turvy, as a tree with the
+    // root at the bottom instead of on top.    
     KisNodeSP node = activeNode();
     if (node->inherits("KisLayer")) {
         m_d->layerManager->layerLower();
@@ -270,19 +261,22 @@ void KisNodeManager::lowerNode()
         m_d->maskManager->lowerMask();
     }
 }
-    
-void KisNodeManager::nodeToTop()
+
+void KisNodeManager::lowerNode()
 {
+    // The user sees the layer stack topsy-turvy, as a tree with the
+    // root at the bottom instead of on top.
     KisNodeSP node = activeNode();
+    
     if (node->inherits("KisLayer")) {
-        m_d->layerManager->layerLower();
+        m_d->layerManager->layerRaise();
     }
     else if (node->inherits("KisMask")) {
-        m_d->maskManager->maskToTop();
+        m_d->maskManager->raiseMask();
     }
 }
-
-void KisNodeManager::nodeToBottom()
+    
+void KisNodeManager::nodeToTop()
 {
     KisNodeSP node = activeNode();
     if (node->inherits("KisLayer")) {
@@ -290,6 +284,18 @@ void KisNodeManager::nodeToBottom()
     }
     else if (node->inherits("KisMask")) {
         m_d->maskManager->maskToBottom();
+    }
+
+}
+
+void KisNodeManager::nodeToBottom()
+{
+    KisNodeSP node = activeNode();
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layerLower();
+    }
+    else if (node->inherits("KisMask")) {
+        m_d->maskManager->maskToTop();
     }
 }
     

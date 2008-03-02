@@ -440,7 +440,7 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter) {
         selection.format.setForeground(QBrush(Qt::black)); // TODO use configured selected-text color
         pc.selections.append(selection);
 
-        QRectF clip = textRect(m_textCursor.position(), m_caret.anchor());
+        QRectF clip = textRect(m_textCursor.position(), m_textCursor.anchor());
         painter.save();
         painter.setClipRect(clip, Qt::IntersectClip);
         m_textShapeData->document()->documentLayout()->draw( &painter, pc);
@@ -721,7 +721,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     if(event->key() == Qt::Key_Backspace) {
-        if(! m_textCursor.hasSelection() && m_caret.block().textList() && m_caret.block().length() == 1) {
+        if(! m_textCursor.hasSelection() && m_textCursor.block().textList() && m_textCursor.block().length() == 1) {
             // backspace on numbered, empty parag, removes numbering.
             ChangeListCommand *clc = new ChangeListCommand(m_textCursor.block(), KoListStyle::NoItem);
             addCommand(clc);
@@ -885,7 +885,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     switch(query) {
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
-        QRectF rect = textRect(m_textCursor.position(), m_caret.position());
+        QRectF rect = textRect(m_textCursor.position(), m_textCursor.position());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
         rect = m_textShape->absoluteTransformation(&converter).mapRect(rect);
         return rect.toRect();
@@ -895,7 +895,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         return m_textCursor.charFormat().font();
     case Qt::ImCursorPosition:
         // The logical position of the cursor within the text surrounding the input area (see ImSurroundingText).
-        return m_textCursor.position() - m_caret.block().position();
+        return m_textCursor.position() - m_textCursor.block().position();
     case Qt::ImSurroundingText:
         // The plain text around the input area, for example the current paragraph.
         return m_textCursor.block().text();
@@ -908,7 +908,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
 
 void TextTool::inputMethodEvent (QInputMethodEvent * event) {
     if (event->replacementLength() > 0) {
-        m_textCursor.setPosition(m_caret.position() + event->replacementStart());
+        m_textCursor.setPosition(m_textCursor.position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
             m_textCursor.deleteChar();
         }
@@ -921,14 +921,14 @@ void TextTool::inputMethodEvent (QInputMethodEvent * event) {
 }
 
 void TextTool::ensureCursorVisible() {
-    if(m_textShapeData->endPosition() < m_textCursor.position() || m_textShapeData->position() > m_caret.position()) {
+    if(m_textShapeData->endPosition() < m_textCursor.position() || m_textShapeData->position() > m_textCursor.position()) {
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
         Q_ASSERT(lay);
         foreach(KoShape* shape, lay->shapes()) {
             TextShape *textShape = dynamic_cast<TextShape*> (shape);
             Q_ASSERT(textShape);
             KoTextShapeData *d = static_cast<KoTextShapeData*> (textShape->userData());
-            if(m_textCursor.position() >= d->position() && m_caret.position() <= d->endPosition()) {
+            if(m_textCursor.position() >= d->position() && m_textCursor.position() <= d->endPosition()) {
                 m_textShapeData = d;
                 m_textShape = textShape;
                 break;
@@ -936,7 +936,7 @@ void TextTool::ensureCursorVisible() {
         }
     }
 
-    QRectF cursorPos = textRect(m_textCursor.position(), m_caret.position());
+    QRectF cursorPos = textRect(m_textCursor.position(), m_textCursor.position());
     if(! cursorPos.isValid()) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
         // So take bottom of last paragraph.
@@ -1104,7 +1104,7 @@ void TextTool::repaintCaret() {
 }
 
 void TextTool::repaintSelection() {
-    repaintSelection(m_textCursor.position(), m_caret.anchor());
+    repaintSelection(m_textCursor.position(), m_textCursor.anchor());
 }
 
 void TextTool::repaintSelection(int startPosition, int endPosition) {

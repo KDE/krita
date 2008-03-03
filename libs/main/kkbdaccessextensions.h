@@ -105,6 +105,7 @@ class KActionCollection;
 */
 class KKbdAccessExtensions : public QObject
 {
+    Q_OBJECT
     // TODO: A .moc isn't really needed right now, but see TODO in eventFilter method.
     // Q_PROPERTY(int stepSize READ stepSize WRITE setStepSize)
 

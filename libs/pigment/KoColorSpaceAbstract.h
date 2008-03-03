@@ -308,7 +308,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
 
         virtual quint32 colorChannelCount() const
         {
-          if(_CSTrait::_alpha_pos_ == -1 )
+          if(_CSTrait::alpha_pos == -1 )
             return _CSTrait::channels_nb;
           else
             return _CSTrait::channels_nb - 1;

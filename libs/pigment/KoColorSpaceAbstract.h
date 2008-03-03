@@ -96,7 +96,7 @@ class CompositeCopy : public KoCompositeOp {
 };
 
 
-template<class _CSTraits>
+template<class _CSTrait>
 class KoMixColorsOpImpl : public KoMixColorsOp {
     public:
         KoMixColorsOpImpl()
@@ -106,8 +106,8 @@ class KoMixColorsOpImpl : public KoMixColorsOp {
         virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const
         {
             // Create and initialize to 0 the array of totals
-            typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totals[_CSTraits::channels_nb];
-            typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype totalAlpha = 0;
+            typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype totals[_CSTrait::channels_nb];
+            typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype totalAlpha = 0;
 
             memset(totals, 0, sizeof(totals));
 
@@ -115,20 +115,20 @@ class KoMixColorsOpImpl : public KoMixColorsOp {
 
             while(nColors--)
             {
-                const typename _CSTraits::channels_type* color = _CSTraits::nativeArray(*colors);
-                typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype alphaTimesWeight;
+                const typename _CSTrait::channels_type* color = _CSTrait::nativeArray(*colors);
+                typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype alphaTimesWeight;
 
-                if (_CSTraits::alpha_pos != -1) {
-                    alphaTimesWeight = color[_CSTraits::alpha_pos];
+                if (_CSTrait::alpha_pos != -1) {
+                    alphaTimesWeight = color[_CSTrait::alpha_pos];
                 } else {
-                    alphaTimesWeight = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue;
+                    alphaTimesWeight = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue;
                 }
 
                 alphaTimesWeight *= *weights;
 
-                for(int i = 0; i < (int)_CSTraits::channels_nb; i++)
+                for(int i = 0; i < (int)_CSTrait::channels_nb; i++)
                 {
-                    if (i != _CSTraits::alpha_pos) {
+                    if (i != _CSTrait::alpha_pos) {
                         totals[i] += color[i] * alphaTimesWeight;
                     }
                 }
@@ -141,40 +141,40 @@ class KoMixColorsOpImpl : public KoMixColorsOp {
             // set totalAlpha to the minimum between its value and the unit value of the channels
             const int sumOfWeights = 255;
 
-            if (totalAlpha > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue * sumOfWeights) {
-                totalAlpha = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue * sumOfWeights;
+            if (totalAlpha > KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue * sumOfWeights) {
+                totalAlpha = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue * sumOfWeights;
             }
 
-            typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
+            typename _CSTrait::channels_type* dstColor = _CSTrait::nativeArray(dst);
 
             if (totalAlpha > 0) {
 
-                for(int i = 0; i < (int)_CSTraits::channels_nb; i++)
+                for(int i = 0; i < (int)_CSTrait::channels_nb; i++)
                 {
-                    if (i != _CSTraits::alpha_pos) {
+                    if (i != _CSTrait::alpha_pos) {
 
-                        typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype v = totals[i] / totalAlpha;
+                        typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype v = totals[i] / totalAlpha;
 
-                        if(v > KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max) {
-                            v = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::max;
+                        if(v > KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::max) {
+                            v = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::max;
                         }
                         dstColor[ i ] = v;
                     }
                 }
 
-                if (_CSTraits::alpha_pos != -1) {
-                    dstColor[ _CSTraits::alpha_pos ] = totalAlpha / sumOfWeights;
+                if (_CSTrait::alpha_pos != -1) {
+                    dstColor[ _CSTrait::alpha_pos ] = totalAlpha / sumOfWeights;
                 }
             } else {
-                memset(dst, 0, sizeof(typename _CSTraits::channels_type) * _CSTraits::channels_nb);
+                memset(dst, 0, sizeof(typename _CSTrait::channels_type) * _CSTrait::channels_nb);
             }
         }
 };
 
-template<class _CSTraits>
+template<class _CSTrait>
 class KoConvolutionOpImpl : public KoConvolutionOp {
-    typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
-    typedef typename _CSTraits::channels_type channels_type;
+    typedef typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype compositetype;
+    typedef typename _CSTrait::channels_type channels_type;
 public:
 
     KoConvolutionOpImpl() { }
@@ -185,24 +185,24 @@ public:
         {
 
             // Create and initialize to 0 the array of totals
-            compositetype totals[_CSTraits::channels_nb];
+            compositetype totals[_CSTrait::channels_nb];
 
             qint32 totalWeight = 0;
             qint32 totalWeightTransparent = 0;
 
-            memset(totals, 0, sizeof(typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype) * _CSTraits::channels_nb);
+            memset(totals, 0, sizeof(typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype) * _CSTrait::channels_nb);
 
             for (;nPixels--; colors++, kernelValues++)
             {
                 qint32 weight = *kernelValues;
-                const channels_type* color = _CSTraits::nativeArray(*colors);
+                const channels_type* color = _CSTrait::nativeArray(*colors);
                 if( weight != 0 )
                 {
-                    if( _CSTraits::alpha( *colors ) == 0 )
+                    if( _CSTrait::alpha( *colors ) == 0 )
                     {
                         totalWeightTransparent += weight;
                     } else {
-                        for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                        for(uint i = 0; i < _CSTrait::channels_nb; i++)
                         {
                             totals[i] += color[i] * weight;
                         }
@@ -211,16 +211,16 @@ public:
                 }
             }
 
-            typename _CSTraits::channels_type* dstColor = _CSTraits::nativeArray(dst);
+            typename _CSTrait::channels_type* dstColor = _CSTrait::nativeArray(dst);
 
             bool allChannels = channelFlags.isEmpty();
-            Q_ASSERT( allChannels || channelFlags.size() == (int)_CSTraits::channels_nb );
+            Q_ASSERT( allChannels || channelFlags.size() == (int)_CSTrait::channels_nb );
             if(totalWeightTransparent == 0)
             {
-                for (uint i = 0; i < _CSTraits::channels_nb; i++)
+                for (uint i = 0; i < _CSTrait::channels_nb; i++)
                 {
                     compositetype v = totals[i] / factor + offset;
-                    if (   (allChannels && i != (uint)_CSTraits::alpha_pos )
+                    if (   (allChannels && i != (uint)_CSTrait::alpha_pos )
                         || (!allChannels && channelFlags.testBit( i ) ) )
                     {
                         dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
@@ -232,7 +232,7 @@ public:
                 if(totalWeight == factor)
                 {
                     qint64 a = ( totalWeight - totalWeightTransparent );
-                    for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                    for(uint i = 0; i < _CSTrait::channels_nb; i++)
                     {
                         compositetype v = totals[i] / a + offset;
                         if( allChannels || channelFlags.testBit( i ) )
@@ -243,7 +243,7 @@ public:
                     }
                 } else {
                     double a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use double as it easily saturate
-                    for(uint i = 0; i < _CSTraits::channels_nb; i++)
+                    for(uint i = 0; i < _CSTrait::channels_nb; i++)
                     {
                         compositetype v = (compositetype)( totals[i] * a + offset );
                         if( allChannels || channelFlags.testBit( i ) )
@@ -297,68 +297,74 @@ class KoInvertColorTransformation : public KoColorTransformation {
  * alpha channel).
  */
 
-template<class _CSTraits>
+template<class _CSTrait>
 class KoColorSpaceAbstract : public KoColorSpace {
     public:
         KoColorSpaceAbstract(const QString &id, const QString &name) :
-            KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTraits>(), new KoConvolutionOpImpl< _CSTraits>())
+            KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>())
         {
             this->addCompositeOp( new CompositeCopy( this ) );
         }
 
-        virtual quint32 colorChannelCount() const { return _CSTraits::channels_nb - 1; }
-        virtual quint32 channelCount() const { return _CSTraits::channels_nb; }
-        virtual quint32 pixelSize() const { return _CSTraits::pixelSize; }
+        virtual quint32 colorChannelCount() const
+        {
+          if(_CSTrait::_alpha_pos_ == -1 )
+            return _CSTrait::channels_nb;
+          else
+            return _CSTrait::channels_nb - 1;
+        }
+        virtual quint32 channelCount() const { return _CSTrait::channels_nb; }
+        virtual quint32 pixelSize() const { return _CSTrait::pixelSize; }
 
         virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const
         {
-            if(channelIndex > _CSTraits::channels_nb) return QString("Error");
-            typename _CSTraits::channels_type c = _CSTraits::nativeArray(pixel)[channelIndex];
+            if(channelIndex > _CSTrait::channels_nb) return QString("Error");
+            typename _CSTrait::channels_type c = _CSTrait::nativeArray(pixel)[channelIndex];
             return QString().setNum(c);
         }
 
         virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
         {
-            if(channelIndex > _CSTraits::channels_nb) return QString("Error");
-            typename _CSTraits::channels_type c = _CSTraits::nativeArray(pixel)[channelIndex];
-            return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue);
+            if(channelIndex > _CSTrait::channels_nb) return QString("Error");
+            typename _CSTrait::channels_type c = _CSTrait::nativeArray(pixel)[channelIndex];
+            return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue);
         }
 
 		virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const
 		{
-			Q_ASSERT((int)channels.count() == (int)_CSTraits::channels_nb);
-			typename _CSTraits::channels_type c;
-			for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-            	c = _CSTraits::nativeArray(pixel)[i];
-				channels[i] = ((double)c ) / KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue;
+			Q_ASSERT((int)channels.count() == (int)_CSTrait::channels_nb);
+			typename _CSTrait::channels_type c;
+			for (uint i = 0; i < _CSTrait::channels_nb; i++) {
+            	c = _CSTrait::nativeArray(pixel)[i];
+				channels[i] = ((double)c ) / KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue;
 			}
 		}
 
 		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const
 		{
-			Q_ASSERT((int)values.count() == (int)_CSTraits::channels_nb);
-			typename _CSTraits::channels_type c;
-			for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-				c = (typename _CSTraits::channels_type)
-					((float)KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::unitValue * values[i]);
-				_CSTraits::nativeArray(pixel)[i] = c;
+			Q_ASSERT((int)values.count() == (int)_CSTrait::channels_nb);
+			typename _CSTrait::channels_type c;
+			for (uint i = 0; i < _CSTrait::channels_nb; i++) {
+				c = (typename _CSTrait::channels_type)
+					((float)KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue * values[i]);
+				_CSTrait::nativeArray(pixel)[i] = c;
 			}
 		}
 
         virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {
-            typename _CSTraits::channels_type c = _CSTraits::nativeArray(srcPixel)[channelIndex];
-            return KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(c);
+            typename _CSTrait::channels_type c = _CSTrait::nativeArray(srcPixel)[channelIndex];
+            return KoColorSpaceMaths<typename _CSTrait::channels_type, quint8>::scaleToA(c);
         }
 
         virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelIndex) const {
-            typename _CSTraits::channels_type c = _CSTraits::nativeArray(srcPixel)[channelIndex];
-            return KoColorSpaceMaths<typename _CSTraits::channels_type,quint16>::scaleToA(c);
+            typename _CSTrait::channels_type c = _CSTrait::nativeArray(srcPixel)[channelIndex];
+            return KoColorSpaceMaths<typename _CSTrait::channels_type,quint16>::scaleToA(c);
         }
         virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const
         {
-            const typename _CSTraits::channels_type* src = _CSTraits::nativeArray(srcPixel);
-            typename _CSTraits::channels_type* dst = _CSTraits::nativeArray(dstPixel);
-            for(uint i = 0; i < _CSTraits::channels_nb;i++)
+            const typename _CSTrait::channels_type* src = _CSTrait::nativeArray(srcPixel);
+            typename _CSTrait::channels_type* dst = _CSTrait::nativeArray(dstPixel);
+            for(uint i = 0; i < _CSTrait::channels_nb;i++)
             {
                 if( i != channelIndex )
                 {
@@ -371,55 +377,55 @@ class KoColorSpaceAbstract : public KoColorSpace {
 
         virtual quint8 alpha(const quint8 * U8_pixel) const
         {
-            return _CSTraits::alpha(U8_pixel);
+            return _CSTrait::alpha(U8_pixel);
         }
 
         virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
         {
-            _CSTraits::setAlpha(pixels, alpha, nPixels);
+            _CSTrait::setAlpha(pixels, alpha, nPixels);
         }
 
         virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
         {
-            if (_CSTraits::alpha_pos < 0) return;
+            if (_CSTrait::alpha_pos < 0) return;
 
             qint32 psize = pixelSize();
-            typename _CSTraits::channels_type valpha =  KoColorSpaceMaths<quint8,typename _CSTraits::channels_type>::scaleToA(alpha);
+            typename _CSTrait::channels_type valpha =  KoColorSpaceMaths<quint8,typename _CSTrait::channels_type>::scaleToA(alpha);
 
             for (; nPixels > 0; --nPixels, pixels += psize) {
-                typename _CSTraits::channels_type* alphapixel = _CSTraits::nativeArray(pixels) + _CSTraits::alpha_pos;
-                *alphapixel = KoColorSpaceMaths<typename _CSTraits::channels_type>::multiply( *alphapixel, valpha );
+                typename _CSTrait::channels_type* alphapixel = _CSTrait::nativeArray(pixels) + _CSTrait::alpha_pos;
+                *alphapixel = KoColorSpaceMaths<typename _CSTrait::channels_type>::multiply( *alphapixel, valpha );
             }
         }
 
         virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const
         {
-            if (_CSTraits::alpha_pos < 0) return;
+            if (_CSTrait::alpha_pos < 0) return;
             qint32 psize = pixelSize();
 
             for (; nPixels > 0; --nPixels, pixels += psize, ++alpha) {
-                typename _CSTraits::channels_type valpha =  KoColorSpaceMaths<quint8,typename _CSTraits::channels_type>::scaleToA(*alpha);
-                typename _CSTraits::channels_type* alphapixel = _CSTraits::nativeArray(pixels) + _CSTraits::alpha_pos;
-                *alphapixel = KoColorSpaceMaths<typename _CSTraits::channels_type>::multiply( *alphapixel, valpha );
+                typename _CSTrait::channels_type valpha =  KoColorSpaceMaths<quint8,typename _CSTrait::channels_type>::scaleToA(*alpha);
+                typename _CSTrait::channels_type* alphapixel = _CSTrait::nativeArray(pixels) + _CSTrait::alpha_pos;
+                *alphapixel = KoColorSpaceMaths<typename _CSTrait::channels_type>::multiply( *alphapixel, valpha );
             }
         }
 
         virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const
         {
-            if (_CSTraits::alpha_pos < 0) return;
+            if (_CSTrait::alpha_pos < 0) return;
             qint32 psize = pixelSize();
 
             for (; nPixels > 0; --nPixels, pixels += psize, ++alpha) {
-                typename _CSTraits::channels_type valpha =  KoColorSpaceMaths<quint8,typename _CSTraits::channels_type>::scaleToA(OPACITY_OPAQUE - *alpha);
-                typename _CSTraits::channels_type* alphapixel = _CSTraits::nativeArray(pixels) + _CSTraits::alpha_pos;
-                *alphapixel = KoColorSpaceMaths<typename _CSTraits::channels_type>::multiply( *alphapixel, valpha );
+                typename _CSTrait::channels_type valpha =  KoColorSpaceMaths<quint8,typename _CSTrait::channels_type>::scaleToA(OPACITY_OPAQUE - *alpha);
+                typename _CSTrait::channels_type* alphapixel = _CSTrait::nativeArray(pixels) + _CSTrait::alpha_pos;
+                *alphapixel = KoColorSpaceMaths<typename _CSTrait::channels_type>::multiply( *alphapixel, valpha );
             }
         }
 
         virtual quint8 intensity8(const quint8 * src) const
         {
             QColor c;
-            const_cast<KoColorSpaceAbstract<_CSTraits> *>(this)->toQColor(src, &c );
+            const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c );
             return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
         }
 

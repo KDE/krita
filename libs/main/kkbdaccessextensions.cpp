@@ -677,3 +677,4 @@ bool KSortedLabel::operator<( const KSortedLabel& l ) const
     QPoint p2 = l.label()->mapToGlobal(l.label()->pos());
     return (p1.y() < p2.y() || (p1.y() == p2.y() && p1.x() < p2.x()));
 }
+

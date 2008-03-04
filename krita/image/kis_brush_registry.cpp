@@ -77,4 +77,4 @@ void KisBrushRegistry::registerDynamicFactory(KisBrushFactorySP factory, const Q
 {
     m_dynamicBrushes[id] = factory;
 }
-    
+

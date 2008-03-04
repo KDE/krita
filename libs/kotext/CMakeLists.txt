@@ -55,6 +55,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     FindDirection_p.cpp
     KoFindStrategy.cpp
     KoReplaceStrategy.cpp
+    KoFind_p.cpp
     KoFind.cpp
 
     styles/Styles_p.cpp

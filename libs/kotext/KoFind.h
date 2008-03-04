@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,12 +23,10 @@
 #include "kotext_export.h"
 
 #include <QObject>
-#include <QList>
-#include <QVariant>
 
 class KoCanvasResourceProvider;
 class KActionCollection;
-class QTextDocument;
+class KoFindPrivate;
 
 /**
  * This controller class allows you to get the relevant find actions
@@ -49,8 +48,7 @@ public:
     ~KoFind();
 
 private:
-    class Private;
-    Private * const d;
+    KoFindPrivate * const d;
 
     Q_PRIVATE_SLOT(d, void resourceChanged(int, const QVariant&) )
     Q_PRIVATE_SLOT(d, void findActivated() )

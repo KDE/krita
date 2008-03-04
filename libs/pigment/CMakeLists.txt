@@ -12,6 +12,18 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
 
+message(STATUS ${OPENCTL_FOUND})
+
+if(OPENCTL_FOUND)
+  include_directories(${OPENCTL_INCLUDE_DIR})
+  set(LINK_OPENCTL_LIB ${OPENCTL_LIBRARIES})
+  add_definitions(${OPENCTL_DEFINITIONS})
+  set( OPENCTL_PIGMENT_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoCTLColorProfile.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoCTLColorSpace.cpp
+  )
+endif(OPENCTL_FOUND)
+
 set(pigmentcms_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/KoBasicHistogramProducers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoColor.cpp
@@ -42,6 +54,7 @@ set(pigmentcms_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU16ColorSpace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8ColorSpace.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8CompositeOp.cpp
+    ${OPENCTL_PIGMENT_SRCS}
 )
 
 add_subdirectory(tests)
@@ -49,7 +62,7 @@ add_subdirectory(tests)
 
 kde4_add_library(pigmentcms SHARED ${pigmentcms_SRCS})
 
-target_link_libraries(pigmentcms ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} komain)
+target_link_libraries(pigmentcms ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} komain ${LINK_OPENCTL_LIB})
 
 set_target_properties(pigmentcms PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 

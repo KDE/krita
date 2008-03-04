@@ -92,6 +92,88 @@ struct KoColorSpaceTrait {
     {
         return new quint8[ nPixels * pixelSize ];
     }
+    inline static void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex)
+    {
+        const channels_type* src = nativeArray(srcPixel);
+        channels_type* dst = nativeArray(dstPixel);
+        for(uint i = 0; i < channels_nb;i++)
+        {
+            if( i != channelIndex )
+            {
+                dst[i] = 0;
+            } else {
+                dst[i] = src[i];
+            }
+        }
+    }
+    inline static QString channelValueText(const quint8 *pixel, quint32 channelIndex)
+    {
+        if(channelIndex > channels_nb) return QString("Error");
+        channels_type c = nativeArray(pixel)[channelIndex];
+        return QString().setNum(c);
+    }
+
+    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex)
+    {
+        if(channelIndex > channels_nb) return QString("Error");
+        channels_type c = nativeArray(pixel)[channelIndex];
+        return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits< channels_type>::unitValue);
+    }
+
+    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels)
+    {
+        Q_ASSERT((int)channels.count() == (int)channels_nb);
+        channels_type c;
+        for (uint i = 0; i < channels_nb; i++) {
+            c = nativeArray(pixel)[i];
+            channels[i] = ((double)c ) / KoColorSpaceMathsTraits<channels_type>::unitValue;
+        }
+    }
+
+    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values)
+    {
+        Q_ASSERT((int)values.count() == (int)channels_nb);
+        channels_type c;
+        for (uint i = 0; i < channels_nb; i++) {
+            c = (channels_type)
+                ((float)KoColorSpaceMathsTraits<channels_type>::unitValue * values[i]);
+            nativeArray(pixel)[i] = c;
+        }
+    }
+    inline static void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels)
+    {
+        if (alpha_pos < 0) return;
+
+        channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(alpha);
+
+        for (; nPixels > 0; --nPixels, pixels += pixelSize) {
+            channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
+            *alphapixel = KoColorSpaceMaths<channels_type>::multiply( *alphapixel, valpha );
+        }
+    }
+
+    inline static void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels)
+    {
+        if (alpha_pos < 0) return;
+
+        for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
+            channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(*alpha);
+            channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
+            *alphapixel = KoColorSpaceMaths<channels_type>::multiply( *alphapixel, valpha );
+        }
+    }
+
+    inline static void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels)
+    {
+        if (alpha_pos < 0) return;
+
+        for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
+            channels_type valpha =  KoColorSpaceMaths<quint8,channels_type>::scaleToA(OPACITY_OPAQUE - *alpha);
+            channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
+            *alphapixel = KoColorSpaceMaths<channels_type>::multiply( *alphapixel, valpha );
+        }
+    }
+
 };
 
 /** LAB traits, it provides some convenient functions to

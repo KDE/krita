@@ -26,7 +26,7 @@
 #include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
-#include <kis_basic_histogram_producers.h>
+#include "KoBasicHistogramProducers.h"
 
 
 #include "kis_lms_f32_colorspace.h"
@@ -38,19 +38,17 @@ K_EXPORT_COMPONENT_FACTORY( krita_lms_f32_plugin, LMSF32PluginFactory( "krita" )
 LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setComponentData(LMSF32PluginFactory::componentData());
 
-    if ( parent->inherits("KoColorSpaceRegistry") )
+    KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     {
-	KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>(parent);
 
-        KoColorSpace * colorSpaceLMSF32  = new KisLmsF32ColorSpace(f, 0);
+        KoColorSpace * colorSpaceLMSF32  = new KisLmsAF32ColorSpace( 0);
 
-        KoColorSpaceFactory * csf  = new KisLmsF32ColorSpaceFactory();
+        KoColorSpaceFactory * csf  = new KisLmsAF32ColorSpaceFactory();
         f->add(csf);
 
-        KisHistogramProducerFactoryRegistry::instance()->add(
-            new KisBasicHistogramProducerFactory<KisBasicF32HistogramProducer>
+        KoHistogramProducerFactoryRegistry::instance()->add(
+            new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
             (KoID("LMSF32HISTO", i18n("Float32 Histogram")), colorSpaceLMSF32) );
     }
 

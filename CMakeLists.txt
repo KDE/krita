@@ -80,6 +80,12 @@ endif(OPENGL_FOUND)
 
 configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h )
 
+# Look for OpenCTL
+macro_optional_find_package(OpenCTL)
+
+macro_log_feature(OPENCTL_FOUND "OpenCTL" "OpenCTL is needed for some color spaces" "http://www.openctl.org" FALSE "0.9.1")
+
+
 include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 configure_file(config-endian.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-endian.h )

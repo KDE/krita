@@ -1,26 +1,134 @@
 /*
- *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
 
 #include "kis_lms_f32_colorspace.h"
+
+#include <klocale.h>
+
+#include <KoColorModelStandardIds.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoCTLColorProfile.h>
+
+KisLmsAF32ColorSpace::KisLmsAF32ColorSpace( const KoCTLColorProfile *p) : KoCTLMonoTypeColorSpace<KisLmsAF32Traits>( "LMSAF32", i18n("LMS Cone Space (32-bit float/channel)"), KoColorSpaceRegistry::instance()->rgb16(), p)
+{
+}
+
+KisLmsAF32ColorSpace::~KisLmsAF32ColorSpace()
+{
+}
+
+KoColorSpace* KisLmsAF32ColorSpace::clone() const
+{
+    return new KisLmsAF32ColorSpace(*this);
+}
+
+KoID KisLmsAF32ColorSpace::colorModelId() const
+{
+    return KoID("LMSA", i18n("Long Middle Short Cone Space"));
+}
+
+KoID KisLmsAF32ColorSpace::colorDepthId() const
+{
+    return Float32BitsColorDepthID;
+}
+
+bool KisLmsAF32ColorSpace::willDegrade(ColorSpaceIndependence independence) const
+{
+    return true;
+}
+
+bool KisLmsAF32ColorSpace::hasHighDynamicRange() const
+{
+    return false;
+}
+
+KoColorSpace *KisLmsAF32ColorSpaceFactory::createColorSpace(const KoColorProfile *p) const
+{
+    return new KisLmsAF32ColorSpace( dynamic_cast<const KoCTLColorProfile*>( p));
+}
+
+QString KisLmsAF32ColorSpaceFactory::id() const
+{
+    return "LMSAF32";
+}
+
+QString KisLmsAF32ColorSpaceFactory::name() const
+{
+    return i18n("Long Middle Short Cone Space (32-bit float/channel)");
+}
+
+bool KisLmsAF32ColorSpaceFactory::userVisible() const
+{
+    return true;
+}
+
+KoID KisLmsAF32ColorSpaceFactory::colorModelId() const
+{
+    return KoID("LMSA", i18n("Long Middle Short Cone Space"));
+}
+
+KoID KisLmsAF32ColorSpaceFactory::colorDepthId() const
+{
+    return Float32BitsColorDepthID;
+}
+
+QString KisLmsAF32ColorSpaceFactory::defaultProfile()
+{
+    return "";
+}
+
+bool KisLmsAF32ColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
+{
+    return ( dynamic_cast<const KoCTLColorProfile*>(profile) );
+}
+
+bool KisLmsAF32ColorSpaceFactory::isIcc() const
+{
+    return false;
+}
+
+bool KisLmsAF32ColorSpaceFactory::isHdr() const
+{
+    return true;
+}
+
+int KisLmsAF32ColorSpaceFactory::referenceDepth() const
+{
+    return 32;
+}
+
+QList<KoColorConversionTransformationFactory*> KisLmsAF32ColorSpaceFactory::colorConversionLinks() const
+{
+    return QList<KoColorConversionTransformationFactory*>();
+}
+
+KoColorConversionTransformationFactory* KisLmsAF32ColorSpaceFactory::createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+{
+    return 0;
+}
+
+QString KisLmsAF32ColorSpaceFactory::defaultProfile() const
+{
+    return "";
+}
+
+
+#if 0
 
 #include <limits.h>
 #include <lcms.h>
@@ -230,7 +338,7 @@ void KisLmsF32ColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStride
 
         while (columns > 0) {
 
-            float srcAlpha = src[PIXEL_ALPHA];
+             float srcAlpha = src[PIXEL_ALPHA];
 
             // apply the alphamask
             if (mask != 0) {
@@ -382,3 +490,4 @@ KoCompositeOpList KisLmsF32ColorSpace::compositeOps() const
     return list;
 }
 
+#endif

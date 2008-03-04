@@ -1,25 +1,74 @@
 /*
- *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
 #ifndef KIS_STRATEGY_COLORSPACE_LMS_F32_H_
 #define KIS_STRATEGY_COLORSPACE_LMS_F32_H_
+
+#include "KoCTLMonoTypeColorSpace.h"
+#include "KoColorSpaceTraits.h"
+
+template<typename _channels_type_>
+struct KisLmsATraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
+    typedef _channels_type_ channels_type;
+    struct Pixel {
+        channels_type longWave;
+        channels_type middleWave;
+        channels_type shortWave;
+        channels_type alpha;
+    };
+};
+
+typedef KisLmsATraits<float> KisLmsAF32Traits;
+
+class KisLmsAF32ColorSpace : public KoCTLMonoTypeColorSpace<KisLmsAF32Traits> {
+    public:
+        KisLmsAF32ColorSpace( const KoCTLColorProfile *p);
+        virtual ~KisLmsAF32ColorSpace();
+        virtual KoColorSpace* clone() const;
+        virtual KoID colorModelId() const;
+        virtual KoID colorDepthId() const;
+        virtual bool willDegrade(ColorSpaceIndependence independence) const;
+        virtual bool hasHighDynamicRange() const;
+};
+
+class KisLmsAF32ColorSpaceFactory : public KoColorSpaceFactory
+{
+public:
+    KisLmsAF32ColorSpaceFactory() {}
+    virtual ~KisLmsAF32ColorSpaceFactory() {}
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual bool userVisible() const;
+    virtual KoID colorModelId() const;
+    virtual KoID colorDepthId() const;
+
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const;
+
+    virtual QString defaultProfile();
+    virtual bool isIcc() const;
+    virtual bool isHdr() const;
+    virtual int referenceDepth() const;
+    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const;
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const;
+    virtual QString defaultProfile() const;
+};
+
+#if 0
 
 #include <QColor>
 
@@ -130,7 +179,7 @@ private:
     };
 };
 
-class KisLmsF32ColorSpaceFactory : public KoColorSpaceFactory
+class KisLmsAF32ColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
@@ -143,6 +192,8 @@ public:
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };
+
+#endif
 
 #endif // KIS_STRATEGY_COLORSPACE_LMS_F32_H_
 

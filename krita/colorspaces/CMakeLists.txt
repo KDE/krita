@@ -1,5 +1,8 @@
-#add_subdirectory( rgb_f32 )
-#add_subdirectory( lms_f32 )
+
+if(OPENCTL_FOUND)
+    add_subdirectory( lms_f32 )
+endif(OPENCTL_FOUND)
+
 add_subdirectory( rgb_float_hdr )
 add_subdirectory( gray_u8_no_alpha )
 add_subdirectory( gray_u16_no_alpa )

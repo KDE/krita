@@ -33,6 +33,7 @@
 #include "kis_node_visitor.h"
 #include "kis_projection_update_strategy.h"
 #include "kis_bottom_up_update_strategy.h" // XXX Make into real plugins with registry and factories
+#include "kis_top_down_update_strategy.h"
 
 class KisNode::Private
 {
@@ -56,7 +57,7 @@ KisNode::KisNode()
         m_d->updateStrategy = new KisBottomUpUpdateStrategy( this );
     }
     else if (updateStrategy == "TopDown") {
-        // XXX
+        m_d->updateStrategy = new KisTopDownUpdateStrategy( this );
     }
 
 

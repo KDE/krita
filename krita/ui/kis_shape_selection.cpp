@@ -70,7 +70,7 @@ void KisShapeSelection::repaintTimerEvent()
 {
     m_dashOffset++;
     if(m_dashOffset>7) m_dashOffset = 0;
-    repaint();
+    update();
 }
 
 QPainterPath KisShapeSelection::selectionOutline()

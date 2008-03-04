@@ -1052,7 +1052,7 @@ void TextTool::activate (bool temporary) {
         m_needSpellChecking = false;
     }
 
-    m_textShape->repaint();
+    m_textShape->update();
 
     updateSelectionHandler();
     updateActions();

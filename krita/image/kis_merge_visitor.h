@@ -42,7 +42,12 @@
 #include "kis_iterators_pixel.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_information.h"
+#include "kis_bottom_up_update_strategy.h"
 
+
+/**
+ * The class merge visitor works using a bottom-up recomposition strategy.
+ */
 class KisMergeVisitor : public KisNodeVisitor {
 public:
 
@@ -90,7 +95,7 @@ public:
             gc.setChannelFlags( layer->channelFlags() );
             gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
 
-            layer->setClean( rc );
+            static_cast<KisBottomUpUpdateStrategy*>(layer->updateStrategy())->setClean( rc );
 
             return true;
         }
@@ -129,7 +134,16 @@ public:
             KisPainter gc(m_projection);
             gc.setChannelFlags( layer->channelFlags() );
 
-            layer->updateProjection(m_rc);
+            KisBottomUpUpdateStrategy * updateStrategy = 
+                                  static_cast<KisBottomUpUpdateStrategy*>(layer->updateStrategy());
+                                  
+            if (updateStrategy->isDirty(rc)) {
+                QRegion dirty = updateStrategy->dirtyRegion( m_rc );
+                foreach (QRect rect, dirty.rects() ) {
+                    layer->updateProjection(rect);
+                }
+            }
+                
             KisPaintDeviceSP source = layer->projection();
 
             if (tempTarget) {
@@ -143,7 +157,7 @@ public:
                 gc.bitBlt(dx, dy, layer->compositeOp(), source, layer->opacity(), sx, sy, w, h);
                 
 
-            layer->setClean( rc );
+            updateStrategy->setClean( rc );
 
             return true;
         }
@@ -176,7 +190,7 @@ public:
             gc.setChannelFlags( layer->channelFlags() );
             gc.bitBlt(dx, dy, layer->compositeOp(), dev, layer->opacity(), sx, sy, w, h);
 
-            layer->setClean( rc );
+            static_cast<KisBottomUpUpdateStrategy*>(layer->updateStrategy())->setClean( rc );
 
             return true;
         }
@@ -243,7 +257,7 @@ public:
                           tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
             gc.end();
 
-            layer->setClean( tmpRc  );
+            static_cast<KisBottomUpUpdateStrategy*>(layer->updateStrategy())->setClean( tmpRc  );
 
             return true;
         }
@@ -260,8 +274,9 @@ public:
                 return true;
 
             qint32 sx, sy, dx, dy, w, h;
-
-            layer->updateProjection( m_rc );
+            if ( !static_cast<KisBottomUpUpdateStrategy*>(layer->updateStrategy())->isDirty( m_rc ) ) {
+                layer->updateProjection( m_rc );
+            }
             KisPaintDeviceSP dev = layer->projection();
 
             if ( !dev ) return false;
@@ -282,7 +297,7 @@ public:
 
             gc.bitBlt(rc.topLeft(), dev, rc);
 
-            layer->setClean( rc );
+            static_cast<KisBottomUpUpdateStrategy*>(layer->updateStrategy())->setClean( rc );
 
             return true;
 

@@ -105,28 +105,6 @@ QIcon KisGroupLayer::icon() const
     return KIcon("folder");
 }
 
-void KisGroupLayer::setDirty()
-{
-    KisLayer::setDirty();
-    emit rectDirtied( extent() );
-
-}
-
-
-void KisGroupLayer::setDirty(const QRect & rect)
-{
-    KisLayer::setDirty( rect );
-    emit rectDirtied( rect );
-}
-
-
-void KisGroupLayer::setDirty( const QRegion & region)
-{
-    KisLayer::setDirty( region );
-    emit regionDirtied( region );
-}
-
-
 void KisGroupLayer::updateSettings()
 {
     KConfigGroup cfg = KGlobal::config()->group("");
@@ -245,107 +223,8 @@ QImage KisGroupLayer::createThumbnail(qint32 w, qint32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
-    if ( !rc.isValid() ) return ;
-    if ( !isDirty( rc ) ) return;
+    m_d->projection = updateStrategy()->updateGroupLayerProjection( rc, m_d->projection );
 
-    // Get the first layer in this group to start compositing with
-    KisLayerSP child = dynamic_cast<KisLayer*>( lastChild().data() );
-
-    // No child -- clear the projection. Without children, a group layer is empty.
-    if (!child)
-        m_d->projection->clear();
-    else
-        m_d->projection->clear( rc );
-
-    KisLayerSP startWith = KisLayerSP(0);
-
-    KisAdjustmentLayerSP adjLayer = KisAdjustmentLayerSP(0);
-    KisLayerSP tmpPaintLayer = KisLayerSP(0);
-
-    // If this is the rootlayer, don't do anything with adj. layers that are below the
-    // first paintlayer
-    bool gotPaintLayer = (!parent().isNull());
-
-    // Look through all the child layers, searching for the first dirty layer
-    // if it's found, and if we have found an adj. layer before the the dirty layer,
-    // composite from the first adjustment layer searching back from the first dirty layer
-    while (child) {
-        KisAdjustmentLayerSP tmpAdjLayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(child.data()));
-        if (tmpAdjLayer) {
-            if (gotPaintLayer) {
-                // If this adjustment layer is dirty, start compositing with the
-                // previous layer, if there's one.
-                if (tmpAdjLayer->isDirty(rc) && !adjLayer.isNull() && adjLayer->visible()) {
-                    startWith = dynamic_cast<KisLayer*>( adjLayer->prevSibling().data() );
-                    break;
-                }
-                else if (tmpAdjLayer->visible() && !tmpAdjLayer->isDirty(rc)) {
-                    // This is the first adj. layer that is not dirty -- the perfect starting point
-                    adjLayer = tmpAdjLayer;
-                }
-                else {
-                    startWith = tmpPaintLayer;
-                }
-            }
-        }
-        else {
-            tmpPaintLayer = child;
-            gotPaintLayer = true;
-            // A non-adjustmentlayer that's dirty; if there's an adjustmentlayer
-            // with a cache, we'll start from there.
-            if (child->isDirty(rc)) {
-                if (!adjLayer.isNull() && adjLayer->visible()) {
-                    // the first layer on top of the adj. layer
-                    startWith = dynamic_cast<KisLayer*>( adjLayer->prevSibling().data() );
-                }
-                else {
-                    startWith = child;
-                }
-                // break here: if there's no adj layer, we'll start with the layer->lastChild
-                break;
-            }
-        }
-        child = dynamic_cast<KisLayer*>( child->prevSibling().data() );
-    }
-
-    if (!adjLayer.isNull() && startWith.isNull() && gotPaintLayer && adjLayer->prevSibling()) {
-        startWith = dynamic_cast<KisLayer*>( adjLayer->prevSibling().data() );
-    }
-
-    // No adj layer -- all layers inside the group must be recomposited
-    if (adjLayer.isNull()) {
-        startWith = dynamic_cast<KisLayer*>( firstChild().data() );
-    }
-
-    if (startWith.isNull()) {
-        return;
-    }
-
-    m_d->projection->clear( rc );
-
-    bool first = true; // The first layer in a stack needs special compositing
-
-    if (!adjLayer.isNull()) {
-        KisPainter gc(m_d->projection);
-        gc.bitBlt(rc.left(), rc.top(),
-                  COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
-                  rc.left(), rc.top(), rc.width(), rc.height());
-        gc.end();
-        first = false;
-    }
-    else {
-        first = true;
-    }
-
-    KisMergeVisitor visitor(m_d->projection, rc);
-
-    child = startWith;
-
-    while(child)
-    {
-        child->accept(visitor);
-        child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
-    }
 }
 
 #include "kis_group_layer.moc"

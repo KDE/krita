@@ -27,6 +27,7 @@ class KoProperties;
 
 class KisNodeVisitor;
 class KisNodeGraphListener;
+class KisProjectionUpdateStrategy;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent
@@ -75,7 +76,13 @@ protected:
      */
     virtual bool allowAsChild( KisNodeSP ) const = 0;
 
-public: // dirty region methods. XXX: Make these slots?
+public:        
+
+    /**
+     * @return the update strategy
+     */
+    KisProjectionUpdateStrategy * updateStrategy() const;
+
 
     /**
      * Set the entire node extent dirty; this percolates up to parent
@@ -97,34 +104,6 @@ public: // dirty region methods. XXX: Make these slots?
      * node, if propagate is true;
      */
     virtual void setDirty( const QRegion & region);
-
-public:
-
-    /**
-     * @return true if any part of this layer has been marked dirty
-     */
-    bool isDirty() const;
-
-    /**
-     *  @return true if the given rect overlaps with the dirty region
-     *  of this node
-     */
-    bool isDirty( const QRect & rect ) const;
-
-    /**
-     * Mark the specified area as clean
-     */
-    void setClean( const QRect & rc );
-
-    /**
-     * Mark the whole layer as clean
-     */
-    void setClean();
-
-    /**
-     * @return the region from the given rect that is dirty.
-     */
-    QRegion dirtyRegion( const QRect & rc );
 
 public: // Graph methods
 

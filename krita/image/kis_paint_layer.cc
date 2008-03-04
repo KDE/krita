@@ -133,9 +133,6 @@ void KisPaintLayer::updateProjection(const QRect & rc)
     if ( !rc.isValid() ) return ;
     if ( !hasEffectMasks() ) return;
     if ( !m_d->paintDevice ) return;
-    if ( !isDirty( rc ) ) return;
-
-    QRegion dirty = dirtyRegion( rc );
 
     if ( !m_d->projection ) {
         m_d->projection = new KisPaintDevice( *m_d->paintDevice );
@@ -143,16 +140,10 @@ void KisPaintLayer::updateProjection(const QRect & rc)
     else {
         KisPainter gc( m_d->projection );
         gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
-        foreach (QRect rect, dirty.rects() ) {
-//             dbgImage << "Resetting projection rc " << rect;
-            gc.bitBlt( rect.topLeft(), m_d->paintDevice, rect );
-        }
+        gc.bitBlt( rc.topLeft(), m_d->paintDevice, rc);
     }
 
-    foreach ( QRect rect, dirty.rects() ) {
-//         dbgImage << "Applying effect masks on rc " << rect;
-        applyEffectMasks( m_d->projection, rect );
-    }
+    applyEffectMasks( m_d->projection, rc );
 }
 
 

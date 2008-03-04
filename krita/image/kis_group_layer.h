@@ -53,15 +53,6 @@ public:
     /// override from KisBaseNode
     void updateSettings();
 
-    /// override from KisNode
-    void setDirty();
-
-    /// override from KisNode
-    void setDirty(const QRect & rect);
-
-    /// override from KisNode
-    void setDirty( const QRegion & region);
-
     /**
      * XXX: make the colorspace of a layergroup user-settable: we want
      * to be able to have, for instance, a group of grayscale layers

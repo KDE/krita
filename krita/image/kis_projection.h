@@ -114,18 +114,15 @@ private slots:
 
     void updateSettings();
 
-    /**
-     * Add the specified region to the recomposition queue
-     */
-    void addDirtyRegion( const QRegion & region );
+    void slotUpdateUi( ThreadWeaver::Job* );
+
+public slots:
 
     /**
      * Add the specified rect to the recomposition queue
      */
     void addDirtyRect( const QRect & rect );
 
-
-    void slotUpdateUi( ThreadWeaver::Job* );
 
 private:
 

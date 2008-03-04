@@ -21,29 +21,27 @@
 #include <QList>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QPainterPath>
+
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include <KoProperties.h>
 
 #include "kis_global.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_visitor.h"
-
+#include "kis_projection_update_strategy.h"
+#include "kis_bottom_up_update_strategy.h" // XXX Make into real plugins with registry and factories
 
 class KisNode::Private
 {
 public:
 
-    Private()
-        : regionLock( QMutex::Recursive )
-        {
-        }
-
     KisNodeSP parent;
     KisNodeGraphListener * graphListener;
     QList<KisNodeSP> nodes;
-    QRegion dirtyRegion;
-    QMutex regionLock;
-
+    KisProjectionUpdateStrategy * updateStrategy;
 };
 
 KisNode::KisNode()
@@ -51,6 +49,16 @@ KisNode::KisNode()
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
+    
+    KConfigGroup cfg = KGlobal::config()->group("");
+    QString updateStrategy = cfg.readEntry("update_strategy", "BottomUp");
+    if (updateStrategy == "BottomUp") {
+        m_d->updateStrategy = new KisBottomUpUpdateStrategy( this );
+    }
+    else if (updateStrategy == "TopDown") {
+        // XXX
+    }
+
 
 }
 
@@ -75,7 +83,9 @@ KisNode::~KisNode()
 bool KisNode::accept(KisNodeVisitor &v)
 {
     return v.visit( this );
-}KisNodeGraphListener * KisNode::graphListener() const
+}
+
+KisNodeGraphListener * KisNode::graphListener() const
 {
     return m_d->graphListener;
 }
@@ -85,56 +95,28 @@ void KisNode::setGraphListener( KisNodeGraphListener * graphListener )
     m_d->graphListener = graphListener;
 }
 
+KisProjectionUpdateStrategy * KisNode::updateStrategy() const
+{
+    return m_d->updateStrategy;
+}
+
 void KisNode::setDirty()
 {
-    setDirty( extent() );
+    m_d->updateStrategy->setDirty( extent(), this );
 }
 
 void KisNode::setDirty(const QRect & rc)
 {
-    setDirty( QRegion( rc ) );
+    m_d->updateStrategy->setDirty( rc, this );
 }
 
 void KisNode::setDirty( const QRegion & region)
 {
     if ( region.isEmpty() ) return;
-    // If we're dirty, our parent is dirty, if we've got a parent
-    if (m_d->parent) {
-        m_d->parent->setDirty(region);
+
+    foreach (QRect rc, region.rects()) {
+        m_d->updateStrategy->setDirty( rc, this );
     }
-
-    QMutexLocker(&m_d->regionLock);
-    m_d->dirtyRegion += region;
-}
-
-bool KisNode::isDirty() const
-{
-    QMutexLocker(&m_d->regionLock);
-    return !m_d->dirtyRegion.isEmpty();
-}
-
-bool KisNode::isDirty( const QRect & rect ) const
-{
-    QMutexLocker(&m_d->regionLock);
-    return m_d->dirtyRegion.intersects( rect );
-}
-
-void KisNode::setClean( const QRect & rc )
-{
-    QMutexLocker(&m_d->regionLock);
-    m_d->dirtyRegion -= QRegion( rc );
-}
-
-void KisNode::setClean()
-{
-    QMutexLocker(&m_d->regionLock);
-    m_d->dirtyRegion = QRegion();
-}
-
-QRegion KisNode::dirtyRegion( const QRect & rc )
-{
-    QMutexLocker(&m_d->regionLock);
-    return m_d->dirtyRegion.intersected( QRegion( rc) );
 }
 
 KisNodeSP KisNode::parent() const
@@ -204,9 +186,6 @@ int KisNode::index( const KisNodeSP node ) const
 
 QList<KisNodeSP> KisNode::childNodes( const QStringList & nodeTypes, const KoProperties & properties ) const
 {
-//     if ( nodeTypes.isEmpty() && properties.isEmpty() )
-//         return m_d->nodes;
-
     QList<KisNodeSP> nodes;
 
     foreach( KisNodeSP node, m_d->nodes ) {

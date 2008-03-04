@@ -89,7 +89,6 @@ void KisCloneLayer::updateProjection(const QRect& r)
 {
     if ( !m_d->copyFrom ) return;
     if ( !r.isValid() ) return ;
-    if ( !isDirty( r ) ) return;
 
     // XXX: update only the overlap of r and the rects in the dirty region
 

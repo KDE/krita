@@ -348,6 +348,7 @@ void KisPaintDeviceTest::testPixel()
 
 void KisPaintDeviceTest::testDirty()
 {
+#if 0
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisImageSP image = new KisImage(0, 512, 512, cs, "merge test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
@@ -379,6 +380,7 @@ void KisPaintDeviceTest::testDirty()
     QVERIFY( layer->isDirty() );
     QVERIFY( !layer->isDirty( QRect( -10, -10, 5, 5 ) ) );
     QVERIFY( layer->isDirty( QRect( 0, 0, 512, 512 ) ) );
+#endif    
 }
 
 void KisPaintDeviceTest::testMirror()

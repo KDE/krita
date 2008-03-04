@@ -55,7 +55,6 @@
 #include "commands/kis_image_commands.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"
-#include "kis_merge_visitor.h"
 
 #include "kis_name_server.h"
 #include "kis_paint_device.h"
@@ -64,14 +63,13 @@
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
 #include "kis_perspective_grid.h"
-#include "kis_projection.h"
 #include "kis_selection.h"
 #include "kis_shear_visitor.h"
 #include "kis_transaction.h"
 #include "kis_transform_visitor.h"
 #include "kis_types.h"
 #include "kis_crop_visitor.h"
-
+#include "kis_projection_update_strategy.h"
 #include "kis_meta_data_merge_strategy.h"
 
 class KisImage::KisImagePrivate {
@@ -96,8 +94,6 @@ public:
 
     KisGroupLayerSP rootLayer; // The layers are contained in here
     QList<KisLayer*> dirtyLayers; // for thumbnails
-
-    KisProjectionSP projection;
 
     KisNameServer *nserver;
     KisUndoAdapter *adapter;
@@ -140,7 +136,6 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->colorSpace = rhs.m_d->colorSpace;
         m_d->adapter = rhs.m_d->adapter;
         m_d->globalSelection = 0;
-        m_d->projection = new KisProjection( this );
         setRootLayer( static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data()) );
         m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied        m_d->nserver = new KisNameServer(rhs.m_d->nserver->currentSeed() + 1);
         Q_CHECK_PTR(m_d->nserver);
@@ -297,7 +292,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
     m_d->nserver = new KisNameServer(1);
 
     m_d->colorSpace = colorSpace;
-    m_d->projection = new KisProjection( this );
+
     setRootLayer( new KisGroupLayer(this, "root", OPACITY_OPAQUE) );
 
     m_d->xres = 1.0;
@@ -317,8 +312,8 @@ bool KisImage::locked() const
 void KisImage::lock()
 {
     if (!locked()) {
-        if (m_d->projection)
-            m_d->projection->lock();
+        if (m_d->rootLayer)
+            m_d->rootLayer->updateStrategy()->lock();
         m_d->sizeChangedWhileLocked = false;
         m_d->selectionChangedWhileLocked = false;
         blockSignals( true );
@@ -344,8 +339,8 @@ void KisImage::unlock()
                 emit sigActiveSelectionChanged(KisImageSP(this));
             }
 
-            if (m_d->projection)
-                m_d->projection->unlock();
+        if (m_d->rootLayer)
+            m_d->rootLayer->updateStrategy()->unlock();
 
         }
     }
@@ -673,8 +668,9 @@ KisGroupLayerSP KisImage::rootLayer() const
 
 KisPaintDeviceSP KisImage::projection()
 {
-    m_d->projection->sync();
-    
+    // XXX: Projection moved to the updateStrategy -- is synching really needed?
+    //m_d->projection->sync();
+
     Q_ASSERT( m_d->rootLayer );
     KisPaintDeviceSP projection = m_d->rootLayer->projection();
     Q_ASSERT( projection );
@@ -826,9 +822,15 @@ void KisImage::flatten()
 
 void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
-    KisPaintLayer *newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
+    if (!layer->nextSibling()) return;
+    // XXX: this breaks if we allow free mixing of masks and layers
+    KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->nextSibling().data());
+    if (!layer2) return;
+    
+    KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(newLayer);
 
+    
     QRect layerExtent = layer->extent();
     QRect layerNextSiblingExtent = layer->nextSibling()->extent();
     
@@ -836,10 +838,13 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
 
     undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
-    //Abuse the merge visitor to only merge two layers (if either are groups they'll recursively merge)
-    KisMergeVisitor visitor(newLayer->paintDevice(), rc);
-    layer->nextSibling()->accept(visitor);
-    layer->accept(visitor);
+    KisPainter gc(newLayer->paintDevice());
+    gc.setCompositeOp(newLayer->colorSpace()->compositeOp(COMPOSITE_COPY));
+    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
+    
+    gc.setCompositeOp(layer2->compositeOp());
+    gc.setOpacity(layer2->opacity());
+    gc.bitBlt(rc.topLeft(), layer2->projection(), rc);
     
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -1064,8 +1069,7 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
     m_d->rootLayer->setGraphListener( this );
-//     m_d->rootLayer->setProjectionManager( m_d->projection );
-    m_d->projection->setRootLayer( rootLayer );
+    m_d->rootLayer->updateStrategy()->setImage( this );
     setRoot( m_d->rootLayer.data() );
 }
 

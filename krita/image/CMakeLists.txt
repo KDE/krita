@@ -53,10 +53,11 @@ set(kritaimage_LIB_SRCS
    filter/kis_filter_configuration.cc
    filter/kis_filter_config_widget.cc
    filter/kis_filter_job.cpp
-   kis_processing_information.cpp
    filter/kis_filter_registry.cc
    filter/kis_filter_strategy.cc
    filter/kis_recorded_filter_action.cc
+   generator/kis_generator.cpp
+   generator/kis_generator_registry.cpp
    kis_action_recorder.cc
    kis_adjustment_layer.cc
    kis_auto_brush.cpp
@@ -65,6 +66,7 @@ set(kritaimage_LIB_SRCS
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
+   kis_bottom_up_update_strategy.cpp
    kis_boundary.cc
    kis_brush.cc
    kis_brush_p.cc
@@ -101,6 +103,7 @@ set(kritaimage_LIB_SRCS
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
    kis_pixel_selection.cpp
+   kis_processing_information.cpp
    kis_projection.cc
    kis_properties_configuration.cc
    kis_random_accessor.cpp
@@ -121,8 +124,6 @@ set(kritaimage_LIB_SRCS
    kis_transparency_mask.cc
    kis_undo_adapter.cc
    kis_vec.cc
-   generator/kis_generator.cpp
-   generator/kis_generator_registry.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc

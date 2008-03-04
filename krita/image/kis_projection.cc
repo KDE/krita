@@ -18,7 +18,6 @@
 
 #include "kis_projection.h"
 
-
 #include <QRegion>
 #include <QRect>
 #include <QThread>
@@ -42,15 +41,15 @@ public:
     ProjectionJob( const QRect & rc, KisGroupLayerSP layer, QObject * parent )
         : Job( parent )
         , m_rc( rc )
-        , m_rootLayer( layer )
+        , m_group( layer )
         {
             dbgRender << "queing job for layer " << layer->name() << " on rect " << rc;
         }
 
     void run()
         {
-            dbgRender << "starting updateprojection for layer " << m_rootLayer->name() << " on rect " << m_rc;
-            m_rootLayer->updateProjection( m_rc );
+            dbgRender << "starting updateprojection for layer " << m_group->name() << " on rect " << m_rc;
+            m_group->updateProjection( m_rc );
             // XXX: Also convert to QImage in the thread?
         }
 
@@ -59,7 +58,7 @@ public:
 private:
 
     QRect m_rc;
-    KisGroupLayerSP m_rootLayer;
+    KisGroupLayerSP m_group;
 };
 
 class KisProjection::Private {
@@ -81,6 +80,7 @@ public:
                               // true, update only region of interest.
     bool useBoundingRectOfDirtyRegion;
     QMutex regionLock;
+    bool useThreading;
 };
 
 
@@ -98,7 +98,6 @@ KisProjection::KisProjection( KisImageWSP image )
     updateSettings();
 
     connect( m_d->weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( slotUpdateUi(ThreadWeaver::Job*) ) );
-    connect( this, SIGNAL( sigProjectionUpdated( const QRect & ) ), image.data(), SLOT(slotProjectionUpdated( const QRect &) ) );
 }
 
 KisProjection::~KisProjection()
@@ -139,8 +138,6 @@ void KisProjection::unlock()
 void KisProjection::setRootLayer( KisGroupLayerSP rootLayer )
 {
     connect( rootLayer, SIGNAL( settingsUpdated() ), this, SLOT( updateSettings() ) );
-    connect( rootLayer, SIGNAL( regionDirtied( const QRegion & ) ), this, SLOT( addDirtyRegion( const QRegion & ) ) );
-    connect( rootLayer, SIGNAL( rectDirtied( const QRect & ) ), this, SLOT( addDirtyRect( const QRect & ) ) );
 }
 
 bool KisProjection::upToDate(const QRect & rect)
@@ -174,29 +171,6 @@ void KisProjection::setRegionOfInterest( const QRect & roi )
 QRect KisProjection::regionOfInterest()
 {
     return m_d->roi;
-}
-
-void KisProjection::addDirtyRegion( const QRegion & region )
-{
-    QMutexLocker(&m_d->regionLock);
-    m_d->dirtyRegion += region;
-
-    if ( m_d->useBoundingRectOfDirtyRegion ) {
-        if ( !m_d->locked )
-            scheduleRect( region.boundingRect() );
-    }
-    else {
-        if ( !m_d->locked ) {
-            QVector<QRect> regionRects = region.rects();
-
-            QVector<QRect>::iterator it = regionRects.begin();
-            QVector<QRect>::iterator end = regionRects.end();
-            while ( it != end ) {
-                scheduleRect( *it );
-                ++it;
-            }
-        }
-    }
 }
 
 void KisProjection::addDirtyRect( const QRect & rect )
@@ -239,7 +213,12 @@ void KisProjection::scheduleRect( const QRect & rc )
     // as possible.
     if ( w <= m_d->updateRectSize && h <= m_d->updateRectSize ) {
         ProjectionJob * job = new ProjectionJob( interestingRect, m_d->image->rootLayer(), this );
-        m_d->weaver->enqueue( job );
+        if (m_d->useThreading)
+            m_d->weaver->enqueue( job );
+        else {
+            job->run();
+            slotUpdateUi(job);
+        }
         return;
     }
 
@@ -251,7 +230,12 @@ void KisProjection::scheduleRect( const QRect & rc )
         while ( hleft > 0 ) {
             QRect rc2( col + x, row + y, qMin( wleft, m_d->updateRectSize ), qMin( hleft, m_d->updateRectSize ) );
             ProjectionJob * job = new ProjectionJob( rc2, m_d->image->rootLayer(), this );
-            m_d->weaver->enqueue( job );
+            if (m_d->useThreading)
+                m_d->weaver->enqueue( job );
+            else {
+                job->run();
+                slotUpdateUi(job);
+            }
             hleft -= m_d->updateRectSize;
             row += m_d->updateRectSize;
 
@@ -272,6 +256,8 @@ void KisProjection::updateSettings()
     m_d->useBoundingRectOfDirtyRegion = cfg.readEntry( "use_bounding_rect_of_dirty_region", false );
 
     m_d->useRegionOfInterest = cfg.readEntry( "use_region_of_interest", false );
-
+    
+    m_d->useThreading = cfg.readEntry( "use_threading", true );
+    
 }
 #include "kis_projection.moc"

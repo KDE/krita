@@ -430,6 +430,7 @@ public:
     void notifyLayerUpdated(KisLayerSP layer);
 
     void setColorSpace(const KoColorSpace * colorSpace);
+    
     void setRootLayer(KisGroupLayerSP rootLayer);
 
     /**

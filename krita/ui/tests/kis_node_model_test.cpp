@@ -32,7 +32,9 @@
 #include "kis_node_model.h"
 #include "KoColorSpace.h"
 #include "KoCompositeOp.h"
-#include "KoColorSpaceRegistry.h"/*
+#include "KoColorSpaceRegistry.h"
+#include "modeltest.h"
+/*
 Image:
 
     root
@@ -55,6 +57,7 @@ void kisnodemodel_test::testRowcount()
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
     KisNodeModel model(0);
+    ModelTest(&model, this);
     model.setImage( img );
 
     KisLayerSP l1 = new KisPaintLayer(img, "first", 200, img->colorSpace());
@@ -102,6 +105,7 @@ void kisnodemodel_test::testModelIndex()
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
     KisNodeModel model(0);
+    ModelTest(&model, this);
     model.setImage( img );
 
     KisLayerSP first = new KisPaintLayer(img, "first", 200, img->colorSpace());
@@ -179,6 +183,8 @@ void kisnodemodel_test::testGroupLayers()
     KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
 
     KisNodeModel model(0);
+    ModelTest(&model, this);
+    
     model.setImage( img );
 
     KisLayerSP first = new KisPaintLayer(img, "first", 200, img->colorSpace());

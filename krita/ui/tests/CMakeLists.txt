@@ -5,7 +5,7 @@ add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
 
 ########### next target ###############
 
-set(kis_node_model_test_SRCS kis_node_model_test.cpp )
+set(kis_node_model_test_SRCS kis_node_model_test.cpp modeltest.cpp )
 
 kde4_add_unit_test(kis_node_model_test TESTNAME krita-ui-kis_node_model_test  ${kis_node_model_test_SRCS})
 

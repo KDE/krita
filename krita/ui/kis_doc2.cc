@@ -21,7 +21,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_doc2.h"// Qt
+#include "kis_doc2.h"
+
+#include "modeltest.h"
+
 #include <QApplication>
 #include <qdom.h>
 #include <QImage>
@@ -204,15 +207,11 @@ bool KisDoc2::init()
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
 
-//      RGBA is not anymore mandatory, and we might want to test it a little bit more
-//     if (!KoColorSpaceRegistry::instance()->contains("RGBA")) {
-//         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
-//         return false;
-//     }
-
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
     m_d->styleManager = new KoStyleManager(this);
     m_d->nodeModel = new KisNodeModel( this );
+    new ModelTest(m_d->nodeModel, this);
+
 
     return true;
 }

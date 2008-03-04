@@ -169,6 +169,7 @@ void KisNodeManager::activateNode( KisNodeSP node )
     // XXX: Set the selection on the shape manager to the active layer
     // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
     // with the parent of the active layer.
+    dbgUI << " activated node: " << node->name() ;
 
     Q_ASSERT( m_d->view );
     Q_ASSERT( m_d->view->canvasBase() );
@@ -186,7 +187,7 @@ void KisNodeManager::activateNode( KisNodeSP node )
     selection->select(shape);
 
     Q_ASSERT( node->parent() );
-    Q_ASSERT( node->parent()->inherits("KisLayer")); // We don't allow nested masks
+    
     KoShape * parentShape = m_d->view->document()->shapeForNode( node->parent() );
     if (!parentShape) {
         parentShape = m_d->view->document()->addShape( node->parent() );

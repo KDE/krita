@@ -18,7 +18,8 @@
 
 #include "kis_kra_loader_test.h"
 
-#include <qtest_kde.h>#include <KoStore.h>
+#include <qtest_kde.h>
+
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>

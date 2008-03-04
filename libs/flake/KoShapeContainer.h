@@ -143,7 +143,7 @@ public:
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter) = 0;
 
     /// reimplemented
-    virtual void repaint() const;
+    virtual void update() const;
 
     /**
      * Create and return an iterator over all child shapes.

@@ -237,7 +237,7 @@ bool KoShapeContainer::childClipped(const KoShape *child) const {
     return d->children->childClipped(child);
 }
 
-void KoShapeContainer::repaint() const {
+void KoShapeContainer::update() const {
     KoShape::update();
     if(d->children)
         foreach ( KoShape *shape, d->children->iterator())

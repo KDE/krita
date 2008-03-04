@@ -127,14 +127,14 @@ class KisSharedPtr {
         inline T& operator*()
         {
             if ( !d )
-                dbgImage << kBacktrace();
+                kWarning() << kBacktrace();
             Q_ASSERT(d); return *d;
         }
 
         inline const T* operator->() const { Q_ASSERT(d); return d; }
         inline T* operator->() {
             if ( !d ) {
-                dbgImage << kBacktrace();
+                kWarning() << kBacktrace();
                 int* crash = 0;
                 *crash = 0xFF;
             }
@@ -240,7 +240,14 @@ class KisWeakSharedPtr {
         inline const T& operator*() const { Q_ASSERT(d && dataPtr && dataPtr->valid); return *d; }
         inline T& operator*() { Q_ASSERT(d && dataPtr && dataPtr->valid); return *d; }
         inline const T* operator->() const { Q_ASSERT(d && dataPtr && dataPtr->valid); return d; }
-        inline T* operator->() { Q_ASSERT(d && dataPtr && dataPtr->valid); return d; }
+        inline T* operator->() 
+            { 
+                if (!d || !dataPtr || !dataPtr->valid) {
+                    kWarning () << kBacktrace();
+                }
+                Q_ASSERT(d && dataPtr && dataPtr->valid); 
+                return d; 
+            }
 
         /**
         * @return true if the pointer is null

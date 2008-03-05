@@ -24,6 +24,7 @@
 #include "kotext_export.h"
 
 class KoShape;
+class QTextDocument;
 class KoShapeSavingContext;
 
 /**
@@ -52,9 +53,9 @@ public:
     /**
      * Constructor
      * @param name the name for this bookmark
-     * @param s the text shape where this bookmark is located
+     * @param document the text document where this bookmark is located
      */
-    KoBookmark(const QString &name, KoShape *s);
+    KoBookmark(const QString &name, const QTextDocument *document);
 
     virtual ~KoBookmark();
 

@@ -431,8 +431,9 @@ bool KoTextSelectionHandler::insertIndexMarker() {
     return true;
 }
 
-void KoTextSelectionHandler::addBookmark(const QString &name, KoShape *shape) {
-    KoBookmark *bookmark = new KoBookmark(name, shape);
+void KoTextSelectionHandler::addBookmark(const QString &name) {
+    QTextDocument *document = d->textShapeData->document();
+    KoBookmark *bookmark = new KoBookmark(name, document);
     int startPos = -1, endPos = -1, caretPos = -1;
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
@@ -444,7 +445,7 @@ void KoTextSelectionHandler::addBookmark(const QString &name, KoShape *shape) {
         caretPos = d->caret->position();
 
         d->caret->setPosition(endPos);
-        KoBookmark *endBookmark = new KoBookmark(name, shape);
+        KoBookmark *endBookmark = new KoBookmark(name, document);
         bookmark->setType(KoBookmark::StartBookmark);
         endBookmark->setType(KoBookmark::EndBookmark);
         layout->inlineObjectTextManager()->insertInlineObject(*d->caret, endBookmark);

@@ -53,7 +53,7 @@ public:
     bool insertIndexMarker();
 
     /// add a bookmark on current cursor location or current selection
-    void addBookmark(const QString &name, KoShape *shape);
+    void addBookmark(const QString &name);
     /// delete all inline objects in current cursor position or selection
     bool deleteInlineObjects(bool backward = false);
 

@@ -19,7 +19,6 @@
 
 #include "KoBookmark.h"
 
-#include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 
@@ -33,19 +32,18 @@
 
 class KoBookmark::Private {
 public:
-    Private(KoShape *s) : document(0), shape(s) /*, cursorPosition(0), chapterPosition(-1), pageNumber(1)*/ { }
+    Private(const QTextDocument *doc) : document(doc) { }
     const QTextDocument *document;
     int posInDocument;
-    KoShape *shape;
     KoBookmark *endBookmark;
     bool selection;
     QString name;
     BookmarkType type;
 };
 
-KoBookmark::KoBookmark(const QString &name, KoShape *shape)
+KoBookmark::KoBookmark(const QString &name, const QTextDocument *document)
     : KoInlineObject(false),
-    d(new Private(shape))
+    d(new Private(document))
 {
     d->selection = false;
     d->endBookmark = 0;
@@ -126,8 +124,9 @@ KoBookmark *KoBookmark::endBookmark() {
     return d->endBookmark;
 }
 
-KoShape *KoBookmark::shape() {
-    return d->shape;
+KoShape *KoBookmark::shape()
+{
+    return shapeForPosition(d->document, d->posInDocument);
 }
 
 int KoBookmark::position() {

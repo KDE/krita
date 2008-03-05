@@ -47,6 +47,11 @@
 #include "colorspaces/KoRgbU16ColorSpace.h"
 #include "colorspaces/KoRgbU8ColorSpace.h"
 
+#include <config-openctl.h>
+#if HAVE_OPENCTL
+#include "colorprofiles/KoCtlColorProfile.h"
+#endif
+
 struct KoColorSpaceRegistry::Private {
     QHash<QString, KoColorProfile * > profileMap;
     QHash<QString, const KoColorSpace * > csMap;
@@ -79,7 +84,7 @@ void KoColorSpaceRegistry::init()
     d->lab16sLAB = 0;
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
-    // prepare a list of the profiles
+    // prepare a list of the ICC profiles
     KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
 
     QStringList profileFilenames;
@@ -106,7 +111,29 @@ void KoColorSpaceRegistry::init()
             }
         }
     }
-
+#if HAVE_OPENCTL
+    // Load CTL Profiles
+    KGlobal::mainComponent().dirs()->addResourceType("ctl_profiles", "data", "pigmentcms/ctlprofiles/");
+    QStringList ctlprofileFilenames;
+    ctlprofileFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_profiles", "*.ctlp",  KStandardDirs::Recursive);
+    kDebug(DBG_PIGMENT) << "There are " << ctlprofileFilenames.size() << " CTL profiles";
+    if (!ctlprofileFilenames.empty()) {
+        KoColorProfile* profile = 0;
+        for( QStringList::Iterator it = ctlprofileFilenames.begin(); it != ctlprofileFilenames.end(); ++it ) {
+            kDebug(DBG_PIGMENT) << "Load profile : " << *it;
+            profile = new KoCtlColorProfile(*it);
+            profile->load();
+            if (profile->valid()) {
+                kDebug(DBG_PIGMENT) << "Valid profile : " << profile->name();
+                d->profileMap[profile->name()] = profile;
+            } else {
+                kDebug(DBG_PIGMENT) << "Invalid profile : " << profile->name();
+            }
+        }
+    }
+#endif
+    
+    // Initialise LAB
     KoColorProfile *labProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
     add(new KoLabColorSpaceFactory());

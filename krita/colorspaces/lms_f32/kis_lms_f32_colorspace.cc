@@ -22,9 +22,9 @@
 
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoCTLColorProfile.h>
+#include <KoCtlColorProfile.h>
 
-KisLmsAF32ColorSpace::KisLmsAF32ColorSpace( const KoCTLColorProfile *p) : KoCTLMonoTypeColorSpace<KisLmsAF32Traits>( "LMSAF32", i18n("LMS Cone Space (32-bit float/channel)"), KoColorSpaceRegistry::instance()->rgb16(), p)
+KisLmsAF32ColorSpace::KisLmsAF32ColorSpace( const KoCtlColorProfile *p) : KoCtlMonoTypeColorSpace<KisLmsAF32Traits>( "LMSAF32", i18n("LMS Cone Space (32-bit float/channel)"), KoColorSpaceRegistry::instance()->rgb16(), p)
 {
 }
 
@@ -59,7 +59,7 @@ bool KisLmsAF32ColorSpace::hasHighDynamicRange() const
 
 KoColorSpace *KisLmsAF32ColorSpaceFactory::createColorSpace(const KoColorProfile *p) const
 {
-    return new KisLmsAF32ColorSpace( dynamic_cast<const KoCTLColorProfile*>( p));
+    return new KisLmsAF32ColorSpace( dynamic_cast<const KoCtlColorProfile*>( p));
 }
 
 QString KisLmsAF32ColorSpaceFactory::id() const
@@ -94,7 +94,7 @@ QString KisLmsAF32ColorSpaceFactory::defaultProfile()
 
 bool KisLmsAF32ColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
 {
-    return ( dynamic_cast<const KoCTLColorProfile*>(profile) );
+    return ( dynamic_cast<const KoCtlColorProfile*>(profile) );
 }
 
 bool KisLmsAF32ColorSpaceFactory::isIcc() const

@@ -20,4 +20,7 @@ install(TARGETS krita_lms_f32_plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  krita_lms_f32_plugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
+install(FILES
+    lmsaf32.ctlp
+    DESTINATION ${DATA_INSTALL_DIR}/pigmentcms/ctlprofiles)
 

@@ -1,0 +1,38 @@
+<ctlprofile>
+    <info colorSpace="LMSA" depth="32" type="float" name="Standard LMS" />
+    <program>
+<![CDATA[
+
+void RGBAf32_to_LMSAf32(float rIn, float gIn, float bIn, float aIn, output float lOut, output float mOut, output float sOut, output float aOut)
+{
+    lOut = rIn;
+    mOut = gIn;
+    sOut = bIn;
+    aOut = aIn;
+    return;
+}
+
+void LMSAf32_to_RGBAf32(float lIn, float mIn, float sIn, float aIn, output float rOut, output float gOut, output float bOut, output float aOut)
+{
+    rOut = lIn;
+    gOut = mIn;
+    bOut = sIn;
+    aOut = aIn;
+    return;
+}
+
+]]>
+    </program>
+    <transformations>
+        <conversions>
+            <conversion function="LMSAf32_to_RGBAf32">
+                <input colorSpace="RGBA" depth="32" type="float" />
+                <output colorSpace="LMSA" depth="32" type="float" />
+            </conversion>
+            <conversion function="LMSAf32_to_RGBAf32">
+                <input colorSpace="LMSA" depth="32" type="float" />
+                <output colorSpace="RGBA" depth="32" type="float" />
+            </conversion>
+        </conversions>
+    </transformations>
+</ctlprofile>

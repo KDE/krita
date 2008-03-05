@@ -84,6 +84,7 @@ configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h
 macro_optional_find_package(OpenCTL)
 
 macro_log_feature(OPENCTL_FOUND "OpenCTL" "OpenCTL is needed for some color spaces" "http://www.openctl.org" FALSE "0.9.1")
+configure_file(config-openctl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openctl.h )
 
 
 include (TestBigEndian)

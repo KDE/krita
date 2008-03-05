@@ -18,7 +18,7 @@
 #ifndef KIS_STRATEGY_COLORSPACE_LMS_F32_H_
 #define KIS_STRATEGY_COLORSPACE_LMS_F32_H_
 
-#include "KoCTLMonoTypeColorSpace.h"
+#include "KoCtlMonoTypeColorSpace.h"
 #include "KoColorSpaceTraits.h"
 
 template<typename _channels_type_>
@@ -34,9 +34,9 @@ struct KisLmsATraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
 
 typedef KisLmsATraits<float> KisLmsAF32Traits;
 
-class KisLmsAF32ColorSpace : public KoCTLMonoTypeColorSpace<KisLmsAF32Traits> {
+class KisLmsAF32ColorSpace : public KoCtlMonoTypeColorSpace<KisLmsAF32Traits> {
     public:
-        KisLmsAF32ColorSpace( const KoCTLColorProfile *p);
+        KisLmsAF32ColorSpace( const KoCtlColorProfile *p);
         virtual ~KisLmsAF32ColorSpace();
         virtual KoColorSpace* clone() const;
         virtual KoID colorModelId() const;

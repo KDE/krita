@@ -23,16 +23,17 @@
 #include <KoColorProfile.h>
 #include <pigment_export.h>
 
-class PIGMENTCMS_EXPORT KoCTLColorProfile : public KoColorProfile {
+class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
     public:
-        KoCTLColorProfile();
-        virtual ~KoCTLColorProfile();
+        KoCtlColorProfile(QString fileName);
+        virtual ~KoCtlColorProfile();
         virtual KoColorProfile* clone() const;
         virtual bool valid() const;
         virtual bool isSuitableForOutput() const;
         virtual bool isSuitableForPrinting() const;
         virtual bool isSuitableForDisplay() const;
         virtual bool operator==(const KoColorProfile&) const;
+        virtual bool load();
     private:
         struct Private;
         Private* const d;

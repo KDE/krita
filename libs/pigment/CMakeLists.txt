@@ -19,8 +19,8 @@ if(OPENCTL_FOUND)
   set(LINK_OPENCTL_LIB ${OPENCTL_LIBRARIES})
   add_definitions(${OPENCTL_DEFINITIONS})
   set( OPENCTL_PIGMENT_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoCTLColorProfile.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoCTLColorSpace.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoCtlColorProfile.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoCtlColorSpace.cpp
   )
 endif(OPENCTL_FOUND)
 

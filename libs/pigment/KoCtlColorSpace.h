@@ -23,15 +23,15 @@
 #include <KoColorSpace.h>
 #include <pigment_export.h>
 
-class KoCTLColorProfile;
+class KoCtlColorProfile;
 
-class PIGMENTCMS_EXPORT KoCTLColorSpace : public KoColorSpace {
+class PIGMENTCMS_EXPORT KoCtlColorSpace : public KoColorSpace {
     public:
         /**
          * This class is use when creating color space that are defined using the Color Transformation Language.
          */
-        KoCTLColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCTLColorProfile* profile);
-        ~KoCTLColorSpace();
+        KoCtlColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile);
+        ~KoCtlColorSpace();
         virtual bool profileIsCompatible(const KoColorProfile* profile) const;
         virtual bool hasHighDynamicRange() const;
         virtual const KoColorProfile * profile() const;

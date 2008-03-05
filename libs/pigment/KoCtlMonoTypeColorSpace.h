@@ -20,21 +20,21 @@
 #ifndef _KO_CTL_MONO_TYPE_COLOR_SPACE_H_
 #define _KO_CTL_MONO_TYPE_COLOR_SPACE_H_
 
-#include "KoCTLColorSpace.h"
+#include "KoCtlColorSpace.h"
 #include <KoColorSpaceMaths.h>
 
 
 template<class _CSTrait>
-class KoCTLMonoTypeColorSpace : public KoCTLColorSpace {
+class KoCtlMonoTypeColorSpace : public KoCtlColorSpace {
     public:
         /**
          * This class is use when creating color space that are defined using the Color Transformation Language,
          * and whose channels are all of the same type.
          */
-        KoCTLMonoTypeColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCTLColorProfile* profile) : KoCTLColorSpace(id, name, fallBack, profile)
+        KoCtlMonoTypeColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile) : KoCtlColorSpace(id, name, fallBack, profile)
         {
         }
-        ~KoCTLMonoTypeColorSpace()
+        ~KoCtlMonoTypeColorSpace()
         {
         }
 

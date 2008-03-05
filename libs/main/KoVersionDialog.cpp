@@ -39,7 +39,7 @@
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
 
-#include <q3multilineedit.h>
+#include <QTextEdit>
 
 
 KoVersionDialog::KoVersionDialog( QWidget* parent, KoDocument *doc  )
@@ -250,16 +250,16 @@ KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *i
         l->setText( i18n("Date: %1", QDateTime::currentDateTime().toString( Qt::ISODate ) ) );
     grid1->addWidget( l );
 
-    m_multiline = new Q3MultiLineEdit( page );
+    m_textEdit = new QTextEdit( page );
     if ( info )
-        m_multiline->setText( info->comment );
-    grid1->addWidget( m_multiline );
+        m_textEdit->setText( info->comment );
+    grid1->addWidget( m_textEdit );
 
 }
 
 QString KoVersionModifyDialog::comment() const
 {
-    return m_multiline->text();
+    return m_textEdit->text();
 }
 
 

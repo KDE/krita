@@ -27,7 +27,7 @@
 
 class QPushButton;
 class QTreeWidget;
-class Q3MultiLineEdit;
+class QTextEdit;
 
 class KoVersionDialog : public KDialog
 {
@@ -65,7 +65,7 @@ public:
     QString comment() const;
 
 private:
-    Q3MultiLineEdit *m_multiline;
+    QTextEdit *m_textEdit;
 };
 
 #endif

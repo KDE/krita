@@ -49,6 +49,11 @@ protected:
     
     KisPaintDeviceSP updateGroupLayerProjection( const QRect & rc, KisPaintDeviceSP projection );
 
+private:
+
+    class Private;
+    Private const * m_d;
+
 };
 
 #endif

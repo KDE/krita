@@ -33,7 +33,7 @@ class KisTopDownUpdateStrategy : public KisProjectionUpdateStrategy {
 
 public:
     
-    KisTopDownUpdateStrategy( KisNodeSP node);
+    KisTopDownUpdateStrategy( KisNodeSP node );
 
     ~KisTopDownUpdateStrategy();
     

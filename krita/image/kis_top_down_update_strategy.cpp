@@ -24,7 +24,7 @@
 
 class KisTopDownUpdateStrategy::Private
 {
-    public:
+public:
 
     KisNodeSP node;
     KisNodeSP filthyNode;
@@ -74,6 +74,13 @@ void KisTopDownUpdateStrategy::lock()
        has two meanings: the update process is stopped until
        unlock is called and the nodes are set locked.
      */
+    // XXX: huh? how come m_d->node is const here?
+    const_cast<KisNode*>(m_d->node.data())->setLocked( true );
+    KisNodeSP child = m_d->node->firstChild();
+    while (child) {
+        static_cast<KisTopDownUpdateStrategy*>(child->updateStrategy())->lock();
+        child = child->nextSibling();
+    }
 }
 
 void KisTopDownUpdateStrategy::unlock()
@@ -84,6 +91,12 @@ void KisTopDownUpdateStrategy::unlock()
       has two meanings: the update process is restarted
       and all nodes are unlocked.
      */
+    KisNodeSP child = m_d->node->firstChild();
+    while (child) {
+        static_cast<KisTopDownUpdateStrategy*>(child->updateStrategy())->unlock();
+        child = child->nextSibling();
+    }
+    const_cast<KisNode*>(m_d->node.data())->setLocked( false );
 }
 
 KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRect & rc, KisPaintDeviceSP projection )

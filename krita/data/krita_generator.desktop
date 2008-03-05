@@ -4,5 +4,6 @@ X-KDE-ServiceType=Krita/Generator
 Comment=Layer data Generator plugin for Krita
 Comment[pt]='Plugin' de geração de dados para camadas no Krita
 Comment[pt_BR]='Plugin' de geração de dados para camadas no Krita
+Comment[zh_TW]=Krita 的層次資料產生器外掛程式
 [PropertyDef::X-Krita-Version]
 Type=int

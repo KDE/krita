@@ -20,6 +20,8 @@
 #ifndef _KO_COLORSPACE_TRAITS_H_
 #define _KO_COLORSPACE_TRAITS_H_
 
+#include <QtCore/QVector>
+
 #include "KoColorSpaceConstants.h"
 #include "KoColorSpaceMaths.h"
 

@@ -1249,9 +1249,9 @@ void TextTool::addUndoCommand() {
 void TextTool::addCommand(QUndoCommand *command) {
     m_currentCommand = command;
     TextCommandBase *cmd = dynamic_cast<TextCommandBase*> (command);
-    m_canvas->addCommand(command); // will execute it.
     if(cmd)
         cmd->setTool(this);
+    m_canvas->addCommand(command); // will execute it.
     m_currentCommand = 0;
 }
 

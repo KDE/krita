@@ -52,7 +52,7 @@ protected:
 private:
 
     class Private;
-    Private const * m_d;
+    Private * const m_d;
 
 };
 

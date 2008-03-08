@@ -20,7 +20,8 @@
 #include "kis_top_down_update_strategy.h"
 #include "kis_node.h"
 #include "kis_paint_device.h"
-#include "kis_projection.h"
+#include "kis_image.h"
+#include "kis_layer.h"
 
 class KisTopDownUpdateStrategy::Private
 {
@@ -28,6 +29,7 @@ public:
 
     KisNodeSP node;
     KisNodeSP filthyNode;
+    KisImageSP image;
 };
 
 KisTopDownUpdateStrategy::KisTopDownUpdateStrategy( KisNodeSP node )
@@ -60,10 +62,20 @@ void KisTopDownUpdateStrategy::setDirty( const QRect & rc, const KisNodeSP filth
     if (m_d->node->inherits("KisGroupLayer")) {
         m_d->filthyNode = filthyNode;
     }
+    if (KisLayer* layer = dynamic_cast<KisLayer*>(m_d->node.data())) {
+        layer->updateProjection( rc );
+    }
+    if (m_d->node->parent()) {
+        m_d->node->parent()->setDirty( rc );
+    }
+    if (m_d->image) {
+        m_d->image->slotProjectionUpdated( rc );
+    }
 }
  
 void KisTopDownUpdateStrategy::setImage(KisImageSP image)
 {
+    m_d->image = image;
 }
      
 void KisTopDownUpdateStrategy::lock()
@@ -72,10 +84,13 @@ void KisTopDownUpdateStrategy::lock()
        lock is called on the root layer's updateStrategy.
        this strategy locks recursively all children. Lock
        has two meanings: the update process is stopped until
-       unlock is called and the nodes are set locked.
+       unlock is called and the nodes are set locked. In contrast
+       with the bottom-up strategy that does per-node book-keeping,
+       we have to lock the nodes themselves to avoid redirtying while
+       updating the projection.
      */
     // XXX: huh? how come m_d->node is const here?
-    const_cast<KisNode*>(m_d->node.data())->setLocked( true );
+    m_d->node.data()->setLocked( true );
     KisNodeSP child = m_d->node->firstChild();
     while (child) {
         static_cast<KisTopDownUpdateStrategy*>(child->updateStrategy())->lock();
@@ -89,14 +104,14 @@ void KisTopDownUpdateStrategy::unlock()
       unlock is called on the root layer's updatestrategy.
       this strategy unlocks recursively all children. Unlock
       has two meanings: the update process is restarted
-      and all nodes are unlocked.
+      and all nodes are unlocked. 
      */
     KisNodeSP child = m_d->node->firstChild();
     while (child) {
         static_cast<KisTopDownUpdateStrategy*>(child->updateStrategy())->unlock();
         child = child->nextSibling();
     }
-    const_cast<KisNode*>(m_d->node.data())->setLocked( false );
+    m_d->node.data()->setLocked( false );
 }
 
 KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRect & rc, KisPaintDeviceSP projection )

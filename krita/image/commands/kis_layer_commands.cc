@@ -52,7 +52,9 @@ void KisLayerOpacityCommand::undo()
 {
     m_layer->setOpacity(m_oldOpacity);
     m_layer->setDirty();
-}KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp* oldCompositeOp,
+}
+
+KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp* oldCompositeOp,
                                 const KoCompositeOp* newCompositeOp) :
     KisLayerCommand(i18n("Layer Composite Mode"), layer)
 {
@@ -70,7 +72,9 @@ void KisLayerCompositeOpCommand::undo()
 {
     m_layer->setCompositeOp(m_oldCompositeOp);
     m_layer->setDirty();
-}KisLayerMoveCommand::KisLayerMoveCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos) :
+}
+
+KisLayerMoveCommand::KisLayerMoveCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos) :
     KisLayerCommand(i18n("Move Layer"), layer)
 {
     m_oldPos = oldpos;

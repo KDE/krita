@@ -1,9 +1,13 @@
 [Desktop Entry]
 Name=Noise Generator
+Name[el]=Γεννήτρια θορύβου
+Name[it]=Generatore di disturbi
 Name[pt]=Gerador de Ruído
 Name[pt_BR]=Gerador de Ruído
 Name[zh_TW]=雜訊產生器
 Comment=Generatore random pixels
+Comment[el]=Δημιουργία τυχαίων εικονοστοιχείων
+Comment[it]=Generatore di pixel casuali
 Comment[pt]=Gerador de pixels aleatórios
 Comment[pt_BR]=Gerador de pixels aleatórios
 Comment[zh_TW]=隨機產生像素

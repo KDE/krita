@@ -93,7 +93,7 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
 {
 #if 1
     KisDoc2 d;
-    d.import(filename);
+    d.importDocument(filename);
     KisImageSP importedImage = d.image();
     KisPaintLayerSP projection = 0;
     if(importedImage)
@@ -162,7 +162,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
     if(dialog->exec()==QDialog::Accepted)
     {
         dbgPlugins <<"Start creating the HDR layer";
-        if( not m_cameraResponseIsComputed)
+        if( !m_cameraResponseIsComputed)
         {
             computeCameraResponse();
         }
@@ -536,14 +536,15 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         f.apexBrightness = 2.0 * log(f.aperture ) + log( 1.0 / f.exposure) - log( f.sensitivity / 3.125 );
         f.apexBrightness /= log(2.0);
         f.apexBrightness = 1.0 / ( powf(2.0, f.apexBrightness) );// * ( 1.0592f * 11.4f / 3.125f ) ); // TODO: the magic number is apparrently dependent of the camera, this value is taken from pfscalibrate, this need to be configurable (it is the reflected-light meter calibration constant)
-        if( i >=  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 and i <  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 + 1)
+        if( i >=  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 && 
+            i < m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 + 1)
         {
             apexNorm = f.apexBrightness;
         }
         dbgPlugins <<"Loading fileName" << fileName <<" Exposure =" << f.exposure <<" APEX Brightness =" << f.apexBrightness <<" Aperture" << f.aperture <<" Sensitivity =" << f.sensitivity;
         // import the image
         KisDoc2 d;
-        d.import(fileName);
+        d.importDocument(fileName);
         f.image = d.image();
         f.device = 0;
         f.image->setUndoAdapter(0);

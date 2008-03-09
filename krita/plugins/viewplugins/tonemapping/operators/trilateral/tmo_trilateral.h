@@ -7,6 +7,8 @@
 #ifndef _tmo_trilateral_h_
 #define _tmo_trilateral_h_
 
+#include "pfs.h"
+
 /*
  * @brief trilateral filter tone-mapping
  *

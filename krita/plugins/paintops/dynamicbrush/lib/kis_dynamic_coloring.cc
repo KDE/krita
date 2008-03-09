@@ -53,7 +53,7 @@ void KisUniformColoring::resize(double , double ) {
 void KisUniformColoring::colorize(KisPaintDeviceSP dev, const QRect& size)
 {
     Q_UNUSED(size);
-    if(not m_cachedColor or not (*dev->colorSpace() == *m_cachedColor->colorSpace()))
+    if(!m_cachedColor || !(*dev->colorSpace() == *m_cachedColor->colorSpace()))
     {
         if(m_cachedColor) delete m_cachedColor;
         m_cachedColor = new KoColor( dev->colorSpace() );
@@ -69,7 +69,7 @@ void KisUniformColoring::colorAt(int x, int y, KoColor* c)
     Q_UNUSED( x );
     Q_UNUSED( y );
 
-    if(not m_cachedColor or not (*c->colorSpace() == *m_cachedColor->colorSpace()))
+    if(!m_cachedColor || !(*c->colorSpace() == *m_cachedColor->colorSpace()))
     {
         if(m_cachedColor) delete m_cachedColor;
         m_cachedColor = new KoColor( c->colorSpace() );
@@ -109,7 +109,7 @@ KisDynamicColoring* KisPlainColoring::clone() const
 
 void KisPlainColoring::selectColor(double mix)
 {
-    if(not m_color or not (*m_color->colorSpace() == *m_foreGroundColor.colorSpace()))
+    if(!m_color || !(*m_color->colorSpace() == *m_foreGroundColor.colorSpace()))
     {
         delete m_color;
         m_color = new KoColor( m_foreGroundColor.colorSpace() );
@@ -215,7 +215,7 @@ void KisTotalRandomColoring::colorize(KisPaintDeviceSP dev, const QRect& rect)
     KisHLineIteratorPixel it = dev->createHLineIterator( rect.x(), rect.y(), rect.width(), 0);
     for(int y = 0; y < rect.height(); y++)
     {
-        while(not it.isDone())
+        while(!it.isDone())
         {
             qc.setRgb( (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX ) );
             kc.fromQColor( qc);

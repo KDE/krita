@@ -33,7 +33,7 @@ KisSensorSelector::KisSensorSelector(QWidget* parent) : QWidget(parent), m_curre
 
 void KisSensorSelector::setCurrent(KisDynamicSensor* sensor)
 {
-    if(not sensor) return;
+    if(!sensor) return;
     dbgPlugins <<"setCurrent" << sensor <<"" << sensor->id();
     m_currentSensor = sensor;
     sensorSelectorUI->comboBoxSensor->setCurrent( sensor->id() );
@@ -47,7 +47,7 @@ void KisSensorSelector::setCurrent(KisDynamicSensor* sensor)
 
 void KisSensorSelector::setSensorId(const KoID& id)
 {
-    if(not m_currentSensor or id.id() != m_currentSensor->id() )
+    if(!m_currentSensor || id.id() != m_currentSensor->id() )
     {
         setCurrent( KisDynamicSensor::id2Sensor(id) );
         emit sensorChanged(m_currentSensor);

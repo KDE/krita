@@ -19,7 +19,8 @@
 
 #include <kis_debug.h>
 
-#include <QDomElement>#include "ui_SensorTimeConfiguration.h"
+#include <QDomElement>
+#include "ui_SensorTimeConfiguration.h"
 
 #include "kis_paint_information.h"
 #include "kis_sensor_selector.h"

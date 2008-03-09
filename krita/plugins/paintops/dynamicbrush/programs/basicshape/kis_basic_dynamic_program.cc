@@ -123,7 +123,7 @@ void KisBasicDynamicProgram::fromXML(const QDomElement& elt)
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();
-        if (not e.isNull()) {
+        if (!e.isNull()) {
             if( e.tagName() == "params")
             {
                 KisPropertiesConfiguration kpc;

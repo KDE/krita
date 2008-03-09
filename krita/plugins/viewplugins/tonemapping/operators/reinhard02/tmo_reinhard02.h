@@ -10,6 +10,8 @@
 #ifndef _tmo_reinhard02_h_
 #define _tmo_reinhard02_h_
 
+#include <pfs.h>
+
 /*
  * @brief Photographic tone-reproduction
  *

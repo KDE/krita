@@ -113,7 +113,7 @@ void KisBasicDynamicProgramEditor::setEnableScatter(bool e)
     m_basicDynamicProgramEditor->scatterSensor->setEnabled(e);
     m_basicDynamicProgramEditor->labelScatterSensor->setEnabled(e);
     m_basicDynamicProgramEditor->countEnabled->setEnabled(e);
-    if(not e)
+    if(!e)
     {
         setEnableCount(false);
     } else {

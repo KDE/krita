@@ -73,7 +73,7 @@ inline void splitCoordinate(double coordinate, qint32 *whole, double *fraction)
 void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc)
 {
 
-    if(not m_dab)
+    if(!m_dab)
     {
       m_dab = new KisPaintDevice(painter()->device()->colorSpace());
     }

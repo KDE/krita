@@ -15,7 +15,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_dynamic_coloring_program_factory_registry.h"struct KisDynamicColoringProgramFactoryRegistry::Private {
+#include "kis_dynamic_coloring_program_factory_registry.h"
+
+struct KisDynamicColoringProgramFactoryRegistry::Private {
     static KisDynamicColoringProgramFactoryRegistry* instance;
 };
 

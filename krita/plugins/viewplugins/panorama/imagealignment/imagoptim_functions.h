@@ -42,7 +42,7 @@ class BaseFunction {
             double r2 = r1;
             double v;
             int count = 0;
-            while( fabs( v = r1 - r2*powf(poly(a,b,c,r2),2.0)) > m_epsilon and (++count) < 1000 )
+            while( fabs( v = r1 - r2*powf(poly(a,b,c,r2),2.0)) > m_epsilon && (++count) < 1000 )
             {
                 r2 += 0.1*v;
             }

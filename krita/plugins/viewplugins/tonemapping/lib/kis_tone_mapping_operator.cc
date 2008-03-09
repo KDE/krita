@@ -60,7 +60,7 @@ void KisToneMappingOperator::applyLuminance(KisPaintDeviceSP src, KisPaintDevice
     KisHLineIterator itL = lumi->createHLineIterator( 0,0, r.width());
     for(int y = 0; y < r.height(); y++)
     {
-        while(not itSrc.isDone())
+        while(!itSrc.isDone())
         {
             KoXyzTraits<float>::Pixel* dataSrc = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itSrc.rawData());
             float* dataL = reinterpret_cast< float* >(itL.rawData());
@@ -104,7 +104,7 @@ KisPropertiesConfiguration * KisToneMappingOperator::defaultConfiguration() cons
     {
         fc = dynamic_cast<KisPropertiesConfiguration*>(bookmarkManager()->defaultConfiguration());
     }
-    if(not fc )
+    if(!fc )
     {
         dbgPlugins << "Factory configuration";
         fc = factoryConfiguration();

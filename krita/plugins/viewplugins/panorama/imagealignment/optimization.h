@@ -384,7 +384,7 @@ namespace Optimization {
         } else {
           lambda *= nu;
         }
-        if(lambda == 0.0 or lambda >= 1.0e200)
+        if(lambda == 0.0 || lambda >= 1.0e200)
         {
           lambda = lambda0;
 //           return previousremain;

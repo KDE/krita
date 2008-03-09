@@ -30,7 +30,7 @@ class ImageMatchModel {
         return 2;
     }
     inline bool isValid() {
-      if(not m_fitComputed)
+      if(!m_fitComputed)
       {
         computeFitting();
       }
@@ -45,7 +45,7 @@ class ImageMatchModel {
       m_fitComputed = false;
     }
     inline double fittingErrorSum() {
-      if(not m_fitComputed)
+      if(!m_fitComputed)
       {
         computeFitting();
       }

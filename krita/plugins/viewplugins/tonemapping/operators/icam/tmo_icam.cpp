@@ -3,14 +3,14 @@
  * @brief Tone map luminance channel using icam model
  */
 
+#include <pfs.h>
+
 #include "tmo_icam.h"
 #include <config.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
-#include <pfs.h>
 
 #include "fft.h"
 #include "color_spaces.h"

@@ -62,7 +62,7 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
         Q_ASSERT(2 * m_functions.size() == values_.size());
         for(int i = 0; i < m_functions.size(); i++)
         {
-            if( fabs(values_[ 2 * i + 1]) < threshold and fabs(values_[ 2 * i ]) < threshold)
+            if( fabs(values_[ 2 * i + 1]) < threshold && fabs(values_[ 2 * i ]) < threshold)
             {
                 dbgPlugins << "Adding function " << i << " " << fabs(values_[ 2 * i ]) << " " << fabs(values_[ 2 * i + 1]);
                 functions_.push_back( m_functions[i] );

@@ -77,7 +77,7 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
     dbgPlugins <<"Creating panorama with" << images.size() <<" images";
     dbgPlugins <<"Detecting interest points";
     const KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
-    if(not graycs)
+    if(!graycs)
     {
         dbgPlugins <<"Gray 8bit is not installed."; // TODO: message box
         return std::vector<Result>();

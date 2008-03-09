@@ -208,7 +208,7 @@ KisDynamicOp::~KisDynamicOp()
 void KisDynamicOp::paintAt(const KisPaintInformation& info)
 {
 
-    if (not painter()->device()) return;
+    if (!painter()->device()) return;
 
     KisPaintDeviceSP device = painter()->device();
 

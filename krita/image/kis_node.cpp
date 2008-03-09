@@ -253,12 +253,13 @@ bool KisNode::remove( quint32 index )
     {
         KisNodeSP removedNode = at(index);
         removedNode->prepareForRemoval();
-        removedNode->setParent( 0 );
         removedNode->setGraphListener( 0 );
 
         if ( m_d->graphListener )
             m_d->graphListener->aboutToRemoveANode( this, index );
 
+        removedNode->setParent( 0 ); // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
+        
         m_d->nodes.removeAt( index );
 
         if ( m_d->graphListener ) m_d->graphListener->nodeHasBeenRemoved(this, index);

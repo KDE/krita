@@ -68,6 +68,7 @@ KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 void KisBaseNode::setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties )
 {
     setVisible( properties.at( 0 ).state.toBool() );
+    dbgImage << "visible = " << properties.at( 0 ).state.toBool() << " " << visible();
     setLocked( properties.at( 1 ).state.toBool() );
 }
 

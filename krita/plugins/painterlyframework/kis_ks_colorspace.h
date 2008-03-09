@@ -215,9 +215,6 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
         virtual bool isIcc() const { return false; }
         virtual bool isHdr() const { return false; }
 
-        virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
-        virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const = 0;
-
         virtual KoColorConversionTransformationFactory *createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
         {
             Q_UNUSED(_colorModelId);

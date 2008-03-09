@@ -126,10 +126,11 @@ int KisNodeModel::columnCount(const QModelIndex&) const
 
 QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    //dbgUI <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
+    dbgUI <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
 
     if (!hasIndex(row, column, parent))
     {
+        dbgUI << "Doesn't have index";
         return QModelIndex();
     }
     KisNodeSP parentNode;
@@ -137,7 +138,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
     if (!parent.isValid())
     {
         int rowCount = m_d->image->root()->childCount() - 1;
-        //dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << m_d->image->root()->at( rowCount - row );
+        dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << m_d->image->root()->at( rowCount - row );
         return indexFromNode( m_d->image->root()->at( rowCount - row ) );
 
     }
@@ -148,7 +149,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 
     int rowCount = parentNode->childCount() - 1;
     // Now invert!
-    //dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << parentNode->at(rowCount - row);
+    dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << parentNode->at(rowCount - row);
     return createIndex(row, column, parentNode->at(rowCount - row).data());
 
 }
@@ -275,13 +276,13 @@ void KisNodeModel::endInsertNodes( KisNode *, int)
 
 void KisNodeModel::beginRemoveNodes( KisNode * parent, int index )
 {
-    //dbgUI <<"KisNodeModel::beginRemoveNodes parent=" << parent << ", index=" << index;
-    beginRemoveRows( indexFromNode( parent ), parent->childCount() - index, parent->childCount() - index );
+    dbgUI <<"KisNodeModel::beginRemoveNodes parent=" << parent << ", index=" << index;
+    beginRemoveRows( indexFromNode( parent ), parent->childCount() - 1 - index, parent->childCount() - 1 - index );
 }
 
 void KisNodeModel::endRemoveNodes( KisNode *, int )
 {
-    //dbgUI <<"KisNodeModel::endRemoveNodes";
+    dbgUI <<"KisNodeModel::endRemoveNodes";
     endRemoveRows();
 }
 

@@ -98,14 +98,16 @@ KoDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
     KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
     l << KoDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
 	if (compositeOp())
-    	l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->id());
+    	l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
     return l;
 }
 
 void KisLayer::setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties )
 {
-    setOpacity( properties.at( 2 ).state.toInt() );
-    setCompositeOp( const_cast<KoCompositeOp*>( image()->colorSpace()->compositeOp( properties.at( 3 ).state.toString() ) ) );
+    KisBaseNode::setSectionModelProperties(properties);
+    /// TODO no nope not at all, the state contains a use-visible string not the actual property
+//     setOpacity( properties.at( 2 ).state.toInt() );
+//     setCompositeOp( const_cast<KoCompositeOp*>( image()->colorSpace()->compositeOp( properties.at( 3 ).state.toString() ) ) );
 }
 
 KisPaintDeviceSP KisLayer::original() const

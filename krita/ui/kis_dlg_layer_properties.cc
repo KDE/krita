@@ -62,7 +62,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
 
     setObjectName(name);
     m_page = new WdgLayerProperties(this);
-    m_page->layout()->setMargin(0);
+//     m_page->layout()->setMargin(0);
 
     opacity = int((opacity * 100.0) / 255 + 0.5);
 

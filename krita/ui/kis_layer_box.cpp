@@ -327,7 +327,7 @@ void KisLayerBox::slotThumbnailView()
 bool allowAsChild( const QString & parentType, const QString & childType )
 {
     // XXX_NODE: do we want to allow masks to apply on masks etc? Selections on masks?
-    if ( parentType == "KisPaintLayer" || parentType == "KisGroupLayer" || parentType == "KisAdjustmentLayer" || parentType == "KisShapeLayer" ) {
+    if ( parentType == "KisPaintLayer" || parentType == "KisAdjustmentLayer" || parentType == "KisShapeLayer" ) {
         if (childType == "KisFilterMask" || childType == "KisTransformationMask" || childType == "KisTransparencyMask" || childType == "KisSelectionMask") {
             return true;
         }
@@ -347,10 +347,10 @@ bool allowAsChild( const QString & parentType, const QString & childType )
 void KisLayerBox::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above)
 {
     KisNodeSP root = m_image->root();
-    KisNodeSP active =  m_nodeManager->activeNode();
-
+    KisNodeSP active = m_nodeManager->activeNode();
     if (!active)
         active = root->firstChild();
+    
     // Find the first node above the current node that can have the desired
     // layer type as child. XXX_NODE: disable the menu entries for node types
     // that are not compatible with the active node type.

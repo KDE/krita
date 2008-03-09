@@ -49,7 +49,7 @@ void KisFilesTest::testFiles()
             QVERIFY2(resultFileInfo.exists(),
                      QString( "Result file %1 not found" ).arg(resultFileInfo.fileName()).toAscii().data() );
             KisDoc2 doc;
-            doc.import( sourceFileInfo.absoluteFilePath() );
+            doc.importDocument( sourceFileInfo.absoluteFilePath() );
             QVERIFY(doc.image());
             QString id = doc.image()->colorSpace()->id();
             if(id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16")

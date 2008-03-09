@@ -152,7 +152,7 @@ KoFilterManager::~KoFilterManager()
     delete d;
 }
 
-QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus& status )
+QString KoFilterManager::importDocument( const QString& url, KoFilter::ConversionStatus& status )
 {
     // Find the mime type for the file to be imported.
     KUrl u;
@@ -247,7 +247,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     return QString();
 }
 
-KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArray& mimeType )
+KoFilter::ConversionStatus KoFilterManager::exportDocument( const QString& url, QByteArray& mimeType )
 {
     bool userCancelled = false;
 

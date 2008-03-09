@@ -111,7 +111,7 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
 
     dbgPlugins << "Use as reference file : " << fileName;
     KisDoc2 d;
-    d.import(fileName);
+    d.importDocument(fileName);
     KisImageSP importedImage = d.image();
 
     if(importedImage)

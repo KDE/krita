@@ -86,7 +86,7 @@ int KoEmbeddingFilter::embedPart( const QByteArray& from, QByteArray& to,
     savePartContents( &tempIn );
 
     KoFilterManager *manager = new KoFilterManager( tempIn.fileName(), from, m_chain );
-    status = manager->exp0rt( QString(), to );
+    status = manager->exportDocument( QString(), to );
     delete manager;
 
     // Add the part to the current "stack frame", using the number as key

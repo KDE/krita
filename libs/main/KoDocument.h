@@ -169,7 +169,7 @@ public:
      *       Open operation (in any reimplementation of openUrl() or openFile())
      *       call isImporting().
      */
-    bool import( const KUrl &url );
+    bool importDocument( const KUrl &url );
 
     /**
      * Saves the document as @p url without changing the state of the
@@ -181,7 +181,7 @@ public:
      *       from an ordinary Save operation (in any reimplementation of
      *       saveFile()) call isExporting().
      */
-    bool exp0rt( const KUrl &url );
+    bool exportDocument( const KUrl &url );
 
     /**
      * @brief Sets whether the document can be edited or is read only.

@@ -684,7 +684,7 @@ bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
     newdoc->addShell( this ); // used by openUrl
-    bool openRet = (!isImporting ()) ? newdoc->openUrl(url) : newdoc->import(url);
+    bool openRet = (!isImporting ()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if(!openRet)
     {
         newdoc->removeShell(this);
@@ -1009,7 +1009,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
                 }
                 else    // Export
                 {
-                    ret = pDoc->exp0rt( newURL );
+                    ret = pDoc->exportDocument( newURL );
 
                     if (ret)
                     {
@@ -1099,7 +1099,7 @@ void KoMainWindow::saveWindowSettings()
         //kDebug(30003) <<"KoMainWindow::saveWindowSettings";
         saveWindowSize( config->group( "MainWindow" ) );
         d->m_windowSizeDirty = false;
-        
+
         // Save toolbar position into the config file of the app, under the doc's component name
         KConfigGroup group = KGlobal::config()->group( rootDocument()->componentData().componentName() );
         //kDebug(30003) <<"KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's componentData=" << rootDocument()->componentData().componentName();
@@ -1113,7 +1113,7 @@ void KoMainWindow::saveWindowSettings()
                 dockGroup.writeEntry( "Collapsed", i.value()->widget()->isHidden() );
             }
         }
-        
+
         KGlobal::config()->sync();
         resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
     }
@@ -1869,23 +1869,23 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent( this );
-        
+
         Qt::DockWidgetArea side = Qt::RightDockWidgetArea;
         bool visible = true;
-        
+
         switch(factory->defaultDockPosition()) {
             case KoDockFactory::DockTornOff:
                 dockWidget->setFloating(true); // position nicely?
                 break;
-            case KoDockFactory::DockTop: 
+            case KoDockFactory::DockTop:
                 side = Qt::TopDockWidgetArea; break;
-            case KoDockFactory::DockLeft: 
+            case KoDockFactory::DockLeft:
                 side = Qt::LeftDockWidgetArea; break;
-            case KoDockFactory::DockBottom: 
+            case KoDockFactory::DockBottom:
                 side = Qt::BottomDockWidgetArea; break;
-            case KoDockFactory::DockRight: 
+            case KoDockFactory::DockRight:
                 side = Qt::RightDockWidgetArea; break;
-            case KoDockFactory::DockMinimized: 
+            case KoDockFactory::DockMinimized:
                 visible = false; break;
             default:;
         }

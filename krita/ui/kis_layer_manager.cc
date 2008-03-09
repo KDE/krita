@@ -704,7 +704,7 @@ void KisLayerManager::mirrorLayerX()
 
     m_doc->setModified(true);
     layersUpdated();
-    
+
     m_view->canvas()->update();
 }
 
@@ -840,7 +840,7 @@ void KisLayerManager::mergeLayer()
 
     KisLayerSP layer = activeLayer();
     if (!layer) return;
-    
+
     const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog( m_view );
     if(!strategy) return;
 
@@ -895,7 +895,7 @@ void KisLayerManager::saveLayerAsImage()
     dst->addNode(l->clone(),dst->rootLayer(),KisLayerSP(0));
 
     d.setOutputMimeType(mimefilter.toLatin1());
-    d.exp0rt(url);
+    d.exportDocument(url);
 }
 
 bool KisLayerManager::activeLayerHasSelection()

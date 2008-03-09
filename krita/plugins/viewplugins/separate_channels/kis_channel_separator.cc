@@ -278,7 +278,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 dst->addNode(l->clone().data(), dst->rootLayer().data());
 
                 d.setOutputMimeType(mimefilter.toLatin1());
-                d.exp0rt(url);
+                d.exportDocument(url);
 
             }
 

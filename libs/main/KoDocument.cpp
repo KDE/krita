@@ -345,7 +345,7 @@ KoView *KoDocument::createView( QWidget *parent )
     return view;
 }
 
-bool KoDocument::exp0rt( const KUrl & _url )
+bool KoDocument::exportDocument( const KUrl & _url )
 {
     bool ret;
 
@@ -356,8 +356,8 @@ bool KoDocument::exp0rt( const KUrl & _url )
     // be able to fake a File --> Export.  Can't do this in saveFile() because,
     // for a start, KParts has already set m_url and m_file and because we need
     // to restore the modified flag etc. and don't want to put a load on anyone
-    // reimplementing saveFile() (Note: import() and export() will remain
-    // non-virtual).
+    // reimplementing saveFile() (Note: importDocument() and exportDocument()
+    // will remain non-virtual).
     //
     KUrl oldURL = url ();
     QString oldFile = localFilePath ();
@@ -440,7 +440,7 @@ bool KoDocument::saveFile()
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
 
-        KoFilter::ConversionStatus status = d->filterManager->exp0rt( localFilePath(), outputMimeType );
+        KoFilter::ConversionStatus status = d->filterManager->exportDocument( localFilePath(), outputMimeType );
         ret = status == KoFilter::OK;
         suppressErrorDialog = (status == KoFilter::UserCancelled || status == KoFilter::BadConversionGraph );
     } else {
@@ -1395,11 +1395,11 @@ bool KoDocument::checkAutoSaveFile()
     return false;
 }
 
-bool KoDocument::import( const KUrl & _url )
+bool KoDocument::importDocument( const KUrl & _url )
 {
     bool ret;
 
-    kDebug (30003) <<"KoDocument::import url=" << _url.url();
+    kDebug (30003) << "url=" << _url.url();
     d->m_isImporting = true;
 
     // open...
@@ -1409,7 +1409,7 @@ bool KoDocument::import( const KUrl & _url )
     // File --> Import
     if (ret)
     {
-        kDebug (30003) <<"KoDocument::import success, resetting url";
+        kDebug (30003) << "success, resetting url";
         resetURL ();
         setTitleModified ();
     }
@@ -1537,7 +1537,7 @@ bool KoDocument::openFile()
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
         KoFilter::ConversionStatus status;
-        importedFile = d->filterManager->import( localFilePath(), status );
+        importedFile = d->filterManager->importDocument( localFilePath(), status );
         if ( status != KoFilter::OK )
         {
             QApplication::restoreOverrideCursor();
@@ -2052,7 +2052,7 @@ bool KoDocument::addVersion( const QString& comment )
 
     KoXmlWriter* manifestWriter = odfStore.manifestWriter( mimeType );
     Q_UNUSED(manifestWriter); // XXX why?
-    
+
     KoEmbeddedDocumentSaver embeddedSaver;
     SavingContext documentContext( odfStore, embeddedSaver );
 

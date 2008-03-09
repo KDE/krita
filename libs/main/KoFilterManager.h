@@ -64,8 +64,8 @@ public:
     /**
      * Create a filter manager for a filter which wants to embed something.
      * The url it passes is the file to convert, obviously. You cannot use
-     * the @ref import() method -- use @ref exp0rt() to convert the file to
-     * the destination mimetype you prefer.
+     * the @ref importDocument() method -- use @ref exportDocument() to convert
+     * the file to the destination mimetype you prefer.
      *
      * @param url The file you want to export
      * @param mimetypeHint The mimetype of the file you want to export. You have
@@ -87,7 +87,7 @@ public:
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    QString import( const QString& url, KoFilter::ConversionStatus& status );
+    QString importDocument( const QString& url, KoFilter::ConversionStatus& status );
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.
      *
@@ -95,7 +95,7 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KoFilter::ConversionStatus exp0rt( const QString& url, QByteArray& mimeType );
+    KoFilter::ConversionStatus exportDocument( const QString& url, QByteArray& mimeType );
 
 
 

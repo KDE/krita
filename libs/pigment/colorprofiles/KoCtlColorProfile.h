@@ -20,8 +20,11 @@
 #ifndef _KO_CTL_COLOR_PROFILE_H_
 #define _KO_CTL_COLOR_PROFILE_H_
 
+#include <KoID.h>
 #include <KoColorProfile.h>
 #include <pigment_export.h>
+
+class QDomElement;
 
 class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
     public:
@@ -34,6 +37,12 @@ class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
         virtual bool isSuitableForDisplay() const;
         virtual bool operator==(const KoColorProfile&) const;
         virtual bool load();
+        KoID colorModel() const;
+        KoID colorDepth() const;
+    private:
+        void decodeTransformations(QDomElement&);
+        void decodeConversions(QDomElement&);
+        
     private:
         struct Private;
         Private* const d;

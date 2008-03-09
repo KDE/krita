@@ -124,10 +124,10 @@ void KoColorSpaceRegistry::init()
             profile = new KoCtlColorProfile(*it);
             profile->load();
             if (profile->valid()) {
-                kDebug(DBG_PIGMENT) << "Valid profile : " << profile->name();
+                kDebug(/*DBG_PIGMENT*/) << "Valid profile : " << profile->name();
                 d->profileMap[profile->name()] = profile;
             } else {
-                kDebug(DBG_PIGMENT) << "Invalid profile : " << profile->name();
+                kDebug(/*DBG_PIGMENT*/) << "Invalid profile : " << profile->name();
             }
         }
     }

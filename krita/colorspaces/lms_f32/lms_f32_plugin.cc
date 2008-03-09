@@ -27,7 +27,7 @@
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include "KoBasicHistogramProducers.h"
-
+#include <KoCtlColorProfile.h>
 
 #include "kis_lms_f32_colorspace.h"
 
@@ -42,10 +42,10 @@ LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     {
 
-        KoColorSpace * colorSpaceLMSF32  = new KisLmsAF32ColorSpace( 0);
 
         KoColorSpaceFactory * csf  = new KisLmsAF32ColorSpaceFactory();
         f->add(csf);
+        KoColorSpace * colorSpaceLMSF32  = new KisLmsAF32ColorSpace( static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) ) );
 
         KoHistogramProducerFactoryRegistry::instance()->add(
             new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>

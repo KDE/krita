@@ -24,8 +24,39 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCtlColorProfile.h>
 
+#include "compositeops/KoCompositeOpOver.h"
+#include "compositeops/KoCompositeOpErase.h"
+
 KisLmsAF32ColorSpace::KisLmsAF32ColorSpace( const KoCtlColorProfile *p) : KoCtlMonoTypeColorSpace<KisLmsAF32Traits>( "LMSAF32", i18n("LMS Cone Space (32-bit float/channel)"), KoColorSpaceRegistry::instance()->rgb16(), p)
 {
+    const int channelSize = sizeof(float);
+    const KoChannelInfo::enumChannelValueType channelValueType = KoColorSpaceMathsTraits<KisLmsAF32Traits::channels_type>::channelValueType;
+    this->addChannel(new KoChannelInfo(i18n("L"),
+                                    0 * channelSize,
+                                    KoChannelInfo::COLOR,
+                                    channelValueType,
+                                    channelSize,
+                                    QColor(255,0,0)));
+    this->addChannel(new KoChannelInfo(i18n("M"),
+                                    1 * channelSize,
+                                    KoChannelInfo::COLOR,
+                                    channelValueType,
+                                    channelSize,
+                                    QColor(0,255,0)));
+    this->addChannel(new KoChannelInfo(i18n("S"),
+                                    2 * channelSize,
+                                    KoChannelInfo::COLOR,
+                                    channelValueType,
+                                    channelSize,
+                                    QColor(0,0,255)));
+    this->addChannel(new KoChannelInfo(i18n("Alpha"),
+                                    3 * channelSize,
+                                    KoChannelInfo::ALPHA,
+                                    channelValueType,
+                                    channelSize));
+
+    addCompositeOp( new KoCompositeOpOver<KisLmsAF32Traits>( this ) );
+    addCompositeOp( new KoCompositeOpErase<KisLmsAF32Traits>( this ) );
 }
 
 KisLmsAF32ColorSpace::~KisLmsAF32ColorSpace()
@@ -89,12 +120,17 @@ KoID KisLmsAF32ColorSpaceFactory::colorDepthId() const
 
 QString KisLmsAF32ColorSpaceFactory::defaultProfile()
 {
-    return "";
+    return "Standard LMS";
 }
 
 bool KisLmsAF32ColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
 {
-    return ( dynamic_cast<const KoCtlColorProfile*>(profile) );
+    const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
+    if(ctlp && ctlp->colorModel().id() == "LMSA" && ctlp->colorDepth().id() == "F32")
+    {
+        return true;
+    }
+    return false;
 }
 
 bool KisLmsAF32ColorSpaceFactory::isIcc() const

@@ -12,6 +12,8 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
 
+add_definitions("-Dand=\\&\\& -Dor=\\|\\| -Dnot=\\!")
+
 message(STATUS ${OPENCTL_FOUND})
 
 if(OPENCTL_FOUND)

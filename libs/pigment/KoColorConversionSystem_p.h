@@ -21,7 +21,7 @@ struct KoColorConversionSystem::Node {
     Node() : isIcc(false), isHdr(false), isInitialized(false), referenceDepth(0), isGray(false), canBeCrossed(true), colorSpaceFactory(0) {}
     void init( const KoColorSpaceFactory* _colorSpaceFactory)
     {
-        Q_ASSERT(!isInitialized);
+        Q_ASSERT(not isInitialized);
         isInitialized = true;
         
         if(_colorSpaceFactory)
@@ -66,7 +66,7 @@ struct KoColorConversionSystem::Vertex {
     void setFactoryFromDst(KoColorConversionTransformationFactory* factory)
     {
         factoryFromDst = factory;
-        if( !factoryFromSrc) initParameter(factoryFromDst);
+        if( not factoryFromSrc) initParameter(factoryFromDst);
     }
     void initParameter(KoColorConversionTransformationFactory* transfo)
     {
@@ -122,8 +122,8 @@ struct KoColorConversionSystem::Path {
             referenceDepth = v->srcNode->referenceDepth;
         }
         vertexes.append(v);
-        if(!v->conserveColorInformation) respectColorCorrectness = false;
-        if(!v->conserveDynamicRange) keepDynamicRange = false;
+        if(not v->conserveColorInformation) respectColorCorrectness = false;
+        if(not v->conserveDynamicRange) keepDynamicRange = false;
         referenceDepth = qMin( referenceDepth, v->dstNode->referenceDepth);
     }
     int length() const {
@@ -165,11 +165,11 @@ struct KoColorConversionSystem::Private {
 };
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \
-    if(path1-> name && !path2-> name) \
+    if(path1-> name && not path2-> name) \
     { \
         return true; \
     } \
-    if(!path1-> name && path2-> name) \
+    if(not path1-> name && path2-> name) \
     { \
         return false; \
     }
@@ -191,11 +191,11 @@ struct PathQualityChecker {
          // There is no point in comparing two pathes which doesn't start from the same node or doesn't end at the same node
         Q_ASSERT(path1->startNode() == path2->startNode());
         Q_ASSERT(path1->endNode() == path2->endNode());
-        if(!ignoreHdr)
+        if(not ignoreHdr)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)
         }
-        if(!ignoreColorCorrectness)
+        if(not ignoreColorCorrectness)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
         }

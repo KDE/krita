@@ -1,5 +1,5 @@
 <ctlprofile>
-    <info colorSpace="LMSA" depth="32" type="float" name="Standard LMS" />
+    <info colorModel="LMSA" depth="32" type="float" name="Standard LMS" />
     <program>
 <![CDATA[
 
@@ -26,12 +26,12 @@ void LMSAf32_to_RGBAf32(float lIn, float mIn, float sIn, float aIn, output float
     <transformations>
         <conversions>
             <conversion function="LMSAf32_to_RGBAf32">
-                <input colorSpace="RGBA" depth="32" type="float" />
-                <output colorSpace="LMSA" depth="32" type="float" />
+                <input colorModel="RGBA" depth="32" type="float" />
+                <output colorModel="LMSA" depth="32" type="float" />
             </conversion>
             <conversion function="LMSAf32_to_RGBAf32">
-                <input colorSpace="LMSA" depth="32" type="float" />
-                <output colorSpace="RGBA" depth="32" type="float" />
+                <input colorModel="LMSA" depth="32" type="float" />
+                <output colorModel="RGBA" depth="32" type="float" />
             </conversion>
         </conversions>
     </transformations>

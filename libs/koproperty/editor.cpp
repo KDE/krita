@@ -715,7 +715,9 @@ Editor::updateEditorGeometry(EditorItem *item, Widget* widget,
 
 	moveChild(widget, r.x(), r.y());
 	widget->resize(r.size());
-	qApp->processEvents(QEventLoop::AllEvents);
+	
+	//sebsauer,2008-03-09; this asserts in Qt4.4 with ASSERT: "sharedPainter ? sharedPainter->isActive() : true" in file kernel/qwidget.cpp, line 4350
+	//qApp->processEvents(QEventLoop::AllEvents);
 }
 
 void

@@ -31,6 +31,7 @@
 */
 class KRITAIMAGE_EXPORT KisSelectionMask : public KisMask
 {
+    Q_OBJECT
 public:
 
     /**

@@ -367,9 +367,22 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
         else
             start recomposition from the bottom
      */
+    KisNodeSP startWith = m_d->node->firstChild();
+    if (m_d->filthyNode) {
+        KisNodeSP node = m_d->node->firstChild();
+        while (node) {
+            if (node == m_d->filthyNode)
+                break;
+            if (node->inherits("KisAdjustmentLayer")) {
+                startWith = node;
+            }
+            node = node->nextSibling();
+        }
+    }
+     
     KisMergeVisitor visitor(projection, rc);
 
-    KisNodeSP child = m_d->node->firstChild();
+    KisNodeSP child = startWith;
 
     while( child )
     {

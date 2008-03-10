@@ -22,7 +22,6 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_base_node.h"
-#include "kis_merge_visitor.h"
 #include <KoProperties.h>
 
 class TestNode : public KisBaseNode

@@ -264,7 +264,8 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 void KisNodeModel::beginInsertNodes( KisNode * parent, int index )
 {
-    dbgUI <<"KisNodeModel::beginInsertNodes parent=" << parent << ", index=" << index;
+    dbgUI <<"KisNodeModel::beginInsertNodes parent=" << parent << ", childcount: " << parent->childCount() << ", index=" << index;
+    
     beginInsertRows( indexFromNode( parent ), parent->childCount() - index, parent->childCount() - index );
 }
 

@@ -25,18 +25,21 @@
 #include <QImage>
 #include <QDateTime>
 
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 #include <KoColorSpace.h>
 
 #include "kis_types.h"
 #include "kis_layer.h"
-
 #include "kis_node_visitor.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
-#include "kis_merge_visitor.h"
 #include "kis_fill_painter.h"
 #include "kis_projection.h"
+#include "kis_paint_layer.h"
+#include "kis_projection_update_strategy.h"
 
 class KisGroupLayer::Private
 {

@@ -50,7 +50,8 @@ public:
      * @param filthyNode the node that set dirty
      */
     virtual void setDirty( const QRect & rc, const KisNodeSP filthyNode ) = 0;
-
+    
+    
     /**
      * If a KisImage is set on the update strategy, the image will
      * be notified if the update is done.

@@ -301,7 +301,8 @@ void KisTopDownUpdateStrategy::setDirty( const QRect & rc )
                 if the projection update is done, set the parent dirty
                     until the root is done
     */ 
-    static_cast<KisTopDownUpdateStrategy*>(m_d->node->parent()->updateStrategy())->setFilthyNode(m_d->node);
+    if (m_d->node && m_d->node->parent())
+        static_cast<KisTopDownUpdateStrategy*>(m_d->node->parent()->updateStrategy())->setFilthyNode(m_d->node);
     
     if (KisLayer* layer = dynamic_cast<KisLayer*>(m_d->node.data())) {
         layer->updateProjection( rc );

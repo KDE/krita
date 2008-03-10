@@ -371,10 +371,8 @@ KisBottomUpUpdateStrategy::~KisBottomUpUpdateStrategy()
     delete m_d;
 }
 
-void KisBottomUpUpdateStrategy::setDirty(const QRect & rc, const KisNodeSP filthyNode )
+void KisBottomUpUpdateStrategy::setDirty(const QRect & rc )
 {
-    Q_UNUSED( filthyNode );
-    
     // If we're dirty, our parent is dirty, if we've got a parent
     if ( m_d->node->parent() ) {
         m_d->node->parent()->setDirty(rc);

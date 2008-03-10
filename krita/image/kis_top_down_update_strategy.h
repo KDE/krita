@@ -37,7 +37,7 @@ public:
 
     ~KisTopDownUpdateStrategy();
     
-    void setDirty( const QRect & rc, const KisNodeSP filthyNode );
+    void setDirty( const QRect & rc );
  
     void setImage(KisImageSP image);
      
@@ -48,6 +48,7 @@ public:
 protected:
     
     KisPaintDeviceSP updateGroupLayerProjection( const QRect & rc, KisPaintDeviceSP projection );
+    void setFilthyNode( const KisNodeSP node );
 
 private:
 

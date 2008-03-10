@@ -291,7 +291,7 @@ KisTopDownUpdateStrategy::~KisTopDownUpdateStrategy()
 }
 
 
-void KisTopDownUpdateStrategy::setDirty( const QRect & rc, const KisNodeSP filthyNode )
+void KisTopDownUpdateStrategy::setDirty( const QRect & rc )
 {
    /*
         if the filthyNode is the node
@@ -301,9 +301,8 @@ void KisTopDownUpdateStrategy::setDirty( const QRect & rc, const KisNodeSP filth
                 if the projection update is done, set the parent dirty
                     until the root is done
     */ 
-    if (m_d->node->inherits("KisGroupLayer")) {
-        m_d->filthyNode = filthyNode;
-    }
+    static_cast<KisTopDownUpdateStrategy*>(m_d->node->parent()->updateStrategy())->setFilthyNode(m_d->node);
+    
     if (KisLayer* layer = dynamic_cast<KisLayer*>(m_d->node.data())) {
         layer->updateProjection( rc );
     }
@@ -381,4 +380,9 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
      
     m_d->filthyNode = 0;
     return projection;
+}
+
+void KisTopDownUpdateStrategy::setFilthyNode( const KisNodeSP node )
+{
+    m_d->filthyNode = node;
 }

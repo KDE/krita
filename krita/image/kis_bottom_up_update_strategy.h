@@ -47,7 +47,7 @@ public:
 
 public:
 
-    void setDirty( const QRect & rc, const KisNodeSP filthyNode );
+    void setDirty( const QRect & rc );
 
     virtual void setImage(KisImageSP image);
     

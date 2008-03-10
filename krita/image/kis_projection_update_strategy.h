@@ -49,7 +49,7 @@ public:
      * @param rc the dirty rect
      * @param filthyNode the node that set dirty
      */
-    virtual void setDirty( const QRect & rc, const KisNodeSP filthyNode ) = 0;
+    virtual void setDirty( const QRect & rc ) = 0;
     
     
     /**

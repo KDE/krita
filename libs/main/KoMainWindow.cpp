@@ -1563,10 +1563,10 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 {
     //TODO optional hide toolbars, statusbar, dockers, etc. Probably introduce own 'view modes' with there own kconfig-settings
     if(fullScreen) {
-        showFullScreen();
+        setWindowState( windowState() | Qt::WindowFullScreen ); // set
     }
     else {
-        showNormal();
+        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
     }
 }
 

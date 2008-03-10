@@ -51,7 +51,7 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 
-
+namespace {
 /**
  * The class merge visitor works using a bottom-up recomposition strategy.
  */
@@ -329,7 +329,7 @@ private:
     KisPaintDeviceSP m_projection;
     QRect m_rc;
 };
-
+}
 
 
 class KisBottomUpUpdateStrategy::Private

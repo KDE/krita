@@ -39,14 +39,13 @@
 #include "kis_iterators_pixel.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_information.h"
-#include "kis_bottom_up_update_strategy.h"
 #include "kis_node.h"
 #include "kis_image.h"
 #include "kis_projection.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 
-
+namespace {
 /**
  * The class merge visitor works using a bottom-up recomposition strategy. It does
  * not need to update the projection of the nodes, because this strategy updates
@@ -265,7 +264,7 @@ private:
     KisPaintDeviceSP m_projection;
     QRect m_rc;
 };
-
+}
 class KisTopDownUpdateStrategy::Private
 {
 public:
@@ -368,7 +367,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
         else
             start recomposition from the bottom
      */
-
+    kDebug() << m_d->node;
     KisMergeVisitor visitor(projection, rc);
 
     KisNodeSP child = m_d->node->firstChild();

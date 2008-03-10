@@ -52,7 +52,7 @@ KisNode::KisNode()
     m_d->graphListener = 0;
     
     KConfigGroup cfg = KGlobal::config()->group("");
-    QString updateStrategy = cfg.readEntry("update_strategy", "BottomUp");
+    QString updateStrategy = cfg.readEntry("update_strategy", "TopDown");
     if (updateStrategy == "BottomUp") {
         m_d->updateStrategy = new KisBottomUpUpdateStrategy( this );
     }

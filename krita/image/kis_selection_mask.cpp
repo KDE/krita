@@ -36,6 +36,7 @@ KisSelectionMask::KisSelectionMask( KisImageWSP image )
     : KisMask( "selection" )
     , m_d( new Private() )
 {
+    m_d->selection = new KisSelection();
     m_d->image = image;
 }
 

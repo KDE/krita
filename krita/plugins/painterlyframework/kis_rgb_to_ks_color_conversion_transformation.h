@@ -27,8 +27,6 @@
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
 
-#include <gsl/gsl_vector.h>
-
 template< typename _TYPE_, int _N_ >
 class KisRGBToKSColorConversionTransformation : public KoColorConversionTransformation {
 
@@ -41,14 +39,14 @@ public:
     {
         m_srcProfile = dynamic_cast<const KoHdrColorProfile*>(srcColorSpace()->profile());
         m_dstProfile = static_cast<const KisIlluminantProfile*>(parent::dstColorSpace()->profile());
-        m_rgbvec = gsl_vector_calloc(  3  );
-        m_ksvec  = gsl_vector_calloc(2*_N_);
+        m_rgbvec = new double[3];
+        m_ksvec  = new double[2*_N_];
     }
 
     ~KisRGBToKSColorConversionTransformation()
     {
-        gsl_vector_free(m_rgbvec);
-        gsl_vector_free(m_ksvec);
+        delete [] m_rgbvec;
+        delete [] m_ksvec;
     }
 
     void transform(const quint8 *src8, quint8 *dst, int nPixels) const
@@ -62,15 +60,15 @@ public:
         const int pixelSize = CSTrait::pixelSize;
 
         for ( ; nPixels > 0; nPixels-- ) {
-            gsl_vector_set(m_rgbvec, 0, m_srcProfile->channelToDisplayDouble((double)src[2]));
-            gsl_vector_set(m_rgbvec, 1, m_srcProfile->channelToDisplayDouble((double)src[1]));
-            gsl_vector_set(m_rgbvec, 2, m_srcProfile->channelToDisplayDouble((double)src[0]));
+            m_rgbvec[0] = m_srcProfile->channelToDisplayDouble((double)src[2]);
+            m_rgbvec[1] = m_srcProfile->channelToDisplayDouble((double)src[1]);
+            m_rgbvec[2] = m_srcProfile->channelToDisplayDouble((double)src[0]);
 
             m_dstProfile->fromRgb(m_rgbvec, m_ksvec);
 
             for (int i = 0; i < _N_; i++) {
-                CSTrait::K(dst,i) = (_TYPE_)gsl_vector_get(m_ksvec,2*i+0);
-                CSTrait::S(dst,i) = (_TYPE_)gsl_vector_get(m_ksvec,2*i+1);
+                CSTrait::K(dst,i) = (_TYPE_)m_ksvec[2*i+0];
+                CSTrait::S(dst,i) = (_TYPE_)m_ksvec[2*i+1];
             }
             CSTrait::nativealpha(dst) = (_TYPE_)src[3];
 
@@ -80,8 +78,8 @@ public:
     }
 
 protected:
-    gsl_vector *m_rgbvec;
-    gsl_vector *m_ksvec;
+    double *m_rgbvec;
+    double *m_ksvec;
 
     const KoHdrColorProfile *m_srcProfile;
     const KisIlluminantProfile *m_dstProfile;

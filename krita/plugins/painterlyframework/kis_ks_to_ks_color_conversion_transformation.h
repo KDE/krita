@@ -20,17 +20,11 @@
 #ifndef KIS_KS_TO_KS_COLOR_CONVERSION_TRANSFORMATION_H_
 #define KIS_KS_TO_KS_COLOR_CONVERSION_TRANSFORMATION_H_
 
-#include "channel_converter.h"
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
-
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_cblas.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
 
 template< typename src_TYPE_, typename dst_TYPE_, int _N_ >
 class KisKSToKSColorConversionTransformation : public KoColorConversionTransformation {

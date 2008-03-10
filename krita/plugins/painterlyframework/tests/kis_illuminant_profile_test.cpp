@@ -22,7 +22,6 @@
 
 
 #include "kis_illuminant_profile.h"
-#include "kis_illuminant_profile_qp.h"
 
 #include <KGlobal>
 #include <KLocale>
@@ -30,39 +29,6 @@
 
 #include <QString>
 #include <QStringList>
-
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
-
-#include <iostream>
-using namespace std;
-
-void gsl_print(const gsl_matrix *M, const char *name)
-{
-    cout << name << endl;
-    for (uint i = 0; i < M->size1; i++) {
-        cout << "\t";
-        for (uint j = 0; j < M->size2; j++) {
-            if (gsl_matrix_get(M, i, j) >= 0)
-                cout << " ";
-            cout << gsl_matrix_get(M, i, j) << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
-void gsl_print(const gsl_vector *V, const char *name)
-{
-    cout << name << endl;
-    cout << "\t";
-    for (uint i = 0; i < V->size; i++) {
-        if (gsl_vector_get(V, i) >= 0)
-            cout << " ";
-        cout << gsl_vector_get(V, i) << " ";
-    }
-    cout << endl;
-}
 
 void KisIlluminantProfileTest::initTestCase()
 {
@@ -72,50 +38,50 @@ void KisIlluminantProfileTest::initTestCase()
 
 void KisIlluminantProfileTest::testLoading()
 {
-    QString d6 = list.filter("6_high")[0];
-    QString d9 = list.filter("9_high")[0];
+    QString d1 = list.filter("D65_4")[0];
+    QString d2 = list.filter("D65_5")[0];
 
-    KisIlluminantProfile *p1 = new KisIlluminantProfileQP;
+    KisIlluminantProfile *p1 = new KisIlluminantProfile;
     QVERIFY(p1->valid() == false);
-    p1->setFileName(d9);
+    p1->setFileName(d1);
     QVERIFY(p1->valid() == false);
     p1->load();
     QVERIFY(p1->valid() == true);
-    QVERIFY(p1->wavelengths() == 9);
+    QVERIFY(p1->wavelengths() == 4);
 
     KisIlluminantProfile *p2 = dynamic_cast<KisIlluminantProfile*>(p1->clone());
     delete p1;
     QVERIFY(p2->valid() == true);
-    QVERIFY(p2->wavelengths() == 9);
+    QVERIFY(p2->wavelengths() == 4);
 
-    p2->setFileName(d6);
+    p2->setFileName(d2);
     p2->load();
     QVERIFY(p2->valid() == true);
-    QVERIFY(p2->wavelengths() == 6);
+    QVERIFY(p2->wavelengths() == 5);
 
     delete p2;
 
-    p1 = new KisIlluminantProfileQP(d6);
+    p1 = new KisIlluminantProfile(d1);
     p1->load();
     QVERIFY(p1->valid() == true);
-    QVERIFY(p1->wavelengths() == 6);
+    QVERIFY(p1->wavelengths() == 4);
 
     delete p1;
 }
 
 void KisIlluminantProfileTest::testSaving()
 {
-    QString d9 = list.filter("9_low")[0];
+    QString d = list.filter("D65_5")[0];
 
-    KisIlluminantProfile *p = new KisIlluminantProfileQP(d9);
+    KisIlluminantProfile *p = new KisIlluminantProfile(d);
     p->load();
-    p->save("D659Save.ill");
+    p->save("IlluminantSave.ill");
     delete p;
 
-    p = new KisIlluminantProfileQP("D659Save.ill");
+    p = new KisIlluminantProfile("IlluminantSave.ill");
     p->load();
     QVERIFY(p->valid() == true);
-    QVERIFY(p->wavelengths() == 9);
+    QVERIFY(p->wavelengths() == 5);
 
     delete p;
 }

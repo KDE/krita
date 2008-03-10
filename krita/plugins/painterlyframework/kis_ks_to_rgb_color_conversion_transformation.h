@@ -20,18 +20,12 @@
 #ifndef KIS_KS_TO_RGB_COLOR_CONVERSION_TRANSFORMATION_H_
 #define KIS_KS_TO_RGB_COLOR_CONVERSION_TRANSFORMATION_H_
 
-#include "channel_converter.h"
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
 #include <KoHdrColorProfile.h>
-
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_cblas.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
 
 template< typename _TYPE_, int _N_ >
 class KisKSToRGBColorConversionTransformation : public KoColorConversionTransformation {
@@ -46,14 +40,14 @@ public:
     {
         m_srcProfile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
         m_dstProfile = dynamic_cast<const KoHdrColorProfile*>(dstColorSpace()->profile());
-        m_rgbvec = gsl_vector_calloc(  3  );
-        m_ksvec  = gsl_vector_calloc(2*_N_);
+        m_rgbvec = new double[3];
+        m_ksvec  = new double[2*_N_];
     }
 
     ~KisKSToRGBColorConversionTransformation()
     {
-        gsl_vector_free(m_rgbvec);
-        gsl_vector_free(m_ksvec);
+        delete [] m_rgbvec;
+        delete [] m_ksvec;
     }
 
     void transform(const quint8 *src, quint8 *dst8, int nPixels) const
@@ -63,15 +57,15 @@ public:
         for ( ; nPixels > 0; nPixels-- ) {
 
             for (int i = 0; i < _N_; i++) {
-                gsl_vector_set(m_ksvec, 2*i+0, (double)CSTrait::K(src,i));
-                gsl_vector_set(m_ksvec, 2*i+1, (double)CSTrait::S(src,i));
+                m_ksvec[2*i+0] = (double)CSTrait::K(src,i);
+                m_ksvec[2*i+1] = (double)CSTrait::S(src,i);
             }
 
             m_srcProfile->toRgb(m_ksvec, m_rgbvec);
 
-            dst[0] = (float)m_dstProfile->displayToChannelDouble(gsl_vector_get(m_rgbvec, 2));
-            dst[1] = (float)m_dstProfile->displayToChannelDouble(gsl_vector_get(m_rgbvec, 1));
-            dst[2] = (float)m_dstProfile->displayToChannelDouble(gsl_vector_get(m_rgbvec, 0));
+            dst[0] = (float)m_dstProfile->displayToChannelDouble(m_rgbvec[2]);
+            dst[1] = (float)m_dstProfile->displayToChannelDouble(m_rgbvec[1]);
+            dst[2] = (float)m_dstProfile->displayToChannelDouble(m_rgbvec[0]);
             dst[3] = (float)CSTrait::nativealpha(src);
 
             src += CSTrait::pixelSize;
@@ -82,8 +76,8 @@ public:
     }
 
 private:
-    gsl_vector *m_rgbvec;
-    gsl_vector *m_ksvec;
+    double *m_rgbvec;
+    double *m_ksvec;
 
     const KisIlluminantProfile *m_srcProfile;
     const KoHdrColorProfile *m_dstProfile;

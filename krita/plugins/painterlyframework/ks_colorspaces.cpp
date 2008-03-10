@@ -19,10 +19,7 @@
 
 #include "ks_colorspaces.h"
 
-
 #include "kis_illuminant_profile.h"
-#include "kis_illuminant_profile_qp.h"
-#include "kis_illuminant_profile_lc.h"
 
 #include "kis_ks_colorspace.h"
 #include "kis_ksf32_colorspace.h"
@@ -54,28 +51,23 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
 
     KisIlluminantProfile *p;
     foreach(QString curr, list) {
-        p = new KisIlluminantProfileQP(curr);
-        p->load();
-        f->addProfile(p);
-    }
-    foreach(QString curr, list) {
-        p = new KisIlluminantProfileLC(curr);
+        p = new KisIlluminantProfile(curr);
         p->load();
         f->addProfile(p);
     }
 
-    f->add(new KisKSF32ColorSpaceFactory<6>);
+    f->add(new KisKSF32ColorSpaceFactory<5>);
     f->add(new KisKSF32ColorSpaceFactory<9>);
 #ifdef HAVE_OPENEXR
-    f->add(new KisKSF16ColorSpaceFactory<6>);
+    f->add(new KisKSF16ColorSpaceFactory<5>);
     f->add(new KisKSF16ColorSpaceFactory<9>);
 #endif
-
+/*
     QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),0));
     css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),0));
 #ifdef HAVE_OPENEXR
-    css.append(f->colorSpace(KisKSF16ColorSpace<6>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF16ColorSpace<5>::ColorSpaceId().id(),0));
     css.append(f->colorSpace(KisKSF16ColorSpace<9>::ColorSpaceId().id(),0));
 #endif
 
@@ -86,6 +78,7 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
             new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
             (KoID(cs->id()+"HISTO", i18n("%1 Histogram", cs->name())), cs->clone()));
     }
+*/
 }
 
 KSColorSpacesPlugin::~KSColorSpacesPlugin()

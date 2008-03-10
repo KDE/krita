@@ -209,7 +209,7 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
         virtual QString name() const { return KisKSColorSpace<_TYPE_,_N_>::ColorSpaceId().name(); }
         virtual KoID colorModelId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorModelId(); }
         virtual KoID colorDepthId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorDepthId(); }
-        virtual bool userVisible() const { return _N_>=9; }
+        virtual bool userVisible() const { return _N_>=5; }
 
         virtual int referenceDepth() const { return sizeof(_TYPE_)*8; }
         virtual bool isIcc() const { return false; }
@@ -233,7 +233,7 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
 
         virtual QString defaultProfile() const
         {
-            return QString("D-65 Illuminant Profile - %1 wavelengths - Black [11.0,0.35] - LC").arg(_N_);
+            return QString("");
         }
 };
 

@@ -19,22 +19,68 @@
 
 #include "kis_illuminant_profile.h"
 
-
 #include <KoColorProfile.h>
 
 #include <QDataStream>
 #include <QFile>
 #include <QString>
+#include <QDebug>
 
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_cblas.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
+#include <cmath>
 
-KisIlluminantProfile::KisIlluminantProfile(const QString &fileName, const QString &algorithm)
-    : KoColorProfile(fileName), m_T(0), m_P(0), m_rgbvec(0), m_refvec(0), m_ksvec(0), m_converter(0),
-      m_illuminant(""), m_algorithm(algorithm), m_valid(false)
+double **allocateMatrix(int m, int n)
+{
+    double **matrix;
+    matrix = new double*[m];
+    for (int i = 0; i < m; i++)
+        matrix[i] = new double[n];
+    return matrix;
+}
+
+double *allocateVector(int n)
+{
+    return new double[n];
+}
+
+void freeMatrix(int m,double **matrix)
+{
+    for (int i = 0; i < m; i++)
+        delete [] matrix[i];
+    delete [] matrix;
+}
+
+void freeVector(double *vector)
+{
+    delete [] vector;
+}
+
+void applyMatrix(int m,int n, double **T,double *b, double *d)
+{
+    for (int i = 0; i < m; i++) {
+        d[i] = 0;
+        for (int j = 0; j < n; j++)
+            d[i] += T[i][j] * b[j];
+    }
+}
+
+double polyval(int n, const double *P, double x)
+{
+    double y = 0;
+    for (int i = 0; i < n; i++)
+        y += P[i]*pow(x,i);
+    return y;
+}
+
+void correct(double &d)
+{
+    if (fabs(d) < 1e-10)
+        d = 0;
+}
+
+KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
+    : KoColorProfile(fileName),
+      m_wl(-1), m_T(0), m_L(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
+      m_illuminant(""), m_valid(false)
 {
 
 }
@@ -48,8 +94,6 @@ bool KisIlluminantProfile::load()
 {
     reset();
 
-    m_valid = false;
-
     if (fileName().isEmpty())
         return false;
 
@@ -60,52 +104,61 @@ bool KisIlluminantProfile::load()
     QDataStream data(&file);
 
     {
-        // Illuminant name
-        data >> m_illuminant;
-    }
-    {
-        // T matrix
-        int m, n;
-        double c;
-        data >> m >> n;
-        m_T = gsl_matrix_alloc(m, n);
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                data >> c;
-                gsl_matrix_set(m_T, i, j, c);
-            }
+        qint8 letter;
+        while (true) {
+            data >> letter;
+            if (!letter)
+                break;
+            m_illuminant += (char)letter;
         }
     }
     {
-        // P vector
-        int l;
-        int c;
-        data >> l;
-        if ((size_t)l != m_T->size2) {
-            gsl_matrix_free(m_T); m_T = 0;
-            return false;
+        qint8 tmp;
+        data >> tmp;
+        m_wl = (int) tmp;
+        data >> tmp >> tmp >> tmp;
+        m_T = allocateMatrix(3,m_wl);
+        for (int i = 0; i < m_wl; i++)
+            for (int j = 0; j < 3; j++)
+                data.readRawData((char*)&m_T[j][i],8);
+    }
+    {
+        m_L = allocateMatrix(1,m_wl);
+        for (int i = 0; i < m_wl; i++)
+            data.readRawData((char*)&m_L[0][i],8);
+    }
+    {
+        m_red   = allocateVector(m_wl);
+        m_green = allocateVector(m_wl);
+        m_blue  = allocateVector(m_wl);
+        for (int i = 0; i < m_wl; i++) {
+            data.readRawData((char*)&m_red[i],8); correct(m_red[i]);
         }
-        m_P = gsl_vector_alloc(l);
-        for (int i = 0; i < l; i++) {
-            data >> c;
-            gsl_vector_set(m_P, i, c);
+        for (int i = 0; i < m_wl; i++) {
+            data.readRawData((char*)&m_green[i],8); correct(m_green[i]);
+        }
+        for (int i = 0; i < m_wl; i++) {
+            data.readRawData((char*)&m_blue[i],8); correct(m_blue[i]);
         }
     }
     {
-        // Absorption and scattering of standard black
-        double c;
-        data >> c;
-        Kb = c;
-        data >> c;
-        Sb = c;
+        data.readRawData((char*)&S1,8); correct(S1);
+        data.readRawData((char*)&K1,8); correct(K1);
+        data.readRawData((char*)&R1,8); correct(R1);
+        data.readRawData((char*)&T1[2],8); correct(T1[2]);
+        data.readRawData((char*)&T1[1],8); correct(T1[1]);
+        data.readRawData((char*)&T1[0],8); correct(T1[0]);
+        data.readRawData((char*)&S2,8); correct(S2);
+        data.readRawData((char*)&K2,8); correct(K2);
+        data.readRawData((char*)&R2,8); correct(R2);
+        data.readRawData((char*)&T2[1],8); correct(T2[1]);
+        data.readRawData((char*)&T2[0],8); correct(T2[0]);
+        data.readRawData((char*)&Lh,8); correct(Lh);
     }
 
     // Initialize the reflectance vector and channel converter
-    m_refvec = gsl_vector_calloc(m_P->size);
-    m_converter = new ChannelConverter<double>(Kb, Sb);
-
-    setName(QString("%1 - %2").arg(m_illuminant).arg(m_algorithm));
-
+    m_refvec = allocateVector(m_wl);
+    setName(QString("%1").arg(m_illuminant));
     m_valid = true;
 
     return true;
@@ -119,85 +172,165 @@ bool KisIlluminantProfile::save(const QString &fileName)
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly))
         return false;
+    
     QDataStream data(&file);
 
-    data << m_illuminant;
-    data << (int)m_T->size1 << (int)m_T->size2;
-    for (int i = 0; i < (int)m_T->size1; i++)
-        for (int j = 0; j < (int)m_T->size2; j++)
-            data << gsl_matrix_get(m_T, i, j);
+    for (int i = 0; i < m_illuminant.size(); i++)
+        data << (qint8)m_illuminant[i].toAscii();
+    data << (qint8)0;
+    
+    data << (qint8)m_wl << (qint8)m_wl << (qint8)m_wl << (qint8)m_wl;
+    for (int i = 0; i < m_wl; i++)
+        for (int j = 0; j < 3; j++)
+            data.writeRawData((char*)&m_T[j][i],8);
 
-    data << (int)m_P->size;
-    for (int i = 0; i < (int)m_P->size; i++)
-        data << (int)gsl_vector_get(m_P, i);
+    for (int i = 0; i < m_wl; i++)
+        data.writeRawData((char*)&m_L[0][i],8);
+    
+    for (int i = 0; i < m_wl; i++)
+        data.writeRawData((char*)&m_red[i],8);
+    for (int i = 0; i < m_wl; i++)
+        data.writeRawData((char*)&m_green[i],8);
+    for (int i = 0; i < m_wl; i++)
+        data.writeRawData((char*)&m_blue[i],8);
 
-    data << Kb << Sb;
+    data.writeRawData((char*)&S1,8);
+    data.writeRawData((char*)&K1,8);
+    data.writeRawData((char*)&R1,8);
+    data.writeRawData((char*)&T1[2],8);
+    data.writeRawData((char*)&T1[1],8);
+    data.writeRawData((char*)&T1[0],8);
+    data.writeRawData((char*)&S2,8);
+    data.writeRawData((char*)&K2,8);
+    data.writeRawData((char*)&R2,8);
+    data.writeRawData((char*)&T2[1],8);
+    data.writeRawData((char*)&T2[0],8);
+    data.writeRawData((char*)&Lh,8);
 
     return true;
 }
 
-void KisIlluminantProfile::fromRgb(gsl_vector *rgbvec, gsl_vector *ksvec) const
+void KisIlluminantProfile::fromRgb(const double *rgbvec, double *ksvec) const
 {
     // TODO: add cache!
-    m_rgbvec = rgbvec;
-    m_ksvec = ksvec;
 
-    rgbToReflectance();
-    reflectanceToKS();
+    rgbToReflectance(rgbvec);
+    reflectanceToKS(ksvec);
 }
 
-void KisIlluminantProfile::toRgb(gsl_vector *ksvec, gsl_vector *rgbvec) const
+void KisIlluminantProfile::toRgb(const double *ksvec, double *rgbvec) const
 {
-    m_ksvec = ksvec;
-    m_rgbvec = rgbvec;
-
-    KSToReflectance();
-    reflectanceToRgb();
+    KSToReflectance(ksvec);
+    reflectanceToRgb(rgbvec);
 }
 
-void KisIlluminantProfile::reflectanceToKS() const
+double phi(double r)
 {
-    for (int i = 0; i < wavelengths(); i++) {
-        m_converter->reflectanceToKS( gsl_vector_get(m_refvec,i),
-                                      *gsl_vector_ptr(m_ksvec,2*i+0),
-                                      *gsl_vector_ptr(m_ksvec,2*i+1) );
+    return 2.0*r / pow(1.0-r,2);
+}
+double invphi(double y)
+{
+    return ( 1.0 + y - sqrt(2.0 * y + 1.0) ) / y;
+}
+
+void KisIlluminantProfile::reflectanceToKS(double *ksvec) const
+{
+    double L, Sa, Ka, Ra; const double *Ta; int n;
+    
+    applyMatrix(1,m_wl, m_L,m_refvec, &L);
+    
+    if (L <= Lh) {
+        Sa = S2;
+        Ka = K2;
+        Ra = R2;
+        Ta = T2;
+        n = 2;
+    } else {
+        Sa = S1;
+        Ka = K1;
+        Ra = R1;
+        Ta = T1;
+        n = 3;
+    }
+    
+    for (int i = 0; i < m_wl; i++) {
+        if (m_refvec[i] >= 1) {
+            ksvec[2*i+0] = 0;
+            ksvec[2*i+1] = 1;
+            continue;
+        }
+        if (m_refvec[i] == Ra) {
+            ksvec[2*i+0] = Ka;
+            ksvec[2*i+1] = Sa;
+            continue;
+        }
+        ksvec[2*i+0] = ( Sa-Ka*phi(polyval(n,Ta,m_refvec[i])) ) / ( phi(polyval(n,Ta,m_refvec[i]))-phi(m_refvec[i]) );
+        ksvec[2*i+1] = ksvec[2*i+0] * phi(m_refvec[i]);
     }
 }
 
-void KisIlluminantProfile::KSToReflectance() const
+void KisIlluminantProfile::KSToReflectance(const double *ksvec) const
 {
-    for (int i = 0; i < wavelengths(); i++) {
-        gsl_vector_set(m_refvec, i, m_converter->KSToReflectance( gsl_vector_get(m_ksvec, 2*i+0),
-                                                                  gsl_vector_get(m_ksvec, 2*i+1) ) );
+    for (int i = 0; i < m_wl; i++) {
+        if (ksvec[2*i+0] <= 0)
+            m_refvec[i] = 1;
+        else if (ksvec[2*i+1] <= 0)
+            m_refvec[i] = 0;
+        else
+            m_refvec[i] = invphi(ksvec[2*i+1]/ksvec[2*i+0]);
     }
 }
 
-void KisIlluminantProfile::reflectanceToRgb() const
+void KisIlluminantProfile::rgbToReflectance(const double *rgbvec) const
+{
+    // Each reflectance is a linear combination of three base colors.
+    for (int i = 0; i < m_wl; i++) {
+        m_refvec[i] = rgbvec[0] * m_red[i] + rgbvec[1] * m_green[i] + rgbvec[2] * m_blue[i];
+    }
+}
+
+void KisIlluminantProfile::reflectanceToRgb(double *rgbvec) const
 {
     // Avoid calculation of black and white
-    double min, max;
-    gsl_vector_minmax(m_refvec, &min, &max);
-    if (min == 1.0) {
-        gsl_vector_set_all(m_rgbvec, 1.0);
+    double sum = 0;
+    for (int i = 0; i < m_wl; i++)
+        sum += m_refvec[i];
+    if (sum <= 0) {
+        rgbvec[0] = rgbvec[1] = rgbvec[2] = 0;
         return;
     }
-    if (max == 0.0) {
-        gsl_vector_set_all(m_rgbvec, 0.0);
+    if (sum >= m_wl) {
+        rgbvec[0] = rgbvec[1] = rgbvec[2] = 1;
         return;
     }
 
-    gsl_blas_dgemv(CblasNoTrans, 1.0, m_T, m_refvec, 0.0, m_rgbvec);
+    applyMatrix(3,m_wl, m_T,m_refvec, rgbvec);
+    for (int i = 0; i < 3; i++) {
+        if (rgbvec[i] < 0) rgbvec[i] = 0;
+        if (rgbvec[i] > 1) rgbvec[i] = 1;
+    }
 }
 
 void KisIlluminantProfile::reset()
 {
     if (m_T)
-        gsl_matrix_free(m_T);
-    if (m_P)
-        gsl_vector_free(m_P);
+        freeMatrix(3,m_T);
+    if (m_L)
+        freeMatrix(1,m_L);
     if (m_refvec)
-        gsl_vector_free(m_refvec);
-    if (m_converter)
-        delete m_converter;
+        freeVector(m_refvec);
+    if (m_red)
+        freeVector(m_red);
+    if (m_green)
+        freeVector(m_green);
+    if (m_blue)
+        freeVector(m_blue);
+    
+    m_T = m_L = 0;
+    m_refvec = m_red = m_green = m_blue = 0;
+    
     m_illuminant = "";
+    m_wl = -1;
+    
+    m_valid = false;
 }

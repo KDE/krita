@@ -22,7 +22,6 @@
 
 
 #include "kis_illuminant_profile.h"
-#include "kis_illuminant_profile_qp.h"
 
 #include "kis_ks_colorspace.h"
 #include "kis_ksf32_colorspace.h"
@@ -58,27 +57,27 @@ void KisKSColorSpaceTest::initTestCase()
 
 void KisKSColorSpaceTest::testConstructor()
 {
-    QString d656 = list.filter("6_high")[0];
-    QString d659 = list.filter("9_high")[0];
+    QString d655 = list.filter("_5_")[0];
+    QString d659 = list.filter("_9_")[0];
 
-    KisIlluminantProfile *p6 = new KisIlluminantProfileQP(d656);
-    KisIlluminantProfile *p9 = new KisIlluminantProfileQP(d659);
-    p6->load();
+    KisIlluminantProfile *p5 = new KisIlluminantProfile(d655);
+    KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
+    p5->load();
     p9->load();
 
-    KisKSF32ColorSpace<6> *cs6 = new KisKSF32ColorSpace<6>(p6->clone());
+    KisKSF32ColorSpace<5> *cs5 = new KisKSF32ColorSpace<5>(p5->clone());
     KisKSF32ColorSpace<9> *cs9 = new KisKSF32ColorSpace<9>(p9->clone());
 
-    QVERIFY(cs6->profileIsCompatible(p9) == false);
-    QVERIFY(cs6->profileIsCompatible(p6) == true);
+    QVERIFY(cs5->profileIsCompatible(p9) == false);
+    QVERIFY(cs5->profileIsCompatible(p5) == true);
 
-    QVERIFY(cs9->profileIsCompatible(p6) == false);
+    QVERIFY(cs9->profileIsCompatible(p5) == false);
     QVERIFY(cs9->profileIsCompatible(p9) == true);
 
-    delete cs6;
+    delete cs5;
     delete cs9;
 
-    delete p6;
+    delete p5;
     delete p9;
 }
 
@@ -86,25 +85,25 @@ void KisKSColorSpaceTest::testRegistry()
 {
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
     const KoColorSpace *cs;
-    QString d656 = list.filter("6_high")[0];
-    QString d659 = list.filter("9_high")[0];
+    QString d655 = list.filter("_5_")[0];
+    QString d659 = list.filter("_9_")[0];
 
-    KisIlluminantProfile *p6 = new KisIlluminantProfileQP(d656);
-    KisIlluminantProfile *p9 = new KisIlluminantProfileQP(d659);
-    p6->load();
+    KisIlluminantProfile *p5 = new KisIlluminantProfile(d655);
+    KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
+    p5->load();
     p9->load();
-
+/*
     // First, load a colorspace with his default profile
-    cs = f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),0);
-    QVERIFY2(cs != 0, "ColorSpace KS6 loaded");
+    cs = f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),0);
+    QVERIFY2(cs != 0, "ColorSpace KS5 loaded");
     QVERIFY(cs->profile() != 0);
     cs = f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),0);
     QVERIFY2(cs != 0, "ColorSpace KS9 loaded");
     QVERIFY(cs->profile() != 0);
-
+*/
     // Now with a profile
-    cs = f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(), p6);
-    QVERIFY2(cs != 0, "ColorSpace KS6 loaded - with custom profile");
+    cs = f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(), p5);
+    QVERIFY2(cs != 0, "ColorSpace KS5 loaded - with custom profile");
     cs = f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(), p9);
     QVERIFY2(cs != 0, "ColorSpace KS9 loaded - with custom profile");
 }
@@ -112,9 +111,18 @@ void KisKSColorSpaceTest::testRegistry()
 void KisKSColorSpaceTest::testToFromRgbA16()
 {
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
+
+    QString d655 = list.filter("_5_")[0];
+    QString d659 = list.filter("_9_")[0];
+
+    KisIlluminantProfile *p5 = new KisIlluminantProfile(d655);
+    KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
+    p5->load();
+    p9->load();
+
     QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),0));
+    css.append(f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),p5));
+    css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),p9));
 
     quint16 red  [4] = { 0x0000, 0x0000, 0xFFFF, 0xFFFF };
     quint16 green[4] = { 0x0000, 0xFFFF, 0x0000, 0xFFFF };
@@ -129,7 +137,7 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 
     #define VERBOSE
     foreach(const KoColorSpace *cs, css) {
-        qDebug() << "Current CS:" << cs->name();
+        qDebug() << "Current CS:" << cs->name() << cs->profile()->fileName();
         quint8 *data = new quint8[cs->pixelSize()];
         #ifdef VERBOSE
         const int n = cs->pixelSize()/sizeof(float);

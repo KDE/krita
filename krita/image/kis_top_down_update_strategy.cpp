@@ -367,7 +367,6 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
         else
             start recomposition from the bottom
      */
-    kDebug() << m_d->node;
     KisMergeVisitor visitor(projection, rc);
 
     KisNodeSP child = m_d->node->firstChild();

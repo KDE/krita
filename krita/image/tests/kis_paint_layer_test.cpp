@@ -67,10 +67,6 @@ void KisPaintLayerTest::testProjection()
     // Which also means that the projection is no longer the paint device
     QVERIFY( layer->paintDevice().data() != layer->projection().data() );
 
-    // And the projection is no longer 0, because while we've updated it, nothing is dirty,
-    // so nothing gets updated
-    QVERIFY( layer->projection().data() == 0 );
-
     // Now the machinery will start to roll
     layer->setDirty( qimg.rect() );
 

@@ -57,8 +57,6 @@ set(kritaui_LIB_SRCS
     kis_icon_item.cc
     kis_iconwidget.cc
     kis_import_catcher.cc
-    kis_int_spinbox.cc
-    kis_int_spinbox_p.cc
     kis_itemchooser.cc
     kis_label_cursor_pos.cc
     kis_label_zoom.cc
@@ -215,7 +213,6 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_iconwidget.h
 #    kis_itemchooser.h
 #    kis_label_zoom.h
-#    kis_int_spinbox.h
 #    kis_layerbox.h
 #    kis_move_event.h
 #    kis_multi_bool_filter_widget.h

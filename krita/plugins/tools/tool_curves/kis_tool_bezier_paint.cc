@@ -40,7 +40,6 @@
 //#include "kis_doc2.h"
 #include "kis_global.h"
 #include "kis_image.h"
-#include "kis_int_spinbox.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"

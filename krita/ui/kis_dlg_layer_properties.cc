@@ -42,7 +42,6 @@
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"
 #include "KoColorProfile.h"
-#include "kis_int_spinbox.h"
 #include "KoColorSpace.h"
 #include "kis_channelflags_widget.h"
 
@@ -80,7 +79,8 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbProfile->addSqueezedItem(profilename);
     m_page->cmbProfile->setEnabled(false);
 
-    m_page->intOpacity->setRange(0, 100, 13);
+    m_page->intOpacity->setMinimum(0);
+    m_page->intOpacity->setMaximum(100);
     m_page->intOpacity->setValue(opacity);
 
     m_page->cmbComposite->setCompositeOpList(colorSpace->compositeOps());

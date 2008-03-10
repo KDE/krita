@@ -56,7 +56,7 @@
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_cmb_composite.h"
-#include "kis_int_spinbox.h"
+#include "KoSliderCombo.h"
 #include "kis_resource_provider.h"
 
 
@@ -121,10 +121,12 @@ QWidget * KisToolPaint::createOptionWidget()
     QWidget * optionWidget = new QWidget();
 
     m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
-    m_slOpacity = new KisIntSpinbox( optionWidget, "int_m_optionwidget");
-    m_slOpacity->setRange(0, 100);
+    m_slOpacity = new KoSliderCombo( optionWidget );
+    m_slOpacity->setMinimum(0);
+    m_slOpacity->setMaximum(100);
+    m_slOpacity->setDecimals(0);
     m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE * 100);
-    connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
+    connect(m_slOpacity, SIGNAL(valueChanged(double, bool)), this, SLOT(slotSetOpacity(double, bool)));
 
     m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
     m_cmbComposite = new KisCmbComposite(optionWidget);
@@ -179,9 +181,9 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
 }
 
-void KisToolPaint::slotSetOpacity(int opacityPerCent)
+void KisToolPaint::slotSetOpacity(double opacityPerCent, bool final)
 {
-    m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
+    m_opacity = (int)(opacityPerCent * OPACITY_OPAQUE / 100);
 }
 
 void KisToolPaint::slotSetCompositeMode(const KoCompositeOp* compositeOp)

@@ -65,7 +65,7 @@
             </widget>
           </item>
           <item>
-            <widget class="KisIntSpinbox" name="ratioSpinBox" >
+            <widget class="KoSliderCombo" name="ratioSpinBox" >
               <property name="sizePolicy" >
                 <sizepolicy>
                   <hsizetype>0</hsizetype>
@@ -84,9 +84,9 @@
   <pixmapfunction></pixmapfunction>
   <customwidgets>
     <customwidget>
-      <class>KisIntSpinbox</class>
+      <class>KoSliderCombo</class>
       <extends></extends>
-      <header location="global" >kis_int_spinbox.h</header>
+      <header location="global" >KoSliderCombo.h</header>
       <sizehint>
         <width>-1</width>
         <height>-1</height>

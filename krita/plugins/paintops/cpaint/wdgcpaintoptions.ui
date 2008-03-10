@@ -124,10 +124,10 @@
       </widget>
      </item>
      <item>
-      <widget class="KisIntSpinbox" native="1" name="intInk" />
+      <widget class="KoSliderCombo" native="1" name="intInk" />
      </item>
      <item>
-      <widget class="KisIntSpinbox" native="1" name="intWater" />
+      <widget class="KoSliderCombo" native="1" name="intWater" />
      </item>
      <item>
       <spacer>
@@ -149,14 +149,14 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
-   <class>KisIntSpinbox</class>
+   <class>KoSliderCombo</class>
    <extends>QWidget</extends>
-   <header>kis_int_spinbox.h</header>
+   <header>KoSliderCombo.h</header>
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local" >kis_int_spinbox.h</include>
-  <include location="local" >kis_int_spinbox.h</include>
+  <include location="local" >KoSliderCombo.h</include>
+  <include location="local" >KoSliderCombo.h</include>
  </includes>
  <resources/>
  <connections/>

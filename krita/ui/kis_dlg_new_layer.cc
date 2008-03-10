@@ -39,7 +39,6 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
-#include "kis_int_spinbox.h"
 #include "kis_dlg_layer_properties.h"
 
 NewLayerDialog::NewLayerDialog(const KoID & colorSpaceID,
@@ -62,7 +61,9 @@ NewLayerDialog::NewLayerDialog(const KoID & colorSpaceID,
     m_page->editName->setText(deviceName);
 
     // Opacity
-    m_page->intOpacity->setRange(0, 100, 13);
+    m_page->intOpacity->setMaximum(100);
+    m_page->intOpacity->setMinimum(0);
+    m_page->intOpacity->setDecimals(0);
     m_page->intOpacity->setValue(100);
 
     // ColorSpace

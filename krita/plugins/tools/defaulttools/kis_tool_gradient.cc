@@ -59,7 +59,7 @@
 #include "kis_opengl_gradient_program.h"
 #include "kis_opengl_canvas2.h"
 #include "kis_canvas2.h"
-#include "kis_int_spinbox.h"
+#include "KoSliderCombo.h"
 #include "kis_config_notifier.h"
 #endif
 
@@ -368,7 +368,8 @@ QWidget* KisToolGradient::createOptionWidget()
 
     m_slAntiAliasThreshold = new KDoubleNumInput(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
-    m_slAntiAliasThreshold->setRange( 0, 1, 0.01);
+    m_slAntiAliasThreshold->setMinimum( 0 );
+    m_slAntiAliasThreshold->setMaximum( 1 );
     m_slAntiAliasThreshold->setValue(m_antiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 
@@ -376,8 +377,8 @@ QWidget* KisToolGradient::createOptionWidget()
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     m_lbPreviewOpacity = new QLabel(i18n("Preview opacity:"), widget);
-    m_slPreviewOpacity = new KisIntSpinbox( widget );
-    m_slPreviewOpacity->setRange(0, 100);
+    m_slPreviewOpacity = new KoSliderCombo( widget );
+    m_slPreviewOpacity->setDecimals(0);
     m_slPreviewOpacity->setValue(m_previewOpacityPercent);
     connect(m_slPreviewOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetPreviewOpacity(int)));
 

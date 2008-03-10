@@ -27,7 +27,6 @@
 #include <KoColorSpace.h>
 #include <KoSegmentGradient.h>
 
-#include "kis_int_spinbox.h"
 #include "kis_autogradient_resource.h"
 
 #include "kis_gradient_slider_widget.h"

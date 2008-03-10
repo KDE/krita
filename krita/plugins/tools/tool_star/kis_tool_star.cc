@@ -36,12 +36,10 @@
 #include "KoCanvasBase.h"
 #include "kis_canvas2.h"
 #include "kis_painter.h"
-#include "kis_int_spinbox.h"
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
 #include "QPainter"
 #include "kis_cursor.h"
-#include "kis_int_spinbox.h"
 #include "kis_paint_device.h"
 
 #include "kis_selection.h"

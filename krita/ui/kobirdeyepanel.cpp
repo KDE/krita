@@ -45,8 +45,6 @@
 #include <KoDocument.h>
 
 
-#include "kis_int_spinbox.h"
-
 KoCanvasAdapter::KoCanvasAdapter() {}
 KoCanvasAdapter::~KoCanvasAdapter() {}
 

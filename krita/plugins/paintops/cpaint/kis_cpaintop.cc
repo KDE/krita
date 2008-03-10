@@ -39,9 +39,6 @@
 #include <kis_iterators_pixel.h>
 #include <kis_selection.h>
 
-#include <kis_int_spinbox.h>
-
-
 #include "ui_wdgcpaintoptions.h"
 #include "brush.h"
 #include "qtoolbutton.h"
@@ -116,9 +113,13 @@ KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush
     m_optionsWidget = new QWidget( parent );
     m_options = new Ui::WdgCPaintOptions( );
     m_options->setupUi( m_optionsWidget );
-    m_options->intInk->setRange( 0, 255 );
-    m_options->intWater->setRange( 0, 255 );
+    m_options->intInk->setMinimum( 0 );
+    m_options->intInk->setMaximum( 255 );
+    m_options->intInk->setDecimals( 0 );
 
+    m_options->intWater->setMinimum( 0 );
+    m_options->intWater->setMaximum( 255 );
+    m_options->intWater->setDecimals( 0 );
 
     connect( m_options->bnInk, SIGNAL( clicked() ), this, SLOT( resetCurrentBrush() ) );
 }

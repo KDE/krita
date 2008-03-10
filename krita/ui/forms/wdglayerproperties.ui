@@ -64,7 +64,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="KisIntSpinbox" native="1" name="intOpacity" >
+  <widget class="KoSliderCombo" native="1" name="intOpacity" >
    <property name="geometry" >
     <rect>
      <x>126</x>
@@ -158,9 +158,9 @@
    <header>kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
-   <class>KisIntSpinbox</class>
+   <class>KoSliderCombo</class>
    <extends>QWidget</extends>
-   <header>kis_int_spinbox.h</header>
+   <header>KoSliderCombo.h</header>
   </customwidget>
   <customwidget>
    <class>SqueezedComboBox</class>

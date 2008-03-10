@@ -53,7 +53,7 @@ class QLabel;
 class KoCanvasBase;
 
 class KisCmbComposite;
-class KisIntSpinbox;
+class KoSliderCombo;
 
 enum enumBrushMode {
     PAINT,
@@ -100,7 +100,7 @@ private:
 private slots:
 
     void slotPopupQuickHelp();
-    void slotSetOpacity(int opacityPerCent);
+    void slotSetOpacity(double opacityPerCent, bool final);
     void slotSetCompositeMode(const KoCompositeOp* compositeOp);
 
 protected:
@@ -114,7 +114,7 @@ private:
     QGridLayout *m_optionWidgetLayout;
 
     QLabel *m_lbOpacity;
-    KisIntSpinbox *m_slOpacity;
+    KoSliderCombo *m_slOpacity;
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
 };

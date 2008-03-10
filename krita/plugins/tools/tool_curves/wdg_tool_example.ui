@@ -76,7 +76,7 @@
                         <cstring>isbWidth</cstring>
                     </property>
                 </widget>
-                <widget class="KisIntSpinbox">
+                <widget class="KoSliderCombo">
                     <property name="name">
                         <cstring>ratioSpinBox</cstring>
                     </property>
@@ -99,8 +99,8 @@
 </tabstops>
 <customwidgets>
 <customwidget>
-    <class>KisIntSpinbox</class>
-    <header location="global">kis_int_spinbox.h</header>
+    <class>KoSliderCombo</class>
+    <header location="global">KoSliderCombo.h</header>
     <sizehint>
         <width>-1</width>
         <height>-1</height>

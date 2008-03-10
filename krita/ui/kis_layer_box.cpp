@@ -220,6 +220,7 @@ void KisLayerBox::updateUI()
     bnLower->setEnabled(m_nodeManager->activeNode() && m_nodeManager->activeNode()->prevSibling());
 
     doubleOpacity->setEnabled(m_nodeManager->activeNode());
+    doubleOpacity->setDecimals(0);
     cmbComposite->setEnabled(m_nodeManager->activeNode());
     if (KisNodeSP active = m_nodeManager->activeNode())
     {

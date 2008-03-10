@@ -77,7 +77,6 @@ KisNode::KisNode( const KisNode & rhs )
 KisNode::~KisNode()
 {
     m_d->nodes.clear();
-    delete m_d->updateStrategy;
     delete m_d;
 }
 

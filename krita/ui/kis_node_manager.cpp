@@ -127,9 +127,61 @@ KisMaskManager * KisNodeManager::maskManager()
     return m_d->maskManager;
 }
 
-
-void KisNodeManager::createNode( const QString & nodeType, KisNodeSP parent, KisNodeSP above)
+bool allowAsChild( const QString & parentType, const QString & childType )
 {
+    // XXX_NODE: do we want to allow masks to apply on masks etc? Selections on masks?
+    if ( parentType == "KisPaintLayer" || parentType == "KisAdjustmentLayer" || parentType == "KisShapeLayer" ) {
+        if (childType == "KisFilterMask" || childType == "KisTransformationMask" || childType == "KisTransparencyMask" || childType == "KisSelectionMask") {
+            return true;
+        }
+        return false;
+    }
+    else if ( parentType == "KisGroupLayer" ) {
+        return true;
+    }
+    else if ( parentType == "KisFilterMask" || parentType == "KisTransformationMask" || parentType == "KisTransparencyMask" || parentType == "KisSelectionMask")
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above)
+{
+    KisNodeSP root = m_d->view->image()->root();
+    KisNodeSP active = activeNode();
+    if (!active)
+        active = root->firstChild();
+    
+    // Find the first node above the current node that can have the desired
+    // layer type as child. XXX_NODE: disable the menu entries for node types
+    // that are not compatible with the active node type.
+    while (active) {
+        if ( allowAsChild(active->metaObject()->className(), nodeType) ) {
+            parent = active;
+            if ( activeNode()->parent() == parent ) {
+                above = activeNode();
+            }
+            else {
+                above = parent->firstChild();
+            }
+            return;
+        }
+        active = active->parent();
+    }
+    parent = root;
+    above = parent->firstChild();
+}
+
+void KisNodeManager::createNode( const QString & nodeType)
+{
+    
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    getNewNodeLocation(nodeType, parent, above);
+
     // XXX: make factories for this kind of stuff,
     //      with a registry
 

@@ -50,7 +50,6 @@ class KisLayerManager;
 /**
  * A widget that visualized the layer structure.
  *
- * TODO: drag & drop -- see also the mimetype stuff in the node model.
  */
 class KisLayerBox : public QDockWidget, public Ui::WdgLayerBox {
 
@@ -77,7 +76,7 @@ signals:
 
     // XXX: create a node factory and a node factory registry in for now just
     //      use strings
-    void sigRequestNewNode( const QString & nodetype, KisNodeSP parent, KisNodeSP above );
+    void sigRequestNewNode( const QString & nodetype);
     void sigRequestNodeProperties(KisNodeSP node);
     void sigOpacityChanged(double opacity, bool final);
     void sigItemComposite(const KoCompositeOp*);
@@ -109,7 +108,6 @@ private slots:
     void slotNodeActivated( const QModelIndex & );
 
 private:
-    void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above);
     QModelIndexList selectedNodes() const;
 
     KMenu *m_viewModeMenu;

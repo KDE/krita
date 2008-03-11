@@ -530,8 +530,8 @@ void KisView2::createGUI()
 
     show();
 
-    connect(m_d->layerBox, SIGNAL(sigRequestNewNode( const QString &, KisNodeSP, KisNodeSP)),
-            m_d->nodeManager, SLOT(createNode( const QString &, KisNodeSP, KisNodeSP)));
+    connect(m_d->layerBox, SIGNAL(sigRequestNewNode( const QString &)),
+            m_d->nodeManager, SLOT(createNode( const QString &)));
 
     connect(m_d->layerBox, SIGNAL(sigRequestNodeProperties(KisNodeSP)),
             m_d->nodeManager, SLOT(nodeProperties(KisNodeSP)));

@@ -325,145 +325,53 @@ void KisLayerBox::slotThumbnailView()
     listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
 
-bool allowAsChild( const QString & parentType, const QString & childType )
-{
-    // XXX_NODE: do we want to allow masks to apply on masks etc? Selections on masks?
-    if ( parentType == "KisPaintLayer" || parentType == "KisAdjustmentLayer" || parentType == "KisShapeLayer" ) {
-        if (childType == "KisFilterMask" || childType == "KisTransformationMask" || childType == "KisTransparencyMask" || childType == "KisSelectionMask") {
-            return true;
-        }
-        return false;
-    }
-    else if ( parentType == "KisGroupLayer" ) {
-        return true;
-    }
-    else if ( parentType == "KisFilterMask" || parentType == "KisTransformationMask" || parentType == "KisTransparencyMask" || parentType == "KisSelectionMask")
-    {
-        return false;
-    }
-
-    return true;
-}
-
-void KisLayerBox::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above)
-{
-    KisNodeSP root = m_image->root();
-    KisNodeSP active = m_nodeManager->activeNode();
-    if (!active)
-        active = root->firstChild();
-    
-    // Find the first node above the current node that can have the desired
-    // layer type as child. XXX_NODE: disable the menu entries for node types
-    // that are not compatible with the active node type.
-    while (active) {
-        if ( allowAsChild(active->metaObject()->className(), nodeType) ) {
-            parent = active;
-            if ( m_nodeManager->activeNode()->parent() == parent ) {
-                above = m_nodeManager->activeNode();
-            }
-            else {
-                above = parent->firstChild();
-            }
-            return;
-        }
-        active = active->parent();
-    }
-    parent = root;
-    above = parent->firstChild();
-}
-
 void KisLayerBox::slotNewPaintLayer()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisPaintLayer", parent, above);
-
-    emit sigRequestNewNode("KisPaintLayer", parent, above);
+    emit sigRequestNewNode("KisPaintLayer");
 }
 
 void KisLayerBox::slotNewGroupLayer()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisGroupLayer", parent, above);
-
-    emit sigRequestNewNode("KisGroupLayer", parent, above);
+    emit sigRequestNewNode("KisGroupLayer");
 }
 
 void KisLayerBox::slotNewCloneLayer()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisCloneLayer", parent, above);
-
-    emit sigRequestNewNode( "KisCloneLayer", parent, above );
+    emit sigRequestNewNode( "KisCloneLayer");
 }
 
 
 void KisLayerBox::slotNewShapeLayer()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisShapeLayer", parent, above);
-
-    emit sigRequestNewNode("KisShapeLayer", parent, above );
+    emit sigRequestNewNode("KisShapeLayer");
 }
 
 
 void KisLayerBox::slotNewAdjustmentLayer()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisAdjustmentLayer", parent, above);
-
-    emit sigRequestNewNode("KisAdjustmentLayer", parent, above);
+    emit sigRequestNewNode("KisAdjustmentLayer");
 }
 
 void KisLayerBox::slotNewTransparencyMask()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisTransparencyMask", parent, above);
-
-    emit sigRequestNewNode("KisTransparencyMask", parent, above);
+    emit sigRequestNewNode("KisTransparencyMask");
 }
 
 void KisLayerBox::slotNewEffectMask()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisFilterMask", parent, above);
-
-    emit sigRequestNewNode("KisFilterMask", parent, above);
+    emit sigRequestNewNode("KisFilterMask");
 }
 
 
 void KisLayerBox::slotNewTransformationMask()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisTransformationMask", parent, above);
-
-    emit sigRequestNewNode("KisTransformationMask", parent, above);
+    emit sigRequestNewNode("KisTransformationMask");
 }
 
 
 void KisLayerBox::slotNewSelectionMask()
 {
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation("KisSelectionMask", parent, above);
-
-    emit sigRequestNewNode("KisSelectionMask", parent, above);
+    emit sigRequestNewNode("KisSelectionMask");
 }
 
 

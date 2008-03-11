@@ -71,7 +71,7 @@ KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index)
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
-    return KisNodeSP(static_cast<KisNode*>(index.internalPointer()));
+    return static_cast<KisNode*>(index.internalPointer());
 }
 
 vKisNodeSP KisNodeModel::nodesFromIndexes(const QModelIndexList &indexes)
@@ -287,15 +287,23 @@ void KisNodeModel::endRemoveNodes( KisNode *, int )
     endRemoveRows();
 }
 
-#if 0
 QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 {
     //dbgUI <<"KisNodeModel::mimeData";
     QMimeData* data = new QMimeData;
-    // TODO: manage the drag
+    QByteArray encoded;
+    QDataStream stream(&encoded, QIODevice::WriteOnly);
 
+    // encode the data
+    QModelIndexList::ConstIterator it = indexes.begin();
+    for( ; it != indexes.end(); ++it)
+    {
+        stream << qVariantFromValue( qulonglong( it->internalPointer() ) );
+    }
+
+    data->setData("application/x-kritalayermodeldatalist", encoded);
+    return data;
 }
-#endif
 
 bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 {
@@ -304,18 +312,24 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
     Q_UNUSED( column );
     Q_UNUSED( parent );
 
-#ifdef __GNUC__
-    #warning "Implement KisNodeModel::dropMimeData"
-#endif
-
 // TODO: manage the drop
     ////dbgUI <<"KisNodeModel::dropMimeData";
     ////dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
-//     const QString format = "application/x-qabstractitemmodeldatalist";
-/*    if(not data->hasFormat( format ))
+    if(! data->hasFormat( "application/x-kritalayermodeldatalist" ))
     {
         return false;
-    }*/
+    }
+    QByteArray encoded = data->data( "application/x-kritalayermodeldatalist" );
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QList<KisNode*> nodes;
+    while( ! stream.atEnd() )
+    {
+        QVariant v;
+        stream >> v;
+        nodes.push_back( static_cast<KisNode*>( (void*)v.value<qulonglong>() ) );
+    }
+    
+    
 /*    QByteArray encoded = data->data(format);
     QDataStream stream(&encoded, QIODevice::ReadOnly);*/
     if(action == Qt::CopyAction)

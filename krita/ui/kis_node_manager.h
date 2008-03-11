@@ -80,7 +80,7 @@ signals:
 
 public slots:
 
-    void createNode( const QString & node, KisNodeSP parent, KisNodeSP above);
+    void createNode( const QString & node);
     void activateNode( KisNodeSP layer );
     void nodesUpdated();
     void nodeProperties( KisNodeSP node );
@@ -113,6 +113,7 @@ public slots:
     void nodeToBottom();
     
 private:
+    void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above);
 
     struct Private;
     Private * const m_d;

@@ -9,9 +9,6 @@ add_subdirectory( histogram )
 add_subdirectory( imagesize )
 add_subdirectory( metadataeditor )
 add_subdirectory( modify_selection )
-if (EIGEN_FOUND)
-    add_subdirectory( panorama )
-endif (EIGEN_FOUND)
 add_subdirectory( rotateimage )
 add_subdirectory( scripting ) # TODO: port it to the change of KisFilter
 add_subdirectory( separate_channels )
@@ -25,6 +22,11 @@ add_subdirectory( trianglecolorselector )
 #add_subdirectory( histogram_docker )
 MESSAGE("Krita: port the histogram docker")
 find_package(GMM)
+
+if (EIGEN_FOUND AND GMM_FOUND)
+    add_subdirectory( panorama )
+endif (EIGEN_FOUND AND GMM_FOUND)
+
 
 macro_optional_find_package(GLUT)
 

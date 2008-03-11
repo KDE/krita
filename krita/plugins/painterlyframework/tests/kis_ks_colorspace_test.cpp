@@ -221,7 +221,7 @@ void KisKSColorSpaceTest::testToFromRgbA16()
         print_vector<quint16>(4, back8, "RANDOM ARRAY BACK:");
         #endif
 
-        delete data;
+        delete [] data;
     }
 }
 

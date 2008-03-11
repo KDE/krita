@@ -50,9 +50,10 @@
 #include "kis_resource_provider.h"
 #include "kis_view2.h"
 
+#include "kis_complex_color.h"
+
 #include "kis_illuminant_profile.h"
-#include "kis_ks_colorspace.h"
-#include "kis_rgbks_colorspace.h"
+#include "kis_ksf32_colorspace.h"
 
 #include "colorspot.h"
 #include "mixertool.h"
@@ -63,11 +64,13 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     setupUi(this);
 
     QStringList illuminants;
-    illuminants += KGlobal::mainComponent().dirs()->findAllResources("kis_profiles", "D65_5_18.ill");
+    illuminants += KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "D65_5_17.ill");
+    
+//     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
     // TODO The Illuminant has to be choosen at runtime
-    m_illuminant = new KisIlluminantProfile(illuminants[0]);
-    m_colorspace = new KisKSColorSpace<5>(m_illuminant);
+    m_illuminant = new KisIlluminantProfile(illuminants[0]); m_illuminant->load();
+    m_colorspace = new KisKSF32ColorSpace<5>(m_illuminant->clone());
     initCanvas();
     initTool();
     initSpots();
@@ -80,8 +83,8 @@ KisPainterlyMixer::~KisPainterlyMixer()
 {
     if (m_tool)
         delete m_tool;
-    delete m_colorspace;
     delete m_illuminant;
+    delete m_colorspace;
 }
 
 void KisPainterlyMixer::initCanvas()
@@ -94,8 +97,8 @@ void KisPainterlyMixer::initCanvas()
 void KisPainterlyMixer::initTool()
 {
     m_tool = new MixerTool(m_canvas, m_resources);
-
     m_canvas->toolProxy()->setActiveTool(m_tool);
+    m_tool->activate();
 }
 
 #define ROWS 2
@@ -128,15 +131,15 @@ void KisPainterlyMixer::initSpots()
 void KisPainterlyMixer::loadColors()
 {
     // TODO We need to handle save/load of user-defined colors in the spots.
-    KoColorSpace *cs = m_colorspace;
-    m_vColors.append(KoColor(QColor(0xFFFF0000), cs)); // Red
-    m_vColors.append(KoColor(QColor(0xFF00FF00), cs)); // Green
-    m_vColors.append(KoColor(QColor(0xFF0000FF), cs)); // Blue
-    m_vColors.append(KoColor(QColor(0xFF0A939D), cs)); // Whatever :)
-    m_vColors.append(KoColor(QColor(0xFFFFFF00), cs)); // Yellow
-    m_vColors.append(KoColor(QColor(0xFFFF00FF), cs)); // Violet
-    m_vColors.append(KoColor(QColor(0xFFFFFFFF), cs)); // White
-    m_vColors.append(KoColor(QColor(0xFF303030), cs)); // Black
+    const KoColorSpace *cs = m_colorspace;
+    m_vColors.append(KoColor(QColor("#FF0000"), cs)); // Red
+    m_vColors.append(KoColor(QColor("#00FF00"), cs)); // Green
+    m_vColors.append(KoColor(QColor("#0000FF"), cs)); // Blue
+    m_vColors.append(KoColor(QColor("#006464"), cs)); // Seablue
+    m_vColors.append(KoColor(QColor("#FFFF00"), cs)); // Yellow
+    m_vColors.append(KoColor(QColor("#700070"), cs)); // Violet
+    m_vColors.append(KoColor(QColor("#FFFFFF"), cs)); // White
+    m_vColors.append(KoColor(QColor("#101010"), cs)); // Black
 }
 
 void KisPainterlyMixer::slotChangeColor(int index)

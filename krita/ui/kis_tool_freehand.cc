@@ -81,8 +81,8 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    if (!currentImage())
- 		return;
+//     if (!currentImage())
+//  		return;
 
     if (!currentBrush())
         return;
@@ -281,7 +281,7 @@ void KisToolFreehand::endPaint()
 {
     m_mode = HOVER;
     m_executor->finish();
-    if (currentImage()) {
+//     if (currentImage()) {
 
         if (m_painter) {
             // If painting in mouse release, make sure painter
@@ -320,7 +320,7 @@ void KisToolFreehand::endPaint()
         delete m_painter;
         m_painter = 0;
         notifyModified();
-    }
+//     }
     if(!m_paintJobs.empty())
     {
         foreach(FreehandPaintJob* job , m_paintJobs)

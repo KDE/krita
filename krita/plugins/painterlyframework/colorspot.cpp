@@ -17,26 +17,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef MATHEMATICS_H_
-#define MATHEMATICS_H_
+#include "colorspot.h"
+#include <QColor>
+#include <QToolButton>
 
-#include "kritapainterlycommon_export.h"
+#include "KoColor.h"
+#include "KoColorSpace.h"
 
-namespace maths {
+ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : QToolButton(parent), m_color(color)
+{
+    setPalette(QPalette(color.toQColor().rgba(), color.toQColor().rgba()));
+    setAutoFillBackground(true);
+    setAutoRepeat(true);
+}
 
-KRITAPAINTERLYCOMMON_EXPORT double coth(double z);
-
-KRITAPAINTERLYCOMMON_EXPORT double acoth(double z);
-
-KRITAPAINTERLYCOMMON_EXPORT double sigmoid(double v);
-
-KRITAPAINTERLYCOMMON_EXPORT double smoothstep(double min, double max, double v);
-
-KRITAPAINTERLYCOMMON_EXPORT double clamp(double min, double max, double v);
-
-KRITAPAINTERLYCOMMON_EXPORT int sign(double v);
+ColorSpot::~ColorSpot()
+{
 
 }
 
+void ColorSpot::setColor(const KoColor &color)
+{
+    m_color = color;
+}
 
-#endif // MATHEMATICS_H_
+
+#include "colorspot.moc"

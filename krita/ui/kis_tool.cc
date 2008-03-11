@@ -102,7 +102,9 @@ void KisTool::activate(bool )
     d->currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
     d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisResourceProvider::HdrExposure ).toDouble() );
     d->currentImage = image();
-}void KisTool::deactivate()
+}
+
+void KisTool::deactivate()
 {
 }
 

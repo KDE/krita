@@ -49,7 +49,7 @@ MixerCanvas::MixerCanvas(QWidget *parent)
 {
     m_dirty = false;
     m_image = QImage(size(), QImage::Format_ARGB32);
-    m_image.fill(0);
+    m_image.fill(1);
 }
 
 MixerCanvas::~MixerCanvas()
@@ -103,10 +103,10 @@ void MixerCanvas::checkCurrentPaintop()
                           static_cast<KisPaintOpSettings*>(
                           internal->resource(KisResourceProvider::CurrentPaintopSettings).value<void *>()),
                           &painter, 0);
-    painter.setPaintOp(current);
+    painter.setPaintOp(current); // This is done just for the painter to own the paintop and destroy it
 
-    if (!current->painterly())
-        internal->setResource(KisResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
+//     if (!current->painterly())
+//         internal->setResource(KisResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
 }
 
 void MixerCanvas::checkCurrentLayer()

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Painterly Mixer
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritapainterlymixer
+X-Krita-Version=3

@@ -20,21 +20,19 @@
 #ifndef MATHEMATICS_H_
 #define MATHEMATICS_H_
 
-#include "kritapainterlycommon_export.h"
-
 namespace maths {
 
-KRITAPAINTERLYCOMMON_EXPORT double coth(double z);
+double coth(double z);
 
-KRITAPAINTERLYCOMMON_EXPORT double acoth(double z);
+double acoth(double z);
 
-KRITAPAINTERLYCOMMON_EXPORT double sigmoid(double v);
+double sigmoid(double v);
 
-KRITAPAINTERLYCOMMON_EXPORT double smoothstep(double min, double max, double v);
+double smoothstep(double min, double max, double v);
 
-KRITAPAINTERLYCOMMON_EXPORT double clamp(double min, double max, double v);
+double clamp(double min, double max, double v);
 
-KRITAPAINTERLYCOMMON_EXPORT int sign(double v);
+int sign(double v);
 
 }
 

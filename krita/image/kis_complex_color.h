@@ -97,6 +97,7 @@ private:
     QPoint m_offset;
     QSize m_size;
 
+    KoColorSpace *m_copy;
     KoColor m_defaultColor;
     quint8 *m_defaultProperty;
 

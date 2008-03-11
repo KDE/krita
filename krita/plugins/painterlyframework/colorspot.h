@@ -17,26 +17,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef MATHEMATICS_H_
-#define MATHEMATICS_H_
+#ifndef COLORSPOT_H_
+#define COLORSPOT_H_
 
-#include "kritapainterlycommon_export.h"
+#include <QToolButton>
 
-namespace maths {
+#include "KoColor.h"
 
-KRITAPAINTERLYCOMMON_EXPORT double coth(double z);
+class KoColor;
+class QColor;
 
-KRITAPAINTERLYCOMMON_EXPORT double acoth(double z);
+class ColorSpot : public QToolButton {
+    Q_OBJECT
 
-KRITAPAINTERLYCOMMON_EXPORT double sigmoid(double v);
+    public:
+        ColorSpot (QWidget *parent, const KoColor &color);
 
-KRITAPAINTERLYCOMMON_EXPORT double smoothstep(double min, double max, double v);
+        ~ColorSpot();
 
-KRITAPAINTERLYCOMMON_EXPORT double clamp(double min, double max, double v);
+        void setColor(const KoColor &color);
 
-KRITAPAINTERLYCOMMON_EXPORT int sign(double v);
+        KoColor color() const { return m_color; }
 
-}
+    private:
+        KoColor m_color;
+};
 
 
-#endif // MATHEMATICS_H_
+#endif // COLORSPOT_H_

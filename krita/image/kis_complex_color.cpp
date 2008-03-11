@@ -51,10 +51,11 @@ KisComplexColor::KisComplexColor(const KoColorSpace *colorSpace)
     : KisPaintDevice(colorSpace)
 {
     m_scaling = DEFAULT_SCALE;
-    m_defaultColor = KoColor(colorSpace);
+    m_copy = colorSpace->clone();
+    m_defaultColor = KoColor(m_copy);
     m_defaultProperty = 0;
-
-    KoColor kc(Qt::black, colorSpace);
+    
+    KoColor kc(Qt::black, m_copy);
     fromKoColor(kc);
 }
 
@@ -62,9 +63,10 @@ KisComplexColor::KisComplexColor(const KoColorSpace *colorSpace, const KoColor &
     : KisPaintDevice(colorSpace)
 {
     m_scaling = DEFAULT_SCALE;
-    m_defaultColor = KoColor(colorSpace);
+    m_copy = colorSpace->clone();
+    m_defaultColor = KoColor(m_copy);
     m_defaultProperty = 0;
-
+    
     fromKoColor(kc);
 }
 
@@ -72,12 +74,14 @@ KisComplexColor::~KisComplexColor()
 {
     if (m_defaultProperty)
         delete [] m_defaultProperty;
+    delete m_copy;
 }
 
 void KisComplexColor::fromKoColor(const KoColor &kc)
 {
     if (painterlyOverlay())
         removePainterlyOverlay();
+    
     createPainterlyOverlay();
     clear();
 
@@ -126,8 +130,12 @@ KoColor KisComplexColor::simpleColor()
 
 KoColor KisComplexColor::defaultColor()
 {
-    if (!m_defaultColor.colorSpace() || !(*m_defaultColor.colorSpace() == *colorSpace()))
-        m_defaultColor.convertTo(colorSpace());
+    if (!m_defaultColor.colorSpace() || !(*m_defaultColor.colorSpace() == *colorSpace())) {
+        KoColorSpace *oldcopy = m_copy;
+        m_copy = colorSpace()->clone();
+        m_defaultColor.convertTo(m_copy);
+        delete oldcopy;
+    }
     return m_defaultColor;
 }
 
@@ -138,8 +146,9 @@ quint8 * KisComplexColor::defaultProperty()
 
 void KisComplexColor::setDefaultColor(const KoColor &kc)
 {
+    m_defaultColor = defaultColor();
     m_defaultColor = kc;
-    m_defaultColor.convertTo(colorSpace());
+    m_defaultColor.convertTo(m_copy);
 }
 
 void KisComplexColor::setDefaultProperty(const PropertyCell &pc)
@@ -173,7 +182,6 @@ void KisComplexColor::setSize(const QSize &rc)
     more.setX( ( newleft - oldleft ) );
     more.setY( ( newtop - oldtop ) );
 
-//     m_center -= more;
     m_offset += more;
 
     translate();

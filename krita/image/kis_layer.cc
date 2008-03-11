@@ -207,8 +207,10 @@ KisSelectionSP KisLayer::selection() const
     KisSelectionMaskSP selMask = selectionMask();
     if (selMask && selMask->active())
         return selMask->selection();
-    else
+    else if (m_d->image)
         return m_d->image->globalSelection();
+    else
+        return 0;
 }
 
 bool KisLayer::hasEffectMasks() const

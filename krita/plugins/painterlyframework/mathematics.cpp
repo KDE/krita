@@ -21,9 +21,7 @@
 #include <cmath>
 #include <cstdio>
 
-extern "C" {
-    #include <glpk.h>
-}namespace maths {
+namespace maths {
 
 double coth(double z)
 {

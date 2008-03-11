@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Complex Brush
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritacomplexbrush
+X-Krita-Version=3

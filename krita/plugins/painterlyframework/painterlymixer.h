@@ -1,6 +1,8 @@
 /*
- *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
+ * painterlymixer.h -- Part of Krita
  *
+ * Copyright (c) 2007 Boudewijn Rempt (boud@valdyas.org)
+ * Copyright (c) 2007 Emanuele Tamponi (emanuele@valinor.it)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,26 +19,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef MATHEMATICS_H_
-#define MATHEMATICS_H_
+#ifndef PAINTERLY_MIXER_H
+#define PAINTERLY_MIXER_H
 
-#include "kritapainterlycommon_export.h"
+#include <kparts/plugin.h>
 
-namespace maths {
+class KisView2;
+class KisPainterlyMixerDockerFactory;
 
-KRITAPAINTERLYCOMMON_EXPORT double coth(double z);
+class PainterlyMixer : public KParts::Plugin {
+    Q_OBJECT
 
-KRITAPAINTERLYCOMMON_EXPORT double acoth(double z);
+public:
+    PainterlyMixer(QObject *parent, const QStringList &);
+    virtual ~PainterlyMixer();
 
-KRITAPAINTERLYCOMMON_EXPORT double sigmoid(double v);
+private:
+    KisView2* m_view;
+    KisPainterlyMixerDockerFactory* m_factory;
+};
 
-KRITAPAINTERLYCOMMON_EXPORT double smoothstep(double min, double max, double v);
-
-KRITAPAINTERLYCOMMON_EXPORT double clamp(double min, double max, double v);
-
-KRITAPAINTERLYCOMMON_EXPORT int sign(double v);
-
-}
-
-
-#endif // MATHEMATICS_H_
+#endif // PAINTERLY_MIXER_H

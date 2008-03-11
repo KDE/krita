@@ -127,7 +127,8 @@ KoColor & KoColor::operator=(const KoColor & rhs)
 
 bool KoColor::operator==(const KoColor &other) const
 {
-    if(colorSpace() != other.colorSpace()) return false;
+    if (!(*colorSpace() == *other.colorSpace()))
+        return false;
     return memcmp(d->data, other.d->data, d->colorSpace->pixelSize()) == 0;
 }
 
@@ -136,7 +137,7 @@ void KoColor::convertTo(const KoColorSpace * cs)
     //kDebug(DBG_PIGMENT) <<"Our colormodel:" << d->colorSpace->id().name()
     //      << ", new colormodel: " << cs->id().name() << "\n";
 
-    if (d->colorSpace == cs)
+    if (*d->colorSpace == *cs)
         return;
 
     quint8 * data = new quint8[cs->pixelSize()];

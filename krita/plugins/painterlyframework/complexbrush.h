@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
- *
+ *  Copyright (c) 2007 Emanuele Tamponi (emanuele@valinor.it)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,26 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef MATHEMATICS_H_
-#define MATHEMATICS_H_
+#ifndef COMPLEX_BRUSH_H
+#define COMPLEX_BRUSH_H
 
-#include "kritapainterlycommon_export.h"
+#include <kparts/plugin.h>
 
-namespace maths {
+class ComplexBrush : public KParts::Plugin
+{
+    Q_OBJECT
+public:
+    ComplexBrush(QObject *parent, const QStringList &);
+    virtual ~ComplexBrush();
+};
 
-KRITAPAINTERLYCOMMON_EXPORT double coth(double z);
-
-KRITAPAINTERLYCOMMON_EXPORT double acoth(double z);
-
-KRITAPAINTERLYCOMMON_EXPORT double sigmoid(double v);
-
-KRITAPAINTERLYCOMMON_EXPORT double smoothstep(double min, double max, double v);
-
-KRITAPAINTERLYCOMMON_EXPORT double clamp(double min, double max, double v);
-
-KRITAPAINTERLYCOMMON_EXPORT int sign(double v);
-
-}
-
-
-#endif // MATHEMATICS_H_
+#endif // COMPLEX_BRUSH_H

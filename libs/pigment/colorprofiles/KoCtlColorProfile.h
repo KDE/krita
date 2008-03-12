@@ -33,6 +33,7 @@ namespace OpenCTL {
 class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
     public:
         KoCtlColorProfile(QString fileName);
+        KoCtlColorProfile(const KoCtlColorProfile&);
         virtual ~KoCtlColorProfile();
         virtual KoColorProfile* clone() const;
         virtual bool valid() const;

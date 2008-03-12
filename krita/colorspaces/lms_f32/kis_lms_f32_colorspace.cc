@@ -68,7 +68,7 @@ KisLmsAF32ColorSpace::~KisLmsAF32ColorSpace()
 
 KoColorSpace* KisLmsAF32ColorSpace::clone() const
 {
-    return new KisLmsAF32ColorSpace(*this);
+    return new KisLmsAF32ColorSpace(static_cast<const KoCtlColorProfile *>(profile()));
 }
 
 KoID KisLmsAF32ColorSpace::colorModelId() const

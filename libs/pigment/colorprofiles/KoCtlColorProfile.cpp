@@ -58,6 +58,11 @@ KoCtlColorProfile::KoCtlColorProfile(QString filename) : KoColorProfile(filename
     d->module = 0;
 }
 
+KoCtlColorProfile::KoCtlColorProfile(const KoCtlColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
+{
+    
+}
+
 KoCtlColorProfile::~KoCtlColorProfile()
 {
     delete d;
@@ -103,9 +108,15 @@ OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(KoID _srcModel
     return 0;
 }
 
-bool KoCtlColorProfile::operator==(const KoColorProfile&) const
+bool KoCtlColorProfile::operator==(const KoColorProfile& p) const
 {
-    return false;
+    const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(&p);
+    if(ctlp)
+    {
+        return ctlp->name() == name() and ctlp->colorModel() == colorModel() and ctlp->colorDepth() == colorDepth();
+    } else {
+        return false;
+    }
 }
 
 KoID KoCtlColorProfile::colorModel() const

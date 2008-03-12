@@ -244,6 +244,7 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
             Vertex* v = path->vertexes[i];
             kDebug(DBG_PIGMENT) << v->srcNode->id() << " to " << v->dstNode->id();
             const KoColorSpace* intermCS2 = defaultColorSpaceForNode( v->dstNode );
+            Q_ASSERT(intermCS2);
             mccTransfo->appendTransfo( v->factory()->createColorTransformation(intermCS, intermCS2, renderingIntent) );
             intermCS = intermCS2;
         }

@@ -23,9 +23,12 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCtlColorProfile.h>
+#include <KoCtlColorConversionTransformation.h>
 
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
+
+KoID LMSAColorModelID("LMSA", i18n("Long Middle Short Cone Space"));
 
 KisLmsAF32ColorSpace::KisLmsAF32ColorSpace( const KoCtlColorProfile *p) : KoCtlMonoTypeColorSpace<KisLmsAF32Traits>( "LMSAF32", i18n("LMS Cone Space (32-bit float/channel)"), KoColorSpaceRegistry::instance()->rgb16(), p)
 {
@@ -110,7 +113,7 @@ bool KisLmsAF32ColorSpaceFactory::userVisible() const
 
 KoID KisLmsAF32ColorSpaceFactory::colorModelId() const
 {
-    return KoID("LMSA", i18n("Long Middle Short Cone Space"));
+    return LMSAColorModelID;
 }
 
 KoID KisLmsAF32ColorSpaceFactory::colorDepthId() const
@@ -120,7 +123,7 @@ KoID KisLmsAF32ColorSpaceFactory::colorDepthId() const
 
 QString KisLmsAF32ColorSpaceFactory::defaultProfile()
 {
-    return "Standard LMS";
+    return QString("Standard LMS");
 }
 
 bool KisLmsAF32ColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
@@ -150,7 +153,12 @@ int KisLmsAF32ColorSpaceFactory::referenceDepth() const
 
 QList<KoColorConversionTransformationFactory*> KisLmsAF32ColorSpaceFactory::colorConversionLinks() const
 {
-    return QList<KoColorConversionTransformationFactory*>();
+    QList<KoColorConversionTransformationFactory*> list;
+    // Conversion to LMSA Float 32bit
+    list.append(new KoCtlColorConversionTransformationFactory( RGBAColorModelID.id(), Float32BitsColorDepthID.id(), LMSAColorModelID.id(), Float32BitsColorDepthID.id() ) );
+    // Conversion from LMSA Float 32bit
+    list.append(new KoCtlColorConversionTransformationFactory( LMSAColorModelID.id(), Float32BitsColorDepthID.id(), RGBAColorModelID.id(), Float32BitsColorDepthID.id() ) );
+    return list;
 }
 
 KoColorConversionTransformationFactory* KisLmsAF32ColorSpaceFactory::createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const

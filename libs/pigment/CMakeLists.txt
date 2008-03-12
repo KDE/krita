@@ -22,6 +22,7 @@ if(OPENCTL_FOUND)
   add_definitions(${OPENCTL_DEFINITIONS})
   set( OPENCTL_PIGMENT_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoCtlColorProfile.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/KoCtlColorConversionTransformation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoCtlColorSpace.cpp
   )
 endif(OPENCTL_FOUND)

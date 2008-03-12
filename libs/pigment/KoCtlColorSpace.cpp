@@ -26,9 +26,10 @@ struct KoCtlColorSpace::Private
     KoCtlColorProfile* profile;
 };
 
-KoCtlColorSpace::KoCtlColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile) : d(new Private)
+KoCtlColorSpace::KoCtlColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile) : KoColorSpace(id, name, 0,0), d(new Private)
 {
-    d->profile = 0;//static_cast<KoCTLColorProfile*>(profile->clone());
+    Q_ASSERT(profile);
+    d->profile = static_cast<KoCtlColorProfile*>(profile->clone());
 }
 
 KoCtlColorSpace::~KoCtlColorSpace()

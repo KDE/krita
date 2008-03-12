@@ -27,6 +27,9 @@
 
 #include <KoID.h>
 
+#include <GTLCore/PixelDescription.h>
+#include <GTLCore/Type.h>
+#include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
 
 struct ConversionInfo {
@@ -85,6 +88,19 @@ bool KoCtlColorProfile::isSuitableForPrinting() const
 bool KoCtlColorProfile::isSuitableForDisplay() const
 {
     return true;
+}
+
+OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(KoID _srcModelId, KoID _srcDepthId, KoID _dstModelId, KoID _dstDepthId) const
+{
+    foreach(ConversionInfo info, d->conversionInfos)
+    {
+        kDebug() << info.sourceColorModelID << _srcModelId << info.sourceColorDepthID << _srcDepthId << info.destinationColorModelID << _dstModelId << info.destinationColorDepthID << _dstDepthId;
+        if(info.sourceColorModelID == _srcModelId and info.sourceColorDepthID == _srcDepthId and info.destinationColorModelID == _dstModelId and info.destinationColorDepthID == _dstDepthId)
+        {
+            return new OpenCTL::Program(info.function.toAscii().data(), d->module, GTLCore::PixelDescription(GTLCore::Type::Float, 4) );
+        }
+    }
+    return 0;
 }
 
 bool KoCtlColorProfile::operator==(const KoColorProfile&) const
@@ -179,31 +195,32 @@ bool KoCtlColorProfile::load()
     }
     QDomNode n = docElem.firstChild();
     while(not n.isNull()) {
-     QDomElement e = n.toElement();
-     if(not e.isNull()) {
-         kDebug(/*DBG_PIGMENT*/) << e.tagName();
-         if( e.tagName() == "info")
-         {
-             setName(e.attribute("name"));
-             d->colorDepthID = generateDepthID(e.attribute("depth"), e.attribute("type"));
-             d->colorModelID = KoID(e.attribute("colorModel"),"");
-             kDebug(/*DBG_PIGMENT*/) << "colorModel = " << e.attribute("colorModel");;
-         } else if(e.tagName() == "program")
-         {
-             QDomNode nCDATA = e.firstChild();
-             if( not nCDATA.isNull())
-             {
-                 QDomCDATASection CDATA = nCDATA.toCDATASection();
-                 kDebug(/*DBG_PIGMENT*/) << CDATA.data();
-                 d->module = new OpenCTL::Module(name().toAscii().data());
-                 d->module->setSource( CDATA.data().toAscii().data());
-                 d->module->compile();
-             }
-         } else if(e.tagName() == "transformations")
-         {
-             decodeTransformations(e);
-         }
-     }
-     n = n.nextSibling();
- }
+        QDomElement e = n.toElement();
+        if(not e.isNull()) {
+            kDebug(/*DBG_PIGMENT*/) << e.tagName();
+            if( e.tagName() == "info")
+            {
+                setName(e.attribute("name"));
+                d->colorDepthID = generateDepthID(e.attribute("depth"), e.attribute("type"));
+                d->colorModelID = KoID(e.attribute("colorModel"),"");
+                kDebug(/*DBG_PIGMENT*/) << "colorModel = " << e.attribute("colorModel");;
+            } else if(e.tagName() == "program")
+            {
+                QDomNode nCDATA = e.firstChild();
+                if( not nCDATA.isNull())
+                {
+                    QDomCDATASection CDATA = nCDATA.toCDATASection();
+                    kDebug(/*DBG_PIGMENT*/) << CDATA.data();
+                    d->module = new OpenCTL::Module(name().toAscii().data());
+                    d->module->setSource( CDATA.data().toAscii().data());
+                    d->module->compile();
+                }
+            } else if(e.tagName() == "transformations")
+            {
+                decodeTransformations(e);
+            }
+        }
+        n = n.nextSibling();
+    }
+    return true;
 }

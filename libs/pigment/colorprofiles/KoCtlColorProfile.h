@@ -26,6 +26,10 @@
 
 class QDomElement;
 
+namespace OpenCTL {
+    class Program;
+};
+
 class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
     public:
         KoCtlColorProfile(QString fileName);
@@ -39,6 +43,8 @@ class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
         virtual bool load();
         KoID colorModel() const;
         KoID colorDepth() const;
+    public:
+        OpenCTL::Program* createColorConversionProgram(KoID _srcModelId, KoID _srcDepthId, KoID _dstModelId, KoID _dstDepthId) const;
     private:
         void decodeTransformations(QDomElement&);
         void decodeConversions(QDomElement&);

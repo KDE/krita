@@ -43,9 +43,11 @@ LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
     {
 
 
-        KoColorSpaceFactory * csf  = new KisLmsAF32ColorSpaceFactory();
+        KisLmsAF32ColorSpaceFactory * csf  = new KisLmsAF32ColorSpaceFactory();
         f->add(csf);
-        KoColorSpace * colorSpaceLMSF32  = new KisLmsAF32ColorSpace( static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) ) );
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
+        Q_ASSERT(profile);
+        KoColorSpace * colorSpaceLMSF32  = new KisLmsAF32ColorSpace( profile );
 
         KoHistogramProducerFactoryRegistry::instance()->add(
             new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>

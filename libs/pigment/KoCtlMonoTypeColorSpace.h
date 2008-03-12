@@ -58,22 +58,22 @@ class KoCtlMonoTypeColorSpace : public KoCtlColorSpace {
         
         virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const
         {
-            return channelValueText(pixel, channelIndex);
+            return _CSTrait::channelValueText(pixel, channelIndex);
         }
 
         virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
         {
-            return normalisedChannelValueText(pixel, channelIndex);
+            return _CSTrait::normalisedChannelValueText(pixel, channelIndex);
         }
 
 		virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const
 		{
-            return normalisedChannelsValue(pixel, channels);
+            return _CSTrait::normalisedChannelsValue(pixel, channels);
 		}
 
 		virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const
 		{
-			return fromNormalisedChannelsValue(pixel, values);
+			return _CSTrait::fromNormalisedChannelsValue(pixel, values);
 		}
 
         virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {

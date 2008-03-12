@@ -25,11 +25,11 @@ void LMSAf32_to_RGBAf32(float lIn, float mIn, float sIn, float aIn, output float
     </program>
     <transformations>
         <conversions>
-            <conversion function="LMSAf32_to_RGBAf32">
+            <conversion function="LMSAf32_to_RGBAf328">
                 <input colorModel="RGBA" depth="32" type="float" />
                 <output colorModel="LMSA" depth="32" type="float" />
             </conversion>
-            <conversion function="LMSAf32_to_RGBAf32">
+            <conversion function="LMSAf32_to_RGBAf328">
                 <input colorModel="LMSA" depth="32" type="float" />
                 <output colorModel="RGBA" depth="32" type="float" />
             </conversion>

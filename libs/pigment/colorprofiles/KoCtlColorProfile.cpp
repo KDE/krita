@@ -33,10 +33,10 @@
 #include <OpenCTL/Module.h>
 
 struct ConversionInfo {
-    ConversionInfo( KoID _sourceColorModelID, KoID _sourceColorDepthID,
+    ConversionInfo( QString _function, KoID _sourceColorModelID, KoID _sourceColorDepthID,
                     KoID _destinationColorModelID, KoID _destinationColorDepthID) :
                     sourceColorModelID( _sourceColorModelID), sourceColorDepthID( _sourceColorDepthID),
-                    destinationColorModelID( _destinationColorModelID), destinationColorDepthID( _destinationColorDepthID)
+                    destinationColorModelID( _destinationColorModelID), destinationColorDepthID( _destinationColorDepthID), function(_function)
     {
     }
     KoID sourceColorModelID;
@@ -102,6 +102,7 @@ OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(KoID _srcModel
         kDebug() << info.sourceColorModelID << _srcModelId << info.sourceColorDepthID << _srcDepthId << info.destinationColorModelID << _dstModelId << info.destinationColorDepthID << _dstDepthId;
         if(info.sourceColorModelID == _srcModelId and info.sourceColorDepthID == _srcDepthId and info.destinationColorModelID == _dstModelId and info.destinationColorDepthID == _dstDepthId)
         {
+            kDebug() << info.function << " " << d->module->asmSourceCode().c_str();
             return new OpenCTL::Program(info.function.toAscii().data(), d->module, GTLCore::PixelDescription(GTLCore::Type::Float, 4) );
         }
     }
@@ -169,9 +170,9 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
                 if(not eIn.isNull() and not eOut.isNull())
                 {
                     d->conversionInfos.push_back(
-                        ConversionInfo(
-                        KoID(eIn.attribute("colorModel"), ""), generateDepthID(eIn.attribute("depth"), eIn.attribute("type")),
-                        KoID(eOut.attribute("colorModel"), ""), generateDepthID(eOut.attribute("depth"), eOut.attribute("type") )));
+                        ConversionInfo( e.attribute("function"),
+                            KoID(eIn.attribute("colorModel"), ""), generateDepthID(eIn.attribute("depth"), eIn.attribute("type")),
+                            KoID(eOut.attribute("colorModel"), ""), generateDepthID(eOut.attribute("depth"), eOut.attribute("type") )));
                 } else {
                     kDebug(/*DBG_PIGMENT*/) << "Invalid conversion, missing <input> or <output> or both";
                 }

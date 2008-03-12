@@ -209,7 +209,7 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
         virtual QString name() const { return KisKSColorSpace<_TYPE_,_N_>::ColorSpaceId().name(); }
         virtual KoID colorModelId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorModelId(); }
         virtual KoID colorDepthId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorDepthId(); }
-        virtual bool userVisible() const { return _N_>=5; }
+        virtual bool userVisible() const { return _N_>=3; }
 
         virtual int referenceDepth() const { return sizeof(_TYPE_)*8; }
         virtual bool isIcc() const { return false; }

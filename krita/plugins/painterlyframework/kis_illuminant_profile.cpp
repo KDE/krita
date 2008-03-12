@@ -266,6 +266,9 @@ void KisIlluminantProfile::reflectanceToKS(double *ksvec) const
         }
         ksvec[2*i+0] = ( Sa-Ka*phi(polyval(n,Ta,m_refvec[i])) ) / ( phi(polyval(n,Ta,m_refvec[i]))-phi(m_refvec[i]) );
         ksvec[2*i+1] = ksvec[2*i+0] * phi(m_refvec[i]);
+
+	ksvec[2*i+0] = fabs(ksvec[2*i+0]);
+	ksvec[2*i+1] = fabs(ksvec[2*i+1]);
     }
 }
 

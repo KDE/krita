@@ -56,10 +56,20 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
         f->addProfile(p);
     }
 
+    f->add(new KisKSF32ColorSpaceFactory<3>);
+    f->add(new KisKSF32ColorSpaceFactory<4>);
     f->add(new KisKSF32ColorSpaceFactory<5>);
+    f->add(new KisKSF32ColorSpaceFactory<6>);
+    f->add(new KisKSF32ColorSpaceFactory<7>);
+    f->add(new KisKSF32ColorSpaceFactory<8>);
     f->add(new KisKSF32ColorSpaceFactory<9>);
 #ifdef HAVE_OPENEXR
+    f->add(new KisKSF16ColorSpaceFactory<3>);
+    f->add(new KisKSF16ColorSpaceFactory<4>);
     f->add(new KisKSF16ColorSpaceFactory<5>);
+    f->add(new KisKSF16ColorSpaceFactory<6>);
+    f->add(new KisKSF16ColorSpaceFactory<7>);
+    f->add(new KisKSF16ColorSpaceFactory<8>);
     f->add(new KisKSF16ColorSpaceFactory<9>);
 #endif
 /*

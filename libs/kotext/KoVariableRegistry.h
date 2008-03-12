@@ -23,13 +23,13 @@
 
 #include <KoGenericRegistry.h>
 #include <kotext_export.h>
+#include <KoVariableFactory.h>
 #include <QObject>
 #include <QList>
 
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KoVariable;
-class KoVariableFactory;
 class KoCanvasBase;
 class QAction;
 

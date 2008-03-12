@@ -26,6 +26,7 @@
 #include <kdebug.h>
 
 #include <KoXmlNS.h>
+#include <KoOdfLoadingContext.h>
 
 class KoListLevelProperties::Private {
 public:

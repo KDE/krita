@@ -5,18 +5,18 @@
 
 void RGBAf32_to_LMSAf32(float rIn, float gIn, float bIn, float aIn, output float lOut, output float mOut, output float sOut, output float aOut)
 {
-    lOut = rIn;
-    mOut = gIn;
-    sOut = bIn;
+    lOut = 0.3811*rIn + 0.5783*gIn + 0.0402*bIn;
+    mOut = 0.1967*rIn + 0.7244*gIn + 0.0782*bIn;
+    sOut = 0.0241*rIn + 0.1288*gIn + 0.8444*bIn;
     aOut = aIn;
     return;
 }
 
 void LMSAf32_to_RGBAf32(float lIn, float mIn, float sIn, float aIn, output float rOut, output float gOut, output float bOut, output float aOut)
 {
-    rOut = lIn;
-    gOut = mIn;
-    bOut = sIn;
+    rOut = 4.4679 * lIn - 3.58738 * mIn + 0.1193 * sIn;
+    gOut = -1.2186 * lIn + 2.3809 * mIn - 0.1624 * sIn;
+    bOut = 0.0497 * lIn - 0.2439 * mIn + 1.2045 * sIn;
     aOut = aIn;
     return;
 }

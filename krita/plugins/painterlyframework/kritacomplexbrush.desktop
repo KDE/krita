@@ -1,5 +1,22 @@
 [Desktop Entry]
 Name=Complex Brush
+Name[ca]=Pinzell complex
+Name[de]=Komplexer Pinsel
+Name[el]=Σύνθετο πινέλο
+Name[es]=Pincel complejo
+Name[et]=Täispintsel
+Name[fi]=Complex brush -sivellin
+Name[ga]=Scuab Choimpléascach
+Name[gl]=Pincel Sofisticado
+Name[it]=Pennello complesso
+Name[ja]=複合ブラシ
+Name[pt]=Pincel Complexo
+Name[pt_BR]=Pincel Complexo
+Name[sv]=Komplex pensel
+Name[tr]=Gelişmiş Fırça
+Name[uk]=Складний пензель
+Name[x-test]=xxComplex Brushxx
+Name[zh_TW]=複色筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacomplexbrush

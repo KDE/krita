@@ -99,10 +99,8 @@ OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(KoID _srcModel
 {
     foreach(ConversionInfo info, d->conversionInfos)
     {
-        kDebug() << info.sourceColorModelID << _srcModelId << info.sourceColorDepthID << _srcDepthId << info.destinationColorModelID << _dstModelId << info.destinationColorDepthID << _dstDepthId;
         if(info.sourceColorModelID == _srcModelId and info.sourceColorDepthID == _srcDepthId and info.destinationColorModelID == _dstModelId and info.destinationColorDepthID == _dstDepthId)
         {
-            kDebug() << info.function << " " << d->module->asmSourceCode().c_str();
             return new OpenCTL::Program(info.function.toAscii().data(), d->module, GTLCore::PixelDescription(GTLCore::Type::Float, 4) );
         }
     }

@@ -19,17 +19,20 @@
 
 #include "KoCtlColorSpace.h"
 
+#include "KoColorSpaceMaths.h"
 #include "colorprofiles/KoCtlColorProfile.h"
 
 struct KoCtlColorSpace::Private
 {
     KoCtlColorProfile* profile;
+    mutable quint16 * qcolordata; // A small buffer for conversion from and to qcolor.
 };
 
 KoCtlColorSpace::KoCtlColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile) : KoColorSpace(id, name, 0,0), d(new Private)
 {
     Q_ASSERT(profile);
     d->profile = static_cast<KoCtlColorProfile*>(profile->clone());
+    d->qcolordata = new quint16[4];
 }
 
 KoCtlColorSpace::~KoCtlColorSpace()
@@ -89,12 +92,24 @@ quint8 KoCtlColorSpace::difference(const quint8* src1, const quint8* src2) const
 
 void KoCtlColorSpace::fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile ) const
 {
-    
+    Q_UNUSED(profile);
+    d->qcolordata[3] = 0xFFFF;
+    d->qcolordata[2] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.red() );
+    d->qcolordata[1] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.green() );
+    d->qcolordata[0] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.blue() );
+    this->fromRgbA16((const quint8*)d->qcolordata, dst, 1);
+    this->setAlpha(dst, color.alpha(), 1);
 }
 
 void KoCtlColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile ) const
 {
-    
+    Q_UNUSED(profile);
+    this->toRgbA16(src, (quint8*)d->qcolordata, 1);
+    c->setRgb(
+        KoColorSpaceMaths<quint16,quint8>::scaleToA( d->qcolordata[2]),
+        KoColorSpaceMaths<quint16,quint8>::scaleToA( d->qcolordata[1]),
+        KoColorSpaceMaths<quint16,quint8>::scaleToA( d->qcolordata[0]) );
+    c->setAlpha( this->alpha(src) );
 }
 
 QImage KoCtlColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,

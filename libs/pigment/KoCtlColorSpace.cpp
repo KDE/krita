@@ -115,7 +115,23 @@ void KoCtlColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfil
 QImage KoCtlColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent ) const
 {
-    return QImage();
+    Q_UNUSED(dstProfile);
+    Q_UNUSED(renderingIntent);
+    QImage img = QImage(width, height, QImage::Format_ARGB32);
+
+    quint32 i = 0;
+    uchar *j = img.bits();
+
+    while ( i < width * height * this->pixelSize()) {
+        this->toRgbA16( ( data + i), (quint8*)d->qcolordata, 1);
+        *( j + 3)  = this->alpha(data + i);
+        *( j + 2 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( d->qcolordata[2]);
+        *( j + 1 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( d->qcolordata[1]);
+        *( j + 0 ) = KoColorSpaceMaths<quint16,quint8>::scaleToA( d->qcolordata[0]);
+        i += this->pixelSize();
+        j += 4;
+    }
+    return img;
 }
 
 quint8 KoCtlColorSpace::intensity8(const quint8 * src) const

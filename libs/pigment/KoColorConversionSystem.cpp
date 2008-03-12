@@ -83,7 +83,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         QList<Node*> nodes = d->graph.values();
         foreach(Node* node, nodes)
         {
-            if(node->isIcc and node->isInitialized and node != csNode)
+            if(node->isIcc && node->isInitialized && node != csNode)
             {
                 // Create the vertex from 1 to 2
                 Q_ASSERT(vertexBetween(csNode, node) == 0); // The two color spaces should not be connected yet
@@ -116,7 +116,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         // Check if the two nodes are already connected
         Vertex* v = vertexBetween(srcNode, dstNode);
         // If the vertex doesn't already exist, then create it
-        if(not v)
+        if(!v)
         {
             v = createVertex(srcNode, dstNode);
         }
@@ -131,7 +131,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     }
     // Check if there is a path to convert self into self
     Vertex* v = vertexBetween(csNode, csNode);
-    if(not v)
+    if(!v)
     {
         v = createVertex(csNode, csNode);
         kDebug(DBG_PIGMENT) << "No self to self color conversion, add the copy one";
@@ -162,7 +162,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(QString _colorMo
 
 KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorConversionSystem::NodeKey& key)
 {
-    if(not d->graph.contains(key))
+    if(!d->graph.contains(key))
     {
         Node* n = new Node;
         n->modelId = key.modelId;
@@ -192,7 +192,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     // from colorSpace to one of the color spaces in the list, but not the other way around
     // it might be worth to look also the return path.
     const Node* csNode = nodeFor( colorSpace->colorModelId().id(), colorSpace->colorDepthId().id() );
-    PathQualityChecker pQC( csNode->referenceDepth, not csNode->isHdr, not csNode->isGray );
+    PathQualityChecker pQC( csNode->referenceDepth, !csNode->isHdr, !csNode->isGray );
     // Look for a color conversion
     Path* bestPath = 0;
     typedef QPair<KoID, KoID> KoID2KoID;
@@ -201,10 +201,10 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
         Path* path = findBestPath( csNode, nodeFor( possibility.first.id(), possibility.second.id() ) );
         path->isGood = pQC.isGoodPath( path );
 
-        if(not bestPath) {
+        if(!bestPath) {
             bestPath = path;
         }
-        else if ( (not bestPath->isGood and path->isGood ) || pQC.lessWorseThan(path, bestPath )  ) {
+        else if ( (!bestPath->isGood && path->isGood ) || pQC.lessWorseThan(path, bestPath )  ) {
             delete bestPath;
             bestPath = path;
         }
@@ -305,7 +305,7 @@ bool KoColorConversionSystem::existsPath( QString srcModelId, QString srcDepthId
 bool KoColorConversionSystem::existsGoodPath( QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId ) const
 {
     Path* path = findBestPath( nodeFor( srcModelId, srcDepthId ), nodeFor( dstModelId, dstDepthId ) );
-    bool existAndGood = path and path->isGood;
+    bool existAndGood = path && path->isGood;
     delete path;
     return existAndGood;
 }
@@ -374,7 +374,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
             Node* endNode = p->endNode();
             foreach( Vertex* v, endNode->outputVertexes)
             {
-                if ( not p->contains( v->dstNode ) )
+                if ( !p->contains( v->dstNode ) )
                 {
                     Path* newP = new Path(*p);
                     newP->appendVertex( v );
@@ -387,7 +387,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
                             newP->isGood = true;
                             return newP;
                         }
-                        else if ( not lessWorsePath )
+                        else if ( !lessWorsePath )
                         {
                             lessWorsePath = newP;
                         }
@@ -443,7 +443,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 KoColorConversionSystem::Path* KoColorConversionSystem::findBestPath( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
 //     kDebug(DBG_PIGMENT) << "Find best path between " << srcNode->id() << " and " << dstNode->id();
-    if (srcNode->isHdr and dstNode->isHdr)
+    if (srcNode->isHdr && dstNode->isHdr)
     {
         return findBestPathImpl(srcNode, dstNode, false);
     }

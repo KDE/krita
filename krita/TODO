@@ -35,15 +35,22 @@ Regressions from 1.x
     * Tablet settings page is back at softer/firmer, which doesn't work: Qt4 does not allow
       us to do much with tablet settings
     * Rulers are uglier and have tab settings, which isn't relevant for Krita's layer shapes
+    * deselect/reselect doesn't work and probably needs some redesign
+    * the selecton undo command needs to be ported to the new structure
 
 * Tools
 
     * Magnetic Outline Tool has not been ported yet
-    * Curve Paint and Curve Select tool are not ported yet:
-      They should be implemented using flake (there's only the vector
-      selection tools right now, but they are not freehand/curve, while
-      the curve paint tool is )
+    * Curve Paint is replaced by a flake-based curve tool, but that
+      is not finished yet.
     * Perspective Transform Tool has not been ported yet
+    * Brush outline has been lost
+    * select brush and eraser don't work (they should be either the 
+      vector-based flake tools for the vector selection or the ordinary 
+      paint tools for the raster selection)
+    * mask selection visualisation is broken (the should be some general
+      visualisation for masks)
+    * move layer/move selection tool
 
 * Filters 
 
@@ -54,7 +61,7 @@ Regressions from 1.x
     
 * Paintops
 
-    * Smudge op
+BR  * Smudge op
 
 * View Plugins
 
@@ -72,6 +79,19 @@ Regressions from 1.x
     * LMS (is now dependent on OpenCTl)
     * Wet (may be deprecated definitively given EmanueleT's color work)
 
+* Import/Export
+
+    * RAW filter
+
+Functionality that _should_ be in KOffice
+=======================================================================
+
+* Snapping guides
+* Make autosave option
+* Setting for autosave interval
+* Setting for number of undo levels
+* Add a toolbar the dockers can be docked into with just their tabs
+* Temporary activation of pan tool with spacebar
 
 2.0
 =======================================================================
@@ -80,12 +100,45 @@ Regressions from 1.x
 
     * The filter dialog asks for a Ruby interpreter?
     * Filters that need access to the whole image do not work correctly with masks.
+BR  * When changing the image size, the canvas doesn't realize that (change document
+      size on canvas controller when image size changes)
+    * Fix QPainter::restore: Unbalanced save/restore messages
 
 * Image
 
     * Make recomposition threaded again
+    * Make BCoppens' tile manager work (and without a global lock!)
+    * Compress tiles, then swap the compressed tiles out (2-stage aging of old tiles)
+    * Fix working with selected subset of channels everywhere
+    * ??? A possible cause for the threadpool crashing issue is the fact that we throw 
+      QStrings across threads, and kDebug in threaded filters. Possible fix: use std::string 
+      in KisID and don't kDebug in filters. But that's all a long shot, hence the '?'
+    * Fix gradient anti-aliasing
 
 * UI
+
+    * show both selection mask and global selection
+    * Categorize the composite ops (show categories in combobox with a separator)
+    * Add apply button to layer and image properties dialogs
+    * Set a good default the default texture, gradient and brush and make the selector
+      look good: 
+      ( Ronan)I have also correct the position of the maps on the buttons, put a simple 
+      middle-grey line around those textures and put a white BG behind the brush shape 
+      (really important for readability of the shape). 
+      http://www.ronanzeegers.com/krita-ui/newDefaultGradientTexture.png
+    * Put a progress bar in the layerbox. 
+    * Show the root layer in the layerbox
+    * Review all menu and remove unnecesserary duplicate of information like "Image > Image 
+      properties" to "Image > properties" or "Image > rotate > Rotate image ..." to 
+      "Image > rotate > Image..."
+BT  * Implement a primary, secundary and tertiary paintop that get activated by mouse,
+       ctrl+mouse and ctrl+shift+mouse
+BT  * Fix flake layers (insertion of shapes in the layer, order of painting)
+    * Make it possible to create new patterns
+    * Divide the QPainter canvas' cached QImage into pyramided tiles.
+    * Review "Scale to new Size" dialog. Add a keep aspect ratio switch
+    * Create a "Change canvas size" dialog
+    
 
 * Tools
     
@@ -93,6 +146,17 @@ Regressions from 1.x
     * Edit perspective grid tool is not keyed to the right shapes yet
     * Krita needs to get its own toolbox, separately from the the KOffice toolbox
     * The KOffice toolbox may need to become an ordinary toolbar: propose to KOffice ML.
+BR  * Show no cursor option
+    * Make flake based curve and freehand vector tools create editable shapes that
+      render with Krita brushes.
+    * Add end poly entry to the popup menu when the poly tool is active (note: make this 
+      more generically useful for tools. Great idea by David Herman)
+    * Allow snapping to guides
+    * Check painting of tool overlays (rubber bands, control points, temporary shapes etc) 
+      for all tools
+    * Dodge and burn tool (see Dik Takken's email)
+    * Add icon for the measure tool
+    * Add icon for the transform tool
 
 * Filters
 
@@ -101,48 +165,153 @@ Regressions from 1.x
         * Make filter settings widget delayed action
         * The temporary filter mask does not take into account the global or local selection
         * Activate "Create Mask Effect" button
-
+    * Make filters work on a subset of channels
       
 * Paintops
+
+    * Filter paintop
+        * fix painting with sharpen filter
+        *  Small tiles: makes circles, otherwise effect is fun
+
 * View Plugins
+
+    * Integrate numerical input into the small colordocker
+    * exif and other metadata editor 
+EM  * Paint mixer
+    * Make scaling filter more user friendly by removing the combo and just 
+      presenting "fast" and "good"
+
 * Brushes
 
-2.1
+* Import/Export
+
+    * Proof-of-concept ORA filter
+    * Save all annotations in .kra files
+    * Save and load more information, gamma info etc.
+    * Save a gradient created with autogradient
+    
+    
+    
+Post 2.0
 =======================================================================
 
 * Bugs
 * Image
+
+    * finish painterly overlay
+    * physics filters for painterly overlays
+    * Anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
+    
 * UI
+
+    * add direction of light setting for mask visualisations
+    * visualize wet mask 
+    * visualize height mask 
+    * visualize gravity mask
+    * add scan plugin
+    * make the resource popups tearable, so they can turn into dockers
+    * show profiles using the lprof/digikam widget
+    * add input profile combobox to the import image and scan dialogs
+    * add export profile combobox to the export image and print dialogs
+    * replace templates with workspaces? (Review the list of default templates, 
+      the current one are useless, user don't care about creating transparent 
+      images in rgb or cmyk or grayscale, they have a task they want to 
+      accomplish, so each template should be related to a task (like "painting" 
+      or "creating a black and white illustration" or a "photo montage" or an 
+      "hdr image")
+    * Create opacity widget (One that grows more white or transparent (showing those 
+      gray blocks) based on the input)    
+    *  Make sure the printing is colormanaged (check X-PDF) 
+    * Investigate using Gutenprint to get printing on Cinepaint's level
+    * Implement combobox in statusbar that switched between different types of info
+      like memory consumption/swap consumption etc.
+
 * Tools
+
+    * Extend the crop tool to work as a canvas resize tool
+    * Add way to switch between replace, add, subtract and intersect in the selection tools 
+      by pressing some key
+    * Add slider that resizes the mean brush size. Also add on-canvas control for this,
+      for instance using button-tilt or something like that
+    * Implement fill-with-gradient for the Krita shape tools
+    * Implement fill-strokeing using the current brush in various way
+    * Crop tool:
+        - Have presets in a combobox, for instance: 
+            - Web landscape (800x533px, 72 dpi) 
+            - Web portrait (533x800px, 72 dpi) 
+            - Print landscape 300 dpi. Make these presets saveable. 
+        -  Show autosnapping guides as hints for composition rules when cropping (gulden snede) 
+        - Fix interaction with guides 
+        - Implement keep aspect ratio
+    * Transform tool: Implement gui, create cursors and update visitor for shearing. Maybe
+      share the button with the default tool in flake?
+
 * Filters
+
+    * Make set of filter categories extensible
+    * Non photorealistic filters (for external plugin and 2.0)
+    * Sharpen filter with settable sharpness. Look at digikam's code for this.
+    * Make unsharp mask work as an adjustment layer: See: 
+        http://www.photo.net/bboard/q-and-a-fetch-msg.tcl?msg_id=3D000Qi5 
+        http://www.earthboundlight.com/phototips/unsharp-mask.html 
+        http://home.planet.nl/~astro.ccd.scholten/processing_E.htm
+    * Colorize is not a perchannel adjustment: http://docs.gimp.org/en/gimp-tool-colorize.html.
+      Make it also work as an adj. layer.
+    * Soft glow filter: http://hans.breuer.org/gimp/pdb/plug_in.html#plug_in_softglow
+    * Do levels similar to lightzone http://www.lightcrafts.com/products/lightzone/. 
+      Ask Alexandre Buisse how it should work, exactly. http://sonic.net/~rat/lightcrafts/ 
+      for a Linux demo
+
 * Paintops
+
+    * implement paintops that take painterly overlays into account
+
+
 * View Plugins
+
+    * Gamut warning in all color selectors
+    * white balance setting plugin
+    * Improve support for working with LAB: Check http://www.ledet.com/margulis/articles.html 
+      and the notes in krita/doc on how to make LAB really useful.
+    * allow float/double entry in color selectors
+    * Variations dialog
+    * History docker with slider and the option to selectively delete some undo/redo commands
+    * Investigate if per layer history is a good idea
+    * Create plugin that merges grayscale layers back into one color image.
+    * Flipbook plugin: load a sequence of images (nameXXXX.ext) and keep them open 
+      to flip forward and backward. Save under a different nameXXXX.ext sequence. 
+      Contact ccherett (Chris Cherrett) for details 
+
 * Brushes
+* Colorspaces
+
+    * Make out-of-gamut visualisation
+    * Indexed colorspaces
+    
+* Import/Export
+
+    * ORA filter
+    * XCF filter
+    * PSD filter (there is a GPL library now, but the legal status of that
+      library is uncertain)
+    * Import photoshop brushes and palettes
+    * CREATE swatch spec support
+    * Saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale 
+      (actually saving to both 8bits and 16bits jpeg with the same build is 
+      impossible with libjpeg)
+    * OpenEXR:
+        * Implement layers 
+        * Implement support for Blender multichannel, including full 32-bit float/int support 
+        * borrow the profile creation code from cinepaint 
+        * Add OpenEXR native format HDR YCbCr colourspaces 
+
+* OpenGL
+
+    * Colour transformations using 3D textures
+    * Implement glsl-based filters
 
 
-2.2
-=======================================================================
-
-* Bugs
-* Image
-* UI
-* Tools
-* Filters
-* Paintops
-* View Plugins
-* Brushes
-
-
-
-
-2.3
-=======================================================================
-
-* Bugs
-* Image
-* UI
-* Tools
-* Filters
-* Paintops
-* View Plugins
-* Brushes
+* Other
+    
+    * a kimgio slave so other kde apps can show .kra images
+    * a kimgio slave so other kde apps can show .ora images

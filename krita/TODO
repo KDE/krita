@@ -1,0 +1,148 @@
+Krita TODO list
+ 
+This file is ordered by release. Regressions are under a separate heading.
+Also: check bugs.kde.org.
+
+Hackers:
+
+Adrian      AP
+Bart        BC
+Boud        BR
+Casper      CB
+Cyrille     CY
+Emanuele    EM
+Sven        SV
+
+Regressions from 1.x
+=======================================================================
+
+* Image
+
+
+
+* UI
+
+    * Bird's eyeview docker: Hubipete started a KOffice-wide one, check status
+      and make sure it's extensible with our own widgets (for exposure)
+    * The filter listview is broken, breaking the adjustment layers dialog
+    * Progress reporting
+    * Order in the toolbox has changed
+    * Split view crashes
+    * opening a backup file causes a crash ( krita(8568)/koffice (filter manager) 
+      KoFilterManager::importDocument: Can't open  "application/zip" , trying filter chooser
+      ASSERT: "mime" in file /home/boud/kde/src/koffice/libs/main/KoFilterManager.cpp, line 82)
+    * Zoom fit to page/canvas doesn't work after cropping an image Opening a backup file crashes
+    * Tablet settings page is back at softer/firmer, which doesn't work: Qt4 does not allow
+      us to do much with tablet settings
+    * Rulers are uglier and have tab settings, which isn't relevant for Krita's layer shapes
+
+* Tools
+
+    * Magnetic Outline Tool has not been ported yet
+    * Curve Paint and Curve Select tool are not ported yet:
+      They should be implemented using flake (there's only the vector
+      selection tools right now, but they are not freehand/curve, while
+      the curve paint tool is )
+    * Perspective Transform Tool has not been ported yet
+
+* Filters 
+
+    (Check also http://wiki.koffice.org/index.php?title=Krita/Filters_State)
+
+    * Port bummap filter (needs access to image for layers)
+    * CImg filter
+    
+* Paintops
+
+    * Smudge op
+
+* View Plugins
+
+    * Histogram Docker needs to be reimplemented
+    * Select all Opaque Pixels
+    * Drop shadow crashes Krita in the tile manager
+
+* Brushes
+
+    * Initial brush is wrong (often an arrow, instead of a 5px dynamic brush)
+    * Sometimes, not all brushes are loaded
+
+* Colorspaces
+
+    * LMS (is now dependent on OpenCTl)
+    * Wet (may be deprecated definitively given EmanueleT's color work)
+
+
+2.0
+=======================================================================
+
+* Bugs
+
+    * The filter dialog asks for a Ruby interpreter?
+    * Filters that need access to the whole image do not work correctly with masks.
+
+* Image
+
+    * Make recomposition threaded again
+
+* UI
+
+* Tools
+    
+    * Edit grid tool is not keyed to the right shapes yet
+    * Edit perspective grid tool is not keyed to the right shapes yet
+    * Krita needs to get its own toolbox, separately from the the KOffice toolbox
+    * The KOffice toolbox may need to become an ordinary toolbar: propose to KOffice ML.
+
+* Filters
+
+    * Filter dialog
+        * Fix the layout of the filter dialog
+        * Make filter settings widget delayed action
+        * The temporary filter mask does not take into account the global or local selection
+        * Activate "Create Mask Effect" button
+
+      
+* Paintops
+* View Plugins
+* Brushes
+
+2.1
+=======================================================================
+
+* Bugs
+* Image
+* UI
+* Tools
+* Filters
+* Paintops
+* View Plugins
+* Brushes
+
+
+2.2
+=======================================================================
+
+* Bugs
+* Image
+* UI
+* Tools
+* Filters
+* Paintops
+* View Plugins
+* Brushes
+
+
+
+
+2.3
+=======================================================================
+
+* Bugs
+* Image
+* UI
+* Tools
+* Filters
+* Paintops
+* View Plugins
+* Brushes

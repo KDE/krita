@@ -30,7 +30,7 @@
 class KisNodeModel::Private
 {
 public:
-    KisImageWSP image;
+    KisImageSP image;
 };
 
 KisNodeModel::KisNodeModel( QObject * parent )
@@ -86,7 +86,7 @@ vKisNodeSP KisNodeModel::nodesFromIndexes(const QModelIndexList &indexes)
 
 QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
 {
-    //dbgUI << "KisNodeModel::indexFromNode " << node;
+    dbgUI << "KisNodeModel::indexFromNode " << node;
     Q_ASSERT(node);
     if ( node->parent() ) {
         int rowCount = node->parent()->childCount() - 1;
@@ -96,7 +96,8 @@ QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
         return createIndex(row, 0, ( void* )node.data());
     }
     else {
-        return QModelIndex();
+        // if no parent then it is the root layer
+        return createIndex(0, 0, ( void* )node.data());
     }
 }
 
@@ -106,10 +107,9 @@ int KisNodeModel::rowCount(const QModelIndex &parent) const
     //dbgUI <<"KisNodeModel::rowCount" << parent;
 
     if (!parent.isValid()) {
-        // Root node
-        if (m_d->image && m_d->image->root()) {
-            //dbgUI <<"Root node:" << m_d->image->root() <<", childcount:" << m_d->image->root()->childCount();;
-            return m_d->image->root()->childCount();
+        if( m_d->image )
+        {
+            return 1; // <- this means that it is the "parent" of the root
         }
     }
     else  {
@@ -137,9 +137,14 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
     
     if (!parent.isValid())
     {
-        int rowCount = m_d->image->root()->childCount() - 1;
-        dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << m_d->image->root()->at( rowCount - row );
-        return indexFromNode( m_d->image->root()->at( rowCount - row ) );
+        Q_ASSERT(row == 0);
+        if( m_d->image)
+        {
+            dbgUI << "root, row: " << row << ", node: " << m_d->image->root();
+            return indexFromNode( m_d->image->root() );
+        } else {
+            return QModelIndex();
+        }
 
     }
 
@@ -170,7 +175,7 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 
     // If the parent is the root node, we want to return an invalid
     // parent, because the qt model shouldn't know about our root node.
-    if ( p && p->parent().data() ) {
+    if ( p ) {
         //dbgUI <<"parent node:" << p <<", name:" << p->name() <<", parent:" << p->parent();
         return indexFromNode( p );
     }
@@ -220,7 +225,7 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable;
 
     // XXX: nodes will also be drop enabled for masks and selections.
-    if (qobject_cast<KisNode*>(static_cast<KisNode*>(index.internalPointer()))) {
+    if (static_cast<KisNode*>(index.internalPointer())) {
         flags |= Qt::ItemIsDropEnabled;
     }
 

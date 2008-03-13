@@ -19,7 +19,6 @@ Regressions from 1.x
 * Image
 
 
-
 * UI
 
     * Bird's eyeview docker: Hubipete started a KOffice-wide one, check status
@@ -127,7 +126,6 @@ BR  * When changing the image size, the canvas doesn't realize that (change docu
       (really important for readability of the shape). 
       http://www.ronanzeegers.com/krita-ui/newDefaultGradientTexture.png
     * Put a progress bar in the layerbox. 
-    * Show the root layer in the layerbox
     * Review all menu and remove unnecesserary duplicate of information like "Image > Image 
       properties" to "Image > properties" or "Image > rotate > Rotate image ..." to 
       "Image > rotate > Image..."
@@ -196,6 +194,7 @@ Post 2.0
 =======================================================================
 
 * Bugs
+
 * Image
 
     * finish painterly overlay
@@ -283,6 +282,7 @@ Post 2.0
       Contact ccherett (Chris Cherrett) for details 
 
 * Brushes
+
 * Colorspaces
 
     * Make out-of-gamut visualisation

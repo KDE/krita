@@ -22,13 +22,13 @@
 #define _HISTOGRAMDOCKER_H_
 
 #include <QObject>
+#include <QMenu>
 
 #include <kparts/plugin.h>
 #include <kis_histogram.h>
 
 #include "kis_cachedhistogram.h"
 
-class QMenu;
 class KisAccumulatingHistogramProducer;
 class KoColorSpace;
 class KisHistogramView;

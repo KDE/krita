@@ -11,6 +11,7 @@ add_subdirectory(tests)
 ### kopageapp ###
 set( kopageapp_LIB_SRCS
      KoPADocument.cpp
+     KoShapeTraversal.cpp
      KoPAView.cpp
      KoPACanvas.cpp
      KoPASavingContext.cpp

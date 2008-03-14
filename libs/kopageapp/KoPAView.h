@@ -30,6 +30,7 @@
 #include "kopageapp_export.h"
 
 class KoCanvasController;
+class KoFind;
 class KoPACanvas;
 class KoPADocument;
 class KToggleAction;
@@ -38,6 +39,7 @@ class KoPAViewMode;
 class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
+class QTextDocument;
 class QAction;
 
 /// Creates a view with a KoPACanvas and rulers
@@ -173,6 +175,20 @@ protected slots:
     /// Go to the last page
     void goToLastPage();
 
+    /**
+     * Set the next document that should be used in find
+     *
+     * @param document The current document
+     */
+    void findDocumentSetNext( QTextDocument * document );
+
+    /**
+     * Set the previous document that should be used in find
+     *
+     * @param document The current document
+     */
+    void findDocumentSetPrevious( QTextDocument * document );
+
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
@@ -203,6 +219,8 @@ private:
     KToggleAction* m_viewRulers;
 
     KoZoomAction *m_zoomAction;
+
+    KoFind * m_find;
 };
 
 #endif /* KOPAVIEW_H */

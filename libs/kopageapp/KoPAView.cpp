@@ -28,6 +28,8 @@
 #include <QClipboard>
 
 #include <KoCanvasController.h>
+#include <KoFind.h>
+#include <KoTextDocumentLayout.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
@@ -45,6 +47,7 @@
 #include <KoDrag.h>
 #include <KoShapeDeleteCommand.h>
 
+#include "KoShapeTraversal.h"
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
 #include "KoPAPage.h"
@@ -233,6 +236,8 @@ void KoPAView::initActions()
     foreach(QAction *action, m_doc->inlineTextObjectManager()->createInsertVariableActions(m_canvas))
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
+
+    m_find = new KoFind( this, m_canvas->resourceProvider(), actionCollection() );
 }
 
 void KoPAView::viewSnapToGrid(bool snap)
@@ -533,8 +538,15 @@ void KoPAView::clipboardDataChanged()
 
 void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
 {
-    if((event->widget() == this) && event->activated()) {
-        clipboardDataChanged();
+    if ( event->widget() == this ) {
+        if ( event->activated() ) {
+            clipboardDataChanged();
+            connect( m_find, SIGNAL( findDocumentSetNext( QTextDocument * ) ), this, SLOT( findDocumentSetNext( QTextDocument * ) ) );
+            connect( m_find, SIGNAL( findDocumentSetPrevious( QTextDocument * ) ), this, SLOT( findDocumentSetPrevious( QTextDocument * ) ) );
+        }
+        else {
+            disconnect( m_find, 0, 0, 0 );
+        }
     }
 
     KoView::partActivateEvent(event);
@@ -562,6 +574,63 @@ void KoPAView::goToLastPage()
 {
     KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PageLast);
     updateActivePage(page);
+}
+
+void KoPAView::findDocumentSetNext( QTextDocument * document )
+{
+    KoPAPageBase * page = 0;
+    KoShape * startShape = 0;
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout*> ( document->documentLayout() ) : 0;
+    if ( lay != 0 ) {
+        startShape = lay->shapes().value( 0 );
+        Q_ASSERT( startShape->shapeId() == "TextShapeID" );
+        page = m_doc->pageByShape( startShape );
+        if ( m_doc->pageIndex( page ) == -1 ) {
+            page = 0;
+        }
+    }
+
+    if ( page == 0 ) {
+        page = m_activePage;
+        startShape = page;
+    }
+
+    KoShape * shape = startShape;
+
+    do {
+        // find next text shape
+        shape = KoShapeTraversal::nextShape( shape, "TextShapeID" );
+        // get next text shape
+        if ( shape != 0 ) {
+            if ( page != m_activePage ) {
+                setActivePage( page );
+                m_canvas->update();
+            }
+            KoSelection* selection = kopaCanvas()->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select( shape );
+            // TODO can this be done nicer? is there a way to get the shape id and the tool id from the shape?
+            KoToolManager::instance()->switchToolRequested( "TextToolFactory_ID" );
+            break;
+        }
+        else {
+            //if none is found go to next page and try again
+            if ( m_doc->pageIndex( page ) < m_doc->pages().size() - 1 ) {
+                // TODO use also master slides
+                page = m_doc->pageByNavigation( page, KoPageApp::PageNext );
+            }
+            else {
+                page = m_doc->pageByNavigation( page, KoPageApp::PageFirst );
+            }
+            shape = page;
+        }
+        // do until you find the same start shape or you are on the same page again only if there was none
+    }
+    while ( page != startShape );
+}
+
+void KoPAView::findDocumentSetPrevious( QTextDocument * document )
+{
 }
 
 void KoPAView::updatePageNavigationActions()

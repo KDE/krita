@@ -179,6 +179,14 @@ public:
 
     QMap<QString, KoDataCenter *>  dataCenterMap(  );
 
+    /**
+     * Get the page on which the shape is located
+     *
+     * @param shape The shape for which the page should be found
+     * @return The page on which the shape is located
+     */
+    KoPAPageBase * pageByShape( KoShape * shape ) const;
+
 signals:
     void shapeAdded(KoShape* shape);
     void shapeRemoved(KoShape* shape);
@@ -204,14 +212,6 @@ protected:
      * The default impementation does nothing
      */
     virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
-
-    /**
-     * Get the page on which the shape is located
-     *
-     * @param shape The shape for which the page should be found
-     * @return The page on which the shape is located
-     */
-    KoPAPageBase * pageByShape( KoShape * shape ) const;
 
     /**
      * @brief Enables/Disables the given actions in all views

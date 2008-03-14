@@ -29,6 +29,7 @@
 #include "ShapeResizeStrategy.h"
 
 #include <KoPointerEvent.h>
+#include <KoToolSelection.h>
 #include <KoToolManager.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
@@ -55,12 +56,31 @@
 
 #define HANDLE_DISTANCE 10
 
+class SelectionHandler : public KoToolSelection
+{
+public:
+    SelectionHandler(DefaultTool *parent)
+        : KoToolSelection(parent), m_selection(parent->koSelection())
+    {
+        Q_ASSERT(m_selection);
+    }
+
+    bool hasSelection() {
+        return m_selection->count();
+    }
+
+private:
+    KoSelection *m_selection;
+};
+
+
 DefaultTool::DefaultTool( KoCanvasBase *canvas )
     : KoInteractionTool( canvas ),
     m_lastHandle(KoFlake::NoHandle),
     m_hotPosition( KoFlake::TopLeftCorner ),
     m_mouseWasInsideHandles( false ),
-    m_moveCommand(0)
+    m_moveCommand(0),
+    m_selectionHandler(new SelectionHandler(this))
 {
     setupActions();
 
@@ -929,6 +949,13 @@ void DefaultTool::updateActions()
     action( "object_align_vertical_top" )->setEnabled(enable);
     action( "object_align_vertical_center" )->setEnabled(enable);
     action( "object_align_vertical_bottom" )->setEnabled(enable);
+
+    emit selectionChanged(koSelection()->count());
+}
+
+KoToolSelection* DefaultTool::selection()
+{
+    return m_selectionHandler;
 }
 
 #include "DefaultTool.moc"

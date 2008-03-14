@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -71,6 +71,8 @@ public:
     virtual bool paste();
     ///reimplemented
     virtual QStringList supportedPasteMimeTypes() const;
+    ///reimplemented
+    virtual KoToolSelection* selection();
 
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
@@ -148,6 +150,8 @@ private:
     QCursor m_rotateCursors[8];
     QCursor m_shearCursors[8];
     double m_angle;
+    KoToolSelection *m_selectionHandler;
+    friend class SelectionHandler;
 };
 
 #endif

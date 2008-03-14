@@ -61,9 +61,9 @@ public:
     /** Lists all producers currently available */
     QList<KoID> listProducers();
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
-    void setCurrentChannels(const KoID& producerID, Q3ValueVector<KoChannelInfo *> channels);
+    void setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels);
     /** Be careful, producer will be modified */
-    void setCurrentChannels(KoHistogramProducerSP producer, Q3ValueVector<KoChannelInfo *> channels);
+    void setCurrentChannels(KoHistogramProducerSP producer, QList<KoChannelInfo *> channels);
     bool hasColor();
     void setColor(bool set);
 

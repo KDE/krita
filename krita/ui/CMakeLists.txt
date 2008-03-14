@@ -157,8 +157,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgcolorspaceselector.ui
     forms/wdgdisplaysettings.ui
     forms/wdgpressuresettings.ui
-    forms/wdgtabletdevicesettings.ui
-    forms/wdgtabletsettings.ui
     forms/kis_previewwidgetbase.ui
     forms/kis_matrix_widget.ui
     forms/wdglayerbox.ui
@@ -186,10 +184,6 @@ if(HAVE_OPENGL)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
-
-if(HAVE_XINPUTEXT)
-    target_link_libraries(kritaui ${X11_Xinput_LIB})
-endif(HAVE_XINPUTEXT)
 
 set_target_properties(kritaui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})

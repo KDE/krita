@@ -31,8 +31,6 @@ Regressions from 1.x
       KoFilterManager::importDocument: Can't open  "application/zip" , trying filter chooser
       ASSERT: "mime" in file /home/boud/kde/src/koffice/libs/main/KoFilterManager.cpp, line 82)
     * Zoom fit to page/canvas doesn't work after cropping an image Opening a backup file crashes
-    * Tablet settings page is back at softer/firmer, which doesn't work: Qt4 does not allow
-      us to do much with tablet settings
     * Rulers are uglier and have tab settings, which isn't relevant for Krita's layer shapes
     * deselect/reselect doesn't work and probably needs some redesign
     * the selecton undo command needs to be ported to the new structure
@@ -224,6 +222,8 @@ Post 2.0
     * Investigate using Gutenprint to get printing on Cinepaint's level
     * Implement combobox in statusbar that switched between different types of info
       like memory consumption/swap consumption etc.
+    * Add global response curve setting for tablet (replaces the old tablet
+      settings that we cannot use anymore)
 
 * Tools
 

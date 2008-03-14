@@ -20,8 +20,6 @@ if (SHOULD_BUILD_KRITA)
         message(STATUS "hardware accelerated rendering.")
     endif(HAVE_OPENGL)
 
-    set(HAVE_XINPUTEXT 0)
-
     if(UNIX)
         set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
     endif(UNIX)
@@ -64,7 +62,7 @@ if (SHOULD_BUILD_KRITA)
 
         # 'Export' this for use by filters
         CACHE INTERNAL ""
-        )
+    )
 
     include_directories(${KRITA_INCLUDES})
 
@@ -74,10 +72,6 @@ if (SHOULD_BUILD_KRITA)
             include_directories(${GLEW_INCLUDE_DIR})
         endif(HAVE_GLEW)
     endif(HAVE_OPENGL)
-
-    if(HAVE_XINPUTEXT)
-        include_directories(${X11_Xinput_INCLUDE_PATH})
-    endif(HAVE_XINPUTEXT)
 
     add_subdirectory( image )
     add_subdirectory( ui )
@@ -93,13 +87,13 @@ if (SHOULD_BUILD_KRITA)
 
     set(kritapart_PART_SRCS krita_part_init.cc)
 
-        kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
+    kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
 
     
 
     target_link_libraries(kritapart kritaui)
 
-install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
+    install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 
@@ -111,17 +105,17 @@ install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
     target_link_libraries(kdeinit_krita kritaui)
 
-install(TARGETS kdeinit_krita DESTINATION ${LIB_INSTALL_DIR})
+    install(TARGETS kdeinit_krita DESTINATION ${LIB_INSTALL_DIR})
 
     target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
 
-install(TARGETS krita DESTINATION ${BIN_INSTALL_DIR})
+    install(TARGETS krita DESTINATION ${BIN_INSTALL_DIR})
 
     ########### install files ###############
 
-install( FILES  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
+    install( FILES  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+    install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
 
     #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins  image/tiles  )
 endif (SHOULD_BUILD_KRITA)

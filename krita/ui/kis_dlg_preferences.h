@@ -27,13 +27,7 @@
 
 #include "kis_global.h"
 
-#ifdef EXTENDED_X11_TABLET_SUPPORT
-#include "kis_canvas2.h"
-#endif
-
 #include "ui_wdggeneralsettings.h"
-#include "ui_wdgtabletsettings.h"
-#include "ui_wdgtabletdevicesettings.h"
 #include "ui_wdgperformancesettings.h"
 #include "ui_wdgdisplaysettings.h"
 #include "ui_wdggridsettings.h"
@@ -124,116 +118,6 @@ public:
 
 //=======================
 
-class WdgTabletSettings : public QWidget, public Ui::WdgTabletSettings
-{
-    Q_OBJECT
-
-    public:
-        WdgTabletSettings(QWidget *parent) : QWidget(parent) { setupUi(this); }
-};
-
-class WdgTabletDeviceSettings : public QWidget, public Ui::WdgTabletDeviceSettings
-{
-    Q_OBJECT
-
-    public:
-        WdgTabletDeviceSettings(QWidget *parent) : QWidget(parent) { setupUi(this); }
-};
-
-/**
- *  Tablet settings tab for preferences dialog
- */
-class TabletSettingsTab : public WdgTabletSettings
-{
-Q_OBJECT
-
-public:
-    TabletSettingsTab( QWidget *parent = 0, const char *name = 0 );
-
-public:
-    void setDefault();
-    void applySettings();
-
-private slots:
-    void slotActivateDevice(int deviceIndex);
-    void slotSetDeviceEnabled(bool enabled);
-    void slotConfigureDevice();
-    void applyTabletDeviceSettings();
-
-#ifdef EXTENDED_X11_TABLET_SUPPORT
-
-private:
-    class DeviceSettings {
-    public:
-        DeviceSettings(KisCanvasWidget::X11TabletDevice *tabletDevice, bool enabled,
-                       qint32 xAxis, qint32 yAxis, qint32 pressureAxis,
-                       qint32 xTiltAxis, qint32 yTiltAxis, qint32 wheelAxis,
-                       qint32 toolIDAxis, qint32 serialNumberAxis);
-        DeviceSettings();
-
-        void applySettings();
-
-        void setEnabled(bool enabled);
-        bool enabled() const;
-
-        qint32 numAxes() const;
-
-        void setXAxis(qint32 axis);
-        void setYAxis(qint32 axis);
-        void setPressureAxis(qint32 axis);
-        void setXTiltAxis(qint32 axis);
-        void setYTiltAxis(qint32 axis);
-        void setWheelAxis(qint32 axis);
-        void setToolIDAxis(qint32 axis);
-        void setSerialNumberAxis(qint32 axis);
-
-        qint32 xAxis() const;
-        qint32 yAxis() const;
-        qint32 pressureAxis() const;
-        qint32 xTiltAxis() const;
-        qint32 yTiltAxis() const;
-        qint32 wheelAxis() const;
-        qint32 toolIDAxis() const;
-        qint32 serialNumberAxis() const;
-
-    private:
-        KisCanvasWidget::X11TabletDevice *m_tabletDevice;
-
-        bool m_enabled;
-        qint32 m_xAxis;
-        qint32 m_yAxis;
-        qint32 m_pressureAxis;
-        qint32 m_xTiltAxis;
-        qint32 m_yTiltAxis;
-        qint32 m_wheelAxis;
-        qint32 m_toolIDAxis;
-        qint32 m_serialNumberAxis;
-    };
-
-    class TabletDeviceSettingsDialog : public KDialog {
-
-    public:
-        TabletDeviceSettingsDialog(const QString& deviceName,
-                                   DeviceSettings settings,
-                                   QWidget *parent = 0,
-                                   const char *name = 0);
-        virtual ~TabletDeviceSettingsDialog();
-
-        DeviceSettings settings();
-
-    private:
-        WdgTabletDeviceSettings *m_page;
-        DeviceSettings m_settings;
-    };
-
-    void initTabletDevices();
-
-    Q3ValueVector<DeviceSettings> m_deviceSettings;
-#endif
-};
-
-//=======================
-
 class WdgDisplaySettings : public QWidget, public Ui::WdgDisplaySettings
 {
     Q_OBJECT
@@ -311,7 +195,6 @@ protected:
     GeneralTab* m_general;
     ColorSettingsTab* m_colorSettings;
     PerformanceTab* m_performanceSettings;
-    TabletSettingsTab * m_tabletSettings;
     DisplaySettingsTab * m_displaySettings;
     GridSettingsTab* m_gridSettings;
 

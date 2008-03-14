@@ -42,34 +42,39 @@ KoOdfPaste::~KoOdfPaste()
 bool KoOdfPaste::paste( KoOdf::DocumentType documentType, const QMimeData * data )
 {
     QByteArray arr = data->data( KoOdf::mimeType( documentType ) );
-    bool retval = false;
-    if ( !arr.isEmpty() ) {
-        QBuffer buffer( &arr );
-        KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
-        KoOdfReadStore odfStore( store );
+    return paste(documentType, arr);
+}
 
-        QString errorMessage;
-        if ( ! odfStore.loadAndParse( errorMessage ) ) {
-            kError() << "loading and parsing failed:" << errorMessage << endl;
-            return false;
-        }
+bool KoOdfPaste::paste( KoOdf::DocumentType documentType, QByteArray &arr )
+{
+    if (arr.isEmpty())
+        return false;
 
-        KoXmlElement content = odfStore.contentDoc().documentElement();
-        KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
+    QByteArray *bytes = &arr;
+    QBuffer buffer( bytes );
+    KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
+    KoOdfReadStore odfStore( store );
 
-        if ( realBody.isNull() ) {
-            kError() << "No body tag found!" << endl;
-            return false;
-        }
-
-        KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( documentType, false ) );
-
-        if ( body.isNull() ) {
-            kError() << "No" << KoOdf::bodyContentElement( documentType, true ) << "tag found!" << endl;
-            return false;
-        }
-
-        retval = process( body, odfStore );
+    QString errorMessage;
+    if ( ! odfStore.loadAndParse( errorMessage ) ) {
+        kError() << "loading and parsing failed:" << errorMessage << endl;
+        return false;
     }
-    return retval;
+
+    KoXmlElement content = odfStore.contentDoc().documentElement();
+    KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
+
+    if ( realBody.isNull() ) {
+        kError() << "No body tag found!" << endl;
+        return false;
+    }
+
+    KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( documentType, false ) );
+
+    if ( body.isNull() ) {
+        kError() << "No" << KoOdf::bodyContentElement( documentType, true ) << "tag found!" << endl;
+        return false;
+    }
+
+    return process( body, odfStore );
 }

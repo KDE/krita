@@ -1361,10 +1361,13 @@ void TextTool::toggleTrackChanges(bool on) {
 
 void TextTool::selectAll() {
     if(m_textShapeData == 0) return;
+    const int selectionLength = qAbs(m_textCursor.position() - m_textCursor.anchor());
     QTextBlock lastBlock = m_textShapeData->document()->end().previous();
     m_textCursor.setPosition(lastBlock.position() + lastBlock.length() - 1);
     m_textCursor.setPosition(0, QTextCursor::KeepAnchor);
     repaintSelection(0, m_textCursor.anchor());
+    if (selectionLength != qAbs(m_textCursor.position() - m_textCursor.anchor())) // it actually changed
+        emit selectionChanged(true);
 }
 
 void TextTool::startMacro(const QString &title) {

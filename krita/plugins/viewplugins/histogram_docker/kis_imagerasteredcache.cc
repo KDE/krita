@@ -66,8 +66,8 @@ void KisImageRasteredCache::imageUpdated(QRegion rc) {
 
     if (!rc.isEmpty()) {
 
-        QVector<QRect>::iterator it = rc.begin();
-        QVector<QRect>::iterator end = rc.end();
+        QVector<QRect>::iterator it = rc.rects().begin();
+        QVector<QRect>::iterator end = rc.rects().end();
 
         while (it != end) {
 

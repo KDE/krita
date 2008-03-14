@@ -20,6 +20,7 @@
 #include "ZoomHandler.h"
 
 #include <KoShapeContainer.h>
+#include <KoShapeBorderModel.h>
 
 #include <QPainter>
 #include <QSizeF>
@@ -58,8 +59,17 @@ void ClipboardProxyShape::paint(QPainter &painter, const KoViewConverter &conver
         qreal x1;
         converter.zoom(&x1, &x1);
         zh.setAbsoluteZoom(x1 * scale);
+        painter.save();
         m_child->paint(painter, zh);
+        painter.restore();
+        if (m_child->border())
+            m_child->border()->paintBorder(m_child, painter, zh);
     }
-    else
+    else {
+        painter.save();
         m_child->paint(painter, converter);
+        painter.restore();
+        if (m_child->border())
+            m_child->border()->paintBorder(m_child, painter, converter);
+    }
 }

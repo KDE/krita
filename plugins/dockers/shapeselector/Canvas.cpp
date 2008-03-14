@@ -29,6 +29,7 @@
 #include "ShapeSelector.h"
 
 #include <KoShapeManager.h>
+#include <KoOdfPaste.h>
 #include <KoPointerEvent.h>
 #include <KoInsets.h>
 #include <KoSelection.h>
@@ -40,6 +41,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoLineBorder.h>
 
 #include <QMouseEvent>
 #include <QBuffer>
@@ -408,42 +410,46 @@ void Canvas::loadShapeTypes()
 
 void Canvas::clipboardChanged()
 {
-    const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
-    if (data->hasFormat(OASIS_MIME)) {
-        QByteArray bytes = data->data(OASIS_MIME);
-        QBuffer buffer(&bytes);
-        KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
-        KoOdfReadStore odfStore(store);
-        QString error;
-        if (! odfStore.loadAndParse(error)) {
-            kWarning() << "could not parse clipboard data;" << error;
-            return;
-        }
-        KoXmlElement root = odfStore.contentDoc().documentElement();
-        KoXmlNode body = root.namedItemNS("urn:oasis:names:tc:opendocument:xmlns:office:1.0", "body");
-        KoXmlNode text = body.namedItemNS("urn:oasis:names:tc:opendocument:xmlns:office:1.0", "text");
-        KoXmlNode item = text.firstChild();
-        while (! item.isElement()) {
-            item = item.nextSibling();
-            if (item.isNull()) { // no more children.
-                kWarning() << "Clipboard Odf-Xml does not seem to contain a useful element";
-                return;
-            }
+    class Paster : public KoOdfPaste {
+      public:
+        Paster(KoShapeControllerBase *controller)
+            : m_shape(0), m_shapeController(controller)
+        {
         }
 
-        KoOdfStylesReader reader;
-        KoOdfLoadingContext context(reader, store);
-        KoShapeLoadingContext context2(context, &m_shapeController);
-        KoShape *clipboardShape = KoShapeRegistry::instance()->createShapeFromOdf(item.toElement(), context2);
-        if (clipboardShape) {
-            if (m_currentClipboard) {
-                m_itemStore.removeShape(m_currentClipboard);
-                delete m_currentClipboard;
+        bool process( const KoXmlElement & body, KoOdfReadStore & odfStore )
+        {
+            KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
+            KoShapeLoadingContext context( loadingContext, m_shapeController );
+
+            KoXmlElement element;
+            forEachElement( element, body )
+            {
+                m_shape = KoShapeRegistry::instance()->createShapeFromOdf( element, context );
+                if (m_shape)
+                    return true;
             }
-            m_currentClipboard = new ClipboardProxyShape(clipboardShape, bytes);
-            m_itemStore.addShape(m_currentClipboard);
+            return false;
         }
-        return;
+
+        KoShape *shape() { return m_shape; }
+
+      private:
+        KoShape *m_shape;
+        KoShapeControllerBase *m_shapeController;
+    };
+
+    Paster paster(&m_shapeController);
+    paster.paste(KoOdf::Text, QApplication::clipboard()->mimeData(QClipboard::Clipboard));
+    if (paster.shape()) {
+        if (m_currentClipboard) {
+            m_itemStore.removeShape(m_currentClipboard);
+            delete m_currentClipboard;
+        }
+        const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+        QByteArray bytes = data->data(OASIS_MIME);
+        m_currentClipboard = new ClipboardProxyShape(paster.shape(), bytes);
+        m_itemStore.addShape(m_currentClipboard);
     }
 }
 

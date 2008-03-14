@@ -28,6 +28,7 @@
 
 #include <kis_global.h>
 #include <kis_types.h>
+#include <kis_image.h>
 #include <kis_view2.h>
 
 KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)

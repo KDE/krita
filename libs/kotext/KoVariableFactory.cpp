@@ -85,5 +85,3 @@ void KoVariableFactory::setOdfElementNames( const QString & nameSpace, const QSt
     d->odfNameSpace = nameSpace;
     d->odfElementNames = names;
 }
-
-#include "KoVariableFactory.moc"

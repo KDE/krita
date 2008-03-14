@@ -30,8 +30,6 @@
 class KoVariable;
 class KoProperties;
 
-#include "KoInlineObjectFactory.h"
-
 /// A template used in the KoVariableFactory
 struct KOTEXT_EXPORT KoVariableTemplate
 {
@@ -51,7 +49,7 @@ struct KOTEXT_EXPORT KoVariableTemplate
  * allow the creation of the inlineObject from that plugin.
  * The factory additionally has information to allow showing a menu entry for user
  * access to the object-type.
- * @see KoInlineObjectRegistry
+ * @see KoVariableRegistry
  */
 class KOTEXT_EXPORT KoVariableFactory
 {

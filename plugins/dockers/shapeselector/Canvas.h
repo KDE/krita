@@ -81,6 +81,8 @@ public:
     void moveDocumentOffset(const QPointF &offset);
     void resetDocumentOffset();
 
+    static KoShape *createShapeFromPaste(QByteArray &bytes);
+
 signals:
     void resized(const QSize &newSize);
 

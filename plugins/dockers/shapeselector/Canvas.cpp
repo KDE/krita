@@ -416,6 +416,33 @@ void Canvas::loadShapeTypes()
 
 void Canvas::clipboardChanged()
 {
+    const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    QByteArray bytes = data->data(OASIS_MIME);
+    KoShape *shape = createShapeFromPaste(bytes);
+
+    if (shape) {
+        ClipboardProxyShape *proxy = new ClipboardProxyShape(shape, bytes);
+        if (m_currentClipboard) {
+            proxy->setParent(m_currentClipboard->parent());
+            proxy->setPosition(m_currentClipboard->position());
+            m_itemStore.removeShape(m_currentClipboard);
+            delete m_currentClipboard;
+        }
+        else {
+            // find a good default spot for the new clipboard shape.
+            if (m_itemStore.mainFolder())
+                proxy->setParent(m_itemStore.mainFolder());
+            else // center it on screen.
+                proxy->setAbsolutePosition( m_displayOffset + m_converter.viewToDocument(QPointF(width() / 2.0, height() / 2.0)));
+        }
+        m_currentClipboard = proxy;
+        m_itemStore.addShape(m_currentClipboard);
+    }
+}
+
+// static
+KoShape *Canvas::createShapeFromPaste(QByteArray &bytes)
+{
     class Paster : public KoOdfPaste {
       public:
         Paster(KoShapeControllerBase *controller)
@@ -445,28 +472,10 @@ void Canvas::clipboardChanged()
         KoShapeControllerBase *m_shapeController;
     };
 
-    Paster paster(&m_shapeController);
-    paster.paste(KoOdf::Text, QApplication::clipboard()->mimeData(QClipboard::Clipboard));
-    if (paster.shape()) {
-        const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
-        QByteArray bytes = data->data(OASIS_MIME);
-        ClipboardProxyShape *proxy = new ClipboardProxyShape(paster.shape(), bytes);
-        if (m_currentClipboard) {
-            proxy->setParent(m_currentClipboard->parent());
-            proxy->setPosition(m_currentClipboard->position());
-            m_itemStore.removeShape(m_currentClipboard);
-            delete m_currentClipboard;
-        }
-        else {
-            // find a good default spot for the new clipboard shape.
-            if (m_itemStore.mainFolder())
-                proxy->setParent(m_itemStore.mainFolder());
-            else // center it on screen.
-                proxy->setAbsolutePosition( m_displayOffset + m_converter.viewToDocument(QPointF(width() / 2.0, height() / 2.0)));
-        }
-        m_currentClipboard = proxy;
-        m_itemStore.addShape(m_currentClipboard);
-    }
+    DummyShapeController dsc;
+    Paster paster(&dsc);
+    paster.paste(KoOdf::Text, bytes);
+    return paster.shape();
 }
 
 #include <Canvas.moc>

@@ -21,6 +21,7 @@
 #include "IconShape.h"
 #include "TemplateShape.h"
 #include "ClipboardProxyShape.h"
+#include "Canvas.h"
 
 #include <KoViewConverter.h>
 
@@ -76,7 +77,12 @@ void FolderShape::load(const QDomDocument &document)
             addChild(t);
         }
         else if (item.tagName() == "clipboard") {
-            // TODO
+            QByteArray data = item.text().toLatin1();
+            KoShape *clipboardShape = Canvas::createShapeFromPaste(data);
+            if (clipboardShape) {
+                ClipboardProxyShape *proxy = new ClipboardProxyShape(clipboardShape, data);
+                addChild(proxy);
+            }
         }
         item = item.nextSiblingElement();
     }

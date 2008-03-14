@@ -79,6 +79,7 @@ public:
     QAction * popup(QMenu *menu, const QPointF &docCoordinate);
 
     void moveDocumentOffset(const QPointF &offset);
+    void resetDocumentOffset();
 
 signals:
     void resized(const QSize &newSize);

@@ -42,7 +42,6 @@ static void deleteShape(KoShape *shape)
     delete shape;
 }
 
-
 ClipboardProxyShape::~ClipboardProxyShape()
 {
     deleteShape(m_child);
@@ -53,7 +52,7 @@ void ClipboardProxyShape::paint(QPainter &painter, const KoViewConverter &conver
     painter.setClipRect(converter.documentToView(QRectF(QPointF(), size())));
     QSizeF nestedSize = m_child->size();
     QSizeF ourSize = size();
-    qreal scale = qMin(ourSize.width() / nestedSize.width(), ourSize.height() / nestedSize.width());
+    const qreal scale = qMin(ourSize.width() / nestedSize.width(), ourSize.height() / nestedSize.height());
     if (scale != 1.0) {
         ZoomHandler zh;
         qreal x1;

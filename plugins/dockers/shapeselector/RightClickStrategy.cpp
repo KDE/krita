@@ -101,6 +101,8 @@ void RightClickStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
             main->setBorder(0);
             main->setSize(m_canvas->size());
             main->update();
+            main->setPosition(QPointF(0,0));
+            m_canvas->resetDocumentOffset();
         }
         delete folder;
     }

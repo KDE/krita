@@ -119,6 +119,12 @@ void Canvas::moveDocumentOffset(const QPointF &offset)
     scroll(qRound(distance.x()), qRound(distance.y()));
 }
 
+void Canvas::resetDocumentOffset()
+{
+    m_displayOffset = QPointF();
+    update();
+}
+
 // event handlers
 void Canvas::mousePressEvent(QMouseEvent *event) {
     KoPointerEvent pe(event, m_displayOffset + m_converter.viewToDocument(event->pos()));
@@ -281,7 +287,7 @@ void  Canvas::dropEvent(QDropEvent *event) {
                     break;
                 }
             }
-            if(shapes.count())
+            if(shapes.count() && shape->parent())
                 shape->setPosition(point - offset - shape->parent()->position());
             else {
                 shape->setParent(0);
@@ -442,13 +448,23 @@ void Canvas::clipboardChanged()
     Paster paster(&m_shapeController);
     paster.paste(KoOdf::Text, QApplication::clipboard()->mimeData(QClipboard::Clipboard));
     if (paster.shape()) {
+        const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+        QByteArray bytes = data->data(OASIS_MIME);
+        ClipboardProxyShape *proxy = new ClipboardProxyShape(paster.shape(), bytes);
         if (m_currentClipboard) {
+            proxy->setParent(m_currentClipboard->parent());
+            proxy->setPosition(m_currentClipboard->position());
             m_itemStore.removeShape(m_currentClipboard);
             delete m_currentClipboard;
         }
-        const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
-        QByteArray bytes = data->data(OASIS_MIME);
-        m_currentClipboard = new ClipboardProxyShape(paster.shape(), bytes);
+        else {
+            // find a good default spot for the new clipboard shape.
+            if (m_itemStore.mainFolder())
+                proxy->setParent(m_itemStore.mainFolder());
+            else // center it on screen.
+                proxy->setAbsolutePosition( m_displayOffset + m_converter.viewToDocument(QPointF(width() / 2.0, height() / 2.0)));
+        }
+        m_currentClipboard = proxy;
         m_itemStore.addShape(m_currentClipboard);
     }
 }

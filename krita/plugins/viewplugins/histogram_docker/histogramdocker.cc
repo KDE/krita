@@ -50,10 +50,9 @@ namespace {
 
     class KisHistogramDock : public QDockWidget {
 
-        public KisHistogramDock( KisView2 *view ) {
-
-
-        }
+        public:
+            KisHistogramDock( KisView2 *view ) {
+            }
     };
 
     class KisHistogramDockFactory : public KoDockFactory {

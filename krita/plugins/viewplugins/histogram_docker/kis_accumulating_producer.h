@@ -52,7 +52,7 @@ public:
 
     virtual qint32 numberOfBins() { return m_source->at(0)->numberOfBins(); }
 
-    virtual Q3ValueVector<KoChannelInfo *> channels() { return m_source->at(0)->channels(); }
+    virtual QList<KoChannelInfo *> channels() { return m_source->at(0)->channels(); }
 
     /// Call this when the 'source' list has changed colorspace
     virtual void changedSourceProducer() {

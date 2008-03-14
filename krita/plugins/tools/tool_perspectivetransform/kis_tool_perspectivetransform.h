@@ -44,8 +44,7 @@ class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryLis
     typedef KisToolNonPaint super;
     Q_OBJECT
     enum InterractionMode { DRAWRECTINTERRACTION, EDITRECTINTERRACTION };
-    enum HandleSelected { NOHAND,
-                          LE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
+    enum HandleSelected { NOHANDLE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
 public:
     KisToolPerspectiveTransform();
     virtual ~KisToolPerspectiveTransform();

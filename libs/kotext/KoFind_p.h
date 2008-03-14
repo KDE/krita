@@ -59,16 +59,21 @@ public:
     QAction *findNext;
     QAction *findPrev;
 
+    void findDocumentSetNext( QTextDocument * document );
+    void findDocumentSetPrevious( QTextDocument * document );
+
 protected:
     void parseSettingsAndFind();
 
 private:
+    KoFind * q;
     KoCanvasResourceProvider *provider;
     KoFindStrategy findStrategy; /// strategy used for find
     KoReplaceStrategy replaceStrategy; /// strategy used for replace
     KoFindStrategyBase * strategy; /// the current strategy used
 
     QTextDocument *document;
+    QTextDocument *startDocument;
     QTextCursor lastKnownPosition;
     bool restarted;
     bool start; /// if true find/replace is restarted

@@ -23,6 +23,7 @@
 #include <KoCanvasResourceProvider.h>
 
 #include "KoText.h"
+#include "KoFind_p.h"
 
 FindDirection::FindDirection( KoCanvasResourceProvider * provider )
 : m_provider( provider )
@@ -58,6 +59,11 @@ void FindForward::select( const QTextCursor & cursor )
     m_provider->setResource( KoText::CurrentTextAnchor, cursor.anchor() );
 }
 
+void FindForward::nextDocument( QTextDocument * document, KoFindPrivate * findPrivate )
+{
+    findPrivate->findDocumentSetNext( document );
+}
+
 FindBackward::FindBackward( KoCanvasResourceProvider * provider )
 : FindDirection( provider )
 {
@@ -82,3 +88,9 @@ void FindBackward::select( const QTextCursor & cursor )
     m_provider->setResource( KoText::CurrentTextPosition, cursor.anchor() );
     m_provider->setResource( KoText::CurrentTextAnchor, cursor.position() );
 }
+
+void FindBackward::nextDocument( QTextDocument * document, KoFindPrivate * findPrivate )
+{
+    findPrivate->findDocumentSetPrevious( document );
+}
+

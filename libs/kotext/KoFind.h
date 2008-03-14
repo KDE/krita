@@ -24,6 +24,7 @@
 
 #include <QObject>
 
+class QTextDocument;
 class KoCanvasResourceProvider;
 class KActionCollection;
 class KoFindPrivate;
@@ -47,8 +48,32 @@ public:
     /// destructor
     ~KoFind();
 
+signals:
+    /**
+     * @brief This signal is send when the current document has reached its end
+     *
+     * Connect to this signal if you want to support find in multiple text shapes.
+     * In you code you then should select the next text shape and select the text 
+     * tool.
+     *
+     * @param document The currently document where find was used.
+     */
+    void findDocumentSetNext( QTextDocument * document );
+
+    /**
+     * @brief This signal is send when the current document has reached its beginning
+     *
+     * Connect to this signal if you want to support find in multiple text shapes.
+     * In you code you then should select the next text shape and select the text 
+     * tool.
+     *
+     * @param document The currently document where find was used.
+     */
+    void findDocumentSetPrevious( QTextDocument * document );
+
 private:
     KoFindPrivate * const d;
+    friend class KoFindPrivate;
 
     Q_PRIVATE_SLOT(d, void resourceChanged(int, const QVariant&) )
     Q_PRIVATE_SLOT(d, void findActivated() )

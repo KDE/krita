@@ -58,6 +58,7 @@ class InUse
 KoFindPrivate::KoFindPrivate( KoFind *find, KoCanvasResourceProvider *crp, QWidget *w )
 : findNext( 0 )
 , findPrev( 0 )
+, q( find )
 , provider( crp )
 , findStrategy( w )
 , replaceStrategy( w )
@@ -70,8 +71,8 @@ KoFindPrivate::KoFindPrivate( KoFind *find, KoCanvasResourceProvider *crp, QWidg
 , findForward( crp )
 , findBackward( crp )
 {
-    QObject::connect( findStrategy.dialog(), SIGNAL( okClicked() ), find, SLOT( startFind() ) );
-    QObject::connect( replaceStrategy.dialog(), SIGNAL( okClicked() ), find, SLOT( startReplace() ) );
+    QObject::connect( findStrategy.dialog(), SIGNAL( okClicked() ), q, SLOT( startFind() ) );
+    QObject::connect( replaceStrategy.dialog(), SIGNAL( okClicked() ), q, SLOT( startReplace() ) );
 }
 
 void KoFindPrivate::resourceChanged(int key, const QVariant &variant)
@@ -152,6 +153,16 @@ void KoFindPrivate::startReplace()
     parseSettingsAndFind();
 }
 
+void KoFindPrivate::findDocumentSetNext( QTextDocument * document )
+{
+    emit q->findDocumentSetNext( document );
+}
+
+void KoFindPrivate::findDocumentSetPrevious( QTextDocument * document )
+{
+    emit q->findDocumentSetPrevious( document );
+}
+
 void KoFindPrivate::parseSettingsAndFind()
 {
     if(document == 0)
@@ -182,6 +193,7 @@ void KoFindPrivate::parseSettingsAndFind()
         start = false;
         restarted = false;
         strategy->reset();
+        startDocument = document;
         lastKnownPosition = QTextCursor( document );
         if ( selectedText ) {
             int selectionStart = provider->intResource( KoText::CurrentTextPosition );
@@ -230,16 +242,18 @@ void KoFindPrivate::parseSettingsAndFind()
         cursor = document->find( pattern, lastKnownPosition, flags );
     }
 
-    //kDebug() << "r" << restarted << "c > e" << ( cursor > endPosition ) << "e" << cursor.atEnd() << "n" << cursor.isNull();
-    if ( ( restarted || selectedText ) && ( cursor.isNull() || findDirection->positionReached( cursor, endPosition ) ) ) {
+    //kDebug() << "r" << restarted << "c > e" << ( document == startDocument && cursor > endPosition ) << ( startDocument == document && findDirection->positionReached(  cursor, endPosition ) )<< "e" << cursor.atEnd() << "n" << cursor.isNull();
+    if ( ( ( ( document == startDocument ) && restarted ) || selectedText ) 
+            && ( cursor.isNull() || findDirection->positionReached( cursor, endPosition ) ) ) {
         restarted = false;
         strategy->displayFinalDialog();
         lastKnownPosition = startPosition;
         return;
     }
     else if ( cursor.isNull() ) {
-        // TODO go to next document
         restarted = true;
+        findDirection->nextDocument( document, this );
+        lastKnownPosition = QTextCursor( document );
         findDirection->positionCursor( lastKnownPosition );
         // restart from the beginning
         parseSettingsAndFind();

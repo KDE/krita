@@ -73,13 +73,14 @@ public:
 
     /// Get the class that manages the user interface for the masks
     KisMaskManager * maskManager();
-
 signals:
 
     void sigNodeActivated( KisNodeSP layer );
 
 public slots:
 
+    void addNode( KisNodeSP node, KisNodeSP activeNode);
+    void moveNode( KisNodeSP node, KisNodeSP activeNode);
     void createNode( const QString & node);
     void activateNode( KisNodeSP layer );
     void nodesUpdated();
@@ -113,7 +114,7 @@ public slots:
     void nodeToBottom();
     
 private:
-    void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above);
+    void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
 
     struct Private;
     Private * const m_d;

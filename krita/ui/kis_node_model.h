@@ -62,6 +62,8 @@ public: // from QAbstractItemModel
 signals:
 
     void nodeActivated( KisNodeSP );
+    void requestAddNode(KisNodeSP node, KisNodeSP activeNode);
+    void requestMoveNode(KisNodeSP node, KisNodeSP activeNode);
 
 private slots:
 

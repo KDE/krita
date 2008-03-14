@@ -217,17 +217,12 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 {
     //dbgUI <<"KisNodeModel::flags" << index;
     if (!index.isValid())
-        return 0; // Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
+        return  Qt::ItemIsDropEnabled;
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable;
-
-    // XXX: nodes will also be drop enabled for masks and selections.
-    if (static_cast<KisNode*>(index.internalPointer())) {
-        flags |= Qt::ItemIsDropEnabled;
-    }
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
 
     return flags;
 }
@@ -294,7 +289,7 @@ void KisNodeModel::endRemoveNodes( KisNode *, int )
 
 QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 {
-    //dbgUI <<"KisNodeModel::mimeData";
+    dbgUI <<"KisNodeModel::mimeData";
     QMimeData* data = new QMimeData;
     QByteArray encoded;
     QDataStream stream(&encoded, QIODevice::WriteOnly);
@@ -319,7 +314,7 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
 
 // TODO: manage the drop
     ////dbgUI <<"KisNodeModel::dropMimeData";
-    ////dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
+    dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
     if(! data->hasFormat( "application/x-kritalayermodeldatalist" ))
     {
         return false;
@@ -340,15 +335,19 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
     if(action == Qt::CopyAction)
     {
         ////dbgUI <<"KisNodeModel::dropMimeData copy action";
-/*        while (!stream.atEnd()) {
-            int r, c;
-            QMap<int, QVariant> v;
-            stream >> r >> c >> v;
-            ////dbgUI <<"KisNodeModel::dropMimeData copy action" << r <<"" << c;
-        }*/
+        KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
+        foreach(KisNode* n, nodes)
+        {
+            emit requestAddNode(n->clone(), activeNode);
+        }
         return true;
     } else if(action == Qt::MoveAction) {
         ////dbgUI <<"KisNodeModel::dropMimeData move action";
+        KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
+        foreach(KisNode* n, nodes)
+        {
+            emit requestMoveNode(n, activeNode);
+        }
         return true;
     }
     return false;

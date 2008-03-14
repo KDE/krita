@@ -84,6 +84,7 @@ KisLayerBox::KisLayerBox()
     setMinimumSize(mainWidget->minimumSizeHint());
 
     listLayers->viewport()->installEventFilter(this);
+    listLayers->setDragDropMode(QAbstractItemView::InternalMove);
     listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     
     connect(listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),

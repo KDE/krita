@@ -148,10 +148,9 @@ bool allowAsChild( const QString & parentType, const QString & childType )
     return true;
 }
 
-void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above)
+void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active)
 {
     KisNodeSP root = m_d->view->image()->root();
-    KisNodeSP active = activeNode();
     if (!active)
         active = root->firstChild();
     
@@ -175,13 +174,31 @@ void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &par
     above = parent->firstChild();
 }
 
+void KisNodeManager::addNode( KisNodeSP node, KisNodeSP activeNode)
+{
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
+    m_d->doc->image()->addNode( node, parent, above);
+}
+
+void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
+{
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
+    m_d->doc->image()->moveNode( node, parent, above);
+}
+
 void KisNodeManager::createNode( const QString & nodeType)
 {
     
     KisNodeSP parent;
     KisNodeSP above;
 
-    getNewNodeLocation(nodeType, parent, above);
+    getNewNodeLocation(nodeType, parent, above, activeNode());
 
     // XXX: make factories for this kind of stuff,
     //      with a registry

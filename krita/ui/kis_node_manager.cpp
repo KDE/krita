@@ -39,6 +39,7 @@
 #include "kis_doc2.h"
 #include "kis_mask_manager.h"
 #include "kis_layer_manager.h"
+#include "kis_selection_manager.h"
 
 struct KisNodeManager::Private {
 
@@ -269,6 +270,7 @@ void KisNodeManager::nodesUpdated()
 
     m_d->view->updateGUI();
     m_d->view->resourceProvider()->slotNodeActivated( node );
+    m_d->view->selectionManager()->selectionChanged();
 
 }
 

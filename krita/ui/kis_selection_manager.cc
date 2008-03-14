@@ -328,27 +328,25 @@ bool KisSelectionManager::selectionIsActive()
     return false;
 }
 
-void KisSelectionManager::imgSelectionChanged(KisImageSP img)
+void KisSelectionManager::selectionChanged()
 {
-    // XXX_SELECTION: I doubt this is still working correctly
-    if (img == m_view->image()) {
+    updateGUI();
+    outline.clear();
 
-        updateGUI();
-        outline.clear();
+    if ( KisSelectionSP selection = m_view->selection() ) {
+        if(selection->hasPixelSelection()) {
+            if(!timer->isActive())
+                timer->start ( 300 );
 
-        if ( KisSelectionSP selection = m_view->selection() ) {
-            if(selection->hasPixelSelection()) {
-                if(!timer->isActive())
-                    timer->start ( 300 );
-
-                KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
-                outline = getOrCreatePixelSelection->outline();
-                updateSimpleOutline();
-            }
+            KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
+            outline = getOrCreatePixelSelection->outline();
+            updateSimpleOutline();
         }
-        else
-            timer->stop();
     }
+    else
+        timer->stop();
+
+    m_view->canvasBase()->updateCanvas();
 }
 
 void KisSelectionManager::updateSimpleOutline()
@@ -461,7 +459,7 @@ void KisSelectionManager::copy()
     }
 
     m_clipboard->setClip(clip);
-    imgSelectionChanged(m_view->image());
+    selectionChanged();
 }
 
 

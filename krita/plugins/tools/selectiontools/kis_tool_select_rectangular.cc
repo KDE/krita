@@ -181,7 +181,11 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         rc = rc.intersected(currentImage()->bounds());
         rc = rc.normalized();
 
-        KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Rectangular Selection"));
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
+        if ( !kisCanvas )
+            return;
+
+        KisSelectionToolHelper helper(kisCanvas, currentLayer(), i18n("Rectangular Selection"));
 
         if(m_selectionMode == PIXEL_SELECTION){
 

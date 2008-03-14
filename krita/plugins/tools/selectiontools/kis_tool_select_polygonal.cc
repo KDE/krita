@@ -147,7 +147,11 @@ void KisToolSelectPolygonal::finish()
     if (currentImage()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Polygonal Selection"));
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
+        if ( !kisCanvas )
+            return;
+
+        KisSelectionToolHelper helper(kisCanvas, currentLayer(), i18n("Polygonal Selection"));
 
         if ( m_selectionMode == PIXEL_SELECTION ) {
 

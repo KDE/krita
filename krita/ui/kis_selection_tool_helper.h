@@ -25,19 +25,19 @@
 
 class QUndoCommand;
 class KoShape;
-class KoShapeController;
+class KisCanvas2;
 
 class KRITAUI_EXPORT KisSelectionToolHelper
 {
 public:
-    KisSelectionToolHelper(KoShapeController* shapeController, KisLayerSP layer, const QString& name);
+    KisSelectionToolHelper( KisCanvas2* canvas, KisLayerSP layer, const QString& name);
     virtual ~KisSelectionToolHelper();
 
     QUndoCommand* selectPixelSelection(KisPixelSelectionSP selection, selectionAction action);
     QUndoCommand* addSelectionShape(KoShape* shape);
 
 private:
-    KoShapeController* m_shapeController;
+    KisCanvas2* m_canvas;
     KisImageSP m_image;
     KisLayerSP m_layer;
     QString m_name;

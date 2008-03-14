@@ -122,7 +122,11 @@ void KisToolSelectPath::addPathShape()
     shape->close();
     m_shape = 0;
 
-    KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer, i18n("Path Selection"));
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
+    if ( !kisCanvas )
+        return;
+
+    KisSelectionToolHelper helper(kisCanvas, currentLayer, i18n("Path Selection"));
 
     if( m_selectionMode == PIXEL_SELECTION ){
 

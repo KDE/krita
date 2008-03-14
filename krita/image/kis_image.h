@@ -456,9 +456,6 @@ public:
 
 signals:
 
-    /// ???
-    void sigActiveSelectionChanged(KisImageSP image);
-
     /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
     void sigLayerPropertiesChanged(KisLayerSP layer);
 
@@ -512,9 +509,6 @@ signals:
 
 
 public slots:
-    void slotSelectionChanged();
-    void slotSelectionChanged(const QRect& r);
-
    void slotProjectionUpdated( const QRect & rc );
 
 private:

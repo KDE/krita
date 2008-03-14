@@ -77,7 +77,6 @@ public:
     KoColor backgroundColor;
     quint32 lockCount;
     bool sizeChangedWhileLocked;
-    bool selectionChangedWhileLocked;
     KisPerspectiveGrid* perspectiveGrid;
 
     KUrl uri;
@@ -284,7 +283,6 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
     m_d->backgroundColor = KoColor(Qt::white, colorSpace);
     m_d->lockCount = 0;
     m_d->sizeChangedWhileLocked = false;
-    m_d->selectionChangedWhileLocked = false;
     m_d->perspectiveGrid = 0;
 
     m_d->adapter = adapter;
@@ -315,7 +313,6 @@ void KisImage::lock()
         if (m_d->rootLayer)
             m_d->rootLayer->updateStrategy()->lock();
         m_d->sizeChangedWhileLocked = false;
-        m_d->selectionChangedWhileLocked = false;
         blockSignals( true );
     }
     m_d->lockCount++;
@@ -333,10 +330,6 @@ void KisImage::unlock()
 
             if (m_d->sizeChangedWhileLocked) {
                 emit sigSizeChanged(m_d->width, m_d->height);
-            }
-
-            if (m_d->selectionChangedWhileLocked) {
-                emit sigActiveSelectionChanged(KisImageSP(this));
             }
 
         if (m_d->rootLayer)
@@ -1033,23 +1026,6 @@ KisActionRecorder* KisImage::actionRecorder() const
 bool KisImage::undo() const
 {
     return (m_d->adapter && m_d->adapter->undo());
-}
-
-
-void KisImage::slotSelectionChanged()
-{
-    slotSelectionChanged(bounds());
-}
-
-void KisImage::slotSelectionChanged(const QRect& r)
-{
-    QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
-
-    if (!locked()) {
-        emit sigActiveSelectionChanged(KisImageSP(this));
-    } else {
-        m_d->selectionChangedWhileLocked = true;
-    }
 }
 
 const KoColorSpace * KisImage::colorSpace() const

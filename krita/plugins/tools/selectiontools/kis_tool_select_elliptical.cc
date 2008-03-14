@@ -159,7 +159,11 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
             if (!currentImage())
                 return;
 
-            KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Elliptical Selection"));
+            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
+            if ( !kisCanvas )
+                return;
+
+            KisSelectionToolHelper helper(kisCanvas, currentLayer(), i18n("Elliptical Selection"));
 
             if( m_selectionMode == PIXEL_SELECTION ) {
 

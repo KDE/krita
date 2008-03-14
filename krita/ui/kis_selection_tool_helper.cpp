@@ -27,9 +27,12 @@
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"
 #include "kis_image.h"
+#include "kis_canvas2.h"
+#include "kis_view2.h"
+#include "kis_selection_manager.h"
 
-KisSelectionToolHelper::KisSelectionToolHelper( KoShapeController* shapeController, KisLayerSP layer, const QString& name)
-    : m_shapeController(shapeController)
+KisSelectionToolHelper::KisSelectionToolHelper( KisCanvas2* canvas, KisLayerSP layer, const QString& name)
+    : m_canvas(canvas)
     , m_layer(layer)
     , m_name(name)
 {
@@ -64,11 +67,11 @@ QUndoCommand* KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP s
         QRect rc = selection->selectedRect();
         getOrCreatePixelSelection->setDirty(rc);
         m_layer->selection()->updateProjection(rc);
-        m_image->slotSelectionChanged(rc);
+        m_canvas->view()->selectionManager()->selectionChanged();
     } else {
         getOrCreatePixelSelection->setDirty(m_image->bounds());
         m_layer->selection()->updateProjection(m_image->bounds());
-        m_image->slotSelectionChanged();
+        m_canvas->view()->selectionManager()->selectionChanged();
     }
     return new QUndoCommand();
 }
@@ -85,14 +88,14 @@ QUndoCommand* KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     KisShapeSelection* shapeSelection;
     if(!selection->hasShapeSelection()) {
         shapeSelection = new KisShapeSelection(m_image, selection);
-        QUndoCommand * cmd = m_shapeController->addShape(shapeSelection);
+        QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
         cmd->redo();
         selection->setShapeSelection(shapeSelection);
     }
     else {
         shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
     }
-    QUndoCommand * cmd = m_shapeController->addShape(shape);
+    QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
     shapeSelection->addChild(shape);
     return cmd;
 }

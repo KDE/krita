@@ -97,7 +97,11 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         KisSelectionSP selection =
             fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage() );
 
-        KisSelectionToolHelper helper(m_canvas->shapeController(), currentLayer(), i18n("Contiguous Area Selection"));
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
+        if ( !kisCanvas )
+            return;
+
+        KisSelectionToolHelper helper(kisCanvas, currentLayer(), i18n("Contiguous Area Selection"));
         QUndoCommand* cmd = helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
         m_canvas->addCommand(cmd);
 

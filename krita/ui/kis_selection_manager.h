@@ -62,7 +62,7 @@ public:
 public slots:
 
     void updateGUI();
-    void imgSelectionChanged(KisImageSP img);
+    void selectionChanged();
     void clipboardDataChanged();
 
     void cut();

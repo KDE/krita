@@ -1602,6 +1602,7 @@ bool KoDocument::openFile()
             d->m_bLoading = false;
             return false;
         }
+        m_bEmpty = false;
         kDebug(30003) <<"KoDocument::openFile - importedFile '" << importedFile
                        << "', status: " << static_cast<int>( status ) << endl;
     }

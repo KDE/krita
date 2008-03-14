@@ -21,7 +21,6 @@
 
 #include "KoGenStyles.h"
 #include "KoXmlNS.h"
-#include "KoUnit.h"
 
 #include <QtCore/QBuffer>
 

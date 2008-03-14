@@ -51,7 +51,7 @@ namespace {
     class KisHistogramDock : public QDockWidget {
 
         public:
-            KisHistogramDock( KisView2 *view ) {
+            KisHistogramDock(KisHistogramView *view ) : QDockWidget(i18n("Histogram"), view) {
             }
     };
 
@@ -62,7 +62,7 @@ public:
         {
         }
 
-    virtual QString dockId() const
+    virtual QString id() const
         {
             return QString( "KisHistogramDock" );
         }
@@ -75,7 +75,7 @@ public:
     virtual QDockWidget* createDockWidget()
         {
             KisHistogramDock * dockWidget = new KisHistogramDock(m_view);
-            dockWidget->setObjectName(dockId());
+            dockWidget->setObjectName(id());
 
             return dockWidget;
         }
@@ -133,7 +133,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
                 this, SLOT(colorSpaceChanged(const KoColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
-        m_view->createDock(i18n("Histogram"), m_hview);
+        m_view->createDockWidget(new KisHistogramDockFactory(m_hview));
     } else {
         m_cache = 0;
     }

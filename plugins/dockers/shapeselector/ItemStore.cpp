@@ -24,6 +24,7 @@
 #include "FolderBorder.h"
 
 #include <KoShapeManager.h>
+#include <KoProperties.h>
 #include <KoShapeRegistry.h>
 #include <KoGlobal.h>
 #include <KLocale>
@@ -97,15 +98,17 @@ public:
                 continue;
             conf.writeEntry(QString::fromLatin1("book.%1_position").arg(index).toAscii().data(), folder->position());
             conf.writeEntry(QString::fromLatin1("book.%1_size").arg(index).toAscii().data(), folder->size());
+            conf.writeEntry(QString::fromLatin1("book.%1_items").arg(index).toAscii().data(), folder->save().toByteArray());
             ++index;
         }
-        for (int i=folders.size()+1; i <= previouslyConfiguredBooks; i++) {
+        for (int i=folders.size()+1; i <= previouslyConfiguredBooks; i++) { // remove surplus
             conf.deleteEntry(QString::fromLatin1("book.%1_name").arg(i).toAscii().data());
             conf.deleteEntry(QString::fromLatin1("book.%1_position").arg(i).toAscii().data());
             conf.deleteEntry(QString::fromLatin1("book.%1_size").arg(i).toAscii().data());
+            conf.deleteEntry(QString::fromLatin1("book.%1_items").arg(i).toAscii().data());
         }
 
-        if (shapeManagers.count() == 0)
+        if (shapeManagers.count() == 0) // last one
         {
             qDeleteAll(folders);
             folders.clear();
@@ -194,6 +197,21 @@ QRectF ItemStore::loadShapeTypes()
             conf.readEntry(QString::fromLatin1("book.%1_position").arg(i).toAscii().data(), QPointF()));
         folder->setSize(
             conf.readEntry(QString::fromLatin1("book.%1_size").arg(i).toAscii().data(), QSizeF(100, 100)));
+        QByteArray children = conf.readEntry(QString::fromLatin1("book.%1_items").arg(i).toAscii().data(), QByteArray());
+        if (children.size()) {
+            QDomDocument doc;
+            QString error;
+            int line, column;
+            if (doc.setContent(children, false, &error, &line, &column)) {
+                folder->load(doc);
+                foreach(KoShape *child, folder->iterator())
+                    s_itemStorePrivate()->addShape(child);
+            }
+            else {
+                kWarning() << "ERROR: Could not parse xml for folder" << i << "at Line" << line << "Column" << column;
+                kWarning() << "  " << error;
+            }
+        }
         s_itemStorePrivate()->addFolder(folder);
         if (mainFolder == 0) {
             mainFolder = folder;
@@ -217,10 +235,24 @@ QRectF ItemStore::loadShapeTypes()
         bool oneAdded=false;
         foreach(KoShapeTemplate shapeTemplate, factory->templates()) {
             oneAdded=true;
-            TemplateShape *shape = new TemplateShape(shapeTemplate);
-            s_itemStorePrivate()->addShape(shape);
-            mainFolder->addChild(shape);
-            maxHeight = qMax(maxHeight, shape->size().height());
+            TemplateShape *ts = new TemplateShape(shapeTemplate);
+            KoShapeTemplate t1 = ts->shapeTemplate();
+            foreach(KoShape *shape, s_itemStorePrivate()->shapes) {
+                TemplateShape *t = dynamic_cast<TemplateShape*> (shape);
+                if (t == 0)
+                    continue;
+                KoShapeTemplate t2 = t->shapeTemplate();
+                if (t1.id == t2.id && t1.properties && t2.properties && t1.properties->operator==(*t2.properties)) { // already there
+                    delete ts;
+                    ts = 0;
+                    break;
+                }
+            }
+            if (ts) {
+                s_itemStorePrivate()->addShape(ts);
+                mainFolder->addChild(ts);
+                maxHeight = qMax(maxHeight, ts->size().height());
+            }
         }
         if(!oneAdded) {
             KoShape *group = new GroupShape(factory);

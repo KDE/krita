@@ -21,6 +21,8 @@
 
 #include <KoShapeContainer.h>
 
+#include <QDomDocument>
+
 #define FOLDERSHAPE_MIMETYPE "application/x-flake-shapeSelector-folder"
 
 class FolderShape : public KoShapeContainer {
@@ -34,6 +36,8 @@ public:
     virtual KoShape * cloneShape() const { return 0; }
     virtual void setSize( const QSizeF &size );
 
+    QDomDocument save();
+    void load(const QDomDocument &document);
 };
 
 #endif

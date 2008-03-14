@@ -154,7 +154,7 @@ void RightClickStrategy::saveSelection()
         doc.appendChild( element );
         ic->save(element);
     }
-    // TODO support saving a folder (aka book).
+    // TODO support saving a folder (aka book). (see FolderShape::save())
     file.write(doc.toByteArray());
     file.close();
 }

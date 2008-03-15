@@ -61,6 +61,7 @@ protected:
     /// Paint a line between the specified positions on the current layer
     virtual void paintLine(const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
+                   
     virtual void paintBezierCurve(const KisPaintInformation &pi1,
                    const QPointF &control1,
                    const QPointF &control2,
@@ -70,10 +71,15 @@ protected:
     virtual void endPaint();
 
     void paintOutline(const QPointF& point);
+    
 protected slots:
+
     void setSmooth(bool smooth);
+    
 private:
+
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
+    
 protected:
 
     KisPaintInformation m_previousPaintInformation;
@@ -93,6 +99,7 @@ protected:
     KisPainter *m_painter;
     bool m_smooth;
     double m_smoothness;
+    
 private:
 
     bool m_paintedOutline;

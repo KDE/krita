@@ -134,24 +134,29 @@ public:
                 if ( nextJob )
                 {
                     nextJob->run();
-                } else {
+                }
+                else {
                     msleep(1);
                 }
             }
         }
+        
         void postJob(FreehandPaintJob* job)
         {
             QMutexLocker lock(&m_mutex_queue);
             m_queue.enqueue(job);
         }
+        
         void finish() {
             m_finish = true;
             this->wait();
         }
+        
         bool isEmpty() {
             QMutexLocker lock(&m_mutex_queue);
             return m_queue.size() == 0;
         }
+        
         int queueLength() {
             QMutexLocker lock(&m_mutex_queue);
             return m_queue.size();
@@ -160,6 +165,7 @@ public:
             m_finish = false;
             QThread::start();
         }
+        
     private:
         QQueue<FreehandPaintJob* > m_queue;
         QMutex m_mutex_queue;

@@ -60,17 +60,22 @@ public:
 public slots:
 
     virtual void activate(bool temporary = false);
+    
     virtual void deactivate();
+    
     virtual void resourceChanged( int key, const QVariant & res );
 
 public:
 
     /// reimplemented from superclass
     virtual void mousePressEvent( KoPointerEvent *event );
+    
     /// reimplemented from superclass
     virtual void mouseMoveEvent( KoPointerEvent *event );
+    
     /// reimplemented from superclass
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+    
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent( KoPointerEvent *) {} // when a krita tool is enabled, don't push double click on
 

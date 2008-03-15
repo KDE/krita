@@ -26,7 +26,7 @@ set(kritaui_LIB_SRCS
     kis_color_space_selector.cc
     kis_config.cc
     kis_config_notifier.cpp
-    kis_controlframe.cc
+    kis_control_frame.cpp
     kis_node_model.cpp
     kis_cursor.cc
     kis_custom_brush.cc

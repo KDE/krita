@@ -1,5 +1,5 @@
 /*
- *  kis_controlframe.h - part of Krita
+ *  kis_control_frame.h - part of Krita
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
@@ -19,8 +19,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef __kis_controlframe_h__
-#define __kis_controlframe_h__
+#ifndef __kis_control_frame_h__
+#define __kis_control_frame_h__
 
 #include <QMenu>
 #include <QKeyEvent>

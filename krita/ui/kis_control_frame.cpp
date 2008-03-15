@@ -1,5 +1,5 @@
 /*
- *  kis_controlframe.cc - part of Krita
+ *  kis_control_frame.cc - part of Krita
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
@@ -21,7 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_controlframe.h"
+#include "kis_control_frame.h"
 
 #include <stdlib.h>
 
@@ -353,5 +353,5 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientMediator->setActiveItem( m_gradientChooser->currentItem() );
 }
 
-#include "kis_controlframe.moc"
+#include "kis_control_frame.moc"
 

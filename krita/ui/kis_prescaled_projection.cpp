@@ -635,7 +635,7 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
             // ImageMagick
             if ( m_d->useSampling ) {
                 dbgRender << "useSampling" << endl;
-                gc.drawImage( rcFromAligned.topLeft(), sampleImage(img, dstSize.width(), dstSize.height(), drawRect) );
+                gc.drawImage( rcTopLeftUnscaled, sampleImage(img, dstSize.width(), dstSize.height(), drawRect) );
             }
             else {
                 // Else, let QPainter do the scaling, like we did in 1.6

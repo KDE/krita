@@ -100,8 +100,9 @@ Functionality that _should_ be in KOffice
 BR  * When changing the image size, the canvas doesn't realize that (change document
       size on canvas controller when image size changes)
     * Fix QPainter::restore: Unbalanced save/restore messages
-    * Krita freezes when trying to set the tablet paintop settings for the brush paintop.
-      (And there's something wrong with the adding of this widget to the toolbar)
+BR  * Krita freezes when trying to set the tablet paintop settings for the brush paintop.
+      (And there's something wrong with the adding of this widget to the toolbar -- moving
+      this widget to krita/ui and making it more flexible, plus make use of KisPopupButton) 
 
 * Image
 

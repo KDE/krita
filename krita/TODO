@@ -147,8 +147,6 @@ BT  * Fix flake layers (insertion of shapes in the layer, order of painting)
 BR  * Show no cursor option
     * Make flake based curve and freehand vector tools create editable shapes that
       render with Krita brushes.
-    * Add end poly entry to the popup menu when the poly tool is active (note: make this 
-      more generically useful for tools. Great idea by David Herman)
     * Allow snapping to guides
     * Check painting of tool overlays (rubber bands, control points, temporary shapes etc) 
       for all tools

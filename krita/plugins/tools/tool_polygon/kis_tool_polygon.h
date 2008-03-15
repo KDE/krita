@@ -47,8 +47,11 @@ public:
         return i18n("Shift-click will end the polygon.");
     }
 
-protected:
+private slots:
     void finish();
+    void cancel();
+
+protected:
     QRectF dragBoundingRect();
 
 protected:

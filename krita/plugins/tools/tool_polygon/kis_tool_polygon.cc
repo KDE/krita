@@ -46,6 +46,19 @@ KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
           m_dragging (false)
 {
     setObjectName("tool_polygon");
+
+    QAction *action = new QAction(i18n("&Finish Polygon"), this);
+    addAction("finish_polygon", action );
+    connect(action, SIGNAL(triggered()), this, SLOT(finish()));
+    action = new QAction(KIcon("cancel"), i18n("&Cancel"), this);
+    addAction("cancel_polygon", action );
+    connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
+
+
+    QList<QAction*> list;
+    list.append(this->action("finish_polygon"));
+    list.append(this->action("cancel_polygon"));
+    setPopupActionList(list);
 }
 
 KisToolPolygon::~KisToolPolygon()
@@ -111,11 +124,16 @@ void KisToolPolygon::keyPressEvent(QKeyEvent *e)
 {
     if (e->key()==Qt::Key_Escape)
     {
-        m_dragging = false;
-        m_points.clear();
-        // erase old lines on canvas
-        updateCanvasPixelRect(image()->bounds());
+        cancel();
     }
+}
+
+void KisToolPolygon::cancel()
+{
+    m_dragging = false;
+    m_points.clear();
+    // erase old lines on canvas
+    updateCanvasPixelRect(image()->bounds());
 }
 
 void KisToolPolygon::finish()

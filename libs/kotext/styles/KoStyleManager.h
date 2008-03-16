@@ -24,8 +24,8 @@
 #include <kotext_export.h>
 
 #include <QObject>
-#include <QTextDocument>
 
+class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
 class ChangeFollower;

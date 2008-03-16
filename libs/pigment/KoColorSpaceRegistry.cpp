@@ -49,6 +49,7 @@
 
 #include <config-openctl.h>
 #if HAVE_OPENCTL
+#include <OpenCTL/ModulesManager.h>
 #include "colorprofiles/KoCtlColorProfile.h"
 #endif
 
@@ -112,6 +113,8 @@ void KoColorSpaceRegistry::init()
         }
     }
 #if HAVE_OPENCTL
+    // Set PigmentCMS's ctl module directory
+    OpenCTL::ModulesManager::instance()->addDirectory("/home/cyrille/kde4/inst/share/apps/pigmentcms/ctlmodules/");// TODO not good that :)
     // Load CTL Profiles
     KGlobal::mainComponent().dirs()->addResourceType("ctl_profiles", "data", "pigmentcms/ctlprofiles/");
     QStringList ctlprofileFilenames;
@@ -221,7 +224,7 @@ const KoColorSpace *  KoColorSpaceRegistry::colorSpace(const KoID &csID, const Q
 }
 
 
-QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory * csf)
+QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoColorSpaceFactory * csf)
 {
     QList<const KoColorProfile *>  profiles;
 
@@ -237,7 +240,7 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFac
     return profiles;
 }
 
-QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoID id)
+QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoID& id)
 {
     return profilesFor(id.id());
 }

@@ -444,3 +444,18 @@ KoColorTransformation* KoColorSpace::createColorTransformation( const QString & 
     }
 }
 
+QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
+        const KoColorProfile *dstProfile,
+        KoColorConversionTransformation::Intent renderingIntent) const
+
+{
+    QImage img = QImage(width, height, QImage::Format_ARGB32);
+
+    const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->rgb8(dstProfile);
+
+    if (data)
+        this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
+
+    return img;
+}
+

@@ -20,10 +20,10 @@
 #ifndef _KO_COLOR_CONVERSION_LINK_H_
 #define _KO_COLOR_CONVERSION_LINK_H_
 
-class QString;
 class KoColorSpace;
 class KoColorConversionTransformation;
 
+#include <QString>
 #include <KoColorConversionTransformation.h>
 
 #include <pigment_export.h>
@@ -42,8 +42,10 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformationFactory {
          * @param _srcDepthId id for the source depth 
          * @param _dstModelId id for the destination color model
          * @param _dstDepthId id for the destination depth
+         * @param _srcProfile name of the source profile, or empty if any profile
+         * @param _dstProfile name of the destination profile, or empty if any profile
          */
-        KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId);
+        KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId, QString _srcProfile = "", QString _dstProfile = "");
         virtual ~KoColorConversionTransformationFactory();
         /**
          * Creates a color transformation between the source color space and the destination
@@ -74,6 +76,11 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformationFactory {
          */
         QString srcColorDepthId() const;
         /**
+         * @return the name of the source profile (note that an empty name
+         *         means all profiles can be used)
+         */
+        QString srcProfile() const;
+        /**
          * @return the id of the destination color model
          */
         QString dstColorModelId() const;
@@ -81,6 +88,11 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformationFactory {
          * @return the id of the destination color depth
          */
         QString dstColorDepthId() const;
+        /**
+         * @return the name of the destination profile (note that an empty name
+         *         means all profiles can be used)
+         */
+        QString dstProfile() const;
     protected:
         /**
          * @param srcCS source color space

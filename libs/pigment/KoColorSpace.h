@@ -354,7 +354,7 @@ public:
      * @param renderingIntent the rendering intent
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const = 0;
+                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const ;
 
     /**
      * This functions allocates the ncessary memory for numPixels number of pixels.

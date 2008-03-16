@@ -25,32 +25,34 @@
 #include <QDomDocument>
 #include <QFile>
 
-#include <KoID.h>
+#include <QString>
+
+#include <KoChannelInfo.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoCtlColorConversionTransformation.h>
 
 #include <GTLCore/PixelDescription.h>
+#include <GTLCore/String.h>
 #include <GTLCore/Type.h>
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
 
 struct ConversionInfo {
-    ConversionInfo( QString _function, KoID _sourceColorModelID, KoID _sourceColorDepthID,
-                    KoID _destinationColorModelID, KoID _destinationColorDepthID) :
-                    sourceColorModelID( _sourceColorModelID), sourceColorDepthID( _sourceColorDepthID),
-                    destinationColorModelID( _destinationColorModelID), destinationColorDepthID( _destinationColorDepthID), function(_function)
-    {
-    }
-    KoID sourceColorModelID;
-    KoID sourceColorDepthID;
-    KoID destinationColorModelID;
-    KoID destinationColorDepthID;
+    QString sourceColorModelID;
+    QString sourceColorDepthID;
+    QString sourceProfile;
+    QString destinationColorModelID;
+    QString destinationColorDepthID;
+    QString destinationProfile;
     QString function;
 };
 
 struct KoCtlColorProfile::Private {
     OpenCTL::Module* module;
     QList<ConversionInfo> conversionInfos;
-    KoID colorModelID;
-    KoID colorDepthID;
+    QString colorModelID;
+    QString colorDepthID;
 };
 
 KoCtlColorProfile::KoCtlColorProfile(QString filename) : KoColorProfile(filename), d(new Private)
@@ -75,9 +77,9 @@ KoColorProfile* KoCtlColorProfile::clone() const
 
 bool KoCtlColorProfile::valid() const
 {
-    kDebug(/*DBG_PIGMENT*/) << d->colorModelID.id().isNull() << " " << d->colorDepthID.id().isNull();
+    kDebug(/*DBG_PIGMENT*/) << d->colorModelID.isNull() << " " << d->colorDepthID.isNull();
     return ( d->module and d->module->isCompiled()
-            and not d->colorModelID.id().isNull() and not d->colorDepthID.id().isNull());
+            and not d->colorModelID.isNull() and not d->colorDepthID.isNull());
 }
 
 bool KoCtlColorProfile::isSuitableForOutput() const
@@ -95,16 +97,32 @@ bool KoCtlColorProfile::isSuitableForDisplay() const
     return true;
 }
 
-OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(KoID _srcModelId, KoID _srcDepthId, KoID _dstModelId, KoID _dstDepthId) const
+OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) const
 {
     foreach(ConversionInfo info, d->conversionInfos)
     {
         if(info.sourceColorModelID == _srcModelId and info.sourceColorDepthID == _srcDepthId and info.destinationColorModelID == _dstModelId and info.destinationColorDepthID == _dstDepthId)
         {
-            return new OpenCTL::Program(info.function.toAscii().data(), d->module, GTLCore::PixelDescription(GTLCore::Type::Float, 4) );
+            GTLCore::PixelDescription srcPixelDescription = createPixelDescription( info.sourceColorModelID, info.sourceColorDepthID );
+            GTLCore::PixelDescription dstPixelDescription = createPixelDescription( info.destinationColorModelID, info.destinationColorDepthID );
+            return new OpenCTL::Program(info.function.toAscii().data(), d->module, srcPixelDescription, dstPixelDescription );
         }
     }
     return 0;
+}
+
+QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorConversionTransformationFactories() const
+{
+    QList<KoColorConversionTransformationFactory*> factories;
+    foreach(ConversionInfo info, d->conversionInfos)
+    {
+        factories.push_back(
+            new KoCtlColorConversionTransformationFactory(
+                info.sourceColorModelID, info.sourceColorDepthID,
+                info.destinationColorModelID, info.destinationColorDepthID,
+                info.sourceProfile, info.destinationProfile ) );
+    }
+    return factories;
 }
 
 bool KoCtlColorProfile::operator==(const KoColorProfile& p) const
@@ -118,12 +136,12 @@ bool KoCtlColorProfile::operator==(const KoColorProfile& p) const
     }
 }
 
-KoID KoCtlColorProfile::colorModel() const
+QString KoCtlColorProfile::colorModel() const
 {
     return d->colorModelID;
 }
 
-KoID KoCtlColorProfile::colorDepth() const
+QString KoCtlColorProfile::colorDepth() const
 {
     return d->colorDepthID;
 }
@@ -144,13 +162,13 @@ void KoCtlColorProfile::decodeTransformations(QDomElement& elt)
     }
 }
 
-KoID generateDepthID(QString depth, QString type)
+QString generateDepthID(QString depth, QString type)
 {
     QString prefix;
     if(type == "integer") prefix = "U";
     else if(type == "float") prefix = "F";
     else kDebug(/*DBG_PIGMENT*/) << "Invalid type";
-    return KoID(prefix + depth,"");
+    return prefix + depth;
 }
 
 void KoCtlColorProfile::decodeConversions(QDomElement& elt)
@@ -167,10 +185,23 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
                 QDomElement eOut = e.firstChildElement("output");
                 if(not eIn.isNull() and not eOut.isNull())
                 {
-                    d->conversionInfos.push_back(
-                        ConversionInfo( e.attribute("function"),
-                            KoID(eIn.attribute("colorModel"), ""), generateDepthID(eIn.attribute("depth"), eIn.attribute("type")),
-                            KoID(eOut.attribute("colorModel"), ""), generateDepthID(eOut.attribute("depth"), eOut.attribute("type") )));
+                    ConversionInfo ci;
+                    ci.function = e.attribute("function");
+                    ci.sourceColorModelID = eIn.attribute("colorModel");
+                    ci.sourceColorDepthID = generateDepthID(eIn.attribute("depth"), eIn.attribute("type"));
+                    ci.sourceProfile = eIn.attribute("profile");
+                    ci.destinationColorModelID = eOut.attribute("colorModel");
+                    ci.destinationColorDepthID = generateDepthID(eOut.attribute("depth"), eOut.attribute("type") );
+                    ci.destinationProfile = eOut.attribute("profile");
+                    if( ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth())
+                    {
+                        ci.sourceProfile = name();
+                        d->conversionInfos.push_back( ci );
+                    } else if( ci.destinationColorModelID == colorModel() and ci.destinationColorDepthID == colorDepth() )
+                    {
+                        ci.destinationProfile = name();
+                        d->conversionInfos.push_back( ci );
+                    }
                 } else {
                     kDebug(/*DBG_PIGMENT*/) << "Invalid conversion, missing <input> or <output> or both";
                 }
@@ -212,7 +243,7 @@ bool KoCtlColorProfile::load()
             {
                 setName(e.attribute("name"));
                 d->colorDepthID = generateDepthID(e.attribute("depth"), e.attribute("type"));
-                d->colorModelID = KoID(e.attribute("colorModel"),"");
+                d->colorModelID = e.attribute("colorModel");
                 kDebug(/*DBG_PIGMENT*/) << "colorModel = " << e.attribute("colorModel");;
             } else if(e.tagName() == "program")
             {
@@ -233,4 +264,43 @@ bool KoCtlColorProfile::load()
         n = n.nextSibling();
     }
     return true;
+}
+
+GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const QString& modelId, const QString& depthId) const
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( modelId, depthId) ,"");
+    QList<KoChannelInfo*> infos = cs->channels();
+    std::vector<const GTLCore::Type* > types;
+    foreach( KoChannelInfo* info, infos)
+    {
+        switch( info->channelValueType() )
+        {
+            case KoChannelInfo::UINT8:
+                types.push_back( GTLCore::Type::UnsignedInteger8 );
+                break;
+            case KoChannelInfo::UINT16:
+                types.push_back( GTLCore::Type::UnsignedInteger16 );
+                break;
+            case KoChannelInfo::UINT32:
+                types.push_back( GTLCore::Type::UnsignedInteger32 );
+                break;
+            case KoChannelInfo::FLOAT16:
+                types.push_back( GTLCore::Type::Half );
+                break;
+            case KoChannelInfo::FLOAT32:
+                types.push_back( GTLCore::Type::Float );
+                break;
+            case KoChannelInfo::FLOAT64:
+                Q_ASSERT(false);
+                break;
+            case KoChannelInfo::INT8:
+                types.push_back( GTLCore::Type::Integer8 );
+                break;
+            case KoChannelInfo::INT16:
+                types.push_back( GTLCore::Type::Integer16 );
+                break;
+        }
+    }
+    Q_ASSERT( types.size() == cs->channelCount() );
+    return GTLCore::PixelDescription( types );
 }

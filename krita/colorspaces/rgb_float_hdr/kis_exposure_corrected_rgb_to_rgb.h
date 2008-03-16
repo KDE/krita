@@ -35,9 +35,19 @@ class KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformation : public 
             Q_ASSERT(hdrProfile);
             const typename _src_CSTraits_::channels_type* src = _src_CSTraits_::nativeArray(srcU8);
             typename _dst_CSTraits_::channels_type* dst = _dst_CSTraits_::nativeArray(dstU8);
-            for(quint32 i = 0; i< _src_CSTraits_::channels_nb * nPixels;i++)
+            for(quint32 i = 0; i< nPixels;i++)
             {
-                dst[i] = hdrProfile->displayToChannel( KoColorSpaceMaths<typename _src_CSTraits_::channels_type, quint16>::scaleToA(src[i]) );
+                for(quint32 j = 0; j < 4; j++)
+                {
+                    if( j == _dst_CSTraits_::alpha_pos)
+                    {
+                        dst[j] = KoColorSpaceMaths<typename _src_CSTraits_::channels_type, quint16>::scaleToA(src[j]);
+                    } else {
+                        dst[j] = hdrProfile->displayToChannel( KoColorSpaceMaths<typename _src_CSTraits_::channels_type, quint16>::scaleToA(src[j]) );
+                    }
+                }
+                dst += 4;
+                src += 4;
             }
         }
 };
@@ -78,9 +88,19 @@ class KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformation : public 
             Q_ASSERT(hdrProfile);
             const typename _src_CSTraits_::channels_type* src = _src_CSTraits_::nativeArray(srcU8);
             typename _dst_CSTraits_::channels_type* dst = _dst_CSTraits_::nativeArray(dstU8);
-            for(quint32 i = 0; i< _src_CSTraits_::channels_nb * nPixels;i++)
+            for(quint32 i = 0; i< nPixels;i++)
             {
-                dst[i] = KoColorSpaceMaths<quint16, typename _dst_CSTraits_::channels_type>::scaleToA(hdrProfile->channelToDisplay( src[i])) ;
+                for(quint32 j = 0; j < 4; j++)
+                {
+                    if( j == _dst_CSTraits_::alpha_pos)
+                    {
+                        dst[j] = KoColorSpaceMaths<typename _src_CSTraits_::channels_type, quint16>::scaleToA(src[j]);
+                    } else {
+                        dst[j] = KoColorSpaceMaths<quint16, typename _dst_CSTraits_::channels_type>::scaleToA(hdrProfile->channelToDisplay( src[j]));
+                    }
+                }
+                dst += 4;
+                src += 4;
             }
         }
 };

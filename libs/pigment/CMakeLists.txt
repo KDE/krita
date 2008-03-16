@@ -20,6 +20,7 @@ if(OPENCTL_FOUND)
   include_directories(${OPENCTL_INCLUDE_DIR})
   set(LINK_OPENCTL_LIB ${OPENCTL_LIBRARIES})
   add_definitions(${OPENCTL_DEFINITIONS})
+  add_subdirectory(ctlmodules)
   set( OPENCTL_PIGMENT_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoCtlColorProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KoCtlColorConversionTransformation.cpp

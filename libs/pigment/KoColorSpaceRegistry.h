@@ -102,7 +102,7 @@ public:
      * @param factory the factory with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<const KoColorProfile *>  profilesFor(KoColorSpaceFactory * factory);
+    QList<const KoColorProfile *>  profilesFor(const KoColorSpaceFactory * factory);
 
     /**
      * Return the list of profiles for a colorspace with the argument id.
@@ -112,7 +112,7 @@ public:
      * @param id the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<const KoColorProfile *>  profilesFor(KoID id);
+    QList<const KoColorProfile *>  profilesFor(const KoID& id);
 
     /**
      * Return the list of profiles for a colorspace with the argument id.

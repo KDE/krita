@@ -273,21 +273,6 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             c->setAlpha( this->alpha(src) );
         }
 
-        virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                const KoColorProfile *dstProfile,
-                KoColorConversionTransformation::Intent renderingIntent) const
-
-        {
-            QImage img = QImage(width, height, QImage::Format_ARGB32);
-
-            const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->rgb8(dstProfile);
-
-            if (data)
-                this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
-
-            return img;
-        }
-
         virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
         {
             if (!d->profile) return 0;

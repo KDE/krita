@@ -35,19 +35,17 @@ struct KoCtlColorConversionTransformation::Private {
 
 KoCtlColorConversionTransformation::KoCtlColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs) : KoColorConversionTransformation(srcCs, dstCs), d(new Private)
 {
-    kDebug() << srcCs->id() << " " << dstCs->id();
+    kDebug() << "init KoCtlColorConversionTransformation " << srcCs->id() << " and " << dstCs->id();
     d->program = 0;
     const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>( srcCs->profile() );
-    kDebug() << ctlp << " " << srcCs->profile();
     if(ctlp)
     {
-        d->program = ctlp->createColorConversionProgram(srcCs->colorModelId(), srcCs->colorDepthId(), dstCs->colorModelId(), dstCs->colorDepthId());
+        d->program = ctlp->createColorConversionProgram(srcCs->colorModelId().id(), srcCs->colorDepthId().id(), dstCs->colorModelId().id(), dstCs->colorDepthId().id());
     }
     if( not d->program and (ctlp = dynamic_cast<const KoCtlColorProfile*>( dstCs->profile() )))
     {
-        d->program = ctlp->createColorConversionProgram(srcCs->colorModelId(), srcCs->colorDepthId(), dstCs->colorModelId(), dstCs->colorDepthId());
+        d->program = ctlp->createColorConversionProgram(srcCs->colorModelId().id(), srcCs->colorDepthId().id(), dstCs->colorModelId().id(), dstCs->colorDepthId().id());
     }
-    kDebug() << ctlp << " " << dstCs->profile();
     Q_ASSERT(d->program);
 }
 
@@ -81,7 +79,7 @@ struct KoCtlColorConversionTransformationFactory::Private {
     
 };
 
-KoCtlColorConversionTransformationFactory::KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcModelId, _srcDepthId, _dstModelId, _dstDepthId), d(new Private)
+KoCtlColorConversionTransformationFactory::KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId, QString _srcProfile, QString _dstProfile) : KoColorConversionTransformationFactory(_srcModelId, _srcDepthId, _dstModelId, _dstDepthId, _srcProfile, _dstProfile), d(new Private)
 {
 }
 
@@ -90,6 +88,7 @@ KoColorConversionTransformation* KoCtlColorConversionTransformationFactory::crea
     Q_UNUSED(renderingIntent);
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
+    kDebug(/*DBG_PIGMENT*/) << "Creating transformation from " << srcColorSpace->id() << " to " << dstColorSpace->id();
     return new KoCtlColorConversionTransformation(srcColorSpace, dstColorSpace);
 }
 
@@ -104,7 +103,7 @@ bool KoCtlColorConversionTransformationFactory::conserveColorInformation() const
 }
 bool KoCtlColorConversionTransformationFactory::conserveDynamicRange() const
 {
-    return false; // Be conservative here for now, but a true value should be computed
+    return true; // Assume hdrness is kept, but it's wrong, it should be fixed Be conservative here for now, but a true value should be computed
 }
 
 

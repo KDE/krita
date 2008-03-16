@@ -44,8 +44,6 @@ class PIGMENTCMS_EXPORT KoCtlColorSpace : public KoColorSpace {
         virtual quint8 difference(const quint8* src1, const quint8* src2) const;
         virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;
         virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
-        virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
         virtual quint8 intensity8(const quint8 * src) const;
         virtual KoID mathToolboxId() const;
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;

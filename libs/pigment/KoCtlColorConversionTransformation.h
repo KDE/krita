@@ -36,7 +36,7 @@ class KoCtlColorConversionTransformation : public KoColorConversionTransformatio
 
 class PIGMENTCMS_EXPORT KoCtlColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
-        KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId);
+        KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId, QString _srcProfile, QString _dstProfile);
         virtual ~KoCtlColorConversionTransformationFactory();
         virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
         virtual bool conserveColorInformation() const;

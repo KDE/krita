@@ -20,16 +20,23 @@
 #ifndef _KO_CTL_COLOR_PROFILE_H_
 #define _KO_CTL_COLOR_PROFILE_H_
 
-#include <KoID.h>
 #include <KoColorProfile.h>
 #include <pigment_export.h>
 
 class QDomElement;
+class KoColorConversionTransformationFactory;
+
+namespace GTLCore {
+    class PixelDescription;
+};
 
 namespace OpenCTL {
     class Program;
 };
 
+/**
+ * This class is a color profile for a color space which is managed by CTL programs.
+ */
 class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
     public:
         KoCtlColorProfile(QString fileName);
@@ -42,14 +49,32 @@ class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
         virtual bool isSuitableForDisplay() const;
         virtual bool operator==(const KoColorProfile&) const;
         virtual bool load();
-        KoID colorModel() const;
-        KoID colorDepth() const;
+        /**
+         * @return the color model that can be used by this profile
+         */
+        QString colorModel() const;
+        /**
+         * @return the color depth that can be used by this profile
+         */
+        QString colorDepth() const;
     public:
-        OpenCTL::Program* createColorConversionProgram(KoID _srcModelId, KoID _srcDepthId, KoID _dstModelId, KoID _dstDepthId) const;
+        /**
+         * This function create a color conversion program between two color spaces.
+         */
+        OpenCTL::Program* createColorConversionProgram(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) const;
+        /**
+         * This function will create the list of color conversion transformation factories that
+         * are available using this profile.
+         */
+        QList<KoColorConversionTransformationFactory*> createColorConversionTransformationFactories() const;
     private:
+        /** decode the \<transformations\> tag.
+         */
         void decodeTransformations(QDomElement&);
+        /** decode the \<conversions\> tag.
+         */
         void decodeConversions(QDomElement&);
-        
+        GTLCore::PixelDescription createPixelDescription(const QString& modelId, const QString& depthId) const;
     private:
         struct Private;
         Private* const d;

@@ -11,14 +11,14 @@ if(OPENCTL_DEFINITIONS AND OPENCTL_LIBRARIES)
 
   FIND_PROGRAM(PKGCONFIG_EXECUTABLE NAMES pkg-config PATHS /usr/bin/ /usr/local/bin )
 
-  # query pkg-config asking for OpenCTL == 0.9.1
-  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --exact-version=0.9.1 OpenCTL RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+  # query pkg-config asking for OpenCTL == 0.9.2
+  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --exact-version=0.9.2 OpenCTL RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
 
   if(_return_VALUE STREQUAL "0")
     set(OPENCTL_FOUND TRUE)
     set(HAVE_OPENCTL TRUE)
   else(_return_VALUE STREQUAL "0")
-    message(STATUS "OpenCTL != 0.9.1 was found")
+    message(STATUS "OpenCTL != 0.9.2 was found")
   endif(_return_VALUE STREQUAL "0")
 endif(OPENCTL_DEFINITIONS AND OPENCTL_LIBRARIES)
 

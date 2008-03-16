@@ -70,6 +70,15 @@ public:
      */
     static KoShape * previousShape( const KoShape * current, const QString & shapeId );
 
+    /**
+     * @brief Get the last shape in subtree
+     *
+     * @param current The current shape
+     *
+     * @return The last shape in the current sub tree
+     */
+    static KoShape * last( KoShape * current );
+
 private:
     static KoShape * nextShapeStep( const KoShape * current, const KoShapeContainer * parent );
 

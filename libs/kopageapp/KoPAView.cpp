@@ -625,12 +625,63 @@ void KoPAView::findDocumentSetNext( QTextDocument * document )
             shape = page;
         }
         // do until you find the same start shape or you are on the same page again only if there was none
-    }
-    while ( page != startShape );
+    } while ( page != startShape );
 }
 
 void KoPAView::findDocumentSetPrevious( QTextDocument * document )
 {
+    KoPAPageBase * page = 0;
+    KoShape * startShape = 0;
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout*> ( document->documentLayout() ) : 0;
+    if ( lay != 0 ) {
+        startShape = lay->shapes().value( 0 );
+        Q_ASSERT( startShape->shapeId() == "TextShapeID" );
+        page = m_doc->pageByShape( startShape );
+        if ( m_doc->pageIndex( page ) == -1 ) {
+            page = 0;
+        }
+    }
+
+    bool check = false;
+    if ( page == 0 ) {
+        page = m_activePage;
+        startShape = KoShapeTraversal::last( page );
+        check = true;
+    }
+
+    KoShape * shape = startShape;
+
+    do {
+        if ( !check || shape->shapeId() != "TextShapeID" ) {
+            shape = KoShapeTraversal::previousShape( shape, "TextShapeID" );
+        }
+        // get next text shape
+        if ( shape != 0 ) {
+            if ( page != m_activePage ) {
+                setActivePage( page );
+                m_canvas->update();
+            }
+            KoSelection* selection = kopaCanvas()->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select( shape );
+            // TODO can this be done nicer? is there a way to get the shape id and the tool id from the shape?
+            KoToolManager::instance()->switchToolRequested( "TextToolFactory_ID" );
+            break;
+        }
+        else {
+            //if none is found go to next page and try again
+            if ( m_doc->pageIndex( page ) > 0 ) {
+                // TODO use also master slides
+                page = m_doc->pageByNavigation( page, KoPageApp::PagePrevious );
+            }
+            else {
+                page = m_doc->pageByNavigation( page, KoPageApp::PageLast );
+            }
+            shape = KoShapeTraversal::last( page );
+            check = true;
+        }
+        // do until you find the same start shape or you are on the same page again only if there was none
+    } while ( shape != startShape );
 }
 
 void KoPAView::updatePageNavigationActions()

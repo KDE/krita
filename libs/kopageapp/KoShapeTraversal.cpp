@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
 #include "KoShapeTraversal.h"
 
 #include <kdebug.h>
@@ -53,6 +54,21 @@ KoShape * KoShapeTraversal::previousShape( const KoShape * current, const QStrin
     }
 
     return previous;
+}
+
+KoShape * KoShapeTraversal::last( KoShape * current )
+{
+    KoShape * last = current;
+    while ( const KoShapeContainer * container = dynamic_cast<const KoShapeContainer *>( last ) ) {
+        QList<KoShape*> childShapes = container->iterator();
+        if ( !childShapes.isEmpty() ) {
+            last = childShapes.last();
+        }
+        else {
+            break;
+        }
+    }
+    return last;
 }
 
 KoShape * KoShapeTraversal::nextShapeStep( const KoShape * current, const KoShapeContainer * parent )
@@ -102,6 +118,37 @@ KoShape * KoShapeTraversal::nextShapeStep( const KoShape * current, const KoShap
 
 KoShape * KoShapeTraversal::previousShapeStep( const KoShape * current, const KoShapeContainer * parent )
 {
-    return 0;
-    //TODO
+    Q_ASSERT( current );
+    if ( !current ) {
+        return 0;
+    }
+
+    KoShape * previous = 0;
+
+    if ( parent ) {
+        if ( previous == 0 ) {
+            const QList<KoShape*> shapes = parent->iterator();
+            QList<KoShape*>::const_iterator it( qFind( shapes, current ) );
+            Q_ASSERT( it != shapes.end() );
+
+            if ( it == shapes.end() ) {
+                kWarning(30010) << "the shape is not in the list of childs of his parent";
+                return 0;
+            }
+
+            if ( it != shapes.begin() ) {
+                --it;
+                previous = last( *it );
+            }
+            else {
+                previous = current->parent();
+            }
+        }
+    }
+    else {
+        KoShapeContainer * currentParent = current->parent();
+        previous = currentParent ? previousShapeStep( current, currentParent ) : 0;
+    }
+
+    return previous;
 }

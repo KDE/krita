@@ -181,7 +181,7 @@ public:
 
     /**
      * pouplates the dataCenterMap with any datacenters the shapes might need.
-     * The dfault implementation does nothing
+     * The default implementation does nothing
      * @param dataCenterMap The map which the shapeControllerBase owns. 
      */
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) {Q_UNUSED(dataCenterMap)}

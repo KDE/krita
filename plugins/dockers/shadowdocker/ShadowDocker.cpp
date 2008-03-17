@@ -46,6 +46,7 @@ ShadowDocker::ShadowDocker()
 
     d->widget = new KoShadowConfigWidget( this );
     setWidget( d->widget );
+    d->widget->setEnabled( false );
 
     connect( d->widget, SIGNAL(shadowColorChanged(const QColor&)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowOffsetChanged(const QPointF&)), this, SLOT(shadowChanged()));
@@ -64,6 +65,8 @@ void ShadowDocker::selectionChanged()
 
     KoSelection *selection = d->canvas->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
+    d->widget->setEnabled( shape != 0 );
+
     if( ! shape )
     {
         d->widget->setShadowVisible( false );

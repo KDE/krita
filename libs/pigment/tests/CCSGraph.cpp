@@ -33,9 +33,9 @@
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("CSSGraph",
+    KAboutData aboutData("CCSGraph",
                          0,
-                         ki18n("CSSGraph"),
+                         ki18n("CCSGraph"),
                          "1.0",
                          ki18n("Output the graph of color conversion of pigment's Color Conversion"),
                          KAboutData::License_LGPL,
@@ -129,7 +129,7 @@ int main(int argc, char** argv)
         }
     }
     else {
-        kDebug() << "Unknow output type : " << outputType;
+        kError() << "Unknow output type : " << outputType;
         exit(EXIT_FAILURE);
     }
 }

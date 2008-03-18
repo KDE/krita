@@ -22,11 +22,13 @@
 
 struct KisCanvasDecoration::Private {
     bool visible;
+    KisView2* view;
 };
 
 KisCanvasDecoration::KisCanvasDecoration(KisView2 * parent) : QObject(parent), d(new Private)
 {
     d->visible = false;
+    d->view = parent;
 }
 
 KisCanvasDecoration::~KisCanvasDecoration()
@@ -37,6 +39,7 @@ KisCanvasDecoration::~KisCanvasDecoration()
 void KisCanvasDecoration::setVisible(bool v)
 {
     d->visible = v;
+    d->view->canvas()->update();
 }
 
 bool KisCanvasDecoration::visible() const

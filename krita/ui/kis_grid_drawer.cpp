@@ -114,8 +114,8 @@ void KisGridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const
 
 void KisGridDrawer::drawGrid(const QRectF& area)
 {
-    if(!m_doc->gridData().showGrid())
-        return;
+//     if(!m_doc->gridData().showGrid())
+//         return;
 
     KisConfig cfg;
 

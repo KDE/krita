@@ -587,6 +587,7 @@ void KisView2::createManagers()
 
     m_d->perspectiveGridManager = new KisPerspectiveGridManager( this );
     m_d->perspectiveGridManager->setup( actionCollection() );
+    m_d->canvas->addDecoration( m_d->perspectiveGridManager );
 
 }
 

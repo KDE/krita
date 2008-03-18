@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006,2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef KIS_PERSPECTIVE_GRID_MANAGER_H
 #define KIS_PERSPECTIVE_GRID_MANAGER_H
 
-#include <QObject>
+#include "kis_canvas_decoration.h">
 #include <QPainter>
 
 #include <krita_export.h>
@@ -31,7 +31,7 @@ class KActionCollection;
 class KToggleAction;
 class KisView2;
 
-class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
+class KRITAUI_EXPORT KisPerspectiveGridManager : public KisCanvasDecoration
 {
     Q_OBJECT
     public:
@@ -40,9 +40,6 @@ class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
         KisPerspectiveGridManager(KisView2 * parent);
         ~KisPerspectiveGridManager();
         void setup(KActionCollection * collection);
-        /** Redraw the perspective grid for the current image of the view using the specified painter
-         */
-        void drawGrid(const QRect & wr, QPainter *p, bool openGL = false);
         /**
          * Call this function to start editing the grid, to disable display
          */
@@ -52,15 +49,16 @@ class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
          * grid if necesserary
          */
         void stopEdition();
-        void setGridVisible(bool t);
     public slots:
         void updateGUI();
         /**
          * Call this to remove all the perspective subgrids.
          */
         void clearPerspectiveGrid();
-    private slots:
-        void toggleGrid();
+//     private slots:
+//         void toggleGrid();
+    protected:
+        virtual void drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter);
     private:
         bool m_toggleEdition;
         KisView2* m_view;

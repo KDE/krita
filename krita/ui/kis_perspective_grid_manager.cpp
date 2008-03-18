@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006,2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 #include "kis_resource_provider.h"
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView2 * parent)
-    : QObject()
+    : KisCanvasDecoration(parent)
     , m_toggleEdition(false)
     , m_view(parent)
 {
@@ -64,7 +64,7 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
 
     m_toggleGrid  = new KToggleAction(i18n("Show Perspective Grid"), this);
     collection->addAction("view_toggle_perspective_grid", m_toggleGrid );
-    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleGrid()));
+    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Perspective Grid")));
     m_toggleGrid->setChecked(false);
@@ -73,6 +73,7 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
     connect(m_gridClear, SIGNAL(triggered()), this, SLOT(clearPerspectiveGrid()));
 }
 
+/*
 void KisPerspectiveGridManager::setGridVisible(bool t)
 {
     KisImageSP image = m_view->image();
@@ -89,8 +90,9 @@ void KisPerspectiveGridManager::setGridVisible(bool t)
     }
 //    m_view->updateCanvas();
 }
+*/
 
-
+#if 0
 void KisPerspectiveGridManager::toggleGrid()
 {
     KisImageSP image = m_view->image();
@@ -107,6 +109,7 @@ void KisPerspectiveGridManager::toggleGrid()
     }
 //    m_view->updateCanvas();
 }
+#endif
 
 void KisPerspectiveGridManager::clearPerspectiveGrid()
 {
@@ -135,39 +138,26 @@ void KisPerspectiveGridManager::stopEdition()
 //       m_view->updateCanvas();
 }
 
-void KisPerspectiveGridManager::drawGrid(const QRect & wr, QPainter *p, bool openGL )
+void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter)
+// void drawGrid(const QRect & wr, QPainter *p, bool openGL )
 {
-    Q_UNUSED( wr );
-    Q_UNUSED( p );
-    Q_UNUSED( openGL );
+//     Q_UNUSED( wr );
+//     Q_UNUSED( p );
+//     Q_UNUSED( openGL );
 
     KisImageSP image = m_view->resourceProvider()->currentImage();
 
 
-    if (image && m_toggleGrid->isChecked() && !m_toggleEdition) {
+    if (image && m_toggleEdition) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 
-        KisGridDrawer *gridDrawer = 0;
-
-        if (openGL) {
-            gridDrawer = new OpenGLGridDrawer( m_view->document(), m_view->canvasBase()->viewConverter() );
-        } else {
-            Q_ASSERT(p);
-
-            if (p) {
-                QPainterGridDrawer* painterGridDrawer = new QPainterGridDrawer(m_view->document(), m_view->canvasBase()->viewConverter() );
-                painterGridDrawer->setPainter( p );
-                gridDrawer = painterGridDrawer;
-            }
-        }
-        
-        Q_ASSERT(gridDrawer != 0);
+        QPainterGridDrawer painterGridDrawer(m_view->document(), &converter );
+        painterGridDrawer.setPainter( &gc );
 
         for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
         {
-            gridDrawer->drawPerspectiveGrid(image, wr, *it );
+            painterGridDrawer.drawPerspectiveGrid(image, area, *it );
         }
-        delete gridDrawer;
     }
 }
 

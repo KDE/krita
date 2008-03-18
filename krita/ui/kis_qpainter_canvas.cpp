@@ -182,7 +182,7 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     bool drawTools = true;
 
     drawDecorations(gc, drawAnts, drawTools, m_d->documentOffset, ev->rect(), m_d->canvas );
-    m_d->canvas->view()->perspectiveGridManager()->drawGrid( ev->rect(), &gc, false);
+//     m_d->canvas->view()->perspectiveGridManager()->drawGrid( ev->rect(), &gc, false);
 
     gc.end();
 

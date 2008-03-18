@@ -69,7 +69,7 @@ void KisToolPerspectiveGrid::activate(bool )
         m_points.clear();
     } else {
         m_mode = MODE_EDITING;
-        m_canvas->view()->perspectiveGridManager()->setGridVisible( true);
+        m_canvas->view()->perspectiveGridManager()->setVisible( true);
         m_canvas->updateCanvas(); // TODO only the correct rect
     }
     super::activate();
@@ -283,7 +283,7 @@ void KisToolPerspectiveGrid::mouseReleaseEvent(KoPointerEvent *event)
                             KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(viewToPixel(m_points[1]))),
                             KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(viewToPixel(m_points[2]))),
                             KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(viewToPixel(m_points[3]))) ));
-                m_canvas->view()->perspectiveGridManager()->setGridVisible( true);
+                m_canvas->view()->perspectiveGridManager()->setVisible( true);
                 m_mode = MODE_EDITING;
             }
         }

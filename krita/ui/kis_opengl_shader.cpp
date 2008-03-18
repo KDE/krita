@@ -145,7 +145,7 @@ GLhandleARB KisOpenGLShader::handle() const
 
 QString KisOpenGLShader::getInfoLog()
 {
-    int infoLogLength;
+    GLint infoLogLength;
     QString infoLog;
 
     KIS_OPENGL_CLEAR_ERROR();

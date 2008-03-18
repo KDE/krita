@@ -330,7 +330,7 @@ void KisOpenGLGradientProgram::activate(const QPointF &gradientVectorStart, cons
     Q_ASSERT(m_gradientShader);
     if (m_gradientShader) {
         m_gradientShader->setGradientVector(gradientVectorStart, gradientVectorEnd);
-        setUniformVariable("gradientColors", 0);
+        setUniformVariable("gradientColors", (GLint) 0);
         glBindTexture(GL_TEXTURE_1D, m_gradientColorsTexture);
     }
 }

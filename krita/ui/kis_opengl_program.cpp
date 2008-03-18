@@ -175,7 +175,7 @@ QString KisOpenGLProgram::getInfoLog() const
     QString infoLog;
 
     if (m_program != 0) {
-        int infoLogLength;
+        GLint infoLogLength;
 
         KIS_OPENGL_CLEAR_ERROR();
         glGetObjectParameterivARB(m_program, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infoLogLength);

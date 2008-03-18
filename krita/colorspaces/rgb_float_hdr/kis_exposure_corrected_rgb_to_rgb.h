@@ -41,7 +41,7 @@ class KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformation : public 
                 {
                     if( j == _dst_CSTraits_::alpha_pos)
                     {
-                        dst[j] = KoColorSpaceMaths<typename _src_CSTraits_::channels_type, quint16>::scaleToA(src[j]);
+                        dst[j] = KoColorSpaceMaths<typename _src_CSTraits_::channels_type, typename _dst_CSTraits_::channels_type>::scaleToA(src[j]);
                     } else {
                         dst[j] = hdrProfile->displayToChannel( KoColorSpaceMaths<typename _src_CSTraits_::channels_type, quint16>::scaleToA(src[j]) );
                     }
@@ -94,7 +94,7 @@ class KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformation : public 
                 {
                     if( j == _dst_CSTraits_::alpha_pos)
                     {
-                        dst[j] = KoColorSpaceMaths<typename _src_CSTraits_::channels_type, quint16>::scaleToA(src[j]);
+                        dst[j] = KoColorSpaceMaths<typename _src_CSTraits_::channels_type, typename _dst_CSTraits_::channels_type >::scaleToA(src[j]);
                     } else {
                         dst[j] = KoColorSpaceMaths<quint16, typename _dst_CSTraits_::channels_type>::scaleToA(hdrProfile->channelToDisplay( src[j]));
                     }

@@ -20,7 +20,6 @@
 #define KOINLINETEXTOBJECTMANAGER_H
 
 #include "KoInlineObject.h"
-#include "KoInlineObjectFactory.h"
 #include "KoBookmarkManager.h"
 #include "KoVariableManager.h"
 

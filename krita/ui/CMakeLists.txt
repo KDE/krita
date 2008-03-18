@@ -52,7 +52,7 @@ set(kritaui_LIB_SRCS
     kis_filters_model.cc
     kis_gradient_chooser.cc
     kis_gradient_slider_widget.cc
-    kis_grid_drawer.cpp
+    kis_grid_painter_configuration.cpp
     kis_grid_manager.cpp
     kis_histogram_view.cc
     kis_icon_item.cc

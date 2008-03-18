@@ -18,8 +18,43 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_grid_drawer.h"
+#include "kis_grid_painter_configuration.h"
 
+#include "kis_config.h"
+
+#include <QBrush>
+#include <QPen>
+
+Qt::PenStyle gs2style(quint32 s)
+{
+    switch(s)
+    {
+        case 1:
+            return Qt::DashLine;
+        case 2:
+            return Qt::DotLine;
+        case 3:
+            return Qt::DashDotLine;
+        case 4:
+            return Qt::DashDotDotLine;
+        default:
+            return Qt::SolidLine;
+    }
+}
+
+QPen KisGridPainterConfiguration::mainPen()
+{
+    KisConfig cfg;
+    return QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
+}
+QPen KisGridPainterConfiguration::subdivisionPen()
+{
+    KisConfig cfg;
+    return QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
+}
+
+
+#if 0
 
 #include <config-opengl.h>
 
@@ -179,76 +214,4 @@ QPainterGridDrawer::QPainterGridDrawer(KisDoc2* doc, const KoViewConverter * vie
 {
 }
 
-OpenGLGridDrawer::OpenGLGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)
-    : KisGridDrawer(doc, viewConverter)
-{
-#ifdef HAVE_OPENGL
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
 #endif
-}
-
-OpenGLGridDrawer::~OpenGLGridDrawer()
-{
-#ifdef HAVE_OPENGL
-    glPopAttrib();
-#endif
-}
-
-void OpenGLGridDrawer::setPen(const QPen& pen)
-{
-#ifdef HAVE_OPENGL
-    Qt::PenStyle penStyle = pen.style();
-
-    if (penStyle == Qt::SolidLine) {
-        glDisable(GL_LINE_STIPPLE);
-    } else {
-        GLushort lineStipple;
-
-        switch (penStyle) {
-        case Qt::NoPen:
-            lineStipple = 0;
-            break;
-        default:
-        case Qt::SolidLine:
-            lineStipple = 0xffff;
-            break;
-        case Qt::DashLine:
-            lineStipple = 0x3fff;
-            break;
-        case Qt::DotLine:
-            lineStipple = 0x3333;
-            break;
-        case Qt::DashDotLine:
-            lineStipple = 0x33ff;
-            break;
-        case Qt::DashDotDotLine:
-            lineStipple = 0x333f;
-            break;
-        }
-
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(1, lineStipple);
-    }
-
-    QColor penColor = pen.color();
-
-    glColor3ub(penColor.red(), penColor.green(), penColor.blue());
-#else
-    Q_UNUSED(pen);
-#endif
-}
-
-void OpenGLGridDrawer::drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2)
-{
-#ifdef HAVE_OPENGL
-    glBegin(GL_LINES);
-    glVertex2i(x1, y1);
-    glVertex2i(x2, y2);
-    glEnd();
-#else
-    Q_UNUSED(x1);
-    Q_UNUSED(y1);
-    Q_UNUSED(x2);
-    Q_UNUSED(y2);
-#endif
-}

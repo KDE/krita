@@ -49,7 +49,6 @@
 #include "kis_config.h"
 #include "kis_debug.h"
 #include "kis_selection_manager.h"
-#include "kis_grid_drawer.h"
 
 class KisOpenGLCanvas2::Private
 {

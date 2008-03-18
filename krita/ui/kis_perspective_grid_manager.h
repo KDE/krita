@@ -21,7 +21,7 @@
 #ifndef KIS_PERSPECTIVE_GRID_MANAGER_H
 #define KIS_PERSPECTIVE_GRID_MANAGER_H
 
-#include "kis_canvas_decoration.h">
+#include "kis_canvas_decoration.h"
 #include <QPainter>
 
 #include <krita_export.h>
@@ -55,8 +55,6 @@ class KRITAUI_EXPORT KisPerspectiveGridManager : public KisCanvasDecoration
          * Call this to remove all the perspective subgrids.
          */
         void clearPerspectiveGrid();
-//     private slots:
-//         void toggleGrid();
     protected:
         virtual void drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter);
     private:

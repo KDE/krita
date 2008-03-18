@@ -38,7 +38,7 @@
 #include <KoViewConverter.h>
 
 #include "kis_config.h"
-#include "kis_grid_drawer.h"
+#include "kis_grid_painter_configuration.h"
 #include "kis_image.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
@@ -158,12 +158,66 @@ void KisGridManager::fastConfig40x40()
     //m_view->updateCanvas();
 }
 
+#define pixelToView(point) \
+    converter.documentToView( m_view->document()->image()->pixelToDocument(point))
+
 void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter)
 {
-    // TODO kill the grid drawer, and move the relevant code here
-    QPainterGridDrawer qgd(m_view->document(), &converter);
-    qgd.setPainter(&gc);
-    qgd.drawGrid( converter.viewToDocument(area) );
+    KisConfig cfg;
+
+    quint32 offsetx = cfg.getGridOffsetX();
+    quint32 offsety = cfg.getGridOffsetY();
+    quint32 hspacing = cfg.getGridHSpacing(); // m_doc->gridData().gridX(); // use koffice grid when KOffice grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
+    quint32 vspacing = cfg.getGridVSpacing(); // m_doc->gridData().gridY(); // use koffice grid when KOffice grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
+    quint32 subdivision = cfg.getGridSubdivisions() - 1;
+
+    // Draw vertical line
+    QPen mainPen = KisGridPainterConfiguration::mainPen();
+    QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
+    quint32 i = subdivision - (offsetx / hspacing) % (subdivision+1);
+    
+    QPointF bottomRight = m_view->document()->image()->documentToPixel( area.bottomRight() );
+    QPointF topLeft = m_view->document()->image()->documentToPixel( area.topLeft() );
+    
+    double x = offsetx % hspacing;
+    while( x <= bottomRight.x())
+    {
+        if( i == subdivision )
+        {
+            gc.setPen(mainPen);
+            i = 0;
+        } else {
+            gc.setPen(subdivisionPen);
+            i++;
+        }
+        if( x >= topLeft.x() )
+        {
+            // Always draw the full line otherwise the line stippling varies
+            // with the location of area and we get glitchy patterns.
+            gc.drawLine( pixelToView( QPointF( x, topLeft.y() ) ), pixelToView( QPointF( x, bottomRight.y() ) ) );
+        }
+        x += hspacing;
+    }
+    // Draw horizontal line
+    i = subdivision - (offsety / vspacing) % (subdivision +1);
+    double y = offsety % vspacing;
+    while( y <= bottomRight.y())
+    {
+        if( i == subdivision )
+        {
+            gc.setPen(mainPen);
+            i = 0;
+        } else {
+            gc.setPen(subdivisionPen);
+            i++;
+        }
+        if( y >= topLeft.y() )
+        {
+            gc.drawLine( pixelToView( QPointF( topLeft.x(), y ) ), pixelToView( QPointF( bottomRight.x(), y ) ) );
+        }
+        y += vspacing;
+    }
+    
 }
 
 #include "kis_grid_manager.moc"

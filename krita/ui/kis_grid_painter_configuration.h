@@ -21,6 +21,22 @@
 #ifndef KIS_GRID_DRAWER_H
 #define KIS_GRID_DRAWER_H
 
+class QPen;
+
+class KisGridPainterConfiguration {
+    public:
+        /**
+         * @return the pen use for drawing the main line of the grid
+         */
+        static QPen mainPen();
+        /**
+         * @return the pen use for drawing the subdivision line of the grid
+         */
+        static QPen subdivisionPen();
+};
+
+#if 0
+
 #include <QObject>
 #include <QPainter>
 
@@ -29,6 +45,7 @@
 class KoViewConverter;
 class KisSubPerspectiveGrid;
 class KisDoc2;
+
 
 class KisGridDrawer {
 
@@ -71,16 +88,6 @@ private:
     QPainter* m_painter;
 };
 
-class OpenGLGridDrawer : public KisGridDrawer {
-public:
-    OpenGLGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter);
-    virtual ~OpenGLGridDrawer();
-
-    using KisGridDrawer::drawLine;
-
-    void setPen(const QPen& pen);
-    void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2);
-};
-
+#endif
 
 #endif

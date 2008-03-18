@@ -27,10 +27,13 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
+#include <KoViewConverter.h>
+
 #include "kis_canvas2.h"
+#include "kis_config.h"
 #include "kis_image.h"
-#include "kis_grid_drawer.h"
 #include "kis_perspective_grid.h"
+#include "kis_grid_painter_configuration.h"
 #include "kis_view2.h"
 #include "kis_resource_provider.h"
 
@@ -73,50 +76,12 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
     connect(m_gridClear, SIGNAL(triggered()), this, SLOT(clearPerspectiveGrid()));
 }
 
-/*
-void KisPerspectiveGridManager::setGridVisible(bool t)
-{
-    KisImageSP image = m_view->image();
-
-
-    if (t && image ) {
-        KisPerspectiveGrid* pGrid = image->perspectiveGrid();
-        if( pGrid->hasSubGrids())
-        {
-            m_toggleGrid->setChecked(true);
-        }
-    } else {
-        m_toggleGrid->setChecked(false);
-    }
-//    m_view->updateCanvas();
-}
-*/
-
-#if 0
-void KisPerspectiveGridManager::toggleGrid()
-{
-    KisImageSP image = m_view->image();
-
-
-    if (image && m_toggleGrid->isChecked()) {
-        KisPerspectiveGrid* pGrid = image->perspectiveGrid();
-
-        if(!pGrid->hasSubGrids())
-        {
-            KMessageBox::error(0, i18n("Before displaying the perspective grid, you need to initialize it with the perspective grid tool"), i18n("No Perspective Grid to Display") );
-            m_toggleGrid->setChecked(false);
-        }
-    }
-//    m_view->updateCanvas();
-}
-#endif
-
 void KisPerspectiveGridManager::clearPerspectiveGrid()
 {
     KisImageSP image = m_view->image();
     if (image ) {
         image->perspectiveGrid()->clearSubGrids();
-//        m_view->updateCanvas();
+        m_view->canvas()->update();
         m_toggleGrid->setChecked(false);
         m_toggleGrid->setEnabled(false);
     }
@@ -126,24 +91,19 @@ void KisPerspectiveGridManager::startEdition()
 {
     m_toggleEdition = true;
     m_toggleGrid->setEnabled( false );
-//    if( m_toggleGrid->isChecked() )
-//        m_view->updateCanvas();
 }
 
 void KisPerspectiveGridManager::stopEdition()
 {
     m_toggleEdition = false;
     m_toggleGrid->setEnabled( true );
-//    if( m_toggleGrid->isChecked() )
-//       m_view->updateCanvas();
 }
 
+#define pixelToView(point) \
+    converter.documentToView(image->pixelToDocument(point))
+
 void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter)
-// void drawGrid(const QRect & wr, QPainter *p, bool openGL )
 {
-//     Q_UNUSED( wr );
-//     Q_UNUSED( p );
-//     Q_UNUSED( openGL );
 
     KisImageSP image = m_view->resourceProvider()->currentImage();
 
@@ -151,12 +111,50 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRect& area, 
     if (image && m_toggleEdition) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 
-        QPainterGridDrawer painterGridDrawer(m_view->document(), &converter );
-        painterGridDrawer.setPainter( &gc );
+        KisConfig cfg;
+        QPen mainPen = KisGridPainterConfiguration::mainPen();
+        QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
 
         for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
         {
-            painterGridDrawer.drawPerspectiveGrid(image, area, *it );
+            const KisSubPerspectiveGrid* grid = *it;
+            gc.setPen(subdivisionPen );
+            // 1 -> top-left corner
+            // 2 -> top-right corner
+            // 3 -> bottom-right corner
+            // 4 -> bottom-left corner
+            // d12 line from top-left to top-right
+            // note that the notion of top-left is purely theorical
+            KisPerspectiveMath::LineEquation d12 = KisPerspectiveMath::computeLineEquation( grid->topLeft().data(), grid->topRight().data() ) ;
+            QPointF v12 = QPointF(*grid->topLeft() - *grid->topRight());
+            v12.setX( v12.x() / grid->subdivisions()); v12.setY( v12.y() / grid->subdivisions() );
+            KisPerspectiveMath::LineEquation d23 = KisPerspectiveMath::computeLineEquation( grid->topRight().data(), grid->bottomRight().data() );
+            QPointF v23 = QPointF(*grid->topRight() - *grid->bottomRight());
+            v23.setX( v23.x() / grid->subdivisions()); v23.setY( v23.y() / grid->subdivisions() );
+            KisPerspectiveMath::LineEquation d34 = KisPerspectiveMath::computeLineEquation( grid->bottomRight().data(), grid->bottomLeft().data() );
+            KisPerspectiveMath::LineEquation d41 = KisPerspectiveMath::computeLineEquation( grid->bottomLeft().data(), grid->topLeft().data() );
+
+            QPointF horizVanishingPoint = KisPerspectiveMath::computeIntersection(d12,d34);
+            QPointF vertVanishingPoint = KisPerspectiveMath::computeIntersection(d23,d41);
+
+            for(int i = 1; i < grid->subdivisions(); i ++)
+            {
+                QPointF pol1 = *grid->topRight() + i * v12;
+                KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( &pol1, &vertVanishingPoint );
+                QPointF pol1b =  KisPerspectiveMath::computeIntersection(d1,d34);
+                gc.drawLine( pixelToView(pol1.toPoint()), pixelToView(pol1b.toPoint() ));
+        
+                QPointF pol2 = *grid->bottomRight() + i * v23;
+                KisPerspectiveMath::LineEquation d2 = KisPerspectiveMath::computeLineEquation( &pol2, &horizVanishingPoint );
+                QPointF pol2b = KisPerspectiveMath::computeIntersection(d2,d41);
+                gc.drawLine( pixelToView(pol2.toPoint()), pixelToView(pol2b.toPoint()) );
+            }
+            gc.setPen(mainPen);
+            gc.drawLine( pixelToView( *grid->topLeft()), pixelToView(  *grid->topRight() ) );
+            gc.drawLine( pixelToView( *grid->topRight()), pixelToView( *grid->bottomRight()) );
+            gc.drawLine( pixelToView( *grid->bottomRight()), pixelToView( *grid->bottomLeft()) );
+            gc.drawLine( pixelToView( *grid->bottomLeft()), pixelToView( *grid->topLeft()) );
+
         }
     }
 }

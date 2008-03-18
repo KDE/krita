@@ -1,7 +1,7 @@
 install(FILES
-D65_3_101.ill  D65_4_104.ill  D65_5_106.ill  D65_5_14.ill  D65_6_108.ill  D65_7_111.ill  D65_8_114.ill  
-D65_9_12.ill   D65_9_2.ill    D65_9_5.ill    D65_9_8.ill   D65_4_102.ill  D65_4_15.ill   D65_5_107.ill
-D65_5_16.ill   D65_7_109.ill  D65_8_112.ill  D65_9_10.ill  D65_9_13.ill   D65_9_3.ill    D65_9_6.ill  
-D65_9_9.ill    D65_4_103.ill  D65_5_105.ill  D65_5_11.ill  D65_5_17.ill   D65_7_110.ill  D65_8_113.ill
-D65_9_115.ill  D65_9_1.ill    D65_9_4.ill    D65_9_7.ill
+D65_10_527.ill  D65_4_503.ill  D65_5_508.ill  D65_6_513.ill  D65_7_518.ill  D65_8_523.ill  D65_9_531.ill
+D65_10_528.ill  D65_4_504.ill  D65_5_509.ill  D65_6_514.ill  D65_7_519.ill  D65_8_524.ill  D65_9_532.ill
+D65_10_529.ill  D65_5_505.ill  D65_5_510.ill  D65_6_515.ill  D65_7_520.ill  D65_8_525.ill  D65_9_533.ill
+D65_3_501.ill   D65_5_506.ill  D65_6_511.ill  D65_6_516.ill  D65_7_521.ill  D65_9_526.ill  D65_9_534.ill
+D65_4_502.ill   D65_5_507.ill  D65_6_512.ill  D65_7_517.ill  D65_7_522.ill  D65_9_530.ill  D65_9_535.ill
 DESTINATION ${DATA_INSTALL_DIR}/krita/illuminants)

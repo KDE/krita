@@ -67,20 +67,29 @@ double polyval(int n, const double *P, double x)
 {
     double y = 0;
     for (int i = 0; i < n; i++)
-        y += P[i]*pow(x,i);
+        y += P[n-1-i]*pow(x,i);
     return y;
 }
 
-void correct(double &d)
+double phi(double r)
 {
-    if (fabs(d) < 1e-10)
-        d = 0;
+    return 2.0*r / pow(1.0-r,2);
+}
+
+double psi(double r)
+{
+    return pow(1.0-r,2) / (2.0*r);
+}
+
+double invphi(double y)
+{
+    return ( 1.0 + y - sqrt(2.0 * y + 1.0) ) / y;
 }
 
 KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
     : KoColorProfile(fileName),
       m_wl(-1), m_T(0), m_L(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
-      m_illuminant(""), m_valid(false)
+      Ca(0), Cs(0), m_illuminant(""), m_valid(false)
 {
 
 }
@@ -115,7 +124,7 @@ bool KisIlluminantProfile::load()
     {
         qint8 tmp;
         data >> tmp;
-        m_wl = (int) tmp;
+        m_wl = (int)tmp;
         data >> tmp >> tmp >> tmp;
         m_T = allocateMatrix(3,m_wl);
         for (int i = 0; i < m_wl; i++)
@@ -132,28 +141,30 @@ bool KisIlluminantProfile::load()
         m_green = allocateVector(m_wl);
         m_blue  = allocateVector(m_wl);
         for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_red[i],8); correct(m_red[i]);
+            data.readRawData((char*)&m_red[i],8);
         }
         for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_green[i],8); correct(m_green[i]);
+            data.readRawData((char*)&m_green[i],8);
         }
         for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_blue[i],8); correct(m_blue[i]);
+            data.readRawData((char*)&m_blue[i],8);
         }
     }
     {
-        data.readRawData((char*)&S1,8); correct(S1);
-        data.readRawData((char*)&K1,8); correct(K1);
-        data.readRawData((char*)&R1,8); correct(R1);
-        data.readRawData((char*)&T1[2],8); correct(T1[2]);
-        data.readRawData((char*)&T1[1],8); correct(T1[1]);
-        data.readRawData((char*)&T1[0],8); correct(T1[0]);
-        data.readRawData((char*)&S2,8); correct(S2);
-        data.readRawData((char*)&K2,8); correct(K2);
-        data.readRawData((char*)&R2,8); correct(R2);
-        data.readRawData((char*)&T2[1],8); correct(T2[1]);
-        data.readRawData((char*)&T2[0],8); correct(T2[0]);
-        data.readRawData((char*)&Lh,8); correct(Lh);
+        qint8 tmp;
+        data >> tmp;
+        Np = (int)tmp-2;
+        data.readRawData((char*)&Cla,8);
+        data.readRawData((char*)&Nla,8);
+        Ca = allocateVector(Np);
+        for (qint8 i = 0; i < Np; i++)
+            data.readRawData((char*)&Ca[i],8);
+        data.readRawData((char*)&Cls,8);
+        data.readRawData((char*)&Nls,8);
+        Cs = allocateVector(Np);
+        for (qint8 i = 0; i < Np; i++)
+            data.readRawData((char*)&Cs[i],8);
+        data.readRawData((char*)&Rh,8);
     }
 
     // Initialize the reflectance vector and channel converter
@@ -194,18 +205,16 @@ bool KisIlluminantProfile::save(const QString &fileName)
     for (int i = 0; i < m_wl; i++)
         data.writeRawData((char*)&m_blue[i],8);
 
-    data.writeRawData((char*)&S1,8);
-    data.writeRawData((char*)&K1,8);
-    data.writeRawData((char*)&R1,8);
-    data.writeRawData((char*)&T1[2],8);
-    data.writeRawData((char*)&T1[1],8);
-    data.writeRawData((char*)&T1[0],8);
-    data.writeRawData((char*)&S2,8);
-    data.writeRawData((char*)&K2,8);
-    data.writeRawData((char*)&R2,8);
-    data.writeRawData((char*)&T2[1],8);
-    data.writeRawData((char*)&T2[0],8);
-    data.writeRawData((char*)&Lh,8);
+    data << (qint8)Np;
+    data.writeRawData((char*)&Cla,8);
+    data.writeRawData((char*)&Nla,8);
+    for (qint8 i = 0; i < Np; i++)
+        data.writeRawData((char*)&Ca[i],8);
+    data.writeRawData((char*)&Cls,8);
+    data.writeRawData((char*)&Nls,8);
+    for (qint8 i = 0; i < Np; i++)
+        data.writeRawData((char*)&Cs[i],8);
+    data.writeRawData((char*)&Rh,8);
 
     return true;
 }
@@ -224,51 +233,30 @@ void KisIlluminantProfile::toRgb(const double *ksvec, double *rgbvec) const
     reflectanceToRgb(rgbvec);
 }
 
-double phi(double r)
+double KisIlluminantProfile::falpha(double R, double L) const
 {
-    return 2.0*r / pow(1.0-r,2);
+    return fabs( Cla * pow(fabs(L+0.05),Nla) * polyval(Np,Ca,R) );
 }
-double invphi(double y)
+
+double KisIlluminantProfile::fsigma(double R, double L) const
 {
-    return ( 1.0 + y - sqrt(2.0 * y + 1.0) ) / y;
+    return fabs( Cls * pow(fabs(L+0.05),Nls) * polyval(Np,Cs,R) );
 }
 
 void KisIlluminantProfile::reflectanceToKS(double *ksvec) const
 {
-    double L, Sa, Ka, Ra; const double *Ta; int n;
-    
+    double L;
     applyMatrix(1,m_wl, m_L,m_refvec, &L);
-    
-    if (L <= Lh) {
-        Sa = S2;
-        Ka = K2;
-        Ra = R2;
-        Ta = T2;
-        n = 2;
-    } else {
-        Sa = S1;
-        Ka = K1;
-        Ra = R1;
-        Ta = T1;
-        n = 3;
-    }
+    qDebug() << L << Rh;
     
     for (int i = 0; i < m_wl; i++) {
-        if (m_refvec[i] >= 1) {
-            ksvec[2*i+0] = 0;
-            ksvec[2*i+1] = 1;
-            continue;
+        if (m_refvec[i] <= Rh) {
+            ksvec[2*i+0] = falpha(m_refvec[i],L);
+            ksvec[2*i+1] = ksvec[2*i+0] * phi(m_refvec[i]);
+        } else {
+            ksvec[2*i+1] = fsigma(m_refvec[i],L);
+            ksvec[2*i+0] = ksvec[2*i+1] * psi(m_refvec[i]);
         }
-        if (m_refvec[i] == Ra) {
-            ksvec[2*i+0] = Ka;
-            ksvec[2*i+1] = Sa;
-            continue;
-        }
-        ksvec[2*i+0] = ( Sa-Ka*phi(polyval(n,Ta,m_refvec[i])) ) / ( phi(polyval(n,Ta,m_refvec[i]))-phi(m_refvec[i]) );
-        ksvec[2*i+1] = ksvec[2*i+0] * phi(m_refvec[i]);
-
-	ksvec[2*i+0] = fabs(ksvec[2*i+0]);
-	ksvec[2*i+1] = fabs(ksvec[2*i+1]);
     }
 }
 
@@ -328,9 +316,14 @@ void KisIlluminantProfile::reset()
         freeVector(m_green);
     if (m_blue)
         freeVector(m_blue);
+    if (Ca)
+        freeVector(Ca);
+    if (Cs)
+        freeVector(Cs);
     
     m_T = m_L = 0;
     m_refvec = m_red = m_green = m_blue = 0;
+    Ca = Cs = 0;
     
     m_illuminant = "";
     m_wl = -1;

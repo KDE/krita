@@ -62,6 +62,9 @@ class KisIlluminantProfile : public KoColorProfile {
         void toRgb(const double *ksvec, double *rgbvec) const;
 
     private:
+        double falpha(double R, double L) const;
+        double fsigma(double R, double L) const;
+
         void rgbToReflectance(const double *rgbvec) const;
         void reflectanceToRgb(double *rgbvec) const;
 
@@ -81,9 +84,10 @@ class KisIlluminantProfile : public KoColorProfile {
 
         double *m_refvec;
 
-        double K1, S1, R1, T1[3];
-        double K2, S2, R2, T2[2];
-        double Lh;
+        int Np;
+        double Cla, Nla, *Ca;
+        double Cls, Nls, *Cs;
+        double Rh;
 
         QString m_illuminant;
         bool m_valid;

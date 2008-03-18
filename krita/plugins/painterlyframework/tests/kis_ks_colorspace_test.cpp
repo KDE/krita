@@ -112,23 +112,23 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 {
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
-    QString d655 = list.filter("_5_")[0];
-    QString d659 = list.filter("_9_")[0];
+    QString d653 = list.filter("_3_")[0];
+    QString d6510 = list.filter("_10_")[0];
 
-    KisIlluminantProfile *p5 = new KisIlluminantProfile(d655);
-    KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
-    p5->load();
-    p9->load();
+    KisIlluminantProfile *p3 = new KisIlluminantProfile(d653);
+    KisIlluminantProfile *p10 = new KisIlluminantProfile(d6510);
+    p3->load();
+    p10->load();
 
     QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),p5));
-    css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),p9));
+    css.append(f->colorSpace(KisKSF32ColorSpace<3>::ColorSpaceId().id(),p3));
+    css.append(f->colorSpace(KisKSF32ColorSpace<10>::ColorSpaceId().id(),p10));
 
     quint16 red  [4] = { 0x0000, 0x0000, 0xFFFF, 0xFFFF };
     quint16 green[4] = { 0x0000, 0xFFFF, 0x0000, 0xFFFF };
     quint16 blue [4] = { 0xFFFF, 0x0000, 0x0000, 0xFFFF };
     quint16 white[4] = { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF };
-    quint16 black[4] = { 0     , 0     , 0     , 0      };
+    quint16 black[4] = { 0     , 0     , 0     , 0xFFFF };
     quint16 random[4] = { rand()%0xFFFF, rand()%0xFFFF, rand()%0xFFFF, rand()%0xFFFF };
     quint8 *curr;
 
@@ -146,80 +146,80 @@ void KisKSColorSpaceTest::testToFromRgbA16()
         curr = reinterpret_cast<quint8*>(red);
         cs->fromRgbA16(curr, data, 1);
         cs->toRgbA16(data, back8, 1);
-        QVERIFY(abs(back[0]-red[0]) <= 2);
-        QVERIFY(abs(back[1]-red[1]) <= 2);
-        QVERIFY(abs(back[2]-red[2]) <= 2);
-        QVERIFY(abs(back[3]-red[3]) <= 2);
         #ifdef VERBOSE
         print_vector<quint16>(4, curr, "RED ARRAY:");
         print_vector<float>(n, data, "RED PIXEL:");
         print_vector<quint16>(4, back8, "RED ARRAY BACK:");
         #endif
+        QVERIFY(abs(back[0]-red[0]) <= 2);
+        QVERIFY(abs(back[1]-red[1]) <= 2);
+        QVERIFY(abs(back[2]-red[2]) <= 2);
+        QVERIFY(abs(back[3]-red[3]) <= 2);
 
         curr = reinterpret_cast<quint8*>(green);
         cs->fromRgbA16(curr, data, 1);
         cs->toRgbA16(data, back8, 1);
-        QVERIFY(abs(back[0]-green[0]) <= 2);
-        QVERIFY(abs(back[1]-green[1]) <= 2);
-        QVERIFY(abs(back[2]-green[2]) <= 2);
-        QVERIFY(abs(back[3]-green[3]) <= 2);
         #ifdef VERBOSE
         print_vector<quint16>(4, curr, "GREEN ARRAY:");
         print_vector<float>(n, data, "GREEN PIXEL:");
         print_vector<quint16>(4, back8, "GREEN ARRAY BACK:");
         #endif
+        QVERIFY(abs(back[0]-green[0]) <= 2);
+        QVERIFY(abs(back[1]-green[1]) <= 2);
+        QVERIFY(abs(back[2]-green[2]) <= 2);
+        QVERIFY(abs(back[3]-green[3]) <= 2);
 
         curr = reinterpret_cast<quint8*>(blue);
         cs->fromRgbA16(curr, data, 1);
         cs->toRgbA16(data, back8, 1);
-        QVERIFY(abs(back[0]-blue[0]) <= 2);
-        QVERIFY(abs(back[1]-blue[1]) <= 2);
-        QVERIFY(abs(back[2]-blue[2]) <= 2);
-        QVERIFY(abs(back[3]-blue[3]) <= 2);
         #ifdef VERBOSE
         print_vector<quint16>(4, curr, "BLUE ARRAY:");
         print_vector<float>(n, data, "BLUE PIXEL:");
         print_vector<quint16>(4, back8, "BLUE ARRAY BACK:");
         #endif
+        QVERIFY(abs(back[0]-blue[0]) <= 2);
+        QVERIFY(abs(back[1]-blue[1]) <= 2);
+        QVERIFY(abs(back[2]-blue[2]) <= 2);
+        QVERIFY(abs(back[3]-blue[3]) <= 2);
 
         curr = reinterpret_cast<quint8*>(white);
         cs->fromRgbA16(curr, data, 1);
         cs->toRgbA16(data, back8, 1);
-        QVERIFY(abs(back[0]-white[0]) <= 2);
-        QVERIFY(abs(back[1]-white[1]) <= 2);
-        QVERIFY(abs(back[2]-white[2]) <= 2);
-        QVERIFY(abs(back[3]-white[3]) <= 2);
         #ifdef VERBOSE
         print_vector<quint16>(4, curr, "WHITE ARRAY:");
         print_vector<float>(n, data, "WHITE PIXEL:");
         print_vector<quint16>(4, back8, "WHITE ARRAY BACK:");
         #endif
+        QVERIFY(abs(back[0]-white[0]) <= 2);
+        QVERIFY(abs(back[1]-white[1]) <= 2);
+        QVERIFY(abs(back[2]-white[2]) <= 2);
+        QVERIFY(abs(back[3]-white[3]) <= 2);
 
         curr = reinterpret_cast<quint8*>(black);
         cs->fromRgbA16(curr, data, 1);
         cs->toRgbA16(data, back8, 1);
-        QVERIFY(abs(back[0]-black[0]) <= 2);
-        QVERIFY(abs(back[1]-black[1]) <= 2);
-        QVERIFY(abs(back[2]-black[2]) <= 2);
-        QVERIFY(abs(back[3]-black[3]) <= 2);
         #ifdef VERBOSE
         print_vector<quint16>(4, curr, "BLACK ARRAY:");
         print_vector<float>(n, data, "BLACK PIXEL:");
         print_vector<quint16>(4, back8, "BLACK ARRAY BACK:");
         #endif
+        QVERIFY(abs(back[0]-black[0]) <= 2);
+        QVERIFY(abs(back[1]-black[1]) <= 2);
+        QVERIFY(abs(back[2]-black[2]) <= 2);
+        QVERIFY(abs(back[3]-black[3]) <= 2);
 
         curr = reinterpret_cast<quint8*>(random);
         cs->fromRgbA16(curr, data, 1);
         cs->toRgbA16(data, back8, 1);
-        QVERIFY(abs(back[0]-random[0]) <= 2);
-        QVERIFY(abs(back[1]-random[1]) <= 2);
-        QVERIFY(abs(back[2]-random[2]) <= 2);
-        QVERIFY(abs(back[3]-random[3]) <= 2);
         #ifdef VERBOSE
         print_vector<quint16>(4, curr, "RANDOM ARRAY:");
         print_vector<float>(n, data, "RANDOM PIXEL:");
         print_vector<quint16>(4, back8, "RANDOM ARRAY BACK:");
         #endif
+        QVERIFY(abs(back[0]-random[0]) <= 2);
+        QVERIFY(abs(back[1]-random[1]) <= 2);
+        QVERIFY(abs(back[2]-random[2]) <= 2);
+        QVERIFY(abs(back[3]-random[3]) <= 2);
 
         delete [] data;
     }

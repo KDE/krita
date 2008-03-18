@@ -63,6 +63,7 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     f->add(new KisKSF32ColorSpaceFactory<7>);
     f->add(new KisKSF32ColorSpaceFactory<8>);
     f->add(new KisKSF32ColorSpaceFactory<9>);
+    f->add(new KisKSF32ColorSpaceFactory<10>);
 #ifdef HAVE_OPENEXR
     f->add(new KisKSF16ColorSpaceFactory<3>);
     f->add(new KisKSF16ColorSpaceFactory<4>);
@@ -71,6 +72,7 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     f->add(new KisKSF16ColorSpaceFactory<7>);
     f->add(new KisKSF16ColorSpaceFactory<8>);
     f->add(new KisKSF16ColorSpaceFactory<9>);
+    f->add(new KisKSF16ColorSpaceFactory<10>);
 #endif
 /*
     QVector<const KoColorSpace *> css;

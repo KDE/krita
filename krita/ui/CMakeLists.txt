@@ -20,6 +20,7 @@ set(kritaui_LIB_SRCS
     kis_boundary_painter.cc
     kis_brush_chooser.cc
     kis_canvas2.cpp
+    kis_canvas_decoration.cc
     kis_clipboard.cc
     kis_cmb_composite.cc
     kis_cmb_idlist.cc

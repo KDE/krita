@@ -18,18 +18,20 @@
 #ifndef _KIS_ABSTRACT_CANVAS_WIDGET_
 #define _KIS_ABSTRACT_CANVAS_WIDGET_
 
-#include <Qt>
+#include <QList>
 
 class QWidget;
 class QRect;
 class QPoint;
 class QImage;
 class QPainter;
+class QRect;
 
 class KoToolProxy;
 
 class KisCanvas2;
 class KisGridDrawer;
+class KisCanvasDecoration;
 
 class KisAbstractCanvasWidget {
 
@@ -59,6 +61,9 @@ public:
      * @param checkSize the size of the check
      */
     QImage checkImage(qint32 checkSize);
+    void addDecoration(KisCanvasDecoration* deco);
+private:
+    QList<KisCanvasDecoration*> m_decorations;
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

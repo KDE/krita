@@ -35,13 +35,16 @@
 #include <kdialog.h>
 #include <klocale.h>
 
+#include <KoViewConverter.h>
+
 #include "kis_config.h"
+#include "kis_grid_drawer.h"
 #include "kis_image.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
 
 KisGridManager::KisGridManager(KisView2 * parent)
-    : QObject(parent), m_view(parent)
+    : KisCanvasDecoration(parent), m_view(parent)
 {
 
 }
@@ -61,7 +64,7 @@ void KisGridManager::setup(KActionCollection * collection)
 
     m_toggleGrid  = new KToggleAction(i18n("Show Grid"), this);
     collection->addAction("view_toggle_grid", m_toggleGrid );
-    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleGrid()));
+    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
     m_toggleGrid->setChecked(m_view->document()->gridData().showGrid());
@@ -99,17 +102,6 @@ void KisGridManager::setup(KActionCollection * collection)
 void KisGridManager::updateGUI()
 {
 
-}
-
-void KisGridManager::setGridVisible( bool v)
-{
-    m_view->document()->gridData().setShowGrid( v );
-}
-
-void KisGridManager::toggleGrid()
-{
-    m_view->document()->gridData().setShowGrid( !m_view->document()->gridData().showGrid() );
-    m_view->canvas()->update();
 }
 
 void KisGridManager::toggleSnapToGrid()
@@ -164,6 +156,14 @@ void KisGridManager::fastConfig40x40()
     cfg.setGridHSpacing(40);
     cfg.setGridVSpacing(40);
     //m_view->updateCanvas();
+}
+
+void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter)
+{
+    // TODO kill the grid drawer, and move the relevant code here
+    QPainterGridDrawer qgd(m_view->document(), &converter);
+    qgd.setPainter(&gc);
+    qgd.drawGrid( converter.viewToDocument(area) );
 }
 
 #include "kis_grid_manager.moc"

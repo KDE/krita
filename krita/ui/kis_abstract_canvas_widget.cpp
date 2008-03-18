@@ -24,7 +24,7 @@
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
 
-
+#include "kis_canvas_decoration.h"
 #include "kis_config.h"
 #include "kis_canvas2.h"
 #include "kis_view2.h"
@@ -58,13 +58,12 @@ void KisAbstractCanvasWidget::drawDecorations( QPainter & gc, bool ants, bool gr
         gc.restore();
     }
 
-    // ask the guides, grids, etc to paint themselves
-    if ( grids ) {
-        gc.save();
-        gridDrawer->drawGrid( canvas->viewConverter()->viewToDocument(clipRect));
-        gc.restore();
+    // ask the decorations to paint themselves
+    foreach( KisCanvasDecoration* deco, m_decorations)
+    {
+        deco->paint(gc, clipRect, *canvas->viewConverter() );
     }
-
+    
     // Give the tool a chance to paint its stuff
     if ( tools ) {
         gc.save();
@@ -88,3 +87,7 @@ QImage KisAbstractCanvasWidget::checkImage(qint32 checkSize)
     return tile;
 }
 
+void KisAbstractCanvasWidget::addDecoration(KisCanvasDecoration* deco)
+{
+    m_decorations.push_back( deco );
+}

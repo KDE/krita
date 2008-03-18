@@ -30,6 +30,7 @@
 class KoToolProxy;
 class KoColorProfile;
 
+class KisCanvasDecoration;
 class KisView2;
 
 enum KisCanvasType {
@@ -122,6 +123,7 @@ public: // KisCanvas2 methods
     KisView2* view();
 
     bool usingHDRExposureProgram();
+    void addDecoration(KisCanvasDecoration* deco);
 
 public slots:
 

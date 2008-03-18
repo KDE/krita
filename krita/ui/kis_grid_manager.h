@@ -21,7 +21,7 @@
 #ifndef KIS_GRID_MANAGER_H
 #define KIS_GRID_MANAGER_H
 
-#include <QObject>
+#include "kis_canvas_decoration.h"
 #include <QPainter>
 
 #include "kis_types.h"
@@ -32,7 +32,7 @@ class KActionCollection;
 class KToggleAction;
 class KAction;
 
-class KRITAUI_EXPORT KisGridManager : public QObject
+class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
 {
     Q_OBJECT
     public:
@@ -41,14 +41,12 @@ class KRITAUI_EXPORT KisGridManager : public QObject
     public:
         void setup(KActionCollection * collection);
 
-        void setGridVisible( bool v);
     public slots:
 
         void updateGUI();
 
     private slots:
 
-        void toggleGrid();
         void toggleSnapToGrid();
         void fastConfig1x1();
         void fastConfig2x2();
@@ -56,6 +54,8 @@ class KRITAUI_EXPORT KisGridManager : public QObject
         void fastConfig10x10();
         void fastConfig20x20();
         void fastConfig40x40();
+    protected:
+        virtual void drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter);
 
     private:
 

@@ -433,4 +433,9 @@ void KisCanvas2::slotSetDisplayProfile( const KoColorProfile * profile )
     m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 }
 
+void KisCanvas2::addDecoration(KisCanvasDecoration* deco)
+{
+    m_d->canvasWidget->addDecoration( deco );
+}
+
 #include "kis_canvas2.moc"

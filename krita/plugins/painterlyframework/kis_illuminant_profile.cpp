@@ -247,7 +247,6 @@ void KisIlluminantProfile::reflectanceToKS(double *ksvec) const
 {
     double L;
     applyMatrix(1,m_wl, m_L,m_refvec, &L);
-    qDebug() << L << Rh;
     
     for (int i = 0; i < m_wl; i++) {
         if (m_refvec[i] <= Rh) {

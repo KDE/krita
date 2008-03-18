@@ -48,7 +48,7 @@ KisToolGrid::~KisToolGrid()
 
 void KisToolGrid::activate(bool )
 {
-    m_canvas->view()->gridManager()->setGridVisible( true);
+    m_canvas->view()->gridManager()->setVisible( true);
     m_canvas->updateCanvas();
     KisTool::activate();
 }

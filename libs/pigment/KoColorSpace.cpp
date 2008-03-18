@@ -434,6 +434,7 @@ KoColorTransformation* KoColorSpace::createColorTransformation( const QString & 
         return factory->createTransformation( this, parameters);
     } else {
         // Find the best solution
+        // TODO use the color conversion cache
         KoColorConversionTransformation* csToFallBack = 0;
         KoColorConversionTransformation* fallBackToCs = 0;
         KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverters(this, models, csToFallBack, fallBackToCs);

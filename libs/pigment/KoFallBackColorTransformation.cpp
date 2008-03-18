@@ -22,11 +22,15 @@
 #include "KoColorConversionTransformation.h"
 #include "KoColorSpace.h"
 #include "KoColorTransformation.h"
+#include "KoColorConversionCache.h"
+#include "KoColorSpaceRegistry.h"
 
 struct KoFallBackColorTransformation::Private {
     const KoColorSpace* fallBackColorSpace;
-    KoColorConversionTransformation* csToFallBack;
-    KoColorConversionTransformation* fallBackToCs;
+    KoCachedColorConversionTransformation* csToFallBackCache;
+    KoCachedColorConversionTransformation* fallBackToCsCache;
+    const KoColorConversionTransformation* csToFallBack;
+    const KoColorConversionTransformation* fallBackToCs;
     KoColorTransformation* colorTransformation;
     mutable quint8* buff;
     mutable qint32 buffSize;
@@ -35,8 +39,10 @@ struct KoFallBackColorTransformation::Private {
 KoFallBackColorTransformation::KoFallBackColorTransformation(const KoColorSpace* _cs, const KoColorSpace* _fallBackCS, KoColorTransformation* _transfo) : d(new Private)
 {
     d->fallBackColorSpace = _fallBackCS;
-    d->csToFallBack = _cs->createColorConverter( _fallBackCS);
-    d->fallBackToCs = _fallBackCS->createColorConverter( _cs );
+    d->csToFallBackCache = new KoCachedColorConversionTransformation( KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter( _cs, _fallBackCS));
+    d->csToFallBack = d->csToFallBackCache->transformation();
+    d->fallBackToCsCache = new KoCachedColorConversionTransformation( KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter( _fallBackCS, _cs) );
+    d->fallBackToCs = d->fallBackToCsCache->transformation();
     d->colorTransformation = _transfo;
     d->buff = 0;
     d->buffSize = 0;
@@ -49,6 +55,8 @@ KoFallBackColorTransformation::KoFallBackColorTransformation(KoColorConversionTr
     d->fallBackColorSpace = _fallBackToCs->dstColorSpace();
     d->csToFallBack = _csToFallBack;
     d->fallBackToCs = _fallBackToCs;
+    d->csToFallBackCache = 0;
+    d->fallBackToCsCache = 0;
     d->colorTransformation = _transfo;
     d->buff = 0;
     d->buffSize = 0;
@@ -56,8 +64,18 @@ KoFallBackColorTransformation::KoFallBackColorTransformation(KoColorConversionTr
 
 KoFallBackColorTransformation::~KoFallBackColorTransformation()
 {
-    delete d->csToFallBack;
-    delete d->fallBackToCs;
+    if( d->csToFallBackCache)
+    {
+        delete d->csToFallBackCache;
+    } else {
+        delete d->csToFallBack;
+    }
+    if( d->csToFallBackCache)
+    {
+        delete d->fallBackToCsCache;
+    } else {
+        delete d->fallBackToCs;
+    }
     delete d->colorTransformation;
     delete[] d->buff;
     delete d;

@@ -129,6 +129,8 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
             v->setFactoryFromSrc(cctf);
         }
     }
+#if 0
+    // Not a good idea !
     // Check if there is a path to convert self into self
     Vertex* v = vertexBetween(csNode, csNode);
     if(not v)
@@ -137,6 +139,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         kDebug(DBG_PIGMENT) << "No self to self color conversion, add the copy one";
         v->setFactoryFromSrc( new KoCopyColorConversionTransformationFactory(modelId, depthId));
     }
+#endif
 }
 
 const KoColorSpace* KoColorConversionSystem::defaultColorSpaceForNode(const Node* node) const

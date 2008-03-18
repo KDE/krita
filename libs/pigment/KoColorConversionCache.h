@@ -42,7 +42,7 @@ class KoColorConversionCache {
          * @param src source color space
          * @param dst destination color space
          */
-        KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent);
+        KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent = KoColorConversionTransformation::IntentPerceptual);
         /**
          * This function is called by the destructor of the color space to
          * warn the cache that any pointers to this color space is going to

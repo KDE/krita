@@ -167,7 +167,7 @@ void KisGlslWidget::slotShaders(const QString &fragShader, const QString &vertSh
     bool fragvalid = true;
     const char * sourcetmp[1];
     GLint compiled = 1;
-    int loglength;
+    GLsizei loglength;
     const int logbufsize = 1024;
     GLchar *log = new GLchar[logbufsize];
 

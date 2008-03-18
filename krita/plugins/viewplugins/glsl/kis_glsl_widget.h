@@ -22,9 +22,6 @@
 #define _KIS_GLSL_WIDGET
 
 #include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-
 #include <QtOpenGL>
 #include <QGLWidget>
 

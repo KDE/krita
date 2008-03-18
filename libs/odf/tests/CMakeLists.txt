@@ -17,7 +17,7 @@ target_link_libraries(kooasissettingstest  ${KDE4_KDECORE_LIBS} koodf )
 
 set(kooasisstoretest_SRCS kooasisstoretest.cpp )
 kde4_add_unit_test(kooasisstoretest TESTNAME libs-odf-kooasisstoretest ${kooasisstoretest_SRCS})
-target_link_libraries(kooasisstoretest  ${KDE4_KDECORE_LIBS} koodf )
+target_link_libraries(kooasisstoretest  ${KDE4_KDECORE_LIBS} koodf ${QT_QT3SUPPORT_LIBRARY})
 
 ########### next target ###############
 

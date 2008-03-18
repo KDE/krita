@@ -23,7 +23,7 @@ set(xmlwritertest_SRCS xmlwritertest.cpp )
 
 kde4_add_unit_test(xmlwritertest TESTNAME libs-store-xmlwritertest ${xmlwritertest_SRCS})
 
-target_link_libraries(xmlwritertest  ${KDE4_KDECORE_LIBS} kstore )
+target_link_libraries(xmlwritertest  ${KDE4_KDECORE_LIBS} kstore ${QT_QT3SUPPORT_LIBRARY})
 
 ########### next target ###############
 

@@ -42,7 +42,7 @@ ComboBox::ComboBox(Property *property, QWidget *parent)
 	m_edit = new KComboBox(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
-	setPlainWidgetStyle(m_edit);
+	//setPlainWidgetStyle(m_edit);
 	
 	l->addWidget(m_edit);
 	m_extraValueAllowed = false;

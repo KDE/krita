@@ -66,11 +66,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
     // TODO The Illuminant has to be choosen at runtime
-    const KoColorProfile* testp = f->profileByName( "D65 Illuminant Profile - 5 wavelenghts - Test 17");
-    if(!testp)
-    {
-      testp = f->profilesFor( "KS5F32" )[0];
-    }
+    const KoColorProfile* testp =  f->profilesFor( "KS5F32" )[0];
     m_illuminant = static_cast<KisIlluminantProfile*>( testp->clone() );
     m_colorspace = new KisKSF32ColorSpace<5>(m_illuminant->clone());
     initCanvas();

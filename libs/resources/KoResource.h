@@ -64,7 +64,10 @@ public:
      */
     virtual QImage img() const {return QImage(); }
 
+private:
+    /// XXX: doc?
     virtual void toXML(QDomDocument& , QDomElement&) const;
+public:
 
     /// Returns if resource can be removed by the user
     bool removable() const;

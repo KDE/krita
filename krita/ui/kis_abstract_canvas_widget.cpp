@@ -31,11 +31,10 @@
 #include "kis_grid_drawer.h"
 #include "kis_selection_manager.h"
 
-void KisAbstractCanvasWidget::drawDecorations( QPainter & gc, bool ants, bool grids, bool tools,
+void KisAbstractCanvasWidget::drawDecorations( QPainter & gc, bool ants, bool tools,
                                                const QPoint & documentOffset,
                                                const QRect & clipRect,
-                                               KisCanvas2 * canvas,
-                                               KisGridDrawer * gridDrawer)
+                                               KisCanvas2 * canvas)
 {
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution

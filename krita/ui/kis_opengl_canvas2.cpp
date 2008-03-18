@@ -60,7 +60,6 @@ public:
     KoToolProxy * toolProxy;
     KisOpenGLImageTexturesSP openGLImageTextures;
     QPoint documentOffset;
-    KisGridDrawer * gridDrawer;
 
 };
 
@@ -71,8 +70,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
     m_d->canvas = canvas;
     m_d->toolProxy = canvas->toolProxy();
     m_d->openGLImageTextures = imageTextures;
-    m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
-
+    
     setAcceptDrops( true );
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -88,7 +86,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOp
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
-    delete m_d->gridDrawer;
     delete m_d;
 }
 
@@ -243,15 +240,14 @@ void KisOpenGLCanvas2::paintGL()
 
     // XXX: make settable
     bool drawAnts = true;
-    bool drawGrids = true;
     bool drawTools = true;
 
     QPainter gc ( this );
 
-    drawDecorations( gc, drawAnts, drawGrids, drawTools,
+    drawDecorations( gc, drawAnts, drawTools,
                      m_d->documentOffset,
                      QRect( QPoint( 0, 0 ), QSize() ),
-                     m_d->canvas, m_d->gridDrawer );
+                     m_d->canvas );
 
     gc.end();
 }

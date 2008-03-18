@@ -50,10 +50,10 @@ public:
     /**
      * Draw the specified decorations on the view.
      */
-    void drawDecorations( QPainter & gc, bool ants, bool grids, bool tools,
+    void drawDecorations( QPainter & gc, bool ants, bool tools,
                           const QPoint & documentOffset,
                           const QRect & clipRect,
-                          KisCanvas2 * canvas, KisGridDrawer * gridDrawer );
+                          KisCanvas2 * canvas );
 
     /**
      * Returns one check of the background checkerboard pattern.

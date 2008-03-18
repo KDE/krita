@@ -65,8 +65,7 @@ public:
     Private(const KoViewConverter *vc)
         : toolProxy(0),
           canvas(0),
-          viewConverter(vc),
-          gridDrawer(0)
+          viewConverter(vc)
         {
         }
 
@@ -76,7 +75,6 @@ public:
     const KoViewConverter * viewConverter;
     QBrush checkBrush;
     QPoint documentOffset;
-    QPainterGridDrawer* gridDrawer;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
@@ -88,7 +86,6 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     KisConfig cfg;
 
     m_d->canvas =  canvas;
-    m_d->gridDrawer = new QPainterGridDrawer(canvas->view()->document(), canvas->viewConverter());
     m_d->toolProxy = canvas->toolProxy();
     setAutoFillBackground(true);
     //setAttribute( Qt::WA_OpaquePaintEvent );
@@ -100,7 +97,6 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
 
 KisQPainterCanvas::~KisQPainterCanvas()
 {
-    delete m_d->gridDrawer;
     delete m_d;
 }
 
@@ -183,12 +179,9 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     // XXX: make settable
     bool drawAnts = true;
-    bool drawGrids = true;
     bool drawTools = true;
 
-    m_d->gridDrawer->setPainter( &gc );
-    drawDecorations(gc, drawAnts, drawGrids, drawTools, m_d->documentOffset, ev->rect(), m_d->canvas, m_d->gridDrawer );
-    m_d->gridDrawer->setPainter( 0 );
+    drawDecorations(gc, drawAnts, drawTools, m_d->documentOffset, ev->rect(), m_d->canvas );
     m_d->canvas->view()->perspectiveGridManager()->drawGrid( ev->rect(), &gc, false);
 
     gc.end();

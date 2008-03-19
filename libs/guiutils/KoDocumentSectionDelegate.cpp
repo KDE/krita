@@ -31,8 +31,6 @@
 #include <QPointer>
 #include <QStyleOptionViewItem>
 
-#include <kdebug.h>
-
 class KoDocumentSectionDelegate::Private
 {
     public:
@@ -422,7 +420,6 @@ void KoDocumentSectionDelegate::drawIcons( QPainter *p, const QStyleOptionViewIt
         for( int i = 0, n = lp.count(); i < n; ++i )
             if( lp[i].isMutable )
             {
-                kDebug() << "lp[" << i << "].state = " << lp[i].state;
                 QIcon icon = lp[i].state.toBool() ? lp[i].onIcon : lp[i].offIcon;
                 p->drawPixmap( x, 0, icon.pixmap( option.decorationSize ) );
                 x += option.decorationSize.width() + d->margin;

@@ -152,10 +152,11 @@ install( FILES flake.desktop flaketool.desktop flakeshape.desktop DESTINATION ${
 install(
     FILES
     flake_export.h
+    KoCanvasBase.h
+    KoCanvasObserver.h
     KoCanvasResourceProvider.h
     KoInputDevice.h
     KoToolManager.h
-    KoCanvasObserver.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 )

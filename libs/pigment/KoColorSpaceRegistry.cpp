@@ -48,7 +48,7 @@
 #include "colorspaces/KoRgbU8ColorSpace.h"
 
 #include <config-openctl.h>
-#if HAVE_OPENCTL
+#ifdef HAVE_OPENCTL
 #include <OpenCTL/ModulesManager.h>
 #include "colorprofiles/KoCtlColorProfile.h"
 #endif
@@ -112,7 +112,7 @@ void KoColorSpaceRegistry::init()
             }
         }
     }
-#if HAVE_OPENCTL
+#ifdef HAVE_OPENCTL
     // Set PigmentCMS's ctl module directory
     OpenCTL::ModulesManager::instance()->addDirectory("/home/cyrille/kde4/inst/share/apps/pigmentcms/ctlmodules/");// TODO not good that :)
     // Load CTL Profiles

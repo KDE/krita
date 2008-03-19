@@ -156,7 +156,11 @@ install(
     KoCanvasObserver.h
     KoCanvasResourceProvider.h
     KoInputDevice.h
+    KoPointerEvent.h
+    KoTool.h
     KoToolManager.h
+    KoToolFactory.h
+    KoToolRegistry.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 )

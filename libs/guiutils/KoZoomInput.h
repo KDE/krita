@@ -28,6 +28,7 @@ class KoZoomInput : public QStackedWidget
     Q_OBJECT
     public:
         explicit KoZoomInput(QWidget* parent = 0);
+        ~KoZoomInput();
 
         void setZoomLevels(const QStringList& levels);
         void setCurrentZoomLevel(const QString& level);

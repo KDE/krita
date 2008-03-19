@@ -70,6 +70,11 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     connect(d->combo, SIGNAL(activated(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
 }
 
+KoZoomInput::~KoZoomInput()
+{
+    delete d;
+}
+
 void KoZoomInput::enterEvent(QEvent* event)
 {
     Q_UNUSED(event);

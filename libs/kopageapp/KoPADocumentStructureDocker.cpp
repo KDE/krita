@@ -26,7 +26,6 @@
 #include <KarbonLayerReorderCommand.h>
 #endif
 
-#include <KoDocumentSectionView.h>
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
 #include <KoShapeContainer.h>
@@ -40,6 +39,7 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
 
+#include <KMenu>
 #include <klocale.h>
 #include <kicon.h>
 #include <kiconloader.h>
@@ -87,7 +87,6 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
     layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, -1 );
-    m_sectionView->setDisplayMode( KoDocumentSectionView::DetailedMode );
     QButtonGroup *buttonGroup = new QButtonGroup( mainWidget );
     buttonGroup->setExclusive( false );
 
@@ -115,6 +114,27 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
     buttonGroup->addButton( button, Button_Lower );
     layout->addWidget( button, 1, 4 );
 
+    button = new QToolButton( mainWidget );
+    KMenu *menu = new KMenu( this );
+    QActionGroup *group = new QActionGroup( this );
+    QList<QAction*> actions;
+
+    actions << menu->addAction(SmallIcon("view-list-text"), i18n("Minimal View"), this, SLOT(minimalView()));
+    actions << menu->addAction(SmallIcon("view-list-details"), i18n("Detailed View"), this, SLOT(detailedView()));
+    actions << menu->addAction(SmallIcon("view-preview"), i18n("Thumbnail View"), this, SLOT(thumbnailView()));
+
+    for (int i = 0, n = actions.count(); i < n; ++i) {
+        actions[i]->setCheckable( true );
+        actions[i]->setActionGroup( group );
+    }
+    actions[1]->trigger(); //TODO save/load previous state
+
+    button->setMenu(menu);
+    button->setPopupMode(QToolButton::InstantPopup);
+    button->setIcon(SmallIcon("view-choose"));
+    button->setText(i18n("View mode"));
+    layout->addWidget(button, 1, 5);
+
     layout->setSpacing( 0 );
     layout->setMargin( 3 );
     layout->setColumnStretch( 2, 10 );
@@ -124,9 +144,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
     m_model = new KoPADocumentModel( this );
-    m_sectionView->setItemsExpandable( true );
     m_sectionView->setModel( m_model );
-    m_sectionView->setDisplayMode( KoDocumentSectionView::MinimalMode );
     m_sectionView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     m_sectionView->setSelectionBehavior( QAbstractItemView::SelectRows );
     m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
@@ -349,6 +367,29 @@ void KoPADocumentStructureDocker::setCanvas( KoCanvasBase* canvas )
 {
     m_canvas = static_cast<KoPACanvas*> ( canvas );
     m_model->setDocument( m_canvas->document() );
+}
+
+void KoPADocumentStructureDocker::minimalView()
+{
+    setViewMode(KoDocumentSectionView::MinimalMode);
+}
+
+void KoPADocumentStructureDocker::detailedView()
+{
+    setViewMode(KoDocumentSectionView::DetailedMode);
+}
+
+void KoPADocumentStructureDocker::thumbnailView()
+{
+    setViewMode(KoDocumentSectionView::ThumbnailMode);
+}
+
+void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
+{
+    bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+    m_sectionView->setDisplayMode(mode);
+    m_sectionView->setItemsExpandable(expandable);
+    m_sectionView->setRootIsDecorated(expandable);
 }
 
 #include "KoPADocumentStructureDocker.moc"

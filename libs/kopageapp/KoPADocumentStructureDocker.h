@@ -22,8 +22,8 @@
 #include <QDockWidget>
 #include <KoDockFactory.h>
 #include <KoCanvasObserver.h>
+#include <KoDocumentSectionView.h>
 
-class KoDocumentSectionView;
 class KoShape;
 class KoShapeLayer;
 class KoPADocumentModel;
@@ -67,8 +67,12 @@ private slots:
     void raiseItem();
     void lowerItem();
     void itemClicked( const QModelIndex &index );
+    void minimalView();
+    void detailedView();
+    void thumbnailView();
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
+    void setViewMode(KoDocumentSectionView::DisplayMode mode);
     KoPACanvas* m_canvas;
     KoDocumentSectionView *m_sectionView;
     KoPADocumentModel *m_model;

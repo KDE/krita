@@ -617,7 +617,7 @@ KoPathSegment KoPathSegment::mapped( const QMatrix &matrix ) const
     return KoPathSegment( p1, p2 );
 }
 
-double KoPathSegment::length( double error ) const
+qreal KoPathSegment::length( qreal error ) const
 {
     /*
      * This algorithm is implemented based on an idea by Jens Gravesen:
@@ -683,6 +683,17 @@ double KoPathSegment::length( double error ) const
         else
             return (2.0 * chordLength + polyLength) / 3.0;
     }
+}
+
+qreal KoPathSegment::lengthAt( qreal t, qreal error ) const
+{
+    if( t == 0.0 )
+        return 0.0;
+    if( t == 1.0 )
+        return length( error );
+
+    QPair<KoPathSegment,KoPathSegment> parts = splitAt( t );
+    return parts.first.length( error );
 }
 
 qreal KoPathSegment::distanceFromChord( const QPointF &point ) const

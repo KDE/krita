@@ -102,7 +102,14 @@ public:
      * Returns the length of the path segment
      * @param error the error tolerance
      */
-    double length( double error = 0.005 ) const;
+    qreal length( qreal error = 0.005 ) const;
+
+    /**
+     * Returns segment length at given parameter
+     * @param t curve parameter to get length at
+     * @param error the error tolerance
+     */
+    qreal lengthAt( qreal t, qreal error = 0.005 ) const;
 
     void printDebug() const;
 

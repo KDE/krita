@@ -131,7 +131,7 @@ void TestPathSegment::segmentSplitAt()
     QPair<KoPathSegment,KoPathSegment> parts2 = s2.splitAt( 0.5 );
     QCOMPARE( parts2.first.first()->point(), QPointF(0,0) );
     QCOMPARE( parts2.first.second()->point(), QPointF(100,50) );
-    QCOMPARE( parts2.first.degree(), 3 );
+    QCOMPARE( parts2.first.degree(), 2 );
     QCOMPARE( parts2.second.first()->point(), QPointF(100,50) );
     QCOMPARE( parts2.second.second()->point(), QPointF(200,0) );
     QCOMPARE( parts2.second.degree(), 2 );
@@ -179,6 +179,37 @@ void TestPathSegment::segmentIntersections()
         KoPathSegment s2( QPointF(0,30), QPointF(25,-20), QPointF(75,-20), QPointF(100,30) );
         QList<QPointF> isects = s1.intersections( s2 );
         QCOMPARE( isects.count(), 2 );
+    }
+}
+
+void TestPathSegment::segmentLength()
+{
+    {
+        // line segment
+        KoPathSegment s( QPointF(0,0), QPointF(100,0) );
+        QCOMPARE( s.length(), 100.0 );
+    }
+    {
+        // quadric curve segment
+        KoPathSegment s1( QPointF(0,0), QPointF(50,0), QPointF(100,0) );
+        QCOMPARE( s1.length(), 100.0 );
+        KoPathSegment s2( QPointF(0,0), QPointF(50,50), QPointF(100,0) );
+        QPainterPath p2;
+        p2.moveTo( QPointF(0,0) );
+        p2.quadTo( QPointF(50,50), QPointF(100,0) );
+        // verify that difference is less than 0.5 percent of the length
+        QVERIFY( s2.length() - p2.length() < 0.005 * s2.length(0.01) );
+    }
+    {
+        // cubic curve segment
+        KoPathSegment s1( QPointF(0,0), QPointF(25,0), QPointF(75,0), QPointF(100,0) );
+        QCOMPARE( s1.length(), 100.0 );
+        KoPathSegment s2( QPointF(0,0), QPointF(25,50), QPointF(75,50), QPointF(100,0) );
+        QPainterPath p2;
+        p2.moveTo( QPointF(0,0) );
+        p2.cubicTo( QPointF(25,50), QPointF(75,50), QPointF(100,0) );
+        // verify that difference is less than 0.5 percent of the length
+        QVERIFY( s2.length() - p2.length() < 0.005 * s2.length(0.01) );
     }
 }
 

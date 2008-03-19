@@ -98,6 +98,14 @@ public:
     /// Returns transformed segment
     KoPathSegment mapped( const QMatrix & matrix ) const;
 
+    /** 
+     * Returns the length of the path segment
+     * @param error the error tolerance
+     */
+    double length( double error = 0.005 ) const;
+
+    void printDebug() const;
+
 private:
     /// calculates signed distance of given point from segment chord
     double distanceFromChord( const QPointF &point ) const;

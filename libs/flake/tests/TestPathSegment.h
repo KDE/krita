@@ -33,6 +33,7 @@ private slots:
     void segmentPointAt();
     void segmentSplitAt();
     void segmentIntersections();
+    void segmentLength();
 };
 
 #endif // TESTPATHSEGMENT_H

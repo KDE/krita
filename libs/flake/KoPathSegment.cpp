@@ -617,6 +617,74 @@ KoPathSegment KoPathSegment::mapped( const QMatrix &matrix ) const
     return KoPathSegment( p1, p2 );
 }
 
+double KoPathSegment::length( double error ) const
+{
+    /*
+     * This algorithm is implemented based on an idea by Jens Gravesen:
+     * "Adaptive subdivision and the length of Bezier curves" mat-report no. 1992-10, Mathematical Institute,
+     * The Technical University of Denmark.
+     *
+     * By subdividing the curve at parameter value t you only have to find the length of a full Bezier curve.
+     * If you denote the length of the control polygon by L1 i.e.:
+     *   L1 = |P0 P1| +|P1 P2| +|P2 P3|
+     *
+     * and the length of the cord by L0 i.e.:
+     *   L0 = |P0 P3|
+     *
+     * then
+     *   L = 1/2*L0 + 1/2*L1
+     *
+     * is a good approximation to the length of the curve, and the difference 
+     *   ERR = L1-L0
+     *
+     * is a measure of the error. If the error is to large, then you just subdivide curve at parameter value
+     * 1/2, and find the length of each half.
+     * If m is the number of subdivisions then the error goes to zero as 2^-4m.
+     * If you dont have a cubic curve but a curve of degree n then you put
+     *   L = (2*L0 + (n-1)*L1)/(n+1)
+     */
+
+    int deg = degree();
+
+    if( deg == -1 )
+        return 0.0;
+
+    QList<QPointF> ctrlPoints = controlPoints();
+
+    // calculate chord length
+    QPointF chord = d->second->point() - d->first->point();
+    double chordLength = sqrt( chord.x()*chord.x() + chord.y()*chord.y() );
+
+    if( deg == 1 )
+    {
+        return chordLength;
+    }
+
+    // calculate length of control polygon
+    double polyLength = 0.0;
+
+    for( int i = 0; i < deg; ++i )
+    {
+        QPointF ctrlSegment = ctrlPoints[i+1]-ctrlPoints[i];
+        polyLength += sqrt( ctrlSegment.x()*ctrlSegment.x() + ctrlSegment.y()*ctrlSegment.y() );
+    }
+
+    if( (polyLength-chordLength) > error )
+    {
+        // the error is still bigger than our tolerance -> split segment
+        QPair<KoPathSegment,KoPathSegment> parts = splitAt( 0.5 );
+        return parts.first.length( error ) + parts.second.length( error );
+    }
+    else
+    {
+        // the error is smaller than our tolerance
+        if( deg == 3 )
+            return 0.5 * chordLength + 0.5 * polyLength;
+        else
+            return (2.0 * chordLength + polyLength) / 3.0;
+    }
+}
+
 qreal KoPathSegment::distanceFromChord( const QPointF &point ) const
 {
     // the segments chord
@@ -730,37 +798,28 @@ QPair<KoPathSegment, KoPathSegment> KoPathSegment::splitAt( qreal t ) const
     if( ! isValid() )
         return results;
 
-    if( d->first->activeControlPoint2() || d->second->activeControlPoint1() )
+    if( degree() == 1 )
     {
-        QPointF newCP2;
-        QPointF newCP1;
-        QPointF splitP;
-        QPointF splitCP1;
-        QPointF splitCP2;
-
-        deCasteljau( t, &newCP2, &splitCP1, &splitP, &splitCP2, &newCP1 );
-
-        KoPathPoint splitPoint( 0, splitP, KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 );
-        splitPoint.setControlPoint1( splitCP1 );
-        splitPoint.setControlPoint2( splitCP2 );
-
-        KoPathSegment s1( new KoPathPoint( *d->first ), new KoPathPoint( splitPoint ) );
-        if( s1.first()->activeControlPoint2() )
-            s1.first()->setControlPoint2( newCP2 );
-        KoPathSegment s2( new KoPathPoint( splitPoint ), new KoPathPoint( *d->second ) );
-        if( s2.second()->activeControlPoint1() )
-            s2.second()->setControlPoint1( newCP1 );
-        results.first = s1;
-        results.second = s2;
+        QPointF p = d->first->point() + t * ( d->second->point() - d->first->point());
+        results.first = KoPathSegment( d->first->point(), p );
+        results.second = KoPathSegment( p, d->second->point() );
     }
     else
     {
-        QPointF p = d->first->point() + t * ( d->second->point() - d->first->point());
-        KoPathPoint splitPoint( 0, p, KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 );
-        KoPathSegment s1( new KoPathPoint( *d->first ), new KoPathPoint( splitPoint ) );
-        KoPathSegment s2( new KoPathPoint( splitPoint ), new KoPathPoint( *d->second ) );
-        results.first = s1;
-        results.second = s2;
+        QPointF newCP2, newCP1, splitP, splitCP1, splitCP2;
+
+        deCasteljau( t, &newCP2, &splitCP1, &splitP, &splitCP2, &newCP1 );
+
+        if( degree() == 2 )
+        {
+            results.first = KoPathSegment( d->first->point(), splitCP1, splitP );
+            results.second = KoPathSegment( splitP, splitCP2, d->second->point() );
+        }
+        else
+        {
+            results.first = KoPathSegment( d->first->point(), newCP2, splitCP1, splitP );
+            results.second = KoPathSegment( splitP, splitCP2, newCP1, d->second->point() );
+        }
     }
 
     return results;
@@ -783,6 +842,7 @@ void KoPathSegment::deCasteljau( qreal t, QPointF *p1, QPointF *p2, QPointF *p3,
     }
     q[deg] = d->second->point();
 
+    // points of the new segment after the split point
     QPointF p[3];
 
     // the De Casteljau algorithm
@@ -792,19 +852,31 @@ void KoPathSegment::deCasteljau( qreal t, QPointF *p1, QPointF *p2, QPointF *p3,
         {
             q[i] = ( 1.0 - t ) * q[i] + t * q[i + 1];
         }
-                // modify the new segment.
         p[j - 1] = q[0];
     }
-    if( p1 )
-        *p1 = p[0];
-    if( p2 && d->first->activeControlPoint2() )
-        *p2 = (deg == 3 ) ? p[1] : q[1];
-    if( p3 )
-        *p3 = (deg == 3) ? p[2] : p[1];
-    if( p4 && d->second->activeControlPoint1() )
-        *p4 = q[1];
-    if( p5 )
-        *p5 = q[2];
+
+    if( deg == 2 )
+    {
+        if( p2 )
+            *p2 = p[0];
+        if( p3 )
+            *p3 = p[1];
+        if( p4 )
+            *p4 = q[1];
+    }
+    else if( deg == 3 )
+    {
+        if( p1 )
+            *p1 = p[0];
+        if( p2 )
+            *p2 = p[1];
+        if( p3 )
+            *p3 = p[2];
+        if( p4 )
+            *p4 = q[1];
+        if( p5 )
+            *p5 = q[2];
+    }
 }
 
 QList<QPointF> KoPathSegment::controlPoints() const
@@ -861,4 +933,28 @@ QList<QPointF> KoPathSegment::linesIntersection( const KoPathSegment &segment ) 
     isects.append( A + r * (B-A) );
 
     return isects;
+}
+
+void KoPathSegment::printDebug() const
+{
+    int deg = degree();
+    kDebug(30006) << "degree:" << deg;
+    if( deg < 1 )
+        return;
+
+    kDebug(30006) << "P0:" << d->first->point();
+    if( deg == 2 )
+    {
+        if( d->first->activeControlPoint2() )
+            kDebug(30006) << "P1:" << d->first->controlPoint2();
+        else
+            kDebug(30006) << "P1:" << d->second->controlPoint1();
+        kDebug(30006) << "P2:" << d->second->point();
+    }
+    else if( deg == 3 )
+    {
+        kDebug(30006) << "P1:" << d->first->controlPoint2();
+        kDebug(30006) << "P2:" << d->second->controlPoint1();
+        kDebug(30006) << "P3:" << d->second->point();
+    }
 }

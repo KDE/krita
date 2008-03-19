@@ -309,11 +309,6 @@ public:
      * Return a list of the connection points that have been added to this shape.
      * @return a list of the connectors that have been added to this shape.
      */
-    KDE_DEPRECATED QList<QPointF> connectors() const;
-    /**
-     * Return a list of the connection points that have been added to this shape.
-     * @return a list of the connectors that have been added to this shape.
-     */
     QList<QPointF> connectionPoints() const;
 
     /**

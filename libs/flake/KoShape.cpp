@@ -420,7 +420,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
 void KoShape::copySettings(const KoShape *shape) {
     d->size = shape->size();
     d->connectors.clear();
-    foreach(QPointF point, shape->connectors())
+    foreach(QPointF point, shape->connectionPoints())
         addConnectionPoint(point);
     d->zIndex = shape->zIndex();
     d->visible = shape->isVisible();
@@ -524,10 +524,6 @@ void KoShape::addConnectionPoint( const QPointF &point ) {
     QSizeF s = size();
     // convert glue point from shape coordinates to factors of size
     d->connectors.append( QPointF( point.x() / s.width(), point.y() / s.height() ) );
-}
-
-QList<QPointF> KoShape::connectors() const {
-    return d->connectors.toList();
 }
 
 QList<QPointF> KoShape::connectionPoints() const {

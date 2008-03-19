@@ -49,6 +49,8 @@ KoShapeShadow::~KoShapeShadow()
 
 void KoShapeShadow::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
 {
+    Q_UNUSED( context );
+
     style.addProperty( "draw:shadow", d->visible ? "visible" : "hidden" );
     style.addProperty( "draw:shadow-color", d->color.name() );
     if( d->color.alphaF() != 1.0 )

@@ -24,6 +24,7 @@
 #include <kotext_export.h>
 
 #include <QObject>
+#include <KoDataCenter.h>
 
 class QTextDocument;
 class KoCharacterStyle;
@@ -34,7 +35,8 @@ class KoGenStyles;
 /**
  * Manages all character and paragraph styles for any number of documents.
  */
-class KOTEXT_EXPORT KoStyleManager : public QObject {
+class KOTEXT_EXPORT KoStyleManager : public QObject, public KoDataCenter
+{
     Q_OBJECT
 public:
     /**
@@ -133,6 +135,12 @@ public:
 
     /// return all the paragraphStyles registered.
     QList<KoParagraphStyle*> paragraphStyles() const;
+
+    /// reimplemented
+    virtual bool completeLoading( KoStore *store ) { return true; }
+
+    /// reimplemented
+    virtual bool completeSaving( KoStore *store ) { return true; }
 
 signals:
     void styleAdded(KoParagraphStyle*);

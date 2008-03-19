@@ -174,13 +174,12 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     QTextBlock block = d->document->findBlock(from);
     kDebug(32500) << "The document is " << d->document;
 
-    KoStyleManager *styleManager = 0;
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->document->documentLayout());
     QHash<int, QString> styleNames; // Store an int index for a QTextFormat => ODF style name
     QVector<QTextFormat> allFormats = d->document->allFormats(); // Will be used to get the indexes.
     QTextFormat firstFragmentFormat;
     if (lay) {
-        styleManager = lay->styleManager();
+        KoStyleManager *styleManager = lay->styleManager();
         if (styleManager) {
             // Ok, now we will iterate over the QTextFormat contained in this textFrameSet.
             foreach (QTextFormat textFormat, allFormats) {

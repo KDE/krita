@@ -49,7 +49,6 @@
 #include "kis_node.h"
 
 #include <KoTextDocumentLayout.h>
-#include <KoStyleManager.h>
 #include <KoTextShapeData.h>
 #include <KoDataCenter.h>
 
@@ -72,14 +71,10 @@ KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer
     m_d->doc = doc;
     m_d->nameServer = nameServer;
     m_d->image = 0;
-/*
     // Ask every shapefactory to populate the dataCenterMap
-    foreach(QString id, KoShapeRegistry::instance()->keys())
-    {
-        KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+    foreach( KoShapeFactory * shapeFactory, KoShapeRegistry::instance()->values() ) {
         shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
     }
-*/
 }
 
 
@@ -248,14 +243,6 @@ void KisShapeController::addShape( KoShape* shape )
         foreach( KoView *view, m_d->doc->views() ) {
             KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
             canvas->globalShapeManager()->add(shape);
-        }
-
-        KoTextShapeData *data = qobject_cast<KoTextShapeData*> (shape->userData());
-        if (data) { // its a text shape.
-            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (data->document()->documentLayout());
-            if(layout) {
-                layout->setStyleManager(m_d->doc->styleManager());
-            }
         }
     }
     else {

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 #include <KoXmlNS.h>
+#include <KoStyleManager.h>
 
 TextShapeFactory::TextShapeFactory(QObject *parent)
     : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text"))
@@ -53,16 +55,21 @@ KoShape *TextShapeFactory::createShape(const KoProperties * params) const {
     TextShape *shape = new TextShape();
     shape->setSize(QSizeF(300, 200));
     shape->setDemoText( params->boolProperty("demo") );
-shape->addConnectionPoint(QPointF(0, 0));
-shape->addConnectionPoint(QPointF(150, 100));
-shape->addConnectionPoint(QPointF(0, 200));
-shape->addConnectionPoint(QPointF(300, 200));
+    shape->addConnectionPoint(QPointF(0, 0));
+    shape->addConnectionPoint(QPointF(150, 100));
+    shape->addConnectionPoint(QPointF(0, 200));
+    shape->addConnectionPoint(QPointF(300, 200));
     return shape;
 }
 
 bool TextShapeFactory::supports(const KoXmlElement & e) const
 {
     return ( e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw );
+}
+
+void TextShapeFactory::populateDataCenterMap( QMap<QString, KoDataCenter *>  & dataCenterMap )
+{
+    dataCenterMap["StyleManager"] = new KoStyleManager();
 }
 
 

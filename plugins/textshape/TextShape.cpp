@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -252,6 +253,16 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const {
 
 bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
     return m_textShapeData->loadOdf(element, context);
+}
+
+void TextShape::init( QMap<QString, KoDataCenter *>  dataCenterMap )
+{
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap["StyleManager"] );
+
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> ( m_textShapeData->document()->documentLayout() );
+    if ( lay ) {
+        lay->setStyleManager( styleManager );
+    }
 }
 
 QTextDocument *TextShape::footnoteDocument() {

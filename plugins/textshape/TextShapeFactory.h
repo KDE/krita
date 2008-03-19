@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +36,7 @@ public:
     KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties * params) const;
     virtual bool supports(const KoXmlElement & e) const;
+    virtual void populateDataCenterMap( QMap<QString, KoDataCenter *>  & dataCenterMap );
 };
 
 #endif

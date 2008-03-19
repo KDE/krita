@@ -41,7 +41,6 @@ class KisView2;
 class KisChildDoc;
 class KisUndoAdapter;
 class KisNodeModel;
-class KoStyleManager;
 /**
  * The class that represents a Krita document containing content and
    settings.
@@ -155,15 +154,6 @@ public:
      * compatible model on the internal Krita image layer hierarchy.
      */
     KisNodeModel * nodeModel() const;
-
-    /**
-     * Returns the document-global text style manager for this document.
-     * All text shapes will use this style manager. When saving shape
-     * layers as odf documents, the styles need to be saved, too. Note:
-     * it is possible in ODF to save the styles in an external document that
-     * can be referenced from multiple odf documents.
-     */
-    KoStyleManager * styleManager() const;
 
 public slots:
     void slotImageUpdated();

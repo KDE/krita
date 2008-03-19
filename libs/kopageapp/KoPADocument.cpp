@@ -54,13 +54,12 @@
 
 #include <typeinfo>
 
-class KoPADocument::Private {
+class KoPADocument::Private
+{
 public:
-
     QList<KoPAPageBase*> pages;
     QList<KoPAPageBase*> masterPages;
     KoInlineTextObjectManager *inlineTextObjectManager;
-    KoStyleManager *styleManager;
     bool rulersVisible;
     QMap<QString, KoDataCenter *>  dataCenterMap;
 };
@@ -70,7 +69,6 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     d(new Private())
 {
     d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
-    d->styleManager = new KoStyleManager(this);
 
     // Ask every shapefactory to populate the dataCenterMap
     foreach(QString id, KoShapeRegistry::instance()->keys())
@@ -129,7 +127,8 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
 
     // Load text styles before the corresponding text shapes try to use them!
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    sharedData->loadOdfStyles( loadingContext, d->styleManager, true );
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap()["StyleManager"] );
+    sharedData->loadOdfStyles( loadingContext, styleManager, true );
     paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     loadingContext.setUseStylesAutoStyles( true );
@@ -313,13 +312,6 @@ void KoPADocument::addShape( KoShape * shape )
 {
     if(!shape)
         return;
-
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*> (shape->userData());
-    if (data) { // its a text shape.
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (data->document()->documentLayout());
-        if(lay)
-            lay->setStyleManager(d->styleManager);
-    }
 
     // the KoShapeController sets the active layer as parent
     KoPAPageBase * page( pageByShape( shape ) );

@@ -62,7 +62,6 @@
 #include <KoSelection.h>
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
-#include <KoStyleManager.h>
 
 // Krita Image
 #include <kis_adjustment_layer.h>
@@ -143,8 +142,6 @@ public:
     KisNodeModel * nodeModel;
 
     KisKraLoader * kraLoader;
-
-    KoStyleManager * styleManager;
 };
 
 
@@ -208,7 +205,6 @@ bool KisDoc2::init()
     Q_CHECK_PTR(m_d->nserver);
 
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
-    m_d->styleManager = new KoStyleManager(this);
     m_d->nodeModel = new KisNodeModel( this );
     new ModelTest(m_d->nodeModel, this);
 
@@ -593,11 +589,6 @@ KoShape * KisDoc2::addShape(const KisNodeSP node)
 KisNodeModel * KisDoc2::nodeModel() const
 {
     return m_d->nodeModel;
-}
-
-KoStyleManager * KisDoc2::styleManager() const
-{
-    return m_d->styleManager;
 }
 
 void KisDoc2::setIOSteps(qint32 nsteps)

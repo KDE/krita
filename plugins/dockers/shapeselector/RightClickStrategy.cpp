@@ -59,7 +59,7 @@ void RightClickStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
     menu.addAction(load);
 
     if (m_canvas->shapeManager()->selection()->count()) {
-        save = new QAction(i18n("Save..."), &menu);
+        save = new QAction(i18n("Save Book..."), &menu);
         menu.addAction(save);
     }
     QAction *newFolder = new QAction(i18n("New Folder..."), &menu);
@@ -144,17 +144,17 @@ void RightClickStrategy::createNewFolder()
 
 void RightClickStrategy::saveSelection()
 {
+    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    FolderShape *fs = dynamic_cast<FolderShape*> (shape);
+    if (fs == 0)
+        fs = dynamic_cast<FolderShape*> (shape->parent());
+    if (fs == 0) // TODO give feedback ?
+        return;
+
     // TODO open file dialog
     QFile file("foo");
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    QDomDocument doc;
-    IconShape *ic = dynamic_cast<IconShape*> (m_canvas->shapeManager()->selection()->firstSelectedShape());
-    if (ic) {
-        QDomElement element = doc.createElement("book");
-        doc.appendChild( element );
-        ic->save(element);
-    }
-    // TODO support saving a folder (aka book). (see FolderShape::save())
+    QDomDocument doc = fs->save();
     file.write(doc.toByteArray());
     file.close();
 }

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KODOCUMENTMODEL_H
-#define KODOCUMENTMODEL_H
+#ifndef KOPADOCUMENTMODEL_H
+#define KOPADOCUMENTMODEL_H
 
 #include <KoDocumentSectionModel.h>
 
@@ -42,7 +42,7 @@ class KoPADocumentModel : public KoDocumentSectionModel
     Q_OBJECT
 public:
     /// Constructs a new document section model using the specified documents data
-    KoPADocumentModel( QObject* parent, KoPADocument *document = 0 );
+    explicit KoPADocumentModel( QObject* parent, KoPADocument *document = 0 );
 
     /// Set the document used in the model
     void setDocument(KoPADocument* document);

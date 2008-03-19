@@ -62,6 +62,7 @@ public:
      */
     QImage checkImage(qint32 checkSize);
     void addDecoration(KisCanvasDecoration* deco);
+    KisCanvasDecoration* decoration(const QString& id);
 private:
     QList<KisCanvasDecoration*> m_decorations;
 };

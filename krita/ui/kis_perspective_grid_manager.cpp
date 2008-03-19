@@ -38,7 +38,7 @@
 #include "kis_resource_provider.h"
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView2 * parent)
-    : KisCanvasDecoration(parent)
+    : KisCanvasDecoration("perspectiveGrid", i18n("Perspective grid"), parent)
     , m_toggleEdition(false)
     , m_view(parent)
 {

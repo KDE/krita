@@ -89,3 +89,15 @@ void KisAbstractCanvasWidget::addDecoration(KisCanvasDecoration* deco)
 {
     m_decorations.push_back( deco );
 }
+
+KisCanvasDecoration* KisAbstractCanvasWidget::decoration(const QString& id)
+{
+    foreach( KisCanvasDecoration* deco, m_decorations)
+    {
+        if(deco->id() == id)
+        {
+            return deco;
+        }
+    }
+    return 0;
+}

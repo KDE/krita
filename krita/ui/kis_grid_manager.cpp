@@ -44,7 +44,7 @@
 #include "kis_doc2.h"
 
 KisGridManager::KisGridManager(KisView2 * parent)
-    : KisCanvasDecoration(parent), m_view(parent)
+    : KisCanvasDecoration("grid", i18n("Grid"), parent), m_view(parent)
 {
 
 }

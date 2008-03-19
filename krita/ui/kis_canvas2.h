@@ -124,6 +124,7 @@ public: // KisCanvas2 methods
 
     bool usingHDRExposureProgram();
     void addDecoration(KisCanvasDecoration* deco);
+    KisCanvasDecoration* decoration(const QString& id);
 
 public slots:
 

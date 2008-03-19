@@ -438,4 +438,9 @@ void KisCanvas2::addDecoration(KisCanvasDecoration* deco)
     m_d->canvasWidget->addDecoration( deco );
 }
 
+KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
+{
+    return m_d->canvasWidget->decoration( id );
+}
+
 #include "kis_canvas2.moc"

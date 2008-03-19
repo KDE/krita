@@ -21,13 +21,16 @@
 
 #include <QList>
 #include <QRectF>
+#include <QObject>
 
 class KoShapeManager;
 class KoShape;
 class FolderShape;
+class ClipboardProxyShape;
 
 class ItemStore {
 public:
+    ItemStore();
     ItemStore(KoShapeManager *shapeManager);
     ~ItemStore();
 
@@ -39,12 +42,39 @@ public:
     QList<KoShape*> shapes() const;
 
     FolderShape * mainFolder() const;
+    ClipboardProxyShape * clipboardShape() const;
+    void setClipboardShape(ClipboardProxyShape *shape);
 
     QRectF loadShapeTypes();
     KoShapeManager *shapeManager() const { return m_shapeManager; }
 
+    static KoShape *createShapeFromPaste(QByteArray &bytes);
+
 private:
     KoShapeManager *m_shapeManager;
+};
+
+class ItemStorePrivate : public QObject {
+    Q_OBJECT
+public:
+    ItemStorePrivate();
+    void addFolder(FolderShape *folder);
+    void removeFolder(FolderShape *folder);
+    void addShape(KoShape *shape);
+    void removeShape(KoShape *shape);
+    void addUser(KoShapeManager *sm);
+    void removeUser(KoShapeManager *sm);
+    void setClipboardShape(ClipboardProxyShape *shape);
+
+private slots:
+    void clipboardChanged();
+
+public:
+    QList<KoShape*> shapes;
+    QList<FolderShape *> folders;
+    QList<KoShapeManager*> shapeManagers;
+    FolderShape *mainFolder;
+    ClipboardProxyShape *currentClipboard;
 };
 
 #endif

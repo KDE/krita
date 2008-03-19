@@ -28,7 +28,6 @@
 #include <KoShapeControllerBase.h>
 
 #include <QList>
-#include <QClipboard>
 
 class ClipboardProxyShape;
 class ShapeSelector;
@@ -81,15 +80,12 @@ public:
     void moveDocumentOffset(const QPointF &offset);
     void resetDocumentOffset();
 
-    static KoShape *createShapeFromPaste(QByteArray &bytes);
-
 signals:
     void resized(const QSize &newSize);
 
 private slots:
     void loadShapeTypes();
     void focusChanged(QWidget *old, QWidget *now);
-    void clipboardChanged();
 
 protected: // event handlers
     virtual void mouseMoveEvent(QMouseEvent *e);
@@ -113,7 +109,6 @@ private:
     int m_zoomIndex;
     ItemStore m_itemStore;
     QWidget *m_previousFocusOwner;
-    ClipboardProxyShape *m_currentClipboard;
 };
 
 #endif

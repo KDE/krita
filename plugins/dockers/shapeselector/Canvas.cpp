@@ -29,28 +29,16 @@
 #include "ShapeSelector.h"
 
 #include <KoShapeManager.h>
-#include <KoOdfPaste.h>
 #include <KoPointerEvent.h>
-#include <KoInsets.h>
 #include <KoSelection.h>
 #include <KoShapeFactory.h> // for the mimetype defines etc
-#include <KoStore.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeRegistry.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoLineBorder.h>
 
-#include <QMouseEvent>
-#include <QBuffer>
+#include <QApplication>
 #include <QToolTip>
 #include <QUndoCommand>
 #include <QPainter>
 #include <QMenu>
 #include <QTimer>
-#include <QApplication>
 
 #include <KUrl>
 
@@ -61,8 +49,7 @@ Canvas::Canvas(ShapeSelector *parent)
     m_currentStrategy(0),
     m_zoomIndex(1),
     m_itemStore(new KoShapeManager(this)),
-    m_previousFocusOwner(0),
-    m_currentClipboard(0)
+    m_previousFocusOwner(0)
 {
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Base);
@@ -72,7 +59,6 @@ Canvas::Canvas(ShapeSelector *parent)
 
     connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*, QWidget*)),
         this, SLOT(focusChanged(QWidget*, QWidget*)));
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
 }
 
 void Canvas::gridSize (double *, double *) const {
@@ -412,70 +398,6 @@ void Canvas::loadShapeTypes()
         m_displayOffset = bounds.topLeft();
         update();
     }
-}
-
-void Canvas::clipboardChanged()
-{
-    const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
-    QByteArray bytes = data->data(OASIS_MIME);
-    KoShape *shape = createShapeFromPaste(bytes);
-
-    if (shape) {
-        ClipboardProxyShape *proxy = new ClipboardProxyShape(shape, bytes);
-        if (m_currentClipboard) {
-            proxy->setParent(m_currentClipboard->parent());
-            proxy->setPosition(m_currentClipboard->position());
-            m_itemStore.removeShape(m_currentClipboard);
-            delete m_currentClipboard;
-        }
-        else {
-            // find a good default spot for the new clipboard shape.
-            if (m_itemStore.mainFolder())
-                proxy->setParent(m_itemStore.mainFolder());
-            else // center it on screen.
-                proxy->setAbsolutePosition( m_displayOffset + m_converter.viewToDocument(QPointF(width() / 2.0, height() / 2.0)));
-        }
-        m_currentClipboard = proxy;
-        m_itemStore.addShape(m_currentClipboard);
-    }
-}
-
-// static
-KoShape *Canvas::createShapeFromPaste(QByteArray &bytes)
-{
-    class Paster : public KoOdfPaste {
-      public:
-        Paster(KoShapeControllerBase *controller)
-            : m_shape(0), m_shapeController(controller)
-        {
-        }
-
-        bool process( const KoXmlElement & body, KoOdfReadStore & odfStore )
-        {
-            KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
-            KoShapeLoadingContext context( loadingContext, m_shapeController );
-
-            KoXmlElement element;
-            forEachElement( element, body )
-            {
-                m_shape = KoShapeRegistry::instance()->createShapeFromOdf( element, context );
-                if (m_shape)
-                    return true;
-            }
-            return false;
-        }
-
-        KoShape *shape() { return m_shape; }
-
-      private:
-        KoShape *m_shape;
-        KoShapeControllerBase *m_shapeController;
-    };
-
-    DummyShapeController dsc;
-    Paster paster(&dsc);
-    paster.paste(KoOdf::Text, bytes);
-    return paster.shape();
 }
 
 #include <Canvas.moc>

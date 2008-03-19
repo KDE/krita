@@ -18,114 +18,158 @@
  */
 #include "ItemStore.h"
 
+#include "ClipboardProxyShape.h"
 #include "FolderShape.h"
 #include "TemplateShape.h"
 #include "GroupShape.h"
 #include "FolderBorder.h"
+#include "Canvas.h"
 
 #include <KoShapeManager.h>
 #include <KoProperties.h>
 #include <KoShapeRegistry.h>
+#include <KoOdfPaste.h>
+#include <KoOdfReadStore.h>
+#include <KoOdfReadStore.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoGlobal.h>
+
+#include <QApplication>
+#include <QClipboard>
+#include <QMimeData>
 #include <KLocale>
 #include <KConfigGroup>
 #include <KGlobal>
 
-class ItemStorePrivate {
-public:
-    ItemStorePrivate() : mainFolder(0) { }
-
-    void addFolder(FolderShape *folder)
-    {
-        Q_ASSERT(folder);
-        if (folders.contains(folder))
-            return;
-        mainFolder = folder;
-        if (!folders.isEmpty()) {
-            folder->setBorder(folders[0]->border());
-            int zIndex = 0;
-            foreach (FolderShape *fs, folders)
-                zIndex = qMax(zIndex, fs->zIndex());
-            folder->setZIndex(zIndex+1);
-        }
-        folders.append(folder);
-        if (folders.count() > 1)
-            mainFolder = 0;
-        foreach(KoShapeManager *sm, shapeManagers)
-            sm->add(folder);
-    }
-
-    void removeFolder(FolderShape *folder)
-    {
-        Q_ASSERT(folder);
-        Q_ASSERT(folder != mainFolder); // can't remove the last folder
-        foreach(KoShapeManager *sm, shapeManagers)
-            sm->remove(folder);
-        folders.removeAll(folder);
-        if (folders.count() == 1)
-            mainFolder = folders[0];
-    }
-
-    void addShape(KoShape *shape)
-    {
-        foreach(KoShapeManager *sm, shapeManagers)
-            sm->add(shape);
-        shapes.append(shape);
-    }
-
-    void removeShape(KoShape *shape)
-    {
-        foreach(KoShapeManager *sm, shapeManagers)
-            sm->remove(shape);
-        shapes.removeAll(shape);
-    }
-
-    void addUser(KoShapeManager *sm)
-    {
-        shapeManagers.append(sm);
-    }
-
-    void removeUser(KoShapeManager *sm)
-    {
-        shapeManagers.removeAll(sm);
-        KConfigGroup conf = KoGlobal::kofficeConfig()->group("ShapeSelectorPlugin");
-        const int previouslyConfiguredBooks = conf.readEntry("books", 0);
-        conf.writeEntry("books", folders.size());
-        int index = 1;
-        foreach(FolderShape *folder, folders) {
-            conf.writeEntry(QString::fromLatin1("book.%1_name").arg(index).toAscii().data(), folder->name());
-            if (folder == mainFolder)
-                continue;
-            conf.writeEntry(QString::fromLatin1("book.%1_position").arg(index).toAscii().data(), folder->position());
-            conf.writeEntry(QString::fromLatin1("book.%1_size").arg(index).toAscii().data(), folder->size());
-            conf.writeEntry(QString::fromLatin1("book.%1_items").arg(index).toAscii().data(), folder->save().toByteArray());
-            ++index;
-        }
-        for (int i=folders.size()+1; i <= previouslyConfiguredBooks; i++) { // remove surplus
-            conf.deleteEntry(QString::fromLatin1("book.%1_name").arg(i).toAscii().data());
-            conf.deleteEntry(QString::fromLatin1("book.%1_position").arg(i).toAscii().data());
-            conf.deleteEntry(QString::fromLatin1("book.%1_size").arg(i).toAscii().data());
-            conf.deleteEntry(QString::fromLatin1("book.%1_items").arg(i).toAscii().data());
-        }
-
-        if (shapeManagers.count() == 0) // last one
-        {
-            qDeleteAll(folders);
-            folders.clear();
-            qDeleteAll(shapes);
-            shapes.clear();
-        }
-    }
-
-    QList<KoShape*> shapes;
-    QList<FolderShape *> folders;
-    QList<KoShapeManager*> shapeManagers;
-    FolderShape *mainFolder;
-};
-
 Q_GLOBAL_STATIC(ItemStorePrivate, s_itemStorePrivate)
 
+/// ItemStorePrivate
+ItemStorePrivate::ItemStorePrivate()
+    : mainFolder(0), currentClipboard(0)
+{
+    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
+}
 
+void ItemStorePrivate::addFolder(FolderShape *folder)
+{
+    Q_ASSERT(folder);
+    if (folders.contains(folder))
+        return;
+    mainFolder = folder;
+    if (!folders.isEmpty()) {
+        folder->setBorder(folders[0]->border());
+        int zIndex = 0;
+        foreach (FolderShape *fs, folders)
+            zIndex = qMax(zIndex, fs->zIndex());
+        folder->setZIndex(zIndex+1);
+    }
+    folders.append(folder);
+    if (folders.count() > 1)
+        mainFolder = 0;
+    foreach(KoShapeManager *sm, shapeManagers)
+        sm->add(folder);
+}
+
+void ItemStorePrivate::removeFolder(FolderShape *folder)
+{
+    Q_ASSERT(folder);
+    Q_ASSERT(folder != mainFolder); // can't remove the last folder
+    foreach(KoShapeManager *sm, shapeManagers)
+        sm->remove(folder);
+    folders.removeAll(folder);
+    if (folders.count() == 1)
+        mainFolder = folders[0];
+}
+
+void ItemStorePrivate::addShape(KoShape *shape)
+{
+    if (shapes.contains(shape))
+        return;
+    foreach(KoShapeManager *sm, shapeManagers)
+        sm->add(shape);
+    shapes.append(shape);
+}
+
+void ItemStorePrivate::removeShape(KoShape *shape)
+{
+    foreach(KoShapeManager *sm, shapeManagers)
+        sm->remove(shape);
+    shapes.removeAll(shape);
+}
+
+void ItemStorePrivate::addUser(KoShapeManager *sm)
+{
+    shapeManagers.append(sm);
+}
+
+void ItemStorePrivate::removeUser(KoShapeManager *sm)
+{
+    shapeManagers.removeAll(sm);
+    KConfigGroup conf = KoGlobal::kofficeConfig()->group("ShapeSelectorPlugin");
+    const int previouslyConfiguredBooks = conf.readEntry("books", 0);
+    conf.writeEntry("books", folders.size());
+    int index = 1;
+    foreach(FolderShape *folder, folders) {
+        conf.writeEntry(QString::fromLatin1("book.%1_name").arg(index).toAscii().data(), folder->name());
+        if (folder == mainFolder)
+            continue;
+        conf.writeEntry(QString::fromLatin1("book.%1_position").arg(index).toAscii().data(), folder->position());
+        conf.writeEntry(QString::fromLatin1("book.%1_size").arg(index).toAscii().data(), folder->size());
+        conf.writeEntry(QString::fromLatin1("book.%1_items").arg(index).toAscii().data(), folder->save().toByteArray());
+        ++index;
+    }
+    for (int i=folders.size()+1; i <= previouslyConfiguredBooks; i++) { // remove surplus
+        conf.deleteEntry(QString::fromLatin1("book.%1_name").arg(i).toAscii().data());
+        conf.deleteEntry(QString::fromLatin1("book.%1_position").arg(i).toAscii().data());
+        conf.deleteEntry(QString::fromLatin1("book.%1_size").arg(i).toAscii().data());
+        conf.deleteEntry(QString::fromLatin1("book.%1_items").arg(i).toAscii().data());
+    }
+
+    if (shapeManagers.count() == 0) // last one
+    {
+        qDeleteAll(folders);
+        folders.clear();
+        qDeleteAll(shapes);
+        shapes.clear();
+    }
+}
+
+void ItemStorePrivate::clipboardChanged()
+{
+    const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    QByteArray bytes = data->data(OASIS_MIME);
+    KoShape *shape = ItemStore::createShapeFromPaste(bytes);
+
+    if (shape)
+        setClipboardShape(new ClipboardProxyShape(shape, bytes));
+}
+
+void ItemStorePrivate::setClipboardShape(ClipboardProxyShape *shape)
+{
+    if (currentClipboard) {
+        shape->setParent(currentClipboard->parent());
+        shape->setPosition(currentClipboard->position());
+        removeShape(currentClipboard);
+        delete currentClipboard;
+    }
+    else {
+        // find a good default spot for the new clipboard shape.
+        if (mainFolder)
+            shape->setParent(mainFolder);
+        else  // TODO is there a better way to get it to be centered or something?
+            shape->setAbsolutePosition( QPointF( 50, 50) );
+    }
+    currentClipboard = shape;
+    addShape(currentClipboard);
+}
+
+ItemStore::ItemStore()
+    : m_shapeManager(0)
+{
+}
+
+/// ItemStore
 ItemStore::ItemStore(KoShapeManager *shapeManager)
     : m_shapeManager(shapeManager)
 {
@@ -263,3 +307,54 @@ QRectF ItemStore::loadShapeTypes()
 
     return boundingRect;
 }
+
+ClipboardProxyShape * ItemStore::clipboardShape() const
+{
+    return s_itemStorePrivate()->currentClipboard;
+}
+
+void ItemStore::setClipboardShape(ClipboardProxyShape *shape)
+{
+    s_itemStorePrivate()->setClipboardShape(shape);
+}
+
+
+// static
+KoShape *ItemStore::createShapeFromPaste(QByteArray &bytes)
+{
+    class Paster : public KoOdfPaste {
+      public:
+        Paster(KoShapeControllerBase *controller)
+            : m_shape(0), m_shapeController(controller)
+        {
+        }
+
+        bool process( const KoXmlElement & body, KoOdfReadStore & odfStore )
+        {
+            KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
+            KoShapeLoadingContext context( loadingContext, m_shapeController );
+
+            KoXmlElement element;
+            forEachElement( element, body )
+            {
+                m_shape = KoShapeRegistry::instance()->createShapeFromOdf( element, context );
+                if (m_shape)
+                    return true;
+            }
+            return false;
+        }
+
+        KoShape *shape() { return m_shape; }
+
+      private:
+        KoShape *m_shape;
+        KoShapeControllerBase *m_shapeController;
+    };
+
+    DummyShapeController dsc;
+    Paster paster(&dsc);
+    paster.paste(KoOdf::Text, bytes);
+    return paster.shape();
+}
+
+#include "ItemStore.moc"

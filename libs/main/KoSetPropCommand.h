@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOGENCOMMAND_H
-#define KOGENCOMMAND_H
+#ifndef KOSETPROPCOMMAND_H
+#define KOSETPROPCOMMAND_H
 
 #include <kcommand.h>
 

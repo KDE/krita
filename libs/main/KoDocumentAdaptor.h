@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KoDocumentIface_h__
-#define __KoDocumentIface_h__
+#ifndef KODOCUMENTADAPTOR_H
+#define KODOCUMENTADAPTOR_H
 
 #include <QMap>
 

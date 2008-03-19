@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef KIS_CHANNELINFO_H_
-#define KIS_CHANNELINFO_H_
+#ifndef KOCHANNELINFO_H_
+#define KOCHANNELINFO_H_
 
 #include <QColor>
 #include "qstring.h"
@@ -111,4 +111,4 @@ private:
 
 };
 
-#endif // KIS_CHANNELINFO_H_
+#endif // KOCHANNELINFO_H_

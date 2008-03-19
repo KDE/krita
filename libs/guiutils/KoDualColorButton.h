@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDUALCOLORBUTTON_H
-#define KDUALCOLORBUTTON_H
+#ifndef KODUALCOLORBUTTON_H
+#define KODUALCOLORBUTTON_H
 
 #include <koguiutils_export.h>
 

@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCANVASVIEW_H
-#define KOCANVASVIEW_H
+#ifndef KOCANVASCONTROLLER_H
+#define KOCANVASCONTROLLER_H
 
 #include "flake_export.h"
 

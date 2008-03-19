@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef DlgPartSelect_included
-#define DlgPartSelect_included
+#ifndef KOPARTSELECTDIA_H
+#define KOPARTSELECTDIA_H
 
 #include <kdialog.h>
 #include <KoQueryTrader.h>

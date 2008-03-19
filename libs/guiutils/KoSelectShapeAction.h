@@ -16,8 +16,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSHAPESELECTACTION_H
-#define KOSHAPESELECTACTION_H
+#ifndef KOSELECTSHAPEACTION_H
+#define KOSELECTSHAPEACTION_H
 
 #include <QWidgetAction>
 
@@ -41,4 +41,4 @@ private:
     QMenu* createShapeMenu();
 };
 
-#endif // KOSHAPESLECTACTION_H
+#endif // KOSELECTSHAPEACTION_H

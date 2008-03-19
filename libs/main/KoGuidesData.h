@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOGUIDEDATA_H
-#define KOGUIDEDATA_H
+#ifndef KOGUIDESDATA_H
+#define KOGUIDESDATA_H
 
 #include <komain_export.h>
 #include <QList>

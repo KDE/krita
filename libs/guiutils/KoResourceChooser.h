@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_ICONCHOOSER_H
-#define KO_ICONCHOOSER_H
+#ifndef KORESOURCECHOOSER_H
+#define KORESOURCECHOOSER_H
 
 #include <q3gridview.h>
 #include <q3ptrlist.h>
@@ -82,4 +82,4 @@ private:
     Private* const d;
 };
 
-#endif // KO_ICONCHOOSER_H
+#endif // KORESOURCECHOOSER_H

@@ -27,15 +27,13 @@ class KisIlluminantProfile : public KoColorProfile {
 
     public:
         KisIlluminantProfile(const QString &fileName = "");
+        KisIlluminantProfile(const KisIlluminantProfile &copy);
         ~KisIlluminantProfile();
 
         // Repeat here from KoColorProfile, to remember it in subclasses
         KoColorProfile *clone() const
         {
-            KoColorProfile *p = new KisIlluminantProfile(fileName());
-            if (valid())
-                p->load();
-            return p;
+            return new KisIlluminantProfile(*this);
         }
 
         ///////////////////////////////////////////////////

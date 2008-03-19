@@ -94,6 +94,50 @@ KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
 
 }
 
+KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
+    : KoColorProfile(copy.fileName()),
+      m_wl(-1), m_T(0), m_L(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
+      Ca(0), Cs(0), m_illuminant(""), m_valid(false)
+{
+    if (copy.valid()) {
+        m_valid = copy.m_valid;
+        m_wl = copy.m_wl;
+        m_illuminant = copy.m_illuminant;
+        setName(copy.name());
+        m_T = allocateMatrix(3,m_wl);
+        for (int i = 0; i < m_wl; i++)
+            for (int j = 0; j < 3; j++)
+                m_T[j][i] = copy.m_T[j][i];
+        m_L = allocateMatrix(1,m_wl);
+        for (int i = 0; i < m_wl; i++)
+            m_L[0][i] = copy.m_L[0][i];
+        m_red   = allocateVector(m_wl);
+        m_green = allocateVector(m_wl);
+        m_blue  = allocateVector(m_wl);
+        for (int i = 0; i < m_wl; i++) {
+            m_red[i] = copy.m_red[i];
+        }
+        for (int i = 0; i < m_wl; i++) {
+            m_green[i] = copy.m_green[i];
+        }
+        for (int i = 0; i < m_wl; i++) {
+            m_blue[i] = copy.m_blue[i];
+        }
+        Np = copy.Np;
+        Cla = copy.Cla;
+        Nla = copy.Nla;
+        Ca = allocateVector(Np);
+        for (qint8 i = 0; i < Np; i++)
+            Ca[i] = copy.Ca[i];
+        Cls = copy.Cls;
+        Nls = copy.Nls;
+        Cs = allocateVector(Np);
+        for (qint8 i = 0; i < Np; i++)
+            Cs[i] = copy.Cs[i];
+        Rh = copy.Rh;
+    }
+}
+
 KisIlluminantProfile::~KisIlluminantProfile()
 {
     reset();

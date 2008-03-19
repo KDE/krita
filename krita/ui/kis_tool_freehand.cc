@@ -81,6 +81,7 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
+    dbgUI << "mousePressEvent" << m_mode;
 //     if (!currentImage())
 //  		return;
 
@@ -124,6 +125,7 @@ inline double angle(const QPointF& p1, const QPointF& p2)
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
+    dbgUI << "mouseMoveEvent " << m_mode << " " << e->button() << " " << e->buttons();
     if (m_mode == PAINT) {
         QPointF pos = convertToPixelCoord(e);
 
@@ -180,11 +182,15 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
+    dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
     }
-}void KisToolFreehand::initPaint(KoPointerEvent *)
+}
+
+void KisToolFreehand::initPaint(KoPointerEvent *)
 {
+    dbgUI << "initPaint";
     if (!currentLayer() || !currentLayer()->paintDevice())
         return;
 
@@ -279,6 +285,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::endPaint()
 {
+    dbgUI << "endPaint";
     m_mode = HOVER;
     m_executor->finish();
 //     if (currentImage()) {

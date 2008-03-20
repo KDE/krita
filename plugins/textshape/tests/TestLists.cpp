@@ -66,7 +66,8 @@ void TestDocumentLayout::testNumberedList() {
     style.setListStyle(listStyle);
 
     QTextList *previous = 0;
-    for(int i=1; i <= 9; i++) {
+    int i;
+    for(i=1; i <= 9; i++) {
         QVERIFY(block.isValid());
         // qDebug() << "->" << block.text();
         style.applyStyle(block);
@@ -86,7 +87,7 @@ void TestDocumentLayout::testNumberedList() {
     QTextBlock blok = doc->begin().next();
     double indent = blok.layout()->lineAt(0).x();
     QVERIFY(indent > 0.0);
-    for(int i=1; i <= 9; i++) {
+    for(i=1; i <= 9; i++) {
         // qDebug() << "=>" << blok.text();
         QTextList *textList = blok.textList();
         QVERIFY(textList);
@@ -95,7 +96,7 @@ void TestDocumentLayout::testNumberedList() {
     }
 
     // now make number of listitems be more than 10, so we use 2 digits.
-    for(int i=9; i <= 12; i++) {
+    for(i=9; i <= 12; i++) {
         QVERIFY(block.isValid());
         style.applyStyle(block);
         // qDebug() << "->" << block.text();
@@ -107,7 +108,7 @@ void TestDocumentLayout::testNumberedList() {
     blok = doc->begin().next();
     double indent2 = blok.layout()->lineAt(0).x();
     QVERIFY(indent2 > indent); // since it takes an extra digit
-    for(int i=2; i <= 12; i++) {
+    for(i=2; i <= 12; i++) {
         // qDebug() << "=>" << blok.text();
         QCOMPARE(blok.layout()->lineAt(0).x(), indent2); // all the same indent.
         blok = blok.next();
@@ -115,7 +116,7 @@ void TestDocumentLayout::testNumberedList() {
 
     // now to make sure the text is actually properly set.
     block = doc->begin().next();
-    int i=1;
+    i=1;
     while(block.isValid() && i < 14) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
         QVERIFY(data);

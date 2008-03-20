@@ -18,6 +18,7 @@
  */
 
 #include "KoShapeShadow.h"
+#include "KoShapeSavingContext.h"
 #include "KoShape.h"
 #include "KoInsets.h"
 #include "KoPathShape.h"

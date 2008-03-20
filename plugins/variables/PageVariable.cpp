@@ -27,6 +27,7 @@
 #include <KoTextShapeData.h>
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 
 PageVariable::PageVariable()
     : KoVariable(true),

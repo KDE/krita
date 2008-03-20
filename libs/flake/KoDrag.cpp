@@ -52,8 +52,19 @@ KoDrag::~KoDrag()
 
 bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
 {
+    struct Finally
+    {
+        Finally(KoStore *s) : store(s) { }
+        ~Finally()
+        {
+            delete store;
+        }
+        KoStore *store;
+    };
+
     QBuffer buffer;
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
+    Finally finally(store); // delete store when we exit this scope
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
 
@@ -63,9 +74,7 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     KoXmlWriter* manifestWriter = odfStore.manifestWriter( mimeType );
     KoXmlWriter* contentWriter = odfStore.contentWriter();
 
-    // TODO delete store on all exits
     if ( !contentWriter ) {
-        delete store;
         return false;
     }
 
@@ -74,7 +83,6 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     KoShapeSavingContext * context = helper.context( bodyWriter, mainStyles, embeddedSaver );
 
     if ( !helper.writeBody() ) {
-        delete store;
         return false;
     }
 
@@ -86,7 +94,6 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
     if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) ) {
-        delete store;
         return false;
     }
 
@@ -95,7 +102,6 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     if ( !embeddedSaver.saveEmbeddedDocuments( documentContext ) )
     {
         kDebug(30006) <<"save embedded documents failed";
-        delete store;
         return false;
     }
 
@@ -103,8 +109,6 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     if ( !odfStore.closeManifestWriter() ) {
         return false;
     }
-
-    delete store;
 
     setData( mimeType, buffer.buffer() );
 

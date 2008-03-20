@@ -39,6 +39,7 @@ double **allocateMatrix(int m, int n)
 
 double *allocateVector(int n)
 {
+    Q_ASSERT(n >= 0);
     return new double[n];
 }
 

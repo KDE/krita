@@ -3,7 +3,7 @@ include_directories( ${PIGMENT_INCLUDES} )
 
 if(MSVC)
   # avoid "cannot open file 'LIBC.lib'" error
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif(MSVC)
 
 ########### next target ###############

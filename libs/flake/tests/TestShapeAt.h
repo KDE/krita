@@ -9,6 +9,7 @@ class TestShapeAt : public QObject
 private slots:
     // tests
     void test();
+    void testShadow();
 
 };
 

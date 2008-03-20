@@ -4,6 +4,8 @@
 #include <kdebug.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoLineBorder.h>
+#include <KoShapeShadow.h>
 
 #include <kcomponentdata.h>
 
@@ -81,6 +83,24 @@ void TestShapeAt::test() {
     QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::Selected, true), &shape2);
     QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::Unselected, true), &shape1);
     QCOMPARE(manager.shapeAt(QPointF(125, 105), KoFlake::NextUnselected, true), &shape1);
+}
+
+void TestShapeAt::testShadow()
+{
+    MockShape shape;
+    shape.setPosition(QPointF(20, 30));
+    shape.setSize(QSizeF(50, 70));
+    QCOMPARE(shape.boundingRect(), QRectF(20, 30, 50, 70));
+
+    KoLineBorder *border = new KoLineBorder();
+    border->setLineWidth(20); // which means the shape grows 10 in all directions.
+    shape.setBorder(border);
+    QCOMPARE(shape.boundingRect(), QRectF(10, 20, 70, 90));
+
+    KoShapeShadow *shadow = new KoShapeShadow();
+    shadow->setOffset(QPointF(5, 9));
+    shape.setShadow(shadow);
+    QCOMPARE(shape.boundingRect(), QRectF(10, 20, 75, 99));
 }
 
 QTEST_MAIN(TestShapeAt)

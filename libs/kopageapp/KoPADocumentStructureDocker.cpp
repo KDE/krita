@@ -145,7 +145,6 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
 
     m_model = new KoPADocumentModel( this );
     m_sectionView->setModel( m_model );
-    m_sectionView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     m_sectionView->setSelectionBehavior( QAbstractItemView::SelectRows );
     m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
 
@@ -190,9 +189,12 @@ void KoPADocumentStructureDocker::itemClicked( const QModelIndex &index )
     KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
     if( ! shape )
         return;
-    if( dynamic_cast<KoShapeLayer*>( shape ) )
+    if (dynamic_cast<KoPAPageBase*>(shape)) {
+        emit pageChanged(dynamic_cast<KoPAPageBase*>(shape));
         return;
-    if (dynamic_cast<KoPAPageBase*>(shape))
+    }
+    emit pageChanged(m_canvas->document()->pageByShape(shape));
+    if( dynamic_cast<KoShapeLayer*>( shape ) )
         return;
 
     QList<KoPAPageBase*> selectedPages;
@@ -371,6 +373,13 @@ void KoPADocumentStructureDocker::setCanvas( KoCanvasBase* canvas )
     m_model->setDocument( m_canvas->document() );
 }
 
+void KoPADocumentStructureDocker::setActivePage(KoPAPageBase *page)
+{
+    int row = m_canvas->document()->pageIndex(page);
+    QModelIndex index = m_model->index(row, 0);
+    m_sectionView->setCurrentIndex(index);
+}
+
 void KoPADocumentStructureDocker::minimalView()
 {
     setViewMode(KoDocumentSectionView::MinimalMode);
@@ -384,6 +393,7 @@ void KoPADocumentStructureDocker::detailedView()
 void KoPADocumentStructureDocker::thumbnailView()
 {
     setViewMode(KoDocumentSectionView::ThumbnailMode);
+    m_sectionView->collapseAll();
 }
 
 void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
@@ -392,6 +402,7 @@ void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode
     m_sectionView->setDisplayMode(mode);
     m_sectionView->setItemsExpandable(expandable);
     m_sectionView->setRootIsDecorated(expandable);
+    m_sectionView->setSelectionMode(expandable ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
 }
 
 #include "KoPADocumentStructureDocker.moc"

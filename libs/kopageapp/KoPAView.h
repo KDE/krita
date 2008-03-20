@@ -73,9 +73,6 @@ public:
     /// @return Page that is shown in the canvas
     KoPAPageBase* activePage() const;
 
-    /// Set the active page and updates the UI
-    void updateActivePage( KoPAPageBase * page );
-
     /// Set page shown in the canvas to @p page
     void setActivePage( KoPAPageBase * page );
 
@@ -108,6 +105,9 @@ public:
     void setActionEnabled( int actions, bool enable );
 
 public slots:
+    /// Set the active page and updates the UI
+    void updateActivePage( KoPAPageBase * page );
+
     /// Shows/hides the rulers
     void setShowRulers(bool show);
 

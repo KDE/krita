@@ -57,9 +57,14 @@ public:
     virtual ~KoPADocumentStructureDocker();
     
     virtual void setCanvas( KoCanvasBase* canvas);
+    void setActivePage(KoPAPageBase *page);
+
+signals:
+    void pageChanged(KoPAPageBase *page);
 
 public slots:
     void updateView();
+
 private slots:
     void slotButtonClicked( int buttonId );
     void addLayer();

@@ -165,6 +165,7 @@ void KoPAView::initGUI()
 
     KoPADocumentStructureDockerFactory structureDockerFactory( m_canvas );
     m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
+    connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
 
     KoToolManager::instance()->requestToolActivation( m_canvasController );
 
@@ -416,6 +417,7 @@ void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
     KoPAPageBase * newPage = m_doc->pageByNavigation( m_activePage, pageNavigation );
 
     if ( newPage != m_activePage ) {
+        m_documentStructureDocker->setActivePage(newPage);
         updateActivePage( newPage );
     }
 }
@@ -554,26 +556,22 @@ void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
 
 void KoPAView::goToPreviousPage()
 {
-    KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PagePrevious);
-    updateActivePage(page);
+    navigatePage(KoPageApp::PagePrevious);
 }
 
 void KoPAView::goToNextPage()
 {
-    KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PageNext);
-    updateActivePage(page);
+    navigatePage(KoPageApp::PageNext);
 }
 
 void KoPAView::goToFirstPage()
 {
-    KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PageFirst);
-    updateActivePage(page);
+    navigatePage(KoPageApp::PageFirst);
 }
 
 void KoPAView::goToLastPage()
 {
-    KoPAPageBase* page = m_doc->pageByNavigation(activePage (), KoPageApp::PageLast);
-    updateActivePage(page);
+    navigatePage(KoPageApp::PageLast);
 }
 
 void KoPAView::findDocumentSetNext( QTextDocument * document )

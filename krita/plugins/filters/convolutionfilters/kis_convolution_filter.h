@@ -42,7 +42,7 @@ public:
     virtual int overlapMarginNeeded(const KisFilterConfiguration* c) const;
 protected:
 
-    KisKernelSP m_matrix;
+    KisConvolutionKernelSP m_matrix;
 };
 
 #endif

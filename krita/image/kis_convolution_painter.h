@@ -35,29 +35,6 @@ enum KisConvolutionBorderOp {
     BORDER_AVOID = 3 // Skip convolving the border pixels at all.
 };
 
-class KisKernel;
-typedef KisSharedPtr<KisKernel> KisKernelSP;
-class KRITAIMAGE_EXPORT KisKernel : public KisShared
-{
-
-public:
-
-    quint32 width;
-    quint32 height;
-    qint32 offset;
-    qint32 factor;
-    qint32 * data;
-
-    KisKernel() : width(0), height(0), offset(0), factor(0), data(0) {}
-
-    virtual ~KisKernel() { delete [] data; }
-
-    static KisKernelSP fromQImage(const QImage& img);
-
-};
-
-
-
 class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter
 {
 
@@ -84,13 +61,13 @@ public:
      * If you want to convolve a subset of the channels in a pixel,
      * set those channels with KisPainter::setChannelFlags();
      */
-    void applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
+    void applyMatrix(const KisConvolutionKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                      KisConvolutionBorderOp borderOp = BORDER_AVOID);
 private:
     /**
      * This function is called by applyMatrix when borderOp == BORDER_REPEAT
      */
-    void applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h);
+    void applyMatrixRepeat(const KisConvolutionKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h);
 
 
 };

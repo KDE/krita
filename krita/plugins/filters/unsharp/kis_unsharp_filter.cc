@@ -26,6 +26,7 @@
 #include <knuminput.h>
 
 #include <kis_auto_brush.h>
+#include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
 #include <filter/kis_filter_configuration.h>
@@ -87,7 +88,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     QImage mask = kas->createBrush();
 //    mask.save("testmask.png", "PNG");
 
-    KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask));
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromQImage(mask);
 
     KisPaintDeviceSP interm = KisPaintDeviceSP(new KisPaintDevice(*src.paintDevice()));
     KoColorSpace * cs = interm->colorSpace();

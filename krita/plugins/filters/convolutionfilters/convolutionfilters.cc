@@ -26,6 +26,7 @@
 #include <kcomponentdata.h>
 #include <kgenericfactory.h>
 
+#include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
 
 #include <filter/kis_filter_configuration.h>
@@ -34,28 +35,22 @@
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
 
-KisKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
+KisConvolutionKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
                           qint32 i3, qint32 i4, qint32 i5,
                           qint32 i6, qint32 i7, qint32 i8,
                           qint32 factor, qint32 offset )
 {
-    KisKernelSP kernel = KisKernelSP(new KisKernel());
-    kernel->width = 3;
-    kernel->height = 3;
+    KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 3, offset, factor);
 
-    kernel->factor = factor;
-    kernel->offset = offset;
-
-    kernel->data = new qint32[9];
-    kernel->data[0] = i0;
-    kernel->data[1] = i1;
-    kernel->data[2] = i2;
-    kernel->data[3] = i3;
-    kernel->data[4] = i4;
-    kernel->data[5] = i5;
-    kernel->data[6] = i6;
-    kernel->data[7] = i7;
-    kernel->data[8] = i8;
+    kernel->data()[0] = i0;
+    kernel->data()[1] = i1;
+    kernel->data()[2] = i2;
+    kernel->data()[3] = i3;
+    kernel->data()[4] = i4;
+    kernel->data()[5] = i5;
+    kernel->data()[6] = i6;
+    kernel->data()[7] = i7;
+    kernel->data()[8] = i8;
 
     return kernel;
 }typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;

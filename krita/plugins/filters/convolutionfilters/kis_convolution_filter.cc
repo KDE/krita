@@ -26,6 +26,7 @@
 
 #include "kis_painter.h"
 #include "kis_convolution_painter.h"
+#include "kis_convolution_kernel.h"
 #include "KoProgressUpdater.h"
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
@@ -71,5 +72,5 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
 }
 
 int KisConvolutionFilter::overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const {
-    return qMax(m_matrix->width / 2, m_matrix->height / 2);
+    return qMax(m_matrix->width() / 2, m_matrix->height() / 2);
 }

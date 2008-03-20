@@ -24,6 +24,7 @@
 
 #include <kis_iterators_pixel.h>
 #include <kis_auto_brush.h>
+#include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
 #include <kis_global.h>
 #include <kis_multi_integer_filter_widget.h>
@@ -101,7 +102,7 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
 
     QImage mask = kas->createBrush();
 
-    KisKernelSP kernel = KisKernel::fromQImage(mask);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromQImage(mask);
 
     KisPaintDeviceSP interm = new KisPaintDevice(*src);
     KisConvolutionPainter painter( interm );

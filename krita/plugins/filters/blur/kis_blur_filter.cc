@@ -25,6 +25,7 @@
 #include <KoCompositeOp.h>
 
 #include <kis_auto_brush.h>
+#include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
 
@@ -127,7 +128,7 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
         }
     }
 
-    KisKernelSP kernel = KisKernelSP(KisKernel::fromQImage(mask));
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromQImage(mask);
     KisConvolutionPainter painter( dst, dstInfo.selection() );
     painter.setProgress( progressUpdater );
     painter.applyMatrix(kernel, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);

@@ -45,6 +45,7 @@
 #include <KoProgressUpdater.h>
 
 #include "kis_brush.h"
+#include "kis_convolution_kernel.h"
 #include "kis_global.h"
 #include "kis_image.h"
 #include "kis_iterators_pixel.h"
@@ -55,25 +56,6 @@
 #include "kis_types.h"
 
 #include "kis_selection.h"
-
-KisKernelSP KisKernel::fromQImage(const QImage& img)
-{
-    KisKernelSP k = KisKernelSP(new KisKernel);
-    k->width = img.width();
-    k->height = img.height();
-    k->offset = 0;
-    uint count = k->width * k->height;
-    k->data = new qint32[count];
-    qint32* itData = k->data;
-    const quint8* itImg = img.bits();
-    k->factor = 0;
-    for(uint i = 0; i < count; ++i , ++itData, itImg+=4)
-    {
-        *itData = 255 - ( *itImg + *(itImg+1) + *(itImg+2) ) / 3;
-        k->factor += *itData;
-    }
-    return k;
-}
 
 
 KisConvolutionPainter::KisConvolutionPainter()
@@ -92,7 +74,7 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 }
 
 
-void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
+void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                                         KisConvolutionBorderOp borderOp )
 {
     // Make the area we cover as small as possible
@@ -108,8 +90,8 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     if ( w == 0 && h == 0 ) return;
     // Determine the kernel's extent from the center pixel
     qint32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
-    kw = kernel->width;
-    kh = kernel->height;
+    kw = kernel->width();
+    kh = kernel->height();
     khalfWidth = (kw - 1) / 2;
     khalfHeight = (kh - 1) / 2;
 
@@ -117,7 +99,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     yLastMinuskhh = y + (h - khalfHeight);
 
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
-    if (w < kw || h < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor == 0 ) return;
+    if (w < kw || h < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor() == 0 ) return;
 
     int lastProgressPercent = 0;
     if (progressUpdater()) progressUpdater()->setProgress(0);
@@ -201,7 +183,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
                 }
             }
             if (hit.isSelected()) {
-                convolutionOp->convolveColors(pixelPtrCache, kernel->data, hit.rawData(), kernel->factor, kernel->offset, kw * kh, channelFlags());
+                convolutionOp->convolveColors(pixelPtrCache, kernel->data(), hit.rawData(), kernel->factor(), kernel->offset(), kw * kh, channelFlags());
 //                 pixelPtrCache.fill(0);
             }
             ++col;
@@ -236,13 +218,13 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     delete[] pixelPtrCache;
 }
 
-void KisConvolutionPainter::applyMatrixRepeat( KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h )
+void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h )
 {
     int lastProgressPercent = 0;
     // Determine the kernel's extent from the center pixel
     qint32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
-    kw = kernel->width;
-    kh = kernel->height;
+    kw = kernel->width();
+    kh = kernel->height();
     khalfWidth = (kw - 1) / 2;
     khalfHeight = (kh - 1) / 2;
 
@@ -399,7 +381,7 @@ void KisConvolutionPainter::applyMatrixRepeat( KisKernelSP kernel, qint32 x, qin
                 }
             }
             if (hit.isSelected()) {
-                convolutionOp->convolveColors(pixelPtrCache, kernel->data, hit.rawData(), kernel->factor, kernel->offset, kw * kh, channelFlags());
+                convolutionOp->convolveColors(pixelPtrCache, kernel->data(), hit.rawData(), kernel->factor(), kernel->offset(), kw * kh, channelFlags());
             }
             ++col;
             ++hit;

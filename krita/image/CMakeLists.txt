@@ -73,6 +73,7 @@ set(kritaimage_LIB_SRCS
    kis_brush_registry.cpp
    kis_clone_layer.cpp
    kis_complex_color.cpp
+   kis_convolution_kernel.cc
    kis_convolution_painter.cc
    kis_effect_mask.cc
    kis_fill_painter.cc

@@ -154,6 +154,9 @@ typedef KisSharedPtr<KisFilter> KisFilterSP;
 class KisGenerator;
 typedef KisSharedPtr<KisGenerator> KisGeneratorSP;
 
+class KisConvolutionKernel;
+typedef KisSharedPtr<KisConvolutionKernel> KisConvolutionKernelSP;
+
 class KisAnnotation;
 typedef KisSharedPtr<KisAnnotation> KisAnnotationSP;
 typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;

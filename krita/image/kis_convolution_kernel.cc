@@ -1,0 +1,91 @@
+/*
+ *  Copyright (c) 2005,2008 Cyrille Berger <cberger@cberger.net>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "kis_convolution_kernel.h"
+
+#include <QImage>
+
+struct KisConvolutionKernel::Private {
+    quint32 width;
+    quint32 height;
+    qint32 offset;
+    qint32 factor;
+    qint32 * data;
+};
+
+KisConvolutionKernel::KisConvolutionKernel( quint32 _width, quint32 _height, qint32 _offset, qint32 _factor) : d(new Private)
+{
+    d->width = _width;
+    d->height = _height;
+    d->offset = _offset;
+    d->factor = _factor;
+    d->data = new qint32[d->width * d->height];
+}
+
+KisConvolutionKernel::~KisConvolutionKernel()
+{
+    delete[] d->data;
+    delete d;
+}
+
+quint32 KisConvolutionKernel::width() const
+{
+    return d->width;
+}
+
+quint32 KisConvolutionKernel::height() const
+{
+    return d->height;
+}
+
+qint32 KisConvolutionKernel::offset() const
+{
+    return d->offset;
+}
+
+qint32 KisConvolutionKernel::factor() const
+{
+    return d->factor;
+}
+
+qint32* KisConvolutionKernel::data()
+{
+    return d->data;
+}
+
+const qint32* KisConvolutionKernel::data() const
+{
+    return d->data;
+}
+
+KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& img)
+{
+    KisConvolutionKernelSP k = new KisConvolutionKernel( img.width(), img.height(), 0, 0);
+    uint count = k->width() * k->height();
+    qint32* itData = k->data();
+    const quint8* itImg = img.bits();
+    qint32 factor = 0;
+    for(uint i = 0; i < count; ++i , ++itData, itImg+=4)
+    {
+        *itData = 255 - ( *itImg + *(itImg+1) + *(itImg+2) ) / 3;
+        factor += *itData;
+    }
+    k->d->factor = factor;
+    return k;
+}
+

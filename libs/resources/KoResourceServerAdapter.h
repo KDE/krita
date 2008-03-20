@@ -48,7 +48,7 @@ protected:
     void emitRemovingResource(KoResource* resource);
 };
 
-template <class T> class KORESOURCES_EXPORT KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T>
+template <class T> class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T>
 {
 public:
     KoResourceServerAdapter(KoResourceServer<T>* resourceServer)

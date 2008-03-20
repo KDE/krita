@@ -35,7 +35,7 @@
  *
  * Exemple of use:
  * @code
- * class KoMyClassRegistry : public KoGenericRegistry\<MyClass*\> {
+ * class KoMyClassRegistry : public KoGenericRegistry<MyClass*> {
  * public:
  *   static KoMyClassRegistry * instance();
  * private:

@@ -49,6 +49,8 @@ void PageVariable::propertyChanged(Property property, const QVariant &value) {
 }
 
 void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument) {
+    Q_UNUSED(document);
+    Q_UNUSED(posInDocument);
     if (m_type == PageNumber) {
         if (shape) {
             KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());

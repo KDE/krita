@@ -173,7 +173,16 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
         }
         case Qt::DecorationRole: return QVariant();//return shape->icon();
         case Qt::EditRole: return shape->name();
-        case Qt::SizeHintRole: return shape->size();
+        case Qt::SizeHintRole:
+        {
+            KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
+            if (page) { // return actual page size for page
+                KoPageLayout layout = page->pageLayout();
+                return QSize(layout.width, layout.height);
+            }
+            else
+                return shape->size();
+        }
         case ActiveRole:
         {
             KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
@@ -285,9 +294,25 @@ void KoPADocumentModel::setProperties( KoShape* shape, const PropertyList &prope
 
 QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const
 {
-    KoShapePainter painter;
+    QSize size(thumbSize.width(), thumbSize.height());
+    KoShapePainter shapePainter;
 
     QList<KoShape*> shapes;
+    double zoom;
+
+    KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
+    if (page) { // We create a thumbnail with actual width / height ratio for page
+        KoPageLayout layout = page->pageLayout();
+        double ratio = (double)layout.width / layout.height;
+        if (ratio > 1) {
+            zoom = (double) size.width() / layout.width;
+            size.setWidth(size.width() * ratio);
+        }
+        else {
+            zoom = (double) size.height() / layout.height;
+            size.setHeight(size.height() / ratio); 
+        }
+    }
 
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
@@ -295,13 +320,24 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     else
         shapes.append( shape );
 
-    painter.setShapes( shapes );
+    shapePainter.setShapes( shapes );
 
-    QImage thumb( thumbSize, QImage::Format_RGB32 );
+    QImage thumb( size, QImage::Format_RGB32 );
     // draw the background of the thumbnail
     thumb.fill( QColor( Qt::white ).rgb() );
 
-    painter.paintShapes( thumb );
+    if (page) { // draw the thumbnail for page
+        QPainter painter(&thumb);
+        painter.setClipRect(QRect(0, 0, size.width(), size.height()));
+        QPen pen(Qt::SolidLine);
+        painter.setPen(pen);
+        painter.drawRect(0, 0, size.width() - 1, size.height() - 1);
+        KoZoomHandler zoomHandler;
+        zoomHandler.setZoom(zoom);
+        shapePainter.paintShapes(painter, zoomHandler);
+    }
+    else // draw thumbnail for other type of shapes
+        shapePainter.paintShapes( thumb );
 
     return thumb;
 }

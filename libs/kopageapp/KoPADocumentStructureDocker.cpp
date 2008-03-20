@@ -192,6 +192,8 @@ void KoPADocumentStructureDocker::itemClicked( const QModelIndex &index )
         return;
     if( dynamic_cast<KoShapeLayer*>( shape ) )
         return;
+    if (dynamic_cast<KoPAPageBase*>(shape))
+        return;
 
     QList<KoPAPageBase*> selectedPages;
     QList<KoShapeLayer*> selectedLayers;

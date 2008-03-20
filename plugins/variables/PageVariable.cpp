@@ -87,4 +87,5 @@ bool PageVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
         m_type = PageNumber;
         // TODO there are different parts of select-page
     }
+    return true;
 }

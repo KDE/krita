@@ -1,3 +1,9 @@
+if(MSVC)
+  # avoid "cannot open file 'LIBC.lib'" error
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
+endif(MSVC)
+
 add_subdirectory( scan )
 add_subdirectory( colorspaces )
 add_subdirectory( variables )

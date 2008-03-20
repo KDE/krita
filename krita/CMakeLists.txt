@@ -2,7 +2,9 @@ project(krita)
 
 if (SHOULD_BUILD_KRITA)
 
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-operator-names")
+    if(GCC)
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-operator-names")
+    endif(GCC)
     include(CheckFunctionExists)
 
     macro_optional_find_package(GLEW)

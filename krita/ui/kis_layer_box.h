@@ -35,7 +35,6 @@
 
 #include <kis_types.h>
 
-#include "ui_wdglayerbox.h"
 #include "kis_view2.h"
 
 class QModelIndex;
@@ -46,12 +45,13 @@ class KMenu;
 class KoCompositeOp;
 class KisNodeModel;
 class KisLayerManager;
+class Ui_WdgLayerBox;
 
 /**
  * A widget that visualized the layer structure.
  *
  */
-class KisLayerBox : public QDockWidget, public Ui::WdgLayerBox {
+class KisLayerBox : public QDockWidget {
 
     Q_OBJECT
 
@@ -115,6 +115,7 @@ private:
     KisImageSP m_image;
     KisNodeModel * m_nodeModel;
     KisNodeManager * m_nodeManager;
+    Ui_WdgLayerBox* m_wdgLayerBox;
 
 };
 

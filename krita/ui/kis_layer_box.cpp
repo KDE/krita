@@ -68,28 +68,31 @@
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
 
+#include "ui_wdglayerbox.h"
+
 KisLayerBox::KisLayerBox()
     : QDockWidget( i18n("Layers" ) )
-    , Ui::WdgLayerBox()
     , m_image( 0 )
     , m_nodeManager( 0 )
+    , m_wdgLayerBox( new Ui_WdgLayerBox )
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
+    
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
 
-    setupUi(mainWidget);
+    m_wdgLayerBox->setupUi(mainWidget);
 
     setMinimumSize(mainWidget->minimumSizeHint());
 
-    listLayers->viewport()->installEventFilter(this);
-    listLayers->setDragDropMode(QAbstractItemView::InternalMove);
-    listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    m_wdgLayerBox->listLayers->viewport()->installEventFilter(this);
+    m_wdgLayerBox->listLayers->setDragDropMode(QAbstractItemView::InternalMove);
+    m_wdgLayerBox->listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     
-    connect(listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
+    connect(m_wdgLayerBox->listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
-    connect(listLayers, SIGNAL(clicked(const QModelIndex&)), SLOT(slotNodeActivated(const QModelIndex&)));
+    connect(m_wdgLayerBox->listLayers, SIGNAL(clicked(const QModelIndex&)), SLOT(slotNodeActivated(const QModelIndex&)));
     m_viewModeMenu = new KMenu( this );
     QActionGroup *group = new QActionGroup( this );
     QList<QAction*> actions;
@@ -108,29 +111,29 @@ KisLayerBox::KisLayerBox()
     }
     actions[1]->trigger(); //TODO save/load previous state
 
-    bnViewMode->setMenu(m_viewModeMenu);
-    bnViewMode->setPopupMode(QToolButton::InstantPopup);
-    bnViewMode->setIcon(KIcon("view-choose"));
-    bnViewMode->setText(i18n("View mode"));
+    m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
+    m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
+    m_wdgLayerBox->bnViewMode->setIcon(KIcon("view-choose"));
+    m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
-    bnAdd->setIcon(SmallIcon("list-add"));
+    m_wdgLayerBox->bnAdd->setIcon(SmallIcon("list-add"));
     
-    bnDelete->setIcon(SmallIcon("list-remove"));
+    m_wdgLayerBox->bnDelete->setIcon(SmallIcon("list-remove"));
     
-    bnRaise->setEnabled(false);
-    bnRaise->setIcon(SmallIcon("go-up"));
+    m_wdgLayerBox->bnRaise->setEnabled(false);
+    m_wdgLayerBox->bnRaise->setIcon(SmallIcon("go-up"));
     
-    bnLower->setEnabled(false);
-    bnLower->setIcon(SmallIcon("go-down"));
+    m_wdgLayerBox->bnLower->setEnabled(false);
+    m_wdgLayerBox->bnLower->setIcon(SmallIcon("go-down"));
     
-    bnProperties->setText("...");
+    m_wdgLayerBox->bnProperties->setText("...");
 
-    bnDuplicate->setIcon(SmallIcon("edit-copy"));
+    m_wdgLayerBox->bnDuplicate->setIcon(SmallIcon("edit-copy"));
         
     m_newLayerMenu = new KMenu(this);
-    bnAdd->setMenu(m_newLayerMenu);
-    bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
-    connect( bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()) );
+    m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
+    m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
+    connect( m_wdgLayerBox->bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()) );
     m_newLayerMenu->addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewPaintLayer()));
     m_newLayerMenu->addAction(KIcon("folder-new"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
@@ -142,16 +145,16 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
     m_newLayerMenu->addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
 
-    connect(bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
+    connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
-    connect(bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked())); 
-    connect(bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
+    connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked())); 
+    connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
     
-    connect(bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
-    connect(bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
-    connect(doubleOpacity, SIGNAL(valueChanged(double, bool)), SIGNAL(sigOpacityChanged(double, bool)));
-    connect(cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
+    connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
+    connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
+    connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(double, bool)), SIGNAL(sigOpacityChanged(double, bool)));
+    connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
 }
 
 KisLayerBox::~KisLayerBox()
@@ -177,28 +180,28 @@ void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNode
         connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(updateUI()));
         connect(m_nodeModel, SIGNAL(modelReset()), this, SLOT(updateUI()));
 
-        listLayers->setModel( nodeModel );
+        m_wdgLayerBox->listLayers->setModel( nodeModel );
 
         m_image = img;
 
         updateUI();
 
-        listLayers->expandAll();
-        listLayers->scrollToBottom();
+        m_wdgLayerBox->listLayers->expandAll();
+        m_wdgLayerBox->listLayers->scrollToBottom();
     }
     else {
-        listLayers->setModel(0);
+        m_wdgLayerBox->listLayers->setModel(0);
     }
 }
 
 bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 {
-    Q_ASSERT(o == listLayers->viewport());
+    Q_ASSERT(o == m_wdgLayerBox->listLayers->viewport());
 
     if (e->type() == QEvent::MouseButtonDblClick) {
 
         QMouseEvent *me = static_cast<QMouseEvent*>(e);
-        QModelIndex mi = listLayers->indexAt(me->pos());
+        QModelIndex mi = m_wdgLayerBox->listLayers->indexAt(me->pos());
         if (mi.isValid())
             slotPropertiesClicked();
         else
@@ -212,17 +215,17 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
-    bnDelete->setEnabled(m_nodeManager->activeNode());
-    bnRaise->setEnabled(    m_nodeManager->activeNode()
+    m_wdgLayerBox->bnDelete->setEnabled(m_nodeManager->activeNode());
+    m_wdgLayerBox->bnRaise->setEnabled(    m_nodeManager->activeNode()
                         && (m_nodeManager->activeNode()->nextSibling()
                             || (   m_nodeManager->activeNode()->parent()
                                 && m_nodeManager->activeNode()->parent() != m_image->root())));
     
-    bnLower->setEnabled(m_nodeManager->activeNode() && m_nodeManager->activeNode()->prevSibling());
+    m_wdgLayerBox->bnLower->setEnabled(m_nodeManager->activeNode() && m_nodeManager->activeNode()->prevSibling());
 
-    doubleOpacity->setEnabled(m_nodeManager->activeNode());
-    doubleOpacity->setDecimals(0);
-    cmbComposite->setEnabled(m_nodeManager->activeNode());
+    m_wdgLayerBox->doubleOpacity->setEnabled(m_nodeManager->activeNode());
+    m_wdgLayerBox->doubleOpacity->setDecimals(0);
+    m_wdgLayerBox->cmbComposite->setEnabled(m_nodeManager->activeNode());
     if (KisNodeSP active = m_nodeManager->activeNode())
     {
         if (m_nodeManager->activePaintDevice())
@@ -243,32 +246,32 @@ void KisLayerBox::updateUI()
 void KisLayerBox::setCurrentNode( KisNodeSP node )
 {
     if ( node && m_nodeModel ) {
-        listLayers->setCurrentIndex( m_nodeModel->indexFromNode( node ) );
+        m_wdgLayerBox->listLayers->setCurrentIndex( m_nodeModel->indexFromNode( node ) );
     }
 
 }
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
-    cmbComposite->blockSignals(true);
-    cmbComposite->setCurrent(compositeOp);
-    cmbComposite->blockSignals(false);
+    m_wdgLayerBox->cmbComposite->blockSignals(true);
+    m_wdgLayerBox->cmbComposite->setCurrent(compositeOp);
+    m_wdgLayerBox->cmbComposite->blockSignals(false);
 }
 
 void KisLayerBox::slotFillCompositeOps(const KoColorSpace * colorSpace)
 {
-    cmbComposite->blockSignals(true);
-    cmbComposite->setCompositeOpList(colorSpace->compositeOps());
-    cmbComposite->blockSignals(false);
+    m_wdgLayerBox->cmbComposite->blockSignals(true);
+    m_wdgLayerBox->cmbComposite->setCompositeOpList(colorSpace->compositeOps());
+    m_wdgLayerBox->cmbComposite->blockSignals(false);
 }
 
 // range: 0-100
 void KisLayerBox::slotSetOpacity(double opacity)
 {
     Q_ASSERT( opacity >= 0 && opacity <= 100 );
-    doubleOpacity->blockSignals(true);
-    doubleOpacity->setValue(opacity);
-    doubleOpacity->blockSignals(false);
+    m_wdgLayerBox->doubleOpacity->blockSignals(true);
+    m_wdgLayerBox->doubleOpacity->setValue(opacity);
+    m_wdgLayerBox->doubleOpacity->blockSignals(false);
 }
 
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
@@ -276,7 +279,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     QMenu menu;
     if (index.isValid())
     {
-        listLayers->addPropertyActions(&menu, index);
+        m_wdgLayerBox->listLayers->addPropertyActions(&menu, index);
         menu.addAction(KIcon("document-properties"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
         menu.addSeparator();
         menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
@@ -313,17 +316,17 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
 
 void KisLayerBox::slotMinimalView()
 {
-    listLayers->setDisplayMode(KoDocumentSectionView::MinimalMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::MinimalMode);
 }
 
 void KisLayerBox::slotDetailedView()
 {
-    listLayers->setDisplayMode(KoDocumentSectionView::DetailedMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::DetailedMode);
 }
 
 void KisLayerBox::slotThumbnailView()
 {
-    listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
 
 void KisLayerBox::slotNewPaintLayer()
@@ -415,19 +418,19 @@ void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
 {
     setUpdatesEnabled(enable);
     //doubleOpacity->setUpdatesEnabled(enable);
-    cmbComposite->setUpdatesEnabled(enable);
+    m_wdgLayerBox->cmbComposite->setUpdatesEnabled(enable);
 
-    doubleOpacity->blockSignals(!enable);
-    cmbComposite->blockSignals(!enable);
+    m_wdgLayerBox->doubleOpacity->blockSignals(!enable);
+    m_wdgLayerBox->cmbComposite->blockSignals(!enable);
 }
 
 QModelIndexList KisLayerBox::selectedNodes() const
 {
-    QModelIndexList l = listLayers->selectionModel()->selectedIndexes();
-    if (l.count() < 2 && m_nodeManager->activeNode() && !l.contains(listLayers->currentIndex()))
+    QModelIndexList l = m_wdgLayerBox->listLayers->selectionModel()->selectedIndexes();
+    if (l.count() < 2 && m_nodeManager->activeNode() && !l.contains(m_wdgLayerBox->listLayers->currentIndex()))
     {
         l.clear();
-        l.append(listLayers->currentIndex());
+        l.append(m_wdgLayerBox->listLayers->currentIndex());
     }
     return l;
 }

@@ -52,7 +52,7 @@ private:
     /// reimplemented from KoShape
     virtual KoShape * cloneShape() const;
 
-    KoImageCollection *m_imageCollection,;
+    KoImageCollection *m_imageCollection;
     KoImageData *m_imageData;
 };
 

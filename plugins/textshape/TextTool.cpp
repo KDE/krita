@@ -975,7 +975,7 @@ void TextTool::updateActions() {
     QTextBlockFormat bf = m_textCursor.blockFormat();
     if(bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
         bool revert = (m_textCursor.block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
-        if(bf.alignment() == Qt::AlignLeading ^ revert)
+        if(bf.alignment() == (Qt::AlignLeading ^ revert))
             m_actionAlignLeft->setChecked(true);
         else
             m_actionAlignRight->setChecked(true);

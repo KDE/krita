@@ -1,6 +1,11 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${KOTEXT_INCLUDES} )
 
+if(MSVC)
+  # avoid "cannot open file 'LIBC.lib'" error
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
+endif(MSVC)
+
 # all tests for obsolete classes
 #   ########### kotextformattertest ###############
 #

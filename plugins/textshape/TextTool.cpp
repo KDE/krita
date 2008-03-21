@@ -314,10 +314,14 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect( m_actionFormatFontSize, SIGNAL(fontSizeChanged( int )), &m_selectionHandler, SLOT(setFontSize(int)) );
 
     m_actionFormatTextColor = new KoColorSetAction(this);
+    m_actionFormatTextColor->setIcon(KIcon("textcolor"));
+    m_actionFormatTextColor->setToolTip(i18n("Text Color..."));
     addAction("format_textcolor", m_actionFormatTextColor);
     connect(m_actionFormatTextColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setTextColor(const KoColor &)) );
 
     m_actionFormatBackgroundColor = new KoColorSetAction(this);
+    m_actionFormatBackgroundColor->setIcon(KIcon("format-fill-color"));
+    m_actionFormatBackgroundColor->setToolTip(i18n("Background Color..."));
     m_actionFormatBackgroundColor->setText( i18n( "Background" ) );
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)) );

@@ -51,8 +51,6 @@ KoColorSetAction::KoColorSetAction(QObject *parent)
     wdgAction->setDefaultWidget(d->colorSetWidget);
     d->menu->addAction(wdgAction);
     setMenu(d->menu);
-    setIcon(KIcon("textcolor"));
-    setToolTip(i18n("Text Color..."));
     connect(this, SIGNAL(triggered()), this, SLOT(showCustomColorDialog()));
 }
 

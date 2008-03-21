@@ -13,7 +13,6 @@ if(OPENEXR_FOUND)
 endif(OPENEXR_FOUND)
 
 if(MSVC)
-  # Remove support for Klingon C++ dialect which is used in pigment library ;)
   add_definitions(-Dand=&& -Dor=|| -Dnot=!)
   # avoid "cannot open file 'LIBC.lib'" error
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")

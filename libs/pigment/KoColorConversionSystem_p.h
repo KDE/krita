@@ -21,7 +21,7 @@ struct KoColorConversionSystem::Node {
     Node() : isIcc(false), isHdr(false), isInitialized(false), referenceDepth(0), isGray(false), canBeCrossed(true), colorSpaceFactory(0) {}
     void init( const KoColorSpaceFactory* _colorSpaceFactory)
     {
-        Q_ASSERT(not isInitialized);
+        Q_ASSERT(!isInitialized);
         isInitialized = true;
         
         if(_colorSpaceFactory)
@@ -31,7 +31,7 @@ struct KoColorConversionSystem::Node {
             colorSpaceFactory = _colorSpaceFactory;
             referenceDepth = _colorSpaceFactory->referenceDepth();
             isGray = ( _colorSpaceFactory->colorModelId() == GrayAColorModelID
-                    or _colorSpaceFactory->colorModelId() == GrayColorModelID );
+                    || _colorSpaceFactory->colorModelId() == GrayColorModelID );
         }
     }
     QString id() const {
@@ -95,7 +95,7 @@ struct KoColorConversionSystem::NodeKey {
     {}
     bool operator==(const KoColorConversionSystem::NodeKey& rhs) const
     {
-        return modelId == rhs.modelId and depthId == rhs.depthId;
+        return modelId == rhs.modelId && depthId == rhs.depthId;
     }
     QString modelId;
     QString depthId;
@@ -133,7 +133,7 @@ struct KoColorConversionSystem::Path {
     {
         foreach(Vertex* v, vertexes)
         {
-            if(v->srcNode == n or v->dstNode == n)
+            if(v->srcNode == n || v->dstNode == n)
             {
                 return true;
             }
@@ -165,11 +165,11 @@ struct KoColorConversionSystem::Private {
 };
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \
-    if(path1-> name and !path2-> name) \
+    if(path1-> name && !path2-> name) \
     { \
         return true; \
     } \
-    if(!path1-> name and path2-> name) \
+    if(!path1-> name && path2-> name) \
     { \
         return false; \
     }
@@ -179,9 +179,9 @@ struct PathQualityChecker {
     /// @return true if the path maximize all the criterions (except length)
     inline bool isGoodPath(KoColorConversionSystem::Path* path)
     {
-        return ( path->respectColorCorrectness or ignoreColorCorrectness ) and
-               ( path->referenceDepth >= referenceDepth) and
-               ( path->keepDynamicRange or ignoreHdr );
+        return ( path->respectColorCorrectness || ignoreColorCorrectness ) &&
+               ( path->referenceDepth >= referenceDepth) &&
+               ( path->keepDynamicRange || ignoreHdr );
     }
     /**
      * Compare two pathes.
@@ -191,11 +191,11 @@ struct PathQualityChecker {
          // There is no point in comparing two pathes which doesn't start from the same node or doesn't end at the same node
         Q_ASSERT(path1->startNode() == path2->startNode());
         Q_ASSERT(path1->endNode() == path2->endNode());
-        if(not ignoreHdr)
+        if(!ignoreHdr)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)
         }
-        if(not ignoreColorCorrectness)
+        if(!ignoreColorCorrectness)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
         }

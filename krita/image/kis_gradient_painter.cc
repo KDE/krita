@@ -614,7 +614,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
             QList<KoChannelInfo *> channels = colorSpace->channels();
             KisHLineIterator iter = dev->createHLineIterator(0, 0, 0);
             KisRandomAccessor accessor = dev->createRandomAccessor(0, 0, 0);
-            double squareRootNumColorChannels = sqrt(colorSpace->colorChannelCount());
+            double squareRootNumColorChannels = sqrt(static_cast<double>(colorSpace->colorChannelCount()));
             
             for (int y = starty; y <= endy; y++) {
                 for (int x = startx; x <= endx; x++) {

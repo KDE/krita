@@ -18,7 +18,10 @@
 
 #include "kis_convolution_kernel.h"
 
+#include <math.h>
+
 #include <QImage>
+#include <kis_mask_generator.h>
 
 struct KisConvolutionKernel::Private {
     quint32 width;
@@ -89,3 +92,71 @@ KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& img)
     return k;
 }
 
+KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGenerator* kmg, double angle)
+{
+    qint32 width = (int)( kmg->width() + 0.5 );
+    qint32 height = (int)( kmg->height() + 0.5 );
+    
+    KisConvolutionKernelSP k = new KisConvolutionKernel( width, height, 0, 0);
+    double cosa = cos(angle);
+    double sina = sin(angle);
+    double xc = 0.5 * width;
+    double yc = 0.5 * height;
+    qint32 factor = 0;
+    qint32* itData = k->data();
+    for(int y_it = 0; y_it < height; ++y_it)
+    {
+        for(int x_it = 0; x_it < width; ++x_it)
+        {
+            double x_ = ( x_it - xc);
+            double y_ = ( y_it - yc);
+            double x = cosa * x_ - sina * y_;
+            double y = sina * x_ + cosa * y_;
+            *itData = kmg->interpolatedValueAt( x,y);
+            factor += *itData;
+            ++itData;
+        }
+    }
+    k->d->factor = factor;
+    return k;
+}
+
+
+
+
+#if 0
+    double xr = (x /*- m_xcenter*/);
+    double yr = (y /*- m_ycenter*/);
+    double n = norme( xr * m_xcoef, yr * m_ycoef);
+    if( n > 1 )
+    {
+        return 255;
+    }
+    else
+    {
+        double normeFade = norme( xr * m_xfadecoef, yr * m_yfadecoef );
+        if( normeFade > 1)
+        {
+            double xle, yle;
+            // xle stands for x-coordinate limit exterior
+            // yle stands for y-coordinate limit exterior
+            // we are computing the coordinate on the external ellipse in order to compute
+            // the fade value
+            if( xr == 0 )
+            {
+                xle = 0;
+                yle = yr > 0 ? 1/m_ycoef : -1/m_ycoef;
+            } else {
+                double c = yr / (double)xr;
+                xle = sqrt(1 / norme( m_xcoef, c * m_ycoef ));
+                xle = xr > 0 ? xle : -xle;
+                yle = xle * c;
+            }
+            // On the internal limit of the fade area, normeFade is equal to 1
+            double normeFadeLimitE = norme( xle * m_xfadecoef, yle * m_yfadecoef );
+            return (uchar)(255 * ( normeFade - 1 ) / ( normeFadeLimitE - 1 ));
+        } else {
+            return 0;
+        }
+    }
+#endif

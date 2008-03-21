@@ -20,11 +20,12 @@
 
 #include <qtest_kde.h>
 #include "kis_auto_brush.h"
+#include "kis_mask_generator.h"
 
 void KisAutoBrushTest::testCreation()
 {
-    KisAutobrushCircleShape circle(10, 10, 1.0, 1.0);
-    KisAutobrushRectShape rect(10, 10, 1.0, 1.0);
+    KisCircleMaskGenerator circle(10, 10, 1.0, 1.0);
+    KisRectangleMaskGenerator rect(10, 10, 1.0, 1.0);
 }
 
 QTEST_KDEMAIN(KisAutoBrushTest, GUI)

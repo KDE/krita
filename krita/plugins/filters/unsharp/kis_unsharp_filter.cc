@@ -25,6 +25,7 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 
+#include <kis_mask_generator.h>
 #include <kis_auto_brush.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
@@ -83,12 +84,10 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 10;
 
 //     dbgKrita <<" brush size =" << size <<"" << halfSize;
-    KisAutobrushShape* kas = new KisAutobrushCircleShape(brushsize, brushsize, halfSize, halfSize);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(brushsize, brushsize, halfSize, halfSize);
 
-    QImage mask = kas->createBrush();
-//    mask.save("testmask.png", "PNG");
 
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromQImage(mask);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
 
     KisPaintDeviceSP interm = KisPaintDeviceSP(new KisPaintDevice(*src.paintDevice()));
     KoColorSpace * cs = interm->colorSpace();

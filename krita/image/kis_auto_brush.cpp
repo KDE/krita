@@ -30,125 +30,32 @@
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"
 
-QImage KisAutobrushShape::createBrush()
+#include "kis_mask_generator.h"
+
+struct KisAutoBrush::Private {
+    KisMaskGenerator* shape;
+};
+
+QImage KisAutoBrush::createBrushPreview()
 {
-    QImage img((int)(m_w+0.5), (int)(m_h+0.5), QImage::Format_ARGB32);
+    QImage img((int)(d->shape->width() + 0.5), (int)( d->shape->height() + 0.5), QImage::Format_ARGB32);
     double centerX = img.width() * 0.5;
     double centerY = img.height() * 0.5;
-    for(int j = 0; j < m_h; j++)
+    for(int j = 0; j < d->shape->height(); j++)
     {
-        for(int i = 0; i < m_w; i++)
+        for(int i = 0; i < d->shape->width(); i++)
         {
-            qint8 v = valueAt( i - centerX, j - centerY);
+            qint8 v = d->shape->valueAt( i - centerX, j - centerY);
             img.setPixel( i, j, qRgb(v,v,v));
         }
     }
     return img;
 }
 
-void KisAutobrushShape::toXML(QDomDocument& , QDomElement& e) const
-{
-    e.setAttribute( "autobrush_width", m_w );
-    e.setAttribute( "autobrush_height", m_h );
-    e.setAttribute( "autobrush_hfade", m_fh );
-    e.setAttribute( "autobrush_vfade", m_fv );
-}
-
-
-KisAutobrushCircleShape::KisAutobrushCircleShape(double w, double h, double fh, double fv)
-    : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
-        m_xcenter ( w / 2.0 ),
-        m_ycenter ( h / 2.0 ),
-        m_xcoef ( 2.0 / w ),
-        m_ycoef ( 2.0 / h ),
-        m_xfadecoef ( (m_fh == 0) ? 1 : ( 1.0 / m_fh)),
-        m_yfadecoef ( (m_fv == 0) ? 1 : ( 1.0 / m_fv))
-{
-}
-quint8 KisAutobrushCircleShape::valueAt(double x, double y)
-{
-    double xr = (x /*- m_xcenter*/);
-    double yr = (y /*- m_ycenter*/);
-    double n = norme( xr * m_xcoef, yr * m_ycoef);
-    if( n > 1 )
-    {
-        return 255;
-    }
-    else
-    {
-        double normeFade = norme( xr * m_xfadecoef, yr * m_yfadecoef );
-        if( normeFade > 1)
-        {
-            double xle, yle;
-            // xle stands for x-coordinate limit exterior
-            // yle stands for y-coordinate limit exterior
-            // we are computing the coordinate on the external ellipse in order to compute
-            // the fade value
-            if( xr == 0 )
-            {
-                xle = 0;
-                yle = yr > 0 ? 1/m_ycoef : -1/m_ycoef;
-            } else {
-                double c = yr / (double)xr;
-                xle = sqrt(1 / norme( m_xcoef, c * m_ycoef ));
-                xle = xr > 0 ? xle : -xle;
-                yle = xle * c;
-            }
-            // On the internal limit of the fade area, normeFade is equal to 1
-            double normeFadeLimitE = norme( xle * m_xfadecoef, yle * m_yfadecoef );
-            return (uchar)(255 * ( normeFade - 1 ) / ( normeFadeLimitE - 1 ));
-        } else {
-            return 0;
-        }
-    }
-}
-
-void KisAutobrushCircleShape::toXML(QDomDocument& d, QDomElement& e) const
-{
-    KisAutobrushShape::toXML(d,e);
-    e.setAttribute( "autobrush_type", "circle" );
-}
-
-
-KisAutobrushRectShape::KisAutobrushRectShape(double w, double h, double fh, double fv)
-    : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
-        m_xcenter ( w / 2.0 ),
-        m_ycenter ( h / 2.0 ),
-        m_c( fv/fh)
-{
-}
-quint8 KisAutobrushRectShape::valueAt(double x, double y)
-{
-    double xr = QABS(x /*- m_xcenter*/);
-    double yr = QABS(y /*- m_ycenter*/);
-    if( xr > m_fh || yr > m_fv )
-    {
-        if( yr <= ((xr - m_fh) * m_c + m_fv )  )
-        {
-            return (uchar)(255 * (xr - m_fh) / (m_w - m_fh));
-        } else {
-            return (uchar)(255 * (yr - m_fv) / (m_w - m_fv));
-        }
-    }
-    else {
-        return 0;
-    }
-}
-
-void KisAutobrushRectShape::toXML(QDomDocument& d, QDomElement& e) const
-{
-    KisAutobrushShape::toXML(d,e);
-    e.setAttribute( "autobrush_type", "rect" );
-}
-
-struct KisAutoBrush::Private {
-    KisAutobrushShape* shape;
-};
-
-KisAutoBrush::KisAutoBrush(KisAutobrushShape* as) : KisBrush(""), d(new Private)
+KisAutoBrush::KisAutoBrush(KisMaskGenerator* as) : KisBrush(""), d(new Private)
 {
     d->shape = as;
-    QImage img = d->shape->createBrush();
+    QImage img = createBrushPreview();
     setImage(img);
     setBrushType(MASK);
 }
@@ -188,26 +95,13 @@ void KisAutoBrush::generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformat
             double y_ = ( hiter.y() - centerY) * invScaleY ;
             double x = cosa * x_ - sina * y_;
             double y = sina * x_ + cosa * y_;
-            double x_i = floor(x);
-            double x_f = x - x_i;
-            if( x_f < 0.0) { x_f *= -1.0; }
-            double x_f_r = 1.0 - x_f;
-            double y_i = floor(y);
-            double y_f = fabs( y - y_i );
-            if( y_f < 0.0) { y_f *= -1.0; }
-            double y_f_r = 1.0 - y_f;
             if(src)
             {
                 memcpy( hiter.rawData(), src->color(), pixelSize);
                 src->nextColumn();
             }
             cs->setAlpha( hiter.rawData(),
-                          OPACITY_OPAQUE - (
-                                x_f_r * y_f_r * d->shape->valueAt( x_i , y_i  ) + 
-                                x_f   * y_f_r * d->shape->valueAt( x_i + 1, y_i ) +
-                                x_f_r * y_f   * d->shape->valueAt( x_i,  y_i + 1) +
-                                x_f   * y_f   * d->shape->valueAt( x_i + 1,  y_i + 1 ) )
-                                  , 1 );
+                          OPACITY_OPAQUE - d->shape->interpolatedValueAt(x, y), 1 );
             ++hiter;
         }
         if(src) src->nextRow();

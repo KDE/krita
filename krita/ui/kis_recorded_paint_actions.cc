@@ -27,6 +27,7 @@
 #include "kis_auto_brush.h"
 #include "kis_brush.h"
 #include "kis_layer.h"
+#include "kis_mask_generator.h"
 #include "kis_painter.h"
 #include "kis_paint_information.h"
 #include "kis_paintop_registry.h"
@@ -230,9 +231,9 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
         QString typeShape = elt.attribute("autobrush_type", "circle");
         if(typeShape == "circle")
         {
-            return new KisAutoBrush(new KisAutobrushCircleShape(width, height, hfade, vfade) );
+            return new KisAutoBrush(new KisCircleMaskGenerator(width, height, hfade, vfade) );
         } else {
-            return new KisAutoBrush(new KisAutobrushRectShape(width, height, hfade, vfade) );
+            return new KisAutoBrush(new KisRectangleMaskGenerator(width, height, hfade, vfade) );
         }
     } else {
         dbgUI << "Looking for brush " << name;
@@ -246,7 +247,7 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
         }
     }
     dbgUI << "Brush " << name << " of type " << type << " not found.";
-    return new KisAutoBrush(new KisAutobrushCircleShape(1.0, 1.0, 0.0, 0.0) );
+    return new KisAutoBrush(new KisCircleMaskGenerator(1.0, 1.0, 0.0, 0.0) );
 }
 
 KisPaintOpSettings* KisRecordedPaintActionFactory::settingsFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image)

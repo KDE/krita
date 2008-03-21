@@ -37,6 +37,7 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 
+#include <kis_mask_generator.h>
 #include <kis_paint_layer.h>
 #include <kis_pattern.h>
 #include <kis_resourceserverprovider.h>
@@ -162,14 +163,14 @@ QObject* Module::brush(const QString& brushname)
 
 QObject* Module::createCircleBrush(uint w, uint h, uint hf, uint vf)
 {
-    KisAutobrushShape* kas = new KisAutobrushCircleShape(qMax(1u,w), qMax(1u,h), hf, vf);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(qMax(1u,w), qMax(1u,h), hf, vf);
     KisAutoBrush *thing = new KisAutoBrush(kas);
     return new Brush(this, thing, false);
 }
 
 QObject* Module::createRectBrush(uint w, uint h, uint hf, uint vf)
 {
-    KisAutobrushShape* kas = new KisAutobrushRectShape(qMax(1u,w), qMax(1u,h), hf, vf);
+    KisRectangleMaskGenerator* kas = new KisRectangleMaskGenerator(qMax(1u,w), qMax(1u,h), hf, vf);
     KisAutoBrush *thing = new KisAutoBrush(kas);
     return new Brush(this, thing, false);
 }

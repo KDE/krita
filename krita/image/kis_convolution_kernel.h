@@ -23,6 +23,7 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
+class KisMaskGenerator;
 class QImage;
 
 class KRITAIMAGE_EXPORT KisConvolutionKernel : public KisShared
@@ -40,6 +41,7 @@ class KRITAIMAGE_EXPORT KisConvolutionKernel : public KisShared
         const qint32 * data() const;
         
         static KisConvolutionKernelSP fromQImage(const QImage& img);
+        static KisConvolutionKernelSP kernelFromMaskGenerator(KisMaskGenerator* , double angle = 0.0);
     private:
         struct Private;
         Private* const d;

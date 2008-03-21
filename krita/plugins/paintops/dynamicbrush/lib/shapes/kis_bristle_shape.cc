@@ -18,6 +18,7 @@
 #include "kis_bristle_shape.h"
 #include <KoColorSpaceRegistry.h>
 
+#include <kis_mask_generator.h>
 #include <kis_auto_brush.h>
 #include <kis_dynamic_coloring.h>
 #include <kis_paint_device.h>
@@ -98,7 +99,7 @@ void KisBristleShape::startPainting(KisPainter* _painter)
 {
     dbgPlugins << "startPainting";
     KisDynamicShape::startPainting(_painter);
-    KisAutobrushCircleShape* kacs = new KisAutobrushCircleShape(1, 1, 1.0, 1.0);
+    KisCircleMaskGenerator* kacs = new KisCircleMaskGenerator(1, 1, 1.0, 1.0);
     m_paintBrush->bristlesPainter = new KisPainter(painter()->device() );
     m_paintBrush->bristlesPainter->setBrush( new KisAutoBrush(kacs) );
     m_paintBrush->bristlesPainter->setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, m_paintBrush->bristlesPainter, 0) );

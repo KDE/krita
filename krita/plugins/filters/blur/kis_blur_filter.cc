@@ -35,6 +35,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include "kis_mask_generator.h"
 
 KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
 {
@@ -98,18 +99,19 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
     int hFade = (halfWidth * strength) / 100;
     int vFade = (halfHeight * strength) / 100;
 
-    KisAutobrushShape* kas;
+    KisMaskGenerator* kas;
 //     dbgKrita << width <<"" << height <<"" << hFade <<"" << vFade;
     switch(shape)
     {
         case 1:
-            kas = new KisAutobrushRectShape(width, height , hFade, vFade);
+            kas = new KisCircleMaskGenerator(width, height , hFade, vFade);
             break;
         case 0:
         default:
-            kas = new KisAutobrushCircleShape(width, height, hFade, vFade);
+            kas = new KisRectangleMaskGenerator(width, height, hFade, vFade);
             break;
     }
+#if 0
     QImage mask = kas->createBrush();
 
     mask.convertToFormat(QImage::Format_Mono);
@@ -129,6 +131,9 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
     }
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromQImage(mask);
+#endif
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas, rotate);
+    delete kas;
     KisConvolutionPainter painter( dst, dstInfo.selection() );
     painter.setProgress( progressUpdater );
     painter.applyMatrix(kernel, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);

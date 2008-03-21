@@ -22,6 +22,7 @@
 #include <KoCompositeOp.h>
 #include <KoProgressUpdater.h>
 
+#include <kis_mask_generator.h>
 #include <kis_iterators_pixel.h>
 #include <kis_auto_brush.h>
 #include <kis_convolution_kernel.h>
@@ -98,11 +99,10 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     const KoColorSpace* cs = src->colorSpace();
 
     // Compute the blur mask
-    KisAutobrushShape* kas = new KisAutobrushCircleShape(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
 
-    QImage mask = kas->createBrush();
-
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromQImage(mask);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
+    delete kas;
 
     KisPaintDeviceSP interm = new KisPaintDevice(*src);
     KisConvolutionPainter painter( interm );

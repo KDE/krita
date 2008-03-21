@@ -27,6 +27,7 @@
 #include <QPixmap>
 #include <QResizeEvent>
 
+#include "kis_mask_generator.h"
 
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
 {
@@ -74,19 +75,20 @@ void KisAutoBrushWidget::paramChanged()
 {
     qint32 fh = qMin( spinBoxWidth->value()/2, spinBoxHorizontal->value() ) ;
     qint32 fv = qMin( spinBoxHeigth->value()/2, spinBoxVertical->value() );
-    KisAutobrushShape* kas;
+    KisMaskGenerator* kas;
 
     if(comboBoxShape->currentIndex() == 0) // use index compare instead of comparing a translatable string
     {
-        kas = new KisAutobrushCircleShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
+        kas = new KisCircleMaskGenerator(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
         Q_CHECK_PTR(kas);
 
     } else {
-        kas = new KisAutobrushRectShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
+        kas = new KisRectangleMaskGenerator(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
         Q_CHECK_PTR(kas);
 
     }
-    m_brush = kas->createBrush();
+    KisAutoBrush * resource = new KisAutoBrush(kas);
+    m_brush = resource->img();
 
     QPixmap p;
     QImage pi(m_brush);
@@ -108,7 +110,6 @@ void KisAutoBrushWidget::paramChanged()
     
     p = QPixmap::fromImage(pi);
     brushPreview->setIcon(QIcon(p));
-    KisAutoBrush * resource = new KisAutoBrush(kas);
     Q_CHECK_PTR(resource);
 
     emit(activatedResource(resource));

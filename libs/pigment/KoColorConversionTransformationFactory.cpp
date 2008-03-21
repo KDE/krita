@@ -51,15 +51,15 @@ KoColorConversionTransformationFactory::~KoColorConversionTransformationFactory(
 bool KoColorConversionTransformationFactory::canBeSource(const KoColorSpace* srcCS) const
 {
     return (( srcCS->colorModelId().id() == d->srcModelId )
-            and ( srcCS->colorDepthId().id() == d->srcDepthId )
-            and ( d->srcProfile == "" or srcCS->profile()->name() == d->srcProfile ) );
+            && ( srcCS->colorDepthId().id() == d->srcDepthId )
+            && ( d->srcProfile == "" || srcCS->profile()->name() == d->srcProfile ) );
 }
 
 bool KoColorConversionTransformationFactory::canBeDestination(const KoColorSpace* dstCS) const
 {
     return (( dstCS->colorModelId().id() == d->dstModelId )
-            and ( dstCS->colorDepthId().id() == d->dstDepthId )
-            and ( d->dstProfile == "" or dstCS->profile()->name() == d->dstProfile ) );
+            && ( dstCS->colorDepthId().id() == d->dstDepthId )
+            && ( d->dstProfile == "" || dstCS->profile()->name() == d->dstProfile ) );
 }
 
 QString KoColorConversionTransformationFactory::srcColorModelId() const

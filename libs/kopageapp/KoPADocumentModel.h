@@ -46,6 +46,8 @@ public:
 
     /// Set the document used in the model
     void setDocument(KoPADocument* document);
+    /// Set the mode to show, master page or normal page
+    void setMasterMode(bool master);
 
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -80,6 +82,7 @@ private:
 
     KoPADocument *m_document; ///< the undelying data structure
     KoShape *m_shape;
+    bool m_master;
     mutable QList<KoShape*> m_childs;
     mutable KoShapeContainer *m_lastContainer;
 };

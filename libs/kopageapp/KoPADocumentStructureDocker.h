@@ -58,6 +58,7 @@ public:
     
     virtual void setCanvas( KoCanvasBase* canvas);
     void setActivePage(KoPAPageBase *page);
+    void setMasterMode(bool master);
 
 signals:
     void pageChanged(KoPAPageBase *page);

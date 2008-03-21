@@ -329,6 +329,7 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, double zoom )
 void KoPAView::setMasterMode( bool master )
 {
     m_viewMode->setMasterMode( master );
+    m_documentStructureDocker->setMasterMode(master);
 }
 
 KoShapeManager* KoPAView::shapeManager() const

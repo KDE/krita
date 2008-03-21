@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,8 @@
 
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
+#include <KoPAPage.h>
+#include <KoPAMasterPage.h>
 #include <KoShapePainter.h>
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
@@ -44,10 +47,9 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMimeData>
 
-
-
 KoPADocumentModel::KoPADocumentModel( QObject* parent, KoPADocument *document )
 : KoDocumentSectionModel( parent )
+, m_master(false)
 , m_lastContainer( 0 )
 {
     setDocument( document );
@@ -66,7 +68,7 @@ int KoPADocumentModel::rowCount( const QModelIndex &parent ) const
 
     // check if parent is root node
     if( ! parent.isValid() )
-        return m_document->pages().count();
+        return m_document->pages(m_master).count();
 
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
@@ -91,8 +93,8 @@ QModelIndex KoPADocumentModel::index( int row, int column, const QModelIndex &pa
     // check if parent is root node
     if( ! parent.isValid() )
     {
-        if( row >= 0 && row < m_document->pages().count() )
-            return createIndex( row, column, m_document->pages().at(row) );
+        if( row >= 0 && row < m_document->pages(m_master).count() )
+            return createIndex( row, column, m_document->pages(m_master).at(row) );
         else
             return QModelIndex();
     }
@@ -133,7 +135,7 @@ QModelIndex KoPADocumentModel::parent( const QModelIndex &child ) const
     if( ! grandParentShape )
     {
         KoPAPageBase* page = dynamic_cast<KoPAPageBase*>( parentShape);
-        return createIndex( m_document->pages().indexOf( page ), 0, parentShape );
+        return createIndex( m_document->pages(m_master).indexOf( page ), 0, parentShape );
     }
 
     return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
@@ -157,19 +159,19 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
             if( name.isEmpty() )
             {
                 if ( dynamic_cast<KoPAPageBase *>( shape ) ) {
-                    name = i18n("Page");
+                    name = i18n("Page") + QString(" %1").arg(m_document->pageIndex(dynamic_cast<KoPAPageBase *>(shape)) + 1);
                 }
                 else if( dynamic_cast<KoShapeLayer*>( shape ) ) {
-                    name = i18n("Layer");
+                    name = i18n("Layer") + QString(" (%1)").arg(shape->zIndex());
                 }
                 else if( dynamic_cast<KoShapeGroup*>( shape ) ) {
-                    name = i18n("Group");
+                    name = i18n("Group") + QString(" (%1)").arg(shape->zIndex());
                 }
                 else {
-                    name = i18n("Shape");
+                    name = i18n("Shape") + QString(" (%1)").arg(shape->zIndex());
                 }
             }
-            return name + QString(" (%1)").arg( shape->zIndex() );
+            return name;
         }
         case Qt::DecorationRole: return QVariant();//return shape->icon();
         case Qt::EditRole: return shape->name();
@@ -327,6 +329,12 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     thumb.fill( QColor( Qt::white ).rgb() );
 
     if (page) { // draw the thumbnail for page
+        // also draw shapes from master page if this page is not a master
+        if (!m_master) {
+            KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
+            shapes += masterPage->iterator();
+            shapePainter.setShapes(shapes);
+        }
         QPainter painter(&thumb);
         painter.setClipRect(QRect(0, 0, size.width(), size.height()));
         QPen pen(Qt::SolidLine);
@@ -568,7 +576,7 @@ QModelIndex KoPADocumentModel::parentIndexFromShape( const KoShape * child )
     if( parentLayer ) {
         KoPAPageBase * page = dynamic_cast<KoPAPageBase*>( parentLayer->parent() );
         if ( page )
-            return createIndex( m_document->pages().count() - 1 - m_document->pages().indexOf( page ), 0, parentLayer );
+            return createIndex( m_document->pages(m_master).count() - 1 - m_document->pages(m_master).indexOf( page ), 0, parentLayer );
     }
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
@@ -591,6 +599,12 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
     }
 
     update();
+}
+
+void KoPADocumentModel::setMasterMode(bool master)
+{
+    m_master = master;
+    update(); // Rebuild the model
 }
 
 #include "KoPADocumentModel.moc"

@@ -183,11 +183,14 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         -1
     };
 
+    QTextCharFormat newFormat;
+
     int i=0;
     while(properties[i] != -1) {
         QVariant variant = d->stylesPrivate->value(properties[i]);
-        if(!variant.isNull())
-            format.setProperty(properties[i], variant);
+        if ( !variant.isNull() ) {
+            newFormat.setProperty(properties[i], variant);
+        }
         i++;
     }
 
@@ -196,17 +199,24 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
     if(!variant.isNull()) {
         switch(static_cast<Transform>(variant.toInt())) {
         case Capitalize:
-            format.setProperty(TransformText, Capitalize);
+            newFormat.setProperty(TransformText, Capitalize);
             // fall through
         case MixedCase:
-            format.setFontCapitalization(QFont::MixedCase);
+            newFormat.setFontCapitalization(QFont::MixedCase);
             break;
-        case SmallCaps: format.setFontCapitalization(QFont::SmallCaps); break;
-        case AllUppercase: format.setFontCapitalization(QFont::AllUppercase); break;
-        case AllLowercase: format.setFontCapitalization(QFont::AllLowercase); break;
+        case SmallCaps:
+            newFormat.setFontCapitalization(QFont::SmallCaps);
+            break;
+        case AllUppercase:
+            newFormat.setFontCapitalization(QFont::AllUppercase);
+            break;
+        case AllLowercase:
+            newFormat.setFontCapitalization(QFont::AllLowercase);
+            break;
         }
     }
 #endif
+    format = newFormat;
 }
 
 void KoCharacterStyle::applyStyle(QTextBlock &block) const {
@@ -218,14 +228,18 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const {
  */
     cursor.setPosition(block.position() + block.length()-1, QTextCursor::KeepAnchor);
     applyStyle(cf);
-    cursor.mergeCharFormat(cf);
+    // if we want to merge the formats we need a much more clever way to do that
+    //cursor.mergeCharFormat(cf);
+    cursor.setCharFormat(cf);
     cursor.setBlockCharFormat(cf);
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
     QTextCharFormat cf = selection->charFormat();
     applyStyle(cf);
-    selection->mergeCharFormat(cf);
+    // if we want to merge the formats we need a much more clever way to do that
+    //selection->mergeCharFormat(cf);
+    selection->setCharFormat(cf);
 }
 
 // OASIS 14.2.29

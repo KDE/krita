@@ -869,7 +869,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
         return 0;
     }
 
-    if(editableShape && (event->modifiers() == Qt::NoModifier )) {
+    if(editableShape) {
         // manipulation of selected shapes goes first
         if(handle != KoFlake::NoHandle) {
             if( event->buttons() == Qt::LeftButton ) {

@@ -27,6 +27,8 @@
 #include <QtGui/QPainter>
 #include <QPointF>
 
+#include <math.h>
+
 class KoPathPoint::Private {
 public:
     Private() : shape(0), properties(Normal), pointGroup(0) {}
@@ -318,6 +320,54 @@ void KoPathPoint::reverse()
     newProps |= d->properties & StartSubpath;
     newProps |= d->properties & CloseSubpath;
     d->properties = newProps;
+}
+
+bool KoPathPoint::isSmooth( KoPathPoint * prev, KoPathPoint * next ) const
+{
+    QPointF t1, t2;
+
+    if( activeControlPoint1() )
+    {
+        t1 = point() - controlPoint1();
+    }
+    else
+    {
+        // we need the previous path point but there is none provided
+        if( ! prev )
+            return false;
+        if( prev->activeControlPoint2() )
+            t1 = point() - prev->controlPoint2();
+        else
+            t1 = point() - prev->point();
+    }
+
+    if( activeControlPoint2() )
+    {
+        t2 = controlPoint2() - point();
+    }
+    else
+    {
+        // we need the next path point but there is none provided
+        if( ! next )
+            return false;
+        if( next->activeControlPoint1() )
+            t2 = next->controlPoint1() - point();
+        else
+            t2 = next->point() - point();
+    }
+
+    // normalize tangent vectors
+    qreal l1 = sqrt( t1.x()*t1.x() + t1.y()*t1.y() );
+    qreal l2 = sqrt( t2.x()*t2.x() + t2.y()*t2.y() );
+    if( qFuzzyCompare( l1, 0.0 ) || qFuzzyCompare( l2, 0.0 ) )
+        return true;
+
+    t1 /= l1;
+    t2 /= l2;
+
+    qreal scalar = t1.x()*t1.y() + t2.x()*t2.y();
+    // tangents are parallel if t1*t2 = |t1|*|t2|
+    return qFuzzyCompare( scalar, 1.0 );
 }
 
 void KoPathPoint::removeFromGroup()

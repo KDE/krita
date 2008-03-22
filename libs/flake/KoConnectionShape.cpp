@@ -84,6 +84,7 @@ void KoConnectionShape::paint( QPainter&, const KoViewConverter& ) {
 
 void KoConnectionShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    Q_UNUSED( context );
 }
 
 bool KoConnectionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
@@ -139,6 +140,8 @@ bool KoConnectionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
 
 void KoConnectionShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
 {
+    Q_UNUSED( modifiers );
+
     if ( handleId > m_handles.size() )
         return;
 
@@ -147,6 +150,8 @@ void KoConnectionShape::moveHandleAction( int handleId, const QPointF & point, Q
 
 void KoConnectionShape::updatePath( const QSizeF &size )
 {
+    Q_UNUSED( size );
+
     const double MinimumEscapeLength = 20.0;
 
     clear();

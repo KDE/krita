@@ -32,6 +32,7 @@ License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPalette>
 #include <QAbstractItemView>
 #include <QEvent>
+#include <QKeyEvent>
 #include <QLineEdit>
 
 class KoZoomInput::Private
@@ -39,6 +40,7 @@ class KoZoomInput::Private
     public:
         QComboBox* combo;
         QLabel* label;
+        bool inside;
 };
 
 KoZoomInput::KoZoomInput(QWidget* parent)
@@ -65,7 +67,9 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     d->combo = new QComboBox(this);
     d->combo->setMaxVisibleItems(15);
     d->combo->setEditable(true);
+    d->combo->installEventFilter(this);
     addWidget(d->combo);
+    d->inside = false;
 
     connect(d->combo, SIGNAL(activated(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
 }
@@ -79,6 +83,7 @@ void KoZoomInput::enterEvent(QEvent* event)
 {
     Q_UNUSED(event);
 
+    d->inside = true;
     if (d->combo->view())
     {
         d->combo->view()->removeEventFilter(this);
@@ -91,13 +96,24 @@ void KoZoomInput::leaveEvent(QEvent* event)
 {
     Q_UNUSED(event);
 
+    d->inside = false;
     if(d->combo->view() && d->combo->view()->isVisible())
     {
         d->combo->view()->installEventFilter(this);
         return;
     }
 
-    setCurrentIndex(0);
+    if(!d->combo->hasFocus())
+        setCurrentIndex(0);
+}
+
+void KoZoomInput::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Return ||
+        event->key() == Qt::Key_Enter)
+    {
+        focusNextChild();
+    }
 }
 
 void KoZoomInput::setZoomLevels(const QStringList& levels)
@@ -114,13 +130,16 @@ void KoZoomInput::setCurrentZoomLevel(const QString& level)
 
 bool KoZoomInput::eventFilter(QObject* watched, QEvent* event)
 {
-    Q_UNUSED(watched);
-
-    if(event->type() == QEvent::Hide)
+    if(watched == d->combo->view() && event->type() == QEvent::Hide)
+    {
+        focusNextChild();
+        setCurrentIndex(0);
+    }
+    else if (watched == d->combo && event->type() == QEvent::FocusOut &&
+            (d->combo->view() && !d->combo->view()->hasFocus()) && !d->inside)
     {
         setCurrentIndex(0);
     }
-
     return false;
 }
 

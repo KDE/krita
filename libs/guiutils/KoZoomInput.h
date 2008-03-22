@@ -41,6 +41,7 @@ class KoZoomInput : public QStackedWidget
     protected:
         void enterEvent(QEvent* event);
         void leaveEvent(QEvent* event);
+        void keyPressEvent(QKeyEvent* event);
 
     private:
         class Private;

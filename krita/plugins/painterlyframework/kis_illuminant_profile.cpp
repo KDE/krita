@@ -37,22 +37,11 @@ double **allocateMatrix(int m, int n)
     return matrix;
 }
 
-double *allocateVector(int n)
-{
-    Q_ASSERT(n >= 0);
-    return new double[n];
-}
-
 void freeMatrix(int m,double **matrix)
 {
     for (int i = 0; i < m; i++)
         delete [] matrix[i];
     delete [] matrix;
-}
-
-void freeVector(double *vector)
-{
-    delete [] vector;
 }
 
 void applyMatrix(int m,int n, double **T,double *b, double *d)
@@ -105,39 +94,40 @@ KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
         m_wl = copy.m_wl;
         m_illuminant = copy.m_illuminant;
         setName(copy.name());
+
         m_T = allocateMatrix(3,m_wl);
-        for (int i = 0; i < m_wl; i++)
-            for (int j = 0; j < 3; j++)
-                m_T[j][i] = copy.m_T[j][i];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < m_wl; j++)
+                m_T[i][j] = copy.m_T[i][j];
+
         m_L = allocateMatrix(1,m_wl);
         for (int i = 0; i < m_wl; i++)
             m_L[0][i] = copy.m_L[0][i];
-        m_red   = allocateVector(m_wl);
-        m_green = allocateVector(m_wl);
-        m_blue  = allocateVector(m_wl);
-        for (int i = 0; i < m_wl; i++) {
+
+        m_red   = new double[m_wl];
+        m_green = new double[m_wl];
+        m_blue  = new double[m_wl];
+        for (int i = 0; i < m_wl; i++)
             m_red[i] = copy.m_red[i];
-        }
-        for (int i = 0; i < m_wl; i++) {
+        for (int i = 0; i < m_wl; i++)
             m_green[i] = copy.m_green[i];
-        }
-        for (int i = 0; i < m_wl; i++) {
+        for (int i = 0; i < m_wl; i++)
             m_blue[i] = copy.m_blue[i];
-        }
+
         Np = copy.Np;
         Cla = copy.Cla;
         Nla = copy.Nla;
-        Ca = allocateVector(Np);
+        Ca = new double[Np];
         for (qint8 i = 0; i < Np; i++)
             Ca[i] = copy.Ca[i];
         Cls = copy.Cls;
         Nls = copy.Nls;
-        Cs = allocateVector(Np);
+        Cs = new double[Np];
         for (qint8 i = 0; i < Np; i++)
             Cs[i] = copy.Cs[i];
         Rh = copy.Rh;
 
-        m_refvec = allocateVector(Np);
+        m_refvec = new double[m_wl];
     }
 }
 
@@ -184,9 +174,9 @@ bool KisIlluminantProfile::load()
             data.readRawData((char*)&m_L[0][i],8);
     }
     {
-        m_red   = allocateVector(m_wl);
-        m_green = allocateVector(m_wl);
-        m_blue  = allocateVector(m_wl);
+        m_red   = new double[m_wl];
+        m_green = new double[m_wl];
+        m_blue  = new double[m_wl];
         for (int i = 0; i < m_wl; i++) {
             data.readRawData((char*)&m_red[i],8);
         }
@@ -203,19 +193,19 @@ bool KisIlluminantProfile::load()
         Np = (int)tmp-2;
         data.readRawData((char*)&Cla,8);
         data.readRawData((char*)&Nla,8);
-        Ca = allocateVector(Np);
+        Ca = new double[Np];
         for (qint8 i = 0; i < Np; i++)
             data.readRawData((char*)&Ca[i],8);
         data.readRawData((char*)&Cls,8);
         data.readRawData((char*)&Nls,8);
-        Cs = allocateVector(Np);
+        Cs = new double[Np];
         for (qint8 i = 0; i < Np; i++)
             data.readRawData((char*)&Cs[i],8);
         data.readRawData((char*)&Rh,8);
     }
 
     // Initialize the reflectance vector and channel converter
-    m_refvec = allocateVector(m_wl);
+    m_refvec = new double[m_wl];
     setName(QString("%1").arg(m_illuminant));
     m_valid = true;
 
@@ -355,17 +345,17 @@ void KisIlluminantProfile::reset()
     if (m_L)
         freeMatrix(1,m_L);
     if (m_refvec)
-        freeVector(m_refvec);
+        delete [] m_refvec;
     if (m_red)
-        freeVector(m_red);
+        delete [] m_red;
     if (m_green)
-        freeVector(m_green);
+        delete [] m_green;
     if (m_blue)
-        freeVector(m_blue);
+        delete [] m_blue;
     if (Ca)
-        freeVector(Ca);
+        delete [] Ca;
     if (Cs)
-        freeVector(Cs);
+        delete [] Cs;
 
     m_T = m_L = 0;
     m_refvec = m_red = m_green = m_blue = 0;

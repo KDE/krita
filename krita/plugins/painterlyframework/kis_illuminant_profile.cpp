@@ -136,6 +136,8 @@ KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
         for (qint8 i = 0; i < Np; i++)
             Cs[i] = copy.Cs[i];
         Rh = copy.Rh;
+
+        m_refvec = allocateVector(Np);
     }
 }
 
@@ -228,13 +230,13 @@ bool KisIlluminantProfile::save(const QString &fileName)
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly))
         return false;
-    
+
     QDataStream data(&file);
 
     for (int i = 0; i < m_illuminant.size(); i++)
         data << (qint8)m_illuminant[i].toAscii();
     data << (qint8)0;
-    
+
     data << (qint8)m_wl << (qint8)m_wl << (qint8)m_wl << (qint8)m_wl;
     for (int i = 0; i < m_wl; i++)
         for (int j = 0; j < 3; j++)
@@ -242,7 +244,7 @@ bool KisIlluminantProfile::save(const QString &fileName)
 
     for (int i = 0; i < m_wl; i++)
         data.writeRawData((char*)&m_L[0][i],8);
-    
+
     for (int i = 0; i < m_wl; i++)
         data.writeRawData((char*)&m_red[i],8);
     for (int i = 0; i < m_wl; i++)
@@ -292,7 +294,7 @@ void KisIlluminantProfile::reflectanceToKS(double *ksvec) const
 {
     double L;
     applyMatrix(1,m_wl, m_L,m_refvec, &L);
-    
+
     for (int i = 0; i < m_wl; i++) {
         if (m_refvec[i] <= Rh) {
             ksvec[2*i+0] = falpha(m_refvec[i],L);
@@ -364,13 +366,13 @@ void KisIlluminantProfile::reset()
         freeVector(Ca);
     if (Cs)
         freeVector(Cs);
-    
+
     m_T = m_L = 0;
     m_refvec = m_red = m_green = m_blue = 0;
     Ca = Cs = 0;
-    
+
     m_illuminant = "";
     m_wl = -1;
-    
+
     m_valid = false;
 }

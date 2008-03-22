@@ -227,132 +227,19 @@ QRectF KoPathSegment::boundingRect() const
             rect.setHeight( 0.1 );
         if( rect.width() == 0.0 )
             rect.setWidth( 0.1 );
-        return rect;
     }
-
-    if( degree() == 3 )
-    {
-        QPainterPath path;
-        path.moveTo( d->first->point() );
-        path.cubicTo(d->first->controlPoint2(), d->second->controlPoint1(), d->second->point() );
-        return path.boundingRect(); 
-        /*
-        The basic idea for calculating the axis aligned bounding box (AABB) for bezier segments
-        was found in comp.graphics.algorithms:
-
-        Both the x coordinate and the y coordinate are polynomial. Newton told 
-        us that at a maximum or minimum the derivative will be zero. Take all 
-        those points, and take the ends; their AABB will be that of the curve. 
-
-        We have a helpful trick for the derivatives: use the curve defined by 
-        differences of successive control points. 
-        This is a quadratic Bezier curve:
-
-                      2
-        r(t) = Sum Bi,2(t) *Pi = B0,2(t) * P0 + B1,2(t) * P1 + B2,2(t) * P2
-                    i=0
-
-        r(t) = (1-t)^2 * P0 + 2t(1-t) * P1 + t^2 * P2
-
-        r(t) = (P2 - 2*P1 + P0) * t^2 + (2*P1 - 2*P0) * t + P0
-
-        Setting r(t) to zero and using the x and y coordinates of differences of
-        successive control points lets us find the parameters t, where the original 
-        bezier curve has a minimum or a maximum.
-        */
-
-        QList<QPointF> points = controlPoints();
-        // calcualting the differences between successive control points
-        QPointF x0 = points[1]-points[0];
-        QPointF x1 = points[2]-points[1];
-        QPointF x2 = points[3]-points[2];
-
-        // calculating the coefficents
-        QPointF a = x2 - 2.0*x1 + x0;
-        QPointF b = 2.0*x1 - 2.0*x0;
-        QPointF c = x0;
-
-        double t[4];
-
-        // calculating parameter t at minimum/maximum in x-direction
-        if( a.x() == 0.0 )
-        {
-            t[0] = - c.x() / b.x();
-            t[1] = -1.0;
-        }
-        else
-        {
-            double rx = b.x()*b.x() - 4.0*a.x()*c.x();
-            if( rx < 0.0 )
-                rx = 0.0;
-            t[0] = ( -b.x() + sqrt( rx ) ) / (2.0*a.x());
-            t[1] = ( -b.x() - sqrt( rx ) ) / (2.0*a.x());
-        }
-
-        // calculating parameter t at minimum/maximum in y-direction
-        if( a.y() == 0.0 )
-        {
-            t[2] = - c.y() / b.y();
-            t[3] = -1.0;
-        }
-        else
-        {
-            double ry = b.y()*b.y() - 4.0*a.y()*c.y();
-            if( ry < 0.0 )
-                ry = 0.0;
-            t[2] = ( -b.y() + sqrt( ry ) ) / (2.0*a.y());
-            t[3] = ( -b.y() - sqrt( ry ) ) / (2.0*a.y());
-        }
-
-        // calculate points at found minimum/maximum and update bounding box
-        for( int i = 0; i < 4; ++i ) 
-        {
-            if( t[i] >= 0.0 && t[i] <= 1.0 )
-            {
-                QPointF p = pointAt( t[i] );
-                rect.setLeft( qMin( rect.left(), p.x() ) );
-                rect.setRight( qMax( rect.right(), p.x() ) );
-                rect.setTop( qMin( rect.top(), p.y() ) );
-                rect.setBottom( qMax( rect.bottom(), p.y() ) );
-            }
-        }
-
-        return rect;
-    }
-    else if( degree() == 2 )
+    else
     {
         /*
-        simpler version of the one for cubic beziers
-                      1
-        r(t) = Sum Bi,1(t) *Pi = B0,1(t) * P0 + B1,1(t) * P1
-                     i=0
-
-        r(t) = (1-t) * P0 + t * P1
-
-        r(t) = (P1 - P0) * t + P0
-        */
-        // TODO test that
-        QList<QPointF> points = controlPoints();
-        // calcualting the differences between successive control points
-        QPointF x0 = points[1]-points[0];
-        QPointF x1 = points[2]-points[1];
-
-        // calculating the coefficents
-        QPointF a = x1 - x0;
-        QPointF b = x0;
-
-        double t[2];
-
-        // calculating parameter t at minimum/maximum in x-direction
-        t[0] = -b.x() / a.x();
-        t[1] = -b.y() / a.y();
-
-        // calculate points at found minimum/maximum and update bounding box
-        for( int i = 0; i < 2; ++i ) 
+         * The basic idea for calculating the axis aligned bounding box (AABB) for bezier segments
+         * was found in comp.graphics.algorithms:
+         * Use the points at the extrema of the curve to calculate the AABB.
+         */
+        foreach( qreal t, extrema() )
         {
-            if( t[i] >= 0.0 && t[i] <= 1.0 )
+            if( t >= 0.0 && t <= 1.0 )
             {
-                QPointF p = pointAt( t[i] );
+                QPointF p = pointAt( t );
                 rect.setLeft( qMin( rect.left(), p.x() ) );
                 rect.setRight( qMax( rect.right(), p.x() ) );
                 rect.setTop( qMin( rect.top(), p.y() ) );
@@ -652,12 +539,11 @@ qreal KoPathSegment::length( qreal error ) const
     QList<QPointF> ctrlPoints = controlPoints();
 
     // calculate chord length
-    QPointF chord = d->second->point() - d->first->point();
-    double chordLength = sqrt( chord.x()*chord.x() + chord.y()*chord.y() );
+    double chordLen = chordLength();
 
     if( deg == 1 )
     {
-        return chordLength;
+        return chordLen;
     }
 
     // calculate length of control polygon
@@ -669,7 +555,7 @@ qreal KoPathSegment::length( qreal error ) const
         polyLength += sqrt( ctrlSegment.x()*ctrlSegment.x() + ctrlSegment.y()*ctrlSegment.y() );
     }
 
-    if( (polyLength-chordLength) > error )
+    if( (polyLength-chordLen) > error )
     {
         // the error is still bigger than our tolerance -> split segment
         QPair<KoPathSegment,KoPathSegment> parts = splitAt( 0.5 );
@@ -679,9 +565,9 @@ qreal KoPathSegment::length( qreal error ) const
     {
         // the error is smaller than our tolerance
         if( deg == 3 )
-            return 0.5 * chordLength + 0.5 * polyLength;
+            return 0.5 * chordLen + 0.5 * polyLength;
         else
-            return (2.0 * chordLength + polyLength) / 3.0;
+            return (2.0 * chordLen + polyLength) / 3.0;
     }
 }
 
@@ -694,6 +580,78 @@ qreal KoPathSegment::lengthAt( qreal t, qreal error ) const
 
     QPair<KoPathSegment,KoPathSegment> parts = splitAt( t );
     return parts.first.length( error );
+}
+
+qreal KoPathSegment::paramAtLength( qreal length, qreal tolerance ) const
+{
+    int deg = degree();
+    if( deg < 1 )
+        return 0.0;
+    if( length <= 0.0 )
+        return 0.0;
+
+    if( deg == 1 )
+        return length / chordLength();
+
+    qreal startT = 0.0; // interval start
+    qreal midT = 0.5;   // interval center
+    qreal endT = 1.0;   // interval end
+
+    qreal midLength = lengthAt( 0.5 );
+    while( qAbs( midLength - length ) / length > tolerance )
+    {
+        if( midLength < length )
+            startT = midT;
+        else
+            endT = midT;
+
+        // new interval center
+        midT = 0.5 * ( startT + endT );
+        // length at new interval center
+        midLength = lengthAt( midT );
+    }
+
+    return midT;
+}
+
+bool KoPathSegment::isFlat( qreal tolerance ) const
+{
+    /*
+     * Calculate the height of the bezier curve.
+     * This is done by rotating the curve so that then chord
+     * is parallel to the x-axis and the calculating the 
+     * parameters t for the extrema of the curve. 
+     * The curve points at the extrema are then used to 
+     * calculate the height.
+     */
+    if( degree() <= 1 )
+        return true;
+
+    QPointF chord = d->second->point() - d->first->point();
+    // calculate angle of chord to the x-axis
+    double chordAngle = atan2( chord.y(), chord.x() );
+    QMatrix m;
+    m.translate( d->first->point().x(), d->first->point().y() );
+    m.rotate( chordAngle * M_PI / 180.0 );
+    m.translate( -d->first->point().x(), -d->first->point().y() );
+
+    KoPathSegment s = mapped( m );
+
+    qreal minDist = 0.0;
+    qreal maxDist = 0.0;
+
+    foreach( qreal t, s.extrema() )
+    {
+        if( t >= 0.0 && t <= 1.0 )
+        {
+            QPointF p = pointAt( t );
+            qreal dist = s.distanceFromChord( p );
+            minDist = qMin( dist, minDist );
+            maxDist = qMax( dist, maxDist );
+        }
+    }
+
+    return ( maxDist - minDist <= tolerance );
 }
 
 qreal KoPathSegment::distanceFromChord( const QPointF &point ) const
@@ -721,6 +679,12 @@ qreal KoPathSegment::distanceFromChord( const QPointF &point ) const
     {
         return -distance;
     }
+}
+
+qreal KoPathSegment::chordLength() const
+{
+    QPointF chord = d->second->point() - d->first->point();
+    return sqrt( chord.x()*chord.x() + chord.y()*chord.y() );
 }
 
 QList<QPointF> KoPathSegment::convexHull() const
@@ -944,6 +908,112 @@ QList<QPointF> KoPathSegment::linesIntersection( const KoPathSegment &segment ) 
     isects.append( A + r * (B-A) );
 
     return isects;
+}
+
+QList<qreal> KoPathSegment::extrema() const
+{
+    int deg = degree();
+    if( deg <= 1 )
+        return QList<qreal>();
+
+    QList<qreal> params;
+
+    /*
+     * The basic idea for calculating the extrama for bezier segments
+     * was found in comp.graphics.algorithms:
+     *
+     * Both the x coordinate and the y coordinate are polynomial. Newton told
+     * us that at a maximum or minimum the derivative will be zero.
+     *
+     * We have a helpful trick for the derivatives: use the curve r(t) defined by
+     * differences of successive control points.
+     * Setting r(t) to zero and using the x and y coordinates of differences of
+     * successive control points lets us find the parameters t, where the original
+     * bezier curve has a minimum or a maximum.
+     */
+    if( deg == 2 )
+    {
+        /*
+         * For quadratic bezier curves r(t) is a linear Bezier curve:
+         *
+         *  1
+         * r(t) = Sum Bi,1(t) *Pi = B0,1(t) * P0 + B1,1(t) * P1
+         * i=0
+         *
+         * r(t) = (1-t) * P0 + t * P1
+         *
+         * r(t) = (P1 - P0) * t + P0
+         */
+
+        // calcualting the differences between successive control points
+        QPointF cp = d->first->activeControlPoint2() ? 
+                d->first->controlPoint2() : d->second->controlPoint1();
+        QPointF x0 = cp - d->first->point();
+        QPointF x1 = d->second->point() - cp;
+
+        // calculating the coefficents
+        QPointF a = x1 - x0;
+        QPointF c = x0;
+
+        if( a.x() != 0.0 )
+            params.append( -c.x() / a.x() );
+        if( a.y() != 0.0 )
+            params.append( -c.y() / a.y() );
+    }
+    else if( deg == 3 )
+    {
+        /*
+         * For cubic bezier curves r(t) is a quadratic Bezier curve:
+         *
+         *  2
+         * r(t) = Sum Bi,2(t) *Pi = B0,2(t) * P0 + B1,2(t) * P1 + B2,2(t) * P2
+         * i=0
+         *
+         * r(t) = (1-t)^2 * P0 + 2t(1-t) * P1 + t^2 * P2
+         *
+         * r(t) = (P2 - 2*P1 + P0) * t^2 + (2*P1 - 2*P0) * t + P0
+         *
+         */
+        // calcualting the differences between successive control points
+        QPointF x0 = d->first->controlPoint2() - d->first->point();
+        QPointF x1 = d->second->controlPoint1() - d->first->controlPoint2();
+        QPointF x2 = d->second->point() - d->second->controlPoint1();
+
+        // calculating the coefficents
+        QPointF a = x2 - 2.0*x1 + x0;
+        QPointF b = 2.0*x1 - 2.0*x0;
+        QPointF c = x0;
+
+        // calculating parameter t at minimum/maximum in x-direction
+        if( a.x() == 0.0 )
+        {
+            params.append( - c.x() / b.x() );
+        }
+        else
+        {
+            double rx = b.x()*b.x() - 4.0*a.x()*c.x();
+            if( rx < 0.0 )
+                rx = 0.0;
+            params.append( ( -b.x() + sqrt( rx ) ) / ( 2.0*a.x() ) );
+            params.append( ( -b.x() - sqrt( rx ) ) / ( 2.0*a.x() ) );
+        }
+
+        // calculating parameter t at minimum/maximum in y-direction
+        if( a.y() == 0.0 )
+        {
+            params.append( - c.y() / b.y() );
+        }
+        else
+        {
+            double ry = b.y()*b.y() - 4.0*a.y()*c.y();
+            if( ry < 0.0 )
+                ry = 0.0;
+            params.append( ( -b.y() + sqrt( ry ) ) / ( 2.0*a.y() ) );
+            params.append( ( -b.y() - sqrt( ry ) ) / ( 2.0*a.y() ) );
+        }
+    }
+
+    return params;
 }
 
 void KoPathSegment::printDebug() const

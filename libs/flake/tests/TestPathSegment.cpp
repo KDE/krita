@@ -213,5 +213,48 @@ void TestPathSegment::segmentLength()
     }
 }
 
+void TestPathSegment::segmentFlatness()
+{
+    // line segments
+    {
+        KoPathSegment s1( QPointF(0,0), QPointF(100,0) );
+        QVERIFY( s1.isFlat() );
+        KoPathSegment s2( QPointF(0,0), QPointF(0,100) );
+        QVERIFY( s2.isFlat() );
+        KoPathSegment s3( QPointF(0,0), QPointF(100,100) );
+        QVERIFY( s3.isFlat() );
+    }
+    // quadratic segments
+    {
+        KoPathSegment s1( QPointF(0,0), QPointF(50,0), QPointF(100,0) );
+        QVERIFY( s1.isFlat() );
+        KoPathSegment s2( QPointF(0,0), QPointF(0,50), QPointF(0,100) );
+        QVERIFY( s2.isFlat() );
+        KoPathSegment s3( QPointF(0,0), QPointF(50,50), QPointF(100,100) );
+        QVERIFY( s3.isFlat() );
+        KoPathSegment s4( QPointF(0,0), QPointF(50,50), QPointF(100,0) );
+        QVERIFY( ! s4.isFlat() );
+        KoPathSegment s5( QPointF(0,0), QPointF(50,-50), QPointF(100,0) );
+        QVERIFY( ! s5.isFlat() );
+        KoPathSegment s6( QPointF(0,0), QPointF(0,100), QPointF(100,100) );
+        QVERIFY( ! s6.isFlat() );
+    }
+    // cubic segments
+    {
+        KoPathSegment s1( QPointF(0,0), QPointF(25,0), QPointF(75,0), QPointF(100,0) );
+        QVERIFY( s1.isFlat() );
+        KoPathSegment s2( QPointF(0,0), QPointF(0,25), QPointF(0,75), QPointF(0,100) );
+        QVERIFY( s2.isFlat() );
+        KoPathSegment s3( QPointF(0,0), QPointF(25,25), QPointF(75,75), QPointF(100,100) );
+        QVERIFY( s3.isFlat() );
+        KoPathSegment s4( QPointF(0,0), QPointF(25,50), QPointF(75,50), QPointF(100,0) );
+        QVERIFY( ! s4.isFlat() );
+        KoPathSegment s5( QPointF(0,0), QPointF(25,-50), QPointF(75,-50), QPointF(100,0) );
+        QVERIFY( ! s5.isFlat() );
+        KoPathSegment s6( QPointF(0,0), QPointF(-25,75), QPointF(25,125), QPointF(100,100) );
+        QVERIFY( ! s6.isFlat() );
+    }
+}
+
 QTEST_KDEMAIN(TestPathSegment, GUI)
 #include "TestPathSegment.moc"

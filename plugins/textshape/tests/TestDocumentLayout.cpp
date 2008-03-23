@@ -100,17 +100,18 @@ void TestDocumentLayout::testBasicLineSpacing() {
     const double fontHeight18 = 18;
     double lineSpacing18 = fontHeight18 * 1.2; // 120% is the normal lineSpacing.
 
-    //QCOMPARE(blockLayout->lineCount(), 16);
+    // QCOMPARE(blockLayout->lineCount(), 15);
     QCOMPARE(blockLayout->lineForTextPosition(1).width(), 200.0);
     QTextLine line;
-    for(int i=0; i < 16; i++) {
+    for (int i=0; i < 15; i++) {
         line = blockLayout->lineAt(i);
+        QVERIFY(line.isValid());
         // The reason for this weird check is that the values are stored internally
         // as 26.6 fixed point integers. The entire internal text layout is
         // actually done using fixed point arithmetic. This is due to embedded
         // considerations, and offers general performance benefits across all
         // platforms.
-        //qDebug() << qAbs(line.y() - i * lineSpacing12);
+        //qDebug() << i << qAbs(line.y() - i * lineSpacing12);
         QVERIFY(qAbs(line.y() - i * lineSpacing12) < ROUNDING);
     }
 
@@ -120,8 +121,9 @@ void TestDocumentLayout::testBasicLineSpacing() {
     charFormat.setFontPointSize(10);
     cursor.mergeCharFormat(charFormat);
     layout->layout();
-    for(int i=0; i < 16; i++) {
+    for (int i=0; i < 15; i++) {
         line = blockLayout->lineAt(i);
+        QVERIFY(line.isValid());
         //qDebug() << i << qAbs(line.y() - i * lineSpacing12);
         QVERIFY(qAbs(line.y() - i * lineSpacing12) < ROUNDING);
     }
@@ -138,7 +140,7 @@ void TestDocumentLayout::testBasicLineSpacing() {
     line = blockLayout->lineAt(1);
     QVERIFY(qAbs(line.y() - lineSpacing12) < ROUNDING);
 
-    for(int i=2; i < 15; i++) {
+    for (int i=2; i < 15; i++) {
         line = blockLayout->lineAt(i);
 //qDebug() << "i: " << i << " gives: " << line.y() << " + " <<  line.ascent() << ", " << line.descent() << " = " << line.height();
         QVERIFY(qAbs(line.y() - (lineSpacing12 + lineSpacing18 + (i-2) * lineSpacing12)) < ROUNDING);

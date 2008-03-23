@@ -46,11 +46,16 @@ void MixingTest::initTestCase()
     list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.ill",  KStandardDirs::Recursive);
 
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
-    foreach(QString ill6, list.filter("_5_")) {
-        css.append(f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),new KisIlluminantProfile(ill6)));
+    KisIlluminantProfile *p;
+    foreach(QString ill, list.filter("_5_")) {
+        p = new KisIlluminantProfile(ill); p->load();
+        css.append(f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),p));
+        delete p;
     }
-    foreach(QString ill9, list.filter("_9_")) {
-        css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),new KisIlluminantProfile(ill9)));
+    foreach(QString ill, list.filter("_9_")) {
+        p = new KisIlluminantProfile(ill); p->load();
+        css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),p));
+        delete p;
     }
 }
 

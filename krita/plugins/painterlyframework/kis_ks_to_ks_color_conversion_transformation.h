@@ -59,6 +59,7 @@ public:
 
 };
 
+
 template< typename src_TYPE_, typename dst_TYPE_, int _N_ >
 class KisKSToKSColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
 

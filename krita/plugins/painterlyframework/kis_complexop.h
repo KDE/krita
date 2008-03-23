@@ -19,26 +19,12 @@
 #ifndef KIS_COMPLEXOP_H_
 #define KIS_COMPLEXOP_H_
 
-#include <klocale.h>
-#include "kis_paintop.h"
-#include "kis_painterly_overlay_colorspace.h"
+#include <kis_paintop.h>
 
-class QPointF;
 class KisPainter;
-
-class KisComplexOpFactory : public KisPaintOpFactory  {
-
-public:
-    KisComplexOpFactory() {}
-    virtual ~KisComplexOpFactory() {}
-
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter *painter, KisImageSP image);
-    virtual QString id() const { return "paintcomplex"; }
-    virtual QString name() const { return i18n("Complex Brush"); }
-    virtual QString pixmap() { return ""; }
-
-};
-
+class KisPaintInformation;
+class KisPaintOpSettings;
+class QString;
 
 class KisComplexOp : public KisPaintOp {
 
@@ -47,19 +33,23 @@ class KisComplexOp : public KisPaintOp {
     public:
 
         KisComplexOp(KisPainter *painter);
-        virtual ~KisComplexOp();
+        ~KisComplexOp();
 
-        void paintAt(const KisPaintInformation& info);
+        void paintAt(const KisPaintInformation &info);
         bool painterly() const {return true;}
 
-    private:
+};
 
-        void mixChannels(QVector<float> &mixed, const QVector<float> &val1, float vol1, const QVector<float> &val2, float vol2);
-        void mixProperty(PropertyCell *mixed, const PropertyCell *cell1, float vol1, const PropertyCell *cell2, float vol2);
-        void computePaintTransferAmount(PropertyCell *brush,
-                                        PropertyCell *canvas,
-                                        float pressure, float velocity,
-                                        float &volume_bc, float &volume_cb);
+
+class KisComplexOpFactory : public KisPaintOpFactory  {
+
+public:
+    KisComplexOpFactory() {}
+    ~KisComplexOpFactory() {}
+
+    KisPaintOp *createOp(const KisPaintOpSettings *settings, KisPainter *painter, KisImageSP image);
+    QString id() const;
+    QString name() const;
 
 };
 

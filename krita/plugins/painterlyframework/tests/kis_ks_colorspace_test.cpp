@@ -106,6 +106,9 @@ void KisKSColorSpaceTest::testRegistry()
     QVERIFY2(cs != 0, "ColorSpace KS5 loaded - with custom profile");
     cs = f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(), p9);
     QVERIFY2(cs != 0, "ColorSpace KS9 loaded - with custom profile");
+
+    delete p5;
+    delete p9;
 }
 
 void KisKSColorSpaceTest::testToFromRgbA16()

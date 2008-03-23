@@ -19,56 +19,32 @@
 */
 
 #include "kis_painterlymixer.h"
-#include <QButtonGroup>
-#include <QColor>
-#include <QGridLayout>
-#include <QList>
-#include <QPalette>
-#include <QSizePolicy>
-#include <QString>
-#include <QStringList>
-#include <QToolButton>
-#include <QWidget>
-
-#include <KComponentData>
-#include <KDebug>
-#include <KGlobal>
-#include <KStandardDirs>
-
-#include "KoCanvasResourceProvider.h"
-#include "KoColorSpaceRegistry.h"
-#include "KoColorSpace.h"
-#include "KoColor.h"
-#include "KoColorProfile.h"
-#include "KoToolProxy.h"
-
-#include "kis_canvas2.h"
-#include "kis_painter.h"
-#include "kis_paint_layer.h"
-#include "kis_paintop.h"
-#include "kis_paintop_registry.h"
-#include "kis_resource_provider.h"
-#include "kis_view2.h"
-
-#include "kis_complex_color.h"
-
-#include "kis_illuminant_profile.h"
-#include "kis_ksf32_colorspace.h"
 
 #include "colorspot.h"
+#include "kis_ksf32_colorspace.h"
+#include "mixercanvas.h"
 #include "mixertool.h"
+
+#include <kis_complex_color.h>
+#include <kis_paintop.h>
+#include <kis_resource_provider.h>
+#include <kis_view2.h>
+#include <KoColorSpace.h>
+#include <KoToolProxy.h>
+#include <QButtonGroup>
 
 KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     : QWidget(parent), m_view(view), m_resources(view->resourceProvider())
 {
     setupUi(this);
 
+    QString csid = KisKSF32ColorSpace<3>::ColorSpaceId().id();
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
-    // TODO The Illuminant has to be choosen at runtime
-    const KoColorProfile* testp =  f->profilesFor( "KS5F32" )[0];
-    m_illuminant = static_cast<KisIlluminantProfile*>( testp->clone() );
-    m_colorspace = new KisKSF32ColorSpace<5>(m_illuminant->clone());
+    // TODO Illuminant and colorspace has to be choosen at runtime
+    const KoColorProfile* testp = f->profilesFor(csid)[0];
+    m_colorspace = f->colorSpace(csid, testp);
+
     initCanvas();
     initTool();
     initSpots();
@@ -81,7 +57,6 @@ KisPainterlyMixer::~KisPainterlyMixer()
 {
     if (m_tool)
         delete m_tool;
-    delete m_illuminant;
     delete m_colorspace;
 }
 
@@ -89,7 +64,7 @@ void KisPainterlyMixer::initCanvas()
 {
     m_canvas->setLayer(m_colorspace);
     m_canvas->setToolProxy(new KoToolProxy(m_canvas));
-    m_canvas->setResources(m_view->canvasBase()->resourceProvider());
+    m_canvas->setResources(m_resources);
 }
 
 void KisPainterlyMixer::initTool()
@@ -142,30 +117,8 @@ void KisPainterlyMixer::loadColors()
 
 void KisPainterlyMixer::slotChangeColor(int index)
 {
-    /*
-    if (m_resources->fgColor().toQColor().rgba() == m_vColors[index].toQColor().rgba()) {
-        // TODO Increment volume
-    } else {
-        m_resources->setFGColor(m_vColors[index]);
-        // TODO Set Complex Color
-    }
-    */
     m_resources->setFGColor(m_vColors[index]);
     m_resources->currentComplexColor()->fromKoColor(m_vColors[index]);
 }
-/*
-bool KisPainterlyMixer::isCurrentPaintOpPainterly()
-{
-    // Is there a cleaner way to do this?!
-    KisPainter painter(m_canvas->device());
-    KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
-                          m_resources->currentPaintop().id(),
-                          m_resources->currentPaintopSettings(),
-                          &painter, 0);
-    painter.setPaintOp(current);
-
-    return current->painterly();
-}
-*/
 
 #include "kis_painterlymixer.moc"

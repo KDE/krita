@@ -22,8 +22,7 @@
 
 #include "kis_painterlymixer.h"
 
-#include <klocale.h>
-#include <kis_debug.h>
+#include <KLocale>
 
 KisPainterlyMixerDocker::KisPainterlyMixerDocker (KisView2 *view)
     : QDockWidget()

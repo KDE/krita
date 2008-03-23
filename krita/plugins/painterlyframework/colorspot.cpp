@@ -18,15 +18,11 @@
  */
 
 #include "colorspot.h"
-#include <QColor>
-#include <QToolButton>
-
-#include "KoColor.h"
-#include "KoColorSpace.h"
 
 ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : QToolButton(parent), m_color(color)
 {
-    setPalette(QPalette(color.toQColor().rgba(), color.toQColor().rgba()));
+    QRgb c = m_color.toQColor().rgba();
+    setPalette(QPalette(c,c));
     setAutoFillBackground(true);
     setAutoRepeat(true);
 }
@@ -39,6 +35,8 @@ ColorSpot::~ColorSpot()
 void ColorSpot::setColor(const KoColor &color)
 {
     m_color = color;
+    QRgb c = m_color.toQColor().rgba();
+    setPalette(QPalette(c,c));
 }
 
 

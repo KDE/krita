@@ -99,8 +99,10 @@ public:
                                                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
     {
         Q_UNUSED(renderingIntent);
+
         Q_ASSERT(canBeSource(srcColorSpace));
         Q_ASSERT(canBeDestination(dstColorSpace));
+
         return new KisKSToRGBColorConversionTransformation<_TYPE_,_N_>(srcColorSpace, dstColorSpace);
     }
 

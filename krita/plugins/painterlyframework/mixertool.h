@@ -21,18 +21,12 @@
 #ifndef MIXERTOOL_H_
 #define MIXERTOOL_H_
 
-#include <QPointF>
-#include <QString>
-
 #include "kis_tool_freehand.h"
 
-class QPainter;
 class KisResourceProvider;
-class KoViewConverter;
-class KisPaintDevice;
-class KisPainterlyOverlay;
-class KisPaintLayer;
+class KoPointerEvent;
 class MixerCanvas;
+class QRegion;
 
 class MixerTool : public KisToolFreehand {
     Q_OBJECT
@@ -42,7 +36,7 @@ public:
     ~MixerTool();
 
 public:
-    void setDirty(const QRegion& region);
+    void setDirty(const QRegion &region);
 
 protected:
     void initPaint(KoPointerEvent *e);

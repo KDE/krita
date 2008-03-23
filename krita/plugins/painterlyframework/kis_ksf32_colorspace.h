@@ -34,8 +34,8 @@ class KisKSF32ColorSpace : public KisKSColorSpace< float,_N_ >
 
     public:
 
-        KisKSF32ColorSpace(KoColorProfile *p) : parent(p) { return; }
-        ~KisKSF32ColorSpace() { return; }
+        KisKSF32ColorSpace(KoColorProfile *p) : parent(p) { }
+        ~KisKSF32ColorSpace() { }
 
         KoColorSpace *clone() const
         {

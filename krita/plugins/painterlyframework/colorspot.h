@@ -20,12 +20,8 @@
 #ifndef COLORSPOT_H_
 #define COLORSPOT_H_
 
+#include <KoColor.h>
 #include <QToolButton>
-
-#include "KoColor.h"
-
-class KoColor;
-class QColor;
 
 class ColorSpot : public QToolButton {
     Q_OBJECT
@@ -42,6 +38,5 @@ class ColorSpot : public QToolButton {
     private:
         KoColor m_color;
 };
-
 
 #endif // COLORSPOT_H_

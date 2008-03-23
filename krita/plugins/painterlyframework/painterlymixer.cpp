@@ -20,14 +20,13 @@
  */
 
 #include "painterlymixer.h"
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kis_debug.h>
-#include <kgenericfactory.h>
-
-#include "kis_view2.h"
 
 #include "kis_painterlymixerdocker.h"
+
+#include <KGenericFactory>
+#include <KIconLoader>
+#include <KLocale>
+#include <kis_view2.h>
 
 typedef KGenericFactory<PainterlyMixer> PainterlyMixerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritapainterlymixer, PainterlyMixerFactory( "krita" ) )

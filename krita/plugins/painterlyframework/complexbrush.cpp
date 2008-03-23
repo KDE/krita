@@ -17,27 +17,22 @@
  */
 
 #include "complexbrush.h"
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <kis_debug.h>
-#include <kgenericfactory.h>
-
-#include "kis_paintop_registry.h"
-
 #include "kis_complexop.h"
+
+#include <KGenericFactory>
+#include <kis_paintop_registry.h>
+#include <QStringList>
 
 typedef KGenericFactory<ComplexBrush> ComplexBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacomplexbrush, ComplexBrushFactory("krita"))
 
-ComplexBrush::ComplexBrush(QObject *parent, const QStringList &)
+ComplexBrush::ComplexBrush(QObject *parent, const QStringList &sl)
     : KParts::Plugin(parent)
 {
-    setComponentData(ComplexBrushFactory::componentData());
+    Q_UNUSED(sl)
 
-    KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(KisPaintOpFactorySP(new KisComplexOpFactory));
+    setComponentData(ComplexBrushFactory::componentData());
+    KisPaintOpRegistry::instance()->add(KisPaintOpFactorySP(new KisComplexOpFactory));
 }
 
 ComplexBrush::~ComplexBrush()

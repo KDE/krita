@@ -22,7 +22,6 @@
 #define KIS_PAINTERLY_MIXER_DOCKER_H_
 
 #include <QDockWidget>
-
 #include <KoDockFactory.h>
 
 #include "kis_view2.h"

@@ -19,37 +19,34 @@
 */
 
 #include "mixercanvas.h"
-#include <QFrame>
 
-#include <KDebug>
-
-#include <KoCanvasBase.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_painter.h>
+#include <kis_painterly_overlay.h>
+#include <kis_paint_layer.h>
+#include <kis_paintop_registry.h>
+#include <kis_resource_provider.h>
 #include <KoCanvasResourceProvider.h>
-#include <KoColor.h>
 #include <KoColorSpace.h>
-#include <KoColorProfile.h>
-#include <KoID.h>
-#include <KoPointerEvent.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
+#include <KoViewConverter.h>
 
-#include "kis_paint_device.h"
-#include "kis_painterly_overlay.h"
-#include "kis_paint_layer.h"
-#include "kis_painter.h"
-#include "kis_paintop.h"
-#include "kis_paintop_registry.h"
-#include "kis_resource_provider.h"
-
-#include "colorspot.h"
-#include "mixertool.h"
+#include <QImage>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QRectF>
+#include <QRegion>
+#include <QResizeEvent>
+#include <QTabletEvent>
+#include <QUndoCommand>
 
 MixerCanvas::MixerCanvas(QWidget *parent)
-    : QFrame(parent), KoCanvasBase(0), m_toolProxy(0)
+    : QFrame(parent), KoCanvasBase(0), m_toolProxy(0), m_dirty(false)
 {
-    m_dirty = false;
     m_image = QImage(size(), QImage::Format_ARGB32);
-    m_image.fill(1);
+    m_image.fill(0);
 }
 
 MixerCanvas::~MixerCanvas()
@@ -58,34 +55,57 @@ MixerCanvas::~MixerCanvas()
         delete m_toolProxy;
 }
 
-void MixerCanvas::setResources(KoCanvasResourceProvider *rp)
+KisPaintLayer *MixerCanvas::layer()
+{
+    return m_layer.data();
+}
+
+KisPaintDevice *MixerCanvas::device()
+{
+    return m_layer->paintDevice().data();
+}
+
+KisPainterlyOverlay *MixerCanvas::overlay()
+{
+    return m_layer->paintDevice()->painterlyOverlay().data();
+}
+
+void MixerCanvas::setToolProxy(KoToolProxy *proxy)
+{
+    m_toolProxy = proxy;
+}
+
+void MixerCanvas::addCommand(QUndoCommand *command)
+{
+    delete command;
+}
+
+KoUnit MixerCanvas::unit() const
+{
+    Q_ASSERT(false);
+    return KoUnit();
+}
+
+void MixerCanvas::setResources(KisResourceProvider *rp)
 {
     KoCanvasResourceProvider *internal = resourceProvider();
 
-    internal->setResource(KoCanvasResource::ForegroundColor,
-                          rp->resource(KoCanvasResource::ForegroundColor));
-    internal->setResource(KoCanvasResource::BackgroundColor,
-                          rp->resource(KoCanvasResource::BackgroundColor));
-    internal->setResource(KisResourceProvider::CurrentBrush,
-                          rp->resource(KisResourceProvider::CurrentBrush));
-    internal->setResource(KisResourceProvider::CurrentPattern,
-                          rp->resource(KisResourceProvider::CurrentPattern));
-    internal->setResource(KisResourceProvider::CurrentGradient,
-                          rp->resource(KisResourceProvider::CurrentGradient));
-    internal->setResource(KisResourceProvider::CurrentComplexColor,
-                          rp->resource(KisResourceProvider::CurrentComplexColor));
+    internal->setResource(KoCanvasResource::ForegroundColor, rp->fgColor());
+    internal->setResource(KoCanvasResource::BackgroundColor, rp->bgColor());
+    internal->setResource(KisResourceProvider::CurrentBrush, rp->currentBrush());
+    internal->setResource(KisResourceProvider::CurrentPattern, rp->currentPattern());
+    internal->setResource(KisResourceProvider::CurrentGradient, rp->currentGradient());
+    internal->setResource(KisResourceProvider::CurrentComplexColor, rp->currentComplexColor());
 
-    internal->setResource(KisResourceProvider::CurrentKritaLayer,
-                          rp->resource(KisResourceProvider::CurrentKritaLayer));
-    internal->setResource(KisResourceProvider::HdrExposure,
-                          rp->resource(KisResourceProvider::HdrExposure));
-    internal->setResource(KisResourceProvider::CurrentPaintop,
-                          rp->resource(KisResourceProvider::CurrentPaintop));
+    internal->setResource(KisResourceProvider::CurrentKritaLayer, rp->currentLayer().data());
+    internal->setResource(KisResourceProvider::HdrExposure, rp->HDRExposure());
+    internal->setResource(KisResourceProvider::CurrentPaintop, rp->currentPaintop());
 
-    initPaintopSettings();
+    initPaintopSettings(); // TODO ?
     checkCurrentPaintop();
 
-    connect(rp, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(slotResourceChanged(int, const QVariant &)));
+    connect( rp->canvas()->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+             this, SLOT(slotResourceChanged(int, const QVariant &)));
 }
 
 void MixerCanvas::initPaintopSettings()
@@ -105,13 +125,14 @@ void MixerCanvas::checkCurrentPaintop()
                           &painter, 0);
     painter.setPaintOp(current); // This is done just for the painter to own the paintop and destroy it
 
-//     if (!current->painterly())
-//         internal->setResource(KisResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
+    if (!current->painterly())
+        internal->setResource(KisResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
 }
 
 void MixerCanvas::checkCurrentLayer()
 {
     KoCanvasResourceProvider *internal = resourceProvider();
+
     KisLayerSP current = internal->resource(KisResourceProvider::CurrentKritaLayer).value<KisLayerSP>();
     if (current.data() != m_layer.data()) {
         QVariant v;
@@ -217,6 +238,5 @@ void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
             break;
     }
 }
-
 
 #include "mixercanvas.moc"

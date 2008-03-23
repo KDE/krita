@@ -21,24 +21,15 @@
 #ifndef KIS_PAINTERLY_MIXER_H_
 #define KIS_PAINTERLY_MIXER_H_
 
-#include <QColor>
-#include <QList>
-
 #include "ui_kis_painterlymixer.h"
 
 class QButtonGroup;
-class QToolButton;
-class QWidget;
-
+class KisPaintOp;
+class KisResourceProvider;
+class KisView2;
 class KoColor;
 class KoColorSpace;
-class KisIlluminantProfile;
-
-class KisResourceProvider;
-
-class KisPaintOp;
-class KisView2;
-
+class MixerCanvas;
 class MixerTool;
 
 class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer {
@@ -56,15 +47,12 @@ private:
 
     void loadColors();
 
-    bool isCurrentPaintOpPainterly();
-
 private slots:
     void slotChangeColor(int index);
 
 private:
     KisView2 *m_view;
     MixerTool *m_tool;
-    KisPaintOp *m_currentOp;
 
     QButtonGroup *m_bgColors;
     QList<KoColor> m_vColors;
@@ -72,7 +60,6 @@ private:
     KisResourceProvider *m_resources;
 
     const KoColorSpace *m_colorspace;
-    KisIlluminantProfile *m_illuminant;
 };
 
 #endif // KIS_PAINTERLY_MIXER_H_

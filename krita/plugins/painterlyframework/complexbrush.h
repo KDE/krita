@@ -21,12 +21,14 @@
 
 #include <kparts/plugin.h>
 
+class QStringList;
+
 class ComplexBrush : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ComplexBrush(QObject *parent, const QStringList &);
-    virtual ~ComplexBrush();
+    ComplexBrush(QObject *parent, const QStringList &sl);
+    ~ComplexBrush();
 };
 
 #endif // COMPLEX_BRUSH_H

@@ -22,9 +22,8 @@
 #include <KoColorProfile.h>
 
 #include <QDataStream>
-#include <QFile>
-#include <QString>
 #include <QDebug>
+#include <QFile>
 
 #include <cmath>
 

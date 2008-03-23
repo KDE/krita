@@ -22,21 +22,24 @@
 #define MIXERCANVAS_H_
 
 #include <QFrame>
-#include <QImage>
-#include <QUndoCommand>
+#include <kis_paint_layer.h>
 #include <KoCanvasBase.h>
 
-#include "kis_paint_device.h"
-#include "kis_painterly_overlay.h"
-#include "kis_paint_layer.h"
-
-class KoCanvasResourceProvider;
-class KoColorSpace;
 class KisPaintDevice;
 class KisPainterlyOverlay;
-class KisPaintLayer;
-class KisPaintOp;
-class MixerTool;
+class KisResourceProvider;
+class KoColorSpace;
+class KoShapeManager;
+class KoToolProxy;
+class KoViewConverter;
+class QImage;
+class QMouseEvent;
+class QPaintEvent;
+class QRectF;
+class QRegion;
+class QResizeEvent;
+class QTabletEvent;
+class QUndoCommand;
 
 class MixerCanvas : public QFrame, public KoCanvasBase {
     Q_OBJECT
@@ -45,31 +48,18 @@ public:
     MixerCanvas(QWidget *parent);
     ~MixerCanvas();
 
-    void setResources(KoCanvasResourceProvider *rp);
+    void setResources(KisResourceProvider *rp);
     void setLayer(const KoColorSpace *cs);
 
-    KisPaintLayer *layer()
-        {
-            return m_layer.data();
-        }
-    KisPaintDevice *device()
-        {
-            return m_layer->paintDevice().data();
-        }
-    KisPainterlyOverlay *overlay()
-        {
-            return m_layer->paintDevice()->painterlyOverlay().data();
-        }
+    KisPaintLayer *layer();
+    KisPaintDevice *device();
+    KisPainterlyOverlay *overlay();
+    void setToolProxy(KoToolProxy *proxy);
 
-    void setToolProxy(KoToolProxy *proxy)
-        {
-            m_toolProxy = proxy;
-        }
-
-    KoToolProxy* toolProxy()
-        {
-            return m_toolProxy;
-        }
+    KoToolProxy *toolProxy() const
+    {
+        return m_toolProxy;
+    }
 
 // Events to be redirected to the MixerTool
 protected:
@@ -87,18 +77,18 @@ public:
     // These methods are not needed.
     void gridSize(double *, double *) const {Q_ASSERT(false);}
     bool snapToGrid() const {Q_ASSERT(false); return false;}
-    void addCommand(QUndoCommand *command) {delete command;}
     KoShapeManager *shapeManager() const {Q_ASSERT(false); return 0;}
-    KoToolProxy * toolProxy() const {Q_ASSERT(false); return m_toolProxy;}
     const KoViewConverter *viewConverter() const {Q_ASSERT(false); return 0;}
-    KoUnit unit() const {Q_ASSERT(false); return KoUnit();}
     void updateInputMethodInfo() {Q_ASSERT(false);}
-    void updateCanvas(const QRectF&) {}
+    void updateCanvas(const QRectF &) {}
+    // Not needed but defined in the cpp source
+    KoUnit unit() const;
+    void addCommand(QUndoCommand*);
 
     QWidget* canvasWidget()
-        {
-            return this;
-        }
+    {
+        return this;
+    }
 
     void updateCanvas(const QRegion& region);
 

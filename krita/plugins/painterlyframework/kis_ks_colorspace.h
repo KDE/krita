@@ -27,6 +27,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorSpaceMaths.h>
 #include <KoIncompleteColorSpace.h>
+
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpMultiply.h"
@@ -59,10 +60,8 @@ class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYP
 
         bool willDegrade(ColorSpaceIndependence) const { return false; }
 
-        KoID colorModelId() const
-            { return ColorModelId(); }
-        KoID colorDepthId() const
-            { return ColorDepthId(); }
+        KoID colorModelId() const { return ColorModelId(); }
+        KoID colorDepthId() const { return ColorDepthId(); }
 
     public: // static
 
@@ -200,29 +199,28 @@ void KisKSColorSpace<_TYPE_,_N_>::colorFromXML(quint8 *pixel, const QDomElement 
 }
 
 
-
 template< typename _TYPE_, int _N_ >
 class KisKSColorSpaceFactory : public KoColorSpaceFactory
 {
     public:
-        virtual QString id() const { return KisKSColorSpace<_TYPE_,_N_>::ColorSpaceId().id(); }
-        virtual QString name() const { return KisKSColorSpace<_TYPE_,_N_>::ColorSpaceId().name(); }
-        virtual KoID colorModelId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorModelId(); }
-        virtual KoID colorDepthId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorDepthId(); }
-        virtual bool userVisible() const { return _N_>=3; }
+        QString id() const { return KisKSColorSpace<_TYPE_,_N_>::ColorSpaceId().id(); }
+        QString name() const { return KisKSColorSpace<_TYPE_,_N_>::ColorSpaceId().name(); }
+        KoID colorModelId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorModelId(); }
+        KoID colorDepthId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorDepthId(); }
+        bool userVisible() const { return _N_>=3; }
 
-        virtual int referenceDepth() const { return sizeof(_TYPE_)*8; }
-        virtual bool isIcc() const { return false; }
-        virtual bool isHdr() const { return false; }
+        int referenceDepth() const { return sizeof(_TYPE_)*8; }
+        bool isIcc() const { return false; }
+        bool isHdr() const { return false; }
 
-        virtual KoColorConversionTransformationFactory *createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+        KoColorConversionTransformationFactory *createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
         {
             Q_UNUSED(_colorModelId);
             Q_UNUSED(_colorDepthId);
             return 0;
         }
 
-        virtual bool profileIsCompatible(const KoColorProfile *profile) const
+        bool profileIsCompatible(const KoColorProfile *profile) const
         {
             const KisIlluminantProfile *p = dynamic_cast<const KisIlluminantProfile *>(profile);
             if ((!p) || (p->wavelengths() != _N_)) {
@@ -231,7 +229,7 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
             return true;
         }
 
-        virtual QString defaultProfile() const
+        QString defaultProfile() const
         {
             return QString("");
         }

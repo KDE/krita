@@ -19,28 +19,17 @@
 */
 
 #include "mixertool.h"
-#include <kis_debug.h>
 
-#include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include <KoID.h>
-#include <KoPointerEvent.h>
-
-#include "kis_complex_color.h"
-#include "kis_iterators_pixel.h"
-#include "kis_paint_device.h"
-#include "kis_paint_information.h"
-#include "kis_painter.h"
-#include "kis_painterly_overlay.h"
-#include "kis_painterly_overlay_colorspace.h"
-#include "kis_paintop.h"
-#include "kis_paintop_registry.h"
-#include "kis_resource_provider.h"
-
-#include "mathematics.h"
 #include "mixercanvas.h"
+
+#include <kis_complex_color.h>
+#include <kis_painter.h>
+#include <kis_paintop_registry.h>
+#include <kis_resource_provider.h>
+#include <KoPointerEvent.h>
+#include <QCursor>
+#include <QRegion>
+#include <QString>
 
 MixerTool::MixerTool(MixerCanvas *mixer, KisResourceProvider *rp)
     : KisToolFreehand(mixer, QCursor(), "Mixer Wrapper Tool"), m_mixer(mixer), m_resources(rp)
@@ -50,33 +39,39 @@ MixerTool::MixerTool(MixerCanvas *mixer, KisResourceProvider *rp)
 
 MixerTool::~MixerTool()
 {
+
 }
 
 void MixerTool::initPaint(KoPointerEvent *e) {
+
     KisToolFreehand::initPaint(e);
+
+    KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
 
     if (!m_painter)
         return;
 
-    KisPaintOp *op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(),
-                                                            currentPaintOpSettings(),
-                                                            m_painter,
-                                                            0);
+    KisPaintOp *op = r->paintOp(currentPaintOp(), currentPaintOpSettings(), m_painter, 0);
 
     if (!op)
         return;
 
     m_painter->setPaintOp(op);
+
 }
 
 void MixerTool::endPaint() {
+
     KisToolFreehand::endPaint();
     m_resources->setFGColor(m_resources->currentComplexColor()->simpleColor());
+
 }
 
 void MixerTool::setDirty(const QRegion& region) {
+
     KisToolFreehand::setDirty(region);
     m_mixer->updateCanvas(region);
+
 }
 
 #include "mixertool.moc"

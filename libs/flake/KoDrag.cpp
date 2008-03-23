@@ -110,6 +110,8 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
         return false;
     }
 
+    delete store; // make sure the buffer if fully flushed.
+    finally.store = 0;
     setData( mimeType, buffer.buffer() );
 
     return true;

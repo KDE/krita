@@ -20,9 +20,8 @@
 #ifndef KIS_COMPLEX_COLOR_H_
 #define KIS_COMPLEX_COLOR_H_
 
-
-#include "kis_paint_device.h"
-#include "kis_painterly_overlay_colorspace.h"
+#include <kis_paint_device.h>
+#include <kis_painterly_overlay_colorspace.h>
 #include <KoColor.h>
 
 class QPoint;
@@ -44,7 +43,7 @@ public:
     KoColor simpleColor();
 
     KoColor defaultColor();
-    quint8 * defaultProperty();
+    quint8 *defaultProperty();
     void setDefaultColor(const KoColor &kc);
     void setDefaultProperty(const PropertyCell &pc);
     void setDefaultProperty(const int type, const float value);
@@ -59,8 +58,8 @@ public:
 
     quint8 *rawData(int x, int y);
     quint8 *rawData(const QPoint &p);
-    PropertyCell * property(int x, int y);
-    PropertyCell * property(const QPoint &p);
+    PropertyCell *property(int x, int y);
+    PropertyCell *property(const QPoint &p);
     float scaling();
     QPoint center();
     void center(int *x, int *y);

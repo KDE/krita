@@ -43,13 +43,13 @@ class KisComplexOp : public KisPaintOp {
 
 class KisComplexOpFactory : public KisPaintOpFactory  {
 
-public:
-    KisComplexOpFactory() {}
-    ~KisComplexOpFactory() {}
+    public:
+        KisComplexOpFactory() {}
+        ~KisComplexOpFactory() {}
 
-    KisPaintOp *createOp(const KisPaintOpSettings *settings, KisPainter *painter, KisImageSP image);
-    QString id() const;
-    QString name() const;
+        KisPaintOp *createOp(const KisPaintOpSettings *settings, KisPainter *painter, KisImageSP image);
+        QString id() const;
+        QString name() const;
 
 };
 

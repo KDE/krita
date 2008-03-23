@@ -18,21 +18,12 @@
  */
 
 #include "kis_complex_color.h"
-#include <QPoint>
 
-#include <KDebug>
-
-#include "KoColor.h"
-#include "KoColorSpace.h"
-
-#include "kis_image.h"
-#include "kis_iterators_pixel.h"
-#include "kis_paint_device.h"
-#include "kis_paint_layer.h"
-#include "kis_painter.h"
-#include "kis_painterly_overlay.h"
-#include "kis_random_accessor.h"
-
+#include <kis_image.h>
+#include <kis_iterators_pixel.h>
+#include <kis_painterly_overlay.h>
+#include <kis_random_accessor.h>
+#include <KoColorSpace.h>
 
 const PropertyCell hardDefault = {
     0.7,
@@ -54,7 +45,7 @@ KisComplexColor::KisComplexColor(const KoColorSpace *colorSpace)
     m_copy = colorSpace->clone();
     m_defaultColor = KoColor(m_copy);
     m_defaultProperty = 0;
-    
+
     KoColor kc(Qt::black, m_copy);
     fromKoColor(kc);
 }
@@ -66,7 +57,7 @@ KisComplexColor::KisComplexColor(const KoColorSpace *colorSpace, const KoColor &
     m_copy = colorSpace->clone();
     m_defaultColor = KoColor(m_copy);
     m_defaultProperty = 0;
-    
+
     fromKoColor(kc);
 }
 
@@ -81,7 +72,7 @@ void KisComplexColor::fromKoColor(const KoColor &kc)
 {
     if (painterlyOverlay())
         removePainterlyOverlay();
-    
+
     createPainterlyOverlay();
     clear();
 

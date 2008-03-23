@@ -54,10 +54,9 @@ public:
     void undo();
 private:
     void initialize();
+    void copyPath( KoPathShape * dst, KoPathShape * src );
     QList<KoParameterShape*> m_shapes;
-    QList<KoSubpathList> m_oldSubpaths;
-    QList<KoSubpathList> m_newSubpaths;
-    bool m_newPointsActive;
+    QList<KoPathShape*> m_copies;
 };
 
 #endif // KOPARAMETERTOPATHCOMMAND_H

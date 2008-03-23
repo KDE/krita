@@ -24,7 +24,6 @@
 
 KoParameterToPathCommand::KoParameterToPathCommand( KoParameterShape *shape, QUndoCommand *parent )
 : QUndoCommand( parent )
-, m_newPointsActive( false )
 {
     m_shapes.append( shape );
     initialize();
@@ -34,7 +33,6 @@ KoParameterToPathCommand::KoParameterToPathCommand( KoParameterShape *shape, QUn
 KoParameterToPathCommand::KoParameterToPathCommand( const QList<KoParameterShape*> &shapes, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_shapes( shapes )
-, m_newPointsActive( false )
 {
     initialize();
     setText( i18n( "Convert to Path" ) );
@@ -42,33 +40,7 @@ KoParameterToPathCommand::KoParameterToPathCommand( const QList<KoParameterShape
 
 KoParameterToPathCommand::~KoParameterToPathCommand()
 {
-    // clear the no longer needed points
-    if ( m_newPointsActive )
-    {
-        QList<KoSubpathList>::iterator it( m_oldSubpaths.begin() );
-        for ( ; it != m_oldSubpaths.end(); ++it )
-        {
-            KoSubpathList::iterator pathIt( it->begin() );
-            for ( ; pathIt != it->end(); ++pathIt )
-            {
-                qDeleteAll( **pathIt );
-            }
-            qDeleteAll( *it );
-        }
-    }
-    else
-    {
-        QList<KoSubpathList>::iterator it( m_newSubpaths.begin() );
-        for ( ; it != m_newSubpaths.end(); ++it )
-        {
-            KoSubpathList::iterator pathIt( it->begin() );
-            for ( ; pathIt != it->end(); ++pathIt )
-            {
-                qDeleteAll( **pathIt );
-            }
-            qDeleteAll( *it );
-        }
-    }
+    qDeleteAll( m_copies );
 }
 
 void KoParameterToPathCommand::redo()
@@ -77,11 +49,10 @@ void KoParameterToPathCommand::redo()
     for ( int i = 0; i < m_shapes.size(); ++i )
     {
         KoParameterShape * parameterShape = m_shapes.at( i );
+        parameterShape->update();
         parameterShape->setModified( true );
-        parameterShape->m_subpaths = m_newSubpaths[i];
         parameterShape->update();
     }
-    m_newPointsActive = true;
 }
 
 void KoParameterToPathCommand::undo()
@@ -90,32 +61,43 @@ void KoParameterToPathCommand::undo()
     for ( int i = 0; i < m_shapes.size(); ++i )
     {
         KoParameterShape * parameterShape = m_shapes.at( i );
+        parameterShape->update();
         parameterShape->setModified( false );
-        parameterShape->m_subpaths = m_oldSubpaths[i];
+        copyPath( parameterShape, m_copies[i] );
         parameterShape->update();
     }
-    m_newPointsActive = false;
 }
 
 void KoParameterToPathCommand::initialize()
 {
     foreach( KoParameterShape *shape, m_shapes )
     {
-        KoSubpathList subpaths = shape->m_subpaths;
-        KoSubpathList newSubpaths;
-        // make a deep copy of the subpaths
-        KoSubpathList::const_iterator pathIt( subpaths.begin() );
-        for (  ; pathIt != subpaths.end(); ++pathIt )
-        {
-            KoSubpath * newSubpath = new KoSubpath();
-            newSubpaths.append( newSubpath );
-            KoSubpath::const_iterator it(  (  *pathIt )->begin() );
-            for (  ; it != (  *pathIt )->end(); ++it )
-            {
-                newSubpath->append( new KoPathPoint( **it ) );
-            }
-        }
-        m_oldSubpaths.append( subpaths );
-        m_newSubpaths.append( newSubpaths );
+        KoPathShape * p = new KoPathShape();
+        copyPath( p, shape );
+        m_copies.append( p );
     }
+}
+
+void KoParameterToPathCommand::copyPath( KoPathShape * dst, KoPathShape * src )
+{
+    dst->clear();
+
+    int subpathCount = src->subpathCount();
+    for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
+    {
+        int pointCount = src->pointCountSubpath( subpathIndex );
+        if( ! pointCount )
+            continue;
+
+        KoSubpath * subpath = new KoSubpath;
+        for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
+        {
+            KoPathPoint * p = src->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex ) );
+            KoPathPoint * c = new KoPathPoint( *p );
+            c->setParent( dst );
+            subpath->append( c );
+        }
+        dst->addSubpath( subpath, subpathIndex );
+    }
+    dst->setTransformation( src->transformation() );
 }

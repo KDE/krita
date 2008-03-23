@@ -128,6 +128,9 @@ public:
      */
     bool isFlat( qreal tolerance = 0.01 ) const;
 
+    /// Returns ordered list of control points
+    QList<QPointF> controlPoints() const;
+
     void printDebug() const;
 
 private:
@@ -153,9 +156,6 @@ private:
      * @param p3 the new control point of the segment end (for cubic curbes only)
      */
     void deCasteljau( qreal t, QPointF *p1, QPointF *p2, QPointF *p3, QPointF *p4, QPointF *p5 ) const;
-
-    /// Returns list of control points
-    QList<QPointF> controlPoints() const;
 
     class Private;
     Private * const d;

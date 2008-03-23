@@ -138,6 +138,18 @@ public:
     KoPathPoint * curveTo( const QPointF &c1, const QPointF &c2, const QPointF &p );
 
     /**
+     * @brief add a quadratic Bezier curve.
+     *
+     * Adds a quadratic Bezier curve between the last point and the given p,
+     * using the control point specified by c.
+     * @param c control point
+     * @param p The endpoint of this curve-part
+     *
+     * @return The newly created point 
+     */
+    KoPathPoint * curveTo( const QPointF &c, const QPointF &p );
+
+    /**
      * @brief add a arc.
      *
      * Adds an arc starting at the current point. The arc will be converted to bezier curves.
@@ -335,7 +347,7 @@ public:
     /**
      * @brief Close a open subpath
      *
-     * The subpath is closed be inserting a segment between the start and end point, makeing
+     * The subpath is closed be inserting a segment between the start and end point, making
      * the given point the new start point of the subpath.
      *
      * @return the new position of the old first point in the subpath
@@ -464,8 +476,6 @@ protected:
     QRectF loadOdfViewbox( const KoXmlElement & element ) const;
     /// Applies the viewbox transformation defined in the given element
     void applyViewboxTransformation( const KoXmlElement & element );
-
-    friend class KoParameterToPathCommand;
 
     KoSubpathList m_subpaths;
 

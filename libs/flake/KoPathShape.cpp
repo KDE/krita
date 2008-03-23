@@ -458,6 +458,20 @@ KoPathPoint * KoPathShape::curveTo( const QPointF &c1, const QPointF &c2, const 
     return point;
 }
 
+KoPathPoint * KoPathShape::curveTo( const QPointF &c, const QPointF &p )
+{
+    if( m_subpaths.empty() )
+        moveTo( QPointF( 0, 0 ) );
+
+    KoPathPoint * lastPoint = m_subpaths.last()->last();
+    updateLast( &lastPoint );
+    lastPoint->setControlPoint2( c );
+    KoPathPoint * point = new KoPathPoint( this, p, KoPathPoint::CanHaveControlPoint1 );
+    m_subpaths.last()->push_back( point );
+
+    return point;
+}
+
 KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, double sweepAngle )
 {
     if ( m_subpaths.empty() )

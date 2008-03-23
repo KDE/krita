@@ -365,7 +365,7 @@ bool KoPathPoint::isSmooth( KoPathPoint * prev, KoPathPoint * next ) const
     t1 /= l1;
     t2 /= l2;
 
-    qreal scalar = t1.x()*t1.y() + t2.x()*t2.y();
+    qreal scalar = t1.x()*t2.x() + t1.y()*t2.y();
     // tangents are parallel if t1*t2 = |t1|*|t2|
     return qFuzzyCompare( scalar, 1.0 );
 }

@@ -209,16 +209,9 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
         KoID colorDepthId() const { return KisKSColorSpace<_TYPE_,_N_>::ColorDepthId(); }
         bool userVisible() const { return _N_>=3; }
 
-        int referenceDepth() const { return sizeof(_TYPE_)*8; }
-        bool isIcc() const { return false; }
-        bool isHdr() const { return false; }
-
-        KoColorConversionTransformationFactory *createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
-        {
-            Q_UNUSED(_colorModelId);
-            Q_UNUSED(_colorDepthId);
-            return 0;
-        }
+        virtual int referenceDepth() const { return sizeof(_TYPE_)*8; }
+        virtual QString colorSpaceEngine() const { return "ks"; }
+        virtual bool isHdr() const { return false; }
 
         bool profileIsCompatible(const KoColorProfile *profile) const
         {

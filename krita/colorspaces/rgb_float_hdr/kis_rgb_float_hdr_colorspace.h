@@ -47,7 +47,7 @@ class KisRgbFloatHDRColorSpaceFactory : public KoColorSpaceFactory
             return isHdrRgbColorProfile(profile);
         }
     
-        virtual bool isIcc() const { return false; }
+        virtual QString colorSpaceEngine() const { return ""; }
         virtual bool isHdr() const { return true; }
         virtual QString defaultProfile() const { return "lcms virtual RGB profile - Rec. 709 Linear"; }
     public:

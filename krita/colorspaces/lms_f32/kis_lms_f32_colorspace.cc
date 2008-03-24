@@ -135,9 +135,9 @@ bool KisLmsAF32ColorSpaceFactory::profileIsCompatible(const KoColorProfile* prof
     return false;
 }
 
-bool KisLmsAF32ColorSpaceFactory::isIcc() const
+QString KisLmsAF32ColorSpaceFactory::colorSpaceEngine() const
 {
-    return false;
+    return "";
 }
 
 bool KisLmsAF32ColorSpaceFactory::isHdr() const
@@ -165,7 +165,7 @@ QList<KoColorConversionTransformationFactory*> KisLmsAF32ColorSpaceFactory::colo
     return list;
 }
 
-KoColorConversionTransformationFactory* KisLmsAF32ColorSpaceFactory::createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+KoColorConversionTransformationFactory* KisLmsAF32ColorSpaceFactory::createICCColorConversionTransformationFactory(const QString& profileName) const
 {
     return 0;
 }

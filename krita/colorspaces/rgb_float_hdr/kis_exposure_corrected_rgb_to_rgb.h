@@ -55,7 +55,7 @@ class KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformation : public 
 template<typename _src_CSTraits_, typename _dst_CSTraits_>
 class KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
-        KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformationFactory(QString _srcDepthId, QString _dstDepthId) : KoColorConversionTransformationFactory(RGBAColorModelID.id(),  _srcDepthId, RGBAColorModelID.id(), _dstDepthId)
+        KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformationFactory(QString _srcDepthId, QString _dstDepthId) : KoColorConversionTransformationFactory(RGBAColorModelID.id(), _srcDepthId, "sRGB built-in - (lcms internal)", RGBAColorModelID.id(), _dstDepthId, "lcms virtual RGB profile - Rec. 709 Linear")
         {}
         virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
         {
@@ -108,7 +108,7 @@ class KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformation : public 
 template<typename _src_CSTraits_, typename _dst_CSTraits_>
 class KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
-        KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformationFactory(QString _srcDepthId, QString _dstDepthId) : KoColorConversionTransformationFactory(RGBAColorModelID.id(),  _srcDepthId, RGBAColorModelID.id(), _dstDepthId)
+        KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformationFactory(QString _srcDepthId, QString _dstDepthId) : KoColorConversionTransformationFactory(RGBAColorModelID.id(),  _srcDepthId,"lcms virtual RGB profile - Rec. 709 Linear", RGBAColorModelID.id(), _dstDepthId, "sRGB built-in - (lcms internal)")
         {}
         virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
         {

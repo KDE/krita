@@ -124,5 +124,5 @@ void KoRgbU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) con
 quint8 KoRgbU8ColorSpace::intensity8(const quint8 * src) const
 {
     const RgbU8Traits::Pixel* p = reinterpret_cast<const RgbU8Traits::Pixel*>( src );
-    return p->red * 0.30 + p->green * 0.59 + p->blue * 0.11;
+    return (quint8)(p->red * 0.30 + p->green * 0.59 + p->blue * 0.11);
 }

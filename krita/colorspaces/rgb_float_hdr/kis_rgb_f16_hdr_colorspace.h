@@ -73,18 +73,17 @@ public:
         // Conversion to RGB Float 16bit
         list.append(new KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformationFactory< KoRgbTraits<quint8>, RgbF16Traits >( Integer8BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
         list.append(new KisExposureCorrectedIntegerRgbToFloatRgbConversionTransformationFactory< KoRgbU16Traits, RgbF16Traits >( Integer16BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
-        list.append(new KoScaleColorConversionTransformationFactory< KoRgbTraits<float>, RgbF16Traits >( RGBAColorModelID.id(), Float32BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
+        list.append(new KoScaleColorConversionTransformationFactory< KoRgbTraits<float>, RgbF16Traits >( RGBAColorModelID.id(), "lcms virtual RGB profile - Rec. 709 Linear", Float32BitsColorDepthID.id(), Float16BitsColorDepthID.id() ) );
         // Conversion from RGB Float 16bit
         list.append(new KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformationFactory< RgbF16Traits, KoRgbTraits<quint8> >( Float16BitsColorDepthID.id(), Integer8BitsColorDepthID.id() ) );
         list.append(new KisExposureCorrectedFloatRgbToIntegerRgbConversionTransformationFactory< RgbF16Traits, KoRgbU16Traits  >( Float16BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
-        list.append(new KoScaleColorConversionTransformationFactory< RgbF16Traits, KoRgbTraits<float> >( RGBAColorModelID.id(), Float16BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
+        list.append(new KoScaleColorConversionTransformationFactory< RgbF16Traits, KoRgbTraits<float> >( RGBAColorModelID.id(), "lcms virtual RGB profile - Rec. 709 Linear", Float16BitsColorDepthID.id(), Float32BitsColorDepthID.id() ) );
         
         return list;
     }
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const
     {
-        Q_UNUSED(_colorModelId);
-        Q_UNUSED(_colorDepthId);
+        Q_UNUSED(profileName);
         return 0;
     }
 };

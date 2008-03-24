@@ -24,14 +24,12 @@ class KoColorSpace;
 class KoColorConversionTransformation;
 
 #include <QString>
-#include <KoColorConversionTransformation.h>
-
-#include <pigment_export.h>
+#include <KoColorConversionTransformationAbstractFactory.h>
 
 /**
  * Factory to create a color transformation between two colorsapces.
  */
-class PIGMENTCMS_EXPORT KoColorConversionTransformationFactory {
+class PIGMENTCMS_EXPORT KoColorConversionTransformationFactory : public KoColorConversionTransformationAbstractFactory {
     public:
         /**
          * Create a color conversion tranformation factory, that can create
@@ -45,16 +43,8 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformationFactory {
          * @param _srcProfile name of the source profile, or empty if any profile
          * @param _dstProfile name of the destination profile, or empty if any profile
          */
-        KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId, QString _srcProfile = "", QString _dstProfile = "");
+        KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _srcProfile, QString _dstModelId, QString _dstDepthId, QString _dstProfile);
         virtual ~KoColorConversionTransformationFactory();
-        /**
-         * Creates a color transformation between the source color space and the destination
-         * color space.
-         * 
-         * @param srcColorSpace source color space
-         * @param dstColorSpace destination color space
-         */
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const =0;
         /**
          * @return true if this factory creates a color conversion transformation which
          * conserve color information (typical color transformation that lose that information

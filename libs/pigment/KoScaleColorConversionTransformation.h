@@ -49,12 +49,14 @@ class KoScaleColorConversionTransformation : public KoColorConversionTransformat
 template<typename _src_CSTraits_, typename _dst_CSTraits_>
 class KoScaleColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
-        KoScaleColorConversionTransformationFactory(QString colorModelId, QString _srcDepthId, QString _dstDepthId) : KoColorConversionTransformationFactory(colorModelId,  _srcDepthId, colorModelId, _dstDepthId),
+        KoScaleColorConversionTransformationFactory(const QString& _colorModelId, const QString& _profileName, const QString& _srcDepthId, const QString& _dstDepthId)
+            : KoColorConversionTransformationFactory(_colorModelId,  _srcDepthId, _profileName, _colorModelId, _dstDepthId, _profileName),
                 hdr( ( (srcColorDepthId() == Float16BitsColorDepthID.id()) && 
                        (dstColorDepthId() == Float32BitsColorDepthID.id()) ) ||
                      ( (srcColorDepthId() == Float32BitsColorDepthID.id()) && 
                        (dstColorDepthId() == Float16BitsColorDepthID.id()) ) )
-        {}
+        {
+        }
         virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
         {
             Q_UNUSED(renderingIntent);

@@ -119,8 +119,8 @@ QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorCon
         factories.push_back(
             new KoCtlColorConversionTransformationFactory(
                 info.sourceColorModelID, info.sourceColorDepthID,
-                info.destinationColorModelID, info.destinationColorDepthID,
-                info.sourceProfile, info.destinationProfile ) );
+                info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                info.destinationProfile ) );
     }
     return factories;
 }

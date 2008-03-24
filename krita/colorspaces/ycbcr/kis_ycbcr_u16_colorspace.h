@@ -60,16 +60,15 @@ public:
         Q_UNUSED(p);
         return new KisYCbCrU16ColorSpace( 0);
     }
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const
     {
-        Q_UNUSED(_colorModelId);
-        Q_UNUSED(_colorDepthId);
+        Q_UNUSED(profileName);
         return 0;
     }
     virtual int referenceDepth() const { return 16; }
 
     
-    virtual bool isIcc() const { return false; }
+    virtual QString colorSpaceEngine() const { return ""; }
     virtual bool isHdr() const { return false; }
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     

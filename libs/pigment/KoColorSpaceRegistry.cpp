@@ -35,11 +35,15 @@
 
 #include <lcms.h>
 
+
 #include "KoPluginLoader.h"
+
+#include "DebugPigment.h"
+#include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
 #include "KoColorConversionCache.h"
 #include "KoColorConversionSystem.h"
-#include "KoBasicHistogramProducers.h"
+#include "KoIccColorSpaceEngine.h"
 
 #include "colorprofiles/KoLcmsColorProfileContainer.h"
 #include "colorspaces/KoAlphaColorSpace.h"
@@ -85,6 +89,8 @@ void KoColorSpaceRegistry::init()
     d->lab16sLAB = 0;
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
+    // Initialise color engine
+    KoColorSpaceEngineRegistry::instance()->add( new KoIccColorSpaceEngine );
     // prepare a list of the ICC profiles
     KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
 
@@ -105,10 +111,10 @@ void KoColorSpaceRegistry::init()
 
             profile->load();
             if (profile->valid()) {
-                kDebug(DBG_PIGMENT) << "Valid profile : " << profile->name();
+                dbgPigmentCSRegistry << "Valid profile : " << profile->name();
                 d->profileMap[profile->name()] = profile;
             } else {
-                kDebug(DBG_PIGMENT) << "Invalid profile : " << profile->name();
+                dbgPigmentCSRegistry << "Invalid profile : " << profile->name();
             }
         }
     }
@@ -119,11 +125,11 @@ void KoColorSpaceRegistry::init()
     KGlobal::mainComponent().dirs()->addResourceType("ctl_profiles", "data", "pigmentcms/ctlprofiles/");
     QStringList ctlprofileFilenames;
     ctlprofileFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_profiles", "*.ctlp",  KStandardDirs::Recursive);
-    kDebug(DBG_PIGMENT) << "There are " << ctlprofileFilenames.size() << " CTL profiles";
+    dbgPigmentCSRegistry << "There are " << ctlprofileFilenames.size() << " CTL profiles";
     if (!ctlprofileFilenames.empty()) {
         KoColorProfile* profile = 0;
         for( QStringList::Iterator it = ctlprofileFilenames.begin(); it != ctlprofileFilenames.end(); ++it ) {
-            kDebug(DBG_PIGMENT) << "Load profile : " << *it;
+            dbgPigmentCSRegistry << "Load profile : " << *it;
             profile = new KoCtlColorProfile(*it);
             profile->load();
             if (profile->valid()) {
@@ -160,7 +166,7 @@ void KoColorSpaceRegistry::init()
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
     KoColorProfile *defProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(hProfile);
-    kDebug(DBG_PIGMENT) << "Gray " << defProfile->name();
+    dbgPigmentCSRegistry << "Gray " << defProfile->name();
     addProfile(defProfile);
 
     // Create the built-in colorspaces
@@ -292,14 +298,14 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         KoColorSpaceFactory *csf = value(csID);
         if(!csf)
         {
-            kDebug(DBG_PIGMENT) <<"Unknown color space type :" << csf;
+            dbgPigmentCSRegistry <<"Unknown color space type :" << csf;
             return 0;
         }
 
         const KoColorProfile *p = profileByName(profileName);
         if(!p && !profileName.isEmpty())
         {
-            kDebug(DBG_PIGMENT) <<"Profile not found :" << profileName;
+            dbgPigmentCSRegistry <<"Profile not found :" << profileName;
             return 0;
         }
         const KoColorSpace *cs = csf->createColorSpace( p);
@@ -332,7 +338,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             KoColorSpaceFactory *csf = value(csID);
             if(!csf)
             {
-                kDebug(DBG_PIGMENT) <<"Unknown color space type :" << csf;
+                dbgPigmentCSRegistry <<"Unknown color space type :" << csf;
                 return 0;
             }
 

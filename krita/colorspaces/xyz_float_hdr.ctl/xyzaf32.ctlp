@@ -109,12 +109,12 @@ void XYZAf32_to_LABAi(float xIn, float yIn, float zIn, float alphaIn, output int
                 <output colorModel="RGBA" depth="32" type="float" profile="scRGB" />
             </conversion>
             <conversion function="LABAi_to_XYZAf328">
-                <input colorModel="LABA" depth="16" type="integer" />
+                <input colorModel="LABA" depth="16" type="integer" profile="Lab built-in - (lcms internal)" />
                 <output colorModel="XYZA" depth="32" type="float" />
             </conversion>
             <conversion function="XYZAf32_to_LABAi8">
                 <input colorModel="XYZA" depth="32" type="float" />
-                <output colorModel="LABA" depth="16" type="integer" />
+                <output colorModel="LABA" depth="16" type="integer" profile="Lab built-in - (lcms internal)" />
             </conversion>
         </conversions>
     </transformations>

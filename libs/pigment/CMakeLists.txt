@@ -28,42 +28,44 @@ if(OPENCTL_FOUND)
   add_definitions(${OPENCTL_DEFINITIONS})
   add_subdirectory(ctlmodules)
   set( OPENCTL_PIGMENT_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoCtlColorProfile.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoCtlColorConversionTransformation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoCtlColorSpace.cpp
+    colorprofiles/KoCtlColorProfile.cpp
+    KoCtlColorConversionTransformation.cpp
+    KoCtlColorSpace.cpp
   )
 endif(OPENCTL_FOUND)
 
 set(pigmentcms_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoBasicHistogramProducers.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionAlphaTransformation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversions.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionSystem.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionTransformation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionTransformationFactory.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorModelStandardIds.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorProfile.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpace.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceMaths.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorSpaceRegistry.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorTransformationFactory.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorTransformationFactoryRegistry.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoCompositeOp.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoCopyColorConversionTransformation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoFallBackColorTransformation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoHistogramProducer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoLcmsColorSpace.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoColorConversionCache.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/KoMultipleColorConversionTransformation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoIccColorProfile.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoHdrColorProfile.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles/KoLcmsColorProfileContainer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoAlphaColorSpace.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoLabColorSpace.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU16ColorSpace.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8ColorSpace.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/KoRgbU8CompositeOp.cpp
+    KoBasicHistogramProducers.cpp
+    KoColor.cpp
+    KoColorConversionAlphaTransformation.cpp
+    KoColorConversionCache.cpp
+    KoColorConversions.cpp
+    KoColorConversionSystem.cpp
+    KoColorConversionTransformation.cpp
+    KoColorConversionTransformationFactory.cpp
+    KoColorModelStandardIds.cpp
+    KoColorProfile.cpp
+    KoColorSpace.cpp
+    KoColorSpaceEngine.cpp
+    KoColorSpaceMaths.cpp
+    KoColorSpaceRegistry.cpp
+    KoColorTransformationFactory.cpp
+    KoColorTransformationFactoryRegistry.cpp
+    KoCompositeOp.cpp
+    KoCopyColorConversionTransformation.cpp
+    KoFallBackColorTransformation.cpp
+    KoHistogramProducer.cpp
+    KoIccColorSpaceEngine.cpp
+    KoLcmsColorSpace.cpp
+    KoMultipleColorConversionTransformation.cpp
+    colorprofiles/KoIccColorProfile.cpp
+    colorprofiles/KoHdrColorProfile.cpp
+    colorprofiles/KoLcmsColorProfileContainer.cpp
+    colorspaces/KoAlphaColorSpace.cpp
+    colorspaces/KoLabColorSpace.cpp
+    colorspaces/KoRgbU16ColorSpace.cpp
+    colorspaces/KoRgbU8ColorSpace.cc
+    colorspaces/KoRgbU8CompositeOp.cpp
     ${OPENCTL_PIGMENT_SRCS}
 )
 
@@ -81,14 +83,17 @@ install(TARGETS pigmentcms  DESTINATION ${LIB_INSTALL_DIR})
 
 install( FILES 
          pigment_export.h
+         DebugPigment.h
          KoBasicHistogramProducers.h
          KoChannelInfo.h
          KoColor.h
          KoColorConversionTransformation.h
+         KoColorConversionTransformationAbstractFactory.h
          KoColorConversionTransformationFactory.h
          KoColorModelStandardIds.h
          KoColorProfile.h
          KoColorSpace.h
+         KoColorSpaceEngine.h
          KoColorSpaceAbstract.h
          KoColorSpaceConstants.h
          KoColorSpaceMaths.h

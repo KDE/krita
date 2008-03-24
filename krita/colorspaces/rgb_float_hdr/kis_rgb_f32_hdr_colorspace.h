@@ -76,10 +76,9 @@ public:
         
         return list;
     }
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const
     {
-        Q_UNUSED(_colorModelId);
-        Q_UNUSED(_colorDepthId);
+        Q_UNUSED(profileName);
         return 0;
     }
 };

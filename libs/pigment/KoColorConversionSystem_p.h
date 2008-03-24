@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,35 +18,46 @@
 */
 
 struct KoColorConversionSystem::Node {
-    Node() : isIcc(false), isHdr(false), isInitialized(false), referenceDepth(0), isGray(false), canBeCrossed(true), colorSpaceFactory(0) {}
+    Node() : isIcc(false), isHdr(false), isInitialized(false), referenceDepth(0), isGray(false), crossingCost(1), colorSpaceFactory(0), isEngine(false),engine(0) {}
     void init( const KoColorSpaceFactory* _colorSpaceFactory)
     {
-        Q_ASSERT(!isInitialized);
+        kDebug(DBG_PIGMENT) << "Initialise " << modelId << " " << depthId << " " << profileName;
+        Q_ASSERT(not isInitialized);
         isInitialized = true;
         
         if(_colorSpaceFactory)
         {
-            isIcc = _colorSpaceFactory->isIcc();
+            isIcc = _colorSpaceFactory->colorSpaceEngine() == "icc";
             isHdr = _colorSpaceFactory->isHdr();
             colorSpaceFactory = _colorSpaceFactory;
             referenceDepth = _colorSpaceFactory->referenceDepth();
             isGray = ( _colorSpaceFactory->colorModelId() == GrayAColorModelID
-                    || _colorSpaceFactory->colorModelId() == GrayColorModelID );
+                    or _colorSpaceFactory->colorModelId() == GrayColorModelID );
         }
     }
+    void init( const KoColorSpaceEngine* _engine)
+    {
+        Q_ASSERT(not isInitialized);
+        isEngine = true;
+        isInitialized = true;
+        engine = _engine;
+    }
     QString id() const {
-        return modelId + " " + depthId;
+        return modelId + " " + depthId + " " + profileName;
     }
     QString modelId;
     QString depthId;
+    QString profileName;
     bool isIcc;
     bool isHdr;
     bool isInitialized;
     int referenceDepth;
     QList<Vertex*> outputVertexes;
     bool isGray;
-    bool canBeCrossed; ///< indicates wether this node can be use in the middle of a path
+    int crossingCost;
     const KoColorSpaceFactory* colorSpaceFactory;
+    bool isEngine;
+    const KoColorSpaceEngine* engine;
 };
 
 struct KoColorConversionSystem::Vertex {
@@ -66,7 +77,7 @@ struct KoColorConversionSystem::Vertex {
     void setFactoryFromDst(KoColorConversionTransformationFactory* factory)
     {
         factoryFromDst = factory;
-        if( !factoryFromSrc) initParameter(factoryFromDst);
+        if( not factoryFromSrc) initParameter(factoryFromDst);
     }
     void initParameter(KoColorConversionTransformationFactory* transfo)
     {
@@ -91,14 +102,15 @@ struct KoColorConversionSystem::Vertex {
 };
 
 struct KoColorConversionSystem::NodeKey {
-    NodeKey(QString _modelId, QString _depthId) : modelId(_modelId), depthId(_depthId)
+    NodeKey(QString _modelId, QString _depthId, QString _profileName) : modelId(_modelId), depthId(_depthId), profileName(_profileName)
     {}
     bool operator==(const KoColorConversionSystem::NodeKey& rhs) const
     {
-        return modelId == rhs.modelId && depthId == rhs.depthId;
+        return modelId == rhs.modelId and depthId == rhs.depthId and profileName == rhs.profileName;
     }
     QString modelId;
     QString depthId;
+    QString profileName;
 };
 
 struct KoColorConversionSystem::Path {
@@ -122,24 +134,49 @@ struct KoColorConversionSystem::Path {
             referenceDepth = v->srcNode->referenceDepth;
         }
         vertexes.append(v);
-        if(!v->conserveColorInformation) respectColorCorrectness = false;
-        if(!v->conserveDynamicRange) keepDynamicRange = false;
+        if(not v->conserveColorInformation) respectColorCorrectness = false;
+        if(not v->conserveDynamicRange) keepDynamicRange = false;
         referenceDepth = qMin( referenceDepth, v->dstNode->referenceDepth);
+        cost += v->dstNode->crossingCost;
     }
-    int length() const {
+    // Compress path to hide the Engine node and correctly select the factory
+    typedef QPair<Node*, const KoColorConversionTransformationAbstractFactory* > node2factory;
+    QList< node2factory > compressedPath() const
+    {
+        QList< node2factory > nodes;
+        nodes.push_back( node2factory( vertexes.first()->srcNode , vertexes.first()->factory() ) );
+        const KoColorConversionTransformationAbstractFactory* previousFactory = 0;
+        foreach( Vertex* vertex, vertexes)
+        { // Unless the node is the icc node, add it to the path
+            Node* n = vertex->dstNode;
+            if( n->isEngine  )
+            {
+                previousFactory = n->engine;
+            } else {
+                nodes.push_back(
+                    node2factory( n,
+                                  previousFactory ? previousFactory : vertex->factory() ) );
+                previousFactory = 0;
+            }
+        }
+        return nodes;
+    }
+    int length() const
+    {
         return vertexes.size();
     }
     bool contains(Node* n) const
     {
         foreach(Vertex* v, vertexes)
         {
-            if(v->srcNode == n || v->dstNode == n)
+            if(v->srcNode == n or v->dstNode == n)
             {
                 return true;
             }
         }
         return false;
     }
+    int cost;
     QList<Vertex*> vertexes;
     bool respectColorCorrectness;
     int referenceDepth;
@@ -165,11 +202,11 @@ struct KoColorConversionSystem::Private {
 };
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \
-    if(path1-> name && !path2-> name) \
+    if(path1-> name and not path2-> name) \
     { \
         return true; \
     } \
-    if(!path1-> name && path2-> name) \
+    if(not path1-> name and path2-> name) \
     { \
         return false; \
     }
@@ -179,9 +216,9 @@ struct PathQualityChecker {
     /// @return true if the path maximize all the criterions (except length)
     inline bool isGoodPath(KoColorConversionSystem::Path* path)
     {
-        return ( path->respectColorCorrectness || ignoreColorCorrectness ) &&
-               ( path->referenceDepth >= referenceDepth) &&
-               ( path->keepDynamicRange || ignoreHdr );
+        return ( path->respectColorCorrectness or ignoreColorCorrectness ) and
+               ( path->referenceDepth >= referenceDepth) and
+               ( path->keepDynamicRange or ignoreHdr );
     }
     /**
      * Compare two pathes.
@@ -191,17 +228,17 @@ struct PathQualityChecker {
          // There is no point in comparing two pathes which doesn't start from the same node or doesn't end at the same node
         Q_ASSERT(path1->startNode() == path2->startNode());
         Q_ASSERT(path1->endNode() == path2->endNode());
-        if(!ignoreHdr)
+        if(not ignoreHdr)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)
         }
-        if(!ignoreColorCorrectness)
+        if(not ignoreColorCorrectness)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
         }
         if( path1->referenceDepth == path2->referenceDepth)
         {
-            return path1->length() < path2->length(); // if they have the same length, well anyway you have to choose one, and there is no point in keeping one and not the other
+            return path1->cost < path2->cost; // if they have the same cost, well anyway you have to choose one, and there is no point in keeping one and not the other
         }
         return path1->referenceDepth > path2->referenceDepth;
     }

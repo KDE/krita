@@ -59,13 +59,12 @@ public:
     virtual bool userVisible() const { return true; }
     
     virtual int referenceDepth() const { return 32; }
-    virtual bool isIcc() const { return false; }
+    virtual QString colorSpaceEngine() const { return ""; }
     virtual bool isHdr() const { return true; }
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const
     {
-        Q_UNUSED(_colorModelId);
-        Q_UNUSED(_colorDepthId);
+        Q_UNUSED(profileName);
         return 0;
     }
 

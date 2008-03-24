@@ -79,7 +79,8 @@ struct KoCtlColorConversionTransformationFactory::Private {
     
 };
 
-KoCtlColorConversionTransformationFactory::KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId, QString _srcProfile, QString _dstProfile) : KoColorConversionTransformationFactory(_srcModelId, _srcDepthId, _dstModelId, _dstDepthId, _srcProfile, _dstProfile), d(new Private)
+KoCtlColorConversionTransformationFactory::KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _srcProfile, QString _dstModelId, QString _dstDepthId, QString _dstProfile) :
+        KoColorConversionTransformationFactory(_srcModelId, _srcDepthId, _srcProfile, _dstModelId, _dstDepthId, _dstProfile), d(new Private)
 {
 }
 

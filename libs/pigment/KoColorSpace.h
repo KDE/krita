@@ -707,9 +707,9 @@ public:
     virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
 
     /**
-     * @return true if the color space follows ICC specification
+     * @return the name of the color space engine for this color space, or "" if none
      */
-    virtual bool isIcc() const = 0;
+    virtual QString colorSpaceEngine() const = 0;
     /**
      * @return true if the color space supports High-Dynamic Range.
      */
@@ -729,12 +729,6 @@ public:
      */
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
 
-    /**
-     * This function will create a
-     * @return a factory to create color conversion objects between two icc color spaces, or null,
-     * if one of the color space is not ICC, or if the ICC engine can't handle the conversion.
-     */
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const = 0;
     /**
      *  @return
      */

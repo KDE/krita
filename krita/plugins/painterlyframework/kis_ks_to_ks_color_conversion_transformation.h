@@ -66,9 +66,9 @@ class KisKSToKSColorConversionTransformationFactory : public KoColorConversionTr
 public:
     KisKSToKSColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<src_TYPE_,_N_>::ColorDepthId().id(),
+                                              KisKSColorSpace<src_TYPE_,_N_>::ColorDepthId().id(), "",
                                               QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<dst_TYPE_,_N_>::ColorDepthId().id() ) { return; }
+                                              KisKSColorSpace<dst_TYPE_,_N_>::ColorDepthId().id(), "" ) { return; }
 
     KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
                                                                 const KoColorSpace* dstColorSpace,

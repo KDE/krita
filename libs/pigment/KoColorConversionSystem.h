@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@
 
 class KoColorSpace;
 class KoColorSpaceFactory;
+class KoColorSpaceEngine;
 class KoID;
 #include "KoColorConversionTransformation.h"
 
@@ -93,19 +94,23 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
          * the graph of color conversion connection, with a red link to show the
          * path of the best color conversion.
          */
-        QString bestPathToDot(QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId) const;
+        QString bestPathToDot(const QString& srcKey, const QString& dstKey) const;
     public:
         /**
          * @return true if there is a path between two color spaces
          */
-        bool existsPath( QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId ) const;
+        bool existsPath( const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName ) const;
         /**
          * @return true if there is a good path between two color spaces
          */
-        bool existsGoodPath( QString srcModelId, QString srcDepthId, QString dstModelId, QString dstDepthId ) const;
+        bool existsGoodPath( const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName ) const;
     private:
         QString vertexToDot(Vertex* v, QString options) const;
     private:
+        /**
+         * Insert an engine.
+         */
+        Node* insertEngine(const KoColorSpaceEngine* engine );
         KoColorConversionTransformation* createTransformationFromPath(const Path* path, const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
         /**
          * Query the registry to get the color space associated with this
@@ -113,15 +118,27 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
          */
         const KoColorSpace* defaultColorSpaceForNode(const Node* node) const;
         /**
+         * Create a new node
+         */
+        Node* createNode( const QString& _modelId, const QString& _depthId, const QString& _profileName );
+        /**
+         * Initialise a node for ICC color spaces
+         */
+        void connectToEngine( Node* _node, Node* _engine  );
+        /**
          * @return the node corresponding to that key, or create it if needed
          */
         Node* nodeFor(const NodeKey& key);
         const Node* nodeFor(const NodeKey& key) const;
         /**
+         * @return the list of nodes that correspond to a given model and depth.
+         */
+        QList<Node*> nodesFor( const QString& _modelId, const QString& _depthId );
+        /**
          * @return the node associated with that key, and create it if needed
          */
-        Node* nodeFor(QString colorModelId, QString colorDepthId);
-        const Node* nodeFor(QString colorModelId, QString colorDepthId) const;
+        Node* nodeFor(const QString& colorModelId, const QString& colorDepthId, const QString& _profileName);
+        const Node* nodeFor(const QString& colorModelId, const QString& colorDepthId, const QString& _profileName) const;
         /**
          * @return the vertex between two nodes, or null if the vertex doesn't exist
          */
@@ -148,6 +165,7 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
          * @internal
          */
         inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode, bool ignoreHdr) const;
+        
     private:
         struct Private;
         Private* const d;

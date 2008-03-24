@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.bet
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.bet
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,14 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_COLOR_SPACE_CONSTANTS_H_
-#define _KO_COLOR_SPACE_CONSTANTS_H_
+#ifndef _DEBUG_PIGMENT_H_
+#define _DEBUG_PIGMENT_H_
 
-#include <climits>
-#include <qglobal.h>
+#include <kdebug.h>
 
-// TODO: find a better place or way to define those stuff
-const quint8 OPACITY_TRANSPARENT = 0;
-const quint8 OPACITY_OPAQUE = UCHAR_MAX;
+#define DBG_PIGMENT 30008
+
+#define dbgPigment kDebug(DBG_PIGMENT)
+#define dbgPigmentCCS dbgPigment
+#define dbgPigmentCSRegistry dbgPigment
+#define dbgPigmentCS dbgPigment
 
 #endif

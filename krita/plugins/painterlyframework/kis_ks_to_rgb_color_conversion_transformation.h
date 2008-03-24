@@ -90,9 +90,9 @@ class KisKSToRGBColorConversionTransformationFactory : public KoColorConversionT
 public:
     KisKSToRGBColorConversionTransformationFactory()
     : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(),
+                                              KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), "",
                                               RGBAColorModelID.id(),
-                                              Float32BitsColorDepthID.id() ) { return; }
+                                              Float32BitsColorDepthID.id(), "" ) { return; }
 
     KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
                                                                 const KoColorSpace* dstColorSpace,

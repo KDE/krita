@@ -55,7 +55,7 @@ void KoColorConversionFromAlphaTransformation::transform(const quint8 *src, quin
 
 //------ KoColorConversionFromAlphaTransformationFactory ------//
 
-KoColorConversionFromAlphaTransformationFactory::KoColorConversionFromAlphaTransformationFactory(QString _dstModelId, QString _dstDepthId) : KoColorConversionTransformationFactory( AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), _dstModelId, _dstDepthId )
+KoColorConversionFromAlphaTransformationFactory::KoColorConversionFromAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _dstProfileName) : KoColorConversionTransformationFactory( AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "", _dstModelId, _dstDepthId, _dstProfileName )
 {
 }
 
@@ -111,7 +111,8 @@ void KoColorConversionToAlphaTransformation::transform(const quint8 *src, quint8
 
 //------ KoColorConversionToAlphaTransformationFactory ------//
 
-KoColorConversionToAlphaTransformationFactory::KoColorConversionToAlphaTransformationFactory(QString _srcModelId, QString _srcDepthId) : KoColorConversionTransformationFactory( _srcModelId, _srcDepthId, AlphaColorModelID.id(), Integer8BitsColorDepthID.id())
+KoColorConversionToAlphaTransformationFactory::KoColorConversionToAlphaTransformationFactory(const QString& _srcModelId, const QString& _srcDepthId, const QString& _srcProfileName)
+    : KoColorConversionTransformationFactory( _srcModelId, _srcDepthId, _srcProfileName, AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "")
 {
 }
 

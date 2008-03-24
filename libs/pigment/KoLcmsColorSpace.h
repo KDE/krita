@@ -33,53 +33,6 @@
 
 #include "colorprofiles/KoHdrColorProfile.h"
 
-class KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
-    public:
-        KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfileContainer* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfileContainer* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
-        {
-            m_transform = this->createTransform(
-                            srcColorSpaceType,
-                            srcProfile,
-                            dstColorSpaceType,
-                            dstProfile,
-                            renderingIntent);
-        }
-        ~KoLcmsColorConversionTransformation()
-        {
-            cmsDeleteTransform( m_transform );
-        }
-    public:
-        virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
-        {
-            Q_ASSERT(m_transform);
-
-            qint32 srcPixelSize = srcColorSpace()->pixelSize();
-            qint32 dstPixelSize = dstColorSpace()->pixelSize();
-
-            cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
-
-        // Lcms does nothing to the destination alpha channel so we must convert that manually.
-            while (numPixels > 0) {
-                quint8 alpha = srcColorSpace()->alpha(src);
-                dstColorSpace()->setAlpha(dst, alpha, 1);
-
-                src += srcPixelSize;
-                dst += dstPixelSize;
-                numPixels--;
-            }
-
-        }
-    private:
-        cmsHTRANSFORM createTransform(
-                quint32 srcColorSpaceType,
-                KoLcmsColorProfileContainer *  srcProfile,
-                quint32 dstColorSpaceType,
-                KoLcmsColorProfileContainer *  dstProfile,
-                qint32 renderingIntent) const;
-    private:
-        mutable cmsHTRANSFORM m_transform;
-};
-
 class KoLcmsInfo {
     struct Private {
         DWORD cmType;  // The colorspace type as defined by littlecms
@@ -455,8 +408,7 @@ class PIGMENTCMS_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, pr
             const KoIccColorProfile* p = dynamic_cast<const KoIccColorProfile*>(profile);
             return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
         }
-        virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const;
-        virtual bool isIcc() const { return true; }
+        virtual QString colorSpaceEngine() const { return "icc"; }
         virtual bool isHdr() const { return false; }
         virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
 };

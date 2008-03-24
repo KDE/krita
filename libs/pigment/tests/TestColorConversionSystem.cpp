@@ -46,7 +46,7 @@ void TestColorConversionSystem::testConnections()
     {
         foreach( pStrStr dstCS, listModels)
         {
-            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.first, srcCS.second , dstCS.first, dstCS.second) , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.first).arg(srcCS.second).arg(dstCS.first).arg(dstCS.second).latin1() );
+            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.first, srcCS.second, "" , dstCS.first, dstCS.second, "") , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.first).arg(srcCS.second).arg(dstCS.first).arg(dstCS.second).latin1() );
         }
     }
 }
@@ -57,7 +57,7 @@ void TestColorConversionSystem::testGoodConnections()
     {
         foreach( pStrStr dstCS, listModels)
         {
-            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.first, srcCS.second , dstCS.first, dstCS.second) , QString("No good path between %1 / %2 and %3 / %4").arg(srcCS.first).arg(srcCS.second).arg(dstCS.first).arg(dstCS.second).latin1() );
+            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.first, srcCS.second, "" , dstCS.first, dstCS.second, "") , QString("No good path between %1 / %2 and %3 / %4").arg(srcCS.first).arg(srcCS.second).arg(dstCS.first).arg(dstCS.second).latin1() );
         }
     }
 }

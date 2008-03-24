@@ -59,11 +59,11 @@ public:
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const;
 
     virtual QString defaultProfile();
-    virtual bool isIcc() const;
+    virtual QString colorSpaceEngine() const;
     virtual bool isHdr() const;
     virtual int referenceDepth() const;
     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(QString _colorModelId, QString _colorDepthId) const;
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const;
     virtual bool profileIsCompatible(const KoColorProfile* profile) const;
     virtual QString defaultProfile() const;
 };

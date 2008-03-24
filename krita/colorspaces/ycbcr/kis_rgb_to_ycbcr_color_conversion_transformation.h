@@ -51,7 +51,7 @@ class KisRgbToYCbCrColorConversionTransformation : public KoColorConversionTrans
 template<typename _src_CSTraits_, typename _dst_CSTraits_>
 class KisRgbToYCbCrColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
     public:
-        KisRgbToYCbCrColorConversionTransformationFactory(QString _srcColorModelId, QString _srcDepthId, QString _dstColorModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcColorModelId,  _srcDepthId, _dstColorModelId, _dstDepthId)
+        KisRgbToYCbCrColorConversionTransformationFactory(QString _srcColorModelId, QString _srcDepthId, QString _dstColorModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcColorModelId,  _srcDepthId, "sRGB built-in - (lcms internal)", _dstColorModelId, _dstDepthId, "")
         {}
         virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
         {

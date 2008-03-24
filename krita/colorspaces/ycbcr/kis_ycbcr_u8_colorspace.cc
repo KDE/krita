@@ -51,7 +51,7 @@ QList<KoColorConversionTransformationFactory*> KisYCbCrU8ColorSpaceFactory::colo
     list.append(new KisYCbCrToRgbColorConversionTransformationFactory< YCbCrU8Traits, KoRgbTraits<quint16> >( YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id(), RGBAColorModelID.id(), Integer16BitsColorDepthID.id() ) );
     // Conversion from RGB16bit
     list.append(new KisRgbToYCbCrColorConversionTransformationFactory< KoRgbTraits<quint16>, YCbCrU8Traits >( RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id() ) );
-    list.append(new KoScaleColorConversionTransformationFactory< YCbCrU8Traits, KoYCbCrTraits<quint16> >( YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
+    list.append(new KoScaleColorConversionTransformationFactory< YCbCrU8Traits, KoYCbCrTraits<quint16> >( YCbCrAColorModelID.id(), "", Integer8BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
     return list;
 }
 

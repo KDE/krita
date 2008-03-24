@@ -29,18 +29,18 @@
 KoRgbU16ColorSpace::KoRgbU16ColorSpace( KoColorProfile *p) :
  KoLcmsColorSpace<KoRgbU16Traits>(colorSpaceId(), i18n("RGB 16-bit integer/channel)"),  TYPE_BGRA_16, icSigRgbData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Red"), 2* sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(255,0,0)));
-    addChannel(new KoChannelInfo(i18n("Green"), 1* sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,255,0)));
-    addChannel(new KoChannelInfo(i18n("Blue"), 0* sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 4, QColor(0,0,255)));
-    addChannel(new KoChannelInfo(i18n("Alpha"), 3* sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16));
+    addChannel(new KoChannelInfo(i18n("Red"),   2*sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(255,0,0)));
+    addChannel(new KoChannelInfo(i18n("Green"), 1*sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(0,255,0)));
+    addChannel(new KoChannelInfo(i18n("Blue"),  0*sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(0,0,255)));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 3*sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, 2));
     init();
-    
+
     addStandardCompositeOps<KoRgbU16Traits>(this);
 }
 
 bool KoRgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA8) 
+    if (independence == TO_RGBA8)
         return true;
     else
         return false;

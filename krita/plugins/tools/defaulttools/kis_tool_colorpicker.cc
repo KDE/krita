@@ -203,11 +203,12 @@ void KisToolColorPicker::displayPickedColor()
 
         for (int i = 0; i < channels.count(); ++i) {
             QString channelValueText;
+            int pos = channels[i]->pos() / channels[i]->size(); // HACK This doesn't work if the channels differ in size
 
             if (m_normaliseValues) {
-                channelValueText = i18n("%1%").arg(m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), i));
+                channelValueText = i18n("%1%").arg(m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), pos));
             } else {
-                channelValueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), i);
+                channelValueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), pos);
             }
 
             QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);

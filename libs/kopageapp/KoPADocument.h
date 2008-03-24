@@ -93,6 +93,9 @@ public:
      */
     KoPAPageBase* pageByIndex( int index, bool masterPage ) const;
 
+    /// reimplemnted
+    virtual int pageCount() const;
+
     /**
      * Get the index of the page
      *

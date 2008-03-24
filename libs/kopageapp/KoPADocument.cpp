@@ -584,4 +584,9 @@ bool KoPADocument::rulersVisible() const
 }
 
 
+int KoPADocument::pageCount() const
+{
+    return d->pages.count();
+}
+
 #include "KoPADocument.moc"

@@ -26,11 +26,16 @@ struct KisPaintInformation::Private {
     double yTilt;
     KisVector2D movement;
     double angle;
+    double rotation;
+    double tangentialPressure;
 };
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos_, double pressure_,
                         double xTilt_, double yTilt_,
-                        KisVector2D movement_)
+                        KisVector2D movement_,
+                        double rotation_,
+                        double tangentialPressure_
+)
     : d(new Private)
 {
     d->pos = pos_;
@@ -38,6 +43,8 @@ KisPaintInformation::KisPaintInformation(const QPointF & pos_, double pressure_,
     d->xTilt = xTilt_;
     d->yTilt = yTilt_;
     d->movement = movement_;
+    d->rotation = rotation_;
+    d->tangentialPressure = tangentialPressure_;
     d->angle = atan2(movement_.y(), movement_.x());
 }
 
@@ -65,6 +72,8 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
     e.setAttribute("yTilt", yTilt());
     e.setAttribute("movementX", movement().x());
     e.setAttribute("movementY", movement().y());
+    e.setAttribute("rotation", rotation());
+    e.setAttribute("tangentialPressure", tangentialPressure());
 }
 
 KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
@@ -72,11 +81,15 @@ KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
     double pointX = e.attribute("pointX","0.0").toDouble();
     double pointY = e.attribute("pointY","0.0").toDouble();
     double pressure = e.attribute("pressure","0.0").toDouble();
+    double rotation = e.attribute("rotation", "0.0").toDouble();
+    double tangentialPressure = e.attribute("tangentialPressure", "0.0").toDouble();
     double xTilt = e.attribute("xTilt","0.0").toDouble();
     double yTilt = e.attribute("yTilt","0.0").toDouble();
     double movementX = e.attribute("movementX","0.0").toDouble();
     double movementY = e.attribute("movementY","0.0").toDouble();
-    return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt, KisVector2D(movementX, movementY));
+    
+    return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt, KisVector2D(movementX, movementY),
+        rotation, tangentialPressure);
 }
 
 QPointF KisPaintInformation::pos() const
@@ -117,4 +130,14 @@ KisVector2D KisPaintInformation::movement() const
 double KisPaintInformation::angle() const
 {
     return d->angle;
+}
+
+double KisPaintInformation::rotation() const
+{
+    return d->rotation;
+}
+
+double KisPaintInformation::tangentialPressure() const
+{
+    return d->tangentialPressure;
 }

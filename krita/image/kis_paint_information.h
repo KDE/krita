@@ -29,6 +29,8 @@ class QDomElement;
 /**
  * This class keeps information that can be used in the painting process, for example by
  * brushes.
+ *
+ * XXX: Add support for rotation!
  **/
 class KRITAIMAGE_EXPORT KisPaintInformation {
 
@@ -36,7 +38,10 @@ public:
 
     KisPaintInformation(const QPointF & pos = QPointF(), double pressure = PRESSURE_DEFAULT,
                         double xTilt = 0.0, double yTilt = 0.0,
-                        KisVector2D movement = KisVector2D());
+                        KisVector2D movement = KisVector2D(),
+                        double rotation = 0.0,
+                        double tangentialPressure = 0.0
+                        );
     KisPaintInformation(const KisPaintInformation& rhs);
     void operator=(const KisPaintInformation& rhs);
     ~KisPaintInformation();
@@ -60,6 +65,12 @@ public:
     
     /// Rotation computed from the movement
     double angle() const;
+
+    /// rotation as given by the tablet event
+    double rotation() const;
+
+    /// tangential pressure (i.e., rate for an airbrush device)
+    double tangentialPressure() const;
     
     void toXML(QDomDocument&, QDomElement&) const;
     static KisPaintInformation fromXML(const QDomElement&);

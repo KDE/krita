@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -203,6 +204,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         case Qt::SizeHintRole: return m_d->image->size();
         case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
         case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
+        case ProgressRole: return 42; // TODO integrate with the progress report of koffice
         default:
             if (role >= int(BeginThumbnailRole))
                 return node->createThumbnail(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole));
@@ -215,15 +217,15 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 {
-    //dbgUI <<"KisNodeModel::flags" << index;
+    dbgUI <<"KisNodeModel::flags" << index;
     if (!index.isValid())
-        return  Qt::ItemIsDropEnabled;
+        return Qt::ItemIsDropEnabled;
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
-
+    dbgUI << flags << (flags & Qt::ItemIsDropEnabled);
     return flags;
 }
 
@@ -307,12 +309,6 @@ QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 
 bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 {
-    Q_UNUSED( data );
-    Q_UNUSED( row );
-    Q_UNUSED( column );
-    Q_UNUSED( parent );
-
-// TODO: manage the drop
     ////dbgUI <<"KisNodeModel::dropMimeData";
     dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
     if(! data->hasFormat( "application/x-kritalayermodeldatalist" ))
@@ -357,5 +353,6 @@ Qt::DropActions KisNodeModel::supportedDragActions () const
 {
   return Qt::CopyAction | Qt::MoveAction;
 }
+
 
 #include "kis_node_model.moc"

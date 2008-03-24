@@ -67,10 +67,12 @@ class KOGUIUTILS_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
         QRect iconsRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         QRect thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         QRect decorationRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        QRect progressBarRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         void drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         void drawIcons( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         void drawThumbnail( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         void drawDecoration( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        void drawProgressBar( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 };
 
 #endif

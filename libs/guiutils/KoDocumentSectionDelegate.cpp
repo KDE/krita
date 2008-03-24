@@ -1,5 +1,6 @@
 /*
   Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
+  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -29,7 +30,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPointer>
+#include <QStyle>
 #include <QStyleOptionViewItem>
+
+#include <klocale.h>
 
 class KoDocumentSectionDelegate::Private
 {
@@ -88,6 +92,7 @@ void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &
         drawIcons( p, option, index );
         drawThumbnail( p, option, index );
         drawDecoration( p, option, index );
+        drawProgressBar( p, option, index );
     }
     p->restore();
 }
@@ -381,6 +386,22 @@ QRect KoDocumentSectionDelegate::decorationRect( const QStyleOptionViewItem &opt
     }
 }
 
+QRect KoDocumentSectionDelegate::progressBarRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    if( d->view->displayMode() == View::ThumbnailMode )
+        return QRect();
+    QRect iconsRect_ = iconsRect(option, index);
+    int width = d->view->width() / 4;
+    if( d->view->displayMode() == View::DetailedMode)
+    { // In detailed mode the progress bar take 50% width on the right of the icons
+        return QRect(option.rect.width() - width - d->margin, iconsRect_.top(), width, iconsRect_.height() ) ;
+    } else {
+        // In minimal mode the progress bar take 50% width on the left of icons
+        return QRect( iconsRect_.left() - width - d->margin , iconsRect_.top(),
+                      width, iconsRect_.height() );
+    }
+}
+
 void KoDocumentSectionDelegate::drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     const QRect r = textRect( option, index ).translated( option.rect.topLeft() );
@@ -463,6 +484,31 @@ void KoDocumentSectionDelegate::drawDecoration( QPainter *p, const QStyleOptionV
     p->restore();
 }
 
+void KoDocumentSectionDelegate::drawProgressBar( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    QVariant value = index.data( KoDocumentSectionModel::ProgressRole );
+    if( !value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100) )
+    {
+        const QRect r = progressBarRect( option, index ).translated( option.rect.topLeft() );
+        p->save();
+        {
+            p->setClipRect( r );
+            QStyle* style = QApplication::style();
+            QStyleOptionProgressBarV2 opt;
+            
+            opt.minimum = 0;
+            opt.maximum = 100;
+            opt.progress = value.toInt();
+            opt.textVisible = true;
+            opt.textAlignment = Qt::AlignHCenter;
+            opt.text = i18n("%1 %", opt.progress);
+            opt.rect = r;
+            opt.orientation = Qt::Horizontal;
+            style->drawControl( QStyle::CE_ProgressBar, &opt, p, 0);
+        }
+        p->restore();
+    }
+}
 
 
 #include "KoDocumentSectionDelegate.moc"

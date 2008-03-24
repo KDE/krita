@@ -38,7 +38,8 @@ struct Schema::Private {
     QString prefix;
 };
 
-Schema::Schema(const QString & _uri, const QString & _ns) : d(new Private)
+Schema::Schema(const QString & _uri, const QString & _ns) 
+    : d(new Private)
 {
     d->uri = _uri;
     d->prefix = _ns;

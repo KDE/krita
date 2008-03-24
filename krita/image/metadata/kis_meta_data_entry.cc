@@ -67,6 +67,7 @@ QString Entry::name() const
 
 const Schema* Entry::schema() const
 {
+    Q_ASSERT(d->schema);
     return d->schema;
 }
 

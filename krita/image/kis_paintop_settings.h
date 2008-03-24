@@ -22,17 +22,21 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
-#include "kis_serializable_configuration.h"
+#include "kis_properties_configuration.h"
 
 class QWidget;
 class KoPointerEvent;
 
 /**
  * This class is used to cache the settings (and the associated widget) for a paintop
- * between two creation. There is one KisPaintOpSettings per input device (mouse, tablet,
+ * between two creations. There is one KisPaintOpSettings per input device (mouse, tablet,
  * etc...).
+ *
+ * The settings may be stored in a preset or a recorded brush stroke. Note that if your
+ * paintop's settings subclass has data that is not stored as a property, that data is not
+ * saved and restored.
  */
-class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisSerializableConfiguration {
+class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration {
 
 public:
     KisPaintOpSettings();
@@ -46,18 +50,23 @@ public:
      */
     virtual void mousePressEvent(KoPointerEvent *e);
 
-    virtual KisPaintOpSettings* clone() const = 0;
-    
     /**
-     * Call this function when the layer is changed
-     * Why is it KDE_DEPRECATED ?
+     * Clone the current settings object. Override this if your settings instance doesn't
+     * store everything as properties.
      */
-    virtual void KDE_DEPRECATED setLayer(KisLayerSP layer );
+    virtual KisPaintOpSettings* clone() const;
+
+    /**
+     * Override this function if your paintop is interested in which
+     * node is currently active.
+     */
+    virtual void setNode(KisNodeSP node );
 
     /**
      * @return a pointer to the widget displaying the settings
      */
     virtual QWidget *widget() const;
+
     /**
      * Call this function when the paint op is selected or the tool is activated
      */

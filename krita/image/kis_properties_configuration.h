@@ -31,12 +31,8 @@ class QDomDocument;
 
 
 /**
- * A KisSerializableConfiguration is the serializable representation of
- * parameters. This can subclass this class to implement
- * direct accessors to properties, but properties not in the map will
- * not be serialized.
- *
- * XXX: Use KoProperties here!
+ * KisPropertiesConfiguration is a map-based properties class that can be serialized
+ * and deserialized.
  */
 class KRITAIMAGE_EXPORT KisPropertiesConfiguration : public KisSerializableConfiguration {
 
@@ -73,12 +69,12 @@ public:
      * This function use the "Legacy" style XML in the 1.x kra file.
      */
     virtual void toXML(QDomDocument&, QDomElement&) const;
+    
     /**
      * Create a serialized version of this filter config
      * This function use the "Legacy" style XML in the 1.x kra file.
      */
     virtual QString toXML() const;
-    
     
     /**
      * Set the property with name to value.
@@ -92,8 +88,6 @@ public:
     virtual bool getProperty(const QString & name, QVariant & value) const;
 
     virtual QVariant getProperty(const QString & name) const;
-
-    
     
     int getInt(const QString & name, int def = 0) const;
     double getDouble(const QString & name, double def = 0.0) const;

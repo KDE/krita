@@ -24,9 +24,9 @@ class QDomDocument;
 #include "krita_export.h"
 
 /**
- * This is an interface for object that are serializable and unserializable.
- * It can be used together with the factory in case the type of objects is also
- * unknown at creation time.
+ * This is an interface for objects that are serializable and unserializable.
+ * It can be used together with the factory in case the type of configuration object
+ * is also unknown at creation time.
  */
 class KRITAIMAGE_EXPORT KisSerializableConfiguration {
     public:

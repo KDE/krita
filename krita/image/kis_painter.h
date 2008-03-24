@@ -336,6 +336,9 @@ public:
 
     /**
      * Paint a rectangle.
+     *
+     * XXX: port to make use of KisPaintInformation -- pressure and tilt is not actually used here.
+     *
      * @param rect the rectangle to paint.
      */
     void paintRect(const QRectF &rect,
@@ -344,12 +347,15 @@ public:
                    const double yTilt);
 
     /**
-    * Paint a rectangle.
-    * @param x x coordinate of the top-left corner
-    * @param y y coordinate of the top-left corner
-    * @param w the rectangle width
-    * @param h the rectangle height
-    */
+     * Paint a rectangle.
+     *
+     * XXX: port to make use of KisPaintInformation -- pressure and tilt is not actually used here.
+     *
+     * @param x x coordinate of the top-left corner
+     * @param y y coordinate of the top-left corner
+     * @param w the rectangle width
+     * @param h the rectangle height
+     */
     void paintRect(const double x,
                    const double y,
                    const double w,
@@ -360,6 +366,9 @@ public:
 
     /**
      * Paint the ellipse that fills the given rectangle.
+     *
+     * XXX: port to make use of KisPaintInformation -- pressure and tilt is not actually used here.
+     *
      * @param rect the rectangle containing the ellipse to paint.
      */
     void paintEllipse(const QRectF &rect,
@@ -368,12 +377,15 @@ public:
                       const double yTilt);
 
     /**
-    * Paint the ellipse that fills the given rectangle.
-    * @param x x coordinate of the top-left corner
-    * @param y y coordinate of the top-left corner
-    * @param w the rectangle width
-    * @param h the rectangle height
-    */
+     * Paint the ellipse that fills the given rectangle.
+     *
+     * XXX: port to make use of KisPaintInformation -- pressure and tilt is not actually used here.
+     *
+     * @param x x coordinate of the top-left corner
+     * @param y y coordinate of the top-left corner
+     * @param w the rectangle width
+     * @param h the rectangle height
+     */
     void paintEllipse(const double x,
                       const double y,
                       const double w,
@@ -479,6 +491,7 @@ public:
 
     /// Set the current brush stroke style
     void setStrokeStyle(StrokeStyle strokeStyle);
+    
     /// Returns the current brush stroke style
     StrokeStyle strokeStyle() const;
 

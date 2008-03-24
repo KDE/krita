@@ -18,14 +18,14 @@
 
 #include "kis_paintop_settings.h"
 
-
-#include <KoPointerEvent.h>
 #include <QWidget>
 
-#include "kis_layer.h"
+#include <KoPointerEvent.h>
+
+#include "kis_node.h"
 
 struct KisPaintOpSettings::Private {
-    KisLayerSP layer;
+    KisNodeSP node;
 };
 
 KisPaintOpSettings::KisPaintOpSettings() : d(new Private)
@@ -50,8 +50,13 @@ QWidget* KisPaintOpSettings::widget() const
     return 0;
 }
 
-void KDE_DEPRECATED KisPaintOpSettings::setLayer(KisLayerSP layer )
+void KDE_DEPRECATED KisPaintOpSettings::setNode(KisNodeSP node )
 {
-    d->layer = layer;
+    d->node = node;
 }
 
+KisPaintOpSettings* KisPaintOpSettings::clone() const
+{
+    KisPaintOpSettings * c = new KisPaintOpSettings();
+    c->fromXML(toXML());
+}

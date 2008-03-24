@@ -70,7 +70,7 @@ void KisAutoBrush::generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformat
 {
     Q_UNUSED(info);
 
-        // Generate the paint device from the mask
+    // Generate the paint device from the mask
     const KoColorSpace* cs = dst->colorSpace();
     quint32 pixelSize = cs->pixelSize();
     

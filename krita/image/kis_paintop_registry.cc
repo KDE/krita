@@ -73,6 +73,11 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
         return 0;
     }
 
+    if (settings == 0) {
+        kWarning() << "KisPaintOpSettings is null";
+        return 0;
+    }
+
     if ( !painter->bounds().isValid() && image )
         painter->setBounds( image->bounds() );
 

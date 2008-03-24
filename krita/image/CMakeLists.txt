@@ -101,6 +101,7 @@ set(kritaimage_LIB_SRCS
    kis_paintop.cc
    kis_paintop_registry.cc
    kis_paintop_settings.cpp
+   kis_paintop_preset.cpp
    kis_pattern.cc
    kis_perspective_grid.cpp
    kis_perspective_math.cpp

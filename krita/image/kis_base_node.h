@@ -61,6 +61,17 @@ public:
      * Delete this node
      */
     virtual ~KisBaseNode();
+    
+    
+    /**
+     * Return the paintdevice you can use to change pixels on. For a
+     * paint layer these will be paint pixels, for an adjustment layer or a mask
+     * the selection paint device.
+     *
+     * @return the paint device to paint on. Can be 0 if the actual
+     *         node type does not support painting.
+     */
+    virtual KisPaintDeviceSP paintDevice() const;
 
     /**
      * return the name of this node. This is the same as the

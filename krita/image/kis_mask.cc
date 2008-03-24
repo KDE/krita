@@ -84,6 +84,11 @@ KisSelectionSP KisMask::selection() const
     return m_d->selection;
 }
 
+KisPaintDeviceSP KisMask::paintDevice() const
+{
+    return m_d->selection->getOrCreatePixelSelection();
+}
+
 void KisMask::setSelection( KisSelectionSP selection )
 {
     m_d->selection = selection;

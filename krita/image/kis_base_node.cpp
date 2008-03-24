@@ -20,6 +20,7 @@
 #include <klocale.h>
 
 #include <KoProperties.h>
+#include "kis_paint_device.h"
 
 class KisBaseNode::Private
 {
@@ -54,6 +55,11 @@ KisBaseNode::KisBaseNode( const KisBaseNode & rhs )
 KisBaseNode::~KisBaseNode()
 {
     delete m_d;
+}
+
+KisPaintDeviceSP KisBaseNode::paintDevice() const
+{
+    return 0;
 }
 
 KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const

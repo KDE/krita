@@ -87,16 +87,6 @@ public:
     virtual KisPaintDeviceSP original() const;
 
     /**
-     * Return the paintdevice you can use to change pixels on. For a
-     * paint layer these will be paint pixels, for an adjustment layer
-     * the selection paint device.
-     *
-     * @return the paint device to paint on. Can be 0 if the actual
-     * layer type does not support painting.
-     */
-    virtual KisPaintDeviceSP paintDevice() const = 0;
-
-    /**
      * @return the selection associated with this layer, if there is
      * one. Otherwise, return 0;
      */

@@ -192,7 +192,7 @@ void KisPaintopBox::slotCurrentLayerChanged(KisLayerSP layer)
         {
             if(s)
             {
-                s->setLayer(layer);
+                s->setNode(layer.data());
             }
         }
     }

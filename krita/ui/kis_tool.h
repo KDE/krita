@@ -82,6 +82,7 @@ public:
     /// Convert from native (postscript points) to image pixel
     /// coordinates.
     QPointF convertToPixelCoord( KoPointerEvent *e );
+    QPointF convertToPixelCoord( const QPointF& pt );
 
     /// Convert from native (postscript points) to integer image pixel
     /// coordinates. This truncates the floating point components and

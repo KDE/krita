@@ -78,6 +78,10 @@ protected slots:
     
 private:
 
+    /**
+     * adjust a coordinates according to a KisPaintingAssitant, if available.
+     */
+    QPointF adjustPosition( const QPointF& point);
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
     
 protected:

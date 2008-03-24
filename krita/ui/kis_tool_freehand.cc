@@ -3,7 +3,7 @@
  *
  *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@
 #include "kis_boundary_painter.h"
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
+#include "kis_painting_assistant.h"
 
 #include "kis_tool_freehand_p.h"
 
@@ -107,7 +108,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     if (e->button() == Qt::LeftButton)
     {
         initPaint(e);
-        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(e),
+        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
                                                          e->pressure(), e->xTilt(), e->yTilt());
         paintAt(m_previousPaintInformation);
     }
@@ -129,7 +130,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (m_mode == PAINT) {
         QPointF pos = convertToPixelCoord(e);
 
-        KisPaintInformation info = KisPaintInformation(convertToPixelCoord(e),
+        KisPaintInformation info = KisPaintInformation( convertToPixelCoord(adjustPosition(e->point)),
                                                        e->pressure(), e->xTilt(), e->yTilt());
         if(m_smooth)
         {
@@ -458,6 +459,16 @@ void KisToolFreehand::paintOutline(const QPointF& point) {
         m_paintedOutline = true;
     }
 #endif
+}
+
+QPointF KisToolFreehand::adjustPosition( const QPointF& point)
+{
+    KisPaintingAssistant* assistant = KisPaintingAssistant::currentAssistant();
+    if( assistant )
+    {
+        return assistant->adjustPosition( point );
+    }
+    return point;
 }
 
 

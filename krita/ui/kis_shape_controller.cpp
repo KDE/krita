@@ -275,7 +275,6 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 
 void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
 {
-    Q_ASSERT(parentNode);
     if (!parentNode) return;
     
     KisNodeSP node = parentNode->at( index );

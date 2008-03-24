@@ -150,6 +150,14 @@ QPointF KisTool::convertToPixelCoord( KoPointerEvent *e )
     return image()->documentToPixel(e->point);
 }
 
+QPointF KisTool::convertToPixelCoord( const QPointF& pt )
+{
+    if (!image())
+        return pt;
+
+    return image()->documentToPixel(pt);
+}
+
 QPoint KisTool::convertToIntPixelCoord( KoPointerEvent *e )
 {
     if (!image())

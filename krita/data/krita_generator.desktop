@@ -5,7 +5,7 @@ Comment=Layer data Generator plugin for Krita
 Comment[el]=Πρόσθετο δημιουργίας δεδομένων στρώματος για το Krita
 Comment[it]=Plugin generatore di dati dei livelli di Krita
 Comment[pt]='Plugin' de geração de dados para camadas no Krita
-Comment[pt_BR]='Plugin' de geração de dados para camadas no Krita
+Comment[pt_BR]=Plugin de geração de dados para camadas no Krita
 Comment[uk]=Втулок створення даних шарів для Krita
 Comment[zh_TW]=Krita 的層次資料產生器外掛程式
 [PropertyDef::X-Krita-Version]

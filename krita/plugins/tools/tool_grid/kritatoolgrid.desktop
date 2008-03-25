@@ -8,6 +8,7 @@ Name[pt_BR]=Grade
 Name[sv]=Rutnät
 Name[tr]=Izgara
 Name[uk]=Ґратка
+Name[x-test]=xxGridxx
 Name[zh_TW]=格線
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service

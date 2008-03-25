@@ -8,6 +8,7 @@ Name[pt_BR]=Plugin de Variáveis de Texto
 Name[sv]=Textvariabler
 Name[tr]=Metin Değişkeni Eklentisi
 Name[uk]=Втулок текстової змінної
+Name[x-test]=xxText Variable Pluginxx
 Name[zh_TW]=文字變數外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-Variable
@@ -19,6 +20,7 @@ Comment[pt]=Um 'plugin' que contém variáveis de texto
 Comment[pt_BR]=Um plugin que contém variáveis de texto
 Comment[sv]=Ett insticksprogram som innehåller textvariabler
 Comment[uk]=Втулок, що містить текстові змінні
+Comment[x-test]=xxA plugin that contains text variablesxx
 Comment[zh_TW]=包含文字變數外掛程式
 [PropertyDef::X-KoText-MinVersion]
 Type=int

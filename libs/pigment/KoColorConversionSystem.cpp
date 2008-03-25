@@ -146,6 +146,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
             if( csf->colorSpaceEngine() != "")
             {
                 KoColorSpaceEngine* engine = KoColorSpaceEngineRegistry::instance()->get( csf->colorSpaceEngine() );
+                Q_ASSERT(engine);
                 NodeKey engineKey( engine->id(), engine->id(), engine->id() );
                 Node* engineNode = 0;
                 if( d->graph.contains(engineKey) )

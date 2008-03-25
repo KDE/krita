@@ -29,8 +29,6 @@ class QDomElement;
 /**
  * This class keeps information that can be used in the painting process, for example by
  * brushes.
- *
- * XXX: Add support for rotation!
  **/
 class KRITAIMAGE_EXPORT KisPaintInformation {
 

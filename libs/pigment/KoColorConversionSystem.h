@@ -125,6 +125,7 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
          * Initialise a node for ICC color spaces
          */
         void connectToEngine( Node* _node, Node* _engine  );
+        const Node* nodeFor( const KoColorSpace*) const;
         /**
          * @return the node corresponding to that key, or create it if needed
          */

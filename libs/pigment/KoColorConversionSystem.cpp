@@ -207,6 +207,13 @@ KoColorConversionSystem::Node* KoColorConversionSystem::createNode( const QStrin
     return n;
 }
 
+const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor( const KoColorSpace* _colorSpace) const
+{
+    const KoColorProfile* profile = _colorSpace->profile();
+    return nodeFor( _colorSpace->colorModelId().id(), _colorSpace->colorDepthId().id(),
+                    profile ? profile->name() : "" );
+}
+
 const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const QString& _colorModelId, const QString& _colorDepthId, const QString& _profileName) const 
 {
     dbgPigmentCCS << "Look for node: " << _colorModelId << " " << _colorDepthId << " " << _profileName;
@@ -249,8 +256,8 @@ QList<KoColorConversionSystem::Node*> KoColorConversionSystem::nodesFor( const Q
 KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
 {
     Path* path = findBestPath(
-           nodeFor( srcColorSpace->colorModelId().id(), srcColorSpace->colorDepthId().id(), srcColorSpace->profile()->name() ),
-           nodeFor( dstColorSpace->colorModelId().id(), dstColorSpace->colorDepthId().id(), dstColorSpace->profile()->name() ) );
+           nodeFor( srcColorSpace ),
+           nodeFor( dstColorSpace ));
     Q_ASSERT(path);
     KoColorConversionTransformation* transfo = createTransformationFromPath(path, srcColorSpace, dstColorSpace, renderingIntent);
     delete path;

@@ -99,14 +99,14 @@ int main(int argc, char** argv)
         QTextStream out(&file);
         out << dot;
     }
-    else if (outputType == "ps") {
+    else if (outputType == "ps" or outputType == "svg" ) {
         QTemporaryFile file;
         if (!file.open()) {
             exit(EXIT_FAILURE);
         }
         QTextStream out(&file);
         out << dot;
-        QString cmd = QString("dot -Tps %1 -o %2").arg(file.fileName()).arg(outputFileName);
+        QString cmd = QString("dot -T%1 %2 -o %3").arg(outputType).arg(file.fileName()).arg(outputFileName);
         file.close();
 
         if (QProcess::execute(cmd) != 0)

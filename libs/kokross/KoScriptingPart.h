@@ -67,7 +67,7 @@ class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin
         * a scripting file and execute it.
         * \return true if the user did choose a file and the file got executed successful.
         */
-        static bool showExecuteScriptFile();
+	bool showExecuteScriptFile();
 
     protected Q_SLOTS:
 

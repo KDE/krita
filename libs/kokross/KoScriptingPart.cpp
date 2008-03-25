@@ -156,7 +156,18 @@ bool KoScriptingPart::showExecuteScriptFile()
     filedialog->setCaption( i18n("Execute Script File") );
     filedialog->setOperationMode( KFileDialog::Opening );
     filedialog->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
-    return filedialog->exec() ? Kross::Manager::self().executeScriptFile( filedialog->selectedUrl().path() ) : false;
+    if (filedialog->exec()) {
+        Kross::Action action(this, "Execute Script File");
+        action.addObject(d->module);
+
+        action.setFile(filedialog->selectedUrl().path());
+        action.trigger();
+
+        return true;
+    }
+
+    return false;
+
 }
 
 void addMenu(QMenu* menu, Kross::ActionCollection* collection)

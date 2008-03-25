@@ -237,12 +237,6 @@ target_link_libraries(KisColorspaceConvertVisitorTest  ${KDE4_KDEUI_LIBS} komain
 
 ########### next target ###############
 
-set(kis_complex_color_test_SRCS kis_complex_color_test.cpp )
-kde4_add_unit_test(KisComplexColorTest TESTNAME krita-image-KisComplexColorTest ${kis_complex_color_test_SRCS})
-target_link_libraries(KisComplexColorTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_convolution_painter_test_SRCS kis_convolution_painter_test.cpp )
 kde4_add_unit_test(KisConvolutionPainterTest TESTNAME krita-image-KisConvolutionPainterTest ${kis_convolution_painter_test_SRCS})
 target_link_libraries(KisConvolutionPainterTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})

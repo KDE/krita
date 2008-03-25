@@ -35,7 +35,6 @@ class KisBrush;
 class KoAbstractGradient;
 class KisPattern;
 class KoResource;
-class KisComplexColor;
 class KoCanvasBase;
 
 /**
@@ -65,7 +64,6 @@ public:
         CurrentPaintop,
         CurrentPaintopSettings,
         CurrentKritaLayer,
-        CurrentComplexColor,
         CurrentDisplayProfile,
         CurrentImage
     };
@@ -95,8 +93,6 @@ public:
     const KisPaintOpSettings *currentPaintopSettings() const;
 
     KisLayerSP currentLayer() const;
-
-    KisComplexColor *currentComplexColor() const;
 
     void resetDisplayProfile();
     const KoColorProfile * currentDisplayProfile() const;
@@ -142,7 +138,6 @@ private:
     KisView2 * m_view;
     KoCanvasResourceProvider * m_resourceProvider;
     KisBrush * m_defaultBrush;
-    KisComplexColor *m_defaultComplex;
     const KoColorProfile * m_displayProfile;
 
 };

@@ -43,9 +43,9 @@
 
 #include <KoColorSpace.h>
 #include <KoColor.h>
+#include <KoCompositeOp.h>
 
 #include "kis_brush.h"
-#include "kis_complex_color.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "filter/kis_filter.h"
@@ -81,7 +81,6 @@ struct KisPainter::Private {
     KoColor backgroundColor;
     KoColor fillColor;
     KisPaintLayer *sourceLayer;
-    KisComplexColor *complexColor;
     FillStyle fillStyle;
     StrokeStyle strokeStyle;
     bool antiAliasPolygonFill;
@@ -134,7 +133,6 @@ void KisPainter::init()
     d->opacity = OPACITY_OPAQUE;
     d->dab = 0;
     d->sourceLayer = 0;
-    d->complexColor = 0;
     d->fillStyle = FillStyleNone;
     d->strokeStyle = StrokeStyleBrush;
     d->pressure = PRESSURE_MIN;
@@ -286,7 +284,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     QRect srcRect = QRect(sx, sy, sw, sh);
 
     srcRect &= srcdev->extent();
-    
+
     if (srcRect.isEmpty()) {
         return;
     }
@@ -417,7 +415,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     if (selMask.isNull()) return;
 
     if (d->device.isNull()) return;
-        
+
     if (selMask->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
         return;
     }
@@ -445,7 +443,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx,sy);
     KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(dx,dy);
     KisRandomConstAccessorPixel maskIt = selMask->createRandomConstAccessor(dx,dy);
-    
+
     while (rowsRemaining > 0) {
 
         qint32 dstX = dx;
@@ -454,7 +452,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
         qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX + sw - 1);
         qint32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
         qint32 numContiguousSelRows = selMask->numContiguousRows(srcY, srcX, srcX + sw - 1);
-        
+
         qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
         rows = qMin(rows, numContiguousSelRows);
         rows = qMin(rows, rowsRemaining);
@@ -464,7 +462,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
             qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
             qint32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
             qint32 numContiguousSelColumns = selMask->numContiguousColumns(srcX, srcY, srcY + rows - 1);
-            
+
             qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
             columns = qMin(columns, numContiguousSelColumns);
             columns = qMin(columns, columnsRemaining);
@@ -480,7 +478,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
             qint32 maskRowStride = selMask->rowStride(dstX, dstY);
             maskIt.moveTo(dstX, dstY);
             const quint8 *maskData = maskIt.rawData();
-            
+
             d->colorSpace->bitBlt(dstData,
                                  dstRowStride,
                                  srcCs,
@@ -514,7 +512,7 @@ double KisPainter::paintLine(const KisPaintInformation &pi1,
     if (!d->device) return 0;
     if (!d->paintOp) return 0;
     if (!d->brush) return 0;
-    
+
     return d->paintOp->paintLine(pi1, pi2, savedDist);
 }
 
@@ -881,9 +879,6 @@ KoColor KisPainter::backgroundColor() const { return d->backgroundColor; }
 
 void KisPainter::setFillColor(const KoColor& color) { d->fillColor = color; }
 KoColor KisPainter::fillColor() const { return d->fillColor; }
-
-void KisPainter::setComplexColor(KisComplexColor *color) { d->complexColor = color; }
-KisComplexColor *KisPainter::complexColor() { return d->complexColor; }
 
 void KisPainter::setFillStyle(FillStyle fillStyle) { d->fillStyle = fillStyle; }
 

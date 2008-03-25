@@ -41,7 +41,6 @@
 // Krita/image
 #include <kis_action_recorder.h>
 #include <kis_brush.h>
-#include <kis_complex_color.h>
 #include <kis_fill_painter.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
@@ -87,9 +86,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 //  		return;
 
     if (!currentBrush())
-        return;
-
-    if (!currentComplexColor())
         return;
 
     if (!currentLayer())
@@ -164,7 +160,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             double normVec = 0.5 * norm(dragVec);
             QPointF control1 = m_previousPaintInformation.pos() + m_previousTangent * normVec;
             QPointF control2 = info.pos() - newTangent * normVec;
-            
+
             paintBezierCurve(m_previousPaintInformation,
                              control1,
                              control2,
@@ -253,7 +249,6 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_painter->setPaintColor(currentFgColor());
     m_painter->setBackgroundColor(currentBgColor());
     m_painter->setBrush(currentBrush());
-    m_painter->setComplexColor(currentComplexColor());
     m_painter->setGradient( currentGradient() );
 
     // if you're drawing on a temporary layer, the layer already sets this

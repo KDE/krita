@@ -88,11 +88,11 @@ template< typename _TYPE_, int _N_ >
 class KisKSToRGBColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
 
 public:
-    KisKSToRGBColorConversionTransformationFactory()
+    KisKSToRGBColorConversionTransformationFactory(QString srcProfile)
     : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), "",
+                                              KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), srcProfile,
                                               RGBAColorModelID.id(),
-                                              Float32BitsColorDepthID.id(), "" ) { return; }
+                                              Float32BitsColorDepthID.id(), "sRGB built-in - (lcms internal)" ) { }
 
     KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
                                                                 const KoColorSpace* dstColorSpace,

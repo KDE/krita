@@ -25,7 +25,6 @@
 #include "mixercanvas.h"
 #include "mixertool.h"
 
-#include <kis_complex_color.h>
 #include <kis_paintop.h>
 #include <kis_resource_provider.h>
 #include <kis_view2.h>
@@ -118,7 +117,6 @@ void KisPainterlyMixer::loadColors()
 void KisPainterlyMixer::slotChangeColor(int index)
 {
     m_resources->setFGColor(m_vColors[index]);
-    m_resources->currentComplexColor()->fromKoColor(m_vColors[index]);
 }
 
 #include "kis_painterlymixer.moc"

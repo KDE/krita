@@ -121,14 +121,14 @@ KisKSColorSpace<_TYPE_,_N_>::KisKSColorSpace(KoColorProfile *p)
 
     for (int i = 0; i < 2*_N_; i+=2) {
         parent::addChannel( new KoChannelInfo( i18n("Absorption"),
-                                               i+0 * channelSize,
+                                               (i+0) * channelSize,
                                                KoChannelInfo::COLOR,
                                                channelValueType,
                                                channelSize,
                                                QColor(0,0,255) ) );
 
         parent::addChannel( new KoChannelInfo( i18n("Scattering"),
-                                               i+1 * channelSize,
+                                               (i+1) * channelSize,
                                                KoChannelInfo::COLOR,
                                                channelValueType,
                                                channelSize,
@@ -210,7 +210,7 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
         bool userVisible() const { return _N_>=3; }
 
         virtual int referenceDepth() const { return sizeof(_TYPE_)*8; }
-        virtual QString colorSpaceEngine() const { return ""; }
+        virtual QString colorSpaceEngine() const { return QString("ks%1").arg(_N_); }
         virtual bool isHdr() const { return false; }
 
         bool profileIsCompatible(const KoColorProfile *profile) const

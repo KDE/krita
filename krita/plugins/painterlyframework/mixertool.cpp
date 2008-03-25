@@ -22,7 +22,6 @@
 
 #include "mixercanvas.h"
 
-#include <kis_complex_color.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
 #include <kis_resource_provider.h>
@@ -63,7 +62,6 @@ void MixerTool::initPaint(KoPointerEvent *e) {
 void MixerTool::endPaint() {
 
     KisToolFreehand::endPaint();
-    m_resources->setFGColor(m_resources->currentComplexColor()->simpleColor());
 
 }
 

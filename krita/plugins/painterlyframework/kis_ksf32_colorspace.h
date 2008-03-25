@@ -20,8 +20,8 @@
 #ifndef KIS_KSF32_COLORSPACE_H_
 #define KIS_KSF32_COLORSPACE_H_
 
-#include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
+#include "kis_illuminant_profile.h"
 
 #include "kis_rgb_to_ks_color_conversion_transformation.h"
 #include "kis_ks_to_rgb_color_conversion_transformation.h"
@@ -54,13 +54,21 @@ class KisKSF32ColorSpaceFactory : public KisKSColorSpaceFactory<float,_N_>
             QList<KoColorConversionTransformationFactory*> list;
 
             // RGB to KS and vice versa
-            list.append(new KisRGBToKSColorConversionTransformationFactory<float,_N_>);
-            list.append(new KisKSToRGBColorConversionTransformationFactory<float,_N_>);
-
+            KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
+            QString csid = KisKSF32ColorSpace<_N_>::ColorSpaceId().id();
+            foreach(const KoColorProfile *p, f->profilesFor(csid)) {
+                list.append(new KisRGBToKSColorConversionTransformationFactory<float,_N_>(p->name()));
+                list.append(new KisKSToRGBColorConversionTransformationFactory<float,_N_>(p->name()));
+            }
+/*
             #ifdef HAVE_OPENEXR
+            // From F16
             list.append(new KisKSToKSColorConversionTransformationFactory<half,float,_N_>);
             #endif
 
+            // Self to self (profile change)
+            list.append(new KisKSToKSColorConversionTransformationFactory<float,float,_N_>);
+*/
             return list;
         }
 

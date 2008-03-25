@@ -33,7 +33,6 @@ class KoCanvasBase;
 class KisBrush;
 class KisPattern;
 class KoAbstractGradient;
-class KisComplexColor;
 class KisPaintOpSettings;
 
 /// Definitions of the toolgroups of Krita
@@ -60,22 +59,22 @@ public:
 public slots:
 
     virtual void activate(bool temporary = false);
-    
+
     virtual void deactivate();
-    
+
     virtual void resourceChanged( int key, const QVariant & res );
 
 public:
 
     /// reimplemented from superclass
     virtual void mousePressEvent( KoPointerEvent *event );
-    
+
     /// reimplemented from superclass
     virtual void mouseMoveEvent( KoPointerEvent *event );
-    
+
     /// reimplemented from superclass
     virtual void mouseReleaseEvent( KoPointerEvent *event );
-    
+
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent( KoPointerEvent *) {} // when a krita tool is enabled, don't push double click on
 
@@ -117,7 +116,7 @@ protected:
 
     /// Call this to set the document modified
     void notifyModified() const;
-    
+
     KisImageSP currentImage();
     KisBrush* currentBrush();
     KisPattern* currentPattern();
@@ -125,7 +124,6 @@ protected:
     KisLayerSP currentLayer();
     KoColor currentFgColor();
     KoColor currentBgColor();
-	KisComplexColor * currentComplexColor();
     QString currentPaintOp();
     KisPaintOpSettings * currentPaintOpSettings();
 

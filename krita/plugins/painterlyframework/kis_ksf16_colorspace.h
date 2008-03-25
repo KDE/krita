@@ -56,12 +56,19 @@ class KisKSF16ColorSpaceFactory : public KisKSColorSpaceFactory<half,_N_>
             QList<KoColorConversionTransformationFactory*> list;
 
             // RGB to KS and vice versa
-            list.append(new KisRGBToKSColorConversionTransformationFactory<half,_N_>);
-            list.append(new KisKSToRGBColorConversionTransformationFactory<half,_N_>);
-
+            KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
+            QString csid = KisKSF16ColorSpace<_N_>::ColorSpaceId().id();
+            foreach(const KoColorProfile *p, f->profilesFor(csid)) {
+                list.append(new KisRGBToKSColorConversionTransformationFactory<half,_N_>(p->name()));
+                list.append(new KisKSToRGBColorConversionTransformationFactory<half,_N_>(p->name()));
+            }
+/*
             // From F32
             list.append(new KisKSToKSColorConversionTransformationFactory<float,half,_N_>);
 
+            // Self to self (profile change)
+            list.append(new KisKSToKSColorConversionTransformationFactory<half,half,_N_>);
+*/
             return list;
         }
 

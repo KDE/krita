@@ -95,7 +95,6 @@ void MixerCanvas::setResources(KisResourceProvider *rp)
     internal->setResource(KisResourceProvider::CurrentBrush, rp->currentBrush());
     internal->setResource(KisResourceProvider::CurrentPattern, rp->currentPattern());
     internal->setResource(KisResourceProvider::CurrentGradient, rp->currentGradient());
-    internal->setResource(KisResourceProvider::CurrentComplexColor, rp->currentComplexColor());
 
     internal->setResource(KisResourceProvider::CurrentKritaLayer, rp->currentLayer().data());
     internal->setResource(KisResourceProvider::HdrExposure, rp->HDRExposure());

@@ -34,7 +34,6 @@
 #include "kis_mask_shape.h"
 #include "kis_shape_layer.h"
 
-#include <kis_complex_color.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_group_layer.h>
@@ -63,7 +62,6 @@ struct KisTool::Private {
     KoAbstractGradient * currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KisComplexColor * currentComplexColor;
     QString currentPaintOp;
     KisPaintOpSettings * currentPaintOpSettings;
     KisLayerSP currentLayer;
@@ -92,7 +90,6 @@ void KisTool::activate(bool )
     d->currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentBrush ).value<void *>() );
     d->currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPattern).value<void *>() );
     d->currentGradient = static_cast<KoAbstractGradient *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentGradient ).value<void *>() );
-    d->currentComplexColor = static_cast<KisComplexColor *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentComplexColor ).value<void *>() );
     d->currentPaintOp = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintop ).value<KoID >().id();
     d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentPaintopSettings ).value<void *>() );
     if( d->currentPaintOpSettings )
@@ -300,11 +297,6 @@ KoColor KisTool::currentFgColor()
 KoColor KisTool::currentBgColor()
 {
     return d->currentBgColor;
-}
-
-KisComplexColor * KisTool::currentComplexColor()
-{
-    return d->currentComplexColor;
 }
 
 KisImageSP KisTool::currentImage()

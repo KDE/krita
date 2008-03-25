@@ -29,7 +29,7 @@
 /**
  * This is an empty shell that needs to be "specialized" for each possible
  * numerical type (quint8, quint16...).
- * 
+ *
  * It needs to defines some static constant fields :
  * - zeroValue : the zero for this numerical type
  * - unitValue : the maximum value of the normal dynamic range
@@ -37,7 +37,7 @@
  * - min : the minimum value
  * - epsilon : a value close to zero but different of zero
  * - bits : the bit depth
- * 
+ *
  * And some types :
  * - compositetype the type used for composite operations (usually one with
  *   a higher bit depth)
@@ -102,7 +102,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint32> {
 #include <config-openexr.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
-                 
+
 template<>
 class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<half> {
     public:
@@ -147,7 +147,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<double> {
  * This class defines some elementary operations used by various color
  * space. It's intended to be generic, but some specialization exists
  * either for optimization or just for being buildable.
- * 
+ *
  * @param _T some numerical type with an existing trait
  * @param _Tdst some other numerical type with an existing trait, it is
  *              only needed if different of _T
@@ -157,7 +157,7 @@ class KoColorSpaceMaths {
     typedef KoColorSpaceMathsTraits<_T> traits;
     typedef typename traits::compositetype traits_compositetype;
     public:
-        inline static traits_compositetype multiply(traits_compositetype a, 
+        inline static traits_compositetype multiply(traits_compositetype a,
             typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b)
         {
             return ((traits_compositetype)a * b ) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
@@ -316,6 +316,12 @@ template<>
 inline half KoColorSpaceMaths<quint16,half>::scaleToA(quint16 a)
 {
     return a * ( 1.0 / 0xFFFF );
+}
+
+template<>
+inline half KoColorSpaceMaths<half,half>::scaleToA(half a)
+{
+    return a;
 }
 
 template<>

@@ -43,7 +43,6 @@ class KoCompositeOp;
 
 class KisTransaction;
 class KisBrush;
-class KisComplexColor;
 class KisPattern;
 class KisPaintOp;
 class KisPaintInformation;
@@ -456,10 +455,6 @@ public:
     void setFillColor(const KoColor& color);
     // Returns the current fill color
     KoColor fillColor() const;
-
-    // XXX
-    void setComplexColor(KisComplexColor *color);
-    KisComplexColor *complexColor() ;
 
     /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {

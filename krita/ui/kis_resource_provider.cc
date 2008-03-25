@@ -21,6 +21,7 @@
 #include <QPainter>
 
 #include <KoCanvasBase.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoID.h>
 #include "colorprofiles/KoIccColorProfile.h"
 
@@ -35,7 +36,6 @@
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "kis_canvas2.h"
-#include "kis_complex_color.h"
 
 KisResourceProvider::KisResourceProvider(KisView2 * view )
     : m_view( view )
@@ -45,7 +45,6 @@ KisResourceProvider::KisResourceProvider(KisView2 * view )
 KisResourceProvider::~KisResourceProvider()
 {
     delete m_defaultBrush;
-    delete m_defaultComplex;
 }
 
 void KisResourceProvider::setCanvasResourceProvider( KoCanvasResourceProvider * resourceProvider )
@@ -78,11 +77,6 @@ void KisResourceProvider::setCanvasResourceProvider( KoCanvasResourceProvider * 
     m_defaultBrush = new KisBrush( img );
     v = qVariantFromValue( static_cast<void *>( m_defaultBrush ) );
     m_resourceProvider->setResource( CurrentBrush, v );
-
-    m_defaultComplex = new KisComplexColor(m_view->image()->colorSpace());
-    v = qVariantFromValue( static_cast<void *>( m_defaultComplex ));
-    m_resourceProvider->setResource(CurrentComplexColor, v );
-
 
     resetDisplayProfile();
 }
@@ -151,11 +145,6 @@ const KisPaintOpSettings * KisResourceProvider::currentPaintopSettings() const
 KisLayerSP KisResourceProvider::currentLayer() const
 {
     return m_resourceProvider->resource( CurrentKritaLayer ).value<KisLayerSP>();
-}
-
-KisComplexColor * KisResourceProvider::currentComplexColor() const
-{
-	return static_cast<KisComplexColor *>(m_resourceProvider->resource( CurrentComplexColor ).value<void *>());
 }
 
 void KisResourceProvider::resetDisplayProfile()

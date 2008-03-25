@@ -124,7 +124,7 @@ void MixerCanvas::checkCurrentPaintop()
                           &painter, 0);
     painter.setPaintOp(current); // This is done just for the painter to own the paintop and destroy it
 
-    if (!current->painterly())
+    if (current && !current->painterly())
         internal->setResource(KisResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
 }
 

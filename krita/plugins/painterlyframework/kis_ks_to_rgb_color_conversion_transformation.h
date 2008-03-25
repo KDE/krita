@@ -92,7 +92,7 @@ public:
     : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
                                               KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), srcProfile,
                                               RGBAColorModelID.id(),
-                                              Float32BitsColorDepthID.id(), "sRGB built-in - (lcms internal)" ) { }
+                                              Float32BitsColorDepthID.id(), "lcms virtual RGB profile - Rec. 709 Linear" ) { }
 
     KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
                                                                 const KoColorSpace* dstColorSpace,

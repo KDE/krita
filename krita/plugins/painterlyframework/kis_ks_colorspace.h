@@ -210,7 +210,7 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
         bool userVisible() const { return _N_>=3; }
 
         virtual int referenceDepth() const { return sizeof(_TYPE_)*8; }
-        virtual QString colorSpaceEngine() const { return "ks"; }
+        virtual QString colorSpaceEngine() const { return ""; }
         virtual bool isHdr() const { return false; }
 
         bool profileIsCompatible(const KoColorProfile *profile) const

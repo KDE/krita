@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -115,6 +115,20 @@ void KoPathPoint::setControlPoint2( const QPointF & point )
 { 
     d->controlPoint2 = point; 
     d->properties |= HasControlPoint2; 
+    if( d->shape )
+        d->shape->notifyChanged();
+}
+
+void KoPathPoint::removeControlPoint1()
+{
+    d->properties &= ~HasControlPoint1;
+    if( d->shape )
+        d->shape->notifyChanged();
+}
+
+void KoPathPoint::removeControlPoint2()
+{
+    d->properties &= ~HasControlPoint2;
     if( d->shape )
         d->shape->notifyChanged();
 }

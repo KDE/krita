@@ -757,6 +757,7 @@ void KisView2::slotSetImageSize( qint32 w, qint32 h )
     m_d->zoomManager->zoomController()->setDocumentSize(QSizeF(image()->width() / image()->xRes(), image()->height() / image()->yRes() ));
     m_d->canvasController->setDocumentSize( QSize( int( ceil( m_d->viewConverter->documentToViewX( w / image()->xRes() ) ) ),
                                                    int( ceil( m_d->viewConverter->documentToViewY( h / image()->yRes() ) ) ) ) );
+    m_d->zoomManager->updateGUI();
 }
 
 

@@ -30,7 +30,6 @@ Regressions from 1.x
     * opening a backup file causes a crash ( krita(8568)/koffice (filter manager) 
       KoFilterManager::importDocument: Can't open  "application/zip" , trying filter chooser
       ASSERT: "mime" in file /home/boud/kde/src/koffice/libs/main/KoFilterManager.cpp, line 82)
-    * Zoom fit to page/canvas doesn't work after cropping an image Opening a backup file crashes
     * Rulers are uglier and have tab settings, which isn't relevant for Krita's layer shapes
     * deselect/reselect doesn't work and probably needs some redesign
     * the selecton undo command needs to be ported to the new structure

@@ -421,7 +421,6 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
     }
     QRect srcRect = QRect(sx, sy, sw, sh);
     srcRect &= srcdev->exactBounds();
-    srcRect &= selMask->selectedExactRect();
     if (srcRect.isEmpty()) {
         return;
     }

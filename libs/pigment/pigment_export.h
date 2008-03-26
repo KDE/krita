@@ -42,4 +42,16 @@
 
 #endif
 
+#if !defined and
+#define and &&
+#endif
+
+#if !defined or
+#define or ||
+#endif
+
+#if !defined not
+#define not !
+#endif
+
 #endif

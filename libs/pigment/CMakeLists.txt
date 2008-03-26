@@ -13,11 +13,8 @@ if(OPENEXR_FOUND)
 endif(OPENEXR_FOUND)
 
 if(MSVC)
-  add_definitions(-Dand=&& -Dor=|| -Dnot=!)
   # avoid "cannot open file 'LIBC.lib'" error
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
-else(MSVC)
-  add_definitions("-Dand=\\&\\& -Dor=\\|\\| -Dnot=\\!")
 endif(MSVC)
 
 message(STATUS ${OPENCTL_FOUND})

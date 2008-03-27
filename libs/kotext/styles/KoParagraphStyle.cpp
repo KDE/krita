@@ -1244,33 +1244,33 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
         // Padding
         } else if (key == KoParagraphStyle::LeftPadding) {
-            style.addAttributePt("fo:padding-left", leftPadding());
+            style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::RightPadding) {
-            style.addAttributePt("fo:padding-right", rightPadding());
+            style.addPropertyPt("fo:padding-right", rightPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TopPadding) {
-            style.addAttributePt("fo:padding-top", topPadding());
+            style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BottomPadding) {
-            style.addAttributePt("fo:padding-bottom", bottomPadding());
+            style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::ParagraphType);
         // Margin
         } else if (key == QTextFormat::BlockLeftMargin) {
-            style.addAttributePt("fo:margin-left", leftMargin());
+            style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockRightMargin) {
-            style.addAttributePt("fo:margin-right", rightMargin());
+            style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockTopMargin) {
-            style.addAttributePt("fo:margin-top", topMargin());
+            style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
-            style.addAttributePt("fo:margin-bottom", bottomMargin());
+            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
         // Line spacing
         } else if (key == KoParagraphStyle::MinimumLineHeight) {
-            style.addAttributePt("style:line-height-at-least", minimumLineHeight());
+            style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::LineSpacing) {
-            style.addAttributePt("style:line-spacing", lineSpacing());
+            style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::PercentLineHeight) {
             style.addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::FixedLineHeight) {
-            style.addAttributePt("fo:line-height", lineHeightAbsolute());
+            style.addPropertyPt("fo:line-height", lineHeightAbsolute(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::TextIndent) {
-            style.addAttributePt("fo:text-indent", textIndent());
+            style.addPropertyPt("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
         }
     }
     // TODO : save border information

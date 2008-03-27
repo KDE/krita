@@ -190,7 +190,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                         continue;
                     }
                     // we'll convert it to a KoParagraphStyle to check for local changes.
-                    KoParagraphStyle paragStyle = KoParagraphStyle(textFormat);
+                    KoParagraphStyle paragStyle(textFormat);
                     QString displayName = originalParagraphStyle->name();
                     QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
                     QString generatedName;
@@ -218,7 +218,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                         continue;
                     }
                     // we'll convert it to a KoCharacterStyle to check for local changes.
-                    KoCharacterStyle charStyle = KoCharacterStyle(textFormat.toCharFormat());
+                    KoCharacterStyle charStyle(textFormat.toCharFormat());
                     QString generatedName;
                     QString displayName = originalCharStyle->name();
                     QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");

@@ -523,6 +523,8 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
 
 inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode, bool ignoreHdr) const
 {
+    Q_ASSERT(srcNode);
+    Q_ASSERT(dstNode);
     if (srcNode->isGray or dstNode->isGray)
     {
         return findBestPathImpl2(srcNode, dstNode, ignoreHdr, true);

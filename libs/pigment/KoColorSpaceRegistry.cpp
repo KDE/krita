@@ -120,7 +120,13 @@ void KoColorSpaceRegistry::init()
     }
 #ifdef HAVE_OPENCTL
     // Set PigmentCMS's ctl module directory
-    OpenCTL::ModulesManager::instance()->addDirectory("/home/cyrille/kde4/inst/share/apps/pigmentcms/ctlmodules/");// TODO not good that :)
+    QStringList ctlModulesDirs = KGlobal::mainComponent().dirs()->findDirs( "data", "pigmentcms/ctlmodules/");
+    dbgPigmentCSRegistry << ctlModulesDirs;
+    foreach(QString dir, ctlModulesDirs)
+    {
+        dbgPigmentCSRegistry << "Append : " << dir << " to the list of CTL modules";
+        OpenCTL::ModulesManager::instance()->addDirectory( dir.toAscii().data());
+    }
     // Load CTL Profiles
     KGlobal::mainComponent().dirs()->addResourceType("ctl_profiles", "data", "pigmentcms/ctlprofiles/");
     QStringList ctlprofileFilenames;

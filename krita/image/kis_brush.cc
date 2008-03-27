@@ -464,8 +464,6 @@ void KisBrush::generateMask(KisPaintDeviceSP dst, ColoringInformation* src, doub
         createScaledBrushes();
     }
     
-//     double scale = scaleForPressure(info.pressure());
-
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
 
@@ -553,8 +551,6 @@ KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace, double scale, 
     if (d->scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
-
-//     double scale = scaleForPressure(info.pressure());
 
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;

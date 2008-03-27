@@ -113,6 +113,29 @@ QRect KisMask::exactBounds() const
     Q_ASSERT( m_d->selection );
     return m_d->selection->selectedExactRect();
 }
-    
+
+qint32 KisMask::x() const
+{
+    Q_ASSERT( m_d->selection );
+    return m_d->selection->x();
+}
+
+void KisMask::setX(qint32 x)
+{
+    Q_ASSERT( m_d->selection );
+    m_d->selection->setX(x);
+}
+
+qint32 KisMask::y() const
+{
+    Q_ASSERT( m_d->selection );
+    return m_d->selection->y();
+}
+
+void KisMask::setY(qint32 y)
+{
+    Q_ASSERT( m_d->selection );
+    m_d->selection->setY(y);
+}
 
 #include "kis_mask.moc"

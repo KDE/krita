@@ -28,7 +28,6 @@
 class KisSelectionMask::Private
 {
 public:
-    KisSelectionSP selection;
     KisImageWSP image;
 };
 
@@ -36,7 +35,6 @@ KisSelectionMask::KisSelectionMask( KisImageWSP image )
     : KisMask( "selection" )
     , m_d( new Private() )
 {
-    m_d->selection = new KisSelection();
     m_d->image = image;
 }
 
@@ -56,21 +54,14 @@ KisSelectionMask::KisSelectionMask( const KisSelectionMask& rhs )
     : KisMask( rhs )
     , m_d( new Private() )
 {
-    // Deep copy.
-    m_d->selection = new KisSelection( rhs.m_d->selection.data() );
-}
-
-KisSelectionSP KisSelectionMask::selection() const
-{
-    return m_d->selection;
 }
 
 void KisSelectionMask::setSelection(KisSelectionSP selection)
 {
-    m_d->selection = new KisSelection();
+    KisMask::setSelection(new KisSelection());
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisFillPainter gc(KisPaintDeviceSP(m_d->selection.data()));
+    KisFillPainter gc(KisPaintDeviceSP(this->selection().data()));
 
     if (selection) {
         gc.bitBlt(0, 0, cs->compositeOp(COMPOSITE_COPY), KisPaintDeviceSP(selection.data()),
@@ -81,61 +72,9 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
 
     gc.end();
 
-    m_d->selection->setInterestedInDirtyness(true);
+    this->selection()->setInterestedInDirtyness(true);
 
     setDirty();
-}
-
-
-qint32 KisSelectionMask::x() const
-{
-    if (m_d->selection)
-        return m_d->selection->x();
-    else
-        return 0;
-}
-
-void KisSelectionMask::setX(qint32 x)
-{
-    if (m_d->selection) {
-        m_d->selection->setX(x);
-    }
-
-}
-
-qint32 KisSelectionMask::y() const
-{
-    if (m_d->selection)
-        return m_d->selection->y();
-    else
-        return 0;
-}
-
-void KisSelectionMask::setY(qint32 y)
-{
-    if (m_d->selection) {
-        m_d->selection->setY(y);
-    }
-}
-
-QRect KisSelectionMask::extent() const
-{
-    if (m_d->selection)
-        return m_d->selection->selectedRect();
-    else if ( m_d->image )
-        return m_d->image->bounds();
-    else
-        return QRect();
-}
-
-QRect KisSelectionMask::exactBounds() const
-{
-    if (m_d->selection)
-        return m_d->selection->selectedExactRect();
-    else if (m_d->image)
-        return m_d->image->bounds();
-    else
-        return QRect();
 }
 
 KisImageSP KisSelectionMask::image() const

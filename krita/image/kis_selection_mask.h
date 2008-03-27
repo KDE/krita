@@ -55,41 +55,8 @@ public:
         return KisNodeSP(new KisSelectionMask(*this));
     }
 
-
-    KisSelectionSP selection() const;
-
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
-
-    /**
-     * overriden from KisBaseNode
-     */
-    qint32 x() const;
-
-    /**
-     * overriden from KisBaseNode
-     */
-    void setX(qint32 x);
-
-    /**
-     * overriden from KisBaseNode
-     */
-    qint32 y() const;
-
-    /**
-     * overriden from KisBaseNode
-     */
-    void setY(qint32 y);
-
-    /**
-     * overriden from KisBaseNode
-     */
-    QRect extent() const;
-
-    /**
-     * overriden from KisBaseNode
-     */
-    QRect exactBounds() const;
 
 private:
 

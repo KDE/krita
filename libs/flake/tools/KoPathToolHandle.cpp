@@ -121,7 +121,7 @@ KoInteractionStrategy * PointHandle::handleMousePress( KoPointerEvent *event )
     }
     else {
         KoPathPoint::KoPointProperties props = m_activePoint->properties();
-        if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
+        if( ! m_activePoint->activeControlPoint1() || ! m_activePoint->activeControlPoint2() )
             return 0;
 
         KoPathPointTypeCommand::PointType pointType = KoPathPointTypeCommand::Smooth;

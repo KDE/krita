@@ -50,12 +50,10 @@ public:
         Normal = 0, ///< it has no control points
         CanHaveControlPoint1 = 1, ///< it can have a control point 1
         CanHaveControlPoint2 = 2, ///< it can have a control point 2
-        HasControlPoint1 = 4, ///< it has a control point 1
-        HasControlPoint2 = 8, ///< it has a control point 2
-        StartSubpath = 16, ///< it starts a new subpath by a moveTo command
-        CloseSubpath = 32, ///< it closes a subpath
-        IsSmooth = 64, ///< it is smooth, both control points on a line through the point
-        IsSymmetric = 128 ///< it is symmetric, like smooth but control points have same distance to point
+        StartSubpath = 4, ///< it starts a new subpath by a moveTo command
+        CloseSubpath = 8, ///< it closes a subpath
+        IsSmooth = 16, ///< it is smooth, both control points on a line through the point
+        IsSymmetric = 32 ///< it is symmetric, like smooth but control points have same distance to point
     };
     Q_DECLARE_FLAGS( KoPointProperties, KoPointProperty )
 

@@ -89,13 +89,11 @@ void KoPathSegmentTypeCommand::redo()
             QPointF pointDiff = segment.second()->point() - segment.first()->point();
             segment.first()->setControlPoint2( segment.first()->point() + pointDiff / 3.0 );
             segment.second()->setControlPoint1( segment.first()->point() + pointDiff * 2.0 / 3.0 );
-            segment.first()->setProperties( segment.first()->properties() | KoPathPoint::HasControlPoint2 );
-            segment.second()->setProperties( segment.second()->properties() | KoPathPoint::HasControlPoint1 );
         }
         else
         {
-            segment.first()->setProperties( segment.first()->properties() & ~KoPathPoint::HasControlPoint2 );
-            segment.second()->setProperties( segment.second()->properties() & ~KoPathPoint::HasControlPoint1 );
+            segment.first()->removeControlPoint2();
+            segment.second()->removeControlPoint1();
         }
 
         pathShape->normalize();

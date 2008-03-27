@@ -162,14 +162,14 @@ void KoRectangleShape::updatePath( const QSizeF &size )
     QPointF curvePoints[12];
 
     m_points[cp]->setPoint( QPointF( rx, 0 ) );
-    m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
-    m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+    m_points[cp]->removeControlPoint1();
+    m_points[cp]->removeControlPoint2();
 
     if ( m_cornerRadiusX < 100 || m_cornerRadiusY == 0 )
     {
         m_points[++cp]->setPoint( QPointF( x2, 0 ) );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint1();
+        m_points[cp]->removeControlPoint2();
     }
 
     if ( rx )
@@ -178,14 +178,14 @@ void KoRectangleShape::updatePath( const QSizeF &size )
         m_points[cp]->setControlPoint2( curvePoints[0] );
         m_points[++cp]->setControlPoint1( curvePoints[1] );
         m_points[cp]->setPoint( curvePoints[2] );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint2();
     }
 
     if ( m_cornerRadiusY < 100 || m_cornerRadiusX == 0 )
     {
         m_points[++cp]->setPoint( QPointF( size.width(), y2 ) );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint1();
+        m_points[cp]->removeControlPoint2();
     }
 
     if ( rx )
@@ -194,14 +194,14 @@ void KoRectangleShape::updatePath( const QSizeF &size )
         m_points[cp]->setControlPoint2( curvePoints[0] );
         m_points[++cp]->setControlPoint1( curvePoints[1] );
         m_points[cp]->setPoint( curvePoints[2] );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint2();
     }
 
     if ( m_cornerRadiusX < 100 || m_cornerRadiusY == 0 )
     {
         m_points[++cp]->setPoint( QPointF( rx, size.height() ) );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint1();
+        m_points[cp]->removeControlPoint2();
     }
 
     if ( rx )
@@ -210,14 +210,14 @@ void KoRectangleShape::updatePath( const QSizeF &size )
         m_points[cp]->setControlPoint2( curvePoints[0] );
         m_points[++cp]->setControlPoint1( curvePoints[1] );
         m_points[cp]->setPoint( curvePoints[2] );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint2();
     }
 
     if ( m_cornerRadiusY < 100 || m_cornerRadiusX == 0 )
     {
         m_points[++cp]->setPoint( QPointF( 0, ry ) );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint1();
+        m_points[cp]->removeControlPoint2();
     }
 
     if ( rx )

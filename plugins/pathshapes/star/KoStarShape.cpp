@@ -189,8 +189,8 @@ void KoStarShape::updatePath( const QSizeF &size )
         }
         else
         {
-            m_points[index]->unsetProperty( KoPathPoint::HasControlPoint1 );
-            m_points[index]->unsetProperty( KoPathPoint::HasControlPoint2 );
+            m_points[index]->removeControlPoint1();
+            m_points[index]->removeControlPoint2();
         }
         index++;
     }

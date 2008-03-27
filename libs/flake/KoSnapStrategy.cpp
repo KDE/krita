@@ -276,14 +276,14 @@ QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QM
     /// check if it is a start point
     if( point->properties() & KoPathPoint::StartSubpath )
     {
-        if( point->properties() & KoPathPoint::HasControlPoint2 )
+        if( point->activeControlPoint2() )
         {
             return matrix.map(point->point()) - matrix.map(point->controlPoint2());
         }
         else
         {
             KoPathPoint * next = path->pointByIndex( KoPathPointIndex( index.first, index.second+1 ) );
-            if( next->properties() & KoPathPoint::HasControlPoint1 )
+            if( next->activeControlPoint1() )
                 return matrix.map(point->point()) - matrix.map(next->controlPoint1());
             else
                 return matrix.map(point->point()) - matrix.map(next->point());
@@ -291,14 +291,14 @@ QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QM
     }
     else
     {
-        if( point->properties() & KoPathPoint::HasControlPoint1 )
+        if( point->activeControlPoint1() )
         {
             return matrix.map(point->point()) - matrix.map(point->controlPoint1());
         }
         else
         {
             KoPathPoint * prev = path->pointByIndex( KoPathPointIndex( index.first, index.second-1 ) );
-            if( prev->properties() & KoPathPoint::HasControlPoint2 )
+            if( prev->activeControlPoint2() )
                 return matrix.map(point->point()) - matrix.map(prev->controlPoint2());
             else
                 return matrix.map(point->point()) - matrix.map(prev->point());

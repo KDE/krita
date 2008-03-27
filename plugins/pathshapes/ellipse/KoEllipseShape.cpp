@@ -217,19 +217,19 @@ void KoEllipseShape::updatePath( const QSizeF &size )
 
     int cp = 0;
     m_points[cp]->setPoint( startpoint );
-    m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
+    m_points[cp]->removeControlPoint1();
     for ( int i = 0; i < pointCnt; i += 3 )
     {
         m_points[cp]->setControlPoint2( curvePoints[i] );
         m_points[++cp]->setControlPoint1( curvePoints[i+1] ); 
         m_points[cp]->setPoint( curvePoints[i+2] );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint2();
     }
     if ( m_type == Pie )
     {
         m_points[++cp]->setPoint( m_center );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
-        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        m_points[cp]->removeControlPoint1();
+        m_points[cp]->removeControlPoint2();
     }
     else if ( m_type == Arc && m_startAngle == m_endAngle )
     {

@@ -459,9 +459,9 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
 
                 // check for the control points as otherwise it is no longer
                 // possible to change the control points when they are the same as the point
-                if( p->properties() & KoPathPoint::HasControlPoint1 && roi.contains( p->controlPoint1() ) )
+                if( p->activeControlPoint1() && roi.contains( p->controlPoint1() ) )
                     type = KoPathPoint::ControlPoint1;
-                else if( p->properties() & KoPathPoint::HasControlPoint2 && roi.contains( p->controlPoint2() ) )
+                else if( p->activeControlPoint2() && roi.contains( p->controlPoint2() ) )
                     type = KoPathPoint::ControlPoint2;
 
                 useCursor( m_moveCursor );

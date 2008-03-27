@@ -31,13 +31,18 @@
 
 class KoPathPoint::Private {
 public:
-    Private() : shape(0), properties(Normal), pointGroup(0) {}
+    Private() 
+        : shape(0), properties(Normal), pointGroup(0)
+        , activeControlPoint1(false), activeControlPoint2(false)
+    {}
     KoPathShape * shape;
     QPointF point;
     QPointF controlPoint1;
     QPointF controlPoint2;
     KoPointProperties properties;
     KoPointGroup * pointGroup;
+    bool activeControlPoint1;
+    bool activeControlPoint2;
 };
 
 KoPathPoint::KoPathPoint( const KoPathPoint & pathPoint )
@@ -48,6 +53,8 @@ KoPathPoint::KoPathPoint( const KoPathPoint & pathPoint )
     d->controlPoint1 = pathPoint.d->controlPoint1;
     d->controlPoint2 = pathPoint.d->controlPoint2;
     d->properties = pathPoint.d->properties;
+    d->activeControlPoint1 = pathPoint.d->activeControlPoint1;
+    d->activeControlPoint2 = pathPoint.d->activeControlPoint2;
 }
 
 KoPathPoint::KoPathPoint()
@@ -78,6 +85,8 @@ KoPathPoint& KoPathPoint::operator=( const KoPathPoint &rhs )
     d->controlPoint2 = rhs.d->controlPoint2;
     d->properties = rhs.d->properties;
     //d->pointGroup = rhs.d->pointGroup;
+    d->activeControlPoint1 = rhs.d->activeControlPoint1;
+    d->activeControlPoint2 = rhs.d->activeControlPoint2;
 
     return (*this);
 }
@@ -92,7 +101,10 @@ bool KoPathPoint::operator == ( const KoPathPoint &rhs ) const
         return false;
     if( d->properties != rhs.d->properties )
         return false;
-
+    if( d->activeControlPoint1 != rhs.d->activeControlPoint1 )
+        return false;
+    if( d->activeControlPoint2 != rhs.d->activeControlPoint2 )
+        return false;
     return true;
 }
 
@@ -104,38 +116,44 @@ void KoPathPoint::setPoint( const QPointF & point )
 }
 
 void KoPathPoint::setControlPoint1( const QPointF & point ) 
-{ 
-    d->controlPoint1 = point; 
-    d->properties |= HasControlPoint1; 
+{
+    d->controlPoint1 = point;
+    if( d->properties & CanHaveControlPoint1 )
+        d->activeControlPoint1 = true;
     if( d->shape )
         d->shape->notifyChanged();
 }
 
 void KoPathPoint::setControlPoint2( const QPointF & point ) 
-{ 
-    d->controlPoint2 = point; 
-    d->properties |= HasControlPoint2; 
+{
+    d->controlPoint2 = point;
+    if( d->properties & CanHaveControlPoint2 )
+        d->activeControlPoint2 = true;
     if( d->shape )
         d->shape->notifyChanged();
 }
 
 void KoPathPoint::removeControlPoint1()
 {
-    d->properties &= ~HasControlPoint1;
+    d->activeControlPoint1 = false;
+    d->properties &= ~IsSmooth;
+    d->properties &= ~IsSymmetric;
     if( d->shape )
         d->shape->notifyChanged();
 }
 
 void KoPathPoint::removeControlPoint2()
 {
-    d->properties &= ~HasControlPoint2;
+    d->activeControlPoint2 = false;
+    d->properties &= ~IsSmooth;
+    d->properties &= ~IsSymmetric;
     if( d->shape )
         d->shape->notifyChanged();
 }
 
 void KoPathPoint::setProperties( KoPointProperties properties ) 
 {
-    if( (properties & HasControlPoint1) == 0 || (properties & HasControlPoint2) == 0 )
+    if( ! d->activeControlPoint1 || ! d->activeControlPoint2 )
     {
         // strip smooth and symmetric flags if points has not two control points
         properties &= ~IsSmooth;
@@ -161,25 +179,17 @@ void KoPathPoint::setProperty( KoPointProperty property )
             if( d->properties & StartSubpath )
                 return;
         break;
-        case HasControlPoint1:
-            if( (d->properties & CanHaveControlPoint1) == 0 )
-                return;
-        break;
         case CanHaveControlPoint2:
             if( d->properties & CloseSubpath )
                 return;
         break;
-        case HasControlPoint2:
-            if( (d->properties & CanHaveControlPoint2) == 0 )
-                return;
-        break;
         case IsSmooth:
-            if( (d->properties & HasControlPoint1) == 0 && (d->properties & HasControlPoint2) == 0 )
+            if( ! d->activeControlPoint1 || ! d->activeControlPoint2 )
                 return;
             d->properties &= ~IsSymmetric;
         break;
         case IsSymmetric:
-            if( (d->properties & HasControlPoint1) == 0 && (d->properties & HasControlPoint2) == 0 )
+            if( ! d->activeControlPoint1 || ! d->activeControlPoint2 )
                 return;
             d->properties &= ~IsSmooth;
         break;
@@ -199,17 +209,12 @@ void KoPathPoint::unsetProperty( KoPointProperty property )
             d->properties |= CanHaveControlPoint2;
         break;
         case CanHaveControlPoint1:
-            d->properties &= ~HasControlPoint1;
+            d->activeControlPoint1 = false;
             d->properties &= ~IsSmooth;
             d->properties &= ~IsSymmetric;
         break;
         case CanHaveControlPoint2:
-            d->properties &= ~HasControlPoint2;
-            d->properties &= ~IsSmooth;
-            d->properties &= ~IsSymmetric;
-        break;
-        case HasControlPoint1:
-        case HasControlPoint2:
+            d->activeControlPoint2 = false;
             d->properties &= ~IsSmooth;
             d->properties &= ~IsSymmetric;
         break;
@@ -224,12 +229,12 @@ void KoPathPoint::unsetProperty( KoPointProperty property )
 
 bool KoPathPoint::activeControlPoint1() const
 {
-    return ( properties() & HasControlPoint1 && properties() & CanHaveControlPoint1 );
+    return d->activeControlPoint1;
 }
 
 bool KoPathPoint::activeControlPoint2() const
 {
-    return ( properties() & HasControlPoint2 && properties() & CanHaveControlPoint2 );
+    return d->activeControlPoint2;
 }
 
 void KoPathPoint::map( const QMatrix &matrix, bool mapGroup )
@@ -320,15 +325,12 @@ QRectF KoPathPoint::boundingRect( bool active ) const
 void KoPathPoint::reverse()
 {
     qSwap( d->controlPoint1, d->controlPoint2 );
+    qSwap( d->activeControlPoint1, d->activeControlPoint2 );
     KoPointProperties newProps = Normal;
     if( d->properties & CanHaveControlPoint1 )
         newProps |= CanHaveControlPoint2;
     if( d->properties & CanHaveControlPoint2 )
         newProps |= CanHaveControlPoint1;
-    if( d->properties & HasControlPoint1 )
-        newProps |= HasControlPoint2;
-    if( d->properties & HasControlPoint2 )
-        newProps |= HasControlPoint1;
     newProps |= d->properties & IsSmooth;
     newProps |= d->properties & IsSymmetric;
     newProps |= d->properties & StartSubpath;

@@ -40,7 +40,7 @@
 #include "kis_imagepipe_brush.h"
 
 #include "kis_resource_mediator.h"
-#include "kis_resourceserverprovider.h"
+#include "kis_resource_server_provider.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 

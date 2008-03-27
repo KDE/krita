@@ -852,7 +852,7 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
                     break;
             }
         } else if (key == QTextFormat::FontPointSize) {
-            style.addAttributePt("fo:font-size", fontPointSize());
+            style.addPropertyPt("fo:font-size", fontPointSize(), KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

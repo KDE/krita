@@ -25,7 +25,7 @@
 
 class QButtonGroup;
 class KisPaintOp;
-class KisResourceProvider;
+class KisCanvasResourceProvider;
 class KisView2;
 class KoColor;
 class KoColorSpace;
@@ -57,7 +57,7 @@ private:
     QButtonGroup *m_bgColors;
     QList<KoColor> m_vColors;
 
-    KisResourceProvider *m_resources;
+    KisCanvasResourceProvider *m_resources;
 
     const KoColorSpace *m_colorspace;
 };

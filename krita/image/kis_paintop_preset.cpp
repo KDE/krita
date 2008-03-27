@@ -32,7 +32,7 @@
 #include "kis_image.h"
 
 struct KisPaintOpPreset::Private {
-    KisPaintOpSettings settings;
+    KisPaintOpSettingsSP settings;
     QImage img;
 };
 
@@ -54,6 +54,16 @@ KisPaintOpPreset::~KisPaintOpPreset()
     delete m_d;
 }
 
+KoID KisPaintOpPreset::paintOp()
+{
+    return KoID(m_d->settings->getString("paintop"), name());
+}
+
+KisPaintOpSettingsSP KisPaintOpPreset::settings()
+{
+    return m_d->settings;
+}
+
 bool KisPaintOpPreset::load()
 {
     if (filename().isEmpty())
@@ -61,11 +71,11 @@ bool KisPaintOpPreset::load()
         
     QFile f(filename());
     f.open(QIODevice::ReadOnly);
-    m_d->settings.fromXML(QString(f.readAll()));
+    m_d->settings->fromXML(QString(f.readAll()));
     f.close();
     return true;
 
-    setName(m_d->settings.getString("name"));
+    setName(m_d->settings->getString("name"));
 }
 
 bool KisPaintOpPreset::save()
@@ -75,7 +85,7 @@ bool KisPaintOpPreset::save()
         
     QFile f(filename());
     f.open( QIODevice::WriteOnly );
-    f.write( m_d->settings.toXML().toUtf8() );
+    f.write( m_d->settings->toXML().toUtf8() );
     f.close();
     return true;
 }
@@ -87,12 +97,12 @@ QImage KisPaintOpPreset::img() const
 
 void KisPaintOpPreset::updateImg()
 {
-    Q_ASSERT(!m_d->settings.getString("paintop").isNull());
+    Q_ASSERT(!m_d->settings->getString("paintop").isNull());
     
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "paintop_preset");
     KisPainter gc(dev);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_d->settings.getString("paintop"),
-                                                              &m_d->settings, &gc);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_d->settings->getString("paintop"),
+                                                              m_d->settings, &gc);
 
 }
 

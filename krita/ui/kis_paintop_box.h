@@ -31,6 +31,7 @@
 #include <KoInputDevice.h>
 
 #include <kis_types.h>
+#include <kis_paintop_settings.h>
 
 class QString;
 class QHBoxLayout;
@@ -39,8 +40,9 @@ class KoID;
 class KoColorSpace;
 
 class KisView2;
-class KisResourceProvider;
-class KisPaintOpSettings;
+class KisCanvasResourceProvider;
+class KisPresetWidget;
+class KisPaintOpPresetsWidget;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -63,7 +65,7 @@ public:
 
 signals:
 
-    void selected(const KoID & id, const KisPaintOpSettings *settings);
+    void selected(const KoID & id, const KisPaintOpSettingsSP settings);
 
 private slots:
 
@@ -74,22 +76,23 @@ private slots:
     void slotItemSelected(int index);
     void colorSpaceChanged(const KoColorSpace *cs);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
-    void slotCurrentLayerChanged(KisLayerSP layer);
-    
+    void slotCurrentNodeChanged(KisNodeSP node);
+
 private:
     QPixmap paintopPixmap(const KoID & paintop);
     void updateOptionWidget();
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
     KoID defaultPaintop(const KoInputDevice & inputDevice);
-    KisPaintOpSettings *paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice);
+    KisPaintOpSettingsSP paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice);
 
 private:
-    KisResourceProvider *m_resourceProvider;
+    KisCanvasResourceProvider *m_resourceProvider;
     QComboBox * m_cmbPaintops;
     QHBoxLayout * m_layout;
     QWidget * m_optionWidget;
-
+    KisPresetWidget * m_presetWidget;
+    KisPaintOpPresetsWidget * m_presetsPopup;
     KisView2 * m_view;
     
     QList<KoID> m_paintops;
@@ -98,7 +101,7 @@ private:
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
 
-    typedef QHash<KoInputDevice, QList<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
+    typedef QHash<KoInputDevice, QList<KisPaintOpSettingsSP> > InputDevicePaintopSettingsMap;
     InputDevicePaintopSettingsMap m_inputDevicePaintopSettings;
 };
 

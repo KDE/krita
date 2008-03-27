@@ -40,9 +40,10 @@ KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QStrin
     setWindowTitle(caption);
     m_autogradientResource = new KisAutogradientResource();
     m_autogradientResource->createSegment( INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 1.0, 0.5, Qt::black, Qt::white );
+    gradientSlider->setGradientResource( m_autogradientResource );
+    
     connect(gradientSlider, SIGNAL( sigSelectedSegment( KoGradientSegment* ) ), SLOT( slotSelectedSegment(KoGradientSegment*) ));
     connect(gradientSlider, SIGNAL( sigChangedSegment(KoGradientSegment*) ), SLOT( slotChangedSegment(KoGradientSegment*) ));
-    gradientSlider->setGradientResource( m_autogradientResource );
     connect(comboBoxColorInterpolationType, SIGNAL( activated(int) ), SLOT( slotChangedColorInterpolation(int) ));
     connect(comboBoxInterpolationType, SIGNAL( activated(int) ), SLOT( slotChangedInterpolation(int) ));
     connect(leftColorButton, SIGNAL( changed(const QColor&) ), SLOT( slotChangedLeftColor(const QColor&) ));

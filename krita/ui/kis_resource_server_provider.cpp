@@ -20,8 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_resourceserverprovider.h"
-
+#include "kis_resource_server_provider.h"
 
 #include <QDir>
 
@@ -36,6 +35,7 @@
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_pattern.h"
+#include "kis_paintop_preset.h"
 
 KisResourceServerProvider *KisResourceServerProvider::m_singleton = 0;
 
@@ -78,6 +78,10 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", "/usr/share/create/patterns/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
+    KGlobal::mainComponent().dirs()->addResourceType("kis_paintOppresets", "data", "krita/paintOppresets/");
+    KGlobal::mainComponent().dirs()->addResourceDir("kis_paintOppresets", QDir::homePath() + QString("/.create/paintOppresets/krita"));
+
+
     m_brushServer = new BrushResourceServer();
     brushThread = new KoResourceLoaderThread(m_brushServer, "*.gbr:*.gih");
     connect(brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
@@ -87,6 +91,11 @@ KisResourceServerProvider::KisResourceServerProvider()
     patternThread = new KoResourceLoaderThread(m_patternServer, "*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat");
     connect(patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
     patternThread->start();
+
+    m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintOppresets");
+    paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer, "*.kpp");
+    connect(paintOpPresetThread, SIGNAL(finished()), this, SLOT(paintOpPresetThreadDone()));
+    paintOpPresetThread->start();
 
 }
 
@@ -114,6 +123,11 @@ KoResourceServer<KisPattern>* KisResourceServerProvider::patternServer()
     return m_patternServer;
 }
 
+KoResourceServer<KisPaintOpPreset>* KisResourceServerProvider::paintOpPresetServer()
+{
+    return m_paintOpPresetServer;
+}
+
 void KisResourceServerProvider::brushThreadDone()
 {
     delete brushThread;
@@ -126,4 +140,10 @@ void KisResourceServerProvider::patternThreadDone()
     patternThread = 0;
 }
 
-#include "kis_resourceserverprovider.moc"
+void KisResourceServerProvider::paintOpPresetThreadDone()
+{
+    delete paintOpPresetThread;
+    paintOpPresetThread = 0;
+}
+
+#include "kis_resource_server_provider.moc"

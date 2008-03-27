@@ -71,7 +71,7 @@
 #include "commands/kis_image_commands.h"
 #include "commands/kis_layer_commands.h"
 #include "commands/kis_node_commands.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_selection_manager.h"
 #include "kis_statusbar.h"
 #include "kis_view2.h"

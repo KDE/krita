@@ -27,7 +27,7 @@
 
 class KisPaintDevice;
 class KisPainterlyOverlay;
-class KisResourceProvider;
+class KisCanvasResourceProvider;
 class KoColorSpace;
 class KoShapeManager;
 class KoToolProxy;
@@ -48,7 +48,7 @@ public:
     MixerCanvas(QWidget *parent);
     ~MixerCanvas();
 
-    void setResources(KisResourceProvider *rp);
+    void setResources(KisCanvasResourceProvider *rp);
     void setLayer(const KoColorSpace *cs);
 
     KisPaintLayer *layer();

@@ -26,7 +26,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_paintop_registry.h"
 #include "kis_brush.h"
 #include "kis_selection.h"
@@ -42,14 +42,14 @@ KisToolPath::~KisToolPath()
 
 void KisToolPath::addPathShape()
 {
-    KisLayerSP currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    KisLayerSP currentLayer = m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
     if(!currentLayer)
         return;
 
     KisImageSP image = currentLayer->image();
     KisPaintDeviceSP dev = currentLayer->paintDevice();
 
-    KisBrush* brush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentBrush ).value<void *>());
+    KisBrush* brush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentBrush ).value<void *>());
 
     KisPainter painter(dev, currentLayer->selection());
     painter.beginTransaction(i18n("Path"));

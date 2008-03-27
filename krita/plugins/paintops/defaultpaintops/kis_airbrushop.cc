@@ -38,8 +38,9 @@
 
 #include "kis_datamanager.h"
 
-KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
+    Q_UNUSED( settings );
     Q_UNUSED( image );
     KisPaintOp * op = new KisAirbrushOp(painter);
     Q_CHECK_PTR(op);

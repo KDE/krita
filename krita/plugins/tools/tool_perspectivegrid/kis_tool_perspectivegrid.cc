@@ -39,7 +39,7 @@
 #include <kis_image.h>
 #include <KoPointerEvent.h>
 #include <kis_perspective_grid_manager.h>
-#include <kis_resource_provider.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_selected_transaction.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>

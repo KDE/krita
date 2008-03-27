@@ -22,10 +22,14 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+#include "kis_shared.h"
 #include "kis_properties_configuration.h"
 
 class QWidget;
 class KoPointerEvent;
+
+class KisPaintOpSettings;
+typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
 /**
  * This class is used to cache the settings (and the associated widget) for a paintop
@@ -36,7 +40,7 @@ class KoPointerEvent;
  * paintop's settings subclass has data that is not stored as a property, that data is not
  * saved and restored.
  */
-class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration {
+class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration, public KisShared {
 
 public:
     KisPaintOpSettings();
@@ -54,7 +58,7 @@ public:
      * Clone the current settings object. Override this if your settings instance doesn't
      * store everything as properties.
      */
-    virtual KisPaintOpSettings* clone() const;
+    virtual KisPaintOpSettingsSP clone() const;
 
     /**
      * Override this function if your paintop is interested in which

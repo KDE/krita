@@ -43,7 +43,7 @@
 #include "kis_canvas2.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_pixel_selection.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_paintop_registry.h"
 
 
@@ -108,7 +108,7 @@ QWidget* KisToolSelectPath::optionWidget()
 
 void KisToolSelectPath::addPathShape()
 {
-    KisLayerSP currentLayer = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    KisLayerSP currentLayer = m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
     if(!currentLayer)
         return;
 

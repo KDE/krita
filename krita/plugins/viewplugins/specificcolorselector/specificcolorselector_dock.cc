@@ -21,7 +21,7 @@
 
 #include <QLabel>
 
-#include <kis_resource_provider.h>
+#include <kis_canvas_resource_provider.h>
 
 #include "kis_specific_color_selector_widget.h"
 

@@ -57,10 +57,10 @@
 #include "shapes/kis_bristle_shape.h"
 #include "shapes/kis_dab_shape.h"
 
-KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED(image);
-    const KisDynamicOpSettings *dosettings = dynamic_cast<const KisDynamicOpSettings *>(settings);
+    const KisDynamicOpSettings *dosettings = dynamic_cast<const KisDynamicOpSettings *>(settings.data());
     Q_ASSERT(dosettings);
 
     KisPaintOp * op = new KisDynamicOp(dosettings, painter);
@@ -68,7 +68,7 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettings *settings, K
     return op;
 }
 
-KisPaintOpSettings *KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(image);
     Q_UNUSED(inputDevice);
@@ -96,7 +96,7 @@ KisDynamicOpSettings::~KisDynamicOpSettings()
 }
 
 
-KisPaintOpSettings* KisDynamicOpSettings::clone() const
+KisPaintOpSettingsSP KisDynamicOpSettings::clone() const
 {
     return new KisDynamicOpSettings(0, m_shapeBookmarksModel->bookmarkedConfigurationManager(), m_coloringBookmarksModel->bookmarkedConfigurationManager());
 }

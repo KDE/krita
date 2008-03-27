@@ -40,7 +40,7 @@ Regressions from 1.x
     * Curve Paint is replaced by a flake-based curve tool, but that
       is not finished yet.
     * Perspective Transform Tool has not been ported yet
-    * Brush outline has been lost
+    * Brush outline cursor mode has been lost
     * select brush and eraser don't work (they should be either the 
       vector-based flake tools for the vector selection or the ordinary 
       paint tools for the raster selection)

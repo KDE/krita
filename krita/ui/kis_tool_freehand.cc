@@ -105,7 +105,9 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     {
         initPaint(e);
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
-                                                         e->pressure(), e->xTilt(), e->yTilt());
+                                                         e->pressure(), e->xTilt(), e->yTilt(),
+                                                         KisVector2D(),
+                                                         e->rotation(), e->tangentialPressure());
         paintAt(m_previousPaintInformation);
     }
 }
@@ -127,7 +129,10 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         QPointF pos = convertToPixelCoord(e);
 
         KisPaintInformation info = KisPaintInformation( convertToPixelCoord(adjustPosition(e->point)),
-                                                       e->pressure(), e->xTilt(), e->yTilt());
+                                                       e->pressure(), e->xTilt(), e->yTilt(),
+                                                       KisVector2D(),
+                                                       e->rotation(), e->tangentialPressure());
+
         if(m_smooth)
         {
             QPointF dragVec = info.pos() - m_previousPaintInformation.pos();

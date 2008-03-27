@@ -26,7 +26,7 @@
 #include "mixertool.h"
 
 #include <kis_paintop.h>
-#include <kis_resource_provider.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_view2.h>
 #include <KoColorSpace.h>
 #include <KoToolProxy.h>

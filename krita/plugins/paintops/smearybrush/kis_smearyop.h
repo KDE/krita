@@ -34,7 +34,7 @@ public:
     KisSmearyOpFactory() {}
     virtual ~KisSmearyOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "paintSmeary"; }
     virtual QString name() const { return i18n("Smeary Brush"); }
     virtual bool userVisible( const KoColorSpace * ) { return false; }

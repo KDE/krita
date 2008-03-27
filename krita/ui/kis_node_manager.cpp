@@ -34,7 +34,7 @@
 #include <kis_image.h>
 
 #include "kis_canvas2.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
 #include "kis_mask_manager.h"

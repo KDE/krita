@@ -67,7 +67,7 @@
 #include "kis_selection.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_undo_adapter.h"
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"

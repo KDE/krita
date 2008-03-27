@@ -41,12 +41,12 @@ class KisFilterOpFactory  : public KisPaintOpFactory  {
     KisFilterOpFactory() {}
     virtual ~KisFilterOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "filter"; }
     virtual QString name() const { return i18n("Filter"); }
     virtual QString pixmap() { return "filterop.png"; }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettings* settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
@@ -57,11 +57,11 @@ public:
 	
     KisFilterOpSettings(QWidget* parent);
     virtual ~KisFilterOpSettings();
-    virtual KisPaintOpSettings* clone() const;
+    virtual KisPaintOpSettingsSP clone() const;
     virtual QWidget *widget() const { return m_optionsWidget; }
     const KisFilterSP filter() const;
     KisFilterConfiguration* filterConfig() const;
-    virtual void setLayer( KisLayerSP layer );
+    virtual void setNode( KisNodeSP node );
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
   
@@ -83,7 +83,7 @@ class KisFilterOp : public KisPaintOp {
 
 public:
 
-    KisFilterOp(const KisFilterOpSettings* settings, KisPainter * painter);
+    KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter);
     virtual ~KisFilterOp();
 
     void paintAt(const KisPaintInformation& info);

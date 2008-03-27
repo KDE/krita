@@ -40,11 +40,11 @@ class KisDynamicOpFactory : public KisPaintOpFactory  {
         {}
         virtual ~KisDynamicOpFactory() {}
 
-        virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+        virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
         virtual QString id() const { return "dynamicbrush"; }
         virtual QString name() const { return i18n("Dynamic Brush"); }
         virtual QString pixmap() { return "dynamicbrush.png"; }
-        virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+        virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     private:
         KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
         KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
@@ -55,7 +55,7 @@ class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
     public:
         KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeConfigurationManager, KisBookmarkedConfigurationManager* coloringConfigurationManager);
         virtual ~KisDynamicOpSettings();
-        virtual KisPaintOpSettings* clone() const;
+        virtual KisPaintOpSettingsSP clone() const;
         virtual QWidget *widget() const { return m_optionsWidget; }
         /// @return a brush with the current shapes, coloring and program
         KisDynamicBrush* createBrush(KisPainter *painter) const;

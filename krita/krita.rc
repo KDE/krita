@@ -170,9 +170,9 @@
      <Action name="brushes"/>
      <Action name="gradients"/>
      <Action name="patterns"/>
+     <Action name="dual"/>
      <Separator/>
      <Action name="paintops"/>
-     <Action name="dual"/>
      <Action name="paintop_options"/>
 </ToolBar>
 

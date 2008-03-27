@@ -37,7 +37,7 @@
 #include "kis_paint_device.h"
 #include "kis_pattern.h"
 
-#include "kis_resourceserverprovider.h"
+#include "kis_resource_server_provider.h"
 #include "kis_paint_layer.h"
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view)

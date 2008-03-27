@@ -20,10 +20,10 @@
 #define KIS_COMPLEXOP_H_
 
 #include <kis_paintop.h>
-
+#include <kis_paintop_settings.h>
 class KisPainter;
 class KisPaintInformation;
-class KisPaintOpSettings;
+
 class QString;
 
 class KisComplexOp : public KisPaintOp {
@@ -47,7 +47,7 @@ class KisComplexOpFactory : public KisPaintOpFactory  {
         KisComplexOpFactory() {}
         ~KisComplexOpFactory() {}
 
-        KisPaintOp *createOp(const KisPaintOpSettings *settings, KisPainter *painter, KisImageSP image);
+        KisPaintOp *createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisImageSP image);
         QString id() const;
         QString name() const;
 

@@ -33,7 +33,7 @@
 #include "kis_global.h"
 #include "kis_icon_item.h"
 #include "kis_autogradient.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * parent, const char *name)
     : KDialog(parent)

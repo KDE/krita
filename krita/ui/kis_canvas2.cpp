@@ -41,7 +41,7 @@
 #include "kis_image.h"
 #include "kis_doc2.h"
 #include "kis_shape_layer.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_view2.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"

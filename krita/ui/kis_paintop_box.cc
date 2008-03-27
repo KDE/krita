@@ -39,15 +39,21 @@
 #include <KoColorSpace.h>
 
 #include <kis_paintop_registry.h>
-#include <kis_resource_provider.h>
-#include <kis_view2.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_layer.h>
-#include <kis_factory2.h>
-#include <kis_layer_manager.h>
+
 #include <kis_paintop_settings.h>
 #include <kis_image.h>
+#include <kis_node.h>
+#include "kis_node_manager.h"
+#include "kis_layer_manager.h"
+#include "kis_view2.h"
+#include "kis_factory2.h"
+#include "kis_preset_widget.h"
+#include "kis_paintop_presets_widget.h"
+
 
 KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * name)
     : QWidget(parent),
@@ -72,9 +78,14 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     m_layout->setSpacing(1);
     m_layout->addWidget(m_cmbPaintops);
 
-    connect(this, SIGNAL(selected(const KoID &, const KisPaintOpSettings *)), m_resourceProvider, SLOT(slotPaintopActivated(const KoID &, const KisPaintOpSettings *)));
-    connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
+    KisPresetWidget * m_presetWidget = new KisPresetWidget(this, "presetwidget");
+    m_presetWidget->setToolTip(i18n("Edit brush settings"));
+    m_presetWidget->setFixedSize( 130, 26 );
+        m_layout->addWidget(m_presetWidget);
 
+    m_presetsPopup = new KisPaintOpPresetsWidget(m_presetWidget);
+    m_presetWidget->setPopupWidget(m_presetsPopup);
+    
     // XXX: Let's see... Are all paintops loaded and ready?
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for ( QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it ) {
@@ -82,16 +93,22 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
         addItem(*it);
     }
 
+    setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
+
+    connect(this, SIGNAL(selected(const KoID &, const KisPaintOpSettingsSP)), m_resourceProvider,
+                  SLOT(slotPaintopActivated(const KoID &, const KisPaintOpSettingsSP)));
+    connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
+
     connect(view->layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
             this, SLOT(colorSpaceChanged(const KoColorSpace*)));
-    connect(view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)),  SLOT(slotCurrentLayerChanged(KisLayerSP)));
+            
+    connect(view->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)), 
+                                 SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
-    connect(KoToolManager::instance(),
-            SIGNAL(inputDeviceChanged(const KoInputDevice &)),
-            this,
-            SLOT(slotInputDeviceChanged(const KoInputDevice &)));
+    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
+                                       SLOT(slotInputDeviceChanged(const KoInputDevice &)));
 
-    setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
+    
 
 }
 
@@ -110,7 +127,8 @@ void KisPaintopBox::slotItemSelected(int index)
         KoID paintop = m_displayedOps.at(index);
 
         setCurrentPaintop(paintop);
-        KisPaintOpSettings* settings = paintopSettings(currentPaintop(), KoToolManager::instance()->currentInputDevice());
+        KisPaintOpSettingsSP settings =
+            paintopSettings(currentPaintop(), KoToolManager::instance()->currentInputDevice());
         if(settings) settings->activate();
     }
 }
@@ -183,16 +201,15 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
     setCurrentPaintop(paintop);
 }
 
-void KisPaintopBox::slotCurrentLayerChanged(KisLayerSP layer)
+void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
 {
     for(InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.begin();
         it != m_inputDevicePaintopSettings.end(); ++it)
     {
-        foreach(KisPaintOpSettings * s, it.value())
+        foreach(KisPaintOpSettingsSP s, it.value())
         {
-            if(s)
-            {
-                s->setNode(layer.data());
+            if(s) {
+                s->setNode(node);
             }
         }
     }
@@ -206,7 +223,7 @@ void KisPaintopBox::updateOptionWidget()
         m_layout->invalidate();
     }
 
-    const KisPaintOpSettings *settings = paintopSettings(currentPaintop(), KoToolManager::instance()->currentInputDevice());
+    const KisPaintOpSettingsSP settings = paintopSettings(currentPaintop(), KoToolManager::instance()->currentInputDevice());
 
     if (settings != 0) {
         m_optionWidget = settings->widget();
@@ -235,21 +252,21 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)
 {
     if (inputDevice == KoInputDevice::eraser()) {
-        return KoID("eraser","");
+        return KoID("eraser", "");
     } else {
-        return KoID("paintbrush","");
+        return KoID("paintbrush", "");
     }
 }
 
-KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice)
+KisPaintOpSettingsSP KisPaintopBox::paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice)
 {
-    QList<KisPaintOpSettings *> settingsArray;
+    QList<KisPaintOpSettingsSP> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find( inputDevice );
     if (it == m_inputDevicePaintopSettings.end()) {
         // Create settings for each paintop.
 
         foreach (KoID paintopId, m_paintops) {
-            KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice, m_view->image());
+            KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice, m_view->image());
             settingsArray.append(settings);
             if (settings && settings->widget()) {
                 settings->widget()->hide();
@@ -266,6 +283,5 @@ KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const K
     else
         return 0;
 }
-
 #include "kis_paintop_box.moc"
 

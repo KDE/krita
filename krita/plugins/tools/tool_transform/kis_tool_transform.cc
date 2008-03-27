@@ -59,7 +59,7 @@
 #include "kis_mask_shape.h"
 #include "kis_layer_container_shape.h"
 #include "kis_shape_layer.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 
 namespace {
     class TransformCmd : public KisSelectedTransaction {
@@ -191,7 +191,7 @@ void KisToolTransform::activate(bool temporary)
             m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
         }
     }
-    currentLayer() = m_canvas->resourceProvider()->resource( KisResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    currentLayer() = m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
 }
 
 void KisToolTransform::initHandles()

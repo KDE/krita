@@ -50,13 +50,16 @@
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
 
-#include "ui_kis_dlgbrushcurvecontrol.h"
+#include "ui_wdgbrushcurves.h"
 
-KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings,
+KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED( image );
-    const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings);
+
+    qDebug() << "creating brushop";
+    
+    const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings.data());
     Q_ASSERT(settings == 0 || brushopSettings != 0);
 
     KisPaintOp * op = new KisBrushOp(brushopSettings, painter);
@@ -71,9 +74,6 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     m_optionsWidget->setObjectName("brush option widget");
 
     QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
-
-    m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionsWidget);
-    l->addWidget(m_pressureVariation);
 
     m_size =  new QCheckBox(i18n("size"), m_optionsWidget);
     m_size->setChecked(true);
@@ -90,10 +90,12 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     m_curveControl->setupUi(m_curveControlWidget);
 
     QToolButton* moreButton = new QToolButton(m_optionsWidget);
-    moreButton->setArrowType(Qt::UpArrow);
-    moreButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    moreButton->setMinimumSize(QSize(24,24)); // Bah, I had hoped the above line would make this unneeded
+    moreButton->setArrowType(Qt::DownArrow);
+    moreButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    moreButton->setMaximumSize(QSize(24,24)); // Bah, I had hoped the above line would make this unneeded
     connect(moreButton, SIGNAL(clicked()), this, SLOT(slotCustomCurves()));
+
+    l->addWidget(moreButton);
 
     m_customSize = false;
     m_customOpacity = false;
@@ -101,8 +103,11 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     // the curves will get filled in when the slot gets accepted
 }
 
-void KisBrushOpSettings::slotCustomCurves() {
+void KisBrushOpSettings::slotCustomCurves() 
+{
+
     if (m_curveControlWidget->exec() == KDialog::Accepted) {
+    
         m_customSize = m_curveControl->sizeCheckbox->isChecked();
         m_customOpacity = m_curveControl->opacityCheckbox->isChecked();
         m_customDarken = m_curveControl->darkenCheckbox->isChecked();
@@ -198,7 +203,7 @@ void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 }
 
 
-KisPaintOpSettings* KisBrushOpSettings::clone() const
+KisPaintOpSettingsSP KisBrushOpSettings::clone() const
 {
     KisBrushOpSettings* s = new KisBrushOpSettings(0);
     s->m_size->setChecked( m_size->isChecked() );
@@ -213,7 +218,7 @@ KisPaintOpSettings* KisBrushOpSettings::clone() const
     return s;
 }
 
-KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
+KisPaintOpSettingsSP KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
 {
     if (inputDevice == KoInputDevice::mouse()) {
         // No options for mouse, only tablet devices
@@ -223,7 +228,7 @@ KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KoInputD
     }
 }
 
-KisPaintOpSettings* KisBrushOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
 {
     return new KisBrushOpSettings(0);
 }

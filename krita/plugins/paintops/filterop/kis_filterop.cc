@@ -39,30 +39,29 @@
 #include <filter/kis_filter_config_widget.h>
 #include <kis_processing_information.h>
 #include <filter/kis_filter_registry.h>
-#include <kis_layer.h>
+#include <kis_node.h>
 #include <kis_types.h>
 #include <kis_iterators_pixel.h>
 #include <kis_paintop.h>
 #include <kis_selection.h>
-
+#include <kis_paintop_settings.h>
 #include "ui_FilterOpOptionsWidget.h"
 
-KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings *_settings, KisPainter * _painter, KisImageSP _image)
+KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP _settings, KisPainter * _painter, KisImageSP _image)
 {
     Q_UNUSED(_image);
-    const KisFilterOpSettings* settings = dynamic_cast<const KisFilterOpSettings*>(_settings);
-    Q_ASSERT(settings);
-    KisPaintOp * op = new KisFilterOp(settings, _painter);
+    KisPaintOp * op = new KisFilterOp(_settings, _painter);
     return op;
 }
 
-KisPaintOpSettings *KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
+KisPaintOpSettingsSP KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(inputDevice);
+    Q_UNUSED(image);
     return new KisFilterOpSettings(parent);
 }
 
-KisPaintOpSettings* KisFilterOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 {
     return new KisFilterOpSettings(0);
 }
@@ -94,10 +93,10 @@ KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
     }
 }
 
-void KisFilterOpSettings::setLayer( KisLayerSP layer )
+void KisFilterOpSettings::setNode( KisNodeSP node )
 {
-    if (layer) {
-        m_paintDevice = layer->paintDevice();
+    if (node) {
+        m_paintDevice = node->paintDevice();
 
         // The "not m_currentFilterConfigWidget" is a corner case
         // which happen because the first configuration settings is
@@ -144,7 +143,7 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
     return m_currentFilterConfigWidget->configuration();
 }
 
-KisPaintOpSettings* KisFilterOpSettings::clone() const
+KisPaintOpSettingsSP KisFilterOpSettings::clone() const
 {
     KisFilterOpSettings* s = new KisFilterOpSettings(0);
     s->m_paintDevice = m_paintDevice;
@@ -189,9 +188,10 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     }
 }
 
-KisFilterOp::KisFilterOp(const KisFilterOpSettings* settings, KisPainter * painter)
-    : KisPaintOp(painter), m_settings(settings)
+KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter)
+    : KisPaintOp(painter)
 {
+    m_settings = dynamic_cast<const KisFilterOpSettings*>(settings.data());
     m_tmpDevice = new KisPaintDevice(source()->colorSpace(), "tmp");
 }
 

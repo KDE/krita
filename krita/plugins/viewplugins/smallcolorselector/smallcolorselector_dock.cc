@@ -19,7 +19,7 @@
 #include <kis_view2.h>
 
 #include "kis_small_color_widget.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 
 #include <KoColorSpaceRegistry.h>
 

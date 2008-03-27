@@ -32,23 +32,24 @@
 
 #include <kdebug.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "kcurve.h"
-#include "kis_brush.h"
-#include "kis_global.h"
-#include "kis_paint_device.h"
-#include "kis_layer.h"
-#include "kis_painter.h"
-#include "kis_types.h"
-#include "kis_paintop.h"
-#include "KoInputDevice.h"
-#include "kis_selection.h"
+#include <KoInputDevice.h>
+#include <KoColorSpaceRegistry.h>
+
+#include <kcurve.h>
+#include <kis_brush.h>
+#include <kis_global.h>
+#include <kis_paint_device.h>
+#include <kis_painter.h>
+#include <kis_types.h>
+#include <kis_paintop.h>
+#include <kis_selection.h>
 #include <kis_iterator.h>
 #include <kis_iterators_pixel.h>
-#include "ui_kis_dlgbrushcurvecontrol.h"
 #include <kis_properties_configuration.h>
 
-KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+#include "ui_wdgbrushcurves.h"
+
+KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
     const KisSmudgeOpSettings *brushopSettings = dynamic_cast<const KisSmudgeOpSettings *>(settings);
     Q_ASSERT(settings == 0 || brushopSettings != 0);
@@ -63,12 +64,10 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
 {
     m_optionsWidget = new QWidget(parent, "brush option widget");
     QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
-    l->setAutoAdd(true);
     m_rateLabel = new QLabel(i18n("Rate: "), m_optionsWidget);
     m_rateSlider = new QSlider(0,100,1, 50, Qt::Horizontal, m_optionsWidget);
     if(isTablet)
     {
-        m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionsWidget);
         m_size =  new QCheckBox(i18n("Size"), m_optionsWidget);
         m_size->setChecked(true);
         m_opacity = new QCheckBox(i18n("Opacity"), m_optionsWidget);
@@ -195,7 +194,7 @@ void KisSmudgeOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 }
 
 
-KisPaintOpSettings* KisSmudgeOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
+KisPaintOpSettingsSP KisSmudgeOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
 {
     if (inputDevice == KoInputDevice::mouse()) {
         // No options for mouse, only tablet devices

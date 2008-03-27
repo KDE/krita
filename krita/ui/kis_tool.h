@@ -28,12 +28,13 @@
 #include <krita_export.h>
 #include <kis_types.h>
 #include <kis_layer.h>
+#include <kis_paintop_settings.h>
 
 class KoCanvasBase;
 class KisBrush;
 class KisPattern;
 class KoAbstractGradient;
-class KisPaintOpSettings;
+
 
 /// Definitions of the toolgroups of Krita
 static const QString TOOL_TYPE_SHAPE = "Krita/Shape"; // Geometric shapes like ellipses and lines
@@ -125,7 +126,7 @@ protected:
     KoColor currentFgColor();
     KoColor currentBgColor();
     QString currentPaintOp();
-    KisPaintOpSettings * currentPaintOpSettings();
+    KisPaintOpSettingsSP currentPaintOpSettings();
 
 private:
     struct Private;

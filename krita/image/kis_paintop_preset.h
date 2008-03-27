@@ -20,10 +20,16 @@
 #define KIS_PAINTOP_PRESET_H
 
 #include "KoResource.h"
+#include "KoID.h"
+
+#include "kis_shared.h"
+#include "kis_paintop_settings.h"
 
 #include "krita_export.h"
 
 class QImage;
+class KisPaintOpPreset;
+typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
 
 /**
  * A KisPaintOpPreset records a particular set of settings
@@ -31,7 +37,7 @@ class QImage;
  * in that though the latter contains much the same information, it
  * also contains state information that should be kept between strokes.
  */
-class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource
+class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource, public KisShared
 {
 public:
 
@@ -41,6 +47,12 @@ public:
 
     ~KisPaintOpPreset();
 
+    /// return the id of the paintop plugin
+    KoID paintOp();
+
+    /// return the settings that define this paintop preset
+    KisPaintOpSettingsSP settings();
+    
     bool load();
 
     bool save();

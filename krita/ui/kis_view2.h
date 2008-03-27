@@ -37,7 +37,7 @@ class KisDoc2;
 class KisFilterManager;
 class KisImage;
 class KisLayerManager;
-class KisResourceProvider;
+class KisCanvasResourceProvider;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
@@ -85,7 +85,7 @@ public:  // Krita specific interfaces
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
-    KisResourceProvider * resourceProvider();
+    KisCanvasResourceProvider * resourceProvider();
 
     /// Return the canvasbase class
     KisCanvas2 * canvasBase() const;

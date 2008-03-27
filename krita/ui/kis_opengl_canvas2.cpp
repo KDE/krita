@@ -45,7 +45,7 @@
 #include "kis_opengl.h"
 #include "kis_opengl_image_textures.h"
 #include "kis_view2.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
 #include "kis_debug.h"
 #include "kis_selection_manager.h"

@@ -41,11 +41,11 @@ public:
     KisSmudgeOpFactory() {}
     virtual ~KisSmudgeOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "smudge"; }
     virtual QString name() const { return i18n("Smudge Brush"); }
     virtual QString pixmap() { return "paintbrush.png"; }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
 };
 
 class KisSmudgeOpSettings : public QObject, public KisPaintOpSettings {

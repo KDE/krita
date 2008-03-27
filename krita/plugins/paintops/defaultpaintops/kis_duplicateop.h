@@ -41,12 +41,12 @@ public:
     KisDuplicateOpFactory() {}
     virtual ~KisDuplicateOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "duplicate"; }
     virtual QString name() const { return i18nc("duplicate paintbrush", "Duplicate"); }
     virtual QString pixmap() { return "krita-duplicate.png"; }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettings* settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
@@ -56,7 +56,7 @@ Q_OBJECT
     public:
         KisDuplicateOpSettings(QWidget* parent, KisImageSP image);
         virtual ~KisDuplicateOpSettings();
-        virtual KisPaintOpSettings* clone() const;
+        virtual KisPaintOpSettingsSP clone() const;
         virtual QWidget *widget() const { return m_optionsWidget; }
         virtual void mousePressEvent(KoPointerEvent *e);
         virtual void activate();

@@ -42,9 +42,11 @@
 #include "kis_iterator.h"
 #include "kis_selection.h"
 #include "kis_iterators_pixel.h"
-KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED( image );
+    Q_UNUSED( settings );
+    
     KisPaintOp * op = new KisPenOp(painter);
     Q_CHECK_PTR(op);
     return op;

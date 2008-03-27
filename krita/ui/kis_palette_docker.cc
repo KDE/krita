@@ -28,7 +28,7 @@
 #include "KoResource.h"
 #include "KoColorSet.h"
 #include "KoColorSetWidget.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 
 KisPaletteDocker::KisPaletteDocker( KisView2 * view )
     : QDockWidget(i18n("Palettes"))

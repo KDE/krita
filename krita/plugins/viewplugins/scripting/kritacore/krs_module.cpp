@@ -40,7 +40,7 @@
 #include <kis_mask_generator.h>
 #include <kis_paint_layer.h>
 #include <kis_pattern.h>
-#include <kis_resourceserverprovider.h>
+#include <kis_resource_server_provider.h>
 #include <kis_view2.h>
 
 // kritacore

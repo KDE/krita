@@ -20,7 +20,7 @@
 
 #include <kis_view2.h>
 
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_triangle_color_selector.h"
 
 KisTriangleColorSelectorDock::KisTriangleColorSelectorDock( KisView2 *view ) : QDockWidget(i18n("Triangle Color Selector")), m_view(view)

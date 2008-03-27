@@ -57,7 +57,7 @@
 #include "kis_cursor.h"
 #include "kis_cmb_composite.h"
 #include "KoSliderCombo.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
@@ -84,7 +84,7 @@ void KisToolPaint::resourceChanged( int key, const QVariant & v )
     KisTool::resourceChanged( key, v );
 
     switch ( key ) {
-    case ( KisResourceProvider::CurrentKritaLayer ):
+    case ( KisCanvasResourceProvider::CurrentKritaLayer ):
         currentLayer() = v.value<KisLayerSP>();
         updateCompositeOpComboBox();
         break;

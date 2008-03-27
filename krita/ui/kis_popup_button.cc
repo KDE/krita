@@ -47,7 +47,7 @@ KisPopupButton::~KisPopupButton()
     delete d;
 }
 
-void KisPopupButton::setAllwaysVisible(bool v)
+void KisPopupButton::setAlwaysVisible(bool v)
 {
     if(v)
     {

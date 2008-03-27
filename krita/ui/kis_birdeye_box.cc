@@ -39,7 +39,7 @@
 #include "kis_canvas2.h"
 #include "kis_image.h"
 #include "kis_iterators_pixel.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kobirdeyepanel.h"
 
 namespace {

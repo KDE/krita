@@ -25,32 +25,23 @@
 #include <KoID.h>
 #include <KoCanvasResourceProvider.h>
 
-//#include "kis_view2.h"
+#include <kis_paintop_settings.h>
 #include "kis_types.h"
 #include "krita_export.h"
 
 class KisView2;
-class KisPaintOpSettings;
 class KisBrush;
 class KoAbstractGradient;
 class KisPattern;
 class KoResource;
 class KoCanvasBase;
+class KisPaintOpPreset;
 
 /**
-   KisResourceProvider contains the per-view current settings that
-   influence painting, like paintop, color, gradients and so on.
-
-   XXX: KisBrush, KoAbstractGradient, KisPattern and the other pointers
-   should really be shared pointers. That would be much safer. Also
-   note: we should have a koffice-wide provider of brushes, patterns
-   and gradients.
-
-   XXX: CurrentKritaLayer should be accompanied by
-   CurrentKritaPaintDevice and CurrentKritaMask, because masks are also important for tools
-
+ * KisCanvasResourceProvider contains the per-view current settings that
+ * influence painting, like paintop, color, gradients and so on.
  */
-class KRITAUI_EXPORT KisResourceProvider : public QObject {
+class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject {
 
     Q_OBJECT
 
@@ -65,12 +56,14 @@ public:
         CurrentPaintopSettings,
         CurrentKritaLayer,
         CurrentDisplayProfile,
-        CurrentImage
+        CurrentImage,
+        CurrentKritaNode,
+        CurrentPaintOpPreset
     };
 
 
-    KisResourceProvider(KisView2 * view);
-    ~KisResourceProvider();
+    KisCanvasResourceProvider(KisView2 * view);
+    ~KisCanvasResourceProvider();
 
     void setCanvasResourceProvider( KoCanvasResourceProvider * resourceProvider );
 
@@ -90,7 +83,7 @@ public:
     KoAbstractGradient *currentGradient() const;
 
     KoID currentPaintop() const;
-    const KisPaintOpSettings *currentPaintopSettings() const;
+    const KisPaintOpSettingsSP currentPaintopSettings() const;
 
     KisLayerSP currentLayer() const;
 
@@ -99,6 +92,10 @@ public:
 
     KisImageSP currentImage() const;
 
+    //KisNodeSP currentNode() const;
+
+    //KisPaintOpPreset * currentPreset() const;
+
 public slots:
 
     void slotSetFGColor(const KoColor& c);
@@ -106,7 +103,7 @@ public slots:
     void slotBrushActivated(KoResource *brush);
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
-    void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
+    void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettingsSP paintopSettings);
     void slotLayerActivated( const KisLayerSP layer );
     void slotNodeActivated( const KisNodeSP node );
 
@@ -129,7 +126,7 @@ signals:
     void sigBrushChanged(KisBrush * brush);
     void sigGradientChanged(KoAbstractGradient *);
     void sigPatternChanged(KisPattern *);
-    void sigPaintopChanged(KoID paintop, const KisPaintOpSettings *);
+    void sigPaintopChanged(KoID paintop, const KisPaintOpSettingsSP);
     void sigLayerChanged(const KisLayerSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
 

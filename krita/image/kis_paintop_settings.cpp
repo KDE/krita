@@ -55,8 +55,9 @@ void KDE_DEPRECATED KisPaintOpSettings::setNode(KisNodeSP node )
     d->node = node;
 }
 
-KisPaintOpSettings* KisPaintOpSettings::clone() const
+KisPaintOpSettingsSP KisPaintOpSettings::clone() const
 {
     KisPaintOpSettings * c = new KisPaintOpSettings();
     c->fromXML(toXML());
+    return c;
 }

@@ -33,8 +33,10 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
-KisPaintOp * KisConvolveOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisConvolveOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
+    Q_UNUSED(settings);
+    Q_UNUSED(image);
     KisPaintOp * op = new KisConvolveOp(painter);
     Q_CHECK_PTR(op);
     return op;

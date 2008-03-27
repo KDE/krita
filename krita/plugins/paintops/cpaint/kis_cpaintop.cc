@@ -64,7 +64,7 @@ KisCPaintOpFactory::~KisCPaintOpFactory()
 */
 }
 
-KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
+KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                           KisPainter * painter,
                                           KisImageSP image)
 {
@@ -72,7 +72,7 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
     dbgKrita << settings;
     
     const KisCPaintOpSettings * cpaintOpSettings =
-        dynamic_cast<const KisCPaintOpSettings*>( settings );
+        dynamic_cast<const KisCPaintOpSettings*>( settings.data() );
 
     Q_ASSERT( cpaintOpSettings );
     if ( !cpaintOpSettings ) return 0;
@@ -91,14 +91,14 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettings *settings,
     return op;
 }
 
-KisPaintOpSettings *KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED( inputDevice );
     Q_UNUSED( image );
     return new KisCPaintOpSettings( parent,  m_brushes);
 }
 
-KisPaintOpSettings *KisCPaintOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisCPaintOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED( image );
     return new KisCPaintOpSettings( 0,  m_brushes);
@@ -124,7 +124,7 @@ KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush
     connect( m_options->bnInk, SIGNAL( clicked() ), this, SLOT( resetCurrentBrush() ) );
 }
 
-KisPaintOpSettings* KisCPaintOpSettings::clone() const
+KisPaintOpSettingsSP KisCPaintOpSettings::clone() const
 {
     KisCPaintOpSettings* s = new KisCPaintOpSettings(0, m_brushes);
     s->m_options->intInk->setValue( ink() );
@@ -186,7 +186,9 @@ KisCPaintOp::KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, Ki
 KisCPaintOp::~KisCPaintOp()
 {
     delete m_stroke;
-}void KisCPaintOp::paintAt(const KisPaintInformation& info)
+}
+
+void KisCPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return;
 

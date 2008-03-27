@@ -81,8 +81,8 @@
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
-#include "kis_resource_provider.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_selection_manager.h"
 #include "kis_image_manager.h"
 #include "kis_control_frame.h"
@@ -97,7 +97,7 @@
 #include "kis_group_layer.h"
 #include "kis_custom_palette.h"
 #include "ui_wdgpalettechooser.h"
-#include "kis_resourceserverprovider.h"
+#include "kis_resource_server_provider.h"
 #include "kis_palette_docker.h"
 #include "kis_node_model.h"
 #include "kis_projection.h"
@@ -150,7 +150,7 @@ public:
     KisDoc2 *doc;
     KoZoomHandler * viewConverter;
     KoCanvasController * canvasController;
-    KisResourceProvider * resourceProvider;
+    KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
     QAction * fullScreen;
@@ -199,7 +199,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->canvas = new KisCanvas2( m_d->viewConverter, this, doc->shapeController() );
     m_d->canvasController->setCanvas( m_d->canvas );
 
-    m_d->resourceProvider = new KisResourceProvider( this );
+    m_d->resourceProvider = new KisCanvasResourceProvider( this );
     m_d->resourceProvider->setCanvasResourceProvider( m_d->canvas->resourceProvider() );
 
     connect( m_d->resourceProvider, SIGNAL( sigDisplayProfileChanged( const KoColorProfile * ) ), m_d->canvas, SLOT(slotSetDisplayProfile( const KoColorProfile * ) ) );
@@ -312,7 +312,7 @@ void KisView2::canvasAddChild(KoViewChild *child) {
     return m_d->doc->image();
 }
 
-KisResourceProvider * KisView2::resourceProvider()
+KisCanvasResourceProvider * KisView2::resourceProvider()
 {
     return m_d->resourceProvider;
 }
@@ -526,7 +526,7 @@ void KisView2::createGUI()
     connect(m_d->canvasController, SIGNAL( documentMousePositionChanged(const QPointF & )),
             m_d->statusBar, SLOT( documentMousePositionChanged( const QPointF & ) ) );
 
-    m_d->controlFrame = new KisControlFrame( mainWindow(), this );    
+    m_d->controlFrame = new KisControlFrame( this );
 
     show();
 
@@ -694,7 +694,7 @@ void KisView2::print(QPrinter& printer, QPrintDialog &printDialog)
     QString printerProfileName = cfg.printerProfile();
     const KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
 
-    double exposure = m_d->canvas->resourceProvider()->resource(KisResourceProvider::HdrExposure ).toDouble();
+    double exposure = m_d->canvas->resourceProvider()->resource(KisCanvasResourceProvider::HdrExposure ).toDouble();
 
     double scaleX = printer.resolution() / (72.0 * img->xRes());
     double scaleY = printer.resolution() / (72.0 * img->yRes());

@@ -23,7 +23,7 @@
 
 #include "kis_tool_freehand.h"
 
-class KisResourceProvider;
+class KisCanvasResourceProvider;
 class KoPointerEvent;
 class MixerCanvas;
 class QRegion;
@@ -32,7 +32,7 @@ class MixerTool : public KisToolFreehand {
     Q_OBJECT
 
 public:
-    MixerTool(MixerCanvas *mixer, KisResourceProvider *rp);
+    MixerTool(MixerCanvas *mixer, KisCanvasResourceProvider *rp);
     ~MixerTool();
 
 public:
@@ -43,7 +43,7 @@ protected:
     void endPaint();
 
     MixerCanvas *m_mixer;
-    KisResourceProvider *m_resources;
+    KisCanvasResourceProvider *m_resources;
 };
 
 

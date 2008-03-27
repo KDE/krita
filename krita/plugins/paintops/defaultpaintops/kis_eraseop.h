@@ -36,7 +36,7 @@ public:
     KisEraseOpFactory() {}
     virtual ~KisEraseOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "eraser"; }
     virtual QString name() const { return i18n("Pixel Eraser"); }
     virtual QString pixmap() { return "krita-eraser.png"; }

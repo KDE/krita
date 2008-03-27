@@ -45,12 +45,12 @@ public:
     KisBrushOpFactory() {}
     virtual ~KisBrushOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "paintbrush"; }
     virtual QString name() const { return i18n("Pixel Brush"); }
     virtual QString pixmap() { return "krita-paintbrush.png"; }
-    virtual KisPaintOpSettings *settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettings* settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
@@ -58,7 +58,7 @@ class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
 
 public:
     KisBrushOpSettings(QWidget *parent);
-    virtual KisPaintOpSettings* clone() const;
+    virtual KisPaintOpSettingsSP clone() const;
 
     bool varySize() const;
     bool varyOpacity() const;

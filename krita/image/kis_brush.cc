@@ -1442,6 +1442,7 @@ KisBrush* KisBrush::clone() const {
 
 void KisBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
+    Q_UNUSED(d);
     e.setAttribute( "type", "brush" );
     e.setAttribute("name", name());
     e.setAttribute("filename", filename());

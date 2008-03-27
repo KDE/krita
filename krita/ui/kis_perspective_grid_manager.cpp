@@ -35,7 +35,7 @@
 #include "kis_perspective_grid.h"
 #include "kis_grid_painter_configuration.h"
 #include "kis_view2.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView2 * parent)
     : KisCanvasDecoration("perspectiveGrid", i18n("Perspective grid"), parent)

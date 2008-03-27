@@ -20,14 +20,13 @@
 #define _KIS_RECORDED_PAINT_ACTIONS_H_
 
 #include "kis_recorded_action.h"
-
+#include "kis_paintop_settings.h"
 #include "kis_types.h"
 
 class KisPaintInformation;
 class KisBrush;
 class KisPainter;
 class KoColor;
-class KisPaintOpSettings;
 class KoCompositeOp;
 
 #include <krita_export.h>
@@ -35,7 +34,7 @@ class KoCompositeOp;
 class KisRecordedPaintAction : public KisRecordedAction {
     public:
 
-        KisRecordedPaintAction(const QString & name, const QString & id, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettings *settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
+        KisRecordedPaintAction(const QString & name, const QString & id, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
         
         KisRecordedPaintAction(const KisRecordedPaintAction&);
 
@@ -67,7 +66,7 @@ class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAct
         
         KisRecordedPolyLinePaintAction(const QString & name, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const
 
-        KisPaintOpSettings *settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
+        KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
 
         KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction&);
 
@@ -93,7 +92,7 @@ class KRITAUI_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaint
 
     public:
     
-        KisRecordedBezierCurvePaintAction(const QString & name, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettings *settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
+        KisRecordedBezierCurvePaintAction(const QString & name, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
         
         KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction&);
 

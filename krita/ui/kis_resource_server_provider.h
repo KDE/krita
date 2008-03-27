@@ -1,5 +1,5 @@
 /*
- *  kis_resourceserverprovider.h - part of KImageShop
+ *  kis_resource_server_provider.h - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
@@ -32,8 +32,8 @@
 
 class KoResource;
 class KisBrush;
-class KisImagePipeBrush;
 class KisPattern;
+class KisPaintOpPreset;
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
@@ -46,24 +46,31 @@ public:
 
     KoResourceServer<KisBrush>* brushServer();
     KoResourceServer<KisPattern>* patternServer();
+    KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
+
 private:
+
     KisResourceServerProvider();
     KisResourceServerProvider(const KisResourceServerProvider&);
     KisResourceServerProvider operator=(const KisResourceServerProvider&);
 
     static KisResourceServerProvider *m_singleton;
+    
     KoResourceServer<KisBrush>* m_brushServer;
     KoResourceServer<KisPattern>* m_patternServer;
+    KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
 
 private slots:
 
     void brushThreadDone();
     void patternThreadDone();
+    void paintOpPresetThreadDone();
 
 private:
     
     QThread * brushThread;
     QThread * patternThread;
+    QThread * paintOpPresetThread;
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

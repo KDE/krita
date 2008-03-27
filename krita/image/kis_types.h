@@ -163,8 +163,6 @@ typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
 typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
 typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
-
-
 // #include <kis_iterators_pixel.h>
 template<class T, typename TSelect> class KisLineIteratorPixelBase;
 class KisHLineConstIterator;

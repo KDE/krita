@@ -39,7 +39,6 @@
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"
-#include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 
@@ -49,24 +48,24 @@
 #include "kis_perspective_grid.h"
 #include "kis_random_sub_accessor.h"
 
-#include "ui_DuplicateOpOptionsWidget.h"
+#include "ui_wdgduplicateop.h"
 
-KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings *_settings, KisPainter * _painter, KisImageSP _image)
+KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP _settings, KisPainter * _painter, KisImageSP _image)
 {
-    const KisDuplicateOpSettings* settings = dynamic_cast<const KisDuplicateOpSettings *>(_settings);
+    const KisDuplicateOpSettings* settings = dynamic_cast<const KisDuplicateOpSettings *>(_settings.data());
     Q_ASSERT(settings);
     KisPaintOp * op = new KisDuplicateOp(settings, _painter, _image);
     Q_CHECK_PTR(op);
     return op;
 }
 
-KisPaintOpSettings *KisDuplicateOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisDuplicateOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(inputDevice);
     return new KisDuplicateOpSettings(parent, image);
 }
 
-KisPaintOpSettings* KisDuplicateOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageSP image)
 {
     return new KisDuplicateOpSettings(0, image);
 }
@@ -142,7 +141,7 @@ void KisDuplicateOpSettings::toXML(QDomDocument&, QDomElement& elt) const
     elt.setAttribute( "PerspectiveCorrection", QString::number( m_uiOptions->cbPerspective->isChecked() ) );
 }
 
-KisPaintOpSettings* KisDuplicateOpSettings::clone() const
+KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 {
     KisDuplicateOpSettings* s = new KisDuplicateOpSettings(0, m_image);
     s->m_uiOptions->cbHealing->setChecked( healing() );

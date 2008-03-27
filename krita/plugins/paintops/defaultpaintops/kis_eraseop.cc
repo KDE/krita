@@ -40,9 +40,10 @@
 #include "kis_selection.h"
 
 
-KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
-    Q_UNUSED( image )
+    Q_UNUSED( settings );
+    Q_UNUSED( image );
     KisPaintOp * op = new KisEraseOp(painter);
     Q_CHECK_PTR(op);
     return op;

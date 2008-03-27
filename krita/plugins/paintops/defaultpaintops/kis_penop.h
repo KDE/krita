@@ -39,7 +39,7 @@ public:
     KisPenOpFactory() {}
     virtual ~KisPenOpFactory() {}
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
     virtual QString id() const { return "pen"; }
     virtual QString name() const { return i18n("Pixel Pencil"); }
     virtual QString pixmap() { return "krita-pencil.png"; }

@@ -26,7 +26,7 @@
 #include <kfiledialog.h>
 
 #include <KoResourceItemChooser.h>
-#include "kis_resourceserverprovider.h"
+#include "kis_resource_server_provider.h"
 #include "kis_double_widget.h"
 
 #include "kis_global.h"

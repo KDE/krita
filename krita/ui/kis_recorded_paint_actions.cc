@@ -32,7 +32,7 @@
 #include "kis_paint_information.h"
 #include "kis_paintop_registry.h"
 #include "kis_recorded_action_factory_registry.h"
-#include "kis_resourceserverprovider.h"
+#include "kis_resource_server_provider.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_paintop_settings.h"
@@ -45,7 +45,7 @@ class KisRecordedPaintActionFactory : public KisRecordedActionFactory {
         virtual ~KisRecordedPaintActionFactory(){}
     protected:
         KisBrush* brushFromXML(const QDomElement& elt);
-        KisPaintOpSettings* settingsFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image);
+        KisPaintOpSettingsSP settingsFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image);
 };
 
 class KisRecordedPolyLinePaintActionFactory : public KisRecordedPaintActionFactory {
@@ -81,7 +81,7 @@ struct KisRecordedPaintAction::Private {
     KisLayerSP layer;
     KisBrush* brush;
     QString paintOpId;
-    KisPaintOpSettings *settings;
+    KisPaintOpSettingsSP settings;
     KoColor foregroundColor;
     KoColor backgroundColor;
     int opacity;
@@ -89,7 +89,7 @@ struct KisRecordedPaintAction::Private {
     const KoCompositeOp * compositeOp;
 };
 
-KisRecordedPaintAction::KisRecordedPaintAction(const QString & name, const QString & id, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettings *settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp) : KisRecordedAction(name, id), d(new Private)
+KisRecordedPaintAction::KisRecordedPaintAction(const QString & name, const QString & id, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp) : KisRecordedAction(name, id), d(new Private)
 {
     d->layer = layer;
     d->brush = brush;
@@ -250,9 +250,9 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
     return new KisAutoBrush(new KisCircleMaskGenerator(1.0, 1.0, 0.0, 0.0) );
 }
 
-KisPaintOpSettings* KisRecordedPaintActionFactory::settingsFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image)
+KisPaintOpSettingsSP KisRecordedPaintActionFactory::settingsFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image)
 {
-    KisPaintOpSettings* settings = KisPaintOpRegistry::instance()->get( paintOpId)->settings(image);
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->get( paintOpId)->settings(image);
     if(settings)
     {
         settings->fromXML( elt );
@@ -266,7 +266,7 @@ struct KisRecordedPolyLinePaintAction::Private {
     QList<KisPaintInformation> infos;
 };
 
-KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & name, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettings *settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp)
+KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & name, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp)
     : KisRecordedPaintAction(name, "PolyLinePaintAction", layer, brush, paintOpId, settings, foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp), d(new Private)
 {
 }
@@ -339,7 +339,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
         compositeOp = layer->colorSpace()->compositeOp( COMPOSITE_OVER );
     }
     
-    KisPaintOpSettings* settings = 0;
+    KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
     if(!settingsElt.isNull())
     {
@@ -421,7 +421,7 @@ KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(const QStri
     KisLayerSP layer,
     KisBrush* brush,
     const QString & paintOpId,
-    const KisPaintOpSettings *settings,
+    const KisPaintOpSettingsSP settings,
     KoColor foregroundColor,
     KoColor backgroundColor,
     int opacity,
@@ -521,7 +521,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
         compositeOp = layer->colorSpace()->compositeOp( COMPOSITE_OVER );
     }
     
-    KisPaintOpSettings* settings = 0;
+    KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
     if(!settingsElt.isNull())
     {

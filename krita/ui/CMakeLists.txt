@@ -8,10 +8,10 @@ configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-proce
 include(kdefx.cmake)
 
 set(kritaui_LIB_SRCS
-    modeltest.cpp
     imageviewer.cc
     kcurve.cc
-    kis_filters_listview.cc
+    kis_abstract_canvas_widget.cpp
+    kis_auto_brush_widget.cpp
     kis_autogradient.cc
     kis_birdeye_box.cc
     kis_bookmarked_configurations_editor.cc
@@ -21,6 +21,8 @@ set(kritaui_LIB_SRCS
     kis_brush_chooser.cc
     kis_canvas2.cpp
     kis_canvas_decoration.cc
+    kis_canvas_resource_provider.cpp
+    kis_channelflags_widget.cpp
     kis_clipboard.cc
     kis_cmb_composite.cc
     kis_cmb_idlist.cc
@@ -28,12 +30,10 @@ set(kritaui_LIB_SRCS
     kis_config.cc
     kis_config_notifier.cpp
     kis_control_frame.cpp
-    kis_node_model.cpp
     kis_cursor.cc
     kis_custom_brush.cc
     kis_custom_image_widget.cc
     kis_custom_palette.cc
-    kis_image_view_converter.cpp
     kis_custom_pattern.cc
     kis_dlg_adj_layer_props.cc
     kis_dlg_adjustment_layer.cc
@@ -42,87 +42,89 @@ set(kritaui_LIB_SRCS
     kis_dlg_layer_properties.cc
     kis_dlg_new_layer.cc
     kis_dlg_preferences.cc
+    kis_dlg_transformation_effect.cpp
     kis_doc2.cc
     kis_double_widget.cc
     kis_exposure_visitor.cc
     kis_factory2.cc
-    kis_filter_manager.cc
     kis_filter_dialog.cc
     kis_filter_handler.cc
+    kis_filter_manager.cc
+    kis_filters_listview.cc
     kis_filters_model.cc
     kis_gradient_chooser.cc
     kis_gradient_slider_widget.cc
-    kis_grid_painter_configuration.cpp
     kis_grid_manager.cpp
+    kis_grid_painter_configuration.cpp
     kis_histogram_view.cc
     kis_icon_item.cc
     kis_iconwidget.cc
+    kis_image_manager.cc
+    kis_imagepipe_brush.cc
+    kis_image_view_converter.cpp
     kis_import_catcher.cc
     kis_itemchooser.cc
+    kis_kra_loader.cpp
+    kis_kra_load_visitor.cpp
+    kis_kra_save_visitor.cpp
     kis_label_cursor_pos.cc
     kis_label_zoom.cc
+    kis_layer_box.cpp
+    kis_layer_container_shape.cc
     kis_layer_manager.cc
     kis_layermap_visitor.cc
-    kis_layer_box.cpp
-    kis_kra_load_visitor.cpp
-    kis_kra_loader.cpp
+    kis_layer_shape.cc
+    kis_mask_manager.cc
+    kis_mask_shape.cc
+    kis_mask_widgets.cpp
     kis_meta_data_merge_strategy_chooser_widget.cc
     kis_multi_bool_filter_widget.cc
     kis_multi_double_filter_widget.cc
     kis_multi_integer_filter_widget.cc
-    kis_opengl.cpp
+    kis_node_manager.cpp
+    kis_node_model.cpp
     kis_opengl_canvas2.cpp
+    kis_opengl.cpp
     kis_opengl_image_textures.cpp
     kis_paintop_box.cc 
+    kis_paintop_presets_widget.cpp
     kis_painting_assistant.cc
     kis_palette_docker.cc
     kis_pattern_chooser.cc
     kis_perspective_grid_manager.cpp
+    kis_png_converter.cpp
     kis_popup_button.cc
+    kis_prescaled_projection.cpp
+    kis_preset_widget.cpp
     kis_previewdialog.cc
     kis_previewwidget.cc
+    kis_print_job.cpp
     kis_qpainter_canvas.cpp
     kis_recorded_paint_actions.cc
     kis_resource_mediator.cc
-    kis_resource_provider.cc
-    kis_resourceserverprovider.cpp
-    kis_kra_save_visitor.cpp
+    kis_resource_server_provider.cpp
     kis_savexml_visitor.cc
     kis_selection_manager.cc
     kis_selection_options.cc
+    kis_selection_tool_helper.cpp
+    kis_shape_controller.cpp
+    kis_shape_layer_canvas.cpp
+    kis_shape_layer.cc
+    kis_shape_selection.cpp
+    kis_shape_selection_model.cpp
     kis_statusbar.cc
     kis_text_brush.cc
     kis_tool.cc
     kis_tool_freehand.cc
+    kis_tool_freehand_p.cpp
     kis_tool_paint.cc
     kis_tool_shape.cc
     kis_tree_view_popup.cc
     kis_view2.cpp
     kis_zoom_manager.cc
     kobirdeyepanel.cpp
+    modeltest.cpp
     squeezedcombobox.cpp
-    kis_image_manager.cc
-    kis_mask_manager.cc
-    kis_shape_layer.cc
-    kis_shape_layer_canvas.cpp
-    kis_layer_shape.cc
-    kis_mask_shape.cc
-    kis_layer_container_shape.cc
-    kis_png_converter.cpp
-    kis_channelflags_widget.cpp
-    kis_abstract_canvas_widget.cpp
-    kis_shape_controller.cpp
-    kis_dlg_transformation_effect.cpp
-    kis_mask_widgets.cpp
-    kis_shape_selection.cpp
-    kis_shape_selection_model.cpp
-    kis_tool_freehand_p.cpp
-    kis_imagepipe_brush.cc
-    kis_prescaled_projection.cpp
-    kis_node_manager.cpp
-    kis_selection_tool_helper.cpp
-    kis_print_job.cpp
-    kis_auto_brush_widget.cpp
 # Open Raster TK
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
@@ -158,7 +160,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgcolorsettings.ui
     forms/wdgcolorspaceselector.ui
     forms/wdgdisplaysettings.ui
-    forms/wdgpressuresettings.ui
     forms/kis_previewwidgetbase.ui
     forms/kis_matrix_widget.ui
     forms/wdglayerbox.ui
@@ -174,6 +175,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgmasksource.ui
     forms/wdgfilterdialog.ui
     forms/wdgmetadatamergestrategychooser.ui
+    forms/wdgpaintoppresets.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

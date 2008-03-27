@@ -31,7 +31,7 @@
 #include "kis_global.h"
 #include "kis_icon_item.h"
 #include "kis_pattern.h"
-#include "kis_resourceserverprovider.h"
+#include "kis_resource_server_provider.h"
 
 KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : KisItemChooser(parent, name)
 {

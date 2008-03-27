@@ -49,7 +49,7 @@
 #include "kis_canvas2.h"
 #include "kis_prescaled_projection.h"
 #include "kis_config.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_doc2.h"
 #include "kis_selection_manager.h"
 #include "kis_selection.h"

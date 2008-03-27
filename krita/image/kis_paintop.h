@@ -25,6 +25,7 @@
 
 #include "kis_shared.h"
 #include "kis_types.h"
+#include "kis_paintop_settings.h"
 
 #include <krita_export.h>
 
@@ -38,7 +39,7 @@ class KoPointerEvent;
 class KisQImagemask;
 class KisPainter;
 class KisPaintInformation;
-class KisPaintOpSettings;
+
 /**
  * KisPaintOp are use by tools to draw on a paint device.
  */
@@ -136,7 +137,7 @@ public:
      * @param settings the settings associated with the input device
      * @param painter the painter used to draw
      */
-    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter, KisImageSP image) = 0;
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image) = 0;
     virtual QString id() const = 0;
     virtual QString name() const = 0;
 
@@ -157,8 +158,8 @@ public:
      * specified input device. Return 0 if there are no settings available for the given
      * device.
      */
-    virtual KisPaintOpSettings* settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettings* settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 
 };
 #endif // KIS_PAINTOP_H_

@@ -41,7 +41,7 @@ void KisComplexOp::paintAt(const KisPaintInformation &info)
 }
 
 
-KisPaintOp *KisComplexOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter *painter, KisImageSP image)
+KisPaintOp *KisComplexOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisImageSP image)
 {
     Q_UNUSED(settings)
     Q_UNUSED(image)

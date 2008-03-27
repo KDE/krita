@@ -26,7 +26,7 @@
 #include <kis_painterly_overlay.h>
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
-#include <kis_resource_provider.h>
+#include <kis_canvas_resource_provider.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColorSpace.h>
 #include <KoShapeManager.h>
@@ -86,19 +86,19 @@ KoUnit MixerCanvas::unit() const
     return KoUnit();
 }
 
-void MixerCanvas::setResources(KisResourceProvider *rp)
+void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
 {
     KoCanvasResourceProvider *internal = resourceProvider();
 
     internal->setResource(KoCanvasResource::ForegroundColor, rp->fgColor());
     internal->setResource(KoCanvasResource::BackgroundColor, rp->bgColor());
-    internal->setResource(KisResourceProvider::CurrentBrush, rp->currentBrush());
-    internal->setResource(KisResourceProvider::CurrentPattern, rp->currentPattern());
-    internal->setResource(KisResourceProvider::CurrentGradient, rp->currentGradient());
+    internal->setResource(KisCanvasResourceProvider::CurrentBrush, rp->currentBrush());
+    internal->setResource(KisCanvasResourceProvider::CurrentPattern, rp->currentPattern());
+    internal->setResource(KisCanvasResourceProvider::CurrentGradient, rp->currentGradient());
 
-    internal->setResource(KisResourceProvider::CurrentKritaLayer, rp->currentLayer().data());
-    internal->setResource(KisResourceProvider::HdrExposure, rp->HDRExposure());
-    internal->setResource(KisResourceProvider::CurrentPaintop, rp->currentPaintop());
+    internal->setResource(KisCanvasResourceProvider::CurrentKritaLayer, rp->currentLayer().data());
+    internal->setResource(KisCanvasResourceProvider::HdrExposure, rp->HDRExposure());
+    internal->setResource(KisCanvasResourceProvider::CurrentPaintop, rp->currentPaintop());
 
     initPaintopSettings(); // TODO ?
     checkCurrentPaintop();
@@ -118,25 +118,25 @@ void MixerCanvas::checkCurrentPaintop()
 
     KisPainter painter(device());
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
-                          internal->resource(KisResourceProvider::CurrentPaintop).value<KoID>().id(),
+                          internal->resource(KisCanvasResourceProvider::CurrentPaintop).value<KoID>().id(),
                           static_cast<KisPaintOpSettings*>(
-                          internal->resource(KisResourceProvider::CurrentPaintopSettings).value<void *>()),
+                          internal->resource(KisCanvasResourceProvider::CurrentPaintopSettings).value<void *>()),
                           &painter, 0);
     painter.setPaintOp(current); // This is done just for the painter to own the paintop and destroy it
 
     if (current && !current->painterly())
-        internal->setResource(KisResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
+        internal->setResource(KisCanvasResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
 }
 
 void MixerCanvas::checkCurrentLayer()
 {
     KoCanvasResourceProvider *internal = resourceProvider();
 
-    KisLayerSP current = internal->resource(KisResourceProvider::CurrentKritaLayer).value<KisLayerSP>();
+    KisLayerSP current = internal->resource(KisCanvasResourceProvider::CurrentKritaLayer).value<KisLayerSP>();
     if (current.data() != m_layer.data()) {
         QVariant v;
         v.setValue(KisLayerSP(m_layer.data()));
-        internal->setResource(KisResourceProvider::CurrentKritaLayer, v);
+        internal->setResource(KisCanvasResourceProvider::CurrentKritaLayer, v);
     }
 }
 
@@ -223,16 +223,16 @@ void MixerCanvas::slotClear()
 
 void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
 {
-    if (key != KisResourceProvider::CurrentPaintopSettings)
+    if (key != KisCanvasResourceProvider::CurrentPaintopSettings)
         resourceProvider()->setResource(key, value);
     else
         return;
 
     switch (key) {
-        case KisResourceProvider::CurrentPaintop:
+        case KisCanvasResourceProvider::CurrentPaintop:
             checkCurrentPaintop();
             break;
-        case KisResourceProvider::CurrentKritaLayer:
+        case KisCanvasResourceProvider::CurrentKritaLayer:
             checkCurrentLayer();
             break;
     }

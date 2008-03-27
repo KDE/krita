@@ -45,7 +45,6 @@ public:
     void setCurveGuide(const QColor & color);
     void setPixmap(const QPixmap & pix);
 
-
 signals:
 
     void modified(void);

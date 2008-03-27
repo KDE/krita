@@ -38,7 +38,7 @@
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
 #include "kis_datamanager.h"
-
+#include "kis_paintop_settings.h"
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #define MAXIMUM_SCALE 2
@@ -260,13 +260,14 @@ bool KisPaintOpFactory::userVisible(const KoColorSpace * cs )
 }
 
 
-KisPaintOpSettings* KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/)
+KisPaintOpSettingsSP KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/)
 {
     return 0;
 }
 
-KisPaintOpSettings* KisPaintOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisPaintOpFactory::settings(KisImageSP image)
 {
+    Q_UNUSED(image);
     return 0;
 }
 

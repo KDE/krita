@@ -24,13 +24,13 @@
 
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
-#include <kis_resource_provider.h>
+#include <kis_canvas_resource_provider.h>
 #include <KoPointerEvent.h>
 #include <QCursor>
 #include <QRegion>
 #include <QString>
 
-MixerTool::MixerTool(MixerCanvas *mixer, KisResourceProvider *rp)
+MixerTool::MixerTool(MixerCanvas *mixer, KisCanvasResourceProvider *rp)
     : KisToolFreehand(mixer, QCursor(), "Mixer Wrapper Tool"), m_mixer(mixer), m_resources(rp)
 {
     activate();

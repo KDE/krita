@@ -73,6 +73,7 @@ public:
 
     /// Get the class that manages the user interface for the masks
     KisMaskManager * maskManager();
+    
 signals:
 
     void sigNodeActivated( KisNodeSP layer );

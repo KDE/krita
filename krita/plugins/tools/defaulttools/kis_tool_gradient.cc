@@ -49,7 +49,7 @@
 #include "kis_gradient_painter.h"
 #include "kis_painter.h"
 #include "KoProgressUpdater.h"
-#include "kis_resource_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
 #include "kis_layer.h"
 #include <kis_selection.h>

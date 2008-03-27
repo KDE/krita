@@ -24,7 +24,6 @@
 #include <cfloat>
 #include <stack>
 
-#include "qbrush.h"
 #include "qfontinfo.h"
 #include "qfontmetrics.h"
 #include "qpen.h"
@@ -42,7 +41,6 @@
 
 #include <KoProgressUpdater.h>
 
-#include "kis_brush.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_layer.h"

@@ -44,8 +44,21 @@ class KisWeakSharedPtr;
  * http://bugs.kde.org/show_bug.cgi?id=52261 as well as
  * http://www.boost.org/libs/smart_ptr/shared_ptr.htm.
  *
- * XXX: We should replace all uses of KisSharedPtr with the boost
- * shared pointer, if possible.
+ * Advantage of KisSharedPtr over boost pointer ?
+ * The difference with boost share pointer is that in boost::shared_ptr,
+ * the counter is kept inside the smart pointer, meaning that you should
+ * never never remove the pointer from its smart pointer object, because if
+ * you do that, and somewhere in the code, the pointer is put back in a smart
+ * pointer, then you have two counters, and when one reach zero, then the object
+ * gets deleted while some other code thinks the pointer is still valid.
+ *
+ * Inconvenient of KisSharedPtr over boost pointer ?
+ * KisSharedPtr requires the class to inherits KisShared.
+ *
+ * Difference with QSharedDataPointer
+ * QSharedDataPointer and KisSharedPtr are very similar, but QSharedDataPointer
+ * has an explicit constructor which makes it more painfull to use in some
+ * construct. And QSharedDataPointer doesn't offer a weak pointer.
  */
 template<class T>
 class KisSharedPtr {

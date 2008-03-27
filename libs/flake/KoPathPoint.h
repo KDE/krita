@@ -174,18 +174,22 @@ public:
     void unsetProperty( KoPointProperty property );
 
     /**
-     * @brief check if there is a controlPoint1
+     * @brief Checks if there is a controlPoint1
      *
-     * @return true when CanHaveControlPoint1 and HasControlPoint1 is set
-     * return false otherwise
+     * The control point is active if CanHaveControlPoint1 is set and
+     * a control point was set by calling setControlPoint1.
+     *
+     * @return true if control point is active, false otherwise
      */
     bool activeControlPoint1() const;
 
     /**
-     * @brief check if there is a controlPoint2
+     * @brief Checks if there is a controlPoint2
      *
-     * @return true when CanHaveControlPoint2 and HasControlPoint2 is set
-     * return false otherwise
+     * The control point is active if CanHaveControlPoint2 is set and
+     * a control point was set by calling setControlPoint2.
+     *
+     * @return true if control point is active, false otherwise
      */
     bool activeControlPoint2() const;
 

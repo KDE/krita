@@ -36,12 +36,6 @@
 # endif
 #endif
 
-#else /* UNIX */
-
-#define PIGMENTCMS_EXPORT KDE_EXPORT
-
-#endif
-
 #if !defined and
 #define and &&
 #endif
@@ -52,6 +46,13 @@
 
 #if !defined not
 #define not !
+#endif
+
+
+#else /* UNIX */
+
+#define PIGMENTCMS_EXPORT KDE_EXPORT
+
 #endif
 
 #endif

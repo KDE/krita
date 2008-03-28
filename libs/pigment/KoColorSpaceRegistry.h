@@ -46,15 +46,11 @@ class KoColorConversionCache;
  *      - a registry of icc profiles
  */
 class PIGMENTCMS_EXPORT KoColorSpaceRegistry : public QObject,  public KoGenericRegistry<KoColorSpaceFactory *> {
-
-
-    Q_OBJECT
 public:
     enum ColorSpaceListVisibility {
         OnlyUserVisible = 1, ///< Only user visible color space
         AllColorSpaces = 4 ///< All color space even those not visible to the user
     };
-public:
 
     /**
      * Return an instance of the KoColorSpaceRegistry

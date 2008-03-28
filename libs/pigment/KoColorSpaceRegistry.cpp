@@ -496,5 +496,3 @@ KoColorConversionCache* KoColorSpaceRegistry::colorConversionCache() const
 {
     return d->colorConversionCache;
 }
-
-#include "KoColorSpaceRegistry.moc"

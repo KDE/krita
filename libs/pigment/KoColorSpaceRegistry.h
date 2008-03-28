@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QList>
 #include <QString>
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 #include <KoGenericRegistry.h>
 

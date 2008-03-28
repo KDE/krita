@@ -21,7 +21,7 @@
 #define _KO_CTL_COLOR_SPACE_H_
 
 #include <KoColorSpace.h>
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 class KoCtlColorProfile;
 

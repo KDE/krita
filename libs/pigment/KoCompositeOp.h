@@ -21,7 +21,7 @@
 
 #include <QtCore>
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 class KoColorSpace;
 

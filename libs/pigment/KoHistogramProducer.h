@@ -22,7 +22,7 @@
 #include <qglobal.h>
 #include <ksharedptr.h>
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 #include "KoGenericRegistry.h"
 

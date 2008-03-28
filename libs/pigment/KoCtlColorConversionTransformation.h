@@ -22,7 +22,7 @@
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 class KoCtlColorConversionTransformation : public KoColorConversionTransformation {
     public:

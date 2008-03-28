@@ -28,7 +28,7 @@
 
 #include "KoColorSpace.h"
 #include "KoID.h"
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 class PIGMENTCMS_EXPORT KoBasicHistogramProducer : public KoHistogramProducer {
 public:

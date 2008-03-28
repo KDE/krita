@@ -22,7 +22,7 @@
 
 #include <KoID.h>
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 extern const KoID PIGMENTCMS_EXPORT AlphaColorModelID;
 extern const KoID PIGMENTCMS_EXPORT RGBAColorModelID;

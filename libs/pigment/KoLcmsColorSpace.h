@@ -29,7 +29,7 @@
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 #include "colorprofiles/KoHdrColorProfile.h"
 

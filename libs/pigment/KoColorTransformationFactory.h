@@ -28,7 +28,7 @@ class KoColorTransformation;
 class KoColorSpace;
 class KoID;
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 class PIGMENTCMS_EXPORT KoColorTransformationFactory {
   public:

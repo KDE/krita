@@ -22,7 +22,7 @@
 
 #include <QString>
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 /**
  * Contains information needed for color transformation.

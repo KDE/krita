@@ -22,7 +22,7 @@
 
 #include <KoColorConversionTransformation.h>
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 /**
  * This color conversion transformation allows to create a chain of color conversion between two color

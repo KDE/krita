@@ -22,7 +22,7 @@
 
 #include <QColor>
 #include <QMetaType>
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 class QDomDocument;
 class QDomElement;

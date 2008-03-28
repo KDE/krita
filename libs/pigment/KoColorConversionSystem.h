@@ -29,7 +29,7 @@ class KoID;
 #include <QList>
 #include <QPair>
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 /**
  * This class hold the logic related to pigment's Color Conversion System. It's

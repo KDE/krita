@@ -20,7 +20,7 @@
 #ifndef KOCOLORSPACEMATHS_H_
 #define KOCOLORSPACEMATHS_H_
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 #include <KoIntegerMaths.h>
 #include "KoChannelInfo.h"
 

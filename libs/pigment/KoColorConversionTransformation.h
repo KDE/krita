@@ -22,7 +22,7 @@
 
 #include "KoColorTransformation.h"
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 class KoColorSpace;
 class KoColorConversionCache;

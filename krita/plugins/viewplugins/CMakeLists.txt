@@ -25,6 +25,10 @@ find_package(GMM)
 
 if (EIGEN_FOUND AND GMM_FOUND)
     add_subdirectory( panorama )
+else (EIGEN_FOUND AND GMM_FOUND)
+    message("Disabling Panorama because you're missing either Eigen or GMM.")
+    message("Eigen is in kdesupport, GMM can be downloaded from:")
+    message("http://home.gna.org/getfem/download.html")
 endif (EIGEN_FOUND AND GMM_FOUND)
 
 

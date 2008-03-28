@@ -22,7 +22,7 @@
 #define KO_TOOL_MANAGER
 
 #include <KoInputDevice.h>
-#include <flake_export.h>
+#include "flake_export.h"
 
 #include <QObject>
 #include <QCursor>

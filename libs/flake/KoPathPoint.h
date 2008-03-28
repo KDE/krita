@@ -22,7 +22,7 @@
 #ifndef KOPATHPOINT_H
 #define KOPATHPOINT_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoPathShape;
 class QPointF;

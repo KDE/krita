@@ -26,7 +26,7 @@
 #include <QSizeF>
 
 #include <KoID.h>
-#include <flake_export.h>
+#include "flake_export.h"
 class KoColor;
 
 /**

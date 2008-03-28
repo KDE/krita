@@ -25,7 +25,7 @@
 
 #include "KoGenericRegistry.h"
 #include <KoToolFactory.h>
-#include <flake_export.h>
+#include "flake_export.h"
 
 /**
  * This singleton class keeps a register of all available flake tools,

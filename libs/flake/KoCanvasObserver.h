@@ -22,7 +22,7 @@
 
 class KoCanvasBase;
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 /**
  * An abstract canvas observer interface class.

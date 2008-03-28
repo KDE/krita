@@ -24,7 +24,7 @@
 #include <QCursor>
 #include <QStringList>
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoCanvasBase;
 class KoPointerEvent;

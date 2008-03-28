@@ -25,7 +25,7 @@
 
 class QString;
 
-#include <flake_export.h>
+#include "flake_export.h"
 /**
  * Parser for svg path data, passed by argument in the parseSvg() method
  *

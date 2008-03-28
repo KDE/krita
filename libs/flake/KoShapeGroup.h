@@ -24,7 +24,7 @@
 
 #include <QList>
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoShapeSavingContext;
 class KoShapeLoadingContext;

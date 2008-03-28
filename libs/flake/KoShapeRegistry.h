@@ -27,7 +27,7 @@
 #include <KoXmlReader.h>
 #include <KoShapeFactory.h>
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoShape;
 class KoShapeLoadingContext;

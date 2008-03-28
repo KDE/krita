@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QString>
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoOdfLoadingContext;
 class KoShapeLayer;

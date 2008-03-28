@@ -21,7 +21,7 @@
 #ifndef KOSHAPEMANAGERPAINTINGSTRATEGY_H
 #define KOSHAPEMANAGERPAINTINGSTRATEGY_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoShapeManager;
 class KoShape;

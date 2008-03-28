@@ -20,7 +20,7 @@
 #ifndef KOSHAPESTYLEWRITER_H
 #define KOSHAPESTYLEWRITER_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 #include <QtCore/QString>
 
 class KoShapeSavingContext;

@@ -20,7 +20,7 @@
 #ifndef _KO_SHAPE_CONFIG_FACTORY_
 #define _KO_SHAPE_CONFIG_FACTORY_
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 #include <QString>
 

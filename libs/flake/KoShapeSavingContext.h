@@ -22,7 +22,7 @@
 #ifndef KOSHAPESAVINGCONTEXT_H
 #define KOSHAPESAVINGCONTEXT_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 #include <QFlags>
 #include <QMap>

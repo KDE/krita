@@ -20,7 +20,7 @@
 #ifndef KOSHAPECONTAINERMODEL_H
 #define KOSHAPECONTAINERMODEL_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 #include <KoShape.h>
 

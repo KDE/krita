@@ -27,7 +27,7 @@
 #include <QList>
 #include <QMap>
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 #include <KoXmlReader.h>
 

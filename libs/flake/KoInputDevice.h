@@ -21,7 +21,7 @@
 #ifndef KO_INPUT_DEVICE_H_
 #define KO_INPUT_DEVICE_H_
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 #include <QHash>
 #include <QTabletEvent>

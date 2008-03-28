@@ -31,7 +31,7 @@
 #include "KoViewConverter.h"
 #include "KoFlake.h"
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoShapeGroup;
 class KoShapeLayer;

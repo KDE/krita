@@ -30,24 +30,24 @@ KoSubpathJoinCommand::KoSubpathJoinCommand( const KoPathPointData &pointData1, c
 , m_oldProperties2( KoPathPoint::Normal )
 , m_reverse( 0 )
 {
-    Q_ASSERT( m_pointData1.m_pathShape == m_pointData2.m_pathShape );
-    KoPathShape * pathShape = m_pointData1.m_pathShape;
-    Q_ASSERT( !pathShape->isClosedSubpath( m_pointData1.m_pointIndex.first ) );
-    Q_ASSERT( m_pointData1.m_pointIndex.second == 0 || 
-              m_pointData1.m_pointIndex.second == pathShape->pointCountSubpath( m_pointData1.m_pointIndex.first ) - 1 );
-    Q_ASSERT( !pathShape->isClosedSubpath( m_pointData2.m_pointIndex.first ) );
-    Q_ASSERT( m_pointData2.m_pointIndex.second == 0 || 
-              m_pointData2.m_pointIndex.second == pathShape->pointCountSubpath( m_pointData2.m_pointIndex.first ) - 1 );
+    Q_ASSERT( m_pointData1.pathShape == m_pointData2.pathShape );
+    KoPathShape * pathShape = m_pointData1.pathShape;
+    Q_ASSERT( !pathShape->isClosedSubpath( m_pointData1.pointIndex.first ) );
+    Q_ASSERT( m_pointData1.pointIndex.second == 0 || 
+              m_pointData1.pointIndex.second == pathShape->pointCountSubpath( m_pointData1.pointIndex.first ) - 1 );
+    Q_ASSERT( !pathShape->isClosedSubpath( m_pointData2.pointIndex.first ) );
+    Q_ASSERT( m_pointData2.pointIndex.second == 0 || 
+              m_pointData2.pointIndex.second == pathShape->pointCountSubpath( m_pointData2.pointIndex.first ) - 1 );
     //TODO check that points are not the same
 
     if ( m_pointData2 < m_pointData1 )
         qSwap( m_pointData1, m_pointData2 );
 
-    if ( m_pointData1.m_pointIndex.first != m_pointData2.m_pointIndex.first )
+    if ( m_pointData1.pointIndex.first != m_pointData2.pointIndex.first )
     {
-        if ( m_pointData1.m_pointIndex.second == 0 && pathShape->pointCountSubpath( m_pointData1.m_pointIndex.first ) > 1 )
+        if ( m_pointData1.pointIndex.second == 0 && pathShape->pointCountSubpath( m_pointData1.pointIndex.first ) > 1 )
             m_reverse |= ReverseFirst;
-        if ( m_pointData2.m_pointIndex.second != 0 )
+        if ( m_pointData2.pointIndex.second != 0 )
             m_reverse |= ReverseSecond;
         setText( i18n( "Close subpath" ) );
     }
@@ -56,8 +56,8 @@ KoSubpathJoinCommand::KoSubpathJoinCommand( const KoPathPointData &pointData1, c
         setText( i18n( "Join subpaths" ) );
     }
 
-    KoPathPoint * point1 = pathShape->pointByIndex( m_pointData1.m_pointIndex );
-    KoPathPoint * point2 = pathShape->pointByIndex( m_pointData2.m_pointIndex );
+    KoPathPoint * point1 = pathShape->pointByIndex( m_pointData1.pointIndex );
+    KoPathPoint * point2 = pathShape->pointByIndex( m_pointData2.pointIndex );
 
     m_oldControlPoint1 = QPointF( pathShape->shapeToDocument( m_reverse & 1 ? point1->controlPoint1() : point1->controlPoint2() ) );
     m_oldControlPoint2 = QPointF( pathShape->shapeToDocument( m_reverse & 2 ? point2->controlPoint1() : point2->controlPoint2() ) );
@@ -72,12 +72,12 @@ KoSubpathJoinCommand::~KoSubpathJoinCommand()
 void KoSubpathJoinCommand::redo()
 {
     QUndoCommand::redo();
-    KoPathShape * pathShape = m_pointData1.m_pathShape;
+    KoPathShape * pathShape = m_pointData1.pathShape;
 
-    bool closeSubpath = m_pointData1.m_pointIndex.first == m_pointData2.m_pointIndex.first; 
+    bool closeSubpath = m_pointData1.pointIndex.first == m_pointData2.pointIndex.first; 
 
-    KoPathPoint * point1 = pathShape->pointByIndex( m_pointData1.m_pointIndex );
-    KoPathPoint * point2 = pathShape->pointByIndex( m_pointData2.m_pointIndex );
+    KoPathPoint * point1 = pathShape->pointByIndex( m_pointData1.pointIndex );
+    KoPathPoint * point2 = pathShape->pointByIndex( m_pointData2.pointIndex );
 
     // if the endpoint is has a control point create a contol point for the new segment to be 
     // at the symetric position to the exiting one
@@ -96,22 +96,22 @@ void KoSubpathJoinCommand::redo()
 
     if ( closeSubpath )
     {
-        pathShape->closeSubpath( m_pointData1.m_pointIndex );
+        pathShape->closeSubpath( m_pointData1.pointIndex );
     }
     else
     {
         if ( m_reverse & ReverseFirst )
         {
-            pathShape->reverseSubpath( m_pointData1.m_pointIndex.first );
+            pathShape->reverseSubpath( m_pointData1.pointIndex.first );
         }
         if ( m_reverse & ReverseSecond )
         {
-            pathShape->reverseSubpath( m_pointData2.m_pointIndex.first );
+            pathShape->reverseSubpath( m_pointData2.pointIndex.first );
         }
-        pathShape->moveSubpath( m_pointData2.m_pointIndex.first, m_pointData1.m_pointIndex.first + 1 );
-        m_splitIndex = m_pointData1.m_pointIndex;
-        m_splitIndex.second = pathShape->pointCountSubpath( m_pointData1.m_pointIndex.first ) - 1;
-        pathShape->join( m_pointData1.m_pointIndex.first );
+        pathShape->moveSubpath( m_pointData2.pointIndex.first, m_pointData1.pointIndex.first + 1 );
+        m_splitIndex = m_pointData1.pointIndex;
+        m_splitIndex.second = pathShape->pointCountSubpath( m_pointData1.pointIndex.first ) - 1;
+        pathShape->join( m_pointData1.pointIndex.first );
     }
     pathShape->normalize();
     pathShape->update();
@@ -120,28 +120,28 @@ void KoSubpathJoinCommand::redo()
 void KoSubpathJoinCommand::undo()
 {
     QUndoCommand::undo();
-    KoPathShape * pathShape = m_pointData1.m_pathShape;
+    KoPathShape * pathShape = m_pointData1.pathShape;
     pathShape->update();
-    if ( m_pointData1.m_pointIndex.first == m_pointData2.m_pointIndex.first )
+    if ( m_pointData1.pointIndex.first == m_pointData2.pointIndex.first )
     {
-        pathShape->openSubpath( m_pointData1.m_pointIndex );
+        pathShape->openSubpath( m_pointData1.pointIndex );
     }
     else
     {
         pathShape->breakAfter( m_splitIndex );
-        pathShape->moveSubpath( m_pointData1.m_pointIndex.first + 1, m_pointData2.m_pointIndex.first );
+        pathShape->moveSubpath( m_pointData1.pointIndex.first + 1, m_pointData2.pointIndex.first );
 
         if ( m_reverse & ReverseSecond )
         {
-            pathShape->reverseSubpath( m_pointData2.m_pointIndex.first );
+            pathShape->reverseSubpath( m_pointData2.pointIndex.first );
         }
         if ( m_reverse & ReverseFirst )
         {
-            pathShape->reverseSubpath( m_pointData1.m_pointIndex.first );
+            pathShape->reverseSubpath( m_pointData1.pointIndex.first );
         }
     }
-    KoPathPoint * point1 = pathShape->pointByIndex( m_pointData1.m_pointIndex );
-    KoPathPoint * point2 = pathShape->pointByIndex( m_pointData2.m_pointIndex );
+    KoPathPoint * point1 = pathShape->pointByIndex( m_pointData1.pointIndex );
+    KoPathPoint * point2 = pathShape->pointByIndex( m_pointData2.pointIndex );
 
     // restore the old end points
     if ( m_reverse & ReverseFirst )

@@ -35,9 +35,9 @@ KoPathPointInsertCommand::KoPathPointInsertCommand( const QList<KoPathPointData>
     QList<KoPathPointData>::const_iterator it( pointDataList.begin() );
     for ( ; it != pointDataList.end(); ++it )
     {
-        KoPathShape * pathShape = it->m_pathShape;
+        KoPathShape * pathShape = it->pathShape;
 
-        KoPathSegment segment = pathShape->segmentByIndex( it->m_pointIndex );
+        KoPathSegment segment = pathShape->segmentByIndex( it->pointIndex );
 
         // should not happen but to be sure
         if ( ! segment.isValid() )
@@ -95,11 +95,11 @@ void KoPathPointInsertCommand::redo()
     for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
     {
         KoPathPointData pointData = m_pointDataList.at( i );
-        KoPathShape * pathShape = pointData.m_pathShape;
+        KoPathShape * pathShape = pointData.pathShape;
 
-        KoPathSegment segment = pathShape->segmentByIndex( pointData.m_pointIndex );
+        KoPathSegment segment = pathShape->segmentByIndex( pointData.pointIndex );
 
-        ++pointData.m_pointIndex.second;
+        ++pointData.pointIndex.second;
 
         if ( segment.first()->activeControlPoint2() )
         {
@@ -115,7 +115,7 @@ void KoPathPointInsertCommand::redo()
             segment.second()->setControlPoint1( controlPoint1 );
         }
 
-        pathShape->insertPoint( m_points.at( i ), pointData.m_pointIndex );
+        pathShape->insertPoint( m_points.at( i ), pointData.pointIndex );
         pathShape->update();
     }
     m_deletePoints = false;
@@ -127,11 +127,11 @@ void KoPathPointInsertCommand::undo()
     for ( int i = 0; i < m_pointDataList.size(); ++i )
     {
         const KoPathPointData &pdBefore = m_pointDataList.at( i );
-        KoPathShape * pathShape = pdBefore.m_pathShape;
-        KoPathPointIndex piAfter = pdBefore.m_pointIndex;
+        KoPathShape * pathShape = pdBefore.pathShape;
+        KoPathPointIndex piAfter = pdBefore.pointIndex;
         ++piAfter.second;
 
-        KoPathPoint * before = pathShape->pointByIndex( pdBefore.m_pointIndex );
+        KoPathPoint * before = pathShape->pointByIndex( pdBefore.pointIndex );
 
         m_points[i] = pathShape->removePoint( piAfter );
 

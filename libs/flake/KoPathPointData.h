@@ -30,31 +30,31 @@ class KoPathPointData
 {
 public:
     /// contructor
-    KoPathPointData( KoPathShape * pathShape, const KoPathPointIndex & pathPointIndex )
-    : m_pathShape( pathShape )
-    , m_pointIndex( pathPointIndex )
+    KoPathPointData( KoPathShape * path, const KoPathPointIndex & pointIndex )
+    : pathShape( path )
+    , pointIndex( pointIndex )
     {}
 
     /// operator used for sorting
     bool operator<( const KoPathPointData & other ) const 
     { 
-        return m_pathShape < other.m_pathShape ||
-               ( m_pathShape == other.m_pathShape && 
-                 ( m_pointIndex.first < other.m_pointIndex.first ||
-                   ( m_pointIndex.first == other.m_pointIndex.first &&
-                     m_pointIndex.second < other.m_pointIndex.second ) ) );
+        return pathShape < other.pathShape ||
+               ( pathShape == other.pathShape && 
+                 ( pointIndex.first < other.pointIndex.first ||
+                   ( pointIndex.first == other.pointIndex.first &&
+                     pointIndex.second < other.pointIndex.second ) ) );
 
     }
     bool operator==( const KoPathPointData & other ) const
     {
-        return m_pathShape == other.m_pathShape && 
-               m_pointIndex.first == other.m_pointIndex.first &&
-               m_pointIndex.second == other.m_pointIndex.second;
+        return pathShape == other.pathShape && 
+               pointIndex.first == other.pointIndex.first &&
+               pointIndex.second == other.pointIndex.second;
     }
     /// path shape the path point belongs too
-    KoPathShape *m_pathShape;
+    KoPathShape * pathShape;
     /// position of the point in the path shape
-    KoPathPointIndex m_pointIndex;
+    KoPathPointIndex pointIndex;
 };
 
 #endif

@@ -177,19 +177,19 @@ QList<KoPathPointData> KoPathToolSelection::selectedSegmentsData() const
     QList<KoPathPointData>::const_iterator it( pd.begin() );
     for ( ; it != pd.end(); ++it )
     {
-        if ( it->m_pointIndex.second == 0 )
+        if ( it->pointIndex.second == 0 )
             lastSubpathStart = *it;
 
-        if ( last.m_pathShape == it->m_pathShape
-             && last.m_pointIndex.first == it->m_pointIndex.first
-             && last.m_pointIndex.second + 1 == it->m_pointIndex.second  )
+        if ( last.pathShape == it->pathShape
+             && last.pointIndex.first == it->pointIndex.first
+             && last.pointIndex.second + 1 == it->pointIndex.second  )
         {
             pointData.append( last );
         }
 
-        if ( lastSubpathStart.m_pathShape == it->m_pathShape
-             && it->m_pathShape->pointByIndex( it->m_pointIndex )->properties() & KoPathPoint::CloseSubpath
-             && (it->m_pathShape->pointByIndex( it->m_pointIndex )->properties() & KoPathPoint::StartSubpath) == 0 )
+        if ( lastSubpathStart.pathShape == it->pathShape
+             && it->pathShape->pointByIndex( it->pointIndex )->properties() & KoPathPoint::CloseSubpath
+             && (it->pathShape->pointByIndex( it->pointIndex )->properties() & KoPathPoint::StartSubpath) == 0 )
         {
             pointData.append( *it );
         }

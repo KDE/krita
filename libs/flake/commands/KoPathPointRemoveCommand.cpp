@@ -56,10 +56,10 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
     for ( ; it != sortedPointData.end(); ++it )
     {
         // check if we have come to the next subpath of the same or another path
-        if ( last.m_pathShape != it->m_pathShape || last.m_pointIndex.first != it->m_pointIndex.first )
+        if ( last.pathShape != it->pathShape || last.pointIndex.first != it->pointIndex.first )
         {
             // check if all points of the last subpath should be deleted
-            if ( last.m_pathShape->pointCountSubpath( last.m_pointIndex.first ) == pointsOfSubpath.size() )
+            if ( last.pathShape->pointCountSubpath( last.pointIndex.first ) == pointsOfSubpath.size() )
             {
                 // all points of subpath to be deleted -> mark subpath as to be deleted
                 subpathsOfPath.append( pointsOfSubpath.first() );
@@ -74,13 +74,13 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
         }
 
         // check if we have come to the next shape
-        if ( last.m_pathShape != it->m_pathShape )
+        if ( last.pathShape != it->pathShape )
         {
             // check if all subpath of the shape should be deleted
-            if ( last.m_pathShape->subpathCount() == subpathsOfPath.size() )
+            if ( last.pathShape->subpathCount() == subpathsOfPath.size() )
             {
                 // all subpaths of path to be deleted -> add shape to delete shape list
-                shapesToDelete.append( last.m_pathShape );
+                shapesToDelete.append( last.pathShape );
             }
             else
             {
@@ -89,7 +89,7 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
             }
             subpathsOfPath.clear();
         }
-        if( ! it->m_pathShape )
+        if( ! it->pathShape )
             continue;
         // keep reference to last point
         last = *it;
@@ -105,7 +105,7 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
     }
     foreach ( const KoPathPointData & pd, subpathToDelete )
     {
-        new KoSubpathRemoveCommand( pd.m_pathShape, pd.m_pointIndex.first, cmd );
+        new KoSubpathRemoveCommand( pd.pathShape, pd.pointIndex.first, cmd );
     }
     if ( shapesToDelete.size() > 0 )
     {
@@ -124,7 +124,7 @@ KoPathPointRemoveCommand::KoPathPointRemoveCommand(
     QList<KoPathPointData>::const_iterator it( pointDataList.begin() );
     for ( ; it != pointDataList.end(); ++it )
     {
-        KoPathPoint *point = it->m_pathShape->pointByIndex( it->m_pointIndex );
+        KoPathPoint *point = it->pathShape->pointByIndex( it->pointIndex );
         if ( point )
         {
             m_pointDataList.append( *it );
@@ -151,10 +151,10 @@ void KoPathPointRemoveCommand::redo()
     for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
     {
         const KoPathPointData &pd = m_pointDataList.at( i );
-        pd.m_pathShape->update();
-        m_points[i] = pd.m_pathShape->removePoint( pd.m_pointIndex );
+        pd.pathShape->update();
+        m_points[i] = pd.pathShape->removePoint( pd.pointIndex );
 
-        if ( lastPathShape != pd.m_pathShape )
+        if ( lastPathShape != pd.pathShape )
         {
             if ( lastPathShape )
             {
@@ -169,7 +169,7 @@ void KoPathPointRemoveCommand::redo()
                 lastPathShape->update();
                 updateBefore = i + 1;
             }
-            lastPathShape = pd.m_pathShape;
+            lastPathShape = pd.pathShape;
         }
     }
 
@@ -196,13 +196,13 @@ void KoPathPointRemoveCommand::undo()
     for ( int i = 0; i < m_pointDataList.size(); ++i )
     {
         const KoPathPointData &pd = m_pointDataList.at( i );
-        if ( lastPathShape && lastPathShape != pd.m_pathShape )
+        if ( lastPathShape && lastPathShape != pd.pathShape )
         {
             lastPathShape->normalize();
             lastPathShape->update();
         }
-        pd.m_pathShape->insertPoint( m_points[i], pd.m_pointIndex );
-        lastPathShape = pd.m_pathShape;
+        pd.pathShape->insertPoint( m_points[i], pd.pointIndex );
+        lastPathShape = pd.pathShape;
     }
     if ( lastPathShape )
     {

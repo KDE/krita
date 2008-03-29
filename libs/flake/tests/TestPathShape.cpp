@@ -724,9 +724,9 @@ void TestPathShape::koPathPointDataLess()
     {
         KoPathPointData ld = l.at( i );
         KoPathPointData vd = v[i];
-        QVERIFY( ld.m_pathShape == vd.m_pathShape );
-        QVERIFY( ld.m_pointIndex.first == vd.m_pointIndex.first );
-        QVERIFY( ld.m_pointIndex.second == vd.m_pointIndex.second );
+        QVERIFY( ld.pathShape == vd.pathShape );
+        QVERIFY( ld.pointIndex.first == vd.pointIndex.first );
+        QVERIFY( ld.pointIndex.second == vd.pointIndex.second );
     }
 }
 

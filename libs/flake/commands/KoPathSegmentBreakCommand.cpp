@@ -28,10 +28,10 @@ KoPathSegmentBreakCommand::KoPathSegmentBreakCommand( const KoPathPointData & po
 , m_startIndex( -1, -1 )
 , m_broken( false )
 {
-    if ( m_pointData.m_pathShape->isClosedSubpath( m_pointData.m_pointIndex.first ) )
+    if ( m_pointData.pathShape->isClosedSubpath( m_pointData.pointIndex.first ) )
     {
-        m_startIndex = m_pointData.m_pointIndex;
-        KoPathPoint * before = m_pointData.m_pathShape->pointByIndex( m_startIndex );
+        m_startIndex = m_pointData.pointIndex;
+        KoPathPoint * before = m_pointData.pathShape->pointByIndex( m_startIndex );
         if ( before->properties() & KoPathPoint::CloseSubpath )
         {
             m_startIndex.second = 0;
@@ -52,20 +52,20 @@ void KoPathSegmentBreakCommand::redo()
 {
     QUndoCommand::redo();
     // a repaint before is needed as the shape can shrink during the break
-    m_pointData.m_pathShape->update();
+    m_pointData.pathShape->update();
     if ( m_startIndex.first != -1 )
     {
-        m_startIndex = m_pointData.m_pathShape->openSubpath( m_startIndex );
-        m_pointData.m_pathShape->normalize();
-        m_pointData.m_pathShape->update();
+        m_startIndex = m_pointData.pathShape->openSubpath( m_startIndex );
+        m_pointData.pathShape->normalize();
+        m_pointData.pathShape->update();
     }
     else
     {
-        m_broken = m_pointData.m_pathShape->breakAfter( m_pointData.m_pointIndex );
+        m_broken = m_pointData.pathShape->breakAfter( m_pointData.pointIndex );
         if ( m_broken )
         {
-            m_pointData.m_pathShape->normalize();
-            m_pointData.m_pathShape->update();
+            m_pointData.pathShape->normalize();
+            m_pointData.pathShape->update();
         }
     }
 }
@@ -75,14 +75,14 @@ void KoPathSegmentBreakCommand::undo()
     QUndoCommand::undo();
     if ( m_startIndex.first != -1 )
     {
-        m_startIndex = m_pointData.m_pathShape->closeSubpath( m_startIndex );
-        m_pointData.m_pathShape->normalize();
-        m_pointData.m_pathShape->update();
+        m_startIndex = m_pointData.pathShape->closeSubpath( m_startIndex );
+        m_pointData.pathShape->normalize();
+        m_pointData.pathShape->update();
     }
     else if ( m_broken )
     {
-        m_pointData.m_pathShape->join( m_pointData.m_pointIndex.first );
-        m_pointData.m_pathShape->normalize();
-        m_pointData.m_pathShape->update();
+        m_pointData.pathShape->join( m_pointData.pointIndex.first );
+        m_pointData.pathShape->normalize();
+        m_pointData.pathShape->update();
     }
 }

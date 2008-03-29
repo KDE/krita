@@ -31,8 +31,8 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
 , m_pointData( pointData )
 , m_pointType( pointType )
 {
-    KoPathShape * pathShape = m_pointData.m_pathShape;
-    KoPathPoint * point = pathShape->pointByIndex( m_pointData.m_pointIndex );
+    KoPathShape * pathShape = m_pointData.pathShape;
+    KoPathPoint * point = pathShape->pointByIndex( m_pointData.pointIndex );
     if ( point )
     {
         m_offset = point->parent()->documentToShape( offset ) - point->parent()->documentToShape( QPointF( 0, 0 ) );
@@ -44,8 +44,8 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
 void KoPathControlPointMoveCommand::redo()
 {
     QUndoCommand::redo();
-    KoPathShape * pathShape = m_pointData.m_pathShape;
-    KoPathPoint * point = pathShape->pointByIndex( m_pointData.m_pointIndex );
+    KoPathShape * pathShape = m_pointData.pathShape;
+    KoPathPoint * point = pathShape->pointByIndex( m_pointData.pointIndex );
     if ( point )
     {
         pathShape->update();

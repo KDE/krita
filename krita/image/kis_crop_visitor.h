@@ -32,7 +32,7 @@
 #include "kis_selected_transaction.h"
 #include "kis_external_layer_iface.h"
 #include "kis_undo_adapter.h"
-#include "commands/kis_layer_commands.h"
+#include "commands/kis_node_commands.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 
@@ -81,7 +81,7 @@ public:
             if(undoAdapter && undoAdapter->undo()) {
                 QPoint oldPos(layer->x(), layer->y());
                 QPoint newPos(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-                QUndoCommand * cmd = new KisLayerMoveCommand(layer, oldPos, newPos);
+                QUndoCommand * cmd = new KisNodeMoveCommand(layer, oldPos, newPos);
                 undoAdapter->addCommand(cmd);
             }
         }

@@ -20,8 +20,12 @@
 
 #include <krita_export.h>
 #include <QUndoCommand>
+#include <QRect>
 #include "kis_types.h"
+#include <klocale.h>
 #include "filter/kis_filter_configuration.h"
+
+class KisNode;
 
 template <typename T>
 class KisChangeFilterCmd : public QUndoCommand {
@@ -59,6 +63,33 @@ private:
     KisFilterConfiguration* m_config;
     QString m_before;
     QString m_after;
+};
+
+
+/// The command for moving of a node
+class KRITAIMAGE_EXPORT KisNodeMoveCommand : public QUndoCommand {
+
+public:
+    /**
+     * Constructor
+     * @param node The node the command will be working on.
+     * @param oldpos the old layer position
+     * @param newpos the new layer position
+     */
+    KisNodeMoveCommand(KisNodeSP node, const QPoint& oldpos, const QPoint& newpos);
+    virtual ~KisNodeMoveCommand();
+
+    virtual void redo();
+    virtual void undo();
+
+private:
+    void moveTo(const QPoint& pos);
+
+private:
+    KisNodeSP m_node;
+    QRect m_updateRect;
+    QPoint m_oldPos;
+    QPoint m_newPos;
 };
 
 

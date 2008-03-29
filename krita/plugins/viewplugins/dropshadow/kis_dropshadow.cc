@@ -56,7 +56,7 @@
 #include <kis_paint_device.h>
 #include <KoChannelInfo.h>
 #include <kis_convolution_painter.h>
-#include <commands/kis_layer_commands.h>
+#include <commands/kis_node_commands.h>
 #include <kis_layer_manager.h>
 
 
@@ -157,7 +157,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
                         newRootY += -shadowBounds.top();
                     }
 
-                    QUndoCommand *moveCommand = new KisLayerMoveCommand(image->rootLayer(),
+                    QUndoCommand *moveCommand = new KisNodeMoveCommand(image->rootLayer(),
                                    QPoint(image->rootLayer()->x(), image->rootLayer()->y()), QPoint(newRootX, newRootY));
                     Q_ASSERT(moveCommand != 0);
 

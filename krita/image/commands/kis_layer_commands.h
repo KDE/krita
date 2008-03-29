@@ -89,30 +89,4 @@ private:
     const KoCompositeOp * m_newCompositeOp;
 };
 
-
-/// The command for moving of a layer
-class KRITAIMAGE_EXPORT KisLayerMoveCommand : public KisLayerCommand {
-
-public:
-    /**
-     * Constructor
-     * @param layer The layer the command will be working on.
-     * @param oldpos the old layer position
-     * @param newpos the new layer position
-     */
-    KisLayerMoveCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos);
-    virtual ~KisLayerMoveCommand();
-
-    virtual void redo();
-    virtual void undo();
-
-private:
-    void moveTo(const QPoint& pos);
-
-private:
-    QRect m_updateRect;
-    QPoint m_oldPos;
-    QPoint m_newPos;
-};
-
 #endif // KIS_LAYER_COMMANDS_H_

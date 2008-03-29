@@ -21,7 +21,6 @@
 #ifndef KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
-#include "kis_strategy_move.h"
 #include "KoToolFactory.h"
 #include "kis_tool.h"
 #include <kis_layer_shape.h>
@@ -47,12 +46,17 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc, KoViewConverter &converter);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 private:
+    void drag(const QPoint& pos);
 
-    KisStrategyMove m_strategy;
+private:
+    QRect m_deviceBounds;
     QPoint m_dragStart;
+    QPoint m_layerStart;
+    QPoint m_layerPosition;
+    bool m_dragging;
 };
 
 
@@ -67,7 +71,7 @@ public:
             setToolType( dynamicToolType() );
             setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority(0);
-            setIcon("tool_move");
+            setIcon("krita_tool_move");
             //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
         }
 

@@ -73,38 +73,3 @@ void KisLayerCompositeOpCommand::undo()
     m_layer->setCompositeOp(m_oldCompositeOp);
     m_layer->setDirty();
 }
-
-KisLayerMoveCommand::KisLayerMoveCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos) :
-    KisLayerCommand(i18n("Move Layer"), layer)
-{
-    m_oldPos = oldpos;
-    m_newPos = newpos;
-
-    QRect currentBounds = m_layer->exactBounds();
-    QRect oldBounds = currentBounds;
-    oldBounds.translate(oldpos.x() - newpos.x(), oldpos.y() - newpos.y());
-
-    m_updateRect = currentBounds | oldBounds;
-}
-
-KisLayerMoveCommand::~KisLayerMoveCommand()
-{
-}
-
-void KisLayerMoveCommand::redo()
-{
-    moveTo(m_newPos);
-}
-
-void KisLayerMoveCommand::undo()
-{
-    moveTo(m_oldPos);
-}
-
-void KisLayerMoveCommand::moveTo(const QPoint& pos)
-{
-    m_layer->setX(pos.x());
-    m_layer->setY(pos.y());
-
-    m_layer->setDirty(m_updateRect);
-}

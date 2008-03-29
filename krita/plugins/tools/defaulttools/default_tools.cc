@@ -38,7 +38,7 @@
 #include "kis_tool_ellipse.h"
 #include "kis_tool_measure.h"
 #include "kis_tool_path.h"
-
+#include "kis_tool_move.h"
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
@@ -58,6 +58,7 @@ DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     r->add(new KisToolRectangleFactory(r, QStringList()));
     r->add(new KisToolMeasureFactory(r, QStringList()));
     r->add(new KisToolPathFactory(r, QStringList()));
+    r->add(new KisToolMoveFactory(r, QStringList()));
 }
 
 DefaultTools::~DefaultTools()

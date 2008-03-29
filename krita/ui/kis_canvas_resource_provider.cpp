@@ -261,8 +261,10 @@ void KisCanvasResourceProvider::slotLayerActivated( const KisLayerSP l )
 
 void KisCanvasResourceProvider::slotNodeActivated( const KisNodeSP node )
 {
-    Q_UNUSED(node);
-    // XXX_NODE: implement!
+    QVariant v;
+    v.setValue( node );
+    m_resourceProvider->setResource( CurrentKritaNode, v );
+    emit sigNodeChanged( currentNode() );
 }
 
 

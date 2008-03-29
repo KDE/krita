@@ -128,6 +128,7 @@ signals:
     void sigPatternChanged(KisPattern *);
     void sigPaintopChanged(KoID paintop, const KisPaintOpSettingsSP);
     void sigLayerChanged(const KisLayerSP);
+    void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
 
 private:

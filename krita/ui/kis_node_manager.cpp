@@ -272,6 +272,7 @@ void KisNodeManager::activateNode( KisNodeSP node )
         m_d->layerManager->activateLayer( static_cast<KisLayer*>( node->parent().data() ) );
     }
     emit sigNodeActivated( node );
+    m_d->view->resourceProvider()->slotNodeActivated( node );
     nodesUpdated();
 }
 

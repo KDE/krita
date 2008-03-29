@@ -364,68 +364,6 @@ const QPainterPath KoPathShape::outline() const
             lastPoint = currPoint;
         }
     }
-    /*
-    KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
-    for ( ; pathIt != m_subpaths.end(); ++pathIt )
-    {
-        KoSubpath::const_iterator it( ( *pathIt )->begin() );
-        KoPathPoint * lastPoint( *it );
-        bool activeCP = false;
-        for ( ; it != ( *pathIt )->end(); ++it )
-        {
-            KoPathPoint::KoPointProperties currProperties = ( *it )->properties();
-            if ( it == ( *pathIt )->begin() )
-            {
-                if ( currProperties & KoPathPoint::StartSubpath )
-                {
-                    //qDebug() << "moveTo(" << ( *it )->point() << ")";
-                    path.moveTo( ( *it )->point() );
-                }
-            }
-            else if ( activeCP || ( *it )->activeControlPoint1() )
-            {
-                //qDebug() << "cubicTo(" << ( activeCP ? lastPoint->controlPoint2() : lastPoint->point() )
-                //         << "," << ( ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : ( *it )->point() )
-                //         << "," << ( *it )->point() << ")";
-
-                path.cubicTo( activeCP ? lastPoint->controlPoint2() : lastPoint->point()
-                            , ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : ( *it )->point()
-                            , ( *it )->point() );
-            }
-            else
-            {
-                //qDebug() << "lineTo(" << ( *it )->point() << ")";
-                path.lineTo( ( *it )->point() );
-            }
-            if ( currProperties & KoPathPoint::CloseSubpath && currProperties & KoPathPoint::StopSubpath )
-            {
-                // add curve when there is a curve on the way to the first point
-                KoPathPoint * firstPoint = ( *pathIt )->first();
-                if ( ( *it )->activeControlPoint2() || firstPoint->activeControlPoint1() )
-                {
-                    //qDebug() << "cubicTo(" << ( ( *it )->activeControlPoint2() ? ( *it )->controlPoint2() : ( *it )->point() )
-                    //         << "," << ( firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point() )
-                    //         << "," << firstPoint->point() << ")";
-                    path.cubicTo( (*it)->activeControlPoint2() ? ( *it )->controlPoint2() : ( *it )->point()
-                                , firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point()
-                                , firstPoint->point() );
-                }
-                //qDebug() << "closeSubpath()";
-                path.closeSubpath();
-            }
-
-            if ( ( *it )->activeControlPoint2() )
-            {
-                activeCP = true;
-            }
-            else
-            {
-                activeCP = false;
-            }
-            lastPoint = *it;
-        }
-    }
-    */
     return path;
 }
 
@@ -452,14 +390,9 @@ QRectF KoPathShape::boundingRect() const
 
 QSizeF KoPathShape::size() const
 {
-    // don't call boundingRect here as it uses absoluteTransformation which leads to infinite reccursion
+    // don't call boundingRect here as it uses absoluteTransformation 
+    // which itself uses size() -> leads to infinite reccursion
     return outline().boundingRect().size();
-}
-
-QPointF KoPathShape::position() const
-{
-    //return boundingRect().topLeft();
-    return KoShape::position();
 }
 
 void KoPathShape::setSize( const QSizeF &newSize )

@@ -95,8 +95,6 @@ public:
     /// reimplemented
     virtual QSizeF size() const;
     /// reimplemented
-    virtual QPointF position() const;
-    /// reimplemented
     virtual void setSize( const QSizeF &size );
 
     // reimplemented

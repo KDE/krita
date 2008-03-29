@@ -92,7 +92,7 @@ public:
 
     KisImageSP currentImage() const;
 
-    //KisNodeSP currentNode() const;
+    KisNodeSP currentNode() const;
 
     //KisPaintOpPreset * currentPreset() const;
 

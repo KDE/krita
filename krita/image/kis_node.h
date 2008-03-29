@@ -247,4 +247,6 @@ private:
 
 };
 
+Q_DECLARE_METATYPE( KisNodeSP )
+
 #endif

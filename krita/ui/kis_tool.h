@@ -123,6 +123,7 @@ protected:
     KisPattern* currentPattern();
     KoAbstractGradient * currentGradient();
     KisLayerSP currentLayer();
+    KisNodeSP currentNode();
     KoColor currentFgColor();
     KoColor currentBgColor();
     QString currentPaintOp();

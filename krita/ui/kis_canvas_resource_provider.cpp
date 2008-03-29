@@ -176,6 +176,11 @@ KisImageSP KisCanvasResourceProvider::currentImage() const
     return m_view->image();
 }
 
+KisNodeSP KisCanvasResourceProvider::currentNode() const
+{
+    return m_view->activeNode();
+}
+
 void KisCanvasResourceProvider::slotBrushActivated(KoResource *res)
 {
 

@@ -65,6 +65,7 @@ struct KisTool::Private {
     QString currentPaintOp;
     KisPaintOpSettingsSP currentPaintOpSettings;
     KisLayerSP currentLayer;
+    KisNodeSP currentNode;
     float currentExposure;
     KisImageSP currentImage;
 };
@@ -96,7 +97,10 @@ void KisTool::activate(bool )
     {
         d->currentPaintOpSettings->activate();
     }
-    d->currentLayer = m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    d->currentLayer =
+        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    d->currentNode =
+        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::HdrExposure ).toDouble() );
     d->currentImage = image();
 }
@@ -287,6 +291,11 @@ KisBrush* KisTool::currentBrush()
 KisLayerSP KisTool::currentLayer()
 {
     return d->currentLayer;
+}
+
+KisNodeSP KisTool::currentNode()
+{
+    return d->currentNode;
 }
 
 KoColor KisTool::currentFgColor()

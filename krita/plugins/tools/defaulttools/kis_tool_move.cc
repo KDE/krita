@@ -22,7 +22,6 @@
 #include "kis_tool_move.h"
 
 #include <QPoint>
-#include <QMouseEvent>
 #include <QUndoCommand>
 
 #include <klocale.h>
@@ -33,7 +32,7 @@
 
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
-#include "kis_layer.h"
+#include "kis_node.h"
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
     :  KisTool(canvas, KisCursor::moveCursor())
@@ -57,15 +56,15 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
     if (m_canvas && e->button() == Qt::LeftButton) {
         QPointF pos = convertToPixelCoord(e);
 
-        KisLayerSP dev;
+        KisNodeSP node;
 
-        if (!currentImage() || !(dev = currentLayer()) || !dev->visible())
+        if (!currentImage() || !(node = currentNode()) || !node->visible())
             return;
 
         m_dragging = true;
         m_dragStart = QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y()));
-        m_layerStart.setX(dev->x());
-        m_layerStart.setY(dev->y());
+        m_layerStart.setX(node->x());
+        m_layerStart.setY(node->y());
         m_layerPosition = m_layerStart;
     }
 }
@@ -92,13 +91,13 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
     if (m_dragging) {
         if (m_canvas && e->button() == Qt::LeftButton) {
             QPointF pos = convertToPixelCoord(e);
-            KisLayerSP layer = currentLayer();
+            KisNodeSP node = currentNode();
 
-            if (layer) {
+            if (node) {
                 drag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
                 m_dragging = false;
 
-                QUndoCommand *cmd = new KisNodeMoveCommand(layer, m_layerStart, m_layerPosition);
+                QUndoCommand *cmd = new KisNodeMoveCommand(node, m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
 
                 m_canvas->addCommand(cmd);
@@ -111,22 +110,22 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
 void KisToolMove::drag(const QPoint& original)
 {
     // original is the position of the user chosen handle point
-    KisLayerSP dev = currentLayer();
+    KisNodeSP node = currentNode();
 
-    if (dev) {
+    if (node) {
         QPoint pos = original;
         QRect rc;
 
         pos -= m_dragStart; // convert to delta
-        rc = dev->extent();
-        dev->setX(dev->x() + pos.x());
-        dev->setY(dev->y() + pos.y());
-        rc = rc.unite(dev->extent());
+        rc = node->extent();
+        node->setX(node->x() + pos.x());
+        node->setY(node->y() + pos.y());
+        rc = rc.unite(node->extent());
 
-        m_layerPosition = QPoint(dev->x(), dev->y());
+        m_layerPosition = QPoint(node->x(), node->y());
         m_dragStart = original;
 
-        dev->setDirty(rc);
+        node->setDirty(rc);
     }
 }
 

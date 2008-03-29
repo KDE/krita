@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -65,7 +65,7 @@ KoPathPointInsertCommand::KoPathPointInsertCommand( const QList<KoPathPointData>
                 // modify the new segment.
                 p[j - 1] = q[0];
             }
-            KoPathPoint * splitPoint = new KoPathPoint( pathShape, p[2], KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 );
+            KoPathPoint * splitPoint = new KoPathPoint( pathShape, p[2] );
             splitPoint->setControlPoint1( p[1] );
             splitPoint->setControlPoint2( q[1] );
 
@@ -75,7 +75,7 @@ KoPathPointInsertCommand::KoPathPointInsertCommand( const QList<KoPathPointData>
         else
         {
             QPointF splitPointPos = segment.first()->point() + insertPosition * ( segment.second()->point() - segment.first()->point());
-            m_points.append( new KoPathPoint( pathShape, splitPointPos, KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 ) );
+            m_points.append( new KoPathPoint( pathShape, splitPointPos ) );
             m_controlPoints.append( QPair<QPointF, QPointF>( segment.first()->controlPoint2(), segment.second()->controlPoint1() ) );
         }
     }

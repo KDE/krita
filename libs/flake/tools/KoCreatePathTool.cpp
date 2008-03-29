@@ -125,7 +125,6 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
             m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
 
             m_activePoint->setPoint( m_canvas->snapGuide()->snap( event->point, event->modifiers() ) );
-            m_activePoint->setProperty(KoPathPoint::CanHaveControlPoint2);
 
             m_canvas->updateCanvas( m_shape->boundingRect() );
             m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
@@ -179,10 +178,7 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     if ( event->buttons() & Qt::LeftButton )
     {
         m_activePoint->setControlPoint2( event->point );
-        if ( m_activePoint->properties() & KoPathPoint::CanHaveControlPoint1 )
-        {
-            m_activePoint->setControlPoint1( m_activePoint->point() + ( m_activePoint->point() - event->point ) );
-        }
+        m_activePoint->setControlPoint1( m_activePoint->point() + ( m_activePoint->point() - event->point ) );
         m_canvas->updateCanvas( m_shape->boundingRect() );
         repaintAdjusted( m_activePoint->boundingRect( false ) );
     }

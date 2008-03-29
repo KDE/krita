@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -239,17 +239,23 @@ void KoEllipseShape::updatePath( const QSizeF &size )
     }
 
     m_subpaths[0]->clear();
+
     for ( int i = 0; i <= cp; ++i )
     {
-        if ( i < cp || ( m_type == Arc && m_startAngle != m_endAngle ) )
-        {
-            m_points[i]->unsetProperty( KoPathPoint::CloseSubpath );
-        }
-        else
-        {
-            m_points[i]->setProperty( KoPathPoint::CloseSubpath );
-        }
+        m_points[i]->unsetProperty( KoPathPoint::StopSubpath );
+        m_points[i]->unsetProperty( KoPathPoint::CloseSubpath );
         m_subpaths[0]->push_back( m_points[i] );
+    }
+    m_subpaths[0]->last()->setProperty( KoPathPoint::StopSubpath );
+    if( m_type == Arc && m_startAngle != m_endAngle )
+    {
+        m_subpaths[0]->first()->unsetProperty( KoPathPoint::CloseSubpath );
+        m_subpaths[0]->last()->unsetProperty( KoPathPoint::CloseSubpath );
+    }
+    else
+    {
+        m_subpaths[0]->first()->setProperty( KoPathPoint::CloseSubpath );
+        m_subpaths[0]->last()->setProperty( KoPathPoint::CloseSubpath );
     }
 
     normalize();

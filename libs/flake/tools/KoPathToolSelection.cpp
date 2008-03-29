@@ -188,7 +188,8 @@ QList<KoPathPointData> KoPathToolSelection::selectedSegmentsData() const
         }
 
         if ( lastSubpathStart.m_pathShape == it->m_pathShape
-             && it->m_pathShape->pointByIndex( it->m_pointIndex )->properties() & KoPathPoint::CloseSubpath )
+             && it->m_pathShape->pointByIndex( it->m_pointIndex )->properties() & KoPathPoint::CloseSubpath
+             && (it->m_pathShape->pointByIndex( it->m_pointIndex )->properties() & KoPathPoint::StartSubpath) == 0 )
         {
             pointData.append( *it );
         }

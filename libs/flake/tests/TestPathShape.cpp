@@ -27,16 +27,22 @@ void TestPathShape::close()
 {
     KoPathShape path;
     path.lineTo( QPointF( 10, 0 ) );
+    path.lineTo( QPointF( 10, 10 ) );
+
     QPainterPath ppath( QPointF( 0, 0 ) );
     ppath.lineTo( QPointF( 10, 0 ) );
-
-    path.lineTo( QPointF( 10, 10 ) );
     ppath.lineTo( 10, 10 );
+
+    QVERIFY( ppath == path.outline() );
+
     path.close();
     ppath.closeSubpath();
+
     QVERIFY( ppath == path.outline() );
+
     path.lineTo( QPointF( 0, 10 ) );
     ppath.lineTo( 0, 10 );
+
     QVERIFY( ppath == path.outline() );
 }
 
@@ -79,6 +85,12 @@ void TestPathShape::pathPointIndex()
     KoPathPointIndex p4Index( 1, 1 );
     KoPathPoint * point5 = 0;
     KoPathPointIndex p5Index( -1, -1 );
+
+    QCOMPARE( p1Index, path.pathPointIndex( point1 ) );
+    QCOMPARE( p2Index, path.pathPointIndex( point2 ) );
+    QCOMPARE( p3Index, path.pathPointIndex( point3 ) );
+    QCOMPARE( p4Index, path.pathPointIndex( point4 ) );
+    QCOMPARE( p5Index, path.pathPointIndex( point5 ) );
 
     QVERIFY( p1Index == path.pathPointIndex( point1 ) );
     QVERIFY( p2Index == path.pathPointIndex( point2 ) );
@@ -716,6 +728,36 @@ void TestPathShape::koPathPointDataLess()
         QVERIFY( ld.m_pointIndex.first == vd.m_pointIndex.first );
         QVERIFY( ld.m_pointIndex.second == vd.m_pointIndex.second );
     }
+}
+
+void TestPathShape::closeMerge()
+{
+    KoPathShape path;
+    KoPathPoint *p1 = path.moveTo( QPointF( 0, 0 ) );
+    KoPathPoint *p2 = path.curveTo( QPointF( 50, 0 ), QPointF( 100, 50 ), QPointF( 100, 100 ) );
+    KoPathPoint *p3 = path.curveTo( QPointF( 50, 100 ), QPointF( 0, 50 ), QPointF( 0, 0 ) );
+    QVERIFY( p1->properties() & KoPathPoint::StartSubpath );
+    QVERIFY( (p1->properties() & KoPathPoint::CloseSubpath) == 0 );
+    QVERIFY( p1->activeControlPoint1() == false );
+    QVERIFY( p1->activeControlPoint2() );
+    QVERIFY( p2->activeControlPoint1() );
+    QVERIFY( p2->activeControlPoint2() );
+    QVERIFY( (p3->properties() & KoPathPoint::CloseSubpath) == 0 );
+    QVERIFY( p3->activeControlPoint1() );
+    QCOMPARE( path.pointCount(), 3 );
+
+    path.closeMerge();
+    QCOMPARE( path.pointCount(), 2 );
+    QVERIFY( p1->properties() & KoPathPoint::CloseSubpath );
+    QVERIFY( p1->activeControlPoint1() );
+    QVERIFY( p2->properties() & KoPathPoint::CloseSubpath );
+    QVERIFY( p2->activeControlPoint2() );
+
+    QPainterPath ppath( QPointF( 0, 0 ) );
+    ppath.cubicTo( 50, 0, 100, 50, 100, 100 );
+    ppath.cubicTo( 50, 100, 0, 50, 0, 0 );
+
+    QVERIFY( path.outline() == ppath );
 }
 
 QTEST_MAIN(TestPathShape)

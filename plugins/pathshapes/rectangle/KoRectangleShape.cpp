@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -233,10 +233,11 @@ void KoRectangleShape::updatePath( const QSizeF &size )
     {
         if ( i != cp - 1 )
         {
-            m_points[i]->unsetProperty( KoPathPoint::CloseSubpath );
+            m_points[i]->unsetProperty( KoPathPoint::StopSubpath );
         }
         else
         {
+            m_points[i]->setProperty( KoPathPoint::StopSubpath );
             m_points[i]->setProperty( KoPathPoint::CloseSubpath );
         }
         m_subpaths[0]->push_back( m_points[i] );

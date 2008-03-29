@@ -47,6 +47,7 @@ private slots:
     void reverseSubpath();
     void removeSubpath();
     void addSubpath();
+    void closeMerge();
 
     void koPathPointDataLess();
 };

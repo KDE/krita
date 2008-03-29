@@ -60,29 +60,23 @@ KoPathSegment::KoPathSegment( const QPointF &p0, const QPointF &p1 )
     : d( new Private( new KoPathPoint(), new KoPathPoint() ) )
 {
     d->first->setPoint( p0 );
-    d->first->setProperties( KoPathPoint::CanHaveControlPoint2 );
     d->second->setPoint( p1 );
-    d->second->setProperties( KoPathPoint::CanHaveControlPoint1 );
 }
 
 KoPathSegment::KoPathSegment( const QPointF &p0, const QPointF &p1, const QPointF &p2 )
     : d( new Private( new KoPathPoint(), new KoPathPoint() ) )
 {
     d->first->setPoint( p0 );
-    d->first->setProperties( KoPathPoint::CanHaveControlPoint2 );
     d->first->setControlPoint2( p1 );
     d->second->setPoint( p2 );
-    d->second->setProperties( KoPathPoint::CanHaveControlPoint1 );
 }
 
 KoPathSegment::KoPathSegment( const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3 )
     : d( new Private( new KoPathPoint(), new KoPathPoint() ) )
 {
     d->first->setPoint( p0 );
-    d->first->setProperties( KoPathPoint::CanHaveControlPoint2 );
     d->first->setControlPoint2( p1 );
     d->second->setPoint( p3 );
-    d->second->setProperties( KoPathPoint::CanHaveControlPoint1 );
     d->second->setControlPoint1( p2 );
 }
 

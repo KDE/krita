@@ -48,10 +48,9 @@ public:
     enum KoPointProperty
     {
         Normal = 0, ///< it has no control points
-        CanHaveControlPoint1 = 1, ///< it can have a control point 1
-        CanHaveControlPoint2 = 2, ///< it can have a control point 2
-        StartSubpath = 4, ///< it starts a new subpath by a moveTo command
-        CloseSubpath = 8, ///< it closes a subpath
+        StartSubpath = 1, ///< it starts a new subpath by a moveTo command
+        StopSubpath = 2, ///< it stops a subpath (last point of subpath)
+        CloseSubpath = 8, ///< it closes a subpath (only applicable on StartSubpath and StopSubpath)
         IsSmooth = 16, ///< it is smooth, both control points on a line through the point
         IsSymmetric = 32 ///< it is symmetric, like smooth but control points have same distance to point
     };
@@ -176,8 +175,10 @@ public:
     /**
      * @brief Checks if there is a controlPoint1
      *
-     * The control point is active if CanHaveControlPoint1 is set and
-     * a control point was set by calling setControlPoint1.
+     * The control point is active if a control point was set by
+     * calling setControlPoint1. However a start point of a subpath
+     * (StartSubpath) can only have an active control 1 if the
+     * subpath is closed (CloseSubpath on first and last point).
      *
      * @return true if control point is active, false otherwise
      */
@@ -186,8 +187,10 @@ public:
     /**
      * @brief Checks if there is a controlPoint2
      *
-     * The control point is active if CanHaveControlPoint2 is set and
-     * a control point was set by calling setControlPoint2.
+     * The control point is active if a control point was set by
+     * calling setControlPoint2. However a end point of a subpath
+     * (StopSubpath) can only have an active control point 2 if there
+     * subpath is closed (CloseSubpath on first and last point).
      *
      * @return true if control point is active, false otherwise
      */

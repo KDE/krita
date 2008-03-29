@@ -32,6 +32,15 @@ void TestPointRemoveCommand::redoUndoPointRemove()
     KoPathPoint *point1 = path1.curveTo( QPointF( 0, 50 ), QPointF( 100, 50 ), QPointF ( 100, 100 ) );
     KoPathPoint *point2 = path1.lineTo( QPointF( 200, 100)  );
     path1.curveTo( QPointF( 200, 50 ), QPointF( 300, 50 ), QPointF ( 300, 100 ) );
+
+    QPainterPath orig1( QPointF( 0, 0 ) );
+    orig1.lineTo( 0, 100 );
+    orig1.cubicTo( 0, 50, 100, 50, 100, 100 );
+    orig1.lineTo( 200, 100 );
+    orig1.cubicTo( 200, 50, 300, 50, 300, 100 );
+
+    QVERIFY( orig1 == path1.outline() );
+
     KoPathShape path2;
     path2.moveTo( QPointF( 0, 0 ) );
     KoPathPoint *point3 = path2.curveTo( QPointF( 50, 0 ), QPointF( 100, 50 ), QPointF( 100, 100 ) );

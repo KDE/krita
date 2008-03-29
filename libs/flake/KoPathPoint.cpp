@@ -23,7 +23,7 @@
 #include "KoPathShape.h"
 #include "KoPointGroup.h"
 
-//#include <KDebug>
+#include <KDebug>
 #include <QtGui/QPainter>
 #include <QPointF>
 
@@ -118,17 +118,15 @@ void KoPathPoint::setPoint( const QPointF & point )
 void KoPathPoint::setControlPoint1( const QPointF & point ) 
 {
     d->controlPoint1 = point;
-    if( d->properties & CanHaveControlPoint1 )
-        d->activeControlPoint1 = true;
+    d->activeControlPoint1 = true;
     if( d->shape )
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setControlPoint2( const QPointF & point ) 
+void KoPathPoint::setControlPoint2( const QPointF & point )
 {
     d->controlPoint2 = point;
-    if( d->properties & CanHaveControlPoint2 )
-        d->activeControlPoint2 = true;
+    d->activeControlPoint2 = true;
     if( d->shape )
         d->shape->notifyChanged();
 }
@@ -160,6 +158,10 @@ void KoPathPoint::setProperties( KoPointProperties properties )
         properties &= ~IsSymmetric;
     }
     d->properties = properties;
+    // CloseSubpath only allowed with StartSubpath or StopSubpath
+    if( (d->properties & StartSubpath) == 0 && (d->properties & StopSubpath) == 0 )
+        d->properties &= ~CloseSubpath;
+
     if( d->shape )
         d->shape->notifyChanged();
 }
@@ -169,27 +171,17 @@ void KoPathPoint::setProperty( KoPointProperty property )
     switch( property )
     {
         case StartSubpath:
-            d->properties &= ~CloseSubpath;
-        break;
+        case StopSubpath:
         case CloseSubpath:
-            d->properties &= ~StartSubpath;
-            d->properties |= CanHaveControlPoint2;
-        break;
-        case CanHaveControlPoint1:
-            if( d->properties & StartSubpath )
-                return;
-        break;
-        case CanHaveControlPoint2:
-            if( d->properties & CloseSubpath )
-                return;
-        break;
+            // nothing special to do here
+            break;
         case IsSmooth:
-            if( ! d->activeControlPoint1 || ! d->activeControlPoint2 )
+            if( ! activeControlPoint1() || ! activeControlPoint2() )
                 return;
             d->properties &= ~IsSymmetric;
         break;
         case IsSymmetric:
-            if( ! d->activeControlPoint1 || ! d->activeControlPoint2 )
+            if( ! activeControlPoint1() || ! activeControlPoint2() )
                 return;
             d->properties &= ~IsSmooth;
         break;
@@ -203,20 +195,19 @@ void KoPathPoint::unsetProperty( KoPointProperty property )
     switch( property )
     {
         case StartSubpath:
-            d->properties |= CanHaveControlPoint1;
+            if( d->properties & StartSubpath && (d->properties & StopSubpath) == 0 )
+                d->properties &= ~CloseSubpath;
+        break;
+        case StopSubpath:
+            if( d->properties & StopSubpath && (d->properties & StartSubpath) == 0 )
+                d->properties &= ~CloseSubpath;
         break;
         case CloseSubpath:
-            d->properties |= CanHaveControlPoint2;
-        break;
-        case CanHaveControlPoint1:
-            d->activeControlPoint1 = false;
-            d->properties &= ~IsSmooth;
-            d->properties &= ~IsSymmetric;
-        break;
-        case CanHaveControlPoint2:
-            d->activeControlPoint2 = false;
-            d->properties &= ~IsSmooth;
-            d->properties &= ~IsSymmetric;
+            if( d->properties & StartSubpath || d->properties & StopSubpath )
+            {
+                d->properties &= ~IsSmooth;
+                d->properties &= ~IsSymmetric;
+            }
         break;
         case IsSmooth:
         case IsSymmetric:
@@ -229,11 +220,19 @@ void KoPathPoint::unsetProperty( KoPointProperty property )
 
 bool KoPathPoint::activeControlPoint1() const
 {
+    // only start point on closed subpaths can have a controlPoint1
+    if( (d->properties & StartSubpath) && (d->properties & CloseSubpath) == 0 )
+        return false;
+
     return d->activeControlPoint1;
 }
 
 bool KoPathPoint::activeControlPoint2() const
 {
+    // only end point on closed subpaths can have a controlPoint2
+    if( (d->properties & StopSubpath) && (d->properties & CloseSubpath) == 0 )
+        return false;
+
     return d->activeControlPoint2;
 }
 
@@ -327,13 +326,10 @@ void KoPathPoint::reverse()
     qSwap( d->controlPoint1, d->controlPoint2 );
     qSwap( d->activeControlPoint1, d->activeControlPoint2 );
     KoPointProperties newProps = Normal;
-    if( d->properties & CanHaveControlPoint1 )
-        newProps |= CanHaveControlPoint2;
-    if( d->properties & CanHaveControlPoint2 )
-        newProps |= CanHaveControlPoint1;
     newProps |= d->properties & IsSmooth;
     newProps |= d->properties & IsSymmetric;
     newProps |= d->properties & StartSubpath;
+    newProps |= d->properties & StopSubpath;
     newProps |= d->properties & CloseSubpath;
     d->properties = newProps;
 }

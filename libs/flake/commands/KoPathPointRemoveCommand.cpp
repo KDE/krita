@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -29,6 +29,13 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
     KoShapeController * shapeController,
     QUndoCommand *parent )
 {
+    /*
+     * We want to decide if we have to:
+     * 1. delete only some points of a path or
+     * 2. delete one or more complete subpath or
+     * 3. delete a complete path
+     */
+
     QList<KoPathPointData> sortedPointData( pointDataList );
     qSort( sortedPointData );
 
@@ -37,57 +44,57 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
     // the right places.
     sortedPointData.append( last );
 
-    QList<KoPathPointData> tmp;
-    QList<KoPathPointData> tmpPoints;
-    QList<KoPathPointData> tmpSubpaths;
-    QList<KoPathPointData> pointsToDelete;
-    QList<KoPathPointData> subpathToDelete;
-    QList<KoShape*> shapesToDelete;
+    QList<KoPathPointData> pointsOfSubpath; // points of current subpath
+    QList<KoPathPointData> subpathsOfPath;  // subpaths of current path
+    QList<KoPathPointData> pointsToDelete;  // single points to delete
+    QList<KoPathPointData> subpathToDelete; // single subpaths to delete
+    QList<KoShape*> shapesToDelete;         // single paths to delete
 
-    int deletePointCount = 0;
+    last = sortedPointData.first();
+
     QList<KoPathPointData>::const_iterator it( sortedPointData.begin() );
     for ( ; it != sortedPointData.end(); ++it )
     {
+        // check if we have come to the next subpath of the same or another path
         if ( last.m_pathShape != it->m_pathShape || last.m_pointIndex.first != it->m_pointIndex.first )
         {
-            if ( last.m_pathShape->pointCountSubpath( last.m_pointIndex.first )  == tmp.size() )
+            // check if all points of the last subpath should be deleted
+            if ( last.m_pathShape->pointCountSubpath( last.m_pointIndex.first ) == pointsOfSubpath.size() )
             {
-                tmpSubpaths.append( tmp.first() );
+                // all points of subpath to be deleted -> mark subpath as to be deleted
+                subpathsOfPath.append( pointsOfSubpath.first() );
             }
             else
             {
-                foreach ( KoPathPointData pd, tmp )
-                {
-                    tmpPoints.append( pd );
-                }
+                // not all points of subpath to be deleted -> add them to the delete point list
+                pointsToDelete += pointsOfSubpath;
             }
-            deletePointCount += tmp.size();
-            tmp.clear();
+            // clear the suboath point list
+            pointsOfSubpath.clear();
         }
 
-        if ( last.m_pathShape != 0 && last.m_pathShape != it->m_pathShape )
+        // check if we have come to the next shape
+        if ( last.m_pathShape != it->m_pathShape )
         {
-            if ( last.m_pathShape->pointCount() == deletePointCount )
+            // check if all subpath of the shape should be deleted
+            if ( last.m_pathShape->subpathCount() == subpathsOfPath.size() )
             {
+                // all subpaths of path to be deleted -> add shape to delete shape list
                 shapesToDelete.append( last.m_pathShape );
             }
             else
             {
-                foreach ( KoPathPointData pd, tmpSubpaths )
-                {
-                    subpathToDelete.append( pd );
-                }
-                foreach ( KoPathPointData pd, tmpPoints )
-                {
-                    pointsToDelete.append( pd );
-                }
+                // not all subpaths of path to be deleted -> add them to delete subpath list
+                subpathToDelete += subpathsOfPath;
             }
-            tmpSubpaths.clear();
-            tmpPoints.clear();
-            deletePointCount = 0;
+            subpathsOfPath.clear();
         }
+        if( ! it->m_pathShape )
+            continue;
+        // keep reference to last point
         last = *it;
-        tmp.append( *it );
+        // add this point to the current subpath point list
+        pointsOfSubpath.append( *it );
     }
 
     QUndoCommand *cmd = new QUndoCommand( i18n( "Remove points" ), parent );

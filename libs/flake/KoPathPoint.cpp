@@ -151,7 +151,7 @@ void KoPathPoint::removeControlPoint2()
 
 void KoPathPoint::setProperties( KoPointProperties properties ) 
 {
-    if( ! d->activeControlPoint1 || ! d->activeControlPoint2 )
+    if( ! activeControlPoint1() || ! activeControlPoint2() )
     {
         // strip smooth and symmetric flags if points has not two control points
         properties &= ~IsSmooth;

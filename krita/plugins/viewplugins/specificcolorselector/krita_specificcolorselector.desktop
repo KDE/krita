@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=SpecificColorSelector
 Name[ca]=SelectorDeColorEspecific
+Name[hi]=विशिष्टरंगचयनक
 Name[it]=Selettore di colore specifico
 Name[pt]=Selector de Cores Específico
 Name[pt_BR]=Seletor de Cores Específico
@@ -10,6 +11,7 @@ Name[x-test]=xxSpecificColorSelectorxx
 Name[zh_TW]=指定顏色選擇器
 Comment=SpecificColorSelector
 Comment[ca]=SelectorDeColorEspecific
+Comment[hi]=विशिष्टरंगचयनक
 Comment[it]=Selettore di colore specifico
 Comment[pt]=Selector de Cores Específico
 Comment[pt_BR]=Seletor de Cores Específico

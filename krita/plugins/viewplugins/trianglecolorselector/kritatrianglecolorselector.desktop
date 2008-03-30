@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=TriangleColorSelector
 Name[ca]=SelectorTriangularDeColor
+Name[hi]=त्रिभुजरंगचयनक
 Name[it]=Selettore triangolare del colore
 Name[pt]=Selector de Cores Triangular
 Name[pt_BR]=Seletor de Cores Triangular
@@ -10,6 +11,7 @@ Name[x-test]=xxTriangleColorSelectorxx
 Name[zh_TW]=三角型顏色選擇器
 Comment=TriangleColorSelector
 Comment[ca]=SelectorTriangularDeColor
+Comment[hi]=त्रिभुजरंगचयनक
 Comment[it]=Selettore triangolare del colore
 Comment[pt]=Selector de Cores Triangular
 Comment[pt_BR]=Seletor de Cores Triangular

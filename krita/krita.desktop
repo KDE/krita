@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Krita
+Name[hi]=केरिता
 Name[ne]=क्रिता
 Name[x-test]=xxKritaxx
 Exec=krita %U
@@ -19,6 +20,7 @@ GenericName[fr]=Peinture et retouche d'images
 GenericName[ga]=Péinteáil agus Eagarthóireacht Íomhánna
 GenericName[gl]=Debuxo e Edición de Imaxes
 GenericName[he]=טיפול ועריכת תמונות
+GenericName[hi]=पेंटिंग तथा छवि संपादन
 GenericName[hu]=Rajzoló és képszerkesztő
 GenericName[is]=Málun og myndsýsl
 GenericName[it]=Disegno e modifica di immagini
@@ -59,6 +61,7 @@ Comment[fr]=Création et retouche d'images
 Comment[ga]=Cuir íomhánna in eagar agus péinteáil
 Comment[gl]=Edita e pinta imaxes
 Comment[he]=עריכה וצביעת תמונות
+Comment[hi]=छवियाँ पेंट तथा संपादन करें 
 Comment[hu]=Képek szerkesztése
 Comment[it]=Modifica e disegna immagini
 Comment[ja]=描画と画像の編集

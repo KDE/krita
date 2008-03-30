@@ -28,7 +28,9 @@
 #include <KoShapeRegistry.h>
 
 #include "KritaShape.h"
-#include "KritaShapeToolFactory.h"K_EXPORT_COMPONENT_FACTORY( kritashape, KGenericFactory<KritaShapePlugin>( "krita" ) )
+#include "KritaShapeToolFactory.h"
+
+K_EXPORT_COMPONENT_FACTORY( kritashape, KGenericFactory<KritaShapePlugin>( "krita" ) )
 
     KritaShapePlugin::KritaShapePlugin( QObject * parent,  const QStringList & list )
 {

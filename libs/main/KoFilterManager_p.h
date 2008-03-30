@@ -22,6 +22,7 @@
 #include <QString>
 #include <QStringList>
 
+#include <kurl.h>
 #include <kdialog.h>
 
 class K3ListBox;
@@ -33,7 +34,7 @@ Q_OBJECT
 
 public:
     KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
-                     const QString &nativeFormat = QString());
+                     const QString &nativeFormat = QString(), const KUrl &url = KUrl());
     ~KoFilterChooser ();
 
     QString filterSelected ();

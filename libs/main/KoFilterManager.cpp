@@ -35,6 +35,7 @@
 #include <KoDocument.h>
 #include <klibloader.h>
 #include <k3listbox.h>
+#include <KSqueezedTextLabel>
 #include <kmimetype.h>
 #include <kdebug.h>
 
@@ -50,7 +51,7 @@ public:
 };
 
 
-KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat)
+KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat, const KUrl &url)
     : KDialog ( parent ),
     m_mimeTypes (mimeTypes)
 {
@@ -65,11 +66,12 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
     QWidget *page = new QWidget (this);
     setMainWidget (page);
 
-    QLabel *filterLabel = new QLabel( i18n ("Select a filter:"), page );
-    m_filterList = new K3ListBox (page, "filterlist");
-
     QVBoxLayout *layout = new QVBoxLayout( page );
-    layout->addWidget (filterLabel);
+    if (url.isValid()) {
+        KSqueezedTextLabel *l = new KSqueezedTextLabel( url.path(), page );
+        layout->addWidget(l);
+    }
+    m_filterList = new K3ListBox (page, "filterlist");
     layout->addWidget (m_filterList);
     page->setLayout( layout );
 
@@ -78,11 +80,10 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
             it != m_mimeTypes.end ();
             it++)
     {
-        KMimeType::Ptr mime = KMimeType::mimeType (*it);
-        Q_ASSERT( mime );
-        if ( !mime )
-	    mime = KMimeType::defaultMimeTypePtr();
-        m_filterList->insertItem(mime->comment());
+        KMimeType::Ptr mime = KMimeType::mimeType(*it);
+        const QString name = mime ? mime->comment() : *it;
+        if (! name.isEmpty())
+            m_filterList->insertItem(name);
     }
 
     if (nativeFormat == "application/x-kword")
@@ -99,6 +100,7 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
     m_filterList->setFocus ();
 
     connect (m_filterList, SIGNAL (selected (int)), this, SLOT (accept()));
+    resize(QSize(520, 400));//.expandedTo(minimumSizeHint()));
 }
 
 KoFilterChooser::~KoFilterChooser ()
@@ -176,7 +178,8 @@ QString KoFilterManager::importDocument( const QString& url, KoFilter::Conversio
             QApplication::setOverrideCursor( Qt::ArrowCursor );
             KoFilterChooser chooser(0,
                                     KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import, m_document->extraNativeMimeTypes()),
-                                    nativeFormat);
+                                    nativeFormat,
+                                    u);
             if (chooser.exec ())
             {
                 QByteArray f = chooser.filterSelected ().toLatin1();
@@ -289,7 +292,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument( const QString& url, 
             kWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser";
 
             QApplication::setOverrideCursor( Qt::ArrowCursor );
-            KoFilterChooser chooser(0, KoFilterManager::mimeFilter ());
+            KoFilterChooser chooser(0, KoFilterManager::mimeFilter (), QString(), u);
             if (chooser.exec ())
                 m_graph.setSourceMimeType (chooser.filterSelected ().toLatin1 ());
             else

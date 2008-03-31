@@ -148,7 +148,7 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_layerAdd->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
 
-    m_actionAdjustmentLayer  = new KAction(i18n("&Adjustment Layer"), this);
+    m_actionAdjustmentLayer  = new KAction(i18n("&Filter Layer"), this);
     actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer );
     connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
 
@@ -363,7 +363,7 @@ void KisLayerManager::layerProperties()
         KisLayerSP prev = dynamic_cast<KisLayer*>( alayer->prevSibling().data() );
         if ( prev ) dev = prev->projection();
 
-        KisDlgAdjLayerProps dlg( dev, alayer->filter(), alayer->name(), i18n("Adjustment Layer Properties"), m_view, "dlgadjlayerprops");
+        KisDlgAdjLayerProps dlg( dev, alayer->filter(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
         QString before = dlg.filterConfiguration()->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {
@@ -547,7 +547,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 
     KisPaintDeviceSP dev = l->projection();
 
-    KisDlgAdjustmentLayer dlg(dev, img->nextLayerName(), i18n("New Adjustment Layer"), m_view, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(dev, img->nextLayerName(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = l->selection();
         KisFilterConfiguration * filter = dlg.filterConfiguration();

@@ -138,7 +138,8 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(KIcon("folder-new"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
     m_newLayerMenu->addAction(KIcon("bookmark-new"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
-    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("New &Filter Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("New &Generated Layer..."), this, SLOT(slotNewAdjustmentLayer()));
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
     m_newLayerMenu->addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
@@ -290,7 +291,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         sub->addAction(KIcon("folder-new"), i18n("&Group Layer"), this, SLOT(slotNewGroupLayer()));
         sub->addAction(KIcon("edit-copy"), i18n("&Clone Layer"), this, SLOT(slotNewCloneLayer()));
         sub->addAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this, SLOT(slotNewShapeLayer()));
-        sub->addAction(KIcon("view-filter"), i18n("&Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+        sub->addAction(KIcon("view-filter"), i18n("&Filter Layer..."), this, SLOT(slotNewAdjustmentLayer()));
         menu.addSeparator();
         sub->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
         sub->addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
@@ -304,7 +305,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(KIcon("folder-new"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
         menu.addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
         menu.addAction(KIcon("bookmark-new"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
-        menu.addAction(KIcon("view-filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+        menu.addAction(KIcon("view-filter"), i18n("New &Filter Layer..."), this, SLOT(slotNewAdjustmentLayer()));
         menu.addSeparator();
         menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
         menu.addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));

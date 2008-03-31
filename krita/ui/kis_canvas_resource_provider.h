@@ -36,6 +36,7 @@ class KisPattern;
 class KoResource;
 class KoCanvasBase;
 class KisPaintOpPreset;
+class KisFilterConfiguration;
 
 /**
  * KisCanvasResourceProvider contains the per-view current settings that
@@ -58,7 +59,8 @@ public:
         CurrentDisplayProfile,
         CurrentImage,
         CurrentKritaNode,
-        CurrentPaintOpPreset
+        CurrentPaintOpPreset,
+        CurrentGeneratorConfiguration
     };
 
 
@@ -96,6 +98,8 @@ public:
 
     //KisPaintOpPreset * currentPreset() const;
 
+    KisFilterConfiguration * currentGeneratorConfiguration() const;
+
 public slots:
 
     void slotSetFGColor(const KoColor& c);
@@ -106,7 +110,8 @@ public slots:
     void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettingsSP paintopSettings);
     void slotLayerActivated( const KisLayerSP layer );
     void slotNodeActivated( const KisNodeSP node );
-
+    void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
+    
     /**
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.
@@ -116,7 +121,6 @@ public slots:
 
 private slots:
 
-    // TODO:  this method is not called or connected. (TZ)
     void slotResourceChanged( int key, const QVariant & res );
 
 signals:
@@ -130,9 +134,10 @@ signals:
     void sigLayerChanged(const KisLayerSP);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
-
+    void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
+    
 private:
-
+    
     KisView2 * m_view;
     KoCanvasResourceProvider * m_resourceProvider;
     KisBrush * m_defaultBrush;

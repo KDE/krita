@@ -20,7 +20,7 @@
 
 #include <QGridLayout>
 #include "kis_mask_widgets.h"
-#include "filter/kis_filter_strategy.h"
+#include "kis_filter_strategy.h"
 
 KisDlgTransformationEffect::KisDlgTransformationEffect(const QString & maskName,
                                                        double xScale,

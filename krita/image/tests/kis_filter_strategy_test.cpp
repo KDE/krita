@@ -19,7 +19,7 @@
 #include "kis_filter_strategy_test.h"
 
 #include <qtest_kde.h>
-#include "filter/kis_filter_strategy.h"
+#include "kis_filter_strategy.h"
 
 void KisFilterStrategyTest::testCreation()
 {

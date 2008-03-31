@@ -98,6 +98,7 @@ private slots:
     void slotNewPaintLayer();
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();
+    void slotNewGeneratorLayer();
     void slotNewCloneLayer();
     void slotNewShapeLayer();
     void slotNewTransparencyMask();

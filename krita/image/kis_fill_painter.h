@@ -21,7 +21,6 @@
 
 #include <QRect>
 
-
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
 
@@ -32,6 +31,7 @@
 #include <krita_export.h>
 
 class KisPattern;
+class KisFilterConfiguration;
 
 // XXX: Filling should set dirty rect.
 /**
@@ -95,6 +95,12 @@ public:
      * entire rectangle.
      */
     void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPattern * pattern);
+
+    /**
+     * Fill the specified area with the output of the generator plugin that is configured
+     * in the generator parameter
+     */
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisFilterConfiguration * generator);
 
     /**
      * Overloaded version of the above function.

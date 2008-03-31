@@ -29,7 +29,7 @@
 #include "kis_selection.h"
 
 #include "kis_iterators_pixel.h"
-#include "filter/kis_filter_strategy.h"
+#include "kis_filter_strategy.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
 

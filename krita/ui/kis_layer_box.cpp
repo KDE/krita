@@ -134,17 +134,17 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
     m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
     connect( m_wdgLayerBox->bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()) );
-    m_newLayerMenu->addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewPaintLayer()));
-    m_newLayerMenu->addAction(KIcon("folder-new"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
-    m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
-    m_newLayerMenu->addAction(KIcon("bookmark-new"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
-    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("New &Filter Layer..."), this, SLOT(slotNewAdjustmentLayer()));
-    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("New &Generated Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+    m_newLayerMenu->addAction(KIcon("document-new"), i18n("&Paint Layer"), this, SLOT(slotNewPaintLayer()));
+    m_newLayerMenu->addAction(KIcon("folder-new"), i18n("&Group Layer"), this, SLOT(slotNewGroupLayer()));
+    m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Clone Layer"), this, SLOT(slotNewCloneLayer()));
+    m_newLayerMenu->addAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this, SLOT(slotNewShapeLayer()));
+    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Filter Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Generated Layer..."), this, SLOT(slotNewGeneratorLayer()));
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
     m_newLayerMenu->addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
-    m_newLayerMenu->addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
+    m_newLayerMenu->addAction(KIcon("edit-paste"), i18n("&Local Selection"), this, SLOT(slotNewSelectionMask()));
 
     connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
@@ -285,33 +285,21 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addSeparator();
         menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
         menu.addAction(KIcon("edit-duplicate"), i18n("&Duplicate Layer or Mask"), this, SLOT(slotDuplicateClicked()));
-        QMenu *sub = menu.addMenu(KIcon("document-new"), i18n("&New"));
-
-        sub->addAction(KIcon("document-new"), i18n("&Paint Layer"), this, SLOT(slotNewPaintLayer()));
-        sub->addAction(KIcon("folder-new"), i18n("&Group Layer"), this, SLOT(slotNewGroupLayer()));
-        sub->addAction(KIcon("edit-copy"), i18n("&Clone Layer"), this, SLOT(slotNewCloneLayer()));
-        sub->addAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this, SLOT(slotNewShapeLayer()));
-        sub->addAction(KIcon("view-filter"), i18n("&Filter Layer..."), this, SLOT(slotNewAdjustmentLayer()));
         menu.addSeparator();
-        sub->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
-        sub->addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
-        sub->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
-        sub->addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
 
     }
-    else
-    {
-        menu.addAction(KIcon("document-new"), i18n("&New Layer"), this, SLOT(slotNewPaintLayer()));
-        menu.addAction(KIcon("folder-new"), i18n("New &Group Layer"), this, SLOT(slotNewGroupLayer()));
-        menu.addAction(KIcon("edit-copy"), i18n("New &Clone Layer"), this, SLOT(slotNewCloneLayer()));
-        menu.addAction(KIcon("bookmark-new"), i18n("New &Shape Layer"), this, SLOT(slotNewShapeLayer()));
-        menu.addAction(KIcon("view-filter"), i18n("New &Filter Layer..."), this, SLOT(slotNewAdjustmentLayer()));
-        menu.addSeparator();
-        menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
-        menu.addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
-        menu.addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
-        menu.addAction(KIcon("edit-paste"), i18n("&Local Selection..."), this, SLOT(slotNewSelectionMask()));
-    }
+    menu.addAction(KIcon("document-new"), i18n("&Layer"), this, SLOT(slotNewPaintLayer()));
+    menu.addAction(KIcon("folder-new"), i18n("&Group Layer"), this, SLOT(slotNewGroupLayer()));
+    menu.addAction(KIcon("edit-copy"), i18n("&Clone Layer"), this, SLOT(slotNewCloneLayer()));
+    menu.addAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this, SLOT(slotNewShapeLayer()));
+    menu.addAction(KIcon("view-filter"), i18n("&Filter Layer..."), this, SLOT(slotNewAdjustmentLayer()));
+    menu.addAction(KIcon("view-filter"), i18n("&Generated Layer..."), this, SLOT(slotNewGeneratorLayer()));
+    menu.addSeparator();
+    menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
+    menu.addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+    menu.addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
+    menu.addAction(KIcon("edit-paste"), i18n("&Local Selection"), this, SLOT(slotNewSelectionMask()));
+   
     menu.exec(pos);
 }
 
@@ -355,6 +343,11 @@ void KisLayerBox::slotNewShapeLayer()
 void KisLayerBox::slotNewAdjustmentLayer()
 {
     emit sigRequestNewNode("KisAdjustmentLayer");
+}
+
+void KisLayerBox::slotNewGeneratorLayer()
+{
+    emit sigRequestNewNode("KisGeneratorLayer");
 }
 
 void KisLayerBox::slotNewTransparencyMask()

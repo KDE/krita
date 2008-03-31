@@ -29,6 +29,7 @@
 #include <KoAbstractGradient.h>
 #include <kis_brush.h>
 #include <kis_pattern.h>
+#include <filter/kis_filter_configuration.h>
 #include <kis_layer.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -128,6 +129,12 @@ KisPattern * KisCanvasResourceProvider::currentPattern() const
     return static_cast<KisPattern*>( m_resourceProvider->resource( CurrentPattern ).value<void *>() );
 }
 
+KisFilterConfiguration * KisCanvasResourceProvider::currentGeneratorConfiguration() const
+{
+    return static_cast<KisFilterConfiguration*>( m_resourceProvider->
+                                                    resource( CurrentGeneratorConfiguration ).value<void *>() );
+}
+
 
 KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
 {
@@ -196,6 +203,14 @@ void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
     QVariant v = qVariantFromValue( ( void * ) pattern );
     m_resourceProvider->setResource( CurrentPattern, v );
     emit sigPatternChanged(pattern);
+}
+
+void KisCanvasResourceProvider::slotGeneratorConfigurationActivated(KisFilterConfiguration * res)
+{
+    KisFilterConfiguration * generatorConfiguration = dynamic_cast<KisFilterConfiguration*>(res);
+    QVariant v = qVariantFromValue( ( void * ) generatorConfiguration  );
+    m_resourceProvider->setResource( CurrentGeneratorConfiguration, v );
+    emit sigGeneratorConfigurationChanged(generatorConfiguration);
 }
 
 void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
@@ -300,6 +315,8 @@ void KisCanvasResourceProvider::slotResourceChanged( int key, const QVariant & r
     case ( CurrentPattern ):
         emit sigPatternChanged( static_cast<KisPattern *>( res.value<void *>() ) );
         break;
+    case ( CurrentGeneratorConfiguration ):
+        emit sigGeneratorConfigurationChanged(static_cast<KisFilterConfiguration*>(res.value<void*>()));
     case ( CurrentGradient ):
         emit sigGradientChanged( static_cast<KoAbstractGradient *>( res.value<void *>() ) );
         break;

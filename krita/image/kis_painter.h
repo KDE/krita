@@ -44,6 +44,7 @@ class KoCompositeOp;
 class KisTransaction;
 class KisBrush;
 class KisPattern;
+class KisFilterConfiguration;
 class KisPaintOp;
 class KisPaintInformation;
 
@@ -431,30 +432,42 @@ public:
 
     QBitArray channelFlags();
 
-    // Set the current brush
+    /// Set the current brush
     void setBrush(KisBrush* brush);
-    // Returns the currently set brush
+
+    /// Returns the currently set brush
     KisBrush * brush() const;
 
-    // Set the current pattern
+    /// Set the current pattern
     void setPattern(KisPattern * pattern);
-    // Returns the currently set pattern
+
+    /// Returns the currently set pattern
     KisPattern * pattern() const;
 
-    // Set the color that will be used to paint with
+    /// Set the color that will be used to paint with
     void setPaintColor(const KoColor& color);
+
     /// Returns the color that will be used to paint with
     KoColor paintColor() const;
 
-    // Set the current background color
+    /// Set the current background color
     void setBackgroundColor(const KoColor& color);
-    // Returns the current background color
+
+    /// Returns the current background color
     KoColor backgroundColor() const;
 
-    // Set the current fill color
+    /// Set the current fill color
     void setFillColor(const KoColor& color);
-    // Returns the current fill color
+
+    /// Returns the current fill color
     KoColor fillColor() const;
+
+    /// Set the current generator (a generator can be used to fill an area
+    void setGenerator(KisFilterConfiguration * generator);
+
+    /// @return the current generator configuration
+    KisFilterConfiguration * generator() const;
+
 
     /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {
@@ -463,7 +476,8 @@ public:
         FillStyleBackgroundColor,
         FillStylePattern,
         FillStyleGradient,
-        FillStyleStrokes
+        FillStyleStrokes,
+        FillStyleGenerator
     };
 
     /// Set the current style with which to fill

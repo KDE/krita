@@ -72,12 +72,12 @@
   	<Action name="insert_clone_layer"/>
   	<Action name="insert_shape_layer"/>
     <Action name="insert_adjustment_layer"/>
+    <Action name="insert_generator_layer"/>
   	<Action name="insert_image_as_layer"/>
   	<Action name="cut_selection_to_new_layer"/>
   	<Action name="copy_selection_to_new_layer"/>
 	<Action name="create_layer_from_mask"/>
   </Menu>
-	
   <Action name="remove_layer"/>
   <Action name="duplicate_layer"/>
   <Action name="hide_layer"/>
@@ -125,7 +125,6 @@
     <Action name="mask_properties"/>
 </Menu>
 
-
 <Menu name="Select"><text>&amp;Select</text>
     <Action name="select_all"/>
     <Action name="deselect"/>
@@ -155,7 +154,6 @@
     <Action name="nonphotorealistic_filters"/>
 	<Action name="other_filters"/>
 </Menu>
-
 
 <Menu name="settings"><text>Settings</text>
   <Separator group="settings_show"/>

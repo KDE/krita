@@ -36,7 +36,7 @@ enum CopyLayerType
 
 /**
  * A copy layer adds the contents of another layer in another place in
- * the layer stack. If is possible to add more effect masks to the
+ * the layer stack. It is possible to add more effect masks to the
  * copy. You can either copy the original data or the projection data
  * produced by the original layer + original effect masks. There is no
  * physical copy of the data; if the original changes, the copy

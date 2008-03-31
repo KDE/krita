@@ -34,6 +34,16 @@
          <string>Brush</string>
         </property>
        </item>
+       <item>
+        <property name="text" >
+         <string>Pattern</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Generator</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item row="1" column="0" >
@@ -65,6 +75,16 @@
          <string>Pattern</string>
         </property>
        </item>
+       <item>
+        <property name="text" >
+         <string>Stroke</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Generator</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
@@ -77,7 +97,7 @@
      <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>69</width>
        <height>31</height>
@@ -93,7 +113,7 @@
      <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>111</width>
        <height>41</height>

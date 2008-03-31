@@ -46,7 +46,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
-#include <filter/kis_filter_strategy.h>
+#include <kis_filter_strategy.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>

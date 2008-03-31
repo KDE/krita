@@ -28,7 +28,7 @@
 #include <KoUnit.h>
 
 #include <kis_cmb_idlist.h>
-#include <filter/kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
+#include <kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
 DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
     : super(parent)

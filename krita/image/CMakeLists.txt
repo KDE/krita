@@ -55,10 +55,11 @@ set(kritaimage_LIB_SRCS
    filter/kis_filter_config_widget.cc
    filter/kis_filter_job.cpp
    filter/kis_filter_registry.cc
-   filter/kis_filter_strategy.cc
+   kis_filter_strategy.cc
    filter/kis_recorded_filter_action.cc
    generator/kis_generator.cpp
    generator/kis_generator_registry.cpp
+   generator/kis_generator_layer.cpp
    kis_action_recorder.cc
    kis_adjustment_layer.cc
    kis_auto_brush.cpp

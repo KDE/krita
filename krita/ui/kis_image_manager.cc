@@ -33,7 +33,7 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
-#include <filter/kis_filter_strategy.h>
+#include <kis_filter_strategy.h>
 #include <kis_shear_visitor.h>
 #include <kis_transform_worker.h>
 #include <kis_paint_device.h>

@@ -29,7 +29,7 @@
 #include <KoColorSpace.h>
 
 #include <kis_image.h>
-#include <filter/kis_filter_strategy.h>
+#include <kis_filter_strategy.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 

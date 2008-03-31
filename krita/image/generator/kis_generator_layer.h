@@ -76,7 +76,7 @@ public:
 
 public:
 
-    KisFilterConfiguration * filter() const;
+    KisFilterConfiguration * generator() const;
     void setGenerator(KisFilterConfiguration * filterConfig);
 
     KisSelectionSP selection() const;
@@ -126,6 +126,11 @@ public:
         {
             return this;
         }
+
+private:
+
+    /// re-run the generator. This happens over the bounds of the associated selection.
+    void update();
 
 private:
 

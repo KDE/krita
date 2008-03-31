@@ -28,6 +28,9 @@ class KoAbstractGradient;
 
 
 // XXX: Need to set dirtyRegion in KisPainter
+/**
+ *  XXX: Docs!
+ */
 class KRITAIMAGE_EXPORT KisGradientPainter : public KisPainter
 {
 

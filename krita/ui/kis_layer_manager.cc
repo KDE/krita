@@ -41,20 +41,20 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 
-#include <kis_clone_layer.h>
-#include <kis_shape_layer.h>
-#include <kis_adjustment_layer.h>
-#include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_strategy.h>
+#include <filter/kis_filter.h>
+#include <kis_filter_strategy.h>
+#include <generator/kis_generator_layer.h>
+#include <kis_adjustment_layer.h>
+#include <kis_clone_layer.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
-
 #include <kis_paint_layer.h>
 #include <kis_selected_transaction.h>
 #include <kis_selection.h>
+#include <kis_shape_layer.h>
 #include <kis_shear_visitor.h>
 #include <kis_transform_worker.h>
 #include <kis_undo_adapter.h>
@@ -86,6 +86,7 @@ KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     , m_imgFlatten( 0 )
     , m_imgMergeLayer( 0 )
     , m_actionAdjustmentLayer( 0 )
+    , m_actionGeneratorLayer( 0 )
     , m_layerAdd( 0 )
     , m_layerAddCloneLayer( 0 )
     , m_layerAddShapeLayer( 0 )
@@ -151,6 +152,10 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_actionAdjustmentLayer  = new KAction(i18n("&Filter Layer"), this);
     actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer );
     connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
+
+    m_actionGeneratorLayer  = new KAction(i18n("&Generator Layer"), this);
+    actionCollection->addAction("insert_Generator_layer", m_actionGeneratorLayer );
+    connect(m_actionGeneratorLayer, SIGNAL(triggered()), this, SLOT(addGeneratorLayer()));
 
     m_layerAddCloneLayer  = new KAction(i18n("&Clone Layer"), this);
     actionCollection->addAction("insert_clone_layer", m_layerAddCloneLayer );
@@ -574,6 +579,34 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, cons
         l->setDirty(l->selection()->selectedExactRect());
     else
         l->setDirty(img->bounds());
+}
+
+void KisLayerManager::addGeneratorLayer()
+{
+    addGeneratorLayer( activeLayer()->parent(), activeLayer() );
+}
+
+void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
+{
+    // XXX: show dialog
+}
+
+void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection)
+{
+    Q_ASSERT(parent);
+    Q_ASSERT(above);
+    Q_ASSERT(filter);
+
+    KisImageSP img = m_view->image();
+    if (!img) return;
+
+    KisGeneratorLayerSP l = new KisGeneratorLayer(img, name, filter, selection);
+    img->addNode(l.data(), parent, above.data());
+    if (l->selection())
+        l->setDirty(l->selection()->selectedExactRect());
+    else
+        l->setDirty(img->bounds());
+
 }
 
 

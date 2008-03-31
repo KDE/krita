@@ -51,7 +51,6 @@
 #include "filter/kis_filter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -60,7 +59,7 @@
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
-
+#include "filter/kis_filter_configuration.h"
 #include "kis_pixel_selection.h"
 
 // Maximum distance from a Bezier control point to the line through the start
@@ -80,6 +79,7 @@ struct KisPainter::Private {
     KoColor paintColor;
     KoColor backgroundColor;
     KoColor fillColor;
+    KisFilterConfiguration * generator;
     KisPaintLayer *sourceLayer;
     FillStyle fillStyle;
     StrokeStyle strokeStyle;
@@ -801,6 +801,10 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         Q_ASSERT(d->pattern != 0);
         fillPainter.fillRect(fillRect, d->pattern);
         break;
+    case FillStyleGenerator:
+        Q_ASSERT(d->generator != 0);
+        fillPainter.fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());
+        break;
     }
 
     KisSelectionSP polygonMask = new KisSelection(polygon);
@@ -878,6 +882,17 @@ KoColor KisPainter::backgroundColor() const { return d->backgroundColor; }
 
 void KisPainter::setFillColor(const KoColor& color) { d->fillColor = color; }
 KoColor KisPainter::fillColor() const { return d->fillColor; }
+
+void KisPainter::setGenerator(KisFilterConfiguration * generator)
+{
+    d->generator = generator;
+}
+
+KisFilterConfiguration * KisPainter::generator() const
+{
+    return d->generator;
+}
+
 
 void KisPainter::setFillStyle(FillStyle fillStyle) { d->fillStyle = fillStyle; }
 

@@ -36,11 +36,14 @@
 #include <QRect>
 #include <QString>
 
-#include <kis_debug.h>
 #include <klocale.h>
 
 #include <KoProgressUpdater.h>
 
+#include "generator/kis_generator.h"
+#include "filter/kis_filter_configuration.h"
+#include "generator/kis_generator_registry.h"
+#include "kis_processing_information.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -147,6 +150,24 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPatte
     }
 
     addDirtyRect(QRect(x1, y1, w, h));
+}
+
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisFilterConfiguration * generator)
+{
+    if (!generator) return;
+    KisGeneratorSP g = KisGeneratorRegistry::instance()->value(generator->name());
+    if (!generator) return;
+    if (!device()) return;
+    if ( w < 1 ) return;
+    if ( h < 1 ) return;
+
+    QRect tmpRc(x1, y1, w, h);
+    
+    KisProcessingInformation dstCfg(device(), tmpRc.topLeft(), 0);
+
+    g->generate(dstCfg, tmpRc.size(), generator);
+
+    addDirtyRect(tmpRc);
 }
 
 // flood filling

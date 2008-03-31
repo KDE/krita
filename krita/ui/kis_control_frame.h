@@ -76,8 +76,8 @@ private:
     void createPatternsChooser(KisView2 * view);
     void createGradientsChooser(KisView2 * view);
 
-
 private:
+
     QFont m_font;
     KisView2 * m_view;
 

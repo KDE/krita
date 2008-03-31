@@ -16,13 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_genrator_layer.h"
+#include "kis_generator_layer.h"
+
+#include <QImage>
 
 #include <kis_debug.h>
 #include <kicon.h>
-#include <QImage>
 
 #include <klocale.h>
+
+#include <KoCompositeOp.h>
 
 #include "kis_debug.h"
 #include "kis_group_layer.h"
@@ -39,29 +42,35 @@
 #include "kis_pixel_selection.h"
 #include "kis_datamanager.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_information.h"
 
-class KisAdjustmentLayer::Private
+class KisGeneratorLayer::Private
 {
 public:
     bool showSelection;
     KisFilterConfiguration * filterConfig;
     KisSelectionSP selection;
-    KisPaintDeviceSP cachedPaintDevice;
+    KisPaintDeviceSP paintDevice;
+    KisPaintDeviceSP projection;
 };
 
-KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection)
+KisGeneratorLayer::KisGeneratorLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection)
     : KisLayer (img.data(), name, OPACITY_OPAQUE)
     , m_d( new Private() )
 {
+    Q_ASSERT(kfc);
+
     m_d->filterConfig = kfc;
     setSelection( selection );
 
-    m_d->cachedPaintDevice = new KisPaintDevice( img->colorSpace(), name.toLatin1());
+    m_d->paintDevice = new KisPaintDevice( img->colorSpace(), name.toLatin1());
+    m_d->paintDevice = new KisPaintDevice( img->colorSpace(), name.toLatin1());
     m_d->showSelection = true;
-    Q_ASSERT(m_d->cachedPaintDevice);
+
+    update();
 }
 
-KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
+KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
     : KisLayer(rhs)
     , KisIndirectPaintingSupport(rhs)
     , m_d( new Private() )
@@ -71,81 +80,95 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
         m_d->selection = new KisSelection( *rhs.m_d->selection.data() );
         m_d->selection->setInterestedInDirtyness(true);
     }
-    m_d->cachedPaintDevice = new KisPaintDevice( *rhs.m_d->cachedPaintDevice.data() );
+    m_d->paintDevice = new KisPaintDevice( *rhs.m_d->paintDevice.data() );
     m_d->showSelection = false;
 }
 
 
-KisAdjustmentLayer::~KisAdjustmentLayer()
+KisGeneratorLayer::~KisGeneratorLayer()
 {
     delete m_d->filterConfig;
     delete m_d;
 }
 
-bool KisAdjustmentLayer::allowAsChild( KisNodeSP node) const
+bool KisGeneratorLayer::allowAsChild( KisNodeSP node) const
 {
     if ( node->inherits( "KisMask" ) )
        return true;
     else
-        return false;
+       return false;
 }
 
 
-void KisAdjustmentLayer::updateProjection(const QRect& r)
+void KisGeneratorLayer::updateProjection(const QRect& rc)
 {
-    Q_UNUSED( r );
-    // XXX: apply the masks to the selection data!
+    if ( !rc.isValid() ) return ;
+    if ( !hasEffectMasks() ) return;
+    if ( !m_d->paintDevice ) return;
+
+    if ( !m_d->projection ) {
+        m_d->projection = new KisPaintDevice( *m_d->paintDevice );
+    }
+    else {
+        KisPainter gc( m_d->projection );
+        gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
+        gc.bitBlt( rc.topLeft(), m_d->paintDevice, rc);
+    }
+
+    applyEffectMasks( m_d->projection, rc );
 
 }
 
-KisPaintDeviceSP KisAdjustmentLayer::projection() const
+KisPaintDeviceSP KisGeneratorLayer::projection() const
 {
-    return m_d->cachedPaintDevice;
+    return m_d->projection;
 }
 
-KisPaintDeviceSP KisAdjustmentLayer::paintDevice() const
+KisPaintDeviceSP KisGeneratorLayer::paintDevice() const
 {
     return m_d->selection;
 }
 
 
-QIcon KisAdjustmentLayer::icon() const
+QIcon KisGeneratorLayer::icon() const
 {
     return KIcon("tool_filter");
 }
 
-KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const
+KoDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Filter"), KisFilterRegistry::instance()->value(filter()->name())->name());
+    l << KoDocumentSectionModel::Property(i18n("Generator"),
+                                          KisGeneratorRegistry::instance()->value(generator()->name())->name());
     return l;
 }
 
-void KisAdjustmentLayer::resetCache()
+void KisGeneratorLayer::resetCache()
 {
-    m_d->cachedPaintDevice = new KisPaintDevice(image()->colorSpace(), name().toLatin1());
+    m_d->paintDevice = new KisPaintDevice(image()->colorSpace(), name().toLatin1());
 }
 
-KisFilterConfiguration * KisAdjustmentLayer::filter() const
+KisFilterConfiguration * KisGeneratorLayer::generator() const
 {
     Q_ASSERT(m_d->filterConfig);
     return m_d->filterConfig;
 }
 
 
-void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
+void KisGeneratorLayer::setGenerator(KisFilterConfiguration * filterConfig)
 {
     Q_ASSERT(filterConfig);
     m_d->filterConfig = filterConfig;
+    update();
 }
 
 
-KisSelectionSP KisAdjustmentLayer::selection() const
+KisSelectionSP KisGeneratorLayer::selection() const
 {
     return m_d->selection;
 }
 
-void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
+void KisGeneratorLayer::setSelection(KisSelectionSP selection)
 {
     if (selection) {
         m_d->selection = new KisSelection(*selection.data());
@@ -163,7 +186,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 }
 
 
-qint32 KisAdjustmentLayer::x() const
+qint32 KisGeneratorLayer::x() const
 {
     if (m_d->selection)
         return m_d->selection->x();
@@ -171,7 +194,7 @@ qint32 KisAdjustmentLayer::x() const
         return 0;
 }
 
-void KisAdjustmentLayer::setX(qint32 x)
+void KisGeneratorLayer::setX(qint32 x)
 {
     if (m_d->selection) {
         m_d->selection->setX(x);
@@ -180,7 +203,7 @@ void KisAdjustmentLayer::setX(qint32 x)
 
 }
 
-qint32 KisAdjustmentLayer::y() const
+qint32 KisGeneratorLayer::y() const
 {
     if (m_d->selection)
         return m_d->selection->y();
@@ -188,7 +211,7 @@ qint32 KisAdjustmentLayer::y() const
         return 0;
 }
 
-void KisAdjustmentLayer::setY(qint32 y)
+void KisGeneratorLayer::setY(qint32 y)
 {
     if (m_d->selection) {
         m_d->selection->setY(y);
@@ -196,7 +219,7 @@ void KisAdjustmentLayer::setY(qint32 y)
     }
 }
 
-QRect KisAdjustmentLayer::extent() const
+QRect KisGeneratorLayer::extent() const
 {
     if (m_d->selection)
         return m_d->selection->selectedRect();
@@ -206,7 +229,7 @@ QRect KisAdjustmentLayer::extent() const
         return QRect();
 }
 
-QRect KisAdjustmentLayer::exactBounds() const
+QRect KisGeneratorLayer::exactBounds() const
 {
     if (m_d->selection)
         return m_d->selection->selectedExactRect();
@@ -216,63 +239,37 @@ QRect KisAdjustmentLayer::exactBounds() const
         return QRect();
 }
 
-bool KisAdjustmentLayer::accept(KisNodeVisitor & v)
+bool KisGeneratorLayer::accept(KisNodeVisitor & v)
 {
     return v.visit( this );
 }
 
-QImage KisAdjustmentLayer::createThumbnail(qint32 w, qint32 h)
+QImage KisGeneratorLayer::createThumbnail(qint32 w, qint32 h)
 {
-    if (!selection())
-        return QImage();
-
-    int srcw, srch;
-    if( image() )
-    {
-        srcw = image()->width();
-        srch = image()->height();
-    }
+    if (m_d->paintDevice)
+        return m_d->paintDevice->createThumbnail(w, h);
     else
-    {
-        const QRect e = extent();
-        srcw = e.width();
-        srch = e.height();
-    }
-
-    if (w > srcw)
-    {
-        w = srcw;
-        h = qint32(double(srcw) / w * h);
-    }
-    if (h > srch)
-    {
-        h = srch;
-        w = qint32(double(srch) / h * w);
-    }
-
-    if (srcw > srch)
-        h = qint32(double(srch) / srcw * w);
-    else if (srch > srcw)
-        w = qint32(double(srcw) / srch * h);
-
-    QColor c;
-    QImage img(w, h, QImage::Format_RGB32);
-
-    for (qint32 y=0; y < h; ++y) {
-        qint32 iY = (y * srch ) / h;
-        for (qint32 x=0; x < w; ++x) {
-            qint32 iX = (x * srcw ) / w;
-            m_d->selection->pixel(iX, iY, &c );
-            quint8 opacity = c.alpha();
-            img.setPixel(x, y, qRgb(opacity, opacity, opacity));
-        }
-    }
-
-    return img;
+        return QImage();
 }
 
-KisPaintDeviceSP KisAdjustmentLayer::cachedPaintDevice() { return m_d->cachedPaintDevice; }
-bool KisAdjustmentLayer::showSelection() const { return m_d->showSelection; }
-void KisAdjustmentLayer::setSelection(bool b) { m_d->showSelection = b; }
+bool KisGeneratorLayer::showSelection() const { return m_d->showSelection; }
 
-#include "kis_adjustment_layer.moc"
+void KisGeneratorLayer::setSelection(bool b) { m_d->showSelection = b; }
+
+void KisGeneratorLayer::update()
+{
+    QRect tmpRc = m_d->selection->selectedRect();
+
+    if (tmpRc.width() == 0 || tmpRc.height() == 0) // Don't even try
+        return;
+
+    KisGeneratorSP f = KisGeneratorRegistry::instance()->value( m_d->filterConfig->name() );
+    if (!f) return;
+
+    KisProcessingInformation dstCfg(m_d->paintDevice, tmpRc .topLeft(), 0);
+
+    f->generate(dstCfg, tmpRc.size(), m_d->filterConfig);
+}
+
+
+#include "kis_generator_layer.moc"

@@ -116,6 +116,10 @@ public slots:
     void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above);
     void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
+    void addGeneratorLayer();
+    void addGeneratorLayer(KisNodeSP parent, KisNodeSP above);
+    void addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+
 private:
 
     friend class KisNodeManager;
@@ -133,6 +137,7 @@ private:
     QAction *m_imgFlatten;
     QAction *m_imgMergeLayer;
     QAction * m_actionAdjustmentLayer;
+    QAction * m_actionGeneratorLayer;
     QAction *m_layerAdd;
     QAction *m_layerAddCloneLayer;
     QAction *m_layerAddShapeLayer;

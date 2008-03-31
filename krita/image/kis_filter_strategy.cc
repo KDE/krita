@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "filter/kis_filter_strategy.h"
+#include "kis_filter_strategy.h"
 #include <kis_debug.h>
 #include <klocale.h>
 #include "kis_debug.h"

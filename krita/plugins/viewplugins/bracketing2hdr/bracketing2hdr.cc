@@ -36,7 +36,7 @@
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_doc2.h"
-#include "filter/kis_filter_strategy.h"
+#include "kis_filter_strategy.h"
 #include "kis_global.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"

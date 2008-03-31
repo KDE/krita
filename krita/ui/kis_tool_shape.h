@@ -56,6 +56,8 @@ protected:
     KisPainter::FillStyle fillStyle();
     KisPainter::StrokeStyle strokeStyle();
 
+    virtual void setupPainter(KisPainter * painter);
+
 private:
     QGridLayout *m_optionLayout;
     WdgGeometryOptions *m_shapeOptionsWidget;

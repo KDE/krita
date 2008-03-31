@@ -35,6 +35,7 @@ class KisBrush;
 class KisPattern;
 class KoAbstractGradient;
 class KisFilterConfiguration;
+class KisPainter;
 
 /// Definitions of the toolgroups of Krita
 static const QString TOOL_TYPE_SHAPE = "Krita/Shape"; // Geometric shapes like ellipses and lines
@@ -129,6 +130,9 @@ protected:
     QString currentPaintOp();
     KisPaintOpSettingsSP currentPaintOpSettings();
     KisFilterConfiguration * currentGenerator();
+
+    /// convenience method to fill the painter's settings with all the current resources
+    virtual void setupPainter(KisPainter * painter);
 
 private:
     struct Private;

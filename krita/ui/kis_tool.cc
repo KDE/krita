@@ -40,6 +40,7 @@
 #include <kis_adjustment_layer.h>
 #include <kis_mask.h>
 #include <kis_paint_layer.h>
+#include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_brush.h>
 #include <kis_pattern.h>
@@ -342,6 +343,17 @@ void KisTool::mouseMoveEvent( KoPointerEvent *event ) {
 
 void KisTool::mouseReleaseEvent( KoPointerEvent *event ) {
     event->ignore();
+}
+
+void KisTool::setupPainter(KisPainter * painter)
+{
+    painter->setBounds( currentImage()->bounds() );
+    painter->setPaintColor(currentFgColor());
+    painter->setBackgroundColor(currentBgColor());
+    painter->setGenerator(currentGenerator());
+    painter->setBrush(currentBrush());
+    painter->setPattern(currentPattern());
+    painter->setGradient(currentGradient());
 }
 
 #include "kis_tool.moc"

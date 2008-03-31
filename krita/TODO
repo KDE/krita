@@ -168,6 +168,8 @@ BR  * Show no cursor option
     * Filter paintop
         * fix painting with sharpen filter
         *  Small tiles: makes circles, otherwise effect is fun
+    * Create architecture that lets paintop re-use the painting algorithm of other paintops
+      without having to daisy-chain other paintops.
 
 * View Plugins
 

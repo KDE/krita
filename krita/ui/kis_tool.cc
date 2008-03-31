@@ -46,13 +46,14 @@
 #include "kis_canvas_resource_provider.h"
 #include <kis_paintop_settings.h>
 #include "kis_canvas2.h"
-
+#include "filter/kis_filter_configuration.h"
 
 struct KisTool::Private {
     Private() : currentBrush(0),
                 currentPattern(0),
                 currentGradient(0),
-                currentPaintOpSettings(0)
+                currentPaintOpSettings(0),
+                currentGenerator(0)
         { }
     QCursor cursor; // the cursor that should be shown on tool activation.
 
@@ -68,6 +69,7 @@ struct KisTool::Private {
     KisNodeSP currentNode;
     float currentExposure;
     KisImageSP currentImage;
+    KisFilterConfiguration * currentGenerator;
 };
 
 KisTool::KisTool( KoCanvasBase * canvas, const QCursor & cursor )
@@ -88,20 +90,30 @@ void KisTool::activate(bool )
 
     d->currentFgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
     d->currentBgColor = m_canvas->resourceProvider()->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
-    d->currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentBrush ).value<void *>() );
-    d->currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentPattern).value<void *>() );
-    d->currentGradient = static_cast<KoAbstractGradient *>( m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentGradient ).value<void *>() );
-    d->currentPaintOp = m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentPaintop ).value<KoID >().id();
-    d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentPaintopSettings ).value<void *>() );
+    d->currentBrush = static_cast<KisBrush *>( m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentBrush ).value<void *>() );
+    d->currentPattern = static_cast<KisPattern *>( m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentPattern).value<void *>() );
+    d->currentGradient = static_cast<KoAbstractGradient *>( m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentGradient ).value<void *>() );
+    d->currentPaintOp = m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentPaintop ).value<KoID >().id();
+    d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentPaintopSettings ).value<void *>() );
+                        
     if( d->currentPaintOpSettings )
     {
         d->currentPaintOpSettings->activate();
     }
-    d->currentLayer =
-        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
-    d->currentNode =
-        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::HdrExposure ).toDouble() );
+    
+    d->currentLayer = m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    d->currentNode = m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::HdrExposure ).toDouble() );
+    d->currentGenerator = static_cast<KisFilterConfiguration*>(m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>() );
     d->currentImage = image();
 }
 
@@ -137,6 +149,8 @@ void KisTool::resourceChanged( int key, const QVariant & v )
         d->currentExposure = static_cast<float>( v.toDouble() );
     case ( KisCanvasResourceProvider::CurrentKritaLayer ):
         d->currentLayer = v.value<KisLayerSP>();
+    case ( KisCanvasResourceProvider::CurrentGeneratorConfiguration ):
+        d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>() );
     default:
         ;
         // Do nothing
@@ -311,6 +325,11 @@ KoColor KisTool::currentBgColor()
 KisImageSP KisTool::currentImage()
 {
     return d->currentImage;
+}
+
+KisFilterConfiguration * KisTool::currentGenerator()
+{
+    return d->currentGenerator;
 }
 
 void KisTool::mousePressEvent( KoPointerEvent *event ) {

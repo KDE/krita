@@ -34,7 +34,7 @@ class KoCanvasBase;
 class KisBrush;
 class KisPattern;
 class KoAbstractGradient;
-
+class KisFilterConfiguration;
 
 /// Definitions of the toolgroups of Krita
 static const QString TOOL_TYPE_SHAPE = "Krita/Shape"; // Geometric shapes like ellipses and lines
@@ -128,6 +128,7 @@ protected:
     KoColor currentBgColor();
     QString currentPaintOp();
     KisPaintOpSettingsSP currentPaintOpSettings();
+    KisFilterConfiguration * currentGenerator();
 
 private:
     struct Private;

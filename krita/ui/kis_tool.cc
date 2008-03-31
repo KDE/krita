@@ -28,7 +28,7 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
-
+#include <kis_paintop_registry.h>
 #include "kis_layer_shape.h"
 #include "kis_layer_container_shape.h"
 #include "kis_mask_shape.h"
@@ -354,6 +354,13 @@ void KisTool::setupPainter(KisPainter * painter)
     painter->setBrush(currentBrush());
     painter->setPattern(currentPattern());
     painter->setGradient(currentGradient());
+    
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(),
+                                                              currentPaintOpSettings(),
+                                                              painter,
+                                                              currentImage());
+    painter->setPaintOp(op);
+                                                          
 }
 
 #include "kis_tool.moc"

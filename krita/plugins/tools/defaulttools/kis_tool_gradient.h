@@ -57,9 +57,6 @@ public:
     KisToolGradient(KoCanvasBase * canvas);
     virtual ~KisToolGradient();
 
- //   virtual void setup(KActionCollection *collection);
- //       virtual enumToolType toolType() { return TOOL_FILL; }
-
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);

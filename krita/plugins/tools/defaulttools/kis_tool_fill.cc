@@ -136,12 +136,10 @@ bool KisToolFill::flood ( int startX, int startY )
         Q_CHECK_PTR ( m_fillPainter );
 
         m_fillPainter->beginTransaction ( i18n ( "Flood Fill" ) );
-
-        m_fillPainter->setPaintColor ( currentFgColor() );
+        setupPainter( m_fillPainter );
         m_fillPainter->setOpacity ( m_opacity );
         m_fillPainter->setFillThreshold ( m_threshold );
         m_fillPainter->setCompositeOp ( m_compositeOp );
-        m_fillPainter->setPattern ( currentPattern() );
         m_fillPainter->setSampleMerged ( !m_unmerged );
         m_fillPainter->setCareForSelection ( true );
         m_fillPainter->setWidth ( currentImage()->width() );

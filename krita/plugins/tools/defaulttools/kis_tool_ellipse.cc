@@ -149,22 +149,14 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
             return;
 
         KisPaintDeviceSP device = currentLayer()->paintDevice();
-	delete m_painter;
-	m_painter = new KisPainter( device, currentLayer()->selection() );
-	Q_CHECK_PTR(m_painter);
+        delete m_painter;
+        m_painter = new KisPainter( device, currentLayer()->selection() );
+        Q_CHECK_PTR(m_painter);
 
         m_painter->beginTransaction (i18n ("Ellipse"));
-        m_painter->setBounds( currentImage()->bounds() );
-        m_painter->setPaintColor(currentFgColor());
-        m_painter->setBackgroundColor(currentBgColor());
-        m_painter->setFillStyle(fillStyle());
-        m_painter->setStrokeStyle(strokeStyle());
-        m_painter->setBrush(currentBrush());
-        m_painter->setPattern(currentPattern());
+        setupPainter(m_painter);
         m_painter->setOpacity(m_opacity);
         m_painter->setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), m_painter, currentImage());
-        m_painter->setPaintOp(op); // Painter takes ownership
 
         m_painter->paintEllipse(QRectF(m_dragStart, m_dragEnd), PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
         QRegion bound = m_painter->dirtyRegion();

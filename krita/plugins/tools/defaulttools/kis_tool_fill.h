@@ -49,8 +49,6 @@ public:
     KisToolFill(KoCanvasBase * canvas);
     virtual ~KisToolFill();
 
-    //     virtual enumToolType toolType() { return TOOL_FILL; }
-
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 

@@ -20,7 +20,6 @@
 
 #include "kis_tool_star.h"
 
-
 #include <math.h>
 
 #include <QPainter>
@@ -103,17 +102,9 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
         KisPaintDeviceSP device = currentLayer()->paintDevice();
         KisPainter painter (device, currentLayer()->selection());
         painter.beginTransaction (i18n("Star"));
-        painter.setBounds( currentImage()->bounds() );
-        painter.setPaintColor(currentFgColor());
-        painter.setBackgroundColor(currentBgColor());
-        painter.setFillStyle(fillStyle());
-        painter.setStrokeStyle(strokeStyle());
-        painter.setBrush(currentBrush());
-        painter.setPattern(currentPattern());
+        setupPainter(&painter);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), &painter, currentImage());
-        painter.setPaintOp(op); // Painter takes ownership
 
         vQPointF coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 

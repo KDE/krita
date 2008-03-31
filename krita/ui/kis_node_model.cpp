@@ -239,7 +239,10 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     Q_ASSERT(index.internalPointer());
 
     KisNode *node = static_cast<KisNode*>(index.internalPointer());
-
+    bool wasVisible;
+    bool visible;
+    PropertyList proplist;
+    
     switch (role)
     {
         case Qt::DisplayRole:
@@ -248,8 +251,15 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             emit dataChanged( index, index );
             return true;
         case PropertiesRole:
-            node->setSectionModelProperties(value.value<PropertyList>());
+            proplist = value.value<PropertyList>();
+            wasVisible = node->visible();
+            visible = proplist.at( 0 ).state.toBool();
+
+            node->setSectionModelProperties(proplist);
             emit dataChanged( index, index );
+            if (wasVisible != visible) {
+                node->setDirty();
+            }
             return true;
         case ActiveRole:
             if (value.toBool())

@@ -331,6 +331,8 @@ void KisLayerManager::layerToggleVisible()
     if (!layer) return;
 
     layer->setVisible(!layer->visible());
+
+    layer->setDirty();
 }
 
 void KisLayerManager::layerToggleLocked()
@@ -381,6 +383,9 @@ void KisLayerManager::layerProperties()
             m_view->undoAdapter()->addCommand(cmd);
             m_doc->setModified( true );
         }
+    }
+    else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
+        // XXX
     }
     else
     {

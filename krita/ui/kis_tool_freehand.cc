@@ -251,11 +251,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_source = device;
     m_painter->beginTransaction(m_transactionText);
 
-    m_painter->setPaintColor(currentFgColor());
-    m_painter->setBackgroundColor(currentBgColor());
-    m_painter->setBrush(currentBrush());
-    m_painter->setGradient( currentGradient() );
-
+    setupPainter(m_painter);
+    
     // if you're drawing on a temporary layer, the layer already sets this
     if (m_paintIncremental) {
         m_painter->setCompositeOp(m_compositeOp);

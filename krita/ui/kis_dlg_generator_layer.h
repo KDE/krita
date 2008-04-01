@@ -32,7 +32,7 @@ class KisFilterConfigWidget;
 class KLineEdit;
 
 #include "ui_wdgdlggeneratorlayer.h"
-
+#include <generator/kis_generator.h>
 /**
  * Create a new generator layer
  */
@@ -45,11 +45,11 @@ public:
 public:
 
     /**
-     * Create a new generator layer dialog
-     *
+     * Create a new generator layer
+     * @param name the proposed name for this layer
      * @param parent the widget parent of this dialog
      */
-    KisDlgGeneratorLayer( QWidget *parent = 0 );
+    KisDlgGeneratorLayer( const QString & name, QWidget *parent = 0 );
 
     KisFilterConfiguration * configuration() const;
     QString layerName() const;

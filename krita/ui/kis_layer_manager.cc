@@ -65,6 +65,7 @@
 #include "kis_dlg_adj_layer_props.h"
 #include "kis_dlg_adjustment_layer.h"
 #include "kis_dlg_layer_properties.h"
+#include "kis_dlg_generator_layer.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_doc2.h"
 #include "kis_filter_manager.h"
@@ -612,19 +613,32 @@ void KisLayerManager::addGeneratorLayer()
 
 void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
 {
-    // XXX: show dialog
-}
-
-void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection)
-{
     Q_ASSERT(parent);
     Q_ASSERT(above);
-    Q_ASSERT(filter);
 
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisGeneratorLayerSP l = new KisGeneratorLayer(img, name, filter, selection);
+    KisDlgGeneratorLayer dlg(img->nextLayerName(), m_view);
+    if (dlg.exec() == QDialog::Accepted) {
+        KisSelectionSP selection = m_view->selection();
+        KisFilterConfiguration * generator = dlg.configuration();
+        QString name = dlg.layerName();
+        addAdjustmentLayer( parent, above, name, generator, selection);
+    }
+
+}
+
+void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * generator, KisSelectionSP selection)
+{
+    Q_ASSERT(parent);
+    Q_ASSERT(above);
+    Q_ASSERT(generator);
+
+    KisImageSP img = m_view->image();
+    if (!img) return;
+
+    KisGeneratorLayerSP l = new KisGeneratorLayer(img, name, generator, selection);
     img->addNode(l.data(), parent, above.data());
     if (l->selection())
         l->setDirty(l->selection()->selectedExactRect());

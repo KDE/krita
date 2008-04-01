@@ -27,14 +27,13 @@
 #include <klineedit.h>
 #include <klocale.h>
 
-#include <generator/kis_generator.h>
 #include <filter/kis_filter_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_previewwidget.h>
 #include <kis_transaction.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer( QWidget * parent )
+KisDlgGeneratorLayer::KisDlgGeneratorLayer( const QString & name, QWidget * parent )
     : KDialog(parent)
     , m_currentConfigWidget(0)
     , m_currentGenerator(0)
@@ -44,9 +43,14 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer( QWidget * parent )
 
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-
-    dlgWidget.setupUi(this);
-
+    QWidget * page = new QWidget(this);
+    dlgWidget.setupUi(page);
+    QHBoxLayout * layout = new QHBoxLayout(page);
+    layout->setMargin(0);
+    layout->setSpacing(6);
+    setMainWidget(page);
+    
+    dlgWidget.txtLayerName->setText(name);
     connect( dlgWidget.txtLayerName, SIGNAL( textChanged ( const QString & ) ),
              this, SLOT( slotNameChanged( const QString & ) ) );
 

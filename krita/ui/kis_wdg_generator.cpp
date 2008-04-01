@@ -29,6 +29,7 @@
 #include <generator/kis_generator_registry.h>
 #include <filter/kis_filter_config_widget.h>
 #include <filter/kis_filter_configuration.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "ui_wdggenerators.h"
 
@@ -64,7 +65,8 @@ KisWdgGenerator::KisWdgGenerator(QWidget * parent)
     : QWidget(parent)
     , d(new Private())
 {
-    init(0);
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(0), "tmp");
+    init(dev);
 }
 
 KisWdgGenerator::KisWdgGenerator( QWidget * parent, KisPaintDeviceSP dev)
@@ -88,6 +90,8 @@ void KisWdgGenerator::init(KisPaintDeviceSP dev)
     d->dev = dev;
     d->uiWdgGenerators.setupUi( this );
     KisGeneratorRegistry * registry = KisGeneratorRegistry::instance();
+    qDebug() << registry->count();
+    
     foreach(QString key, registry->keys())
     {
         KisGeneratorSP generator = registry->get(key);
@@ -98,7 +102,9 @@ void KisWdgGenerator::init(KisPaintDeviceSP dev)
         item->generator = generator;
     }
     connect(d->uiWdgGenerators.lstGenerators, SIGNAL(itemActivated(QListWidgetItem*)),
-            this, SLOT(generatorActivated(QListWidgetItem*)));
+            this, SLOT(slotGeneratorActivated(QListWidgetItem*)));
+
+    slotGeneratorActivated(d->uiWdgGenerators.lstGenerators->currentItem());
 }
 
 
@@ -133,6 +139,12 @@ KisFilterConfiguration * KisWdgGenerator::configuration()
 
 void KisWdgGenerator::slotGeneratorActivated(QListWidgetItem* i)
 {
+    if (!i) {
+        d->centralWidget = new QLabel( i18n("No configuration options."),
+                                       d->uiWdgGenerators.centralWidgetHolder );
+        return;
+    }
+
     KisGeneratorItem * item = static_cast<KisGeneratorItem*>(i);
     d->currentGenerator = item->generator;
     

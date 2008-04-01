@@ -35,8 +35,11 @@
 #include "commands/kis_node_commands.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "generator/kis_generator_layer.h"
 
-
+/**
+ * XXX: crop all masks, too?
+ */
 class KisCropVisitor : public KisNodeVisitor {
 
 public:
@@ -64,6 +67,39 @@ public:
      */
     bool visit(KisPaintLayer *layer)
     {
+        return cropPaintDeviceLayer(layer);
+    }
+
+    bool visit(KisGroupLayer *layer)
+    {
+        layer->resetProjection();
+
+        KisNodeSP child = layer->firstChild();
+        while (child) {
+            child->accept(*this);
+            child = child->nextSibling();
+        }
+        layer->setDirty();
+        return true;
+    }
+
+    virtual bool visit(KisAdjustmentLayer* layer)
+    {
+        // XXX: crop the selection?
+        layer->resetCache();
+        return true;
+    }
+
+    virtual bool visit(KisGeneratorLayer * layer)
+    {
+        return cropPaintDeviceLayer(layer);
+    }
+
+private:
+
+    bool cropPaintDeviceLayer(KisLayer * layer)
+    {
+
         KisPaintDeviceSP dev = layer->paintDevice();
         KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
 
@@ -89,27 +125,6 @@ public:
         return true;
     }
 
-    bool visit(KisGroupLayer *layer)
-    {
-	layer->resetProjection();
-
-        KisNodeSP child = layer->firstChild();
-        while (child) {
-            child->accept(*this);
-            child = child->nextSibling();
-        }
-        layer->setDirty();
-        return true;
-    }
-
-    virtual bool visit(KisAdjustmentLayer* layer)
-    {
-        layer->resetCache();
-        return true;
-    }
-
-
-private:
     QRect m_rect;
     bool m_movelayers;
 };

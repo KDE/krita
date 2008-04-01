@@ -34,7 +34,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
-
+#include "generator/kis_generator_layer.h"
 
 // XXX: Make undoable (used to be in KisPaintDevice, should be in
 // KisLayer)
@@ -129,7 +129,7 @@ public:
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer* layer);
-
+    bool visit(KisGeneratorLayer * layer);
 private:
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
@@ -171,6 +171,16 @@ bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
     layer->setCompositeOp( m_dstColorSpace->compositeOp( layer->compositeOp()->id() ) );
     return true;
 }
+
+bool KisColorSpaceConvertVisitor::visit(KisGeneratorLayer *layer)
+{
+    layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
+    layer->setChannelFlags( m_emptyChannelFlags );
+    layer->setDirty();
+    layer->setCompositeOp( m_dstColorSpace->compositeOp( layer->compositeOp()->id() ) );
+    return true;
+}
+
 
 
 bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)

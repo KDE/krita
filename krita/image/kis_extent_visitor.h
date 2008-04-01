@@ -28,6 +28,7 @@
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_transformation_mask.h"
+#include "generator/kis_generator_layer.h"
 
 /**
  * The ExtentVisitor determines the total extent of all layers
@@ -61,13 +62,7 @@ public:
 
     bool visit(KisPaintLayer *layer)
         {
-            if (m_exact) {
-                m_region = m_region.united(layer->exactBounds());
-            }
-            else {
-                m_region = m_region.united(layer->extent());
-            }
-            return true;
+            return updateExtent(layer);
         }
 
     bool visit(KisGroupLayer *layer)
@@ -83,16 +78,22 @@ public:
 
     bool visit(KisAdjustmentLayer *layer)
         {
-            if (m_exact) {
-                m_region = m_region.united(layer->exactBounds());
-            }
-            else {
-                m_region = m_region.united(layer->extent());
-            }
-            return true;
+            return updateExtent(layer);
         }
 
     bool visit(KisCloneLayer *layer)
+        {
+            return updateExtent(layer);
+        }
+
+    bool visit(KisGeneratorLayer * layer)
+        {
+            return updateExtent(layer);
+        }
+        
+private:
+
+    bool updateExtent( KisLayer * layer )
         {
             if (m_exact) {
                 m_region = m_region.united(layer->exactBounds());
@@ -101,10 +102,9 @@ public:
                 m_region = m_region.united(layer->extent());
             }
             return true;
+     
         }
-
-private:
-
+    
     QRect m_imageRect;
     QRegion m_region;
     bool m_exact;

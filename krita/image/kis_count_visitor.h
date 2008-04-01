@@ -33,7 +33,7 @@
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_transformation_mask.h"
-
+#include "generator/kis_generator_layer.h"
 /**
  * The count visitor traverses the node stack for nodes that conform
  * to certain properties. You can set the types of nodes to count and
@@ -110,6 +110,10 @@ public:
             return check( mask );
         }
 
+    bool visit(KisGeneratorLayer * layer)
+        {
+            return check( layer );
+        }
 
 private:
 

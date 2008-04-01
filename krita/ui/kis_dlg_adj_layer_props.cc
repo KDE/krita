@@ -108,7 +108,10 @@ void KisDlgAdjLayerProps::slotNameChanged( const QString & text )
 
 KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
 {
-    return m_currentConfigWidget->configuration();
+    if (m_currentConfigWidget)
+        return m_currentConfigWidget->configuration();
+    else
+        return 0;
 }
 
 QString KisDlgAdjLayerProps::layerName() const

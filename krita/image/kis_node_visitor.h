@@ -42,6 +42,7 @@ public:
     virtual bool visit(KisGroupLayer *layer) { Q_UNUSED( layer ); return false; }
     virtual bool visit(KisAdjustmentLayer *layer) { Q_UNUSED( layer ); return false; }
     virtual bool visit(KisExternalLayer *layer) { Q_UNUSED( layer ); return false; }
+    virtual bool visit(KisGeneratorLayer *layer) { Q_UNUSED( layer); return false; }
     virtual bool visit(KisCloneLayer *layer) { Q_UNUSED( layer ); return false; }
     virtual bool visit(KisFilterMask *mask) { Q_UNUSED( mask ); return false; }
     virtual bool visit(KisTransparencyMask *mask) { Q_UNUSED( mask ); return false; }

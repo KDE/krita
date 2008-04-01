@@ -85,6 +85,34 @@ KisWdgGenerator::~KisWdgGenerator()
 {
 }
 
+void KisWdgGenerator::setConfiguration(KisFilterConfiguration * config)
+{
+    for(int i = 0; i < d->uiWdgGenerators.lstGenerators->count(); ++i) {
+        KisGeneratorItem * item = static_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(i));
+        if (item->generator->id() == config->name()) {
+            // match!
+            slotGeneratorActivated(item);
+            KisFilterConfigWidget * wdg = dynamic_cast<KisFilterConfigWidget*>(d->centralWidget);
+            if (wdg) {
+                wdg->setConfiguration(config);
+            }
+            return;
+        }
+    }
+}
+
+KisFilterConfiguration * KisWdgGenerator::configuration()
+{
+    KisFilterConfigWidget * wdg = dynamic_cast<KisFilterConfigWidget*>(d->centralWidget);
+    if (wdg) {
+        return wdg->configuration();
+    }
+    else {
+        return 0;
+    }
+
+}
+
 void KisWdgGenerator::slotGeneratorActivated(QListWidgetItem* i)
 {
     KisGeneratorItem * item = static_cast<KisGeneratorItem*>(i);

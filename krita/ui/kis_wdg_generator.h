@@ -21,7 +21,9 @@
 
 #include <QWidget>
 #include <kis_types.h>
+
 class QListWidgetItem;
+class KisFilterConfiguration;
 
 /**
  * A widget that allows users to select a generator and
@@ -35,6 +37,10 @@ public:
     KisWdgGenerator(QWidget * parent, KisPaintDeviceSP dev);
 
     ~KisWdgGenerator();
+
+    void setConfiguration(KisFilterConfiguration * config);
+
+    KisFilterConfiguration * configuration();
     
 private:
 

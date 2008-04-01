@@ -65,6 +65,44 @@ private:
     QString m_after;
 };
 
+template <typename T>
+class KisChangeGeneratorCmd : public QUndoCommand {
+
+public:
+    // The QStrings are the _serialized_ configs
+    KisChangeGeneratorCmd(T node,
+                       KisFilterConfiguration* config,
+                       const QString& before,
+                       const QString& after)
+        : QUndoCommand(i18n("Change Generator"))
+    {
+        m_node = node;
+        m_config = config;
+        m_before = before;
+        m_after = after;
+    }
+public:
+    virtual void redo()
+    {
+        m_config->fromLegacyXML(m_after);
+        m_node->setGenerator(m_config);
+        m_node->setDirty();
+    }
+
+    virtual void undo()
+    {
+        m_config->fromLegacyXML(m_before);
+        m_node->setGenerator(m_config);
+        m_node->setDirty();
+    }
+
+private:
+    T m_node;
+    KisFilterConfiguration* m_config;
+    QString m_before;
+    QString m_after;
+};
+
 
 /// The command for moving of a node
 class KRITAIMAGE_EXPORT KisNodeMoveCommand : public QUndoCommand {

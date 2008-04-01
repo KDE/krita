@@ -78,7 +78,7 @@
 #include "kis_zoom_manager.h"
 #include "kis_canvas2.h"
 #include "kis_meta_data_merge_strategy_chooser_widget.h"
-
+#include "kis_wdg_generator.h"
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     : m_view( view )
@@ -385,7 +385,26 @@ void KisLayerManager::layerProperties()
         }
     }
     else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
-        // XXX
+        KDialog dlg(0);
+        dlg.setCaption(i18n("Generator Layer Properties"));
+        dlg.setButtons( KDialog::Ok | KDialog::Cancel );
+        KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace(), "tmp");
+        KisWdgGenerator * page = new KisWdgGenerator(&dlg, dev);
+        dlg.setMainWidget(page);
+        page->setConfiguration(alayer->generator());
+        QString before = alayer->generator()->toLegacyXML();
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            KisChangeGeneratorCmd<KisGeneratorLayerSP> * cmd
+                = new KisChangeGeneratorCmd<KisGeneratorLayerSP>(alayer,
+                                                              page->configuration(),
+                                                              before,
+                                                              page->configuration()->toLegacyXML());
+            cmd->redo();
+            m_view->undoAdapter()->addCommand(cmd);
+            m_doc->setModified( true );
+
+        }
     }
     else
     {

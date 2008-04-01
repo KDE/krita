@@ -26,6 +26,7 @@
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 #include "kis_adjustment_layer.h"
+#include "generator/kis_generator_layer.h"
 #include "kis_group_layer.h"
 #include "kis_external_layer_iface.h"
 
@@ -38,76 +39,81 @@
  */
 class KisChangeProfileVisitor :public KisNodeVisitor {
 public:
-    KisChangeProfileVisitor(const KoColorSpace *oldColorSpace, const KoColorSpace *dstColorSpace);
-    virtual ~KisChangeProfileVisitor();
-
+    
     using KisNodeVisitor::visit;
 
-public:
-    bool visit( KisExternalLayer * )
-        {
-            return true;
-        }
+    KisChangeProfileVisitor(const KoColorSpace * oldColorSpace,
+                            const KoColorSpace *dstColorSpace)
+        : KisNodeVisitor()
+        , m_oldColorSpace(oldColorSpace)
+        , m_dstColorSpace(dstColorSpace)
+    {
+    }
 
-    bool visit(KisPaintLayer *layer);
-    bool visit(KisGroupLayer *layer);
-    bool visit(KisAdjustmentLayer* layer);
+    ~KisChangeProfileVisitor()
+    {
+    }
+    
+    bool visit( KisExternalLayer * )
+    {
+        return true;
+    }
+
+    bool visit(KisGroupLayer * layer)
+    {
+        // Clear the projection, we will have to re-render everything.
+        layer->resetProjection();
+
+        KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
+        while (child) {
+            child->accept(*this);
+            child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
+        }
+        layer->setDirty();
+        return true;
+    }
+
+
+    bool visit(KisPaintLayer *layer)
+    {
+        return updatePaintDevice(layer);
+    }
+
+    bool visit(KisGeneratorLayer *layer)
+    {
+        return updatePaintDevice(layer);
+    }
+
+    bool visit(KisAdjustmentLayer * layer)
+    {
+        layer->resetCache();
+        layer->setDirty();
+        return true;
+    }
 
 private:
+
+    bool updatePaintDevice(KisLayer * layer)
+    {
+        if (!layer) return false;
+        if (!layer->paintDevice()) return false;
+        if (!layer->paintDevice()->colorSpace()) return false;
+
+        const KoColorSpace * cs = layer->paintDevice()->colorSpace();
+
+        if (*cs == *m_oldColorSpace) {
+
+            layer->paintDevice()->setProfile(m_dstColorSpace->profile());
+
+            layer->setDirty();
+        }
+
+        return true;
+    }
+    
     const KoColorSpace *m_oldColorSpace;
     const KoColorSpace *m_dstColorSpace;
 };
-
-KisChangeProfileVisitor::KisChangeProfileVisitor(const KoColorSpace * oldColorSpace,
-                                                 const KoColorSpace *dstColorSpace) :
-    KisNodeVisitor(),
-    m_oldColorSpace(oldColorSpace),
-    m_dstColorSpace(dstColorSpace)
-{
-}
-
-KisChangeProfileVisitor::~KisChangeProfileVisitor()
-{
-}
-
-bool KisChangeProfileVisitor::visit(KisGroupLayer * layer)
-{
-    // Clear the projection, we will have to re-render everything.
-    layer->resetProjection();
-
-    KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
-    while (child) {
-        child->accept(*this);
-        child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
-    }
-    layer->setDirty();
-    return true;
-}
-
-bool KisChangeProfileVisitor::visit(KisPaintLayer *layer)
-{
-    if (!layer) return false;
-    if (!layer->paintDevice()) return false;
-    if (!layer->paintDevice()->colorSpace()) return false;
-
-    const KoColorSpace * cs = layer->paintDevice()->colorSpace();
-
-    if (*cs == *m_oldColorSpace) {
-
-        layer->paintDevice()->setProfile(m_dstColorSpace->profile());
-
-        layer->setDirty();
-    }
-    return true;
-}
-
-
-bool KisChangeProfileVisitor::visit(KisAdjustmentLayer * layer)
-{
-    layer->resetCache();
-    layer->setDirty();
-    return true;
-}
 
 #endif // KIS_CHANGE_PROFILE_VISITOR_H_
 

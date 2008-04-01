@@ -50,14 +50,20 @@
 #include "ui_wdgnoiseoptions.h"
 
 typedef KGenericFactory<KritaNoiseGenerator> KritaNoiseGeneratorFactory;
-K_EXPORT_COMPONENT_FACTORY( KritaNoiseGenerator, KritaNoiseGeneratorFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritanoisegenerator, KritaNoiseGeneratorFactory( "krita" ) )
 
 KritaNoiseGenerator::KritaNoiseGenerator(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(KritaNoiseGeneratorFactory::componentData());
-    KisGeneratorRegistry * manager = dynamic_cast<KisGeneratorRegistry *>(parent);
-    manager->add(new KisNoiseGenerator());
+    if (parent->inherits("KisGeneratorRegistry")) {
+        kDebug() << "XXX";
+        KisGeneratorRegistry * manager = dynamic_cast<KisGeneratorRegistry *>(parent);
+        if (manager) {
+            kDebug() << "YYY";
+            manager->add(new KisNoiseGenerator());
+        }
+    }
 }
 
 KritaNoiseGenerator::~KritaNoiseGenerator()

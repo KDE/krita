@@ -48,7 +48,7 @@ KisGeneratorRegistry::KisGeneratorRegistry()
                                                                              "([X-Krita-Version] == 3)"));
 
     KService::List::ConstIterator iter;
-
+    dbgPlugins << "generators found: " << offers.count();
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
@@ -81,11 +81,13 @@ KisGeneratorRegistry* KisGeneratorRegistry::instance()
 
 void KisGeneratorRegistry::add(KisGeneratorSP item)
 {
+    dbgPlugins << "adding " << item->name();
     add(item->id(), item);
 }
 
 void KisGeneratorRegistry::add(const QString &id, KisGeneratorSP item)
 {
+    dbgPlugins << "adding " << item->name() << " with id " << id;
     KoGenericRegistry<KisGeneratorSP>::add(id, item);
     emit(generatorAdded(id));
 }

@@ -50,7 +50,6 @@ set(kritaui_LIB_SRCS
     kis_filter_dialog.cc
     kis_filter_handler.cc
     kis_filter_manager.cc
-    kis_filters_listview.cc
     kis_filters_model.cc
     kis_gradient_chooser.cc
     kis_gradient_slider_widget.cc
@@ -122,6 +121,7 @@ set(kritaui_LIB_SRCS
     kis_tree_view_popup.cc
     kis_view2.cpp
     kis_zoom_manager.cc
+    kis_wdg_generator.cpp
     kobirdeyepanel.cpp
     modeltest.cpp
     squeezedcombobox.cpp
@@ -151,7 +151,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
     forms/wdggridsettings.ui
-    forms/wdgbirdeye.ui
+    forms/wdgbirdeye.ui 
+    forms/wdggenerators.ui
     forms/wdgbookmarkedconfigurationseditor.ui
     forms/wdgapplyprofile.ui
     forms/wdgcustombrush.ui
@@ -229,7 +230,6 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_tool_types.h
 #    kis_view2.h
 #    kobirdeyepanel.h
-#    kis_filters_listview.h
 #    KoInputDevice.h
 #    kis_perspective_grid_manager.h
 #    DESTINATION ${INCLUDE_INSTALL_DIR})

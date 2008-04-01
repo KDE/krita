@@ -72,12 +72,12 @@ public:
     virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
 
     /**
-     * @return the bookmark manager for this filter
+     * @return the bookmark manager for this processor
      */
     KisBookmarkedConfigurationManager* bookmarkManager();
 
     /**
-     * @return the bookmark manager for this filter
+     * @return the bookmark manager for this processor
      */
     const KisBookmarkedConfigurationManager* bookmarkManager() const;
 
@@ -103,14 +103,14 @@ public:
     /// @return User-visible identification for this processor
     QString name() const;
 
-    /// @return the submenu in the filters menu does filter want to go?
+    /// @return the submenu in the filters menu does processor want to go?
     KoID menuCategory() const;
 
     /// @return the i18n'ed string this filter wants to show itself in the menu
     QString menuEntry() const;
 
     /**
-     * Create the configuration widget for this filter.
+     * Create the configuration widget for this processor.
      *
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on

@@ -28,6 +28,9 @@
 
 class KisFilter;
 
+/**
+ *
+ */
 class KisFiltersModel : public QAbstractItemModel {
     public:
         KisFiltersModel(KisPaintDeviceSP thumb);

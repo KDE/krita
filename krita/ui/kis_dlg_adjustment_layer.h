@@ -25,7 +25,6 @@ class KisFilter;
 class QListWidgetItem;
 class QLabel;
 class KisPreviewWidget;
-class KisFiltersListView;
 class KisFilterConfiguration;
 class QGroupBox;
 class KisFilterConfigWidget;
@@ -71,7 +70,6 @@ protected slots:
 private:
 
     KisPaintDeviceSP m_dev;
-    KisFiltersListView * m_filtersList;
     KisPreviewWidget * m_preview;
     QGroupBox * m_configWidgetHolder;
     KisFilterConfigWidget * m_currentConfigWidget;

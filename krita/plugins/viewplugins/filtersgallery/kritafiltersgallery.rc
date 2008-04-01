@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritafiltersgallery" version="7">
-<MenuBar>
-<Menu name="Filter"><text>&amp;Filter</text>
-	<Separator/>
-	<Action name="krita_filters_gallery"/>
-</Menu>
-</MenuBar>
-</kpartgui>

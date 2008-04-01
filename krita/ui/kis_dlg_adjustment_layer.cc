@@ -31,7 +31,6 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_config_widget.h"
 #include "filter/kis_filter_configuration.h"
-#include "kis_filters_listview.h"
 #include "kis_paint_device.h"
 #include "kis_previewwidget.h"
 #include "kis_transaction.h"
@@ -68,10 +67,6 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisPaintDeviceSP device,
     m_layerName->setObjectName("m_layerName");
     grid->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
-
-    m_filtersList = new KisFiltersListView(m_dev, page, true);
-    connect(m_filtersList , SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionHasChanged(QListWidgetItem* )));
-    grid->addWidget(m_filtersList, 1, 0, 2, 1);
 
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
     m_preview->slotSetDevice( m_dev );
@@ -144,7 +139,7 @@ void KisDlgAdjustmentLayer::refreshPreview()
 
 void KisDlgAdjustmentLayer::selectionHasChanged ( QListWidgetItem * item )
 {
-
+/*
     KisFiltersIconViewItem* kisitem = (KisFiltersIconViewItem*) item;
 
     m_currentFilter = kisitem->filter();
@@ -188,6 +183,7 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QListWidgetItem * item )
     enableButtonOk( !m_layerName->text().isEmpty() );
     if(m_currentConfigWidget)
         refreshPreview();
+*/        
 }
 
 #include "kis_dlg_adjustment_layer.moc"

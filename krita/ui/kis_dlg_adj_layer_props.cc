@@ -31,7 +31,6 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
-#include "kis_filters_listview.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_adjustment_layer.h"

@@ -35,6 +35,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "generator/kis_generator_layer.h"
 
 class KoUpdater;
 class KisFilterStrategy;
@@ -75,27 +76,13 @@ public:
      */
     bool visit(KisPaintLayer *layer)
     {
-        KisPaintDeviceSP dev = layer->paintDevice();
-
-        KisTransaction * t = 0;
-        if (m_img->undo()) {
-            t = new KisTransaction(i18n("Rotate Layer"), dev);
-            Q_CHECK_PTR(t);
-	}
-
-        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
-        tw.run();
-
-        if (m_img->undo()) {
-            m_img->undoAdapter()->addCommand(t);
-	}
-        layer->setDirty();
+        transformPaintDevice(layer);
         return true;
     }
 
     bool visit(KisGroupLayer *layer)
     {
-	layer->resetProjection();
+        layer->resetProjection();
 
         KisNodeSP child = layer->firstChild();
         while (child) {
@@ -108,10 +95,37 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+        transformPaintDevice(layer);
         layer->resetCache();
         return true;
     }
 
+    bool visit(KisGeneratorLayer* layer)
+    {
+        transformPaintDevice(layer);
+        return true;
+    }
+    
+private:
+
+    void transformPaintDevice(KisNode * node)
+    {
+        KisPaintDeviceSP dev = node->paintDevice();
+
+        KisTransaction * t = 0;
+        if (m_img->undo()) {
+            t = new KisTransaction(i18n("Rotate Node"), dev);
+            Q_CHECK_PTR(t);
+        }
+
+        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
+        tw.run();
+
+        if (m_img->undo()) {
+            m_img->undoAdapter()->addCommand(t);
+        }
+        node->setDirty();
+    }
 
 private:
     double m_sx, m_sy;

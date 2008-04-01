@@ -64,6 +64,8 @@ public:
 
     bool visit(KisSelectionMask *mask);
 
+    bool visit(KisGeneratorLayer * layer);
+
 private:
 
     bool visitLeafNodeLayer( KisLayer * layer );

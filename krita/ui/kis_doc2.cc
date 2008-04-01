@@ -336,7 +336,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     // Save the layers data
     quint32 count=0;
-    KisKraSaveVisitior visitor( img, store, count, documentInfo()->aboutInfo("title"));
+    KisKraSaveVisitor visitor( img, store, count, documentInfo()->aboutInfo("title"));
 
     if(external)
         visitor.setExternalUri(uri);

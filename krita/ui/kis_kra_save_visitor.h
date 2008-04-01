@@ -26,9 +26,9 @@
 
 class KoStore;
 
-class KisKraSaveVisitior : public KisNodeVisitor {
+class KisKraSaveVisitor : public KisNodeVisitor {
 public:
-    KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &count, const QString & name);
+    KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, const QString & name);
 
     using KisNodeVisitor::visit;
     
@@ -42,6 +42,8 @@ public:
     bool visit(KisGroupLayer *layer);
 
     bool visit(KisAdjustmentLayer* layer);
+
+    bool visit(KisGeneratorLayer * layer);
 
 private:
     KisImageSP m_img;

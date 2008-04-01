@@ -38,6 +38,7 @@
 #include "kis_adjustment_layer.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_datamanager.h"
+#include "generator/kis_generator_layer.h"
 
 KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, const QString & name) :
     KisNodeVisitor(),

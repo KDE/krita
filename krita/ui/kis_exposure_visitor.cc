@@ -23,7 +23,7 @@
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
-
+#include "generator/kis_generator_layer.h"
 
 KisExposureVisitor::KisExposureVisitor(double exposure) : m_exposure(exposure)
 {

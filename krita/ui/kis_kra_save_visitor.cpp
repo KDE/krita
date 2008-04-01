@@ -33,9 +33,9 @@
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
 #include "kis_shape_layer.h"
+#include "generator/kis_generator_layer.h"
 
-
-KisKraSaveVisitior::KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &count, const QString & name) :
+KisKraSaveVisitor::KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, const QString & name) :
     KisNodeVisitor(),
     m_count(count)
 {
@@ -45,27 +45,27 @@ KisKraSaveVisitior::KisKraSaveVisitior(KisImageSP img, KoStore *store, quint32 &
     m_name = name;
 }
 
-void KisKraSaveVisitior::setExternalUri(QString &uri)
+void KisKraSaveVisitor::setExternalUri(QString &uri)
 {
     m_external = true;
     m_uri = uri;
 }
 
-bool KisKraSaveVisitior::visit( KisExternalLayer * layer )
-    {
-        bool result = false;
-        if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
-            
-            QString location = m_external ? QString::null : m_uri;
-            m_store->pushDirectory();
-            m_store->enterDirectory( m_name + QString("/shapelayers/layer%1").arg(m_count) );
-            result = shapeLayer->saveOdf(m_store);
-            m_store->popDirectory();
-        }
-        return result;
-    }
+bool KisKraSaveVisitor::visit( KisExternalLayer * layer )
+{
+    bool result = false;
+    if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
 
-bool KisKraSaveVisitior::visit(KisPaintLayer *layer)
+        QString location = m_external ? QString::null : m_uri;
+        m_store->pushDirectory();
+        m_store->enterDirectory( m_name + QString("/shapelayers/layer%1").arg(m_count) );
+        result = shapeLayer->saveOdf(m_store);
+        m_store->popDirectory();
+    }
+    return result;
+}
+
+bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 {
     //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
@@ -106,6 +106,8 @@ bool KisKraSaveVisitior::visit(KisPaintLayer *layer)
         }
     }
 
+    // XXX: save masks!
+
 //     if (layer->hasMask()) {
 //         KisPaintDeviceSP mask = layer->getMask();
 
@@ -130,12 +132,12 @@ bool KisKraSaveVisitior::visit(KisPaintLayer *layer)
     return true;
 }
 
-bool KisKraSaveVisitior::visit(KisGroupLayer *layer)
+bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
 {
     return visitAllInverse( layer );
 }
 
-bool KisKraSaveVisitior::visit(KisAdjustmentLayer* layer)
+bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
 {
 
     if (layer->selection()) {
@@ -169,3 +171,71 @@ bool KisKraSaveVisitior::visit(KisAdjustmentLayer* layer)
     return true;
 }
 
+bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
+{
+    QString location = m_external ? QString::null : m_uri;
+    location += m_name + QString("/layers/layer%1").arg(m_count);
+
+    // Layer data
+    if (m_store->open(location)) {
+        if (!layer->paintDevice()->write(m_store)) {
+            layer->paintDevice()->disconnect();
+            m_store->close();
+            //IODone();
+            return false;
+        }
+
+        m_store->close();
+    }
+
+    if (layer->paintDevice()->colorSpace()->profile()) {
+        const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
+        KisAnnotationSP annotation;
+        if (profile)
+        {
+            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
+            if (iccprofile && !iccprofile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+        }
+
+        if (annotation) {
+            // save layer profile
+            location = m_external ? QString::null : m_uri;
+            location += m_name + QString("/layers/layer%1").arg(m_count) + ".icc";
+
+            if (m_store->open(location)) {
+                m_store->write(annotation->annotation());
+                m_store->close();
+            }
+        }
+    }
+    
+    if (layer->selection()) {
+        location += m_name + QString("/layers/layer%1").arg(m_count) + ".selection";
+
+        // Layer data
+        if (m_store->open(location)) {
+            if (!layer->selection()->write(m_store)) {
+                layer->selection()->disconnect();
+                m_store->close();
+                //IODone();
+                return false;
+            }
+            m_store->close();
+        }
+    }
+
+    if (layer->generator()) {
+        QString location = m_external ? QString::null : m_uri;
+        location = m_external ? QString::null : m_uri;
+        location += m_name + QString("/layers/layer%1").arg(m_count) + ".generatorconfig";
+
+        if (m_store->open(location)) {
+            QString s = layer->generator()->toLegacyXML();
+            m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
+            m_store->close();
+        }
+    }
+    m_count++;
+    return true;
+}

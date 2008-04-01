@@ -39,6 +39,7 @@
 #include <kis_image.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
+#include <generator/kis_generator_layer.h>
 
 #include "kis_layer_container_shape.h"
 
@@ -69,6 +70,11 @@ bool KisLayerMapVisitor::visit( KisExternalLayer * layer)
     }
 
 bool KisLayerMapVisitor::visit(KisPaintLayer *layer)
+{
+    return visitLeafNodeLayer( layer );
+}
+
+bool KisLayerMapVisitor::visit(KisGeneratorLayer * layer)
 {
     return visitLeafNodeLayer( layer );
 }

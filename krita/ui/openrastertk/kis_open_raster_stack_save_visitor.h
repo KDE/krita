@@ -30,6 +30,7 @@ class KisOpenRasterSaveContext;
 class KisAdjustmentLayer;
 class KisGroupLayer;
 class KisPaintLayer;
+class KisGeneratorLayer;
 
 class QDomElement;
 
@@ -48,6 +49,9 @@ public:
         {
             return true;
         }
+
+    bool visit(KisGeneratorLayer * layer);
+    
 private:
     void saveLayerInfo(QDomElement& elt, KisLayer* layer);
     struct Private;

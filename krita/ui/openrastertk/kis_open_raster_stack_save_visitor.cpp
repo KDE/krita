@@ -29,7 +29,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
-
+#include <generator/kis_generator_layer.h>
 #include "kis_open_raster_save_context.h"
 
 struct KisOpenRasterStackSaveVisitor::Private
@@ -66,6 +66,13 @@ bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)
     saveLayerInfo(elt, layer);
     elt.setAttribute("src", filename);
     d->currentElement->appendChild( elt );
+    
+    return true;
+}
+
+bool KisOpenRasterStackSaveVisitor::visit(KisGeneratorLayer* layer)
+{
+    // XXX: implement!
     
     return true;
 }

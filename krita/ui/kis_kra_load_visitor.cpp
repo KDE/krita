@@ -99,6 +99,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
     }
 
+    // XXX: load masks
 //     // mask
 //     if (layer->hasMask()) { // We set this in KisDoc::loadPaintLayer
 //         KisPaintDeviceSP mask = layer->getMask();
@@ -178,3 +179,74 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
 }
 
+bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
+{
+    QString location = m_external ? QString::null : m_uri;
+    location += m_name + "/layers/" + m_layerFilenames[layer];
+    
+    // Layer data
+    if (m_store->open(location)) {
+        if (!layer->paintDevice()->read(m_store)) {
+            layer->paintDevice()->disconnect();
+            m_store->close();
+            //IODone();
+            return false;
+        }
+
+        m_store->close();
+    }
+    else {
+        kError() << "No image data: that's an error!";
+        return false;
+    }
+
+    // icc profile
+    location = m_external ? QString::null : m_uri;
+    location += m_name + "/layers/" + m_layerFilenames[layer] + ".icc";
+
+    if (m_store->hasFile(location)) {
+        QByteArray data;
+        m_store->open(location);
+        data = m_store->read(m_store->size());
+        m_store->close();
+        // Create a colorspace with the embedded profile
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(), new KoIccColorProfile(data));
+        // replace the old colorspace
+        layer->paintDevice()->setDataManager(layer->paintDevice()->dataManager(), cs);
+
+    }
+
+    location = m_external ? QString::null : m_uri;
+    location += m_name + "/layers/" + m_layerFilenames[layer] + ".selection";
+    if (m_store->hasFile(location)) {
+        m_store->open(location);
+        KisSelectionSP selection = KisSelectionSP(new KisSelection());
+        if (!selection->read(m_store)) {
+            selection->disconnect();
+            m_store->close();
+        }
+        else {
+            layer->setSelection( selection );
+        }
+        m_store->close();
+
+    }
+
+    // filter configuration
+    location = m_external ? QString::null : m_uri;
+    location += m_name + "/layers/" + m_layerFilenames[layer] + ".generatorconfig";
+
+    if (m_store->hasFile(location) && layer->generator()) {
+        QByteArray data;
+        m_store->open(location);
+        data = m_store->read(m_store->size());
+        m_store->close();
+        if (!data.isEmpty()) {
+            KisFilterConfiguration * kfc = layer->generator();
+            kfc->fromLegacyXML(QString(data));
+        }
+    }
+
+    layer->setDirty( m_img->bounds() );
+    return true;
+}

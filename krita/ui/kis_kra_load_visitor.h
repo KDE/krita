@@ -39,12 +39,10 @@ public:
     void setExternalUri(const QString &uri);
 
     bool visit( KisExternalLayer * );
-
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-
     bool visit(KisAdjustmentLayer* layer);
-
+    bool visit(KisGeneratorLayer* layer);
 private:
     KisImageSP m_img;
     KoStore *m_store;

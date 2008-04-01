@@ -18,6 +18,7 @@
  */
 
 #include "kis_filter_dialog.h"
+#include <QHeaderView>
 #include <QTreeView>
 
 // From krita/image
@@ -87,7 +88,11 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->layer->setPreviewMask( d->mask );
     d->filtersModel = new KisFiltersModel(d->thumb);
     d->uiFilterDialog.filtersSelector->setModel(d->filtersModel);
-    connect(d->uiFilterDialog.filtersSelector, SIGNAL(currentItemChanged(const QModelIndex &)), SLOT(setFilterIndex(const QModelIndex& )));
+    d->uiFilterDialog.filtersSelector->header()->setVisible(false);
+    connect(d->uiFilterDialog.filtersSelector, SIGNAL(entered(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
+    connect(d->uiFilterDialog.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
+    connect(d->uiFilterDialog.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
+
     connect(d->uiFilterDialog.comboBoxPresets, SIGNAL(activated ( int )),
             SLOT(slotBookmarkedFilterConfigurationSelected(int )) );
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
@@ -112,7 +117,9 @@ void KisFilterDialog::setFilterIndex(const QModelIndex& idx)
         setFilter( filter  );
     } else {
         bool v = d->uiFilterDialog.filtersSelector->blockSignals( true );
-        d->uiFilterDialog.filtersSelector->setCurrentIndex( d->filtersModel->indexForFilter( d->currentFilter->id() ) );
+        QModelIndex idx = d->filtersModel->indexForFilter( d->currentFilter->id() );
+        d->uiFilterDialog.filtersSelector->setCurrentIndex( idx );
+        d->uiFilterDialog.filtersSelector->scrollTo( idx );
         d->uiFilterDialog.filtersSelector->blockSignals( v );
     }
 }

@@ -34,6 +34,7 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
+#include "generator/kis_generator_layer.h"
 #include "kis_external_layer_iface.h"
 #include "kis_paint_layer.h"
 #include "filter/kis_filter.h"
@@ -75,6 +76,40 @@ public:
 public:
 
     bool visit( KisExternalLayer * layer )
+        {
+            if (m_projection.isNull()) {
+                return false;
+            }
+            if (!layer->visible())
+                return true;
+
+            layer->updateProjection( m_rc );
+            KisPaintDeviceSP dev = layer->projection();
+            if (!dev)
+                return true;
+
+            qint32 sx, sy, dx, dy, w, h;
+
+            QRect rc = dev->extent() & m_rc;
+
+            sx= rc.left();
+            sy = rc.top();
+            w = rc.width();
+            h = rc.height();
+            dx = sx;
+            dy = sy;
+
+            KisPainter gc(m_projection);
+            gc.setChannelFlags( layer->channelFlags() );
+            gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
+
+            static_cast<KisBottomUpUpdateStrategy*>(layer->updateStrategy())->setClean( rc );
+
+            return true;
+        }
+
+
+    bool visit( KisGeneratorLayer * layer )
         {
             if (m_projection.isNull()) {
                 return false;

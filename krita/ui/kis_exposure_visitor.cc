@@ -56,8 +56,6 @@ bool KisExposureVisitor::visit(KisGeneratorLayer *layer)
     return true;
 }
 
-
-
 bool KisExposureVisitor::visit(KisGroupLayer *layer)
 {
     setExposureToProfile(layer->colorSpace()->profile());

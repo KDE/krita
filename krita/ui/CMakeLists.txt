@@ -125,6 +125,7 @@ set(kritaui_LIB_SRCS
     kobirdeyepanel.cpp
     modeltest.cpp
     squeezedcombobox.cpp
+    kis_dlg_generator_layer.cpp
 # Open Raster TK
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
@@ -177,6 +178,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfilterdialog.ui
     forms/wdgmetadatamergestrategychooser.ui
     forms/wdgpaintoppresets.ui
+    forms/wdgdlggeneratorlayer.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

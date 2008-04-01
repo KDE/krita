@@ -60,9 +60,30 @@ public:
     KisPaintDeviceSP dev;
 };
 
+KisWdgGenerator::KisWdgGenerator(QWidget * parent)
+    : QWidget(parent)
+    , d(new Private())
+{
+    init(0);
+}
+
 KisWdgGenerator::KisWdgGenerator( QWidget * parent, KisPaintDeviceSP dev)
     : QWidget(parent)
     , d(new Private())
+{
+    init(dev);
+}
+
+KisWdgGenerator::~KisWdgGenerator()
+{
+}
+
+void KisWdgGenerator::setPaintdevice(KisPaintDeviceSP dev)
+{
+    d->dev = dev;
+}
+
+void KisWdgGenerator::init(KisPaintDeviceSP dev)
 {
     d->dev = dev;
     d->uiWdgGenerators.setupUi( this );
@@ -81,9 +102,6 @@ KisWdgGenerator::KisWdgGenerator( QWidget * parent, KisPaintDeviceSP dev)
 }
 
 
-KisWdgGenerator::~KisWdgGenerator()
-{
-}
 
 void KisWdgGenerator::setConfiguration(KisFilterConfiguration * config)
 {

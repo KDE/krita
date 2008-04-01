@@ -16,45 +16,55 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_WDG_GENERATOR_H
-#define KIS_WDG_GENERATOR_H
+#ifndef KIS_DLG_GENERATORLAYER_H
+#define KIS_DLG_GENERATORLAYER_H
 
-#include <QWidget>
-#include <kis_types.h>
+#include <kdialog.h>
+#include <QString>
 
+class KisFilter;
 class QListWidgetItem;
+class QLabel;
+class KisPreviewWidget;
 class KisFilterConfiguration;
+class QGroupBox;
+class KisFilterConfigWidget;
+class KLineEdit;
+
+#include "ui_wdgdlggeneratorlayer.h"
 
 /**
- * A widget that allows users to select a generator and
- * create a config object for it.
- *
- * XXX: make use of bookmarked configuration things, like
- *      in the filter widget.
+ * Create a new generator layer
  */
-class KisWdgGenerator : public QWidget {
+class KisDlgGeneratorLayer : public KDialog
+{
 public:
 
-    KisWdgGenerator(QWidget * parent);
+    Q_OBJECT
 
-    KisWdgGenerator(QWidget * parent, KisPaintDeviceSP dev);
+public:
 
-    ~KisWdgGenerator();
+    /**
+     * Create a new generator layer dialog
+     *
+     * @param parent the widget parent of this dialog
+     */
+    KisDlgGeneratorLayer( QWidget *parent = 0 );
 
-    void setPaintdevice(KisPaintDeviceSP dev);
-        
-    void init(KisPaintDeviceSP dev);
-    
-    void setConfiguration(KisFilterConfiguration * config);
+    KisFilterConfiguration * configuration() const;
+    QString layerName() const;
 
-    KisFilterConfiguration * configuration();
-    
+protected slots:
+
+    void slotNameChanged( const QString & );
+
 private:
 
-    void slotGeneratorActivated(QListWidgetItem*);
-
-    class Private;
-    Private * const d;
+    Ui_WdgDlgGeneratorLayer dlgWidget;
+    KisFilterConfigWidget * m_currentConfigWidget;
+    KisGeneratorSP m_currentGenerator;
+    bool m_customName;
+    bool m_freezeName;
 };
 
 #endif

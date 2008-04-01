@@ -57,10 +57,8 @@ KritaNoiseGenerator::KritaNoiseGenerator(QObject *parent, const QStringList &)
 {
     setComponentData(KritaNoiseGeneratorFactory::componentData());
     if (parent->inherits("KisGeneratorRegistry")) {
-        kDebug() << "XXX";
         KisGeneratorRegistry * manager = dynamic_cast<KisGeneratorRegistry *>(parent);
         if (manager) {
-            kDebug() << "YYY";
             manager->add(new KisNoiseGenerator());
         }
     }

@@ -36,6 +36,7 @@ class KisExposureVisitor : public KisNodeVisitor {
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);
         virtual bool visit(KisAdjustmentLayer* layer);
+        virtual bool visit(KisGeneratorLayer* layer);
     protected:
         void setExposureToProfile(KoColorProfile* profile);
     private:

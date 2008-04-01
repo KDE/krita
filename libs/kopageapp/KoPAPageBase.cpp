@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
 
 #include <kdebug.h>
 
+#include <KoXmlNS.h>
+#include <KoPageLayout.h>
 #include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLayer.h>
@@ -52,6 +54,17 @@ void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& conv
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+}
+
+void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & converter )
+{
+    painter.save();
+    applyConversion( painter, converter );
+    KoPageLayout layout = pageLayout();
+    painter.setPen( Qt::black );
+    painter.setBrush( background() );
+    painter.drawRect( QRectF( 0.0, 0.0, layout.width, layout.height ) );
+    painter.restore();
 }
 
 void KoPAPageBase::saveOdfPageContent( KoPASavingContext & paContext ) const
@@ -100,9 +113,7 @@ QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 
 void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
 {
-    //TODO
-    QBrush background( Qt::white );
-    KoOdfGraphicStyles::saveOasisFillStyle( style, paContext.mainStyles(), background );
+    KoOdfGraphicStyles::saveOasisFillStyle( style, paContext.mainStyles(), background() );
 }
 
 bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext & loadingContext )
@@ -145,6 +156,19 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
 void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element,
                                    KoPALoadingContext &loadingContext )
 {
-    Q_UNUSED( element );
-    Q_UNUSED( loadingContext );
+    if ( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    {
+        loadingContext.odfLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "drawing-page" );
+
+        KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
+        styleStack.save();
+
+        styleStack.setTypeProperties( "drawing-page" );
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
+        {
+            setBackground( loadOdfFill( element, loadingContext ) );
+        }
+
+        styleStack.restore();
+    }
 }

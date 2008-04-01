@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -66,6 +66,14 @@ public:
     virtual KoPageLayout & pageLayout() = 0;
 
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+
+    /**
+     * @brief Paint background
+     *
+     * @param painter
+     * @param converter
+     */
+    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter );
 
 protected:
     /**

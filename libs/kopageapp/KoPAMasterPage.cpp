@@ -78,6 +78,7 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 
 void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
+    KoPAPageBase::loadOdfPageTag( element, loadingContext );
     if ( element.hasAttributeNS( KoXmlNS::style, "display-name" ) ) {
         setName( element.attributeNS( KoXmlNS::style, "display-name" ) );
     }

@@ -57,7 +57,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint8> {
         static const quint8 min = 0;
         static const quint8 epsilon = 1;
         static const qint8 bits = 8;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+        static const KoChannelInfo::enumChannelValueType channelValueType = KoChannelInfo::UINT8;
 };
 
 template<>
@@ -70,7 +70,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint16> {
         static const quint16 min = 0;
         static const quint16 epsilon = 1;
         static const qint8 bits = 16;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+        static const KoChannelInfo::enumChannelValueType channelValueType = KoChannelInfo::UINT16;
 };
 
 template<>
@@ -83,7 +83,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<qint16> {
         static const qint16 min = -32768;
         static const qint16 epsilon = 1;
         static const qint8 bits = 16;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+        static const KoChannelInfo::enumChannelValueType channelValueType = KoChannelInfo::INT16;
 };
 
 template<>
@@ -96,7 +96,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint32> {
         static const quint32 min = 0;
         static const quint32 epsilon = 1;
         static const qint8 bits= 32;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+        static const KoChannelInfo::enumChannelValueType channelValueType = KoChannelInfo::UINT32;
 };
 
 #include <config-openexr.h>

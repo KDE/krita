@@ -444,17 +444,20 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
         Path* p = new Path;
         p->appendVertex(v);
         Node* endNode = p->endNode();
-        if( endNode == dstNode)
+        if( endNode->isInitialized )
         {
-            Q_ASSERT( pQC.isGoodPath(p)); // <- it's a direct link, it has to be a good path, damn it not  or go fix your color space not 
-            deletePathes(currentPathes); // clean up
-            p->isGood = true;
-            return p;
-        } else
-        {
-            Q_ASSERT(not node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
-            node2path[ endNode ] = new Path( *p );
-            currentPathes.append( p );
+          if( endNode == dstNode)
+          {
+              Q_ASSERT( pQC.isGoodPath(p)); // <- it's a direct link, it has to be a good path, damn it not  or go fix your color space not 
+              deletePathes(currentPathes); // clean up
+              p->isGood = true;
+              return p;
+          } else 
+          {
+              Q_ASSERT(not node2path.contains( endNode )); // That would be a total fuck up if there are two vertexes between two nodes
+              node2path[ endNode ] = new Path( *p );
+              currentPathes.append( p );
+          }
         }
     }
     Path* lessWorsePath = 0;
@@ -471,40 +474,44 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
                     Path* newP = new Path(*p);
                     newP->appendVertex( v );
                     Node* newEndNode = newP->endNode();
-                    if( newEndNode == dstNode)
+                    if( newEndNode->isInitialized )
                     {
-                        if ( pQC.isGoodPath(newP) )
-                        { // Victory
-                            deletePathes(currentPathes); // clean up
-                            newP->isGood = true;
-                            return newP;
-                        }
-                        else if ( not lessWorsePath )
-                        {
-                            lessWorsePath = newP;
-                        }
-                        else if ( pQC.lessWorseThan( newP, lessWorsePath)  ) {
-                            delete lessWorsePath;
-                            lessWorsePath = newP;
-                        } else {
-                            delete newP;
-                        }
-                    } else {
-                        if( node2path.contains( newEndNode ) )
-                        {
-                            Path* p2 = node2path[newEndNode];
-                            if ( pQC.lessWorseThan( newP, p2 ) ) {
-                                node2path[ newEndNode ] = new Path(*newP);
-                                currentPathes.append( newP );
-                                delete p2;
-                            }
-                            else {
-                                delete newP;
-                            }
-                        } else {
-                            node2path[ newEndNode ] = new Path(*newP);
-                           currentPathes.append( newP );
-                        }
+                      if( newEndNode == dstNode)
+                      {
+                          if ( pQC.isGoodPath(newP) )
+                          { // Victory
+                              deletePathes(currentPathes); // clean up
+                              newP->isGood = true;
+                              return newP;
+                          }
+                          else if ( not lessWorsePath )
+                          {
+                              lessWorsePath = newP;
+                          }
+                          else if ( pQC.lessWorseThan( newP, lessWorsePath)  ) {
+                              kDebug() << pQC.lessWorseThan( newP, lessWorsePath) << " " << newP << "  "<< lessWorsePath;
+                              delete lessWorsePath;
+                              lessWorsePath = newP;
+                          } else {
+                              delete newP;
+                          }
+                      } else {
+                          if( node2path.contains( newEndNode ) )
+                          {
+                              Path* p2 = node2path[newEndNode];
+                              if ( pQC.lessWorseThan( newP, p2 ) ) {
+                                  node2path[ newEndNode ] = new Path(*newP);
+                                  currentPathes.append( newP );
+                                  delete p2;
+                              }
+                              else {
+                                  delete newP;
+                              }
+                          } else {
+                              node2path[ newEndNode ] = new Path(*newP);
+                            currentPathes.append( newP );
+                          }
+                      }
                     }
                 }
             }

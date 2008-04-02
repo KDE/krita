@@ -72,7 +72,9 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_paintedOutline = false;
     m_executor = new FreehandPaintJobExecutor();
     m_smooth = false;
+    m_assistant = false;
     m_smoothness = 0.5;
+    m_magnetism = 1.0;
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -401,6 +403,11 @@ void KisToolFreehand::setSmooth(bool smooth)
     m_smooth = smooth;
 }
 
+void KisToolFreehand::setAssistant(bool assistant)
+{
+    m_assistant = assistant;
+}
+
 
 void KisToolFreehand::paintOutline(const QPointF& point) {
     Q_UNUSED( point );
@@ -461,9 +468,10 @@ void KisToolFreehand::paintOutline(const QPointF& point) {
 QPointF KisToolFreehand::adjustPosition( const QPointF& point)
 {
     KisPaintingAssistant* assistant = KisPaintingAssistant::currentAssistant();
-    if( assistant )
+    if( assistant && m_assistant)
     {
-        return assistant->adjustPosition( point );
+      QPointF ap = assistant->adjustPosition( point );
+      return  (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;
 }

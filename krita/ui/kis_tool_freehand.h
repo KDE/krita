@@ -75,6 +75,7 @@ protected:
 protected slots:
 
     void setSmooth(bool smooth);
+    void setAssistant(bool assistan);
     
 private:
 
@@ -103,6 +104,8 @@ protected:
     KisPainter *m_painter;
     bool m_smooth;
     double m_smoothness;
+    bool m_assistant;
+    double m_magnetism;
     
 private:
 

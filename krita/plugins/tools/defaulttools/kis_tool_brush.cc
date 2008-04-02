@@ -30,6 +30,7 @@
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QSlider>
+#include <QComboBox>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -49,6 +50,7 @@
 #include "kis_layer.h"
 
 #define MAXIMUM_SMOOTHNESS 1000
+#define MAXIMUM_MAGNETISM 1000
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
         : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18n("Brush"))
@@ -146,6 +148,11 @@ void KisToolBrush::slotSetSmoothness( int smoothness )
     m_smoothness = smoothness / (double)MAXIMUM_SMOOTHNESS;
 }
 
+void KisToolBrush::slotSetMagnetism( int magnetism )
+{
+    m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM)/ expf(1.0);
+}
+
 QWidget * KisToolBrush::createOptionWidget()
 {
 
@@ -170,7 +177,23 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderSmoothness->setMaximum(MAXIMUM_SMOOTHNESS);
     m_sliderSmoothness->setEnabled(false);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
+    connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
     m_sliderSmoothness->setValue( m_smoothness * MAXIMUM_SMOOTHNESS );
+    
+    // Drawing assistant configuration
+    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
+    m_assistant = new QComboBox(optionWidget);
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_assistant, SLOT(setEnabled(bool)));
+    QLabel* labelMagnetism = new QLabel(i18n("Magnetism:"), optionWidget);
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), labelMagnetism, SLOT(setEnabled(bool)));
+    m_sliderMagnetism = new QSlider(Qt::Horizontal, optionWidget);
+    m_sliderMagnetism->setMinimum(0);
+    m_sliderMagnetism->setMaximum(MAXIMUM_SMOOTHNESS);
+    m_sliderMagnetism->setEnabled(false);
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
+    m_sliderMagnetism->setValue( m_magnetism * MAXIMUM_MAGNETISM );
+    connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
     
     m_optionLayout = new QGridLayout(optionWidget);
     Q_CHECK_PTR(m_optionLayout);
@@ -183,6 +206,10 @@ QWidget * KisToolBrush::createOptionWidget()
     m_optionLayout->addWidget(m_chkSmooth, 1, 0);
     m_optionLayout->addWidget(labelSmoothness, 2, 0);
     m_optionLayout->addWidget(m_sliderSmoothness, 2, 1);
+    m_optionLayout->addWidget(m_chkAssistant, 3, 0);
+    m_optionLayout->addWidget(m_assistant, 3, 1);
+    m_optionLayout->addWidget(labelMagnetism, 4, 0);
+    m_optionLayout->addWidget(m_sliderMagnetism, 4, 1);
 
     return optionWidget;
 }

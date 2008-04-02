@@ -45,9 +45,6 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer( const QString & name, QWidget * pare
     setDefaultButton( Ok );
     QWidget * page = new QWidget(this);
     dlgWidget.setupUi(page);
-    QHBoxLayout * layout = new QHBoxLayout(page);
-    layout->setMargin(0);
-    layout->setSpacing(6);
     setMainWidget(page);
     
     dlgWidget.txtLayerName->setText(name);

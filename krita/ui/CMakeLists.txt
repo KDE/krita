@@ -67,7 +67,6 @@ set(kritaui_LIB_SRCS
     kis_kra_load_visitor.cpp
     kis_kra_save_visitor.cpp
     kis_label_cursor_pos.cc
-    kis_label_zoom.cc
     kis_layer_box.cpp
     kis_layer_container_shape.cc
     kis_layer_manager.cc

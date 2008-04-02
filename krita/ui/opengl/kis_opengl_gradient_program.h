@@ -24,7 +24,7 @@
 
 #include "krita_export.h"
 
-#include "kis_opengl_program.h"
+#include "opengl/kis_opengl_program.h"
 #include "kis_gradient_painter.h"
 
 class KoAbstractGradient;

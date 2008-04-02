@@ -16,13 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_opengl_hdr_exposure_program.h"
+#include "opengl/kis_opengl_hdr_exposure_program.h"
 
 
 #include <cmath>
 
-#include "kis_opengl.h"
-#include "kis_opengl_fragment_shader.h"
+#include "opengl/kis_opengl.h"
+#include "opengl/kis_opengl_fragment_shader.h"
 
 KisOpenGLHDRExposureProgram::KisOpenGLHDRExposureProgram()
 {

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_opengl_gradient_program.h"
+#include "opengl/kis_opengl_gradient_program.h"
 
 
 #include <GL/glew.h>
@@ -27,8 +27,8 @@
 #include <kis_debug.h>
 #include <KoAbstractGradient.h>
 
-#include "kis_opengl.h"
-#include "kis_opengl_fragment_shader.h"
+#include "opengl/kis_opengl.h"
+#include "opengl/kis_opengl_fragment_shader.h"
 #include "kis_debug.h"
 #include <kis_paint_device.h>
 

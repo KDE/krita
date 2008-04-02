@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_opengl_canvas2.h"
+#include "opengl/kis_opengl_canvas2.h"
 
 
 #ifdef HAVE_OPENGL
@@ -42,8 +42,8 @@
 #include "kis_types.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
-#include "kis_opengl.h"
-#include "kis_opengl_image_textures.h"
+#include "opengl/kis_opengl.h"
+#include "opengl/kis_opengl_image_textures.h"
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"

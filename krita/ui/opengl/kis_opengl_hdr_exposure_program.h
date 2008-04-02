@@ -21,7 +21,7 @@
 #include <GL/glew.h>
 
 #include "krita_export.h"
-#include "kis_opengl_program.h"
+#include "opengl/kis_opengl_program.h"
 
 /**
  * An OpenGL program for displaying high dynamic range images using an exposure control.

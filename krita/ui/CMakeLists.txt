@@ -81,9 +81,9 @@ set(kritaui_LIB_SRCS
     kis_multi_integer_filter_widget.cc
     kis_node_manager.cpp
     kis_node_model.cpp
-    kis_opengl_canvas2.cpp
-    kis_opengl.cpp
-    kis_opengl_image_textures.cpp
+    opengl/kis_opengl_canvas2.cpp
+    opengl/kis_opengl.cpp
+    opengl/kis_opengl_image_textures.cpp
     kis_paintop_box.cc 
     kis_paintop_presets_widget.cpp
     kis_painting_assistant.cc
@@ -133,12 +133,12 @@ set(kritaui_LIB_SRCS
 if(HAVE_OPENGL AND HAVE_GLEW)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        kis_opengl_shader.cpp
-        kis_opengl_fragment_shader.cpp
-        kis_opengl_vertex_shader.cpp
-        kis_opengl_program.cpp
-        kis_opengl_hdr_exposure_program.cpp
-        kis_opengl_gradient_program.cpp
+        opengl/kis_opengl_shader.cpp
+        opengl/kis_opengl_fragment_shader.cpp
+        opengl/kis_opengl_vertex_shader.cpp
+        opengl/kis_opengl_program.cpp
+        opengl/kis_opengl_hdr_exposure_program.cpp
+        opengl/kis_opengl_gradient_program.cpp
         )
 endif(HAVE_OPENGL AND HAVE_GLEW)
 

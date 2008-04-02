@@ -20,7 +20,7 @@
 
 #include "krita_export.h"
 
-#include "kis_opengl_shader.h"
+#include "opengl/kis_opengl_shader.h"
 
 #include <QVector>
 #include <QString>

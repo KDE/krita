@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_opengl_shader.h"
+#include "opengl/kis_opengl_shader.h"
 
 
 #include <QFile>
@@ -27,7 +27,7 @@
 #include <kis_debug.h>
 
 #include "kis_factory2.h"
-#include "kis_opengl.h"
+#include "opengl/kis_opengl.h"
 #include "kis_debug.h"
 
 KisOpenGLShader::KisOpenGLShader(GLenum shaderType)

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_opengl_image_textures.h"
+#include "opengl/kis_opengl_image_textures.h"
 
 
 #ifdef HAVE_OPENGL
@@ -42,12 +42,12 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
-#include "kis_opengl.h"
+#include "opengl/kis_opengl.h"
 #include "kis_config.h"
 #include "kis_debug.h"
 
 #ifdef HAVE_GLEW
-#include "kis_opengl_hdr_exposure_program.h"
+#include "opengl/kis_opengl_hdr_exposure_program.h"
 #endif
 
 #ifndef GL_CLAMP_TO_EDGE

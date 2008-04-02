@@ -68,7 +68,7 @@
 #include "KoColorProfile.h"
 
 #if HAVE_OPENGL
-#include "kis_opengl.h"
+#include "opengl/kis_opengl.h"
 #endif
 
 // for the performance update

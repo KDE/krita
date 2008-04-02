@@ -22,7 +22,7 @@
 #include <QVector>
 
 #include "krita_export.h"
-#include "kis_opengl_shader.h"
+#include "opengl/kis_opengl_shader.h"
 
 /**
  * An encapsulation of an OpenGL Shading Language fragment shader object. 

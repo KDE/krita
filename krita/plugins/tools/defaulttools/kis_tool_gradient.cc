@@ -55,9 +55,9 @@
 #include <kis_selection.h>
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-#include "kis_opengl.h"
-#include "kis_opengl_gradient_program.h"
-#include "kis_opengl_canvas2.h"
+#include "opengl/kis_opengl.h"
+#include "opengl/kis_opengl_gradient_program.h"
+#include "opengl/kis_opengl_canvas2.h"
 #include "kis_canvas2.h"
 #include "KoSliderCombo.h"
 #include "kis_config_notifier.h"

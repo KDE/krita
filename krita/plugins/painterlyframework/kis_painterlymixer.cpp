@@ -33,7 +33,7 @@
 #include <QButtonGroup>
 
 KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
-    : QWidget(parent), m_view(view), m_resources(view->resourceProvider())
+    : QWidget(parent), m_view(view), m_resources(view->resourceProvider()), m_tool(0), m_colorspace(0)
 {
     setupUi(this);
 
@@ -41,8 +41,15 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
     // TODO Illuminant and colorspace has to be choosen at runtime
-    const KoColorProfile* testp = f->profilesFor(csid)[0];
-    m_colorspace = f->colorSpace(csid, testp);
+    QList<const KoColorProfile*> profiles = f->profilesFor(csid);
+    if (profiles.count()) { // don't crash if the profile is not available.
+        const KoColorProfile* testp = profiles.at(0);
+        m_colorspace = f->colorSpace(csid, testp);
+    }
+    else {
+        setEnabled(false);
+        return;
+    }
 
     initCanvas();
     initTool();
@@ -68,6 +75,7 @@ void KisPainterlyMixer::initCanvas()
 
 void KisPainterlyMixer::initTool()
 {
+    Q_ASSERT(m_canvas);
     m_tool = new MixerTool(m_canvas, m_resources);
     m_canvas->toolProxy()->setActiveTool(m_tool);
     m_tool->activate();

@@ -299,6 +299,18 @@ void KisNodeModel::endRemoveNodes( KisNode *, int )
     endRemoveRows();
 }
 
+Qt::DropActions KisNodeModel::supportedDropActions () const
+{
+    return Qt::MoveAction | Qt::CopyAction;
+}
+
+QStringList KisNodeModel::mimeTypes() const
+{
+    QStringList types;
+    types << QLatin1String("application/x-kritalayermodeldatalist");
+    return types;
+}
+
 QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 {
     dbgUI <<"KisNodeModel::mimeData";

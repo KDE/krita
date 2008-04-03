@@ -57,8 +57,6 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
 {
     Q_UNUSED( image );
 
-    qDebug() << "creating brushop";
-    
     const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings.data());
     Q_ASSERT(settings == 0 || brushopSettings != 0);
 

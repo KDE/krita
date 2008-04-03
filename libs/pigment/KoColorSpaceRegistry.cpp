@@ -239,6 +239,8 @@ const KoColorSpace *  KoColorSpaceRegistry::colorSpace(const KoID &csID, const Q
 QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoColorSpaceFactory * csf)
 {
     QList<const KoColorProfile *>  profiles;
+    if (csf == 0)
+        return profiles;
 
     QHash<QString, KoColorProfile * >::Iterator it;
     for (it = d->profileMap.begin(); it != d->profileMap.end(); ++it) {

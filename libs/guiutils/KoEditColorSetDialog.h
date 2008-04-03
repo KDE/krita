@@ -24,7 +24,7 @@
 
 #include <KDialog>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 class QGridLayout;
 class QScrollArea;

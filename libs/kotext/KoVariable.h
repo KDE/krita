@@ -22,7 +22,7 @@
 
 // KOffice libs
 #include "KoInlineObject.h"
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 // Qt + kde
 #include <QHash>

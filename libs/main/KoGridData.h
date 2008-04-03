@@ -21,7 +21,7 @@
 #ifndef KOGRIDDATA_H
 #define KOGRIDDATA_H
 
-#include <komain_export.h>
+#include "komain_export.h"
 #include <QColor>
 
 class QPainter;

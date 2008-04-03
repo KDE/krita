@@ -20,7 +20,7 @@
 #ifndef KOXMLNS_H
 #define KOXMLNS_H
 
-#include <koodf_export.h>
+#include "koodf_export.h"
 /**
  * Repository of XML namespaces used for OASIS documents.
  */

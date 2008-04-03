@@ -31,7 +31,7 @@ class KActionCollection;
 class QSize;
 
 #include <KoZoomMode.h>
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 /**
  * This controller class handles zoom levels for any canvas.

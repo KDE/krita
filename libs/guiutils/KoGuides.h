@@ -29,7 +29,7 @@
 #include <QList>
 #include <QKeyEvent>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 class KoView;
 class KoZoomHandler;

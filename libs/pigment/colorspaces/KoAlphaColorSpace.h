@@ -22,7 +22,7 @@
 #include <QColor>
 #include <QBitArray>
 
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 #include "KoLcmsColorSpace.h"
 #include "KoColorSpaceTraits.h"

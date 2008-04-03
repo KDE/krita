@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QSet>
 #include <QString>
-#include <koodf_export.h>
+#include "koodf_export.h"
 #include "KoGenStyle.h"
 
 class KoStore;

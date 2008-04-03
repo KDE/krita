@@ -22,7 +22,7 @@
 
 #include <QComboBox>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 /**
  * @short A widget for double values with a popup slider

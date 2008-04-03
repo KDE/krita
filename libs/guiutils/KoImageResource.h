@@ -20,7 +20,7 @@
 
 #ifndef __ko_imageresource__
 #define __ko_imageresource__
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 /**
  * You should use KoAspectButton instead.

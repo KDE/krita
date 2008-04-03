@@ -25,7 +25,7 @@
 #include <QVariant>
 #include <QString>
 #include <QTextCharFormat>
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 class StylePrivate;
 class QTextBlock;

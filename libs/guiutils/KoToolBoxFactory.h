@@ -22,7 +22,7 @@
 #define KOTOOLBOXFACTORY_H
 
 #include <KoDockFactory.h>
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 #include <QString>
 #include <QDockWidget>

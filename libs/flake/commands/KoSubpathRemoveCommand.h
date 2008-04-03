@@ -22,7 +22,7 @@
 #define KOSUBPATHREMOVECOMMAND_H
 
 #include <QUndoCommand>
-#include <flake_export.h>
+#include "flake_export.h"
 #include "KoPathPointData.h"
 
 #include "KoPathPoint.h"

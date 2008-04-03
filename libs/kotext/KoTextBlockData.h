@@ -21,7 +21,7 @@
 
 #include <QTextBlockUserData>
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 class KoTextBlockBorderData;
 

@@ -21,7 +21,7 @@
 #ifndef KOSHAPELOCKCOMMAND_H
 #define KOSHAPELOCKCOMMAND_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 #include <QUndoCommand>
 #include <QList>
 

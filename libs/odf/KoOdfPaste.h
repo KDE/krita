@@ -22,7 +22,7 @@
 
 #include <KoOdf.h>
 
-#include <koodf_export.h>
+#include "koodf_export.h"
 
 class QString;
 class QMimeData;

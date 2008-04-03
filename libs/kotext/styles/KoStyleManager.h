@@ -21,7 +21,7 @@
 #ifndef KOSTYLEMANAGER_H
 #define KOSTYLEMANAGER_H
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 #include <QObject>
 #include <KoDataCenter.h>

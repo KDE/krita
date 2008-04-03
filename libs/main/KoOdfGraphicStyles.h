@@ -21,7 +21,7 @@
 #ifndef KOODFGRAPHICSTYLES_H
 #define KOODFGRAPHICSTYLES_H
 
-#include <komain_export.h>
+#include "komain_export.h"
 
 #include <QtGui/QMatrix>
 

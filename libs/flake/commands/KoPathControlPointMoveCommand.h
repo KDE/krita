@@ -26,7 +26,7 @@
 #include "KoPathShape.h"
 #include "KoPathPointData.h"
 #include "KoPathPoint.h"
-#include <flake_export.h>
+#include "flake_export.h"
 
 
 /// The undo / redo command for path point moving.

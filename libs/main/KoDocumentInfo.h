@@ -28,7 +28,7 @@
 #include <QStringList>
 
 #include <kconfig.h>
-#include <komain_export.h>
+#include "komain_export.h"
 #include <KoXmlReader.h>
 
 class QDomDocument;

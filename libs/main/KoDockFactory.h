@@ -22,7 +22,7 @@
 
 #include <QString>
 
-#include <komain_export.h>
+#include "komain_export.h"
 
 class QDockWidget;
 

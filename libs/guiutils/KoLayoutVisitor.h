@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 /**
  * This class can be used to loop over a number of widgets and then do a relayout to align

@@ -22,7 +22,7 @@
 #ifndef KOINTERACTIONSTRATEGY_H
 #define KOINTERACTIONSTRATEGY_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 #include "KoSelection.h"
 
 #include <QList>

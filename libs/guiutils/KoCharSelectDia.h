@@ -22,7 +22,7 @@
 #define KOCHARSELECTDIA_H
 
 #include <kdialog.h>
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 class QWidget;
 

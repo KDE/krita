@@ -35,7 +35,7 @@
 
 #include <kaction.h>
 #include <ktoggleaction.h>
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 class KActionCollection;
 class QPixmap;

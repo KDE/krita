@@ -23,7 +23,7 @@
 // KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
 
-#include <kostore_export.h>
+#include "kostore_export.h"
 
 #include <QtXml/qxml.h>
 #include <QtXml/qdom.h>

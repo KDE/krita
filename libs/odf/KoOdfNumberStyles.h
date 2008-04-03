@@ -21,7 +21,7 @@
 #ifndef KOODFNUMBERSTYLES_H
 #define KOODFNUMBERSTYLES_H
 
-#include <koodf_export.h>
+#include "koodf_export.h"
 #include <KoXmlReader.h>
 
 #include <QPair>

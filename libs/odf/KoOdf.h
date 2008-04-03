@@ -20,7 +20,7 @@
 #ifndef KOODF_H
 #define KOODF_H
 
-#include <koodf_export.h>
+#include "koodf_export.h"
 
 class KOODF_EXPORT KoOdf
 {

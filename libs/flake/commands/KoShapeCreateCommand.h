@@ -20,7 +20,7 @@
 #ifndef KOSHAPECREATECOMMAND_H
 #define KOSHAPECREATECOMMAND_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 #include <QUndoCommand>
 
 class KoShape;

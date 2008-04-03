@@ -23,7 +23,7 @@
 #include <KoToolSelection.h>
 #include <KoShape.h>
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 #include <QColor>
 

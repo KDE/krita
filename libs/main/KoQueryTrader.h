@@ -24,7 +24,7 @@
 #include <kservice.h>
 #include <ksharedptr.h>
 #include <qlist.h>
-#include <komain_export.h>
+#include "komain_export.h"
 
 class QObject;
 class QStringList;

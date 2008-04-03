@@ -27,7 +27,7 @@
 #include <QByteArray>
 
 #include <KoFilterChain.h>
-#include <komain_export.h>
+#include "komain_export.h"
 class KoDocument;
 
 /**

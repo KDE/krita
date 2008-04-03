@@ -23,7 +23,7 @@
 #include "KoBookmarkManager.h"
 #include "KoVariableManager.h"
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 // Qt + kde
 #include <QHash>

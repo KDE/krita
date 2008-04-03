@@ -33,7 +33,7 @@ class KoXmlDocument;
  *
  * @author: David Faure <faure@kde.org>
  */
-#include <koodf_export.h>
+#include "koodf_export.h"
 
 class KOODF_EXPORT KoOdfReadStore
 {

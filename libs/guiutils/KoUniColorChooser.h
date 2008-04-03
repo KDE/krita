@@ -23,7 +23,7 @@
 
 #include "KoColor.h"
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 class KoColor;
 class KoXYColorSelector;

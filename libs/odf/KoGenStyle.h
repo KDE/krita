@@ -23,7 +23,7 @@
 #include <QList>
 #include <QMap>
 #include <QString>
-#include <koodf_export.h>
+#include "koodf_export.h"
 
 class KoGenStyles;
 class KoXmlWriter;

@@ -20,7 +20,7 @@
 #ifndef KO_EXECUTEPOLICY_H
 #define KO_EXECUTEPOLICY_H
 
-#include <komain_export.h>
+#include "komain_export.h"
 
 class QVariant;
 

@@ -24,7 +24,7 @@
 #include <QWidgetAction>
 #include <QFrame>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 class KoColor;
 class KoColorSet;

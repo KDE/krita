@@ -25,7 +25,7 @@
 
 #include <KoID.h>
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 class KoVariable;
 class KoProperties;

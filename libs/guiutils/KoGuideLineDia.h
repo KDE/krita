@@ -25,7 +25,7 @@
 #include <kdialog.h>
 #include <KoUnit.h>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 class KoUnitDoubleSpinBox;
 class QRadioButton;
 

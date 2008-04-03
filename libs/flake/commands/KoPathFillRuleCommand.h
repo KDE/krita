@@ -20,7 +20,7 @@
 #ifndef KOPATHFILLRULECOMMAND_H
 #define KOPATHFILLRULECOMMAND_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 #include <QUndoCommand>
 #include <QList>

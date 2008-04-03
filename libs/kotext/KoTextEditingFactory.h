@@ -23,7 +23,7 @@
 #include <QString>
 #include <QObject>
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 class KoTextEditingPlugin;
 

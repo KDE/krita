@@ -26,7 +26,7 @@
 #include <QIODevice>
 #include <QStack>
 #include <QByteArray>
-#include <kostore_export.h>
+#include "kostore_export.h"
 
 class QWidget;
 

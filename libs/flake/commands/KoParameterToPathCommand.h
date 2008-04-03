@@ -26,7 +26,7 @@
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoParameterShape;
 

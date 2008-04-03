@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <KoFlake.h>
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 /**
  * Widget to show a set of radio buttons so the user can select a position.

@@ -28,7 +28,7 @@
 #include <kparts/part.h>
 
 #include <KoChild.h>
-#include <komain_export.h>
+#include "komain_export.h"
 #include <KoDocumentChild.h>
 #include <KoFrame.h>
 #include <KoViewChild.h>

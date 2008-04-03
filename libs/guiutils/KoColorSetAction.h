@@ -23,7 +23,7 @@
 
 #include <QAction>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 class KoColor;
 

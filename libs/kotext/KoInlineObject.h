@@ -19,7 +19,7 @@
 #ifndef KOINLINEOBJECTBASE_H
 #define KOINLINEOBJECTBASE_H
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 class QTextDocument;
 class QTextCharFormat;

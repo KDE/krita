@@ -21,7 +21,7 @@
 #define _KO_CTL_COLOR_PROFILE_H_
 
 #include <KoColorProfile.h>
-#include <pigment_export.h>
+#include "pigment_export.h"
 
 class QDomElement;
 class KoColorConversionTransformationFactory;

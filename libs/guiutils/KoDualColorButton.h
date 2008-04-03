@@ -21,7 +21,7 @@
 #ifndef KODUALCOLORBUTTON_H
 #define KODUALCOLORBUTTON_H
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 #include <QtGui/QWidget>
 

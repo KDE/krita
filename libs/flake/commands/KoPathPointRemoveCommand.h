@@ -25,7 +25,7 @@
 #include <QList>
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
-#include <flake_export.h>
+#include "flake_export.h"
 
 class KoShapeController;
 

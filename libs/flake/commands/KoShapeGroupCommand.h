@@ -21,7 +21,7 @@
 #ifndef KOSHAPEGROUPCOMMAND_H
 #define KOSHAPEGROUPCOMMAND_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 #include <QList>
 #include <QUndoCommand>

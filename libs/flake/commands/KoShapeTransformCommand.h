@@ -21,7 +21,7 @@
 #ifndef KOSHAPETRANSFORMCOMMAND_H
 #define KOSHAPETRANSFORMCOMMAND_H
 
-#include <flake_export.h>
+#include "flake_export.h"
 #include <QtGui/QUndoCommand>
 
 class KoShape;

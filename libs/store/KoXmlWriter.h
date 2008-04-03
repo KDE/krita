@@ -25,7 +25,7 @@
 #include <QStack>
 #include <QMap>
 #include <QIODevice>
-#include <kostore_export.h>
+#include "kostore_export.h"
 
 
 /**

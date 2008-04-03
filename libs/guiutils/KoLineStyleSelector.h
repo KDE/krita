@@ -20,7 +20,7 @@
 #ifndef _KOLINESTYLESELECTOR_H_
 #define _KOLINESTYLESELECTOR_H_
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 #include <QComboBox>
 
 /**

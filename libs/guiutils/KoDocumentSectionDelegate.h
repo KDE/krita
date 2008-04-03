@@ -21,7 +21,7 @@
 #define KO_DOCUMENT_SECTION_DELEGATE_H
 
 #include <QAbstractItemDelegate>
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 #include "KoDocumentSectionView.h"
 
 class KoDocumentSectionModel;

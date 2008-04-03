@@ -24,7 +24,7 @@
 #include "KoToolDocker.h"
 #include <KoDockFactory.h>
 
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 /**
  * The factory class for the KoToolDocker.

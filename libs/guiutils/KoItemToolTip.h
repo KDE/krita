@@ -21,7 +21,7 @@
 #define KO_ITEM_TOOLTIP_H
 
 #include <QFrame>
-#include <koguiutils_export.h>
+#include "koguiutils_export.h"
 
 class QStyleOptionViewItem;
 class QModelIndex;

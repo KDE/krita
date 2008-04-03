@@ -22,7 +22,7 @@
 #define KOVARIABLEREGISTRY_H
 
 #include <KoGenericRegistry.h>
-#include <kotext_export.h>
+#include "kotext_export.h"
 #include <KoVariableFactory.h>
 #include <QObject>
 #include <QList>

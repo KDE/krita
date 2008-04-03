@@ -21,7 +21,7 @@
 #define KOINLINEOBJECTREGISTRY_H
 
 #include <KoGenericRegistry.h>
-#include <kotext_export.h>
+#include "kotext_export.h"
 #include <QObject>
 #include <QList>
 

@@ -21,7 +21,7 @@
 
 #include "KoInlineObject.h"
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 #include <QPointF>
 

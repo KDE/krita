@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QString>
 #include <QHash>
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 class QAction;
 class QTextDocument;

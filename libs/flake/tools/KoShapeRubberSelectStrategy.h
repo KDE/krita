@@ -26,7 +26,7 @@
 
 #include <QRectF>
 
-#include <flake_export.h>
+#include "flake_export.h"
 
 class QPainter;
 class QPointF;

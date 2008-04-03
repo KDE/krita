@@ -24,7 +24,7 @@
 
 #include <KoID.h>
 
-#include <kotext_export.h>
+#include "kotext_export.h"
 
 class KoInlineObject;
 class InlineObjectFactoryPrivate;

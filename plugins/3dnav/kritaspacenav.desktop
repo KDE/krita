@@ -1,10 +1,6 @@
 [Desktop Entry]
 Name=spacenav
-Name[pt_BR]=%{NOME_APLICATIVO}
-Name[x-test]=xxspacenavxx
 Comment=spacenav
-Comment[pt_BR]=%{NOME_APLICATIVO}
-Comment[x-test]=xxspacenavxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaspacenav

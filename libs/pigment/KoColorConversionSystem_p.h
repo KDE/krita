@@ -114,7 +114,7 @@ struct KoColorConversionSystem::NodeKey {
 };
 
 struct KoColorConversionSystem::Path {
-    Path() : respectColorCorrectness(true), referenceDepth(0), keepDynamicRange(true), isGood(false)
+    Path() : respectColorCorrectness(true), referenceDepth(0), keepDynamicRange(true), isGood(false), cost(0)
     {}
     Node* startNode() {
         return (vertexes.first())->srcNode;

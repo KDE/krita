@@ -53,4 +53,10 @@ class PIGMENTCMS_EXPORT KoCtlColorSpace : public KoColorSpace {
         Private* const d;
 };
 
+class PIGMENTCMS_EXPORT KoCtlColorSpaceFactory : public KoColorSpaceFactory {
+    public:
+        virtual ~KoCtlColorSpaceFactory() {}
+        QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+};
+
 #endif

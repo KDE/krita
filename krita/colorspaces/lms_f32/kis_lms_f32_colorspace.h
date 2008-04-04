@@ -45,7 +45,7 @@ class KisLmsAF32ColorSpace : public KoCtlMonoTypeColorSpace<KisLmsAF32Traits> {
         virtual bool hasHighDynamicRange() const;
 };
 
-class KisLmsAF32ColorSpaceFactory : public KoColorSpaceFactory
+class KisLmsAF32ColorSpaceFactory : public KoCtlColorSpaceFactory
 {
 public:
     KisLmsAF32ColorSpaceFactory() {}
@@ -62,7 +62,6 @@ public:
     virtual QString colorSpaceEngine() const;
     virtual bool isHdr() const;
     virtual int referenceDepth() const;
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const;
     virtual bool profileIsCompatible(const KoColorProfile* profile) const;
     virtual QString defaultProfile() const;

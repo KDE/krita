@@ -45,7 +45,7 @@ public:
 
 
 
-class KisXyzF32HDRColorSpaceFactory : public KoColorSpaceFactory
+class KisXyzF32HDRColorSpaceFactory : public KoCtlColorSpaceFactory
 {
 public:
     /**
@@ -61,7 +61,6 @@ public:
     virtual int referenceDepth() const { return 32; }
     virtual QString colorSpaceEngine() const { return ""; }
     virtual bool isHdr() const { return true; }
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const
     {
         Q_UNUSED(profileName);

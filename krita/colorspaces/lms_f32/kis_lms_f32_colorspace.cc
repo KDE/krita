@@ -150,21 +150,6 @@ int KisLmsAF32ColorSpaceFactory::referenceDepth() const
     return 32;
 }
 
-QList<KoColorConversionTransformationFactory*> KisLmsAF32ColorSpaceFactory::colorConversionLinks() const
-{
-    QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor( this );
-    QList<KoColorConversionTransformationFactory*> list;
-    foreach(const KoColorProfile* profile, profiles)
-    {
-        const KoCtlColorProfile* ctlprofile = dynamic_cast<const KoCtlColorProfile*>( profile );
-        if(ctlprofile)
-        {
-            list += ctlprofile->createColorConversionTransformationFactories();
-        }
-    }
-    return list;
-}
-
 KoColorConversionTransformationFactory* KisLmsAF32ColorSpaceFactory::createICCColorConversionTransformationFactory(const QString& profileName) const
 {
     return 0;

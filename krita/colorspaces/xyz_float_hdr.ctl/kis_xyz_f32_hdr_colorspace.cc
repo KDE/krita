@@ -34,22 +34,6 @@ QString KisXyzF32HDRColorSpace::colorSpaceId()
     return QString("XyzAF32");
 }
 
-QList<KoColorConversionTransformationFactory*> KisXyzF32HDRColorSpaceFactory::colorConversionLinks() const
-{
-    QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor( this );
-    QList<KoColorConversionTransformationFactory*> list;
-    foreach(const KoColorProfile* profile, profiles)
-    {
-        const KoCtlColorProfile* ctlprofile = dynamic_cast<const KoCtlColorProfile*>( profile );
-        if(ctlprofile)
-        {
-            list += ctlprofile->createColorConversionTransformationFactories();
-        }
-    }
-    return list;
-}
-
-
 KoColorSpace* KisXyzF32HDRColorSpace::clone() const
 {
     return new KisXyzF32HDRColorSpace( static_cast<const KoCtlColorProfile*>(profile()) );

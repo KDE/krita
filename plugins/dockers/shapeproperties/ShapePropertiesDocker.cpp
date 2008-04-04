@@ -28,6 +28,7 @@
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 #include <KoSelection.h>
+#include <KoParameterShape.h>
 
 #include <klocale.h>
 
@@ -103,9 +104,18 @@ void ShapePropertiesDocker::addWidgetForShape( KoShape * shape )
         d->currentShape = shape;
         if( ! d->currentShape )
             return;
+        QString shapeId = shape->shapeId();
         KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-        // use the path specific shape id if shape is a path, otherwise use the shape id
-        KoShapeFactory *factory = KoShapeRegistry::instance()->value( path ? path->pathShapeId() : shape->shapeId() );
+        if( path )
+        {
+            // use the path specific shape id if shape is a path, otherwise use the shape id
+            shapeId = path->pathShapeId();
+            // check if we have an edited parametric shape, then we use the path shape id
+            KoParameterShape * paramShape = dynamic_cast<KoParameterShape*>( shape );
+            if( paramShape && ! paramShape->isParametricShape() )
+                shapeId = shape->shapeId();
+        }
+        KoShapeFactory *factory = KoShapeRegistry::instance()->value( shapeId );
         if( ! factory )
             return;
         QList<KoShapeConfigWidgetBase*> panels = factory->createShapeOptionPanels();

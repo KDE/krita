@@ -475,14 +475,6 @@ KoInsets KoShape::borderInsets() const {
     return answer;
 }
 
-double KoShape::scaleX() const {
-    return 0.0;
-}
-
-double KoShape::scaleY() const {
-    return 0.0;
-}
-
 double KoShape::rotation() const {
     // try to extract the rotation angle out of the local matrix
     // if it is a pure rotation matrix
@@ -500,14 +492,6 @@ double KoShape::rotation() const {
         angle += 360.0;
 
     return angle;
-}
-
-double KoShape::shearX() const {
-    return 0.0;
-}
-
-double KoShape::shearY() const {
-    return 0.0;
 }
 
 QSizeF KoShape::size () const {

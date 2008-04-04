@@ -197,16 +197,6 @@ public:
     void setScale( double sx, double sy );
 
     /**
-     * Return the current scaling adjustment over the X axis.
-     */
-    KDE_DEPRECATED double scaleX() const;
-
-    /**
-     * Return the current scaling adjustment over the Y axis.
-     */
-    KDE_DEPRECATED double scaleY() const;
-
-    /**
      * @brief Rotate the shape (relative)
      *
      * The shape will be rotated from the current rotation using the center of the shape using the size()
@@ -230,18 +220,6 @@ public:
      * @param sy shear in y direction
      */
     void setShear( double sx, double sy );
-
-    /**
-     * Return the current horizontal shearing angle for this shape.
-     * @return the current horizontal shearing angle for this shape.
-     */
-    KDE_DEPRECATED double shearX() const;
-
-    /**
-     * Return the current vertical shearing angle for this shape.
-     * @return the current vertical shearing angle for this shape.
-     */
-    KDE_DEPRECATED double shearY() const;
 
     /**
      * @brief Resize the shape

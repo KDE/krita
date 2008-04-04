@@ -17,37 +17,37 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_xyz_f32_hdr_colorspace.h"
+#include "kis_rgb_f32_hdr_colorspace.h"
 
 #include "colorprofiles/KoCtlColorProfile.h"
 
 #include <KoColorConversionTransformationFactory.h>
 #include <KoCtlColorConversionTransformation.h>
 
-KisXyzF32HDRColorSpace::KisXyzF32HDRColorSpace( const KoCtlColorProfile *p)
-: KisXyzFloatHDRColorSpace<XyzF32Traits>(colorSpaceId(), i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging"),  p)
+KisRgbF32HDRColorSpace::KisRgbF32HDRColorSpace( const KoCtlColorProfile *p)
+: KisRgbFloatHDRColorSpace<RgbF32Traits>(colorSpaceId(), i18n("RGB (32-bit float/channel) for High Dynamic Range imaging"),  p)
 {
 }
 
-QString KisXyzF32HDRColorSpace::colorSpaceId()
+QString KisRgbF32HDRColorSpace::colorSpaceId()
 {
-    return QString("XyzAF32");
+    return QString("RgbAF32");
 }
 
-KoColorSpace* KisXyzF32HDRColorSpace::clone() const
+KoColorSpace* KisRgbF32HDRColorSpace::clone() const
 {
-    return new KisXyzF32HDRColorSpace( static_cast<const KoCtlColorProfile*>(profile()) );
+    return new KisRgbF32HDRColorSpace( static_cast<const KoCtlColorProfile*>(profile()) );
 }
 
-KoColorSpace* KisXyzF32HDRColorSpaceFactory::createColorSpace( const KoColorProfile * p) const {
-    return new KisXyzF32HDRColorSpace( dynamic_cast<const KoCtlColorProfile*>(p) );
+KoColorSpace* KisRgbF32HDRColorSpaceFactory::createColorSpace( const KoColorProfile * p) const {
+    return new KisRgbF32HDRColorSpace( dynamic_cast<const KoCtlColorProfile*>(p) );
 }
 
-bool KisXyzF32HDRColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
+bool KisRgbF32HDRColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
 {
 
     const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
-    if(ctlp && ctlp->colorModel() == "XYZA" )
+    if(ctlp && ctlp->colorModel() == "RGBA" )
     {
         return true;
     }

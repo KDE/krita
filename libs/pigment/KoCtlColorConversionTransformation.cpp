@@ -40,11 +40,11 @@ KoCtlColorConversionTransformation::KoCtlColorConversionTransformation(const KoC
     const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>( srcCs->profile() );
     if(ctlp)
     {
-        d->program = ctlp->createColorConversionProgram(srcCs->colorModelId().id(), srcCs->colorDepthId().id(), dstCs->colorModelId().id(), dstCs->colorDepthId().id());
+        d->program = ctlp->createColorConversionProgram(srcCs, dstCs);
     }
     if( not d->program and (ctlp = dynamic_cast<const KoCtlColorProfile*>( dstCs->profile() )))
     {
-        d->program = ctlp->createColorConversionProgram(srcCs->colorModelId().id(), srcCs->colorDepthId().id(), dstCs->colorModelId().id(), dstCs->colorDepthId().id());
+        d->program = ctlp->createColorConversionProgram(srcCs, dstCs);
     }
     Q_ASSERT(d->program);
 }

@@ -25,6 +25,7 @@
 
 class QDomElement;
 class KoColorConversionTransformationFactory;
+class KoColorSpace;
 
 namespace GTLCore {
     class PixelDescription;
@@ -61,7 +62,7 @@ class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
         /**
          * This function create a color conversion program between two color spaces.
          */
-        OpenCTL::Program* createColorConversionProgram(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) const;
+        OpenCTL::Program* createColorConversionProgram(const KoColorSpace* csSrc, const KoColorSpace* csDst) const;
         /**
          * This function will create the list of color conversion transformation factories that
          * are available using this profile.
@@ -74,7 +75,7 @@ class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
         /** decode the \<conversions\> tag.
          */
         void decodeConversions(QDomElement&);
-        GTLCore::PixelDescription createPixelDescription(const QString& modelId, const QString& depthId) const;
+        GTLCore::PixelDescription createPixelDescription(const KoColorSpace* cs) const;
     private:
         struct Private;
         Private* const d;

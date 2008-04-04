@@ -29,6 +29,7 @@
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCtlColorConversionTransformation.h>
 
@@ -97,14 +98,23 @@ bool KoCtlColorProfile::isSuitableForDisplay() const
     return true;
 }
 
-OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(QString _srcModelId, QString _srcDepthId, QString _dstModelId, QString _dstDepthId) const
+OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(const KoColorSpace* _srcCs, const KoColorSpace* _dstCs) const
 {
+    QString srcModelId = _srcCs->colorModelId().id();
+    QString srcDepthId = _srcCs->colorDepthId().id();
+    QString dstModelId = _dstCs->colorModelId().id();
+    QString dstDepthId = _dstCs->colorDepthId().id();
     foreach(ConversionInfo info, d->conversionInfos)
     {
-        if(info.sourceColorModelID == _srcModelId and info.sourceColorDepthID == _srcDepthId and info.destinationColorModelID == _dstModelId and info.destinationColorDepthID == _dstDepthId)
+        if(info.sourceColorModelID == srcModelId
+           and (info.sourceColorDepthID == srcDepthId or (info.sourceColorDepthID == "F"
+                and ( srcDepthId == Float16BitsColorDepthID.id() or srcDepthId == Float32BitsColorDepthID.id() ) ) )
+           and info.destinationColorModelID == dstModelId
+           and (info.destinationColorDepthID == dstDepthId or (info.destinationColorDepthID == "F"
+                and ( dstDepthId == Float16BitsColorDepthID.id() or dstDepthId == Float32BitsColorDepthID.id() ) ) ) )
         {
-            GTLCore::PixelDescription srcPixelDescription = createPixelDescription( info.sourceColorModelID, info.sourceColorDepthID );
-            GTLCore::PixelDescription dstPixelDescription = createPixelDescription( info.destinationColorModelID, info.destinationColorDepthID );
+            GTLCore::PixelDescription srcPixelDescription = createPixelDescription( _srcCs );
+            GTLCore::PixelDescription dstPixelDescription = createPixelDescription( _dstCs );
             return new OpenCTL::Program(info.function.toAscii().data(), d->module, srcPixelDescription, dstPixelDescription );
         }
     }
@@ -116,11 +126,38 @@ QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorCon
     QList<KoColorConversionTransformationFactory*> factories;
     foreach(ConversionInfo info, d->conversionInfos)
     {
-        factories.push_back(
-            new KoCtlColorConversionTransformationFactory(
-                info.sourceColorModelID, info.sourceColorDepthID,
-                info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
-                info.destinationProfile ) );
+        if( info.sourceColorDepthID == "F" )
+        {
+            factories.push_back(
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, Float16BitsColorDepthID.id(),
+                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                    info.destinationProfile ) );
+            factories.push_back(
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, Float32BitsColorDepthID.id(),
+                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                    info.destinationProfile ) );
+            
+        } else if( info.destinationColorDepthID == "F")
+        {
+            factories.push_back(
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, info.sourceColorDepthID,
+                    info.sourceProfile, info.destinationColorModelID, Float16BitsColorDepthID.id(),
+                    info.destinationProfile ) );
+            factories.push_back(
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, info.sourceColorDepthID,
+                    info.sourceProfile, info.destinationColorModelID, Float32BitsColorDepthID.id(),
+                    info.destinationProfile ) );
+        } else {
+            factories.push_back(
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, info.sourceColorDepthID,
+                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                    info.destinationProfile ) );
+        }
     }
     return factories;
 }
@@ -266,9 +303,8 @@ bool KoCtlColorProfile::load()
     return true;
 }
 
-GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const QString& modelId, const QString& depthId) const
+GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const KoColorSpace* cs) const
 {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( modelId, depthId) ,"");
     QList<KoChannelInfo*> infos = cs->channels();
     std::vector<const GTLCore::Type* > types;
     foreach( KoChannelInfo* info, infos)

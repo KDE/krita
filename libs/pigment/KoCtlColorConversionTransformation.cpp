@@ -60,8 +60,8 @@ class KoCtlBuffer : public GTLCore::Buffer {
         {
         }
         virtual ~KoCtlBuffer() {}
-        virtual char * data() { return m_buffer; }
-        virtual const char * data() const { return m_buffer; }
+        virtual char * rawData() { return m_buffer; }
+        virtual const char * rawData() const { return m_buffer; }
         virtual int size() const  { return m_size; }
     private:
         char * m_buffer;

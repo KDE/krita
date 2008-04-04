@@ -733,7 +733,7 @@ void KoShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &co
     else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
     {
         context.odfLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
-        styleStack.setTypeProperties( "presentation" );
+        styleStack.setTypeProperties( "graphic" );
     }
 
     setBackground( loadOdfFill( element, context ) );
@@ -797,15 +797,8 @@ QString KoShape::getStyleProperty( const char *property, const KoXmlElement & el
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString value;
 
-    if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
-    {
-        if( styleStack.hasProperty( KoXmlNS::draw, property ) )
-            value = styleStack.property( KoXmlNS::draw, property );
-    }
-    else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
-    {
-        if ( styleStack.hasProperty( KoXmlNS::presentation, property ) )
-            value = styleStack.property( KoXmlNS::presentation, property );
+    if ( styleStack.hasProperty( KoXmlNS::draw, property ) ) {
+        value = styleStack.property( KoXmlNS::draw, property );
     }
 
     return value;

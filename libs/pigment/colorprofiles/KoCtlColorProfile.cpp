@@ -290,6 +290,7 @@ GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const QStrin
             case KoChannelInfo::FLOAT32:
                 types.push_back( GTLCore::Type::Float );
                 break;
+            case KoChannelInfo::OTHER:
             case KoChannelInfo::FLOAT64:
                 Q_ASSERT(false);
                 break;

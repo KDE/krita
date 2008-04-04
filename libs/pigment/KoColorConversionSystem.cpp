@@ -68,50 +68,13 @@ KoColorConversionSystem::~KoColorConversionSystem()
 
 void KoColorConversionSystem::connectToEngine( Node* _node, Node* _engine )
 {
-    createVertex( _node, _engine );
-    createVertex( _engine, _node );
+    Vertex* v1 = createVertex( _node, _engine );
+    Vertex* v2 = createVertex( _engine, _node );
+    v1->conserveColorInformation = not _node->isGray;
+    v2->conserveColorInformation = not _node->isGray;
+    v1->conserveDynamicRange = not _node->isHdr;
+    v2->conserveDynamicRange = not _node->isHdr;
 }
-
-#if 0
-void KoColorConversionSystem::initICCNode( Node* csNode, const KoColorSpaceFactory* csf )
-{
-    dbgPigmentCCS << csf->id() << " is an ICC color space, connecting to ICC virtual node";
-    Vertex* v1 = createVertex( csNode, d->iccNode );
-//     v1->setFactoryFromSrc( csf->createICCColorConversionTransformationFactory( csNode->profileName ) );
-    Q_ASSERT( v1->factory() );
-    Vertex* v2 = createVertex( d->iccNode, csNode );
-//     v2->setFactoryFromDst( csf->createICCColorConversionTransformationFactory( csNode->profileName ) );
-    Q_ASSERT( v2->factory() );
-#if 0
-     // Construct a link between this color space and all other ICC color space
-    dbgPigmentCCS << csf->id() << " is an ICC color space, connecting to others";
-    QList<Node*> nodes = d->graph.values();
-    foreach(Node* node, nodes)
-    {
-        if(node->isIcc and node->isInitialized and node != csNode)
-        {
-            Vertex* v = createVertex(csNode, node);
-#if 0
-            // Create the vertex from 1 to 2
-            Q_ASSERT(vertexBetween(csNode, node) == 0); // The two color spaces should not be connected yet
-            Vertex* v12 = createVertex(csNode, node);
-            v12->setFactoryFromSrc( csf->createICCColorConversionTransformationFactory( node->modelId, node->depthId) );
-            Q_ASSERT( v12->factory() );
-            // Create the vertex from 2 to 1
-            Q_ASSERT(vertexBetween(node, csNode) == 0); // The two color spaces should not be connected yet
-            Vertex* v21 = createVertex(node, csNode);
-            v21->setFactoryFromSrc( node->colorSpaceFactory->createICCColorConversionTransformationFactory( csNode->modelId, csNode->depthId) );
-            Q_ASSERT( v21->factory() );
-#endif
-        }
-    }
-    // ICC color space can be converted among the same color space to a different profile, hence the need to a vertex on self
-    Vertex* vSelfToSelf = createVertex(csNode, csNode);
-    vSelfToSelf->setFactoryFromSrc( csf->createICCColorConversionTransformationFactory(csNode->modelId, csNode->depthId) );
-    Q_ASSERT( vSelfToSelf->factory() );
-#endif
-}
-#endif
 
 KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoColorSpaceEngine* engine )
 {
@@ -120,6 +83,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoCol
     n->modelId = engine->id();
     n->depthId = engine->id();
     n->profileName = engine->id();
+    n->referenceDepth = 64; // engine don't have reference depth, 
     d->graph[ key ] = n;
     n->init( engine ); 
     return n;
@@ -518,7 +482,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
     }
     if(lessWorsePath)
     {
-        kWarning(DBG_PIGMENT) << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found not ";
+        kWarning(DBG_PIGMENT) << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found : length = " << lessWorsePath->length() << " cost = " << lessWorsePath->cost << " referenceDepth = " << lessWorsePath->referenceDepth << " respectColorCorrectness = " << lessWorsePath->respectColorCorrectness << " isGood = " << lessWorsePath->isGood ;
         return lessWorsePath;
     } 
     kError(DBG_PIGMENT) << "No path from " << srcNode->id() << " to " << dstNode->id() << " found not ";

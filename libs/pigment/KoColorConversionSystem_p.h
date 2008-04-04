@@ -176,12 +176,12 @@ struct KoColorConversionSystem::Path {
         }
         return false;
     }
-    int cost;
     QList<Vertex*> vertexes;
     bool respectColorCorrectness;
     int referenceDepth;
     bool keepDynamicRange;
     bool isGood;
+    int cost;
 };
 
 class Node2PathHash : public QHash<KoColorConversionSystem::Node*, KoColorConversionSystem::Path*>

@@ -45,13 +45,29 @@ public:
     /// @return the masterpage of this page
     KoPAMasterPage * masterPage() { return m_masterPage; }
 
+    /// reimplemented
+    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter );
+
 protected:
+    /**
+     * DisplayMasterBackground and DisplayMasterShapes are only saved loaded in a presentation
+     * They are however implemented here to reduce code duplication.
+     */
+    enum PageProperty
+    {
+        UseMasterBackground = 1,        ///< Use the background of the master page. See ODF 14.13.2 Drawing Page Style
+        DisplayMasterBackground = 2,    ///< If the master page is used this indicated if its backround should be used. See ODF 15.36.13 Background Visible
+        DisplayMasterShapes = 4         ///< Set if the shapes of the master page should be shown. See ODF 15.36.12 Background Objects Visible
+    };
+
     /// Reimplemented from KoPageBase
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
     /// reimplemented from KoShape
     virtual KoShape * cloneShape() const;
 
     KoPAMasterPage * m_masterPage;
+
+    int m_pageProperties;
 };
 
 #endif /* KOPAPAGE_H */

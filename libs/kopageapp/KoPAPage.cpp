@@ -21,6 +21,8 @@
 
 #include <KoShapeSavingContext.h>
 #include <KoShapeLayer.h>
+#include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
@@ -31,6 +33,7 @@
 KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
 : KoPAPageBase()
 , m_masterPage( masterPage )
+, m_pageProperties( UseMasterBackground | DisplayMasterBackground | DisplayMasterShapes )
 {
 }
 
@@ -68,7 +71,13 @@ KoPageLayout & KoPAPage::pageLayout()
 
 void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
-    KoPAPageBase::loadOdfPageTag( element, loadingContext );
+    KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
+    int pageProperties = UseMasterBackground | DisplayMasterShapes | DisplayMasterBackground;
+    if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
+        KoPAPageBase::loadOdfPageTag( element, loadingContext );
+        pageProperties = DisplayMasterShapes;
+    }
+    m_pageProperties = pageProperties;
     setName( element.attributeNS( KoXmlNS::draw, "name" ) );
     QString master = element.attributeNS (KoXmlNS::draw, "master-page-name" );
     setMasterPage( loadingContext.masterPageFromName( master ) );
@@ -77,4 +86,17 @@ void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &
 void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )
 {
     m_masterPage = masterPage;
+}
+
+void KoPAPage::paintBackground( QPainter & painter, const KoViewConverter & converter )
+{
+    if ( m_pageProperties & UseMasterBackground ) {
+        if ( m_pageProperties & DisplayMasterBackground ) {
+            Q_ASSERT( m_masterPage );
+            m_masterPage->paintBackground( painter, converter );
+        }
+    }
+    else {
+        KoPAPageBase::paintBackground( painter, converter );
+    }
 }

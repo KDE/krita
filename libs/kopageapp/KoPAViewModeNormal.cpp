@@ -50,10 +50,12 @@ void KoPAViewModeNormal::paintEvent( QPaintEvent* event )
     QRectF clipRect = event->rect().translated( m_canvas->documentOffset() );
     painter.setClipRect( clipRect );
 
-    m_canvas->document()->gridData().paintGrid( painter, *(m_view->viewConverter()), clipRect );
-    m_canvas->masterShapeManager()->paint( painter, *( m_view->viewConverter() ), false );
-    m_canvas->shapeManager()->paint( painter, *( m_view->viewConverter() ), false );
-    m_toolProxy->paint( painter, *( m_view->viewConverter() ) );
+    KoViewConverter * converter = m_view->viewConverter();
+    m_view->activePage()->paintBackground( painter, *converter );
+    m_canvas->document()->gridData().paintGrid( painter, *converter, clipRect );
+    m_canvas->masterShapeManager()->paint( painter, *converter, false );
+    m_canvas->shapeManager()->paint( painter, *converter, false );
+    m_toolProxy->paint( painter, *converter );
 }
 
 void KoPAViewModeNormal::tabletEvent( QTabletEvent *event, const QPointF &point )

@@ -120,7 +120,14 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
 {
     KoPALoadingContext &paContext = static_cast<KoPALoadingContext&>( loadingContext );
 
+    KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
+    styleStack.save();
+    loadingContext.odfLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "drawing-page" );
+    styleStack.setTypeProperties( "drawing-page" );
+
     loadOdfPageTag(element, paContext);
+
+    styleStack.restore();
 
     // load layers and shapes 
     // This needs some work as this is only for layers which are the same for all pages
@@ -156,19 +163,9 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
 void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element,
                                    KoPALoadingContext &loadingContext )
 {
-    if ( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
-    {
-        loadingContext.odfLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "drawing-page" );
+    KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
 
-        KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
-        styleStack.save();
-
-        styleStack.setTypeProperties( "drawing-page" );
-        if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
-        {
-            setBackground( loadOdfFill( element, loadingContext ) );
-        }
-
-        styleStack.restore();
+    if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
+        setBackground( loadOdfFill( element, loadingContext ) );
     }
 }

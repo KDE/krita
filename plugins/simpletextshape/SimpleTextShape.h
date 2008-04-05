@@ -22,6 +22,7 @@
 #define SIMPLETEXTSHAPE_H
 
 #include <KoShape.h>
+#include <interfaces/SimpleTextShapeInterface.h>
 
 #include <QtGui/QFont>
 
@@ -30,7 +31,7 @@ class KoPathShape;
 
 #define SimpleTextShapeID "SimpleText"
 
-class SimpleTextShape : public KoShape
+class SimpleTextShape : public SimpleTextShapeInterface
 {
 public:
     enum TextAnchor { AnchorStart, AnchorMiddle, AnchorEnd };

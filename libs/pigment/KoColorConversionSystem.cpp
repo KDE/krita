@@ -186,6 +186,7 @@ const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const QStr
 
 const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const NodeKey& key) const
 {
+    dbgPigmentCCS << "Look for node: " << key.modelId << " " << key.depthId << " " << key.profileName << " " << d->graph.value(key);
     return d->graph.value(key);
 }
 
@@ -505,6 +506,8 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 KoColorConversionSystem::Path* KoColorConversionSystem::findBestPath( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
 //     dbgPigmentCCS << "Find best path between " << srcNode->id() << " and " << dstNode->id();
+    Q_ASSERT(srcNode);
+    Q_ASSERT(dstNode);
     if (srcNode->isHdr and dstNode->isHdr)
     {
         return findBestPathImpl(srcNode, dstNode, false);

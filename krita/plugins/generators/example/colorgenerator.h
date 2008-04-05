@@ -18,26 +18,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef NOISEFILTER_H
-#define NOISEFILTER_H
+#ifndef COLORFILTER_H
+#define COLORFILTER_H
 
 #include <kparts/plugin.h>
 #include "generator/kis_generator.h"
 
 class KisFilterConfigWidget;
 
-class KritaNoiseGenerator : public KParts::Plugin
+class KritaColorGenerator : public KParts::Plugin
 {
 public:
-    KritaNoiseGenerator(QObject *parent, const QStringList &);
-    virtual ~KritaNoiseGenerator();
+    KritaColorGenerator(QObject *parent, const QStringList &);
+    virtual ~KritaColorGenerator();
 };
 
-class KisNoiseGenerator : public KisGenerator
+class KisColorGenerator : public KisGenerator
 {
 public:
 
-    KisNoiseGenerator();
+    KisColorGenerator();
 
     using KisGenerator::generate;
     
@@ -46,11 +46,8 @@ public:
                    const KisFilterConfiguration* config,
                    KoUpdater* progressUpdater
         ) const;
-
-    /// The noise generator only works on 8-bit rgba.
-    virtual const KoColorSpace * colorSpace();
     
-    static inline KoID id() { return KoID("noise", i18n("Noise")); }
+    static inline KoID id() { return KoID("color", i18n("Color")); }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };

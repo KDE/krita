@@ -64,7 +64,6 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageSP img, const QString &name, KisFil
     setSelection( selection );
 
     m_d->paintDevice = new KisPaintDevice( img->colorSpace(), name.toLatin1());
-    m_d->paintDevice = new KisPaintDevice( img->colorSpace(), name.toLatin1());
     m_d->showSelection = true;
 
     update();
@@ -121,11 +120,19 @@ void KisGeneratorLayer::updateProjection(const QRect& rc)
 
 KisPaintDeviceSP KisGeneratorLayer::projection() const
 {
-    return m_d->projection;
+    if (m_d->projection)
+        return m_d->projection;
+    else
+        return m_d->paintDevice;
 }
 
 KisPaintDeviceSP KisGeneratorLayer::paintDevice() const
 {
+    if (!m_d->selection) {
+        m_d->selection = new KisSelection();
+        KisPixelSelectionSP sel = m_d->selection->getOrCreatePixelSelection();
+        sel->select(image()->bounds());
+    }
     return m_d->selection;
 }
 
@@ -172,17 +179,9 @@ void KisGeneratorLayer::setSelection(KisSelectionSP selection)
 {
     if (selection) {
         m_d->selection = new KisSelection(*selection.data());
-//         KisFillPainter gc(KisPaintDeviceSP(m_d->selection.data()));
-//         gc.bitBlt(0, 0, COMPOSITE_COPY, selection,
-//                   0, 0, image()->bounds().width(), image()->bounds().height());
-//         gc.end();
-//         selection->getOrCreatePixelSelection()->dataManager()->setDefaultPixel(selection->dataManager()->defaultPixel());
-    } else {
-        m_d->selection = new KisSelection();
-        m_d->selection->getOrCreatePixelSelection()->invert();
+        m_d->selection->updateProjection();
+        m_d->selection->setInterestedInDirtyness(true);
     }
-    m_d->selection->updateProjection();
-    m_d->selection->setInterestedInDirtyness(true);
 }
 
 
@@ -222,7 +221,7 @@ void KisGeneratorLayer::setY(qint32 y)
 QRect KisGeneratorLayer::extent() const
 {
     if (m_d->selection)
-        return m_d->selection->selectedRect();
+        return m_d->selection->selectedRect().intersected(image()->bounds());
     else if (image())
         return image()->bounds();
     else
@@ -232,7 +231,7 @@ QRect KisGeneratorLayer::extent() const
 QRect KisGeneratorLayer::exactBounds() const
 {
     if (m_d->selection)
-        return m_d->selection->selectedExactRect();
+        return m_d->selection->selectedExactRect().intersected(image()->bounds());
     else if (image())
         return image()->bounds();
     else
@@ -258,16 +257,14 @@ void KisGeneratorLayer::setSelection(bool b) { m_d->showSelection = b; }
 
 void KisGeneratorLayer::update()
 {
-    QRect tmpRc = m_d->selection->selectedRect();
-
-    if (tmpRc.width() == 0 || tmpRc.height() == 0) // Don't even try
-        return;
 
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value( m_d->filterConfig->name() );
     if (!f) return;
 
-    KisProcessingInformation dstCfg(m_d->paintDevice, tmpRc .topLeft(), 0);
-
+    QRect tmpRc = exactBounds();
+    
+    KisProcessingInformation dstCfg(m_d->paintDevice, tmpRc.topLeft(), m_d->selection);
+    m_d->filterConfig->setChannelFlags(channelFlags());
     f->generate(dstCfg, tmpRc.size(), m_d->filterConfig);
 }
 

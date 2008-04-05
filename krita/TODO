@@ -115,6 +115,8 @@ BR  * Krita freezes when trying to set the tablet paintop settings for the brush
     * Fix gradient anti-aliasing
     * The fillpainter api is a mess: simplify to use less parameters and more getters and
       less overloading.
+    * KisSelection should get its own shape manager, analogous to KisShapeLayer.
+
 * UI
 
     * show both selection mask and global selection

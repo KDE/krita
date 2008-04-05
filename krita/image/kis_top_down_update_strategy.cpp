@@ -97,6 +97,7 @@ public:
             if (!layer->visible())
                 return true;
 
+            layer->updateProjection(m_rc);
             KisPaintDeviceSP dev = layer->projection();
             if (!dev)
                 return true;

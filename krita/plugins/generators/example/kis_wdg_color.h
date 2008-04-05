@@ -18,26 +18,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_WDG_NOISE_H
-#define KIS_WDG_NOISE_H
+#ifndef KIS_WDG_COLOR_H
+#define KIS_WDG_COLOR_H
 
 #include <filter/kis_filter_config_widget.h>
 
-class Ui_WdgNoiseOptions;
+class Ui_WdgColorOptions;
 
-class KisWdgNoise : public KisFilterConfigWidget
+class KisWdgColor : public KisFilterConfigWidget
 {
     Q_OBJECT
     public:
-        KisWdgNoise(QWidget* parent = 0);
-        ~KisWdgNoise();
+        KisWdgColor(QWidget* parent = 0);
+        ~KisWdgColor();
     public:
-        inline const Ui_WdgNoiseOptions* widget() const { return m_widget; }
+        inline const Ui_WdgColorOptions* widget() const { return m_widget; }
         virtual void setConfiguration(KisFilterConfiguration*);
         virtual KisFilterConfiguration* configuration() const;
     private:
-        Ui_WdgNoiseOptions* m_widget;
-        int m_seedAlpha, m_seedRed, m_seedGreen, m_seedBlue;
+        Ui_WdgColorOptions* m_widget;
 };
 
 #endif

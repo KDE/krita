@@ -31,6 +31,7 @@
 #include <KoSelection.h>
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>
+#include <KoColorSpaceConstants.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_clone_layer.h"
@@ -213,8 +214,6 @@ void KisShapeController::addShape( KoShape* shape )
         dbgUI <<"shape parent:" << shape->parent();
         dbgUI <<"shape layer:" << shapeLayer;
 
-//TODO this doesn't work with shape selections
-#if 0
         if ( !shapeLayer ) {
             // There is no parent layer set, which means that when
             // dropping, there was no shape layer active. Create one
@@ -232,9 +231,9 @@ void KisShapeController::addShape( KoShape* shape )
             // layerbox and makes sure the new layer is in the
             // layer-shape map and in the layerbox
 
-            m_d->image->addLayer( shapeLayer, m_d->image->rootLayer());
+            m_d->image->addNode( shapeLayer, m_d->image->rootLayer());
         }
-#endif
+
         // XXX: What happens if the shape is added embedded in another
         // shape?
         if ( shapeLayer )
@@ -297,7 +296,8 @@ void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
     }
     else if ( node->inherits("KisPaintLayer")  ||
               node->inherits("KisAdjustmentLayer") ||
-              node->inherits("KisCloneLayer") ) {
+              node->inherits("KisCloneLayer") ||
+              node->inherits("KisGeneratorLayer") ) {
         shape = new KisLayerShape( parent, static_cast<KisLayer*>( node.data() ) );
     }
     else if ( node->inherits("KisShapeLayer") ) {

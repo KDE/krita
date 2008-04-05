@@ -55,7 +55,7 @@ public:
 
 private slots:
 
-    void slotGeneratorActivated(QListWidgetItem*);
+    void slotGeneratorActivated(int);
 
 private:
 

@@ -93,8 +93,7 @@ void KisWdgGenerator::init(KisPaintDeviceSP dev)
     d->uiWdgGenerators.setupUi( this );
     d->widgetLayout = new QGridLayout( d->uiWdgGenerators.centralWidgetHolder );
     KisGeneratorRegistry * registry = KisGeneratorRegistry::instance();
-    qDebug() << registry->count();
-    
+
     foreach(QString key, registry->keys())
     {
         KisGeneratorSP generator = registry->get(key);
@@ -104,10 +103,12 @@ void KisWdgGenerator::init(KisPaintDeviceSP dev)
                                                 QListWidgetItem::UserType + 1);
         item->generator = generator;
     }
-    connect(d->uiWdgGenerators.lstGenerators, SIGNAL(itemActivated(QListWidgetItem*)),
-           this, SLOT(slotGeneratorActivated(QListWidgetItem*)));
+    connect(d->uiWdgGenerators.lstGenerators, SIGNAL(currentRowChanged(int)),
+           this, SLOT(slotGeneratorActivated(int)));
 
-    slotGeneratorActivated(d->uiWdgGenerators.lstGenerators->currentItem());
+    if (d->uiWdgGenerators.lstGenerators->count() > 0) {
+        d->uiWdgGenerators.lstGenerators->setCurrentRow(0);
+    }
 }
 
 
@@ -118,7 +119,7 @@ void KisWdgGenerator::setConfiguration(KisFilterConfiguration * config)
         KisGeneratorItem * item = static_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(i));
         if (item->generator->id() == config->name()) {
             // match!
-            slotGeneratorActivated(item);
+            slotGeneratorActivated(i);
             KisFilterConfigWidget * wdg = dynamic_cast<KisFilterConfigWidget*>(d->centralWidget);
             if (wdg) {
                 wdg->setConfiguration(config);
@@ -140,14 +141,19 @@ KisFilterConfiguration * KisWdgGenerator::configuration()
 
 }
 
-void KisWdgGenerator::slotGeneratorActivated(QListWidgetItem* i)
+void KisWdgGenerator::slotGeneratorActivated(int row)
 {
-    if (!i) {
+    QListWidgetItem * item = d->uiWdgGenerators.lstGenerators->item(row);
+    
+    if (!item) {
         d->centralWidget = new QLabel( i18n("No configuration options."),
                                        d->uiWdgGenerators.centralWidgetHolder );
     }
     else {
-        KisGeneratorItem * item = static_cast<KisGeneratorItem*>(i);
+        qDebug() << row;
+        qDebug() << item;
+        qDebug() << dynamic_cast<KisGeneratorItem*>(item);
+        KisGeneratorItem * item = static_cast<KisGeneratorItem*>(item);
         d->currentGenerator = item->generator;
     
         delete d->centralWidget;

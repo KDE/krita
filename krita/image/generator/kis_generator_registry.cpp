@@ -45,7 +45,7 @@ KisGeneratorRegistry::KisGeneratorRegistry()
 
     KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Generator"),
                                                          QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-Krita-Version] == 3)"));
+                                                                             "([X-Krita-Version] == 4)"));
 
     KService::List::ConstIterator iter;
     dbgPlugins << "generators found: " << offers.count();

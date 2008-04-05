@@ -18,40 +18,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_wdg_noise.h"
+#include "kis_wdg_color.h"
 
 #include <qlayout.h>
 
 #include <knuminput.h>
-
+#include <KoColor.h>
 #include <filter/kis_filter_configuration.h>
 
-#include "ui_wdgnoiseoptions.h"
+#include "ui_wdgcoloroptions.h"
 
-KisWdgNoise::KisWdgNoise(QWidget* parent)
+KisWdgColor::KisWdgColor(QWidget* parent)
     : KisFilterConfigWidget(parent)
 {
-    m_widget = new Ui_WdgNoiseOptions();
+    m_widget = new Ui_WdgColorOptions();
     m_widget->setupUi(this);
-
-    connect( widget()->intLevel, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intOpacity, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    m_seedAlpha = rand();
-    m_seedRed = rand();
-    m_seedGreen = rand();
-    m_seedBlue = rand();
 }
 
-KisWdgNoise::~KisWdgNoise()
+KisWdgColor::~KisWdgColor()
 {
 }
 
-void KisWdgNoise::setConfiguration(KisFilterConfiguration* config)
+void KisWdgColor::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("level", value))
+    if (config->getProperty("color", value))
     {
-        widget()->intLevel->setValue( value.toUInt() );
+        widget()->bnColor->setColor(value.value<KoColor>().toQColor());
     }
     if (config->getProperty("opacity", value))
     {
@@ -59,17 +52,17 @@ void KisWdgNoise::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
-KisFilterConfiguration* KisWdgNoise::configuration() const
+KisFilterConfiguration* KisWdgColor::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
-    config->setProperty("level", this->widget()->intLevel->value() );
+    KisFilterConfiguration* config = new KisFilterConfiguration("color", 1);
+    KoColor c;
+    c.fromQColor(this->widget()->bnColor->color());
+    QVariant v;
+    v.setValue(c);
+    config->setProperty("color", v );
     config->setProperty("opacity", this->widget()->intOpacity->value() );
-    config->setProperty("seedAlpha", m_seedAlpha );
-    config->setProperty("seedRed", m_seedRed );
-    config->setProperty("seedGreen", m_seedGreen );
-    config->setProperty("seedBlue", m_seedBlue );
     return config;
 }
 
-#include "kis_wdg_noise.moc"
+#include "kis_wdg_color.moc"
 

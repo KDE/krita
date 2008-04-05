@@ -1,21 +1,21 @@
-set(kritanoisegenerator_PART_SRCS
-    noisegenerator.cpp
-    kis_wdg_noise.cpp
+set(kritacolorgenerator_PART_SRCS
+    colorgenerator.cpp
+    kis_wdg_color.cpp
     )
 
 
-kde4_add_ui_files(kritanoisegenerator_PART_SRCS
-    wdgnoiseoptions.ui
+kde4_add_ui_files(kritacolorgenerator_PART_SRCS
+    wdgcoloroptions.ui
     )
 
-kde4_add_plugin(kritanoisegenerator ${kritanoisegenerator_PART_SRCS})
+kde4_add_plugin(kritacolorgenerator ${kritacolorgenerator_PART_SRCS})
 
 
-target_link_libraries(kritanoisegenerator kritaui)
+target_link_libraries(kritacolorgenerator kritaui)
 
-install(TARGETS kritanoisegenerator  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorgenerator  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kritanoisegenerator.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritacolorgenerator.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

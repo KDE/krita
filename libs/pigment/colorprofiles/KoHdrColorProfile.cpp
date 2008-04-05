@@ -144,3 +144,22 @@ double KoHdrColorProfile::displayToChannelDouble(double value) const
 {
     return value * 0xFFFF * d->invExposureFactor;
 }
+
+QVariant KoHdrColorProfile::property( const QString& _name) const
+{
+    if( _name == "exposure" )
+    {
+        return d->exposure;
+    } else {
+        return KoColorProfile::property( _name );
+    }
+}
+void KoHdrColorProfile::setProperty( const QString& _name, const QVariant& _variant)
+{
+    if( _name == "exposure" )
+    {
+        setHdrExposure( _variant.toDouble() );
+    } else {
+        KoColorProfile::setProperty( _name, _variant );
+    }
+}

@@ -21,6 +21,7 @@
 #define _KO_COLOR_PROFILE_H_
 
 #include <QString>
+#include <QVariant>
 
 #include "pigment_export.h"
 
@@ -98,6 +99,16 @@ class PIGMENTCMS_EXPORT KoColorProfile {
         virtual bool isSuitableForDisplay() const = 0;
 
         virtual bool operator==(const KoColorProfile&) const = 0;
+        
+        /**
+         * @return the profile property given in argument
+         */
+        virtual QVariant property( const QString& _name) const;
+        /**
+         * Set a new value of a profile property.
+         * 
+         */
+        virtual void setProperty( const QString& _name, const QVariant& _variant);
     protected:
         /**
          * Allows to define the name of this profile.

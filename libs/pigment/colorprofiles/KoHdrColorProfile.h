@@ -54,6 +54,8 @@ class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
         virtual bool isSuitableForOutput() const;
         virtual bool isSuitableForPrinting() const;
         virtual bool isSuitableForDisplay() const;
+        virtual QVariant property( const QString& _name) const;
+        virtual void setProperty( const QString& _name, const QVariant& _variant);
 
         /**
          * @return the current exposure

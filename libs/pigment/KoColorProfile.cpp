@@ -80,3 +80,15 @@ void KoColorProfile::setInfo(const QString &info)
 {
     d->info = info;
 }
+
+QVariant KoColorProfile::property( const QString& _name) const
+{
+    Q_UNUSED(_name);
+    return QVariant();
+}
+
+void KoColorProfile::setProperty( const QString& _name, const QVariant& _variant)
+{
+    Q_UNUSED(_name);
+    Q_UNUSED(_variant);
+}

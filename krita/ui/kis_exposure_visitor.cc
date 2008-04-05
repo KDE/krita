@@ -32,11 +32,7 @@ KisExposureVisitor::KisExposureVisitor(double exposure) : m_exposure(exposure)
 
 void KisExposureVisitor::setExposureToProfile(KoColorProfile* profile)
 {
-    KoHdrColorProfile* hdrProfile = dynamic_cast<KoHdrColorProfile*>(profile);
-    if(hdrProfile)
-    {
-        hdrProfile->setHdrExposure(m_exposure);
-    }
+    profile->setProperty("exposure", m_exposure);
 }
 
 bool KisExposureVisitor::visit( KisExternalLayer * e)

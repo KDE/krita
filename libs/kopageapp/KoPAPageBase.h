@@ -75,6 +75,15 @@ public:
      */
     virtual void paintBackground( QPainter & painter, const KoViewConverter & converter );
 
+    /**
+     * Get if master shapes should be displayed
+     *
+     * For master pages this allways returns false
+     *
+     * @return true if master shapes should be displayed
+     */
+    virtual bool displayMasterShapes() = 0;
+
 protected:
     /**
      * @param paContext the pageapp saving context

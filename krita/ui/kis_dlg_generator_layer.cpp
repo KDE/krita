@@ -50,9 +50,6 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer( const QString & name, QWidget * pare
     dlgWidget.txtLayerName->setText(name);
     connect( dlgWidget.txtLayerName, SIGNAL( textChanged ( const QString & ) ),
              this, SLOT( slotNameChanged( const QString & ) ) );
-
-
-    enableButtonOk(0);
 }
 
 void KisDlgGeneratorLayer::slotNameChanged( const QString & text )

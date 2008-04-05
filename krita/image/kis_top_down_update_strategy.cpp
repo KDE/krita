@@ -58,10 +58,6 @@ public:
 
     using KisNodeVisitor::visit;
 
-    /**
-     * Don't even _think_ of creating a merge visitor without a projection; without a projection,
-     * the adjustmentlayers won't work.
-     */
     KisMergeVisitor(KisPaintDeviceSP projection, const QRect& rc) :
         KisNodeVisitor()
         {
@@ -353,7 +349,6 @@ void KisTopDownUpdateStrategy::lock()
        we have to lock the nodes themselves to avoid redirtying while
        updating the projection.
      */
-    // XXX: huh? how come m_d->node is const here?
     m_d->node.data()->setLocked( true );
     KisNodeSP child = m_d->node->firstChild();
     while (child) {

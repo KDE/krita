@@ -33,6 +33,9 @@ class KisFilterConfiguration;
  *      in the filter widget.
  */
 class KisWdgGenerator : public QWidget {
+
+Q_OBJECT
+
 public:
 
     KisWdgGenerator(QWidget * parent);
@@ -49,9 +52,12 @@ public:
 
     KisFilterConfiguration * configuration();
     
-private:
+
+private slots:
 
     void slotGeneratorActivated(QListWidgetItem*);
+
+private:
 
     class Private;
     Private * const d;

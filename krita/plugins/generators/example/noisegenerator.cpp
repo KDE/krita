@@ -91,6 +91,7 @@ KisFilterConfiguration* KisNoiseGenerator::factoryConfiguration(const KisPaintDe
 KisFilterConfigWidget * KisNoiseGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
+    qDebug() << "XXXXXXXXXXXX";
     return new KisWdgNoise(parent);
 }
 

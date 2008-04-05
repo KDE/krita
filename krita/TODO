@@ -72,7 +72,7 @@ BR  * Smudge op
 
 * Colorspaces
 
-    * LMS (is now dependent on OpenCTl)
+    * LMS (is now dependent on OpenCTL)
     * Wet (may be deprecated definitively given EmanueleT's color work)
 
 * Import/Export
@@ -171,6 +171,7 @@ BR  * Show no cursor option
         *  Small tiles: makes circles, otherwise effect is fun
     * Create architecture that lets paintop re-use the painting algorithm of other paintops
       without having to daisy-chain other paintops.
+BR  * Implement paintop presets and preset editor
 
 * View Plugins
 
@@ -181,6 +182,11 @@ EM  * Paint mixer
       presenting "fast" and "good"
 
 * Brushes
+
+    * extract the gimp code from KisBrush, make KisBrush an interface and put
+      all brushes in their own plugins, including their gui
+BR  * show the kisbrush selection widget only in the option widget of paintops
+      that use it
 
 * Import/Export
 

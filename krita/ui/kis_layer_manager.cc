@@ -624,7 +624,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
         KisSelectionSP selection = m_view->selection();
         KisFilterConfiguration * generator = dlg.configuration();
         QString name = dlg.layerName();
-        addAdjustmentLayer( parent, above, name, generator, selection);
+        addGeneratorLayer( parent, above, name, generator, selection);
     }
 
 }

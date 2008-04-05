@@ -29,7 +29,7 @@ class KisBookmarkedConfigurationManager;
 class KisSerializableConfiguration;
 
 /**
- * This class provides basic functionnalities for a model of a bookmark
+ * This class provides the basic functionality for a model of a bookmark
  * of configurations.
  */
 class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListModel {

@@ -43,7 +43,7 @@ class KisRgbFloatHDRColorSpaceFactory : public KoCtlColorSpaceFactory
     
         virtual QString colorSpaceEngine() const { return ""; }
         virtual bool isHdr() const { return true; }
-        virtual QString defaultProfile() const { return "Standard RGB (sRGB)"; }
+        virtual QString defaultProfile() const { return "Standard Linear RGB (scRGB/sRGB64)"; }
     public:
         static bool isRgbCtlColorProfile( const KoColorProfile* profile)
         {

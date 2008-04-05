@@ -23,6 +23,7 @@
 
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
+#include "DebugPigment.h"
 
 struct KoColorConversionTransformationFactory::Private {
     QString srcModelId;
@@ -57,6 +58,7 @@ bool KoColorConversionTransformationFactory::canBeSource(const KoColorSpace* src
 
 bool KoColorConversionTransformationFactory::canBeDestination(const KoColorSpace* dstCS) const
 {
+    dbgPigment << dstCS->colorModelId().id() << " " << d->dstModelId << " " << dstCS->colorDepthId().id() << " " <<  d->dstDepthId << " " << d->dstProfile << " " << dstCS->profile()->name()  << " " << d->dstProfile;
     return (( dstCS->colorModelId().id() == d->dstModelId )
             && ( dstCS->colorDepthId().id() == d->dstDepthId )
             && ( d->dstProfile == "" || dstCS->profile()->name() == d->dstProfile ) );

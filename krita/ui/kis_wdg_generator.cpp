@@ -143,17 +143,15 @@ KisFilterConfiguration * KisWdgGenerator::configuration()
 
 void KisWdgGenerator::slotGeneratorActivated(int row)
 {
-    QListWidgetItem * item = d->uiWdgGenerators.lstGenerators->item(row);
+    KisGeneratorItem * item = dynamic_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(row));
     
     if (!item) {
         d->centralWidget = new QLabel( i18n("No configuration options."),
                                        d->uiWdgGenerators.centralWidgetHolder );
     }
     else {
-        qDebug() << row;
-        qDebug() << item;
-        qDebug() << dynamic_cast<KisGeneratorItem*>(item);
-        KisGeneratorItem * item = static_cast<KisGeneratorItem*>(item);
+
+        
         d->currentGenerator = item->generator;
     
         delete d->centralWidget;

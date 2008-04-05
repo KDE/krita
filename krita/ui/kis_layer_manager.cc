@@ -386,21 +386,20 @@ void KisLayerManager::layerProperties()
         }
     }
     else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
-        KDialog dlg(0);
+
+        KisDlgGeneratorLayer dlg(alayer->name(), m_view);
         dlg.setCaption(i18n("Generator Layer Properties"));
-        dlg.setButtons( KDialog::Ok | KDialog::Cancel );
-        KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace(), "tmp");
-        KisWdgGenerator * page = new KisWdgGenerator(&dlg, dev);
-        dlg.setMainWidget(page);
-        page->setConfiguration(alayer->generator());
+
         QString before = alayer->generator()->toLegacyXML();
-        if (dlg.exec() == QDialog::Accepted)
-        {
+        dlg.setConfiguration(alayer->generator());
+        
+        if (dlg.exec() == QDialog::Accepted) {
+            
             KisChangeGeneratorCmd<KisGeneratorLayerSP> * cmd
                 = new KisChangeGeneratorCmd<KisGeneratorLayerSP>(alayer,
-                                                              page->configuration(),
+                                                              dlg.configuration(),
                                                               before,
-                                                              page->configuration()->toLegacyXML());
+                                                              dlg.configuration()->toLegacyXML());
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
             m_doc->setModified( true );

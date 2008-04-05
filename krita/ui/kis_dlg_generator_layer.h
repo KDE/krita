@@ -51,6 +51,7 @@ public:
      */
     KisDlgGeneratorLayer( const QString & name, QWidget *parent = 0 );
 
+    void setConfiguration(KisFilterConfiguration * config);
     KisFilterConfiguration * configuration() const;
     QString layerName() const;
 

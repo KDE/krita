@@ -20,7 +20,9 @@
 
 #include "KoCtlColorProfile.h"
 
-#include <kdebug.h>
+#include <math.h>
+
+#include "DebugPigment.h"
 
 #include <QDomDocument>
 #include <QFile>
@@ -36,6 +38,7 @@
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/String.h>
 #include <GTLCore/Type.h>
+#include <GTLCore/Value.h>
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
 
@@ -54,11 +57,15 @@ struct KoCtlColorProfile::Private {
     QList<ConversionInfo> conversionInfos;
     QString colorModelID;
     QString colorDepthID;
+    double exposure;
+    double middleGreyScaleFactor;
 };
 
 KoCtlColorProfile::KoCtlColorProfile(QString filename) : KoColorProfile(filename), d(new Private)
 {
     d->module = 0;
+    d->middleGreyScaleFactor = 0.0883883;
+    d->exposure = pow(2, 2.47393) * d->middleGreyScaleFactor;
 }
 
 KoCtlColorProfile::KoCtlColorProfile(const KoCtlColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
@@ -340,4 +347,26 @@ GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const KoColo
     }
     Q_ASSERT( types.size() == cs->channelCount() );
     return GTLCore::PixelDescription( types );
+}
+
+QVariant KoCtlColorProfile::property( const QString& _name) const
+{
+    if( _name == "exposure" )
+    {
+        return d->exposure;
+    } else {
+        dbgPigment << "Not CTL property " << _name;
+        return KoColorProfile::property(_name);
+    }
+}
+
+void KoCtlColorProfile::setProperty( const QString& _name, const QVariant& _variant)
+{
+    if( _name == "exposure" )
+    {
+        d->exposure = pow(2, _variant.toDouble() + 2.47393) * d->middleGreyScaleFactor;
+    } else {
+        dbgPigment << "Not CTL property " << _name;
+        return KoColorProfile::setProperty(_name, _variant);
+    }
 }

@@ -68,6 +68,8 @@ class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
          * are available using this profile.
          */
         QList<KoColorConversionTransformationFactory*> createColorConversionTransformationFactories() const;
+        virtual QVariant property( const QString& _name) const;
+        virtual void setProperty( const QString& _name, const QVariant& _variant);
     private:
         /** decode the \<transformations\> tag.
          */

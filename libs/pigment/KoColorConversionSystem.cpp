@@ -220,6 +220,10 @@ QList<KoColorConversionSystem::Node*> KoColorConversionSystem::nodesFor( const Q
 
 KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
 {
+    Q_ASSERT(srcColorSpace);
+    Q_ASSERT(dstColorSpace);
+    dbgPigmentCCS << srcColorSpace->id() << (srcColorSpace->profile() ? srcColorSpace->profile()->name() : "");
+    dbgPigmentCCS << dstColorSpace->id() << (dstColorSpace->profile() ? dstColorSpace->profile()->name() : "");
     Path* path = findBestPath(
            nodeFor( srcColorSpace ),
            nodeFor( dstColorSpace ));
@@ -505,9 +509,9 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 
 KoColorConversionSystem::Path* KoColorConversionSystem::findBestPath( const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
-//     dbgPigmentCCS << "Find best path between " << srcNode->id() << " and " << dstNode->id();
     Q_ASSERT(srcNode);
     Q_ASSERT(dstNode);
+    dbgPigmentCCS << "Find best path between " << srcNode->id() << " and " << dstNode->id();
     if (srcNode->isHdr and dstNode->isHdr)
     {
         return findBestPathImpl(srcNode, dstNode, false);

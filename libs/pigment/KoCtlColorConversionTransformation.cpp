@@ -22,15 +22,18 @@
 #include <kdebug.h>
 
 #include <GTLCore/Buffer.h>
+#include <GTLCore/Value.h>
 #include <OpenCTL/Program.h>
 
 #include "KoColorSpace.h"
 #include "colorprofiles/KoCtlColorProfile.h"
+#include "DebugPigment.h"
 
 #include <QString>
 
 struct KoCtlColorConversionTransformation::Private {
     OpenCTL::Program* program;
+    bool srcIsCTL;
 };
 
 KoCtlColorConversionTransformation::KoCtlColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs) : KoColorConversionTransformation(srcCs, dstCs), d(new Private)
@@ -41,10 +44,12 @@ KoCtlColorConversionTransformation::KoCtlColorConversionTransformation(const KoC
     if(ctlp)
     {
         d->program = ctlp->createColorConversionProgram(srcCs, dstCs);
+        d->srcIsCTL = true;
     }
     if( not d->program and (ctlp = dynamic_cast<const KoCtlColorProfile*>( dstCs->profile() )))
     {
         d->program = ctlp->createColorConversionProgram(srcCs, dstCs);
+        d->srcIsCTL = false;
     }
     Q_ASSERT(d->program);
 }
@@ -72,6 +77,23 @@ void KoCtlColorConversionTransformation::transform(const quint8 *src8, quint8 *d
 {
     KoCtlBuffer src( reinterpret_cast<char*>(const_cast<quint8*>(src8) ), nPixels * srcColorSpace()->pixelSize());
     KoCtlBuffer dst( reinterpret_cast<char*>(dst8), nPixels * dstColorSpace()->pixelSize());
+    const KoColorProfile* ctlp = d->srcIsCTL ? srcColorSpace()->profile() : dstColorSpace()->profile();
+    for( std::list<GTLCore::String>::const_iterator cit = d->program->varyings().begin();
+         cit != d->program->varyings().end(); ++cit)
+    {
+        QVariant v = ctlp->property( cit->c_str() );
+        dbgPigment << "Setting " << cit->c_str() << " to " << v;
+        if( v.type() == QVariant::Double)
+        {
+            d->program->setVarying( *cit, (float)v.toDouble() );
+        } else if( v.type() == QVariant::Int) {
+            d->program->setVarying( *cit, v.toInt() );
+        } else if( v.type() == QVariant::Bool) {
+            d->program->setVarying( *cit, v.toBool() );
+        } else {
+            dbgPigment << "Unsuitable type";
+        }
+    }
     d->program->apply(src, dst);
 }
 

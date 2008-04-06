@@ -43,18 +43,21 @@ bool KisExposureVisitor::visit( KisExternalLayer * e)
 bool KisExposureVisitor::visit(KisPaintLayer *layer)
 {
     setExposureToProfile(layer->paintDevice()->colorSpace()->profile());
+    layer->setDirty();
     return true;
 }
 
 bool KisExposureVisitor::visit(KisGeneratorLayer *layer)
 {
     setExposureToProfile(layer->paintDevice()->colorSpace()->profile());
+    layer->setDirty();
     return true;
 }
 
 bool KisExposureVisitor::visit(KisGroupLayer *layer)
 {
     setExposureToProfile(layer->colorSpace()->profile());
+    layer->setDirty();
     KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
     while (child) {
         child->accept(*this);

@@ -29,6 +29,7 @@
 #include <KoAbstractGradient.h>
 #include <kis_brush.h>
 #include <kis_pattern.h>
+#include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_layer.h>
 #include <kis_image.h>
@@ -112,6 +113,7 @@ void KisCanvasResourceProvider::setHDRExposure(float exposure)
 {
     m_resourceProvider->setResource( HdrExposure, static_cast<double>( exposure ) );
     KisExposureVisitor eV(exposure);
+    m_view->image()->projection()->colorSpace()->profile()->setProperty("exposure", exposure);
     m_view->image()->rootLayer()->accept( eV );
     m_view->canvasBase()->updateCanvas();
     m_view->canvasBase()->updateCanvasProjection( m_view->image()->bounds() );

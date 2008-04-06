@@ -75,6 +75,7 @@ class KoCtlBuffer : public GTLCore::Buffer {
 
 void KoCtlColorConversionTransformation::transform(const quint8 *src8, quint8 *dst8, qint32 nPixels) const
 {
+    dbgPigment << "Transformation from " << srcColorSpace()->id() << " " << srcColorSpace()->profile()->name() << " to " << dstColorSpace()->id() << " " << dstColorSpace()->profile()->name();
     KoCtlBuffer src( reinterpret_cast<char*>(const_cast<quint8*>(src8) ), nPixels * srcColorSpace()->pixelSize());
     KoCtlBuffer dst( reinterpret_cast<char*>(dst8), nPixels * dstColorSpace()->pixelSize());
     const KoColorProfile* ctlp = d->srcIsCTL ? srcColorSpace()->profile() : dstColorSpace()->profile();

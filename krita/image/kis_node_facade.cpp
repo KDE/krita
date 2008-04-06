@@ -55,14 +55,14 @@ const KisNodeSP KisNodeFacade::root() const
 
 bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
 {
-    if ( !node ) return false;
-    if ( !parent ) return false;
-    if ( node == parent ) return false;
-    if ( node == aboveThis ) return false;
-    if ( parent == aboveThis ) return false;
-    if ( !node->parent() ) return false;
+    if ( !node ) { dbgImage << "can't move null node"; return false; }
+    if ( !parent )  { dbgImage << "can't move to null parent"; return false; }
+    if ( node == parent )  { dbgImage << "can't move self inside self"; return false; }
+    if ( node == aboveThis )  { dbgImage << "can't move self above self"; return false; }
+    if ( parent == aboveThis )  { dbgImage << "can't move above parent"; return false; }
+    if ( !node->parent() )  { dbgImage << "node doesn't have a parent"; return false; }
 
-    if ( aboveThis && aboveThis->parent() != parent ) return false;
+    if ( aboveThis && aboveThis->parent() != parent )  { dbgImage << "above this parent is not the parent"; return false; }
 
     int oldIndex = node->parent()->index( node );
     int newIndex = parent->childCount();

@@ -148,20 +148,20 @@ bool allowAsChild( const QString & parentType, const QString & childType )
     return true;
 }
 
-void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active)
+void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode)
 {
     KisNodeSP root = m_d->view->image()->root();
-    if (!active)
-        active = root->firstChild();
-    
+    if (!_activeNode)
+        _activeNode = root->firstChild();
+    KisNodeSP active = _activeNode;
     // Find the first node above the current node that can have the desired
     // layer type as child. XXX_NODE: disable the menu entries for node types
     // that are not compatible with the active node type.
     while (active) {
         if ( allowAsChild(active->metaObject()->className(), nodeType) ) {
             parent = active;
-            if ( activeNode()->parent() == parent ) {
-                above = activeNode();
+            if ( _activeNode->parent() == parent ) {
+                above = _activeNode;
             }
             else {
                 above = parent->firstChild();
@@ -170,6 +170,7 @@ void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &par
         }
         active = active->parent();
     }
+    dbgUI << "Nothing found, add in the root layer above the first child";
     parent = root;
     above = parent->firstChild();
 }
@@ -185,10 +186,12 @@ void KisNodeManager::addNode( KisNodeSP node, KisNodeSP activeNode)
 
 void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
 {
+    dbgUI << " move node " << node->name() << " toward " << activeNode->name();
     KisNodeSP parent;
     KisNodeSP above;
 
     getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
+    dbgUI << " move node " << node->name() << " above " << above->name() << " for parent " << parent->name();
     m_d->doc->image()->moveNode( node, parent, above);
 }
 

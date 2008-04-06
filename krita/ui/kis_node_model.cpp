@@ -335,6 +335,7 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
     dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
     if(! data->hasFormat( "application/x-kritalayermodeldatalist" ))
     {
+        dbgUI << "Doesn't have 'application/x-kritalayermodeldatalist'";
         return false;
     }
     QByteArray encoded = data->data( "application/x-kritalayermodeldatalist" );
@@ -352,7 +353,7 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
     QDataStream stream(&encoded, QIODevice::ReadOnly);*/
     if(action == Qt::CopyAction)
     {
-        ////dbgUI <<"KisNodeModel::dropMimeData copy action";
+        dbgUI <<"KisNodeModel::dropMimeData copy action";
         KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
         foreach(KisNode* n, nodes)
         {
@@ -360,7 +361,7 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
         }
         return true;
     } else if(action == Qt::MoveAction) {
-        ////dbgUI <<"KisNodeModel::dropMimeData move action";
+        dbgUI <<"KisNodeModel::dropMimeData move action";
         KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
         foreach(KisNode* n, nodes)
         {
@@ -368,6 +369,7 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
         }
         return true;
     }
+    dbgUI << "Action was not Copy or Move " << action;
     return false;
 }
 

@@ -33,6 +33,9 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
 #include "KoCanvasBase.h"
+#include "KoDeviceRegistry.h"
+#include "KoDeviceEvent.h"
+#include "KoPointerEvent.h"
 #include "tools/KoZoomTool.h"
 #include "tools/KoZoomToolFactory.h"
 #include "tools/KoPanTool.h"
@@ -176,6 +179,9 @@ void KoToolManager::setup() {
     // connect to all tools so we can hear their button-clicks
     foreach(ToolHelper *tool, d->tools)
         connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
+
+    // load pluggable input devices
+    KoDeviceRegistry::instance();
 }
 
 QList<KoToolManager::Button> KoToolManager::createToolList() const {
@@ -657,6 +663,18 @@ void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas) 
     }
 }
 
+void KoToolManager::injectDeviceEvent( KoDeviceEvent * event )
+{
+    if( d->canvasData->canvas->canvas() )
+    {
+        if( event->type() == KoDeviceEvent::ButtonPressed )
+            d->canvasData->activeTool->customPressEvent( event->pointerEvent() );
+        else if( event->type() == KoDeviceEvent::ButtonReleased )
+            d->canvasData->activeTool->customReleaseEvent( event->pointerEvent() );
+        else if( event->type() ==  KoDeviceEvent::PositionChanged )
+            d->canvasData->activeTool->customMoveEvent( event->pointerEvent() );
+    }
+}
 
 //static
 KoToolManager* KoToolManager::s_instance = 0;

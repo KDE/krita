@@ -76,6 +76,11 @@ void KoPanTool::activate(bool temporary) {
     useCursor(QCursor(Qt::OpenHandCursor), true);
 }
 
+void KoPanTool::customMoveEvent( KoPointerEvent * event ) {
+    m_controller->pan( QPoint( -event->x(), -event->y() ) );
+    event->accept();
+}
+
 QPointF KoPanTool::documentToViewport( const QPointF &p ) {
     QPointF viewportPoint = m_canvas->viewConverter()->documentToView( p );
     viewportPoint += m_canvas->documentOrigin();

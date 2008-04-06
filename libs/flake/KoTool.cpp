@@ -113,6 +113,21 @@ void KoTool::inputMethodEvent (QInputMethodEvent * event) {
     event->accept();
 }
 
+void KoTool::customPressEvent( KoPointerEvent * event )
+{
+    event->ignore();
+}
+
+void KoTool::customReleaseEvent( KoPointerEvent * event )
+{
+    event->ignore();
+}
+
+void KoTool::customMoveEvent( KoPointerEvent * event )
+{
+    event->ignore();
+}
+
 void KoTool::useCursor(QCursor cursor, bool force) {
     if(!force && cursor.shape() != Qt::BitmapCursor && cursor.shape() == d->previousCursor.shape())
         return;

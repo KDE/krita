@@ -53,6 +53,8 @@ public:
     virtual void paint(QPainter &, const KoViewConverter &) {}
     /// reimplemented from superclass
     virtual void activate(bool temporary = false);
+    /// reimplemented method
+    virtual void customMoveEvent( KoPointerEvent * event );
 
     /// set the canvasController this tool works on.
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }

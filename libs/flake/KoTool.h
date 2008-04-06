@@ -186,6 +186,26 @@ public:
      */
     virtual void inputMethodEvent (QInputMethodEvent * event);
 
+    /**
+     * Called when (one of) a custom device buttons is pressed.
+     * Implementors should call event->ignore() if they do not actually use the event.
+     * @param event state and reason of this custom device press
+     */
+    virtual void customPressEvent( KoPointerEvent * event );
+
+    /**
+     * Called when (one of) a custom device buttons is released.
+     * Implementors should call event->ignore() if they do not actually use the event.
+     * @param event state and reason of this custom device release
+     */
+    virtual void customReleaseEvent( KoPointerEvent * event );
+
+    /**
+     * Called when a custom device moved over the canvas.
+     * Implementors should call event->ignore() if they do not actually use the event.
+     * @param event state and reason of this custom device move
+     */
+    virtual void customMoveEvent( KoPointerEvent * event );
 
     /**
      * Set the identifier code from the KoToolFactory that created this tool.

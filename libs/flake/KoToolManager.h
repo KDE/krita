@@ -37,6 +37,7 @@ class KActionCollection;
 class KoShape;
 class KoToolProxy;
 class QAbstractButton;
+class KoDeviceEvent;
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -164,6 +165,10 @@ public:
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation( KoCanvasController * controller );
+
+    /// Injects an input event from a plugin based input device
+    void injectDeviceEvent( KoDeviceEvent * event );
+
 public slots:
     /**
      * Request switching tool

@@ -28,6 +28,7 @@
 class QTabletEvent;
 class QMouseEvent;
 class QWheelEvent;
+class KoDeviceEvent;
 
 #include "flake_export.h"
 
@@ -64,6 +65,8 @@ public:
      * @param pnt the zoomed point in the normal coordinate system.
      */
     KoPointerEvent( QWheelEvent *ev, const QPointF &pnt );
+
+    KoPointerEvent( KoDeviceEvent * ev, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0 );
 
     ~KoPointerEvent();
 
@@ -167,6 +170,24 @@ public:
     int delta() const;
 
     /**
+     * Returns the rotation around the X-axis. If the device does not support
+     * this, the value is always zero.
+     */
+    int rotationX() const;
+
+    /**
+     * Returns the rotation around the X-axis. If the device does not support
+     * this, the value is always zero.
+     */
+    int rotationY() const;
+
+    /**
+     * Returns the rotation around the Z-axis. If the device does not support
+     * this, the value is always zero.
+     */
+    int rotationZ() const;
+
+    /**
      * Returns the orientation of the delta.
      */
     Qt::Orientation orientation() const;
@@ -178,7 +199,6 @@ protected:
     friend class KoToolProxy;
     /// called by KoToolProxy to set which button was pressed.
     void setTabletButton(Qt::MouseButton button);
-
 private:
     // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
     QInputEvent * m_event;

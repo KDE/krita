@@ -1,0 +1,21 @@
+ideas from a discussion with wind-rider on #koffice:
+
+The space navigator is very good for just navigating around in your
+document (e.g. panning and zooming). But we also want to have support
+for it inside the tools so we can for instance scale, move and rotate shapes, 
+change the size of a brush, etc.
+So we have to decide based on the actual working context where to
+send the device events so that the right things happens.
+Thats means if the user is currently working on a specific aspect of
+the document, we should not pan/zoom the document by accident. This can
+be achieved by using a keyboard modifier or a device button to switch 
+between document and tool context.
+Another problem is that the space navigator reports both position and
+rotation changes in a single event. It would maybe be better to check the
+most significant part of the event and only use that for the action to be
+carried out. An example for tha twould probably be the default tool where 
+we can rotate, scale and move the currently selected shapes. We certainly
+don't want to rotate, scale and move at the same time. So we have to decide
+which action we want to carry out. Hopefully we can decide that based on 
+the position/rotation values. If that is not enough we have to use other
+means to switch between those actions.

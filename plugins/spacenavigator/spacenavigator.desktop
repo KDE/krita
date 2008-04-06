@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Spacenavigator Device
+X-KDE-ServiceTypes=KOffice/Device
+Type=Service
+X-KDE-Library=spacenavigator
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

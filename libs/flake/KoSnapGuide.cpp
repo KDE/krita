@@ -127,15 +127,13 @@ QRectF KoSnapGuide::boundingRect()
     QRectF rect;
 
     if( m_currentStrategy )
-        rect = m_currentStrategy->decoration().boundingRect();
+        rect = m_currentStrategy->decoration( *m_canvas->viewConverter() ).boundingRect();
 
     return rect.adjusted( -2, -2, 2, 2 );
 }
 
 void KoSnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
 {
-    Q_UNUSED(converter);
-
     if( ! m_currentStrategy || ! m_active )
         return;
 
@@ -143,7 +141,7 @@ void KoSnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
     pen.setStyle( Qt::DotLine );
     painter.setPen( pen );
     painter.setBrush( Qt::NoBrush );
-    painter.drawPath( m_currentStrategy->decoration() );
+    painter.drawPath( m_currentStrategy->decoration( converter ) );
 }
 
 KoCanvasBase * KoSnapGuide::canvas() const

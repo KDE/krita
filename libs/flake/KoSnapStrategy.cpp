@@ -22,6 +22,9 @@
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
 #include <KoCanvasBase.h>
+#include <KoViewConverter.h>
+
+#include <QtGui/QPainter>
 
 //#include <kdebug.h>
 #include <math.h>
@@ -30,16 +33,6 @@
 KoSnapStrategy::KoSnapStrategy( KoSnapStrategy::SnapType type )
     : m_snapType(type)
 {
-}
-
-QPainterPath KoSnapStrategy::decoration() const
-{
-    return m_decoration;
-}
-
-void KoSnapStrategy::setDecoration( const QPainterPath &decoration )
-{
-    m_decoration = decoration;
 }
 
 QPointF KoSnapStrategy::snappedPosition() const
@@ -103,24 +96,37 @@ bool OrthogonalSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * p
     if( minVertDist < HUGE_VAL )
         snappedPoint.setY( vertSnap.y() );
 
-    QPainterPath decoration;
-
     if( minHorzDist < HUGE_VAL )
-    {
-        decoration.moveTo( horzSnap );
-        decoration.lineTo( snappedPoint );
-    }
+        m_hLine = QLineF( horzSnap, snappedPoint );
+    else
+        m_hLine = QLineF();
 
     if( minVertDist < HUGE_VAL )
-    {
-        decoration.moveTo( vertSnap );
-        decoration.lineTo( snappedPoint );
-    }
+        m_vLine = QLineF( vertSnap, snappedPoint );
+    else
+        m_vLine = QLineF();
 
-    setDecoration( decoration );
     setSnappedPosition( snappedPoint );
 
     return (minHorzDist < HUGE_VAL || minVertDist < HUGE_VAL);
+}
+
+QPainterPath OrthogonalSnapStrategy::decoration( const KoViewConverter &converter ) const
+{
+    Q_UNUSED( converter );
+
+    QPainterPath decoration;
+    if( ! m_hLine.isNull() )
+    {
+        decoration.moveTo( m_hLine.p1() );
+        decoration.lineTo( m_hLine.p2() );
+    }
+    if( ! m_vLine.isNull() )
+    {
+        decoration.moveTo( m_vLine.p1() );
+        decoration.lineTo( m_vLine.p2() );
+    }
+    return decoration;
 }
 
 NodeSnapStrategy::NodeSnapStrategy()
@@ -149,19 +155,18 @@ bool NodeSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, 
         }
     }
 
-    QPainterPath decoration;
-
-    if( minDistance < HUGE_VAL )
-    {
-        QRectF ellipse( -10, -10, 10, 10 );
-        ellipse.moveCenter( snappedPoint );
-        decoration.addEllipse( ellipse );
-    }
-
-    setDecoration( decoration );
     setSnappedPosition( snappedPoint );
 
     return (minDistance < HUGE_VAL);
+}
+
+QPainterPath NodeSnapStrategy::decoration( const KoViewConverter &converter ) const
+{
+    QRectF unzoomedRect = converter.viewToDocument( QRectF( 0, 0, 11, 11 ) );
+    unzoomedRect.moveCenter( snappedPosition() );
+    QPainterPath decoration;
+    decoration.addEllipse( unzoomedRect );
+    return decoration;
 }
 
 ExtensionSnapStrategy::ExtensionSnapStrategy()
@@ -224,18 +229,27 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
         }
     }
 
-    QPainterPath decoration;
-
     if( minDistance < HUGE_VAL )
-    {
-        decoration.moveTo( startPoint );
-        decoration.lineTo( snappedPoint );
-    }
+        m_line = QLineF( startPoint, snappedPoint );
+    else
+        m_line = QLineF();
 
-    setDecoration( decoration );
     setSnappedPosition( snappedPoint );
 
     return (minDistance < HUGE_VAL);
+}
+
+QPainterPath ExtensionSnapStrategy::decoration( const KoViewConverter &converter ) const
+{
+    Q_UNUSED( converter );
+
+    QPainterPath decoration;
+    if( ! m_line.isNull() )
+    {
+        decoration.moveTo( m_line.p1() );
+        decoration.lineTo( m_line.p2() );
+    }
+    return decoration;
 }
 
 bool ExtensionSnapStrategy::snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix )
@@ -283,7 +297,9 @@ QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QM
         else
         {
             KoPathPoint * next = path->pointByIndex( KoPathPointIndex( index.first, index.second+1 ) );
-            if( next->activeControlPoint1() )
+            if( ! next )
+                return QPointF();
+            else if( next->activeControlPoint1() )
                 return matrix.map(point->point()) - matrix.map(next->controlPoint1());
             else
                 return matrix.map(point->point()) - matrix.map(next->point());
@@ -298,7 +314,9 @@ QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QM
         else
         {
             KoPathPoint * prev = path->pointByIndex( KoPathPointIndex( index.first, index.second-1 ) );
-            if( prev->activeControlPoint2() )
+            if( ! prev )
+                return QPointF();
+            else if( prev->activeControlPoint2() )
                 return matrix.map(point->point()) - matrix.map(prev->controlPoint2());
             else
                 return matrix.map(point->point()) - matrix.map(prev->point());
@@ -345,21 +363,18 @@ bool IntersectionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy *
         }
     }
 
-    QPainterPath decoration;
-
-    //kDebug() << "min distance =" << minDistance;
-
-    if( minDistance < HUGE_VAL )
-    {
-        QRectF rectangle( -10, -10, 10, 10 );
-        rectangle.moveCenter( snappedPoint );
-        decoration.addRect( rectangle );
-    }
-
-    setDecoration( decoration );
     setSnappedPosition( snappedPoint );
 
     return (minDistance < HUGE_VAL);
+}
+
+QPainterPath IntersectionSnapStrategy::decoration( const KoViewConverter &converter ) const
+{
+    QRectF unzoomedRect = converter.viewToDocument( QRectF( 0, 0, 11, 11 ) );
+    unzoomedRect.moveCenter( snappedPosition() );
+    QPainterPath decoration;
+    decoration.addRect( unzoomedRect );
+    return decoration;
 }
 
 GridSnapStrategy::GridSnapStrategy()
@@ -403,7 +418,6 @@ bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, 
     }
 
     QPointF snappedPoint = mousePosition;
-    QPainterPath decoration;
 
     qreal distance = distToCol*distToCol+distToRow*distToRow;
     qreal maxDistance = maxSnapDistance*maxSnapDistance;
@@ -411,14 +425,20 @@ bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, 
     if( distance < maxDistance )
     {
         snappedPoint = QPointF( col * gridX, row * gridY );
-        decoration.moveTo( snappedPoint-QPointF(10,0) );
-        decoration.lineTo( snappedPoint+QPointF(10,0) );
-        decoration.moveTo( snappedPoint-QPointF(0,10) );
-        decoration.lineTo( snappedPoint+QPointF(0,10) );
     }
 
-    setDecoration( decoration );
     setSnappedPosition( snappedPoint );
 
     return (distance<maxDistance);
+}
+
+QPainterPath GridSnapStrategy::decoration( const KoViewConverter &converter ) const
+{
+    QSizeF unzoomedSize = converter.viewToDocument( QSizeF( 5, 5 ) );
+    QPainterPath decoration;
+    decoration.moveTo( snappedPosition()-QPointF(unzoomedSize.width(),0) );
+    decoration.lineTo( snappedPosition()+QPointF(unzoomedSize.width(),0) );
+    decoration.moveTo( snappedPosition()-QPointF(0,unzoomedSize.height()) );
+    decoration.lineTo( snappedPosition()+QPointF(0,unzoomedSize.height()) );
+    return decoration;
 }

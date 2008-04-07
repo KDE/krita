@@ -25,6 +25,7 @@
 
 class KoPathPoint;
 class KoSnapProxy;
+class KoViewConverter;
 
 class KoSnapStrategy
 {
@@ -43,9 +44,6 @@ public:
 
     virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance ) = 0;
 
-    /// returns the current snap strategy decoration
-    QPainterPath decoration() const;
-
     /// returns the strategies type
     SnapType type() const;
 
@@ -54,15 +52,14 @@ public:
     /// returns the snapped position form the last call to snapToPoints
     QPointF snappedPosition() const;
 
-protected:
-    /// sets the current snap strategy decoration
-    void setDecoration( const QPainterPath &decoration );
+    /// returns the current snap strategy decoration
+    virtual QPainterPath decoration( const KoViewConverter &converter ) const = 0;
 
+protected:
     /// sets the current snapped position
     void setSnappedPosition( const QPointF &position );
 
 private:
-    QPainterPath m_decoration;
     SnapType m_snapType;
     QPointF m_snappedPosition;
 };
@@ -73,6 +70,10 @@ class OrthogonalSnapStrategy : public KoSnapStrategy
 public:
     OrthogonalSnapStrategy();
     virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual QPainterPath decoration( const KoViewConverter &converter ) const;
+private:
+    QLineF m_hLine;
+    QLineF m_vLine;
 };
 
 /// snaps to path points
@@ -81,6 +82,7 @@ class NodeSnapStrategy : public KoSnapStrategy
 public:
     NodeSnapStrategy();
     virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual QPainterPath decoration( const KoViewConverter &converter ) const;
 };
 
 /// snaps extension lines of path shapes
@@ -89,10 +91,12 @@ class ExtensionSnapStrategy : public KoSnapStrategy
 public:
     ExtensionSnapStrategy();
     virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual QPainterPath decoration( const KoViewConverter &converter ) const;
 private:
     double project( const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point );
     QPointF extensionDirection( KoPathPoint * point, const QMatrix &matrix );
     bool snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix );
+    QLineF m_line;
 };
 
 /// snaps to intersections of shapes
@@ -101,6 +105,7 @@ class IntersectionSnapStrategy : public KoSnapStrategy
 public:
     IntersectionSnapStrategy();
     virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual QPainterPath decoration( const KoViewConverter &converter ) const;
 };
 
 /// snaps to the canvas grid
@@ -109,6 +114,7 @@ class GridSnapStrategy : public KoSnapStrategy
 public:
     GridSnapStrategy();
     virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual QPainterPath decoration( const KoViewConverter &converter ) const;
 };
 
 #endif // KOSNAPSTRATEGY_H

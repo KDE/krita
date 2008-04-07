@@ -463,8 +463,13 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
         // so split the curve and calculate intersections
         // with the remaining parts
         QPair<KoPathSegment,KoPathSegment> parts = splitAt( 0.5 );
-        isects += segment.intersections( parts.first );
-        isects += segment.intersections( parts.second );
+        if( chordLength() < 1e-5 )
+            isects += parts.first.second()->point();
+        else
+        {
+            isects += segment.intersections( parts.first );
+            isects += segment.intersections( parts.second );
+        }
     }
     else if( qAbs(tmin - tmax) < 1e-5 )
     {

@@ -58,6 +58,7 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
     KoGenStyle pageMaster( KoGenStyle::StyleMaster );
     pageMaster.addAttribute( "style:page-layout-name", pageLayoutName );
     pageMaster.addAttribute( "style:display-name", name() );
+    pageMaster.addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
 
     KoXmlWriter &savedWriter = paContext.xmlWriter();
 

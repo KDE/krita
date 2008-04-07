@@ -35,6 +35,7 @@
 #include <KoGenStyles.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
+#include <KoShapeStyleWriter.h>
 #include <KoXmlWriter.h>
 #include <KoViewConverter.h>
 
@@ -113,7 +114,8 @@ QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 
 void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
 {
-    KoOdfGraphicStyles::saveOasisFillStyle( style, paContext.mainStyles(), background() );
+    KoShapeStyleWriter styleWriter( paContext );
+    styleWriter.saveFillStyle( style, background() );
 }
 
 bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext & loadingContext )

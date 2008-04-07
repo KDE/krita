@@ -105,3 +105,10 @@ bool KoPAPage::displayMasterShapes()
 {
     return m_pageProperties & DisplayMasterShapes;
 }
+
+void KoPAPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
+{
+    if ( ( m_pageProperties & UseMasterBackground ) == 0 ) {
+        KoPAPageBase::saveOdfPageStyleData( style, paContext );
+    }
+}

@@ -639,9 +639,10 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
             }
             else {
                 // Else, let QPainter do the scaling, like we did in 1.6
-                dbgRender << "1.6 way" << endl;
+                dbgRender << "1.6 way " << rcTopLeftUnscaled << " " << scaleX << " " << scaleY << " " << rcFromAligned.topLeft() << " " << alignedImageRect << endl;
                 gc.save();
                 gc.scale(scaleX, scaleY);
+                gc.setCompositionMode( QPainter::CompositionMode_SourceOver ); // HACK since 4.4, the rounding when drawing an image in nearest neighborg mode has changed, and without this tiny lines appear on the canvas when scrolling on a non multiple of 2 scale (superior to 200%)
                 gc.drawImage( rcTopLeftUnscaled, img);
                 gc.restore();
             }

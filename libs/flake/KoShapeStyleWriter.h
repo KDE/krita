@@ -43,6 +43,17 @@ public:
      */
     QString addFillStyle( KoGenStyle &style, const QBrush &brush );
 
+    /**
+     * Add the fill style to the current style
+     *
+     * This is nearly the same as addFillStyle but it does not add the generated style 
+     * to the styles collection
+     *
+     * @param style the style to write to
+     * @param brush the fill style to save
+     */
+    void saveFillStyle( KoGenStyle &style, const QBrush &fill );
+
 private:
     /// Saves pattern style
     QString savePatternStyle( KoGenStyle &style, const QBrush &brush );

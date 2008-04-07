@@ -34,6 +34,17 @@ KoShapeStyleWriter::KoShapeStyleWriter( KoShapeSavingContext &context )
 
 QString KoShapeStyleWriter::addFillStyle( KoGenStyle &style, const QBrush &fill )
 {
+    saveFillStyle( style, fill );
+
+    if ( m_context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
+        style.setAutoStyleInStylesDotXml( true );
+    }
+
+    return m_context.mainStyles().lookup( style, m_context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
+}
+
+void KoShapeStyleWriter::saveFillStyle( KoGenStyle &style, const QBrush &fill )
+{
     switch ( fill.style() )
     {
         case Qt::NoBrush:
@@ -49,12 +60,6 @@ QString KoShapeStyleWriter::addFillStyle( KoGenStyle &style, const QBrush &fill 
             KoOdfGraphicStyles::saveOasisFillStyle( style, m_context.mainStyles(), fill );
             break;
     }
-
-    if ( m_context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
-        style.setAutoStyleInStylesDotXml( true );
-    }
-
-    return m_context.mainStyles().lookup( style, m_context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }
 
 QString KoShapeStyleWriter::savePatternStyle( KoGenStyle &style, const QBrush &brush )

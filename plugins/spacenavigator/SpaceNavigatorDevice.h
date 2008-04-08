@@ -26,6 +26,7 @@ class SpaceNavigatorPollingThread;
 
 class SpaceNavigatorDevice : public KoDevice
 {
+    Q_OBJECT
 public:
     SpaceNavigatorDevice( QObject * parent );
     virtual ~SpaceNavigatorDevice();
@@ -34,6 +35,10 @@ public:
     virtual bool start();
     /// reimplemented from KoDevice
     virtual bool stop();
+private slots:
+    void slotMoveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons );
+    void slotButtonEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons, Qt::MouseButton, int type );
+
 private:
     SpaceNavigatorPollingThread * m_thread;
 };

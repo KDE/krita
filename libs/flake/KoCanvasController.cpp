@@ -357,20 +357,20 @@ void KoCanvasController::recenterPreferred()
 
 void KoCanvasController::zoomIn(const QPoint &center)
 {
-    m_d->preferredCenterFractionX = 1.0 * center.x() / m_d->documentSize.width();
-    m_d->preferredCenterFractionY = 1.0 * center.y() / m_d->documentSize.height();
-
-    emit zoomBy(sqrt(2.0));
-    recenterPreferred();
-    m_d->canvas->canvasWidget()->update();
+    zoomBy(center,sqrt(2.0));
 }
 
 void KoCanvasController::zoomOut(const QPoint &center)
 {
+    zoomBy(center,sqrt(0.5));
+}
+
+void KoCanvasController::zoomBy(const QPoint &center, qreal zoom )
+{
     m_d->preferredCenterFractionX = 1.0 * center.x() / m_d->documentSize.width();
     m_d->preferredCenterFractionY = 1.0 * center.y() / m_d->documentSize.height();
 
-    emit zoomBy(sqrt(0.5));
+    emit zoomBy( zoom );
     recenterPreferred();
     m_d->canvas->canvasWidget()->update();
 }

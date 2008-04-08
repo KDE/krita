@@ -188,6 +188,17 @@ public:
     void zoomOut(const QPoint &center);
 
     /**
+     * @brief zooms around the center.
+     *
+     * The center must be specified in pixel coordinates. The scrollbar positions
+     * are changed so that the center becomes center if possible.
+     *
+     * @param center the position to zoom around
+     * @param zoom the zoom to apply
+     */
+    void zoomBy(const QPoint &center, qreal zoom );
+
+    /**
      * @brief zoom so that rect is exactly visible (as close as possible)
      *
      * The rect must be specified in document coordinates. The scrollbar positions

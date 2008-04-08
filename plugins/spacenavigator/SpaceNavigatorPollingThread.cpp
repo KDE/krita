@@ -18,8 +18,7 @@
  */
 
 #include "SpaceNavigatorPollingThread.h"
-#include "SpaceNavigatorEvent.h"
-#include <KoToolManager.h>
+#include <KoDeviceEvent.h>
 #include <KDebug>
 #include <spnav.h>
 
@@ -45,6 +44,7 @@ void SpaceNavigatorPollingThread::run()
     while( ! m_stopped )
     {
         spnav_event event;
+
         if( spnav_poll_event( &event ) )
         {
             if( event.type == SPNAV_EVENT_MOTION )
@@ -68,12 +68,7 @@ void SpaceNavigatorPollingThread::run()
                 currRX = event.motion.rx;
                 currRY = event.motion.rz;
                 currRZ = event.motion.ry;
-                SpaceNavigatorEvent e( KoDeviceEvent::PositionChanged );
-                e.setPosition( currX, currY, currZ );
-                e.setRotation( currRX, currRY, currRZ );
-                e.setButton( Qt::NoButton );
-                e.setButtons( buttons );
-                KoToolManager::instance()->injectDeviceEvent( &e );
+                emit moveEvent( currX, currY, currZ, currRX, currRY, currRZ, buttons );
             }
             else
             {
@@ -92,12 +87,7 @@ void SpaceNavigatorPollingThread::run()
                     buttons &= ~button;
                     type = KoDeviceEvent::ButtonReleased;
                 }
-                SpaceNavigatorEvent e( type );
-                e.setPosition( currX, currY, currZ );
-                e.setRotation( currRX, currRY, currRZ );
-                e.setButton( button );
-                e.setButtons( buttons );
-                KoToolManager::instance()->injectDeviceEvent( &e );
+                emit buttonEvent( currX, currY, currZ, currRX, currRY, currRZ, buttons, button, type );
             }
             spnav_remove_events( event.type );
         }

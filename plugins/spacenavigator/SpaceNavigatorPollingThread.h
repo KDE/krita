@@ -24,12 +24,17 @@
 
 class SpaceNavigatorPollingThread : public QThread
 {
+    Q_OBJECT
 public:
     SpaceNavigatorPollingThread( QObject * parent );
     ~SpaceNavigatorPollingThread();
 
     /// Stops the thread
     void stop();
+
+signals:
+    void moveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons );
+    void buttonEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons, Qt::MouseButton, int type );
 
 protected:
 

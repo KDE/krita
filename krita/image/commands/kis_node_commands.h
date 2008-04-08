@@ -86,7 +86,6 @@ public:
     {
         m_config->fromLegacyXML(m_after);
         m_node->setGenerator(m_config);
-        m_node->update();
         m_node->setDirty();
     }
 
@@ -94,7 +93,6 @@ public:
     {
         m_config->fromLegacyXML(m_before);
         m_node->setGenerator(m_config);
-        m_node->update();
         m_node->setDirty();
     }
 

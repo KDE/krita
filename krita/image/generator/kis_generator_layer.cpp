@@ -63,7 +63,6 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageSP img, const QString &name, KisFil
     m_d->filterConfig = kfc;
     setSelection( selection );
 
-    m_d->paintDevice = new KisPaintDevice( img->colorSpace(), name.toLatin1());
     m_d->showSelection = true;
 
     update();
@@ -260,6 +259,11 @@ void KisGeneratorLayer::update()
 
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value( m_d->filterConfig->name() );
     if (!f) return;
+
+    if (f->colorSpace())
+        m_d->paintDevice = new KisPaintDevice( f->colorSpace(), name().toLatin1());
+    else
+        m_d->paintDevice = new KisPaintDevice( image()->colorSpace(), name().toLatin1());
 
     QRect tmpRc = exactBounds();
     

@@ -92,7 +92,7 @@ class KoDocumentSectionModel: public QAbstractItemModel
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = 99, 
         /// For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension is larger than (int) value - (int) BeginThumbnailRole. This is a hack to work around the fact that Interview doesn't have a nice way to request thumbnails of arbitrary size.
-        BeginThumbnailRole,
+        BeginThumbnailRole
         
     };
 

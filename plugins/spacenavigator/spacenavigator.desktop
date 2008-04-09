@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Spacenavigator Device
+Name[pt]=Dispositivo do Spacenavigator
+Name[pt_BR]=Dispositivo do Spacenavigator
 X-KDE-ServiceTypes=KOffice/Device
 Type=Service
 X-KDE-Library=spacenavigator

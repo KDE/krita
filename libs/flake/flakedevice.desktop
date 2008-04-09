@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=Flake device definition
+Name[pt]=Definição de dispositivo do Flake
+Name[pt_BR]=Definição de dispositivo do Flake
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Device
 Comment=Definition of flake devices
+Comment[pt]=Definição de dispositivos do Flake
+Comment[pt_BR]=Definição de dispositivos do Flake
 [PropertyDef::X-Flake-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

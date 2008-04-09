@@ -66,7 +66,7 @@ namespace {
         typedef KisSelectedTransaction KisTool;
 
     public:
-        TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
+        TransformCmd(KisToolTransform *tool, KisLayerSP layer, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
         virtual ~TransformCmd();
 
     public:
@@ -86,8 +86,8 @@ namespace {
         QPoint m_originalBottomRight;
     };
 
-    TransformCmd::TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight) :
-        KisTool(i18n("Transform"), device)
+    TransformCmd::TransformCmd(KisToolTransform *tool, KisLayerSP layer, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight) :
+        KisTool(i18n("Transform"), layer)
         , m_scaleX(scaleX)
         , m_scaleY(scaleY)
         , m_translate(translate)
@@ -663,7 +663,7 @@ void KisToolTransform::transform()
     //KoUpdater *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
-    TransformCmd * transaction = new TransformCmd(this, currentLayer()->paintDevice(), m_scaleX,
+    TransformCmd * transaction = new TransformCmd(this, currentLayer(), m_scaleX,
                                                   m_scaleY, m_translate, m_a, m_origSelection, m_originalTopLeft, m_originalBottomRight);
 
     // Copy the original state back.

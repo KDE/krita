@@ -183,7 +183,8 @@ quint32 matchColors(const QColor & c, enumAction action)
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    if (m_view->image()->undo()) m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
+    // XXX_SELECTION
+    // if (m_view->image()->undo()) m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
 
     KisSelectionSP selection = m_view->selection();
 

@@ -621,6 +621,7 @@ void KisView2::connectCurrentImage()
         }
         connect(img.data(), SIGNAL( sigSizeChanged( qint32, qint32 ) ), m_d->resourceProvider, SLOT( slotSetImageSize( qint32, qint32 ) ) );
         connect(img.data(), SIGNAL( sigSizeChanged( qint32, qint32 ) ), this, SLOT( slotSetImageSize( qint32, qint32 ) ) );
+        connect(img->undoAdapter(), SIGNAL( selectionChanged() ), selectionManager(), SLOT( selectionChanged() ) );
 
 #if 0 // XXX_NODE
         connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));

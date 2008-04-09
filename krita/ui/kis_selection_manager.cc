@@ -390,8 +390,8 @@ void KisSelectionManager::cut()
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = m_view->activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = m_view->activeLayer();
+    if (!layer) return;
 
     if ( !m_view->selection() ) return;
 
@@ -400,7 +400,7 @@ void KisSelectionManager::cut()
     KisSelectedTransaction *t = 0;
 
     if (img->undo()) {
-        t = new KisSelectedTransaction(i18n("Cut"), dev);
+        t = new KisSelectedTransaction(i18n("Cut"), layer);
         Q_CHECK_PTR(t);
     }
 #if 0 // XXX_SELECTION
@@ -551,23 +551,23 @@ void KisSelectionManager::selectAll()
 {
     KisImageSP img = m_view->image();
     if (!img) return;
-#if 0
-    KisSelectedTransaction * t = 0;
 
-    if (img->undo()) t = new KisSelectedTransaction(i18n("Select All"), dev);
+    KisLayerSP layer = m_view->activeLayer();
+    if(!layer) return;
+
+    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Select All"), layer);
     Q_CHECK_PTR(t);
-#endif
 
     KisSelectionSP selection = m_view->selection();
     if (!selection) {
         selection = new KisSelection();
         img->setGlobalSelection(selection);
     }
+
     selection->getOrCreatePixelSelection()->select(img->bounds());
-#if 0
-    if (img->undo())
-        img->undoAdapter()->addCommand(t);
-#endif        
+
+    m_view->selectionManager()->selectionChanged();
+    m_view->document()->addCommand(t);
 }
 
 void KisSelectionManager::deselect()
@@ -628,7 +628,6 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
 
     KisPaintDeviceSP filled = new KisPaintDevice(dev->colorSpace());
 
-    // XXX_SELECTION: pass the selection to the right painter?
     KisFillPainter painter(filled);
 
     if (fillWithPattern) {
@@ -640,16 +639,14 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
 
     painter.end();
 
-    KisPainter painter2(dev);
+    KisPainter painter2(dev, selection);
 
     if (img->undo()) painter2.beginTransaction(transactionText);
     painter2.bltSelection(0, 0, COMPOSITE_OVER, filled, OPACITY_OPAQUE,
                           0, 0, img->width(), img->height());
 
-// XXX_SELECTION
-#if 0
     dev->setDirty();
-#endif
+
     if (img->undo()) {
         img->undoAdapter()->addCommand(painter2.endTransaction());
     }
@@ -701,24 +698,19 @@ void KisSelectionManager::invert()
     KisSelectionSP selection = m_view->selection();
     if ( !selection ) return;
 
+    KisLayerSP layer = m_view->activeLayer();
+    if(!layer) return;
+
     KisPixelSelectionSP s = selection->getOrCreatePixelSelection();
-#if 0 // XXX_SELECTION
-    KisSelectedTransaction * t = 0;
-    if (img->undo())
-    {
-        t = new KisSelectedTransaction(i18n("Invert"), dev);
-        Q_CHECK_PTR(t);
-    }
+
+    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Invert"), layer);
+    Q_CHECK_PTR(t);
 
     s->invert();
+    s->setDirty(img->bounds());
 
-
-    dev->setDirty(img->bounds());
-    if (t) {
-        img->undoAdapter()->addCommand(t);
-    }
-#endif
-
+    m_view->selectionManager()->selectionChanged();
+    m_view->document()->addCommand(t);
 }
 
 void KisSelectionManager::copySelectionToNewLayer()

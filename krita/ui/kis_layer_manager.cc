@@ -802,17 +802,17 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
 {
     if (!m_view->image()) return;
 
-    KisPaintDeviceSP dev = activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
 
     KisSelectedTransaction * t = 0;
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisSelectedTransaction(i18n("Scale Layer"), dev);
+        t = new KisSelectedTransaction(i18n("Scale Layer"), layer);
         Q_CHECK_PTR(t);
     }
 
     // XXX_PROGRESS: pass KoUpdater
-    KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, 0, filterStrategy);
+    KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0.0, 0, 0, 0, filterStrategy);
     worker.run();
 
     if (t) m_view->undoAdapter()->addCommand(t);
@@ -825,12 +825,12 @@ void KisLayerManager::rotateLayer(double radians)
 {
     if (!m_view->image()) return;
 
-    KisPaintDeviceSP dev = activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
 
     KisSelectedTransaction * t = 0;
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisSelectedTransaction(i18n("Rotate Layer"), dev);
+        t = new KisSelectedTransaction(i18n("Rotate Layer"), layer);
         Q_CHECK_PTR(t);
     }
 
@@ -840,12 +840,12 @@ void KisLayerManager::rotateLayer(double radians)
     if(KisSelectionSP selection = activeLayer()->selection())
         r = selection->selectedExactRect();
     else
-        r = dev->exactBounds();
+        r = layer->exactBounds();
     double cx = r.x()+r.width()/2.0;
     double cy = r.y()+r.height()/2.0;
     qint32 tx = qint32(cx*cos(radians) - cy*sin(radians) - cx + 0.5);
     qint32 ty = qint32(cy*cos(radians) + cx*sin(radians) - cy + 0.5);
-    KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
+    KisTransformWorker tw(layer->paintDevice(), 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
     tw.run();
 
     if (t) m_view->undoAdapter()->addCommand(t);

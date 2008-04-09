@@ -38,7 +38,7 @@
 class KRITAIMAGE_EXPORT KisSelectedTransaction : public KisTransaction {
 
 public:
-    KisSelectedTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0);
+    KisSelectedTransaction(const QString& name,  KisLayerSP layer, QUndoCommand* parent = 0);
     virtual ~KisSelectedTransaction();
 
 public:
@@ -47,7 +47,7 @@ public:
     void undoNoUpdate();
 
 private:
-    KisPaintDeviceSP m_device;
+    KisLayerSP m_layer;
     KisTransaction *m_selTransaction;
     bool m_hadSelection;
     bool m_redoHasSelection;

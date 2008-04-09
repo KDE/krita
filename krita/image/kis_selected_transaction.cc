@@ -23,29 +23,29 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_undo_adapter.h"
 
-KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent) :
-    KisTransaction(name, device, parent),
-    m_device(device),
+KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisLayerSP layer, QUndoCommand* parent) :
+    KisTransaction(name, layer->paintDevice(), parent),
+    m_layer(layer),
     m_hadSelection(false /*device->hasSelection()*/)
 {
-#if 0 // XXX_SELECTION
-    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(device->selection()->getOrCreatePixelSelection().data()));
-    if(! m_hadSelection) {
-        m_device->deselect(); // let us not be the cause of select
-    }
+    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(layer->selection()->getOrCreatePixelSelection().data()));
+//     if(! m_hadSelection) {
+//         m_device->deselect(); // let us not be the cause of select
+//     }
     m_firstRedo = true;
-#endif
 }
 
 KisSelectedTransaction::~KisSelectedTransaction()
 {
-    //delete m_selTransaction;
+    delete m_selTransaction;
 }
 
 void KisSelectedTransaction::redo()
 {
-#if 0
     //QUndoStack calls redo(), so the first call needs to be blocked
     if(m_firstRedo)
     {
@@ -56,43 +56,38 @@ void KisSelectedTransaction::redo()
 
     KisTransaction::redo();
     m_selTransaction->redo();
-    if(m_redoHasSelection)
-        m_device->selection();
-    else
-        m_device->deselect();
+//     if(m_redoHasSelection)
+//         m_device->selection();
+//     else
+//         m_device->deselect();
 
-    m_device->setDirty(m_device->image()->bounds());
-    m_device->emitSelectionChanged();
-#endif
+     m_layer->setDirty(m_layer->image()->bounds());
+     m_layer->image()->undoAdapter()->emitSelectionChanged();
 }
 
 void KisSelectedTransaction::undo()
 {
-#if 0
-    m_redoHasSelection = m_device->hasSelection();
+//     m_redoHasSelection = m_device->hasSelection();
 
     KisTransaction::undo();
     m_selTransaction->undo();
-    if(m_hadSelection)
-        m_device->selection();
-    else
-        m_device->deselect();
-
-    m_device->setDirty(m_device->image()->bounds());
-    m_device->emitSelectionChanged();
-#endif
+//     if(m_hadSelection)
+//         m_device->selection();
+//     else
+//         m_device->deselect();
+// 
+    m_layer->setDirty(m_layer->image()->bounds());
+    m_layer->image()->undoAdapter()->emitSelectionChanged();
 }
 
 void KisSelectedTransaction::undoNoUpdate()
 {
-#if 0
-    m_redoHasSelection = m_device->hasSelection();
-
-    KisTransaction::undoNoUpdate();
-    m_selTransaction->undoNoUpdate();
-    if(m_hadSelection)
-        m_device->selection();
-    else
-        m_device->deselect();
-#endif
+//     m_redoHasSelection = m_device->hasSelection();
+// 
+//     KisTransaction::undoNoUpdate();
+//     m_selTransaction->undoNoUpdate();
+//     if(m_hadSelection)
+//         m_device->selection();
+//     else
+//         m_device->deselect();
 }

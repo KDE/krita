@@ -21,6 +21,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QObject>
 
 #include <krita_export.h>
 
@@ -43,7 +44,9 @@ public:
     virtual void notifyCommandExecuted(QUndoCommand * cmd) = 0;
 };
 
-class KRITAIMAGE_EXPORT KisUndoAdapter {
+class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject {
+Q_OBJECT
+
 public:
     KisUndoAdapter(KoDocument* doc);
     virtual ~KisUndoAdapter();
@@ -60,6 +63,10 @@ public:
     virtual bool undo() const;
     virtual void beginMacro(const QString& macroName);
     virtual void endMacro();
+    void emitSelectionChanged();
+
+signals:
+    void selectionChanged();
 
 private:
     KisUndoAdapter(const KisUndoAdapter&);

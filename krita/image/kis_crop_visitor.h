@@ -105,7 +105,7 @@ private:
 
         KisSelectedTransaction * t = 0;
         if (undoAdapter && undoAdapter->undo())
-            t = new KisSelectedTransaction(i18n("Crop"), dev);
+            t = new KisSelectedTransaction(i18n("Crop"), layer);
 
         dev->crop(m_rect);
 

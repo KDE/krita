@@ -80,4 +80,11 @@ void KisUndoAdapter::endMacro()
     m_doc->endMacro();
 }
 
+void KisUndoAdapter::emitSelectionChanged()
+{
+    emit selectionChanged();
+}
+
+#include "kis_undo_adapter.moc"
+
 

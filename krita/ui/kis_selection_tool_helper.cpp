@@ -30,6 +30,7 @@
 #include "kis_canvas2.h"
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
+#include "kis_selected_transaction.h"
 
 KisSelectionToolHelper::KisSelectionToolHelper( KisCanvas2* canvas, KisLayerSP layer, const QString& name)
     : m_canvas(canvas)
@@ -50,9 +51,8 @@ QUndoCommand* KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP s
     if(!hasSelection)
         m_image->setGlobalSelection();
 
-#if 0 // XXX_SELECTION
-                KisSelectedTransaction *t = new KisSelectedTransaction(m_name, dev);
-#endif
+    KisSelectedTransaction *t = new KisSelectedTransaction(m_name, m_layer);
+
     KisPixelSelectionSP getOrCreatePixelSelection = m_layer->selection()->getOrCreatePixelSelection();
 
     if(! hasSelection || action == SELECTION_REPLACE)
@@ -73,7 +73,7 @@ QUndoCommand* KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP s
         m_layer->selection()->updateProjection(m_image->bounds());
         m_canvas->view()->selectionManager()->selectionChanged();
     }
-    return new QUndoCommand();
+    return t;
 }
 
 QUndoCommand* KisSelectionToolHelper::addSelectionShape(KoShape* shape)

@@ -11,3 +11,9 @@ install(FILES
     srgbaf.ctlp
     scrgbaf.ctlp
     DESTINATION ${DATA_INSTALL_DIR}/pigmentcms/ctlprofiles)
+
+########### install files ###############
+
+install( FILES  kritargbfloathdrplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
+

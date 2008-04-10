@@ -109,7 +109,7 @@
             <property name="supportsPainting">true</property>
         </script>
     </collection>
-    <collection name="dockers" text="Dockers" comment="Dockers for Krita" enabled="false">
+    <collection name="dockers" text="Dockers" comment="Dockers for Krita" enabled="true">
         <script
             name="Palette Docker"
             text="Palette Docker"
@@ -117,6 +117,14 @@
             interpreter="ruby"
             file="dockers/palettedocker.rb">
             <property name="defaultDockPosition">Qt::DockBottom</property>
+        </script>
+        <script
+            name="Flipbook Docker"
+            text="Flipbook Docker"
+            comment="Show the flipbook docker"
+            interpreter="ruby"
+            file="dockers/flipbookdocker.rb">
+            <property name="defaultDockPosition">Qt::DockRight</property>
         </script>
     </collection>
 </KrossScripting>

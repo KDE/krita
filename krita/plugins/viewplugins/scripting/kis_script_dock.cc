@@ -28,34 +28,20 @@
 #include <QApplication>
 #include <QEventLoop>
 
-Kikoo::Kikoo()
-{
-    connect(&timer, SIGNAL(timeout()), SLOT(timeout()));
-    timer.start(100);
-}
-
-void Kikoo::timeout()
-{
-    while(true)
-    {
-        dbgKrita << "C++ Event Loop";
-        QApplication::instance()->processEvents(QEventLoop::AllEvents | QEventLoop::WaitForMoreEvents | QEventLoop::DeferredDeletion);
-    }
-}
-
 KisScriptDockFactory::KisScriptDockFactory(Kross::Action* act) : m_action(act)
 {
     m_action->addObject(this, "KritaDockFactory", Kross::ChildrenInterface::AutoConnectSignals);
-//     new Kikoo();
 }
 
 QString KisScriptDockFactory::id() const
 {
-    return m_action->property("id").toString();
+    dbgScript << "Script dock factory id = " << m_action->name();
+    return m_action->name();
 }
 
 QDockWidget* KisScriptDockFactory::createDockWidget()
 {
+    dbgScript << "KisScriptDockFactory::createDockWidget()";
     QVariant v = m_action->callFunction("createDockWidget");
     QDockWidget* qdw = dynamic_cast<QDockWidget*>(v.value<QObject*>());
     if(qdw)

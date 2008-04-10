@@ -86,8 +86,9 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
     if( actioncollection && (actioncollection2 = actioncollection->collection("filters")) ) {
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
+            action->addObject(module());
             KisScriptFilter* sf = new KisScriptFilter(action);
-            KisFilterRegistry::instance()->add( KisFilterSP(sf) );
+            KisFilterRegistry::instance()->add( sf );
 //             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
 //             if( ! factory ) continue;
            dbgScript <<"Adding scripting filters with id=" << sf->id();
@@ -96,6 +97,8 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
     if( actioncollection && (actioncollection2 = actioncollection->collection("dockers")) ) {
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
+            action->addObject(module());
+            dbgScript <<"Start Adding scripting dockers with id=" /*<< sf->id()*/;
             KisScriptDockFactory ksdf(action);
             d->view->createDockWidget( &ksdf );
 //             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);

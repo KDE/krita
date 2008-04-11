@@ -50,7 +50,10 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoListStyle.h>
 #include <KoStyleManager.h>
-#include <KoXmlWriter.h>
+#include <KoTextOdfSaveHelper.h>
+#include <KoDrag.h>
+#include <KoOdf.h>
+#include <KoTextPaste.h>
 
 #include <kdebug.h>
 #include <KStandardShortcut>
@@ -599,24 +602,11 @@ void TextTool::copy() const {
     if(m_textShapeData == 0 || !m_textCursor.hasSelection()) return;
     int from = m_textCursor.position();
     int to = m_textCursor.anchor();
-    if(to < from)
-        qSwap(to, from);
-
-    QByteArray bytes;
-    QBuffer buffer( &bytes );
-    buffer.open( QIODevice::WriteOnly );
-    KoXmlWriter writer( &buffer );
-    KoGenStyles mainStyles;
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
-    //writer.startDocument( "foobar" );
-    m_textShapeData->saveOdf(context, from, to);
-    //writer.endDocument();
-    buffer.putChar( '\0' ); // null-terminate
-    QMimeData *data = new QMimeData();
-    data->setData("application/vnd.oasis.opendocument.text", bytes);
-    QApplication::clipboard()->setMimeData(data);
-kDebug() <<"output:" << QString::fromUtf8(bytes);
+    KoTextOdfSaveHelper saveHelper( m_textShapeData, from, to );
+    KoDrag drag;
+    drag.setOdf( KoOdf::mimeType( KoOdf::Text ), saveHelper );
+    // TODO add also a text version to the clipboard
+    drag.addToClipboard();
 }
 
 void TextTool::deleteSelection()
@@ -627,18 +617,20 @@ void TextTool::deleteSelection()
     editingPluginEvents();
 }
 
-bool TextTool::paste() 
+bool TextTool::paste()
 {
+    if (m_textCursor.hasSelection()) {
+        m_selectionHandler.deleteInlineObjects();
+    }
+
     // check for mime type
     const QMimeData *data = QApplication::clipboard()->mimeData();
 
     if(data->hasFormat("application/vnd.oasis.opendocument.text")) {
-        kDebug(32500) <<"TODO load ODF style text!";
-        // TODO create a KoTextShapeData::loadOdf() method and call it here.
+        KoTextPaste paste( m_textShapeData, m_textCursor, m_canvas );
+        paste.paste( KoOdf::Text, data );
     }
     else if(data->hasHtml()) {
-        if (m_textCursor.hasSelection())
-            m_selectionHandler.deleteInlineObjects();
         m_textCursor.insertHtml(data->html());
     }
     else if(data->hasText()) {

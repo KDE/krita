@@ -27,12 +27,14 @@ class QTextDocument;
 class QTextEdit;
 class KoStore;
 class KoTextShapeData;
+class KComponentData;
 
 class TestLoading : public QObject 
 {
     Q_OBJECT
 public:
     TestLoading();
+    ~TestLoading();
 
 private slots:
     void init();
@@ -47,6 +49,7 @@ private:
     QTextDocument *documentFromScript(const QString &script);
     QTextDocument *documentFromOdt(const QString &odt);
 
+    KComponentData *componentData;
     QScriptEngine *engine;
     KoTextShapeData *textShapeData;
     KoStore *store;

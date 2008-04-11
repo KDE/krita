@@ -37,6 +37,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
+#include <kcomponentdata.h>
 
 // Functions to print the contents of QTextDocument as XML
 static int depth = 0;
@@ -256,6 +257,12 @@ static bool compareDocuments(QTextDocument *actualDocument, QTextDocument *expec
 // May the testing begin
 TestLoading::TestLoading() 
 {
+    componentData = new KComponentData("TestLoading");
+}
+
+TestLoading::~TestLoading()
+{
+    delete componentData;
 }
 
 static QScriptValue importExtension(QScriptContext *context, QScriptEngine *engine)
@@ -297,6 +304,9 @@ void TestLoading::cleanupTestCase()
 // init/cleanup are called beginning and end of every test case
 void TestLoading::init()
 {
+    textShapeData = 0;
+    store = 0;
+    textEdit = 0;
 }
 
 void TestLoading::cleanup()
@@ -340,13 +350,12 @@ QTextDocument *TestLoading::documentFromScript(const QString &script)
 
 QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 {
-   if (!QDir(odt).exists()) {
-        qDebug("testDoc/ does not exist");
+    if (!QFile(odt).exists()) {
+        qDebug() << odt << " does not exist";
         return 0;
     }
 
-    // FIXME: Load from file instead of directory
-    store = KoStore::createStore(odt, KoStore::Read, "", KoStore::Directory);
+    store = KoStore::createStore(odt, KoStore::Read, "", KoStore::Zip);
     KoOdfReadStore odfReadStore(store);
     QString error;
     if (!odfReadStore.loadAndParse(error)) {
@@ -372,7 +381,7 @@ void TestLoading::testLoading_data()
     QTest::addColumn<QString>("testDocument");
     QTest::addColumn<QString>("testScript");
 
-    QTest::newRow("Bulleted list") << "data/testDoc" << "data/script.js";
+    QTest::newRow("Bulleted list") << "data/testDoc.odt" << "data/script.js";
 }
 
 void TestLoading::testLoading() 
@@ -381,7 +390,11 @@ void TestLoading::testLoading()
     QFETCH(QString, testScript);
 
     QTextDocument *actualDocument = documentFromOdt(testDocument);
+    QVERIFY(actualDocument != 0);
+
     QTextDocument *expectedDocument = documentFromScript(testScript);
+    QVERIFY(expectedDocument != 0);
+
     QVERIFY(compareDocuments(actualDocument, expectedDocument));
 }
 

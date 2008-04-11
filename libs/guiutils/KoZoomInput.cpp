@@ -50,6 +50,8 @@ KoZoomInput::KoZoomInput(QWidget* parent)
 
     QWidget* first = new QWidget(this);
     QHBoxLayout* layout = new QHBoxLayout(first);
+    layout->setSpacing(0);
+    layout->setMargin(0);
     d->label = new QLabel(first);
     d->label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(d->label, 10);

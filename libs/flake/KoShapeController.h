@@ -110,6 +110,8 @@ private:
 
     // allowing accsess to shapeControllerBase
     friend class KoShapePaste;
+    friend class KoTextPaste;
+
     friend class Viewport;
     friend class KoCreateShapeStrategy;
     class Private;

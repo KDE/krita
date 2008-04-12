@@ -76,8 +76,7 @@ bool KoZoomToolWidget::eventFilter( QObject* object, QEvent* event )
         else
              return false;
     }
-    else
-        return QWidget::eventFilter( object, event );
+    return QWidget::eventFilter( object, event );
 }
 
 void KoZoomToolWidget::changeZoomMode()

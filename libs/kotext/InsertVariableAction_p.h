@@ -25,7 +25,7 @@
 class KoCanvasBase;
 class KoProperties;
 class KoVariableFactory;
-class KoVariableTemplate;
+struct KoVariableTemplate;
 
 /// \internal
 class InsertVariableAction : public InsertVariableActionBase

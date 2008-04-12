@@ -627,16 +627,20 @@ bool TextTool::paste()
     const QMimeData *data = QApplication::clipboard()->mimeData();
 
     if(data->hasFormat("application/vnd.oasis.opendocument.text")) {
+        startMacro( "Paste" );
         KoTextPaste paste( m_textShapeData, m_textCursor, m_canvas );
         paste.paste( KoOdf::Text, data );
+        stopMacro();
     }
     else if(data->hasHtml()) {
+        startMacro( "Paste" );
         m_textCursor.insertHtml(data->html());
+        stopMacro();
     }
     else if(data->hasText()) {
-        if (m_textCursor.hasSelection())
-            m_selectionHandler.deleteInlineObjects();
+        startMacro( "Paste" );
         m_textCursor.insertText(data->text());
+        stopMacro();
     }
     else
         return false;

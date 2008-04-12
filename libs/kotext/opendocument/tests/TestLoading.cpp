@@ -378,21 +378,19 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 
 void TestLoading::testLoading_data()
 {
-    QTest::addColumn<QString>("testDocument");
-    QTest::addColumn<QString>("testScript");
+    QTest::addColumn<QString>("testcase");
 
-    QTest::newRow("Bulleted list") << "data/testDoc.odt" << "data/script.js";
+    QTest::newRow("Bulleted list") << "data/TextContents/Lists/bulletedList";
 }
 
 void TestLoading::testLoading() 
 {
-    QFETCH(QString, testDocument);
-    QFETCH(QString, testScript);
+    QFETCH(QString, testcase);
 
-    QTextDocument *actualDocument = documentFromOdt(testDocument);
+    QTextDocument *actualDocument = documentFromOdt(testcase + ".odt");
     QVERIFY(actualDocument != 0);
 
-    QTextDocument *expectedDocument = documentFromScript(testScript);
+    QTextDocument *expectedDocument = documentFromScript(testcase + ".qs");
     QVERIFY(expectedDocument != 0);
 
     QVERIFY(compareDocuments(actualDocument, expectedDocument));

@@ -29,7 +29,7 @@ class KoGenStyle;
 class KoShapeSavingContext;
 class QPainter;
 class KoViewConverter;
-class KoInsets;
+struct KoInsets;
 
 class FLAKE_EXPORT KoShapeShadow
 {

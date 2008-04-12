@@ -193,7 +193,7 @@ public:
     Qt::Orientation orientation() const;
 
     /// The point in document coordinates.
-    const QPointF &point;
+    const QPointF point;
 
 protected:
     friend class KoToolProxy;

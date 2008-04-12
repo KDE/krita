@@ -67,7 +67,7 @@ KoPointerEvent::KoPointerEvent( QWheelEvent *ev, const QPointF &pnt )
 }
 
 KoPointerEvent::KoPointerEvent( KoDeviceEvent * ev, int x, int y, int z, int rx, int ry, int rz )
-    : point(QPoint()), m_event(ev), d(new Private())
+    : m_event(ev), d(new Private())
 {
     d->deviceEvent = ev;
     d->pos = QPoint(x,y);

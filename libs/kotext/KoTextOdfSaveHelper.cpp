@@ -60,5 +60,5 @@ bool KoTextOdfSaveHelper::writeBody()
 
     bodyWriter.endElement(); // office:element
     bodyWriter.endElement(); // office:body
-
+    return true;
 }

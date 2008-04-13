@@ -1,11 +1,11 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kchart/kdchart1 ${KOMAIN_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/kchart/ ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############
 
-set(kochart_LIB_SRCS koChart.cc )
+set(kochart_LIB_SRCS koChart.cc KoChartModel.cpp )
 
 
 kde4_add_library(kochart SHARED ${kochart_LIB_SRCS})
@@ -18,5 +18,5 @@ install(TARGETS kochart  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  koChart.h  DESTINATION ${INCLUDE_INSTALL_DIR})
+install( FILES  koChart.h KoChartModel.h DESTINATION ${INCLUDE_INSTALL_DIR})
 

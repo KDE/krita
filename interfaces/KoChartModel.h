@@ -21,6 +21,7 @@
 #define KO_CHART_MODEL
 
 #include <QAbstractTableModel>
+#include "kochart_export.h"
 
 namespace KoChart {
 
@@ -47,14 +48,16 @@ const int SECTION_AREA_ROLE = 32;
 */
 const int HEADER_AREA_ROLE  = 33;
 
-class KoChartModel : public QAbstractTableModel
+class KOCHART_EXPORT ChartModel : public QAbstractTableModel
 {
-public:
-    KoChartModel( QObject *parent = 0 );
-    ~KoChartModel();
+    Q_OBJECT
 
-    virtual QString areaAt( const QModelIndex &index ) = 0;
-    virtual QString areaAt( const QModelIndex &first, const QModelIndex &last ) = 0;
+public:
+    ChartModel( QObject *parent = 0 );
+    virtual ~ChartModel();
+
+    virtual QString areaAt( const QModelIndex &index ) const = 0;
+    virtual QString areaAt( const QModelIndex &first, const QModelIndex &last ) const = 0;
 
     virtual bool addArea( const QString &area, int section, Qt::Orientation orientation ) = 0;
     virtual bool removeArea( const QString &area, int section, Qt::Orientation orientation ) = 0;

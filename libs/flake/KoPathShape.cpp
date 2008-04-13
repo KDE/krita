@@ -565,17 +565,14 @@ void KoPathShape::closeMerge()
 
 QPointF KoPathShape::normalize()
 {
-    QPointF oldTL( boundingRect().topLeft() );
-
     QPointF tl( outline().boundingRect().topLeft() );
     QMatrix matrix;
     matrix.translate( -tl.x(), -tl.y() );
     map( matrix );
 
     // keep the top left point of the object
-    QPointF newTL( boundingRect().topLeft() );
-    QPointF diff( oldTL - newTL );
-    setAbsolutePosition( absolutePosition() + diff );
+    applyTransformation( matrix.inverted() );
+
     return tl;
 }
 

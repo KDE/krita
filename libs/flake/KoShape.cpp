@@ -292,7 +292,7 @@ QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const 
     }
 
     if(converter) {
-        QPointF pos = d->localMatrix.map( QPoint() );
+        QPointF pos = d->localMatrix.map( QPointF() );
         QPointF trans = converter->documentToView( pos ) - pos;
         matrix.translate( trans.x(), trans.y() );
     }

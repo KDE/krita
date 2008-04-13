@@ -79,8 +79,7 @@ namespace KoChart
     class KOCHART_EXPORT ChartInterface
     {
     public:
-        ChartInterface();
-        virtual ~ChartInterface();
+        virtual ~ChartInterface() {};
 
         virtual void setModel( QAbstractItemModel* model, 
                                bool takeOwnershipOfModel = false ) = 0;

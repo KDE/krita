@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Krita/Brush
 Comment=Brush plugin for Krita
 Comment[el]=Πρόσθετο πινέλου για το Krita
+Comment[fy]=Kwastplugin foar Krita
 Comment[ga]=Breiseán scuaibe le haghaidh Krita
 Comment[hi]=केरिता के लिए ब्रश प्लगइन
 Comment[it]=Plugin pennello di Krita

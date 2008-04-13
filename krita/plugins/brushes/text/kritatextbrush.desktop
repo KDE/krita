@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Text Brush
 Name[el]=Πινέλο κειμένου
+Name[fy]=Tekstkwast
 Name[ga]=Scuab Théacs
 Name[hi]=पाठ ब्रश
 Name[it]=Pennello di testo
@@ -11,6 +12,7 @@ Name[x-test]=xxText Brushxx
 Name[zh_TW]=文字筆刷
 Comment=Text brush
 Comment[el]=Πινέλο κειμένου
+Comment[fy]=Tekstkwast
 Comment[ga]=Scuab théacs
 Comment[hi]=पाठ ब्रश
 Comment[it]=Pennello di testo

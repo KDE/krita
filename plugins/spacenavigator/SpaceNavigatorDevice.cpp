@@ -35,8 +35,8 @@ SpaceNavigatorDevice::SpaceNavigatorDevice( QObject * parent )
     qRegisterMetaType<Qt::MouseButton>( "Qt::MouseButton" );
     connect( m_thread, SIGNAL(moveEvent(int,int,int,int,int,int,Qt::MouseButtons)),
             this, SLOT(slotMoveEvent(int,int,int,int,int,int,Qt::MouseButtons)));
-    connect( m_thread, SIGNAL(moveEvent(int,int,int,int,int,int,Qt::MouseButtons,Qt::MouseButton,int)),
-            this, SLOT(slotMoveEvent(int,int,int,int,int,int,Qt::MouseButtons,Qt::MouseButton,int)));
+    connect( m_thread, SIGNAL(buttonEvent(int,int,int,int,int,int,Qt::MouseButtons,Qt::MouseButton,int)),
+            this, SLOT(slotButtonEvent(int,int,int,int,int,int,Qt::MouseButtons,Qt::MouseButton,int)));
 }
 
 SpaceNavigatorDevice::~SpaceNavigatorDevice()

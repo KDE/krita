@@ -22,7 +22,7 @@
 #include <QtCore/QVariant>
 
 #include <KoDocument.h>
-#include <kochart_export.h>
+#include "kochart_export.h"
 
 
 class QAbstractItemModel;
@@ -79,7 +79,8 @@ namespace KoChart
     class KOCHART_EXPORT ChartInterface
     {
     public:
-        virtual ~ChartInterface() {};
+        ChartInterface();
+        virtual ~ChartInterface();
 
         virtual void setModel( QAbstractItemModel* model, 
                                bool takeOwnershipOfModel = false ) = 0;

@@ -339,7 +339,7 @@ QTextDocument *TestLoading::documentFromScript(const QString &script)
 QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 {
     if (!QFile(odt).exists()) {
-        qDebug() << odt << " does not exist";
+        qFatal("%s does not exist", qPrintable(odt));
         return 0;
     }
 
@@ -367,17 +367,14 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 void TestLoading::testLoading_data()
 {
     QTest::addColumn<QString>("testcase");
-
-    // ### Can this be automatically created by the build system?
-    if (!QFileInfo("data").exists())
-        qFatal("data/ not found. Create a symbolic link 'data' to the /path/to/test/source/data");
-
-    QTest::newRow("Bulleted list") << "data/TextContents/Lists/bulletedList";
+    
+    QTest::newRow("Bulleted list") << "TextContents/Lists/bulletedList";
 }
 
 void TestLoading::testLoading() 
 {
     QFETCH(QString, testcase);
+    testcase.prepend(FILES_DATA_DIR);
 
     QTextDocument *actualDocument = documentFromOdt(testcase + ".odt");
     QVERIFY(actualDocument != 0);

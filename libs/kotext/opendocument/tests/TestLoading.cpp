@@ -231,9 +231,9 @@ static bool compareFrames(QTextFrame *actualFrame, QTextFrame *expectedFrame)
             } else {
                 if (expectedTable)
                     return false;
+                if (!compareFrames(actualChildFrame, expectedChildFrame))
+                    return false;
             }
-            if (!compareFrames(actualChildFrame, expectedChildFrame))
-                return false;
         } else if (actualTextBlock.isValid()) {
             QTextBlock expectedTextBlock = expectedIterator.currentBlock();
             if (!expectedTextBlock.isValid())
@@ -288,11 +288,9 @@ void TestLoading::initTestCase()
 
     QScriptValue globalObject = engine->globalObject();
     globalObject.setProperty("qApp", engine->newQObject(qApp));
-    {
-        QScriptValue qscript = engine->newObject();
-        qscript.setProperty("importExtension", engine->newFunction(importExtension));
-        globalObject.property("qt").setProperty("script", qscript);
-    }
+    QScriptValue qscript = engine->newObject();
+    qscript.setProperty("importExtension", engine->newFunction(importExtension));
+    globalObject.property("qt").setProperty("script", qscript);
 }
 
 void TestLoading::cleanupTestCase()
@@ -306,7 +304,6 @@ void TestLoading::init()
 {
     textShapeData = 0;
     store = 0;
-    textEdit = 0;
 }
 
 void TestLoading::cleanup()
@@ -315,8 +312,6 @@ void TestLoading::cleanup()
     textShapeData = 0;
     delete store;
     store = 0;
-    delete textEdit;
-    textEdit = 0;
 }
 
 QTextDocument *TestLoading::documentFromScript(const QString &script)
@@ -330,13 +325,6 @@ QTextDocument *TestLoading::documentFromScript(const QString &script)
         file.close();
     }
 
-    // "var cursor = new QTextCursor(document)" doesn't seem to work. So, create a QTextEdit
-    // that will expose the document and cursor to the scripts
-    textEdit = new QTextEdit;
-    QScriptValue textEditValue = engine->newQObject(textEdit);
-    QScriptValue globalObject = engine->globalObject();
-    globalObject.setProperty("textEdit", textEditValue);
-
     QScriptValue r = engine->evaluate(contents);
     if (engine->hasUncaughtException()) {
         QStringList backtrace = engine->uncaughtExceptionBacktrace();
@@ -345,7 +333,7 @@ QTextDocument *TestLoading::documentFromScript(const QString &script)
         return 0;
     }
 
-    return textEdit->document();
+    return qobject_cast<QTextDocument *>(r.toQObject());
 }
 
 QTextDocument *TestLoading::documentFromOdt(const QString &odt)
@@ -379,6 +367,10 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 void TestLoading::testLoading_data()
 {
     QTest::addColumn<QString>("testcase");
+
+    // ### Can this be automatically created by the build system?
+    if (!QFileInfo("data").exists())
+        qFatal("data/ not found. Create a symbolic link 'data' to the /path/to/test/source/data");
 
     QTest::newRow("Bulleted list") << "data/TextContents/Lists/bulletedList";
 }

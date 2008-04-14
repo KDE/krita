@@ -53,7 +53,6 @@ private:
     QScriptEngine *engine;
     KoTextShapeData *textShapeData;
     KoStore *store;
-    QTextEdit *textEdit;
 };
 
 #endif // TESTLOADING_H

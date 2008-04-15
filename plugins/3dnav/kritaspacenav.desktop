@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=spacenav
+Name[it]=Navigatore spaziale
 Comment=spacenav
+Comment[it]=Navigatore spaziale
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaspacenav

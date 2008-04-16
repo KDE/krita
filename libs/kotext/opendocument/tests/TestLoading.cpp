@@ -379,6 +379,8 @@ void TestLoading::testLoading_data()
     
     QTest::newRow("Bulleted list") << "TextContents/Lists/bulletedList";
     QTest::newRow("Bold and Italic") << "TextContents/TextFormatting/boldAndItalic";
+    QTest::newRow("Font Size") << "TextContents/TextFormatting/fontSize";
+    QTest::newRow("Font Colors") << "TextContents/TextFormatting/fontColors";
 }
 
 void TestLoading::testLoading() 
@@ -392,7 +394,14 @@ void TestLoading::testLoading()
     QTextDocument *expectedDocument = documentFromScript(testcase + ".qs");
     QVERIFY(expectedDocument != 0);
 
-    QVERIFY(compareDocuments(actualDocument, expectedDocument));
+    bool documentsEqual = compareDocuments(actualDocument, expectedDocument);
+
+    if (!documentsEqual) {
+        dumpDocument(actualDocument);
+        dumpDocument(expectedDocument);
+    }
+
+    QVERIFY(documentsEqual);
 }
 
 int main(int argc, char *argv[])

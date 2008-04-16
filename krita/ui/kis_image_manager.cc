@@ -43,7 +43,7 @@
 #include "kis_import_catcher.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
-#include "kis_dlg_image_properties.h"
+#include "dialogs/kis_dlg_image_properties.h"
 #include "commands/kis_image_commands.h"
 
 

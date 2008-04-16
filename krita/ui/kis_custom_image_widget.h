@@ -20,7 +20,7 @@
 #define KIS_CUSTOM_IMAGE_WIDGET_H
 
 #include "kis_global.h"
-//#include "kis_dlg_image_properties.h"
+//#include "dialogs/kis_dlg_image_properties.h"
 #include "KoUnit.h"
 
 #include "ui_wdgnewimage.h"

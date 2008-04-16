@@ -30,7 +30,7 @@
 #include "kis_transaction.h"
 #include "filter/kis_filter_configuration.h"
 #include "commands/kis_node_commands.h"
-#include "kis_dlg_transformation_effect.h"
+#include "dialogs/kis_dlg_transformation_effect.h"
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
 #include "kis_doc2.h"
@@ -42,11 +42,11 @@
 #include "kis_transparency_mask.h"
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
-#include "kis_dlg_adjustment_layer.h"
+#include "dialogs/kis_dlg_adjustment_layer.h"
 #include "kis_mask_widgets.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
-#include "kis_dlg_adj_layer_props.h"
+#include "dialogs/kis_dlg_adj_layer_props.h"
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 #include "kis_paint_device.h"

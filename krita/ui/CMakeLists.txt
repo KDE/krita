@@ -35,19 +35,19 @@ set(kritaui_LIB_SRCS
     kis_custom_image_widget.cc
     kis_custom_palette.cc
     kis_custom_pattern.cc
-    kis_dlg_adj_layer_props.cc
-    kis_dlg_adjustment_layer.cc
-    kis_dlg_apply_profile.cc
-    kis_dlg_image_properties.cc
-    kis_dlg_layer_properties.cc
-    kis_dlg_new_layer.cc
-    kis_dlg_preferences.cc
-    kis_dlg_transformation_effect.cpp
+    dialogs/kis_dlg_adj_layer_props.cc
+    dialogs/kis_dlg_adjustment_layer.cc
+    dialogs/kis_dlg_apply_profile.cc
+    dialogs/kis_dlg_image_properties.cc
+    dialogs/kis_dlg_layer_properties.cc
+    dialogs/kis_dlg_new_layer.cc
+    dialogs/kis_dlg_preferences.cc
+    dialogs/kis_dlg_transformation_effect.cpp
     kis_doc2.cc
     kis_double_widget.cc
     kis_exposure_visitor.cc
     kis_factory2.cc
-    kis_filter_dialog.cc
+    dialogs/kis_dlg_filter.cpp
     kis_filter_handler.cc
     kis_filter_manager.cc
     kis_filters_model.cc
@@ -94,7 +94,6 @@ set(kritaui_LIB_SRCS
     kis_popup_button.cc
     kis_prescaled_projection.cpp
     kis_preset_widget.cpp
-    kis_previewdialog.cc
     kis_previewwidget.cc
     kis_print_job.cpp
     kis_qpainter_canvas.cpp
@@ -124,7 +123,7 @@ set(kritaui_LIB_SRCS
     kobirdeyepanel.cpp
     modeltest.cpp
     squeezedcombobox.cpp
-    kis_dlg_generator_layer.cpp
+    dialogs/kis_dlg_generator_layer.cpp
 # Open Raster TK
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
@@ -220,7 +219,6 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_multi_integer_filter_widget.h
 #    kis_paintop_box.h
 #    kis_palette_widget.h
-#    kis_previewdialog.h
 #    kis_previewwidget.h
 #    kis_tool.h
 #    kis_tool_non_paint.h

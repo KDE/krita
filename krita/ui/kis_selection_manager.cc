@@ -21,7 +21,7 @@
  */
 
 #include "kis_selection_manager.h"
-#include "kis_dlg_apply_profile.h" // If this isn't first, I get
+#include "dialogs/kis_dlg_apply_profile.h" // If this isn't first, I get
                                    // errors in qslider.h. Weird... (BSAR)
 #include <QApplication>
 #include <QClipboard>

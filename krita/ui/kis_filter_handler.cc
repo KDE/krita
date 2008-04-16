@@ -38,7 +38,7 @@
 
 #include "kis_statusbar.h"
 #include "kis_doc2.h"
-#include "kis_filter_dialog.h"
+#include "dialogs/kis_dlg_filter.h"
 #include "kis_filter_manager.h"
 #include "kis_transaction.h"
 #include "kis_view2.h"

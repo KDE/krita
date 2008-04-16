@@ -93,7 +93,7 @@
 #include "kis_grid_manager.h"
 #include "kis_perspective_grid_manager.h"
 #include "kis_mask_manager.h"
-#include "kis_dlg_preferences.h"
+#include "dialogs/kis_dlg_preferences.h"
 #include "kis_group_layer.h"
 #include "kis_custom_palette.h"
 #include "ui_wdgpalettechooser.h"

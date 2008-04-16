@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_filter_dialog.h"
+#include "kis_dlg_filter.h"
 #include <QHeaderView>
 #include <QTreeView>
 
@@ -214,4 +214,4 @@ void KisFilterDialog::editConfigurations()
 }
 
 
-#include "kis_filter_dialog.moc"
+#include "kis_dlg_filter.moc"

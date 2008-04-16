@@ -46,16 +46,25 @@ static const int INDENT = 2;
 static void dumpFragment(const QTextFragment &fragment)
 {
     depth += INDENT;
-    qDebug("%*s%s", depth, " ", "<fragment>");
 
     QTextCharFormat textFormat = fragment.charFormat();
     QTextImageFormat imageFormat = textFormat.toImageFormat();
 
-    if (imageFormat.isValid()) {
+    QString startTag;
+        if (imageFormat.isValid()) {
+        qDebug("%*s%s", depth, " ", "<fragment type=\"image\">");
     } else {
+        QString formatString = QString(" font=\"%1\"").arg(textFormat.font().toString());
+        if (textFormat.isAnchor()) {
+            formatString.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
+            formatString.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
+        }
+        startTag = QString("<fragment type=\"char\"%1>").arg(formatString);
     }
   
-    qDebug("%*s%s", depth+INDENT, " ", qPrintable(fragment.text()));
+    qDebug("%*s%s", depth, " ", qPrintable(startTag));
+
+    qDebug("%*s|%s|", depth+INDENT, " ", qPrintable(fragment.text()));
 
     qDebug("%*s%s", depth, " ", "</fragment>");
     depth -= INDENT;
@@ -163,7 +172,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
             return false;
     }
 
-    return true; // FIXME: Compare the char formats
+    return actualFormat.font() == expectedFormat.font(); // FIXME: Compare other properties
 }
 
 static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock)
@@ -369,6 +378,7 @@ void TestLoading::testLoading_data()
     QTest::addColumn<QString>("testcase");
     
     QTest::newRow("Bulleted list") << "TextContents/Lists/bulletedList";
+    QTest::newRow("Bold and Italic") << "TextContents/TextFormatting/boldAndItalic";
 }
 
 void TestLoading::testLoading() 

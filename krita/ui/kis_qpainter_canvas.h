@@ -50,7 +50,8 @@ public:
 
     void setPrescaledProjection( KisPrescaledProjectionSP prescaledProjection );
 public: // QWidget
-
+    void enterEvent( QEvent* e );
+    void leaveEvent( QEvent* e );
     /// reimplemented method from superclass
     void keyPressEvent( QKeyEvent *e );
 

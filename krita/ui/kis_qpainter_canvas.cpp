@@ -64,7 +64,8 @@ public:
     Private(const KoViewConverter *vc)
         : toolProxy(0),
           canvas(0),
-          viewConverter(vc)
+          viewConverter(vc),
+          previousEvent( QEvent::TabletRelease, QPoint(), QPoint(), QPointF(), QTabletEvent::NoDevice, 0, 0.0, 0, 0, 0, 0, 0, Qt::NoModifier, Q_INT64_C(932838457459459) )
         {
         }
 
@@ -74,6 +75,8 @@ public:
     const KoViewConverter * viewConverter;
     QBrush checkBrush;
     QPoint documentOffset;
+    bool tabletDown;
+    QTabletEvent previousEvent;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
@@ -191,7 +194,26 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     dbgRender <<"Drawing pixmap on widget:" << t.elapsed();
 }
 
+void KisQPainterCanvas::enterEvent( QEvent* e )
+{
+    dbgRender << "Enter event ";
+    QWidget::enterEvent( e );
+}
+
+void KisQPainterCanvas::leaveEvent( QEvent* e )
+{
+    dbgRender << "Leave event ";
+    if( m_d->tabletDown )
+    {
+        m_d->tabletDown = false;
+        QTabletEvent* fakeEvent = new QTabletEvent( QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId() );
+        m_d->toolProxy->tabletEvent( fakeEvent , QPointF() ); // HACK this fake event is a work around a bug in Qt which stop sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
+    }
+    QWidget::leaveEvent( e );
+}
+
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
+    dbgRender <<"mouse event:" << e->x();
     m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
@@ -236,9 +258,23 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
 
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
 {
-    dbgRender <<"tablet event:" << e->pressure();
+    dbgRender <<"tablet event:" << e->pressure() << e->type() << " " << e->device();
+    switch( e->type() ) {
+    case QEvent::TabletPress:
+        m_d->tabletDown = true;
+        break;
+    case QEvent::TabletRelease:
+        m_d->tabletDown = false;
+        break;
+    case QEvent::TabletMove:
+        break;
+    default:
+        ; // ignore the rest.
+    }
     QPointF pos = e->pos() + (e->hiResGlobalPos() - e->globalPos());
     pos += m_d->documentOffset;
+    
+    m_d->previousEvent = *e;
     m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
 }
 

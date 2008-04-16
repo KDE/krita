@@ -45,7 +45,7 @@
 #include "kis_view2.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "widgets/kis_abstract_canvas_widget.h"
+#include "kis_abstract_canvas_widget.h"
 #include "kis_qpainter_canvas.h"
 #include "opengl/kis_opengl_canvas2.h"
 #include "kis_group_layer.h"

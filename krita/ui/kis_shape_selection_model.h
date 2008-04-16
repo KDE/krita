@@ -24,6 +24,9 @@
 
 class KisShapeSelection;
 
+/**
+ *
+ */
 class KisShapeSelectionModel: public KoShapeContainerModel {
 public:
     KisShapeSelectionModel(KisImageSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection);

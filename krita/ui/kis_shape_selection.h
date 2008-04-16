@@ -26,6 +26,9 @@
 
 #include <krita_export.h>
 
+/**
+ *
+ */
 class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeContainer, public KisSelectionComponent
 {
     Q_OBJECT

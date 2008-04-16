@@ -20,7 +20,7 @@
 
 #include <QWidget>
 
-#include "widgets/kis_abstract_canvas_widget.h"
+#include "kis_abstract_canvas_widget.h"
 #include "kis_prescaled_projection.h"
 
 class QImage;

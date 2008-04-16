@@ -99,10 +99,12 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 }
 
 void KisShapeLayerCanvas::repaint() {
+qDebug() << "START >>>>>>>>>>>>>>";
     QRect r = m_dirty.boundingRect();
     QImage img(r.width(), r.height(), QImage::Format_ARGB32);
     img.fill(0);
     QPainter p(&img);
+    
     if(m_antialias)
         p.setRenderHint(QPainter::Antialiasing);
     p.translate(-r.x(), -r.y());
@@ -124,6 +126,7 @@ void KisShapeLayerCanvas::repaint() {
     m_parentLayer->setDirty(r);
     m_dirty = QRegion();
     m_repaintTriggered = false;
+qDebug() << "END >>>>>>>>>>>>>>";    
 }
 
 KoToolProxy * KisShapeLayerCanvas::toolProxy() const

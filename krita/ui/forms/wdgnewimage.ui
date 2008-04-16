@@ -979,7 +979,7 @@
   <customwidget>
    <class>KisColorSpaceSelector</class>
    <extends>QWidget</extends>
-   <header>kis_color_space_selector.h</header>
+   <header>widgets/kis_color_space_selector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

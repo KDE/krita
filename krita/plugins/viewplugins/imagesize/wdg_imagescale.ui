@@ -333,7 +333,7 @@
   <customwidget>
    <class>KisCmbIDList</class>
    <extends></extends>
-   <header>kis_cmb_idlist.h</header>
+   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

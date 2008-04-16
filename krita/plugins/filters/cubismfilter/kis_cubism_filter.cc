@@ -55,7 +55,7 @@
 #include <kis_processing_information.h>
 #include <KoCompositeOp.h>
 
-#include "kis_multi_integer_filter_widget.h"
+#include "widgets/kis_multi_integer_filter_widget.h"
 
 #include "kis_polygon.h"
 

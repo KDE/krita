@@ -37,13 +37,13 @@
 #include <KoColorSpace.h>
 
 #include "kis_global.h"
-#include "squeezedcombobox.h"
+#include "widgets/squeezedcombobox.h"
 
-#include "kis_cmb_composite.h"
-#include "kis_cmb_idlist.h"
+#include "widgets/kis_cmb_composite.h"
+#include "widgets/kis_cmb_idlist.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
-#include "kis_channelflags_widget.h"
+#include "widgets/kis_channelflags_widget.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                                              qint32 opacity,

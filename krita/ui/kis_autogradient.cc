@@ -29,7 +29,7 @@
 
 #include "kis_autogradient_resource.h"
 
-#include "kis_gradient_slider_widget.h"
+#include "widgets/kis_gradient_slider_widget.h"
 
 /****************************** KisAutogradient ******************************/
 

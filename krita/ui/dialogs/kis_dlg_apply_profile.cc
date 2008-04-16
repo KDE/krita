@@ -29,11 +29,11 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoID.h"
 
-#include "kis_cmb_idlist.h"
+#include "widgets/kis_cmb_idlist.h"
 #include "kis_config.h"
 #include "kis_factory2.h"
 #include "kis_types.h"
-#include "squeezedcombobox.h"
+#include "widgets/squeezedcombobox.h"
 
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.

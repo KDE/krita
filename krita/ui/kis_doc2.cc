@@ -87,7 +87,7 @@
 #include "kis_view2.h"
 #include "kis_clipboard.h"
 #include "kis_config.h"
-#include "kis_custom_image_widget.h"
+#include "widgets/kis_custom_image_widget.h"
 #include "kis_kra_save_visitor.h"
 #include "kis_savexml_visitor.h"
 #include "kis_canvas2.h"

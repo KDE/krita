@@ -163,7 +163,7 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
     <customwidget>
       <class>KisCmbIDList</class>
       <extends></extends>
-      <header location="local" >kis_cmb_idlist.h</header>
+      <header location="local" >widgets/kis_cmb_idlist.h</header>
       <sizehint>
         <width>1</width>
         <height>24</height>
@@ -178,7 +178,7 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
     <customwidget>
       <class>SqueezedComboBox</class>
       <extends></extends>
-      <header location="local" >squeezedcombobox.h</header>
+      <header location="local" >widgets/squeezedcombobox.h</header>
       <sizehint>
         <width>-1</width>
         <height>0</height>

@@ -86,7 +86,7 @@
   <customwidget>
    <class>KisCmbComposite</class>
    <extends>QWidget</extends>
-   <header>kis_cmb_composite.h</header>
+   <header>widgets/kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KoSliderCombo</class>
@@ -96,12 +96,12 @@
   <customwidget>
    <class>SqueezedComboBox</class>
    <extends>QWidget</extends>
-   <header>squeezedcombobox.h</header>
+   <header>widgets/squeezedcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KisCmbIDList</class>
    <extends>QWidget</extends>
-   <header>kis_cmb_idlist.h</header>
+   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

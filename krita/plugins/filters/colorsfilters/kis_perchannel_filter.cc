@@ -44,7 +44,7 @@
 #include <kis_processing_information.h>
 
 #include "kis_iterators_pixel.h"
-#include "kcurve.h"
+#include "widgets/kcurve.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
 

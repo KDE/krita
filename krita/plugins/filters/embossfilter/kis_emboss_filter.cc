@@ -52,7 +52,7 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 
-#include "kis_multi_integer_filter_widget.h"
+#include "widgets/kis_multi_integer_filter_widget.h"
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), CategoryEmboss, i18n("&Emboss with Variable Depth..."))
 {

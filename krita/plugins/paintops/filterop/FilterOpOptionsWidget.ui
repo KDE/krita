@@ -53,12 +53,12 @@
   <customwidget>
    <class>KisCmbIDList</class>
    <extends>QComboBox</extends>
-   <header>kis_cmb_idlist.h</header>
+   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
   <customwidget>
    <class>KisPopupButton</class>
    <extends>QPushButton</extends>
-   <header>kis_popup_button.h</header>
+   <header>widgets/kis_popup_button.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

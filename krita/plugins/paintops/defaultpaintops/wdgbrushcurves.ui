@@ -192,7 +192,7 @@
   <customwidgets>
     <customwidget>
       <class>KCurve</class>
-      <header location="local" >kcurve.h</header>
+      <header location="local" >widgets/kcurve.h</header>
       <sizehint>
         <width>-1</width>
         <height>-1</height>
@@ -211,9 +211,9 @@
     </image>
   </images>
   <includes>
-    <include location="local" >kcurve.h</include>
-    <include location="local" >kcurve.h</include>
-    <include location="local" >kcurve.h</include>
+    <include location="local" >widgets/kcurve.h</include>
+    <include location="local" >widgets/kcurve.h</include>
+    <include location="local" >widgets/kcurve.h</include>
   </includes>
   <connections>
     <connection>

@@ -53,7 +53,7 @@
 #include <kis_processing_information.h>
 #include <KoCompositeOp.h>
 
-#include "kis_multi_integer_filter_widget.h"
+#include "widgets/kis_multi_integer_filter_widget.h"
 
 KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Small Tiles..."))
 {

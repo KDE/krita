@@ -40,8 +40,8 @@
 
 #include "kis_config.h"
 #include "kis_factory2.h"
-#include "kis_cmb_idlist.h"
-#include "squeezedcombobox.h"
+#include "widgets/kis_cmb_idlist.h"
+#include "widgets/squeezedcombobox.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
     : KDialog(parent)

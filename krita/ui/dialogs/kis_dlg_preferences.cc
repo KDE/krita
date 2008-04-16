@@ -54,9 +54,9 @@
 #include <kpagewidgetmodel.h>
 #include <kicon.h>
 #include <kvbox.h>
-#include "squeezedcombobox.h"
+#include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
-#include "kis_cmb_idlist.h"
+#include "widgets/kis_cmb_idlist.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_cursor.h"

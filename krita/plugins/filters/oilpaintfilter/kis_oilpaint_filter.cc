@@ -52,7 +52,7 @@
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
 
-#include "kis_multi_integer_filter_widget.h"
+#include "widgets/kis_multi_integer_filter_widget.h"
 
 
 KisOilPaintFilter::KisOilPaintFilter() : KisFilter( id(), KisFilter::CategoryArtistic, i18n("&Oilpaint...") )

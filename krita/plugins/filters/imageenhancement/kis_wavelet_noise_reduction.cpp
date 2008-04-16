@@ -27,8 +27,8 @@
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_math_toolbox.h>
-#include <kis_multi_double_filter_widget.h>
-#include <kis_multi_integer_filter_widget.h>
+#include <widgets/kis_multi_double_filter_widget.h>
+#include <widgets/kis_multi_integer_filter_widget.h>
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>

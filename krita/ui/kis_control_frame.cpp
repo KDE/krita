@@ -56,18 +56,18 @@
 #include "kis_canvas_resource_provider.h"
 
 #include "kis_resource_mediator.h"
-#include "kis_iconwidget.h"
+#include "widgets/kis_iconwidget.h"
 #include "kis_brush.h"
 #include "kis_pattern.h"
-#include "kis_brush_chooser.h"
-#include "kis_gradient_chooser.h"
+#include "widgets/kis_brush_chooser.h"
+#include "widgets/kis_gradient_chooser.h"
 #include "kis_view2.h"
-#include "kis_auto_brush_widget.h"
+#include "widgets/kis_auto_brush_widget.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"
 #include "kis_custom_brush.h"
 #include "kis_custom_pattern.h"
-#include "kis_pattern_chooser.h"
+#include "widgets/kis_pattern_chooser.h"
 #ifdef HAVE_TEXT_BRUSH
 #include "kis_text_brush.h"
 #endif

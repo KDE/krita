@@ -160,12 +160,12 @@
   <customwidget>
    <class>KisCmbIDList</class>
    <extends>QWidget</extends>
-   <header>kis_cmb_idlist.h</header>
+   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
   <customwidget>
    <class>SqueezedComboBox</class>
    <extends>QComboBox</extends>
-   <header>squeezedcombobox.h</header>
+   <header>widgets/squeezedcombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

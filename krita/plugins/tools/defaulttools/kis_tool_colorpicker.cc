@@ -206,7 +206,7 @@ void KisToolColorPicker::displayPickedColor()
             int pos = channels[i]->pos() / channels[i]->size(); // HACK This doesn't work if the channels differ in size
 
             if (m_normaliseValues) {
-                channelValueText = i18n("%1%").arg(m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), pos));
+                channelValueText = m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), pos);
             } else {
                 channelValueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), pos);
             }

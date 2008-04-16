@@ -253,7 +253,7 @@
   <customwidget>
    <class>KisCmbComposite</class>
    <extends></extends>
-   <header>kis_cmb_composite.h</header>
+   <header>widgets/kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KoDocumentSectionView</class>

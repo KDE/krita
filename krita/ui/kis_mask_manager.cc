@@ -43,7 +43,7 @@
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
 #include "dialogs/kis_dlg_adjustment_layer.h"
-#include "kis_mask_widgets.h"
+#include "widgets/kis_mask_widgets.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"

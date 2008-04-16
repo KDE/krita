@@ -31,9 +31,9 @@
 
 #include "kis_factory2.h"
 #include "kis_global.h"
-#include "kis_cmb_composite.h"
-#include "kis_cmb_idlist.h"
-#include "squeezedcombobox.h"
+#include "widgets/kis_cmb_composite.h"
+#include "widgets/kis_cmb_idlist.h"
+#include "widgets/squeezedcombobox.h"
 
 
 #include "KoColorSpaceRegistry.h"

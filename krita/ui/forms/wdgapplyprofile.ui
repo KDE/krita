@@ -152,7 +152,7 @@
   <customwidget>
    <class>SqueezedComboBox</class>
    <extends>QWidget</extends>
-   <header>squeezedcombobox.h</header>
+   <header>widgets/squeezedcombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

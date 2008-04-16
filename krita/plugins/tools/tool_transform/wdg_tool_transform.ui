@@ -176,7 +176,7 @@
     <customwidget>
       <class>KisCmbIDList</class>
       <extends>QComboBox</extends>
-      <header location="local" >kis_cmb_idlist.h</header>
+      <header location="local" >widgets/kis_cmb_idlist.h</header>
       <sizehint>
         <width>1</width>
         <height>24</height>

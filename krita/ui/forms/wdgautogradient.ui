@@ -394,7 +394,7 @@
   <customwidget>
    <class>KisGradientSliderWidget</class>
    <extends></extends>
-   <header>kis_gradient_slider_widget.h</header>
+   <header>widgets/kis_gradient_slider_widget.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

@@ -51,7 +51,7 @@
   <customwidget>
    <class>KisWdgGenerator</class>
    <extends>QWidget</extends>
-   <header>kis_wdg_generator.h</header>
+   <header>widgets/kis_wdg_generator.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

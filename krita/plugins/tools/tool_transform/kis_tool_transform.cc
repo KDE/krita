@@ -52,7 +52,7 @@
 #include <kis_selected_transaction.h>
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
-#include <kis_cmb_idlist.h>
+#include <widgets/kis_cmb_idlist.h>
 #include <kis_transform_worker.h>
 
 #include "kis_layer_shape.h"

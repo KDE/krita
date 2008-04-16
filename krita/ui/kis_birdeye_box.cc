@@ -35,7 +35,7 @@
 #include "kis_view2.h"
 #include "kis_doc2.h"
 
-#include "kis_double_widget.h"
+#include "widgets/kis_double_widget.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
 #include "kis_iterators_pixel.h"

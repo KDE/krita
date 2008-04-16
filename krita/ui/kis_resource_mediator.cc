@@ -24,7 +24,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 
-#include "kis_itemchooser.h"
+#include "widgets/kis_item_chooser.h"
 
 KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
                      KoAbstractResourceServerAdapter* rServerAdapter,

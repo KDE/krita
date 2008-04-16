@@ -8,125 +8,123 @@ configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-proce
 include(kdefx.cmake)
 
 set(kritaui_LIB_SRCS
-    imageviewer.cc
-    kcurve.cc
-    kis_abstract_canvas_widget.cpp
-    kis_auto_brush_widget.cpp
+    dialogs/kis_dlg_adj_layer_props.cc 
+    dialogs/kis_dlg_adjustment_layer.cc
+    dialogs/kis_dlg_apply_profile.cc 
+    dialogs/kis_dlg_filter.cpp
+    dialogs/kis_dlg_generator_layer.cpp
+    dialogs/kis_dlg_image_properties.cc
+    dialogs/kis_dlg_layer_properties.cc
+    dialogs/kis_dlg_new_layer.cc 
+    dialogs/kis_dlg_preferences.cc
+    dialogs/kis_dlg_transformation_effect.cpp
+    kis_abstract_canvas_widget.cpp 
     kis_autogradient.cc
-    kis_birdeye_box.cc
+    kis_birdeye_box.cc 
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
-    kis_boundary_painter.cc
-    kis_brush_chooser.cc
-    kis_canvas2.cpp
+    kis_boundary_painter.cc 
+    kis_canvas2.cpp 
     kis_canvas_decoration.cc
-    kis_canvas_resource_provider.cpp
-    kis_channelflags_widget.cpp
-    kis_clipboard.cc
-    kis_cmb_composite.cc
-    kis_cmb_idlist.cc
-    kis_color_space_selector.cc
+    kis_canvas_resource_provider.cpp 
+    kis_clipboard.cc 
     kis_config.cc
-    kis_config_notifier.cpp
-    kis_control_frame.cpp
+    kis_config_notifier.cpp 
+    kis_control_frame.cpp 
     kis_cursor.cc
-    kis_custom_brush.cc
-    kis_custom_image_widget.cc
-    kis_custom_palette.cc
+    kis_custom_brush.cc 
+    kis_custom_palette.cc 
     kis_custom_pattern.cc
-    dialogs/kis_dlg_adj_layer_props.cc
-    dialogs/kis_dlg_adjustment_layer.cc
-    dialogs/kis_dlg_apply_profile.cc
-    dialogs/kis_dlg_image_properties.cc
-    dialogs/kis_dlg_layer_properties.cc
-    dialogs/kis_dlg_new_layer.cc
-    dialogs/kis_dlg_preferences.cc
-    dialogs/kis_dlg_transformation_effect.cpp
-    kis_doc2.cc
-    kis_double_widget.cc
-    kis_exposure_visitor.cc
+    kis_doc2.cc 
+    kis_exposure_visitor.cc 
     kis_factory2.cc
-    dialogs/kis_dlg_filter.cpp
-    kis_filter_handler.cc
-    kis_filter_manager.cc
+    kis_filter_handler.cc 
+    kis_filter_manager.cc 
     kis_filters_model.cc
-    kis_gradient_chooser.cc
-    kis_gradient_slider_widget.cc
-    kis_grid_manager.cpp
+    kis_grid_manager.cpp 
     kis_grid_painter_configuration.cpp
-    kis_histogram_view.cc
-    kis_icon_item.cc
-    kis_iconwidget.cc
+    kis_histogram_view.cc 
+    kis_icon_item.cc 
     kis_image_manager.cc
-    kis_imagepipe_brush.cc
+    kis_imagepipe_brush.cc 
     kis_image_view_converter.cpp
-    kis_import_catcher.cc
-    kis_itemchooser.cc
-    kis_kra_loader.cpp
+    kis_import_catcher.cc 
+    kis_kra_loader.cpp 
     kis_kra_load_visitor.cpp
-    kis_kra_save_visitor.cpp
+    kis_kra_save_visitor.cpp 
     kis_label_cursor_pos.cc
-    kis_layer_box.cpp
-    kis_layer_container_shape.cc
+    kis_layer_box.cpp 
+    kis_layer_container_shape.cc 
     kis_layer_manager.cc
-    kis_layermap_visitor.cc
-    kis_layer_shape.cc
+    kis_layermap_visitor.cc 
+    kis_layer_shape.cc 
     kis_mask_manager.cc
-    kis_mask_shape.cc
-    kis_mask_widgets.cpp
-    kis_meta_data_merge_strategy_chooser_widget.cc
-    kis_multi_bool_filter_widget.cc
-    kis_multi_double_filter_widget.cc
-    kis_multi_integer_filter_widget.cc
-    kis_node_manager.cpp
+    kis_mask_shape.cc 
+    kis_node_manager.cpp 
     kis_node_model.cpp
-    opengl/kis_opengl_canvas2.cpp
-    opengl/kis_opengl.cpp
-    opengl/kis_opengl_image_textures.cpp
+    kis_painting_assistant.cc 
     kis_paintop_box.cc 
-    kis_paintop_presets_widget.cpp
-    kis_painting_assistant.cc
     kis_palette_docker.cc
-    kis_pattern_chooser.cc
-    kis_perspective_grid_manager.cpp
+    kis_perspective_grid_manager.cpp  
     kis_png_converter.cpp
-    kis_popup_button.cc
     kis_prescaled_projection.cpp
-    kis_preset_widget.cpp
-    kis_previewwidget.cc
-    kis_print_job.cpp
+    kis_print_job.cpp 
     kis_qpainter_canvas.cpp
-    kis_recorded_paint_actions.cc
+    kis_recorded_paint_actions.cc 
     kis_resource_mediator.cc
-    kis_resource_server_provider.cpp
+    kis_resource_server_provider.cpp 
     kis_savexml_visitor.cc
-    kis_selection_manager.cc
+    kis_selection_manager.cc 
     kis_selection_options.cc
-    kis_selection_tool_helper.cpp
+    kis_selection_tool_helper.cpp 
     kis_shape_controller.cpp
-    kis_shape_layer_canvas.cpp
-    kis_shape_layer.cc
+    kis_shape_layer_canvas.cpp 
+    kis_shape_layer.cc 
     kis_shape_selection.cpp
-    kis_shape_selection_model.cpp
-    kis_statusbar.cc
+    kis_shape_selection_model.cpp 
+    kis_statusbar.cc 
     kis_text_brush.cc
-    kis_tool.cc
-    kis_tool_freehand.cc
+    kis_tool.cc 
+    kis_tool_freehand.cc 
     kis_tool_freehand_p.cpp
-    kis_tool_paint.cc
-    kis_tool_shape.cc
-    kis_tree_view_popup.cc
-    kis_view2.cpp
+    kis_tool_paint.cc 
+    kis_tool_shape.cc kis_view2.cpp 
     kis_zoom_manager.cc
-    kis_wdg_generator.cpp
-    kobirdeyepanel.cpp
-    modeltest.cpp
-    squeezedcombobox.cpp
-    dialogs/kis_dlg_generator_layer.cpp
-# Open Raster TK
+    kobirdeyepanel.cpp 
+    modeltest.cpp 
+    opengl/kis_opengl_canvas2.cpp
+    opengl/kis_opengl.cpp 
+    opengl/kis_opengl_image_textures.cpp
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
+    widgets/imageviewer.cc 
+    widgets/kcurve.cc
+    widgets/kis_auto_brush_widget.cpp 
+    widgets/kis_brush_chooser.cc
+    widgets/kis_channelflags_widget.cpp 
+    widgets/kis_cmb_composite.cc
+    widgets/kis_cmb_idlist.cc 
+    widgets/kis_color_space_selector.cc
+    widgets/kis_custom_image_widget.cc 
+    widgets/kis_double_widget.cc
+    widgets/kis_gradient_chooser.cc 
+    widgets/kis_gradient_slider_widget.cc
+    widgets/kis_iconwidget.cc 
+    widgets/kis_item_chooser.cpp
+    widgets/kis_mask_widgets.cpp 
+    widgets/kis_meta_data_merge_strategy_chooser_widget.cc
+    widgets/kis_multi_bool_filter_widget.cc
+    widgets/kis_multi_double_filter_widget.cc
+    widgets/kis_multi_integer_filter_widget.cc
+    widgets/kis_paintop_presets_widget.cpp 
+    widgets/kis_pattern_chooser.cc
+    widgets/kis_popup_button.cc 
+    widgets/kis_preset_widget.cpp 
+    widgets/kis_previewwidget.cc
+    widgets/kis_tree_view_popup.cc 
+    widgets/kis_wdg_generator.cpp
+    widgets/squeezedcombobox.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

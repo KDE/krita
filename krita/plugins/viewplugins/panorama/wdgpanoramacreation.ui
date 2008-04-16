@@ -188,7 +188,7 @@
   <customwidget>
    <class>ImageViewer</class>
    <extends>QWidget</extends>
-   <header>imageviewer.h</header>
+   <header>widgets/imageviewer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

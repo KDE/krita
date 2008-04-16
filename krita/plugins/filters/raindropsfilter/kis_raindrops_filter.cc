@@ -52,7 +52,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
-#include "kis_multi_integer_filter_widget.h"
+#include "widgets/kis_multi_integer_filter_widget.h"
 
 
 KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Raindrops..."))

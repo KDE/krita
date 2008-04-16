@@ -205,7 +205,7 @@
     <customwidget>
       <class>ImageViewer</class>
       <extends></extends>
-      <header location="local" >imageviewer.h</header>
+      <header location="local" >widgets/imageviewer.h</header>
       <sizehint>
         <width>-1</width>
         <height>-1</height>

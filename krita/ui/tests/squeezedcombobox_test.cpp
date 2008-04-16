@@ -4,7 +4,7 @@
 #include "squeezedcombobox_test.h"
 #include <qtest_kde.h>
 
-#include "squeezedcombobox.h"
+#include "widgets/squeezedcombobox.h"
 
 void SqueezedComboBoxTest::testContains()
 {

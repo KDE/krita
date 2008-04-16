@@ -55,7 +55,7 @@
 
 #include "kis_config.h"
 #include "kis_cursor.h"
-#include "kis_cmb_composite.h"
+#include "widgets/kis_cmb_composite.h"
 #include "KoSliderCombo.h"
 #include "kis_canvas_resource_provider.h"
 

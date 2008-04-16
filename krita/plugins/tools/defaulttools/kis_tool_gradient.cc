@@ -43,9 +43,9 @@
 #include "KoCanvasBase.h"
 #include "KoViewConverter.h"
 
-#include "kis_cmb_composite.h"
+#include "widgets/kis_cmb_composite.h"
 #include "kis_cursor.h"
-#include "kis_double_widget.h"
+#include "widgets/kis_double_widget.h"
 #include "kis_gradient_painter.h"
 #include "kis_painter.h"
 #include "KoProgressUpdater.h"

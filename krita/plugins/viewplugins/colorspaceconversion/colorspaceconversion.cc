@@ -51,8 +51,8 @@
 
 #include "kis_view2.h"
 #include "kis_paint_device.h"
-#include "kis_cmb_idlist.h"
-#include "squeezedcombobox.h"
+#include "widgets/kis_cmb_idlist.h"
+#include "widgets/squeezedcombobox.h"
 
 
 #include "dlg_colorspaceconversion.h"

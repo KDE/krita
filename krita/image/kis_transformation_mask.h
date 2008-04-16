@@ -26,7 +26,7 @@
 #include "kis_types.h"
 #include "kis_effect_mask.h"
 #include <kis_filter_strategy.h>
-#include <kis_cmb_idlist.h>
+#include <widgets/kis_cmb_idlist.h>
 
 class KisFilterStrategy;
 

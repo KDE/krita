@@ -78,8 +78,8 @@
 #include "kis_view2.h"
 #include "kis_zoom_manager.h"
 #include "kis_canvas2.h"
-#include "kis_meta_data_merge_strategy_chooser_widget.h"
-#include "kis_wdg_generator.h"
+#include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
+#include "widgets/kis_wdg_generator.h"
 
 KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
     : m_view( view )

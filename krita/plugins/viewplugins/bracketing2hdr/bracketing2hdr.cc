@@ -501,14 +501,14 @@ void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
     for(int i = 0; i < numberOfInputLevels(); i ++ )
     {
         redCurve->addPoint(i, m_intensityR[i]);
-        min = QMIN(min, m_intensityR[i]);
-        max = QMAX(max, m_intensityR[i]);
+        min = qMin(min, m_intensityR[i]);
+        max = qMax(max, m_intensityR[i]);
         greenCurve->addPoint(i, m_intensityG[i]);
-        min = QMIN(min, m_intensityG[i]);
-        max = QMAX(max, m_intensityG[i]);
+        min = qMin(min, m_intensityG[i]);
+        max = qMax(max, m_intensityG[i]);
         blueCurve->addPoint(i, m_intensityB[i]);
-        min = QMIN(min, m_intensityB[i]);
-        max = QMAX(max, m_intensityB[i]);
+        min = qMin(min, m_intensityB[i]);
+        max = qMax(max, m_intensityB[i]);
 //         dbgPlugins << i <<"" << m_intensityR[i] <<"" << m_intensityG[i] <<"" << m_intensityB[i];
     }
     m_wdgBracketing2HDR->plotWidget->addPlotObject(redCurve);

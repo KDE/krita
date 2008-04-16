@@ -34,7 +34,7 @@
 #include "KoPointerEvent.h"
 
 #include "kis_brush.h"
-#include "kis_cmb_composite.h"
+#include "widgets/kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_doc2.h"
 #include "kis_paintop.h"

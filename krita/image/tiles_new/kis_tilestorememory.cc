@@ -329,3 +329,4 @@ void KisTileStoreMemory::reclaimTileToPool(quint8* data, qint32 pixelSize) {
     }
 }
 #endif
+

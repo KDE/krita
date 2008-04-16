@@ -158,7 +158,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
                         // To grayscale
 
-                        // Decide wether we need downscaling
+                        // Decide whether we need downscaling
                         if (channelSize == 1 && destSize == 1) {
 
                             // Both 8-bit channels

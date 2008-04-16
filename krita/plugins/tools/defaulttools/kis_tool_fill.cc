@@ -38,7 +38,7 @@
 #include "kis_cursor.h"
 #include "kis_painter.h"
 #include "kis_tool_brush.h"
-#include "kis_cmb_composite.h"
+#include "widgets/kis_cmb_composite.h"
 
 #include "KoColorSpace.h"
 #include "KoCanvasBase.h"

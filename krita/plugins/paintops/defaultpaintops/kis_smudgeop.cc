@@ -35,7 +35,7 @@
 #include <KoInputDevice.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <kcurve.h>
+#include <widgets/kcurve.h>
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <kis_paint_device.h>

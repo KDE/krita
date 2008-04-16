@@ -155,7 +155,7 @@
   <customwidget>
    <class>KisCmbIDList</class>
    <extends>QComboBox</extends>
-   <header>kis_cmb_idlist.h</header>
+   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

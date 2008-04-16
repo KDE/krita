@@ -52,7 +52,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
-#include "kis_multi_bool_filter_widget.h"
+#include "widgets/kis_multi_bool_filter_widget.h"
 
 
 #define MIN(a,b) (((a)<(b))?(a):(b))

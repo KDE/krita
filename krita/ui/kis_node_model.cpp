@@ -131,7 +131,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 
     if (!hasIndex(row, column, parent))
     {
-        dbgUI << "Doesn't have index";
+        dbgUI << "Does not have index";
         return QModelIndex();
     }
     KisNodeSP parentNode;
@@ -335,7 +335,7 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
     dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
     if(! data->hasFormat( "application/x-kritalayermodeldatalist" ))
     {
-        dbgUI << "Doesn't have 'application/x-kritalayermodeldatalist'";
+        dbgUI << "Does not have 'application/x-kritalayermodeldatalist'";
         return false;
     }
     QByteArray encoded = data->data( "application/x-kritalayermodeldatalist" );

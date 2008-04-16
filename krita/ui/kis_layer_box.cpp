@@ -63,7 +63,7 @@
 #include <kis_mask.h>
 #include <kis_node.h>
 
-#include "kis_cmb_composite.h"
+#include "widgets/kis_cmb_composite.h"
 #include "kis_view2.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"

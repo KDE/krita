@@ -254,7 +254,7 @@
   <customwidget>
    <class>KCurve</class>
    <extends></extends>
-   <header>kcurve.h</header>
+   <header>widgets/kcurve.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

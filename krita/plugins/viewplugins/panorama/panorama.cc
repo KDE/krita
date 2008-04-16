@@ -47,7 +47,7 @@
 #include "kis_paint_device.h"
 #include "kis_types.h"
 #include "kis_view2.h"
-#include "imageviewer.h"
+#include "widgets/imageviewer.h"
 #include <kis_image.h>
 
 #include "imagoptim_functions.h"

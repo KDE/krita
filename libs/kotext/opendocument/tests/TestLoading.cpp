@@ -379,6 +379,7 @@ void TestLoading::testLoading_data()
     
     QTest::newRow("Bulleted list") << "TextContents/Lists/bulletedList";
     QTest::newRow("Bold and Italic") << "TextContents/TextFormatting/boldAndItalic";
+    QTest::newRow("Attributed Text") << "TextContents/Paragraph/attributedText";
     QTest::newRow("Font Size") << "TextContents/TextFormatting/fontSize";
     QTest::newRow("Font Colors") << "TextContents/TextFormatting/fontColors";
 }

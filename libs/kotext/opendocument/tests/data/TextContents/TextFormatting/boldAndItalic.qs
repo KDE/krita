@@ -1,29 +1,21 @@
 // This is very similar to attributedText.qs
 
-var textEdit = new QTextEdit;
-var document = textEdit.document();
-var cursor = textEdit.textCursor();
+include("common.qs");
 
-var defaultFont = new QFont;
-defaultFont.setPointSizeF(12.0); // See KoCharacterStyle.cpp
-
-var defaultFormat = new QTextCharFormat;
-defaultFormat.setFont(defaultFont);
-
-var emphasizedFormat = new QTextCharFormat;
+var emphasizedFormat = QTextCharFormat.clone(defaultTextFormat);
 var emphasizedFont = new QFont(defaultFont);
 emphasizedFont.setBold(true);
 emphasizedFormat.setFont(emphasizedFont);
 
-var italicFormat = new QTextCharFormat;
+var italicFormat = QTextCharFormat.clone(defaultTextFormat);
 italicFormat.setFont(defaultFont);
 italicFormat.setFontItalic(true);
 
-cursor.insertText("This word is ", defaultFormat);
+cursor.insertText("This word is ", defaultTextFormat);
 cursor.insertText("emphasized", emphasizedFormat);
-cursor.insertText(", and this word is ", defaultFormat);
+cursor.insertText(", and this word is ", defaultTextFormat);
 cursor.insertText("italic", italicFormat);
-cursor.insertText(". ", defaultFormat);
+cursor.insertText(". ", defaultTextFormat);
 
 cursor.insertBlock(); // CHECKME: This should not be created
 

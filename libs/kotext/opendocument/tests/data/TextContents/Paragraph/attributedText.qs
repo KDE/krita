@@ -1,30 +1,22 @@
 // this is very similar to boldAndItalic.qs
 
-var textEdit = new QTextEdit;
-var document = textEdit.document();
-var cursor = textEdit.textCursor();
+include("common.qs");
 
-var defaultFont = new QFont;
-defaultFont.setPointSizeF(12.0); // See KoCharacterStyle.cpp
-
-var defaultFormat = new QTextCharFormat;
-defaultFormat.setFont(defaultFont);
-
-var italicFormat = new QTextCharFormat;
+var italicFormat = QTextCharFormat.clone(defaultTextFormat);
 italicFormat.setFont(defaultFont);
 italicFormat.setFontItalic(true);
 
-var boldFormat = new QTextCharFormat;
+var boldFormat = QTextCharFormat.clone(defaultTextFormat);
 var boldFont = new QFont(defaultFont);
 boldFont.setBold(true);
 boldFormat.setFont(boldFont);
 
-cursor.insertText("In this paragraphs ", defaultFormat);
+cursor.insertText("In this paragraphs ", defaultTextFormat);
 cursor.insertText("these words are emphasized", italicFormat);
-cursor.insertText(" and ", defaultFormat);
+cursor.insertText(" and ", defaultTextFormat);
 cursor.insertText("these words are emphasized", boldFormat);
-cursor.insertText(". ", defaultFormat);
+cursor.insertText(". ", defaultTextFormat);
 
-cursor.insertBlock(); // CHECKME: This should not be created
+cursor.insertBlock(new QTextBlockFormat, defaultTextFormat); // CHECKME: This should not be created
 
 return document;

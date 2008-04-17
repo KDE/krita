@@ -1,6 +1,4 @@
-var textEdit = new QTextEdit;
-var document = textEdit.document();
-var cursor = textEdit.textCursor();
+// include("common.qs");
 
 cursor.insertList(QTextListFormat.ListDisc);
 cursor.insertText("This is an example of bulleted list.");

@@ -36,6 +36,8 @@ class QPoint;
 
 class KoCanvasBase;
 
+class KisRecordedPolyLinePaintAction;
+
 class KisToolLine : public KisToolPaint {
 
     Q_OBJECT

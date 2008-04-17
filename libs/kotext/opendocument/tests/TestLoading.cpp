@@ -407,6 +407,7 @@ void TestLoading::testLoading_data()
 
     QTest::newRow("Font Colors") << "TextContents/TextFormatting/fontColors";
     QTest::newRow("Colors") << "FormattingProperties/TextFormattingProperties/color";
+    QTest::newRow("Font family") << "FormattingProperties/TextFormattingProperties/fontFamily";
 }
 
 void TestLoading::testLoading() 

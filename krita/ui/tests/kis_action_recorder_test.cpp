@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ * Copyright (C) 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_files_test.h"
+#include "kis_action_recorder_test.h"
 
 
 #include <QTest>
@@ -28,6 +28,7 @@
 #include <kis_image.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_action_recorder.h>
 
 #include <ktemporaryfile.h>
 
@@ -36,36 +37,41 @@
 #endif
 
 
-void KisFilesTest::testFiles()
+void KisActionRecorderTest::testFiles()
 {
-    QDir dirSources ( QString(FILES_DATA_DIR) + "/sources" );
+    QDir dirSources ( QString(FILES_DATA_DIR) + "/actionrecorder/sources" );
     foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList())
     {
         if( !sourceFileInfo.isHidden())
         {
             qDebug() << "handling " << sourceFileInfo.fileName();
-            QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png" );
+            QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/actionrecorder/results/" + sourceFileInfo.fileName() + ".png" );
             QVERIFY2(resultFileInfo.exists(),
                      QString( "Result file %1 not found" ).arg(resultFileInfo.fileName()).toAscii().data() );
+            // Replay
+            // Create an image and the document
+            QDomDocument domDoc;
             KisDoc2 doc;
-            doc.importDocument( sourceFileInfo.absoluteFilePath() );
-            QVERIFY(doc.image());
-            QString id = doc.image()->colorSpace()->id();
-            if(id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16")
-            {
-              dbgKrita << "Images need conversion";
-              doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
-            }
-            KTemporaryFile tmpFile;
-            tmpFile.setSuffix(".png");
-            tmpFile.open();
-            tmpFile.setAutoRemove(false);
-            doc.setOutputMimeType("image/png");
-            doc.saveAs( "file://" + tmpFile.fileName());
+            KisImageSP image = doc.newImage("", 200, 200, KoColorSpaceRegistry::instance()->rgb8());
+            
+            // Load recorded action
+            QString err;
+            int line, col;
+            QFile file(sourceFileInfo.absoluteFilePath());
+            QVERIFY(file.open( QIODevice::ReadOnly));
+            QVERIFY(domDoc.setContent(&file, &err, &line, &col));
+            file.close();
+            QDomElement docElem = domDoc.documentElement();
+            QVERIFY(!docElem.isNull() && docElem.tagName() == "RecordedActions");
+            // Unserialise
+            KisMacro m(image);
+            m.fromXML(docElem);
+            // Play
+            m.play();
+            QImage sourceImg = image->convertToQImage(0,0,200,200, 0 );
+            // load what we should have get from the hard drive
             QImage resultImg(resultFileInfo.absoluteFilePath());
             resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
-            QImage sourceImg(tmpFile.fileName());
-            sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
             QVERIFY(resultImg.width() == sourceImg.width());
             QVERIFY(resultImg.height() == sourceImg.height());
             QCOMPARE(resultImg.numBytes(), sourceImg.numBytes());
@@ -89,6 +95,6 @@ void KisFilesTest::testFiles()
         }
     }
 }
-QTEST_KDEMAIN(KisFilesTest, GUI)
+QTEST_KDEMAIN(KisActionRecorderTest, GUI)
 
-#include "kis_files_test.moc"
+#include "kis_action_recorder_test.moc"

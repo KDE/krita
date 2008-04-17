@@ -289,7 +289,7 @@ void KisRecordedPolyLinePaintAction::addPoint(const KisPaintInformation& info)
 void KisRecordedPolyLinePaintAction::playPaint(KisPainter* painter) const
 {
     dbgUI << "play poly line paint with " << d->infos.size() << " points";
-    if(d->infos.size() < 0) return;
+    if(d->infos.size() <= 0) return;
     painter->paintAt(d->infos[0]);
     double savedDist = 0.0;
     for(int i = 0; i < d->infos.size() - 1; i++)
@@ -454,7 +454,7 @@ void KisRecordedBezierCurvePaintAction::addPoint(const KisPaintInformation& poin
 void KisRecordedBezierCurvePaintAction::playPaint(KisPainter* painter) const
 {
     dbgUI << "play bezier curve paint with " << d->infos.size() << " points";
-    if(d->infos.size() < 0) return;
+    if(d->infos.size() <= 0) return;
     double savedDist = 0.0;
     for(int i = 0; i < d->infos.size(); i++)
     {

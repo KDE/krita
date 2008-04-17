@@ -456,6 +456,7 @@ void KisRecordedBezierCurvePaintAction::playPaint(KisPainter* painter) const
     dbgUI << "play bezier curve paint with " << d->infos.size() << " points";
     if(d->infos.size() <= 0) return;
     double savedDist = 0.0;
+    painter->paintAt(d->infos[0].point1);
     for(int i = 0; i < d->infos.size(); i++)
     {
         dbgUI << d->infos[i].point1.pos() << " to " << d->infos[i].point2.pos();

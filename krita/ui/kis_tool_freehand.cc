@@ -111,6 +111,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                                                          KisVector2D(),
                                                          e->rotation(), e->tangentialPressure());
         paintAt(m_previousPaintInformation);
+        if(!m_smooth)
+        {
+            m_polyLinePaintAction->addPoint( m_previousPaintInformation );
+        }
     }
 }
 

@@ -65,15 +65,15 @@ KisPaintInformation::~KisPaintInformation()
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
 {
-    e.setAttribute("pointX", pos().x());
-    e.setAttribute("pointY", pos().y());
-    e.setAttribute("pressure", pressure());
-    e.setAttribute("xTilt", xTilt());
-    e.setAttribute("yTilt", yTilt());
-    e.setAttribute("movementX", movement().x());
-    e.setAttribute("movementY", movement().y());
-    e.setAttribute("rotation", rotation());
-    e.setAttribute("tangentialPressure", tangentialPressure());
+    e.setAttribute("pointX", QString::number( pos().x(), 'g', 15) );
+    e.setAttribute("pointY", QString::number( pos().y(), 'g', 15) );
+    e.setAttribute("pressure", QString::number( pressure(), 'g', 15) );
+    e.setAttribute("xTilt", QString::number( xTilt(), 'g', 15) );
+    e.setAttribute("yTilt", QString::number( yTilt(), 'g', 15) );
+    e.setAttribute("movementX", QString::number( movement().x(), 'g', 15) );
+    e.setAttribute("movementY", QString::number( movement().y(), 'g', 15) );
+    e.setAttribute("rotation", QString::number( rotation(), 'g', 15) );
+    e.setAttribute("tangentialPressure", QString::number( tangentialPressure(), 'g', 15) );
 }
 
 KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)

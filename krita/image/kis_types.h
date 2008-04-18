@@ -22,7 +22,10 @@
 #include <QMap>
 #include <QPoint>
 
-#include <kis_shared_ptr.h>
+template<class T>
+class KisWeakSharedPtr;
+template<class T>
+class KisSharedPtr;
 
 #include "kis_shared_ptr_vector.h"
 
@@ -39,12 +42,6 @@ typedef KisSharedPtr<KisProjection> KisProjectionSP;
 class KisImage;
 typedef KisSharedPtr<KisImage> KisImageSP;
 typedef KisWeakSharedPtr<KisImage> KisImageWSP;
-
-class KisAnnotation;
-typedef KisSharedPtr<KisAnnotation> KisAnnotationSP;
-typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
-typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
-typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
 class KisPaintDevice;
 typedef KisSharedPtr<KisPaintDevice> KisPaintDeviceSP;
@@ -191,3 +188,5 @@ typedef KisRandomAccessorPixelBase<KisRandomAccessor, quint8*> KisRandomAccessor
 typedef QVector<QPointF> vQPointF;
 
 #endif // KISTYPES_H_
+
+#include <kis_shared_ptr.h>

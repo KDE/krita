@@ -254,11 +254,8 @@ public:
     virtual KisLayer* layer() = 0;
 
 private:
-
-    // To simulate the indirect painting
-    KisPaintDeviceSP m_temporaryTarget;
-    const KoCompositeOp* m_compositeOp;
-    quint8 m_compositeOpacity;
+    struct Private;
+    Private* const d;
 
 };
 

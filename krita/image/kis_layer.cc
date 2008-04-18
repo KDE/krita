@@ -282,32 +282,42 @@ KisMetaData::Store* KisLayer::metaData()
     return m_d->metaDataStore;
 }
 
+struct KisIndirectPaintingSupport::Private {
+    // To simulate the indirect painting
+    KisPaintDeviceSP temporaryTarget;
+    const KoCompositeOp* compositeOp;
+    quint8 compositeOpacity;
+};
+
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {
-    m_temporaryTarget = t;
+    d->temporaryTarget = t;
 }
 
 void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c) {
-    m_compositeOp = c;
+    d->compositeOp = c;
 }
 
 void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o) {
-    m_compositeOpacity = o;
+    d->compositeOpacity = o;
 }
 
 KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() {
-    return m_temporaryTarget;
+    return d->temporaryTarget;
 }
 
 const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const {
-    return m_compositeOp;
+    return d->compositeOp;
 }
 
 quint8 KisIndirectPaintingSupport::temporaryOpacity() const {
-    return m_compositeOpacity;
+    return d->compositeOpacity;
 }
 
 
-KisIndirectPaintingSupport::KisIndirectPaintingSupport() : m_compositeOp(0) { }
-KisIndirectPaintingSupport::~KisIndirectPaintingSupport() {}
+KisIndirectPaintingSupport::KisIndirectPaintingSupport() : d(new Private)
+{
+    d->compositeOp = 0;
+}
+KisIndirectPaintingSupport::~KisIndirectPaintingSupport() { delete d; }
 
 #include "kis_layer.moc"

@@ -229,6 +229,9 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     layout->setMargin(0);
     layout->setSpacing(0);
 
+    // this is wrong; createWidget() implies this is a factory method, so we should be able to be called
+    // multiple times without problems.  The 'new' here means we can't do that.
+    // TODO refactor this method to use connections instead of d-pointer members to communicate so it becomes reentrant.
     d->input = new KoZoomInput(group);
     regenerateItems( d->effectiveZoom );
     connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));

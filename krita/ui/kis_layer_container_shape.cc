@@ -88,14 +88,11 @@ void KisLayerContainerShape::paintComponent(QPainter &painter, const KoViewConve
     Q_UNUSED( converter );
 }
 
-void KisLayerContainerShape::saveOdf( KoShapeSavingContext & context ) const
+void KisLayerContainerShape::saveOdf( KoShapeSavingContext & /*context*/ ) const
 {
-    Q_UNUSED(context);
     // TODO
 }
 
-bool KisLayerContainerShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    Q_UNUSED(element);
-    Q_UNUSED(context);
+bool KisLayerContainerShape::loadOdf( const KoXmlElement & /*element*/, KoShapeLoadingContext &/*context*/ ) {
     return false; // TODO
 }

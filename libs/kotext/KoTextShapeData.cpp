@@ -202,8 +202,9 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     } else {
                         // There are manual changes... We'll have to store them then
                         KoGenStyle style(KoGenStyle::StyleAuto, "paragraph", internalName);
-                        // TODO this needs to check if false or true is needed
-                        style.setAutoStyleInStylesDotXml(false);
+                        if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
+                            style.setAutoStyleInStylesDotXml( true );
+                        }
                         paragStyle.removeDuplicates(*originalParagraphStyle);
                         paragStyle.saveOdf(style);
                         generatedName = context.mainStyles().lookup(style, "P");
@@ -236,7 +237,9 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     } else {
                         // There are manual changes... We'll have to store them then
                         KoGenStyle style(KoGenStyle::StyleAuto, "text", internalName);
-                        style.setAutoStyleInStylesDotXml(false);
+                        if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
+                            style.setAutoStyleInStylesDotXml( true );
+                        }
                         charStyle.removeDuplicates(*originalCharStyle);
                         charStyle.saveOdf(style);
                         generatedName = context.mainStyles().lookup(style, "T");

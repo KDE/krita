@@ -124,6 +124,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_previewwidget.cc
     widgets/kis_tree_view_popup.cc 
     widgets/kis_wdg_generator.cpp
+    widgets/kis_filter_selector_widget.cc
     widgets/squeezedcombobox.cpp
 )
 
@@ -175,6 +176,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgmetadatamergestrategychooser.ui
     forms/wdgpaintoppresets.ui
     forms/wdgdlggeneratorlayer.ui
+    forms/wdgfilterselector.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

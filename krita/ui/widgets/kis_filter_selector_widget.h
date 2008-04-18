@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,33 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILTER_DIALOG_H_
-#define _KIS_FILTER_DIALOG_H_
+#ifndef _KIS_FILTER_SELECTOR_WIDGET_H_
+#define _KIS_FILTER_SELECTOR_WIDGET_H_
 
-#include <QDialog>
+#include <QWidget>
 
 #include <kis_types.h>
 
-class KisFilter;
-class KisFilterConfiguration;
 class QModelIndex;
+class KisFilterConfiguration;
 
-class KisFilterDialog : public QDialog {
+class KisFilterSelectorWidget : public QWidget {
     Q_OBJECT
-    struct Private;
     public:
-        KisFilterDialog(QWidget* parent, KisLayerSP device);
-        ~KisFilterDialog();
+        KisFilterSelectorWidget( QWidget* parent);
+        ~KisFilterSelectorWidget();
         void setFilter(KisFilterSP f);
-    public slots:
-        void updatePreview();
+        void setLayer(KisLayerSP layer);
+        KisFilterConfiguration* configuration();
     protected slots:
-        void apply();
-        void close();
+        void slotBookmarkedFilterConfigurationSelected(int );
+        void setFilterIndex(const QModelIndex& );
+        void editConfigurations();
     signals:
-        void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);
+        void configurationChanged();
     private:
-        KisFilterDialog::Private* const d;
+        struct Private;
+        Private* const d;
 };
 
 #endif

@@ -18,6 +18,4 @@ cursor.insertBlock();
 cursor.insertText("This is an example that set font pitch to variable. This is an example that set font pitch to variable. This is an example that set font pitch to variable.", variablePitchFormat);
 cursor.insertText(" ", defaultTextFormat);
 
-cursor.insertBlock(new QTextBlockFormat, new QTextCharFormat); // CHECKME: I don't think this should be created
-
 return document;

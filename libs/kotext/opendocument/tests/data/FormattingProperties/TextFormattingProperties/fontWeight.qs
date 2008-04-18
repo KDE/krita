@@ -32,6 +32,4 @@ cursor.insertText("This is an example of text with 500 font weight", weight500Fo
 cursor.insertBlock();
 cursor.insertText("This is an example of text with 900 font weight", weight900Format);
 
-cursor.insertBlock(new QTextBlockFormat, new QTextCharFormat); // CHECKME: I don't think this should be created
-
 return document;

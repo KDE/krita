@@ -250,9 +250,15 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
 
     startBody( KoXml::childNodesCount( bodyElem ) );
     KoXmlElement tag;
+    bool firstTime = true;
     forEachElement(tag, bodyElem) {
         if ( ! tag.isNull() ) {
             const QString localName = tag.localName();
+            if (firstTime) {
+                firstTime = false;
+            } else {
+                cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+            }
             if ( tag.namespaceURI() == KoXmlNS::text ) {
                 if ( localName == "p" ) {  // text paragraph
                     loadParagraph( tag, cursor );
@@ -466,11 +472,6 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
     bool stripLeadingSpace = true;
     loadSpan( element, cursor, &stripLeadingSpace );
     cursor.setCharFormat( cf ); // restore the cursor char format
-
-    // tz: why is this done
-    QTextBlockFormat emptyTbf;
-    QTextCharFormat emptyCf;
-    cursor.insertBlock(emptyTbf, emptyCf);
 }
 
 #if 0
@@ -880,15 +881,12 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
                       ;
     #endif
 
-    // we need at least one item, so add a dummy-item we remove later again
-    cursor.insertBlock();
-    QTextBlock prev = cursor.block();
-
     // increment list level by one for nested lists.
     d->currentListLevel = level + 1;
 
     // Iterate over list items and add them to the textlist
     KoXmlElement e;
+    bool firstTime = true;
     forEachElement( e, element ) {
         if( e.isNull() ) {
             continue;
@@ -910,10 +908,18 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
 
         //listStyle->applyStyle(cursor.block(), level + 1);
         //listStyle->applyStyle(cursor.block());
+        if (firstTime) {
+            firstTime = false;
+        } else {
+            cursor.insertBlock();
+        }
+
         QTextBlock current = cursor.block();
-        list->add( current );
 
         loadBody( e, cursor );
+
+        if (!current.textList())
+            list->add(current);
 
         if ( ! listStyle->hasPropertiesForLevel( level ) ) { // set default style
             KoListLevelProperties props;
@@ -922,9 +928,8 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
             props.setLevel( 0 );
             listStyle->setLevel( props );
         }
-        if ( prev != current ) {
-            listStyle->applyStyle( current, level );
-        }
+
+        listStyle->applyStyle(current, level);
     }
 
     // set the list level back to the previous value
@@ -937,10 +942,6 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         listStyle->applyStyle(b, level);
     }
     */
-    int endPosition = cursor.position();
-    cursor.setPosition( list->item( 0 ).position() );
-    cursor.deleteChar();
-    cursor.setPosition( endPosition - 1 );
     /*
     // Get the matching paragraph style
     //QString userStyleName = context.styleStack().userStyleName( "paragraph" );
@@ -965,12 +966,6 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
     listStyle->loadOasis(context);
     paragStyle->setListStyle(*listStyle);
     */
-
-    QTextBlockFormat emptyTbf;
-    QTextCharFormat emptyCf;
-    cursor.setBlockFormat(emptyTbf);
-    cursor.setCharFormat(emptyCf);
-    //cursor.insertBlock(emptyTbf, emptyCf);
 }
 
 #if 0

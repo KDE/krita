@@ -17,6 +17,4 @@ cursor.insertText(", and this word is ", defaultTextFormat);
 cursor.insertText("italic", italicFormat);
 cursor.insertText(". ", defaultTextFormat);
 
-cursor.insertBlock(); // CHECKME: This should not be created
-
 return document;

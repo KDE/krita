@@ -10,6 +10,4 @@ cursor.insertText("The following is a character whose font size is ", defaultTex
 cursor.insertText("28.", twentyEightPointFormat);
 cursor.insertText(" ", defaultTextFormat); // CHECKME: Why is a blank space appended?
 
-cursor.insertBlock(); // CHECKME: This should not be created
-
 return document;

@@ -1,12 +1,12 @@
-// include("common.qs");
+include("common.qs");
 
-cursor.insertList(QTextListFormat.ListDisc);
-cursor.insertText("This is an example of bulleted list.");
+cursor.createList(QTextListFormat.ListCircle);
+cursor.insertText("This is an example of bulleted list.", defaultListItemFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example of bulleted list.");
+cursor.insertText("This is an example of bulleted list.", defaultListItemFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example of bulleted list.");
+cursor.insertText("This is an example of bulleted list.", defaultListItemFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example of bulleted list.");
+cursor.insertText("This is an example of bulleted list.", defaultListItemFormat);
 
 return document;

@@ -22,3 +22,14 @@ QTextCharFormat.clone = function(fmt) {
     return newFormat;
 };
 
+// KOffice specific
+var KoListStyle = {};
+KoListStyle.StartValue = 0x1003EA;
+KoListStyle.Level = 0x1003EB;
+
+var defaultListItemFormat = new QTextCharFormat;
+defaultListItemFormat.setFont(defaultFont);
+defaultListItemFormat.setVerticalAlignment(QTextCharFormat.AlignNormal);
+//defaultListItemFormat.setProperty(0x1003EA, 1);
+//defaultListItemFormat.setProperty(0x1003EB, 1);
+

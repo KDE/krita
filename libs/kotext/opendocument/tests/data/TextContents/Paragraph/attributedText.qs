@@ -17,6 +17,4 @@ cursor.insertText(" and ", defaultTextFormat);
 cursor.insertText("these words are emphasized", boldFormat);
 cursor.insertText(". ", defaultTextFormat);
 
-cursor.insertBlock(new QTextBlockFormat, defaultTextFormat); // CHECKME: This should not be created
-
 return document;

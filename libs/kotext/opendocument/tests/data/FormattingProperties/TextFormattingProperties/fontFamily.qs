@@ -14,6 +14,4 @@ cursor.insertText("This is an example that create a font family for the text. ",
 cursor.insertBlock();
 cursor.insertText("This is an example that create a font family for the text. ", arialBlackFormat);
 
-cursor.insertBlock(new QTextBlockFormat, new QTextCharFormat); // CHECKME: I don't think this should be created
-
 return document;

@@ -247,12 +247,11 @@ void KoParagraphStyle::applyStyle(QTextBlock &block) const {
     if(d->charStyle)
         d->charStyle->applyStyle(block);
 
-    if(d->listStyle) {
-        // make sure this block becomes a list if its not one already
+    // 14.1 List Style - Apply the list style of a paragaph if the list it
+    // is a part of does not specify a style.
+    if (block.textList() && !KoListStyle::fromTextList(block.textList()) && d->listStyle) {
         d->listStyle->applyStyle(block, listLevel());
-    } else if(block.textList()) {
-        // remove
-        block.textList()->remove(block);
+    } else {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
         if(data)
             data->setCounterWidth(-1);

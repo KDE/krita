@@ -6,6 +6,4 @@ cursor.insertText("this is an example of specifying the foreground color of the 
 
 cursor.insertText(" "); // CHECKME: Why is this appended?
 
-cursor.insertBlock(new QTextBlockFormat, new QTextCharFormat); // CHECKME: I don't think this should be created
-
 return document;

@@ -21,13 +21,10 @@
 #ifndef KIS_RANDOM_ACCESSOR_H
 #define KIS_RANDOM_ACCESSOR_H
 
-#include <kis_shared_ptr.h>
 #include <krita_export.h>
 #include <kis_global.h>
 
 class KisDataManager;
-class KisTiledRandomAccessor;
-typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
 
 /**
  * Gives a random access to the pixels of an image. Use the moveTo
@@ -61,9 +58,8 @@ public:
     const quint8* oldRawData() const;
 
 private:
-
-    KisTiledRandomAccessorSP m_accessor;
-    qint32 m_offsetx, m_offsety;
+    struct Private;
+    Private* const d;
 
 };
 

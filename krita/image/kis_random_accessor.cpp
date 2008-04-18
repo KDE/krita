@@ -28,46 +28,57 @@
 #include "tiles_new/kis_tiled_random_accessor.h"
 #endif
 
+#include <kis_shared_ptr.h>
+
 typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
 
-KisRandomConstAccessor::KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable) : m_offsetx(offsetx), m_offsety(offsety)
+struct KisRandomConstAccessor::Private {
+    KisTiledRandomAccessorSP accessor;
+    qint32 offsetx, offsety;
+};
+
+KisRandomConstAccessor::KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, bool writable) : d(new Private)
 {
-    m_accessor = new KisTiledRandomAccessor(ktm, x, y, writable);
+    d->offsetx = offsetx;
+    d->offsety = offsety;
+    d->accessor = new KisTiledRandomAccessor(ktm, x, y, writable);
 }
 
-KisRandomConstAccessor::KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety) : m_offsetx(offsetx), m_offsety(offsety)
+KisRandomConstAccessor::KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety) : d(new Private)
 {
-    m_accessor = new KisTiledRandomAccessor(ktm, x, y, false);
+    d->offsetx = offsetx;
+    d->offsety = offsety;
+    d->accessor = new KisTiledRandomAccessor(ktm, x, y, false);
 }
 
-KisRandomConstAccessor::KisRandomConstAccessor(const KisRandomConstAccessor& rhs) {
-    m_accessor = rhs.m_accessor;
-    m_offsetx = rhs.m_offsetx;
-    m_offsety = rhs.m_offsety;
+KisRandomConstAccessor::KisRandomConstAccessor(const KisRandomConstAccessor& rhs) : d(new Private) {
+    d->accessor = rhs.d->accessor;
+    d->offsetx = rhs.d->offsetx;
+    d->offsety = rhs.d->offsety;
 }
 
 KisRandomConstAccessor::~KisRandomConstAccessor()
 {
-
+    delete d;
 }
 
 void KisRandomConstAccessor::moveTo(qint32 x, qint32 y)
 {
-    m_accessor->moveTo(x - m_offsetx, y  - m_offsety);
+    d->accessor->moveTo(x - d->offsetx, y  - d->offsety);
 }
 
 const quint8* KisRandomConstAccessor::rawData() const
 {
-    return m_accessor->rawData();
+    return d->accessor->rawData();
 }
 
 quint8* KisRandomAccessor::rawData() const
 {
-    return m_accessor->rawData();
+    return d->accessor->rawData();
 }
 
 const quint8* KisRandomConstAccessor::oldRawData() const
 {
-    return m_accessor->oldRawData();
+    return d->accessor->oldRawData();
 }
 

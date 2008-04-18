@@ -3,12 +3,14 @@ Name=Flake device definition
 Name[it]=Definizione del dispositivo Flake
 Name[pt]=Definição de dispositivo do Flake
 Name[pt_BR]=Definição de dispositivo do Flake
+Name[uk]=Визначення інструмента елемента
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Device
 Comment=Definition of flake devices
 Comment[it]=Definizione dei dispositivi Flake
 Comment[pt]=Definição de dispositivos do Flake
 Comment[pt_BR]=Definição de dispositivos do Flake
+Comment[uk]=Визначення пристроїв елементів
 [PropertyDef::X-Flake-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

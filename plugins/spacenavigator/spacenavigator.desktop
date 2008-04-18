@@ -3,6 +3,7 @@ Name=Spacenavigator Device
 Name[it]=Dispositivo per la navigazione spaziale
 Name[pt]=Dispositivo do Spacenavigator
 Name[pt_BR]=Dispositivo do Spacenavigator
+Name[uk]=Пристрій просторового орієнтування
 X-KDE-ServiceTypes=KOffice/Device
 Type=Service
 X-KDE-Library=spacenavigator

@@ -48,8 +48,10 @@ public:
     QUndoCommand* createCommand();
     void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
+    virtual void handleCustomEvent( KoPointerEvent * event );
 
 private:
+    void rotateBy( qreal angle );
     QRectF m_initialBoundingRect;
     QPointF m_start;
     QMatrix m_rotationMatrix;

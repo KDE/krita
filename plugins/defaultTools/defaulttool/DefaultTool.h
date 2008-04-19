@@ -112,6 +112,8 @@ public: // Events
 
     virtual void keyPressEvent(QKeyEvent *event);
 
+    virtual void customMoveEvent( KoPointerEvent * event );
+
 protected:
     QWidget* createOptionWidget();
 
@@ -152,6 +154,7 @@ private:
     double m_angle;
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
+    KoInteractionStrategy * m_customEventStrategy;
 };
 
 #endif

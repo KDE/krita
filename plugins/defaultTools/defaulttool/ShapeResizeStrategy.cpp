@@ -33,7 +33,7 @@
 
 ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
-: KoInteractionStrategy(tool, canvas)
+: KoInteractionStrategy(tool, canvas), m_lastScale(1.0,1.0)
 {
     Q_ASSERT( canvas->shapeManager()->selection()->count() > 0);
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
@@ -92,7 +92,7 @@ ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
     }
 }
 
-void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) 
+void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     QPointF newPos = m_canvas->snapGuide()->snap( point, modifiers );
 
@@ -124,31 +124,44 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
 
     bool scaleFromCenter = modifiers & Qt::ControlModifier;
     QPointF move;
-    QMatrix matrix;
 
     if(scaleFromCenter)
         move = QPointF(startWidth / 2.0, startHeight / 2.0);
     else
         move = QPointF(m_left?startWidth:0, m_top?startHeight:0);
 
-    matrix.translate(move.x(), move.y()); // translate to 
+    resizeBy( move, zoomX, zoomY );
+}
+
+void ShapeResizeStrategy::handleCustomEvent( KoPointerEvent * event )
+{
+    QPointF center = 0.5 * QPointF( m_initialSize.width(), m_initialSize.height() );
+    qreal zoom = pow(1.01, -0.1 * event->z() );
+    m_lastScale *= zoom;
+    resizeBy( center, m_lastScale.x(), m_lastScale.y() );
+}
+
+void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zoomY )
+{
+    QMatrix matrix;
+    matrix.translate(center.x(), center.y()); // translate to 
     matrix.scale(zoomX, zoomY);
-    matrix.translate(-move.x(), -move.y()); // and back
+    matrix.translate(-center.x(), -center.y()); // and back
 
     // that is the transformation we want to apply to the shapes
     matrix = m_unwindMatrix * matrix * m_windMatrix;
 
     // the resizing transformation without the mirroring part
     QMatrix resizeMatrix;
-    resizeMatrix.translate(move.x(), move.y()); // translate to 
+    resizeMatrix.translate(center.x(), center.y()); // translate to 
     resizeMatrix.scale( qAbs(zoomX), qAbs(zoomY) );
-    resizeMatrix.translate(-move.x(), -move.y()); // and back
+    resizeMatrix.translate(-center.x(), -center.y()); // and back
 
     // the mirroring part of the resizing transformation
     QMatrix mirrorMatrix;
-    mirrorMatrix.translate(move.x(), move.y()); // translate to 
+    mirrorMatrix.translate(center.x(), center.y()); // translate to 
     mirrorMatrix.scale( zoomX < 0 ? -1 : 1, zoomY < 0 ? -1 : 1 );
-    mirrorMatrix.translate(-move.x(), -move.y()); // and back
+    mirrorMatrix.translate(-center.x(), -center.y()); // and back
 
     int i = 0;
     foreach(KoShape *shape, m_selectedShapes)

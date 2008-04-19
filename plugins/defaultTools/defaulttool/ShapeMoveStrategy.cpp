@@ -29,6 +29,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <KoSnapGuide.h>
+#include <KoPointerEvent.h>
 
 ShapeMoveStrategy::ShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoInteractionStrategy(tool, canvas)
@@ -72,16 +73,39 @@ void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifi
         diff = snappedPosition - m_initialOffset - m_start;
     }
 
+    m_diff = diff;
+
+    moveBy( diff );
+}
+
+void ShapeMoveStrategy::handleCustomEvent( KoPointerEvent * event )
+{
+    QPointF diff = m_canvas->viewConverter()->viewToDocument( event->pos() );
+
+    if( event->modifiers() & (Qt::AltModifier | Qt::ControlModifier)) {
+        // keep x or y position unchanged
+        if(qAbs(diff.x()) < qAbs(diff.y()))
+            diff.setX(0);
+        else
+            diff.setY(0);
+    }
+
+    m_diff += 0.1 * diff ;
+
+    moveBy( diff );
+}
+
+void ShapeMoveStrategy::moveBy( const QPointF &diff )
+{
     Q_ASSERT(m_newPositions.count());
 
-    m_diff = diff;
     int i=0;
     foreach(KoShape *shape, m_selectedShapes) {
-        diff = m_previousPositions.at(i) + m_diff - shape->position();
+        QPointF delta = m_previousPositions.at(i) + m_diff - shape->position();
         if(shape->parent())
-            shape->parent()->model()->proposeMove(shape, diff);
-        m_canvas->clipToDocument(shape, diff);
-        QPointF newPos (shape->position() + diff);
+            shape->parent()->model()->proposeMove(shape, delta);
+        m_canvas->clipToDocument(shape, delta);
+        QPointF newPos (shape->position() + delta);
         m_newPositions[i] = newPos;
         shape->update();
         shape->setPosition(newPos);

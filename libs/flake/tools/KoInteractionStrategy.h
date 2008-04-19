@@ -64,6 +64,14 @@ public:
      * @param modifiers OR-ed set of keys pressed.
      */
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) = 0;
+
+    /**
+     * Extending classes should implement this method to update the selectedShapes
+     * based on the new pointer event. The default implementations does nothing.
+     * @param event the new pointer event
+     */
+    virtual void handleCustomEvent( KoPointerEvent * event );
+
     /**
      * For interactions that are undo-able this method should be implemented to return such
      * a command.  Implementations should return 0 otherwise.

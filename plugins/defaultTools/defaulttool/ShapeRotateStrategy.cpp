@@ -49,10 +49,10 @@ ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, co
         m_oldTransforms << shape->transformation();
     }
 
-    if( buttons & Qt::LeftButton )
-        m_rotationCenter = m_initialBoundingRect.center();
-    else
+    if( buttons & Qt::RightButton )
         m_rotationCenter = canvas->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
+    else
+        m_rotationCenter = m_initialBoundingRect.center();
 }
 
 void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
@@ -69,6 +69,39 @@ void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         angle += (angle>0?-1:1)*modula;
     }
 
+    QMatrix matrix;
+    matrix.translate(m_rotationCenter.x(), m_rotationCenter.y());
+    matrix.rotate(angle);
+    matrix.translate(-m_rotationCenter.x(), -m_rotationCenter.y());
+
+    QMatrix applyMatrix = matrix * m_rotationMatrix.inverted();
+    m_rotationMatrix = matrix;
+    foreach( KoShape * shape, m_selectedShapes ) {
+        shape->update();
+        shape->applyAbsoluteTransformation( applyMatrix );
+        shape->update();
+    }
+    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
+}
+
+void ShapeRotateStrategy::handleCustomEvent( KoPointerEvent * event )
+{
+    QMatrix matrix;
+    matrix.translate(m_rotationCenter.x(), m_rotationCenter.y());
+    matrix.rotate( 0.1 * event->rotationZ() );
+    matrix.translate(-m_rotationCenter.x(), -m_rotationCenter.y());
+
+    m_rotationMatrix *= matrix;
+    foreach( KoShape * shape, m_selectedShapes ) {
+        shape->update();
+        shape->applyAbsoluteTransformation( matrix );
+        shape->update();
+    }
+    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
+}
+
+void ShapeRotateStrategy::rotateBy( qreal angle )
+{
     QMatrix matrix;
     matrix.translate(m_rotationCenter.x(), m_rotationCenter.y());
     matrix.rotate(angle);

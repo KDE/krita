@@ -45,8 +45,10 @@ public:
     QUndoCommand* createCommand();
     void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED(modifiers); }
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
-
+    virtual void handleCustomEvent( KoPointerEvent * event );
 private:
+    void resizeBy( const QPointF &center, qreal zoomX, qreal zoomY );
+
     QPointF m_start;
     QList<QPointF> m_startPositions;
     QList<QSizeF> m_startSizes;
@@ -57,6 +59,7 @@ private:
     QMatrix m_scaleMatrix;
     QList<QMatrix> m_oldTransforms;
     QList<QMatrix> m_transformations;
+    QPointF m_lastScale;
 };
 
 #endif

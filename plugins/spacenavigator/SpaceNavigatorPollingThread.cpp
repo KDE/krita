@@ -66,9 +66,9 @@ void SpaceNavigatorPollingThread::run()
                 currX = static_cast<int>( posfactor * event.motion.x );
                 currY = -static_cast<int>( posfactor * event.motion.z );
                 currZ = -static_cast<int>( posfactor * event.motion.y );
-                currRX = event.motion.rx;
-                currRY = event.motion.rz;
-                currRZ = event.motion.ry;
+                currRX = static_cast<int>( posfactor * event.motion.rx );
+                currRY = static_cast<int>( -posfactor * event.motion.rz );
+                currRZ = static_cast<int>( -posfactor * event.motion.ry );
                 emit moveEvent( currX, currY, currZ, currRX, currRY, currRZ, buttons );
             }
             else

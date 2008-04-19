@@ -38,108 +38,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <kcomponentdata.h>
-
-// Functions to print the contents of QTextDocument as XML
-static int depth = 0;
-static const int INDENT = 2;
-
-static void dumpFragment(const QTextFragment &fragment)
-{
-    depth += INDENT;
-
-    QTextCharFormat textFormat = fragment.charFormat();
-    QTextImageFormat imageFormat = textFormat.toImageFormat();
-
-    QString startTag;
-        if (imageFormat.isValid()) {
-        qDebug("%*s%s", depth, " ", "<fragment type=\"image\">");
-    } else {
-        QString formatString = QString(" font=\"%1\"").arg(textFormat.font().toString());
-        if (textFormat.isAnchor()) {
-            formatString.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
-            formatString.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
-        }
-        startTag = QString("<fragment type=\"char\"%1>").arg(formatString);
-    }
-  
-    qDebug("%*s%s", depth, " ", qPrintable(startTag));
-
-    qDebug("%*s|%s|", depth+INDENT, " ", qPrintable(fragment.text()));
-
-    qDebug("%*s%s", depth, " ", "</fragment>");
-    depth -= INDENT;
-}
-
-static void dumpTable(QTextTable *)
-{
-    depth += INDENT;
-    qDebug("%*s%s", depth, " ", "<table>");
-    // FIXME
-    qDebug("%*s%s", depth, " ", "</table>");
-    depth -= INDENT;
-}
-
-static void dumpBlock(const QTextBlock &block)
-{
-    depth += INDENT;
-
-    QTextList *list = block.textList();
-
-    QString startTag;
-    if (list) {
-        startTag.sprintf("<block listitem=\"%d/%d\">", list->itemNumber(block)+1, list->count());
-    } else {
-        startTag = "<block>";
-    }
-
-    qDebug("%*s%s", depth, " ", qPrintable(startTag));
-
-    QTextBlock::Iterator iterator = block.begin();
-    for(; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
-        QTextFragment fragment = iterator.fragment();
-        if (fragment.isValid()) {
-            dumpFragment(fragment);
-        }
-    }
-    qDebug("%*s%s", depth, " ", "</block>");
-    depth -= INDENT;
-    if (block.next().isValid())
-        qDebug(" ");
-}
-
-static void dumpFrame(QTextFrame *frame)
-{
-    depth += INDENT;
-    qDebug("%*s%s", depth, " ", "<frame>");
-
-    QTextFrame::iterator iterator = frame->begin();
-
-    for (; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
-        QTextFrame *childFrame = iterator.currentFrame();
-        QTextBlock textBlock = iterator.currentBlock();
-
-        if (childFrame) {
-            QTextTable *table = qobject_cast<QTextTable *>(childFrame);
-            if (table) {
-                dumpTable(table);
-            } else {
-                dumpFrame(frame);
-            }
-        } else if (textBlock.isValid()) {
-            dumpBlock(textBlock);
-        }
-    }
-
-    qDebug("%*s%s", depth, " ", "</frame>");
-    depth -= INDENT;
-}
-
-static void dumpDocument(QTextDocument *document)
-{
-    qDebug() << "<document>";
-    dumpFrame(document->rootFrame());
-    qDebug() << "</document>";
-}
+#include <KoTextDebug.h>
 
 static void showDocument(QTextDocument *document)
 {
@@ -426,8 +325,8 @@ void TestLoading::testLoading()
     bool documentsEqual = compareDocuments(actualDocument, expectedDocument);
 
     if (!documentsEqual) {
-        dumpDocument(actualDocument);
-        dumpDocument(expectedDocument);
+        KoTextDebug::dumpDocument(actualDocument);
+        KoTextDebug::dumpDocument(expectedDocument);
     }
 
     QVERIFY(documentsEqual);

@@ -175,21 +175,28 @@ void StylesWidget::editStyle()
 void StylesWidget::editStyle(QListWidgetItem *item) {
 
     QWidget *widget = 0;
-    if(m_type == CharacterStyle) {
+    KoParagraphStyle *paragraphStyle = 0;
+    if (m_type == CharacterStyle) {
         //KoCharacterStyle *style = m_styleManager->characterStyle(item->data(99).toInt());
         // TODO
     }
     else {
-        KoParagraphStyle *style = m_styleManager->paragraphStyle(item->data(99).toInt());
-        ParagraphGeneral *p = new ParagraphGeneral();
+        paragraphStyle = m_styleManager->paragraphStyle(item->data(99).toInt());
+        ParagraphGeneral *p = new ParagraphGeneral;
+        p->setParagraphStyles(m_styleManager->paragraphStyles());
+        p->setStyle(paragraphStyle);
         // TODO get KoUnit from somewhere and set that on p
-        p->setStyle(style);
         widget = p;
     }
-    if(widget) {
-        KDialog *dia = new KDialog(this);
-        dia->setMainWidget(widget);
-        dia->show();
+    if (widget) {
+        KDialog *dialog = new KDialog(this);
+        dialog->setMainWidget(widget);
+        connect(dialog, SIGNAL(okClicked()), widget, SLOT(save()));
+        if (dialog->exec() == KDialog::Accepted) {
+            if (paragraphStyle)
+                item->setText(paragraphStyle->name());
+        }
+        delete dialog;
     }
 }
 

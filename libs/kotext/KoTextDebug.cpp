@@ -26,15 +26,22 @@
 #include <QTextFragment>
 #include <QTextList>
 #include <QDebug>
+#include "styles/KoParagraphStyle.h"
+#include "styles/KoCharacterStyle.h"
+#include "styles/KoStyleManager.h"
+#include <KoTextDocumentLayout.h>
 
 int KoTextDebug::depth = 0;
 const int KoTextDebug::INDENT = 2;
+QTextDocument *KoTextDebug::document = 0;
 
-void KoTextDebug::dumpDocument(QTextDocument *document)
+void KoTextDebug::dumpDocument(QTextDocument *doc)
 {
+    document = doc;
     qDebug() << "<document>";
     dumpFrame(document->rootFrame());
     qDebug() << "</document>";
+    document = 0;
 }
 
 void KoTextDebug::dumpFrame(QTextFrame *frame)
@@ -68,16 +75,24 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
 {
     depth += INDENT;
 
-    QTextList *list = block.textList();
-
-    QString startTag;
-    if (list) {
-        startTag.sprintf("<block listitem=\"%d/%d\">", list->itemNumber(block)+1, list->count());
-    } else {
-        startTag = "<block>";
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(document->documentLayout());
+    QString attrs;
+    if (lay && lay->styleManager()) {
+        int id = block.blockFormat().intProperty(KoParagraphStyle::StyleId);
+        KoParagraphStyle *paragraphStyle = lay->styleManager()->paragraphStyle(id);
+        attrs.append(" paragraphStyle=\"id:").append(QString::number(id));
+        if (paragraphStyle)
+             attrs.append(" name:").append(paragraphStyle->name());
+        attrs.append("\"");
     }
 
-    qDebug("%*s%s", depth, " ", qPrintable(startTag));
+    QTextList *list = block.textList();
+    if (list) {
+        attrs.append(" listitem=\"").append(QString::number(list->itemNumber(block)+1)).append('\\')
+              .append(QString::number(list->count()));
+    }
+
+    qDebug("%*s<block%s>", depth, " ", qPrintable(attrs));
 
     QTextBlock::Iterator iterator = block.begin();
     for(; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
@@ -105,22 +120,32 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment)
 {
     depth += INDENT;
 
-    QTextCharFormat textFormat = fragment.charFormat();
-    QTextImageFormat imageFormat = textFormat.toImageFormat();
-
-    QString startTag;
-    if (imageFormat.isValid()) {
-        qDebug("%*s%s", depth, " ", "<fragment type=\"image\">");
-    } else {
-        QString formatString = QString(" font=\"%1\"").arg(textFormat.font().toString());
-        if (textFormat.isAnchor()) {
-            formatString.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
-            formatString.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
-        }
-        startTag = QString("<fragment type=\"char\"%1>").arg(formatString);
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(document->documentLayout());
+    QString attrs;
+    if (lay && lay->styleManager()) {
+        int id = fragment.charFormat().intProperty(KoCharacterStyle::StyleId);
+        KoCharacterStyle *characterStyle = lay->styleManager()->characterStyle(id);
+        attrs.append(" characterStyle=\"id:").append(QString::number(id));
+        if (characterStyle)
+             attrs.append(" name:").append(characterStyle->name());
+        attrs.append("\"");
     }
 
-    qDebug("%*s%s", depth, " ", qPrintable(startTag));
+    QTextCharFormat textFormat = fragment.charFormat();
+    QTextImageFormat imageFormat = textFormat.toImageFormat();
+ 
+    if (imageFormat.isValid()) {
+        attrs.append(" type=\"image\">");
+    } else {
+        attrs.append(" type=\"char\"");
+        attrs.append(" font=\"").append(textFormat.font().toString()).append("\"");
+        if (textFormat.isAnchor()) {
+            attrs.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
+            attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
+        }
+    }
+
+    qDebug("%*s<fragment%s>", depth, " ", qPrintable(attrs));
 
     qDebug("%*s|%s|", depth+INDENT, " ", qPrintable(fragment.text()));
 

@@ -42,6 +42,7 @@ private:
     KoTextDebug( const KoTextDebug& );
     KoTextDebug operator=( const KoTextDebug& );
 
+    static QTextDocument *document;
     static int depth;
     static const int INDENT;
 };

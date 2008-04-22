@@ -58,6 +58,8 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->mask->selection()->updateProjection();
     
     d->layer->setPreviewMask( d->mask );
+    d->uiFilterDialog.filterSelection->setLayer( d->layer );
+    
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
@@ -79,40 +81,6 @@ void KisFilterDialog::setFilter(KisFilterSP f)
     d->currentFilter = f;
     d->uiFilterDialog.filterSelection->setFilter(f);
     updatePreview();
-#if 0
-    Q_ASSERT(f);
-    setWindowTitle(f->name());
-    dbgKrita << "setFilter: " << f;
-    d->currentFilter = f;
-    delete d->currentCentralWidget;
-    {
-        bool v = d->uiFilterDialog.filtersSelector->blockSignals( true );
-        d->uiFilterDialog.filtersSelector->setCurrentIndex( d->filtersModel->indexForFilter( f->id() ) );
-        d->uiFilterDialog.filtersSelector->blockSignals( v );
-    }
-    KisFilterConfigWidget* widget =
-        d->currentFilter->createConfigurationWidget( d->uiFilterDialog.centralWidgetHolder, d->layer->paintDevice() );
-    if( !widget )
-    { // No widget, so display a label instead
-        d->currentFilterConfigurationWidget = 0;
-        d->currentCentralWidget = new QLabel( i18n("No configuration option."),
-                                              d->uiFilterDialog.centralWidgetHolder );
-    } else {
-        d->currentFilterConfigurationWidget = widget;
-        d->currentCentralWidget = widget;
-        d->currentFilterConfigurationWidget->setConfiguration(
-            d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
-        connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), SLOT(updatePreview()));
-    }
-    // Change the list of presets
-    delete d->currentBookmarkedFilterConfigurationsModel;
-    d->currentBookmarkedFilterConfigurationsModel = new KisBookmarkedFilterConfigurationsModel(d->thumb, f );
-    d->uiFilterDialog.comboBoxPresets->setModel(  d->currentBookmarkedFilterConfigurationsModel );
-    // Add the widget to the layout
-    d->widgetLayout->addWidget( d->currentCentralWidget, 0 , 0);
-    d->uiFilterDialog.centralWidgetHolder->setMinimumSize( d->currentCentralWidget->minimumSize() );
-    updatePreview();
-#endif
 }
 
 void KisFilterDialog::updatePreview()

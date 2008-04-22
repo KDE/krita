@@ -54,7 +54,9 @@ KisFilterSelectorWidget::KisFilterSelectorWidget( QWidget* parent ) : d(new Priv
 {
     d->currentCentralWidget = 0;
     d->currentFilterConfigurationWidget = 0;
+    d->currentBookmarkedFilterConfigurationsModel = 0;
     d->currentFilter = 0;
+    d->filtersModel = 0;
     d->uiFilterSelector.setupUi(this);
     
     d->widgetLayout = new QGridLayout( d->uiFilterSelector.centralWidgetHolder );
@@ -89,6 +91,7 @@ void KisFilterSelectorWidget::setLayer(KisLayerSP layer)
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 {
     Q_ASSERT(f);
+    Q_ASSERT(d->filtersModel);
     setWindowTitle(f->name());
     dbgKrita << "setFilter: " << f;
     d->currentFilter = f;
@@ -123,6 +126,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 
 void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
 {
+    Q_ASSERT(d->filtersModel);
     KisFilter* filter = const_cast<KisFilter*>(d->filtersModel->indexToFilter( idx ));
     if(filter)
     {

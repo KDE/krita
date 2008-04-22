@@ -12,6 +12,7 @@ Comment[it]=Un modulo che implementa un'estensione a uno spazio di colori da usa
 Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com o Sistema de Manipulação de Cores por Pigmentos
 Comment[pt_BR]=Um módulo que implementa uma extensão para espaço de cores do Sistema de Manipulação de Pigmeto de Cor
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med systemet för hantering av pigmentfärg
+Comment[ta]= தெளிவான வண்ணத்தின் சிறிய பகுதியை அதிகரித்து ஒரு கூரை உண்டாக்குகிறதுஉருவாக்கம் கணினி
 Comment[uk]=Модуль впровадження повного простору кольорів для використання з Системою керування кольорами пігментів
 Comment[x-test]=xxA module implementing an extension to a colorspace of the Pigment Color Manipulation Systemxx
 Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的模組

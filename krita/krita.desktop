@@ -2,6 +2,7 @@
 Name=Krita
 Name[hi]=केरिता
 Name[ne]=क्रिता
+Name[ta]=கிரிட்டா
 Name[x-test]=xxKritaxx
 Exec=krita %U
 X-DocPath=krita/index.html

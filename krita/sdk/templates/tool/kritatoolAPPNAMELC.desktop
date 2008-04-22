@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=%{APPNAME}
 Name[pt_BR]=%{NOME_APLICATIVO}
+Name[ta]=%{ஏபிபிஎன்ஏஎம்இ}
 Name[x-test]=xx%{APPNAME}xx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service

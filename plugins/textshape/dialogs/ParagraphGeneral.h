@@ -40,9 +40,10 @@ public:
     void setParagraphStyles(const QList<KoParagraphStyle*> styles);
     void setUnit(const KoUnit &unit);
 
-    void save();
-
     void switchToGeneralTab();
+
+public slots:
+    void save();
 
 signals:
     void nameChanged(const QString &name);

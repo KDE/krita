@@ -316,6 +316,7 @@ void TestLoading::testLoading_data()
     QTest::addColumn<QString>("testcase");
     
     QTest::newRow("Bulleted list") << "TextContents/Lists/bulletedList";
+    QTest::newRow("Numbered list") << "TextContents/Lists/numberedList";
 
     QTest::newRow("Bold and Italic") << "TextContents/TextFormatting/boldAndItalic";
     QTest::newRow("Attributed Text") << "TextContents/Paragraph/attributedText";

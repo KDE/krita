@@ -21,23 +21,17 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QPen>
+#include <QtGui/QIcon>
 
-#include <KoShapeManager.h>
-#include <KoCanvasController.h>
 #include <KoShapePainter.h>
 #include <KoZoomHandler.h>
 #include <KoPageLayout.h>
-#include <KoSelection.h>
-#include <KoPAPageBase.h>
-#include <KoPAPage.h>
-#include <KoPAMasterPage.h>
-#include <KoShapeLayer.h>
-
-#include "KoPAView.h"
-#include "KoPACanvas.h"
-#include "KoPADocument.h"
 
 #include <KLocale>
+
+#include "KoPAPageBase.h"
+#include "KoPAPage.h"
+#include "KoPAMasterPage.h"
 
 KoPAPageThumbnailModel::KoPAPageThumbnailModel(QList<KoPAPageBase *> pages, bool master, QObject *parent)
     : QAbstractListModel(parent),
@@ -86,12 +80,6 @@ void KoPAPageThumbnailModel::setIconSize(const QSize &size)
 {
     m_iconSize = size;
 }
-
-/* int KoPAPageThumbnailModel::selectedPageIndex()
-{
-    return currentRow();
-}
-*/
 
 QPixmap KoPAPageThumbnailModel::paintPage(KoPAPageBase *page) const
 {

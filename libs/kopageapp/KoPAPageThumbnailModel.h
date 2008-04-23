@@ -36,7 +36,7 @@ class KoPAPageThumbnailModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    KoPAPageThumbnailModel(QList<KoPAPageBase *> pages, bool master, QObject *parent = 0);
+    explicit KoPAPageThumbnailModel(QList<KoPAPageBase *> pages, QObject *parent = 0);
     ~KoPAPageThumbnailModel();
 
     // from QAbstractItemModel
@@ -53,7 +53,6 @@ private:
     KoPAView *m_view;
     QList<KoPAPageBase *> m_pages;
     
-    bool m_master;
     int m_iconWidth;
     QSize m_iconSize;
 };

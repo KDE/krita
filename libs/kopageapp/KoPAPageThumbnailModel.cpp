@@ -33,10 +33,9 @@
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
 
-KoPAPageThumbnailModel::KoPAPageThumbnailModel(QList<KoPAPageBase *> pages, bool master, QObject *parent)
+KoPAPageThumbnailModel::KoPAPageThumbnailModel(QList<KoPAPageBase *> pages, QObject *parent)
     : QAbstractListModel(parent),
     m_pages(pages),
-    m_master(master),
     m_iconSize(512, 512)
 {
 }
@@ -102,10 +101,9 @@ QPixmap KoPAPageThumbnailModel::paintPage(KoPAPageBase *page) const
 
     shapes = page->iterator();
     // also draw shapes from master page if this page is not a master
-    if (!m_master) {
-        KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
+    KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
+    if (masterPage)
         shapes += masterPage->iterator();
-    }
     shapePainter.setShapes(shapes);
 
     QPixmap pixmap(size.width(), size.height());

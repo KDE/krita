@@ -26,7 +26,6 @@
 #include <KLocale>
 #include <KDebug>
 
-#include "KoPAView.h"
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"
 #include "KoPAPageThumbnailModel.h"
@@ -51,7 +50,7 @@ KoPAMasterPageDialog::KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPag
     m_listView->setMovement(QListView::Static);
     m_listView->setMinimumSize(320, 200);
 
-    m_pageThumbnailModel = new KoPAPageThumbnailModel(m_document->pages(true), true, m_listView);
+    m_pageThumbnailModel = new KoPAPageThumbnailModel(m_document->pages(true), m_listView);
     m_pageThumbnailModel->setIconSize(iconSize);
     m_listView->setModel(m_pageThumbnailModel);
     layout->addWidget(m_listView);

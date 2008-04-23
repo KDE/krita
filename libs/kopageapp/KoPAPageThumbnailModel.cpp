@@ -101,9 +101,11 @@ QPixmap KoPAPageThumbnailModel::paintPage(KoPAPageBase *page) const
 
     shapes = page->iterator();
     // also draw shapes from master page if this page is not a master
-    KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
-    if (masterPage)
+    KoPAMasterPage *masterPage = dynamic_cast<KoPAMasterPage *>(page);
+    if (!masterPage) {
+        KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
         shapes += masterPage->iterator();
+    }
     shapePainter.setShapes(shapes);
 
     QPixmap pixmap(size.width(), size.height());

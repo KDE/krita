@@ -39,6 +39,7 @@
 #include <KoXmlNS.h>
 #include <kcomponentdata.h>
 #include <KoTextDebug.h>
+#include <KoListStyle.h>
 
 static void showDocument(QTextDocument *document)
 {
@@ -84,7 +85,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
     if (actualList) {
         if (!expectedList)
             return false;
-        if (actualList->format() != expectedList->format()
+        if (actualList->format() == expectedList->format()
             || actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))
             return false;
     } else {
@@ -195,6 +196,22 @@ static QScriptValue includeFunction(QScriptContext *context, QScriptEngine *engi
     return evaluate(engine, QString(FILES_DATA_DIR) + context->argument(0).toString());
 }
 
+// FIXME: Remove this once the generator is fixed
+Q_DECLARE_METATYPE(QTextCharFormat);
+Q_DECLARE_METATYPE(QTextCharFormat *);
+
+static QScriptValue setDefaultListItemProperties(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() == 0)
+        return engine->nullValue();
+    
+    QTextCharFormat *format = qscriptvalue_cast<QTextCharFormat *>(context->argument(0));
+    format->setProperty(KoListStyle::StartValue, 1);
+    format->setProperty(KoListStyle::Level, 1);
+
+    return QScriptValue();
+}
+
 // May the testing begin
 TestLoading::TestLoading() 
 {
@@ -234,6 +251,7 @@ void TestLoading::initTestCase()
     globalObject.property("qt").setProperty("script", qscript);
     
     globalObject.setProperty("include", engine->newFunction(includeFunction));
+    globalObject.setProperty("setDefaultListItemProperties", engine->newFunction(setDefaultListItemProperties));
 }
 
 void TestLoading::cleanupTestCase()

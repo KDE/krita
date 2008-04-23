@@ -85,7 +85,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
     if (actualList) {
         if (!expectedList)
             return false;
-        if (actualList->format() == expectedList->format()
+        if (actualList->format() != expectedList->format()
             || actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))
             return false;
     } else {

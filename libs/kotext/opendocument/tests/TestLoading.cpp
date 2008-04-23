@@ -317,6 +317,7 @@ void TestLoading::testLoading_data()
     
     QTest::newRow("Bulleted list") << "TextContents/Lists/bulletedList";
     QTest::newRow("Numbered list") << "TextContents/Lists/numberedList";
+    QTest::newRow("Embedded bulleted list") << "TextContents/Lists/embeddedBulletedList";
 
     QTest::newRow("Bold and Italic") << "TextContents/TextFormatting/boldAndItalic";
     QTest::newRow("Attributed Text") << "TextContents/Paragraph/attributedText";

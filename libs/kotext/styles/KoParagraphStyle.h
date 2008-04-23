@@ -446,7 +446,7 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
      * Apply this style to the textBlock by copying all properties from this, parent and
      * the character style (where relevant) to the target block formats.
      */
-    void applyStyle(QTextBlock &block) const;
+    void applyStyle(QTextBlock &block, bool applyListStyle = true) const;
 
     /// return the character style for this paragraph style
     KoCharacterStyle *characterStyle();

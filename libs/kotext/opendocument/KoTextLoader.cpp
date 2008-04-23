@@ -461,7 +461,7 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
 
     if ( paragraphStyle ) {
         QTextBlock block = cursor.block();
-        paragraphStyle->applyStyle( block );
+        paragraphStyle->applyStyle(block, false);
     }
     else {
         kWarning(32500) << "paragraph style " << styleName << " not found";
@@ -670,7 +670,7 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     // Set the paragraph-style on the block
     KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName, d->stylesDotXml );
     if( paragraphStyle ) {
-        paragraphStyle->applyStyle( block );
+        paragraphStyle->applyStyle(block, false);
     }
 
     //1.6: KoTextParag::loadOasisSpan

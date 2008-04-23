@@ -239,7 +239,7 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
     }
 }
 
-void KoParagraphStyle::applyStyle(QTextBlock &block) const {
+void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const {
     QTextCursor cursor(block);
     QTextBlockFormat format = cursor.blockFormat();
     applyStyle(format);
@@ -247,14 +247,16 @@ void KoParagraphStyle::applyStyle(QTextBlock &block) const {
     if(d->charStyle)
         d->charStyle->applyStyle(block);
 
-    // 14.1 List Style - Apply the list style of a paragaph if the list it
-    // is a part of does not specify a style.
-    if (block.textList() && !KoListStyle::fromTextList(block.textList()) && d->listStyle) {
-        d->listStyle->applyStyle(block, listLevel());
-    } else {
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
-        if(data)
-            data->setCounterWidth(-1);
+    if (applyListStyle) {
+        if (d->listStyle) {
+            d->listStyle->applyStyle(block, listLevel());
+        } else {
+            if (block.textList())
+                block.textList()->remove(block);
+            KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+            if(data)
+                data->setCounterWidth(-1);
+        }
     }
 }
 

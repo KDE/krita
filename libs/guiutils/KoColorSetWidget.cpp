@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2007 Casper Boemann <cbr@boemann.dk>
-   Copyright (c) 2007 Fredy Yanardi <fyanardi@gmail.com>
+   Copyright (c) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
+#include <QtGui/QScrollArea>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -54,6 +55,7 @@ public:
     bool firstShowOfContainer;
     QCheckBox *filterCheckBox;
     QWidget *colorSetContainer;
+    QScrollArea *scrollArea;
     QGridLayout *colorSetLayout;
     QHBoxLayout *recentsLayout;
     KoColorPatch *recentPatches[6];
@@ -94,7 +96,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
         }
     }
 
-    mainLayout->insertWidget(2, colorSetContainer);
+    scrollArea->setWidget(colorSetContainer);
 }
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
@@ -106,8 +108,8 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
     KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
     if (dlg->exec()) { // always reload the color set
         thePublic->setColorSet(dlg->activeColorSet());
-        colorSetContainer->setFixedSize(colorSetLayout->sizeHint());
-        thePublic->setFixedSize(mainLayout->sizeHint());
+        // colorSetContainer->setFixedSize(colorSetLayout->sizeHint());
+        // thePublic->setFixedSize(mainLayout->sizeHint());
     }
     delete dlg;
 }
@@ -173,6 +175,8 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->addWidget(d->filterCheckBox);
     connect(d->filterCheckBox, SIGNAL(stateChanged(int)), SLOT(filter(int)));
 
+    d->scrollArea = new QScrollArea();
+    d->mainLayout->addWidget(d->scrollArea);
     d->filter(QCheckBox::On);
 
     d->addRemoveButton = new QToolButton(this);
@@ -237,6 +241,7 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)
 {
     emit widgetSizeChanged(event->size());
+    QFrame::resizeEvent(event);
 }
 
 #include "KoColorSetWidget.moc"

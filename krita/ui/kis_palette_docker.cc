@@ -44,6 +44,7 @@ KisPaletteDocker::KisPaletteDocker( KisView2 * view )
 
     KoColorSetWidget* chooser = new KoColorSetWidget(this);
     layout->addWidget( chooser );
+    mainWidget->setLayout(layout);
 
     //setFixedSize(sizeHint());
 

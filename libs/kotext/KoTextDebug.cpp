@@ -88,8 +88,10 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
 
     QTextList *list = block.textList();
     if (list) {
-        attrs.append(" listitem=\"").append(QString::number(list->itemNumber(block)+1)).append('\\')
+        attrs.append(" list=\"item:").append(QString::number(list->itemNumber(block)+1)).append('/')
               .append(QString::number(list->count()));
+        attrs.append(" indent:").append(QString::number(list->format().indent()));
+        attrs.append(" style:").append(QString::number(list->format().style()));
     }
 
     qDebug("%*s<block%s>", depth, " ", qPrintable(attrs));

@@ -406,7 +406,7 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     int nextStyle() const;
 
     /// return the name of the style.
-    const QString& name() const;
+    QString name() const;
 
     /// set a user-visible name on the style.
     void setName(const QString &name);

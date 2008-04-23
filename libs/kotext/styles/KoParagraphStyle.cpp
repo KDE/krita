@@ -689,7 +689,7 @@ int KoParagraphStyle::nextStyle() const {
     return d->next;
 }
 
-const QString& KoParagraphStyle::name() const {
+QString KoParagraphStyle::name() const {
     return d->name;
 }
 

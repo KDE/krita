@@ -24,10 +24,12 @@ set( kopageapp_LIB_SRCS
      KoPAOdfPageSaveHelper.cpp
      KoPAPastePage.cpp
      KoPADocumentModel.cpp
+     KoPAPageThumbnailModel.cpp
      KoPADocumentStructureDocker.cpp
      commands/KoPAPageInsertCommand.cpp
      commands/KoPAPageDeleteCommand.cpp
      commands/KoPAPageMoveCommand.cpp
+     dialogs/KoPAMasterPageDialog.cpp
 )
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})

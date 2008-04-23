@@ -142,6 +142,8 @@ protected slots:
     void editSelectAll();
     void editDeselectAll();
 
+    void formatMasterPage();
+
     /// Change the current view mode to work on master pages
     void setMasterMode( bool master );
 
@@ -213,6 +215,8 @@ private:
     KAction * m_actionInsertPage;
     KAction * m_actionCopyPage;
     KAction * m_actionDeletePage;
+
+    KAction *m_actionMasterPage;
 
     KoRuler *m_horizontalRuler;
     KoRuler *m_verticalRuler;

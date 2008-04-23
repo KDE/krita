@@ -57,6 +57,7 @@
 #include "KoPAPastePage.h"
 #include "commands/KoPAPageInsertCommand.h"
 #include "commands/KoPAPageDeleteCommand.h"
+#include "dialogs/KoPAMasterPageDialog.h"
 
 #include "KoShapeOdfSaveHelper.h"
 #include "KoShapePaste.h"
@@ -228,6 +229,10 @@ void KoPAView::initActions()
     m_actionDeletePage->setWhatsThis( i18n( "Delete a new page after the current one" ) );
     connect( m_actionDeletePage, SIGNAL( triggered() ), this, SLOT( deletePage() ) );
 
+    m_actionMasterPage = new KAction(i18n("Master Page..."), this);
+    actionCollection()->addAction("format_masterpage", m_actionMasterPage);
+    connect(m_actionMasterPage, SIGNAL(triggered()), this, SLOT(formatMasterPage()));
+
     actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
     actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
     actionCollection()->addAction(KStandardAction::FirstPage,  "page_first", this, SLOT(goToFirstPage()));
@@ -319,6 +324,24 @@ void KoPAView::editDeselectAll()
     kopaCanvas()->update();
 }
 
+void KoPAView::formatMasterPage()
+{
+    KoPAPage *page = dynamic_cast<KoPAPage *>(m_activePage);
+    Q_ASSERT(page);
+    KoPAMasterPageDialog *dialog = new KoPAMasterPageDialog(m_doc, page->masterPage(), m_canvas);
+
+    if (dialog->exec() == QDialog::Accepted) {
+        KoPAMasterPage *masterPage = dialog->selectedMasterPage();
+        KoPAPage *page = dynamic_cast<KoPAPage *>(m_activePage);
+        if (page) {
+            page->setMasterPage(masterPage);
+            updateActivePage(page);
+        }
+    }
+
+    delete dialog;
+}
+
 void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, double zoom )
 {
     Q_UNUSED(mode);
@@ -330,6 +353,7 @@ void KoPAView::setMasterMode( bool master )
 {
     m_viewMode->setMasterMode( master );
     m_documentStructureDocker->setMasterMode(master);
+    m_actionMasterPage->setEnabled(!master);
 }
 
 KoShapeManager* KoPAView::shapeManager() const

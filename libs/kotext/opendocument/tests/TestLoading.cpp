@@ -50,7 +50,7 @@ static void showDocument(QTextDocument *document)
     delete textEdit;
 }
 
-// Functions that compare two QTextDocuments
+// Functions that help compare two QTextDocuments
 static bool compareFragments(const QTextFragment &actualFragment, const QTextFragment &expectedFragment)
 {
     if (actualFragment.text() != expectedFragment.text())
@@ -85,8 +85,8 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
     if (actualList) {
         if (!expectedList)
             return false;
-        if (actualList->format() != expectedList->format()
-            || actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))
+        if ((actualList->format().properties() != expectedList->format().properties())
+            || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock)))
             return false;
     } else {
         if (expectedList)
@@ -197,34 +197,39 @@ static QScriptValue includeFunction(QScriptContext *context, QScriptEngine *engi
 }
 
 // FIXME: Remove this once the generator is fixed
-Q_DECLARE_METATYPE(QTextCharFormat);
-Q_DECLARE_METATYPE(QTextCharFormat *);
+Q_DECLARE_METATYPE(QTextFormat);
+Q_DECLARE_METATYPE(QTextFormat *);
 
-static QScriptValue setDefaultListItemProperties(QScriptContext *context, QScriptEngine *engine)
+static QScriptValue setFormatProperty(QScriptContext *context, QScriptEngine *engine)
 {
-    if (context->argumentCount() == 0)
+    if (context->argumentCount() < 2)
         return engine->nullValue();
     
-    QTextCharFormat *format = qscriptvalue_cast<QTextCharFormat *>(context->argument(0));
-    format->setProperty(KoListStyle::StartValue, 1);
-    format->setProperty(KoListStyle::Level, 1);
+    QTextFormat *format = qscriptvalue_cast<QTextFormat *>(context->argument(0));
+    int id = context->argument(1).toInt32();
+    QVariant value = context->argument(2).toVariant();
+    format->setProperty(id, value);
 
     return QScriptValue();
 }
 
-static QScriptValue cloneCharFormat(QScriptContext *context, QScriptEngine *engine)
+Q_DECLARE_METATYPE(QTextCharFormat);
+Q_DECLARE_METATYPE(QTextCharFormat *);
+
+static QScriptValue copyFormatProperties(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() < 1)
         return engine->nullValue();
     
-    QTextCharFormat *dest = qscriptvalue_cast<QTextCharFormat *>(context->argument(0));
-    QTextCharFormat *src = qscriptvalue_cast<QTextCharFormat *>(context->argument(1));
+    QTextFormat *dest = qscriptvalue_cast<QTextFormat *>(context->argument(0));
+    QTextFormat *src = qscriptvalue_cast<QTextFormat *>(context->argument(1));
     if (dest && src) {
         QMap<int, QVariant> properties = src->properties();
         foreach(int id, properties.keys()) {
             dest->setProperty(id, properties[id]);
         }
     }
+
     return QScriptValue();
 }
 
@@ -268,8 +273,8 @@ void TestLoading::initTestCase()
     globalObject.property("qt").setProperty("script", qscript);
     
     globalObject.setProperty("include", engine->newFunction(includeFunction));
-    globalObject.setProperty("setDefaultListItemProperties", engine->newFunction(setDefaultListItemProperties));
-    globalObject.setProperty("cloneCharFormat", engine->newFunction(cloneCharFormat));
+    globalObject.setProperty("setFormatProperty", engine->newFunction(setFormatProperty));
+    globalObject.setProperty("copyFormatProperties", engine->newFunction(copyFormatProperties));
 }
 
 void TestLoading::cleanupTestCase()

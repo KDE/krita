@@ -212,6 +212,23 @@ static QScriptValue setDefaultListItemProperties(QScriptContext *context, QScrip
     return QScriptValue();
 }
 
+static QScriptValue cloneCharFormat(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() < 1)
+        return engine->nullValue();
+    
+    QTextCharFormat *dest = qscriptvalue_cast<QTextCharFormat *>(context->argument(0));
+    QTextCharFormat *src = qscriptvalue_cast<QTextCharFormat *>(context->argument(1));
+    if (dest && src) {
+        QMap<int, QVariant> properties = src->properties();
+        foreach(int id, properties.keys()) {
+            dest->setProperty(id, properties[id]);
+        }
+    }
+    return QScriptValue();
+}
+
+
 // May the testing begin
 TestLoading::TestLoading() 
 {
@@ -252,6 +269,7 @@ void TestLoading::initTestCase()
     
     globalObject.setProperty("include", engine->newFunction(includeFunction));
     globalObject.setProperty("setDefaultListItemProperties", engine->newFunction(setDefaultListItemProperties));
+    globalObject.setProperty("cloneCharFormat", engine->newFunction(cloneCharFormat));
 }
 
 void TestLoading::cleanupTestCase()

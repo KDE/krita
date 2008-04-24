@@ -29,6 +29,7 @@ set( kopageapp_LIB_SRCS
      commands/KoPAPageInsertCommand.cpp
      commands/KoPAPageDeleteCommand.cpp
      commands/KoPAPageMoveCommand.cpp
+     commands/KoPAChangeMasterPageCommand.cpp
      dialogs/KoPAMasterPageDialog.cpp
 )
 

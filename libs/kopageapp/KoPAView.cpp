@@ -57,6 +57,7 @@
 #include "KoPAPastePage.h"
 #include "commands/KoPAPageInsertCommand.h"
 #include "commands/KoPAPageDeleteCommand.h"
+#include "commands/KoPAChangeMasterPageCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
 
 #include "KoShapeOdfSaveHelper.h"
@@ -334,7 +335,8 @@ void KoPAView::formatMasterPage()
         KoPAMasterPage *masterPage = dialog->selectedMasterPage();
         KoPAPage *page = dynamic_cast<KoPAPage *>(m_activePage);
         if (page) {
-            page->setMasterPage(masterPage);
+            KoPAChangeMasterPageCommand * command = new KoPAChangeMasterPageCommand( page, masterPage );
+            m_canvas->addCommand( command );
             updateActivePage(page);
         }
     }

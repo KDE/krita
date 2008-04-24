@@ -24,6 +24,7 @@
 #include <QDomElement>
 #include <QRect>
 
+#include <kis_image.h>
 #include <kis_debug.h>
 
 #include <KoColorSpace.h>

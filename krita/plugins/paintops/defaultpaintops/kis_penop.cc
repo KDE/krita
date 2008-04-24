@@ -25,6 +25,7 @@
 
 #include <QRect>
 
+#include <kis_image.h>
 #include <kis_debug.h>
 
 #include <KoColor.h>

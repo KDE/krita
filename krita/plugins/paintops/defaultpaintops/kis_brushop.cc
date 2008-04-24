@@ -33,6 +33,7 @@
 #include <QHBoxLayout>
 #include <qtoolbutton.h>
 
+#include <kis_image.h>
 #include <kis_debug.h>
 
 #include <KoColorTransformation.h>

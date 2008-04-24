@@ -31,7 +31,7 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
-class KisRecordedPaintAction : public KisRecordedAction {
+class KRITAUI_EXPORT KisRecordedPaintAction : public KisRecordedAction {
     public:
 
         KisRecordedPaintAction(const QString & name, const QString & id, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);

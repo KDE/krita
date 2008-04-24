@@ -26,7 +26,7 @@ class KoPAPage;
 class KoPAMasterPage;
 
 /**
- * Command to chamge the master page of a page
+ * Command to change the master page of a page
  */
 class KoPAChangeMasterPageCommand : public QUndoCommand
 {

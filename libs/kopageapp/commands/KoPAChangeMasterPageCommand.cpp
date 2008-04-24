@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 
-#include "KoPAPage.h";
+#include "KoPAPage.h"
 
 KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand( KoPAPage * page, KoPAMasterPage * masterPage )
 : m_page( page )

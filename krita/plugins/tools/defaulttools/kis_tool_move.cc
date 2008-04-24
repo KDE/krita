@@ -75,7 +75,7 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *e)
 	QPointF posf = convertToPixelCoord(e);
         QPoint pos = QPoint(static_cast<int>(posf.x()), static_cast<int>(posf.y()));
         if((e->modifiers() & Qt::AltModifier) || (e->modifiers() & Qt::ControlModifier)) {
-            if(fabs(pos.x() - m_dragStart.x()) > fabs(pos.y() - m_dragStart.y()))
+            if(fabs(static_cast<double>(pos.x() - m_dragStart.x())) > fabs(static_cast<double>(pos.y() - m_dragStart.y())))
                 pos.setY(m_dragStart.y());
             else
                 pos.setX(m_dragStart.x());

@@ -25,6 +25,7 @@
 
 #include <QSlider>
 #include <QPoint>
+#include <QPainter>
 
 #include <klocale.h>
 #include <kiconloader.h>

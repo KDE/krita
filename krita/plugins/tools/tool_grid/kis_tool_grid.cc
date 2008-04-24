@@ -15,9 +15,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_tool_grid.h"
+#include <KoViewConverter.h>
 
-#include <kis_tool_grid.h>
+#include "kis_tool_grid.h"
 
 #include <qpainter.h>
 

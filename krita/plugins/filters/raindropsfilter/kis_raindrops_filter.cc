@@ -195,7 +195,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
             for (j = -1 * halfSize ; (j < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++)
             {
                 r = sqrt (i * i + j * j);
-                a = atan2 (i, j);
+                a = atan2 (static_cast<double>(i), static_cast<double>(j));
 
                 if (r <= Radius)
                 {

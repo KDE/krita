@@ -21,7 +21,6 @@
 #include <klocale.h>
 
 #include "kis_rgb_float_hdr_colorspace.h"
-#include "krita_rgbf32_export.h"
 
 #include "KoColorSpaceTraits.h"
 #include <KoColorModelStandardIds.h>
@@ -30,7 +29,7 @@
 
 typedef KoRgbTraits<float> RgbF32Traits;
 
-class KRITA_RGBF32_EXPORT KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF32Traits>
+class KisRgbF32HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF32Traits>
 {
 public:
     KisRgbF32HDRColorSpace( KoColorProfile *p);
@@ -46,7 +45,7 @@ public:
     static QString colorSpaceId();
 };
 
-class KRITA_RGBF32_EXPORT KisRgbF32HDRColorSpaceFactory : public KisRgbFloatHDRColorSpaceFactory
+class KisRgbF32HDRColorSpaceFactory : public KisRgbFloatHDRColorSpaceFactory
 {
 public:
     /**

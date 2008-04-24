@@ -36,18 +36,19 @@
 # endif
 #endif
 
-#if !defined and
+#if !defined __MINGW32__
+#ifndef and
 #define and &&
 #endif
 
-#if !defined or
+#ifndef or
 #define or ||
 #endif
 
-#if !defined not
+#ifndef not
 #define not !
 #endif
-
+#endif
 
 #else /* UNIX */
 

@@ -18,7 +18,7 @@
 #ifndef KIS_TOOL_SELECT_PICKER_H_
 #define KIS_TOOL_SELECT_PICKER_H_
 
-#include <QPainter.h>
+#include <QtGui/QPainter>
 #include <kis_tool.h>
 #include <KoToolFactory.h>
 #include <kis_selection.h>

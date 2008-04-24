@@ -504,7 +504,7 @@ fprintf (stderr, "\t before indep=false low-pass-filter\n");
     {
       value           = (y_channel[y][x] < 0.) ? 0. : 5. * y_channel[y][x];
       factor          = pow (1. / (value + 1.), 4.);
-      y_channel[y][x] = (1. / 1.7) * ((0.2 * value * factor) + (0.1 * pow (1. - factor, 2.) * cbrt (value)));
+      y_channel[y][x] = (1. / 1.7) * ((0.2 * value * factor) + (0.1 * pow (1. - factor, 2.) * pow (value, 1. / 3. )));
       for (c = 0; c < 3; c++)
 	  {
 		rgb_image[y][x][c] /= 100.;

@@ -35,6 +35,7 @@
 #include <QFont>
 #include <QTextCursor>
 #include <QTextBlock>
+#include <QTextList>
 
 class KoTextSelectionHandler::Private {
 public:
@@ -403,13 +404,16 @@ void KoTextSelectionHandler::nextParagraph() {
         if(currentStyle == nextStyle)
             nextStyle = 0;
     }
-    d->caret->insertText("\n");
+    QTextList *list = d->caret->block().textList();
+    d->caret->insertBlock();
     QTextBlockFormat bf = d->caret->blockFormat();
     bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
     d->caret->setBlockFormat(bf);
     if(nextStyle) {
         QTextBlock block = d->caret->block();
         nextStyle->applyStyle(block);
+        if (list)
+            list->add(block);
     }
     emit stopMacro();
 }

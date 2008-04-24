@@ -27,6 +27,9 @@
 #include <klocale.h>
 #include <kis_debug.h>
 
+#include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
+
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>

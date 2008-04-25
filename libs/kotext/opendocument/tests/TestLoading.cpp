@@ -42,6 +42,7 @@
 #include <KoListStyle.h>
 #include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
+#include <KoCharacterStyle.h>
 
 static void showDocument(QTextDocument *document)
 {
@@ -74,9 +75,14 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
             return false;
     }
 
+    // this should really be actualFormat.properties() == expectedFormat.properties()
     return actualFormat.font() == expectedFormat.font()
            && actualFormat.foreground() == expectedFormat.foreground()
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
+           && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
+            && actualFormat.property(KoCharacterStyle::UnderlineType).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::UnderlineType).toInt()
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
 }
 
@@ -205,8 +211,10 @@ Q_DECLARE_METATYPE(QTextFormat *);
 
 static QScriptValue setFormatProperty(QScriptContext *context, QScriptEngine *engine)
 {
-    if (context->argumentCount() < 2)
+    if (context->argumentCount() < 3) {
+        qWarning() << "too few arguments to setFormatProperty(format, id, value)";
         return engine->nullValue();
+    }
     
     QTextFormat *format = qscriptvalue_cast<QTextFormat *>(context->argument(0));
     int id = context->argument(1).toInt32();
@@ -362,6 +370,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font style") << "FormattingProperties/TextFormattingProperties/fontStyle";
     QTest::newRow("Font name") << "FormattingProperties/TextFormattingProperties/fontName";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";
+    QTest::newRow("Underline type") << "FormattingProperties/TextFormattingProperties/underlineType";
 }
 
 void TestLoading::testLoading() 

@@ -371,6 +371,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font name") << "FormattingProperties/TextFormattingProperties/fontName";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";
     QTest::newRow("Underline type") << "FormattingProperties/TextFormattingProperties/underlineType";
+    QTest::newRow("Underline style") << "FormattingProperties/TextFormattingProperties/underlineStyle";
 }
 
 void TestLoading::testLoading() 

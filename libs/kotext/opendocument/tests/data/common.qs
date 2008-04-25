@@ -56,12 +56,12 @@ KoCharacterStyle.NoLineType = 0;
 KoCharacterStyle.SingleLine = 1;
 KoCharacterStyle.DoubleLine = 2;
 
-KoCharacterStyle.NoLineStyle = Qt.NoPen;
+KoCharacterStyle.NoLineStyle = 0; // Qt.NoPen;
 KoCharacterStyle.SolidLine = 1; // Qt.SolidLine;
-KoCharacterStyle.DottedLine = Qt.DottedLine;
-KoCharacterStyle.DashLine = Qt.DashLine;
-KoCharacterStyle.DashDotLine = Qt.DashDotLine;
-KoCharacterStyle.DashDotDotLine = Qt.DashDotDotLine;
+KoCharacterStyle.DottedLine = 3; // Qt.DotLine;
+KoCharacterStyle.DashLine = 2; // Qt.DashLine;
+KoCharacterStyle.DashDotLine = 4; // Qt.DashDotLine;
+KoCharacterStyle.DashDotDotLine = 5; // Qt.DashDotDotLine;
 KoCharacterStyle.LongDashLine = KoCharacterStyle.DashDotDotLine + 1;
 KoCharacterStyle.WaveLine = KoCharacterStyle.DashDotDotLine + 2;
 

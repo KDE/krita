@@ -190,6 +190,8 @@ public:
      */
     KoPAPageBase * pageByShape( KoShape * shape ) const;
 
+    void updateViews(KoPAPageBase *page = 0);
+
 signals:
     void shapeAdded(KoShape* shape);
     void shapeRemoved(KoShape* shape);

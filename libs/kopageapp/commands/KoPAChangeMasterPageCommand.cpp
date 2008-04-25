@@ -22,9 +22,12 @@
 #include <klocale.h>
 
 #include "KoPAPage.h"
+#include "KoPADocument.h"
+#include "KoPAView.h"
 
-KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand( KoPAPage * page, KoPAMasterPage * masterPage )
-: m_page( page )
+KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand( KoPADocument *document, KoPAPage * page, KoPAMasterPage * masterPage )
+: m_document( document )
+, m_page( page )
 , m_oldMasterPage( page->masterPage() )
 , m_newMasterPage( masterPage )
 {
@@ -38,11 +41,12 @@ KoPAChangeMasterPageCommand::~KoPAChangeMasterPageCommand()
 void KoPAChangeMasterPageCommand::redo()
 {
     m_page->setMasterPage( m_newMasterPage );
-    // TODO add a way to update all views that show m_page
+    m_document->updateViews(m_page);
 }
 
 void KoPAChangeMasterPageCommand::undo()
 {
     m_page->setMasterPage( m_oldMasterPage );
-    // TODO add a way to update all views that show m_page
+    m_document->updateViews(m_page);
 }
+

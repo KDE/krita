@@ -393,6 +393,17 @@ KoPAPageBase * KoPADocument::pageByShape( KoShape * shape ) const
     return page;
 }
 
+void KoPADocument::updateViews(KoPAPageBase *page)
+{
+    foreach (KoView *view, views()) {
+        KoPAView *paView = static_cast<KoPAView *>(view);
+        if (page && paView->activePage() == page)
+            paView->updateActivePage(page);
+        else if (!page)
+            paView->updateActivePage(paView->activePage());
+    }
+}
+
 void KoPADocument::setActionEnabled( int actions, bool enable )
 {
     foreach( KoView *view, views() )

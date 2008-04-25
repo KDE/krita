@@ -335,9 +335,8 @@ void KoPAView::formatMasterPage()
         KoPAMasterPage *masterPage = dialog->selectedMasterPage();
         KoPAPage *page = dynamic_cast<KoPAPage *>(m_activePage);
         if (page) {
-            KoPAChangeMasterPageCommand * command = new KoPAChangeMasterPageCommand( page, masterPage );
+            KoPAChangeMasterPageCommand * command = new KoPAChangeMasterPageCommand( m_doc, page, masterPage );
             m_canvas->addCommand( command );
-            updateActivePage(page);
         }
     }
 

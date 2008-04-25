@@ -22,6 +22,7 @@
 
 #include <QUndoCommand>
 
+class KoPADocument;
 class KoPAPage;
 class KoPAMasterPage;
 
@@ -31,7 +32,7 @@ class KoPAMasterPage;
 class KoPAChangeMasterPageCommand : public QUndoCommand
 {
 public:
-    KoPAChangeMasterPageCommand( KoPAPage * page, KoPAMasterPage * masterPage );
+    KoPAChangeMasterPageCommand( KoPADocument *document, KoPAPage * page, KoPAMasterPage * masterPage );
     virtual ~KoPAChangeMasterPageCommand();
 
     /// redo the command
@@ -40,6 +41,7 @@ public:
     void undo();
 
 private:
+    KoPADocument *m_document;
     KoPAPage * m_page;
     KoPAMasterPage * m_oldMasterPage;
     KoPAMasterPage * m_newMasterPage;

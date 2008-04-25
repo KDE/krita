@@ -380,6 +380,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font weight") << "FormattingProperties/TextFormattingProperties/fontWeight";
     QTest::newRow("Font variant") << "FormattingProperties/TextFormattingProperties/fontVariant";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
+    QTest::newRow("Text tranformations") << "FormattingProperties/TextFormattingProperties/textTransformations";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";
     QTest::newRow("Underline type") << "FormattingProperties/TextFormattingProperties/underlineType";
     QTest::newRow("Underline style") << "FormattingProperties/TextFormattingProperties/underlineStyle";

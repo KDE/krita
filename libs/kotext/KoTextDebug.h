@@ -28,21 +28,25 @@ class QTextBlock;
 class QTextTable;
 class QTextFragment;
 
+#include <QMap>
+#include <QVariant>
+
 class KOTEXT_EXPORT KoTextDebug
 {
 public:
-    static void dumpDocument(QTextDocument *document);
-    static void dumpFrame(QTextFrame *frame);
+    static void dumpDocument(const QTextDocument *document);
+    static void dumpFrame(const QTextFrame *frame);
     static void dumpBlock(const QTextBlock &block);
-    static void dumpTable(QTextTable *);
+    static void dumpTable(const QTextTable *);
     static void dumpFragment(const QTextFragment &fragment);
+    static QString attributes(const QMap<int, QVariant> &properties);
 
 private:
     KoTextDebug();
     KoTextDebug( const KoTextDebug& );
     KoTextDebug operator=( const KoTextDebug& );
 
-    static QTextDocument *document;
+    static const QTextDocument *document;
     static int depth;
     static const int INDENT;
 };

@@ -33,9 +33,9 @@
 
 int KoTextDebug::depth = 0;
 const int KoTextDebug::INDENT = 2;
-QTextDocument *KoTextDebug::document = 0;
+const QTextDocument *KoTextDebug::document = 0;
 
-void KoTextDebug::dumpDocument(QTextDocument *doc)
+void KoTextDebug::dumpDocument(const QTextDocument *doc)
 {
     document = doc;
     qDebug() << "<document>";
@@ -44,7 +44,43 @@ void KoTextDebug::dumpDocument(QTextDocument *doc)
     document = 0;
 }
 
-void KoTextDebug::dumpFrame(QTextFrame *frame)
+QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
+{
+    QString attrs;
+    foreach(int id, properties.keys()) {
+        QString key, value;
+        switch (id) {
+        case KoCharacterStyle::UnderlineStyle:
+            key = "underlinestyle";
+            value = QString::number(properties[id].toInt());
+            break;
+        case QTextFormat::TextUnderlineColor:
+            key = "underlinecolor";
+            value = qvariant_cast<QColor>(properties[id]).name();
+            break;
+        case KoCharacterStyle::UnderlineType:
+            key = "underlinetype";
+            value = QString::number(properties[id].toInt());
+            break;
+        case QTextFormat::ForegroundBrush:
+            key = "foreground";
+            value = qvariant_cast<QBrush>(properties[id]).color().name(); // beware!
+            break;
+        case QTextFormat::BackgroundBrush:
+            key = "background";
+            value = qvariant_cast<QBrush>(properties[id]).color().name(); // beware!
+            break;
+        default:
+            break;
+        }
+            
+        if (!key.isEmpty())
+            attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+    }
+    return attrs;
+}
+
+void KoTextDebug::dumpFrame(const QTextFrame *frame)
 {
     depth += INDENT;
     qDebug("%*s%s", depth, " ", "<frame>");
@@ -94,6 +130,8 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
         attrs.append(" style:").append(QString::number(list->format().style()));
     }
 
+    attrs.append(attributes(block.blockFormat().properties()));
+
     qDebug("%*s<block%s>", depth, " ", qPrintable(attrs));
 
     QTextBlock::Iterator iterator = block.begin();
@@ -109,7 +147,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
         qDebug(" ");
 }
 
-void KoTextDebug::dumpTable(QTextTable *)
+void KoTextDebug::dumpTable(const QTextTable *)
 {
     depth += INDENT;
     qDebug("%*s%s", depth, " ", "<table>");
@@ -145,6 +183,7 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment)
             attrs.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
             attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
         }
+        attrs.append(attributes(textFormat.properties()));
     }
 
     qDebug("%*s<fragment%s>", depth, " ", qPrintable(attrs));

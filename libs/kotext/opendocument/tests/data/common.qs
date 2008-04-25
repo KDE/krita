@@ -24,6 +24,7 @@ QTextBlockFormat.clone = function(fmt) {
 var defaultTextFormat = new QTextCharFormat;
 defaultTextFormat.setFont(defaultFont);
 defaultTextFormat.setVerticalAlignment(QTextCharFormat.AlignNormal);
+cursor.setCharFormat(defaultTextFormat);
 
 QTextCharFormat.clone = function(fmt) {
     var newFormat = new QTextCharFormat;

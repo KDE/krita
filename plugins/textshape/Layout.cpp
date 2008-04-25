@@ -589,6 +589,9 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
 
         if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
             started=true;
+            QBrush bg = block.blockFormat().background();
+            if (bg != Qt::NoBrush)
+                painter->fillRect(layout->boundingRect(), bg);
             painter->save();
             drawListItem(painter, block);
             painter->restore();

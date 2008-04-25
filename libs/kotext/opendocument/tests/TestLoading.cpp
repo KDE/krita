@@ -40,6 +40,8 @@
 #include <kcomponentdata.h>
 #include <KoTextDebug.h>
 #include <KoListStyle.h>
+#include <KoTextDocumentLayout.h>
+#include <KoStyleManager.h>
 
 static void showDocument(QTextDocument *document)
 {
@@ -327,6 +329,10 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
     KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store());
     KoShapeLoadingContext shapeLoadingContext(odfLoadingContext, 0 /* KoShapeControllerBase (KWDocument) */);
     textShapeData = new KoTextShapeData;
+    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
+    textShapeData->document()->setDocumentLayout(layout);
+    KoStyleManager *styleManager = new KoStyleManager;
+    layout->setStyleManager(styleManager);
     if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
         qDebug() << "KoTextShapeData failed to load ODT";
     }

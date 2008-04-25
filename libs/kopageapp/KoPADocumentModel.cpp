@@ -307,12 +307,12 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
         KoPageLayout layout = page->pageLayout();
         double ratio = (double)layout.width / layout.height;
         if (ratio > 1) {
-            zoom = (double) size.width() / layout.width;
-            size.setWidth(size.width() * ratio);
+            size.setHeight(size.width() / ratio);
+            zoom = (double) size.height() / layout.width;
         }
         else {
-            zoom = (double) size.height() / layout.height;
-            size.setHeight(size.height() / ratio); 
+            size.setWidth(size.height() * ratio); 
+            zoom = (double) size.width() / layout.height;
         }
     }
 
@@ -329,20 +329,23 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     thumb.fill( QColor( Qt::white ).rgb() );
 
     if (page) { // draw the thumbnail for page
-        // also draw shapes from master page if this page is not a master
-        if (!m_master) {
-            KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
-            shapes += masterPage->iterator();
-            shapePainter.setShapes(shapes);
-        }
         QPainter painter(&thumb);
         painter.setClipRect(QRect(0, 0, size.width(), size.height()));
+        KoZoomHandler zoomHandler;
+        zoomHandler.setZoom(zoom);
+
+        // also draw shapes from master page if this page is not a master
+        // and draw shapes from master page first
+        if (!m_master) {
+            KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
+            shapePainter.setShapes(masterPage->iterator());
+            shapePainter.paintShapes(painter, zoomHandler);
+            shapePainter.setShapes(shapes);
+        }
+        shapePainter.paintShapes(painter, zoomHandler);
         QPen pen(Qt::SolidLine);
         painter.setPen(pen);
         painter.drawRect(0, 0, size.width() - 1, size.height() - 1);
-        KoZoomHandler zoomHandler;
-        zoomHandler.setZoom(zoom);
-        shapePainter.paintShapes(painter, zoomHandler);
     }
     else // draw thumbnail for other type of shapes
         shapePainter.paintShapes( thumb );

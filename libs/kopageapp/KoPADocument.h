@@ -194,9 +194,8 @@ public:
      * Update all views this document is displayed on
      *
      * @param page specify a page to be updated, all views with this page as active page will be updated.
-     * If no page is given, all views regardless of the active page will be updated.
      */
-    void updateViews(KoPAPageBase *page = 0);
+    void updateViews(KoPAPageBase *page);
 
 signals:
     void shapeAdded(KoShape* shape);

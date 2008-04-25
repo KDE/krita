@@ -1,7 +1,7 @@
 include("common.qs");
 
 var transparentBackgroundFormat = QTextCharFormat.clone(defaultTextFormat);
-transparentBackgroundFormat.setBackground(new QBrush(new QColor("#000000")));
+transparentBackgroundFormat.setBackground(new QBrush());
 
 var redBackgroundFormat = QTextCharFormat.clone(defaultTextFormat);
 redBackgroundFormat.setBackground(new QBrush(new QColor("#ff3366")));

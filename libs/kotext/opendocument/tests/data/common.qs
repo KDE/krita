@@ -6,6 +6,21 @@ var defaultFont = new QFont;
 defaultFont.setPointSizeF(12.0);
 defaultFont.setWeight(QFont.Normal);
 
+var KoParagraphStyle = {};
+KoParagraphStyle.StyleId = QTextFormat.UserProperty + 1;
+KoParagraphStyle.PercentLineHeight = QTextFormat.UserProperty + 2;
+
+var defaultBlockFormat = new QTextBlockFormat;
+setFormatProperty(defaultBlockFormat, KoParagraphStyle.PercentLineHeight, 120);
+defaultBlockFormat.clearBackground();
+cursor.setBlockFormat(defaultBlockFormat);
+
+QTextBlockFormat.clone = function(fmt) {
+    var newFormat = new QTextBlockFormat;
+    copyFormatProperties(newFormat, fmt);
+    return newFormat;
+}
+
 var defaultTextFormat = new QTextCharFormat;
 defaultTextFormat.setFont(defaultFont);
 defaultTextFormat.setVerticalAlignment(QTextCharFormat.AlignNormal);

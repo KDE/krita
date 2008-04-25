@@ -78,6 +78,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
     // this should really be actualFormat.properties() == expectedFormat.properties()
     return actualFormat.font() == expectedFormat.font()
            && actualFormat.foreground() == expectedFormat.foreground()
+           && actualFormat.background() == expectedFormat.background()
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
            && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
@@ -99,6 +100,12 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
             return false;
     } else {
         if (expectedList)
+            return false;
+        // this should really be actualBlock.blockFormat().properties() == expectedBlock.blockFormat().properties()
+        QTextBlockFormat actualFormat = actualBlock.blockFormat();
+        QTextBlockFormat expectedFormat = expectedBlock.blockFormat();
+        if (actualFormat.background() != expectedFormat.background()
+            || actualFormat.foreground() != expectedFormat.foreground())
             return false;
     }
 
@@ -352,7 +359,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 void TestLoading::testLoading_data()
 {
     QTest::addColumn<QString>("testcase");
-    
+
     QTest::newRow("Bulleted list") << "TextContents/Lists/bulletedList";
     QTest::newRow("Numbered list") << "TextContents/Lists/numberedList";
     QTest::newRow("Embedded bulleted list") << "TextContents/Lists/embeddedBulletedList";
@@ -363,6 +370,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font Size") << "TextContents/TextFormatting/fontSize";
 
     QTest::newRow("Font Colors") << "TextContents/TextFormatting/fontColors";
+
     QTest::newRow("Colors") << "FormattingProperties/TextFormattingProperties/color";
     QTest::newRow("Font family") << "FormattingProperties/TextFormattingProperties/fontFamily";
     QTest::newRow("Font weight") << "FormattingProperties/TextFormattingProperties/fontWeight";

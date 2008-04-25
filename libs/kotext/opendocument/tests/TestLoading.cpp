@@ -80,6 +80,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
            && actualFormat.foreground() == expectedFormat.foreground()
            && actualFormat.background() == expectedFormat.background()
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
+           && actualFormat.fontCapitalization() == expectedFormat.fontCapitalization()
            && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
             && actualFormat.property(KoCharacterStyle::UnderlineType).toInt() 
@@ -373,10 +374,11 @@ void TestLoading::testLoading_data()
 
     QTest::newRow("Colors") << "FormattingProperties/TextFormattingProperties/color";
     QTest::newRow("Font family") << "FormattingProperties/TextFormattingProperties/fontFamily";
-    QTest::newRow("Font weight") << "FormattingProperties/TextFormattingProperties/fontWeight";
+    QTest::newRow("Font name") << "FormattingProperties/TextFormattingProperties/fontName";
     QTest::newRow("Font pitch") << "FormattingProperties/TextFormattingProperties/fontPitch";
     QTest::newRow("Font style") << "FormattingProperties/TextFormattingProperties/fontStyle";
-    QTest::newRow("Font name") << "FormattingProperties/TextFormattingProperties/fontName";
+    QTest::newRow("Font weight") << "FormattingProperties/TextFormattingProperties/fontWeight";
+    QTest::newRow("Font variant") << "FormattingProperties/TextFormattingProperties/fontVariant";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";
     QTest::newRow("Underline type") << "FormattingProperties/TextFormattingProperties/underlineType";

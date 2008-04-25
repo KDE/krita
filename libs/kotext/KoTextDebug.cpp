@@ -70,6 +70,10 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "background";
             value = qvariant_cast<QBrush>(properties[id]).color().name(); // beware!
             break;
+        case QTextFormat::FontCapitalization:
+            key="font-caps";
+            value = QString::number(properties[id].toInt());
+            break;
         default:
             break;
         }

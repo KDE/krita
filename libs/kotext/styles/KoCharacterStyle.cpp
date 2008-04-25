@@ -199,8 +199,8 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
     if(!variant.isNull()) {
         switch(static_cast<Transform>(variant.toInt())) {
         case Capitalize:
-            newFormat.setProperty(TransformText, Capitalize);
-            // fall through
+            newFormat.setFontCapitalization(QFont::Capitalize);
+            break;
         case MixedCase:
             newFormat.setFontCapitalization(QFont::MixedCase);
             break;
@@ -667,8 +667,11 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     }
     // The fo:font-variant attribute provides the option to display text as small capitalized letters.
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-variant" ) ) {
-        if ( styleStack.property( KoXmlNS::fo, "font-variant" ) == "small-caps" )
-            setTransform( SmallCaps );
+        QString textVariant = styleStack.property(KoXmlNS::fo, "font-variant");
+        if (textVariant == "small-caps")
+            setTransform(SmallCaps);
+        else if (textVariant == "normal")
+            setTransform(MixedCase);
     }
     // The fo:text-transform attribute specifies text transformations to uppercase, lowercase, and capitalization.
     else if ( styleStack.hasProperty( KoXmlNS::fo, "text-transform" ) ) {
@@ -849,6 +852,9 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
                     break;
                 case Capitalize:
                     style.addProperty("fo:text-transform", "capitalize", KoGenStyle::TextType);
+                    break;
+                case MixedCase:
+                    style.addProperty("fo:text-transform", "normal", KoGenStyle::TextType);
                     break;
             }
         } else if (key == QTextFormat::FontPointSize) {

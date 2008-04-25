@@ -56,10 +56,15 @@ static void showDocument(QTextDocument *document)
 // Functions that help compare two QTextDocuments
 static bool compareFragments(const QTextFragment &actualFragment, const QTextFragment &expectedFragment)
 {
-    if (actualFragment.text() != expectedFragment.text())
+    if (actualFragment.text() != expectedFragment.text()) {
+        qDebug() << "compareFragments: text not equal " << actualFragment.text() << expectedFragment.text();
         return false;
-    if (actualFragment.position() != expectedFragment.position())
+    }
+    if (actualFragment.position() != expectedFragment.position()) {
+        qDebug() << "compareFragments: position not equal " << actualFragment.position() << expectedFragment.position();
         return false;
+    }
+
     QTextCharFormat actualFormat = actualFragment.charFormat();
     QTextImageFormat actualImageFormat = actualFormat.toImageFormat();
 
@@ -67,16 +72,20 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
     QTextImageFormat expectedImageFormat = expectedFormat.toImageFormat();
     
     if (actualImageFormat.isValid()) {
-        if (!expectedImageFormat.isValid())
+        if (!expectedImageFormat.isValid()) {
+            qDebug() << "compareFragments: actualDocument has unexpected image at " << actualFragment.text();
             return false;
+         }
         return true; // FIXME: Compare the image formats
     } else {
-        if (expectedImageFormat.isValid())
+        if (expectedImageFormat.isValid()) {
+            qDebug() << "compareFragment: expecting image in actualDocument at " << actualFragment.text();
             return false;
+        }
     }
 
     // this should really be actualFormat.properties() == expectedFormat.properties()
-    return actualFormat.font() == expectedFormat.font()
+    bool equal = actualFormat.font() == expectedFormat.font()
            && actualFormat.foreground() == expectedFormat.foreground()
            && actualFormat.background() == expectedFormat.background()
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
@@ -86,6 +95,11 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
             && actualFormat.property(KoCharacterStyle::UnderlineType).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineType).toInt()
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
+    
+    if (!equal)
+        qDebug() << "compareFragment: property mismatch at " << actualFragment.text();
+
+    return equal;
 }
 
 static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock)
@@ -94,21 +108,32 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
     QTextList *expectedList = expectedBlock.textList();
 
     if (actualList) {
-        if (!expectedList)
+        if (!expectedList) {
+            qDebug() << "compareBlocks: Unexpected list in actualDocument at " << actualBlock.text();
             return false;
+        }
         if ((actualList->format().properties() != expectedList->format().properties())
-            || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock)))
+            || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))) {
+            qDebug() << "compareBlocks: list properties mismatch at " << actualBlock.text()
+                     << actualList->format().properties() << expectedList->format().properties()
+                     << actualList->itemNumber(actualBlock) << expectedList->itemNumber(expectedBlock);
             return false;
+        }
     } else {
-        if (expectedList)
+        if (expectedList) {
+            qDebug() << "compareBlock: Expecting  list in actualDocument at " << actualBlock.text();
             return false;
+        }
         // this should really be actualBlock.blockFormat().properties() == expectedBlock.blockFormat().properties()
         QTextBlockFormat actualFormat = actualBlock.blockFormat();
         QTextBlockFormat expectedFormat = expectedBlock.blockFormat();
         if (actualFormat.background() != expectedFormat.background()
             || actualFormat.alignment() != expectedFormat.alignment()
-            || actualFormat.foreground() != expectedFormat.foreground())
+            || actualFormat.foreground() != expectedFormat.foreground()) {
+            qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text()
+                     << actualFormat.properties() << expectedFormat.properties();
             return false;
+        }
     }
 
     QTextBlock::Iterator actualIterator = actualBlock.begin();
@@ -117,17 +142,26 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
         QTextFragment actualFragment = actualIterator.fragment();
         QTextFragment expectedFragment = expectedIterator.fragment();
         if (actualFragment.isValid()) {
-            if (!expectedFragment.isValid())
+            if (!expectedFragment.isValid()) {
+                qDebug() << "compareBlock: Unexpected fragment in actualDocument at " << actualFragment.text();
                 return false;
+            }
+
             if (!compareFragments(actualFragment, expectedFragment))
                 return false;
         } else {
-            if (expectedFragment.isValid())
+            if (expectedFragment.isValid()) {
+                qDebug() << "compareBlock: Expecting fragment in actualDocument at " << actualFragment.text();
                 return false;
+            }
         }
     }
 
-   return actualIterator.atEnd() == expectedIterator.atEnd();
+    bool equal = actualIterator.atEnd() == expectedIterator.atEnd();
+    if (!equal)
+        qDebug() << "compareBlock: Iterator are not in the end! at " << actualBlock.text();
+
+    return equal;
 }
 
 static bool compareTables(QTextTable * /*actualTable*/, QTextTable * /*expectedTable*/)
@@ -148,28 +182,37 @@ static bool compareFrames(QTextFrame *actualFrame, QTextFrame *expectedFrame)
 
         if (actualChildFrame) {
             QTextFrame *expectedChildFrame = expectedIterator.currentFrame();
-            if (!expectedChildFrame)
+            if (!expectedChildFrame) {
+                qDebug() << "compareFrames: Unexpected frame at " << actualTextBlock.text();
                 return false;
+            }
             QTextTable *actualTable = qobject_cast<QTextTable *>(actualChildFrame);
             QTextTable *expectedTable = qobject_cast<QTextTable *>(expectedChildFrame);
             if (actualTable) {
-                if (!expectedTable)
+                if (!expectedTable) {
+                    qDebug() << "compareFrames: Unexpected table at " << actualTextBlock.text();
                     return false;
+                }
                 if (!compareTables(actualTable, expectedTable))
                     return false;
             } else {
-                if (expectedTable)
+                if (expectedTable) {
+                    qDebug() << "compareFrames: Expecting table at " << actualTextBlock.text();
                     return false;
+                }
                 if (!compareFrames(actualChildFrame, expectedChildFrame))
                     return false;
             }
         } else if (actualTextBlock.isValid()) {
             QTextBlock expectedTextBlock = expectedIterator.currentBlock();
-            if (!expectedTextBlock.isValid())
+            if (!expectedTextBlock.isValid()) {
+                qDebug() << "compareFrames: Unexpected text block at " << actualTextBlock.text();
                 return false;
+            }
             if (!compareBlocks(actualTextBlock, expectedTextBlock))
                 return false;
         } else {
+            qDebug() << "compareFrames: neither frame nor block! - internal error!";
             return false;
         }
     }

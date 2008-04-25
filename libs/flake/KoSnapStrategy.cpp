@@ -57,6 +57,11 @@ double KoSnapStrategy::fastDistance( const QPointF &p1, const QPointF &p2 )
     return dx*dx + dy*dy;
 }
 
+double KoSnapStrategy::scalarProduct(const QPointF &p1, const QPointF &p2)
+{
+    return p1.x() * p2.x() + p1.y() * p2.y();
+}
+
 OrthogonalSnapStrategy::OrthogonalSnapStrategy()
     : KoSnapStrategy( KoSnapStrategy::Orthogonal )
 {
@@ -440,5 +445,95 @@ QPainterPath GridSnapStrategy::decoration( const KoViewConverter &converter ) co
     decoration.lineTo( snappedPosition()+QPointF(unzoomedSize.width(),0) );
     decoration.moveTo( snappedPosition()-QPointF(0,unzoomedSize.height()) );
     decoration.lineTo( snappedPosition()+QPointF(0,unzoomedSize.height()) );
+    return decoration;
+}
+
+BoundingBoxSnapStrategy::BoundingBoxSnapStrategy()
+    : KoSnapStrategy( KoSnapStrategy::BoundingBox )
+{
+}
+
+bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+{
+    double maxDistance = maxSnapDistance*maxSnapDistance;
+    double minDistance = HUGE_VAL;
+
+    QRectF rect( -maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance );
+    rect.moveCenter( mousePosition );
+    QPointF snappedPoint = mousePosition;
+
+    KoFlake::Position pointId[5] = {
+        KoFlake::TopLeftCorner,
+        KoFlake::TopRightCorner,
+        KoFlake::BottomRightCorner,
+        KoFlake::BottomLeftCorner,
+        KoFlake::CenteredPosition
+    };
+
+    QList<KoShape*> shapes = proxy->shapesInRect( rect, true );
+    foreach( KoShape * shape, shapes )
+    {
+        double shapeMinDistance = HUGE_VAL;
+        // first check the corner and center points
+        for( int i = 0; i < 5; ++i )
+        {
+            m_boxPoints[i] = shape->absolutePosition( pointId[i] );
+            double d = fastDistance( mousePosition, m_boxPoints[i] );
+            if( d < minDistance && d < maxDistance )
+            {
+                shapeMinDistance = d;
+                minDistance = d;
+                snappedPoint = m_boxPoints[i];
+            }
+        }
+        // prioritize points over edges
+        if( shapeMinDistance < maxDistance )
+            continue;
+
+        // now check distances to edges of bounding box
+        for( int i = 0; i < 4; ++i )
+        {
+            QPointF pointOnLine;
+            double d = squareDistanceToLine( m_boxPoints[i], m_boxPoints[(i+1)%4], mousePosition, pointOnLine );
+            if( d < minDistance && d < maxDistance )
+            {
+                minDistance = d;
+                snappedPoint = pointOnLine;
+            }
+        }
+    }
+
+    setSnappedPosition( snappedPoint );
+
+    return (minDistance<maxDistance);
+
+}
+
+double BoundingBoxSnapStrategy::squareDistanceToLine( const QPointF &lineA, const QPointF &lineB, const QPointF &point, QPointF &pointOnLine )
+{
+    QPointF diff = lineB - lineA;
+    double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+    if( diffLength == 0.0f )
+        return HUGE_VAL;
+    // project mouse position relative to start position on line
+    double scalar = KoSnapStrategy::scalarProduct( point-lineA, diff / diffLength );
+    if( scalar < 0.0 || scalar > diffLength )
+        return HUGE_VAL;
+    // calculate vector between relative mouse position and projected mouse position
+    pointOnLine = lineA + scalar/diffLength * diff;
+    QPointF distVec = pointOnLine - point;
+    return distVec.x()*distVec.x() + distVec.y()*distVec.y();
+}
+
+QPainterPath BoundingBoxSnapStrategy::decoration( const KoViewConverter &converter ) const
+{
+    QSizeF unzoomedSize = converter.viewToDocument( QSizeF( 5, 5 ) );
+
+    QPainterPath decoration;
+    decoration.moveTo( snappedPosition() - QPointF( unzoomedSize.width(), unzoomedSize.height() ) );
+    decoration.lineTo( snappedPosition() + QPointF( unzoomedSize.width(), unzoomedSize.height() ) );
+    decoration.moveTo( snappedPosition() - QPointF( unzoomedSize.width(), -unzoomedSize.height() ) );
+    decoration.lineTo( snappedPosition() + QPointF( unzoomedSize.width(), -unzoomedSize.height() ) );
+
     return decoration;
 }

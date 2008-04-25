@@ -40,6 +40,7 @@ KoSnapGuide::KoSnapGuide( KoCanvasBase * canvas )
     m_strategies.append( new OrthogonalSnapStrategy() );
     m_strategies.append( new ExtensionSnapStrategy() );
     m_strategies.append( new IntersectionSnapStrategy() );
+    m_strategies.append( new BoundingBoxSnapStrategy() );
 }
 
 KoSnapGuide::~KoSnapGuide()
@@ -137,11 +138,19 @@ void KoSnapGuide::paint( QPainter &painter, const KoViewConverter &converter )
     if( ! m_currentStrategy || ! m_active )
         return;
 
-    QPen pen( Qt::red );
-    pen.setStyle( Qt::DotLine );
-    painter.setPen( pen );
+    QPainterPath decoration = m_currentStrategy->decoration( converter );
+
     painter.setBrush( Qt::NoBrush );
-    painter.drawPath( m_currentStrategy->decoration( converter ) );
+
+    QPen whitePen( Qt::white );
+    whitePen.setStyle( Qt::SolidLine );
+    painter.setPen( whitePen );
+    painter.drawPath( decoration );
+
+    QPen redPen( Qt::red );
+    redPen.setStyle( Qt::DotLine );
+    painter.setPen( redPen );
+    painter.drawPath( decoration );
 }
 
 KoCanvasBase * KoSnapGuide::canvas() const

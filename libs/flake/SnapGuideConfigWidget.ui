@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>255</width>
-    <height>256</height>
+    <width>285</width>
+    <height>262</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -19,7 +19,7 @@
    </item>
    <item row="1" column="0" >
     <widget class="QWidget" native="1" name="strategyPanel" >
-     <layout class="QGridLayout" >
+     <layout class="QGridLayout" name="gridLayout" >
       <item row="0" column="0" colspan="2" >
        <widget class="QCheckBox" name="nodeSnapGuide" >
         <property name="text" >
@@ -49,21 +49,28 @@
        </widget>
       </item>
       <item row="4" column="0" colspan="2" >
+       <widget class="QCheckBox" name="boundingBoxSnapGuide" >
+        <property name="text" >
+         <string>Enable Bounding Box Guide</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2" >
        <widget class="QLabel" name="label" >
         <property name="text" >
          <string>Snap Distance (px)</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0" >
+      <item row="6" column="0" >
        <widget class="QSpinBox" name="snapDistance" />
       </item>
-      <item row="5" column="1" >
+      <item row="6" column="1" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>40</width>
           <height>20</height>
@@ -71,12 +78,12 @@
         </property>
        </spacer>
       </item>
-      <item row="6" column="0" >
+      <item row="7" column="0" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Vertical</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>20</width>
           <height>40</height>

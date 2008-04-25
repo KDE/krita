@@ -36,7 +36,8 @@ public:
         Node = 2,
         Extension = 4,
         Intersection = 8,
-        Grid = 16
+        Grid = 16,
+        BoundingBox = 32
     };
 
     KoSnapStrategy( SnapType type );
@@ -48,6 +49,7 @@ public:
     SnapType type() const;
 
     static double fastDistance( const QPointF &p1, const QPointF &p2 );
+    static double scalarProduct(const QPointF &p1, const QPointF &p2 );
 
     /// returns the snapped position form the last call to snapToPoints
     QPointF snappedPosition() const;
@@ -115,6 +117,18 @@ public:
     GridSnapStrategy();
     virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
     virtual QPainterPath decoration( const KoViewConverter &converter ) const;
+};
+
+/// snaps to shape bounding boxes
+class BoundingBoxSnapStrategy : public KoSnapStrategy
+{
+public:
+    BoundingBoxSnapStrategy();
+    virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual QPainterPath decoration( const KoViewConverter &converter ) const;
+private:
+    double squareDistanceToLine( const QPointF &lineA, const QPointF &lineB, const QPointF &point, QPointF &pointOnLine );
+    QPointF m_boxPoints[5];
 };
 
 #endif // KOSNAPSTRATEGY_H

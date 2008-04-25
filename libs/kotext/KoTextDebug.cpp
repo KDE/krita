@@ -74,6 +74,10 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key="font-caps";
             value = QString::number(properties[id].toInt());
             break;
+        case QTextFormat::BlockAlignment:
+            key="align";
+            value = QString::number(properties[id].toInt());
+            break;
         default:
             break;
         }

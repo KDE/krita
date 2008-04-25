@@ -106,6 +106,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
         QTextBlockFormat actualFormat = actualBlock.blockFormat();
         QTextBlockFormat expectedFormat = expectedBlock.blockFormat();
         if (actualFormat.background() != expectedFormat.background()
+            || actualFormat.alignment() != expectedFormat.alignment()
             || actualFormat.foreground() != expectedFormat.foreground())
             return false;
     }
@@ -226,7 +227,17 @@ static QScriptValue setFormatProperty(QScriptContext *context, QScriptEngine *en
     
     QTextFormat *format = qscriptvalue_cast<QTextFormat *>(context->argument(0));
     int id = context->argument(1).toInt32();
-    QVariant value = context->argument(2).toVariant();
+    QScriptValue arg = context->argument(2);
+    QVariant value;
+    if (arg.isNumber()) {
+        // ### hack to detect if the number is of type int
+        if ((qsreal)arg.toInt32() == arg.toNumber())
+            value = arg.toInt32();
+        else
+            value = arg.toNumber();
+    } else {
+        value = arg.toVariant();
+    }
     format->setProperty(id, value);
 
     return QScriptValue();
@@ -386,6 +397,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Underline style") << "FormattingProperties/TextFormattingProperties/underlineStyle";
 
     QTest::newRow("Paragraph background") << "FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor";
+    QTest::newRow("Text align") << "FormattingProperties/ParagraphFormattingProperties/textAlign";
 }
 
 void TestLoading::testLoading() 

@@ -76,6 +76,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
 
     return actualFormat.font() == expectedFormat.font()
            && actualFormat.foreground() == expectedFormat.foreground()
+           && actualFormat.underlineColor() == expectedFormat.underlineColor()
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
 }
 
@@ -360,6 +361,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font pitch") << "FormattingProperties/TextFormattingProperties/fontPitch";
     QTest::newRow("Font style") << "FormattingProperties/TextFormattingProperties/fontStyle";
     QTest::newRow("Font name") << "FormattingProperties/TextFormattingProperties/fontName";
+    QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";
 }
 
 void TestLoading::testLoading() 

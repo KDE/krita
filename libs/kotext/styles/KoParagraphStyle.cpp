@@ -32,6 +32,7 @@
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCursor>
+#include <QFontMetrics>
 
 #include <KoUnit.h>
 #include <KoStyleStack.h>
@@ -794,14 +795,16 @@ void KoParagraphStyle::loadOdf( const KoXmlElement* element, KoOdfLoadingContext
 
     //setParent( d->stylemanager->defaultParagraphStyle() );
 
-    //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
-    context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
-    loadOdfProperties( context.styleStack() ); // load the KoParagraphStyle from the stylestack
 
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();
     context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
     charstyle->loadOasis( context ); // load the KoCharacterStyle from the stylestack
+
+    // we need to know the font, so load paragraph style after char style
+    //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
+    context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
+    loadOdfProperties( context.styleStack() ); // load the KoParagraphStyle from the stylestack
 
     context.styleStack().restore();
 }
@@ -876,17 +879,24 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
     // OOo is not assuming this. Commenting this line thus allow more OpenDocuments to be supported, including a 
     // testcase from the ODF test suite. See §15.5.18 in the spec.
     //if ( hasMarginLeft || hasMarginRight ) {
-        if ( styleStack.hasProperty(KoXmlNS::fo, "auto-text-indent") ) { // style:auto-text-indent takes precedence
+        // style:auto-text-indent takes precedence
+        if ( styleStack.hasProperty(KoXmlNS::style, "auto-text-indent") &&
+             styleStack.property(KoXmlNS::style, "auto-text-indent") != "false" ) {
             // "indented by a value that is based on the current font size"
             const QString autotextindent = styleStack.property(KoXmlNS::style, "auto-text-indent");
-            if ( styleStack.property(KoXmlNS::style, "auto-text-indent") == "true" )
-                setTextIndent( 10.0 ); //hmmm, this was "10" on 1.6...
-            else
+            if ( autotextindent == "true" ) {
+                int guessGlyphWidth = QFontMetrics(characterStyle()->font()).width('x');
+                setTextIndent( guessGlyphWidth * 3 );
+            } else {
+              // really? can it be an indent number? not in odf, but in the earlier format?
+              // not removing this line, in case it can be a number
                 setTextIndent( KoUnit::parseValue(autotextindent) );
+            }
         }
         else if ( styleStack.hasProperty(KoXmlNS::fo, "text-indent") ) {
             setTextIndent( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "text-indent") ) );
         }
+
     //}
 
     // Line spacing

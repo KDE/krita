@@ -104,6 +104,12 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
 
 static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock)
 {
+    if (actualBlock.blockFormat().indent() != expectedBlock.blockFormat().indent()) {
+      return false;
+    }
+    if (actualBlock.blockFormat().textIndent() != expectedBlock.blockFormat().textIndent()) {
+      return false;
+    }
     QTextList *actualList = actualBlock.textList();
     QTextList *expectedList = expectedBlock.textList();
 
@@ -442,6 +448,7 @@ void TestLoading::testLoading_data()
 
     QTest::newRow("Paragraph background") << "FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor";
     QTest::newRow("Text align") << "FormattingProperties/ParagraphFormattingProperties/textAlign";
+    QTest::newRow("Auto text indent") << "FormattingProperties/ParagraphFormattingProperties/automaticTextIndent";
 }
 
 void TestLoading::testLoading() 

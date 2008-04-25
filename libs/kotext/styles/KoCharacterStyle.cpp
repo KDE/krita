@@ -168,6 +168,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         QTextFormat::TextOutline,
         QTextFormat::BackgroundBrush,
         QTextFormat::ForegroundBrush,
+        QTextFormat::TextUnderlineColor,
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
         QTextFormat::FontLetterSpacing,
         QTextFormat::FontWordSpacing,
@@ -177,7 +178,6 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::StrikeOutColor,
         KoCharacterStyle::UnderlineStyle,
         KoCharacterStyle::UnderlineType,
-        KoCharacterStyle::UnderlineColor,
         KoCharacterStyle::TransformText,
         KoCharacterStyle::HasHyphenation,
         -1
@@ -439,11 +439,11 @@ KoCharacterStyle::LineType KoCharacterStyle::underlineType () const {
 }
 
 void KoCharacterStyle::setUnderlineColor (const QColor &color) {
-    d->setProperty(UnderlineColor, color);
+    d->setProperty(QTextFormat::TextUnderlineColor, color);
 }
 
 QColor KoCharacterStyle::underlineColor () const {
-    return d->propertyColor(UnderlineColor);
+    return d->propertyColor(QTextFormat::TextUnderlineColor);
 }
 
 void KoCharacterStyle::setFontLetterSpacing(qreal spacing) {
@@ -800,7 +800,7 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             int type = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
                 style.addProperty("style:text-underline-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
-        } else if (key == UnderlineColor) {
+        } else if (key == QTextFormat::TextUnderlineColor) {
             QColor color = d->stylesPrivate->value(key).value<QColor>();
             if (color.isValid())
                 style.addProperty("style:text-underline-color", color.name(), KoGenStyle::TextType);

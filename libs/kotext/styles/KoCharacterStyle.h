@@ -57,7 +57,6 @@ public:
         StrikeOutColor,
         UnderlineStyle,
         UnderlineType,
-        UnderlineColor,
         TransformText,
         Spelling
     };

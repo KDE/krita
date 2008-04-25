@@ -740,7 +740,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                         (fontUnderLineType != KoCharacterStyle::NoLineType)) {
                         QFontMetrics metrics( fmt.font() );
                         double y = line.position().y() + line.ascent() + metrics.underlinePos();
-                        QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
+                        QColor color = fmt.underlineColor();
                         if (!color.isValid())
                             color = fmt.foreground().color();
 

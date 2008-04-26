@@ -65,6 +65,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     : KisLayer(rhs)
     , KisIndirectPaintingSupport(rhs)
+    , KisNodeFilterInterface(rhs)
     , m_d( new Private() )
 {
     m_d->filterConfig = new KisFilterConfiguration(*rhs.m_d->filterConfig);

@@ -21,6 +21,8 @@
 #include "kis_types.h"
 #include "kis_effect_mask.h"
 
+#include "kis_node_filter_interface.h"
+
 class KisFilterConfiguration;
 
 /**
@@ -30,7 +32,7 @@ class KisFilterConfiguration;
    adjustment layers work on all layers below it in its layer group.
 */
 
-class KRITAIMAGE_EXPORT KisFilterMask : public KisEffectMask
+class KRITAIMAGE_EXPORT KisFilterMask : public KisEffectMask, public KisNodeFilterInterface
 {
     Q_OBJECT
 

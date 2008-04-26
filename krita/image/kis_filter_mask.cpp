@@ -51,6 +51,7 @@ bool KisFilterMask::allowAsChild( KisNodeSP node) const
 
 KisFilterMask::KisFilterMask( const KisFilterMask& rhs )
     : KisEffectMask( rhs )
+    , KisNodeFilterInterface(rhs)
     , m_d( new Private() )
 {
     m_d->filterConfig = rhs.m_d->filterConfig;

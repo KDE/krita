@@ -22,6 +22,7 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include <krita_export.h>
+#include "kis_node_filter_interface.h"
 
 class KisFilterConfiguration;
 class KisNodeVisitor;
@@ -51,7 +52,7 @@ class KisNodeVisitor;
 
  * XXX_NODE: also implement masks modifying the adj. layer's selection.
  */
-class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer, public KisIndirectPaintingSupport, public KisNodeFilterInterface
 {
     Q_OBJECT
 

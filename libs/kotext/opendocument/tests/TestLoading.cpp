@@ -104,12 +104,6 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
 
 static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock)
 {
-    if (actualBlock.blockFormat().indent() != expectedBlock.blockFormat().indent()) {
-      return false;
-    }
-    if (actualBlock.blockFormat().textIndent() != expectedBlock.blockFormat().textIndent()) {
-      return false;
-    }
     QTextList *actualList = actualBlock.textList();
     QTextList *expectedList = expectedBlock.textList();
 
@@ -135,6 +129,8 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
         QTextBlockFormat expectedFormat = expectedBlock.blockFormat();
         if (actualFormat.background() != expectedFormat.background()
             || actualFormat.alignment() != expectedFormat.alignment()
+            || actualFormat.indent() != expectedFormat.indent()
+            || actualFormat.textIndent() != expectedFormat.textIndent()
             || actualFormat.foreground() != expectedFormat.foreground()) {
             qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text()
                      << actualFormat.properties() << expectedFormat.properties();

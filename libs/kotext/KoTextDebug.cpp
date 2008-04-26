@@ -71,11 +71,19 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             value = qvariant_cast<QBrush>(properties[id]).color().name(); // beware!
             break;
         case QTextFormat::FontCapitalization:
-            key="font-caps";
+            key = "font-caps";
             value = QString::number(properties[id].toInt());
             break;
         case QTextFormat::BlockAlignment:
-            key="align";
+            key = "align";
+            value = QString::number(properties[id].toInt());
+            break;
+        case QTextFormat::TextIndent:
+            key = "textindent";
+            value = QString::number(properties[id].toInt());
+            break;
+        case QTextFormat::BlockIndent:
+            key = "indent";
             value = QString::number(properties[id].toInt());
             break;
         default:
@@ -130,16 +138,13 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
         attrs.append("\"");
     }
 
-    attrs.append(" indent:").append(QString::number(block.blockFormat().indent()));
-    attrs.append(" textindent:").append(QString::number(block.blockFormat().textIndent()));
-    // FIXME: move these to attributes()
-
     QTextList *list = block.textList();
     if (list) {
         attrs.append(" list=\"item:").append(QString::number(list->itemNumber(block)+1)).append('/')
               .append(QString::number(list->count()));
         attrs.append(" listindent:").append(QString::number(list->format().indent()));
         attrs.append(" style:").append(QString::number(list->format().style()));
+        attrs.append("\"");
     }
 
     attrs.append(attributes(block.blockFormat().properties()));

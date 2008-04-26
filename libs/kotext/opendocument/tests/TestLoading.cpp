@@ -88,12 +88,16 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
     bool equal = actualFormat.font() == expectedFormat.font()
            && actualFormat.foreground() == expectedFormat.foreground()
            && actualFormat.background() == expectedFormat.background()
-           && actualFormat.underlineColor() == expectedFormat.underlineColor()
            && actualFormat.fontCapitalization() == expectedFormat.fontCapitalization()
+           && actualFormat.underlineColor() == expectedFormat.underlineColor()
            && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
-            && actualFormat.property(KoCharacterStyle::UnderlineType).toInt() 
-                  == expectedFormat.property(KoCharacterStyle::UnderlineType).toInt()
+           /*&& qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
+                  == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))*/
+           && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
+           && actualFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
     
     if (!equal)
@@ -436,6 +440,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font style") << "FormattingProperties/TextFormattingProperties/fontStyle";
     QTest::newRow("Font weight") << "FormattingProperties/TextFormattingProperties/fontWeight";
     QTest::newRow("Font variant") << "FormattingProperties/TextFormattingProperties/fontVariant";
+    QTest::newRow("Line through type") << "FormattingProperties/TextFormattingProperties/lineThroughType";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
     QTest::newRow("Text tranformations") << "FormattingProperties/TextFormattingProperties/textTransformations";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";

@@ -26,8 +26,8 @@ void KisMaskGenerator::toXML(QDomDocument& , QDomElement& e) const
 {
     e.setAttribute( "autobrush_width", m_w );
     e.setAttribute( "autobrush_height", m_h );
-    e.setAttribute( "autobrush_hfade", m_fh );
-    e.setAttribute( "autobrush_vfade", m_fv );
+    e.setAttribute( "autobrush_hfade", m_w / 2.0 - m_fh );
+    e.setAttribute( "autobrush_vfade", m_h / 2.0 - m_fv );
 }
 
 quint8 KisMaskGenerator::interpolatedValueAt(double x, double y)

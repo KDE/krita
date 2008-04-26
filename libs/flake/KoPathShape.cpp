@@ -1136,6 +1136,7 @@ QString KoPathShape::toString( const QMatrix &matrix ) const
         bool activeCP = false;
         for ( ; it != ( *pathIt )->end(); ++it )
         {
+            // first point of subpath ?
             if ( it == ( *pathIt )->begin() )
             {
                 if ( ( *it )->properties() & KoPathPoint::StartSubpath )
@@ -1144,29 +1145,33 @@ QString KoPathShape::toString( const QMatrix &matrix ) const
                     d += QString( "M%1 %2" ).arg( p.x() ).arg( p.y() );
                 }
             }
+            // end point of curve ?
             else if ( activeCP || ( *it )->activeControlPoint1() )
             {
-                QPointF cp1 = matrix.map( activeCP ? lastPoint->controlPoint2() : lastPoint->point() );
-                QPointF cp2 = matrix.map( ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : ( *it )->point() );
+                QPointF cp1 = matrix.map( activeCP ? lastPoint->controlPoint2() : ( *it )->controlPoint1() );
+                QPointF cp2 = matrix.map( ( *it )->activeControlPoint1() ? ( *it )->controlPoint1() : lastPoint->controlPoint2() );
                 QPointF p = matrix.map( (*it)->point() );
                 d += QString( "C%1 %2 %3 %4 %5 %6" )
                         .arg( cp1.x() ).arg( cp1.y() )
                         .arg( cp2.x() ).arg( cp2.y() )
                         .arg( p.x() ).arg( p.y() );
             }
+            // end point of line
             else
             {
                 QPointF p = matrix.map( (*it)->point() );
                 d += QString( "L%1 %2" ).arg( p.x() ).arg( p.y() );
             }
-            if ( ( *it )->properties() & KoPathPoint::CloseSubpath )
+            // last point closes subpath ?
+            if ( ( *it )->properties() & KoPathPoint::StopSubpath
+              && ( *it )->properties() & KoPathPoint::CloseSubpath )
             {
                 // add curve when there is a curve on the way to the first point
                 KoPathPoint * firstPoint = ( *pathIt )->first();
                 if ( ( *it )->activeControlPoint2() || firstPoint->activeControlPoint1() )
                 {
-                    QPointF cp1 = matrix.map( ( *it )->activeControlPoint2() ? ( *it )->controlPoint2() : ( *it )->point() );
-                    QPointF cp2 = matrix.map( firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point() );
+                    QPointF cp1 = matrix.map( ( *it )->activeControlPoint2() ? ( *it )->controlPoint2() : firstPoint->controlPoint1() );
+                    QPointF cp2 = matrix.map( firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : ( *it )->controlPoint2() );
                     QPointF p = matrix.map( firstPoint->point() );
 
                     d += QString( "C%1 %2 %3 %4 %5 %6" )
@@ -1177,14 +1182,7 @@ QString KoPathShape::toString( const QMatrix &matrix ) const
                 d += QString( "Z" );
             }
 
-            if ( ( *it )->activeControlPoint2() )
-            {
-                activeCP = true;
-            }
-            else
-            {
-                activeCP = false;
-            }
+            activeCP = ( *it )->activeControlPoint2();
             lastPoint = *it;
         }
     }

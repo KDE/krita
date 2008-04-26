@@ -1,6 +1,6 @@
 <RecordedActions>
   <RecordedAction opacity="255" compositeOp="normal" layer="\0" id="PolyLinePaintAction" name="Freehand tool" paintop="paintbrush" paintIncremental="1" >
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="0" b="0" />
     </ForegroundColor>
@@ -71,7 +71,7 @@
     </Waypoints>
   </RecordedAction>
   <RecordedAction opacity="255" compositeOp="normal" layer="\0" id="PolyLinePaintAction" name="Freehand tool" paintop="paintbrush" paintIncremental="1" >
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="0" b="0" />
     </ForegroundColor>
@@ -116,7 +116,7 @@
     </Waypoints>
   </RecordedAction>
   <RecordedAction opacity="255" compositeOp="normal" layer="\0" id="PolyLinePaintAction" name="Freehand tool" paintop="paintbrush" paintIncremental="1" >
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="0" b="0" />
     </ForegroundColor>
@@ -165,7 +165,7 @@
     </Waypoints>
   </RecordedAction>
   <RecordedAction opacity="255" compositeOp="normal" layer="\0" id="PolyLinePaintAction" name="Freehand tool" paintop="paintbrush" paintIncremental="1" >
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="0" b="0" />
     </ForegroundColor>
@@ -217,7 +217,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.2156862745098039" b="0.8509803921568627" />
     </ForegroundColor>
@@ -296,7 +296,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.2156862745098039" b="0.8509803921568627" />
     </ForegroundColor>
@@ -362,7 +362,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.2156862745098039" b="0.8509803921568627" />
     </ForegroundColor>
@@ -423,7 +423,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.2156862745098039" b="0.8509803921568627" />
     </ForegroundColor>
@@ -477,7 +477,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.8509803921568627" r="0.3058823529411765" b="0.1843137254901961" />
     </ForegroundColor>
@@ -551,7 +551,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.8509803921568627" r="0.3058823529411765" b="0.1843137254901961" />
     </ForegroundColor>
@@ -612,7 +612,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.8509803921568627" r="0.3058823529411765" b="0.1843137254901961" />
     </ForegroundColor>
@@ -670,7 +670,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.8509803921568627" r="0.3058823529411765" b="0.1843137254901961" />
     </ForegroundColor>
@@ -720,7 +720,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.7176470588235294" r="0.1843137254901961" b="0.8509803921568627" />
     </ForegroundColor>
@@ -791,7 +791,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.7176470588235294" r="0.1843137254901961" b="0.8509803921568627" />
     </ForegroundColor>
@@ -850,7 +850,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.7176470588235294" r="0.1843137254901961" b="0.8509803921568627" />
     </ForegroundColor>
@@ -904,7 +904,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.7176470588235294" r="0.1843137254901961" b="0.8509803921568627" />
     </ForegroundColor>
@@ -958,7 +958,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.8509803921568627" b="0.7843137254901961" />
     </ForegroundColor>
@@ -1026,7 +1026,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.8509803921568627" b="0.7843137254901961" />
     </ForegroundColor>
@@ -1081,7 +1081,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.8509803921568627" b="0.7843137254901961" />
     </ForegroundColor>
@@ -1133,7 +1133,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.8509803921568627" b="0.7843137254901961" />
     </ForegroundColor>
@@ -1181,7 +1181,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.5843137254901961" r="0.8509803921568627" b="0.1843137254901961" />
     </ForegroundColor>
@@ -1251,7 +1251,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.5843137254901961" r="0.8509803921568627" b="0.1843137254901961" />
     </ForegroundColor>
@@ -1307,7 +1307,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.5843137254901961" r="0.8509803921568627" b="0.1843137254901961" />
     </ForegroundColor>
@@ -1366,7 +1366,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.5843137254901961" r="0.8509803921568627" b="0.1843137254901961" />
     </ForegroundColor>
@@ -1414,7 +1414,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.5411764705882353" b="0.8509803921568627" />
     </ForegroundColor>
@@ -1481,7 +1481,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.5411764705882353" b="0.8509803921568627" />
     </ForegroundColor>
@@ -1535,7 +1535,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.5411764705882353" b="0.8509803921568627" />
     </ForegroundColor>
@@ -1591,7 +1591,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.1843137254901961" r="0.5411764705882353" b="0.8509803921568627" />
     </ForegroundColor>
@@ -1638,7 +1638,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.8509803921568627" r="0.1843137254901961" b="0.3058823529411765" />
     </ForegroundColor>
@@ -1707,7 +1707,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.8509803921568627" r="0.1843137254901961" b="0.3058823529411765" />
     </ForegroundColor>
@@ -1763,7 +1763,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.8509803921568627" r="0.1843137254901961" b="0.3058823529411765" />
     </ForegroundColor>
@@ -1810,7 +1810,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.8509803921568627" r="0.1843137254901961" b="0.3058823529411765" />
     </ForegroundColor>
@@ -1852,7 +1852,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="1" b="0" />
     </ForegroundColor>
@@ -1916,7 +1916,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="1" b="0" />
     </ForegroundColor>
@@ -1971,7 +1971,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="1" b="0" />
     </ForegroundColor>
@@ -2025,7 +2025,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="1" b="0" />
     </ForegroundColor>
@@ -2066,7 +2066,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="1" r="1" b="1" />
     </ForegroundColor>
@@ -2133,7 +2133,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="1" r="1" b="1" />
     </ForegroundColor>
@@ -2196,7 +2196,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="1" r="1" b="1" />
     </ForegroundColor>
@@ -2253,7 +2253,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="1" r="1" b="1" />
     </ForegroundColor>
@@ -2304,7 +2304,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.2352941176470588" r="0" b="1" />
     </ForegroundColor>
@@ -2379,7 +2379,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.2352941176470588" r="0" b="1" />
     </ForegroundColor>
@@ -2439,7 +2439,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.2352941176470588" r="0" b="1" />
     </ForegroundColor>
@@ -2492,7 +2492,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0.2352941176470588" r="0" b="1" />
     </ForegroundColor>
@@ -2536,7 +2536,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="0.2509803921568627" b="1" />
     </ForegroundColor>
@@ -2600,7 +2600,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="0.2509803921568627" b="1" />
     </ForegroundColor>
@@ -2657,7 +2657,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="0.2509803921568627" b="1" />
     </ForegroundColor>
@@ -2712,7 +2712,7 @@
         <param name="PressureSize" ><![CDATA[true]]></param>
       </Params>
     </PaintOpSettings>
-    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1.5" filename="" autobrush_vfade="1.5" />
+    <Brush autobrush_width="5" autobrush_height="5" autobrush_type="circle" type="autobrush" name="" autobrush_hfade="1" filename="" autobrush_vfade="1" />
     <ForegroundColor>
       <RGB space="sRGB built-in - (lcms internal)" g="0" r="0.2509803921568627" b="1" />
     </ForegroundColor>

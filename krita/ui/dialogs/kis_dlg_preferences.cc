@@ -416,6 +416,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     page->setHeader( i18n( "Performance") );
     page->setIcon( KIcon( "preferences-system-performance" ));
     addPage( page );
+    m_performanceSettings = new PerformanceTab( vbox );
 
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Grid" ));

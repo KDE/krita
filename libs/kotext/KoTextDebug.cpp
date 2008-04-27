@@ -30,6 +30,7 @@
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoStyleManager.h"
 #include <KoTextDocumentLayout.h>
+#include <kdeversion.h>
 
 int KoTextDebug::depth = 0;
 const int KoTextDebug::INDENT = 2;
@@ -70,10 +71,12 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "background";
             value = qvariant_cast<QBrush>(properties[id]).color().name(); // beware!
             break;
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
         case QTextFormat::FontCapitalization:
             key = "font-caps";
             value = QString::number(properties[id].toInt());
             break;
+#endif
         case QTextFormat::BlockAlignment:
             key = "align";
             value = QString::number(properties[id].toInt());

@@ -36,7 +36,7 @@ namespace KoChart {
 */
 const int SECTION_AREA_ROLE = 32;
 
-/*
+/**
 * Item data role used to retrieve the string representing the data cell
 * of a header. The header data usually is a name for the dataset.
 *

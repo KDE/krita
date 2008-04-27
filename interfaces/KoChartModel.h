@@ -48,6 +48,10 @@ const int SECTION_AREA_ROLE = 32;
 */
 const int HEADER_AREA_ROLE  = 33;
 
+/**
+* The ChartModel class implements a model that can be filled and
+* passed on to KChart to provide the data used within the chart.
+*/
 class KOCHART_EXPORT ChartModel : public QAbstractTableModel
 {
     Q_OBJECT

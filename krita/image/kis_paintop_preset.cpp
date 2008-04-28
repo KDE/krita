@@ -91,7 +91,7 @@ bool KisPaintOpPreset::save()
 }
 
 QImage KisPaintOpPreset::img() const
-{
+    {
     return m_d->img;
 }
 
@@ -103,6 +103,15 @@ void KisPaintOpPreset::updateImg()
     KisPainter gc(dev);
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_d->settings->getString("paintop"),
                                                               m_d->settings, &gc);
+    gc.setPaintOp(op);
+
+    KisPaintInformation i1(QPointF(0, 25), PRESSURE_MIN);
+    KisPaintInformation i2(QPointF(50, 25), PRESSURE_MAX);
+    KisPaintInformation i3(QPointF(100, 25), PRESSURE_MIN);
+    
+    gc.paintBezierCurve(i1, QPointF(25, 0), QPointF(25,0), i2);
+    gc.paintBezierCurve(i2, QPointF(75, 0), QPointF(75,0), i3);
+    gc.end();
 
 }
 

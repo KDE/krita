@@ -41,7 +41,8 @@ class KisPainter;
 class KisPaintInformation;
 
 /**
- * KisPaintOp are use by tools to draw on a paint device.
+ * KisPaintOp are use by tools to draw on a paint device. A paintop takes settings
+ * and input information, like pressure, tilt or motion and uses that to draw pixels
  */
 class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
 {

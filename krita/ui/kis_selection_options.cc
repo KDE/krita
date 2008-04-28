@@ -30,7 +30,7 @@
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_paint_device.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_view2.h"
 
 KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)

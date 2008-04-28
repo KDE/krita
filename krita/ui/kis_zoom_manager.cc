@@ -39,7 +39,7 @@
 #include <KoRulerController.h>
 
 #include "kis_view2.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_image.h"
 #include "kis_statusbar.h"
 #include "kis_config.h"

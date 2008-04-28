@@ -40,7 +40,7 @@
 
 #include <kis_global.h>
 #include <kis_painter.h>
-#include <kis_canvas.h>
+#include <canvas/kis_canvas.h>
 #include <kis_canvas_controller.h>
 #include <kis_canvas_subject.h>
 #include <kis_cursor.h>

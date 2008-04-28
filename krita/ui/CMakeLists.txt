@@ -8,6 +8,14 @@ configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-proce
 include(kdefx.cmake)
 
 set(kritaui_LIB_SRCS
+    canvas/kis_abstract_canvas_widget.cpp 
+    canvas/kis_canvas2.cpp 
+    canvas/kis_canvas_decoration.cc
+    canvas/kis_grid_manager.cpp 
+    canvas/kis_grid_painter_configuration.cpp
+    canvas/kis_perspective_grid_manager.cpp  
+    canvas/kis_prescaled_projection.cpp
+    canvas/kis_qpainter_canvas.cpp
     dialogs/kis_dlg_adj_layer_props.cc 
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_apply_profile.cc 
@@ -18,15 +26,12 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_new_layer.cc 
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_transformation_effect.cpp
-    kis_abstract_canvas_widget.cpp 
     kis_autogradient.cc
     kis_birdeye_box.cc 
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
     kis_boundary_painter.cc 
-    kis_canvas2.cpp 
-    kis_canvas_decoration.cc
     kis_canvas_resource_provider.cpp 
     kis_clipboard.cc 
     kis_config.cc
@@ -42,8 +47,6 @@ set(kritaui_LIB_SRCS
     kis_filter_handler.cc 
     kis_filter_manager.cc 
     kis_filters_model.cc
-    kis_grid_manager.cpp 
-    kis_grid_painter_configuration.cpp
     kis_histogram_view.cc 
     kis_icon_item.cc 
     kis_image_manager.cc
@@ -66,11 +69,8 @@ set(kritaui_LIB_SRCS
     kis_painting_assistant.cc 
     kis_paintop_box.cc 
     kis_palette_docker.cc
-    kis_perspective_grid_manager.cpp  
     kis_png_converter.cpp
-    kis_prescaled_projection.cpp
     kis_print_job.cpp 
-    kis_qpainter_canvas.cpp
     kis_recorded_paint_actions.cc 
     kis_resource_mediator.cc
     kis_resource_server_provider.cpp 
@@ -108,6 +108,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_space_selector.cc
     widgets/kis_custom_image_widget.cc 
     widgets/kis_double_widget.cc
+    widgets/kis_filter_selector_widget.cc
     widgets/kis_gradient_chooser.cc 
     widgets/kis_gradient_slider_widget.cc
     widgets/kis_iconwidget.cc 
@@ -124,7 +125,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_previewwidget.cc
     widgets/kis_tree_view_popup.cc 
     widgets/kis_wdg_generator.cpp
-    widgets/kis_filter_selector_widget.cc
     widgets/squeezedcombobox.cpp
 )
 
@@ -231,5 +231,5 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 #    kis_view2.h
 #    kobirdeyepanel.h
 #    KoInputDevice.h
-#    kis_perspective_grid_manager.h
+#    canvas/kis_perspective_grid_manager.h
 #    DESTINATION ${INCLUDE_INSTALL_DIR})

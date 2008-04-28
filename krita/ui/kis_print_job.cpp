@@ -21,7 +21,7 @@
 #include "kis_print_job.h"
 
 #include "kis_view2.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
 

@@ -44,7 +44,7 @@
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
 #include "kis_paintop_registry.h"
-#include "kis_canvas.h"
+#include "canvas/kis_canvas.h"
 
 #include "kis_curve_framework.h"
 

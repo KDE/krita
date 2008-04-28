@@ -32,10 +32,8 @@ class KisPaintOpPreset;
 typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
 
 /**
- * A KisPaintOpPreset records a particular set of settings
- * associated with a paintop. It differs from KisPaintOpSettings
- * in that though the latter contains much the same information, it
- * also contains state information that should be kept between strokes.
+ * A KisPaintOpPreset contains a particular set of settings
+ * associated with a paintop, like brush, paintopsettings.
  */
 class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource, public KisShared
 {

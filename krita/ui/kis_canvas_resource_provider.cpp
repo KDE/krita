@@ -38,7 +38,7 @@
 #include "kis_exposure_visitor.h"
 #include "kis_config.h"
 #include "kis_view2.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view )
     : m_view( view )

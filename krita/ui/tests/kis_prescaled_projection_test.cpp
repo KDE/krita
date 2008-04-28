@@ -37,7 +37,7 @@
 #include <kis_group_layer.h>
 
 
-#include "kis_prescaled_projection.h"
+#include "canvas/kis_prescaled_projection.h"
 
 
 bool KisPrescaledProjectionTest::testProjectionScenario( KisPrescaledProjection & projection,

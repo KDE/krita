@@ -33,7 +33,7 @@
 #include <knuminput.h>
 
 #include "KoCanvasBase.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_painter.h"
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"

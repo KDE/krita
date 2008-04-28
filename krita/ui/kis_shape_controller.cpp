@@ -35,7 +35,7 @@
 
 #include "kis_adjustment_layer.h"
 #include "kis_clone_layer.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"

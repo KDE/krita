@@ -32,7 +32,7 @@
 
 #include <KoCanvasBase.h>
 
-#include "kis_abstract_canvas_widget.h"
+#include "canvas/kis_abstract_canvas_widget.h"
 #include "opengl/kis_opengl_image_textures.h"
 
 #include "krita_export.h"

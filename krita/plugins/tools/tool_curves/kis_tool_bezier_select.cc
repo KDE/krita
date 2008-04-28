@@ -47,7 +47,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_tool_paint.h"
 
-#include "kis_canvas.h"
+#include "canvas/kis_canvas.h"
 #include "kis_canvas_subject.h"
 
 #include "kis_curve_framework.h"

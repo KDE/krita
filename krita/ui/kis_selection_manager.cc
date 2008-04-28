@@ -48,7 +48,7 @@
 #include <KoCompositeOp.h>
 
 #include "kis_adjustment_layer.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_convolution_painter.h"
 #include "kis_debug.h"

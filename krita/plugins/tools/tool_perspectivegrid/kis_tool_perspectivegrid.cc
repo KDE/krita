@@ -38,14 +38,14 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <KoPointerEvent.h>
-#include <kis_perspective_grid_manager.h>
+#include <canvas/kis_perspective_grid_manager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_selected_transaction.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
 #include <kis_view2.h>
 
-#include <kis_canvas2.h>
+#include <canvas/kis_canvas2.h>
 
 KisToolPerspectiveGrid::KisToolPerspectiveGrid(KoCanvasBase * canvas)
     : super(canvas, KisCursor::arrowCursor()), m_handleSize(13), m_handleHalfSize(6), m_canvas( dynamic_cast<KisCanvas2*>(canvas) )

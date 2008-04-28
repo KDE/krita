@@ -564,3 +564,9 @@ target_link_libraries(KisMetaDataTest ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_
 set(kis_random_generator_test_SRCS kis_random_generator_test.cpp )
 kde4_add_unit_test(KisRandomGeneratorTest TESTNAME krita-image-KisRandomGeneratorTest ${kis_random_generator_test_SRCS})
 target_link_libraries(KisRandomGeneratorTest ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+#set(kis_paintop_preset_test_SRCS kis_paintop_preset_test.cpp )
+#kde4_add_unit_test(KisPaintopPresetTest TESTNAME krita-image-KisPaintopPresetTest ${kis_paintop_preset_test_SRCS})
+#target_link_libraries(KisPaintopPresetTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})

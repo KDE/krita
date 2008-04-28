@@ -280,6 +280,7 @@ void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
         subpixelX = 0.0;
     }
     QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
+ 
     m_d->previousEvent = *e;
     m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
 }

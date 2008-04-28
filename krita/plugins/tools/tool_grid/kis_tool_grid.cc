@@ -27,8 +27,8 @@
 #include <KoCanvasController.h>
 #include <KoPointerEvent.h>
 
-#include <kis_grid_manager.h>
-#include <kis_canvas2.h>
+#include <canvas/kis_grid_manager.h>
+#include <canvas/kis_canvas2.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <kis_view2.h>

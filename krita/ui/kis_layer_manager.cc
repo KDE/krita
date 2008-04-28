@@ -77,7 +77,7 @@
 #include "kis_statusbar.h"
 #include "kis_view2.h"
 #include "kis_zoom_manager.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
 #include "widgets/kis_wdg_generator.h"
 

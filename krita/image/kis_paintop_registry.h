@@ -37,6 +37,9 @@ class KisPainter;
 class KoColorSpace;
 class KoInputDevice;
 
+/**
+ * Manages the loading and creating of all paintop plugins.
+ */
 class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericRegistry<KisPaintOpFactorySP>
 {
 

@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_grid_painter_configuration.h"
+#include "canvas/kis_grid_painter_configuration.h"
 
 #include "kis_config.h"
 
@@ -68,7 +68,7 @@ QPen KisGridPainterConfiguration::subdivisionPen()
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_perspective_grid.h"
-#include "kis_perspective_grid_manager.h"
+#include "canvas/kis_perspective_grid_manager.h"
 
 
 KisGridDrawer::KisGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)

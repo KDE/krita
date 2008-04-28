@@ -51,7 +51,7 @@
 #include "kis_selected_transaction.h"
 #include "kis_paintop_registry.h"
 #include "kis_convolution_painter.h"
-#include "kis_canvas.h"
+#include "canvas/kis_canvas.h"
 using namespace std;
 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))

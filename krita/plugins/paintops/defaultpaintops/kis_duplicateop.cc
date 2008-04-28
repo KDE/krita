@@ -94,7 +94,7 @@ void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
       m_isOffsetNotUptodate = true;
       e->accept();
     } else {
-      if(m_isOffsetNotUptodate)
+      if ( m_isOffsetNotUptodate )
       {
           m_offset = m_image->documentToPixel(e->point) - m_position;
           m_isOffsetNotUptodate = false;

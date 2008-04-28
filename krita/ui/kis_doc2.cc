@@ -90,7 +90,7 @@
 #include "widgets/kis_custom_image_widget.h"
 #include "kis_kra_save_visitor.h"
 #include "kis_savexml_visitor.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_undo_adapter.h"
 #include "kis_shape_controller.h"
 #include "kis_node_model.h"

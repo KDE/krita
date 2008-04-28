@@ -27,7 +27,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"
 #include "kis_image.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
 #include "kis_selected_transaction.h"

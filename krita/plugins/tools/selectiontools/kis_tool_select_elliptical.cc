@@ -44,7 +44,7 @@
 #include "kis_layer.h"
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 

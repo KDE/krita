@@ -40,7 +40,7 @@
 #include "KoShapeManager.h"
 
 #include "kis_types.h"
-#include "kis_canvas2.h"
+#include "canvas/kis_canvas2.h"
 #include "kis_image.h"
 #include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_image_textures.h"

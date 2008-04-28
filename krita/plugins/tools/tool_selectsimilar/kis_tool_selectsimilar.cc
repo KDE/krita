@@ -46,7 +46,7 @@
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
 #include <kis_selected_transaction.h>
-#include <kis_canvas2.h>
+#include <canvas/kis_canvas2.h>
 #include <kis_pixel_selection.h>
 
 void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness, selectionAction mode)

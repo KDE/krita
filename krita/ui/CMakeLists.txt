@@ -177,6 +177,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpaintoppresets.ui
     forms/wdgdlggeneratorlayer.ui
     forms/wdgfilterselector.ui
+    forms/wdgfilternodecreation.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

@@ -221,23 +221,25 @@ void KisMaskManager::createFilterMask( KisNodeSP parent, KisNodeSP above )
         return;
 
     KisPaintDeviceSP dev = layer->projection();
+    KisFilterMask * mask = new KisFilterMask();
+    KisSelectionSP selection = m_view->selection();
+    if (selection) {
+        mask->setSelection(selection);
+    }
+    mask->setActive( true );
+    mask->setName( m_view->image()->nextLayerName() );
+    m_view->image()->addNode( mask, parent, above );
 
-    KisDlgAdjustmentLayer dlg(dev, m_view->image()->nextLayerName(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
+    KisDlgAdjustmentLayer dlg(mask, mask, i18n("New Filter Mask"), m_view, "dlgfiltermask");
 
     if (dlg.exec() == QDialog::Accepted) {
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
 
-        KisFilterMask * mask = new KisFilterMask();
-        KisSelectionSP selection = m_view->selection();
-        if (selection) {
-            mask->setSelection(selection);
-        }
-        mask->setActive( true );
-        mask->setFilter( filter );
-        mask->setName( name );
-        m_view->image()->addNode( mask, parent, above );
+//         mask->setFilter( filter );
         activateMask( mask );
+    } else {
+      m_view->image()->removeNode(mask);
     }
 }
 

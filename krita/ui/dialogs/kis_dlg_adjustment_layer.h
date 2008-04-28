@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,8 +30,9 @@ class KisFilterConfiguration;
 class QGroupBox;
 class KisFilterConfigWidget;
 class KLineEdit;
-
+class KisNodeFilterInterface;
 #include "kis_types.h"
+#include "ui_wdgfilternodecreation.h"
 
 /**
  * Create a new adjustment layer.
@@ -51,8 +53,8 @@ public:
      * @param parent the widget parent of this dialog
      * @param name the QObject name, if any
      */
-    KisDlgAdjustmentLayer(KisPaintDeviceSP layer,
-                          const QString & layerName,
+    KisDlgAdjustmentLayer(KisNodeSP node,
+                          KisNodeFilterInterface* nfi,
                           const QString & caption,
                           QWidget *parent = 0,
                           const char *name = 0);
@@ -64,19 +66,13 @@ protected slots:
 
     void slotNameChanged( const QString & );
     void slotConfigChanged();
-    void refreshPreview();
-    void selectionHasChanged ( QListWidgetItem * item );
 
 private:
 
-    KisPaintDeviceSP m_dev;
-    KisPreviewWidget * m_preview;
-    QGroupBox * m_configWidgetHolder;
-    KisFilterConfigWidget * m_currentConfigWidget;
-    KisFilter* m_currentFilter;
-    KLineEdit * m_layerName;
-    QLabel* m_labelNoConfigWidget;
-    bool m_customName;
+    KisNodeSP m_node;
+    KisNodeFilterInterface* m_nodeFilterInterface;
+    Ui::WdgFilterNodeCreation wdgFilterNodeCreation;
+    KisFilterConfiguration* m_currentFilter;
     bool m_freezeName;
 };
 

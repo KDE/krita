@@ -575,27 +575,24 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     KisLayerSP l = activeLayer();
 
     KisPaintDeviceSP dev = l->projection();
+    KisSelectionSP selection = l->selection();
+    KisAdjustmentLayerSP adjl = addAdjustmentLayer( parent, above, QString(), 0, selection);
 
-    KisDlgAdjustmentLayer dlg(dev, img->nextLayerName(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
-    if (dlg.exec() == QDialog::Accepted) {
-        KisSelectionSP selection = l->selection();
-        KisFilterConfiguration * filter = dlg.filterConfiguration();
-        QString name = dlg.layerName();
-
-        addAdjustmentLayer( parent, above, name, filter, selection);
-
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
+    if ( dlg.exec() != QDialog::Accepted) {
+      m_view->image()->removeNode( adjl );
     }
 }
 
-void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name,
+KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name,
                                  KisFilterConfiguration * filter, KisSelectionSP selection)
 {
     Q_ASSERT(parent);
     Q_ASSERT(above);
-    Q_ASSERT(filter);
+//     Q_ASSERT(filter);
 
     KisImageSP img = m_view->image();
-    if (!img) return;
+    if (!img) return 0;
 
     KisAdjustmentLayerSP l = new KisAdjustmentLayer(img, name, filter, selection);
     img->addNode(l.data(), parent, above.data());
@@ -603,6 +600,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, cons
         l->setDirty(l->selection()->selectedExactRect());
     else
         l->setDirty(img->bounds());
+    return l;
 }
 
 void KisLayerManager::addGeneratorLayer()

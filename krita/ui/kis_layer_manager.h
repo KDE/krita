@@ -114,7 +114,7 @@ public slots:
 
     void addAdjustmentLayer();
     void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above);
-    void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
     void addGeneratorLayer();
     void addGeneratorLayer(KisNodeSP parent, KisNodeSP above);

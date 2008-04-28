@@ -83,6 +83,8 @@ class KoTextLoader::Private
         QString currentListStyleName;
         int currentListLevel;
 
+        KoStyleManager *styleManager;
+
         explicit Private( KoShapeLoadingContext & context )
         : context( context )
         , textSharedData( 0 )
@@ -91,6 +93,7 @@ class KoTextLoader::Private
         , bodyProgressValue( 0 )
         , lastElapsed( 0 )
         , currentListLevel( 1 )
+        , styleManager(0)
         {
             dt.start();
         }
@@ -247,6 +250,12 @@ void KoTextLoader::loadBody(KoTextLoadingContext& context, const KoXmlElement& b
 void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
 {
     kDebug(32500) << "";
+
+    const QTextDocument *document = cursor.block().document();
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(document->documentLayout());
+    if (layout) {
+        d->styleManager = layout->styleManager();
+    }
 
     startBody( KoXml::childNodesCount( bodyElem ) );
     KoXmlElement tag;
@@ -458,6 +467,14 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
     QString styleName = element.attributeNS( KoXmlNS::text, "style-name", QString() );
 
     KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName, d->stylesDotXml );
+    
+    if (!paragraphStyle && d->styleManager) {
+         // Either the paragraph has no style or the style-name could not be found.
+         // Fix up the paragraphStyle to be our default paragraph style in either case.
+         if (!styleName.isEmpty())
+             kWarning(32500) << "paragraph style " << styleName << "not found - using default style";
+         paragraphStyle = d->styleManager->defaultParagraphStyle();
+    }
 
     if ( paragraphStyle ) {
         QTextBlock block = cursor.block();

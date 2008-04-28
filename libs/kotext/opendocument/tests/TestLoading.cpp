@@ -451,6 +451,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Paragraph background") << "FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor";
     QTest::newRow("Text align") << "FormattingProperties/ParagraphFormattingProperties/textAlign";
     QTest::newRow("Auto text indent") << "FormattingProperties/ParagraphFormattingProperties/automaticTextIndent";
+     QTest::newRow("Text indent") << "FormattingProperties/ParagraphFormattingProperties/textIndent";
 }
 
 void TestLoading::testLoading() 

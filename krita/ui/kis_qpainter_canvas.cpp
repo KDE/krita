@@ -271,9 +271,15 @@ void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
     default:
         ; // ignore the rest.
     }
-    QPointF pos = e->pos() + (e->hiResGlobalPos() - e->globalPos());
-    pos += m_d->documentOffset;
-    
+    qreal subpixelX = e->hiResGlobalX() - e->globalX();
+    qreal subpixelY = e->hiResGlobalY() - e->globalY();
+    // required for xinerama setups prior to Qt45
+    if (subpixelY > 1.0 || subpixelX > 1.0) {
+        // kWarning(41007) << "Warn, subPixel is not correct! (> 0) X:" << subpixelX << "Y:" << subpixelY;
+        subpixelY = 0.0;
+        subpixelX = 0.0;
+    }
+    QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
     m_d->previousEvent = *e;
     m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
 }

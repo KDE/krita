@@ -92,8 +92,8 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
            && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
-           /*&& qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
-                  == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))*/
+           && qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
+                  == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))
            && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
                   == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
            && actualFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
@@ -442,6 +442,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font variant") << "FormattingProperties/TextFormattingProperties/fontVariant";
     QTest::newRow("Line through style") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";
     QTest::newRow("Line through type") << "FormattingProperties/TextFormattingProperties/lineThroughType";
+    QTest::newRow("Line through color") << "FormattingProperties/TextFormattingProperties/lineThroughColor";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
     QTest::newRow("Text tranformations") << "FormattingProperties/TextFormattingProperties/textTransformations";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";

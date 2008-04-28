@@ -48,17 +48,13 @@ KoCharacterStyle.WaveLine = KoCharacterStyle.DashDotDotLine + 2;
 var defaultTextFormat = new QTextCharFormat;
 defaultTextFormat.setFont(defaultFont);
 defaultTextFormat.setVerticalAlignment(QTextCharFormat.AlignNormal);
+defaultTextFormat.setForeground(new QBrush(new QColor(0, 0, 0)));
 setFormatProperty(defaultTextFormat, KoCharacterStyle.StrikeOutColor, new QColor(0, 0, 0));
 cursor.setCharFormat(defaultTextFormat);
 
 QTextCharFormat.clone = function(fmt) {
     var newFormat = new QTextCharFormat;
     copyFormatProperties(newFormat, fmt);
-
-    // CHECKME: When new formats are created, the color is explicitly set to Black
-    if (newFormat.foreground().style() == 0) {
-        newFormat.setForeground(new QBrush(new QColor(0, 0, 0)));
-    }
     return newFormat;
 };
 

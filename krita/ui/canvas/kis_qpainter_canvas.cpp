@@ -271,9 +271,9 @@ void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
     default:
         ; // ignore the rest.
     }
-    qreal subpixelX = e->globalX();
+    qreal subpixelX = e->hiResGlobalX();
     subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
-    qreal subpixelY = e->globalY();
+    qreal subpixelY = e->hiResGlobalY();
     subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
     QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
 

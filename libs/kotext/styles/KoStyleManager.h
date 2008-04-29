@@ -137,10 +137,10 @@ public:
     QList<KoParagraphStyle*> paragraphStyles() const;
 
     /// reimplemented
-    virtual bool completeLoading( KoStore *store ) { return true; }
+    virtual bool completeLoading( KoStore *) { return true; }
 
     /// reimplemented
-    virtual bool completeSaving( KoStore *store ) { return true; }
+    virtual bool completeSaving( KoStore *) { return true; }
 
 signals:
     void styleAdded(KoParagraphStyle*);

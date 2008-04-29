@@ -24,6 +24,8 @@
 #include <QtScript>
 #include <QtTest>
 
+#include <kdeversion.h>
+
 #include <KoStyleManager.h>
 #include <KoDocument.h>
 #include <KoOdfStylesReader.h>
@@ -88,7 +90,9 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
     bool equal = actualFormat.font() == expectedFormat.font()
            && actualFormat.foreground() == expectedFormat.foreground()
            && actualFormat.background() == expectedFormat.background()
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
            && actualFormat.fontCapitalization() == expectedFormat.fontCapitalization()
+#endif
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
            && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()

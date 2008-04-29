@@ -26,6 +26,7 @@
 #include <QString>
 #include <QTextCharFormat>
 #include "kotext_export.h"
+#include <kdeversion.h>
 
 class StylePrivate;
 class QTextBlock;
@@ -144,6 +145,13 @@ public:
     void setFontWordSpacing(qreal spacing);
     /// See similar named method on QTextCharFormat
     qreal fontWordSpacing() const;
+
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+    /// See similar named method on QTextCharFormat (Qt 4.5 and above)
+    void setFontStyleHint(QFont::StyleHint styleHint);
+    /// See similar named method on QTextCharFormat (Qt 4.5 and above)
+    QFont::StyleHint fontStyleHint() const;
+#endif
 
     /// See similar named method on QTextCharFormat
     void setBackground (const QBrush &brush);

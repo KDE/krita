@@ -101,6 +101,12 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "indent";
             value = QString::number(properties[id].toInt());
             break;
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+        case QTextFormat::FontStyleHint:
+            key = "font-family-generic";
+            value = QString::number(properties[id].toInt());
+            break;
+#endif
         default:
             break;
         }

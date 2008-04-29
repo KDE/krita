@@ -31,7 +31,6 @@
 #include <KoUnit.h>
 #include <KoGenStyle.h>
 
-#include <kdeversion.h>
 #include <KDebug>
 
 class KoCharacterStyle::Private {
@@ -172,6 +171,10 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
         QTextFormat::FontLetterSpacing,
         QTextFormat::FontWordSpacing,
+#endif
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+        QTextFormat::FontStyleHint,
+        QTextFormat::FontStyleStrategy,
 #endif
         KoCharacterStyle::StrikeOutStyle,
         KoCharacterStyle::StrikeOutType,
@@ -351,6 +354,14 @@ void KoCharacterStyle::setFontFixedPitch (bool fixedPitch) {
 bool KoCharacterStyle::fontFixedPitch () const {
     return d->propertyBoolean(QTextFormat::FontFixedPitch);
 }
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+void KoCharacterStyle::setFontStyleHint(QFont::StyleHint styleHint) {
+    d->setProperty(QTextFormat::FontStyleHint, styleHint);
+}
+QFont::StyleHint KoCharacterStyle::fontStyleHint() const {
+    return static_cast<QFont::StyleHint>(d->propertyInt(QTextFormat::FontStyleHint));
+}
+#endif
 void KoCharacterStyle::setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment) {
     d->setProperty(QTextFormat::TextVerticalAlignment, alignment);
 }
@@ -517,6 +528,24 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
             if ( styleStack.property( KoXmlNS::style, "font-pitch" ) == "fixed" )
                 setFontFixedPitch( true );
         }
+
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+        if (styleStack.hasProperty(KoXmlNS::style, "font-family-generic")) {
+            QString genericFamily = styleStack.property(KoXmlNS::style, "font-family-generic");
+            if (genericFamily == "roman")
+                setFontStyleHint(QFont::Serif);
+            else if (genericFamily == "swiss")
+                setFontStyleHint(QFont::SansSerif);
+            else if (genericFamily == "modern")
+                setFontStyleHint(QFont::TypeWriter);
+            else if (genericFamily == "decorative")
+                setFontStyleHint(QFont::Decorative);
+            else if (genericFamily == "system")
+                setFontStyleHint(QFont::System);
+            else if (genericFamily == "script")
+                ; // TODO: no hint available in Qt yet
+        }
+#endif
     }
     if ( styleStack.hasProperty( KoXmlNS::style, "font-family" ) )
         fontName = styleStack.property( KoXmlNS::style, "font-family" );
@@ -739,7 +768,6 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     /*
       Missing properties:
       style:text-outline, 3.10.5 - not implemented in kotext
-      style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
       style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
       style:font-charset, 3.10.14 - not necessary with Qt
       fo:letter-spacing, 3.10.16 - not implemented in kotext

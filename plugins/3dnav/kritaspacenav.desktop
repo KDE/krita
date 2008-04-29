@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=spacenav
 Name[it]=Navigatore spaziale
+Name[sv]=Rymdnavigering
 Name[ta]=இடம் தேடி
 Comment=spacenav
 Comment[it]=Navigatore spaziale
+Comment[sv]=Rymdnavigering
 Comment[ta]=இடம் தேடி
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service

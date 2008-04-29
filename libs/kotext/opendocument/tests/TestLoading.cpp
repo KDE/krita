@@ -448,6 +448,9 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font style") << "FormattingProperties/TextFormattingProperties/fontStyle";
     QTest::newRow("Font weight") << "FormattingProperties/TextFormattingProperties/fontWeight";
     QTest::newRow("Font variant") << "FormattingProperties/TextFormattingProperties/fontVariant";
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+    QTest::newRow("Letter kerning") << "FormattingProperties/TextFormattingProperties/letterKerning";
+#endif
     QTest::newRow("Line through style") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";
     QTest::newRow("Line through type") << "FormattingProperties/TextFormattingProperties/lineThroughType";
     QTest::newRow("Line through color") << "FormattingProperties/TextFormattingProperties/lineThroughColor";

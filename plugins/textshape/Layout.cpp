@@ -697,6 +697,9 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
 }
 
 void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
+    Q_UNUSED(selectionEnd);
+    Q_UNUSED(converter);
+
     QTextLayout *layout = block.layout();
     QTextOption textOption = layout->textOption();
 

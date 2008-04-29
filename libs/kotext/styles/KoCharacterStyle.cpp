@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -175,6 +176,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
         QTextFormat::FontStyleHint,
         QTextFormat::FontStyleStrategy,
+        QTextFormat::FontKerning,
 #endif
         KoCharacterStyle::StrikeOutStyle,
         KoCharacterStyle::StrikeOutType,
@@ -360,6 +362,12 @@ void KoCharacterStyle::setFontStyleHint(QFont::StyleHint styleHint) {
 }
 QFont::StyleHint KoCharacterStyle::fontStyleHint() const {
     return static_cast<QFont::StyleHint>(d->propertyInt(QTextFormat::FontStyleHint));
+}
+void KoCharacterStyle::setFontKerning(bool enable) {
+    d->setProperty(QTextFormat::FontKerning, enable);
+}
+bool KoCharacterStyle::fontKerning() const {
+    return d->propertyBoolean(QTextFormat::FontKerning);
 }
 #endif
 void KoCharacterStyle::setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment) {
@@ -755,6 +763,15 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         }
     }
 
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+    if (styleStack.hasProperty(KoXmlNS::style, "letter-kerning")) {
+        if (styleStack.property(KoXmlNS::style, "letter-kerning") == "true") {
+            setFontKerning(true);
+        } else {
+            setFontKerning(false);
+        }
+    }
+#endif
 //TODO
 #if 0
     if ( styleStack.hasProperty( KoXmlNS::fo, "text-shadow") ) { // 3.10.21
@@ -772,7 +789,6 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
       style:font-charset, 3.10.14 - not necessary with Qt
       fo:letter-spacing, 3.10.16 - not implemented in kotext
       style:text-relief, 3.10.20 - not implemented in kotext
-      style:letter-kerning, 3.10.20 - not implemented in kotext
       style:text-blinking, 3.10.27 - not implemented in kotext IIRC
       style:text-combine, 3.10.29/30 - not implemented, see http://www.w3.org/TR/WD-i18n-format/
       style:text-emphasis, 3.10.31 - not implemented in kotext

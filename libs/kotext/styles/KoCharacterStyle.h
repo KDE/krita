@@ -151,8 +151,11 @@ public:
     void setFontStyleHint(QFont::StyleHint styleHint);
     /// See similar named method on QTextCharFormat (Qt 4.5 and above)
     QFont::StyleHint fontStyleHint() const;
+    /// See similar named method on QTextCharFormat (Qt 4.5 and above)
+    void setFontKerning(bool enable);
+    /// See similar named method on QTextCharFormat (Qt 4.5 and above)
+    bool fontKerning() const;
 #endif
-
     /// See similar named method on QTextCharFormat
     void setBackground (const QBrush &brush);
     /// See similar named method on QTextCharFormat

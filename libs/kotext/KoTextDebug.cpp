@@ -106,6 +106,10 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "font-family-generic";
             value = QString::number(properties[id].toInt());
             break;
+        case QTextFormat::FontKerning:
+            key = "font-kerning";
+            value = QString::number(properties[id].toInt());
+            break;
 #endif
         default:
             break;

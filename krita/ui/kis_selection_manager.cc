@@ -554,9 +554,10 @@ void KisSelectionManager::selectAll()
 
     KisLayerSP layer = m_view->activeLayer();
     if(!layer) return;
-
-    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Select All"), layer);
-    Q_CHECK_PTR(t);
+// XXX: make the select all undoable; but this transaction command crashes if the layer doesn't have a selection,
+//      so comment out.
+//    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Select All"), layer);
+//    Q_CHECK_PTR(t);
 
     KisSelectionSP selection = m_view->selection();
     if (!selection) {
@@ -567,7 +568,7 @@ void KisSelectionManager::selectAll()
     selection->getOrCreatePixelSelection()->select(img->bounds());
 
     m_view->selectionManager()->selectionChanged();
-    m_view->document()->addCommand(t);
+//    m_view->document()->addCommand(t);
 }
 
 void KisSelectionManager::deselect()

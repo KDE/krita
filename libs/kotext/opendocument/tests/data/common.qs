@@ -31,6 +31,8 @@ KoCharacterStyle.StrikeOutType = QTextFormat.UserProperty + 5;
 KoCharacterStyle.StrikeOutColor = QTextFormat.UserProperty + 6;
 KoCharacterStyle.UnderlineStyle = QTextFormat.UserProperty + 7;
 KoCharacterStyle.UnderlineType = QTextFormat.UserProperty + 8;
+KoCharacterStyle.TransformText = QTextFormat.UserProperty + 9;
+KoCharacterStyle.Spelling = QTextFormat.UserProperty + 10;
 
 KoCharacterStyle.NoLineType = 0;
 KoCharacterStyle.SingleLine = 1;

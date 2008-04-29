@@ -88,6 +88,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
 
     // this should really be actualFormat.properties() == expectedFormat.properties()
     bool equal = actualFormat.font() == expectedFormat.font()
+           && actualFormat.font().styleHint() == expectedFormat.font().styleHint() // test this explicity since font == ignores it
            && actualFormat.foreground() == expectedFormat.foreground()
            && actualFormat.background() == expectedFormat.background()
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
@@ -438,6 +439,9 @@ void TestLoading::testLoading_data()
 
     QTest::newRow("Colors") << "FormattingProperties/TextFormattingProperties/color";
     QTest::newRow("Font family") << "FormattingProperties/TextFormattingProperties/fontFamily";
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+    QTest::newRow("Font family generic") << "FormattingProperties/TextFormattingProperties/fontFamilyGeneric";
+#endif
     QTest::newRow("Font name") << "FormattingProperties/TextFormattingProperties/fontName";
     QTest::newRow("Font pitch") << "FormattingProperties/TextFormattingProperties/fontPitch";
     QTest::newRow("Font size") << "FormattingProperties/TextFormattingProperties/fontSize";
@@ -456,7 +460,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Paragraph background") << "FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor";
     QTest::newRow("Text align") << "FormattingProperties/ParagraphFormattingProperties/textAlign";
     QTest::newRow("Auto text indent") << "FormattingProperties/ParagraphFormattingProperties/automaticTextIndent";
-     QTest::newRow("Text indent") << "FormattingProperties/ParagraphFormattingProperties/textIndent";
+    QTest::newRow("Text indent") << "FormattingProperties/ParagraphFormattingProperties/textIndent";
 }
 
 void TestLoading::testLoading() 

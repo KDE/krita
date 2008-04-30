@@ -61,6 +61,7 @@ void KisRandomGeneratorTest::testEvolution()
         {
             int number = randg.randomAt(x,y);
             double dnumber = randg.doubleRandomAt(x,y);
+            
             for(int i = -2; i < 3; i++)
             {
                 for(int j = -2; j < 3; j++)
@@ -68,7 +69,8 @@ void KisRandomGeneratorTest::testEvolution()
                     if( i != 0 && j != 0)
                     {
                         QVERIFY( number != randg.randomAt( x + i, y + j) );
-                        QVERIFY( fabs( number - randg.doubleRandomAt( x + i, y + j) ) > 0.001 );
+                        double dnumber2 = randg.doubleRandomAt( x + i, y + j);
+                        QVERIFY( fabs( dnumber - dnumber2 ) > 0.001 );
                     }
                 }
             }

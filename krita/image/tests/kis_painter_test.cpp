@@ -88,6 +88,9 @@ Note: the bltSelection tests assume the following geometry:
  */
 void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
 {
+    if (cs->id() == QString("RGBAF16HALF")) return;
+    if (cs->id() == QString("RGBAF32")) return;
+    
     KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
 
     KisPaintDeviceSP src = new KisPaintDevice( cs, "src" );
@@ -125,6 +128,10 @@ void KisPainterTest::testPaintDeviceBltSelection()
 
 void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * cs)
 {
+    
+    if (cs->id() == QString("RGBAF16HALF")) return;
+    if (cs->id() == QString("RGBAF32")) return;
+    
     KisPaintDeviceSP dst = new KisPaintDevice( cs, "dst");
     KisPaintDeviceSP src = new KisPaintDevice( cs, "src" );
     KisFillPainter gc(src);
@@ -320,14 +327,12 @@ void KisPainterTest::checkPerformance()
         KisPainter gc(dst);
         gc.bitBlt(0, 0, COMPOSITE_OVER, src, OPACITY_OPAQUE, 0, 0, 10000, 5000);
     }
-    qDebug() << "bitblt: " << t.elapsed();
     
     t.restart();
     for (int i = 0; i < 10; ++i) {
         KisPainter gc(dst, sel);
         gc.bltSelection(0, 0, COMPOSITE_OVER, src, OPACITY_OPAQUE, 0, 0, 10000, 5000);
     }
-    qDebug() << "selection: " << t.elapsed();
 }
 
 QTEST_KDEMAIN(KisPainterTest, NoGUI)

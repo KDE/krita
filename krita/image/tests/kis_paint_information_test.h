@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +28,7 @@ class KisPaintInformationTest : public QObject
 private slots:
 
     void testCreation();
-
+    void testSerialisation();
 };
 
 #endif

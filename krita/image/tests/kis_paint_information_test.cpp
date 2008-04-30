@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +22,31 @@
 #include <qtest_kde.h>
 #include "kis_paint_information.h"
 
+#include <QDomDocument>
+
 void KisPaintInformationTest::testCreation()
 {
     KisPaintInformation test;
+}
+
+void KisPaintInformationTest::testSerialisation()
+{
+    KisPaintInformation test(QPointF( rand() / RAND_MAX, rand() / RAND_MAX), rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, KisVector2D(rand() / RAND_MAX, rand() / RAND_MAX), rand() / RAND_MAX, rand() / RAND_MAX );
+    
+    QDomDocument doc = QDomDocument("pi");
+    QDomElement root = doc.createElement( "pi" );
+    doc.appendChild( root );
+    test.toXML(doc, root );
+    KisPaintInformation testUnS = KisPaintInformation::fromXML( root );
+    QVERIFY( test.pos() == testUnS.pos() );
+    QVERIFY( test.pressure() == testUnS.pressure() );
+    QVERIFY( test.xTilt() == testUnS.xTilt() );
+    QVERIFY( test.yTilt() == testUnS.yTilt() );
+    QVERIFY( test.movement() == testUnS.movement() );
+    QVERIFY( test.angle() == testUnS.angle() );
+    QVERIFY( test.rotation() == testUnS.rotation() );
+    QVERIFY( test.tangentialPressure() == testUnS.tangentialPressure() );
+    
 }
 
 

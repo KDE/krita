@@ -70,7 +70,9 @@ void KisRandomGeneratorTest::testEvolution()
                     {
                         QVERIFY( number != randg.randomAt( x + i, y + j) );
                         double dnumber2 = randg.doubleRandomAt( x + i, y + j);
-                        QVERIFY( fabs( dnumber - dnumber2 ) > 0.001 );
+                        if (!(fabs( dnumber - dnumber2 ) > 0.000000001 ))
+                            qDebug() << dnumber << ", " << dnumber2 << ", " << fabs( dnumber - dnumber2 );
+                        QVERIFY( fabs( dnumber - dnumber2 ) > 0.000000001 );
                     }
                 }
             }

@@ -120,7 +120,6 @@ public:
     virtual void setValue( int value ) = 0;
     virtual void setRange( int minimum, int maximum ) = 0;
     virtual void setFormat( const QString & format ) = 0;
-
 };
 
 /**
@@ -133,6 +132,9 @@ public:
  * need to recursively split up progress reporting. (For instance, when your
  * progress reporting routine can be called by other progress reporting
  * routines.)
+ *
+ * KoUpdater implements KoProgressProxy because it is possible to recursively
+ * create anoter KoProgressUpdater with an updater as progress proxy.
  *
  * @see KoProgressUpdater::startSubtask()
  */

@@ -47,3 +47,4 @@ void KoProgressBar::setFormat( const QString & format )
 {
     QProgressBar::setFormat( format );
 }
+

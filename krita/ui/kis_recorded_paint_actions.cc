@@ -224,17 +224,7 @@ KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
     QString type = elt.attribute("type","");
     if( type == "autobrush")
     {
-        double width = elt.attribute("autobrush_width","1.0").toDouble();
-        double height = elt.attribute("autobrush_height","1.0").toDouble();
-        double hfade = elt.attribute("autobrush_hfade","1.0").toDouble();
-        double vfade = elt.attribute("autobrush_vfade","1.0").toDouble();
-        QString typeShape = elt.attribute("autobrush_type", "circle");
-        if(typeShape == "circle")
-        {
-            return new KisAutoBrush(new KisCircleMaskGenerator(width, height, hfade, vfade) );
-        } else {
-            return new KisAutoBrush(new KisRectangleMaskGenerator(width, height, hfade, vfade) );
-        }
+        return new KisAutoBrush(KisMaskGenerator::fromXML( elt ) );
     } else {
         dbgUI << "Looking for brush " << name;
         QList<KisBrush*> resources = KisResourceServerProvider::instance()->brushServer()->resources();

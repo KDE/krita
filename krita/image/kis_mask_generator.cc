@@ -30,6 +30,21 @@ void KisMaskGenerator::toXML(QDomDocument& , QDomElement& e) const
     e.setAttribute( "autobrush_vfade", m_h / 2.0 - m_fv );
 }
 
+KisMaskGenerator* KisMaskGenerator::fromXML( const QDomElement& elt)
+{
+    double width = elt.attribute("autobrush_width","1.0").toDouble();
+    double height = elt.attribute("autobrush_height","1.0").toDouble();
+    double hfade = elt.attribute("autobrush_hfade","1.0").toDouble();
+    double vfade = elt.attribute("autobrush_vfade","1.0").toDouble();
+    QString typeShape = elt.attribute("autobrush_type", "circle");
+    if(typeShape == "circle")
+    {
+        return new KisCircleMaskGenerator(width, height, hfade, vfade);
+    } else {
+        return new KisRectangleMaskGenerator(width, height, hfade, vfade);
+    }
+}
+
 quint8 KisMaskGenerator::interpolatedValueAt(double x, double y)
 {
     double x_i = floor(x);

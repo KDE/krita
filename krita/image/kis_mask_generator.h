@@ -45,6 +45,10 @@ class KRITAIMAGE_EXPORT KisMaskGenerator {
         virtual quint8 valueAt(double x, double y) =0;
         quint8 interpolatedValueAt(double x, double y);
         virtual void toXML(QDomDocument& , QDomElement&) const;
+        /**
+         * Unserialise a \ref KisMaskGenerator
+         */
+        static KisMaskGenerator* fromXML( const QDomElement&);
         double width() const { return m_w; }
         double height() const { return m_h; }
     protected:

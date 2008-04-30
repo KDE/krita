@@ -130,7 +130,7 @@ void KisAdjustmentLayer::resetCache()
 
 KisFilterConfiguration * KisAdjustmentLayer::filter() const
 {
-    Q_ASSERT(m_d->filterConfig);
+//     Q_ASSERT(m_d->filterConfig);
     return m_d->filterConfig;
 }
 

@@ -46,7 +46,6 @@ void KisPaintInformationTest::testSerialisation()
     QVERIFY( test.angle() == testUnS.angle() );
     QVERIFY( test.rotation() == testUnS.rotation() );
     QVERIFY( test.tangentialPressure() == testUnS.tangentialPressure() );
-    
 }
 
 

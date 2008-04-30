@@ -567,6 +567,12 @@ target_link_libraries(KisRandomGeneratorTest ${KDE4_KDEUI_LIBS} komain kritaimag
 
 ########### next target ###############
 
+set(kis_mask_generator_test_SRCS kis_mask_generator_test.cpp )
+kde4_add_unit_test(KisMaskGeneratorTest TESTNAME krita-image-KisMaskGeneratorTest ${kis_mask_generator_test_SRCS})
+target_link_libraries(KisMaskGeneratorTest ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 #set(kis_paintop_preset_test_SRCS kis_paintop_preset_test.cpp )
 #kde4_add_unit_test(KisPaintopPresetTest TESTNAME krita-image-KisPaintopPresetTest ${kis_paintop_preset_test_SRCS})
 #target_link_libraries(KisPaintopPresetTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})

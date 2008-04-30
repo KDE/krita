@@ -29,7 +29,7 @@ struct KoCtlColorSpace::Private
     mutable quint16 * qcolordata; // A small buffer for conversion from and to qcolor.
 };
 
-KoCtlColorSpace::KoCtlColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile) : KoColorSpace(id, name, 0,0), d(new Private)
+KoCtlColorSpace::KoCtlColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, const KoColorSpace* fallBack, const KoCtlColorProfile* profile) : KoColorSpace(id, name, mixColorsOp,0), d(new Private)
 {
     Q_ASSERT(profile);
     d->profile = static_cast<KoCtlColorProfile*>(profile->clone());

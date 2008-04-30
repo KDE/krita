@@ -30,7 +30,7 @@ class PIGMENTCMS_EXPORT KoCtlColorSpace : public KoColorSpace {
         /**
          * This class is use when creating color space that are defined using the Color Transformation Language.
          */
-        KoCtlColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile);
+        KoCtlColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, const KoColorSpace* fallBack, const KoCtlColorProfile* profile);
         ~KoCtlColorSpace();
         virtual bool profileIsCompatible(const KoColorProfile* profile) const;
         virtual bool hasHighDynamicRange() const;

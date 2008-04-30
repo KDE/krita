@@ -22,6 +22,7 @@
 
 #include "KoCtlColorSpace.h"
 #include <KoColorSpaceMaths.h>
+#include "KoMixColorsOpImpl.h"
 
 
 template<class _CSTrait>
@@ -31,7 +32,7 @@ class KoCtlMonoTypeColorSpace : public KoCtlColorSpace {
          * This class is use when creating color space that are defined using the Color Transformation Language,
          * and whose channels are all of the same type.
          */
-        KoCtlMonoTypeColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile) : KoCtlColorSpace(id, name, fallBack, profile)
+        KoCtlMonoTypeColorSpace(const QString &id, const QString &name, const KoColorSpace* fallBack, const KoCtlColorProfile* profile) : KoCtlColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), fallBack, profile)
         {
         }
         ~KoCtlMonoTypeColorSpace()

@@ -25,6 +25,8 @@
 #include "kochart_export.h"
 
 
+#define ChartShapeId "ChartShape"
+
 class QAbstractItemModel;
 
 namespace KoChart

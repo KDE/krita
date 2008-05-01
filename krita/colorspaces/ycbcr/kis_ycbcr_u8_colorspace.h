@@ -21,6 +21,7 @@
 #include "klocale.h"
 #include "kis_ycbcr_base_colorspace.h"
 #include <KoColorModelStandardIds.h>
+#include <KoCtlColorProfile.h>
 
 #include "kis_ycbcr_traits.h"
 
@@ -29,7 +30,7 @@ typedef KoYCbCrTraits<quint8> YCbCrU8Traits;
 class KisYCbCrU8ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU8Traits>
 {
     public:
-        KisYCbCrU8ColorSpace( KoColorProfile *p);
+        KisYCbCrU8ColorSpace( const KoCtlColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const {
             return false;
         }
@@ -38,7 +39,7 @@ class KisYCbCrU8ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU8Traits>
         virtual KoColorSpace* clone() const;
 };
 
-class KisYCbCrU8ColorSpaceFactory : public KoColorSpaceFactory
+class KisYCbCrU8ColorSpaceFactory : public KoCtlColorSpaceFactory
 {
 public:
     virtual QString id() const { return "YCbCrAU8"; }
@@ -47,29 +48,16 @@ public:
     virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
     virtual bool userVisible() const { return true; }
 
-    virtual bool profileIsCompatible(const KoColorProfile* /*profile*/) const
-    {
-        return false;
-    }
-
     virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const
     {
-        Q_UNUSED(p);
-        return new KisYCbCrU8ColorSpace(0);
+        return new KisYCbCrU8ColorSpace(dynamic_cast<const KoCtlColorProfile*>(p));
     }
 
     virtual int referenceDepth() const { return 8; }
     virtual QString colorSpaceEngine() const { return ""; }
     virtual bool isHdr() const { return false; }
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
-    virtual KoColorConversionTransformationFactory*
-        createICCColorConversionTransformationFactory(const QString& profileName) const
-    {
-        Q_UNUSED(profileName);
-        return 0;
-    }
 
-    virtual QString defaultProfile() const { return ""; }
+    virtual QString defaultProfile() const { return "Standard YCbCr (8-bits)"; }
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

@@ -32,8 +32,8 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 
-KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace( KoColorProfile */*p*/)
-: KisYCbCrBaseColorSpace<YCbCrU8Traits>("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)"))
+KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace( const KoCtlColorProfile *p)
+: KisYCbCrBaseColorSpace<YCbCrU8Traits>("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)"), p)
 {
     addChannel(new KoChannelInfo(i18n("Y"), YCbCrU8Traits::y_pos * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Cb"), YCbCrU8Traits::cb_pos * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(0,255,0)));
@@ -44,19 +44,8 @@ KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace( KoColorProfile */*p*/)
     addCompositeOp( new KoCompositeOpErase<YCbCrU8Traits>( this ) );
 }
 
-QList<KoColorConversionTransformationFactory*> KisYCbCrU8ColorSpaceFactory::colorConversionLinks() const
-{
-    QList<KoColorConversionTransformationFactory*> list;
-    // Conversion to RGB16bit
-    list.append(new KisYCbCrToRgbColorConversionTransformationFactory< YCbCrU8Traits, KoRgbTraits<quint16> >( YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id(), RGBAColorModelID.id(), Integer16BitsColorDepthID.id() ) );
-    // Conversion from RGB16bit
-    list.append(new KisRgbToYCbCrColorConversionTransformationFactory< KoRgbTraits<quint16>, YCbCrU8Traits >( RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id() ) );
-    list.append(new KoScaleColorConversionTransformationFactory< YCbCrU8Traits, KoYCbCrTraits<quint16> >( YCbCrAColorModelID.id(), "", Integer8BitsColorDepthID.id(), Integer16BitsColorDepthID.id() ) );
-    return list;
-}
-
 KoColorSpace* KisYCbCrU8ColorSpace::clone() const
 {
-    return new KisYCbCrU8ColorSpace( 0);
+    return new KisYCbCrU8ColorSpace( static_cast<const KoCtlColorProfile*>(profile()));
 }
 

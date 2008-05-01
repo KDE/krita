@@ -23,6 +23,7 @@
 #include <KoIncompleteColorSpace.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
+#include "KoCtlMonoTypeColorSpace.h"
 
 #define UINT8_TO_NATIVE(v) (KoColorSpaceMaths<quint8, typename _CSTraits::channels_type >::scaleToA(v))
 #define NATIVE_TO_UINT8(v) (KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(v))
@@ -31,11 +32,11 @@
 
 
 template <class _CSTraits>
-class KisYCbCrBaseColorSpace : public KoIncompleteColorSpace<_CSTraits>
+class KisYCbCrBaseColorSpace : public KoCtlMonoTypeColorSpace<_CSTraits>
 {
     public:
-        KisYCbCrBaseColorSpace(const QString &id, const QString &name)
-          : KoIncompleteColorSpace<_CSTraits>(id, name, KoColorSpaceRegistry::instance()->rgb16(""))
+        KisYCbCrBaseColorSpace(const QString &id, const QString &name, const KoCtlColorProfile *profile)
+          : KoCtlMonoTypeColorSpace<_CSTraits>(id, name, KoColorSpaceRegistry::instance()->rgb16(""), profile)
         {
 
         }

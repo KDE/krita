@@ -56,6 +56,7 @@ class PIGMENTCMS_EXPORT KoCtlColorSpace : public KoColorSpace {
 class PIGMENTCMS_EXPORT KoCtlColorSpaceFactory : public KoColorSpaceFactory {
     public:
         virtual ~KoCtlColorSpaceFactory() {}
+        virtual bool profileIsCompatible(const KoColorProfile* profile) const;
         QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
 };
 

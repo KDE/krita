@@ -32,8 +32,8 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 
-KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace( KoColorProfile */*p*/)
-: KisYCbCrBaseColorSpace<YCbCrU16Traits>("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)"))
+KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace( const KoCtlColorProfile *p)
+: KisYCbCrBaseColorSpace<YCbCrU16Traits>("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)"), p)
 {
     addChannel(new KoChannelInfo(i18n("Y"), YCbCrU16Traits::y_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Cb"), YCbCrU16Traits::cb_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(0,255,0)));
@@ -44,20 +44,9 @@ KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace( KoColorProfile */*p*/)
     addCompositeOp( new KoCompositeOpErase<YCbCrU16Traits>( this ) );
 }
 
-QList<KoColorConversionTransformationFactory*> KisYCbCrU16ColorSpaceFactory::colorConversionLinks() const
-{
-    QList<KoColorConversionTransformationFactory*> list;
-    // Conversion to RGB16bit
-    list.append(new KisYCbCrToRgbColorConversionTransformationFactory< YCbCrU16Traits, KoRgbTraits<quint16> >( YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id(), RGBAColorModelID.id(), Integer16BitsColorDepthID.id() ) );
-    // Conversion from RGB16bit
-    list.append(new KisRgbToYCbCrColorConversionTransformationFactory< KoRgbTraits<quint16>, YCbCrU16Traits >( RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id() ) );
-    list.append(new KoScaleColorConversionTransformationFactory< YCbCrU16Traits, KoYCbCrTraits<quint8> >( YCbCrAColorModelID.id(), "", Integer16BitsColorDepthID.id(), Integer8BitsColorDepthID.id() ) );
-    
-    return list;
-}
 
 KoColorSpace* KisYCbCrU16ColorSpace::clone() const
 {
-    return new KisYCbCrU16ColorSpace( 0);
+    return new KisYCbCrU16ColorSpace( static_cast<const KoCtlColorProfile*>(profile()));
 }
 

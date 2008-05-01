@@ -23,13 +23,14 @@
 
 #include "kis_ycbcr_traits.h"
 #include <KoColorModelStandardIds.h>
+#include <KoCtlColorProfile.h>
 
 typedef KoYCbCrTraits<quint16> YCbCrU16Traits;
 
 class KisYCbCrU16ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU16Traits>
 {
     public:
-        KisYCbCrU16ColorSpace( KoColorProfile *p);
+        KisYCbCrU16ColorSpace( const KoCtlColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const {
           if (independence == TO_RGBA8 )
             return true;
@@ -41,7 +42,7 @@ class KisYCbCrU16ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU16Traits>
         virtual KoColorSpace* clone() const;
 };
 
-class KisYCbCrU16ColorSpaceFactory : public KoColorSpaceFactory
+class KisYCbCrU16ColorSpaceFactory : public KoCtlColorSpaceFactory
 {
 public:
     virtual QString id() const { return "YCbCrAU16"; }
@@ -49,30 +50,18 @@ public:
     virtual KoID colorModelId() const { return YCbCrAColorModelID; }
     virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
     virtual bool userVisible() const { return true; }
-
-    virtual bool profileIsCompatible(const KoColorProfile* /*profile*/) const
-    {
-        return false;
-    }
-
+    
     virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const
     {
-        Q_UNUSED(p);
-        return new KisYCbCrU16ColorSpace( 0);
-    }
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const
-    {
-        Q_UNUSED(profileName);
-        return 0;
+        return new KisYCbCrU16ColorSpace( dynamic_cast<const KoCtlColorProfile*>(p));
     }
     virtual int referenceDepth() const { return 16; }
 
     
     virtual QString colorSpaceEngine() const { return ""; }
     virtual bool isHdr() const { return false; }
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     
-    virtual QString defaultProfile() const { return ""; }
+    virtual QString defaultProfile() const { return "Standard YCbCr (16-bits)"; }
 };
 
 #endif

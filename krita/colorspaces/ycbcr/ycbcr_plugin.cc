@@ -44,8 +44,9 @@ YCbCrPlugin::YCbCrPlugin(QObject *parent, const QStringList &)
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     // Register U16 YCbCr colorspace
     {
-        KoColorSpace * colorSpaceYCbCr16  = new KisYCbCrU16ColorSpace( 0);
         KoColorSpaceFactory *csf  = new KisYCbCrU16ColorSpaceFactory();
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
+        KoColorSpace * colorSpaceYCbCr16  = new KisYCbCrU16ColorSpace( profile );
         Q_CHECK_PTR(colorSpaceYCbCr16);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
@@ -54,8 +55,9 @@ YCbCrPlugin::YCbCrPlugin(QObject *parent, const QStringList &)
     }
     // Register U8 YCbCr colorspace
     {
-        KoColorSpace * colorSpaceYCbCr8  = new KisYCbCrU8ColorSpace( 0);
         KoColorSpaceFactory *csf  = new KisYCbCrU8ColorSpaceFactory();
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
+        KoColorSpace * colorSpaceYCbCr8  = new KisYCbCrU8ColorSpace( profile);
         Q_CHECK_PTR(colorSpaceYCbCr8);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(

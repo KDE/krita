@@ -24,7 +24,6 @@
 
 #include <math.h>
 
-#include "KoIncompleteColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 
 #include "compositeops/KoCompositeOpOver.h"

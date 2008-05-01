@@ -16,3 +16,8 @@ install(TARGETS kritaycbcrplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kritaycbcrplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
+install(FILES
+    ycbcr_16.ctlp
+    ycbcr_8.ctlp
+    DESTINATION ${DATA_INSTALL_DIR}/pigmentcms/ctlprofiles)

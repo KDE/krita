@@ -79,6 +79,10 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "strikeouttype";
             value = QString::number(properties[id].toInt());
             break;
+        case KoCharacterStyle::StrikeOutMode:
+            key = "strikeoutmode";
+            value = QString::number(properties[id].toInt());
+            break;
         case QTextFormat::ForegroundBrush:
             key = "foreground";
             value = qvariant_cast<QBrush>(properties[id]).color().name(); // beware!

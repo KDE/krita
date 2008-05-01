@@ -60,7 +60,8 @@ public:
         UnderlineType,
         TransformText,
         Spelling,
-        UnderlineMode
+        UnderlineMode,
+        StrikeOutMode
     };
 
     /// list of possible line type : no line, single line, double line
@@ -190,6 +191,10 @@ public:
     void setStrikeOutType (LineType lineType);
     /// Get the current font strike out color of this KoCharacterStyle
     LineType strikeOutType () const;
+    /// Apply a strike out mode of this KoCharacterStyle
+    void setStrikeOutMode(LineMode lineMode);
+    /// Get the current strike out mode of this KoCharacterStyle
+    LineMode strikeOutMode() const;
 
     /// Apply a font underline style to this KoCharacterStyle
     void setUnderlineStyle (LineStyle style);

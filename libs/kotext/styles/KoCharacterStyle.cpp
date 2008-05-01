@@ -186,6 +186,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::TransformText,
         KoCharacterStyle::HasHyphenation,
         KoCharacterStyle::UnderlineMode,
+        KoCharacterStyle::StrikeOutMode,
         -1
     };
 
@@ -320,6 +321,16 @@ static QString exportOasisLineStyle(KoCharacterStyle::LineStyle lineStyle) {
             return "";
     }
 }
+static QString exportOasisLineMode(KoCharacterStyle::LineMode lineMode) {
+    switch (lineMode) {
+        case KoCharacterStyle::ContinuousLineMode:
+            return "continuous";
+         case KoCharacterStyle::SkipWhiteSpaceLineMode:
+            return "skip-white-space";
+         default:
+            return "";
+    }
+}
 
 void KoCharacterStyle::setFontFamily (const QString &family) {
     d->setProperty(QTextFormat::FontFamily, family);
@@ -441,6 +452,13 @@ QColor KoCharacterStyle::strikeOutColor () const {
     return d->propertyColor(StrikeOutColor);
 }
 
+void KoCharacterStyle::setStrikeOutMode(LineMode lineMode) {
+    d->setProperty(StrikeOutMode, lineMode);
+}
+
+KoCharacterStyle::LineMode KoCharacterStyle::strikeOutMode() const {
+    return (KoCharacterStyle::LineMode) d->propertyInt(StrikeOutMode);
+}
 
 void KoCharacterStyle::setUnderlineStyle (KoCharacterStyle::LineStyle underline) {
     d->setProperty(UnderlineStyle, underline);
@@ -690,6 +708,12 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     if ( !lineThroughColor.isEmpty() && lineThroughColor != "font-color" )
         setStrikeOutColor( QColor(lineThroughColor) );
 
+    QString lineThroughMode = styleStack.property(KoXmlNS::style, "text-line-through-mode");
+    if (lineThroughMode == "continuous") {
+        setStrikeOutMode(ContinuousLineMode);
+    } else if (lineThroughMode == "skip-white-space") {
+        setStrikeOutMode(SkipWhiteSpaceLineMode);
+    }
 
 //TODO
 #if 0
@@ -873,12 +897,8 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
         } else if (key == UnderlineMode) {
             bool ok = false;
             int mode = d->stylesPrivate->value(key).toInt(&ok);
-            if (ok) {
-                if (mode == ContinuousLineMode)
-                    style.addProperty("style:text-underline-mode", "continuous", KoGenStyle::TextType);
-                else if (mode == SkipWhiteSpaceLineMode)
-                    style.addProperty("style:text-underline-mode", "skip-white-space", KoGenStyle::TextType);
-            }
+            if (ok)
+                style.addProperty("style:text-underline-mode", exportOasisLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         } else if (key == StrikeOutStyle) {
             bool ok = false;
             int styleId = d->stylesPrivate->value(key).toInt(&ok);
@@ -893,6 +913,11 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             QColor color = d->stylesPrivate->value(key).value<QColor>();
             if (color.isValid())
                 style.addProperty("style:text-line-through-color", color.name(), KoGenStyle::TextType);
+        } else if (key == StrikeOutMode) {
+            bool ok = false;
+            int mode = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok)
+                style.addProperty("style:text-line-through-mode", exportOasisLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush brush = d->stylesPrivate->value(key).value<QBrush>();
             if (brush.style() == Qt::NoBrush)

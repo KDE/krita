@@ -63,6 +63,10 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "underlinetype";
             value = QString::number(properties[id].toInt());
             break;
+        case KoCharacterStyle::UnderlineMode:
+            key = "underlinemode";
+            value = QString::number(properties[id].toInt());
+            break;
         case KoCharacterStyle::StrikeOutStyle:
             key = "strikeoutstyle";
             value = QString::number(properties[id].toInt());

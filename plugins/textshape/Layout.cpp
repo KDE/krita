@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -716,6 +717,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                 offset = currentFragment.position();
             int firstLine = layout->lineForTextPosition(currentFragment.position() - offset).lineNumber();
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - offset).lineNumber();
+            QString text = currentFragment.text();
 
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
@@ -750,8 +752,27 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                         QColor color = fmt.underlineColor();
                         if (!color.isValid())
                             color = fmt.foreground().color();
+                        KoCharacterStyle::LineMode underlineMode = 
+                                    (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::UnderlineMode);
+                        if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
+                            double wordBeginX = -1;
+                            int j = line.textStart();
+                            while (j < line.textLength()+line.textStart()) {
+                                if (text[j].isSpace()) {
+                                  if (wordBeginX != -1)
+                                        drawDecorationLine(painter, color, fontUnderLineType, fontUnderLineStyle, wordBeginX, line.cursorToX(j), y);
+                                    wordBeginX = -1;
+                                } else if (wordBeginX == -1) {
+                                    wordBeginX = line.cursorToX(j);
+                                }
+                             ++j;
+                            }
+                            if (wordBeginX != -1)
+                                 drawDecorationLine(painter, color, fontUnderLineType, fontUnderLineStyle, wordBeginX, line.cursorToX(j), y);
 
-                        drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
+                        } else {
+                            drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
+                        }
                     }
 
                     bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);

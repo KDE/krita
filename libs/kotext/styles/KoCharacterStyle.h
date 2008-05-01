@@ -59,7 +59,8 @@ public:
         UnderlineStyle,
         UnderlineType,
         TransformText,
-        Spelling
+        Spelling,
+        UnderlineMode
     };
 
     /// list of possible line type : no line, single line, double line
@@ -79,6 +80,13 @@ public:
         DotDotDashLine = Qt::DashDotDotLine,
         LongDashLine,
         WaveLine
+    };
+
+    /// list of possible line modes.
+    enum LineMode {
+        NoLineMode,
+        ContinuousLineMode,
+        SkipWhiteSpaceLineMode
     };
 
     /// Text transformation
@@ -195,7 +203,10 @@ public:
     void setUnderlineType (LineType lineType);
     /// Get the current font underline color of this KoCharacterStyle
     LineType underlineType () const;
-
+    /// Apply a underline mode to this KoCharacterStyle
+    void setUnderlineMode(LineMode mode);
+    /// Get the current underline mode of this KoCharacterStyle
+    LineMode underlineMode() const;
 
     /// Set the text tranformation.
     void setTransform(Transform transformtext);

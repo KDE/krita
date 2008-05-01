@@ -185,6 +185,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::UnderlineType,
         KoCharacterStyle::TransformText,
         KoCharacterStyle::HasHyphenation,
+        KoCharacterStyle::UnderlineMode,
         -1
     };
 
@@ -465,6 +466,14 @@ QColor KoCharacterStyle::underlineColor () const {
     return d->propertyColor(QTextFormat::TextUnderlineColor);
 }
 
+void KoCharacterStyle::setUnderlineMode(LineMode mode) {
+    d->setProperty(KoCharacterStyle::UnderlineMode, mode);
+}
+
+KoCharacterStyle::LineMode KoCharacterStyle::underlineMode() const {
+    return static_cast<KoCharacterStyle::LineMode>(d->propertyInt(KoCharacterStyle::UnderlineMode));
+}
+
 void KoCharacterStyle::setFontLetterSpacing(qreal spacing) {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->setProperty(QTextCharFormat::FontLetterSpacing, spacing);
@@ -612,6 +621,14 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         if ( styleStack.property( KoXmlNS::fo, "font-style" ) == "italic" ||
              styleStack.property( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
             setFontItalic( true );
+        }
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::style, "text-underline-mode")) {
+        if (styleStack.property(KoXmlNS::style, "text-underline-mode") == "skip-white-space") {
+            setUnderlineMode(SkipWhiteSpaceLineMode);
+        } else if (styleStack.property(KoXmlNS::style, "text-underline-mode") == "continuous") {
+            setUnderlineMode(ContinuousLineMode);
         }
     }
 

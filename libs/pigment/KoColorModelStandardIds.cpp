@@ -29,7 +29,7 @@ extern const KoID LABAColorModelID("LABA", i18n("L a* b*"));
 extern const KoID CMYKAColorModelID("CMYKA", i18n("Cyan Magenta Yellow Black"));
 extern const KoID GrayAColorModelID("GRAYA", i18n("Grayscale"));
 extern const KoID GrayColorModelID("GRAY", i18n("Grayscale (without transparency)"));
-extern const KoID YCbCrAColorModelID("YCbCr", i18n("YCbCr"));
+extern const KoID YCbCrAColorModelID("YCbCrA", i18n("YCbCr"));
 
 extern const KoID Integer8BitsColorDepthID("U8", i18n("8 Bits"));
 extern const KoID Integer16BitsColorDepthID("U16", i18n("16 Bits"));

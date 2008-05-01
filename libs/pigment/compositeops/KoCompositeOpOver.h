@@ -21,7 +21,7 @@
 #define _KOCOMPOSITEOPOVER_H_
 
 #include "KoCompositeOpAlphaBase.h"
-
+#include <klocale.h>
 
 /**
  * A template version of the over composite operation to use in colorspaces.

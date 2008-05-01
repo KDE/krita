@@ -12,4 +12,10 @@ namespace PigmentUtils {
         if( v > 1.0 ) return 65535;
         return v * 65535;
     }
+    int clampInt( int a, int min, int max)
+    {
+        if( a < min ) return min;
+        if( a > max ) return max;
+        return a;
+    }
 }

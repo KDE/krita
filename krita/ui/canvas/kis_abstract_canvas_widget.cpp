@@ -25,10 +25,10 @@
 #include <KoToolProxy.h>
 
 #include "kis_canvas_decoration.h"
-#include "kis_config.h"
+#include "../kis_config.h"
 #include "kis_canvas2.h"
-#include "kis_view2.h"
-#include "kis_selection_manager.h"
+#include "../kis_view2.h"
+#include "../kis_selection_manager.h"
 
 void KisAbstractCanvasWidget::drawDecorations( QPainter & gc, bool ants, bool tools,
                                                const QPoint & documentOffset,

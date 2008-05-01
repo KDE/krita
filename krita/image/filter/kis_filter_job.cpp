@@ -40,7 +40,7 @@ KisFilterJob::KisFilterJob( const KisFilter* filter,
                             QObject * parent, KisPaintDeviceSP dev,
                             const QRect & rc,
                             int margin,
-                            KoUpdater * updater  )
+                            KoUpdater updater  )
     : KisJob( parent, dev, rc, margin )
     , m_filter( filter )
     , m_config( config )
@@ -60,12 +60,12 @@ void KisFilterJob::run()
                         KisProcessingInformation( dst, marginRect.topLeft() ),
                         marginRect.size(),
                         m_config,
-                        m_updater );
+                        &m_updater );
     KisPainter p( m_dev );
     p.setCompositeOp( m_dev->colorSpace()->compositeOp( COMPOSITE_COPY ) );
     p.bitBlt( m_rc.topLeft(), dst, m_rc );
     p.end();
-    m_updater->setProgress(100);
+    m_updater.setProgress(100);
 }
 
 KisFilterJobFactory::KisFilterJobFactory( const KisFilter* filter, const KisFilterConfiguration * config )
@@ -74,7 +74,7 @@ KisFilterJobFactory::KisFilterJobFactory( const KisFilter* filter, const KisFilt
 {
 }
 
-ThreadWeaver::Job * KisFilterJobFactory::createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater * updater )
+ThreadWeaver::Job * KisFilterJobFactory::createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater updater )
 {
     return new KisFilterJob( m_filter, m_config, parent, dev, rc, margin, updater );
 }

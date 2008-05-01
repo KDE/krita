@@ -141,12 +141,11 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     KoProgressUpdater updater( m_d->view->statusBar()->progress() );
     if (layer->image()->undo()) cmd = new KisTransaction(m_d->filter->name(), m_d->dev);
 
-    //if ( !m_d->filter->supportsThreading() ) {
+    if ( !m_d->filter->supportsThreading() ) {
         KoUpdater up = updater.startSubtask();
         m_d->filter->process(m_d->dev, rect, config, &up);
         areaDone(rect);
-    //}
-#if 0    
+    }
     else {
         // Chop up in rects.
         KisFilterJobFactory factory( m_d->filter, config );
@@ -154,7 +153,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         applicator.connect( &applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect &)));
         applicator.execute();
     }
-#endif    
+
 /*    if (m_d->filter->cancelRequested()) { // TODO: port to the progress display reporter
         delete config;
         if (cmd) {

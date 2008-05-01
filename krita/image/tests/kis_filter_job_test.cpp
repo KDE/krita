@@ -50,21 +50,21 @@ void KisFilterJobTest::testCreation()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     
     KisFilterJobFactory factory(f, kfc);
-    ThreadWeaver::Job * job = factory.createJob(0, dev, QRect(0, 0, 2000, 2000), f->overlapMarginNeeded(kfc), &up);
+    ThreadWeaver::Job * job = factory.createJob(0, dev, QRect(0, 0, 2000, 2000), f->overlapMarginNeeded(kfc), up);
     Q_ASSERT(job);
 }
 
 
 void KisFilterJobTest::testInWeaver()
 {
-    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    KisFilterSP f = KisFilterRegistry::instance()->value("noise");
     Q_ASSERT( f );
 
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT( kfc );
 
-    TestUtil::TestProgressBar bar;
-    KoProgressUpdater pu(&bar);
+    TestUtil::TestProgressBar * bar = new TestUtil::TestProgressBar();
+    KoProgressUpdater * pu = new KoProgressUpdater(bar);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
@@ -74,7 +74,7 @@ void KisFilterJobTest::testInWeaver()
 
     KisFilterJobFactory factory(f, kfc);
 
-    KisThreadedApplicator applicator(dev, QRect(0, 0, 2000, 2000), &factory, &pu, f->overlapMarginNeeded( kfc ));
+    KisThreadedApplicator applicator(dev, QRect(0, 0, 2000, 2000), &factory, pu, f->overlapMarginNeeded( kfc ));
     applicator.execute();
 
     
@@ -83,6 +83,8 @@ void KisFilterJobTest::testInWeaver()
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
         QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
+    delete pu;
+    delete bar;
 }
 
 QTEST_KDEMAIN(KisFilterJobTest, GUI)

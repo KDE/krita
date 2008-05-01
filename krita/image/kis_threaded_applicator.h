@@ -26,12 +26,11 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class KoUpdater;
-class KoProgressUpdater;
+#include <KoProgressUpdater.h>
 
 /**
-   A threadweaver job that knows about paint devices and rects. Note
-   that it is the task of the job implementation to handle the margin!
+ * A threadweaver job that knows about paint devices and rects. Note
+ * that it is the task of the job implementation to handle the margin!
  */
 class KRITAIMAGE_EXPORT KisJob : public ThreadWeaver::Job
 {
@@ -73,7 +72,7 @@ public:
     virtual ~KisJobFactory() {}
 
 
-    virtual ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater * updater) = 0;
+    virtual ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater updater) = 0;
 };
 
 /**

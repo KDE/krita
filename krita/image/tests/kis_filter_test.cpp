@@ -60,6 +60,39 @@ void KisFilterTest::testCreation()
     TestFilter test;
 }
 
+void KisFilterTest::testWithProgressUpdater()
+{
+    TestUtil::TestProgressBar * bar = new TestUtil::TestProgressBar();
+    KoProgressUpdater * pu = new KoProgressUpdater(bar);
+    KoUpdater updater = pu->startSubtask();
+    
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs, "filter test");
+    dev->convertFromQImage(qimg, "", 0, 0);
+    
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT( f );
+
+    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    Q_ASSERT( kfc );
+
+    KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
+    KisProcessingInformation dst( dev, QPoint(0, 0), 0 );
+    
+    f->process(src, dst, qimg.size(), kfc, &updater);
+
+    QPoint errpoint;
+    if ( !TestUtil::compareQImages( errpoint, inverted, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtertest.png");
+        QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+    }
+    delete pu;
+    delete bar;
+}
+
 void KisFilterTest::testSingleThreaded()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();

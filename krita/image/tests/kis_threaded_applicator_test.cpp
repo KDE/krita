@@ -69,7 +69,7 @@ public:
 
 class TestJobFactory : public KisJobFactory {
 public:
-    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater * updater = 0)
+    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater updater = 0)
         {
             Q_UNUSED(updater);
             return new TestJob( parent, dev, rc, margin );

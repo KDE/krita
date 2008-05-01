@@ -105,6 +105,8 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
                   == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
            && actualFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
                   == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
+           && actualFormat.property(KoCharacterStyle::StrikeOutMode).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
     
     if (!equal)
@@ -453,9 +455,10 @@ void TestLoading::testLoading_data()
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     QTest::newRow("Letter kerning") << "FormattingProperties/TextFormattingProperties/letterKerning";
 #endif
+    QTest::newRow("Line through color") << "FormattingProperties/TextFormattingProperties/lineThroughColor";
+    QTest::newRow("Line through mode") << "FormattingProperties/TextFormattingProperties/lineThroughMode";
     QTest::newRow("Line through style") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";
     QTest::newRow("Line through type") << "FormattingProperties/TextFormattingProperties/lineThroughType";
-    QTest::newRow("Line through color") << "FormattingProperties/TextFormattingProperties/lineThroughColor";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
     QTest::newRow("Text tranformations") << "FormattingProperties/TextFormattingProperties/textTransformations";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";

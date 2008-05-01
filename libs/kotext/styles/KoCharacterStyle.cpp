@@ -624,14 +624,6 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         }
     }
 
-    if (styleStack.hasProperty(KoXmlNS::style, "text-underline-mode")) {
-        if (styleStack.property(KoXmlNS::style, "text-underline-mode") == "skip-white-space") {
-            setUnderlineMode(SkipWhiteSpaceLineMode);
-        } else if (styleStack.property(KoXmlNS::style, "text-underline-mode") == "continuous") {
-            setUnderlineMode(ContinuousLineMode);
-        }
-    }
-
 //TODO
 #if 0
     d->m_bWordByWord = styleStack.property( KoXmlNS::style, "text-underline-mode" ) == "skip-white-space";
@@ -654,6 +646,14 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     }
     */
 #endif
+
+    if (styleStack.hasProperty(KoXmlNS::style, "text-underline-mode")) {
+        if (styleStack.property(KoXmlNS::style, "text-underline-mode") == "skip-white-space") {
+            setUnderlineMode(SkipWhiteSpaceLineMode);
+        } else if (styleStack.property(KoXmlNS::style, "text-underline-mode") == "continuous") {
+            setUnderlineMode(ContinuousLineMode);
+        }
+    }
 
     // Specifies whether text is underlined, and if so, whether a single or double line will be used for underlining.
     if ( styleStack.hasProperty( KoXmlNS::style, "text-underline-type" )
@@ -689,6 +689,8 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     QString lineThroughColor = styleStack.property( KoXmlNS::style, "text-line-through-color" ); // OO 3.10.23, OASIS 14.4.31
     if ( !lineThroughColor.isEmpty() && lineThroughColor != "font-color" )
         setStrikeOutColor( QColor(lineThroughColor) );
+
+
 //TODO
 #if 0
     if ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) { // OASIS 14.4.7
@@ -868,6 +870,15 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             QColor color = d->stylesPrivate->value(key).value<QColor>();
             if (color.isValid())
                 style.addProperty("style:text-underline-color", color.name(), KoGenStyle::TextType);
+        } else if (key == UnderlineMode) {
+            bool ok = false;
+            int mode = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok) {
+                if (mode == ContinuousLineMode)
+                    style.addProperty("style:text-underline-mode", "continuous", KoGenStyle::TextType);
+                else if (mode == SkipWhiteSpaceLineMode)
+                    style.addProperty("style:text-underline-mode", "skip-white-space", KoGenStyle::TextType);
+            }
         } else if (key == StrikeOutStyle) {
             bool ok = false;
             int styleId = d->stylesPrivate->value(key).toInt(&ok);

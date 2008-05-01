@@ -97,6 +97,8 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
            && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
+           && actualFormat.property(KoCharacterStyle::UnderlineMode).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::UnderlineMode).toInt()
            && qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
                   == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))
            && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
@@ -457,6 +459,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
     QTest::newRow("Text tranformations") << "FormattingProperties/TextFormattingProperties/textTransformations";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";
+    QTest::newRow("Underline mode") << "FormattingProperties/TextFormattingProperties/underlineMode";
     QTest::newRow("Underline type") << "FormattingProperties/TextFormattingProperties/underlineType";
     QTest::newRow("Underline style") << "FormattingProperties/TextFormattingProperties/underlineStyle";
 

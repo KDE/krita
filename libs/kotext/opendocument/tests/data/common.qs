@@ -33,6 +33,7 @@ KoCharacterStyle.UnderlineStyle = QTextFormat.UserProperty + 7;
 KoCharacterStyle.UnderlineType = QTextFormat.UserProperty + 8;
 KoCharacterStyle.TransformText = QTextFormat.UserProperty + 9;
 KoCharacterStyle.Spelling = QTextFormat.UserProperty + 10;
+KoCharacterStyle.UnderlineMode = QTextFormat.UserProperty + 11;
 
 KoCharacterStyle.NoLineType = 0;
 KoCharacterStyle.SingleLine = 1;
@@ -46,6 +47,10 @@ KoCharacterStyle.DashDotLine = 4; // Qt.DashDotLine;
 KoCharacterStyle.DashDotDotLine = 5; // Qt.DashDotDotLine;
 KoCharacterStyle.LongDashLine = KoCharacterStyle.DashDotDotLine + 1;
 KoCharacterStyle.WaveLine = KoCharacterStyle.DashDotDotLine + 2;
+
+KoCharacterStyle.NoLineMode = 0;
+KoCharacterStyle.ContinuousLineMode = 1;
+KoCharacterStyle.SkipWhiteSpaceLineMode = 2;
 
 var defaultTextFormat = new QTextCharFormat;
 defaultTextFormat.setFont(defaultFont);

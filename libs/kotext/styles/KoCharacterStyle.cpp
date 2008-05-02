@@ -334,6 +334,26 @@ static QString exportOasisLineMode(KoCharacterStyle::LineMode lineMode) {
     }
 }
 
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+static QString exportOasisFontStyleHint(QFont::StyleHint hint) {
+    switch (hint) {
+        case QFont::Serif:
+            return "roman";
+         case QFont::SansSerif:
+            return "swiss";
+         case QFont::TypeWriter:
+            return "modern";
+         case QFont::Decorative:
+            return "decorative";
+         case QFont::System:
+            return "system";
+         /*case QFont::Script */
+         default:
+            return "";
+    }
+}
+#endif
+
 void KoCharacterStyle::setFontFamily (const QString &family) {
     d->setProperty(QTextFormat::FontFamily, family);
 }
@@ -891,6 +911,15 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             } else {
                 style.addProperty("fo:font-style", "", KoGenStyle::TextType);
             }
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+        } else if (key == QTextFormat::FontStyleHint) {
+            bool ok = false;
+            int styleHint = d->stylesPrivate->value(key).toInt(&ok);
+            if (ok)
+                style.addProperty("style:font-family-generic", exportOasisFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
+        } else if (key == QTextFormat::FontKerning) {
+            style.addProperty("style:letter-kerning", fontKerning() ? "true" : "false", KoGenStyle::TextType);
+#endif
         } else if (key == UnderlineStyle) {
             bool ok = false;
             int styleId = d->stylesPrivate->value(key).toInt(&ok);

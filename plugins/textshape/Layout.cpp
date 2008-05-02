@@ -849,7 +849,7 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block) {
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style> ( listFormat.style() );
         if(listStyle == KoListStyle::SquareItem || listStyle == KoListStyle::DiscItem ||
                 listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem ||
-                listStyle == KoListStyle::RhombusItem ||
+                listStyle == KoListStyle::RhombusItem || listStyle == KoListStyle::CustomCharItem ||
                 listStyle == KoListStyle::HeavyCheckMarkItem || listStyle == KoListStyle::BallotXItem ||
                 listStyle == KoListStyle::RightArrowItem || listStyle == KoListStyle::RightArrowHeadItem
         ) {
@@ -914,6 +914,9 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
                     painter->drawLine(QLineF(0.0,0.0,width,width));
                     painter->drawLine(QLineF(0.0,width,width,0.0));
                 } break;
+                case KoListStyle::CustomCharItem:
+                    painter->drawText(0, 0, QChar(listFormat.intProperty(KoListStyle::BulletCharacter)));
+                    break;
                 default:; // others we ignore.
             }
         }

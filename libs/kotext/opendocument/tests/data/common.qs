@@ -35,6 +35,8 @@ KoCharacterStyle.TransformText = QTextFormat.UserProperty + 9;
 KoCharacterStyle.Spelling = QTextFormat.UserProperty + 10;
 KoCharacterStyle.UnderlineMode = QTextFormat.UserProperty + 11;
 KoCharacterStyle.StrikeOutMode = QTextFormat.UserProperty + 12;
+KoCharacterStyle.Country = QTextFormat.UserProperty + 13;
+KoCharacterStyle.Language = QTextFormat.UserProperty + 14;
 
 KoCharacterStyle.NoLineType = 0;
 KoCharacterStyle.SingleLine = 1;

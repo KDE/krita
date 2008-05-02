@@ -107,6 +107,10 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
                   == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
            && actualFormat.property(KoCharacterStyle::StrikeOutMode).toInt() 
                   == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
+           && actualFormat.property(KoCharacterStyle::Country).toString()
+                  == expectedFormat.property(KoCharacterStyle::Country).toString()
+           && actualFormat.property(KoCharacterStyle::Language).toString()
+                  == expectedFormat.property(KoCharacterStyle::Language).toString()
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
     
     if (!equal)
@@ -442,6 +446,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font Colors") << "TextContents/TextFormatting/fontColors";
 
     QTest::newRow("Colors") << "FormattingProperties/TextFormattingProperties/color";
+    QTest::newRow("Country") << "FormattingProperties/TextFormattingProperties/country";
     QTest::newRow("Font family") << "FormattingProperties/TextFormattingProperties/fontFamily";
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     QTest::newRow("Font family generic") << "FormattingProperties/TextFormattingProperties/fontFamilyGeneric";
@@ -452,6 +457,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Font style") << "FormattingProperties/TextFormattingProperties/fontStyle";
     QTest::newRow("Font weight") << "FormattingProperties/TextFormattingProperties/fontWeight";
     QTest::newRow("Font variant") << "FormattingProperties/TextFormattingProperties/fontVariant";
+    QTest::newRow("Language") << "FormattingProperties/TextFormattingProperties/language";
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     QTest::newRow("Letter kerning") << "FormattingProperties/TextFormattingProperties/letterKerning";
 #endif

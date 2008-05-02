@@ -313,6 +313,9 @@ void KoListLevelProperties::loadOasis(KoOdfLoadingContext& context, const KoXmlE
                 default:
                     QChar customBulletChar = bulletChar[0];
                     kDebug(32500) <<"Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 );
+                    kDebug(32500) << "Should use the style =>" << style.attributeNS( KoXmlNS::text, "style-name", QString::null ) << "<=";
+                    setStyle(KoListStyle::CustomCharItem);
+                    setBulletCharacter(customBulletChar);
                     /*
                     QString customBulletFont;
                     // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
@@ -328,7 +331,7 @@ void KoListLevelProperties::loadOasis(KoOdfLoadingContext& context, const KoXmlE
                     }
                     // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                     */
-                    setStyle(KoListStyle::BoxItem); //fallback
+//                     setStyle(KoListStyle::BoxItem); //fallback
                     break;
             }
         }

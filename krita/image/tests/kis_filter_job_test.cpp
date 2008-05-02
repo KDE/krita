@@ -57,7 +57,7 @@ void KisFilterJobTest::testCreation()
 
 void KisFilterJobTest::testInWeaver()
 {
-    KisFilterSP f = KisFilterRegistry::instance()->value("noise");
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT( f );
 
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);

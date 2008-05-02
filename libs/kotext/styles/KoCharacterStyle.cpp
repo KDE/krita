@@ -187,6 +187,8 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::HasHyphenation,
         KoCharacterStyle::UnderlineMode,
         KoCharacterStyle::StrikeOutMode,
+        KoCharacterStyle::Language,
+        KoCharacterStyle::Country,
         -1
     };
 
@@ -427,7 +429,6 @@ void KoCharacterStyle::setHasHyphenation(bool on) {
 bool KoCharacterStyle::hasHyphenation() const {
     return d->propertyBoolean(HasHyphenation);
 }
-
 void KoCharacterStyle::setStrikeOutStyle (KoCharacterStyle::LineStyle strikeOut) {
     d->setProperty(StrikeOutStyle, strikeOut);
 }
@@ -531,6 +532,22 @@ void KoCharacterStyle::setTransform(KoCharacterStyle::Transform transformtext) {
 
 KoCharacterStyle::Transform KoCharacterStyle::transform() const {
     return (KoCharacterStyle::Transform) d->propertyInt(KoCharacterStyle::TransformText);
+}
+
+void KoCharacterStyle::setLocale(const QString &country, const QString &language) {
+    if (!country.isNull())
+        d->setProperty(KoCharacterStyle::Country, country);
+    if (!language.isNull())
+        d->setProperty(KoCharacterStyle::Language, language);
+}
+
+QLocale KoCharacterStyle::locale() const {
+    QString locale = d->stylesPrivate->value(KoCharacterStyle::Country).toString().toLower();
+    QString language = d->stylesPrivate->value(KoCharacterStyle::Language).toString();
+    if (!language.isNull()) {
+        locale.append('_').append(language.toUpper());
+    }
+    return QLocale(locale);
 }
 
 bool KoCharacterStyle::hasProperty(int key) const {
@@ -764,16 +781,9 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
             setTransform( Capitalize );
     }
 
-#if 0
-    if ( styleStack.hasProperty( KoXmlNS::fo, "language") ) { // 3.10.17
-        m_language = styleStack.property( KoXmlNS::fo, "language");
-        const QString country = styleStack.property( KoXmlNS::fo, "country" );
-        if ( !country.isEmpty() ) {
-            m_language += '_';
-            m_language += country;
-        }
-    }
-#endif
+    QString language = styleStack.property(KoXmlNS::fo, "language");
+    QString country = styleStack.property(KoXmlNS::fo, "country");
+    setLocale(language, country);
 
     // The fo:background-color attribute specifies the background color of a paragraph.
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
@@ -815,6 +825,7 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         }
     }
 #endif
+
 //TODO
 #if 0
     if ( styleStack.hasProperty( KoXmlNS::fo, "text-shadow") ) { // 3.10.21
@@ -956,6 +967,10 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             }
         } else if (key == QTextFormat::FontPointSize) {
             style.addPropertyPt("fo:font-size", fontPointSize(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::Country) {
+            style.addProperty("style:country", d->stylesPrivate->value(KoCharacterStyle::Country).toString(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::Language) {
+            style.addProperty("style:language", d->stylesPrivate->value(KoCharacterStyle::Language).toString(), KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

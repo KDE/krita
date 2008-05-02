@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include <QVariant>
 #include <QString>
 #include <QTextCharFormat>
+#include <QLocale>
 #include "kotext_export.h"
 #include <kdeversion.h>
 
@@ -61,7 +63,9 @@ public:
         TransformText,
         Spelling,
         UnderlineMode,
-        StrikeOutMode
+        StrikeOutMode,
+        Language,
+        Country
     };
 
     /// list of possible line type : no line, single line, double line
@@ -217,6 +221,11 @@ public:
     void setTransform(Transform transformtext);
     /// Return how the text should be transformed.
     Transform transform() const;
+
+    /// Set the locale information
+    void setLocale(const QString &country, const QString &language);
+    /// Get the locale information
+    QLocale locale() const;
 
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;

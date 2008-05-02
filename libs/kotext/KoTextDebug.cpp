@@ -119,10 +119,17 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             value = QString::number(properties[id].toInt());
             break;
 #endif
+        case KoCharacterStyle::Country:
+            key = "country";
+            value = properties[id].toString();
+            break;
+        case KoCharacterStyle::Language:
+            key = "language";
+            value = properties[id].toString();
+            break;
         default:
             break;
         }
-            
         if (!key.isEmpty())
             attrs.append(" ").append(key).append("=\"").append(value).append("\"");
     }

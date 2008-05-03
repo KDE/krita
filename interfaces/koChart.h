@@ -20,10 +20,12 @@
 #define __koChart_h__
 
 #include <QtCore/QVariant>
+#include <QVector>
+#include <QRect>
 
 #include <KoDocument.h>
 #include "kochart_export.h"
-
+#include "KoChartModel.h"
 
 #define ChartShapeId "ChartShape"
 

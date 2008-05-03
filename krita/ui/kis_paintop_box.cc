@@ -77,7 +77,8 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     m_layout->setMargin(1);
     m_layout->setSpacing(1);
     m_layout->addWidget(m_cmbPaintops);
-
+    
+#if 0 // Disable for now
     KisPresetWidget * m_presetWidget = new KisPresetWidget(this, "presetwidget");
     m_presetWidget->setToolTip(i18n("Edit brush settings"));
     m_presetWidget->setFixedSize( 130, 26 );
@@ -85,6 +86,7 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
 
     m_presetsPopup = new KisPaintOpPresetsWidget(m_presetWidget);
     m_presetWidget->setPopupWidget(m_presetsPopup);
+#endif
     
     // XXX: Let's see... Are all paintops loaded and ready?
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
@@ -95,8 +97,6 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
 
     setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
 
-    connect(this, SIGNAL(selected(const KoID &, const KisPaintOpSettingsSP)), m_resourceProvider,
-                  SLOT(slotPaintopActivated(const KoID &, const KisPaintOpSettingsSP)));
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     connect(view->layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
@@ -246,7 +246,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     updateOptionWidget();
 
-    emit selected(paintop, paintopSettings(paintop, KoToolManager::instance()->currentInputDevice()));
+    KisPaintOpSettingsSP settings = paintopSettings(paintop, KoToolManager::instance()->currentInputDevice());
+    qDebug() << paintop.name() << ", " << settings;
+    m_resourceProvider->slotPaintopActivated(paintop, settings);
 }
 
 KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)
@@ -263,10 +265,13 @@ KisPaintOpSettingsSP KisPaintopBox::paintopSettings(const KoID & paintop, const 
     QList<KisPaintOpSettingsSP> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find( inputDevice );
     if (it == m_inputDevicePaintopSettings.end()) {
-        // Create settings for each paintop.
+        qDebug() << "Create settings for each paintop.";
 
         foreach (KoID paintopId, m_paintops) {
-            KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice, m_view->image());
+            qDebug() << "\t" << paintopId.name();
+            KisPaintOpSettingsSP settings =
+                KisPaintOpRegistry::instance()->settings( paintopId, this, inputDevice, m_view->image() );
+            qDebug() << "\t\t" << settings;
             settingsArray.append(settings);
             if (settings && settings->widget()) {
                 settings->widget()->hide();

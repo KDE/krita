@@ -63,10 +63,6 @@ public:
 
     ~KisPaintopBox();
 
-signals:
-
-    void selected(const KoID & id, const KisPaintOpSettingsSP settings);
-
 private slots:
 
     void addItem(const KoID & paintop, const QString & category = "");

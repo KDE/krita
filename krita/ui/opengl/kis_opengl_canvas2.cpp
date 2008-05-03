@@ -302,7 +302,7 @@ void KisOpenGLCanvas2::leaveEvent( QEvent* e )
     {
         m_d->tabletDown = false;
         QTabletEvent* fakeEvent = new QTabletEvent( QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId() );
-        m_d->toolProxy->tabletEvent( fakeEvent , QPointF() ); // HACK this fake event is a work around a bug in Qt which stop sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
+        m_d->toolProxy->tabletEvent( fakeEvent , QPointF() ); // HACK this fake event is a work around a bug in Qt which stops sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
     }
     QWidget::leaveEvent( e );
 }

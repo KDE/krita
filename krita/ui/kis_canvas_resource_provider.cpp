@@ -227,6 +227,8 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 void KisCanvasResourceProvider::slotPaintopActivated(const KoID & paintop,
                                                const KisPaintOpSettingsSP paintopSettings)
 {
+    kDebug() << paintop.id() << ", " << paintopSettings;
+    
     if (paintop.id().isNull() || paintop.id().isEmpty()) {
         return;
     }

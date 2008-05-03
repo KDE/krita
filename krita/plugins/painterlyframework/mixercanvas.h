@@ -97,7 +97,7 @@ public slots:
     void slotResourceChanged(int key, const QVariant &value);
 
 private:
-    void initPaintopSettings();
+
     void checkCurrentPaintop();
     void checkCurrentLayer();
 

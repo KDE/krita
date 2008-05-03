@@ -100,16 +100,14 @@ void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
     internal->setResource(KisCanvasResourceProvider::HdrExposure, rp->HDRExposure());
     internal->setResource(KisCanvasResourceProvider::CurrentPaintop, rp->currentPaintop());
 
-    initPaintopSettings(); // TODO ?
     checkCurrentPaintop();
 
     connect( rp->canvas()->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
              this, SLOT(slotResourceChanged(int, const QVariant &)));
-}
 
-void MixerCanvas::initPaintopSettings()
-{
-    // TODO Write here when the paintop will have the settings...
+    // By now, both properties have been set
+    connect( rp, SIGNAL(sigPaintopChanged(KoID, const KisPaintOpSettingsSP)),
+             this, SLOT(checkCurrentPaintop()));
 }
 
 void MixerCanvas::checkCurrentPaintop()
@@ -227,11 +225,13 @@ void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
         resourceProvider()->setResource(key, value);
     else
         return;
-
     switch (key) {
+#if 0 // Apparently setting the paintop and settings is not atomic: it will be when I have fixed
+      // the presets thing (boud)
         case KisCanvasResourceProvider::CurrentPaintop:
             checkCurrentPaintop();
             break;
+#endif            
         case KisCanvasResourceProvider::CurrentKritaLayer:
             checkCurrentLayer();
             break;

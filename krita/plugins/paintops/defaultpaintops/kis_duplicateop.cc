@@ -53,7 +53,7 @@
 KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP _settings, KisPainter * _painter, KisImageSP _image)
 {
     const KisDuplicateOpSettings* settings = dynamic_cast<const KisDuplicateOpSettings *>(_settings.data());
-    Q_ASSERT(settings);
+    assert(settings);
     KisPaintOp * op = new KisDuplicateOp(settings, _painter, _image);
     Q_CHECK_PTR(op);
     return op;

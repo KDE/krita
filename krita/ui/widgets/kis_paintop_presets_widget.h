@@ -51,6 +51,7 @@ public:
      */
     virtual void writeOptionSetting( KisPaintOpPreset * preset ) const
         {
+            Q_UNUSED(preset);
         }
         
     /**
@@ -58,6 +59,7 @@ public:
      */
     virtual void readOptionSetting( KisPaintOpPreset * preset )
         {
+            Q_UNUSED(preset);
         }
     
 private:

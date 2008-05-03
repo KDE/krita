@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
@@ -691,6 +691,42 @@ public:
 
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
+
+    /**
+     * Set additional attribute
+     *
+     * This can be used to attach additional attributes to a shape for attributes
+     * that are application specific like presentation:placeholder
+     *
+     * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
+     * @param value The value of the attribute
+     */
+    void setAddtionalAttribute( const QString & name, const QString & value );
+
+    /**
+     * Remove additional attribute
+     *
+     * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
+     */
+    void removeAddtionalAttribute( const QString & name );
+
+    /**
+     * Check if additional attribute is set
+     *
+     * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
+     *
+     * @return true if there is a attribute with prefix:tag set, false otherwise
+     */
+    bool hasAdditionalAttribute( const QString & name );
+
+    /**
+     * Get additional attribute
+     *
+     * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
+     *
+     * @return The value of the attribute if it exists or a null string if not found.
+     */
+    QString addtionalAttribute( const QString & name );
 
 protected:
 

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -52,6 +52,7 @@
 #include <QVariant>
 #include <QPainterPath>
 #include <QList>
+#include <QMap>
 
 #include <kdebug.h>
 
@@ -126,6 +127,7 @@ public:
     KoShape *me;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
+    QMap<QString,QString> additionalAttributes;
 };
 
 KoShape::KoShape()
@@ -1071,4 +1073,24 @@ void KoShape::notifyShapeChanged( KoShape * shape, ChangeType type )
 KoSnapData KoShape::snapData() const
 {
     return KoSnapData();
+}
+
+void KoShape::setAddtionalAttribute( const QString & name, const QString & value )
+{
+    d->additionalAttributes.insert( name, value );
+}
+
+void KoShape::removeAddtionalAttribute( const QString & name )
+{
+    d->additionalAttributes.remove( name );
+}
+
+bool KoShape::hasAdditionalAttribute( const QString & name )
+{
+    return d->additionalAttributes.contains( name );
+}
+
+QString KoShape::addtionalAttribute( const QString & name )
+{
+    return d->additionalAttributes.value( name );
 }

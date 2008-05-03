@@ -45,6 +45,9 @@ class KisCanvas2;
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
  *
+ * NOTE: if you change something in the event handling here, also change it
+ * in the qpainter canvas.
+ *
  */
 class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisAbstractCanvasWidget
 {
@@ -65,6 +68,13 @@ public:
     void setPixelToViewTransformation(void);
 
 public: // QWidget
+
+    /// reimplemented method from superclass
+    void enterEvent( QEvent* e );
+
+    /// reimplemented method from superclass
+    void leaveEvent( QEvent* e );
+
 
     /// reimplemented method from superclass
     void keyPressEvent( QKeyEvent *e );

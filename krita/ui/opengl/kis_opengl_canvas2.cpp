@@ -53,12 +53,20 @@
 class KisOpenGLCanvas2::Private
 {
 public:
-    Private(const KoViewConverter *vc) : viewConverter(vc), canvas(0), toolProxy(0) {}
+    Private(const KoViewConverter *vc)
+        : viewConverter(vc)
+        , canvas(0)
+        , toolProxy(0)
+        , previousEvent( QEvent::TabletRelease, QPoint(), QPoint(), QPointF(),
+                         QTabletEvent::NoDevice, 0, 0.0, 0, 0, 0, 0, 0, Qt::NoModifier, Q_INT64_C(932838457459459) )
+    {}
     const KoViewConverter * viewConverter;
     KisCanvas2 * canvas;
     KoToolProxy * toolProxy;
     KisOpenGLImageTexturesSP openGLImageTextures;
     QPoint documentOffset;
+    bool tabletDown;
+    QTabletEvent previousEvent;
 
 };
 
@@ -281,15 +289,24 @@ void KisOpenGLCanvas2::setPixelToViewTransformation(void)
     glScalef(scaleX, scaleY, 1.0);
 }
 
-KoToolProxy * KisOpenGLCanvas2::toolProxy() {
-    return m_d->toolProxy;
+void KisOpenGLCanvas2::enterEvent( QEvent* e )
+{
+    dbgRender << "Enter event ";
+    QWidget::enterEvent( e );
 }
 
-void KisOpenGLCanvas2::documentOffsetMoved( const QPoint & pt )
+void KisOpenGLCanvas2::leaveEvent( QEvent* e )
 {
-    m_d->documentOffset = pt;
-    updateGL();
+    dbgRender << "Leave event ";
+    if( m_d->tabletDown )
+    {
+        m_d->tabletDown = false;
+        QTabletEvent* fakeEvent = new QTabletEvent( QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId() );
+        m_d->toolProxy->tabletEvent( fakeEvent , QPointF() ); // HACK this fake event is a work around a bug in Qt which stop sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
+    }
+    QWidget::leaveEvent( e );
 }
+
 
 void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e) {
     m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
@@ -324,19 +341,6 @@ void KisOpenGLCanvas2::keyReleaseEvent (QKeyEvent *e) {
     m_d->toolProxy->keyReleaseEvent(e);
 }
 
-void KisOpenGLCanvas2::tabletEvent( QTabletEvent *e )
-{
-    dbgRender <<"tablet event:" << e->pressure();
-    QPointF pos = e->pos() + (e->hiResGlobalPos() - e->globalPos());
-    pos += m_d->documentOffset;
-    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
-}
-
-void KisOpenGLCanvas2::wheelEvent( QWheelEvent *e )
-{
-    m_d->toolProxy->wheelEvent( e, m_d->viewConverter->viewToDocument( e->pos() + m_d->documentOffset ) );
-}
-
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
@@ -345,6 +349,36 @@ QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
     m_d->toolProxy->inputMethodEvent(event);
+}
+
+void KisOpenGLCanvas2::tabletEvent( QTabletEvent *e )
+{
+    dbgRender <<"tablet event:" << e->pressure() << e->type() << " " << e->device();
+    switch( e->type() ) {
+    case QEvent::TabletPress:
+        m_d->tabletDown = true;
+        break;
+    case QEvent::TabletRelease:
+        m_d->tabletDown = false;
+        break;
+    case QEvent::TabletMove:
+        break;
+    default:
+        ; // ignore the rest.
+    }
+    qreal subpixelX = e->hiResGlobalX();
+    subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
+    qreal subpixelY = e->hiResGlobalY();
+    subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
+    QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
+
+    m_d->previousEvent = *e;
+    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
+}
+
+void KisOpenGLCanvas2::wheelEvent( QWheelEvent *e )
+{
+    m_d->toolProxy->wheelEvent( e, m_d->viewConverter->viewToDocument( e->pos() + m_d->documentOffset ) );
 }
 
 bool KisOpenGLCanvas2::event (QEvent *event) {
@@ -362,6 +396,17 @@ bool KisOpenGLCanvas2::event (QEvent *event) {
     }
     return QWidget::event(event);
 }
+
+KoToolProxy * KisOpenGLCanvas2::toolProxy() {
+    return m_d->toolProxy;
+}
+
+void KisOpenGLCanvas2::documentOffsetMoved( const QPoint & pt )
+{
+    m_d->documentOffset = pt;
+    updateGL();
+}
+
 
 #include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

@@ -21,6 +21,7 @@
 #define KO_CHART_MODEL
 
 #include <QAbstractTableModel>
+#include <QVector>
 #include "kochart_export.h"
 
 namespace KoChart {
@@ -60,11 +61,8 @@ public:
     ChartModel( QObject *parent = 0 );
     virtual ~ChartModel();
 
-    virtual QString areaAt( const QModelIndex &index ) const = 0;
-    virtual QString areaAt( const QModelIndex &first, const QModelIndex &last ) const = 0;
-
-    virtual bool addArea( const QString &area, int section, Qt::Orientation orientation ) = 0;
-    virtual bool removeArea( const QString &area, int section, Qt::Orientation orientation ) = 0;
+    virtual QString regionToString( const QVector<QRect> &region ) const = 0;
+    virtual QVector<QRect> stringToRegion( const QString &string ) const = 0;
 };
 
 } // Namespace KoChart

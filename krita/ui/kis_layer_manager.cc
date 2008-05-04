@@ -578,7 +578,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     KisSelectionSP selection = l->selection();
     KisAdjustmentLayerSP adjl = addAdjustmentLayer( parent, above, QString(), 0, selection);
 
-    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, adjl->image(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
     if ( dlg.exec() != QDialog::Accepted) {
       m_view->image()->removeNode( adjl );
     }

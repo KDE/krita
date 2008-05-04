@@ -230,7 +230,7 @@ void KisMaskManager::createFilterMask( KisNodeSP parent, KisNodeSP above )
     mask->setName( m_view->image()->nextLayerName() );
     m_view->image()->addNode( mask, parent, above );
 
-    KisDlgAdjustmentLayer dlg(mask, mask, i18n("New Filter Mask"), m_view, "dlgfiltermask");
+    KisDlgAdjustmentLayer dlg(mask, mask, dev, m_view->image(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
 
     if (dlg.exec() == QDialog::Accepted) {
         KisFilterConfiguration * filter = dlg.filterConfiguration();

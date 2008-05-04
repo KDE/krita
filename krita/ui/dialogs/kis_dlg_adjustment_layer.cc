@@ -35,11 +35,14 @@
 #include "kis_paint_device.h"
 #include "widgets/kis_previewwidget.h"
 #include "kis_transaction.h"
+#include "kis_image.h"
 #include "kis_node.h"
 #include "kis_node_filter_interface.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              KisNodeFilterInterface* nfi,
+                                             KisPaintDeviceSP paintDevice,
+                                             KisImageSP image,
                                              const QString & caption,
                                              QWidget *parent,
                                              const char *name)
@@ -61,6 +64,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     wdgFilterNodeCreation.setupUi( page );
     setMainWidget(page);
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
+    wdgFilterNodeCreation.filterSelector->setPaintDevice(paintDevice);
+    wdgFilterNodeCreation.filterSelector->setImage( image );
 
     enableButtonOk(0);
 }

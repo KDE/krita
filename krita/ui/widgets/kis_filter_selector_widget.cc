@@ -43,7 +43,8 @@ struct KisFilterSelectorWidget::Private {
     QWidget* currentCentralWidget;
     KisFilterConfigWidget* currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
-    KisLayerSP layer;
+    KisImageSP image;
+    KisPaintDeviceSP paintDevice;
     Ui_FilterSelector uiFilterSelector;
     KisPaintDeviceSP thumb;
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
@@ -82,12 +83,24 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
 
 void KisFilterSelectorWidget::setLayer(KisLayerSP layer)
 {
-    d->layer = layer;
-    d->thumb = layer->paintDevice()->createThumbnailDevice(100, 100);
+    setPaintDevice( layer->paintDevice() );
+    setImage( layer->image() );
+}
+
+void KisFilterSelectorWidget::setPaintDevice( KisPaintDeviceSP _paintDevice)
+{
+    d->paintDevice = _paintDevice;
+    d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
     d->filtersModel = new KisFiltersModel(d->thumb);
     d->uiFilterSelector.filtersSelector->setModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
 }
+
+void KisFilterSelectorWidget::setImage( KisImageSP _image)
+{
+    d->image = _image;
+}
+
 
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 {
@@ -103,7 +116,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->uiFilterSelector.filtersSelector->blockSignals( v );
     }
     KisFilterConfigWidget* widget =
-        d->currentFilter->createConfigurationWidget( d->uiFilterSelector.centralWidgetHolder, d->layer->paintDevice(), d->layer->image() );
+        d->currentFilter->createConfigurationWidget( d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image );
     if( !widget )
     { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;
@@ -113,7 +126,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
         d->currentFilterConfigurationWidget->setConfiguration(
-            d->currentFilter->defaultConfiguration( d->layer->paintDevice() ) );
+            d->currentFilter->defaultConfiguration( d->paintDevice ) );
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), SLOT(updatePreview()));
     }
     // Change the list of presets
@@ -166,7 +179,7 @@ KisFilterConfiguration* KisFilterSelectorWidget::configuration()
         return d->currentFilterConfigurationWidget->configuration();
     }
     else {
-        return d->currentFilter->defaultConfiguration( d->layer->paintDevice() );
+        return d->currentFilter->defaultConfiguration( d->paintDevice );
     }
 }
 

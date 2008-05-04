@@ -49,12 +49,15 @@ public:
      *
      * @param img the current image
      * @param layerName the name of the adjustment layer
+     * @param paintDevice the paint device that is used as source for the preview
      * @param caption the caption for the dialog -- create or properties
      * @param parent the widget parent of this dialog
      * @param name the QObject name, if any
      */
     KisDlgAdjustmentLayer(KisNodeSP node,
                           KisNodeFilterInterface* nfi,
+                          KisPaintDeviceSP paintDevice,
+                          KisImageSP image,
                           const QString & caption,
                           QWidget *parent = 0,
                           const char *name = 0);

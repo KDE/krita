@@ -33,7 +33,13 @@ class KisFilterSelectorWidget : public QWidget {
         KisFilterSelectorWidget( QWidget* parent);
         ~KisFilterSelectorWidget();
         void setFilter(KisFilterSP f);
+        /**
+         * Convenient function that will call \ref setPaintDevice with the layer paint device
+         * and \ref setImage with the layer image
+         */
         void setLayer(KisLayerSP layer);
+        void setPaintDevice( KisPaintDeviceSP );
+        void setImage( KisImageSP );
         KisFilterConfiguration* configuration();
     protected slots:
         void slotBookmarkedFilterConfigurationSelected(int );

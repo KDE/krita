@@ -5,6 +5,7 @@ Name[pt]=Definição de dispositivo do Flake
 Name[pt_BR]=Definição de dispositivo do Flake
 Name[sv]=Enhetsdefinition i Flake
 Name[uk]=Визначення інструмента елемента
+Name[zh_TW]=Flake 裝置定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Device
 Comment=Definition of flake devices
@@ -14,6 +15,7 @@ Comment[pt_BR]=Definição de dispositivos do Flake
 Comment[sv]=Definition av enheter i Flake
 Comment[ta]=இளைய வடிவக் கருவியின் விளக்கம்
 Comment[uk]=Визначення пристроїв елементів
+Comment[zh_TW]=Flake 裝置定義
 [PropertyDef::X-Flake-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

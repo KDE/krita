@@ -6,6 +6,7 @@ Name[pt_BR]=Dispositivo do Spacenavigator
 Name[sv]=Rymdnavigeringsenhet
 Name[ta]=இடம் தேடும் கருவி
 Name[uk]=Пристрій просторового орієнтування
+Name[zh_TW]=Spacenavigator 裝置
 X-KDE-ServiceTypes=KOffice/Device
 Type=Service
 X-KDE-Library=spacenavigator

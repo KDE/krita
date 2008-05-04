@@ -127,7 +127,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentCentralWidget = widget;
         d->currentFilterConfigurationWidget->setConfiguration(
             d->currentFilter->defaultConfiguration( d->paintDevice ) );
-        connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), SLOT(updatePreview()));
+        connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), this, SIGNAL(configurationChanged()));
     }
     // Change the list of presets
     delete d->currentBookmarkedFilterConfigurationsModel;
@@ -152,8 +152,8 @@ void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
         d->uiFilterSelector.filtersSelector->scrollTo( idx );
         d->uiFilterSelector.filtersSelector->blockSignals( v );
     }
+    emit( configurationChanged() );
 }
-
 
 void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int index)
 {

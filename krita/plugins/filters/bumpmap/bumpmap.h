@@ -92,7 +92,7 @@ class KisBumpmapConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f = 0 );
+    KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f = 0 );
     virtual ~KisBumpmapConfigWidget() {}
 
     void setConfiguration(KisFilterConfiguration * config);
@@ -103,7 +103,7 @@ public:
 private:
 
     KisPaintDeviceSP m_device;
-
+    KisImageSP m_image;
 };
 
 #endif

@@ -51,7 +51,9 @@
 #include <KoColorTransformation.h>
 #include <KoIntegerMaths.h>
 #include <KoProgressUpdater.h>
+#include <KoDocumentSectionView.h>
 
+#include <kis_image.h>
 #include <kis_debug.h>
 #include <kis_doc2.h>
 #include <filter/kis_filter_registry.h>
@@ -65,6 +67,8 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <kis_node_model.h>
+
 #define MOD(x, y)                                               \
     ((x) < 0 ? ((y) - 1 - ((y) - 1 - (x)) % (y)) : (x) % (y))
 
@@ -411,16 +415,16 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
 
 KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
-    // XXX: Use image here!
-    KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(dev, parent);
+    KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(dev, image, parent);
 
     return w;
 }
 
 
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget * parent, Qt::WFlags f)
-    : KisFilterConfigWidget(parent, f),
-      m_device(dev)
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f)
+    : KisFilterConfigWidget(parent, f)
+    , m_device(dev)
+    , m_image(image)  
 {
     Q_ASSERT(m_device);
 
@@ -430,15 +434,21 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidg
     Q_CHECK_PTR(l);
 
     l->addWidget(m_page);
-    m_page->txtSourceLayer->setText( "" );
-    connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
+
+    KisNodeModel * model = new KisNodeModel(this);
+    model->setImage(image);
+    
+    m_page->listLayers->setModel( model );
+    m_page->listLayers->expandAll();
+    m_page->listLayers->scrollToBottom();
+    
 }
 
 void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
 {
     if (!cfg) return;
 
-    m_page->txtSourceLayer->setText( cfg->getString("bumpmap", "") );
+    //m_page->txtSourceLayer->setText( cfg->getString("bumpmap", "") );
     m_page->dblAzimuth->setValue(cfg->getDouble("azimuth", 135.0) );
     m_page->dblElevation->setValue(cfg->getDouble("elevation", 45.0));
     m_page->dblDepth->setValue(cfg->getInt("depth", 3));
@@ -467,7 +477,7 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
 KisFilterConfiguration* KisBumpmapConfigWidget::configuration() const
 {
     KisFilterConfiguration * cfg = new KisFilterConfiguration("bumpmap", 1);
-    cfg->setProperty("bumpmap", m_page->txtSourceLayer->text());
+    //cfg->setProperty("bumpmap", m_page->txtSourceLayer->text());
     cfg->setProperty("azimuth",m_page->dblAzimuth->value());
     cfg->setProperty("elevation",m_page->dblElevation->value());
     cfg->setProperty("depth",m_page->dblDepth->value());

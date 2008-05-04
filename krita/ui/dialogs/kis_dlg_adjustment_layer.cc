@@ -90,6 +90,7 @@ QString KisDlgAdjustmentLayer::layerName() const
 
 void KisDlgAdjustmentLayer::slotConfigChanged()
 {
+    enableButtonOk(1);
     m_nodeFilterInterface->setFilter( filterConfiguration() );
 }
 

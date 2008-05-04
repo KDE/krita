@@ -167,7 +167,7 @@ void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,
 
 }
 
-KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/) const
+KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width"), "pixelWidth" ) );

@@ -48,9 +48,8 @@
 #include <kis_paintop_settings.h>
 #include "ui_FilterOpOptionsWidget.h"
 
-KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP _settings, KisPainter * _painter, KisImageSP _image)
+KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP _settings, KisPainter * _painter, KisImageSP)
 {
-    Q_UNUSED(_image);
     KisPaintOp * op = new KisFilterOp(_settings, _painter);
     return op;
 }
@@ -58,21 +57,21 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP _settings, 
 KisPaintOpSettingsSP KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(inputDevice);
-    Q_UNUSED(image);
-    return new KisFilterOpSettings(parent);
+    return new KisFilterOpSettings(parent, image);
 }
 
 KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 {
-    return new KisFilterOpSettings(0);
+    return new KisFilterOpSettings(0, image);
 }
 
-KisFilterOpSettings::KisFilterOpSettings(QWidget* parent) :
+KisFilterOpSettings::KisFilterOpSettings(QWidget* parent, KisImageSP image) :
         QObject(parent),
         KisPaintOpSettings(),
         m_optionsWidget(new QWidget(parent)),
         m_uiOptions(new Ui_FilterOpOptions()),
-        m_currentFilterConfigWidget(0)
+        m_currentFilterConfigWidget(0),
+        m_image(image)
 {
     m_uiOptions->setupUi(m_optionsWidget);
 
@@ -126,7 +125,7 @@ void KisFilterOpSettings::setCurrentFilter(const KoID & id)
     Q_ASSERT( m_currentFilter );
     if(m_paintDevice)
     {
-        m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(0, m_paintDevice);
+        m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(0, m_paintDevice, m_image);
         m_uiOptions->popupButtonOptions->setPopupWidget(m_currentFilterConfigWidget);
     } else {
         m_currentFilterConfigWidget = 0;
@@ -146,7 +145,7 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 
 KisPaintOpSettingsSP KisFilterOpSettings::clone() const
 {
-    KisFilterOpSettings* s = new KisFilterOpSettings(0);
+    KisFilterOpSettings* s = new KisFilterOpSettings(0, m_image);
     s->m_paintDevice = m_paintDevice;
     s->setCurrentFilter( KoID(m_currentFilter->id()) );
     if(s->m_currentFilterConfigWidget && m_currentFilterConfigWidget)
@@ -166,7 +165,7 @@ void KisFilterOpSettings::fromXML(const QDomElement& elt)
         if(m_currentFilter)
         {
             delete m_currentFilterConfigWidget;
-            m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(m_optionsWidget, m_paintDevice );
+            m_currentFilterConfigWidget = m_currentFilter->createConfigurationWidget(m_optionsWidget, m_paintDevice, m_image);
             KisFilterConfiguration * kfc = m_currentFilter->defaultConfiguration(m_paintDevice);
             if(kfc && m_currentFilterConfigWidget)
             {
@@ -220,8 +219,6 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     KisBrush * brush = painter()->brush();
     if (!brush) return;
-
-    const KoColorSpace * colorSpace = source()->colorSpace();
 
     double scale = KisPaintOp::scaleForPressure( info.pressure() );
     QPointF hotSpot = brush->hotSpot(scale, scale);

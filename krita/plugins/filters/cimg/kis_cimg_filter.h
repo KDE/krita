@@ -72,7 +72,7 @@ public:
     static inline KoID id() { return KoID("cimg", i18n("Image Restoration (cimg-based)")); }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     virtual KisFilterConfiguration * configuration(QWidget*);
     virtual KisFilterConfiguration * configuration() { return new KisCImgFilterConfiguration();}
 private:

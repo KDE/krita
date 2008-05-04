@@ -55,7 +55,7 @@ Q_OBJECT
 
 public:
 	
-    KisFilterOpSettings(QWidget* parent);
+    KisFilterOpSettings(QWidget* parent, KisImageSP image);
     virtual ~KisFilterOpSettings();
     virtual KisPaintOpSettingsSP clone() const;
     virtual QWidget *widget() const { return m_optionsWidget; }
@@ -76,6 +76,7 @@ private:
     const KisFilterSP m_currentFilter;
     KisPaintDeviceSP m_paintDevice;
     KisFilterConfigWidget* m_currentFilterConfigWidget;
+    KisImageSP m_image;
 
 };
 

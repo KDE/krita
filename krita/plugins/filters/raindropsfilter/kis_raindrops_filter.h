@@ -40,7 +40,7 @@ public:
 
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 private:
     bool** CreateBoolArray (uint Columns, uint Rows) const;
     void   FreeBoolArray (bool** lpbArray, uint Columns) const;

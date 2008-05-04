@@ -42,6 +42,7 @@
 #include "filter/kis_filter_configuration.h"
 
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
+                                         const KisImageSP image,
                                          KisFilterConfiguration * configuration,
                                          const QString & layerName,
                                          const QString & caption,
@@ -84,7 +85,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
     if ( m_currentFilter ) {
-        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice);
+        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice, image);
         if (m_currentConfigWidget) {
             m_currentConfigWidget->setConfiguration( m_currentConfiguration );
         }

@@ -25,6 +25,7 @@
 #include <QString>
 #include <QGridLayout>
 
+#include <kis_image.h>
 #include <kis_paint_device.h>
 #include <generator/kis_generator.h>
 #include <generator/kis_generator_registry.h>

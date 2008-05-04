@@ -47,7 +47,7 @@ KisWaveletNoiseReduction::~KisWaveletNoiseReduction()
 {
 }
 
-KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP ) const
+KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
 {
     vKisDoubleWidgetParam param;
     param.push_back( KisDoubleWidgetParam( 0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold"), "threshold" ) );

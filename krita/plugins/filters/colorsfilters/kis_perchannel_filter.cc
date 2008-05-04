@@ -204,7 +204,7 @@ KisPerChannelFilter::KisPerChannelFilter() : KisFilter( id(), CategoryAdjust, i1
     setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisPerChannelFilterConfigurationFactory()));
 }
 
-KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev) const
+KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev, const KisImageSP image ) const
 {
     return new KisPerChannelConfigWidget(parent, dev);
 }

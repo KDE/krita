@@ -32,7 +32,7 @@ Regressions from 1.x
       ASSERT: "mime" in file /home/boud/kde/src/koffice/libs/main/KoFilterManager.cpp, line 82)
     * Rulers are uglier and have tab settings, which isn't relevant for Krita's layer shapes
     * deselect/reselect doesn't work and probably needs some redesign
-    * the selecton undo command needs to be ported to the new structure
+    * the selection undo command needs to be ported to the new structure
 
 * Tools
 
@@ -52,7 +52,7 @@ Regressions from 1.x
 
     (Check also http://wiki.koffice.org/index.php?title=Krita/Filters_State)
 
-    * Port bummap filter (needs access to image for layers)
+    * Port bumpmap filter (needs access to image for layers)
     * CImg filter
     
 * Paintops

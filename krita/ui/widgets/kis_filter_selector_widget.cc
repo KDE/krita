@@ -31,6 +31,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_config_widget.h>
 #include <filter/kis_filter_configuration.h>
+#include <kis_image.h>
 
 // From krita/ui
 #include "kis_bookmarked_configurations_editor.h"
@@ -102,7 +103,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->uiFilterSelector.filtersSelector->blockSignals( v );
     }
     KisFilterConfigWidget* widget =
-        d->currentFilter->createConfigurationWidget( d->uiFilterSelector.centralWidgetHolder, d->layer->paintDevice() );
+        d->currentFilter->createConfigurationWidget( d->uiFilterSelector.centralWidgetHolder, d->layer->paintDevice(), d->layer->image() );
     if( !widget )
     { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;

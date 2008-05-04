@@ -36,6 +36,10 @@ class KRITAIMAGE_EXPORT KisConstProcessingInformation {
          * @return the paint device
          */
         const KisPaintDeviceSP paintDevice() const;
+
+        /**
+         * @return the active selection
+         */
         const KisSelectionSP selection() const;
         /**
          * @return the top left pixel that need to process

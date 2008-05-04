@@ -74,7 +74,7 @@ class KisPerChannelFilter
 public:
     KisPerChannelFilter();
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     
     using KisFilter::process;
     void process(KisConstProcessingInformation src,

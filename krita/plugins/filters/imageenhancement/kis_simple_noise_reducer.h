@@ -37,7 +37,7 @@ public:
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
         ) const;
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     
         static inline KoID id() { return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer")); }
     protected:

@@ -23,6 +23,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
 #include "kis_processing_information.h"
+#include "kis_node.h"
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private {
 public:

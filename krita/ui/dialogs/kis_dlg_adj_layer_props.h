@@ -48,6 +48,7 @@ public:
      * @param name the QObject name, if any
      */
     KisDlgAdjLayerProps( KisPaintDeviceSP paintDevice,
+                         const KisImageSP image,
                          KisFilterConfiguration * configuration,
                          const QString & layerName,
                          const QString & caption,

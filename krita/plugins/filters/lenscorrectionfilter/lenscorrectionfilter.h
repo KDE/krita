@@ -49,7 +49,7 @@ class KisFilterLensCorrection : public KisFilter
         static inline KoID id() { return KoID("lenscorrection", i18n("Lens Correction")); }
         virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     public:
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 };
 
 #endif

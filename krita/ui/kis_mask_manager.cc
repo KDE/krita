@@ -477,7 +477,7 @@ void KisMaskManager::maskProperties()
             return;
 
         KisPaintDeviceSP dev = layer->projection();
-        KisDlgAdjLayerProps dlg( layer->projection(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops" );
+        KisDlgAdjLayerProps dlg( layer->projection(), layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops" );
         QString before = dlg.filterConfiguration()->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {

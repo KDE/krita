@@ -409,8 +409,9 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
     delete [] bm_row3;
 }
 
-KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
+    // XXX: Use image here!
     KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(dev, parent);
 
     return w;

@@ -59,7 +59,7 @@ void KoShapeGroup::childCountChanged() {
 
 void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const {
     context.xmlWriter().startElement( "draw:g" );
-    saveOdfAttributes(context, OdfMandatories);
+    saveOdfAttributes( context, OdfMandatories | OdfAdditionalAttributes );
     context.xmlWriter().addAttributePt( "svg:y", position().y() );
 
     QList<KoShape*> shapes = iterator();
@@ -84,7 +84,7 @@ bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
         }
     }
 
-    loadOdfAttributes( element, context, OdfMandatories );
+    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes );
 
     QRectF bound;
     bool boundInitialized = false;

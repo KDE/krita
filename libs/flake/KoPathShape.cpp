@@ -70,7 +70,7 @@ KoShape * KoPathShape::cloneShape() const
 void KoPathShape::saveOdf( KoShapeSavingContext & context ) const
 {
     context.xmlWriter().startElement( "draw:path" );
-    saveOdfAttributes( context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation );
+    saveOdfAttributes( context, OdfAllAttributes );
 
     context.xmlWriter().addAttribute( "svg:d", toString( QMatrix() ) );
 
@@ -79,7 +79,7 @@ void KoPathShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) 
 {
-    loadOdfAttributes( element, context, OdfMandatories );
+    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes );
 
     // first clear the path data from the default path
     clear();

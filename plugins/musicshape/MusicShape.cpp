@@ -119,7 +119,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     KoXmlWriter& writer = context.xmlWriter();
     writer.startElement("music:shape");
     writer.addAttribute("xmlns:music", "http://www.koffice.org/music");
-    saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
+    saveOdfAttributes( context, OdfAllAttributes );
 
     MusicXmlWriter().writeSheet( writer, m_sheet, false );
 
@@ -128,7 +128,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 }
 
 bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    loadOdfAttributes( element, context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation );
+    loadOdfAttributes( element, context, OdfAllAttributes );
 
     KoXmlElement score = KoXml::namedItemNS(element, "http://www.koffice.org/music", "score-partwise");
     if (score.isNull()) {

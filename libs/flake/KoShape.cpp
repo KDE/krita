@@ -53,6 +53,7 @@
 #include <QPainterPath>
 #include <QList>
 #include <QMap>
+#include <QByteArray>
 
 #include <kdebug.h>
 
@@ -127,7 +128,7 @@ public:
     KoShape *me;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
-    QMap<QString,QString> additionalAttributes;
+    QMap<QByteArray, QString> additionalAttributes;
 };
 
 KoShape::KoShape()
@@ -920,7 +921,7 @@ QMatrix KoShape::parseOdfTransform( const QString &transform )
 }
 
 void KoShape::saveOdfFrameAttributes(KoShapeSavingContext &context) const {
-    saveOdfAttributes(context, FrameAttributes);
+    saveOdfAttributes( context, OdfAdditionalAttributes );
     context.addOption(KoShapeSavingContext::FrameOpened);
 }
 
@@ -1018,6 +1019,13 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             context.xmlWriter().addAttribute( "draw:transform", m );
         }
     }
+
+    if ( attributes & OdfAdditionalAttributes ) {
+        QMap<QByteArray, QString>::const_iterator it( d->additionalAttributes.constBegin() );
+        for ( ; it != d->additionalAttributes.constEnd(); ++it ) {
+            context.xmlWriter().addAttribute( it.key(), it.value() );
+        }
+    }
 }
 
 // end loading & saving methods
@@ -1075,22 +1083,22 @@ KoSnapData KoShape::snapData() const
     return KoSnapData();
 }
 
-void KoShape::setAddtionalAttribute( const QString & name, const QString & value )
+void KoShape::setAddtionalAttribute( const char * name, const QString & value )
 {
     d->additionalAttributes.insert( name, value );
 }
 
-void KoShape::removeAddtionalAttribute( const QString & name )
+void KoShape::removeAddtionalAttribute( const char * name )
 {
     d->additionalAttributes.remove( name );
 }
 
-bool KoShape::hasAdditionalAttribute( const QString & name )
+bool KoShape::hasAdditionalAttribute( const char * name )
 {
     return d->additionalAttributes.contains( name );
 }
 
-QString KoShape::addtionalAttribute( const QString & name )
+QString KoShape::additionalAttribute( const char * name )
 {
     return d->additionalAttributes.value( name );
 }

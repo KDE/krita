@@ -701,14 +701,14 @@ public:
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      * @param value The value of the attribute
      */
-    void setAddtionalAttribute( const QString & name, const QString & value );
+    void setAddtionalAttribute( const char * name, const QString & value );
 
     /**
      * Remove additional attribute
      *
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      */
-    void removeAddtionalAttribute( const QString & name );
+    void removeAddtionalAttribute( const char * name );
 
     /**
      * Check if additional attribute is set
@@ -717,7 +717,7 @@ public:
      *
      * @return true if there is a attribute with prefix:tag set, false otherwise
      */
-    bool hasAdditionalAttribute( const QString & name );
+    bool hasAdditionalAttribute( const char * name );
 
     /**
      * Get additional attribute
@@ -726,20 +726,20 @@ public:
      *
      * @return The value of the attribute if it exists or a null string if not found.
      */
-    QString addtionalAttribute( const QString & name );
+    QString additionalAttribute( const char * name );
 
 protected:
 
 /* ** loading saving helper methods */
     /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
     enum OdfAttribute {
-        OdfTransformation = 1,  ///< Store transformation information
-        OdfSize = 2,            ///< Store size information
-        OdfPosition = 4,        ///< Store position of shape
-        OdfMandatories = 8,     ///< Id, z-index, layer and style
+        OdfTransformation = 1,       ///< Store transformation information
+        OdfSize = 2,                 ///< Store size information
+        OdfAdditionalAttributes = 4, ///< Store position of shape
+        OdfMandatories = 8,          ///< Id, z-index, layer and style
 
-        /// A mask for all the attributes a 'draw:frame' requires
-        FrameAttributes = OdfMandatories | OdfSize | OdfPosition | OdfTransformation
+        /// A mask for all the attributes
+        OdfAllAttributes = OdfTransformation | OdfSize | OdfAdditionalAttributes | OdfMandatories
     };
 
     /**

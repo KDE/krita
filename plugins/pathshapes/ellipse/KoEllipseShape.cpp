@@ -53,7 +53,7 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
     if( isParametricShape() )
     {
         context.xmlWriter().startElement("draw:ellipse");
-        saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
+        saveOdfAttributes( context, OdfAllAttributes );
 
         char * kind = "full";
         switch ( m_type )
@@ -123,7 +123,7 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
     setStartAngle( element.attributeNS( KoXmlNS::draw, "start-angle", "0" ).toDouble() );
     setEndAngle( element.attributeNS( KoXmlNS::draw, "end-angle", "360" ).toDouble() );
 
-    loadOdfAttributes( element, context, OdfMandatories|OdfTransformation );
+    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes );
 
     return true;
 }

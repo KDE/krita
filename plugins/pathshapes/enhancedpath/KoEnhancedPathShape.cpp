@@ -334,7 +334,7 @@ void KoEnhancedPathShape::saveOdf( KoShapeSavingContext & context ) const
     if( isParametricShape() )
     {
         context.xmlWriter().startElement("draw:custom-shape");
-        saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
+        saveOdfAttributes( context, OdfAllAttributes );
 
         context.xmlWriter().startElement("draw:enhanced-geometry");
         context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg( m_viewBox.x() ).arg( m_viewBox.y() ).arg( m_viewBox.width() ).arg( m_viewBox.height() ) );
@@ -435,7 +435,7 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
 
     setSize( size );
 
-    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation );
+    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes );
 
     return true;
 }

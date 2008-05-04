@@ -259,7 +259,7 @@ QPointF KoStarShape::computeCenter() const
 
 bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    loadOdfAttributes( element, context, OdfMandatories | OdfSize | OdfTransformation );
+    loadOdfAttributes( element, context, OdfAllAttributes );
 
     QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
     if( ! corners.isEmpty() )
@@ -301,7 +301,7 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
     if( isParametricShape() )
     {
         context.xmlWriter().startElement("draw:regular-polygon");
-        saveOdfAttributes(context, OdfMandatories | OdfTransformation | OdfSize );
+        saveOdfAttributes( context, OdfAllAttributes );
         context.xmlWriter().addAttribute( "draw:corners", m_cornerCount );
         context.xmlWriter().addAttribute( "draw:concave", m_convex ? "false" : "true" );
         // TODO saving the offset angle as rotation applied to the transformation

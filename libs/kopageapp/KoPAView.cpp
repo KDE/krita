@@ -167,7 +167,7 @@ void KoPAView::initGUI()
 
     KoPADocumentStructureDockerFactory structureDockerFactory( m_canvas );
     m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
-    connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
+    // connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
 
     KoToolManager::instance()->requestToolActivation( m_canvasController );
 
@@ -436,6 +436,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
         // if the page is a master page no shapes are in the masterShapeManager
         masterShapeManager()->setShapes( QList<KoShape*>() );
     }
+    m_documentStructureDocker->setActivePage(m_activePage);
 }
 
 void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
@@ -582,22 +583,22 @@ void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
 
 void KoPAView::goToPreviousPage()
 {
-    navigatePage(KoPageApp::PagePrevious);
+    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier));
 }
 
 void KoPAView::goToNextPage()
 {
-    navigatePage(KoPageApp::PageNext);
+    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier));
 }
 
 void KoPAView::goToFirstPage()
 {
-    navigatePage(KoPageApp::PageFirst);
+    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_Home, Qt::NoModifier));
 }
 
 void KoPAView::goToLastPage()
 {
-    navigatePage(KoPageApp::PageLast);
+    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_End, Qt::NoModifier));
 }
 
 void KoPAView::findDocumentSetNext( QTextDocument * document )

@@ -72,7 +72,7 @@ void KoPAPageBase::saveOdfPageContent( KoPASavingContext & paContext ) const
 {
     saveOdfShapes( paContext );
     saveOdfAnimations( paContext );
-    saveOdfPresentationNotes();
+    saveOdfPresentationNotes( paContext );
 }
 
 void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const

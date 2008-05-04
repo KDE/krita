@@ -66,6 +66,11 @@ public:
 
     KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
 
+    KoZoomController *zoomController() { return m_zoomController; }
+
+    KoRuler *horizontalRuler() { return m_horizontalRuler; }
+    KoRuler *verticalRuler() { return m_verticalRuler; }
+
     KoPACanvas * kopaCanvas() { return m_canvas; }
     KoPACanvas * kopaCanvas() const { return m_canvas; }
 

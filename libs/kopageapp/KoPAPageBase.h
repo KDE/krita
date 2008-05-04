@@ -115,9 +115,10 @@ protected:
      *
      * Here is a empty implementation as not all page apps presentations notes.
      *
+     * @param paContext the pageapp saving context
      * @return true on success, false otherwise
      */
-    virtual bool saveOdfPresentationNotes() const { return true; }
+    virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const { Q_UNUSED( paContext ); return true; }
 
     /**
      * @brief Save the style of the page

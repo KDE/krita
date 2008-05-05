@@ -224,46 +224,20 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
     QRect bmRect;
     const KisPaintDevice * bumpmap;
 
-    QString bumpmapname = config->getString("bumpmap", "");
-
-#if 0
-    //XXX: Get a better way to get at the layer stack instead of through the paint device
-    if (!bumpmapname.isNull() && src->image()) {
-        KisLayerSP l = src->image()->findLayer(bumpmapname);
-        KisPaintDeviceSP bumplayer = KisPaintDeviceSP(0);
-
-        KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
-        if (pl) {
-            bumplayer = pl->paintDevice();
+    KisNodeSP node = config->getProperty("source_layer").value<KisNodeSP>();
+    if (node) {
+        if (node->inherits("KisLayer")) {
+            bumpmap = static_cast<KisLayer*>(node.data())->projection();
         }
-        else {
-            KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
-            if (gl) {
-                bumplayer = gl->projection();
-            }
-            else {
-                KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(l.data());
-                if (al) {
-                    bumplayer = al->cachedPaintDevice();
-                }
-            }
+        else if (node->inherits("KisMask")) {
+            bumpmap = static_cast<KisMask*>(node.data())->paintDevice();
         }
-
-
-        if (bumplayer) {
-            bmRect = bumplayer->exactBounds();
-            bumpmap = bumplayer;
-        }
-        else {
-            bmRect = QRect(srcTopLeft, size) ;
-            bumpmap = src;
-        }
+        bmRect = bumpmap->exactBounds();
     }
     else {
         bmRect = QRect(srcTopLeft, size);
         bumpmap = src;
     }
-#endif
 
     return;
     
@@ -424,7 +398,7 @@ KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* par
 KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f)
     : KisFilterConfigWidget(parent, f)
     , m_device(dev)
-    , m_image(image)  
+        , m_image(image)  
 {
     Q_ASSERT(m_device);
 
@@ -435,10 +409,10 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const
 
     l->addWidget(m_page);
 
-    KisNodeModel * model = new KisNodeModel(this);
-    model->setImage(image);
+    m_model = new KisNodeModel(this);
+    m_model->setImage(image);
     
-    m_page->listLayers->setModel( model );
+    m_page->listLayers->setModel( m_model );
     m_page->listLayers->expandAll();
     m_page->listLayers->scrollToBottom();
     
@@ -448,7 +422,10 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
 {
     if (!cfg) return;
 
-    //m_page->txtSourceLayer->setText( cfg->getString("bumpmap", "") );
+    KisNodeSP node = cfg->getProperty("source_layer").value<KisNodeSP>();
+    if (node)
+        m_page->listLayers->setCurrentIndex( m_model->indexFromNode( node ) );
+    
     m_page->dblAzimuth->setValue(cfg->getDouble("azimuth", 135.0) );
     m_page->dblElevation->setValue(cfg->getDouble("elevation", 45.0));
     m_page->dblDepth->setValue(cfg->getInt("depth", 3));
@@ -476,8 +453,11 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
 
 KisFilterConfiguration* KisBumpmapConfigWidget::configuration() const
 {
-    KisFilterConfiguration * cfg = new KisFilterConfiguration("bumpmap", 1);
+    KisFilterConfiguration * cfg = new KisFilterConfiguration("bumpmap", 2);
     //cfg->setProperty("bumpmap", m_page->txtSourceLayer->text());
+    QVariant v;
+    v.fromValue(m_model->nodeFromIndex(m_page->listLayers->currentIndex()));
+    cfg->setProperty("source_layer", v);
     cfg->setProperty("azimuth",m_page->dblAzimuth->value());
     cfg->setProperty("elevation",m_page->dblElevation->value());
     cfg->setProperty("depth",m_page->dblDepth->value());

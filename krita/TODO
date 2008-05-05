@@ -53,7 +53,7 @@ Regressions from 1.x
 
     (Check also http://wiki.koffice.org/index.php?title=Krita/Filters_State)
 
-    * Port bumpmap filter (needs access to image for layers)
+BR  * Make the bumpmap filter get the right layer on loading as adj. layer or filter mask.
     * CImg filter
     
 * Paintops

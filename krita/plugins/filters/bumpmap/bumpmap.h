@@ -31,6 +31,8 @@
 
 #include "ui_wdgbumpmap.h"
 
+class KisNodeModel;
+
 class BumpmapWidget : public QWidget, public Ui::WdgBumpmap
 {
     Q_OBJECT
@@ -51,6 +53,7 @@ namespace krita {
 
 using namespace krita;
 
+
 class KritaBumpmap : public KParts::Plugin
 {
 public:
@@ -66,6 +69,10 @@ public:
  *             "Fast Embossing Effects on Raster Image Data"
  *             by John Schlag, jfs@kerner.com
  *             in "Graphics Gems IV", Academic Press, 1994
+ *
+ * XXX: make sure we save the layer by name and restore it on loading
+ *      adj. layers and filter masks from the layer stack. Maybe do that
+ *      afterwards?
  */
 class KisFilterBumpmap : public KisFilter
 {
@@ -82,6 +89,7 @@ public:
                  KoUpdater* progressUpdater
         ) const;
 
+    bool supportsAdjustmentLayers() const { return false; }
     
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
@@ -104,6 +112,7 @@ private:
 
     KisPaintDeviceSP m_device;
     KisImageSP m_image;
+    KisNodeModel * m_model;
 };
 
 #endif

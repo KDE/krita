@@ -133,6 +133,7 @@ endif(Boost_FOUND)
 
 add_subdirectory(libs)
 add_subdirectory(interfaces)
+add_subdirectory(cmake)
 
 macro_log_feature(FREETYPE_FOUND "FreeType" "Karbon requires FreeType. Karbon will not be built" "http://www.freetype.org" FALSE "")
 macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Karbon requires Fontconfig. Karbon will not be built" "http://fontconfig.org" FALSE "")

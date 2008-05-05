@@ -41,7 +41,7 @@ class KRITAIMAGE_EXPORT KisBottomUpUpdateStrategy : public QObject, public KisPr
 
 public:
 
-    KisBottomUpUpdateStrategy( KisNodeSP node );
+    KisBottomUpUpdateStrategy( KisNodeWSP node );
 
     ~KisBottomUpUpdateStrategy();
 

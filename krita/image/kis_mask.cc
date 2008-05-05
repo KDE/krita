@@ -40,7 +40,7 @@ KisMask::KisMask( const QString & name )
     : KisNode()
     , m_d( new Private() )
 {
-    //setName( name );
+    setName( name );
     m_d->selection = new KisSelection();
 }
 

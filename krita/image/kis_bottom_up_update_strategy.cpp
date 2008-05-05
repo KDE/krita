@@ -379,7 +379,7 @@ public:
         {
         }
 
-    KisNodeSP node;
+    KisNodeWSP node;
     KisImageSP image;
     KisProjection * projection;
     
@@ -391,7 +391,7 @@ public:
     QMutex regionLock;
 };
 
-KisBottomUpUpdateStrategy::KisBottomUpUpdateStrategy( KisNodeSP node )
+KisBottomUpUpdateStrategy::KisBottomUpUpdateStrategy( KisNodeWSP node )
  : KisProjectionUpdateStrategy()
  , m_d(new Private())
 {

@@ -26,6 +26,7 @@ class KisFilterMaskTest : public QObject
 {
     Q_OBJECT
 
+
 private slots:
     
     void testCreation();

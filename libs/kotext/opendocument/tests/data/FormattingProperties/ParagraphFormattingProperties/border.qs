@@ -1,7 +1,6 @@
 include("common.qs");
 
 var textBlockFormatBall = new QTextBlockFormat.clone(defaultBlockFormat);
-setFormatProperty(textBlockFormatBall, KoParagraphStyle.AutoTextIndent, true);
 setFormatProperty(textBlockFormatBall, KoParagraphStyle.LeftBorderWidth, 0.0346 * 72);
 setFormatProperty(textBlockFormatBall, KoParagraphStyle.TopBorderWidth, 0.0346 * 72);
 setFormatProperty(textBlockFormatBall, KoParagraphStyle.RightBorderWidth, 0.0346 * 72);

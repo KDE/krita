@@ -131,8 +131,10 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
     // check custom properties
     const QMap<int, QVariant> actualProperty = actualFormat.properties();
     const QMap<int, QVariant> expectedProperty = expectedFormat.properties();
+    QList<int> allPropertyIds = actualProperty.keys();
+    allPropertyIds << expectedProperty.keys();
     bool match = true;
-    foreach(int id, actualProperty.keys()) {
+    foreach(int id, allPropertyIds) {
       QString key, value;
         switch (id) {
         case KoParagraphStyle::AutoTextIndent:

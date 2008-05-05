@@ -284,6 +284,8 @@ private:
     QRect m_rc;
 };
 }
+
+
 class KisTopDownUpdateStrategy::Private
 {
 public:
@@ -297,10 +299,6 @@ KisTopDownUpdateStrategy::KisTopDownUpdateStrategy( KisNodeSP node )
     : m_d( new Private)
 {
     m_d->node = node;
-
-    // XXX: how about nesting masks? Then masks need to get a projection, too.
-    if (node->inherits("KisLayer")) {
-    }
 }
 
 

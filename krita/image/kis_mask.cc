@@ -36,9 +36,9 @@ struct KisMask::Private
     KisSelectionSP selection;
 };
 
-
 KisMask::KisMask( const QString & name )
-    : m_d( new Private() )
+    : KisNode()
+    , m_d( new Private() )
 {
     setName( name );
     m_d->selection = new KisSelection();

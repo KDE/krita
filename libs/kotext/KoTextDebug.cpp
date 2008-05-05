@@ -29,6 +29,7 @@
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoStyleManager.h"
+#include "KoTextBlockData.h"
 #include <KoTextDocumentLayout.h>
 #include <kdeversion.h>
 
@@ -108,6 +109,7 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
         case KoParagraphStyle::AutoTextIndent:
             key = "autotextindent";
             value = properties[id].toBool()? "true" : "false" ;
+            // qDebug() << key << " = " << id;
             break;
         case QTextFormat::BlockIndent:
             key = "indent";
@@ -130,6 +132,26 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
         case KoCharacterStyle::Language:
             key = "language";
             value = properties[id].toString();
+            break;
+        case KoParagraphStyle::LeftBorderWidth:
+            key = "border-left-width";
+            value = QString::number(properties[id].toDouble()) ;
+            // qDebug() << key << " = " << id;
+            break;
+        case KoParagraphStyle::TopBorderWidth:
+            key = "border-top-width";
+            value = QString::number(properties[id].toDouble()) ;
+            // qDebug() << key << " = " << id;
+            break;
+        case KoParagraphStyle::RightBorderWidth:
+            key = "border-right-width";
+            value = QString::number(properties[id].toDouble()) ;
+            // qDebug() << key << " = " << id;
+            break;
+        case KoParagraphStyle::BottomBorderWidth:
+            key = "border-bottom-width";
+            value = QString::number(properties[id].toDouble()) ;
+            // qDebug() << key << " = " << id;
             break;
         default:
             break;
@@ -187,7 +209,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
         attrs.append(" list=\"item:").append(QString::number(list->itemNumber(block)+1)).append('/')
               .append(QString::number(list->count()));
         attrs.append(" listindent:").append(QString::number(list->format().indent()));
-        attrs.append(" style:").append(QString::number(list->format().style()));
+        attrs.append(" liststyle:").append(QString::number(list->format().style()));
         attrs.append("\"");
     }
 

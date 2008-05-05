@@ -3,9 +3,14 @@ var cursor = new QTextCursor(document);
 
 // Default paragraph formatting
 var KoParagraphStyle = {};
-KoParagraphStyle.StyleId = QTextFormat.UserProperty + 1;
+KoParagraphStyle.StyleId = QTextFormat.UserProperty + 1; // = 1048577
 KoParagraphStyle.PercentLineHeight = QTextFormat.UserProperty + 2;
 KoParagraphStyle.AutoTextIndent = QTextFormat.UserProperty + 52;
+KoParagraphStyle.LeftBorderWidth = QTextFormat.UserProperty + 28;
+KoParagraphStyle.TopBorderWidth = QTextFormat.UserProperty + 33;
+KoParagraphStyle.RightBorderWidth = QTextFormat.UserProperty + 38;
+KoParagraphStyle.BottomBorderWidth = QTextFormat.UserProperty + 43;
+
 
 var defaultBlockFormat = new QTextBlockFormat;
 setFormatProperty(defaultBlockFormat, KoParagraphStyle.PercentLineHeight, 120);

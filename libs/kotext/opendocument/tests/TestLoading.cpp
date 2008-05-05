@@ -120,6 +120,48 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
     return equal;
 }
 
+static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTextBlockFormat &expectedFormat) {
+    if (actualFormat.background() != expectedFormat.background()
+        || actualFormat.alignment() != expectedFormat.alignment()
+        || actualFormat.indent() != expectedFormat.indent()
+        || actualFormat.textIndent() != expectedFormat.textIndent()
+        || actualFormat.foreground() != expectedFormat.foreground()) {
+        return false;
+    }
+    // check custom properties
+    const QMap<int, QVariant> actualProperty = actualFormat.properties();
+    const QMap<int, QVariant> expectedProperty = expectedFormat.properties();
+    bool match = true;
+    foreach(int id, actualProperty.keys()) {
+      QString key, value;
+        switch (id) {
+        case KoParagraphStyle::AutoTextIndent:
+            if (actualProperty[id].toInt() != expectedProperty[id].toInt())
+              match = false;
+            break;
+        case KoParagraphStyle::LeftBorderWidth:
+            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
+              match = false;
+            break;
+        case KoParagraphStyle::TopBorderWidth:
+            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
+              match = false;
+            break;
+        case KoParagraphStyle::RightBorderWidth:
+            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
+              match = false;
+            break;
+        case KoParagraphStyle::BottomBorderWidth:
+            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
+              match = false;
+            break;
+        }
+        if (!match)
+            return false;
+    }
+    return match;
+}
+
 static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock)
 {
     QTextList *actualList = actualBlock.textList();
@@ -145,15 +187,10 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
         // this should really be actualBlock.blockFormat().properties() == expectedBlock.blockFormat().properties()
         QTextBlockFormat actualFormat = actualBlock.blockFormat();
         QTextBlockFormat expectedFormat = expectedBlock.blockFormat();
-        if (actualFormat.background() != expectedFormat.background()
-            || actualFormat.alignment() != expectedFormat.alignment()
-            || actualFormat.indent() != expectedFormat.indent()
-            || actualFormat.textIndent() != expectedFormat.textIndent()
-            || actualFormat.boolProperty(KoParagraphStyle::AutoTextIndent) != expectedFormat.boolProperty(KoParagraphStyle::AutoTextIndent)
-            || actualFormat.foreground() != expectedFormat.foreground()) {
-            qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text()
-                     << actualFormat.properties() << expectedFormat.properties();
-            return false;
+        if (!compareBlockFormats(actualFormat, expectedFormat)) {
+                qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text()
+                         << actualFormat.properties() << expectedFormat.properties();
+                return false;
         }
     }
 
@@ -478,6 +515,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Text align") << "FormattingProperties/ParagraphFormattingProperties/textAlign";
     QTest::newRow("Auto text indent") << "FormattingProperties/ParagraphFormattingProperties/automaticTextIndent";
     QTest::newRow("Text indent") << "FormattingProperties/ParagraphFormattingProperties/textIndent";
+    QTest::newRow("Border") << "FormattingProperties/ParagraphFormattingProperties/border";
 }
 
 void TestLoading::testLoading() 

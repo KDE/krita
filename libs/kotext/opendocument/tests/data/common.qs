@@ -5,6 +5,7 @@ var cursor = new QTextCursor(document);
 var KoParagraphStyle = {};
 KoParagraphStyle.StyleId = QTextFormat.UserProperty + 1;
 KoParagraphStyle.PercentLineHeight = QTextFormat.UserProperty + 2;
+KoParagraphStyle.AutoTextIndent = QTextFormat.UserProperty + 52;
 
 var defaultBlockFormat = new QTextBlockFormat;
 setFormatProperty(defaultBlockFormat, KoParagraphStyle.PercentLineHeight, 120);

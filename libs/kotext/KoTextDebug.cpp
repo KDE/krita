@@ -105,6 +105,10 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "textindent";
             value = QString::number(properties[id].toInt());
             break;
+        case KoParagraphStyle::AutoTextIndent:
+            key = "autotextindent";
+            value = properties[id].toBool()? "true" : "false" ;
+            break;
         case QTextFormat::BlockIndent:
             key = "indent";
             value = QString::number(properties[id].toInt());

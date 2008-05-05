@@ -58,6 +58,8 @@ public:
     virtual bool nextParag();
     virtual bool previousParag();
     virtual double documentOffsetInShape();
+    // get the text indent accounting for auto-text-indent
+    double resolveTextIndent();
     virtual bool setFollowupShape(KoShape *shape);
     /// called by the KoTextDocumentLayout to notify the LayoutState of a successfully resized inline object
     virtual void registerInlineObject(const QTextInlineObject &inlineObject);

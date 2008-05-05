@@ -122,6 +122,7 @@ static const int properties[] = {
     KoParagraphStyle::BottomBorderColor,
     KoParagraphStyle::ExplicitListValue,
     KoParagraphStyle::RestartListNumbering,
+    KoParagraphStyle::AutoTextIndent,
     KoParagraphStyle::TabPositions,
     KoParagraphStyle::TextProgressionDirection,
 
@@ -672,6 +673,14 @@ double KoParagraphStyle::textIndent () const {
     return propertyDouble(QTextFormat::TextIndent);
 }
 
+void KoParagraphStyle::setAutoTextIndent (bool on) {
+    setProperty(KoParagraphStyle::AutoTextIndent, on);
+}
+
+bool KoParagraphStyle::autoTextIndent () const {
+    return propertyBoolean(KoParagraphStyle::AutoTextIndent);
+}
+
 void KoParagraphStyle::setNonBreakableLines(bool on) {
     setProperty(QTextFormat::BlockNonBreakableLines, on);
 }
@@ -885,12 +894,7 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
             // "indented by a value that is based on the current font size"
             const QString autotextindent = styleStack.property(KoXmlNS::style, "auto-text-indent");
             if ( autotextindent == "true" ) {
-                int guessGlyphWidth = QFontMetrics(characterStyle()->font()).width('x');
-                setTextIndent( guessGlyphWidth * 3 );
-            } else {
-              // really? can it be an indent number? not in odf, but in the earlier format?
-              // not removing this line, in case it can be a number
-                setTextIndent( KoUnit::parseValue(autotextindent) );
+                setAutoTextIndent( true );
             }
         }
         else if ( styleStack.hasProperty(KoXmlNS::fo, "text-indent") ) {
@@ -1282,6 +1286,8 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
             style.addPropertyPt("fo:line-height", lineHeightAbsolute(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::TextIndent) {
             style.addPropertyPt("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::AutoTextIndent) {
+            style.addPropertyPt("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
         }
     }
     // TODO : save border information

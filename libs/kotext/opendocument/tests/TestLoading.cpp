@@ -45,6 +45,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
 
 static void showDocument(QTextDocument *document)
 {
@@ -148,6 +149,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
             || actualFormat.alignment() != expectedFormat.alignment()
             || actualFormat.indent() != expectedFormat.indent()
             || actualFormat.textIndent() != expectedFormat.textIndent()
+            || actualFormat.boolProperty(KoParagraphStyle::AutoTextIndent) != expectedFormat.boolProperty(KoParagraphStyle::AutoTextIndent)
             || actualFormat.foreground() != expectedFormat.foreground()) {
             qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text()
                      << actualFormat.properties() << expectedFormat.properties();

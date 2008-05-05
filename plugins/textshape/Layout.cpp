@@ -40,6 +40,8 @@
 #include <KDebug>
 #include <QTextList>
 #include <QStyle>
+#include <QFontMetrics>
+
 
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
@@ -83,7 +85,7 @@ double Layout::width() {
     Q_ASSERT(shape);
     double ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
     if(m_newParag)
-        ptWidth -= m_format.textIndent();
+        ptWidth -= resolveTextIndent();
     if(m_newParag && m_blockData)
         ptWidth -= m_blockData->counterWidth() + m_blockData->counterSpacing();
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
@@ -91,7 +93,7 @@ double Layout::width() {
 }
 
 double Layout::x() {
-    double result = m_newParag?m_format.textIndent():0.0;
+    double result = m_newParag?resolveTextIndent():0.0;
     result += m_isRtl ? m_format.rightMargin() : m_format.leftMargin();
     result += listIndent();
     result += m_borderInsets.left + m_shapeBorder.left;
@@ -100,6 +102,16 @@ double Layout::x() {
 
 double Layout::y() {
     return m_y;
+}
+
+double Layout::resolveTextIndent() {
+    if ( (m_block.blockFormat().property(KoParagraphStyle::AutoTextIndent).toBool()) ) {
+        // if auto-text-indent is set,
+        // return an indent approximately 3-characters wide as per current font
+        int guessGlyphWidth = QFontMetricsF( m_block.charFormat().font() ).width('x');
+        return guessGlyphWidth * 3;
+    }
+    return m_block.blockFormat().textIndent();
 }
 
 double Layout::docOffsetInShape() const {

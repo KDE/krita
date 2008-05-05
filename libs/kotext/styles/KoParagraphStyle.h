@@ -106,6 +106,8 @@ public:
         ListLevel,               ///< int with the list-level that the paragraph will get when this is a list
         IsListHeader,           ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
 
+        AutoTextIndent,         ///< bool, says whether the paragraph is auto-indented or not
+
         TabPositions,            ///< A list of tab positions
         TextProgressionDirection
 // do 15.5.24
@@ -381,6 +383,10 @@ public:
     void setTextIndent (double margin);
     /// duplicated property from QTextBlockFormat
     double textIndent () const;
+    /// Custom KoParagraphStyle property for auto-text-indent
+    void setAutoTextIndent (bool on);
+    bool autoTextIndent () const;
+
 #if 0
 as this is a duplicate of leftMargin, lets make it very clear we are using that one.
     /// duplicated property from QTextBlockFormat

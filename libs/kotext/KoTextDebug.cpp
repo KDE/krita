@@ -133,26 +133,43 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "language";
             value = properties[id].toString();
             break;
+#ifdef PARAGRAPH_BORDER_DEBUG // because it tends to get annoyingly long :)
         case KoParagraphStyle::LeftBorderWidth:
-            key = "border-left-width";
+            key = "border-width-left";
             value = QString::number(properties[id].toDouble()) ;
             // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::TopBorderWidth:
-            key = "border-top-width";
+            key = "border-width-top";
             value = QString::number(properties[id].toDouble()) ;
             // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::RightBorderWidth:
-            key = "border-right-width";
+            key = "border-width-right";
             value = QString::number(properties[id].toDouble()) ;
             // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::BottomBorderWidth:
-            key = "border-bottom-width";
+            key = "border-width-bottom";
             value = QString::number(properties[id].toDouble()) ;
             // qDebug() << key << " = " << id;
             break;
+        case KoParagraphStyle::LeftBorderStyle:
+            key = "border-style-left";
+            value = QString::number(properties[id].toDouble()) ;
+            // qDebug() << key << " = " << id;
+            break;
+        case KoParagraphStyle::LeftBorderSpacing:
+            key = "inner-border-spacing-left";
+            value = QString::number(properties[id].toDouble()) ;
+            // qDebug() << key << " = " << id;
+            break;
+        case KoParagraphStyle::LeftInnerBorderWidth:
+            key = "inner-border-width-left";
+            value = QString::number(properties[id].toDouble()) ;
+            // qDebug() << key << " = " << id;
+            break;
+#endif
         default:
             break;
         }

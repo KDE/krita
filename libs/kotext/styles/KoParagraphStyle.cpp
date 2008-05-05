@@ -1037,6 +1037,42 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
             setBottomBorderColor( QColor(border.section(' ',2,2)) );
         }
     }
+    if ( styleStack.hasProperty( KoXmlNS::style, "border-line-width", "left") ) {
+        QString borderLineWidth = styleStack.property( KoXmlNS::style, "border-line-width", "left" );
+        if ( !borderLineWidth.isEmpty() && borderLineWidth!="none" && borderLineWidth!="hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setLeftInnerBorderWidth( KoUnit::parseValue( blw[0], 0.1 ) );
+            setLeftBorderSpacing( KoUnit::parseValue( blw[1], 1.0 ) );
+            setLeftBorderWidth( KoUnit::parseValue( blw[2], 0.1 ) );
+        }
+    }
+    if ( styleStack.hasProperty( KoXmlNS::style, "border-line-width", "top") ) {
+        QString borderLineWidth = styleStack.property( KoXmlNS::style, "border-line-width", "top" );
+        if ( !borderLineWidth.isEmpty() && borderLineWidth!="none" && borderLineWidth!="hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setTopInnerBorderWidth( KoUnit::parseValue( blw[0], 0.1 ) );
+            setTopBorderSpacing( KoUnit::parseValue( blw[1], 1.0 ) );
+            setTopBorderWidth( KoUnit::parseValue( blw[2], 0.1 ) );
+        }
+    }
+    if ( styleStack.hasProperty( KoXmlNS::style, "border-line-width", "right") ) {
+        QString borderLineWidth = styleStack.property( KoXmlNS::style, "border-line-width", "right" );
+        if ( !borderLineWidth.isEmpty() && borderLineWidth!="none" && borderLineWidth!="hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setRightInnerBorderWidth( KoUnit::parseValue( blw[0], 0.1 ) );
+            setRightBorderSpacing( KoUnit::parseValue( blw[1], 1.0 ) );
+            setRightBorderWidth( KoUnit::parseValue( blw[2], 0.1 ) );
+        }
+    }
+    if ( styleStack.hasProperty( KoXmlNS::style, "border-line-width", "bottom") ) {
+        QString borderLineWidth = styleStack.property( KoXmlNS::style, "border-line-width", "bottom" );
+        if ( !borderLineWidth.isEmpty() && borderLineWidth!="none" && borderLineWidth!="hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setBottomInnerBorderWidth( KoUnit::parseValue( blw[0], 0.1 ) );
+            setBottomBorderSpacing( KoUnit::parseValue( blw[1], 1.0 ) );
+            setBottomBorderWidth( KoUnit::parseValue( blw[2], 0.1 ) );
+        }
+    }
 
     // Page breaking
 #if 0

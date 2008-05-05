@@ -518,6 +518,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Auto text indent") << "FormattingProperties/ParagraphFormattingProperties/automaticTextIndent";
     QTest::newRow("Text indent") << "FormattingProperties/ParagraphFormattingProperties/textIndent";
     QTest::newRow("Border") << "FormattingProperties/ParagraphFormattingProperties/border";
+    QTest::newRow("BorderLineWidth") << "FormattingProperties/ParagraphFormattingProperties/borderLineWidth";
 }
 
 void TestLoading::testLoading() 
@@ -533,11 +534,12 @@ void TestLoading::testLoading()
 
     bool documentsEqual = compareDocuments(actualDocument, expectedDocument);
 
+//    showDocument(actualDocument);
+//    showDocument(expectedDocument);
     if (!documentsEqual) {
         KoTextDebug::dumpDocument(actualDocument);
         KoTextDebug::dumpDocument(expectedDocument);
     }
-
     QVERIFY(documentsEqual);
 }
 

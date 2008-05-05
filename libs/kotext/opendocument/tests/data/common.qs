@@ -3,13 +3,55 @@ var cursor = new QTextCursor(document);
 
 // Default paragraph formatting
 var KoParagraphStyle = {};
+// enum KoParagraphStyle.Property
 KoParagraphStyle.StyleId = QTextFormat.UserProperty + 1; // = 1048577
 KoParagraphStyle.PercentLineHeight = QTextFormat.UserProperty + 2;
 KoParagraphStyle.AutoTextIndent = QTextFormat.UserProperty + 52;
-KoParagraphStyle.LeftBorderWidth = QTextFormat.UserProperty + 28;
-KoParagraphStyle.TopBorderWidth = QTextFormat.UserProperty + 33;
-KoParagraphStyle.RightBorderWidth = QTextFormat.UserProperty + 38;
-KoParagraphStyle.BottomBorderWidth = QTextFormat.UserProperty + 43;
+
+// enum KoParagraphStyle.Property - border stuff
+KoParagraphStyle.HasLeftBorder = QTextFormat.UserProperty + 17;
+KoParagraphStyle.HasTopBorder = KoParagraphStyle.HasLeftBorder + 1;
+KoParagraphStyle.HasRightBorder = KoParagraphStyle.HasLeftBorder + 2;
+KoParagraphStyle.HasBottomBorder = KoParagraphStyle.HasLeftBorder + 3;
+KoParagraphStyle.BorderLineWidth = KoParagraphStyle.HasLeftBorder + 4;
+KoParagraphStyle.SecondBorderLineWidth = KoParagraphStyle.HasLeftBorder + 5;
+KoParagraphStyle.DistanceToSecondBorder = KoParagraphStyle.HasLeftBorder + 6;
+KoParagraphStyle.LeftPadding = KoParagraphStyle.HasLeftBorder + 7;
+KoParagraphStyle.TopPadding = KoParagraphStyle.HasLeftBorder + 8;
+KoParagraphStyle.RightPadding = KoParagraphStyle.HasLeftBorder + 9;
+KoParagraphStyle.BottomPadding = KoParagraphStyle.HasLeftBorder + 10;
+KoParagraphStyle.LeftBorderWidth = KoParagraphStyle.HasLeftBorder + 11;
+KoParagraphStyle.LeftInnerBorderWidth = KoParagraphStyle.HasLeftBorder + 12;
+KoParagraphStyle.LeftBorderSpacing = KoParagraphStyle.HasLeftBorder + 13;
+KoParagraphStyle.LeftBorderStyle = KoParagraphStyle.HasLeftBorder + 14;
+KoParagraphStyle.LeftBorderColor = KoParagraphStyle.HasLeftBorder + 15;
+KoParagraphStyle.TopBorderWidth = KoParagraphStyle.HasLeftBorder + 16;
+KoParagraphStyle.TopInnerBorderWidth = KoParagraphStyle.HasLeftBorder + 17;
+KoParagraphStyle.TopBorderSpacing = KoParagraphStyle.HasLeftBorder + 18;
+KoParagraphStyle.TopBorderStyle = KoParagraphStyle.HasLeftBorder + 19;
+KoParagraphStyle.TopBorderColor = KoParagraphStyle.HasLeftBorder + 20;
+KoParagraphStyle.RightBorderWidth = KoParagraphStyle.HasLeftBorder + 21;
+KoParagraphStyle.RightInnerBorderWidth = KoParagraphStyle.HasLeftBorder + 22;
+KoParagraphStyle.RightBorderSpacing = KoParagraphStyle.HasLeftBorder + 23;
+KoParagraphStyle.RightBorderStyle = KoParagraphStyle.HasLeftBorder + 24;
+KoParagraphStyle.RightBorderColor = KoParagraphStyle.HasLeftBorder + 25;
+KoParagraphStyle.BottomBorderWidth = KoParagraphStyle.HasLeftBorder + 26;
+KoParagraphStyle.BottomInnerBorderWidth = KoParagraphStyle.HasLeftBorder + 27;
+KoParagraphStyle.BottomBorderSpacing = KoParagraphStyle.HasLeftBorder + 28;
+KoParagraphStyle.BottomBorderStyle = KoParagraphStyle.HasLeftBorder + 29;
+KoParagraphStyle.BottomBorderColor = KoParagraphStyle.HasLeftBorder + 30;
+
+// enum KoParagraphStyle.BorderStyle
+KoParagraphStyle.BorderNone = 0;
+KoParagraphStyle.BorderDotted = 1;
+KoParagraphStyle.BorderDashed = 2;
+KoParagraphStyle.BorderSolid = 3;
+KoParagraphStyle.BorderDouble = 4;
+KoParagraphStyle.BorderGroove = 5;
+KoParagraphStyle.BorderRidge = 6;
+KoParagraphStyle.BorderInset = 7;
+KoParagraphStyle.BorderOutset = 8;
+
 
 
 var defaultBlockFormat = new QTextBlockFormat;

@@ -49,8 +49,7 @@ public:
 public:
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
-   // virtual enumToolType toolType() { return TOOL_FILL; }
-    virtual quint32 priority() { return 3; }
+
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
@@ -87,8 +86,8 @@ public:
         {
             setToolTip(i18n("Select a color from the image or current layer"));
             setToolType(TOOL_TYPE_SELECTED);
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority( 14 );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            setPriority( 15 );
             setIcon("krita_tool_color_picker");
             setShortcut( KShortcut( Qt::Key_P ) );
         }

@@ -105,8 +105,8 @@ public:
         : KoToolFactory(parent, "KritaShape/KisToolMeasure", i18n( "Measure" ))
         {
             setToolType( TOOL_TYPE_TRANSFORM );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority( 15 );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            setPriority( 16 );
         }
 
     virtual ~KisToolMeasureFactory(){}

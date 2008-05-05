@@ -74,8 +74,6 @@ public:
     ~KisToolMagnetic();
 
     virtual void setup (KActionCollection*);
-    virtual enumToolType toolType() { return TOOL_SELECT; }
-    virtual quint32 priority() { return 9; }
 
     virtual void keyPress(QKeyEvent*);
     virtual void buttonPress(KoPointerEvent*);

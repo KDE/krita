@@ -81,7 +81,7 @@ public:
             setToolType(TOOL_TYPE_SHAPE);
             setPriority( 6 );
             setIcon("tool_star");
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setInputDeviceAgnostic(false);
         }
 

@@ -34,8 +34,6 @@ public:
     virtual ~KisToolBezierPaint();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual quint32 priority() { return 7; }
 
 protected:
 
@@ -51,7 +49,7 @@ public:
         {
             setToolTip(i18n("Draw cubic Beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
             setToolType(TOOL_TYPE_SHAPE);
-            setPriority(0);
+            setPriority(7);
             setIcon("tool_bezier_paint");
         };
 

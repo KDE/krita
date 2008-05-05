@@ -118,8 +118,8 @@ public:
             setToolType( TOOL_TYPE_FILL );
             setIcon( "krita_tool_gradient" );
             setShortcut( KShortcut( Qt::Key_G ) );
-            setPriority( 13 );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            setPriority( 15 );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setInputDeviceAgnostic(false);
         }
 

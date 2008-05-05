@@ -60,8 +60,6 @@ public:
      virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-    virtual quint32 priority() { return 1; }
-
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
@@ -140,7 +138,7 @@ public:
         {
             setToolTip(i18n("Crop the image to an area"));
             setToolType(TOOL_TYPE_TRANSFORM);
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority( 10 );
             setIcon("tool_crop");
         }

@@ -41,9 +41,6 @@ public:
     KisToolPolyline(KoCanvasBase * canvas);
     virtual ~KisToolPolyline();
 
-//     virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual quint32 priority() { return 5; }
-
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
@@ -81,7 +78,7 @@ public:
         {
             setToolTip( i18n( "Draw a polyline. Shift-mouseclick ends the polyline." ) );
             setToolType( TOOL_TYPE_SHAPE );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "polyline" );
             setPriority( 5 );
             setInputDeviceAgnostic(false);

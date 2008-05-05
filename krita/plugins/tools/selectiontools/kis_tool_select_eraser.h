@@ -65,7 +65,7 @@ public:
             setIcon( "tool_eraser_selection" );
             setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
             setPriority( 51 );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectEraserFactory(){}

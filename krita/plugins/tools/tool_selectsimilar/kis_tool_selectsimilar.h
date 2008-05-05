@@ -88,7 +88,7 @@ public:
         {
             setToolTip( i18n( "Select similar colors" ) );
             setToolType( TOOL_TYPE_SELECTED );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_similar_selection" );
             setShortcut( KShortcut(Qt::CTRL + Qt::Key_E) );
             setPriority( 57 );

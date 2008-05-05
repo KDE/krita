@@ -62,7 +62,7 @@ public:
         {
             setToolTip( i18n( "Select an area of the image with path." ) );
             setToolType( TOOL_TYPE_SELECTED );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_outline_selection" );
             setPriority( 58 );
         }

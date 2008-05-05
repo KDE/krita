@@ -48,17 +48,11 @@ public:
     KisToolRectangle(KoCanvasBase * canvas);
     virtual ~KisToolRectangle();
 
-    //virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual quint32 priority() { return 2; }
-
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
-    // protected:
-    //virtual void draw(const QPointF&, const QPointF&);
 
  private:
     void paintRectangle();
@@ -88,7 +82,7 @@ public:
             setToolTip( i18n( "Draw a rectangle" ) );
 
             setToolType( TOOL_TYPE_SHAPE );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "krita_tool_rectangle" );
             //setShortcut( Qt::Key_F6 );
             setPriority( 2 );

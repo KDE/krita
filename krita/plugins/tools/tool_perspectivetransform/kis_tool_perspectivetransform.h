@@ -53,8 +53,6 @@ public:
     virtual QWidget* optionWidget();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_TRANSFORM; }
-    virtual quint32 priority() { return 4; }
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
     virtual void mousePressEvent(KoPointerEvent *e);
@@ -112,7 +110,7 @@ public:
             setToolTip( i18n( "Transform the perspective appearance of a layer or a selection" ) );
             setToolType( TOOL_TYPE_TRANSFORM );
             setIcon( "tool_perspectivetransform" );
-            setPriority( 0 );
+            setPriority( 12 );
         };
 
     virtual ~KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&){}

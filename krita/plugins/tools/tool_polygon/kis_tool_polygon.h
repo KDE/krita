@@ -74,7 +74,7 @@ public:
         {
             setToolTip( i18n( "Draw a polygon. Shift-mouseclick ends the polygon." ) );
             setToolType( TOOL_TYPE_SHAPE );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_polygon" );
             setPriority( 4 );
             setInputDeviceAgnostic(false);

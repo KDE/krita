@@ -74,7 +74,7 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_contiguous_selection" );
             setPriority( 56 );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectContiguousFactory(){}

@@ -61,7 +61,6 @@ public:
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-    virtual quint32 priority() { return 0; }
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
@@ -136,7 +135,7 @@ public:
             setIcon( "transform" );
             setPriority( 11 );
 
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolTransformFactory(){}

@@ -33,18 +33,10 @@ public:
     KisToolGrid(KoCanvasBase * canvas);
     virtual ~KisToolGrid();
 
-    //
-    // KisToolPaint interface
-    //
-
-    virtual quint32 priority() { return 3; }
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-// Uncomment if you have a configuration widget
-//     QWidget* createOptionWidget();
-//     virtual QWidget* optionWidget();
 
 public slots:
     virtual void activate(bool temp = false);
@@ -75,7 +67,7 @@ public:
             setToolTip( i18n( "Edit the grid" ) );
             setToolType( TOOL_TYPE_VIEW );
             setIcon( "krita_tool_grid" );
-            setPriority( 0 );
+            setPriority( 17 );
         };
 
 

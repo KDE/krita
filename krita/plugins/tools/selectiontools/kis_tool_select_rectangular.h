@@ -39,8 +39,6 @@ public:
     KisToolSelectRectangular(KoCanvasBase * canvas);
     virtual ~KisToolSelectRectangular();
 
-//     virtual quint32 priority() { return 3; }
-//     virtual enumToolType toolType() { return TOOL_SELECT; }
     virtual QWidget * createOptionWidget();
         virtual QWidget* optionWidget();
 
@@ -77,7 +75,7 @@ public:
         {
             setToolTip( i18n( "Select a rectangular area" ) );
             setToolType( TOOL_TYPE_SELECTED );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_rect_selection" );
             setShortcut( KShortcut( Qt::Key_R ) );
             setPriority( 52 );

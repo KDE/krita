@@ -41,7 +41,6 @@ public:
     KisToolSelectElliptical(KoCanvasBase * canvas);
     virtual ~KisToolSelectElliptical();
 
-//     virtual quint32 priority() { return 4; }
     virtual QWidget * createOptionWidget();
         virtual QWidget* optionWidget();
 //     virtual enumToolType toolType() { return TOOL_SELECT; }
@@ -80,7 +79,7 @@ public:
         {
             setToolTip( i18n( "Select an elliptical area" ) );
             setToolType( TOOL_TYPE_SELECTED);
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_elliptical_selection" );
             setShortcut( KShortcut(Qt::Key_J) );
             setPriority( 53 );

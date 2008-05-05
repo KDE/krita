@@ -84,7 +84,7 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             setIcon( "tool_polygonal_selection" );
             setPriority( 54 );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectPolygonalFactory(){}

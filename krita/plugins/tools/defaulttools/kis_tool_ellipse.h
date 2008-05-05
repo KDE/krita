@@ -43,9 +43,6 @@ public:
     KisToolEllipse(KoCanvasBase * canvas);
     virtual ~KisToolEllipse();
 
-    virtual quint32 priority() { return 3; }
-    //virtual enumToolType toolType() { return TOOL_SHAPE; }
-
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -73,7 +70,7 @@ public:
         {
             setToolTip( i18n( "Draw an ellipse" ) );
             setToolType( TOOL_TYPE_SHAPE );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "krita_tool_ellipse" );
             setPriority( 3 );
             setInputDeviceAgnostic(false);

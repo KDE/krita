@@ -47,8 +47,6 @@ class KisToolLine : public KisToolPaint {
     KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
 
-    virtual quint32 priority() { return 1; }
-
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -84,7 +82,7 @@ public:
             setToolTip(i18n("Draw a straight line with the current brush"));
             // Temporarily
             setToolType(TOOL_TYPE_SHAPE);
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority( 1 );
             setIcon("krita_tool_line");
             setInputDeviceAgnostic(false);

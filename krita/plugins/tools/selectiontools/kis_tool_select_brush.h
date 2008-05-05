@@ -70,7 +70,7 @@ public:
             setIcon( "tool_brush_selection" );
             setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
             setPriority( 50 );
-            setActivationShapeId( KIS_LAYER_SHAPE_ID );
+            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
         }
 
     virtual ~KisToolSelectBrushFactory(){}

@@ -92,7 +92,7 @@ public:
             setToolTip( i18n( "Edit the perspective grid" ) );
             setToolType( TOOL_TYPE_VIEW );
             setIcon( "tool_perspectivegrid" );
-            setPriority( 0 );
+            setPriority( 16 );
         };
 
 

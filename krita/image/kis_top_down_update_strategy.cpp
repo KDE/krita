@@ -290,12 +290,12 @@ class KisTopDownUpdateStrategy::Private
 {
 public:
 
-    KisNodeSP node;
-    KisNodeSP filthyNode;
+    KisNodeWSP node;
+    KisNodeWSP filthyNode;
     KisImageSP image;
 };
 
-KisTopDownUpdateStrategy::KisTopDownUpdateStrategy( KisNodeSP node )
+KisTopDownUpdateStrategy::KisTopDownUpdateStrategy( KisNodeWSP node )
     : m_d( new Private)
 {
     m_d->node = node;
@@ -387,7 +387,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
     if (m_d->filthyNode) {
         KisNodeSP node = m_d->node->firstChild();
         while (node) {
-            if (node == m_d->filthyNode)
+            if (node.data() == m_d->filthyNode.data())
                 break;
             if (node->inherits("KisAdjustmentLayer")) {
                 startWith = node;
@@ -412,7 +412,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
     return projection;
 }
 
-void KisTopDownUpdateStrategy::setFilthyNode( const KisNodeSP node )
+void KisTopDownUpdateStrategy::setFilthyNode( const KisNodeWSP node )
 {
     m_d->filthyNode = node;
 }

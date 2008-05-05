@@ -36,6 +36,11 @@
 
 #include "testutil.h"
 
+void KisFilterMaskTest::testCreation()
+{
+    KisFilterMaskSP mask = new KisFilterMask();
+}
+
 void KisFilterMaskTest::testProjectionNotSelected()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);

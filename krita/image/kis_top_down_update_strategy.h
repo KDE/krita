@@ -33,7 +33,7 @@ class KisTopDownUpdateStrategy : public KisProjectionUpdateStrategy {
 
 public:
     
-    KisTopDownUpdateStrategy( KisNodeSP node );
+    KisTopDownUpdateStrategy( KisNodeWSP node );
 
     ~KisTopDownUpdateStrategy();
     
@@ -48,7 +48,7 @@ public:
 protected:
     
     KisPaintDeviceSP updateGroupLayerProjection( const QRect & rc, KisPaintDeviceSP projection );
-    void setFilthyNode( const KisNodeSP node );
+    void setFilthyNode( const KisNodeWSP node );
 
 private:
 

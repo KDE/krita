@@ -608,6 +608,7 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device) {
                 d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             }
             d->canvasData->canvas->activate();
+            emit inputDeviceChanged(device);
             return;
         }
     }

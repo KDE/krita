@@ -810,7 +810,6 @@ void KoParagraphStyle::loadOdf( const KoXmlElement* element, KoOdfLoadingContext
     context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
     charstyle->loadOasis( context ); // load the KoCharacterStyle from the stylestack
 
-    // we need to know the font, so load paragraph style after char style
     //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
     context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
     loadOdfProperties( context.styleStack() ); // load the KoParagraphStyle from the stylestack

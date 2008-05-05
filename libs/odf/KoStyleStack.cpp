@@ -106,10 +106,10 @@ QString KoStyleStack::property( const char* nsURI, const char* name, const char*
     {
         --it;
         KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
-        if ( properties.hasAttributeNS( nsURI, name ) )
-            return properties.attributeNS( nsURI, name, QString() );
         if ( detail && properties.hasAttributeNS( nsURI, fullName ) )
             return properties.attributeNS( nsURI, fullName, QString() );
+        if ( properties.hasAttributeNS( nsURI, name ) )
+            return properties.attributeNS( nsURI, name, QString() );
     }
     return QString();
 }

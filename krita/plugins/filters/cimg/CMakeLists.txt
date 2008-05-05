@@ -18,7 +18,7 @@ if(MINGW)
 target_link_libraries(kritacimg gdi32)
 endif(MINGW)
 
-target_link_libraries(kritacimg kritaui)
+target_link_libraries(kritacimg kritaui ${CMAKE_THREAD_LIBS_INIT})
 
 install(TARGETS kritacimg  DESTINATION ${PLUGIN_INSTALL_DIR})
 

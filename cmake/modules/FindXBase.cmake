@@ -19,15 +19,6 @@ ELSE (XBase_INCLUDE_DIR AND XBase_LIBRARIES)
 
        FIND_LIBRARY(XBase_LIBRARIES NAMES xbase )
 
-	#
-	# everything necessary found?
-	#
-       IF (XBase_LIBRARIES AND XBase_INCLUDE_DIR)
-		SET (XBase_FOUND TRUE)
-       ELSE (XBase_LIBRARIES AND XBase_INCLUDE_DIR)
-		SET (XBase_FOUND FALSE)
-       ENDIF (XBase_LIBRARIES AND XBase_INCLUDE_DIR)
-
        include(FindPackageHandleStandardArgs)
        FIND_PACKAGE_HANDLE_STANDARD_ARGS(XBase DEFAULT_MSG XBase_INCLUDE_DIR XBase_LIBRARIES )
 

@@ -100,8 +100,26 @@ public:
      */
     KoPAView * view() const;
 
+    /**
+     * @brief Get the view mode's implementation of view converter
+     *
+     * The default implementation returns the KoPAView's view converter
+     *
+     * @return the view converter used in the view mode
+     */
     virtual KoViewConverter * viewConverter();
 
+    /**
+     * @brief Update the view based on the active page
+     *
+     * The default implementation calls the KoPAView's updateActivePage(). If
+     * other behavior is intended when updating active page, the derived class
+     * should reimplement this function.
+     *
+     * @see KoPAView::updateActivePage()
+     *
+     * @param page the new page to be updated on the view mode
+     */
     virtual void updateActivePage( KoPAPageBase * page );
 
 protected:

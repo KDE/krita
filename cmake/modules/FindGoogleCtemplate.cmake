@@ -14,12 +14,12 @@
 
 SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have google/ctemplate?" )
 
-FIND_PATH(GOOGLE_CTEMPLATE_INCLUDE_DIR google/template.h /usr/include /usr/local/include )
+FIND_PATH(GOOGLE_CTEMPLATE_INCLUDE_DIR google/template.h )
 
-FIND_LIBRARY(GOOGLE_CTEMPLATE_THREAD_LIB ctemplate /usr/lib /usr/loca/lib )
-FIND_LIBRARY(GOOGLE_CTEMPLATE_NOTHREAD_LIB ctemplate_nothreads /usr/local/lib )
+FIND_LIBRARY(GOOGLE_CTEMPLATE_THREAD_LIB ctemplate )
+FIND_LIBRARY(GOOGLE_CTEMPLATE_NOTHREAD_LIB ctemplate_nothreads  )
 
-FIND_PROGRAM(GOOGLE_CTEMPLATE_COMPILER make_tpl_varnames_h /usr/bin /usr/local/bin)
+FIND_PROGRAM(GOOGLE_CTEMPLATE_COMPILER make_tpl_varnames_h )
 
 #How guest if all this are found
 

@@ -62,6 +62,7 @@
 #include <KoSelection.h>
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
+#include <KoToolManager.h>
 
 // Krita Image
 #include <kis_adjustment_layer.h>
@@ -521,9 +522,9 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
 {
     KisView2 * v = new KisView2(this, parent);
     Q_CHECK_PTR(v);
-
+    
     m_d->shapeController->setInitialShapeForView( v );
-
+    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
     return v;
 }
 

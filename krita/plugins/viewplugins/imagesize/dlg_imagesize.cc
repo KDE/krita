@@ -43,6 +43,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_width = width / resolution;
     m_height = height / resolution;
 
+    m_aspectRatio = m_width / m_height;
+
     m_page = new WdgImageSize(this);
     m_page->layout()->setMargin(0);
     Q_CHECK_PTR(m_page);
@@ -59,24 +61,27 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     m_page->doubleResolution->setValue(72.0 * resolution);
 
-    m_buttonGroup = new QButtonGroup(m_page);
-    m_buttonGroup->addButton(m_page->radioProtectPixel);
-    m_buttonGroup->addButton(m_page->radioProtectPhysical);
-    m_buttonGroup->addButton(m_page->radioProtectResolution);
+    m_page->cmbInteractor->addItem( "Size in Pixels" );
+    m_page->cmbInteractor->addItem( "Print Size" );
+
+    slotAspectChanged(true);
+
+    m_page->chkPercentage->setEnabled(false);
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    connect(m_page->radioProtectPixel, SIGNAL(toggled(bool)),
+    connect(m_page->chkAffectResolution, SIGNAL(toggled(bool)),
         this, SLOT(slotProtectChanged()));
 
-    connect(m_page->radioProtectPhysical, SIGNAL(toggled(bool)),
-        this, SLOT(slotProtectChanged()));
+    connect(m_page->aspectPixels, SIGNAL(keepAspectRatioChanged(bool)),
+        this, SLOT(slotAspectChanged(bool)));
 
-    connect(m_page->radioProtectResolution, SIGNAL(toggled(bool)),
-        this, SLOT(slotProtectChanged()));
+    connect(m_page->aspectPhysical, SIGNAL(keepAspectRatioChanged(bool)),
+        this, SLOT(slotAspectChanged(bool)));
 
-    m_page->radioProtectResolution->setChecked(true);
+    connect(m_page->cmbInteractor, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(slotProtectChanged()));
 
     connect(m_page->intPixelWidth, SIGNAL(valueChanged(int)),
         this, SLOT(slotWidthPixelsChanged(int)));
@@ -95,6 +100,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     connect(m_page->cmbHeightUnit, SIGNAL(currentIndexChanged(int)),
         this, SLOT(slotHeightUnitChanged(int)));
+
+    slotProtectChanged();
 
     // FIXME should take it from some application wide setting
     m_page->cmbWidthUnit->setCurrentIndex(KoUnit::Centimeter);
@@ -142,7 +149,7 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
 {
     blockAll();
 
-   if(m_page->radioProtectResolution->isChecked()) {
+   if(!m_page->chkAffectResolution->isChecked()) {
         m_width = 72 * w / m_page->doubleResolution->value();
 
         KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
@@ -151,8 +158,22 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
     else {
         m_page->doubleResolution->setValue(72 * w / m_width);
         // since we only have one resolution parameter we need to recalculate the height in pixels
-        m_page->intPixelHeight->setValue(int(m_height * m_page->doubleResolution->value() / 72.0));
+        m_page->intPixelHeight->setValue(int(0.5+m_height * m_page->doubleResolution->value() / 72.0));
     }
+
+    if(m_page->aspectPixels->keepAspectRatio())
+    {
+        m_height = m_width / m_aspectRatio;
+
+        KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
+        m_page->doublePhysicalHeight->setValue(unit.toUserValue(m_height));
+
+        m_page->intPixelHeight->setValue(int(0.5+m_height * m_page->doubleResolution->value() / 72.0));
+    }
+
+    // recalculate aspect ratio
+    m_aspectRatio = m_width / m_height;
+    
     unblockAll();
 }
 
@@ -160,7 +181,7 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
 {
     blockAll();
 
-    if(m_page->radioProtectResolution->isChecked()) {
+    if(!m_page->chkAffectResolution->isChecked()) {
         m_height = 72 * h / m_page->doubleResolution->value();
 
         KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
@@ -169,9 +190,22 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
     else {
         m_page->doubleResolution->setValue(72 * h / m_height);
         // since we only have one resolution parameter we need to recalculate the width in pixels
-        m_page->intPixelWidth->setValue(int(m_width * m_page->doubleResolution->value() / 72.0));
+        m_page->intPixelWidth->setValue(int(0.5+m_width * m_page->doubleResolution->value() / 72.0));
     }
 
+    if(m_page->aspectPixels->keepAspectRatio())
+    {
+        m_width = m_aspectRatio * m_height;
+
+        KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
+        m_page->doublePhysicalWidth->setValue(unit.toUserValue(m_width));
+
+        m_page->intPixelWidth->setValue(int(0.5+m_width * m_page->doubleResolution->value() / 72.0));
+    }
+
+    // recalculate aspect ratio
+    m_aspectRatio = m_width / m_height;
+    
     unblockAll();
 }
 
@@ -182,8 +216,8 @@ void DlgImageSize::slotWidthPhysicalChanged(double w)
     KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
     m_width = unit.fromUserValue(w);
 
-    if(m_page->radioProtectResolution->isChecked()) {
-        m_page->intPixelWidth->setValue(int(m_width*m_page->doubleResolution->value()/72.0));
+    if(!m_page->chkAffectResolution->isChecked()) {
+        m_page->intPixelWidth->setValue(int(0.5+m_width*m_page->doubleResolution->value()/72.0));
     }
     else {
         m_page->doubleResolution->setValue(72*m_page->intPixelWidth->value()/m_width);
@@ -194,6 +228,19 @@ void DlgImageSize::slotWidthPhysicalChanged(double w)
         m_page->doublePhysicalHeight->setValue(unit.toUserValue(m_height));
     }
 
+    if(m_page->aspectPixels->keepAspectRatio())
+    {
+        m_height = m_width / m_aspectRatio;
+
+        unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
+        m_page->doublePhysicalHeight->setValue(unit.toUserValue(m_height));
+
+        m_page->intPixelHeight->setValue(int(0.5+m_height * m_page->doubleResolution->value() / 72.0));
+    }
+
+    // recalculate aspect ratio
+    m_aspectRatio = m_width / m_height;
+    
     unblockAll();
 }
 
@@ -204,11 +251,12 @@ void DlgImageSize::slotHeightPhysicalChanged(double h)
     KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
     m_height = unit.fromUserValue(h);
 
-    if(m_page->radioProtectResolution->isChecked()) {
-        m_page->intPixelHeight->setValue(int(m_height*m_page->doubleResolution->value()/72.0));
+    if(!m_page->chkAffectResolution->isChecked()) {
+        m_page->intPixelHeight->setValue(int(0.5+m_height*m_page->doubleResolution->value()/72.0));
     }
     else {
         m_page->doubleResolution->setValue(72*m_page->intPixelHeight->value()/m_height);
+
         // since we only have one resolution parameter we need to recalculate the physical width
         m_width = 72 * m_page->intPixelWidth->value()/m_page->doubleResolution->value();
 
@@ -216,6 +264,19 @@ void DlgImageSize::slotHeightPhysicalChanged(double h)
         m_page->doublePhysicalWidth->setValue(unit.toUserValue(m_width));
     }
 
+    if(m_page->aspectPixels->keepAspectRatio())
+    {
+        m_width = m_aspectRatio * m_height;
+
+        unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
+        m_page->doublePhysicalWidth->setValue(unit.toUserValue(m_width));
+
+        m_page->intPixelWidth->setValue(int(0.5+m_width * m_page->doubleResolution->value() / 72.0));
+    }
+
+    // recalculate aspect ratio
+    m_aspectRatio = m_width / m_height;
+    
     unblockAll();
 }
 
@@ -226,6 +287,7 @@ void DlgImageSize::slotWidthUnitChanged(int index)
     KoUnit unit = KoUnit((KoUnit::Unit)index);
     m_page->doublePhysicalWidth->setValue(unit.toUserValue(m_width));
 
+    
     unblockAll();
 }
 
@@ -241,11 +303,32 @@ void DlgImageSize::slotHeightUnitChanged(int index)
 
 void DlgImageSize::slotProtectChanged()
 {
-    m_page->intPixelWidth->setEnabled(!m_page->radioProtectPixel->isChecked());
-    m_page->intPixelHeight->setEnabled(!m_page->radioProtectPixel->isChecked());
-    m_page->doublePhysicalWidth->setEnabled(!m_page->radioProtectPhysical->isChecked());
-    m_page->doublePhysicalHeight->setEnabled(!m_page->radioProtectPhysical->isChecked());
-    m_page->doubleResolution->setEnabled(!m_page->radioProtectResolution->isChecked());
+    if(m_page->chkAffectResolution->isChecked())
+    {
+        m_page->intPixelWidth->setEnabled(m_page->cmbInteractor->currentIndex()==0);
+        m_page->intPixelHeight->setEnabled(m_page->cmbInteractor->currentIndex()==0);
+        m_page->doublePhysicalWidth->setEnabled(m_page->cmbInteractor->currentIndex()==1);
+        m_page->doublePhysicalHeight->setEnabled(m_page->cmbInteractor->currentIndex()==1);
+        m_page->doubleResolution->setEnabled(true);
+        m_page->cmbInteractor->setEnabled(true);
+        m_page->labelInteractor->setEnabled(true);
+    }
+    else
+    {
+        m_page->intPixelWidth->setEnabled(true);
+        m_page->intPixelHeight->setEnabled(true);
+        m_page->doublePhysicalWidth->setEnabled(true);
+        m_page->doublePhysicalHeight->setEnabled(true);
+        m_page->doubleResolution->setEnabled(false);
+        m_page->cmbInteractor->setEnabled(false);
+        m_page->labelInteractor->setEnabled(false);
+    }
+}
+
+void DlgImageSize::slotAspectChanged(bool keep)
+{
+    m_page->aspectPixels->setKeepAspectRatio(keep);
+    m_page->aspectPhysical->setKeepAspectRatio(keep);
 }
 
 void DlgImageSize::blockAll()

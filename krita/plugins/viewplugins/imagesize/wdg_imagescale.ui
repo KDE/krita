@@ -5,49 +5,50 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>456</width>
-    <height>416</height>
+    <width>418</width>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Scale To New Size</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout" >
    <item>
     <widget class="QGroupBox" name="groupPixelSize" >
      <property name="title" >
       <string>Size in Pixels</string>
      </property>
-     <layout class="QGridLayout" >
+     <property name="flat" >
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3" >
       <item row="0" column="0" >
-       <widget class="QLabel" name="labelPixelProtect" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <spacer name="spacer_6" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="minimumSize" >
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>100</width>
           <height>0</height>
          </size>
         </property>
-        <property name="text" >
-         <string>Protect:</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy" >
-         <cstring>radioProtectPixel</cstring>
+       </spacer>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QSpinBox" name="intPixelWidth" >
+        <property name="maximum" >
+         <number>1000000</number>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2" >
-       <widget class="QRadioButton" name="radioProtectPixel" >
+      <item rowspan="2" row="1" column="2" >
+       <widget class="KoAspectButton" name="aspectPixels" >
         <property name="text" >
-         <string>while editing physical size or resolution</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -64,12 +65,18 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QSpinBox" name="intPixelWidth" >
-        <property name="maximum" >
-         <number>1000000</number>
+      <item rowspan="2" row="1" column="3" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="labelHeight" >
@@ -97,75 +104,33 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>124</width>
-          <height>16</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="3" column="1" >
-       <widget class="KisCmbIDList" native="1" name="cmbFilterType" />
-      </item>
      </layout>
     </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="groupPhysicalsize" >
      <property name="title" >
-      <string>Physical Size</string>
+      <string>Print Size</string>
      </property>
-     <layout class="QGridLayout" >
+     <property name="flat" >
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4" >
       <item row="0" column="0" >
-       <widget class="QLabel" name="labelPhysicalProtect" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <spacer name="spacer_5" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="minimumSize" >
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>100</width>
           <height>0</height>
          </size>
         </property>
-        <property name="text" >
-         <string>Protect:</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy" >
-         <cstring>radioProtectPhysical</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="3" >
-       <widget class="QRadioButton" name="radioProtectPhysical" >
-        <property name="text" >
-         <string>while editing size in pixels or resolution</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="labelPhysicalWidth" >
-        <property name="text" >
-         <string>Physical Width:</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy" >
-         <cstring>doublePhysicalWidth</cstring>
-        </property>
-       </widget>
+       </spacer>
       </item>
       <item row="1" column="1" >
        <widget class="QDoubleSpinBox" name="doublePhysicalWidth" >
@@ -183,13 +148,53 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
-       <widget class="QComboBox" name="cmbWidthUnit" />
+      <item rowspan="2" row="1" column="2" >
+       <layout class="QGridLayout" name="gridLayout_2" >
+        <item row="0" column="0" >
+         <widget class="QComboBox" name="cmbWidthUnit" />
+        </item>
+        <item rowspan="2" row="0" column="1" >
+         <widget class="KoAspectButton" name="aspectPhysical" >
+          <property name="text" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item rowspan="2" row="0" column="2" >
+         <spacer name="spacer_3" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>0</width>
+            <height>27</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QComboBox" name="cmbHeightUnit" />
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="labelPhysicalWidth" >
+        <property name="text" >
+         <string>Print Width:</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy" >
+         <cstring>doublePhysicalWidth</cstring>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="labelPhysicalHeight" >
         <property name="text" >
-         <string>Physical Height:</string>
+         <string>Print Height:</string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -212,67 +217,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2" >
-       <widget class="QComboBox" name="cmbHeightUnit" />
-      </item>
-      <item row="2" column="3" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupResolution" >
-     <property name="title" >
-      <string>Resolution</string>
-     </property>
-     <layout class="QGridLayout" >
-      <item row="1" column="0" >
-       <widget class="QLabel" name="labelResolutionProtect" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize" >
-         <size>
-          <width>100</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>Protect:</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy" >
-         <cstring>radioProtectResolution</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2" >
-       <widget class="QRadioButton" name="radioProtectResolution" >
-        <property name="layoutDirection" >
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text" >
-         <string>while editing size in pixels or physical size</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
+      <item row="3" column="0" >
        <widget class="QLabel" name="labelResolution" >
         <property name="text" >
          <string>Resolution:</string>
@@ -280,36 +225,135 @@
         <property name="alignment" >
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="buddy" >
-         <cstring>doubleResolution</cstring>
-        </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleResolution" >
-        <property name="minimumSize" >
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximum" >
-         <double>100000000.000000000000000</double>
-        </property>
-       </widget>
+      <item row="3" column="1" >
+       <layout class="QHBoxLayout" name="horizontalLayout_2" >
+        <item>
+         <widget class="QCheckBox" name="chkAffectResolution" >
+          <property name="text" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="doubleResolution" >
+          <property name="minimumSize" >
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum" >
+           <double>100000000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="2" column="2" >
-       <spacer>
+      <item row="3" column="2" >
+       <layout class="QHBoxLayout" name="horizontalLayout" >
+        <item>
+         <widget class="QLabel" name="labelInteractor" >
+          <property name="text" >
+           <string>interacting with</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cmbInteractor" />
+        </item>
+        <item>
+         <spacer name="spacer_4" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>0</width>
+            <height>27</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Scaling Options</string>
+     </property>
+     <property name="flat" >
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout" >
+      <item row="0" column="0" >
+       <spacer name="spacer_8" >
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
          <size>
-          <width>0</width>
+          <width>100</width>
           <height>0</height>
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="labelFilter" >
+        <property name="text" >
+         <string>Interpolation:</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy" >
+         <cstring>doublePhysicalWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <spacer name="spacer" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>181</width>
+          <height>17</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KisCmbIDList" native="1" name="cmbFilterType" />
+      </item>
+      <item row="2" column="1" >
+       <widget class="QCheckBox" name="chkPercentage" >
+        <property name="text" >
+         <string>sizes as percentage %</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="labelPercentage" >
+        <property name="text" >
+         <string>Specify:</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy" >
+         <cstring>doublePhysicalWidth</cstring>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -319,7 +363,7 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>0</width>
        <height>0</height>
@@ -334,6 +378,11 @@
    <class>KisCmbIDList</class>
    <extends></extends>
    <header>widgets/kis_cmb_idlist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QLabel</extends>
+   <header>KoAspectButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

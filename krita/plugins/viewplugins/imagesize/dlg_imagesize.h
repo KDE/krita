@@ -65,6 +65,7 @@ private slots:
     void slotWidthUnitChanged(int index);
     void slotHeightUnitChanged(int index);
     void slotProtectChanged();
+    void slotAspectChanged(bool keep);
 
 private:
 
@@ -75,6 +76,7 @@ private:
     double m_origW, m_origH;
     double m_width, m_height;  // in points
     QButtonGroup *m_buttonGroup;
+    double m_aspectRatio;
 };
 
 #endif // DLG_IMAGESIZE

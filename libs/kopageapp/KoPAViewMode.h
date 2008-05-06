@@ -24,7 +24,9 @@
 
 class KoPAView;
 class KoPACanvas;
+class KoPAPageBase;
 class KoToolProxy;
+class KoViewConverter;
 class QPaintEvent;
 class QTabletEvent;
 class QMouseEvent;
@@ -97,6 +99,10 @@ public:
      * @return view view used by the view mode
      */
     KoPAView * view() const;
+
+    virtual KoViewConverter * viewConverter();
+
+    virtual void updateActivePage( KoPAPageBase * page );
 
 protected:
     KoPACanvas * m_canvas;

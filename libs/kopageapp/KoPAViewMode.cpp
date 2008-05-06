@@ -20,6 +20,7 @@
 #include "KoPAViewMode.h"
 
 #include "KoPACanvas.h"
+#include "KoPAView.h"
 
 KoPAViewMode::KoPAViewMode( KoPAView * view, KoPACanvas * canvas )
 : m_canvas( canvas )
@@ -59,5 +60,15 @@ KoPACanvas * KoPAViewMode::canvas() const
 KoPAView * KoPAViewMode::view() const
 {
     return m_view;
+}
+
+KoViewConverter * KoPAViewMode::viewConverter()
+{
+    return m_view->KoPAView::viewConverter();
+}
+
+void KoPAViewMode::updateActivePage( KoPAPageBase *page )
+{
+    m_view->updateActivePage( page );
 }
 

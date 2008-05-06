@@ -26,7 +26,6 @@ Regressions from 1.x
       and make sure it's extensible with our own widgets (for exposure)
     * The filter listview is broken, breaking the adjustment layers dialog
     * Progress reporting
-    * Order in the toolbox has changed
     * Split view crashes
     * opening a backup file causes a crash ( krita(8568)/koffice (filter manager) 
       KoFilterManager::importDocument: Can't open  "application/zip" , trying filter chooser

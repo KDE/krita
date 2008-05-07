@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -123,13 +123,13 @@ void SimpleTextShape::createOutline()
         QPointF pathPoint;
 
         m_charOffsets.resize( textLength + 1 );
-	int charIdx = 0;
+        int charIdx = 0;
         for( ;charIdx < textLength; ++charIdx )
         {
             QString actChar( m_text[charIdx] );
             // get the percent value of the actual char position
             qreal t = m_baseline.percentAtLength( charPos );
-	    m_charOffsets[ charIdx ] = -1;
+            m_charOffsets[ charIdx ] = -1;
             if( t >= 1.0 )
                 break;
 
@@ -141,7 +141,7 @@ void SimpleTextShape::createOutline()
                 t = m_baseline.percentAtLength( charPos + 0.5 * metrics.width( actChar ) );
             }
 
-	    m_charOffsets[ charIdx ] = m_baseline.percentAtLength( charPos );
+            m_charOffsets[ charIdx ] = m_baseline.percentAtLength( charPos );
             charPos += metrics.width( actChar );
             if( t < 0.0 )
                 continue;
@@ -156,7 +156,7 @@ void SimpleTextShape::createOutline()
             m.rotate( 360. - angle );
             m_outline.addPath( m.map( m_charOutlines[charIdx] ) );
         }
-	m_charOffsets[ charIdx ] = m_baseline.percentAtLength( charPos );
+        m_charOffsets[ charIdx ] = m_baseline.percentAtLength( charPos );
     }
     else
     {
@@ -226,9 +226,31 @@ qreal SimpleTextShape::baselineOffset() const
 
 void SimpleTextShape::setTextAnchor( TextAnchor anchor )
 {
+    if( anchor == m_textAnchor )
+        return;
+
+    QFontMetricsF metrics( m_font );
+    int length = metrics.width( m_text );
+    qreal oldOffset = 0.0;
+    if( m_textAnchor == AnchorMiddle )
+        oldOffset = -0.5 * length;
+    else if( m_textAnchor == AnchorEnd )
+        oldOffset = -length;
+
     m_textAnchor = anchor;
+
+    qreal newOffset = 0.0;
+    if( m_textAnchor == AnchorMiddle )
+        newOffset = -0.5 * length;
+    else if( m_textAnchor == AnchorEnd )
+        newOffset = -length;
+
+    QMatrix m;
+    m.translate( newOffset-oldOffset, 0.0 );
+
     update();
     updateSizeAndPosition();
+    setTransformation( transformation() * m );
     update();
 }
 

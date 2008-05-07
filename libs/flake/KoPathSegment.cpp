@@ -526,7 +526,7 @@ qreal KoPathSegment::length( qreal error ) const
      * is a measure of the error. If the error is to large, then you just subdivide curve at parameter value
      * 1/2, and find the length of each half.
      * If m is the number of subdivisions then the error goes to zero as 2^-4m.
-     * If you dont have a cubic curve but a curve of degree n then you put
+     * If you don't have a cubic curve but a curve of degree n then you put
      *   L = (2*L0 + (n-1)*L1)/(n+1)
      */
 

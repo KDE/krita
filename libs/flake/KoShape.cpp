@@ -776,6 +776,9 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
             applyAbsoluteTransformation( parseOdfTransform( transform ) );
     }
 
+    if ( attributes & OdfAdditionalAttributes ) {
+    }
+
     return true;
 }
 
@@ -921,7 +924,7 @@ QMatrix KoShape::parseOdfTransform( const QString &transform )
 }
 
 void KoShape::saveOdfFrameAttributes(KoShapeSavingContext &context) const {
-    saveOdfAttributes( context, OdfAdditionalAttributes );
+    saveOdfAttributes( context, OdfAllAttributes );
     context.addOption(KoShapeSavingContext::FrameOpened);
 }
 

@@ -139,7 +139,7 @@ useCursor(m_subtractCursor);
         QPointF pos = convertToPixelCoord(e);
         KisSelectionSP selection = currentLayer()->selection();
         if (!selection) selection = currentImage()->globalSelection();
-        KisPixelSelectionSP pSel = selection->pixelSelection();
+        KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
         bool hasSelection = pSel;
 
         KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Similar Selection"),currentLayer());

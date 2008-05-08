@@ -56,7 +56,7 @@ public:
     {
         // XXX: How to use channelflags here? It would be cool to
         // erase all green from an image, for example.
-        qint32 srcInc = (srcstride == 0) ? _CSTraits::channels_nb : 0;
+        qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
         Q_UNUSED( channelFlags );
         while (rows-- > 0)
         {
@@ -77,7 +77,7 @@ public:
                                                                                             NATIVE_OPACITY_OPAQUE,
                                                                                             KoColorSpaceMaths<quint8,channels_type>::scaleToA( U8_mask) );
                     }
-                    mask++;
+                    ++mask;
                 }
                 srcAlpha = KoColorSpaceMaths<channels_type>::multiply( NATIVE_OPACITY_OPAQUE - srcAlpha, U8_opacity);
                 srcAlpha = NATIVE_OPACITY_OPAQUE - srcAlpha;

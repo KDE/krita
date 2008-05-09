@@ -66,7 +66,7 @@ protected:
 
 private:
     QRectF handleRect( const QPointF &p );
-    void repaintAdjusted( const QRectF &rect );
+    void repaintActivePoint();
 
     KoPathPoint *m_activePoint;
     KoPathPoint *m_firstPoint;

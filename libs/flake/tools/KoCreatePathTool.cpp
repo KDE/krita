@@ -174,13 +174,13 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     m_mouseOverFirstPoint = handleRect( m_firstPoint->point() ).contains( event->point );
 
     m_canvas->updateCanvas( m_shape->boundingRect() );
-    repaintAdjusted( m_activePoint->boundingRect( false ) );
+    repaintActivePoint();
     if ( event->buttons() & Qt::LeftButton )
     {
         m_activePoint->setControlPoint2( event->point );
         m_activePoint->setControlPoint1( m_activePoint->point() + ( m_activePoint->point() - event->point ) );
         m_canvas->updateCanvas( m_shape->boundingRect() );
-        repaintAdjusted( m_activePoint->boundingRect( false ) );
+        repaintActivePoint();
     }
     else
     {
@@ -196,7 +196,7 @@ void KoCreatePathTool::mouseReleaseEvent( KoPointerEvent *event )
     if ( ! m_shape || (event->buttons() & Qt::RightButton) )
         return;
 
-    repaintAdjusted( m_activePoint->boundingRect( false ) );
+    repaintActivePoint();
     m_activePoint = m_shape->lineTo( event->point );
 }
 
@@ -277,9 +277,15 @@ QRectF KoCreatePathTool::handleRect( const QPointF &p )
     return QRectF( p.x() - m_handleRadius, p.y() - m_handleRadius, 2 * m_handleRadius, 2 * m_handleRadius );
 }
 
-void KoCreatePathTool::repaintAdjusted( const QRectF &rect )
+void KoCreatePathTool::repaintActivePoint()
 {
-    m_canvas->updateCanvas( rect.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius ) );
+    QRectF rect = m_activePoint->boundingRect( false ); 
+
+    QPointF border = m_canvas->viewConverter()
+            ->viewToDocument( QPointF(m_handleRadius, m_handleRadius) );
+
+    rect.adjust( -border.x(), -border.y(), border.x(), border.y() );
+    m_canvas->updateCanvas( rect );
 }
 
 QWidget * KoCreatePathTool::createOptionWidget() {

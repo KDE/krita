@@ -83,6 +83,7 @@ KoRgbU8ColorSpace::KoRgbU8ColorSpace( KoColorProfile *p) :
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_SATURATION,  i18n( "Saturation" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_VALUE,  i18n( "Value" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_COLOR,  i18n( "Color" )));
+    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_ADD,  i18n( "Add" )));
 }
 
 

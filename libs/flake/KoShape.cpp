@@ -777,6 +777,14 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
     }
 
     if ( attributes & OdfAdditionalAttributes ) {
+        QSet<KoShapeLoadingContext::AdditionalAttributeData> additionalAttributeData = KoShapeLoadingContext::additionalAttributeData();
+        foreach ( KoShapeLoadingContext::AdditionalAttributeData attributeData, additionalAttributeData ) {
+            if ( element.hasAttributeNS( attributeData.ns, attributeData.tag ) ) {
+                QString value = element.attributeNS( attributeData.ns, attributeData.tag );
+                //kDebug(30006) << "load additional attribute" << attributeData.tag << value;
+                setAddtionalAttribute( attributeData.name, value );
+            }
+        }
     }
 
     return true;

@@ -22,6 +22,7 @@
 #define KOSHAPELOADINGCONTEXT_H
 
 #include <QMap>
+#include <QSet>
 #include <QString>
 
 #include "flake_export.h"
@@ -41,6 +42,33 @@ class KoSharedLoadingData;
 class FLAKE_EXPORT KoShapeLoadingContext
 {
 public:
+    /**
+     * Struct to store data about additional attributes that should be loaded during
+     * the shape loading.
+     *
+     * Make sure all parameters point to const char * that stay around. e.g. The a KoXmlNS or 
+     * a "tag" defined string e.g. 
+     * AdditionalAttributeData( KoXmlNS::presentation, "placeholder", presentation:placeholder" )
+     */
+    struct AdditionalAttributeData
+    {
+        AdditionalAttributeData( const char * const ns, const char * const tag, const char * name )
+        : ns( ns )
+        , tag( tag )
+        , name( name )
+        {
+        }
+
+        const char * const ns;
+        const char * const tag;
+        const char * const name;
+
+        bool operator==( const AdditionalAttributeData & other ) const
+        {
+            return ( qstrcmp( name, other.name ) == 0 );
+        }
+    };
+
     /**
      * constructor
      * @param context the context created for generic ODF loading.
@@ -116,6 +144,26 @@ public:
      * @return The shared data for the id or 0 if there is no shared data for the id.
      */
     KoSharedLoadingData * sharedData( const QString & id ) const;
+
+    /**
+     * @brief Add an additional attribute that should be loaded during shape loading
+     *
+     * An application can use that to set the data for additional attributes that should be 
+     * loaded during shape loading.
+     * If attribute is set it will not change if set again. The tag is used to differentiate
+     * the attributes
+     *
+     * @param attributeData The data describing the additional attribute data
+     */
+    static void addAdditionalAttributeData( const AdditionalAttributeData & attributeData );
+
+    /**
+     * @brief Get the additional attribute data for loading of a shape
+     *
+     * This is used by KoShape::loadOdfAttributes to load all additional attributes defined 
+     * in the returned set.
+     */
+    static QSet<AdditionalAttributeData> additionalAttributeData();
 
 private:
     /**

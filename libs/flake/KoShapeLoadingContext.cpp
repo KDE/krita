@@ -25,6 +25,13 @@
 
 #include <kdebug.h>
 
+uint qHash( const KoShapeLoadingContext::AdditionalAttributeData & attributeData )
+{
+    return qHash( attributeData.name );
+}
+
+static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttributes;
+
 class KoShapeLoadingContext::Private {
 public:
     Private( KoOdfLoadingContext &c, KoShapeControllerBase * sc )
@@ -136,6 +143,16 @@ KoSharedLoadingData * KoShapeLoadingContext::sharedData( const QString & id ) co
         data = it.value();
     }
     return data;
+}
+
+void KoShapeLoadingContext::addAdditionalAttributeData( const AdditionalAttributeData & attributeData )
+{
+    s_additionlAttributes.insert( attributeData );
+}
+
+QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::additionalAttributeData()
+{
+    return s_additionlAttributes;
 }
 
 KoShapeControllerBase * KoShapeLoadingContext::shapeController() const

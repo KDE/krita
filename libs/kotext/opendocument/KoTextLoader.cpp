@@ -46,6 +46,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoVariableRegistry.h>
 #include <KoProperties.h>
+#include <KoImageCollection.h>
 
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
@@ -1434,6 +1435,39 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
 
 void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor )
 {
+    kDebug() <<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
+    Q_ASSERT( shape );
+
+    //WTF; even image-loading got broken?????????? Man, we are even in a more worse state then 2 years ago :-(
+    //FIXME break this code asap before it starts to work again!
+    for(KoXmlNode node = frameElem.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        KoXmlElement ts = node.toElement();
+        if( ts.isNull() )
+            continue;
+        const QString localName( ts.localName() );
+        if(ts.namespaceURI() == KoXmlNS::draw && localName == "image") {
+            KoStore* store = d->context.odfLoadingContext().store();
+            QString href = ts.attribute("href");
+            Q_ASSERT( store->hasFile(href) );
+            Q_ASSERT( ! store->isOpen() );
+            bool openok = store->open(href);
+            Q_ASSERT( openok );
+            KoImageCollection* imagecollection = new KoImageCollection();
+            KoImageData* imagedata = new KoImageData(imagecollection);
+            shape->setUserData( imagedata );
+            store->close();
+        }
+    }
+
+    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    anchor->setOffset( shape->position() );
+    anchor->setAlignment(KoTextAnchor::HorizontalOffset);
+    anchor->setAlignment(KoTextAnchor::VerticalOffset);
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
+    Q_ASSERT(layout && layout->inlineObjectTextManager());
+    layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
 }
 
 void KoTextLoader::startBody(int total)

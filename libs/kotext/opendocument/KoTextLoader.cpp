@@ -1441,7 +1441,6 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     Q_ASSERT( shape );
 
     //WTF; even image-loading got broken?????????? Man, we are even in a more worse state then 2 years ago :-(
-    //FIXME break this code asap before it starts to work again!
     for(KoXmlNode node = frameElem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         KoXmlElement ts = node.toElement();
         if( ts.isNull() )

@@ -28,7 +28,9 @@
 
 #include "krita_export.h"
 
-#include "kis_tile.h"
+#include "kis_shared.h"
+
+class KisSharedTileData;
 
 struct KRITAIMAGE_EXPORT KisTileStoreData { // used to be struct KisTileStore::SharedDataInfo
     virtual ~KisTileStoreData() {};
@@ -49,24 +51,24 @@ struct KRITAIMAGE_EXPORT KisTileStoreData { // used to be struct KisTileStore::S
  *    read any tile, as long as nobody is writing to it. (bsar)
  *    See: http://doc.trolltech.com/qq/qq14-threading.html
  */
-class KRITAIMAGE_EXPORT KisTileStore  {
+class KRITAIMAGE_EXPORT KisTileStore : public KisShared {
 public:
     virtual ~KisTileStore() {}
 
 public: // Tile management
     // ### Perhaps add sth like hasCapability(TileDataSharing), to check if the backend can support sharing tiles?
-    virtual KisTileStoreData* registerTileData(const KisTile::SharedTileData* tileData);
-    virtual void deregisterTileData(const KisTile::SharedTileData* tile);
+    virtual KisTileStoreData* registerTileData(const KisSharedTileData* tileData);
+    virtual void deregisterTileData(const KisSharedTileData* tile);
 
-    virtual void degradeTileForSharing(KisTile* tile); // Might change m_store !
+    virtual KisSharedTileData* degradedTileDataForSharing(KisSharedTileData* tileData); // Might change m_store ! locked!
 
     // these can change the tile indirectly, though, through the actual swapping!
-    virtual void ensureTileLoaded(KisTile::SharedTileData* tile);
-    virtual void maySwapTile(KisTile::SharedTileData* tile);
+    virtual void ensureTileLoaded(KisSharedTileData* tile);
+    virtual void maySwapTile(KisSharedTileData* tile);
 
 public: // Pool management
-    virtual quint8* requestTileData(qint32 pixelSize);
-    virtual void dontNeedTileData(quint8* data, qint32 pixelSize);
+    virtual void requestTileData(KisSharedTileData* tileData);
+    virtual void dontNeedTileData(KisSharedTileData* tileData);
 
 public: // Configuration
     virtual void configChanged();
@@ -85,13 +87,15 @@ protected:
 
     KisTileStore(); // Protected, since we need to be able to construct it from subclasses!
 private:
-    KisTileStore(KisTileStore&) {}
+    KisTileStore(KisTileStore&);
     KisTileStore operator=(const KisTileStore&);
 
     friend class KisTile;
 };
 
-KisTileStore* defaultTileStore(); // ### Do this in a better way!
+typedef KisSharedPtr<KisTileStore> KisTileStoreSP;
+
+KisTileStoreSP defaultTileStore(); // ### Do this in a better way!
 
 //typedef QHash<const KisTile*, KisTileStore::TileInfo*> TileMap;
 //typedef Q3ValueList<KisTileStore::TileInfo*> TileList;

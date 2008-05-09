@@ -19,6 +19,9 @@
 #include "kis_tile_sharing_tester.h"
 #include <qtest_kde.h>
 
+#include <sys/mman.h>
+#include <string.h>
+#include <map>
 
 #include "kis_global.h"
 
@@ -28,6 +31,7 @@
 
 #include "tiles_new/kis_tilestorememory.h"
 #include "tiles_new/kis_tileswapper.h"
+#include "tiles_new/kis_sharedtiledata.h"
 
 #include "kis_datamanager.h" // ### Check that, indeed, this is a TILED dm?
 #include "kis_iterator.h"
@@ -43,8 +47,8 @@ static quint8 defPixel = 145;
 // A generic swap check: swap in & out, verify
 void KisTileSharingTester::tileSharingTest()
 {
-    KisTileStoreMemory memoryStore;
-    KisTile tile1(&memoryStore, sizeof(defPixel), 0, 0, &defPixel);
+    KisSharedPtr<KisTileStoreMemory> memoryStore = new KisTileStoreMemory;
+    KisTile tile1(memoryStore, sizeof(defPixel), 0, 0, &defPixel);
 
     tile1.addReader();
     tile1.m_tileData->data[0] = 125;
@@ -89,8 +93,8 @@ void KisTileSharingTester::tileSharingTest()
 // Check how well the implicit tilesharing works with swapping
 void KisTileSharingTester::swappingSharedTilesTest()
 {
-    KisTileStoreMemory memoryStore;
-    KisTile tile1(&memoryStore, sizeof(defPixel), 0, 0, &defPixel);
+    KisSharedPtr<KisTileStoreMemory> memoryStore = new KisTileStoreMemory;
+    KisTile tile1(memoryStore, sizeof(defPixel), 0, 0, &defPixel);
     KisTileSwapper* swapper = KisTileSwapper::instance();
     KisTileStoreMemory::SharedDataMemoryInfo* memInfo1 = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tile1.m_tileData->storeData);
 
@@ -131,7 +135,7 @@ void KisTileSharingTester::swappingSharedTilesTest()
 
     // Swap tile2 again
     tile2.m_tileData->lastUse = QTime();
-    memoryStore.maySwapTile(tile2.m_tileData);
+    memoryStore->maySwapTile(tile2.m_tileData);
 
     swapper->swapTileData(tile1.m_tileData);
     //swapper->swapTileData(tile2.m_tileData);
@@ -169,8 +173,8 @@ void KisTileSharingTester::swappingSharedTilesTest()
 // Check that detaching unshared tiles works
 void KisTileSharingTester::detachUnshared()
 {
-    KisTileStoreMemory memoryStore;
-    KisTile tile(&memoryStore, sizeof(defPixel), 0, 0, &defPixel);
+    KisSharedPtr<KisTileStoreMemory> memoryStore = new KisTileStoreMemory;
+    KisTile tile(memoryStore, sizeof(defPixel), 0, 0, &defPixel);
 
     quint8* oldData = tile.data();
     tile.detachShared();
@@ -191,25 +195,26 @@ void KisTileSharingTester::dataManagerTileSharingTest() {
     KisDataManager dm2(dm1);
 
     {
-        KisHLineConstIterator dm1ConstIter(&dm1, 0, 0, 128, false);
-        KisHLineConstIterator dm2ConstIter(&dm2, 0, 0, 128, false);
+        KisHLineConstIterator dm1ConstIter(&dm1, 0, 0, 128, false /* writable */);
+        KisHLineConstIterator dm2ConstIter(&dm2, 0, 0, 128, false /* writable */);
 
         QVERIFY(dm1ConstIter.rawData() == dm2ConstIter.rawData());
-        QVERIFY(dm1ConstIter.m_iter->m_tile->m_tileData->tiles.size() == 2);
+        QVERIFY(dm1ConstIter.m_iter->m_tile->m_tileData->references == 2);
         QVERIFY(dm1ConstIter.m_iter->m_tile != dm2ConstIter.m_iter->m_tile);
         QVERIFY(dm1ConstIter.m_iter->m_tile->m_tileData == dm2ConstIter.m_iter->m_tile->m_tileData);
     }
 
     {
-        KisHLineConstIterator dm1ConstIter(&dm1, 0, 0, 128, false);
-        KisHLineConstIterator dm2Iter(&dm2, 0, 0, 128, true);
+        // TODO: Ask Cyrille why you can have writable const iterators...
+        KisHLineConstIterator dm1ConstIter(&dm1, 0, 0, 128, false /* writable */);
+        KisHLineConstIterator dm2Iter(&dm2, 0, 0, 128, true /* writable */);
 
         QVERIFY(dm1ConstIter.rawData() != dm2Iter.rawData());
 
         QVERIFY(dm1ConstIter.m_iter->m_tile->m_tileData != dm2Iter.m_iter->m_tile->m_tileData);
 
-        QVERIFY(dm1ConstIter.m_iter->m_tile->m_tileData->timesLockedInMemory == 1);
-        QVERIFY(dm1ConstIter.m_iter->m_tile->m_tileData->tiles.size() == 1);
+        //QVERIFY(dm1ConstIter.m_iter->m_tile->m_tileData->timesLockedInMemory == 1); ### Check should include swapper
+        QVERIFY(dm1ConstIter.m_iter->m_tile->m_tileData->references == 1);
 
         // People should not use this 'feature'
         //KisHLineConstIterator dm1Iter(&dm1, 0, 0, 128, true);
@@ -219,6 +224,62 @@ void KisTileSharingTester::dataManagerTileSharingTest() {
 
 void KisTileSharingTester::shareTilesAcrossDatamanagersTest() {
     
+}
+
+// Test if the degrading of tiledata works: in this case, we have a store that mprotects the data, so we MUST degrade to write to it!
+namespace {
+    struct StrictReadOnlyTileStore : public KisTileStore {
+        virtual ~StrictReadOnlyTileStore() {}
+
+        virtual void requestTileData(KisSharedTileData* tileData) {
+            // TODO: share this piece of code with the tileswapper?
+            long pageSize;
+#ifdef Q_WS_WIN
+            SYSTEM_INFO systemInfo;
+            GetSystemInfo(&systemInfo);
+            pageSize = systemInfo.dwPageSize;
+#else
+            pageSize = sysconf(_SC_PAGESIZE);
+#endif
+
+            size_t len = tileData->pixelSize * KisTile::WIDTH * KisTile::HEIGHT;
+            tileData->data = 0;
+            int res = posix_memalign(reinterpret_cast<void**>(&tileData->data), sysconf(_SC_PAGESIZE), len);
+            assert(res == 0);
+        }
+
+        void protect(KisTile& tile) {
+            // Note that we don't lock, since this class will not interact with the swapper, and as a unit test, it will
+            // not be used in a multithreaded environment...
+            mprotect(tile.m_tileData->data, tile.m_tileData->tileSize, PROT_READ);
+        }
+
+        virtual void dontNeedTileData(KisSharedTileData* tileData) {
+            free(tileData->data);
+        }
+
+        virtual KisSharedTileData* degradedTileDataForSharing(KisSharedTileData* tileData) {
+            KisSharedTileData* data = new KisSharedTileData(new KisTileStoreMemory, tileData->tileSize, tileData->pixelSize);
+
+            tileData->addLockInMemory();
+            data->addLockInMemory();
+
+            memcpy(data->data, tileData->data, tileData->tileSize);
+
+            data->removeLockInMemory();
+            tileData->removeLockInMemory();
+
+            return data;
+        }
+    };
+}
+
+void KisTileSharingTester::degradeDataTest() {
+    KisSharedPtr<StrictReadOnlyTileStore> store = new StrictReadOnlyTileStore;
+    KisTile tile(store, sizeof(defPixel), 0, 0, &defPixel);
+    store->protect(tile);
+    KisTile tile2(tile);
+    tile2.detachShared();
 }
 
 QTEST_KDEMAIN(KisTileSharingTester, NoGUI)

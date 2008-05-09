@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005-2007 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2008 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_TILEMANAGER_H_
-#define KIS_TILEMANAGER_H_
+#ifndef KIS_TILESTOREFROMFILE_H_
+#define KIS_TILESTOREFROMFILE_H_
 
 #include <sys/types.h>
 
@@ -31,46 +31,28 @@
 
 #include "kis_tilestore.h"
 
-//#define DEBUG_OWN_TILES
-
 #include "kis_tile.h"
 
 class KisSharedTileData;
 
-//#define TILESTOREDEBUGGING
-
 /**
- * This class keeps has the intention to make certain tile-related operations faster or more
- * efficient. It does this by keeping lots of info on KisTiles, and manages the way they are
- * created, used, etc.
- * It mainly does the following more visible things
- *  * provide a way to store tiles on disk to a swap file, to reduce memory usage
- *  * keep a list of previously swapped (but now unused) tiles, to reuse these when we want
- *    to swap new tiles.
- *  * tries to preallocate and recycle some tiles to make future allocations faster
- *    (not done yet)
- *
- *    XXX: Use QReadWriteLock, QReadLocker and QWriteLocker to make sure everyone can
- *    read any tile, as long as nobody is writing to it. (bsar)
- *    See: http://doc.trolltech.com/qq/qq14-threading.html
+ * This class is a very small tilestore that knows how to deal with the case where we read 
+ * tiledata directly from an image file, and which on write actions will duplicate itself into
+ * a tile from a memory tilestore.
  */
-class KRITAIMAGE_EXPORT KisTileStoreMemory : public KisTileStore {
+class KRITAIMAGE_EXPORT KisTileStoreFromFile : public KisTileStore {
 public:
-    virtual ~KisTileStoreMemory();
+    virtual ~KisTileStoreFromFile();
 
 public: // Tile management
-
     KisTileStoreData* registerTileData(const KisSharedTileData* tile);
-
     void deregisterTileData(const KisSharedTileData* tile); // Deletes its TileInfo*
 
     // these can change the tile indirectly, though, through the actual swapping!
     void ensureTileLoaded(KisSharedTileData* tile);
-
     void maySwapTile(KisSharedTileData* tile);
 
 public: // Pool management
-
     void requestTileData(KisSharedTileData* tileData);
     void dontNeedTileData(KisSharedTileData* tileData);
 
@@ -141,4 +123,4 @@ private:
 #endif
 };
 
-#endif // KIS_TILEMANAGER_H_
+#endif // KIS_TILESTOREFROMFILE_H_

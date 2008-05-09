@@ -26,12 +26,14 @@
 #include <QVector>
 
 #include "krita_export.h"
+#include "kis_tilestore.h"
+#include "kis_sharedtiledata.h"
 
 class KisTileStoreData;
-class KisTileStore;
 
 class KisTiledDataManager;
 class KisTiledIterator;
+
 
 /**
  * Provides abstraction to a tile.  A tile contains
@@ -46,14 +48,14 @@ class KisTiledIterator;
 class KRITAIMAGE_EXPORT KisTile {
 public:
     // ### The problem with auto-implicit sharing is that it might be bad for tiles that get copied to get in the KisMemento ...
-    KisTile(KisTileStore* store, qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel);
+    KisTile(KisTileStoreSP store, qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel);
     KisTile(const KisTile& rhs, qint32 col, qint32 row); // Implicit sharing (Configurable?? ### )
     KisTile(const KisTile& rhs); // Implicit sharing (Configurable?? ### )
     ~KisTile();
 
 public:
     void release();
-    void allocate() const; // The tile should either be locked, or not accessible from the outside (during construction)! (const, blegh, but OK since m_sharedData mutable)
+    void allocate(KisTileStoreSP store) const; // The tile should either be locked, or not accessible from the outside (during construction)! (const, blegh, but OK since m_sharedData mutable)
 
     inline quint8 *data() const { return m_tileData->data; }
 
@@ -79,17 +81,15 @@ public:
 
     void removeReader() const;
 
-    inline qint32 readers() const { return m_nReadlock; }
+    //inline qint32 readers() const { return m_nReadlock; }
 
     inline qint32 pixelSize() const { return m_pixelSize; }
 
 public:
-    typedef int TimeDiffType;
-    typedef QTime TimeType;
-    const TimeType& lastUseTime() const { return m_tileData->lastUse; }
+    const KisSharedTileData::TimeType& lastUseTime() const { return m_tileData->lastUse; }
     void lock() const { m_lock.lock(); }
     void unlock() const { m_lock.unlock(); }
-
+    //QString trace; // for debugging
 private:
 
     friend class KisTiledIterator;
@@ -103,32 +103,9 @@ private:
     KisTile& operator=(const KisTile&);
 
 private:
-    // Seperate a pointer for the store, even though it's also in the storeInfo (more straightforward code, esp. in construction)
-    KisTileStore* m_store; // TODO: Make the store a member of the tile data? (Sucks locking-wise, I guess)
-public: // ### private with friends?
-    struct SharedTileData {
-        SharedTileData() : lock(QMutex::Recursive) {}
-        ~SharedTileData();
-
-        mutable QMutex lock; // Lock when changing this data (swapping, changing the *locked* status of a dependant tile, de-sharing, etc)
-
-        int tileSize;
-        quint8* data;
-
-        // Doubly linked list of the tiles that share this data, ending in 0s ### Actually do this
-        QVector<const KisTile*> tiles;
-        int timesLockedInMemory; // Can is not related with tiles.size(). (adding it to the swap queue also increases this!)
-
-        KisTileStoreData* storeData;
-
-        // The last use time is *shared* amongst the different sharers!
-        TimeType lastUse;
-    };
-private:
-    mutable SharedTileData* m_tileData; // Shared among the tiles
+    mutable KisSharedTileData* m_tileData; // Shared among the tiles
 
     QByteArray m_compressedData;
-    mutable qint32 m_nReadlock;
     qint32 m_row;
     qint32 m_col;
     qint32 m_pixelSize;

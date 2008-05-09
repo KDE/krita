@@ -39,6 +39,7 @@
 
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
+#include "kis_sharedtiledata.h"
 
 #include "kis_tileswapper.h"
 
@@ -49,6 +50,10 @@
 // Note: the cache file doesn't get deleted when we crash and so :(
 
 // ### ### TODO When reviewing the locking policy, take care of unlocking, dyncast meminfo, lock meminfo, since the meminfo COULD be deleted?
+
+#ifdef TILESTOREDEBUGGING
+int KisTileStoreMemory::instances = 0;
+#endif
 
 KisTileStoreMemory::KisTileStoreMemory()
 {
@@ -78,9 +83,11 @@ KisTileStoreMemory::KisTileStoreMemory()
     /*for (int i = 0; i < 8; i++) {
         m_freeLists.push_back(FreeList());
     }*/
-
     counter = 0;
 
+#ifdef TILESTOREDEBUGGING
+    instances++;
+#endif
 }
 
 KisTileStoreMemory::~KisTileStoreMemory() {
@@ -110,12 +117,17 @@ KisTileStoreMemory::~KisTileStoreMemory() {
         delete (*it).tempFile;
     }*/
 
-    //delete [] m_poolPixelSizes;
-    //delete [] m_pools;
-    // Where did this go to? delete [] m_poolFreeList;
+    // More cleanup! And: interaction with tileswapper (that one needs to get destroyed FIRST!)
+    delete [] m_poolPixelSizes;
+    delete [] m_pools;
+    delete [] m_poolFreeList;
+
+#ifdef TILESTOREDEBUGGING
+    instances--;
+#endif
 }
 
-KisTileStoreData* KisTileStoreMemory::registerTileData(const KisTile::SharedTileData* tileData)
+KisTileStoreData* KisTileStoreMemory::registerTileData(const KisSharedTileData* tileData)
 {
     m_lock.lock(); // ### This is locked too long? (Should we lock at all, except for debug info?)
 
@@ -152,11 +164,11 @@ KisTileStoreData* KisTileStoreMemory::registerTileData(const KisTile::SharedTile
     return data;
 }
 
-void KisTileStoreMemory::deregisterTileData(const KisTile::SharedTileData* tile) {
+void KisTileStoreMemory::deregisterTileData(const KisSharedTileData* tile) {
     // Does nothing atm...
 }
 
-void KisTileStoreMemory::ensureTileLoaded(KisTile::SharedTileData* tileData)
+void KisTileStoreMemory::ensureTileLoaded(KisSharedTileData* tileData)
 {
     Q_ASSERT(tileData);
 
@@ -179,7 +191,7 @@ void KisTileStoreMemory::ensureTileLoaded(KisTile::SharedTileData* tileData)
     }
 }
 
-void KisTileStoreMemory::maySwapTile(KisTile::SharedTileData* tileData)
+void KisTileStoreMemory::maySwapTile(KisSharedTileData* tileData)
 {
     QMutexLocker dataLock(&(tileData->lock));
 
@@ -193,7 +205,7 @@ void KisTileStoreMemory::maySwapTile(KisTile::SharedTileData* tileData)
 #endif
 }
 
-quint8* KisTileStoreMemory::requestTileData(qint32 pixelSize)
+void KisTileStoreMemory::requestTileData(KisSharedTileData* tileData)
 {/*
     if ( pixelSize > 10 )
         return new quint8[ m_tileSize * pixelSize ];
@@ -206,16 +218,30 @@ quint8* KisTileStoreMemory::requestTileData(qint32 pixelSize)
         }
         return data;
     }*/
-    return new quint8[m_tileSize * pixelSize];
+    QMutexLocker dataLock(&(tileData->lock));
+    tileData->data = new quint8[m_tileSize * tileData->pixelSize];
+    //kDebug() << "Requested " << tileData->data;
 }
 
-void KisTileStoreMemory::dontNeedTileData(quint8* data, qint32 pixelSize)
+void KisTileStoreMemory::dontNeedTileData(KisSharedTileData* tileData)
 {
+    QMutexLocker dataLock(&(tileData->lock));
+    KisTileStoreMemory::SharedDataMemoryInfo* memInfo = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tileData->storeData);
+
     /*m_bigKritaLock.lock();
     if (isPoolTile(data, pixelSize)) {
         reclaimTileToPool(data, pixelSize);
     } else*/
-        delete[] data;
+
+    if (memInfo->onFile) {
+        // TODO: coordinate with tileswapper, freelists there and so...
+        munmap(tileData->data, tileData->tileSize);
+    } else {
+        delete[] tileData->data;
+    }
+
+    //kDebug() << "Didn't need " << tileData->data;
+    tileData->data = 0;
     //m_bigKritaLock.unlock();
 
 }
@@ -233,7 +259,7 @@ void KisTileStoreMemory::configChanged() {
 }
 
 // ### TODO Shared Pointer! (And check that for threadsafe)
-KisTileStore* defaultTileStore() {
+KisTileStoreSP defaultTileStore() {
     return new KisTileStoreMemory();
 }
 
@@ -329,4 +355,3 @@ void KisTileStoreMemory::reclaimTileToPool(quint8* data, qint32 pixelSize) {
     }
 }
 #endif
-

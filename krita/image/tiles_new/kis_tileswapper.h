@@ -30,6 +30,7 @@
 
 #include "kis_tile.h"
 #include "kis_tilestorememory.h"
+#include "kis_sharedtiledata.h"
 
 /**
  * An idle swapper. This class is responsible for the management of the files that the tiles of individual KisTileStoreMemories are swapped to.
@@ -50,25 +51,25 @@ public:
     ~KisTileSwapper();
     static KisTileSwapper* instance();
 
-    void enqueueForSwapping(KisTile::SharedTileData* tileData);
-    void fromSwap(KisTile::SharedTileData* tileData); // Locked tile with a locked memInfo!
+    void enqueueForSwapping(KisSharedTileData* tileData);
+    void fromSwap(KisSharedTileData* tileData); // Locked tile with a locked memInfo!
 
-    void fromSwappableList(KisTile::SharedTileData* tileData); // A locked memInfo!
+    void fromSwappableList(KisSharedTileData* tileData); // A locked memInfo!
 private:
     QMutex m_mutex;
 
 private:
-    static KisTile::TimeDiffType idleThreshold();
-    void addTileDataToSwapFile(KisTile::SharedTileData* tileData); // Locked tileData!
-    unsigned long shouldSleepAmountmsecs(KisTile::SharedTileData* tileData);
-    void swapTileData(KisTile::SharedTileData* tileData);
+    static KisSharedTileData::TimeDiffType idleThreshold();
+    void addTileDataToSwapFile(KisSharedTileData* tileData); // Locked tileData!
+    unsigned long shouldSleepAmountmsecs(KisSharedTileData* tileData);
+    void swapTileData(KisSharedTileData* tileData);
 
 protected:
     void run();
 
 private: // File handling
     QMutex m_swapQueueLock;
-    QLinkedList<KisTile::SharedTileData*> m_swapList;
+    QLinkedList<KisSharedTileData*> m_swapList;
 
     // This keeps track of open swap files, and their associated filesizes
     struct TempFile {

@@ -36,6 +36,7 @@ set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilestore.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilestorememory.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tileswapper.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_sharedtiledata.cc
 )
 add_subdirectory( tiles_new )
 endif(USE_OLD_TILESYSTEM)

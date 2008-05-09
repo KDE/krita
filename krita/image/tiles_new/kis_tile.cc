@@ -25,44 +25,43 @@
 
 #include "kis_tileddatamanager.h"
 #include "kis_tilestore.h"
+#include "kis_sharedtiledata.h"
 
 const qint32 KisTile::WIDTH = 64;
 const qint32 KisTile::HEIGHT = 64;
 
+// TODO: Actually, m_tileData->tiles would only be needed if we'd do dirty signalling from the shared data to the tile...
+
 #define USE_IMPLICIT_SHARING
 
-// ### WARNING: readers() != SharedTileData->timesLockedInMemory!!!!! FIXME
-
-KisTile::KisTile(KisTileStore* store, qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel)
+KisTile::KisTile(KisTileStoreSP store, qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel)
     : m_lock(QMutex::Recursive)
 {
     m_pixelSize = pixelSize;
     m_nextTile = 0;
     m_col = col;
     m_row = row;
-    m_nReadlock = 0;
-    m_store = store;
 
     // ### TODO: Maybe we could all share tiles with the same defPixel?
 
-    allocate();
+    allocate(store);
 
     setData(defPixel);
 
     m_tileData->lastUse = QTime::currentTime(); // Should this lock the shareData? ###
 
     // Not shared, so this should be valid unconditionally
-    m_store->maySwapTile(m_tileData); // ### Possibly leaked! So try to keep this at the end at all times
+    store->maySwapTile(m_tileData); // ### Possibly leaked! So try to keep this at the end at all times
+    //trace = kBacktrace();
 }
 
 KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
     : m_lock(QMutex::Recursive)
 {
+    // Lock rhs?
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
         m_nextTile = 0;
-        m_nReadlock = 0;
-        m_store = rhs.m_store;
 
         m_col = col;
         m_row = row;
@@ -71,98 +70,97 @@ KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
         rhs.m_tileData->lock.lock();
 
         m_tileData = rhs.m_tileData;
-        m_tileData->tiles.push_back(this);
+        m_tileData->references++;
 
         rhs.m_tileData->lock.unlock();
 #else
-        allocate();
+        rhs.m_tileData->lock.lock();
+        allocate(rhs.m_tileData->store);
+        rhs.m_tileData->lock.unlock();
 
         rhs.addReader();
         memcpy(m_tileData->data, rhs.m_tileData->data, WIDTH * HEIGHT * m_pixelSize * sizeof(quint8));
         rhs.removeReader();
 
         m_tileData->lastUse = QTime::currentTime(); // Should this lock?
-        m_store->maySwapTile(m_tileData); // ### Possibly leaked! So try to keep this at the end at all times
+        m_tileData->store->maySwapTile(m_tileData); // ### Possibly leaked! So try to keep this at the end at all times
 #endif
     } else {
         //m_data = 0;
         //m_nextTile = 0;
-        m_nReadlock = 0; // ### WHY
     }
 
     m_tileData->lastUse = QTime::currentTime(); // Should this lock? ###
+    //trace = kBacktrace();
 }
 
 KisTile::KisTile(const KisTile& rhs)
     : m_lock(QMutex::Recursive)
 {
+    // Lock rhs?
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
         m_col = rhs.m_col;
         m_row = rhs.m_row;
         m_nextTile = 0;
-        m_nReadlock = 0;
-        m_store = rhs.m_store;
 
 #ifdef USE_IMPLICIT_SHARING
         rhs.m_tileData->lock.lock();
 
         m_tileData = rhs.m_tileData;
-        m_tileData->tiles.push_back(this);
+        m_tileData->references++;
 
         rhs.m_tileData->lock.unlock();
 #else
-        allocate();
+        rhs.m_tileData->lock.lock();
+        allocate(rhs.m_tileData->store);
+        rhs.m_tileData->lock.unlock();
 
         rhs.addReader();
         memcpy(m_tileData->data, rhs.m_tileData->data, WIDTH * HEIGHT * m_pixelSize * sizeof(quint8));
         rhs.removeReader();
 
         m_tileData->lastUse = QTime::currentTime(); // Lock?
-        m_store->maySwapTile(m_tileData); // ### Possibly leaked! So try to keep this at the end at all times
+        m_tileData->store->maySwapTile(m_tileData); // ### Possibly leaked! So try to keep this at the end at all times
 #endif
     }
     else {
-        m_nReadlock = 0; // ### WHY
+        ;
     }
 
     m_tileData->lastUse = QTime::currentTime(); // Lock?
+    //trace = kBacktrace();
 }
 
 KisTile::~KisTile()
 {
     m_tileData->lock.lock();
 
-    if ( (m_tileData->tiles.size() == 1) && (m_tileData->timesLockedInMemory == 0) ) { // We are the last tile refering to this shared tile data
-        Q_ASSERT(m_tileData->timesLockedInMemory == 0);
-
+    if ( (m_tileData->references == 1) && (m_tileData->timesLockedInMemory == 0) && (m_tileData->deleteable) ) { // We are the last tile refering to this shared tile data (timesLockedInMemory -> tileswapper
         m_tileData->lock.unlock();
 
-        m_store->deregisterTileData(m_tileData); // goes before the deleting of m_data!
+        delete m_tileData; // Deregisters and deallocates itself
         m_tileData = 0;
     } else {
-        m_tileData->tiles.remove(m_tileData->tiles.indexOf(this));
+        if (m_tileData->references == 1) {
+            // Otherwise it was the timesLockedInMemory, which is supposed to be 0 in that case
+            assert(!m_tileData->deleteable);
+            assert(m_tileData->timesLockedInMemory == 0);
+        }
+        m_tileData->references--;
 
         m_tileData->lock.unlock();
     }
 
-    assert( !readers() );
+    //assert( !readers() ); ### Hmmm, we should do sth similar with the shared data?
 }
 
-void KisTile::allocate() const
+void KisTile::allocate(KisTileStoreSP store) const
 {
     //assert (!readers()); // Cannot work anymore in this way, since we now can call this while detaching
 
-    m_tileData = new SharedTileData;
-    m_tileData->timesLockedInMemory = 0;
-    m_tileData->data = 0;
-    m_tileData->tiles.push_back(this);
-    m_tileData->tileSize = pixelSize() * KisTile::WIDTH * KisTile::HEIGHT;
-
-    m_tileData->data = m_store->requestTileData(m_pixelSize);
-    Q_CHECK_PTR(m_tileData->data);
-
-    m_tileData->storeData = m_store->registerTileData(m_tileData);
+    m_tileData = new KisSharedTileData(store, pixelSize() * KisTile::WIDTH * KisTile::HEIGHT, pixelSize());
+    m_tileData->references++;
 }
 
 void KisTile::setNext(KisTile *n)
@@ -186,38 +184,12 @@ void KisTile::setData(const quint8 *pixel)
 
 void KisTile::addReader() const
 {
-    m_lock.lock();
-    if (m_nReadlock++ == 0) {
-        m_tileData->lock.lock();
-        m_tileData->timesLockedInMemory++;
-
-        m_store->ensureTileLoaded(m_tileData); // Needs to come after the locking of the tile in memory!
-
-        m_tileData->lock.unlock(); // ### Here, or before?
-    } else if (m_nReadlock < 0) {
-        assert(0);
-    }
-    assert(m_tileData->data);
-    m_lock.unlock();
+    m_tileData->addLockInMemory(); // TODO/FIXME: see below :( (also for all other stuff about this!!!)
 }
 
 void KisTile::removeReader() const
 {
-    m_lock.lock();
-    assert(m_nReadlock >= 0);
-    if (--m_nReadlock == 0) {
-        m_tileData->lock.lock();
-
-        m_tileData->timesLockedInMemory--;
-        m_tileData->lastUse = QTime::currentTime(); // Lock?
-
-        if (m_tileData->timesLockedInMemory == 0) {
-            m_store->maySwapTile(m_tileData);
-        }
-
-        m_tileData->lock.unlock();
-    }
-    m_lock.unlock();
+    m_tileData->removeLockInMemory(); // Actually, should we not lock the tile as well, since we access it's member var tileData? :( ###
 }
 
 // ### Check the locking here! (ESPECIALLY: returning m_data while we are locked!)
@@ -229,37 +201,32 @@ void KisTile::detachShared() const
     //Q_ASSERT(!readers()); // This should not really assert, but it is bad code nevertheless (meaning you'd have ptr data pointing to the old AND new data!)
 
     QMutexLocker lockData(&(m_tileData->lock));
-    if (m_tileData->tiles.size() == 1) {
+    if (m_tileData->references == 1) {
         // We are the only ones using this data, don't detach!
         return;
     }
 
-    Q_ASSERT(m_tileData->tiles.size() > 1);
-
-    m_tileData->tiles.remove(m_tileData->tiles.indexOf(this));
+    Q_ASSERT(m_tileData->references > 1);
 
     addReader(); // Make sure we are in memory, use old tileData for it
-    
-    SharedTileData* oldTileData = m_tileData; // Keep around to copy the data from...
 
     // Don't deregister the tiledata since we already asserted that we should not yet delete it!
-    m_tileData = 0;
 
-    m_store->degradeTileForSharing(const_cast<KisTile*>(this)); // ### IEW (in case the store needs to be changed, like HTTP->Mem)
+    // Already registers the new tile data, ### (in case the store needs to be changed, like HTTP->Mem)
+    KisSharedTileData* newTileData = m_tileData->store->degradedTileDataForSharing(m_tileData);
 
-    allocate(); // Will allocate a new m_tileData, etc. (we ourselves are locked) (already registers)
+    if (newTileData == m_tileData) {
+        removeReader();
+        return;
+    }
 
-    memcpy(m_tileData->data, oldTileData->data, WIDTH * HEIGHT * m_pixelSize * sizeof(quint8));
+    m_tileData->references--;
+    newTileData->references++;
+    // Since we don't yet leak the pointer to the new tiledata, we don't need to lock it...
 
-    // HACK (iew!)
-    SharedTileData* newTileData = m_tileData;
-    m_tileData = oldTileData;
+    memcpy(newTileData->data, m_tileData->data, WIDTH * HEIGHT * m_pixelSize * sizeof(quint8));
+
     removeReader();
-    m_tileData = newTileData;
-}
 
-KisTile::SharedTileData::~SharedTileData() {
-    delete storeData;
-    storeData = 0;
-    data = 0;
+    m_tileData = newTileData;
 }

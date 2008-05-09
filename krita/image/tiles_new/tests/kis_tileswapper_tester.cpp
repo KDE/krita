@@ -41,8 +41,8 @@ static quint8 defPixel = 145;
 // A generic swap check: swap in & out, verify
 void KisTileSwapperTester::checkAgeTest()
 {
-    KisTileStoreMemory memoryStore;
-    KisTile tile(&memoryStore, sizeof(defPixel), 0, 0, &defPixel);
+    KisSharedPtr<KisTileStoreMemory> memoryStore = new KisTileStoreMemory;
+    KisTile tile(memoryStore, sizeof(defPixel), 0, 0, &defPixel);
     KisTileSwapper* swapper = KisTileSwapper::instance();
     KisTileStoreMemory::SharedDataMemoryInfo* memInfo
             = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tile.m_tileData->storeData);
@@ -55,16 +55,20 @@ void KisTileSwapperTester::checkAgeTest()
     tile.removeReader();
 
     // Artificially age the tile, and swap (if this wouldn't happen, it's checked by checkAgeTest)
+    tile.m_tileData->lock.lock();
     tile.m_tileData->lastUse = QTime();
     //KisTileSwapper::instance()->swapTilesInStore(&memoryStore);
     swapper->swapTileData(tile.m_tileData);
+    tile.m_tileData->lock.unlock();
 
     QVERIFY(memInfo->inMem == false);
     QVERIFY(memInfo->onFile == true);
     QVERIFY(tile.m_tileData->data == 0);
 
     // Unswap
+    tile.m_tileData->lock.lock();
     KisTileSwapper::instance()->fromSwap(tile.m_tileData);
+    tile.m_tileData->lock.unlock();
 
     QVERIFY(memInfo->inMem == true);
     QVERIFY(memInfo->onFile == true);
@@ -82,8 +86,8 @@ void KisTileSwapperTester::checkAgeTest()
 // Does the memorystore swapping check for the tile last use time?
 void KisTileSwapperTester::tileSwapTest()
 {
-    KisTileStoreMemory memoryStore;
-    KisTile tile(&memoryStore, sizeof(defPixel), 0, 0, &defPixel);
+    KisSharedPtr<KisTileStoreMemory> memoryStore = new KisTileStoreMemory;
+    KisTile tile(memoryStore, sizeof(defPixel), 0, 0, &defPixel);
     KisTileSwapper* swapper = KisTileSwapper::instance();
     KisTileStoreMemory::SharedDataMemoryInfo* memInfo =
             dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tile.m_tileData->storeData);
@@ -96,22 +100,29 @@ void KisTileSwapperTester::tileSwapTest()
     //QVERIFY(memInfo->onFile == false);
 
     // Now, artificially age the tile, and try to swap again
+    tile.m_tileData->lock.lock();
     tile.m_tileData->lastUse = QTime();
     swapper->swapTileData(tile.m_tileData);
+    tile.m_tileData->lock.unlock();
     QVERIFY(memInfo->inMem == false);
     QVERIFY(memInfo->onFile == true);
+    QVERIFY(memInfo->isInSwappableList == false);
 }
 
 void KisTileSwapperTester::interactionWithTileReadersTest() {
-    KisTileStoreMemory memoryStore;
-    KisTile tile(&memoryStore, sizeof(defPixel), 0, 0, &defPixel);
+    KisSharedPtr<KisTileStoreMemory> memoryStore = new KisTileStoreMemory;
+    {
+    KisTile tile(memoryStore, sizeof(defPixel), 0, 0, &defPixel);
     KisTileSwapper* swapper = KisTileSwapper::instance();
     KisTileStoreMemory::SharedDataMemoryInfo* memInfo =
             dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tile.m_tileData->storeData);
 
     // Artificially age the tile, and swap (if this wouldn't happen, it's checked by checkAgeTest)
+    tile.m_tileData->lock.lock();
     tile.m_tileData->lastUse = QTime();
     swapper->swapTileData(tile.m_tileData);
+    QVERIFY(memInfo->isInSwappableList == false);
+    tile.m_tileData->lock.unlock();
 
     QVERIFY(memInfo->inMem == false);
     QVERIFY(memInfo->onFile == true);
@@ -120,16 +131,24 @@ void KisTileSwapperTester::interactionWithTileReadersTest() {
     // Does it swap in again?
     QVERIFY(memInfo->inMem == true);
     tile.removeReader();
+
+    // See that it is still swapped in:
+    QVERIFY(memInfo->isInSwappableList == true);
+    }
+
+    // Hope the tile is still in the swappable list...
+    QVERIFY(memoryStore->ref == 2); // KisShared memorystore: since the tile is swapped out and !inMem, we have the last ref (sharedtiledata not yet deleted now)
 }
 
 void KisTileSwapperTester::idleSwappingTest() {
-    KisTileStoreMemory memoryStore;
-    KisTile tile(&memoryStore, sizeof(defPixel), 0, 0, &defPixel);
+    KisSharedPtr<KisTileStoreMemory> memoryStore = new KisTileStoreMemory;
+    {
+    KisTile tile(memoryStore, sizeof(defPixel), 0, 0, &defPixel);
     KisTileSwapper* swapper = KisTileSwapper::instance();
     KisTileStoreMemory::SharedDataMemoryInfo* memInfo =
             dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tile.m_tileData->storeData);
 
-    // Prevent the swapper from swapping, you never know... (### Do this elsewhere too?)
+    // Prevent the swapper from swapping, you never know...
     tile.m_tileData->lock.lock();
 
     QVERIFY(memInfo->inMem == true);
@@ -145,12 +164,16 @@ void KisTileSwapperTester::idleSwappingTest() {
     //usleep(1200); // ### Agressive swapping for now... (!### But the old 'dirty age' is still 500 ms, so shorter wait time won't work) ### NOT TRUE TOO SLOW
     ::sleep(1);
 
+    tile.m_tileData->lock.lock();
     QVERIFY(memInfo->inMem == false);
     QVERIFY(memInfo->onFile == true);
+    tile.m_tileData->lock.unlock();
 
     tile.addReader();
     // Does it swap in again?
+    tile.m_tileData->lock.lock();
     QVERIFY(memInfo->inMem == true);
+    tile.m_tileData->lock.unlock();
     tile.removeReader();
 
     // Now, for the big trick: very small test of the idle timer mechanism (does not test the mechanism at the fullest)
@@ -163,6 +186,9 @@ void KisTileSwapperTester::idleSwappingTest() {
     ::sleep(1);
 
     QVERIFY(memInfo->inMem == false);
+    QVERIFY(memInfo->isInSwappableList == false);
+    }
+    QVERIFY(memoryStore->ref == 1); // KisShared memorystore: since the tile is swapped out and !inMem, we have the last ref (sharedtiledata should be deleted now, since the tile is already swapped out -> no more refs)
 }
 
 QTEST_KDEMAIN(KisTileSwapperTester, NoGUI)

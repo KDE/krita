@@ -42,6 +42,7 @@ KoDeviceEvent::KoDeviceEvent( Type type )
 KoDeviceEvent::~KoDeviceEvent()
 {
     delete m_event;
+    delete d;
 }
 
 Qt::MouseButton KoDeviceEvent::button() const

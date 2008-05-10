@@ -47,14 +47,14 @@ void MixingTest::initTestCase()
 
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
     KisIlluminantProfile *p;
-    foreach(QString ill, list.filter("_5_")) {
+    foreach(QString ill, list.filter("_111_")) {
         p = new KisIlluminantProfile(ill); p->load();
-        css.append(f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),p));
+        css.append(f->colorSpace(KisKSF32ColorSpace<3>::ColorSpaceId().id(),p));
         delete p;
     }
-    foreach(QString ill, list.filter("_9_")) {
+    foreach(QString ill, list.filter("_222_")) {
         p = new KisIlluminantProfile(ill); p->load();
-        css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),p));
+        css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),p));
         delete p;
     }
 }

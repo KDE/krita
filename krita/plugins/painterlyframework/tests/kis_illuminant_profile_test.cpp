@@ -38,8 +38,8 @@ void KisIlluminantProfileTest::initTestCase()
 
 void KisIlluminantProfileTest::testLoading()
 {
-    QString d1 = list.filter("D65_4")[0];
-    QString d2 = list.filter("D65_5")[0];
+    QString d1 = list.filter("_121_")[0];
+    QString d2 = list.filter("_222_")[0];
 
     KisIlluminantProfile *p1 = new KisIlluminantProfile;
     QVERIFY(p1->valid() == false);
@@ -57,7 +57,7 @@ void KisIlluminantProfileTest::testLoading()
     p2->setFileName(d2);
     p2->load();
     QVERIFY(p2->valid() == true);
-    QVERIFY(p2->wavelengths() == 5);
+    QVERIFY(p2->wavelengths() == 6);
 
     delete p2;
 
@@ -71,7 +71,7 @@ void KisIlluminantProfileTest::testLoading()
 
 void KisIlluminantProfileTest::testSaving()
 {
-    QString d = list.filter("D65_5")[0];
+    QString d = list.filter("_222_")[0];
 
     KisIlluminantProfile *p = new KisIlluminantProfile(d);
     p->load();
@@ -81,7 +81,7 @@ void KisIlluminantProfileTest::testSaving()
     p = new KisIlluminantProfile("IlluminantSave.ill");
     p->load();
     QVERIFY(p->valid() == true);
-    QVERIFY(p->wavelengths() == 5);
+    QVERIFY(p->wavelengths() == 6);
 
     delete p;
 }

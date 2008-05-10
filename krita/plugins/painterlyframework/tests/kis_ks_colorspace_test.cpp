@@ -57,41 +57,41 @@ void KisKSColorSpaceTest::initTestCase()
 
 void KisKSColorSpaceTest::testConstructor()
 {
-    QString d655 = list.filter("_5_")[0];
-    QString d659 = list.filter("_9_")[0];
+    QString d651 = list.filter("_121_")[0];
+    QString d652 = list.filter("_222_")[0];
 
-    KisIlluminantProfile *p5 = new KisIlluminantProfile(d655);
-    KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
-    p5->load();
-    p9->load();
+    KisIlluminantProfile *p1 = new KisIlluminantProfile(d651);
+    KisIlluminantProfile *p2 = new KisIlluminantProfile(d652);
+    p1->load();
+    p2->load();
 
-    KisKSF32ColorSpace<5> *cs5 = new KisKSF32ColorSpace<5>(p5->clone());
-    KisKSF32ColorSpace<9> *cs9 = new KisKSF32ColorSpace<9>(p9->clone());
+    KisKSF32ColorSpace<4> *cs1 = new KisKSF32ColorSpace<4>(p1->clone());
+    KisKSF32ColorSpace<6> *cs2 = new KisKSF32ColorSpace<6>(p2->clone());
 
-    QVERIFY(cs5->profileIsCompatible(p9) == false);
-    QVERIFY(cs5->profileIsCompatible(p5) == true);
+    QVERIFY(cs1->profileIsCompatible(p1) == true);
+    QVERIFY(cs1->profileIsCompatible(p2) == false);
 
-    QVERIFY(cs9->profileIsCompatible(p5) == false);
-    QVERIFY(cs9->profileIsCompatible(p9) == true);
+    QVERIFY(cs2->profileIsCompatible(p1) == false);
+    QVERIFY(cs2->profileIsCompatible(p2) == true);
 
-    delete cs5;
-    delete cs9;
+    delete cs1;
+    delete cs2;
 
-    delete p5;
-    delete p9;
+    delete p1;
+    delete p2;
 }
 
 void KisKSColorSpaceTest::testRegistry()
 {
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
     const KoColorSpace *cs;
-    QString d655 = list.filter("_5_")[0];
-    QString d659 = list.filter("_9_")[0];
+    QString d651 = list.filter("_121_")[0];
+    QString d652 = list.filter("_222_")[0];
 
-    KisIlluminantProfile *p5 = new KisIlluminantProfile(d655);
-    KisIlluminantProfile *p9 = new KisIlluminantProfile(d659);
-    p5->load();
-    p9->load();
+    KisIlluminantProfile *p1 = new KisIlluminantProfile(d651);
+    KisIlluminantProfile *p2 = new KisIlluminantProfile(d652);
+    p1->load();
+    p2->load();
 /*
     // First, load a colorspace with his default profile
     cs = f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),0);
@@ -102,30 +102,30 @@ void KisKSColorSpaceTest::testRegistry()
     QVERIFY(cs->profile() != 0);
 */
     // Now with a profile
-    cs = f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(), p5);
-    QVERIFY2(cs != 0, "ColorSpace KS5 loaded - with custom profile");
-    cs = f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(), p9);
-    QVERIFY2(cs != 0, "ColorSpace KS9 loaded - with custom profile");
+    cs = f->colorSpace(KisKSF32ColorSpace<4>::ColorSpaceId().id(), p1);
+    QVERIFY2(cs != 0, "ColorSpace KS4 loaded - with custom profile");
+    cs = f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(), p2);
+    QVERIFY2(cs != 0, "ColorSpace KS6 loaded - with custom profile");
 
-    delete p5;
-    delete p9;
+    delete p1;
+    delete p2;
 }
 
 void KisKSColorSpaceTest::testToFromRgbA16()
 {
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
-    QString d653 = list.filter("_3_")[0];
-    QString d6510 = list.filter("_10_")[0];
+    QString d651 = list.filter("_111_")[0];
+    QString d652 = list.filter("_222_")[0];
 
-    KisIlluminantProfile *p3 = new KisIlluminantProfile(d653);
-    KisIlluminantProfile *p10 = new KisIlluminantProfile(d6510);
-    p3->load();
-    p10->load();
+    KisIlluminantProfile *p1 = new KisIlluminantProfile(d651);
+    KisIlluminantProfile *p2 = new KisIlluminantProfile(d652);
+    p1->load();
+    p2->load();
 
     QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSF32ColorSpace<3>::ColorSpaceId().id(),p3));
-    css.append(f->colorSpace(KisKSF32ColorSpace<10>::ColorSpaceId().id(),p10));
+    css.append(f->colorSpace(KisKSF32ColorSpace<3>::ColorSpaceId().id(),p1));
+    css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),p2));
 
     quint16 red  [4] = { 0x0000, 0x0000, 0xFFFF, 0xFFFF };
     quint16 green[4] = { 0x0000, 0xFFFF, 0x0000, 0xFFFF };
@@ -226,6 +226,9 @@ void KisKSColorSpaceTest::testToFromRgbA16()
 
         delete [] data;
     }
+
+    delete p1;
+    delete p2;
 }
 
 QTEST_KDEMAIN(KisKSColorSpaceTest, GUI)

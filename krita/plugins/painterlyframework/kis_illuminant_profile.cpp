@@ -77,16 +77,16 @@ double invphi(double y)
 
 KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
     : KoColorProfile(fileName),
-      m_wl(-1), m_T(0), m_L(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
-      Ca(0), Cs(0), m_illuminant(""), m_valid(false)
+      m_wl(-1), m_T(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
+      coeffs(0), m_illuminant(""), m_valid(false)
 {
 
 }
 
 KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
     : KoColorProfile(copy.fileName()),
-      m_wl(-1), m_T(0), m_L(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
-      Ca(0), Cs(0), m_illuminant(""), m_valid(false)
+      m_wl(-1), m_T(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
+      coeffs(0), m_illuminant(""), m_valid(false)
 {
     if (copy.valid()) {
         m_valid = copy.m_valid;
@@ -99,10 +99,6 @@ KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
             for (int j = 0; j < m_wl; j++)
                 m_T[i][j] = copy.m_T[i][j];
 
-        m_L = allocateMatrix(1,m_wl);
-        for (int i = 0; i < m_wl; i++)
-            m_L[0][i] = copy.m_L[0][i];
-
         m_red   = new double[m_wl];
         m_green = new double[m_wl];
         m_blue  = new double[m_wl];
@@ -113,18 +109,10 @@ KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
         for (int i = 0; i < m_wl; i++)
             m_blue[i] = copy.m_blue[i];
 
-        Np = copy.Np;
-        Cla = copy.Cla;
-        Nla = copy.Nla;
-        Ca = new double[Np];
-        for (qint8 i = 0; i < Np; i++)
-            Ca[i] = copy.Ca[i];
-        Cls = copy.Cls;
-        Nls = copy.Nls;
-        Cs = new double[Np];
-        for (qint8 i = 0; i < Np; i++)
-            Cs[i] = copy.Cs[i];
-        Rh = copy.Rh;
+        nc = copy.nc;
+        coeffs = new double[nc*m_wl];
+        for (qint8 i = 0; i < nc*m_wl; i++)
+            coeffs[i] = copy.coeffs[i];
 
         m_refvec = new double[m_wl];
     }
@@ -161,16 +149,10 @@ bool KisIlluminantProfile::load()
         qint8 tmp;
         data >> tmp;
         m_wl = (int)tmp;
-        data >> tmp >> tmp >> tmp;
         m_T = allocateMatrix(3,m_wl);
         for (int i = 0; i < m_wl; i++)
             for (int j = 0; j < 3; j++)
                 data.readRawData((char*)&m_T[j][i],8);
-    }
-    {
-        m_L = allocateMatrix(1,m_wl);
-        for (int i = 0; i < m_wl; i++)
-            data.readRawData((char*)&m_L[0][i],8);
     }
     {
         m_red   = new double[m_wl];
@@ -189,18 +171,10 @@ bool KisIlluminantProfile::load()
     {
         qint8 tmp;
         data >> tmp;
-        Np = (int)tmp-2;
-        data.readRawData((char*)&Cla,8);
-        data.readRawData((char*)&Nla,8);
-        Ca = new double[Np];
-        for (qint8 i = 0; i < Np; i++)
-            data.readRawData((char*)&Ca[i],8);
-        data.readRawData((char*)&Cls,8);
-        data.readRawData((char*)&Nls,8);
-        Cs = new double[Np];
-        for (qint8 i = 0; i < Np; i++)
-            data.readRawData((char*)&Cs[i],8);
-        data.readRawData((char*)&Rh,8);
+        nc = (int)tmp;
+        coeffs = new double[nc*m_wl];
+        for (qint8 i = 0; i < nc*m_wl; i++)
+            data.readRawData((char*)&coeffs[i],8);
     }
 
     // Initialize the reflectance vector and channel converter
@@ -232,26 +206,16 @@ bool KisIlluminantProfile::save(const QString &fileName)
             data.writeRawData((char*)&m_T[j][i],8);
 
     for (int i = 0; i < m_wl; i++)
-        data.writeRawData((char*)&m_L[0][i],8);
-
-    for (int i = 0; i < m_wl; i++)
         data.writeRawData((char*)&m_red[i],8);
     for (int i = 0; i < m_wl; i++)
         data.writeRawData((char*)&m_green[i],8);
     for (int i = 0; i < m_wl; i++)
         data.writeRawData((char*)&m_blue[i],8);
 
-    data << (qint8)Np;
-    data.writeRawData((char*)&Cla,8);
-    data.writeRawData((char*)&Nla,8);
-    for (qint8 i = 0; i < Np; i++)
-        data.writeRawData((char*)&Ca[i],8);
-    data.writeRawData((char*)&Cls,8);
-    data.writeRawData((char*)&Nls,8);
-    for (qint8 i = 0; i < Np; i++)
-        data.writeRawData((char*)&Cs[i],8);
-    data.writeRawData((char*)&Rh,8);
-
+    data << (qint8)nc;
+    for (qint8 i = 0; i < nc*m_wl; i++)
+        data.writeRawData((char*)&coeffs[i],8);
+    
     return true;
 }
 
@@ -269,29 +233,16 @@ void KisIlluminantProfile::toRgb(const double *ksvec, double *rgbvec) const
     reflectanceToRgb(rgbvec);
 }
 
-double KisIlluminantProfile::falpha(double R, double L) const
+double KisIlluminantProfile::fgen(double R, int i) const
 {
-    return fabs( Cla * pow(fabs(L+0.05),Nla) * polyval(Np,Ca,R) );
-}
-
-double KisIlluminantProfile::fsigma(double R, double L) const
-{
-    return fabs( Cls * pow(fabs(L+0.05),Nls) * polyval(Np,Cs,R) );
+    return fabs( polyval(nc,coeffs+i*nc,R) );
 }
 
 void KisIlluminantProfile::reflectanceToKS(double *ksvec) const
 {
-    double L;
-    applyMatrix(1,m_wl, m_L,m_refvec, &L);
-
     for (int i = 0; i < m_wl; i++) {
-        if (m_refvec[i] <= Rh) {
-            ksvec[2*i+0] = falpha(m_refvec[i],L);
-            ksvec[2*i+1] = ksvec[2*i+0] * phi(m_refvec[i]);
-        } else {
-            ksvec[2*i+1] = fsigma(m_refvec[i],L);
-            ksvec[2*i+0] = ksvec[2*i+1] * psi(m_refvec[i]);
-        }
+        ksvec[2*i+0] = fgen(m_refvec[i],i) * pow(1-m_refvec[i],2);
+        ksvec[2*i+1] = fgen(m_refvec[i],i) * 2.0 * m_refvec[i];
     }
 }
 
@@ -341,8 +292,6 @@ void KisIlluminantProfile::reset()
 {
     if (m_T)
         freeMatrix(3,m_T);
-    if (m_L)
-        freeMatrix(1,m_L);
     if (m_refvec)
         delete [] m_refvec;
     if (m_red)
@@ -351,14 +300,11 @@ void KisIlluminantProfile::reset()
         delete [] m_green;
     if (m_blue)
         delete [] m_blue;
-    if (Ca)
-        delete [] Ca;
-    if (Cs)
-        delete [] Cs;
+    if (coeffs)
+        delete [] coeffs;
 
-    m_T = m_L = 0;
+    m_T = 0;
     m_refvec = m_red = m_green = m_blue = 0;
-    Ca = Cs = 0;
 
     m_illuminant = "";
     m_wl = -1;

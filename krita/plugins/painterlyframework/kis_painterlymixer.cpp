@@ -63,7 +63,6 @@ KisPainterlyMixer::~KisPainterlyMixer()
 {
     if (m_tool)
         delete m_tool;
-    delete m_colorspace;
 }
 
 void KisPainterlyMixer::initCanvas()

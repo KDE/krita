@@ -1440,8 +1440,11 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
     Q_ASSERT( shape );
 
-    shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-type");
-    shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-page-number"); //<=== KWPageManager
+    //TODO see how it was done in KPrDocument
+    //shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-type");
+    //shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-page-number"); //<=== KWPageManager
+
+    d->textSharedData->shapeInserted(shape);
 
     /*
     All we need to find is a way to create the shape applicationData after the 
@@ -1455,9 +1458,17 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     KoShapeApplicationData *appdata = ; //TODO where do we get that one from? using ObjectX?
     shape->setApplicationData(appdata);
 
-    class KOTEXT_EXPORT ObjectX {
+    class KOTEXT_EXPORT ObjectX : public KoSharedLoadingData {
         public:
-            virtual void doAppDependendThingsWithTheShape(KoShape*) {}
+            virtual void shapeInserted(KoShape*) = 0;
+    };
+    class KWordObjectX : public ObjectX {
+        public:
+            virtual void doAppDependendThingsWithTheShape(KoShape* shape) {
+                if(shape->addtionalAttribute("anchor-type") == "page")
+                    KWPage* p = m_document->m_pageManager->page( shape->addtionalAttribute("anchor-page-number") );
+                    ...
+            }
     };
     if(ObjectX) ObjectX->doAppDependendThingsWithTheShape(shape);
     */

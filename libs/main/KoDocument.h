@@ -1046,7 +1046,7 @@ protected:
      *  But do this ONLY if the document is not stored extern (see isStoredExtern() ).
      *  If it is, then the pictures should be saved to tar:/pictures.
      */
-    virtual bool completeSaving( KoStore* store );
+    virtual bool completeSaving( KoStore* store);
 
     /**
      * Inserts the new child in the list of children and emits the

@@ -42,10 +42,11 @@ public:
     bool completeLoading(KoStore *store);
 
     /**
-     * Save all images to the store which have a recognized KoImageData::storeHref().
+     * Save all images to the store which are tagged for saving
+     * and have a recognized KoImageData::storeHref().
      * @return returns true if save was successful (no images failed).
      */
-    bool completeSaving(KoStore *store);
+    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter );
 
 protected:
     friend class KoImageData;

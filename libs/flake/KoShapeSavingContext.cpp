@@ -136,7 +136,6 @@ void KoShapeSavingContext::saveLayerSet( KoXmlWriter * xmlWriter ) const
 
 QString KoShapeSavingContext::addImageForSaving( const QPixmap &pixmap )
 {
-Q_ASSERT(false);
     QString filename = "Pictures/image" + QTime::currentTime().toString( "_hh_mm_ss_zzz.png" );
     if( m_pixmaps.contains( filename ) )
     {
@@ -150,12 +149,12 @@ Q_ASSERT(false);
     return filename;
 }
 
+
 bool KoShapeSavingContext::saveImages( KoStore * store, KoXmlWriter * manifestWriter ) const
 {
     QString fileName("/tmp/temp.png");
     // Find the mimetype only by the extension, not by file content (as the file is empty!)
     const QString mimetype( KMimeType::findByPath( fileName, 0 ,true )->name() );
-Q_ASSERT(false);
     QMapIterator<QString, QPixmap> i( m_pixmaps );
     while( i.hasNext() )
     {

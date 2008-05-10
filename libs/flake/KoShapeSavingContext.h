@@ -175,6 +175,8 @@ public:
 
     /**
      * Adds a pixmap for saving into the Pictures subfolder within the odf file
+     * Note that images added this way should only be transient images like textures from styles etc
+     * Real images should be added to the ImageCollection
      * @param pixmap the pixmap to save
      * @return the filename of the pixmap to refer to
      */

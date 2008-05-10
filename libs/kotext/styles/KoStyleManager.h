@@ -29,6 +29,7 @@
 class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
+class KoXmlWriter;
 class ChangeFollower;
 class KoGenStyles;
 
@@ -140,7 +141,7 @@ public:
     virtual bool completeLoading( KoStore *) { return true; }
 
     /// reimplemented
-    virtual bool completeSaving( KoStore *) { return true; }
+    virtual bool completeSaving( KoStore *, KoXmlWriter * ) { return true; }
 
 signals:
     void styleAdded(KoParagraphStyle*);

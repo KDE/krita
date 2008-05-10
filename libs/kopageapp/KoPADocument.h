@@ -34,6 +34,7 @@ class KoPAPageBase;
 class KoPAMasterPage;
 class KoPALoadingContext;
 class KoPASavingContext;
+class KoXmlWriter;
 
 class KoInlineTextObjectManager;
 

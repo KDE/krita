@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +33,14 @@
 
 class KoImageData::Private {
 public:
-    Private(KoImageCollection *c) : refCount(0), quality(MediumQuality), collection(c), tempImageFile(0) { }
+    Private(KoImageCollection *c)
+    : refCount(0)
+    , quality(MediumQuality)
+    , collection(c)
+    , tempImageFile(0)
+    , taggedForSaving(false)
+    { }
+
     ~Private() {
         delete tempImageFile;
     }
@@ -47,13 +55,15 @@ public:
     QString storeHref;
     KoImageCollection *collection;
     KTemporaryFile *tempImageFile;
+    bool taggedForSaving;
 };
 
-KoImageData::KoImageData(KoImageCollection *collection)
+KoImageData::KoImageData(KoImageCollection *collection, QString href)
     : d(new Private(collection))
 {
     Q_ASSERT(collection);
     collection->addImage(this);
+    d->storeHref = href;
     Q_ASSERT(d->refCount == 1);
 }
 
@@ -124,8 +134,15 @@ KUrl KoImageData::imageLocation() const {
     return d->url;
 }
 
-void KoImageData::setStoreHref(const QString &href) {
-    d->storeHref = href;
+QString KoImageData::tagForSaving() {
+    d->taggedForSaving=true;
+    d->storeHref = "";
+    if(d->tempImageFile) {
+        d->storeHref = "Pictures/image.jpg";
+    }
+
+
+    return d->storeHref;
 }
 
 QString KoImageData::storeHref() const {
@@ -134,9 +151,42 @@ QString KoImageData::storeHref() const {
 
 bool KoImageData::saveToFile(QIODevice *device)
 {
-    Q_ASSERT(false);
-    return d->image.save(device);
+    if(d->tempImageFile) {
+        if(! d->tempImageFile->open())
+            return false;
+        char * data = new char[32 * 1024];
+        while(true) {
+            bool failed = false;
+            qint64 bytes = d->tempImageFile->read(data, 32*1024);
+            if(bytes == 0)
+                break;
+            else if(bytes == -1) {
+                kWarning() << "Failed to read data from the tmpfile\n";
+                failed = true;
+            }
+            while(! failed && bytes > 0) {
+                qint64 written = device->write(data, bytes);
+                if(written < 0) {// error!
+                    kWarning() << "Failed to copy the image from the temp to the store\n";
+                    failed = true;
+                }
+                bytes -= written;
+            }
+            if(failed) { // read or write failed; so lets cleanly abort.
+                return false;
+            }
+        }
+        return true;
+    }
+    else
+        return d->image.save(device);
 }
+
+bool KoImageData::isTaggedForSaving()
+{
+    return d->taggedForSaving;
+}
+
 
 bool KoImageData::loadFromFile(QIODevice *device) {
     struct Finally {
@@ -155,7 +205,7 @@ bool KoImageData::loadFromFile(QIODevice *device) {
     d->tempImageFile = 0;
     d->image = QImage();
 
-    if(device->size() > 25E4) { // larger than 250Kb, save to tmp file.
+    if(true) { //  right now we tmp file everything device->size() > 25E4) { // larger than 250Kb, save to tmp file.
         d->tempImageFile = new KTemporaryFile();
         if(! d->tempImageFile->open())
             return false;

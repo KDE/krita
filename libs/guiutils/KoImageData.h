@@ -69,8 +69,9 @@ public:
     /**
      * constructor
      * @param collection the image collection which will do the loading of the image data for us.
+     * @param href the url of the image in the store.
      */
-    KoImageData(KoImageCollection *collection);
+    KoImageData(KoImageCollection *collection, QString href="");
 
     /**
      * copy constructor using ref-counting.
@@ -117,9 +118,13 @@ public:
      */
     void setImage( const QImage &image );
 
-    /// If using SaveInStore, the collection will set a url-like location using this method.
-    void setStoreHref(const QString &href);
-    /// returns the SaveInStore type url-like location
+    /**
+     * Tags this image to be saved and returns the href for reference in the xml.
+     * @return returns the url-like location this image will be saved to.
+     */
+    QString tagForSaving();
+
+    /// returns the url-like location
     QString storeHref() const;
 
     /**
@@ -138,6 +143,12 @@ public:
      * @return returns true if load was successful.
      */
     bool saveToFile(QIODevice *device);
+
+    /**
+     * Return whether this image have been tagged for saving.
+     * @return returns true if this image should be saved.
+     */
+    bool isTaggedForSaving();
 
     bool operator==(const KoImageData &other) {
         return other.d == d;

@@ -20,6 +20,7 @@
 #include "KoImageData.h"
 
 #include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 
 #include <QList>
 #include <KDebug>
@@ -63,14 +64,19 @@ bool KoImageCollection::completeLoading(KoStore *store) {
     return true;
 }
 
-bool KoImageCollection::completeSaving(KoStore *store) {
+bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter ) {
     foreach(KoImageData *image, d->images) {
-        if(! store->open(image->storeHref()))
-            return false;
-        bool ok = image->saveToFile(new KoStoreDevice(store));
-        store->close();
-        if(! ok)
-            return false;
+        if(image->isTaggedForSaving())
+        {
+            if(! store->open(image->storeHref()))
+                return false;
+            bool ok = image->saveToFile(new KoStoreDevice(store));
+            store->close();
+            if(! ok)
+                return false;
+//            const QString mimetype( KMimeType::findByPath( image->storeHref(), 0 ,true )->name() );
+//            manifestWriter->addManifestEntry( image->storeHref(), mimetype );
+        }
     }
     return true;
 }

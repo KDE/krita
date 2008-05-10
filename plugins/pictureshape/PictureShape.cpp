@@ -85,7 +85,10 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
 
     writer.startElement("draw:image");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-    QString name = context.addImageForSaving( data->pixmap() );
+    QString name = data->tagForSaving();
+    writer.addAttribute("xlink:type", "simple" );
+    writer.addAttribute("xlink:show", "embed" );
+    writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
     writer.endElement();
     if(! nestedInFrame)
@@ -100,9 +103,7 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     if( m_imageCollection)//context.imageCollection() )
     {
         const QString href = element.attribute("href");
-
-        KoImageData * data = new KoImageData( m_imageCollection);//context.imageCollection() );
-        data->setStoreHref( href );
+        KoImageData * data = new KoImageData( m_imageCollection, href);
         setUserData( data );
     }
 
@@ -111,7 +112,8 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
 
 bool PictureShape::loadFromUrl( KUrl &url )
 {
-    KoImageData * data = new KoImageData( m_imageCollection );
+    //This should be changed so that we store the original file somewhere for later saving
+    KoImageData * data = new KoImageData( m_imageCollection, "" );
     QImage img(url.path());
     data->setImage(img);
     setUserData( data );

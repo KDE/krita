@@ -26,7 +26,7 @@
 #include <QtGlobal>
 
 class KoStore;
-
+class KoXmlWriter;
 /**
  * The data center is for now just a sort of void pointer.
  * The data centers can be stuff like image collection, or stylemanager.
@@ -46,7 +46,7 @@ public:
     /**
      * Save any remaining binary blobs
      */
-    virtual bool completeSaving(KoStore *store) = 0;
+    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter ) = 0;
 };
 
 #endif

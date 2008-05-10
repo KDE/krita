@@ -1440,8 +1440,8 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
     Q_ASSERT( shape );
 
-    //TODO see how it was done in KPrDocument
-    //shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-type");
+    //TODO probably better use KoShapeLoadingContext::addAdditionalAttributeData like KPrDocument
+    shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-type");
     //shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-page-number"); //<=== KWPageManager
 
     d->textSharedData->shapeInserted(shape);

@@ -381,7 +381,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
             cs->normalisedChannelsValue(cit.rawData(),cc);
             cs->normalisedChannelsValue(dit.rawData(),dc);
             for (int i = 0; i < count; i++)
-                dc[i] = 0.5*(cc[i] + dc[i]);
+                dc[i] = (1.0-0.4*adjustedInfo.pressure())*cc[i] + 0.4*adjustedInfo.pressure()*dc[i];
             cs->fromNormalisedChannelsValue(dit.rawData(),dc);
             if (dit.x() == (int)(sw/2) && dit.y() == (int)(sh/2))
                 painter()->setPaintColor(KoColor(dit.rawData(),cs));

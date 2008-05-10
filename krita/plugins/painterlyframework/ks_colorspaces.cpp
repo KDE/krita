@@ -64,8 +64,8 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     e->add(new KisKSColorSpaceEngine<6>);
 /*    e->add(new KisKSColorSpaceEngine<7>);
     e->add(new KisKSColorSpaceEngine<8>);
-    e->add(new KisKSColorSpaceEngine<9>);
-    e->add(new KisKSColorSpaceEngine<10>); */
+    e->add(new KisKSColorSpaceEngine<9>); */
+    e->add(new KisKSColorSpaceEngine<10>);
 
     f->add(new KisKSF32ColorSpaceFactory<3>);
     f->add(new KisKSF32ColorSpaceFactory<4>);
@@ -82,8 +82,8 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     f->add(new KisKSF16ColorSpaceFactory<6>);
 /*    f->add(new KisKSF16ColorSpaceFactory<7>);
     f->add(new KisKSF16ColorSpaceFactory<8>);
-    f->add(new KisKSF16ColorSpaceFactory<9>);
-    f->add(new KisKSF16ColorSpaceFactory<10>); */
+    f->add(new KisKSF16ColorSpaceFactory<9>); */
+    f->add(new KisKSF16ColorSpaceFactory<10>);
 #endif
 /*
     QVector<const KoColorSpace *> css;

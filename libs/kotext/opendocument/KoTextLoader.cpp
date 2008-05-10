@@ -1440,33 +1440,27 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
     Q_ASSERT( shape );
 
-    //WTF; even image-loading got broken?????????? Man, we are even in a more worse state then 2 years ago :-(
-    for(KoXmlNode node = frameElem.firstChild(); !node.isNull(); node = node.nextSibling()) {
-        KoXmlElement ts = node.toElement();
-        if( ts.isNull() )
-            continue;
-        const QString localName( ts.localName() );
-        if(ts.namespaceURI() == KoXmlNS::draw && localName == "image") {
-            KoStore* store = d->context.odfLoadingContext().store();
-            QString href = ts.attribute("href");
-            Q_ASSERT( store->hasFile(href) );
-            Q_ASSERT( ! store->isOpen() );
-            bool openok = store->open(href);
-            Q_ASSERT( openok );
-            KoImageCollection* imagecollection = new KoImageCollection();
-            KoImageData* imagedata = new KoImageData(imagecollection);
-            shape->setUserData( imagedata );
-            store->close();
-        }
-    }
+    shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-type");
+    shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-page-number"); //<=== KWPageManager
 
-    KoTextAnchor *anchor = new KoTextAnchor(shape);
-    anchor->setOffset( shape->position() );
-    anchor->setAlignment(KoTextAnchor::HorizontalOffset);
-    anchor->setAlignment(KoTextAnchor::VerticalOffset);
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
-    Q_ASSERT(layout && layout->inlineObjectTextManager());
-    layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
+    /*
+    All we need to find is a way to create the shape applicationData after the 
+    shape is loaded. We could use the KoTextSharedLoadingData for passing a 
+    pointer to an object (ObjectX) that can be used to handle that work. This 
+    could be set by kword and would be 0 for all other apps where no special data 
+    would be attached after the shapes are loaded. The interface for the object 
+    needs to be in kotext.
+
+
+    KoShapeApplicationData *appdata = ; //TODO where do we get that one from? using ObjectX?
+    shape->setApplicationData(appdata);
+
+    class KOTEXT_EXPORT ObjectX {
+        public:
+            virtual void doAppDependendThingsWithTheShape(KoShape*) {}
+    };
+    if(ObjectX) ObjectX->doAppDependendThingsWithTheShape(shape);
+    */
 }
 
 void KoTextLoader::startBody(int total)

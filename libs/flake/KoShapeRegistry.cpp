@@ -52,8 +52,7 @@ public:
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
     {
-        loadOdfAttributes( element, context, OdfAllAttributes );
-        return true;
+        return loadOdfAttributes( element, context, OdfAllAttributes );
     };
     virtual void saveOdf( KoShapeSavingContext & context ) const 
     {

@@ -112,14 +112,18 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
 
 bool PictureShape::loadFromUrl( KUrl &url )
 {
-    //This should be changed so that we store the original file somewhere for later saving
-    KoImageData * data = new KoImageData( m_imageCollection);
-    QImage img(url.path());
-    data->setImage(img);
-    setUserData( data );
-    setSize(QSizeF(DM_TO_POINT(img.width() / (double) img.dotsPerMeterX() * 10.0),
-DM_TO_POINT(img.height() / (double) img.dotsPerMeterY() * 10.0)  ));
-    return true;
+    if (url.isLocalFile()) {
+        KoImageData * data = new KoImageData(m_imageCollection);
+
+        QFile *file = new QFile(url.toLocalFile());
+        file->open(QIODevice::ReadOnly);
+        data->loadFromFile(file); //also closes and deletes the file
+
+        setUserData( data );
+        setSize(data->imageSize());
+        return true;
+    }
+    return false;
 }
 
 void PictureShape::init(QMap<QString, KoDataCenter *>  dataCenterMap)

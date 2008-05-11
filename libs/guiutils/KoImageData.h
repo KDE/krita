@@ -150,6 +150,12 @@ public:
      */
     bool isTaggedForSaving();
 
+
+    /**
+     * The size of the image in points
+     */
+    const QSizeF imageSize();
+
     bool operator==(const KoImageData &other) {
         return other.d == d;
     }

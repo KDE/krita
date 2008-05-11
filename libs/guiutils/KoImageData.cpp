@@ -93,14 +93,7 @@ KoImageData::ImageQuality KoImageData::imageQuality() const {
 
 QPixmap KoImageData::pixmap() {
     if(d->pixmap.isNull()) {
-        if(d->image.isNull() && d->tempImageFile) {
-            d->tempImageFile->open();
-            d->image.load(d->tempImageFile, 0);
-            // kDebug(30004)() <<"  orig:" << d->image.width() <<"x" << d->image.height();
-            d->tempImageFile->close();
-            d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (double) d->image.dotsPerMeterX() * 10.0) );
-            d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (double) d->image.dotsPerMeterY() * 10.0) );
-        }
+        image(); // force loading if only present in a tmp file
 
         if(! d->image.isNull()) {
             int multiplier = 150; // max 150 ppi
@@ -116,8 +109,8 @@ QPixmap KoImageData::pixmap() {
                 multiplier = 50;
             else if(d->quality == MediumQuality)
                 multiplier = 100;
-            int width = qMin(d->image.width(), qRound(d->imageSize.width() * multiplier / 72.));
-            int height = qMin(d->image.height(), qRound(d->imageSize.height() * multiplier / 72.));
+            int width = qMin(d->image.width(), qRound(imageSize().width() * multiplier / 72.));
+            int height = qMin(d->image.height(), qRound(imageSize().height() * multiplier / 72.));
             // kDebug(30004)() <<"  image:" << width <<"x" << height;
 
             QImage scaled = d->image.scaled(width, height);
@@ -246,13 +239,38 @@ bool KoImageData::loadFromFile(QIODevice *device) {
     }
     else { // small image; just load it in memory.
         d->image.load(device, 0);
-        d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (double) d->image.dotsPerMeterX() * 10.0) );
-        d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (double) d->image.dotsPerMeterY() * 10.0) );
     }
     return true;
 }
 
+const QSizeF KoImageData:: imageSize() {
+    if(d->imageSize.isValid() == 0)
+    {
+        // The imagesize have not yet been calculated 
+
+        image(); // make sure the image is loaded
+
+        if(d->image.dotsPerMeterX())
+            d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (double) d->image.dotsPerMeterX() * 10.0) );
+        else
+            d->imageSize.setWidth( d->image.width() / 72.0);
+
+        if(d->image.dotsPerMeterY())
+            d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (double) d->image.dotsPerMeterY() * 10.0) );
+        else
+            d->imageSize.setHeight( d->image.height() / 72.0);
+    }
+    return d->imageSize;
+}
+
 const QImage KoImageData::image() const {
+    if(d->image.isNull() && d->tempImageFile) {
+        d->tempImageFile->open();
+        d->image.load(d->tempImageFile, 0);
+            // kDebug(30004)() <<"  orig:" << d->image.width() <<"x" << d->image.height();
+        d->tempImageFile->close();
+    }
+
     return d->image;
 }
 
@@ -262,6 +280,4 @@ void KoImageData::setImage( const QImage &image ) {
     d->tempImageFile = 0;
 
     d->image = image;
-    d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (double) d->image.dotsPerMeterX() * 10.0) );
-    d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (double) d->image.dotsPerMeterY() * 10.0) );
 }

@@ -24,6 +24,7 @@
 
 #include <QList>
 #include <KDebug>
+#include <kmimetype.h>
 
 class KoImageCollection::Private {
 public:
@@ -74,8 +75,8 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWri
             store->close();
             if(! ok)
                 return false;
-//            const QString mimetype( KMimeType::findByPath( image->storeHref(), 0 ,true )->name() );
-//            manifestWriter->addManifestEntry( image->storeHref(), mimetype );
+            const QString mimetype( KMimeType::findByPath( image->storeHref(), 0 ,true )->name() );
+            manifestWriter->addManifestEntry( image->storeHref(), mimetype );
         }
     }
     return true;

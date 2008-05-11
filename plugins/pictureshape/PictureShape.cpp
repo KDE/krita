@@ -113,7 +113,7 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
 bool PictureShape::loadFromUrl( KUrl &url )
 {
     //This should be changed so that we store the original file somewhere for later saving
-    KoImageData * data = new KoImageData( m_imageCollection, "" );
+    KoImageData * data = new KoImageData( m_imageCollection);
     QImage img(url.path());
     data->setImage(img);
     setUserData( data );

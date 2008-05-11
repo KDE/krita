@@ -136,11 +136,15 @@ KUrl KoImageData::imageLocation() const {
 
 QString KoImageData::tagForSaving() {
     d->taggedForSaving=true;
-    d->storeHref = "";
+    d->storeHref = QString("Pictures/image%1").arg((qint32)this);
     if(d->tempImageFile) {
-        d->storeHref = "Pictures/image.jpg";
+        // we should set a suffix, unfortunately the tmp file don'thave a correct one set
+        //d->storeHref += 
     }
-
+    else
+        // save as png if we don't have the original file data
+        // also see saveToFile where we again hardcode to "PNG"
+        d->storeHref += ".png";
 
     return d->storeHref;
 }
@@ -173,13 +177,16 @@ bool KoImageData::saveToFile(QIODevice *device)
                 bytes -= written;
             }
             if(failed) { // read or write failed; so lets cleanly abort.
+                 delete[] data;
                 return false;
             }
         }
+        delete[] data;
         return true;
     }
-    else
-        return d->image.save(device);
+    else {
+        return d->image.save(device,"PNG");
+    }
 }
 
 bool KoImageData::isTaggedForSaving()

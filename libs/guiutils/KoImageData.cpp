@@ -244,8 +244,7 @@ bool KoImageData::loadFromFile(QIODevice *device) {
 }
 
 const QSizeF KoImageData:: imageSize() {
-    if(d->imageSize.isValid() == 0)
-    {
+    if(!d->imageSize.isValid()) {
         // The imagesize have not yet been calculated 
 
         image(); // make sure the image is loaded

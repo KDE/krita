@@ -701,14 +701,14 @@ public:
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      * @param value The value of the attribute
      */
-    void setAddtionalAttribute( const char * name, const QString & value );
+    void setAdditionalAttribute( const char * name, const QString & value );
 
     /**
      * Remove additional attribute
      *
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      */
-    void removeAddtionalAttribute( const char * name );
+    void removeAdditionalAttribute( const char * name );
 
     /**
      * Check if additional attribute is set

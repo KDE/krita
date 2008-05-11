@@ -946,7 +946,6 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
             props.setLevel( 0 );
             listStyle->setLevel( props );
         }
-
         listStyle->applyStyle(current, level);
     }
 
@@ -1441,8 +1440,8 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     Q_ASSERT( shape );
 
     //TODO probably better use KoShapeLoadingContext::addAdditionalAttributeData like KPrDocument
-    shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-type");
-    //shape->setAddtionalAttribute(KoXmlNS::draw, "anchor-page-number"); //<=== KWPageManager
+    //shape->setAdditionalAttribute(KoXmlNS::draw, "anchor-type");
+    //shape->setAdditionalAttribute(KoXmlNS::draw, "anchor-page-number"); //<=== KWPageManager
 
     d->textSharedData->shapeInserted(shape);
 

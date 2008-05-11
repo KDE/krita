@@ -782,7 +782,7 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
             if ( element.hasAttributeNS( attributeData.ns, attributeData.tag ) ) {
                 QString value = element.attributeNS( attributeData.ns, attributeData.tag );
                 //kDebug(30006) << "load additional attribute" << attributeData.tag << value;
-                setAddtionalAttribute( attributeData.name, value );
+                setAdditionalAttribute( attributeData.name, value );
             }
         }
     }
@@ -1094,12 +1094,12 @@ KoSnapData KoShape::snapData() const
     return KoSnapData();
 }
 
-void KoShape::setAddtionalAttribute( const char * name, const QString & value )
+void KoShape::setAdditionalAttribute( const char * name, const QString & value )
 {
     d->additionalAttributes.insert( name, value );
 }
 
-void KoShape::removeAddtionalAttribute( const char * name )
+void KoShape::removeAdditionalAttribute( const char * name )
 {
     d->additionalAttributes.remove( name );
 }

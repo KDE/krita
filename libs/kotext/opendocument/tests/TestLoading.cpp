@@ -32,7 +32,6 @@
 #include <KoStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoTextLoader.h>
-#include <KoTextLoadingContext.h>
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
 #include <KoTextShapeData.h>

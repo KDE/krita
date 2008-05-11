@@ -22,7 +22,6 @@
  */
 
 #include "KoTextLoader.h"
-#include "KoTextFrameLoader.h"
 
 // koffice
 #include <KoOdfStylesReader.h>

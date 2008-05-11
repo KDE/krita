@@ -71,9 +71,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
 
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextLoader.cpp
-    opendocument/KoTextFrameLoader.cpp
-    opendocument/KoTextLoadingContext.cpp
- )
+)
 
 
 kde4_add_ui_files(kotext_LIB_SRCS

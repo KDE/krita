@@ -24,6 +24,7 @@
 #include "kis_selection.h"
 #include "kis_processing_information.h"
 #include "kis_node.h"
+#include "kis_node_visitor.h"
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private {
 public:
@@ -90,6 +91,11 @@ void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
 
     filter->process( src, dst, rc.size(), m_d->filterConfig);
 
+}
+
+bool KisFilterMask::accept(KisNodeVisitor &v)
+{
+    return v.visit(this);
 }
 
 #include "kis_filter_mask.moc"

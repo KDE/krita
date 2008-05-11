@@ -50,6 +50,7 @@ public:
         return KisNodeSP(new KisFilterMask(*this));
     }
 
+    bool accept(KisNodeVisitor &v);
 
     KisFilterMask( const KisFilterMask& rhs );
 

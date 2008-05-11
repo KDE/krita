@@ -128,8 +128,9 @@ KUrl KoImageData::imageLocation() const {
 }
 
 QString KoImageData::tagForSaving() {
+    static int counter=0;
     d->taggedForSaving=true;
-    d->storeHref = QString("Pictures/image%1").arg((qint32)this);
+    d->storeHref = QString("Pictures/image%1").arg(counter++);
     if(d->tempImageFile) {
         // we should set a suffix, unfortunately the tmp file don'thave a correct one set
         //d->storeHref += 

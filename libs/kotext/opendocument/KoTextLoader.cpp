@@ -1433,43 +1433,12 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
 
 void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor )
 {
-    kDebug() <<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
-    Q_ASSERT( shape );
-
-    //TODO probably better use KoShapeLoadingContext::addAdditionalAttributeData like KPrDocument
-    //shape->setAdditionalAttribute(KoXmlNS::draw, "anchor-type");
-    //shape->setAdditionalAttribute(KoXmlNS::draw, "anchor-page-number"); //<=== KWPageManager
-
+    if( shape ) {
+        return;
+    }
+    shape->setAdditionalAttribute("draw:anchor-type", frameElem.attribute("anchor-type"));
     d->textSharedData->shapeInserted(shape);
-
-    /*
-    All we need to find is a way to create the shape applicationData after the 
-    shape is loaded. We could use the KoTextSharedLoadingData for passing a 
-    pointer to an object (ObjectX) that can be used to handle that work. This 
-    could be set by kword and would be 0 for all other apps where no special data 
-    would be attached after the shapes are loaded. The interface for the object 
-    needs to be in kotext.
-
-
-    KoShapeApplicationData *appdata = ; //TODO where do we get that one from? using ObjectX?
-    shape->setApplicationData(appdata);
-
-    class KOTEXT_EXPORT ObjectX : public KoSharedLoadingData {
-        public:
-            virtual void shapeInserted(KoShape*) = 0;
-    };
-    class KWordObjectX : public ObjectX {
-        public:
-            virtual void doAppDependendThingsWithTheShape(KoShape* shape) {
-                if(shape->addtionalAttribute("anchor-type") == "page")
-                    KWPage* p = m_document->m_pageManager->page( shape->addtionalAttribute("anchor-page-number") );
-                    ...
-            }
-    };
-    if(ObjectX) ObjectX->doAppDependendThingsWithTheShape(shape);
-    */
 }
 
 void KoTextLoader::startBody(int total)

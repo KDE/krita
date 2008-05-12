@@ -51,7 +51,7 @@ struct KRITAIMAGE_EXPORT KisTileStoreData { // used to be struct KisTileStore::S
  *    read any tile, as long as nobody is writing to it. (bsar)
  *    See: http://doc.trolltech.com/qq/qq14-threading.html
  */
-class KRITAIMAGE_EXPORT KisTileStore : public KisShared {
+class KRITAIMAGE_EXPORT KisTileStore : public virtual KisShared {
 public:
     virtual ~KisTileStore() {}
 

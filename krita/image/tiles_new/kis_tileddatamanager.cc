@@ -30,6 +30,7 @@
 #include "kis_memento.h"
 #include "kis_tilemanager.h"
 #include "kis_tilestore.h"
+#include "kis_datamanagerproxy.h"
 
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
  * The tiles are laid out in a matrix that can have negative indexes.
@@ -59,6 +60,7 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize, const quint8 *defPix
     m_extentMinY = qint32_MAX;
     m_extentMaxX = qint32_MIN;
     m_extentMaxY = qint32_MIN;
+    m_proxy = 0;
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm) : KisShared(dm)
@@ -102,6 +104,7 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm) : KisSh
         }
     }
 
+    m_proxy = dm.m_proxy;
 }
 
 KisTiledDataManager::~KisTiledDataManager()
@@ -781,10 +784,14 @@ KisTile *KisTiledDataManager::getTile(qint32 col, qint32 row, bool writeAccess)
     // Might not have been created yet
     if(!tile)
     {
+        // Create a new tile
+        if (m_proxy)
+            tile = m_proxy->getTileDataAt(col, row, writeAccess, m_defaultTile);
         if(writeAccess)
         {
-            // Create a new tile
-            tile = new KisTile(*m_defaultTile, col, row);
+            // Create a new tile by copying the default into a new tile in case there was no proxy (or it returned nothing)
+            if (!tile)
+                tile = new KisTile(*m_defaultTile, col, row);
             Q_CHECK_PTR(tile);
 
             tile->setNext(m_hashTable[tileHash]);
@@ -795,10 +802,12 @@ KisTile *KisTiledDataManager::getTile(qint32 col, qint32 row, bool writeAccess)
             if (m_currentMemento && !m_currentMemento->containsTile(col, row, tileHash)) {
                 m_currentMemento->addTileToDeleteOnUndo(col, row);
             }
-        }
-        else
+        } else {
             // If only read access then it's enough to share a default tile
-            tile = m_defaultTile;
+            // Only in case the proxy did not exist, or it returned nothing:
+            if (!tile)
+                tile = m_defaultTile;
+        }
     }
 
     if(writeAccess) {
@@ -1155,6 +1164,10 @@ qint32 KisTiledDataManager::rowStride(qint32 x, qint32 y) const
 qint32 KisTiledDataManager::numTiles(void) const
 {
     return m_numTiles;
+}
+
+void KisTiledDataManager::setProxy(KisDataManagerProxySP proxy) {
+    m_proxy = proxy;
 }
 
 KisTileDataWrapper::KisTileDataWrapper(KisTile* tile, qint32 offset)

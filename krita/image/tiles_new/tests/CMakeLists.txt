@@ -29,3 +29,11 @@ set(kis_tiles_regression_tester_SRCS kis_tiles_regression_tester.cpp )
 kde4_add_unit_test(KisTilesRegressionTester TESTNAME krita-image-KisTilesRegressionTester  ${kis_tiles_regression_tester_SRCS})
 
 target_link_libraries(KisTilesRegressionTester ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_tiles_from_file_tester_SRCS kis_tiles_from_file_tester.cpp )
+
+kde4_add_unit_test(KisTilesFromFileTester TESTNAME krita-image-KisTilesFromFileTester  ${kis_tiles_from_file_tester_SRCS})
+
+target_link_libraries(KisTilesFromFileTester ${KDE4_KDEUI_LIBS} koguiutils komain kritaimage ${QT_QTTEST_LIBRARY})

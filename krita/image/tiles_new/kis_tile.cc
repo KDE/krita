@@ -94,6 +94,20 @@ KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
     //trace = kBacktrace();
 }
 
+KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, KisSharedTileData *data)
+    : m_lock(QMutex::Recursive)
+{
+    m_pixelSize = pixelSize;
+    m_nextTile = 0;
+    m_col = col;
+    m_row = row;
+
+    QMutexLocker lock(&data->lock);
+    m_tileData = data;
+    m_tileData->references++;
+    m_tileData->lastUse = QTime::currentTime(); // Should this lock the shareData? ###
+}
+
 KisTile::KisTile(const KisTile& rhs)
     : m_lock(QMutex::Recursive)
 {
@@ -193,6 +207,7 @@ void KisTile::removeReader() const
 }
 
 // ### Check the locking here! (ESPECIALLY: returning m_data while we are locked!)
+// This function should be called only in case this tile was not locked into memory by the caller...
 void KisTile::detachShared() const
 {
     QMutexLocker lock(&m_lock);
@@ -206,6 +221,7 @@ void KisTile::detachShared() const
         return;
     }
 
+    //Q_ASSERT(m_tileData->timesLockedInMemory < m_tileData->references); // If equal, we'd also have a lock!
     Q_ASSERT(m_tileData->references > 1);
 
     addReader(); // Make sure we are in memory, use old tileData for it

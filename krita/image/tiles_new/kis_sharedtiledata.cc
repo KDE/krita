@@ -60,7 +60,7 @@ void KisSharedTileData::addLockInMemory() {
 
 void KisSharedTileData::removeLockInMemory() {
     QMutexLocker lock(&this->lock);
-    assert(timesLockedInMemory >= 0);
+    assert(timesLockedInMemory > 0);
     if (--timesLockedInMemory == 0) {
         lastUse = QTime::currentTime();
 

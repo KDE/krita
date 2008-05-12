@@ -25,6 +25,8 @@
 
 #include "kis_global.h"
 
+#include <KoColorSpaceRegistry.h>
+
 // ### HACK so that we can easily test the internals
 #define private public
 #define protected public
@@ -36,6 +38,9 @@
 #include "kis_datamanager.h" // ### Check that, indeed, this is a TILED dm?
 #include "kis_iterator.h"
 #include "kis_tilediterator.h"
+
+#include "kis_paint_device.h"
+#include "kis_iterators_pixel.h"
 
 #undef private
 #undef protected
@@ -222,6 +227,43 @@ void KisTileSharingTester::dataManagerTileSharingTest() {
     }
 }
 
+void KisTileSharingTester::iterationTest() {
+    const KoColorSpace* colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    KisPaintDevice dev1( colorSpace, "test");
+    KisPaintDevice dev2(dev1); // Shared with dev1
+
+    {
+    KisHLineConstIteratorPixel srcIt = dev1.createHLineConstIterator(0, 0, 128);
+    KisHLineIteratorPixel dstIt = dev2.createHLineIterator(0, 0, 128);
+
+    for (int y = 0; y < 10; y++) {
+        while ( !srcIt.isDone()  ) {
+            (quint8*) srcIt.oldRawData();
+            (quint8*) dstIt.rawData();
+            ++srcIt;
+            ++dstIt;
+        }
+        srcIt.nextRow();
+        dstIt.nextRow();
+    }
+    }
+    {
+        KisHLineConstIteratorPixel srcIt = dev1.createHLineConstIterator(0, 0, 128);
+        KisHLineIteratorPixel dstIt = dev2.createHLineIterator(0, 0, 128);
+
+        for (int y = 0; y < 10; y++) {
+            while ( !srcIt.isDone()  ) {
+                (quint8*) srcIt.oldRawData();
+                (quint8*) dstIt.rawData();
+                ++srcIt;
+                ++dstIt;
+            }
+            srcIt.nextRow();
+            dstIt.nextRow();
+        }
+    }
+}
+
 void KisTileSharingTester::shareTilesAcrossDatamanagersTest() {
     
 }
@@ -282,6 +324,6 @@ void KisTileSharingTester::degradeDataTest() {
     tile2.detachShared();
 }
 
-QTEST_KDEMAIN(KisTileSharingTester, NoGUI)
+QTEST_KDEMAIN(KisTileSharingTester, GUI) // GUI for the colorspaces
 
 #include "kis_tile_sharing_tester.moc"

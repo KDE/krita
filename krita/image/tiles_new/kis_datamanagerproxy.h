@@ -15,38 +15,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_TILESTOREFROMFILE_H_
-#define KIS_TILESTOREFROMFILE_H_
+#ifndef KIS_DATAMANAGERPROXY_H_
+#define KIS_DATAMANAGERPROXY_H_
 
-#include <sys/types.h>
+#include "kis_shared.h"
 
-#include <qglobal.h>
-#include <QHash>
-#include <QLinkedList>
-#include <q3valuevector.h>
-#include <QMutex>
-
-#include <ktemporaryfile.h>
-#include <krita_export.h>
-
-#include "kis_tilestore.h"
-
-#include "kis_tile.h"
-
-class KisSharedTileData;
+class KisTile;
 
 /**
- * This class is a very small tilestore that knows how to deal with the case where we read 
- * tiledata directly from an image file, and which on write actions will duplicate itself into
- * a tile from a memory tilestore.
+ * Implementations of this class will return a KisTile for the given col/row, or 0 in case the data manager's
+ * default tile should be returned. Is used in case a tile is not yet in the datamanager.
+ * TODO: rename as KisTileSource of so?
  */
-class KRITAIMAGE_EXPORT KisTileStoreFromFile : public KisTileStore {
+class KRITAIMAGE_EXPORT KisDataManagerProxy : public virtual KisShared {
 public:
-    virtual ~KisTileStoreFromFile() {}
+    virtual ~KisDataManagerProxy() {}
 
-protected:
-    struct StoreFromFileInfo : public KisTileStoreData {
-    };
+    /// Returns 0 in case this proxy knows nothing about this location; defaultTile is given so it can be used for partial tiles
+    virtual KisTile* getTileDataAt(qint32 col, qint32 row, bool write, KisTile* defaultTile) = 0;
 };
 
-#endif // KIS_TILESTOREFROMFILE_H_
+typedef KisSharedPtr<KisDataManagerProxy> KisDataManagerProxySP;
+
+#endif // KIS_DATAMANAGERPROXY_H_

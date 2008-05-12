@@ -42,6 +42,9 @@ class KisTiledRandomAccessor;
 class KoStore;
 class KisTileStore;
 
+class KisDataManagerProxy;
+typedef KisSharedPtr<KisDataManagerProxy> KisDataManagerProxySP;
+
 class KisTileDataWrapper : public KisShared {
     KisTile* m_tile;
     qint32 m_offset;
@@ -182,6 +185,7 @@ protected:
     // For debugging use
     qint32 numTiles() const;
 
+    void setProxy(KisDataManagerProxySP proxy);
 private:
     QMutex m_lock; // ### TODO: Lock more!
     quint32 m_pixelSize;
@@ -194,6 +198,7 @@ private:
     qint32 m_extentMaxX;
     qint32 m_extentMaxY;
     quint8 *m_defPixel;
+    KisDataManagerProxySP m_proxy;
 
 private:
 

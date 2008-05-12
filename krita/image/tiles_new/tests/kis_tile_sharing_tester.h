@@ -30,6 +30,7 @@ private slots:
     void dataManagerTileSharingTest();
     void shareTilesAcrossDatamanagersTest();
     void degradeDataTest();
+    void iterationTest();
 };
 
 #endif

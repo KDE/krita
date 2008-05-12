@@ -15,38 +15,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_TILESTOREFROMFILE_H_
-#define KIS_TILESTOREFROMFILE_H_
+#ifndef KIS_TILESFROMFILE_TESTER_H
+#define KIS_TILESFROMFILE_TESTER_H
 
-#include <sys/types.h>
+#include <QtTest/QtTest>
 
-#include <qglobal.h>
-#include <QHash>
-#include <QLinkedList>
-#include <q3valuevector.h>
-#include <QMutex>
-
-#include <ktemporaryfile.h>
-#include <krita_export.h>
-
-#include "kis_tilestore.h"
-
-#include "kis_tile.h"
-
-class KisSharedTileData;
-
-/**
- * This class is a very small tilestore that knows how to deal with the case where we read 
- * tiledata directly from an image file, and which on write actions will duplicate itself into
- * a tile from a memory tilestore.
- */
-class KRITAIMAGE_EXPORT KisTileStoreFromFile : public KisTileStore {
-public:
-    virtual ~KisTileStoreFromFile() {}
-
-protected:
-    struct StoreFromFileInfo : public KisTileStoreData {
-    };
+class KisTilesFromFileTester : public QObject
+{
+    Q_OBJECT
+private slots:
+    void loadFakeTilesTest();
+    void paintDeviceTest();
+    void writeTest();
 };
 
-#endif // KIS_TILESTOREFROMFILE_H_
+#endif // KIS_TILESFROMFILE_TESTER_H

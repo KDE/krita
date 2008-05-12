@@ -49,6 +49,7 @@ class KRITAIMAGE_EXPORT KisTile {
 public:
     // ### The problem with auto-implicit sharing is that it might be bad for tiles that get copied to get in the KisMemento ...
     KisTile(KisTileStoreSP store, qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel);
+    KisTile(qint32 pixelSize, qint32 col, qint32 row, KisSharedTileData *data);
     KisTile(const KisTile& rhs, qint32 col, qint32 row); // Implicit sharing (Configurable?? ### )
     KisTile(const KisTile& rhs); // Implicit sharing (Configurable?? ### )
     ~KisTile();

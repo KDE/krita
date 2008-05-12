@@ -32,6 +32,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QDoubleSpinBox>
+#include <QDesktopWidget>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -171,8 +172,17 @@ void KoSliderCombo::KoSliderComboPrivate::showPopup()
 
     QSize popSize = container->size();
     QRect popupRect(thePublic->mapToGlobal(QPoint(arrowPos - hdlPos - slider->x(), thePublic->size().height())), popSize);
-    container->setGeometry(popupRect);
 
+    // Make sure the popup is not drawn outside the screen area
+    QRect screenRect = QApplication::desktop()->availableGeometry(container);
+    if (popupRect.right() > screenRect.right())
+        popupRect.translate(screenRect.right() - popupRect.right(), 0);
+    if (popupRect.left() < screenRect.left())
+        popupRect.translate(screenRect.left() - popupRect.left(), 0);
+    if (popupRect.bottom() > screenRect.bottom())
+        popupRect.translate(0, -(thePublic->height() + container->height()));
+
+    container->setGeometry(popupRect);
     container->raise();
     container->show();
     slider->setFocus();

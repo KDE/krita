@@ -280,6 +280,11 @@ QRectF KoCreatePathTool::handleRect( const QPointF &p )
 void KoCreatePathTool::repaintActivePoint()
 {
     QRectF rect = m_activePoint->boundingRect( false ); 
+    // make sure that we have the second control point inside our
+    // update rect, as KoPathPoint::boundingRect will not include
+    // the second control point of the last path point if the path 
+    // is not closed
+    rect = rect.united( QRectF( m_activePoint->point(), m_activePoint->controlPoint2() ).normalized() );
 
     QPointF border = m_canvas->viewConverter()
             ->viewToDocument( QPointF(m_handleRadius, m_handleRadius) );

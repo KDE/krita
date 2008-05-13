@@ -128,9 +128,14 @@ QRectF KoSnapGuide::boundingRect()
     QRectF rect;
 
     if( m_currentStrategy )
+    {
         rect = m_currentStrategy->decoration( *m_canvas->viewConverter() ).boundingRect();
-
-    return rect.adjusted( -2, -2, 2, 2 );
+        return rect.adjusted( -2, -2, 2, 2 );
+    }
+    else
+    {
+        return rect;
+    };
 }
 
 void KoSnapGuide::paint( QPainter &painter, const KoViewConverter &converter )

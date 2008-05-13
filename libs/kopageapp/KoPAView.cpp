@@ -436,7 +436,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
         // if the page is a master page no shapes are in the masterShapeManager
         masterShapeManager()->setShapes( QList<KoShape*>() );
     }
-    m_documentStructureDocker->setActivePage(m_activePage);
+    // m_documentStructureDocker->setActivePage(m_activePage);
 }
 
 void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )

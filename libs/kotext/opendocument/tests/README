@@ -1,0 +1,27 @@
+This test suite automates the test cases at 
+http://develop.opendocumentfellowship.com/testsuite/.
+
+How to run:
+The ODF test suite requires QScript bindings of Qt. 
+1. svn co svn://labs.trolltech.com/svn/qtscript/generator
+2. Please read the README in the generator package. Once you have done that
+   * Create the generator by compiling inside generator/
+   * Run the generator. This will create bindings for qt-copy. This will
+     take quite a bit of time since Qt 4.4 is massive. Unfortunately, there
+     seems to be no way to customize what needs to be generated.
+   * Now we have to compile the C++ code generated in the above step.
+     We need only only QtCore and QtGui bindings, so modify the qtbindings.pro 
+     to read something like
+         TEMPLATE = subdirs
+         SUBDIRS = qtscript_core \
+                   qtscript_gui \
+                   qs_eval
+    * Compile bindings!
+
+Now compile the test suite here. Since the code relies on the bindings, it
+needs to find the location of the bindings generated above. This is done by
+setting an environment variable QSCRIPT_PLUGIN_PATH.
+    QSCRIPT_PLUGIN_PATH=~/generator/plugins ./TestLoading
+
+Girish Ramakrishnan (girish@forwardbias.in)
+

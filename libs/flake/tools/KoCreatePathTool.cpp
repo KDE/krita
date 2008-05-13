@@ -70,7 +70,22 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
         }
 
         KoShape::applyConversion( painter, converter );
+
+        QRectF handle = handleRect( QPoint(0,0) );
         painter.setPen( Qt::blue );
+        painter.setBrush( Qt::white ); //TODO make configurable
+
+        const bool firstPoint = (m_firstPoint == m_activePoint);
+        const bool pointIsBeingDragged = m_activePoint->activeControlPoint1();
+        if ( pointIsBeingDragged || firstPoint )
+        {
+            const bool onlyPaintActivePoints = false;
+            m_activePoint->paint( painter, handle.size(), 
+                                  KoPathPoint::ControlPoint1 | KoPathPoint::ControlPoint2,
+                                  onlyPaintActivePoints );
+        }
+
+        // paint the first point
 
         // check if we have to color the first point
         if( m_mouseOverFirstPoint )
@@ -78,17 +93,7 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
         else
             painter.setBrush( Qt::white ); //TODO make configurable
 
-        QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
         m_firstPoint->paint( painter, handle.size(), KoPathPoint::Node );
-
-        painter.setBrush( Qt::white ); //TODO make configurable
-
-        if ( m_activePoint->activeControlPoint1() || m_activePoint->activeControlPoint2() )
-        {
-            m_activePoint->paint( painter, handle.size(), 
-                                  KoPathPoint::ControlPoint1 | KoPathPoint::ControlPoint2, 
-                                  !m_activePoint->activeControlPoint1() );
-        }
 
         painter.restore();
     }
@@ -137,7 +142,12 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         // TODO take properties from the resource provider
         m_shape->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
         m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
-        m_activePoint = m_shape->moveTo( m_canvas->snapGuide()->snap( event->point, event->modifiers() ) );
+        const QPointF &point = m_canvas->snapGuide()->snap( event->point, event->modifiers() );
+        m_activePoint = m_shape->moveTo( point );
+        // set the control points to be different from the default (0, 0)
+        // to avoid a unnecessary big area being repainted
+        m_activePoint->setControlPoint1( point );
+        m_activePoint->setControlPoint2( point );
         m_firstPoint = m_activePoint;
         m_canvas->updateCanvas( m_shape->boundingRect() );
         m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
@@ -174,6 +184,7 @@ void KoCreatePathTool::mouseMoveEvent( KoPointerEvent *event )
     m_mouseOverFirstPoint = handleRect( m_firstPoint->point() ).contains( event->point );
 
     m_canvas->updateCanvas( m_shape->boundingRect() );
+
     repaintActivePoint();
     if ( event->buttons() & Qt::LeftButton )
     {
@@ -274,17 +285,41 @@ void KoCreatePathTool::addPathShape()
 
 QRectF KoCreatePathTool::handleRect( const QPointF &p ) 
 {
-    return QRectF( p.x() - m_handleRadius, p.y() - m_handleRadius, 2 * m_handleRadius, 2 * m_handleRadius );
+    QPointF border = m_canvas->viewConverter()
+            ->viewToDocument( QPointF(m_handleRadius, m_handleRadius) );
+
+    const double x = p.x() - border.x();
+    const double y = p.y() - border.y();
+    const double w = border.x() * 2;
+    const double h = border.x() * 2;
+    return QRectF( x, y, w, h );
 }
 
 void KoCreatePathTool::repaintActivePoint()
 {
+    const bool isFirstPoint = (m_activePoint == m_firstPoint);
+    const bool pointIsBeeingDragged = m_activePoint->activeControlPoint1();
+
+    if ( !isFirstPoint && !pointIsBeeingDragged )
+        return;
+
     QRectF rect = m_activePoint->boundingRect( false ); 
+
     // make sure that we have the second control point inside our
     // update rect, as KoPathPoint::boundingRect will not include
     // the second control point of the last path point if the path 
     // is not closed
-    rect = rect.united( QRectF( m_activePoint->point(), m_activePoint->controlPoint2() ).normalized() );
+    const QPointF &point = m_activePoint->point();
+    const QPointF &controlPoint = m_activePoint->controlPoint2();
+    rect = rect.united( QRectF( point, controlPoint ).normalized() );
+
+    // when paiting the fist point we want the
+    // first control point to be painted as well
+    if ( isFirstPoint ) 
+    {
+        const QPointF &controlPoint = m_activePoint->controlPoint1();
+        rect = rect.united( QRectF( point, controlPoint ).normalized() );
+    }
 
     QPointF border = m_canvas->viewConverter()
             ->viewToDocument( QPointF(m_handleRadius, m_handleRadius) );

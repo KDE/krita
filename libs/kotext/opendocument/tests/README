@@ -25,3 +25,13 @@ setting an environment variable QSCRIPT_PLUGIN_PATH.
 
 Girish Ramakrishnan (girish@forwardbias.in)
 
+################################################################
+
+or in short;
+
+GENERATOR_PATH=~/generator
+[ -f $GENERATOR_PATH/generator/generator ] || exit
+(cd $GENERATOR_PATH/generator && qmake && make && ./generator) || exit
+(cd ../qtbindings && echo -e "TEMPLATE=subdirs\nSUBDIRS=qtscript_core qtscript_gui qs_eval" > qtbindings.pro && qmake && make) || exit
+export QSCRIPT_PLUGIN_PATH=$GENERATOR_PATH/plugins
+cd ~/svn/_builddir/koffice/libs/kotext/opendocument/tests && ./TestLoading

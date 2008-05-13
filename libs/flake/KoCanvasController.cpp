@@ -332,6 +332,8 @@ void KoCanvasController::recenterPreferred()
     if(viewport()->width() >= m_d->documentSize.width()
                 && viewport()->height() >= m_d->documentSize.height())
         return; // no need to center when image is smaller than viewport
+    const bool oldIgnoreScrollSignals = m_d->ignoreScrollSignals;
+    m_d->ignoreScrollSignals = true;
 
     QPoint center = QPoint(int(m_d->documentSize.width() * m_d->preferredCenterFractionX),
                                         int(m_d->documentSize.height() * m_d->preferredCenterFractionY));
@@ -353,6 +355,7 @@ void KoCanvasController::recenterPreferred()
     topLeft.ry() = qMax( topLeft.y(), vBar->minimum() );
     topLeft.ry() = qMin( topLeft.y(), vBar->maximum() );
     vBar->setValue( topLeft.y() );
+    m_d->ignoreScrollSignals = oldIgnoreScrollSignals;
 }
 
 void KoCanvasController::zoomIn(const QPoint &center)
@@ -406,12 +409,16 @@ void KoCanvasController::setDocumentSize( const QSize & sz, bool recalculateCent
         m_d->preferredCenterFractionX = m_d->documentSize.width() * m_d->preferredCenterFractionX / sz.width();
         m_d->preferredCenterFractionY = m_d->documentSize.height() * m_d->preferredCenterFractionY / sz.height();
     }
+    
+    updateCanvasOffsetX();
+    updateCanvasOffsetY();
 
+    const bool oldIgnoreScrollSignals = m_d->ignoreScrollSignals;
     m_d->ignoreScrollSignals = true;
     m_d->documentSize = sz;
     m_d->viewportWidget->setDocumentSize( sz );
     resetScrollBars();
-    m_d->ignoreScrollSignals = false;
+    m_d->ignoreScrollSignals = oldIgnoreScrollSignals;
 
     // in case the document got so small a slider dissapeared; emit the new offset.
     if(!horizontalScrollBar()->isVisible())
@@ -493,6 +500,7 @@ void KoCanvasController::resetScrollBars()
     }
 
     int fontheight = QFontMetrics(font()).height();
+    
     vScroll->setPageStep(drawH);
     vScroll->setSingleStep(fontheight);
     hScroll->setPageStep(drawW);
@@ -552,11 +560,28 @@ void KoCanvasController::dragLeaveEvent( QDragLeaveEvent *event )
 
 void KoCanvasController::wheelEvent( QWheelEvent *event ) {
     if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
+        const bool oldIgnoreScrollSignals = m_d->ignoreScrollSignals;
+        m_d->ignoreScrollSignals = true;
+        
+        const QPoint offset( horizontalScrollBar()->value(), verticalScrollBar()->value() );
+        const QPoint mousePos( event->pos() + offset );
+        const double zoomLevel = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
+
+        QPoint oldCenter = preferredCenter();
+        if ( visibleWidth() >= m_d->documentSize.width() )
+            oldCenter.rx() = m_d->documentSize.width() * 0.5;
+        if ( visibleHeight() >= m_d->documentSize.height() )
+            oldCenter.ry() = m_d->documentSize.height() * 0.5;
+        
+        const QPoint newCenter = mousePos - (1 / zoomLevel) * (mousePos - oldCenter);
+        
         if(event->delta() > 0)
-            zoomIn(event->pos());
+            zoomIn( newCenter );
         else
-            zoomOut(event->pos());
+            zoomOut( newCenter );
         event->accept();
+
+        m_d->ignoreScrollSignals = oldIgnoreScrollSignals;
     }
     else
         QAbstractScrollArea::wheelEvent(event);

@@ -31,6 +31,12 @@ class KoShape;
  * This class is the object that is positioned in the text to be an anchor for a shape.
  * The idea is that when the text is relayouted and this inline character is moved, the shape
  * associated with it is repositioned based on a set of rules influenced by the data on this anchor.
+ *
+ * Steps to use a KoTextAnchor are;
+ * 1. Create a new instance with e.g. new KoTextAnchor(myshape);
+ * 2. Use loadOdfFromShape() to load additional attributes like the "text:anchor-type"
+ * 3. Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
+ *    the TextShape's \a KoTextShapeContainerModel .
  */
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject {
 public:
@@ -120,9 +126,11 @@ public:
     /// set the new offset. Causes a new layout soon.
     void setOffset(const QPointF &offset);
 
+    /// Load the additional attributes.
     bool loadOdfFromShape ();
-    
+    /// Save the additional attributes.
     void saveOdf (KoShapeSavingContext & context);
+
 private:
     class Private;
     Private * const d;

@@ -182,6 +182,7 @@ void KoTextAnchor::setOffset(const QPointF &offset) {
 
 void KoTextAnchor::saveOdf (KoShapeSavingContext & context) {
     // TODO support different types of anchors
+    // TODO do we really need to pass the context in here?
     shape()->setAdditionalAttribute( "text:anchor-type", "paragraph" );
     shape()->saveOdf(context);
 }

@@ -41,7 +41,6 @@
 #include <kis_layer.h>
 #include <generator/kis_generator_registry.h>
 #include <kis_global.h>
-#include <kis_random_generator.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <filter/kis_filter_configuration.h>
@@ -69,7 +68,7 @@ KritaColorGenerator::~KritaColorGenerator()
 {
 }
 
-KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("randomness"), i18n("&Solid Color..."))
+KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Solid Color..."))
 {
     setColorSpaceIndependence( FULLY_INDEPENDENT );
     setSupportsPainting( true );

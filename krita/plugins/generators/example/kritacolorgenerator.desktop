@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Color Generator
+Name[el]=Δημιουργός χρωμάτων
 Name[ga]=Gineadóir Dathanna
 Name[it]=Generatore di colori
 Name[pt]=Gerador de Cores
@@ -12,6 +13,7 @@ Comment=Generates random pixels
 Comment[pt]=Gera pixels aleatórios
 Comment[pt_BR]=Gera pixels aleatórios
 Comment[sv]=Skapar slumpmässiga bildpunkter
+Comment[uk]=Створює випадкові пікселі
 Comment[zh_TW]=隨機產生像素
 X-KDE-ServiceTypes=Krita/Generator
 Type=Service

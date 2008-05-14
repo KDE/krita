@@ -54,6 +54,9 @@ Regressions from 1.x
 
 BR  * Make the bumpmap filter get the right layer on loading as adj. layer or filter mask.
     * CImg filter
+    * unsharp mask does something weird using the channelflags that breaks convolution
+    * the other convolution filters appear broken
+    * all filters are extremely slow
     
 * Paintops
 

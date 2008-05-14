@@ -39,7 +39,9 @@ public:
         verticalAlignment(VerticalOffset),
         document(0),
         position(-1),
-        model(0)
+        model(0),
+        pageNumber(-1),
+        anchorType(Paragraph)
     {
         Q_ASSERT(shape);
     }
@@ -79,6 +81,8 @@ public:
     int position;
     KoTextShapeContainerModel *model;
     QPointF distance;
+    int pageNumber;
+    AnchorType anchorType;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
@@ -182,4 +186,28 @@ void KoTextAnchor::saveOdf (KoShapeSavingContext & context) {
     shape()->saveOdf(context);
 }
 
+bool KoTextAnchor::loadOdfFromShape () {
+    if (shape()->hasAdditionalAttribute("text:anchor-type")) {
+        QString anchorType = shape()->additionalAttribute("text:anchor-type");
+        if (anchorType == "paragraph")
+            d->anchorType = Paragraph;
+        else if (anchorType == "page") {
+            d->anchorType = Page;
+            if (shape()->hasAdditionalAttribute("text:anchor-page-number"))
+                d->pageNumber = (shape()->additionalAttribute("text:anchor-page-number")).toInt();
+            else
+                d->pageNumber = -1;
+        } else if (anchorType == "frame")
+            d->anchorType = Frame;
+        else if (anchorType == "char")
+            d->anchorType = Char;
+        else if (anchorType == "as-char")
+            d->anchorType = AsChar;
+        return true;
+    }
+    return false;
+}
 
+int KoTextAnchor::pageNumber () const {
+    return d->pageNumber;
+}

@@ -1434,11 +1434,22 @@ void KoTextLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& 
 void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor )
 {
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
-    if( shape ) {
+    if( !shape ) {
         return;
     }
     shape->setAdditionalAttribute("text:anchor-type", frameElem.attributeNS(KoXmlNS::text, "anchor-type", "paragraph"));
+    shape->setAdditionalAttribute("text:anchor-page-number", frameElem.attributeNS(KoXmlNS::text, "anchor-page-number", "paragraph"));
     d->textSharedData->shapeInserted(shape);
+    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    anchor->loadOdfFromShape();
+    
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
+    if ( layout ) {
+        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+        if ( textObjectManager ) {
+            textObjectManager->insertInlineObject( cursor, anchor );
+        }
+    }
 }
 
 void KoTextLoader::startBody(int total)

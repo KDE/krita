@@ -846,6 +846,16 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     }
 #endif
 
+    if (styleStack.hasProperty(KoXmlNS::style, "text-outline")) {
+        if (styleStack.property(KoXmlNS::style, "text-outline") == "true") {
+            setTextOutline(QPen(foreground(), 0));
+            setForeground(Qt::transparent);
+        } else {
+            setTextOutline(QPen(Qt::NoPen));
+        }
+    }
+
+
 //TODO
 #if 0
     if ( styleStack.hasProperty( KoXmlNS::fo, "text-shadow") ) { // 3.10.21
@@ -858,7 +868,6 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
 
     /*
       Missing properties:
-      style:text-outline, 3.10.5 - not implemented in kotext
       style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
       style:font-charset, 3.10.14 - not necessary with Qt
       fo:letter-spacing, 3.10.16 - not implemented in kotext
@@ -1000,6 +1009,9 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             style.addProperty("style:country", d->stylesPrivate->value(KoCharacterStyle::Country).toString(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Language) {
             style.addProperty("style:language", d->stylesPrivate->value(KoCharacterStyle::Language).toString(), KoGenStyle::TextType);
+        } else if (key == QTextFormat::TextOutline) {
+            QPen outline = textOutline();
+            style.addProperty("style:text-outline", outline.style() == Qt::NoPen ? "false" : "true", KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

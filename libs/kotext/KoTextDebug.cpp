@@ -52,6 +52,15 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
     foreach(int id, properties.keys()) {
         QString key, value;
         switch (id) {
+        case QTextFormat::TextOutline: {
+            key = "outline";
+            QPen pen = qvariant_cast<QPen>(properties[id]);
+            if (pen.style() == Qt::NoPen)
+                value = "false";
+            else
+                value = pen.color().name();
+            break;
+                                       }
         case KoCharacterStyle::UnderlineStyle:
             key = "underlinestyle";
             value = QString::number(properties[id].toInt());

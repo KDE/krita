@@ -932,9 +932,9 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         }
 
         QTextBlock current = cursor.block();
-
+        
         loadBody( e, cursor );
-
+        
         if (!current.textList())
             list->add(current);
 
@@ -1437,7 +1437,7 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     if( shape ) {
         return;
     }
-    shape->setAdditionalAttribute("draw:anchor-type", frameElem.attribute("anchor-type"));
+    shape->setAdditionalAttribute("text:anchor-type", frameElem.attributeNS(KoXmlNS::text, "anchor-type", "paragraph"));
     d->textSharedData->shapeInserted(shape);
 }
 

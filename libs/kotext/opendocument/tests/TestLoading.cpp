@@ -95,6 +95,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
            && actualFormat.fontCapitalization() == expectedFormat.fontCapitalization()
 #endif
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
+           && actualFormat.textOutline() == expectedFormat.textOutline()
            && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
            && actualFormat.property(KoCharacterStyle::UnderlineMode).toInt() 
@@ -506,6 +507,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Line through style") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";
     QTest::newRow("Line through type") << "FormattingProperties/TextFormattingProperties/lineThroughType";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
+    QTest::newRow("Text Outline") << "FormattingProperties/TextFormattingProperties/textOutline";
     QTest::newRow("Text tranformations") << "FormattingProperties/TextFormattingProperties/textTransformations";
     QTest::newRow("Underline color") << "FormattingProperties/TextFormattingProperties/underlineColor";
     QTest::newRow("Underline mode") << "FormattingProperties/TextFormattingProperties/underlineMode";

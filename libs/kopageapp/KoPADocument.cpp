@@ -188,6 +188,8 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
 
 bool KoPADocument::completeSaving( KoStore* store)
 {
+    Q_UNUSED(store)
+    return true;
 }
 
 QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context )

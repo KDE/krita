@@ -931,11 +931,6 @@ QMatrix KoShape::parseOdfTransform( const QString &transform )
     return matrix;
 }
 
-void KoShape::saveOdfFrameAttributes(KoShapeSavingContext &context) const {
-    saveOdfAttributes( context, OdfAllAttributes );
-    context.addOption(KoShapeSavingContext::FrameOpened);
-}
-
 void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) const {
     if(attributes & OdfMandatories) {
         KoGenStyle style;
@@ -959,13 +954,6 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
         if(d->parent && dynamic_cast<KoShapeLayer*> (d->parent))
             context.xmlWriter().addAttribute("draw:layer", d->parent->name());
-    }
-
-    // all items after this should not be written out when they have already be written in
-    // a 'draw:frame' attribute.
-    if(context.isSet(KoShapeSavingContext::FrameOpened)) {
-        context.removeOption(KoShapeSavingContext::FrameOpened);
-        return;
     }
 
     if(attributes & OdfSize) {

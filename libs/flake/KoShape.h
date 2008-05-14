@@ -174,11 +174,14 @@ public:
     virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
 
     /**
-     * When saving this shape to ODF, you may nest it in a 'draw:frame' and shape properties should be
-     * saved as attributes on that element instead of on the normal shape.  After starting to write such
-     * an element you can call this method to write all relevant properties.
+     * This method can be used while saving the shape as ODF to add the data
+     * stored on this shape to the current element.
+     *
+     * @param context the context for the current save.
+     * @param attributes a number of OdfAttribute items to state which attributes to save.
+     * @see saveOdf
      */
-    void saveOdfFrameAttributes( KoShapeSavingContext & context ) const;
+    void saveOdfAttributes( KoShapeSavingContext &context, int attributes ) const;
 
     /**
      * After the shape has been created this method is called so it can get access to any DataCenter it
@@ -757,16 +760,6 @@ protected:
      * @return the resulting transformation matrix
      */
     QMatrix parseOdfTransform( const QString &transform );
-
-    /**
-     * This method can be used while saving the shape as ODF to add the data
-     * stored on this shape to the current element.
-     *
-     * @param context the context for the current save.
-     * @param attributes a number of OdfAttribute items to state which attributes to save.
-     * @see saveOdf
-     */
-    void saveOdfAttributes( KoShapeSavingContext &context, int attributes ) const;
 
     /**
      * Add a new draw-glue-point element for each connections() present on this shape.

@@ -229,26 +229,17 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
     }
 }
 
-void TextShape::saveOdf(KoShapeSavingContext & context) const {
-    KoXmlWriter *writer = &context.xmlWriter();
+void TextShape::saveOdf(KoShapeSavingContext & context) const
+{
+    KoXmlWriter & writer = context.xmlWriter();
     //fo:min-height="120pt" draw:chain-next-name="Framesetje-2"
-    const bool mainTextFrame = context.isSet(KoShapeSavingContext::MainTextFrame);
-    const bool nestedInFrame = context.isSet(KoShapeSavingContext::FrameOpened);
-    if ((!nestedInFrame) && (!mainTextFrame)) {
-        writer->startElement( "draw:frame" );
-        saveOdfFrameAttributes(context);
-    }
-    saveOdfAttributes(context, 0); // required to clear the 'frameOpened' attribute on KoShape
-    if (!mainTextFrame)
-        writer->startElement( "draw:text-box" );
 
+    writer.startElement( "draw:frame" );
+    saveOdfAttributes( context, OdfAllAttributes );
+    writer.startElement( "draw:text-box" );
     m_textShapeData->saveOdf(context);
-
-    if (!mainTextFrame) {
-        writer->endElement(); // draw-text-box
-        if(! nestedInFrame)
-            writer->endElement(); // draw-frame
-    }
+    writer.endElement(); // draw:text-box
+    writer.endElement(); // draw:frame
 }
 
 bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {

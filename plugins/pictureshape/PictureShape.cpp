@@ -76,13 +76,8 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
 
     KoXmlWriter &writer = context.xmlWriter();
 
-    const bool nestedInFrame = context.isSet(KoShapeSavingContext::FrameOpened);
-    if( ! nestedInFrame ) {
-        writer.startElement( "draw:frame" );
-        saveOdfFrameAttributes(context);
-    }
-    saveOdfAttributes(context, 0); // required to clear the 'frameOpened' attribute on KoShape
-
+    writer.startElement( "draw:frame" );
+    saveOdfAttributes( context, OdfAllAttributes );
     writer.startElement("draw:image");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
     QString name = data->tagForSaving();
@@ -90,9 +85,8 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
     writer.addAttribute("xlink:show", "embed" );
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
-    writer.endElement();
-    if(! nestedInFrame)
-        writer.endElement(); // draw-frame
+    writer.endElement(); // draw:image
+    writer.endElement(); // draw:frame
 }
 
 bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )

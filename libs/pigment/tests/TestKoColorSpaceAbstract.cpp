@@ -205,12 +205,12 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
                                                               weights));
     QCOMPARE(outputPixel[ALPHA_CHANNEL], mixOpExpectedAlpha(pixel1[ALPHA_CHANNEL], pixel2[ALPHA_CHANNEL], weights));
 
-    pixel1[COLOR_CHANNEL_1] = 200 / 255.0;
-    pixel1[COLOR_CHANNEL_2] = 100 / 255.0;
+    pixel1[COLOR_CHANNEL_1] = 200.0f / 255.0f;
+    pixel1[COLOR_CHANNEL_2] = 100.0f / 255.0f;
     pixel1[ALPHA_CHANNEL] = 1.0;
 
-    pixel2[COLOR_CHANNEL_1] = 100 / 255.0;
-    pixel2[COLOR_CHANNEL_2] = 200 / 255.0;
+    pixel2[COLOR_CHANNEL_1] = 100.0f / 255.0f;
+    pixel2[COLOR_CHANNEL_2] = 200.0f / 255.0f;
     pixel2[ALPHA_CHANNEL] = 1.0;
 
     op->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
@@ -245,8 +245,8 @@ void TestKoColorSpaceAbstract::testMixColorsOpF32()
     QCOMPARE(outputPixel[ALPHA_CHANNEL], mixOpExpectedAlpha(pixel1[ALPHA_CHANNEL], pixel2[ALPHA_CHANNEL], weights));
 
     pixel1[COLOR_CHANNEL_1] = -667788;
-    pixel1[COLOR_CHANNEL_2] = 0.123;
-    pixel1[ALPHA_CHANNEL] = 0.3;
+    pixel1[COLOR_CHANNEL_2] = 0.123f;
+    pixel1[ALPHA_CHANNEL] = 0.3f;
 
     pixel2[COLOR_CHANNEL_1] = 5;
     pixel2[COLOR_CHANNEL_2] = 100000;

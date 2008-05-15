@@ -68,12 +68,16 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
                  KoUpdater* progressUpdater
         ) const
 {
-
-    KoProgressUpdater updater(progressUpdater);
-    updater.start();
-    // Two sub-sub tasks that each go from 0 to 100.
-    KoUpdater convolutionUpdater = updater.startSubtask();
-    KoUpdater filterUpdater = updater.startSubtask();
+    
+    KoUpdater* filterUpdater = 0;
+    KoUpdater* convolutionUpdater = 0;
+    if (progressUpdater){
+    	KoProgressUpdater updater(progressUpdater);
+    	updater.start();
+    	// Two sub-sub tasks that each go from 0 to 100.
+    	convolutionUpdater = new KoUpdater( updater.startSubtask() );
+    	filterUpdater = new KoUpdater(updater.startSubtask() );
+    }
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
 
@@ -95,7 +99,10 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     QBitArray channelFlags = cs->channelFlags(); // Only convolve color channels
 
     KisConvolutionPainter painter( interm );
-    painter.setProgress( &convolutionUpdater );
+    if (progressUpdater){
+    	painter.setProgress( convolutionUpdater );
+    }
+
     painter.setChannelFlags( channelFlags );
     painter.beginTransaction("convolution step");
     painter.applyMatrix(kernel, src.topLeft().x(), src.topLeft().y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
@@ -138,7 +145,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
                 }
             }
             ++pixelsProcessed;
-            filterUpdater.setProgress(steps * pixelsProcessed);
+            if (progressUpdater) filterUpdater->setProgress(steps * pixelsProcessed);
             ++srcIt;
             ++dstIt;
             ++intermIt;
@@ -153,6 +160,8 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     }
     delete colors[0];
     delete colors[1];
+    delete filterUpdater;
+    delete convolutionUpdater;
 
 
     if (progressUpdater) progressUpdater->setProgress(100);

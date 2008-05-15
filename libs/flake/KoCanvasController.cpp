@@ -373,7 +373,10 @@ void KoCanvasController::zoomBy(const QPoint &center, qreal zoom )
     m_d->preferredCenterFractionX = 1.0 * center.x() / m_d->documentSize.width();
     m_d->preferredCenterFractionY = 1.0 * center.y() / m_d->documentSize.height();
 
+    const bool oldIgnoreScrollSignals = m_d->ignoreScrollSignals;
+    m_d->ignoreScrollSignals = true;
     emit zoomBy( zoom );
+    m_d->ignoreScrollSignals = oldIgnoreScrollSignals;
     recenterPreferred();
     m_d->canvas->canvasWidget()->update();
 }
@@ -409,9 +412,6 @@ void KoCanvasController::setDocumentSize( const QSize & sz, bool recalculateCent
         m_d->preferredCenterFractionX = m_d->documentSize.width() * m_d->preferredCenterFractionX / sz.width();
         m_d->preferredCenterFractionY = m_d->documentSize.height() * m_d->preferredCenterFractionY / sz.height();
     }
-    
-    updateCanvasOffsetX();
-    updateCanvasOffsetY();
 
     const bool oldIgnoreScrollSignals = m_d->ignoreScrollSignals;
     m_d->ignoreScrollSignals = true;
@@ -573,7 +573,7 @@ void KoCanvasController::wheelEvent( QWheelEvent *event ) {
         if ( visibleHeight() >= m_d->documentSize.height() )
             oldCenter.ry() = m_d->documentSize.height() * 0.5;
         
-        const QPoint newCenter = mousePos - (1 / zoomLevel) * (mousePos - oldCenter);
+        const QPoint newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
         
         if(event->delta() > 0)
             zoomIn( newCenter );

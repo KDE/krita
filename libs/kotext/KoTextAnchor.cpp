@@ -181,9 +181,26 @@ void KoTextAnchor::setOffset(const QPointF &offset) {
 }
 
 void KoTextAnchor::saveOdf (KoShapeSavingContext & context) {
-    // TODO support different types of anchors
     // TODO do we really need to pass the context in here?
-    shape()->setAdditionalAttribute( "text:anchor-type", "paragraph" );
+    switch(d->anchorType) {
+        case Page:
+            shape()->setAdditionalAttribute( "text:anchor-type", "page" );
+            Q_ASSERT(d->pageNumber >= 1);
+            shape()->setAdditionalAttribute( "text:anchor-page-number", QString::number(d->pageNumber) );
+            break;
+        case Frame:
+            shape()->setAdditionalAttribute( "text:anchor-type", "frame" );
+            break;
+        case Paragraph:
+            shape()->setAdditionalAttribute( "text:anchor-type", "paragraph" );
+            break;
+        case Char:
+            shape()->setAdditionalAttribute( "text:anchor-type", "char" );
+            break;
+        case AsChar:
+            shape()->setAdditionalAttribute( "text:anchor-type", "as-char" );
+            break;
+    }
     shape()->saveOdf(context);
 }
 

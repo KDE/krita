@@ -182,6 +182,7 @@ void KoTextAnchor::setOffset(const QPointF &offset) {
 
 void KoTextAnchor::saveOdf (KoShapeSavingContext & context) {
     // TODO do we really need to pass the context in here?
+    shape()->removeAdditionalAttribute( "text:anchor-page-number" );
     switch(d->anchorType) {
         case Page:
             shape()->setAdditionalAttribute( "text:anchor-type", "page" );

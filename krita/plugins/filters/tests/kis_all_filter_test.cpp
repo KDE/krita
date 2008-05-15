@@ -71,6 +71,7 @@ bool testFilter(KisFilterSP f)
     
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
         out << kfc->toXML();
@@ -79,8 +80,10 @@ bool testFilter(KisFilterSP f)
         QString s;
         QTextStream in(&file);
         s = in.readAll();
+        qDebug() << "Read for " << f->id() << "\n" << s;
         kfc->fromXML( s );
     }
+    qDebug() << f->id() << "\n" << kfc->toXML() << "\n";
 
     KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
     KisProcessingInformation dst( dev, QPoint(0, 0), 0 );

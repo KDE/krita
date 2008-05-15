@@ -92,7 +92,12 @@ void KisHSVAdjustmentFilter::process(KisConstProcessingInformation srcInfo,
 
 KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    return new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    config->setProperty("h", 0 );
+    config->setProperty("s", 0 );
+    config->setProperty("v", 0 );
+    return config;
+
 }
 
 KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f ) : KisFilterConfigWidget(parent, f)

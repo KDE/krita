@@ -206,15 +206,14 @@ void KoTextAnchor::saveOdf (KoShapeSavingContext & context) {
 
 bool KoTextAnchor::loadOdfFromShape () {
     if (shape()->hasAdditionalAttribute("text:anchor-type")) {
+        d->pageNumber = -1;
         QString anchorType = shape()->additionalAttribute("text:anchor-type");
         if (anchorType == "paragraph")
             d->anchorType = Paragraph;
         else if (anchorType == "page") {
             d->anchorType = Page;
-            if (shape()->hasAdditionalAttribute("text:anchor-page-number"))
-                d->pageNumber = (shape()->additionalAttribute("text:anchor-page-number")).toInt();
-            else
-                d->pageNumber = -1;
+            Q_ASSERT(shape()->hasAdditionalAttribute("text:anchor-page-number"));
+            d->pageNumber = qMax(1,shape()->additionalAttribute("text:anchor-page-number").toInt());
         } else if (anchorType == "frame")
             d->anchorType = Frame;
         else if (anchorType == "char")

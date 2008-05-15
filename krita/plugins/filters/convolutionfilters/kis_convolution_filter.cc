@@ -66,6 +66,11 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
 
     KisConvolutionPainter painter( dst, dstInfo.selection() );
 
+    QBitArray channelFlags = config->channelFlags();
+    if (channelFlags.isEmpty()) {
+        channelFlags = dst->colorSpace()->channelFlags();
+    }
+    
     painter.setProgress( progressUpdater );
     painter.applyMatrix(m_matrix, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 

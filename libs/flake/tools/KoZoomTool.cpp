@@ -42,16 +42,8 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
 
 void KoZoomTool::wheelEvent ( KoPointerEvent * event )
 {
-    if(event->modifiers() & Qt::ControlModifier)
-    {
-        QPoint pt = m_controller->canvas()->viewConverter()->documentToView(event->point).toPoint();
-        if(event->delta() >0)
-            m_controller->zoomIn(pt);
-        else
-            m_controller->zoomOut(pt);
-    }
-    else
-        event->ignore();
+    // Let KoCanvasController handle this
+    event->ignore();
 }
 
 void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event ) {

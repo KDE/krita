@@ -165,5 +165,9 @@ KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaint
     config->setProperty("level", 50 );
     config->setProperty("windowsize", 2.5 );
     config->setProperty("opacity", 100 );
+    config->setProperty("seedThreshold", rand() );
+    config->setProperty("seedH", rand() );
+    config->setProperty("seedV", rand() );
+    
     return config;
 }

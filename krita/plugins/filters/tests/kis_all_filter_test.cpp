@@ -57,10 +57,8 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2 )
     return true;
 }
 
-void testFilter(KisFilterSP f)
+bool testFilter(KisFilterSP f)
 {
-    qDebug() << f->name();
-    
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
@@ -73,7 +71,6 @@ void testFilter(KisFilterSP f)
     
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Could not open " << QString(FILES_DATA_DIR) << QDir::separator() << f->id() << ".cfg";
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
         out << kfc->toXML();
@@ -94,19 +91,26 @@ void testFilter(KisFilterSP f)
     
     if ( !compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("lena_%1.png").arg(f->id()));
-        QFAIL( QString( "Failed to execute %1 image, first different pixel: %2,%3 " )
-                    .arg(f->id()).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+        return false;
     }
-    else {
-        qDebug() << "succeeded executing filter " << f->id();
-    }
+    return true;
 }
 
 void KisAllFilterTest::testAllFilters()
-{   
+{
+    QStringList failures;
+    QStringList successes;
+    
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
     for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
-        testFilter(KisFilterRegistry::instance()->value(*it));
+        if (testFilter(KisFilterRegistry::instance()->value(*it)))
+            successes << *it;
+        else
+            failures << *it;
+    }
+    qDebug() << "Success: " << successes;
+    if (failures.size() > 0) {
+        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
     }
 }
 QTEST_KDEMAIN(KisAllFilterTest, GUI)

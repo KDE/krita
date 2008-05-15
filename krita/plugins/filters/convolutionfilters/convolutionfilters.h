@@ -65,7 +65,7 @@ class KisEmbossHorizontalVerticalFilter : public KisConvolutionFilter {
 public:
     KisEmbossHorizontalVerticalFilter();
 public:
-    static inline KoID id() { return KoID("", i18n("Emboss Horizontal & Vertical")); }
+    static inline KoID id() { return KoID("emboss horizontal and vertical", i18n("Emboss Horizontal & Vertical")); }
 };
 
 class KisEmbossVerticalFilter : public KisConvolutionFilter {

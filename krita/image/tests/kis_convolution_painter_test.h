@@ -32,6 +32,8 @@ private slots:
     void testIdentityConvolutionOnColorChannels();
     void testMaskConvolution();
     void testMaskConvolutionOnColorChannels();
+    void testMaskConvolutionOnRedChannel();
+    
 };
 
 #endif

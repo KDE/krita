@@ -173,7 +173,7 @@ bool KisIlluminantProfile::load()
         data >> tmp;
         nc = (int)tmp;
         coeffs = new double[nc*m_wl];
-        for (qint8 i = 0; i < nc*m_wl; i++)
+        for (quint8 i = 0; i < nc*m_wl; i++)
             data.readRawData((char*)&coeffs[i],8);
     }
 

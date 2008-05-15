@@ -213,8 +213,8 @@ bool KoTextAnchor::loadOdfFromShape () {
             d->anchorType = Paragraph;
         else if (anchorType == "page") {
             d->anchorType = Page;
-            Q_ASSERT(shape()->hasAdditionalAttribute("text:anchor-page-number"));
-            d->pageNumber = qMax(1,shape()->additionalAttribute("text:anchor-page-number").toInt());
+            if (shape()->hasAdditionalAttribute("text:anchor-page-number"))
+                d->pageNumber = shape()->additionalAttribute("text:anchor-page-number").toInt();
         } else if (anchorType == "frame")
             d->anchorType = Frame;
         else if (anchorType == "char")

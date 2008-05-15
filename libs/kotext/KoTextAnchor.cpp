@@ -206,7 +206,9 @@ void KoTextAnchor::saveOdf (KoShapeSavingContext & context) {
 }
 
 bool KoTextAnchor::loadOdfFromShape () {
+    kDebug() << "Hey, I'm loading ODF from Shape !";
     if (shape()->hasAdditionalAttribute("text:anchor-type")) {
+        kDebug() << "and the attributes are available";
         d->pageNumber = -1;
         QString anchorType = shape()->additionalAttribute("text:anchor-type");
         if (anchorType == "paragraph")

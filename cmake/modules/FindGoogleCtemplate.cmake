@@ -12,7 +12,7 @@
 # http://groups.google.com/group/ydra
 #
 
-SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have google/ctemplate?" )
+SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have Google CTemplate?" )
 
 FIND_PATH(GOOGLE_CTEMPLATE_INCLUDE_DIR google/template.h )
 
@@ -24,7 +24,7 @@ FIND_PROGRAM(GOOGLE_CTEMPLATE_COMPILER make_tpl_varnames_h )
 #How guest if all this are found
 
 IF ( GOOGLE_CTEMPLATE_INCLUDE_DIR)
-    SET( GOOGLE_CTEMPLATE_FOUND 1 CACHE BOOL "Do we have google/ctemplate?" FORCE )
+    SET( GOOGLE_CTEMPLATE_FOUND 1 CACHE BOOL "Do we have Google CTemplate?" FORCE )
     MESSAGE(STATUS "google/ctemplate include files found at: ${GOOGLE_CTEMPLATE_INCLUDE_DIR}")
 ENDIF( GOOGLE_CTEMPLATE_INCLUDE_DIR )
 
@@ -37,19 +37,19 @@ IF(GOOGLE_CTEMPLATE_FOUND)
 
         #Check if the project require the thread lib
         IF(GOOGLE_CTEMPLATE_USE_THREAD)
-            SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have google/ctemplate?" FORCE )
-            MESSAGE(STATUS "Your project require ctemplate with thread support but your package seems is build with out thread support")
+            SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have Google CTemplate?" FORCE )
+            MESSAGE(STATUS "Your project requires Google CTemplate with thread support but your package seems is build without thread support")
         ENDIF(GOOGLE_CTEMPLATE_USE_THREAD)
 
         #Check if at least we have the no thread version
         IF(NOT GOOGLE_CTEMPLATE_NOTHREAD_LIB)
-            SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have google/ctemplate?" FORCE )
-            MESSAGE( STATUS "Your system doesn't has any google/ctemplate libs installed")
+            SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have Google CTemplate?" FORCE )
+            MESSAGE( STATUS "Your system doesn't have any Google CTemplate libs installed")
         ELSE(NOT GOOGLE_CTEMPLATE_THREAD_LIB)
-            MESSAGE(STATUS "google/ctemplate nothreadlib found at: ${GOOGLE_CTEMPLATE_NOTHREAD_LIB}")
+            MESSAGE(STATUS "Google CTemplate nothreadlib found at: ${GOOGLE_CTEMPLATE_NOTHREAD_LIB}")
         ENDIF(NOT GOOGLE_CTEMPLATE_NOTHREAD_LIB)
     ELSE(NOT GOOGLE_CTEMPLATE_THREAD_LIB)
-        MESSAGE(STATUS "google/ctemplate threadlib found at: ${GOOGLE_CTEMPLATE_THREAD_LIB}")
+        MESSAGE(STATUS "Google CTemplate threadlib found at: ${GOOGLE_CTEMPLATE_THREAD_LIB}")
     ENDIF(NOT GOOGLE_CTEMPLATE_THREAD_LIB)
 ENDIF(GOOGLE_CTEMPLATE_FOUND)
 
@@ -58,9 +58,15 @@ ENDIF(GOOGLE_CTEMPLATE_FOUND)
 IF(GOOGLE_CTEMPLATE_FOUND AND GOOGLE_CTEMPLATE_USE_COMPILER)
     IF(NOT GOOGLE_CTEMPLATE_COMPILER)
         #The template compiler is not there
-        MESSAGE( STATUS "Your system doesn't has the google/ctemplate compiler")
-        SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have google/ctemplate?" FORCE )
+        MESSAGE( STATUS "Your system doesn't have the Google CTemplate compiler")
+        SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have Google CTemplate?" FORCE )
     ELSE(NOT GOOGLE_CTEMPLATE_COMPILER)
-        MESSAGE( STATUS "google/ctemplate compiler found at: ${GOOGLE_CTEMPLATE_COMPILER}")
+        MESSAGE( STATUS "Google CTemplate compiler found at: ${GOOGLE_CTEMPLATE_COMPILER}")
     ENDIF(NOT GOOGLE_CTEMPLATE_COMPILER)
 ENDIF(GOOGLE_CTEMPLATE_FOUND AND GOOGLE_CTEMPLATE_USE_COMPILER)
+
+IF(GoogleCtemplate_FIND_REQUIRED)
+  message(FATAL_ERROR "Required package Google CTemplate NOT found")
+ELSE(GoogleCtemplate_FIND_REQUIRED)
+  message(STATUS "Could not find OPTIONAL package Google CTemplate")
+ENDIF(GoogleCtemplate_FIND_REQUIRED)

@@ -1,3 +1,4 @@
+add_subdirectory( tests )
 add_subdirectory( blur )
 add_subdirectory( bumpmap )
 add_subdirectory( cimg )

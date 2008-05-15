@@ -16,10 +16,10 @@ SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have Google CTemplate?" )
 
 FIND_PATH(GOOGLE_CTEMPLATE_INCLUDE_DIR google/template.h )
 
-FIND_LIBRARY(GOOGLE_CTEMPLATE_THREAD_LIB ctemplate )
-FIND_LIBRARY(GOOGLE_CTEMPLATE_NOTHREAD_LIB ctemplate_nothreads  )
+FIND_LIBRARY(GOOGLE_CTEMPLATE_THREAD_LIB NAMES ctemplate libctemplate libctemplate-debug )
+FIND_LIBRARY(GOOGLE_CTEMPLATE_NOTHREAD_LIB ctemplate_nothreads libctemplate_nothreads ctemplate_nothreads-debug )
 
-FIND_PROGRAM(GOOGLE_CTEMPLATE_COMPILER make_tpl_varnames_h )
+FIND_PROGRAM(GOOGLE_CTEMPLATE_COMPILER make_tpl_varnames_h PATHS ${KDE4_BIN_INSTALL_DIR} )
 
 #How guest if all this are found
 
@@ -65,8 +65,10 @@ IF(GOOGLE_CTEMPLATE_FOUND AND GOOGLE_CTEMPLATE_USE_COMPILER)
     ENDIF(NOT GOOGLE_CTEMPLATE_COMPILER)
 ENDIF(GOOGLE_CTEMPLATE_FOUND AND GOOGLE_CTEMPLATE_USE_COMPILER)
 
-IF(GoogleCtemplate_FIND_REQUIRED)
-  message(FATAL_ERROR "Required package Google CTemplate NOT found")
-ELSE(GoogleCtemplate_FIND_REQUIRED)
-  message(STATUS "Could not find OPTIONAL package Google CTemplate")
-ENDIF(GoogleCtemplate_FIND_REQUIRED)
+IF(NOT GOOGLE_CTEMPLATE_FOUND)
+  IF(GoogleCtemplate_FIND_REQUIRED)
+    message(FATAL_ERROR "Required package Google CTemplate NOT found")
+  ELSE(GoogleCtemplate_FIND_REQUIRED)
+    message(STATUS "Could not find OPTIONAL package Google CTemplate")
+  ENDIF(GoogleCtemplate_FIND_REQUIRED)
+ENDIF(NOT GOOGLE_CTEMPLATE_FOUND)

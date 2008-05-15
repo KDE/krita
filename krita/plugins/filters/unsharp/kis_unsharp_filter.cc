@@ -95,18 +95,14 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     KisPaintDeviceSP interm = KisPaintDeviceSP(new KisPaintDevice(*src.paintDevice()));
     KoColorSpace * cs = interm->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
-    QBitArray channelFlags = cs->channelFlags(); // Only convolve color channels
-
     KisConvolutionPainter painter( interm );
     if (progressUpdater){
     	painter.setProgress( convolutionUpdater );
     }
-
-    QBitArray channelFlags = cfg->channelFlags();
+    QBitArray channelFlags;// = cfg->channelFlags();
     if (channelFlags.isEmpty()) {
         channelFlags = cs->channelFlags();
     }
-    
     painter.setChannelFlags( channelFlags );
     painter.beginTransaction("convolution step");
     painter.applyMatrix(kernel, src.topLeft().x(), src.topLeft().y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);

@@ -1,0 +1,282 @@
+<!DOCTYPE AS Profile - per-wavelength - 10 wl (343) - Test 10007>
+<illuminant version="1" wavelengths="10" name="AS Profile - per-wavelength - 10 wl (343) - Test 10007" >
+ <transformation>
+  <transformation i="0" j="0" ><![CDATA[¿æßÅï_Æ¿]]></transformation>
+  <transformation i="0" j="1" ><![CDATA[YPiÕ?]]></transformation>
+  <transformation i="0" j="2" ><![CDATA[Ë3²n¹×?]]></transformation>
+  <transformation i="1" j="0" ><![CDATA[Hßò?á?]]></transformation>
+  <transformation i="1" j="1" ><![CDATA[à´ÁÅ¿]]></transformation>
+  <transformation i="1" j="2" ><![CDATA[{`àE²V?]]></transformation>
+  <transformation i="2" j="0" ><![CDATA[){7´¿]]></transformation>
+  <transformation i="2" j="1" ><![CDATA[Utä;¬¸?]]></transformation>
+  <transformation i="2" j="2" ><![CDATA[w¿]]></transformation>
+  <transformation i="3" j="0" ><![CDATA[<i½ÕÕ¿]]></transformation>
+  <transformation i="3" j="1" ><![CDATA[ãÑm%?]]></transformation>
+  <transformation i="3" j="2" ><![CDATA[àûdæ&ç?]]></transformation>
+  <transformation i="4" j="0" ><![CDATA[¤à´ü}¿]]></transformation>
+  <transformation i="4" j="1" ><![CDATA[mêTb?]]></transformation>
+  <transformation i="4" j="2" ><![CDATA[Z¾Ô&­?]]></transformation>
+  <transformation i="5" j="0" ><![CDATA[9¢xHè¿]]></transformation>
+  <transformation i="5" j="1" ><![CDATA[ö_ê¡í?]]></transformation>
+  <transformation i="5" j="2" ><![CDATA[ÚüÛÄÇ¹¿]]></transformation>
+  <transformation i="6" j="0" ><![CDATA[è,Vú?]]></transformation>
+  <transformation i="6" j="1" ><![CDATA[oÔ@¡~Øß¿]]></transformation>
+  <transformation i="6" j="2" ><![CDATA[Wl`@?]]></transformation>
+  <transformation i="7" j="0" ><![CDATA[ÂüÇ)}ä¿]]></transformation>
+  <transformation i="7" j="1" ><![CDATA[5lîé?]]></transformation>
+  <transformation i="7" j="2" ><![CDATA[²ßïSÁµ¿]]></transformation>
+  <transformation i="8" j="0" ><![CDATA[m
+þ¹ë?]]></transformation>
+  <transformation i="8" j="1" ><![CDATA[r/ùG2Ð¿]]></transformation>
+  <transformation i="8" j="2" ><![CDATA[Qì¿v?]]></transformation>
+  <transformation i="9" j="0" ><![CDATA[N·ãªA®¿]]></transformation>
+  <transformation i="9" j="1" ><![CDATA[)ªÁFv²?]]></transformation>
+  <transformation i="9" j="2" ><![CDATA[Á«ê]]></transformation>
+ </transformation>
+ <primaries>
+  <red>
+   <wavelength><![CDATA[v%'Nª?]]></wavelength>
+   <wavelength><![CDATA[xårj`ö¿?]]></wavelength>
+   <wavelength><![CDATA[î_§æ£¦?]]></wavelength>
+   <wavelength><![CDATA[]]></wavelength>
+   <wavelength><![CDATA[ÂSË±Ø?]]></wavelength>
+   <wavelength><![CDATA[}eÓ¥6Ô°?]]></wavelength>
+   <wavelength><![CDATA[þ¥ÑÝ?]]></wavelength>
+   <wavelength><![CDATA[oWS£Ø?]]></wavelength>
+   <wavelength><![CDATA[ÎÖ*Öëâ?]]></wavelength>
+   <wavelength><![CDATA[Õ·Dâ?]]></wavelength>
+  </red>
+  <green>
+   <wavelength><![CDATA[]]></wavelength>
+   <wavelength><![CDATA[è
+O^M<]]></wavelength>
+   <wavelength><![CDATA[¨x»?]]></wavelength>
+   <wavelength><![CDATA[f|)ÿSÁ?]]></wavelength>
+   <wavelength><![CDATA[^YD"ß?]]></wavelength>
+   <wavelength><![CDATA[Ð[:QÁ
+ì?]]></wavelength>
+   <wavelength><![CDATA[íáDphß?]]></wavelength>
+   <wavelength><![CDATA[|HTV.ÿã?]]></wavelength>
+   <wavelength><![CDATA[IÈñPIÙ?]]></wavelength>
+   <wavelength><![CDATA[àUvÅæÛ?]]></wavelength>
+  </green>
+  <blue>
+   <wavelength><![CDATA[¦^î?]]></wavelength>
+   <wavelength><![CDATA[Q£±ò3ì?]]></wavelength>
+   <wavelength><![CDATA[ï´ un#ë?]]></wavelength>
+   <wavelength><![CDATA[\æ 5]]></wavelength>
+   <wavelength><![CDATA[!¬ìR·Þ?]]></wavelength>
+   <wavelength><![CDATA[øw³ }«­?]]></wavelength>
+   <wavelength><![CDATA[~hÇK¿3¬?]]></wavelength>
+   <wavelength><![CDATA[(ßOË=9]]></wavelength>
+   <wavelength><![CDATA[êu,«×?]]></wavelength>
+   <wavelength><![CDATA[]]></wavelength>
+  </blue>
+ </primaries>
+ <X nc="20" >
+  <coefficient><![CDATA[¥¸Ë`æ¿]]></coefficient>
+  <coefficient><![CDATA[ö¹ÃÀî?]]></coefficient>
+  <coefficient><![CDATA[iÊÒVÙæ?]]></coefficient>
+  <coefficient><![CDATA[OF!Ú¿]]></coefficient>
+  <coefficient><![CDATA[ºéddtÝ?]]></coefficient>
+  <coefficient><![CDATA[6µéÊ&n»?]]></coefficient>
+  <coefficient><![CDATA[õÈ wy|÷¿]]></coefficient>
+  <coefficient><![CDATA[@"ò|2«Ï?]]></coefficient>
+  <coefficient><![CDATA[êßl8À]]></coefficient>
+  <coefficient><![CDATA[ûR`BÉ¿]]></coefficient>
+  <coefficient><![CDATA[òA~ä¿]]></coefficient>
+  <coefficient><![CDATA[fºþ?]]></coefficient>
+  <coefficient><![CDATA[èaãÔ³ãÔ?]]></coefficient>
+  <coefficient><![CDATA[¾+ÎË?]]></coefficient>
+  <coefficient><![CDATA[òM
+Ë¤4à?]]></coefficient>
+  <coefficient><![CDATA[+P±Bñ¿]]></coefficient>
+  <coefficient><![CDATA[úÖb?]]></coefficient>
+  <coefficient><![CDATA[=ñ9¹ä?]]></coefficient>
+  <coefficient><![CDATA[CÄï»ä?]]></coefficient>
+  <coefficient><![CDATA[¶Ú]Ë×â?]]></coefficient>
+  <coefficient><![CDATA["ÅåLw~ß?]]></coefficient>
+  <coefficient><![CDATA[ð¸ãÎLð?]]></coefficient>
+  <coefficient><![CDATA[ë&íÿbö?]]></coefficient>
+  <coefficient><![CDATA[Æ	ÿFV×Ü?]]></coefficient>
+  <coefficient><![CDATA[5C;ãè?]]></coefficient>
+  <coefficient><![CDATA[^fa¸d%Ì?]]></coefficient>
+  <coefficient><![CDATA[­#cà§æ?]]></coefficient>
+  <coefficient><![CDATA[ºe¯§ÿ?]]></coefficient>
+  <coefficient><![CDATA[@Á%³`]]></coefficient>
+  <coefficient><![CDATA[yêcEuÕ?]]></coefficient>
+  <coefficient><![CDATA[A±
+y³ü?]]></coefficient>
+  <coefficient><![CDATA[ë¥ÎÞ¸à?]]></coefficient>
+  <coefficient><![CDATA[ûóï¬GØ?]]></coefficient>
+  <coefficient><![CDATA[FgÉ~õËô?]]></coefficient>
+  <coefficient><![CDATA[|isÂóð?]]></coefficient>
+  <coefficient><![CDATA[V_Täß?]]></coefficient>
+  <coefficient><![CDATA[Ô¤4Óïø?]]></coefficient>
+  <coefficient><![CDATA[ (Kò?]]></coefficient>
+  <coefficient><![CDATA[üýÁ:á?]]></coefficient>
+  <coefficient><![CDATA[¢.cDÕê?]]></coefficient>
+  <coefficient><![CDATA[ÂWªêûSÌ?]]></coefficient>
+  <coefficient><![CDATA[è5È± ÃÝ¿]]></coefficient>
+  <coefficient><![CDATA[(?¡è?]]></coefficient>
+  <coefficient><![CDATA[ÐB-.¡'?]]></coefficient>
+  <coefficient><![CDATA[Àn¼{[x×¿]]></coefficient>
+  <coefficient><![CDATA[ÐZ¦,û´Å?]]></coefficient>
+  <coefficient><![CDATA[~Å,ÂßÃ?]]></coefficient>
+  <coefficient><![CDATA[AÖã(é¿]]></coefficient>
+  <coefficient><![CDATA[¦Uº¼íä?]]></coefficient>
+  <coefficient><![CDATA[<¢¶²¿]]></coefficient>
+  <coefficient><![CDATA[ô=ö¨®ñ?]]></coefficient>
+  <coefficient><![CDATA[Ì¿j À]]></coefficient>
+  <coefficient><![CDATA[UWlàÅ?]]></coefficient>
+  <coefficient><![CDATA[îÿYo÷Ïæ?]]></coefficient>
+  <coefficient><![CDATA[¦åaRbå¿]]></coefficient>
+  <coefficient><![CDATA[Þ{©1]]></coefficient>
+  <coefficient><![CDATA[B|í©lì¿]]></coefficient>
+  <coefficient><![CDATA[ÊÊ¹¼÷õû?]]></coefficient>
+  <coefficient><![CDATA[<Þ4´Bõ?]]></coefficient>
+  <coefficient><![CDATA[*Oñ©ñý?]]></coefficient>
+  <coefficient><![CDATA[èwxì¹?]]></coefficient>
+  <coefficient><![CDATA[út8²³?]]></coefficient>
+  <coefficient><![CDATA[×0úÕñè?]]></coefficient>
+  <coefficient><![CDATA[ªÒj¸Sâ?]]></coefficient>
+  <coefficient><![CDATA[^Ëá(Ëñ?]]></coefficient>
+  <coefficient><![CDATA[T±âý·ò¿]]></coefficient>
+  <coefficient><![CDATA[ÅÏ	æ?]]></coefficient>
+  <coefficient><![CDATA[,ß>jãÚ?]]></coefficient>
+  <coefficient><![CDATA[¤ÝâIÚô¿]]></coefficient>
+  <coefficient><![CDATA[Þ¹ ùí?]]></coefficient>
+  <coefficient><![CDATA[@Àõ±=¿]]></coefficient>
+  <coefficient><![CDATA[Õû)-=ë?]]></coefficient>
+  <coefficient><![CDATA[d¾Æúà¿]]></coefficient>
+  <coefficient><![CDATA[H¹GúVË¿]]></coefficient>
+  <coefficient><![CDATA[oÀlÕ?]]></coefficient>
+  <coefficient><![CDATA[íÚFÐä?]]></coefficient>
+  <coefficient><![CDATA[Vâ>+.Û¿]]></coefficient>
+  <coefficient><![CDATA[g÷-]ö?]]></coefficient>
+  <coefficient><![CDATA["ÓONÄóà¿]]></coefficient>
+  <coefficient><![CDATA[6·!®@]]></coefficient>
+  <coefficient><![CDATA[Ûîä?]]></coefficient>
+  <coefficient><![CDATA[ºk«çEö¿]]></coefficient>
+  <coefficient><![CDATA[o± V#	ã?]]></coefficient>
+  <coefficient><![CDATA[~E4ï?]]></coefficient>
+  <coefficient><![CDATA[ò¾(´ç?]]></coefficient>
+  <coefficient><![CDATA[ÊÍç¸@]]></coefficient>
+  <coefficient><![CDATA[ô³ðr)÷?]]></coefficient>
+  <coefficient><![CDATA[TÊ+kö¿]]></coefficient>
+  <coefficient><![CDATA[$O¸05î?]]></coefficient>
+  <coefficient><![CDATA[°,1ù{ú?]]></coefficient>
+  <coefficient><![CDATA[=.O·Üð?]]></coefficient>
+  <coefficient><![CDATA[°ûbà?]]></coefficient>
+  <coefficient><![CDATA[¿øÉ×Yð?]]></coefficient>
+  <coefficient><![CDATA[cµè/@]]></coefficient>
+  <coefficient><![CDATA[ir¹6«ø?]]></coefficient>
+  <coefficient><![CDATA[äÄ¥.*Åî?]]></coefficient>
+  <coefficient><![CDATA[$Õ'â¿]]></coefficient>
+  <coefficient><![CDATA[»f-$7Ý?]]></coefficient>
+  <coefficient><![CDATA[/3zr¨þ?]]></coefficient>
+  <coefficient><![CDATA[omç&éµ?]]></coefficient>
+  <coefficient><![CDATA[@ ¬	üW¿]]></coefficient>
+  <coefficient><![CDATA[4¸êoèÓ?]]></coefficient>
+  <coefficient><![CDATA[@ku$$±¿]]></coefficient>
+  <coefficient><![CDATA[Îuô/@Ø?]]></coefficient>
+  <coefficient><![CDATA[¸ÍéiÙµÑ?]]></coefficient>
+  <coefficient><![CDATA[Ìhd¥Íþ¿]]></coefficient>
+  <coefficient><![CDATA[þ¸AqÓ¿]]></coefficient>
+  <coefficient><![CDATA[uÅ?]]></coefficient>
+  <coefficient><![CDATA[óàkWÞ¿]]></coefficient>
+  <coefficient><![CDATA[9[^ï¿]]></coefficient>
+  <coefficient><![CDATA[|ô!rò¿]]></coefficient>
+  <coefficient><![CDATA[{ô-ÉÐ?]]></coefficient>
+  <coefficient><![CDATA[o0 é­PÓ¿]]></coefficient>
+  <coefficient><![CDATA[ÎÿèYÁ?]]></coefficient>
+  <coefficient><![CDATA[ ÄìYê?]]></coefficient>
+  <coefficient><![CDATA[ù¤óó?]]></coefficient>
+  <coefficient><![CDATA[m¥	{üRê?]]></coefficient>
+  <coefficient><![CDATA[0ü&Ï
+ã?]]></coefficient>
+  <coefficient><![CDATA[H#	¢Å?]]></coefficient>
+  <coefficient><![CDATA[]]></coefficient>
+  <coefficient><![CDATA[ÀfòGÆ¿]]></coefficient>
+  <coefficient><![CDATA[¶©ÉÐ°ñÇ?]]></coefficient>
+  <coefficient><![CDATA[ è~â'Àá¿]]></coefficient>
+  <coefficient><![CDATA[RýØì?]]></coefficient>
+  <coefficient><![CDATA[l¬ôÓí?]]></coefficient>
+  <coefficient><![CDATA[ãr@k>ð¿]]></coefficient>
+  <coefficient><![CDATA[ïzg0à?]]></coefficient>
+  <coefficient><![CDATA[Ïá¤-Tø¿]]></coefficient>
+  <coefficient><![CDATA[²pä3÷?]]></coefficient>
+  <coefficient><![CDATA[ÄääÊ¿]]></coefficient>
+  <coefficient><![CDATA[¥õñÐ?]]></coefficient>
+  <coefficient><![CDATA[]çE3Nö¿]]></coefficient>
+  <coefficient><![CDATA[¶z®Ú9å?]]></coefficient>
+  <coefficient><![CDATA[ØZìíÞ¿¿]]></coefficient>
+  <coefficient><![CDATA[Æ¸*øÖ?]]></coefficient>
+  <coefficient><![CDATA[wYá?]]></coefficient>
+  <coefficient><![CDATA[æíõÚªgÜ¿]]></coefficient>
+  <coefficient><![CDATA[ÕþØß¿]]></coefficient>
+  <coefficient><![CDATA[ÙÉ,QSÆ?]]></coefficient>
+  <coefficient><![CDATA[/QÝVY.é?]]></coefficient>
+  <coefficient><![CDATA[õ:Äù ã?]]></coefficient>
+  <coefficient><![CDATA[¾¾ÞOï¿]]></coefficient>
+  <coefficient><![CDATA[pwX´÷Eì?]]></coefficient>
+  <coefficient><![CDATA[flÓiçÜ¿]]></coefficient>
+  <coefficient><![CDATA[¤*ñ^k:ð?]]></coefficient>
+  <coefficient><![CDATA[ðnaÏ@Ö¿]]></coefficient>
+  <coefficient><![CDATA[µÀøüú?]]></coefficient>
+  <coefficient><![CDATA[(M×'Ö¿]]></coefficient>
+  <coefficient><![CDATA[B+Rt¶
+@]]></coefficient>
+  <coefficient><![CDATA[ÜÌG÷?]]></coefficient>
+  <coefficient><![CDATA[w»¨?¡ñ¿]]></coefficient>
+  <coefficient><![CDATA[ð,:È?]]></coefficient>
+  <coefficient><![CDATA[¼µ¢ÆÁ?]]></coefficient>
+  <coefficient><![CDATA[¼ü`ßÉöØ?]]></coefficient>
+  <coefficient><![CDATA[-«ãfð?]]></coefficient>
+  <coefficient><![CDATA[8ÕËøÔ¿]]></coefficient>
+  <coefficient><![CDATA[qÞ=Ü¡ð?]]></coefficient>
+  <coefficient><![CDATA[Ð.×¤>_¯?]]></coefficient>
+  <coefficient><![CDATA[{{Èõ?]]></coefficient>
+  <coefficient><![CDATA[:Dbò?]]></coefficient>
+  <coefficient><![CDATA[}Óëmã?]]></coefficient>
+  <coefficient><![CDATA[2Ï3lçð¿]]></coefficient>
+  <coefficient><![CDATA[~&×N=î?]]></coefficient>
+  <coefficient><![CDATA[«Ê÷]]></coefficient>
+  <coefficient><![CDATA[­zåF8ñ¿]]></coefficient>
+  <coefficient><![CDATA[ÜL²°÷?]]></coefficient>
+  <coefficient><![CDATA[Ø1ËÝÔ¿]]></coefficient>
+  <coefficient><![CDATA[2ÎUô`à?]]></coefficient>
+  <coefficient><![CDATA[°%xIwzþ¿]]></coefficient>
+  <coefficient><![CDATA[ ë÷f$¬?]]></coefficient>
+  <coefficient><![CDATA[j«ÀHRÐ?]]></coefficient>
+  <coefficient><![CDATA[Ög"Lªá?]]></coefficient>
+  <coefficient><![CDATA[äÙÉö?]]></coefficient>
+  <coefficient><![CDATA[hj>)ôÌ¿]]></coefficient>
+  <coefficient><![CDATA[l»-åó?]]></coefficient>
+  <coefficient><![CDATA[/Èì?]]></coefficient>
+  <coefficient><![CDATA[Uë^$õ?]]></coefficient>
+  <coefficient><![CDATA[ÜDõ.9Ë@]]></coefficient>
+  <coefficient><![CDATA[ÿr¡*.ü¿]]></coefficient>
+  <coefficient><![CDATA[hd&×ú?]]></coefficient>
+  <coefficient><![CDATA[>bJiTù¿]]></coefficient>
+  <coefficient><![CDATA[K½½¡,Çù?]]></coefficient>
+  <coefficient><![CDATA[]]></coefficient>
+  <coefficient><![CDATA[¸.ï¿]]></coefficient>
+  <coefficient><![CDATA[¯Ý:#+ç¿]]></coefficient>
+  <coefficient><![CDATA[ü:üÇ?]]></coefficient>
+  <coefficient><![CDATA[Ï31çë?]]></coefficient>
+  <coefficient><![CDATA[È.%$Õ¿]]></coefficient>
+  <coefficient><![CDATA[û¸]+Jgî?]]></coefficient>
+  <coefficient><![CDATA[ ÆÖ!µ¿]]></coefficient>
+  <coefficient><![CDATA[aÊïÍñ?]]></coefficient>
+  <coefficient><![CDATA[Û¿Îe©þ?]]></coefficient>
+  <coefficient><![CDATA[U"}«ì?]]></coefficient>
+  <coefficient><![CDATA[t¯oÙý¿]]></coefficient>
+  <coefficient><![CDATA[qÅ¯ÿÈ?]]></coefficient>
+  <coefficient><![CDATA[;;5¸û?]]></coefficient>
+  <coefficient><![CDATA[HÊ½9ÿø?]]></coefficient>
+  <coefficient><![CDATA[Dm-åPù?]]></coefficient>
+  <coefficient><![CDATA[v£·l©Ñ?]]></coefficient>
+  <coefficient><![CDATA[Ì4¦	É?]]></coefficient>
+ </X>
+</illuminant>

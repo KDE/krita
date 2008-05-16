@@ -1,6 +1,8 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${KOMAIN_INCLUDES} )
 
+add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
 ########### next target ###############
 
 set(priorityqueue_test_SRCS priorityqueue_test.cpp )
@@ -46,6 +48,11 @@ kde4_add_unit_test(KoPropertiesTest TESTNAME libs-komain-KoPropertiesTest ${kopr
 target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} komain ${QT_QTTEST_LIBRARY})
 
 
+########### next target ###############
+
+set(documentstructuretest_SRCS documentstructuretest.cpp )
+kde4_add_unit_test(DocumentStructureTest TESTNAME libs-komain-DocumentStructureTest  ${documentstructuretest_SRCS})
+target_link_libraries(DocumentStructureTest komain ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
 

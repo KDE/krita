@@ -506,6 +506,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Line through mode") << "FormattingProperties/TextFormattingProperties/lineThroughMode";
     QTest::newRow("Line through style") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";
     QTest::newRow("Line through type") << "FormattingProperties/TextFormattingProperties/lineThroughType";
+    QTest::newRow("Relative Font Size") << "FormattingProperties/TextFormattingProperties/relativeFontSize";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
     QTest::newRow("Text Outline") << "FormattingProperties/TextFormattingProperties/textOutline";
     QTest::newRow("Text tranformations") << "FormattingProperties/TextFormattingProperties/textTransformations";

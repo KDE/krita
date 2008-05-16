@@ -83,7 +83,7 @@ testsuite.
 ./FormattingProperties/TextFormattingProperties/hyphenationPushCharCount/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/textShadow/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TextFormattingProperties/textRotationAngle/test.xml:   <result>unsupported</result>
-./FormattingProperties/TextFormattingProperties/textOutline/test.xml:   <result>unsupported</result>
+*./FormattingProperties/TextFormattingProperties/textOutline/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/fontFamily/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/TextFormattingProperties/country/test.xml:   <result>unknown</result>
 ./FormattingProperties/TextFormattingProperties/hyphenation/test.xml:   <result>fullsupport</result>
@@ -117,7 +117,7 @@ testsuite.
 ./FormattingProperties/TextFormattingProperties/textScale/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/lineThroughWidth/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/underliningWidth/test.xml:   <result>unsupported</result>
-./FormattingProperties/TextFormattingProperties/relativeFontSize/test.xml:   <result>unsupported</result>
+*./FormattingProperties/TextFormattingProperties/relativeFontSize/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/textBackgroundColor/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TextFormattingProperties/hiddenOrConditionalText/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/color/test.xml:   <result>fullsupport</result>

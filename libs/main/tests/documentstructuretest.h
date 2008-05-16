@@ -38,12 +38,11 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-
+    void rootAttributes_test();
     void predefinedMetaData_test();
 
 private:
     KComponentData *componentData;
-    KoStore *store;
 };
 
 #endif // DOCUMENTSTRUCTURE_H

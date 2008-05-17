@@ -187,7 +187,7 @@ QRectF KoPathSegment::controlPointRect() const
 
     QList<QPointF> points = controlPoints();
     QRectF bbox( points.first(), points.first() );
-    foreach( QPointF p, points )
+    foreach( const QPointF &p, points )
     {
         bbox.setLeft( qMin( bbox.left(), p.x() ) );
         bbox.setRight( qMax( bbox.right(), p.x() ) );

@@ -354,7 +354,7 @@ bool IntersectionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy *
         {
             QList<QPointF> isects = s1.intersections( segments[j] );
             //kDebug() << isects.count() << "intersections found";
-            foreach( QPointF point, isects )
+            foreach( const QPointF &point, isects )
             {
                 if( ! rect.contains( point ) )
                     continue;

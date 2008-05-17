@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Solid Color Generator
-Name[x-test]=xxSolid Color Generatorxx
 Comment=Generates a solid color
 X-KDE-ServiceTypes=Krita/Generator
 Type=Service

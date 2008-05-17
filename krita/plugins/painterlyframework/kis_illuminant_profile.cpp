@@ -200,7 +200,7 @@ bool KisIlluminantProfile::save(const QString &fileName)
         data << (qint8)m_illuminant[i].toAscii();
     data << (qint8)0;
 
-    data << (qint8)m_wl << (qint8)m_wl << (qint8)m_wl << (qint8)m_wl;
+    data << (qint8)m_wl;
     for (int i = 0; i < m_wl; i++)
         for (int j = 0; j < 3; j++)
             data.writeRawData((char*)&m_T[j][i],8);

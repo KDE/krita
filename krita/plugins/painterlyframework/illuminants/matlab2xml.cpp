@@ -40,9 +40,10 @@ void writeTransformations(QDomDocument & doc, QDomElement & transformations, dou
             QDomElement transformation = doc.createElement("transformation");
             transformation.setAttribute("j", j);
             transformation.setAttribute("i", i);
-            QByteArray bytes((char*)&T[j][i], 8);
-            QDomCDATASection cdata = doc.createCDATASection(bytes);
-            transformation.appendChild(cdata);
+            transformation.setAttribute("value", T[j][i]);
+            //QByteArray bytes((char*)&T[j][i], 8);
+            //QDomCDATASection cdata = doc.createCDATASection(bytes);
+            //transformation.appendChild(cdata);
             transformations.appendChild(transformation);
         }
     }
@@ -52,15 +53,23 @@ void writePrimary(QDomDocument & doc, QDomElement & node, double * primary, int 
 {
     for (int i = 0; i < numWavelengths; ++i) {
         QDomElement wavelength = doc.createElement("wavelength");
-        QByteArray bytes((char*)(primary + i), 8);
-        QDomCDATASection cdata = doc.createCDATASection(bytes);
-        wavelength.appendChild(cdata);
+        wavelength.setAttribute("value", primary[i]);
+        //QByteArray bytes((char*)(primary + i), 8);
+        //QDomCDATASection cdata = doc.createCDATASection(bytes);
+        //wavelength.appendChild(cdata);
         node.appendChild(wavelength);
     }
 }
 
 int main(int c, char **v) {
     QCoreApplication app(c, v);
+
+    if (sizeof(double) != 8) {
+        QTextStream(stdout) << "double is the wrong size " << sizeof(double) << endl;
+        return 1;
+    }
+
+    
     if (c < 2) {
         QTextStream(stdout) << "Usage; matlab2xml input > output" << endl;
         return 1;
@@ -145,7 +154,7 @@ int main(int c, char **v) {
     }
 
     // Create a dom document & save it
-    QDomDocument doc(m_illuminant);
+    QDomDocument doc("illuminant");
     QDomElement root = doc.createElement("illuminant");
     doc.appendChild(root);
 
@@ -153,7 +162,7 @@ int main(int c, char **v) {
     root.setAttribute("name", m_illuminant);
     root.setAttribute("wavelengths", m_wl);
 
-    QDomElement transformations = doc.createElement("transformation");
+    QDomElement transformations = doc.createElement("transformations");
     root.appendChild(transformations);
     writeTransformations(doc, transformations, m_T, m_wl);
 
@@ -178,11 +187,11 @@ int main(int c, char **v) {
     
     for (int i = 0; i < m_wl * nc; ++i) {
         QDomElement coeff = doc.createElement("coefficient");
-        
-        QByteArray bytes((char*)(coeffs + i), 8);
-        QDomCDATASection cdata = doc.createCDATASection(bytes);
+        coeff.setAttribute("value", coeffs[i]);
+        //QByteArray bytes((char*)(coeffs + i), 8);
+        //QDomCDATASection cdata = doc.createCDATASection(bytes);
         coefficients.appendChild(coeff);
-        coeff.appendChild(cdata);
+        //coeff.appendChild(cdata);
     }
     
     QTextStream(stdout) << doc.toString();

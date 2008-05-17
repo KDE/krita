@@ -1,49 +1,48 @@
-<!DOCTYPE AS Profile - per-wavelength - 3 wl (111) - Test 10001>
+<!DOCTYPE illuminant>
 <illuminant version="1" wavelengths="3" name="AS Profile - per-wavelength - 3 wl (111) - Test 10001" >
- <transformation>
-  <transformation i="0" j="0" ><![CDATA[ÚÊ^á¿]]></transformation>
-  <transformation i="0" j="1" ><![CDATA[1À.)§?]]></transformation>
-  <transformation i="0" j="2" ><![CDATA[U
-0ãkò?]]></transformation>
-  <transformation i="1" j="0" ><![CDATA[WS]]></transformation>
-  <transformation i="1" j="1" ><![CDATA[«ÿ¾õÚþ?]]></transformation>
-  <transformation i="1" j="2" ><![CDATA[¦@ÕOúÊ¿]]></transformation>
-  <transformation i="2" j="0" ><![CDATA[äÐçß£@]]></transformation>
-  <transformation i="2" j="1" ><![CDATA[¨ÊÔHzí¿]]></transformation>
-  <transformation i="2" j="2" ><![CDATA[¸SÙ«?]]></transformation>
- </transformation>
+ <transformations>
+  <transformation i="0" j="0" value="-0.5428211905426921" />
+  <transformation i="0" j="1" value="0.04523606839965522" />
+  <transformation i="0" j="2" value="1.15112580056361" />
+  <transformation i="1" j="0" value="-1.53719502687928" />
+  <transformation i="1" j="1" value="1.875941238351497" />
+  <transformation i="1" j="2" value="-0.2040093316850335" />
+  <transformation i="2" j="0" value="3.080016217421973" />
+  <transformation i="2" j="1" value="-0.9211773067511517" />
+  <transformation i="2" j="2" value="0.05288353112142378" />
+ </transformations>
  <primaries>
   <red>
-   <wavelength><![CDATA[\B·Ã-?]]></wavelength>
-   <wavelength><![CDATA[Â7I8Ë?]]></wavelength>
-   <wavelength><![CDATA[W&[ÅÛ?]]></wavelength>
+   <wavelength value="0.01775270277040818" />
+   <wavelength value="0.2126552122910593" />
+   <wavelength value="0.4339357275026478" />
   </red>
   <green>
-   <wavelength><![CDATA[%¬¬*¿¼?]]></wavelength>
-   <wavelength><![CDATA["KF*¬âæ?]]></wavelength>
-   <wavelength><![CDATA[_ÅÓ¢Ø?]]></wavelength>
+   <wavelength value="0.1094626883683963" />
+   <wavelength value="0.7151699853587596" />
+   <wavelength value="0.3762234773740455" />
   </green>
   <blue>
-   <wavelength><![CDATA[]]></wavelength>
-   <wavelength><![CDATA[ku°?z²?]]></wavelength>
-   <wavelength><![CDATA[(@´LÈ?]]></wavelength>
+   <wavelength value="0.8727846088611955" />
+   <wavelength value="0.07217480235018107" />
+   <wavelength value="0.1898407951233063" />
   </blue>
  </primaries>
  <X nc="5" >
-  <coefficient><![CDATA[l2ÄÌ¿]]></coefficient>
-  <coefficient><![CDATA[C ÖH[Ü?]]></coefficient>
-  <coefficient><![CDATA[þG5CtØ¿]]></coefficient>
-  <coefficient><![CDATA[â_­Éà¿]]></coefficient>
-  <coefficient><![CDATA[u¼ùû:è?]]></coefficient>
-  <coefficient><![CDATA[/W ¯e÷¿]]></coefficient>
-  <coefficient><![CDATA[ÄÔ?ò?]]></coefficient>
-  <coefficient><![CDATA[wÂ[í?]]></coefficient>
-  <coefficient><![CDATA[ôØ¨DÎ?]]></coefficient>
-  <coefficient><![CDATA[¼¶þï?]]></coefficient>
-  <coefficient><![CDATA[¸øæºó?]]></coefficient>
-  <coefficient><![CDATA[rbïÛ´ú¿]]></coefficient>
-  <coefficient><![CDATA[YAV%Û?]]></coefficient>
-  <coefficient><![CDATA[JSlá>ä¿]]></coefficient>
-  <coefficient><![CDATA[+W:õDQí?]]></coefficient>
+  <coefficient value="-0.2247475620462188" />
+  <coefficient value="0.4430592738431224" />
+  <coefficient value="-0.3820961020547883" />
+  <coefficient value="-0.5160873781415645" />
+  <coefficient value="0.7572002291107213" />
+  <coefficient value="-1.462325692400053" />
+  <coefficient value="1.14058376883796" />
+  <coefficient value="0.92225339144177" />
+  <coefficient value="0.2347799133724063" />
+  <coefficient value="0.9998305863413484" />
+  <coefficient value="1.233130427900368" />
+  <coefficient value="-1.669155058952247" />
+  <coefficient value="0.4241667597138072" />
+  <coefficient value="-0.6326758495060372" />
+  <coefficient value="0.9161705770118024" />
  </X>
 </illuminant>

@@ -47,6 +47,7 @@ struct Finalizer {
 #include <KoParagraphStyle.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 #include <QTextLayout>
@@ -246,7 +247,11 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
 bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
     loadOdfAttributes( element, context, OdfAllAttributes );
-    return loadOdfFrame( element, context );
+    //HACK ? I'm not sure at all if this code should be here, but it works.
+    if ((element.tagName() == "text") && (element.namespaceURI() == KoXmlNS::office))
+        return loadOdfFrameElement(element, context);
+    else
+        return loadOdfFrame( element, context );
 }
 
 bool TextShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )

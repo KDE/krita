@@ -67,7 +67,7 @@
 
 #include "KoColorProfile.h"
 
-#if HAVE_OPENGL
+#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl.h"
 #endif
 

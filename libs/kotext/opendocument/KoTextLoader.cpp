@@ -675,12 +675,13 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     }
 
     //TEMP HACK; will be later automated
-    shape->setAdditionalAttribute("text:anchor-type", frameElem.attributeNS(KoXmlNS::text, "anchor-type", "paragraph"));
-    shape->setAdditionalAttribute("text:anchor-page-number", frameElem.attributeNS(KoXmlNS::text, "anchor-page-number", "paragraph"));
+    //shape->setAdditionalAttribute("text:anchor-type", frameElem.attributeNS(KoXmlNS::text, "anchor-type", "paragraph"));
+    //shape->setAdditionalAttribute("text:anchor-page-number", frameElem.attributeNS(KoXmlNS::text, "anchor-page-number", "paragraph"));
 
-    d->textSharedData->shapeInserted(shape);
     KoTextAnchor *anchor = new KoTextAnchor(shape);
     anchor->loadOdfFromShape();
+
+    d->textSharedData->shapeInserted(shape);
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
     if ( layout ) {

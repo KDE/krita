@@ -7,11 +7,11 @@ if (SHOULD_BUILD_KRITA)
     endif(GCC)
     include(CheckFunctionExists)
 
-    macro_optional_find_package(GLEW)
-    macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
-    configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
-
     if(HAVE_OPENGL)
+        macro_optional_find_package(GLEW)
+        macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
+        configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
+
         if(HAVE_GLEW)
             message(STATUS "GLEW found!")
         else(HAVE_GLEW)

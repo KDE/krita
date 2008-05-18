@@ -56,6 +56,10 @@ public:
 
     virtual bool masterMode();
 
+    void addShape( KoShape *shape );
+    
+    void removeShape( KoShape *shape );
+
 private:
     /// if true it works on master pages, if false on normal pages
     bool m_masterMode;

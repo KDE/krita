@@ -143,3 +143,39 @@ bool KoPAViewModeNormal::masterMode()
 {
     return m_masterMode;
 }
+
+void KoPAViewModeNormal::addShape( KoShape *shape )
+{
+    // the KoShapeController sets the active layer as parent
+    KoPAPageBase * page( m_view->kopaDocument()->pageByShape( shape ) );
+
+    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0;
+
+    KoPAPage * p;
+    if ( page == m_view->activePage() ) {
+        m_view->kopaCanvas()->shapeManager()->add( shape );
+    }
+    else if ( isMaster && ( p = dynamic_cast<KoPAPage*>( m_view->activePage() ) ) != 0 ) {
+        if ( p->masterPage() == page ) {
+            m_view->kopaCanvas()->masterShapeManager()->add( shape );
+        }
+    }
+}
+
+void KoPAViewModeNormal::removeShape( KoShape *shape )
+{
+    KoPAPageBase * page( m_view->kopaDocument()->pageByShape( shape ) );
+
+    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0;
+
+    KoPAPage * p;
+    if ( page == m_view->activePage() ) {
+        m_view->kopaCanvas()->shapeManager()->remove( shape );
+    }
+    else if ( isMaster && ( p = dynamic_cast<KoPAPage*>( m_view->activePage() ) ) != 0 ) {
+        if ( p->masterPage() == page ) {
+            m_view->kopaCanvas()->masterShapeManager()->remove( shape );
+        }
+    }
+}
+

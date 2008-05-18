@@ -26,6 +26,7 @@ class KoPAView;
 class KoPACanvas;
 class KoPAPageBase;
 class KoToolProxy;
+class KoShape;
 class KoViewConverter;
 class QPaintEvent;
 class QTabletEvent;
@@ -121,6 +122,10 @@ public:
      * @param page the new page to be updated on the view mode
      */
     virtual void updateActivePage( KoPAPageBase * page );
+
+    virtual void addShape( KoShape *shape );
+
+    virtual void removeShape( KoShape *shape );
 
 protected:
     KoPACanvas * m_canvas;

@@ -47,6 +47,7 @@
 #include "KoPAMasterPage.h"
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
+#include "KoPAViewMode.h"
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -320,20 +321,10 @@ void KoPADocument::addShape( KoShape * shape )
     // the KoShapeController sets the active layer as parent
     KoPAPageBase * page( pageByShape( shape ) );
 
-    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0;
-
     foreach( KoView *view, views() )
     {
         KoPAView * kopaView = static_cast<KoPAView*>( view );
-        KoPAPage * p;
-        if ( page == kopaView->activePage() ) {
-            kopaView->kopaCanvas()->shapeManager()->add( shape );
-        }
-        else if ( isMaster && ( p = dynamic_cast<KoPAPage*>( kopaView->activePage() ) ) != 0 ) {
-            if ( p->masterPage() == page ) {
-                kopaView->kopaCanvas()->masterShapeManager()->add( shape );
-            }
-        }
+        kopaView->viewMode()->addShape( shape );
     }
 
     emit shapeAdded( shape );
@@ -354,20 +345,10 @@ void KoPADocument::removeShape( KoShape *shape )
 
     KoPAPageBase * page( pageByShape( shape ) );
 
-    bool isMaster = dynamic_cast<KoPAMasterPage*>( page ) != 0;
-
     foreach( KoView *view, views() )
     {
         KoPAView * kopaView = static_cast<KoPAView*>( view );
-        KoPAPage * p;
-        if ( page == kopaView->activePage() ) {
-            kopaView->kopaCanvas()->shapeManager()->remove( shape );
-        }
-        else if ( isMaster && ( p = dynamic_cast<KoPAPage*>( kopaView->activePage() ) ) != 0 ) {
-            if ( p->masterPage() == page ) {
-                kopaView->kopaCanvas()->masterShapeManager()->remove( shape );
-            }
-        }
+        kopaView->viewMode()->removeShape( shape );
     }
 
     emit shapeRemoved( shape );

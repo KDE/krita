@@ -45,9 +45,9 @@ struct Finalizer {
 #include <KoSelection.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-
-#include "KoShapeSavingContext.h"
-#include "KoXmlWriter.h"
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 
 #include <QTextLayout>
 #include <QFont>
@@ -58,9 +58,10 @@ struct Finalizer {
 
 
 TextShape::TextShape()
-    : KoShapeContainer(new KoTextShapeContainerModel()),
-    m_footnotes(0),
-    m_demoText(false)
+: KoShapeContainer(new KoTextShapeContainerModel())
+, KoFrameShape(KoXmlNS::draw, "text-box")
+, m_footnotes(0)
+, m_demoText(false)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -242,7 +243,14 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
     writer.endElement(); // draw:frame
 }
 
-bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
+    loadOdfAttributes( element, context, OdfAllAttributes );
+    return loadOdfFrame( element, context );
+}
+
+bool TextShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
     return m_textShapeData->loadOdf(element, context);
 }
 

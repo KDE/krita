@@ -22,6 +22,7 @@
 #define KOTEXTSHAPE_H
 
 #include <KoShapeContainer.h>
+#include <KoFrameShape.h>
 #include <KoTextShapeData.h>
 
 #include <QTextDocument>
@@ -36,7 +37,8 @@
  * The Text shape is capable of drawing structured text.
  * @see KoTextShapeData
  */
-class TextShape : public KoShapeContainer {
+class TextShape : public KoShapeContainer, public KoFrameShape
+{
 public:
     TextShape();
     virtual ~TextShape();
@@ -90,6 +92,9 @@ public:
     QTextDocument *footnoteDocument();
 
     void markLayoutDone();
+
+protected:
+    virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
 
 private:
     void shapeChanged(ChangeType type);

@@ -28,6 +28,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 
@@ -35,7 +36,8 @@
 #include <kdebug.h>
 
 PictureShape::PictureShape()
-    : m_imageData(0)
+: KoFrameShape(KoXmlNS::draw, "image")
+, m_imageData(0)
 {
     setKeepAspectRatio(true);
 }
@@ -57,7 +59,7 @@ void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) 
 
     if(m_imageData == 0)
     {
-	painter.fillRect(target, QColor(Qt::gray));
+        painter.fillRect(target, QColor(Qt::gray));
         return;
     }
 
@@ -91,11 +93,15 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    loadOdfAttributes( element, context, OdfAllAttributes );
+    return loadOdfFrame( element, context );
+}
+
+bool PictureShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
     Q_UNUSED(context);
 
-    // the frame attributes are loaded outside in the shape registry
-    if( m_imageCollection)//context.imageCollection() )
-    {
+    if ( m_imageCollection ) {
         const QString href = element.attribute("href");
         KoImageData * data = new KoImageData( m_imageCollection, href);
         setUserData( data );

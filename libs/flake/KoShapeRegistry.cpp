@@ -40,42 +40,6 @@
 #include <kdebug.h>
 #include <k3staticdeleter.h>
 
-// just for loading the frame attributes
-class FrameShape : public KoShape
-{
-public:
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) 
-    {
-        Q_UNUSED( painter );
-        Q_UNUSED( converter );
-    };
-
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
-    {
-        return loadOdfAttributes( element, context, OdfAllAttributes );
-    };
-    virtual void saveOdf( KoShapeSavingContext & context ) const 
-    {
-        Q_UNUSED( context );
-    };
-
-    void setAttributes( KoShape * shape )
-    {
-        if( ! shape )
-            return;
-        shape->setSize( size() );
-        shape->setTransformation( transformation() );
-        shape->setZIndex( zIndex() );
-        shape->setName( name() );
-    }
-
-    virtual KoShape * cloneShape() const
-    {
-        return 0;
-    }
-};
-
-
 class KoShapeRegistry::Private
 {
 public:
@@ -167,13 +131,8 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
 
         KoXmlElement element;
         forEachElement( element, e ) {
-            KoShape * shape = createShapeInternal( element, context );
-            if ( shape )
-            {
-                FrameShape frame;
-                if( frame.loadOdf( e, context ) )
-                    frame.setAttributes( shape );
-
+            KoShape * shape = createShapeInternal( e, context, element );
+            if ( shape ) {
                 return shape;
             }
         }
@@ -194,13 +153,13 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
         delete group;
     }
     else {
-        return createShapeInternal( e, context );
+        return createShapeInternal( e, context, e );
     }
 
     return 0;
 }
 
-KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & element, KoShapeLoadingContext & context ) const
+KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element ) const
 {
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
     kDebug(30006) << p;
@@ -222,7 +181,7 @@ KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & element, Ko
                 shape->setShapeId(factory->id());
 
             context.odfLoadingContext().styleStack().save();
-            bool loaded = shape->loadOdf( element, context );
+            bool loaded = shape->loadOdf( fullElement, context );
             context.odfLoadingContext().styleStack().restore();
 
             if( loaded )

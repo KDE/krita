@@ -68,7 +68,7 @@ private:
     KoShapeRegistry operator=(const KoShapeRegistry&);
     void init();
 
-    KoShape * createShapeInternal( const KoXmlElement & e, KoShapeLoadingContext & context ) const;
+    KoShape * createShapeInternal( const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element ) const;
 
 private:
     static KoShapeRegistry *s_singleton;

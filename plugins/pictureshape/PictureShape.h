@@ -22,6 +22,7 @@
 
 #include <QPixmap>
 #include <KoShape.h>
+#include <KoFrameShape.h>
 
 #define PICTURESHAPEID "PictureShape"
 
@@ -29,7 +30,7 @@ class KoImageData;
 class KoImageCollection;
 class KUrl;
 
-class PictureShape : public KoShape
+class PictureShape : public KoShape, public KoFrameShape
 {
 public:
     explicit PictureShape();
@@ -47,6 +48,9 @@ public:
 
     /// reimplemented
     void init(QMap<QString, KoDataCenter *>  dataCenterMap);
+
+protected:
+    virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
 
 private:
     /// reimplemented from KoShape

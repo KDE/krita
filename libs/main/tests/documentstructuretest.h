@@ -38,8 +38,9 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void rootAttributes_test();
-    void predefinedMetaData_test();
+    void rootAttributes();
+    void predefinedMetaData();
+    void multipleDocumentContents();
 
 private:
     KComponentData *componentData;

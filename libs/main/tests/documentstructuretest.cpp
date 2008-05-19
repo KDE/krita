@@ -81,25 +81,25 @@ static KoDocumentInfo *loadDocumentInfo(const QString &odt)
     return documentInfo;
 }
 
-void DocumentStructureTest::rootAttributes_test()
+void DocumentStructureTest::rootAttributes()
 {
     QString odt = QString(FILES_DATA_DIR) + "/DocumentStructure/rootAttributes.odt";
     QVERIFY(QFile(odt).exists());
     KoDocumentInfo *documentInfo = loadDocumentInfo(odt);
     QVERIFY(documentInfo);
 
-//    QCOMPARE(documentInfo->aboutInfo("creation-date"), QString("2005-12-13T11:59:58"));
-//    QCOMPARE(documentInfo->aboutInfo("initial-creator"), QString("Majid Ali Khan"));
+    QCOMPARE(documentInfo->aboutInfo("creation-date"), QString("2005-12-13T11:59:58"));
+    QCOMPARE(documentInfo->aboutInfo("initial-creator"), QString("Majid Ali Khan"));
     QCOMPARE(documentInfo->aboutInfo("date"), QString("2005-12-13T11:59:58"));
-//    QCOMPARE(documentInfo->aboutInfo("language"), QString("en-US"));
+    QCOMPARE(documentInfo->aboutInfo("language"), QString("en-US"));
     QCOMPARE(documentInfo->aboutInfo("editing-cycles"), QString("1"));
- //   QCOMPARE(documentInfo->aboutInfo("editing-duration"), QString("PT19S"));
+    QCOMPARE(documentInfo->aboutInfo("editing-duration"), QString("PT19S"));
 
     QCOMPARE(documentInfo->authorInfo("creator"), QString("Majid Ali Khan"));
     delete documentInfo;
 }
 
-void DocumentStructureTest::predefinedMetaData_test() 
+void DocumentStructureTest::predefinedMetaData() 
 {
     QString odt = QString(FILES_DATA_DIR) + "/DocumentStructure/predefined.odt";
     QVERIFY(QFile(odt).exists());
@@ -121,6 +121,19 @@ void DocumentStructureTest::predefinedMetaData_test()
     QCOMPARE(documentInfo->aboutInfo("date"), QString("2005-12-19T12:50:56"));
 
     QCOMPARE(documentInfo->authorInfo("creator"), QString("Majid Khan"));
+    delete documentInfo;
+}
+
+void DocumentStructureTest::multipleDocumentContents()
+{
+    QString odt = QString(FILES_DATA_DIR) + "/DocumentStructure/multipleDocumentContents.odt";
+    QVERIFY(QFile(odt).exists());
+    KoDocumentInfo *documentInfo = loadDocumentInfo(odt);
+    QVERIFY(documentInfo);
+    QCOMPARE(documentInfo->authorInfo("creator"), QString("Majid Ali Khan"));
+
+    // Should probably test if the document loads fine, but then the test would then depend
+    // on kotext. See libs/kotext/opendocument/tests/TestLoading.cpp::documentFromOdt.
     delete documentInfo;
 }
 

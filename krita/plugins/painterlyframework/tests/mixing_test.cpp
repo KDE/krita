@@ -43,7 +43,7 @@ void mix(int N, const float *data1, float c1, const float *data2, float c2, floa
 void MixingTest::initTestCase()
 {
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
-    list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.ill",  KStandardDirs::Recursive);
+    list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.xll",  KStandardDirs::Recursive);
 
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
     KisIlluminantProfile *p;

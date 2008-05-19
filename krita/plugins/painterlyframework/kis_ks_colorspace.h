@@ -35,6 +35,7 @@
 #include "compositeops/KoCompositeOpBurn.h"
 
 #include <QDomElement>
+#include <kdebug.h>
 
 template< typename _TYPE_, int _N_ >
 class KisKSColorSpace : public KoIncompleteColorSpace< KisKSColorSpaceTrait<_TYPE_,_N_> >
@@ -219,6 +220,7 @@ class KisKSColorSpaceFactory : public KoColorSpaceFactory
             if ((!p) || (p->wavelengths() != _N_)) {
                 return false;
             }
+            
             return true;
         }
 

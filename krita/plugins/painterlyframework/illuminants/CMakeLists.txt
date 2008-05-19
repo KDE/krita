@@ -1,3 +1,3 @@
-file(GLOB _ill_files *.ill)
-install(FILES ${_ill_files} 
+file(GLOB _xll_files *.xll)
+install(FILES ${_xll_files} 
 DESTINATION ${DATA_INSTALL_DIR}/krita/illuminants)

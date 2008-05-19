@@ -20,11 +20,11 @@
 #include "kis_illuminant_profile.h"
 
 #include <KoColorProfile.h>
+#include <QtXml/QtXml>
 
 #include <QDataStream>
-#include <QDebug>
 #include <QFile>
-
+#include <kis_debug.h>
 #include <cmath>
 
 double **allocateMatrix(int m, int n)
@@ -74,6 +74,69 @@ double invphi(double y)
 {
     return ( 1.0 + y - sqrt(2.0 * y + 1.0) ) / y;
 }
+
+//--------------------------
+// Helper functions for saving and loading
+void writeTransformations(QDomDocument & doc, QDomElement & transformations, double ** T, int numWavelengths)
+{
+    for (int i = 0; i < numWavelengths; i++) {
+        for (int j = 0; j < 3; j++) {
+            QDomElement transformation = doc.createElement("transformation");
+            transformation.setAttribute("value", T[j][i]);
+            transformations.appendChild(transformation);
+        }
+    }
+}
+
+void writePrimary(QDomDocument & doc, QDomElement & node, double * primary, int numWavelengths)
+{
+    for (int i = 0; i < numWavelengths; ++i) {
+        QDomElement wavelength = doc.createElement("wavelength");
+        wavelength.setAttribute("value", primary[i]);
+        node.appendChild(wavelength);
+    }
+}
+
+bool readPrimaries(double *wavelengths, QDomElement primary, int numWavelengths)
+{
+    QDomElement wvl = primary.firstChildElement("wavelength");
+    for (int i = 0; i < numWavelengths; i++) {
+        if (wvl.isNull()) {
+            dbgFile << "Not enough wavelengths";
+            return false;
+
+        }
+        QString v = wvl.attribute("value");
+        if (v.isEmpty()) {
+            dbgFile << "No wavelength value";
+            return false;
+        }
+        bool ok = true;
+        double d = v.toDouble(&ok);
+        if (!ok) {
+            dbgFile << "Could not convert" << v << " to double.";
+            return false;
+        }
+        wavelengths[i] = d;
+        wvl = wvl.nextSiblingElement("wavelength");
+    }
+    return true;
+}
+
+bool verifyCount(const QString & elementName, QDomElement & e, int num)
+{
+    // Check whether there are enough coeffs
+    int count = 0;
+    QDomElement c = e.firstChildElement(elementName);
+    while(! c.isNull()) {
+        ++count;
+        c = c.nextSiblingElement(elementName);
+    }
+    return (count == num);
+
+}
+//--------------- end helper functions for loading/saving
+
 
 KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
     : KoColorProfile(fileName),
@@ -127,54 +190,155 @@ bool KisIlluminantProfile::load()
 {
     reset();
 
-    if (fileName().isEmpty())
+    QFile inFile(fileName());
+    if (! inFile.open(QIODevice::ReadOnly)) {
+        dbgFile << "Could not open file for reading; " << fileName();
         return false;
+    }
 
-    QFile file(fileName());
-    if (!file.open(QIODevice::ReadOnly))
+    QDomDocument doc("illuminant");
+    if (!doc.setContent(&inFile)) {
+        dbgFile << "Not an XML file; " << fileName();
+        inFile.close();
         return false;
+    }
 
-    QDataStream data(&file);
+    QDomElement root = doc.documentElement();
+    if (root.nodeName() != "illuminant" || root.attribute("version") != "1") {
+        dbgFile << "Not an illuminant file or wrong version; " << fileName();
+        return false;
+    }
+    
+    m_wl = root.attribute("wavelengths").toInt();
+    if (m_wl == 0) {
+        dbgFile << "No wavelengths; " << fileName();
+        return false;
+    }
+    m_illuminant = root.attribute("name");
+    if (m_illuminant.isEmpty()) {
+        dbgFile << "No name; " << fileName();
+        return false;
+    }
+    m_T = allocateMatrix(3, m_wl);
+    QDomElement transformations = root.firstChildElement("transformations");
+    if (transformations.isNull()) {
+        dbgFile << "No transformations element; " << fileName();
+        return false;
+    }
+    if (!verifyCount("transformation", transformations, 3 * m_wl)) {
+        dbgFile << "Wrong number of transformations; " << fileName();
+        return false;
+    }
+    
+    QDomElement transformation = transformations.firstChildElement("transformation");
+    for (int i = 0; i < m_wl; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (transformation.isNull()) {
+                dbgFile << "Not enough transformations: " << fileName();
+                return false;
+            
+            }
+            QString v = transformation.attribute("value");
+            if (v.isEmpty()) {
+                dbgFile << "No value in transformation element " << fileName();
+                return 0;
+            }
+            bool ok = true;
+            double d = v.toDouble(&ok);
+            if (!ok) {
+                dbgFile << "Could not convert" << v << " to double: " << fileName();
+                return 0;
+            }
+            m_T[j][i] = d;
+            transformation = transformation.nextSiblingElement("transformation");
+        }
+    }
+    
+    QDomElement primaries = root.firstChildElement("primaries");
+    if (primaries.isNull()) {
+        dbgFile << "No primaries; " << fileName();
+        return false;
+    }
+        
+    m_red   = new double[m_wl];
+    QDomElement red = primaries.firstChildElement("red");
+    if (red.isNull()) {
+        dbgFile << "No red; " << fileName();
+        return false;
+    }
+    
+    if (!verifyCount("wavelength", red, m_wl)) {
+        dbgFile << "Wrong number of red wavelengths; " << m_wl << ": " << fileName();
+        return false;
+    }
 
-    {
-        qint8 letter;
-        while (true) {
-            data >> letter;
-            if (!letter)
-                break;
-            m_illuminant += (char)letter;
-        }
+    readPrimaries(m_red, red, m_wl);
+    
+    m_green = new double[m_wl];
+    QDomElement green = primaries.firstChildElement("green");
+    if (green.isNull()) {
+        dbgFile << "No green; " << fileName();
+        return false;
     }
-    {
-        qint8 tmp;
-        data >> tmp;
-        m_wl = (int)tmp;
-        m_T = allocateMatrix(3,m_wl);
-        for (int i = 0; i < m_wl; i++)
-            for (int j = 0; j < 3; j++)
-                data.readRawData((char*)&m_T[j][i],8);
+    if (!verifyCount("wavelength", green, m_wl)) {
+        dbgFile << "Wrong number of green wavelengths; " << fileName();
+        return false;
     }
-    {
-        m_red   = new double[m_wl];
-        m_green = new double[m_wl];
-        m_blue  = new double[m_wl];
-        for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_red[i],8);
-        }
-        for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_green[i],8);
-        }
-        for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_blue[i],8);
-        }
+    readPrimaries(m_green, green, m_wl);
+
+    m_blue  = new double[m_wl];
+    QDomElement blue = primaries.firstChildElement("blue");
+    if (blue.isNull()) {
+        dbgFile << "No blue: " << fileName();
+        return false;
     }
-    {
-        qint8 tmp;
-        data >> tmp;
-        nc = (int)tmp;
-        coeffs = new double[nc*m_wl];
-        for (quint8 i = 0; i < nc*m_wl; i++)
-            data.readRawData((char*)&coeffs[i],8);
+    if (!verifyCount("wavelength", blue, m_wl)) {
+        dbgFile << "Wrong number of blue wavelengths; " << fileName();
+        return false;
+    }
+    readPrimaries(m_blue, blue, m_wl);
+    
+    QDomElement X = root.firstChildElement("X");
+    if (X.isNull()) {
+        dbgFile << "No X: " << fileName();
+        return false;
+    }
+    
+    nc = X.attribute("nc").toInt();
+    if (nc == 0) {
+        dbgFile << "No number of coefficients " << fileName();
+        return false;
+    }
+
+    if (!verifyCount("coefficient", X, m_wl * nc)) {
+        dbgFile << "Got wrong number coefficients (" << nc * m_wl << "): " << fileName();
+        return false;
+    }
+    
+    coeffs = new double[nc*m_wl];
+
+    
+    QDomElement coefficient = X.firstChildElement("coefficient");
+    for (int i = 0; i < nc * m_wl; ++i) {
+        if (coefficient.isNull()) {
+            dbgFile << "Got wrong number of coefficients";
+            return false;
+        }
+        QString v = coefficient.attribute("value");
+        if (v.isEmpty()) {
+            dbgFile << "No coefficient value " << fileName();
+            return false;
+        }
+        bool ok = true;
+        double d = v.toDouble(&ok);
+        if (!ok) {
+            dbgFile << "Could not convert" << v << " to double: " << fileName();
+            return false;
+        }
+        
+        coeffs[i] = d;
+        
+        coefficient = coefficient.nextSiblingElement("coefficient");
     }
 
     // Initialize the reflectance vector and channel converter
@@ -194,28 +358,45 @@ bool KisIlluminantProfile::save(const QString &fileName)
     if (!file.open(QIODevice::WriteOnly))
         return false;
 
-    QDataStream data(&file);
+    // Create a dom document & save it
+    QDomDocument doc("illuminant");
+    QDomElement root = doc.createElement("illuminant");
+    doc.appendChild(root);
 
-    for (int i = 0; i < m_illuminant.size(); i++)
-        data << (qint8)m_illuminant[i].toAscii();
-    data << (qint8)0;
+    root.setAttribute("version", 1);
+    root.setAttribute("name", m_illuminant);
+    root.setAttribute("wavelengths", m_wl);
 
-    data << (qint8)m_wl;
-    for (int i = 0; i < m_wl; i++)
-        for (int j = 0; j < 3; j++)
-            data.writeRawData((char*)&m_T[j][i],8);
+    QDomElement transformations = doc.createElement("transformations");
+    root.appendChild(transformations);
+    writeTransformations(doc, transformations, m_T, m_wl);
 
-    for (int i = 0; i < m_wl; i++)
-        data.writeRawData((char*)&m_red[i],8);
-    for (int i = 0; i < m_wl; i++)
-        data.writeRawData((char*)&m_green[i],8);
-    for (int i = 0; i < m_wl; i++)
-        data.writeRawData((char*)&m_blue[i],8);
+    QDomElement primaries = doc.createElement("primaries");
+    root.appendChild(primaries);
 
-    data << (qint8)nc;
-    for (qint8 i = 0; i < nc*m_wl; i++)
-        data.writeRawData((char*)&coeffs[i],8);
+    QDomElement red = doc.createElement("red");
+    primaries.appendChild(red);
+    writePrimary(doc, red, m_red, m_wl);
     
+    QDomElement green = doc.createElement("green");
+    primaries.appendChild(green);
+    writePrimary(doc, green, m_green, m_wl);
+    
+    QDomElement blue = doc.createElement("blue");
+    primaries.appendChild(blue);
+    writePrimary(doc, blue, m_blue, m_wl);
+    
+    QDomElement coefficients = doc.createElement("X");
+    coefficients.setAttribute("nc", nc);
+    root.appendChild(coefficients);
+    
+    for (int i = 0; i < m_wl * nc; ++i) {
+        QDomElement coeff = doc.createElement("coefficient");
+        coeff.setAttribute("value", coeffs[i]);
+        coefficients.appendChild(coeff);
+    }
+    
+    QTextStream(&file) << doc.toString();
     return true;
 }
 

@@ -49,59 +49,36 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
     KGlobal::mainComponent().dirs()->addResourceType("illuminant_profiles", 0, "share/apps/krita/illuminants");
-    list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.ill",  KStandardDirs::Recursive);
+    list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.xll",  KStandardDirs::Recursive);
 
     KisIlluminantProfile *p;
     foreach(QString curr, list) {
         p = new KisIlluminantProfile(curr);
-        p->load();
-        f->addProfile(p);
+        bool r = p->load();
+        if(!r) {
+            qWarning() << "failed to load profile " << curr;
+            delete p;
+        }
+        else {
+            f->addProfile(p);
+        }
     }
 
     e->add(new KisKSColorSpaceEngine<3>);
     e->add(new KisKSColorSpaceEngine<4>);
-//    e->add(new KisKSColorSpaceEngine<5>);
     e->add(new KisKSColorSpaceEngine<6>);
-/*    e->add(new KisKSColorSpaceEngine<7>);
-    e->add(new KisKSColorSpaceEngine<8>);
-    e->add(new KisKSColorSpaceEngine<9>); */
     e->add(new KisKSColorSpaceEngine<10>);
 
     f->add(new KisKSF32ColorSpaceFactory<3>);
     f->add(new KisKSF32ColorSpaceFactory<4>);
-//    f->add(new KisKSF32ColorSpaceFactory<5>);
     f->add(new KisKSF32ColorSpaceFactory<6>);
-/*    f->add(new KisKSF32ColorSpaceFactory<7>);
-    f->add(new KisKSF32ColorSpaceFactory<8>);
-    f->add(new KisKSF32ColorSpaceFactory<9>); */
     f->add(new KisKSF32ColorSpaceFactory<10>);
 #ifdef HAVE_OPENEXR
     f->add(new KisKSF16ColorSpaceFactory<3>);
     f->add(new KisKSF16ColorSpaceFactory<4>);
-//    f->add(new KisKSF16ColorSpaceFactory<5>);
     f->add(new KisKSF16ColorSpaceFactory<6>);
-/*    f->add(new KisKSF16ColorSpaceFactory<7>);
-    f->add(new KisKSF16ColorSpaceFactory<8>);
-    f->add(new KisKSF16ColorSpaceFactory<9>); */
     f->add(new KisKSF16ColorSpaceFactory<10>);
 #endif
-/*
-    QVector<const KoColorSpace *> css;
-    css.append(f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSF32ColorSpace<9>::ColorSpaceId().id(),0));
-#ifdef HAVE_OPENEXR
-    css.append(f->colorSpace(KisKSF16ColorSpace<5>::ColorSpaceId().id(),0));
-    css.append(f->colorSpace(KisKSF16ColorSpace<9>::ColorSpaceId().id(),0));
-#endif
-
-    foreach(const KoColorSpace *cs, css) {
-        if(!cs)
-            continue;
-        KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID(cs->id()+"HISTO", i18n("%1 Histogram", cs->name())), cs->clone()));
-    }
-*/
 }
 
 KSColorSpacesPlugin::~KSColorSpacesPlugin()

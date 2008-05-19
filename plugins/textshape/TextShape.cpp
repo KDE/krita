@@ -248,11 +248,7 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
 bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
     loadOdfAttributes( element, context, OdfAllAttributes );
-    //HACK ? I'm not sure at all if this code should be here, but it works.
-    if ((element.tagName() == "text") && (element.namespaceURI() == KoXmlNS::office))
-        return loadOdfFrameElement(element, context);
-    else
-        return loadOdfFrame( element, context );
+    return loadOdfFrame( element, context );
 }
 
 bool TextShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )

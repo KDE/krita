@@ -36,6 +36,7 @@ Name[sr@Latn]=Filter za šum
 Name[sv]=Brusfilter
 Name[uk]=Фільтр шуму
 Name[uz]=Shovqin filteri
+Name[uz@cyrillic]=Шовқин филтери
 Name[zh_TW]=雜訊過濾器
 Comment=Add noise to an image
 Comment[bg]=Добавяне на шум към изображение

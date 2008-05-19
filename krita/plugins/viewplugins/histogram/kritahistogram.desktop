@@ -35,6 +35,7 @@ Name[sr@Latn]=Histogramski priključak
 Name[sv]=Insticksprogram med histogram
 Name[uk]=Втулок гістограм
 Name[uz]=Gistogramma plagini
+Name[uz@cyrillic]=Гистограмма плагини
 Name[zh_CN]=直方图插件
 Name[zh_TW]=直方圖外掛程式
 ServiceTypes=Krita/ViewPlugin

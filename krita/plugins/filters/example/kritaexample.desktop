@@ -74,6 +74,7 @@ Comment[sr@Latn]=Invertuje boje na slici
 Comment[sv]=Invertera färgerna i en bild
 Comment[uk]=Інвертація кольорів зображення
 Comment[uz]=Rasmning ranglarini teskarisiga almashtirish
+Comment[uz@cyrillic]=Расмнинг рангларини тескарисига алмаштириш
 Comment[zh_TW]=倒轉圖片的色彩
 ServiceTypes=Krita/Filter
 Type=Service

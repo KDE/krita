@@ -33,6 +33,7 @@ Name[sr@Latn]=YCbCr model boja (8-bitno celobrojno)
 Name[sv]=YCbCr-färgmodell (8-bitars heltal)
 Name[uk]=Модель кольорів YCbCr (ціле 8-біт)
 Name[uz]=YCbCr rang usuli (8-bit butun)
+Name[uz@cyrillic]=YCbCr ранг усули (8-бит бутун)
 Name[zh_TW]=YCbCr 色彩模型 (16-bit 整數)
 Comment=Color model for 8-bit integer per channel YCbCr images
 Comment[bg]=Цветови модел за 16 битови YCbCr изображения

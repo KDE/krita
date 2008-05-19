@@ -33,6 +33,7 @@ Name[sr@Latn]=Priključak za rotiranje slike
 Name[sv]=Insticksprogram för rotera bild
 Name[uk]=Втулок обертання зображень
 Name[uz]=Rasmni burish plagini
+Name[uz@cyrillic]=Расмни буриш плагини
 Name[zh_TW]=旋轉圖片外掛程式
 ServiceTypes=Krita/ViewPlugin
 Type=Service

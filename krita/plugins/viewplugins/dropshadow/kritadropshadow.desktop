@@ -32,6 +32,7 @@ Name[sr@Latn]=Padajuća senka
 Name[sv]=Fallskugga
 Name[uk]=Тінь
 Name[uz]=Soya tushirish
+Name[uz@cyrillic]=Соя тушириш
 Name[zh_CN]=阴影
 ServiceTypes=Krita/ViewPlugin
 Type=Service

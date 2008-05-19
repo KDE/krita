@@ -33,6 +33,7 @@ Name[sr@Latn]=Priključak za varijacije
 Name[sv]=Insticksprogram med variationer
 Name[uk]=Варіації
 Name[uz]=Variatsiya plagini
+Name[uz@cyrillic]=Вариация плагини
 Name[zh_TW]=變動外掛程式
 ServiceTypes=Krita/ViewPlugin
 Type=Service

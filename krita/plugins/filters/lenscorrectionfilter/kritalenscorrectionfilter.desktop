@@ -62,6 +62,7 @@ Name[sr@Latn]=Filter za popravku sočiva
 Name[sv]=Linskorrektionsfilter
 Name[uk]=Корекція спотворення лінзи
 Name[uz]=Linzani toʻgʻrilash filteri
+Name[uz@cyrillic]=Линзани тўғрилаш филтери
 Name[zh_TW]=LensCorrection 過濾器
 ServiceTypes=Krita/Filter
 Type=Service

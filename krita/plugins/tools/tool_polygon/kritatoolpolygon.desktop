@@ -44,6 +44,7 @@ Name[sr@Latn]=Alat za poligone
 Name[sv]=Polygonverktyg
 Name[uk]=Засіб багатокутника
 Name[uz]=Pligon vositasi
+Name[uz@cyrillic]=Плигон воситаси
 Name[zh_CN]=多边形工具
 Name[zh_TW]=多邊形工具
 ServiceTypes=Krita/Tool

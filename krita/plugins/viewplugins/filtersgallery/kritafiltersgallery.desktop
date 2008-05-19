@@ -37,6 +37,7 @@ Name[sr@Latn]=Galerija filtera
 Name[sv]=Filtrergalleri
 Name[uk]=Галерея фільтрів
 Name[uz]=Filterlar toʻplami
+Name[uz@cyrillic]=Филтерлар тўплами
 Name[zh_CN]=滤镜库
 Name[zh_TW]=濾鏡畫廊
 ServiceTypes=Krita/ViewPlugin

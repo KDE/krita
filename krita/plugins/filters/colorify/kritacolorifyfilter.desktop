@@ -35,6 +35,7 @@ Name[sr@Latn]=Filteri boja (proširenje)
 Name[sv]=Färgfilter (utökning)
 Name[uk]=Фільтри кольору (розширення)
 Name[uz]=Rang filterlari (kengaytma)
+Name[uz@cyrillic]=Ранг филтерлари (кенгайтма)
 Name[zh_TW]=色彩過濾器（延伸）
 ServiceTypes=Krita/Filter
 Type=Service

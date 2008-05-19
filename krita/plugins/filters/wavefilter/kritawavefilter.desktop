@@ -65,6 +65,7 @@ Name[sr@Latn]=Filter za talase
 Name[sv]=Vågfilter
 Name[uk]=Хвилі
 Name[uz]=Toʻlqin filteri
+Name[uz@cyrillic]=Тўлқин филтери
 Name[zh_TW]=Wave 過濾器
 ServiceTypes=Krita/Filter
 Type=Service

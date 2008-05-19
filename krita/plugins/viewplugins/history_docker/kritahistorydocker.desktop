@@ -66,6 +66,7 @@ Comment[sr@Latn]=Sidraš istorijata naredbi za Krita-u
 Comment[sv]=Dockning av kommandohistorik för Krita
 Comment[uk]=Швартувальник історії команд для Krita
 Comment[uz]=Krita uchun buyruqlar tarixi paneli
+Comment[uz@cyrillic]=Krita учун буйруқлар тарихи панели
 Comment[zh_TW]=Krita 的指令紀錄停駐點
 ServiceTypes=Krita/ViewPlugin
 Type=Service

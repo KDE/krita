@@ -39,6 +39,7 @@ Name[sr@Latn]=Snimak ekrana
 Name[sv]=Skärmdump
 Name[uk]=Знімок екрана
 Name[uz]=Skrinshot
+Name[uz@cyrillic]=Скриншот
 Name[zh_CN]=抓图
 Name[zh_TW]=螢幕快照
 ServiceTypes=Krita/ViewPlugin

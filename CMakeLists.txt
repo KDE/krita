@@ -7,13 +7,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")
 set(GENERIC_KOFFICE_LIB_SOVERSION "5")
 
-if(WIN32)
-    set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
-                        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-                        LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-                        ARCHIVE DESTINATION ${LIB_INSTALL_DIR} )
-endif(WIN32)
-
 # search packages used by KDE
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
@@ -137,6 +130,13 @@ if(Boost_FOUND)
 else(Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
 endif(Boost_FOUND)
+
+if(WIN32)
+    set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
+                        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+                        LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+                        ARCHIVE DESTINATION ${LIB_INSTALL_DIR} )
+endif(WIN32)
 
 add_subdirectory(libs)
 add_subdirectory(interfaces)

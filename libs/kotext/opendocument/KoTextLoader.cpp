@@ -617,9 +617,10 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
         }
         else if ( isTextNS && localName == "number" ) // text:number
         {
-            // TODO is this true?
-            // This is the number in front of a numbered paragraph,
-            // written out to help export filters. We can ignore it.
+            /*                ODF Spec, §4.1.1, Formatted Heading Numbering
+            If a heading has a numbering applied, the text of the formatted number can be included in a
+            <text:number> element. This text can be used by applications that do not support numbering of
+            headings, but it will be ignored by applications that support numbering.                   */
         }
         else if ( isDrawNS && localName == "frame" ) // draw:frame
         {
@@ -673,14 +674,9 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     if( !shape ) {
         return;
     }
-
-    //TEMP HACK; will be later automated
-    //shape->setAdditionalAttribute("text:anchor-type", frameElem.attributeNS(KoXmlNS::text, "anchor-type", "paragraph"));
-    //shape->setAdditionalAttribute("text:anchor-page-number", frameElem.attributeNS(KoXmlNS::text, "anchor-page-number", "paragraph"));
-
+    
     KoTextAnchor *anchor = new KoTextAnchor(shape);
     anchor->loadOdfFromShape();
-
     d->textSharedData->shapeInserted(shape);
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );

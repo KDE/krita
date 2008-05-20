@@ -81,7 +81,7 @@ public:
     virtual void activate( KoPAViewMode * previousViewMode );
 
     /**
-     * @bried This method is called when the view mode is deactivated
+     * @brief This method is called when the view mode is deactivated
      *
      * The default implementation does nothing.
      */
@@ -123,8 +123,24 @@ public:
      */
     virtual void updateActivePage( KoPAPageBase * page );
 
+    /**
+     * @brief Update the view when a new shape is added to the document
+     *
+     * The default implementation does nothing. The derived class' implementation 
+     * should check whether the new shape is added to currently active page.
+     *
+     * @param shape the new shape added to the document
+     */
     virtual void addShape( KoShape *shape );
 
+    /**
+     * @brief Update the view when a shape is removed from the document
+     *
+     * The default implementation does nothing. The derived class' implementation 
+     * should check whether the shape is removed from currently active page.
+     *
+     * @param shape the shape removed from the document
+     */
     virtual void removeShape( KoShape *shape );
 
 protected:

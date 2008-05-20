@@ -49,7 +49,12 @@ class KOPAGEAPP_EXPORT KoPAView : public KoView
 public:
     enum KoPAAction
     {
-        ActionDeletePage = 1
+        ActionInsertPage = 1,
+        ActionCopyPage   = 2,
+        ActionDeletePage = 4,
+        ActionViewShowMasterPages = 8,
+        ActionFormatMasterPage = 16,
+        AllActions       = 0xFF
     };
 
     /**

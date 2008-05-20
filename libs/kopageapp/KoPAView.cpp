@@ -530,9 +530,25 @@ void KoPAView::deletePage()
 
 void KoPAView::setActionEnabled( int actions, bool enable )
 {
+    if ( actions & ActionInsertPage )
+    {
+        m_actionInsertPage->setEnabled( enable );
+    }
+    if ( actions & ActionCopyPage )
+    {
+        m_actionCopyPage->setEnabled( enable );
+    }
     if ( actions & ActionDeletePage )
     {
         m_actionDeletePage->setEnabled( enable );
+    }
+    if ( actions & ActionViewShowMasterPages )
+    {
+        m_actionViewShowMasterPages->setEnabled( enable );
+    }
+    if ( actions & ActionFormatMasterPage )
+    {
+        m_actionMasterPage->setEnabled( enable );
     }
 }
 

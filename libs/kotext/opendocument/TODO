@@ -10,8 +10,9 @@
     each time and assume that we only need to append content anyway?
 
 - bring back header+footers :)
-    ==> loading works and saving is work under progress
-    ==> support also page-styles with different headers/footers
+    ==> loading and saving works
+    ==> TODO atm we name the master-page A1 rather then "Standard" what needs to be fixed
+    ==> TODO support also page-styles with different headers/footers
 
 - What about parent-styles aka style-inheritance? Does this REALLY work already?
 

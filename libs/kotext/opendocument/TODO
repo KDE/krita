@@ -21,7 +21,7 @@
 
 - unittests :)
     ==> see libs/kotext/opendocument/tests
-    * anchors
+    we could need additional tests that do the loading+saving roundtrip and let us know what got lost
 
 - probably related to the crash with the OpenDoc1.1-specs;
     http://lists.kde.org/?l=koffice-devel&m=121068865723376&w=2
@@ -29,3 +29,12 @@
 - paragraph background-color does not work if the color is defined as style
 
 - support loading+saving page-styles && add GUI-functionality to KWord for it
+
+- implement loading+saving all types of anchors
+    see KoTextAnchor and KWOdfSharedLoadingData::shapeInserted()
+
+- loading+saving frames
+
+- loading+saving variables
+
+- loading+saving footnotes

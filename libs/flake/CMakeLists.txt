@@ -159,8 +159,20 @@ install(
     KoCanvasBase.h
     KoCanvasObserver.h
     KoCanvasResourceProvider.h
+    KoFlake.h
     KoInputDevice.h
+    KoInsets.h
+    KoPathSegment.h
     KoPointerEvent.h
+    KoSelection.h
+    KoShape.h
+    KoShapeControllerBase.h
+    KoShapeFactory.h
+    KoShapeLoadingContext.h
+    KoShapeManager.h
+    KoShapeRegistry.h
+    KoShapeSavingContext.h
+    KoSnapData.h
     KoTool.h
     KoToolManager.h
     KoToolFactory.h

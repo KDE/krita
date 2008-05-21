@@ -189,6 +189,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::StrikeOutMode,
         KoCharacterStyle::Language,
         KoCharacterStyle::Country,
+        KoCharacterStyle::FontCharset,
         -1
     };
 
@@ -618,6 +619,12 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
                 ; // TODO: no hint available in Qt yet
         }
 #endif
+
+        if (styleStack.hasProperty( KoXmlNS::style, "font-charset" ) ) {
+            // this property is not required by Qt, since Qt auto selects the right font based on the text
+            // The only charset of interest to us is x-symbol - this should disable spell checking
+            d->setProperty(KoCharacterStyle::FontCharset, styleStack.property(KoXmlNS::style, "font-charset"));
+        }
     }
     if ( styleStack.hasProperty( KoXmlNS::style, "font-family" ) )
         fontName = styleStack.property( KoXmlNS::style, "font-family" );
@@ -803,7 +810,7 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
 
     QString language = styleStack.property(KoXmlNS::fo, "language");
     QString country = styleStack.property(KoXmlNS::fo, "country");
-    setLocale(language, country);
+    setLocale(country, language);
 
     // The fo:background-color attribute specifies the background color of a paragraph.
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
@@ -869,7 +876,6 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     /*
       Missing properties:
       style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
-      style:font-charset, 3.10.14 - not necessary with Qt
       fo:letter-spacing, 3.10.16 - not implemented in kotext
       style:text-relief, 3.10.20 - not implemented in kotext
       style:text-blinking, 3.10.27 - not implemented in kotext IIRC
@@ -1012,6 +1018,8 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
         } else if (key == QTextFormat::TextOutline) {
             QPen outline = textOutline();
             style.addProperty("style:text-outline", outline.style() == Qt::NoPen ? "false" : "true", KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::FontCharset) {
+            style.addProperty("style:font-charset", d->stylesPrivate->value(KoCharacterStyle::FontCharset).toString(), KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

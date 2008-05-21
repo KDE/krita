@@ -118,7 +118,6 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
         case KoParagraphStyle::AutoTextIndent:
             key = "autotextindent";
             value = properties[id].toBool()? "true" : "false" ;
-            // qDebug() << key << " = " << id;
             break;
         case QTextFormat::BlockIndent:
             key = "indent";
@@ -146,39 +145,36 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
         case KoParagraphStyle::LeftBorderWidth:
             key = "border-width-left";
             value = QString::number(properties[id].toDouble()) ;
-            // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::TopBorderWidth:
             key = "border-width-top";
             value = QString::number(properties[id].toDouble()) ;
-            // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::RightBorderWidth:
             key = "border-width-right";
             value = QString::number(properties[id].toDouble()) ;
-            // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::BottomBorderWidth:
             key = "border-width-bottom";
             value = QString::number(properties[id].toDouble()) ;
-            // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::LeftBorderStyle:
             key = "border-style-left";
             value = QString::number(properties[id].toDouble()) ;
-            // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::LeftBorderSpacing:
             key = "inner-border-spacing-left";
             value = QString::number(properties[id].toDouble()) ;
-            // qDebug() << key << " = " << id;
             break;
         case KoParagraphStyle::LeftInnerBorderWidth:
             key = "inner-border-width-left";
             value = QString::number(properties[id].toDouble()) ;
-            // qDebug() << key << " = " << id;
             break;
 #endif
+        case KoCharacterStyle::FontCharset:
+            key = "font-charset";
+            value = properties[id].toString();
+            break;
         default:
             break;
         }

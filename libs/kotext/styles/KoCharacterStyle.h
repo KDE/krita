@@ -65,7 +65,8 @@ public:
         UnderlineMode,
         StrikeOutMode,
         Language,
-        Country
+        Country,
+        FontCharset
     };
 
     /// list of possible line type : no line, single line, double line

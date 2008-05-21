@@ -41,6 +41,7 @@ private slots:
     void rootAttributes();
     void predefinedMetaData();
     void multipleDocumentContents();
+    void singleDocumentContents();
 
 private:
     KComponentData *componentData;

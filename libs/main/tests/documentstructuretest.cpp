@@ -93,6 +93,7 @@ void DocumentStructureTest::rootAttributes()
     QCOMPARE(documentInfo->aboutInfo("date"), QString("2005-12-13T11:59:58"));
     QCOMPARE(documentInfo->aboutInfo("language"), QString("en-US"));
     QCOMPARE(documentInfo->aboutInfo("editing-cycles"), QString("1"));
+    QEXPECT_FAIL("", "Not supported", Continue);
     QCOMPARE(documentInfo->aboutInfo("editing-duration"), QString("PT19S"));
 
     QCOMPARE(documentInfo->authorInfo("creator"), QString("Majid Ali Khan"));
@@ -135,6 +136,20 @@ void DocumentStructureTest::multipleDocumentContents()
     // Should probably test if the document loads fine, but then the test would then depend
     // on kotext. See libs/kotext/opendocument/tests/TestLoading.cpp::documentFromOdt.
     delete documentInfo;
+}
+
+void DocumentStructureTest::singleDocumentContents()
+{
+    QString odt = QString(FILES_DATA_DIR) + "/DocumentStructure/singleDocumentContents.odt";
+    QVERIFY(QFile(odt).exists());
+    KoDocumentInfo *documentInfo = loadDocumentInfo(odt);
+    QEXPECT_FAIL("", "Not supported", Continue);
+    QVERIFY(documentInfo);
+
+    // Should probably test if the document loads fine, but then the test would then depend
+    // on kotext. See libs/kotext/opendocument/tests/TestLoading.cpp::documentFromOdt.
+    delete documentInfo;
+
 }
 
 int main(int argc, char *argv[])

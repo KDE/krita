@@ -40,7 +40,7 @@ KoDocumentInfo::KoDocumentInfo( QObject* parent ) : QObject( parent )
 {
     m_aboutTags << "title" << "description" << "subject" << "comments"
         << "keyword" << "initial-creator" << "editing-cycles"
-        << "date" << "creation-date";
+        << "date" << "creation-date" << "language";
 
     m_authorTags << "creator" << "initial" << "author-title"
         << "email" << "telephone" << "telephone-work"
@@ -313,7 +313,8 @@ bool KoDocumentInfo::loadOasisAboutInfo( const KoXmlNode& metaDoc )
             if ( !e.text().isEmpty() )
                 keywords << e.text().trimmed();
         }
-        else if( tag == "title" || tag == "description" || tag == "subject" || tag == "date" )
+        else if( tag == "title" || tag == "description" || tag == "subject" 
+                 || tag == "date" || tag == "language")
         {
             KoXmlElement e  = KoXml::namedItemNS( metaDoc, KoXmlNS::dc, tag.toLatin1().constData() );
             if ( !e.isNull() && !e.text().isEmpty() )

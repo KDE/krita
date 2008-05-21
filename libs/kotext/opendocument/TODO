@@ -11,7 +11,6 @@
 
 - bring back header+footers :)
     ==> loading and saving works
-    ==> TODO atm we name the master-page A1 rather then "Standard" what needs to be fixed
     ==> TODO support also page-styles with different headers/footers
 
 - What about parent-styles aka style-inheritance? Does this REALLY work already?
@@ -30,6 +29,7 @@
 - paragraph background-color does not work if the color is defined as style
 
 - support loading+saving page-styles && add GUI-functionality to KWord for it
+    ==> under progress
 
 - implement loading+saving all types of anchors
     see KoTextAnchor and KWOdfSharedLoadingData::shapeInserted()

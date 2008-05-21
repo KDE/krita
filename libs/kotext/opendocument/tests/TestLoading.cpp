@@ -88,6 +88,8 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
 
     // this should really be actualFormat.properties() == expectedFormat.properties()
     bool equal = actualFormat.font() == expectedFormat.font()
+           && actualFormat.property(KoCharacterStyle::FontCharset).toString()
+                 == expectedFormat.property(KoCharacterStyle::FontCharset).toString()
            && actualFormat.font().styleHint() == expectedFormat.font().styleHint() // test this explicity since font == ignores it
            && actualFormat.foreground() == expectedFormat.foreground()
            && actualFormat.background() == expectedFormat.background()
@@ -103,15 +105,15 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
            && qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
                   == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))
            && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt()  
            && actualFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
                   == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
            && actualFormat.property(KoCharacterStyle::StrikeOutMode).toInt() 
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt() 
            && actualFormat.property(KoCharacterStyle::Country).toString()
                   == expectedFormat.property(KoCharacterStyle::Country).toString()
            && actualFormat.property(KoCharacterStyle::Language).toString()
-                  == expectedFormat.property(KoCharacterStyle::Language).toString()
+                  == expectedFormat.property(KoCharacterStyle::Language).toString() 
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
     
     if (!equal)
@@ -488,6 +490,7 @@ void TestLoading::testLoading_data()
 
     QTest::newRow("Colors") << "FormattingProperties/TextFormattingProperties/color";
     QTest::newRow("Country") << "FormattingProperties/TextFormattingProperties/country";
+    QTest::newRow("Font charset") << "FormattingProperties/TextFormattingProperties/fontCharacterSet";
     QTest::newRow("Font family") << "FormattingProperties/TextFormattingProperties/fontFamily";
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     QTest::newRow("Font family generic") << "FormattingProperties/TextFormattingProperties/fontFamilyGeneric";

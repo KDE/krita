@@ -22,10 +22,11 @@ testsuite.
 
 ./TextContents/Headings/test.xml:   <result>unsupported</result>
 
-./General/DocumentStructure/MultipleDocumentContents/test.xml:   <result>fullsupport</result>
+*./General/DocumentStructure/MultipleDocumentContents/test.xml:   <result>fullsupport</result>
 ./General/DocumentStructure/SingleDocumentContents/test.xml:   <result>fullsupport</result>
 ./General/DocumentStructure/MetaData/UserDefined/test.xml:   <result>fullsupport</result>
-./General/DocumentStructure/MetaData/Predefined/test.xml:   <result>fullsupport</result>
+*./General/DocumentStructure/MetaData/Predefined/test.xml:   <result>fullsupport</result>
+*./General/DocumentStructure/MetaData/RootAttributes/test.xml:   <result>fullsupport</result>
 
 ./TextFrames/framePadding/test.xml:   <result>fullsupport</result>
 ./TextFrames/frameIndividualPadding/test.xml:   <result>fullsupport</result>
@@ -113,7 +114,7 @@ testsuite.
 ./FormattingProperties/TextFormattingProperties/textEmphasis/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/scriptType/test.xml:   <result>unknown</result>
 *./FormattingProperties/TextFormattingProperties/fontWeight/test.xml:   <result>partial</result>
-./FormattingProperties/TextFormattingProperties/fontCharacterSet/test.xml:   <result>unknown</result>
+*./FormattingProperties/TextFormattingProperties/fontCharacterSet/test.xml:   <result>unknown</result>
 ./FormattingProperties/TextFormattingProperties/textScale/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/lineThroughWidth/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/underliningWidth/test.xml:   <result>unsupported</result>

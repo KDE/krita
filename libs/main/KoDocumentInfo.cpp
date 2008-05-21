@@ -229,9 +229,9 @@ bool KoDocumentInfo::loadAuthorInfo( const KoXmlElement& e )
             continue;
 
         if( e.tagName() == "full-name" )
-            setAuthorInfo( "creator", e.text() );
+            setAuthorInfo( "creator", e.text().trimmed() );
         else
-            setAuthorInfo( e.tagName(), e.text() );
+            setAuthorInfo( e.tagName(), e.text().trimmed() );
     }
 
     return true;
@@ -311,19 +311,19 @@ bool KoDocumentInfo::loadOasisAboutInfo( const KoXmlNode& metaDoc )
         //kDebug( 30003 )<<"localName="<<e.localName();
         if( tag == "keyword" ) {
             if ( !e.text().isEmpty() )
-                keywords << e.text();
+                keywords << e.text().trimmed();
         }
         else if( tag == "title" || tag == "description" || tag == "subject" || tag == "date" )
         {
             KoXmlElement e  = KoXml::namedItemNS( metaDoc, KoXmlNS::dc, tag.toLatin1().constData() );
             if ( !e.isNull() && !e.text().isEmpty() )
-                setAboutInfo( tag, e.text() );
+                setAboutInfo( tag, e.text().trimmed() );
         }
         else
         {
             KoXmlElement e  = KoXml::namedItemNS( metaDoc, KoXmlNS::meta, tag.toLatin1().constData() );
             if ( !e.isNull() && !e.text().isEmpty() )
-                setAboutInfo( tag, e.text() );
+                setAboutInfo( tag, e.text().trimmed() );
         }
     }
     if( keywords.count() > 0 )

@@ -150,6 +150,16 @@ void KisCanvas2::addCommand(QUndoCommand *command)
     m_d->view->koDocument()->addCommand( command );
 }
 
+void KisCanvas2::startMacro(const QString &title)
+{
+    m_d->view->koDocument()->beginMacro( title );
+}
+
+void KisCanvas2::stopMacro()
+{
+    m_d->view->koDocument()->endMacro( );
+}
+
 KoShapeManager* KisCanvas2::shapeManager() const
 {
     if (!m_d->view) return m_d->shapeManager;

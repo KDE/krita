@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QSize>
+#include <QString>
 
 #include <KoCanvasBase.h>
 #include <krita_export.h>
@@ -73,6 +74,10 @@ public: // KoCanvasBase implementation
     bool snapToGrid() const;
 
     void addCommand(QUndoCommand *command);
+    
+    virtual void startMacro(const QString &title);
+    virtual void stopMacro();
+
 
     /**
      * Return the right shape manager for the current layer. That is

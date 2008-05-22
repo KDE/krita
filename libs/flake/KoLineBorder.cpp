@@ -218,6 +218,16 @@ QVector<qreal> KoLineBorder::lineDashes() const
     return d->pen.dashPattern();
 }
 
+void KoLineBorder::setDashOffset( double dashOffset )
+{
+    d->pen.setDashOffset( dashOffset );
+}
+
+double KoLineBorder::dashOffset() const
+{
+    return d->pen.dashOffset();
+}
+
 void KoLineBorder::setLineBrush( const QBrush & brush )
 {
     d->brush = brush;

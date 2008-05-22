@@ -76,6 +76,10 @@ public:
     Qt::PenStyle lineStyle() const;
     /// Returns the line dashes
     QVector<qreal> lineDashes() const;
+    /// Sets the dash offset
+    void setDashOffset( double dashOffset );
+    /// Returns the dash offset
+    double dashOffset() const;
 
     /// Returns the color
     const QColor & color() const;

@@ -156,27 +156,6 @@ install( FILES flake.desktop flaketool.desktop flakeshape.desktop flakedevice.de
 install(
     FILES
     flake_export.h
-    KoCanvasBase.h
-    KoCanvasObserver.h
-    KoCanvasResourceProvider.h
-    KoFlake.h
-    KoInputDevice.h
-    KoInsets.h
-    KoPathSegment.h
-    KoPointerEvent.h
-    KoSelection.h
-    KoShape.h
-    KoShapeControllerBase.h
-    KoShapeFactory.h
-    KoShapeLoadingContext.h
-    KoShapeManager.h
-    KoShapeRegistry.h
-    KoShapeSavingContext.h
-    KoSnapData.h
-    KoTool.h
-    KoToolManager.h
-    KoToolFactory.h
-    KoToolRegistry.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 )

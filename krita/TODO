@@ -329,3 +329,72 @@ Post 2.0
     
     * a kimgio slave so other kde apps can show .kra images
     * a kimgio slave so other kde apps can show .ora images
+
+
+
+Remarks by Enkhitan
+=========================================================================================
+
+*tablet & paint freely tool:
+ 
+  - the first "stamp" of a stroke is shifted to bottom-right, of half 
+the size of the brush. It only happens when tablet pressure is not set 
+on "size" (or maybe that the first stamp is too small).
+  - pressure for size is mapped to 0-200% of the size of the brush, 
+instead of 0-100% (it could be interesting to keep it as an option 
+though, to fake real soft brushes like chinese brushes, unless curves 
+settings for pressure comes back one day).
+  - pressure for opacity & darken are broken.
+  - the eraser composite mode erases its whole tile/stamp minus the 
+brush stamp.
+  - strokes are "cut" by borders of the canvas.
+  - after painting for more than one hour, glitches appear in stroke, 
+and are followed soon after by a crash. These glitches are just in the 
+display, they are not saved in the document. They looks like the kind 
+you get when you video card is seriously overheating, or defectious (I 
+have a backtrace, console output, and screenshots, if needed).
+ 
+*filter paintop:
+ 
+  - transparent pixels are replaced by black or white pixels, instead of 
+keeping their transparency (it is the case in 1.6 too, so I'm not sure 
+if it's a bug or missing feature, regular filters works well with 
+transparency, after all).
+   - some filters crash the app (small tiles,...)
+ 
+*layers:
+  - when a shape layer is deleted, shapes that were on that layer are 
+not removed.
+  - create a selection, copy, paste: the new layer is empty (but "paste 
+in a new image" works).
+  - duplicate layer = crash
+  - several composite mode dont work at 100% of opacity, instead they're 
+shown as a mix of "normal" and their own "composite" mode.
+  - some other composite modes don't work as expected (add, overlay).
+ 
+-normal          OK
+-multiply        X
+-divide          X
+-dodge           X
+-burn            X
+-darken          OK
+-lighten         OK
+-hue             OK
+-saturation      OK
+-value           OK
+-color           OK
+-screen          X
+-overlay         X
+ 
+ 
+*dockers/UI :
+ 
+  - text input boxes (e.g. opacity, in the tool options docker) keep the 
+focus and catch pressed keys, even after having pressed the "enter" key. 
+(it also happens in karbon).
+ 
+ 
+*shortcuts :
+ 
+   - middle mouse button doesn't flip bg/fg colors
+   - keyboard shorcuts don't works, except ctrl + key and Fxx ones

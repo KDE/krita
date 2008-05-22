@@ -45,6 +45,10 @@
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
+#include <KoText.h>
+
+typedef KoText::Tab KoTextTab;
+// because in a QtScript, I don't seem to be able to use a namespaced type
 
 static void showDocument(QTextDocument *document)
 {
@@ -122,6 +126,35 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
     return equal;
 }
 
+static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs) {
+    QList<QVariant> actualTabList = qvariant_cast<QList<QVariant> >(actualTabs);
+    QList<QVariant> expectedTabList = qvariant_cast<QList<QVariant> >(expectedTabs);
+    if (actualTabList.count() != expectedTabList.count())
+        return false;
+    for (int i = 0; i<actualTabList.count(); i++) {
+        KoText::Tab actualTab = actualTabList[i].value<KoText::Tab>();
+        KoText::Tab expectedTab = expectedTabList[i].value<KoText::Tab>();
+        qDebug() << actualTab.position  << " cmp " <<  expectedTab.position
+             << "\n" << actualTab.type  << " cmp " <<  expectedTab.type
+             << "\n" << actualTab.delimiter  << " cmp " <<  expectedTab.delimiter
+             << "\n" << actualTab.leaderStyle  << " cmp " <<  expectedTab.leaderStyle
+             << "\n" << actualTab.leaderColor  << " cmp " <<  expectedTab.leaderColor
+             << "\n" << actualTab.leaderText  << " cmp " <<  expectedTab.leaderText
+             << "\n" << actualTab.textStyleId  << " cmp " <<  expectedTab.textStyleId;
+        if (actualTab.position != expectedTab.position
+     //       || actualTab.type != expectedTab.type
+     //       || actualTab.delimiter != expectedTab.delimiter
+     //       || actualTab.leaderStyle != expectedTab.leaderStyle
+     //       || actualTab.leaderColor != expectedTab.leaderColor
+     //       || actualTab.leaderText != expectedTab.leaderText
+     //       || actualTab.textStyleId != expectedTab.textStyleId
+            ) {
+            return false;
+        }
+    }
+    return true;
+}
+
 static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTextBlockFormat &expectedFormat) {
     if (actualFormat.background() != expectedFormat.background()
         || actualFormat.alignment() != expectedFormat.alignment()
@@ -157,6 +190,10 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
             break;
         case KoParagraphStyle::BottomBorderWidth:
             if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
+              match = false;
+            break;
+        case KoParagraphStyle::TabPositions: 
+            if (!compareTabProperties(actualProperty[id], expectedProperty[id]))
               match = false;
             break;
         }
@@ -334,16 +371,40 @@ static QScriptValue setFormatProperty(QScriptContext *context, QScriptEngine *en
     int id = context->argument(1).toInt32();
     QScriptValue arg = context->argument(2);
     QVariant value;
+    QList<QVariant> qvlist;
+    QList<KoText::Tab> tabList;
     if (arg.isNumber()) {
         // ### hack to detect if the number is of type int
         if ((qsreal)arg.toInt32() == arg.toNumber())
             value = arg.toInt32();
         else
             value = arg.toNumber();
+        format->setProperty(id, value);
+    } else if (arg.isArray()) {
+        switch (id) {
+        case KoParagraphStyle::TabPositions:
+            qvlist.clear();
+            tabList.clear();
+            qScriptValueToSequence(arg, tabList);
+            foreach(KoText::Tab tab, tabList) {
+                QVariant v;
+                v.setValue(tab);
+                qvlist.append(v);
+            }
+            format->setProperty(id, qvlist);
+            break;
+        default:
+            value = arg.toVariant();
+            format->setProperty(id, value);
+            break;
+        }
+        //FIXME: Ain't able to convert KoText::Tab->QVariant>QScriptValue 
+        //       in QtScript and back to QScriptValue->QVariant->KoText::Tab
+        //       in C++. If one can, there's no need for a switch-case here.
     } else {
         value = arg.toVariant();
+        format->setProperty(id, value);
     }
-    format->setProperty(id, value);
 
     return QScriptValue();
 }
@@ -385,6 +446,42 @@ static QScriptValue importExtension(QScriptContext *context, QScriptEngine *engi
     return engine->importExtension(context->argument(0).toString());
 }
 
+QScriptValue KoTextTabToQScriptValue(QScriptEngine *engine, const KoTextTab &tab)
+{
+  QScriptValue obj = engine->newObject();
+  obj.setProperty("position", QScriptValue(engine, tab.position)); // double
+  obj.setProperty("type", QScriptValue(engine, tab.type)); // enum
+  obj.setProperty("delimiter", QScriptValue(engine, tab.delimiter)); // QChar
+  obj.setProperty("leaderStyle", QScriptValue(engine, tab.leaderStyle)); // enum
+  obj.setProperty("leaderColor", QScriptValue(engine, tab.leaderColor.name())); // QColor
+  obj.setProperty("leaderText", QScriptValue(engine, tab.leaderText)); // QChar
+  obj.setProperty("textStyleId", QScriptValue(engine, tab.textStyleId)); // int
+  return obj;
+}
+
+void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
+{
+  tab.position = obj.property("position").toNumber();
+  tab.type = (
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+              QTextOption::
+#else
+              KoText::
+#endif
+                      TabType) obj.property("type").toInteger();
+  tab.delimiter = obj.property("delimiter").toString()[0];
+  tab.leaderStyle = (QTextCharFormat::UnderlineStyle) obj.property("leaderStyle").toInteger();
+  tab.leaderColor = QColor(obj.property("leaderColor").toString());
+  tab.leaderText = obj.property("leaderText").toString()[0];
+  tab.textStyleId = (int) obj.property("textStyleId").toInteger();
+}
+
+QScriptValue constructKoTextTab(QScriptContext *, QScriptEngine *engine)
+{
+    return engine->toScriptValue(KoTextTab());
+}
+Q_DECLARE_METATYPE(QList<KoText::Tab>)
+
 // initTestCase/cleanupTestCase are called beginning and end of test suite
 void TestLoading::initTestCase()
 {
@@ -410,6 +507,10 @@ void TestLoading::initTestCase()
     globalObject.setProperty("include", engine->newFunction(includeFunction));
     globalObject.setProperty("setFormatProperty", engine->newFunction(setFormatProperty));
     globalObject.setProperty("copyFormatProperties", engine->newFunction(copyFormatProperties));
+
+    globalObject.setProperty("KoTextTab", engine->newFunction(constructKoTextTab));
+    qScriptRegisterMetaType(engine, KoTextTabToQScriptValue, QScriptValueToKoTextTab);
+    qScriptRegisterSequenceMetaType< QList<KoText::Tab> > (engine);
 }
 
 void TestLoading::cleanupTestCase()
@@ -524,6 +625,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Text indent") << "FormattingProperties/ParagraphFormattingProperties/textIndent";
     QTest::newRow("Border") << "FormattingProperties/ParagraphFormattingProperties/border";
     QTest::newRow("BorderLineWidth") << "FormattingProperties/ParagraphFormattingProperties/borderLineWidth";
+    QTest::newRow("tabPosition") << "FormattingProperties/ParagraphFormattingProperties/tabPosition";
 }
 
 void TestLoading::testLoading() 

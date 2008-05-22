@@ -7,6 +7,7 @@ var KoParagraphStyle = {};
 KoParagraphStyle.StyleId = QTextFormat.UserProperty + 1; // = 1048577
 KoParagraphStyle.PercentLineHeight = QTextFormat.UserProperty + 2;
 KoParagraphStyle.AutoTextIndent = QTextFormat.UserProperty + 52;
+KoParagraphStyle.TabPositions = QTextFormat.UserProperty + 53;
 
 // enum KoParagraphStyle.Property - border stuff
 KoParagraphStyle.HasLeftBorder = QTextFormat.UserProperty + 17;

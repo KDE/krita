@@ -921,22 +921,22 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
     }
 
     //TODO
-#if 0
     // Tabulators
-    KoTabulatorList tabList;
+    QList<KoText::Tab> tabList;
     if ( styleStack.hasChildNode( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
-        QDomElement tabStops = styleStack.childNode( KoXmlNS::style, "tab-stops" );
-        //kDebug(30519) << tabStops.childNodes().count() <<" tab stops in layout.";
-        QDomElement tabStop;
+        KoXmlElement tabStops = styleStack.childNode( KoXmlNS::style, "tab-stops" );
+        KoXmlElement tabStop;
         forEachElement( tabStop, tabStops )
         {
             Q_ASSERT( tabStop.localName() == "tab-stop" );
             const QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString() ); // left, right, center or char
 
-            KoTabulator tab;
-            tab.ptPos = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString() ) );
+            KoText::Tab tab;
+            tab.position = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString() ) );
+            kDebug(32500) << "tab position " << tab.position;
             // Tab stop positions in the XML are relative to the left-margin
-            tab.ptPos += layout.margins[QStyleSheetItem::MarginLeft];
+            // Equivalently, we make it relative to the left end of our textshape
+#if 0
             if ( type == "center" )
                 tab.type = T_CENTER;
             else if ( type == "right" )
@@ -986,12 +986,11 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
                     }
                 }
             }
+#endif
             tabList.append( tab );
         } //for
     }
-    qHeapSort( tabList );
-    layout.setTabList( tabList );
-#endif
+    setTabPositions(tabList);
 
 #if 0
     layout.joinBorder = !( styleStack.property( KoXmlNS::style, "join-border") == "false" );

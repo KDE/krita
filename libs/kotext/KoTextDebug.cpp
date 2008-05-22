@@ -37,6 +37,8 @@ int KoTextDebug::depth = 0;
 const int KoTextDebug::INDENT = 2;
 const QTextDocument *KoTextDebug::document = 0;
 
+Q_DECLARE_METATYPE(QList<KoText::Tab>)
+
 void KoTextDebug::dumpDocument(const QTextDocument *doc)
 {
     document = doc;
@@ -174,6 +176,24 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
         case KoCharacterStyle::FontCharset:
             key = "font-charset";
             value = properties[id].toString();
+            break;
+        case KoParagraphStyle::TabPositions:
+            key = "tab-stops";
+            value = "";
+            foreach(QVariant qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
+                KoText::Tab tab = qvtab.value<KoText::Tab>();
+                value.append("{");
+                value.append(" pos:").append(QString::number(tab.position));
+    //           value.append(" type:").append(QString::number(tab.type));
+    //           if (! tab.delimiter.isNull())
+    //               value.append(" delim:").append(QString(tab.delimiter));
+    //           value.append(" leaderstyle:").append(QString::number(tab.leaderStyle));
+    //           value.append(" leadercolor:").append(tab.leaderColor.name());
+    //           if (! tab.leaderText.isNull())
+    //               value.append(" leadertext:").append(QString(tab.leaderText));
+    //           value.append(" textStyleId:").append(QString::number(tab.textStyleId));
+                value.append("}, ");
+            }
             break;
         default:
             break;

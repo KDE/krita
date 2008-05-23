@@ -40,7 +40,9 @@ PictureShapeFactory::PictureShapeFactory( QObject* parent)
 
 KoShape* PictureShapeFactory::createDefaultShape() const
 {
-    return new PictureShape();
+    PictureShape * defaultShape = new PictureShape();
+    defaultShape->setShapeId( PICTURESHAPEID );
+    return defaultShape;
 }
 
 KoShape* PictureShapeFactory::createShape( const KoProperties* params ) const

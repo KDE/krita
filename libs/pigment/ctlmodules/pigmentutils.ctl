@@ -1,5 +1,5 @@
 
-namespace PigmentUtils {
+//namespace PigmentUtils {
     float int16toFloat( int v )
     {
         float vf = v;
@@ -18,4 +18,4 @@ namespace PigmentUtils {
         if( a > max ) return max;
         return a;
     }
-}
+//}

@@ -161,14 +161,14 @@ bool Layout::addLine(QTextLine &line)
         // line does not fit.
         m_data->setEndPosition(m_block.position() + line.textStart()-1);
 
-        bool ignoreLine = true;
+        bool ignoreParagraph = false;
         if(! m_newParag && m_format.nonBreakableLines()) { // then revert layouting of parag
             // TODO check height of parag so far; and if it does not fit in the rest of the shapes, just continue.
             m_data->setEndPosition(m_block.position() -1);
             m_block.layout()->endLayout();
             m_block.layout()->beginLayout();
             line = m_block.layout()->createLine();
-            ignoreLine = true;
+            ignoreParagraph = true;
         }
         if(m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition( m_data->position() );
@@ -176,12 +176,12 @@ bool Layout::addLine(QTextLine &line)
         m_textShape->markLayoutDone();
         nextShape();
         if(m_data)
-            m_data->setPosition(m_block.position() + (ignoreLine?0:line.textStart()));
+            m_data->setPosition(m_block.position() + (ignoreParagraph?0:line.textStart()));
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if(m_demoText)
             m_endOfDemoText = false;
-        return ignoreLine;
+        return true;
     }
 
     // add linespacing

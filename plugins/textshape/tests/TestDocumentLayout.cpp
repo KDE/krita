@@ -856,6 +856,25 @@ void TestDocumentLayout::testShapePosition()
     QCOMPARE(shape2->textShapeData()->endPosition(), 30);
 }
 
+void TestDocumentLayout::testShapePosition2()
+{
+    initForNewTest("Foo\n" + loremIpsum);
+
+    shape1->setSize(QSizeF(200, 40));
+    MockTextShape *shape2 = new MockTextShape();
+    shape2->setSize(QSizeF(200, 1000));
+    layout->addShape(shape2);
+
+    layout->layout();
+
+    QCOMPARE(shape1->textShapeData()->position(), 0);
+    int split = shape1->textShapeData()->endPosition();
+    // qDebug() << split;
+    QVERIFY(split > 4 && split < loremIpsum.length());
+    QCOMPARE(shape2->textShapeData()->position(), split + 1);
+    QCOMPARE(shape2->textShapeData()->endPosition(), loremIpsum.length() + 5);
+}
+
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
 
 #include "TestDocumentLayout.moc"

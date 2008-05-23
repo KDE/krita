@@ -43,6 +43,7 @@ private slots:
     void testAdvancedLineSpacing();
     /// test data integrety for multiple shapes.
     void testShapePosition();
+    void testShapePosition2();
 
 // Block styles
     /// Test top, left, right and bottom margins of paragraphs.

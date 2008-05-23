@@ -104,8 +104,6 @@ private:
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
-    QList<double> m_lotsOfTabs;
-    QList<KoTextBlockData::TabLineData> m_currentParagTabsData;
     QHash<int, double> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
     TextShape *m_textShape;
 

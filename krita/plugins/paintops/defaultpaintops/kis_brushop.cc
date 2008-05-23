@@ -294,7 +294,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         return;
 
     KisPaintDeviceSP device = painter()->device();
-    double pScale = KisPaintOp::scaleForPressure( info.pressure() );
+    double pScale = KisPaintOp::scaleForPressure( adjustedInfo.pressure() ); // TODO: why is there scale and pScale that seems to contains the same things ?
     QPointF hotSpot = brush->hotSpot( pScale, pScale );
     QPointF pt = info.pos() - hotSpot;
 

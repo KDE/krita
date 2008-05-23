@@ -337,9 +337,6 @@ Remarks by Enkhitan
 
 *tablet & paint freely tool:
  
-  - the first "stamp" of a stroke is shifted to bottom-right, of half 
-the size of the brush. It only happens when tablet pressure is not set 
-on "size" (or maybe that the first stamp is too small).
   - pressure for size is mapped to 0-200% of the size of the brush, 
 instead of 0-100% (it could be interesting to keep it as an option 
 though, to fake real soft brushes like chinese brushes, unless curves 

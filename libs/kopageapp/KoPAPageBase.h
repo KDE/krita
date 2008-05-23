@@ -23,6 +23,7 @@
 
 #include <QList>
 #include <QString>
+#include <QPixmap>
 
 #include <KoShapeContainer.h>
 #include <KoXmlReader.h>
@@ -83,6 +84,8 @@ public:
      * @return true if master shapes should be displayed
      */
     virtual bool displayMasterShapes() = 0;
+
+    virtual QPixmap thumbnail() = 0;
 
 protected:
     /**

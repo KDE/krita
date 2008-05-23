@@ -45,6 +45,9 @@ public:
     /// reimplemented
     virtual bool displayMasterShapes();
 
+    /// reimplemented
+    virtual QPixmap thumbnail();
+
 protected:
     /// Reimplemented from KoPageBase
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );

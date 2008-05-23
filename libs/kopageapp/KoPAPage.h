@@ -51,6 +51,9 @@ public:
     /// reimplemented
     virtual bool displayMasterShapes();
 
+    /// reimplemented
+    virtual QPixmap thumbnail();
+
 protected:
     /**
      * DisplayMasterBackground and DisplayMasterShapes are only saved loaded in a presentation

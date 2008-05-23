@@ -64,13 +64,16 @@ QModelIndex KoPAPageThumbnailModel::index(int row, int column, const QModelIndex
 
 QVariant KoPAPageThumbnailModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole) {
         return m_pages.at(index.row())->name();
-    else if (role == Qt::DecorationRole)
-        return QIcon(paintPage(m_pages.at(index.row())));
+    }
+    else if (role == Qt::DecorationRole) {
+        return QIcon(m_pages.at(index.row())->thumbnail());
+    }
 
     return QVariant();
 }
@@ -78,48 +81,6 @@ QVariant KoPAPageThumbnailModel::data(const QModelIndex &index, int role) const
 void KoPAPageThumbnailModel::setIconSize(const QSize &size)
 {
     m_iconSize = size;
-}
-
-QPixmap KoPAPageThumbnailModel::paintPage(KoPAPageBase *page) const
-{
-    QSize size(m_iconSize);
-    KoShapePainter shapePainter;
-
-    QList<KoShape*> shapes;
-    double zoom;
-
-    KoPageLayout layout = page->pageLayout();
-    double ratio = (double)layout.width / layout.height;
-    if (ratio > 1) {
-        zoom = (double) size.width() / layout.width;
-        size.setWidth(size.width() * ratio);
-    }
-    else {
-        zoom = (double) size.height() / layout.height;
-        size.setHeight(size.height() / ratio);
-    }
-
-    shapes = page->iterator();
-    // also draw shapes from master page if this page is not a master
-    KoPAMasterPage *masterPage = dynamic_cast<KoPAMasterPage *>(page);
-    if (!masterPage) {
-        KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
-        shapes += masterPage->iterator();
-    }
-    shapePainter.setShapes(shapes);
-
-    QPixmap pixmap(size.width(), size.height());
-    pixmap.fill(Qt::white);
-    QPainter painter(&pixmap);
-    painter.setClipRect(QRect(0, 0, size.width(), size.height()));
-    QPen pen(Qt::SolidLine);
-    painter.setPen(pen);
-    painter.drawRect(0, 0, size.width() - 1, size.height() - 1);
-    KoZoomHandler zoomHandler;
-    zoomHandler.setZoom(zoom);
-    shapePainter.paintShapes(painter, zoomHandler);
-
-    return pixmap;
 }
 
 #include "KoPAPageThumbnailModel.moc"

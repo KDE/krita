@@ -46,13 +46,10 @@ public:
 
     void setIconSize(const QSize &size);
 
-protected:
-    QPixmap paintPage(KoPAPageBase *page) const;
-
 private:
     KoPAView *m_view;
     QList<KoPAPageBase *> m_pages;
-    
+
     int m_iconWidth;
     QSize m_iconSize;
 };

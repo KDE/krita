@@ -443,8 +443,8 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter) {
         QAbstractTextDocumentLayout::PaintContext pc;
         QAbstractTextDocumentLayout::Selection selection;
         selection.cursor = m_textCursor;
-        selection.format.setBackground(QBrush(Qt::yellow)); // TODO use configured selection color
-        selection.format.setForeground(QBrush(Qt::black)); // TODO use configured selected-text color
+        selection.format.setBackground( m_canvas->canvasWidget()->palette().brush(QPalette::Highlight) );
+        selection.format.setForeground( m_canvas->canvasWidget()->palette().brush(QPalette::HighlightedText) );
         pc.selections.append(selection);
 
         QRectF clip = textRect(m_textCursor.position(), m_textCursor.anchor());

@@ -341,7 +341,6 @@ Remarks by Enkhitan
 instead of 0-100% (it could be interesting to keep it as an option 
 though, to fake real soft brushes like chinese brushes, unless curves 
 settings for pressure comes back one day).
-  - pressure for opacity & darken are broken.
   - the eraser composite mode erases its whole tile/stamp minus the 
 brush stamp.
   - strokes are "cut" by borders of the canvas.

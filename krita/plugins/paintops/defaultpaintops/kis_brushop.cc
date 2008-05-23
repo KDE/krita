@@ -313,7 +313,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     quint8 origOpacity = painter()->opacity();
     KoColor origColor = painter()->paintColor();
-
+    
     if (m_pressureOpacity) {
         if (!m_customOpacity)
             painter()->setOpacity((qint8)(origOpacity * info.pressure()));
@@ -379,10 +379,10 @@ double KisBrushOp::paintLine(const KisPaintInformation &pi1,
 {
     KisPaintInformation adjustedInfo1(pi1);
     KisPaintInformation adjustedInfo2(pi2);
-    if ( !m_pressureSize ) {
+/*    if ( !m_pressureSize ) {
         adjustedInfo1.setPressure( PRESSURE_DEFAULT );
         adjustedInfo2.setPressure( PRESSURE_DEFAULT );
-    }
+    }*/
     return KisPaintOp::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
 }
 

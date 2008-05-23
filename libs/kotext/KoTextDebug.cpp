@@ -184,14 +184,14 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
                 KoText::Tab tab = qvtab.value<KoText::Tab>();
                 value.append("{");
                 value.append(" pos:").append(QString::number(tab.position));
-    //           value.append(" type:").append(QString::number(tab.type));
-    //           if (! tab.delimiter.isNull())
-    //               value.append(" delim:").append(QString(tab.delimiter));
-    //           value.append(" leaderstyle:").append(QString::number(tab.leaderStyle));
-    //           value.append(" leadercolor:").append(tab.leaderColor.name());
-    //           if (! tab.leaderText.isNull())
-    //               value.append(" leadertext:").append(QString(tab.leaderText));
-    //           value.append(" textStyleId:").append(QString::number(tab.textStyleId));
+                value.append(" type:").append(QString::number(tab.type));
+                if (! tab.delimiter.isNull())
+                    value.append(" delim:").append(QString(tab.delimiter));
+                value.append(" leaderstyle:").append(QString::number(tab.leaderStyle));
+                value.append(" leadercolor:").append(tab.leaderColor.name());
+                if (! tab.leaderText.isNull())
+                    value.append(" leadertext:").append(QString(tab.leaderText));
+                value.append(" textStyleId:").append(QString::number(tab.textStyleId));
                 value.append("}, ");
             }
             break;

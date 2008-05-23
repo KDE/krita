@@ -142,8 +142,8 @@ static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs) {
              << "\n" << actualTab.leaderText  << " cmp " <<  expectedTab.leaderText
              << "\n" << actualTab.textStyleId  << " cmp " <<  expectedTab.textStyleId;
         if (actualTab.position != expectedTab.position
-     //       || actualTab.type != expectedTab.type
-     //       || actualTab.delimiter != expectedTab.delimiter
+            || actualTab.type != expectedTab.type
+            || actualTab.delimiter != expectedTab.delimiter
      //       || actualTab.leaderStyle != expectedTab.leaderStyle
      //       || actualTab.leaderColor != expectedTab.leaderColor
      //       || actualTab.leaderText != expectedTab.leaderText
@@ -626,6 +626,8 @@ void TestLoading::testLoading_data()
     QTest::newRow("Border") << "FormattingProperties/ParagraphFormattingProperties/border";
     QTest::newRow("BorderLineWidth") << "FormattingProperties/ParagraphFormattingProperties/borderLineWidth";
     QTest::newRow("tabPosition") << "FormattingProperties/ParagraphFormattingProperties/tabPosition";
+    QTest::newRow("tabType") << "FormattingProperties/ParagraphFormattingProperties/tabType";
+    QTest::newRow("tabDelimiterChar") << "FormattingProperties/ParagraphFormattingProperties/tabDelimiterChar";
 }
 
 void TestLoading::testLoading() 

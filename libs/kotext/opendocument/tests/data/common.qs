@@ -3,6 +3,7 @@ var cursor = new QTextCursor(document);
 
 // Default paragraph formatting
 var KoParagraphStyle = {};
+var QTextOption = {};
 // enum KoParagraphStyle.Property
 KoParagraphStyle.StyleId = QTextFormat.UserProperty + 1; // = 1048577
 KoParagraphStyle.PercentLineHeight = QTextFormat.UserProperty + 2;
@@ -53,7 +54,11 @@ KoParagraphStyle.BorderRidge = 6;
 KoParagraphStyle.BorderInset = 7;
 KoParagraphStyle.BorderOutset = 8;
 
-
+// enum QTextOption.TabType
+QTextOption.LeftTab = 0;
+QTextOption.RightTab = QTextOption.LeftTab + 1;
+QTextOption.CenterTab = QTextOption.LeftTab + 2;
+QTextOption.DelimiterTab = QTextOption.LeftTab + 3;
 
 var defaultBlockFormat = new QTextBlockFormat;
 setFormatProperty(defaultBlockFormat, KoParagraphStyle.PercentLineHeight, 120);

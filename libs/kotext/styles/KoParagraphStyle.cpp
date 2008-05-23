@@ -929,27 +929,39 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
         forEachElement( tabStop, tabStops )
         {
             Q_ASSERT( tabStop.localName() == "tab-stop" );
-            const QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString() ); // left, right, center or char
-
+            // Tab position
             KoText::Tab tab;
             tab.position = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString() ) );
             kDebug(32500) << "tab position " << tab.position;
             // Tab stop positions in the XML are relative to the left-margin
             // Equivalently, we make it relative to the left end of our textshape
-#if 0
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+        #define TAB_TYPE_NAMESPACE  QTextOption
+#else
+        #define TAB_TYPE_NAMESPACE  KoText
+#endif
+            // Tab type (left/right/center/char)
+            const QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString() );
             if ( type == "center" )
-                tab.type = T_CENTER;
+                tab.type = TAB_TYPE_NAMESPACE :: CenterTab;
             else if ( type == "right" )
-                tab.type = T_RIGHT;
-            else if ( type == "char" ) {
-                QString delimiterChar = tabStop.attributeNS( KoXmlNS::style, "char", QString() ); // single character
-                if ( !delimiterChar.isEmpty() )
-                    tab.alignChar = delimiterChar[0];
-                tab.type = T_DEC_PNT; // "alignment on decimal point"
-            }
+                tab.type = TAB_TYPE_NAMESPACE :: RightTab;
+            else if ( type == "char" )
+                tab.type = TAB_TYPE_NAMESPACE :: DelimiterTab;
             else //if ( type == "left" )
-                tab.type = T_LEFT;
+                tab.type = TAB_TYPE_NAMESPACE :: LeftTab;
 
+            // Tab delimiter char
+            if ( tab.type == TAB_TYPE_NAMESPACE :: DelimiterTab ) {
+                QString delimiterChar = tabStop.attributeNS( KoXmlNS::style, "char", QString() ); // single character
+                if ( !delimiterChar.isEmpty() ) {
+                    tab.delimiter = delimiterChar[0];
+                } else {
+                    // this is invalid. fallback to left-tabbing.
+                    tab.type = TAB_TYPE_NAMESPACE :: LeftTab;
+                }
+            }
+#if 0
             tab.ptWidth = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "leader-width", QString() ), 0.5 );
 
             tab.filling = TF_BLANK;

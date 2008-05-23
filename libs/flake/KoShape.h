@@ -351,9 +351,10 @@ public:
      * Returns current visibility state of this shape.
      * Being visible means being painted, as well as being used for
      *   things like guidelines or searches.
+     * @param recursive when true, checks visibility recursively
      * @return current visibility state of this shape.
      */
-    bool isVisible() const;
+    bool isVisible( bool recursive = false ) const;
 
     /**
      * Changes the shape to be printable or not. The default is true.

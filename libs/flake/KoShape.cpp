@@ -542,15 +542,24 @@ void KoShape::setVisible(bool on) {
     d->visible = on;
 }
 
-bool KoShape::isVisible() const {
-    return d->visible;
+bool KoShape::isVisible( bool recursive ) const {
+    if( ! recursive )
+        return d->visible;
+    KoShapeContainer * parentShape = parent();
+    while( parentShape )
+    {
+        if( ! parentShape->isVisible() )
+            return false;
+        parentShape = parentShape->parent();
+    }
+    return true;
 }
 
 void KoShape::setPrintable(bool on)
 {
     d->printable = on;
 }
-    
+
 bool KoShape::isPrintable() const
 {
     if (d->visible)

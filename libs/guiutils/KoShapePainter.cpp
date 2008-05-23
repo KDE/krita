@@ -176,7 +176,7 @@ QRectF KoShapePainter::contentRect()
     QRectF bound;
     foreach( KoShape * shape, d->canvas->shapeManager()->shapes() )
     {
-        if( ! shape->isVisible() )
+        if( ! shape->isVisible( true ) )
             continue;
         if( dynamic_cast<KoShapeGroup*>( shape ) )
             continue;

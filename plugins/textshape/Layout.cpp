@@ -58,7 +58,8 @@ Layout::Layout(KoTextDocumentLayout *parent)
     layout = 0;
 }
 
-bool Layout::start() {
+bool Layout::start()
+{
     if(m_reset)
         resetPrivate();
     else if(shape)
@@ -67,21 +68,25 @@ bool Layout::start() {
     return !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
 }
 
-void Layout::end() {
+void Layout::end()
+{
     if(layout)
         layout->endLayout();
     layout = 0;
 }
 
-void Layout::reset() {
+void Layout::reset()
+{
     m_reset = true;
 }
 
-bool Layout::interrupted() {
+bool Layout::interrupted()
+{
     return m_reset;
 }
 
-double Layout::width() {
+double Layout::width()
+{
     Q_ASSERT(shape);
     double ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
     if(m_newParag)
@@ -92,7 +97,8 @@ double Layout::width() {
     return ptWidth;
 }
 
-double Layout::x() {
+double Layout::x()
+{
     double result = m_newParag?resolveTextIndent():0.0;
     result += m_isRtl ? m_format.rightMargin() : m_format.leftMargin();
     result += listIndent();
@@ -100,11 +106,13 @@ double Layout::x() {
     return result;
 }
 
-double Layout::y() {
+double Layout::y()
+{
     return m_y;
 }
 
-double Layout::resolveTextIndent() {
+double Layout::resolveTextIndent()
+{
     if ( (m_block.blockFormat().property(KoParagraphStyle::AutoTextIndent).toBool()) ) {
         // if auto-text-indent is set,
         // return an indent approximately 3-characters wide as per current font
@@ -114,12 +122,14 @@ double Layout::resolveTextIndent() {
     return m_block.blockFormat().textIndent();
 }
 
-double Layout::docOffsetInShape() const {
+double Layout::docOffsetInShape() const
+{
     Q_ASSERT(m_data);
     return m_data->documentOffset();
 }
 
-bool Layout::addLine(QTextLine &line) {
+bool Layout::addLine(QTextLine &line)
+{
     double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     double objectHeight = 0.0;
     bool useFixedLineHeight = height != 0.0;
@@ -202,7 +212,8 @@ bool Layout::addLine(QTextLine &line) {
 
 extern int qt_defaultDpiX();
 
-bool Layout::nextParag() {
+bool Layout::nextParag()
+{
     m_inlineObjectHeights.clear();
     if(layout) { // guard against first time
         layout->endLayout();
@@ -349,11 +360,13 @@ bool Layout::nextParag() {
     return true;
 }
 
-double Layout::documentOffsetInShape() {
+double Layout::documentOffsetInShape()
+{
     return m_data->documentOffset();
 }
 
-void Layout::nextShape() {
+void Layout::nextShape()
+{
     m_newShape = true;
 
     if(m_data) {
@@ -388,14 +401,16 @@ void Layout::nextShape() {
 }
 
 // and the end of text, make sure the rest of the frames have something sane to show.
-void Layout::cleanupShapes() {
+void Layout::cleanupShapes()
+{
     int i = shapeNumber + 1;
     QList<KoShape *> shapes = m_parent->shapes();
     while(i < shapes.count())
         cleanupShape(shapes[i++]);
 }
 
-void Layout::cleanupShape(KoShape *daShape) {
+void Layout::cleanupShape(KoShape *daShape)
+{
     TextShape *ts = dynamic_cast<TextShape*>(daShape);
     if(ts)
         ts->markLayoutDone();
@@ -410,7 +425,8 @@ void Layout::cleanupShape(KoShape *daShape) {
     daShape->update();
 }
 
-double Layout::listIndent() {
+double Layout::listIndent()
+{
     if(m_blockData == 0)
         return 0;
     if(m_isRtl)
@@ -418,7 +434,8 @@ double Layout::listIndent() {
     return m_blockData->counterWidth();
 }
 
-void Layout::resetPrivate() {
+void Layout::resetPrivate()
+{
     m_demoText = false;
     m_endOfDemoText = false;
     m_y = 0;
@@ -506,7 +523,8 @@ void Layout::resetPrivate() {
        shapeNumber++;
 }
 
-void Layout::updateBorders() {
+void Layout::updateBorders()
+{
     Q_ASSERT(m_data);
     m_borderInsets = m_data->shapeMargins();
     KoTextBlockBorderData border(QRectF(this->x() - listIndent(), m_y + m_borderInsets.top + topMargin(), width(), 1.));
@@ -563,7 +581,8 @@ void Layout::updateBorders() {
     m_borderInsets.right += m_format.doubleProperty(KoParagraphStyle::RightPadding);
 }
 
-double Layout::topMargin() {
+double Layout::topMargin()
+{
     bool allowMargin = true; // wheather to allow margins at top of shape
     if(m_newShape) {
         allowMargin = false; // false by default, but check 2 exceptions.
@@ -582,7 +601,8 @@ double Layout::topMargin() {
     return 0.0;
 }
 
-void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context) {
+void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
+{
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
     QTextBlock block = m_parent->document()->begin();
@@ -647,7 +667,8 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
         lastBorder->paint(*painter);
 }
 
-static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double x1, const double x2, const double y) {
+static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double x1, const double x2, const double y)
+{
     QPen penBackup = painter->pen();
     QPen pen = painter->pen();
     pen.setColor(color);
@@ -709,7 +730,8 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
     painter->setPen(penBackup);
 }
 
-static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double y) {
+static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double y)
+{
     double wordBeginX = -1;
     int j = line.textStart();
     while (j < line.textLength()+line.textStart()) {
@@ -726,7 +748,8 @@ static void drawDecorationWords(QPainter *painter, const QTextLine &line, const 
          drawDecorationLine(painter, color, type, style, wordBeginX, line.cursorToX(j), y);
 }
 
-void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
+void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter)
+{
     Q_UNUSED(selectionStart);
     Q_UNUSED(selectionEnd);
     Q_UNUSED(converter);
@@ -804,7 +827,8 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
     }
 }
 
-void Layout::drawListItem(QPainter *painter, const QTextBlock &block) {
+void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
+{
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
     if(data == 0)
         return;
@@ -935,7 +959,8 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
     }
 }
 
-bool Layout::setFollowupShape(KoShape *followupShape) {
+bool Layout::setFollowupShape(KoShape *followupShape)
+{
     if(m_demoText)
         return false;
     Q_ASSERT(shape == 0);
@@ -952,7 +977,8 @@ bool Layout::setFollowupShape(KoShape *followupShape) {
     return true;
 }
 
-void Layout::clearTillEnd() {
+void Layout::clearTillEnd()
+{
     QTextBlock block = m_block.next();
     while(block.isValid()) {
         if(block.layout()->lineCount() == 0)
@@ -964,7 +990,8 @@ void Layout::clearTillEnd() {
     }
 }
 
-int Layout::cursorPosition() const {
+int Layout::cursorPosition() const
+{
     int answer = m_block.position();
     if(!m_newParag && layout && layout->lineCount()) {
         QTextLine tl = layout->lineAt(layout->lineCount() -1);
@@ -973,7 +1000,8 @@ int Layout::cursorPosition() const {
     return answer;
 }
 
-bool Layout::previousParag() {
+bool Layout::previousParag()
+{
     if(m_block.position() == 0 && layout->lineCount() == 0)
         return false;
 
@@ -1013,17 +1041,20 @@ bool Layout::previousParag() {
     return true;
 }
 
-void Layout::registerInlineObject(const QTextInlineObject &inlineObject) {
+void Layout::registerInlineObject(const QTextInlineObject &inlineObject)
+{
     m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), inlineObject.height());
 }
 
-double Layout::inlineCharHeight(const QTextFragment &fragment) {
+double Layout::inlineCharHeight(const QTextFragment &fragment)
+{
     if(m_inlineObjectHeights.contains(fragment.position()))
         return m_inlineObjectHeights[fragment.position()];
     return 0.0;
 }
 
-double Layout::findFootnote(const QTextLine &line) {
+double Layout::findFootnote(const QTextLine &line)
+{
     if(m_parent->inlineObjectTextManager() == 0)
         return 0;
     QString text = m_block.text();

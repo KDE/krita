@@ -88,7 +88,8 @@ KoShape * TextShape::cloneShape() const
     return 0;
 }
 
-void TextShape::setDemoText(bool on) {
+void TextShape::setDemoText(bool on)
+{
     if(on) {
         QTextCursor cursor (m_textShapeData->document());
         for (int i=0; i < 10; i ++)
@@ -105,7 +106,8 @@ void TextShape::setDemoText(bool on) {
     m_demoText = on;
 }
 
-void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter) {
+void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+{
     painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
     QTextDocument *doc = m_textShapeData->document();
     Q_ASSERT(doc);
@@ -136,12 +138,14 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     }
 }
 
-QPointF TextShape::convertScreenPos(const QPointF &point) {
+QPointF TextShape::convertScreenPos(const QPointF &point)
+{
     QPointF p = matrix().inverted().map(point);
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
-void TextShape::shapeChanged(ChangeType type) {
+void TextShape::shapeChanged(ChangeType type)
+{
     if(type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->foul();
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
@@ -151,7 +155,8 @@ void TextShape::shapeChanged(ChangeType type) {
     }
 }
 
-void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
+void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
+{
     bool showTextFrames = canvas->resourceProvider()->boolResource(KoText::ShowTextFrames);
 
     if(showTextFrames) {
@@ -266,7 +271,8 @@ void TextShape::init( QMap<QString, KoDataCenter *>  dataCenterMap )
     }
 }
 
-QTextDocument *TextShape::footnoteDocument() {
+QTextDocument *TextShape::footnoteDocument()
+{
     if(m_footnotes == 0) {
         m_footnotes = new QTextDocument();
         m_footnotes->setUseDesignMetrics(true);
@@ -277,13 +283,15 @@ QTextDocument *TextShape::footnoteDocument() {
     return m_footnotes;
 }
 
-void TextShape::markLayoutDone() {
+void TextShape::markLayoutDone()
+{
     synchronized(m_mutex) {
         m_waiter.wakeAll();
     }
 }
 
-void TextShape::waitUntilReady() const {
+void TextShape::waitUntilReady() const
+{
     synchronized(m_mutex) {
         if(m_textShapeData->isDirty()) {
             m_textShapeData->fireResizeEvent(); // triggers a relayout

@@ -30,7 +30,8 @@
 #include <QAbstractTextDocumentLayout>
 using namespace Lists;
 
-QString Lists::intToRoman( int n ) {
+QString Lists::intToRoman( int n )
+{
     static const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
     static const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
     static const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
@@ -44,7 +45,8 @@ QString Lists::intToRoman( int n ) {
                                 RNTens[ ( n / 10 ) % 10 ] + RNUnits[ ( n ) % 10 ] );
 }
 
-QString Lists::intToAlpha( int n, Capitalisation caps, bool letterSynchronization) {
+QString Lists::intToAlpha( int n, Capitalisation caps, bool letterSynchronization)
+{
     const char offset = caps == Uppercase?'A':'a';
     QString answer;
     if(letterSynchronization) {
@@ -67,7 +69,8 @@ QString Lists::intToAlpha( int n, Capitalisation caps, bool letterSynchronizatio
     return answer;
 }
 
-QString Lists::intToScript(int n, KoListStyle::Style type) {
+QString Lists::intToScript(int n, KoListStyle::Style type)
+{
     // 10-base
     static const int bengali = 0x9e6;
     static const int gujarati = 0xae6;
@@ -123,7 +126,8 @@ QString Lists::intToScript(int n, KoListStyle::Style type) {
     return answer;
 }
 
-QString Lists::intToScriptList(int n, KoListStyle::Style type) {
+QString Lists::intToScriptList(int n, KoListStyle::Style type)
+{
     // 1 time Sequences
     // note; the leading X is to make these 1 based.
     static const char* Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
@@ -164,7 +168,8 @@ http://en.wikipedia.org/wiki/Japanese_numerals
     }
 }
 
-QList<ListStyleItem> Lists::genericListStyleItems() {
+QList<ListStyleItem> Lists::genericListStyleItems()
+{
     QList<ListStyleItem> answer;
     answer.append( ListStyleItem( i18nc("Text list-style", "None" ), KoListStyle::NoItem) );
     answer.append( ListStyleItem( i18n( "Arabic" ), KoListStyle::DecimalItem) );
@@ -184,7 +189,8 @@ QList<ListStyleItem> Lists::genericListStyleItems() {
     return answer;
 }
 
-QList<ListStyleItem> Lists::otherlistStyleItems() {
+QList<ListStyleItem> Lists::otherlistStyleItems()
+{
     QList<ListStyleItem> answer;
     answer.append( ListStyleItem( i18n("Bengali"), KoListStyle::Bengali) );
     answer.append( ListStyleItem( i18n("Gujarati"), KoListStyle::Gujarati) );
@@ -211,7 +217,8 @@ ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
 {
 }
 
-void ListItemsHelper::recalculate() {
+void ListItemsHelper::recalculate()
+{
     //kDebug(32500) <<"ListItemsHelper::recalculate";
     double width = 0.0;
     QTextListFormat format = m_textList->format();
@@ -385,7 +392,8 @@ void ListItemsHelper::recalculate() {
 }
 
 // static
-bool ListItemsHelper::needsRecalc(QTextList *textList) {
+bool ListItemsHelper::needsRecalc(QTextList *textList)
+{
     Q_ASSERT(textList);
     QTextBlock tb = textList->item(0);
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());

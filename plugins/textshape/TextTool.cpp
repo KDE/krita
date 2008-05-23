@@ -429,45 +429,71 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
     QTextBlock block = m_textCursor.block();
     if(! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
         return;
+    if (m_textShapeData == 0)
+        return;
 
-    if(painter.hasClipping()) {
-        QRect shape = converter.documentToView(m_textShape->boundingRect()).toRect();
-        if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
-            return;
+    int selectStart = m_textCursor.position();
+    int selectEnd = m_textCursor.anchor();
+    if (selectEnd < selectStart)
+        qSwap(selectStart, selectEnd);
+    QList<TextShape *> shapesToPaint;
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> ( m_textShapeData->document()->documentLayout());
+    if (lay) {
+        foreach( KoShape *shape, lay->shapes()) {
+            TextShape *ts = dynamic_cast<TextShape*> (shape);
+            if (! ts)
+                continue;
+            KoTextShapeData *data = ts->textShapeData();
+            // check if shape contains some of the selection, if not, skip
+            if (! (data->endPosition() >= selectStart && data->position()  <= selectEnd
+                    || data->position() <= selectStart && data->endPosition() >= selectEnd))
+                continue;
+            if (painter.hasClipping()) {
+                QRect rect = converter.documentToView(ts->boundingRect()).toRect();
+                if(painter.clipRegion().intersect( QRegion(rect) ).isEmpty())
+                    continue;
+            }
+            shapesToPaint << ts;
+        }
     }
+    if (shapesToPaint.isEmpty()) // quite unlikely, though ;)
+        return;
 
-    painter.setMatrix( painter.matrix() * m_textShape->absoluteTransformation(&converter) );
     double zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
-    Q_ASSERT(m_textShapeData);
-    painter.translate(0, -m_textShapeData->documentOffset());
 
-    if(m_textShapeData && m_textCursor.hasSelection()) {
-        QAbstractTextDocumentLayout::PaintContext pc;
-        QAbstractTextDocumentLayout::Selection selection;
-        selection.cursor = m_textCursor;
-        selection.format.setBackground( m_canvas->canvasWidget()->palette().brush(QPalette::Highlight) );
-        selection.format.setForeground( m_canvas->canvasWidget()->palette().brush(QPalette::HighlightedText) );
-        pc.selections.append(selection);
+    QAbstractTextDocumentLayout::PaintContext pc;
+    QAbstractTextDocumentLayout::Selection selection;
+    selection.cursor = m_textCursor;
+    selection.format.setBackground( m_canvas->canvasWidget()->palette().brush(QPalette::Highlight) );
+    selection.format.setForeground( m_canvas->canvasWidget()->palette().brush(QPalette::HighlightedText) );
+    pc.selections.append(selection);
+    foreach (TextShape *ts, shapesToPaint) {
+        KoTextShapeData *data = ts->textShapeData();
+        Q_ASSERT(data);
 
-        QRectF clip = textRect(m_textCursor.position(), m_textCursor.anchor());
         painter.save();
+        painter.setMatrix( painter.matrix() * ts->absoluteTransformation(&converter) );
+        painter.translate(0, -data->documentOffset());
+        QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));
         painter.setClipRect(clip, Qt::IntersectClip);
-        m_textShapeData->document()->documentLayout()->draw( &painter, pc);
+        data->document()->documentLayout()->draw( &painter, pc);
+        if (data == m_textShapeData) {
+            // paint caret
+            QPen caretPen(Qt::black);
+            if(! m_textShape->hasTransparency()) {
+                QColor bg = m_textShape->background().color();
+                QColor invert = QColor(255 - bg.red(), 255 - bg.green(), 255 - bg.blue());
+                caretPen.setColor(invert);
+            }
+            painter.setPen(caretPen);
+            const int posInParag = m_textCursor.position() - block.position();
+            block.layout()->drawCursor(&painter, QPointF(0,0), posInParag);
+        }
+
         painter.restore();
     }
-
-    // paint caret
-    QPen pen(Qt::black);
-    if(! m_textShape->hasTransparency()) {
-        QColor bg = m_textShape->background().color();
-        QColor invert = QColor(255 - bg.red(), 255 - bg.green(), 255 - bg.blue());
-        pen.setColor(invert);
-    }
-    painter.setPen(pen);
-    const int posInParag = m_textCursor.position() - block.position();
-    block.layout()->drawCursor(&painter, QPointF(0,0), posInParag);
 }
 
 void TextTool::mousePressEvent( KoPointerEvent *event )

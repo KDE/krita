@@ -26,6 +26,7 @@
 #include <KoUnit.h>
 #include <KoShape.h>
 #include <KoShapeBorderModel.h>
+#include <KoShapeGroup.h>
 
 #include <QtGui/QImage>
 
@@ -175,6 +176,10 @@ QRectF KoShapePainter::contentRect()
     QRectF bound;
     foreach( KoShape * shape, d->canvas->shapeManager()->shapes() )
     {
+        if( ! shape->isVisible() )
+            continue;
+        if( dynamic_cast<KoShapeGroup*>( shape ) )
+            continue;
         QPainterPath outline = shape->absoluteTransformation(0).map( shape->outline() );
         QRectF shapeRect = outline.boundingRect();
         // correct shape box with border sizes

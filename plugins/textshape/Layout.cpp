@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -50,12 +50,11 @@ Layout::Layout(KoTextDocumentLayout *parent)
     m_data(0),
     m_reset(true),
     m_isRtl(false),
+    m_parent(parent),
     m_demoText(false),
     m_endOfDemoText(false),
     m_defaultTabSizing(MM_TO_POINT(15))
 {
-    m_parent = parent;
-    layout = 0;
 }
 
 bool Layout::start()

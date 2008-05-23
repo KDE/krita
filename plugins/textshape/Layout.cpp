@@ -176,7 +176,7 @@ bool Layout::addLine(QTextLine &line)
         m_textShape->markLayoutDone();
         nextShape();
         if(m_data)
-            m_data->setPosition(m_block.position() + ignoreLine?0:line.textStart());
+            m_data->setPosition(m_block.position() + (ignoreLine?0:line.textStart()));
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if(m_demoText)

@@ -839,6 +839,23 @@ void TestDocumentLayout::testNonBreakableLines() {
     QCOMPARE(l->lineAt(0).y(), 110.);
 }
 
+void TestDocumentLayout::testShapePosition()
+{
+    initForNewTest("line\nParag2\nSimple Parag\nLast");
+
+    shape1->setSize(QSizeF(200, 40));
+    MockTextShape *shape2 = new MockTextShape();
+    shape2->setSize(QSizeF(200, 100));
+    layout->addShape(shape2);
+
+    layout->layout();
+
+    QCOMPARE(shape1->textShapeData()->position(), 0);
+    QCOMPARE(shape1->textShapeData()->endPosition(), 11);
+    QCOMPARE(shape2->textShapeData()->position(), 12);
+    QCOMPARE(shape2->textShapeData()->endPosition(), 30);
+}
+
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
 
 #include "TestDocumentLayout.moc"

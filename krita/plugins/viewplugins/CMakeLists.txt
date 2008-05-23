@@ -26,7 +26,7 @@ if (EIGEN_FOUND AND GMM_FOUND)
     add_subdirectory( panorama )
 endif (EIGEN_FOUND AND GMM_FOUND)
 
-macro_log_feature(HAVE_GMM "GMM" "The Krita Panorama plugin will not be built." "http://home.gna.org/getfem/download.html" FALSE "")
+macro_log_feature(GMM_FOUND "GMM" "The Krita Panorama plugin will not be built." "http://home.gna.org/getfem/download.html" FALSE "")
 
 macro_optional_find_package(GLUT)
 

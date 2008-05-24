@@ -315,7 +315,7 @@ bool KoEncryptedStore::doFinalize( ) {
             QDomDocument document;
             if( m_manifestBuffer.isEmpty( ) ) {
                 // No manifest? Better create one
-                document = QDomDocument::QDomDocument( );
+                document = QDomDocument( );
                 QDomElement rootElement = document.createElement( "manifest:manifest" );
                 rootElement.setAttribute( "xmlns:manifest", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" );
                 document.appendChild( rootElement );

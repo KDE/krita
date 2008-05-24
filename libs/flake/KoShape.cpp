@@ -545,6 +545,9 @@ void KoShape::setVisible(bool on) {
 bool KoShape::isVisible( bool recursive ) const {
     if( ! recursive )
         return d->visible;
+    if( recursive && ! d->visible )
+        return false;
+
     KoShapeContainer * parentShape = parent();
     while( parentShape )
     {

@@ -98,8 +98,8 @@ KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGene
     qint32 height = (int)( kmg->height() + 0.5 );
     
     KisConvolutionKernelSP k = new KisConvolutionKernel( width, height, 0, 0);
-    double cosa = cos(angle);
-    double sina = sin(angle);
+    double cosa = 1.0;//cos(angle);
+    double sina = 0.0;//sin(angle);
     double xc = 0.5 * width;
     double yc = 0.5 * height;
     qint32 factor = 0;
@@ -112,7 +112,8 @@ KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGene
             double y_ = ( y_it - yc);
             double x = cosa * x_ - sina * y_;
             double y = sina * x_ + cosa * y_;
-            *itData = kmg->interpolatedValueAt( x,y);
+//             dbgKrita << x << " " << y << " " << x_ << " " << y_ << " " << kmg->interpolatedValueAt( x,y);
+            *itData = 255 - kmg->interpolatedValueAt( x,y);
             factor += *itData;
             ++itData;
         }
@@ -160,3 +161,22 @@ KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGene
         }
     }
 #endif
+
+#include "kis_debug.h"
+
+QDebug operator<<(QDebug dbg, const KisConvolutionKernel &c)
+{
+    int pos = 0;
+    dbg.nospace() << "[" << c.width() << "," << c.height() << "]{";
+    for( unsigned int i = 0; i < c.width(); ++i)
+    {
+        dbg.nospace() << " {";
+        for(unsigned int j = 0; j < c.height(); ++j, ++pos)
+        {
+            dbg.nospace() << c.data()[pos] << " ";
+        }
+        dbg.nospace() << " }";
+    }
+    dbg.nospace() << c.factor()<< " " << c.offset() <<  " }";
+    return dbg.space();
+} 

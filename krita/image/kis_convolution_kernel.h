@@ -48,5 +48,7 @@ class KRITAIMAGE_EXPORT KisConvolutionKernel : public KisShared
 
 };
 
+class QDebug;
 
+QDebug operator<<(QDebug dbg, const KisConvolutionKernel &c);
 #endif

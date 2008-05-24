@@ -77,6 +77,7 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                                         KisConvolutionBorderOp borderOp )
 {
+    dbgKrita << *kernel;
     // Make the area we cover as small as possible
     if ( selection() ) {
 

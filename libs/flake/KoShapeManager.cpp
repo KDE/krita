@@ -173,27 +173,12 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     QList<KoShape*> sortedShapes;
     foreach( KoShape * shape, unsortedShapes )
     {
-        if( ! shape->isVisible() )
-            continue;
-
-        bool hiddenFromParent = false;
-        KoShapeContainer * parent = shape->parent();
-        while( parent )
-        {
-            if( ! parent->isVisible() )
-            {
-                hiddenFromParent = true;
-                break;
-            }
-            parent = parent->parent();
-        }
-        if( ! hiddenFromParent )
-            sortedShapes.append( shape );
+        if( shape->isVisible( true ) )
+           sortedShapes.append( shape );
     }
 
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
-    const QRegion clipRegion = painter.clipRegion();
     foreach ( KoShape * shape, sortedShapes ) {
         if(shape->parent() != 0 && shape->parent()->childClipped(shape))
             continue;
@@ -249,7 +234,7 @@ KoShape * KoShapeManager::shapeAt( const QPointF &position, KoFlake::ShapeSelect
     KoShape *firstUnselectedShape = 0;
     for(int count = sortedShapes.count()-1; count >= 0; count--) {
         KoShape *shape = sortedShapes.at(count);
-        if ( omitHiddenShapes && ! shape->isVisible() )
+        if ( omitHiddenShapes && ! shape->isVisible( true ) )
             continue;
         if ( ! shape->hitTest( position ) )
             continue;
@@ -299,7 +284,7 @@ QList<KoShape *> KoShapeManager::shapesAt( const QRectF &rect, bool omitHiddenSh
         QList<KoShape*> intersectedShapes( d->tree.intersects( rect ) );
         for(int count = intersectedShapes.count()-1; count >= 0; count--) {
             KoShape *shape = intersectedShapes.at( count );
-            if( ! shape->isVisible() )
+            if( ! shape->isVisible( true ) )
                 intersectedShapes.removeAt( count );
         }
         return intersectedShapes;

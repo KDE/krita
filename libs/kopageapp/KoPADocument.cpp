@@ -132,9 +132,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     sharedData->loadOdfStyles( loadingContext, styleManager, true );
     paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
-    loadingContext.setUseStylesAutoStyles( true );
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
-    loadingContext.setUseStylesAutoStyles( false );
     d->pages = loadOdfPages( body, paContext );
     if ( d->pages.size() > 1 ) {
         setActionEnabled( KoPAView::ActionDeletePage, false );
@@ -195,6 +193,7 @@ bool KoPADocument::completeSaving( KoStore* store)
 
 QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context )
 {
+    context.odfLoadingContext().setUseStylesAutoStyles( true );
     QList<KoPAPageBase *> masterPages;
 
     QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
@@ -206,6 +205,7 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
         masterPages.append( masterPage );
         context.addMasterPage( it.key(), masterPage );
     }
+    context.odfLoadingContext().setUseStylesAutoStyles( false );
     return masterPages;
 }
 

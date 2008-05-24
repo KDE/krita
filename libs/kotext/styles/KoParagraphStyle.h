@@ -108,8 +108,11 @@ public:
 
         AutoTextIndent,         ///< bool, says whether the paragraph is auto-indented or not
 
-        TabPositions,            ///< A list of tab positions
-        TextProgressionDirection
+        TabPositions,           ///< A list of tab positions
+        TextProgressionDirection,
+
+        MasterPageName          ///< The name of the master-page.
+
 // do 15.5.24
 // continue at 15.5.28
     };
@@ -422,6 +425,11 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
 
     /// each style has a unique ID (non persistent) given out by the styleManager
     void setStyleId(int id);
+
+    /// return the name of the master-page.
+    QString masterPageName() const;
+    /// Set the name of the master-page.
+    void setMasterPageName(const QString& name);
 
     /// Set to true if this paragraph is marked to start the list numbering from the first entry.
     void setRestartListNumbering(bool on);

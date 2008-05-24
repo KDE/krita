@@ -125,6 +125,7 @@ static const int properties[] = {
     KoParagraphStyle::AutoTextIndent,
     KoParagraphStyle::TabPositions,
     KoParagraphStyle::TextProgressionDirection,
+    KoParagraphStyle::MasterPageName,
 
     -1
 };
@@ -717,6 +718,14 @@ void KoParagraphStyle::setStyleId(int id) {
     setProperty(StyleId, id); if(d->next == 0) d->next=id;
 }
 
+QString KoParagraphStyle::masterPageName() const {
+    return value(MasterPageName).toString();
+}
+
+void KoParagraphStyle::setMasterPageName(const QString& name) {
+    setProperty(MasterPageName, name);
+}
+
 void KoParagraphStyle::setRestartListNumbering(bool on) {
     setProperty(RestartListNumbering, on);
 }
@@ -804,6 +813,10 @@ void KoParagraphStyle::loadOdf( const KoXmlElement* element, KoOdfLoadingContext
 
     //setParent( d->stylemanager->defaultParagraphStyle() );
 
+    QString masterPage = element->attributeNS( KoXmlNS::style, "master-page-name", QString() );
+    if ( ! masterPage.isNull() ) {
+        setMasterPageName(masterPage);
+    }
 
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();

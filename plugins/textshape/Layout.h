@@ -112,6 +112,8 @@ private:
 
     // tab setting
     double m_defaultTabSizing;
+
+    QString m_masterPageName;
 };
 
 #endif

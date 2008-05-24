@@ -304,13 +304,23 @@ bool Layout::nextParag()
     updateBorders(); // fill the border inset member vars.
     m_y += m_borderInsets.top;
 
-    if(!m_newShape && (m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
-            m_format.boolProperty(KoParagraphStyle::BreakBefore))) {
+    bool pagebreak = ( m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
+                       m_format.boolProperty(KoParagraphStyle::BreakBefore) );
+
+    const QString masterPageName = m_format.property(KoParagraphStyle::MasterPageName).toString();
+    if(! masterPageName.isNull() && masterPageName != m_masterPageName) {
+        if(! m_masterPageName.isNull())
+            pagebreak = true; // new master-page means new page
+        m_masterPageName = masterPageName;
+    }
+
+    if(!m_newShape && pagebreak) {
         m_data->setEndPosition(m_block.position()-1);
         nextShape();
         if(m_data)
             m_data->setPosition(m_block.position());
     }
+
     m_y += topMargin();
     layout = m_block.layout();
     QTextOption option = layout->textOption();

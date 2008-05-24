@@ -815,6 +815,7 @@ bool KoPathShape::insertPoint( KoPathPoint* point, const KoPathPointIndex &point
     }
 
     point->setProperties( properties );
+    point->setParent( this );
     subpath->insert( pointIndex.second , point );
     return true;
 }

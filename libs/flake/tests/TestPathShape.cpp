@@ -237,29 +237,35 @@ void TestPathShape::insertPoint()
     KoPathPoint *point1 = new KoPathPoint( &path, QPointF( 5, 5 ), KoPathPoint::Normal );
     KoPathPointIndex p1Index( 0, 0 );
     QVERIFY( path.insertPoint( point1, p1Index ) == true );
+    QVERIFY( point1->parent() == &path );
 
     KoPathPoint *point2 = new KoPathPoint( &path, QPointF( 15, 15 ), KoPathPoint::Normal );
     KoPathPointIndex p2Index( 0, 2 );
     QVERIFY( path.insertPoint( point2, p2Index ) == true );
+    QVERIFY( point2->parent() == &path );
 
     // add after last point of a open subpath
     KoPathPoint *point3 = new KoPathPoint( &path, QPointF( 25, 25 ), KoPathPoint::Normal );
     KoPathPointIndex p3Index( 0, 4 );
     QVERIFY( path.insertPoint( point3, p3Index ) == true );
+    QVERIFY( point3->parent() == &path );
 
     KoPathPoint *point4 = new KoPathPoint( &path, QPointF( 40, 30 ), KoPathPoint::Normal );
     KoPathPointIndex p4Index( 1, 1 );
     QVERIFY( path.insertPoint( point4, p4Index ) == true );
+    QVERIFY( point4->parent() == &path );
 
     // add before the first point of a closed subpath
     KoPathPoint *point5 = new KoPathPoint( &path, QPointF( 30, 35 ), KoPathPoint::Normal );
     KoPathPointIndex p5Index( 1, 0 );
     QVERIFY( path.insertPoint( point5, p5Index ) == true );
+    QVERIFY( point5->parent() == &path );
 
     // add after last point of a closed subpath
     KoPathPoint *point6 = new KoPathPoint( &path, QPointF( 35, 40 ), KoPathPoint::Normal );
     KoPathPointIndex p6Index( 1, 4 );
     QVERIFY( path.insertPoint( point6, p6Index ) == true );
+    QVERIFY( point6->parent() == &path );
 
     // test out of bounds
     KoPathPoint *point7 = new KoPathPoint( &path, QPointF( 0, 0 ), KoPathPoint::Normal );
@@ -283,6 +289,12 @@ void TestPathShape::insertPoint()
     ppath.closeSubpath();
 
     QVERIFY( ppath == path.outline() );
+
+    KoPathShape path2;
+    path2.moveTo( QPointF(0,0) );
+    KoPathPoint * p = new KoPathPoint( 0, QPointF( 100, 100 ) );
+    QVERIFY( path2.insertPoint( p, KoPathPointIndex(0,1) ) == true );
+    QVERIFY( p->parent() == &path2 );
 }
 
 void TestPathShape::removePoint()

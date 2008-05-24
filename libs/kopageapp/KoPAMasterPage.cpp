@@ -32,6 +32,7 @@
 
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
+#include "KoPAUtil.h"
 
 KoPAMasterPage::KoPAMasterPage()
 : KoPAPageBase()
@@ -113,15 +114,8 @@ QPixmap KoPAMasterPage::thumbnail()
 
     KoZoomHandler zoomHandler;
     const KoPageLayout & layout = pageLayout();
-    double zoom = size.width() / ( zoomHandler.resolutionX() * layout.width );
-    zoom = qMin( zoom, size.height() / ( zoomHandler.resolutionY() * layout.height ) );
-    zoomHandler.setZoom( zoom );
-
-    int width = int( 0.5 + zoomHandler.documentToViewX( layout.width ) );
-    int height = int( 0.5 + zoomHandler.documentToViewY( layout.height ) );
-    int x = int( ( size.width() - width ) / 2.0 );
-    int y = int( ( size.height() - height ) / 2.0 );
-    QRect pageRect( x, y, width, height );
+    KoPAUtil::setZoom( layout, size, zoomHandler );
+    QRect pageRect( KoPAUtil::pageRect( layout, size, zoomHandler ) );
 
     QPixmap pixmap( size.width(), size.height() );
     // should it be transparent at the places where it is to big?

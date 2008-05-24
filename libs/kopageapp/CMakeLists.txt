@@ -26,6 +26,7 @@ set( kopageapp_LIB_SRCS
      KoPADocumentModel.cpp
      KoPAPageThumbnailModel.cpp
      KoPADocumentStructureDocker.cpp
+     KoPAUtil.cpp
      commands/KoPAPageInsertCommand.cpp
      commands/KoPAPageDeleteCommand.cpp
      commands/KoPAPageMoveCommand.cpp

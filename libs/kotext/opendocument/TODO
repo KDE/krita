@@ -30,6 +30,11 @@
 
 - support loading+saving page-styles && add GUI-functionality to KWord for it
     ==> under progress
+    commit r812046 adds functionality to page-break if a paragraph defines a master-page-name
+    but it's not a nice solution cause we would e.g. need to move the defined master-page-name
+    if the paragraph got removed to the parag after it.
+    also we should fill+use KoPageLayout && KWPage->setPageLayout() here.
+    see also KoPageApp.
 
 - implement loading+saving all types of anchors
     see KoTextAnchor and KWOdfSharedLoadingData::shapeInserted()

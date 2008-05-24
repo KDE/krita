@@ -111,7 +111,7 @@ public:
         TabPositions,           ///< A list of tab positions
         TextProgressionDirection,
 
-        MasterPageName          ///< The name of the master-page.
+        MasterPageName          ///< Optional name of the master-page.
 
 // do 15.5.24
 // continue at 15.5.28
@@ -426,7 +426,7 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     /// each style has a unique ID (non persistent) given out by the styleManager
     void setStyleId(int id);
 
-    /// return the name of the master-page.
+    /// return the optional name of the master-page or a QString() if this paragraph isn't attached to a master-page.
     QString masterPageName() const;
     /// Set the name of the master-page.
     void setMasterPageName(const QString& name);

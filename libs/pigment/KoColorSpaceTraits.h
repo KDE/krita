@@ -191,8 +191,9 @@ struct KoColorSpaceTrait {
  * oneKoColorSpace->fromLabA16(p, somepointertodata, 1);
  */
 template<typename _channels_type_>
-struct KoLabTraits : public KoColorSpaceTrait<quint16, 4,3> {
+struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
     typedef _channels_type_ channels_type;
+    typedef KoColorSpaceTrait<_channels_type_, 4,3> parent;
     static const qint32 L_pos = 0;
     static const qint32 a_pos = 1;
     static const qint32 b_pos = 2;
@@ -209,35 +210,35 @@ struct KoLabTraits : public KoColorSpaceTrait<quint16, 4,3> {
 
     /// @return the L component
     inline static channels_type L(quint8* data) {
-        channels_type* d = nativeArray(data);
+        channels_type* d = parent::nativeArray(data);
         return d[L_pos];
     }
     /// Set the L component
     inline static void setL(quint8* data, channels_type nv)
     {
-        channels_type* d = nativeArray(data);
+        channels_type* d = parent::nativeArray(data);
         d[L_pos] = nv;
     }
     /// @return the a component
     inline static channels_type a(quint8* data) {
-        channels_type* d = nativeArray(data);
+        channels_type* d = parent::nativeArray(data);
         return d[a_pos];
     }
     /// Set the a component
     inline static void setA(quint8* data, channels_type nv)
     {
-        channels_type* d = nativeArray(data);
+        channels_type* d = parent::nativeArray(data);
         d[a_pos] = nv;
     }
     /// @return the b component
     inline static channels_type b(quint8* data) {
-        channels_type* d = nativeArray(data);
+        channels_type* d = parent::nativeArray(data);
         return d[b_pos];
     }
     /// Set the a component
     inline static void setB(quint8* data, channels_type nv)
     {
-        channels_type* d = nativeArray(data);
+        channels_type* d = parent::nativeArray(data);
         d[b_pos] = nv;
     }
 };

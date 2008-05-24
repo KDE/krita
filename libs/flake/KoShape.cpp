@@ -57,6 +57,8 @@
 
 #include <kdebug.h>
 
+#include <limits>
+
 class KoShape::Private {
 public:
     Private(KoShape *shape)
@@ -484,10 +486,10 @@ double KoShape::rotation() const {
 
     // check if the matrix has shearing mixed in
     if( fabs( fabs(d->localMatrix.m12()) - fabs(d->localMatrix.m21()) ) > 1e-10 )
-        return NAN;
+        return std::numeric_limits<double>::quiet_NaN();
     // check if the matrix has scaling mixed in
     if( fabs( d->localMatrix.m11() - d->localMatrix.m22() ) > 1e-10 )
-        return NAN;
+        return std::numeric_limits<double>::quiet_NaN();
 
     // calculate the angle from the matrix elements
     double angle = atan2( -d->localMatrix.m21(), d->localMatrix.m11() ) * 180.0 / M_PI;

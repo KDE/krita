@@ -74,3 +74,11 @@ set(TestKoIntegerMaths_test_SRCS TestKoIntegerMaths.cpp )
 kde4_add_unit_test(TestKoIntegerMaths TESTNAME libs-pigment-TestKoIntegerMaths ${TestKoIntegerMaths_test_SRCS})
 target_link_libraries(TestKoIntegerMaths  ${KDE4_KDECORE_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestConvolutionOpImpl_test_SRCS TestConvolutionOpImpl.cpp )
+
+kde4_add_unit_test(TestConvolutionOpImpl TESTNAME libs-pigment-TestConvolutionOpImpl ${TestConvolutionOpImpl_test_SRCS})
+
+target_link_libraries(TestConvolutionOpImpl  ${KDE4_KDECORE_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+

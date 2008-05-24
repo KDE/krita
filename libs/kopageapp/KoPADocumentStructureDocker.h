@@ -20,6 +20,7 @@
 #define KOPADOCUMENTSTRUCTUREDOCKER_H
 
 #include <QDockWidget>
+#include <QHash>
 #include <KoDockFactory.h>
 #include <KoCanvasObserver.h>
 #include <KoDocumentSectionView.h>
@@ -30,15 +31,16 @@ class KoPADocumentModel;
 class QModelIndex;
 class KoPAPageBase;
 class KoPACanvas;
+class QAction;
 
 class KoPADocumentStructureDockerFactory : public KoDockFactory
 {
 public:
-    KoPADocumentStructureDockerFactory( KoPACanvas* canvas );
+    KoPADocumentStructureDockerFactory( KoPACanvas* canvas, KoDocumentSectionView::DisplayMode mode );
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-    
+
     DockPosition defaultDockPosition() const
     {
         return DockRight;
@@ -46,6 +48,7 @@ public:
 
 private:
     KoPACanvas* m_canvas;
+    KoDocumentSectionView::DisplayMode m_mode;
 };
 
 class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserver
@@ -53,7 +56,7 @@ class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserver
 Q_OBJECT
 
 public:
-    explicit KoPADocumentStructureDocker( QWidget* parent = 0 );
+    explicit KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, QWidget* parent = 0 );
     virtual ~KoPADocumentStructureDocker();
     
     virtual void setCanvas( KoCanvasBase* canvas);
@@ -79,9 +82,14 @@ private slots:
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
+
+    KoDocumentSectionView::DisplayMode viewModeFromString( const QString& mode );
+    QString viewModeToString( KoDocumentSectionView::DisplayMode mode );
+
     KoPACanvas* m_canvas;
     KoDocumentSectionView *m_sectionView;
     KoPADocumentModel *m_model;
+    QHash<KoDocumentSectionView::DisplayMode, QAction*> m_viewModeActions;
 };
 
 #endif // KOPADOCUMENTSTRUCTUREDOCKER_H

@@ -46,6 +46,7 @@
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
+#include <KConfigGroup>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QToolButton>
@@ -59,8 +60,8 @@ enum ButtonIds
     Button_Delete
 };
 
-KoPADocumentStructureDockerFactory::KoPADocumentStructureDockerFactory( KoPACanvas* canvas )
-    : m_canvas( canvas )
+KoPADocumentStructureDockerFactory::KoPADocumentStructureDockerFactory( KoPACanvas* canvas, KoDocumentSectionView::DisplayMode mode )
+    : m_canvas( canvas ), m_mode( mode )
 {
 }
 
@@ -71,13 +72,13 @@ QString KoPADocumentStructureDockerFactory::id() const
 
 QDockWidget* KoPADocumentStructureDockerFactory::createDockWidget()
 {
-    KoPADocumentStructureDocker* docker = new KoPADocumentStructureDocker();
+    KoPADocumentStructureDocker* docker = new KoPADocumentStructureDocker(m_mode);
     docker->setCanvas( m_canvas );
 
     return docker;
 }
 
-KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
+KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, QWidget* parent )
     : QDockWidget( parent )
     , KoCanvasObserver()
     , m_canvas( 0 )
@@ -118,17 +119,18 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
     button = new QToolButton( mainWidget );
     KMenu *menu = new KMenu( this );
     QActionGroup *group = new QActionGroup( this );
-    QList<QAction*> actions;
 
-    actions << menu->addAction(SmallIcon("view-list-text"), i18n("Minimal View"), this, SLOT(minimalView()));
-    actions << menu->addAction(SmallIcon("view-list-details"), i18n("Detailed View"), this, SLOT(detailedView()));
-    actions << menu->addAction(SmallIcon("view-preview"), i18n("Thumbnail View"), this, SLOT(thumbnailView()));
+    m_viewModeActions.insert( KoDocumentSectionView::MinimalMode,
+                              menu->addAction( SmallIcon( "view-list-text" ), i18n( "Minimal View" ), this, SLOT( minimalView() ) ) );
+    m_viewModeActions.insert( KoDocumentSectionView::DetailedMode,
+                              menu->addAction( SmallIcon( "view-list-details" ), i18n( "Detailed View" ), this, SLOT( detailedView() ) ) );
+    m_viewModeActions.insert( KoDocumentSectionView::ThumbnailMode,
+                              menu->addAction( SmallIcon( "view-preview" ), i18n( "Thumbnail View" ), this, SLOT( thumbnailView() ) ) );
 
-    for (int i = 0, n = actions.count(); i < n; ++i) {
-        actions[i]->setCheckable( true );
-        actions[i]->setActionGroup( group );
+    foreach (QAction* action, m_viewModeActions) {
+        action->setCheckable( true );
+        action->setActionGroup( group );
     }
-    actions[1]->trigger(); //TODO save/load previous state
 
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
@@ -150,10 +152,20 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( QWidget* parent )
     m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
 
     connect( m_sectionView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
+
+    KConfigGroup configGroup = KGlobal::config()->group( "KoPageApp/DocumentStructureDocker" );
+    QString viewModeString = configGroup.readEntry("ViewMode", "");
+
+    if( viewModeString.isEmpty() )
+        setViewMode( mode );
+    else
+        setViewMode( viewModeFromString( viewModeString ) );
 }
 
 KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
 {
+    KConfigGroup configGroup = KGlobal::config()->group( "KoPageApp/DocumentStructureDocker" );
+    configGroup.writeEntry( "ViewMode", viewModeToString( m_sectionView->displayMode() ) );
 }
 
 void KoPADocumentStructureDocker::updateView()
@@ -399,7 +411,6 @@ void KoPADocumentStructureDocker::detailedView()
 void KoPADocumentStructureDocker::thumbnailView()
 {
     setViewMode(KoDocumentSectionView::ThumbnailMode);
-    m_sectionView->collapseAll();
 }
 
 void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
@@ -409,6 +420,41 @@ void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode
     m_sectionView->setItemsExpandable(expandable);
     m_sectionView->setRootIsDecorated(expandable);
     m_sectionView->setSelectionMode(expandable ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
+
+    if(mode == KoDocumentSectionView::ThumbnailMode)
+        m_sectionView->collapseAll();
+
+    m_viewModeActions[mode]->setChecked (true);
+}
+
+KoDocumentSectionView::DisplayMode KoPADocumentStructureDocker::viewModeFromString( const QString& mode )
+{
+    if( mode == "Minimal" )
+        return KoDocumentSectionView::MinimalMode;
+    else if( mode == "Detailed" )
+        return KoDocumentSectionView::DetailedMode;
+    else if( mode == "Thumbnail" )
+        return KoDocumentSectionView::ThumbnailMode;
+
+    return KoDocumentSectionView::DetailedMode;
+}
+
+QString KoPADocumentStructureDocker::viewModeToString( KoDocumentSectionView::DisplayMode mode )
+{
+    switch (mode)
+    {
+        case KoDocumentSectionView::MinimalMode:
+            return QString( "Minimal" );
+            break;
+        case KoDocumentSectionView::DetailedMode:
+            return QString( "Detailed" );
+            break;
+        case KoDocumentSectionView::ThumbnailMode:
+            return QString( "Thumbnail" );
+            break;
+    }
+
+    return QString();
 }
 
 #include "KoPADocumentStructureDocker.moc"

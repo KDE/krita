@@ -352,9 +352,12 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                 for (qint32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
                     quint8** d = pixelPtrCache + krow * kw;
                     //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
-                    for (int i = 0; i < (kw-1); i++) {
-                        memcpy(d[i], d[i+1], cdepth);
-                    }
+//                     for (int i = 0; i < (kw-1); i++) {
+//                         memcpy(d[i], d[i+1], cdepth);
+//                     }
+                    quint8* first = *d;
+                    memmove( d, d+1, (kw-1)*sizeof(quint8*));
+                    *(d + kw -1 ) = first;
                 }
                 if(col < xLastMinuskhw)
                 {

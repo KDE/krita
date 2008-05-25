@@ -135,28 +135,24 @@ public:
                                 srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
                             }
 
-                            if (srcAlpha == NATIVE_OPACITY_OPAQUE) {
-                                memcpy(dstN, srcN, pixelSize);
+                            channels_type dstAlpha = dstN[_CSTraits::alpha_pos];
+
+                            channels_type srcBlend;
+
+                            if (dstAlpha == NATIVE_OPACITY_OPAQUE) {
+                                srcBlend = srcAlpha;
                             } else {
-                                channels_type dstAlpha = dstN[_CSTraits::alpha_pos];
+                                channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                                dstN[_CSTraits::alpha_pos] = newAlpha;
 
-                                channels_type srcBlend;
-
-                                if (dstAlpha == NATIVE_OPACITY_OPAQUE) {
-                                    srcBlend = srcAlpha;
+                                if (newAlpha != 0) {
+                                    srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
                                 } else {
-                                    channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                                    dstN[_CSTraits::alpha_pos] = newAlpha;
-
-                                    if (newAlpha != 0) {
-                                        srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
-                                    } else {
-                                        srcBlend = srcAlpha;
-                                    }
+                                    srcBlend = srcAlpha;
                                 }
-                                _compositeOp::composeColorChannels( srcBlend, srcN, dstN, pixelSize, channelFlags );
-
                             }
+                            _compositeOp::composeColorChannels( srcBlend, srcN, dstN, pixelSize, channelFlags );
+
                         }
                         columns--;
                         srcN += srcInc;

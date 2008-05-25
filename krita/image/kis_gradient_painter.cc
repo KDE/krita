@@ -608,7 +608,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }
 
     if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
-        // XXX: Enable after debugging
+        // XXX: FIX ANTIALISED DRAWING OF GRADIENTS
         if ( false && antiAliasThreshold < 1 - DBL_EPSILON) {
 
             QList<KoChannelInfo *> channels = colorSpace->channels();

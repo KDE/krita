@@ -61,12 +61,6 @@ KoPathShape::~KoPathShape()
     delete d;
 }
 
-KoShape * KoPathShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 void KoPathShape::saveOdf( KoShapeSavingContext & context ) const
 {
     context.xmlWriter().startElement( "draw:path" );

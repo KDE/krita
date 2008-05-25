@@ -450,9 +450,6 @@ private:
     virtual void loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 protected:
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
-
     QRectF handleRect( const QPointF &p, double radius ) const;
     /**
      * @brief add a arc.

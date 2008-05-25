@@ -684,15 +684,6 @@ public:
     /// Removes as shape depending on this shape
     void removeDependee( KoShape * shape );
 
-    /**
-     * Creates a clone of this shape.
-     *
-     * Deriving shapes have to implement the proteced abstract clone
-     * function which does create the specific shape instance and
-     * copies the shapes data.
-     */
-    KoShape * clone( KoShapeControllerBase * base ) const;
-
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
 
@@ -830,9 +821,6 @@ protected:
 
     /// return the current matrix that contains the rotation/scale/position of this shape
     const QMatrix& matrix() const;
-
-    /// Deriving shapes have to implement that to support cloning
-    virtual KoShape * cloneShape() const = 0;
 
 private:
     friend class KoShapeManager;

@@ -49,7 +49,6 @@ class MockTextShape : public KoShape {
     }
     virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
-    virtual KoShape * cloneShape() const { return 0; }
     KoTextDocumentLayout *layout;
 };
 

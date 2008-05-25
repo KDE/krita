@@ -45,12 +45,6 @@ KoPAMasterPage::~KoPAMasterPage()
 {
 }
 
-KoShape * KoPAMasterPage::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 {
     KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );

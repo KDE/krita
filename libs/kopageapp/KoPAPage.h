@@ -72,9 +72,6 @@ protected:
     /// Reimplemented from KoPageBase
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
 
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
-
     KoPAMasterPage * m_masterPage;
 
     int m_pageProperties;

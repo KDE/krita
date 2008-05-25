@@ -33,12 +33,6 @@ KoShapeLayer::KoShapeLayer()
     setSelectable(false);
 }
 
-KoShape * KoShapeLayer::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 bool KoShapeLayer::hitTest( const QPointF &position ) const
 {
     Q_UNUSED(position);

@@ -149,7 +149,7 @@ void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
         m_activePoint->setControlPoint1( point );
         m_activePoint->setControlPoint2( point );
         m_firstPoint = m_activePoint;
-        m_canvas->updateCanvas( m_shape->boundingRect() );
+        m_canvas->updateCanvas( handleRect( point ) );
         m_canvas->updateCanvas( m_canvas->snapGuide()->boundingRect() );
 
         m_canvas->snapGuide()->setEditedShape( m_shape );

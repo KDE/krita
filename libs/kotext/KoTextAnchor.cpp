@@ -24,12 +24,14 @@
 #include <KoShapeContainer.h>
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
+#include <KoUnit.h>
 
 #include <QTextInlineObject>
 #include <QFontMetricsF>
 #include <QPainter>
 #include <KDebug>
 
+#define I_WANT_BAD_LOOKING_THINGS_FOR_DEBUG 0
 class KoTextAnchor::Private {
 public:
     Private(KoTextAnchor *p, KoShape *s)
@@ -158,6 +160,15 @@ void KoTextAnchor::paint (QPainter &painter, QPaintDevice *pd, const QTextDocume
     Q_UNUSED(object);
     Q_UNUSED(posInDocument);
     Q_UNUSED(format);
+#if I_WANT_BAD_LOOKING_THINGS_FOR_DEBUG
+    kDebug() << "*****************************************************************************************************************************";
+    kDebug() << "painting KoTextAnchor : " << rect ;
+    kDebug() << "*****************************************************************************************************************************";
+    painter.setOpacity(0.5);
+    painter.drawLine(0, 0, 15, 15);
+    painter.drawLine(15, 0, 0, 15);
+    painter.setOpacity(1);
+#endif
     // we never paint ourselves; the shape can do that.
 }
 
@@ -206,9 +217,15 @@ void KoTextAnchor::saveOdf (KoShapeSavingContext & context) {
 }
 
 bool KoTextAnchor::loadOdfFromShape () {
-    kDebug() << "Hey, I'm loading ODF from Shape !";
+    QPointF offset(0, 0);
+    if (shape()->hasAdditionalAttribute("svg:x")) {
+        offset.setX(KoUnit::parseValue(shape()->additionalAttribute("svg:x")));
+    }
+    if (shape()->hasAdditionalAttribute("svg:y")) {
+        offset.setY(KoUnit::parseValue(shape()->additionalAttribute("svg:y")));
+    }
+    setOffset(offset);
     if (shape()->hasAdditionalAttribute("text:anchor-type")) {
-        kDebug() << "and the attributes are available";
         d->pageNumber = -1;
         QString anchorType = shape()->additionalAttribute("text:anchor-type");
         if (anchorType == "paragraph")

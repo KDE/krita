@@ -66,7 +66,8 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
 
     KisConvolutionPainter painter( dst, dstInfo.selection() );
 
-    QBitArray channelFlags = config->channelFlags();
+    QBitArray channelFlags;
+    if( config) channelFlags = config->channelFlags();
     if (channelFlags.isEmpty()) {
         channelFlags = dst->colorSpace()->channelFlags();
     }

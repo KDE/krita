@@ -48,12 +48,6 @@ KisLayerShape::~KisLayerShape()
     delete m_d;
 }
 
-KoShape * KisLayerShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 KisLayerSP KisLayerShape::layer()
 {
     return m_d->layer;

@@ -87,8 +87,6 @@ private:
     /// will initiate a load of the image data.
     void tryLoadFromImageData(KoImageData *data);
 
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
 private:
 
     class Private;

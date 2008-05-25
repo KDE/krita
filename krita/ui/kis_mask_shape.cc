@@ -47,13 +47,6 @@ KisMaskShape::~KisMaskShape()
     delete m_d;
 }
 
-
-KoShape * KisMaskShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 KisMaskSP KisMaskShape::mask()
 {
     return m_d->mask;

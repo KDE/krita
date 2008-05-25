@@ -67,12 +67,6 @@ KritaShape::~KritaShape()
     delete m_d;
 }
 
-KoShape * KritaShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 void KritaShape::importImage(const KUrl & url )
 {
     delete m_d->doc;

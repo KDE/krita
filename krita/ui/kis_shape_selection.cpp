@@ -51,12 +51,6 @@ KisShapeSelection::~KisShapeSelection()
 {
 }
 
-KoShape * KisShapeSelection::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 bool KisShapeSelection::loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
 {
     return false;

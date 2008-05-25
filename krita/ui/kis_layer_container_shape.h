@@ -63,10 +63,6 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 private:
-
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
-
     class Private;
     Private * const m_d;
 };

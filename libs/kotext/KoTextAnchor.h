@@ -37,6 +37,8 @@ class KoShape;
  * 2. Use loadOdfFromShape() to load additional attributes like the "text:anchor-type"
  * 3. Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
  *    the TextShape's \a KoTextShapeContainerModel .
+ * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdfFromShape().
+ * @see KWAnchorStrategy for more information about the layout of anchors/shapes in KWord.
  */
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject {
 public:
@@ -121,9 +123,9 @@ public:
     virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
             const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
-    /// return the offset from the origin.
+    /// return the offset of the shape from the anchor.
     const QPointF &offset() const;
-    /// set the new offset. Causes a new layout soon.
+    /// set the new offset of the shape. Causes a new layout soon.
     void setOffset(const QPointF &offset);
 
     /// Load the additional attributes.

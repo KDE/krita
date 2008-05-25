@@ -38,7 +38,7 @@
 class KisNode::Private
 {
 public:
-
+    Private() : graphListener(0), updateStrategy(0) {}
     KisNodeSP parent;
     KisNodeGraphListener * graphListener;
     QList<KisNodeSP> nodes;
@@ -51,15 +51,7 @@ KisNode::KisNode()
     m_d->parent = 0;
     m_d->graphListener = 0;
     
-    KConfigGroup cfg = KGlobal::config()->group("");
-    QString updateStrategy = cfg.readEntry("update_strategy", "TopDown");
-    if (updateStrategy == "BottomUp") {
-        m_d->updateStrategy = new KisBottomUpUpdateStrategy( this );
-    }
-    else if (updateStrategy == "TopDown") {
-        m_d->updateStrategy = new KisTopDownUpdateStrategy( this );
-    }
-
+    init();
 }
 
 
@@ -71,6 +63,19 @@ KisNode::KisNode( const KisNode & rhs )
     m_d->graphListener = rhs.m_d->graphListener;
     foreach( KisNodeSP node, rhs.m_d->nodes ) {
         m_d->nodes.append( node.data()->clone() );
+    }
+    init();
+}
+
+void KisNode::init()
+{
+    KConfigGroup cfg = KGlobal::config()->group("");
+    QString updateStrategy = cfg.readEntry("update_strategy", "TopDown");
+    if (updateStrategy == "BottomUp") {
+        m_d->updateStrategy = new KisBottomUpUpdateStrategy( this );
+    }
+    else if (updateStrategy == "TopDown") {
+        m_d->updateStrategy = new KisTopDownUpdateStrategy( this );
     }
 }
 

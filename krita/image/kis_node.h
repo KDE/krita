@@ -55,7 +55,9 @@ public:
      * node.
      */
     KisNode( const KisNode & rhs );
-
+private:
+    void init();
+public:
     /**
      * Delete this node
      */

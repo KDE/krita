@@ -363,7 +363,6 @@ transparency, after all).
 not removed.
   - create a selection, copy, paste: the new layer is empty (but "paste 
 in a new image" works).
-  - duplicate layer = crash
   - several composite mode dont work at 100% of opacity, instead they're 
 shown as a mix of "normal" and their own "composite" mode.
   - some other composite modes don't work as expected (add, overlay).

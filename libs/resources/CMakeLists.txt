@@ -19,7 +19,7 @@ kde4_add_library(koresources SHARED ${koresources_LIB_SRCS})
 target_link_libraries(koresources  ${KDE4_KDECORE_LIBS} pigmentcms)
 
 set_target_properties(koresources PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS koresources  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS koresources  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES 
          koresource_export.h

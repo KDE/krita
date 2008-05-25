@@ -32,7 +32,7 @@ target_link_libraries(kstore ${QCA2_LIBRARIES})
 endif( QCA2_FOUND )
 
 set_target_properties(kstore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kstore  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kstore  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

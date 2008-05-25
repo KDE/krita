@@ -76,7 +76,7 @@ target_link_libraries(pigmentcms ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${X11_X11
 set_target_properties(pigmentcms PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
 
-install(TARGETS pigmentcms  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES 
          pigment_export.h

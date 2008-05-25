@@ -30,7 +30,7 @@ kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
 target_link_libraries(koodf kstore)
 
 set_target_properties(koodf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS koodf DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 install( FILES

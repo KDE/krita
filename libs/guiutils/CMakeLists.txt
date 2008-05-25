@@ -78,7 +78,7 @@ kde4_add_library(koguiutils SHARED ${koguiutils_LIB_SRCS})
 target_link_libraries(koguiutils  ${KDE4_KDECORE_LIBS} komain flake pigmentcms koresources)
 
 set_target_properties(koguiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS koguiutils  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS koguiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES zoom-width.png zoom-page.png zoom-pixels.png DESTINATION ${DATA_INSTALL_DIR}/koffice/icons/hicolor/22x22/actions)
 

@@ -89,7 +89,7 @@ kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 target_link_libraries(komain koodf kstore ${KDE4_KPARTS_LIBS} ${KDE4_KFILE_LIBRARY} ${KDE4_KABC_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
 
 set_target_properties(komain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS komain DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 ########### next target ###############

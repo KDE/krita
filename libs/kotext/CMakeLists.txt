@@ -86,7 +86,7 @@ kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 target_link_libraries(kotext flake ${KDE4_KUTILS_LIBS} komain koguiutils )
 
 set_target_properties(kotext PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kotext  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

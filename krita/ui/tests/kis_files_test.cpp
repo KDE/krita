@@ -22,14 +22,9 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include "testutil.h"
 #include <qtest_kde.h>
-#include <kis_doc2.h>
-#include <kis_image.h>
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 
-#include <ktemporaryfile.h>
+#include "filestest.h"
 
 #ifndef FILES_DATA_DIR
     #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -38,39 +33,7 @@
 
 void KisFilesTest::testFiles()
 {
-    QDir dirSources ( QString(FILES_DATA_DIR) + "/sources" );
-    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList())
-    {
-        if( !sourceFileInfo.isHidden())
-        {
-            qDebug() << "handling " << sourceFileInfo.fileName();
-            QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png" );
-            QVERIFY2(resultFileInfo.exists(),
-                     QString( "Result file %1 not found" ).arg(resultFileInfo.fileName()).toAscii().data() );
-            KisDoc2 doc;
-            doc.importDocument( sourceFileInfo.absoluteFilePath() );
-            QVERIFY(doc.image());
-            QString id = doc.image()->colorSpace()->id();
-            if(id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16")
-            {
-              dbgKrita << "Images need conversion";
-              doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
-            }
-            KTemporaryFile tmpFile;
-            tmpFile.setSuffix(".png");
-            tmpFile.open();
-            tmpFile.setAutoRemove(false);
-            doc.setOutputMimeType("image/png");
-            doc.saveAs( "file://" + tmpFile.fileName());
-            QImage resultImg(resultFileInfo.absoluteFilePath());
-            resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
-            QImage sourceImg(tmpFile.fileName());
-            sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
-            
-            QPoint pt;
-            QVERIFY2( TestUtil::compareQImages( pt, resultImg, sourceImg), QString("Pixel (%1,%2) has different values").arg(pt.x()).arg(pt.y()).toLatin1() );
-        }
-    }
+    TestUtil::testFiles( QString(FILES_DATA_DIR) + "/sources" );
 }
 QTEST_KDEMAIN(KisFilesTest, GUI)
 

@@ -81,7 +81,7 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2 )
 
     for ( int x = 0; x < w1; ++x ) {
         for ( int y = 0; y < h1; ++y ) {
-            if ( img1.pixel(x, y) != img2.pixel( x, y ) ) {
+            if ( img1.pixel(x, y) != img2.pixel( x, y ) && ( qAlpha( img1.pixel(x, y) != 0 || qAlpha( img2.pixel(x, y) != 0  ) ) ) ) {
                 pt.setX( x );
                 pt.setY( y );
                 return false;

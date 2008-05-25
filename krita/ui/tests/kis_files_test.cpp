@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-
+#include "testutil.h"
 #include <qtest_kde.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -66,26 +66,9 @@ void KisFilesTest::testFiles()
             resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
             QImage sourceImg(tmpFile.fileName());
             sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
-            QVERIFY(resultImg.width() == sourceImg.width());
-            QVERIFY(resultImg.height() == sourceImg.height());
-            QCOMPARE(resultImg.numBytes(), sourceImg.numBytes());
-            if(memcmp(resultImg.bits(), sourceImg.bits(), sourceImg.numBytes()) != 0)
-            {
-                for(int i = 0; i < sourceImg.numBytes(); i+=4)
-                {
-                    if( resultImg.bits()[i + 3] == sourceImg.bits()[i + 3] && resultImg.bits()[i + 3] != 0 )
-                    {
-                        for(int j = 0; j < 4; j++ )
-                        {
-                            QVERIFY2( resultImg.bits()[i+j] == sourceImg.bits()[i+j], 
-                                    QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i+j)
-                                    .arg((int)resultImg.bits()[i+j])
-                                    .arg((int)sourceImg.bits()[i+j])
-                                    .arg(sourceFileInfo.fileName()).toAscii().data());
-                        }
-                    }
-                }
-            }
+            
+            QPoint pt;
+            QVERIFY2( TestUtil::compareQImages( pt, resultImg, sourceImg), QString("Pixel (%1,%2) has different values").arg(pt.x()).arg(pt.y()).toLatin1() );
         }
     }
 }

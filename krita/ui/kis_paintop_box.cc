@@ -179,6 +179,8 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
 
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 {
+    dbgKrita << "Change input device : " << inputDevice.device() << " " << inputDevice.pointer() << " " << inputDevice.uniqueTabletId() ;
+    dbgKrita << KoToolManager::instance()->currentInputDevice().device() << " " << KoToolManager::instance()->currentInputDevice().pointer() << " " << KoToolManager::instance()->currentInputDevice().uniqueTabletId() ;
     KoID paintop;
     InputDevicePaintopMap::iterator it = m_currentID.find(inputDevice);
 

@@ -177,7 +177,8 @@ void KisToolFill::mouseReleaseEvent ( KoPointerEvent *e )
 
     if ( !m_canvas ) return;
     if ( !currentImage() || !currentLayer()->paintDevice() ) return;
-    if ( e->button() != Qt::LeftButton ) return;
+    if ( e->button() == Qt::LeftButton )
+    {
     int x, y;
 
     x = static_cast<int> ( m_startPos.x() );
@@ -190,6 +191,9 @@ void KisToolFill::mouseReleaseEvent ( KoPointerEvent *e )
 
     flood ( x, y );
     notifyModified();
+    } else {
+        KisToolPaint::mouseReleaseEvent(e);
+    }
 }
 
 QWidget* KisToolFill::createOptionWidget()

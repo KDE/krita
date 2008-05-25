@@ -167,6 +167,8 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
 
         delete m_painter;
         m_painter = 0;
+    } else {
+        KisToolPaint::mouseReleaseEvent(event);
     }
 }
 

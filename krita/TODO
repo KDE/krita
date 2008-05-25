@@ -341,7 +341,7 @@ Remarks by Enkhitan
 instead of 0-100% (it could be interesting to keep it as an option 
 though, to fake real soft brushes like chinese brushes, unless curves 
 settings for pressure comes back one day).
-  - strokes are "cut" by borders of the canvas.
+  - strokes are "cut" by borders of the canvas. (it's a Qt bug, tablet events are not tracked by the widget when the widget leave the canvas)
   - after painting for more than one hour, glitches appear in stroke, 
 and are followed soon after by a crash. These glitches are just in the 
 display, they are not saved in the document. They looks like the kind 
@@ -371,5 +371,4 @@ focus and catch pressed keys, even after having pressed the "enter" key.
  
 *shortcuts :
  
-   - middle mouse button doesn't flip bg/fg colors
    - keyboard shorcuts don't works, except ctrl + key and Fxx ones

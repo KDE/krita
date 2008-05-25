@@ -176,8 +176,9 @@ dbgPlugins <<"do we ever go here";
                 m_canvas->updateCanvas(convertToPt(bound.normalized()));
             }
         }
+    } else {
+        KisToolPaint::mouseReleaseEvent(e);
     }
-
 }
 
 

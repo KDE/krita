@@ -124,6 +124,8 @@ void KisToolRectangle::mouseMoveEvent(KoPointerEvent *event)
 
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
+    } else {
+        KisToolPaint::mouseReleaseEvent(event);
     }
 }
 

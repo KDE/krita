@@ -193,6 +193,8 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
     dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
+    } else {
+        KisToolPaint::mouseReleaseEvent(e);
     }
 }
 

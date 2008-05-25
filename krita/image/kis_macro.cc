@@ -56,6 +56,8 @@ void KisMacro::addAction(const KisRecordedAction& action)
     d->actions.append(action.clone());
 }
 
+#include <QApplication>
+
 void KisMacro::play()
 {
     dbgImage << "Start playing macro with " << d->actions.size() << " actions";
@@ -71,6 +73,7 @@ void KisMacro::play()
     {
         dbgImage << "Play action : " << (*it)->name();
         (*it)->play(undoAdapter);
+        QApplication::processEvents();
     }
     
     if(undoAdapter)

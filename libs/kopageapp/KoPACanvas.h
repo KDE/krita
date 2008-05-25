@@ -75,6 +75,9 @@ signals:
      */
     void sizeChanged( const QSize & size );
 
+    /// Emitted when updateCanvas has been called.
+    void canvasUpdated();
+
 protected:
     /// reimplemented method from superclass
     void paintEvent( QPaintEvent* event );

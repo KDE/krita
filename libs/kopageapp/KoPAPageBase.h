@@ -85,7 +85,7 @@ public:
      */
     virtual bool displayMasterShapes() = 0;
 
-    virtual QPixmap thumbnail() = 0;
+    virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
 
 protected:
     /**

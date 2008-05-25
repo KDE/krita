@@ -52,7 +52,7 @@ public:
     virtual bool displayMasterShapes();
 
     /// reimplemented
-    virtual QPixmap thumbnail();
+    virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
 
 protected:
     /**

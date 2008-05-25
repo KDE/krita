@@ -107,6 +107,8 @@ void KoPACanvas::updateCanvas( const QRectF& rc )
     clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
     clipRect.moveTopLeft( clipRect.topLeft() - m_documentOffset);
     update( clipRect );
+
+    emit canvasUpdated();
 }
 
 const KoViewConverter * KoPACanvas::viewConverter() const

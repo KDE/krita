@@ -102,10 +102,8 @@ bool KoPAMasterPage::displayMasterShapes()
     return false;
 }
 
-QPixmap KoPAMasterPage::thumbnail()
+QPixmap KoPAMasterPage::thumbnail( const QSize& size )
 {
-    QSize size( 512, 512 );
-
     KoZoomHandler zoomHandler;
     const KoPageLayout & layout = pageLayout();
     KoPAUtil::setZoom( layout, size, zoomHandler );

@@ -35,8 +35,6 @@ public:
     const KoShapeTemplate &shapeTemplate() const { return m_shapeTemplate; }
 
     static TemplateShape *createShape(const QDomElement &element);
-protected:
-    virtual KoShape * cloneShape() const { return 0; }
 
 private:
     KoShapeTemplate m_shapeTemplate;

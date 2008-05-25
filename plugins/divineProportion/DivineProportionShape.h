@@ -59,9 +59,6 @@ private:
     void divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left);
     void draw(QPainter &painter);
 
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
-
     const double m_divineProportion;
     Orientation m_orientation;
     bool m_printable;

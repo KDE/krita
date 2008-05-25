@@ -53,9 +53,6 @@ protected:
     virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
 
 private:
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
-
     KoImageCollection *m_imageCollection;
     KoImageData *m_imageData;
 };

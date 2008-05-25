@@ -91,12 +91,6 @@ MusicShape::~MusicShape()
     if (this == firstShape) firstShape = this->m_predecessor;
 }
 
-KoShape * MusicShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 void MusicShape::setSize( const QSizeF &newSize )
 {
     KoShape::setSize(newSize);

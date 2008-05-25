@@ -48,12 +48,6 @@ SimpleTextShape::~SimpleTextShape()
         m_path->removeDependee( this );
 }
 
-KoShape * SimpleTextShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion( painter, converter );

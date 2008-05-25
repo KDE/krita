@@ -44,7 +44,6 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
     virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) { return false; }
     virtual void saveOdf(KoShapeSavingContext &) const { }
-    virtual KoShape* cloneShape() const { return 0; }
 
     QByteArray clipboardData() const { return m_clipboardData; }
 

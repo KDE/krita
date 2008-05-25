@@ -99,9 +99,6 @@ protected:
 private:
     void shapeChanged(ChangeType type);
 
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
-
     KoTextShapeData *m_textShapeData;
     QTextDocument *m_footnotes;
 

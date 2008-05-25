@@ -45,12 +45,6 @@ PictureShape::PictureShape()
 PictureShape::~PictureShape() {
 }
 
-KoShape * PictureShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) {
     QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
 

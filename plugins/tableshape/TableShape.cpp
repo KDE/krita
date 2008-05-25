@@ -62,12 +62,6 @@ TableShape::TableShape()
 TableShape::~TableShape() {
 }
 
-KoShape * TableShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 void TableShape::paintComponent( QPainter& painter, const KoViewConverter& converter )
 {
     Q_UNUSED( painter );

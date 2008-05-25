@@ -61,8 +61,6 @@ public:
     MusicShape* successor() { return m_successor; }
     MusicShape* predecessor() { return m_predecessor; }
 private:
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
 
     MusicCore::Sheet* m_sheet;
     int m_firstSystem;

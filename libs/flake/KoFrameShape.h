@@ -42,7 +42,7 @@ class KoShapeLoadingContext;
  * KoShape itself. As example the PictureShape, which may got used here
  * to handle the draw:image, does inherit KoFrameShape as well as KoShape
  * to implement handlers for both. If we are now interested to know what
- * value is with e.g. the "svg:x" attribute of the draw:frame we are
+ * value is within e.g. the "svg:x" attribute of the draw:frame we are
  * able to access it by using the additional-attribute functionality. For
  * this we have to define first something like;
  * @code
@@ -51,10 +51,10 @@ class KoShapeLoadingContext;
  *     KoXmlNS::svg, "x", "svg:x" ) );
  * @endcode
  * somewhere before the loading starts to let flake know that we are
- * interested in those attributes. Then during loading we are able
+ * interested in those attribute. Then during loading we are able
  * to ask the KoShape itself for those attributes with something like;
  * @code
- * pictureShapeInstance->additionalAttribute("svg:x")
+ * myPictureShapeInstance->additionalAttribute("svg:x")
  * @endcode
  */
 class FLAKE_EXPORT KoFrameShape

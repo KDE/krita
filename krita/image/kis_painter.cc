@@ -277,7 +277,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sx, qint32 sy,
                         qint32 sw, qint32 sh)
 {
-    if (srcdev.isNull()) {
+    if (srcdev.isNull() || sw == 0 || sh == 0) {
         return;
     }
 
@@ -410,7 +410,8 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
                               qint32 sw, qint32 sh)
 {
 
-    if (srcdev.isNull()) return;
+    if (sw == 0 || sh == 0 ) return;
+    if (srcdev.isNull() ) return;
 
     if (selMask.isNull()) return;
 

@@ -19,19 +19,11 @@
 
 #include "KoPAPageThumbnailModel.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QPen>
 #include <QtGui/QIcon>
-
-#include <KoShapePainter.h>
-#include <KoZoomHandler.h>
-#include <KoPageLayout.h>
 
 #include <KLocale>
 
 #include "KoPAPageBase.h"
-#include "KoPAPage.h"
-#include "KoPAMasterPage.h"
 
 KoPAPageThumbnailModel::KoPAPageThumbnailModel(QList<KoPAPageBase *> pages, QObject *parent)
     : QAbstractListModel(parent),

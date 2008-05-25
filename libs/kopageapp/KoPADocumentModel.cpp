@@ -22,8 +22,6 @@
 
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KoPAPage.h>
-#include <KoPAMasterPage.h>
 #include <KoShapePainter.h>
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
@@ -33,7 +31,6 @@
 #include <KoCanvasController.h>
 #include <KoShapeControllerBase.h>
 #include <KoSelection.h>
-#include <KoZoomHandler.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
@@ -300,7 +297,6 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     KoShapePainter shapePainter;
 
     QList<KoShape*> shapes;
-    double zoom;
 
     KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
     if (page) { // We create a thumbnail with actual width / height ratio for page

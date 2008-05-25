@@ -21,7 +21,7 @@
 #define KOPAPAGETHUMBNAILMODEL_H
 
 #include <QtCore/QAbstractListModel>
-#include <QtGui/QPixmap>
+#include <QtCore/QSize>
 
 class KoPAView;
 class KoPAPageBase;

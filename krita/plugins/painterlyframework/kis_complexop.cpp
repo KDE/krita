@@ -407,3 +407,5 @@ double KisComplexOp::paintLine(const KisPaintInformation &pi1,
     }
     return KisPaintOp::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
 }
+
+#include "kis_complexop.moc"

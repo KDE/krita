@@ -29,6 +29,7 @@ namespace TestUtil {
 void testFiles(const QString& _dirname)
 {
     QDir dirSources ( _dirname );
+    qDebug() << "There are " << dirSources.entryInfoList().count() << " files in " << _dirname;
     foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList())
     {
         if( !sourceFileInfo.isHidden())

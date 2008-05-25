@@ -27,16 +27,65 @@ class KoShapeLoadingContext;
 
 /**
  * @brief Base class for shapes that are saved as a part of a draw:frame.
+ *
+ * Shapes like the TextShape or the PictureShape are implementing this
+ * class to deal with frames and there attributes.
+ *
+ * It follows a sample taken out of a ODT-file that shows how this works
+ * together;
+ * @code
+ * <draw:frame draw:style-name="fr1" text:anchor-type="paragraph" svg:x="0.6429in" svg:y="0.1409in" svg:width="4.7638in" svg:height="3.3335in">
+ *   <draw:image xlink:href="Pictures/imagename.jpg" />
+ * </draw:frame>
+ * @endcode
+ * The draw:frame is our KoFrameShape while the draw:image is then the
+ * KoShape itself. As example the PictureShape, which may got used here
+ * to handle the draw:image, does inherit KoFrameShape as well as KoShape
+ * to implement handlers for both. If we are now interested to know what
+ * value is with e.g. the "svg:x" attribute of the draw:frame we are
+ * able to access it by using the additional-attribute functionality. For
+ * this we have to define first something like;
+ * @code
+ * KoShapeLoadingContext::addAdditionalAttributeData(
+ *   KoShapeLoadingContext::AdditionalAttributeData(
+ *     KoXmlNS::svg, "x", "svg:x" ) );
+ * @endcode
+ * somewhere before the loading starts to let flake know that we are
+ * interested in those attributes. Then during loading we are able
+ * to ask the KoShape itself for those attributes with something like;
+ * @code
+ * pictureShapeInstance->additionalAttribute("svg:x")
+ * @endcode
  */
 class FLAKE_EXPORT KoFrameShape
 {
 public:
+
+    /**
+    * Constructor.
+    *
+    * \param ns The namespace. E.g. KoXmlNS::draw
+    * \param tag The tag-name. E.g. "image"
+    */
     KoFrameShape( const char * ns, const char * tag );
+
+    /**
+    * Destructor.
+    */
     virtual ~KoFrameShape();
 
+    /**
+    * Loads the content of the draw:frame element and it's children. This
+    * method calls the abstract loadOdfFrameElement() method.
+    */
     virtual bool loadOdfFrame( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 protected:
+
+    /**
+    * Abstract method to handle loading of the defined inner element like
+    * e.g. the draw:image element.
+    */
     virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context ) = 0;
 
 private:

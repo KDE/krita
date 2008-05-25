@@ -304,16 +304,8 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 
     KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
     if (page) { // We create a thumbnail with actual width / height ratio for page
-        KoPageLayout layout = page->pageLayout();
-        double ratio = (double)layout.width / layout.height;
-        if (ratio > 1) {
-            size.setHeight(size.width() / ratio);
-            zoom = (double) size.height() / layout.width;
-        }
-        else {
-            size.setWidth(size.height() * ratio); 
-            zoom = (double) size.width() / layout.height;
-        }
+        QPixmap pixmap = page->thumbnail().scaled( thumbSize );
+        return pixmap.toImage();
     }
 
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
@@ -327,28 +319,7 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     QImage thumb( size, QImage::Format_RGB32 );
     // draw the background of the thumbnail
     thumb.fill( QColor( Qt::white ).rgb() );
-
-    if (page) { // draw the thumbnail for page
-        QPainter painter(&thumb);
-        painter.setClipRect(QRect(0, 0, size.width(), size.height()));
-        KoZoomHandler zoomHandler;
-        zoomHandler.setZoom(zoom);
-
-        // also draw shapes from master page if this page is not a master
-        // and draw shapes from master page first
-        if (!m_master) {
-            KoPAMasterPage *masterPage = dynamic_cast<KoPAPage *>(page)->masterPage();
-            shapePainter.setShapes(masterPage->iterator());
-            shapePainter.paintShapes(painter, zoomHandler);
-            shapePainter.setShapes(shapes);
-        }
-        shapePainter.paintShapes(painter, zoomHandler);
-        QPen pen(Qt::SolidLine);
-        painter.setPen(pen);
-        painter.drawRect(0, 0, size.width() - 1, size.height() - 1);
-    }
-    else // draw thumbnail for other type of shapes
-        shapePainter.paintShapes( thumb );
+    shapePainter.paintShapes( thumb );
 
     return thumb;
 }

@@ -304,7 +304,15 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 
     KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
     if (page) { // We create a thumbnail with actual width / height ratio for page
-        QPixmap pixmap = page->thumbnail().scaled( thumbSize );
+        KoPageLayout layout = page->pageLayout();
+        double ratio = (double)layout.width / layout.height;
+        if ( ratio > 1 ) {
+            size.setHeight( size.width() / ratio );
+        }
+        else {
+            size.setWidth( size.height() * ratio );
+        }
+        QPixmap pixmap = page->thumbnail( size );
         return pixmap.toImage();
     }
 

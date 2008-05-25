@@ -79,7 +79,7 @@ public:
                     }
                     ++mask;
                 }
-                srcAlpha = KoColorSpaceMaths<channels_type>::multiply( NATIVE_OPACITY_OPAQUE - srcAlpha, U8_opacity);
+                srcAlpha = KoColorSpaceMaths<channels_type>::multiply( srcAlpha, U8_opacity);
                 srcAlpha = NATIVE_OPACITY_OPAQUE - srcAlpha;
                 d[_CSTraits::alpha_pos] = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, d[_CSTraits::alpha_pos]);
             }

@@ -29,6 +29,7 @@
 
 #include "kis_types.h"
 #include "kis_shared.h"
+#include "kis_image.h"
 
 #include "krita_export.h"
 

@@ -47,7 +47,7 @@ void KoPathToolSelection::paint( QPainter &painter, const KoViewConverter &conve
         painter.setMatrix( it.key()->absoluteTransformation(&converter) * painter.matrix() );
         KoShape::applyConversion( painter, converter );
 
-        QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
+        QRectF handle = m_tool->handleRect( QPoint(0,0) );
 
         foreach( KoPathPoint *p, it.value() )
             p->paint( painter, handle.size(), KoPathPoint::All );

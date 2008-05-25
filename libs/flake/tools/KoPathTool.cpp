@@ -699,8 +699,10 @@ void KoPathTool::repaint( const QRectF &repaintRect ) {
     m_canvas->updateCanvas( repaintRect.adjusted( -radius, -radius, radius, radius ) );
 }
 
-QRectF KoPathTool::handleRect( const QPointF &p ) {
-    return QRectF( p.x()-m_handleRadius, p.y()-m_handleRadius, 2*m_handleRadius, 2*m_handleRadius );
+QRectF KoPathTool::handleRect( const QPointF &p )
+{
+    QSizeF hsize = m_canvas->viewConverter()->viewToDocument( QSizeF(m_handleRadius,m_handleRadius) );
+    return QRectF( p.x()-hsize.width(), p.y()-hsize.height(), 2*hsize.width(), 2*hsize.height() );
 }
 
 void KoPathTool::deleteSelection()

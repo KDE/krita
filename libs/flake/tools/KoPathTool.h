@@ -69,7 +69,11 @@ public:
     /// reimplemented
     virtual KoToolSelection* selection();
 
-    /// returns a handle rect at the given position
+    /**
+     * Returns a handle rect at the given position.
+     * The position is expected to be in document coordinates.
+     * @return the handle rectangle in document coordinates
+     */
     QRectF handleRect( const QPointF &p );
 
     /// repaints the specified rect

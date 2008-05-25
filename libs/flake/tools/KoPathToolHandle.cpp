@@ -58,7 +58,7 @@ void PointHandle::paint( QPainter &painter, const KoViewConverter &converter )
     painter.setMatrix( m_activePoint->parent()->absoluteTransformation(&converter) * painter.matrix() );
     KoShape::applyConversion( painter, converter );
 
-    QRectF handle = converter.viewToDocument( m_tool->handleRect( QPoint(0,0) ) );
+    QRectF handle = m_tool->handleRect( QPoint(0,0) );
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
 
     KoPathPoint::KoPointType type = KoPathPoint::Node;

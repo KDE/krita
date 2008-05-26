@@ -33,13 +33,21 @@
     commit r812046 adds functionality to page-break if a paragraph defines a master-page-name
     but it's not a nice solution cause we would e.g. need to move the defined master-page-name
     if the paragraph got removed to the parag after it.
+        ==> should work since the master-page-name is already duplicated
     also we should fill+use KoPageLayout && KWPage->setPageLayout() here.
     see also KoPageApp.
+        ==> we probably need to find a KWord-only solution here without using KoStyleManager
+        ==> KWPage+KWPageManager works on page-numbers but page-styles are more KoInlineObjects
+    see 1.1-specs "2.8 Page Styles and Layout" + "14.4 Master Pages"
 
 - implement loading+saving all types of anchors
-    see KoTextAnchor and KWOdfSharedLoadingData::shapeInserted()
+    see KoTextAnchor and KWOdfSharedLoadingData::shapeInserted() and KWAnchorStrategy
+    ==> TODO save results in an invalid ODT file cause draw:frame has a draw:transform="matrix(1 0 0 1 187.085pt 207.549pt)"
+    ==> so far we only support "as-char" types. The other 3 types are still TODO
+    ==> what to do with KoTextAnchor::(AnchorVertical|AnchorHorizontal) which doesn't seem to be supported in odt's? :-/
 
 - loading+saving frames
+    ==> works
 
 - loading+saving variables
 

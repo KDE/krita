@@ -205,6 +205,8 @@ signals:
     void pageRemoved(KoPAPageBase* page);
 
 protected:
+    void insertIntoDataCenterMap(QString key, KoDataCenter *dc);
+
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
     virtual const char *odfTagName( bool withNamespace ) = 0;
 

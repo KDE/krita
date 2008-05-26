@@ -585,4 +585,9 @@ int KoPADocument::pageCount() const
     return d->pages.count();
 }
 
+void KoPADocument::insertIntoDataCenterMap(QString key, KoDataCenter *dc)
+{
+    d->dataCenterMap[key] = dc;
+}
+
 #include "KoPADocument.moc"

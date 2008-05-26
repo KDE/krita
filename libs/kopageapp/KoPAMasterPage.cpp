@@ -104,6 +104,10 @@ bool KoPAMasterPage::displayMasterShapes()
 
 QPixmap KoPAMasterPage::thumbnail( const QSize& size )
 {
+    // don't paint null pixmap
+    if ( size.isEmpty() ) // either width or height is <= 0
+        return QPixmap();
+
     KoZoomHandler zoomHandler;
     const KoPageLayout & layout = pageLayout();
     KoPAUtil::setZoom( layout, size, zoomHandler );

@@ -29,9 +29,9 @@ class KoShapeLoadingContext;
  * @brief Base class for shapes that are saved as a part of a draw:frame.
  *
  * Shapes like the TextShape or the PictureShape are implementing this
- * class to deal with frames and there attributes.
+ * class to deal with frames and their attributes.
  *
- * It follows a sample taken out of a ODT-file that shows how this works
+ * What follows is a sample taken out of an ODT-file that shows how this works
  * together;
  * @code
  * <draw:frame draw:style-name="fr1" text:anchor-type="paragraph" svg:x="0.6429in" svg:y="0.1409in" svg:width="4.7638in" svg:height="3.3335in">
@@ -39,8 +39,8 @@ class KoShapeLoadingContext;
  * </draw:frame>
  * @endcode
  * The draw:frame is our KoFrameShape while the draw:image is then the
- * KoShape itself. As example the PictureShape, which may got used here
- * to handle the draw:image, does inherit KoFrameShape as well as KoShape
+ * KoShape itself. As example the PictureShape, which may be used here
+ * to handle the draw:image, inherits KoFrameShape as well as KoShape
  * to implement handlers for both. If we are now interested to know what
  * value is within e.g. the "svg:x" attribute of the draw:frame we are
  * able to access it by using the additional-attribute functionality. For

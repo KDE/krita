@@ -217,14 +217,8 @@ void KoTextAnchor::saveOdf (KoShapeSavingContext & context) {
 }
 
 bool KoTextAnchor::loadOdfFromShape () {
-    QPointF offset(0, 0);
-    if (shape()->hasAdditionalAttribute("svg:x")) {
-        offset.setX(KoUnit::parseValue(shape()->additionalAttribute("svg:x")));
-    }
-    if (shape()->hasAdditionalAttribute("svg:y")) {
-        offset.setY(KoUnit::parseValue(shape()->additionalAttribute("svg:y")));
-    }
-    setOffset(offset);
+    setOffset(shape()->position());
+    shape()->setPosition(QPointF(0, 0));
     if (shape()->hasAdditionalAttribute("text:anchor-type")) {
         d->pageNumber = -1;
         QString anchorType = shape()->additionalAttribute("text:anchor-type");

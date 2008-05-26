@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -498,7 +498,14 @@ void KoPAView::insertPage()
 {
     KoPAPageBase * page = 0;
     if ( m_viewMode->masterMode() ) {
-        page = m_doc->newMasterPage();
+        KoPAMasterPage * masterPage = m_doc->newMasterPage();
+        // use the layout of the current active page for the new page
+        KoPageLayout & layout = masterPage->pageLayout();
+        KoPAMasterPage * activeMasterPage = dynamic_cast<KoPAMasterPage *>( m_activePage );
+        if ( activeMasterPage ) {
+            layout = activeMasterPage->pageLayout();
+        }
+        page = masterPage;
     }
     else {
         KoPAPage * activePage = dynamic_cast<KoPAPage*>( m_activePage );

@@ -97,15 +97,15 @@ public:
     void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPattern * pattern);
 
     /**
+     * Overloaded version of the above function.
+     */
+    void fillRect(const QRect& rc, KisPattern * pattern);
+
+    /**
      * Fill the specified area with the output of the generator plugin that is configured
      * in the generator parameter
      */
     void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisFilterConfiguration * generator);
-
-    /**
-     * Overloaded version of the above function.
-     */
-    void fillRect(const QRect& rc, KisPattern * pattern);
 
     /**
      * Fills the enclosed area around the point with the set color. If

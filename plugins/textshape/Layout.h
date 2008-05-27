@@ -85,6 +85,8 @@ private:
     void nextShape();
     void drawListItem(QPainter *painter, const QTextBlock &block);
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
+    void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
+    
     double inlineCharHeight(const QTextFragment &fragment);
     double findFootnote(const QTextLine &line);
 
@@ -112,8 +114,9 @@ private:
 
     // tab setting
     double m_defaultTabSizing;
-
     QString m_masterPageName;
+    int m_currentTabStop; // = n, where we should be looking from the nth tab stop onwards when 
+                          // we decorate the tab for the text of a fragment
 };
 
 #endif

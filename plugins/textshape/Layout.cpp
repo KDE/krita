@@ -53,7 +53,8 @@ Layout::Layout(KoTextDocumentLayout *parent)
     m_parent(parent),
     m_demoText(false),
     m_endOfDemoText(false),
-    m_defaultTabSizing(MM_TO_POINT(15))
+    m_defaultTabSizing(MM_TO_POINT(15)),
+    m_currentTabStop(0)
 {
 }
 
@@ -757,8 +758,83 @@ static void drawDecorationWords(QPainter *painter, const QTextLine &line, const 
          drawDecorationLine(painter, color, type, style, wordBeginX, line.cursorToX(j), y);
 }
 
-void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter)
-{
+// Decorate any tabs ('\t's) in 'currentFragment' and laid out in 'line'.
+void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock) {
+    // If a line in the layout represent multiple text fragments, this function will
+    // be called multiple times on the same line, with different fragments.
+    // Likewise, if a fragment spans two lines, then this function will be called twice 
+    // on the same fragment, once for each line.
+    QString fragText = currentFragment.text();
+    kDebug(32500) << "OK text " << fragText;
+    int fragmentOffset = currentFragment.position() - startOfBlock;
+
+    QFontMetricsF fm(currentFragment.charFormat().font());
+    double tabStyleLineMargin = fm.averageCharWidth()/4; // leave some margin for the tab decoration line
+    QColor tabDecorColor = currentFragment.charFormat().foreground().color();
+
+    // currentFragment.position() : start of this fragment w.r.t. the document
+    // startOfBlock : start of this block w.r.t. the document
+    // fragmentOffset : start of this fragment w.r.t. the block
+    // line.textStart() : start of this line w.r.t. the block
+
+    int searchForTabFrom; // search for \t from this point onwards in fragText
+    int searchForTabTill; // search for \t till this point in fragText
+
+    if (line.textStart() >= fragmentOffset) { // fragment starts at or before the start of line
+        // we are concerned with only that part of the fragment displayed in this line
+        searchForTabFrom = line.textStart() - fragmentOffset;
+        // It's a new line. So we should look at the first tab-stop properties for the next \t.
+        m_currentTabStop = 0;
+    } else { // fragment starts in the middle of the line
+        searchForTabFrom = 0;
+    }
+    if (line.textStart() + line.textLength() > fragmentOffset + currentFragment.length() ) {
+        // fragment ends before the end of line. need to see only till the end of the fragment.
+        searchForTabTill = currentFragment.length();
+    } else {
+        // line ends before the fragment ends. need to see only till the end of this line.
+        // but then, we need to convert the end of line to an index into fragText
+        searchForTabTill = line.textLength() + line.textStart() - fragmentOffset;
+    }
+    for( int i = searchForTabFrom ; i < searchForTabTill; i++ ) {
+        double tabStyleLeftLineMargin = tabStyleLineMargin;
+        double tabStyleRightLineMargin = tabStyleLineMargin;
+        if (m_currentTabStop >= tabList.size()) // no more decorations
+            break;
+        if (fragText[i] == '\t') {
+            // no margin if its adjacent char is also a tab
+            if ( i > searchForTabFrom && fragText[i-1] == '\t' )
+                tabStyleLeftLineMargin = 0;
+            if ( i < (searchForTabTill - 1) && fragText[i+1] == '\t' )
+                tabStyleRightLineMargin = 0;
+
+            double x1 = line.cursorToX(currentFragment.position() - startOfBlock + i);
+            double x2 = line.cursorToX(currentFragment.position() - startOfBlock + i + 1);
+
+            // find a tab-stop decoration for this tab position
+            // for eg., if there's a tab-stop at 1in, but the text before \t already spans 1.2in,
+            // we should look at the next tab-stop
+            KoText::Tab tab;
+            do { 
+                tab = qvariant_cast<KoText::Tab>(tabList[m_currentTabStop]);
+                m_currentTabStop++;
+            // should actually be (tab.position() != x2), but why risk such an accurate check? :)
+            } while(tab.position <= x1 && m_currentTabStop < tabList.size());
+            if (tab.position <= x1) // no appropriate tab-stop found
+                break;
+
+            double y = line.position().y() + line.ascent() - 1 ;
+            x1 += tabStyleLeftLineMargin;
+            x2 -= tabStyleRightLineMargin;
+            if (tab.leaderColor.isValid())
+                tabDecorColor = tab.leaderColor;
+            if (x1 < x2)
+                drawDecorationLine (painter, tabDecorColor, tab.leaderType, tab.leaderStyle, x1, x2, y);
+        }
+    }
+}
+
+void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
     Q_UNUSED(selectionStart);
     Q_UNUSED(selectionEnd);
     Q_UNUSED(converter);
@@ -767,23 +843,26 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
     QTextOption textOption = layout->textOption();
 
     QTextBlockFormat bf = block.blockFormat();
+    QVariantList tabList = bf.property(KoParagraphStyle::TabPositions).toList();
 
     QTextBlock::iterator it;
-    int offset = -1;
+    int startOfBlock = -1;
     // loop over text fragments in this paragraph and draw the underline and line through.
-    for (it = block.begin(); !(it.atEnd()); ++it) {
+    for (it = block.begin(); !it.atEnd(); ++it) {
         QTextFragment currentFragment = it.fragment();
         if (currentFragment.isValid()) {
-            if (offset == -1)
-                offset = currentFragment.position();
-            int firstLine = layout->lineForTextPosition(currentFragment.position() - offset).lineNumber();
-            int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - offset).lineNumber();
-
+            if (startOfBlock == -1)
+                startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
+            int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
+            int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - startOfBlock).lineNumber();
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
-                if (layout->isValidCursorPosition(currentFragment.position() - offset)) {
-                    double x1 = line.cursorToX(currentFragment.position() - offset);
-                    double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - offset);
+                if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
+                    double x1 = line.cursorToX(currentFragment.position() - startOfBlock);
+                    double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
+
+                    decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
+
                     QTextCharFormat fmt = currentFragment.charFormat();
                     KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle)
                     fmt.intProperty(KoCharacterStyle::StrikeOutStyle);

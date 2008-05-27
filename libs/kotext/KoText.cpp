@@ -50,7 +50,8 @@ KoText::Tab::Tab()
 #else
     type(LeftTab), // remove when 4.4 is mandatory
 #endif
-    leaderStyle(QTextCharFormat::NoUnderline),
+    leaderType(KoCharacterStyle::NoLineType),
+    leaderStyle(KoCharacterStyle::NoLineStyle),
     textStyleId(0)
 {
 }

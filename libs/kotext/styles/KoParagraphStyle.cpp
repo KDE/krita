@@ -974,24 +974,42 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
                     tab.type = TAB_TYPE_NAMESPACE :: LeftTab;
                 }
             }
-#if 0
-            tab.ptWidth = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "leader-width", QString() ), 0.5 );
+            // tab.ptWidth = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "leader-width", QString() ), 0.5 );
 
-            tab.filling = TF_BLANK;
-            if ( tabStop.attributeNS( KoXmlNS::style, "leader-type", QString() ) == "single" )
-            {
+                QString leaderType = tabStop.attributeNS( KoXmlNS::style, "leader-type", QString() );
+                if ( leaderType == "none" ) {
+                    tab.leaderType = KoCharacterStyle::NoLineType;
+                } else {
+                    if ( leaderType == "single" )
+                        tab.leaderType = KoCharacterStyle::SingleLine;
+                    else if ( leaderType == "double" )
+                        tab.leaderType = KoCharacterStyle::DoubleLine;
+                    // change default leaderStyle
+                    tab.leaderStyle = KoCharacterStyle::SolidLine;
+                }
+
                 QString leaderStyle = tabStop.attributeNS( KoXmlNS::style, "leader-style", QString() );
-                if ( leaderStyle == "solid" )
-                    tab.filling = TF_LINE;
+                if ( leaderStyle == "none" )
+                    tab.leaderStyle = KoCharacterStyle::NoLineStyle;
+                else if ( leaderStyle == "solid" )
+                    tab.leaderStyle = KoCharacterStyle::SolidLine;
                 else if ( leaderStyle == "dotted" )
-                    tab.filling = TF_DOTS;
-                else if ( leaderStyle == "dash" )
-                    tab.filling = TF_DASH;
+                    tab.leaderStyle = KoCharacterStyle::DottedLine;
+                else if ( leaderStyle == "dash")
+                    tab.leaderStyle = KoCharacterStyle::DashLine;
+                else if ( leaderStyle == "long-dash" )
+                    tab.leaderStyle = KoCharacterStyle::LongDashLine;
                 else if ( leaderStyle == "dot-dash" )
-                    tab.filling = TF_DASH_DOT;
+                    tab.leaderStyle = KoCharacterStyle::DotDashLine;
                 else if ( leaderStyle == "dot-dot-dash" )
-                    tab.filling = TF_DASH_DOT_DOT;
-            }
+                    tab.leaderStyle = KoCharacterStyle::DotDotDashLine;
+                else if ( leaderStyle == "wave" )
+                    tab.leaderStyle = KoCharacterStyle::WaveLine;
+
+                QString leaderColor = tabStop.attributeNS( KoXmlNS::style, "leader-color", QString() );
+                tab.leaderColor = QColor(leaderColor); // if invalid color, will use text color
+
+#if 0
             else
             {
                 // Fallback: convert leaderChar's unicode value

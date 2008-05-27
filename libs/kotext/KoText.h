@@ -28,6 +28,8 @@
 #include <QtGui/QTextCharFormat>
 #include <QtCore/QMetaType>
 #include <QtGui/QTextOption>
+#include <styles/KoCharacterStyle.h>
+
 
 /**
  * Generic namespace of the KOffice Text library for helper methods and data.
@@ -71,7 +73,8 @@ namespace KoText {
 #endif
         TabType type;       ///< Determine which type is used.
         QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
-        QTextCharFormat::UnderlineStyle leaderStyle;
+        KoCharacterStyle::LineType leaderType; // none/single/double
+        KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...
         //leaderWidth       // 15.4.30 TODO
         QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
         QChar leaderText;   ///< character to print as the leader (filler of the tabbed space)

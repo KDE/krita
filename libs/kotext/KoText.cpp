@@ -52,6 +52,8 @@ KoText::Tab::Tab()
 #endif
     leaderType(KoCharacterStyle::NoLineType),
     leaderStyle(KoCharacterStyle::NoLineStyle),
+    leaderWeight(KoCharacterStyle::AutoLineWeight),
+    leaderWidth(0),
     textStyleId(0)
 {
 }

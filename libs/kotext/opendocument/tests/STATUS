@@ -74,7 +74,7 @@ testsuite.
 ./FormattingProperties/ParagraphFormattingProperties/textAlignOfLastLine/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/registerTrue/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/lineDistance/test.xml:   <result>fullsupport</result>
-./FormattingProperties/ParagraphFormattingProperties/leaderWidth/test.xml:   <result>unsupported</result>
+*./FormattingProperties/ParagraphFormattingProperties/leaderWidth/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/dropCapsTextStyle/test.xml:   <result>unsupported</result>
 
 *./FormattingProperties/TextFormattingProperties/underlineColor/test.xml:   <result>fullsupport</result>
@@ -116,8 +116,8 @@ testsuite.
 *./FormattingProperties/TextFormattingProperties/fontWeight/test.xml:   <result>partial</result>
 *./FormattingProperties/TextFormattingProperties/fontCharacterSet/test.xml:   <result>unknown</result>
 ./FormattingProperties/TextFormattingProperties/textScale/test.xml:   <result>unsupported</result>
-./FormattingProperties/TextFormattingProperties/lineThroughWidth/test.xml:   <result>unsupported</result>
-./FormattingProperties/TextFormattingProperties/underliningWidth/test.xml:   <result>unsupported</result>
+*./FormattingProperties/TextFormattingProperties/lineThroughWidth/test.xml:   <result>unsupported</result>
+*./FormattingProperties/TextFormattingProperties/underliningWidth/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/relativeFontSize/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/textBackgroundColor/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TextFormattingProperties/hiddenOrConditionalText/test.xml:   <result>unsupported</result>

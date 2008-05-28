@@ -156,6 +156,8 @@ static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs) {
             || actualTab.leaderType != expectedTab.leaderType
             || actualTab.leaderStyle != expectedTab.leaderStyle
             || actualTab.leaderColor != expectedTab.leaderColor
+            || actualTab.leaderWeight != expectedTab.leaderWeight
+            || actualTab.leaderWidth != expectedTab.leaderWidth
      //       || actualTab.leaderText != expectedTab.leaderText
      //       || actualTab.textStyleId != expectedTab.textStyleId
             ) {
@@ -464,6 +466,8 @@ QScriptValue KoTextTabToQScriptValue(QScriptEngine *engine, const KoTextTab &tab
   obj.setProperty("delimiter", QScriptValue(engine, tab.delimiter)); // QChar
   obj.setProperty("leaderType", QScriptValue(engine, tab.leaderType)); // enum
   obj.setProperty("leaderStyle", QScriptValue(engine, tab.leaderStyle)); // enum
+  obj.setProperty("leaderWeight", QScriptValue(engine, tab.leaderWeight)); // enum
+  obj.setProperty("leaderWidth", QScriptValue(engine, tab.leaderWidth)); // double
   if (tab.leaderColor.isValid())
       obj.setProperty("leaderColor", QScriptValue(engine, tab.leaderColor.name())); // QColor
   else
@@ -486,7 +490,10 @@ void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
   tab.delimiter = obj.property("delimiter").toString()[0];
   tab.leaderType = (KoCharacterStyle::LineType) obj.property("leaderType").toInteger();
   tab.leaderStyle = (KoCharacterStyle::LineStyle) obj.property("leaderStyle").toInteger();
-  tab.leaderColor = QColor(obj.property("leaderColor").toString());
+  tab.leaderWeight = (KoCharacterStyle::LineWeight) obj.property("leaderWeight").toInteger();
+  tab.leaderWidth = obj.property("leaderWidth").toNumber();
+  if (obj.property("leaderColor").toString() != "invalid")
+      tab.leaderColor = QColor(obj.property("leaderColor").toString());
   tab.leaderText = obj.property("leaderText").toString()[0];
   tab.textStyleId = (int) obj.property("textStyleId").toInteger();
 }
@@ -648,6 +655,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("tabLeaderType") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderType";
     QTest::newRow("tabLeaderStyle") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderStyle";
     QTest::newRow("tabLeaderColor") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderColor";
+    QTest::newRow("tabLeaderWidth") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderWidth";
 }
 
 void TestLoading::testLoading() 

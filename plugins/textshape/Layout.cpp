@@ -759,6 +759,25 @@ static void drawDecorationWords(QPainter *painter, const QTextLine &line, const 
          drawDecorationLine(painter, color, type, style, width, wordBeginX, line.cursorToX(j), y);
 }
 
+static double computeWidth(KoCharacterStyle::LineWeight weight, double width, const QFont& font) {
+    switch(weight) {
+        case KoCharacterStyle::AutoLineWeight:
+        case KoCharacterStyle::NormalLineWeight:
+        case KoCharacterStyle::MediumLineWeight:
+        case KoCharacterStyle::DashLineWeight:
+            return QFontMetricsF(font).lineWidth();
+        case KoCharacterStyle::BoldLineWeight:
+        case KoCharacterStyle::ThickLineWeight:
+            return QFontMetricsF(font).lineWidth() * 2;
+        case KoCharacterStyle::ThinLineWeight:
+            return QFontMetricsF(font).lineWidth() / 2;
+        case KoCharacterStyle::PercentLineWeight:
+            return QFontInfo(font).pointSizeF() * width / 100;
+        case KoCharacterStyle::LengthLineWeight:
+            return width;
+    }
+}
+
 // Decorate any tabs ('\t's) in 'currentFragment' and laid out in 'line'.
 void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock) {
     // If a line in the layout represent multiple text fragments, this function will
@@ -829,28 +848,10 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
             QColor tabDecorColor = currentFragment.charFormat().foreground().color();
             if (tab.leaderColor.isValid())
                 tabDecorColor = tab.leaderColor;
+            double width = computeWidth(tab.leaderWeight, tab.leaderWidth, painter->font());
             if (x1 < x2)
-                drawDecorationLine (painter, tabDecorColor, tab.leaderType, tab.leaderStyle, painter->fontMetrics().lineWidth(), x1, x2, y);
+                drawDecorationLine (painter, tabDecorColor, tab.leaderType, tab.leaderStyle, width, x1, x2, y);
         }
-    }
-}
-
-static double computeWidth(KoCharacterStyle::LineWeight weight, double width, const QFont& font) {
-    switch(weight) {
-        case KoCharacterStyle::AutoLineWeight:
-        case KoCharacterStyle::NormalLineWeight:
-        case KoCharacterStyle::MediumLineWeight:
-        case KoCharacterStyle::DashLineWeight:
-            return QFontMetricsF(font).lineWidth();
-        case KoCharacterStyle::BoldLineWeight:
-        case KoCharacterStyle::ThickLineWeight:
-            return QFontMetricsF(font).lineWidth() * 2;
-        case KoCharacterStyle::ThinLineWeight:
-            return QFontMetricsF(font).lineWidth() / 2;
-        case KoCharacterStyle::PercentLineWeight:
-            return QFontInfo(font).pointSizeF() * width / 100;
-        case KoCharacterStyle::LengthLineWeight:
-            return width;
     }
 }
 

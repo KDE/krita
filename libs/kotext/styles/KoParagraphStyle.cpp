@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -974,7 +975,6 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
                     tab.type = TAB_TYPE_NAMESPACE :: LeftTab;
                 }
             }
-            // tab.ptWidth = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "leader-width", QString() ), 0.5 );
 
             QString leaderType = tabStop.attributeNS( KoXmlNS::style, "leader-type", QString() );
             if ( leaderType.isEmpty() || leaderType == "none" ) {
@@ -1009,6 +1009,32 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
             QString leaderColor = tabStop.attributeNS( KoXmlNS::style, "leader-color", QString() );
             if ( leaderColor != "font-color" )
                 tab.leaderColor = QColor(leaderColor); // if invalid color (the default), will use text color
+
+            QString width = tabStop.attributeNS( KoXmlNS::style, "leader-width", QString() );
+            if (width.isEmpty() || width == "auto")
+                tab.leaderWeight = KoCharacterStyle::AutoLineWeight;
+            else if (width == "normal")
+                tab.leaderWeight = KoCharacterStyle::NormalLineWeight;
+            else if (width == "bold")
+                tab.leaderWeight = KoCharacterStyle::BoldLineWeight;
+            else if (width == "thin")
+                tab.leaderWeight = KoCharacterStyle::ThinLineWeight;
+            else if (width == "dash")
+                tab.leaderWeight = KoCharacterStyle::DashLineWeight;
+            else if (width == "medium")
+                tab.leaderWeight = KoCharacterStyle::MediumLineWeight;
+            else if (width == "thick")
+                tab.leaderWeight = KoCharacterStyle::ThickLineWeight;
+            else if (width.endsWith('%')) {
+                tab.leaderWeight = KoCharacterStyle::PercentLineWeight;
+                tab.leaderWidth = width.mid(0, width.length()-1).toDouble();
+            } else if (width[width.length()-1].isNumber()) {
+                tab.leaderWeight = KoCharacterStyle::PercentLineWeight;
+                tab.leaderWidth = 100 * width.toDouble();
+            } else {
+                tab.leaderWeight = KoCharacterStyle::LengthLineWeight;
+                tab.leaderWidth = KoUnit::parseValue( width );
+            }
 
 #if 0
             else

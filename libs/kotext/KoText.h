@@ -75,7 +75,8 @@ namespace KoText {
         QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
         KoCharacterStyle::LineType leaderType; // none/single/double
         KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...
-        //leaderWidth       // 15.4.30 TODO
+        KoCharacterStyle::LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
+        double leaderWidth; // the width value if length/percentage
         QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
         QChar leaderText;   ///< character to print as the leader (filler of the tabbed space)
         int textStyleId;

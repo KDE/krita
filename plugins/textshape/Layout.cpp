@@ -818,7 +818,7 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
             do { 
                 tab = qvariant_cast<KoText::Tab>(tabList[m_currentTabStop]);
                 m_currentTabStop++;
-            // should actually be (tab.position() != x2), but why risk such an accurate check? :)
+            // comparing with x1 should work for all of left/right/center/char tabs
             } while(tab.position <= x1 && m_currentTabStop < tabList.size());
             if (tab.position <= x1) // no appropriate tab-stop found
                 break;

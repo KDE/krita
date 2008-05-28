@@ -770,7 +770,6 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
 
     QFontMetricsF fm(currentFragment.charFormat().font());
     double tabStyleLineMargin = fm.averageCharWidth()/4; // leave some margin for the tab decoration line
-    QColor tabDecorColor = currentFragment.charFormat().foreground().color();
 
     // currentFragment.position() : start of this fragment w.r.t. the document
     // startOfBlock : start of this block w.r.t. the document
@@ -826,6 +825,7 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
             double y = line.position().y() + line.ascent() - 1 ;
             x1 += tabStyleLeftLineMargin;
             x2 -= tabStyleRightLineMargin;
+            QColor tabDecorColor = currentFragment.charFormat().foreground().color();
             if (tab.leaderColor.isValid())
                 tabDecorColor = tab.leaderColor;
             if (x1 < x2)

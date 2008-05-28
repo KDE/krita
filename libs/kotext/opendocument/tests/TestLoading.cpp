@@ -134,18 +134,19 @@ static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs) {
     for (int i = 0; i<actualTabList.count(); i++) {
         KoText::Tab actualTab = actualTabList[i].value<KoText::Tab>();
         KoText::Tab expectedTab = expectedTabList[i].value<KoText::Tab>();
-        qDebug() << actualTab.position  << " cmp " <<  expectedTab.position
-             << "\n" << actualTab.type  << " cmp " <<  expectedTab.type
-             << "\n" << actualTab.delimiter  << " cmp " <<  expectedTab.delimiter
-             << "\n" << actualTab.leaderStyle  << " cmp " <<  expectedTab.leaderStyle
-             << "\n" << actualTab.leaderColor  << " cmp " <<  expectedTab.leaderColor
-             << "\n" << actualTab.leaderText  << " cmp " <<  expectedTab.leaderText
-             << "\n" << actualTab.textStyleId  << " cmp " <<  expectedTab.textStyleId;
+      //qDebug() << actualTab.position  << " cmp " <<  expectedTab.position
+      //     << "\n" << actualTab.type  << " cmp " <<  expectedTab.type
+      //       << "\n" << actualTab.delimiter  << " cmp " <<  expectedTab.delimiter
+      //     << "\n" << actualTab.leaderStyle  << " cmp " <<  expectedTab.leaderStyle
+      //     << "\n" << actualTab.leaderColor  << " cmp " <<  expectedTab.leaderColor
+      //     << "\n" << actualTab.leaderText  << " cmp " <<  expectedTab.leaderText
+      //     << "\n" << actualTab.textStyleId  << " cmp " <<  expectedTab.textStyleId;
         if (actualTab.position != expectedTab.position
             || actualTab.type != expectedTab.type
             || actualTab.delimiter != expectedTab.delimiter
-     //       || actualTab.leaderStyle != expectedTab.leaderStyle
-     //       || actualTab.leaderColor != expectedTab.leaderColor
+            || actualTab.leaderType != expectedTab.leaderType
+            || actualTab.leaderStyle != expectedTab.leaderStyle
+            || actualTab.leaderColor != expectedTab.leaderColor
      //       || actualTab.leaderText != expectedTab.leaderText
      //       || actualTab.textStyleId != expectedTab.textStyleId
             ) {
@@ -452,8 +453,12 @@ QScriptValue KoTextTabToQScriptValue(QScriptEngine *engine, const KoTextTab &tab
   obj.setProperty("position", QScriptValue(engine, tab.position)); // double
   obj.setProperty("type", QScriptValue(engine, tab.type)); // enum
   obj.setProperty("delimiter", QScriptValue(engine, tab.delimiter)); // QChar
+  obj.setProperty("leaderType", QScriptValue(engine, tab.leaderType)); // enum
   obj.setProperty("leaderStyle", QScriptValue(engine, tab.leaderStyle)); // enum
-  obj.setProperty("leaderColor", QScriptValue(engine, tab.leaderColor.name())); // QColor
+  if (tab.leaderColor.isValid())
+      obj.setProperty("leaderColor", QScriptValue(engine, tab.leaderColor.name())); // QColor
+  else
+      obj.setProperty("leaderColor", QScriptValue(engine, "invalid")); // QColor
   obj.setProperty("leaderText", QScriptValue(engine, tab.leaderText)); // QChar
   obj.setProperty("textStyleId", QScriptValue(engine, tab.textStyleId)); // int
   return obj;
@@ -470,6 +475,7 @@ void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
 #endif
                       TabType) obj.property("type").toInteger();
   tab.delimiter = obj.property("delimiter").toString()[0];
+  tab.leaderType = (KoCharacterStyle::LineType) obj.property("leaderType").toInteger();
   tab.leaderStyle = (KoCharacterStyle::LineStyle) obj.property("leaderStyle").toInteger();
   tab.leaderColor = QColor(obj.property("leaderColor").toString());
   tab.leaderText = obj.property("leaderText").toString()[0];
@@ -628,6 +634,9 @@ void TestLoading::testLoading_data()
     QTest::newRow("tabPosition") << "FormattingProperties/ParagraphFormattingProperties/tabPosition";
     QTest::newRow("tabType") << "FormattingProperties/ParagraphFormattingProperties/tabType";
     QTest::newRow("tabDelimiterChar") << "FormattingProperties/ParagraphFormattingProperties/tabDelimiterChar";
+    QTest::newRow("tabLeaderType") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderType";
+    QTest::newRow("tabLeaderStyle") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderStyle";
+    QTest::newRow("tabLeaderColor") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderColor";
 }
 
 void TestLoading::testLoading() 

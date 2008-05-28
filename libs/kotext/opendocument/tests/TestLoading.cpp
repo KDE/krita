@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -106,6 +107,10 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
            && actualFormat.property(KoCharacterStyle::UnderlineMode).toInt() 
                   == expectedFormat.property(KoCharacterStyle::UnderlineMode).toInt()
+           && actualFormat.property(KoCharacterStyle::UnderlineWeight).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::UnderlineWeight).toInt()
+           && actualFormat.property(KoCharacterStyle::UnderlineWidth).toDouble() 
+                  == expectedFormat.property(KoCharacterStyle::UnderlineWidth).toDouble()
            && qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
                   == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))
            && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
@@ -114,6 +119,10 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
                   == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
            && actualFormat.property(KoCharacterStyle::StrikeOutMode).toInt() 
                   == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt() 
+           && actualFormat.property(KoCharacterStyle::StrikeOutWeight).toInt() 
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutWeight).toInt()
+           && actualFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble() 
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble()
            && actualFormat.property(KoCharacterStyle::Country).toString()
                   == expectedFormat.property(KoCharacterStyle::Country).toString()
            && actualFormat.property(KoCharacterStyle::Language).toString()
@@ -616,6 +625,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Line through mode") << "FormattingProperties/TextFormattingProperties/lineThroughMode";
     QTest::newRow("Line through style") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";
     QTest::newRow("Line through type") << "FormattingProperties/TextFormattingProperties/lineThroughType";
+    QTest::newRow("Line through width") << "FormattingProperties/TextFormattingProperties/lineThroughWidth";
     QTest::newRow("Relative Font Size") << "FormattingProperties/TextFormattingProperties/relativeFontSize";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
     QTest::newRow("Text Outline") << "FormattingProperties/TextFormattingProperties/textOutline";
@@ -624,6 +634,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Underline mode") << "FormattingProperties/TextFormattingProperties/underlineMode";
     QTest::newRow("Underline type") << "FormattingProperties/TextFormattingProperties/underlineType";
     QTest::newRow("Underline style") << "FormattingProperties/TextFormattingProperties/underlineStyle";
+    QTest::newRow("Underline width") << "FormattingProperties/TextFormattingProperties/underlineWidth";
 
     QTest::newRow("Paragraph background") << "FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor";
     QTest::newRow("Text align") << "FormattingProperties/ParagraphFormattingProperties/textAlign";

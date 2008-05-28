@@ -181,8 +181,12 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::StrikeOutStyle,
         KoCharacterStyle::StrikeOutType,
         KoCharacterStyle::StrikeOutColor,
+        KoCharacterStyle::StrikeOutWidth,
+        KoCharacterStyle::StrikeOutWeight,
         KoCharacterStyle::UnderlineStyle,
         KoCharacterStyle::UnderlineType,
+        KoCharacterStyle::UnderlineWidth,
+        KoCharacterStyle::UnderlineWeight,
         KoCharacterStyle::TransformText,
         KoCharacterStyle::HasHyphenation,
         KoCharacterStyle::UnderlineMode,
@@ -253,11 +257,14 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
 }
 
 // OASIS 14.2.29
-static void importOasisLine( const QString& type, const QString& style,
-                             KoCharacterStyle::LineStyle& lineStyle, KoCharacterStyle::LineType& lineType )
+static void importOasisLine( const QString& type, const QString& style, const QString& width,
+                             KoCharacterStyle::LineStyle& lineStyle, KoCharacterStyle::LineType& lineType,
+                             KoCharacterStyle::LineWeight& lineWeight, double& lineWidth )
 {
     lineStyle = KoCharacterStyle::NoLineStyle;
     lineType = KoCharacterStyle::NoLineType;
+    lineWidth = 0;
+    lineWeight = KoCharacterStyle::AutoLineWeight;
     
     QString fixedType = type;
     QString fixedStyle = style;
@@ -285,8 +292,31 @@ static void importOasisLine( const QString& type, const QString& style,
         lineStyle = KoCharacterStyle::DotDotDashLine;
     else if ( fixedStyle == "wave" )
         lineStyle = KoCharacterStyle::WaveLine;
-    // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
-    // We should separate them in kotext...
+
+    if (width.isEmpty() || width == "auto")
+        lineWeight = KoCharacterStyle::AutoLineWeight;
+    else if (width == "normal")
+        lineWeight = KoCharacterStyle::NormalLineWeight;
+    else if (width == "bold")
+        lineWeight = KoCharacterStyle::BoldLineWeight;
+    else if (width == "thin")
+        lineWeight = KoCharacterStyle::ThinLineWeight;
+    else if (width == "dash")
+        lineWeight = KoCharacterStyle::DashLineWeight;
+    else if (width == "medium")
+        lineWeight = KoCharacterStyle::MediumLineWeight;
+    else if (width == "thick")
+        lineWeight = KoCharacterStyle::ThickLineWeight;
+    else if (width.endsWith('%')) {
+        lineWeight = KoCharacterStyle::PercentLineWeight;
+        lineWidth = width.mid(0, width.length()-1).toDouble();
+    } else if (width[width.length()-1].isNumber()) {
+        lineWeight = KoCharacterStyle::PercentLineWeight;
+        lineWidth = 100 * width.toDouble();
+    } else {
+        lineWeight = KoCharacterStyle::LengthLineWeight;
+        lineWidth = KoUnit::parseValue( width );
+    }
 }
 
 static QString exportOasisLineType(KoCharacterStyle::LineType lineType) {
@@ -474,6 +504,15 @@ QColor KoCharacterStyle::strikeOutColor () const {
     return d->propertyColor(StrikeOutColor);
 }
 
+void KoCharacterStyle::setStrikeOutWidth (LineWeight weight, double width) {
+    d->setProperty(KoCharacterStyle::StrikeOutWeight, weight);
+    d->setProperty(KoCharacterStyle::StrikeOutWidth, width);
+}
+
+void KoCharacterStyle::strikeOutWidth (LineWeight& weight, double& width) const {
+     weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::StrikeOutWeight);
+     width = d->propertyDouble(KoCharacterStyle::StrikeOutWidth);
+}
 void KoCharacterStyle::setStrikeOutMode(LineMode lineMode) {
     d->setProperty(StrikeOutMode, lineMode);
 }
@@ -504,6 +543,16 @@ void KoCharacterStyle::setUnderlineColor (const QColor &color) {
 
 QColor KoCharacterStyle::underlineColor () const {
     return d->propertyColor(QTextFormat::TextUnderlineColor);
+}
+
+void KoCharacterStyle::setUnderlineWidth (LineWeight weight, double width) {
+    d->setProperty(KoCharacterStyle::UnderlineWeight, weight);
+    d->setProperty(KoCharacterStyle::UnderlineWidth, width);
+}
+
+void KoCharacterStyle::underlineWidth (LineWeight& weight, double& width) const {
+     weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::UnderlineWeight);
+     width = d->propertyDouble(KoCharacterStyle::UnderlineWidth);
 }
 
 void KoCharacterStyle::setUnderlineMode(LineMode mode) {
@@ -722,12 +771,16 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         || styleStack.hasProperty( KoXmlNS::style, "text-underline-style" ) ) { // OASIS 14.4.28
         LineStyle underlineStyle;
         LineType underlineType;
+        double underlineWidth;
+        LineWeight underlineWeight;
     
         importOasisLine(styleStack.property( KoXmlNS::style, "text-underline-type" ),
                         styleStack.property( KoXmlNS::style, "text-underline-style" ),
-                        underlineStyle, underlineType);
+                        styleStack.property( KoXmlNS::style, "text-underline-width" ),
+                        underlineStyle, underlineType, underlineWeight, underlineWidth);
         setUnderlineStyle(underlineStyle);
         setUnderlineType(underlineType);
+        setUnderlineWidth(underlineWeight, underlineWidth);
     }
 
     // Specifies the color that is used to underline text. The value of this attribute is either font-color or a color. If the value is font-color, the current text color is used for underlining.
@@ -739,13 +792,17 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
     if (( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) ||  ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-style" ))) { // OASIS 14.4.7
         KoCharacterStyle::LineStyle throughStyle;
         LineType throughType;
+        double throughWidth;
+        LineWeight throughWeight;
         
         importOasisLine(styleStack.property( KoXmlNS::style, "text-line-through-type" ),
                         styleStack.property( KoXmlNS::style, "text-line-through-style" ),
-                        throughStyle, throughType);
+                        styleStack.property( KoXmlNS::style, "text-line-through-width" ),
+                        throughStyle, throughType, throughWeight, throughWidth);
         
         setStrikeOutStyle(throughStyle);
         setStrikeOutType(throughType);
+        setStrikeOutWidth(throughWeight, throughWidth);
     }
     
     QString lineThroughColor = styleStack.property( KoXmlNS::style, "text-line-through-color" ); // OO 3.10.23, OASIS 14.4.31

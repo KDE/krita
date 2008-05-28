@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -677,19 +678,19 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
         lastBorder->paint(*painter);
 }
 
-static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double x1, const double x2, const double y)
+static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, double width, const double x1, const double x2, const double y)
 {
     QPen penBackup = painter->pen();
     QPen pen = painter->pen();
     pen.setColor(color);
-    pen.setWidth(painter->fontMetrics().lineWidth());
+    pen.setWidth(width);
     if (style == KoCharacterStyle::WaveLine) {
         // Ok, try the waves :)
         pen.setStyle(Qt::SolidLine);
         painter->setPen(pen);
         double x = x1;
-        const double halfWaveWidth = 2 * painter->fontMetrics().lineWidth();
-        const double halfWaveLength = 6 * painter->fontMetrics().lineWidth();
+        const double halfWaveWidth = 2 * width;
+        const double halfWaveLength = 6 * width;
         const int startAngle = 0 * 16;
         const int middleAngle = 180 * 16;
         const int endAngle = 180 * 16;
@@ -740,14 +741,14 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
     painter->setPen(penBackup);
 }
 
-static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double y)
+static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, double width, const double y)
 {
     double wordBeginX = -1;
     int j = line.textStart();
     while (j < line.textLength()+line.textStart()) {
         if (text[j].isSpace()) {
           if (wordBeginX != -1)
-                drawDecorationLine(painter, color, type, style, wordBeginX, line.cursorToX(j), y);
+                drawDecorationLine(painter, color, type, style, width, wordBeginX, line.cursorToX(j), y);
             wordBeginX = -1;
         } else if (wordBeginX == -1) {
             wordBeginX = line.cursorToX(j);
@@ -755,7 +756,7 @@ static void drawDecorationWords(QPainter *painter, const QTextLine &line, const 
         ++j;
     }
     if (wordBeginX != -1)
-         drawDecorationLine(painter, color, type, style, wordBeginX, line.cursorToX(j), y);
+         drawDecorationLine(painter, color, type, style, width, wordBeginX, line.cursorToX(j), y);
 }
 
 // Decorate any tabs ('\t's) in 'currentFragment' and laid out in 'line'.
@@ -829,8 +830,27 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
             if (tab.leaderColor.isValid())
                 tabDecorColor = tab.leaderColor;
             if (x1 < x2)
-                drawDecorationLine (painter, tabDecorColor, tab.leaderType, tab.leaderStyle, x1, x2, y);
+                drawDecorationLine (painter, tabDecorColor, tab.leaderType, tab.leaderStyle, painter->fontMetrics().lineWidth(), x1, x2, y);
         }
+    }
+}
+
+static double computeWidth(KoCharacterStyle::LineWeight weight, double width, const QFont& font) {
+    switch(weight) {
+        case KoCharacterStyle::AutoLineWeight:
+        case KoCharacterStyle::NormalLineWeight:
+        case KoCharacterStyle::MediumLineWeight:
+        case KoCharacterStyle::DashLineWeight:
+            return QFontMetricsF(font).lineWidth();
+        case KoCharacterStyle::BoldLineWeight:
+        case KoCharacterStyle::ThickLineWeight:
+            return QFontMetricsF(font).lineWidth() * 2;
+        case KoCharacterStyle::ThinLineWeight:
+            return QFontMetricsF(font).lineWidth() / 2;
+        case KoCharacterStyle::PercentLineWeight:
+            return QFontInfo(font).pointSizeF() * width / 100;
+        case KoCharacterStyle::LengthLineWeight:
+            return width;
     }
 }
 
@@ -877,10 +897,14 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
 
                         KoCharacterStyle::LineMode strikeOutMode = 
                                     (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::StrikeOutMode);
+                        double width = computeWidth(
+                                 (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
+                                 fmt.doubleProperty (KoCharacterStyle::StrikeOutWidth),
+                                 painter->font() );
                         if (strikeOutMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-                            drawDecorationWords(painter, line, currentFragment.text(), color, fontStrikeOutType, fontStrikeOutStyle, y);
+                            drawDecorationWords(painter, line, currentFragment.text(), color, fontStrikeOutType, fontStrikeOutStyle, width, y);
                         } else {
-                            drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
+                            drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, width, x1, x2, y);
                         }
                     }
 
@@ -899,16 +923,20 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                             color = fmt.foreground().color();
                         KoCharacterStyle::LineMode underlineMode = 
                                     (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::UnderlineMode);
+                        double width = computeWidth(
+                                 (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::UnderlineWeight),
+                                 fmt.doubleProperty (KoCharacterStyle::UnderlineWidth),
+                                 painter->font() );
                         if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-                            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType, fontUnderLineStyle, y);
+                            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType, fontUnderLineStyle, width, y);
                         } else {
-                            drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
+                            drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, width, x1, x2, y);
                         }
                     }
 
                     bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);
                     if (misspelled)
-                        drawDecorationLine (painter, QColor(255,0,0), KoCharacterStyle::SingleLine, KoCharacterStyle::WaveLine, x1, x2, y);
+                        drawDecorationLine (painter, QColor(255,0,0), KoCharacterStyle::SingleLine, KoCharacterStyle::WaveLine, painter->fontMetrics().lineWidth(), x1, x2, y);
                 }
             }
         }

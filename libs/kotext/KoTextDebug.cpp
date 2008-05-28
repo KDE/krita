@@ -79,6 +79,14 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "underlinemode";
             value = QString::number(properties[id].toInt());
             break;
+        case KoCharacterStyle::UnderlineWeight:
+            key = "underlineweight";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoCharacterStyle::UnderlineWidth:
+            key = "underlinewidth";
+            value = QString::number(properties[id].toDouble());
+            break;
         case KoCharacterStyle::StrikeOutStyle:
             key = "strikeoutstyle";
             value = QString::number(properties[id].toInt());
@@ -94,6 +102,14 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
         case KoCharacterStyle::StrikeOutMode:
             key = "strikeoutmode";
             value = QString::number(properties[id].toInt());
+            break;
+        case KoCharacterStyle::StrikeOutWeight:
+            key = "strikeoutweight";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoCharacterStyle::StrikeOutWidth:
+            key = "strikeoutwidth";
+            value = QString::number(properties[id].toDouble());
             break;
         case QTextFormat::ForegroundBrush:
             key = "foreground";

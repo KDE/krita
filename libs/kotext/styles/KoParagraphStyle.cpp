@@ -948,31 +948,26 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
             tab.position = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString() ) );
             kDebug(32500) << "tab position " << tab.position;
             // Tab stop positions in the XML are relative to the left-margin
-            // Equivalently, we make it relative to the left end of our textshape
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-        #define TAB_TYPE_NAMESPACE  QTextOption
-#else
-        #define TAB_TYPE_NAMESPACE  KoText
-#endif
+            // Equivalently, relative to the left end of our textshape
             // Tab type (left/right/center/char)
             const QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString() );
             if ( type == "center" )
-                tab.type = TAB_TYPE_NAMESPACE :: CenterTab;
+                tab.type = QTextOption::CenterTab;
             else if ( type == "right" )
-                tab.type = TAB_TYPE_NAMESPACE :: RightTab;
+                tab.type = QTextOption::RightTab;
             else if ( type == "char" )
-                tab.type = TAB_TYPE_NAMESPACE :: DelimiterTab;
+                tab.type = QTextOption::DelimiterTab;
             else //if ( type == "left" )
-                tab.type = TAB_TYPE_NAMESPACE :: LeftTab;
+                tab.type = QTextOption::LeftTab;
 
             // Tab delimiter char
-            if ( tab.type == TAB_TYPE_NAMESPACE :: DelimiterTab ) {
+            if ( tab.type == QTextOption::DelimiterTab ) {
                 QString delimiterChar = tabStop.attributeNS( KoXmlNS::style, "char", QString() ); // single character
                 if ( !delimiterChar.isEmpty() ) {
                     tab.delimiter = delimiterChar[0];
                 } else {
                     // this is invalid. fallback to left-tabbing.
-                    tab.type = TAB_TYPE_NAMESPACE :: LeftTab;
+                    tab.type = QTextOption::LeftTab;
                 }
             }
 

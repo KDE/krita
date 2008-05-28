@@ -35,6 +35,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 #include <KoShapeUngroupCommand.h>
+#include <KoZoomHandler.h>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -300,8 +301,9 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 
     KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
     if (page) { // We create a thumbnail with actual width / height ratio for page
+        KoZoomHandler zoomHandler;
         KoPageLayout layout = page->pageLayout();
-        double ratio = (double)layout.width / layout.height;
+        double ratio = (zoomHandler.resolutionX() * layout.width) / (zoomHandler.resolutionY() * layout.height);
         if ( ratio > 1 ) {
             size.setHeight( size.width() / ratio );
         }

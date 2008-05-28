@@ -187,6 +187,7 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
                 value.append(" type:").append(QString::number(tab.type));
                 if (! tab.delimiter.isNull())
                     value.append(" delim:").append(QString(tab.delimiter));
+                value.append(" leadertype:").append(QString::number(tab.leaderType));
                 value.append(" leaderstyle:").append(QString::number(tab.leaderStyle));
                 value.append(" leadercolor:").append(tab.leaderColor.name());
                 if (! tab.leaderText.isNull())

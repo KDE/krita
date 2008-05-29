@@ -683,7 +683,7 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
     QPen penBackup = painter->pen();
     QPen pen = painter->pen();
     pen.setColor(color);
-    pen.setWidth(width);
+    pen.setWidthF(width);
     if (style == KoCharacterStyle::WaveLine) {
         // Ok, try the waves :)
         pen.setStyle(Qt::SolidLine);
@@ -855,6 +855,58 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
     }
 }
 
+static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, double x1, double x2) {
+    QTextCharFormat fmt = currentFragment.charFormat();
+    KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle)
+                                                     fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
+    KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType)
+                                                    fmt.intProperty(KoCharacterStyle::StrikeOutType);
+    if ((fontStrikeOutStyle != KoCharacterStyle::NoLineStyle) &&
+        (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
+        double y = line.position().y() + line.height()/2;
+        QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
+        if (!color.isValid())
+            color = fmt.foreground().color();
+        KoCharacterStyle::LineMode strikeOutMode = 
+                    (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::StrikeOutMode);
+
+        double width = computeWidth(
+                 (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
+                 fmt.doubleProperty (KoCharacterStyle::StrikeOutWidth),
+                 painter->font() );
+        if (strikeOutMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
+            drawDecorationWords(painter, line, currentFragment.text(), color, fontStrikeOutType, fontStrikeOutStyle, width, y);
+        } else {
+            drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, width, x1, x2, y);
+        }
+    }
+}
+
+static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, double x1, double x2) {
+    QTextCharFormat fmt = currentFragment.charFormat();
+    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
+    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
+    if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
+        (fontUnderLineType != KoCharacterStyle::NoLineType)) {
+        QFontMetrics metrics( fmt.font() );
+        double y = line.position().y() + line.ascent() + metrics.underlinePos();
+        QColor color = fmt.underlineColor();
+        if (!color.isValid())
+            color = fmt.foreground().color();
+        KoCharacterStyle::LineMode underlineMode = 
+                    (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::UnderlineMode);
+        double width = computeWidth(
+                 (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::UnderlineWeight),
+                 fmt.doubleProperty (KoCharacterStyle::UnderlineWidth),
+                 painter->font() );
+        if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
+            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType, fontUnderLineStyle, width, y);
+        } else {
+            drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, width, x1, x2, y);
+        }
+    }
+}
+
 void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
     Q_UNUSED(selectionStart);
     Q_UNUSED(selectionEnd);
@@ -865,6 +917,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
 
     QTextBlockFormat bf = block.blockFormat();
     QVariantList tabList = bf.property(KoParagraphStyle::TabPositions).toList();
+    QFont oldFont = painter->font();
 
     QTextBlock::iterator it;
     int startOfBlock = -1;
@@ -872,6 +925,8 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
     for (it = block.begin(); !it.atEnd(); ++it) {
         QTextFragment currentFragment = it.fragment();
         if (currentFragment.isValid()) {
+            QTextCharFormat fmt = currentFragment.charFormat();
+            painter->setFont(fmt.font());
             if (startOfBlock == -1)
                 startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
             int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
@@ -882,66 +937,20 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                     double x1 = line.cursorToX(currentFragment.position() - startOfBlock);
                     double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
 
+                    drawStrikeOuts(painter, currentFragment, line, x1, x2);
+                    drawUnderlines(painter, currentFragment, line, x1, x2);
                     decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
 
-                    QTextCharFormat fmt = currentFragment.charFormat();
-                    KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle)
-                    fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
-                    KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType)
-                    fmt.intProperty(KoCharacterStyle::StrikeOutType);
-                    if ((fontStrikeOutStyle != KoCharacterStyle::NoLineStyle) &&
-                        (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
-                        double y = line.position().y() + line.height()/2;
-                        QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
-                        if (!color.isValid())
-                            color = fmt.foreground().color();
-
-                        KoCharacterStyle::LineMode strikeOutMode = 
-                                    (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::StrikeOutMode);
-                        double width = computeWidth(
-                                 (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
-                                 fmt.doubleProperty (KoCharacterStyle::StrikeOutWidth),
-                                 painter->font() );
-                        if (strikeOutMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-                            drawDecorationWords(painter, line, currentFragment.text(), color, fontStrikeOutType, fontStrikeOutStyle, width, y);
-                        } else {
-                            drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, width, x1, x2, y);
-                        }
-                    }
-
-                    QFontMetrics metrics( fmt.font() );
-                    double y = line.position().y() + line.ascent() + metrics.underlinePos();
-                    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle)
-                    fmt.intProperty(KoCharacterStyle::UnderlineStyle);
-                    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType)
-                    fmt.intProperty(KoCharacterStyle::UnderlineType);
-                    if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
-                        (fontUnderLineType != KoCharacterStyle::NoLineType)) {
-                        QFontMetrics metrics( fmt.font() );
-                        double y = line.position().y() + line.ascent() + metrics.underlinePos();
-                        QColor color = fmt.underlineColor();
-                        if (!color.isValid())
-                            color = fmt.foreground().color();
-                        KoCharacterStyle::LineMode underlineMode = 
-                                    (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::UnderlineMode);
-                        double width = computeWidth(
-                                 (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::UnderlineWeight),
-                                 fmt.doubleProperty (KoCharacterStyle::UnderlineWidth),
-                                 painter->font() );
-                        if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-                            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType, fontUnderLineStyle, width, y);
-                        } else {
-                            drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, width, x1, x2, y);
-                        }
-                    }
-
                     bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);
-                    if (misspelled)
+                    if (misspelled) {
+                        double y = line.position().y() + line.ascent() + painter->fontMetrics().underlinePos();
                         drawDecorationLine (painter, QColor(255,0,0), KoCharacterStyle::SingleLine, KoCharacterStyle::WaveLine, painter->fontMetrics().lineWidth(), x1, x2, y);
+                    }
                 }
             }
         }
     }
+    painter->setFont(oldFont);
 }
 
 void Layout::drawListItem(QPainter *painter, const QTextBlock &block)

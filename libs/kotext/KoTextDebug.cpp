@@ -210,7 +210,6 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
                 value.append(" leadercolor:").append(tab.leaderColor.name());
                 if (! tab.leaderText.isNull())
                     value.append(" leadertext:").append(QString(tab.leaderText));
-                value.append(" textStyleId:").append(QString::number(tab.textStyleId));
                 value.append("}, ");
             }
             break;

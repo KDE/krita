@@ -78,8 +78,7 @@ namespace KoText {
         KoCharacterStyle::LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
         double leaderWidth; // the width value if length/percentage
         QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
-        QChar leaderText;   ///< character to print as the leader (filler of the tabbed space)
-        int textStyleId;
+        QString leaderText;   ///< character to print as the leader (filler of the tabbed space)
 
         bool operator==(const Tab &tab) const;
     };

@@ -53,8 +53,7 @@ KoText::Tab::Tab()
     leaderType(KoCharacterStyle::NoLineType),
     leaderStyle(KoCharacterStyle::NoLineStyle),
     leaderWeight(KoCharacterStyle::AutoLineWeight),
-    leaderWidth(0),
-    textStyleId(0)
+    leaderWidth(0)
 {
 }
 
@@ -64,7 +63,6 @@ bool KoText::Tab::operator==(const Tab &other) const {
         other.delimiter == delimiter &&
         other.leaderStyle == leaderStyle &&
         other.leaderColor == leaderColor &&
-        other.leaderText == leaderText &&
-        other.textStyleId == textStyleId;
+        other.leaderText == leaderText ;
 }
 

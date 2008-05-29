@@ -473,7 +473,6 @@ QScriptValue KoTextTabToQScriptValue(QScriptEngine *engine, const KoTextTab &tab
   else
       obj.setProperty("leaderColor", QScriptValue(engine, "invalid")); // QColor
   obj.setProperty("leaderText", QScriptValue(engine, tab.leaderText)); // QChar
-  obj.setProperty("textStyleId", QScriptValue(engine, tab.textStyleId)); // int
   return obj;
 }
 
@@ -495,7 +494,6 @@ void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
   if (obj.property("leaderColor").toString() != "invalid")
       tab.leaderColor = QColor(obj.property("leaderColor").toString());
   tab.leaderText = obj.property("leaderText").toString()[0];
-  tab.textStyleId = (int) obj.property("textStyleId").toInteger();
 }
 
 QScriptValue constructKoTextTab(QScriptContext *, QScriptEngine *engine)

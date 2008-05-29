@@ -868,8 +868,12 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
             if (tab.leaderColor.isValid())
                 tabDecorColor = tab.leaderColor;
             double width = computeWidth(tab.leaderWeight, tab.leaderWidth, painter->font());
-            if (x1 < x2)
-                drawDecorationLine (painter, tabDecorColor, tab.leaderType, tab.leaderStyle, width, x1, x2, y);
+            if (x1 < x2) {
+                if (tab.leaderText.isEmpty())
+                   drawDecorationLine(painter, tabDecorColor, tab.leaderType, tab.leaderStyle, width, x1, x2, y);
+                else
+                   drawDecorationText(painter, line, tabDecorColor, tab.leaderText, x1, x2);
+            }
         }
     }
 }

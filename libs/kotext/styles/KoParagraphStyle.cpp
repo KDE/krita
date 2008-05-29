@@ -1031,6 +1031,8 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
                 tab.leaderWidth = KoUnit::parseValue( width );
             }
 
+            tab.leaderText = tabStop.attributeNS( KoXmlNS::style, "leader-text", QString() );
+
 #if 0
             else
             {

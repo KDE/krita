@@ -183,6 +183,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::StrikeOutColor,
         KoCharacterStyle::StrikeOutWidth,
         KoCharacterStyle::StrikeOutWeight,
+        KoCharacterStyle::StrikeOutText,
         KoCharacterStyle::UnderlineStyle,
         KoCharacterStyle::UnderlineType,
         KoCharacterStyle::UnderlineWidth,
@@ -517,6 +518,12 @@ void KoCharacterStyle::setStrikeOutMode(LineMode lineMode) {
     d->setProperty(StrikeOutMode, lineMode);
 }
 
+void KoCharacterStyle::setStrikeOutText (const QString& text) {
+    d->setProperty(StrikeOutText, text);
+}
+QString KoCharacterStyle::strikeOutText () const {
+    return d->propertyString(StrikeOutText);
+}
 KoCharacterStyle::LineMode KoCharacterStyle::strikeOutMode() const {
     return (KoCharacterStyle::LineMode) d->propertyInt(StrikeOutMode);
 }
@@ -803,6 +810,10 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         setStrikeOutStyle(throughStyle);
         setStrikeOutType(throughType);
         setStrikeOutWidth(throughWeight, throughWidth);
+        if ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-text" ) ) {
+            setStrikeOutText( styleStack.property( KoXmlNS::style, "text-line-through-text" ) );
+            kDebug(32500) << "line-through-text is " << styleStack.property( KoXmlNS::style, "text-line-through-text" );
+        }
     }
     
     QString lineThroughColor = styleStack.property( KoXmlNS::style, "text-line-through-color" ); // OO 3.10.23, OASIS 14.4.31

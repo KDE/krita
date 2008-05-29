@@ -741,22 +741,42 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
     painter->setPen(penBackup);
 }
 
-static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, double width, const double y)
+static void drawDecorationText (QPainter *painter, const QTextLine &line, const QColor &color, const QString& decorText, double x1, double x2) {
+    double y = line.position().y();
+    QPen oldPen = painter->pen();
+    painter->setPen(QPen(color));
+    do {
+        QRectF br;
+        painter->drawText( QRectF(QPointF(x1, y), QPointF(x2, y + line.height())), Qt::AlignLeft | Qt::AlignVCenter, decorText, &br );
+        x1 = br.right();
+    } while ( x1 <= x2 );
+    painter->setPen(oldPen);
+}
+
+static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const QString& decorText, double width, const double y)
 {
     double wordBeginX = -1;
     int j = line.textStart();
     while (j < line.textLength()+line.textStart()) {
         if (text[j].isSpace()) {
-          if (wordBeginX != -1)
-                drawDecorationLine(painter, color, type, style, width, wordBeginX, line.cursorToX(j), y);
+            if (wordBeginX != -1) {
+                if (decorText.isEmpty())
+                    drawDecorationLine(painter, color, type, style, width, wordBeginX, line.cursorToX(j), y);
+                else
+                    drawDecorationText(painter, line, color, decorText, wordBeginX, line.cursorToX(j));
+            }
             wordBeginX = -1;
         } else if (wordBeginX == -1) {
             wordBeginX = line.cursorToX(j);
         }
         ++j;
     }
-    if (wordBeginX != -1)
-         drawDecorationLine(painter, color, type, style, width, wordBeginX, line.cursorToX(j), y);
+    if (wordBeginX != -1) {
+        if (decorText.isEmpty())
+            drawDecorationLine(painter, color, type, style, width, wordBeginX, line.cursorToX(j), y);
+        else
+            drawDecorationText(painter, line, color, decorText, wordBeginX, line.cursorToX(j));
+    }
 }
 
 static double computeWidth(KoCharacterStyle::LineWeight weight, double width, const QFont& font) {
@@ -785,7 +805,6 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
     // Likewise, if a fragment spans two lines, then this function will be called twice 
     // on the same fragment, once for each line.
     QString fragText = currentFragment.text();
-    kDebug(32500) << "OK text " << fragText;
     int fragmentOffset = currentFragment.position() - startOfBlock;
 
     QFontMetricsF fm(currentFragment.charFormat().font());
@@ -857,12 +876,12 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
 
 static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, double x1, double x2) {
     QTextCharFormat fmt = currentFragment.charFormat();
-    KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle)
+    KoCharacterStyle::LineStyle strikeOutStyle = (KoCharacterStyle::LineStyle)
                                                      fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
-    KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType)
+    KoCharacterStyle::LineType strikeOutType = (KoCharacterStyle::LineType)
                                                     fmt.intProperty(KoCharacterStyle::StrikeOutType);
-    if ((fontStrikeOutStyle != KoCharacterStyle::NoLineStyle) &&
-        (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
+    if ((strikeOutStyle != KoCharacterStyle::NoLineStyle) &&
+        (strikeOutType != KoCharacterStyle::NoLineType)) {
         double y = line.position().y() + line.height()/2;
         QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
         if (!color.isValid())
@@ -870,14 +889,22 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
         KoCharacterStyle::LineMode strikeOutMode = 
                     (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::StrikeOutMode);
 
-        double width = computeWidth(
-                 (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
-                 fmt.doubleProperty (KoCharacterStyle::StrikeOutWidth),
-                 painter->font() );
+        QString strikeOutText = fmt.stringProperty(KoCharacterStyle::StrikeOutText);
+        double width = 0;
+        if (strikeOutText.isEmpty()) {
+            width = computeWidth(
+                     (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
+                     fmt.doubleProperty (KoCharacterStyle::StrikeOutWidth),
+                     painter->font() );
+        }
+
         if (strikeOutMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-            drawDecorationWords(painter, line, currentFragment.text(), color, fontStrikeOutType, fontStrikeOutStyle, width, y);
+            drawDecorationWords(painter, line, currentFragment.text(), color, strikeOutType, strikeOutStyle, strikeOutText, width, y);
         } else {
-            drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, width, x1, x2, y);
+            if (strikeOutText.isEmpty())
+               drawDecorationLine (painter, color, strikeOutType, strikeOutStyle, width, x1, x2, y);
+            else
+               drawDecorationText (painter, line, color, strikeOutText, x1, x2);
         }
     }
 }
@@ -900,7 +927,7 @@ static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragme
                  fmt.doubleProperty (KoCharacterStyle::UnderlineWidth),
                  painter->font() );
         if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType, fontUnderLineStyle, width, y);
+            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType, fontUnderLineStyle, QString(), width, y);
         } else {
             drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, width, x1, x2, y);
         }

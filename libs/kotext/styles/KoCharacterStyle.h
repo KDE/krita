@@ -61,6 +61,7 @@ public:
         StrikeOutWidth,
         StrikeOutWeight,
         StrikeOutMode,
+        StrikeOutText,
         UnderlineStyle,
         UnderlineType,
         UnderlineWidth,
@@ -220,6 +221,10 @@ public:
     void setStrikeOutMode(LineMode lineMode);
     /// Get the current strike out mode of this KoCharacterStyle
     LineMode strikeOutMode() const;
+    /// Apply a strike out text of this KoCharacterStyle
+    void setStrikeOutText(const QString& text);
+    /// Get the current strike out text of this KoCharacterStyle
+    QString strikeOutText() const;
 
     /// Apply a font underline style to this KoCharacterStyle
     void setUnderlineStyle (LineStyle style);

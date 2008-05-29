@@ -145,13 +145,6 @@ static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs) {
     for (int i = 0; i<actualTabList.count(); i++) {
         KoText::Tab actualTab = actualTabList[i].value<KoText::Tab>();
         KoText::Tab expectedTab = expectedTabList[i].value<KoText::Tab>();
-      //qDebug() << actualTab.position  << " cmp " <<  expectedTab.position
-      //     << "\n" << actualTab.type  << " cmp " <<  expectedTab.type
-      //       << "\n" << actualTab.delimiter  << " cmp " <<  expectedTab.delimiter
-      //     << "\n" << actualTab.leaderStyle  << " cmp " <<  expectedTab.leaderStyle
-      //     << "\n" << actualTab.leaderColor  << " cmp " <<  expectedTab.leaderColor
-      //     << "\n" << actualTab.leaderText  << " cmp " <<  expectedTab.leaderText
-      //     << "\n" << actualTab.textStyleId  << " cmp " <<  expectedTab.textStyleId;
         if (actualTab.position != expectedTab.position
             || actualTab.type != expectedTab.type
             || actualTab.delimiter != expectedTab.delimiter
@@ -160,8 +153,7 @@ static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs) {
             || actualTab.leaderColor != expectedTab.leaderColor
             || actualTab.leaderWeight != expectedTab.leaderWeight
             || actualTab.leaderWidth != expectedTab.leaderWidth
-     //       || actualTab.leaderText != expectedTab.leaderText
-     //       || actualTab.textStyleId != expectedTab.textStyleId
+            || actualTab.leaderText != expectedTab.leaderText
             ) {
             return false;
         }
@@ -474,7 +466,7 @@ QScriptValue KoTextTabToQScriptValue(QScriptEngine *engine, const KoTextTab &tab
       obj.setProperty("leaderColor", QScriptValue(engine, tab.leaderColor.name())); // QColor
   else
       obj.setProperty("leaderColor", QScriptValue(engine, "invalid")); // QColor
-  obj.setProperty("leaderText", QScriptValue(engine, tab.leaderText)); // QChar
+  obj.setProperty("leaderText", QScriptValue(engine, tab.leaderText)); // QString
   return obj;
 }
 
@@ -495,7 +487,7 @@ void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
   tab.leaderWidth = obj.property("leaderWidth").toNumber();
   if (obj.property("leaderColor").toString() != "invalid")
       tab.leaderColor = QColor(obj.property("leaderColor").toString());
-  tab.leaderText = obj.property("leaderText").toString()[0];
+  tab.leaderText = obj.property("leaderText").toString();
 }
 
 QScriptValue constructKoTextTab(QScriptContext *, QScriptEngine *engine)
@@ -657,6 +649,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("tabLeaderStyle") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderStyle";
     QTest::newRow("tabLeaderColor") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderColor";
     QTest::newRow("tabLeaderWidth") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderWidth";
+    QTest::newRow("tabLeaderText") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderText";
 }
 
 void TestLoading::testLoading() 

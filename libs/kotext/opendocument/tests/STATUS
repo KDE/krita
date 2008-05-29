@@ -66,7 +66,7 @@ testsuite.
 ./FormattingProperties/ParagraphFormattingProperties/punctuationWrap/test.xml:   <result>unknown</result>
 ./FormattingProperties/ParagraphFormattingProperties/breakBeforeAndBreakAfter/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/ParagraphFormattingProperties/leaderType/test.xml:   <result>unsupported</result>
-./FormattingProperties/ParagraphFormattingProperties/leaderText/test.xml:   <result>unsupported</result>
+*./FormattingProperties/ParagraphFormattingProperties/leaderText/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/keepTogether/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/dropCapsDistance/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/topAndBottomMargins/test.xml:   <result>fullsupport</result>
@@ -103,7 +103,7 @@ testsuite.
 ./FormattingProperties/TextFormattingProperties/textCombine/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/lineThroughType/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/TextFormattingProperties/underliningStyle/test.xml:   <result>fullsupport</result>
-./FormattingProperties/TextFormattingProperties/lineThroughText/test.xml:   <result>unsupported</result>
+*./FormattingProperties/TextFormattingProperties/lineThroughText/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/textCombineStartAndEndCharacters/test.xml:   <result>unknown</result>
 *./FormattingProperties/TextFormattingProperties/textLineTroughWordMode/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/language/test.xml:   <result>fullsupport</result>

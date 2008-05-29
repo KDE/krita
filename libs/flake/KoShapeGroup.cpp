@@ -68,6 +68,8 @@ void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const {
 }
 
 bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes );
+
     KoXmlElement child;
     forEachElement( child, element )
     {
@@ -77,8 +79,6 @@ bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
             addChild( shape );
         }
     }
-
-    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes );
 
     QRectF bound;
     bool boundInitialized = false;

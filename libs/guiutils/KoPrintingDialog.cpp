@@ -106,12 +106,12 @@ public:
         painter = 0;
     }
 
-    void printPage(const QVariant &) {
+    void printPage(const QVariant &page) {
         if(! stop)
             shapeManager->paint( *painter, zoomer, true );
         painter->restore(); // matching the one in preparePage above
         painter->save();
-        parent->printPage(index, *painter);
+        parent->printPage(page.toInt(), *painter);
         painter->restore();
 
         if(!stop && index < pages.count()) {

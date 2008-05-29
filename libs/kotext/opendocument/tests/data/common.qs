@@ -87,6 +87,7 @@ KoCharacterStyle.StrikeOutColor = ++i;
 KoCharacterStyle.StrikeOutWidth = ++i;
 KoCharacterStyle.StrikeOutWeight = ++i;
 KoCharacterStyle.StrikeOutMode = ++i;
+KoCharacterStyle.StrikeOutText = ++i;
 KoCharacterStyle.UnderlineStyle = ++i;
 KoCharacterStyle.UnderlineType = ++i;
 KoCharacterStyle.UnderlineWidth = ++i;

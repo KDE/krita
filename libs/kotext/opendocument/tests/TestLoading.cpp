@@ -123,6 +123,8 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
                   == expectedFormat.property(KoCharacterStyle::StrikeOutWeight).toInt()
            && actualFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble() 
                   == expectedFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble()
+           && actualFormat.property(KoCharacterStyle::StrikeOutText).toString() 
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutText).toString()
            && actualFormat.property(KoCharacterStyle::Country).toString()
                   == expectedFormat.property(KoCharacterStyle::Country).toString()
            && actualFormat.property(KoCharacterStyle::Language).toString()
@@ -631,6 +633,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("Line through style") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";
     QTest::newRow("Line through type") << "FormattingProperties/TextFormattingProperties/lineThroughType";
     QTest::newRow("Line through width") << "FormattingProperties/TextFormattingProperties/lineThroughWidth";
+    QTest::newRow("lineThroughText") << "FormattingProperties/TextFormattingProperties/lineThroughText";
     QTest::newRow("Relative Font Size") << "FormattingProperties/TextFormattingProperties/relativeFontSize";
     QTest::newRow("Text Background Color") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
     QTest::newRow("Text Outline") << "FormattingProperties/TextFormattingProperties/textOutline";

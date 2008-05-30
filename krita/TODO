@@ -341,34 +341,34 @@ Remarks by Enkhitan
 instead of 0-100% (it could be interesting to keep it as an option 
 though, to fake real soft brushes like chinese brushes, unless curves 
 settings for pressure comes back one day).
-  - strokes are "cut" by borders of the canvas. (it's a Qt bug, tablet events are not tracked by the widget when the widget leave the canvas)
+  - strokes are "cut" by borders of the canvas. (it's a Qt bug, tablet events are not tracked by the widget when the widget leave the canvas) (bug:162874 )
   - after painting for more than one hour, glitches appear in stroke, 
 and are followed soon after by a crash. These glitches are just in the 
 display, they are not saved in the document. They looks like the kind 
 you get when you video card is seriously overheating, or defectious (I 
-have a backtrace, console output, and screenshots, if needed).
+have a backtrace, console output, and screenshots, if needed). (bug:162149)
  
 *filter paintop:
  
   - transparent pixels are replaced by black or white pixels, instead of 
 keeping their transparency (it is the case in 1.6 too, so I'm not sure 
 if it's a bug or missing feature, regular filters works well with 
-transparency, after all).
+transparency, after all). (bug:162872)
    - some filters crash the app (small tiles,...)
  
 *layers:
   - when a shape layer is deleted, shapes that were on that layer are 
-not removed.
+not removed. (bug:162877)
   - create a selection, copy, paste: the new layer is empty (but "paste 
-in a new image" works).
+in a new image" works). (bug:162873)
  
 *dockers/UI :
  
   - text input boxes (e.g. opacity, in the tool options docker) keep the 
 focus and catch pressed keys, even after having pressed the "enter" key. 
-(it also happens in karbon).
+(it also happens in karbon). (bug: 162875)
  
  
 *shortcuts :
  
-   - keyboard shorcuts don't works, except ctrl + key and Fxx ones
+   - keyboard shorcuts don't works, except ctrl + key and Fxx ones (bug: 162876)

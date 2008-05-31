@@ -75,6 +75,12 @@ KoTextSharedLoadingData::~KoTextSharedLoadingData()
     delete d;
 }
 
+static void addDefaultParagraphStyle( KoOdfLoadingContext & context, const KoXmlElement* styleElem, KoStyleManager* styleManager ) {
+    if (styleManager && styleElem) {
+        styleManager->defaultParagraphStyle()->loadOdf( styleElem, context );
+    }
+}
+
 void KoTextSharedLoadingData::loadOdfStyles( KoOdfLoadingContext & context, KoStyleManager * styleManager, bool insertOfficeStyles )
 {
     // add paragraph styles
@@ -85,6 +91,7 @@ void KoTextSharedLoadingData::loadOdfStyles( KoOdfLoadingContext & context, KoSt
     // add office:styles from styles.xml to paragraphContentDotXmlStyles, paragraphStylesDotXmlStyles and styleManager
     // now all styles referencable from the body in content.xml is in paragraphContentDotXmlStyles
     addParagraphStyles( context, context.stylesReader().customStyles( "paragraph" ).values(), ContextDotXml | StylesDotXml, styleManager, insertOfficeStyles );
+    addDefaultParagraphStyle( context, context.stylesReader().defaultStyle( "paragraph" ), styleManager );
 
     addCharacterStyles( context, context.stylesReader().autoStyles( "text" ).values(), ContextDotXml );
     addCharacterStyles( context, context.stylesReader().autoStyles( "text", true ).values(), StylesDotXml );

@@ -38,23 +38,17 @@ class KoShapeLoadingContext;
  *   <draw:image xlink:href="Pictures/imagename.jpg" />
  * </draw:frame>
  * @endcode
- * The draw:frame is our KoFrameShape while the draw:image is then the
- * KoShape itself. As example the PictureShape, which may be used here
- * to handle the draw:image, inherits KoFrameShape as well as KoShape
- * to implement handlers for both. If we are now interested to know what
- * value is within e.g. the "svg:x" attribute of the draw:frame we are
- * able to access it by using the additional-attribute functionality. For
- * this we have to define first something like;
+ *
+ * The loading code of the shape gets passed the the draw:frame element. Out of this element the 
+ * odf attributes can be loaded. Then it class loadOdfFrame which loads the correct flame element 
+ * the object supports. The loading of the frame element is done in the loadOdfFrameElement.
+ *
  * @code
- * KoShapeLoadingContext::addAdditionalAttributeData(
- *   KoShapeLoadingContext::AdditionalAttributeData(
- *     KoXmlNS::svg, "x", "svg:x" ) );
- * @endcode
- * somewhere before the loading starts to let flake know that we are
- * interested in those attribute. Then during loading we are able
- * to ask the KoShape itself for those attributes with something like;
- * @code
- * myPictureShapeInstance->additionalAttribute("svg:x")
+ * bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+ * {
+ *     loadOdfAttributes( element, context, OdfAllAttributes );
+ *     return loadOdfFrame( element, context );
+ * }
  * @endcode
  */
 class FLAKE_EXPORT KoFrameShape

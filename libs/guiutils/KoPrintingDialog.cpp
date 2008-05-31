@@ -67,19 +67,16 @@ public:
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
         KoUpdater updater = updaters.at(index-1);
-        const bool doSave = painter == 0;
-        if (painter)
-            painter->save();
+        if (!painter)
+            painter = new QPainter(printer);
+        painter->save(); // state before page preparation
         if(! stop)
             parent->preparePage(pageNumber);
         updater.setProgress(45);
         if (index > 1)
             printer->newPage();
         updater.setProgress(55);
-        if (painter == 0)
-            painter = new QPainter(printer);
-        if (doSave)
-            painter->save(); // make sure we saved to match the restore later on.
+        painter->save(); // state after page preparation
 
         QList<KoShape*> shapes = parent->shapesOnPage(pageNumber);
         if (shapes.isEmpty()) {
@@ -107,12 +104,13 @@ public:
     }
 
     void printPage(const QVariant &page) {
-        if(! stop)
-            shapeManager->paint( *painter, zoomer, true );
-        painter->restore(); // matching the one in preparePage above
+        painter->restore(); // state after page preparation
         painter->save();
         parent->printPage(page.toInt(), *painter);
         painter->restore();
+        if (!stop)
+            shapeManager->paint(*painter, zoomer, true);
+        painter->restore(); // state before page preparation
 
         if(!stop && index < pages.count()) {
             pageNumber->setText(i18n("Printing page %1", QString::number(pages[index])));

@@ -105,12 +105,12 @@ private:
     };
     // helper functions for loading of paragraph styles
     void addParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
-                             KoStyleManager *styleManager, bool insertOfficeStyles = false );
+                             KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
     QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements );
 
     // helper functions for loading of character styles
     void addCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
-                             KoStyleManager *styleManager, bool insertOfficeStyles = false );
+                             KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
     QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements );
 
     // helper functions for loading of list styles

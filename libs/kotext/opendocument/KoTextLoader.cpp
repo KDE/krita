@@ -88,6 +88,10 @@ class KoTextLoader::Private
         explicit Private( KoShapeLoadingContext & context )
         : context( context )
         , textSharedData( 0 )
+        // stylesDotXml says from where the office:automatic-styles are to be picked from:
+        // the content.xml or the styles.xml (in a multidocument scenario). It does not
+        // decide from where the office:styles are to be picked (always picked from styles.xml).
+        // For our use here, stylesDotXml is always false (see ODF1.1 spec §2.1).
         , stylesDotXml( context.odfLoadingContext().useStylesAutoStyles() )
         , bodyProgressTotal( 0 )
         , bodyProgressValue( 0 )

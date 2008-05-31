@@ -2026,10 +2026,10 @@ QDomNode KoXmlNodeData::asQDomNode( QDomDocument ownerDoc ) const
 
 void KoXmlNodeData::dump()
 {
-  printf("NodeData %p\n", this);
+  printf("NodeData %p\n", (void*)this);
 
   printf("  nodeIndex: %d\n", (int)nodeIndex);  
-  printf("  packedDoc: %p\n", packedDoc);
+  printf("  packedDoc: %p\n", (void*)packedDoc);
   
   printf("  nodeType : %d\n", (int)nodeType);
   printf("  tagName: %s\n", qPrintable( tagName ) );
@@ -2037,11 +2037,11 @@ void KoXmlNodeData::dump()
   printf("  prefix: %s\n", qPrintable( prefix ) );
   printf("  localName: %s\n", qPrintable( localName ) );
   
-  printf("  parent : %p\n", parent);
-  printf("  prev : %p\n", prev);
-  printf("  next : %p\n", next);
-  printf("  first : %p\n", first);
-  printf("  last : %p\n", last);
+  printf("  parent : %p\n", (void*)parent);
+  printf("  prev : %p\n", (void*)prev);
+  printf("  next : %p\n", (void*)next);
+  printf("  first : %p\n", (void*)first);
+  printf("  last : %p\n", (void*)last);
   
   printf("  count: %ld\n", count);
   

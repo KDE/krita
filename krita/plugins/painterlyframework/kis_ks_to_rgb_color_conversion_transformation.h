@@ -36,7 +36,7 @@ typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
 public:
 
     KisKSToRGBColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
-    : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0), m_dstProfile(0)
+    : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0)
     {
         m_srcProfile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
         m_rgbvec = new double[3];
@@ -62,9 +62,9 @@ public:
 
             m_srcProfile->toRgb(m_ksvec, m_rgbvec);
 
-            dst[0] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[2]));
-            dst[1] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[1]));
-            dst[2] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[0]));
+            dst[0] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[2]);
+            dst[1] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[1]);
+            dst[2] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[0]);
             dst[3] = (float)CSTrait::nativealpha(src);
 
             src += CSTrait::pixelSize;

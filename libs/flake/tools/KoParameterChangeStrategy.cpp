@@ -29,6 +29,9 @@ KoParameterChangeStrategy::KoParameterChangeStrategy( KoTool *tool, KoCanvasBase
 , m_startPoint( m_parameterShape->shapeToDocument( m_parameterShape->handlePosition( handleId ) ) )
 , m_lastModifierUsed(0)
 {
+    // initialize release point with start point position to prevent
+    // change when just clicking a handle without moving the mouse
+    m_releasePoint = m_startPoint;
 }
 
 KoParameterChangeStrategy::~KoParameterChangeStrategy()

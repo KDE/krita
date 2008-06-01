@@ -36,4 +36,13 @@ void KoPrintJob::startPrinting(RemovePolicy removePolicy)
         deleteLater();
 }
 
+QAbstractPrintDialog::PrintDialogOptions KoPrintJob::printDialogOptions() const
+{
+    return QAbstractPrintDialog::PrintToFile |
+           QAbstractPrintDialog::PrintPageRange |
+           QAbstractPrintDialog::PrintCollateCopies |
+           QAbstractPrintDialog::DontUseSheet |
+           QAbstractPrintDialog::PrintShowPageSize;
+}
+
 #include <KoPrintJob.moc>

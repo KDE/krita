@@ -1368,6 +1368,7 @@ void KoMainWindow::slotFilePrint()
     QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
             printJob->createOptionWidgets(), this);
     printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
+    printDialog->setEnabledOptions(printJob->printDialogOptions());
     if (printDialog->exec() == QDialog::Accepted)
         printJob->startPrinting( KoPrintJob::DeleteWhenDone );
     else

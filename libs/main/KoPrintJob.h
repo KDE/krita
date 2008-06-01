@@ -22,6 +22,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
+#include <QtGui/QAbstractPrintDialog>
 #include <QtGui/QPrinter>
 
 #include "komain_export.h"
@@ -61,6 +62,8 @@ public:
 
     virtual int documentFirstPage() const { return 1; }
     virtual int documentLastPage() const { return 1; }
+
+    virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
 public slots:
     /**

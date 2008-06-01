@@ -39,7 +39,6 @@ public:
     : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0), m_dstProfile(0)
     {
         m_srcProfile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
-        m_dstProfile = dynamic_cast<const KoHdrColorProfile*>(dstColorSpace()->profile());
         m_rgbvec = new double[3];
         m_ksvec  = new double[2*_N_];
     }
@@ -63,9 +62,9 @@ public:
 
             m_srcProfile->toRgb(m_ksvec, m_rgbvec);
 
-            dst[0] = (float)m_dstProfile->displayToChannelDouble(m_rgbvec[2]);
-            dst[1] = (float)m_dstProfile->displayToChannelDouble(m_rgbvec[1]);
-            dst[2] = (float)m_dstProfile->displayToChannelDouble(m_rgbvec[0]);
+            dst[0] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[2]));
+            dst[1] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[1]));
+            dst[2] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[0]));
             dst[3] = (float)CSTrait::nativealpha(src);
 
             src += CSTrait::pixelSize;
@@ -80,7 +79,6 @@ private:
     double *m_ksvec;
 
     const KisIlluminantProfile *m_srcProfile;
-    const KoHdrColorProfile *m_dstProfile;
 
 };
 
@@ -92,7 +90,7 @@ public:
     : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
                                               KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), srcProfile,
                                               RGBAColorModelID.id(),
-                                              Float32BitsColorDepthID.id(), "lcms virtual RGB profile - Rec. 709 Linear" ) { }
+                                              Integer16BitsColorDepthID.id(), "sRGB built-in - (lcms internal)" ) { }
 
     KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
                                                                 const KoColorSpace* dstColorSpace,

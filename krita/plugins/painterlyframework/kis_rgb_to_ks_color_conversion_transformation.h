@@ -22,7 +22,6 @@
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
-#include <KoHdrColorProfile.h>
 
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
@@ -37,7 +36,6 @@ public:
     KisRGBToKSColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
     : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0), m_dstProfile(0)
     {
-        m_srcProfile = dynamic_cast<const KoHdrColorProfile*>(srcColorSpace()->profile());
         m_dstProfile = static_cast<const KisIlluminantProfile*>(parent::dstColorSpace()->profile());
         m_rgbvec = new double[3];
         m_ksvec  = new double[2*_N_];
@@ -60,9 +58,9 @@ public:
         const int pixelSize = CSTrait::pixelSize;
 
         for ( ; nPixels > 0; nPixels-- ) {
-            m_rgbvec[0] = m_srcProfile->channelToDisplayDouble((double)src[2]);
-            m_rgbvec[1] = m_srcProfile->channelToDisplayDouble((double)src[1]);
-            m_rgbvec[2] = m_srcProfile->channelToDisplayDouble((double)src[0]);
+            m_rgbvec[0] = KoColorSpaceMaths<quint16, _TYPE_>::scaleToA((double)src[2]));
+            m_rgbvec[1] = KoColorSpaceMaths<quint16, _TYPE_>::scaleToA((double)src[1]));
+            m_rgbvec[2] = KoColorSpaceMaths<quint16, _TYPE_>::scaleToA((double)src[0]));
 
             m_dstProfile->fromRgb(m_rgbvec, m_ksvec);
 
@@ -81,7 +79,6 @@ protected:
     double *m_rgbvec;
     double *m_ksvec;
 
-    const KoHdrColorProfile *m_srcProfile;
     const KisIlluminantProfile *m_dstProfile;
 
 };
@@ -92,7 +89,7 @@ class KisRGBToKSColorConversionTransformationFactory : public KoColorConversionT
 public:
     KisRGBToKSColorConversionTransformationFactory(QString dstProfile)
     : KoColorConversionTransformationFactory( RGBAColorModelID.id(),
-                                              Float32BitsColorDepthID.id(), "lcms virtual RGB profile - Rec. 709 Linear",
+                                              Integer16BitsColorDepthID.id(), "sRGB built-in - (lcms internal)",
                                               QString("KS%1").arg(_N_),
                                               KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), dstProfile ) { }
 

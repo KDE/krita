@@ -22,6 +22,10 @@
 
 #include <KoPathShape.h>
 #include <KoGlobal.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 
 #include <KLocale>
 
@@ -60,14 +64,36 @@ void SimpleTextShape::paintDecorations(QPainter &/*painter*/, const KoViewConver
 {
 }
 
-void SimpleTextShape::saveOdf(KoShapeSavingContext &/*context*/) const
+void SimpleTextShape::saveOdf(KoShapeSavingContext &context) const
 {
-    // TODO
+    context.xmlWriter().startElement("draw:custom-shape");
+    saveOdfAttributes( context, OdfAllAttributes );
+
+    // write a enhanced geometry element for compatibility with other applications
+    context.xmlWriter().startElement("draw:enhanced-geometry");
+
+    // write the path data
+    KoPathShape * path = KoPathShape::fromQPainterPath( outline() );
+    context.xmlWriter().addAttribute("draw:enhanced-path", path->toString( transformation() ) );
+    delete path;
+
+    context.xmlWriter().endElement(); // draw:enhanced-geometry
+
+    // now write the special shape data
+    context.xmlWriter().addAttribute( "draw:engine", "svg:text" );
+    context.xmlWriter().addAttribute( "draw:data", "" );
+
+    context.xmlWriter().endElement(); // draw:custom-shape
+
+    saveOdfConnections(context);
 }
 
-bool SimpleTextShape::loadOdf( const KoXmlElement & /*element*/, KoShapeLoadingContext &/*context*/ )
+bool SimpleTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    // TODO
+    QString drawEngine = element.attributeNS( KoXmlNS::draw, "engine", "" );
+    if( drawEngine.isEmpty() || drawEngine != "svg:text" )
+        return false;
+
     return false;
 }
 

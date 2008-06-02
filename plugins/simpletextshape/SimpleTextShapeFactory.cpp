@@ -21,6 +21,8 @@
 #include "SimpleTextShape.h"
 #include "SimpleTextShapeConfigWidget.h"
 
+#include <KoXmlNS.h>
+
 #include <klocale.h>
 
 SimpleTextShapeFactory::SimpleTextShapeFactory(QObject *parent)
@@ -28,6 +30,8 @@ SimpleTextShapeFactory::SimpleTextShapeFactory(QObject *parent)
 {
     setToolTip(i18n("A shape which shows a single text line"));
     setIcon( "text" );
+    setLoadingPriority( 5 );
+    setOdfElementNames( KoXmlNS::draw, QStringList( "custom-shape" ) );
 }
 
 KoShape *SimpleTextShapeFactory::createDefaultShape() const
@@ -47,6 +51,11 @@ QList<KoShapeConfigWidgetBase*> SimpleTextShapeFactory::createShapeOptionPanels(
     QList<KoShapeConfigWidgetBase*> answer;
     answer.append( new SimpleTextShapeConfigWidget() );
     return answer;
+}
+
+bool SimpleTextShapeFactory::supports(const KoXmlElement & e) const
+{
+    return ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw );
 }
 
 #include "SimpleTextShapeFactory.moc"

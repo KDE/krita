@@ -108,6 +108,8 @@ public:
 
         AutoTextIndent,         ///< bool, says whether the paragraph is auto-indented or not
 
+        TabStopDistance,        ///< Double, Length. specifies that there's a tab stop every n inches
+                                ///< (after the last of the TabPositions, if any)
         TabPositions,           ///< A list of tab positions
         TextProgressionDirection,
 
@@ -436,6 +438,10 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     /// return if this paragraph is marked to start the list numbering from the first entry.
     bool restartListNumbering();
 
+    /// Set the tab stop distance for this paragraph style.
+    void setTabStopDistance(double value);
+    /// return the tab stop distance for this paragraph style
+    double tabStopDistance() const;
     /// Set the tab data for this paragraph style.
     void setTabPositions(const QList<KoText::Tab> &tabs);
     /// return the tabs data for this paragraph style

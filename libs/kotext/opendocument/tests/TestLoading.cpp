@@ -198,6 +198,10 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
             if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
               match = false;
             break;
+        case KoParagraphStyle::TabStopDistance:
+            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
+              match = false;
+            break;
         case KoParagraphStyle::TabPositions: 
             if (!compareTabProperties(actualProperty[id], expectedProperty[id]))
               match = false;
@@ -650,6 +654,7 @@ void TestLoading::testLoading_data()
     QTest::newRow("tabLeaderColor") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderColor";
     QTest::newRow("tabLeaderWidth") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderWidth";
     QTest::newRow("tabLeaderText") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderText";
+    QTest::newRow("tabStopDistance") << "FormattingProperties/ParagraphFormattingProperties/tabStopDistance";
 }
 
 void TestLoading::testLoading() 

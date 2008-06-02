@@ -327,7 +327,11 @@ bool Layout::nextParag()
     layout = m_block.layout();
     QTextOption option = layout->textOption();
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere );
-    option.setTabStop (m_defaultTabSizing);
+    double tabStopDistance =  m_format.property(KoParagraphStyle::TabStopDistance).toDouble();
+    if (tabStopDistance > 0)
+        option.setTabStop (tabStopDistance * qt_defaultDpiX() / 72.);
+    else
+        option.setTabStop (m_defaultTabSizing);
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     // tabs

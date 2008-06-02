@@ -124,6 +124,7 @@ static const int properties[] = {
     KoParagraphStyle::ExplicitListValue,
     KoParagraphStyle::RestartListNumbering,
     KoParagraphStyle::AutoTextIndent,
+    KoParagraphStyle::TabStopDistance,
     KoParagraphStyle::TabPositions,
     KoParagraphStyle::TextProgressionDirection,
     KoParagraphStyle::MasterPageName,
@@ -934,8 +935,12 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
         setLineSpacing( KoUnit::parseValue( styleStack.property( KoXmlNS::style, "line-spacing" ) ) );
     }
 
-    //TODO
     // Tabulators
+    if ( styleStack.hasProperty( KoXmlNS::style, "tab-stop-distance" ) ) {
+        double tabStopDistance = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "tab-stop-distance" ) );
+        if (tabStopDistance > 0)
+            setTabStopDistance(tabStopDistance);
+    }
     QList<KoText::Tab> tabList;
     if ( styleStack.hasChildNode( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
         KoXmlElement tabStops = styleStack.childNode( KoXmlNS::style, "tab-stops" );
@@ -1242,6 +1247,14 @@ QList<KoText::Tab> KoParagraphStyle::tabPositions() const {
         answer.append(tab.value<KoText::Tab>());
     }
     return answer;
+}
+
+void KoParagraphStyle::setTabStopDistance(double value) {
+    setProperty(TabStopDistance, value);
+}
+
+double KoParagraphStyle::tabStopDistance() const {
+    return propertyDouble(TabStopDistance);
 }
 
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style) {

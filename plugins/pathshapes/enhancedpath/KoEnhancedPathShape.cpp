@@ -477,7 +477,7 @@ void KoEnhancedPathShape::parsePathData( const QString & data )
             case 'X':
             case 'Y':
             case 'Q':
-                if( lastChar == ' ' )
+                if( lastChar == ' ' || QChar(lastChar).isNumber() )
                 {
                     if( ! cmdString.isEmpty() )
                         addCommand( cmdString );

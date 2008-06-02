@@ -39,7 +39,8 @@ public:
     static void dumpBlock(const QTextBlock &block);
     static void dumpTable(const QTextTable *);
     static void dumpFragment(const QTextFragment &fragment);
-    static QString attributes(const QMap<int, QVariant> &properties);
+    static QString textAttributes(const QMap<int, QVariant> &properties);
+    static QString paraAttributes(const QMap<int, QVariant> &properties);
 
 private:
     KoTextDebug();

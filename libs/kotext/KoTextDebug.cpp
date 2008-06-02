@@ -48,7 +48,7 @@ void KoTextDebug::dumpDocument(const QTextDocument *doc)
     document = 0;
 }
 
-QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
+QString KoTextDebug::textAttributes(const QMap<int, QVariant> &properties)
 {
     QString attrs;
     foreach(int id, properties.keys()) {
@@ -133,10 +133,6 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             key = "textindent";
             value = QString::number(properties[id].toInt());
             break;
-        case KoParagraphStyle::AutoTextIndent:
-            key = "autotextindent";
-            value = properties[id].toBool()? "true" : "false" ;
-            break;
         case QTextFormat::BlockIndent:
             key = "indent";
             value = QString::number(properties[id].toInt());
@@ -158,6 +154,28 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
         case KoCharacterStyle::Language:
             key = "language";
             value = properties[id].toString();
+            break;
+        case KoCharacterStyle::FontCharset:
+            key = "font-charset";
+            value = properties[id].toString();
+            break;
+        default:
+            break;
+        }
+        if (!key.isEmpty())
+            attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+    }
+    return attrs;
+}
+QString KoTextDebug::paraAttributes(const QMap<int, QVariant> &properties)
+{
+    QString attrs;
+    foreach(int id, properties.keys()) {
+        QString key, value;
+        switch (id) {
+        case KoParagraphStyle::AutoTextIndent:
+            key = "autotextindent";
+            value = properties[id].toBool()? "true" : "false" ;
             break;
 #ifdef PARAGRAPH_BORDER_DEBUG // because it tends to get annoyingly long :)
         case KoParagraphStyle::LeftBorderWidth:
@@ -189,9 +207,9 @@ QString KoTextDebug::attributes(const QMap<int, QVariant> &properties)
             value = QString::number(properties[id].toDouble()) ;
             break;
 #endif
-        case KoCharacterStyle::FontCharset:
-            key = "font-charset";
-            value = properties[id].toString();
+        case KoParagraphStyle::TabStopDistance:
+            key = "tab-stop-distance";
+            value = QString::number(properties[id].toDouble());
             break;
         case KoParagraphStyle::TabPositions:
             key = "tab-stops";
@@ -273,7 +291,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
         attrs.append("\"");
     }
 
-    attrs.append(attributes(block.blockFormat().properties()));
+    attrs.append(paraAttributes(block.blockFormat().properties()));
 
     qDebug("%*s<block%s>", depth, " ", qPrintable(attrs));
 
@@ -326,7 +344,7 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment)
             attrs.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
             attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
         }
-        attrs.append(attributes(textFormat.properties()));
+        attrs.append(textAttributes(textFormat.properties()));
     }
 
     qDebug("%*s<fragment%s>", depth, " ", qPrintable(attrs));

@@ -45,6 +45,7 @@
 #include "kis_painter.h"
 #include "kis_threaded_applicator.h"
 #include "filter/kis_filter_job.h"
+#include "filter/kis_filter_registry.h"
 
 struct KisFilterHandler::Private {
 
@@ -124,6 +125,8 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     dbgUI <<"Applying a filter";
     if( !layer ) return;
 
+    KisFilterSP filter = KisFilterRegistry::instance()->value( config->name() );
+    
     m_d->dev = layer->paintDevice();
 
     QRect r1 = m_d->dev->extent();
@@ -139,22 +142,22 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
 
     KisTransaction * cmd = 0;
     KoProgressUpdater updater( m_d->view->statusBar()->progress() );
-    if (layer->image()->undo()) cmd = new KisTransaction(m_d->filter->name(), m_d->dev);
+    if (layer->image()->undo()) cmd = new KisTransaction( filter->name(), m_d->dev);
 
-    if ( !m_d->filter->supportsThreading() ) {
+    if ( !filter->supportsThreading() ) {
         KoUpdater up = updater.startSubtask();
-        m_d->filter->process(m_d->dev, rect, config, &up);
+        filter->process(m_d->dev, rect, config, &up);
         areaDone(rect);
     }
     else {
         // Chop up in rects.
-        KisFilterJobFactory factory( m_d->filter, config );
-        KisThreadedApplicator applicator(m_d->dev, rect, &factory, &updater, m_d->filter->overlapMarginNeeded( config ));
+        KisFilterJobFactory factory( filter, config );
+        KisThreadedApplicator applicator(m_d->dev, rect, &factory, &updater, filter->overlapMarginNeeded( config ));
         applicator.connect( &applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect &)));
         applicator.execute();
     }
 
-/*    if (m_d->filter->cancelRequested()) { // TODO: port to the progress display reporter
+/*    if (filter->cancelRequested()) { // TODO: port to the progress display reporter
         delete config;
         if (cmd) {
             cmm_d->undo();
@@ -162,9 +165,9 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         }
     } else */{
         if (cmd) m_d->view->document()->addCommand(cmd);
-        if(m_d->filter->bookmarkManager())
+        if(filter->bookmarkManager())
         {
-            m_d->filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
+            filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config); // TODO ugly const_cast
         }
         if(m_d->lastConfiguration != config)
         {
@@ -173,7 +176,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         m_d->lastConfiguration = config;
         m_d->manager->setLastFilterHandler(this);
 
-        layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(m_d->filter->name(), layer, m_d->filter, config));
+        layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(filter->name(), layer, filter, config));
     }
 
     QApplication::restoreOverrideCursor();

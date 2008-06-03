@@ -39,7 +39,7 @@
     </widget>
    </item>
    <item row="0" column="1" colspan="4" >
-    <widget class="KFontComboBox" name="fontComboBox" >
+    <widget class="QFontComboBox" name="fontComboBox" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
        <horstretch>0</horstretch>

@@ -368,6 +368,9 @@ void KoListLevelProperties::loadOasis(KoOdfLoadingContext& context, const KoXmlE
         const QString suffix = style.attributeNS( KoXmlNS::style, "num-suffix", QString() );
         if( ! suffix.isNull() )
             setListItemSuffix(suffix);
+        const QString startValue = style.attributeNS( KoXmlNS::text, "start-value", QString() );
+        if ( ! startValue.isNull() )
+            setStartValue( startValue.toInt() );
     }
     else { // if not defined, we have do nothing
         kDebug(32500)<<"stylename else:"<<style.localName()<<"level="<<level<<"displayLevel="<<displayLevel;

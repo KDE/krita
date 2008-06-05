@@ -121,7 +121,7 @@ static const int properties[] = {
     KoParagraphStyle::TopBorderColor,
     KoParagraphStyle::RightBorderColor,
     KoParagraphStyle::BottomBorderColor,
-    KoParagraphStyle::ExplicitListValue,
+    KoParagraphStyle::ListStartValue,
     KoParagraphStyle::RestartListNumbering,
     KoParagraphStyle::AutoTextIndent,
     KoParagraphStyle::TabStopDistance,
@@ -726,6 +726,14 @@ QString KoParagraphStyle::masterPageName() const {
 
 void KoParagraphStyle::setMasterPageName(const QString& name) {
     setProperty(MasterPageName, name);
+}
+
+void KoParagraphStyle::setListStartValue(int value) {
+    setProperty(ListStartValue, value);
+}
+
+int KoParagraphStyle::listStartValue() const {
+    return propertyInt(ListStartValue);
 }
 
 void KoParagraphStyle::setRestartListNumbering(bool on) {

@@ -101,7 +101,7 @@ public:
         BottomBorderColor,      ///< The border Color
 
         // lists
-        ExplicitListValue,      ///< Int with the list-value that that parag will have. Ignored if this is not a list.
+        ListStartValue,         ///< Int with the list-value that that parag will have. Ignored if this is not a list.
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
         ListLevel,               ///< int with the list-level that the paragraph will get when this is a list
         IsListHeader,           ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
@@ -432,6 +432,12 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     QString masterPageName() const;
     /// Set the name of the master-page.
     void setMasterPageName(const QString& name);
+
+
+    /// Set the list start value
+    void setListStartValue(int value);
+    /// Returns the list start value
+    int listStartValue() const;
 
     /// Set to true if this paragraph is marked to start the list numbering from the first entry.
     void setRestartListNumbering(bool on);

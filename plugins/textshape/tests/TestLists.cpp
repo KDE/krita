@@ -135,7 +135,7 @@ void TestDocumentLayout::testNumberedList() {
     QCOMPARE(block.textList()->format().intProperty(KoListStyle::StartValue), 4);
 
     QTextBlockFormat format = cursor.blockFormat();
-    format.setProperty(KoParagraphStyle::ExplicitListValue, 12);
+    format.setProperty(KoParagraphStyle::ListStartValue, 12);
     cursor.setBlockFormat(format);
 
     // at this point we start numbering at 4. Have 4, 5, 6, 12, 13, 14, 15 etc

@@ -399,18 +399,6 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         if( ( e.tagName() != "list-item" ) || ( e.namespaceURI() != KoXmlNS::text ) ) {
             continue;
         }
-        /*
-        //TODO handle also the other item properties
-        if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
-            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
-            KoListLevelProperties p = KoListLevelProperties::fromTextList(list);
-            p.setStartValue(startValue);
-            QTextListFormat f = list->format();
-            p.applyStyle(f);
-            list->setFormat(f);
-        }
-        */
-
         //listStyle->applyStyle(cursor.block(), level + 1);
         //listStyle->applyStyle(cursor.block());
         if (firstTime) {
@@ -423,14 +411,25 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         
         loadBody( e, cursor );
         
+        /*
         if ( ! listStyle->hasPropertiesForLevel( level ) ) { // set default style
             KoListLevelProperties props;
             props.setStyle( KoListStyle::DecimalItem );
             props.setListItemSuffix( "." );
             props.setLevel( 0 );
             listStyle->setLevel( props );
-        }
+        } */
         listStyle->applyStyle(current, level);
+
+        //TODO handle also the other item properties
+        if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
+            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
+            KoParagraphStyle *paraStyle = KoParagraphStyle::fromBlock( current );
+            if (paraStyle) {
+                paraStyle->setListStartValue(startValue);
+                paraStyle->applyStyle(current);
+            }
+        }
     }
 
     // set the list level back to the previous value

@@ -43,6 +43,7 @@ public:
     void end() {}
     void reset() {}
     bool interrupted() { return false; }
+    int numColumns() { return 0; }
     double width() { return 0; }
     double x() { return 0; }
     double y() { return 0; }
@@ -322,7 +323,10 @@ void KoTextDocumentLayout::layout() {
             continue;
         }
         newParagraph = false;
-        line.setLineWidth(m_state->width());
+        if (m_state->numColumns() > 0)
+            line.setNumColumns(m_state->numColumns());
+        else
+            line.setLineWidth(m_state->width());
         line.setPosition(QPointF(m_state->x(), m_state->y()));
         while(m_state->addLine(line)) {
             if(m_state->shape == 0) { // shape is full!

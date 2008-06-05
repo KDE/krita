@@ -141,6 +141,8 @@ public:
         virtual void reset() = 0;
         /// returns true if reset has been called.
         virtual bool interrupted() = 0;
+        /// return the number of columns of the line to be layouted
+        virtual int numColumns() { return 0; } // if numColumns() returns 0, use width() instead
         /// return the width of the line to be layouted
         virtual double width() = 0;
         /// return the x position of the line to be layouted

@@ -83,10 +83,11 @@ static const int properties[] = {
 //      KoParagraphStyle::AlignLastLine,
 //      KoParagraphStyle::WidowThreshold,
 //      KoParagraphStyle::OrphanThreshold,
-//      KoParagraphStyle::DropCaps,
-//      KoParagraphStyle::DropCapsLength,
-//      KoParagraphStyle::DropCapsLines,
-//      KoParagraphStyle::DropCapsDistance,
+    KoParagraphStyle::DropCaps,
+    KoParagraphStyle::DropCapsLength,
+    KoParagraphStyle::DropCapsLines,
+    KoParagraphStyle::DropCapsDistance,
+    KoParagraphStyle::DropCapsTextStyle,
 //      KoParagraphStyle::FollowDocBaseline,
     KoParagraphStyle::BreakBefore,
     KoParagraphStyle::BreakAfter,
@@ -1153,6 +1154,22 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
         }
     }
 
+    // drop caps
+    if ( styleStack.hasChildNode( KoXmlNS::style, "drop-cap" ) ) {
+        KoXmlElement dropCap = styleStack.childNode( KoXmlNS::style, "drop-cap" );
+        setDropCaps(true);
+        const QString length = dropCap.attributeNS( KoXmlNS::style, "length", QString("1") );
+        if (length.toLower() == "word") {
+            setDropCapsLength(-1); // -1 indicates drop caps of the whole first word
+        } else {
+            setDropCapsLength(length.toInt());
+        }
+        const QString lines = dropCap.attributeNS( KoXmlNS::style, "lines", QString("1") );
+        setDropCapsLines(lines.toInt());
+        const double distance = KoUnit::parseValue( dropCap.attributeNS( KoXmlNS::style, "distance", QString() ) );
+        setDropCapsDistance(distance);
+    }
+
     // Page breaking
 #if 0
     int pageBreaking = 0;
@@ -1227,10 +1244,6 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
     // AlignLastLine,
     // WidowThreshold,
     // OrphanThreshold,
-    // DropCaps,
-    // DropCapsLength,
-    // DropCapsLines,
-    // DropCapsDistance,
     // FollowDocBaseline,
 
 }

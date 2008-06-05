@@ -63,6 +63,7 @@ public:
         DropCapsLength, ///< Number of glyphs to show as drop-caps
         DropCapsLines,  ///< Number of lines that the drop-caps span
         DropCapsDistance,   ///< Distance between drop caps and text
+        DropCapsTextStyle,  ///< Text style of dropped chars. Not supported yet.
         FollowDocBaseline,  ///< If true the baselines will be aligned with the doc-wide grid
         BreakBefore,    ///< If true, insert a frame break before this paragraph
         BreakAfter,     ///< If true, insert a frame break after this paragraph

@@ -58,7 +58,8 @@ static const int properties[] = {
 KoListLevelProperties::KoListLevelProperties()
     : d( new Private())
 {
-    setStyle(KoListStyle::DiscItem);
+    setStyle(KoListStyle::DecimalItem);
+    setListItemSuffix(".");
     setStartValue(1);
 }
 
@@ -370,7 +371,6 @@ void KoListLevelProperties::loadOasis(KoOdfLoadingContext& context, const KoXmlE
     }
     else { // if not defined, we have do nothing
         kDebug(32500)<<"stylename else:"<<style.localName()<<"level="<<level<<"displayLevel="<<displayLevel;
-        //setStyle( KoListStyle::NoItem );
         setStyle(KoListStyle::DecimalItem);
         setListItemSuffix(".");
     }

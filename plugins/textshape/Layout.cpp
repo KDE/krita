@@ -55,7 +55,10 @@ Layout::Layout(KoTextDocumentLayout *parent)
     m_demoText(false),
     m_endOfDemoText(false),
     m_defaultTabSizing(MM_TO_POINT(15)),
-    m_currentTabStop(0)
+    m_currentTabStop(0),
+    m_dropCapsNChars(0), m_dropCapsAffectsNMoreLines(0),
+    m_dropCapsAffectedLineWidthAdjust(0),
+    m_y_justBelowDropCaps(0)
 {
 }
 
@@ -95,6 +98,7 @@ double Layout::width()
     if(m_newParag && m_blockData)
         ptWidth -= m_blockData->counterWidth() + m_blockData->counterSpacing();
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
+    ptWidth -= m_dropCapsAffectedLineWidthAdjust;
     return ptWidth;
 }
 
@@ -104,6 +108,7 @@ double Layout::x()
     result += m_isRtl ? m_format.rightMargin() : m_format.leftMargin();
     result += listIndent();
     result += m_borderInsets.left + m_shapeBorder.left;
+    result += m_dropCapsAffectedLineWidthAdjust;
     return result;
 }
 
@@ -134,6 +139,8 @@ bool Layout::addLine(QTextLine &line)
     double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     double objectHeight = 0.0;
     bool useFixedLineHeight = height != 0.0;
+    if (m_dropCapsNChars > 0)
+        height = line.ascent();
     if(! useFixedLineHeight) {
         const bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
         if(useFontProperties)
@@ -207,6 +214,24 @@ bool Layout::addLine(QTextLine &line)
         m_y = line.y() + height; // The line got a pos <> from y(), follow that lead.
     m_newShape = false;
     m_newParag = false;
+
+    // drop caps
+    if (m_dropCapsNChars > 0) { // we just laid out the dropped chars
+        m_y_justBelowDropCaps = m_y; // save the y position just below the dropped characters
+        m_y = line.y();              // keep the same y for the next line
+        m_dropCapsNChars = 0;
+        double dropCapDistance = m_format.doubleProperty(KoParagraphStyle::DropCapsDistance);
+        // save the x-offset that the dropped characters have caused on drop-cap-affected lines
+        m_dropCapsAffectedLineWidthAdjust = line.naturalTextWidth() + dropCapDistance + 1;
+    } else if (m_dropCapsAffectsNMoreLines > 0) { // we just laid out a drop-cap-affected line
+        m_dropCapsAffectsNMoreLines--;
+        if (m_dropCapsAffectsNMoreLines == 0) {   // no more drop-cap-affected lines
+            if (m_y < m_y_justBelowDropCaps)
+                m_y = m_y_justBelowDropCaps; // make sure m_y is below the dropped characters
+            m_y_justBelowDropCaps = 0;
+            m_dropCapsAffectedLineWidthAdjust = 0;
+        }
+    }
 
     return false;
 }
@@ -356,6 +381,58 @@ bool Layout::nextParag()
     else
         option.setTextDirection(Qt::LeftToRight);
     layout->setTextOption(option);
+
+    // drop caps
+    QString blockText = m_block.text();
+    int dropCaps = m_format.boolProperty(KoParagraphStyle::DropCaps);
+    int dropCapsLength = m_format.intProperty(KoParagraphStyle::DropCapsLength);
+    int dropCapsLines = m_format.intProperty(KoParagraphStyle::DropCapsLines);
+    if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1 && !blockText.isEmpty()) {
+        if (dropCapsLength < 0) // means whole word is to be dropped
+            dropCapsLength = blockText.indexOf(QRegExp("\\W"));
+        // increase the size of the dropped chars
+        QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
+        QTextLayout::FormatRange dropCaps;
+        QTextCursor blockStart(m_block);
+        dropCaps.format = blockStart.charFormat();
+        dropCaps.format.setFontPointSize( blockStart.charFormat().fontPointSize() * dropCapsLines);
+        dropCaps.start = 0;
+        dropCaps.length = dropCapsLength;
+        bool addDropCapsFormatting = true;
+        QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
+        const int dropCapsEnd = dropCaps.start + dropCaps.length;
+        while( iter != formatRanges.end() ) {
+            // find out if there's a conflicting formatting for our range
+            QTextLayout::FormatRange r = *(iter);
+            const int rEnd = r.start + r.length;
+            if (r.start == dropCaps.start && r.length == dropCaps.length ) {
+                // a formatting exists for the exact range we want. override.
+                iter->format = dropCaps.format;
+                addDropCapsFormatting = false;
+            } else if (rEnd >= dropCaps.start && rEnd <= dropCapsEnd || dropCapsEnd >= r.start && dropCapsEnd <= rEnd) {
+                // drop caps formatting range intersects with some formatting. an earlier dropcaps formatting, maybe?
+                formatRanges.erase(iter);
+                break;
+            }
+            ++iter;
+        }
+        if (addDropCapsFormatting) {
+            formatRanges.append(dropCaps);
+        }
+        layout->setAdditionalFormats(formatRanges);
+        // bookkeep
+        m_dropCapsNChars = dropCapsLength;
+        m_dropCapsAffectedLineWidthAdjust = 0;
+        m_dropCapsAffectsNMoreLines = (m_dropCapsNChars > 0) ? dropCapsLines : 0;
+    } else {
+        m_dropCapsNChars = 0;
+    }
+    if (!m_newShape && m_y_justBelowDropCaps && m_y < m_y_justBelowDropCaps) {
+        // we started a new paragraph even before filling up all drop-cap-affected lines
+        // should start layouting after the drop-cap characters
+        m_y = m_y_justBelowDropCaps;
+        m_dropCapsAffectedLineWidthAdjust = 0;
+    }
 
     layout->beginLayout();
     m_fragmentIterator = m_block.begin();

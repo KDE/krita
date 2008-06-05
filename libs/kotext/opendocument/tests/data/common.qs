@@ -180,4 +180,5 @@ var defaultListItemFormat = QTextCharFormat.clone(defaultTextFormat); // new QTe
 var defaultListFormat = new QTextListFormat;
 setFormatProperty(defaultListFormat, KoListStyle.StartValue, 1);
 setFormatProperty(defaultListFormat, KoListStyle.Level, 1);
+setFormatProperty(defaultListFormat, KoListStyle.ListItemSuffix, ".");
 

@@ -2,7 +2,7 @@
 add_subdirectory( tests )
 
 
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES}  ${KOGUIUTILS_INCLUDES} ${KORESOURCES_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES}  ${KOGUIUTILS_INCLUDES} ${KORESOURCES_INCLUDES} ${KOTEXT_INCLUDES} )
 
 
 ########### next target ###############
@@ -62,11 +62,15 @@ set(koguiutils_LIB_SRCS
    KoSelectShapeAction.cpp
    KoZoomInput.cpp
     KoShadowConfigWidget.cpp
+    KoPageLayoutDialog.cpp
+    KoPageLayoutWidget.cpp
+    KoPagePreviewWidget.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS
     KoCsvImportDialog.ui
     KoGeneralPropertyUi.ui
+    KoPageLayoutWidget.ui
     #KoPageLayoutColumns.ui
     #KoPageLayoutHeaderBase.ui
     KoEditColorSet.ui

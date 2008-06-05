@@ -949,8 +949,8 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
         if (tabStopDistance > 0)
             setTabStopDistance(tabStopDistance);
     }
-    QList<KoText::Tab> tabList;
     if ( styleStack.hasChildNode( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
+        QList<KoText::Tab> tabList;
         KoXmlElement tabStops = styleStack.childNode( KoXmlNS::style, "tab-stops" );
         KoXmlElement tabStop;
         forEachElement( tabStop, tabStops )
@@ -1069,8 +1069,8 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
 #endif
             tabList.append( tab );
         } //for
+        setTabPositions(tabList);
     }
-    setTabPositions(tabList);
 
 #if 0
     layout.joinBorder = !( styleStack.property( KoXmlNS::style, "join-border") == "false" );

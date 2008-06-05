@@ -379,10 +379,6 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
     // The level specifies the level of the list style.
     int level = d->currentListLevel;
 
-    // Set the style and create the textlist
-    QTextListFormat listformat;
-    QTextList* list = cursor.createList( listformat );
-
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug(32500) << "styleName =" << styleName << "listStyle =" << ( listStyle ? listStyle->name() :"NULL" )
                       <<"level =" << level << "hasPropertiesForLevel =" << listStyle->hasPropertiesForLevel( level )
@@ -427,9 +423,6 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         
         loadBody( e, cursor );
         
-        if (!current.textList())
-            list->add(current);
-
         if ( ! listStyle->hasPropertiesForLevel( level ) ) { // set default style
             KoListLevelProperties props;
             props.setStyle( KoListStyle::DecimalItem );

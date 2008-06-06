@@ -23,9 +23,12 @@
 #include <KoPathShape.h>
 #include <KoGlobal.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoUnit.h>
+#include <KoPathShapeLoader.h>
 
 #include <KLocale>
 
@@ -69,6 +72,50 @@ void SimpleTextShape::saveOdf(KoShapeSavingContext &context) const
     context.xmlWriter().startElement("draw:custom-shape");
     saveOdfAttributes( context, OdfAllAttributes );
 
+    // now write the special shape data
+    context.xmlWriter().addAttribute( "draw:engine", "svg:text" );
+
+    // create the data attribute
+    QString drawData = "text:" + m_text +';';
+    drawData += "font-family:" + m_font.family() + ';';
+    drawData += QString("font-size:%1pt;").arg( TO_PS_SIZE(m_font.pointSize()) );
+    if( m_font.bold() )
+        drawData += "font-weight:bold;";
+    if( m_font.italic() )
+        drawData += "font-style:italic;";
+
+    qreal anchorOffset = 0.0;
+    if( m_textAnchor == SimpleTextShape::AnchorMiddle )
+    {
+        anchorOffset += 0.5 * size().width();
+        drawData += "text-anchor:middle;";
+    }
+    else if( m_textAnchor == SimpleTextShape::AnchorEnd )
+    {
+        anchorOffset += size().width();
+        drawData += "text-anchor:end;";
+    }
+
+    // check if we are set on a path
+    if( layout() == SimpleTextShape::OnPathShape )
+    {
+        /// TODO: we have to make sure that the path shape is saved before
+        drawData += "textPath:" + context.drawId( m_path ) +';';
+        drawData += QString( "startOffset:%1%;").arg( m_startOffset * 100.0 );
+    }
+    else if( layout() == SimpleTextShape::OnPath )
+    {
+        KoPathShape * baseline = KoPathShape::fromQPainterPath( m_baseline );
+        QMatrix offsetMatrix;
+        offsetMatrix.translate( 0.0, m_baselineOffset );
+        drawData += "textPathData:" + baseline->toString( baseline->transformation() ) + ';';
+        drawData += QString( "startOffset:%1%;").arg( m_startOffset * 100.0 );
+
+        delete baseline;
+    }
+
+    context.xmlWriter().addAttribute( "draw:data", drawData );
+
     // write a enhanced geometry element for compatibility with other applications
     context.xmlWriter().startElement("draw:enhanced-geometry");
 
@@ -78,11 +125,6 @@ void SimpleTextShape::saveOdf(KoShapeSavingContext &context) const
     delete path;
 
     context.xmlWriter().endElement(); // draw:enhanced-geometry
-
-    // now write the special shape data
-    context.xmlWriter().addAttribute( "draw:engine", "svg:text" );
-    context.xmlWriter().addAttribute( "draw:data", "" );
-
     saveOdfCommonChildElements( context );
     context.xmlWriter().endElement(); // draw:custom-shape
 }
@@ -93,7 +135,71 @@ bool SimpleTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingConte
     if( drawEngine.isEmpty() || drawEngine != "svg:text" )
         return false;
 
-    return false;
+    QString drawData = element.attributeNS( KoXmlNS::draw, "data" );
+    if( drawData.isEmpty() )
+        return false;
+
+    QStringList properties = drawData.split( ';' );
+    if( properties.count() == 0 )
+        return false;
+
+    foreach( QString property, properties )
+    {
+        QStringList pair = property.split( ':' );
+        if( pair.count() != 2 )
+            continue;
+        if( pair[0] == "text" )
+        {
+            setText( pair[1] );
+        }
+        else if( pair[0] == "font-family" )
+        {
+            m_font.setFamily( pair[1] );
+        }
+        else if( pair[0] == "font-size" )
+        {
+            m_font.setPointSizeF( FROM_PS_SIZE( KoUnit::parseValue( pair[1], 12 ) ) );
+        }
+        else if( pair[0] == "font-weight" && pair[1] == "bold" )
+        {
+            m_font.setBold( true );
+        }
+        else if( pair[0] == "font-style" && pair[1] == "italic" )
+        {
+            m_font.setItalic( true );
+        }
+        else if( pair[0] == "textPathData" )
+        {
+            KoPathShape path;
+            KoPathShapeLoader loader( &path );
+            loader.parseSvg( pair[1], true );
+            putOnPath( path.outline() );
+        }
+        else if( pair[0] == "textPath" )
+        {
+            KoPathShape * path = dynamic_cast<KoPathShape*>( context.shapeById( pair[1] ) ); 
+            putOnPath( path );
+        }
+        else if( pair[0] == "startOffset" )
+        {
+            m_startOffset = 0.01 * pair[1].toDouble();
+        }
+        else if( pair[0] == "text-anchor" )
+        {
+            if( pair[1] == "middle" )
+                m_textAnchor = AnchorMiddle;
+            else if( pair[1] == "end" )
+                m_textAnchor = AnchorEnd;
+        }
+    }
+
+    cacheGlyphOutlines();
+    updateSizeAndPosition();
+    update();
+
+    loadOdfAttributes( element, context, OdfAllAttributes );
+
+    return true;
 }
 
 QSizeF SimpleTextShape::size() const

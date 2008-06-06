@@ -111,7 +111,7 @@ void KoEventActionRegistry::init()
                                       config);
 }
 
-QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf( KoXmlElement & e, KoShapeLoadingContext & context ) const
+QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf( const KoXmlElement & e, KoShapeLoadingContext & context ) const
 {
     QList<KoEventAction *> eventActions;
 

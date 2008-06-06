@@ -44,7 +44,7 @@ public:
     /**
      * Create action events for the elements given
      */
-    QList<KoEventAction*> createEventActionsFromOdf( KoXmlElement & e, KoShapeLoadingContext & context ) const;
+    QList<KoEventAction*> createEventActionsFromOdf( const KoXmlElement & e, KoShapeLoadingContext & context ) const;
 
     /**
      * Add presentation event action.

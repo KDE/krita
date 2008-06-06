@@ -179,6 +179,9 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
       QString key, value;
         switch (id) {
         case KoParagraphStyle::AutoTextIndent:
+        case KoParagraphStyle::DropCaps:
+        case KoParagraphStyle::DropCapsLines:
+        case KoParagraphStyle::DropCapsLength:
             if (actualProperty[id].toInt() != expectedProperty[id].toInt())
               match = false;
             break;
@@ -187,6 +190,7 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
         case KoParagraphStyle::RightBorderWidth:
         case KoParagraphStyle::BottomBorderWidth:
         case KoParagraphStyle::TabStopDistance:
+        case KoParagraphStyle::DropCapsDistance:
             if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
               match = false;
             break;
@@ -631,6 +635,9 @@ void TestLoading::testLoading_data()
     QTest::newRow("autoTextIndent") << "FormattingProperties/ParagraphFormattingProperties/automaticTextIndent";
     QTest::newRow("border") << "FormattingProperties/ParagraphFormattingProperties/border";
     QTest::newRow("borderLineWidth") << "FormattingProperties/ParagraphFormattingProperties/borderLineWidth";
+    QTest::newRow("dropCapsDistance") << "FormattingProperties/ParagraphFormattingProperties/dropCapsDistance";
+    QTest::newRow("dropCapsLength") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLength";
+    QTest::newRow("dropCapsLines") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLines";
     QTest::newRow("paragraphBackground") << "FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor";
     QTest::newRow("textAlign") << "FormattingProperties/ParagraphFormattingProperties/textAlign";
     QTest::newRow("textIndent") << "FormattingProperties/ParagraphFormattingProperties/textIndent";

@@ -20,6 +20,7 @@ KoParagraphStyle.DropCaps = ++i;
 KoParagraphStyle.DropCapsLength = ++i;
 KoParagraphStyle.DropCapsLines = ++i;
 KoParagraphStyle.DropCapsDistance = ++i;
+KoParagraphStyle.DropCapsTextStyle = ++i;
 KoParagraphStyle.FollowDocBaseline = ++i;
 KoParagraphStyle.BreakBefore = ++i;
 KoParagraphStyle.BreakAfter = ++i;

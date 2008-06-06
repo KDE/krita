@@ -231,6 +231,22 @@ QString KoTextDebug::paraAttributes(const QMap<int, QVariant> &properties)
                 value.append("}, ");
             }
             break;
+        case KoParagraphStyle::DropCaps:
+            key = "drop-caps";
+            value = QString::number(properties[id].toBool());
+            break;
+        case KoParagraphStyle::DropCapsLines:
+            key = "drop-caps-lines";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoParagraphStyle::DropCapsLength:
+            key = "drop-caps-length";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoParagraphStyle::DropCapsDistance:
+            key = "drop-caps-distance";
+            value = QString::number(properties[id].toDouble());
+            break;
         default:
             break;
         }

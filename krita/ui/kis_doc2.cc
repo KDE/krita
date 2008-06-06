@@ -207,7 +207,7 @@ bool KisDoc2::init()
 
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
     m_d->nodeModel = new KisNodeModel( this );
-    new ModelTest(m_d->nodeModel, this);
+//    new ModelTest(m_d->nodeModel, this);
 
 
     return true;

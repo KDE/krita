@@ -89,7 +89,7 @@ void KoConnectionShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool KoConnectionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-    loadOdfAttributes( element, context, OdfMandatories );
+    loadOdfAttributes( element, context, OdfMandatories | OdfCommonChildElements );
 
     QString type = element.attributeNS( KoXmlNS::draw, "type", "standard" );
     if( type == "lines" )

@@ -82,6 +82,7 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
     writer.endElement(); // draw:image
+    saveOdfCommonChildElements( context );
     writer.endElement(); // draw:frame
 }
 

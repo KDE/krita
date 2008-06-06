@@ -74,8 +74,8 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
         context.xmlWriter().addAttribute( "draw:kind", kind );
         context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
         context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
+        saveOdfCommonChildElements( context );
         context.xmlWriter().endElement();
-        saveOdfConnections(context);
     }
     else
         KoPathShape::saveOdf( context );
@@ -123,7 +123,7 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
     setStartAngle( element.attributeNS( KoXmlNS::draw, "start-angle", "0" ).toDouble() );
     setEndAngle( element.attributeNS( KoXmlNS::draw, "end-angle", "360" ).toDouble() );
 
-    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes );
+    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements );
 
     return true;
 }

@@ -63,12 +63,12 @@ void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const {
         shape->saveOdf(context);
     }
 
-    saveOdfConnections(context);
+    saveOdfCommonChildElements( context );
     context.xmlWriter().endElement();
 }
 
 bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes );
+    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
     forEachElement( child, element )

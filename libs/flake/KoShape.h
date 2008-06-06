@@ -184,6 +184,13 @@ public:
     void saveOdfAttributes( KoShapeSavingContext &context, int attributes ) const;
 
     /**
+     * This method can be used while saving the shape as Odf to add common child elements
+     *
+     * The office:event-listeners and draw:glue-point are saved.
+     */
+    void saveOdfCommonChildElements( KoShapeSavingContext &context ) const;
+
+    /**
      * After the shape has been created this method is called so it can get access to any DataCenter it
      * might want.
      * The default implementation does nothing.
@@ -730,11 +737,12 @@ protected:
     enum OdfAttribute {
         OdfTransformation = 1,       ///< Store transformation information
         OdfSize = 2,                 ///< Store size information
-        OdfAdditionalAttributes = 4, ///< Store position of shape
+        OdfAdditionalAttributes = 4, ///< Store additional attributes of shape
         OdfMandatories = 8,          ///< Id, z-index, layer and style
+        OdfCommonChildElements = 16, ///< event actions and connection points
 
         /// A mask for all the attributes
-        OdfAllAttributes = OdfTransformation | OdfSize | OdfAdditionalAttributes | OdfMandatories
+        OdfAllAttributes = OdfTransformation | OdfSize | OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements
     };
 
     /**
@@ -752,11 +760,6 @@ protected:
      * @return the resulting transformation matrix
      */
     QMatrix parseOdfTransform( const QString &transform );
-
-    /**
-     * Add a new draw-glue-point element for each connections() present on this shape.
-     */
-    void saveOdfConnections( KoShapeSavingContext &context ) const;
 
     /**
      * @brief Saves the style used for the shape

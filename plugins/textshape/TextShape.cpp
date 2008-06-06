@@ -241,6 +241,7 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
     writer.startElement( "draw:text-box" );
     m_textShapeData->saveOdf(context);
     writer.endElement(); // draw:text-box
+    saveOdfCommonChildElements( context );
     writer.endElement(); // draw:frame
 }
 

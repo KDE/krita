@@ -117,8 +117,8 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 
     MusicXmlWriter().writeSheet( writer, m_sheet, false );
 
+    saveOdfCommonChildElements( context );
     writer.endElement();
-    saveOdfConnections(context);
 }
 
 bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {

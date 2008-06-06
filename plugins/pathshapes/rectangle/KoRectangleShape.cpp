@@ -47,7 +47,7 @@ KoRectangleShape::~KoRectangleShape()
 
 bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    loadOdfAttributes( element, context, OdfMandatories | OdfSize | OdfAdditionalAttributes );
+    loadOdfAttributes( element, context, OdfMandatories | OdfSize | OdfAdditionalAttributes | OdfCommonChildElements );
 
     if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) && element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
     {
@@ -83,8 +83,8 @@ void KoRectangleShape::saveOdf( KoShapeSavingContext & context ) const
         saveOdfAttributes( context, OdfAllAttributes );
         context.xmlWriter().addAttribute( "svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0 );
         context.xmlWriter().addAttribute( "svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0 );
+        saveOdfCommonChildElements( context );
         context.xmlWriter().endElement();
-        saveOdfConnections(context);
     }
     else
         KoPathShape::saveOdf( context );

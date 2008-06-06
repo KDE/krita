@@ -38,6 +38,8 @@
 #include "ShapeDeleter_p.h"
 #include "KoShapeStyleWriter.h"
 #include "KoShapeShadow.h"
+#include "KoEventAction.h"
+#include "KoEventActionRegistry.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -94,6 +96,7 @@ public:
         }
         if( shadow && shadow->removeUser() == 0 )
             delete shadow;
+        qDeleteAll( eventActions );
     }
 
     void shapeChanged(ChangeType type) {
@@ -131,6 +134,7 @@ public:
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
     QMap<QByteArray, QString> additionalAttributes;
+    QList<KoEventAction *> eventActions; ///< list of event actions the shape has
 };
 
 KoShape::KoShape()
@@ -698,11 +702,6 @@ bool KoShape::isEditable() const {
 }
 
 // loading & saving methods
-void KoShape::saveOdfConnections(KoShapeSavingContext &context) const {
-    // TODO  save "draw-glue-point" elements (9.2.19)
-    Q_UNUSED( context );
-}
-
 QString KoShape::saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) const
 {
     // and fill the style
@@ -799,6 +798,14 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
                 setAdditionalAttribute( attributeData.name, value );
             }
         }
+    }
+
+    if ( attributes & OdfCommonChildElements ) {
+        const KoXmlElement eventActionsElement( KoXml::namedItemNS( element, KoXmlNS::office, "event-listeners" ) );
+        if ( !eventActionsElement.isNull() ) {
+            d->eventActions = KoEventActionRegistry::instance()->createEventActionsFromOdf( eventActionsElement, context );
+        }
+        // load glue points (connection points)
     }
 
     return true;
@@ -1039,6 +1046,20 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             context.xmlWriter().addAttribute( it.key(), it.value() );
         }
     }
+}
+
+void KoShape::saveOdfCommonChildElements( KoShapeSavingContext &context ) const
+{
+    // save event listeners see ODF 9.2.21 Event Listeners
+    if ( d->eventActions.size() > 0 ) {
+        context.xmlWriter().startElement( "office:event-listeners" );
+        foreach ( KoEventAction * action, d->eventActions ) {
+            action->saveOdf( context );
+        }
+        context.xmlWriter().endElement();
+    }
+
+    // save glue points see ODF 9.2.19 Glue Points
 }
 
 // end loading & saving methods

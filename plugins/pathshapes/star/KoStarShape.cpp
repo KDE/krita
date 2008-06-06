@@ -313,8 +313,8 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
             double percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
             context.xmlWriter().addAttribute( "draw:sharpness", QString("%1%" ).arg( percent ) );
         }
+        saveOdfCommonChildElements( context );
         context.xmlWriter().endElement();
-        saveOdfConnections(context);
     }
     else
         KoPathShape::saveOdf( context );

@@ -83,9 +83,8 @@ void SimpleTextShape::saveOdf(KoShapeSavingContext &context) const
     context.xmlWriter().addAttribute( "draw:engine", "svg:text" );
     context.xmlWriter().addAttribute( "draw:data", "" );
 
+    saveOdfCommonChildElements( context );
     context.xmlWriter().endElement(); // draw:custom-shape
-
-    saveOdfConnections(context);
 }
 
 bool SimpleTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )

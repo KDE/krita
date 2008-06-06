@@ -68,12 +68,13 @@ void KoPathShape::saveOdf( KoShapeSavingContext & context ) const
 
     context.xmlWriter().addAttribute( "svg:d", toString( QMatrix() ) );
 
+    saveOdfCommonChildElements( context );
     context.xmlWriter().endElement();
 }
 
 bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) 
 {
-    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes );
+    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements );
 
     // first clear the path data from the default path
     clear();

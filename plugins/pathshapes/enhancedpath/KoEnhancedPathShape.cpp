@@ -362,8 +362,8 @@ void KoEnhancedPathShape::saveOdf( KoShapeSavingContext & context ) const
             handle->saveOdf( context );
 
         context.xmlWriter().endElement(); // draw:enhanced-geometry
+        saveOdfCommonChildElements( context );
         context.xmlWriter().endElement(); // draw:custom-shape
-        saveOdfConnections(context);
     }
     else
         KoPathShape::saveOdf( context );
@@ -435,7 +435,7 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
 
     setSize( size );
 
-    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes );
+    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements );
 
     return true;
 }

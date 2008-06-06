@@ -291,10 +291,13 @@ void KoEnhancedPathShape::addCommand( const QString &command )
     // the first character is the command
     KoEnhancedPathCommand * cmd = new KoEnhancedPathCommand( commandStr[0], this );
 
+    // strip command char
+    commandStr = commandStr.mid( 1 );
+
     // now parse the command parameters
-    if( commandStr.length() > 1 )
+    if( commandStr.length() > 0 )
     {
-        QStringList tokens = commandStr.right( commandStr.length()-1 ).simplified().split( ' ' );
+        QStringList tokens = commandStr.simplified().split( ' ' );
         int tokenCount = tokens.count();
         for( int i = 0; i < tokenCount; ++i )
             cmd->addParameter( parameter( tokens[i] ) );
@@ -451,13 +454,13 @@ void KoEnhancedPathShape::parsePathData( const QString & data )
 
     const QByteArray buffer = d.toLatin1();
     const char *ptr = buffer.constData();
-    const char *end = buffer.constData() + buffer.length() + 1;
+    const char *end = buffer.constData() + buffer.length();
 
     char lastChar = ' ';
 
     QString cmdString;
 
-    while( ptr < end )
+    for( ; ptr < end; ptr++ )
     {
         switch( *ptr )
         {
@@ -493,7 +496,6 @@ void KoEnhancedPathShape::parsePathData( const QString & data )
         }
 
         lastChar = *ptr;
-        ptr++;
     }
     if( ! cmdString.isEmpty() )
         addCommand( cmdString );

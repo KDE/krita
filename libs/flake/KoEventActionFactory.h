@@ -29,18 +29,25 @@ class KoEventAction;
 class FLAKE_EXPORT KoEventActionFactory
 {
 public:
+    /**
+     * Factory to create events
+     *
+     * @param id The id of the event action
+     * @param action Only presentation event actions need to set the action. It is not used 
+     *               for script event actions.
+     */
     explicit KoEventActionFactory( const QString &id, const QString & action = QString("") );
     virtual ~KoEventActionFactory();
 
+    /**
+     * Create the event action.
+     */
     virtual KoEventAction * createEventAction() = 0;
 
     /**
      * The action is used to differentiate presentation effects.
-     *
-     * This function has to be overloaded for presentation effects. The default
-     * implementation return an empty string.
      */
-    virtual const QString & action();
+    const QString & action();
 
     /**
      * return the id for the variable this factory creates.

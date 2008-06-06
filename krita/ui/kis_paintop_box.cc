@@ -249,7 +249,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     updateOptionWidget();
 
     KisPaintOpSettingsSP settings = paintopSettings(paintop, KoToolManager::instance()->currentInputDevice());
-    qDebug() << paintop.name() << ", " << settings;
     m_resourceProvider->slotPaintopActivated(paintop, settings);
 }
 
@@ -267,13 +266,10 @@ KisPaintOpSettingsSP KisPaintopBox::paintopSettings(const KoID & paintop, const 
     QList<KisPaintOpSettingsSP> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find( inputDevice );
     if (it == m_inputDevicePaintopSettings.end()) {
-        qDebug() << "Create settings for each paintop.";
 
         foreach (KoID paintopId, m_paintops) {
-            qDebug() << "\t" << paintopId.name();
             KisPaintOpSettingsSP settings =
                 KisPaintOpRegistry::instance()->settings( paintopId, this, inputDevice, m_view->image() );
-            qDebug() << "\t\t" << settings;
             settingsArray.append(settings);
             if (settings && settings->widget()) {
                 settings->widget()->hide();

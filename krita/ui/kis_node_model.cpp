@@ -87,7 +87,7 @@ vKisNodeSP KisNodeModel::nodesFromIndexes(const QModelIndexList &indexes)
 
 QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
 {
-    dbgUI << "KisNodeModel::indexFromNode " << node;
+    //dbgUI << "KisNodeModel::indexFromNode " << node;
     Q_ASSERT(node);
     if ( node->parent() ) {
         int rowCount = node->parent()->childCount() - 1;
@@ -127,11 +127,11 @@ int KisNodeModel::columnCount(const QModelIndex&) const
 
 QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    dbgUI <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
+    //dbgUI <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
 
     if (!hasIndex(row, column, parent))
     {
-        dbgUI << "Does not have index";
+        //dbgUI << "Does not have index";
         return QModelIndex();
     }
     KisNodeSP parentNode;
@@ -141,7 +141,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
         Q_ASSERT(row == 0);
         if( m_d->image)
         {
-            dbgUI << "root, row: " << row << ", node: " << m_d->image->root();
+            //dbgUI << "root, row: " << row << ", node: " << m_d->image->root();
             return indexFromNode( m_d->image->root() );
         } else {
             return QModelIndex();
@@ -155,7 +155,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 
     int rowCount = parentNode->childCount() - 1;
     // Now invert!
-    dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << parentNode->at(rowCount - row);
+    //dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << parentNode->at(rowCount - row);
     return createIndex(row, column, parentNode->at(rowCount - row).data());
 
 }
@@ -217,7 +217,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 {
-    dbgUI <<"KisNodeModel::flags" << index;
+    //dbgUI <<"KisNodeModel::flags" << index;
     if (!index.isValid())
         return Qt::ItemIsDropEnabled;
 
@@ -225,7 +225,7 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
     Q_ASSERT(index.internalPointer());
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
-    dbgUI << flags << (flags & Qt::ItemIsDropEnabled);
+    //dbgUI << flags << (flags & Qt::ItemIsDropEnabled);
     return flags;
 }
 
@@ -276,26 +276,26 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 void KisNodeModel::beginInsertNodes( KisNode * parent, int index )
 {
-    dbgUI <<"KisNodeModel::beginInsertNodes parent=" << parent << ", childcount: " << parent->childCount() << ", index=" << index;
+    //dbgUI <<"KisNodeModel::beginInsertNodes parent=" << parent << ", childcount: " << parent->childCount() << ", index=" << index;
     
     beginInsertRows( indexFromNode( parent ), parent->childCount() - index, parent->childCount() - index );
 }
 
 void KisNodeModel::endInsertNodes( KisNode *, int)
 {
-    dbgUI <<"KisNodeModel::endInsertNodes";
+    //dbgUI <<"KisNodeModel::endInsertNodes";
     endInsertRows();
 }
 
 void KisNodeModel::beginRemoveNodes( KisNode * parent, int index )
 {
-    dbgUI <<"KisNodeModel::beginRemoveNodes parent=" << parent << ", index=" << index;
+    //dbgUI <<"KisNodeModel::beginRemoveNodes parent=" << parent << ", index=" << index;
     beginRemoveRows( indexFromNode( parent ), parent->childCount() - 1 - index, parent->childCount() - 1 - index );
 }
 
 void KisNodeModel::endRemoveNodes( KisNode *, int )
 {
-    dbgUI <<"KisNodeModel::endRemoveNodes";
+    //dbgUI <<"KisNodeModel::endRemoveNodes";
     endRemoveRows();
 }
 
@@ -313,7 +313,7 @@ QStringList KisNodeModel::mimeTypes() const
 
 QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 {
-    dbgUI <<"KisNodeModel::mimeData";
+    //dbgUI <<"KisNodeModel::mimeData";
     QMimeData* data = new QMimeData;
     QByteArray encoded;
     QDataStream stream(&encoded, QIODevice::WriteOnly);
@@ -331,7 +331,7 @@ QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 
 bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 {
-    ////dbgUI <<"KisNodeModel::dropMimeData";
+    //dbgUI <<"KisNodeModel::dropMimeData";
     dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
     if(! data->hasFormat( "application/x-kritalayermodeldatalist" ))
     {

@@ -195,7 +195,7 @@ void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
     m_d->doc->image()->moveNode( node, parent, above);
 }
 
-void KisNodeManager::createNode( const QString & nodeType)
+void KisNodeManager::createNode( const QString & nodeType )
 {
     
     KisNodeSP parent;

@@ -32,7 +32,9 @@
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>
 #include <KoColorSpaceConstants.h>
+#include <KoCanvasController.h>
 
+#include "kis_selection.h"
 #include "kis_adjustment_layer.h"
 #include "kis_clone_layer.h"
 #include "canvas/kis_canvas2.h"
@@ -146,18 +148,6 @@ void KisShapeController::removeShape( KoShape* shape )
         }
     }
 
-#if 0 // XXX This bites with recursive deleting of all children of the current node
-    if ( KoShapeContainer * container = shape->parent() ) {
-        dbgUI <<"parent is" << container;
-        container->removeChild( shape );
-
-        // If there are no longer children, remove the container
-        // layer, too.
-        if ( container->childCount() == 0 ) {
-            removeShape( container );
-        }
-    }
-#endif
     if ( shape->shapeId() == KIS_LAYER_SHAPE_ID
          || shape->shapeId() == KIS_SHAPE_LAYER_ID
          || shape->shapeId() == KIS_LAYER_CONTAINER_ID
@@ -189,6 +179,19 @@ void KisShapeController::removeShape( KoShape* shape )
 void KisShapeController::addShape( KoShape* shape )
 {
     if ( !m_d->image ) return;
+
+    // If the parent of the added shape has is a selection, has a selection
+    // or if the image has a selection, add the shape to the selection, instead
+    // of to a shape layer
+    qDebug() << ">>>>>>>>>>>>>>> parent " << shape->parent();
+    KisCanvas2 * canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
+    qDebug() << ">>>>>>>>>>>>>>> canvas " << canvas;
+    if (canvas) {
+        qDebug() << ">>>>>>>>>>>>>>> view " << canvas->view();
+        qDebug() << ">>>>>>>>>>>>>>> node " << canvas->view()->activeNode();
+        qDebug() << ">>>>>>>>>>>>>>> selection " << canvas->view()->selection();
+    }
+    
     // Only non-krita shapes get added through this method; krita
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
@@ -202,7 +205,7 @@ void KisShapeController::addShape( KoShape* shape )
         // of the active layer.
 
         // Check whether the shape is part of a layer -- that would be our
-        // shape layers. The parent is set KoShapeController using the
+        // shape layers. The parent is set by KoShapeController using the
         // KoSelection object returned by the KoShapeManager that is
         // returned by KoCanvasBase -- and the shape manager in the
         // KisShapeLayer always sets the layer as parent using
@@ -219,7 +222,9 @@ void KisShapeController::addShape( KoShape* shape )
             // dropping, there was no shape layer active. Create one
             // and add it on top of the image stack.
 
-            KisLayerContainerShape * container = dynamic_cast<KisLayerContainerShape*>( m_d->image->rootLayer().data() );
+            KisLayerContainerShape * container =
+                dynamic_cast<KisLayerContainerShape*>( shapeForNode(m_d->image->rootLayer().data() ) );
+                
             dbgUI <<"container:" << container;
             shapeLayer = new KisShapeLayer(container,
                                            m_d->image,
@@ -238,11 +243,11 @@ void KisShapeController::addShape( KoShape* shape )
         // shape?
         if ( shapeLayer )
             shapeLayer->addChild( shape );
-
-        foreach( KoView *view, m_d->doc->views() ) {
-            KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
-            canvas->globalShapeManager()->add(shape);
-        }
+        
+//        foreach( KoView *view, m_d->doc->views() ) {
+//            KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
+//            canvas->globalShapeManager()->add(shape);
+//        }
     }
     else {
         kWarning() <<"Eeek -- we tried to add a krita layer shape without going through KisImage";
@@ -274,6 +279,7 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 
 void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
 {
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>> slotNodeAdded " << parentNode << ", " << index;
     if (!parentNode) return;
     
     KisNodeSP node = parentNode->at( index );

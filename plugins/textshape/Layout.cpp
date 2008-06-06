@@ -388,8 +388,10 @@ bool Layout::nextParag()
     int dropCapsLength = m_format.intProperty(KoParagraphStyle::DropCapsLength);
     int dropCapsLines = m_format.intProperty(KoParagraphStyle::DropCapsLines);
     if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1 && !blockText.isEmpty()) {
+        int firstNonSpace = blockText.indexOf(QRegExp("[^ ]")); // since QTextLine::setNumColumns()
+                                                                // skips blankspaces, we will too
         if (dropCapsLength < 0) // means whole word is to be dropped
-            dropCapsLength = blockText.indexOf(QRegExp("\\W"));
+            dropCapsLength = blockText.indexOf(QRegExp("\\W"), firstNonSpace);
         // increase the size of the dropped chars
         QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
         QTextLayout::FormatRange dropCaps;
@@ -397,7 +399,7 @@ bool Layout::nextParag()
         dropCaps.format = blockStart.charFormat();
         dropCaps.format.setFontPointSize( blockStart.charFormat().fontPointSize() * dropCapsLines);
         dropCaps.start = 0;
-        dropCaps.length = dropCapsLength;
+        dropCaps.length = dropCapsLength + firstNonSpace;
         bool addDropCapsFormatting = true;
         QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
         const int dropCapsEnd = dropCaps.start + dropCaps.length;
@@ -421,7 +423,7 @@ bool Layout::nextParag()
         }
         layout->setAdditionalFormats(formatRanges);
         // bookkeep
-        m_dropCapsNChars = dropCapsLength;
+        m_dropCapsNChars = dropCapsLength + firstNonSpace;
         m_dropCapsAffectedLineWidthAdjust = 0;
         m_dropCapsAffectsNMoreLines = (m_dropCapsNChars > 0) ? dropCapsLines : 0;
     } else {

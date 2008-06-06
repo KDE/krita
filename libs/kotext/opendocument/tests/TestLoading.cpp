@@ -183,21 +183,9 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
               match = false;
             break;
         case KoParagraphStyle::LeftBorderWidth:
-            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
-              match = false;
-            break;
         case KoParagraphStyle::TopBorderWidth:
-            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
-              match = false;
-            break;
         case KoParagraphStyle::RightBorderWidth:
-            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
-              match = false;
-            break;
         case KoParagraphStyle::BottomBorderWidth:
-            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
-              match = false;
-            break;
         case KoParagraphStyle::TabStopDistance:
             if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
               match = false;

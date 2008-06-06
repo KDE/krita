@@ -110,7 +110,6 @@ void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &con
 
 void KisShapeLayer::addChild(KoShape *object)
 {
-    dbgImage <<"KisShapeLayer::addChild";
     KoShapeLayer::addChild( object );
     m_d->canvas->shapeManager()->add( object );
 

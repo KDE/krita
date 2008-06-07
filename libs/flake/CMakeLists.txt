@@ -106,6 +106,7 @@ set(flake_SRCS
     commands/KoConnectionShapeTypeCommand.cpp
     commands/KoShapeShadowCommand.cpp
     commands/KoPathReverseCommand.cpp
+    commands/KoEventActionAddCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp

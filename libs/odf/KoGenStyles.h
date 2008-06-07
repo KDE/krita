@@ -60,6 +60,15 @@ class KoStore;
 class KOODF_EXPORT KoGenStyles
 {
 public:
+    struct NamedStyle {
+        const KoGenStyle* style; ///< @note owned by the collection
+        QString name;
+    };
+
+    typedef QMap<KoGenStyle, QString> StyleMap;
+    typedef QSet<QString> NameMap;
+    typedef QList<NamedStyle> StyleArray;
+
     KoGenStyles();
     ~KoGenStyles();
 
@@ -97,17 +106,12 @@ public:
      */
     QString lookup( const KoGenStyle& style, const QString& name = QString(), int flags = NoFlag );
 
-    typedef QMap<KoGenStyle, QString> StyleMap;
     /**
      * Return the entire collection of styles
      * Use this for saving the styles
      */
-    const StyleMap& styles() const { return m_styleMap; }
+    StyleMap styles() const;
 
-    struct NamedStyle {
-        const KoGenStyle* style; ///< @note owned by the collection
-        QString name;
-    };
     /**
      * Return all styles of a given type
      * Use this for saving the styles
@@ -211,25 +215,6 @@ public:
 
 private:
     QString makeUniqueName( const QString& base, int flags ) const;
-
-    /// style definition -> name
-    StyleMap m_styleMap;
-
-    /// Map with the style name as key.
-    /// This map is mainly used to check for name uniqueness
-    typedef QSet<QString> NameMap;
-    NameMap m_styleNames;
-    NameMap m_autoStylesInStylesDotXml;
-
-    /// List of styles (used to preserve ordering)
-    typedef QList<NamedStyle> StyleArray;
-    StyleArray m_styleArray;
-
-    /// map for saving default styles
-    QMap<int, KoGenStyle> m_defaultStyles;
-
-    /// font faces
-    QSet<QString> m_fontFaces;
 
     class Private;
     Private * const d;

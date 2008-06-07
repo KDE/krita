@@ -79,6 +79,23 @@ static const unsigned int numAutoStyleData = sizeof( autoStyleData ) / sizeof( *
 
 class KoGenStyles::Private
 {
+public:
+    /// style definition -> name
+    StyleMap styleMap;
+
+    /// Map with the style name as key.
+    /// This map is mainly used to check for name uniqueness
+    NameMap styleNames;
+    NameMap autoStylesInStylesDotXml;
+
+    /// List of styles (used to preserve ordering)
+    StyleArray styleArray;
+
+    /// map for saving default styles
+    QMap<int, KoGenStyle> defaultStyles;
+
+    /// font faces
+    QSet<QString> fontFaces;
 };
 
 KoGenStyles::KoGenStyles()
@@ -96,18 +113,18 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
     // if it is a default style it has to be saved differently
     if ( style.isDefaultStyle() ) {
         // we can have only one default style per type
-        Q_ASSERT( !m_defaultStyles.contains( style.type() ) );
+        Q_ASSERT( !d->defaultStyles.contains( style.type() ) );
         // default style is only possible for style:style in office:style types
         Q_ASSERT( style.type() == KoGenStyle::StyleUser ||
                   style.type() == KoGenStyle::StyleTableColumn ||
                   style.type() == KoGenStyle::StyleTableRow ||
                   style.type() == KoGenStyle::StyleTableCell );
-        m_defaultStyles.insert( style.type(), style );
+        d->defaultStyles.insert( style.type(), style );
         // default styles don't have a name
         return QString( "" );
     }
-    StyleMap::iterator it = m_styleMap.find( style );
-    if ( it == m_styleMap.end() ) {
+    StyleMap::iterator it = d->styleMap.find( style );
+    if ( it == d->styleMap.end() ) {
         // Not found, try if this style is in fact equal to its parent (the find above
         // wouldn't have found it, due to m_parentName being set).
         if ( !style.parentName().isEmpty() ) {
@@ -143,41 +160,46 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
         }
         styleName = makeUniqueName( styleName, flags );
         if ( style.autoStyleInStylesDotXml() )
-            m_autoStylesInStylesDotXml.insert( styleName );
+            d->autoStylesInStylesDotXml.insert( styleName );
         else
-            m_styleNames.insert( styleName );
-        it = m_styleMap.insert( style, styleName );
+            d->styleNames.insert( styleName );
+        it = d->styleMap.insert( style, styleName );
         NamedStyle s;
         s.style = &it.key();
         s.name = styleName;
-        m_styleArray.append( s );
+        d->styleArray.append( s );
     }
     return it.value();
+}
+
+KoGenStyles::StyleMap KoGenStyles::styles() const
+{
+    return d->styleMap;
 }
 
 QString KoGenStyles::makeUniqueName( const QString& base, int flags ) const
 {
     // If this name is not used yet, and numbering isn't forced, then the given name is ok.
     if ( ( flags & DontForceNumbering )
-         && ! m_autoStylesInStylesDotXml.contains( base )
-         && ! m_styleNames.contains( base ) )
+         && ! d->autoStylesInStylesDotXml.contains( base )
+         && ! d->styleNames.contains( base ) )
         return base;
     int num = 1;
     QString name;
     do {
         name = base;
         name += QString::number( num++ );
-    } while ( m_autoStylesInStylesDotXml.contains( name )
-              || m_styleNames.contains( name ) );
+    } while ( d->autoStylesInStylesDotXml.contains( name )
+              || d->styleNames.contains( name ) );
     return name;
 }
 
 QList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type, bool markedForStylesXml ) const
 {
     QList<KoGenStyles::NamedStyle> lst;
-    const NameMap& nameMap = markedForStylesXml ? m_autoStylesInStylesDotXml : m_styleNames;
-    StyleArray::const_iterator it = m_styleArray.begin();
-    const StyleArray::const_iterator end = m_styleArray.end();
+    const NameMap& nameMap = markedForStylesXml ? d->autoStylesInStylesDotXml : d->styleNames;
+    StyleArray::const_iterator it = d->styleArray.begin();
+    const StyleArray::const_iterator end = d->styleArray.end();
     for ( ; it != end ; ++it ) {
         // Look up if it's marked for styles.xml or not by looking up in the corresponding style map.
         if ( (*it).style->type() == type && nameMap.find((*it).name) != nameMap.end() ) {
@@ -189,8 +211,8 @@ QList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type, bool markedForStyl
 
 const KoGenStyle* KoGenStyles::style( const QString& name ) const
 {
-    StyleArray::const_iterator it = m_styleArray.begin();
-    const StyleArray::const_iterator end = m_styleArray.end();
+    StyleArray::const_iterator it = d->styleArray.begin();
+    const StyleArray::const_iterator end = d->styleArray.end();
     for ( ; it != end ; ++it ) {
         if ( (*it).name == name )
             return (*it).style;
@@ -205,24 +227,24 @@ KoGenStyle* KoGenStyles::styleForModification( const QString& name )
 
 void KoGenStyles::markStyleForStylesXml( const QString& name )
 {
-    Q_ASSERT( m_styleNames.contains( name ) );
-    m_styleNames.remove( name );
-    m_autoStylesInStylesDotXml.insert( name );
+    Q_ASSERT( d->styleNames.contains( name ) );
+    d->styleNames.remove( name );
+    d->autoStylesInStylesDotXml.insert( name );
     styleForModification( name )->setAutoStyleInStylesDotXml( true );
 }
 
 void KoGenStyles::dump()
 {
     kDebug(30003) <<"Style array:";
-    StyleArray::const_iterator it = m_styleArray.begin();
-    const StyleArray::const_iterator end = m_styleArray.end();
+    StyleArray::const_iterator it = d->styleArray.begin();
+    const StyleArray::const_iterator end = d->styleArray.end();
     for ( ; it != end ; ++it ) {
         kDebug(30003) << (*it).name;
     }
-    for ( NameMap::const_iterator it = m_styleNames.begin(); it != m_styleNames.end(); ++it ) {
+    for ( NameMap::const_iterator it = d->styleNames.begin(); it != d->styleNames.end(); ++it ) {
         kDebug(30003) <<"style:" << *it;
     }
-    for ( NameMap::const_iterator it = m_autoStylesInStylesDotXml.begin(); it != m_autoStylesInStylesDotXml.end(); ++it ) {
+    for ( NameMap::const_iterator it = d->autoStylesInStylesDotXml.begin(); it != d->autoStylesInStylesDotXml.end(); ++it ) {
         kDebug(30003) <<"auto style for style.xml:" << *it;
         const KoGenStyle* s = style( *it );
         Q_ASSERT( s );
@@ -232,7 +254,7 @@ void KoGenStyles::dump()
 
 void KoGenStyles::addFontFace( const QString& fontName )
 {
-    m_fontFaces.insert( fontName );
+    d->fontFaces.insert( fontName );
 }
 
 bool KoGenStyles::saveOdfStylesDotXml( KoStore* store, KoXmlWriter* manifestWriter )
@@ -282,8 +304,8 @@ void KoGenStyles::saveOdfDocumentStyles( KoXmlWriter* xmlWriter ) const
     xmlWriter->startElement( "office:styles" );
 
     for ( uint i = 0; i < numStyleData; ++i ) {
-        QMap<int, KoGenStyle>::iterator it( m_defaultStyles.find( styleData[i].m_type ) );
-        if ( it != m_defaultStyles.end() ) {
+        QMap<int, KoGenStyle>::iterator it( d->defaultStyles.find( styleData[i].m_type ) );
+        if ( it != d->defaultStyles.end() ) {
             it.value().writeStyle( xmlWriter, *this, "style:default-style", "",
                                    styleData[i].m_propertiesElementName, true, styleData[i].m_drawElement );
         }
@@ -316,12 +338,12 @@ void KoGenStyles::saveOdfMasterStyles( KoXmlWriter* xmlWriter ) const
 
 void KoGenStyles::saveOdfFontFaceDecls( KoXmlWriter* xmlWriter ) const
 {
-    if ( !m_fontFaces.isEmpty() ) {
+    if ( !d->fontFaces.isEmpty() ) {
         xmlWriter->startElement( "office:font-face-decls" );
 
-        QSet<QString>::const_iterator it( m_fontFaces.begin() );
+        QSet<QString>::const_iterator it( d->fontFaces.begin() );
 
-        for ( ; it != m_fontFaces.end(); ++it )
+        for ( ; it != d->fontFaces.end(); ++it )
         {
             xmlWriter->startElement( "style:font-face" );
             xmlWriter->addAttribute( "style:name", *it );

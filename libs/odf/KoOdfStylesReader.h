@@ -107,13 +107,13 @@ public:
     const KoXmlElement& layerSet() const;
 
     /// @return all list styles ("text:list-style" elements), hashed by name
-    const QHash<QString, KoXmlElement*>& listStyles() const;
+    QHash<QString, KoXmlElement*> listStyles() const;
 
     /// @return master pages ("style:master-page" elements), hashed by name
-    const QHash<QString, KoXmlElement*>& masterPages() const;
+    QHash<QString, KoXmlElement*> masterPages() const;
 
     /// @return draw styles, hashed by name
-    const QHash<QString, KoXmlElement*>& drawStyles() const;
+    QHash<QString, KoXmlElement*> drawStyles() const;
 
     /// @return all custom styles ("style:style" elements) for a given family, hashed by name
     QHash<QString, KoXmlElement*> customStyles(const QString& family) const;
@@ -128,7 +128,7 @@ public:
     typedef QHash<QString, KoOdfNumberStyles::NumericStyleFormat> DataFormatsMap;
     /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
-    const DataFormatsMap& dataFormats() const;
+    DataFormatsMap dataFormats() const;
 
 private:
     enum TypeAndLocation

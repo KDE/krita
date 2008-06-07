@@ -139,7 +139,7 @@ QHash<QString, KoXmlElement*> KoOdfStylesReader::autoStyles(const QString& famil
     return stylesDotXml ? d->stylesAutoStyles.value( family ) : d->contentAutoStyles.value( family );
 }
 
-const KoOdfStylesReader::DataFormatsMap& KoOdfStylesReader::dataFormats() const
+KoOdfStylesReader::DataFormatsMap KoOdfStylesReader::dataFormats() const
 {
     return d->dataFormats;
 }
@@ -266,17 +266,17 @@ const KoXmlElement& KoOdfStylesReader::layerSet() const
     return d->layerSet;
 }
 
-const QHash<QString, KoXmlElement*>& KoOdfStylesReader::listStyles() const
+QHash<QString, KoXmlElement*> KoOdfStylesReader::listStyles() const
 {
     return d->listStyles;
 }
 
-const QHash<QString, KoXmlElement*>& KoOdfStylesReader::masterPages() const
+QHash<QString, KoXmlElement*> KoOdfStylesReader::masterPages() const
 {
     return d->masterPages;
 }
 
-const QHash<QString, KoXmlElement*>& KoOdfStylesReader::drawStyles() const
+QHash<QString, KoXmlElement*> KoOdfStylesReader::drawStyles() const
 {
     return d->drawStyles;
 }

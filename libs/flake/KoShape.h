@@ -54,6 +54,7 @@ class KoGenStyle;
 class KoShapeControllerBase;
 class KoDataCenter;
 class KoShapeShadow;
+class KoEventAction;
 
 /**
  *
@@ -298,6 +299,21 @@ public:
      * @return a list of the connectors that have been added to this shape.
      */
     QList<QPointF> connectionPoints() const;
+
+    /**
+     * Add a event action 
+     */
+    void addEventAction( KoEventAction * action );
+
+    /**
+     * Remove a event action
+     */
+    void removeEventAction( KoEventAction * action );
+
+    /**
+     * Get all event actions
+     */
+    QList<KoEventAction *> eventActions() const;
 
     /**
      * Set the background of the shape.

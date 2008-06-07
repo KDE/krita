@@ -529,6 +529,25 @@ QList<QPointF> KoShape::connectionPoints() const {
     return points;
 }
 
+void KoShape::addEventAction( KoEventAction * action )
+{
+    if ( ! d->eventActions.contains( action ) ) {
+        d->eventActions.append( action );
+    }
+}
+
+void KoShape::removeEventAction( KoEventAction * action )
+{
+    if ( d->eventActions.contains( action ) ) {
+        d->eventActions.removeAll( action );
+    }
+}
+
+QList<KoEventAction *> KoShape::eventActions() const
+{
+    return d->eventActions;
+}
+
 void KoShape::setBackground ( const QBrush & brush ) {
     d->backgroundBrush = brush;
     d->shapeChanged(BackgroundChanged);

@@ -99,7 +99,7 @@ public:
 };
 
 KoGenStyles::KoGenStyles()
-    : d( 0 )
+    : d( new Private )
 {
 }
 

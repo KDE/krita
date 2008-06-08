@@ -157,7 +157,7 @@ void KoDocumentInfo::setAboutInfo( const QString& info, const QString& data )
 {
     if( !m_aboutTags.contains( info ) )
         return;
-    
+
     m_aboutInfo.insert( info, data );
     emit infoUpdated(info, data);
 }
@@ -278,8 +278,15 @@ bool KoDocumentInfo::saveOasisAboutInfo( KoXmlWriter &xmlWriter )
             {
               if ( tag == "title" && aboutInfo( tag ).isEmpty() )
                 {
-                  KoDocument* doc = static_cast< KoDocument* >( parent() );
-                  setAboutInfo( "title", doc->url().fileName() );
+                  KoDocument* doc = dynamic_cast< KoDocument* >( parent() );
+                  if( doc )
+                  {
+                    setAboutInfo( "title", doc->url().fileName() );
+                  }
+                  else
+                  {
+                    setAboutInfo( "title", "" );
+                  }
                 }
                 QByteArray elementName( QString( "dc:" + tag ).toLatin1() );
                 xmlWriter.startElement( elementName );
@@ -313,7 +320,7 @@ bool KoDocumentInfo::loadOasisAboutInfo( const KoXmlNode& metaDoc )
             if ( !e.text().isEmpty() )
                 keywords << e.text().trimmed();
         }
-        else if( tag == "title" || tag == "description" || tag == "subject" 
+        else if( tag == "title" || tag == "description" || tag == "subject"
                  || tag == "date" || tag == "language")
         {
             KoXmlElement e  = KoXml::namedItemNS( metaDoc, KoXmlNS::dc, tag.toLatin1().constData() );

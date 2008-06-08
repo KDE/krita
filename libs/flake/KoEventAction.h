@@ -25,6 +25,7 @@
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoXmlElement;
+class KoTool;
 
 /**
  * This is the base class for actions that are executed on events.
@@ -53,8 +54,8 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) = 0;
     virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
 
-    // TODO method for checking/getting event
-    // TODO method for execute
+    virtual void execute( KoTool * tool ) = 0;
+    virtual void finish( KoTool * tool ) = 0;
 };
 
 #endif /* KOEVENTACTION_H */

@@ -48,8 +48,8 @@ class KoTool;
 class FLAKE_EXPORT KoEventAction
 {
 public:
-    KoEventAction() {}
-    virtual ~KoEventAction() {}
+    KoEventAction();
+    virtual ~KoEventAction();
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) = 0;
     virtual void saveOdf( KoShapeSavingContext & context ) const = 0;

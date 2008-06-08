@@ -70,6 +70,7 @@ set(flake_SRCS
     KoDevice.cpp
     KoDeviceEvent.cpp
     KoDeviceRegistry.cpp
+    KoEventAction.cpp
     KoEventActionFactory.cpp
     KoEventActionRegistry.cpp
     commands/KoShapeGroupCommand.cpp

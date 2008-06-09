@@ -100,7 +100,7 @@ public:
 
     vKisAnnotationSP annotations;
 
-    KisSelectionSP globalSelection; // XXX_SELECTION: Use the selection from the root layer for this
+    KisSelectionSP globalSelection;
 
 };
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)

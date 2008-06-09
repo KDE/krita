@@ -27,6 +27,9 @@ class QUndoCommand;
 class KoShape;
 class KisCanvas2;
 
+/**
+ * XXX: Doc!
+ */
 class KRITAUI_EXPORT KisSelectionToolHelper
 {
 public:

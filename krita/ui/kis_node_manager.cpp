@@ -242,29 +242,33 @@ void KisNodeManager::createNode( const QString & nodeType )
 void KisNodeManager::activateNode( KisNodeSP node )
 {
     Q_ASSERT( node );
-    // XXX: Set the selection on the shape manager to the active layer
-    // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
-    // with the parent of the active layer.
     dbgUI << " activated node: " << node->name() ;
-
     Q_ASSERT( m_d->view );
     Q_ASSERT( m_d->view->canvasBase() );
     Q_ASSERT( m_d->view->canvasBase()->globalShapeManager() );
 
+    // Set the selection on the shape manager to the active layer
+    // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
+    // with the parent of the active layer.
+
     KoSelection * selection = m_d->view->canvasBase()->globalShapeManager()->selection();
     Q_ASSERT( selection );
-
+    
     KoShape * shape = m_d->view->document()->shapeForNode( node );
     if ( !shape ) {
         shape = m_d->view->document()->addShape( node->parent() );
+    }
+    KoShape * parentShape = shape->parent();
+    if (!parentShape) {
+        parentShape = m_d->view->document()->addShape( node->parent() );
     }
 
     selection->deselectAll();
     selection->select(shape);
 
-    KoShape * parentShape = m_d->view->document()->shapeForNode( node->parent() );
-    if (!parentShape) {
-        parentShape = m_d->view->document()->addShape( node->parent() );
+    KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape->parent());
+    if ( shapeLayer ) {
+        selection->setActiveLayer( shapeLayer );
     }
 
     m_d->activeNode = node;

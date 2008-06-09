@@ -116,7 +116,7 @@ KisKSColorSpace<_TYPE_,_N_>::KisKSColorSpace(KoColorProfile *p)
 {
     Q_ASSERT(p);
     m_profile = static_cast<KisIlluminantProfile *>(p);
-
+    
     const KoChannelInfo::enumChannelValueType channelValueType = KoColorSpaceMathsTraits<_TYPE_>::channelValueType;
     const int channelSize = sizeof(_TYPE_);
 

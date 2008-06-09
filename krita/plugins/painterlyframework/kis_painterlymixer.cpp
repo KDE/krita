@@ -45,6 +45,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     if (profiles.count()) { // don't crash if the profile is not available.
         const KoColorProfile* testp = profiles.at(0);
         m_colorspace = f->colorSpace(csid, testp);
+        Q_ASSERT(m_colorspace);
     }
     else {
         setEnabled(false);

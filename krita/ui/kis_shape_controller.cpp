@@ -34,7 +34,10 @@
 #include <KoColorSpaceConstants.h>
 #include <KoCanvasController.h>
 
+#include "kis_node_manager.h"
+#include "kis_shape_selection.h"
 #include "kis_selection.h"
+#include "kis_selection_component.h"
 #include "kis_adjustment_layer.h"
 #include "kis_clone_layer.h"
 #include "canvas/kis_canvas2.h"
@@ -185,13 +188,13 @@ void KisShapeController::addShape( KoShape* shape )
     // of to a shape layer
     qDebug() << ">>>>>>>>>>>>>>> parent " << shape->parent();
     KisCanvas2 * canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
+    
     qDebug() << ">>>>>>>>>>>>>>> canvas " << canvas;
     if (canvas) {
         qDebug() << ">>>>>>>>>>>>>>> view " << canvas->view();
         qDebug() << ">>>>>>>>>>>>>>> node " << canvas->view()->activeNode();
         qDebug() << ">>>>>>>>>>>>>>> selection " << canvas->view()->selection();
     }
-    
     // Only non-krita shapes get added through this method; krita
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
@@ -199,55 +202,72 @@ void KisShapeController::addShape( KoShape* shape )
          shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
          shape->shapeId() != KIS_LAYER_CONTAINER_ID &&
          shape->shapeId() != KIS_MASK_SHAPE_ID ) {
-
-        // An ordinary shape, if the active layer is a KisShapeLayer,
-        // add it there, otherwise, create a new KisShapeLayer on top
-        // of the active layer.
-
-        // Check whether the shape is part of a layer -- that would be our
-        // shape layers. The parent is set by KoShapeController using the
-        // KoSelection object returned by the KoShapeManager that is
-        // returned by KoCanvasBase -- and the shape manager in the
-        // KisShapeLayer always sets the layer as parent using
-        // KoSelection::setActiveLayer. The inheritance is:
-        // KisShapeLayer::KoShapeLayer::KoShapeContainer::KoShape.
-
-        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
-        dbgUI <<"shape:" << shape;
-        dbgUI <<"shape parent:" << shape->parent();
-        dbgUI <<"shape layer:" << shapeLayer;
-
-        if ( !shapeLayer ) {
-            // There is no parent layer set, which means that when
-            // dropping, there was no shape layer active. Create one
-            // and add it on top of the image stack.
-
-            KisLayerContainerShape * container =
-                dynamic_cast<KisLayerContainerShape*>( shapeForNode(m_d->image->rootLayer().data() ) );
-                
-            dbgUI <<"container:" << container;
-            shapeLayer = new KisShapeLayer(container,
-                                           m_d->image,
-                                           i18n( "Flake shapes %1", m_d->nameServer->number() ),
-                                           OPACITY_OPAQUE);
-
-            // Add the shape layer to the image. The image then emits
-            // a signal that is caught by us (the document) and the
-            // layerbox and makes sure the new layer is in the
-            // layer-shape map and in the layerbox
-
-            m_d->image->addNode( shapeLayer, m_d->image->rootLayer());
-        }
-
-        // XXX: What happens if the shape is added embedded in another
-        // shape?
-        if ( shapeLayer )
-            shapeLayer->addChild( shape );
         
-//        foreach( KoView *view, m_d->doc->views() ) {
-//            KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
-//            canvas->globalShapeManager()->add(shape);
-//        }
+        // There's a selection active. that means that all shapes get added to the active selection,
+        // instead of to a shape layer or a newly created shape layer.
+        KisSelectionSP selection;
+        if ( canvas && (selection = canvas->view()->selection()) ) {
+            if ( !selection->shapeSelection() ) {
+                selection->setShapeSelection( new KisShapeSelection( m_d->image, selection ) );
+            }
+            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+            shapeSelection->addChild(shape);
+                        
+            foreach( KoView *view, m_d->doc->views() ) {
+                KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
+                canvas->globalShapeManager()->add(shape);
+            }
+        }
+        else {
+            // An ordinary shape, if the active layer is a KisShapeLayer,
+            // add it there, otherwise, create a new KisShapeLayer on top
+            // of the active layer.
+
+            // Check whether the shape is part of a layer -- that would be our
+            // shape layers. The parent is set by KoShapeController using the
+            // KoSelection object returned by the KoShapeManager that is
+            // returned by KoCanvasBase -- and the shape manager in the
+            // KisShapeLayer always sets the layer as parent using
+            // KoSelection::setActiveLayer. The inheritance is:
+            // KisShapeLayer::KoShapeLayer::KoShapeContainer::KoShape.
+
+            KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
+            dbgUI <<"shape:" << shape;
+            dbgUI <<"shape parent:" << shape->parent();
+            dbgUI <<"shape layer:" << shapeLayer;
+
+            if ( !shapeLayer ) {
+                // There is no parent layer set, which means that when
+                // dropping, there was no shape layer active. Create one
+                // and add it on top of the image stack.
+
+                KisLayerContainerShape * container =
+                    dynamic_cast<KisLayerContainerShape*>( shapeForNode(m_d->image->rootLayer().data() ) );
+                    
+                dbgUI <<"container:" << container;
+                shapeLayer = new KisShapeLayer(container,
+                                            m_d->image,
+                                            i18n( "Flake shapes %1", m_d->nameServer->number() ),
+                                            OPACITY_OPAQUE);
+
+                // Add the shape layer to the image. The image then emits
+                // a signal that is caught by us (the document) and the
+                // layerbox and makes sure the new layer is in the
+                // layer-shape map and in the layerbox
+
+                m_d->image->addNode( shapeLayer, m_d->image->rootLayer());
+                if ( canvas ) {
+                    canvas->view()->nodeManager()->activateNode(shapeLayer);
+                }
+                
+            }
+
+            // XXX: What happens if the shape is added embedded in another
+            // shape?
+            if ( shapeLayer )
+                shapeLayer->addChild( shape );
+
+        }
     }
     else {
         kWarning() <<"Eeek -- we tried to add a krita layer shape without going through KisImage";

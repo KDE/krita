@@ -31,7 +31,7 @@ public:
 };
 
 KisLayerShape::KisLayerShape( KoShapeContainer * parent, KisLayerSP layer)
-    : KoShapeContainer()
+    : KoShapeLayer()
     , m_d ( new Private() )
 {
 

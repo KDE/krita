@@ -19,7 +19,7 @@
 #ifndef KIS_LAYER_SHAPE_H_
 #define KIS_LAYER_SHAPE_H_
 
-#include <KoShapeContainer.h>
+#include <KoShapeLayer.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
 
@@ -32,7 +32,7 @@
    A KisLayerShape is a flake wrapper around adjustment layers or paint
    layers. A layershape can only have a KisMaskShape as its descendant.
  */
-class KRITAUI_EXPORT KisLayerShape : public KoShapeContainer
+class KRITAUI_EXPORT KisLayerShape : public KoShapeLayer
 {
 
 public:

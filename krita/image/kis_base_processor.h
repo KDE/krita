@@ -61,6 +61,7 @@ public:
     KisBaseProcessor(const KoID& id, const KoID & category, const QString & entry);
 
     virtual ~KisBaseProcessor();
+    
     /**
      * Return the configuration set as the default by the user or the default 
      * configuration from the filter writer as returned by factoryConfiguration.

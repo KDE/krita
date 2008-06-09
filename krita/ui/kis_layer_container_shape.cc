@@ -1,4 +1,4 @@
-/*
+ /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,7 @@ public:
 };
 
 KisLayerContainerShape::KisLayerContainerShape( KoShapeContainer *parent, KisLayerSP groupLayer )
-    : KoShapeContainer()
+    : KoShapeLayer()
     , m_d( new Private )
 {
     m_d->groupLayer = groupLayer;

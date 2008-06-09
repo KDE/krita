@@ -44,6 +44,7 @@ KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 vers
 {
      d->name = name;
      d->version = version;
+     d->channelFlags = QBitArray();
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)

@@ -49,5 +49,5 @@ install( FILES
     KoOdfReadStore.h
     KoOdfWriteStore.h
     KoStyleStack.h
-DESTINATION ${INCLUDE_INSTALL_DIR})
+DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

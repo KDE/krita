@@ -32,5 +32,5 @@ install( FILES
          KoResourceServerProvider.h
          KoSegmentGradient.h
          KoStopGradient.h
-         DESTINATION ${INCLUDE_INSTALL_DIR})
+         DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

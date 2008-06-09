@@ -183,5 +183,5 @@ install(
     KoToolFactory.h
     KoToolRegistry.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}
+    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

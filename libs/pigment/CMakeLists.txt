@@ -104,7 +104,7 @@ install( FILES
          KoIntegerMaths.h
          KoLabDarkenColorTransformation.h
          KoHistogramProducer.h
-         DESTINATION ${INCLUDE_INSTALL_DIR})
+         DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 install( FILES  pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 

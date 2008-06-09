@@ -37,4 +37,4 @@ install(TARGETS kstore  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  KoStore.h KoStoreDevice.h KoXmlReader.h KoXmlWriter.h kostore_export.h KoXmlReaderForward.h DESTINATION ${INCLUDE_INSTALL_DIR})
+install( FILES  KoStore.h KoStoreDevice.h KoXmlReader.h KoXmlWriter.h kostore_export.h KoXmlReaderForward.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

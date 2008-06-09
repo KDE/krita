@@ -88,5 +88,5 @@ editors/stringlistedit.h
 editors/symbolcombo.h
 editors/timeedit.h
 editors/urledit.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors)
+DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors COMPONENT Devel)
 

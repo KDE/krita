@@ -116,4 +116,4 @@ install(
     KoZoomMode.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
-)
+COMPONENT Devel)

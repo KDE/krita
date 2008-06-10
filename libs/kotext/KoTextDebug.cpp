@@ -247,6 +247,26 @@ QString KoTextDebug::paraAttributes(const QMap<int, QVariant> &properties)
             key = "drop-caps-distance";
             value = QString::number(properties[id].toDouble());
             break;
+        case QTextFormat::BlockBottomMargin:
+            value = QString::number(properties[id].toDouble());
+            if (value != "0")
+                key = "block-bottom-margin";
+            break;
+        case QTextFormat::BlockTopMargin:
+            value = QString::number(properties[id].toDouble());
+            if (value != "0")
+                key = "block-top-margin";
+            break;
+        case QTextFormat::BlockLeftMargin:
+            value = QString::number(properties[id].toDouble());
+            if (value != "0")
+                key = "block-left-margin";
+            break;
+        case QTextFormat::BlockRightMargin:
+            value = QString::number(properties[id].toDouble());
+            if (value != "0")
+                key = "block-right-margin";
+            break;
         default:
             break;
         }

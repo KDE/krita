@@ -35,9 +35,15 @@
 #include <KoTextLoader.h>
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
+#include <KoOdfWriteStore.h>
+#include <KTemporaryFile>
+#include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 #include <KoTextShapeData.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoGenStyles.h>
 #include <KoXmlNS.h>
 #include <kcomponentdata.h>
 #include <KoTextDebug.h>
@@ -47,6 +53,8 @@
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 #include <KoText.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoInlineTextObjectManager.h>
 
 typedef KoText::Tab KoTextTab;
 // because in a QtScript, I don't seem to be able to use a namespaced type
@@ -537,7 +545,8 @@ void TestLoading::cleanupTestCase()
 void TestLoading::init()
 {
     textShapeData = 0;
-    store = 0;
+    readStore = 0;
+    writeStore = 0;
 
     // FIXME: the line below exists because I haven't manage get includeFunction to work
     evaluate(engine, QString(FILES_DATA_DIR) + "common.qs");
@@ -547,51 +556,14 @@ void TestLoading::cleanup()
 {
     delete textShapeData;
     textShapeData = 0;
-    delete store;
-    store = 0;
+    delete readStore;
+    readStore = 0;
+    delete writeStore;
+    writeStore = 0;
 }
 
-QTextDocument *TestLoading::documentFromScript(const QString &script)
+void TestLoading::addData()
 {
-    return qobject_cast<QTextDocument *>(evaluate(engine, script).toQObject());
-}
-
-QTextDocument *TestLoading::documentFromOdt(const QString &odt)
-{
-    if (!QFile(odt).exists()) {
-        qFatal("%s does not exist", qPrintable(odt));
-        return 0;
-    }
-
-    store = KoStore::createStore(odt, KoStore::Read, "", KoStore::Zip);
-    KoOdfReadStore odfReadStore(store);
-    QString error;
-    if (!odfReadStore.loadAndParse(error)) {
-        qDebug() << "Parsing error : " << error;
-    }
-
-    KoXmlElement content = odfReadStore.contentDoc().documentElement();
-    KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
-    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
-
-    KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store());
-    KoShapeLoadingContext shapeLoadingContext(odfLoadingContext, 0 /* KoShapeControllerBase (KWDocument) */);
-    textShapeData = new KoTextShapeData;
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-    textShapeData->document()->setDocumentLayout(layout);
-    KoStyleManager *styleManager = new KoStyleManager;
-    layout->setStyleManager(styleManager);
-    if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
-        qDebug() << "KoTextShapeData failed to load ODT";
-    }
-
-    return textShapeData->document();
-}
-
-void TestLoading::testLoading_data()
-{
-    QTest::addColumn<QString>("testcase");
-
     QTest::newRow("bulletedList") << "TextContents/Lists/bulletedList";
     QTest::newRow("numberedList") << "TextContents/Lists/numberedList";
     QTest::newRow("embeddedBulletedList") << "TextContents/Lists/embeddedBulletedList";
@@ -659,6 +631,101 @@ void TestLoading::testLoading_data()
     QTest::newRow("tabType") << "FormattingProperties/ParagraphFormattingProperties/tabType";
 }
 
+QTextDocument *TestLoading::documentFromScript(const QString &script)
+{
+    return qobject_cast<QTextDocument *>(evaluate(engine, script).toQObject());
+}
+
+QTextDocument *TestLoading::documentFromOdt(const QString &odt)
+{
+    if (!QFile(odt).exists()) {
+        qFatal("%s does not exist", qPrintable(odt));
+        return 0;
+    }
+
+    readStore = KoStore::createStore(odt, KoStore::Read, "", KoStore::Zip);
+    KoOdfReadStore odfReadStore(readStore);
+    QString error;
+    if (!odfReadStore.loadAndParse(error)) {
+        qDebug() << "Parsing error : " << error;
+    }
+
+    KoXmlElement content = odfReadStore.contentDoc().documentElement();
+    KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
+    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
+
+    KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store());
+    KoShapeLoadingContext shapeLoadingContext(odfLoadingContext, 0 /* KoShapeControllerBase (KWDocument) */);
+    textShapeData = new KoTextShapeData;
+    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
+    textShapeData->document()->setDocumentLayout(layout);
+    layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
+    KoStyleManager *styleManager = new KoStyleManager;
+    layout->setStyleManager(styleManager);
+    if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
+        qDebug() << "KoTextShapeData failed to load ODT";
+    }
+
+    return textShapeData->document();
+}
+
+QString TestLoading::documentToOdt(QTextDocument *document)
+{
+    QString odt("test.odt");
+    writeStore = KoStore::createStore(odt, KoStore::Write, "application/vnd.oasis.opendocument.text", KoStore::Zip);
+
+    KoOdfWriteStore odfWriteStore(writeStore);
+    KoStore *store = odfWriteStore.store();
+    KoXmlWriter *manifestWriter = odfWriteStore.manifestWriter("application/vnd.oasis.opendocument.text");
+    manifestWriter->addManifestEntry("content.xml", "text/xml");
+    if (!store->open("content.xml"))
+        return QString();
+
+    KoStoreDevice contentDev(store);
+    KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter(&contentDev, "office:document-content");
+
+    // for office:body
+    KTemporaryFile contentTmpFile;
+    if (!contentTmpFile.open())
+        qFatal("Error opening temporary file!");
+    KoXmlWriter xmlWriter(&contentTmpFile, 1);
+
+    KoGenStyles mainStyles;
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
+
+    xmlWriter.startElement("office:body");
+    xmlWriter.startElement("office:text");
+
+    textShapeData->saveOdf(context);
+
+    xmlWriter.endElement(); // office:text
+    xmlWriter.endElement(); // office:body
+
+    contentTmpFile.close();
+
+    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+    contentWriter->addCompleteElement(&contentTmpFile);
+
+    contentWriter->endElement(); // root element
+    contentWriter->endDocument();
+    delete contentWriter;
+
+    if (!store->close())
+        qWarning() << "Failed to close the writeStore";
+
+    odfWriteStore.closeManifestWriter();
+
+    return odt;
+}
+
+void TestLoading::testLoading_data()
+{
+    QTest::addColumn<QString>("testcase");
+
+    addData();
+}
+
 void TestLoading::testLoading() 
 {
     QFETCH(QString, testcase);
@@ -679,6 +746,40 @@ void TestLoading::testLoading()
         KoTextDebug::dumpDocument(expectedDocument);
     }
     QVERIFY(documentsEqual);
+    cleanup();
+}
+
+void TestLoading::testSaving_data()
+{
+    QTest::addColumn<QString>("testcase");
+
+    addData();
+}
+
+void TestLoading::testSaving()
+{
+    QFETCH(QString, testcase);
+    testcase.prepend(FILES_DATA_DIR);
+
+    QTextDocument *actualDocument = documentFromOdt(testcase + ".odt");
+    QVERIFY(actualDocument != 0);
+    QString fileName = documentToOdt(actualDocument);
+    QVERIFY(!fileName.isEmpty());
+    QTextDocument *savedDocument = documentFromOdt(fileName);
+
+    QTextDocument *expectedDocument = documentFromScript(testcase + ".qs");
+    QVERIFY(expectedDocument != 0);
+
+    bool documentsEqual = compareDocuments(savedDocument, expectedDocument);
+
+//    showDocument(actualDocument);
+//    showDocument(expectedDocument);
+    if (!documentsEqual) {
+        KoTextDebug::dumpDocument(actualDocument);
+        KoTextDebug::dumpDocument(expectedDocument);
+    }
+//    QVERIFY(documentsEqual);
+    cleanup();
 }
 
 int main(int argc, char *argv[])

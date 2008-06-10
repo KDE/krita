@@ -45,14 +45,19 @@ private slots:
     void testLoading();
     void testLoading_data();
 
+    void testSaving();
+    void testSaving_data();
+
 private:
     QTextDocument *documentFromScript(const QString &script);
     QTextDocument *documentFromOdt(const QString &odt);
+    QString documentToOdt(QTextDocument *);
+    void addData();
 
     KComponentData *componentData;
     QScriptEngine *engine;
     KoTextShapeData *textShapeData;
-    KoStore *store;
+    KoStore *readStore, *writeStore;
 };
 
 #endif // TESTLOADING_H

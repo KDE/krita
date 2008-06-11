@@ -155,7 +155,7 @@ private:
     KoDocument* document() const { return m_document; }
     friend int KoFilterChain::filterManagerDirection() const;
     int direction() const { return static_cast<int>( m_direction ); }
-    friend KoFilterChain* const KoFilterChain::filterManagerParentChain() const;
+    friend KoFilterChain* KoFilterChain::filterManagerParentChain() const;
     KoFilterChain* const parentChain() const { return m_parentChain; }
 
     // Private API

@@ -382,7 +382,7 @@ int KoFilterChain::filterManagerDirection() const
     return m_manager->direction();
 }
 
-KoFilterChain* const KoFilterChain::filterManagerParentChain() const
+KoFilterChain* KoFilterChain::filterManagerParentChain() const
 {
     return m_manager->parentChain();
 }

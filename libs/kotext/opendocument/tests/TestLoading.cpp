@@ -371,8 +371,8 @@ static QScriptValue includeFunction(QScriptContext *context, QScriptEngine *engi
 }
 
 // FIXME: Remove this once the generator is fixed
-Q_DECLARE_METATYPE(QTextFormat);
-Q_DECLARE_METATYPE(QTextFormat *);
+Q_DECLARE_METATYPE(QTextFormat)
+Q_DECLARE_METATYPE(QTextFormat *)
 
 static QScriptValue setFormatProperty(QScriptContext *context, QScriptEngine *engine)
 {
@@ -423,8 +423,8 @@ static QScriptValue setFormatProperty(QScriptContext *context, QScriptEngine *en
     return QScriptValue();
 }
 
-Q_DECLARE_METATYPE(QTextCharFormat);
-Q_DECLARE_METATYPE(QTextCharFormat *);
+Q_DECLARE_METATYPE(QTextCharFormat)
+Q_DECLARE_METATYPE(QTextCharFormat *)
 
 static QScriptValue copyFormatProperties(QScriptContext *context, QScriptEngine *engine)
 {

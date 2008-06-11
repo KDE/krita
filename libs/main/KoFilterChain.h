@@ -144,7 +144,7 @@ private:
     QString filterManagerExportFile() const;
     KoDocument* filterManagerKoDocument() const;
     int filterManagerDirection() const;
-    KoFilterChain* const filterManagerParentChain() const;
+    KoFilterChain* filterManagerParentChain() const;
 
 
     // Helper methods which keep track of all the temp files, documents,

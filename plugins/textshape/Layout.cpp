@@ -396,12 +396,15 @@ bool Layout::nextParag()
     }
     layout->setAdditionalFormats(formatRanges);
 
-    // do stuff if dropCaps is set for this block
     QString blockText = m_block.text();
     int dropCaps = m_format.boolProperty(KoParagraphStyle::DropCaps);
     int dropCapsLength = m_format.intProperty(KoParagraphStyle::DropCapsLength);
     int dropCapsLines = m_format.intProperty(KoParagraphStyle::DropCapsLines);
-    if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1 && !blockText.isEmpty()) {
+    if ( dropCaps && dropCapsLength != 0 && dropCapsLines > 1
+         && m_dropCapsAffectsNMoreLines == 0 // first line of this para is not affected by a previous drop-cap
+         && !blockText.isEmpty()
+         ) {
+        // ok, now we can drop caps for this block
         int firstNonSpace = blockText.indexOf(QRegExp("[^ ]")); // since QTextLine::setNumColumns()
                                                                 // skips blankspaces, we will too
         if (dropCapsLength < 0) // means whole word is to be dropped
@@ -422,12 +425,6 @@ bool Layout::nextParag()
         m_dropCapsAffectsNMoreLines = (m_dropCapsNChars > 0) ? dropCapsLines : 0;
     } else {
         m_dropCapsNChars = 0;
-    }
-    if (!m_newShape && m_y_justBelowDropCaps && m_y < m_y_justBelowDropCaps) {
-        // we started a new paragraph even before filling up all drop-cap-affected lines
-        // should start layouting after the drop-cap characters
-        m_y = m_y_justBelowDropCaps;
-        m_dropCapsAffectedLineWidthAdjust = 0;
     }
 
     layout->beginLayout();

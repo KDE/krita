@@ -383,6 +383,20 @@ bool Layout::nextParag()
     layout->setTextOption(option);
 
     // drop caps
+
+    // first remove any drop-caps related formatting that's already there in the layout.
+    // we'll do it all afresh now.
+    QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
+    for ( QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
+          iter != formatRanges.end();
+          ++iter ) {
+        if (iter->format.boolProperty(KoCharacterStyle::DropCapsAdditionalFormatting)) {
+            formatRanges.erase(iter);
+        }
+    }
+    layout->setAdditionalFormats(formatRanges);
+
+    // do stuff if dropCaps is set for this block
     QString blockText = m_block.text();
     int dropCaps = m_format.boolProperty(KoParagraphStyle::DropCaps);
     int dropCapsLength = m_format.intProperty(KoParagraphStyle::DropCapsLength);
@@ -393,34 +407,14 @@ bool Layout::nextParag()
         if (dropCapsLength < 0) // means whole word is to be dropped
             dropCapsLength = blockText.indexOf(QRegExp("\\W"), firstNonSpace);
         // increase the size of the dropped chars
-        QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
-        QTextLayout::FormatRange dropCaps;
         QTextCursor blockStart(m_block);
-        dropCaps.format = blockStart.charFormat();
-        dropCaps.format.setFontPointSize( blockStart.charFormat().fontPointSize() * dropCapsLines);
-        dropCaps.start = 0;
-        dropCaps.length = dropCapsLength + firstNonSpace;
-        bool addDropCapsFormatting = true;
-        QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
-        const int dropCapsEnd = dropCaps.start + dropCaps.length;
-        while( iter != formatRanges.end() ) {
-            // find out if there's a conflicting formatting for our range
-            QTextLayout::FormatRange r = *(iter);
-            const int rEnd = r.start + r.length;
-            if (r.start == dropCaps.start && r.length == dropCaps.length ) {
-                // a formatting exists for the exact range we want. override.
-                iter->format = dropCaps.format;
-                addDropCapsFormatting = false;
-            } else if (rEnd >= dropCaps.start && rEnd <= dropCapsEnd || dropCapsEnd >= r.start && dropCapsEnd <= rEnd) {
-                // drop caps formatting range intersects with some formatting. an earlier dropcaps formatting, maybe?
-                formatRanges.erase(iter);
-                break;
-            }
-            ++iter;
-        }
-        if (addDropCapsFormatting) {
-            formatRanges.append(dropCaps);
-        }
+        QTextLayout::FormatRange dropCapsFormatRange;
+        dropCapsFormatRange.format = blockStart.charFormat();
+        dropCapsFormatRange.format.setFontPointSize( blockStart.charFormat().fontPointSize() * dropCapsLines);
+        dropCapsFormatRange.format.setProperty(KoCharacterStyle::DropCapsAdditionalFormatting, (QVariant) true);
+        dropCapsFormatRange.start = 0;
+        dropCapsFormatRange.length = dropCapsLength + firstNonSpace;
+        formatRanges.append(dropCapsFormatRange);
         layout->setAdditionalFormats(formatRanges);
         // bookkeep
         m_dropCapsNChars = dropCapsLength + firstNonSpace;

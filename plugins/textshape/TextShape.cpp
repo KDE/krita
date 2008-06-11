@@ -49,6 +49,7 @@ struct Finalizer {
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoShapeBackground.h>
 
 #include <QTextLayout>
 #include <QFont>
@@ -102,7 +103,12 @@ void TextShape::setDemoText(bool on)
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
+    if( background() )
+    {
+        QPainterPath p;
+        p.addRect( converter.documentToView(QRectF(QPointF(0.0,0.0), size()) ) );
+        background()->paint( painter, p );
+    }
     QTextDocument *doc = m_textShapeData->document();
     Q_ASSERT(doc);
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (doc->documentLayout());

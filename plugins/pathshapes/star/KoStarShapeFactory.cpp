@@ -26,6 +26,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
+#include <KoColorBackground.h>
 
 #include <klocale.h>
 
@@ -120,7 +121,7 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
     star->setShapeId( KoPathShapeId );
     QVariant v;
     if( params->property( "background", v ) )
-        star->setBackground( v.value<QColor>() );
+        star->setBackground( new KoColorBackground( v.value<QColor>() ) );
 
     return star;
 }

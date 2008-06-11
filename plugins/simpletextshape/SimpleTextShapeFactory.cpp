@@ -22,6 +22,7 @@
 #include "SimpleTextShapeConfigWidget.h"
 
 #include <KoXmlNS.h>
+#include <KoColorBackground.h>
 
 #include <klocale.h>
 
@@ -37,7 +38,7 @@ SimpleTextShapeFactory::SimpleTextShapeFactory(QObject *parent)
 KoShape *SimpleTextShapeFactory::createDefaultShape() const
 {
     SimpleTextShape * text = new SimpleTextShape();
-    text->setBackground( QBrush( Qt::black ) );
+    text->setBackground( new KoColorBackground( QColor( Qt::black) ) );
     return text;
 }
 

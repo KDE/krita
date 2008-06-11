@@ -121,7 +121,7 @@ double KoEnhancedPathNamedParameter::evaluate()
             return parent()->border() ? 1.0 : 0.0;
         break;
         case IdentifierHasFill:
-            return parent()->background().style() == Qt::NoBrush ? 0.0 : 1.0;
+            return parent()->background() ? 0.0 : 1.0;
         break;
         case IdentifierWidth:
             return viewBox.width();

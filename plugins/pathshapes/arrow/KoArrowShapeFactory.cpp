@@ -20,6 +20,7 @@
 #include <KoShape.h>
 #include <KoProperties.h>
 #include <KoLineBorder.h>
+#include <KoColorBackground.h>
 #include "arrow/KoArrowShapeFactory.h"
 #include "arrow/KoArrowShape.h"
 
@@ -99,7 +100,7 @@ KoShape *KoArrowShapeFactory::createDefaultShape() const
 {
     KoArrowShape *s = new KoArrowShape();
     s->setSize(QSizeF(100,100));
-    s->setBackground(QBrush(Qt::red));
+    s->setBackground( new KoColorBackground( QColor(Qt::red) ) );
     s->setBorder( new KoLineBorder( 1.0 ) );
     return s;
 }
@@ -109,7 +110,7 @@ KoShape *KoArrowShapeFactory::createShape(const KoProperties* props) const
     KoArrowShape *s = new KoArrowShape();
     s->setType(static_cast<KoArrowShape::KoArrowType> (props->intProperty("type", KoArrowShape::ArrowLeft)));
     s->setSize(QSizeF(100,100));
-    s->setBackground(QBrush(Qt::red));
+    s->setBackground( new KoColorBackground( QColor(Qt::red) ) );
     s->setBorder( new KoLineBorder( 1.0 ) );
     return s;
 }

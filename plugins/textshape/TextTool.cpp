@@ -39,6 +39,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
 #include <KoColorSetAction.h>
+#include <KoColorBackground.h>
 
 #include <KoCharacterStyle.h>
 #include <KoTextDocumentLayout.h>
@@ -483,9 +484,13 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
             // paint caret
             QPen caretPen(Qt::black);
             if(! m_textShape->hasTransparency()) {
-                QColor bg = m_textShape->background().color();
-                QColor invert = QColor(255 - bg.red(), 255 - bg.green(), 255 - bg.blue());
-                caretPen.setColor(invert);
+                KoColorBackground * fill = dynamic_cast<KoColorBackground*>( m_textShape->background() );
+                if( fill )
+                {
+                    QColor bg = fill->color();
+                    QColor invert = QColor(255 - bg.red(), 255 - bg.green(), 255 - bg.blue());
+                    caretPen.setColor(invert);
+                }
             }
             painter.setPen(caretPen);
             const int posInParag = m_textCursor.position() - block.position();

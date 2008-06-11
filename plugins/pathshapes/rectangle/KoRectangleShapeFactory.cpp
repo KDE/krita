@@ -23,6 +23,7 @@
 #include "KoLineBorder.h"
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
+#include <KoGradientBackground.h>
 
 #include <klocale.h>
 
@@ -42,10 +43,10 @@ KoShape * KoRectangleShapeFactory::createDefaultShape() const
     rect->setBorder( new KoLineBorder( 1.0 ) );
     rect->setShapeId( KoPathShapeId );
 
-    QLinearGradient gradient( QPointF(0,0), QPointF(100,100) );
-    gradient.setColorAt( 0.0, Qt::white );
-    gradient.setColorAt( 1.0, Qt::green );
-    rect->setBackground( QBrush( gradient ) );
+    QLinearGradient * gradient = new QLinearGradient( QPointF(0,0), QPointF(100,100) );
+    gradient->setColorAt( 0.0, Qt::white );
+    gradient->setColorAt( 1.0, Qt::green );
+    rect->setBackground( new KoGradientBackground( gradient ) );
 
     return rect;
 }

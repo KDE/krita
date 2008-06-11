@@ -28,6 +28,7 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeShadow.h"
+#include "KoShapeBackground.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -232,8 +233,8 @@ void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter )
     QPainterPath path( outline() );
     path.setFillRule( d->fillRule );
 
-    painter.setBrush( background() );
-    painter.drawPath( path );
+    if( background() )
+        background()->paint( painter, path );
     //paintDebug( painter );
 }
 

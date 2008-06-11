@@ -24,6 +24,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
+#include <KoColorBackground.h>
 
 #include <klocale.h>
 
@@ -105,8 +106,7 @@ KoShape * KoEnhancedPathShapeFactory::createShape(const KoProperties * params) c
 
     QVariant color;
     if( params->property( "background", color ) )
-        shape->setBackground( color.value<QColor>() );
-
+        shape->setBackground( new KoColorBackground( color.value<QColor>() ) );
     QSizeF size = shape->size();
     if( size.width() > size.height() )
         shape->setSize( QSizeF( 100, 100 * size.height() / size.width() ) );

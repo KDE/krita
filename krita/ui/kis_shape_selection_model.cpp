@@ -42,8 +42,7 @@ void KisShapeSelectionModel::add(KoShape *child) {
         return;
 
     child->setBorder(0);
-    child->setBackground(Qt::NoBrush);
-
+    child->setBackground(0);
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->setDirty();
 

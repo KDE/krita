@@ -53,6 +53,10 @@ set(flake_SRCS
     KoShapeBorderRegistry.cpp
     KoLineBorder.cpp
     KoLineBorderFactory.cpp
+    KoShapeBackground.cpp
+    KoColorBackground.cpp
+    KoGradientBackground.cpp
+    KoPatternBackground.cpp
     KoShapeStyleWriter.cpp
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp

@@ -29,6 +29,7 @@
 #include <KoXmlReader.h>
 #include <KoUnit.h>
 #include <KoPathShapeLoader.h>
+#include <KoShapeBackground.h>
 
 #include <KLocale>
 
@@ -59,8 +60,8 @@ void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion( painter, converter );
     painter.setFont( m_font );
-    painter.setBrush( background() );
-    painter.drawPath( outline() );
+    if( background() )
+        background()->paint( painter, outline() );
 }
 
 void SimpleTextShape::paintDecorations(QPainter &/*painter*/, const KoViewConverter &/*converter*/, const KoCanvasBase * /*canvas*/)

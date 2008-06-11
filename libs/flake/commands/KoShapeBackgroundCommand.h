@@ -28,6 +28,7 @@
 #include <QBrush>
 
 class KoShape;
+class KoShapeBackground;
 
 /// The undo / redo command for setting the shape background
 class FLAKE_EXPORT KoShapeBackgroundCommand : public QUndoCommand {
@@ -38,7 +39,7 @@ public:
      * @param brush the new background brush
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand( const QList<KoShape*> &shapes, const QBrush &brush, QUndoCommand *parent = 0 );
+    KoShapeBackgroundCommand( const QList<KoShape*> &shapes, KoShapeBackground * fill, QUndoCommand *parent = 0 );
 
      /**
      * Command to set a new shape background.
@@ -46,7 +47,7 @@ public:
      * @param brush the new background brush
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand( KoShape * shape, const QBrush &brush, QUndoCommand *parent = 0 );
+    KoShapeBackgroundCommand( KoShape * shape, KoShapeBackground * fill, QUndoCommand *parent = 0 );
 
     virtual ~KoShapeBackgroundCommand();
     /// redo the command

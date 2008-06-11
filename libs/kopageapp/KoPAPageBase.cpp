@@ -38,6 +38,7 @@
 #include <KoShapeStyleWriter.h>
 #include <KoXmlWriter.h>
 #include <KoViewConverter.h>
+#include <KoShapeBackground.h>
 
 KoPAPageBase::KoPAPageBase()
 : KoShapeContainer()
@@ -63,8 +64,14 @@ void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & 
     applyConversion( painter, converter );
     KoPageLayout layout = pageLayout();
     painter.setPen( Qt::black );
-    painter.setBrush( background() );
-    painter.drawRect( QRectF( 0.0, 0.0, layout.width, layout.height ) );
+
+    if( background() )
+    {
+        QPainterPath p;
+        p.addRect( QRectF( 0.0, 0.0, layout.width, layout.height ) );
+        background()->paint( painter, p );
+    }
+
     painter.restore();
 }
 
@@ -114,8 +121,15 @@ QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 
 void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
 {
-    KoShapeStyleWriter styleWriter( paContext );
-    styleWriter.saveFillStyle( style, background() );
+    KoShapeBackground * bg = background();
+    if( bg )
+        bg->fillStyle( style, paContext );
+
+    if ( paContext.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
+        style.setAutoStyleInStylesDotXml( true );
+    }
+
+    paContext.mainStyles().lookup( style, paContext.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }
 
 bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext & loadingContext )

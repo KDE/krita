@@ -28,6 +28,10 @@
 #include "KoPointerEvent.h"
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
+#include "KoShapeBackground.h"
+#include "KoColorBackground.h"
+#include "KoGradientBackground.h"
+#include "KoPatternBackground.h"
 #include "KoShapeManager.h"
 #include "KoShapeUserData.h"
 #include "KoShapeApplicationData.h"
@@ -45,6 +49,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include <KoUnit.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
@@ -75,7 +80,7 @@ public:
         detectCollision( false ),
         userData(0),
         appData(0),
-        backgroundBrush(Qt::NoBrush),
+        fill(0),
         border(0),
         me(shape),
         shadow(0)
@@ -96,6 +101,8 @@ public:
         }
         if( shadow && shadow->removeUser() == 0 )
             delete shadow;
+        if( fill && fill->removeUser() == 0 )
+            delete fill;
         qDeleteAll( eventActions );
     }
 
@@ -128,7 +135,7 @@ public:
     QSet<KoShapeManager *> shapeManagers;
     KoShapeUserData *userData;
     KoShapeApplicationData *appData;
-    QBrush backgroundBrush; ///< Stands for the background color / fill etc.
+    KoShapeBackground * fill; ///< Stands for the background color / fill etc.
     KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
     KoShape *me;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
@@ -472,9 +479,10 @@ KoShapeApplicationData *KoShape::applicationData() const {
 }
 
 bool KoShape::hasTransparency() {
-    if(d->backgroundBrush.style() == Qt::NoBrush)
+    if( ! d->fill )
         return true;
-    return !d->backgroundBrush.isOpaque();
+    else
+        return d->fill->hasTransparency();
 }
 
 KoInsets KoShape::borderInsets() const {
@@ -548,14 +556,18 @@ QList<KoEventAction *> KoShape::eventActions() const
     return d->eventActions;
 }
 
-void KoShape::setBackground ( const QBrush & brush ) {
-    d->backgroundBrush = brush;
+void KoShape::setBackground( KoShapeBackground * fill ) {
+    if(d->fill)
+        d->fill->removeUser();
+    d->fill = fill;
+    if(d->fill)
+        d->fill->addUser();
     d->shapeChanged(BackgroundChanged);
     notifyChanged();
 }
 
-QBrush KoShape::background() const {
-    return d->backgroundBrush;
+KoShapeBackground * KoShape::background() const {
+    return d->fill;
 }
 
 void KoShape::setZIndex(int zIndex) {
@@ -733,9 +745,15 @@ QString KoShape::saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) c
     if( s )
         s->fillStyle( style, context );
 
-    KoShapeStyleWriter styleWriter( context );
+    KoShapeBackground * bg = background();
+    if( bg )
+        bg->fillStyle( style, context );
 
-    return styleWriter.addFillStyle( style, background() );
+    if ( context.isSet( KoShapeSavingContext::AutoStyleInStyleXml ) ) {
+        style.setAutoStyleInStylesDotXml( true );
+    }
+
+    return context.mainStyles().lookup( style, context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }
 
 void KoShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context )
@@ -842,18 +860,28 @@ QString KoShape::getStyleProperty( const char *property, const KoXmlElement & el
     return value;
 }
 
-QBrush KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context )
+KoShapeBackground * KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString fill = getStyleProperty( "fill", element, context );
+    KoShapeBackground * bg = 0;
     if ( fill == "solid" || fill == "hatch" )
-        return KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
+        bg = new KoColorBackground();
     else if( fill == "gradient" )
-        return KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), size() );
+        bg = new KoGradientBackground( new QLinearGradient() );
     else if( fill == "bitmap" )
-        return KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), size() );
+        bg = new KoPatternBackground();
 
-    return QBrush();
+    if( ! bg )
+        return 0;
+
+    if( ! bg->loadStyle( context.odfLoadingContext(), size() ) )
+    {
+        delete bg;
+        return 0;
+    }
+
+    return bg;
 }
 
 KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context )

@@ -43,6 +43,7 @@ class QPainterPath;
 
 class KoShapeContainer;
 class KoShapeBorderModel;
+class KoShapeBackground;
 class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;
@@ -322,8 +323,7 @@ public:
      * will be able to tell if its transparent or not.
      * @param brush the brush for the background.
      */
-    void setBackground ( const QBrush & brush );
-
+    void setBackground ( KoShapeBackground * bg );
     /**
      * return the brush used to paint te background of this shape with.
      * A QBrush can have a plain color, be fully transparent or have a complex fill.
@@ -331,7 +331,7 @@ public:
      * will be able to tell if its transparent or not.
      * @return the background-brush
      */
-    QBrush background() const;
+    KoShapeBackground * background() const;
 
     /**
      * Returns true if there is some transparency, false if the shape is fully opaque.
@@ -397,7 +397,7 @@ public:
      * @return current printable state of this shape.
      */
     bool isPrintable() const;
-    
+
     /**
      * Makes it possible for the user to select this shape.
      * This parameter defaults to true.
@@ -799,7 +799,8 @@ protected:
     virtual void loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context );
 
     /// Loads the fill style
-    QBrush loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
+    //QBrush loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
+    KoShapeBackground * loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
 
     /// Loads the stroke style
     KoShapeBorderModel * loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context );

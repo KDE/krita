@@ -163,6 +163,8 @@ double KoUnit::parseValue( const QString& _value, double defaultVal )
     int firstLetter = -1;
     for (int i = 0; i < value.length(); ++i ) {
         if (value.at(i).isLetter()) {
+            if( value.at(i) == 'e' )
+                continue;
             firstLetter = i;
             break;
         }

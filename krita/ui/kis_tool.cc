@@ -347,6 +347,9 @@ void KisTool::mouseReleaseEvent( KoPointerEvent *event ) {
 
 void KisTool::setupPainter(KisPainter * painter)
 {
+    Q_ASSERT(currentImage());
+    if (!currentImage()) return;
+
     painter->setBounds( currentImage()->bounds() );
     painter->setPaintColor(currentFgColor());
     painter->setBackgroundColor(currentBgColor());

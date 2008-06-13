@@ -22,7 +22,7 @@
 class KoShapeBorderModel::Private {
 public:
     Private() : refCount(0) { }
-    int refCount;
+    QAtomicInt refCount;
 };
 
 KoShapeBorderModel::KoShapeBorderModel()
@@ -42,11 +42,11 @@ KoInsets KoShapeBorderModel::borderInsets(const KoShape *shape) {
 }
 
 void KoShapeBorderModel::addUser() {
-    d->refCount++;
+    d->refCount.ref();
 }
 
-int KoShapeBorderModel::removeUser() {
-    return --d->refCount;
+bool KoShapeBorderModel::removeUser() {
+    return d->refCount.deref();
 }
 
 int KoShapeBorderModel::useCount() const {

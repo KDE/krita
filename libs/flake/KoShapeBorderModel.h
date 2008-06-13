@@ -83,7 +83,7 @@ public:
     /// refcounting
     void addUser();
     /// refcounting
-    int removeUser();
+    bool removeUser();
     /// refcounting
     int useCount() const;
 

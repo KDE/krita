@@ -24,6 +24,7 @@
 #include "KoPathShape.h"
 #include <KoGenStyle.h>
 #include <QtGui/QPainter>
+#include <QtCore/QAtomicInt>
 
 class KoShapeShadow::Private
 {
@@ -35,7 +36,7 @@ public:
     QPointF offset;
     QColor color;
     bool visible;
-    int refCount;
+    QAtomicInt refCount;
 };
 
 KoShapeShadow::KoShapeShadow()
@@ -127,12 +128,12 @@ void KoShapeShadow::insets( const KoShape *shape, KoInsets &insets )
 
 void KoShapeShadow::addUser()
 {
-    d->refCount++;
+    d->refCount.ref();
 }
 
-int KoShapeShadow::removeUser()
+bool KoShapeShadow::removeUser()
 {
-    return --d->refCount;
+    return d->refCount.deref();
 }
 
 int KoShapeShadow::useCount() const

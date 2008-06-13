@@ -83,7 +83,7 @@ public:
     /// Increase reference counter
     void addUser();
     /// Decrease reference counter
-    int removeUser();
+    bool removeUser();
     /// Return reference counter
     int useCount() const;
 

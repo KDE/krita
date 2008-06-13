@@ -19,11 +19,13 @@
 
 #include "KoShapeBackground.h"
 
+#include <QtCore/QAtomicInt>
+
 class KoShapeBackground::Private
 {
 public:
     Private() : refCount(0) { }
-    int refCount;
+    QAtomicInt refCount;
 };
 
 KoShapeBackground::KoShapeBackground()
@@ -43,12 +45,12 @@ bool KoShapeBackground::hasTransparency()
 
 void KoShapeBackground::addUser()
 {
-    d->refCount++;
+    d->refCount.ref();
 }
 
-int KoShapeBackground::removeUser()
+bool KoShapeBackground::removeUser()
 {
-    return --d->refCount;
+    return d->refCount.deref();
 }
 
 int KoShapeBackground::useCount() const

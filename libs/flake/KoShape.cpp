@@ -94,14 +94,11 @@ public:
             manager->remove(me);
         delete userData;
         delete appData;
-        if(border) {
-            border->removeUser();
-            if(border->useCount() == 0)
-                delete border;
-        }
-        if( shadow && shadow->removeUser() == 0 )
+        if( border && ! border->removeUser() )
+            delete border;
+        if( shadow && ! shadow->removeUser() )
             delete shadow;
-        if( fill && fill->removeUser() == 0 )
+        if( fill && ! fill->removeUser() )
             delete fill;
         qDeleteAll( eventActions );
     }

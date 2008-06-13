@@ -74,7 +74,7 @@ public: // KoCanvasBase implementation
     bool snapToGrid() const;
 
     void addCommand(QUndoCommand *command);
-    
+
     virtual void startMacro(const QString &title);
     virtual void stopMacro();
 
@@ -163,6 +163,8 @@ private slots:
     void slotSetDisplayProfile( const KoColorProfile * profile );
 
 private:
+
+friend class KisView2;
 
     void resetCanvas();
 

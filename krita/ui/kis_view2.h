@@ -160,7 +160,7 @@ public:  // Krita specific interfaces
     void disconnectCurrentImage();
 
     virtual KoPrintJob * createPrintJob();
-    
+
     KisGridManager * gridManager();
     KisPerspectiveGridManager* perspectiveGridManager();
 
@@ -171,7 +171,7 @@ private slots:
     void slotPreferences();
     void slotEditPalette();
     void slotSetImageSize( qint32 w, qint32 h );
-
+    void slotTotalRefresh();
 private:
 
 

@@ -153,7 +153,7 @@ public:
     KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
-    QAction * fullScreen;
+    QAction * totalRefresh;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisBirdEyeBox * birdEyeBox;
@@ -170,6 +170,12 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     : KoView(doc, parent),
     m_d(new KisView2Private())
 {
+
+    m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
+    actionCollection()->addAction("total_refresh", m_d->totalRefresh );
+    m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
+    connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
+
 
     // XXX: This state is taken from a kritarc where the docker constellation was configured by hand to look
     //      like the krita 1.6 configuration. Setting this state if none is present seems to work, but there's
@@ -460,7 +466,7 @@ void KisView2::createGUI()
 {
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools( actionCollection(), m_d->canvasController );
-    
+
     // Remove the plugin dock widgets
     QList<QDockWidget*> dockWidgets = shell()->dockWidgets();
     foreach( QDockWidget * dockWidget, dockWidgets ) {
@@ -479,7 +485,7 @@ void KisView2::createGUI()
 
     KisPaletteDockerFactory paletteDockerFactory(this);
     createDockWidget( &paletteDockerFactory );
-   
+
     KoColorDockerFactory colorDockerFactory;
     createDockWidget( &colorDockerFactory );
 
@@ -501,7 +507,7 @@ void KisView2::createGUI()
     if (birdEyeBox != 0 && toolBox != 0) {
         shell()->tabifyDockWidget(birdEyeBox, toolBox);
     }
-    
+
     if (colorDocker != 0 && paletteDocker != 0 && strokeDocker != 0) {
         shell()->tabifyDockWidget(colorDocker, paletteDocker);
         shell()->tabifyDockWidget(paletteDocker, strokeDocker);
@@ -521,7 +527,7 @@ void KisView2::createGUI()
             tabBar->setFont( dockWidgetFont );
         }
     }
-    
+
     m_d->statusBar = KoView::statusBar() ? new KisStatusBar( KoView::statusBar(), this ) : 0;
     connect(m_d->canvasController, SIGNAL( documentMousePositionChanged(const QPointF & )),
             m_d->statusBar, SLOT( documentMousePositionChanged( const QPointF & ) ) );
@@ -811,6 +817,11 @@ KisPerspectiveGridManager* KisView2::perspectiveGridManager()
 KisGridManager * KisView2::gridManager()
 {
     return m_d->gridManager;
+}
+
+void KisView2::slotTotalRefresh()
+{
+    m_d->canvas->resetCanvas();
 }
 
 #include "kis_view2.moc"

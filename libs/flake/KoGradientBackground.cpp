@@ -127,12 +127,15 @@ bool KoGradientBackground::loadStyle( KoOdfLoadingContext & context, const QSize
         return false;
 
     QString fillStyle = styleStack.property( KoXmlNS::draw, "fill" );
-    if ( fillStyle == "solid" || fillStyle == "hatch" )
+    if ( fillStyle == "gradient" )
     {
         QBrush brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.stylesReader(), shapeSize );
-        // TODO copy gradient here
-        d->matrix = brush.matrix();
-        return true;
+        const QGradient * gradient = brush.gradient();
+        if ( gradient ) {
+            d->gradient = cloneGradient( gradient );
+            d->matrix = brush.matrix();
+            return true;
+        }
     }
     return false;
 }

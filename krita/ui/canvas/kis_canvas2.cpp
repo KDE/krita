@@ -127,7 +127,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
         // Avoids jumping and redrawing when changing zoom means the image fits in the area completely
         controller->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         controller->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        
+
         controller->changeCanvasWidget(widget);
     }
 }
@@ -235,8 +235,6 @@ void KisCanvas2::createQPainterCanvas()
 
     KisConfig cfg;
     m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
-
-    connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), m_d->prescaledProjection, SLOT(updateSettings()));
 
     setCanvasWidget( canvasWidget );
 }

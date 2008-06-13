@@ -1,108 +1,105 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>WdgGeneralSettings</class>
-  <widget class="QWidget" name="WdgGeneralSettings" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>335</width>
-        <height>209</height>
-      </rect>
-    </property>
-    <layout class="QGridLayout" >
-      <item row="0" column="0" >
-        <layout class="QVBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
+<ui version="4.0" >
+ <class>WdgGeneralSettings</class>
+ <widget class="QWidget" name="WdgGeneralSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>335</width>
+    <height>209</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="textLabel1" >
+         <property name="text" >
+          <string>&amp;Cursor shape:</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_cmbCursorShape</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="m_cmbCursorShape" >
+         <item>
+          <property name="text" >
+           <string>Tool Icon</string>
           </property>
-          <item>
-            <layout class="QHBoxLayout" >
-              <property name="margin" >
-                <number>0</number>
-              </property>
-              <item>
-                <widget class="QLabel" name="textLabel1" >
-                  <property name="text" >
-                    <string>&amp;Cursor shape:</string>
-                  </property>
-                  <property name="buddy" stdset="0" >
-                    <cstring>m_cmbCursorShape</cstring>
-                  </property>
-                </widget>
-              </item>
-              <item>
-                <widget class="QComboBox" name="m_cmbCursorShape" >
-                  <item>
-                    <property name="text" >
-                      <string>Tool Icon</string>
-                    </property>
-                  </item>
-                  <item>
-                    <property name="text" >
-                      <string>Crosshair</string>
-                    </property>
-                  </item>
-                  <item>
-                    <property name="text" >
-                      <string>Arrow</string>
-                    </property>
-                  </item>
-                  <item>
-                    <property name="text" >
-                      <string>Brush Outline</string>
-                    </property>
-                  </item>
-                </widget>
-              </item>
-            </layout>
-          </item>
-        </layout>
-      </item>
-      <item row="0" column="1" >
-        <spacer name="spacer1" >
-          <property name="sizeHint" >
-            <size>
-              <width>41</width>
-              <height>20</height>
-            </size>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Crosshair</string>
           </property>
-          <property name="sizeType" >
-            <enum>Expanding</enum>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Arrow</string>
           </property>
-          <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Brush Outline</string>
           </property>
-        </spacer>
-      </item>
-      <item row="1" column="0" >
-        <spacer name="spacer2" >
-          <property name="sizeHint" >
-            <size>
-              <width>20</width>
-              <height>41</height>
-            </size>
-          </property>
-          <property name="sizeType" >
-            <enum>Expanding</enum>
-          </property>
-          <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-          </property>
-        </spacer>
-      </item>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <customwidgets>
-	  <customwidget>
-		  <class>KIntNumInput</class>
-		  <extends>QWidget</extends>
-		  <header>knuminput.h</header>
-		  <container>1</container>
-		  <pixmap></pixmap>
-	  </customwidget>
-  </customwidgets>
+   </item>
+   <item row="0" column="1" >
+    <spacer name="spacer1" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>41</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QCheckBox" name="chkShowRootLayer" >
+     <property name="text" >
+      <string>Show root layer</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <spacer name="spacer2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>41</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <resources/>
+ <connections/>
 </ui>

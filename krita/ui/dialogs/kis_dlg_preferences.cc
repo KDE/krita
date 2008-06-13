@@ -80,6 +80,7 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
     KisConfig cfg;
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
+    chkShowRootLayer->setChecked(cfg.showRootLayer());
 }
 
 void GeneralTab::setDefault()
@@ -87,7 +88,7 @@ void GeneralTab::setDefault()
     KisConfig cfg;
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
-
+    chkShowRootLayer->setChecked(false);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -95,6 +96,10 @@ enumCursorStyle GeneralTab::cursorStyle()
     return (enumCursorStyle)m_cmbCursorShape->currentIndex();
 }
 
+bool GeneralTab::showRootLayer()
+{
+    return chkShowRootLayer->isChecked();
+}
 
 //---------------------------------------------------------------------------------------------------
 
@@ -453,7 +458,7 @@ bool PreferencesDialog::editPreferences()
     {
         KisConfig cfg;
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
-
+        cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         // Color settings
         cfg.setMonitorProfile( dialog->m_colorSettings->m_page->cmbMonitorProfile->currentText());
         cfg.setWorkingColorSpace( dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentText());

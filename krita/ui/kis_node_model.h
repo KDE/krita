@@ -73,6 +73,7 @@ private slots:
     void endInsertNodes( KisNode * parent, int index );
     void beginRemoveNodes( KisNode * parent, int index );
     void endRemoveNodes( KisNode * parent, int index );
+    void updateSettings();
 
 private:
 

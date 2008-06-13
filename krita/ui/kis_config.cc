@@ -597,3 +597,13 @@ void KisConfig::setNoXRender( bool noXRender )
 {
     m_cfg.writeEntry( "NoXRender",  noXRender );
 }
+
+bool KisConfig::showRootLayer()
+{
+    return m_cfg.readEntry("ShowRootLayer", false);
+}
+
+void KisConfig::setShowRootLayer( bool showRootLayer )
+{
+    m_cfg.writeEntry("ShowRootLayer", showRootLayer);
+}

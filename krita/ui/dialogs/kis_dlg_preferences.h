@@ -58,7 +58,7 @@ public:
     GeneralTab( QWidget *parent = 0, const char *name = 0 );
 
     enumCursorStyle cursorStyle();
-
+    bool showRootLayer();
     void setDefault();
 
 };

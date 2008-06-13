@@ -22,22 +22,25 @@
 
 #include <QMimeData>
 
-
+#include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_node.h"
 #include "kis_image.h"
 #include "kis_selection.h"
-
 
 class KisNodeModel::Private
 {
 public:
     KisImageSP image;
+    bool showRootLayer;
 };
 
 KisNodeModel::KisNodeModel( QObject * parent )
     : KoDocumentSectionModel( parent )
     , m_d( new Private )
 {
+    updateSettings();
+    connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
 }
 
 KisNodeModel::~KisNodeModel()
@@ -97,8 +100,14 @@ QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
         return createIndex(row, 0, ( void* )node.data());
     }
     else {
+        if (m_d->showRootLayer) {
         // if no parent then it is the root layer
         return createIndex(0, 0, ( void* )node.data());
+        }
+        else {
+            return QModelIndex();
+        }
+
     }
 }
 
@@ -110,13 +119,21 @@ int KisNodeModel::rowCount(const QModelIndex &parent) const
     if (!parent.isValid()) {
         if( m_d->image )
         {
-            return 1; // <- this means that it is the "parent" of the root
+            if (m_d->showRootLayer) {
+                return 1; // <- this means that it is the "parent" of the root
+            }
+            else {
+                if (m_d->image && m_d->image->root()) {
+                    //dbgUI <<"Root node:" << m_d->image->root() <<", childcount:" << m_d->image->root()->childCount();;  the root
+                    return m_d->image->root()->childCount();
+                }
+            }
         }
     }
     else  {
         return static_cast<KisNode*>(parent.internalPointer())->childCount();
     }
-    
+
     return 0;
 }
 
@@ -135,16 +152,23 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
         return QModelIndex();
     }
     KisNodeSP parentNode;
-    
+
     if (!parent.isValid())
     {
-        Q_ASSERT(row == 0);
-        if( m_d->image)
-        {
-            //dbgUI << "root, row: " << row << ", node: " << m_d->image->root();
-            return indexFromNode( m_d->image->root() );
-        } else {
-            return QModelIndex();
+        if (m_d->showRootLayer) {
+            Q_ASSERT(row == 0);
+            if( m_d->image)
+            {
+                //dbgUI << "root, row: " << row << ", node: " << m_d->image->root();
+                return indexFromNode( m_d->image->root() );
+            } else {
+                return QModelIndex();
+            }
+        }
+        else {
+            int rowCount = m_d->image->root()->childCount() - 1;
+            //dbgUI << "row count: " << rowCount << ", row: " << row << ", node: " << m_d->image->root()->at( rowCount - row );
+            return indexFromNode( m_d->image->root()->at( rowCount - row ) );
         }
 
     }
@@ -176,12 +200,18 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 
     // If the parent is the root node, we want to return an invalid
     // parent, because the qt model shouldn't know about our root node.
-    if ( p ) {
-        //dbgUI <<"parent node:" << p <<", name:" << p->name() <<", parent:" << p->parent();
-        return indexFromNode( p );
+    if (m_d->showRootLayer) {
+        if (p) {
+            return indexFromNode(p);
+        }
     }
-    else
-        return QModelIndex();
+    else {
+        if (p && p->parent().data() ) {
+           //dbgUI <<"parent node:" << p <<", name:" << p->name() <<", parent:" << p->parent();
+            return indexFromNode( p );
+        }
+    }
+    return QModelIndex();
 
 }
 
@@ -242,7 +272,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     bool wasVisible;
     bool visible;
     PropertyList proplist;
-    
+
     switch (role)
     {
         case Qt::DisplayRole:
@@ -277,7 +307,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 void KisNodeModel::beginInsertNodes( KisNode * parent, int index )
 {
     //dbgUI <<"KisNodeModel::beginInsertNodes parent=" << parent << ", childcount: " << parent->childCount() << ", index=" << index;
-    
+
     beginInsertRows( indexFromNode( parent ), parent->childCount() - index, parent->childCount() - index );
 }
 
@@ -331,6 +361,8 @@ QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 
 bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 {
+    Q_UNUSED(row);
+    Q_UNUSED(column);
     //dbgUI <<"KisNodeModel::dropMimeData";
     dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
     if(! data->hasFormat( "application/x-kritalayermodeldatalist" ))
@@ -347,8 +379,8 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
         stream >> v;
         nodes.push_back( static_cast<KisNode*>( (void*)v.value<qulonglong>() ) );
     }
-    
-    
+
+
 /*    QByteArray encoded = data->data(format);
     QDataStream stream(&encoded, QIODevice::ReadOnly);*/
     if(action == Qt::CopyAction)
@@ -378,5 +410,11 @@ Qt::DropActions KisNodeModel::supportedDragActions () const
   return Qt::CopyAction | Qt::MoveAction;
 }
 
+void KisNodeModel::updateSettings()
+{
+    KisConfig cfg;
+    m_d->showRootLayer = cfg.showRootLayer();
+    reset();
+}
 
 #include "kis_node_model.moc"

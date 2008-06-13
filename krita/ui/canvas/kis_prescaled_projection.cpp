@@ -226,6 +226,7 @@ KisPrescaledProjection::KisPrescaledProjection()
 {
     updateSettings();
     connect( &m_d->smoothingTimer, SIGNAL( timeout() ), this, SLOT( slotDoSmoothScale() ) );
+    connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
 }
 
 KisPrescaledProjection::~KisPrescaledProjection()
@@ -358,7 +359,7 @@ void KisPrescaledProjection::documentOffsetMoved( const QPoint &documentOffset )
 
         qint32 deltaX =  oldCanvasXOffset - m_d->documentOffset.x();
         qint32 deltaY = oldCanvasYOffset - m_d->documentOffset.y();
-    
+
         dbgRender << "deltaX: " << deltaX << ", deltaY: " << deltaY;
         if( qAbs(deltaX) < width && qAbs(deltaY) < height)
         {
@@ -369,7 +370,7 @@ void KisPrescaledProjection::documentOffsetMoved( const QPoint &documentOffset )
 #else
             gc.drawImage( deltaX, deltaY, m_d->prescaledQImage);
 #endif
-        
+
             dbgRender << "exposedRegion: " << exposedRegion;
             dbgRender << "Preexistant data: " << QRegion(QRect( deltaX, deltaY, width , height ));
             exposedRegion -= QRegion(QRect( deltaX, deltaY, width , height ));
@@ -377,9 +378,9 @@ void KisPrescaledProjection::documentOffsetMoved( const QPoint &documentOffset )
         }
         dbgRender << "exposedRegion: " << exposedRegion;
         if (!exposedRegion.isEmpty()) {
-    
+
             QVector<QRect> rects = exposedRegion.rects();
-    
+
             for (int i = 0; i < rects.count(); i++) {
                 QRect r = rects[i];
                 // Set the areas to empty. Who knows, there may be not
@@ -510,7 +511,7 @@ void KisPrescaledProjection::resizePrescaledImage( const QSize & newSize )
                       0, 0, m_d->prescaledQImage.width(), m_d->prescaledQImage.height() );
     }
 #endif
-    
+
 #if 1
     m_d->prescaledQImage = img;
     m_d->canvasSize = newSize;
@@ -570,12 +571,12 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
                          (alignedImageRect.right() + 1.0 ) / xRes, (alignedImageRect.bottom() + 1.0 ) / yRes );
     m_d->viewConverter->documentToViewY( rcFromAligned.height() );
     rcFromAligned = m_d->viewConverter->documentToView( rcFromAligned ).translated( -m_d->documentOffset) ;
-    
+
     // Apparently we have never before tried to draw the image
     if ( m_d->cacheKisImageAsQImage && m_d->unscaledCache.isNull() ) {
         updateUnscaledCache( alignedImageRect );
     }
-    
+
 #if 0
     dbgRender << "#####################################";
     dbgRender << " xRed = " << xRes << " yRes = " << yRes;
@@ -594,7 +595,7 @@ void KisPrescaledProjection::drawScaledImage( const QRect & rc,  QPainter & gc, 
     dbgRender << " dstSize = " << dstSize;
     dbgRender << "#####################################";
 #endif
-    
+
     QPointF rcTopLeftUnscaled( rcFromAligned.topLeft().x() / scaleX, rcFromAligned.topLeft().y() / scaleY );
     // And now for deciding what to do and when -- the complicated bit
     if ( scaleX > 1.0 - EPSILON && scaleY > 1.0 - EPSILON ) {
@@ -710,7 +711,7 @@ QRect KisPrescaledProjection::viewRectFromImagePixels( const QRect & rc )
     docRect.setCoords((rc.left() - 2) / xRes, (rc.top() - 2) / yRes, (rc.right() + 2) / xRes, (rc.bottom() + 2) / yRes);
 
     Q_ASSERT(m_d->viewConverter);
-    
+
     QRect viewRect = m_d->viewConverter->documentToView(docRect).toAlignedRect();
     viewRect = viewRect.translated( -m_d->documentOffset );
     viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasSize.width(), m_d->canvasSize.height() ) );

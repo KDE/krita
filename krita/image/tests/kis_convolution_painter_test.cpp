@@ -90,7 +90,7 @@ void KisConvolutionPainterTest::testIdentityConvolutionOnColorChannels()
         
     QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, qimg, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
-        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("identity_convolution_channelflags.png");
+        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("identity_convolution_identity_on_colorchannels.png");
         QFAIL( QString( "Identity kernel did change image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 }
@@ -110,7 +110,7 @@ void KisConvolutionPainterTest::testMaskConvolution()
     QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("mask_conv.png");
-        QFAIL( QString( "Identity kernel did change image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+        QFAIL( QString( "Mask kernel failed, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 }
 
@@ -130,7 +130,7 @@ void KisConvolutionPainterTest::testMaskConvolutionOnColorChannels()
     QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("mask_conv_channelflags.png");
-        QFAIL( QString( "Identity kernel did change image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+        QFAIL( QString( "Mask on color channels failed, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 }
 
@@ -156,7 +156,7 @@ void KisConvolutionPainterTest::testMaskConvolutionOnRedChannel()
     QPoint errpoint;
     if ( !TestUtil::compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("mask_conv_red.png");
-        QFAIL( QString( "Identity kernel did change image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+        QFAIL( QString( "Mask on red channel, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
     }
 }
 QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)

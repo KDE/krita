@@ -57,7 +57,7 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
 
         switch ( m_type ) {
         case Arc:
-            context.xmlWriter().addAttribute( "draw:kind", sweepAngle()==360 ? "full" : "section" );
+            context.xmlWriter().addAttribute( "draw:kind", sweepAngle()==360 ? "full" : "arc" );
             break;
         case Pie:
             context.xmlWriter().addAttribute( "draw:kind", "section" );

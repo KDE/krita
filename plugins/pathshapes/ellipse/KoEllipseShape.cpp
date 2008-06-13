@@ -55,23 +55,19 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
         context.xmlWriter().startElement("draw:ellipse");
         saveOdfAttributes( context, OdfAllAttributes );
 
-        char * kind = "full";
-        switch ( m_type )
-        {
-            case Arc:
-                if ( sweepAngle() != 360 )
-                {
-                    kind = "arc";
-                }
-                break;
-            case Pie:
-                kind = "section";
-                break;
-            case Chord:
-                kind = "cut";
-                break;
+        switch ( m_type ) {
+        case Arc:
+            context.xmlWriter().addAttribute( "draw:kind", sweepAngle()==360 ? "full" : "section" );
+            break;
+        case Pie:
+            context.xmlWriter().addAttribute( "draw:kind", "section" );
+            break;
+        case Chord:
+            context.xmlWriter().addAttribute( "draw:kind", "cut" );
+            break;
+        default:
+            context.xmlWriter().addAttribute( "draw:kind", "full" );
         }
-        context.xmlWriter().addAttribute( "draw:kind", kind );
         context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
         context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
         saveOdfCommonChildElements( context );

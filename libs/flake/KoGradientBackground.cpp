@@ -37,19 +37,58 @@ public:
     {
         delete gradient;
     }
+    QGradient * cloneGradient( const QGradient * gradient ) const
+    {
+        if( ! gradient )
+            return 0;
+
+        QGradient * clone = 0;
+
+        switch( gradient->type() )
+        {
+            case QGradient::LinearGradient:
+            {
+                const QLinearGradient * lg = static_cast<const QLinearGradient*>( gradient );
+                clone = new QLinearGradient( lg->start(), lg->finalStop() );
+                break;
+            }
+            case QGradient::RadialGradient:
+            {
+                const QRadialGradient * rg = static_cast<const QRadialGradient*>( gradient );
+                clone = new QRadialGradient( rg->center(), rg->radius(), rg->focalPoint() );
+                break;
+            }
+            case QGradient::ConicalGradient:
+            {
+                const QConicalGradient * cg = static_cast<const QConicalGradient*>( gradient );
+                clone = new QConicalGradient( cg->center(), cg->angle() );
+                break;
+            }
+            default:
+                return 0;
+        }
+
+        clone->setSpread( gradient->spread() );
+        clone->setStops( gradient->stops() );
+
+        return clone;
+    }
+
     QGradient * gradient;
     QMatrix matrix;
 };
 
 KoGradientBackground::KoGradientBackground( QGradient * gradient )
-    : d( new Private( gradient ) )
+    : d( new Private( 0 ) )
 {
+    d->gradient = d->cloneGradient( gradient );
     Q_ASSERT(d->gradient);
 }
 
 KoGradientBackground::KoGradientBackground( const QGradient & gradient )
-    : d( new Private( cloneGradient( &gradient ) ) )
+    : d( new Private( 0 ) )
 {
+    d->gradient = d->cloneGradient( &gradient );
     Q_ASSERT(d->gradient);
 }
 
@@ -82,7 +121,7 @@ void KoGradientBackground::setGradient( const QGradient & gradient )
     if( d->gradient )
         delete d->gradient;
 
-    d->gradient = cloneGradient( &gradient );
+    d->gradient = d->cloneGradient( &gradient );
     Q_ASSERT(d->gradient);
 }
 
@@ -98,7 +137,7 @@ KoGradientBackground& KoGradientBackground::operator = ( const KoGradientBackgro
 
     d->matrix = rhs.d->matrix;
     delete d->gradient;
-    d->gradient = cloneGradient( rhs.d->gradient );
+    d->gradient = d->cloneGradient( rhs.d->gradient );
     Q_ASSERT( d->gradient );
 
     return *this;
@@ -132,47 +171,10 @@ bool KoGradientBackground::loadStyle( KoOdfLoadingContext & context, const QSize
         QBrush brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.stylesReader(), shapeSize );
         const QGradient * gradient = brush.gradient();
         if ( gradient ) {
-            d->gradient = cloneGradient( gradient );
+            d->gradient = d->cloneGradient( gradient );
             d->matrix = brush.matrix();
             return true;
         }
     }
     return false;
-}
-
-QGradient * KoGradientBackground::cloneGradient( const QGradient * gradient ) const
-{
-    if( ! gradient )
-        return 0;
-
-    QGradient * clone = 0;
-
-    switch( gradient->type() )
-    {
-        case QGradient::LinearGradient:
-        {
-            const QLinearGradient * lg = static_cast<const QLinearGradient*>( gradient );
-            clone = new QLinearGradient( lg->start(), lg->finalStop() );
-            break;
-        }
-        case QGradient::RadialGradient:
-        {
-            const QRadialGradient * rg = static_cast<const QRadialGradient*>( gradient );
-            clone = new QRadialGradient( rg->center(), rg->radius(), rg->focalPoint() );
-            break;
-        }
-        case QGradient::ConicalGradient:
-        {
-            const QConicalGradient * cg = static_cast<const QConicalGradient*>( gradient );
-            clone = new QConicalGradient( cg->center(), cg->angle() );
-            break;
-        }
-        default:
-            return 0;
-    }
-
-    clone->setSpread( gradient->spread() );
-    clone->setStops( gradient->stops() );
-
-    return clone;
 }

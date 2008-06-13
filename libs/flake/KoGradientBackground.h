@@ -26,6 +26,7 @@
 #include <QtGui/QMatrix>
 #include <QtGui/QGradient>
 
+/// A gradient shape background
 class FLAKE_EXPORT KoGradientBackground : public KoShapeBackground
 {
 public:
@@ -76,7 +77,6 @@ public:
     virtual bool loadStyle( KoOdfLoadingContext & context, const QSizeF &shapeSize );
 
 private:
-    QGradient * cloneGradient( const QGradient * gradient ) const;
     class Private;
     Private * const d;
 };

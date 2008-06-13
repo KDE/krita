@@ -26,17 +26,21 @@
 
 class QColor;
 
+/// A simple solid color shape background
 class FLAKE_EXPORT KoColorBackground : public KoShapeBackground
 {
 public:
     KoColorBackground();
+
+    /// Creates background from given color and style
     KoColorBackground( const QColor &color, Qt::BrushStyle style = Qt::SolidPattern );
+
     virtual ~KoColorBackground();
 
     /// Returns the background color
     QColor color() const;
 
-    /// Returns the brush style
+    /// Returns the background style
     Qt::BrushStyle style() const;
 
     // reimplemented from KoShapeBackground

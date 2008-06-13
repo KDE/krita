@@ -24,11 +24,15 @@
 #include "flake_export.h"
 #include <QtGui/QMatrix>
 
+/// A pattern shape background
 class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
 {
 public:
     KoPatternBackground();
+
+    /// Creates new pattern background with the given pattern image
     KoPatternBackground( const QImage &pattern );
+
     virtual ~KoPatternBackground();
 
     /// Sets the transform matrix

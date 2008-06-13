@@ -29,6 +29,11 @@ class KoGenStyle;
 class KoShapeSavingContext;
 class KoOdfLoadingContext;
 
+/**
+ * This is the base class for shape backgrounds.
+ * Derived classes are used to paint the background of
+ * a shape within a given painter path.
+ */
 class FLAKE_EXPORT KoShapeBackground
 {
 public:

@@ -61,6 +61,7 @@
 //   // qt includes
 #include <QDockWidget>
 #include <QApplication>
+#include <QLayout>
 #include <QProgressBar>
 #include <QSplitter>
 #include <QtGui/QPrinter>
@@ -1870,6 +1871,9 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent( this );
+
+        if(dockWidget->widget() && dockWidget->widget()->layout())
+            dockWidget->widget()->layout()->setContentsMargins(1,1,1,1);
 
         Qt::DockWidgetArea side = Qt::RightDockWidgetArea;
         bool visible = true;

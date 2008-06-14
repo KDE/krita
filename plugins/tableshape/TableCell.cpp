@@ -65,7 +65,7 @@ KoShape * TableCell::createShape( const QString & shapeId )
     KoShapeFactory * factory = KoShapeRegistry::instance()->get(shapeId);
     if (!factory) return 0;
 
-    KoShape * shape = factory->createDefaultShape( 0 );
+    KoShape * shape = factory->createDefaultShapeAndInit( 0 );
     d->shape = shape;
 
     return d->shape;

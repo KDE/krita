@@ -37,7 +37,6 @@
 #include <KoShape.h>
 #include <KoUnit.h>
 
-#include <kdeversion.h>
 #include <KDebug>
 #include <QTextList>
 #include <QStyle>
@@ -358,12 +357,11 @@ bool Layout::nextParag()
     else
         option.setTabStop (m_defaultTabSizing);
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     // tabs
     QList<QTextOption::Tab> tabs;
     QList<KoText::Tab> koTabs;
     QVariant variant = m_format.property(KoParagraphStyle::TabPositions);
-    if(! variant.isNull())
+    if(! variant.isNull()) {
         foreach(QVariant tv, qvariant_cast<QList<QVariant> >(variant)) {
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
@@ -372,8 +370,8 @@ bool Layout::nextParag()
             tab.delimiter = koTab.delimiter;
             tabs.append(tab);
         }
+    }
     option.setTabs(tabs);
-#endif
 
     option.setAlignment( QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, m_format.alignment()) );
     if(m_isRtl)

@@ -50,7 +50,8 @@ private:
 
     Q_PRIVATE_SLOT(d, void canvasResourceChanged(int))
     Q_PRIVATE_SLOT(d, void indentsChanged())
-    Q_PRIVATE_SLOT(d, void tabsChanged(bool))
+    Q_PRIVATE_SLOT(d, void tabChanged(int,KoRuler::Tab *tab));
+    Q_PRIVATE_SLOT(d, void tabChangeInitiated());
 };
 
 #endif

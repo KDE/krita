@@ -40,6 +40,10 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
+static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2) {
+    return tab1.position < tab2.position;
+}
+
 class KoParagraphStyle::Private {
 public:
     Private() : charStyle(0), listStyle(0), parent(0), next(0), stylesPrivate(0) {}
@@ -1249,7 +1253,8 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
 }
 
 void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs) {
-    // TODO sort on position
+    QList<KoText::Tab> newTabs = tabs;
+    qSort(newTabs.begin(), newTabs.end(), compareTabs);
     QList<QVariant> list;
     foreach(KoText::Tab tab, tabs) {
         QVariant v;

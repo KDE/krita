@@ -29,7 +29,6 @@
 
 
 #include "koguiutils_export.h"
-#include <kdeversion.h>
 #include <KoUnit.h>
 
 #include <QWidget>
@@ -57,23 +56,10 @@ public:
         KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter);
         ~KoRuler();
 
-#if QT_VERSION < KDE_MAKE_VERSION(4,4,0) // remove when 4.4 is mandatory
-        /// enum for a type of tabulator used
-        enum TabType {
-            LeftTab,        ///< A left-tab
-            RightTab,       ///< A right-tab
-            CenterTab,      ///< A centered-tab
-            DelimiterTab    ///< A tab stopping at a certain delimiter-character
-        };
-#endif
-
         /// For paragraphs each tab definition is represented by this struct.
         struct Tab {
             double position;    ///< distance in point from the start of the text-shape
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-        QTextOption::
-#endif
-            TabType type;       ///< Determine which type is used.
+            QTextOption::TabType type;       ///< Determine which type is used.
         };
 
         /// The ruler's unit
@@ -230,11 +216,16 @@ signals:
          */
         void indentsChanged(bool final);
 
-        /**
-         * emitted when any of the tabs is moved, deleted or inserted by the user.
-         * @param final false until the user releases the mouse. So you can implement live update.
-         */
-        void tabsChanged(bool final);
+    /**
+     * Emitted when any of the tabs are moved, deleted or inserted by the user.
+     * @param originalTabIndex the index in the list of tabs before the user interaction
+     *          started, or -1 if this is a new tab
+     * @param tab the new tab, or zero when the tab has been removed.
+     */
+    void tabChanged(int originalTabIndex, KoRuler::Tab *tab);
+
+    /// emitted when there the user is about to change a tab or hotspot
+    void aboutToChange();
 
     void hotSpotChanged(int id, qreal newPosition);
 
@@ -248,7 +239,8 @@ protected:
 
 
 private:
-        KoRulerPrivate * const d;
+    KoRulerPrivate * const d;
+    friend class KoRulerPrivate;
 };
 
 #endif

@@ -54,24 +54,11 @@ namespace KoText {
         SelectedTextAnchor = 3344189
     };
 
-#if QT_VERSION < KDE_MAKE_VERSION(4,4,0) // remove when 4.4 is mandatory
-    /// enum for a type of tabulator used
-    enum TabType {
-        LeftTab,        ///< A left-tab
-        RightTab,       ///< A right-tab
-        CenterTab,      ///< A centered-tab
-        DelimiterTab    ///< A tab stopping at a certain delimiter-character
-    };
-#endif
-
     /// For paragraphs each tab definition is represented by this struct.
     struct KOTEXT_EXPORT Tab {
         Tab();
         double position;    ///< distance in point from the start of the text-shape
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-        QTextOption::
-#endif
-        TabType type;       ///< Determine which type is used.
+        QTextOption::TabType type;       ///< Determine which type is used.
         QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
         KoCharacterStyle::LineType leaderType; // none/single/double
         KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...

@@ -36,7 +36,6 @@
 
 #include <KoViewConverter.h>
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
 void RulerTabChooser::mousePressEvent(QMouseEvent *)
 {
     switch(m_type) {
@@ -97,7 +96,6 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
         break;
     }
 }
-#endif
 
 static int compareTabs(KoRuler::Tab &tab1, KoRuler::Tab &tab2) {
     return tab1.position < tab2.position;
@@ -141,7 +139,6 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
 }
 
 void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &painter) {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (! d->showTabs)
         return;
     QPolygonF polygon;
@@ -189,7 +186,6 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
         }
     }
     //painter.setRenderHint( QPainter::Antialiasing, false );
-#endif
 }
 
 void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
@@ -610,6 +606,7 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     paragraphIndent(0),
     endIndent(0),
     showTabs(false),
+    originalIndex(-1),
     currentIndex(0),
     rightToLeft(false),
     selected(None),
@@ -621,10 +618,8 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     paintingStrategy(normalPaintingStrategy),
     ruler(parent)
 {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if(orientation == Qt::Horizontal)
         tabChooser = new RulerTabChooser(parent);
-#endif
 }
 
 KoRulerPrivate::~KoRulerPrivate()
@@ -916,7 +911,6 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 
     QPoint pos = ev->pos();
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (d->showTabs && pos.y() > height() - 9) {
         int i = 0;
         int x;
@@ -963,7 +957,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             i++;
         }
     }
-#endif
+    d->originalIndex = d->currentIndex;
 
     if (d->selected == KoRulerPrivate::None)
         d->selected = d->selectionAtPosition(ev->pos(), &d->selectOffset);
@@ -971,12 +965,10 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         int hotSpotIndex = d->hotSpotIndex(ev->pos());
         if (hotSpotIndex >= 0) {
             d->selected = KoRulerPrivate::HotSpot;
-            d->currentIndex = d->currentIndex;
             update();
         }
     }
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (d->showTabs && d->selected == KoRulerPrivate::None) {
         // still haven't found something so let assume the user wants to add a tab
         double tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
@@ -986,14 +978,26 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         d->selectOffset = 0;
         d->selected = KoRulerPrivate::Tab;
         d->currentIndex = d->tabs.count() - 1;
+        d->originalIndex = -1; // new!
         update();
     }
-#endif
     if (d->orientation == Qt::Horizontal && (ev->modifiers() & Qt::ShiftModifier) &&
             (d->selected == KoRulerPrivate::FirstLineIndent ||
              d->selected == KoRulerPrivate::ParagraphIndent ||
+             d->selected == KoRulerPrivate::Tab ||
              d->selected == KoRulerPrivate::EndIndent))
         d->paintingStrategy = d->distancesPaintingStrategy;
+
+    if (d->selected != KoRulerPrivate::None)
+        emit aboutToChange();
+}
+
+void KoRulerPrivate::emitTabChanged()
+{
+    KoRuler::Tab tab;
+    if (currentIndex >= 0)
+        tab = tabs[currentIndex];
+    emit ruler->tabChanged(originalIndex, currentIndex >= 0 ? &tab : 0);
 }
 
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
@@ -1003,8 +1007,9 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
     if( d->selected != KoRulerPrivate::None)
         emit indentsChanged(true);
 
-    if( d->selected == KoRulerPrivate::Tab)
-        emit tabsChanged(true);
+    if (d->selected == KoRulerPrivate::Tab) {
+        d->emitTabChanged();
+    }
 
     d->paintingStrategy = d->normalPaintingStrategy;
     d->selected = KoRulerPrivate::None;
@@ -1103,7 +1108,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             d->currentIndex = -1;
         }
 
-        emit tabsChanged(false);
+        d->emitTabChanged();
         break;
     case KoRulerPrivate::HotSpot:
         qreal newPos;

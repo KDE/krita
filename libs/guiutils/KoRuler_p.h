@@ -20,7 +20,6 @@
 #define KORULER_P_H
 
 class RulerTabChooser : public QWidget {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
 public:
     RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab) {}
     virtual ~RulerTabChooser() {}
@@ -32,7 +31,6 @@ public:
 
 private:
     QTextOption::TabType m_type;
-#endif
 };
 
 class PaintingStrategy {
@@ -90,6 +88,9 @@ class KoRulerPrivate {
 public:
     KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::Orientation orientation);
     ~KoRulerPrivate();
+
+    void emitTabChanged();
+
     KoUnit unit;
     const Qt::Orientation orientation;
     const KoViewConverter * const viewConverter;
@@ -113,7 +114,8 @@ public:
 
     bool showTabs;
     QList<KoRuler::Tab> tabs;
-    int currentIndex; //indext of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot
+    int originalIndex; //index of selected tab before we started dragging it.
+    int currentIndex; //index of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot
     KoRuler::Tab deletedTab;
 
     struct HotSpotData {

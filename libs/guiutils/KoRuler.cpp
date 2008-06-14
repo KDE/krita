@@ -606,6 +606,7 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     paragraphIndent(0),
     endIndent(0),
     showTabs(false),
+    tabMoved(false),
     originalIndex(-1),
     currentIndex(0),
     rightToLeft(false),
@@ -714,6 +715,15 @@ int KoRulerPrivate::hotSpotIndex(const QPoint & pos) {
     }
     return -1;
 }
+
+void KoRulerPrivate::emitTabChanged()
+{
+    KoRuler::Tab tab;
+    if (currentIndex >= 0)
+        tab = tabs[currentIndex];
+    emit ruler->tabChanged(originalIndex, currentIndex >= 0 ? &tab : 0);
+}
+
 
 KoRuler::KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter)
   : QWidget(parent)
@@ -901,6 +911,7 @@ QList<QAction*> KoRuler::popupActionList() const {
 
 void KoRuler::mousePressEvent ( QMouseEvent* ev )
 {
+    d->tabMoved = false;
     d->selected = KoRulerPrivate::None;
     if (ev->button() == Qt::RightButton && !d->popupActions.isEmpty())
         QMenu::exec(d->popupActions, ev->globalPos());
@@ -911,7 +922,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 
     QPoint pos = ev->pos();
 
-    if (d->showTabs && pos.y() > height() - 9) {
+    if (d->showTabs) {
         int i = 0;
         int x;
         foreach (Tab t, d->tabs) {
@@ -921,43 +932,16 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             else
                 x = int(d->viewConverter->documentToViewX(d->activeRangeStart + t.position)
                         + d->offset);
-
-            switch (t.type) {
-            case QTextOption::LeftTab:
-                if (pos.x() >= x-6 && pos.x() <= x) {
-                    d->selected = KoRulerPrivate::Tab;
-                    d->selectOffset = x - pos.x();
-                    d->currentIndex = i;
-                }
-                break;
-            case QTextOption::RightTab:
-                if (pos.x() >= x && pos.x() <= x+6) {
-                    d->selected = KoRulerPrivate::Tab;
-                    d->selectOffset = x - pos.x();
-                    d->currentIndex = i;
-                }
-                break;
-            case QTextOption::CenterTab:
-                if (pos.x() >= x-6 && pos.x() <= x+6) {
-                    d->selected = KoRulerPrivate::Tab;
-                    d->selectOffset = x - pos.x();
-                    d->currentIndex = i;
-                }
-                break;
-            case QTextOption::DelimiterTab:
-                if (pos.x() >= x-6 && pos.x() <= x+6) {
-                    d->selected = KoRulerPrivate::Tab;
-                    d->selectOffset = x - pos.x();
-                    d->currentIndex = i;
-                }
-                break;
-            default:
+            if (pos.x() >= x-6 && pos.x() <= x+6) {
+                d->selected = KoRulerPrivate::Tab;
+                d->selectOffset = x - pos.x();
+                d->currentIndex = i;
                 break;
             }
             i++;
         }
+        d->originalIndex = d->currentIndex;
     }
-    d->originalIndex = d->currentIndex;
 
     if (d->selected == KoRulerPrivate::None)
         d->selected = d->selectionAtPosition(ev->pos(), &d->selectOffset);
@@ -992,24 +976,24 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         emit aboutToChange();
 }
 
-void KoRulerPrivate::emitTabChanged()
-{
-    KoRuler::Tab tab;
-    if (currentIndex >= 0)
-        tab = tabs[currentIndex];
-    emit ruler->tabChanged(originalIndex, currentIndex >= 0 ? &tab : 0);
-}
-
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 {
-    mouseMoveEvent(ev); // handle any last movement
-
-    if( d->selected != KoRulerPrivate::None)
-        emit indentsChanged(true);
-
+    ev->accept();
     if (d->selected == KoRulerPrivate::Tab) {
+        if (d->originalIndex >= 0 && !d->tabMoved) {
+            int type = d->tabs[d->currentIndex].type;
+            type++;
+            if (type > 3)
+                type = 0;
+            d->tabs[d->currentIndex].type = static_cast<QTextOption::TabType> (type);
+            update();
+        }
         d->emitTabChanged();
     }
+    else if( d->selected != KoRulerPrivate::None)
+        emit indentsChanged(true);
+    else
+        ev->ignore();
 
     d->paintingStrategy = d->normalPaintingStrategy;
     d->selected = KoRulerPrivate::None;
@@ -1082,6 +1066,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         emit indentsChanged(false);
         break;
     case KoRulerPrivate::Tab:
+        d->tabMoved = true;
         if (d->currentIndex < 0) { // tab is deleted.
             if (ev->pos().y() < height()) { // reinstante it.
                 d->currentIndex = d->tabs.count();

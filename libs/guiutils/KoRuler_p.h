@@ -113,6 +113,7 @@ public:
     double endIndent;
 
     bool showTabs;
+    bool tabMoved; // set to true on first move of a selected tab
     QList<KoRuler::Tab> tabs;
     int originalIndex; //index of selected tab before we started dragging it.
     int currentIndex; //index of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot

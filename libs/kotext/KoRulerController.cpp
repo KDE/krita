@@ -144,6 +144,7 @@ public:
 
         if (tab) {
             currentTab.position = tab->position;
+            currentTab.type = tab->type;
             if (currentTabIndex == -2) { // add the new tab to the list, sorting in.
                 currentTabIndex = tabList.count();
                 tabList << currentTab;

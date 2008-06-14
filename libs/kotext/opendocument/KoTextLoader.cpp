@@ -187,6 +187,12 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
                     kWarning(32500) << "unhandled draw:" << localName;
                 }
             } else if( tag.namespaceURI() == KoXmlNS::table ) {
+                if ( localName == "table" ) {
+                    loadTable( tag, cursor );
+                }
+                else {
+                    kWarning(32500) << "unhandled table:" << localName;
+                }
 #if 0 // TODO commented out for now
                 if ( localName == "table" ) {
                     cursor.insertText("\n");
@@ -660,6 +666,26 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
                 kDebug(32500) <<"Node '" << localName << "' unhandled";
             }
 #endif
+        }
+    }
+}
+
+void KoTextLoader::loadTable( const KoXmlElement& tableElem, QTextCursor& cursor )
+{
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(tableElem, d->context);
+    if( !shape ) {
+        return;
+    }
+
+    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    anchor->loadOdfFromShape();
+    d->textSharedData->shapeInserted(shape);
+
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
+    if ( layout ) {
+        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+        if ( textObjectManager ) {
+            textObjectManager->insertInlineObject( cursor, anchor );
         }
     }
 }

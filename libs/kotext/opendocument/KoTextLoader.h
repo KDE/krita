@@ -105,10 +105,13 @@ private:
     void loadSpan( const KoXmlElement& element, QTextCursor& cursor, bool* stripLeadingSpace );
 
     /**
-     * Load the table from the \p element into the \p cursor. The table and its contents are placed in a
-     * new shape and 
+     * Load the table from the \p element into the \p cursor.
+     *
+     * The table and its contents are placed in a new shape.
+     */
+    void loadTable( const KoXmlElement& element, QTextCursor& cursor );
 
-    / **
+    /**
     * Load the frame element \p element into the \p cursor .
     *
     * This method does normaly something like at the example above with an

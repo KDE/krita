@@ -27,14 +27,16 @@ class Stroke {
 
 public:
 	void drawWuLine(QImage *dev, float x1, float y1, float x2, float y2, float width, const QColor &color);
+	void drawGSLine(QImage *dev, float x1, float y1, float x2, float y2, float width, const QColor &color);
+	void gupta_wide_line(QImage *pixmap, int x0, int y0,int x1, int y1, int w1, int w2);
 
 
 private:
 	int inline trunc(float value);
 	float inline frac(float value);
 	float inline invertFrac(float value);
-
-
+	int MapBrightness(float p, int thickness);
+	int gsfilter(float val);
 
 };
 

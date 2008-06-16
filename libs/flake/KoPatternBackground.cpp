@@ -49,6 +49,21 @@ public:
         delete imageData;
     }
 
+    QSizeF targetSize()
+    {
+        QSizeF size = imageData->imageSize();
+        if( targetImageSizePercent.width() > 0.0 )
+            size.setWidth( 0.01 * targetImageSizePercent.width() * size.width() );
+        else if( targetImageSize.width() > 0.0 )
+            size.setWidth( targetImageSize.width() );
+        if( targetImageSizePercent.height() > 0.0 )
+            size.setHeight( 0.01 * targetImageSizePercent.height() * size.height() );
+        else if( targetImageSize.height() > 0.0 )
+            size.setHeight( targetImageSize.height() );
+
+        return size;
+    }
+
     QMatrix matrix;
     KoPatternBackground::PatternRepeat repeat;
     KoPatternBackground::ReferencePoint refPoint;
@@ -155,7 +170,7 @@ void KoPatternBackground::paint( QPainter &painter, const QPainterPath &fillPath
     else if( d->repeat == Original )
     {
         QRectF sourceRect = QRectF( QPoint(0,0), d->imageData->pixmap().size() );
-        QRectF targetRect = QRectF( QPoint(0,0), d->imageData->imageSize() );
+        QRectF targetRect = QRectF( QPoint(0,0), d->targetSize() );
         targetRect.moveCenter( fillPath.boundingRect().center() );
         painter.setClipPath( fillPath );
         painter.drawPixmap( targetRect, d->imageData->pixmap(), sourceRect );
@@ -190,11 +205,24 @@ void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &co
             style.addProperty( "style:repeat", "stretch" );
             break;
     }
-    style.addProperty( "draw:fill-image-ref-point-x", QString("%1%").arg( d->matrix.dx()/size.width() * 100.0 ) );
-    style.addProperty( "draw:fill-image-ref-point-y", QString("%1%").arg( d->matrix.dy()/size.height() * 100.0 ) );
 
-    style.addAttribute( "draw:fill-image-height", QString("%1").arg( d->targetImageSize.height() ) );
-    style.addAttribute( "draw:fill-image-width", QString("%1").arg( d->targetImageSize.width() ) );
+    if( d->repeat == Tiled )
+    {
+        if( d->refPointOffsetPercent.x() > 0.0 )
+            style.addProperty( "draw:fill-image-ref-point-x", QString("%1%").arg( d->refPointOffsetPercent.x() ) );
+        if( d->refPointOffsetPercent.y() > 0.0 )
+            style.addProperty( "draw:fill-image-ref-point-y", QString("%1%").arg( d->refPointOffsetPercent.y() ) );
+    }
+
+    if( d->repeat != Stretched )
+    {
+        QSizeF targetSize = d->targetSize();
+        QSizeF imageSize = d->imageData->imageSize();
+        if( targetSize.height() != imageSize.height() )
+            style.addAttribute( "draw:fill-image-height", QString("%1").arg( targetSize.height() ) );
+        if( targetSize.width() != imageSize.width() )
+            style.addAttribute( "draw:fill-image-width", QString("%1").arg( targetSize.width() ) );
+    }
 
     KoGenStyle patternStyle( KoGenStyle::StyleFillImage /*no family name*/ );
     patternStyle.addAttribute( "xlink:show", "embed" );
@@ -202,8 +230,10 @@ void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &co
     patternStyle.addAttribute( "xlink:type", "simple" );
     patternStyle.addAttribute( "xlink:href", d->imageData->tagForSaving() );
 
-    context.mainStyles().lookup( patternStyle, "picture" );
+    QString patternStyleName = context.mainStyles().lookup( patternStyle, "picture" );
     context.mainStyles().lookup( style, context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
+    style.addProperty( "draw:fill","bitmap" );
+    style.addProperty( "draw:fill-image-name", patternStyleName );
 }
 
 bool KoPatternBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF & )

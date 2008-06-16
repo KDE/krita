@@ -67,7 +67,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 {
     m_painter = 0;
     m_tempLayer = 0;
-    m_paintIncremental = true;
+    m_paintIncremental = false;
     m_paintOnSelection = false;
     m_paintedOutline = false;
     m_executor = new FreehandPaintJobExecutor();

@@ -160,7 +160,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     m_chkDirect = new QCheckBox(i18n("Paint incrementally"), optionWidget);
     m_chkDirect->setObjectName("chkDirect");
-    m_chkDirect->setChecked(true);
+    m_chkDirect->setChecked(false);
     connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
 
     m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smooth"), optionWidget);

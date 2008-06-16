@@ -30,6 +30,7 @@ class KoCanvasBase;
 class KoShape;
 class KoShapeControllerBase;
 class QUndoCommand;
+class KoDataCenter;
 
 /**
  * Class used by tools to maintain the list of shapes.
@@ -101,6 +102,13 @@ public:
      * @param shapeControllerBase the new shapeControllerBase
      */
     void setShapeControllerBase(KoShapeControllerBase* shapeControllerBase);
+
+    /**
+     * @brief Returns pointer to data center with given name.
+     *
+     * @return pointer to requested data center if it exist, else null
+     */
+    KoDataCenter * dataCenter( const QString &dataCenterName );
 
 private:
     /**

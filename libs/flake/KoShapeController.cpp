@@ -152,3 +152,9 @@ KoShapeControllerBase * KoShapeController::shapeControllerBase()
 {
     return d->shapeController;
 }
+
+KoDataCenter * KoShapeController::dataCenter( const QString &dataCenterName )
+{
+    return d->shapeController->dataCenterMap().value( dataCenterName, 0 );
+}
+

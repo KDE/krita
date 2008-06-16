@@ -191,8 +191,6 @@ void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &co
     if( ! d->imageData )
         return;
 
-    QSizeF size = d->imageData->imageSize();
-
     switch( d->repeat )
     {
         case Original:

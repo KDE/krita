@@ -69,7 +69,6 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     KoShape::applyConversion( painter, converter );
 
     painter.setPen( d->color );
-    //if( shape->background().style() != Qt::NoBrush )
     if( shape->background() )
         painter.setBrush( QBrush(d->color) );
     QMatrix tm;

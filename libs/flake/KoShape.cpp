@@ -904,8 +904,8 @@ KoShapeBorderModel * KoShape::loadOdfStroke( const KoXmlElement & element, KoSha
 KoShapeShadow * KoShape::loadOdfShadow( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    QString stroke = getStyleProperty( "shadow", element, context );
-    if( stroke == "visible" || stroke == "hidden" )
+    QString shadowStyle = getStyleProperty( "shadow", element, context );
+    if( shadowStyle == "visible" || shadowStyle == "hidden" )
     {
         KoShapeShadow * shadow = new KoShapeShadow();
         QColor shadowColor( styleStack.property( KoXmlNS::draw, "shadow-color" ) );
@@ -917,6 +917,7 @@ KoShapeShadow * KoShape::loadOdfShadow( const KoXmlElement & element, KoShapeLoa
         if( ! opacity.isEmpty() && opacity.right( 1 ) == "%" )
             shadowColor.setAlphaF( opacity.left( opacity.length()-1 ).toFloat() / 100.0 );
         shadow->setColor( shadowColor );
+        shadow->setVisibility( shadowStyle == "visible" );
 
         return shadow;
     }

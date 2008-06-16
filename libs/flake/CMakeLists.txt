@@ -77,6 +77,8 @@ set(flake_SRCS
     KoEventAction.cpp
     KoEventActionFactory.cpp
     KoEventActionRegistry.cpp
+    KoImageData.cpp
+    KoImageCollection.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

@@ -20,7 +20,7 @@
 #ifndef KOIMAGEDATA_H
 #define KOIMAGEDATA_H
 
-#include "koguiutils_export.h"
+#include "flake_export.h"
 
 #include <KoShapeUserData.h>
 
@@ -43,7 +43,7 @@ class QIODevice;
  * Such plugins are suggested to not make a copy of the pixmap data, but use the fact that this
  * image data caches one for every request to pixmap()
  */
-class KOGUIUTILS_EXPORT KoImageData : public KoShapeUserData {
+class FLAKE_EXPORT KoImageData : public KoShapeUserData {
 public:
     /**
      * The image quality that the pixmap() method will render to.

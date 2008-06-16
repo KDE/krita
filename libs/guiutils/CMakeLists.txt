@@ -38,8 +38,6 @@ set(koguiutils_LIB_SRCS
     KoLayoutVisitor.cpp
     KoCopyController.cpp
     KoPasteController.cpp
-    KoImageData.cpp
-    KoImageCollection.cpp
    KoColorDocker.cpp
    KoResourceChooser.cpp
    KoColorSlider.cpp

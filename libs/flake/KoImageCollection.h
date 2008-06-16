@@ -19,7 +19,7 @@
 #ifndef KOIMAGECOLLECTION_H
 #define KOIMAGECOLLECTION_H
 
-#include "koguiutils_export.h"
+#include "flake_export.h"
 
 #include <KoDataCenter.h>
 
@@ -29,7 +29,7 @@ class KoStore;
 /**
  * An collection of KoImageData objects to allow loading and saving them all together to the KoStore.
  */
-class KOGUIUTILS_EXPORT KoImageCollection : public KoDataCenter {
+class FLAKE_EXPORT KoImageCollection : public KoDataCenter {
 public:
     /// constructor
     KoImageCollection();

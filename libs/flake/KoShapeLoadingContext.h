@@ -93,9 +93,6 @@ public:
     /// return the shape formerly registered using addShapeId()
     KoShape * shapeById( const QString & id );
 
-    /// Sets the image collection used for loading images
-    void setImageCollection( KoImageCollection * imageCollection );
-
     /// Returns the image collection for loading images
     KoImageCollection * imageCollection();
 

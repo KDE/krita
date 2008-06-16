@@ -58,6 +58,10 @@ bool PictureShapeFactory::supports(const KoXmlElement & e) const
 
 void PictureShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) 
 {
-    KoImageCollection *imgCol = new KoImageCollection();
-    dataCenterMap["ImageCollection"] = imgCol;
+    // only add image collection if none exist already
+    if( ! dataCenterMap.contains( "ImageCollection" ) )
+    {
+        KoImageCollection *imgCol = new KoImageCollection();
+        dataCenterMap["ImageCollection"] = imgCol;
+    }
 }

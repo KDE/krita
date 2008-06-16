@@ -867,7 +867,7 @@ KoShapeBackground * KoShape::loadOdfFill( const KoXmlElement & element, KoShapeL
     else if( fill == "gradient" )
         bg = new KoGradientBackground( new QLinearGradient() );
     else if( fill == "bitmap" )
-        bg = new KoPatternBackground();
+        bg = new KoPatternBackground( context.imageCollection() );
 
     if( ! bg )
         return 0;

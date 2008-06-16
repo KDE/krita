@@ -24,14 +24,18 @@
 #include "flake_export.h"
 #include <QtGui/QMatrix>
 
+class KoImageCollection;
+
 /// A pattern shape background
 class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
 {
 public:
-    KoPatternBackground();
+    /// Pattern rendering style
+    enum PatternRepeat { Original, Tiled, Stretched };
+    /// Pattern reference point
+    enum ReferencePoint { None, TopLeft, Top, TopRight, Left, Center, Right, BottomLeft, Bottom, BottomRight };
 
-    /// Creates new pattern background with the given pattern image
-    KoPatternBackground( const QImage &pattern );
+    KoPatternBackground( KoImageCollection *collection );
 
     virtual ~KoPatternBackground();
 
@@ -45,6 +49,12 @@ public:
     void setPattern( const QImage &pattern );
     /// Returns the pattern
     QImage pattern();
+
+    /// Sets the pattern repeat
+    void setPatternRepeat( PatternRepeat repeat );
+
+    /// Returns the pattern repeat
+    PatternRepeat patternRepeat() const;
 
     /// Assignment operator
     KoPatternBackground& operator = ( const KoPatternBackground &rhs );

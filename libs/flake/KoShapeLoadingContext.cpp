@@ -22,6 +22,9 @@
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoSharedLoadingData.h"
+#include "KoShapeControllerBase.h"
+#include "KoDataCenter.h"
+#include "KoImageCollection.h"
 
 #include <kdebug.h>
 
@@ -36,7 +39,6 @@ class KoShapeLoadingContext::Private {
 public:
     Private( KoOdfLoadingContext &c, KoShapeControllerBase * sc )
     : context( c )
-    , imageCollection( 0 )
     , zIndex( 0 )
     , shapeController( sc )
     {}
@@ -50,7 +52,6 @@ public:
     KoOdfLoadingContext &context;
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
-    KoImageCollection * imageCollection;
     QMap<QString, KoSharedLoadingData*> sharedData;
     QMap<KoShape*, int> zIndices;
     int zIndex;
@@ -92,14 +93,13 @@ KoShape * KoShapeLoadingContext::shapeById( const QString & id )
    return d->drawIds.value( id, 0 );
 }
 
-void KoShapeLoadingContext::setImageCollection( KoImageCollection * imageCollection )
-{
-    d->imageCollection = imageCollection;
-}
-
 KoImageCollection * KoShapeLoadingContext::imageCollection()
 {
-    return d->imageCollection;
+    if( ! d->shapeController )
+        return 0;
+
+    QMap<QString, KoDataCenter *>  dataCenterMap = d->shapeController->dataCenterMap();
+    return dynamic_cast<KoImageCollection*>( dataCenterMap.value( "ImageCollection", 0 ) );
 }
 
 int KoShapeLoadingContext::zIndex()

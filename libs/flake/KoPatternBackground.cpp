@@ -64,6 +64,52 @@ public:
         return size;
     }
 
+    QPointF offsetFromRect( const QRectF &fillRect, const QSizeF &imageSize )
+    {
+        QPointF offset;
+        switch( refPoint )
+        {
+            case TopLeft:
+                offset = fillRect.topLeft();
+                break;
+            case Top:
+                offset.setX( fillRect.center().x() - 0.5 * imageSize.width() );
+                offset.setY( fillRect.top() );
+                break;
+            case TopRight:
+                offset.setX( fillRect.right() - imageSize.width() );
+                offset.setY( fillRect.top() );
+                break;
+            case Left:
+                offset.setX( fillRect.left() );
+                offset.setY( fillRect.center().y() - 0.5 * imageSize.height() );
+                break;
+            case Center:
+                offset.setX( fillRect.center().x() - 0.5 * imageSize.width() );
+                offset.setY( fillRect.center().y() - 0.5 * imageSize.height() );
+                break;
+            case Right:
+                offset.setX( fillRect.right() - imageSize.width() );
+                offset.setY( fillRect.center().y() - 0.5 * imageSize.height() );
+                break;
+            case BottomLeft:
+                offset.setX( fillRect.left() );
+                offset.setY( fillRect.bottom() - imageSize.height() );
+                break;
+            case Bottom:
+                offset.setX( fillRect.center().x() - 0.5 * imageSize.width() );
+                offset.setY( fillRect.bottom() - imageSize.height() );
+                break;
+            case BottomRight:
+                offset.setX( fillRect.right() - imageSize.width() );
+                offset.setY( fillRect.bottom() - imageSize.height() );
+                break;
+            default:
+                break;
+        }
+        return offset;
+    }
+
     QMatrix matrix;
     KoPatternBackground::PatternRepeat repeat;
     KoPatternBackground::ReferencePoint refPoint;
@@ -161,11 +207,27 @@ void KoPatternBackground::paint( QPainter &painter, const QPainterPath &fillPath
 
     if( d->repeat == Tiled )
     {
-        QBrush brush( d->imageData->pixmap() );
-        brush.setMatrix( d->matrix );
+        // calculate scaling of pixmap
+        QSizeF targetSize = d->targetSize();
+        QSizeF imageSize = d->imageData->pixmap().size();
+        qreal scaleX = targetSize.width() / imageSize.width();
+        qreal scaleY = targetSize.height() / imageSize.height();
 
-        painter.setBrush( brush );
-        painter.drawPath( fillPath );
+        QRectF targetRect = fillPath.boundingRect();
+        // undo scaling on target rectangle
+        targetRect.setWidth(  targetRect.width() / scaleX );
+        targetRect.setHeight( targetRect.height() / scaleY );
+
+        // determine pattern offset
+        QPointF offset = d->offsetFromRect( targetRect, d->imageData->pixmap().size() );
+
+        // create matrix for pixmap scaling
+        QMatrix matrix;
+        matrix.scale( scaleX, scaleY );
+
+        painter.setClipPath( fillPath );
+        painter.setWorldMatrix( matrix, true );
+        painter.drawTiledPixmap( targetRect, d->imageData->pixmap(), offset );
     }
     else if( d->repeat == Original )
     {
@@ -254,8 +316,6 @@ bool KoPatternBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF
     if( href.isEmpty() )
         return false;
 
-    kDebug() << "href =" << href;
-
     delete d->imageData;
     d->imageData = new KoImageData( d->imageCollection, href );
     if( ! d->imageData )
@@ -269,8 +329,6 @@ bool KoPatternBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF
         d->repeat = Tiled;
     else
         d->repeat = Original;
-
-    kDebug() << "style =" << style;
 
     if( style != "stretch" )
     {

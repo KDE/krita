@@ -36,6 +36,8 @@ public:
     KoShape * createDefaultShape() const;
     KoShape * createShape(const KoProperties * params) const;
     bool supports(const KoXmlElement & e) const;
+    /// reimplemented
+    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap);
 };
 
 #endif

@@ -19,12 +19,12 @@
 #include "KoPathShapeFactory.h"
 #include "KoPathShape.h"
 #include "KoLineBorder.h"
+#include "KoImageCollection.h"
 
 #include <klocale.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-
 
 KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
     : KoShapeFactory(parent, KoPathShapeId, i18n("A simple path shape"))
@@ -66,3 +66,15 @@ bool KoPathShapeFactory::supports(const KoXmlElement & e) const
     return false;
 }
 
+void KoPathShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) 
+{
+    // as we need an image collection for the pattern background
+    // we want to make sure that there is always an image collection
+    // added to the data center map, in case the picture shape plugin
+    // is not loaded
+    if( ! dataCenterMap.contains( "ImageCollection" ) )
+    {
+        KoImageCollection *imgCol = new KoImageCollection();
+        dataCenterMap["ImageCollection"] = imgCol;
+    }
+}

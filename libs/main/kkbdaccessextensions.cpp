@@ -318,7 +318,8 @@ void KKbdAccessExtensions::nextHandle()
     } else {
         // Find first panel.
         QWidgetList* allWidgets = getAllPanels();
-        panel = allWidgets->first();
+        if ( ! allWidgets->isEmpty() )
+            panel = allWidgets->first();
         delete allWidgets;
         d->handleNdx = 1;
     }
@@ -358,7 +359,8 @@ void KKbdAccessExtensions::prevHandle()
     } else {
         // Find last panel.
         QWidgetList* allWidgets = getAllPanels();
-        panel = allWidgets->last();
+        if ( ! allWidgets->isEmpty() )
+            panel = allWidgets->last();
         delete allWidgets;
         if (panel) {
             if (qobject_cast<QSplitter*>( panel ))

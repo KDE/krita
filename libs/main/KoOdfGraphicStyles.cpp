@@ -600,7 +600,10 @@ QPen KoOdfGraphicStyles::loadOasisStrokeStyle( const KoStyleStack &styleStack, c
         {
             QColor color = tmpPen.color();
             QString opacity = styleStack.property( KoXmlNS::svg, "stroke-opacity" );
-            color.setAlphaF( opacity.toDouble() );
+            if( opacity.endsWith( '%' ) )
+                color.setAlphaF( 0.01 * opacity.remove( "%" ).toDouble() );
+            else
+                color.setAlphaF( opacity.toDouble() );
             tmpPen.setColor( color );
         }
         if( styleStack.hasProperty( KoXmlNS::svg, "stroke-width" ) )

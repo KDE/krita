@@ -48,14 +48,20 @@ class KoTool;
 class FLAKE_EXPORT KoEventAction
 {
 public:
-    KoEventAction();
+    KoEventAction( const QString & id );
     virtual ~KoEventAction();
+
+    const QString & id() const;
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) = 0;
     virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
 
     virtual void execute( KoTool * tool ) = 0;
     virtual void finish( KoTool * tool ) = 0;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif /* KOEVENTACTION_H */

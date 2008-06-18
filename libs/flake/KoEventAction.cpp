@@ -19,11 +19,29 @@
 
 #include "KoEventAction.h"
 
-KoEventAction::KoEventAction()
+#include <QString>
+
+class KoEventAction::Private
+{
+public:
+    Private( const QString & id )
+    : id( id )
+    {}
+
+    QString id;
+};
+
+KoEventAction::KoEventAction( const QString & id )
+: d( new Private( id ) )
 {
 }
 
 KoEventAction::~KoEventAction()
 {
+    delete d;
 }
 
+const QString & KoEventAction::id() const
+{
+    return d->id;
+}

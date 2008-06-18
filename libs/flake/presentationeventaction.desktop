@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Presentation Event Action Plugin
+Type=ServiceType
+X-KDE-ServiceType=KOffice/PresentationEventAction
+Comment=A plugin that contains a presentation event action
+[PropertyDef::X-PresentationEventAction-MinVersion]
+Type=int
+[PropertyDef::X-PresentationEventAction-PluginVersion]
+Type=int

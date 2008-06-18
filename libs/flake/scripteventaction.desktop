@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Script Event Action Plugin
+Type=ServiceType
+X-KDE-ServiceType=KOffice/ScriptEventAction
+Comment=A plugin that contains a script event action
+[PropertyDef::X-ScriptEventAction-MinVersion]
+Type=int
+[PropertyDef::X-ScriptEventAction-PluginVersion]
+Type=int

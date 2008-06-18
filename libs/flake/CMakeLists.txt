@@ -162,7 +162,7 @@ set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SO
 ########### install files ###############
 
 install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES flake.desktop flaketool.desktop flakeshape.desktop flakedevice.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES flake.desktop flaketool.desktop flakeshape.desktop flakedevice.desktop presentationeventaction.desktop scripteventaction.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(
     FILES

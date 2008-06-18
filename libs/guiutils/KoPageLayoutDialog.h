@@ -26,7 +26,7 @@
 
 #include <KPageDialog>
 
-class KoPageLayout;
+struct KoPageLayout;
 
 /// A dialog to show the settings for one page and apply them afterwards.
 class KOGUIUTILS_EXPORT KoPageLayoutDialog : public KPageDialog {

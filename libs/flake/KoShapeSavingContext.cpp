@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  
    This library is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@
 
 #include "KoShapeSavingContext.h"
 #include "KoShapeLayer.h"
+#include "KoDataCenter.h"
 
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
@@ -30,6 +31,7 @@
 #include <kmimetype.h>
 
 #include <QtCore/QTime>
+#include <kdebug.h>
 
 KoShapeSavingContext::KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
                                             KoEmbeddedDocumentSaver& embeddedSaver, SavingMode savingMode )
@@ -170,4 +172,20 @@ bool KoShapeSavingContext::saveImages( KoStore * store, KoXmlWriter * manifestWr
         }
     }
     return true;
+}
+
+void KoShapeSavingContext::addDataCenter( KoDataCenter * dataCenter )
+{
+    m_dataCenter.insert( dataCenter );
+}
+
+bool KoShapeSavingContext::saveDataCenter( KoStore *store, KoXmlWriter* manifestWriter )
+{
+    bool ok = true;
+    foreach( KoDataCenter *dataCenter, m_dataCenter )
+    {
+        ok = ok && dataCenter->completeSaving( store, manifestWriter );
+        kDebug() << "ok" << ok;
+    }
+    return ok;
 }

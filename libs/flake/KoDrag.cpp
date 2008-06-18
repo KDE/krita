@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -93,7 +93,13 @@ bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
+
     if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) ) {
+        return false;
+    }
+
+    if ( !context->saveDataCenter( store, manifestWriter ) ) {
+        kDebug(30006) <<"save data centers failed";
         return false;
     }
 

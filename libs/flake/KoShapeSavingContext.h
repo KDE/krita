@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -26,12 +26,14 @@
 
 #include <QFlags>
 #include <QMap>
+#include <QSet>
 #include <QString>
 #include <QPixmap>
 
 class KoShape;
 class KoXmlWriter;
 class KoGenStyles;
+class KoDataCenter;
 class KoEmbeddedDocumentSaver;
 class KoShapeLayer;
 class KoStore;
@@ -185,12 +187,25 @@ public:
      */
     bool saveImages( KoStore *store, KoXmlWriter* manifestWriter ) const;
 
+    /**
+     * Add data center
+     */
+    void addDataCenter( KoDataCenter * dataCenter );
+
+    /**
+     * Save the data centers
+     *
+     * This calls KoDataCenter::completeSaving()
+     */
+    bool saveDataCenter( KoStore *store, KoXmlWriter* manifestWriter );
+
 private:
     KoXmlWriter *m_xmlWriter;
     KoShapeSavingOptions m_savingOptions;
     QMap<const KoShape *, QString> m_drawIds;
     QList<const KoShapeLayer*> m_layers;
     QMap<QString, QPixmap> m_pixmaps;
+    QSet<KoDataCenter *> m_dataCenter;
     int m_drawId;
 
     KoGenStyles& m_mainStyles;

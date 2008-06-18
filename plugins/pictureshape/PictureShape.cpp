@@ -84,6 +84,8 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
     writer.endElement(); // draw:image
     saveOdfCommonChildElements( context );
     writer.endElement(); // draw:frame
+
+    context.addDataCenter( m_imageCollection );
 }
 
 bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )

@@ -107,6 +107,11 @@ public:
             default:
                 break;
         }
+        if( refPointOffsetPercent.x() > 0.0 )
+            offset += QPointF( 0.01 * refPointOffsetPercent.x() * imageSize.width(), 0 );
+        if( refPointOffsetPercent.y() > 0.0 )
+            offset += QPointF( 0, 0.01 * refPointOffsetPercent.y() * imageSize.height() );
+
         return offset;
     }
 
@@ -191,7 +196,6 @@ KoPatternBackground& KoPatternBackground::operator = ( const KoPatternBackground
 
     if( rhs.d->imageData )
     {
-        kDebug() << rhs.d->imageData;
         d->imageData = new KoImageData( *(rhs.d->imageData) );
     }
 
@@ -227,7 +231,7 @@ void KoPatternBackground::paint( QPainter &painter, const QPainterPath &fillPath
 
         painter.setClipPath( fillPath );
         painter.setWorldMatrix( matrix, true );
-        painter.drawTiledPixmap( targetRect, d->imageData->pixmap(), offset );
+        painter.drawTiledPixmap( targetRect, d->imageData->pixmap(), -offset );
     }
     else if( d->repeat == Original )
     {

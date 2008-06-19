@@ -48,7 +48,12 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
                                          const QString & caption,
                                          QWidget *parent,
                                          const char *name)
-    : KDialog(parent)
+    : KDialog( parent )
+    , m_image( 0 )
+    , m_currentConfigWidget ( 0 )
+    , m_currentFilter ( 0 )
+    , m_currentConfiguration ( 0 )
+    , m_layer ( 0 )
 {
     setButtons( Ok | Cancel);
     setDefaultButton( Ok );
@@ -56,9 +61,8 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
     setObjectName(name);
 
     m_currentConfiguration = configuration;
-    m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name()).data();
-    if (!m_currentFilter) {
-        kWarning() <<"No filter specified!";
+    if (m_currentConfiguration) {
+        m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name()).data();
     }
     setCaption(caption);
     QWidget * page = new QWidget(this);

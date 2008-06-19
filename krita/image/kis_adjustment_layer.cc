@@ -157,7 +157,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 //         selection->getOrCreatePixelSelection()->dataManager()->setDefaultPixel(selection->dataManager()->defaultPixel());
     } else {
         m_d->selection = new KisSelection();
-        m_d->selection->getOrCreatePixelSelection()->invert();
+        m_d->selection->getOrCreatePixelSelection()->select(image()->bounds());
     }
     m_d->selection->updateProjection();
     m_d->selection->setInterestedInDirtyness(true);

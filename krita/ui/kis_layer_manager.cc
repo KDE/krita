@@ -372,14 +372,22 @@ void KisLayerManager::layerProperties()
         if ( prev ) dev = prev->projection();
 
         KisDlgAdjLayerProps dlg( dev, alayer->image(), alayer->filter(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
-        QString before = dlg.filterConfiguration()->toLegacyXML();
+        KisFilterConfiguration* config = dlg.filterConfiguration();
+        QString before;
+        if (config)
+            before = config->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {
+
+            QString after;
+            if (dlg.filterConfiguration())
+                after = dlg.filterConfiguration()->toLegacyXML();
+
             KisChangeFilterCmd<KisAdjustmentLayerSP> * cmd
                 = new KisChangeFilterCmd<KisAdjustmentLayerSP>(alayer,
                                                                dlg.filterConfiguration(),
                                                                before,
-                                                               dlg.filterConfiguration()->toLegacyXML());
+                                                               after );
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
             m_doc->setModified( true );

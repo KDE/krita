@@ -58,7 +58,7 @@ testsuite.
 ./FormattingProperties/ParagraphFormattingProperties/leaderTextStyle/test.xml:   <result>unsupported</result>
 *./FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/justifySingleWord/test.xml:   <result>unknown</result>
-./FormattingProperties/ParagraphFormattingProperties/tabStopDistance/test.xml:   <result>fullsupport</result>
+*./FormattingProperties/ParagraphFormattingProperties/tabStopDistance/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/leftAndRightMargins/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/font-independentLineSpacing/test.xml:   <result>unknown</result>
 ./FormattingProperties/ParagraphFormattingProperties/widows/test.xml:   <result>unsupported</result>

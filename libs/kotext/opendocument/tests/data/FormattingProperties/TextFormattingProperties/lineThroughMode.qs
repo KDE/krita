@@ -12,8 +12,8 @@ setFormatProperty(wordStrikeOutFormat, KoCharacterStyle.StrikeOutStyle, KoCharac
 setFormatProperty(wordStrikeOutFormat, KoCharacterStyle.StrikeOutMode, KoCharacterStyle.SkipWhiteSpaceLineMode);
 setFormatProperty(wordStrikeOutFormat, KoCharacterStyle.StrikeOutType, KoCharacterStyle.SingleLine);
 
-cursor.insertText("This is an example of text with continuous line through. ", continuousStrikeOutFormat);
+cursor.insertText("This is an example of text with continuous line through.", continuousStrikeOutFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example of text with word only line through. ", wordStrikeOutFormat);
+cursor.insertText("This is an example of text with word only line through.", wordStrikeOutFormat);
 
 return document;

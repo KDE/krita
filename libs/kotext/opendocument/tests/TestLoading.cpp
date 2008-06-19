@@ -570,6 +570,7 @@ void TestLoading::addData()
 
     QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic";
     QTest::newRow("attributedText") << "TextContents/Paragraph/attributedText";
+    QTest::newRow("basicContents") << "TextContents/Paragraph/basicContents";
 
     QTest::newRow("fontSize") << "TextContents/TextFormatting/fontSize";
 

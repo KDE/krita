@@ -12,10 +12,8 @@ font.setFixedPitch(false);
 variablePitchFormat.setFont(font);
 
 cursor.insertText("This is an example that set font pitch to fixed. This is an example that set font pitch to fixed. This is an example that set font pitch to fixed.", fixedPitchFormat);
-cursor.insertText(" ", defaultTextFormat);
 
 cursor.insertBlock();
 cursor.insertText("This is an example that set font pitch to variable. This is an example that set font pitch to variable. This is an example that set font pitch to variable.", variablePitchFormat);
-cursor.insertText(" ", defaultTextFormat);
 
 return document;

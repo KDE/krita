@@ -12,10 +12,8 @@ size50pcFormat.setFont(font);
 
 cursor.insertText("This test case checks font size, this is an example of text with ", defaultTextFormat);
 cursor.insertText("font size of 28", size28Format);
-cursor.insertText(" ", defaultTextFormat);
 cursor.insertBlock();
 cursor.insertText("This test case checks font size, this is an example of text with ", defaultTextFormat);
 cursor.insertText("font size of 50%", size50pcFormat);
-cursor.insertText(" ", defaultTextFormat);
 
 return document;

@@ -12,8 +12,8 @@ setFormatProperty(wordUnderlineFormat, KoCharacterStyle.UnderlineStyle, KoCharac
 setFormatProperty(wordUnderlineFormat, KoCharacterStyle.UnderlineMode, KoCharacterStyle.SkipWhiteSpaceLineMode);
 setFormatProperty(wordUnderlineFormat, KoCharacterStyle.UnderlineType, KoCharacterStyle.SingleLine);
 
-cursor.insertText("This is an example of text with continuous underline. ", continuousUnderlineFormat);
+cursor.insertText("This is an example of text with continuous underline.", continuousUnderlineFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example of text with word only underline. ", wordUnderlineFormat);
+cursor.insertText("This is an example of text with word only underline.", wordUnderlineFormat);
 
 return document;

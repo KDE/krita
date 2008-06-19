@@ -8,11 +8,11 @@ tabstop.type = QTextOption.DelimiterTab;
 tabstop.delimiter = ",";
 setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);
 cursor.setBlockFormat(textBlockFormat);
-cursor.insertText("\tGamgee, Sam ");
+cursor.insertText("\tGamgee, Sam");
 cursor.insertBlock(textBlockFormat);
-cursor.insertText("\tBrandybuck, Meriadoc ");
+cursor.insertText("\tBrandybuck, Meriadoc");
 cursor.insertBlock(textBlockFormat);
-cursor.insertText("\tTook, Peregrin ");
+cursor.insertText("\tTook, Peregrin");
 
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
@@ -26,10 +26,10 @@ tabstop2.type = QTextOption.DelimiterTab;
 tabstop2.delimiter = ".";
 setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop, tabstop2]);
 cursor.insertBlock(textBlockFormat);
-cursor.insertText("\t0.322 + 4 = \t4.322 ");
+cursor.insertText("\t0.322 + 4 = \t4.322");
 cursor.insertBlock(textBlockFormat);
-cursor.insertText("\t42 + 0.01 = \t42.01 ");
+cursor.insertText("\t42 + 0.01 = \t42.01");
 cursor.insertBlock(textBlockFormat);
-cursor.insertText("\t4233.343 + 0.00 = \t4233.343 ");
+cursor.insertText("\t4233.343 + 0.00 = \t4233.343");
 
 return document;

@@ -12,8 +12,8 @@ decorativeFont.setFamily("decorative");
 decorativeFont.setStyleHint(QFont.Decorative);
 decorativeFormat.setFont(decorativeFont);
 
-cursor.insertText("This is an example of using font family generic in text. ", romanFormat);
+cursor.insertText("This is an example of using font family generic in text.", romanFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example of using font family generic in text. ", decorativeFormat);
+cursor.insertText("This is an example of using font family generic in text.", decorativeFormat);
 
 return document;

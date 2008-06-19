@@ -12,20 +12,20 @@ setFormatProperty(tf, KoCharacterStyle.StrikeOutType, KoCharacterStyle.SingleLin
 setFormatProperty(tf, KoCharacterStyle.StrikeOutText, "/");
 cursor.insertText("this is an example of text with line through /", tf);
 cursor.insertBlock();
-cursor.insertText("the line through text is /. ", tf_plain);
+cursor.insertText("the line through text is /.", tf_plain);
 cursor.insertBlock();
 
 cursor.insertBlock();
 setFormatProperty(tf, KoCharacterStyle.StrikeOutText, "x");
 cursor.insertText("this is an example of text with line through x", tf);
 cursor.insertBlock();
-cursor.insertText("the line through text is x. ", tf_plain);
+cursor.insertText("the line through text is x.", tf_plain);
 cursor.insertBlock();
 
 cursor.insertBlock();
 setFormatProperty(tf, KoCharacterStyle.StrikeOutText, "--x--");
 cursor.insertText("this is an example of text with line through --x--", tf);
 cursor.insertBlock();
-cursor.insertText("the line through text is --x--. ", tf_plain);
+cursor.insertText("the line through text is --x--.", tf_plain);
 
 return document;

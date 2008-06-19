@@ -15,13 +15,13 @@ setFormatProperty(doubleLineThroughFormat, KoCharacterStyle.StrikeOutStyle, KoCh
 setFormatProperty(doubleLineThroughFormat, KoCharacterStyle.StrikeOutType, KoCharacterStyle.DoubleLine);
 setFormatProperty(doubleLineThroughFormat, KoCharacterStyle.StrikeOutColor, new QColor("#000000"));
 
-cursor.insertText("this is an example of text with no line trough ", noLineThroughFormat); // typo intentional
+cursor.insertText("this is an example of text with no line trough", noLineThroughFormat); // typo intentional
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with single line trough ", singleLineThroughFormat);
+cursor.insertText("this is an example of text with single line trough", singleLineThroughFormat);
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with double line trough ", doubleLineThroughFormat);
+cursor.insertText("this is an example of text with double line trough", doubleLineThroughFormat);
 
 return document;
 

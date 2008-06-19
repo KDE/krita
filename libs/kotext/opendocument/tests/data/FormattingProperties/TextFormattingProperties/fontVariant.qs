@@ -6,8 +6,8 @@ smallCapsFormat.setFontCapitalization(QFont.SmallCaps);
 var normalFormat = QTextCharFormat.clone(defaultTextFormat);
 normalFormat.setFontCapitalization(QFont.MixedCase);
 
-cursor.insertText("this is an example of paragraph displaying text as small capitalized letters on. ", smallCapsFormat);
+cursor.insertText("this is an example of paragraph displaying text as small capitalized letters on.", smallCapsFormat);
 cursor.insertBlock();
-cursor.insertText("this is an example of paragraph displaying text as small capitalized letters off. ", normalFormat);
+cursor.insertText("this is an example of paragraph displaying text as small capitalized letters off.", normalFormat);
 
 return document;

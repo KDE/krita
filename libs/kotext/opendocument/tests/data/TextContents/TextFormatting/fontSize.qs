@@ -8,6 +8,5 @@ twentyEightPointFormat.setFont(twentyEightPointFont);
 
 cursor.insertText("The following is a character whose font size is ", defaultTextFormat);
 cursor.insertText("28.", twentyEightPointFormat);
-cursor.insertText(" ", defaultTextFormat); // CHECKME: Why is a blank space appended?
 
 return document;

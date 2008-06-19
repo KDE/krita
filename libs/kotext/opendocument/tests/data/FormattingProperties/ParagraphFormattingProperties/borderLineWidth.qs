@@ -32,7 +32,7 @@ for(var i = 0; i < borderWidthIds.length; i++) {
 }
 
 cursor.setBlockFormat(textBlockFormatAllSides);
-cursor.insertText("This is an example of paragraph with double border. The width of inner line is 0.01 inch, the distance between two line is 0.02 inch, and the width of the outer line is 0.01 inch. "); // P1
+cursor.insertText("This is an example of paragraph with double border. The width of inner line is 0.01 inch, the distance between two line is 0.02 inch, and the width of the outer line is 0.01 inch."); // P1
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
@@ -55,7 +55,7 @@ for(var i = 0; i < borderWidthIds.length; i++) {
 }
 
 cursor.setBlockFormat(textBlockFormatAllSides);
-cursor.insertText("This is an example of paragraph with double border. The width of inner line is 0.03 inch, the distance between two line is 0.02 inch, and the width of the outer line is 0.01 inch. "); // P2
+cursor.insertText("This is an example of paragraph with double border. The width of inner line is 0.03 inch, the distance between two line is 0.02 inch, and the width of the outer line is 0.01 inch."); // P2
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
@@ -78,7 +78,7 @@ for(var i = 0; i < borderWidthIds.length; i++) {
 }
 
 cursor.setBlockFormat(textBlockFormatAllSides);
-cursor.insertText("This is an example of paragraph with double border. The width of inner line is 0.01 inch, the distance between two line is 0.02 inch, and the width of the outer line is 0.03 inch. "); // P3
+cursor.insertText("This is an example of paragraph with double border. The width of inner line is 0.01 inch, the distance between two line is 0.02 inch, and the width of the outer line is 0.03 inch."); // P3
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
@@ -102,7 +102,7 @@ for(var i = 0; i < borderWidthIds.length; i++) {
 }
 
 cursor.setBlockFormat(textBlockFormatAllSides);
-cursor.insertText("This is an example of paragraph with double border. The width of inner line is 0.01 inch, the distance between two line is 0.4 inch, and the width of the outer line is 0.01 inch. "); // P4
+cursor.insertText("This is an example of paragraph with double border. The width of inner line is 0.01 inch, the distance between two line is 0.4 inch, and the width of the outer line is 0.01 inch."); // P4
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertBlock(defaultBlockFormat);
@@ -115,6 +115,6 @@ setFormatProperty(textBlockFormatLeftOnly, KoParagraphStyle.LeftBorderSpacing, 0
 setFormatProperty(textBlockFormatLeftOnly, KoParagraphStyle.LeftBorderWidth, 0.03 * 72);
 
 cursor.setBlockFormat(textBlockFormatLeftOnly);
-cursor.insertText("This is an example of paragraph with double border. The width of inner line in left side is 0.01 inch, the distance between two line in left side is 0.3 inch, and the width of the outer line in left side is 0.03 inch. "); // P5
+cursor.insertText("This is an example of paragraph with double border. The width of inner line in left side is 0.01 inch, the distance between two line in left side is 0.3 inch, and the width of the outer line in left side is 0.03 inch."); // P5
 
 return document;

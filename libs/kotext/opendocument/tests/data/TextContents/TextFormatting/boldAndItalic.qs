@@ -15,6 +15,6 @@ cursor.insertText("This word is ", defaultTextFormat);
 cursor.insertText("emphasized", emphasizedFormat);
 cursor.insertText(", and this word is ", defaultTextFormat);
 cursor.insertText("italic", italicFormat);
-cursor.insertText(". ", defaultTextFormat);
+cursor.insertText(".", defaultTextFormat);
 
 return document;

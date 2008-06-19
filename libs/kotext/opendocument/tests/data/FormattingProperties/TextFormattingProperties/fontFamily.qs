@@ -10,8 +10,8 @@ var timesNewRomanFont = timesNewRomanFormat.font();
 timesNewRomanFont.setFamily("Times New Roman");
 timesNewRomanFormat.setFont(timesNewRomanFont);
 
-cursor.insertText("This is an example that create a font family for the text. ", timesNewRomanFormat);
+cursor.insertText("This is an example that create a font family for the text.", timesNewRomanFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example that create a font family for the text. ", arialBlackFormat);
+cursor.insertText("This is an example that create a font family for the text.", arialBlackFormat);
 
 return document;

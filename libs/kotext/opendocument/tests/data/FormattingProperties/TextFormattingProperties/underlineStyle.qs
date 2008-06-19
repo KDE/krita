@@ -32,27 +32,27 @@ var waveLineFormat = QTextCharFormat.clone(defaultTextFormat);
 setFormatProperty(waveLineFormat, KoCharacterStyle.UnderlineStyle, KoCharacterStyle.WaveLine);
 setFormatProperty(waveLineFormat, KoCharacterStyle.UnderlineType, KoCharacterStyle.SingleLine);
 
-cursor.insertText("This is an example of text without underline. ", noLineFormat);
+cursor.insertText("This is an example of text without underline.", noLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("This is an example of text with solid underline. ", solidLineFormat);
+cursor.insertText("This is an example of text with solid underline.", solidLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("This is an example of text with dotted underline. ", dottedLineFormat);
+cursor.insertText("This is an example of text with dotted underline.", dottedLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("This is an example of text with dash underline. ", dashLineFormat);
+cursor.insertText("This is an example of text with dash underline.", dashLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("This is an example of text with long-dash underline. ", longDashLineFormat);
+cursor.insertText("This is an example of text with long-dash underline.", longDashLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("This is an example of text with dot dash underline. ", dotDashLineFormat);
+cursor.insertText("This is an example of text with dot dash underline.", dotDashLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("This is an example of text with dot dot dash underline. ", dotDotDashLineFormat);
+cursor.insertText("This is an example of text with dot dot dash underline.", dotDotDashLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("This is an example of text with wave underline. ", waveLineFormat);
+cursor.insertText("This is an example of text with wave underline.", waveLineFormat);
 
 return document;

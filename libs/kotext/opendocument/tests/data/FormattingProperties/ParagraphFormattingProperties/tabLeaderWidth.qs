@@ -8,18 +8,18 @@ tabstop.leaderWeight = KoCharacterStyle.NormalLineWeight;
 
 setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);
 cursor.setBlockFormat(textBlockFormat);
-cursor.insertText("this is (tab)\tan example of paragraph with tab stop at 3in, whose leader line width is normal. ");
+cursor.insertText("this is (tab)\tan example of paragraph with tab stop at 3in, whose leader line width is normal.");
 cursor.insertBlock(defaultBlockFormat);
 
 tabstop.leaderWeight = KoCharacterStyle.BoldLineWeight;
 setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);
 cursor.setBlockFormat(textBlockFormat);
-cursor.insertText("this is (tab)\tan example of paragraph with tab stop at 3in, whose leader line width is bold. ");
+cursor.insertText("this is (tab)\tan example of paragraph with tab stop at 3in, whose leader line width is bold.");
 cursor.insertBlock(defaultBlockFormat);
 
 tabstop.leaderWeight = KoCharacterStyle.ThinLineWeight;
 setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);
 cursor.setBlockFormat(textBlockFormat);
-cursor.insertText("this is (tab)\tan example of paragraph with tab stop at 3in, whose leader line width is thin. ");
+cursor.insertText("this is (tab)\tan example of paragraph with tab stop at 3in, whose leader line width is thin.");
 
 return document;

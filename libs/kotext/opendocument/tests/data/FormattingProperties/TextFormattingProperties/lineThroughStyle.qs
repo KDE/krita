@@ -32,27 +32,27 @@ var waveLineFormat = QTextCharFormat.clone(defaultTextFormat);
 setFormatProperty(waveLineFormat, KoCharacterStyle.StrikeOutStyle, KoCharacterStyle.WaveLine);
 setFormatProperty(waveLineFormat, KoCharacterStyle.StrikeOutType, KoCharacterStyle.SingleLine);
 
-cursor.insertText("this is an example of text without line through. ", noLineFormat);
+cursor.insertText("this is an example of text without line through.", noLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with line trough whose style is solid. ", solidLineFormat);
+cursor.insertText("this is an example of text with line trough whose style is solid.", solidLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with line trough whose style is dotted. ", dottedLineFormat);
+cursor.insertText("this is an example of text with line trough whose style is dotted.", dottedLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with line trough whose style is dash. ", dashLineFormat);
+cursor.insertText("this is an example of text with line trough whose style is dash.", dashLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with line trough whose style is long dash. ", longDashLineFormat);
+cursor.insertText("this is an example of text with line trough whose style is long dash.", longDashLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with line trough whose style is dot dash. ", dotDashLineFormat);
+cursor.insertText("this is an example of text with line trough whose style is dot dash.", dotDashLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with line trough whose style is dot dot dash. ", dotDotDashLineFormat);
+cursor.insertText("this is an example of text with line trough whose style is dot dot dash.", dotDotDashLineFormat);
 
 cursor.insertBlock();
-cursor.insertText("this is an example of text with line trough whose style is wave. ", waveLineFormat);
+cursor.insertText("this is an example of text with line trough whose style is wave.", waveLineFormat);
 
 return document;

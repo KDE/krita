@@ -7,6 +7,6 @@ var textBlockFormatAi = new QTextBlockFormat;
 setFormatProperty(textBlockFormat, KoParagraphStyle.TabStopDistance, 72);
 
 cursor.setBlockFormat(textBlockFormat);
-cursor.insertText("this is (tab)\ta paragraph whose (tab)\tdefault tab stop distance is 1in. "); 
+cursor.insertText("this is (tab)\ta paragraph whose (tab)\tdefault tab stop distance is 1in."); 
 
 return document;

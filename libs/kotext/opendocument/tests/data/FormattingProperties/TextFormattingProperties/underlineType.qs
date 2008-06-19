@@ -14,16 +14,13 @@ setFormatProperty(doubleUnderlineFormat, KoCharacterStyle.UnderlineType, KoChara
 
 cursor.insertText("This is an example of text ", defaultTextFormat);
 cursor.insertText("without underline.", noUnderlineFormat);
-cursor.insertText(" ", defaultTextFormat);
 
 cursor.insertBlock();
 cursor.insertText("This is an example of text ", defaultTextFormat);
 cursor.insertText("with single underline.", singleUnderlineFormat);
-cursor.insertText(" ", defaultTextFormat);
 
 cursor.insertBlock();
 cursor.insertText("This is an example of text ", defaultTextFormat);
 cursor.insertText("with double underline.", doubleUnderlineFormat);
-cursor.insertText(" ", defaultTextFormat);
 
 return document;

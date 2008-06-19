@@ -20,16 +20,16 @@ setFormatProperty(alignJustifyFormat, QTextFormat.BlockAlignment, 8 /*Qt.AlignJu
 
 cursor.setCharFormat(QTextCharFormat.clone(defaultTextFormat));
 cursor.setBlockFormat(alignStartFormat);
-cursor.insertText("This is an example of paragraph with text align of start. ");
+cursor.insertText("This is an example of paragraph with text align of start.");
 cursor.insertBlock(alignEndFormat);
-cursor.insertText("This is an example of paragraph with text align of end. ");
+cursor.insertText("This is an example of paragraph with text align of end.");
 cursor.insertBlock(alignLeftFormat);
-cursor.insertText("This is an example of paragraph with text align of left. ");
+cursor.insertText("This is an example of paragraph with text align of left.");
 cursor.insertBlock(alignRightFormat);
-cursor.insertText("This is an example of paragraph with text align of right. ");
+cursor.insertText("This is an example of paragraph with text align of right.");
 cursor.insertBlock(alignCenterFormat);
-cursor.insertText("This is an example of paragraph with text align of center. ");
+cursor.insertText("This is an example of paragraph with text align of center.");
 cursor.insertBlock(alignJustifyFormat);
-cursor.insertText("This is an example of paragraph with text align of justify. ");
+cursor.insertText("This is an example of paragraph with text align of justify.");
 
 return document;

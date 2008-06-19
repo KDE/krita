@@ -15,6 +15,6 @@ cursor.insertText("In this paragraphs ", defaultTextFormat);
 cursor.insertText("these words are emphasized", italicFormat);
 cursor.insertText(" and ", defaultTextFormat);
 cursor.insertText("these words are emphasized", boldFormat);
-cursor.insertText(". ", defaultTextFormat);
+cursor.insertText(".", defaultTextFormat);
 
 return document;

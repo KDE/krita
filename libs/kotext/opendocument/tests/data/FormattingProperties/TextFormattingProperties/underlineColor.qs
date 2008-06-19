@@ -13,8 +13,8 @@ definedColorUnderlineFormat.setUnderlineColor(new QColor("#3deb3d"));
 setFormatProperty(definedColorUnderlineFormat, KoCharacterStyle.UnderlineStyle, KoCharacterStyle.SolidLine);
 setFormatProperty(definedColorUnderlineFormat, KoCharacterStyle.UnderlineType, KoCharacterStyle.SingleLine);
 
-cursor.insertText("This is an example of text with underline which has the same color of font. ", fontColorUnderlineFormat);
+cursor.insertText("This is an example of text with underline which has the same color of font.", fontColorUnderlineFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example of text with underline which has the defined color. ", definedColorUnderlineFormat);
+cursor.insertText("This is an example of text with underline which has the defined color.", definedColorUnderlineFormat);
 
 return document;

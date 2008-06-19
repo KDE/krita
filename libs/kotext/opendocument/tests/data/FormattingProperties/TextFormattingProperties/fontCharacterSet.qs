@@ -9,6 +9,5 @@ setFormatProperty(symbolsFormat, KoCharacterStyle.FontCharset, "0xf001");
 
 cursor.insertText("This test case checks text position, this is an example of text with ");
 cursor.insertText("font character set.", symbolsFormat);
-cursor.insertText(" ", defaultTextFormat);
 
 return document;

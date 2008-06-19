@@ -10,8 +10,8 @@ setFormatProperty(redStrikeThroughFormat, KoCharacterStyle.StrikeOutStyle, KoCha
 setFormatProperty(redStrikeThroughFormat, KoCharacterStyle.StrikeOutType, KoCharacterStyle.SingleLine);
 setFormatProperty(redStrikeThroughFormat, KoCharacterStyle.StrikeOutColor, new QColor("#ff3366"));
 
-cursor.insertText("this is an example of text with black line through. ", blackStrikeThroughFormat);
+cursor.insertText("this is an example of text with black line through.", blackStrikeThroughFormat);
 cursor.insertBlock();
-cursor.insertText("this is an example of text with red line through. ", redStrikeThroughFormat);
+cursor.insertText("this is an example of text with red line through.", redStrikeThroughFormat);
 
 return document;

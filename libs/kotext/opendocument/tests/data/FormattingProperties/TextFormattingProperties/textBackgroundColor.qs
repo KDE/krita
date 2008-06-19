@@ -6,8 +6,8 @@ transparentBackgroundFormat.setBackground(new QBrush());
 var redBackgroundFormat = QTextCharFormat.clone(defaultTextFormat);
 redBackgroundFormat.setBackground(new QBrush(new QColor("#ff3366")));
 
-cursor.insertText("This is an example of text with transparent background color. ", transparentBackgroundFormat);
+cursor.insertText("This is an example of text with transparent background color.", transparentBackgroundFormat);
 cursor.insertBlock();
-cursor.insertText("This is an example of text with red background color. ", redBackgroundFormat);
+cursor.insertText("This is an example of text with red background color.", redBackgroundFormat);
 
 return document;

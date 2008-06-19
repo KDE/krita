@@ -12,10 +12,10 @@ sizeM3Format.setFont(font);
 
 cursor.insertText("This test case checks font size, this is an example of text with ", defaultTextFormat);
 cursor.insertText("relative font size of +5pt", sizeP5Format);
-cursor.insertText(" ", defaultTextFormat);
+cursor.insertText("", defaultTextFormat);
 cursor.insertBlock();
 cursor.insertText("This test case checks font size, this is an example of text with ", defaultTextFormat);
 cursor.insertText("relative font size of -3pt", sizeM3Format);
-cursor.insertText(" ", defaultTextFormat);
+cursor.insertText("", defaultTextFormat);
 
 return document;

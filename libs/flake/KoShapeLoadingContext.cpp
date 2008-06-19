@@ -155,6 +155,11 @@ QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::addi
     return s_additionlAttributes;
 }
 
+KoDataCenter * KoShapeLoadingContext::dataCenter( const QString & dataCenterName )
+{
+    return d->shapeController->dataCenterMap().value( dataCenterName, 0 );
+}
+
 KoShapeControllerBase * KoShapeLoadingContext::shapeController() const
 {
     return d->shapeController;

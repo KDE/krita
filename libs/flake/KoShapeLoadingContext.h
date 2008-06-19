@@ -33,6 +33,7 @@ class KoShape;
 class KoShapeControllerBase;
 class KoImageCollection;
 class KoSharedLoadingData;
+class KoDataCenter;
 
 /**
  * Context passed to shapes during loading.
@@ -161,6 +162,13 @@ public:
      * in the returned set.
      */
     static QSet<AdditionalAttributeData> additionalAttributeData();
+
+    /**
+     * Get a data center from the KoShapeControllerBase
+     *
+     * If the data center is not found 0 is returned 
+     */
+    KoDataCenter * dataCenter( const QString & dataCenterName );
 
 private:
     /**

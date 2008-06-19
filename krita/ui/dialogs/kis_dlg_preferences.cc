@@ -302,10 +302,12 @@ void DisplaySettingsTab::setDefault()
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
+#ifdef HAVE_OPENGL
 #ifdef HAVE_GLEW
     if (KisOpenGL::hasShadingLanguage()) {
         cbUseOpenGLShaders->setEnabled(isChecked);
     }
+#endif
 #else
     Q_UNUSED(isChecked);
 #endif

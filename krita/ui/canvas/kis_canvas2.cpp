@@ -52,10 +52,10 @@
 #include "kis_layer_manager.h"
 #include "kis_selection.h"
 
-#ifdef HAVE_OPENGL
-#include <QGLFormat>
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
+#ifdef HAVE_OPENGL
+#include <QGLFormat>
 #endif
 
 class KisCanvas2::KisCanvas2Private {

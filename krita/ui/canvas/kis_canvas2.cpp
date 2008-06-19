@@ -47,15 +47,15 @@
 #include "kis_config_notifier.h"
 #include "kis_abstract_canvas_widget.h"
 #include "kis_qpainter_canvas.h"
-#include "opengl/kis_opengl_canvas2.h"
 #include "kis_group_layer.h"
-#include "opengl/kis_opengl_image_textures.h"
 #include "kis_shape_controller.h"
 #include "kis_layer_manager.h"
 #include "kis_selection.h"
 
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
+#include "opengl/kis_opengl_canvas2.h"
+#include "opengl/kis_opengl_image_textures.h"
 #endif
 
 class KisCanvas2::KisCanvas2Private {

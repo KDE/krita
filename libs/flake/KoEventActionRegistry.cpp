@@ -115,7 +115,7 @@ QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf( const Ko
 {
     QList<KoEventAction *> eventActions;
 
-    if ( e.namespaceURI() == KoXmlNS::office && e.tagName() == "office:event-listeners" ) {
+    if ( e.namespaceURI() == KoXmlNS::office && e.tagName() == "event-listeners" ) {
         KoXmlElement element;
         forEachElement( element, e ) {
             if ( element.tagName() == "event-listener" ) {

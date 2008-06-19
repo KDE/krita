@@ -27,11 +27,14 @@
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_paintop_settings.h>
+
 #include <KoCanvasResourceProvider.h>
 #include <KoColorSpace.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
 #include <KoViewConverter.h>
+
 
 #include <QImage>
 #include <QMouseEvent>
@@ -114,12 +117,14 @@ void MixerCanvas::checkCurrentPaintop()
 {
     KoCanvasResourceProvider *internal = resourceProvider();
 
+    KisPaintOpSettings* settings =
+        static_cast<KisPaintOpSettings*>(internal->resource(KisCanvasResourceProvider::CurrentPaintopSettings).value<void *>());
+    if (!settings) return;
+
     KisPainter painter(device());
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
                           internal->resource(KisCanvasResourceProvider::CurrentPaintop).value<KoID>().id(),
-                          static_cast<KisPaintOpSettings*>(
-                          internal->resource(KisCanvasResourceProvider::CurrentPaintopSettings).value<void *>()),
-                          &painter, 0);
+                          settings, &painter, 0);
     painter.setPaintOp(current); // This is done just for the painter to own the paintop and destroy it
 
     if (current && !current->painterly())
@@ -232,7 +237,7 @@ void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
         case KisCanvasResourceProvider::CurrentPaintop:
             checkCurrentPaintop();
             break;
-#endif            
+#endif
         case KisCanvasResourceProvider::CurrentKritaLayer:
             checkCurrentLayer();
             break;

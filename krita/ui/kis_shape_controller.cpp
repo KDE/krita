@@ -186,15 +186,8 @@ void KisShapeController::addShape( KoShape* shape )
     // If the parent of the added shape has is a selection, has a selection
     // or if the image has a selection, add the shape to the selection, instead
     // of to a shape layer
-    qDebug() << ">>>>>>>>>>>>>>> parent " << shape->parent();
     KisCanvas2 * canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
     
-    qDebug() << ">>>>>>>>>>>>>>> canvas " << canvas;
-    if (canvas) {
-        qDebug() << ">>>>>>>>>>>>>>> view " << canvas->view();
-        qDebug() << ">>>>>>>>>>>>>>> node " << canvas->view()->activeNode();
-        qDebug() << ">>>>>>>>>>>>>>> selection " << canvas->view()->selection();
-    }
     // Only non-krita shapes get added through this method; krita
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
@@ -299,7 +292,6 @@ void KisShapeController::setInitialShapeForView( KisView2 * view )
 
 void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
 {
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>> slotNodeAdded " << parentNode << ", " << index;
     if (!parentNode) return;
     
     KisNodeSP node = parentNode->at( index );

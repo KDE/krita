@@ -574,9 +574,6 @@ void KisLayerManager::addAdjustmentLayer()
 
 void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 {
-    qDebug() << parent;
-    qDebug() << above;
-
     Q_ASSERT(parent);
     Q_ASSERT(above);
 
@@ -585,10 +582,8 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 
 
     KisLayerSP l = activeLayer();
-    qDebug() << l->name();
 
     KisPaintDeviceSP dev = l->projection();
-    qDebug() << dev;
 
     KisSelectionSP selection;
     if ( l->selection() )
@@ -596,7 +591,6 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     else
         selection = img->globalSelection();
 
-    qDebug() << selection;
 
     KisAdjustmentLayerSP adjl = addAdjustmentLayer( parent, above, QString(), 0, selection);
 

@@ -392,9 +392,9 @@ void KisLayerManager::layerProperties()
 
         QString before = alayer->generator()->toLegacyXML();
         dlg.setConfiguration(alayer->generator());
-        
+
         if (dlg.exec() == QDialog::Accepted) {
-            
+
             KisChangeGeneratorCmd<KisGeneratorLayerSP> * cmd
                 = new KisChangeGeneratorCmd<KisGeneratorLayerSP>(alayer,
                                                               dlg.configuration(),
@@ -566,21 +566,35 @@ void KisLayerManager::addAdjustmentLayer()
 
 void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 {
+    qDebug() << parent;
+    qDebug() << above;
+
     Q_ASSERT(parent);
     Q_ASSERT(above);
 
     KisImageSP img = m_view->image();
     if (!img) return;
 
+
     KisLayerSP l = activeLayer();
+    qDebug() << l->name();
 
     KisPaintDeviceSP dev = l->projection();
-    KisSelectionSP selection = l->selection();
+    qDebug() << dev;
+
+    KisSelectionSP selection;
+    if ( l->selection() )
+        selection = l->selection();
+    else
+        selection = img->globalSelection();
+
+    qDebug() << selection;
+
     KisAdjustmentLayerSP adjl = addAdjustmentLayer( parent, above, QString(), 0, selection);
 
     KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, adjl->image(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
     if ( dlg.exec() != QDialog::Accepted) {
-      m_view->image()->removeNode( adjl );
+        m_view->image()->removeNode( adjl );
     }
 }
 
@@ -589,17 +603,13 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNo
 {
     Q_ASSERT(parent);
     Q_ASSERT(above);
-//     Q_ASSERT(filter);
 
     KisImageSP img = m_view->image();
     if (!img) return 0;
 
     KisAdjustmentLayerSP l = new KisAdjustmentLayer(img, name, filter, selection);
-    img->addNode(l.data(), parent, above.data());
-    if (l->selection())
-        l->setDirty(l->selection()->selectedExactRect());
-    else
-        l->setDirty(img->bounds());
+    img->addNode(l.data(), parent, above);
+    l->setDirty(img->bounds());
     return l;
 }
 

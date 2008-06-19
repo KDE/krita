@@ -169,12 +169,15 @@ public:
             KisPainter gc(m_projection);
             gc.setChannelFlags( layer->channelFlags() );
             gc.bitBlt(rc.left(), rc.top(), layer->compositeOp(), dev, layer->opacity(), rc.left(), rc.top(),rc.width(), rc.height());
-            
+
             return true;
         }
 
     bool visit(KisAdjustmentLayer* layer)
         {
+
+            Q_ASSERT( layer );
+
             if (m_projection.isNull()) {
                 return true;
             }
@@ -183,9 +186,9 @@ public:
                 return true;
 
             QRect tmpRc = m_rc;
-            
+
             KisPaintDeviceSP tempTarget = layer->temporaryTarget();
-            
+
             if (tempTarget) {
                 tmpRc = (layer->extent() | tempTarget->extent()) & tmpRc;
             }
@@ -195,7 +198,7 @@ public:
 
 
             KisFilterConfiguration * cfg = layer->filter();
-            if (!cfg) return false;
+            if (!cfg) return true;
 
             KisFilterSP f = KisFilterRegistry::instance()->value( cfg->name() );
             if (!f) return false;
@@ -212,7 +215,7 @@ public:
             gc1.setCompositeOp(layerProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
             gc1.bitBlt(m_rc.topLeft(), m_projection, m_rc);
             gc1.end();
-            
+
             KisConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
             KisProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
 
@@ -317,10 +320,10 @@ void KisTopDownUpdateStrategy::setDirty( const QRect & rc )
             schedule a projection update for the current node
                 if the projection update is done, set the parent dirty
                     until the root is done
-    */ 
+    */
     if (m_d->node && m_d->node->parent())
         static_cast<KisTopDownUpdateStrategy*>(m_d->node->parent()->updateStrategy())->setFilthyNode(m_d->node);
-    
+
     if (KisLayer* layer = dynamic_cast<KisLayer*>(m_d->node.data())) {
         layer->updateProjection( rc );
     }
@@ -331,12 +334,12 @@ void KisTopDownUpdateStrategy::setDirty( const QRect & rc )
         m_d->image->slotProjectionUpdated( rc );
     }
 }
- 
+
 void KisTopDownUpdateStrategy::setImage(KisImageSP image)
 {
     m_d->image = image;
 }
-     
+
 void KisTopDownUpdateStrategy::lock()
 {
     /*
@@ -362,7 +365,7 @@ void KisTopDownUpdateStrategy::unlock()
       unlock is called on the root layer's updatestrategy.
       this strategy unlocks recursively all children. Unlock
       has two meanings: the update process is restarted
-      and all nodes are unlocked. 
+      and all nodes are unlocked.
      */
     KisNodeSP child = m_d->node->firstChild();
     while (child) {
@@ -376,7 +379,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
 {
     /*
         Grouplayer are special since they can contain nodes that contain a projection
-        of part of the stack. 
+        of part of the stack.
 
         if filthynode is above an adjustment layer
             start recomposition from the adjustment layer
@@ -395,7 +398,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
             node = node->nextSibling();
         }
     }
-     
+
     KisMergeVisitor visitor(projection, rc);
 
     KisNodeSP child = startWith;
@@ -405,9 +408,9 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection( const QRe
         child->accept(visitor);
         child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
-    
+
     return projection;
-     
+
     m_d->filthyNode = 0;
     return projection;
 }

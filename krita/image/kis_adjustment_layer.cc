@@ -119,7 +119,8 @@ QIcon KisAdjustmentLayer::icon() const
 KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Filter"), KisFilterRegistry::instance()->value(filter()->name())->name());
+    if ( filter() )
+        l << KoDocumentSectionModel::Property(i18n("Filter"), KisFilterRegistry::instance()->value(filter()->name())->name());
     return l;
 }
 
@@ -130,14 +131,12 @@ void KisAdjustmentLayer::resetCache()
 
 KisFilterConfiguration * KisAdjustmentLayer::filter() const
 {
-//     Q_ASSERT(m_d->filterConfig);
     return m_d->filterConfig;
 }
 
 
 void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 {
-    Q_ASSERT(filterConfig);
     m_d->filterConfig = filterConfig;
 }
 

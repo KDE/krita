@@ -43,6 +43,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              KisNodeFilterInterface* nfi,
                                              KisPaintDeviceSP paintDevice,
                                              KisImageSP image,
+                                             const QString & layerName,
                                              const QString & caption,
                                              QWidget *parent,
                                              const char *name)
@@ -63,10 +64,11 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     QWidget * page = new QWidget(this);
     wdgFilterNodeCreation.setupUi( page );
     setMainWidget(page);
+
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
     wdgFilterNodeCreation.filterSelector->setPaintDevice(paintDevice);
     wdgFilterNodeCreation.filterSelector->setImage( image );
-
+    wdgFilterNodeCreation.layerName->setText(layerName);
     enableButtonOk(0);
 }
 

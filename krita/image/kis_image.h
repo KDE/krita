@@ -159,7 +159,7 @@ public:
     void removeGlobalSelection();
 
     /**
-     * Retrieve the next automatic layername.
+     * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
      */
     QString nextLayerName() const;
 
@@ -430,7 +430,7 @@ public:
     void notifyLayerUpdated(KisLayerSP layer);
 
     void setColorSpace(const KoColorSpace * colorSpace);
-    
+
     void setRootLayer(KisGroupLayerSP rootLayer);
 
     /**

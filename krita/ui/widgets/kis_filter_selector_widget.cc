@@ -60,10 +60,10 @@ KisFilterSelectorWidget::KisFilterSelectorWidget( QWidget* parent ) : d(new Priv
     d->currentFilter = 0;
     d->filtersModel = 0;
     d->uiFilterSelector.setupUi(this);
-    
+
     d->widgetLayout = new QGridLayout( d->uiFilterSelector.centralWidgetHolder );
 
-    
+
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(entered(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
@@ -146,11 +146,13 @@ void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
     {
         setFilter( filter  );
     } else {
-        bool v = d->uiFilterSelector.filtersSelector->blockSignals( true );
-        QModelIndex idx = d->filtersModel->indexForFilter( d->currentFilter->id() );
-        d->uiFilterSelector.filtersSelector->setCurrentIndex( idx );
-        d->uiFilterSelector.filtersSelector->scrollTo( idx );
-        d->uiFilterSelector.filtersSelector->blockSignals( v );
+        if ( d->currentFilter ) {
+            bool v = d->uiFilterSelector.filtersSelector->blockSignals( true );
+            QModelIndex idx = d->filtersModel->indexForFilter( d->currentFilter->id() );
+            d->uiFilterSelector.filtersSelector->setCurrentIndex( idx );
+            d->uiFilterSelector.filtersSelector->scrollTo( idx );
+            d->uiFilterSelector.filtersSelector->blockSignals( v );
+        }
     }
     emit( configurationChanged() );
 }
@@ -178,8 +180,11 @@ KisFilterConfiguration* KisFilterSelectorWidget::configuration()
     if ( d->currentFilterConfigurationWidget ) {
         return d->currentFilterConfigurationWidget->configuration();
     }
-    else {
+    else if (d->currentFilter) {
         return d->currentFilter->defaultConfiguration( d->paintDevice );
+    }
+    else {
+        return 0;
     }
 }
 

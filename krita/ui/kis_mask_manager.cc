@@ -230,7 +230,7 @@ void KisMaskManager::createFilterMask( KisNodeSP parent, KisNodeSP above )
     mask->setName( m_view->image()->nextLayerName() );
     m_view->image()->addNode( mask, parent, above );
 
-    KisDlgAdjustmentLayer dlg(mask, mask, dev, m_view->image(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
+    KisDlgAdjustmentLayer dlg(mask, mask, dev, m_view->image(), mask->name(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
 
     if (dlg.exec() == QDialog::Accepted) {
         KisFilterConfiguration * filter = dlg.filterConfiguration();
@@ -291,7 +291,7 @@ void KisMaskManager::createSelectionmask()
             createSelectionMask( activeLayer.data(), m_activeMask.data() );
     }
 }
-    
+
 void KisMaskManager::createSelectionMask( KisNodeSP parent, KisNodeSP above )
 {
     if (parent->inherits("KisLayer")) {
@@ -352,7 +352,7 @@ void KisMaskManager::maskToLayer()
         }
         dstiter.nextRow();
     }
-    
+
     image->removeNode(m_activeMask.data());
     m_activeMask = 0;
     image->addNode(layer.data(), activeLayer->parent(), activeLayer.data());
@@ -365,7 +365,7 @@ void KisMaskManager::duplicateMask()
     if (m_activeMask->inherits("KisSelectionMask")) return; // Cannot duplicate selection masks
     KisNodeSP dup = m_activeMask->clone();
     m_view->image()->addNode(dup, m_activeMask->parent(), m_activeMask.data());
-    
+
 }
 
 void KisMaskManager::removeMask()

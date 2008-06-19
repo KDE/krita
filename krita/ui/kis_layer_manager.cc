@@ -382,7 +382,7 @@ void KisLayerManager::layerProperties()
             QString after;
             if (dlg.filterConfiguration())
                 after = dlg.filterConfiguration()->toLegacyXML();
-
+            alayer->setName(dlg.layerName());
             KisChangeFilterCmd<KisAdjustmentLayerSP> * cmd
                 = new KisChangeFilterCmd<KisAdjustmentLayerSP>(alayer,
                                                                dlg.filterConfiguration(),
@@ -591,12 +591,14 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     else
         selection = img->globalSelection();
 
-
     KisAdjustmentLayerSP adjl = addAdjustmentLayer( parent, above, QString(), 0, selection);
 
-    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, adjl->image(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, adjl->image(), img->nextLayerName(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
     if ( dlg.exec() != QDialog::Accepted) {
         m_view->image()->removeNode( adjl );
+    }
+    else {
+        adjl->setName( dlg.layerName() );
     }
 }
 

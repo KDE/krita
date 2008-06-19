@@ -121,7 +121,7 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h )
 
 }
 
-const bool KisBaseNode::visible() const
+bool KisBaseNode::visible() const
 {
     return m_d->properties.boolProperty( "visible", true );
 }

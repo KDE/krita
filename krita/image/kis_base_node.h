@@ -61,8 +61,8 @@ public:
      * Delete this node
      */
     virtual ~KisBaseNode();
-    
-    
+
+
     /**
      * Return the paintdevice you can use to change pixels on. For a
      * paint layer these will be paint pixels, for an adjustment layer or a mask
@@ -182,7 +182,7 @@ public:
     /**
      * @return true if this node is visible (i.e, active) in the graph
      */
-    const bool visible() const;
+    bool visible() const;
 
     /**
      * Set the visible status of this node. Visible nodes are active

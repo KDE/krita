@@ -32,7 +32,7 @@ testsuite.
 ./TextFrames/frameIndividualPadding/test.xml:   <result>fullsupport</result>
 
 ./FormattingProperties/ParagraphFormattingProperties/verticalAlignment/test.xml:   <result>partial</result>
-./FormattingProperties/ParagraphFormattingProperties/dropCapsLength/test.xml:   <result>unsupported</result>
+*./FormattingProperties/ParagraphFormattingProperties/dropCapsLength/test.xml:   <result>unsupported</result>
 *./FormattingProperties/ParagraphFormattingProperties/tabType/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/fixedLineHeight/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/lineNumbering/test.xml:   <result>unsupported</result>
@@ -44,9 +44,9 @@ testsuite.
 ./FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundImageOpacity/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/textAutospace/test.xml:   <result>unsupported</result>
 *./FormattingProperties/ParagraphFormattingProperties/leaderColor/test.xml:   <result>unsupported</result>
-./FormattingProperties/ParagraphFormattingProperties/margins/test.xml:   <result>unsupported</result>
+*./FormattingProperties/ParagraphFormattingProperties/margins/test.xml:   <result>unsupported</result>
 *./FormattingProperties/ParagraphFormattingProperties/textAlign/test.xml:   <result>fullsupport</result>
-./FormattingProperties/ParagraphFormattingProperties/dropCapsLines/test.xml:   <result>unsupported</result>
+*./FormattingProperties/ParagraphFormattingProperties/dropCapsLines/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/padding/test.xml:   <result>unsupported</result>
 *./FormattingProperties/ParagraphFormattingProperties/leaderStyle/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/writingMode/test.xml:   <result>fullsupport</result>
@@ -59,7 +59,7 @@ testsuite.
 *./FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/justifySingleWord/test.xml:   <result>unknown</result>
 *./FormattingProperties/ParagraphFormattingProperties/tabStopDistance/test.xml:   <result>fullsupport</result>
-./FormattingProperties/ParagraphFormattingProperties/leftAndRightMargins/test.xml:   <result>fullsupport</result>
+*./FormattingProperties/ParagraphFormattingProperties/leftAndRightMargins/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/font-independentLineSpacing/test.xml:   <result>unknown</result>
 ./FormattingProperties/ParagraphFormattingProperties/widows/test.xml:   <result>unsupported</result>
 *./FormattingProperties/ParagraphFormattingProperties/textIndent/test.xml:   <result>unsupported</result>
@@ -68,8 +68,8 @@ testsuite.
 *./FormattingProperties/ParagraphFormattingProperties/leaderType/test.xml:   <result>unsupported</result>
 *./FormattingProperties/ParagraphFormattingProperties/leaderText/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/keepTogether/test.xml:   <result>fullsupport</result>
-./FormattingProperties/ParagraphFormattingProperties/dropCapsDistance/test.xml:   <result>unsupported</result>
-./FormattingProperties/ParagraphFormattingProperties/topAndBottomMargins/test.xml:   <result>fullsupport</result>
+*./FormattingProperties/ParagraphFormattingProperties/dropCapsDistance/test.xml:   <result>unsupported</result>
+*./FormattingProperties/ParagraphFormattingProperties/topAndBottomMargins/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/ParagraphFormattingProperties/tabPosition/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/textAlignOfLastLine/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/registerTrue/test.xml:   <result>unsupported</result>

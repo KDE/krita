@@ -287,7 +287,15 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
     bool stripLeadingSpace = true;
+    int pos = cursor.position();
     loadSpan( element, cursor, &stripLeadingSpace );
+    if (cursor.position() > pos) { // ok something was loaded
+        QTextCursor tempCursor(cursor);
+        tempCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1); // select last char loaded
+        if (tempCursor.selectedText() == " " && stripLeadingSpace) {            // if it's a collapsed blankspace
+            tempCursor.removeSelectedText();                                    // remove it (ODF1.1 §5.1.1)
+        }
+    }
     cursor.setCharFormat( cf ); // restore the cursor char format
 }
 
@@ -320,7 +328,15 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
 
     //1.6: KoTextParag::loadOasisSpan
     bool stripLeadingSpace = true;
+    int pos = cursor.position();
     loadSpan( element, cursor, &stripLeadingSpace );
+    if (cursor.position() > pos) { // ok something was loaded
+        QTextCursor tempCursor(cursor);
+        tempCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1); // select last char loaded
+        if (tempCursor.selectedText() == " " && stripLeadingSpace) {            // if it's a collapsed blankspace
+            tempCursor.removeSelectedText();                                    // remove it
+        }
+    }
 
     // Add a new empty block which finish's our list-item block
     QTextBlockFormat emptyTbf;
@@ -528,10 +544,11 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             #endif
             text = normalizeWhitespace( text.replace('\n', QChar::LineSeparator), *stripLeadingSpace );
 
-            if ( text.isEmpty() )
-                *stripLeadingSpace = false;
-            else
+            if ( !text.isEmpty() ) {
+                // if present text ends with a space,
+                // we can remove the leading space in the next text
                 *stripLeadingSpace = text[text.length() - 1].isSpace();
+            }
 
             cursor.insertText( text );
         }

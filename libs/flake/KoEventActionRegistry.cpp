@@ -134,6 +134,9 @@ QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf( const Ko
                             }
                         }
                     }
+                    else {
+                        kWarning(30006) << "presentation:event-listerer action = " << action << "not supported";
+                    }
                 }
                 else if ( element.namespaceURI() == KoXmlNS::script ) {
                     // TODO

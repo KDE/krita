@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -80,8 +80,8 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
 bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
     QSizeF size;
-    size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
-    size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
+
+    bool radiusGiven = true;
 
     if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) && element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
     {
@@ -94,17 +94,24 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
         double r = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r" ) );
         size = QSizeF( 2*r, 2*r );
     }
+    else {
+        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
+        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
+        radiusGiven = false;
+    }
     setSize( size );
 
     QPointF pos;
-    pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
-    pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
 
     if( element.hasAttributeNS( KoXmlNS::svg, "cx" ) && element.hasAttributeNS( KoXmlNS::svg, "cy" ) )
     {
         double cx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cx" ) );
         double cy = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cy" ) );
         pos = QPointF( cx - 0.5 * size.width(), cy - 0.5 * size.height() );
+    }
+    else {
+        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
     }
     setPosition( pos );
 
@@ -118,6 +125,12 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
 
     setStartAngle( element.attributeNS( KoXmlNS::draw, "start-angle", "0" ).toDouble() );
     setEndAngle( element.attributeNS( KoXmlNS::draw, "end-angle", "360" ).toDouble() );
+    if ( !radiusGiven ) {
+        // is the size was given by width and height we have to reset the data as the size of the 
+        // part of the cut/pie is given.
+        setSize( size );
+        setPosition( pos );
+    }
 
     loadOdfAttributes( element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements );
 

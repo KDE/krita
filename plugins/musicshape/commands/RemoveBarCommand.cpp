@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "RemoveBarCommand.h"
-
+#include <KLocale>
 #include "../core/Bar.h"
 #include "../core/Sheet.h"
 
@@ -28,7 +28,7 @@ using namespace MusicCore;
 RemoveBarCommand::RemoveBarCommand(MusicShape* shape, int barIdx)
     : m_shape(shape), m_bar(m_shape->sheet()->bar(barIdx)), m_index(barIdx)
 {
-    setText("Remove bar");
+    setText(i18n("Remove bar"));
 }
 
 void RemoveBarCommand::redo()

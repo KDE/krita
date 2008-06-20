@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "RemoveStaffElementCommand.h"
-
+#include <KLocale>
 #include "../core/StaffElement.h"
 #include "../core/Clef.h"
 #include "../core/Bar.h"
@@ -32,9 +32,9 @@ RemoveStaffElementCommand::RemoveStaffElementCommand(MusicShape* shape, StaffEle
     : m_shape(shape), m_element(se), m_bar(bar), m_index(m_bar->indexOfStaffElement(se))
 {
     if (dynamic_cast<Clef*>(se)) {
-        setText("Remove clef");
+        setText(i18n("Remove clef"));
     } else {
-        setText("Remove staff element");
+        setText(i18n("Remove staff element"));
     }
 }
 

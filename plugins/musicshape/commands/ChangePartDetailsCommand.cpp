@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "ChangePartDetailsCommand.h"
-
+#include <KLocale>
 #include "../core/Part.h"
 #include "../core/Staff.h"
 #include "../core/Clef.h"
@@ -40,7 +40,7 @@ ChangePartDetailsCommand::ChangePartDetailsCommand(MusicShape* shape, Part* part
     : m_shape(shape), m_part(part), m_oldName(part->name()), m_newName(name), m_oldAbbr(part->shortName(false))
     , m_newAbbr(abbr), m_oldStaffCount(part->staffCount()), m_newStaffCount(staffCount)
 {
-    setText("Change part details");
+    setText(i18n("Change part details"));
     
     if (m_newStaffCount > m_oldStaffCount) {
         TimeSignature* ts = m_part->staff(0)->lastTimeSignatureChange(0);

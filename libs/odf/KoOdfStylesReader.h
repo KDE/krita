@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -111,6 +112,9 @@ public:
 
     /// @return master pages ("style:master-page" elements), hashed by name
     QHash<QString, KoXmlElement*> masterPages() const;
+
+    /// @return all presentation page layouts ("presentation-page-layout" elements), hashed by name
+    QHash<QString, KoXmlElement*> presentationPageLayouts() const;
 
     /// @return draw styles, hashed by name
     QHash<QString, KoXmlElement*> drawStyles() const;

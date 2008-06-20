@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +42,7 @@ public:
 
     QHash<QString /*name*/, KoXmlElement*> styles; // page-layout, font-face etc.
     QHash<QString /*name*/, KoXmlElement*> masterPages;
+    QHash<QString /*name*/, KoXmlElement*> presentationPageLayouts;
     QHash<QString /*name*/, KoXmlElement*> listStyles;
     QHash<QString /*name*/, KoXmlElement*> drawStyles;
 
@@ -66,6 +68,7 @@ KoOdfStylesReader::~KoOdfStylesReader()
     qDeleteAll( d->defaultStyles );
     qDeleteAll( d->styles );
     qDeleteAll( d->masterPages );
+    qDeleteAll( d->presentationPageLayouts );
     qDeleteAll( d->listStyles );
     qDeleteAll( d->drawStyles );
     delete d;
@@ -221,8 +224,7 @@ void KoOdfStylesReader::insertStyle( const KoXmlElement& e, TypeAndLocation type
         }
     } else if ( ns == KoXmlNS::style && (
                 localName == "page-layout"
-             || localName == "font-face"
-             || localName == "presentation-page-layout" ) )
+             || localName == "font-face" ) )
     {
         if ( d->styles.contains( name ) )
         {
@@ -230,6 +232,13 @@ void KoOdfStylesReader::insertStyle( const KoXmlElement& e, TypeAndLocation type
             delete d->styles.take( name );
         }
         d->styles.insert( name, new KoXmlElement( e ) );
+    } else if ( localName == "presentation-page-layout" || ns == KoXmlNS::style ) {
+        if ( d->presentationPageLayouts.contains( name ) )
+        {
+            kDebug(30003) <<"Presentation page layout: '" << name <<"' already exists";
+            delete d->presentationPageLayouts.take( name );
+        }
+        d->presentationPageLayouts.insert( name, new KoXmlElement( e ) );
     } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
         const QString family = e.attributeNS( KoXmlNS::style, "family", QString() );
         if ( !family.isEmpty() )
@@ -274,6 +283,11 @@ QHash<QString, KoXmlElement*> KoOdfStylesReader::listStyles() const
 QHash<QString, KoXmlElement*> KoOdfStylesReader::masterPages() const
 {
     return d->masterPages;
+}
+
+QHash<QString, KoXmlElement*> KoOdfStylesReader::presentationPageLayouts() const
+{
+    return d->presentationPageLayouts;
 }
 
 QHash<QString, KoXmlElement*> KoOdfStylesReader::drawStyles() const

@@ -36,7 +36,7 @@ class KoCreateShapesTool;
 class KActionCollection;
 class KoShape;
 class KoToolProxy;
-class QAbstractButton;
+class QToolButton;
 class KoDeviceEvent;
 
 /**
@@ -149,7 +149,7 @@ public:
 
     /// Struct for the createToolList return type.
     struct Button {
-        QAbstractButton *button;///< a newly created button.
+        QToolButton *button;///< a newly created button.
         QString section;        ///< The section the button wants to be in.
         int priority;           ///< Higher priority means coming first in the section.
         int buttonGroupId;      ///< An unique ID for this button as passed by changedTool()

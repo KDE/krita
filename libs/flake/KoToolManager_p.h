@@ -31,14 +31,14 @@ class KoCanvasBase;
 class KoTool;
 class KoShape;
 
-class QAbstractButton;
+class QToolButton;
 
 /// \internal
 class ToolHelper : public QObject {
     Q_OBJECT
 public:
     explicit ToolHelper(KoToolFactory *tool);
-    QAbstractButton *createButton();
+    QToolButton *createButton();
     /// wrapper around KoToolFactory::id();
     QString id() const;
     /// wrapper around KoToolFactory::name();

@@ -52,5 +52,13 @@ KoDockFactory::DockPosition KoToolBoxFactory::defaultDockPosition() const
 
 QDockWidget* KoToolBoxFactory::createDockWidget()
 {
-    return new KoToolBox(d->canvas, d->appName);
+    KoToolBox *box = new KoToolBox(d->canvas);
+    QDockWidget *dockWidget = new QDockWidget();
+
+    dockWidget->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    dockWidget->setWindowTitle(d->appName);
+    dockWidget->setObjectName("ToolBox_"+ d->appName);
+    dockWidget->setWidget(box);
+
+    return dockWidget;
 }

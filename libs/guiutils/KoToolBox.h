@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (c) 2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2005-2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,21 +22,21 @@
 
 #include <KoCanvasObserver.h>
 
-#include <QList>
-#include <QMap>
-#include <QHash>
-#include <QDockWidget>
+#include <QtCore/QList>
+#include <QtCore/QMap>
+#include <QtCore/QHash>
+#include <QtGui/QDockWidget>
 
 class QButtonGroup;
 class QBoxLayout;
-class QAbstractButton;
+class QToolButton;
 class ToolArea;
 class KoCanvasController;
 class KoCanvasBase;
 
 /**
- * KoToolBox is a kind of super-specialized toolbar that can order
- * tools according to type and priority.
+ * KoToolBox is a dock widget that can order tools according to type and
+ * priority.
  *
  * The ToolBox is a container for tool buttons which are themselves
  * divided into sections.
@@ -48,11 +48,11 @@ class KoCanvasBase;
  * rotating in a smart way to show the buttons optimally.
  * @see KoToolManager
  */
-class KoToolBox : public QDockWidget, public KoCanvasObserver {
+class KoToolBox : public QWidget, public KoCanvasObserver {
     Q_OBJECT
 public:
     /// constructor
-    explicit KoToolBox(KoCanvasController *canvas, const QString &title);
+    explicit KoToolBox(KoCanvasController *canvas);
     ~KoToolBox();
 
     /**
@@ -68,7 +68,7 @@ public:
      *      this button
      * @see setup()
      */
-    void addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId=-1);
+    void addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId=-1);
 
 public slots:
     /**
@@ -89,57 +89,12 @@ public slots:
      */
     void setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes);
 
-    /**
-     * Enables or disables all the tools that this toolbox shows.
-     * @param enable if true, then the tools will be clickable.
-     */
-    void enableTools(bool enable);
-
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
 
 private:
-    /**
-     * Setup the toolbox by adding the buttons in the right configuration to the ui.
-     * You should only call this method one time, and you should call it prior to showing.
-     */
-    void setup();
-    void setButtonsVisible(const KoCanvasBase *canvas, const QList<QString> &codes);
-
-
-private:
-    class ToolArea : public QWidget {
-    public:
-        ToolArea(QWidget *parent);
-        ~ToolArea();
-
-        void setOrientation (Qt::Orientation orientation);
-        void add(QWidget *button);
-
-        QWidget* getNextParent();
-
-    private:
-        QList<QWidget *> m_children;
-        QBoxLayout *m_layout;
-
-        QWidget *m_leftRow;
-        QWidget *m_rightRow;
-        QBoxLayout *m_leftLayout;
-        QBoxLayout *m_rightLayout;
-
-        bool m_left;
-    };
-    QButtonGroup *m_buttonGroup;
-    QBoxLayout* m_layout;
-    QList<ToolArea *> m_toolBoxes;
-    QHash<QAbstractButton*, QString> m_visibilityCodes;
-
-    // Section,  [prio, button]
-    QMap<QString, QMultiMap<int, QAbstractButton*> > m_buttons;
-    QMap<QString, ToolArea*> m_toolAreas;
-
-    void showEvent(QShowEvent *event);
-    const KoCanvasBase *m_canvas;
+    class Private;
+    Private * const d;
 };
 
 #endif // _KO_TOOLBOX_H_

@@ -33,7 +33,7 @@ ToolHelper::ToolHelper(KoToolFactory *tool) {
     m_uniqueId = (int) random();
 }
 
-QAbstractButton* ToolHelper::createButton() {
+QToolButton* ToolHelper::createButton() {
     QToolButton *but = new QToolButton();
     but->setIcon(KIcon( m_toolFactory->icon() ).pixmap(22));
     but->setAutoRaise(true);

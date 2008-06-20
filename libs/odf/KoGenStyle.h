@@ -162,7 +162,8 @@ public:
         /// GraphicType is always graphic-properties.
         GraphicType,
         Reserved1, ///< @internal for binary compatible extensions
-        Reserved2, ///< @internal for binary compatible extensions
+        /// For elements that are children of the style itself, not any of the properties
+        StyleChildElement,
         ChildElement, ///< @internal
         N_NumTypes ///< @internal - warning, adding items here affects binary compatibility (size of KoGenStyle)
     };

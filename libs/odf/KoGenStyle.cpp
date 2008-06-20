@@ -146,6 +146,15 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, const KoGenStyles& styles, con
     writeStyleProperties( writer, KoGenStyle::ParagraphType, "style:paragraph-properties", parentStyle );
     writeStyleProperties( writer, KoGenStyle::TextType, "style:text-properties", parentStyle );
 
+    //write child elements that aren't in any of the properties elements
+    i = KoGenStyle::StyleChildElement;
+    it = m_properties[i].begin();
+    for ( ; it != m_properties[i].end(); ++it ) {
+        if ( !parentStyle || parentStyle->property( it.key(), i ) != it.value() ) {
+            writer->addCompleteElement( it.value().toUtf8() );
+        }
+    }
+
     // And now the style maps
     for ( int i = 0; i < m_maps.count(); ++i ) {
         bool writeit = true;

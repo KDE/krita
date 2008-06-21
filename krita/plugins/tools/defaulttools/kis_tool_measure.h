@@ -105,6 +105,8 @@ public:
         : KoToolFactory(parent, "KritaShape/KisToolMeasure", i18n( "Measure" ))
         {
             setToolType( TOOL_TYPE_TRANSFORM );
+            setToolTip( i18n( "Measure the distance between two points" ) );
+            setIcon( "krita_tool_measure" );
             //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority( 16 );
         }

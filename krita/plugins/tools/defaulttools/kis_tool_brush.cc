@@ -171,7 +171,7 @@ QWidget * KisToolBrush::createOptionWidget()
     QLabel* labelSmoothness = new QLabel(i18n("Smoothness:"), optionWidget);
     labelSmoothness->setEnabled(false);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), labelSmoothness, SLOT(setEnabled(bool)));
-    
+
     m_sliderSmoothness = new QSlider(Qt::Horizontal, optionWidget);
     m_sliderSmoothness->setMinimum(0);
     m_sliderSmoothness->setMaximum(MAXIMUM_SMOOTHNESS);
@@ -179,7 +179,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
     connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
     m_sliderSmoothness->setValue( m_smoothness * MAXIMUM_SMOOTHNESS );
-    
+
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
@@ -194,22 +194,22 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
     m_sliderMagnetism->setValue( m_magnetism * MAXIMUM_MAGNETISM );
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
-    
+
     m_optionLayout = new QGridLayout(optionWidget);
     Q_CHECK_PTR(m_optionLayout);
 
     m_optionLayout->setMargin(0);
-    m_optionLayout->setSpacing(6);
+    m_optionLayout->setSpacing(2);
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
-    m_optionLayout->addWidget(m_chkDirect, 0, 0);
+    m_optionLayout->addWidget(m_chkDirect, 0, 0, 1, 3);
     m_optionLayout->addWidget(m_chkSmooth, 1, 0);
-    m_optionLayout->addWidget(labelSmoothness, 2, 0);
-    m_optionLayout->addWidget(m_sliderSmoothness, 2, 1);
+    m_optionLayout->addWidget(labelSmoothness, 1, 1);
+    m_optionLayout->addWidget(m_sliderSmoothness, 1, 2);
     m_optionLayout->addWidget(m_chkAssistant, 3, 0);
-    m_optionLayout->addWidget(m_assistant, 3, 1);
+    m_optionLayout->addWidget(m_assistant, 3, 1, 1, 2);
     m_optionLayout->addWidget(labelMagnetism, 4, 0);
-    m_optionLayout->addWidget(m_sliderMagnetism, 4, 1);
+    m_optionLayout->addWidget(m_sliderMagnetism, 4, 1, 1, 2);
 
     return optionWidget;
 }

@@ -174,13 +174,9 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
     //add manifest line for content.xml
     documentContext.odfStore.manifestWriter()->addManifestEntry( "content.xml", "text/xml" );
 
-    bool ok=true;
-    foreach(KoDataCenter *dataCenter, d->dataCenterMap)
-    {
-        ok = ok && dataCenter->completeSaving(documentContext.odfStore.store(), documentContext.odfStore.manifestWriter());
-    }
-    if(!ok)
+    if ( !paContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() ) ) {
         return false;
+    }
 
     return mainStyles.saveOdfStylesDotXml( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() );
 }

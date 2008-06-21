@@ -173,6 +173,8 @@ install(
     KoCanvasObserver.h
     KoCanvasResourceProvider.h
     KoFlake.h
+    KoImageCollection.h
+    KoImageData.h
     KoInputDevice.h
     KoInsets.h
     KoPathSegment.h

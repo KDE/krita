@@ -44,6 +44,7 @@
 
 #include <QGridLayout>
 #include <QListView>
+#include <QStandardItemModel>
 #include <QList>
 #include <QSize>
 #include <QToolButton>
@@ -85,21 +86,39 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     QGridLayout* mainLayout = new QGridLayout(mainWidget);
     setWidget(mainWidget);
 
-    m_collectionsCombo = new KComboBox(mainWidget);
-    mainLayout->addWidget(m_collectionsCombo, 0, 0);
+    m_quickView = new QListView (0);
+    mainLayout->addWidget(m_quickView, 0, 0);
+    m_quickView->setViewMode(QListView::IconMode);
+    m_quickView->setDragDropMode(QListView::DragOnly);
+    m_quickView->setSelectionMode(QListView::SingleSelection);
+    m_quickView->setResizeMode(QListView::Adjust);
+    m_quickView->setFlow(QListView::LeftToRight);
+    m_quickView->setGridSize(QSize(32, 32));
+    m_quickView->setMaximumSize(QSize(5*32+10,32+10));
+    m_quickView->setMinimumSize(QSize(5*32+10,32+10));
+    m_quickView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_quickView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    connect(m_quickView, SIGNAL(clicked(const QModelIndex&)),
+            this, SLOT(activateShapeCreationTool(const QModelIndex&)));
+
+    m_moreShapes = new KComboBox(mainWidget);
+    mainLayout->addWidget(m_moreShapes, 0, 1);
+
+    m_collectionsCombo = new KComboBox(mainWidget);
+    mainLayout->addWidget(m_collectionsCombo, 0, 2);
     connect(m_collectionsCombo, SIGNAL(currentIndexChanged(int)),
             this, SLOT(setCurrentShapeCollection(int)));
 
     m_addCollectionButton = new QToolButton (mainWidget);
-    mainLayout->addWidget(m_addCollectionButton, 0, 1);
+    mainLayout->addWidget(m_addCollectionButton, 0, 3);
     m_addCollectionButton->setIcon(SmallIcon("list-add"));
     m_addCollectionButton->setIconSize(QSize(16, 16));
     m_addCollectionButton->setToolTip(i18n("Open Shape Collection"));
     m_addCollectionButton->setPopupMode(QToolButton::InstantPopup);
 
     m_closeCollectionButton = new QToolButton (mainWidget);
-    mainLayout->addWidget(m_closeCollectionButton, 0, 2);
+    mainLayout->addWidget(m_closeCollectionButton, 0, 4);
     m_closeCollectionButton->setIcon(SmallIcon("list-remove"));
     m_closeCollectionButton->setIconSize(QSize(16, 16));
     m_closeCollectionButton->setToolTip(i18n("Close Shape Collection"));
@@ -118,13 +137,17 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
         buildAddCollectionMenu();
     }
 
-    m_collectionView = new QListView (mainWidget);
-    mainLayout->addWidget(m_collectionView, 1, 0, 1, -1);
+    //m_collectionView = new QListView (mainWidget);
+    m_collectionView = new QListView (0);
+    //mainLayout->addWidget(m_collectionView, 1, 0, 1, -1);
     m_collectionView->setViewMode(QListView::IconMode);
     m_collectionView->setDragDropMode(QListView::DragOnly);
     m_collectionView->setSelectionMode(QListView::SingleSelection);
     m_collectionView->setResizeMode(QListView::Adjust);
     m_collectionView->setGridSize(QSize(48, 48));
+    m_collectionView->setMinimumSize(QSize(200,320));
+
+    m_moreShapes->setView(m_collectionView);
 
     connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(activateShapeCreationTool(const QModelIndex&)));
@@ -136,6 +159,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
 void KoShapeCollectionDocker::loadDefaultShapes()
 {
     QList<KoCollectionItem> templatelist;
+    QList<KoCollectionItem> quicklist;
 
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
@@ -149,6 +173,9 @@ void KoShapeCollectionDocker::loadDefaultShapes()
             temp.icon = KIcon(shapeTemplate.icon);
             temp.properties = shapeTemplate.properties;
             templatelist.append(temp);
+
+            if(temp.id=="TextShapeID" || temp.id=="PictureShape" || temp.id=="KoConnectionShape" || temp.id=="ChartShape" || temp.id=="FormulaShapeID")
+                quicklist.append(temp);
         }
 
         if(!oneAdded) {
@@ -158,12 +185,19 @@ void KoShapeCollectionDocker::loadDefaultShapes()
             temp.icon = KIcon(factory->icon());
             temp.properties = 0;
             templatelist.append(temp);
+
+            if(temp.id=="TextShapeID" || temp.id=="PictureShape" || temp.id=="KoConnectionShape" || temp.id=="ChartShape" || temp.id=="FormulaShapeID")
+                quicklist.append(temp);
         }
     }
 
     KoCollectionItemModel* model = new KoCollectionItemModel(this);
     model->setShapeTemplateList(templatelist);
     addCollection("default", i18n("Default"), model);
+
+    KoCollectionItemModel* quickModel = new KoCollectionItemModel(this);
+    quickModel->setShapeTemplateList(quicklist);
+    m_quickView->setModel(quickModel);
 }
 
 void KoShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index)
@@ -187,8 +221,10 @@ void KoShapeCollectionDocker::setCurrentShapeCollection(int index)
 {
     QString id = m_collectionsCombo->itemData(index).toString();
 
-    if(m_modelMap.contains(id))
+    if(m_modelMap.contains(id)) {
         m_collectionView->setModel(m_modelMap[id]);
+        m_moreShapes->setModel(m_modelMap[id]);
+    }
     else
         kWarning() << "Didn't find a model with id ==" << id;
 

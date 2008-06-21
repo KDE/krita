@@ -137,7 +137,7 @@ BR  * Krita freezes when trying to set the tablet paintop settings for the brush
       "Image > rotate > Image..."
 BR  * Implement a primary, secundary and tertiary paintop that get activated by mouse,
        ctrl+mouse and ctrl+shift+mouse
-BR  * Fix flake layers (insertion of shapes in the layer, order of painting)
+BR  * Fix flake layers: deletion of shapes
     * Make it possible to create new patterns
     * Divide the QPainter canvas' cached QImage into pyramided tiles.
     * Review "Scale to new Size" dialog. Add a keep aspect ratio switch
@@ -164,7 +164,6 @@ BR  * Show no cursor option
 
     * Filter dialog
         * Fix the layout of the filter dialog
-        * Make filter settings widget delayed action
         * The temporary filter mask does not take into account the global or local selection
         * Activate "Create Mask Effect" button
     * Make filters work on a subset of channels

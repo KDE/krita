@@ -57,6 +57,7 @@ class KoShapeCollectionDocker : public QDockWidget
          * Activates the shape creation tool when a shape is selected.
          */
         void activateShapeCreationTool(const QModelIndex& index);
+        void activateShapeCreationToolFromQuick(const QModelIndex& index);
 
         /**
          * Changes the current shape collection

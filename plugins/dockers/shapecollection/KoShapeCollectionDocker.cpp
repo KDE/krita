@@ -100,7 +100,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     m_quickView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(m_quickView, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(activateShapeCreationTool(const QModelIndex&)));
+            this, SLOT(activateShapeCreationToolFromQuick(const QModelIndex&)));
 
     m_moreShapes = new KComboBox(mainWidget);
     mainLayout->addWidget(m_moreShapes, 0, 1);
@@ -200,6 +200,24 @@ void KoShapeCollectionDocker::loadDefaultShapes()
     m_quickView->setModel(quickModel);
 }
 
+void KoShapeCollectionDocker::activateShapeCreationToolFromQuick(const QModelIndex& index)
+{
+    if(!index.isValid())
+        return;
+
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+
+    if(canvasController) {
+        KoCreateShapesTool* tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
+        QString id = m_quickView->model()->data(index, Qt::UserRole).toString();
+        KoProperties* properties = static_cast<KoCollectionItemModel*>(m_quickView->model())->properties(index);
+
+        tool->setShapeId(id);
+        tool->setShapeProperties(properties);
+        KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
+    }
+}
+
 void KoShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index)
 {
     if(!index.isValid())
@@ -211,6 +229,7 @@ void KoShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index
         KoCreateShapesTool* tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
         QString id = m_collectionView->model()->data(index, Qt::UserRole).toString();
         KoProperties* properties = static_cast<KoCollectionItemModel*>(m_collectionView->model())->properties(index);
+        
         tool->setShapeId(id);
         tool->setShapeProperties(properties);
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);

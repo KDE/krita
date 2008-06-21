@@ -23,6 +23,10 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 #include "KoPACanvas.h"
+#include "KoPAView.h"
+#include "KoPAMasterPage.h"
+#include "KoPAPage.h"
+#include "commands/KoPAPageInsertCommand.h"
 #if 0 // XXX: Add undo for reordering pages, look at Karbon
 #include <KarbonLayerReorderCommand.h>
 #endif
@@ -51,10 +55,10 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QToolButton>
 #include <QtGui/QButtonGroup>
+#include <QItemSelection>
 
 enum ButtonIds
 {
-    Button_New,
     Button_Raise,
     Button_Lower,
     Button_Delete
@@ -89,35 +93,41 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
     layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, -1 );
-    QButtonGroup *buttonGroup = new QButtonGroup( mainWidget );
-    buttonGroup->setExclusive( false );
 
     QToolButton *button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "list-add" ) );
-    button->setToolTip( i18n("Add a new layer") );
-    buttonGroup->addButton( button, Button_New );
+    button->setToolTip( i18n("Add a new page or layer") );
     layout->addWidget( button, 1, 0 );
+
+    KMenu *menu = new KMenu( button );
+    button->setMenu(menu);
+    button->setPopupMode(QToolButton::InstantPopup);
+    menu->addAction( SmallIcon( "document-new" ), i18n( "Page" ), this, SLOT( addPage() ) );
+    m_addLayerAction = menu->addAction( SmallIcon( "layer-new" ), i18n( "Layer" ), this, SLOT( addLayer() ) );
+
+    m_buttonGroup = new QButtonGroup( mainWidget );
+    m_buttonGroup->setExclusive( false );
 
     button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "list-remove" ) );
     button->setToolTip( i18n("Delete selected objects") );
-    buttonGroup->addButton( button, Button_Delete );
+    m_buttonGroup->addButton( button, Button_Delete );
     layout->addWidget( button, 1, 1 );
 
     button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "arrow-up" ) );
     button->setToolTip( i18n("Raise selected objects") );
-    buttonGroup->addButton( button, Button_Raise );
+    m_buttonGroup->addButton( button, Button_Raise );
     layout->addWidget( button, 1, 3 );
 
     button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "arrow-down" ) );
     button->setToolTip( i18n("Lower selected objects") );
-    buttonGroup->addButton( button, Button_Lower );
+    m_buttonGroup->addButton( button, Button_Lower );
     layout->addWidget( button, 1, 4 );
 
     button = new QToolButton( mainWidget );
-    KMenu *menu = new KMenu( this );
+    menu = new KMenu( this );
     QActionGroup *group = new QActionGroup( this );
 
     m_viewModeActions.insert( KoDocumentSectionView::MinimalMode,
@@ -144,7 +154,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
 
     setWidget( mainWidget );
 
-    connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
+    connect( m_buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
     m_model = new KoPADocumentModel( this );
     m_sectionView->setModel( m_model );
@@ -152,6 +162,8 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
 
     connect( m_sectionView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
+    connect( m_sectionView->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
+             this, SLOT (itemSelected( const QItemSelection&, const QItemSelection& ) ) );
 
     KConfigGroup configGroup = KGlobal::config()->group( "KoPageApp/DocumentStructureDocker" );
     QString viewModeString = configGroup.readEntry("ViewMode", "");
@@ -177,9 +189,6 @@ void KoPADocumentStructureDocker::slotButtonClicked( int buttonId )
 {
     switch( buttonId )
     {
-        case Button_New:
-            addLayer();
-            break;
         case Button_Raise:
             raiseItem();
             break;
@@ -455,6 +464,31 @@ QString KoPADocumentStructureDocker::viewModeToString( KoDocumentSectionView::Di
     }
 
     return QString();
+}
+
+void KoPADocumentStructureDocker::itemSelected( const QItemSelection& selected, const QItemSelection& deselected )
+{
+    Q_UNUSED( deselected );
+
+    if( selected.indexes().isEmpty() ) {
+        m_buttonGroup->button( Button_Raise )->setEnabled( false );
+        m_buttonGroup->button( Button_Lower )->setEnabled( false );
+        m_buttonGroup->button( Button_Delete )->setEnabled( false );
+        m_addLayerAction->setEnabled( false );
+    } else {
+        m_buttonGroup->button( Button_Delete )->setEnabled( true );
+        m_buttonGroup->button( Button_Raise )->setEnabled( true );
+        m_buttonGroup->button( Button_Lower )->setEnabled( true );
+        m_addLayerAction->setEnabled( true );
+    }
+}
+
+void KoPADocumentStructureDocker::addPage()
+{
+    if( !m_canvas )
+        return;
+
+    m_canvas->koPAView()->insertPage();
 }
 
 #include "KoPADocumentStructureDocker.moc"

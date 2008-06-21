@@ -32,6 +32,7 @@ class QModelIndex;
 class KoPAPageBase;
 class KoPACanvas;
 class QAction;
+class QButtonGroup;
 
 class KoPADocumentStructureDockerFactory : public KoDockFactory
 {
@@ -72,6 +73,7 @@ public slots:
 private slots:
     void slotButtonClicked( int buttonId );
     void addLayer();
+    void addPage();
     void deleteItem();
     void raiseItem();
     void lowerItem();
@@ -79,6 +81,9 @@ private slots:
     void minimalView();
     void detailedView();
     void thumbnailView();
+
+    void itemSelected( const QItemSelection& selected, const QItemSelection& deselected );
+
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
@@ -90,6 +95,8 @@ private:
     KoDocumentSectionView *m_sectionView;
     KoPADocumentModel *m_model;
     QHash<KoDocumentSectionView::DisplayMode, QAction*> m_viewModeActions;
+    QButtonGroup *m_buttonGroup;
+    QAction* m_addLayerAction;
 };
 
 #endif // KOPADOCUMENTSTRUCTUREDOCKER_H

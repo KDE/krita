@@ -121,6 +121,9 @@ public slots:
     /// Shows/hides the rulers
     void setShowRulers(bool show);
 
+    /// Insert a new page after the current one
+    void insertPage();
+
 signals:
     /// Emitted every time the active page is changed
     void activePageChanged();
@@ -165,9 +168,6 @@ protected slots:
 
     /// Called when the selection changed
     virtual void selectionChanged();
-
-    /// Insert a new page after the current one
-    void insertPage();
 
     /// Copy Page
     void copyPage();

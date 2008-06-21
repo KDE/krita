@@ -61,6 +61,8 @@ public:
     KoUnit unit() const;
     const QPoint & documentOffset() const;
 
+    KoPAView* koPAView () const { return m_view; }
+
 public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     void updateSize();

@@ -109,6 +109,8 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
+    if ( !currentImage() ) return;
+
     gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
 
     QPen old = gc.pen();
@@ -193,6 +195,8 @@ void KisToolMeasure::mouseReleaseEvent(KoPointerEvent *e)
 
 QWidget* KisToolMeasure::createOptionWidget()
 {
+    if ( !currentImage() )
+        return 0;
     m_optWidget = new KisToolMeasureOptionsWidget(0, currentImage()->xRes());
     connect(this, SIGNAL(sigDistanceChanged(double)), m_optWidget, SLOT(slotSetDistance(double)));
     connect(this, SIGNAL(sigAngleChanged(double)), m_optWidget, SLOT(slotSetAngle(double)));

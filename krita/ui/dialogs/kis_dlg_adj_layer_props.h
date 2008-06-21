@@ -63,6 +63,7 @@ protected slots:
     void slotNameChanged( const QString & );
 
 private:
+    KisPaintDeviceSP m_paintDevice;
     KisImage * m_image;
     KisFilterConfigWidget * m_currentConfigWidget;
     KisFilter* m_currentFilter;

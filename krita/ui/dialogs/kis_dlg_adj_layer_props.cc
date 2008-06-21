@@ -49,6 +49,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
                                          QWidget *parent,
                                          const char *name)
     : KDialog( parent )
+    , m_paintDevice( paintDevice )
     , m_image( 0 )
     , m_currentConfigWidget ( 0 )
     , m_currentFilter ( 0 )
@@ -116,7 +117,7 @@ KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
     if (m_currentConfigWidget)
         return m_currentConfigWidget->configuration();
     else
-        return 0;
+        return m_currentFilter->defaultConfiguration( m_paintDevice );
 }
 
 QString KisDlgAdjLayerProps::layerName() const

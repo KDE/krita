@@ -297,7 +297,6 @@ void KisCanvas2::updateCanvasProjection( const QRect & rc )
     Q_ASSERT( m_d->openGLImageTextures.isNull() );
 #endif
     // XXX: Use the KisQPainterImageContext here
-qDebug() << "updateCanvasProjection " << rc;
     // If this does anything, it updates the pixel-for-pixel
     // projection of the KisImage
     m_d->prescaledProjection->updateCanvasProjection( rc );

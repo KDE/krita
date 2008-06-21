@@ -38,7 +38,7 @@ class KisTiledIterator;
 /**
  * Provides abstraction to a tile.  A tile contains
  * a part of a PaintDevice, but only the individual pixels
- * are accesable and that only via iterators.
+ * are accessible and that only via iterators.
  *
  * Implicit sharing: they share a same static, non-changing data thing. Tiles writing will auto-detach (as opposed to where they all share the same data, even
  * after writing; this would require also looking at the dirtyRect).

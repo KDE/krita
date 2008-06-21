@@ -478,13 +478,18 @@ void KisMaskManager::maskProperties()
 
         KisPaintDeviceSP dev = layer->projection();
         KisDlgAdjLayerProps dlg( layer->projection(), layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops" );
-        QString before = dlg.filterConfiguration()->toLegacyXML();
+        QString before;
+        if (dlg.filterConfiguration())
+            before = dlg.filterConfiguration()->toLegacyXML();
         if (dlg.exec() == QDialog::Accepted)
         {
+            QString after;
+            if (dlg.filterConfiguration())
+                after = dlg.filterConfiguration()->toLegacyXML();
             KisChangeFilterCmd<KisFilterMaskSP> * cmd = new KisChangeFilterCmd<KisFilterMaskSP>(mask,
                 dlg.filterConfiguration(),
                 before,
-                dlg.filterConfiguration()->toLegacyXML());
+                after);
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
             m_view->document()->setModified( true );

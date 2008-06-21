@@ -198,6 +198,7 @@ public:
 
 
             KisFilterConfiguration * cfg = layer->filter();
+            qDebug() << ">>>>>>>>>>>>>>>> cfg: " << cfg;
             if (!cfg) return true;
 
             KisFilterSP f = KisFilterRegistry::instance()->value( cfg->name() );

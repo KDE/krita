@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Boudewijn Rempt <boud@valdysa.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +20,8 @@
 
 #include "kis_dlg_filter.h"
 
+#include <QTimer>
+
 // From krita/image
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -31,7 +34,7 @@
 #include "ui_wdgfilterdialog.h"
 
 struct KisFilterDialog::Private {
-    Private() 
+    Private()
         : currentFilter(0)
         , mask(0)
     {
@@ -41,6 +44,7 @@ struct KisFilterDialog::Private {
     Ui_FilterDialog uiFilterDialog;
     KisFilterMaskSP mask;
     KisLayerSP layer;
+    QTimer timer;
 };
 
 KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
@@ -56,17 +60,18 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
     psel->select( rc );
     d->mask->selection()->updateProjection();
-    
+
     d->layer->setPreviewMask( d->mask );
     d->uiFilterDialog.filterSelection->setLayer( d->layer );
-    
+    d->timer.setSingleShot(true);
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
-    connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
+    connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(kickTimer()));
+    connect(&d->timer, SIGNAL(timeout()), SLOT(updatePreview()));
 }
 
 KisFilterDialog::~KisFilterDialog()
@@ -91,14 +96,12 @@ void KisFilterDialog::updatePreview()
     if ( !d->currentFilter ) return;
 
     d->mask->setFilter( d->uiFilterDialog.filterSelection->configuration() );
-    d->mask->setDirty(d->layer->extent());
-
 }
 
 void KisFilterDialog::apply()
 {
     if ( !d->currentFilter ) return;
-    
+
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
     emit(sigPleaseApplyFilter(d->layer, config));
 }
@@ -107,6 +110,11 @@ void KisFilterDialog::close()
 {
     d->layer->removePreviewMask();
     d->layer->setDirty(d->layer->extent());
+}
+
+void KisFilterDialog::kickTimer()
+{
+    d->timer.start(50);
 }
 
 #include "kis_dlg_filter.moc"

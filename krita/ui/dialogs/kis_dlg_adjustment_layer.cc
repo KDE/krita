@@ -24,10 +24,10 @@
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
+#include <QTimer>
 
 #include <klineedit.h>
 #include <klocale.h>
-
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_config_widget.h"
@@ -57,7 +57,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     setObjectName(name);
-
+    m_timer = new QTimer(this);
+    m_timer->setSingleShot( true );
     Q_ASSERT( m_node );
     Q_ASSERT( m_nodeFilterInterface );
 
@@ -65,7 +66,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     wdgFilterNodeCreation.setupUi( page );
     setMainWidget(page);
 
-    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
+    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(kickTimer()));
+    connect(m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));
     wdgFilterNodeCreation.filterSelector->setPaintDevice(paintDevice);
     wdgFilterNodeCreation.filterSelector->setImage( image );
     wdgFilterNodeCreation.layerName->setText(layerName);
@@ -94,6 +96,12 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
 {
     enableButtonOk(1);
     m_nodeFilterInterface->setFilter( filterConfiguration() );
+    m_node->setDirty(m_node->extent());
+}
+
+void KisDlgAdjustmentLayer::kickTimer()
+{
+    m_timer->start(50);
 }
 
 #include "kis_dlg_adjustment_layer.moc"

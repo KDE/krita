@@ -172,6 +172,7 @@ install(
     KoCanvasBase.h
     KoCanvasObserver.h
     KoCanvasResourceProvider.h
+    KoDataCenter.h
     KoFlake.h
     KoImageCollection.h
     KoImageData.h
@@ -187,6 +188,7 @@ install(
     KoShapeManager.h
     KoShapeRegistry.h
     KoShapeSavingContext.h
+    KoShapeUserData.h
     KoSnapData.h
     KoTool.h
     KoToolManager.h

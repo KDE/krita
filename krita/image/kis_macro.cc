@@ -43,6 +43,12 @@ KisMacro::KisMacro(KisImageSP _image, const QList<KisRecordedAction*>& actions) 
     appendActions(actions);
 }
 
+KisMacro::~KisMacro()
+{
+    delete d;
+}
+
+
 void KisMacro::appendActions(const QList<KisRecordedAction*>& actions)
 {
     foreach(KisRecordedAction* action, actions)
@@ -67,7 +73,7 @@ void KisMacro::play()
         undoAdapter = d->image->undoAdapter();
         undoAdapter->beginMacro(i18n("Play macro"));
     }
-    
+
     for( QList<KisRecordedAction*>::iterator it = d->actions.begin();
          it != d->actions.end(); ++it)
     {
@@ -75,7 +81,7 @@ void KisMacro::play()
         (*it)->play(undoAdapter);
         QApplication::processEvents();
     }
-    
+
     if(undoAdapter)
     {
         undoAdapter->endMacro();

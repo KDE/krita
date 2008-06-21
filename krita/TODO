@@ -22,38 +22,21 @@ Regressions from 1.x
 
 * UI
 
-    * Bird's eyeview docker: Hubipete started a KOffice-wide one, check status
-      and make sure it's extensible with our own widgets (for exposure)
-    * The filter listview is broken, breaking the adjustment layers dialog
     * Progress reporting
     * Split view crashes
     * opening a backup file causes a crash ( krita(8568)/koffice (filter manager) 
       KoFilterManager::importDocument: Can't open  "application/zip" , trying filter chooser
       ASSERT: "mime" in file /home/boud/kde/src/koffice/libs/main/KoFilterManager.cpp, line 82)
-    * Rulers are uglier and have tab settings, which isn't relevant for Krita's layer shapes
     * deselect/reselect doesn't work and probably needs some redesign
     * the selection undo command needs to be ported to the new structure
 
 * Tools
 
-    * Magnetic Outline Tool has not been ported yet
-    * Curve Paint is replaced by a flake-based curve tool, but that
-      is not finished yet.
-    * Perspective Transform Tool has not been ported yet
-    * Brush outline cursor mode has been lost
-    * select brush and eraser don't work (they should be either the 
-      vector-based flake tools for the vector selection or the ordinary 
-      paint tools for the raster selection)
-    * mask selection visualisation is broken (the should be some general
-      visualisation for masks)
-    * move layer/move selection tool
-
 * Filters 
 
-    (Check also http://wiki.koffice.org/index.php?title=Krita/Filters_State)
+    Run filter test to see which filters are broken (or need a fixed test)
 
 BR  * Make the bumpmap filter get the right layer on loading as adj. layer or filter mask.
-    * CImg filter
     * unsharp mask does something weird using the channelflags that breaks convolution
     * the other convolution filters appear broken
     * all filters are extremely slow
@@ -71,12 +54,7 @@ BR  * Smudge op
 * Brushes
 
     * Initial brush is wrong (often an arrow, instead of a 5px dynamic brush)
-    * Sometimes, not all brushes are loaded
-
-* Colorspaces
-
-    * LMS (is now dependent on OpenCTL)
-    * Wet (may be deprecated definitively given EmanueleT's color work)
+    * Sometimes not all brushes are loaded
 
 * Import/Export
 
@@ -110,7 +88,6 @@ BR  * Krita freezes when trying to set the tablet paintop settings for the brush
 
     * Make recomposition threaded again
     * Make BCoppens' tile manager work (and without a global lock!)
-    * Compress tiles, then swap the compressed tiles out (2-stage aging of old tiles)
     * Fix working with selected subset of channels everywhere
     * ??? A possible cause for the threadpool crashing issue is the fact that we throw 
       QStrings across threads, and kDebug in threaded filters. Possible fix: use std::string 
@@ -118,7 +95,6 @@ BR  * Krita freezes when trying to set the tablet paintop settings for the brush
     * Fix gradient anti-aliasing
     * The fillpainter api is a mess: simplify to use less parameters and more getters and
       less overloading.
-    * KisSelection should get its own shape manager, analogous to KisShapeLayer.
 
 * UI
 
@@ -151,12 +127,8 @@ BR  * Fix flake layers: deletion of shapes
     * Krita needs to get its own toolbox, separately from the the KOffice toolbox
     * The KOffice toolbox may need to become an ordinary toolbar: propose to KOffice ML.
 BR  * Show no cursor option
-    * Make flake based curve and freehand vector tools create editable shapes that
-      render with Krita brushes.
-    * Allow snapping to guides
     * Check painting of tool overlays (rubber bands, control points, temporary shapes etc) 
       for all tools
-    * Dodge and burn tool (see Dik Takken's email)
     * Add icon for the measure tool
     * Add icon for the transform tool
 
@@ -173,9 +145,7 @@ BR  * Show no cursor option
     * Filter paintop
         * fix painting with sharpen filter
         *  Small tiles: makes circles, otherwise effect is fun
-    * Create architecture that lets paintop re-use the painting algorithm of other paintops
-      without having to daisy-chain other paintops.
-BR  * Implement paintop presets and preset editor
+BR  * Implement paintop presets and preset editor (necessary to make mixer canvas not break)
 
 * View Plugins
 
@@ -204,6 +174,37 @@ BR  * show the kisbrush selection widget only in the option widget of paintops
 Post 2.0
 =======================================================================
 
+* Regressions from 1.x
+
+* UI
+    * Bird's eyeview docker: Hubipete started a KOffice-wide one, check status
+      and make sure it's extensible with our own widgets (for exposure)
+    * Rulers are uglier and have tab settings, which isn't relevant for Krita's layer shapes
+
+* Tools
+    * Magnetic Outline Tool has not been ported yet
+    * Curve Paint is replaced by a flake-based curve tool, but that
+      is not finished yet.
+    * Perspective Transform Tool has not been ported yet
+    * Brush outline cursor mode has been lost
+    * select brush and eraser don't work (they should be either the 
+      vector-based flake tools for the vector selection or the ordinary 
+      paint tools for the raster selection)
+    * mask selection visualisation is broken (the should be some general
+      visualisation for masks)
+    * use generic flake shape tool for moving and transforming masks and layers
+
+* Filters
+    
+   * Cimg filter
+
+
+* Colorspaces
+
+    * LMS (is now dependent on OpenCTL)
+    * Wet (may be deprecated definitively given EmanueleT's color work)
+
+
 * Bugs
 
 * Image
@@ -211,7 +212,8 @@ Post 2.0
     * finish painterly overlay
     * physics filters for painterly overlays
     * Anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
-    
+    * Compress tiles, then swap the compressed tiles out (2-stage aging of old tiles)
+
 * UI
 
     * add direction of light setting for mask visualisations
@@ -257,7 +259,11 @@ Post 2.0
         - Implement keep aspect ratio
     * Transform tool: Implement gui, create cursors and update visitor for shearing. Maybe
       share the button with the default tool in flake?
-
+    * Allow snapping to guides
+    * Dodge and burn tool (see Dik Takken's email)
+    * Make flake based curve and freehand vector tools create editable shapes that
+      render with Krita brushes.
+ 
 * Filters
 
     * Make set of filter categories extensible
@@ -277,6 +283,8 @@ Post 2.0
 * Paintops
 
     * implement paintops that take painterly overlays into account
+    * Create architecture that lets paintop re-use the painting algorithm of other paintops
+      without having to daisy-chain other paintops.
 
 
 * View Plugins
@@ -347,7 +355,7 @@ display, they are not saved in the document. They looks like the kind
 you get when you video card is seriously overheating, or defectious (I 
 have a backtrace, console output, and screenshots, if needed). (bug:162149)
  
-*filter paintop:
+* filter paintop:
  
   - transparent pixels are replaced by black or white pixels, instead of 
 keeping their transparency (it is the case in 1.6 too, so I'm not sure 
@@ -356,8 +364,6 @@ transparency, after all). (bug:162872)
    - some filters crash the app (small tiles,...)
  
 *layers:
-  - when a shape layer is deleted, shapes that were on that layer are 
-not removed. (bug:162877)
   - create a selection, copy, paste: the new layer is empty (but "paste 
 in a new image" works). (bug:162873)
  

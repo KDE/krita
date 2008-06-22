@@ -1,8 +1,14 @@
 [Desktop Entry]
 Name=Script Event Action Plugin
+Name[pt]='Plugin' de Acção do Evento do Programa
+Name[pt_BR]=Plugin de Ação do Evento do Programa
+Name[zh_TW]=文稿事件動作外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/ScriptEventAction
 Comment=A plugin that contains a script event action
+Comment[pt]=Um 'plugin' que contém uma acção de evento do programa
+Comment[pt_BR]=Um plugin que contém uma ação de evento do programa
+Comment[zh_TW]=包含文稿事件動作的外掛程式
 [PropertyDef::X-ScriptEventAction-MinVersion]
 Type=int
 [PropertyDef::X-ScriptEventAction-PluginVersion]

@@ -1,8 +1,14 @@
 [Desktop Entry]
 Name=Presentation Event Action Plugin
+Name[pt]='Plugin' de Acções do Evento da Apresentação
+Name[pt_BR]=Plugin de Ações do Evento da Apresentação
+Name[zh_TW]=展示事件動作外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/PresentationEventAction
 Comment=A plugin that contains a presentation event action
+Comment[pt]=Um 'plugin' que contém uma acção de eventos de apresentação
+Comment[pt_BR]=Um plugin que contém uma ação de evento de apresentação
+Comment[zh_TW]=包含展示事件動作的外掛程式
 [PropertyDef::X-PresentationEventAction-MinVersion]
 Type=int
 [PropertyDef::X-PresentationEventAction-PluginVersion]

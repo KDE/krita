@@ -38,10 +38,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-class KoSliderComboContainer : public QFrame
+class KoSliderComboContainer : public QMenu
 {
 public:
-    KoSliderComboContainer(KoSliderCombo *parent) : QFrame(parent, Qt::Popup ), m_parent(parent) {}
+    KoSliderComboContainer(KoSliderCombo *parent) : QMenu(parent ), m_parent(parent) {}
 
 protected:
     virtual void mousePressEvent(QMouseEvent *e);
@@ -60,7 +60,7 @@ void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
                                                            m_parent);
     if (sc == QStyle::SC_ComboBoxArrow)
         setAttribute(Qt::WA_NoMouseReplay);
-    QFrame::mousePressEvent(e);
+    QMenu::mousePressEvent(e);
 }
 
 class KoSliderCombo::KoSliderComboPrivate {
@@ -96,7 +96,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->container->setAttribute(Qt::WA_WindowPropagation);
     QStyleOptionComboBox opt;
     opt.init(this);
-    d->container->setFrameStyle(style()->styleHint(QStyle::SH_ComboBox_PopupFrameStyle, &opt, this));
+//    d->container->setFrameStyle(style()->styleHint(QStyle::SH_ComboBox_PopupFrameStyle, &opt, this));
 
     d->slider = new QSlider(Qt::Horizontal);
     d->slider->setMinimum(0);

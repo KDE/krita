@@ -27,8 +27,8 @@ class Stroke {
 
 public:
 	void drawWuLine(QImage *dev, float x1, float y1, float x2, float y2, float width, const QColor &color);
-	void drawGSLine(QImage *dev, float x1, float y1, float x2, float y2, float width, const QColor &color);
-	void gupta_wide_line(QImage *pixmap, int x0, int y0,int x1, int y1, int w1, int w2);
+	void drawGSLine(QImage *image, int x0, int y0, int x1, int y1, int w1, int w2, const QColor &color);
+	void drawDDALine(QImage *image, int x1, int y1, int x2, int y2, const QColor &color);
 
 
 private:

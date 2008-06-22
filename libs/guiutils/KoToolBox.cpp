@@ -176,7 +176,15 @@ public:
     void addSection(Section *section)
     {
         addChildWidget(section);
-        m_sections.append(new QWidgetItem(section));
+
+        QList<QWidgetItem*>::iterator iterator = m_sections.begin();
+        int defaults = 2; // skip the first two as they are the 'main' and 'dynamic' sections.
+        while (iterator != m_sections.end()) {
+            if (--defaults < 0 && static_cast<Section*> ((*iterator)->widget())->name() > section->name())
+                break;
+            ++iterator;
+        }
+        m_sections.insert(iterator, new QWidgetItem(section));
     }
 
     void addItem(QLayoutItem*)
@@ -287,6 +295,8 @@ class KoToolBox::Private
 public:
     Private(KoCanvasController *c) : layout(0), buttonGroup(0), canvas(c->canvas()) { }
 
+    void addSection(Section *section, const QString &name);
+
     QMap<QString, Section*> sections;
     ToolBoxLayout *layout;
     QButtonGroup *buttonGroup;
@@ -294,10 +304,21 @@ public:
     QHash<QToolButton*, QString> visibilityCodes;
 };
 
+void KoToolBox::Private::addSection(Section *section, const QString &name)
+{
+    section->setName(name);
+    layout->addSection(section);
+    sections.insert(name, section);
+}
+
 KoToolBox::KoToolBox(KoCanvasController *canvas)
     : d( new Private(canvas))
 {
     d->layout = new ToolBoxLayout(this);
+    // add defaults
+    d->addSection(new Section(this), "main");
+    d->addSection(new Section(this), "dynamic");
+
     d->buttonGroup = new QButtonGroup(this);
     setLayout(d->layout);
     foreach(KoToolManager::Button button, KoToolManager::instance()->createToolList()) {
@@ -323,9 +344,7 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
     Section *sectionWidget = d->sections.value(section);
     if (sectionWidget == 0) {
         sectionWidget = new Section(this);
-        sectionWidget->setName(section);
-        d->layout->addSection(sectionWidget);
-        d->sections.insert(section, sectionWidget);
+        d->addSection(sectionWidget, section);
     }
     sectionWidget->addButton(button, priority);
 

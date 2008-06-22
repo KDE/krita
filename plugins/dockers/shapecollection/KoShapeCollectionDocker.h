@@ -103,7 +103,8 @@ class KoShapeCollectionDocker : public QDockWidget
 
     private:
         KComboBox* m_collectionsCombo;
-        KComboBox* m_moreShapes;
+        QToolButton* m_moreShapes;
+        QMenu* m_moreShapesContainer;
         QListView* m_quickView;
         QListView* m_collectionView;
         QToolButton* m_closeCollectionButton;

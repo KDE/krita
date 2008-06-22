@@ -49,7 +49,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
 
     KoPAPageBase * insertAfterPage = 0;
     KoPAPageBase * insertAfterMasterPage = 0;
-    if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) || m_activePage == 0 && pages.empty() ) {
+    if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) || ( m_activePage == 0 && pages.empty() ) ) {
         insertAfterMasterPage = m_activePage;
         insertAfterPage = m_doc->pages( false ).last();
     }

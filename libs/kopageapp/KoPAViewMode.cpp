@@ -74,9 +74,11 @@ void KoPAViewMode::updateActivePage( KoPAPageBase *page )
 
 void KoPAViewMode::addShape( KoShape *shape )
 {
+    Q_UNUSED( shape );
 }
 
 void KoPAViewMode::removeShape( KoShape *shape )
 {
+    Q_UNUSED( shape );
 }
 

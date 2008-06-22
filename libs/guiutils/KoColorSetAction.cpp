@@ -24,6 +24,7 @@
 
 #include <QWidgetAction>
 #include <QMenu>
+#include <QHBoxLayout>
 
 #include <KColorDialog>
 #include <klocale.h>
@@ -47,10 +48,14 @@ KoColorSetAction::KoColorSetAction(QObject *parent)
     QWidgetAction *wdgAction = new QWidgetAction(d->menu);
     d->colorSetWidget = new KoColorSetWidget(d->menu);
     connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)), this, SLOT(handleColorChange(const KoColor &, bool)));
-    connect(d->colorSetWidget, SIGNAL(widgetSizeChanged(const QSize &)), this, SLOT(resizeMenu(const QSize &)));
+//    connect(d->colorSetWidget, SIGNAL(widgetSizeChanged(const QSize &)), this, SLOT(resizeMenu(const QSize &)));
     wdgAction->setDefaultWidget(d->colorSetWidget);
     d->menu->addAction(wdgAction);
     setMenu(d->menu);
+    new QHBoxLayout(d->menu);
+    d->menu->layout()->addWidget(d->colorSetWidget);
+    d->menu->layout()->setMargin(4);
+
     connect(this, SIGNAL(triggered()), this, SLOT(showCustomColorDialog()));
 }
 
@@ -66,11 +71,6 @@ void KoColorSetAction::handleColorChange(const KoColor &color, bool final)
         menu()->hide();
         emit colorChanged(color);
     }
-}
-
-void KoColorSetAction::resizeMenu(const QSize &size)
-{
-    d->menu->resize(size);
 }
 
 void KoColorSetAction::showCustomColorDialog()

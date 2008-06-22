@@ -33,7 +33,7 @@ PictureShapeFactory::PictureShapeFactory( QObject* parent)
 {
     setToolTip( i18n( "A shape which displays a picture" ) );
     ///@todo setIcon( "pictureshape" );
-    setIcon( "image" );
+    setIcon( "image-jpeg2000" );
     setOdfElementNames( KoXmlNS::draw, QStringList( "image" ) );
     setLoadingPriority( 1 );
 }

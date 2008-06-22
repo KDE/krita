@@ -22,6 +22,9 @@
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
+class KoXmlElement;
+class KoShapeLoadingContext;
+
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
  * Typical notes that use this are Footnotes and Endnotes.
@@ -53,10 +56,18 @@ public:
      * @param text the new label
      */
     void setLabel(const QString &text);
+    /**
+     * Set the id that is used to reference this note.
+     * @param id the new id
+     */
+    void setId(const QString &id);
+    
     /// return the current text
     QString text() const;
     /// return the current label
     QString label() const;
+    /// return the current id
+    QString id() const;
 
     /**
      * @return whether the label should be automatically recreated or if the label is static.
@@ -70,6 +81,10 @@ public:
 
     /// return the type of note.
     Type type() const;
+
+    bool loadOdf( const KoXmlElement & element );
+    ///reimplemented
+    void saveOdf( KoShapeSavingContext & context );
 
 protected:
     /// reimplemented

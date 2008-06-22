@@ -112,6 +112,11 @@ private:
     void loadTable( const KoXmlElement& element, QTextCursor& cursor );
 
     /**
+     * Load a note \p element into the \p cursor.
+     */
+    void loadNote( const KoXmlElement& element, QTextCursor& cursor );
+
+    /**
     * Load the frame element \p element into the \p cursor .
     *
     * This method does normaly something like at the example above with an

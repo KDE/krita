@@ -39,6 +39,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
 #include <KoVariable.h>
+#include <KoInlineNote.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 #include <KoVariableManager.h>
@@ -494,6 +495,24 @@ void KoTextLoader::loadSection( const KoXmlElement& sectionElem, QTextCursor& cu
 {
 }
 
+void KoTextLoader::loadNote( const KoXmlElement& noteElem, QTextCursor& cursor )
+{
+    kDebug(32500) << "Loading a text:note element.";
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
+    if (layout)
+    {
+	KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
+	if (note->loadOdf(noteElem))
+	{
+	    KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+	    layout->inlineObjectTextManager()->insertInlineObject(cursor, note);
+	}
+	else {
+	    kDebug(32500) << "Error while loading the note !";
+	}
+    }
+}
+
 // we cannot use QString::simplifyWhiteSpace() because it removes
 // leading and trailing whitespace, but such whitespace is significant
 // in ODF -- so we use this function to compress sequences of space characters
@@ -580,6 +599,10 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             }
             cursor.insertText( QString().fill( 32, howmany ) );
         }
+	else if ( isTextNS && localName == "note" ) // text:note
+	{
+	    loadNote (ts, cursor);
+	}
         else if ( isTextNS && localName == "tab" ) // text:tab
         {
             cursor.insertText( "\t" );

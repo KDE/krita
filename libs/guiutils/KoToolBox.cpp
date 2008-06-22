@@ -326,6 +326,9 @@ KoToolBox::KoToolBox(KoCanvasController *canvas)
         d->visibilityCodes.insert(button.button, button.visibilityCode);
     }
 
+    // Update visibility of buttons
+    setButtonsVisible(canvas, QList<QString>());
+
     connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)),
             this, SLOT(setActiveTool(const KoCanvasController*, int)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController*, QList<QString>)),

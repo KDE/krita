@@ -28,6 +28,8 @@
 #include <QButtonGroup>
 #include <QToolButton>
 #include <QHash>
+#include <QPainter>
+#include <QRect>
 
 #include "math.h"
 
@@ -344,6 +346,7 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
 {
     // ensure same L&F
     button->setCheckable(true);
+    button->setAutoRaise(true);
     Section *sectionWidget = d->sections.value(section);
     if (sectionWidget == 0) {
         sectionWidget = new Section(this);
@@ -387,6 +390,52 @@ void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<
 
 void KoToolBox::setCanvas(KoCanvasBase *canvas) {
     d->canvas = canvas;
+}
+
+void KoToolBox::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.setBrush(palette().shadow());
+
+    QList<Section*> sections = d->sections.values();
+    QList<Section*>::iterator iterator = sections.begin();
+    int halfSpacing = layout()->spacing();
+    if (halfSpacing > 0)
+        halfSpacing /= 2;
+    while(iterator != sections.end()) {
+        Section *section = *iterator;
+        const int bottom = section->y() + section->height();
+        const int right = section->x() + section->width();
+        QList<Section*>::iterator iter = iterator;
+        ++iter;
+        while (iter != sections.end()) {
+            Section *other = *iter;
+            const bool rightOf = (other->x() - right - layout()->spacing() == 0);
+            const bool leftOf = (other->x() + other->width() - section->x() + layout()->spacing() == 0);
+            const bool above = (other->y() + other->height() - section->y() + layout()->spacing() == 0);
+            const bool below = (other->y() - bottom - layout()->spacing() == 0);
+            if (leftOf || rightOf) { // lets check how much overlap we have
+                const int y1 = qMax(section->y(), other->y()) - halfSpacing;
+                const int y2 = qMin(bottom, other->y() + other->height()) + halfSpacing;
+                if (y2 > y1) { // we have overlap, so lets draw.
+                    const int x = leftOf ? section->x() - halfSpacing : right + halfSpacing;
+                    painter.drawLine(x, y1, x, y2);
+                }
+            }
+            else if (above || below) {
+                const int x1 = qMax(section->x(), other->x()) - halfSpacing;
+                const int x2 = qMin(right, other->x() + other->width()) + halfSpacing;
+                if (x2 > x1) { // we have overlap, so lets draw.
+                    const int y = above ? section->y() - halfSpacing : bottom + halfSpacing;
+                    painter.drawLine(x1, y, x2, y);
+                }
+            }
+            ++iter;
+        }
+        ++iterator;
+    }
+
+    painter.end();
 }
 
 #include "KoToolBox.moc"

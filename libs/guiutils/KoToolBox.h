@@ -92,6 +92,9 @@ public slots:
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 private:
     class Private;
     Private * const d;

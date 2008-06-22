@@ -9,6 +9,8 @@
 #  GSL_VERSION
 #
 
+INCLUDE(UsePkgConfig)
+
 IF (GSL_INCLUDE_DIR AND GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_VERSION)
 
 	# Already in cache
@@ -39,7 +41,12 @@ ELSE (GSL_INCLUDE_DIR AND GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_VERSION)
 		# TODO check version! 1.6 suffices?
 	ENDIF (GSL_CONFIG)
 
-
+	IF (NOT GSL_INCLUDE_DIR OR NOT GSL_CONFIG)
+		# Try pkg-config instead, but only for the
+		# include directory, since we really need
+		# the *LIBRARIES to point to the actual .so's.
+		PKGCONFIG(gsl GSL_INCLUDE_DIR dummy dummy dummy)
+	ENDIF (NOT GSL_INCLUDE_DIR OR NOT GSL_CONFIG)
 	#
 	# everything necessary found?
 	#

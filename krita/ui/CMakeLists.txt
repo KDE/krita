@@ -53,9 +53,9 @@ set(kritaui_LIB_SRCS
     kis_imagepipe_brush.cc 
     kis_image_view_converter.cpp
     kis_import_catcher.cc 
-    kis_kra_loader.cpp 
-    kis_kra_load_visitor.cpp
-    kis_kra_save_visitor.cpp 
+    kra/kis_kra_loader.cpp 
+    kra/kis_kra_load_visitor.cpp
+    kra/kis_kra_save_visitor.cpp 
     kis_label_cursor_pos.cc
     kis_layer_box.cpp 
     kis_layer_container_shape.cc 
@@ -74,7 +74,7 @@ set(kritaui_LIB_SRCS
     kis_recorded_paint_actions.cc 
     kis_resource_mediator.cc
     kis_resource_server_provider.cpp 
-    kis_savexml_visitor.cc
+    kra/kis_savexml_visitor.cc
     kis_selection_manager.cc 
     kis_selection_options.cc
     kis_selection_tool_helper.cpp 

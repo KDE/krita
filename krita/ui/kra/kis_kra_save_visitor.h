@@ -31,7 +31,7 @@ public:
     KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, const QString & name);
 
     using KisNodeVisitor::visit;
-    
+
 public:
     void setExternalUri(QString &uri);
 
@@ -44,6 +44,20 @@ public:
     bool visit(KisAdjustmentLayer* layer);
 
     bool visit(KisGeneratorLayer * layer);
+
+    bool visit(KisCloneLayer *layer);
+
+    bool visit(KisFilterMask *mask);
+
+    bool visit(KisTransparencyMask *mask);
+
+    bool visit(KisTransformationMask *mask);
+
+    bool visit(KisSelectionMask *mask);
+
+private:
+
+    bool savePaintDevice( KisNode * node );
 
 private:
     KisImageSP m_img;

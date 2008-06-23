@@ -182,6 +182,7 @@ void KisNodeManager::addNode( KisNodeSP node, KisNodeSP activeNode)
 
     getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
     m_d->doc->image()->addNode( node, parent, above);
+    node->setDirty(node->extent());
 }
 
 void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
@@ -193,6 +194,7 @@ void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
     getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
     dbgUI << " move node " << node->name() << " above " << above->name() << " for parent " << parent->name();
     m_d->doc->image()->moveNode( node, parent, above);
+    node->setDirty(node->extent());
 }
 
 void KisNodeManager::createNode( const QString & nodeType )

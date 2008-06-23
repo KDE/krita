@@ -89,13 +89,13 @@
 #include "kis_clipboard.h"
 #include "kis_config.h"
 #include "widgets/kis_custom_image_widget.h"
-#include "kis_kra_save_visitor.h"
-#include "kis_savexml_visitor.h"
+#include "kra/kis_kra_save_visitor.h"
+#include "kra/kis_savexml_visitor.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_undo_adapter.h"
 #include "kis_shape_controller.h"
 #include "kis_node_model.h"
-#include "kis_kra_loader.h"
+#include "kra/kis_kra_loader.h"
 
 
 static const char *CURRENT_DTD_VERSION = "1.3";
@@ -120,7 +120,7 @@ public:
         , conversionDepth( 0 )
         , ioProgressTotalSteps( 0 )
         , ioProgressBase( 0 )
-        , kraLoader( 0 ) 
+        , kraLoader( 0 )
         {
         }
 
@@ -265,7 +265,7 @@ bool KisDoc2::loadXML(QIODevice *, const KoXmlDocument& doc)
 
     setUndo(false);
     m_d->kraLoader = new KisKraLoader(this);
-    
+
     // XXX: This still handles multi-image .kra files?
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
@@ -394,10 +394,10 @@ bool KisDoc2::completeLoading(KoStore *store)
 
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
-    
+
     connect( m_d->image.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
     emit sigLoadingFinished();
-        
+
     return true;
 }
 
@@ -408,7 +408,7 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
     int w = cfg.defImgWidth();
     int h = cfg.defImgHeight();
     bool clipAvailable = false;
-    
+
     QSize sz = KisClipboard::instance()->clipSize();
     if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
         w = sz.width();
@@ -522,7 +522,7 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
 {
     KisView2 * v = new KisView2(this, parent);
     Q_CHECK_PTR(v);
-    
+
     m_d->shapeController->setInitialShapeForView( v );
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
     return v;

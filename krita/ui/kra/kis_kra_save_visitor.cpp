@@ -17,8 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_kra_save_visitor.h"
-#include <kis_kra_save_visitor.h>
+#include "kra/kis_kra_save_visitor.h"
 
 #include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
@@ -68,21 +67,7 @@ bool KisKraSaveVisitor::visit( KisExternalLayer * layer )
 bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 {
     //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
-
-    QString location = m_external ? QString::null : m_uri;
-    location += m_name + QString("/layers/layer%1").arg(m_count);
-
-    // Layer data
-    if (m_store->open(location)) {
-        if (!layer->paintDevice()->write(m_store)) {
-            layer->paintDevice()->disconnect();
-            m_store->close();
-            //IODone();
-            return false;
-        }
-
-        m_store->close();
-    }
+    if (!savePaintDevice(layer)) return false;
 
     if (layer->paintDevice()->colorSpace()->profile()) {
         const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
@@ -96,7 +81,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 
         if (annotation) {
             // save layer profile
-            location = m_external ? QString::null : m_uri;
+            QString location = m_external ? QString::null : m_uri;
             location += m_name + QString("/layers/layer%1").arg(m_count) + ".icc";
 
             if (m_store->open(location)) {
@@ -105,7 +90,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
             }
         }
     }
-
+    visitAllInverse( layer );
     // XXX: save masks!
 
 //     if (layer->hasMask()) {
@@ -140,22 +125,6 @@ bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
 bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
 {
 
-    if (layer->selection()) {
-        QString location = m_external ? QString::null : m_uri;
-        location += m_name + QString("/layers/layer%1").arg(m_count) + ".selection";
-
-        // Layer data
-        if (m_store->open(location)) {
-            if (!layer->selection()->write(m_store)) {
-                layer->selection()->disconnect();
-                m_store->close();
-                //IODone();
-                return false;
-            }
-            m_store->close();
-        }
-    }
-
     if (layer->filter()) {
         QString location = m_external ? QString::null : m_uri;
         location = m_external ? QString::null : m_uri;
@@ -173,20 +142,7 @@ bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
 
 bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
 {
-    QString location = m_external ? QString::null : m_uri;
-    location += m_name + QString("/layers/layer%1").arg(m_count);
-
-    // Layer data
-    if (m_store->open(location)) {
-        if (!layer->paintDevice()->write(m_store)) {
-            layer->paintDevice()->disconnect();
-            m_store->close();
-            //IODone();
-            return false;
-        }
-
-        m_store->close();
-    }
+    if (!savePaintDevice(layer)) return false;
 
     if (layer->paintDevice()->colorSpace()->profile()) {
         const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
@@ -200,28 +156,13 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
 
         if (annotation) {
             // save layer profile
-            location = m_external ? QString::null : m_uri;
+            QString location = m_external ? QString::null : m_uri;
             location += m_name + QString("/layers/layer%1").arg(m_count) + ".icc";
 
             if (m_store->open(location)) {
                 m_store->write(annotation->annotation());
                 m_store->close();
             }
-        }
-    }
-    
-    if (layer->selection()) {
-        location += m_name + QString("/layers/layer%1").arg(m_count) + ".selection";
-
-        // Layer data
-        if (m_store->open(location)) {
-            if (!layer->selection()->write(m_store)) {
-                layer->selection()->disconnect();
-                m_store->close();
-                //IODone();
-                return false;
-            }
-            m_store->close();
         }
     }
 
@@ -237,5 +178,51 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
         }
     }
     m_count++;
+    return true;
+}
+
+bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
+{
+    return true;
+}
+
+bool KisKraSaveVisitor::visit(KisFilterMask *mask)
+{
+    return true;
+}
+
+bool KisKraSaveVisitor::visit(KisTransparencyMask *mask)
+{
+    return true;
+}
+
+bool KisKraSaveVisitor::visit(KisTransformationMask *mask)
+{
+    return true;
+}
+
+bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
+{
+    return true;
+}
+
+
+bool KisKraSaveVisitor::savePaintDevice( KisNode * node )
+{
+
+    QString location = m_external ? QString::null : m_uri;
+    location += m_name + QString("/layers/layer%1").arg(m_count);
+
+    // Layer data
+    if (m_store->open(location)) {
+        if (!node->paintDevice()->write(m_store)) {
+            node->paintDevice()->disconnect();
+            m_store->close();
+            //IODone();
+            return false;
+        }
+
+        m_store->close();
+    }
     return true;
 }

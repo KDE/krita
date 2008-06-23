@@ -151,7 +151,7 @@ void KisToolSelectPolygonal::finish()
         if ( !kisCanvas )
             return;
 
-        KisSelectionToolHelper helper(kisCanvas, currentLayer(), i18n("Polygonal Selection"));
+        KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Polygonal Selection"));
 
         if ( m_selectionMode == PIXEL_SELECTION ) {
 

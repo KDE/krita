@@ -69,9 +69,9 @@ KisToolFill::~KisToolFill()
 bool KisToolFill::flood ( int startX, int startY )
 {
 
-    KisPaintDeviceSP device = currentLayer()->paintDevice();
+    KisPaintDeviceSP device = currentNode()->paintDevice();
     if ( !device ) return false;
-    KisSelectionSP selection = currentLayer()->selection();
+    KisSelectionSP selection = currentSelection();
 
     if ( m_fillOnlySelection && selection )
     {
@@ -105,7 +105,7 @@ bool KisToolFill::flood ( int startX, int startY )
         delete m_fillPainter;
         m_fillPainter = 0;
 
-        m_painter = new KisPainter ( device, currentLayer()->selection() );
+        m_painter = new KisPainter ( device, currentSelection() );
         Q_CHECK_PTR ( m_painter );
 
 
@@ -176,7 +176,7 @@ void KisToolFill::mouseReleaseEvent ( KoPointerEvent *e )
 {
 
     if ( !m_canvas ) return;
-    if ( !currentImage() || !currentLayer()->paintDevice() ) return;
+    if ( !currentImage() || !currentNode()->paintDevice() ) return;
     if ( e->button() == Qt::LeftButton )
     {
     int x, y;

@@ -26,20 +26,22 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_layer.h"
+#include "kis_node.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
+#include "kis_selection_mask.h"
 
 struct KisRecordedFilterAction::Private {
-    KisLayerSP layer;
+    KisNodeSP node;
     const KisFilter* filter;
     QString config;
     QRect rect;
 };
 
-KisRecordedFilterAction::KisRecordedFilterAction(QString name, KisLayerSP layer, const KisFilter* filter, KisFilterConfiguration* fc) : KisRecordedAction(name, "FilterAction"), d(new Private)
+KisRecordedFilterAction::KisRecordedFilterAction(QString name, KisNodeSP node, const KisFilter* filter, KisFilterConfiguration* fc) : KisRecordedAction(name, "FilterAction"), d(new Private)
 {
-    d->layer = layer;
+    d->node = node;
     d->filter = filter;
     if(fc)
     {
@@ -57,39 +59,48 @@ KisRecordedFilterAction::~KisRecordedFilterAction()
 
 void KisRecordedFilterAction::play(KisUndoAdapter* adapter) const
 {
-    
+
     KisFilterConfiguration * kfc = d->filter->defaultConfiguration(0);
     if(kfc)
     {
         kfc->fromXML(d->config);
     }
-    KisPaintDeviceSP dev = d->layer->paintDevice();
+    KisPaintDeviceSP dev = d->node->paintDevice();
     KisTransaction * cmd = 0;
     if (adapter) cmd = new KisTransaction(d->filter->name(), dev);
 
     QRect r1 = dev->extent();
-    QRect r2 = d->layer->image()->bounds();
 
-    // Filters should work only on the visible part of an image.
-    QRect rect = r1.intersect(r2);
-
-    if (KisSelectionSP selection = d->layer->selection()) {
-        QRect r3 = selection->selectedExactRect();
-        rect = rect.intersect(r3);
+    // Ugly hack to get at the image without bloating the node interface
+    KisImageSP image;
+    KisNodeSP parent = d->node;
+    while (image == 0 && parent->parent() ) {
+        // XXX: ugly!
+        KisLayerSP layer = dynamic_cast<KisLayer*>(parent.data());
+        if (layer) {
+            image = layer->image();
+            r1 = r1.intersected(image->bounds());
+            if (layer->selectionMask()) {
+                r1 = r1.intersected(layer->selectionMask()->exactBounds());
+            }
+            if (image->globalSelection())
+                r1 = r1.intersected(image->globalSelection()->selectedExactRect());
+        }
+        parent = parent->parent();
     }
 
-    d->filter->process( dev, rect, kfc);
-    dev->setDirty( rect );
+    d->filter->process( dev, r1, kfc);
+    dev->setDirty( r1 );
     if (adapter) adapter->addCommand( cmd );
 }
 
 void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
     KisRecordedAction::toXML(doc,elt);
-    elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));
+    elt.setAttribute("node", KisRecordedAction::nodeToIndexPath(d->node));
     elt.setAttribute("filter", d->filter->id());
     // Save configuration
-    KisFilterConfiguration * kfc = d->filter->defaultConfiguration(d->layer->paintDevice());
+    KisFilterConfiguration * kfc = d->filter->defaultConfiguration(d->node->paintDevice());
     if(kfc)
     {
         kfc->fromXML( d->config );
@@ -117,17 +128,17 @@ KisRecordedFilterActionFactory::~KisRecordedFilterActionFactory()
 KisRecordedAction* KisRecordedFilterActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
 {
     QString name = elt.attribute("name");
-    KisLayerSP layer = KisRecordedActionFactory::indexPathToLayer(img, elt.attribute("layer"));
+    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(img, elt.attribute("node"));
     const KisFilterSP filter = KisFilterRegistry::instance()->get(elt.attribute("filter"));
     if(filter)
     {
-        KisFilterConfiguration* config = filter->defaultConfiguration(layer->paintDevice());
+        KisFilterConfiguration* config = filter->defaultConfiguration(node->paintDevice());
         QDomElement paramsElt = elt.firstChildElement("Params");
         if(config && !paramsElt.isNull())
         {
             config->fromXML(paramsElt);
         }
-        KisRecordedFilterAction* rfa = new KisRecordedFilterAction(name, layer, filter, config);
+        KisRecordedFilterAction* rfa = new KisRecordedFilterAction(name, node, filter, config);
         delete config;
         return rfa;
     } else {

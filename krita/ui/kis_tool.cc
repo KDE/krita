@@ -28,14 +28,16 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
+
 #include <kis_paintop_registry.h>
 #include "kis_layer_shape.h"
 #include "kis_layer_container_shape.h"
 #include "kis_mask_shape.h"
 #include "kis_shape_layer.h"
 
+#include <kis_view2.h>
+#include <kis_selection.h>
 #include <kis_image.h>
-#include <kis_layer.h>
 #include <kis_group_layer.h>
 #include <kis_adjustment_layer.h>
 #include <kis_mask.h>
@@ -66,10 +68,8 @@ struct KisTool::Private {
     KoColor currentBgColor;
     QString currentPaintOp;
     KisPaintOpSettingsSP currentPaintOpSettings;
-    KisLayerSP currentLayer;
     KisNodeSP currentNode;
     float currentExposure;
-    KisImageSP currentImage;
     KisFilterConfiguration * currentGenerator;
 };
 
@@ -101,21 +101,18 @@ void KisTool::activate(bool )
                         resource( KisCanvasResourceProvider::CurrentPaintop ).value<KoID >().id();
     d->currentPaintOpSettings = static_cast<KisPaintOpSettings*>( m_canvas->resourceProvider()->
                         resource( KisCanvasResourceProvider::CurrentPaintopSettings ).value<void *>() );
-                        
+
     if( d->currentPaintOpSettings )
     {
         d->currentPaintOpSettings->activate();
     }
-    
-    d->currentLayer = m_canvas->resourceProvider()->
-                        resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+
     d->currentNode = m_canvas->resourceProvider()->
                         resource( KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->
                         resource( KisCanvasResourceProvider::HdrExposure ).toDouble() );
     d->currentGenerator = static_cast<KisFilterConfiguration*>(m_canvas->resourceProvider()->
                         resource( KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>() );
-    d->currentImage = image();
 }
 
 void KisTool::deactivate()
@@ -148,8 +145,6 @@ void KisTool::resourceChanged( int key, const QVariant & v )
         break;
     case ( KisCanvasResourceProvider::HdrExposure ):
         d->currentExposure = static_cast<float>( v.toDouble() );
-    case ( KisCanvasResourceProvider::CurrentKritaLayer ):
-        d->currentLayer = v.value<KisLayerSP>();
     case ( KisCanvasResourceProvider::CurrentGeneratorConfiguration ):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>() );
     default:
@@ -238,35 +233,25 @@ void KisTool::updateCanvasViewRect(const QRectF &viewRect)
 
 KisImageSP KisTool::image() const
 {
-
+    // For now, krita tools only work in krita, not for a krita shape. Krita shapes are for 2.1
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
-    if ( !kisCanvas ) {
-//         dbgUI <<"The current canvas is not a kis canvas!";
-        return 0;
+    if ( kisCanvas ) {
+        return kisCanvas->currentImage();
     }
-#if 0
-    KisImageSP img = kisCanvas->currentImage();
 
-    return img;
-#endif
+    return 0;
 
-    KoShape * shape = kisCanvas->globalShapeManager()->selection()->firstSelectedShape();
+}
 
-    if ( !shape ) return 0;
-
-    if ( shape->shapeId() == KIS_LAYER_CONTAINER_ID ) {
-        return static_cast<KisLayerContainerShape*>( shape )->groupLayer()->image();
-    } else if ( shape->shapeId() ==  KIS_LAYER_SHAPE_ID) {
-        return static_cast<KisLayerShape*>( shape )->layer()->image();
-    } else if ( shape->shapeId() == KIS_MASK_SHAPE_ID ) {
-        // XXX
-        return 0;
-    } else if ( shape->shapeId() == KIS_SHAPE_LAYER_ID ) {
-        return static_cast<KisShapeLayer*>( shape )->image();
-    } else {
-        // First selected shape is not a krita layer type shape
-        return 0;
+KisSelectionSP KisTool::currentSelection() const
+{
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
+    if ( kisCanvas ) {
+        KisView2 * view = kisCanvas->view();
+        if (view) return view->selection();
     }
+
+    return 0;
 
 }
 
@@ -303,11 +288,6 @@ KisBrush* KisTool::currentBrush()
     return d->currentBrush;
 }
 
-KisLayerSP KisTool::currentLayer()
-{
-    return d->currentLayer;
-}
-
 KisNodeSP KisTool::currentNode()
 {
     return d->currentNode;
@@ -325,7 +305,7 @@ KoColor KisTool::currentBgColor()
 
 KisImageSP KisTool::currentImage()
 {
-    return d->currentImage;
+    return image();
 }
 
 KisFilterConfiguration * KisTool::currentGenerator()
@@ -357,13 +337,13 @@ void KisTool::setupPainter(KisPainter * painter)
     painter->setBrush(currentBrush());
     painter->setPattern(currentPattern());
     painter->setGradient(currentGradient());
-    
+
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(),
                                                               currentPaintOpSettings(),
                                                               painter,
                                                               currentImage());
     painter->setPaintOp(op);
-                                                          
+
 }
 
 #include "kis_tool.moc"

@@ -548,6 +548,8 @@ void KisView2::createGUI()
     connect(m_d->layerBox, SIGNAL(sigItemComposite(const KoCompositeOp*)),
             m_d->nodeManager, SLOT(nodeCompositeOpChanged(const KoCompositeOp*)));
 
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
 }
 
 

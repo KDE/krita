@@ -76,7 +76,7 @@ void KisToolBrush::timeoutPaint()
         m_painter->paintAt( m_previousPaintInformation );
         QRegion r = m_painter->dirtyRegion();
         dbgPlugins <<"Timeout paint dirty region:" << r;
-        currentLayer()->setDirty(r);
+        currentNode()->setDirty(r);
     }
 }
 

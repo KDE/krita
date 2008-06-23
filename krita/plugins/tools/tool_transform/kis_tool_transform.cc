@@ -63,10 +63,9 @@
 
 namespace {
     class TransformCmd : public KisSelectedTransaction {
-        typedef KisSelectedTransaction KisTool;
 
     public:
-        TransformCmd(KisToolTransform *tool, KisLayerSP layer, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
+        TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
         virtual ~TransformCmd();
 
     public:
@@ -86,8 +85,8 @@ namespace {
         QPoint m_originalBottomRight;
     };
 
-    TransformCmd::TransformCmd(KisToolTransform *tool, KisLayerSP layer, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight) :
-        KisTool(i18n("Transform"), layer)
+    TransformCmd::TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight)
+        : KisSelectedTransaction(i18n("Transform"), node)
         , m_scaleX(scaleX)
         , m_scaleY(scaleY)
         , m_translate(translate)
@@ -120,12 +119,12 @@ namespace {
 
     void TransformCmd::redo()
     {
-        KisTool::redo();
+        KisSelectedTransaction::redo();
     }
 
     void TransformCmd::undo()
     {
-        KisTool::undo();
+        KisSelectedTransaction::undo();
     }
 }
 
@@ -169,7 +168,7 @@ void KisToolTransform::activate(bool temporary)
 {
     Q_UNUSED(temporary);
 
-    if( currentLayer() && currentLayer()->paintDevice() )
+    if( currentNode() && currentNode()->paintDevice() )
     {
         //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
         //m_subject->undoAdapter()->setCommandHistoryListener( this );
@@ -191,20 +190,21 @@ void KisToolTransform::activate(bool temporary)
             m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
         }
     }
-    currentLayer() = m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    currentNode() =
+        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode ).value<KisNodeSP>();
 }
 
 void KisToolTransform::initHandles()
 {
     int x,y,w,h;
 
-    KisPaintDeviceSP dev = currentLayer()->paintDevice();
+    KisPaintDeviceSP dev = currentNode()->paintDevice();
 
     // Create a lazy copy of the current state
     m_origDevice = new KisPaintDevice(*dev.data());
     Q_ASSERT(m_origDevice);
 
-    KisSelectionSP selection = currentLayer()->selection();
+    KisSelectionSP selection = currentSelection();
     if(selection)
     {
         QRect r = selection->selectedExactRect();
@@ -231,7 +231,7 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 {
     KisImageSP img = image();
 
-    if (img && currentLayer()->paintDevice() && e->button() == Qt::LeftButton) {
+    if (img && currentNode()->paintDevice() && e->button() == Qt::LeftButton) {
         QPointF mousePos = QPointF(e->point.x() * img->xRes(), e->point.y() * img->yRes());
         switch(m_function)
         {
@@ -656,21 +656,21 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolTransform::transform()
 {
-    if (!image() || !currentLayer()->paintDevice())
+    if (!image() || !currentNode()->paintDevice())
         return;
 
     QPointF t = m_translate - rot(m_originalCenter.x() * m_scaleX, m_originalCenter.y() * m_scaleY);
     //KoUpdater *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
-    TransformCmd * transaction = new TransformCmd(this, currentLayer(), m_scaleX,
+    TransformCmd * transaction = new TransformCmd(this, currentNode(), m_scaleX,
                                                   m_scaleY, m_translate, m_a, m_origSelection, m_originalTopLeft, m_originalBottomRight);
 
     // Copy the original state back.
     QRect rc = m_origDevice->extent();
     rc = rc.normalized();
-    currentLayer()->paintDevice()->clear();
-    KisPainter gc(currentLayer()->paintDevice());
+    currentNode()->paintDevice()->clear();
+    KisPainter gc(currentNode()->paintDevice());
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
     gc.end();
 
@@ -680,19 +680,19 @@ void KisToolTransform::transform()
         QRect rc = m_origSelection->selectedRect();
         rc = rc.normalized();
         // XXX_SELECTION This used to create a new selection!
-        if ( currentLayer()->selection() ) currentLayer()->selection()->clear();
-        KisPainter sgc(KisPaintDeviceSP(currentLayer()->selection().data()));
+        if ( currentSelection() ) currentSelection()->clear();
+        KisPainter sgc(KisPaintDeviceSP(currentSelection().data()));
         sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, KisPaintDeviceSP(m_origSelection.data()), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
     }
     else
-        if(currentLayer()->selection())
-            currentLayer()->selection()->clear();
+        if(currentSelection())
+            currentSelection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    KisTransformWorker worker(currentLayer()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), 0/*progress*/, m_filter);
+    KisTransformWorker worker(currentNode()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), 0/*progress*/, m_filter);
     worker.run();
 
 // XXX_PROGRESS, XXX_LAYERS
@@ -704,7 +704,7 @@ void KisToolTransform::transform()
 //         return;
 //     }
 
-    currentLayer()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
+    currentNode()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()
@@ -791,27 +791,6 @@ QWidget* KisToolTransform::createOptionWidget()
 QWidget* KisToolTransform::optionWidget()
 {
     return m_optWidget;
-}
-
-KisImageSP KisToolTransform::image() const
-{
-    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-
-    if ( !shape ) return 0;
-
-    if ( shape->shapeId() == KIS_LAYER_CONTAINER_ID ) {
-        return static_cast<KisLayerContainerShape*>( shape )->groupLayer()->image();
-    } else if ( shape->shapeId() ==  KIS_LAYER_SHAPE_ID) {
-        return static_cast<KisLayerShape*>( shape )->layer()->image();
-    } else if ( shape->shapeId() == KIS_MASK_SHAPE_ID ) {
-        // XXX
-        return 0;
-    } else if ( shape->shapeId() == KIS_SHAPE_LAYER_ID ) {
-        return static_cast<KisShapeLayer*>( shape )->image();
-    } else {
-        // First selected shape is not a krita layer type shape
-        return 0;
-    }
 }
 
 #include "kis_tool_transform.moc"

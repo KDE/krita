@@ -67,19 +67,19 @@ void KisToolSelectEraser::activate( bool tmp )
 
 void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 {
-    if (!currentImage() || !currentLayer()->paintDevice()) return;
+    if (!currentImage() || !currentNode()->paintDevice()) return;
 
     m_mode = PAINT;
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceSP dev = currentLayer()->paintDevice();
+    KisPaintDeviceSP dev = currentNode()->paintDevice();
 
     if (dev.isNull()) return;
 
     if (m_painter)
         delete m_painter;
-    KisSelectionSP selection = currentLayer()->selection();
+    KisSelectionSP selection = currentSelection();
 
     m_target = selection;
     m_painter = new KisPainter(selection);

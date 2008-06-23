@@ -133,9 +133,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
             KisPaintDeviceSP device;
 
-            if (currentLayer() &&  ( device = currentLayer()->paintDevice()) &&  currentBrush()) {
+            if (currentNode() &&  ( device = currentNode()->paintDevice()) &&  currentBrush()) {
                 delete m_painter;
-                m_painter = new KisPainter( device, currentLayer()->selection() );
+                m_painter = new KisPainter( device, currentSelection() );
                 Q_CHECK_PTR(m_painter);
 
                 m_painter->beginTransaction(i18nc("a straight drawn line", "Line"));
@@ -155,12 +155,12 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_canvas->updateCanvas(convertToPt(dirtyRegion));
 #endif
 
-                if (currentLayer()->image())
+                if (image())
                 {
-                  KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction( i18n("Line tool"), currentLayer(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp );
+                  KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction( i18n("Line tool"), currentNode(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp );
                   linePaintAction->addPoint( m_startPos );
                   linePaintAction->addPoint( m_endPos );
-                  currentLayer()->image()->actionRecorder()->addAction(*linePaintAction);
+                  image()->actionRecorder()->addAction(*linePaintAction);
                 }
 
                 m_canvas->addCommand(m_painter->endTransaction());
@@ -219,13 +219,13 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         QPointF end;
 
 //        Q_ASSERT(controller);
-	start = m_startPos;
-	end = m_endPos;
+    start = m_startPos;
+    end = m_endPos;
         gc.setPen(pen);
         //gc.drawLine(start.toPoint(), end.toPoint());
-	start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
-	end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
-	gc.drawLine(start, end);
+    start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
+    end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
+    gc.drawLine(start, end);
         gc.setPen(old);
     }
 }

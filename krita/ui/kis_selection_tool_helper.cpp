@@ -32,11 +32,16 @@
 #include "kis_selection_manager.h"
 #include "kis_selected_transaction.h"
 
-KisSelectionToolHelper::KisSelectionToolHelper( KisCanvas2* canvas, KisLayerSP layer, const QString& name)
+KisSelectionToolHelper::KisSelectionToolHelper( KisCanvas2* canvas, KisNodeSP node, const QString& name)
     : m_canvas(canvas)
-    , m_layer(layer)
+    , m_layer(0)
     , m_name(name)
 {
+    m_layer = dynamic_cast<KisLayer*>(node.data());
+    while ( !m_layer && node->parent() ) {
+        m_layer = dynamic_cast<KisLayer*>(node->parent().data());
+        node = node->parent();
+    }
     m_image = m_layer->image();
 }
 

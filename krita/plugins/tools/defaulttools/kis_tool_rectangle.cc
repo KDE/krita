@@ -58,7 +58,10 @@ void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
 {
     double sx, sy;
     converter.zoom(&sx, &sy);
-
+    if (!currentImage()) {
+        kWarning() << "No currentImage!";
+        return;
+    }
     gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
     if (m_dragging)
         paintRectangle(gc, QRect());
@@ -139,7 +142,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
     if (!currentImage())
         return;
 
-    KisPaintDeviceSP device = currentLayer()->paintDevice();
+    KisPaintDeviceSP device = currentNode()->paintDevice();
     if (!device) return;
 
     if (m_dragging && currentBrush() && event->button() == Qt::LeftButton) {
@@ -149,14 +152,14 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
             return;
 
         delete m_painter;
-        m_painter = new KisPainter( device, currentLayer()->selection() );
+        m_painter = new KisPainter( device, currentSelection() );
         Q_CHECK_PTR(m_painter);
 
         m_painter->beginTransaction (i18n ("Rectangle"));
         setupPainter(m_painter);
         m_painter->setOpacity(m_opacity);
         m_painter->setCompositeOp(m_compositeOp);
-        
+
         m_painter->paintRect(QRectF(m_dragStart, m_dragEnd), PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
         QRegion bound = m_painter->dirtyRegion();
         device->setDirty( bound );

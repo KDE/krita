@@ -82,6 +82,7 @@ public:
     QImage createThumbnail(qint32 w, qint32 h);
 
     bool accept(KisNodeVisitor &v);
+
     /**
      * Returns the paintDevice that accompanies this layer
      */

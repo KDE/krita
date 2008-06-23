@@ -82,9 +82,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
-        KisPaintDeviceSP dev = currentLayer()->paintDevice();
+        KisPaintDeviceSP dev = currentNode()->paintDevice();
 
-        if (!dev || !currentLayer()->visible())
+        if (!dev || !currentNode()->visible())
             return;
 
         QPoint pos = convertToIntPixelCoord(e);
@@ -101,7 +101,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         if ( !kisCanvas )
             return;
 
-        KisSelectionToolHelper helper(kisCanvas, currentLayer(), i18n("Contiguous Area Selection"));
+        KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Contiguous Area Selection"));
         QUndoCommand* cmd = helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
         m_canvas->addCommand(cmd);
 

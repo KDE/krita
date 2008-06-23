@@ -161,7 +161,7 @@ void KisToolPerspectiveTransform::activate()
 {
     super::activate();
     m_currentSelectedPoint = 0;
-    if(m_subject && m_currentImage && currentLayer()->paintDevice())
+    if(m_subject && m_currentImage && currentNode()->paintDevice())
     {
         //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
         m_subject->undoAdapter()->setCommandHistoryListener( this );
@@ -172,7 +172,7 @@ void KisToolPerspectiveTransform::activate()
             cmd = dynamic_cast<PerspectiveTransformCmd*>(m_currentImage->undoAdapter()->presentCommand());
 
         // One of our commands is on top
-        if(cmd &&cmd->theDevice() == currentLayer()->paintDevice())
+        if(cmd &&cmd->theDevice() == currentNode()->paintDevice())
         {
             m_interractionMode = EDITRECTINTERRACTION;
             // and it even has the same device
@@ -196,7 +196,7 @@ void KisToolPerspectiveTransform::initHandles()
 //     qint32 x,y,w,h;
 
 
-    KisPaintDeviceSP dev = currentLayer()->paintDevice();
+    KisPaintDeviceSP dev = currentNode()->paintDevice();
     if (!dev ) return;
 
     // Create a lazy copy of the current state
@@ -260,7 +260,7 @@ void KisToolPerspectiveTransform::mousePressEvent(KoPointerEvent *event)
             {
 
 
-                if (m_currentImage && currentLayer()->paintDevice() && event->button() == Qt::LeftButton) {
+                if (m_currentImage && currentNode()->paintDevice() && event->button() == Qt::LeftButton) {
                     m_actualyMoveWhileSelected = false;
                     m_dragEnd = event->pos().toPointF();
                     KisCanvasController *controller = m_subject->canvasController();
@@ -572,20 +572,20 @@ void KisToolPerspectiveTransform::transform()
 {
 
 
-    if (!m_currentImage || !currentLayer()->paintDevice())
+    if (!m_currentImage || !currentNode()->paintDevice())
         return;
 
     KoUpdater *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
-    PerspectiveTransformCmd * transaction = new PerspectiveTransformCmd(this, currentLayer()->paintDevice(), m_origDevice,
+    PerspectiveTransformCmd * transaction = new PerspectiveTransformCmd(this, currentNode()->paintDevice(), m_origDevice,
             m_topleft, m_topright, m_bottomleft, m_bottomright, m_origSelection, m_initialRect);
 
     // Copy the original state back.
     QRect rc = m_origDevice->extent();
     rc = rc.normalize();
-    currentLayer()->paintDevice()->clear();
-    KisPainter gc(currentLayer()->paintDevice());
+    currentNode()->paintDevice()->clear();
+    KisPainter gc(currentNode()->paintDevice());
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
     gc.end();
 
@@ -594,19 +594,19 @@ void KisToolPerspectiveTransform::transform()
     {
         QRect rc = m_origSelection->extent();
         rc = rc.normalize();
-        currentLayer()->paintDevice()->selection()->clear();
-        KisPainter sgc(currentLayer()->paintDevice()->selection().data());
+        currentNode()->paintDevice()->selection()->clear();
+        KisPainter sgc(currentNode()->paintDevice()->selection().data());
         sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origSelection.data(), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
     }
     else
-        if(currentLayer()->paintDevice()->hasSelection())
-            currentLayer()->paintDevice()->selection()->clear();
+        if(currentNode()->paintDevice()->hasSelection())
+            currentNode()->paintDevice()->selection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    KisPerspectiveTransformWorker t(currentLayer()->paintDevice(),m_topleft, m_topright, m_bottomleft, m_bottomright, progress);
+    KisPerspectiveTransformWorker t(currentNode()->paintDevice(),m_topleft, m_topright, m_bottomleft, m_bottomright, progress);
     t.run();
 
     // If canceled, go back to the memento
@@ -617,7 +617,7 @@ void KisToolPerspectiveTransform::transform()
         return;
     }
 
-    currentLayer()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
+    currentNode()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()

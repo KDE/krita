@@ -56,7 +56,6 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_painting_assistant.h"
-
 #include "kis_tool_freehand_p.h"
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
@@ -90,10 +89,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     if (!currentBrush())
         return;
 
-    if (!currentLayer())
+    if (!currentNode())
         return;
 
-    if (!currentLayer()->paintDevice())
+    if (!currentNode()->paintDevice())
         return;
 
     if(currentPaintOpSettings())
@@ -201,11 +200,11 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
     dbgUI << "initPaint";
-    if (!currentLayer() || !currentLayer()->paintDevice())
+    if (!currentNode() || !currentNode()->paintDevice())
         return;
 
     if (m_compositeOp == 0 ) {
-        KisPaintDeviceSP device = currentLayer()->paintDevice();
+        KisPaintDeviceSP device = currentNode()->paintDevice();
         if (device) {
             m_compositeOp = device->colorSpace()->compositeOp( COMPOSITE_OVER );
         }
@@ -215,7 +214,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceSP device = currentLayer()->paintDevice();
+    KisPaintDeviceSP device = currentNode()->paintDevice();
 
     if (m_painter)
         delete m_painter;
@@ -224,7 +223,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
         KisIndirectPaintingSupport* layer;
         if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(
-                 currentLayer().data())))
+                 currentNode().data())))
         {
             // Hack for the painting of single-layered layers using indirect painting,
             // because the group layer would not have a correctly synched cache (
@@ -245,7 +244,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
                 l->parentLayer()->resetProjection(pl->paintDevice());
             }
 #endif
-            m_target = new KisPaintDevice(currentLayer().data(),
+            m_target = new KisPaintDevice(currentNode().data(),
                                           device->colorSpace());
             layer->setTemporaryTarget(m_target);
             layer->setTemporaryCompositeOp(m_compositeOp);
@@ -254,13 +253,13 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     } else {
         m_target = device;
     }
-    m_painter = new KisPainter( m_target, currentLayer()->selection() );
+    m_painter = new KisPainter( m_target, currentSelection() );
     Q_CHECK_PTR(m_painter);
     m_source = device;
     m_painter->beginTransaction(m_transactionText);
 
     setupPainter(m_painter);
-    
+
     // if you're drawing on a temporary layer, the layer already sets this
     if (m_paintIncremental) {
         m_painter->setCompositeOp(m_compositeOp);
@@ -282,9 +281,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 */
     if(m_smooth)
     {
-        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction( i18n("Freehand tool"),  currentLayer(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
+        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction( i18n("Freehand tool"),  currentNode(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
     } else {
-        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction( i18n("Freehand tool"), currentLayer(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
+        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction( i18n("Freehand tool"), currentNode(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
     }
     m_executor->start();
 }
@@ -294,46 +293,50 @@ void KisToolFreehand::endPaint()
     dbgUI << "endPaint";
     m_mode = HOVER;
     m_executor->finish();
-//     if (currentImage()) {
 
-        if (m_painter) {
-            // If painting in mouse release, make sure painter
-            // is destructed or end()ed
-            if (!m_paintIncremental) {
-                m_painter->endTransaction();
+    if (m_painter) {
+        // If painting in mouse release, make sure painter
+        // is destructed or end()ed
 
-                KisPainter painter( m_source, currentLayer()->selection());
-                painter.setCompositeOp(m_compositeOp);
+        // XXX: For now, only layers can be painted on in non-incremental mode
+        KisLayerSP layer = dynamic_cast<KisLayer*>(currentNode().data());
 
-                painter.beginTransaction(m_transactionText);
+        if (layer && !m_paintIncremental) {
+            m_painter->endTransaction();
 
-                QRegion r = m_incrementalDirtyRegion;
-                QVector<QRect> dirtyRects = r.rects();
-                QVector<QRect>::iterator it = dirtyRects.begin();
-                QVector<QRect>::iterator end = dirtyRects.end();
+            KisPainter painter( m_source, currentSelection());
+            painter.setCompositeOp(m_compositeOp);
 
-                while (it != end) {
+            painter.beginTransaction(m_transactionText);
 
-                    painter.bitBlt(it->x(), it->y(), m_compositeOp, m_target,
-                                   m_opacity,
-                                   it->x(), it->y(),
-                                   it->width(), it->height());
-                    ++it;
-                }
-                KisIndirectPaintingSupport* layer =
-                    dynamic_cast<KisIndirectPaintingSupport*>(currentLayer().data());
-                layer->setTemporaryTarget(0);
-                m_source->setDirty(painter.dirtyRegion());
+            QRegion r = m_incrementalDirtyRegion;
+            QVector<QRect> dirtyRects = r.rects();
+            QVector<QRect>::iterator it = dirtyRects.begin();
+            QVector<QRect>::iterator end = dirtyRects.end();
 
-                m_canvas->addCommand(painter.endTransaction());
-            } else {
-                m_canvas->addCommand(m_painter->endTransaction());
+            while (it != end) {
+
+                painter.bitBlt(it->x(), it->y(), m_compositeOp, m_target,
+                                m_opacity,
+                                it->x(), it->y(),
+                                it->width(), it->height());
+                ++it;
             }
+            KisIndirectPaintingSupport* indirect =
+                dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
+            if (indirect)
+                indirect->setTemporaryTarget(0);
+            m_source->setDirty(painter.dirtyRegion());
+
+            m_canvas->addCommand(painter.endTransaction());
+        } else {
+            m_canvas->addCommand(m_painter->endTransaction());
         }
-        delete m_painter;
-        m_painter = 0;
-        notifyModified();
-//     }
+    }
+    delete m_painter;
+    m_painter = 0;
+    notifyModified();
+
     if(!m_paintJobs.empty())
     {
         foreach(FreehandPaintJob* job , m_paintJobs)
@@ -342,14 +345,14 @@ void KisToolFreehand::endPaint()
         }
         m_paintJobs.clear();
     }
-    if(m_smooth)
+    if( m_smooth )
     {
-        if (currentLayer()->image())
-            currentLayer()->image()->actionRecorder()->addAction(*m_bezierCurvePaintAction);
+        if (image())
+            image()->actionRecorder()->addAction(*m_bezierCurvePaintAction);
         m_bezierCurvePaintAction = 0;
     } else {
-        if (currentLayer()->image())
-            currentLayer()->image()->actionRecorder()->addAction(*m_polyLinePaintAction);
+        if (image())
+            image()->actionRecorder()->addAction(*m_polyLinePaintAction);
         m_polyLinePaintAction = 0;
     }
 }
@@ -385,19 +388,13 @@ void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*p
 
 void KisToolFreehand::setDirty(const QRegion& region)
 {
-//     QRect r( 10, 4, -2, -4);
-//     QRegion region2;
-//     region2 += r;
-//     kDebug(DBG_AREA_UI) << region2;
     if (!m_paintOnSelection) {
-        currentLayer()->setDirty(region);
-//         kDebug(DBG_AREA_UI) << currentLayer()->dirtyRegion( QRect(-20000, -20000, 400000, 400000) );
+        currentNode()->setDirty(region);
     }
     else {
-        // Just update the canvas
-        // XXX: How to do this hack with regions?
-        // r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
-        m_target->setDirty(region);
+        QRect r = region.boundingRect();
+        r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+        m_target->setDirty(r);
     }
     if (!m_paintIncremental) {
         m_incrementalDirtyRegion += region;

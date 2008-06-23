@@ -27,12 +27,17 @@
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
 
-KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisLayerSP layer, QUndoCommand* parent) :
-    KisTransaction(name, layer->paintDevice(), parent),
-    m_layer(layer),
+KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent) :
+    KisTransaction(name, node->paintDevice(), parent),
     m_hadSelection(false /*device->hasSelection()*/)
 {
-    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(layer->selection()->getOrCreatePixelSelection().data()));
+    m_layer = dynamic_cast<KisLayer*>(node.data());
+    while ( !m_layer && node->parent() ) {
+        m_layer = dynamic_cast<KisLayer*>(node->parent().data());
+        node = node->parent();
+    }
+
+    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
 //     if(! m_hadSelection) {
 //         m_device->deselect(); // let us not be the cause of select
 //     }
@@ -75,7 +80,7 @@ void KisSelectedTransaction::undo()
 //         m_device->selection();
 //     else
 //         m_device->deselect();
-// 
+//
     m_layer->setDirty(m_layer->image()->bounds());
     m_layer->image()->undoAdapter()->emitSelectionChanged();
 }
@@ -83,7 +88,7 @@ void KisSelectedTransaction::undo()
 void KisSelectedTransaction::undoNoUpdate()
 {
 //     m_redoHasSelection = m_device->hasSelection();
-// 
+//
 //     KisTransaction::undoNoUpdate();
 //     m_selTransaction->undoNoUpdate();
 //     if(m_hadSelection)

@@ -34,8 +34,8 @@ class KoCompositeOp;
 class KRITAUI_EXPORT KisRecordedPaintAction : public KisRecordedAction {
     public:
 
-        KisRecordedPaintAction(const QString & name, const QString & id, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
-        
+        KisRecordedPaintAction(const QString & name, const QString & id, KisNodeSP node, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
+
         KisRecordedPaintAction(const KisRecordedPaintAction&);
 
         ~KisRecordedPaintAction();
@@ -43,17 +43,17 @@ class KRITAUI_EXPORT KisRecordedPaintAction : public KisRecordedAction {
         virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
 
         virtual void play(KisUndoAdapter* adapter = 0) const;
-        
+
     protected:
 
         virtual void playPaint(KisPainter* painter) const = 0;
 
-        KisLayerSP layer() const;
+        KisNodeSP node() const;
 
         KisBrush* brush() const;
 
         QString paintOpId() const;
-        
+
     private:
 
         struct Private;
@@ -63,8 +63,8 @@ class KRITAUI_EXPORT KisRecordedPaintAction : public KisRecordedAction {
 class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction {
 
     public:
-        
-        KisRecordedPolyLinePaintAction(const QString & name, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const
+
+        KisRecordedPolyLinePaintAction(const QString & name, KisNodeSP node, KisBrush* brush, const QString & paintOpId, const
 
         KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
 
@@ -77,13 +77,13 @@ class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAct
         virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
 
         virtual KisRecordedAction* clone() const;
-        
+
     protected:
-    
+
         virtual void playPaint(KisPainter* painter) const;
-        
+
     private:
-    
+
         struct Private;
         Private* const d;
 };
@@ -91,9 +91,9 @@ class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAct
 class KRITAUI_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction {
 
     public:
-    
-        KisRecordedBezierCurvePaintAction(const QString & name, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
-        
+
+        KisRecordedBezierCurvePaintAction(const QString & name, KisNodeSP node, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp);
+
         KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction&);
 
         ~KisRecordedBezierCurvePaintAction();
@@ -103,13 +103,13 @@ class KRITAUI_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaint
         virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
 
         virtual KisRecordedAction* clone() const;
-        
+
     protected:
-    
+
         virtual void playPaint(KisPainter* painter) const;
-        
+
     private:
-    
+
         struct Private;
         Private* const d;
 };

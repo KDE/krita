@@ -109,7 +109,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
             if ( !kisCanvas )
                 return;
 
-            KisSelectionToolHelper helper(kisCanvas, currentLayer(), i18n("Outline Selection"));
+            KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Outline Selection"));
 
             if(m_selectionMode == PIXEL_SELECTION){
 

@@ -72,23 +72,23 @@ void KisToolSelectBrush::activate( bool tmp )
 
 void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
 {
-    if (!currentImage() || !currentLayer()->paintDevice()) return;
+    if (!currentImage() || !currentNode() || !currentNode()->paintDevice()) return;
 
     m_mode = PAINT;
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceSP dev = currentLayer()->paintDevice();
+    KisPaintDeviceSP dev = currentNode()->paintDevice();
     if (m_painter)
         delete m_painter;
 #if 0 // XXX_SELECTION
-    bool hasSelection = currentLayer()->selection();
+    bool hasSelection = currentSelection();
 
     if (currentImage()->undo())
         m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
 
 #endif
-    KisSelectionSP selection = currentLayer()->selection();
+    KisSelectionSP selection = currentSelection();
 
     m_target = selection.data();
     m_painter = new KisPainter(selection);
@@ -112,7 +112,7 @@ void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
 void KisToolSelectBrush::endPaint()
 {
     m_mode = HOVER;
-    if (currentImage() && currentLayer()) {
+    if (currentImage() && currentNode()) {
         if (currentImage()->undo() && m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed

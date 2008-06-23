@@ -131,18 +131,26 @@ useCursor(m_subtractCursor);
         if (!currentImage())
             return;
 
-        KisPaintDeviceSP dev = currentLayer()->paintDevice();
+        KisPaintDeviceSP dev = currentNode()->paintDevice();
 
-        if (!dev || !currentLayer()->visible())
+        if (!dev || !currentNode()->visible())
             return;
 
         QPointF pos = convertToPixelCoord(e);
-        KisSelectionSP selection = currentLayer()->selection();
+        KisSelectionSP selection = currentSelection();
         if (!selection) selection = currentImage()->globalSelection();
         KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
         bool hasSelection = pSel;
 
-        KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Similar Selection"),currentLayer());
+
+        KisNodeSP node = currentNode();
+        KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+        while ( !layer && node->parent() ) {
+           layer = dynamic_cast<KisLayer*>(node->parent().data());
+           node = node->parent();
+        }
+
+        KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Similar Selection"), layer);
 
         if (!hasSelection || m_defaultSelectAction == SELECTION_REPLACE)
         {

@@ -33,7 +33,8 @@ class KisCanvas2;
 class KRITAUI_EXPORT KisSelectionToolHelper
 {
 public:
-    KisSelectionToolHelper( KisCanvas2* canvas, KisLayerSP layer, const QString& name);
+
+    KisSelectionToolHelper( KisCanvas2* canvas, KisNodeSP node, const QString& name);
     virtual ~KisSelectionToolHelper();
 
     QUndoCommand* selectPixelSelection(KisPixelSelectionSP selection, selectionAction action);

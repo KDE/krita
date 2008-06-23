@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisRecordedAction {
         QString id() const;
         QString name() const;
     protected:
-        static QString layerToIndexPath(KisLayerSP);
+        static QString nodeToIndexPath( KisNodeSP node );
     private:
         struct Private;
         Private* const d;
@@ -53,7 +53,7 @@ class KRITAIMAGE_EXPORT KisRecordedActionFactory {
         QString id() const;
         QString name() const;
     protected:
-        static KisLayerSP indexPathToLayer(KisImageSP img, const QString &);
+        static KisNodeSP indexPathToNode(KisImageSP img, const QString &);
     private:
         struct Private;
         Private* const d;

@@ -68,18 +68,12 @@ void KisToolCrop::activate( bool tmp )
 {
     super::activate( tmp );
 
-    KisLayerSP layer = currentLayer();
-    KisImageSP image = currentImage();
-
-    KisSelectionSP selection = layer->selection();
-    if (!selection) {
-        selection = image->globalSelection();
-    }
-    if (selection) {
-        selection->updateProjection();
-        m_rectCrop = selection->selectedExactRect();
+    KisSelectionSP sel = currentSelection();
+    if (sel) {
+        sel->updateProjection();
+        m_rectCrop = sel->selectedExactRect();
         validateSelection();
-        updateCanvasPixelRect(image->bounds());
+        updateCanvasPixelRect(image()->bounds());
     }
 }
 
@@ -102,7 +96,7 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
-        if (currentImage() && currentLayer()->paintDevice() && e->button() == Qt::LeftButton) {
+        if (currentImage() && currentNode()->paintDevice() && e->button() == Qt::LeftButton) {
 
             QPoint pos = convertToIntPixelCoord(e);
 
@@ -304,7 +298,7 @@ void KisToolCrop::updateWidgetValues(bool updateratio)
 {
     QRect r = m_rectCrop.normalized();
     if (!m_optWidget) createOptionWidget();
-    
+
     setOptionWidgetX(r.x());
     setOptionWidgetY(r.y());
     setOptionWidgetWidth(r.width() );
@@ -322,7 +316,7 @@ void KisToolCrop::mouseReleaseEvent(KoPointerEvent *e)
         m_rectCrop = m_rectCrop.normalized();
 
         QRectF updateRect = boundingRect();
-        
+
         validateSelection();
 
         updateRect |= boundingRect();
@@ -440,8 +434,8 @@ void KisToolCrop::crop() {
             currentImage()->undoAdapter()->beginMacro(i18n("Crop"));
 
         KisCropVisitor v(cropRect, false);
-        KisLayerSP layer = currentLayer();
-        layer->accept(v);
+        KisNodeSP node = currentNode();
+        node->accept(v);
 
         if (currentImage()->undo())
             currentImage()->undoAdapter()->endMacro();

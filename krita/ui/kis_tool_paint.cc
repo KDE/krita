@@ -85,7 +85,6 @@ void KisToolPaint::resourceChanged( int key, const QVariant & v )
 
     switch ( key ) {
     case ( KisCanvasResourceProvider::CurrentKritaLayer ):
-        currentLayer() = v.value<KisLayerSP>();
         updateCompositeOpComboBox();
         break;
     default:
@@ -194,8 +193,8 @@ void KisToolPaint::slotSetCompositeMode(const KoCompositeOp* compositeOp)
 
 void KisToolPaint::updateCompositeOpComboBox()
 {
-    if (m_cmbComposite && currentLayer()) {
-        KisPaintDeviceSP device = currentLayer()->paintDevice();
+    if (m_cmbComposite && currentNode()) {
+        KisPaintDeviceSP device = currentNode()->paintDevice();
 
         if (device) {
             QList<KoCompositeOp*> compositeOps = device->colorSpace()->compositeOps();

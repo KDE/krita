@@ -108,6 +108,10 @@ public:
     */
     KisPaintDeviceSP projection() const;
 
+    /**
+     * @return 0 since there is no paint device associated with a group
+     * layer.
+     */
     KisPaintDeviceSP paintDevice() const;
 
     /**

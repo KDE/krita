@@ -29,7 +29,7 @@ class QRect;
 
 class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction {
     public:
-        KisRecordedFilterAction(QString name, KisLayerSP layer, const KisFilter* filter, KisFilterConfiguration*);
+        KisRecordedFilterAction(QString name, KisNodeSP node, const KisFilter* filter, KisFilterConfiguration*);
         KisRecordedFilterAction(const KisRecordedFilterAction&);
         virtual ~KisRecordedFilterAction();
         virtual void play(KisUndoAdapter* adapter = 0) const;

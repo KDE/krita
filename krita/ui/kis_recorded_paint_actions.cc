@@ -26,7 +26,7 @@
 #include <KoColorSpace.h>
 #include "kis_auto_brush.h"
 #include "kis_brush.h"
-#include "kis_layer.h"
+#include "kis_node.h"
 #include "kis_mask_generator.h"
 #include "kis_painter.h"
 #include "kis_paint_information.h"
@@ -38,6 +38,7 @@
 #include "kis_paintop_settings.h"
 #include "kis_paint_device.h"
 #include "kis_image.h"
+#include "kis_layer.h"
 
 class KisRecordedPaintActionFactory : public KisRecordedActionFactory {
     public:
@@ -78,7 +79,7 @@ KisRecordedPaintActionsFactory factory;
 //--- KisRecordedPolyLinePaintAction ---//
 
 struct KisRecordedPaintAction::Private {
-    KisLayerSP layer;
+    KisNodeSP node;
     KisBrush* brush;
     QString paintOpId;
     KisPaintOpSettingsSP settings;
@@ -89,9 +90,9 @@ struct KisRecordedPaintAction::Private {
     const KoCompositeOp * compositeOp;
 };
 
-KisRecordedPaintAction::KisRecordedPaintAction(const QString & name, const QString & id, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp) : KisRecordedAction(name, id), d(new Private)
+KisRecordedPaintAction::KisRecordedPaintAction(const QString & name, const QString & id, KisNodeSP node, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp) : KisRecordedAction(name, id), d(new Private)
 {
-    d->layer = layer;
+    d->node = node;
     d->brush = brush;
     d->paintOpId = paintOpId;
     d->settings = settings ? d->settings = settings->clone() : 0;
@@ -104,7 +105,7 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & name, const QStri
 
 KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs) : KisRecordedAction(rhs), d(new Private(*rhs.d))
 {
-    
+
 }
 
 KisRecordedPaintAction::~KisRecordedPaintAction()
@@ -116,7 +117,7 @@ KisRecordedPaintAction::~KisRecordedPaintAction()
 void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
     KisRecordedAction::toXML(doc, elt);
-    elt.setAttribute("layer", KisRecordedAction::layerToIndexPath(d->layer));
+    elt.setAttribute("node", KisRecordedAction::nodeToIndexPath(d->node));
     elt.setAttribute("paintop", d->paintOpId);
     // Paintop settings
     if(d->settings)
@@ -145,9 +146,9 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("compositeOp", d->compositeOp->id());
 }
 
-KisLayerSP KisRecordedPaintAction::layer() const
+KisNodeSP KisRecordedPaintAction::node() const
 {
-    return d->layer;
+    return d->node;
 }
 KisBrush* KisRecordedPaintAction::brush() const
 {
@@ -160,40 +161,53 @@ QString KisRecordedPaintAction::paintOpId() const
 
 void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
 {
-    dbgUI << "Play recorded paint action on layer : " << layer()->name() ;
+    dbgUI << "Play recorded paint action on node : " << node()->name() ;
     KisTransaction * cmd = 0;
-    if (adapter) cmd = new KisTransaction("", layer()->paintDevice());
-    
+    if (adapter) cmd = new KisTransaction("", node()->paintDevice());
+
     KisPaintDeviceSP target = 0;
     if(d->paintIncremental)
     {
-        target = layer()->paintDevice();
+        target = node()->paintDevice();
     } else {
-        target = new KisPaintDevice( layer()->paintDevice()->colorSpace());
+        target = new KisPaintDevice( node()->paintDevice()->colorSpace());
     }
-    
+
     KisPainter painter( target );
     Q_ASSERT(brush());
     painter.setBrush( brush() );
-    painter.setPaintOp( KisPaintOpRegistry::instance()->paintOp( paintOpId(), (KisPaintOpSettings*)0, &painter, layer()->image() ) );
-    
+
+    KisImageSP image;
+    KisNodeSP parent = node();
+    while (image == 0 && parent->parent() ) {
+        // XXX: ugly!
+        KisLayerSP layer = dynamic_cast<KisLayer*>(parent.data());
+        if (layer) {
+            image = layer->image();
+        }
+        parent = parent->parent();
+    }
+
+    painter.setPaintOp(
+        KisPaintOpRegistry::instance()->paintOp( paintOpId(), (KisPaintOpSettings*)0, &painter, image ) );
+
     if (d->paintIncremental) {
         painter.setCompositeOp(d->compositeOp);
         painter.setOpacity( d->opacity);
     } else {
-        painter.setCompositeOp(layer()->paintDevice()->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+        painter.setCompositeOp(node()->paintDevice()->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         painter.setOpacity( OPACITY_OPAQUE );
 
     }
-    
+
     painter.setPaintColor( d->foregroundColor );
     painter.setFillColor( d->backgroundColor );
-    
+
     playPaint(&painter);
-    
+
     if(!d->paintIncremental)
     {
-        KisPainter painter2( layer()->paintDevice());
+        KisPainter painter2( node()->paintDevice());
         painter2.setCompositeOp(d->compositeOp);
         QRegion r = painter.dirtyRegion();
         QVector<QRect> dirtyRects = r.rects();
@@ -207,10 +221,10 @@ void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
                             it->width(), it->height());
             ++it;
         }
-        
-        layer()->setDirty(painter2.dirtyRegion());
+
+        node()->setDirty(painter2.dirtyRegion());
     } else {
-        layer()->setDirty( painter.dirtyRegion() );
+        node()->setDirty( painter.dirtyRegion() );
     }
     if (adapter) adapter->addCommand( cmd );
 }
@@ -219,7 +233,7 @@ void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
 KisBrush* KisRecordedPaintActionFactory::brushFromXML(const QDomElement& elt)
 {
     // TODO: support for autobrush
-    
+
     QString name = elt.attribute("name","");
     QString type = elt.attribute("type","");
     if( type == "autobrush")
@@ -256,14 +270,14 @@ struct KisRecordedPolyLinePaintAction::Private {
     QList<KisPaintInformation> infos;
 };
 
-KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & name, KisLayerSP layer, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp)
-    : KisRecordedPaintAction(name, "PolyLinePaintAction", layer, brush, paintOpId, settings, foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp), d(new Private)
+KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & name, KisNodeSP node, KisBrush* brush, const QString & paintOpId, const KisPaintOpSettingsSP settings, KoColor foregroundColor, KoColor backgroundColor, int opacity, bool paintIncremental, const KoCompositeOp * compositeOp)
+    : KisRecordedPaintAction(name, "PolyLinePaintAction", node, brush, paintOpId, settings, foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp), d(new Private)
 {
 }
 
 KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction& rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
 {
-    
+
 }
 
 KisRecordedPolyLinePaintAction::~KisRecordedPolyLinePaintAction()
@@ -313,22 +327,22 @@ KisRecordedPolyLinePaintActionFactory::KisRecordedPolyLinePaintActionFactory() :
 }
 KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
 {
-    
+
 }
 
 KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
 {
     QString name = elt.attribute("name");
-    KisLayerSP layer = KisRecordedActionFactory::indexPathToLayer(img, elt.attribute("layer"));
+    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(img, elt.attribute("node"));
     QString paintOpId = elt.attribute("paintop");
     int opacity = elt.attribute("opacity", "100").toInt();
     bool paintIncremental = elt.attribute("paintIncremental", "1").toInt();
-    
-    const KoCompositeOp * compositeOp = layer->colorSpace()->compositeOp( elt.attribute("compositeOp"));
+
+    const KoCompositeOp * compositeOp = node->paintDevice()->colorSpace()->compositeOp( elt.attribute("compositeOp"));
     if(!compositeOp) {
-        compositeOp = layer->colorSpace()->compositeOp( COMPOSITE_OVER );
+        compositeOp = node->paintDevice()->colorSpace()->compositeOp( COMPOSITE_OVER );
     }
-    
+
     KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
     if(!settingsElt.isNull())
@@ -338,9 +352,9 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     else {
         dbgUI << "No <PaintOpSettings /> found";
     }
-    
+
     KisBrush* brush = 0;
-    
+
     QDomElement brushElt = elt.firstChildElement("Brush");
     if(!brushElt.isNull())
     {
@@ -349,7 +363,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     else {
         dbgUI << "Warning: no <Brush /> found";
     }
-    
+
     QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
     KoColor bC;
     if(!backgroundColorElt.isNull())
@@ -371,9 +385,9 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     } else {
         dbgUI << "Warning: no <ForegroundColor /> found";
     }
-    
-    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, layer, brush, paintOpId, settings, fC, bC, opacity, paintIncremental, compositeOp);
-    
+
+    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, node, brush, paintOpId, settings, fC, bC, opacity, paintIncremental, compositeOp);
+
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if(!wpElt.isNull())
     {
@@ -408,7 +422,7 @@ struct KisRecordedBezierCurvePaintAction::Private {
 };
 
 KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(const QString & name,
-    KisLayerSP layer,
+    KisNodeSP node,
     KisBrush* brush,
     const QString & paintOpId,
     const KisPaintOpSettingsSP settings,
@@ -417,13 +431,13 @@ KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(const QStri
     int opacity,
     bool paintIncremental,
     const KoCompositeOp * compositeOp)
-    : KisRecordedPaintAction(name, "BezierCurvePaintAction", layer, brush, paintOpId, settings, foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp), d(new Private)
+    : KisRecordedPaintAction(name, "BezierCurvePaintAction", node, brush, paintOpId, settings, foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp), d(new Private)
 {
 }
 
 KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction& rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
 {
-    
+
 }
 
 KisRecordedBezierCurvePaintAction::~KisRecordedBezierCurvePaintAction()
@@ -479,7 +493,7 @@ void KisRecordedBezierCurvePaintAction::toXML(QDomDocument& doc, QDomElement& el
         QDomElement point2Elt = doc.createElement( "Point2");
         info.point2.toXML(doc, point2Elt);
         infoElt.appendChild(point2Elt);
-        
+
         waypointsElt.appendChild(infoElt);
     }
     elt.appendChild(waypointsElt);
@@ -496,22 +510,22 @@ KisRecordedBezierCurvePaintActionFactory::KisRecordedBezierCurvePaintActionFacto
 }
 KisRecordedBezierCurvePaintActionFactory::~KisRecordedBezierCurvePaintActionFactory()
 {
-    
+
 }
 
 KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
 {
     QString name = elt.attribute("name");
-    KisLayerSP layer = KisRecordedActionFactory::indexPathToLayer(img, elt.attribute("layer"));
+    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(img, elt.attribute("node"));
     QString paintOpId = elt.attribute("paintop");
     int opacity = elt.attribute("opacity", "100").toInt();
     bool paintIncremental = elt.attribute("paintIncremental", "1").toInt();
-    
-    const KoCompositeOp * compositeOp = layer->colorSpace()->compositeOp( elt.attribute("compositeOp"));
+
+    const KoCompositeOp * compositeOp = node->paintDevice()->colorSpace()->compositeOp( elt.attribute("compositeOp"));
     if (!compositeOp) {
-        compositeOp = layer->colorSpace()->compositeOp( COMPOSITE_OVER );
+        compositeOp = node->paintDevice()->colorSpace()->compositeOp( COMPOSITE_OVER );
     }
-    
+
     KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
     if(!settingsElt.isNull())
@@ -523,7 +537,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
     }
 
     KisBrush* brush = 0;
-    
+
     QDomElement brushElt = elt.firstChildElement("Brush");
     if(!brushElt.isNull())
     {
@@ -555,9 +569,9 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
     } else {
         dbgUI << "Warning: no <ForegroundColor /> found";
     }
-    
-    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, layer, brush, paintOpId, settings, fC, bC, opacity, paintIncremental, compositeOp);
-    
+
+    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, node, brush, paintOpId, settings, fC, bC, opacity, paintIncremental, compositeOp);
+
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if(!wpElt.isNull())
     {
@@ -569,10 +583,10 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
             {
                 QDomElement control1Elt = eWp.firstChildElement("Control1");
                 QDomElement control2Elt = eWp.firstChildElement("Control2");
-                rplpa->addPoint( KisPaintInformation::fromXML(eWp.firstChildElement("Point1") ), 
-                                 QPointF(control1Elt.attribute("x","0.0").toDouble(), 
+                rplpa->addPoint( KisPaintInformation::fromXML(eWp.firstChildElement("Point1") ),
+                                 QPointF(control1Elt.attribute("x","0.0").toDouble(),
                                          control1Elt.attribute("y","0.0").toDouble()),
-                                 QPointF(control2Elt.attribute("x","0.0").toDouble(), 
+                                 QPointF(control2Elt.attribute("x","0.0").toDouble(),
                                          control2Elt.attribute("y","0.0").toDouble()),
                                  KisPaintInformation::fromXML(eWp.firstChildElement("Point2") ) );
             }

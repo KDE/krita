@@ -140,9 +140,9 @@ void KisToolPolygon::finish()
 {
     m_dragging = false;
 
-    KisPaintDeviceSP device = currentLayer()->paintDevice();
+    KisPaintDeviceSP device = currentNode()->paintDevice();
     if (device) {
-        KisPainter painter (device, currentLayer()->selection());
+        KisPainter painter (device, currentSelection());
         if (currentImage()->undo()) painter.beginTransaction (i18n ("Polygon"));
         setupPainter(&painter);
         painter.setOpacity(m_opacity);

@@ -38,7 +38,7 @@
 class KRITAIMAGE_EXPORT KisSelectedTransaction : public KisTransaction {
 
 public:
-    KisSelectedTransaction(const QString& name,  KisLayerSP layer, QUndoCommand* parent = 0);
+    KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent = 0);
     virtual ~KisSelectedTransaction();
 
 public:

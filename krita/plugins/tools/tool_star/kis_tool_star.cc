@@ -96,11 +96,11 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
         if (!currentImage())
             return;
 
-        if (!currentLayer()->paintDevice())
+        if (!currentNode()->paintDevice())
             return;
 
-        KisPaintDeviceSP device = currentLayer()->paintDevice();
-        KisPainter painter (device, currentLayer()->selection());
+        KisPaintDeviceSP device = currentNode()->paintDevice();
+        KisPainter painter (device, currentSelection());
         painter.beginTransaction (i18n("Star"));
         setupPainter(&painter);
         painter.setOpacity(m_opacity);

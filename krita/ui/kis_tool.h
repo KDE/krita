@@ -27,7 +27,6 @@
 #include <KoCanvasResourceProvider.h>
 #include <krita_export.h>
 #include <kis_types.h>
-#include <kis_layer.h>
 #include <kis_paintop_settings.h>
 
 class KoCanvasBase;
@@ -112,10 +111,9 @@ public:
 
 protected:
 
-    /// @return the image wrapped in the dummy shape in the shape
-    /// manager. XXX: This is probably wrong!
-    virtual KisImageSP image() const;
-
+    KisImageSP image() const;
+    /// @return the currently active selection
+    KisSelectionSP currentSelection() const;
     /// Call this to set the document modified
     void notifyModified() const;
 
@@ -123,7 +121,6 @@ protected:
     KisBrush* currentBrush();
     KisPattern* currentPattern();
     KoAbstractGradient * currentGradient();
-    KisLayerSP currentLayer();
     KisNodeSP currentNode();
     KoColor currentFgColor();
     KoColor currentBgColor();

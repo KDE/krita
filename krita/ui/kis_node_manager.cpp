@@ -102,7 +102,7 @@ KisPaintDeviceSP KisNodeManager::activePaintDevice()
 const KoColorSpace* KisNodeManager::activeColorSpace()
 {
     Q_ASSERT(m_d->maskManager);
-    
+
     if ( m_d->maskManager->activeDevice() ) {
         Q_ASSERT(m_d->maskManager->activeDevice());
         return m_d->maskManager->activeDevice()->colorSpace();
@@ -197,7 +197,7 @@ void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
 
 void KisNodeManager::createNode( const QString & nodeType )
 {
-    
+
     KisNodeSP parent;
     KisNodeSP above;
 
@@ -253,7 +253,7 @@ void KisNodeManager::activateNode( KisNodeSP node )
 
     KoSelection * selection = m_d->view->canvasBase()->globalShapeManager()->selection();
     Q_ASSERT( selection );
-    
+
     KoShape * shape = m_d->view->document()->shapeForNode( node );
     if ( !shape ) {
         shape = m_d->view->document()->addShape( node->parent() );
@@ -282,7 +282,7 @@ void KisNodeManager::activateNode( KisNodeSP node )
         m_d->layerManager->activateLayer( static_cast<KisLayer*>( node->parent().data() ) );
     }
     emit sigNodeActivated( node );
-    m_d->view->resourceProvider()->slotNodeActivated( node );
+
     nodesUpdated();
 }
 
@@ -295,7 +295,6 @@ void KisNodeManager::nodesUpdated()
     m_d->maskManager->masksUpdated();
 
     m_d->view->updateGUI();
-    m_d->view->resourceProvider()->slotNodeActivated( node );
     m_d->view->selectionManager()->selectionChanged();
 
 }
@@ -333,7 +332,7 @@ void KisNodeManager::duplicateActiveNode( KisNodeSP node )
 void KisNodeManager::raiseNode()
 {
     // The user sees the layer stack topsy-turvy, as a tree with the
-    // root at the bottom instead of on top.    
+    // root at the bottom instead of on top.
     KisNodeSP node = activeNode();
     if (node->inherits("KisLayer")) {
         m_d->layerManager->layerLower();
@@ -348,7 +347,7 @@ void KisNodeManager::lowerNode()
     // The user sees the layer stack topsy-turvy, as a tree with the
     // root at the bottom instead of on top.
     KisNodeSP node = activeNode();
-    
+
     if (node->inherits("KisLayer")) {
         m_d->layerManager->layerRaise();
     }
@@ -356,7 +355,7 @@ void KisNodeManager::lowerNode()
         m_d->maskManager->raiseMask();
     }
 }
-    
+
 void KisNodeManager::nodeToTop()
 {
     KisNodeSP node = activeNode();
@@ -379,7 +378,7 @@ void KisNodeManager::nodeToBottom()
         m_d->maskManager->maskToTop();
     }
 }
-    
+
 
 #include "kis_node_manager.moc"
 

@@ -146,12 +146,12 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         if (!currentImage())
             return;
 
-        if (!currentLayer()->paintDevice())
+        if (!currentNode()->paintDevice())
             return;
 
-        KisPaintDeviceSP device = currentLayer()->paintDevice();
+        KisPaintDeviceSP device = currentNode()->paintDevice();
         delete m_painter;
-        m_painter = new KisPainter( device, currentLayer()->selection() );
+        m_painter = new KisPainter( device, currentSelection() );
         Q_CHECK_PTR(m_painter);
 
         m_painter->beginTransaction (i18n ("Ellipse"));

@@ -109,7 +109,7 @@ void KisToolSelectRectangular::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
-        if (currentImage() && currentLayer()->paintDevice() && e->button() == Qt::LeftButton) {
+        if (currentImage() && currentNode()->paintDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = convertToPixelCoord(e);
             m_selecting = true;
@@ -185,7 +185,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         if ( !kisCanvas )
             return;
 
-        KisSelectionToolHelper helper(kisCanvas, currentLayer(), i18n("Rectangular Selection"));
+        KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Rectangular Selection"));
 
         if(m_selectionMode == PIXEL_SELECTION){
 
@@ -201,7 +201,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         else {
             QRectF documentRect = convertToPt(bound);
 
-            KisSelectionSP selection = currentLayer()->selection();
+            KisSelectionSP selection = currentSelection();
 
             KoShape* shape;
             KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoRectangleShape");

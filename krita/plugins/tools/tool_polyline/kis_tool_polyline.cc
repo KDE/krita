@@ -96,10 +96,10 @@ void KisToolPolyline::finish()
 {
     m_dragging = false;
 
-    KisPaintDeviceSP device = currentLayer()->paintDevice();
+    KisPaintDeviceSP device = currentNode()->paintDevice();
     if (!device) return;
 
-    KisPainter painter (device, currentLayer()->selection());
+    KisPainter painter (device, currentSelection());
     painter.beginTransaction (i18n ("Polyline"));
 
     painter.setPaintColor(currentFgColor());

@@ -22,6 +22,7 @@
 #include <QString>
 
 #include <kis_image.h>
+#include <kis_node.h>
 #include <kis_layer.h>
 #include <kis_group_layer.h>
 
@@ -38,7 +39,7 @@ KisRecordedAction::KisRecordedAction(QString name, QString id) : d(new Private)
 
 KisRecordedAction::KisRecordedAction(const KisRecordedAction& rhs) : d(new Private(*rhs.d))
 {
-    
+
 }
 
 KisRecordedAction::~KisRecordedAction()
@@ -62,18 +63,18 @@ void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt) const
     elt.setAttribute( "id", id() );
 }
 
-QString KisRecordedAction::layerToIndexPath(KisLayerSP _layer)
+QString KisRecordedAction::nodeToIndexPath(KisNodeSP _node)
 {
     QString path;
-    KisNodeSP layer = _layer.data();
+    KisNodeSP node = _node;
     KisNodeSP parent = 0;
-    while((parent = layer->parent()))
+    while((parent = node->parent()))
     {
-        int index = parent->index( layer );
+        int index = parent->index( node );
         if ( index >= 0 ) {
             path = (QString("\\%0").arg(index)) + path;
         }
-        layer = parent;
+        node = parent;
     }
     return path;
 }
@@ -102,7 +103,7 @@ QString KisRecordedActionFactory::name() const
     return QString();
 }
 
-KisLayerSP KisRecordedActionFactory::indexPathToLayer(KisImageSP img, const QString & path)
+KisNodeSP KisRecordedActionFactory::indexPathToNode(KisImageSP img, const QString & path)
 {
     QStringList indexes = path.split("\\");
     KisNodeSP current = (img->rootLayer()->at(indexes[0].toUInt()));
@@ -117,6 +118,5 @@ KisLayerSP KisRecordedActionFactory::indexPathToLayer(KisImageSP img, const QStr
             break;
         }
     }
-    KisLayerSP l = dynamic_cast<KisLayer*>( current.data() );
-    return l;
+    return current;
 }

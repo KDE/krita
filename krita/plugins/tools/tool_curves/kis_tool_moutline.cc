@@ -262,7 +262,7 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     rc.setTopLeft(rc.topLeft()+QPoint(-8,-8));         // Enlarge the view, so problems with gaussian blur can be removed
     rc.setBottomRight(rc.bottomRight()+QPoint(8,8));   // and we are able to find paths that go beyond the rect.
 
-    KisPaintDeviceSP src = m_parent->currentLayer()->paintDevice();
+    KisPaintDeviceSP src = m_parent->currentNode()->paintDevice();
     GrayMatrix       dst = GrayMatrix(rc.width(),GrayCol(rc.height()));
 
     detectEdges  (rc, src, dst);

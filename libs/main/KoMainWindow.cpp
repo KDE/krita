@@ -1074,6 +1074,9 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
 
     if (!ret && reset_url)
         pDoc->resetURL(); //clean the suggested filename as the save dialog was rejected
+
+    updateCaption();
+
     return ret;
 }
 

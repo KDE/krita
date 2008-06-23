@@ -276,18 +276,6 @@ bool KoDocumentInfo::saveOasisAboutInfo( KoXmlWriter &xmlWriter )
             else if( tag == "title" || tag == "description" || tag == "subject" ||
                     tag == "date" )
             {
-              if ( tag == "title" && aboutInfo( tag ).isEmpty() )
-                {
-                  KoDocument* doc = dynamic_cast< KoDocument* >( parent() );
-                  if( doc )
-                  {
-                    setAboutInfo( "title", doc->url().fileName() );
-                  }
-                  else
-                  {
-                    setAboutInfo( "title", "" );
-                  }
-                }
                 QByteArray elementName( QString( "dc:" + tag ).toLatin1() );
                 xmlWriter.startElement( elementName );
                 xmlWriter.addTextNode( aboutInfo( tag ) );

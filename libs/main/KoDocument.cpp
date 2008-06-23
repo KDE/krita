@@ -2274,8 +2274,10 @@ void KoDocument::setTitleModified()
         {
             caption = documentInfo()->aboutInfo( "title" );
         }
-        if ( caption.isEmpty() )
-            caption = url().pathOrUrl();             // Fall back to document URL
+        if ( !caption.isEmpty() && !url().pathOrUrl().isEmpty() )
+            caption = QString( "%1 - %2" ).arg( caption ).arg( url().pathOrUrl() );
+        else if ( caption.isEmpty() )
+            caption = url().pathOrUrl(); // Fall back to document URL
 
         //kDebug(30003)<<" url:"<<url().url()<<" caption:"<<caption;
         if ( doc )

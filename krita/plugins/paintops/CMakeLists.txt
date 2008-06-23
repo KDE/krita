@@ -1,6 +1,7 @@
 add_subdirectory( defaultpaintops )
 add_subdirectory( smearybrush )
 add_subdirectory( cpaint )
+add_subdirectory( sumie )
 add_subdirectory( filterop )
 if( NOT MSVC )
 add_subdirectory( dynamicbrush )

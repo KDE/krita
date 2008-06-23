@@ -60,9 +60,9 @@ Q_OBJECT
 public:
     KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*> m_brushes);
     virtual ~KisCPaintOpSettings() {}
-    
+
     virtual KisPaintOpSettingsSP clone() const;
-    
+
     int brush() const;
     int ink() const;
     int water() const;
@@ -107,7 +107,6 @@ private:
     bool newStrokeFlag;
     Stroke * m_stroke;
 
-    QImage m_tempImage;
 };
 
 #endif // KIS_CPAINTOP_H_

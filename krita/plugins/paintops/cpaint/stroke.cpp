@@ -64,6 +64,7 @@ void Stroke::storeOldPath ( double x1, double y1 )
 
 void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )
 {
+    kDebug() << x1 << ", " << y1 << " to " << x2 << ", " << y2;
 	QColor mycolor = color.toQColor();
 	int ix1, ix2, iy1, iy2, iwidth;
 	ix1 = (int)x1;
@@ -74,41 +75,6 @@ void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, do
 
 	drawGSLine(dev,ix1,iy1,ix2,iy2,iwidth,iwidth,mycolor);
 
-/*    Q_UNUSED(width);
-    
-    if (!dev) return;
-
-    QPointF pos1 = QPointF( x1, y1 );
-    QPointF pos2 = QPointF( x2, y2 );
-
-    KisVector2D end(pos2);
-    KisVector2D start(pos1);
-
-    KisVector2D dragVec = end - start;
-    KisVector2D movement = dragVec;
-
-    double xScale = 1;
-    double yScale = 1;
-
-    double dist = dragVec.length();
-
-    if (dist < 1) {
-        return;
-    }
-
-    dragVec.normalize();
-
-    KisVector2D step(0, 0);
-
-    //dbgKrita << "drawLine " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << ". Width: " << width << ", dist: " << dist << endl;
-
-    while (dist >= 1) {
-        step += dragVec;
-        QPoint p = QPointF(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale)).toPoint();
-        
-        dev->setPixel(p.x(), p.y(), color);
-        dist -= 1;
-    }*/
 }
 
 int Stroke::gsfilter(float val)
@@ -834,9 +800,9 @@ void Stroke::drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, d
     Q_UNUSED(width);
     Q_UNUSED(color);
     // From Wikipedia...
-    
+
     if (!dev) return;
-    
+
     if (x2 < x1) {
         double tmp = x2;
         x2 = x1;
@@ -854,9 +820,9 @@ void Stroke::drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, d
     double yend = y1 + gradient * (xend - x1);
     double tmp;
     double xgap = 1 - modf(x1 + 0.5, &tmp);
-    
+
     double xpxl1 = xend;  // this will be used in the main loop
-    
+
     double ypxl1 = static_cast<int>(yend); // Remove the fractional part the fast way
 
     QColor black = Qt::black;
@@ -874,7 +840,7 @@ void Stroke::drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, d
 
     double xpxl2 = xend;  // this will be used in the main loop
     double ypxl2 = static_cast<int>(yend);
-    
+
     black.setAlpha( (qint32) ( (1 - modf(yend, &tmp)) * xgap) );
     dev->setPixel( (qint32)xpxl2, (qint32)ypxl2, black );
     black.setAlpha( (qint32) ( modf(yend, &tmp) * xgap) );
@@ -888,13 +854,13 @@ void Stroke::drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, d
         dev->setPixel(x, static_cast<int>(intery) + 1, black );
         intery = intery + gradient;
     }
-    
+
 }
 
 // draw the stroke by drawing the old paths, then the new segment
 void Stroke::draw (KisPaintDeviceSP dev)
 {
-    
+
     if ( m_samples.size() <= 1 ) return; // No sample to initialize from
 
     int i = m_samples.size() - 1;
@@ -918,7 +884,7 @@ void Stroke::draw (KisPaintDeviceSP dev)
                           m_brush->m_bristles[i].getY() + y,
                           m_brush->m_bristles[i].getThickness(),
                           m_color);
-                          
+
                 m_brush->m_bristles[i].depleteInk ( 1 ); //remove one unit of ink from bristle
             }
             m_valid[i].append( true );
@@ -948,7 +914,7 @@ bool Stroke::testThreshold ( int i, double pressure, double tx, double ty )
 {
     Q_UNUSED(tx);
     Q_UNUSED(ty);
-    
+
     if ( ( m_brush->m_bristles[i].getPreThres() < pressure )
          && m_brush->m_bristles[i].getInkAmount() > 0 )
         return 1;

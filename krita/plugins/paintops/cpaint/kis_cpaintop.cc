@@ -71,7 +71,7 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettingsSP settings,
 {
     Q_UNUSED( image );
     dbgKrita << settings;
-    
+
     const KisCPaintOpSettings * cpaintOpSettings =
         dynamic_cast<const KisCPaintOpSettings*>( settings.data() );
 
@@ -226,7 +226,8 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
         //int brushSize = m_currentBrush->size();
         KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
         m_stroke->draw( dab );
-        painter()->bitBlt( QPoint( 0, 0 ), dab, m_tempImage.rect() );
+        QRect rc = dab->extent();
+        painter()->bitBlt( rc.topLeft(), dab, dab->extent() );
     }
     m_lastPoint = info.pos();
 }

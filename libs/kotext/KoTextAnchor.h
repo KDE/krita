@@ -29,14 +29,26 @@ class KoShape;
 
 /**
  * This class is the object that is positioned in the text to be an anchor for a shape.
- * The idea is that when the text is relayouted and this inline character is moved, the shape
- * associated with it is repositioned based on a set of rules influenced by the data on this anchor.
+ * An anchor is the connection between the text-shape and the so called 'anchored-shape', where the
+ * anchored shape can be any kind of shape.  This textanchor then connects the anchored-shape
+ * to the text flow so the anchored shape can be repositioned on the canvas if new text is inserted
+ * or removed before the anchor character.
  *
- * Steps to use a KoTextAnchor are;
- * 1. Create a new instance with e.g. new KoTextAnchor(myshape);
- * 2. Use loadOdfFromShape() to load additional attributes like the "text:anchor-type"
- * 3. Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
- *    the TextShape's \a KoTextShapeContainerModel .
+ * The KoTextAnchor object is inserted in text, and is represented to the user as one invisible character
+ * in the text flow. Since this is a real character it will be positioned by the text-layout engine and
+ * anything that will change the position of the text will thus also change the KoTextAnchor character.
+ * In such a case where the KoTextAnchor character is repositioned the position of the anchored-frame
+ * will also be reconsidered.
+ *
+ * The anchored shape will be positioned (in supporting applications) based on the properties set on the
+ * anchor.  The setAlignment(AnchorVertical) and setAlignment(AnchorHorizontal) calls will determine the
+ * resulting position relative to the position the KoTextAnchor character.
+ *
+ * Steps to use a KoTextAnchor are; <ol>
+ * <li> Create a new instance with e.g. new KoTextAnchor(myshape);
+ * <li> Use loadOdfFromShape() to load additional attributes like the "text:anchor-type"
+ * <li> Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
+ *    the TextShape's \a KoTextShapeContainerModel . </ol>
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdfFromShape().
  * @see KWAnchorStrategy for more information about the layout of anchors/shapes in KWord.
  */

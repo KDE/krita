@@ -48,18 +48,16 @@ public:
     void storeSample ( Sample * sample );
     
 private:
-
     void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );
     void drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );
-    
+	void drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, int w1, int w2, const QColor &color);
+	int gsfilter(float val);    
     // test whether a bristle is touching the paper or not
     // by testing the pressure threshold and test if there is any ink
     bool testThreshold ( int, double, double, double );
 
 private:
-
     KoColor m_color;
-    
     QVector<Sample*> m_samples;
 
     double m_lastx1, m_lasty1, m_lastx2, m_lasty2;

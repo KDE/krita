@@ -3,5 +3,5 @@ Name=Sumi-e brush
 Comment[sk]=Čínsky štetec
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
-X-KDE-Library=kritasumipaintops
+X-KDE-Library=kritasumipaintop
 X-Krita-Version=3

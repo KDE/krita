@@ -1,5 +1,3 @@
-
-
 set(kritasumipaintop_PART_SRCS
 	sumipaintop_plugin.cpp
 	kis_sumipaintop.cpp

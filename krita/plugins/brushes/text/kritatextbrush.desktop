@@ -2,6 +2,7 @@
 Name=Text Brush
 Name[ca]=Pinzell de text
 Name[el]=Πινέλο κειμένου
+Name[et]=Tekstipintsel
 Name[fy]=Tekstkwast
 Name[ga]=Scuab Théacs
 Name[hi]=पाठ ब्रश
@@ -16,6 +17,7 @@ Name[zh_TW]=文字筆刷
 Comment=Text brush
 Comment[ca]=Pinzell de text
 Comment[el]=Πινέλο κειμένου
+Comment[et]=Tekstipintsel
 Comment[fy]=Tekstkwast
 Comment[ga]=Scuab théacs
 Comment[hi]=पाठ ब्रश

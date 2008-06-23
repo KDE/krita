@@ -2,6 +2,7 @@
 Name=Flake device definition
 Name[ca]=Definició d'aparell de floc
 Name[el]=Ορισμός συσκευής Flake
+Name[et]=Helbeseadme definitsioon
 Name[it]=Definizione del dispositivo Flake
 Name[pt]=Definição de dispositivo do Flake
 Name[pt_BR]=Definição de dispositivo do Flake
@@ -14,6 +15,7 @@ X-KDE-ServiceType=KOffice/Device
 Comment=Definition of flake devices
 Comment[ca]=Definició d'aparells de floc
 Comment[el]=Ορισμός των συσκευών Flake
+Comment[et]=Helbeseadmete definitsioon
 Comment[it]=Definizione dei dispositivi Flake
 Comment[pt]=Definição de dispositivos do Flake
 Comment[pt_BR]=Definição de dispositivos do Flake

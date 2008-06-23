@@ -4,6 +4,7 @@ X-KDE-ServiceType=Krita/Generator
 Comment=Layer data Generator plugin for Krita
 Comment[ca]=Connector de generació de dades de capa per al Krita
 Comment[el]=Πρόσθετο δημιουργίας δεδομένων στρώματος για το Krita
+Comment[et]=Krita kihi andmete genereerimise plugin
 Comment[fy]=Gegevens laachoanmakker plugin foar Krita
 Comment[it]=Plugin generatore di dati dei livelli di Krita
 Comment[pt]='Plugin' de geração de dados para camadas no Krita

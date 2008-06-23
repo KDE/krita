@@ -2,6 +2,7 @@
 Name=Solid Color Generator
 Name[ca]=Generador de color sòlid
 Name[el]=Δημιουργός συμπαγών χρωμάτων
+Name[et]=Ühtlase värvi generaator
 Name[ga]=Gineadóir Datha Soladaigh
 Name[it]=Generatore di colori solidi
 Name[pt]=Gerador de Cores Sólidas
@@ -14,6 +15,7 @@ Name[zh_TW]=實心顏色產生器
 Comment=Generates a solid color
 Comment[ca]=Genera un color sòlid
 Comment[el]=Δημιουργεί ένα συμπαγές χρώμα
+Comment[et]=Ühtlase värvi genereerimine
 Comment[it]=Genera un colore solido
 Comment[pt]=Gera uma cor sólida
 Comment[pt_BR]=Gera uma cor sólida

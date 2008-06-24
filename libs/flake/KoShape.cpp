@@ -40,7 +40,6 @@
 #include "KoViewConverter.h"
 #include "KoLineBorder.h"
 #include "ShapeDeleter_p.h"
-#include "KoShapeStyleWriter.h"
 #include "KoShapeShadow.h"
 #include "KoEventAction.h"
 #include "KoEventActionRegistry.h"

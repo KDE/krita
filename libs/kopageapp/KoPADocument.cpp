@@ -34,7 +34,6 @@
 #include <KoTextSharedLoadingData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoShapeStyleWriter.h>
 #include <KoStyleManager.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>

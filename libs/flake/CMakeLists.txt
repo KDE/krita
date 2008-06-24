@@ -57,7 +57,6 @@ set(flake_SRCS
     KoColorBackground.cpp
     KoGradientBackground.cpp
     KoPatternBackground.cpp
-    KoShapeStyleWriter.cpp
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
     KoDragOdfSaveHelper.cpp

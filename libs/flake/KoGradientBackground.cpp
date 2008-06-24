@@ -32,7 +32,7 @@
 class KoGradientBackground::Private
 {
 public:
-    Private( QGradient * g ) : gradient(g) {};
+    Private() : gradient(0) {};
     ~Private()
     {
         delete gradient;
@@ -78,17 +78,19 @@ public:
     QMatrix matrix;
 };
 
-KoGradientBackground::KoGradientBackground( QGradient * gradient )
-    : d( new Private( 0 ) )
+KoGradientBackground::KoGradientBackground( QGradient * gradient, const QMatrix &matrix )
+    : d( new Private() )
 {
     d->gradient = d->cloneGradient( gradient );
+    d->matrix = matrix;
     Q_ASSERT(d->gradient);
 }
 
-KoGradientBackground::KoGradientBackground( const QGradient & gradient )
-    : d( new Private( 0 ) )
+KoGradientBackground::KoGradientBackground( const QGradient & gradient, const QMatrix &matrix )
+    : d( new Private() )
 {
     d->gradient = d->cloneGradient( &gradient );
+    d->matrix = matrix;
     Q_ASSERT(d->gradient);
 }
 

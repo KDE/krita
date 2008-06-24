@@ -34,13 +34,13 @@ public:
      * Creates new gradient background from given gradient.
      * The background takes ownership of the given gradient.
      */
-    KoGradientBackground( QGradient * gradient );
+    KoGradientBackground( QGradient * gradient, const QMatrix &matrix = QMatrix() );
 
     /**
      * Create new gradient background from the given gradient.
      * A clone of the given gradient is used.
      */
-    KoGradientBackground( const QGradient & gradient );
+    KoGradientBackground( const QGradient & gradient, const QMatrix &matrix = QMatrix() );
 
     /// Destroys the background
     virtual ~KoGradientBackground();

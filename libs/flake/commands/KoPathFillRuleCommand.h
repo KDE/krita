@@ -33,7 +33,7 @@ public:
     /**
      * Command to set a new shape background.
      * @param shapes a set of all the path shapes that should get the new fill rule
-     * @param fillrule the new fill rule
+     * @param fillRule the new fill rule
      * @param parent the parent command used for macro commands
      */
     KoPathFillRuleCommand( const QList<KoPathShape*> &shapes, Qt::FillRule fillRule, QUndoCommand *parent = 0 );

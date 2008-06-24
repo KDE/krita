@@ -49,7 +49,7 @@ public:
 
     /**
      * Command to set a new shape shadow.
-     * @param shapes a single shape that should get the new shadow.
+     * @param shape a single shape that should get the new shadow.
      * @param shadow the new shadow
      * @param parent the parent command used for macro commands
      */

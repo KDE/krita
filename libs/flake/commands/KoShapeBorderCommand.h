@@ -50,7 +50,7 @@ public:
 
     /**
      * Command to set a new shape border.
-     * @param shapes a single shape that should get the new border.
+     * @param shape a single shape that should get the new border.
      * @param border the new border
      * @param parent the parent command used for macro commands
      */

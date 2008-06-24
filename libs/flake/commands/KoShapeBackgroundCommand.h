@@ -36,7 +36,7 @@ public:
     /**
      * Command to set a new shape background.
      * @param shapes a set of all the shapes that should get the new background.
-     * @param brush the new background brush
+     * @param fill the new shape background
      * @param parent the parent command used for macro commands
      */
     KoShapeBackgroundCommand( const QList<KoShape*> &shapes, KoShapeBackground * fill, QUndoCommand *parent = 0 );
@@ -44,7 +44,7 @@ public:
      /**
      * Command to set a new shape background.
      * @param shape a single shape that should get the new background.
-     * @param brush the new background brush
+     * @param fill the new shape background
      * @param parent the parent command used for macro commands
      */
     KoShapeBackgroundCommand( KoShape * shape, KoShapeBackground * fill, QUndoCommand *parent = 0 );

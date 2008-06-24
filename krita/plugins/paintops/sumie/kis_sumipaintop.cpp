@@ -19,6 +19,7 @@
 #include "kis_sumipaintop.h"
 
 #include <QRect>
+#include <QColor>
 
 #include <KoColor.h>
 
@@ -32,6 +33,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
+#include "kis_random_accessor.h"
 
 #include "kis_datamanager.h"
 
@@ -48,6 +50,7 @@ KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings
 KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter)
     : KisPaintOp(painter)
 {
+	dbgKrita << "START OF KisSumiPaintOp" << endl;
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
@@ -56,55 +59,45 @@ KisSumiPaintOp::~KisSumiPaintOp()
 
 void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return;
+    // KisPainter, see KisSumiPaintOp::createOp
+	if (!painter()) return;
 
-    KisPaintDeviceSP device = painter()->device();
+    // read, write pixel data
+	KisPaintDeviceSP device = painter()->device();
+	if (!device) return;
+// boud
+//    if (!painter()->device()) return;
+	
+	qint32 x = (qint32)info.pos().x();
+	qint32 y = (qint32)info.pos().y();
+	/*dbgKrita << "LUKAST: x" << x;
+	dbgKrita << "LUKAST: y" << y;*/
 
-    if (!device) return;
+	int r,g,b;
+	r = x % 255;
+	g = y % 255;
+	b = (r - g);
+	if (b<0) b = -b;
+	b = b % 255;
 
-    KisBrush * brush = painter()->brush();
-    if (! brush->canPaintFor(info) )
-        return;
-    KisPaintDeviceSP dab = 0;
+	c.setRgb(r,g,b);
+    KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
+    //m_stroke->draw( dab );
+	//setPixel (qint32 x, qint32 y, const QColor &c) 
+	
+	// FASTER VERSION, but actually it is not faster..
+	KisRandomAccessor randDab = dab->createRandomAccessor(x, y, 0);
 
-    double scale = KisPaintOp::scaleForPressure( info.pressure() );
-    QPointF hotSpot = brush->hotSpot(scale, scale);
-    QPointF pt = info.pos() - hotSpot;
+	randDab.moveTo(x,y);
+	quint8 *pixel = randDab.rawData();
+	quint32 val = c.rgba();
+	memcpy(pixel, &val, sizeof(val) );
 
-    qint32 x;
-    double xFraction;
-    qint32 y;
-    double yFraction;
+	// setPixel
+	/*for (int i=0;i<20;i++)
+		for (int j=0;j<20;j++)
+			dab->setPixel(x+i,y+j, c.rgba() );*/
 
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
-
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0 , info, xFraction, yFraction);
-    }
-    else {
-        dab = cachedDab( );
-        KoColor color = painter()->paintColor();
-        color.convertTo( dab->colorSpace() );
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
-    }
-
-    painter()->setDab(dab); // Cache dab for future paints in the painter.
-    painter()->setPressure(info.pressure()); // Cache pressure in the current painter.
-
-    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
-    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-
-    if ( painter()->bounds().isValid() ) {
-        dstRect &= painter()->bounds();
-    }
-
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
-
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
-    qint32 sw = dstRect.width();
-    qint32 sh = dstRect.height();
-
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
+    QRect rc = dab->extent();
+    painter()->bitBlt( rc.topLeft(), dab, dab->extent() );
 }

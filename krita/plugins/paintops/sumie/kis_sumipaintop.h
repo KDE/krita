@@ -23,6 +23,8 @@
 #ifndef KIS_SUMIPAINTOP_H_
 #define KIS_SUMIPAINTOP_H_
 
+#include <QColor>
+
 #include <klocale.h>
 #include "kis_paintop.h"
 
@@ -54,6 +56,9 @@ public:
     virtual bool incremental() { return true; }
 
     void paintAt(const KisPaintInformation& info);
+
+private:
+	QColor c;
 
 };
 

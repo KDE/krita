@@ -89,7 +89,9 @@ KoPAView::~KoPAView()
 {
     KoToolManager::instance()->removeCanvasController( m_canvasController );
     delete m_zoomController;
-    delete m_viewMode;
+    // delete only the view mode normal, let the derived class delete the currently
+    // active view mode if it is not view mode normal
+    delete m_viewModeNormal;
 }
 
 
@@ -125,7 +127,8 @@ void KoPAView::initGUI()
 
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
-    m_viewMode = new KoPAViewModeNormal( this, m_canvas );
+    m_viewModeNormal = new KoPAViewModeNormal( this, m_canvas );
+    m_viewMode = m_viewModeNormal;
 
     //Ruler
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter());

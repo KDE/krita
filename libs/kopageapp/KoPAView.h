@@ -235,6 +235,8 @@ private:
     KoZoomAction *m_zoomAction;
 
     KoFind * m_find;
+
+    KoPAViewMode *m_viewModeNormal;
 };
 
 #endif /* KOPAVIEW_H */

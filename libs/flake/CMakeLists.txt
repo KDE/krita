@@ -173,6 +173,7 @@ install(
     KoCanvasResourceProvider.h
     KoDataCenter.h
     KoFlake.h
+    KoFrameShape.h
     KoImageCollection.h
     KoImageData.h
     KoInputDevice.h

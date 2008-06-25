@@ -81,7 +81,7 @@ public:
 KoGradientBackground::KoGradientBackground( QGradient * gradient, const QMatrix &matrix )
     : d( new Private() )
 {
-    d->gradient = d->cloneGradient( gradient );
+    d->gradient = gradient;
     d->matrix = matrix;
     Q_ASSERT(d->gradient);
 }

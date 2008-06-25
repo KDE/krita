@@ -26,8 +26,7 @@
 
 class KoShapeBackgroundCommand::Private {
 public:
-    Private( KoShapeBackground * f )
-    : newFill(f)
+    Private()
     {
     }
     ~Private()
@@ -36,40 +35,65 @@ public:
             if(fill && fill->useCount() <= 0)
                 delete fill;
         }
+        foreach(KoShapeBackground* fill, newFills) {
+            if(fill && fill->useCount() <= 0)
+                delete fill;
+        }
     }
     QList<KoShape*> shapes;    ///< the shapes to set background for
     QList<KoShapeBackground*> oldFills;
-    KoShapeBackground * newFill;
+    QList<KoShapeBackground*> newFills;
 };
 
 KoShapeBackgroundCommand::KoShapeBackgroundCommand( const QList<KoShape*> &shapes, KoShapeBackground * fill,
         QUndoCommand *parent )
     : QUndoCommand( parent )
-        , d(new Private(fill))
+    , d(new Private())
 {
     d->shapes = shapes;
     foreach( KoShape *shape, d->shapes )
+    {
         d->oldFills.append( shape->background() );
+        d->newFills.append( fill );
+    }
 
     setText( i18n( "Set background" ) );
 }
 
 KoShapeBackgroundCommand::KoShapeBackgroundCommand( KoShape * shape, KoShapeBackground * fill, QUndoCommand *parent )
     : QUndoCommand( parent )
-        , d(new Private(fill))
+    , d(new Private())
 {
     d->shapes.append( shape );
     d->oldFills.append( shape->background() );
+    d->newFills.append( fill );
 
     setText( i18n( "Set background" ) );
 }
 
-void KoShapeBackgroundCommand::redo () {
-    QUndoCommand::redo();
-    foreach( KoShape *shape, d->shapes ) {
-        shape->setBackground( d->newFill );
-        shape->update();
+KoShapeBackgroundCommand::KoShapeBackgroundCommand( const QList<KoShape*> &shapes, const QList<KoShapeBackground*> &fills, QUndoCommand *parent )
+    : QUndoCommand( parent )
+    , d(new Private())
+{
+    d->shapes = shapes;
+    foreach( KoShape *shape, d->shapes )
+    {
+        d->oldFills.append( shape->background() );
     }
+    d->newFills = fills;
+
+    setText( i18n( "Set background" ) );
+}
+
+
+void KoShapeBackgroundCommand::redo () {
+    QList<KoShapeBackground*>::iterator brushIt = d->newFills.begin();
+    foreach( KoShape *shape, d->shapes ) {
+        shape->setBackground( *brushIt );
+        shape->update();
+        brushIt++;
+    }
+    QUndoCommand::redo();
 }
 
 void KoShapeBackgroundCommand::undo () {

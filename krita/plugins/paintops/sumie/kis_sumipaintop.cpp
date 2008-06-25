@@ -22,6 +22,7 @@
 #include <QColor>
 
 #include <KoColor.h>
+#include <KoColorSpace.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>
@@ -86,19 +87,20 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     //setPixel (qint32 x, qint32 y, const QColor &c)
 
     // FASTER VERSION, but actually it is not faster..
-    dab = cachedDab( );
+    KisPaintDeviceSP dab = cachedDab( );
     KisRandomAccessor accessor = dab->createRandomAccessor(x, y);
 
     accessor.moveTo(x,y);
     quint8 *pixel = accessor.rawData();
     quint32 val = c.rgba();
     memcpy(pixel, &val, sizeof(val) );
-
+    dab->colorSpace()->fromQColor(c, accessor.rawData());
     // setPixel
     /*for (int i=0;i<20;i++)
       for (int j=0;j<20;j++)
       dab->setPixel(x+i,y+j, c.rgba() );*/
 
     QRect rc = dab->extent();
+    qDebug() << dab->extent();
     painter()->bitBlt( rc.topLeft(), dab, rc );
 }

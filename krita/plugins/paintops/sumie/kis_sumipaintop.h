@@ -26,8 +26,8 @@
 #include <QColor>
 
 #include <klocale.h>
-#include "kis_paintop.h"
-
+#include <kis_paintop.h>
+#include <kis_types.h>
 class QPointF;
 class KisPainter;
 
@@ -58,8 +58,7 @@ public:
     void paintAt(const KisPaintInformation& info);
 
 private:
-	QColor c;
-
+    QColor c;
 };
 
 #endif // KIS_SUMIPAINTOP_H_

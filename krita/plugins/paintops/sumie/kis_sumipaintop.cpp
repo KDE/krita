@@ -50,7 +50,8 @@ KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings
 KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter)
     : KisPaintOp(painter)
 {
-	dbgKrita << "START OF KisSumiPaintOp" << endl;
+    dbgKrita << "START OF KisSumiPaintOp" << endl;
+
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
@@ -60,44 +61,44 @@ KisSumiPaintOp::~KisSumiPaintOp()
 void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 {
     // KisPainter, see KisSumiPaintOp::createOp
-	if (!painter()) return;
+    if (!painter()) return;
 
     // read, write pixel data
-	KisPaintDeviceSP device = painter()->device();
-	if (!device) return;
+    KisPaintDeviceSP device = painter()->device();
+    if (!device) return;
 // boud
 //    if (!painter()->device()) return;
-	
-	qint32 x = (qint32)info.pos().x();
-	qint32 y = (qint32)info.pos().y();
-	/*dbgKrita << "LUKAST: x" << x;
-	dbgKrita << "LUKAST: y" << y;*/
 
-	int r,g,b;
-	r = x % 255;
-	g = y % 255;
-	b = (r - g);
-	if (b<0) b = -b;
-	b = b % 255;
+    qint32 x = (qint32)info.pos().x();
+    qint32 y = (qint32)info.pos().y();
+    /*dbgKrita << "LUKAST: x" << x;
+      dbgKrita << "LUKAST: y" << y;*/
 
-	c.setRgb(r,g,b);
-    KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
+    int r,g,b;
+    r = x % 255;
+    g = y % 255;
+    b = (r - g);
+    if (b<0) b = -b;
+    b = b % 255;
+
+    c.setRgb(r,g,b);
     //m_stroke->draw( dab );
-	//setPixel (qint32 x, qint32 y, const QColor &c) 
-	
-	// FASTER VERSION, but actually it is not faster..
-	KisRandomAccessor randDab = dab->createRandomAccessor(x, y, 0);
+    //setPixel (qint32 x, qint32 y, const QColor &c)
 
-	randDab.moveTo(x,y);
-	quint8 *pixel = randDab.rawData();
-	quint32 val = c.rgba();
-	memcpy(pixel, &val, sizeof(val) );
+    // FASTER VERSION, but actually it is not faster..
+    dab = cachedDab( );
+    KisRandomAccessor accessor = dab->createRandomAccessor(x, y);
 
-	// setPixel
-	/*for (int i=0;i<20;i++)
-		for (int j=0;j<20;j++)
-			dab->setPixel(x+i,y+j, c.rgba() );*/
+    accessor.moveTo(x,y);
+    quint8 *pixel = accessor.rawData();
+    quint32 val = c.rgba();
+    memcpy(pixel, &val, sizeof(val) );
+
+    // setPixel
+    /*for (int i=0;i<20;i++)
+      for (int j=0;j<20;j++)
+      dab->setPixel(x+i,y+j, c.rgba() );*/
 
     QRect rc = dab->extent();
-    painter()->bitBlt( rc.topLeft(), dab, dab->extent() );
+    painter()->bitBlt( rc.topLeft(), dab, rc );
 }

@@ -17,6 +17,7 @@
  */
 
 #include "kis_sumipaintop.h"
+#include <cmath>
 
 #include <QRect>
 #include <QColor>
@@ -41,22 +42,22 @@
 KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED( settings );
-    Q_UNUSED( image );
-    KisPaintOp * op = new KisSumiPaintOp(painter);
+    KisPaintOp * op = new KisSumiPaintOp(painter, image);
     Q_CHECK_PTR(op);
     return op;
 }
 
 
-KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter)
+KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter, KisImageSP image)
     : KisPaintOp(painter)
 {
     dbgKrita << "START OF KisSumiPaintOp" << endl;
-
+	m_image = image;
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
 {
+	dbgKrita << "END OF KisSumiPaintOp" << endl;
 }
 
 void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
@@ -67,41 +68,46 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     // read, write pixel data
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
-// boud
-//    if (!painter()->device()) return;
 
     qint32 x = (qint32)info.pos().x();
     qint32 y = (qint32)info.pos().y();
-    /*dbgKrita << "LUKAST: x" << x;
-      dbgKrita << "LUKAST: y" << y;*/
 
-    int r,g,b;
+	QRect layerRect = m_image->bounds();
+	int w = layerRect.width();
+	dbgKrita << "\tWIDTH:" << w << endl;
+
+/*  int r,g,b;
     r = x % 255;
     g = y % 255;
-    b = (r - g);
-    if (b<0) b = -b;
-    b = b % 255;
+    b = (int)(255*(1.0/sqrt(x+y)));
+	b %=  255;
 
-    c.setRgb(r,g,b);
-    //m_stroke->draw( dab );
-    //setPixel (qint32 x, qint32 y, const QColor &c)
+    c.setRgb(r,g,b);*/
+	c = Qt::black;    
+	//m_stroke->draw( dab );
 
     // FASTER VERSION, but actually it is not faster..
     KisPaintDeviceSP dab = cachedDab( );
     KisRandomAccessor accessor = dab->createRandomAccessor(x, y);
+	quint8 *pixel = accessor.rawData();
 
     accessor.moveTo(x,y);
-    quint8 *pixel = accessor.rawData();
-    quint32 val = c.rgba();
-    memcpy(pixel, &val, sizeof(val) );
-    dab->colorSpace()->fromQColor(c, accessor.rawData());
+	for (int i=0;i<20;i++)
+		for (int j=0;j<20;j++)
+		{
+			pixel = pixel+i*w+j;
+	   		// ?? weird color when black used?
+			dab->colorSpace()->fromQColor(c, pixel);
+		}
+
     // setPixel
     /*for (int i=0;i<20;i++)
       for (int j=0;j<20;j++)
-      dab->setPixel(x+i,y+j, c.rgba() );*/
+      	dab->setPixel(x+i,y+j, c.rgba() );*/
 
-    //QRect rc = dab->extent();
+
+    QRect rc = dab->extent();
     //qDebug() << dab->extent();
-    //painter()->bitBlt( rc.topLeft(), dab, rc );
-    painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
+    painter()->bitBlt( rc.topLeft(), dab, rc );
+    //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
 }

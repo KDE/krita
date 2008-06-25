@@ -49,7 +49,7 @@ class KisSumiPaintOp : public KisPaintOp {
 
 public:
 
-    KisSumiPaintOp(KisPainter * painter);
+    KisSumiPaintOp(KisPainter * painter, KisImageSP image);
     virtual ~KisSumiPaintOp();
 
     // Do we want to spray even when no movement?
@@ -59,6 +59,7 @@ public:
 
 private:
     QColor c;
+	KisImageSP m_image;
 };
 
 #endif // KIS_SUMIPAINTOP_H_

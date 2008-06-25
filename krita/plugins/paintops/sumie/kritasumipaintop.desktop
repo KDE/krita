@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Sumi-e brush
+Name[pt]=Pincel Sumi-e
+Name[pt_BR]=Pincel Sumi-e
+Name[uk]=Пензель Сумі-е
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasumipaintop

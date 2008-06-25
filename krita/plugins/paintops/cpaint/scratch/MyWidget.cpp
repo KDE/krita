@@ -11,7 +11,7 @@ MyWidget::MyWidget(QWidget *parent)
 	setBackgroundRole(QPalette::Dark);
 	setAutoFillBackground(true);
 	setFocusPolicy(Qt::StrongFocus);
-	setWindowTitle("Press F1, F2 or F3 to change line algorithm");
+	setWindowTitle(i18n("Press F1, F2 or F3 to change line algorithm"));
 
 
 	dda = new QString("DDA Line");
@@ -31,7 +31,7 @@ MyWidget::MyWidget(QWidget *parent)
 	label->setPixmap(QPixmap::fromImage(*image));
 	//QObject::connect(quit, SIGNAL(clicked())),this, SLOT(drawLine(int,int,int,int,int,const QColor &) );
 
-	QPushButton *quit = new QPushButton("Quit", this);
+	QPushButton *quit = new QPushButton(i18n("Quit"), this);
     quit->setGeometry(62, 40, 75, 30);
 
 	QHBoxLayout *topLeftLayout = new QHBoxLayout;

@@ -23,6 +23,8 @@
 #include <QtCore/QAbstractListModel>
 #include <QtCore/QSize>
 
+#include "kopageapp_export.h"
+
 class KoPAView;
 class KoPAPageBase;
 
@@ -31,7 +33,7 @@ class KoPAPageBase;
  * create a list view of available pages. Example usage is widget for choosing master page
  * and slide/page sorter widget.
  */
-class KoPAPageThumbnailModel : public QAbstractListModel
+class KOPAGEAPP_EXPORT KoPAPageThumbnailModel : public QAbstractListModel
 {
     Q_OBJECT
 

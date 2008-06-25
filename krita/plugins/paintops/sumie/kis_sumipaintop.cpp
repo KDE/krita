@@ -100,7 +100,8 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
       for (int j=0;j<20;j++)
       dab->setPixel(x+i,y+j, c.rgba() );*/
 
-    QRect rc = dab->extent();
-    qDebug() << dab->extent();
-    painter()->bitBlt( rc.topLeft(), dab, rc );
+    //QRect rc = dab->extent();
+    //qDebug() << dab->extent();
+    //painter()->bitBlt( rc.topLeft(), dab, rc );
+    painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
 }

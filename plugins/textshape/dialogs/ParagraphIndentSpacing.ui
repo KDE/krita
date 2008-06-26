@@ -74,7 +74,7 @@
       <item row="2" column="2" >
        <widget class="QCheckBox" name="autoTextIndent" >
         <property name="text" >
-         <string>Auto-infer from text size   </string>
+         <string>Auto-infer from text size</string>
         </property>
        </widget>
       </item>

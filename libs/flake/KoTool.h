@@ -81,14 +81,14 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter ) = 0;
 
     /**
-     * Return the option widget for this tool. Create it if it
-     * does not exist yet. If the tool does not have an option widget,
-     * this method return 0. (After discussion with Thomas, who prefers
+     * Return the option widgets for this tool. Create them if they
+     * do not exist yet. If the tool does not have an option widget,
+     * this method return an empty list. (After discussion with Thomas, who prefers
      * the toolmanager to handle that case.)
      *
-     * @see m_optionWidget
+     * @see m_optionWidgets
      */
-    QWidget * optionWidget();
+    QMap<QString, QWidget *>  optionWidgets();
 
     /**
      * Quick help is a short help text about the way the tool functions.
@@ -355,7 +355,8 @@ protected:
      * Reimplement this if your tool actually has an option widget.
      * Sets the option widget to 0 by default.
      */
-    virtual QWidget *  createOptionWidget();
+    virtual QWidget *createOptionWidget();
+    virtual QMap<QString, QWidget *> createOptionWidgets();
 
     /**
      * Add an action under the given name to the collection.

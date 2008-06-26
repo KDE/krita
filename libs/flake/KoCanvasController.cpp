@@ -401,8 +401,8 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
     m_d->canvas->canvasWidget()->update();
 }
 
-void KoCanvasController::setToolOptionWidget(QWidget *widget) {
-    emit toolOptionWidgetChanged(widget);
+void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap) {
+    emit toolOptionWidgetsChanged(widgetMap);
 }
 
 void KoCanvasController::setDocumentSize( const QSize & sz, bool recalculateCenter )

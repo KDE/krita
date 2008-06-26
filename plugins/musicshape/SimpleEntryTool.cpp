@@ -616,7 +616,7 @@ void SimpleEntryTool::activeActionChanged(QAction* action)
     m_activeAction = qobject_cast<AbstractMusicAction*>(action);
     if (m_activeAction->isVoiceAware() != oldVoiceAware) {
         m_musicshape->update();
-        reinterpret_cast<SimpleEntryWidget*>(optionWidget())->setVoiceListEnabled(m_activeAction->isVoiceAware());
+    //    reinterpret_cast<SimpleEntryWidget*>(optionWidget())->setVoiceListEnabled(m_activeAction->isVoiceAware());
     }
 }
 

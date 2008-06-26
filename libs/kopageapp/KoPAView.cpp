@@ -42,6 +42,7 @@
 #include <KoSelection.h>
 #include <KoToolDockerFactory.h>
 #include <KoToolDocker.h>
+#include <KoDockerManager.h>
 #include <KoShapeLayer.h>
 #include <KoRulerController.h>
 #include <KoDrag.h>
@@ -158,10 +159,10 @@ void KoPAView::initGUI()
 
     KoToolBoxFactory toolBoxFactory(m_canvasController, "Tools" );
     createDockWidget( &toolBoxFactory );
-    KoToolDockerFactory toolDockerFactory;
-    KoToolDocker* toolDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
-    connect( m_canvasController, SIGNAL( toolOptionWidgetChanged( QWidget* ) ),
-             toolDocker, SLOT( newOptionWidget( QWidget* ) ) );
+
+    KoDockerManager *dockerManager = new KoDockerManager(this);
+    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
+             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_canvas, SIGNAL(documentSize(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));

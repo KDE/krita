@@ -162,10 +162,11 @@ public:
     void ensureVisible( KoShape *shape );
 
     /**
-     * will cause the toolOptionWidgetChanged to be emitted and all listeners to be updated to the new widget.
+     * will cause the toolOptionWidgetsChanged to be emitted and all
+     * listeners to be updated to the new widget.
      * @param widget the widget
      */
-    void setToolOptionWidget(QWidget *widget);
+    void setToolOptionWidgets(const QMap<QString, QWidget *> &);
 
     /**
      * @brief zooms in around the center.
@@ -277,9 +278,9 @@ signals:
     void sizeChanged(const QSize & size );
 
     /**
-     * Emit the new tool option widget to be used with this canvas.
+     * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetChanged(QWidget *widget);
+    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &);
 
     /**
      * Emitted whenever the document is scrolled.

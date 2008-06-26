@@ -376,8 +376,9 @@ void KoToolManager::postSwitchTool() {
         canvas->updateInputMethodInfo();
     }
 
-    QWidget *toolWidget = d->canvasData->activeTool->optionWidget();
-    if(toolWidget == 0) { // no option widget.
+    QMap<QString, QWidget *> optionWidgetMap = d->canvasData->activeTool->optionWidgets();
+    if(optionWidgetMap.empty()) { // no option widget.
+        QWidget *toolWidget;
         QString name;
         foreach( ToolHelper * tool, d->tools ) {
             if ( tool->id() == d->canvasData->activeTool->toolId() ) {
@@ -397,8 +398,9 @@ void KoToolManager::postSwitchTool() {
             d->canvasData->dummyToolWidget = toolWidget;
         }
         d->canvasData->dummyToolLabel->setText(i18n("Active tool: %1", name));
+        optionWidgetMap.insert(i18n("Tool Options"), toolWidget);
     }
-    d->canvasData->canvas->setToolOptionWidget(toolWidget);
+    d->canvasData->canvas->setToolOptionWidgets(optionWidgetMap);
     emit changedTool(d->canvasData->canvas, d->uniqueToolIds.value(d->canvasData->activeTool));
 }
 

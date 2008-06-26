@@ -22,16 +22,17 @@
 #include "KoPointerEvent.h"
 #include "KoCanvasResourceProvider.h"
 
+
+#include <klocale.h>
 #include <kactioncollection.h>
 #include <QWidget>
 
 class KoToolPrivate {
 public:
     KoToolPrivate()
-        : optionWidget(0),
-        previousCursor(Qt::ArrowCursor) { }
+        : previousCursor(Qt::ArrowCursor) { }
 
-    QWidget *optionWidget; ///< the optionwidget this tool will show in the option widget palette
+    QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated witth this tool
     QCursor previousCursor;
     QHash<QString, QAction*> actionCollection;
     QString toolId;
@@ -53,8 +54,10 @@ KoTool::KoTool(KoCanvasBase *canvas )
 
 KoTool::~KoTool()
 {
+/*TODO change this to map behaviour
     if (d->optionWidget && !d->optionWidget->parentWidget())
         delete d->optionWidget;
+*/
     delete d;
 }
 
@@ -140,11 +143,11 @@ void KoTool::useCursor(QCursor cursor, bool force) {
     emit cursorChanged(d->previousCursor);
 }
 
-QWidget * KoTool::optionWidget() {
-    if (d->optionWidget == 0) {
-        d->optionWidget = createOptionWidget();
+QMap<QString, QWidget *> KoTool::optionWidgets() {
+    if (d->optionWidgets.empty()) {
+        d->optionWidgets = createOptionWidgets();
     }
-    return d->optionWidget;
+    return d->optionWidgets;
 }
 
 void KoTool::addAction(const QString &name, QAction *action) {
@@ -162,6 +165,14 @@ QAction *KoTool::action(const QString &name) const {
 QWidget * KoTool::createOptionWidget()
 {
     return 0;
+}
+
+QMap<QString, QWidget *>  KoTool::createOptionWidgets()
+{
+    QMap<QString, QWidget *> ow;
+    if(QWidget *widget = createOptionWidget())
+        ow.insert(i18n("Tool Option"), widget);
+    return ow;
 }
 
 void KoTool::setToolId(const QString &id) {

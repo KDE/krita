@@ -12,6 +12,7 @@ set(koguiutils_LIB_SRCS
    KoCharSelectDia.cpp
    KoContextHelp.cpp
    KoCsvImportDialog.cpp
+   KoDockerManager.cpp
    KoDocumentSectionDelegate.cpp
    KoDocumentSectionView.cpp
    KoDocumentSectionToolTip.cpp

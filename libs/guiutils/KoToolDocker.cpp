@@ -34,12 +34,8 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
     d( new Private() )
 {
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    QWidget *child = new QWidget();
-    QLayout *layout = new QVBoxLayout(child);
-    layout->setMargin(0);
-    child->setLayout(layout);
-    setWidget(child);
+    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
+
 }
 
 KoToolDocker::~KoToolDocker() {
@@ -50,12 +46,11 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
     if(d->currentWidget == optionWidget)
         return;
     if(d->currentWidget) {
-        widget()->layout()->removeWidget(d->currentWidget);
         d->currentWidget->hide();
         d->currentWidget->setParent(0);
     }
     d->currentWidget = optionWidget;
-    widget()->layout()->addWidget(optionWidget);
+    setWidget(optionWidget);
     optionWidget->show();
 }
 

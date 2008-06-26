@@ -65,6 +65,7 @@
 #include <KoToolDockerFactory.h>
 #include <KoColorDocker.h>
 #include "KoColorSpaceRegistry.h"
+#include <KoDockerManager.h>
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
 
@@ -433,11 +434,10 @@ void KisView2::slotLoadingFinished()
 
     m_d->nodeManager->nodesUpdated();
 
-    KoToolDocker * d = shell()->findChild<KoToolDocker*>("KoToolOptionsDocker" );
-    if(d)
-        connect(m_d->canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), d, SLOT(newOptionWidget(QWidget*)));
-    else
-        kWarning(41007) <<"Could not find tool docker:" << d;
+    KoDockerManager *dockerManager = new KoDockerManager(this);
+    connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
+             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
+
 
     connectCurrentImage();
 

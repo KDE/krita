@@ -66,6 +66,25 @@ void KoGenStyle::writeStyleProperties( KoXmlWriter* writer, PropertyType i,
     }
 }
 
+static KoGenStyle::PropertyType s_propertyTypes[] = 
+    { KoGenStyle::DefaultType, KoGenStyle::TextType, KoGenStyle::ParagraphType, KoGenStyle::GraphicType };
+
+static const char* s_propertyNames[] = { 0, "style:text-properties", "style:paragraph-properties", "style:graphic-properties" };
+
+static const int s_propertyNamesCount = sizeof(s_propertyNames) / sizeof(*s_propertyNames);
+
+static KoGenStyle::PropertyType propertyTypeByElementName(const char* propertiesElementName)
+{
+    for ( int i = 0; i < s_propertyNamesCount; ++i) {
+        if (qstrcmp(s_propertyNames[i], propertiesElementName) == 0) {
+            return s_propertyTypes[i];
+        }
+    }
+    return KoGenStyle::DefaultType;
+}
+
+
+
 void KoGenStyle::writeStyle( KoXmlWriter* writer, const KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
     //kDebug(30003) <<"writing out style" << name <<" display-name=" << m_attributes["style:display-name"] <<" family=" << m_familyName;
@@ -123,8 +142,12 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, const KoGenStyles& styles, con
     }
     bool createPropertiesTag = propertiesElementName && propertiesElementName[0] != '\0';
     KoGenStyle::PropertyType i = KoGenStyle::DefaultType;
+    KoGenStyle::PropertyType defaultPropertyType = KoGenStyle::DefaultType;
+    if(createPropertiesTag)
+        defaultPropertyType = propertyTypeByElementName( propertiesElementName );
     if ( !m_properties[i].isEmpty() ||
-         !m_properties[KoGenStyle::ChildElement].isEmpty() ) {
+         !m_properties[KoGenStyle::ChildElement].isEmpty() ||
+         !m_properties[defaultPropertyType].isEmpty() ) {
         if ( createPropertiesTag )
             writer->startElement( propertiesElementName ); // e.g. paragraph-properties
         it = m_properties[i].begin();
@@ -132,6 +155,16 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, const KoGenStyles& styles, con
             if ( !parentStyle || parentStyle->property( it.key(), i ) != it.value() )
                 writer->addAttribute( it.key().toUtf8(), it.value().toUtf8() );
         }
+        //write the explicitly-defined properties that are the same type as the default,
+        //but only if defaultPropertyType is Text, Paragraph, or GraphicType
+        if ( defaultPropertyType != 0 ) {
+            it = m_properties[defaultPropertyType].begin();
+            for ( ; it != m_properties[defaultPropertyType].end(); ++it ) {
+                if ( !parentStyle || parentStyle->property( it .key(), defaultPropertyType ) != it.value() )
+                    writer->addAttribute( it.key().toUtf8(), it.value().toUtf8() );
+            }
+        }
+        //write child elements of the properties elements
         i = KoGenStyle::ChildElement;
         it = m_properties[i].begin();
         for ( ; it != m_properties[i].end(); ++it ) {
@@ -142,9 +175,15 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, const KoGenStyles& styles, con
         if ( createPropertiesTag )
             writer->endElement();
     }
-    writeStyleProperties( writer, KoGenStyle::GraphicType, "style:graphic-properties", parentStyle );
-    writeStyleProperties( writer, KoGenStyle::ParagraphType, "style:paragraph-properties", parentStyle );
-    writeStyleProperties( writer, KoGenStyle::TextType, "style:text-properties", parentStyle );
+
+    // now write out any other properties elements
+    //start with i=1 to skip the defaultType that we already took care of
+    for (int i = 1; i < s_propertyNamesCount; ++i) {
+        //skip any properties that are the same as the defaultType
+        if (i != defaultPropertyType) {
+            writeStyleProperties( writer, s_propertyTypes[i], s_propertyNames[i], parentStyle );
+        }
+    }
 
     //write child elements that aren't in any of the properties elements
     i = KoGenStyle::StyleChildElement;

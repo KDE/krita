@@ -28,6 +28,7 @@ private slots:
     void testLookup();
     void testDefaultStyle();
     void testUserStyles();
+    void testWriteStyle();
     void testStylesDotXml();
 };
 

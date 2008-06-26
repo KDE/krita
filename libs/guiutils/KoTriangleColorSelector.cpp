@@ -15,10 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_triangle_color_selector.h"
+#include "KoTriangleColorSelector.h"
 #include <math.h>
-
-#include <kis_debug.h>
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -30,7 +28,7 @@ enum CurrentHandle {
     HueHandle,
     ValueSaturationHandle };
 
-struct KisTriangleColorSelector::Private {
+struct KoTriangleColorSelector::Private {
     QPixmap wheelPixmap;
     QPixmap trianglePixmap;
     int hue;
@@ -55,7 +53,7 @@ struct KisTriangleColorSelector::Private {
     double triangleHandleSize;
 };
 
-KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
+KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
 {
     setMinimumHeight( 100 );
     setMinimumWidth( 100 );
@@ -67,12 +65,12 @@ KisTriangleColorSelector::KisTriangleColorSelector(QWidget* parent) : QWidget(pa
     updateTriangleCircleParameters();
 }
 
-KisTriangleColorSelector::~KisTriangleColorSelector()
+KoTriangleColorSelector::~KoTriangleColorSelector()
 {
     delete d;
 }
 
-void KisTriangleColorSelector::updateTriangleCircleParameters()
+void KoTriangleColorSelector::updateTriangleCircleParameters()
 {
     d->sizeColorSelector = qMin(width(), height());
     d->centerColorSelector = 0.5 * d->sizeColorSelector;
@@ -89,7 +87,7 @@ void KisTriangleColorSelector::updateTriangleCircleParameters()
     d->triangleHandleSize = 10.0;
 }
 
-void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
+void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
 {
     Q_UNUSED(event);
     QPainter p(this);
@@ -133,12 +131,12 @@ void KisTriangleColorSelector::paintEvent( QPaintEvent * event )
     p.end();
 }
 
-int KisTriangleColorSelector::hue() const
+int KoTriangleColorSelector::hue() const
 {
     return d->hue;
 }
 
-void KisTriangleColorSelector::setHue(int h)
+void KoTriangleColorSelector::setHue(int h)
 {
     h = qBound(0, h, 360);
     d->hue = h;
@@ -147,12 +145,12 @@ void KisTriangleColorSelector::setHue(int h)
     update();
 }
 
-int KisTriangleColorSelector::value() const
+int KoTriangleColorSelector::value() const
 {
     return d->value;
 }
 
-void KisTriangleColorSelector::setValue(int v)
+void KoTriangleColorSelector::setValue(int v)
 {
     v = qBound(0, v, 255);
     d->value = v;
@@ -161,12 +159,12 @@ void KisTriangleColorSelector::setValue(int v)
     update();
 }
 
-int KisTriangleColorSelector::saturation() const
+int KoTriangleColorSelector::saturation() const
 {
     return d->saturation;
 }
 
-void KisTriangleColorSelector::setSaturation(int s)
+void KoTriangleColorSelector::setSaturation(int s)
 {
     s = qBound(0, s, 255);
     d->saturation = s;
@@ -175,7 +173,7 @@ void KisTriangleColorSelector::setSaturation(int s)
     update();
 }
 
-void KisTriangleColorSelector::setHSV(int h, int s, int v)
+void KoTriangleColorSelector::setHSV(int h, int s, int v)
 {
     h = qBound(0, h, 360);
     s = qBound(0, s, 255);
@@ -188,14 +186,14 @@ void KisTriangleColorSelector::setHSV(int h, int s, int v)
     update();
 }
 
-QColor KisTriangleColorSelector::color() const
+QColor KoTriangleColorSelector::color() const
 {
     int r,g,b;
     hsv_to_rgb( d->hue, d->saturation, d->value, &r, &g, &b);
     return QColor(r,g,b);
 }
 
-void KisTriangleColorSelector::setQColor(const QColor& c)
+void KoTriangleColorSelector::setQColor(const QColor& c)
 {
     if(d->updateAllowed)
     {
@@ -208,7 +206,7 @@ void KisTriangleColorSelector::setQColor(const QColor& c)
     }
 }
 
-void KisTriangleColorSelector::resizeEvent( QResizeEvent * event )
+void KoTriangleColorSelector::resizeEvent( QResizeEvent * event )
 {
     QWidget::resizeEvent( event );
     updateTriangleCircleParameters();
@@ -221,14 +219,14 @@ inline double pow2(double v)
     return v*v;
 }
 
-void KisTriangleColorSelector::tellColorChanged()
+void KoTriangleColorSelector::tellColorChanged()
 {
     d->updateAllowed = false;
     emit(colorChanged(color()));
     d->updateAllowed = true;
 }
 
-void KisTriangleColorSelector::generateTriangle()
+void KoTriangleColorSelector::generateTriangle()
 {
     QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
     // Length of triangle
@@ -268,7 +266,7 @@ void KisTriangleColorSelector::generateTriangle()
     d->trianglePixmap = QPixmap::fromImage(img);
 }
 
-void KisTriangleColorSelector::generateWheel()
+void KoTriangleColorSelector::generateWheel()
 {
     QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
     for(int y = 0; y < d->sizeColorSelector; y++)
@@ -302,7 +300,7 @@ void KisTriangleColorSelector::generateWheel()
     d->wheelPixmap = QPixmap::fromImage(img);
 }
 
-void KisTriangleColorSelector::mouseReleaseEvent( QMouseEvent * event )
+void KoTriangleColorSelector::mouseReleaseEvent( QMouseEvent * event )
 {
     if(event->button() == Qt::LeftButton)
     {
@@ -312,7 +310,7 @@ void KisTriangleColorSelector::mouseReleaseEvent( QMouseEvent * event )
     QWidget::mouseReleaseEvent( event );
 }
 
-void KisTriangleColorSelector::mousePressEvent( QMouseEvent * event )
+void KoTriangleColorSelector::mousePressEvent( QMouseEvent * event )
 {
     if(event->button() == Qt::LeftButton)
     {
@@ -322,7 +320,7 @@ void KisTriangleColorSelector::mousePressEvent( QMouseEvent * event )
     QWidget::mousePressEvent( event );
 }
 
-void KisTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
+void KoTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
 {
     if(event->buttons() & Qt::LeftButton)
     {
@@ -331,8 +329,9 @@ void KisTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
     QWidget::mouseMoveEvent( event);
 }
 
-void KisTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
+void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
 {
+    Q_UNUSED( checkInWheel );
     double x = _x - 0.5*width();
     double y = _y - 0.5*height();
     // Check if the click is inside the wheel
@@ -366,4 +365,4 @@ void KisTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
     }
 }
 
-#include "kis_triangle_color_selector.moc"
+#include "KoTriangleColorSelector.moc"

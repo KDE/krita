@@ -22,7 +22,7 @@
 
 class KoColor;
 class KisView2;
-class KisTriangleColorSelector;
+class KoTriangleColorSelector;
 
 class KisTriangleColorSelectorDock : public QDockWidget {
     Q_OBJECT
@@ -32,7 +32,7 @@ class KisTriangleColorSelectorDock : public QDockWidget {
         void colorChangedProxy(const QColor&);
         void setColorProxy( const KoColor& );
 private:
-    KisTriangleColorSelector* m_colorSelector;
+    KoTriangleColorSelector* m_colorSelector;
     KisView2* m_view;
 };
 

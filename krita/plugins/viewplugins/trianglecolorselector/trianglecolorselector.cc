@@ -35,7 +35,6 @@
 #include "kis_types.h"
 #include "kis_view2.h"
 
-#include "kis_triangle_color_selector.h"
 #include "kis_triangle_color_selector_dock.h"
 
 typedef KGenericFactory<TriangleColorSelectorPlugin> TriangleColorSelectorPluginFactory;

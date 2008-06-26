@@ -50,6 +50,7 @@ set(koguiutils_LIB_SRCS
    KoEditColorSetDialog.cpp
    KoColorPatch.cpp
    KoDualColorButton.cpp
+    KoTriangleColorSelector.cpp
    KoLineStyleSelector.cpp
     KoProgressUpdater.cpp
     KoPrintingDialog.cpp

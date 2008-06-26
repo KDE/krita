@@ -15,16 +15,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_TRIANGLE_COLOR_SELECTOR_H_
-#define _KIS_TRIANGLE_COLOR_SELECTOR_H_
+#ifndef _KO_TRIANGLE_COLOR_SELECTOR_H_
+#define _KO_TRIANGLE_COLOR_SELECTOR_H_
 
 #include <QWidget>
 
-class KisTriangleColorSelector : public QWidget {
+#include "koguiutils_export.h"
+
+class KOGUIUTILS_EXPORT KoTriangleColorSelector : public QWidget {
     Q_OBJECT
     public:
-        KisTriangleColorSelector(QWidget* parent);
-        ~KisTriangleColorSelector();
+        KoTriangleColorSelector(QWidget* parent);
+        ~KoTriangleColorSelector();
     protected: // events
         void paintEvent( QPaintEvent * event );
         void resizeEvent( QResizeEvent * event );

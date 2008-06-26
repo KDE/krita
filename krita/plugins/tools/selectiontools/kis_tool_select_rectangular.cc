@@ -201,8 +201,6 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         else {
             QRectF documentRect = convertToPt(bound);
 
-            KisSelectionSP selection = currentSelection();
-
             KoShape* shape;
             KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoRectangleShape");
             if(rectFactory) {

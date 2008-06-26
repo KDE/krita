@@ -48,8 +48,9 @@
 #include <kis_selected_transaction.h>
 #include <canvas/kis_canvas2.h>
 #include <kis_pixel_selection.h>
+#include "kis_selection_tool_helper.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness, selectionAction mode)
+void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness)
 {
     // XXX: Multithread this!
     qint32 x, y, w, h;
@@ -68,15 +69,8 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 
             quint8 match = cs->difference(c, hiter.rawData());
 
-            if (mode == SELECTION_ADD || mode == SELECTION_REPLACE) {
-                if (match <= fuzziness) {
-                    *(selIter.rawData()) = MAX_SELECTED;
-                }
-            }
-            else if (mode == SELECTION_SUBTRACT) {
-                if (match <= fuzziness) {
-                    *(selIter.rawData()) = MIN_SELECTED;
-                }
+            if (match <= fuzziness) {
+                *(selIter.rawData()) = MAX_SELECTED;
             }
             ++hiter;
             ++selIter;
@@ -85,7 +79,9 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
         selIter.nextRow();
     }
 
-}KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
+}
+
+KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::load("tool_similar_selection_plus_cursor.png", 6, 6))
 {
     m_addCursor = KisCursor::load("tool_similar_selection_plus_cursor.png", 1, 21);
@@ -125,7 +121,7 @@ useCursor(m_subtractCursor);
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         quint8 opacity = OPACITY_OPAQUE;
 
-        if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
+        if (e->button() != Qt::LeftButton)
             return;
 
         if (!currentImage())
@@ -137,27 +133,10 @@ useCursor(m_subtractCursor);
             return;
 
         QPointF pos = convertToPixelCoord(e);
-        KisSelectionSP selection = currentSelection();
-        if (!selection) selection = currentImage()->globalSelection();
-        KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
-        bool hasSelection = pSel;
 
-
-        KisNodeSP node = currentNode();
-        KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-        while ( !layer && node->parent() ) {
-           layer = dynamic_cast<KisLayer*>(node->parent().data());
-           node = node->parent();
-        }
-
-        KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Similar Selection"), layer);
-
-        if (!hasSelection || m_defaultSelectAction == SELECTION_REPLACE)
-        {
-            pSel->clear();
-            if(m_defaultSelectAction == SELECTION_SUBTRACT)
-                pSel->invert();
-        }
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
+        if ( !kisCanvas )
+            return;
 
         KoColor c;
         dev->pixel(pos.x(), pos.y(), &c);
@@ -165,12 +144,13 @@ useCursor(m_subtractCursor);
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)
-        selectByColor(dev, pSel, c.data(), m_fuzziness, m_currentSelectAction);
+        KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+        selectByColor(dev, tmpSel, c.data(), m_fuzziness);
 
-        m_canvas->addCommand(t);
+        KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Similar Selection"));
+        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_defaultSelectAction);
 
-        selection->updateProjection();
-        dev->setDirty();
+        m_canvas->addCommand(cmd);
         QApplication::restoreOverrideCursor();
     }
 }

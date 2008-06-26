@@ -38,7 +38,7 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
 
     KoShapeTemplate t;
     t.name = i18n("Text");
-    t.icon = "draw-text";
+    t.icon = "x-shape-text";
     t.toolTip = i18n("Text Shape");
     KoProperties *props = new KoProperties();
     t.properties = props;

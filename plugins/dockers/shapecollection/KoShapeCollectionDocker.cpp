@@ -83,6 +83,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     setWindowTitle(i18n("Add Shape"));
 
     QWidget* mainWidget = new QWidget(this);
+    mainWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     QGridLayout* mainLayout = new QGridLayout(mainWidget);
     setWidget(mainWidget);
 
@@ -98,6 +99,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     m_quickView->setMinimumSize(QSize(5*32+10,32+10));
     m_quickView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_quickView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_quickView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     connect(m_quickView, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(activateShapeCreationToolFromQuick(const QModelIndex&)));
@@ -106,6 +108,8 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     m_moreShapes->setText(i18n("More"));
     m_moreShapes->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     m_moreShapes->setIconSize(QSize(32, 32));
+    m_moreShapes->setIcon(KIcon("shape-choose"));
+    m_moreShapes->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     mainLayout->addWidget(m_moreShapes, 0, 1);
 
     m_moreShapesContainer = new QMenu(0);
@@ -231,6 +235,7 @@ void KoShapeCollectionDocker::activateShapeCreationToolFromQuick(const QModelInd
         tool->setShapeProperties(properties);
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
     }
+    m_quickView->clearSelection();
 }
 
 void KoShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index)

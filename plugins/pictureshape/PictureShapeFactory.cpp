@@ -32,8 +32,7 @@ PictureShapeFactory::PictureShapeFactory( QObject* parent)
     : KoShapeFactory( parent, PICTURESHAPEID, i18n( "Picture Shape" ) )
 {
     setToolTip( i18n( "A shape which displays a picture" ) );
-    ///@todo setIcon( "pictureshape" );
-    setIcon( "image-jpeg2000" );
+    setIcon( "x-shape-image" );
     setOdfElementNames( KoXmlNS::draw, QStringList( "image" ) );
     setLoadingPriority( 1 );
 }

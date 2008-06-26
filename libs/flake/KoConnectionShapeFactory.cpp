@@ -33,8 +33,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory( QObject* parent)
     : KoShapeFactory( parent, KOCONNECTIONSHAPEID, i18n( "Connection Shape" ) )
 {
     setToolTip( i18n( "A shape which displays a connection between two other shapes" ) );
-    ///@todo setIcon( "connectionshape" );
-    //setIcon( "" );
+    setIcon("x-shape-connection");
     setOdfElementNames( KoXmlNS::draw, QStringList( "connector" ) );
     setLoadingPriority( 1 );
 }

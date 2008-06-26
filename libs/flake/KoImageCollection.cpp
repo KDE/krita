@@ -55,12 +55,16 @@ void KoImageCollection::removeImage(KoImageData *image) {
 
 bool KoImageCollection::completeLoading(KoStore *store) {
     foreach(KoImageData *image, d->images) {
-        if(! store->open(image->storeHref()))
+        if(! store->open(image->storeHref())) {
+            kWarning(30006) << "open image " << image->storeHref() << "failed";
             return false;
+        }
         bool ok = image->loadFromFile(new KoStoreDevice(store));
         store->close();
-        if(! ok)
+        if(! ok) {
+            kWarning(30006) << "load image " << image->storeHref() << "failed";
             return false;
+        }
     }
     return true;
 }

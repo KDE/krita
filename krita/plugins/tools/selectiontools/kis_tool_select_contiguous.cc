@@ -76,11 +76,11 @@ void KisToolSelectContiguous::activate( bool tmp )
 
 void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
 {
+    if (e->button() != Qt::LeftButton)
+        return;
+
     if (m_canvas && currentImage()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-
-        if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
-            return;
 
         KisPaintDeviceSP dev = currentNode()->paintDevice();
 

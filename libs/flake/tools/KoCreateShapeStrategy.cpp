@@ -30,7 +30,7 @@
 #include <QUndoCommand>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
-: KoShapeRubberSelectStrategy(tool, canvas, clicked, true)
+: KoShapeRubberSelectStrategy(tool, canvas, clicked, canvas->snapToGrid() )
 {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(parent->shapeId());

@@ -28,6 +28,10 @@
 #include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
+
+#include "stroke.h"
+
+
 class QPointF;
 class KisPainter;
 
@@ -59,7 +63,11 @@ public:
 
 private:
     QColor c;
+	QPointF m_previousPoint;
 	KisImageSP m_image;
+	bool newStrokeFlag;
+	Stroke stroke;
+	KisPaintDeviceSP dab;
 };
 
 #endif // KIS_SUMIPAINTOP_H_

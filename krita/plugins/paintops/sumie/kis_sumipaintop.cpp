@@ -39,11 +39,13 @@
 
 #include "kis_datamanager.h"
 
+#include "stroke.h"
+
 KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED( settings );
     KisPaintOp * op = new KisSumiPaintOp(painter, image);
-    Q_CHECK_PTR(op);
+	Q_CHECK_PTR(op);
     return op;
 }
 
@@ -52,19 +54,22 @@ KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter, KisImageSP image)
     : KisPaintOp(painter)
 {
     dbgKrita << "START OF KisSumiPaintOp" << endl;
+    newStrokeFlag = true;
 	m_image = image;
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
 {
+	stroke.draw(dab);
+	QRect rc = dab->extent();
+    painter()->bitBlt( rc.topLeft(), dab, rc );
+
 	dbgKrita << "END OF KisSumiPaintOp" << endl;
 }
 
 void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 {
-    // KisPainter, see KisSumiPaintOp::createOp
     if (!painter()) return;
-
     // read, write pixel data
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
@@ -72,42 +77,34 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     qint32 x = (qint32)info.pos().x();
     qint32 y = (qint32)info.pos().y();
 
+	dbgPlugins << "X:" << x << endl;
+	dbgPlugins << "Y:" << y << endl;
+
 	QRect layerRect = m_image->bounds();
-	int w = layerRect.width();
-	dbgKrita << "\tWIDTH:" << w << endl;
-
-/*  int r,g,b;
-    r = x % 255;
-    g = y % 255;
-    b = (int)(255*(1.0/sqrt(x+y)));
-	b %=  255;
-
-    c.setRgb(r,g,b);*/
+//	int w = layerRect.width();
 	c = Qt::black;    
-	//m_stroke->draw( dab );
 
-    // FASTER VERSION, but actually it is not faster..
-    KisPaintDeviceSP dab = cachedDab( );
-    KisRandomAccessor accessor = dab->createRandomAccessor(x, y);
+    dab = cachedDab( );
+/*	KisRandomAccessor accessor = dab->createRandomAccessor(x, y);
 	quint8 *pixel = accessor.rawData();
+	accessor.moveTo(x,y);
+	dab->colorSpace()->fromQColor(c, pixel);*/
 
-    accessor.moveTo(x,y);
-	for (int i=0;i<20;i++)
-		for (int j=0;j<20;j++)
-		{
-			pixel = pixel+i*w+j;
-	   		// ?? weird color when black used?
-			dab->colorSpace()->fromQColor(c, pixel);
-		}
+    if ( newStrokeFlag ) {
+		stroke.x1 = info.pos().x();
+		stroke.y1 = info.pos().y();
+		KoColor color = painter()->paintColor();
+		stroke.setColor(color);
+		dbgKrita << "Everything Ok?" << flush << endl;
+        newStrokeFlag = false;
+    } else
+	{	
+		stroke.x2 = info.pos().x();
+		stroke.y2 = info.pos().y();
+	}
 
-    // setPixel
-    /*for (int i=0;i<20;i++)
-      for (int j=0;j<20;j++)
-      	dab->setPixel(x+i,y+j, c.rgba() );*/
-
-
-    QRect rc = dab->extent();
-    //qDebug() << dab->extent();
-    painter()->bitBlt( rc.topLeft(), dab, rc );
+/*    QRect rc = dab->extent();
+    painter()->bitBlt( rc.topLeft(), dab, rc );*/
     //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
 }
+

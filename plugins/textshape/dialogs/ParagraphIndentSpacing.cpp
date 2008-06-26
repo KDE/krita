@@ -21,6 +21,7 @@
 #include "ParagraphIndentSpacing.h"
 
 #include <KoParagraphStyle.h>
+#include <KDebug>
 
 ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     : QWidget(parent),
@@ -38,7 +39,12 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
 
     connect(widget.lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(lineSpacingChanged(int)));
     connect(widget.useFont, SIGNAL(toggled (bool)), this, SLOT(useFontMetrices(bool)));
+    connect(widget.autoTextIndent, SIGNAL(stateChanged (int)), this, SLOT(autoTextIndentChanged(int)));
     lineSpacingChanged(0);
+}
+
+void ParagraphIndentSpacing::autoTextIndentChanged(int state) {
+    widget.first->setEnabled(state == Qt::Unchecked);
 }
 
 void ParagraphIndentSpacing::open(KoParagraphStyle *style) {
@@ -48,6 +54,7 @@ void ParagraphIndentSpacing::open(KoParagraphStyle *style) {
     widget.right->changeValue(style->rightMargin());
     widget.before->changeValue(style->topMargin());
     widget.after->changeValue(style->bottomMargin());
+    widget.autoTextIndent->setChecked(style->autoTextIndent());
 
     int index;
     if(style->lineHeightPercent() != 0) {
@@ -119,6 +126,7 @@ void ParagraphIndentSpacing::save() {
     m_style->setRightMargin( widget.right->value() );
     m_style->setTopMargin( widget.before->value() );
     m_style->setBottomMargin( widget.after->value() );
+    m_style->setAutoTextIndent( widget.autoTextIndent->isChecked() );
     m_style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
     switch(widget.lineSpacing->currentIndex()) {
         case 0: m_style->setLineHeightPercent(120); break;

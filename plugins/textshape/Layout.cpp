@@ -121,7 +121,8 @@ double Layout::resolveTextIndent()
     if ( (m_block.blockFormat().property(KoParagraphStyle::AutoTextIndent).toBool()) ) {
         // if auto-text-indent is set,
         // return an indent approximately 3-characters wide as per current font
-        qreal guessGlyphWidth = QFontMetricsF( m_block.charFormat().font() ).width('x');
+        QTextCursor blockCursor(m_block);
+        qreal guessGlyphWidth = QFontMetricsF( blockCursor.charFormat().font() ).width('x');
         return guessGlyphWidth * 3;
     }
     return m_block.blockFormat().textIndent();

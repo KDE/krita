@@ -40,6 +40,7 @@ public:
 private slots:
     void lineSpacingChanged(int);
     void useFontMetrices(bool);
+    void autoTextIndentChanged(int state);
 
 private:
     Ui::ParagraphIndentSpacing widget;

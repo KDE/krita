@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>388</height>
+    <width>430</width>
+    <height>402</height>
    </rect>
   </property>
   <property name="whatsThis" >
@@ -32,7 +32,7 @@
       <item row="0" column="1" >
        <widget class="KoUnitDoubleSpinBox" name="left" />
       </item>
-      <item rowspan="3" row="0" column="2" >
+      <item rowspan="2" row="0" column="2" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
@@ -70,6 +70,13 @@
       </item>
       <item row="2" column="1" >
        <widget class="KoUnitDoubleSpinBox" name="first" />
+      </item>
+      <item row="2" column="2" >
+       <widget class="QCheckBox" name="autoTextIndent" >
+        <property name="text" >
+         <string>Auto-infer from text size   </string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

@@ -106,6 +106,7 @@ int result = (int)(ret);
 
 void Stroke::drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, int w1, int w2, const QColor &color)
 {
+Q_ASSERT(image);
 int da, incrEa, incrNEa, incrNa, incrSEa, incrSa;
 int db, incrEb, incrNEb, incrNb, incrSEb, incrSb;
 int d, incrE, incrNE, incrN, incrSE, incrS;
@@ -321,7 +322,7 @@ case 1:
 
 		}
 		//--------------------------------------------------------
-		lineColor->setAlpha ( 255*perc ); // 255*perc is cool, gradient color
+		lineColor->setAlpha ( (int)(255*perc) ); // 255*perc is cool, gradient color
 		// fill remaining pixels between current xfa,xfb
 		if ( ! ( w1==1 && w2==1 ) )
 		{
@@ -609,7 +610,7 @@ case 3:
 			image->setPixel ( x,yb-1,lineColor->rgba() );
 		}
 		//--------------------------------------------------------
-		lineColor->setAlpha ( 255 * perc);
+		lineColor->setAlpha ( (int)(255*perc) );
 		// fill remaining pixels between current xfa,xfb
 		if ( ! ( w1==1 && w2==1 ) )
 		{
@@ -791,7 +792,8 @@ void Stroke::draw(KisPaintDeviceSP dev)
 		dbgPlugins << "..just testing , bigger than 1600" << endl;
 		return;
 	}
-    drawLine( dev,x1,y1,x2,y2,1, m_color);
+    //drawDDALine( dev,(int)x1,(int)y1,(int)x2,(int)y2, m_color.toQColor() );
+	drawGSLine(dev,(int)x1,(int)y1,(int)x2,(int)y2,1,1,m_color.toQColor() );
 }
 
 
@@ -801,5 +803,59 @@ void Stroke::setColor ( const KoColor & color )
 }
 
 
+void Stroke::drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const QColor &color){
+	Q_ASSERT(image);
+// Width and height of the line
+	int xd = (x2 - x1);
+	int yd = (y2 - y1);
 
+int x;
+int y;
+float fx = (x = x1);
+float fy = (y = y1);
+float m = (float)yd/(float)xd;
+
+if ( fabs(m) > 1 )
+{
+	int incr;
+	if ( yd > 0 )
+	{
+		m = 1.0f/m;
+		incr = 1;
+	}
+	else
+	{
+		m = -1.0f/m;
+		incr = -1;
+	}
+	while ( y!=y2 )
+	{
+		fx = fx + m;
+		y = y + incr;
+		x = (int)(fx + 0.5f);
+		image->setPixel(x,y,color.rgba());
+	}
+}else
+{
+	int incr;
+	if ( xd > 0 )
+	{
+		incr = 1;
+	}else
+	{
+		incr = -1;
+		m = -m;
+	}
+	while ( x!=x2 )
+	{
+		fy= fy + m;
+		x = x + incr;
+		y = (int)(fy + 0.5f);
+		image->setPixel ( x,y,color.rgba() );
+	}
+}
+
+
+
+}
 

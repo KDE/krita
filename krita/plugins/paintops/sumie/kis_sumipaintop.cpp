@@ -60,10 +60,6 @@ KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter, KisImageSP image)
 
 KisSumiPaintOp::~KisSumiPaintOp()
 {
-	stroke.draw(dab);
-	QRect rc = dab->extent();
-    painter()->bitBlt( rc.topLeft(), dab, rc );
-
 	dbgKrita << "END OF KisSumiPaintOp" << endl;
 }
 
@@ -83,8 +79,6 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 	QRect layerRect = m_image->bounds();
 //	int w = layerRect.width();
 	c = Qt::black;    
-
-    dab = cachedDab( );
 /*	KisRandomAccessor accessor = dab->createRandomAccessor(x, y);
 	quint8 *pixel = accessor.rawData();
 	accessor.moveTo(x,y);
@@ -101,7 +95,15 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 	{	
 		stroke.x2 = info.pos().x();
 		stroke.y2 = info.pos().y();
+
+		dab = cachedDab( );
+		stroke.draw(dab);
+		QRect rc = dab->extent();
+	    painter()->bitBlt( rc.topLeft(), dab, rc );
+
 	}
+
+
 
 /*    QRect rc = dab->extent();
     painter()->bitBlt( rc.topLeft(), dab, rc );*/

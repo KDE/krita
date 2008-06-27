@@ -2,6 +2,7 @@
 Name=SmallColorSelector
 Name[ca]=SelectorDeColorPetit
 Name[et]=Väike värvivalija
+Name[gl]=PequenoSelectorDeCores
 Name[hi]=छोटारंगचयनक
 Name[it]=Piccolo selettore del colore
 Name[pt]=Selector de Cores Pequeno
@@ -14,6 +15,7 @@ Name[zh_TW]=小型顏色選擇器
 Comment=SmallColorSelector
 Comment[ca]=SelectorDeColorPetit
 Comment[et]=Väike värvivalija
+Comment[gl]=PequenoSelectorDeCores
 Comment[hi]=छोटारंगचयनक
 Comment[it]=Piccolo selettore del colore
 Comment[pt]=Selector de Cores Pequeno

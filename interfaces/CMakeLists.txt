@@ -18,5 +18,5 @@ install(TARGETS kochart  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  koChart.h KoChartModel.h DESTINATION ${INCLUDE_INSTALL_DIR})
+install( FILES  koChart.h KoChartModel.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

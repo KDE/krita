@@ -63,7 +63,7 @@ set.h
 utils.h
 widget.h
 widgetproxy.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty)
+DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty COMPONENT Devel)
 
 install( FILES
 editors/booledit.h

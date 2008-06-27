@@ -93,6 +93,8 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
         newStrokeFlag = false;
     } else
 	{	
+        stroke.x1 = stroke.x2;
+        stroke.y1 = stroke.y2;
 		stroke.x2 = info.pos().x();
 		stroke.y2 = info.pos().y();
 

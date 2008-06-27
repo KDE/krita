@@ -24,6 +24,7 @@
 #define KIS_SUMIPAINTOP_H_
 
 #include <QColor>
+#include <QMutex>
 
 #include <klocale.h>
 #include <kis_paintop.h>
@@ -68,6 +69,7 @@ private:
 	bool newStrokeFlag;
 	Stroke stroke;
 	KisPaintDeviceSP dab;
+    QMutex m_mutex;
 };
 
 #endif // KIS_SUMIPAINTOP_H_

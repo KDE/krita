@@ -21,6 +21,7 @@
 
 #include <QRect>
 #include <QColor>
+#include <QMutexLocker>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -65,6 +66,7 @@ KisSumiPaintOp::~KisSumiPaintOp()
 
 void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 {
+    QMutexLocker locker(&m_mutex);
     if (!painter()) return;
     // read, write pixel data
     KisPaintDeviceSP device = painter()->device();

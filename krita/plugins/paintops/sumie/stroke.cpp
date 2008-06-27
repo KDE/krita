@@ -34,14 +34,14 @@
 Stroke::Stroke ()
 {
 	m_color = KoColor();
-}
-
-Stroke::~Stroke()
-{
 	x1 = 0;
 	y1 = 0;
 	x2 = 0;
 	y2 = 0;
+}
+
+Stroke::~Stroke()
+{
 }
 
 void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )

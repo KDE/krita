@@ -87,6 +87,8 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     if ( newStrokeFlag ) {
 		stroke.x1 = info.pos().x();
 		stroke.y1 = info.pos().y();
+        stroke.x2 = stroke.x1;
+        stroke.y2 = stroke.y1;
 		KoColor color = painter()->paintColor();
 		stroke.setColor(color);
 		dbgKrita << "Everything Ok?" << flush << endl;
@@ -99,13 +101,12 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 		stroke.y2 = info.pos().y();
 
 		dab = cachedDab( );
+        dab->clear();
 		stroke.draw(dab);
 		QRect rc = dab->extent();
 	    painter()->bitBlt( rc.topLeft(), dab, rc );
 
 	}
-
-
 
 /*    QRect rc = dab->extent();
     painter()->bitBlt( rc.topLeft(), dab, rc );*/

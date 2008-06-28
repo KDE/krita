@@ -58,6 +58,8 @@ public:
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
+    bool accept(KisNodeVisitor &v);
+
 private:
 
     KisImageSP image() const;

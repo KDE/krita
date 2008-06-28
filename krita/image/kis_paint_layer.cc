@@ -177,7 +177,8 @@ QImage KisPaintLayer::createThumbnail(qint32 w, qint32 h)
 bool KisPaintLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
-}/// Returns the paintDevice that accompanies this layer
+}
+
 KisPaintDeviceSP KisPaintLayer::paintDevice() const
 {
     return m_d->paintDevice;

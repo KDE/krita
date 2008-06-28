@@ -55,6 +55,8 @@ public:
     bool allowAsChild( KisNodeSP ) const;
 
     virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
+
+    bool accept(KisNodeVisitor &v);
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

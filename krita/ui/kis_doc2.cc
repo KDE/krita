@@ -98,7 +98,7 @@
 #include "kra/kis_kra_loader.h"
 
 
-static const char *CURRENT_DTD_VERSION = "1.3";
+static const char *CURRENT_DTD_VERSION = "2.0";
 
 /**
  * Mime type for this app - not same as file type, but file types

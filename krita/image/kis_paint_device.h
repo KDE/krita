@@ -125,12 +125,12 @@ public:
     qint32 y() const;
 
     /**
-     * Return the X offset of the paint device
+     * set the X offset of the paint device
      */
     void setX(qint32 x);
 
     /**
-     * Return the Y offset of the paint device
+     * set the Y offset of the paint device
      */
     void setY(qint32 y);
 
@@ -185,7 +185,7 @@ public:
 
     /**
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
-     * caller still owns the pointer.
+     * caller still owns the pointer and needs to delete it to avoid memory leaks.
      */
     void setDefaultPixel(const quint8 *defPixel);
 

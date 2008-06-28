@@ -145,6 +145,7 @@ public:
      */
     virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
 
+    bool accept(KisNodeVisitor &v);
 private:
 
     double m_xscale, m_yscale;

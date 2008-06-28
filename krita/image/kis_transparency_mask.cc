@@ -22,6 +22,7 @@
 #include "kis_iterators_pixel.h"
 #include "KoColorSpace.h"
 #include "kis_selection.h"
+#include "kis_node_visitor.h"
 
 #include "kis_debug.h"
 
@@ -70,5 +71,14 @@ void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc )
     }
 
 }
+
+bool KisTransparencyMask::accept(KisNodeVisitor &v)
+{
+    dbgKrita << name() << " accepts visitor ";
+    bool b = v.visit(this);
+    dbgKrita << "result: " << b;
+    return b;
+}
+
 
 #include "kis_transparency_mask.moc"

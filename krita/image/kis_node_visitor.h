@@ -86,14 +86,16 @@ protected:
         {
             KisNodeSP child = node->lastChild();
             while (child) {
+                dbgKrita << child->name();
                 if ( !child->accept( *this ) ) {
+                    dbgKrita << " visiting failed";
                     if ( breakOnFail )
                         return false;
                 }
                 child = child->prevSibling();
             }
             return true;
-        }        
+        }
 };
 
 

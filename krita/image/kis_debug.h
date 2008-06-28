@@ -25,7 +25,7 @@
  * instead of the raw numbers. Also, try not to check in code outside of tests that uses kDebug
  * without an area.
  */
-#define dbgKrita kDebug(41000) // For temporary debug lines, where you'd have used dbgKrita before.
+#define dbgKrita kDebug(41000) // For temporary debug lines, where you'd have used kDebug() before.
 #define dbgImage kDebug(41001)
 #define dbgRegistry kDebug(41002)
 #define dbgTools kDebug(41003)

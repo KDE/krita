@@ -24,6 +24,7 @@
 #include "kis_fill_painter.h"
 #include "kis_image.h"
 #include <KoCompositeOp.h>
+#include "kis_node_visitor.h"
 
 class KisSelectionMask::Private
 {
@@ -81,3 +82,9 @@ KisImageSP KisSelectionMask::image() const
 {
     return m_d->image;
 }
+
+bool KisSelectionMask::accept(KisNodeVisitor &v)
+{
+    return v.visit(this);
+}
+

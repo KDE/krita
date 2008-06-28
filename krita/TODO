@@ -118,6 +118,7 @@ BR  * Fix flake layers: deletion of shapes
     * Divide the QPainter canvas' cached QImage into pyramided tiles.
     * Review "Scale to new Size" dialog. Add a keep aspect ratio switch
     * Create a "Change canvas size" dialog
+BR  * make it possible to save and load masks
     
 
 * Tools

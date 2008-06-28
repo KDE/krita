@@ -33,14 +33,24 @@ public:
     using KisNodeVisitor::visit;
 
 public:
+
     bool visit( KisExternalLayer * );
-
     bool visit(KisPaintLayer *layer);
-
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer* layer);
+    bool visit(KisGeneratorLayer *layer);
+    bool visit(KisCloneLayer *layer);
+    bool visit(KisFilterMask *mask);
+    bool visit(KisTransparencyMask *mask);
+    bool visit(KisTransformationMask *mask);
+    bool visit(KisSelectionMask *mask);
 
 private:
+
+    void saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer);
+    void saveMask(QDomElement & el, const QString & maskType, const KisMask * mask);
+    bool saveMasks(KisNode * node, QDomElement & layerElement);
+
     QDomDocument m_doc;
     QDomElement m_elem;
     quint32 &m_count;

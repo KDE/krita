@@ -575,11 +575,9 @@ void KisLayerManager::addAdjustmentLayer()
 void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 {
     Q_ASSERT(parent);
-    Q_ASSERT(above);
 
     KisImageSP img = m_view->image();
     if (!img) return;
-
 
     KisLayerSP l = activeLayer();
 
@@ -606,7 +604,6 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNo
                                  KisFilterConfiguration * filter, KisSelectionSP selection)
 {
     Q_ASSERT(parent);
-    Q_ASSERT(above);
 
     KisImageSP img = m_view->image();
     if (!img) return 0;
@@ -625,7 +622,6 @@ void KisLayerManager::addGeneratorLayer()
 void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
 {
     Q_ASSERT(parent);
-    Q_ASSERT(above);
 
     KisImageSP img = m_view->image();
     if (!img) return;
@@ -643,7 +639,6 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
 void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * generator, KisSelectionSP selection)
 {
     Q_ASSERT(parent);
-    Q_ASSERT(above);
     Q_ASSERT(generator);
 
     KisImageSP img = m_view->image();

@@ -89,6 +89,8 @@ void KisFilterSelectorWidget::setLayer(KisLayerSP layer)
 
 void KisFilterSelectorWidget::setPaintDevice( KisPaintDeviceSP _paintDevice)
 {
+    if (!_paintDevice) return;
+
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
     d->filtersModel = new KisFiltersModel(d->thumb);

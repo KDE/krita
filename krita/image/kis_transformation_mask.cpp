@@ -20,6 +20,7 @@
 #include "kis_selection.h"
 #include "kis_paint_device.h"
 #include "kis_transform_worker.h"
+#include "kis_node_visitor.h"
 
 #include "QRect"
 
@@ -134,6 +135,12 @@ void KisTransformationSettingsCommand::undo()
     m_mask->setYTranslation( m_old_ytranslate );
     m_mask->setFilterStrategy( m_old_filter );
 }
+
+bool KisTransformationMask::accept(KisNodeVisitor &v)
+{
+    return v.visit(this);
+}
+
 
 
 #include "kis_transformation_mask.moc"

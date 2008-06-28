@@ -95,3 +95,8 @@ KoSnapGuide * KoCanvasBase::snapGuide() const
 {
     return d->snapGuide;
 }
+
+KoGuidesData * KoCanvasBase::guidesData()
+{
+    return 0;
+}

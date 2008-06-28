@@ -38,6 +38,7 @@ class KoShape;
 class KoToolProxy;
 class QToolButton;
 class KoDeviceEvent;
+class KoGuidesTool;
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -137,6 +138,14 @@ public:
      */
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
+    /**
+     * Returns the tool that is able to add/edit guides for this param canvas.
+     * @param canvas the canvas that is a child of a previously registered controller
+     *    who's tool you want.
+     * @see addController()
+     */
+    KoGuidesTool * guidesTool( KoCanvasBase * canvas ) const;
+
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;
 
@@ -227,6 +236,9 @@ private:
     bool eventFilter(QObject *object, QEvent *event);
 
 private slots:
+
+    // make it a friend so we can temporary switch tool from there
+    friend class KoCanvasController;
 
     void toolActivated(ToolHelper *tool);
     void detachCanvas(KoCanvasController *controller);

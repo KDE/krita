@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
    Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -35,6 +35,9 @@
 #include <QMouseEvent>
 
 #include <KoViewConverter.h>
+
+// the distance in pixels of a mouse position considered outside the rule
+const int OutsideRulerThreshold = 20;
 
 void RulerTabChooser::mousePressEvent(QMouseEvent *)
 {
@@ -1088,9 +1091,14 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         if (d->tabs[d->currentIndex].position > activeLength)
             d->tabs[d->currentIndex].position = activeLength;
 
-        if (ev->pos().y() > height() + 20) { // moved out of the ruler, delete it.
+        if (ev->pos().y() > height() + OutsideRulerThreshold ) { // moved out of the ruler, delete it.
             d->deletedTab = d->tabs.takeAt(d->currentIndex);
             d->currentIndex = -1;
+            // was that a temporary added tab?
+            if( d->originalIndex == -1 )
+            {
+                emit guideLineCreated( d->orientation, d->orientation == Qt::Horizontal ? ev->pos().y() : ev->pos().x() );
+            }
         }
 
         d->emitTabChanged();
@@ -1119,6 +1127,19 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         case KoRulerPrivate::FirstLineIndent: text = i18n("First line indent"); break;
         case KoRulerPrivate::ParagraphIndent: text = i18n("Left indent"); break;
         case KoRulerPrivate::EndIndent: text = i18n("Right indent"); break;
+        case KoRulerPrivate::None:
+            if( ev->buttons() & Qt::LeftButton )
+            {
+                if( d->orientation == Qt::Horizontal && ev->pos().y() > height() + OutsideRulerThreshold )
+                {
+                    emit guideLineCreated( d->orientation, ev->pos().y() );
+                }
+                else if( d->orientation == Qt::Vertical && ev->pos().x() > width() + OutsideRulerThreshold )
+                {
+                    emit guideLineCreated( d->orientation, ev->pos().x() );
+                }
+            }
+            break;
         default:
             break;
         }

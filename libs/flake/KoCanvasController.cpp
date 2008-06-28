@@ -5,7 +5,7 @@
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
- * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +31,8 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasObserver.h"
 #include <KoMainWindow.h>
+#include "tools/KoGuidesTool.h"
+#include "KoToolManager.h"
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -603,6 +605,23 @@ void KoCanvasController::activate()
         if( observer )
             observer->setCanvas( canvas() );
     }
+}
+
+void KoCanvasController::addGuideLine( Qt::Orientation orientation, int viewPosition )
+{
+    KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool( m_d->canvas );
+    if( ! guidesTool )
+        return;
+    // check if the canvas does provide access to guides data
+    if( ! m_d->canvas->guidesData() )
+        return;
+
+    if( orientation == Qt::Horizontal )
+        guidesTool->setNewGuideLine( orientation, m_d->canvas->viewConverter()->viewToDocumentY( viewPosition ) );
+    else
+        guidesTool->setNewGuideLine( orientation, m_d->canvas->viewConverter()->viewToDocumentX( viewPosition ) );
+
+    KoToolManager::instance()->switchToolTemporaryRequested( guidesTool->toolId() );
 }
 
 #include "KoCanvasController.moc"

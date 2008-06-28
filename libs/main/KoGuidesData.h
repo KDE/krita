@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +24,11 @@
 #include "komain_export.h"
 #include <QList>
 #include <qnamespace.h>
+
+class QPainter;
+class KoViewConverter;
+class QRectF;
+
 class KOMAIN_EXPORT KoGuidesData
 {
 public:
@@ -34,20 +40,20 @@ public:
      * @param horizontalLines a list of positions of the horizontal guide lines
      * @param verticalLines a list of positions of the vertical guide lines
      */
-    void guideLines( const QList<double> &horizontalLines, const QList<double> &verticalLines);
+    void setGuideLines( const QList<double> &horizontalLines, const QList<double> &verticalLines);
     /**
      * @brief Set the positions of the horizontal guide lines
      *
      * @param lines a list of positions of the horizontal guide lines
      */
-    void horizontalGuideLines( const QList<double> &lines );
+    void setHorizontalGuideLines( const QList<double> &lines );
 
     /**
      * @brief Set the positions of the vertical guide lines
      *
      * @param lines a list of positions of the vertical guide lines
      */
-    void verticalGuideLines( const QList<double> &lines );
+    void setVerticalGuideLines( const QList<double> &lines );
 
     /**
      * @brief Add a guide line
@@ -66,6 +72,21 @@ public:
      * @param show display or not guide line
      */
     void setShowGuideLines( bool show );
+
+     /// Returns the list of horizontal guide lines.
+    QList<double> horizontalGuideLines() const;
+
+     /// Returns the list of vertical guide lines.
+    QList<double> verticalGuideLines() const;
+
+    /**
+     * Paints the guides using the given painter and viewconverter.
+     * Only guides intersecting the given area are painted.
+     * @param painter the painter
+     * @param converter the view converter
+     * @param area the area in need of updating
+     */
+    void paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const;
 
 #if 0 //TODO
     void saveOasisSettings( KoXmlWriter &settingsWriter );

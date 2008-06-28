@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,23 +19,26 @@
 */
 
 #include "KoGuidesData.h"
+#include "KoViewConverter.h"
+
+#include <QtGui/QPainter>
 
 KoGuidesData::KoGuidesData()
  :m_bShowGuideLines(true)
 {
 }
 
-void KoGuidesData::horizontalGuideLines( const QList<double> &lines )
+void KoGuidesData::setHorizontalGuideLines( const QList<double> &lines )
 {
     m_hGuideLines = lines;
 }
 
-void KoGuidesData::verticalGuideLines( const QList<double> &lines )
+void KoGuidesData::setVerticalGuideLines( const QList<double> &lines )
 {
     m_vGuideLines = lines;
 }
 
-void KoGuidesData::guideLines( const QList<double> &horizontalLines, const QList<double> &verticalLines)
+void KoGuidesData::setGuideLines( const QList<double> &horizontalLines, const QList<double> &verticalLines)
 {
     m_hGuideLines = horizontalLines;
     m_vGuideLines = verticalLines;
@@ -62,3 +66,31 @@ void KoGuidesData::setShowGuideLines( bool show )
   m_bShowGuideLines=show;
 }
 
+QList<double> KoGuidesData::horizontalGuideLines() const
+{
+    return m_hGuideLines;
+}
+
+QList<double> KoGuidesData::verticalGuideLines() const
+{
+    return m_vGuideLines;
+}
+
+void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
+{
+    painter.setPen( Qt::lightGray ); /// TODO: make member of guides data?
+    foreach( double guide, m_hGuideLines )
+    {
+        if( guide < area.top() || guide > area.bottom() )
+            continue;
+        painter.drawLine( converter.documentToView( QPointF( area.left(), guide ) ),
+                          converter.documentToView( QPointF( area.right(), guide ) ) );
+    }
+    foreach( double guide, m_vGuideLines )
+    {
+        if( guide < area.left() || guide > area.right() )
+            continue;
+        painter.drawLine( converter.documentToView( QPointF( guide, area.top() ) ),
+                          converter.documentToView( QPointF( guide, area.bottom() ) ) );
+    }
+}

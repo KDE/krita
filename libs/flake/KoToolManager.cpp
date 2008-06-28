@@ -3,6 +3,7 @@
  * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,6 +41,8 @@
 #include "tools/KoZoomToolFactory.h"
 #include "tools/KoPanTool.h"
 #include "tools/KoPanToolFactory.h"
+#include "tools/KoGuidesToolFactory.h"
+#include "tools/KoGuidesTool.h"
 
 // Qt + kde
 #include <QWidget>
@@ -168,6 +171,7 @@ void KoToolManager::setup() {
     d->tools.append( new ToolHelper(new KoPathToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoZoomToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoPanToolFactory(this)) );
+    d->tools.append( new ToolHelper(new KoGuidesToolFactory(this)) );
 
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();
@@ -188,6 +192,8 @@ QList<KoToolManager::Button> KoToolManager::createToolList() const {
     QList<KoToolManager::Button> answer;
     foreach(ToolHelper *tool, d->tools) {
         if(tool->id() == KoCreateShapesTool_ID)
+            continue; // don't show this one.
+        if(tool->id() == KoGuidesTool_ID)
             continue; // don't show this one.
         Button button;
         button.button = tool->createButton();
@@ -531,6 +537,20 @@ KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
                 (d->canvasData->allTools.value(KoCreateShapesTool_ID));
             Q_ASSERT(createTool /* ID changed? */);
             return createTool;
+        }
+    }
+    Q_ASSERT( 0 ); // this should not happen
+    return 0;
+}
+
+KoGuidesTool * KoToolManager::guidesTool( KoCanvasBase * canvas ) const
+{
+    foreach(KoCanvasController *controller, d->canvasses.keys()) {
+        if (controller->canvas() == canvas) {
+            KoGuidesTool * guidesTool = dynamic_cast<KoGuidesTool*>
+                    (d->canvasData->allTools.value(KoGuidesTool_ID));
+            Q_ASSERT(guidesTool /* ID changed? */);
+            return guidesTool;
         }
     }
     Q_ASSERT( 0 ); // this should not happen

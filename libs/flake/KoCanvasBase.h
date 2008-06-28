@@ -43,6 +43,7 @@ class KoShapeControllerBase;
 class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
+class KoGuidesData;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -181,6 +182,17 @@ public:
      * Returns the snap guide of the canvas
      */
     KoSnapGuide * snapGuide() const;
+
+    /**
+     * Returns the guides data.
+     *
+     * Applications that want to have guides should reimplement this
+     * function and return the KOGuideData object.
+     * The default implementation returns 0.
+     *
+     * @return pointer to the guide data or zero if there is none
+     */
+    virtual KoGuidesData * guidesData();
 
 protected:
     friend class KoCanvasController;

@@ -229,6 +229,9 @@ signals:
 
     void hotSpotChanged(int id, qreal newPosition);
 
+    /// emitted when the user is dragging outside the ruler
+    void guideLineCreated( Qt::Orientation orientation, int viewPosition );
+
 protected:
         virtual void paintEvent(QPaintEvent* event);
         virtual void mousePressEvent ( QMouseEvent* ev );

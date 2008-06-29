@@ -29,7 +29,6 @@ Comment[sr@Latn]=Transformacija slike za popravku sočiva
 Comment[sv]=Omvandla en bild med linskorrektion
 Comment[uk]=Коректувати спотворення від лінзи фотоапарата
 Comment[zh_TW]=在 lenscorrection 下轉換圖片
-Encoding=UTF-8
 Icon=
 Name=LensCorrection Filter
 Name[bg]=Филтри за коригиране на лещи

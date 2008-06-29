@@ -28,7 +28,6 @@ Comment[sr@Latn]=Nasumičan izbor sa slike
 Comment[sv]=Utför slumpmässigt urval i en bild
 Comment[uk]=Міняє місцями деякі точки зображення
 Comment[zh_TW]=隨機挑選圖片
-Encoding=UTF-8
 Icon=
 Name=Random pick Filter
 Name[bg]=Филтър за случайно избиране

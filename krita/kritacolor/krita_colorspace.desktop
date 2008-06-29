@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Krita/ColorSpace
 Comment=A module implementing a complete colorspace for use with libkritacolor

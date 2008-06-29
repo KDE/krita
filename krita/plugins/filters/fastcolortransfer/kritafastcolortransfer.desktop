@@ -30,7 +30,6 @@ Comment[sr@Latn]=Ovaj priključak omogućava prenos boje sa jedne na drugu sliku
 Comment[sv]=Insticksprogrammet gör det möjligt att överföra en färg från en bild till en annan bild
 Comment[uk]=Перенесення кольору з одного зображення в інше
 Comment[zh_TW]=這個外掛程式允許將一張圖片的顏色轉換為另一張圖片
-Encoding=UTF-8
 Icon=
 Name=Color Transfer Filter
 Name[bg]=Филтри за прехвърляне на цвят

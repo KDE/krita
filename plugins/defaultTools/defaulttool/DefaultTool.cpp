@@ -46,6 +46,7 @@
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
 #include <KoSnapGuide.h>
+#include <tools/KoGuidesTool.h>
 
 #include <QAction>
 #include <QKeyEvent>
@@ -81,7 +82,9 @@ DefaultTool::DefaultTool( KoCanvasBase *canvas )
     m_mouseWasInsideHandles( false ),
     m_moveCommand(0),
     m_selectionHandler(new SelectionHandler(this)),
-    m_customEventStrategy(0)
+    m_customEventStrategy(0),
+    m_guideOrientation( Qt::Horizontal ),
+    m_guideIndex(-1)
 {
     setupActions();
 
@@ -360,7 +363,10 @@ void DefaultTool::updateCursor() {
                     cursor = m_rotateCursors[(7 +rotOctant)%8];
                     break;
                 case KoFlake::NoHandle:
-                    cursor = Qt::ArrowCursor;
+                    if( m_guideIndex >= 0 )
+                        cursor = m_guideOrientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
+                    else
+                        cursor = Qt::ArrowCursor;
                     break;
              }
         }
@@ -399,6 +405,10 @@ void DefaultTool::updateCursor() {
         }
         if( !editable)
             cursor = Qt::ArrowCursor;
+    }
+    else {
+        if( m_guideIndex >= 0 )
+            cursor = m_guideOrientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
     }
     useCursor(cursor);
 }
@@ -441,9 +451,44 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent *event ) {
                 repaintDecorations();
             m_lastHandle = KoFlake::NoHandle;
             m_mouseWasInsideHandles = false;
+
+            selectGuideAtPosition( event->point );
         }
     }
+    else
+        selectGuideAtPosition( event->point );
+
     updateCursor();
+}
+
+void DefaultTool::selectGuideAtPosition( const QPointF &position )
+{
+    m_guideIndex = -1;
+    // check if we are on a guide line
+    KoGuidesData * guidesData = m_canvas->guidesData();
+    if( guidesData && guidesData->showGuideLines() ) {
+        qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
+        double minDistance = m_canvas->viewConverter()->viewToDocumentX( handleRadius );
+        uint i = 0;
+        foreach( double guidePos, guidesData->horizontalGuideLines() ) {
+            double distance = qAbs( guidePos - position.y() );
+            if( distance < minDistance ) {
+                m_guideOrientation = Qt::Horizontal;
+                m_guideIndex = i;
+            }
+            i++;
+        }
+        i = 0;
+        foreach( double guidePos, guidesData->verticalGuideLines() )
+        {
+            double distance = qAbs( guidePos - position.x() );
+            if( distance < minDistance ) {
+                m_guideOrientation = Qt::Vertical;
+                m_guideIndex = i;
+            }
+            i++;
+        }
+    }
 }
 
 QRectF DefaultTool::handlesSize() {
@@ -951,6 +996,15 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
 
     KoShape * object( shapeManager->shapeAt( event->point, (event->modifiers() & Qt::ShiftModifier) ? KoFlake::NextUnselected : KoFlake::ShapeOnTop ) );
     if( !object && handle == KoFlake::NoHandle) {
+        // check if we have hit a guide
+        if( m_guideIndex >= 0 ) {
+            KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool( m_canvas );
+            if( guidesTool ) {
+                guidesTool->setEditGuideLine( m_guideOrientation, m_guideIndex );
+                activateTemporary( guidesTool->toolId() );
+                return 0;
+            }
+        }
         if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
         {
             repaintDecorations();

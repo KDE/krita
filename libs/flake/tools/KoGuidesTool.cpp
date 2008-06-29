@@ -24,7 +24,6 @@
 #include <KoViewConverter.h>
 #include <KoGuidesData.h>
 
-#include <KDebug>
 #include <QtGui/QPainter>
 
 class KoGuidesTool::Private
@@ -53,30 +52,27 @@ void KoGuidesTool::paint( QPainter &painter, const KoViewConverter &converter )
     if( d->mode == Private::None )
         return;
 
-    if( d->index == -1 )
-    {
-        KoCanvasController * controller = m_canvas->canvasController();
-        QPoint documentOrigin = m_canvas->documentOrigin();
-        QPoint canvasOffset( controller->canvasOffsetX(), controller->canvasOffsetY() );
+    KoCanvasController * controller = m_canvas->canvasController();
+    QPoint documentOrigin = m_canvas->documentOrigin();
+    QPoint canvasOffset( controller->canvasOffsetX(), controller->canvasOffsetY() );
 
-        QPointF start, end;
-        if( d->orientation == Qt::Horizontal )
-        {
-            qreal left = -canvasOffset.x() - documentOrigin.x();
-            qreal right = left + m_canvas->canvasWidget()->width();
-            start = QPointF( left, converter.documentToViewY( d->position ) );
-            end = QPointF( right, converter.documentToViewY( d->position ) );
-        }
-        else
-        {
-            qreal top = -canvasOffset.y() - documentOrigin.y();
-            qreal bottom = top + m_canvas->canvasWidget()->height();
-            start = QPointF( converter.documentToViewX( d->position ), top );
-            end = QPointF( converter.documentToViewX( d->position ), bottom );
-        }
-        painter.setPen( Qt::red );
-        painter.drawLine( start, end );
+    QPointF start, end;
+    if( d->orientation == Qt::Horizontal )
+    {
+        qreal left = -canvasOffset.x() - documentOrigin.x();
+        qreal right = left + m_canvas->canvasWidget()->width();
+        start = QPointF( left, converter.documentToViewY( d->position ) );
+        end = QPointF( right, converter.documentToViewY( d->position ) );
     }
+    else
+    {
+        qreal top = -canvasOffset.y() - documentOrigin.y();
+        qreal bottom = top + m_canvas->canvasWidget()->height();
+        start = QPointF( converter.documentToViewX( d->position ), top );
+        end = QPointF( converter.documentToViewX( d->position ), bottom );
+    }
+    painter.setPen( Qt::red );
+    painter.drawLine( start, end );
 }
 
 void KoGuidesTool::repaintDecorations()
@@ -108,6 +104,10 @@ void KoGuidesTool::repaintDecorations()
 
 void KoGuidesTool::activate(bool temporary)
 {
+    if( d->mode != Private::None )
+        useCursor( d->orientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor, true );
+    else
+        useCursor( Qt::ArrowCursor );
     m_canvas->canvasWidget()->grabMouse();
 }
 
@@ -125,7 +125,6 @@ void KoGuidesTool::mouseMoveEvent( KoPointerEvent *event )
     if( d->mode == Private::None )
         return;
 
-    //kDebug() << "got move event";
     repaintDecorations();
     d->position = d->orientation == Qt::Horizontal ? event->point.y() : event->point.x();
     if( d->mode == Private::EditGuide )

@@ -137,6 +137,8 @@ private:
 
     void resourceChanged( int key, const QVariant & res );
 
+    /// selects guide line at given position
+    void selectGuideAtPosition( const QPointF &position );
 
     KoFlake::SelectionHandle m_lastHandle;
     KoFlake::Position m_hotPosition;
@@ -155,6 +157,9 @@ private:
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
     KoInteractionStrategy * m_customEventStrategy;
+
+    Qt::Orientation m_guideOrientation;
+    int m_guideIndex;
 };
 
 #endif

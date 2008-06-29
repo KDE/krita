@@ -475,6 +475,7 @@ void DefaultTool::selectGuideAtPosition( const QPointF &position )
             if( distance < minDistance ) {
                 m_guideOrientation = Qt::Horizontal;
                 m_guideIndex = i;
+                minDistance = distance;
             }
             i++;
         }
@@ -485,6 +486,7 @@ void DefaultTool::selectGuideAtPosition( const QPointF &position )
             if( distance < minDistance ) {
                 m_guideOrientation = Qt::Vertical;
                 m_guideIndex = i;
+                minDistance = distance;
             }
             i++;
         }

@@ -78,6 +78,9 @@ QList<double> KoGuidesData::verticalGuideLines() const
 
 void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
 {
+    if( ! showGuideLines() )
+        return;
+
     painter.setPen( Qt::lightGray ); /// TODO: make member of guides data?
     foreach( double guide, m_hGuideLines )
     {

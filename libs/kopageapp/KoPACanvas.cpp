@@ -223,4 +223,9 @@ void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>
         menu->exec( globalPos );
 }
 
+KoGuidesData * KoPACanvas::guidesData()
+{
+    return &m_doc->guidesData();
+}
+
 #include "KoPACanvas.moc"

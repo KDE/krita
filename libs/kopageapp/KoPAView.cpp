@@ -156,6 +156,10 @@ void KoPAView::initGUI()
              this, SLOT(canvasControllerResized()));
     connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
              this, SLOT(updateMousePosition(const QPoint&)));
+    connect(m_verticalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
+            m_canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
+    connect(m_horizontalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
+            m_canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
 
     KoToolBoxFactory toolBoxFactory(m_canvasController, "Tools" );
     createDockWidget( &toolBoxFactory );

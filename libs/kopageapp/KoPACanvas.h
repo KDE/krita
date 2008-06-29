@@ -54,6 +54,8 @@ public:
     virtual void updateCanvas( const QRectF& rc );
     /// reimplemented method
     virtual void updateInputMethodInfo();
+    /// reimplemented from KoCanvasBase
+    virtual KoGuidesData * guidesData();
 
     KoToolProxy * toolProxy() const { return m_toolProxy; }
     const KoViewConverter *viewConverter() const;

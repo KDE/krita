@@ -53,6 +53,7 @@ void KoPAViewModeNormal::paintEvent( QPaintEvent* event )
     KoViewConverter * converter = m_view->viewConverter();
     m_view->activePage()->paintBackground( painter, *converter );
     m_canvas->document()->gridData().paintGrid( painter, *converter, clipRect );
+    m_canvas->document()->guidesData().paintGuides( painter, *converter, clipRect );
     if ( m_view->activePage()->displayMasterShapes() ) {
         m_canvas->masterShapeManager()->paint( painter, *converter, false );
     }

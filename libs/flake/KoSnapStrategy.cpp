@@ -23,6 +23,7 @@
 #include <KoPathPoint.h>
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
+#include <KoGuidesData.h>
 
 #include <QtGui/QPainter>
 
@@ -535,5 +536,62 @@ QPainterPath BoundingBoxSnapStrategy::decoration( const KoViewConverter &convert
     decoration.moveTo( snappedPosition() - QPointF( unzoomedSize.width(), -unzoomedSize.height() ) );
     decoration.lineTo( snappedPosition() + QPointF( unzoomedSize.width(), -unzoomedSize.height() ) );
 
+    return decoration;
+}
+
+LineGuideSnapStrategy::LineGuideSnapStrategy()
+    : KoSnapStrategy( KoSnapStrategy::GuideLine )
+{
+}
+
+bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+{
+    KoGuidesData * guidesData = proxy->canvas()->guidesData();
+    if( ! guidesData || ! guidesData->showGuideLines() )
+          return false;
+
+    QPointF snappedPoint = mousePosition;
+
+    double minDistance = maxSnapDistance;
+    foreach( double guidePos, guidesData->horizontalGuideLines() )
+    {
+        double distance = qAbs( guidePos - mousePosition.y() );
+        if( distance < minDistance )
+        {
+            snappedPoint = QPointF( mousePosition.x(), guidePos );
+            minDistance = distance;
+            m_orientation = Qt::Horizontal;
+        }
+    }
+    foreach( double guidePos, guidesData->verticalGuideLines() )
+    {
+        double distance = qAbs( guidePos - mousePosition.x() );
+        if( distance < minDistance )
+        {
+            snappedPoint = QPointF( guidePos, mousePosition.y() );
+            minDistance = distance;
+            m_orientation = Qt::Vertical;
+        }
+    }
+
+    setSnappedPosition( snappedPoint );
+
+    return (minDistance < maxSnapDistance);
+}
+
+QPainterPath LineGuideSnapStrategy::decoration( const KoViewConverter &converter ) const
+{
+    QSizeF unzoomedSize = converter.viewToDocument( QSizeF( 5, 5 ) );
+    QPainterPath decoration;
+    if( m_orientation == Qt::Horizontal )
+    {
+        decoration.moveTo( snappedPosition()-QPointF(unzoomedSize.width(),0) );
+        decoration.lineTo( snappedPosition()+QPointF(unzoomedSize.width(),0) );
+    }
+    else
+    {
+        decoration.moveTo( snappedPosition()-QPointF(0,unzoomedSize.height()) );
+        decoration.lineTo( snappedPosition()+QPointF(0,unzoomedSize.height()) );
+    }
     return decoration;
 }

@@ -37,7 +37,8 @@ public:
         Extension = 4,
         Intersection = 8,
         Grid = 16,
-        BoundingBox = 32
+        BoundingBox = 32,
+        GuideLine = 64
     };
 
     KoSnapStrategy( SnapType type );
@@ -129,6 +130,17 @@ public:
 private:
     double squareDistanceToLine( const QPointF &lineA, const QPointF &lineB, const QPointF &point, QPointF &pointOnLine );
     QPointF m_boxPoints[5];
+};
+
+/// snaps to line guides
+class LineGuideSnapStrategy : public KoSnapStrategy
+{
+public:
+    LineGuideSnapStrategy();
+    virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
+    virtual QPainterPath decoration( const KoViewConverter &converter ) const;
+private:
+    Qt::Orientation m_orientation;
 };
 
 #endif // KOSNAPSTRATEGY_H

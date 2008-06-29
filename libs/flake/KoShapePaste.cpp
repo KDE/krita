@@ -36,21 +36,19 @@
 
 struct KoShapePaste::Private
 {
-    Private( KoDocument * doc, KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent )
-    : doc( doc )
-    , canvas( canvas )
+    Private( KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent )
+    : canvas( canvas )
     , zIndex( zIndex )
     , parent( parent )
     {}
 
-    KoDocument * doc;
     KoCanvasBase * canvas;
     int zIndex;
     KoShapeContainer * parent;
 };
 
-KoShapePaste::KoShapePaste( KoDocument * doc, KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent )
-: d( new Private( doc, canvas, zIndex, parent ) )
+KoShapePaste::KoShapePaste( KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent )
+: d( new Private( canvas, zIndex, parent ) )
 {
 }
 

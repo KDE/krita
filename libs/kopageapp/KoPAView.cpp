@@ -62,7 +62,6 @@
 #include "dialogs/KoPAMasterPageDialog.h"
 
 #include "KoShapeOdfSaveHelper.h"
-#include "KoShapePaste.h"
 
 #include <kdebug.h>
 #include <klocale.h>

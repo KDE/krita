@@ -23,7 +23,6 @@
 #include <KoDrag.h>
 #include <KoShapeOdfSaveHelper.h>
 #include <KoOdf.h>
-#include <KoShapePaste.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStore.h>

@@ -649,9 +649,7 @@ bool DefaultTool::paste()
             zIndex = qMax( zIndex, shape->zIndex() );
         }
 
-        // TODO it is not possible to get the doc
-        KoShapePaste paste( static_cast<KoDocument*>( 0 ), m_canvas,
-                            zIndex + 1, shapeManager->selection()->activeLayer() );
+        KoShapePaste paste( m_canvas, zIndex + 1, shapeManager->selection()->activeLayer() );
         success = paste.paste( KoOdf::Text, data );
     }
     return success;

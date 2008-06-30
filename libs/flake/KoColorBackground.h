@@ -33,7 +33,7 @@ public:
     KoColorBackground();
 
     /// Creates background from given color and style
-    KoColorBackground( const QColor &color, Qt::BrushStyle style = Qt::SolidPattern );
+    explicit KoColorBackground( const QColor &color, Qt::BrushStyle style = Qt::SolidPattern );
 
     virtual ~KoColorBackground();
 

@@ -71,7 +71,7 @@ public:
      * @param collection the image collection which will do the loading of the image data for us.
      * @param href the url of the image in the store.
      */
-    KoImageData(KoImageCollection *collection, QString href="");
+    explicit KoImageData(KoImageCollection *collection, QString href="");
 
     /**
      * copy constructor using ref-counting.

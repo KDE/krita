@@ -341,7 +341,7 @@ bool KoPatternBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF
         {
             QString height = styleStack.property( KoXmlNS::draw, "fill-image-height" );
             if( height.endsWith( '%' ) )
-                d->targetImageSizePercent.setHeight( height.remove( "%" ).toDouble() );
+                d->targetImageSizePercent.setHeight( height.remove( '%' ).toDouble() );
             else
                 d->targetImageSize.setHeight( KoUnit::parseValue( height ) );
         }
@@ -349,7 +349,7 @@ bool KoPatternBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF
         {
             QString width = styleStack.property( KoXmlNS::draw, "fill-image-width" );
             if( width.endsWith( '%' ) )
-                d->targetImageSizePercent.setWidth( width.remove( "%" ).toDouble() );
+                d->targetImageSizePercent.setWidth( width.remove( '%' ).toDouble() );
             else
                 d->targetImageSize.setWidth( KoUnit::parseValue( width ) );
         }

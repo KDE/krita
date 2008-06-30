@@ -204,7 +204,7 @@ bool KoApplication::start()
 
 		     QString templateName = templateInfo.readUrl();
 		     KUrl templateURL;
-		     templateURL.setPath( templateBase.directory() + "/" + templateName );
+		     templateURL.setPath( templateBase.directory() + '/' + templateName );
 		     if ( shell->openDocument(doc, templateURL )) {
 		       doc->resetURL();
 		       doc->setEmpty();

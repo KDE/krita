@@ -215,8 +215,8 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         {
             QRadialGradient * rg = new QRadialGradient();
             // TODO : find out whether Oasis works with boundingBox only?
-            double cx = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cx", QString() ).remove("%") );
-            double cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString() ).remove("%") );
+            double cx = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cx", QString() ).remove('%') );
+            double cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString() ).remove('%') );
             rg->setCenter( QPointF( size.width() * 0.01 * cx, size.height() * 0.01 * cy ) );
             rg->setFocalPoint( rg->center() );
             double dx = 0.5 * size.width();
@@ -241,12 +241,12 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         QGradientStop start;
         start.first = 0.0;
         start.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
-        start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove("%").toDouble() );
+        start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove('%').toDouble() );
 
         QGradientStop end;
         end.first = 1.0;
         end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
-        end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove("%").toDouble() );
+        end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove('%').toDouble() );
 
         QGradientStops stops;
         gradient->setStops( stops << start << end );
@@ -369,13 +369,13 @@ QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack
             QString height = styleStack.property( KoXmlNS::draw, "fill-image-height" );
             double newHeight = 0.0;
             if( height.endsWith( '%' ) )
-                newHeight = 0.01 * height.remove( "%" ).toDouble() * imageSize.height();
+                newHeight = 0.01 * height.remove( '%' ).toDouble() * imageSize.height();
             else
                 newHeight = KoUnit::parseValue( height );
             QString width = styleStack.property( KoXmlNS::draw, "fill-image-width" );
             double newWidth = 0.0;
             if( width.endsWith( '%' ) )
-                newWidth = 0.01 * width.remove( "%" ).toDouble() * imageSize.width();
+                newWidth = 0.01 * width.remove( '%' ).toDouble() * imageSize.width();
             else
                 newWidth = KoUnit::parseValue( width );
             if( newHeight > 0.0 )
@@ -601,7 +601,7 @@ QPen KoOdfGraphicStyles::loadOasisStrokeStyle( const KoStyleStack &styleStack, c
             QColor color = tmpPen.color();
             QString opacity = styleStack.property( KoXmlNS::svg, "stroke-opacity" );
             if( opacity.endsWith( '%' ) )
-                color.setAlphaF( 0.01 * opacity.remove( "%" ).toDouble() );
+                color.setAlphaF( 0.01 * opacity.remove( '%' ).toDouble() );
             else
                 color.setAlphaF( opacity.toDouble() );
             tmpPen.setColor( color );

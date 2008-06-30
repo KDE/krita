@@ -546,7 +546,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     font.setPointSize(6);
     QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
-            d->viewConverter->viewToDocumentX(line.length())) + " " + KoUnit::unitName(d->unit);
+            d->viewConverter->viewToDocumentX(line.length())) + ' ' + KoUnit::unitName(d->unit);
     QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.width(label)/2,
             midPoint.y() + fontMetrics.ascent()/2);
     painter.setFont(font);

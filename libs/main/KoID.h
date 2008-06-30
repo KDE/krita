@@ -22,9 +22,9 @@
 #ifndef _KO_ID_H_
 #define _KO_ID_H_
 
-#include <QString>
-#include <QMetaType>
-#include <QDebug>
+#include <QtCore/QString>
+#include <QtCore/QMetaType>
+#include <QtCore/QDebug>
 
 /**
  * A KoID is a combination of a user-visible string and a string that uniquely

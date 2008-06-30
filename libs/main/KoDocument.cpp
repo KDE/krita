@@ -40,7 +40,6 @@
 
 #include <kdialog.h>
 #include <kfileitem.h>
-#include <kdebug.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
@@ -55,14 +54,14 @@
 #include <kdeprintdialog.h>
 #include <knotification.h>
 
-#include <QBuffer>
-#include <QDir>
-#include <QFileInfo>
-#include <QPainter>
-#include <QTimer>
-#include <QDBusConnection>
-#include <QLayout>
-#include <QApplication>
+#include <QtCore/QBuffer>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtGui/QPainter>
+#include <QtCore/QTimer>
+#include <QtDBus/QDBusConnection>
+#include <QtGui/QLayout>
+#include <QtGui/QApplication>
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
 

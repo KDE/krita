@@ -22,11 +22,11 @@
 #ifndef __koffice_filter_manager_h__
 #define __koffice_filter_manager_h__
 
-#include <QObject>
-#include <QMap>
-#include <QByteArray>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QByteArray>
 
-#include <KoFilterChain.h>
+#include "KoFilterChain.h"
 #include "komain_export.h"
 class KoDocument;
 

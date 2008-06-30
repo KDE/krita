@@ -23,10 +23,9 @@
 #include <math.h>
 #include <kcursor.h>
 #include <kdebug.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QEvent>
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QKeyEvent>
 
 KoEventHandler::KoEventHandler( QObject* target )
 {

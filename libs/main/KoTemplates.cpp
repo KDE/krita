@@ -19,8 +19,6 @@
 
 #include "KoTemplates.h"
 
-#include <KoTemplates.h>
-
 #include <QDir>
 #include <QImage>
 #include <QPixmap>

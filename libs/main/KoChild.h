@@ -19,10 +19,9 @@
 #ifndef __koChild_h__
 #define __koChild_h__
 
-#include <QObject>
-#include <QMatrix>
-//Added by qt3to4:
-#include <QPolygon>
+#include <QtCore/QObject>
+#include <QtGui/QMatrix>
+#include <QtGui/QPolygon>
 #include "komain_export.h"
 
 /**

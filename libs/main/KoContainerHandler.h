@@ -20,13 +20,12 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 
-#include <QObject>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QEvent>
-#include <KoDocumentChild.h>
+#include <QtCore/QObject>
+#include "KoDocumentChild.h"
 
 class QMatrix;
+class QEvent;
+class QMouseEvent;
 
 class KoView;
 class KoPartResizeHandlerPrivate;

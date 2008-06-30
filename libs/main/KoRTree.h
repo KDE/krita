@@ -24,17 +24,17 @@
 
 #include <KDebug>
 
-#include <QPair>
-#include <QMap>
-#include <QList>
-#include <QVector>
-#include <QPointF>
-#include <QRectF>
-#include <qvarlengtharray.h>
+#include <QtCore/QPair>
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QVector>
+#include <QtCore/QPointF>
+#include <QtCore/QRectF>
+#include <QtCore/QVarLengthArray>
 
 // #define KOFFICE_RTREE_DEBUG
 #ifdef KOFFICE_RTREE_DEBUG
-#include <QPainter>
+#include <QtGui/QPainter>
 #endif
 
 /**

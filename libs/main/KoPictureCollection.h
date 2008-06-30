@@ -22,10 +22,10 @@
 #ifndef koPictureCollection_h
 #define koPictureCollection_h
 
-#include <QMap>
-#include <QDomDocument>
-#include <QDomElement>
-#include <q3valuelist.h>
+#include <QtCore/QMap>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <Qt3Support/Q3ValueList>
 
 #include "KoPicture.h"
 

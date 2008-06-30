@@ -22,11 +22,11 @@
 
 #include <config-prefix.h>
 
-#include <QPaintDevice>
-#include <QFont>
-#include <QFontInfo>
+#include <QtGui/QPaintDevice>
+#include <QtGui/QFont>
+#include <QtGui/QFontInfo>
 #ifdef Q_WS_X11
-#include <QX11Info>
+#include <QtGui/QX11Info>
 #endif
 
 #include <kdebug.h>
@@ -38,7 +38,6 @@
 #include <kstandarddirs.h>
 #include <k3staticdeleter.h>
 #include <kimageio.h>
-#include <kstandarddirs.h>
 
 
 KoGlobal* KoGlobal::s_global = 0L;

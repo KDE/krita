@@ -22,7 +22,7 @@
 #define KOGRIDDATA_H
 
 #include "komain_export.h"
-#include <QColor>
+#include <QtGui/QColor>
 
 class QPainter;
 class QRectF;

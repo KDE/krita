@@ -22,8 +22,8 @@
 #define KOGUIDESDATA_H
 
 #include "komain_export.h"
-#include <QList>
-#include <qnamespace.h>
+#include <QtCore/QList>
+#include <QtCore/Qt>
 
 class QPainter;
 class KoViewConverter;

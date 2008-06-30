@@ -20,18 +20,18 @@
 #ifndef __koView_h__
 #define __koView_h__
 
-#include <QWidget>
-#include <QPointer>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QtGui/QWidget>
+#include <QtCore/QPointer>
+#include <QtCore/QCustomEvent>
 
 #include <kparts/part.h>
 
-#include <KoChild.h>
+#include "KoChild.h"
 #include "komain_export.h"
-#include <KoDocumentChild.h>
-#include <KoFrame.h>
-#include <KoViewChild.h>
+#include "KoDocumentChild.h"
+#include "KoFrame.h"
+#include "KoViewChild.h"
+
 class KoDocument;
 class KoMainWindow;
 class KoPrintJob;

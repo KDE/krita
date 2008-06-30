@@ -19,12 +19,12 @@
 #ifndef __koffice_filter_chain_h__
 #define __koffice_filter_chain_h__
 
-#include <q3asciidict.h>
-#include <q3ptrlist.h>
-#include <QStringList>
+#include <Qt3Support/Q3AsciiDict>
+#include <Qt3Support/Q3PtrList>
+#include <QtCore/QStringList>
 
-#include <KoFilter.h>
-#include <KoQueryTrader.h>
+#include "KoFilter.h"
+#include "KoQueryTrader.h"
 #include <KoStoreDevice.h>
 #include "komain_export.h"
 

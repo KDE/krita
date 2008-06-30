@@ -28,11 +28,13 @@
 class QPainter;
 class KoViewConverter;
 class QRectF;
+class QColor;
 
 class KOMAIN_EXPORT KoGuidesData
 {
 public:
     KoGuidesData();
+    ~KoGuidesData();
 
     /**
      * @brief Set the positions of the horizontal and vertical guide lines
@@ -88,17 +90,23 @@ public:
      */
     void paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const;
 
+    /**
+     * Sets the color of the guide lines.
+     * @param color the new guides color
+     */
+    void setGuidesColor( const QColor &color );
+
+    /// Returns the color of the guide lines.
+    QColor guidesColor() const;
+
 #if 0 //TODO
     void saveOasisSettings( KoXmlWriter &settingsWriter );
     void loadOasisSettings(const QDomDocument&settingsDoc);
 #endif     
 
 private:
-    /// list of positions of horizontal guide lines
-    QList<double> m_hGuideLines;
-    /// list of positions of vertical guide lines
-    QList<double> m_vGuideLines;
-    bool m_bShowGuideLines;
+    class Private;
+    Private * const d;
 };
 
 

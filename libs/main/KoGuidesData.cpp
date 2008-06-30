@@ -23,57 +23,74 @@
 
 #include <QtGui/QPainter>
 
-KoGuidesData::KoGuidesData()
- :m_bShowGuideLines(true)
+class KoGuidesData::Private
 {
+public:
+    Private() : showGuideLines(true), guidesColor( Qt::lightGray ) {}
+    /// list of positions of horizontal guide lines
+    QList<double> horzGuideLines;
+    /// list of positions of vertical guide lines
+    QList<double> vertGuideLines;
+    bool showGuideLines;
+    QColor guidesColor;
+};
+
+KoGuidesData::KoGuidesData()
+ : d( new Private() )
+{
+}
+
+KoGuidesData::~KoGuidesData()
+{
+    delete d;
 }
 
 void KoGuidesData::setHorizontalGuideLines( const QList<double> &lines )
 {
-    m_hGuideLines = lines;
+    d->horzGuideLines = lines;
 }
 
 void KoGuidesData::setVerticalGuideLines( const QList<double> &lines )
 {
-    m_vGuideLines = lines;
+    d->vertGuideLines = lines;
 }
 
 void KoGuidesData::setGuideLines( const QList<double> &horizontalLines, const QList<double> &verticalLines)
 {
-    m_hGuideLines = horizontalLines;
-    m_vGuideLines = verticalLines;
+    d->horzGuideLines = horizontalLines;
+    d->vertGuideLines = verticalLines;
 }
 
 void KoGuidesData::addGuideLine( Qt::Orientation o, double pos )
 {
     if ( o == Qt::Horizontal )
     {
-        m_hGuideLines.append( pos );
+        d->horzGuideLines.append( pos );
     }
     else
     {
-        m_vGuideLines.append( pos );
+        d->vertGuideLines.append( pos );
     }
 }
 
 bool KoGuidesData::showGuideLines() const 
 { 
-  return m_bShowGuideLines; 
+  return d->showGuideLines; 
 }
 
 void KoGuidesData::setShowGuideLines( bool show )
 {
-  m_bShowGuideLines=show;
+  d->showGuideLines=show;
 }
 
 QList<double> KoGuidesData::horizontalGuideLines() const
 {
-    return m_hGuideLines;
+    return d->horzGuideLines;
 }
 
 QList<double> KoGuidesData::verticalGuideLines() const
 {
-    return m_vGuideLines;
+    return d->vertGuideLines;
 }
 
 void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
@@ -81,19 +98,29 @@ void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &convert
     if( ! showGuideLines() )
         return;
 
-    painter.setPen( Qt::lightGray ); /// TODO: make member of guides data?
-    foreach( double guide, m_hGuideLines )
+    painter.setPen( d->guidesColor );
+    foreach( double guide, d->horzGuideLines )
     {
         if( guide < area.top() || guide > area.bottom() )
             continue;
         painter.drawLine( converter.documentToView( QPointF( area.left(), guide ) ),
                           converter.documentToView( QPointF( area.right(), guide ) ) );
     }
-    foreach( double guide, m_vGuideLines )
+    foreach( double guide, d->vertGuideLines )
     {
         if( guide < area.left() || guide > area.right() )
             continue;
         painter.drawLine( converter.documentToView( QPointF( guide, area.top() ) ),
                           converter.documentToView( QPointF( guide, area.bottom() ) ) );
     }
+}
+
+void KoGuidesData::setGuidesColor( const QColor &color )
+{
+    d->guidesColor = color;
+}
+
+QColor KoGuidesData::guidesColor() const
+{
+    return d->guidesColor;
 }

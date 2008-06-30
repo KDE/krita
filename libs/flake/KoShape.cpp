@@ -846,6 +846,7 @@ bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingCon
 
 QString KoShape::getStyleProperty( const char *property, const KoXmlElement & element, KoShapeLoadingContext & context )
 {
+    Q_UNUSED(element);
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString value;
 
@@ -858,7 +859,6 @@ QString KoShape::getStyleProperty( const char *property, const KoXmlElement & el
 
 KoShapeBackground * KoShape::loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     QString fill = getStyleProperty( "fill", element, context );
     KoShapeBackground * bg = 0;
     if ( fill == "solid" || fill == "hatch" )

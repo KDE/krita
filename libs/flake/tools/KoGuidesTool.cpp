@@ -104,6 +104,8 @@ void KoGuidesTool::repaintDecorations()
 
 void KoGuidesTool::activate(bool temporary)
 {
+    Q_UNUSED(temporary);
+
     if( d->mode != Private::None )
         useCursor( d->orientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor, true );
     else
@@ -118,6 +120,7 @@ void KoGuidesTool::deactivate()
 
 void KoGuidesTool::mousePressEvent( KoPointerEvent *event )
 {
+    Q_UNUSED(event);
 }
 
 void KoGuidesTool::mouseMoveEvent( KoPointerEvent *event )
@@ -151,6 +154,8 @@ void KoGuidesTool::mouseMoveEvent( KoPointerEvent *event )
 
 void KoGuidesTool::mouseReleaseEvent( KoPointerEvent *event )
 {
+    Q_UNUSED(event);
+
     KoGuidesData * guidesData = m_canvas->guidesData();
     if( d->mode == Private::AddGuide && guidesData )
     {

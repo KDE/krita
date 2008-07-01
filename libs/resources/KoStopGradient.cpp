@@ -26,6 +26,8 @@
 #include <QFile>
 #include <QDomDocument>
 
+#include <klocale.h>
+
 #include "KoColorSpaceRegistry.h"
 
 #include <math.h>
@@ -269,6 +271,7 @@ void KoStopGradient::loadSvgGradient(QFile* file)
 
             if( e.tagName() == "linearGradient" || e.tagName() == "radialGradient" ) {
                 parseSvgGradient(e);
+                updatePreview();
                 return;
             }
             // Inkscape gradients are in another defs
@@ -281,6 +284,7 @@ void KoStopGradient::loadSvgGradient(QFile* file)
 
                     if( defelement.tagName() == "linearGradient" || defelement.tagName() == "radialGradient" ) {
                         parseSvgGradient(defelement);
+                        updatePreview();
                         return;
                     }
                 }
@@ -399,6 +403,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
     if( !href.isEmpty() )
     {
     }*/
+    setName(element.attribute( "id", i18n("SVG Gradient")));
 
     const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 

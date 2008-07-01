@@ -83,10 +83,6 @@ public:
      */
     bool removeSegmentPossible() const;
 
-    /**
-     * Recreates the preview of the gradient
-     */
-    void updatePreview();
 public:
     virtual bool load() { return false; }
 };

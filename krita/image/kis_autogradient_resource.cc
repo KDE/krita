@@ -217,8 +217,3 @@ bool KisAutogradientResource::removeSegmentPossible() const
         return false;
     return true;
 }
-
-void KisAutogradientResource::updatePreview()
-{
-    setImage( generatePreview( PREVIEW_WIDTH, PREVIEW_HEIGHT ) );
-}

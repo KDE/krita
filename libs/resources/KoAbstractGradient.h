@@ -48,6 +48,11 @@ public:
     void setType(QGradient::Type repeatType);
     QGradient::Type type() const;
 
+    QImage img() const;
+    void updatePreview();
+
+    QImage generatePreview(int width, int height) const;
+
 private:
     struct Private;
     Private* const d;

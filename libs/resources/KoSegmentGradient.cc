@@ -35,10 +35,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-
-#define PREVIEW_WIDTH 64
-#define PREVIEW_HEIGHT 64
-
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWColorInterpolationStrategy::m_instance = 0;
@@ -70,11 +66,6 @@ bool KoSegmentGradient::load()
 bool KoSegmentGradient::save()
 {
     return false;
-}
-
-QImage KoSegmentGradient::img() const
-{
-    return m_img;
 }
 
 bool KoSegmentGradient::init()
@@ -176,21 +167,13 @@ bool KoSegmentGradient::init()
     }
 
     if (!m_segments.isEmpty()) {
-        m_img = generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+        updatePreview();
         setValid(true);
         return true;
     }
     else {
         return false;
     }
-}
-
-void KoSegmentGradient::setImage(const QImage& img)
-{
-    m_img = img;
-    m_img.detach();
-
-    setValid(true);
 }
 
 KoGradientSegment *KoSegmentGradient::segmentAt(double t) const
@@ -216,35 +199,6 @@ void KoSegmentGradient::colorAt(KoColor& dst, double t) const
     if (segment) {
         segment->colorAt(dst, t);
     }
-}
-
-QImage KoSegmentGradient::generatePreview(int width, int height) const
-{
-    QImage img(width, height, QImage::Format_RGB32);
-
-    KoColor c;
-    QColor color;
-    for (int x = 0; x < img.width(); x++) {
-
-        double t = static_cast<double>(x) / (img.width() - 1);
-        colorAt(c, t);
-        c.toQColor( &color );
-        double alpha = static_cast<double>(color.alpha()) / OPACITY_OPAQUE;
-
-        for (int y = 0; y < img.height(); y++) {
-            int backgroundRed = 128 + 63 * ((x / 4 + y / 4) % 2);
-            int backgroundGreen = backgroundRed;
-            int backgroundBlue = backgroundRed;
-
-            int red = static_cast<int>((1 - alpha) * backgroundRed + alpha * color.red() + 0.5);
-            int green = static_cast<int>((1 - alpha) * backgroundGreen + alpha * color.green() + 0.5);
-            int blue = static_cast<int>((1 - alpha) * backgroundBlue + alpha * color.blue() + 0.5);
-
-            img.setPixel(x, y, qRgb(red, green, blue));
-        }
-    }
-
-    return img;
 }
 
 QGradient* KoSegmentGradient::toQGradient() const

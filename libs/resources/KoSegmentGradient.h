@@ -232,8 +232,6 @@ public:
 
     virtual bool load();
     virtual bool save();
-    virtual QImage img() const;
-    virtual QImage generatePreview(int width, int height) const;
 
     void colorAt(KoColor& dst, double t) const;
 
@@ -245,15 +243,11 @@ public:
 
 protected:
     inline void pushSegment( KoGradientSegment* segment ) { m_segments.push_back(segment); }
-    void setImage(const QImage& img);
 
     QList<KoGradientSegment *> m_segments;
 
 private:
     bool init();
-
-private:
-    QImage m_img;
 };
 
 #endif // KOSEGMENTGRADIENT_H

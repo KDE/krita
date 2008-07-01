@@ -1,5 +1,6 @@
 /*
     Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,10 +20,15 @@
 #include "KoAbstractGradient.h"
 #include "KoColorSpaceRegistry.h"
 
+#define PREVIEW_WIDTH 64
+#define PREVIEW_HEIGHT 64
+
+
 struct KoAbstractGradient::Private {
     const KoColorSpace* colorSpace;
     QGradient::Spread spread;
     QGradient::Type type;
+    QImage img;
 };
 
 KoAbstractGradient::KoAbstractGradient(const QString& filename)
@@ -71,5 +77,45 @@ QGradient::Type KoAbstractGradient::type () const
 {
     return d->type;
 }
+
+QImage KoAbstractGradient::generatePreview(int width, int height) const
+{
+    QImage img(width, height, QImage::Format_RGB32);
+
+    KoColor c;
+    QColor color;
+    for (int x = 0; x < img.width(); x++) {
+
+        double t = static_cast<double>(x) / (img.width() - 1);
+        colorAt(c, t);
+        c.toQColor( &color );
+        double alpha = static_cast<double>(color.alpha()) / OPACITY_OPAQUE;
+
+        for (int y = 0; y < img.height(); y++) {
+            int backgroundRed = 128 + 63 * ((x / 4 + y / 4) % 2);
+            int backgroundGreen = backgroundRed;
+            int backgroundBlue = backgroundRed;
+
+            int red = static_cast<int>((1 - alpha) * backgroundRed + alpha * color.red() + 0.5);
+            int green = static_cast<int>((1 - alpha) * backgroundGreen + alpha * color.green() + 0.5);
+            int blue = static_cast<int>((1 - alpha) * backgroundBlue + alpha * color.blue() + 0.5);
+
+            img.setPixel(x, y, qRgb(red, green, blue));
+        }
+    }
+
+    return img;
+}
+
+QImage KoAbstractGradient::img() const
+{
+    return d->img;
+}
+
+void KoAbstractGradient::updatePreview()
+{
+    d->img = generatePreview( PREVIEW_WIDTH, PREVIEW_HEIGHT );
+}
+
 
 #include "KoAbstractGradient.moc"

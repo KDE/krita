@@ -34,6 +34,7 @@ Name[sv]=Ändra markering
 Name[tr]=Seçimi Düzenle
 Name[uk]=Зміна виділення
 Name[x-test]=xxModify Selectionxx
+Name[zh_CN]=修改选择
 Name[zh_TW]=變更選取
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service

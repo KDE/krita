@@ -35,6 +35,7 @@ Name[uk]=Втулок обертання зображень
 Name[uz]=Rasmni burish plagini
 Name[uz@cyrillic]=Расмни буриш плагини
 Name[x-test]=xxRotate Image Pluginxx
+Name[zh_CN]=图像旋转插件
 Name[zh_TW]=旋轉圖片外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service

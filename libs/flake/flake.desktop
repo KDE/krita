@@ -19,6 +19,7 @@ Name[pt_BR]=Plugin do Flake
 Name[sv]=Flake-insticksprogram
 Name[uk]=Втулок Flake
 Name[x-test]=xxFlake Pluginxx
+Name[zh_CN]=Flake 插件
 Name[zh_TW]=Flake 外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Flake

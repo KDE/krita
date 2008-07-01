@@ -26,28 +26,42 @@
 
 class KisFilter;
 class KisFilterConfiguration;
-class QModelIndex;
 
 class KisFilterDialog : public QDialog {
+
     Q_OBJECT
+
+public:
+
+    KisFilterDialog(QWidget* parent, KisLayerSP device);
+
+    ~KisFilterDialog();
+
+    void setFilter(KisFilterSP f);
+
+public slots:
+
+    void updatePreview();
+
+protected slots:
+
+    void apply();
+
+    void close();
+
+    void createMask();
+
+private slots:
+
+    void kickTimer();
+
+signals:
+
+    void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);
+
+private:
     struct Private;
-    public:
-        KisFilterDialog(QWidget* parent, KisLayerSP device);
-        ~KisFilterDialog();
-        void setFilter(KisFilterSP f);
-    public slots:
-        void updatePreview();
-    protected slots:
-        void apply();
-        void close();
-
-    private slots:
-        void kickTimer();
-    signals:
-        void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);
-    private:
-
-        KisFilterDialog::Private* const d;
+    KisFilterDialog::Private* const d;
 };
 
 #endif

@@ -70,6 +70,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
+    connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(kickTimer()));
     connect(&d->timer, SIGNAL(timeout()), SLOT(updatePreview()));
 }
@@ -91,7 +92,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 
 void KisFilterDialog::updatePreview()
 {
-    dbgKrita <<">>>>  KisFilterDialog::updatePreview()";
+    dbgKrita <<">>>>  KisFilterDialog::updatePreview() " << d->currentFilter->name();
 
     if ( !d->currentFilter ) return;
 
@@ -110,6 +111,13 @@ void KisFilterDialog::close()
 {
     d->layer->removePreviewMask();
     d->layer->setDirty(d->layer->extent());
+}
+
+void KisFilterDialog::createMask()
+{
+    KisEffectMaskSP mask = d->layer->previewMask();
+    d->layer->removePreviewMask();
+
 }
 
 void KisFilterDialog::kickTimer()

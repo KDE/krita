@@ -134,6 +134,8 @@ void KisPaintLayer::updateProjection(const QRect & rc)
     if ( !hasEffectMasks() ) return;
     if ( !m_d->paintDevice ) return;
 
+    dbgImage << name() << ": updateProjection " << rc;
+
     if ( !m_d->projection ) {
         m_d->projection = new KisPaintDevice( *m_d->paintDevice );
     }

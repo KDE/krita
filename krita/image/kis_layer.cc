@@ -229,15 +229,20 @@ void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect 
         m_d->previewMask->apply( projection, rc );
     }
 
-    QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), KoProperties() );
+    KoProperties props;
+    props.setProperty( "visible", true );
+
+    QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), props );
 
     // Then loop through the effect masks and apply them
     for ( int i = 0; i < masks.size(); ++i ) {
 
         const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>( masks.at( i ).data() );
 
-        if ( effectMask )
+        if ( effectMask ) {
+            dbgImage << " layer " << name() << " has effect mask " << effectMask->name();
             effectMask->apply( projection, rc );
+        }
     }
 
 }

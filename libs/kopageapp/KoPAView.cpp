@@ -208,6 +208,13 @@ void KoPAView::initActions()
     actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
     connect( m_actionViewSnapToGrid, SIGNAL( triggered( bool ) ), this, SLOT (viewSnapToGrid( bool )));
 
+    m_actionViewShowGuides  = new KToggleAction( KIcon( "guides" ), i18n( "Show Guides" ), this );
+    m_actionViewShowGuides->setChecked( m_doc->guidesData().showGuideLines() );
+    m_actionViewShowGuides->setCheckedState( KGuiItem( i18n( "Hide Guides" ) ) );
+    m_actionViewShowGuides->setToolTip( i18n( "Shows or hides guides" ) );
+    actionCollection()->addAction( "view_show_guides", m_actionViewShowGuides );
+    connect( m_actionViewShowGuides, SIGNAL(triggered(bool)), this, SLOT(viewGuides(bool)));
+
     m_actionViewShowMasterPages = new KToggleAction(i18n( "Show Master Pages" ), this );
     actionCollection()->addAction( "view_masterpages", m_actionViewShowMasterPages );
     connect( m_actionViewShowMasterPages, SIGNAL( triggered( bool ) ), this, SLOT( setMasterMode( bool ) ) );
@@ -263,7 +270,13 @@ void KoPAView::viewSnapToGrid(bool snap)
 void KoPAView::viewGrid(bool show)
 {
     m_doc->gridData().setShowGrid(show);
-    m_actionViewShowGrid->setChecked(show);
+    //m_actionViewShowGrid->setChecked(show);
+}
+
+void KoPAView::viewGuides(bool show)
+{
+    m_doc->guidesData().setShowGuideLines(show);
+    m_canvas->update();
 }
 
 void KoPAView::editCut()

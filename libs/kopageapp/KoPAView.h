@@ -146,6 +146,7 @@ protected:
 protected slots:
     void viewSnapToGrid(bool snap);
     void viewGrid(bool show);
+    void viewGuides(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, double zoom );
 
     void editCut();
@@ -220,6 +221,7 @@ private:
 
     KToggleAction *m_actionViewSnapToGrid;
     KToggleAction *m_actionViewShowGrid;
+    KToggleAction *m_actionViewShowGuides;
     KToggleAction *m_actionViewShowMasterPages;
 
     KAction * m_actionInsertPage;

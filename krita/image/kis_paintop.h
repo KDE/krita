@@ -109,6 +109,12 @@ protected:
     virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
 
     /**
+     * Determine the x and y spacing between two calls to paintAt.
+     * @return the spacing
+     */
+    virtual double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
+
+    /**
      * Return the painter this paintop is owned by
      */
     KisPainter* painter();

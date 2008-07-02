@@ -77,17 +77,15 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     m_layout->setMargin(1);
     m_layout->setSpacing(1);
     m_layout->addWidget(m_cmbPaintops);
-    
-#if 0 // Disable for now
+
     KisPresetWidget * m_presetWidget = new KisPresetWidget(this, "presetwidget");
     m_presetWidget->setToolTip(i18n("Edit brush settings"));
     m_presetWidget->setFixedSize( 130, 26 );
-        m_layout->addWidget(m_presetWidget);
+    m_layout->addWidget(m_presetWidget);
 
     m_presetsPopup = new KisPaintOpPresetsWidget(m_presetWidget);
     m_presetWidget->setPopupWidget(m_presetsPopup);
-#endif
-    
+
     // XXX: Let's see... Are all paintops loaded and ready?
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for ( QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it ) {
@@ -101,14 +99,14 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
 
     connect(view->layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
             this, SLOT(colorSpaceChanged(const KoColorSpace*)));
-            
-    connect(view->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)), 
+
+    connect(view->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
                                  SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
                                        SLOT(slotInputDeviceChanged(const KoInputDevice &)));
 
-    
+
 
 }
 

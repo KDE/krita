@@ -23,13 +23,10 @@
 #include "KoID.h"
 
 #include "kis_shared.h"
-#include "kis_paintop_settings.h"
-
+#include "kis_types.h"
 #include "krita_export.h"
 
 class QImage;
-class KisPaintOpPreset;
-typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
 
 /**
  * A KisPaintOpPreset contains a particular set of settings
@@ -40,7 +37,7 @@ class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource, public KisShared
 public:
 
     KisPaintOpPreset();
-    
+
     KisPaintOpPreset(const QString& filename);
 
     ~KisPaintOpPreset();
@@ -50,7 +47,7 @@ public:
 
     /// return the settings that define this paintop preset
     KisPaintOpSettingsSP settings();
-    
+
     bool load();
 
     bool save();
@@ -68,9 +65,11 @@ private:
     void updateImg();
 
 private:
-    
+
     struct Private;
     Private * const m_d;
 };
+
+Q_DECLARE_METATYPE( KisPaintOpPresetSP )
 
 #endif

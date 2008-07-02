@@ -35,7 +35,6 @@ class KoAbstractGradient;
 class KisPattern;
 class KoResource;
 class KoCanvasBase;
-class KisPaintOpPreset;
 class KisFilterConfiguration;
 
 /**
@@ -96,7 +95,7 @@ public:
 
     KisNodeSP currentNode() const;
 
-    //KisPaintOpPreset * currentPreset() const;
+    KisPaintOpPresetSP currentPreset() const;
 
     KisFilterConfiguration * currentGeneratorConfiguration() const;
 
@@ -108,10 +107,11 @@ public slots:
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
     void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettingsSP paintopSettings);
+    void slotPaintOpPresetActivated( const KisPaintOpPresetSP preset );
     void slotLayerActivated( const KisLayerSP layer );
     void slotNodeActivated( const KisNodeSP node );
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
-    
+
     /**
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.
@@ -131,13 +131,14 @@ signals:
     void sigGradientChanged(KoAbstractGradient *);
     void sigPatternChanged(KisPattern *);
     void sigPaintopChanged(KoID paintop, const KisPaintOpSettingsSP);
+    void sigPaintOpPresetChanged( KisPaintOpPresetSP preset );
     void sigLayerChanged(const KisLayerSP);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
-    
+
 private:
-    
+
     KisView2 * m_view;
     KoCanvasResourceProvider * m_resourceProvider;
     KisBrush * m_defaultBrush;

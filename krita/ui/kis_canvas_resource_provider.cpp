@@ -34,7 +34,7 @@
 #include <kis_layer.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
-
+#include <kis_paintop_preset.h>
 #include "kis_exposure_visitor.h"
 #include "kis_config.h"
 #include "kis_view2.h"
@@ -85,7 +85,7 @@ void KisCanvasResourceProvider::setCanvasResourceProvider( KoCanvasResourceProvi
 
     connect(m_resourceProvider, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(slotResourceChanged(int, const QVariant&)));
-           
+
 }
 
 
@@ -190,6 +190,12 @@ KisNodeSP KisCanvasResourceProvider::currentNode() const
     return m_view->activeNode();
 }
 
+KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
+{
+    return m_resourceProvider->resource( CurrentPaintOpPreset ).value<KisPaintOpPresetSP>();
+}
+
+
 void KisCanvasResourceProvider::slotBrushActivated(KoResource *res)
 {
 
@@ -225,7 +231,7 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 }
 
 void KisCanvasResourceProvider::slotPaintopActivated(const KoID & paintop,
-                                               const KisPaintOpSettingsSP paintopSettings)
+                                                     const KisPaintOpSettingsSP paintopSettings)
 {
     if (paintop.id().isNull() || paintop.id().isEmpty()) {
         return;
@@ -239,6 +245,15 @@ void KisCanvasResourceProvider::slotPaintopActivated(const KoID & paintop,
     m_resourceProvider->setResource( CurrentPaintopSettings, v );
 
     emit sigPaintopChanged(paintop, paintopSettings);
+}
+
+void KisCanvasResourceProvider::slotPaintOpPresetActivated( const KisPaintOpPresetSP preset )
+{
+    if (!preset) return;
+    QVariant v;
+    v.setValue(preset);
+    m_resourceProvider->setResource( CurrentPaintOpPreset, v );
+    emit sigPaintOpPresetChanged( preset );
 }
 
 void KisCanvasResourceProvider::setBGColor(const KoColor& c)

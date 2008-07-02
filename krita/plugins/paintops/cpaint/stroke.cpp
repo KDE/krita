@@ -64,7 +64,6 @@ void Stroke::storeOldPath ( double x1, double y1 )
 
 void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )
 {
-    kDebug() << x1 << ", " << y1 << " to " << x2 << ", " << y2;
 	QColor mycolor = color.toQColor();
 	int ix1, ix2, iy1, iy2, iwidth;
 	ix1 = (int)x1;

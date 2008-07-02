@@ -151,32 +151,21 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         savedDist = 0;
     }
 
-    // XXX: The spacing should vary as the pressure changes along the line.
-    // This is a quick simplification.
-    double xSpacing = d->painter->brush()->xSpacing( scaleForPressure( (pi1.pressure() + pi2.pressure()) / 2) );
-    double ySpacing = d->painter->brush()->ySpacing( scaleForPressure( (pi1.pressure() + pi2.pressure()) / 2) );
-
-    if (xSpacing < 0.5) {
-        xSpacing = 0.5;
-    }
-    if (ySpacing < 0.5) {
-        ySpacing = 0.5;
-    }
+    double xSpacing, ySpacing = 1;
+    double sp = spacing(xSpacing, ySpacing, pi1.pressure(), pi2.pressure());
 
     double xScale = 1;
     double yScale = 1;
-    double spacing;
+
     // Scale x or y so that we effectively have a square brush
     // and calculate distance in that coordinate space. We reverse this scaling
     // before drawing the brush. This produces the correct spacing in both
     // x and y directions, even if the brush's aspect ratio is not 1:1.
     if (xSpacing > ySpacing) {
         yScale = xSpacing / ySpacing;
-        spacing = xSpacing;
     }
     else {
         xScale = ySpacing / xSpacing;
-        spacing = ySpacing;
     }
 
     dragVec.setX(dragVec.x() * xScale);
@@ -186,20 +175,20 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
     double dist = savedDist + newDist;
     double l_savedDist = savedDist;
 
-    if (dist < spacing) {
+    if (dist < sp) {
         return dist;
     }
 
     dragVec.normalize();
     KisVector2D step(0, 0);
 
-    while (dist >= spacing) {
+    while (dist >= sp) {
         if (l_savedDist > 0) {
-            step += dragVec * (spacing - l_savedDist);
-            l_savedDist -= spacing;
+            step += dragVec * (sp - l_savedDist);
+            l_savedDist -= sp;
         }
         else {
-            step += dragVec * spacing;
+            step += dragVec * sp;
         }
 
         QPointF p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
@@ -216,7 +205,7 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         double yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
 
         paintAt(KisPaintInformation(p, pressure, xTilt, yTilt, dragVec));
-        dist -= spacing;
+        dist -= sp;
     }
 
     QRect r( pi1.pos().toPoint(), pi2.pos().toPoint() );
@@ -253,6 +242,29 @@ double KisPaintOp::scaleForPressure(double pressure)
     return scale;
 }
 
+double KisPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
+{
+
+    // XXX: The spacing should vary as the pressure changes along the line.
+    // This is a quick simplification.
+    xSpacing = d->painter->brush()->xSpacing( scaleForPressure( (pressure1 + pressure2) / 2) );
+    ySpacing = d->painter->brush()->ySpacing( scaleForPressure( (pressure1 + pressure2) / 2) );
+
+    if (xSpacing < 0.5) {
+        xSpacing = 0.5;
+    }
+    if (ySpacing < 0.5) {
+        ySpacing = 0.5;
+    }
+
+    if (xSpacing > ySpacing) {
+        return xSpacing;
+    }
+    else {
+        return ySpacing;
+    }
+}
+
 //------------------------ KisPaintOpFactory ------------------------//
 
 bool KisPaintOpFactory::userVisible(const KoColorSpace * cs )
@@ -277,3 +289,5 @@ QString KisPaintOpFactory::pixmap()
 {
     return "";
 }
+
+

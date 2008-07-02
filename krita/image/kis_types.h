@@ -32,7 +32,7 @@ class KisSharedPtr;
 /**
  * Define lots of shared pointer versions of Krita classes.
  * Shared pointer classes have the advantage of near automatic
- * memory management (but take care of circular references)
+ * memory management (but beware of circular references)
  * and the disadvantage that inheritiance relations are no longer
  * recognizable
  */
@@ -186,6 +186,15 @@ class KisRandomAccessor;
 typedef KisRandomAccessorPixelBase<KisRandomAccessor, quint8*> KisRandomAccessorPixel;
 
 typedef QVector<QPointF> vQPointF;
+
+class KisPaintOpPreset;
+typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
+
+class KisPaintOp;
+typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
+
+class KisPaintOpSettings;
+typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
 #endif // KISTYPES_H_
 

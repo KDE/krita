@@ -28,8 +28,6 @@
 class QWidget;
 class KoPointerEvent;
 
-class KisPaintOpSettings;
-typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
 /**
  * This class is used to cache the settings (and the associated widget) for a paintop

@@ -55,7 +55,6 @@ RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
     {
         KoColorSpaceFactory *csf  = new KisRgbF32HDRColorSpaceFactory();
         const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
-        kDebug() << csf->defaultProfile();
         Q_ASSERT(profile);
         KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace(profile);
         Q_CHECK_PTR(colorSpaceRGBF32);

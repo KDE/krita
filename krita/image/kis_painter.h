@@ -412,10 +412,15 @@ public:
     QBitArray channelFlags();
 
     /// Set the current brush
-    void setBrush(KisBrush* brush);
+    void KDE_DEPRECATED setBrush(KisBrush* brush);
 
     /// Returns the currently set brush
-    KisBrush * brush() const;
+    KisBrush* KDE_DEPRECATED brush() const;
+
+    /// Set the paintop preset to use
+    void setPaintOpPreset( KisPaintOpPresetSP preset );
+    /// Return the paintop preset
+    KisPaintOpPresetSP preset() const;
 
     /// Set the current pattern
     void setPattern(KisPattern * pattern);

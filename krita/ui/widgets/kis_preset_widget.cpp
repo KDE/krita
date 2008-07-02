@@ -60,7 +60,10 @@ void KisPresetWidget::paintEvent(QPaintEvent *)
 /*
     draw a sinus with min pressure at start, max pressure in the middle, min pressure at end
 */
-
+    if (m_preset) {
+        p.drawImage( 1, 1, m_preset->img() );
+        p.drawText( 1, ch -1 , m_preset->name() );
+    }
     p.setPen(Qt::gray);
     p.drawRect(0, 0, cw + 1, ch + 1);
 }

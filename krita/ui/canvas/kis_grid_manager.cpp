@@ -164,7 +164,7 @@ void KisGridManager::fastConfig40x40()
 #define viewToPixel(point) \
     m_view->document()->image()->documentToPixel( converter.viewToDocument( point))
 
-void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter)
+void KisGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, const QRect& area, const KoViewConverter &converter)
 {
     dbgRender << "drawDecoration";
     KisConfig cfg;
@@ -182,10 +182,13 @@ void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoVie
     
     QPointF bottomRight = viewToPixel( area.bottomRight() );
     QPointF topLeft = viewToPixel( area.topLeft() );
+    QPointF pixelOffset =  m_view->document()->image()->documentToPixel( documentOffset );
+    
+    dbgRender << "topLeft = " << topLeft << " bottomRight = " << bottomRight << " pixelOffset = " << pixelOffset;
     
     double x = offsetx % hspacing;
-    dbgRender << " x = " << x << " hspacing = " << hspacing << " bottomRight.x() " << bottomRight.x();
-    while( x <= bottomRight.x())
+    dbgRender << " x = " << x << " hspacing = " << hspacing;
+    while( x <= bottomRight.x() + pixelOffset.x() )
     {
         if( i == subdivision )
         {
@@ -199,16 +202,16 @@ void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoVie
         {
             // Always draw the full line otherwise the line stippling varies
             // with the location of area and we get glitchy patterns.
-            dbgRender << pixelToView( QPointF( x, topLeft.y() ) ) << " " << pixelToView( QPointF( x, bottomRight.y() ) );
-            gc.drawLine( pixelToView( QPointF( x, topLeft.y() ) ), pixelToView( QPointF( x, bottomRight.y() ) ) );
+//             dbgRender << pixelToView( QPointF( x, topLeft.y() ) ) << " " << pixelToView( QPointF( x, bottomRight.y() ) );
+            gc.drawLine( pixelToView( QPointF( x, topLeft.y() ) ), pixelToView( QPointF( x, bottomRight.y() + pixelOffset.y() ) ) );
         }
         x += hspacing;
     }
     // Draw horizontal line
     i = subdivision - (offsety / vspacing) % (subdivision +1);
     double y = offsety % vspacing;
-    dbgRender << " y = " << x << " vspacing = " << vspacing << " bottomRight.y() " << bottomRight.y();
-    while( y <= bottomRight.y())
+    dbgRender << " y = " << x << " vspacing = " << vspacing;
+    while( y <= bottomRight.y() + pixelOffset.y() )
     {
         if( i == subdivision )
         {
@@ -220,7 +223,7 @@ void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoVie
         }
         if( y >= topLeft.y() )
         {
-            gc.drawLine( pixelToView( QPointF( topLeft.x(), y ) ), pixelToView( QPointF( bottomRight.x(), y ) ) );
+            gc.drawLine( pixelToView( QPointF( topLeft.x(), y ) ), pixelToView( QPointF( bottomRight.x() + pixelOffset.x() , y ) ) );
         }
         y += vspacing;
     }

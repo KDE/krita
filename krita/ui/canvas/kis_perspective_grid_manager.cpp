@@ -102,7 +102,7 @@ void KisPerspectiveGridManager::stopEdition()
 #define pixelToView(point) \
     converter.documentToView(image->pixelToDocument(point))
 
-void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter)
+void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, const QRect& area, const KoViewConverter &converter)
 {
 
     KisImageSP image = m_view->resourceProvider()->currentImage();

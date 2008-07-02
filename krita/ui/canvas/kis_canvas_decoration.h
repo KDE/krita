@@ -22,6 +22,7 @@
 #include <QObject>
 #include <krita_export.h>
 
+class QPoint;
 class QRect;
 class QPainter;
 class KoViewConverter;
@@ -45,7 +46,7 @@ class KRITAUI_EXPORT KisCanvasDecoration : public QObject {
         /**
          * Will paint the decoration on the QPainter, if the visible is set to true.
          */
-        void paint(QPainter& gc, const QRect& area, const KoViewConverter &converter);
+        void paint(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
     public slots:
         /**
          * Set if the decoration is visible or not.
@@ -56,7 +57,7 @@ class KRITAUI_EXPORT KisCanvasDecoration : public QObject {
          */
         void toggleVisibility();
     protected:
-        virtual void drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter) = 0;
+        virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter) = 0;
     private:
         struct Private;
         Private* const d;

@@ -56,7 +56,7 @@ class KRITAUI_EXPORT KisPerspectiveGridManager : public KisCanvasDecoration
          */
         void clearPerspectiveGrid();
     protected:
-        virtual void drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter);
+        virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter);
     private:
         bool m_toggleEdition;
         KisView2* m_view;

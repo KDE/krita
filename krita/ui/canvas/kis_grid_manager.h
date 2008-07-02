@@ -55,7 +55,7 @@ class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
         void fastConfig20x20();
         void fastConfig40x40();
     protected:
-        virtual void drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter);
+        virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset, const QRect& area, const KoViewConverter &converter);
 
     private:
 

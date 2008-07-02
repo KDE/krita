@@ -161,8 +161,12 @@ void KisGridManager::fastConfig40x40()
 #define pixelToView(point) \
     converter.documentToView( m_view->document()->image()->pixelToDocument(point))
 
+#define viewToPixel(point) \
+    m_view->document()->image()->documentToPixel( converter.viewToDocument( point))
+
 void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoViewConverter &converter)
 {
+    dbgRender << "drawDecoration";
     KisConfig cfg;
 
     quint32 offsetx = cfg.getGridOffsetX();
@@ -176,10 +180,11 @@ void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoVie
     QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
     quint32 i = subdivision - (offsetx / hspacing) % (subdivision+1);
     
-    QPointF bottomRight = m_view->document()->image()->documentToPixel( area.bottomRight() );
-    QPointF topLeft = m_view->document()->image()->documentToPixel( area.topLeft() );
+    QPointF bottomRight = viewToPixel( area.bottomRight() );
+    QPointF topLeft = viewToPixel( area.topLeft() );
     
     double x = offsetx % hspacing;
+    dbgRender << " x = " << x << " hspacing = " << hspacing << " bottomRight.x() " << bottomRight.x();
     while( x <= bottomRight.x())
     {
         if( i == subdivision )
@@ -194,6 +199,7 @@ void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoVie
         {
             // Always draw the full line otherwise the line stippling varies
             // with the location of area and we get glitchy patterns.
+            dbgRender << pixelToView( QPointF( x, topLeft.y() ) ) << " " << pixelToView( QPointF( x, bottomRight.y() ) );
             gc.drawLine( pixelToView( QPointF( x, topLeft.y() ) ), pixelToView( QPointF( x, bottomRight.y() ) ) );
         }
         x += hspacing;
@@ -201,6 +207,7 @@ void KisGridManager::drawDecoration(QPainter& gc, const QRect& area, const KoVie
     // Draw horizontal line
     i = subdivision - (offsety / vspacing) % (subdivision +1);
     double y = offsety % vspacing;
+    dbgRender << " y = " << x << " vspacing = " << vspacing << " bottomRight.y() " << bottomRight.y();
     while( y <= bottomRight.y())
     {
         if( i == subdivision )

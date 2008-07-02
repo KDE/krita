@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -76,6 +77,8 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     rightAlign->setDefaultAction( m_tool->action( "object_align_horizontal_right" ) );
     hCenterAlign->setDefaultAction( m_tool->action( "object_align_horizontal_center" ) );
     leftAlign->setDefaultAction( m_tool->action( "object_align_horizontal_left" ) );
+    group->setDefaultAction( m_tool->action( "object_group" ) );
+    ungroup->setDefaultAction( m_tool->action( "object_ungroup" ) );
 
     aspectButton->setChecked( false );
 

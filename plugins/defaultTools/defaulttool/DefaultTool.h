@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -99,6 +99,9 @@ private slots:
     void selectionSendToBack();
     void selectionMoveUp();
     void selectionMoveDown();
+
+    void selectionGroup();
+    void selectionUngroup();
 
     /// Update actions on selection change
     void updateActions();

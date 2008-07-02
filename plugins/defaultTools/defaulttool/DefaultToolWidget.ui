@@ -510,6 +510,57 @@
      </widget>
     </item>
     <item>
+     <widget class="QGroupBox" name="groupGroupBox" >
+      <property name="title" >
+       <string>Group</string>
+      </property>
+      <property name="flat" >
+       <bool>true</bool>
+      </property>
+      <layout class="QHBoxLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>0</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="group" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="ungroup" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <spacer>
       <property name="orientation" >
        <enum>Qt::Vertical</enum>
@@ -554,6 +605,8 @@
   <tabstop>topAlign</tabstop>
   <tabstop>vCenterAlign</tabstop>
   <tabstop>bottomAlign</tabstop>
+  <tabstop>group</tabstop>
+  <tabstop>ungroup</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
 
@@ -45,6 +45,9 @@
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
+#include <commands/KoShapeCreateCommand.h>
+#include <commands/KoShapeGroupCommand.h>
+#include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
 #include <tools/KoGuidesTool.h>
 
@@ -192,6 +195,16 @@ void DefaultTool::setupActions()
                                               i18n( "Align Bottom" ), this );
     addAction( "object_align_vertical_bottom", actionAlignBottom );
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
+
+    QAction* actionGroupBottom = new QAction( KIcon( "group" ),
+                                              i18n( "Group" ), this );
+    addAction( "object_group", actionGroupBottom );
+    connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
+
+    QAction* actionUngroupBottom = new QAction( KIcon( "ungroup" ),
+                                                i18n( "Ungroup" ), this );
+    addAction( "object_ungroup", actionUngroupBottom );
+    connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
 }
 
 double DefaultTool::rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation )
@@ -842,6 +855,65 @@ void DefaultTool::selectionAlignVerticalBottom() {
     selectionAlign(KoShapeAlignCommand::VerticalBottomAlignment);
 }
 
+void DefaultTool::selectionGroup()
+{
+    KoSelection* selection = koSelection();
+    if ( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> groupedShapes;
+
+    // only group shapes with an unselected parent
+    foreach( KoShape* shape, selectedShapes ) {
+        if ( ! selectedShapes.contains( shape->parent() ) ) {
+            groupedShapes << shape;
+        }
+    }
+    KoShapeGroup *group = new KoShapeGroup();
+    // is this needed?
+    if ( selection->activeLayer() ) {
+        selection->activeLayer()->addChild( group );
+    }
+    // TODO what if only one shape is left?
+    QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
+    m_canvas->shapeController()->addShapeDirect( group, cmd );
+    new KoShapeGroupCommand( group, groupedShapes, cmd );
+    m_canvas->addCommand( cmd );
+}
+
+void DefaultTool::selectionUngroup()
+{
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if (  ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes(  KoFlake::TopLevelSelection );
+    QList<KoShape*> containerSet;
+
+    // only ungroup shape groups with an unselected parent
+    foreach( KoShape* shape, selectedShapes ) {
+        if( !selectedShapes.contains( shape->parent() ) ) {
+            containerSet << shape;
+        }
+    }
+
+    QUndoCommand *cmd = 0;
+
+    // add a ungroup command for each found shape container to the macro command
+    foreach( KoShape* shape, containerSet )
+    {
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>( shape );
+        if( group ) {
+            cmd = cmd ? cmd : new QUndoCommand(  i18n( "Ungroup shapes" ) );
+            new KoShapeUngroupCommand( group, group->iterator(), cmd );
+            m_canvas->shapeController()->removeShape( group, cmd );
+        }
+    }
+    if ( cmd ) {
+        m_canvas->addCommand( cmd );
+    }
+}
 
 void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
 {
@@ -1034,7 +1106,8 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
 
 void DefaultTool::updateActions()
 {
-    if (!koSelection())
+    KoSelection * selection( koSelection() ); 
+    if (!selection)
     {
         action( "object_move_totop" )->setEnabled(false);
         action( "object_move_up" )->setEnabled(false);
@@ -1046,15 +1119,17 @@ void DefaultTool::updateActions()
         action( "object_align_vertical_top" )->setEnabled(false);
         action( "object_align_vertical_center" )->setEnabled(false);
         action( "object_align_vertical_bottom" )->setEnabled(false);
+        action( "object_group" )->setEnabled(false);
+        action( "object_ungroup" )->setEnabled(false);
         return;
     }
 
-    bool enable = koSelection()->count () > 0;
+    bool enable = selection->count () > 0;
     action( "object_move_totop" )->setEnabled(enable);
     action( "object_move_up" )->setEnabled(enable);
     action( "object_move_down" )->setEnabled(enable);
     action( "object_move_tobottom" )->setEnabled(enable);
-    enable = koSelection()->count () > 1;
+    enable = selection->count () > 1;
     action( "object_align_horizontal_left" )->setEnabled(enable);
     action( "object_align_horizontal_center" )->setEnabled(enable);
     action( "object_align_horizontal_right" )->setEnabled(enable);
@@ -1062,7 +1137,18 @@ void DefaultTool::updateActions()
     action( "object_align_vertical_center" )->setEnabled(enable);
     action( "object_align_vertical_bottom" )->setEnabled(enable);
 
-    emit selectionChanged(koSelection()->count());
+    QList<KoShape *> shapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    action( "object_group" )->setEnabled( shapes.count() > 1 );
+    bool groupShape = false;
+    foreach ( KoShape * shape, shapes ) {
+        if ( dynamic_cast<KoShapeGroup *>( shape ) ) {
+            groupShape = true;
+            break;
+        }
+    }
+    action( "object_ungroup" )->setEnabled( groupShape );
+
+    emit selectionChanged(selection->count());
 }
 
 KoToolSelection* DefaultTool::selection()

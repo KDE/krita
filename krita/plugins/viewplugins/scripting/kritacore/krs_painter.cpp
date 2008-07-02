@@ -193,9 +193,9 @@ void Painter::paintBezierCurve(double x1, double y1, double p1, double cx1, doub
     m_painter->paintBezierCurve( KisPaintInformation(QPointF(x1,y1), p1), QPointF(cx1,cy1), QPointF(cx2,cy2), KisPaintInformation(QPointF(x2,y2), p2));
 }
 
-void Painter::paintEllipse(double x, double y, double w, double h, double pressure)
+void Painter::paintEllipse(double x, double y, double w, double h)
 {
-    m_painter->paintEllipse( x, y, w, h, pressure, 0.0, 0.0 );
+    m_painter->paintEllipse( x, y, w, h );
 }
 
 void Painter::paintPolygon(QVariantList pointsX, QVariantList pointsY)
@@ -207,9 +207,9 @@ void Painter::paintPolygon(QVariantList pointsX, QVariantList pointsY)
     m_painter->paintPolygon( createPointsVector(pointsX, pointsY) );
 }
 
-void Painter::paintRect(double x, double y, double width, double height, double pressure)
+void Painter::paintRect(double x, double y, double width, double height)
 {
-    m_painter->paintRect( x, y, width, height, pressure, 0, 0);
+    m_painter->paintRect( x, y, width, height);
 }
 
 void Painter::paintAt(double x, double y, double pressure)

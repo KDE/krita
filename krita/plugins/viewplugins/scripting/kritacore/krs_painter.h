@@ -197,7 +197,7 @@ class Painter : public QObject
          *
          * Where x, y, w, and h define the rectangle containing the ellipse.
          */
-        void paintEllipse(double x, double y, double w, double h, double pressure);
+        void paintEllipse(double x, double y, double w, double h);
 
         /**
          * This function will paint a polygon.
@@ -216,7 +216,7 @@ class Painter : public QObject
          *  - height of the rectangle
          *  - pressure
          */
-        void paintRect(double x, double y, double width, double height, double pressure);
+        void paintRect(double x, double y, double width, double height);
 
         /**
          * This function will paint at a given position.

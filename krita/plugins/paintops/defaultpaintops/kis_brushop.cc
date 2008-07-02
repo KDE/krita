@@ -102,11 +102,11 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     // the curves will get filled in when the slot gets accepted
 }
 
-void KisBrushOpSettings::slotCustomCurves() 
+void KisBrushOpSettings::slotCustomCurves()
 {
 
     if (m_curveControlWidget->exec() == KDialog::Accepted) {
-    
+
         m_customSize = m_curveControl->sizeCheckbox->isChecked();
         m_customOpacity = m_curveControl->opacityCheckbox->isChecked();
         m_customDarken = m_curveControl->darkenCheckbox->isChecked();
@@ -185,7 +185,7 @@ void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     kpc.setProperty("CustomSize", m_customSize);
     kpc.setProperty("CustomOpacity", m_customOpacity);
     kpc.setProperty("CustomDarken", m_customDarken);
-    
+
     for(int i = 0; i < 256; i++)
     {
         if( m_customSize )
@@ -195,7 +195,7 @@ void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
         if( m_customDarken )
             kpc.setProperty( QString("DarkenCurve%0").arg(i), m_darkenCurve[i] );
     }
-    
+
     QDomElement paramsElt = doc.createElement( "Params" );
     rootElt.appendChild( paramsElt );
     kpc.toXML( doc, paramsElt);
@@ -313,7 +313,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     quint8 origOpacity = painter()->opacity();
     KoColor origColor = painter()->paintColor();
-    
+
     if (m_pressureOpacity) {
         if (!m_customOpacity)
             painter()->setOpacity((qint8)(origOpacity * info.pressure()));
@@ -336,10 +336,8 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         delete transfo;
     }
 
-    painter()->setPressure(adjustedInfo.pressure());
-
     double scale = KisPaintOp::scaleForPressure( adjustedInfo.pressure() );
-    
+
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0),
                           brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());

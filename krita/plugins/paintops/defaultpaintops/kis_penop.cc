@@ -47,7 +47,7 @@ KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings, KisP
 {
     Q_UNUSED( image );
     Q_UNUSED( settings );
-    
+
     KisPaintOp * op = new KisPenOp(painter);
     Q_CHECK_PTR(op);
     return op;
@@ -93,7 +93,6 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, scale, 0.0, info);
     }
 
-    painter()->setPressure(info.pressure());
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 

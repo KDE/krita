@@ -159,7 +159,7 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         m_painter->setOpacity(m_opacity);
         m_painter->setCompositeOp(m_compositeOp);
 
-        m_painter->paintEllipse(QRectF(m_dragStart, m_dragEnd), PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
+        m_painter->paintEllipse(QRectF(m_dragStart, m_dragEnd));
         QRegion bound = m_painter->dirtyRegion();
         device->setDirty( bound );
         notifyModified();

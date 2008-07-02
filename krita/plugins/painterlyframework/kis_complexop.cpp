@@ -103,11 +103,11 @@ KisComplexOpSettings::KisComplexOpSettings(QWidget *parent)
     // the curves will get filled in when the slot gets accepted
 }
 
-void KisComplexOpSettings::slotCustomCurves() 
+void KisComplexOpSettings::slotCustomCurves()
 {
 
     if (m_curveControlWidget->exec() == KDialog::Accepted) {
-    
+
         m_customSize = m_curveControl->sizeCheckbox->isChecked();
         m_customOpacity = m_curveControl->opacityCheckbox->isChecked();
         m_customDarken = m_curveControl->darkenCheckbox->isChecked();
@@ -186,7 +186,7 @@ void KisComplexOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     kpc.setProperty("CustomSize", m_customSize);
     kpc.setProperty("CustomOpacity", m_customOpacity);
     kpc.setProperty("CustomDarken", m_customDarken);
-    
+
     for(int i = 0; i < 256; i++)
     {
         if( m_customSize )
@@ -196,7 +196,7 @@ void KisComplexOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
         if( m_customDarken )
             kpc.setProperty( QString("DarkenCurve%0").arg(i), m_darkenCurve[i] );
     }
-    
+
     QDomElement paramsElt = doc.createElement( "Params" );
     rootElt.appendChild( paramsElt );
     kpc.toXML( doc, paramsElt);
@@ -337,10 +337,8 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
         delete transfo;
     }
 
-    painter()->setPressure(adjustedInfo.pressure());
-
     double scale = KisPaintOp::scaleForPressure( adjustedInfo.pressure() );
-    
+
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0),
                           brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
@@ -371,7 +369,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP canvas = new KisPaintDevice(cs);
     KisPainter p(canvas);
     p.bitBlt(sx,sy,COMPOSITE_COPY,device,OPACITY_OPAQUE,dstRect.x(),dstRect.y(),sw,sh);
-    
+
     int count = cs->channelCount();
     KisRectIterator cit = canvas->createRectIterator(sx,sy,sw,sh);
     KisRectIterator dit = dab->createRectIterator(sx,sy,sw,sh);

@@ -235,17 +235,15 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    painter()->setPressure(info.pressure());
-
     qint32 maskWidth = brush->maskWidth(scale, 0.0);
     qint32 maskHeight = brush->maskHeight(scale, 0.0);
 
     m_tmpDevice->clear();
 
     // Filter the paint device
-    filter->process( KisConstProcessingInformation( source(), QPoint(x,y)), 
+    filter->process( KisConstProcessingInformation( source(), QPoint(x,y)),
 		     KisProcessingInformation(m_tmpDevice, QPoint(0,0) ),
-		     QSize(maskWidth, maskHeight), 
+		     QSize(maskWidth, maskHeight),
 		     m_settings->filterConfig(), 0 );
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)

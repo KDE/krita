@@ -180,8 +180,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
                 painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
-                painter.paintEllipse(QRectF(m_startPos, m_endPos), PRESSURE_DEFAULT/*e->pressure()*/,
-                                     e->xTilt(), e->yTilt());
+                painter.paintEllipse(QRectF(m_startPos, m_endPos));
 
                 QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
                 m_canvas->addCommand(cmd);

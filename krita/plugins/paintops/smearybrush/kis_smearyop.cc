@@ -132,8 +132,6 @@ void KisSmearyOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "smeary dab"));
     Q_CHECK_PTR(dab);
 
-    painter()->setPressure(info.pressure());
-
     // Compute the position of the tufts. The tufts are arranged in a line
     // perpendicular to the motion of the brush, i.e, the straight line between
     // the current position and the previous position.

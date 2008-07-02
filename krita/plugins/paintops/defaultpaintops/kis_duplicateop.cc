@@ -226,8 +226,6 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.y(), &y, &yFraction);
     xFraction = yFraction = 0.0;
 
-    painter()->setPressure(info.pressure());
-
     QPointF srcPointF = pt - m_settings->offset();
     QPoint srcPoint = QPoint(x - static_cast<qint32>(m_settings->offset().x()),
                              y - static_cast<qint32>(m_settings->offset().y()));
@@ -398,7 +396,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 //     copySelection.end();
 
     brush->mask( m_srcdev, scale, scale, 0.0, info, xFraction, yFraction);
-    
+
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 

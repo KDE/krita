@@ -89,11 +89,9 @@ struct KisPainter::Private {
     QPointF duplicateOffset;
     quint8 opacity;
     KisPaintOp * paintOp;
-    double pressure;
     qint32 pixelSize;
     const KoColorSpace * colorSpace;
     KoColorProfile *  profile;
-    KisPaintDeviceSP dab;
     const KoCompositeOp * compositeOp;
     QBitArray channelFlags;
     bool useBoundingDirtyRect;
@@ -131,11 +129,9 @@ void KisPainter::init()
     d->brush = 0;
     d->pattern= 0;
     d->opacity = OPACITY_OPAQUE;
-    d->dab = 0;
     d->sourceLayer = 0;
     d->fillStyle = FillStyleNone;
     d->strokeStyle = StrokeStyleBrush;
-    d->pressure = PRESSURE_MIN;
     d->antiAliasPolygonFill = true;
     d->bounds = QRect();
     d->progressUpdater = 0;
@@ -577,10 +573,7 @@ double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
     return d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, savedDist);
 }
 
-void KisPainter::paintRect(const QRectF &rect,
-                           const double /*pressure*/,
-                           const double /*xTilt*/,
-                           const double /*yTilt*/)
+void KisPainter::paintRect(const QRectF &rect)
 {
     QRectF normalizedRect = rect.normalized();
 
@@ -597,18 +590,12 @@ void KisPainter::paintRect(const QRectF &rect,
 void KisPainter::paintRect(const double x,
                            const double y,
                            const double w,
-                           const double h,
-                           const double pressure,
-                           const double xTilt,
-                           const double yTilt)
+                           const double h)
 {
-    paintRect(QRectF(x, y, w, h), pressure, xTilt, yTilt);
+    paintRect(QRectF(x, y, w, h));
 }
 
-void KisPainter::paintEllipse(const QRectF &rect,
-                              const double /*pressure*/,
-                              const double /*xTilt*/,
-                              const double /*yTilt*/)
+void KisPainter::paintEllipse(const QRectF &rect)
 {
     QRectF r = rect.normalized();
 
@@ -652,12 +639,9 @@ void KisPainter::paintEllipse(const QRectF &rect,
 void KisPainter::paintEllipse(const double x,
                               const double y,
                               const double w,
-                              const double h,
-                              const double pressure,
-                              const double xTilt,
-                              const double yTilt)
+                              const double h)
 {
-    paintEllipse(QRectF(x, y, w, h), pressure, xTilt, yTilt);
+    paintEllipse(QRectF(x, y, w, h));
 }
 
 void KisPainter::paintAt(const KisPaintInformation& pi)
@@ -918,16 +902,10 @@ KisPainter::StrokeStyle KisPainter::strokeStyle() const
 void KisPainter::setOpacity(quint8 opacity) { d->opacity = opacity; }
 quint8 KisPainter::opacity() const { return d->opacity; }
 
-void KisPainter::setPressure(double pressure) { d->pressure = pressure; }
-double KisPainter::pressure() { return d->pressure; }
-
 void KisPainter::setBounds( const QRect & bounds ) { d->bounds = bounds;  }
 QRect KisPainter::bounds() { return d->bounds;  }
 
 KisPaintOp * KisPainter::paintOp() const { return d->paintOp; }
-
-void KisPainter::setDab(KisPaintDeviceSP dab) { d->dab = dab; }
-KisPaintDeviceSP KisPainter::dab() const { return d->dab; }
 
 void KisPainter::setCompositeOp(const KoCompositeOp * op) { d->compositeOp = op; }
 const KoCompositeOp * KisPainter::compositeOp() { return d->compositeOp; }

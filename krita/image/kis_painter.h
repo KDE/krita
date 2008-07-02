@@ -336,20 +336,12 @@ public:
 
     /**
      * Paint a rectangle.
-     *
-     * XXX: port to make use of KisPaintInformation -- pressure and tilt is not actually used here.
-     *
      * @param rect the rectangle to paint.
      */
-    void paintRect(const QRectF &rect,
-                   const double pressure,
-                   const double xTilt,
-                   const double yTilt);
+    void paintRect(const QRectF &rect);
 
     /**
      * Paint a rectangle.
-     *
-     * XXX: port to make use of KisPaintInformation -- pressure and tilt is not actually used here.
      *
      * @param x x coordinate of the top-left corner
      * @param y y coordinate of the top-left corner
@@ -359,27 +351,17 @@ public:
     void paintRect(const double x,
                    const double y,
                    const double w,
-                   const double h,
-                   const double pressure,
-                   const double xTilt,
-                   const double yTilt);
+                   const double h);
 
     /**
      * Paint the ellipse that fills the given rectangle.
-     *
-     * XXX: port to make use of KisPaintInformation -- pressure and tilt is not actually used here.
      *
      * @param rect the rectangle containing the ellipse to paint.
      */
-    void paintEllipse(const QRectF &rect,
-                      const double pressure,
-                      const double xTilt,
-                      const double yTilt);
+    void paintEllipse(const QRectF &rect);
 
     /**
      * Paint the ellipse that fills the given rectangle.
-     *
-     * XXX: port to make use of KisPaintInformation -- pressure and tilt is not actually used here.
      *
      * @param x x coordinate of the top-left corner
      * @param y y coordinate of the top-left corner
@@ -389,10 +371,7 @@ public:
     void paintEllipse(const double x,
                       const double y,
                       const double w,
-                      const double h,
-                      const double pressure,
-                      const double xTilt,
-                      const double yTilt);
+                      const double h);
 
     /**
      * Paint the polygon with the points given in points. It automatically closes the polygon
@@ -500,7 +479,7 @@ public:
 
     /// Set the current brush stroke style
     void setStrokeStyle(StrokeStyle strokeStyle);
-    
+
     /// Returns the current brush stroke style
     StrokeStyle strokeStyle() const;
 
@@ -508,11 +487,6 @@ public:
     void setOpacity(quint8 opacity);
     /// Returns the opacity that is used in painting
     quint8 opacity() const;
-
-    /// Sets the current pressure for things that like to use this
-    void setPressure(double pressure);
-    /// Returns the current pressure
-    double pressure();
 
     /// Sets the bounds of the painter area; if not set, the painter
     /// will happily paint where you ask it, making the paint device
@@ -528,11 +502,6 @@ public:
     void setPaintOp(KisPaintOp * paintOp);
     /// Returns the current paint operation
     KisPaintOp * paintOp() const;
-
-    /// Set a current 'dab'. This usually is a paint device containing a rendered brush
-    void setDab(KisPaintDeviceSP dab);
-    /// Get the currently set dab
-    KisPaintDeviceSP dab() const;
 
     /// Set the composite op for this painter
     void setCompositeOp(const KoCompositeOp * op);

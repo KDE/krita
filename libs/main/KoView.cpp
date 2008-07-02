@@ -751,6 +751,18 @@ QDockWidget *KoView::createDockWidget(KoDockFactory* factory)
     return shell() ? shell()->createDockWidget(factory) : 0;
 }
 
+void KoView::removeDockWidget(QDockWidget *dock)
+{
+    if (shell())
+        shell()->removeDockWidget(dock);
+}
+
+void KoView::restoreDockWidget(QDockWidget *dock)
+{
+    if (shell())
+        shell()->restoreDockWidget(dock);
+}
+
 QPoint KoView::applyViewTransformations( const QPoint& p ) const
 {
   return QPoint( qRound( p.x() * zoom() ), qRound( p.y() * zoom() ) );

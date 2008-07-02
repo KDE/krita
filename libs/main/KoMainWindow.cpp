@@ -474,6 +474,8 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
 
+  emit restoringDone();
+
   oldRootViews.setAutoDelete( true );
   oldRootViews.clear();
 

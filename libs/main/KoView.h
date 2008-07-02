@@ -362,6 +362,22 @@ public:
      */
     QDockWidget *createDockWidget(KoDockFactory* factory);
 
+    /**
+     * Programatically closes (but doesn't delete) a dockwidget if the mainwindow is a
+     * KoMainWindow by calling KoMainWindow::removeDockWidget()
+     *
+     * @param dock the docker that you want to close
+     */
+    void removeDockWidget(QDockWidget *dock);
+
+    /**
+     * Programatically restore a (previously removed) dockwidget if the mainwindow is a
+     * KoMainWindow by calling KoMainWindow::restoreDockWidget()
+     *
+     * @param dock the docker that you want to close
+     */
+    void restoreDockWidget(QDockWidget *dock);
+
    /**
     * Check to see if the view is currently in the middle of an operation which means
     * that there will be no screen refreshes until a signal from the document hits

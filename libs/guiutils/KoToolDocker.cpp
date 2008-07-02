@@ -27,19 +27,41 @@ class KoToolDocker::Private {
 public:
     Private() : currentWidget(0) {}
     QWidget *currentWidget;
+    QWidget *minimalWidget; //used to force the docker to a minimal size
 };
 
 
 KoToolDocker::KoToolDocker(QWidget *parent)
-    : QDockWidget(i18n("Tool Options"), parent),
+    : QDockWidget("Tool Options initial name - never seen", parent),
     d( new Private() )
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
-
+    d->currentWidget = 0;
+    d->minimalWidget = new QWidget();
+    d->minimalWidget->setMaximumSize(0,0);
+    setWidget(d->minimalWidget);
+    d->minimalWidget->show();
 }
 
 KoToolDocker::~KoToolDocker() {
     delete d;
+}
+
+bool KoToolDocker::hasOptionWidget()
+{
+    return  d->currentWidget != 0;
+}
+
+void KoToolDocker::removeOptionWidget()
+{
+    if(d->currentWidget) {
+        d->currentWidget->hide();
+        d->currentWidget->setParent(0);
+        d->currentWidget->resize(0,0);
+    }
+    setWidget(d->minimalWidget);
+    d->minimalWidget->show();
+    d->currentWidget = 0;
 }
 
 void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
@@ -48,6 +70,7 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
     if(d->currentWidget) {
         d->currentWidget->hide();
         d->currentWidget->setParent(0);
+        d->currentWidget->resize(0,0);
     }
     d->currentWidget = optionWidget;
     setWidget(optionWidget);

@@ -40,6 +40,9 @@ public slots:
      */
     void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap);
 
+    void removeUnusedOptionWidgets();
+
+
 private:
     class Private;
     Private * const d;

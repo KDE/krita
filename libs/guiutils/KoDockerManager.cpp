@@ -24,6 +24,9 @@
 #include <KoView.h>
 #include <KoToolDockerFactory.h>
 #include <KoToolDocker.h>
+#include <KoMainWindow.h>
+
+#include <QAction>
 
 class KoDockerManager::Private {
 public:
@@ -32,19 +35,31 @@ public:
     KoToolDocker* toolDocker[10];
 };
 
-
+#define NUMDOCKERS 3
 KoDockerManager::KoDockerManager(KoView *view)
     :  d( new Private() )
 {
     d->view = view;
     KoToolDockerFactory toolDockerFactory;
-    d->toolDocker[0] = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
-    d->toolDocker[1] = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
+    for (int i=0; i < NUMDOCKERS; i++) {
+        d->toolDocker[i] = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
+    }
+    connect(view->shell(), SIGNAL(restoringDone()), this, SLOT(removeUnusedOptionWidgets()));
+
 }
 
 KoDockerManager::~KoDockerManager()
 {
     delete d;
+}
+
+void KoDockerManager::removeUnusedOptionWidgets()
+{
+    for (int i=0; i < NUMDOCKERS; i++) {
+        if (!d->toolDocker[i]->hasOptionWidget()) {
+            d->view->removeDockWidget(d->toolDocker[i]);
+        }
+    }
 }
 
 void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap)
@@ -53,13 +68,19 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWi
     QMapIterator<QString, QWidget *> i(optionWidgetMap);
     while (i.hasNext()) {
         i.next();
+        d->toolDocker[count]->removeOptionWidget();
         d->toolDocker[count]->newOptionWidget( i.value() );
         d->toolDocker[count]->setWindowTitle( i.key() );
-        d->toolDocker[count]->show();
+        d->view->restoreDockWidget(d->toolDocker[count]);
+        d->toolDocker[count]->toggleViewAction()->setVisible(true);
         count++;
     }
-    while(count<2)
-        d->toolDocker[count++]->hide();
+    while(count < NUMDOCKERS) {
+        d->toolDocker[count]->removeOptionWidget();
+        d->toolDocker[count]->toggleViewAction()->setVisible(false);
+        d->view->removeDockWidget(d->toolDocker[count]);
+        count++;
+    }
 }
 
 #include "KoDockerManager.moc"

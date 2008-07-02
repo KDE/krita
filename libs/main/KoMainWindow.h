@@ -171,6 +171,9 @@ signals:
     void documentSaved();
     /// This signals is emmitted before the save dialog is shown
     void saveDialogShown();
+    
+    /// This signal is emitted right after the docker states have been succefully restored from config
+    void restoringDone();
 
 public slots:
 

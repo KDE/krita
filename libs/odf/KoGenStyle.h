@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@ public:
            StyleAuto,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element
            StyleList,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
            StyleAutoList,               ///< text:list-style as in odf 14.10 List Style
+           StyleSectionAuto,            ///< style:style with style:section-properties as in odf 14.8.3 Section Styles
            StyleNumericNumber,          ///< number:number-style as in odf 14.7.1 Number Style
            StyleNumericDate,            ///< number:date-style as in odf 14.7.4 Date Style
            StyleNumericTime,            ///< number:time-style as in odf 14.7.5 Time Style

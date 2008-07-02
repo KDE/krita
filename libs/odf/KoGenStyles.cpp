@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -62,6 +62,7 @@ static const struct {
     { KoGenStyle::StyleAutoTableColumn, "style:style", "style:table-column-properties", false  },
     { KoGenStyle::StyleAutoTableRow, "style:style", "style:table-row-properties", false  },
     { KoGenStyle::StyleAutoTableCell, "style:style", "style:table-cell-properties", false  },
+    { KoGenStyle::StyleSectionAuto, "style:style", "style:section-properties", false  },
     { KoGenStyle::StylePageLayout, "style:page-layout", "style:page-layout-properties", false  },
     { KoGenStyle::StyleAutoList, "text:list-style", 0, false  },
     { KoGenStyle::StyleNumericNumber, "number:number-style", 0, false  },

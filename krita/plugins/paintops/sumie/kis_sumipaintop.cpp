@@ -40,7 +40,7 @@
 
 #include "kis_datamanager.h"
 
-#include "stroke.h"
+#include "lines.h"
 
 KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
@@ -72,46 +72,56 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
 
-    qint32 x = (qint32)info.pos().x();
-    qint32 y = (qint32)info.pos().y();
 
-	dbgPlugins << "X:" << x << endl;
-	dbgPlugins << "Y:" << y << endl;
 
-	QRect layerRect = m_image->bounds();
+//	QRect layerRect = m_image->bounds();
 //	int w = layerRect.width();
-	c = Qt::black;    
+//	c = Qt::black;    
 /*	KisRandomAccessor accessor = dab->createRandomAccessor(x, y);
 	quint8 *pixel = accessor.rawData();
 	accessor.moveTo(x,y);
 	dab->colorSpace()->fromQColor(c, pixel);*/
 
     if ( newStrokeFlag ) {
-		stroke.x1 = info.pos().x();
+/*		stroke.x1 = info.pos().x();
 		stroke.y1 = info.pos().y();
         stroke.x2 = stroke.x1;
         stroke.y2 = stroke.y1;
 		KoColor color = painter()->paintColor();
 		stroke.setColor(color);
-		dbgKrita << "Everything Ok?" << flush << endl;
+		dbgKrita << "Everything Ok?" << flush << endl;*/
         newStrokeFlag = false;
     } else
 	{	
-        stroke.x1 = stroke.x2;
+/*		stroke.x1 = stroke.x2;
         stroke.y1 = stroke.y2;
 		stroke.x2 = info.pos().x();
-		stroke.y2 = info.pos().y();
+		stroke.y2 = info.pos().y();*/
 
-		dab = cachedDab( );
-        dab->clear();
-		stroke.draw(dab);
-		QRect rc = dab->extent();
-	    painter()->bitBlt( rc.topLeft(), dab, rc );
+	dab = cachedDab( );
+	dab->clear();
+
+	float x0,y0,x1,y1;
+	x0 = info.pos().x()+info.movement().x();
+	y0 = info.pos().y()+info.movement().y();
+
+	x1 = info.pos().x();
+	y1 = info.pos().y();
+
+	dbgPlugins << "mov x: " << info.movement().x() << endl;
+	dbgPlugins << "mov y: " << info.movement().y() << endl;
+	
+	dbgPlugins << "pos x:" << info.pos().x() << endl;
+	dbgPlugins << "pos y:" << info.pos().y() << endl;
+	
+	Lines lines;
+	lines.drawGSLine(dab,x0,y0,x1,y1,1,1, painter()->paintColor() );
+
+	QRect rc = dab->extent();
+	painter()->bitBlt( rc.topLeft(), dab, rc );
 
 	}
 
-/*    QRect rc = dab->extent();
-    painter()->bitBlt( rc.topLeft(), dab, rc );*/
     //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
 }
 

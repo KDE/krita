@@ -1,7 +1,7 @@
 set(kritasumipaintop_PART_SRCS
 	sumipaintop_plugin.cpp
 	kis_sumipaintop.cpp
-	stroke.cpp
+	lines.cpp
     )
 
 #kde4_add_ui_files(kritadefaultpaintops_PART_SRCS wdgbrushcurves.ui wdgduplicateop.ui )

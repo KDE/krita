@@ -1,9 +1,6 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,7 +27,7 @@
 #include <kis_paintop.h>
 #include <kis_types.h>
 
-#include "stroke.h"
+#include "lines.h"
 
 
 class QPointF;
@@ -67,7 +64,7 @@ private:
 	QPointF m_previousPoint;
 	KisImageSP m_image;
 	bool newStrokeFlag;
-	Stroke stroke;
+	//Stroke stroke;
 	KisPaintDeviceSP dab;
     QMutex m_mutex;
 };

@@ -167,6 +167,7 @@ quint32 matchColors(const QColor & c, enumAction action)
     return MIN_SELECTED;
 }DlgColorRange::DlgColorRange( KisView2 * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
     : super (parent)
+    , m_transaction(0)
 {
     setCaption( i18n("Color Range") );
     setButtons(  Ok | Cancel);
@@ -189,12 +190,12 @@ quint32 matchColors(const QColor & c, enumAction action)
     KisSelectionSP selection = m_view->selection();
 
     if( !selection ) {
-        // XXX_SELECTION: create a new selection here
-        //m_dev->selection()->getOrCreatePixelSelection()->clear();
+        m_view->image()->setGlobalSelection();
+        selection = m_view->selection();
     }
     m_selection = selection->getOrCreatePixelSelection();
 
-        updatePreview();
+    updatePreview();
 
     m_invert = false;
     m_mode = SELECTION_ADD;
@@ -245,12 +246,18 @@ void DlgColorRange::updatePreview()
 
 void DlgColorRange::okClicked()
 {
-    if (m_view->image()->undo()) m_view->undoAdapter()->addCommand(m_transaction);
+    if (m_view && m_view->undoAdapter() && m_transaction) {
+        m_view->undoAdapter()->addCommand(m_transaction);
+    }
     accept();
 }
 
 void DlgColorRange::cancelClicked()
 {
+    if (!m_view) return;
+    if (!m_view->image()) return;
+    if (!m_transaction) return;
+
     if (m_view->image()->undo()) m_transaction->undo();
 
     m_view->canvas()->update();

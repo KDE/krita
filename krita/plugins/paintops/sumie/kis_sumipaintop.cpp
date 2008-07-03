@@ -115,10 +115,20 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 	dbgPlugins << "pos y:" << info.pos().y() << endl;
 	
 	Lines lines;
-	lines.drawGSLine(dab,x0,y0,x1,y1,10,5, painter()->paintColor() );
+	//lines.drawGSLine(dab,x0,y0,x1,y1,10,5, painter()->paintColor() );
 	// Feel free to uncomment any line
 	//lines.drawDDALine(dab, (int)x0, (int)y0, (int)x1, (int)y1,painter()->paintColor() );
 	//lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1/*unused-width*/ ,painter()->paintColor() );
+
+	float phase = 0.0f;
+	int ix,iy;
+ 	for (float theta= phase; theta<360+phase; theta += 10 )
+        {
+            ix = (int)(100.0*cos(theta*3.14/180.0)+info.pos().x() );
+            iy = (int)(-100.0*sin(theta*3.14/180.0)+info.pos().y());
+            lines.drawWuLine(dab, ix, iy, info.pos().x(), info.pos().y(), 1, painter()->paintColor() );
+			//lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1/*unused-width*/ ,painter()->paintColor() );
+        }
 
 
 	QRect rc = dab->extent();
@@ -152,10 +162,10 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,
 	y1 = pi2.pos().y();
 		
 	Lines lines;
-	lines.drawGSLine(dab,(int)x0, (int)y0, (int)x1, (int)y1,10,5, painter()->paintColor() );
+	//lines.drawGSLine(dab,(int)x0, (int)y0, (int)x1, (int)y1,10,5, painter()->paintColor() );
 	// Feel free to uncomment any line
 	//lines.drawDDALine(dab, (int)x0, (int)y0, (int)x1, (int)y1,painter()->paintColor() );
-	//lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1/*unused-width*/ ,painter()->paintColor() );
+	lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1/*unused-width*/ ,painter()->paintColor() );
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );

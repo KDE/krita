@@ -33,6 +33,7 @@ static const struct {
     bool m_drawElement;
 } styleData[] = {
     { KoGenStyle::StyleUser, "style:style", "style:paragraph-properties", false  },
+    { KoGenStyle::StyleText, "style:style", "style:text-properties", false  },
     { KoGenStyle::StyleTableColumn, "style:style", "style:table-column-properties", false  },
     { KoGenStyle::StyleTableRow, "style:style", "style:table-row-properties", false  },
     { KoGenStyle::StyleTableCell, "style:style", "style:table-cell-properties", false  },
@@ -55,6 +56,7 @@ static const struct {
     bool m_drawElement;
 } autoStyleData[] = {
     { KoGenStyle::StyleAuto, "style:style", "style:paragraph-properties", false  },
+    { KoGenStyle::StyleTextAuto, "style:style", "style:text-properties", false  },
     { KoGenStyle::StyleGraphicAuto, "style:style", "style:graphic-properties", false  },
     { KoGenStyle::StylePresentationAuto, "style:style", "style:graphic-properties", false  },
     { KoGenStyle::StyleDrawingPage, "style:style", "style:drawing-page-properties", false  },

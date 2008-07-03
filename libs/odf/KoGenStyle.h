@@ -47,6 +47,8 @@ public:
            StylePageLayout,             ///< style:page-layout as in odf 14.3 Page Layout
            StyleUser,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:styles)
            StyleAuto,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element
+           StyleText,                   ///< style:style with style:text-properties as in odf 14.8.1 Text Styles (office:styles)
+           StyleTextAuto,               ///< style:style with style:text-properties as in odf 14.8.1 Text Styles
            StyleList,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
            StyleAutoList,               ///< text:list-style as in odf 14.10 List Style
            StyleSectionAuto,            ///< style:style with style:section-properties as in odf 14.8.3 Section Styles

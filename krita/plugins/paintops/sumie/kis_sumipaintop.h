@@ -58,6 +58,8 @@ public:
     virtual bool incremental() { return true; }
 
     void paintAt(const KisPaintInformation& info);
+	double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
+
 
 private:
     QColor c;

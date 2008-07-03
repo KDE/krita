@@ -27,9 +27,13 @@ class Lines{
 public:
 	void drawLine(int x0,int y0,int x1,int y1,KoColor color);
 	void drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, int w1, int w2, const KoColor &color);
+	void drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const KoColor &color);
+	void drawWuLine(KisPaintDeviceSP dev, float x1, float y1, float x2, float y2, float width,const KoColor &color);
 
 private:
 	int gsfilter(float val);
+	float inline frac(float value);
+	float inline invertFrac(float value);
 	
 };
 

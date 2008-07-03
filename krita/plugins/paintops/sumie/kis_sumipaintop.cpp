@@ -115,7 +115,11 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 	dbgPlugins << "pos y:" << info.pos().y() << endl;
 	
 	Lines lines;
-	lines.drawGSLine(dab,x0,y0,x1,y1,1,1, painter()->paintColor() );
+	lines.drawGSLine(dab,x0,y0,x1,y1,10,5, painter()->paintColor() );
+	// Feel free to uncomment any line
+	//lines.drawDDALine(dab, (int)x0, (int)y0, (int)x1, (int)y1,painter()->paintColor() );
+	//lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1/*unused-width*/ ,painter()->paintColor() );
+
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );
@@ -125,3 +129,36 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
 }
 
+
+double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,
+                             const KisPaintInformation &pi2,
+                             double savedDist )
+{
+	Q_UNUSED(savedDist);
+
+   if (!painter()) return -1;
+    // read, write pixel data
+    KisPaintDeviceSP device = painter()->device();
+    if (!device) return -1;
+
+	dab = cachedDab( );
+	dab->clear();
+
+	float x0,y0,x1,y1;
+	x0 = pi1.pos().x();
+	y0 = pi1.pos().y();
+
+	x1 = pi2.pos().x();
+	y1 = pi2.pos().y();
+		
+	Lines lines;
+	lines.drawGSLine(dab,(int)x0, (int)y0, (int)x1, (int)y1,10,5, painter()->paintColor() );
+	// Feel free to uncomment any line
+	//lines.drawDDALine(dab, (int)x0, (int)y0, (int)x1, (int)y1,painter()->paintColor() );
+	//lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1/*unused-width*/ ,painter()->paintColor() );
+
+	QRect rc = dab->extent();
+	painter()->bitBlt( rc.topLeft(), dab, rc );
+
+    return 0;
+}

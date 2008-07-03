@@ -16,8 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "lines.h"
+
 #include <KoColor.h>
 #include "kis_paint_device.h"
+
+#include <cmath>
 
 int Lines::gsfilter(float val){
 
@@ -736,8 +739,179 @@ void Lines::drawLine(int x0,int y0,int x1,int y1,KoColor color){
 	Q_UNUSED(y0);
 	Q_UNUSED(x1);
 	Q_UNUSED(y1);
+	Q_UNUSED(color);
 }
 
 
+void Lines::drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const KoColor &color){
+	Q_ASSERT(image);
+// Width and height of the line
+	int xd = (x2 - x1);
+	int yd = (y2 - y1);
 
+int x;
+int y;
+float fx = (x = x1);
+float fy = (y = y1);
+float m = (float)yd/(float)xd;
+
+if ( fabs(m) > 1 )
+{
+	int incr;
+	if ( yd > 0 )
+	{
+		m = 1.0f/m;
+		incr = 1;
+	}
+	else
+	{
+		m = -1.0f/m;
+		incr = -1;
+	}
+	while ( y!=y2 )
+	{
+		fx = fx + m;
+		y = y + incr;
+		x = (int)(fx + 0.5f);
+		image->setPixel(x,y,color);
+	}
+}else
+{
+	int incr;
+	if ( xd > 0 )
+	{
+		incr = 1;
+	}else
+	{
+		incr = -1;
+		m = -m;
+	}
+	while ( x!=x2 )
+	{
+		fy= fy + m;
+		x = x + incr;
+		y = (int)(fy + 0.5f);
+		image->setPixel ( x,y,color );
+	}
+}
+
+}
+
+float inline Lines::frac(float value)
+{
+	float tmp = 0;
+	return modff(value , &tmp);
+}
+
+float inline Lines::invertFrac(float value){
+	float tmp = 0;
+	return 1.0f - modff(value , &tmp);
+}
+
+
+void Lines::drawWuLine(KisPaintDeviceSP dev, float x1, float y1, float x2, float y2, float width,const KoColor &color){
+    Q_UNUSED(width);
+
+// I liked this approach: http://freespace.virgin.net/hugo.elias/graphics/x_wuline.htm
+	KoColor lineColor(color);
+
+float grad, xd, yd, 
+	xgap, xend, yend, yf,
+	brightness1, brightness2;
+
+int ix1, ix2, iy1, iy2;
+
+int c1, c2;
+
+const float MaxPixelValue = 255.0f;
+
+// Width and height of the line
+	xd = (x2 - x1);
+	yd = (y2 - y1);
+
+	// horizontal or vertical lines
+/*	if (fabs(xd) < fabs(yd))
+	{
+		float tmp;
+		tmp=x1;x1=y1;y1=tmp;
+		tmp=x2;x2=y2;y2=tmp;
+		xd = (x2 - x1);
+		yd = (y2 - y1);
+	}*/
+
+	// line have to be paint from left to right
+	if (x1 > x2)
+	{
+		float tmp;
+		tmp=x1;x1=x2;x2=tmp;
+		tmp=y1;y1=y2;y2=tmp;
+		xd = (x2 - x1);
+		yd = (y2 - y1);
+	}
+
+	grad = yd/xd;
+
+	// nearest X,Y interger coordinates
+	xend = round(x1+0.5f);
+	yend = y1 + grad * (xend - x1);
+
+	xgap = invertFrac(x1 + 0.5f);
+
+	ix1 = static_cast<int>(xend);
+	iy1 = static_cast<int>(yend);
+
+	// calc the intensity of the other end point pixel pair.
+	brightness1 = invertFrac(yend) * xgap;
+	brightness2 =       frac(yend) * xgap; 
+
+	c1 = (int)(brightness1 * MaxPixelValue);
+	c2 = (int)(brightness2 * MaxPixelValue);
+
+	lineColor.setOpacity(c1);
+	dev->setPixel(ix1, iy1, lineColor );
+
+	lineColor.setOpacity(c2);
+	dev->setPixel(ix1, iy1+1, lineColor );
+	
+	// calc first Y-intersection for main loop
+	yf = yend+grad;
+
+	xend = trunc(x2+0.5f);
+	yend = y2 + grad * (xend - x2);
+
+	xgap = invertFrac(x2-0.5f);
+
+	ix2 = static_cast<int>(xend);
+	iy2 = static_cast<int>(yend);
+
+	brightness1 = invertFrac(yend) * xgap; 
+	brightness2 =    frac(yend) * xgap; 
+
+	c1 = (int)(brightness1 * MaxPixelValue);
+	c2 = (int)(brightness2 * MaxPixelValue);
+
+	lineColor.setOpacity(c1);
+    dev->setPixel( ix2,iy2, lineColor );
+
+	lineColor.setOpacity(c1);
+	dev->setPixel( ix2,iy2+1, lineColor );
+
+   // main loop 
+   for (int x = ix1+1; x <= ix2-1; x++) {
+		brightness1 = invertFrac(yf);
+		brightness2 =    frac(yf);
+		c1 = (int)(brightness1 * MaxPixelValue);
+		c2 = (int)(brightness2 * MaxPixelValue);
+
+		//cout << c1 << " " << c2 << endl;
+
+		lineColor.setOpacity(c1);
+		dev->setPixel(x,int(yf),lineColor );
+		
+ 		lineColor.setOpacity(c2);
+		dev->setPixel(x,int(yf)+1, lineColor );
+        yf = yf + grad;
+    }
+
+}
 

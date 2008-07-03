@@ -1599,9 +1599,8 @@ void TextTool::insertSpecialCharacter()
 
 void TextTool::selectFont()
 {
-    FontDia *fontDlg = new FontDia( m_textCursor.charFormat());
+    FontDia *fontDlg = new FontDia(m_textCursor);
     fontDlg->exec();
-    fontDlg->style().applyStyle(&m_textCursor);
     delete fontDlg;
 }
 

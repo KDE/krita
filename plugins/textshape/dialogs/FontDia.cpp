@@ -29,9 +29,10 @@
 #include <kvbox.h>
 #include <kfontdialog.h>
 
-FontDia::FontDia( const QTextCharFormat &format, /*KSpell2::Loader::Ptr loader,*/ QWidget* parent)
+FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
     : KDialog(parent),
-    m_style(format)
+      m_cursor(cursor),
+      m_style(cursor.charFormat())
 {
     setCaption(i18n("Select Font") );
     setModal( true );
@@ -45,7 +46,7 @@ FontDia::FontDia( const QTextCharFormat &format, /*KSpell2::Loader::Ptr loader,*
 
     // Font tab
     fontTab = new FontTab( this );
-    fontTab->setFont( format.font() );
+    fontTab->setFont(m_style.font());
     fontTabWidget->addTab( fontTab, i18n( "Font" ) );
 
 /*  connect( fontTab, SIGNAL( familyChanged() ), this, SLOT( slotFontFamilyChanged() ) );
@@ -98,6 +99,7 @@ void FontDia::slotApply()
     m_highlightingTab->save();
     m_decorationTab->save();
     m_layoutTab->save();
+    m_style.applyStyle(&m_cursor);
 }
 
 void FontDia::slotOk()

@@ -24,7 +24,7 @@
 #include <kdialog.h>
 #include <KoCharacterStyle.h>
 
-#include <QTextCharFormat>
+#include <QTextCursor>
 
 class FontTab;
 class CharacterHighlighting;
@@ -36,10 +36,7 @@ class FontDia : public KDialog
 {
     Q_OBJECT
 public:
-
-    /// If your application supports spell-checking, pass here the KSpell2 Loader
-    /// so that the font dialog can show which languages are supported for spellchecking.
-    explicit FontDia( const QTextCharFormat &format/* KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/, QWidget* parent = 0);
+    explicit FontDia(const QTextCursor &cursor, QWidget* parent = 0);
 
     KoCharacterStyle style() const { return m_style; }
 
@@ -54,6 +51,7 @@ private:
     FontDecorations *m_decorationTab;
     FontLayoutTab *m_layoutTab;
     LanguageTab *languageTab;
+    QTextCursor m_cursor;
 
     KoCharacterStyle m_style;
 };

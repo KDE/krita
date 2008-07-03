@@ -106,10 +106,13 @@ void CharacterHighlighting::save() {
         m_style->setUnderlineColor(widget.underlineColor->color());
     }
 
-    if (widget.strikethrough->isChecked())
+    if (widget.strikethrough->isChecked()) {
         m_style->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    else
+        m_style->setStrikeOutType(KoCharacterStyle::SingleLine);
+    } else {
         m_style->setStrikeOutStyle(KoCharacterStyle::NoLineStyle);
+        m_style->setStrikeOutType(KoCharacterStyle::NoLineType);
+    }
 
     if (widget.normal->isChecked())
         m_style->setTransform(KoCharacterStyle::MixedCase);

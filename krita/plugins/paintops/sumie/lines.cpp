@@ -152,11 +152,11 @@ switch ( dir )
 {
 case 1:
 	Aa = 0;
-	Ba = 1.0/ ( 2.0 * sqrt ( dxa *dxa + dya * dya ) );
+	Ba = 1.0/ ( 2.0 * sqrt ( (double)(dxa *dxa + dya * dya) ) );
 	Ca = 2.0 * dxa * Ba;
 
 	Ab = 0;
-	Bb = 1.0/ ( 2.0 * sqrt ( dxb *dxb + dyb * dyb ) );
+	Bb = 1.0/ ( 2.0 * sqrt ( (double)(dxb *dxb + dyb * dyb) ) );
 	Cb = 2.0 * dxb * Bb;
 
 	da = 2*dya-dxa;
@@ -297,11 +297,11 @@ case 1:
 
 case 2:
 	Aa = 0;
-	Ba = 1.0/ ( 2.0 * sqrt ( dxa *dxa + dya * dya ) );
+	Ba = 1.0/ ( 2.0 * sqrt ( (double)(dxa *dxa + dya * dya) ) );
 	Ca = 2.0 * dxa * Ba;
 
 	Ab = 0;
-	Bb = 1.0/ ( 2.0 * sqrt ( dxb *dxb + dyb * dyb ) );
+	Bb = 1.0/ ( 2.0 * sqrt ( (double)(dxb *dxb + dyb * dyb) ) );
 	Cb = 2.0 * dxb * Bb;
 
 	da = dya-2*dxa;
@@ -443,11 +443,11 @@ case 2:
 
 case 3:
 	Aa = 0;
-	Ba = 1.0/ ( 2.0 * sqrt ( dxa *dxa + dya * dya ) );
+	Ba = 1.0/ ( 2.0 * sqrt ( (double)(dxa *dxa + dya * dya) ) );
 	Ca = 2.0 * dxa * Ba;
 
 	Ab = 0;
-	Bb = 1.0/ ( 2.0 * sqrt ( dxb *dxb + dyb * dyb ) );
+	Bb = 1.0/ ( 2.0 * sqrt ( (double)(dxb *dxb + dyb * dyb) ) );
 	Cb = 2.0 * dxb * Bb;
 
 	da = 2*dya+dxa;
@@ -585,11 +585,11 @@ case 3:
 
 case 4:
 	Aa = 0;
-	Ba = 1.0/ ( 2.0 * sqrt ( dxa *dxa + dya * dya ) );
+	Ba = 1.0/ ( 2.0 * sqrt ( (double)(dxa *dxa + dya * dya) ) );
 	Ca = 2.0 * dxa * Ba;
 
 	Ab = 0;
-	Bb = 1.0/ ( 2.0 * sqrt ( dxb *dxb + dyb * dyb ) );
+	Bb = 1.0/ ( 2.0 * sqrt ( (double)(dxb *dxb + dyb * dyb) ) );
 	Cb = 2.0 * dxb * Bb;
 
 	da = dya+2*dxa;

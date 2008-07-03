@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
    Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,11 +33,11 @@
 FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
     : KDialog(parent),
       m_cursor(cursor),
-      m_style(cursor.charFormat())
+      m_initialFormat(cursor.charFormat())
 {
     setCaption(i18n("Select Font") );
     setModal( true );
-    setButtons( Ok|Cancel|Default|Apply );
+    setButtons(Ok|Cancel|Reset|Apply);
     setDefaultButton( Ok );
 
     KVBox *mainWidget = new KVBox( this );
@@ -45,9 +46,8 @@ FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
     QTabWidget *fontTabWidget = new QTabWidget( mainHBox );
 
     // Font tab
-    fontTab = new FontTab( this );
-    fontTab->setFont(m_style.font());
-    fontTabWidget->addTab( fontTab, i18n( "Font" ) );
+    m_fontTab = new FontTab(this);
+    fontTabWidget->addTab(m_fontTab, i18n("Font"));
 
 /*  connect( fontTab, SIGNAL( familyChanged() ), this, SLOT( slotFontFamilyChanged() ) );
     connect( fontTab, SIGNAL( boldChanged() ), this, SLOT( slotFontBoldChanged() ) );
@@ -57,23 +57,20 @@ FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
 
     //Highlighting tab
     m_highlightingTab = new CharacterHighlighting( this );
-    m_highlightingTab->open(&m_style);
     fontTabWidget->addTab( m_highlightingTab, i18n( "Highlighting" ) );
 
     //Decoration tab
     m_decorationTab = new FontDecorations( this );
-    m_decorationTab->open(&m_style);
     fontTabWidget->addTab( m_decorationTab, i18n( "Decoration" ) );
 
     //Layout tab
     m_layoutTab = new FontLayoutTab( true, this );
-    m_layoutTab->open(&m_style);
     fontTabWidget->addTab( m_layoutTab, i18n( "Layout" ) );
 
     //Language tab
-    languageTab = new LanguageTab( /*loader,*/ this );
-    fontTabWidget->addTab( languageTab, i18n( "Language" ) );
-    connect( languageTab, SIGNAL( languageChanged() ), this, SLOT( slotLanguageChanged() ) );
+    m_languageTab = new LanguageTab(this);
+    fontTabWidget->addTab(m_languageTab, i18n("Language"));
+    connect(m_languageTab, SIGNAL(languageChanged()), this, SLOT(slotLanguageChanged()));
 
     //Related properties List View
     //relatedPropertiesListView = new K3ListView( mainHBox );
@@ -85,13 +82,13 @@ FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
 
     connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotReset() ) );
+    connect( this, SIGNAL( resetClicked() ), this, SLOT( slotReset() ) );
     slotReset();
 }
 
 void FontDia::slotApply()
 {
-    QFont font = fontTab->font();
+    QFont font = m_fontTab->font();
     m_style.setFontFamily(font.family());
     m_style.setFontPointSize(font.pointSize());
     m_style.setFontWeight(font.weight());
@@ -110,12 +107,12 @@ void FontDia::slotOk()
 
 void FontDia::slotReset()
 {
-/*
-    fontTab->setFont( m_format.font());
-    m_highlightingTab->open( m_format );
-    m_decorationTab->open( m_format );
-    m_layoutTab->open( m_format );
-*/
+    m_style.copyProperties(m_initialFormat);
+    m_fontTab->setFont(m_style.font());
+    m_highlightingTab->open(&m_style);
+    m_decorationTab->open(&m_style);
+    m_layoutTab->open(&m_style);
+    slotApply();
 }
 
 #include "FontDia.moc"

@@ -40,11 +40,17 @@ void FontDecorations::open(KoCharacterStyle *style) {
     m_textColorChanged = false;
     m_backgroundColorChanged = false;
     m_textColorReset = ! m_style->hasProperty(QTextFormat::ForegroundBrush);
-    if(!m_textColorReset)
+    if (m_textColorReset) {
+        clearTextColor();
+    } else {
         widget.textColor->setColor(m_style->foreground().color());
+    }
     m_backgroundColorReset = ! m_style->hasProperty(QTextFormat::BackgroundBrush);
-    if(!m_backgroundColorReset)
+    if (m_backgroundColorReset) {
+        clearBackgroundColor();
+    } else {
         widget.backgroundColor->setColor(m_style->background().color());
+    }
 }
 
 void FontDecorations::save() const {

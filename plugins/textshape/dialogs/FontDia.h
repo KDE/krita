@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
    Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,13 +47,14 @@ protected slots:
     void slotOk();
 
 private:
-    FontTab *fontTab;
+    FontTab *m_fontTab;
     CharacterHighlighting *m_highlightingTab;
     FontDecorations *m_decorationTab;
     FontLayoutTab *m_layoutTab;
-    LanguageTab *languageTab;
-    QTextCursor m_cursor;
+    LanguageTab *m_languageTab;
 
+    QTextCursor m_cursor;
+    QTextCharFormat m_initialFormat;
     KoCharacterStyle m_style;
 };
 

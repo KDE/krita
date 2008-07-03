@@ -96,21 +96,26 @@ KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
     d->name = style.name();
 }
 
-
 KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format)
     : QObject(0), d( new Private() )
 {
-    QMapIterator<int, QVariant> iter(format.properties());
-    while (iter.hasNext()) {
-        iter.next();
-        d->setProperty(iter.key(), iter.value());
-    }
+    copyProperties(format);
 }
 
 void KoCharacterStyle::copyProperties(const KoCharacterStyle *style) {
     d->stylesPrivate->clearAll();
     d->stylesPrivate->copyMissing(style->d->stylesPrivate);
     d->name = style->name();
+}
+
+void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
+{
+    d->stylesPrivate->clearAll();
+    QMapIterator<int, QVariant> iter(format.properties());
+    while (iter.hasNext()) {
+        iter.next();
+        d->setProperty(iter.key(), iter.value());
+    }
 }
 
 KoCharacterStyle::~KoCharacterStyle() {

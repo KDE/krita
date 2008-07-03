@@ -263,6 +263,7 @@ public:
     bool hasHyphenation() const;
 
     void copyProperties(const KoCharacterStyle *style);
+    void copyProperties(const QTextCharFormat &format);
 
 
     /// return the name of the style.

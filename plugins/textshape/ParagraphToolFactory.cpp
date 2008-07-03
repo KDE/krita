@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Florian Merz <florianmerz@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,28 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextPlugin.h"
-#include "TextToolFactory.h"
+
 #include "ParagraphToolFactory.h"
-#include "TextShapeFactory.h"
+#include "ParagraphTool.h"
+#include "TextShape.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <klocale.h>
 
-#include <kgenericfactory.h>
-
-K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<TextPlugin>( "TextShape" ) )
-
-TextPlugin::TextPlugin(QObject * parent, const QStringList &)
-    : QObject(parent)
+ParagraphToolFactory::ParagraphToolFactory( QObject *parent )
+: KoToolFactory(parent, "ParagraphToolFactory_ID", i18n("Paragraph tool"))
 {
-    KoToolRegistry::instance()->add(new TextToolFactory(parent));
-    KoToolRegistry::instance()->add(new ParagraphToolFactory(parent));
-    KoShapeRegistry::instance()->add(new TextShapeFactory(parent));
+    setToolTip(i18n("Paragraph tool"));
+    setToolType(dynamicToolType());
+    setIcon("draw-text");
+    setPriority(2);
+    setActivationShapeId(TextShape_SHAPEID);
 }
 
-#include "TextPlugin.moc"
+ParagraphToolFactory::~ParagraphToolFactory() {
+}
+
+KoTool * ParagraphToolFactory::createTool( KoCanvasBase *canvas ) {
+    return new ParagraphTool(canvas);
+}
+
+#include "ParagraphToolFactory.moc"

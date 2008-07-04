@@ -47,6 +47,8 @@ protected slots:
     void slotOk();
 
 private:
+    void initTabs();
+
     FontTab *m_fontTab;
     CharacterHighlighting *m_highlightingTab;
     FontDecorations *m_decorationTab;

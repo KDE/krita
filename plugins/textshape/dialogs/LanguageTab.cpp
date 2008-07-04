@@ -28,7 +28,6 @@
 
 #include "LanguageTab.moc"
 
-
 LanguageTab::LanguageTab( /*KSpell2::Loader::Ptr loader,*/ QWidget* parent, Qt::WFlags fl ) 
         : QWidget( parent )
 {
@@ -69,9 +68,10 @@ LanguageTab::~LanguageTab()
 {
 }
 
-QString LanguageTab::getLanguage() const
+QString LanguageTab::language() const
 {
-    Q_ASSERT( widget.languageList->currentItem() );
+    if (!widget.languageList->currentItem())
+        return QString();
 
     return KoGlobal::tagOfLanguage( widget.languageList->currentItem()->text() );
 }

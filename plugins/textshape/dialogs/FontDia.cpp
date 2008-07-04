@@ -33,7 +33,8 @@
 FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
     : KDialog(parent),
       m_cursor(cursor),
-      m_initialFormat(cursor.charFormat())
+      m_initialFormat(cursor.charFormat()),
+      m_style(m_initialFormat)
 {
     setCaption(i18n("Select Font") );
     setModal( true );
@@ -70,7 +71,6 @@ FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
     //Language tab
     m_languageTab = new LanguageTab(this);
     fontTabWidget->addTab(m_languageTab, i18n("Language"));
-    connect(m_languageTab, SIGNAL(languageChanged()), this, SLOT(slotLanguageChanged()));
 
     //Related properties List View
     //relatedPropertiesListView = new K3ListView( mainHBox );
@@ -83,7 +83,16 @@ FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
     connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect( this, SIGNAL( resetClicked() ), this, SLOT( slotReset() ) );
-    slotReset();
+    initTabs();
+}
+
+void FontDia::initTabs()
+{
+    m_fontTab->setFont(m_style.font());
+    m_highlightingTab->open(&m_style);
+    m_decorationTab->open(&m_style);
+    m_layoutTab->open(&m_style);
+    m_languageTab->setLanguage(m_style.language());
 }
 
 void FontDia::slotApply()
@@ -96,6 +105,7 @@ void FontDia::slotApply()
     m_highlightingTab->save();
     m_decorationTab->save();
     m_layoutTab->save();
+    m_style.setLanguage(m_languageTab->language());
     m_style.applyStyle(&m_cursor);
 }
 
@@ -108,11 +118,8 @@ void FontDia::slotOk()
 void FontDia::slotReset()
 {
     m_style.copyProperties(m_initialFormat);
-    m_fontTab->setFont(m_style.font());
-    m_highlightingTab->open(&m_style);
-    m_decorationTab->open(&m_style);
-    m_layoutTab->open(&m_style);
-    slotApply();
+    initTabs();
+    slotApply(); // ### Should reset() apply?
 }
 
 #include "FontDia.moc"

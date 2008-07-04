@@ -115,7 +115,6 @@ KoTextLoader::KoTextLoader( KoShapeLoadingContext & context )
 , d( new Private( context ) )
 {
     KoSharedLoadingData * sharedData = context.sharedData( KOTEXT_SHARED_LOADING_ID );
-
     if ( sharedData ) {
         d->textSharedData = dynamic_cast<KoTextSharedLoadingData *>( sharedData );
     }
@@ -176,8 +175,24 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
                 else if ( localName == "section" ) { // Temporary support (###TODO)
                     loadSection( tag, cursor );
                 }
-                else {
-                    kWarning(32500) << "unhandled text:" << localName;
+		else {
+		    KoVariable * var = KoVariableRegistry::instance()->createFromOdf( tag, d->context );
+
+		    if ( var ) {
+			KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
+			if ( layout ) {
+			    KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+			    if ( textObjectManager ) {
+				KoVariableManager *varManager = textObjectManager->variableManager();
+				if ( varManager ) {
+				    textObjectManager->insertInlineObject( cursor, var );
+				}
+			    }
+			}
+		    }
+		    else {
+			kWarning(32500) << "unhandled text:" << localName;
+		    }
                 }
             }
             else if( tag.namespaceURI() == KoXmlNS::draw ) {

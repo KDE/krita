@@ -64,8 +64,43 @@ void TOCVariable::variableMoved(const KoShape *shape, const QTextDocument *docum
 //update();
 }
 
+void TOCSourceTemplate::saveOdf( KoShapeSavingContext & context )
+{
+    KoXmlWriter *writer = &context.xmlWriter();
+    writer->startElement("text:table-of-content-entry-template");
+    writer->addAttribute("text:outline-level", m_outlineLevel);
+    // writer->addAttribute("text:style-name", "something"); // I don't remember this, sorry.
+    writer->endElement();	// text:table-of-content-entry-template
+}
+
+void TOCSource::saveOdf( KoShapeSavingContext & context )
+{
+    KoXmlWriter *writer = &context.xmlWriter();
+    writer->startElement("text:table-of-content-source");
+    writer->addAttribute("text:outline-level", m_outlineLevel);
+    writer->startElement("text:index-title-template");
+    // writer->addAttribute("text:style-name", "something"); // I don't remember this, sorry.
+    writer->addTextNode(m_titleTemplate);
+    writer->endElement();	// text:index-title-template
+    foreach ( TOCSourceTemplate tpl, m_sources )
+    {
+	tpl.saveOdf(context);
+    }
+    writer->endElement();
+}
+
 void TOCVariable::saveOdf( KoShapeSavingContext & context )
 {
+    KoXmlWriter *writer = &context.xmlWriter();
+    writer->startElement("text:table-of-content");
+    writer->addAttribute("text:protected", true);
+    source.saveOdf(context);
+    writer->startElement("text:index-body");
+    // Wonderful, store the index-body here... But what about the text:index-title thing ?
+    writer->addTextNode("Work in progress, sorry, you must refresh your table of content manually after saving it.");
+    
+    writer->endElement();	// text:index-body
+    writer->endElement();	// text:table-of-content
 }
 
 void TOCSource::buildFromDocument (const QTextDocument *source, QTextCursor *target)
@@ -117,6 +152,7 @@ bool TOCSourceTemplate::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
     if ( !m_style )
 	m_style = textSharedData->paragraphStyle(element.attributeNS( KoXmlNS::text, "style-name", ""), true);
     m_outlineLevel = element.attributeNS( KoXmlNS::text, "outline-level", "10").toInt();
+    return true;
 }
 
 bool TOCSource::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
@@ -149,6 +185,7 @@ bool TOCSource::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & c
 	    }
 	}
     }
+    return true;
 }
 
 bool TOCVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
@@ -187,13 +224,6 @@ bool TOCVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
 	    indexLoader.loadBody(e, cursor);
 	}
     }
-
-    // element is a text:table-of-content.
-
-    // => text:table-of-content-source
-    // => text:index-body
-    // text:index-body is the current index content. Should be stored using a saveOdf to convert an internal QTextDocument to ODF...
-    // on OOo, begins with text:index-title that contains the index title.
     return true;
 }
 
@@ -213,6 +243,8 @@ void TOCVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument
     Q_UNUSED(document);
     Q_UNUSED(object);
     Q_UNUSED(posInDocument);
+    Q_UNUSED(pd);
+    Q_UNUSED(format);
 
     kDebug() << "Painting a TOCVariable with rect=" << rect;
     painter.translate(QPointF(-2, -2) + rect.topLeft());

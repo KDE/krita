@@ -31,6 +31,7 @@ class TOCSourceTemplate
 public:
     int outlineLevel() const { return m_outlineLevel; }
     bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    void saveOdf( KoShapeSavingContext & context );
 private:
     int m_outlineLevel;
     KoParagraphStyle *m_style;
@@ -44,6 +45,7 @@ class TOCSource
 {
 public:
     bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    void saveOdf( KoShapeSavingContext & context );
     const QList<TOCSourceTemplate> &sources() { return m_sources; }
     int outlineLevel() const { return m_outlineLevel; }
     void buildFromDocument (const QTextDocument *source, QTextCursor *target);

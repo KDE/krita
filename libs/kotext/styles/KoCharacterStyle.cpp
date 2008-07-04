@@ -616,20 +616,26 @@ KoCharacterStyle::Transform KoCharacterStyle::transform() const {
     return (KoCharacterStyle::Transform) d->propertyInt(KoCharacterStyle::TransformText);
 }
 
-void KoCharacterStyle::setLocale(const QString &country, const QString &language) {
+void KoCharacterStyle::setCountry(const QString &country)
+{
     if (!country.isNull())
         d->setProperty(KoCharacterStyle::Country, country);
+}
+
+void KoCharacterStyle::setLanguage(const QString &language)
+{
     if (!language.isNull())
         d->setProperty(KoCharacterStyle::Language, language);
 }
 
-QLocale KoCharacterStyle::locale() const {
-    QString locale = d->stylesPrivate->value(KoCharacterStyle::Country).toString().toLower();
-    QString language = d->stylesPrivate->value(KoCharacterStyle::Language).toString();
-    if (!language.isNull()) {
-        locale.append('_').append(language.toUpper());
-    }
-    return QLocale(locale);
+QString KoCharacterStyle::country() const
+{
+    return d->stylesPrivate->value(KoCharacterStyle::Country).toString();
+}
+
+QString KoCharacterStyle::language() const
+{
+    return d->propertyString(KoCharacterStyle::Language);
 }
 
 bool KoCharacterStyle::hasProperty(int key) const {
@@ -881,9 +887,8 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
             setTransform( Capitalize );
     }
 
-    QString language = styleStack.property(KoXmlNS::fo, "language");
-    QString country = styleStack.property(KoXmlNS::fo, "country");
-    setLocale(country, language);
+    setLanguage(styleStack.property(KoXmlNS::fo, "language"));
+    setCountry(styleStack.property(KoXmlNS::fo, "country"));
 
     // The fo:background-color attribute specifies the background color of a paragraph.
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {

@@ -26,7 +26,6 @@
 #include <QVariant>
 #include <QString>
 #include <QTextCharFormat>
-#include <QLocale>
 #include "kotext_export.h"
 #include <kdeversion.h>
 
@@ -254,10 +253,14 @@ public:
     /// Return how the text should be transformed.
     Transform transform() const;
 
-    /// Set the locale information
-    void setLocale(const QString &country, const QString &language);
-    /// Get the locale information
-    QLocale locale() const;
+    /// Set the country
+    void setCountry(const QString &country);
+    /// Set the language
+    void setLanguage(const QString &language);
+    /// Get the country
+    QString country() const;
+    /// Get the language
+    QString language() const;
 
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;

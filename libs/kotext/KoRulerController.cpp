@@ -32,6 +32,7 @@
 #include <QTextBlockFormat>
 #include <QTextLayout>
 #include <QTextCursor>
+#include <QLocale>
 
 #include <KoRuler.h>
 

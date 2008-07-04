@@ -21,6 +21,7 @@
 #include "DateVariableFactory.h"
 #include "PageVariableFactory.h"
 #include "InfoVariableFactory.h"
+#include "TOCVariableFactory.h"
 #include <kgenericfactory.h>
 
 #include <KoVariableRegistry.h>
@@ -34,6 +35,7 @@ VariablesPlugin::VariablesPlugin( QObject *parent, const QStringList& )
     KoVariableRegistry::instance()->add( new PageVariableFactory() );
     KoVariableRegistry::instance()->add( new DateVariableFactory() );
     KoVariableRegistry::instance()->add( new InfoVariableFactory() );
+    KoVariableRegistry::instance()->add( new TOCVariableFactory() );
 }
 
 #include "VariablesPlugin.moc"

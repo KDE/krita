@@ -448,6 +448,9 @@ static QScriptValue copyFormatProperties(QScriptContext *context, QScriptEngine 
 TestLoading::TestLoading() 
 {
     componentData = new KComponentData("TestLoading");
+    QFile testFile("test.odt"); // make the file, as its needed later on.
+    testFile.open(QIODevice::WriteOnly);
+    testFile.close();
 }
 
 TestLoading::~TestLoading()

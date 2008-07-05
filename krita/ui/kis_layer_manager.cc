@@ -661,10 +661,13 @@ void KisLayerManager::layerRemove()
     if (img) {
         KisLayerSP layer = activeLayer();
         if (layer) {
+            QRect extent = layer->extent();
+            KisNodeSP parent = layer->parent();
+
             img->removeLayer(layer);
 
-            if (layer->parent())
-                layer->parent()->setDirty(layer->extent());
+            if (parent)
+                parent->setDirty(extent);
 
             m_view->canvas()->update();
             m_view->updateGUI();

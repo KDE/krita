@@ -25,6 +25,7 @@
 #include "kis_shape_selection.h"
 #include "kis_selection.h"
 #include "kis_image.h"
+#include "kis_undo_adapter.h"
 
 KisShapeSelectionModel::KisShapeSelectionModel(KisImageSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection)
  : m_image(image)
@@ -52,7 +53,7 @@ void KisShapeSelectionModel::add(KoShape *child) {
     updateRect = matrix.mapRect(updateRect);
     m_parentSelection->updateProjection(updateRect);
 
-//     m_image->slotSelectionChanged();
+    m_image->undoAdapter()->emitSelectionChanged();
 }
 
 void KisShapeSelectionModel::remove(KoShape *child)

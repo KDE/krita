@@ -38,10 +38,6 @@ KisShapeSelection::KisShapeSelection(KisImageSP image, KisSelectionSP selection)
     : KoShapeContainer(new KisShapeSelectionModel(image, selection, this))
     , m_image(image)
 {
-    m_dashOffset = 0;
-    m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(repaintTimerEvent()));
-    m_timer->start(300);
     setShapeId("KisShapeSelection");
     setSelectable(false);
     m_dirty = false;
@@ -58,13 +54,6 @@ bool KisShapeSelection::loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
 
 void KisShapeSelection::saveOdf(KoShapeSavingContext&) const
 {
-}
-
-void KisShapeSelection::repaintTimerEvent()
-{
-    m_dashOffset++;
-    if(m_dashOffset>7) m_dashOffset = 0;
-    update();
 }
 
 QPainterPath KisShapeSelection::selectionOutline()
@@ -91,26 +80,6 @@ QPainterPath KisShapeSelection::selectionOutline()
 
 void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter)
 {
-    double zoomX, zoomY;
-    converter.zoom(&zoomX, &zoomY);
-
-    QVector<qreal> dashes;
-    qreal space = 4;
-    dashes << 4 << space;
-
-    QPainterPathStroker stroker;
-    stroker.setWidth(0);
-    stroker.setDashPattern(dashes);
-    stroker.setDashOffset(m_dashOffset-4);
-
-    painter.setRenderHint(QPainter::Antialiasing);
-    QColor outlineColor = Qt::black;
-
-    QMatrix zoomMatrix;
-    zoomMatrix.scale(zoomX, zoomY);
-
-    QPainterPath stroke = stroker.createStroke(zoomMatrix.map(selectionOutline()));
-    painter.fillPath(stroke, outlineColor);
 }
 
 void KisShapeSelection::renderToProjection(KisSelection* projection)

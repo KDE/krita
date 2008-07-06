@@ -320,7 +320,7 @@ bool KisSelectionManager::selectionIsActive()
 {
     KisImageSP img = m_view->image();
     if (img) {
-        if ( m_view->selection() && m_view->selection()->hasPixelSelection() ) {
+        if ( m_view->selection() && ( m_view->selection()->hasPixelSelection() || m_view->selection()->hasShapeSelection())) {
             return true;
         }
     }
@@ -334,10 +334,11 @@ void KisSelectionManager::selectionChanged()
     outline.clear();
 
     if ( KisSelectionSP selection = m_view->selection() ) {
-        if(selection->hasPixelSelection()) {
+        if(selection->hasPixelSelection() || selection->hasShapeSelection()) {
             if(!timer->isActive())
                 timer->start ( 300 );
-
+        }
+        if(selection->hasPixelSelection()) {
             KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
             outline = getOrCreatePixelSelection->outline();
             updateSimpleOutline();
@@ -1677,7 +1678,7 @@ void KisSelectionManager::selectionTimerEvent()
             offset++;
             if(offset>7) offset = 0;
 
-            QRect bound = selection->getOrCreatePixelSelection()->selectedRect();
+            QRect bound = selection->selectedRect();
             double xRes = m_view->image()->xRes();
             double yRes = m_view->image()->yRes();
             QRectF rect( int(bound.left()) / xRes, int(bound.top()) / yRes,
@@ -1710,10 +1711,11 @@ void KisSelectionManager::shapeSelectionChanged()
 void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisSelectionSP selection = m_view->selection();
-    if (selection && selection->hasPixelSelection()) {
 
-        double sx, sy;
-        converter.zoom(&sx, &sy);
+    double sx, sy;
+    converter.zoom(&sx, &sy);
+
+    if (selection && selection->hasPixelSelection()) {
 
         QMatrix matrix;
         matrix.scale(sx/m_view->image()->xRes(), sy/m_view->image()->yRes());
@@ -1746,6 +1748,27 @@ void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
         dbgRender <<"Painting marching ants :" << t.elapsed();
 
         gc.setWorldMatrix( oldWorldMatrix);
+    }
+    if (selection && selection->hasShapeSelection()) {
+        KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+
+        QVector<qreal> dashes;
+        qreal space = 4;
+        dashes << 4 << space;
+
+        QPainterPathStroker stroker;
+        stroker.setWidth(0);
+        stroker.setDashPattern(dashes);
+        stroker.setDashOffset(offset-4);
+
+        gc.setRenderHint(QPainter::Antialiasing);
+        QColor outlineColor = Qt::black;
+
+        QMatrix zoomMatrix;
+        zoomMatrix.scale(sx, sy);
+
+        QPainterPath stroke = stroker.createStroke(zoomMatrix.map(shapeSelection->selectionOutline()));
+        gc.fillPath(stroke, outlineColor);
     }
 }
 

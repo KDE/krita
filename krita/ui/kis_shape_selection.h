@@ -55,12 +55,10 @@ public:
 
     virtual void setDirty();
 
-protected:
     virtual QPainterPath selectionOutline();
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
-private slots:
-    void repaintTimerEvent();
+protected:
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
 private:
     
@@ -68,8 +66,6 @@ private:
 
     void renderSelection(KisSelection* projection, const QRect& r);
 
-    int m_dashOffset;
-    QTimer* m_timer;
     KisImageSP m_image;
     QPainterPath m_outline;
     bool m_dirty;

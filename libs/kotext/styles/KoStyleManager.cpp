@@ -238,4 +238,14 @@ QList<KoParagraphStyle*> KoStyleManager::paragraphStyles() const {
     return d->paragStyles;
 }
 
+bool KoStyleManager::completeLoading( KoStore *)
+{
+    return true;
+}
+
+bool KoStyleManager::completeSaving( KoStore *, KoXmlWriter * )
+{
+    return true;
+}
+
 #include "KoStyleManager.moc"

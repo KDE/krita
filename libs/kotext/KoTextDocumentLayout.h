@@ -186,8 +186,6 @@ public:
         KoShape *shape;
         /// The current paragraph layout.
         QTextLayout *layout;
-        /// The name of the used master-page which defines then the used KoPageLayout.
-        QString m_masterPageName;
 
     protected:
         friend class KoTextDocumentLayout;

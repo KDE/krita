@@ -54,7 +54,7 @@ public:
         // 2 - find reflectances using the transformation matrix of the profile.
         // 3 - convert reflectances to K/S
 
-        const float *src = reinterpret_cast<const float*>(src8);
+        const quint16 *src = reinterpret_cast<const quint16*>(src8);
         const int pixelSize = CSTrait::pixelSize;
 
         for ( ; nPixels > 0; nPixels-- ) {
@@ -68,7 +68,7 @@ public:
                 CSTrait::K(dst,i) = (_TYPE_)m_ksvec[2*i+0];
                 CSTrait::S(dst,i) = (_TYPE_)m_ksvec[2*i+1];
             }
-            CSTrait::nativealpha(dst) = (_TYPE_)src[3];
+            CSTrait::nativealpha(dst) =  KoColorSpaceMaths<quint16, _TYPE_>::scaleToA(src[3]);
 
             src += 4;
             dst += pixelSize;

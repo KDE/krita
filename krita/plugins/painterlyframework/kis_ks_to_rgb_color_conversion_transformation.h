@@ -51,7 +51,7 @@ public:
 
     void transform(const quint8 *src, quint8 *dst8, int nPixels) const
     {
-        float *dst = reinterpret_cast<float*>(dst8);
+        quint16 *dst = reinterpret_cast<quint16*>(dst8);
 
         for ( ; nPixels > 0; nPixels-- ) {
 
@@ -65,7 +65,7 @@ public:
             dst[0] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[2]);
             dst[1] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[1]);
             dst[2] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(m_rgbvec[0]);
-            dst[3] = (float)CSTrait::nativealpha(src);
+            dst[3] = KoColorSpaceMaths<_TYPE_, quint16 >::scaleToA(CSTrait::nativealpha(src));
 
             src += CSTrait::pixelSize;
             dst += 4;

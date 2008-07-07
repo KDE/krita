@@ -348,7 +348,15 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
         liststyle.setLevel(d->textSharedData->outlineLevel(level));
         paragraphStyle->setListStyle(liststyle);
     }
-    //paragraphStyle->setIsOutline(true); //FIXME hmmm... would it make sense?!
+
+    //sebsauer; FIXME
+    //headers need to look like <li><h1><p>headertext</p></h1></li> where <li><h1><p> got
+    //on save merged into text:h. But the problem here is, that we are not able to change
+    //e.g. the style of all outlines with level2 any longer cause each h2 does have now
+    //an own style-instance for it. hmmmm... probably what would make most sense is to
+    //have one global outline-list KoListStyle?!
+    //paragraphStyle->setIsOutline(true);
+
     paragraphStyle->setListLevel(level);
     paragraphStyle->applyStyle(block, /*applyListStyle*/ false);
 

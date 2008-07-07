@@ -72,8 +72,9 @@ KisToolBrush::~KisToolBrush()
 
 void KisToolBrush::timeoutPaint()
 {
+    Q_ASSERT( m_painter->paintOp()->incremental() );
     if (currentImage() && m_painter) {
-        m_painter->paintAt( m_previousPaintInformation );
+        paintAt( m_previousPaintInformation );
         QRegion r = m_painter->dirtyRegion();
         dbgPlugins <<"Timeout paint dirty region:" << r;
         currentNode()->setDirty(r);
@@ -123,6 +124,9 @@ void KisToolBrush::mouseMoveEvent(KoPointerEvent *e) {
     KisConfig cfg;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE)
         paintOutline(e->pos());
+    if ( m_painter->paintOp()->incremental()) {
+        m_timer->start( m_rate );
+    }
 }
 
 #if 0

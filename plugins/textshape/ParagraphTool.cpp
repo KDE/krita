@@ -23,7 +23,6 @@
 #include <KoCanvasBase.h>
 #include <KoParagraphStyle.h>
 #include <KoPointerEvent.h>
-#include <KoShapeBorderModel.h>
 #include <KoShapeManager.h>
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
@@ -47,7 +46,6 @@
 
 ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
     : KoTool(canvas),
-    m_textShape(NULL),
     m_paragraphStyle(NULL),
     m_textBlockValid(false),
     m_needsRepaint(false),
@@ -118,7 +116,7 @@ void ParagraphTool::loadDimensions()
 
     // border rectangle left and right
     m_border.setLeft(0.0);
-    m_border.setRight(textShape()->size().width());
+    m_border.setRight(m_shapeSpecificData.textShape()->size().width());
 
     // first line rectangle
     m_firstLine = textLayout()->lineAt(0).rect();
@@ -231,7 +229,7 @@ void ParagraphTool::updateLayout()
 {
     saveRulers();
 
-    if (!shapeContainsBlock()) {
+    if (!m_shapeSpecificData.shapeContainsBlock(textBlock())) {
         // for now, if the block moved to a different shape, we deselect the block
         // in the future we should switch to the new shape that contains the text block
         kDebug() << "Block moved to different shape: deslecting block";
@@ -282,18 +280,8 @@ void ParagraphTool::paintLabel(QPainter &painter, const QMatrix &matrix, const R
     painter.restore();
 }
 
-void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
+void ParagraphTool::paintRulers(QPainter &painter) const
 {
-    if (!m_textBlockValid)
-        return;
-
-    painter.save();
-
-    // transform painter from view coordinate system to text block coordinate system
-    painter.setMatrix(textShape()->absoluteTransformation(&converter) * painter.matrix());
-    KoShape::applyConversion(painter, converter);
-    painter.translate(0.0, -shapeStartOffset());
-
     painter.setPen(Qt::darkGray);
 
     foreach (Ruler *ruler, findChildren<Ruler *>()) {
@@ -305,6 +293,21 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (!m_singleLine) {
         painter.drawLine(m_border.left(), m_firstLine.bottom(), m_firstLine.right(), m_firstLine.bottom());
     }
+}
+
+void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
+{
+    if (!m_textBlockValid)
+        return;
+
+    painter.save();
+
+    // transform painter from view coordinate system to shape coordinate system
+    painter.setMatrix(m_shapeSpecificData.textShape()->absoluteTransformation(&converter) * painter.matrix());
+    KoShape::applyConversion(painter, converter);
+    painter.translate(0.0, -m_shapeSpecificData.shapeStartOffset());
+
+    paintRulers(painter);
 
     QMatrix matrix(painter.combinedMatrix());
 
@@ -318,24 +321,12 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void ParagraphTool::repaintDecorations()
 {
-    if (!m_needsRepaint || m_textShape == NULL)
+    if (!m_needsRepaint)
         return;
 
-    QRectF boundingRect( QPointF(0, 0), textShape()->size() );
-    if(textShape()->border()) {
-        KoInsets insets;
-        textShape()->border()->borderInsets(textShape(), insets);
-        boundingRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
+    // should add previous and current label positions to the repaint area
 
-    // adjust for arrow heads and label (although we can't be sure about the label)
-    boundingRect.adjust(-50.0, -50.0, 50.0, 50.0);
-
-    boundingRect = textShape()->absoluteTransformation(0).mapRect(boundingRect);
-
-    // TODO: should add previous and current label position to the repaint area, too.
- 
-    canvas()->updateCanvas(boundingRect);
+    canvas()->updateCanvas(m_shapeSpecificData.dirtyRectangle());
 
     m_needsRepaint = false;
 }
@@ -345,55 +336,15 @@ void ParagraphTool::scheduleRepaint()
     m_needsRepaint = true;
 }
 
-qreal ParagraphTool::shapeStartOffset() const
-{
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape()->userData());
-
-    return textShapeData->documentOffset();
-}
-
-qreal ParagraphTool::shapeEndOffset() const
-{
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape()->userData());
-
-    return textShapeData->documentOffset() + textShape()->size().height();
-}
-
-bool ParagraphTool::shapeContainsBlock()
-{
-    QTextLayout *layout = textLayout();
-    qreal blockStart = layout->lineAt(0).y();
-
-    QTextLine endLine = layout->lineAt(layout->lineCount()-1);
-    qreal blockEnd = endLine.y() + endLine.height();
-
-    qreal shapeStart = shapeStartOffset();
-    qreal shapeEnd = shapeEndOffset();
-
-    if (blockEnd < shapeStart || blockStart > shapeEnd) {
-        return false;
-    }
-    else {
-        return true;
-    }
-}
-
-QPointF ParagraphTool::mapDocumentToTextBlock(QPointF point) const
-{
-    QMatrix matrix = textShape()->absoluteTransformation(NULL);
-    matrix.translate(0.0, -shapeStartOffset());
-    return matrix.inverted().map(point);
-}
-
 void ParagraphTool::selectTextBlock(TextShape *newTextShape, QTextBlock block)
 {
     // the text block is already selected, no need for a repaint and all that
-    if (m_textBlockValid && block == m_block && newTextShape == textShape())
+    if (m_textBlockValid && block == m_block)
         return;
 
     m_textBlockValid = true;
 
-    m_textShape = newTextShape;
+    m_shapeSpecificData.setTextShape(newTextShape);
     m_block = block;
     m_paragraphStyle = KoParagraphStyle::fromBlock(textBlock());
 
@@ -439,7 +390,7 @@ void ParagraphTool::deactivateActiveRuler()
     m_activeRuler = NULL;
 
     // there's no active ruler anymore, so we have to if we hover somewhere
-    QPointF point(mapDocumentToTextBlock(m_mousePosition));
+    QPointF point(m_shapeSpecificData.mapDocumentToShape(m_mousePosition));
     foreach (Ruler *ruler, findChildren<Ruler *>()) {
         if (ruler->hitTest(point)) {
             m_hoverRuler = ruler;
@@ -502,7 +453,7 @@ void ParagraphTool::mousePressEvent(KoPointerEvent *event)
         // we check if the mouse pointer pressed on one of the current textblock's rulers
         if (m_textBlockValid) {
 
-            QPointF point(mapDocumentToTextBlock(event->point));
+            QPointF point(m_shapeSpecificData.mapDocumentToShape(event->point));
 
             foreach (Ruler *ruler, findChildren<Ruler *>()) {
                 if (ruler->hitTest(point)) {
@@ -556,11 +507,10 @@ void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    // map to the same coordinate system as the paint process
     m_mousePosition = event->point;
 
     if (m_textBlockValid) {
-        QPointF point(mapDocumentToTextBlock(event->point));
+        QPointF point(m_shapeSpecificData.mapDocumentToShape(event->point));
 
         // send a mouseMoveEvent to the activeRuler
         // do this first so the active control can resize if necessary

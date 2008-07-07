@@ -21,6 +21,7 @@
 #define PARAGRAPHTOOL_H
 
 #include "TextShape.h"
+#include "ShapeSpecificData.h"
 #include "Ruler.h"
 
 #include <KoTool.h>
@@ -119,16 +120,7 @@ protected:
     // paint a label at the specified position
     void paintLabel(QPainter &painter, const QMatrix &matrix, const Ruler *ruler) const;
 
-    // y-offset of the current text block in it's shape
-    // essentially a shortcut to access KoShapeData.documentOffset()
-    qreal shapeStartOffset() const;
-
-    qreal shapeEndOffset() const;
-
-    bool shapeContainsBlock();
-
-    // maps document coordinates to coordinates of the current text block
-    QPointF mapDocumentToTextBlock(QPointF point) const;
+    void paintRulers(QPainter &painter) const;
 
     // internal convencience methods
     const QTextDocument *document() const { return textBlock().document(); }
@@ -136,15 +128,18 @@ protected:
     QTextBlockFormat blockFormat() const { return textBlock().blockFormat(); }
     QTextCharFormat charFormat() const { return textBlock().charFormat(); }
     QTextLayout *textLayout() const { return textBlock().layout(); }
-    TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
 
 private:
-    TextShape *m_textShape;
+    // this single member will be replaced by a list with a ShapeSpecificData for each shape that contains
+    // the active text block
+    ShapeSpecificData m_shapeSpecificData;
+
     QTextBlock m_block;
     KoParagraphStyle *m_paragraphStyle;
 
     QPointF m_mousePosition;
 
+    // should move to ShapeSpecificData
     QRectF m_counter,
            m_firstLine,
            m_followingLines,

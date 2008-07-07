@@ -17,6 +17,7 @@ SET ( textshape_SRCS
     PluginHelperAction.cpp
     ParagraphTool.cpp
     ParagraphToolFactory.cpp
+    ShapeSpecificData.cpp
     Ruler.cpp
 
     ChangeTracker.cpp

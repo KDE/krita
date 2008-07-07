@@ -373,6 +373,9 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     }
 
 #if 0 // TODO tz: I don't understand how should this be used
+//sebsauer; fine that this was reason enough to make it not working any longer :-(
+//hint, it was done the same way like we did in 1.6.x and it *WAS* working a year ago.
+
     // Add the block as list-item to the list
     list->add( block );
 

@@ -41,6 +41,7 @@
 #include "kis_datamanager.h"
 
 #include "lines.h"
+#include "brush.h"
 
 KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
@@ -72,68 +73,22 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
 
-
-
-//	QRect layerRect = m_image->bounds();
-//	int w = layerRect.width();
-//	c = Qt::black;    
-/*	KisRandomAccessor accessor = dab->createRandomAccessor(x, y);
-	quint8 *pixel = accessor.rawData();
-	accessor.moveTo(x,y);
-	dab->colorSpace()->fromQColor(c, pixel);*/
-
     if ( newStrokeFlag ) {
-/*		stroke.x1 = info.pos().x();
-		stroke.y1 = info.pos().y();
-        stroke.x2 = stroke.x1;
-        stroke.y2 = stroke.y1;
-		KoColor color = painter()->paintColor();
-		stroke.setColor(color);
-		dbgKrita << "Everything Ok?" << flush << endl;*/
         newStrokeFlag = false;
     } else
 	{	
-/*		stroke.x1 = stroke.x2;
-        stroke.y1 = stroke.y2;
-		stroke.x2 = info.pos().x();
-		stroke.y2 = info.pos().y();*/
-
 	dab = cachedDab( );
 	dab->clear();
 
-	float x0,y0,x1,y1;
-	x0 = info.pos().x()+info.movement().x();
-	y0 = info.pos().y()+info.movement().y();
+	float x1,y1;
 
 	x1 = info.pos().x();
 	y1 = info.pos().y();
 
-	dbgPlugins << "mov x: " << info.movement().x() << endl;
-	dbgPlugins << "mov y: " << info.movement().y() << endl;
-	
-	dbgPlugins << "pos x:" << info.pos().x() << endl;
-	dbgPlugins << "pos y:" << info.pos().y() << endl;
-	
-	Lines lines;
-	//lines.drawGSLine(dab,x0,y0,x1,y1,10,5, painter()->paintColor() );
-	// Feel free to uncomment any line
-	//lines.drawDDALine(dab, (int)x0, (int)y0, (int)x1, (int)y1,painter()->paintColor() );
-	//lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1/*unused-width*/ ,painter()->paintColor() );
-
-	float phase = 0.0f;
-	int ix,iy;
- 	for (float theta= phase; theta<360+phase; theta += 10 )
-        {
-            ix = (int)(100.0*cos(theta*3.14/180.0)+info.pos().x() );
-            iy = (int)(-100.0*sin(theta*3.14/180.0)+info.pos().y());
-            lines.drawWuLine(dab, ix, iy, info.pos().x(), info.pos().y(), 1, painter()->paintColor() );
-			//lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1/*unused-width*/ ,painter()->paintColor() );
-        }
-
+	//m_mybrush.paint(dab, x1, y1, painter()->paintColor() );
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );
-
 	}
 
     //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);

@@ -28,7 +28,7 @@
 #include <kis_types.h>
 
 #include "lines.h"
-
+#include "brush.h"
 
 class QPointF;
 class KisPainter;
@@ -69,6 +69,7 @@ private:
 	//Stroke stroke;
 	KisPaintDeviceSP dab;
     QMutex m_mutex;
+	Brush m_mybrush;
 };
 
 #endif // KIS_SUMIPAINTOP_H_

@@ -17,9 +17,19 @@
  */
 
 #include "brush_shape.h"
+#include <QVector>
 #include <cmath>
 
 const float PI = 3.141592f;
+
+BrushShape::BrushShape(){
+
+}
+
+BrushShape::~BrushShape(){
+
+}
+
 
 void BrushShape::fromGaussian(int radius, float maxLength, float sigma){
 	    m_width = m_height = radius * 2 + 1;
@@ -44,7 +54,7 @@ void BrushShape::fromGaussian(int radius, float maxLength, float sigma){
 			}
 		}
 
-		cout << "total: " << total <<  " " << p << endl << flush;
+		// dbgKrita << "total: " << total <<  " " << p << endl << flush;
 
 		// normalise
 		for (int i=0;i<gaussLength;i++){

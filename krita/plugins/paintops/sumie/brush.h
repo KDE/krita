@@ -16,14 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef _BRUSH_H_
+#define _BRUSH_H_
+
+#include <QVector>
+
 #include <KoColor.h>
+
 #include "bristle.h"
+#include "brush_shape.h"
+#include "kis_paint_device.h"
 
 class Brush{
 
 public:
+	Brush(const BrushShape &initialShape, KoColor inkColor);
+	Brush();
+	~Brush();
 	Brush(KoColor inkColor, BrushShape shape);
-	void paint();
+	void paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color);
 
 
 
@@ -33,3 +44,5 @@ private:
 	KoColor m_inkColor;
 
 };
+
+#endif

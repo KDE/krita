@@ -16,15 +16,43 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "brush.h"
 #include "brush_shape.h"
 #include <KoColor.h>
 
 Brush::Brush(const BrushShape &initialShape, KoColor inkColor){
-	m_initialShape = shape;
+	m_initialShape = initialShape;
 	m_inkColor = inkColor;	
 }
 
+Brush::Brush(){
+	BrushShape bs;
+	bs.fromGaussian(14,1.0f,0.9f);
+	m_bristles = bs.getBristles();
+}
 
-void Brush::paint(){
+
+void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
+	Bristle bristle;
+	for (int i=0;i<m_bristles.size();i++){
+		bristle = m_bristles[i];
+		KoColor mycolor(color);
+	
+		int len = (int)(bristle.length() * 2550);
+		
+		if (len > 255){
+			len = 255;
+		}else 
+		if (len < 0){
+			len = 0;
+		}
+		
+		mycolor.setOpacity(len);
+		//dbgPlugins << "len:" << bristle.length() << endl;
+		dev->setPixel(x+bristle.x(), y+bristle.y(), mycolor);
+	}
+}
+
+Brush::~Brush(){
 
 }

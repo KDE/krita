@@ -16,6 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef _BRUSH_SHAPE_H_
+#define _BRUSH_SHAPE_H_
+
+#include <QVector>
+#include "bristle.h"
 
 class BrushShape{
 
@@ -33,3 +38,5 @@ private:
 	QVector<Bristle> m_bristles;
 	
 };
+
+#endif

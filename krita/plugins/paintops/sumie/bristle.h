@@ -16,23 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ink.h"
+#ifndef _BRISTLE_H_
+#define _BRISTLE_H_
+
 #include <KoColor.h>
 
 class Bristle{
 
 public:
 	Bristle(float x, float y,float length);
+	Bristle();
 	~Bristle();
 	float x();
 	float y();
 	float length();
+	void setLength(float length);
+
 	KoColor color();
+
 	void setColor(KoColor inkColor);
 	void addInk(float value);	// TODO talk with boud ??
 	void removeInk(float value); //
 	void setInkAmount(float inkAmount);
 
+	float amount();
 private:
 	// coordinates of bristle
 	float m_x;
@@ -42,3 +49,5 @@ private:
 	float m_inkAmount;
 
 };
+
+#endif

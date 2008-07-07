@@ -55,10 +55,10 @@ public:
     virtual ~KisSumiPaintOp();
 
     // Do we want to spray even when no movement?
-    virtual bool incremental() { return true; }
+    virtual bool incremental() { return false; }
 
     void paintAt(const KisPaintInformation& info);
-	double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
+	//double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
 
 
 private:

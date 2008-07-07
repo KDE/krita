@@ -49,6 +49,7 @@ void BrushShape::fromGaussian(int radius, float maxLength, float sigma){
 				length = (exp( (x*x + y*y) / sigmaSquare ) * sigmaConst);
 				total += length;
 				Bristle b(x,y,length*maxLength);
+				b.setInkAmount(1.0f);
 				m_bristles.append(b);
 				p++;
 			}

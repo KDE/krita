@@ -19,6 +19,7 @@
 #ifndef _BRISTLE_H_
 #define _BRISTLE_H_
 
+#include <cmath>
 #include <KoColor.h>
 
 class Bristle{
@@ -39,6 +40,10 @@ public:
 	void removeInk(float value); //
 	void setInkAmount(float inkAmount);
 
+
+	float distanceCenter(){
+		return sqrt(m_x*m_x + m_y*m_y);
+	}
 	float amount();
 private:
 	// coordinates of bristle
@@ -47,7 +52,7 @@ private:
 	float m_length; // z - coordinate
 	KoColor m_inkColor;
 	float m_inkAmount;
-
+	
 };
 
 #endif

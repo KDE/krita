@@ -60,6 +60,15 @@ void Bristle::removeInk(float value){
 }
 
 void Bristle::setInkAmount(float inkAmount){
+	if (inkAmount > 1.0f)
+	{
+		inkAmount = 1.0f;
+	}
+	else if (inkAmount < -1.0f)
+	{
+		inkAmount = -1.0f;
+	}
+
 	m_inkAmount = inkAmount;
 }
 

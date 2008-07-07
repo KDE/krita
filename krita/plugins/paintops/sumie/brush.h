@@ -42,6 +42,8 @@ private:
 	QVector<Bristle> m_bristles;
 	BrushShape m_initialShape;
 	KoColor m_inkColor;
+	int m_counter;
+	int m_radius;
 
 };
 

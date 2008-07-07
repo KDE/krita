@@ -317,11 +317,8 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
 
 void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor )
 {
-    int level = element.attributeNS( KoXmlNS::text, "outline-level", "1" ).toInt();
+    int level = qMax(1,element.attributeNS( KoXmlNS::text, "outline-level", "1" ).toInt());
     QString styleName = element.attributeNS( KoXmlNS::text, "style-name", QString() );
-
-    // Get the KoListStyle the name may reference to
-    KoListStyle* listStyle = d->textSharedData->listStyle( styleName );
 
     //context.setCurrentListStyleName(styleName);
     //int level = context.currentListLevel();
@@ -338,9 +335,22 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
 
     // Set the paragraph-style on the block
     KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName, d->stylesDotXml );
-    if( paragraphStyle ) {
-        paragraphStyle->applyStyle(block, false);
+    Q_ASSERT( paragraphStyle ); // if that really can happen then just create a new style for the header and add it...
+    if( ! paragraphStyle->listStyle().isValid()) {
+        // The outline style is a list style that is applied to all headings within a text document
+        // where the heading's paragraph style does not define a list style to use itself.
+        KoListStyle liststyle;
+        liststyle.setLevel(d->textSharedData->outlineLevel(level));
+        paragraphStyle->setListStyle(liststyle);
     }
+    else if( ! paragraphStyle->listStyle().hasPropertiesForLevel(level) ) {
+        KoListStyle liststyle = paragraphStyle->listStyle();
+        liststyle.setLevel(d->textSharedData->outlineLevel(level));
+        paragraphStyle->setListStyle(liststyle);
+    }
+    //paragraphStyle->setIsOutline(true); //FIXME hmmm... would it make sense?!
+    paragraphStyle->setListLevel(level);
+    paragraphStyle->applyStyle(block, /*applyListStyle*/ false);
 
     //1.6: KoTextParag::loadOasisSpan
     bool stripLeadingSpace = true;
@@ -353,11 +363,6 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
             tempCursor.removeSelectedText();                                    // remove it
         }
     }
-
-    // Add a new empty block which finish's our list-item block
-    QTextBlockFormat emptyTbf;
-    QTextCharFormat emptyCf;
-    cursor.insertBlock( emptyTbf, emptyCf );
 
 #if 0 // TODO tz: I don't understand how should this be used
     // Add the block as list-item to the list
@@ -386,6 +391,11 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     cursor.deleteChar();
     cursor.setPosition( endPosition - 1 );
 #endif
+
+    // Add a new empty block which finish's our list-item block
+    QTextBlockFormat emptyTbf;
+    QTextCharFormat emptyCf;
+    cursor.insertBlock( emptyTbf, emptyCf );
 }
 
 void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )

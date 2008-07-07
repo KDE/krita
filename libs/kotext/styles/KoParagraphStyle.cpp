@@ -134,6 +134,12 @@ static const int properties[] = {
     KoParagraphStyle::TextProgressionDirection,
     KoParagraphStyle::MasterPageName,
 
+//sebsauer; why we don't copy them?
+//KoParagraphStyle::ListStartValue,
+//KoParagraphStyle::RestartListNumbering,
+//KoParagraphStyle::ListLevel,
+//KoParagraphStyle::IsListHeader,
+
     -1
 };
 

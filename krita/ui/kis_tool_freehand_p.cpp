@@ -2,7 +2,7 @@
  *  kis_tool_freehand_p.cpp - part of Krita
  *
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,9 +39,33 @@ FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand,
 {
 }
 
+
 FreehandPaintJob::~FreehandPaintJob()
 {
-}FreehandPaintLineJob::FreehandPaintLineJob(KisToolFreehand* toolFreeHand,
+}
+
+FreehandPaintAtJob::FreehandPaintAtJob(KisToolFreehand* toolFreeHand,
+                                           KisPainter* painter,
+                                           const KisPaintInformation & pi,
+                                           const FreehandPaintJob* previousPaintJob)
+    : FreehandPaintJob(toolFreeHand, painter, pi, pi, previousPaintJob)
+{
+}
+
+FreehandPaintAtJob::~FreehandPaintAtJob()
+{
+}
+
+void FreehandPaintAtJob::run()
+{
+    m_dragDist = 0.0;
+    m_painter->paintAt(KisPaintInformation(m_pi1));
+    m_toolFreeHand->setDirty( m_painter->dirtyRegion() );
+}
+
+
+
+FreehandPaintLineJob::FreehandPaintLineJob(KisToolFreehand* toolFreeHand,
                                            KisPainter* painter,
                                            const KisPaintInformation & pi1,
                                            const KisPaintInformation & pi2,
@@ -59,7 +83,9 @@ void FreehandPaintLineJob::run()
     m_dragDist = (m_previousPaintJob) ? m_dragDist = m_previousPaintJob->dragDist() : 0.0;
     m_dragDist = m_painter->paintLine(m_pi1, m_pi2, m_dragDist);
     m_toolFreeHand->setDirty( m_painter->dirtyRegion() );
-}FreehandPaintBezierJob::FreehandPaintBezierJob(KisToolFreehand* toolFreeHand,
+}
+
+FreehandPaintBezierJob::FreehandPaintBezierJob(KisToolFreehand* toolFreeHand,
                                                KisPainter* painter,
                                                const KisPaintInformation & pi1,
                                                const QPointF& control1,

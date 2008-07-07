@@ -70,6 +70,21 @@ protected:
 /**
  * XXX: doc
  */
+class FreehandPaintAtJob : public FreehandPaintJob {
+
+public:
+
+    FreehandPaintAtJob(KisToolFreehand* freeHand,
+                         KisPainter* painter,
+                         const KisPaintInformation & pi,
+                         const FreehandPaintJob* previousPaintJob);
+    virtual ~FreehandPaintAtJob();
+    virtual void run();
+};
+
+/**
+ * XXX: doc
+ */
 class FreehandPaintLineJob : public FreehandPaintJob {
 
 public:

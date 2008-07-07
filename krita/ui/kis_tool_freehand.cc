@@ -359,8 +359,8 @@ void KisToolFreehand::endPaint()
 
 void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
-    m_painter->paintAt(KisPaintInformation(pi));
-    setDirty( m_painter->dirtyRegion() );
+    FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
+    queuePaintJob( new FreehandPaintAtJob(this, m_painter, pi, previousJob), previousJob );
 }
 
 void KisToolFreehand::paintLine(const KisPaintInformation &pi1,

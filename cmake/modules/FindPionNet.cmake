@@ -4,6 +4,9 @@
 #
 # Usage:
 # FIND_PACKAGE(PionNet)
+# PionNet_FOUND - set to TRUE if library and headers were found
+# PionNet_INCLUDE_DIR - where is the include directory?
+# PionNet_LIBRARY - name of pion-net library
 #
 
 # Try auto discovery

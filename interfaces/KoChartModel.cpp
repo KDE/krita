@@ -24,7 +24,8 @@
 
 using namespace KoChart;
 
-ChartModel::ChartModel()
+ChartModel::ChartModel(QObject *parent)
+    : QObject(parent)
 {
 }
 

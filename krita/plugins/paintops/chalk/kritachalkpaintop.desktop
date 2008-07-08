@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Chalk brush
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritachalkpaintop
+X-Krita-Version=3

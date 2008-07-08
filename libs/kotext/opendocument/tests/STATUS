@@ -3,8 +3,8 @@ Here we have all the text tests listed in http://develop.opendocumentfellowship.
 Testcase on the left and the (assumed/expected/guessed) support status of KWord 1.6 on the right.
 None of these status can be relied upon for KWord 2.0.
 
-Testcases that start with a "*" are completely working in KWord and also imported into this
-testsuite.
+Testcases that start with a "*" can be loaded in KWord.
+Testcases that start with a "**" can be saved by KWord.
 
 ./TextContents/lists/startValue/test.xml:   <result>unsupported</result>
 *./TextContents/lists/embededBulletedList/test.xml:   <result>fullsupport</result>
@@ -77,32 +77,32 @@ testsuite.
 *./FormattingProperties/ParagraphFormattingProperties/leaderWidth/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/dropCapsTextStyle/test.xml:   <result>unsupported</result>
 
-*./FormattingProperties/TextFormattingProperties/underlineColor/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/TextFormattingProperties/underlineColor/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/TextFormattingProperties/fontName/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TextFormattingProperties/textBlinking/test.xml:   <result>unsupported</result>
-*./FormattingProperties/TextFormattingProperties/lineThroughStyle/test.xml:   <result>partial</result>
+**./FormattingProperties/TextFormattingProperties/lineThroughStyle/test.xml:   <result>partial</result>
 ./FormattingProperties/TextFormattingProperties/hyphenationPushCharCount/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/textShadow/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TextFormattingProperties/textRotationAngle/test.xml:   <result>unsupported</result>
-*./FormattingProperties/TextFormattingProperties/textOutline/test.xml:   <result>unsupported</result>
+**./FormattingProperties/TextFormattingProperties/textOutline/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/fontFamily/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/TextFormattingProperties/country/test.xml:   <result>unknown</result>
 ./FormattingProperties/TextFormattingProperties/hyphenation/test.xml:   <result>fullsupport</result>
-*./FormattingProperties/TextFormattingProperties/underliningType/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/TextFormattingProperties/underliningType/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TextFormattingProperties/letterSpacing/test.xml:   <result>unsupported</result>
-*./FormattingProperties/TextFormattingProperties/textUnderlineWordMode/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/TextFormattingProperties/textUnderlineWordMode/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TextFormattingProperties/fontRelief/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/letterKerning/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/fontStyle/test.xml:   <result>fullsupport</result>
-*./FormattingProperties/TextFormattingProperties/textTransformations/test.xml:   <result>partial</result>
-*./FormattingProperties/TextFormattingProperties/fontVariant/test.xml:   <result>fullsupport</result>
-*./FormattingProperties/TextFormattingProperties/lineThroughColor/test.xml:   <result>unsupported</result>
+**./FormattingProperties/TextFormattingProperties/textTransformations/test.xml:   <result>partial</result>
+**./FormattingProperties/TextFormattingProperties/fontVariant/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/TextFormattingProperties/lineThroughColor/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/fontFamilyGeneric/test.xml:   <result>unknown</result>
 ./FormattingProperties/TextFormattingProperties/textPosition/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/TextFormattingProperties/fontSize/test.xml:   <result>partial</result>
 ./FormattingProperties/TextFormattingProperties/textCombine/test.xml:   <result>unsupported</result>
-*./FormattingProperties/TextFormattingProperties/lineThroughType/test.xml:   <result>fullsupport</result>
-*./FormattingProperties/TextFormattingProperties/underliningStyle/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/TextFormattingProperties/lineThroughType/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/TextFormattingProperties/underliningStyle/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/TextFormattingProperties/lineThroughText/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/textCombineStartAndEndCharacters/test.xml:   <result>unknown</result>
 *./FormattingProperties/TextFormattingProperties/textLineTroughWordMode/test.xml:   <result>unsupported</result>
@@ -119,9 +119,9 @@ testsuite.
 *./FormattingProperties/TextFormattingProperties/lineThroughWidth/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/underliningWidth/test.xml:   <result>unsupported</result>
 *./FormattingProperties/TextFormattingProperties/relativeFontSize/test.xml:   <result>unsupported</result>
-*./FormattingProperties/TextFormattingProperties/textBackgroundColor/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/TextFormattingProperties/textBackgroundColor/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TextFormattingProperties/hiddenOrConditionalText/test.xml:   <result>unsupported</result>
-*./FormattingProperties/TextFormattingProperties/color/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/TextFormattingProperties/color/test.xml:   <result>fullsupport</result>
 *./FormattingProperties/TextFormattingProperties/textLineThroughWordMode/test.xml:   <result>unsupported</result>
 ./FormattingProperties/TextFormattingProperties/windowFontColor/test.xml:   <result>unsupported</result>
 

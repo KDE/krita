@@ -983,6 +983,9 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             } else {
                 style.addProperty("fo:font-style", "", KoGenStyle::TextType);
             }
+        } else if (key == QTextFormat::FontFamily) {
+            QString fontFamily = d->stylesPrivate->value(key).toString();
+            style.addProperty("fo:font-family", fontFamily, KoGenStyle::TextType);
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
         } else if (key == QTextFormat::FontStyleHint) {
             bool ok = false;
@@ -991,6 +994,7 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
                 style.addProperty("style:font-family-generic", exportOasisFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
         } else if (key == QTextFormat::FontKerning) {
             style.addProperty("style:letter-kerning", fontKerning() ? "true" : "false", KoGenStyle::TextType);
+#endif
         } else if (key == QTextFormat::FontCapitalization) {
             switch (fontCapitalization()) {
                 case QFont::SmallCaps:
@@ -1009,7 +1013,6 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
                     style.addProperty("fo:text-transform", "capitalize", KoGenStyle::TextType);
                     break;
             }
-#endif
         } else if (key == UnderlineStyle) {
             bool ok = false;
             int styleId = d->stylesPrivate->value(key).toInt(&ok);

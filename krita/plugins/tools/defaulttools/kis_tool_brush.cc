@@ -124,7 +124,7 @@ void KisToolBrush::mouseMoveEvent(KoPointerEvent *e) {
     KisConfig cfg;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE)
         paintOutline(e->pos());
-    if ( m_painter->paintOp()->incremental()) {
+    if ( m_painter && m_painter->paintOp() && m_painter->paintOp()->incremental()) {
         m_timer->start( m_rate );
     }
 }

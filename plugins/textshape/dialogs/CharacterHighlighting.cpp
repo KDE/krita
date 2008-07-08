@@ -68,12 +68,12 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
     }
     widget.underlineStyle->setCurrentIndex( style->underlineType() );
 
-    switch(style->transform()) {
-        case KoCharacterStyle::MixedCase: widget.normal->setChecked(true); break;
-        case KoCharacterStyle::SmallCaps: widget.smallcaps->setChecked(true); break;
-        case KoCharacterStyle::AllUppercase: widget.uppercase->setChecked(true); break;
-        case KoCharacterStyle::AllLowercase: widget.lowercase->setChecked(true); break;
-        case KoCharacterStyle::Capitalize: widget.capitalize->setChecked(true); break;
+    switch(style->fontCapitalization()) {
+        case QFont::MixedCase: widget.normal->setChecked(true); break;
+        case QFont::SmallCaps: widget.smallcaps->setChecked(true); break;
+        case QFont::AllUppercase: widget.uppercase->setChecked(true); break;
+        case QFont::AllLowercase: widget.lowercase->setChecked(true); break;
+        case QFont::Capitalize: widget.capitalize->setChecked(true); break;
     }
 
     underlineChanged(widget.underlineStyle->currentIndex());
@@ -115,15 +115,15 @@ void CharacterHighlighting::save() {
     }
 
     if (widget.normal->isChecked())
-        m_style->setTransform(KoCharacterStyle::MixedCase);
+        m_style->setFontCapitalization(QFont::MixedCase);
     else if (widget.smallcaps->isChecked())
-        m_style->setTransform(KoCharacterStyle::SmallCaps);
+        m_style->setFontCapitalization(QFont::SmallCaps);
     else if (widget.uppercase->isChecked())
-        m_style->setTransform(KoCharacterStyle::AllUppercase);
+        m_style->setFontCapitalization(QFont::AllUppercase);
     else if (widget.lowercase->isChecked())
-        m_style->setTransform(KoCharacterStyle::AllLowercase);
+        m_style->setFontCapitalization(QFont::AllLowercase);
     else if (widget.capitalize->isChecked())
-        m_style->setTransform(KoCharacterStyle::Capitalize);
+        m_style->setFontCapitalization(QFont::Capitalize);
 }
 
 #include "CharacterHighlighting.moc"

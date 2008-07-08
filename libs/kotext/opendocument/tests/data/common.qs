@@ -116,7 +116,6 @@ KoCharacterStyle.UnderlineType = ++i;
 KoCharacterStyle.UnderlineWidth = ++i;
 KoCharacterStyle.UnderlineWeight = ++i;
 KoCharacterStyle.UnderlineMode = ++i;
-KoCharacterStyle.TransformText = ++i;
 KoCharacterStyle.Spelling = ++i;
 KoCharacterStyle.Language = ++i;
 KoCharacterStyle.Country = ++i;

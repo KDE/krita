@@ -66,7 +66,6 @@ public:
         UnderlineWidth,
         UnderlineWeight,
         UnderlineMode,
-        TransformText,
         Spelling,
         Language,
         Country,
@@ -111,15 +110,6 @@ public:
         NoLineMode,
         ContinuousLineMode,
         SkipWhiteSpaceLineMode
-    };
-
-    /// Text transformation
-    enum Transform {
-        MixedCase = 0, ///< No text-transformation. This is the default value.
-        SmallCaps, ///< Small capitalized letters.
-        AllUppercase, ///< Uppercase characters. E.g. "My teXT"=>"MY TEXT"
-        AllLowercase, ///< Lowercase characters. E.g. "My teXT"=>"my text"
-        Capitalize ///< Capitalize characters. E.g. "my text"=>"My Text"
     };
 
     /**
@@ -177,6 +167,10 @@ public:
     void setFontWordSpacing(qreal spacing);
     /// See similar named method on QTextCharFormat
     qreal fontWordSpacing() const;
+    /// Set the text capitalization
+    void setFontCapitalization(QFont::Capitalization capitalization);
+    /// Return how the text should be capitalized
+    QFont::Capitalization fontCapitalization() const;
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     /// See similar named method on QTextCharFormat (Qt 4.5 and above)
@@ -247,11 +241,6 @@ public:
     void setUnderlineMode(LineMode mode);
     /// Get the current underline mode of this KoCharacterStyle
     LineMode underlineMode() const;
-
-    /// Set the text tranformation.
-    void setTransform(Transform transformtext);
-    /// Return how the text should be transformed.
-    Transform transform() const;
 
     /// Set the country
     void setCountry(const QString &country);

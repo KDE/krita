@@ -177,6 +177,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
         QTextFormat::FontLetterSpacing,
         QTextFormat::FontWordSpacing,
+        QTextFormat::FontCapitalization,
 #endif
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
         QTextFormat::FontStyleHint,
@@ -193,7 +194,6 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         KoCharacterStyle::UnderlineType,
         KoCharacterStyle::UnderlineWidth,
         KoCharacterStyle::UnderlineWeight,
-        KoCharacterStyle::TransformText,
         KoCharacterStyle::HasHyphenation,
         KoCharacterStyle::UnderlineMode,
         KoCharacterStyle::StrikeOutMode,
@@ -214,28 +214,6 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         i++;
     }
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-    QVariant variant = d->stylesPrivate->value(TransformText);
-    if(!variant.isNull()) {
-        switch(static_cast<Transform>(variant.toInt())) {
-        case Capitalize:
-            newFormat.setFontCapitalization(QFont::Capitalize);
-            break;
-        case MixedCase:
-            newFormat.setFontCapitalization(QFont::MixedCase);
-            break;
-        case SmallCaps:
-            newFormat.setFontCapitalization(QFont::SmallCaps);
-            break;
-        case AllUppercase:
-            newFormat.setFontCapitalization(QFont::AllUppercase);
-            break;
-        case AllLowercase:
-            newFormat.setFontCapitalization(QFont::AllLowercase);
-            break;
-        }
-    }
-#endif
     format = newFormat;
 }
 
@@ -608,12 +586,12 @@ qreal KoCharacterStyle::fontWordSpacing() const {
 }
 
 
-void KoCharacterStyle::setTransform(KoCharacterStyle::Transform transformtext) {
-    d->setProperty(KoCharacterStyle::TransformText, transformtext);
+void KoCharacterStyle::setFontCapitalization(QFont::Capitalization capitalization) {
+    d->setProperty(QTextFormat::FontCapitalization, capitalization);
 }
 
-KoCharacterStyle::Transform KoCharacterStyle::transform() const {
-    return (KoCharacterStyle::Transform) d->propertyInt(KoCharacterStyle::TransformText);
+QFont::Capitalization KoCharacterStyle::fontCapitalization() const {
+    return (QFont::Capitalization) d->propertyInt(QTextFormat::FontCapitalization);
 }
 
 void KoCharacterStyle::setCountry(const QString &country)
@@ -868,23 +846,24 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         else if (textPosition.startsWith("sub"))
             setVerticalAlignment(QTextCharFormat::AlignSubScript);
     }
+
     // The fo:font-variant attribute provides the option to display text as small capitalized letters.
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-variant" ) ) {
         QString textVariant = styleStack.property(KoXmlNS::fo, "font-variant");
         if (textVariant == "small-caps")
-            setTransform(SmallCaps);
+            setFontCapitalization(QFont::SmallCaps);
         else if (textVariant == "normal")
-            setTransform(MixedCase);
+            setFontCapitalization(QFont::MixedCase);
     }
     // The fo:text-transform attribute specifies text transformations to uppercase, lowercase, and capitalization.
     else if ( styleStack.hasProperty( KoXmlNS::fo, "text-transform" ) ) {
         QString textTransform = styleStack.property( KoXmlNS::fo, "text-transform" );
         if ( textTransform == "uppercase" )
-            setTransform( AllUppercase );
+            setFontCapitalization(QFont::AllUppercase);
         else if ( textTransform == "lowercase" )
-            setTransform( AllLowercase );
+            setFontCapitalization(QFont::AllLowercase);
         else if ( textTransform == "capitalize" )
-            setTransform( Capitalize );
+            setFontCapitalization(QFont::Capitalize);
     }
 
     setLanguage(styleStack.property(KoXmlNS::fo, "language"));
@@ -1012,6 +991,24 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
                 style.addProperty("style:font-family-generic", exportOasisFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
         } else if (key == QTextFormat::FontKerning) {
             style.addProperty("style:letter-kerning", fontKerning() ? "true" : "false", KoGenStyle::TextType);
+        } else if (key == QTextFormat::FontCapitalization) {
+            switch (fontCapitalization()) {
+                case QFont::SmallCaps:
+                    style.addProperty("fo:font-variant", "small-caps", KoGenStyle::TextType);
+                    break;
+                case QFont::MixedCase:
+                    style.addProperty("fo:font-variant", "normal", KoGenStyle::TextType);
+                    break;
+                case QFont::AllUppercase:
+                    style.addProperty("fo:text-transform", "uppercase", KoGenStyle::TextType);
+                    break;
+                case QFont::AllLowercase:
+                    style.addProperty("fo:text-transform", "lowercase", KoGenStyle::TextType);
+                    break;
+                case QFont::Capitalize:
+                    style.addProperty("fo:text-transform", "capitalize", KoGenStyle::TextType);
+                    break;
+            }
 #endif
         } else if (key == UnderlineStyle) {
             bool ok = false;
@@ -1068,25 +1065,6 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
                 style.addProperty("style:text-position", "super", KoGenStyle::TextType);
             else if (verticalAlignment() == QTextCharFormat::AlignSubScript)
                 style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
-        } else if (key == KoCharacterStyle::TransformText) {
-            Transform transform = (Transform) d->stylesPrivate->value(key).value<int>();
-            switch (transform) {
-                case SmallCaps:
-                    style.addProperty("fo:font-variant", "small-caps", KoGenStyle::TextType);
-                    break;
-                case AllUppercase:
-                    style.addProperty("fo:text-transform", "uppercase", KoGenStyle::TextType);
-                    break;
-                case AllLowercase:
-                    style.addProperty("fo:text-transform", "lowercase", KoGenStyle::TextType);
-                    break;
-                case Capitalize:
-                    style.addProperty("fo:text-transform", "capitalize", KoGenStyle::TextType);
-                    break;
-                case MixedCase:
-                    style.addProperty("fo:text-transform", "normal", KoGenStyle::TextType);
-                    break;
-            }
         } else if (key == QTextFormat::FontPointSize) {
             style.addPropertyPt("fo:font-size", fontPointSize(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Country) {

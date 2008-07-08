@@ -65,7 +65,7 @@ void KisShapeSelectionModel::remove(KoShape *child)
     updateRect = matrix.mapRect(updateRect);
     m_parentSelection->updateProjection(updateRect);
 
-//     m_image->slotSelectionChanged();
+    m_image->undoAdapter()->emitSelectionChanged();
 
     m_shapeMap.remove(child);
     m_shapeSelection->setDirty();
@@ -111,7 +111,7 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
 
     m_shapeMap[child] = child->boundingRect();
     m_parentSelection->updateProjection(changedRect.toAlignedRect());
-//     m_image->slotSelectionChanged(changedRect.toAlignedRect());
+    m_image->undoAdapter()->emitSelectionChanged();
 }
 
 bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const {

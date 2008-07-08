@@ -26,11 +26,14 @@
 #include <KoPathShape.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoShapeManager.h>
+
 #include "kis_painter.h"
 #include "kis_paint_device.h"
 #include "kis_shape_selection_model.h"
 #include "kis_image.h"
 #include "kis_selection.h"
+#include "kis_shape_selection_canvas.h"
 
 #include <kis_debug.h>
 
@@ -41,6 +44,8 @@ KisShapeSelection::KisShapeSelection(KisImageSP image, KisSelectionSP selection)
     setShapeId("KisShapeSelection");
     setSelectable(false);
     m_dirty = false;
+    m_canvas = new KisShapeSelectionCanvas();
+    m_canvas->shapeManager()->add(this);
 }
 
 KisShapeSelection::~KisShapeSelection()
@@ -145,6 +150,10 @@ void KisShapeSelection::setDirty()
     m_dirty = true;
 }
 
+KoShapeManager* KisShapeSelection::shapeManager() const
+{
+    return m_canvas->shapeManager();
+}
 
 KisShapeSelectionFactory::KisShapeSelectionFactory( QObject* parent)
     : KoShapeFactory( parent, "KisShapeSelection", "selection shape container" )

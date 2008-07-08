@@ -91,6 +91,7 @@ set(kritaui_LIB_SRCS
     kis_tool_paint.cc 
     kis_tool_shape.cc kis_view2.cpp 
     kis_zoom_manager.cc
+    kis_shape_selection_canvas.cpp
     kobirdeyepanel.cpp 
     modeltest.cpp 
     opengl/kis_opengl_canvas2.cpp

@@ -26,6 +26,8 @@
 
 #include <krita_export.h>
 
+class KisShapeSelectionCanvas;
+
 /**
  *
  */
@@ -57,6 +59,8 @@ public:
 
     virtual QPainterPath selectionOutline();
 
+    KoShapeManager *shapeManager() const;
+
 protected:
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
@@ -69,6 +73,7 @@ private:
     KisImageSP m_image;
     QPainterPath m_outline;
     bool m_dirty;
+    KisShapeSelectionCanvas* m_canvas;
 
     friend class KisShapeSelectionModel;
 };

@@ -51,6 +51,8 @@
 #include "kis_shape_controller.h"
 #include "kis_layer_manager.h"
 #include "kis_selection.h"
+#include "kis_selection_component.h"
+#include "kis_shape_selection.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -170,6 +172,8 @@ KoShapeManager* KisCanvas2::shapeManager() const
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( activeLayer.data() );
         if ( shapeLayer )
             return shapeLayer->shapeManager();
+        if ( activeLayer->selection() && activeLayer->selection()->hasShapeSelection() )
+            return static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
     }
     return m_d->shapeManager;
 }

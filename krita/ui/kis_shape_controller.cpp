@@ -205,11 +205,11 @@ void KisShapeController::addShape( KoShape* shape )
             }
             KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
             shapeSelection->addChild(shape);
-                        
+/*                        
             foreach( KoView *view, m_d->doc->views() ) {
                 KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
                 canvas->globalShapeManager()->add(shape);
-            }
+            }*/
         }
         else {
             // An ordinary shape, if the active layer is a KisShapeLayer,

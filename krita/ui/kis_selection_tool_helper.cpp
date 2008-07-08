@@ -23,6 +23,7 @@
 
 #include <KoShapeController.h>
 #include <KoPathShape.h>
+#include <KoShapeManager.h>
 
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"
@@ -97,6 +98,7 @@ QUndoCommand* KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
     shapeSelection->addChild(shape);
+    shapeSelection->shapeManager()->add( shape );
     return cmd;
 }
 

@@ -18,8 +18,14 @@
 
 #include "brush.h"
 #include "brush_shape.h"
+
 #include <KoColor.h>
 #include <KoColorSpace.h>
+#include <KoColorTransformation.h>
+
+#include <QVariant>
+#include <QHash>
+
 #include "kis_random_accessor.h"
 #include <cmath>
 
@@ -42,9 +48,14 @@ Brush::Brush(){
 
 
 void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
+	/*if (m_counter == 1){
+		m_inkColor = color;
+	}*/
+
+	m_inkColor = color;
 
 	m_counter++;
-	float decr = ((m_counter*m_counter*m_counter)+(m_counter*m_counter)+5)/100000.0f;
+	float decr = (m_counter*m_counter*m_counter)/1000000.0f;
 
 	Bristle *bristle;
 	float max = 0.0f;
@@ -52,9 +63,30 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
 
 	qint32 pixelSize = dev->colorSpace()->pixelSize();
 	KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
-	KoColor mycolor(color);
+	
 
 	double u;
+
+	QHash<QString, QVariant> params;
+
+	if (true){
+		params["h"] = 0.0;
+
+		double result = log (m_counter);
+		result = -(result * 10)/100.0;
+		params["s"] = result;
+		//dbgPlugins << "log (m_counter): "<< result << endl;
+
+		params["v"] = 0.0;
+
+		KoColorTransformation* transfo = dev->colorSpace()->createColorTransformation( "hsv_adjustment", params);
+		transfo->transform( m_inkColor.data(), m_inkColor.data(), 1);
+		
+		int opacity = (1.0f+result)*255;
+		dbgPlugins << "opacity: "<< opacity << endl;
+		m_inkColor.setOpacity(opacity);
+	}
+
 	for (int i=0;i<m_bristles.size();i++){
 		bristle = &m_bristles[i];
 
@@ -62,8 +94,6 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
 		if (bristle->distanceCenter() > m_radius || u <0.5){
 			continue;
 		}
-
-		
 
 		//int len = (int)(bristle->length() * 1295 * bristle->amount() );
 		int len = (int)(bristle->amount() * 255 );
@@ -83,17 +113,18 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
 		dx = (int)(x+bristle->x());
 		dy = (int)(y+bristle->y());
 
-		mycolor.setOpacity(len);
+
 		accessor.moveTo(dx,dy);
-		memcpy(accessor.rawData(), mycolor.data(), pixelSize);
-		//dev->setPixel(x+bristle.x(), y+bristle.y(), mycolor);
+		memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
+		//dev->setPixel(x+bristle.x(), y+bristle.y(), m_inkColor);
 
 		
 		bristle->setInkAmount(1.0f-decr);
 	}
 
 	//dbgPlugins << "Maximum at: " << pos << " value: "  << max << endl;
-	dbgPlugins << "decr: " << decr << " counter: " << m_counter << endl;
+	//dbgPlugins << "decr: " << decr << " counter: " << m_counter << endl;
+	
 }
 
 Brush::~Brush(){

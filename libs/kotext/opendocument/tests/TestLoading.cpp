@@ -468,40 +468,40 @@ static QScriptValue importExtension(QScriptContext *context, QScriptEngine *engi
 
 QScriptValue KoTextTabToQScriptValue(QScriptEngine *engine, const KoTextTab &tab)
 {
-  QScriptValue obj = engine->newObject();
-  obj.setProperty("position", QScriptValue(engine, tab.position)); // double
-  obj.setProperty("type", QScriptValue(engine, tab.type)); // enum
-  obj.setProperty("delimiter", QScriptValue(engine, tab.delimiter)); // QChar
-  obj.setProperty("leaderType", QScriptValue(engine, tab.leaderType)); // enum
-  obj.setProperty("leaderStyle", QScriptValue(engine, tab.leaderStyle)); // enum
-  obj.setProperty("leaderWeight", QScriptValue(engine, tab.leaderWeight)); // enum
-  obj.setProperty("leaderWidth", QScriptValue(engine, tab.leaderWidth)); // double
-  if (tab.leaderColor.isValid())
-      obj.setProperty("leaderColor", QScriptValue(engine, tab.leaderColor.name())); // QColor
-  else
-      obj.setProperty("leaderColor", QScriptValue(engine, "invalid")); // QColor
-  obj.setProperty("leaderText", QScriptValue(engine, tab.leaderText)); // QString
-  return obj;
+    QScriptValue obj = engine->newObject();
+    obj.setProperty("position", QScriptValue(engine, tab.position)); // double
+    obj.setProperty("type", QScriptValue(engine, tab.type)); // enum
+    obj.setProperty("delimiter", QScriptValue(engine, tab.delimiter)); // QChar
+    obj.setProperty("leaderType", QScriptValue(engine, tab.leaderType)); // enum
+    obj.setProperty("leaderStyle", QScriptValue(engine, tab.leaderStyle)); // enum
+    obj.setProperty("leaderWeight", QScriptValue(engine, tab.leaderWeight)); // enum
+    obj.setProperty("leaderWidth", QScriptValue(engine, tab.leaderWidth)); // double
+    if (tab.leaderColor.isValid())
+        obj.setProperty("leaderColor", QScriptValue(engine, tab.leaderColor.name())); // QColor
+    else
+        obj.setProperty("leaderColor", QScriptValue(engine, "invalid")); // QColor
+    obj.setProperty("leaderText", QScriptValue(engine, tab.leaderText)); // QString
+    return obj;
 }
 
 void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
 {
-  tab.position = obj.property("position").toNumber();
-  tab.type = (
+    tab.position = obj.property("position").toNumber();
+    tab.type = (
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
               QTextOption::
 #else
               KoText::
 #endif
                       TabType) obj.property("type").toInteger();
-  tab.delimiter = obj.property("delimiter").toString()[0];
-  tab.leaderType = (KoCharacterStyle::LineType) obj.property("leaderType").toInteger();
-  tab.leaderStyle = (KoCharacterStyle::LineStyle) obj.property("leaderStyle").toInteger();
-  tab.leaderWeight = (KoCharacterStyle::LineWeight) obj.property("leaderWeight").toInteger();
-  tab.leaderWidth = obj.property("leaderWidth").toNumber();
-  if (obj.property("leaderColor").toString() != "invalid")
-      tab.leaderColor = QColor(obj.property("leaderColor").toString());
-  tab.leaderText = obj.property("leaderText").toString();
+    tab.delimiter = obj.property("delimiter").toString()[0];
+    tab.leaderType = (KoCharacterStyle::LineType) obj.property("leaderType").toInteger();
+    tab.leaderStyle = (KoCharacterStyle::LineStyle) obj.property("leaderStyle").toInteger();
+    tab.leaderWeight = (KoCharacterStyle::LineWeight) obj.property("leaderWeight").toInteger();
+    tab.leaderWidth = obj.property("leaderWidth").toNumber();
+    if (obj.property("leaderColor").toString() != "invalid")
+        tab.leaderColor = QColor(obj.property("leaderColor").toString());
+    tab.leaderText = obj.property("leaderText").toString();
 }
 
 QScriptValue constructKoTextTab(QScriptContext *, QScriptEngine *engine)
@@ -789,11 +789,12 @@ void TestLoading::testSaving()
     bool documentsEqual = compareDocuments(savedDocument, expectedDocument);
 
     if (!documentsEqual) {
-        KoTextDebug::dumpDocument(actualDocument);
+        KoTextDebug::dumpDocument(savedDocument);
         KoTextDebug::dumpDocument(expectedDocument);
     }
     delete actualDocument;
     delete expectedDocument;
+    delete savedDocument;
     QVERIFY(documentsEqual);
 }
 

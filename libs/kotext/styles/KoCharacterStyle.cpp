@@ -805,7 +805,6 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         setStrikeOutWidth(throughWeight, throughWidth);
         if ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-text" ) ) {
             setStrikeOutText( styleStack.property( KoXmlNS::style, "text-line-through-text" ) );
-            kDebug(32500) << "line-through-text is " << styleStack.property( KoXmlNS::style, "text-line-through-text" );
         }
     }
     
@@ -1049,6 +1048,8 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             int type = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
                 style.addProperty("style:text-line-through-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+        } else if (key == StrikeOutText) {
+            style.addProperty("style:text-line-through-text", d->stylesPrivate->value(key).toString(), KoGenStyle::TextType);
         } else if (key == StrikeOutColor) {
             QColor color = d->stylesPrivate->value(key).value<QColor>();
             if (color.isValid())

@@ -649,6 +649,8 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         if ( styleStack.hasProperty( KoXmlNS::style, "font-pitch" ) ) {
             if ( styleStack.property( KoXmlNS::style, "font-pitch" ) == "fixed" )
                 setFontFixedPitch( true );
+            else if (styleStack.property(KoXmlNS::style, "font-pitch") == "variable")
+                setFontFixedPitch(false);
         }
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
@@ -992,6 +994,9 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
         } else if (key == QTextFormat::FontFamily) {
             QString fontFamily = d->stylesPrivate->value(key).toString();
             style.addProperty("fo:font-family", fontFamily, KoGenStyle::TextType);
+        } else if (key == QTextFormat::FontFixedPitch) {
+            bool fixedPitch = d->stylesPrivate->value(key).toBool();
+            style.addProperty("style:font-pitch", fixedPitch ? "fixed" : "variable", KoGenStyle::TextType);
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
         } else if (key == QTextFormat::FontStyleHint) {
             bool ok = false;

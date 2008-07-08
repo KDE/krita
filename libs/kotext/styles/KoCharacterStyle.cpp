@@ -596,13 +596,17 @@ QFont::Capitalization KoCharacterStyle::fontCapitalization() const {
 
 void KoCharacterStyle::setCountry(const QString &country)
 {
-    if (!country.isNull())
+    if (country.isNull())
+        d->stylesPrivate->remove(KoCharacterStyle::Country);
+    else
         d->setProperty(KoCharacterStyle::Country, country);
 }
 
 void KoCharacterStyle::setLanguage(const QString &language)
 {
-    if (!language.isNull())
+    if (language.isNull())
+        d->stylesPrivate->remove(KoCharacterStyle::Language);
+    else
         d->setProperty(KoCharacterStyle::Language, language);
 }
 
@@ -866,8 +870,11 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
             setFontCapitalization(QFont::Capitalize);
     }
 
-    setLanguage(styleStack.property(KoXmlNS::fo, "language"));
-    setCountry(styleStack.property(KoXmlNS::fo, "country"));
+    if (styleStack.hasProperty(KoXmlNS::fo, "language"))
+        setLanguage(styleStack.property(KoXmlNS::fo, "language"));
+
+    if (styleStack.hasProperty(KoXmlNS::fo, "country"))
+        setCountry(styleStack.property(KoXmlNS::fo, "country"));
 
     // The fo:background-color attribute specifies the background color of a paragraph.
     if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
@@ -1071,9 +1078,9 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
         } else if (key == QTextFormat::FontPointSize) {
             style.addPropertyPt("fo:font-size", fontPointSize(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Country) {
-            style.addProperty("style:country", d->stylesPrivate->value(KoCharacterStyle::Country).toString(), KoGenStyle::TextType);
+            style.addProperty("fo:country", d->stylesPrivate->value(KoCharacterStyle::Country).toString(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Language) {
-            style.addProperty("style:language", d->stylesPrivate->value(KoCharacterStyle::Language).toString(), KoGenStyle::TextType);
+            style.addProperty("fo:language", d->stylesPrivate->value(KoCharacterStyle::Language).toString(), KoGenStyle::TextType);
         } else if (key == QTextFormat::TextOutline) {
             QPen outline = textOutline();
             style.addProperty("style:text-outline", outline.style() == Qt::NoPen ? "false" : "true", KoGenStyle::TextType);

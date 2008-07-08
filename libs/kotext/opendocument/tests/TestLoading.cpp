@@ -262,6 +262,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
 
             if (!compareFragments(actualFragment, expectedFragment))
                 return false;
+
         } else {
             if (expectedFragment.isValid()) {
                 qDebug() << "compareBlock: Expecting fragment in actualDocument at " << actualFragment.text();
@@ -272,7 +273,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
 
     bool equal = actualIterator.atEnd() == expectedIterator.atEnd();
     if (!equal)
-        qDebug() << "compareBlock: Iterator are not in the end! at " << actualBlock.text();
+        qDebug() << "compareBlock: Iterator are not in the end! at " << actualBlock.text() << expectedBlock.text();
 
     return equal;
 }
@@ -448,9 +449,6 @@ static QScriptValue copyFormatProperties(QScriptContext *context, QScriptEngine 
 TestLoading::TestLoading() 
 {
     componentData = new KComponentData("TestLoading");
-    QFile testFile("test.odt"); // make the file, as its needed later on.
-    testFile.open(QIODevice::WriteOnly);
-    testFile.close();
 }
 
 TestLoading::~TestLoading()
@@ -547,22 +545,12 @@ void TestLoading::cleanupTestCase()
 // init/cleanup are called beginning and end of every test case
 void TestLoading::init()
 {
-    textShapeData = 0;
-    readStore = 0;
-    writeStore = 0;
-
     // FIXME: the line below exists because I haven't manage get includeFunction to work
     evaluate(engine, QString(FILES_DATA_DIR) + "common.qs");
 }
 
 void TestLoading::cleanup()
 {
-    delete textShapeData;
-    textShapeData = 0;
-    delete readStore;
-    readStore = 0;
-    delete writeStore;
-    writeStore = 0;
 }
 
 void TestLoading::addData()
@@ -647,7 +635,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
         return 0;
     }
 
-    readStore = KoStore::createStore(odt, KoStore::Read, "", KoStore::Zip);
+    KoStore *readStore = KoStore::createStore(odt, KoStore::Read, "", KoStore::Zip);
     KoOdfReadStore odfReadStore(readStore);
     QString error;
     if (!odfReadStore.loadAndParse(error)) {
@@ -660,7 +648,9 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 
     KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store());
     KoShapeLoadingContext shapeLoadingContext(odfLoadingContext, 0 /* KoShapeControllerBase (KWDocument) */);
-    textShapeData = new KoTextShapeData;
+    KoTextShapeData *textShapeData = new KoTextShapeData;
+    QTextDocument *document = new QTextDocument;
+    textShapeData->setDocument(document, false /* ownership */);
     KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
     textShapeData->document()->setDocumentLayout(layout);
     layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
@@ -670,16 +660,22 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
         qDebug() << "KoTextShapeData failed to load ODT";
     }
 
-    return textShapeData->document();
+    delete readStore;
+    delete textShapeData;
+    return document;
 }
 
 QString TestLoading::documentToOdt(QTextDocument *document)
 {
     QString odt("test.odt");
-    writeStore = KoStore::createStore(odt, KoStore::Write, "application/vnd.oasis.opendocument.text", KoStore::Zip);
+    if (QFile::exists(odt))
+        QFile::remove(odt);
+    QFile f(odt);
+    f.open(QFile::WriteOnly);
+    f.close();
 
-    KoOdfWriteStore odfWriteStore(writeStore);
-    KoStore *store = odfWriteStore.store();
+    KoStore *store = KoStore::createStore(odt, KoStore::Write, "application/vnd.oasis.opendocument.text", KoStore::Zip);
+    KoOdfWriteStore odfWriteStore(store);
     KoXmlWriter *manifestWriter = odfWriteStore.manifestWriter("application/vnd.oasis.opendocument.text");
     manifestWriter->addManifestEntry("content.xml", "text/xml");
     if (!store->open("content.xml"))
@@ -701,6 +697,13 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     xmlWriter.startElement("office:body");
     xmlWriter.startElement("office:text");
 
+    KoTextShapeData *textShapeData = new KoTextShapeData;
+    textShapeData->setDocument(document, false /* ownership */);
+    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
+    textShapeData->document()->setDocumentLayout(layout);
+    layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
+    KoStyleManager *styleManager = new KoStyleManager;
+    layout->setStyleManager(styleManager);
     textShapeData->saveOdf(context);
 
     xmlWriter.endElement(); // office:text
@@ -716,9 +719,12 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     delete contentWriter;
 
     if (!store->close())
-        qWarning() << "Failed to close the writeStore";
+        qWarning() << "Failed to close the store";
 
     odfWriteStore.closeManifestWriter();
+
+    delete store;
+    delete textShapeData;
 
     return odt;
 }
@@ -749,8 +755,9 @@ void TestLoading::testLoading()
         KoTextDebug::dumpDocument(actualDocument);
         KoTextDebug::dumpDocument(expectedDocument);
     }
+    delete actualDocument;
+    delete expectedDocument;
     QVERIFY(documentsEqual);
-    cleanup();
 }
 
 void TestLoading::testSaving_data()
@@ -776,14 +783,13 @@ void TestLoading::testSaving()
 
     bool documentsEqual = compareDocuments(savedDocument, expectedDocument);
 
-//    showDocument(actualDocument);
-//    showDocument(expectedDocument);
     if (!documentsEqual) {
         KoTextDebug::dumpDocument(actualDocument);
         KoTextDebug::dumpDocument(expectedDocument);
     }
-//    QVERIFY(documentsEqual);
-    cleanup();
+    delete actualDocument;
+    delete expectedDocument;
+    QVERIFY(documentsEqual);
 }
 
 int main(int argc, char *argv[])

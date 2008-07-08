@@ -56,8 +56,6 @@ private:
 
     KComponentData *componentData;
     QScriptEngine *engine;
-    KoTextShapeData *textShapeData;
-    KoStore *readStore, *writeStore;
 };
 
 #endif // TESTLOADING_H

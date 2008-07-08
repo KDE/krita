@@ -28,6 +28,7 @@ SET ( textshape_SRCS
     dialogs/SimpleStyleWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp
+    dialogs/ParagraphDecorations.cpp
     dialogs/ParagraphBulletsNumbers.cpp
     dialogs/ParagraphSettingsDialog.cpp
     dialogs/ListsSpinBox.cpp
@@ -55,6 +56,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui
+    dialogs/ParagraphDecorations.ui
     dialogs/ParagraphBulletsNumbers.ui
     dialogs/StyleManager.ui
     dialogs/ParagraphGeneral.ui

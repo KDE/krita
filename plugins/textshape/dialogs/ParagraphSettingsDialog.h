@@ -27,6 +27,7 @@
 class TextTool;
 class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
+class ParagraphDecorations;
 class ParagraphLayout;
 
 class KoParagraphStyle;
@@ -60,6 +61,7 @@ private:
     ParagraphIndentSpacing *m_paragraphIndentSpacing;
     ParagraphLayout *m_paragraphLayout;
     ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
+    ParagraphDecorations *m_paragraphDecorations;
 
     TextTool *m_tool;
     QTextCursor m_cursor;

@@ -22,6 +22,7 @@
 #include "ParagraphIndentSpacing.h"
 #include "ParagraphLayout.h"
 #include "ParagraphBulletsNumbers.h"
+#include "ParagraphDecorations.h"
 #include "../commands/ChangeListCommand.h"
 #include "../TextTool.h"
 
@@ -43,10 +44,12 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent, TextTool *tool
     m_paragraphIndentSpacing = new ParagraphIndentSpacing (this);
     m_paragraphLayout = new ParagraphLayout (this);
     m_paragraphBulletsNumbers = new ParagraphBulletsNumbers (this);
+    m_paragraphDecorations = new ParagraphDecorations (this);
 
     addPage(m_paragraphIndentSpacing, "Indent/Spacing");
     addPage(m_paragraphLayout, "General Layout");
     addPage(m_paragraphBulletsNumbers, "Bullets/Numbers");
+    addPage(m_paragraphDecorations, "Decorations");
 }
 
 ParagraphSettingsDialog::~ParagraphSettingsDialog() {
@@ -60,6 +63,7 @@ void ParagraphSettingsDialog::accept() {
         m_paragraphIndentSpacing->save();
         m_paragraphLayout->save();
         m_paragraphBulletsNumbers->save();
+        m_paragraphDecorations->save();
 
         QTextBlockFormat format;
         m_style->applyStyle(format);
@@ -98,10 +102,12 @@ void ParagraphSettingsDialog::open(KoParagraphStyle *style) {
     m_paragraphIndentSpacing->open(style);
     m_paragraphLayout->open(style);
     m_paragraphBulletsNumbers->open(style);
+    m_paragraphDecorations->open(style);
 }
 
 void ParagraphSettingsDialog::setUnit(const KoUnit &unit) {
     m_paragraphIndentSpacing->setUnit(unit);
+   // m_paragraphDecorations->setUnit(unit);
 }
 
 void ParagraphSettingsDialog::showEvent (QShowEvent *e) {
@@ -116,6 +122,7 @@ void ParagraphSettingsDialog::visit() {
     visitor.visit(m_paragraphBulletsNumbers);
     visitor.visit(m_paragraphLayout);
     visitor.visit(m_paragraphIndentSpacing);
+    visitor.visit(m_paragraphDecorations);
     visitor.relayout();
 }
 

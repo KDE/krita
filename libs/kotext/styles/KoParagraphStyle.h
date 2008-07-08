@@ -519,6 +519,7 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     void loadOdf( const KoXmlElement* element, KoOdfLoadingContext & context );
 
     void saveOdf( KoGenStyle &style );
+    bool hasProperty(int key) const;
 
 private:
     /**

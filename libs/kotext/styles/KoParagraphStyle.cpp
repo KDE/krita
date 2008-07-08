@@ -213,6 +213,10 @@ QVariant KoParagraphStyle::value(int key) const {
     return var;
 }
 
+bool KoParagraphStyle::hasProperty(int key) const {
+    return d->stylesPrivate->contains(key);
+}
+
 double KoParagraphStyle::propertyDouble(int key) const {
     QVariant variant = value(key);
     if(variant.isNull())

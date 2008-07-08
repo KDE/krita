@@ -19,9 +19,12 @@
 
 #include "KoChartModel.h"
 
+// Qt
+#include <QRect>
+
 using namespace KoChart;
 
-ChartModel::ChartModel( QObject *parent )
+ChartModel::ChartModel()
 {
 }
 
@@ -29,4 +32,3 @@ ChartModel::~ChartModel()
 {
 }
 
-#include "KoChartModel.moc"

@@ -20,9 +20,10 @@
 #ifndef KO_CHART_MODEL
 #define KO_CHART_MODEL
 
-#include <QAbstractTableModel>
 #include <QVector>
 #include "kochart_export.h"
+
+class QRect;
 
 namespace KoChart {
 
@@ -53,12 +54,10 @@ const int HEADER_AREA_ROLE  = 33;
 * The ChartModel class implements a model that can be filled and
 * passed on to KChart to provide the data used within the chart.
 */
-class KOCHART_EXPORT ChartModel : public QAbstractTableModel
+class KOCHART_EXPORT ChartModel
 {
-    Q_OBJECT
-
 public:
-    ChartModel( QObject *parent = 0 );
+    ChartModel();
     virtual ~ChartModel();
 
     virtual QString regionToString( const QVector<QRect> &region ) const = 0;

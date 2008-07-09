@@ -30,7 +30,6 @@ private slots:
     // tests
     void testConstruction();
     void testApi();
-    void testOld();
     void testViewToDocument();
     void testDocumentToView();
 

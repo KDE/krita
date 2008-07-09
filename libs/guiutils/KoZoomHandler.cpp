@@ -84,23 +84,20 @@ void KoZoomHandler::setZoom( double zoom )
     }
 }
 
-void KoZoomHandler::setZoom( int zoom )
-{
-    setZoom(zoom / 100.0);
-}
-
 QPointF KoZoomHandler::documentToView( const QPointF &documentPoint )  const
 {
     return QPointF( zoomItX( documentPoint.x() ),
                     zoomItY( documentPoint.y() ));
 }
 
-QPointF KoZoomHandler::viewToDocument( const QPointF &viewPoint )  const{
+QPointF KoZoomHandler::viewToDocument( const QPointF &viewPoint )  const
+{
     return QPointF( unzoomItX( viewPoint.x() ),
                     unzoomItY( viewPoint.y() ) );
 }
 
-QRectF KoZoomHandler::documentToView( const QRectF &documentRect )  const {
+QRectF KoZoomHandler::documentToView( const QRectF &documentRect )  const
+{
     QRectF r (zoomItX( documentRect.x() ),
               zoomItY( documentRect.y() ),
               zoomItX( documentRect.width() ),
@@ -108,7 +105,8 @@ QRectF KoZoomHandler::documentToView( const QRectF &documentRect )  const {
     return r;
 }
 
-QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect )  const{
+QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect )  const
+{
     QRectF r (  unzoomItX( viewRect.x() ),
                 unzoomItY( viewRect.y()),
                 unzoomItX( viewRect.width() ),
@@ -116,12 +114,14 @@ QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect )  const{
     return r;
 }
 
-QSizeF KoZoomHandler::documentToView( const QSizeF &documentSize ) const {
+QSizeF KoZoomHandler::documentToView( const QSizeF &documentSize ) const
+{
     return QSizeF( zoomItX( documentSize.width() ),
                    zoomItY( documentSize.height() ) );
 }
 
-QSizeF KoZoomHandler::viewToDocument( const QSizeF &viewSize ) const {
+QSizeF KoZoomHandler::viewToDocument( const QSizeF &viewSize ) const
+{
     return QSizeF( unzoomItX( viewSize.width() ),
                    unzoomItY( viewSize.height() ) );
 }
@@ -146,33 +146,8 @@ double KoZoomHandler::viewToDocumentY( double viewY ) const
     return unzoomItY( viewY );
 }
 
-void KoZoomHandler::zoom(double *zoomX, double *zoomY) const {
+void KoZoomHandler::zoom(double *zoomX, double *zoomY) const
+{
     *zoomX = zoomItX(100.0) / 100.0;
     *zoomY = zoomItY(100.0) / 100.0;
-}
-
-QPoint KoZoomHandler::zoomPointOld( const QPointF & p ) const {
-    return QPoint( zoomItXOld( p.x() ), zoomItYOld( p.y() ) );
-}
-
-QRect KoZoomHandler::zoomRectOld( const QRectF & r ) const {
-    QRect _r;
-    _r.setCoords( zoomItXOld( r.left() ),  zoomItYOld( r.top() ),
-            zoomItXOld( r.right() ), zoomItYOld( r.bottom() ) );
-    return _r;
-}
-
-QSize KoZoomHandler::zoomSizeOld( const QSizeF & s ) const {
-    return QSize( zoomItXOld( s.width() ), zoomItYOld( s.height() ) );
-}
-
-QPointF KoZoomHandler::unzoomPointOldF( const QPoint & p ) const {
-    return QPointF( unzoomItXOld( p.x() ), unzoomItYOld( p.y() ) );
-}
-
-QRectF KoZoomHandler::unzoomRectOldF (const QRect & r ) const {
-    QRectF _r;
-    _r.setCoords( unzoomItXOld( r.left() ),  unzoomItYOld( r.top() ),
-                  unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
-    return _r;
 }

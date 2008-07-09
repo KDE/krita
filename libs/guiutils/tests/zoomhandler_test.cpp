@@ -92,26 +92,6 @@ void zoomhandler_test::testApi()
 
 }
 
-void zoomhandler_test::testOld()
-{
-    KoZoomHandler zoomHandler;
-    zoomHandler.setZoom( 150 );
-
-    QVERIFY( zoomHandler.zoomItXOld( 100.0 ) == 156 );
-    QVERIFY( zoomHandler.zoomItYOld( 100.0 ) == 156);
-    QVERIFY( zoomHandler.zoomItX( 100.0 ) < 156.251 && zoomHandler.zoomItX( 100.0 ) > 156.249 );
-    QVERIFY( zoomHandler.zoomItY( 100.0 ) < 156.251 && zoomHandler.zoomItY( 100.0 ) > 156.249 );
-    QVERIFY( zoomHandler.zoomPointOld(  QPointF( 10.0, 10.0 ) ) == QPoint( 16, 16 ) );
-    QVERIFY( zoomHandler.zoomRectOld(  QRectF( 10.0, 10.0, 100.0, 100.0 ) ) == QRect(16, 16, 157, 157) );
-    QVERIFY( zoomHandler.zoomSizeOld(  QSizeF( 100.0, 100.0 ) ) == QSizeF(156, 156) );
-    QVERIFY( zoomHandler.unzoomItXOld( 10 ) < 6.41 && zoomHandler.unzoomItXOld( 10 ) > 6.39 );
-    QVERIFY( zoomHandler.unzoomItYOld( 10 ) < 6.41 && zoomHandler.unzoomItYOld( 10 ) > 6.39 );
-    QVERIFY( zoomHandler.unzoomItX( 10 ) < 6.41 && zoomHandler.unzoomItX( 10 ) > 6.39 );
-    QVERIFY( zoomHandler.unzoomItY( 10 ) < 6.41 && zoomHandler.unzoomItY( 10 ) > 6.39 );
-    QVERIFY( zoomHandler.unzoomRectOldF( QRect( 10, 10, 100, 100 ) ) == QRectF(6.4, 6.4, 63.36, 63.36) );
-
-}
-
 void zoomhandler_test::testViewToDocument()
 {
     KoZoomHandler zoomHandler;

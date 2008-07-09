@@ -37,13 +37,10 @@
  */
 class KOGUIUTILS_EXPORT KoZoomHandler : public KoViewConverter
 {
-
-
 public:
 
     KoZoomHandler();
     virtual ~KoZoomHandler();
-
 
     /**
      * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -59,20 +56,20 @@ public:
      * takes care of the zoom and the DPI setting.
      * Use zoomIt(pt) instead, though.
      */
-    double zoomedResolutionX() const { return m_zoomedResolutionX; }
-    double zoomedResolutionY() const { return m_zoomedResolutionY; }
+    inline double zoomedResolutionX() const { return m_zoomedResolutionX; }
+    inline double zoomedResolutionY() const { return m_zoomedResolutionY; }
 
-    double resolutionX() const { return m_resolutionX; }
-    double resolutionY() const { return m_resolutionY; }
+    inline double resolutionX() const { return m_resolutionX; }
+    inline double resolutionY() const { return m_resolutionY; }
 
     /**
      * Zoom factor for X. Equivalent to zoomedResolutionX()/resolutionX()
      */
-    double zoomFactorX() const { return m_zoomedResolutionX / m_resolutionX; }
+    inline double zoomFactorX() const { return m_zoomedResolutionX / m_resolutionX; }
     /**
      * Zoom factor for Y. Equivalent to zoomedResolutionY()/resolutionY()
      */
-    double zoomFactorY() const { return m_zoomedResolutionY / m_resolutionY; }
+    inline double zoomFactorY() const { return m_zoomedResolutionY / m_resolutionY; }
 
     /**
      * Set a resolution for X and Y of the output device.
@@ -97,28 +94,22 @@ public:
 
     /**
      * Change the zoom level, keeping the resolution unchanged.
-     * @param zoom the zoom factor (e.g. 100 for 100%)
-     * \deprecated
-     */
-    KDE_DEPRECATED void setZoom( int zoom );
-    /**
-     * Change the zoom level, keeping the resolution unchanged.
      * @param zoom the zoom factor (e.g. 1.0 for 100%)
      */
     void setZoom( double zoom );
 
-    double zoom() const { return m_zoom; }
+    inline double zoom() const { return m_zoom; }
 
     /**
      * Change the zoom mode
      * @param zoomMode the zoom mode.
      */
-    void setZoomMode( KoZoomMode::Mode zoomMode ) { m_zoomMode = zoomMode; }
+    inline void setZoomMode( KoZoomMode::Mode zoomMode ) { m_zoomMode = zoomMode; }
     /**
      * @return the global zoom factor (e.g. 100 for 100%).
      * Only use this to display to the user, don't use in calculations
      */
-    int zoomInPercent() const { return qRound(m_zoom * 100); }
+    inline int zoomInPercent() const { return qRound(m_zoom * 100); }
     /**
      * @return the global zoom mode (e.g. KoZoomMode::ZOOM_WIDTH).
      * use this to determine how to zoom
@@ -126,66 +117,27 @@ public:
     KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
 
     // Input: pt. Output: pixels. Resolution and zoom are applied.
-    KDE_DEPRECATED int zoomItXOld( double z ) const
-        {
-            return qRound( m_zoomedResolutionX * z );
-        }
 
-    KDE_DEPRECATED int zoomItYOld( double z ) const
-        {
-            return qRound( m_zoomedResolutionY * z );
-        }
-
-    double zoomItX( double z ) const
+    inline double zoomItX( double z ) const
         {
             return m_zoomedResolutionX * z;
         }
 
-    double zoomItY( double z ) const
+    inline double zoomItY( double z ) const
         {
             return m_zoomedResolutionY * z ;
         }
 
-    KDE_DEPRECATED QPoint zoomPointOld( const QPointF & p ) const;
-
-    KDE_DEPRECATED QRect zoomRectOld( const QRectF & r ) const;
-
-    /**
-     * Returns the size in pixels for a input size in points.
-     *
-     * This function can return a size with 1 pixel to less, depending
-     * on the reference point and the width and/or the zoom level.
-     * It's save to use if the starting point is (0/0).
-     * You can use it if you don't know the starting point yet
-     * (like when inserting a picture), but then please take
-     * care of it afterwards, when you know the reference point.
-     */
-    KDE_DEPRECATED QSize zoomSizeOld( const QSizeF & s ) const;
-
     // Input: pixels. Output: pt.
-    KDE_DEPRECATED double unzoomItXOld( int x ) const
-        {
-            return static_cast<double>( x ) / m_zoomedResolutionX;
-        }
-
-    KDE_DEPRECATED double unzoomItYOld( int y ) const
-        {
-            return static_cast<double>( y ) / m_zoomedResolutionY;
-        }
-
-    double unzoomItX( double x ) const
+    inline double unzoomItX( double x ) const
         {
             return  x / m_zoomedResolutionX;
         }
 
-    double unzoomItY( double y ) const
+    inline double unzoomItY( double y ) const
         {
             return  y / m_zoomedResolutionY;
         }
-
-    KDE_DEPRECATED QPointF unzoomPointOldF( const QPoint & p ) const;
-
-    KDE_DEPRECATED QRectF unzoomRectOldF (const QRect & r ) const;
 
     // KoViewConverter-interface methods
 
@@ -262,9 +214,6 @@ public:
      */
     void zoom(double *zoomX, double *zoomY) const;
 
-
-
-
 protected:
     double m_zoom;
     KoZoomMode::Mode m_zoomMode;
@@ -273,7 +222,6 @@ protected:
     double m_resolutionY;
     double m_zoomedResolutionX;
     double m_zoomedResolutionY;
-
 };
 
 #endif

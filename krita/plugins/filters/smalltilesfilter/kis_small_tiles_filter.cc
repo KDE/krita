@@ -136,7 +136,7 @@ KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* 
 
 KisFilterConfiguration* KisSmallTilesFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfiguration* config = new KisFilterConfiguration("smalltiles", 1);
     config->setProperty("smalltiles", 2 );
     return config;
 }

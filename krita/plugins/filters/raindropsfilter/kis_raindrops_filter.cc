@@ -432,7 +432,7 @@ KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* p
 
 KisFilterConfiguration* KisRainDropsFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfiguration* config = new KisFilterConfiguration("raindrops", 1);
     config->setProperty("dropsize", 80 );
     config->setProperty("number", 80 );
     config->setProperty("fishEyes", 30 );

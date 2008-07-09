@@ -196,7 +196,7 @@ QList<QPair<QString, KoCharacterStyle *> > KoTextSharedLoadingData::loadCharacte
 
         KoCharacterStyle *characterStyle = new KoCharacterStyle();
         characterStyle->setName( displayName );
-        characterStyle->loadOasis( context );
+        characterStyle->loadOdf( context );
 
         context.styleStack().restore();
 
@@ -214,7 +214,7 @@ void KoTextSharedLoadingData::addListStyles( KoOdfLoadingContext & context )
         kDebug(32500) << "listStyle =" << it.key();
         KoListStyle *listStyle = new KoListStyle();
         listStyle->setName( it.key() );
-        listStyle->loadOasis( context, *it.value() );
+        listStyle->loadOdf( context, *it.value() );
         d->listStyles.insert( it.key(), listStyle);
     }
 }
@@ -228,7 +228,7 @@ void KoTextSharedLoadingData::addOutlineStyles( KoOdfLoadingContext & context )
     {
         kDebug(32500) << "outline-listStyle =" << tag.localName();
         KoListLevelProperties properties;
-        properties.loadOasis( context, tag );
+        properties.loadOdf( context, tag );
         d->outlineStyles.setLevel( properties );
     }
 }

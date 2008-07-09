@@ -179,7 +179,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOasis(KoOdfLoadingContext& context, const KoXmlElement& style = KoXmlElement());
+    void loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style = KoXmlElement());
 
 protected:
     friend class KoParagraphStyle;

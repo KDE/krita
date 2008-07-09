@@ -201,14 +201,14 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     return answer;
 }
 
-void KoListStyle::loadOasis(KoOdfLoadingContext& context, const KoXmlElement& style)
+void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style)
 {
     //kDebug(32500)<<"KoListStyle::loadOasis style.localName="<<style.localName();
     //KoStyleStack &styleStack = context.styleStack();
     KoXmlElement styleElem;
     forEachElement(styleElem, style) {
         KoListLevelProperties properties;
-        properties.loadOasis(context, styleElem);
+        properties.loadOdf(context, styleElem);
         setLevel(properties);
     }
 }

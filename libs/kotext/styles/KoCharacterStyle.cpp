@@ -241,9 +241,9 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
 }
 
 // OASIS 14.2.29
-static void importOasisLine( const QString& type, const QString& style, const QString& width,
-                             KoCharacterStyle::LineStyle& lineStyle, KoCharacterStyle::LineType& lineType,
-                             KoCharacterStyle::LineWeight& lineWeight, double& lineWidth )
+static void importOdfLine(const QString& type, const QString& style, const QString& width,
+                          KoCharacterStyle::LineStyle& lineStyle, KoCharacterStyle::LineType& lineType,
+                          KoCharacterStyle::LineWeight& lineWeight, double& lineWidth)
 {
     lineStyle = KoCharacterStyle::NoLineStyle;
     lineType = KoCharacterStyle::NoLineType;
@@ -303,7 +303,7 @@ static void importOasisLine( const QString& type, const QString& style, const QS
     }
 }
 
-static QString exportOasisLineType(KoCharacterStyle::LineType lineType) {
+static QString exportOdfLineType(KoCharacterStyle::LineType lineType) {
     switch (lineType) {
         case KoCharacterStyle::NoLineType:
             return "none";
@@ -316,7 +316,7 @@ static QString exportOasisLineType(KoCharacterStyle::LineType lineType) {
     }
 }
 
-static QString exportOasisLineStyle(KoCharacterStyle::LineStyle lineStyle) {
+static QString exportOdfLineStyle(KoCharacterStyle::LineStyle lineStyle) {
     switch (lineStyle) {
         case KoCharacterStyle::NoLineStyle:
             return "none";
@@ -338,7 +338,7 @@ static QString exportOasisLineStyle(KoCharacterStyle::LineStyle lineStyle) {
             return "";
     }
 }
-static QString exportOasisLineMode(KoCharacterStyle::LineMode lineMode) {
+static QString exportOdfLineMode(KoCharacterStyle::LineMode lineMode) {
     switch (lineMode) {
         case KoCharacterStyle::ContinuousLineMode:
             return "continuous";
@@ -349,7 +349,7 @@ static QString exportOasisLineMode(KoCharacterStyle::LineMode lineMode) {
     }
 }
 
-static QString exportOasisLineWidth(KoCharacterStyle::LineWeight lineWeight, double lineWidth)
+static QString exportOdfLineWidth(KoCharacterStyle::LineWeight lineWeight, double lineWidth)
 {
     switch (lineWeight) {
     case KoCharacterStyle::AutoLineWeight:
@@ -376,7 +376,7 @@ static QString exportOasisLineWidth(KoCharacterStyle::LineWeight lineWeight, dou
 }
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
-static QString exportOasisFontStyleHint(QFont::StyleHint hint) {
+static QString exportOdfFontStyleHint(QFont::StyleHint hint) {
     switch (hint) {
         case QFont::Serif:
             return "roman";
@@ -651,7 +651,7 @@ bool KoCharacterStyle::hasProperty(int key) const {
 }
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
-void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
+void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context) {
     KoStyleStack &styleStack = context.styleStack();
 
     // The fo:color attribute specifies the foreground color of text.
@@ -802,10 +802,10 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         double underlineWidth;
         LineWeight underlineWeight;
     
-        importOasisLine(styleStack.property( KoXmlNS::style, "text-underline-type" ),
-                        styleStack.property( KoXmlNS::style, "text-underline-style" ),
-                        styleStack.property( KoXmlNS::style, "text-underline-width" ),
-                        underlineStyle, underlineType, underlineWeight, underlineWidth);
+        importOdfLine(styleStack.property( KoXmlNS::style, "text-underline-type" ),
+                      styleStack.property( KoXmlNS::style, "text-underline-style" ),
+                      styleStack.property( KoXmlNS::style, "text-underline-width" ),
+                      underlineStyle, underlineType, underlineWeight, underlineWidth);
         setUnderlineStyle(underlineStyle);
         setUnderlineType(underlineType);
         setUnderlineWidth(underlineWeight, underlineWidth);
@@ -823,7 +823,7 @@ void KoCharacterStyle::loadOasis(KoOdfLoadingContext& context) {
         double throughWidth;
         LineWeight throughWeight;
         
-        importOasisLine(styleStack.property( KoXmlNS::style, "text-line-through-type" ),
+        importOdfLine(styleStack.property( KoXmlNS::style, "text-line-through-type" ),
                         styleStack.property( KoXmlNS::style, "text-line-through-style" ),
                         styleStack.property( KoXmlNS::style, "text-line-through-width" ),
                         throughStyle, throughType, throughWeight, throughWidth);
@@ -1028,7 +1028,7 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             bool ok = false;
             int styleHint = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:font-family-generic", exportOasisFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
+                style.addProperty("style:font-family-generic", exportOdfFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
         } else if (key == QTextFormat::FontKerning) {
             style.addProperty("style:letter-kerning", fontKerning() ? "true" : "false", KoGenStyle::TextType);
 #endif
@@ -1054,12 +1054,12 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             bool ok = false;
             int styleId = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-underline-style", exportOasisLineStyle((KoCharacterStyle::LineStyle) styleId), KoGenStyle::TextType);
+                style.addProperty("style:text-underline-style", exportOdfLineStyle((KoCharacterStyle::LineStyle) styleId), KoGenStyle::TextType);
         } else if (key == UnderlineType) {
             bool ok = false;
             int type = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-underline-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+                style.addProperty("style:text-underline-type", exportOdfLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
         } else if (key == QTextFormat::TextUnderlineColor) {
             QColor color = d->stylesPrivate->value(key).value<QColor>();
             if (color.isValid())
@@ -1068,22 +1068,22 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             bool ok = false;
             int mode = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-underline-mode", exportOasisLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
+                style.addProperty("style:text-underline-mode", exportOdfLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         } else if (key == UnderlineWidth) {
             KoCharacterStyle::LineWeight weight;
             double width;
             underlineWidth(weight, width);
-            style.addProperty("style:text-underline-width", exportOasisLineWidth(weight, width), KoGenStyle::TextType);
+            style.addProperty("style:text-underline-width", exportOdfLineWidth(weight, width), KoGenStyle::TextType);
         } else if (key == StrikeOutStyle) {
             bool ok = false;
             int styleId = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-line-through-style", exportOasisLineStyle((KoCharacterStyle::LineStyle) styleId), KoGenStyle::TextType);
+                style.addProperty("style:text-line-through-style", exportOdfLineStyle((KoCharacterStyle::LineStyle) styleId), KoGenStyle::TextType);
         } else if (key == StrikeOutType) {
             bool ok = false;
             int type = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-line-through-type", exportOasisLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+                style.addProperty("style:text-line-through-type", exportOdfLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
         } else if (key == StrikeOutText) {
             style.addProperty("style:text-line-through-text", d->stylesPrivate->value(key).toString(), KoGenStyle::TextType);
         } else if (key == StrikeOutColor) {
@@ -1094,12 +1094,12 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
             bool ok = false;
             int mode = d->stylesPrivate->value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-line-through-mode", exportOasisLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
+                style.addProperty("style:text-line-through-mode", exportOdfLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         } else if (key == StrikeOutWidth) {
             KoCharacterStyle::LineWeight weight;
             double width;
             strikeOutWidth(weight, width);
-            style.addProperty("style:text-line-through-width", exportOasisLineWidth(weight, width), KoGenStyle::TextType);
+            style.addProperty("style:text-line-through-width", exportOdfLineWidth(weight, width), KoGenStyle::TextType);
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush brush = d->stylesPrivate->value(key).value<QBrush>();
             if (brush.style() == Qt::NoBrush)

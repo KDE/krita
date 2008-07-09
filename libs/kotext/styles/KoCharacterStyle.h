@@ -289,7 +289,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOasis(KoOdfLoadingContext& context);
+    void loadOdf(KoOdfLoadingContext& context);
 
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;

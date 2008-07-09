@@ -117,7 +117,7 @@ public:
     /**
      * Load the properties from the \p style using the OpenDocument format.
      */
-    void loadOasis(KoOdfLoadingContext& context, const KoXmlElement& style);
+    void loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style);
 
 private:
     void setProperty(int key, const QVariant &value);

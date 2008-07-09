@@ -259,7 +259,7 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
     return llp;
 }
 
-void KoListLevelProperties::loadOasis(KoOdfLoadingContext& context, const KoXmlElement& style)
+void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style)
 {
     Q_UNUSED( context );
 

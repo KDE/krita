@@ -109,7 +109,7 @@ void KisQPainterCanvas::setPrescaledProjection( KisPrescaledProjectionSP prescal
 
 void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 {
-    QPixmap pm( ev->rect().size() );
+//     QPixmap pm( ev->rect().size() );
 
     KisConfig cfg;
 
@@ -121,9 +121,9 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     setAutoFillBackground(false);
 
-    QPainter gc( &pm );
+    QPainter gc( this );
 
-    gc.translate( -ev->rect().topLeft() );
+//     gc.translate( -ev->rect().topLeft() );
 
     gc.setCompositionMode( QPainter::CompositionMode_Source );
 
@@ -188,10 +188,10 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     gc.end();
 
-    QPainter gc2( this );
+/*    QPainter gc2( this );
     t.restart();
     gc2.drawPixmap( ev->rect().topLeft(), pm );
-    dbgRender <<"Drawing pixmap on widget:" << t.elapsed();
+    dbgRender <<"Drawing pixmap on widget:" << t.elapsed();*/
 }
 
 void KisQPainterCanvas::enterEvent( QEvent* e )

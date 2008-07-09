@@ -118,12 +118,18 @@ public:
                 return false;
             }
 
-            if (!layer->visible())
-                return true;
-
             bool first = false;
             if (layer->prevSibling() == 0 && layer->parent() == layer->image()->root())
                 first = true;
+
+            if (!layer->visible())
+            {
+                if(first)
+                {
+                    m_projection->clear();
+                }
+                return true;
+            }
 
             QRect rc = layer->paintDevice()->extent() & m_rc;
 

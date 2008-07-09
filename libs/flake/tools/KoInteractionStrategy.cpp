@@ -82,5 +82,6 @@ QPointF KoInteractionStrategy::snapToGrid( const QPointF &point, Qt::KeyboardMod
 
 void KoInteractionStrategy::handleCustomEvent( KoPointerEvent * event )
 {
+    Q_UNUSED(event);
 }
 

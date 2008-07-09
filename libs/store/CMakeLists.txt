@@ -25,7 +25,7 @@ set(kstore_LIB_SRCS
 
 kde4_add_library(kstore SHARED ${kstore_LIB_SRCS})
 
-target_link_libraries(kstore ${KDE4_KIO_LIBS})
+target_link_libraries(kstore ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
 
 if( QCA2_FOUND )
 target_link_libraries(kstore ${QCA2_LIBRARIES})

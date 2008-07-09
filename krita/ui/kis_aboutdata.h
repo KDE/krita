@@ -32,7 +32,7 @@ KAboutData * newKritaAboutData()
             KOFFICE_VERSION_STRING,
             ki18n("KOffice image manipulation application"),
             KAboutData::License_GPL,
-            ki18n("(c) 1999-2007 The Krita team.\n"),
+            ki18n("(c) 1999-2008 The Krita team.\n"),
             KLocalizedString(),
             "http://www.koffice.org/krita",
             "submit@bugs.kde.org");

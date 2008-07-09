@@ -1397,10 +1397,10 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
             }
         } else if (key == KoParagraphStyle::BreakBefore) {
             if (breakBefore())
-                style.addProperty("fo:breaf-before", "page", KoGenStyle::ParagraphType);
+                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BreakAfter) {
-            if (breakBefore())
-                style.addProperty("fo:breaf-after", "page", KoGenStyle::ParagraphType);
+            if (breakAfter())
+                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)
@@ -1437,7 +1437,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
         } else if (key == QTextFormat::TextIndent) {
             style.addPropertyPt("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::AutoTextIndent) {
-            style.addPropertyPt("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
+            style.addProperty("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
         }
     }
     // TODO : save border information

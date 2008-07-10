@@ -47,9 +47,55 @@ KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings
 {
     Q_UNUSED( settings );
     KisPaintOp * op = new KisSumiPaintOp(painter, image);
-	Q_CHECK_PTR(op);
+    Q_CHECK_PTR(op);
     return op;
 }
+
+KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+{
+    Q_UNUSED( inputDevice );
+    Q_UNUSED( image );
+    return new KisSumiPaintOpSettings( parent );
+}
+
+KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(KisImageSP image)
+{
+    Q_UNUSED( image );
+    return new KisSumiPaintOpSettings( 0 );
+}
+
+KisSumiPaintOpSettings::KisSumiPaintOpSettings(QWidget * parent )
+    : KisPaintOpSettings()
+{
+    m_optionsWidget = new KisPopupButton( parent );
+    m_optionsWidget->setText( "..." );
+    m_optionsWidget->setToolTip( i18n( "Options for the sumi-e brush" ) );
+
+    m_popupWidget = new QWidget( parent );
+    m_options = new Ui::WdgSumieOptions( );
+    m_options->setupUi( m_popupWidget );
+
+    m_optionsWidget->setPopupWidget(m_popupWidget);
+
+}
+
+KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
+{
+    KisSumiPaintOpSettings* s = new KisSumiPaintOpSettings( 0 );
+    return s;
+
+}
+
+void KisSumiPaintOpSettings::fromXML(const QDomElement&)
+{
+    // XXX: save to xml. See for instance the color adjustment filters
+}
+
+void KisSumiPaintOpSettings::toXML(QDomDocument&, QDomElement&) const
+{
+    // XXX: load from xml. See for instance the color adjustment filters
+}
+
 
 
 KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter, KisImageSP image)
@@ -57,12 +103,12 @@ KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter, KisImageSP image)
 {
     dbgKrita << "START OF KisSumiPaintOp" << endl;
     newStrokeFlag = true;
-	m_image = image;
+    m_image = image;
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
 {
-	dbgKrita << "END OF KisSumiPaintOp" << endl;
+    dbgKrita << "END OF KisSumiPaintOp" << endl;
 }
 
 void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
@@ -76,7 +122,7 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     if ( newStrokeFlag ) {
         newStrokeFlag = false;
     } else
-	{	
+    {
 	dab = cachedDab( );
 	dab->clear();
 
@@ -89,41 +135,41 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );
-	}
+    }
 
     //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
 }
 
 
 /*double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist )
-{
-	Q_UNUSED(savedDist);
+  const KisPaintInformation &pi2,
+  double savedDist )
+  {
+  Q_UNUSED(savedDist);
 
-   if (!painter()) return -1;
-    // read, write pixel data
-    KisPaintDeviceSP device = painter()->device();
-    if (!device) return -1;
+  if (!painter()) return -1;
+  // read, write pixel data
+  KisPaintDeviceSP device = painter()->device();
+  if (!device) return -1;
 
-	dab = cachedDab( );
-	dab->clear();
+  dab = cachedDab( );
+  dab->clear();
 
-	float x0,y0,x1,y1;
-	x0 = pi1.pos().x();
-	y0 = pi1.pos().y();
+  float x0,y0,x1,y1;
+  x0 = pi1.pos().x();
+  y0 = pi1.pos().y();
 
-	x1 = pi2.pos().x();
-	y1 = pi2.pos().y();
-		
-	Lines lines;
-	//lines.drawGSLine(dab,(int)x0, (int)y0, (int)x1, (int)y1,10,5, painter()->paintColor() );
-	// Feel free to uncomment any line
-	//lines.drawDDALine(dab, (int)x0, (int)y0, (int)x1, (int)y1,painter()->paintColor() );
-	lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1 ,painter()->paintColor() );
+  x1 = pi2.pos().x();
+  y1 = pi2.pos().y();
 
-	QRect rc = dab->extent();
-	painter()->bitBlt( rc.topLeft(), dab, rc );
+  Lines lines;
+  //lines.drawGSLine(dab,(int)x0, (int)y0, (int)x1, (int)y1,10,5, painter()->paintColor() );
+  // Feel free to uncomment any line
+  //lines.drawDDALine(dab, (int)x0, (int)y0, (int)x1, (int)y1,painter()->paintColor() );
+  lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1 ,painter()->paintColor() );
 
-    return 0;
-}*/
+  QRect rc = dab->extent();
+  painter()->bitBlt( rc.topLeft(), dab, rc );
+
+  return 0;
+  }*/

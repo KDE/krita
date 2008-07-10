@@ -29,6 +29,8 @@
 
 #include "lines.h"
 #include "brush.h"
+#include "ui_wdgsumieoptions.h"
+#include "widgets/kis_popup_button.h"
 
 class QPointF;
 class KisPainter;
@@ -43,8 +45,34 @@ public:
     virtual QString id() const { return "sumibrush"; }
     virtual QString name() const { return i18n("Sumi-e brush"); }
     virtual QString pixmap() { return "krita-sumi.png"; }
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
+
 };
 
+class KisSumiPaintOpSettings : public QObject, public KisPaintOpSettings {
+    Q_OBJECT
+
+public:
+    KisSumiPaintOpSettings(QWidget * paren );
+    virtual ~KisSumiPaintOpSettings() {}
+
+    virtual KisPaintOpSettingsSP clone() const;
+
+    QWidget * widget() const { return m_optionsWidget; }
+
+    using KisPropertiesConfiguration::fromXML;
+    using KisPropertiesConfiguration::toXML;
+
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+
+private:
+
+    Ui::WdgSumieOptions* m_options;
+    KisPopupButton * m_optionsWidget;
+    QWidget * m_popupWidget;
+};
 
 
 class KisSumiPaintOp : public KisPaintOp {
@@ -58,18 +86,18 @@ public:
     virtual bool incremental() { return false; }
 
     void paintAt(const KisPaintInformation& info);
-	//double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
+    //double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
 
 
 private:
     QColor c;
-	QPointF m_previousPoint;
-	KisImageSP m_image;
-	bool newStrokeFlag;
-	//Stroke stroke;
-	KisPaintDeviceSP dab;
+    QPointF m_previousPoint;
+    KisImageSP m_image;
+    bool newStrokeFlag;
+    //Stroke stroke;
+    KisPaintDeviceSP dab;
     QMutex m_mutex;
-	Brush m_mybrush;
+    Brush m_mybrush;
 };
 
 #endif // KIS_SUMIPAINTOP_H_

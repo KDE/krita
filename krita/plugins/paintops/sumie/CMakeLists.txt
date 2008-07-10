@@ -7,10 +7,9 @@ set(kritasumipaintop_PART_SRCS
 	brush.cpp	
     )
 
-#kde4_add_ui_files(kritadefaultpaintops_PART_SRCS wdgbrushcurves.ui wdgduplicateop.ui )
+kde4_add_ui_files(kritasumipaintop_PART_SRCS wdgsumieoptions.ui )
 
 kde4_add_plugin(kritasumipaintop ${kritasumipaintop_PART_SRCS})
-
 
 target_link_libraries(kritasumipaintop kritaui)
 

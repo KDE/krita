@@ -231,8 +231,10 @@ public:
         foreach (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
             const int buttonCount = section->visibleButtonCount();
-            if (buttonCount == 0)
+            if (buttonCount == 0) {
+                section->setGeometry(1000, 1000, 0, 0);
                 continue;
+            }
             // kDebug() << " + section" << buttonCount;
             int rows = 0;
             int preferredColumnWidth = 0; // in buttons

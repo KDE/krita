@@ -61,7 +61,11 @@ QVariant KoPAPageThumbnailModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::DisplayRole) {
-        return m_pages.at(index.row())->name();
+        QString name = m_pages.at( index.row() )->name();
+        if ( name.isEmpty() ) {
+            name = i18n( "Page %1", index.row() );
+        }
+        return name;
     }
     else if (role == Qt::DecorationRole) {
         return QIcon( m_pages.at(index.row())->thumbnail( m_iconSize ) );

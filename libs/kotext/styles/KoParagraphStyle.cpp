@@ -314,6 +314,32 @@ static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle
         return KoParagraphStyle::BorderOutset;
     return KoParagraphStyle::BorderSolid; // not needed to handle "solid" since it's the default
 }
+static QString odfBorderStyleString(const KoParagraphStyle::BorderStyle borderstyle) {
+    switch (borderstyle) {
+        case KoParagraphStyle::BorderNone:
+            return QString("none");
+        case KoParagraphStyle::BorderDashed:
+            return QString("dashed");
+        case KoParagraphStyle::BorderDotted:
+            return QString("dotted");
+        case KoParagraphStyle::BorderDashDotPattern:
+            return QString("dot-dash"); // not odf
+        case KoParagraphStyle::BorderDashDotDotPattern:
+            return QString("dot-dot-dash"); // not odf
+        case KoParagraphStyle::BorderDouble:
+            return QString("double");
+        case KoParagraphStyle::BorderGroove:
+            return QString("groove");
+        case KoParagraphStyle::BorderRidge:
+            return QString("ridge");
+        case KoParagraphStyle::BorderInset:
+            return QString("inset");
+        case KoParagraphStyle::BorderOutset:
+            return QString("outset");
+        case KoParagraphStyle::BorderSolid:
+            return QString("solid");
+    }
+}
 
 void KoParagraphStyle::setLineHeightPercent(int lineHeight) {
     setProperty(PercentLineHeight, lineHeight);
@@ -1440,7 +1466,62 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
             style.addProperty("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
         }
     }
-    // TODO : save border information
+    // save border stuff
+    QString leftBorder = QString("%1pt %2 %3").arg(QString::number(leftBorderWidth()),
+                                                   odfBorderStyleString(leftBorderStyle()),
+                                                   leftBorderColor().name());
+    QString rightBorder = QString("%1pt %2 %3").arg(QString::number(rightBorderWidth()),
+                                                    odfBorderStyleString(rightBorderStyle()),
+                                                    rightBorderColor().name());
+    QString topBorder = QString("%1pt %2 %3").arg(QString::number(topBorderWidth()),
+                                                  odfBorderStyleString(topBorderStyle()),
+                                                  topBorderColor().name());
+    QString bottomBorder = QString("%1pt %2 %3").arg(QString::number(bottomBorderWidth()),
+                                                     odfBorderStyleString(bottomBorderStyle()),
+                                                     bottomBorderColor().name());
+    if (leftBorder == rightBorder && leftBorder == topBorder && leftBorder == bottomBorder) {
+        if (leftBorderWidth() > 0 && leftBorderStyle() != KoParagraphStyle::BorderNone)
+            style.addProperty("fo:border", leftBorder, KoGenStyle::ParagraphType);
+    } else {
+        if (leftBorderWidth() > 0 && leftBorderStyle() != KoParagraphStyle::BorderNone)
+            style.addProperty("fo:border-left", leftBorder, KoGenStyle::ParagraphType);
+        if (rightBorderWidth() > 0 && rightBorderStyle() != KoParagraphStyle::BorderNone)
+            style.addProperty("fo:border-right", rightBorder, KoGenStyle::ParagraphType);
+        if (topBorderWidth() > 0 && topBorderStyle() != KoParagraphStyle::BorderNone)
+            style.addProperty("fo:border-top", topBorder, KoGenStyle::ParagraphType);
+        if (bottomBorderWidth() > 0 && bottomBorderStyle() != KoParagraphStyle::BorderNone)
+            style.addProperty("fo:border-bottom", bottomBorder, KoGenStyle::ParagraphType);
+    }
+    QString leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
+                                                                QString::number(leftBorderSpacing()),
+                                                                QString::number(leftBorderWidth()) );
+    QString rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
+                                                                 QString::number(rightBorderSpacing()),
+                                                                 QString::number(rightBorderWidth()) );
+    QString topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
+                                                               QString::number(topBorderSpacing()),
+                                                               QString::number(topBorderWidth()) );
+    QString bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
+                                                                  QString::number(bottomBorderSpacing()),
+                                                                  QString::number(bottomBorderWidth()) );
+    if (leftBorderLineWidth == rightBorderLineWidth &&
+        leftBorderLineWidth == topBorderLineWidth &&
+        leftBorderLineWidth == bottomBorderLineWidth &&
+        leftBorderStyle() == KoParagraphStyle::BorderDouble &&
+        rightBorderStyle() == KoParagraphStyle::BorderDouble &&
+        topBorderStyle() == KoParagraphStyle::BorderDouble &&
+        bottomBorderStyle() == KoParagraphStyle::BorderDouble) {
+        style.addProperty("style:border-line-width", leftBorderLineWidth, KoGenStyle::ParagraphType);
+    } else {
+        if (leftBorderStyle() == KoParagraphStyle::BorderDouble)
+            style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
+        if (rightBorderStyle() == KoParagraphStyle::BorderDouble)
+            style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
+        if (topBorderStyle() == KoParagraphStyle::BorderDouble)
+            style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
+        if (bottomBorderStyle() == KoParagraphStyle::BorderDouble)
+            style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
+    }
 }
 
 #include "KoParagraphStyle.moc"

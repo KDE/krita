@@ -51,10 +51,10 @@ Testcases that start with a "**" can be saved by KWord.
 *./FormattingProperties/ParagraphFormattingProperties/leaderStyle/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/writingMode/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/orphans/test.xml:   <result>unsupported</result>
-*./FormattingProperties/ParagraphFormattingProperties/border/test.xml:   <result>fullsupport</result>
+**./FormattingProperties/ParagraphFormattingProperties/border/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/lineNumberStartValue/test.xml:   <result>unsupported</result>
 ./FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundImagePosition/test.xml:   <result>unsupported</result>
-*./FormattingProperties/ParagraphFormattingProperties/borderLineWidth/test.xml:   <result>partial</result>
+**./FormattingProperties/ParagraphFormattingProperties/borderLineWidth/test.xml:   <result>partial</result>
 ./FormattingProperties/ParagraphFormattingProperties/leaderTextStyle/test.xml:   <result>unsupported</result>
 *./FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/ParagraphFormattingProperties/justifySingleWord/test.xml:   <result>unknown</result>

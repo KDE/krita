@@ -200,13 +200,22 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
         case KoParagraphStyle::TopBorderWidth:
         case KoParagraphStyle::RightBorderWidth:
         case KoParagraphStyle::BottomBorderWidth:
+        case KoParagraphStyle::LeftInnerBorderWidth:
+        case KoParagraphStyle::TopInnerBorderWidth:
+        case KoParagraphStyle::RightInnerBorderWidth:
+        case KoParagraphStyle::BottomInnerBorderWidth:
+        case KoParagraphStyle::LeftBorderSpacing:
+        case KoParagraphStyle::TopBorderSpacing:
+        case KoParagraphStyle::RightBorderSpacing:
+        case KoParagraphStyle::BottomBorderSpacing:
         case KoParagraphStyle::TabStopDistance:
         case KoParagraphStyle::DropCapsDistance:
         case QTextFormat::BlockLeftMargin:
         case QTextFormat::BlockRightMargin:
         case QTextFormat::BlockTopMargin:
         case QTextFormat::BlockBottomMargin:
-            if (actualProperty[id].toDouble() != expectedProperty[id].toDouble())
+            if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10)
+              // just checking if it's equal results in floating point errors
               match = false;
             break;
         case KoParagraphStyle::TabPositions: 
@@ -217,6 +226,7 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
         if (!match) {
             qDebug() << "Actual property:   " << KoTextDebug::paraAttributes(actualProperty);
             qDebug() << "Expected property: " << KoTextDebug::paraAttributes(expectedProperty);
+            qDebug() << "At index: QTextFormat::UserProperty + " << id - QTextFormat::UserProperty;
             return false;
         }
     }

@@ -33,6 +33,8 @@
 #include <KoTextDocumentLayout.h>
 #include <kdeversion.h>
 
+#define PARAGRAPH_BORDER_DEBUG
+
 int KoTextDebug::depth = 0;
 const int KoTextDebug::INDENT = 2;
 const QTextDocument *KoTextDebug::document = 0;

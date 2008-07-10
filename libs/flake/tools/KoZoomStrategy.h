@@ -39,11 +39,15 @@ public:
      */
     KoZoomStrategy( KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked );
 
+    void forceZoomOut();
+
     /// Execute the zoom
     virtual void finishInteraction( Qt::KeyboardModifiers modifiers );
     virtual void cancelInteraction();
 private:
     KoCanvasController *m_controller;
+
+    bool m_forceZoomOut;
 };
 
 #endif

@@ -27,7 +27,8 @@
 
 KoZoomStrategy::KoZoomStrategy( KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked)
 : KoShapeRubberSelectStrategy(tool, controller->canvas(), clicked, false),
-m_controller(controller)
+    m_controller(controller),
+    m_forceZoomOut(false)
 {
 }
 
@@ -35,7 +36,7 @@ void KoZoomStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
 {
     QRect pixelRect = m_controller->canvas()->viewConverter()->documentToView(selectRect()).toRect();
     pixelRect.translate( m_controller->canvas()->documentOrigin() );
-    if( modifiers & Qt::ControlModifier)
+    if( m_forceZoomOut || modifiers & Qt::ControlModifier)
         m_controller->zoomOut(pixelRect.center());
     else if(pixelRect.width() > 5 && pixelRect.height() > 5)
         m_controller->zoomTo(pixelRect);
@@ -48,3 +49,7 @@ void KoZoomStrategy::cancelInteraction() {
     m_canvas->updateCanvas(selectRect().toRect().normalized());
 }
 
+void KoZoomStrategy::forceZoomOut()
+{
+    m_forceZoomOut = true;
+}

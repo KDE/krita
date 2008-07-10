@@ -91,7 +91,10 @@ void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
 }
 
 KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event) {
-    return new KoZoomStrategy(this, m_controller, event->point);
+    KoZoomStrategy *zs = new KoZoomStrategy(this, m_controller, event->point);
+    if (event->button() == Qt::RightButton)
+        zs->forceZoomOut();
+    return zs;
 }
 
 QWidget* KoZoomTool::createOptionWidget()

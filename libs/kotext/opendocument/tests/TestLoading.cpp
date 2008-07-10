@@ -493,11 +493,11 @@ void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
 #else
               KoText::
 #endif
-                      TabType) obj.property("type").toInteger();
+                      TabType) obj.property("type").toInt32();
     tab.delimiter = obj.property("delimiter").toString()[0];
-    tab.leaderType = (KoCharacterStyle::LineType) obj.property("leaderType").toInteger();
-    tab.leaderStyle = (KoCharacterStyle::LineStyle) obj.property("leaderStyle").toInteger();
-    tab.leaderWeight = (KoCharacterStyle::LineWeight) obj.property("leaderWeight").toInteger();
+    tab.leaderType = (KoCharacterStyle::LineType) obj.property("leaderType").toInt32();
+    tab.leaderStyle = (KoCharacterStyle::LineStyle) obj.property("leaderStyle").toInt32();
+    tab.leaderWeight = (KoCharacterStyle::LineWeight) obj.property("leaderWeight").toInt32();
     tab.leaderWidth = obj.property("leaderWidth").toNumber();
     if (obj.property("leaderColor").toString() != "invalid")
         tab.leaderColor = QColor(obj.property("leaderColor").toString());

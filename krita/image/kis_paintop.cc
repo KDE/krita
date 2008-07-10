@@ -40,6 +40,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_datamanager.h"
 #include "kis_paintop_settings.h"
+#include "kis_paintop_preset.h"
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #define MAXIMUM_SCALE 2
@@ -267,6 +268,10 @@ double KisPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure
 
 //------------------------ KisPaintOpFactory ------------------------//
 
+KisPaintOpFactory::KisPaintOpFactory()
+{
+}
+
 bool KisPaintOpFactory::userVisible(const KoColorSpace * cs )
 {
     return cs && cs->id() != "WET";
@@ -289,5 +294,3 @@ QString KisPaintOpFactory::pixmap()
 {
     return "";
 }
-
-

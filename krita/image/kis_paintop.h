@@ -39,7 +39,6 @@ class KoPointerEvent;
 class KisQImagemask;
 class KisPainter;
 class KisPaintInformation;
-
 /**
  * KisPaintOp are use by tools to draw on a paint device. A paintop takes settings
  * and input information, like pressure, tilt or motion and uses that to draw pixels
@@ -136,7 +135,7 @@ class KRITAIMAGE_EXPORT KisPaintOpFactory  : public KisShared
 {
 
 public:
-    KisPaintOpFactory() {}
+    KisPaintOpFactory();
     virtual ~KisPaintOpFactory() {}
 
     /**
@@ -161,8 +160,10 @@ public:
     virtual bool userVisible(const KoColorSpace * cs = 0);
 
     /**
-     * Create and return an (abstracted) widget with options for this paintop when used with the
-     * specified input device. Return 0 if there are no settings available for the given
+     * Create and return an settings object for this paintop when used with the
+     * specified input device. The settings object knows how to create a widget.
+     *
+     * @return 0 if there are no settings available for the given
      * device.
      */
     virtual KisPaintOpSettingsSP settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image);

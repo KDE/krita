@@ -156,7 +156,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     }
     else {
         // Chop up in rects.
-        KisFilterJobFactory factory( filter, config );
+        KisFilterJobFactory factory( filter, config, selection );
         KisThreadedApplicator applicator(m_d->dev, rect, &factory, &updater, filter->overlapMarginNeeded( config ));
         applicator.connect( &applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect &)));
         applicator.execute();

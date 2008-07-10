@@ -42,11 +42,18 @@ public:
 
     ~KisPaintOpPreset();
 
+
+    /// set the id of the paintop plugin
+    void setPaintOp(const KoID & paintOp);
+
     /// return the id of the paintop plugin
-    KoID paintOp();
+    KoID paintOp() const;
+
+    /// replace the current settings object with the specified settings
+    void setSettings(KisPaintOpSettingsSP settings);
 
     /// return the settings that define this paintop preset
-    KisPaintOpSettingsSP settings();
+    KisPaintOpSettingsSP settings() const;
 
     bool load();
 

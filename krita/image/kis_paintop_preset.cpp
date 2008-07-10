@@ -41,6 +41,7 @@ KisPaintOpPreset::KisPaintOpPreset()
  : KoResource(QString::null)
  , m_d(new Private)
 {
+    m_d->settings = 0;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
@@ -54,12 +55,25 @@ KisPaintOpPreset::~KisPaintOpPreset()
     delete m_d;
 }
 
-KoID KisPaintOpPreset::paintOp()
+void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
+{
+    m_d->settings->setProperty("paintop", paintOp.id());
+}
+
+KoID KisPaintOpPreset::paintOp() const
 {
     return KoID(m_d->settings->getString("paintop"), name());
 }
 
-KisPaintOpSettingsSP KisPaintOpPreset::settings()
+void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
+{
+    if (settings)
+        m_d->settings = settings->clone();
+    else
+        m_d->settings = 0;
+}
+
+KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 {
     return m_d->settings;
 }
@@ -68,7 +82,7 @@ bool KisPaintOpPreset::load()
 {
     if (filename().isEmpty())
         return false;
-        
+
     QFile f(filename());
     f.open(QIODevice::ReadOnly);
     m_d->settings->fromXML(QString(f.readAll()));
@@ -82,7 +96,7 @@ bool KisPaintOpPreset::save()
 {
     if (filename().isEmpty())
         return false;
-        
+
     QFile f(filename());
     f.open( QIODevice::WriteOnly );
     f.write( m_d->settings->toXML().toUtf8() );
@@ -97,8 +111,11 @@ QImage KisPaintOpPreset::img() const
 
 void KisPaintOpPreset::updateImg()
 {
+    if (!m_d->settings) return;
+
     Q_ASSERT(!m_d->settings->getString("paintop").isNull());
-    
+    if (m_d->settings->getString("paintop").isNull()) return;
+
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "paintop_preset");
     KisPainter gc(dev);
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_d->settings->getString("paintop"),
@@ -108,7 +125,7 @@ void KisPaintOpPreset::updateImg()
     KisPaintInformation i1(QPointF(0, 25), PRESSURE_MIN);
     KisPaintInformation i2(QPointF(50, 25), PRESSURE_MAX);
     KisPaintInformation i3(QPointF(100, 25), PRESSURE_MIN);
-    
+
     gc.paintBezierCurve(i1, QPointF(25, 0), QPointF(25,0), i2);
     gc.paintBezierCurve(i2, QPointF(75, 0), QPointF(75,0), i3);
     gc.end();

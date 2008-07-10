@@ -23,7 +23,7 @@
 #include <KoProgressUpdater.h>
 #include "kis_types.h"
 #include "kis_threaded_applicator.h"
-
+#include "kis_processing_information.h"
 #include "krita_export.h"
 
 class KisFilter;
@@ -36,33 +36,37 @@ public:
 
     KisFilterJob( const KisFilter* filter,
                   const KisFilterConfiguration * config,
-                  QObject * parent, KisPaintDeviceSP dev, 
-                  const QRect & rc, 
+                  QObject * parent,
+                  KisPaintDeviceSP dev,
+                  const QRect & rc,
                   int margin,
-                  KoUpdater updater  );
+                  KoUpdater updater,
+                  KisSelectionSP selection);
 
     virtual ~KisFilterJob() {}
 
 
     virtual void run();
-    
+
 private:
 
     const KisFilter * m_filter;
     const KisFilterConfiguration * m_config;
     KoUpdater m_updater;
+    const KisSelectionSP m_selection;
 };
 
 class KRITAIMAGE_EXPORT KisFilterJobFactory : public KisJobFactory {
 public:
 
-    KisFilterJobFactory( const KisFilter* filter, const KisFilterConfiguration * config );
+    KisFilterJobFactory( const KisFilter* filter, const KisFilterConfiguration * config, KisSelectionSP selection = 0 );
     ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater updater );
 
 private:
 
     const KisFilter * m_filter;
     const KisFilterConfiguration * m_config;
+    const KisSelectionSP m_selection;
 };
 
 #endif

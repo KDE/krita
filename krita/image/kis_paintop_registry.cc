@@ -97,6 +97,14 @@ KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, QWidget * pare
     return 0;
 }
 
+KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image ) const
+{
+    KisPaintOpPresetSP preset = new KisPaintOpPreset();
+    preset->setName(i18n("default"));
+    preset->setSettings(settings(id, parent, inputDevice, image));
+    preset->setValid(true);
+}
+
 bool KisPaintOpRegistry::userVisible(const KoID & id, const KoColorSpace* cs) const
 {
 

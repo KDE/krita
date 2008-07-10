@@ -67,6 +67,11 @@ public:
      */
     KisPaintOpSettingsSP settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image = 0) const;
 
+    /**
+     * @return a default preset for the given paintop.
+     */
+    KisPaintOpPresetSP defaultPreset(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image = 0) const;
+
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KoID & id, const KoColorSpace* cs) const;
 

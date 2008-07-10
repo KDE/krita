@@ -31,6 +31,7 @@ struct KisPaintOpSettings::Private {
 KisPaintOpSettings::KisPaintOpSettings() : d(new Private)
 {
 }
+
 KisPaintOpSettings::~KisPaintOpSettings()
 {
     delete d;
@@ -61,3 +62,4 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     c->fromXML(toXML());
     return c;
 }
+

@@ -25,7 +25,7 @@
 #include "kopageapp_export.h"
 
 class QSize;
-class KoPageLayout;
+struct KoPageLayout;
 class KoZoomHandler;
 
 

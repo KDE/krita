@@ -165,14 +165,58 @@ QImage KoPatternBackground::pattern()
     return QImage();
 }
 
-void KoPatternBackground::setPatternRepeat( PatternRepeat repeat )
+void KoPatternBackground::setRepeat( PatternRepeat repeat )
 {
     d->repeat = repeat;
 }
 
-KoPatternBackground::PatternRepeat KoPatternBackground::patternRepeat() const
+KoPatternBackground::PatternRepeat KoPatternBackground::repeat() const
 {
     return d->repeat;
+}
+
+KoPatternBackground::ReferencePoint KoPatternBackground::referencePoint() const
+{
+    return d->refPoint;
+}
+
+void KoPatternBackground::setReferencePoint( ReferencePoint referencePoint )
+{
+    d->refPoint = referencePoint;
+}
+
+QPointF KoPatternBackground::referencePointOffset() const
+{
+    return d->refPointOffsetPercent;
+}
+
+void KoPatternBackground::setReferencePointOffset( const QPointF &offset )
+{
+    qreal ox = qMax( 0.0, qMin( 100.0, offset.x() ) );
+    qreal oy = qMax( 0.0, qMin( 100.0, offset.y() ) );
+
+    d->refPointOffsetPercent = QPointF( ox, oy );
+}
+
+QPointF KoPatternBackground::tileRepeatOffset() const
+{
+    return d->tileRepeatOffsetPercent;
+}
+
+void KoPatternBackground::setTileRepeatOffset( const QPointF &offset )
+{
+    d->tileRepeatOffsetPercent = offset;
+}
+
+QSize KoPatternBackground::patternDisplaySize() const
+{
+    return d->targetSize().toSize();
+}
+
+void KoPatternBackground::setPatternDisplaySize( const QSize &size )
+{
+    d->targetImageSizePercent = QSizeF();
+    d->targetImageSize = QSizeF( size );
 }
 
 KoPatternBackground& KoPatternBackground::operator = ( const KoPatternBackground &rhs )

@@ -35,6 +35,7 @@ public:
     /// Pattern reference point
     enum ReferencePoint { None, TopLeft, Top, TopRight, Left, Center, Right, BottomLeft, Bottom, BottomRight };
 
+    /// Constructs a new pattern background utilizing the given image collection
     KoPatternBackground( KoImageCollection *collection );
 
     virtual ~KoPatternBackground();
@@ -51,10 +52,34 @@ public:
     QImage pattern();
 
     /// Sets the pattern repeat
-    void setPatternRepeat( PatternRepeat repeat );
+    void setRepeat( PatternRepeat repeat );
 
     /// Returns the pattern repeat
-    PatternRepeat patternRepeat() const;
+    PatternRepeat repeat() const;
+
+    /// Returns the pattern reference point identifier
+    ReferencePoint referencePoint() const;
+
+    /// Sets the pattern reference point
+    void setReferencePoint( ReferencePoint referencePoint );
+
+    /// Returns reference point offset in percent of the size to fill
+    QPointF referencePointOffset() const;
+
+    /// Sets the reference point offset in percent of the size to fill
+    void setReferencePointOffset( const QPointF &offset );
+
+    /// Returns tile repeat offset in percent of the size to fill
+    QPointF tileRepeatOffset() const;
+
+    /// Sets the tile repeat offset in percent of the size to fill
+    void setTileRepeatOffset( const QPointF &offset );
+
+    /// Returns the pattern display size
+    QSize patternDisplaySize() const;
+
+    /// Sets pattern display size
+    void setPatternDisplaySize( const QSize &size );
 
     /// Assignment operator
     KoPatternBackground& operator = ( const KoPatternBackground &rhs );

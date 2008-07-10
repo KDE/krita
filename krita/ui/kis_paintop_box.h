@@ -90,7 +90,7 @@ private:
     KisPresetWidget * m_presetWidget;
     KisPaintOpPresetsWidget * m_presetsPopup;
     KisView2 * m_view;
-    
+
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
 
@@ -99,6 +99,9 @@ private:
 
     typedef QHash<KoInputDevice, QList<KisPaintOpSettingsSP> > InputDevicePaintopSettingsMap;
     InputDevicePaintopSettingsMap m_inputDevicePaintopSettings;
+
+    typedef QHash<KoInputDevice, QList<KisPaintOpPresetSP> > InputDevicePresetsMap;
+    InputDevicePresetsMap m_inputDevicePresets;
 };
 
 

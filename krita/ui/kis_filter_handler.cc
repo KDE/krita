@@ -67,7 +67,7 @@ struct KisFilterHandler::Private {
     KisPaintDeviceSP dev;
 };
 
-KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view) 
+KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view)
     : QObject(parent)
     , m_d(new Private)
 {
@@ -126,7 +126,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     if( !layer ) return;
 
     KisFilterSP filter = KisFilterRegistry::instance()->value( config->name() );
-    
+
     m_d->dev = layer->paintDevice();
 
     QRect r1 = m_d->dev->extent();
@@ -135,7 +135,9 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     // Filters should work only on the visible part of an image.
     QRect rect = r1.intersect(r2);
 
-    if (KisSelectionSP selection = layer->selection() ) {
+    KisSelectionSP selection = m_d->view->selection();
+
+    if (  selection  ) {
         QRect r3 = selection->selectedExactRect();
         rect = rect.intersect(r3);
     }
@@ -144,9 +146,12 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     KoProgressUpdater updater( m_d->view->statusBar()->progress() );
     if (layer->image()->undo()) cmd = new KisTransaction( filter->name(), m_d->dev);
 
+    KisProcessingInformation src( m_d->dev, rect.topLeft(), selection );
+    KisProcessingInformation dst( m_d->dev, rect.topLeft(), selection );
+
     if ( !filter->supportsThreading() ) {
         KoUpdater up = updater.startSubtask();
-        filter->process(m_d->dev, rect, config, &up);
+        filter->process(src, dst, rect.size(), config, &up);
         areaDone(rect);
     }
     else {

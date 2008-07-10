@@ -78,8 +78,8 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", "/usr/share/create/patterns/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("kis_paintOppresets", "data", "krita/paintOppresets/");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_paintOppresets", QDir::homePath() + QString("/.create/paintOppresets/krita"));
+    KGlobal::mainComponent().dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
+    KGlobal::mainComponent().dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
 
 
     m_brushServer = new BrushResourceServer();
@@ -92,7 +92,7 @@ KisResourceServerProvider::KisResourceServerProvider()
     connect(patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
     patternThread->start();
 
-    m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintOppresets");
+    m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets");
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer, "*.kpp");
     connect(paintOpPresetThread, SIGNAL(finished()), this, SLOT(paintOpPresetThreadDone()));
     paintOpPresetThread->start();

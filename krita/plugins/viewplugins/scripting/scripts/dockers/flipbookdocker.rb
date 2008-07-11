@@ -1,4 +1,3 @@
-GC.disable
 
 require 'Krita'
 require 'KritaDockFactory'

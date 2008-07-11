@@ -84,7 +84,7 @@ void KisToolPaint::resourceChanged( int key, const QVariant & v )
     KisTool::resourceChanged( key, v );
 
     switch ( key ) {
-    case ( KisCanvasResourceProvider::CurrentKritaLayer ):
+    case ( KisCanvasResourceProvider::CurrentKritaNode ):
         updateCompositeOpComboBox();
         break;
     default:
@@ -182,6 +182,7 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 
 void KisToolPaint::slotSetOpacity(double opacityPerCent, bool final)
 {
+    Q_UNUSED(final);
     m_opacity = (int)(opacityPerCent * OPACITY_OPAQUE / 100);
 }
 

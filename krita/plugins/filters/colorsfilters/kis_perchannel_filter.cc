@@ -344,6 +344,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
     : KisFilterConfigWidget(parent, f)
 {
+    Q_ASSERT(dev);
     int i;
     int height;
     m_page = new WdgPerChannel(this);

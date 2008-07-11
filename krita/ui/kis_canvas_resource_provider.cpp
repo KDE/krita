@@ -31,7 +31,6 @@
 #include <kis_pattern.h>
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
-#include <kis_layer.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paintop_preset.h>
@@ -156,11 +155,6 @@ const KisPaintOpSettingsSP KisCanvasResourceProvider::currentPaintopSettings() c
                                              .value<void *>() );
 }
 
-KisLayerSP KisCanvasResourceProvider::currentLayer() const
-{
-    return m_resourceProvider->resource( CurrentKritaLayer ).value<KisLayerSP>();
-}
-
 void KisCanvasResourceProvider::resetDisplayProfile()
 {
     // XXX: The X11 monitor profile overrides the settings
@@ -283,16 +277,13 @@ void KisCanvasResourceProvider::slotSetBGColor(const KoColor& c)
     setBGColor( c );
 }
 
-void KisCanvasResourceProvider::slotLayerActivated( const KisLayerSP l )
-{
-    QVariant v;
-    v.setValue( l );
-    m_resourceProvider->setResource( CurrentKritaLayer, v );
-    emit sigLayerChanged( currentLayer() );
-}
-
 void KisCanvasResourceProvider::slotNodeActivated( const KisNodeSP node )
 {
+    if (node)
+        dbgUI << " node activated: " << node->name();
+    else
+        dbgUI << " null node activated";
+
     QVariant v;
     v.setValue( node );
     m_resourceProvider->setResource( CurrentKritaNode, v );
@@ -343,8 +334,8 @@ void KisCanvasResourceProvider::slotResourceChanged( int key, const QVariant & r
     case ( CurrentPaintopSettings ):
         emit sigPaintopChanged(currentPaintop(), currentPaintopSettings() );
         break;
-    case ( CurrentKritaLayer ) :
-        emit sigLayerChanged( currentLayer() );
+    case ( CurrentKritaNode ) :
+        emit sigNodeChanged( currentNode() );
     default:
         ;
         // Do nothing

@@ -108,13 +108,20 @@ QWidget* KisToolSelectPath::optionWidget()
 
 void KisToolSelectPath::addPathShape()
 {
-    KisLayerSP currentNode = m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    KisNodeSP currentNode =
+        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode ).value<KisNodeSP>();
     if(!currentNode)
         return;
 
-    KisImageSP image = currentNode->image();
+    KisImageSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
     KisPaintDeviceSP dev = currentNode->paintDevice();
-//    bool hasSelection = currentNode->selection();
+
+    KisSelectionSP selection = image->globalSelection();
+    // XXX: also get global selection!
+    if ( selection && currentNode->inherits("KisLayer") ) {
+        selection = qobject_cast<KisLayer*>(currentNode.data())->selection();
+    }
+
 
     m_shape->normalize();
 

@@ -99,7 +99,7 @@ void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
     internal->setResource(KisCanvasResourceProvider::CurrentPattern, rp->currentPattern());
     internal->setResource(KisCanvasResourceProvider::CurrentGradient, rp->currentGradient());
 
-    internal->setResource(KisCanvasResourceProvider::CurrentKritaLayer, rp->currentLayer().data());
+    internal->setResource(KisCanvasResourceProvider::CurrentKritaNode, rp->currentNode().data());
     internal->setResource(KisCanvasResourceProvider::HdrExposure, rp->HDRExposure());
     internal->setResource(KisCanvasResourceProvider::CurrentPaintop, rp->currentPaintop());
 
@@ -135,11 +135,11 @@ void MixerCanvas::checkCurrentLayer()
 {
     KoCanvasResourceProvider *internal = resourceProvider();
 
-    KisLayerSP current = internal->resource(KisCanvasResourceProvider::CurrentKritaLayer).value<KisLayerSP>();
+    KisNodeSP current = internal->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     if (current.data() != m_layer.data()) {
         QVariant v;
-        v.setValue(KisLayerSP(m_layer.data()));
-        internal->setResource(KisCanvasResourceProvider::CurrentKritaLayer, v);
+        v.setValue(KisNodeSP(m_layer.data()));
+        internal->setResource(KisCanvasResourceProvider::CurrentKritaNode, v);
     }
 }
 
@@ -238,7 +238,7 @@ void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
             checkCurrentPaintop();
             break;
 #endif
-        case KisCanvasResourceProvider::CurrentKritaLayer:
+        case KisCanvasResourceProvider::CurrentKritaNode:
             checkCurrentLayer();
             break;
     }

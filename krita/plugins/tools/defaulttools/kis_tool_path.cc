@@ -42,16 +42,24 @@ KisToolPath::~KisToolPath()
 
 void KisToolPath::addPathShape()
 {
-    KisLayerSP currentNode = m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaLayer ).value<KisLayerSP>();
+    KisNodeSP currentNode =
+        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode ).value<KisLayerSP>();
     if(!currentNode)
         return;
 
-    KisImageSP image = currentNode->image();
+    KisImageSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
     KisPaintDeviceSP dev = currentNode->paintDevice();
 
-    KisBrush* brush = static_cast<KisBrush *>( m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentBrush ).value<void *>());
+    KisBrush* brush =
+        static_cast<KisBrush *>( m_canvas->resourceProvider()->
+                                    resource( KisCanvasResourceProvider::CurrentBrush ).value<void *>());
 
-    KisPainter painter(dev, currentNode->selection());
+    KisSelectionSP selection = image->globalSelection();
+    // XXX: also get global selection!
+    if ( selection && currentNode->inherits("KisLayer") ) {
+        selection = qobject_cast<KisLayer*>(currentNode.data())->selection();
+    }
+    KisPainter painter(dev, selection);
     painter.beginTransaction(i18n("Path"));
     painter.setPaintColor(KoColor(Qt::black, dev->colorSpace()));
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);

@@ -54,7 +54,6 @@ public:
         CurrentGradient,
         CurrentPaintop,
         CurrentPaintopSettings,
-        CurrentKritaLayer,
         CurrentDisplayProfile,
         CurrentImage,
         CurrentKritaNode,
@@ -86,8 +85,6 @@ public:
     KoID currentPaintop() const;
     const KisPaintOpSettingsSP currentPaintopSettings() const;
 
-    KisLayerSP currentLayer() const;
-
     void resetDisplayProfile();
     const KoColorProfile * currentDisplayProfile() const;
 
@@ -108,7 +105,6 @@ public slots:
     void slotGradientActivated(KoResource *gradient);
     void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettingsSP paintopSettings);
     void slotPaintOpPresetActivated( const KisPaintOpPresetSP preset );
-    void slotLayerActivated( const KisLayerSP layer );
     void slotNodeActivated( const KisNodeSP node );
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
 
@@ -132,7 +128,6 @@ signals:
     void sigPatternChanged(KisPattern *);
     void sigPaintopChanged(KoID paintop, const KisPaintOpSettingsSP);
     void sigPaintOpPresetChanged( KisPaintOpPresetSP preset );
-    void sigLayerChanged(const KisLayerSP);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);

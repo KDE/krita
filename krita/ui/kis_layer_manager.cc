@@ -129,7 +129,7 @@ void KisLayerManager::activateLayer( KisLayerSP layer )
     m_activeLayer = layer;
     emit sigLayerActivated( layer );
     layersUpdated();
-    m_view->resourceProvider()->slotLayerActivated( layer );
+    m_view->resourceProvider()->slotNodeActivated( layer.data() );
 }
 
 
@@ -935,7 +935,7 @@ void KisLayerManager::layersUpdated()
     if (!layer) return;
 
     m_view->updateGUI();
-    m_view->resourceProvider()->slotLayerActivated( layer );
+    m_view->resourceProvider()->slotNodeActivated( layer.data() );
 
 }
 

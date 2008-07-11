@@ -109,6 +109,10 @@ void KisTool::activate(bool )
 
     d->currentNode = m_canvas->resourceProvider()->
                         resource( KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    if (d->currentNode)
+        dbgUI << "Activating tool " << toolId() << " with node " << d->currentNode->name();
+    else
+        dbgUI << "Activating tool " << toolId() << " with no node ";
     d->currentExposure = static_cast<float>( m_canvas->resourceProvider()->
                         resource( KisCanvasResourceProvider::HdrExposure ).toDouble() );
     d->currentGenerator = static_cast<KisFilterConfiguration*>(m_canvas->resourceProvider()->
@@ -147,6 +151,10 @@ void KisTool::resourceChanged( int key, const QVariant & v )
         d->currentExposure = static_cast<float>( v.toDouble() );
     case ( KisCanvasResourceProvider::CurrentGeneratorConfiguration ):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>() );
+    case ( KisCanvasResourceProvider::CurrentKritaNode):
+        d->currentNode = static_cast<KisNode*>(v.value<void *>() );
+        if (d->currentNode)
+            dbgUI << " node changed to " << d->currentNode->name();
     default:
         ;
         // Do nothing

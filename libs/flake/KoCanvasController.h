@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
@@ -340,6 +340,9 @@ protected:
     virtual void dragLeaveEvent( QDragLeaveEvent *event );
     /// reimplemented from QWidget
     virtual void wheelEvent( QWheelEvent *event );
+    /// reimplemented from QWidget
+    virtual void keyPressEvent(QKeyEvent *event);
+
 
 private:
 

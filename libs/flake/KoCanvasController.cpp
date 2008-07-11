@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
@@ -558,6 +558,11 @@ void KoCanvasController::dragMoveEvent ( QDragMoveEvent *event )
 void KoCanvasController::dragLeaveEvent( QDragLeaveEvent *event )
 {
     m_d->viewportWidget->handleDragLeaveEvent( event );
+}
+
+void KoCanvasController::keyPressEvent(QKeyEvent *event)
+{
+    KoToolManager::instance()->switchToolByShortcut(event);
 }
 
 void KoCanvasController::wheelEvent( QWheelEvent *event ) {

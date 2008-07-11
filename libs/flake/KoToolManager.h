@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *  Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -224,8 +224,14 @@ protected:
      */
     void registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas);
 
-private:
+    // make it a friend so we can temporary switch tool from there
+    friend class KoCanvasController;
+    void switchToolByShortcut(QKeyEvent *event);
 
+protected slots:
+    void switchToolTemporaryRequested(const QString &id);
+
+private:
     KoToolManager();
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);
@@ -236,16 +242,11 @@ private:
     bool eventFilter(QObject *object, QEvent *event);
 
 private slots:
-
-    // make it a friend so we can temporary switch tool from there
-    friend class KoCanvasController;
-
     void toolActivated(ToolHelper *tool);
     void detachCanvas(KoCanvasController *controller);
     void attachCanvas(KoCanvasController *controller);
     void movedFocus(QWidget *from, QWidget *to);
     void updateCursor(QCursor cursor);
-    void switchToolTemporaryRequested(const QString &id);
     void switchBackRequested();
     void selectionChanged(QList<KoShape*> shapes);
 

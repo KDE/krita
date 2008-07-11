@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
@@ -228,25 +228,6 @@ KoInputDevice KoToolManager::currentInputDevice() const {
 
 void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *controller) {
     setup();
-
-    class ToolSwitchAction : public KAction {
-      public:
-        ToolSwitchAction(KActionCollection *parent, const QString &toolId) : KAction(parent) {
-            m_toolId = toolId;
-        }
-      private:
-        void slotTriggered() {
-            KoToolManager::instance()->switchToolRequested(m_toolId);
-        }
-        QString m_toolId;
-    };
-
-    foreach(ToolHelper *th, d->tools) {
-        ToolSwitchAction *tsa = new ToolSwitchAction(ac, th->id());
-        ac->addAction("tool_"+ th->name(), tsa);
-        tsa->setShortcut(th->shortcut());
-        tsa->setText(i18n("Activate %1", th->name()));
-    }
 
     if(! d->canvasses.contains(controller)) {
         kWarning(30006) << "registerTools called on a canvasController that has not been registered (yet)!\n";
@@ -581,6 +562,18 @@ KoCanvasController *KoToolManager::activeCanvasController() const {
     if( ! d->canvasData )
         return 0;
     return d->canvasData->canvas;
+}
+
+void KoToolManager::switchToolByShortcut(QKeyEvent *event)
+{
+    QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
+
+    foreach(ToolHelper *th, d->tools) {
+        if (th->shortcut().contains(item)) {
+            event->accept();
+            switchTool(th->id(), false);
+        }
+    }
 }
 
 QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) {

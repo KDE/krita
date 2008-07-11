@@ -580,10 +580,10 @@ KoShape * KisDoc2::shapeForNode( KisNodeSP layer ) const
     return m_d->shapeController->shapeForNode( layer );
 }
 
-
 KoShape * KisDoc2::addShape(const KisNodeSP node)
 {
-    m_d->shapeController->slotNodeAdded( const_cast<KisNode*>(node.data()), 0 );
+    KisNodeSP parent = node->parent();
+    m_d->shapeController->slotNodeAdded( parent.data(), parent->index(node) );
     return m_d->shapeController->shapeForNode( node );
 }
 

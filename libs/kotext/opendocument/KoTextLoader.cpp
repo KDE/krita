@@ -47,6 +47,7 @@
 #include <KoVariableRegistry.h>
 #include <KoProperties.h>
 #include <KoImageCollection.h>
+#include <KoTextBlockData.h>
 
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
@@ -325,41 +326,25 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
 
     kDebug(32500) << "localName =" << element.localName() << "style-name =" << styleName << "outline-level =" << level;
 
-    // Each header is within a list. That allows us to have them numbered on demand.
-    QTextListFormat listformat;
-    QTextList* list = cursor.createList( listformat );
-
     // Add a new block which will become the list-item for the header
-    cursor.insertBlock();
     QTextBlock block = cursor.block();
 
     // Set the paragraph-style on the block
     KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName, d->stylesDotXml );
-    Q_ASSERT( paragraphStyle ); // if that really can happen then just create a new style for the header and add it...
-    if( ! paragraphStyle->listStyle().isValid()) {
-        // The outline style is a list style that is applied to all headings within a text document
-        // where the heading's paragraph style does not define a list style to use itself.
-        KoListStyle liststyle;
-        liststyle.setLevel(d->textSharedData->outlineLevel(level));
-        paragraphStyle->setListStyle(liststyle);
-    }
-    else if( ! paragraphStyle->listStyle().hasPropertiesForLevel(level) ) {
-        KoListStyle liststyle = paragraphStyle->listStyle();
-        liststyle.setLevel(d->textSharedData->outlineLevel(level));
-        paragraphStyle->setListStyle(liststyle);
-    }
-
-    //sebsauer; FIXME
-    //headers need to look like <li><h1><p>headertext</p></h1></li> where <li><h1><p> got
-    //on save merged into text:h. But the problem here is, that we are not able to change
-    //e.g. the style of all outlines with level2 any longer cause each h2 does have now
-    //an own style-instance for it. hmmmm... probably what would make most sense is to
-    //have one global outline-list KoListStyle?!
-    //paragraphStyle->setIsOutline(true);
-
-    paragraphStyle->setListLevel(level);
     paragraphStyle->applyStyle(block, /*applyListStyle*/ false);
 
+    KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
+    if (!blockData)
+    {
+	// Ok, we must create the KoTextBlockData for this block. Quite logical indeed... Except if KoParagraphStyle does create the block data for us ?
+	blockData = new KoTextBlockData();
+	block.setUserData(blockData);
+    }
+    if (blockData)
+    {
+	kDebug(32500) << "Ok, setting the outline level in a block data, good...";
+	blockData->setOutlineLevel(level);
+    }
     //1.6: KoTextParag::loadOasisSpan
     bool stripLeadingSpace = true;
     int pos = cursor.position();
@@ -371,42 +356,6 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
             tempCursor.removeSelectedText();                                    // remove it
         }
     }
-
-#if 0 // TODO tz: I don't understand how should this be used
-//sebsauer; fine that this was reason enough to make it not working any longer :-(
-//hint, it was done the same way like we did in 1.6.x and it *WAS* working a year ago.
-
-    // Add the block as list-item to the list
-    list->add( block );
-
-    // Set the list-properties
-    if( ! listStyle->hasPropertiesForLevel( level ) ) {
-        KoListLevelProperties props;
-        //props.setStyle(KoListStyle::DecimalItem);
-        //props.setListItemSuffix(".");
-        props.setStyle( KoListStyle::NoItem );
-        //props.setLevel(level);
-        //props.setDisplayLevel(level);
-        listStyle->setLevel( d->textSharedData->outlineLevel( level, props ) );
-    }
-
-    // apply the list-style on the block for the defined level
-    if ( element.attributeNS ( KoXmlNS::text, "is-list-header", "false") != "true" ) {
-        listStyle->applyStyle( block, level );
-    }
-
-    // TODO tz: this needs to be investigated
-    // Remove the first char. This seems to be needed else it crashes for whatever reason :-/
-    int endPosition = cursor.position();
-    cursor.setPosition( list->item(0).position() );
-    cursor.deleteChar();
-    cursor.setPosition( endPosition - 1 );
-#endif
-
-    // Add a new empty block which finish's our list-item block
-    QTextBlockFormat emptyTbf;
-    QTextCharFormat emptyCf;
-    cursor.insertBlock( emptyTbf, emptyCf );
 }
 
 void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )

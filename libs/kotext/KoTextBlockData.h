@@ -98,6 +98,17 @@ public:
      */
     KoTextBlockBorderData *border() const;
 
+    /**
+     * Return the outline level of this block, or 0 if it's not a heading.
+     * This information is here and not in the styles because the OpenDocument specification says so.
+     * See ODF Spec 1.1, §14.1, Outline Numbering Level, but also other parts of the specification.
+     */
+    int outlineLevel() const;
+    
+    /**
+     * Change this block outline level
+     */
+    void setOutlineLevel (int outline);
 private:
     class Private;
     Private * const d;

@@ -21,7 +21,7 @@
 
 class KoTextBlockData::Private {
 public:
-    Private() : counterWidth(0), counterSpacing(0), border(0) {}
+    Private() : counterWidth(0), counterSpacing(0), border(0), outline(0) {}
     ~Private() {
         if(border && border->removeUser() == 0)
             delete border;
@@ -32,6 +32,7 @@ public:
     QString partialCounterText;
     QPointF counterPos;
     KoTextBlockBorderData *border;
+    int outline;
 };
 
 KoTextBlockData::KoTextBlockData()
@@ -98,5 +99,13 @@ const QPointF &KoTextBlockData::counterPosition() const {
 
 KoTextBlockBorderData *KoTextBlockData::border() const {
     return d->border;
+}
+
+int KoTextBlockData::outlineLevel() const {
+    return d->outline;
+}
+
+void KoTextBlockData::setOutlineLevel (int outline) {
+    d->outline = outline;
 }
 

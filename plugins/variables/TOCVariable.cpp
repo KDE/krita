@@ -38,6 +38,7 @@
 #include <KoXmlNS.h>
 #include <KoTextLoader.h>
 #include <KoTextSharedLoadingData.h>
+#include <KoTextBlockData.h>
 
 TOCVariable::TOCVariable()
     : KoVariable(true), currentDoc(0)
@@ -126,16 +127,22 @@ void TOCSource::buildFromDocument (const QTextDocument *source, QTextCursor *tar
     block = source->begin();
     while (block.isValid())
     {
-	// This is a small hack that I just can't commit, too dirty... Please wait, this part will come later.
-	/*if (block.blockFormat().boolProperty(KoParagraphStyle::HeadingBlock))
+	if (block.userData())
 	{
-	    KoShape *shape = docLayout->shapeForPosition(block.position());
-	    if (shape)
+	    KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
+	    if (blockData)
 	    {
-		target->insertText("TOC entry :" + block.text() + ";page" + QString::number(dynamic_cast<KoTextShapeData *>(shape->userData())->pageNumber()));
-		target->insertBlock();
+		if (blockData->outlineLevel() > 0)
+		{
+		    KoShape *shape = docLayout->shapeForPosition(block.position());
+		    if (shape)
+		    {
+			target->insertText("TOC entry " + QString::number(blockData->outlineLevel()) + " :" + block.text() + ";page" + QString::number(dynamic_cast<KoTextShapeData *>(shape->userData())->pageNumber()));
+			target->insertBlock();
+		    }
+		}
 	    }
-	}*/
+	}
 	block = block.next();
     }
     target->endEditBlock();

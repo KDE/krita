@@ -28,9 +28,20 @@
 
 #include "ui/kis_aboutdata.h"
 
+#ifndef NDEBUG
+static void qtMessageHandler(QtMsgType type, const char *msg)
+{
+    fprintf(stderr, "%s\n", msg);
+    if (type == QtFatalMsg)
+        abort();
+}
+#endif
+
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-
+#ifndef NDEBUG
+    qInstallMsgHandler(qtMessageHandler);
+#endif
     KCmdLineArgs::init(argc, argv, newKritaAboutData());
 
     KCmdLineOptions options;

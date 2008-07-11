@@ -258,12 +258,14 @@ void KisNodeManager::activateNode( KisNodeSP node )
 
     KoShape * shape = m_d->view->document()->shapeForNode( node );
     if ( !shape ) {
-        shape = m_d->view->document()->addShape( node->parent() );
+        shape = m_d->view->document()->addShape( node );
     }
+#if 0
     KoShape * parentShape = shape->parent();
     if (!parentShape) {
         parentShape = m_d->view->document()->addShape( node->parent() );
     }
+#endif
 
     selection->deselectAll();
     selection->select(shape);

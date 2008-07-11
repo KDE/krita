@@ -71,10 +71,11 @@ class FlipBookWidget < Qt::Widget
         @filesList.model = @model
         
         @gridLayout.addWidget(@filesList, 1, 0, 1, 3)
+        @currentImageFileName = ""
     end
     def slotAdd
         file = KDE::FileDialog::getOpenFileName()
-        return if( file == "")
+        return if( file == "" or file.nil?)
         # add the file
         @model.addFile( file )
     end
@@ -82,8 +83,10 @@ class FlipBookWidget < Qt::Widget
         @model.removeFile( @filesList.currentIndex)
     end
     def slotSelected(item)
-        puts @model.fileAt(item)
-        Krita.document().openUrl( @model.fileAt(item) )
+        if( @currentImageFileName != @model.fileAt(item))
+            @currentImageFileName = @model.fileAt(item)
+            Krita.document().openUrl( @currentImageFileName )
+        end
     end
 end
 def createDockWidget

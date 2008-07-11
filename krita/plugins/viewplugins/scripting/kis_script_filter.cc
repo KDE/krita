@@ -36,6 +36,12 @@ class KisScriptFilter::Private
 KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), KoID(action->property("categoryId").toString(), i18n(action->property("categoryName").toString().toUtf8().data() )), action->text()), d(new Private(action))
 {
     d->action->addObject(this, "KritaFilter", Kross::ChildrenInterface::AutoConnectSignals);
+    setSupportsPainting(d->action->property("supportsPainting").toBool());
+    setSupportsPreview(d->action->property("supportsPreview").toBool());
+    setSupportsIncrementalPainting(d->action->property("supportsIncrementalPainting").toBool());
+    setSupportsAdjustmentLayers(d->action->property("supportsAdjustmentLayers").toBool());
+    setSupportsThreading( false );
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
 KisScriptFilter::~KisScriptFilter()
@@ -56,29 +62,6 @@ void KisScriptFilter::process(KisConstProcessingInformation srcInfo, KisProcessi
     d->action->trigger();
 
     emit scriptProcess(new Scripting::ConstPaintDevice(srcInfo.paintDevice(), 0), srcInfo.topLeft(), new Scripting::PaintDevice(dstInfo.paintDevice(), 0), dstInfo.topLeft(), size, 0);
-}
-
-bool KisScriptFilter::supportsPainting() const
-{
-    return d->action->property("supportsPainting").toBool();
-}
-bool KisScriptFilter::supportsPreview() const
-{
-    return d->action->property("supportsPreview").toBool();
-}
-bool KisScriptFilter::supportsAdjustmentLayers() const
-{
-    return d->action->property("supportsAdjustmentLayers").toBool();
-}
-
-bool KisScriptFilter::supportsIncrementalPainting() const
-{
-    return d->action->property("supportsIncrementalPainting").toBool();
-}
-
-bool KisScriptFilter::supportsThreading() const
-{
-    return d->action->property("supportsThreading").toBool();
 }
 
 #include "kis_script_filter.moc"

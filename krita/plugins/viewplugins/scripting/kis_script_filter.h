@@ -44,12 +44,6 @@ class KisScriptFilter : public QObject, public KisFilter {
         QString category() const;
     signals:
         void scriptProcess( QObject* src, const QPoint& srcTopLeft, QObject* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config ) const;
-    public:
-        virtual bool supportsPainting() const;
-        virtual bool supportsPreview() const;
-        virtual bool supportsAdjustmentLayers() const;
-        virtual bool supportsIncrementalPainting() const;
-        virtual bool supportsThreading() const;
     private:
         class Private;
         Private* const d;

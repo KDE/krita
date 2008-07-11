@@ -422,7 +422,7 @@ KisUndoAdapter * KisView2::undoAdapter()
 
 void KisView2::slotLoadingFinished()
 {
-    disconnect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+//     disconnect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished())); // TODO why the deconnection ?
 
     KisImageSP img = image();
     slotSetImageSize( img->width(), img->height() );

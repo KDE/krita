@@ -501,7 +501,7 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void TextTool::mousePressEvent( KoPointerEvent *event )
+void TextTool::updateSelectedShape(KoPointerEvent *event)
 {
     const bool canMoveCaret = !m_textCursor.hasSelection() || event->button() !=  Qt::RightButton;
 
@@ -519,12 +519,18 @@ void TextTool::mousePressEvent( KoPointerEvent *event )
         }
         setShapeData(static_cast<KoTextShapeData*> (m_textShape->userData()));
     }
+}
+
+void TextTool::mousePressEvent( KoPointerEvent *event )
+{
+    updateSelectedShape(event);
     KoSelection *selection = m_canvas->shapeManager()->selection();
     if(!selection->isSelected(m_textShape)) {
         selection->deselectAll();
         selection->select(m_textShape);
     }
 
+    const bool canMoveCaret = !m_textCursor.hasSelection() || event->button() !=  Qt::RightButton;
     if(canMoveCaret) {
         bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         if(m_textCursor.hasSelection() && !shiftPressed)
@@ -730,6 +736,8 @@ void TextTool::mouseDoubleClickEvent( KoPointerEvent *event )
 void TextTool::mouseMoveEvent( KoPointerEvent *event )
 {
     useCursor(Qt::IBeamCursor);
+    updateSelectedShape(event);
+
     int position = pointToPosition(event->point);
 
     if(event->buttons() == Qt::NoButton) {

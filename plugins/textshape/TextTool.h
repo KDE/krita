@@ -185,6 +185,7 @@ private:
     void updateActions();
     void updateStyleManager();
     void setShapeData(KoTextShapeData *data);
+    void updateSelectedShape(KoPointerEvent *event);
 
     void editingPluginEvents();
     void finishedWord();

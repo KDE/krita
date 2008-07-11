@@ -564,23 +564,23 @@ void KoCanvasController::wheelEvent( QWheelEvent *event ) {
     if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
         const bool oldIgnoreScrollSignals = m_d->ignoreScrollSignals;
         m_d->ignoreScrollSignals = true;
-        
+
         const QPoint offset( horizontalScrollBar()->value(), verticalScrollBar()->value() );
         const QPoint mousePos( event->pos() + offset );
         const double zoomLevel = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
 
-        QPoint oldCenter = preferredCenter();
+        QPointF oldCenter = preferredCenter();
         if ( visibleWidth() >= m_d->documentSize.width() )
             oldCenter.rx() = m_d->documentSize.width() * 0.5;
         if ( visibleHeight() >= m_d->documentSize.height() )
             oldCenter.ry() = m_d->documentSize.height() * 0.5;
-        
-        const QPoint newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
-        
+
+        const QPointF newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
+
         if(event->delta() > 0)
-            zoomIn( newCenter );
+            zoomIn( newCenter.toPoint() );
         else
-            zoomOut( newCenter );
+            zoomOut( newCenter.toPoint() );
         event->accept();
 
         m_d->ignoreScrollSignals = oldIgnoreScrollSignals;

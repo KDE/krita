@@ -162,7 +162,7 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
 
     KoPASavingContext paContext( *bodyWriter, mainStyles, documentContext.embeddedSaver, 1, KoShapeSavingContext::Store );
 
-    if ( !saveOasisPages( paContext, d->pages, d->masterPages ) ) {
+    if ( !saveOdfPages( paContext, d->pages, d->masterPages ) ) {
         return false;
     }
 
@@ -219,7 +219,7 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
     return pages;
 }
 
-bool KoPADocument::saveOasisPages( KoPASavingContext &paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )
+bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )
 {
     paContext.addOption( KoPASavingContext::DrawId );
     paContext.addOption( KoPASavingContext::AutoStyleInStyleXml );

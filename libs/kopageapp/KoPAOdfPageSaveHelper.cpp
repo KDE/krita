@@ -65,7 +65,7 @@ bool KoPAOdfPageSaveHelper::writeBody()
 {
     Q_ASSERT( m_context );
     if ( m_context ) {
-        return m_doc->saveOasisPages( *( static_cast<KoPASavingContext*>( m_context ) ), m_pages, m_masterPages );
+        return m_doc->saveOdfPages( *( static_cast<KoPASavingContext*>( m_context ) ), m_pages, m_masterPages );
     }
     return false;
 }

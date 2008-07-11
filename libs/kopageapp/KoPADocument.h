@@ -80,11 +80,11 @@ public:
     /**
      * Save pages
      *
-     * This is used by saveOasis and for copy and paste of pages.
+     * This is used by saveOdf and for copy and paste of pages.
      *
      * For all pages that are specified also the master slide has to be specified.
      */
-    bool saveOasisPages( KoPASavingContext & paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages );
+    bool saveOdfPages( KoPASavingContext & paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages );
 
     /**
      * Get page by index.

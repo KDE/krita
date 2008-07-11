@@ -219,10 +219,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     loadPlugins();
 
     // Wait for the async image to have loaded
-    if ( m_d->doc->isLoading() ) {
-        connect( m_d->doc, SIGNAL( sigLoadingFinished() ), this, SLOT( slotLoadingFinished() ) );
-    }
-    else {
+    connect( m_d->doc, SIGNAL( sigLoadingFinished() ), this, SLOT( slotLoadingFinished() ) );
+    if ( !m_d->doc->isLoading() ) {
         slotLoadingFinished();
     }
 

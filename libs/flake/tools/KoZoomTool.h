@@ -56,14 +56,9 @@ public:
     void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
 
 protected:
-    /**
-     * Reimplement this if your tool actually has an option widget.
-     * Sets the option widget to 0 by default.
-     */
     QWidget* createOptionWidget();
 
 private:
-    /// reimplemented method
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 
     KoCanvasController *m_controller;

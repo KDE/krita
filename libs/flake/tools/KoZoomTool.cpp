@@ -36,8 +36,8 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
     QPixmap inPixmap, outPixmap;
     inPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_in_cursor.png"));
     outPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_out_cursor.png"));
-    m_inCursor = QCursor(inPixmap);
-    m_outCursor = QCursor(outPixmap);
+    m_inCursor = QCursor(inPixmap, 4, 4);
+    m_outCursor = QCursor(outPixmap, 4, 4);
 }
 
 void KoZoomTool::wheelEvent ( KoPointerEvent * event )

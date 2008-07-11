@@ -44,7 +44,8 @@ void KoZoomStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
         m_controller->zoomIn(pixelRect.center());
 }
 
-void KoZoomStrategy::cancelInteraction() {
+void KoZoomStrategy::cancelInteraction()
+{
     m_parent->repaintDecorations();
     m_canvas->updateCanvas(selectRect().toRect().normalized());
 }

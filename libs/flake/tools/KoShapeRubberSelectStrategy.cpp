@@ -32,8 +32,7 @@
 
 KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid )
 : KoInteractionStrategy(tool, canvas )
-, m_selectRect(clicked
-, QSizeF(0, 0))
+, m_selectRect(clicked, QSizeF(0, 0))
 , m_useSnapToGrid (useSnapToGrid)
 {
 }

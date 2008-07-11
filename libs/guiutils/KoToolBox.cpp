@@ -232,7 +232,8 @@ public:
             Section *section = static_cast<Section*> (wi->widget());
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
-                section->setGeometry(1000, 1000, 0, 0);
+                if (actuallyPlace)
+                    section->setGeometry(1000, 1000, 0, 0);
                 continue;
             }
             // kDebug() << " + section" << buttonCount;

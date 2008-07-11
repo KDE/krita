@@ -228,7 +228,9 @@ void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
     }
 
     KisPerChannelFilterConfiguration* configBC =
-            const_cast<KisPerChannelFilterConfiguration*>(static_cast<const KisPerChannelFilterConfiguration*>(config)); // Somehow, this shouldn't happen
+            const_cast<KisPerChannelFilterConfiguration*>(dynamic_cast<const KisPerChannelFilterConfiguration*>(config)); // Somehow, this shouldn't happen
+    if( not configBC )
+      return;
     if (configBC->nTransfers != src->colorSpace()->colorChannelCount()) {
         // We got an illegal number of colorchannels.KisFilter
         return;

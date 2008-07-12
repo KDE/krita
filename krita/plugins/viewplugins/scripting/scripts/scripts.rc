@@ -109,7 +109,7 @@
             <property name="supportsPainting">true</property>
         </script>
     </collection>
-<!--
+
     <collection name="dockers" text="Dockers" comment="Dockers for Krita" enabled="true">
         <script
             name="Palette Docker"
@@ -128,5 +128,5 @@
             <property name="defaultDockPosition">Qt::DockRight</property>
         </script>
     </collection>
--->
+
 </KrossScripting>

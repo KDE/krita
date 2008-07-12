@@ -25,7 +25,5 @@ def createDockWidget
     wdg = Qt::DockWidget.new(Qt::Object::tr("Ruby Palette"))
     label = PaletteWidget.new(wdg)
     wdg.setWidget(label)
-    voidptr = Qt::Internal.smoke2kross(wdg)
-    ko = Kross::Object::fromVoidPtr(voidptr)
-    return ko
+    return wdg
 end

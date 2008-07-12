@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 
+#include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionSystem.h>
 #include <KoColorModelStandardIds.h>
@@ -33,31 +34,36 @@ TestColorConversionSystem::TestColorConversionSystem()
     {
         foreach( KoID depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces))
         {
-
-            listModels.append( pStrStr( modelId.id(), depthId.id() ) );
+          QList< const KoColorProfile * > profiles =
+               KoColorSpaceRegistry::instance()->profilesFor(
+                    KoColorSpaceRegistry::instance()->colorSpaceId( modelId, depthId ) );
+          foreach( const KoColorProfile * profile, profiles)
+          {
+              listModels.append( ModelDepthProfile( modelId.id(), depthId.id(), profile->name() ) );
+          }
         }
     }
-    listModels.append( pStrStr(AlphaColorModelID.id(), Integer8BitsColorDepthID.id() ) );
+    listModels.append( ModelDepthProfile(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "" ) );
 }
 
 void TestColorConversionSystem::testConnections()
 {
-    foreach( pStrStr srcCS, listModels)
+    foreach( ModelDepthProfile srcCS, listModels)
     {
-        foreach( pStrStr dstCS, listModels)
+        foreach( ModelDepthProfile dstCS, listModels)
         {
-            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.first, srcCS.second, "" , dstCS.first, dstCS.second, "") , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.first).arg(srcCS.second).arg(dstCS.first).arg(dstCS.second).latin1() );
+            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.model, srcCS.depth, srcCS.profile, dstCS.model, dstCS.depth, dstCS.profile) , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).latin1() );
         }
     }
 }
 
 void TestColorConversionSystem::testGoodConnections()
 {
-    foreach( pStrStr srcCS, listModels)
+    foreach( ModelDepthProfile srcCS, listModels)
     {
-        foreach( pStrStr dstCS, listModels)
+        foreach( ModelDepthProfile dstCS, listModels)
         {
-            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.first, srcCS.second, "" , dstCS.first, dstCS.second, "") , QString("No good path between %1 / %2 and %3 / %4").arg(srcCS.first).arg(srcCS.second).arg(dstCS.first).arg(dstCS.second).latin1() );
+            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile) , QString("No good path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).latin1() );
         }
     }
 }

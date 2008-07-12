@@ -22,7 +22,15 @@
 
 #include <QtTest/QtTest>
 
-typedef QPair< QString, QString> pStrStr;
+struct ModelDepthProfile {
+  ModelDepthProfile( const QString& _model, const QString& _depth, const QString& _profile )
+        : model(_model), depth(_depth), profile(_profile)
+  {
+  }
+  QString model;
+  QString depth;
+  QString profile;
+};
 
 class TestColorConversionSystem : public QObject
 {
@@ -33,7 +41,7 @@ class TestColorConversionSystem : public QObject
         void testConnections();
         void testGoodConnections();
     private:
-        QList< pStrStr > listModels;
+        QList< ModelDepthProfile > listModels;
 };
 
 #endif

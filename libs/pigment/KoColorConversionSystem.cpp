@@ -220,6 +220,10 @@ QList<KoColorConversionSystem::Node*> KoColorConversionSystem::nodesFor( const Q
 
 KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
 {
+    if( srcColorSpace == dstColorSpace )
+    {
+        return new KoCopyColorConversionTransformation( srcColorSpace );
+    }
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);
     dbgPigmentCCS << srcColorSpace->id() << (srcColorSpace->profile() ? srcColorSpace->profile()->name() : "");
@@ -346,7 +350,11 @@ QString KoColorConversionSystem::toDot() const
 
 bool KoColorConversionSystem::existsPath( const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName ) const
 {
-    Path* path = findBestPath( nodeFor( srcModelId, srcDepthId, srcProfileName ), nodeFor( dstModelId, dstDepthId, dstProfileName ) );
+    dbgPigmentCCS << "srcModelId = " << srcModelId << " srcDepthId = " << srcDepthId << " srcProfileName = " << srcProfileName << " dstModelId = " << dstModelId << " dstDepthId = " << dstDepthId << " dstProfileName = " << dstProfileName;
+    const Node* srcNode = nodeFor( srcModelId, srcDepthId, srcProfileName );
+    const Node* dstNode = nodeFor( dstModelId, dstDepthId, dstProfileName );
+    if(srcNode == dstNode ) return true;
+    Path* path = findBestPath( srcNode, dstNode);
     bool exist = path;
     delete path;
     return exist;
@@ -354,7 +362,10 @@ bool KoColorConversionSystem::existsPath( const QString& srcModelId, const QStri
 
 bool KoColorConversionSystem::existsGoodPath( const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName ) const
 {
-    Path* path = findBestPath( nodeFor( srcModelId, srcDepthId, srcProfileName ), nodeFor( dstModelId, dstDepthId, dstProfileName ) );
+    const Node* srcNode = nodeFor( srcModelId, srcDepthId, srcProfileName );
+    const Node* dstNode = nodeFor( dstModelId, dstDepthId, dstProfileName );
+    if(srcNode == dstNode ) return true;
+    Path* path = findBestPath( srcNode, dstNode );
     bool existAndGood = path and path->isGood;
     delete path;
     return existAndGood;

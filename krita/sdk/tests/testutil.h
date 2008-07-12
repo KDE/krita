@@ -63,15 +63,16 @@ struct TestProgressBar : public KoProgressProxy
 };
 
 
-bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2 )
+bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2, int fuzzy = 0 )
 {
 //     QTime t;
 //     t.start();
 
-    int w1 = img1.width();
-    int h1 = img1.height();
-    int w2 = img2.width();
-    int h2 = img2.height();
+    const int w1 = img1.width();
+    const int h1 = img1.height();
+    const int w2 = img2.width();
+    const int h2 = img2.height();
+    const int bytesPerLine = img1.bytesPerLine();
 
     if ( w1 != w2 || h1 != h2 ) {
         pt.setX( -1 );
@@ -79,12 +80,21 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2 )
         return false;
     }
 
-    for ( int x = 0; x < w1; ++x ) {
-        for ( int y = 0; y < h1; ++y ) {
-            if ( img1.pixel(x, y) != img2.pixel( x, y ) && ( qAlpha( img1.pixel(x, y) ) != 0 || qAlpha( img2.pixel(x, y) ) != 0  ) ) {
-                pt.setX( x );
-                pt.setY( y );
-                return false;
+    for (int y = 0; y < h1; ++y) {
+        const QRgb * const firstLine = reinterpret_cast<const QRgb *>(img2.scanLine(y));
+        const QRgb * const secondLine = reinterpret_cast<const QRgb *>(img1.scanLine(y));
+
+        if (memcmp(firstLine, secondLine, bytesPerLine) != 0) {
+            for (int x = 0; x < w1; ++x) {
+                const QRgb a = firstLine[x];
+                const QRgb b = secondLine[x];
+                const bool same = qAbs(qRed(a) - qRed(b)) <= fuzzy
+                    && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
+                    && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
+                if (!same) {
+                    qDebug() << " Different! source" << qRed(a) << qGreen(a) << qBlue(a) << "dest" << qRed(b) << qGreen(b) << qBlue(b);
+                    return false;
+                }
             }
         }
     }

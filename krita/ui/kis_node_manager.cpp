@@ -192,7 +192,9 @@ void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
     KisNodeSP above;
 
     getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
-    dbgUI << " move node " << node->name() << " above " << above->name() << " for parent " << parent->name();
+    dbgUI << " move node " << node->name() << " for parent " << parent->name();
+    if(above)
+        dbgUI << " above " << above->name();
     m_d->doc->image()->moveNode( node, parent, above);
     node->setDirty(node->extent());
 }

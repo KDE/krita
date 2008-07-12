@@ -132,7 +132,7 @@ bool KisToolFill::flood ( int startX, int startY )
     {
 
         delete m_fillPainter;
-        m_fillPainter = new KisFillPainter ( device );
+        m_fillPainter = new KisFillPainter ( device, currentSelection() );
         Q_CHECK_PTR ( m_fillPainter );
 
         m_fillPainter->beginTransaction ( i18n ( "Flood Fill" ) );

@@ -283,6 +283,8 @@ public:
     /**
      * @brief Removes point from the path.
      *
+     * Note that the ownership of the point will pass to the caller.
+     *
      * @param pointIndex of the point which should be removed
      *
      * @return The removed point on success,

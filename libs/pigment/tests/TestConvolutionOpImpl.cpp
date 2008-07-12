@@ -43,6 +43,20 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
     quint8* dst = new quint8[KoRgbU16Traits::pixelSize];
     quint16* dst16 = (quint16*)dst;
     {
+        memcpy( dst16, colors[0], KoRgbU16Traits::pixelSize );
+        QVERIFY2( dst16[0] == 100, QString("%1 100").arg(dst16[0]).toLatin1() );
+        QVERIFY2( dst16[1] == 200, QString("%1 200").arg(dst16[1]).toLatin1() );
+        QVERIFY2( dst16[2] == 300, QString("%1 300").arg(dst16[2]).toLatin1() );
+        memcpy( dst16, colors[1], KoRgbU16Traits::pixelSize );
+        QVERIFY2( dst16[0] == 50, QString("%1 50").arg(dst16[0]).toLatin1() );
+        QVERIFY2( dst16[1] == 150, QString("%1 150").arg(dst16[1]).toLatin1() );
+        QVERIFY2( dst16[2] == 0, QString("%1 0").arg(dst16[2]).toLatin1() );
+        memcpy( dst16, colors[2], KoRgbU16Traits::pixelSize );
+        QVERIFY2( dst16[0] == 100, QString("%1 100").arg(dst16[0]).toLatin1() );
+        QVERIFY2( dst16[1] == 300, QString("%1 300").arg(dst16[1]).toLatin1() );
+        QVERIFY2( dst16[2] == 50, QString("%1 50").arg(dst16[2]).toLatin1() );
+    }
+    {
         qint32 kernelValues[] = { 1, 1, 1};
         op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
         QVERIFY2( dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1() );

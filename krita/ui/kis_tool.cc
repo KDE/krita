@@ -152,7 +152,7 @@ void KisTool::resourceChanged( int key, const QVariant & v )
     case ( KisCanvasResourceProvider::CurrentGeneratorConfiguration ):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>() );
     case ( KisCanvasResourceProvider::CurrentKritaNode):
-        d->currentNode = static_cast<KisNode*>(v.value<void *>() );
+        d->currentNode = (v.value<KisNodeSP>() );
         if (d->currentNode)
             dbgUI << " node changed to " << d->currentNode->name();
     default:

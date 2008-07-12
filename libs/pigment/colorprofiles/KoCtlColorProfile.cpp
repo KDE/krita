@@ -133,7 +133,17 @@ QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorCon
     QList<KoColorConversionTransformationFactory*> factories;
     foreach(ConversionInfo info, d->conversionInfos)
     {
-        if( info.sourceColorDepthID == "F" )
+        if( info.sourceColorDepthID == "F" and info.destinationColorDepthID == "F" )
+        {
+            factories.push_back(
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, Float16BitsColorDepthID.id(), info.sourceProfile,
+                    info.destinationColorModelID, Float16BitsColorDepthID.id(), info.destinationProfile ) );
+            factories.push_back(
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, Float32BitsColorDepthID.id(), info.sourceProfile,
+                    info.destinationColorModelID, Float32BitsColorDepthID.id(), info.destinationProfile ) );
+        } else if( info.sourceColorDepthID == "F" )
         {
             factories.push_back(
                 new KoCtlColorConversionTransformationFactory(
@@ -145,7 +155,6 @@ QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorCon
                     info.sourceColorModelID, Float32BitsColorDepthID.id(),
                     info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
                     info.destinationProfile ) );
-            
         } else if( info.destinationColorDepthID == "F")
         {
             factories.push_back(
@@ -237,13 +246,16 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
                     ci.destinationColorModelID = eOut.attribute("colorModel");
                     ci.destinationColorDepthID = generateDepthID(eOut.attribute("depth"), eOut.attribute("type") );
                     ci.destinationProfile = eOut.attribute("profile");
-                    if( ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth())
+                    if( ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth() and ci.sourceProfile == "" )
                     {
                         ci.sourceProfile = name();
                         d->conversionInfos.push_back( ci );
-                    } else if( ci.destinationColorModelID == colorModel() and ci.destinationColorDepthID == colorDepth() )
+                    } else if( ci.destinationColorModelID == colorModel() and ci.destinationColorDepthID == colorDepth() and ci.destinationProfile == "" )
                     {
                         ci.destinationProfile = name();
+                        d->conversionInfos.push_back( ci );
+                    } else {
+                        Q_ASSERT( ci.destinationProfile == name() or ci.sourceProfile == name() );
                         d->conversionInfos.push_back( ci );
                     }
                 } else {

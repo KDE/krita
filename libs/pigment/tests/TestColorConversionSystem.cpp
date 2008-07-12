@@ -63,7 +63,7 @@ void TestColorConversionSystem::testGoodConnections()
     {
         foreach( ModelDepthProfile dstCS, listModels)
         {
-            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile) , QString("No good path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).latin1() );
+            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile) , QString("No good path between %1 / %2 / %3 and %4 / %5 / %6").arg(srcCS.model).arg(srcCS.depth).arg(srcCS.profile).arg(dstCS.model).arg(dstCS.depth).arg(dstCS.profile).latin1() );
         }
     }
 }

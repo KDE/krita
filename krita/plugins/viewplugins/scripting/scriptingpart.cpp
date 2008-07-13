@@ -27,6 +27,7 @@
 #include <QPoint>
 #include <QPointer>
 
+#include <KToggleAction>
 #include <kactioncollection.h>
 #include <kis_debug.h>
 #include <kfiledialog.h>
@@ -113,7 +114,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
             }
         }
     }
-    if( actioncollection && (actioncollection2 = actioncollection->collection("decorations")) ) {
+    if( actioncollection && (actioncollection2 = actioncollection->collection("decorations")) ) {        
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
             if(Kross::Manager::self().hasInterpreterInfo( action->interpreter() ) )
@@ -122,7 +123,23 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
                 dbgScript <<"Start Adding scripting decoration with id=" << action->name();
                 KisScriptDecoration* ksd = new KisScriptDecoration(action, d->view);
                 d->view->canvasBase()->addDecoration( ksd );
-                ksd->toggleVisibility(); // TODO: create entry in the menu
+                QString menuActionName = "toggle" + action->name() + "Action";
+                QString document = "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\"> \
+<kpartgui library=\"kritascripting\" version=\"7\"> \
+  <MenuBar> \
+    <Menu name=\"View\"> \
+      <Action name=\"";
+                document += menuActionName ;
+                document += "\"/> \
+    </Menu> \
+  </MenuBar> \
+</kpartgui>";
+                dbgScript << document;
+                setXML(document, true);
+                dbgScript << "Create an action " << menuActionName;
+                KToggleAction *actionMenu  = new KToggleAction(i18n("&Show %1", action->text()), this);
+                actionCollection()->addAction( menuActionName, actionMenu );
+                connect(actionMenu, SIGNAL(triggered()), ksd, SLOT(toggleVisibility()));
             } else {
                 dbgScript << "No such interpreter as " << action->interpreter();
             }

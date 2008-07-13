@@ -130,7 +130,7 @@
     </collection>
     <collection name="decorations" text="Canvas decorations" comment="Decorations for the canvas of Krita" enabled="true">
         <script
-            name="Vanishing Point Decoration"
+            name="VanishingPointDecoration"
             text="Vanishing Point Decoration"
             comment="Show some vanishing point"
             interpreter="ruby"

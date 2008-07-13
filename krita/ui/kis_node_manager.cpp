@@ -187,7 +187,10 @@ void KisNodeManager::addNode( KisNodeSP node, KisNodeSP activeNode)
 
 void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
 {
-    dbgUI << " move node " << node->name() << " toward " << activeNode->name();
+    if(activeNode)
+        dbgUI << " move node " << node->name() << " toward " << activeNode->name();
+    else
+        dbgUI << " move node " << node->name() << " toward root";
     KisNodeSP parent;
     KisNodeSP above;
 

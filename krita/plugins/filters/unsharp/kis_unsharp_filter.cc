@@ -98,7 +98,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     
     KisConvolutionPainter painter( interm );
     if (progressUpdater){
-    	painter.setProgress( convolutionUpdater );
+//     	painter.setProgress( convolutionUpdater );
     }
     QBitArray channelFlags = config->channelFlags();
     if (channelFlags.isEmpty()) {
@@ -140,9 +140,11 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
                 quint8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
                 if( diff > threshold)
                 {
-                    memcpy(colors[0],srcIt.rawData(), cdepth);
+                    memcpy(colors[0],srcIt.oldRawData(), cdepth);
                     memcpy(colors[1],intermIt.rawData(), cdepth);
                     convolutionOp->convolveColors(colors, weights, dstIt.rawData(),  factor, 0, 2, channelFlags );
+                } else {
+                    memcpy( dstIt.rawData(), srcIt.oldRawData(), cdepth);
                 }
             }
             ++pixelsProcessed;
@@ -166,4 +168,9 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
 
 
     if (progressUpdater) progressUpdater->setProgress(100);
+}
+
+int KisUnsharpFilter::overlapMarginNeeded(const KisFilterConfiguration* _config) const {
+    QVariant value;
+    return (_config->getProperty("halfSize", value)) ? value.toUInt() : 5;
 }

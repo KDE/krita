@@ -140,3 +140,10 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
 
 }
 
+int KisBlurFilter::overlapMarginNeeded(const KisFilterConfiguration* _config) const {
+    QVariant value;
+    uint halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
+    uint halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
+    return qMax(halfWidth, halfHeight);
+}
+

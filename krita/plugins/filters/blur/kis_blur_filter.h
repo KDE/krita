@@ -41,6 +41,7 @@ public:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
     KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    int overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const;
 };
 
 #endif

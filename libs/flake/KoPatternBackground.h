@@ -33,7 +33,7 @@ public:
     /// Pattern rendering style
     enum PatternRepeat { Original, Tiled, Stretched };
     /// Pattern reference point
-    enum ReferencePoint { None, TopLeft, Top, TopRight, Left, Center, Right, BottomLeft, Bottom, BottomRight };
+    enum ReferencePoint { TopLeft, Top, TopRight, Left, Center, Right, BottomLeft, Bottom, BottomRight };
 
     /// Constructs a new pattern background utilizing the given image collection
     KoPatternBackground( KoImageCollection *collection );
@@ -76,10 +76,13 @@ public:
     void setTileRepeatOffset( const QPointF &offset );
 
     /// Returns the pattern display size
-    QSize patternDisplaySize() const;
+    QSizeF patternDisplaySize() const;
 
     /// Sets pattern display size
-    void setPatternDisplaySize( const QSize &size );
+    void setPatternDisplaySize( const QSizeF &size );
+
+    /// Returns the original image size
+    QSizeF patternOriginalSize() const;
 
     /// Assignment operator
     KoPatternBackground& operator = ( const KoPatternBackground &rhs );
@@ -91,6 +94,8 @@ public:
     /// reimplemented from KoShapeBackground
     virtual bool loadStyle( KoOdfLoadingContext & context, const QSizeF &shapeSize );
 
+    /// Returns the bounding rect of the pattern image based on the given fill size
+    QRectF patternRectFromFillSize( const QSizeF &size );
 private:
     class Private;
     Private * const d;

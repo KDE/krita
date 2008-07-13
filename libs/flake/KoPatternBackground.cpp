@@ -40,7 +40,7 @@ class KoPatternBackground::Private
 {
 public:
     Private()
-    : repeat(Tiled), refPoint(None), imageCollection(0), imageData(0)
+    : repeat(Tiled), refPoint(TopLeft), imageCollection(0), imageData(0)
     {
     }
 
@@ -208,15 +208,20 @@ void KoPatternBackground::setTileRepeatOffset( const QPointF &offset )
     d->tileRepeatOffsetPercent = offset;
 }
 
-QSize KoPatternBackground::patternDisplaySize() const
+QSizeF KoPatternBackground::patternDisplaySize() const
 {
-    return d->targetSize().toSize();
+    return d->targetSize();
 }
 
-void KoPatternBackground::setPatternDisplaySize( const QSize &size )
+void KoPatternBackground::setPatternDisplaySize( const QSizeF &size )
 {
     d->targetImageSizePercent = QSizeF();
-    d->targetImageSize = QSizeF( size );
+    d->targetImageSize = size;
+}
+
+QSizeF KoPatternBackground::patternOriginalSize() const
+{
+    return d->imageData->imageSize();
 }
 
 KoPatternBackground& KoPatternBackground::operator = ( const KoPatternBackground &rhs )
@@ -231,6 +236,7 @@ KoPatternBackground& KoPatternBackground::operator = ( const KoPatternBackground
     d->targetImageSizePercent = rhs.d->targetImageSizePercent;
     d->refPointOffsetPercent = rhs.d->refPointOffsetPercent;
     d->tileRepeatOffsetPercent = rhs.d->tileRepeatOffsetPercent;
+    d->imageCollection = rhs.d->imageCollection;
 
     if( d->imageData )
     {
@@ -241,6 +247,10 @@ KoPatternBackground& KoPatternBackground::operator = ( const KoPatternBackground
     if( rhs.d->imageData )
     {
         d->imageData = new KoImageData( *(rhs.d->imageData) );
+    }
+    else
+    {
+        d->imageData = new KoImageData( rhs.d->imageCollection );
     }
 
     return *this;
@@ -450,4 +460,28 @@ bool KoPatternBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF
     }
 
     return true;
+}
+
+QRectF KoPatternBackground::patternRectFromFillSize( const QSizeF &size )
+{
+    QRectF rect;
+
+    switch( d->repeat )
+    {
+        case Tiled:
+            rect.setTopLeft( d->offsetFromRect( QRectF(QPointF(),size), d->targetSize() ) );
+            rect.setSize( d->targetSize() );
+            break;
+        case Original:
+            rect.setLeft( 0.5 * (size.width() - d->targetSize().width() ) );
+            rect.setTop( 0.5 * (size.height() - d->targetSize().height() ) );
+            rect.setSize( d->targetSize() );
+            break;
+        case Stretched:
+            rect.setTopLeft( QPointF( 0.0, 0.0 ) );
+            rect.setSize( size );
+            break;
+    }
+
+    return rect;
 }

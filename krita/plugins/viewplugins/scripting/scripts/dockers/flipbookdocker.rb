@@ -15,7 +15,7 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 require 'Krita'
-require 'KritaDockFactory'
+# require 'KritaDockFactory'
 require 'korundum4'
 
 class FlibBookListModel < Qt::AbstractListModel
@@ -107,7 +107,5 @@ def createDockWidget
     wdg = Qt::DockWidget.new(Qt::Object::tr("Flipbook"))
     label = FlipBookWidget.new(wdg)
     wdg.setWidget(label)
-    voidptr = Qt::Internal.smoke2kross(wdg)
-    ko = Kross::Object::fromVoidPtr(voidptr)
-    return ko
+    return wdg
 end

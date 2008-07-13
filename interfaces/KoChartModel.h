@@ -22,6 +22,7 @@
 
 #include "kochart_export.h"
 
+#include <QHash>
 #include <QVector>
 #include <QObject>
 
@@ -65,6 +66,19 @@ public:
 
     virtual QString regionToString( const QVector<QRect> &region ) const = 0;
     virtual QVector<QRect> stringToRegion( const QString &string ) const = 0;
+
+    /**
+     * Default implementation returns an empty hash.
+     * \return the cell region in ranges ordered by sheet name
+     */
+    virtual QHash<QString, QVector<QRect> > cellRegion() const;
+
+    /**
+     * Sets the cell region.
+     * Default implementation does nothing and returns \c false.
+     * \return \c true on success
+     */
+    virtual bool setCellRegion(const QString& regionName);
     virtual QAbstractItemModel * model() = 0;
 };
 

@@ -33,3 +33,12 @@ ChartModel::~ChartModel()
 {
 }
 
+QHash<QString, QVector<QRect> > ChartModel::cellRegion() const
+{
+    return QHash<QString, QVector<QRect> >();
+}
+
+bool ChartModel::setCellRegion(const QString&)
+{
+    return false;
+}

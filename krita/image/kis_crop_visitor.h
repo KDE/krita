@@ -104,7 +104,7 @@ private:
         KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
 
         KisSelectedTransaction * t = 0;
-        if (undoAdapter && undoAdapter->undo())
+        if (undoAdapter && undoAdapter->undo() && layer->selection())
             t = new KisSelectedTransaction(i18n("Crop"), layer);
 
         dev->crop(m_rect);

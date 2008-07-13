@@ -148,8 +148,6 @@ class KisSharedPtr {
         inline T* operator->() {
             if ( !d ) {
                 kWarning() << kBacktrace();
-                int* crash = 0;
-                *crash = 0xFF;
             }
 
             Q_ASSERT(d); return d;

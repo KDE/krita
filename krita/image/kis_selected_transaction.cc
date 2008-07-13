@@ -36,7 +36,7 @@ KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP no
         m_layer = dynamic_cast<KisLayer*>(node->parent().data());
         node = node->parent();
     }
-
+    Q_ASSERT( m_layer->selection() );
     m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
 //     if(! m_hadSelection) {
 //         m_device->deselect(); // let us not be the cause of select

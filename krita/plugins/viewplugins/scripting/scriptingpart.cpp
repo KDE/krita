@@ -52,6 +52,7 @@
 #include <kis_layer.h>
 #include <kis_doc2.h>
 #include <kis_paint_device.h>
+#include <canvas/kis_canvas2.h>
 // kritacore
 #include "kritacore/krs_module.h"
 #include "kritacore/krs_monitor.h"
@@ -61,6 +62,7 @@
 
 #include "kis_script_dock.h"
 #include "kis_script_filter.h"
+#include "kis_script_decoration.h"
 
 typedef KGenericFactory<ScriptingPart> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
@@ -91,8 +93,6 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
                 action->addObject(module());
                 KisScriptFilter* sf = new KisScriptFilter(action);
                 KisFilterRegistry::instance()->add( sf );
-//             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
-//             if( ! factory ) continue;
                 dbgScript <<"Adding scripting filters with id=" << sf->id();
             } else {
                 dbgScript << "No such interpreter as " << action->interpreter();
@@ -102,13 +102,30 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
     if( actioncollection && (actioncollection2 = actioncollection->collection("dockers")) ) {
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
-            action->addObject(module());
-            dbgScript <<"Start Adding scripting dockers with id=" /*<< sf->id()*/;
-            KisScriptDockFactory ksdf(action);
-            d->view->createDockWidget( &ksdf );
-//             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
-//             if( ! factory ) continue;
-           dbgScript <<"Adding scripting dockers with id=" /*<< sf->id()*/;
+            if(Kross::Manager::self().hasInterpreterInfo( action->interpreter() ) )
+            {
+                action->addObject(module());
+                dbgScript <<"Start Adding scripting dockers with id=" << action->name();
+                KisScriptDockFactory ksdf(action);
+                d->view->createDockWidget( &ksdf );
+            } else {
+                dbgScript << "No such interpreter as " << action->interpreter();
+            }
+        }
+    }
+    if( actioncollection && (actioncollection2 = actioncollection->collection("decorations")) ) {
+        foreach(Kross::Action* action, actioncollection2->actions()) {
+            Q_ASSERT(action);
+            if(Kross::Manager::self().hasInterpreterInfo( action->interpreter() ) )
+            {
+                action->addObject(module());
+                dbgScript <<"Start Adding scripting decoration with id=" << action->name();
+                KisScriptDecoration* ksd = new KisScriptDecoration(action, d->view);
+                d->view->canvasBase()->addDecoration( ksd );
+                ksd->toggleVisibility(); // TODO: create entry in the menu
+            } else {
+                dbgScript << "No such interpreter as " << action->interpreter();
+            }
         }
     }
 #endif

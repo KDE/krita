@@ -43,7 +43,7 @@ QDockWidget* KisScriptDockFactory::createDockWidget()
 {
     dbgScript << "KisScriptDockFactory::createDockWidget()";
     QVariant v = m_action->callFunction("createDockWidget");
-    QDockWidget* qdw = dynamic_cast<QDockWidget*>(v.value<QObject*>());
+    QDockWidget* qdw = qobject_cast<QDockWidget*>(v.value<QObject*>());
     if(qdw)
         return qdw;
     kWarning() << "The script didn't delivered its promise of providing a QDockWidget";

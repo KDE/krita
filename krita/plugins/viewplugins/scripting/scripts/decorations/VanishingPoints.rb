@@ -15,8 +15,7 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 def drawDecoration( gc, documentOffset, area, converter)
-  puts "======================"
   painter = Qt::Internal.kross2smoke( gc, Qt::Painter )
-  painter.setPen( Qt::black )
+  painter.setPen( Qt::Pen.new( Qt::Brush.new(Qt::black), 1, Qt::SolidLine ) )
   painter.drawLine(0,0, 200, 200)
 end

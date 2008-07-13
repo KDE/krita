@@ -33,8 +33,14 @@ KoJobsListPolicy::~KoJobsListPolicy() {
 
 bool KoJobsListPolicy::canRun (Job *job) {
     QMutexLocker ml(&mutex);
-    bool rc = m_jobs.isEmpty() || m_jobs[0] == job;
-    return rc;
+    if( canRunMutex.tryLock() )
+    {
+        bool rc = m_jobs.isEmpty() || m_jobs[0] == job;
+        canRunMutex.unlock();
+        return rc;
+    } else {
+        return false;
+    }
 }
 
 void KoJobsListPolicy::free (Job *job) {
@@ -44,11 +50,9 @@ void KoJobsListPolicy::free (Job *job) {
 
 void KoJobsListPolicy::release (Job *job) {
     QMutexLocker ml(&mutex);
-    if(m_jobs.contains( job ))
-    {
-        m_jobs.removeAll(job);
-        job->removeQueuePolicy(this);
-    }
+    Q_ASSERT(m_jobs.contains( job ));
+    m_jobs.removeAll(job);
+    job->removeQueuePolicy(this);
 }
 
 void KoJobsListPolicy::destructed (Job *job) {

@@ -65,17 +65,18 @@ public:
      * jobs to be started.
      * You should call unlock() afterwards.
      */
-    void lock() { writeMutex.lock(); }
+    void lock() { writeMutex.lock(); canRunMutex.lock(); }
     /**
      * unlock.
      * @see lock()
      */
-    void unlock() { writeMutex.unlock(); }
+    void unlock() { writeMutex.unlock(); canRunMutex.unlock(); }
 
 private:
     QList<ThreadWeaver::Job*> m_jobs;
     QMutex writeMutex;
     QMutex mutex;
+    QMutex canRunMutex;
 };
 
 #endif

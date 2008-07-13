@@ -128,5 +128,12 @@
             <property name="defaultDockPosition">Qt::DockRight</property>
         </script>
     </collection>
-
+    <collection name="decorations" text="Canvas decorations" comment="Decorations for the canvas of Krita" enabled="true">
+        <script
+            name="Vanishing Point Decoration"
+            text="Vanishing Point Decoration"
+            comment="Show some vanishing point"
+            interpreter="ruby"
+            file="decorations/VanishingPoints.rb" />
+    </collection>
 </KrossScripting>

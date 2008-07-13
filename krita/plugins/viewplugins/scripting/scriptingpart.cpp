@@ -86,12 +86,17 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
     if( actioncollection && (actioncollection2 = actioncollection->collection("filters")) ) {
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
-            action->addObject(module());
-            KisScriptFilter* sf = new KisScriptFilter(action);
-            KisFilterRegistry::instance()->add( sf );
+            if(Kross::Manager::self().hasInterpreterInfo( action->interpreter() ) )
+            {
+                action->addObject(module());
+                KisScriptFilter* sf = new KisScriptFilter(action);
+                KisFilterRegistry::instance()->add( sf );
 //             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
 //             if( ! factory ) continue;
-           dbgScript <<"Adding scripting filters with id=" << sf->id();
+                dbgScript <<"Adding scripting filters with id=" << sf->id();
+            } else {
+                dbgScript << "No such interpreter as " << action->interpreter();
+            }
         }
     }
     if( actioncollection && (actioncollection2 = actioncollection->collection("dockers")) ) {

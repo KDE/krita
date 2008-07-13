@@ -44,8 +44,11 @@ void KoJobsListPolicy::free (Job *job) {
 
 void KoJobsListPolicy::release (Job *job) {
     QMutexLocker ml(&mutex);
-    m_jobs.removeAll(job);
-    job->removeQueuePolicy(this);
+    if(m_jobs.contains( job ))
+    {
+        m_jobs.removeAll(job);
+        job->removeQueuePolicy(this);
+    }
 }
 
 void KoJobsListPolicy::destructed (Job *job) {

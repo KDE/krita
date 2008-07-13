@@ -111,14 +111,14 @@
     </collection>
 
     <collection name="dockers" text="Dockers" comment="Dockers for Krita" enabled="true">
-        <script
+<!--        <script
             name="Palette Docker"
             text="Palette Docker"
             comment="Show a palette docker"
             interpreter="ruby"
             file="dockers/palettedocker.rb">
             <property name="defaultDockPosition">Qt::DockBottom</property>
-        </script>
+        </script>-->
         <script
             name="Flipbook Docker"
             text="Flipbook Docker"

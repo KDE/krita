@@ -32,21 +32,53 @@
 
 #include <krita_export.h>
 
+/**
+ * KCurve is a widget that shows a single curve that can be edited
+ * by the user. The user can grab the curve and move it; this creates
+ * a new control point. Control points can be deleted by selecting a point
+ * and pressing the delete key.
+ */
 class KRITAUI_EXPORT KCurve : public QWidget
 {
 Q_OBJECT
 
 public:
+
+    /**
+     * Create a new curve widget with a default curve, that is a straight
+     * line from bottom-left to top-right.
+     */
     KCurve(QWidget *parent = 0, Qt::WFlags f = 0);
 
     virtual ~KCurve();
 
+    /**
+     * Reset the curve to the default shape
+     */
     void reset(void);
+
+    /**
+     * Enable the guide and set the guide color to the specified color.
+     *
+     * XXX: it seems that the guide feature isn't actually implemented yet?
+     */
     void setCurveGuide(const QColor & color);
+
+
+    /**
+     * Set a background pixmap. The background pixmap will be drawn under
+     * the grid and the curve.
+     *
+     * XXX: or is the pixmap what is drawn to the  left and bottom of the curve
+     * itself?
+     */
     void setPixmap(const QPixmap & pix);
 
 signals:
 
+    /**
+     * Emitted whenever a control point has changed position.
+     */
     void modified(void);
 
 protected:
@@ -59,10 +91,30 @@ protected:
     void leaveEvent ( QEvent * );
 
 public:
+
+    /**
+     * @return the y value on the specified curve corresponding to
+     * the specified x value.
+     */
     static double getCurveValue(const QList<QPointF> &curve, double x);
+
+    /**
+     * @return the y value corresponding the specified x value of the current
+     * curve.
+     */
     double getCurveValue(double x);
 
+    /**
+     * @return get a list with all defined points. If you want to know what the
+     * y value for a given x is on the curve defined by these points, use getCurveValue().
+     * @see getCurveValue
+     */
     QList<QPointF> getCurve();
+
+    /**
+     * Replace the current curve with a curve specified by the curve defined by the control
+     * points in @param inlist.
+     */
     void setCurve(QList<QPointF> inlist);
 
 private:

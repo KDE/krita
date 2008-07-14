@@ -132,8 +132,10 @@ void SimpleStyleWidget::setStyleManager(KoStyleManager *sm) {
 
 void SimpleStyleWidget::setCurrentFormat(const QTextCharFormat& format)
 {
+    m_blockSignals = true;
     widget.fontComboBox->setCurrentFont(format.font());
-    widget.sizeSpinBox->setValue(qRound(format.fontPointSize()));
+    widget.sizeSpinBox->setValue(qRound(format.font().pointSizeF()));
+    m_blockSignals = false;
 }
 
 void SimpleStyleWidget::listStyleChanged(int row) {
@@ -169,11 +171,17 @@ void SimpleStyleWidget::directionChangeRequested() {
     cursor.setBlockFormat(format);
 }
 
-void SimpleStyleWidget::fontChanged ( const QFont & font )  {
+void SimpleStyleWidget::fontChanged ( const QFont & font )  
+{
+    if (m_blockSignals)
+        return;
     static_cast<KoTextSelectionHandler*>(m_tool->selection())->setFontFamily(font.family());
 }
 
-void SimpleStyleWidget::fontSizeChanged( int size )  {
+void SimpleStyleWidget::fontSizeChanged( int size )  
+{
+    if (m_blockSignals)
+        return;
     static_cast<KoTextSelectionHandler*>(m_tool->selection())->setFontSize(size);
 }
 

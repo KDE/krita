@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Chalk brush
+Name[it]=Pennello a gesso
+Name[nds]=Kriedpinsel
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritachalkpaintop

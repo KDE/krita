@@ -309,7 +309,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
 {
     depth += INDENT;
 
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(document->documentLayout());
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
     QString attrs;
     if (lay && lay->styleManager()) {
         int id = block.blockFormat().intProperty(KoParagraphStyle::StyleId);
@@ -355,14 +355,12 @@ void KoTextDebug::dumpTable(const QTextTable *)
     depth -= INDENT;
 }
 
-void KoTextDebug::dumpFragment(const QTextFragment &fragment)
+QString KoTextDebug::charFormat(const QTextCharFormat &textFormat)
 {
-    depth += INDENT;
-
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(document->documentLayout());
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
     QString attrs;
     if (lay && lay->styleManager()) {
-        int id = fragment.charFormat().intProperty(KoCharacterStyle::StyleId);
+        int id = textFormat.intProperty(KoCharacterStyle::StyleId);
         KoCharacterStyle *characterStyle = lay->styleManager()->characterStyle(id);
         attrs.append(" characterStyle=\"id:").append(QString::number(id));
         if (characterStyle)
@@ -370,7 +368,6 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment)
         attrs.append("\"");
     }
 
-    QTextCharFormat textFormat = fragment.charFormat();
     QTextImageFormat imageFormat = textFormat.toImageFormat();
  
     if (imageFormat.isValid()) {
@@ -385,7 +382,15 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment)
         attrs.append(textAttributes(textFormat.properties()));
     }
 
-    qDebug("%*s<fragment%s>", depth, " ", qPrintable(attrs));
+    return attrs;
+}
+
+void KoTextDebug::dumpFragment(const QTextFragment &fragment)
+{
+    depth += INDENT;
+    QString cf = charFormat(fragment.charFormat());
+
+    qDebug("%*s<fragment%s>", depth, " ", qPrintable(cf));
 
     qDebug("%*s|%s|", depth+INDENT, " ", qPrintable(fragment.text()));
 

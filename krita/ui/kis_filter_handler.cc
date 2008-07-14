@@ -183,7 +183,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
 
         layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(filter->name(), layer, filter, config));
     }
-
+    layer->setDirty( rect );
     QApplication::restoreOverrideCursor();
 }
 

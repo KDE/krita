@@ -20,11 +20,9 @@
 #ifndef KO_CHART_MODEL
 #define KO_CHART_MODEL
 
-#include "kochart_export.h"
-
 #include <QHash>
 #include <QVector>
-#include <QObject>
+#include <QtPlugin>
 
 class QAbstractItemModel;
 class QRect;
@@ -58,31 +56,30 @@ const int HEADER_AREA_ROLE  = 33;
 * The ChartModel class implements a model that can be filled and
 * passed on to KChart to provide the data used within the chart.
 */
-class KOCHART_EXPORT ChartModel : public QObject
+class ChartModel
 {
 public:
-    ChartModel(QObject *parent = 0);
-    virtual ~ChartModel();
+    virtual ~ChartModel() {}
 
     virtual QString regionToString( const QVector<QRect> &region ) const = 0;
     virtual QVector<QRect> stringToRegion( const QString &string ) const = 0;
 
     /**
-     * Default implementation returns an empty hash.
      * \return the cell region in ranges ordered by sheet name
      */
-    virtual QHash<QString, QVector<QRect> > cellRegion() const;
+    virtual QHash<QString, QVector<QRect> > cellRegion() const = 0;
 
     /**
      * Sets the cell region.
-     * Default implementation does nothing and returns \c false.
      * \return \c true on success
      */
-    virtual bool setCellRegion(const QString& regionName);
+    virtual bool setCellRegion(const QString& regionName) = 0;
     virtual QAbstractItemModel * model() = 0;
 };
 
 } // Namespace KoChart
+
+Q_DECLARE_INTERFACE(KoChart::ChartModel, "org.koffice.KoChart.ChartModel:1.0")
 
 #endif // KO_CHART_MODEL
 

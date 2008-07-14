@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart/ ${KOMAIN_INCLUDES} )
 
 ########### next target ###############
 
-set(kochart_LIB_SRCS koChart.cc KoChartModel.cpp )
+set(kochart_LIB_SRCS koChart.cc)
 
 
 kde4_add_library(kochart SHARED ${kochart_LIB_SRCS})

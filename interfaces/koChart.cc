@@ -55,13 +55,4 @@ WizardExtension *Part::wizardExtension()
     return 0;
 }
 
-
-ChartInterface::ChartInterface()
-{
-}
-
-ChartInterface::~ChartInterface()
-{
-}
-
 #include "koChart.moc"

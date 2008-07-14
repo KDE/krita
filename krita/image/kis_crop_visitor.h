@@ -30,6 +30,7 @@
 #include "kis_adjustment_layer.h"
 #include "kis_transaction.h"
 #include "kis_selected_transaction.h"
+#include "kis_selection.h"
 #include "kis_external_layer_iface.h"
 #include "kis_undo_adapter.h"
 #include "commands/kis_node_commands.h"

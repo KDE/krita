@@ -20,6 +20,7 @@
 #define _BRUSH_H_
 
 #include <QVector>
+#include <QList>
 
 #include <KoColor.h>
 
@@ -35,7 +36,7 @@ public:
 	~Brush();
 	Brush(KoColor inkColor, BrushShape shape);
 	void paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color);
-
+	void setInkDepletion(QList<float> *curveData);
 
 
 private:
@@ -44,6 +45,7 @@ private:
 	KoColor m_inkColor;
 	int m_counter;
 	int m_radius;
+	QList<float> m_inkDepletion; // array
 
 };
 

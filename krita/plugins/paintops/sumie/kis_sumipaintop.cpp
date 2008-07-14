@@ -20,6 +20,7 @@
 #include <cmath>
 
 #include <QRect>
+#include <QList>
 #include <QColor>
 #include <QMutexLocker>
 
@@ -45,8 +46,10 @@
 
 KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
-    Q_UNUSED( settings );
-    KisPaintOp * op = new KisSumiPaintOp(painter, image);
+    const KisSumiPaintOpSettings *sumiSettings = dynamic_cast<const KisSumiPaintOpSettings *>(settings.data());
+    Q_ASSERT(settings == 0 || sumiSettings != 0);
+
+	KisPaintOp * op = new KisSumiPaintOp(sumiSettings, painter, image);
     Q_CHECK_PTR(op);
     return op;
 }
@@ -77,6 +80,7 @@ KisSumiPaintOpSettings::KisSumiPaintOpSettings(QWidget * parent )
 
     m_optionsWidget->setPopupWidget(m_popupWidget);
 
+
 }
 
 KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
@@ -85,6 +89,19 @@ KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
     return s;
 
 }
+
+QList<float> * KisSumiPaintOpSettings::curve() const
+{
+	int curveSamples = 256;
+	QList<float> *result = new QList<float>;
+	for (int i=0; i < curveSamples ; i++)
+	{
+		result->append( (float)m_options->inkCurve->getCurveValue( i / (float)(curveSamples-1.0f) ) );
+	}
+	// have to be freed!!
+	return result;
+}
+
 
 void KisSumiPaintOpSettings::fromXML(const QDomElement&)
 {
@@ -98,12 +115,14 @@ void KisSumiPaintOpSettings::toXML(QDomDocument&, QDomElement&) const
 
 
 
-KisSumiPaintOp::KisSumiPaintOp(KisPainter * painter, KisImageSP image)
+KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter * painter, KisImageSP image)
     : KisPaintOp(painter)
 {
-    dbgKrita << "START OF KisSumiPaintOp" << endl;
     newStrokeFlag = true;
     m_image = image;
+	
+	m_brush.setInkDepletion( settings->curve() );
+	// delete??
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
@@ -131,7 +150,7 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 	x1 = info.pos().x();
 	y1 = info.pos().y();
 
-	m_mybrush.paint(dab, x1, y1, painter()->paintColor() );
+	m_brush.paint(dab, x1, y1, painter()->paintColor() );
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );

@@ -25,9 +25,13 @@
 
 #include <QVariant>
 #include <QHash>
+#include <QList>
 
 #include "kis_random_accessor.h"
+#include "widgets/kcurve.h"
+
 #include <cmath>
+
 
 Brush::Brush(const BrushShape &initialShape, KoColor inkColor){
 	m_initialShape = initialShape;
@@ -46,6 +50,19 @@ Brush::Brush(){
 	srand48(1045);
 }
 
+void Brush::setInkDepletion(QList<float> *curveData){
+	int count = curveData->size();
+
+	for (int i = 0; i< count ;i++)
+	{
+		m_inkDepletion.append( curveData->at(i) );
+	}
+
+	dbgKrita << "size: " << curveData->size() ;
+	dbgKrita << "size depletion: " << m_inkDepletion.size() << endl;
+	delete curveData;
+	 // thank you
+}
 
 void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
 	/*if (m_counter == 1){
@@ -55,6 +72,7 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
 	m_inkColor = color;
 
 	m_counter++;
+	
 	float decr = (m_counter*m_counter*m_counter)/1000000.0f;
 
 	Bristle *bristle;
@@ -69,23 +87,29 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
 
 	QHash<QString, QVariant> params;
 
-	if (true){
+	double result;
+	if ( m_counter >= m_inkDepletion.size()-1 ){
+		result = m_inkDepletion[m_inkDepletion.size() - 1];
+	}else{
+		result = m_inkDepletion[m_counter];
+	}
+
+
+	dbgPlugins << "result:" << result << endl;
+	dbgPlugins << "m_counter:" << m_counter << endl;
+		
 		params["h"] = 0.0;
-
-		double result = log (m_counter);
-		result = -(result * 10)/100.0;
-		params["s"] = result;
-		//dbgPlugins << "log (m_counter): "<< result << endl;
-
+		params["s"] = -result;
 		params["v"] = 0.0;
+		
 
 		KoColorTransformation* transfo = dev->colorSpace()->createColorTransformation( "hsv_adjustment", params);
 		transfo->transform( m_inkColor.data(), m_inkColor.data(), 1);
 		
-		int opacity = (1.0f+result)*255;
+		/*int opacity = (1.0f+result)*255;
 		dbgPlugins << "opacity: "<< opacity << endl;
-		m_inkColor.setOpacity(opacity);
-	}
+		m_inkColor.setOpacity(opacity);*/
+	
 
 	for (int i=0;i<m_bristles.size();i++){
 		bristle = &m_bristles[i];
@@ -128,5 +152,4 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
 }
 
 Brush::~Brush(){
-
 }

@@ -67,11 +67,14 @@ public:
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
-private:
+	QList<float> * curve() const;
 
+private:
     Ui::WdgSumieOptions* m_options;
     KisPopupButton * m_optionsWidget;
     QWidget * m_popupWidget;
+
+	QList<QPointF> m_curveData;
 };
 
 
@@ -79,7 +82,7 @@ class KisSumiPaintOp : public KisPaintOp {
 
 public:
 
-    KisSumiPaintOp(KisPainter * painter, KisImageSP image);
+    KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual ~KisSumiPaintOp();
 
     // Do we want to spray even when no movement?
@@ -97,7 +100,7 @@ private:
     //Stroke stroke;
     KisPaintDeviceSP dab;
     QMutex m_mutex;
-    Brush m_mybrush;
+    Brush m_brush;
 };
 
 #endif // KIS_SUMIPAINTOP_H_

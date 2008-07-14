@@ -81,10 +81,12 @@ namespace KoChart
         PartPrivate *d;
     };
 
-    class ChartInterface
+    class KOCHART_EXPORT ChartInterface
     {
     public:
-        virtual ~ChartInterface() {}
+        ChartInterface();
+        virtual ~ChartInterface();
+
         virtual void setModel( QAbstractItemModel* model,
                                bool takeOwnershipOfModel = false ) = 0;
         virtual void setModel( ChartModel *model, const QVector<QRect> &selection ) = 0;

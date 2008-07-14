@@ -60,8 +60,8 @@ KoStyleManager::KoStyleManager(QObject *parent)
     d->standard->setRightMargin(0);
     d->standard->setTextIndent(0);
     d->standard->setAlignment(Qt::AlignLeft);
-    d->standard->setName( i18n("Standard"));
-    d->standard->characterStyle()->setName(i18n("Standard"));
+    d->standard->setName( i18n("Default"));
+    d->standard->characterStyle()->setName(i18n("Default"));
     add(d->standard);
 }
 

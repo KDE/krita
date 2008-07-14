@@ -82,11 +82,6 @@ public:
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
     : QObject(parent), d( new Private() )
 {
-    setFontPointSize(12.0);
-    setFontWeight(QFont::Normal);
-    setVerticalAlignment(QTextCharFormat::AlignNormal);
-    setForeground(Qt::black);
-    setStrikeOutColor(Qt::black);
 }
 
 KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)

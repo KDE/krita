@@ -148,7 +148,6 @@ KoParagraphStyle::KoParagraphStyle()
 {
     d->charStyle = new KoCharacterStyle(this);
     d->stylesPrivate = new StylePrivate();
-    setLineHeightPercent(120);
 }
 
 KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)

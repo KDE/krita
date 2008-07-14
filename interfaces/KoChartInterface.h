@@ -16,43 +16,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koChart.h"
+#ifndef KOCHART_INTERFACE
+#define KOCHART_INTERFACE
 
-#include <qobject.h>
+#include <QtPlugin>
 
-using namespace KoChart;
+#define ChartShapeId "ChartShape"
 
-WizardExtension::WizardExtension( Part *part )
-    : QObject( part )
+class QAbstractItemModel;
+class QRect;
+
+namespace KoChart
 {
-    m_part = part;
-}
+class ChartModel;
 
-WizardExtension::~WizardExtension()
+class ChartInterface
 {
-}
+public:
+    virtual ~ChartInterface() {}
 
-Part::Part( QWidget *parentWidget,
-            QObject *parent,
-            bool singleViewMode )
-    : KoDocument( parentWidget, parent, singleViewMode )
-{
-}
+    virtual void setModel(QAbstractItemModel* model, bool takeOwnershipOfModel = false) = 0;
+    virtual void setModel(ChartModel *model, const QVector<QRect> &selection) = 0;
+    virtual void setFirstRowIsLabel(bool isLabel) = 0;
+    virtual void setFirstColumnIsLabel(bool isLabel) = 0;
+    virtual void setDataDirection(Qt::Orientation orientation) = 0;
+};
 
-Part::~Part()
-{
-}
+} // namespace KoChart
 
-WizardExtension *Part::wizardExtension()
-{
-    QObjectList::ConstIterator end( QObject::children().end() );
-    for (QObjectList::ConstIterator it( QObject::children().begin() ); it != end; ++it ) {
-      WizardExtension* we = ::qobject_cast<WizardExtension *>( *it );
-      if ( we )
-          return we;
-    }
+Q_DECLARE_INTERFACE(KoChart::ChartInterface, "org.koffice.KoChart.ChartInterface:1.0")
 
-    return 0;
-}
-
-#include "koChart.moc"
+#endif // KOCHART_INTERFACE

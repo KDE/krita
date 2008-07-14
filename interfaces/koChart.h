@@ -81,22 +81,6 @@ namespace KoChart
         PartPrivate *d;
     };
 
-    class KOCHART_EXPORT ChartInterface
-    {
-    public:
-        ChartInterface();
-        virtual ~ChartInterface();
-
-        virtual void setModel( QAbstractItemModel* model,
-                               bool takeOwnershipOfModel = false ) = 0;
-        virtual void setModel( ChartModel *model, const QVector<QRect> &selection ) = 0;
-        virtual void setFirstRowIsLabel( bool isLabel ) = 0;
-        virtual void setFirstColumnIsLabel( bool isLabel ) = 0;
-        virtual void setDataDirection( Qt::Orientation orientation ) = 0;
-    };
-
 } // namespace KoChart
-
-Q_DECLARE_INTERFACE(KoChart::ChartInterface, "org.koffice.KoChart.ChartInterface:1.0")
 
 #endif

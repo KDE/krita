@@ -334,8 +334,8 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     action = new QAction(i18n("Default Format"), this);
     addAction("text_default", action);
-    action->setToolTip( i18n( "Change font and paragraph attributes to their default values" ) );
-    connect(action, SIGNAL(triggered()), this, SLOT( textDefaultFormat() ));
+    action->setToolTip( i18n( "Change text attributes to their default values" ) );
+    connect(action, SIGNAL(triggered()), this, SLOT(setDefaultFormat()));
 
     foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
@@ -1409,10 +1409,9 @@ void TextTool::decreaseIndent()
     m_actionFormatDecreaseIndent->setEnabled(m_textCursor.blockFormat().leftMargin() > 0.);
 }
 
-void TextTool::textDefaultFormat()
+void TextTool::setDefaultFormat()
 {
-    // TODO
-    kDebug(32500) <<"TextTool::textDefaultFormat";
+    m_selectionHandler.setDefaultFormat();
 }
 
 void TextTool::insertIndexMarker()

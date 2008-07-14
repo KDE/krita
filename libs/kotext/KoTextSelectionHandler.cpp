@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -262,6 +263,21 @@ void KoTextSelectionHandler::decreaseFontSize() {
     emit startMacro(i18n("Decrease font size"));
     FontResizer sizer(FontResizer::Shrink);
     CharFormatVisitor::visitSelection(d->caret, sizer);
+    emit stopMacro();
+}
+
+void KoTextSelectionHandler::setDefaultFormat()
+{
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (d->textShapeData->document()->documentLayout());
+    if (!layout)
+        return;
+    emit startMacro(i18n("Set default format"));
+    if (KoStyleManager *styleManager = layout->styleManager()) {
+        KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
+        QTextCharFormat defaultFormat;
+        defaultCharStyle->applyStyle(defaultFormat);
+        d->caret->setCharFormat(defaultFormat);
+    }
     emit stopMacro();
 }
 

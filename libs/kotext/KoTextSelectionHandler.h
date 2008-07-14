@@ -109,6 +109,11 @@ public slots:
     void increaseFontSize();
 
     /**
+     * Alter the selection to have the default format
+     */
+    void setDefaultFormat();
+
+    /**
      * Alter the selections font size to be slightly smaller.
      */
     void decreaseFontSize();

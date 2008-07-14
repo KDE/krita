@@ -139,7 +139,7 @@ private slots:
     /// move the paragraph indent of the selected text to be more (right on LtR text)
     void increaseIndent();
     /// Default Format
-    void textDefaultFormat();
+    void setDefaultFormat();
     /// see KoTextSelectionHandler::insertIndexMarker
     void insertIndexMarker();
     /// shows a dialog to alter the paragraph properties

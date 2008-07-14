@@ -34,11 +34,13 @@
 #include <QTextBlockFormat>
 #include <QTextCursor>
 #include <QFontMetrics>
+#include <QBuffer>
 
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2) {
     return tab1.position < tab2.position;
@@ -1054,6 +1056,17 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
             else if ( leaderStyle == "wave" )
                 tab.leaderStyle = KoCharacterStyle::WaveLine;
 
+            if (tab.leaderType == KoCharacterStyle::NoLineType && tab.leaderStyle != KoCharacterStyle::NoLineStyle) {
+                if (leaderType == "none")
+                    // if leaderType was explicitly specified as none, but style was not none,
+                    // make leaderType override (ODF1.1 §15.5.11)
+                    tab.leaderStyle = KoCharacterStyle::NoLineStyle;
+                else
+                    // if leaderType was implicitly assumed none, but style was not none,
+                    // make leaderStyle override
+                    tab.leaderType = KoCharacterStyle::SingleLine;
+            }
+
             QString leaderColor = tabStop.attributeNS( KoXmlNS::style, "leader-color", QString() );
             if ( leaderColor != "font-color" )
                 tab.leaderColor = QColor(leaderColor); // if invalid color (the default), will use text color
@@ -1463,6 +1476,8 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
             style.addPropertyPt("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::AutoTextIndent) {
             style.addProperty("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::TabStopDistance) {
+            style.addPropertyPt("style:tab-stop-distance", tabStopDistance(), KoGenStyle::ParagraphType);
         }
     }
     // save border stuff
@@ -1520,6 +1535,79 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
             style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
         if (bottomBorderStyle() == KoParagraphStyle::BorderDouble)
             style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
+    }
+    // drop-caps
+    if (dropCaps()) {
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
+        KoXmlWriter elementWriter(&buf);
+        elementWriter.startElement("style:drop-cap");
+        elementWriter.addAttribute("style:lines", QString::number(dropCapsLines()));
+        elementWriter.addAttribute("style:length", dropCapsLength()<0? "word" : QString::number(dropCapsLength()));
+        if (dropCapsDistance())
+            elementWriter.addAttributePt("style:distance", dropCapsDistance());
+        elementWriter.endElement();
+        QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+        style.addChildElement("style:drop-cap", elementContents);
+    }
+    if (tabPositions().count() > 0) {
+        QMap<int,QString> tabTypeMap, leaderTypeMap, leaderStyleMap, leaderWeightMap;
+        tabTypeMap[QTextOption::LeftTab] = "left";
+        tabTypeMap[QTextOption::RightTab] = "right";
+        tabTypeMap[QTextOption::CenterTab] = "center";
+        tabTypeMap[QTextOption::DelimiterTab] = "char";
+        leaderTypeMap[KoCharacterStyle::NoLineType] = "none";
+        leaderTypeMap[KoCharacterStyle::SingleLine] = "single";
+        leaderTypeMap[KoCharacterStyle::DoubleLine] = "double";
+        leaderStyleMap[KoCharacterStyle::NoLineStyle] = "none";
+        leaderStyleMap[KoCharacterStyle::SolidLine] = "solid";
+        leaderStyleMap[KoCharacterStyle::DottedLine] = "dotted";
+        leaderStyleMap[KoCharacterStyle::DashLine] = "dash";
+        leaderStyleMap[KoCharacterStyle::LongDashLine] = "long-dash";
+        leaderStyleMap[KoCharacterStyle::DotDashLine] = "dot-dash";
+        leaderStyleMap[KoCharacterStyle::DotDotDashLine] = "dot-dot-dash";
+        leaderStyleMap[KoCharacterStyle::WaveLine] = "wave";
+        leaderWeightMap[KoCharacterStyle::AutoLineWeight] = "auto";
+        leaderWeightMap[KoCharacterStyle::NormalLineWeight] = "normal";
+        leaderWeightMap[KoCharacterStyle::BoldLineWeight] = "bold";
+        leaderWeightMap[KoCharacterStyle::ThinLineWeight] = "thin";
+        leaderWeightMap[KoCharacterStyle::DashLineWeight] = "dash";
+        leaderWeightMap[KoCharacterStyle::MediumLineWeight] = "medium";
+        leaderWeightMap[KoCharacterStyle::ThickLineWeight] = "thick";
+
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
+        KoXmlWriter elementWriter(&buf);
+        elementWriter.startElement("style:tab-stops");
+        foreach (KoText::Tab tab, tabPositions()) {
+            elementWriter.startElement("style:tab-stop");
+            elementWriter.addAttributePt("style:position", tab.position);
+            if (!tabTypeMap[tab.type].isEmpty())
+                elementWriter.addAttribute("style:type", tabTypeMap[tab.type]);
+            if (tab.type == QTextOption::DelimiterTab && !tab.delimiter.isNull())
+                elementWriter.addAttribute("style:char", tab.delimiter);
+            if (!leaderTypeMap[tab.leaderType].isEmpty())
+                elementWriter.addAttribute("style:leader-type", leaderTypeMap[tab.leaderType]);
+            if (!leaderStyleMap[tab.leaderStyle].isEmpty())
+                elementWriter.addAttribute("style:leader-style", leaderStyleMap[tab.leaderStyle]);
+            if (!leaderWeightMap[tab.leaderWeight].isEmpty())
+                elementWriter.addAttribute("style:leader-width", leaderWeightMap[tab.leaderWeight]);
+            else if (tab.leaderWeight = KoCharacterStyle::PercentLineWeight)
+                elementWriter.addAttribute("style:leader-width", QString("%1%").arg(QString::number(tab.leaderWidth)));
+            else if (tab.leaderWeight = KoCharacterStyle::LengthLineWeight)
+                elementWriter.addAttributePt("style:leader-width", tab.leaderWidth);
+            if (tab.leaderColor.isValid())
+                elementWriter.addAttribute("style:leader-color", tab.leaderColor.name());
+            else
+                elementWriter.addAttribute("style:leader-color", "font-color");
+            if (!tab.leaderText.isEmpty())
+                elementWriter.addAttribute("style:leader-text", tab.leaderText);
+            elementWriter.endElement();
+        }
+        elementWriter.endElement();
+        QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+        style.addChildElement("style:tab-stops", elementContents);
+
     }
 }
 

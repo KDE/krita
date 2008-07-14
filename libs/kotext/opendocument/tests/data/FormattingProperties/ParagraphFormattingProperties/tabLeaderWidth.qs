@@ -4,6 +4,7 @@ var textBlockFormat = new QTextBlockFormat.clone(defaultBlockFormat);
 var tabstop = new KoTextTab;
 tabstop.position = 3 * 72; // 1 in = 72 pts
 tabstop.leaderStyle = KoCharacterStyle.SolidLine;
+tabstop.leaderType = KoCharacterStyle.SingleLine;
 tabstop.leaderWeight = KoCharacterStyle.NormalLineWeight;
 
 setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);

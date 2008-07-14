@@ -15,37 +15,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SELECTION_TOOL_HELPER_H
-#define KIS_SELECTION_TOOL_HELPER_H
+#ifndef KIS_SELECTION_COMMANDS_H_
+#define KIS_SELECTION_COMMANDS_H_
 
 #include <krita_export.h>
+#include <QUndoCommand>
+#include "kis_types.h"
 
-#include "kis_layer.h"
-#include "kis_selection.h"
+/// The command for setting the global selection
+class KRITAIMAGE_EXPORT KisSetGlobalSelectionCommand : public QUndoCommand {
 
-class QUndoCommand;
-class KoShape;
-class KisCanvas2;
-
-/**
- * XXX: Doc!
- */
-class KRITAUI_EXPORT KisSelectionToolHelper
-{
 public:
+    /**
+     * Constructor
+     * @param image the image to set the global selection on
+     * @param selection the selection that will be set a global selection, if 0 a new selection will be created
+     */
+    KisSetGlobalSelectionCommand(KisImageSP image, QUndoCommand * parent, KisSelectionSP selection = 0);
+    virtual ~KisSetGlobalSelectionCommand();
 
-    KisSelectionToolHelper( KisCanvas2* canvas, KisNodeSP node, const QString& name);
-    virtual ~KisSelectionToolHelper();
-
-    QUndoCommand* selectPixelSelection(KisPixelSelectionSP selection, selectionAction action);
-    void addSelectionShape(KoShape* shape);
+    virtual void redo();
+    virtual void undo();
 
 private:
-    KisCanvas2* m_canvas;
     KisImageSP m_image;
-    KisLayerSP m_layer;
-    QString m_name;
+    KisSelectionSP m_newSelection;
+    KisSelectionSP m_oldSelection;
 };
 
 
-#endif
+#endif // KIS_SELECTION_COMMANDS_H_

@@ -52,6 +52,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_commands.cc
    commands/kis_layer_commands.cc
    commands/kis_node_commands.cc
+   commands/kis_selection_commands.cc
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_config_widget.cc

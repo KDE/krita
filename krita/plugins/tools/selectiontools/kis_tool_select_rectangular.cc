@@ -221,8 +221,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
                 shape = path;
             }
 
-            QUndoCommand* cmd = helper.addSelectionShape(shape);
-            m_canvas->addCommand(cmd);
+            helper.addSelectionShape(shape);
         }
         m_selecting = false;
     }

@@ -159,8 +159,7 @@ void KisToolSelectPath::addPathShape()
         delete shape;
     }
     else {
-        QUndoCommand* cmd = helper.addSelectionShape(shape);
-        m_canvas->addCommand(cmd);
+        helper.addSelectionShape(shape);
     }
 }
 

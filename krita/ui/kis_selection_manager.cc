@@ -71,6 +71,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"
+#include "commands/kis_selection_commands.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -555,21 +556,20 @@ void KisSelectionManager::selectAll()
 
     KisLayerSP layer = m_view->activeLayer();
     if(!layer) return;
-// XXX: make the select all undoable; but this transaction command crashes if the layer doesn't have a selection,
-//      so comment out.
-//    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Select All"), layer);
-//    Q_CHECK_PTR(t);
 
+    QUndoCommand* selectionCmd = new QUndoCommand(i18n("Select All"));
+
+    if (!m_view->selection())
+        new KisSetGlobalSelectionCommand(img, selectionCmd);
     KisSelectionSP selection = m_view->selection();
-    if (!selection) {
-        selection = new KisSelection();
-        img->setGlobalSelection(selection);
-    }
+
+    KisSelectedTransaction * t = new KisSelectedTransaction(QString(), layer, selectionCmd);
+    Q_CHECK_PTR(t);
 
     selection->getOrCreatePixelSelection()->select(img->bounds());
 
     m_view->selectionManager()->selectionChanged();
-//    m_view->document()->addCommand(t);
+    m_view->document()->addCommand(selectionCmd);
 }
 
 void KisSelectionManager::deselect()

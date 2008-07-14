@@ -32,6 +32,7 @@
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
 #include "kis_selected_transaction.h"
+#include "commands/kis_selection_commands.h"
 
 KisSelectionToolHelper::KisSelectionToolHelper( KisCanvas2* canvas, KisNodeSP node, const QString& name)
     : m_canvas(canvas)
@@ -54,10 +55,12 @@ QUndoCommand* KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP s
 {
     bool hasSelection = m_layer->selection();
 
-    if(!hasSelection)
-        m_image->setGlobalSelection();
+    QUndoCommand* selectionCmd = new QUndoCommand(m_name);
 
-    KisSelectedTransaction *t = new KisSelectedTransaction(m_name, m_layer);
+    if(!hasSelection)
+        new KisSetGlobalSelectionCommand(m_image, selectionCmd);
+
+    KisSelectedTransaction *t = new KisSelectedTransaction(m_name, m_layer, selectionCmd);
 
     KisPixelSelectionSP getOrCreatePixelSelection = m_layer->selection()->getOrCreatePixelSelection();
 
@@ -79,15 +82,17 @@ QUndoCommand* KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP s
         m_layer->selection()->updateProjection(m_image->bounds());
         m_canvas->view()->selectionManager()->selectionChanged();
     }
-    return t;
+    return selectionCmd;
 }
 
-QUndoCommand* KisSelectionToolHelper::addSelectionShape(KoShape* shape)
+void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
 {
     bool hasSelection = m_layer->selection();
 
+    m_canvas->startMacro(m_name);
+
     if(!hasSelection)
-        m_image->setGlobalSelection();
+        m_canvas->addCommand(new KisSetGlobalSelectionCommand(m_image, 0));
 
     KisSelectionSP selection = m_layer->selection();
 
@@ -104,6 +109,8 @@ QUndoCommand* KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
     shapeSelection->addChild(shape);
     shapeSelection->shapeManager()->add( shape );
-    return cmd;
+
+    m_canvas->addCommand(cmd);
+    m_canvas->stopMacro();
 }
 

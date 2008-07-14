@@ -144,8 +144,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                     path->close();
                     path->normalize();
 
-                    QUndoCommand* cmd = helper.addSelectionShape(path);
-                    m_canvas->addCommand(cmd);
+                    helper.addSelectionShape(path);
                 }
             }
             QApplication::restoreOverrideCursor();

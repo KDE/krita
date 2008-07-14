@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -68,9 +69,22 @@ KoStyleManager::~KoStyleManager() {
     delete d;
 }
 
+void KoStyleManager::saveOdfDefaultStyles(KoGenStyles &mainStyles)
+{
+    KoGenStyle style(KoGenStyle::StyleUser, "parargaph");
+    style.setDefaultStyle(true);
+    d->standard->saveOdf(style);
+    mainStyles.lookup(style);
+}
+
 void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
 {
+    saveOdfDefaultStyles(mainStyles);
+
     foreach ( KoParagraphStyle *paragraphStyle, d->paragStyles ) {
+        if (paragraphStyle == d->standard)
+            continue;
+
         QString name( QString( QUrl::toPercentEncoding( paragraphStyle->name(), "", " " ) ).replace( "%", "_" ) );
         if ( name.isEmpty() ) {
             name = "P";
@@ -82,6 +96,9 @@ void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
     }
 
     foreach ( KoCharacterStyle *characterStyle, d->charStyles ) {
+        if (characterStyle == d->standard->characterStyle())
+            continue;
+
         QString name( QString( QUrl::toPercentEncoding( characterStyle->name(), "", " " ) ).replace( "%", "_" ) );
         if ( name.isEmpty() ) {
             name = "T";

@@ -59,6 +59,11 @@ public:
     void saveOdf( KoGenStyles& mainStyles );
 
     /**
+     * Save the default-style styles
+     */
+    void saveOdfDefaultStyles(KoGenStyles &mainStyles);
+
+    /**
      * Add a new style, automatically giving it a new styleId.
      */
     void add(KoCharacterStyle *style);

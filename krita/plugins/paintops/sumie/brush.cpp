@@ -44,7 +44,7 @@ Brush::Brush(){
 	m_counter = 0;
 
 	BrushShape bs;
-	bs.fromGaussian( m_radius, 2.0f );
+	bs.fromGaussian( m_radius, 20.0f );
 	m_bristles = bs.getBristles();
 
 	srand48(1045);
@@ -103,9 +103,9 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y){
 	*/
 	for (int i=0;i<m_bristles.size();i++)
 	{
-		/*if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
+		if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
 			continue;
-		}*/
+		}
 
 		bristle = &m_bristles[i];
 		brColor = bristle->color();
@@ -113,21 +113,27 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y){
 
 
 		// saturation		
-		params["s"] = -result*( 1.0-bristle->length() );
+		params["s"] = -(1.0 - ( bristle->length() * bristle->inkAmount() ) );
+
 		transfo = dev->colorSpace()->createColorTransformation( "hsv_adjustment", params);
 		transfo->transform( m_inkColor.data(), brColor.data() , 1);
 
 		// opacity 
-		brColor.setOpacity( static_cast<int>( 255*bristle->length() ) );
-	
+		//brColor.setOpacity( static_cast<int>( 255*bristle->length() ) );
+		
+
+		brColor.setOpacity( 255*bristle->length() * bristle->inkAmount() * (1.0 - result) );
 		int dx, dy;
 		dx = (int)(x+bristle->x() );
 		dy = (int)(y+bristle->y() );
 
 		accessor.moveTo(dx,dy);
 		memcpy(accessor.rawData(), brColor.data(), pixelSize);
+
 		
-		bristle->setColor(brColor);
+
+		bristle->setInkAmount( 1.0 - result );
+		//bristle->setColor(brColor);
 	}
 
 	

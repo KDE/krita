@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 
+#include <DebugPigment.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionSystem.h>
@@ -59,13 +60,19 @@ void TestColorConversionSystem::testConnections()
 
 void TestColorConversionSystem::testGoodConnections()
 {
+    int countFail = 0;
     foreach( ModelDepthProfile srcCS, listModels)
     {
         foreach( ModelDepthProfile dstCS, listModels)
         {
-            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile) , QString("No good path between %1 / %2 / %3 and %4 / %5 / %6").arg(srcCS.model).arg(srcCS.depth).arg(srcCS.profile).arg(dstCS.model).arg(dstCS.depth).arg(dstCS.profile).latin1() );
+            if(not KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile) )
+            {
+                ++countFail;
+                dbgPigment << "No good path between \"" << srcCS.model << " " << srcCS.depth << " " << srcCS.profile << "\" \"" << dstCS.model << " " << dstCS.depth << " " << dstCS.profile <<"\"";
+            }
         }
     }
+    QVERIFY2( countFail == 0, QString("%1 tests have fails").arg( countFail).latin1() );
 }
 
 QTEST_KDEMAIN(TestColorConversionSystem, NoGUI)

@@ -1,8 +1,8 @@
 include("common.qs");
 
 var textOutlineFormat = QTextCharFormat.clone(defaultTextFormat);
+setFormatProperty(textOutlineFormat, QTextFormat.TextOutline, new QPen(Qt.black, 0));
 textOutlineFormat.setForeground(new QBrush(new QColor(Qt.transparent)));
-setFormatProperty(textOutlineFormat, QTextFormat.TextOutline, new QPen());
 
 var noTextOutlineFormat = QTextCharFormat.clone(defaultTextFormat);
 setFormatProperty(noTextOutlineFormat, QTextFormat.TextOutline, new QPen(Qt.NoPen));

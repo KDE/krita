@@ -84,8 +84,6 @@ QTextOption.CenterTab = QTextOption.LeftTab + 2;
 QTextOption.DelimiterTab = QTextOption.LeftTab + 3;
 
 var defaultBlockFormat = new QTextBlockFormat;
-setFormatProperty(defaultBlockFormat, KoParagraphStyle.PercentLineHeight, 120);
-defaultBlockFormat.clearBackground();
 cursor.setBlockFormat(defaultBlockFormat);
 
 QTextBlockFormat.clone = function(fmt) {
@@ -95,9 +93,9 @@ QTextBlockFormat.clone = function(fmt) {
 }
 
 // Default character formatting
+// Default font - See KoTextShapeData constructor
 var defaultFont = new QFont;
-defaultFont.setPointSizeF(12.0);
-defaultFont.setWeight(QFont.Normal);
+document.font = defaultFont;
 
 var KoCharacterStyle = {};
 i = QTextFormat.UserProperty;
@@ -150,10 +148,6 @@ KoCharacterStyle.PercentLineWeight = i++;
 KoCharacterStyle.LengthLineWeight = i++;
 
 var defaultTextFormat = new QTextCharFormat;
-defaultTextFormat.setFont(defaultFont);
-defaultTextFormat.setVerticalAlignment(QTextCharFormat.AlignNormal);
-defaultTextFormat.setForeground(new QBrush(new QColor(0, 0, 0)));
-setFormatProperty(defaultTextFormat, KoCharacterStyle.StrikeOutColor, new QColor(0, 0, 0));
 cursor.setCharFormat(defaultTextFormat);
 
 QTextCharFormat.clone = function(fmt) {

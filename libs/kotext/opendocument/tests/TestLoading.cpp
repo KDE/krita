@@ -138,7 +138,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
            && actualFormat.property(KoCharacterStyle::Language).toString()
                   == expectedFormat.property(KoCharacterStyle::Language).toString() 
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
-    
+
     if (!equal) {
         qDebug() << "Actual property:   " << KoTextDebug::textAttributes(actualFormat.properties());
         qDebug() << "Expected property: " << KoTextDebug::textAttributes(expectedFormat.properties());
@@ -578,7 +578,7 @@ void TestLoading::addData()
     QTest::newRow("attributedText") << "TextContents/Paragraph/attributedText";
     QTest::newRow("basicContents") << "TextContents/Paragraph/basicContents";
 
-    QTest::newRow("fontSize") << "TextContents/TextFormatting/fontSize";
+    QTest::newRow("fontSize1") << "TextContents/TextFormatting/fontSize";
 
     QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
 
@@ -591,7 +591,7 @@ void TestLoading::addData()
 #endif
     QTest::newRow("fontName") << "FormattingProperties/TextFormattingProperties/fontName";
     QTest::newRow("fontPitch") << "FormattingProperties/TextFormattingProperties/fontPitch";
-    QTest::newRow("fontSize") << "FormattingProperties/TextFormattingProperties/fontSize";
+    QTest::newRow("fontSize2") << "FormattingProperties/TextFormattingProperties/fontSize";
     QTest::newRow("fontStyle") << "FormattingProperties/TextFormattingProperties/fontStyle";
     QTest::newRow("fontWeight") << "FormattingProperties/TextFormattingProperties/fontWeight";
     QTest::newRow("fontVariant") << "FormattingProperties/TextFormattingProperties/fontVariant";

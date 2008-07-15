@@ -260,49 +260,49 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     QMap<QTextList *, QString> listStyleNames;
     QTextBlock startBlock = block;
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
-	if ((block.textList()) and (!listStyleNames.contains(block.textList()))) {
-	    // Generate a style from that...
-	    KoGenStyle style(KoGenStyle::StyleList);
+        if ((block.textList()) and (!listStyleNames.contains(block.textList()))) {
+            // Generate a style from that...
+            KoGenStyle style(KoGenStyle::StyleList);
             KoListStyle *listStyle = KoListStyle::fromTextList(block.textList());
-	    listStyle->saveOdf(style);
+            listStyle->saveOdf(style);
             QString generatedName = context.mainStyles().lookup(style, listStyle->name());
-	    listStyleNames[block.textList()] = generatedName;
-	    delete(listStyle);
-	}
-	block = block.next();
+            listStyleNames[block.textList()] = generatedName;
+            delete(listStyle);
+        }
+        block = block.next();
     }
     block = startBlock;
-    
+
     // Ok, now that the styles are done, we can store the blocks themselves.
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
         if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
             break;
 
         KoParagraphStyle *paragstyle = KoParagraphStyle::fromBlock(block);
-	if (block.textList()) {
-	    kDebug() << "Ok, we've got a list for the block with text " << block.begin().fragment().text();
-	    kDebug() << "The list :" << block.textList();
-	    if ((textLists.isEmpty()) or (!textLists.contains(block.textList()))) {
-		kDebug() << "This is a text list we never met before, adding it.";
-		writer->startElement( "text:list", false );
-		writer->addAttribute("text:style-name", listStyleNames[block.textList()]);
-		textLists.append(block.textList());
-	    } else if (block.textList() != textLists.last()) {
-		kDebug() << "We will close every text:list element until we reach the right list...";
-		while ((!textLists.isEmpty()) and (block.textList() != textLists.last())) {
-		    textLists.removeLast();
-		    writer->endElement();
-		}
-	    }
-	    writer->startElement( "text:list-item", false );
-	} else {
-	    kDebug() << "We close any remaining list...";
-	    // Close any remaining list...
-	    while (!textLists.isEmpty()) {
-		textLists.removeLast();
-		writer->endElement();
-	    }
-	}
+        if (block.textList()) {
+            kDebug() << "Ok, we've got a list for the block with text " << block.begin().fragment().text();
+            kDebug() << "The list :" << block.textList();
+            if ((textLists.isEmpty()) or (!textLists.contains(block.textList()))) {
+                kDebug() << "This is a text list we never met before, adding it.";
+                writer->startElement( "text:list", false );
+                writer->addAttribute("text:style-name", listStyleNames[block.textList()]);
+                textLists.append(block.textList());
+            } else if (block.textList() != textLists.last()) {
+                kDebug() << "We will close every text:list element until we reach the right list...";
+                while ((!textLists.isEmpty()) and (block.textList() != textLists.last())) {
+                    textLists.removeLast();
+                    writer->endElement();
+                }
+            }
+            writer->startElement( "text:list-item", false );
+        } else {
+            kDebug() << "We close any remaining list...";
+            // Close any remaining list...
+            while (!textLists.isEmpty()) {
+                textLists.removeLast();
+                writer->endElement();
+            }
+        }
         writer->startElement( "text:p", false );
 
         if (styleNames.contains(allFormats.indexOf(block.blockFormat())))

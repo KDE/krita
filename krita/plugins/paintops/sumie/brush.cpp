@@ -103,9 +103,9 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y){
 	*/
 	for (int i=0;i<m_bristles.size();i++)
 	{
-		if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
+		/*if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
 			continue;
-		}
+		}*/
 
 		bristle = &m_bristles[i];
 		brColor = bristle->color();

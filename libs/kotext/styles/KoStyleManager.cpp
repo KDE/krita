@@ -54,13 +54,7 @@ KoStyleManager::KoStyleManager(QObject *parent)
     : QObject(parent), d(new Private())
 {
     d->standard = new KoParagraphStyle();
-    d->standard->setLeftMargin(0);
-    d->standard->setTopMargin(0);
-    d->standard->setBottomMargin(0);
-    d->standard->setRightMargin(0);
-    d->standard->setTextIndent(0);
-    d->standard->setAlignment(Qt::AlignLeft);
-    d->standard->setName( i18n("Default"));
+    d->standard->setName(i18n("Default"));
     d->standard->characterStyle()->setName(i18n("Default"));
     add(d->standard);
 }

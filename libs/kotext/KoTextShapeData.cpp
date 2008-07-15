@@ -184,6 +184,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     QHash<int, QString> styleNames; // Store an int index for a QTextFormat => ODF style name
     QVector<QTextFormat> allFormats = d->document->allFormats(); // Will be used to get the indexes
     QTextFormat firstFragmentFormat;
+    QList<QTextList*> textLists;	// Store the current lists being stored.
 
     if (KoStyleManager *styleManager = layout->styleManager()) {
         foreach (QTextFormat textFormat, allFormats) { // iterate over the QTextFormat contained in this textFrameSet
@@ -259,6 +260,29 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             break;
 
         KoParagraphStyle *paragstyle = KoParagraphStyle::fromBlock(block);
+	if (block.textList()) {
+	    kDebug() << "Ok, we've got a list for the block with text " << block.begin().fragment().text();
+	    kDebug() << "The list :" << block.textList();
+	    if ((textLists.isEmpty()) or (!textLists.contains(block.textList()))) {
+		kDebug() << "This is a text list we never met before, adding it.";
+		writer->startElement( "text:list", false );
+		textLists.append(block.textList());
+	    } else if (block.textList() != textLists.last()) {
+		kDebug() << "We will close every text:list element until we reach the right list...";
+		while ((!textLists.isEmpty()) and (block.textList() != textLists.last())) {
+		    textLists.removeLast();
+		    writer->endElement();
+		}
+	    }
+	    writer->startElement( "text:list-item", false );
+	} else {
+	    kDebug() << "We close any remaining list...";
+	    // Close any remaining list...
+	    while (!textLists.isEmpty()) {
+		textLists.removeLast();
+		writer->endElement();
+	    }
+	}
         writer->startElement( "text:p", false );
 
         if (styleNames.contains(allFormats.indexOf(block.blockFormat())))
@@ -271,8 +295,6 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                 QTextFormat charFormat = currentFragment.charFormat();
                 KoInlineObject *inlineObject = layout->inlineObjectTextManager()->inlineTextObject((const QTextCharFormat &)charFormat);
                 if (inlineObject) {
-                    // Hey, there is a KoInlineTextObject in this fragment, stop here !
-                    //writer->addTextSpan("Here will come an inlineTextObject");
                     inlineObject->saveOdf(context);
                 } else {
                     if (currentFragment.charFormat() != firstFragmentFormat) {
@@ -287,6 +309,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             }
         }
         writer->endElement();
+	if (block.textList())	// This block is a list item too...
+	    writer->endElement();
         block = block.next();
     }
 }

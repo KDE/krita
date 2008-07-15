@@ -4,6 +4,7 @@ Name[hi]=केरिता
 Name[ne]=क्रिता
 Name[ta]=கிரிட்டா
 Name[x-test]=xxKritaxx
+Name[zh_TW]=繪圖_Krita
 Exec=krita %U
 X-DocPath=krita/index.html
 GenericName=Painting and Image Editing

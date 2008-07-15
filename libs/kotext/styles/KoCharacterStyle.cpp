@@ -654,9 +654,7 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context) {
         if (styleStack.property( KoXmlNS::style, "use-window-font-color") != "true") {
             QColor color(styleStack.property( KoXmlNS::fo, "color" )); // #rrggbb format
             if ( color.isValid() ) {
-                QBrush brush = foreground();
-                brush.setColor(color);
-                setForeground(brush);
+                setForeground(QBrush(color));
             }
         }
     }

@@ -72,13 +72,13 @@ void Bristle::setInkAmount(float inkAmount){
 	m_inkAmount = inkAmount;
 }
 
-float Bristle::amount(){
+float Bristle::inkAmount(){
 	return m_inkAmount;
 }
 
 KoColor Bristle::color(){
-	return m_inkColor;
+	return m_color;
 }
-void Bristle::setColor(KoColor inkColor){
-	m_inkColor = inkColor;
+void Bristle::setColor(KoColor color){
+	m_color = color;
 }

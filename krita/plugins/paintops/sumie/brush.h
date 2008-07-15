@@ -35,9 +35,9 @@ public:
 	Brush();
 	~Brush();
 	Brush(KoColor inkColor, BrushShape shape);
-	void paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color);
+	void paint(KisPaintDeviceSP dev, float x, float y);
 	void setInkDepletion(QList<float> *curveData);
-
+	void setInkColor(const KoColor &color);
 
 private:
 	QVector<Bristle> m_bristles;
@@ -46,7 +46,6 @@ private:
 	int m_counter;
 	int m_radius;
 	QList<float> m_inkDepletion; // array
-
 };
 
 #endif

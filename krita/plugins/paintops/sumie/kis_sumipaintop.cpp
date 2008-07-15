@@ -92,7 +92,7 @@ KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
 
 QList<float> * KisSumiPaintOpSettings::curve() const
 {
-	int curveSamples = 256;
+	int curveSamples = 1024;
 	QList<float> *result = new QList<float>;
 	for (int i=0; i < curveSamples ; i++)
 	{
@@ -122,6 +122,7 @@ KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter
     m_image = image;
 	
 	m_brush.setInkDepletion( settings->curve() );
+	m_brush.setInkColor( painter->paintColor() );
 	// delete??
 }
 
@@ -150,7 +151,9 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 	x1 = info.pos().x();
 	y1 = info.pos().y();
 
-	m_brush.paint(dab, x1, y1, painter()->paintColor() );
+		//color: painter()->paintColor()
+
+	m_brush.paint(dab, x1, y1 );
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );

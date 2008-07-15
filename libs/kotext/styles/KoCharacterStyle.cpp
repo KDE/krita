@@ -721,14 +721,12 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context) {
 
     // Specify the size of a font. The value of these attribute is either an absolute length or a percentage
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
-        double pointSize = styleStack.fontSize( fontPointSize() );
+        double pointSize = styleStack.fontSize();
         if (pointSize > 0)
             setFontPointSize(pointSize);
-    }
-
-    // These attributes specify a relative font size change as a length such as +1pt, -3pt. It changes the font size based on the font size of the parent style.
-    if ( styleStack.hasProperty( KoXmlNS::style, "font-size-rel" ) ) {
-        double pointSize = fontPointSize() + KoUnit::parseValue( styleStack.property( KoXmlNS::style, "font-size-rel" ) );
+    } else if ( styleStack.hasProperty( KoXmlNS::style, "font-size-rel" ) ) {
+        // These attributes specify a relative font size change as a length such as +1pt, -3pt. It changes the font size based on the font size of the parent style.
+        double pointSize = styleStack.fontSize() + KoUnit::parseValue( styleStack.property( KoXmlNS::style, "font-size-rel" ) );
         if (pointSize > 0)
             setFontPointSize(pointSize);
     }

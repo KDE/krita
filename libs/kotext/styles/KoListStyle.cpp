@@ -24,8 +24,11 @@
 #include <KoStyleStack.h>
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
+#include <KoGenStyle.h>
 #include <kdebug.h>
 #include <QTextCursor>
+#include <QBuffer>
 
 class KoListStyle::Private {
 public:
@@ -203,12 +206,24 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
 
 void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style)
 {
-    //kDebug(32500)<<"KoListStyle::loadOasis style.localName="<<style.localName();
-    //KoStyleStack &styleStack = context.styleStack();
     KoXmlElement styleElem;
     forEachElement(styleElem, style) {
         KoListLevelProperties properties;
         properties.loadOdf(context, styleElem);
         setLevel(properties);
     }
+}
+
+void KoListStyle::saveOdf(KoGenStyle &style)
+{
+    QBuffer buffer;
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    QMapIterator<int, KoListLevelProperties> it(d->levels);
+    while (it.hasNext()) {
+	it.next();
+	it.value().saveOdf(&elementWriter);
+    }
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    style.addChildElement( "text-list-level-style-content", elementContents );
 }

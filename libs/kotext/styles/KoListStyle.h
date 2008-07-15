@@ -30,6 +30,7 @@
 
 class KoListLevelProperties;
 class KoOdfLoadingContext;
+class KoGenStyle;
 
 /**
  * This class groups all styling-options for lists.
@@ -180,7 +181,12 @@ public:
      * OpenDocument format.
      */
     void loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style = KoXmlElement());
-
+    
+    /**
+     * Save the style to a KoGenStyle object using the OpenDocument format
+     */
+    void saveOdf( KoGenStyle &style );
+    
 protected:
     friend class KoParagraphStyle;
     void apply(const KoListStyle &other);

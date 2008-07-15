@@ -27,6 +27,7 @@
 
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
+#include <KoXmlWriter.h>
 
 class KoListLevelProperties::Private {
 public:
@@ -381,4 +382,33 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
     setLevel(level);
     if( ! displayLevel.isNull() )
         setDisplayLevel(displayLevel.toInt());
+}
+
+void KoListLevelProperties::saveOdf (KoXmlWriter *writer) const
+{
+    switch (d->stylesPrivate.value(QTextListFormat::ListStyle).toInt()) {
+	case KoListStyle::DecimalItem:
+	case KoListStyle::AlphaLowerItem:
+	case KoListStyle::UpperAlphaItem:
+	case KoListStyle::RomanLowerItem:
+	case KoListStyle::UpperRomanItem:
+	    writer->startElement("list-level-style-number");
+	    break;
+	default:
+	    writer->startElement("text:list-style-content");
+	    break;
+    }
+    if (d->stylesPrivate.contains(KoListStyle::Level))
+	writer->addAttribute("text:level", d->stylesPrivate.value(KoListStyle::Level).toInt());
+    if (d->stylesPrivate.contains(KoListStyle::BulletCharacter))
+	writer->addAttribute("text:bullet-char", QChar(d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt()));
+    kDebug() << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
+    kDebug() << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);
+    kDebug() << "Key KoListStyle::StartValue :" << d->stylesPrivate.value(KoListStyle::StartValue);
+    kDebug() << "Key KoListStyle::DisplayLevel :" << d->stylesPrivate.value(KoListStyle::DisplayLevel);
+    kDebug() << "Key KoListStyle::CharacterStyleId :" << d->stylesPrivate.value(KoListStyle::CharacterStyleId);
+    kDebug() << "Key KoListStyle::BulletSize :" << d->stylesPrivate.value(KoListStyle::BulletSize);
+    kDebug() << "Key KoListStyle::Alignment :" << d->stylesPrivate.value(KoListStyle::Alignment);
+    kDebug() << "Key KoListStyle::LetterSynchronization :" << d->stylesPrivate.value(KoListStyle::LetterSynchronization);
+    writer->endElement();
 }

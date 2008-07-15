@@ -255,6 +255,25 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             }
         }
     }
+    
+    //TODO: The list formats are currently not stored in the KoStyleManager ??
+    QMap<QTextList *, QString> listStyleNames;
+    QTextBlock startBlock = block;
+    while(block.isValid() && ((to == -1) || (block.position() < to))) {
+	if ((block.textList()) and (!listStyleNames.contains(block.textList()))) {
+	    // Generate a style from that...
+	    KoGenStyle style(KoGenStyle::StyleList);
+            KoListStyle *listStyle = KoListStyle::fromTextList(block.textList());
+	    listStyle->saveOdf(style);
+            QString generatedName = context.mainStyles().lookup(style, listStyle->name());
+	    listStyleNames[block.textList()] = generatedName;
+	    delete(listStyle);
+	}
+	block = block.next();
+    }
+    block = startBlock;
+    
+    // Ok, now that the styles are done, we can store the blocks themselves.
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
         if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
             break;
@@ -266,6 +285,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
 	    if ((textLists.isEmpty()) or (!textLists.contains(block.textList()))) {
 		kDebug() << "This is a text list we never met before, adding it.";
 		writer->startElement( "text:list", false );
+		writer->addAttribute("text:style-name", listStyleNames[block.textList()]);
 		textLists.append(block.textList());
 	    } else if (block.textList() != textLists.last()) {
 		kDebug() << "We will close every text:list element until we reach the right list...";

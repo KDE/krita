@@ -151,6 +151,16 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
         d->styleManager = layout->styleManager();
     }
 
+    if (document->isEmpty()) {
+        QTextBlockFormat blockFormat;
+        d->styleManager->defaultParagraphStyle()->applyStyle(blockFormat);
+        cursor.setBlockFormat(blockFormat);
+        QTextCharFormat charFormat;
+        d->styleManager->defaultParagraphStyle()->characterStyle()->applyStyle(charFormat);
+        cursor.setBlockCharFormat(charFormat);
+        cursor.setCharFormat(charFormat);
+    }
+
     startBody( KoXml::childNodesCount( bodyElem ) );
     KoXmlElement tag;
     bool firstTime = true;

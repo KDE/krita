@@ -577,7 +577,10 @@ void KisView2::createManagers()
     m_d->nodeManager = new KisNodeManager( this, m_d->doc );
     m_d->nodeManager->setup( actionCollection() );
     connect(m_d->doc->nodeModel(), SIGNAL(requestAddNode(KisNodeSP, KisNodeSP)), m_d->nodeManager, SLOT(addNode(KisNodeSP, KisNodeSP)));
+    connect(m_d->doc->nodeModel(), SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, int )), m_d->nodeManager, SLOT(insertNode(KisNodeSP, KisNodeSP, int )));
     connect(m_d->doc->nodeModel(), SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP)), m_d->nodeManager, SLOT(moveNode(KisNodeSP, KisNodeSP)));
+    connect(m_d->doc->nodeModel(), SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, int )), m_d->nodeManager, SLOT(moveNodeAt(KisNodeSP, KisNodeSP, int)));
+    
 
     // the following cast is not really safe, but better here than in the zoomManager
     // best place would be outside kisview too

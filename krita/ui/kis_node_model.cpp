@@ -363,8 +363,7 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
 {
     Q_UNUSED(row);
     Q_UNUSED(column);
-    //dbgUI <<"KisNodeModel::dropMimeData";
-    dbgUI <<"KisNodeModel::dropMimeData" << data->formats();
+    dbgUI <<"KisNodeModel::dropMimeData" << data->formats() << " row = " << row << " column = " << column;
     if(! data->hasFormat( "application/x-kritalayermodeldatalist" ))
     {
         dbgUI << "Does not have 'application/x-kritalayermodeldatalist'";
@@ -383,21 +382,37 @@ bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action,
 
 /*    QByteArray encoded = data->data(format);
     QDataStream stream(&encoded, QIODevice::ReadOnly);*/
+    KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
+    KisNodeSP parentNode = 0;
+    if( activeNode )
+    {
+      parentNode = activeNode->parent();
+    } else {
+      parentNode = m_d->image->root();
+    }
     if(action == Qt::CopyAction)
     {
-        dbgUI <<"KisNodeModel::dropMimeData copy action";
-        KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
+        dbgUI <<"KisNodeModel::dropMimeData copy action on " << activeNode;
         foreach(KisNode* n, nodes)
         {
-            emit requestAddNode(n->clone(), activeNode);
+            if( row >= 0)
+            {
+                emit requestAddNode(n->clone(), parentNode, parentNode->childCount() - row );
+            } else {
+                emit requestAddNode(n->clone(), activeNode);
+            }
         }
         return true;
     } else if(action == Qt::MoveAction) {
-        dbgUI <<"KisNodeModel::dropMimeData move action";
-        KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
+        dbgUI <<"KisNodeModel::dropMimeData move action on " << activeNode;
         foreach(KisNode* n, nodes)
         {
-            emit requestMoveNode(n, activeNode);
+            if( row >= 0 )
+            {
+                emit requestMoveNode( n, parentNode, parentNode->childCount() - row );
+            } else {
+                emit requestMoveNode(n, activeNode);
+            }
         }
         return true;
     }

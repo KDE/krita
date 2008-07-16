@@ -65,7 +65,9 @@ signals:
 
     void nodeActivated( KisNodeSP );
     void requestAddNode(KisNodeSP node, KisNodeSP activeNode);
+    void requestAddNode(KisNodeSP node, KisNodeSP parent, int index);
     void requestMoveNode(KisNodeSP node, KisNodeSP activeNode);
+    void requestMoveNode(KisNodeSP node, KisNodeSP parent, int index);
 
 private slots:
 

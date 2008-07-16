@@ -81,7 +81,9 @@ signals:
 public slots:
 
     void addNode( KisNodeSP node, KisNodeSP activeNode);
+    void insertNode( KisNodeSP node, KisNodeSP parent, int index );
     void moveNode( KisNodeSP node, KisNodeSP activeNode);
+    void moveNodeAt( KisNodeSP node, KisNodeSP parent, int index);
     void createNode( const QString & node);
     void activateNode( KisNodeSP layer );
     void nodesUpdated();

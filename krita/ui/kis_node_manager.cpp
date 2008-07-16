@@ -185,6 +185,14 @@ void KisNodeManager::addNode( KisNodeSP node, KisNodeSP activeNode)
     node->setDirty(node->extent());
 }
 
+void KisNodeManager::insertNode( KisNodeSP node, KisNodeSP parent, int index )
+{
+    if( allowAsChild( parent->metaObject()->className(), node->metaObject()->className() ) )
+    {
+        m_d->doc->image()->addNode(node, parent, index );
+    }
+}
+
 void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
 {
     if(activeNode)
@@ -201,6 +209,16 @@ void KisNodeManager::moveNode( KisNodeSP node, KisNodeSP activeNode)
     m_d->doc->image()->moveNode( node, parent, above);
     node->setDirty(node->extent());
 }
+
+void KisNodeManager::moveNodeAt( KisNodeSP node, KisNodeSP parent, int index)
+{
+    dbgUI << "Move node " << node << " to " << parent << " at " << index;
+    if( allowAsChild( parent->metaObject()->className(), node->metaObject()->className() ) )
+    {
+        m_d->doc->image()->moveNode(node, parent, index);
+    }
+}
+
 
 void KisNodeManager::createNode( const QString & nodeType )
 {

@@ -326,6 +326,20 @@ void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &co
 
     if( d->repeat == Tiled )
     {
+        QString refPointId = "top-left";
+        switch( d->refPoint )
+        {
+            case TopLeft: refPointId = "top-left"; break;
+            case Top: refPointId = "top"; break;
+            case TopRight: refPointId = "top-right"; break;
+            case Left: refPointId = "left"; break;
+            case Center: refPointId = "center"; break;
+            case Right: refPointId = "right"; break;
+            case BottomLeft: refPointId = "bottom-left"; break;
+            case Bottom: refPointId = "bottom"; break;
+            case BottomRight: refPointId = "bottom-right"; break;
+        }
+        style.addProperty( "draw:fill-image-ref-point", refPointId );
         if( d->refPointOffsetPercent.x() > 0.0 )
             style.addProperty( "draw:fill-image-ref-point-x", QString("%1%").arg( d->refPointOffsetPercent.x() ) );
         if( d->refPointOffsetPercent.y() > 0.0 )
@@ -352,6 +366,8 @@ void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &co
     context.mainStyles().lookup( style, context.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
     style.addProperty( "draw:fill","bitmap" );
     style.addProperty( "draw:fill-image-name", patternStyleName );
+
+    context.addDataCenter( d->imageCollection );
 }
 
 bool KoPatternBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF & )

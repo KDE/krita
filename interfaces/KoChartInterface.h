@@ -28,7 +28,6 @@ class QRect;
 
 namespace KoChart
 {
-class ChartModel;
 
 class ChartInterface
 {
@@ -36,7 +35,7 @@ public:
     virtual ~ChartInterface() {}
 
     virtual void setModel(QAbstractItemModel* model, bool takeOwnershipOfModel = false) = 0;
-    virtual void setModel(ChartModel *model, const QVector<QRect> &selection) = 0;
+    virtual void setModel(QAbstractItemModel* model, const QVector<QRect> &selection) = 0;
     virtual void setFirstRowIsLabel(bool isLabel) = 0;
     virtual void setFirstColumnIsLabel(bool isLabel) = 0;
     virtual void setDataDirection(Qt::Orientation orientation) = 0;

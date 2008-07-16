@@ -71,7 +71,6 @@ public:
      * \return \c true on success
      */
     virtual bool setCellRegion(const QString& regionName) = 0;
-    virtual QAbstractItemModel * model() = 0;
 };
 
 } // Namespace KoChart

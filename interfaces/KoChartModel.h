@@ -71,6 +71,11 @@ public:
      * \return \c true on success
      */
     virtual bool setCellRegion(const QString& regionName) = 0;
+
+    /**
+     * \return \c true if the cell region is valid
+     */
+    virtual bool isCellRegionValid(const QString& regionName) const = 0;
 };
 
 } // Namespace KoChart

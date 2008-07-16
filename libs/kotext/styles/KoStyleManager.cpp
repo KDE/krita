@@ -65,7 +65,7 @@ KoStyleManager::~KoStyleManager() {
 
 void KoStyleManager::saveOdfDefaultStyles(KoGenStyles &mainStyles)
 {
-    KoGenStyle style(KoGenStyle::StyleUser, "parargaph");
+    KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
     style.setDefaultStyle(true);
     d->standard->saveOdf(style);
     mainStyles.lookup(style);

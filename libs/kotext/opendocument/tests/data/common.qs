@@ -94,7 +94,7 @@ QTextBlockFormat.clone = function(fmt) {
 
 // Default character formatting
 // Default font - See KoTextShapeData constructor
-var defaultFont = new QFont;
+var defaultFont = new QFont("Sans Serif", 12, QFont.Normal, false);
 document.font = defaultFont;
 
 var KoCharacterStyle = {};
@@ -148,6 +148,7 @@ KoCharacterStyle.PercentLineWeight = i++;
 KoCharacterStyle.LengthLineWeight = i++;
 
 var defaultTextFormat = new QTextCharFormat;
+defaultTextFormat.setFont(defaultFont);
 cursor.setCharFormat(defaultTextFormat);
 
 QTextCharFormat.clone = function(fmt) {

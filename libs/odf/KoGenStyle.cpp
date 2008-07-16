@@ -284,6 +284,7 @@ bool KoGenStyle::operator<( const KoGenStyle &other ) const
 {
     if ( m_type != other.m_type ) return m_type < other.m_type;
     if ( m_parentName != other.m_parentName ) return m_parentName < other.m_parentName;
+    if ( m_familyName != other.m_familyName ) return m_familyName < other.m_familyName;
     if ( m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml ) return m_autoStyleInStylesDotXml;
     for ( uint i = 0 ; i < N_NumTypes ; ++i )
         if ( m_properties[i].count() != other.m_properties[i].count() )
@@ -311,6 +312,7 @@ bool KoGenStyle::operator==( const KoGenStyle &other ) const
 {
     if ( m_type != other.m_type ) return false;
     if ( m_parentName != other.m_parentName ) return false;
+    if ( m_familyName != other.m_familyName ) return false;
     if ( m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml ) return false;
     for ( uint i = 0 ; i < N_NumTypes ; ++i )
         if ( m_properties[i].count() != other.m_properties[i].count() )

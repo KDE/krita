@@ -61,9 +61,6 @@ class ChartModel
 public:
     virtual ~ChartModel() {}
 
-    virtual QString regionToString( const QVector<QRect> &region ) const = 0;
-    virtual QVector<QRect> stringToRegion( const QString &string ) const = 0;
-
     /**
      * \return the cell region in ranges ordered by sheet name
      */

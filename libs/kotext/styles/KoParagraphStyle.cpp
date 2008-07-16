@@ -1390,6 +1390,9 @@ void KoParagraphStyle::removeDuplicates ( const KoParagraphStyle &other ) {
 
 void KoParagraphStyle::saveOdf( KoGenStyle & style )
 {
+    if (d->charStyle) {
+        d->charStyle->saveOdf(style);
+    }
     // only custom style have a displayname. automatic styles don't have a name set.
     if ( !d->name.isEmpty() ) {
         style.addAttribute( "style:display-name", d->name );

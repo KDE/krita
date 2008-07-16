@@ -232,7 +232,7 @@ void KoOdfStylesReader::insertStyle( const KoXmlElement& e, TypeAndLocation type
             delete d->styles.take( name );
         }
         d->styles.insert( name, new KoXmlElement( e ) );
-    } else if ( localName == "presentation-page-layout" || ns == KoXmlNS::style ) {
+    } else if ( localName == "presentation-page-layout" && ns == KoXmlNS::style ) {
         if ( d->presentationPageLayouts.contains( name ) )
         {
             kDebug(30003) <<"Presentation page layout: '" << name <<"' already exists";

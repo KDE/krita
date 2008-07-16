@@ -55,6 +55,7 @@ const KisNodeSP KisNodeFacade::root() const
 
 bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
 {
+    dbgImage << "moveNode " << node << " " << parent << " " << aboveThis;
     if ( !node ) { dbgImage << "cannot move null node"; return false; }
     if ( !parent )  { dbgImage << "cannot move to null parent"; return false; }
     if ( node == parent )  { dbgImage << "cannot move self inside self"; return false; }
@@ -64,22 +65,31 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveTh
 
     if ( aboveThis && aboveThis->parent() != parent )  { dbgImage << "above this parent is not the parent"; return false; }
 
-    int oldIndex = node->parent()->index( node );
     int newIndex = parent->childCount();
     if ( aboveThis ) newIndex = parent->index( aboveThis ) + 1;
 
+    return moveNode( node, parent, newIndex);
+}
+
+bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, quint32 newIndex )
+{
+    dbgImage << "moveNode " << node << " " << parent << " " << newIndex;
+    int oldIndex = node->parent()->index( node );
+
     if ( node->graphListener() )
         node->graphListener()->aboutToMoveNode(node.data(), oldIndex, newIndex);
-
+    KisNodeSP aboveThis = parent->at( newIndex - 1 );
     if ( node->parent() )
+    {
         if ( !node->parent()->remove( node ) ) return false;
-
-    bool success = parent->add( node, aboveThis );
+    }
+    dbgImage << "moving node to " << newIndex;
+    bool success = addNode( node, parent, aboveThis );
     if ( node->graphListener() )
         node->graphListener()->nodeHasBeenMoved(node.data(), oldIndex, newIndex);
-
     return success;
 }
+
 
 bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent)
 {

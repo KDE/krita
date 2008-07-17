@@ -226,7 +226,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     QMap<QTextList *, QString> listStyleNames;
     QTextBlock startBlock = block;
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
-        if ((block.textList()) and (!listStyleNames.contains(block.textList()))) {
+        if ((block.textList()) && (!listStyleNames.contains(block.textList()))) {
             // Generate a style from that...
             KoGenStyle style(KoGenStyle::StyleList);
             KoListStyle *listStyle = KoListStyle::fromTextList(block.textList());
@@ -248,12 +248,12 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
 
         KoParagraphStyle *paragstyle = KoParagraphStyle::fromBlock(block);
         if (block.textList()) {
-            if ((textLists.isEmpty()) or (!textLists.contains(block.textList()))) {
+            if ((textLists.isEmpty()) || (!textLists.contains(block.textList()))) {
                 writer->startElement( "text:list", false );
                 writer->addAttribute("text:style-name", listStyleNames[block.textList()]);
                 textLists.append(block.textList());
             } else if (block.textList() != textLists.last()) {
-                while ((!textLists.isEmpty()) and (block.textList() != textLists.last())) {
+                while ((!textLists.isEmpty()) && (block.textList() != textLists.last())) {
                     textLists.removeLast();
                     writer->endElement();
                 }

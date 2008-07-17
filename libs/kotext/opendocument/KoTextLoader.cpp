@@ -163,12 +163,13 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
 
     startBody( KoXml::childNodesCount( bodyElem ) );
     KoXmlElement tag;
+    int cursorPosition;
     bool firstTime = true;
     forEachElement(tag, bodyElem) {
         if ( ! tag.isNull() ) {
             const QString localName = tag.localName();
             if (firstTime) {
-                firstTime = false;
+                cursorPosition = cursor.position();
             } else {
                 cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
             }
@@ -283,6 +284,8 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
 #endif
             }
         }
+        if ((firstTime) && (cursor.position() != cursorPosition))
+            firstTime = false;
         processBody();
     }
     endBody();

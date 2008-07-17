@@ -186,24 +186,24 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
                 else if ( localName == "section" ) { // Temporary support (###TODO)
                     loadSection( tag, cursor );
                 }
-		else {
-		    KoVariable * var = KoVariableRegistry::instance()->createFromOdf( tag, d->context );
+                else {
+                    KoVariable * var = KoVariableRegistry::instance()->createFromOdf( tag, d->context );
 
-		    if ( var ) {
-			KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
-			if ( layout ) {
-			    KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-			    if ( textObjectManager ) {
-				KoVariableManager *varManager = textObjectManager->variableManager();
-				if ( varManager ) {
-				    textObjectManager->insertInlineObject( cursor, var );
-				}
-			    }
-			}
-		    }
-		    else {
-			kWarning(32500) << "unhandled text:" << localName;
-		    }
+                    if ( var ) {
+                        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
+                        if ( layout ) {
+                            KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                            if ( textObjectManager ) {
+                                KoVariableManager *varManager = textObjectManager->variableManager();
+                                if ( varManager ) {
+                                    textObjectManager->insertInlineObject( cursor, var );
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        kWarning(32500) << "unhandled text:" << localName;
+                    }
                 }
             }
             else if( tag.namespaceURI() == KoXmlNS::draw ) {
@@ -496,15 +496,15 @@ void KoTextLoader::loadNote( const KoXmlElement& noteElem, QTextCursor& cursor )
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>( cursor.block().document()->documentLayout() );
     if (layout)
     {
-	KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
-	if (note->loadOdf(noteElem))
-	{
-	    KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-	    layout->inlineObjectTextManager()->insertInlineObject(cursor, note);
-	}
-	else {
-	    kDebug(32500) << "Error while loading the note !";
-	}
+        KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
+        if (note->loadOdf(noteElem))
+        {
+            KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+            layout->inlineObjectTextManager()->insertInlineObject(cursor, note);
+        }
+        else {
+            kDebug(32500) << "Error while loading the note !";
+        }
     }
 }
 
@@ -594,10 +594,10 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             }
             cursor.insertText( QString().fill( 32, howmany ) );
         }
-	else if ( isTextNS && localName == "note" ) // text:note
-	{
-	    loadNote (ts, cursor);
-	}
+        else if ( isTextNS && localName == "note" ) // text:note
+        {
+            loadNote (ts, cursor);
+        }
         else if ( isTextNS && localName == "tab" ) // text:tab
         {
             cursor.insertText( "\t" );

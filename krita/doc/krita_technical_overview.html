@@ -58,7 +58,18 @@ plugins (as opposed to brush engine plugins) are a work-in-progress and part of
 research into making resource types plugins.)</p>
 
 <p>Krita itself consists of two libraries: the core functionality in krita/image
-and the user interface in krita/ui.</p>
+and the user interface in krita/ui. This document will first discuss the architecture
+of these fixed parts of Krita and then provide a hands-on introduction to each
+type of plugin.
+</p>
+
+<p>The most important and central concept of Krita is that only colorspaces can
+interpret and change pixel data. Krita's paint device and tile system know nothing
+more than the size of a single pixel in bytes -- two bytes per pixel for a 8-bit/channel
+grayscale plus alpha colorspace, four bytes for 8bit/channel rgba, 8 bytes for 16bit/channel
+rgba -- and so on. To know what those bytes mean the colorspace is needed.</p>
+
+<h1>The Architecture of Krita: image and ui</h1>
 
 <h2>KritaImage</h2>
 
@@ -127,7 +138,6 @@ are defined: <a href="http://websvn.kde.org/trunk/koffice/krita/image/kis_iterat
 <h2>KritaUi</h2>
 
 
-<h1>Changes Compared to Krita 1.6</h1>
 
 <h1>Plugins</h1>
 
@@ -141,3 +151,6 @@ are defined: <a href="http://websvn.kde.org/trunk/koffice/krita/image/kis_iterat
 <h3>Generators</h3>
 <h2>User Interface Add-ons</h2>
 <h2>Resource type plugins</h2>
+
+<h1>Appendix 1. Changes Compared to Krita 1.6</h1>
+

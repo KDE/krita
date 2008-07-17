@@ -51,7 +51,7 @@ class KXmlGuiWindow;
  *   Control Frame - status display with access to
  *   color selector, brushes, patterns, and preview
  */
-class KisControlFrame : public QObject 
+class KisControlFrame : public QObject
 {
     Q_OBJECT
 

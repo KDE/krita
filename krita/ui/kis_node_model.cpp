@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#include <iostream>
 #include "kis_node_model.h"
 #include "kis_debug.h"
 
@@ -361,6 +361,7 @@ QMimeData * KisNodeModel::mimeData ( const QModelIndexList & indexes ) const
 
 bool KisNodeModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 {
+
     Q_UNUSED(row);
     Q_UNUSED(column);
     dbgUI <<"KisNodeModel::dropMimeData" << data->formats() << " row = " << row << " column = " << column;

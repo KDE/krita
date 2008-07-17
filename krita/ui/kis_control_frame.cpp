@@ -114,7 +114,7 @@ KisControlFrame::KisControlFrame( KisView2 * view, const char* name )
     action->setDefaultWidget( m_gradientWidget );
 
 /**** Temporary hack to test the KoDualColorButton ***/
-   KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->fgColor(), view, view);
+    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->fgColor(), view, view);
     action  = new KAction(i18n("&Painter's Tools"), this);
     view->actionCollection()->addAction("dual", action );
     action->setDefaultWidget( dual );
@@ -135,7 +135,7 @@ KisControlFrame::KisControlFrame( KisView2 * view, const char* name )
     m_patternWidget->setPopupWidget(m_patternChooserPopup);
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
 
-    
+
     m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
     action  = new KAction(i18n("&Painter's Tools"), this);
     view->actionCollection()->addAction("paintops", action );

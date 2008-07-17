@@ -75,16 +75,21 @@ private slots:
     void slotCurrentNodeChanged(KisNodeSP node);
 
 private:
+
     QPixmap paintopPixmap(const KoID & paintop);
     void updateOptionWidget();
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpSettingsSP paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice);
+    KisPaintOpPresetSP defaultPreset(const KoID & paintop, const KoInputDevice & inputDevice);
 
 private:
+
     KisCanvasResourceProvider *m_resourceProvider;
     QComboBox * m_cmbPaintops;
+    QComboBox * m_cmbPaintopPresets;
+
     QHBoxLayout * m_layout;
     QWidget * m_optionWidget;
     KisPresetWidget * m_presetWidget;

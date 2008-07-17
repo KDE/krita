@@ -55,7 +55,7 @@ void TestColorConversionSystem::testConnections()
     {
         foreach( ModelDepthProfile dstCS, listModels)
         {
-            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.model, srcCS.depth, srcCS.profile, dstCS.model, dstCS.depth, dstCS.profile) , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).latin1() );
+            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.model, srcCS.depth, srcCS.profile, dstCS.model, dstCS.depth, dstCS.profile) , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).toLatin1() );
         }
     }
 }
@@ -79,7 +79,7 @@ void TestColorConversionSystem::testGoodConnections()
 #else
     int failed = 42;
 #endif
-    QVERIFY2( countFail == failed, QString("%1 tests have fails (it should have been %2)").arg( countFail).arg(failed).latin1() );
+    QVERIFY2( countFail == failed, QString("%1 tests have fails (it should have been %2)").arg( countFail).arg(failed).toLatin1() );
 }
 
 QTEST_KDEMAIN(TestColorConversionSystem, NoGUI)

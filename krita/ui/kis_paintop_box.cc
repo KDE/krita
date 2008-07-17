@@ -136,15 +136,15 @@ void KisPaintopBox::slotItemSelected(int index)
         if(settings) settings->activate();
 
 
-        QList<KisPaintOpPreset*> presets;
-        presets.insert(0, activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice()).data());
+        KisPaintOpPresetSP preset =
+            activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice() );
+        m_cmbPaintopPresets->addItem(preset->name(), QVariant(preset));
 
         foreach( KisPaintOpPreset* preset,
                  KisResourceServerProvider::instance()->paintOpPresetServer()->resources() )
         {
             if (preset->paintOp() == paintop) {
-                QVariant v(preset);
-                m_cmbPaintopPresets->addItem(preset->name(), v);
+                m_cmbPaintopPresets->addItem(preset->name(), QVariant(preset));
             }
         }
     }

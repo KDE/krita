@@ -70,12 +70,13 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     
     KoUpdater* filterUpdater = 0;
     KoUpdater* convolutionUpdater = 0;
+    KoProgressUpdater* updater = 0;
     if (progressUpdater){
-    	KoProgressUpdater updater(progressUpdater);
-    	updater.start();
+    	updater = new KoProgressUpdater(progressUpdater);
+    	updater->start();
     	// Two sub-sub tasks that each go from 0 to 100.
-    	convolutionUpdater = new KoUpdater( updater.startSubtask() );
-    	filterUpdater = new KoUpdater(updater.startSubtask() );
+    	convolutionUpdater = new KoUpdater( updater->startSubtask() );
+    	filterUpdater = new KoUpdater(updater->startSubtask() );
     }
 
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
@@ -86,19 +87,17 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     double amount = (config->getProperty("amount", value)) ? value.toDouble() : 0.5;
     uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 10;
 
-//     dbgKrita <<" brush size =" << size <<"" << halfSize;
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(brushsize, brushsize, halfSize, halfSize);
-
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
 
-    KisPaintDeviceSP interm = KisPaintDeviceSP(new KisPaintDevice(*src.paintDevice()));
+    KisPaintDeviceSP interm = new KisPaintDevice(*src.paintDevice());
     KoColorSpace * cs = interm->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
     
     KisConvolutionPainter painter( interm );
     if (progressUpdater){
-//     	painter.setProgress( convolutionUpdater );
+    	painter.setProgress( convolutionUpdater );
     }
     QBitArray channelFlags = config->channelFlags();
     if (channelFlags.isEmpty()) {
@@ -165,7 +164,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     delete colors[1];
     delete filterUpdater;
     delete convolutionUpdater;
-
+    delete updater;
 
     if (progressUpdater) progressUpdater->setProgress(100);
 }

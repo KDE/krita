@@ -57,6 +57,11 @@ is a meta-plugin that contains plugins of many types. Also note that brush-type
 plugins (as opposed to brush engine plugins) are a work-in-progress and part of
 research into making resource types plugins.)</p>
 
+<p>Krita uses resources (as defined by the <a href="http://create.freedesktop.org ">create</a>
+project) suchs as patterns, gradients, brushes or icc profiles. The list of resources
+is a this moment fixed, but in the future it may become possible to write plugins
+to handle new types of resources.</p>
+
 <p>Krita itself consists of two libraries: the core functionality in krita/image
 and the user interface in krita/ui. This document will first discuss the architecture
 of these fixed parts of Krita and then provide a hands-on introduction to each
@@ -134,9 +139,49 @@ are defined: <a href="http://websvn.kde.org/trunk/koffice/krita/image/kis_iterat
 <h3>Metadata</h3>
 
 
+<h3>Pixel Processors</h3>
+
+<p>There are currently two types of pixel processors: <a href="http://websvn.kde.org/trunk/koffice/krita/image/filter/">filters</a>
+and <a href="http://websvn.kde.org/trunk/koffice/krita/image/generator/">generators</a>. Filters
+take input data and perform an algorithm on that data, generators perform an algorithm and
+write data.</p>
+
+
+<h3>Brush Engine</h3>
+
+
+<h3>Undo handling</h3>
+
+
 
 <h2>KritaUi</h2>
 
+<h1>Resources</h1>
+
+<p>Resources are objects that can either be loaded from files in the file
+system or generated on the fly and that are available to the user. Examples
+are brushes, gradients or patterns.</p>
+
+
+<h2>KOffice-wide resources</h2>
+
+<h3>Patterns</h3>
+<h3>Gradients</h3>
+<h3>Palettes</h3>
+
+<h2>Standard resources</h2>
+
+<h3>(gimp) brushes</h3>
+
+<h2>Krita-specific resources</h2>
+
+<h3>Brush engine presets</h3>
+
+<h3>Filter settings</h3>
+
+<h3>Generator settings</h3>
+
+<h3>Scripts</h3>
 
 
 <h1>Plugins</h1>

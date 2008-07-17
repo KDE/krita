@@ -102,6 +102,10 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, QWidget * p
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));
     preset->setSettings(settings(id, parent, inputDevice, image));
+    if (preset->settings() && preset->settings()->widget()) {
+        preset->settings()->widget()->hide();
+    }
+
     preset->setValid(true);
     return preset;
 }

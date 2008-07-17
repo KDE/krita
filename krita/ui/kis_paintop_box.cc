@@ -132,12 +132,12 @@ void KisPaintopBox::slotItemSelected(int index)
 
         setCurrentPaintop(paintop);
         KisPaintOpSettingsSP settings =
-            paintopSettings(currentPaintop(), KoToolManager::instance()->currentInputDevice());
+            activeSetting(currentPaintop(), KoToolManager::instance()->currentInputDevice());
         if(settings) settings->activate();
 
 
         QList<KisPaintOpPreset*> presets;
-        presets.insert(0, defaultPreset(currentPaintop(), KoToolManager::instance()->currentInputDevice()).data());
+        presets.insert(0, activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice()).data());
 
         foreach( KisPaintOpPreset* preset,
                  KisResourceServerProvider::instance()->paintOpPresetServer()->resources() )
@@ -242,7 +242,8 @@ void KisPaintopBox::updateOptionWidget()
         m_layout->invalidate();
     }
 
-    const KisPaintOpSettingsSP settings = paintopSettings(currentPaintop(), KoToolManager::instance()->currentInputDevice());
+    const KisPaintOpSettingsSP settings =
+        activeSetting(currentPaintop(), KoToolManager::instance()->currentInputDevice());
 
     if (settings != 0) {
         m_optionWidget = settings->widget();
@@ -265,10 +266,10 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     updateOptionWidget();
 
-    KisPaintOpSettingsSP settings = paintopSettings(paintop, KoToolManager::instance()->currentInputDevice());
+    KisPaintOpSettingsSP settings = activeSetting(paintop, KoToolManager::instance()->currentInputDevice());
     m_resourceProvider->slotPaintopActivated(paintop, settings);
 
-    KisPaintOpPresetSP preset = defaultPreset(paintop, KoToolManager::instance()->currentInputDevice());
+    KisPaintOpPresetSP preset = activePreset(paintop, KoToolManager::instance()->currentInputDevice());
     m_resourceProvider->slotPaintOpPresetActivated( preset );
 }
 
@@ -281,7 +282,7 @@ KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)
     }
 }
 
-KisPaintOpSettingsSP KisPaintopBox::paintopSettings(const KoID & paintop, const KoInputDevice & inputDevice)
+KisPaintOpSettingsSP KisPaintopBox::activeSetting(const KoID & paintop, const KoInputDevice & inputDevice)
 {
     QList<KisPaintOpSettingsSP> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find( inputDevice );
@@ -307,19 +308,20 @@ KisPaintOpSettingsSP KisPaintopBox::paintopSettings(const KoID & paintop, const 
         return 0;
 }
 
-KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID & paintop, const KoInputDevice & inputDevice)
+KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInputDevice & inputDevice)
 {
-/*
     QList<KisPaintOpPresetSP> settingsArray;
 
     InputDevicePresetsMap::iterator it = m_inputDevicePresets.find( inputDevice );
     if (it == m_inputDevicePresets.end()) {
         foreach (KoID paintopId, m_paintops) {
-
             KisPaintOpPresetSP preset =
-                KisPaintOpRegistry::instance()->defaultPreset( paintopId, this, inputDevice, m_view->image() );
-
+                KisPaintOpRegistry::instance()->defaultPreset( paintopId, 0, inputDevice, m_view->image() );
+            if (preset && preset->settings() && preset->settings()->widget()) {
+                preset->settings()->widget()->hide();
+            }
             settingsArray.append( preset );
+
         }
         m_inputDevicePresets[ inputDevice ] = settingsArray;
     } else {
@@ -330,8 +332,7 @@ KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID & paintop, const KoIn
     if (index >= 0 && index < settingsArray.count())
         return settingsArray[index];
     else
-*/
-        return 0;
+       return 0;
 }
 
 

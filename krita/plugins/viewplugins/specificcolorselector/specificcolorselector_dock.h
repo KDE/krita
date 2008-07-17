@@ -30,7 +30,7 @@ class SpecificColorSelectorDock : public QDockWidget {
     public:
         SpecificColorSelectorDock( KisView2 *view );
     public slots:
-        void layerChanged(const KisLayerSP);
+        void layerChanged(const KisNodeSP);
 private:
     KisSpecificColorSelectorWidget* m_colorSelector;
     KisView2* m_view;

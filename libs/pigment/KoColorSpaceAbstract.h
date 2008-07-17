@@ -144,8 +144,8 @@ public:
                 for (uint i = 0; i < _CSTrait::channels_nb; i++)
                 {
                     compositetype v = totals[i] / factor + offset;
-                    if (   (allChannels && i != (uint)_CSTrait::alpha_pos )
-                        || (!allChannels && channelFlags.testBit( i ) ) )
+                    if (   (allChannels and i != (uint)_CSTrait::alpha_pos )
+                        or (not allChannels and channelFlags.testBit( i ) ) )
                     {
                         dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
                                                     KoColorSpaceMathsTraits<channels_type>::max );

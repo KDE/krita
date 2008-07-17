@@ -23,6 +23,7 @@
 
 #include "../KoColorSpaceAbstract.h"
 #include "../KoColorSpaceTraits.h"
+#include "../DebugPigment.h"
 
 void TestConvolutionOpImpl::testConvolutionOpImpl()
 {
@@ -32,14 +33,17 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
     ((quint16*)colors[0])[0] = 100;
     ((quint16*)colors[0])[1] = 200;
     ((quint16*)colors[0])[2] = 300;
+    ((quint16*)colors[0])[3] = 0xFFFF;
     colors[1] = new quint8[KoRgbU16Traits::pixelSize];
     ((quint16*)colors[1])[0] = 50;
     ((quint16*)colors[1])[1] = 150;
     ((quint16*)colors[1])[2] = 0;
+    ((quint16*)colors[1])[3] = 0xFFFF;
     colors[2] = new quint8[KoRgbU16Traits::pixelSize];
     ((quint16*)colors[2])[0] = 100;
     ((quint16*)colors[2])[1] = 300;
     ((quint16*)colors[2])[2] = 50;
+    ((quint16*)colors[2])[3] = 0xFFFF;
     quint8* dst = new quint8[KoRgbU16Traits::pixelSize];
     quint16* dst16 = (quint16*)dst;
     {
@@ -59,6 +63,7 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
     {
         qint32 kernelValues[] = { 1, 1, 1};
         op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
+        dbgPigment << dst16[0] << " " << dst16[1] << " " << dst16[2] << " " << QBitArray().isEmpty();
         QVERIFY2( dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1() );
         QVERIFY2( dst16[1] == 650, QString("%1 650").arg(dst16[1]).toLatin1() );
         QVERIFY2( dst16[2] == 350, QString("%1 350").arg(dst16[2]).toLatin1() );

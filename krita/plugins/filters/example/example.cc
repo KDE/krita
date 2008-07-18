@@ -124,7 +124,7 @@ void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
 #if 0
     t.restart();
 
-    bool hasSelection = src->hasSelection();
+    bool hasSelection = srcInfo.selection();
 
 // Method two: check the number of consecutive pixels the iterators
 // points to. Take as large stretches of unselected pixels as possible

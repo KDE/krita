@@ -265,6 +265,8 @@ bool KisNode::remove( quint32 index )
         removedNode->setParent( 0 ); // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
         
         m_d->nodes.removeAt( index );
+        
+        setDirty(); // FIXME Would probably better if we could set a QRect
 
         if ( m_d->graphListener ) m_d->graphListener->nodeHasBeenRemoved(this, index);
 

@@ -425,9 +425,10 @@ void KisPrescaledProjection::updateCanvasProjection( const QRect & rc )
         vRect = QRect( m_d->documentOffset, m_d->canvasSize );
     }
     else {
-        QRect vRect = viewRectFromImagePixels( rc );
+        vRect = viewRectFromImagePixels( rc );
     }
 
+    dbgRender << "vRect = " << vRect;
     if ( !vRect.isEmpty() ) {
         preScale( vRect );
     }
@@ -751,7 +752,7 @@ void KisPrescaledProjection::updateUnscaledCache( const QRect & rc )
 
     QImage updateImage = m_d->image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
                                                      m_d->monitorProfile);
-
+    dbgRender << updateImage.isNull() << " " << updateImage.width() << " " << updateImage.height();
     if ( m_d->showMask && m_d->drawMaskVisualisationOnUnscaledCanvasCache ) {
 
         // XXX: Also visualize the global selection
@@ -773,7 +774,7 @@ void KisPrescaledProjection::updateUnscaledCache( const QRect & rc )
         }
         selection->paint(&updateImage, rc);
     }
-
+    dbgRender << qAlpha(updateImage.pixel(0,0 ));
     p.drawImage( rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height() );
     p.end();
 

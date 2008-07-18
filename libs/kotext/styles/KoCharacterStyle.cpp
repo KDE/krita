@@ -198,41 +198,29 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
         -1
     };
 
-    QTextCharFormat newFormat;
-
     int i=0;
     while(properties[i] != -1) {
         QVariant variant = d->stylesPrivate->value(properties[i]);
         if ( !variant.isNull() ) {
-            newFormat.setProperty(properties[i], variant);
+            format.setProperty(properties[i], variant);
         }
         i++;
     }
-
-    format = newFormat;
 }
 
 void KoCharacterStyle::applyStyle(QTextBlock &block) const {
     QTextCursor cursor(block);
-    QTextCharFormat cf = cursor.charFormat();
-/*
-    TODO make replacement of the style be a lot smarter.
-    QTextBlock::Iterator fragmentIter = block.begin();
- */
+    QTextCharFormat cf;
     cursor.setPosition(block.position() + block.length()-1, QTextCursor::KeepAnchor);
     applyStyle(cf);
-    // if we want to merge the formats we need a much more clever way to do that
-    //cursor.mergeCharFormat(cf);
     cursor.setCharFormat(cf);
     cursor.setBlockCharFormat(cf);
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
-    QTextCharFormat cf = selection->charFormat();
+    QTextCharFormat cf;
     applyStyle(cf);
-    // if we want to merge the formats we need a much more clever way to do that
-    //selection->mergeCharFormat(cf);
-    selection->setCharFormat(cf);
+    selection->mergeCharFormat(cf);
 }
 
 // OASIS 14.2.29

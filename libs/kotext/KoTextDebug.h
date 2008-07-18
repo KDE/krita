@@ -28,6 +28,7 @@ class QTextBlock;
 class QTextTable;
 class QTextFragment;
 class QTextCharFormat;
+class QTextBlockFormat;
 
 #include <QMap>
 #include <QVariant>
@@ -40,9 +41,8 @@ public:
     static void dumpBlock(const QTextBlock &block);
     static void dumpTable(const QTextTable *);
     static void dumpFragment(const QTextFragment &fragment);
-    static QString textAttributes(const QMap<int, QVariant> &properties);
-    static QString paraAttributes(const QMap<int, QVariant> &properties);
-    static QString charFormat(const QTextCharFormat &textFormat);
+    static QString textAttributes(const QTextCharFormat &format);
+    static QString paraAttributes(const QTextBlockFormat &format);
 
 private:
     KoTextDebug();

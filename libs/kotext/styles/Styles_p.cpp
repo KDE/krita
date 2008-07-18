@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,6 +45,11 @@ bool StylePrivate::contains(int key) const {
     return m_properties.contains(key);
 }
 
+bool StylePrivate::isEmpty() const
+{
+    return m_properties.isEmpty();
+}
+
 void StylePrivate::copyMissing(const StylePrivate *other) {
     foreach(int key, other->m_properties.keys()) {
         if(! m_properties.contains(key))
@@ -54,6 +60,14 @@ void StylePrivate::copyMissing(const StylePrivate *other) {
 void StylePrivate::removeDuplicates(const StylePrivate *other) {
     foreach(int key, other->m_properties.keys()) {
         if(m_properties.value(key) == other->value(key))
+            m_properties.remove(key);
+    }
+}
+
+void StylePrivate::removeDuplicates(const QHash<int, QVariant> &other)
+{
+    foreach(int key, other.keys()) {
+        if (m_properties.value(key) == other.value(key))
             m_properties.remove(key);
     }
 }

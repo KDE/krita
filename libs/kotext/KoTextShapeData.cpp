@@ -271,6 +271,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         if (styleNames.contains(allFormats.indexOf(block.blockFormat())))
             writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(block.blockFormat())]);
 
+        QTextCharFormat blockCharFormat = QTextCursor(block).blockCharFormat();
         QTextBlock::iterator it;
         for (it = block.begin(); !(it.atEnd()); ++it) {
             QTextFragment currentFragment = it.fragment();
@@ -284,27 +285,34 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
 
                     KoCharacterStyle *originalCharStyle = styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
 
-                    if (!originalCharStyle)
+                    if (!originalCharStyle) {
                         originalCharStyle = defaultCharStyle;
+                    }
 
                     displayName = originalCharStyle->name();
                     internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
 
-                    // we'll convert it to a KoCharacterStyle to check for local changes.
                     KoCharacterStyle charStyle(charFormat);
+                    // we'll convert it to a KoCharacterStyle to check for local changes.
                     if (charStyle == (*originalCharStyle)) { // This is the real, unmodified character style.
                         if (originalCharStyle != defaultCharStyle) {
-                            KoGenStyle style(KoGenStyle::StyleUser, "text");
-                            originalCharStyle->saveOdf(style);
-                            generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
+                            charStyle.removeDuplicates(blockCharFormat);
+                            if (!charStyle.isEmpty()) {
+                                KoGenStyle style(KoGenStyle::StyleUser, "text");
+                                originalCharStyle->saveOdf(style);
+                                generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
+                            }
                         }
                      } else { // There are manual changes... We'll have to store them then
                          KoGenStyle style(KoGenStyle::StyleAuto, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
                          if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
                             style.setAutoStyleInStylesDotXml(true);
                          charStyle.removeDuplicates(*originalCharStyle);
-                         charStyle.saveOdf(style);
-                         generatedName = context.mainStyles().lookup(style, "T");
+                         charStyle.removeDuplicates(blockCharFormat);
+                         if (!charStyle.isEmpty()) {
+                            charStyle.saveOdf(style);
+                            generatedName = context.mainStyles().lookup(style, "T");
+                         }
                      }
 
                      if (!generatedName.isEmpty()) {

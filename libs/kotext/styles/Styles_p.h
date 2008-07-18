@@ -34,9 +34,12 @@ public:
     bool contains(int key) const;
     void copyMissing(const StylePrivate *other);
     void removeDuplicates(const StylePrivate *other);
+    void removeDuplicates(const QHash<int, QVariant> &other);
     void clearAll() { m_properties.clear(); }
     QList<int> keys();
     bool operator==( const StylePrivate &other ) const;
+    bool isEmpty() const;
+
 private:
     QHash<int, QVariant> m_properties;
 };

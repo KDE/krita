@@ -973,6 +973,17 @@ void KoCharacterStyle::removeDuplicates ( const KoCharacterStyle &other ) {
     this->d->stylesPrivate->removeDuplicates(other.d->stylesPrivate);
 }
 
+void KoCharacterStyle::removeDuplicates(const QTextCharFormat &otherFormat)
+{
+    KoCharacterStyle other(otherFormat);
+    removeDuplicates(other);
+}
+
+bool KoCharacterStyle::isEmpty() const
+{
+    return d->stylesPrivate->isEmpty();
+}
+
 void KoCharacterStyle::saveOdf( KoGenStyle &style )
 {
     QList<int> keys = d->stylesPrivate->keys();

@@ -296,9 +296,22 @@ public:
 
     bool operator==( const KoCharacterStyle &other ) const;
 
+    /*
+     * Removes properties from this style that have the same value in other style.
+     */
     void removeDuplicates ( const KoCharacterStyle &other );
 
+    /*
+     * Removes properties from this style that have the same value in other format.
+     */
+    void removeDuplicates(const QTextCharFormat &other_format);
+
     void saveOdf( KoGenStyle &style );
+
+    /**
+     * Returns true if this style has no properties set. Else, returns false.
+     */
+    bool isEmpty() const;
 
 private:
     class Private;

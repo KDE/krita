@@ -41,18 +41,97 @@ const QTextDocument *KoTextDebug::document = 0;
 
 Q_DECLARE_METATYPE(QList<KoText::Tab>)
 
+static QString fontProperties(const QTextCharFormat &textFormat)
+{
+    QMap<int, QVariant> properties = textFormat.properties();
+    QStringList fontProps;
+    // add only font properties here
+    foreach(int id, properties.keys()) {
+        QString key, value;
+        switch (id) {
+        case QTextFormat::FontFamily:
+            fontProps.append(properties[id].toString());
+            break;
+        case QTextFormat::FontPointSize:
+            fontProps.append(QString("%1pt").arg(properties[id].toDouble()));
+            break;
+        case QTextFormat::FontSizeAdjustment:
+            fontProps.append(QString("%1adj").arg(properties[id].toDouble()));
+            break;
+        case QTextFormat::FontWeight:
+            fontProps.append(QString("%1 weight").arg(properties[id].toInt()));
+            break;
+        case QTextFormat::FontItalic:
+            fontProps.append(properties[id].toBool() ? "italic" : "non-italic");
+            break;
+        case QTextFormat::FontPixelSize:
+            fontProps.append(QString("%1px").arg(properties[id].toDouble()));
+            break;
+        case QTextFormat::FontFixedPitch:
+            fontProps.append(properties[id].toBool() ? "fixedpitch" : "varpitch");
+            break;
+        case QTextFormat::FontCapitalization:
+            fontProps.append(QString("caps %1").arg(properties[id].toInt()));
+            break;
+         case KoCharacterStyle::FontCharset:
+            fontProps.append(properties[id].toString());
+            break;
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+        case QTextFormat::FontStyleHint:
+            fontProps.append(QString::number(properties[id].toInt()));
+            break;
+        case QTextFormat::FontKerning:
+            fontProps.append(QString("kerning %1").arg(properties[id].toInt()));
+            break;
+#endif
+        default:
+            break;
+        }
+    }
+    return fontProps.join(",");
+}
+
 void KoTextDebug::dumpDocument(const QTextDocument *doc)
 {
     document = doc;
-    qDebug() << "<document>";
+    qDebug() << QString("<document defaultfont=\"%1\">").arg(doc->defaultFont().toString());
     dumpFrame(document->rootFrame());
     qDebug() << "</document>";
     document = 0;
 }
 
-QString KoTextDebug::textAttributes(const QMap<int, QVariant> &properties)
+QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
 {
     QString attrs;
+
+    QTextImageFormat imageFormat = textFormat.toImageFormat();
+ 
+    if (imageFormat.isValid()) {
+        attrs.append(" type=\"image\">");
+        return attrs;
+    }
+
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
+    if (lay && lay->styleManager()) {
+        int id = textFormat.intProperty(KoCharacterStyle::StyleId);
+        KoCharacterStyle *characterStyle = lay->styleManager()->characterStyle(id);
+        attrs.append(" characterStyle=\"id:").append(QString::number(id));
+        if (characterStyle)
+             attrs.append(" name:").append(characterStyle->name());
+        attrs.append("\"");
+    }
+
+    QMap<int, QVariant> properties = textFormat.properties();
+    attrs.append(" type=\"char\"");
+    QString fontProps = fontProperties(textFormat);
+    if (!fontProps.isEmpty())
+        attrs.append(QString(" font=\"%1\"").arg(fontProps));
+    
+    if (textFormat.isAnchor()) {
+        attrs.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
+        attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
+    }
+
     foreach(int id, properties.keys()) {
         QString key, value;
         switch (id) {
@@ -121,12 +200,6 @@ QString KoTextDebug::textAttributes(const QMap<int, QVariant> &properties)
             key = "background";
             value = qvariant_cast<QBrush>(properties[id]).color().name(); // beware!
             break;
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-        case QTextFormat::FontCapitalization:
-            key = "font-caps";
-            value = QString::number(properties[id].toInt());
-            break;
-#endif
         case QTextFormat::BlockAlignment:
             key = "align";
             value = QString::number(properties[id].toInt());
@@ -139,26 +212,12 @@ QString KoTextDebug::textAttributes(const QMap<int, QVariant> &properties)
             key = "indent";
             value = QString::number(properties[id].toInt());
             break;
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
-        case QTextFormat::FontStyleHint:
-            key = "font-family-generic";
-            value = QString::number(properties[id].toInt());
-            break;
-        case QTextFormat::FontKerning:
-            key = "font-kerning";
-            value = QString::number(properties[id].toInt());
-            break;
-#endif
-        case KoCharacterStyle::Country:
+       case KoCharacterStyle::Country:
             key = "country";
             value = properties[id].toString();
             break;
         case KoCharacterStyle::Language:
             key = "language";
-            value = properties[id].toString();
-            break;
-        case KoCharacterStyle::FontCharset:
-            key = "font-charset";
             value = properties[id].toString();
             break;
         default:
@@ -169,9 +228,20 @@ QString KoTextDebug::textAttributes(const QMap<int, QVariant> &properties)
     }
     return attrs;
 }
-QString KoTextDebug::paraAttributes(const QMap<int, QVariant> &properties)
+QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
 {
     QString attrs;
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
+    if (lay && lay->styleManager()) {
+        int id = blockFormat.intProperty(KoParagraphStyle::StyleId);
+        KoParagraphStyle *paragraphStyle = lay->styleManager()->paragraphStyle(id);
+        attrs.append(" paragraphStyle=\"id:").append(QString::number(id));
+        if (paragraphStyle)
+             attrs.append(" name:").append(paragraphStyle->name());
+        attrs.append("\"");
+    }
+
+    QMap<int, QVariant> properties = blockFormat.properties();
     foreach(int id, properties.keys()) {
         QString key, value;
         switch (id) {
@@ -309,16 +379,10 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
 {
     depth += INDENT;
 
-    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
     QString attrs;
-    if (lay && lay->styleManager()) {
-        int id = block.blockFormat().intProperty(KoParagraphStyle::StyleId);
-        KoParagraphStyle *paragraphStyle = lay->styleManager()->paragraphStyle(id);
-        attrs.append(" paragraphStyle=\"id:").append(QString::number(id));
-        if (paragraphStyle)
-             attrs.append(" name:").append(paragraphStyle->name());
-        attrs.append("\"");
-    }
+    attrs.append(paraAttributes(block.blockFormat()));
+    //attrs.append(" blockcharformat=\"").append(textAttributes(QTextCursor(block).blockCharFormat())).append('\"');
+    attrs.append(textAttributes(QTextCursor(block).blockCharFormat()));
 
     QTextList *list = block.textList();
     if (list) {
@@ -328,8 +392,6 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
         attrs.append(" liststyle:").append(QString::number(list->format().style()));
         attrs.append("\"");
     }
-
-    attrs.append(paraAttributes(block.blockFormat().properties()));
 
     qDebug("%*s<block%s>", depth, " ", qPrintable(attrs));
 
@@ -355,40 +417,10 @@ void KoTextDebug::dumpTable(const QTextTable *)
     depth -= INDENT;
 }
 
-QString KoTextDebug::charFormat(const QTextCharFormat &textFormat)
-{
-    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
-    QString attrs;
-    if (lay && lay->styleManager()) {
-        int id = textFormat.intProperty(KoCharacterStyle::StyleId);
-        KoCharacterStyle *characterStyle = lay->styleManager()->characterStyle(id);
-        attrs.append(" characterStyle=\"id:").append(QString::number(id));
-        if (characterStyle)
-             attrs.append(" name:").append(characterStyle->name());
-        attrs.append("\"");
-    }
-
-    QTextImageFormat imageFormat = textFormat.toImageFormat();
- 
-    if (imageFormat.isValid()) {
-        attrs.append(" type=\"image\">");
-    } else {
-        attrs.append(" type=\"char\"");
-        attrs.append(" font=\"").append(textFormat.font().toString()).append("\"");
-        if (textFormat.isAnchor()) {
-            attrs.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
-            attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
-        }
-        attrs.append(textAttributes(textFormat.properties()));
-    }
-
-    return attrs;
-}
-
 void KoTextDebug::dumpFragment(const QTextFragment &fragment)
 {
     depth += INDENT;
-    QString cf = charFormat(fragment.charFormat());
+    QString cf = textAttributes(fragment.charFormat());
 
     qDebug("%*s<fragment%s>", depth, " ", qPrintable(cf));
 

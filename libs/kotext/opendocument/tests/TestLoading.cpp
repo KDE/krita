@@ -140,8 +140,8 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
 
     if (!equal) {
-        qDebug() << "Actual property:   " << KoTextDebug::textAttributes(actualFormat.properties());
-        qDebug() << "Expected property: " << KoTextDebug::textAttributes(expectedFormat.properties());
+        qDebug() << "Actual property:   " << KoTextDebug::textAttributes(actualFormat);
+        qDebug() << "Expected property: " << KoTextDebug::textAttributes(expectedFormat);
         qDebug() << "compareFragment: property mismatch at " << actualFragment.text();
     }
 
@@ -224,8 +224,8 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
             break;
         }
         if (!match) {
-            qDebug() << "Actual property:   " << KoTextDebug::paraAttributes(actualProperty);
-            qDebug() << "Expected property: " << KoTextDebug::paraAttributes(expectedProperty);
+            qDebug() << "Actual property:   " << KoTextDebug::paraAttributes(actualFormat);
+            qDebug() << "Expected property: " << KoTextDebug::paraAttributes(expectedFormat);
             qDebug() << "At index: QTextFormat::UserProperty + " << id - QTextFormat::UserProperty;
             return false;
         }

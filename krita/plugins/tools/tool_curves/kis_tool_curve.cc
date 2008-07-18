@@ -486,7 +486,7 @@ void KisToolCurve::selectCurve()
     KisPaintDeviceSP dev = currentNode()->paintDevice();
     bool hasSelection = dev->hasSelection();
     KisSelectedTransaction *t = 0;
-    if (m_currentImage->undo()) t = new KisSelectedTransaction(m_transactionMessage, dev);
+    if (m_currentImage->undo() && hasSelection) t = new KisSelectedTransaction(m_transactionMessage, dev);
     KisSelectionSP selection = dev->selection();
 
     if (!hasSelection) {

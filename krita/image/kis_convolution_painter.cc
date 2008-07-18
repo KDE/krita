@@ -77,7 +77,7 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                                         KisConvolutionBorderOp borderOp )
 {
-    dbgKrita << *kernel;
+    dbgImage << *kernel;
     // Make the area we cover as small as possible
     if ( selection() ) {
 
@@ -200,6 +200,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, qin
             lastProgressPercent = progressPercent;
 
             if (progressUpdater()->interrupted()) {
+                dbgImage << "Convolution is interupted";
                 for (int i = 0; i < cacheSize; i++)
                     delete[] pixelPtrCache[i];
                 delete[] pixelPtrCache;
@@ -353,12 +354,12 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                 for (qint32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
                     quint8** d = pixelPtrCache + krow * kw;
                     //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
-//                     for (int i = 0; i < (kw-1); i++) {
-//                         memcpy(d[i], d[i+1], cdepth);
-//                     }
-                    quint8* first = *d;
-                    memmove( d, d+1, (kw-1)*sizeof(quint8*));
-                    *(d + kw -1 ) = first;
+                    for (int i = 0; i < (kw-1); i++) {
+                        memcpy(d[i], d[i+1], cdepth);
+                    }
+//                     quint8* first = *d;
+//                     memmove( d, d+1, (kw-1)*sizeof(quint8*));
+//                     *(d + kw -1 ) = first;
                 }
                 if(col < xLastMinuskhw)
                 {
@@ -399,6 +400,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
             lastProgressPercent = progressPercent;
 
             if (progressUpdater()->interrupted()) {
+                dbgImage << "Convolution is interupted";
                 for (int i = 0; i < cacheSize; i++)
                     delete[] pixelPtrCache[i];
                 delete[] pixelPtrCache;

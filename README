@@ -1,7 +1,9 @@
-KOffice is based on KDE ( http://www.kde.org ) which is needed to run KOffice.
-You need kdelibs and kdebase installed if you want to compile and run
-KOffice. Look in the kdelibs sourcedir for the file COMPILING for help. Also
-look at the website as there are many helpfiles available.
+KOffice is based on KDE libraries ( http://www.kde.org ) which are needed to
+run KOffice.  It is important to make clear you don't have to actually run
+the KDE desktop in order to use KOffice.
+You need kdelibs, kdepimlibs and kdebase installed if you want to compile and run
+KOffice.
+See http://wiki.koffice.org/index.php?title=Build_KOffice
 
 KOffice is a collection of office applications linked together by a common
 basis. This common basis assures that all office application can work
@@ -19,8 +21,6 @@ The applications currently included in KOffice are:
   Graphing of your abstract data
 - Karbon
   Vector graphics tool
-- Kugar
-  Database report creation
 - Kivio
   Flowcharting program
 - Kexi
@@ -29,11 +29,8 @@ The applications currently included in KOffice are:
   A pixel graphics tool
 - KFormula
   A mathematical formula editor
-- KOffice Workspace
-  A combination of all of the above
 
-Note: these applications are not necessarily part of the previous or next
-official stable version of KOffice.
+More information can be found at http://wiki.koffice.org
 
 Developers:
 ===========
@@ -47,31 +44,12 @@ If you feel you found a bug or missing feature you can always contact the
 developers of KOffice (via http://www.koffice.org ) or delve into the software
 yourself.
 
-The part that is shared between all KOffice applications can be found in the lib
+The part that is shared between all KOffice applications can be found in the libs
 directory. There classes like KoDocument can be found; these classes are
 extended in the project directories.
 
-Read the .h files in the respective directories for more info.
-
-
-Document format:
-================
-
-Nearly all KOffice applications use XML formatted files in a ZIP file.
-
-The main document in XML format can be read with a text editor (after having
-unzip-ped it from the ZIP file.) XML itself is simply a set of tags,
-where the application can define the meaning of these tags. The definition of
-the document type is therefore different for each KOffice application (as you
-will most likely not find a curved line in a KWord document). The Document Type
-Definition can be found in every application's source directory in the
-directory '(application)/dtd.'
-
-If you would like more information about the makeup of the actual KOffice 
-document structure (not the XML DTD), see the lib/store/SPEC file.
-
-If you want to see more/fix bugs in this file, feel free to ask or add it 
-yourself.
+Read the .h files in the respective directories for more info or read the online
+API docs which you can find at http://www.koffice.org/developer/apidocmain.php
 
 
 Contacts:

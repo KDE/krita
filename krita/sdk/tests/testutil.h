@@ -77,6 +77,7 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2, int 
     if ( w1 != w2 || h1 != h2 ) {
         pt.setX( -1 );
         pt.setY( -1 );
+        qDebug() << "Images have different sizes";
         return false;
     }
 
@@ -91,7 +92,7 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2, int 
                 const bool same = qAbs(qRed(a) - qRed(b)) <= fuzzy
                     && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
                     && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
-                if (!same) {
+                if (!same && (qAlpha(a) != 0 || qAlpha(b) != 0 ) ) {
                     qDebug() << " Different! source" << qRed(a) << qGreen(a) << qBlue(a) << "dest" << qRed(b) << qGreen(b) << qBlue(b);
                     return false;
                 }
@@ -99,6 +100,7 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2, int 
         }
     }
 //     qDebug() << "compareQImages time elapsed:" << t.elapsed();
+    qDebug() << "Images are identical";
     return true;
 }
 

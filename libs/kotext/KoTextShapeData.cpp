@@ -41,6 +41,7 @@
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
 #include "KoTextDocumentLayout.h"
+#include "KoTextBlockData.h"
 
 #include "opendocument/KoTextLoader.h"
 
@@ -246,8 +247,12 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
             break;
 
+        bool isHeading = false;
+        KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
+        if (blockData)
+            isHeading = (blockData->outlineLevel() > 0);
         KoParagraphStyle *paragstyle = KoParagraphStyle::fromBlock(block);
-        if (block.textList()) {
+        if (block.textList() && !isHeading) {
             if ((textLists.isEmpty()) || (!textLists.contains(block.textList()))) {
                 writer->startElement( "text:list", false );
                 writer->addAttribute("text:style-name", listStyleNames[block.textList()]);
@@ -266,7 +271,12 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                 writer->endElement();
             }
         }
-        writer->startElement( "text:p", false );
+        if (isHeading) {
+            writer->startElement( "text:h", false );
+            writer->addAttribute( "text:outline-level", blockData->outlineLevel() );
+        } else {
+            writer->startElement( "text:p", false );
+        }
 
         if (styleNames.contains(allFormats.indexOf(block.blockFormat())))
             writer->addAttribute("text:style-name", styleNames[allFormats.indexOf(block.blockFormat())]);
@@ -336,7 +346,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
 
         writer->endElement();
 
-	    if (block.textList())	// This block is a list item too...
+	    if (block.textList() && !isHeading)	// We must check if we need to close a previously-opened text:list node.
 	        writer->endElement();
 
         block = block.next();

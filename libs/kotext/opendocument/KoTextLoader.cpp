@@ -344,16 +344,19 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
     if (!blockData)
     {
-	// Ok, we must create the KoTextBlockData for this block. Quite logical indeed... Except if KoParagraphStyle does create the block data for us ?
-	blockData = new KoTextBlockData();
-	block.setUserData(blockData);
+        // Ok, we must create the KoTextBlockData for this block. Quite logical indeed... Except if KoParagraphStyle does create the block data for us ?
+        blockData = new KoTextBlockData();
+        block.setUserData(blockData);
     }
     if (blockData)
     {
-	kDebug(32500) << "Ok, setting the outline level in a block data, good...";
-	blockData->setOutlineLevel(level);
+        blockData->setOutlineLevel(level);
     }
-    //1.6: KoTextParag::loadOasisSpan
+    
+    KoListStyle listStyle;
+    listStyle.setLevel(d->textSharedData->outlineLevel(level));
+    listStyle.applyStyle(block, level);
+    
     bool stripLeadingSpace = true;
     int pos = cursor.position();
     loadSpan( element, cursor, &stripLeadingSpace );

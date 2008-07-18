@@ -37,7 +37,10 @@ SpecificColorSelectorDock::SpecificColorSelectorDock( KisView2 *view ) : QDockWi
 
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP l)
 {
-    m_colorSelector->setColorSpace( l->colorSpace());
+    if (l->inherits("KisMask") && l->parent())
+        m_colorSelector->setColorSpace( static_cast<const KisLayer*>(l->parent().data())->colorSpace());
+    else
+        m_colorSelector->setColorSpace( static_cast<const KisLayer*>(l.data())->colorSpace());
 }
 
 

@@ -26,23 +26,31 @@
 #include <QLineF>
 #include <QMatrix>
 #include <QObject>
-#include <QPointF>
 
 class QPainter;
+class QPointF;
+
+// TODO: move this to a separate file. ParagraphTool itself would be nice, but we need it in ShapeSpecificData, too.
+typedef enum
+{
+    firstIndentRuler,
+    followingIndentRuler,
+    rightMarginRuler,
+    topMarginRuler,
+    bottomMarginRuler,
+    maxRuler,
+    noRuler
+} RulerIndex;
 
 /** A Ruler is a user interface element which can be used to change the Spacing and Dimensions in a KOffice document,
- * for example the spacing in a text paragraph, by simply dragging the ruler lacross the screen */
+ * for example the spacing in a text paragraph, by simply dragging the ruler across the screen */
 class Ruler : public QObject
 {
     Q_OBJECT
 public:
-    Ruler(QObject *parent);
+    Ruler(QObject *parent = NULL);
 
     ~Ruler() {}
-
-    qreal width() const { return m_width; }
-    void setBaseline(const QLineF &baseline);
-    void setBaseline(const QPointF &from, const QPointF &to);
 
     KoUnit unit() const { return m_unit; }
     void setUnit(KoUnit unit);
@@ -78,24 +86,23 @@ public:
     int options() const { return m_options; }
     void setOptions(int options) { m_options = m_options | options; }
 
-    void moveRuler(const QPointF &point, bool smooth);
-    void moveRuler(qreal value, bool smooth);
-
     bool isActive() const { return m_active; }
     void setActive(bool active);
 
     bool isHighlighted() const { return m_highlighted; }
     void setHighlighted(bool highlighted);
 
-    QLineF labelConnector() const;
+    QLineF labelConnector(const QLineF &baseline) const;
+
+    void paint(QPainter &painter, const QLineF &baseline) const;
+
+    bool hitTest(const QPointF &point, const QLineF &baseline) const;
+
+    void moveRuler(const QPointF &point, bool smooth, QLineF baseline);
 
     QColor activeColor() const { return QColor(100, 148, 255); }
     QColor highlightColor() const { return QColor(78, 117, 201); }
     QColor normalColor() const { return QColor(100, 100, 100); }
-
-    void paint(QPainter &painter) const;
-
-    bool hitTest(const QPointF &point) const;
 
 signals:
     // emitted when value has been changed via the user interface
@@ -106,12 +113,17 @@ signals:
     void needsRepaint();
 
 protected:
+    void paint(QPainter &painter, const QMatrix &matrix, qreal width) const;
+
+    bool hitTest(const QPointF &point, const QMatrix &matrix, qreal width) const;
+
+    QLineF labelConnector(const QMatrix &matrix, qreal width) const;
+
+    void moveRuler(const QPointF &point, bool smooth, QMatrix matrix);
+    void moveRuler(qreal value, bool smooth);
+
     void setOldValue(qreal value) { m_oldValue = value; }
     void paintArrow(QPainter &painter, const QPointF &tip, const qreal angle, qreal value) const;
-
-    // baseline properties
-    QMatrix m_matrix;
-    qreal m_width;
 
     // all values in points
     qreal m_value; // value is distance between baseline and ruler line

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Florian Merz <florianmerz@web.de>
+ * Copyright (C) 2008 Florian Merz <florianmerz@gmx.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,13 +20,13 @@
 #ifndef PARAGRAPHTOOL_H
 #define PARAGRAPHTOOL_H
 
-#include "TextShape.h"
 #include "ShapeSpecificData.h"
 #include "Ruler.h"
 
 #include <KoTool.h>
 
 #include <QTextBlock>
+#include <QVector>
 
 class TextShape;
 
@@ -34,7 +34,6 @@ class KoParagraphStyle;
 class KoCanvasBase;
 
 class QAbstractTextDocumentLayout;
-class QColor;
 class QTextLayout;
 
 /**
@@ -48,13 +47,13 @@ public:
     explicit ParagraphTool(KoCanvasBase *canvas);
     ~ParagraphTool();
 
-    void initializeRuler(Ruler *ruler, int options = 0);
+    void initializeRuler(Ruler &ruler, int options = 0);
 
     // reimplemented from superclass
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
-    // select the text block and the given textShape
-    void selectTextBlock(TextShape *textShape, QTextBlock textBlock);
+    // select the paragraph below the specified cursor position, if there is a paragraph
+    bool selectTextBlockAt(const QPointF &point);
 
     // deselect the current text block (for example use clicked somwhere else)
     void deselectTextBlock();
@@ -106,44 +105,52 @@ signals:
 protected:
     QWidget *createOptionWidget();
 
-    // get all necessary properties from the layout system and pass them to the controls
-    void loadDimensions();
+    bool createShapeList(QTextBlock textBlock, TextShape *textShape);
+
     void loadRulers();
     void saveRulers();
 
-    void activateRuler(Ruler *ruler);
-    void deactivateActiveRuler();
+    void activateRuler(RulerIndex ruler, ShapeSpecificData *shape);
+    bool activateRulerAt(const QPointF &point);
+    void deactivateRuler();
     void resetActiveRuler();
+
+    void highlightRulerAt(const QPointF &point);
 
     bool smoothMovement() { return m_smoothMovement; }
 
     // paint a label at the specified position
-    void paintLabel(QPainter &painter, const QMatrix &matrix, const Ruler *ruler) const;
+    void paintLabel(QPainter &painter, const KoViewConverter &converter) const;
 
-    void paintRulers(QPainter &painter) const;
+    // paint all rulers for a given shape
+    void paintRulers(QPainter &painter, const KoViewConverter &converter, const ShapeSpecificData &shape) const;
+
+    // hit test for a single ruler on a single shape
+    bool hitTest(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point) const;
+
+    void moveRuler(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point, bool smoothMovement);
 
     // internal convencience methods
-    const QTextDocument *document() const { return textBlock().document(); }
     QTextBlock textBlock() const { Q_ASSERT(m_textBlockValid); return m_block; }
     QTextBlockFormat blockFormat() const { return textBlock().blockFormat(); }
     QTextCharFormat charFormat() const { return textBlock().charFormat(); }
     QTextLayout *textLayout() const { return textBlock().layout(); }
 
 private:
-    // this single member will be replaced by a list with a ShapeSpecificData for each shape that contains
-    // the active text block
-    ShapeSpecificData m_shapeSpecificData;
-
     QTextBlock m_block;
     KoParagraphStyle *m_paragraphStyle;
 
-    QPointF m_mousePosition;
+    QVector<ShapeSpecificData> m_shapes;
 
-    // should move to ShapeSpecificData
-    QRectF m_counter,
-           m_firstLine,
-           m_followingLines,
-           m_border;
+    ShapeSpecificData *m_activeShape,
+                      *m_highlightShape;
+
+    Ruler m_rulers[maxRuler];
+
+    RulerIndex m_activeRuler,
+               m_highlightRuler;
+
+    QPointF m_mousePosition;
 
     bool m_singleLine,
          m_isList,
@@ -151,14 +158,6 @@ private:
          m_needsRepaint,
          m_smoothMovement;
 
-    Ruler m_firstIndentRuler,
-          m_followingIndentRuler,
-          m_rightMarginRuler,
-          m_topMarginRuler,
-          m_bottomMarginRuler;
-
-    Ruler *m_activeRuler,
-          *m_hoverRuler;
 };
 
 #endif

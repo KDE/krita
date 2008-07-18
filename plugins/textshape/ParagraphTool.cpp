@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Florian Merz <florianmerz@web.de>
+ * Copyright (C) 2008 Florian Merz <florianmerz@gmx.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +18,8 @@
  */
 
 #include "ParagraphTool.h"
+
+#include "TextShape.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 
 #include <KoCanvasBase.h>
@@ -35,6 +37,8 @@
 #include <QAbstractTextDocumentLayout>
 #include <QAction>
 #include <QCheckBox>
+#include <QColor>
+#include <QGridLayout>
 #include <QLabel>
 #include <QPen>
 #include <QString>
@@ -42,27 +46,40 @@
 #include <QTextDocument>
 #include <QTextLine>
 #include <QTextList>
-#include <QGridLayout>
+#include <QVectorIterator>
 
+/* FIXME:
+ * - the separator line uses firstLine.right(), which is not calculated correctly
+ *   (should be done using border - right margin instead of simply the right end of the layouted text)
+ * - think about were to store paragraph properties such as singeLine and isList, ParagraphTool or ShapeSpecificData?
+ * - repainting currently causes artifacts. it should always repaint the area which has been repainted the last time
+ *   (store new area in class for next round, then repaint union with previously stored area
+ * - make sure that rulers only draw into the right area, pass a bounding rectangle to the drawing method for this
+ *
+ * TODO:
+ * - add accessibility support
+ * - remove hard-coded colors (use KDE theme or adjust to document/shape background?)
+ * - add RTL support
+ * - add undo support
+ * - add linespacing support
+ * - add more feature via the options docker
+ * - add proper relayouting (when relayouting is done by the tool it doesn't flow around other shapes)
+ * - think about a method to give instructions to new users (the bubble used by okular might ne a good way to do this)
+ */
 ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
     : KoTool(canvas),
     m_paragraphStyle(NULL),
+    m_activeRuler(noRuler),
+    m_highlightRuler(noRuler),
     m_textBlockValid(false),
     m_needsRepaint(false),
-    m_smoothMovement(false),
-    m_firstIndentRuler(this),
-    m_followingIndentRuler(this),
-    m_rightMarginRuler(this),
-    m_topMarginRuler(this),
-    m_bottomMarginRuler(this),
-    m_activeRuler(NULL),
-    m_hoverRuler(NULL)
+    m_smoothMovement(false)
 {
-    initializeRuler(&m_firstIndentRuler);
-    initializeRuler(&m_followingIndentRuler);
-    initializeRuler(&m_rightMarginRuler);
-    initializeRuler(&m_topMarginRuler, Ruler::drawSides);
-    initializeRuler(&m_bottomMarginRuler, Ruler::drawSides);
+    initializeRuler(m_rulers[firstIndentRuler]);
+    initializeRuler(m_rulers[followingIndentRuler]);
+    initializeRuler(m_rulers[rightMarginRuler]);
+    initializeRuler(m_rulers[topMarginRuler], Ruler::drawSides);
+    initializeRuler(m_rulers[bottomMarginRuler], Ruler::drawSides);
 
     QAction *action = new QAction(i18n("Apply parent style to ruler"), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
@@ -74,13 +91,44 @@ ParagraphTool::~ParagraphTool()
 {}
 
 // helper function to initalize rulers
-void ParagraphTool::initializeRuler(Ruler *ruler, int options)
+void ParagraphTool::initializeRuler(Ruler &ruler, int options)
 {
-    ruler->setOptions(options);
-    ruler->setUnit(canvas()->unit());
-    ruler->setMinimumValue(0.0);
-    connect(ruler, SIGNAL(needsRepaint()), this, SLOT(scheduleRepaint()));
-    connect(ruler, SIGNAL(valueChanged(qreal)), this, SLOT(updateLayout()));
+    ruler.setParent(this);
+    ruler.setOptions(options);
+    ruler.setUnit(canvas()->unit());
+    ruler.setMinimumValue(0.0);
+    connect(&ruler, SIGNAL(needsRepaint()), this, SLOT(scheduleRepaint()));
+    connect(&ruler, SIGNAL(valueChanged(qreal)), this, SLOT(updateLayout()));
+}
+
+/* clear list of shapes and then add all shapes that contain the given paragraph to the list
+ */
+bool ParagraphTool::createShapeList(QTextBlock textBlock, TextShape *textShape)
+{
+    m_shapes.clear();
+
+    KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock.document()->documentLayout());
+    int start = textBlock.position();
+    int end = start + textBlock.length() - 1;
+
+    // FIXME: for now we only add the first and the last shape to the list
+    //       for >2 shape support we need to do a little bit more work to find all shapes in between
+
+    KoShape *firstShape = layout->shapeForPosition(start);
+    KoShape *lastShape = layout->shapeForPosition(end);
+
+    if (firstShape != NULL)
+        m_shapes << ShapeSpecificData(static_cast<TextShape*>(firstShape));
+    if (lastShape != firstShape && lastShape != NULL) {
+        m_shapes << ShapeSpecificData(static_cast<TextShape*>(lastShape));
+    }
+
+    // create dimensions for the shape list
+    for (int shape = 0; shape != m_shapes.size(); ++shape) {
+        m_shapes[shape].initDimensions(textBlock, m_paragraphStyle);
+    }
+
+    return true;
 }
 
 QWidget *ParagraphTool::createOptionWidget()
@@ -110,81 +158,20 @@ QWidget *ParagraphTool::createOptionWidget()
     return widget;
 }
 
-void ParagraphTool::loadDimensions()
-{
-    m_singleLine = (textLayout()->lineCount() == 1);
-
-    // border rectangle left and right
-    m_border.setLeft(0.0);
-    m_border.setRight(m_shapeSpecificData.textShape()->size().width());
-
-    // first line rectangle
-    m_firstLine = textLayout()->lineAt(0).rect();
-
-    // counter rectangle 
-    KoTextBlockData *blockData = static_cast<KoTextBlockData*> (textBlock().userData());
-    if (blockData != NULL) {
-        m_counter = QRectF(blockData->counterPosition(), QSizeF(blockData->counterWidth() - blockData->counterSpacing(),
-                    m_firstLine.height()));
-        m_isList = true;
-    }
-    else {
-        m_isList = false;
-    }
-
-    // folowing lines rectangle
-    if (!m_singleLine) {
-        m_followingLines = QRectF(textLayout()->lineAt(1).rect().topLeft(),
-                textLayout()->lineAt(textLayout()->lineCount() - 1).rect().bottomRight());
-    }
-    else {
-        m_followingLines = m_firstLine;
-    }
-
-    // border rectangle top and bottom
-    m_border.setTop(m_firstLine.top() - m_paragraphStyle->topMargin());
-    m_border.setBottom(m_singleLine ? m_firstLine.bottom() + m_paragraphStyle->bottomMargin()
-            : m_followingLines.bottom() + m_paragraphStyle->bottomMargin());
-
-    // workaround: the lines overlap slightly so right now we simply calculate the mean of the two y-values
-    if (!m_singleLine) {
-        qreal lineBreak((m_firstLine.bottom() + m_followingLines.top()) / 2.0);
-        m_firstLine.setBottom(lineBreak);
-        m_counter.setBottom(lineBreak);
-        m_followingLines.setTop(lineBreak);
-    }
-}
-
 void ParagraphTool::loadRulers()
 {
-    m_rightMarginRuler.setBaseline(QPointF(m_border.right(), m_followingLines.bottom()),
-            QPointF(m_border.right(), m_firstLine.top()));
-    m_rightMarginRuler.setValue(m_paragraphStyle->rightMargin());
-
-    m_topMarginRuler.setBaseline(QPointF(m_border.right(), m_border.top()),
-                QPointF(m_border.left(), m_border.top()));
-    m_topMarginRuler.setValue(m_paragraphStyle->topMargin());
-
-    m_bottomMarginRuler.setBaseline(QPointF(m_border.right(), m_followingLines.bottom()), 
-                QPointF(m_border.left(), m_followingLines.bottom()));
-    m_bottomMarginRuler.setValue(m_paragraphStyle->bottomMargin());
+    m_rulers[rightMarginRuler].setValue(m_paragraphStyle->rightMargin());
+    m_rulers[topMarginRuler].setValue(m_paragraphStyle->topMargin());
+    m_rulers[bottomMarginRuler].setValue(m_paragraphStyle->bottomMargin());
 
     if (m_singleLine) {
-        m_firstIndentRuler.setBaseline(QPointF(m_border.left(), m_firstLine.top()), 
-                QPointF(m_border.left(), m_firstLine.bottom()));
-        m_firstIndentRuler.setValue(m_paragraphStyle->leftMargin() + m_paragraphStyle->textIndent());
-
-        m_followingIndentRuler.hide();
+        m_rulers[firstIndentRuler].setValue(m_paragraphStyle->leftMargin() + m_paragraphStyle->textIndent());
+        m_rulers[followingIndentRuler].hide();
     }
     else {
-        m_firstIndentRuler.setBaseline(QPointF(m_border.left(), m_firstLine.top()),
-                   QPointF(m_border.left(), m_firstLine.bottom()));
-        m_firstIndentRuler.setValue(m_paragraphStyle->leftMargin() + m_paragraphStyle->textIndent());
-
-        m_followingIndentRuler.setBaseline(QPointF(m_border.left(), m_followingLines.top()),
-                    QPointF(m_border.left(), m_followingLines.bottom()));
-        m_followingIndentRuler.setValue(m_paragraphStyle->leftMargin());
-        m_followingIndentRuler.show();
+        m_rulers[firstIndentRuler].setValue(m_paragraphStyle->leftMargin() + m_paragraphStyle->textIndent());
+        m_rulers[followingIndentRuler].setValue(m_paragraphStyle->leftMargin());
+        m_rulers[followingIndentRuler].show();
     }
 }
 
@@ -196,11 +183,11 @@ void ParagraphTool::saveRulers()
     // at the same time. maybe it's best to return followingIndent to the way the backend does it
     Q_ASSERT(m_paragraphStyle != NULL);
 
-    m_paragraphStyle->setLeftMargin(m_followingIndentRuler.value());
-    m_paragraphStyle->setRightMargin(m_rightMarginRuler.value());
-    m_paragraphStyle->setTopMargin(m_topMarginRuler.value());
-    m_paragraphStyle->setBottomMargin(m_bottomMarginRuler.value());
-    m_paragraphStyle->setTextIndent(m_firstIndentRuler.value() - m_followingIndentRuler.value());
+    m_paragraphStyle->setLeftMargin(m_rulers[followingIndentRuler].value());
+    m_paragraphStyle->setRightMargin(m_rulers[rightMarginRuler].value());
+    m_paragraphStyle->setTopMargin(m_rulers[topMarginRuler].value());
+    m_paragraphStyle->setBottomMargin(m_rulers[bottomMarginRuler].value());
+    m_paragraphStyle->setTextIndent(m_rulers[firstIndentRuler].value() - m_rulers[followingIndentRuler].value());
 
     QTextBlockFormat format;
     m_paragraphStyle->applyStyle(format);
@@ -225,40 +212,63 @@ QString ParagraphTool::styleName()
     return QString(i18n("None"));
 }
 
+/* slot which is called when the value of one of the rulers changed
+ * causes storing and reloading of the positions and values of the rulers from the file */
 void ParagraphTool::updateLayout()
 {
     saveRulers();
 
-    if (!m_shapeSpecificData.shapeContainsBlock(textBlock())) {
-        // for now, if the block moved to a different shape, we deselect the block
-        // in the future we should switch to the new shape that contains the text block
-        kDebug() << "Block moved to different shape: deslecting block";
+    static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
+
+    // recreate list of shapes for the current text block and try not to switch away from the current active shape
+    if (!createShapeList(textBlock(), m_activeShape->textShape())) {
         deselectTextBlock();
         repaintDecorations();
         return;
     }
 
-    static_cast<KoTextDocumentLayout*>(document()->documentLayout())->layout();
-    loadDimensions();
     loadRulers();
 
     repaintDecorations();
 }
 
-void ParagraphTool::paintLabel(QPainter &painter, const QMatrix &matrix, const Ruler *ruler) const
+void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &converter) const
 {
-    QColor foregroundColor(ruler == m_activeRuler ? ruler->activeColor() : ruler->highlightColor());
-    QString text(ruler->valueString());
-    QLineF connector(matrix.map(ruler->labelConnector()));
-    connector.setLength(10.0);
+    RulerIndex ruler;
+    ShapeSpecificData *shape;
+    QColor foregroundColor;
+
+    if (m_activeRuler != noRuler) {
+        ruler = m_activeRuler;
+        shape = m_activeShape;
+        foregroundColor = m_rulers[ruler].activeColor();
+    }
+    else if (m_highlightRuler != noRuler) {
+        ruler = m_highlightRuler;
+        shape = m_highlightShape;
+        foregroundColor = m_rulers[ruler].highlightColor();
+    }
+    else {
+        return;
+    }
 
     painter.save();
 
+    // transform painter from view coordinate system to shape coordinate system
+    painter.setMatrix(shape->textShape()->absoluteTransformation(&converter) * painter.matrix());
+    KoShape::applyConversion(painter, converter);
+    painter.translate(0.0, -shape->shapeStartOffset());
+
+    QMatrix matrix(painter.combinedMatrix());
+
+    QString text(m_rulers[ruler].valueString());
+    QLineF connector(matrix.map(m_rulers[ruler].labelConnector(shape->baseline(ruler))));
+    connector.setLength(10.0);
+
     painter.resetMatrix();
 
-    QColor foreground(foregroundColor);
     painter.setBrush(Qt::white);
-    painter.setPen(foreground);
+    painter.setPen(foregroundColor);
 
     QRectF label(connector.p2().x(), connector.p2().y(), 0.0, 0.0);
     label = painter.boundingRect(label, Qt::AlignCenter | Qt::AlignVCenter, text);
@@ -277,22 +287,36 @@ void ParagraphTool::paintLabel(QPainter &painter, const QMatrix &matrix, const R
     painter.drawLine(connector);
     painter.drawRoundRect(label, 720.0 / label.width(), 720.0 /  label.height());
     painter.drawText(label, Qt::AlignHCenter | Qt::AlignVCenter, text);
+
     painter.restore();
 }
 
-void ParagraphTool::paintRulers(QPainter &painter) const
+void ParagraphTool::paintRulers(QPainter &painter, const KoViewConverter &converter, const ShapeSpecificData &shape) const
 {
+    painter.save();
+
+    // transform painter from view coordinate system to shape coordinate system
+    painter.setMatrix(shape.textShape()->absoluteTransformation(&converter) * painter.matrix());
+    KoShape::applyConversion(painter, converter);
+    painter.translate(0.0, -shape.shapeStartOffset());
+
     painter.setPen(Qt::darkGray);
 
-    foreach (Ruler *ruler, findChildren<Ruler *>()) {
-        if (ruler->isVisible())
-            ruler->paint(painter);
+    m_rulers[firstIndentRuler].paint(painter, shape.baseline(firstIndentRuler));
+
+    if (!m_singleLine) {
+        m_rulers[followingIndentRuler].paint(painter, shape.baseline(followingIndentRuler));
+
+        painter.drawLine(shape.separatorLine());
     }
 
-    // paint line between first line and following lines
-    if (!m_singleLine) {
-        painter.drawLine(m_border.left(), m_firstLine.bottom(), m_firstLine.right(), m_firstLine.bottom());
-    }
+    m_rulers[rightMarginRuler].paint(painter, shape.baseline(rightMarginRuler));
+
+    m_rulers[topMarginRuler].paint(painter, shape.baseline(topMarginRuler));
+
+    m_rulers[bottomMarginRuler].paint(painter, shape.baseline(bottomMarginRuler));
+
+    painter.restore();
 }
 
 void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -300,23 +324,11 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (!m_textBlockValid)
         return;
 
-    painter.save();
-
-    // transform painter from view coordinate system to shape coordinate system
-    painter.setMatrix(m_shapeSpecificData.textShape()->absoluteTransformation(&converter) * painter.matrix());
-    KoShape::applyConversion(painter, converter);
-    painter.translate(0.0, -m_shapeSpecificData.shapeStartOffset());
-
-    paintRulers(painter);
-
-    QMatrix matrix(painter.combinedMatrix());
-
-    painter.restore();
-
-    Ruler *labeledRuler = m_activeRuler != NULL ? m_activeRuler : m_hoverRuler;
-    if (labeledRuler != NULL) {
-        paintLabel(painter, matrix, labeledRuler);
+    foreach (ShapeSpecificData shape, m_shapes) {
+        paintRulers(painter, converter, shape);
     }
+
+    paintLabel(painter, converter);
 }
 
 void ParagraphTool::repaintDecorations()
@@ -325,8 +337,11 @@ void ParagraphTool::repaintDecorations()
         return;
 
     // should add previous and current label positions to the repaint area
-
-    canvas()->updateCanvas(m_shapeSpecificData.dirtyRectangle());
+    QRectF dirtyRectangle;
+    foreach (ShapeSpecificData shape, m_shapes) {
+        dirtyRectangle |= shape.dirtyRectangle();
+    }
+    canvas()->updateCanvas(dirtyRectangle);
 
     m_needsRepaint = false;
 }
@@ -334,26 +349,6 @@ void ParagraphTool::repaintDecorations()
 void ParagraphTool::scheduleRepaint()
 {
     m_needsRepaint = true;
-}
-
-void ParagraphTool::selectTextBlock(TextShape *newTextShape, QTextBlock block)
-{
-    // the text block is already selected, no need for a repaint and all that
-    if (m_textBlockValid && block == m_block)
-        return;
-
-    m_textBlockValid = true;
-
-    m_shapeSpecificData.setTextShape(newTextShape);
-    m_block = block;
-    m_paragraphStyle = KoParagraphStyle::fromBlock(textBlock());
-
-    emit styleNameChanged(styleName());
-
-    scheduleRepaint();
-
-    loadDimensions();
-    loadRulers();
 }
 
 void ParagraphTool::deselectTextBlock()
@@ -367,75 +362,126 @@ void ParagraphTool::deselectTextBlock()
     scheduleRepaint();
 }
 
-void ParagraphTool::activateRuler(Ruler *ruler)
+bool ParagraphTool::activateRulerAt(const QPointF &point)
+{
+    if (!m_textBlockValid) {
+        // can't select a ruler without a textblock
+        return false;
+    }
+
+    for (int shape = 0; shape != m_shapes.size(); ++shape) {
+        QPointF mappedPoint(m_shapes[shape].mapDocumentToShape(point));
+
+        for (int ruler = 0; ruler != maxRuler; ++ruler) {
+            if (hitTest((RulerIndex)ruler, m_shapes[shape], mappedPoint)) {
+                activateRuler((RulerIndex)ruler, &m_shapes[shape]);
+
+                return true;
+            }
+        }
+    }
+
+    m_activeRuler = noRuler;
+    return false;
+}
+
+
+void ParagraphTool::activateRuler(RulerIndex ruler, ShapeSpecificData *shape)
 {
     m_activeRuler = ruler;
-    m_activeRuler->setActive(true);
+    m_activeShape = shape;
+    m_rulers[m_activeRuler].setActive(true);
 
     // disable hovering if we have an active ruler
     // hovering over the wrong ruler confuses the user
-    if (m_hoverRuler != NULL) {
-        m_hoverRuler->setHighlighted(false);
-        m_hoverRuler = NULL;
+    if (m_highlightRuler != noRuler) {
+        m_rulers[m_highlightRuler].setHighlighted(false);
+        m_highlightRuler = noRuler;
     }
 }
 
-void ParagraphTool::deactivateActiveRuler()
+void ParagraphTool::deactivateRuler()
 {
-    if (m_activeRuler == NULL) {
+    if (m_activeRuler == noRuler) {
         return;
     }
 
-    m_activeRuler->setActive(false);
-    m_activeRuler = NULL;
+    RulerIndex deactivateRuler = m_activeRuler;
+    m_activeRuler = noRuler;
+    m_rulers[deactivateRuler].setActive(false);
 
-    // there's no active ruler anymore, so we have to if we hover somewhere
-    QPointF point(m_shapeSpecificData.mapDocumentToShape(m_mousePosition));
-    foreach (Ruler *ruler, findChildren<Ruler *>()) {
-        if (ruler->hitTest(point)) {
-            m_hoverRuler = ruler;
-            m_hoverRuler->setHighlighted(true);
-            break;
-        }
-    }
+    // there's no active ruler anymore, so we have to check if we hover somewhere
+    highlightRulerAt(m_mousePosition);
 }
 
 void ParagraphTool::resetActiveRuler()
 {
-    if (m_activeRuler != NULL) {
-        m_activeRuler->reset();
-        deactivateActiveRuler();
+    if (m_activeRuler != noRuler) {
+        m_rulers[m_activeRuler].reset();
+        deactivateRuler();
+    }
+}
+
+void ParagraphTool::highlightRulerAt(const QPointF &point)
+{
+    // check if we were already hovering over an element
+    if (m_highlightRuler != noRuler) {
+        QPointF mappedPoint(m_highlightShape->mapDocumentToShape(point));
+
+        // check if we are still over the same element
+        if (hitTest((RulerIndex)m_highlightRuler, *m_highlightShape, mappedPoint)) {
+            return;
+        }
+        else {
+            // stop hovering over the element
+            m_rulers[m_highlightRuler].setHighlighted(false);
+            m_highlightRuler = noRuler;
+        }
+    }
+
+    // check if we are hovering over a new control
+    for (int shape = 0; shape != m_shapes.size(); ++shape) {
+        QPointF mappedPoint(m_shapes[shape].mapDocumentToShape(point));
+
+        for (int ruler = 0; ruler != maxRuler; ++ruler) {
+            if (hitTest((RulerIndex)ruler, m_shapes[shape], mappedPoint)) {
+                m_highlightRuler = (RulerIndex)ruler;
+                m_highlightShape = &m_shapes[shape];
+                m_rulers[m_highlightRuler].setHighlighted(true);
+                break;
+            }
+        }
     }
 }
 
 void ParagraphTool::applyParentStyleToActiveRuler()
 {
-    if (m_activeRuler == NULL) {
+    if (m_activeRuler == noRuler) {
         return;
     }
 
-    if (m_activeRuler == &m_firstIndentRuler) {
+    if (m_activeRuler == firstIndentRuler) {
         m_paragraphStyle->remove(QTextFormat::TextIndent);
-        m_activeRuler->setValue(m_paragraphStyle->textIndent());
+        m_rulers[m_activeRuler].setValue(m_paragraphStyle->textIndent());
     }
-    else if (m_activeRuler == &m_followingIndentRuler) {
+    else if (m_activeRuler == followingIndentRuler) {
         m_paragraphStyle->remove(QTextFormat::BlockLeftMargin);
-        m_activeRuler->setValue(m_paragraphStyle->leftMargin());
+        m_rulers[m_activeRuler].setValue(m_paragraphStyle->leftMargin());
     }
-    else if (m_activeRuler == &m_rightMarginRuler) {
+    else if (m_activeRuler == rightMarginRuler) {
         m_paragraphStyle->remove(QTextFormat::BlockRightMargin);
-        m_activeRuler->setValue(m_paragraphStyle->rightMargin());
+        m_rulers[m_activeRuler].setValue(m_paragraphStyle->rightMargin());
     }
-    else if (m_activeRuler == &m_topMarginRuler) {
+    else if (m_activeRuler == topMarginRuler) {
         m_paragraphStyle->remove(QTextFormat::BlockTopMargin);
-        m_activeRuler->setValue(m_paragraphStyle->topMargin());
+        m_rulers[m_activeRuler].setValue(m_paragraphStyle->topMargin());
     }
-    else if (m_activeRuler == &m_bottomMarginRuler) {
+    else if (m_activeRuler == bottomMarginRuler) {
         m_paragraphStyle->remove(QTextFormat::BlockBottomMargin);
-        m_activeRuler->setValue(m_paragraphStyle->bottomMargin());
+        m_rulers[m_activeRuler].setValue(m_paragraphStyle->bottomMargin());
     }
 
-    deactivateActiveRuler();
+    deactivateRuler();
 
     // we need to call the updateLayout() slot manually, it is not emitted if
     // the ruler has been changed by calling setValue()
@@ -444,45 +490,62 @@ void ParagraphTool::applyParentStyleToActiveRuler()
     updateLayout();
 }
 
+// try to find and select a text block below the cursor. return true if successfull
+bool ParagraphTool::selectTextBlockAt(const QPointF &point)
+{
+    TextShape *textShape = dynamic_cast<TextShape*> (canvas()->shapeManager()->shapeAt(point));
+    if (!textShape) {
+        // the shape below the cursor is not a text shape
+        return false;
+    }
+
+    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape->userData());
+    QTextDocument *document = textShapeData->document();
+
+    int position = document->documentLayout()->hitTest(textShape->convertScreenPos(point), Qt::ExactHit);
+    if (position == -1) {
+        // there is no text below the cursor
+        return false;
+    }
+
+    QTextBlock textBlock(document->findBlock(position));
+    if (!textBlock.isValid()) {
+        // the text block is not valid, this shouldn't really happen
+        return false;
+    }
+
+    // the text block is already selected, no need for a repaint and all that
+    if (m_textBlockValid && textBlock == m_block) {
+        return true;
+    }
+
+    m_textBlockValid = true;
+    m_block = textBlock;
+    m_paragraphStyle = KoParagraphStyle::fromBlock(textBlock);
+
+    createShapeList(textBlock, textShape);
+
+    emit styleNameChanged(styleName());
+
+    scheduleRepaint();
+
+    loadRulers();
+
+    return true;
+}
+
 void ParagraphTool::mousePressEvent(KoPointerEvent *event)
 {
     m_mousePosition = event->point;
 
     if (event->button() == Qt::LeftButton) {
 
-        // we check if the mouse pointer pressed on one of the current textblock's rulers
-        if (m_textBlockValid) {
+        bool activated = activateRulerAt(event->point);
 
-            QPointF point(m_shapeSpecificData.mapDocumentToShape(event->point));
-
-            foreach (Ruler *ruler, findChildren<Ruler *>()) {
-                if (ruler->hitTest(point)) {
-                    activateRuler(ruler);
-
-                    repaintDecorations();
-                    return;
-                }
-            }
-
-            m_activeRuler = NULL;
+        if (!activated) {
+            deselectTextBlock();
+            selectTextBlockAt(event->point);
         }
-
-        // if there is a new text block (possibly in another shape) under the mouse, then we select that block
-        TextShape *textShape = dynamic_cast<TextShape*> (canvas()->shapeManager()->shapeAt(event->point));
-        if (textShape) {
-            KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape->userData());
-            QTextDocument *document = textShapeData->document();
-
-            int position = document->documentLayout()->hitTest(textShape->convertScreenPos(event->point), Qt::ExactHit);
-            if (position != -1) {
-                selectTextBlock(textShape, document->findBlock(position));
-                repaintDecorations();
-                return;
-            }
-        }
-
-        // if there is no ruler and no text block under the mouse, then we simply deselect the current text block
-        deselectTextBlock();
     }
     else if (event->button() == Qt::RightButton) {
         resetActiveRuler();
@@ -498,8 +561,8 @@ void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     m_mousePosition = event->point;
 
-    if (m_textBlockValid && m_activeRuler != NULL) {
-        deactivateActiveRuler();
+    if (m_textBlockValid && m_activeRuler != noRuler) {
+        deactivateRuler();
     }
 
     repaintDecorations();
@@ -510,35 +573,16 @@ void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
     m_mousePosition = event->point;
 
     if (m_textBlockValid) {
-        QPointF point(m_shapeSpecificData.mapDocumentToShape(event->point));
-
-        // send a mouseMoveEvent to the activeRuler
-        // do this first so the active control can resize if necessary
-        if (m_activeRuler != NULL) {
-            m_activeRuler->moveRuler(point, smoothMovement());
+        if (m_activeRuler != noRuler) {
+            QPointF point(m_activeShape->mapDocumentToShape(event->point));
+            moveRuler(m_activeRuler, *m_activeShape, point, smoothMovement());
         }
-        // we don't want to hover if we have an active ruler
         else {
-            // check if we left the element over which we were hovering
-            if (m_hoverRuler != NULL && !m_hoverRuler->hitTest(point)) {
-                m_hoverRuler->setHighlighted(false);
-                m_hoverRuler = NULL;
-            }
-
-            // check if we are hovering over a new control
-            if (m_hoverRuler == NULL) {
-                foreach (Ruler *ruler, findChildren<Ruler *>()) {
-                    if (ruler->hitTest(point)) {
-                        m_hoverRuler = ruler;
-                        m_hoverRuler->setHighlighted(true);
-                        break;
-                    }
-                }
-            }
+            highlightRulerAt(event->point);
         }
-    }
 
-    repaintDecorations();
+        repaintDecorations();
+    }
 }
 
 void ParagraphTool::keyPressEvent(QKeyEvent *event)
@@ -577,5 +621,15 @@ void ParagraphTool::deactivate()
 {
     // the document might have changed, so we have to deselect the text block
     deselectTextBlock();
+}
+
+bool ParagraphTool::hitTest(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point) const
+{
+    return m_rulers[ruler].hitTest(point, shape.baseline(ruler));
+}
+
+void ParagraphTool::moveRuler(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point, bool smooth)
+{
+    m_rulers[ruler].moveRuler(point, smooth, shape.baseline(ruler));
 }
 

@@ -19,11 +19,60 @@
 
 #include "ShapeSpecificData.h"
 
+#include <KoParagraphStyle.h>
 #include <KoShapeBorderModel.h>
+#include <KoTextBlockData.h>
 #include <KoTextShapeData.h>
 
 #include <QTextBlock>
 #include <QTextLayout>
+
+void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle)
+{
+    QTextLayout *layout = textBlock.layout();
+
+    m_singleLine = (layout->lineCount() == 1);
+
+    // border rectangle left and right
+    m_border.setLeft(0.0);
+    m_border.setRight(m_textShape->size().width());
+
+    // first line rectangle
+    m_firstLine = layout->lineAt(0).rect();
+
+    // counter rectangle 
+    KoTextBlockData *blockData = static_cast<KoTextBlockData*> (textBlock.userData());
+    if (blockData != NULL) {
+        m_counter = QRectF(blockData->counterPosition(), QSizeF(blockData->counterWidth() - blockData->counterSpacing(),
+                    m_firstLine.height()));
+        m_isList = true;
+    }
+    else {
+        m_isList = false;
+    }
+
+    // folowing lines rectangle
+    if (!m_singleLine) {
+        m_followingLines = QRectF(layout->lineAt(1).rect().topLeft(),
+                layout->lineAt(layout->lineCount() - 1).rect().bottomRight());
+    }
+    else {
+        m_followingLines = m_firstLine;
+    }
+
+    // border rectangle top and bottom
+    m_border.setTop(m_firstLine.top() - paragraphStyle->topMargin());
+    m_border.setBottom(m_singleLine ? m_firstLine.bottom() + paragraphStyle->bottomMargin()
+            : m_followingLines.bottom() + paragraphStyle->bottomMargin());
+
+    // workaround: the lines overlap slightly so right now we simply calculate the mean of the two y-values
+    if (!m_singleLine) {
+        qreal lineBreak((m_firstLine.bottom() + m_followingLines.top()) / 2.0);
+        m_firstLine.setBottom(lineBreak);
+        m_counter.setBottom(lineBreak);
+        m_followingLines.setTop(lineBreak);
+    }
+}
 
 qreal ShapeSpecificData::shapeStartOffset() const
 {
@@ -84,5 +133,28 @@ QRectF ShapeSpecificData::dirtyRectangle() const
     boundingRect = textShape()->absoluteTransformation(0).mapRect(boundingRect);
 
     return boundingRect;
+}
+
+QLineF ShapeSpecificData::baseline(RulerIndex ruler) const
+{
+    switch (ruler) {
+        case firstIndentRuler:
+            return QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom());
+        case followingIndentRuler:
+            return QLineF(m_border.left(), m_followingLines.top(), m_border.left(), m_followingLines.bottom());
+        case rightMarginRuler:
+            return QLineF(m_border.right(), m_followingLines.bottom(), m_border.right(), m_firstLine.top());
+        case topMarginRuler:
+            return QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top());
+        case bottomMarginRuler:
+            return QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom());
+        default:
+            return QLineF();
+    }
+}
+
+QLineF ShapeSpecificData::separatorLine() const
+{
+    return QLineF(m_border.left(), m_firstLine.bottom(), m_firstLine.right(), m_firstLine.bottom());
 }
 

@@ -22,7 +22,7 @@
 #include <KDebug>
 
 #include <QColor>
-#include <QPolygonF>
+#include <QPointF>
 #include <QPainter>
 #include <QRectF>
 
@@ -42,27 +42,6 @@ Ruler::Ruler(QObject *parent)
     m_highlighted(false),
     m_options(noOptions)
 {}
-
-void Ruler::setBaseline(const QLineF &baseline)
-{
-    QMatrix matrix;
-    matrix.translate(baseline.p1().x(), baseline.p1().y());
-    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
-
-    if (matrix == m_matrix && baseline.length() == width()) {
-        return;
-    }
-
-    m_matrix = matrix;
-    m_width = baseline.length();
-
-    emit needsRepaint();
-}
-
-void Ruler::setBaseline(const QPointF &from, const QPointF &to)
-{
-    setBaseline(QLineF(from, to));
-}
 
 void Ruler::setUnit(KoUnit unit)
 {
@@ -126,9 +105,18 @@ void Ruler::reset()
     setValue(oldValue());
 }
 
-void Ruler::moveRuler(const QPointF &point, bool smooth)
+void Ruler::moveRuler(const QPointF &point, bool smooth, QLineF baseline)
 {
-    moveRuler(m_matrix.inverted().map(point).x(), smooth);
+    QMatrix matrix;
+    matrix.translate(baseline.p1().x(), baseline.p1().y());
+    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
+
+    moveRuler(point, smooth, matrix);
+}
+
+void Ruler::moveRuler(const QPointF &point, bool smooth, QMatrix matrix)
+{
+    moveRuler(matrix.inverted().map(point).x(), smooth);
 }
 
 void Ruler::moveRuler(qreal value, bool smooth)
@@ -195,30 +183,48 @@ void Ruler::setHighlighted(bool highlighted)
     emit needsRepaint();
 }
 
-QLineF Ruler::labelConnector() const
+QLineF Ruler::labelConnector(const QLineF &baseline) const
 {
-    return m_matrix.map(QLineF(value()/2.0, width()/2.0, value()/2.0, width()/2.0 + 1.0));
+    QMatrix matrix;
+    matrix.translate(baseline.p1().x(), baseline.p1().y());
+    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
+
+    return labelConnector(matrix, baseline.length());
 }
 
-void Ruler::paint(QPainter &painter) const
+QLineF Ruler::labelConnector(const QMatrix &matrix, qreal width) const
+{
+    return matrix.map(QLineF(value()/2.0, width/2.0, value()/2.0, width/2.0 + 1.0));
+}
+
+void Ruler::paint(QPainter &painter, const QLineF &baseline) const
+{
+    QMatrix matrix;
+    matrix.translate(baseline.p1().x(), baseline.p1().y());
+    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
+
+    paint(painter, matrix, baseline.length());
+}
+
+void Ruler::paint(QPainter & painter, const QMatrix &matrix, qreal width) const
 {
     painter.save();
 
-    painter.setWorldMatrix(m_matrix, true);
+    painter.setWorldMatrix(matrix, true);
 
     // draw dark gray square for old value
 
     painter.setPen(QPen(Qt::darkGray));
 
     if (value() != 0.0)
-        painter.drawLine(QLineF(0.0, 0.0, 0.0, width()));
+        painter.drawLine(QLineF(0.0, 0.0, 0.0, width));
 
     if (oldValue() != value() && oldValue() != 0.0)
-        painter.drawLine(QLineF(oldValue(), 0.0, oldValue(), width()));
+        painter.drawLine(QLineF(oldValue(), 0.0, oldValue(), width));
 
     if (options() & drawSides) {
         painter.drawLine(QLineF(0.0, 0.0, oldValue(), 0.0));
-        painter.drawLine(QLineF(0.0, width(), oldValue(), width()));
+        painter.drawLine(QLineF(0.0, width, oldValue(), width));
     }
 
     // draw arrow and ruler line for current value
@@ -230,15 +236,15 @@ void Ruler::paint(QPainter &painter) const
     else
         painter.setPen(normalColor());
 
-    painter.drawLine(QLineF(value(), 0.0, value(), width()));
+    painter.drawLine(QLineF(value(), 0.0, value(), width));
 
-    painter.drawLine(QLineF(0.0, width()/2.0, value(), width()/2.0));
+    painter.drawLine(QLineF(0.0, width/2.0, value(), width/2.0));
 
     if (value() >= 0.0) {
-        paintArrow(painter, QPointF(value(), width()/2.0), 0.0, value());
+        paintArrow(painter, QPointF(value(), width/2.0), 0.0, value());
     }
     else {
-        paintArrow(painter, QPointF(value(), width()/2.0), 180.0, -value());
+        paintArrow(painter, QPointF(value(), width/2.0), 180.0, -value());
     }
 
     painter.restore();
@@ -267,8 +273,17 @@ void Ruler::paintArrow(QPainter &painter, const QPointF &tip, const qreal angle,
     painter.restore();
 }
 
-bool Ruler::hitTest(const QPointF &point) const
+bool Ruler::hitTest(const QPointF &point, const QLineF &baseline) const
 {
-    return QRectF(value() - 5.0, 0.0, 10.0, width()).contains(m_matrix.inverted().map(point));
+    QMatrix matrix;
+    matrix.translate(baseline.p1().x(), baseline.p1().y());
+    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
+
+    return hitTest(point, matrix, baseline.length());
+}
+
+bool Ruler::hitTest(const QPointF &point, const QMatrix &matrix, qreal width) const
+{
+    return QRectF(value() - 5.0, 0.0, 10.0, width).contains(matrix.inverted().map(point));
 }
 

@@ -22,7 +22,11 @@
 
 #include "TextShape.h"
 
+#include "Ruler.h"
+
 #include <QRectF>
+
+class KoParagraphStyle;
 
 /* ShapeSpecificData is used by ParagraphTool to store information about a paragraph which is specific to a shape.
  * As the width of shapes may be different the positions and sizes of its ruler will be different, too.
@@ -31,8 +35,10 @@
 class ShapeSpecificData
 {
 public:
-    ShapeSpecificData() : m_textShape(NULL) {};
+    ShapeSpecificData(TextShape *textShape = NULL) : m_textShape(textShape) { };
     ~ShapeSpecificData() {};
+
+    void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
 
     // wrapper method for textShapeData->documentOffset()
     qreal shapeStartOffset() const;
@@ -50,6 +56,10 @@ public:
     // currently this is the bounding rectangle of the shape plus a margin for the arrows on all four sides
     QRectF dirtyRectangle() const;
 
+    QLineF baseline(RulerIndex ruler) const;
+
+    QLineF separatorLine() const;
+
     TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
     void setTextShape(TextShape *textShape) { m_textShape = textShape; }
 
@@ -61,6 +71,9 @@ private:
            m_firstLine,
            m_followingLines,
            m_border;
+
+    bool m_singleLine,
+         m_isList;
 };
 
 #endif

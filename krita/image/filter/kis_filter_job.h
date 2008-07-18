@@ -40,7 +40,7 @@ public:
                   KisPaintDeviceSP dev,
                   const QRect & rc,
                   int margin,
-                  KoUpdater updater,
+                  const KoUpdater& updater,
                   KisSelectionSP selection);
 
     virtual ~KisFilterJob() {}

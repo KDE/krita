@@ -40,7 +40,7 @@ KisFilterJob::KisFilterJob( const KisFilter* filter,
                             QObject * parent, KisPaintDeviceSP dev,
                             const QRect & rc,
                             int margin,
-                            KoUpdater updater,
+                            const KoUpdater& updater,
                             KisSelectionSP selection)
     : KisJob( parent, dev, rc, margin )
     , m_filter( filter )

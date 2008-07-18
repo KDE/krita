@@ -55,7 +55,12 @@ KoStyleManager::KoStyleManager(QObject *parent)
 {
     d->standard = new KoParagraphStyle();
     d->standard->setName(i18n("Default"));
-    d->standard->characterStyle()->setName(i18n("Default"));
+    KoCharacterStyle *charStyle = d->standard->characterStyle();
+    charStyle->setName(i18n("Default"));
+    // ###: Load the default from an external resource and load it into the style stack
+    // This is a temporary hack until we make KoXmlElement non-readonly
+    charStyle->setFontFamily("Sans Serif");
+    charStyle->setFontPointSize(12.0);
     add(d->standard);
 }
 

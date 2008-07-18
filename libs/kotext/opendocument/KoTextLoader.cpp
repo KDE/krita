@@ -151,8 +151,7 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
         d->styleManager = layout->styleManager();
     }
 
-    if (document->isEmpty()) {
-        Q_ASSERT(d->styleManager);
+    if ((document->isEmpty()) && (d->styleManager)) {
         QTextBlock block = cursor.block();
         d->styleManager->defaultParagraphStyle()->applyStyle(block);
     }

@@ -606,7 +606,8 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             QTextCharFormat linkCf( cf ); // and copy it to alter it
             linkCf.setAnchor( true );
             linkCf.setAnchorHref( ts.attributeNS( KoXmlNS::xlink, "href" ) );
-            // TODO make configurable ?
+            
+            // TODO make configurable ? Ho, and it will interfere with saving :/
             QBrush foreground = linkCf.foreground();
             foreground.setColor( Qt::blue );
             foreground.setStyle( Qt::Dense1Pattern );
@@ -614,6 +615,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             linkCf.setProperty( KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine );
             linkCf.setProperty( KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine );
             linkCf.setFontItalic( true );
+            
             cursor.setCharFormat( linkCf );
             loadSpan( ts, cursor, stripLeadingSpace ); // recurse
             cursor.setCharFormat( cf ); // restore the cursor char format

@@ -303,26 +303,33 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                                 generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
                             }
                         }
-                     } else { // There are manual changes... We'll have to store them then
-                         KoGenStyle style(KoGenStyle::StyleAuto, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
-                         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
-                            style.setAutoStyleInStylesDotXml(true);
-                         charStyle.removeDuplicates(*originalCharStyle);
-                         charStyle.removeDuplicates(blockCharFormat);
-                         if (!charStyle.isEmpty()) {
-                            charStyle.saveOdf(style);
-                            generatedName = context.mainStyles().lookup(style, "T");
-                         }
-                     }
+                    } else { // There are manual changes... We'll have to store them then
+                        KoGenStyle style(KoGenStyle::StyleAuto, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
+                        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+                           style.setAutoStyleInStylesDotXml(true);
+                        charStyle.removeDuplicates(*originalCharStyle);
+                        charStyle.removeDuplicates(blockCharFormat);
+                        if (!charStyle.isEmpty()) {
+                           charStyle.saveOdf(style);
+                           generatedName = context.mainStyles().lookup(style, "T");
+                        }
+                    }
 
-                     if (!generatedName.isEmpty()) {
-                         writer->startElement("text:span", false);
-                         writer->addAttribute("text:style-name", generatedName);
-                     }
-                     writer->addTextSpan(currentFragment.text());
+                    if (charFormat.isAnchor()) {
+                        writer->startElement("text:a", false);
+                        writer->addAttribute("xlink:type", "simple");
+                        writer->addAttribute("xlink:href", charFormat.anchorHref());
+                    } else if (!generatedName.isEmpty()) {
+                        writer->startElement("text:span", false);
+                    }
+                    if (!generatedName.isEmpty()) {
+                        writer->addAttribute("text:style-name", generatedName);
+                    }
+                    
+                    writer->addTextSpan(currentFragment.text());
 
-                     if (!generatedName.isEmpty())
-                         writer->endElement();
+                    if ((!generatedName.isEmpty()) || (charFormat.isAnchor()))
+                        writer->endElement();
                 } // if (inlineObject)
             } // if (fragment.valid())
         } // foeach(fragment)

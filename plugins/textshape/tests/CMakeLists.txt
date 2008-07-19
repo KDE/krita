@@ -15,16 +15,6 @@ target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestChangesDatabase_test_SRCS
-    TestChangesDatabase.cpp
-    ../TextChanges.cpp
-    ../TextChange.cpp
-)
-kde4_add_unit_test(TestChangesDatabase TESTNAME shapes-text-TestChangesDatabase ${TestChangesDatabase_test_SRCS})
-target_link_libraries(TestChangesDatabase ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY})
-
-########### next target ###############
-
 set(TestChangeListCommand_test_SRCS
     TestChangeListCommand.cpp
     ../commands/ChangeListCommand.cpp

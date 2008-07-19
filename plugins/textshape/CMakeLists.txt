@@ -21,8 +21,6 @@ SET ( textshape_SRCS
     Ruler.cpp
 
     ChangeTracker.cpp
-    TextChanges.cpp
-    TextChange.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SimpleStyleWidget.cpp

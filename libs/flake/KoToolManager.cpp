@@ -414,8 +414,11 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
         {
             if( th->toolType() == KoToolFactory::mainToolType() )
             {
-                highestPriority = qMin( highestPriority, th->priority() );
-                helper = th;
+                if( th->priority() < highestPriority )
+                {
+                    highestPriority = qMin( highestPriority, th->priority() );
+                    helper = th;
+                }
             }
         }
         if( helper )

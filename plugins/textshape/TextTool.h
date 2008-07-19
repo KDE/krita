@@ -93,11 +93,11 @@ public:
     /// reimplemented from superclass
     virtual void inputMethodEvent(QInputMethodEvent * event);
 
-    void startTextEditingPlugin(const QString &pluginId);
-
     bool isBidiDocument() const;
 
 public slots:
+    /// start the textedit-plugin.
+    void startTextEditingPlugin(const QString &pluginId);
     /// add a command to the undo stack, executing it as well.
     void addCommand(QUndoCommand *command);
     /// reimplemented from KoTool

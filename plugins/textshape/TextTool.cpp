@@ -405,7 +405,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
-    connect(signalMapper, SIGNAL(mapped(QString)), this, SIGNAL(startTextEditingPlugin(QString)));
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
     QList<QAction*> list;
     list.append(this->action("text_default"));
     list.append(this->action("format_font"));

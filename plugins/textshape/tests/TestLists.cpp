@@ -60,9 +60,9 @@ void TestDocumentLayout::testNumberedList() {
     QVERIFY(block.isValid());
 
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.level(1);
+    KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
     style.setListStyle(listStyle);
 
     QTextList *previous = 0;
@@ -126,7 +126,7 @@ void TestDocumentLayout::testNumberedList() {
 
     llp.setListItemSuffix(".");
     llp.setStartValue(4);
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
 
     QTextCursor cursor(doc);
     cursor.setPosition(40); // listItem4
@@ -159,10 +159,10 @@ void TestDocumentLayout::testInterruptedLists() {
 
     KoParagraphStyle style;
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.level(1);
+    KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
     llp.setListItemSuffix(".");
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
     style.setListStyle(listStyle);
 
     QTextBlock block = doc->begin();
@@ -238,29 +238,29 @@ void TestDocumentLayout::testNestedLists() {
     styleManager->add(&h4);
 
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.level(1);
+    KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
     h1.setListStyle(listStyle);
 
     KoListStyle listStyle2;
     llp.setLevel(2);
     llp.setListItemSuffix(".");
-    listStyle2.setLevel(llp);
+    listStyle2.setLevelProperties(llp);
     h2.setListStyle(listStyle2);
     // purpusfully leave this one out, as it should default to the only known one: // h2.setListLevel(2);
 
     llp.setLevel(3);
     llp.setListItemSuffix("");
     KoListStyle listStyle3;
-    listStyle3.setLevel(llp);
+    listStyle3.setLevelProperties(llp);
     h3.setListStyle(listStyle3);
     h3.setListLevel(3);
 
     KoListStyle listStyle4;
     llp.setLevel(4);
     llp.setDisplayLevel(2);
-    listStyle4.setLevel(llp);
+    listStyle4.setLevelProperties(llp);
     h4.setListStyle(listStyle4);
     h4.setListLevel(4);
 
@@ -321,15 +321,15 @@ void TestDocumentLayout::testAutoRestartList() {
     styleManager->add(&h2);
 
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.level(1);
+    KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
     h1.setListStyle(listStyle);
 
     KoListStyle listStyle2;
-    KoListLevelProperties llp2 = listStyle2.level(2);
+    KoListLevelProperties llp2 = listStyle2.levelProperties(2);
     llp2.setStyle(KoListStyle::DecimalItem);
-    listStyle2.setLevel(llp2);
+    listStyle2.setLevelProperties(llp2);
     h2.setListStyle(listStyle2);
 
     QTextBlock block = doc->begin();
@@ -393,9 +393,9 @@ void TestDocumentLayout::testRestartNumbering() {
     KoParagraphStyle h1;
     styleManager->add(&h1);
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.level(1);
+    KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
     h1.setListStyle(listStyle);
 
     QTextBlock block = doc->begin();
@@ -432,9 +432,9 @@ void TestDocumentLayout::testRightToLeftList() {
     h1.setTextProgressionDirection(KoText::RightLeftTopBottom);
     styleManager->add(&h1);
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.level(1);
+    KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
     h1.setListStyle(listStyle);
 
     QTextBlock block = doc->begin();
@@ -463,11 +463,11 @@ void TestDocumentLayout::testLetterSynchronization() {
     KoParagraphStyle h1;
     styleManager->add(&h1);
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.level(1);
+    KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::AlphaLowerItem);
     llp.setLetterSynchronization(true);
     llp.setStartValue(25);
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
     h1.setListStyle(listStyle);
 
     QTextBlock block = doc->begin();

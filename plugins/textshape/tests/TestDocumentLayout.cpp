@@ -709,9 +709,9 @@ void TestDocumentLayout::testBorderData() {
     styleManager->add(&style);
     style.setTopMargin(10);
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.level(1);
+    KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
-    listStyle.setLevel(llp);
+    listStyle.setLevelProperties(llp);
     style.setListStyle(listStyle);
     style.setLeftBorderWidth(3);
 

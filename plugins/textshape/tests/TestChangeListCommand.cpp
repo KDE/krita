@@ -116,9 +116,9 @@ void TestChangeListCommand::joinList2() {
     style.applyStyle(block); // apply on parag2
 
     KoListStyle style2;
-    KoListLevelProperties llp = style2.level(1);
+    KoListLevelProperties llp = style2.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
-    style2.setLevel(llp);
+    style2.setLevelProperties(llp);
     block = block.next().next(); // parag4
     style2.applyStyle(block);
 
@@ -162,8 +162,8 @@ void TestChangeListCommand::splitList() {
     style.applyStyle(block); // apply on parag2
 
     KoListStyle style2;
-    KoListLevelProperties llp = style2.level(2);
-    style2.setLevel(llp);
+    KoListLevelProperties llp = style2.levelProperties(2);
+    style2.setLevelProperties(llp);
     block = block.next();
     style2.applyStyle(block);
     block = block.next();

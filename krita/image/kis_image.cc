@@ -101,6 +101,7 @@ public:
     vKisAnnotationSP annotations;
 
     KisSelectionSP globalSelection;
+    KisSelectionSP deselectedGlobalSelection;
 
 };
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
@@ -135,6 +136,7 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->colorSpace = rhs.m_d->colorSpace;
         m_d->adapter = rhs.m_d->adapter;
         m_d->globalSelection = 0;
+        m_d->deselectedGlobalSelection = 0;
         setRootLayer( static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data()) );
         m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied        m_d->nserver = new KisNameServer(rhs.m_d->nserver->currentSeed() + 1);
         Q_CHECK_PTR(m_d->nserver);
@@ -247,6 +249,17 @@ void KisImage::setGlobalSelection( KisSelectionSP globalSelection )
 void KisImage::removeGlobalSelection() {
     m_d->globalSelection = 0;
 }
+
+KisSelectionSP KisImage::deleselectedGlobalSelection()
+{
+    return m_d->deselectedGlobalSelection;
+}
+
+void KisImage::setDeleselectedGlobalSelection(KisSelectionSP selection)
+{
+    m_d->deselectedGlobalSelection = selection;
+}
+
 
 KoColor KisImage::backgroundColor() const
 {

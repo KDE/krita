@@ -72,6 +72,8 @@
 #include "kis_pixel_selection.h"
 #include "kis_shape_selection.h"
 #include "commands/kis_selection_commands.h"
+#include "kis_selection_transaction.h"
+#include "kis_selection_mask.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -272,7 +274,6 @@ void KisSelectionManager::updateGUI()
     m_cut->setEnabled(enable);
     m_cutToNewLayer->setEnabled(enable);
     m_selectAll->setEnabled(!img.isNull());
-    m_deselect->setEnabled(enable);
     m_clear->setEnabled(enable);
     m_fillForegroundColor->setEnabled(enable);
     m_fillBackgroundColor->setEnabled(enable);
@@ -285,6 +286,16 @@ void KisSelectionManager::updateGUI()
 //    m_load->setEnabled(enable);
 //    m_save->setEnabled(enable);
 
+
+    if(m_view->selection() && !m_view->selection()->isDeselected())
+        m_deselect->setEnabled(true);
+    else
+        m_deselect->setEnabled(false);
+
+    if(m_view->selection() && m_view->selection()->isDeselected())
+        m_reselect->setEnabled(true);
+    else
+        m_reselect->setEnabled(false);
 
     if ( !m_pluginActions.isEmpty() ) {
         QListIterator<QAction *> i( m_pluginActions );
@@ -334,7 +345,8 @@ void KisSelectionManager::selectionChanged()
     updateGUI();
     outline.clear();
 
-    if ( KisSelectionSP selection = m_view->selection() ) {
+    KisSelectionSP selection = m_view->selection();
+    if ( selection && !selection->isDeselected() ) {
         if(selection->hasPixelSelection() || selection->hasShapeSelection()) {
             if(!timer->isActive())
                 timer->start ( 300 );
@@ -399,19 +411,14 @@ void KisSelectionManager::cut()
 
     copy();
 
-    KisSelectedTransaction *t = 0;
+    KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Cut"), layer);
+    Q_CHECK_PTR(t);
 
-    if (img->undo()) {
-        t = new KisSelectedTransaction(i18n("Cut"), layer);
-        Q_CHECK_PTR(t);
-    }
+    layer->paintDevice()->clearSelection(m_view->selection());
 #if 0 // XXX_SELECTION
-    dev->clearSelection();
     dev->deselect();
 #endif
-    if (img->undo()) {
-        img->undoAdapter()->addCommand(t);
-    }
+    m_view->document()->addCommand(t);
 }
 
 void KisSelectionManager::copy()
@@ -563,8 +570,7 @@ void KisSelectionManager::selectAll()
         new KisSetGlobalSelectionCommand(img, selectionCmd);
     KisSelectionSP selection = m_view->selection();
 
-    KisSelectedTransaction * t = new KisSelectedTransaction(QString(), layer, selectionCmd);
-    Q_CHECK_PTR(t);
+    new KisSelectedTransaction(QString(), layer, selectionCmd);
 
     selection->getOrCreatePixelSelection()->select(img->bounds());
 
@@ -574,23 +580,25 @@ void KisSelectionManager::selectAll()
 
 void KisSelectionManager::deselect()
 {
-
-    // XXX_SELECTION
     KisImageSP img = m_view->image();
     if (!img) return;
 
     KisSelectionSP sel = m_view->selection();
     if (!sel) return;
-#if 0
-    KisSelectedTransaction * t = 0;
-    if (img->undo()) t = new KisSelectedTransaction(i18n("Deselect"), dev);
-    Q_CHECK_PTR(t);
-#endif
-    sel->clear();
-#if 0
-    if (img->undo())
-        img->undoAdapter()->addCommand(t);
-#endif
+
+    KisLayerSP layer = m_view->activeLayer();
+    if(!layer) return;
+
+    if(layer->selectionMask()) {
+        KisDeselectLocalSelectionCommand* cmd = new KisDeselectLocalSelectionCommand(img, layer->selectionMask());
+        m_view->document()->addCommand(cmd);
+    }
+    else {
+        if(img->globalSelection()) {
+            KisDeselectGlobalSelectionCommand* cmd = new KisDeselectGlobalSelectionCommand(img);
+            m_view->document()->addCommand(cmd);
+        }
+    }
 }
 
 
@@ -671,24 +679,22 @@ void KisSelectionManager::fillPattern()
 
 void KisSelectionManager::reselect()
 {
-
-#if 0 // XXX_SELECTION
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisPaintDeviceSP dev = m_view->activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = m_view->activeLayer();
+    if(!layer) return;
 
-    KisSelectedTransaction * t = 0;
-    if (img->undo()) t = new KisSelectedTransaction(i18n("&Reselect"), dev);
-    Q_CHECK_PTR(t);
-
-    dev->reselect(); // sets hasSelection=true
-    dev->setDirty(img->bounds());
-
-    if (img->undo())
-        img->undoAdapter()->addCommand(t);
-#endif
+    if(layer->selectionMask() && layer->selectionMask()->deleselectedSelection()) {
+        KisReselectLocalSelectionCommand* cmd = new KisReselectLocalSelectionCommand(img, layer->selectionMask());
+        m_view->document()->addCommand(cmd);
+    }
+    else {
+        if(img->globalSelection()) {
+            KisReselectGlobalSelectionCommand* cmd = new KisReselectGlobalSelectionCommand(img);
+            m_view->document()->addCommand(cmd);
+        }
+    }
 }
 
 
@@ -700,18 +706,15 @@ void KisSelectionManager::invert()
     KisSelectionSP selection = m_view->selection();
     if ( !selection ) return;
 
-    KisLayerSP layer = m_view->activeLayer();
-    if(!layer) return;
-
     KisPixelSelectionSP s = selection->getOrCreatePixelSelection();
 
-    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Invert"), layer);
+    KisSelectionTransaction * t = new KisSelectionTransaction(i18n("Invert"), img, selection);
     Q_CHECK_PTR(t);
 
     s->invert();
     s->setDirty(img->bounds());
 
-    m_view->selectionManager()->selectionChanged();
+    selectionChanged();
     m_view->document()->addCommand(t);
 }
 
@@ -742,19 +745,13 @@ void KisSelectionManager::cutToNewLayer()
 
 void KisSelectionManager::feather()
 {
-#if 0 // XXX_SELECTION
     KisImageSP img = m_view->image();
     if (!img) return;
-    if (!m_view->selection()) {
-        // activate it, but don't do anything with it
-        dev->selection();
-
+    if (!m_view->selection())
         return;
-    }
-
+#if 0
     KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
-    KisSelectedTransaction * t = 0;
-    if (img->undo()) t = new KisSelectedTransaction(i18n("Feather..."), dev);
+    KisSelectionTransaction * t = new KisSelectionTransaction(i18n("Feather..."), img, m_view->selection());
     Q_CHECK_PTR(t);
 
 
@@ -786,12 +783,10 @@ void KisSelectionManager::feather()
     painter.setChannelFlags( selection->colorSpace()->channelFlags( false, true, false, false ) );
     painter.applyMatrix(k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID);
     painter.end();
-#if 0
-    dev->setDirty(img->bounds());
-#endif
-    if (img->undo())
-        img->undoAdapter()->addCommand(t);
 
+    m_view->document()->addCommand(t);
+    m_view->selection()->setDirty(img->bounds());
+    selectionChanged();
 #endif
 }
 
@@ -829,14 +824,9 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
 
     if (xradius <= 0 || yradius <= 0)
         return;
-#if 0
-    KisSelectedTransaction *t = 0;
 
-    if (img->undo()) {
-        t = new KisSelectedTransaction(i18n("Grow"), dev);
-        Q_CHECK_PTR(t);
-    }
-#endif
+    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Grow"), img, m_view->selection());
+
     max = new quint8* [layerSize.width() + 2 * xradius];
     buf = new quint8* [yradius + 1];
     for (qint32 i = 0; i < yradius + 1; i++)
@@ -947,13 +937,10 @@ void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
         delete[] buf[i];
     delete[] buf;
     delete[] out;
-#if 0
-    dev->setDirty(img->bounds());
 
-    if (t) {
-        img->undoAdapter()->addCommand(t);
-    }
-#endif
+    m_view->document()->addCommand(t);
+    m_view->selection()->setDirty(img->bounds());
+    selectionChanged();
 }
 
 void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock)
@@ -964,10 +951,9 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
 
     if ( !m_view->selection() ) return;
     KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
-#if 0
-    KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Shrink"), dev);
+
+    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Shrink"), img, m_view->selection());
     Q_CHECK_PTR(t);
-#endif
 
     //determine the layerSize
     QRect layerSize = img->bounds();
@@ -1115,11 +1101,10 @@ void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock
         delete buf[i];
     delete[] buf;
     delete[] out;
-#if 0
-    img->undoAdapter()->addCommand(t);
-    dev->setDirty(img->bounds());
-    dev->emitSelectionChanged();
-#endif
+
+    m_view->document()->addCommand(t);
+    m_view->selection()->setDirty(img->bounds());
+    selectionChanged();
 }
 
 //Simple convolution filter to smooth a mask (1bpp)
@@ -1344,10 +1329,10 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
 
     //determine the layerSize
     QRect layerSize = img->bounds();
-#if 0
-    KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Border"), dev);
+
+    KisSelectionTransaction *t = new KisSelectionTransaction(i18n("Border"), img, m_view->selection());
     Q_CHECK_PTR(t);
-#endif
+
     quint8  *buf[3];
     quint8 **density;
     quint8 **transition;
@@ -1385,10 +1370,10 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
         for (qint32 i = 0; i < 3; i++)
             delete[] source[i];
         delete[] transition;
-#if 0
-        img->undoAdapter()->addCommand(t);
-        dev->setDirty(img->bounds());
-#endif
+
+        m_view->document()->addCommand(t);
+        m_view->selection()->setDirty(img->bounds());
+        selectionChanged();
         return;
     }
 
@@ -1578,10 +1563,10 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
     density -= xradius;
     delete[] density;
 
-#if 0
-    img->undoAdapter()->addCommand(t);
-    dev->setDirty(img->bounds());
-#endif
+
+    m_view->document()->addCommand(t);
+    m_view->selection()->setDirty(img->bounds());
+    selectionChanged();
 }
 
 #define RINT(x) floor ((x) + 0.5)
@@ -1711,6 +1696,9 @@ void KisSelectionManager::shapeSelectionChanged()
 void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisSelectionSP selection = m_view->selection();
+
+    if (selection && selection->isDeselected())
+        return;
 
     double sx, sy;
     converter.zoom(&sx, &sy);

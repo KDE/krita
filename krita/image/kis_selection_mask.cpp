@@ -25,11 +25,13 @@
 #include "kis_image.h"
 #include <KoCompositeOp.h>
 #include "kis_node_visitor.h"
+#include "kis_pixel_selection.h"
 
 class KisSelectionMask::Private
 {
 public:
     KisImageWSP image;
+    KisSelectionSP deselectedSelection;
 };
 
 KisSelectionMask::KisSelectionMask( KisImageWSP image )
@@ -37,6 +39,7 @@ KisSelectionMask::KisSelectionMask( KisImageWSP image )
     , m_d( new Private() )
 {
     m_d->image = image;
+    m_d->deselectedSelection = 0;
 }
 
 KisSelectionMask::~KisSelectionMask()
@@ -59,19 +62,16 @@ KisSelectionMask::KisSelectionMask( const KisSelectionMask& rhs )
 
 void KisSelectionMask::setSelection(KisSelectionSP selection)
 {
-    KisMask::setSelection(new KisSelection());
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-
-    KisFillPainter gc(KisPaintDeviceSP(this->selection().data()));
-
     if (selection) {
-        gc.bitBlt(0, 0, cs->compositeOp(COMPOSITE_COPY), KisPaintDeviceSP(selection.data()),
-                  0, 0, m_d->image->bounds().width(), m_d->image->bounds().height());
+        KisMask::setSelection(selection);
     } else {
-        gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
-    }
+        KisMask::setSelection(new KisSelection());
 
-    gc.end();
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->alpha8();
+        KisFillPainter gc(KisPaintDeviceSP(this->selection()->getOrCreatePixelSelection().data()));
+        gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
+        gc.end();
+    }
 
     this->selection()->setInterestedInDirtyness(true);
 
@@ -86,5 +86,15 @@ KisImageSP KisSelectionMask::image() const
 bool KisSelectionMask::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+KisSelectionSP KisSelectionMask::deleselectedSelection()
+{
+    return m_d->deselectedSelection;
+}
+
+void KisSelectionMask::setDeleselectedSelection(KisSelectionSP selection)
+{
+    m_d->deselectedSelection = selection;
 }
 

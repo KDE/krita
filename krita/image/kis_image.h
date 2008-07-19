@@ -159,6 +159,16 @@ public:
     void removeGlobalSelection();
 
     /**
+     * @return the deselected global selection or 0 if no global selection was deselected
+     */
+    KisSelectionSP deleselectedGlobalSelection();
+
+    /**
+     * Set deselected global selection
+     */
+    void setDeleselectedGlobalSelection(KisSelectionSP selection);
+
+    /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
      */
     QString nextLayerName() const;

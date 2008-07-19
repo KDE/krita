@@ -120,6 +120,7 @@ set(kritaimage_LIB_SRCS
    kis_recorded_action_factory_registry.cc
    kis_rotate_visitor.cc
    kis_selected_transaction.cc
+   kis_selection_transaction.cc
    kis_selection.cc
    kis_selection_mask.cpp
    kis_serializable_configuration.cc

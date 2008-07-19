@@ -51,6 +51,7 @@ struct KisSelection::Private {
     bool interestedInDirtyness;
     bool hasPixelSelection;
     bool hasShapeSelection;
+    bool isDeselected;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent* shapeSelection;
 };
@@ -64,6 +65,7 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
     m_d->interestedInDirtyness = false;
     m_d->hasPixelSelection = false;
     m_d->hasShapeSelection = false;
+    m_d->isDeselected = false;
     m_d->shapeSelection = 0;
     
     clear();
@@ -79,6 +81,7 @@ KisSelection::KisSelection( KisPaintDeviceSP parent, KisMaskSP mask )
     m_d->hasPixelSelection = true;
     m_d->pixelSelection = new KisPixelSelection();
     m_d->hasShapeSelection = false;
+    m_d->isDeselected = false;
     m_d->shapeSelection = 0;
 
     clear();
@@ -101,6 +104,7 @@ KisSelection::KisSelection()
     m_d->interestedInDirtyness = false;
     m_d->hasPixelSelection = false;
     m_d->hasShapeSelection = false;
+    m_d->isDeselected = false;
     m_d->shapeSelection = 0;
 
     clear();
@@ -117,6 +121,7 @@ KisSelection::KisSelection(const KisSelection& rhs)
     }
     m_d->hasPixelSelection = rhs.m_d->hasPixelSelection;
     m_d->hasShapeSelection = rhs.m_d->hasShapeSelection;
+    m_d->isDeselected = rhs.m_d->isDeselected;
     if (rhs.m_d->hasShapeSelection) {
         m_d->shapeSelection = 0; // XXX: define clone method for selection components!
     }
@@ -392,4 +397,14 @@ void KisSelection::updateProjection(const QRect& r)
         m_d->pixelSelection->renderToProjection(this, r);
     }
     m_d->shapeSelection->renderToProjection(this, r);
+}
+
+void KisSelection::setDeselected(bool deselected)
+{
+    m_d->isDeselected = deselected;
+}
+
+bool KisSelection::isDeselected()
+{
+    return m_d->isDeselected;
 }

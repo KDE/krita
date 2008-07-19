@@ -196,6 +196,9 @@ public:
     void updateProjection();
     void updateProjection(const QRect& r);
 
+    void setDeselected(bool deselected);
+    bool isDeselected();
+
 private:
 
     // We don't want these methods to be used on selections:

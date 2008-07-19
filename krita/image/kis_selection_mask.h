@@ -60,6 +60,16 @@ public:
 
     bool accept(KisNodeVisitor &v);
 
+    /**
+     * @return the deselected selection or 0 if no selection was deselected
+     */
+    KisSelectionSP deleselectedSelection();
+
+    /**
+     * Set deselected selection
+     */
+    void setDeleselectedSelection(KisSelectionSP selection);
+
 private:
 
     KisImageSP image() const;

@@ -20,7 +20,6 @@
 
 #include "TextTool.h"
 #include "ChangeTracker.h"
-#include "PluginHelperAction.h"
 #include "dialogs/SimpleStyleWidget.h"
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
@@ -75,6 +74,7 @@
 #include <QTabWidget>
 #include <QTextBlock>
 #include <QUndoCommand>
+#include <QSignalMapper>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
@@ -403,15 +403,20 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect(m_updateParagDirection.action, SIGNAL(updateUi(const QVariant &)),
             this, SLOT(updateParagraphDirectionUi()));
 
-
     // setup the context list.
+    QSignalMapper *signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SIGNAL(startTextEditingPlugin(QString)));
     QList<QAction*> list;
     list.append(this->action("text_default"));
     list.append(this->action("format_font"));
     foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
-        if(factory->showInMenu())
-            list.append(new PluginHelperAction(factory->title(), this, factory->id()));
+        if(factory->showInMenu()) {
+            QAction *a = new QAction(factory->title(), this);
+            connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
+            signalMapper->setMapping(a, factory->id());
+            list.append(a);
+        }
     }
     setPopupActionList(list);
 

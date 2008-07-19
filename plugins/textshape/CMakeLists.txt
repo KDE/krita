@@ -14,7 +14,6 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     Layout.cpp
     ListItemsHelper.cpp
-    PluginHelperAction.cpp
     ParagraphTool.cpp
     ParagraphToolFactory.cpp
     ShapeSpecificData.cpp

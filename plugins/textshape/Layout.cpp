@@ -869,6 +869,8 @@ static double computeWidth(KoCharacterStyle::LineWeight weight, double width, co
         case KoCharacterStyle::LengthLineWeight:
             return width;
     }
+ 
+    return 0.0;
 }
 
 // Decorate any tabs ('\t's) in 'currentFragment' and laid out in 'line'.

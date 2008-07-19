@@ -10,18 +10,18 @@
 
 void TestListStyle::testListStyle() {
     KoListStyle ls;
-    KoListLevelProperties llp = ls.level(2);
+    KoListLevelProperties llp = ls.levelProperties(2);
     QCOMPARE(llp.level(), 2);
 
     llp.setStyle(KoListStyle::AlphaLowerItem);
-    KoListLevelProperties llp2 = ls.level(2);
+    KoListLevelProperties llp2 = ls.levelProperties(2);
     QVERIFY(llp2.style() != llp.style());
 
-    ls.setLevel(llp);
+    ls.setLevelProperties(llp);
     QCOMPARE(llp.level(), 2);
     QCOMPARE(llp.style(), KoListStyle::AlphaLowerItem);
 
-    llp = ls.level(2);
+    llp = ls.levelProperties(2);
     QCOMPARE(llp.level(), 2);
     QCOMPARE(llp.style(), KoListStyle::AlphaLowerItem);
 

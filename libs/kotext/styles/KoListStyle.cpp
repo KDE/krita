@@ -81,13 +81,13 @@ KoListStyle::~KoListStyle() {
 
 bool KoListStyle::operator==(const KoListStyle &other) const {
     foreach(int level, d->levels.keys()) {
-        if(! other.hasPropertiesForLevel(level))
+        if(! other.hasLevelProperties(level))
             return false;
-        if(!(other.level(level) == d->levels[level]))
+        if(!(other.levelProperties(level) == d->levels[level]))
             return false;
     }
     foreach(int level, other.d->levels.keys()) {
-        if(! hasPropertiesForLevel(level))
+        if(! hasLevelProperties(level))
             return false;
     }
     return true;
@@ -101,7 +101,7 @@ void KoListStyle::setName(const QString &name) {
     d->name = name;
 }
 
-KoListLevelProperties KoListStyle::level(int level) const {
+KoListLevelProperties KoListStyle::levelProperties(int level) const {
     if(d->levels.contains(level))
         return d->levels.value(level);
     if(d->levels.count()) {
@@ -114,7 +114,7 @@ KoListLevelProperties KoListStyle::level(int level) const {
     return llp;
 }
 
-void KoListStyle::setLevel(const KoListLevelProperties &properties) {
+void KoListStyle::setLevelProperties(const KoListLevelProperties &properties) {
     d->levels.insert(properties.level(), properties);
 
     // find all QTextList objects and apply the changed style on them.
@@ -136,11 +136,11 @@ void KoListStyle::setLevel(const KoListLevelProperties &properties) {
     }
 }
 
-bool KoListStyle::hasPropertiesForLevel(int level) const {
+bool KoListStyle::hasLevelProperties(int level) const {
     return d->levels.contains(level);
 }
 
-void KoListStyle::removePropertiesForLevel(int level) {
+void KoListStyle::removeLevelProperties(int level) {
     d->levels.remove(level);
 }
 
@@ -153,7 +153,7 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level) {
             level = 1;
     }
 
-    const bool contains = hasPropertiesForLevel(level);
+    const bool contains = hasLevelProperties(level);
 
     QTextList *textList = d->textList(level, block.document());
     if(textList && block.textList() && block.textList() != textList) // remove old one
@@ -169,7 +169,7 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level) {
     if(block.textList())
         format = block.textList()->format();
 
-    KoListLevelProperties llp = this->level(level);
+    KoListLevelProperties llp = this->levelProperties(level);
     llp.applyStyle(format);
 
     if(textList) {
@@ -199,7 +199,7 @@ bool KoListStyle::isValid() const {
 KoListStyle* KoListStyle::fromTextList(QTextList *list) {
     KoListStyle *answer = new KoListStyle();
     KoListLevelProperties llp = KoListLevelProperties::fromTextList(list);
-    answer->setLevel(llp);
+    answer->setLevelProperties(llp);
     answer->d->setTextList(llp.level(), list->document(), list);
     return answer;
 }
@@ -210,7 +210,7 @@ void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& styl
     forEachElement(styleElem, style) {
         KoListLevelProperties properties;
         properties.loadOdf(context, styleElem);
-        setLevel(properties);
+        setLevelProperties(properties);
     }
 }
 

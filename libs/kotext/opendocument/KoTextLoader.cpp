@@ -354,7 +354,7 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     }
     
     KoListStyle listStyle;
-    listStyle.setLevel(d->textSharedData->outlineLevel(level));
+    listStyle.setLevelProperties(d->textSharedData->outlineLevel(level));
     listStyle.applyStyle(block, level);
     
     bool stripLeadingSpace = true;
@@ -400,7 +400,7 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
 
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug(32500) << "styleName =" << styleName << "listStyle =" << ( listStyle ? listStyle->name() :"NULL" )
-                      <<"level =" << level << "hasPropertiesForLevel =" << listStyle->hasPropertiesForLevel( level )
+                      <<"level =" << level << "hasLevelProperties =" << listStyle->hasLevelProperties( level )
                     //<<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()
                       ;
     #endif
@@ -431,7 +431,7 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         loadBody( e, cursor );
         
         /*
-        if ( ! listStyle->hasPropertiesForLevel( level ) ) { // set default style
+        if ( ! listStyle->hasLevelProperties( level ) ) { // set default style
             KoListLevelProperties props;
             props.setStyle( KoListStyle::DecimalItem );
             props.setListItemSuffix( "." );

@@ -134,28 +134,28 @@ public:
      * Adding level properties for lower levels will have the effect that the counter of that level will be displayed
      * in the specified format instead of being inherited from the list style at the higher level.
      */
-    KoListLevelProperties level(int level) const;
+    KoListLevelProperties levelProperties(int level) const;
 
     /**
      * Set the properties for a level.
      * @param properties the new properties for the level, including the level number.
      * @see level()
      */
-    void setLevel(const KoListLevelProperties &properties);
+    void setLevelProperties(const KoListLevelProperties &properties);
 
     /**
      * @return if there are the properties for a level set.
      * @param level the level for which to check
      * @see level()
      */
-    bool hasPropertiesForLevel(int level) const;
+    bool hasLevelProperties(int level) const;
 
     /**
      * Remove any properties that were set for a level.
      * @param level the level for which to remove
      * @see level()
      */
-    void removePropertiesForLevel(int level);
+    void removeLevelProperties(int level);
 
     /// return the name of the style.
     QString name() const;

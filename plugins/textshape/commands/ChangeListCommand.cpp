@@ -60,7 +60,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
 }
             else
 { //kDebug() <<" create new level 1";
-                 llp = m_listStyle->level(1);
+                 llp = m_listStyle->levelProperties(1);
 }
             llp.setStyle(style);
             if(style == KoListStyle::SquareItem || style == KoListStyle::DiscItem ||
@@ -71,7 +71,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
                 llp.setListItemSuffix(""); // for non-numbered items, remove any suffix.
             else
                 llp.setListItemSuffix("."); // for numbered items, add a trailing dot.
-            m_listStyle->setLevel(llp);
+            m_listStyle->setLevelProperties(llp);
         }
     }
 

@@ -229,7 +229,7 @@ void KoTextSharedLoadingData::addOutlineStyles( KoOdfLoadingContext & context )
         kDebug(32500) << "outline-listStyle =" << tag.localName();
         KoListLevelProperties properties;
         properties.loadOdf( context, tag );
-        d->outlineStyles.setLevel( properties );
+        d->outlineStyles.setLevelProperties( properties );
     }
 }
 
@@ -250,5 +250,5 @@ KoListStyle * KoTextSharedLoadingData::listStyle( const QString &name )
 
 KoListLevelProperties KoTextSharedLoadingData::outlineLevel( int level, const KoListLevelProperties& defaultprops )
 {
-    return d->outlineStyles.hasPropertiesForLevel( level ) ? d->outlineStyles.level( level ) : defaultprops;
+    return d->outlineStyles.hasLevelProperties( level ) ? d->outlineStyles.levelProperties( level ) : defaultprops;
 }

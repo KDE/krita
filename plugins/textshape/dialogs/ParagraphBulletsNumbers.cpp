@@ -62,7 +62,7 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
         return;
     }
 
-    KoListLevelProperties llp = listStyle.level(m_paragStyle->listLevel());
+    KoListLevelProperties llp = listStyle.levelProperties(m_paragStyle->listLevel());
     m_previousLevel = llp.level();
     widget.prefix->setText(llp.listItemPrefix());
     widget.suffix->setText(llp.listItemSuffix());
@@ -110,7 +110,7 @@ kDebug() <<"ParagraphBulletsNumbers::save";
         m_paragStyle->setListStyle(ls);
     }
     KoListStyle listStyle = m_paragStyle->listStyle();
-    KoListLevelProperties llp = listStyle.level(widget.depth->value());
+    KoListLevelProperties llp = listStyle.levelProperties(widget.depth->value());
     llp.setStyle(style);
     llp.setLevel(widget.depth->value());
     llp.setDisplayLevel(widget.levels->value());
@@ -130,8 +130,8 @@ kDebug() <<"ParagraphBulletsNumbers::save";
     }
     llp.setAlignment(align);
     if(llp.level() != m_previousLevel)
-        listStyle.removePropertiesForLevel(m_previousLevel);
-    listStyle.setLevel(llp);
+        listStyle.removeLevelProperties(m_previousLevel);
+    listStyle.setLevelProperties(llp);
     m_paragStyle->setListLevel(llp.level());
 }
 

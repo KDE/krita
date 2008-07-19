@@ -427,6 +427,7 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
             SLOT(selectionChanged(QList<KoShape*>)));
 
     d->canvasData->canvas->activate();
+    emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
 }
 
 void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
@@ -456,6 +457,7 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
             postSwitchTool();
             d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             d->canvasData->canvas->activate();
+            emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
             return;
         }
     }
@@ -463,6 +465,7 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     d->canvasData = d->canvasses.value(newCanvas).first();
     d->inputDevice = d->canvasData->inputDevice;
     d->canvasData->canvas->activate();
+    emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {
@@ -482,6 +485,7 @@ void KoToolManager::detachCanvas(KoCanvasController *controller) {
         delete tool;
     }
     d->canvasses.remove(controller);
+    emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
 }
 
 void KoToolManager::updateCursor(QCursor cursor) {
@@ -624,6 +628,7 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device) {
             }
             d->canvasData->canvas->activate();
             emit inputDeviceChanged(device);
+            emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
             return;
         }
     }
@@ -640,6 +645,7 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device) {
     switchToolRequested(oldTool);
     emit inputDeviceChanged(device);
     d->canvasData->canvas->activate();
+    emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
 }
 
 bool KoToolManager::eventFilter(QObject *object, QEvent *event)

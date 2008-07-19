@@ -207,6 +207,12 @@ signals:
      */
     void inputDeviceChanged(const KoInputDevice &device);
 
+    /**
+     * Emitted whenever the active canvas changed.
+     * @param canvas the new activated canvas (might be 0)
+     */
+    void changedCanvas( const KoCanvasBase * canvas );
+
 protected:
     friend class KoToolProxy;
     /**
@@ -240,7 +246,6 @@ private:
     void switchTool(const QString &id, bool temporary);
     void postSwitchTool();
     bool eventFilter(QObject *object, QEvent *event);
-
 private slots:
     void toolActivated(ToolHelper *tool);
     void detachCanvas(KoCanvasController *controller);

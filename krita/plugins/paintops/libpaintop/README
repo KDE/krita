@@ -1,0 +1,3 @@
+libpaintop is meant to share common classes used
+by Krita brush engines, suchs as certain configuration
+widgets.

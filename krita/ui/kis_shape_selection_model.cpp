@@ -59,6 +59,9 @@ void KisShapeSelectionModel::add(KoShape *child) {
 void KisShapeSelectionModel::remove(KoShape *child)
 {
     QRect updateRect = child->boundingRect().toAlignedRect();
+    m_shapeMap.remove(child);
+
+    m_shapeSelection->setDirty();
 
     QMatrix matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
@@ -66,9 +69,6 @@ void KisShapeSelectionModel::remove(KoShape *child)
     m_parentSelection->updateProjection(updateRect);
 
     m_image->undoAdapter()->emitSelectionChanged();
-
-    m_shapeMap.remove(child);
-    m_shapeSelection->setDirty();
 }
 
 void KisShapeSelectionModel::setClipping(const KoShape *child, bool clipping)

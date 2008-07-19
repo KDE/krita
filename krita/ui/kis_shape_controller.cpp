@@ -157,10 +157,14 @@ void KisShapeController::removeShape( KoShape* shape )
          || shape->shapeId() == KIS_MASK_SHAPE_ID
          || shape->shapeId() == KoPathShapeId)  // selection shapes
     {
-        foreach( KoView *view, m_d->doc->views() ) {
-            KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
-            canvas->shapeManager()->remove(shape);
-            canvas->canvasWidget()->update();
+        KisCanvas2 * canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
+        KisSelectionSP selection;
+        if ( canvas && (selection = canvas->view()->selection()) ) {
+            if ( !selection->shapeSelection() ) {
+                selection->setShapeSelection( new KisShapeSelection( m_d->image, selection ) );
+            }
+            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+            shapeSelection->removeChild(shape);
         }
     }
 

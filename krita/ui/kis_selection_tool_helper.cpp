@@ -110,10 +110,8 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
         shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
     }
     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
-    shapeSelection->addChild(shape);
-    shapeSelection->shapeManager()->add( shape );
-
     m_canvas->addCommand(cmd);
+
     m_canvas->stopMacro();
 }
 

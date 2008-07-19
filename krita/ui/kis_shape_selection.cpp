@@ -61,6 +61,18 @@ void KisShapeSelection::saveOdf(KoShapeSavingContext&) const
 {
 }
 
+void KisShapeSelection::addChild(KoShape *object)
+{
+    KoShapeContainer::addChild( object );
+    m_canvas->shapeManager()->add( object );
+}
+
+void KisShapeSelection::removeChild(KoShape *object)
+{
+    m_canvas->shapeManager()->remove( object );
+    KoShapeContainer::removeChild( object );
+}
+
 QPainterPath KisShapeSelection::selectionOutline()
 {
     if(m_dirty) {

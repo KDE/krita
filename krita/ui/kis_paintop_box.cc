@@ -52,7 +52,7 @@
 #include "kis_view2.h"
 #include "kis_factory2.h"
 #include "widgets/kis_preset_widget.h"
-#include "widgets/kis_paintop_presets_widget.h"
+#include "widgets/kis_paintop_presets_popup.h"
 
 
 KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * name)
@@ -89,7 +89,7 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
     m_presetWidget->setFixedSize( 130, 26 );
     m_layout->addWidget(m_presetWidget);
 
-    m_presetsPopup = new KisPaintOpPresetsWidget(m_presetWidget);
+    m_presetsPopup = new KisPaintOpPresetsPopup(m_presetWidget);
     m_presetWidget->setPopupWidget(m_presetsPopup);
 
     // XXX: Let's see... Are all paintops loaded and ready?

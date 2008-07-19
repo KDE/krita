@@ -119,7 +119,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_bool_filter_widget.cc
     widgets/kis_multi_double_filter_widget.cc
     widgets/kis_multi_integer_filter_widget.cc
-    widgets/kis_paintop_presets_widget.cpp 
+    widgets/kis_paintop_presets_popup.cpp 
     widgets/kis_pattern_chooser.cc
     widgets/kis_popup_button.cc 
     widgets/kis_preset_widget.cpp 

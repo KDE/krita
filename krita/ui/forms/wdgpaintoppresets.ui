@@ -5,67 +5,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>471</width>
-    <height>547</height>
+    <width>447</width>
+    <height>410</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2" >
-   <item row="0" column="1" >
-    <widget class="QStackedWidget" name="stackOptions" >
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="grpSettingsPane" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+      <sizepolicy vsizetype="Expanding" hsizetype="Minimum" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="frameShape" >
-      <enum>QFrame::Panel</enum>
+     <property name="title" >
+      <string/>
      </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Sunken</enum>
-     </property>
-     <property name="currentIndex" >
-      <number>0</number>
-     </property>
-     <widget class="QWidget" name="page" >
-      <property name="geometry" >
-       <rect>
-        <x>1</x>
-        <y>1</y>
-        <width>183</width>
-        <height>361</height>
-       </rect>
-      </property>
-      <widget class="QPushButton" name="pushButton" >
-       <property name="geometry" >
-        <rect>
-         <x>70</x>
-         <y>400</y>
-         <width>105</width>
-         <height>28</height>
-        </rect>
-       </property>
-       <property name="text" >
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="page_2" >
-      <property name="geometry" >
-       <rect>
-        <x>1</x>
-        <y>1</y>
-        <width>183</width>
-        <height>361</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2" >
+   <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
-      <string>Current Preset</string>
+      <string/>
+     </property>
+     <property name="flat" >
+      <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout" >
       <item row="0" column="0" >
@@ -80,6 +44,12 @@
       </item>
       <item row="1" column="0" colspan="2" >
        <widget class="QLabel" name="lblPreview" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize" >
          <size>
           <width>0</width>
@@ -95,30 +65,8 @@
         <property name="text" >
          <string/>
         </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title" >
-      <string/>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout" >
-      <item>
-       <widget class="QListView" name="lstOptions" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Expanding" hsizetype="Minimum" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>

@@ -42,7 +42,7 @@ class KoColorSpace;
 class KisView2;
 class KisCanvasResourceProvider;
 class KisPresetWidget;
-class KisPaintOpPresetsWidget;
+class KisPaintOpPresetsPopup;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -93,7 +93,7 @@ private:
     QHBoxLayout * m_layout;
     QWidget * m_optionWidget;
     KisPresetWidget * m_presetWidget;
-    KisPaintOpPresetsWidget * m_presetsPopup;
+    KisPaintOpPresetsPopup * m_presetsPopup;
     KisView2 * m_view;
 
     QList<KoID> m_paintops;

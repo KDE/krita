@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "widgets/kis_paintop_presets_widget.h"
+#include "widgets/kis_paintop_presets_popup.h"
 
 #include <QList>
 #include <QComboBox>
@@ -28,65 +28,26 @@
 
 #include <ui_wdgpaintoppresets.h>
 
-class KisPaintOpOption::Private {
-public:    
-    bool checked;
-    QString label;
-    QWidget * configurationPage;
-};
 
-KisPaintOpOption::KisPaintOpOption( const QString & label, bool checked )
-    : m_d(new Private())
-{
-    m_d->checked = checked;
-    m_d->label = label;
-    m_d->configurationPage = 0;
-}
-
-KisPaintOpOption::~KisPaintOpOption()
-{
-    delete m_d;
-}
-
-void KisPaintOpOption::setConfigurationPage( QWidget * page )
-{
-    m_d->configurationPage = page;
-}
-
-QWidget * KisPaintOpOption::configurationPage() const
-{
-    return m_d->configurationPage;
-}
-
-
-class KisPaintOpPresetsWidget::Private
+class KisPaintOpPresetsPopup::Private
 {
 
 public:
 
-    QList<KisPaintOpOption*> paintOpOptions;
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
-    
+
 };
 
-KisPaintOpPresetsWidget::KisPaintOpPresetsWidget( QWidget * parent )
+KisPaintOpPresetsPopup::KisPaintOpPresetsPopup( QWidget * parent )
     : QWidget( parent )
     , m_d(new Private())
 {
-    setObjectName("KisPaintOpPresetsWidget");
+    setObjectName("KisPaintOpPresetsPopup");
     m_d->uiWdgPaintOpPresets.setupUi( this );
 }
 
 
-KisPaintOpPresetsWidget::~KisPaintOpPresetsWidget()
+KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 {
-    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
-        delete option;
-    }
     delete m_d;
-}
-
-void KisPaintOpPresetsWidget::addPaintOpOption( KisPaintOpOption * option )
-{
-    m_d->paintOpOptions << option;
 }

@@ -51,6 +51,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_convolution_painter.h"
+#include "kis_convolution_kernel.h"
 #include "kis_debug.h"
 #include "kis_doc2.h"
 #include "kis_fill_painter.h"
@@ -749,7 +750,7 @@ void KisSelectionManager::feather()
     if (!img) return;
     if (!m_view->selection())
         return;
-#if 0
+
     KisPixelSelectionSP selection = m_view->selection()->getOrCreatePixelSelection();
     KisSelectionTransaction * t = new KisSelectionTransaction(i18n("Feather..."), img, m_view->selection());
     Q_CHECK_PTR(t);
@@ -760,21 +761,17 @@ void KisSelectionManager::feather()
 
     KisConvolutionPainter painter(KisPaintDeviceSP(selection.data()));
 
-    KisKernelSP k = KisKernelSP(new KisKernel());
-    k->width = 3;
-    k->height = 3;
-    k->factor = 16;
-    k->offset = 0;
-    k->data = new qint32[9];
-    k->data[0] = 1;
-    k->data[1] = 2;
-    k->data[2] = 1;
-    k->data[3] = 2;
-    k->data[4] = 4;
-    k->data[5] = 2;
-    k->data[6] = 1;
-    k->data[7] = 2;
-    k->data[8] = 1;
+    KisConvolutionKernelSP k = new KisConvolutionKernel(3, 3, 0, 16);
+
+    k->data()[0] = 1;
+    k->data()[1] = 2;
+    k->data()[2] = 1;
+    k->data()[3] = 2;
+    k->data()[4] = 4;
+    k->data()[5] = 2;
+    k->data()[6] = 1;
+    k->data()[7] = 2;
+    k->data()[8] = 1;
 
     QRect rect = selection->selectedExactRect();
     // Make sure we've got enough space around the edges.
@@ -787,7 +784,7 @@ void KisSelectionManager::feather()
     m_view->document()->addCommand(t);
     m_view->selection()->setDirty(img->bounds());
     selectionChanged();
-#endif
+
 }
 
 void KisSelectionManager::toggleDisplaySelection()

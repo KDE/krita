@@ -94,18 +94,19 @@ void GuidesTool::repaintDecorations()
     KoCanvasController * controller = m_canvas->canvasController();
     QPoint documentOrigin = m_canvas->documentOrigin();
     QPoint canvasOffset( controller->canvasOffsetX(), controller->canvasOffsetY() ); 
-    QRectF viewRect = m_canvas->viewConverter()->viewToDocument( m_canvas->canvasWidget()->rect() );
     if( d->orientation == Qt::Horizontal )
     {
-        rect.setTop( d->position - 2.0 );
-        rect.setBottom( d->position + 2.0 );
+        qreal pixelBorder = m_canvas->viewConverter()->viewToDocumentY( 2.0 );
+        rect.setTop( d->position - pixelBorder );
+        rect.setBottom( d->position + pixelBorder );
         rect.setLeft( m_canvas->viewConverter()->viewToDocumentX( -canvasOffset.x()-documentOrigin.x() ) );
         rect.setWidth( m_canvas->viewConverter()->viewToDocumentX( m_canvas->canvasWidget()->width() ) );
     }
     else
     {
-        rect.setLeft( d->position - 2.0 );
-        rect.setRight( d->position + 2.0 );
+        qreal pixelBorder = m_canvas->viewConverter()->viewToDocumentX( 2.0 );
+        rect.setLeft( d->position - pixelBorder );
+        rect.setRight( d->position + pixelBorder );
         rect.setTop( m_canvas->viewConverter()->viewToDocumentY( -canvasOffset.y()-documentOrigin.y() ) );
         rect.setHeight( m_canvas->viewConverter()->viewToDocumentY( m_canvas->canvasWidget()->height() ) );
     }
@@ -285,26 +286,29 @@ void GuidesTool::guideLinesChanged( Qt::Orientation orientation )
     else
         guidesData->setVerticalGuideLines( d->options->verticalGuideLines() );
 
-    QList<double> lines;
-    if( d->orientation == Qt::Horizontal )
-        lines = guidesData->horizontalGuideLines();
-    else
-        lines = guidesData->verticalGuideLines();
+    if( orientation == d->orientation )
+    {
+        QList<double> lines;
+        if( d->orientation == Qt::Horizontal )
+            lines = guidesData->horizontalGuideLines();
+        else
+            lines = guidesData->verticalGuideLines();
 
-    int oldIndex = d->index;
+        int oldIndex = d->index;
 
-    if( lines.count() == 0 )
-        d->index = -1;
-    else if( d->index >= lines.count() )
-        d->index = 0;
+        if( lines.count() == 0 )
+            d->index = -1;
+        else if( d->index >= lines.count() )
+            d->index = 0;
 
-    if( d->index >= 0 )
-        d->position = lines[d->index];
+        if( d->index >= 0 )
+            d->position = lines[d->index];
+
+        if( oldIndex != d->index )
+            d->options->selectGuideLine( d->orientation, d->index );
+    }
 
     repaintDecorations();
-
-    if( oldIndex != d->index )
-        d->options->selectGuideLine( d->orientation, d->index );
 }
 
 GuidesTool::GuideLine GuidesTool::guideLineAtPosition( const QPointF &position )

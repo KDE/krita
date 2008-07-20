@@ -22,7 +22,6 @@
 #include "KoSnapStrategy.h"
 
 #include <KLocale>
-#include <KDebug>
 
 GuidesToolOptionWidget::GuidesToolOptionWidget( QWidget * parent )
     :QWidget(parent)
@@ -47,7 +46,6 @@ GuidesToolOptionWidget::GuidesToolOptionWidget( QWidget * parent )
              this, SLOT(removeLine()) );
     connect( widget.addButton, SIGNAL(clicked(bool)),
              this, SLOT(addLine()) );
-
 }
 
 GuidesToolOptionWidget::~GuidesToolOptionWidget()
@@ -90,9 +88,16 @@ void GuidesToolOptionWidget::setOrientation( Qt::Orientation orientation )
 
 void GuidesToolOptionWidget::selectGuideLine( Qt::Orientation orientation, uint index )
 {
+    widget.orientation->blockSignals( true );
+    widget.positionList->blockSignals( true );
+
     widget.orientation->setCurrentIndex( orientation-1 );
     updateList( widget.orientation->currentIndex() );
     widget.positionList->setCurrentRow( index );
+    updatePosition( index );
+
+    widget.orientation->blockSignals( false );
+    widget.positionList->blockSignals( false );
 }
 
 void GuidesToolOptionWidget::updateList( int orientation )
@@ -114,18 +119,23 @@ void GuidesToolOptionWidget::updateList( int orientation )
 
 void GuidesToolOptionWidget::updatePosition( int index )
 {
+    widget.position->blockSignals( true );
+
     if( index < 0 )
     {
         widget.position->changeValue( 0.0 );
-        return;
+    }
+    else
+    {
+        if( orientation() == Qt::Horizontal )
+            widget.position->changeValue( m_hGuides[index] );
+        else
+            widget.position->changeValue( m_vGuides[index] );
+
+        emit guideLineSelected( orientation(), index );
     }
 
-    if( orientation() == Qt::Horizontal )
-        widget.position->changeValue( m_hGuides[index] );
-    else
-        widget.position->changeValue( m_vGuides[index] );
-
-    emit guideLineSelected( orientation(), index );
+    widget.position->blockSignals( false );
 }
 
 void GuidesToolOptionWidget::positionChanged( double position )
@@ -169,16 +179,20 @@ void GuidesToolOptionWidget::removeLine()
 
 void GuidesToolOptionWidget::addLine()
 {
-    if( orientation() == Qt::Horizontal )
+    Qt::Orientation o = orientation();
+
+    if( o == Qt::Horizontal )
         m_hGuides.append( widget.position->value() );
     else
         m_vGuides.append( widget.position->value() );
 
+    widget.positionList->blockSignals( true );
     updateList( widget.orientation->currentIndex() );
-
-    emit guideLinesChanged( orientation() );
-
     widget.positionList->setCurrentRow( widget.positionList->count()-1 );
+    widget.positionList->blockSignals( false );
+
+    emit guideLinesChanged( o );
+    emit guideLineSelected( o, widget.positionList->currentRow() );
 }
 
 void GuidesToolOptionWidget::setUnit( const KoUnit &unit )

@@ -17,6 +17,9 @@
  */
 
 #include "kis_meta_data_store.h"
+
+#include <QStringList>
+
 #include <kis_debug.h>
 
 #include "kis_meta_data_entry.h"
@@ -69,6 +72,7 @@ void Store::copyFrom(const Store* store)
 
 bool Store::addEntry(const Entry& entry)
 {
+    Q_ASSERT( !entry.name().isEmpty() ); 
     if(d->entries.contains(entry.qualifiedName()) && d->entries[entry.qualifiedName()].isValid() )
     {
         dbgImage <<"Entry" << entry.qualifiedName() <<" already exists in the store, cannot be included twice";
@@ -101,7 +105,14 @@ bool Store::containsEntry(const KisMetaData::Schema* schema, const QString & ent
 
 Entry& Store::getEntry(const QString & entryKey)
 {
-    return d->entries[entryKey];
+    if( !d->entries.contains( entryKey ) )
+    {
+        QStringList splitedKey = entryKey.split(":");
+        QString prefix = splitedKey[0];
+        splitedKey.pop_front();
+        d->entries[entryKey] = Entry( SchemaRegistry::instance()->schemaFromPrefix( prefix ) , splitedKey.join(":"), Value() );
+    }
+    return d->entries [entryKey];
 }
 
 Entry& Store::getEntry(const QString & uri, const QString & entryName)

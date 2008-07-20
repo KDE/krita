@@ -17,8 +17,10 @@
  */
 
 #include "kis_meta_data_schema.h"
-#include <QDebug>
+
 #include <QString>
+
+#include "kis_debug.h"
 
 using namespace KisMetaData;
 
@@ -47,6 +49,8 @@ Schema::Schema(const QString & _uri, const QString & _ns)
 
 Schema::~Schema()
 {
+    dbgImage << "Deleting schema " << d->uri << " " << d->prefix;
+    dbgImage << kBacktrace();
     delete d;
 }
 
@@ -62,7 +66,9 @@ QString Schema::prefix() const
 
 QString Schema::generateQualifiedName(const QString & name) const
 {
-    return prefix() + ':' + name;
+    dbgImage << "generateQualifiedName for " << name;
+    Q_ASSERT( !name.isEmpty() && !name.isNull());
+    return prefix() + ":" + name;
 }
 
 QDebug operator<<(QDebug dbg, const KisMetaData::Schema &c)

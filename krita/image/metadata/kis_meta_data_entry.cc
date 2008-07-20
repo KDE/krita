@@ -36,6 +36,7 @@ struct Entry::Private {
 Entry::Entry() :
         d(new Private)
 {
+    d->name = "";
     d->schema = 0;
     d->valid = false;
 }
@@ -43,6 +44,7 @@ Entry::Entry() :
 Entry::Entry(const Schema* schema, QString name, const Value& value) :
         d(new Private)
 {
+    Q_ASSERT( !name.isEmpty() );
     d->name = name;
     d->schema = schema;
     d->value = value;

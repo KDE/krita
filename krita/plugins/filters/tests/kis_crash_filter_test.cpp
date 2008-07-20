@@ -31,11 +31,11 @@
 
 bool applyFilter( const KoColorSpace * cs,  KisFilterSP f ) {
 
-//    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->fill(0, 0, 100, 100, dev->defaultPixel());
-//    dev->convertFromQImage(qimg, "", 0, 0);
+//    dev->fill(0, 0, 100, 100, dev->defaultPixel());
+    dev->convertFromQImage(qimg, "", 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -58,7 +58,7 @@ bool applyFilter( const KoColorSpace * cs,  KisFilterSP f ) {
     KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
     KisProcessingInformation dst( dev, QPoint(0, 0), 0 );
 
-    f->process(src, dst, QSize( 100, 100 ), kfc);
+    f->process(src, dst, qimg.size(), kfc);
 
 #if 0
     QPoint errpoint;

@@ -1,19 +1,11 @@
-- shape can be anything, not only an image-shape but with the current KWFrame-design
-    we need to special case them, or? well, probably it would be wise to refactor
-    the KWFrame+KWFrameSet logic here...
-            ==> DONE ? Now, we just use a KWFrame + KWFrameSet, no need for KWImageFrame for instance.
-                ==> imho the best way to go in the long run.
-
-- we also need to pass the used QTextCursor around to know in what KWFrameSet we are
-    atm and where to write to. Or should we just use
-    QTextCursor(m_loader->currentFrameset->document())
-    each time and assume that we only need to append content anyway?
-
-- bring back header+footers :)
-    ==> loading and saving works
-    ==> TODO support also page-styles with different headers/footers
-
-- What about parent-styles aka style-inheritance? Does this REALLY work already?
+- pagestyles / masterpage(s)
+    the way KWord deals with pages is broken by design cause ODF defines every
+    formatting through styles while KWord doesn't understand the notion of page
+    styles.
+    ==> affects basicly all the current kword-code and need to be fixed before
+        we build things on top of that broken design.
+    ==> text:soft-page-break is a KoTextInlineObject
+    ==> "2.8 Page Styles and Layout" + "14.4 Master Pages"
 
 - table-shape vs. QTextTable vs. the layout-hacks within the textshape is still a huge
     issue of it's own. http://lists.kde.org/?l=koffice-devel&m=120574617208477&w=2 and
@@ -26,29 +18,8 @@
 - probably related to the crash with the OpenDoc1.1-specs;
     http://lists.kde.org/?l=koffice-devel&m=121068865723376&w=2
 
-- paragraph background-color does not work if the color is defined as style
+- implement all types of anchors
+    load+save works, but UI and KoTextShapeContainerModel use only as-char anchors.
 
-- support loading+saving page-styles && add GUI-functionality to KWord for it
-    ==> under progress
-    commit r812046 adds functionality to page-break if a paragraph defines a master-page-name
-    but it's not a nice solution cause we would e.g. need to move the defined master-page-name
-    if the paragraph got removed to the parag after it.
-        ==> should work since the master-page-name is already duplicated
-    also we should fill+use KoPageLayout && KWPage->setPageLayout() here.
-    see also KoPageApp.
-        ==> we probably need to find a KWord-only solution here without using KoStyleManager
-        ==> KWPage+KWPageManager works on page-numbers but page-styles are more KoInlineObjects
-    see 1.1-specs "2.8 Page Styles and Layout" + "14.4 Master Pages"
-
-- implement loading+saving all types of anchors
-    see KoTextAnchor and KWOdfSharedLoadingData::shapeInserted() and KWAnchorStrategy
-    ==> TODO save results in an invalid ODT file cause draw:frame has a draw:transform="matrix(1 0 0 1 187.085pt 207.549pt)"
-    ==> so far we only support "as-char" types. The other 3 types are still TODO
-    ==> what to do with KoTextAnchor::(AnchorVertical|AnchorHorizontal) which doesn't seem to be supported in odt's? :-/
-
-- loading+saving frames
-    ==> works
-
-- loading+saving variables
-
-- loading+saving footnotes
+- What about parent-styles aka style-inheritance? Does this REALLY work already or do
+  we only miss the UI for it?

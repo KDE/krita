@@ -35,6 +35,23 @@
 class KisDoc2;
 class KisUndoAdapter;
 
+namespace KisMetaData {
+    class Filter;
+    class Store;
+}
+
+struct KisPNGOptions {
+    KisPNGOptions() : compression(0), interlace(false), alpha(true), exif(true), iptc(true), xmp(true)
+    {}
+    int compression;
+    bool interlace;
+    bool alpha;
+    bool exif;
+    bool iptc;
+    bool xmp;
+    QList<const KisMetaData::Filter*> filters;
+};
+
 /**
  * Image import/export plugins can use these results to report about success or failure.
  */
@@ -91,8 +108,8 @@ class KRITAUI_EXPORT KisPNGConverter : public QObject {
          * @param interlace set to true if you want to generate an interlaced png
          * @param alpha set to true if you want to save the alpha channel
          */
-        KisImageBuilder_Result buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
-        KisImageBuilder_Result buildFile(QIODevice*, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
+        KisImageBuilder_Result buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData );
+        KisImageBuilder_Result buildFile(QIODevice*, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData );
         /**
          * Retrieve the constructed image
          */

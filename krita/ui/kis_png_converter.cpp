@@ -25,6 +25,7 @@
 #include <limits.h>
 #include <stdio.h>
 
+#include <QBuffer>
 #include <QFile>
 
 #include <kapplication.h>
@@ -46,6 +47,8 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
+#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_store.h>
 
 namespace {
 
@@ -105,6 +108,82 @@ namespace {
         p_text->text_length = text.length()+1;
     }
 
+    long formatStringList(char *string, const size_t length, const char *format, va_list operands)
+    {
+        int n = vsnprintf(string, length, format, operands);
+    
+        if (n < 0)
+            string[length-1] = '\0';
+    
+        return((long) n);
+    }
+    
+    long formatString(char *string, const size_t length, const char *format,...)
+    {
+        long n;
+    
+        va_list operands;
+    
+        va_start(operands,format);
+        n = (long) formatStringList(string, length, format, operands);
+        va_end(operands);
+        return(n);
+    }
+    
+    void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type, QByteArray profile_data)
+    {
+        
+        png_textp      text;
+    
+        png_uint_32    allocated_length, description_length;
+    
+        const uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+    
+        kDebug() << "Writing Raw profile: type=" << profile_type << ", length=" << profile_data.length() << endl;
+    
+        text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
+        description_length = profile_type.length();
+        allocated_length   = (png_uint_32) (profile_data.length()*2 + (profile_data.length() >> 5) + 20 + description_length);
+    
+        text[0].text   = (png_charp) png_malloc(ping, allocated_length);
+    
+        QString key = "Raw profile type " + profile_type.toLatin1();
+        QByteArray keyData = key.toLatin1();
+        text[0].key = keyData.data();
+    
+        uchar* sp = (uchar*)profile_data.data();
+        png_charp dp = text[0].text;
+        *dp++='\n';
+    
+        memcpy(dp, (const char *) profile_type.toLatin1().data(), profile_type.length());
+    
+        dp += description_length;
+        *dp++='\n';
+    
+        formatString(dp, allocated_length-strlen(text[0].text), "%8lu ", profile_data.length());
+    
+        dp += 8;
+    
+        for(long i=0; i < (long) profile_data.length(); i++)
+        {
+            if (i%36 == 0)
+                *dp++='\n';
+    
+            *(dp++)=(char) hex[((*sp >> 4) & 0x0f)];
+            *(dp++)=(char) hex[((*sp++ ) & 0x0f)];
+        }
+    
+        *dp++='\n';
+        *dp='\0';
+        text[0].text_length = (png_size_t) (dp-text[0].text);
+        text[0].compression = -1;
+    
+        if (text[0].text_length <= allocated_length)
+            png_set_text(ping, ping_info,text, 1);
+    
+        png_free(ping, text[0].text);
+        png_free(ping, text);
+    }
 }
 
 KisPNGConverter::KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
@@ -648,7 +727,7 @@ KisImageSP KisPNGConverter::image()
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     dbgFile << "Start writing PNG File " << uri;
     if (uri.isEmpty())
@@ -658,14 +737,14 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP im
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open a QIODevice for writting
     QFile *fp = new QFile( QFile::encodeName(uri.path()) );
-    KisImageBuilder_Result result = buildFile(fp, img, device, annotationsStart, annotationsEnd, compression, interlace, alpha);
+    KisImageBuilder_Result result = buildFile(fp, img, device, annotationsStart, annotationsEnd, options, metaData);
     delete fp;
     return result;
 // TODO: if failure do            KIO::del(uri); // async
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     if(!iodevice->open(QIODevice::WriteOnly))
     {
@@ -710,7 +789,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 
 
     /* set the zlib compression level */
-    png_set_compression_level(png_ptr, compression);
+    png_set_compression_level(png_ptr, options.compression);
 
 
     png_set_write_fn(png_ptr, (void*)iodevice, _write_fn, _flush_fn);
@@ -723,7 +802,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     png_set_compression_buffer_size(png_ptr, 8192);
 
     int color_nb_bits = 8 * device->pixelSize() / device->channelCount();
-    int color_type = getColorTypeforColorSpace(device->colorSpace(), alpha);
+    int color_type = getColorTypeforColorSpace(device->colorSpace(), options.alpha);
 
     if(color_type == -1)
     {
@@ -733,7 +812,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     // Try to compute a table of color if the colorspace is RGB8f
     png_colorp palette = 0;
     int num_palette = 0;
-    if(!alpha && KoID(device->colorSpace()->id()) == KoID("RGBA") )
+    if(!options.alpha && KoID(device->colorSpace()->id()) == KoID("RGBA") )
     { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
         KisRectConstIteratorPixel it = device->createRectConstIterator(0,0, img->width(), img->height());
@@ -787,7 +866,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
         }
     }
 
-    int interlacetype = interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
+    int interlacetype = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
 
     png_set_IHDR(png_ptr, info_ptr,
                  width,
@@ -851,6 +930,56 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 
         png_set_text(png_ptr, info_ptr, texts, nbtexts);
     }
+    
+    // Save metadata following imagemagick way
+    
+        // Save exif
+    if( metaData && !metaData->empty())
+    {
+        if(options.exif)
+        {
+            dbgFile <<"Trying to save exif information";
+
+            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            Q_ASSERT(exifIO);
+
+            QBuffer buffer;
+            exifIO->saveTo( metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+            writeRawProfile(png_ptr, info_ptr, "exif", buffer.data());
+        }
+        // Save IPTC
+        if(options.iptc)
+        {
+            dbgFile <<"Trying to save exif information";
+            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+            Q_ASSERT(iptcIO);
+
+            QBuffer buffer;
+            iptcIO->saveTo( metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+
+            dbgFile <<"IPTC information size is" << buffer.data().size();
+            writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data());
+        }
+        // Save XMP
+//         if(options.xmp)
+#if 0
+        // TODO enable when XMP support is finiehsed
+        {
+            dbgFile <<"Trying to save exif information";
+            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+            Q_ASSERT(iptcIO);
+
+            QBuffer buffer;
+            iptcIO->saveTo( metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+
+            dbgFile <<"IPTC information size is" << buffer.data().size();
+            writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data()Z);
+          QByteArray exifArray = exiv2.getXmp();
+          writeRawProfile(png_ptr, info_ptr, "xmp", exifArray);
+        }
+#endif
+    }
+    
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);
     png_write_flush(png_ptr);
@@ -879,7 +1008,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
                     while (!it.isDone()) {
                         const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
                         *(dst++) = d[0];
-                        if(alpha) *(dst++) = d[1];
+                        if(options.alpha) *(dst++) = d[1];
                         ++it;
                     }
                 } else {
@@ -887,7 +1016,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
                     while (!it.isDone()) {
                         const quint8 *d = it.rawData();
                         *(dst++) = d[0];
-                        if(alpha) *(dst++) = d[1];
+                        if(options.alpha) *(dst++) = d[1];
                         ++it;
                     }
                 }
@@ -902,7 +1031,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
                         *(dst++) = d[2];
                         *(dst++) = d[1];
                         *(dst++) = d[0];
-                        if(alpha) *(dst++) = d[3];
+                        if(options.alpha) *(dst++) = d[3];
                         ++it;
                     }
                 } else {
@@ -912,7 +1041,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
                         *(dst++) = d[2];
                         *(dst++) = d[1];
                         *(dst++) = d[0];
-                        if(alpha) *(dst++) = d[3];
+                        if(options.alpha) *(dst++) = d[3];
                         ++it;
                     }
                 }

@@ -470,8 +470,27 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {
+    // check if we are removing the active canvas controller
     if (d->canvasData && d->canvasData->canvas == controller) {
-        d->canvasData = 0; // replace with a blank one
+        KoCanvasController *newCanvas = 0;
+        // try to find another canvas controller beside the one we are removing
+        foreach(KoCanvasController* canvas, d->canvasses.keys()) {
+            if( canvas != controller )
+            {
+                // yay found one
+                newCanvas = canvas;
+                break;
+            }
+        }
+        if( newCanvas ) {
+            // activate the found canvas controller
+            d->canvasData = d->canvasses.value(newCanvas).first();
+            d->inputDevice = d->canvasData->inputDevice;
+            d->canvasData->canvas->activate();
+        } else {
+            // as a last resort just set a blank one
+            d->canvasData = 0;
+        }
     }
 
     QList<KoTool *> tools;

@@ -317,8 +317,6 @@ static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle
 }
 static QString odfBorderStyleString(const KoParagraphStyle::BorderStyle borderstyle) {
     switch (borderstyle) {
-        case KoParagraphStyle::BorderNone:
-            return QString("none");
         case KoParagraphStyle::BorderDashed:
             return QString("dashed");
         case KoParagraphStyle::BorderDotted:
@@ -339,6 +337,9 @@ static QString odfBorderStyleString(const KoParagraphStyle::BorderStyle borderst
             return QString("outset");
         case KoParagraphStyle::BorderSolid:
             return QString("solid");
+        default:
+        case KoParagraphStyle::BorderNone:
+            return QString("none");
     }
 }
 

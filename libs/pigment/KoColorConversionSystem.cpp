@@ -220,7 +220,7 @@ QList<KoColorConversionSystem::Node*> KoColorConversionSystem::nodesFor( const Q
 
 KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
 {
-    if( srcColorSpace == dstColorSpace )
+    if( *srcColorSpace == *dstColorSpace )
     {
         return new KoCopyColorConversionTransformation( srcColorSpace );
     }

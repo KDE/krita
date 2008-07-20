@@ -4,8 +4,9 @@
     styles.
     ==> affects basicly all the current kword-code and need to be fixed before
         we build things on top of that broken design.
-    ==> text:soft-page-break is a KoTextInlineObject
     ==> "2.8 Page Styles and Layout" + "14.4 Master Pages"
+
+- text:soft-page-break is a KoTextInlineObject
 
 - table-shape vs. QTextTable vs. the layout-hacks within the textshape is still a huge
     issue of it's own. http://lists.kde.org/?l=koffice-devel&m=120574617208477&w=2 and

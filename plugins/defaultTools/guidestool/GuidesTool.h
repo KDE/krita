@@ -43,6 +43,8 @@ public:
     /// reimplemented form KoTool
     virtual void mouseReleaseEvent( KoPointerEvent *event );
     /// reimplemented form KoTool
+    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    /// reimplemented form KoTool
     virtual void repaintDecorations();
     /// reimplemented form KoTool
     virtual void activate(bool temporary = false);

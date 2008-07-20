@@ -209,6 +209,63 @@ void GuidesTool::mouseReleaseEvent( KoPointerEvent *event )
         emit done();
 }
 
+void GuidesTool::mouseDoubleClickEvent( KoPointerEvent *event )
+{
+    KoGuidesData * guidesData = m_canvas->guidesData();
+    if( ! guidesData )
+    {
+        event->ignore();
+        return;
+    }
+
+    repaintDecorations();
+
+    // get guide line at position
+    GuideLine line = guideLineAtPosition( event->point );
+    if( line.second < 0 )
+    {
+        // no guide line hit -> insert a new one
+        d->orientation = d->options->orientation();
+        d->position = d->orientation == Qt::Horizontal ? event->point.y() : event->point.x();
+        // no guide line hit -> insert a new one
+        guidesData->addGuideLine( d->orientation, d->position );
+        if( d->orientation == Qt::Horizontal )
+        {
+            d->options->setHorizontalGuideLines( guidesData->horizontalGuideLines() );
+            d->index = guidesData->horizontalGuideLines().count()-1;
+        }
+        else
+        {
+            d->options->setVerticalGuideLines( guidesData->verticalGuideLines() );
+            d->index = guidesData->verticalGuideLines().count()-1;
+        }
+        d->options->selectGuideLine( d->orientation, d->index );
+    }
+    else
+    {
+        // guide line hit -> remove it
+        QList<double> lines;
+        if( line.first == Qt::Horizontal )
+        {
+            lines = guidesData->horizontalGuideLines();
+            lines.removeAt( line.second );
+            guidesData->setHorizontalGuideLines( lines );
+            d->options->setHorizontalGuideLines( lines );
+            d->index = -1;
+        }
+        else
+        {
+            lines = guidesData->verticalGuideLines();
+            lines.removeAt( line.second );
+            guidesData->setVerticalGuideLines( lines );
+            d->options->setVerticalGuideLines( lines );
+            d->index = -1;
+        }
+    }
+
+    repaintDecorations();
+}
+
 void GuidesTool::addGuideLine( Qt::Orientation orientation, qreal position )
 {
     d->orientation = orientation;

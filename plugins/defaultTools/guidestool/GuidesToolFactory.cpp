@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoGuidesToolFactory.h"
-#include "KoGuidesTool.h"
+#include "GuidesToolFactory.h"
+#include "GuidesTool.h"
 #include <KLocale>
 
-KoGuidesToolFactory::KoGuidesToolFactory( QObject *parent )
+GuidesToolFactory::GuidesToolFactory( QObject *parent )
     : KoToolFactory(parent, KoGuidesTool_ID, i18n("Edit Guidelines"))
 {
     setToolTip(i18n("Edit guidelines"));
@@ -29,11 +29,11 @@ KoGuidesToolFactory::KoGuidesToolFactory( QObject *parent )
     setPriority(1);
 }
 
-KoGuidesToolFactory::~KoGuidesToolFactory()
+GuidesToolFactory::~GuidesToolFactory()
 {
 }
 
-KoTool* KoGuidesToolFactory::createTool(KoCanvasBase *canvas)
+KoTool* GuidesToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new KoGuidesTool( canvas );
+    return new GuidesTool( canvas );
 }

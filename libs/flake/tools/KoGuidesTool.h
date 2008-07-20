@@ -31,32 +31,20 @@ class KoCanvasBase;
 
 class FLAKE_EXPORT KoGuidesTool : public KoTool
 {
+    Q_OBJECT
+
 public:
     explicit KoGuidesTool( KoCanvasBase * canvas );
     virtual ~KoGuidesTool();
-    /// reimplemented form KoTool
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
-    /// reimplemented form KoTool
-    virtual void mousePressEvent( KoPointerEvent *event );
-    /// reimplemented form KoTool
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    /// reimplemented form KoTool
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-    /// reimplemented form KoTool
-    virtual void repaintDecorations();
-    /// reimplemented form KoTool
-    virtual void activate(bool temporary = false);
-    /// reimplemented form KoTool
-    virtual void deactivate();
 
     /// Sets a new guide line to be added
-    void setNewGuideLine( Qt::Orientation orientation, qreal position );
+    virtual void addGuideLine( Qt::Orientation orientation, qreal position ) = 0;
+
+    /// Sets an existing guide line to be moved
+    virtual void moveGuideLine( Qt::Orientation orientation, uint index ) = 0;
 
     /// Sets an existing guide line to be edited
-    void setEditGuideLine( Qt::Orientation orientation, uint index );
-private:
-    class Private;
-    Private * const d;
+    virtual void editGuideLine( Qt::Orientation orientation, uint index ) = 0;
 };
 
 #endif // KOGUIDESTOOL_H

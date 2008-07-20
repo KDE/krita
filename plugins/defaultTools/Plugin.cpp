@@ -18,6 +18,7 @@
  */
 #include "Plugin.h"
 #include "defaulttool/DefaultToolFactory.h"
+#include "guidestool/GuidesToolFactory.h"
 
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
@@ -30,6 +31,7 @@ Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new DefaultToolFactory(parent));
+    KoToolRegistry::instance()->add(new GuidesToolFactory(parent));
 }
 
 #include "Plugin.moc"

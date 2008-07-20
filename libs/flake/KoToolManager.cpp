@@ -41,7 +41,6 @@
 #include "tools/KoZoomToolFactory.h"
 #include "tools/KoPanTool.h"
 #include "tools/KoPanToolFactory.h"
-#include "tools/KoGuidesToolFactory.h"
 #include "tools/KoGuidesTool.h"
 
 // Qt + kde
@@ -171,7 +170,6 @@ void KoToolManager::setup() {
     d->tools.append( new ToolHelper(new KoPathToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoZoomToolFactory(this)) );
     d->tools.append( new ToolHelper(new KoPanToolFactory(this)) );
-    d->tools.append( new ToolHelper(new KoGuidesToolFactory(this)) );
 
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();

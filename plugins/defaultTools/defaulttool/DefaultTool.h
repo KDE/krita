@@ -161,8 +161,8 @@ private:
     friend class SelectionHandler;
     KoInteractionStrategy * m_customEventStrategy;
 
-    Qt::Orientation m_guideOrientation;
-    int m_guideIndex;
+    class GuideLine;
+    GuideLine * m_guideLine;
 };
 
 #endif

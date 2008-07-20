@@ -17,10 +17,15 @@ SET ( defaulttools_SRCS
     defaulttool/ShapeRotateStrategy.cpp
     defaulttool/ShapeShearStrategy.cpp
     defaulttool/SelectionDecorator.cpp
+
+    guidestool/GuidesTool.cpp
+    guidestool/GuidesToolFactory.cpp
+    guidestool/GuidesToolOptionWidget.cpp
 )
 
 kde4_add_ui_files(defaulttools_SRCS
     defaulttool/DefaultToolWidget.ui
+    guidestool/GuidesToolOptionWidget.ui
 )
 
 kde4_add_plugin(defaulttools ${defaulttools_SRCS})

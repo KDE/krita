@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOGUIDESTOOLFACTORY_H
-#define KOGUIDESTOOLFACTORY_H
+#ifndef GUIDESTOOLFACTORY_H
+#define GUIDESTOOLFACTORY_H
 
 #include "KoToolFactory.h"
 
 /// The factory for the KoGuidesTool
-class KoGuidesToolFactory : public KoToolFactory
+class GuidesToolFactory : public KoToolFactory
 {
 public:
     /// Constructor
-    KoGuidesToolFactory( QObject *parent );
+    explicit GuidesToolFactory( QObject *parent );
     /// Destructor
-    ~KoGuidesToolFactory();
+    ~GuidesToolFactory();
     /// reimplemented
     KoTool* createTool( KoCanvasBase *canvas );
 };
 
-#endif // KOGUIDESTOOLFACTORY_H
+#endif // GUIDESTOOLFACTORY_H

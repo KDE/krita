@@ -77,6 +77,46 @@ private:
     KoSelection *m_selection;
 };
 
+class DefaultTool::GuideLine
+{
+public:
+    GuideLine()
+        : m_orientation(Qt::Horizontal), m_index(0), m_valid(false), m_selected(false)
+    {
+    }
+    GuideLine( Qt::Orientation orientation, uint index )
+        : m_orientation(orientation), m_index(index), m_valid(true), m_selected(false)
+    {
+    }
+
+    bool isValid() const
+    {
+        return m_valid;
+    }
+    bool isSelected() const
+    {
+        return m_selected;
+    }
+    void select()
+    {
+        m_selected = true;
+    }
+
+    uint index() const
+    {
+        return m_index;
+    }
+    Qt::Orientation orientation() const
+    {
+        return m_orientation;
+    }
+private:
+    Qt::Orientation m_orientation;
+    uint m_index;
+    bool m_valid;
+    bool m_selected;
+};
+
 
 DefaultTool::DefaultTool( KoCanvasBase *canvas )
     : KoInteractionTool( canvas ),
@@ -86,8 +126,7 @@ DefaultTool::DefaultTool( KoCanvasBase *canvas )
     m_moveCommand(0),
     m_selectionHandler(new SelectionHandler(this)),
     m_customEventStrategy(0),
-    m_guideOrientation( Qt::Horizontal ),
-    m_guideIndex(-1)
+    m_guideLine( new GuideLine() )
 {
     setupActions();
 
@@ -136,6 +175,7 @@ DefaultTool::DefaultTool( KoCanvasBase *canvas )
 
 DefaultTool::~DefaultTool()
 {
+    delete m_guideLine;
 }
 
 bool DefaultTool::wantsAutoScroll()
@@ -376,8 +416,8 @@ void DefaultTool::updateCursor() {
                     cursor = m_rotateCursors[(7 +rotOctant)%8];
                     break;
                 case KoFlake::NoHandle:
-                    if( m_guideIndex >= 0 )
-                        cursor = m_guideOrientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
+                    if( m_guideLine->isValid() )
+                        cursor = m_guideLine->orientation() == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
                     else
                         cursor = Qt::ArrowCursor;
                     break;
@@ -420,8 +460,8 @@ void DefaultTool::updateCursor() {
             cursor = Qt::ArrowCursor;
     }
     else {
-        if( m_guideIndex >= 0 )
-            cursor = m_guideOrientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
+        if( m_guideLine->isValid() )
+            cursor = m_guideLine->orientation() == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
     }
     useCursor(cursor);
 }
@@ -465,18 +505,36 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent *event ) {
             m_lastHandle = KoFlake::NoHandle;
             m_mouseWasInsideHandles = false;
 
+            if( m_guideLine->isSelected() ) {
+                KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool( m_canvas );
+                if( guidesTool ) {
+                    guidesTool->moveGuideLine( m_guideLine->orientation(), m_guideLine->index() );
+                    activateTemporary( guidesTool->toolId() );
+                }
+            } else {
+                selectGuideAtPosition( event->point );
+            }
+        }
+    } else {
+        if( m_guideLine->isSelected() ) {
+            KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool( m_canvas );
+            if( guidesTool ) {
+                guidesTool->moveGuideLine( m_guideLine->orientation(), m_guideLine->index() );
+                activateTemporary( guidesTool->toolId() );
+            }
+        } else {
             selectGuideAtPosition( event->point );
         }
     }
-    else
-        selectGuideAtPosition( event->point );
 
     updateCursor();
 }
 
 void DefaultTool::selectGuideAtPosition( const QPointF &position )
 {
-    m_guideIndex = -1;
+    int index = -1;
+    Qt::Orientation orientation = Qt::Horizontal;
+
     // check if we are on a guide line
     KoGuidesData * guidesData = m_canvas->guidesData();
     if( guidesData && guidesData->showGuideLines() ) {
@@ -486,8 +544,8 @@ void DefaultTool::selectGuideAtPosition( const QPointF &position )
         foreach( double guidePos, guidesData->horizontalGuideLines() ) {
             double distance = qAbs( guidePos - position.y() );
             if( distance < minDistance ) {
-                m_guideOrientation = Qt::Horizontal;
-                m_guideIndex = i;
+                orientation = Qt::Horizontal;
+                index = i;
                 minDistance = distance;
             }
             i++;
@@ -497,13 +555,19 @@ void DefaultTool::selectGuideAtPosition( const QPointF &position )
         {
             double distance = qAbs( guidePos - position.x() );
             if( distance < minDistance ) {
-                m_guideOrientation = Qt::Vertical;
-                m_guideIndex = i;
+                orientation = Qt::Vertical;
+                index = i;
                 minDistance = distance;
             }
             i++;
         }
     }
+
+    delete m_guideLine;
+    if( index >= 0 )
+        m_guideLine = new GuideLine( orientation, index );
+    else
+        m_guideLine = new GuideLine();
 }
 
 QRectF DefaultTool::handlesSize() {
@@ -530,8 +594,16 @@ void DefaultTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
     }
     if(shapes.count() == 0) { // nothing in the selection was clicked on.
         KoShape *shape = m_canvas->shapeManager()->shapeAt (event->point, KoFlake::ShapeOnTop);
-        if(shape)
+        if(shape) {
             shapes.append(shape);
+        } else if( m_guideLine->isSelected() ) {
+            KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool( m_canvas );
+            if( guidesTool ) {
+                guidesTool->editGuideLine( m_guideLine->orientation(), m_guideLine->index() );
+                activateTool( guidesTool->toolId() );
+                return;
+            }
+        }
     }
 
     KoToolManager::instance()->switchToolRequested(
@@ -822,6 +894,8 @@ void DefaultTool::activate(bool temporary) {
     m_lastHandle = KoFlake::NoHandle;
     useCursor(Qt::ArrowCursor, true);
     repaintDecorations();
+    delete m_guideLine;
+    m_guideLine = new GuideLine();
 }
 
 void DefaultTool::selectionAlignHorizontalLeft() {
@@ -1071,13 +1145,9 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
     KoShape * object( shapeManager->shapeAt( event->point, (event->modifiers() & Qt::ShiftModifier) ? KoFlake::NextUnselected : KoFlake::ShapeOnTop ) );
     if( !object && handle == KoFlake::NoHandle) {
         // check if we have hit a guide
-        if( m_guideIndex >= 0 ) {
-            KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool( m_canvas );
-            if( guidesTool ) {
-                guidesTool->setEditGuideLine( m_guideOrientation, m_guideIndex );
-                activateTemporary( guidesTool->toolId() );
-                return 0;
-            }
+        if( m_guideLine->isValid() ) {
+            m_guideLine->select();
+            return 0;
         }
         if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
         {

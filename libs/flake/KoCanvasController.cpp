@@ -622,9 +622,9 @@ void KoCanvasController::addGuideLine( Qt::Orientation orientation, int viewPosi
         return;
 
     if( orientation == Qt::Horizontal )
-        guidesTool->setNewGuideLine( orientation, m_d->canvas->viewConverter()->viewToDocumentY( viewPosition ) );
+        guidesTool->addGuideLine( orientation, m_d->canvas->viewConverter()->viewToDocumentY( viewPosition ) );
     else
-        guidesTool->setNewGuideLine( orientation, m_d->canvas->viewConverter()->viewToDocumentX( viewPosition ) );
+        guidesTool->addGuideLine( orientation, m_d->canvas->viewConverter()->viewToDocumentX( viewPosition ) );
 
     KoToolManager::instance()->switchToolTemporaryRequested( guidesTool->toolId() );
 }

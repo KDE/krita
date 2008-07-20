@@ -51,10 +51,9 @@ bool applyFilter( const KoColorSpace * cs,  KisFilterSP f ) {
         QString s;
         QTextStream in(&file);
         s = in.readAll();
-        qDebug() << "Read for " << f->id() << "\n" << s;
         kfc->fromXML( s );
     }
-    qDebug() << f->id() << "\n" << kfc->toXML() << "\n";
+    qDebug() << f->id() << ", " << cs->id();// << kfc->toXML() << "\n";
 
     KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
     KisProcessingInformation dst( dev, QPoint(0, 0), 0 );
@@ -79,8 +78,10 @@ bool testFilter(KisFilterSP f)
     QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
     bool ok = false;
     foreach( QString csId, csIds ) {
-
-        dbgImage <<"Testing with" << csId;
+        // XXX: Let's not check the painterly colorspaces right now
+        if ( csId.startsWith( "KS", Qt::CaseInsensitive ) ) {
+            continue;
+        }
         QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
         if ( profiles.size() == 0 ) {
             const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );

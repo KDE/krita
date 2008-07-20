@@ -126,7 +126,7 @@ bool testFilterWithSelections(KisFilterSP f)
         //qDebug() << "Read for " << f->id() << "\n" << s;
         kfc->fromXML( s );
     }
-    qDebug() << f->id() << "\n";// << kfc->toXML() << "\n";
+    qDebug() << f->id();// << "\n"; << kfc->toXML() << "\n";
 
     KisSelectionSP sel1 = new KisSelection(dev);
     sel1->getOrCreatePixelSelection()->select( qimg.rect() );

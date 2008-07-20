@@ -28,6 +28,7 @@ class KisAllFilterTest : public QObject
 private slots:
 
     void testAllFilters();
+    void testAllFiltersWithSelections();
 };
 
 #endif

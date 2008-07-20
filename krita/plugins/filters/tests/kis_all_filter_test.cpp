@@ -68,10 +68,10 @@ bool testFilter(KisFilterSP f)
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
-    
+
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "creating new file for " << f->id();
+        //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
         out << kfc->toXML();
@@ -80,18 +80,18 @@ bool testFilter(KisFilterSP f)
         QString s;
         QTextStream in(&file);
         s = in.readAll();
-        qDebug() << "Read for " << f->id() << "\n" << s;
+        //qDebug() << "Read for " << f->id() << "\n" << s;
         kfc->fromXML( s );
     }
-    qDebug() << f->id() << "\n" << kfc->toXML() << "\n";
+    qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
 
     KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
     KisProcessingInformation dst( dev, QPoint(0, 0), 0 );
-    
+
     f->process(src, dst, qimg.size(), kfc);
 
     QPoint errpoint;
-    
+
     if ( !compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("lena_%1.png").arg(f->id()));
         return false;
@@ -99,11 +99,62 @@ bool testFilter(KisFilterSP f)
     return true;
 }
 
+
+bool testFilterWithSelections(KisFilterSP f)
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage result( QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png" );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(qimg, "", 0, 0);
+
+    // Get the predefined configuration from a file
+    KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
+
+    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        //qDebug() << "creating new file for " << f->id();
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream out(&file);
+        out << kfc->toXML();
+    }
+    else {
+        QString s;
+        QTextStream in(&file);
+        s = in.readAll();
+        //qDebug() << "Read for " << f->id() << "\n" << s;
+        kfc->fromXML( s );
+    }
+    qDebug() << f->id() << "\n";// << kfc->toXML() << "\n";
+
+    KisSelectionSP sel1 = new KisSelection(dev);
+    sel1->getOrCreatePixelSelection()->select( qimg.rect() );
+
+    KisSelectionSP sel2 = new KisSelection(dev);
+    sel2->getOrCreatePixelSelection()->select( qimg.rect() );
+
+    KisConstProcessingInformation src( dev,  QPoint(0, 0), sel1 );
+    KisProcessingInformation dst( dev, QPoint(0, 0), sel2 );
+
+    f->process(src, dst, qimg.size(), kfc);
+
+    QPoint errpoint;
+
+    if ( !compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("sel_lena_%1.png").arg(f->id()));
+        return false;
+    }
+
+
+    return true;
+}
+
 void KisAllFilterTest::testAllFilters()
 {
     QStringList failures;
     QStringList successes;
-    
+
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
     for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
         if (testFilter(KisFilterRegistry::instance()->value(*it)))
@@ -116,5 +167,26 @@ void KisAllFilterTest::testAllFilters()
         QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
     }
 }
+
+void KisAllFilterTest::testAllFiltersWithSelections()
+{
+    QStringList failures;
+    QStringList successes;
+
+    QList<QString> filterList = KisFilterRegistry::instance()->keys();
+    for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
+        if (testFilterWithSelections(KisFilterRegistry::instance()->value(*it)))
+            successes << *it;
+        else
+            failures << *it;
+    }
+    qDebug() << "Success: " << successes;
+    if (failures.size() > 0) {
+        QFAIL(QString("Failed filters with selections:\n\t %1").arg(failures.join("\n\t")).toAscii());
+    }
+}
+
+
+
 QTEST_KDEMAIN(KisAllFilterTest, GUI)
 #include "kis_all_filter_test.moc"

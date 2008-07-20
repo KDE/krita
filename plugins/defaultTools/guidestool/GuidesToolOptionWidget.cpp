@@ -22,6 +22,7 @@
 #include "KoSnapStrategy.h"
 
 #include <KLocale>
+#include <KDebug>
 
 GuidesToolOptionWidget::GuidesToolOptionWidget( QWidget * parent )
     :QWidget(parent)
@@ -30,7 +31,7 @@ GuidesToolOptionWidget::GuidesToolOptionWidget( QWidget * parent )
 
     widget.orientation->addItem( i18n("Horizontal") );
     widget.orientation->addItem( i18n("Vertical") );
-
+    widget.orientation->setCurrentIndex( 0 );
     widget.addButton->setIcon( KIcon( "list-add" ) );
     widget.removeButton->setIcon( KIcon( "list-remove" ) );
 
@@ -56,14 +57,14 @@ GuidesToolOptionWidget::~GuidesToolOptionWidget()
 void GuidesToolOptionWidget::setHorizontalGuideLines( const QList<double> &lines )
 {
     m_hGuides = lines;
-    if( widget.orientation->currentIndex() == Qt::Horizontal-1 )
+    if( orientation() == Qt::Horizontal )
         updateList( widget.orientation->currentIndex() );
 }
 
 void GuidesToolOptionWidget::setVerticalGuideLines( const QList<double> &lines )
 {
     m_vGuides = lines;
-    if( widget.orientation->currentIndex() == Qt::Vertical-1 )
+    if( orientation() == Qt::Vertical )
         updateList( widget.orientation->currentIndex() );
 }
 
@@ -148,6 +149,8 @@ void GuidesToolOptionWidget::positionChanged( double position )
 
 void GuidesToolOptionWidget::removeLine()
 {
+    widget.positionList->blockSignals( true );
+
     int index = widget.positionList->currentRow();
     if( index < 0 )
         return;
@@ -158,6 +161,8 @@ void GuidesToolOptionWidget::removeLine()
         m_vGuides.removeAt(index);
 
     delete widget.positionList->takeItem( index );
+
+    widget.positionList->blockSignals( false );
 
     emit guideLinesChanged( orientation() );
 }

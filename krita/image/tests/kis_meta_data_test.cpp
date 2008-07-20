@@ -215,6 +215,10 @@ void KisMetaDataTest::testStore()
     QVERIFY(s.containsEntry(KisMetaData::Schema::TIFFSchemaUri, "test" ) );
     s.removeEntry(schema, "test");
     QVERIFY(!s.containsEntry(schema, "test" ) );
+    Entry& e2 = s.getEntry( schema, "hello" );
+    QVERIFY( s.containsEntry(schema, "hello") );
+    QVERIFY( e2.name() == "hello" );
+    QVERIFY( e2.schema() == schema );
 }
 
 void KisMetaDataTest::testFilters()

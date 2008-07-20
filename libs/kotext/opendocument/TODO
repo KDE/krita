@@ -16,9 +16,6 @@
     ==> see libs/kotext/opendocument/tests
     we could need additional tests that do the loading+saving roundtrip and let us know what got lost
 
-- probably related to the crash with the OpenDoc1.1-specs;
-    http://lists.kde.org/?l=koffice-devel&m=121068865723376&w=2
-
 - implement all types of anchors
     load+save works, but UI and KoTextShapeContainerModel use only as-char anchors.
 

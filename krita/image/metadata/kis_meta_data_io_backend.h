@@ -42,6 +42,10 @@ namespace KisMetaData {
                 Binary,
                 Text
             };
+            enum HeaderType {
+                NoHeader, ///< Don't append any header
+                JpegHeader ///< Append Jpeg-style header
+            };
         public:
             virtual ~IOBackend() {}
             virtual QString id() const = 0;
@@ -57,9 +61,11 @@ namespace KisMetaData {
             /**
              * @param store the list of metadata to save
              * @param ioDevice the device to where the metadata will be saved
+             * @param headerType determine if an header must be prepend to the binary header, and if it does,
+             *                   which type of header
              * @return true if the save was successful
              */
-            virtual bool saveTo(Store* store, QIODevice* ioDevice) const = 0;
+            virtual bool saveTo(Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const = 0;
             /**
              * @param store the list of metadata
              * @return true if this backend is capable of saving all the metadata

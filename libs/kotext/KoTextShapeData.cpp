@@ -178,7 +178,6 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
 void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) const {
     KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
-    kDebug(32500) << "The document is " << d->document;
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->document->documentLayout());
     Q_ASSERT(layout);
@@ -285,6 +284,10 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         QTextBlock::iterator it;
         for (it = block.begin(); !(it.atEnd()); ++it) {
             QTextFragment currentFragment = it.fragment();
+            const int fragmentStart = currentFragment.position();
+            const int fragmentEnd = fragmentStart + currentFragment.length();
+            if (fragmentStart >= to)
+                break;
             if (currentFragment.isValid()) {
                 QTextCharFormat charFormat = currentFragment.charFormat();
                 KoInlineObject *inlineObject = layout->inlineObjectTextManager()->inlineTextObject((const QTextCharFormat &)charFormat);
@@ -332,11 +335,19 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     } else if (!generatedName.isEmpty()) {
                         writer->startElement("text:span", false);
                     }
+
                     if (!generatedName.isEmpty()) {
                         writer->addAttribute("text:style-name", generatedName);
                     }
                     
-                    writer->addTextSpan(currentFragment.text());
+                    QString text = currentFragment.text();
+                    int spanFrom = fragmentStart >= from ? 0 : from;
+                    int spanTo = fragmentEnd > to ? to : fragmentEnd;
+                    if (spanFrom != fragmentStart || spanTo != fragmentEnd) { // avoid mid, if possible
+                        writer->addTextSpan(text.mid(spanFrom - fragmentStart, spanTo - spanFrom));
+                    } else {
+                        writer->addTextSpan(text);
+                    }
 
                     if ((!generatedName.isEmpty()) || (charFormat.isAnchor()))
                         writer->endElement();

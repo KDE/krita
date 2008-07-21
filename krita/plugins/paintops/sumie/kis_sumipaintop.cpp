@@ -43,6 +43,7 @@
 
 #include "lines.h"
 #include "brush.h"
+#include "brush_shape.h"
 
 KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
@@ -80,7 +81,7 @@ KisSumiPaintOpSettings::KisSumiPaintOpSettings(QWidget * parent )
 
     m_optionsWidget->setPopupWidget(m_popupWidget);
 
-
+	m_curveSamples = m_options->inkAmountSpinBox->value();
 }
 
 KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
@@ -92,7 +93,7 @@ KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
 
 QList<float> * KisSumiPaintOpSettings::curve() const
 {
-	int curveSamples = 1024;
+	int curveSamples = inkAmount();
 	QList<float> *result = new QList<float>;
 	for (int i=0; i < curveSamples ; i++)
 	{
@@ -101,6 +102,26 @@ QList<float> * KisSumiPaintOpSettings::curve() const
 	// have to be freed!!
 	return result;
 }
+
+int KisSumiPaintOpSettings::radius() const{
+	return m_options->radiusSpinBox->value();
+}
+
+double KisSumiPaintOpSettings::sigma() const{
+	return m_options->sigmaSpinBox->value();
+}
+
+int KisSumiPaintOpSettings::brushDimension() const{
+	if ( m_options->oneDimBrushBtn->isChecked() ){
+		return 1;
+	} else
+		return 2;
+}
+
+int KisSumiPaintOpSettings::inkAmount() const{
+	return m_options->inkAmountSpinBox->value();
+}
+
 
 
 void KisSumiPaintOpSettings::fromXML(const QDomElement&)
@@ -120,7 +141,20 @@ KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter
 {
     newStrokeFlag = true;
     m_image = image;
-	
+
+	BrushShape brushShape;
+	if (settings->brushDimension() == 1){
+		brushShape.fromLine(settings->radius(), settings->sigma() );
+	}
+	else if (settings->brushDimension() == 2)
+	{
+		brushShape.fromGaussian(settings->radius(), settings->sigma() );
+	}
+	else {
+		Q_ASSERT(false);
+	}
+
+	m_brush.setBrushShape(brushShape);
 	m_brush.setInkDepletion( settings->curve() );
 	m_brush.setInkColor( painter->paintColor() );
 	// delete??
@@ -136,7 +170,8 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
     QMutexLocker locker(&m_mutex);
     if (!painter()) return;
     // read, write pixel data
-    KisPaintDeviceSP device = painter()->device();
+    //color: painter()->paintColor()
+	KisPaintDeviceSP device = painter()->device();
     if (!device) return;
 
     if ( newStrokeFlag ) {
@@ -151,9 +186,23 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 	x1 = info.pos().x();
 	y1 = info.pos().y();
 
-		//color: painter()->paintColor()
+	double slope;
+	if (info.movement().x() != 0)
+	{
+		slope = info.movement().y() / info.movement().x();
+	} else slope = 0.0;
+	
+	
+/*	int ix = info.movement().x()+0.5;
+	int iy = info.movement().y()+0.5;
 
-	m_brush.paint(dab, x1, y1 );
+	double angle = atan2( iy, ix );*/
+
+	//double angle = m_brush.getAngleDelta(info);
+	double angle = info.angle();
+
+	m_brush.paint(dab, info);
+	m_brush.rotateBristles(angle);
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );

@@ -28,6 +28,7 @@ public:
 	BrushShape();
 	~BrushShape();
 	void fromGaussian(int radius, float sigma);
+	void fromLine(int radius, float sigma);
 	QVector<Bristle> getBristles();
 	int width();
 	int height();

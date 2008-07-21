@@ -26,7 +26,9 @@
 
 #include "bristle.h"
 #include "brush_shape.h"
+#include "stroke_sample.h"
 #include "kis_paint_device.h"
+#include "kis_paint_information.h"
 
 class Brush{
 
@@ -35,17 +37,38 @@ public:
 	Brush();
 	~Brush();
 	Brush(KoColor inkColor, BrushShape shape);
-	void paint(KisPaintDeviceSP dev, float x, float y);
+	void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
 	void setInkDepletion(QList<float> *curveData);
 	void setInkColor(const KoColor &color);
+	void addStrokeSample(StrokeSample sample);
+	void addStrokeSample(float x,float y,float pressure,float tiltX, float tiltY,float rotation);
+
+	void repositionBristles(double angle, double slope);
+	void rotateBristles(double angle);
+
+	double getAngleDelta(const KisPaintInformation& info);
+
+	void setRadius(int radius);
+	void setSigma(double sigma);
+	void setBrushShape(BrushShape brushShape);
+
 
 private:
 	QVector<Bristle> m_bristles;
+	QVector<StrokeSample> m_stroke;
+	QList<float> m_inkDepletion; // array
+
 	BrushShape m_initialShape;
 	KoColor m_inkColor;
 	int m_counter;
+
 	int m_radius;
-	QList<float> m_inkDepletion; // array
+	double m_sigma;
+
+	double m_lastAngle;
+	double m_lastSlope;
+
+	double m_angle;
 };
 
 #endif

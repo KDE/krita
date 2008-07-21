@@ -29,7 +29,11 @@ public:
 	Bristle();
 	~Bristle();
 	float x();
+	void setX(float x){ m_x = x; }
+
 	float y();
+	void setY(float y){ m_y = y; }
+
 	float length();
 	void setLength(float length);
 

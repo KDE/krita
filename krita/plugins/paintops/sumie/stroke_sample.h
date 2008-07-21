@@ -15,47 +15,31 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef _STROKE_SAMPLE_H_
+#define _STROKE_SAMPLE_H_
+class StrokeSample{
 
 
-StrokeSample::StrokeSample(	float x,float y,float pressure,float tiltX, float tiltY,float rotation){
-	m_x = x;
-	m_y = y;
-	m_pressure = pressure;
-	m_tiltX = tiltX;
-	m_tiltY = tiltY;
-	m_rotation = rotation;
-}
+public:
+	StrokeSample(float x,float y,float pressure,float tiltX, float tiltY,float rotation);
+	StrokeSample();
+	~StrokeSample();
 
+	float x();
+	float y();
+	float pressure();
+	float tiltX();
+	float tiltY();
+	float rotation();
 
-StrokeSample::StrokeSample(){
+private:
+	float m_x;
+	float m_y;
+	float m_pressure;
+	float m_tiltX;
+	float m_tiltY;
+	float m_rotation;
+};
 
-}
+#endif // _STROKE_SAMPLE_H_
 
-StrokeSample::~StrokeSample(){
-
-}
-
-
-float StrokeSample::x(){
-	return m_x;
-}
-
-float StrokeSample::y(){
-	return m_y;
-}
-
-float StrokeSample::pressure(){
-	return pressure();
-}
-
-float StrokeSample::tiltX(){
-	return m_tiltX;
-}
-
-float StrokeSample::tiltY(){
-	return m_tiltY;
-}
-
-float StrokeSample::rotation(){
-	return m_rotation;
-}

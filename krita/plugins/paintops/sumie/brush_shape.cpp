@@ -80,6 +80,38 @@ void BrushShape::fromGaussian(int radius, float sigma){
 
 }
 
+void BrushShape::fromLine(int radius, float sigma)
+{
+	m_width = radius*2+1;
+	m_height = 1;
+
+	int gaussLength = m_width;
+
+	float sigmaSquare = - 2.0f * sigma * sigma;
+	float sigmaConst = 1.0f / (sigma * 2.506628f); /* sqrt(2.0*pi) */
+
+	float length;
+	for (int x=-radius;x<=radius;x++)
+	{
+		length = exp(x*x / sigmaSquare) * sigmaConst;
+		Bristle b(x ,0.0f , length);
+		m_bristles.append(b);
+	}
+
+	float minLen = m_bristles[0].length();
+	float maxLen = m_bristles[gaussLength/2].length();
+	float dist = maxLen - minLen;
+
+	// normalise lengths 
+	float result;
+	
+	for (int x=0;x<m_width;x++)
+	{
+		result = (m_bristles[x].length() - minLen ) / dist;
+		m_bristles[x].setLength(result);
+	}
+}
+
 QVector<Bristle> BrushShape::getBristles(){
 	return m_bristles;
 }

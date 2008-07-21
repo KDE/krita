@@ -68,12 +68,17 @@ public:
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
 	QList<float> * curve() const;
+	int radius() const;
+	double sigma() const;
+	int brushDimension() const;
+	int inkAmount() const;
 
 private:
     Ui::WdgSumieOptions* m_options;
     KisPopupButton * m_optionsWidget;
     QWidget * m_popupWidget;
 
+	int m_curveSamples;
 	QList<QPointF> m_curveData;
 };
 

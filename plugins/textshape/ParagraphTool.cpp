@@ -52,8 +52,8 @@
  * - the separator line uses firstLine.right(), which is not calculated correctly
  *   (should be done using border - right margin instead of simply the right end of the layouted text)
  * - think about were to store paragraph properties such as singeLine and isList, ParagraphTool or ShapeSpecificData?
- * - repainting currently causes artifacts. it should always repaint the area which has been repainted the last time
- *   (store new area in class for next round, then repaint union with previously stored area
+ * - repainting currently causes artifacts. it seems like the relayouting causes a paint, but we then need another repaint
+ *   to draw the tool itself
  * - make sure that rulers only draw into the right area, pass a bounding rectangle to the drawing method for this
  *
  * TODO:
@@ -103,7 +103,7 @@ void ParagraphTool::initializeRuler(Ruler &ruler, int options)
 
 /* clear list of shapes and then add all shapes that contain the given paragraph to the list
  */
-bool ParagraphTool::createShapeList(QTextBlock textBlock, TextShape *textShape)
+bool ParagraphTool::createShapeList(QTextBlock textBlock)
 {
     m_shapes.clear();
 
@@ -220,14 +220,12 @@ void ParagraphTool::updateLayout()
 
     static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
 
-    // recreate list of shapes for the current text block and try not to switch away from the current active shape
-    if (!createShapeList(textBlock(), m_activeShape->textShape())) {
-        deselectTextBlock();
-        repaintDecorations();
-        return;
+    if (createShapeList(textBlock())) {
+        loadRulers();
     }
-
-    loadRulers();
+    else {
+        deselectTextBlock();
+    }
 
     repaintDecorations();
 }
@@ -238,12 +236,12 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
     ShapeSpecificData *shape;
     QColor foregroundColor;
 
-    if (m_activeRuler != noRuler) {
+    if (hasActiveRuler()) {
         ruler = m_activeRuler;
         shape = m_activeShape;
         foregroundColor = m_rulers[ruler].activeColor();
     }
-    else if (m_highlightRuler != noRuler) {
+    else if (hasHighlightedRuler()) {
         ruler = m_highlightRuler;
         shape = m_highlightShape;
         foregroundColor = m_rulers[ruler].highlightColor();
@@ -336,11 +334,12 @@ void ParagraphTool::repaintDecorations()
     if (!m_needsRepaint)
         return;
 
-    // should add previous and current label positions to the repaint area
+    // TODO: should add previous and current label positions to the repaint area
     QRectF dirtyRectangle;
     foreach (ShapeSpecificData shape, m_shapes) {
         dirtyRectangle |= shape.dirtyRectangle();
     }
+
     canvas()->updateCanvas(dirtyRectangle);
 
     m_needsRepaint = false;
@@ -357,6 +356,9 @@ void ParagraphTool::deselectTextBlock()
         return;
 
     emit styleNameChanged(QString(i18n("n/a")));
+
+    deactivateRuler();
+    dehighlightRuler();
 
     m_textBlockValid = false;
     scheduleRepaint();
@@ -394,15 +396,14 @@ void ParagraphTool::activateRuler(RulerIndex ruler, ShapeSpecificData *shape)
 
     // disable hovering if we have an active ruler
     // hovering over the wrong ruler confuses the user
-    if (m_highlightRuler != noRuler) {
-        m_rulers[m_highlightRuler].setHighlighted(false);
-        m_highlightRuler = noRuler;
+    if (hasHighlightedRuler()) {
+        dehighlightRuler();
     }
 }
 
 void ParagraphTool::deactivateRuler()
 {
-    if (m_activeRuler == noRuler) {
+    if (!hasActiveRuler()) {
         return;
     }
 
@@ -416,7 +417,7 @@ void ParagraphTool::deactivateRuler()
 
 void ParagraphTool::resetActiveRuler()
 {
-    if (m_activeRuler != noRuler) {
+    if (hasActiveRuler()) {
         m_rulers[m_activeRuler].reset();
         deactivateRuler();
     }
@@ -425,7 +426,7 @@ void ParagraphTool::resetActiveRuler()
 void ParagraphTool::highlightRulerAt(const QPointF &point)
 {
     // check if we were already hovering over an element
-    if (m_highlightRuler != noRuler) {
+    if (hasHighlightedRuler()) {
         QPointF mappedPoint(m_highlightShape->mapDocumentToShape(point));
 
         // check if we are still over the same element
@@ -434,8 +435,7 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
         }
         else {
             // stop hovering over the element
-            m_rulers[m_highlightRuler].setHighlighted(false);
-            m_highlightRuler = noRuler;
+            dehighlightRuler();
         }
     }
 
@@ -454,9 +454,17 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
     }
 }
 
+void ParagraphTool::dehighlightRuler()
+{
+    if (hasHighlightedRuler()) {
+        m_rulers[m_highlightRuler].setHighlighted(false);
+        m_highlightRuler = noRuler;
+    }
+}
+
 void ParagraphTool::applyParentStyleToActiveRuler()
 {
-    if (m_activeRuler == noRuler) {
+    if (!hasActiveRuler()) {
         return;
     }
 
@@ -523,7 +531,7 @@ bool ParagraphTool::selectTextBlockAt(const QPointF &point)
     m_block = textBlock;
     m_paragraphStyle = KoParagraphStyle::fromBlock(textBlock);
 
-    createShapeList(textBlock, textShape);
+    createShapeList(textBlock);
 
     emit styleNameChanged(styleName());
 
@@ -561,7 +569,7 @@ void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     m_mousePosition = event->point;
 
-    if (m_textBlockValid && m_activeRuler != noRuler) {
+    if (m_textBlockValid) {
         deactivateRuler();
     }
 
@@ -573,9 +581,8 @@ void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
     m_mousePosition = event->point;
 
     if (m_textBlockValid) {
-        if (m_activeRuler != noRuler) {
-            QPointF point(m_activeShape->mapDocumentToShape(event->point));
-            moveRuler(m_activeRuler, *m_activeShape, point, smoothMovement());
+        if (hasActiveRuler()) {
+            moveActiveRulerTo(event->point);
         }
         else {
             highlightRulerAt(event->point);
@@ -628,8 +635,9 @@ bool ParagraphTool::hitTest(RulerIndex ruler, const ShapeSpecificData &shape, co
     return m_rulers[ruler].hitTest(point, shape.baseline(ruler));
 }
 
-void ParagraphTool::moveRuler(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point, bool smooth)
+void ParagraphTool::moveActiveRulerTo(const QPointF &point)
 {
-    m_rulers[ruler].moveRuler(point, smooth, shape.baseline(ruler));
+    QPointF mappedPoint(m_activeShape->mapDocumentToShape(point));
+    m_rulers[m_activeRuler].moveRuler(mappedPoint, smoothMovement(), m_activeShape->baseline(m_activeRuler));
 }
 

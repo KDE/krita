@@ -105,17 +105,20 @@ signals:
 protected:
     QWidget *createOptionWidget();
 
-    bool createShapeList(QTextBlock textBlock, TextShape *textShape);
+    bool createShapeList(QTextBlock textBlock);
 
     void loadRulers();
     void saveRulers();
 
+    bool hasActiveRuler() const { return m_activeRuler != noRuler; }
     void activateRuler(RulerIndex ruler, ShapeSpecificData *shape);
     bool activateRulerAt(const QPointF &point);
     void deactivateRuler();
     void resetActiveRuler();
 
+    bool hasHighlightedRuler() const { return m_highlightRuler != noRuler; }
     void highlightRulerAt(const QPointF &point);
+    void dehighlightRuler();
 
     bool smoothMovement() { return m_smoothMovement; }
 
@@ -128,7 +131,7 @@ protected:
     // hit test for a single ruler on a single shape
     bool hitTest(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point) const;
 
-    void moveRuler(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point, bool smoothMovement);
+    void moveActiveRulerTo(const QPointF &point);
 
     // internal convencience methods
     QTextBlock textBlock() const { Q_ASSERT(m_textBlockValid); return m_block; }

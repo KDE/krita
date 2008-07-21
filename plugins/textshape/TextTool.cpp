@@ -68,7 +68,6 @@
 #include <QAbstractTextDocumentLayout>
 #include <QAction>
 #include <QBuffer>
-#include <QClipboard>
 #include <QKeyEvent>
 #include <QPointer>
 #include <QTabWidget>
@@ -556,16 +555,7 @@ void TextTool::mousePressEvent( KoPointerEvent *event )
     updateActions();
 
     if(event->button() ==  Qt::MidButton) { // Paste
-        QClipboard *clipboard = QApplication::clipboard();
-        QString paste = clipboard->text(QClipboard::Selection);
-        if(! paste.isEmpty()) {
-            if (m_textCursor.hasSelection())
-                m_selectionHandler.deleteInlineObjects();
-            m_textCursor.insertText(paste);
-            ensureCursorVisible();
-            editingPluginEvents();
-            emit blockChanged(m_textCursor.block());
-        }
+        pasteHelper(QClipboard::Selection);
     } else {
         // Is there an anchor here ?
         if (m_textCursor.charFormat().isAnchor()) {
@@ -667,14 +657,14 @@ void TextTool::deleteSelection()
     editingPluginEvents();
 }
 
-bool TextTool::paste()
+bool TextTool::pasteHelper(QClipboard::Mode mode)
 {
     if (m_textCursor.hasSelection()) {
         m_selectionHandler.deleteInlineObjects();
     }
 
     // check for mime type
-    const QMimeData *data = QApplication::clipboard()->mimeData();
+    const QMimeData *data = QApplication::clipboard()->mimeData(mode);
 
     if(data->hasFormat("application/vnd.oasis.opendocument.text")) {
         startMacro( "Paste" );
@@ -699,6 +689,11 @@ bool TextTool::paste()
     editingPluginEvents();
     emit blockChanged(m_textCursor.block());
     return true;
+}
+
+bool TextTool::paste()
+{
+    return pasteHelper(QClipboard::Clipboard);
 }
 
 QStringList TextTool::supportedPasteMimeTypes() const

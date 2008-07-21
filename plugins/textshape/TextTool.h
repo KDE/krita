@@ -30,6 +30,7 @@
 #include <QAction>
 #include <QHash>
 #include <QTextBlock>
+#include <QClipboard>
 
 class KoAction;
 class KoStyleManager;
@@ -175,6 +176,7 @@ private slots:
     void shapeAddedToCanvas();
 
 private:
+    bool pasteHelper(QClipboard::Mode mode);
     void repaintCaret();
     void repaintSelection();
     void repaintSelection(int from, int to);

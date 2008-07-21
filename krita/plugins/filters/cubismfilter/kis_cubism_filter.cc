@@ -361,7 +361,7 @@ void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
 //                                                         KisRectIteratorPixel srcIt = src->createRectIterator(x,y,1,1, false);
 //                                                         const quint8* srcPixel = srcIt.oldRawData();
 //                                                         memcpy( buf, srcPixel, sizeof(quint8) * pixelSize );
-                                                        src->readBytes(buf, x, y, 1, 1);
+                                                        dst->readBytes(buf, x, y, 1, 1);
                                                 #ifndef USE_READABLE_BUT_SLOW_CODE
                                                         quint8 *bufIter = buf;
                                                         const quint8 *colIter = col;

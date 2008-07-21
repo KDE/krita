@@ -184,6 +184,72 @@ namespace {
         png_free(ping, text[0].text);
         png_free(ping, text);
     }
+    QByteArray png_read_raw_profile(png_textp text)
+    {
+        QByteArray profile;
+        
+        unsigned char unhex[103]={0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                    0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                    0,0,0,0,0,0,0,0,0,1, 2,3,4,5,6,7,8,9,0,0,
+                    0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
+                    0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,10,11,12,
+                    13,14,15};
+        
+        png_charp sp=text[0].text + 1;
+        /* look for newline */
+        while (*sp != '\n')
+            sp++;
+        /* look for length */
+        while (*sp == '\0' || *sp == ' ' || *sp == '\n')
+            sp++;
+        png_uint_32 length=(png_uint_32) atol(sp);
+        while (*sp != ' ' && *sp != '\n')
+            sp++;
+        if( length == 0 )
+        {
+            return profile;
+        }
+        profile.resize( length );
+        /* copy profile, skipping white space and column 1 "=" signs */
+        unsigned char *dp = (unsigned char*)profile.data();
+        png_uint_32 nibbles = length * 2;
+        for (png_uint_32 i=0; i < nibbles; i++)
+        {
+            while (*sp < '0' || (*sp > '9' && *sp < 'a') || *sp > 'f')
+            {
+                if (*sp == '\0')
+                {
+                    return QByteArray();
+                }
+                sp++;
+            }
+            if (i%2 == 0)
+                *dp=(unsigned char) (16*unhex[(int) *sp++]);
+            else
+                (*dp++)+=unhex[(int) *sp++];
+        }
+        return profile;
+    }
+    void decode_meta_data( png_textp text, KisMetaData::Store* store, QString type, int headerSize)
+    {
+        dbgFile << "Decoding " << type << " " << text[0].key;
+                KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value(type);
+        Q_ASSERT(exifIO);
+
+        QByteArray rawProfile = png_read_raw_profile( text );
+        if( headerSize > 0 )
+        {
+            rawProfile.remove(0, headerSize);
+        }
+        if(rawProfile.size() > 0 )
+        {
+            QBuffer buffer;
+            buffer.setData( rawProfile);
+            exifIO->loadFrom( store, &buffer);
+        } else {
+            dbgFile << "Decoding failed";
+        }
+    }
 }
 
 KisPNGConverter::KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
@@ -490,6 +556,25 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 #endif
 
+    // Creating the KisImageSP
+    if( m_img == 0 ) {
+        m_img = new KisImage(m_adapter, width, height, cs, "built image");
+        Q_CHECK_PTR(m_img);
+        m_img->lock();
+        if(profile && !profile->isSuitableForOutput())
+        {
+            KisAnnotationSP annotation;
+            // XXX we hardcode icc, this is correct for lcms?
+            // XXX productName(), or just "ICC Profile"?
+            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            if ( iccprofile && !iccprofile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+            m_img -> addAnnotation( annotation );
+        }
+    }
+
+    double coeff = quint8_MAX / (double)( pow(2, color_nb_bits ) - 1 );
+    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
     // Read comments/texts...
     png_text* text_ptr;
     int num_comments;
@@ -500,16 +585,23 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         dbgFile << "There are " << num_comments << " comments in the text";
         for(int i = 0; i < num_comments; i++)
         {
-            dbgFile << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text;
-            if(QString::compare(text_ptr[i].key, "title") == 0)
+            QString key = text_ptr[i].key;
+            dbgFile << "key is |" << text_ptr[i].key << "| containing " << text_ptr[i].text << " " << (key ==  "Raw profile type exif ");
+            if( key == "title")
             {
                     info->setAboutInfo("title", text_ptr[i].text);
-            } else if(QString::compare(text_ptr[i].key, "abstract")  == 0)
+            } else if( key == "abstract")
             {
                     info->setAboutInfo("description", text_ptr[i].text);
-            } else if(QString::compare(text_ptr[i].key, "author") == 0)
+            } else if( key == "author")
             {
                     info->setAuthorInfo("creator", text_ptr[i].text);
+            } else if( key.contains( "Raw profile type exif" )) {
+                decode_meta_data( text_ptr + i, layer->metaData(), "exif", 6 );
+            } else if( key.contains( " Raw profile type iptc " )) {
+                decode_meta_data( text_ptr + i, layer->metaData(), "iptc", 14 );
+            } else if( key.contains( " Raw profile type xmp  " )) {
+                decode_meta_data( text_ptr + i, layer->metaData(), "xmp", 0 );
             }
         }
     }
@@ -559,25 +651,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         }
     }
 
-    // Creating the KisImageSP
-    if( m_img == 0 ) {
-        m_img = new KisImage(m_adapter, width, height, cs, "built image");
-        Q_CHECK_PTR(m_img);
-        m_img->lock();
-        if(profile && !profile->isSuitableForOutput())
-        {
-            KisAnnotationSP annotation;
-            // XXX we hardcode icc, this is correct for lcms?
-            // XXX productName(), or just "ICC Profile"?
-            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
-            if ( iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
-            m_img -> addAnnotation( annotation );
-        }
-    }
-
-    double coeff = quint8_MAX / (double)( pow(2, color_nb_bits ) - 1 );
-    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
     for (png_uint_32 y = 0; y < height; y++) {
         KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width);
 

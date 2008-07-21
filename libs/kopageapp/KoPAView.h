@@ -67,7 +67,7 @@ public:
 
     void updateReadWrite( bool readwrite );
 
-    virtual KoViewConverter * viewConverter() { return &m_zoomHandler; }
+    virtual KoViewConverter * viewConverter( KoPACanvas * canvas ) { Q_UNUSED( canvas ); return &m_zoomHandler; }
 
     KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
 

@@ -131,10 +131,10 @@ void KoPAView::initGUI()
     m_viewMode = m_viewModeNormal;
 
     //Ruler
-    m_horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter());
+    m_horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter( m_canvas ));
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->setUnit(m_doc->unit());
-    m_verticalRuler = new KoRuler(this, Qt::Vertical, viewConverter());
+    m_verticalRuler = new KoRuler(this, Qt::Vertical, viewConverter( m_canvas ));
     m_verticalRuler->setUnit(m_doc->unit());
     m_verticalRuler->setShowMousePosition(true);
 

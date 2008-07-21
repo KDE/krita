@@ -113,7 +113,7 @@ void KoPACanvas::updateCanvas( const QRectF& rc )
 
 const KoViewConverter * KoPACanvas::viewConverter() const
 {
-    return m_view->viewConverter();
+    return m_view->viewConverter( const_cast<KoPACanvas *>( this ) );
 }
 
 KoUnit KoPACanvas::unit() const
@@ -128,7 +128,7 @@ const QPoint & KoPACanvas::documentOffset() const
 
 void KoPACanvas::paintEvent( QPaintEvent *event )
 {
-    m_view->viewMode()->paintEvent( event );
+    m_view->viewMode()->paintEvent( this, event );
 }
 
 void KoPACanvas::tabletEvent( QTabletEvent *event )

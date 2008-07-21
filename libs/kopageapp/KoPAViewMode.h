@@ -41,7 +41,7 @@ public:
     KoPAViewMode( KoPAView * view, KoPACanvas * canvas );
     virtual ~KoPAViewMode();
 
-    virtual void paintEvent( QPaintEvent* event ) = 0;
+    virtual void paintEvent( KoPACanvas * canvas, QPaintEvent* event ) = 0;
     virtual void tabletEvent( QTabletEvent *event, const QPointF &point ) = 0;
     virtual void mousePressEvent( QMouseEvent *event, const QPointF &point ) = 0;
     virtual void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point ) = 0;
@@ -108,7 +108,7 @@ public:
      *
      * @return the view converter used in the view mode
      */
-    virtual KoViewConverter * viewConverter();
+    virtual KoViewConverter * viewConverter( KoPACanvas * canvas );
 
     /**
      * @brief Update the view based on the active page

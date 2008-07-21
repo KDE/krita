@@ -42,15 +42,17 @@ KoPAViewModeNormal::~KoPAViewModeNormal()
 {
 }
 
-void KoPAViewModeNormal::paintEvent( QPaintEvent* event )
+void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
 {
+    Q_ASSERT( m_canvas == canvas );
+
     QPainter painter( m_canvas );
     painter.translate( -m_canvas->documentOffset() );
     painter.setRenderHint( QPainter::Antialiasing );
     QRectF clipRect = event->rect().translated( m_canvas->documentOffset() );
     painter.setClipRect( clipRect );
 
-    KoViewConverter * converter = m_view->viewConverter();
+    KoViewConverter * converter = m_view->viewConverter( m_canvas );
     m_view->activePage()->paintBackground( painter, *converter );
     m_canvas->document()->gridData().paintGrid( painter, *converter, clipRect );
     m_canvas->document()->guidesData().paintGuides( painter, *converter, clipRect );

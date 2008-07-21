@@ -62,9 +62,9 @@ KoPAView * KoPAViewMode::view() const
     return m_view;
 }
 
-KoViewConverter * KoPAViewMode::viewConverter()
+KoViewConverter * KoPAViewMode::viewConverter( KoPACanvas * canvas )
 {
-    return m_view->KoPAView::viewConverter();
+    return m_view->KoPAView::viewConverter( canvas );
 }
 
 void KoPAViewMode::updateActivePage( KoPAPageBase *page )

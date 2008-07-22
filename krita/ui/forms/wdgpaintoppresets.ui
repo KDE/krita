@@ -5,9 +5,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>335</width>
-    <height>430</height>
+    <width>274</width>
+    <height>350</height>
    </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <layout class="QGridLayout" name="gridLayout_4" >
    <item row="0" column="0" >
@@ -26,8 +32,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>319</width>
-        <height>390</height>
+        <width>258</width>
+        <height>310</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -65,6 +71,12 @@
           </item>
           <item row="1" column="0" colspan="2" >
            <widget class="QFrame" name="frmOptionWidgetContainer" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="frameShape" >
              <enum>QFrame::StyledPanel</enum>
             </property>
@@ -124,28 +136,34 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>319</width>
-        <height>390</height>
+        <width>402</width>
+        <height>415</height>
        </rect>
       </property>
       <attribute name="title" >
        <string>Preset Collection</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="lblName" >
-         <property name="text" >
-          <string>Name</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0" >
         <widget class="KisPresetChooser" native="1" name="wdgPresetChooser" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="lblName" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Name</string>
          </property>
         </widget>
        </item>

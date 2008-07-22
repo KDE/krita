@@ -29,6 +29,8 @@ class QPainter;
 class KoViewConverter;
 class QRectF;
 class QColor;
+class KoXmlDocument;
+class KoXmlWriter;
 
 class KOMAIN_EXPORT KoGuidesData
 {
@@ -99,10 +101,11 @@ public:
     /// Returns the color of the guide lines.
     QColor guidesColor() const;
 
-#if 0 //TODO
-    void saveOasisSettings( KoXmlWriter &settingsWriter );
-    void loadOasisSettings(const QDomDocument&settingsDoc);
-#endif     
+    /// Loads guide lines from the given setting xml document
+    bool loadOdfSettings( const KoXmlDocument & settingsDoc );
+
+    /// Saves guide lines to the given settings xml writer
+    void saveOdfSettings( KoXmlWriter &settingsWriter );
 
 private:
     class Private;

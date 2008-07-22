@@ -27,6 +27,8 @@
 class QPainter;
 class QRectF;
 class KoViewConverter;
+class KoXmlDocument;
+class KoXmlWriter;
 
 /**
  * This class stores application-data for display-grids.
@@ -93,10 +95,11 @@ public:
      */
      void setShowGrid ( bool showGrid );
 
-#if 0 //TODO look at if we save or not into odf file
-     void saveOasisSettings( KoXmlWriter &settingsWriter );
-     void loadOasisSettings(const QDomDocument&settingsDoc);
-#endif
+    /// Loads grid data from the given setting xml document
+    bool loadOdfSettings( const KoXmlDocument & settingsDoc );
+
+    /// Saves grid data to the given settings xml writer
+    void saveOdfSettings( KoXmlWriter &settingsWriter );
 
     /**
       * Paint the grid

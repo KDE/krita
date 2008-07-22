@@ -22,6 +22,8 @@
 
 #include "KoUnit.h"
 #include "KoViewConverter.h"
+#include <KoOasisSettings.h>
+#include <KoXmlWriter.h>
 
 #include <QPainter>
 #include <QRectF>
@@ -136,3 +138,53 @@ void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, 
     };
 }
 
+bool KoGridData::loadOdfSettings( const KoXmlDocument & settingsDoc )
+{
+    KoOasisSettings settings( settingsDoc );
+    KoOasisSettings::Items viewSettings = settings.itemSet( "ooo:view-settings" );
+    if( viewSettings.isNull() )
+        return false;
+
+    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
+    if( viewMap.isNull() )
+        return false;
+
+    KoOasisSettings::Items firstView = viewMap.entry( 0 );
+    if( firstView.isNull() )
+        return false;
+
+    qreal gridX = firstView.parseConfigItemInt( "GridFineWidth" );
+    qreal gridY = firstView.parseConfigItemInt( "GridFineHeight" );
+    d->gridX = MM_TO_POINT( gridX / 100.0 );
+    d->gridY = MM_TO_POINT( gridY / 100.0 );
+    d->snapToGrid = firstView.parseConfigItemBool( "IsSnapToGrid" );
+
+    return true;
+}
+
+void KoGridData::saveOdfSettings( KoXmlWriter &settingsWriter )
+{
+    settingsWriter.startElement( "config:config-item" );
+    settingsWriter.addAttribute( "config:name", "IsSnapToGrid" );
+    settingsWriter.addAttribute( "config:type", "boolean" );
+    settingsWriter.addTextNode( d->snapToGrid ? "true" : "false" );
+    settingsWriter.endElement();
+
+    if( d->gridX >= 0.0 )
+    {
+        settingsWriter.startElement( "config:config-item" );
+        settingsWriter.addAttribute( "config:name", "GridFineWidth" );
+        settingsWriter.addAttribute( "config:type", "int" );
+        settingsWriter.addTextNode( QString::number( static_cast<int>( POINT_TO_MM( d->gridX * 100.0 ) ) ) );
+        settingsWriter.endElement();
+    }
+
+    if( d->gridY >= 0.0 )
+    {
+        settingsWriter.startElement( "config:config-item" );
+        settingsWriter.addAttribute( "config:name", "GridFineHeight" );
+        settingsWriter.addAttribute( "config:type", "int" );
+        settingsWriter.addTextNode( QString::number( static_cast<int>( POINT_TO_MM( d->gridY * 100.0 ) ) ) );
+        settingsWriter.endElement();
+    }
+}

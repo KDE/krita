@@ -52,8 +52,6 @@
  * - the separator line uses firstLine.right(), which is not calculated correctly
  *   (should be done using border - right margin instead of simply the right end of the layouted text)
  * - think about were to store paragraph properties such as singeLine and isList, ParagraphTool or ShapeSpecificData?
- * - repainting currently causes artifacts. it seems like the relayouting causes a paint, but we then need another repaint
- *   to draw the tool itself
  * - make sure that rulers only draw into the right area, pass a bounding rectangle to the drawing method for this
  *
  * TODO:
@@ -173,6 +171,8 @@ void ParagraphTool::loadRulers()
         m_rulers[followingIndentRuler].setValue(m_paragraphStyle->leftMargin());
         m_rulers[followingIndentRuler].show();
     }
+
+    scheduleRepaint();
 }
 
 
@@ -331,16 +331,19 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void ParagraphTool::repaintDecorations()
 {
-    if (!m_needsRepaint)
+    if (!m_needsRepaint) {
         return;
-
-    // TODO: should add previous and current label positions to the repaint area
-    QRectF dirtyRectangle;
-    foreach (ShapeSpecificData shape, m_shapes) {
-        dirtyRectangle |= shape.dirtyRectangle();
     }
 
-    canvas()->updateCanvas(dirtyRectangle);
+    // TODO: should add previous and current label positions to the repaint area
+    QRectF repaintRectangle = m_storedRepaintRectangle;
+    m_storedRepaintRectangle = QRectF();
+    foreach (ShapeSpecificData shape, m_shapes) {
+        m_storedRepaintRectangle |= shape.dirtyRectangle();
+    }
+    repaintRectangle |= m_storedRepaintRectangle;
+
+    canvas()->updateCanvas(repaintRectangle);
 
     m_needsRepaint = false;
 }
@@ -534,8 +537,6 @@ bool ParagraphTool::selectTextBlockAt(const QPointF &point)
     createShapeList(textBlock);
 
     emit styleNameChanged(styleName());
-
-    scheduleRepaint();
 
     loadRulers();
 

@@ -154,6 +154,7 @@ private:
                m_highlightRuler;
 
     QPointF m_mousePosition;
+    QRectF m_storedRepaintRectangle;
 
     bool m_singleLine,
          m_isList,

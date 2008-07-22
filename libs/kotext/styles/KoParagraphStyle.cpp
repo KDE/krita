@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1295,15 +1296,27 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
     return answer;
 }
 
-bool KoParagraphStyle::operator==(const KoParagraphStyle &other) const
+bool KoParagraphStyle::compareParagraphProperties(const KoParagraphStyle &other) const
 {
-    if ((*(other.d->stylesPrivate)) != (*(this->d->stylesPrivate)))
-        return false;
+    return *other.d->stylesPrivate == *d->stylesPrivate;
+}
+
+bool KoParagraphStyle::compareCharacterProperties(const KoParagraphStyle &other) const
+{
     if (d->charStyle == 0 && other.d->charStyle == 0)
         return true;
     if (!d->charStyle || !other.d->charStyle)
         return false;
     return *d->charStyle == *other.d->charStyle;
+}
+
+bool KoParagraphStyle::operator==(const KoParagraphStyle &other) const
+{
+    if (!compareParagraphProperties(other))
+        return false;
+    if (!compareCharacterProperties(other))
+        return false;
+    return true;
 }
 
 void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)

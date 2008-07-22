@@ -407,11 +407,17 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition( const QPointF &position )
 void GuidesTool::resourceChanged( int key, const QVariant & )
 {
     if( key == KoCanvasResource::Unit )
-        d->options->setUnit( m_canvas->unit() );
+    {
+        if( d->options )
+            d->options->setUnit( m_canvas->unit() );
+    }
 }
 
 QWidget * GuidesTool::createOptionWidget()
 {
+    if( d->mode != Private::EditGuide )
+        return 0;
+
     d->options = new GuidesToolOptionWidget();
 
     connect( d->options, SIGNAL(guideLineSelected(Qt::Orientation,uint)),

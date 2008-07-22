@@ -135,7 +135,6 @@ void KisPaintopBox::slotItemSelected(int index)
             activeSetting(currentPaintop(), KoToolManager::instance()->currentInputDevice());
         if(settings) settings->activate();
 
-
         m_cmbPaintopPresets->clear();
         KisPaintOpPresetSP preset =
             activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice() );

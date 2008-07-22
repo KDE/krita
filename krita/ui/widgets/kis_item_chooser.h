@@ -28,13 +28,17 @@ class KoResourceItemChooser;
 class KoResourceItem;
 class QTableWidgetItem;
 
+/**
+ * A special type of item chooser that can contain extra widgets that show
+ * more information about the currently selected item. Reimplement update()
+ * to extract that information and fill the appropriate widgets.
+ */
 class KisItemChooser : public QWidget {
 
     Q_OBJECT
 
 public:
-    KisItemChooser(QWidget *parent = 0,
-               const char *name = 0);
+    KisItemChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisItemChooser();
 
     QTableWidgetItem *currentItem();
@@ -53,6 +57,10 @@ signals:
     void deleteClicked();
 
 protected:
+
+    /**
+     * Reimplement update() to extract that information and fill the appropriate widgets
+     */
     virtual void update(QTableWidgetItem *item) = 0;
     QWidget *chooserWidget() const;
 

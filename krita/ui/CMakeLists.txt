@@ -100,6 +100,7 @@ set(kritaui_LIB_SRCS
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
     widgets/imageviewer.cc 
+    widgets/kis_preset_chooser.cpp
     widgets/kcurve.cc
     widgets/kis_auto_brush_widget.cpp 
     widgets/kis_brush_chooser.cc

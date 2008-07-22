@@ -54,12 +54,13 @@ public:
 public slots:
     void setActiveItem(QTableWidgetItem *item);
 
- private slots:
+private slots:
     void deleteActiveResource();
     void rServerAddedResource(KoResource *resource);
     void rServerRemovingResource(KoResource *resource);
 
 signals:
+
     void activatedResource(KoResource *r);
 
 private:

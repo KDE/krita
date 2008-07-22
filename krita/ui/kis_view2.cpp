@@ -171,6 +171,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     : KoView(doc, parent),
     m_d(new KisView2Private())
 {
+    setFocusPolicy(Qt::NoFocus);
 
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
     actionCollection()->addAction("total_refresh", m_d->totalRefresh );
@@ -580,7 +581,7 @@ void KisView2::createManagers()
     connect(m_d->doc->nodeModel(), SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, int )), m_d->nodeManager, SLOT(insertNode(KisNodeSP, KisNodeSP, int )));
     connect(m_d->doc->nodeModel(), SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP)), m_d->nodeManager, SLOT(moveNode(KisNodeSP, KisNodeSP)));
     connect(m_d->doc->nodeModel(), SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, int )), m_d->nodeManager, SLOT(moveNodeAt(KisNodeSP, KisNodeSP, int)));
-    
+
 
     // the following cast is not really safe, but better here than in the zoomManager
     // best place would be outside kisview too

@@ -264,22 +264,22 @@ QDebug operator<<(QDebug dbg, const Value &v)
             dbg.nospace() << "invalid value";
             break;
         case Value::Variant:
-            dbg.nospace() << v.asVariant();
+            dbg.nospace() << "Variant: " << v.asVariant();
             break;
         case Value::OrderedArray:
         case Value::UnorderedArray:
         case Value::AlternativeArray:
         case Value::LangArray:
-            dbg.nospace() << v.asArray();
+            dbg.nospace() << "Array: " << v.asArray();
             break;
         case Value::Structure:
-            dbg.nospace() << v.asStructure();
+            dbg.nospace() << "Structure: " << v.asStructure();
             break;
         case Value::SignedRational:
-            dbg.nospace() << v.asSignedRational().numerator << " / " << v.asSignedRational().denominator;
+            dbg.nospace() << "Signed rational: " << v.asSignedRational().numerator << " / " << v.asSignedRational().denominator;
             break;
         case Value::UnsignedRational:
-            dbg.nospace() << v.asUnsignedRational().numerator << " / " << v.asUnsignedRational().denominator;
+            dbg.nospace() << "Unsigend rational: " << v.asUnsignedRational().numerator << " / " << v.asUnsignedRational().denominator;
             break;
     }
     return dbg.space();

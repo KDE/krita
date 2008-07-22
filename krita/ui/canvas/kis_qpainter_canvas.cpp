@@ -27,6 +27,7 @@
 #include <QColor>
 #include <QString>
 #include <QTime>
+#include <QTimer>
 #include <QPixmap>
 #include <QApplication>
 #include <QMenu>
@@ -77,6 +78,7 @@ public:
     QPoint documentOffset;
     bool tabletDown;
     QTabletEvent previousEvent;
+    QTimer blockMouseEvent;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
@@ -95,6 +97,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     setAcceptDrops( true );
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_InputMethodEnabled, true);
+    m_d->blockMouseEvent.setSingleShot(true);
 }
 
 KisQPainterCanvas::~KisQPainterCanvas()
@@ -211,6 +214,7 @@ void KisQPainterCanvas::leaveEvent( QEvent* e )
 }
 
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
+    if( m_d->blockMouseEvent.isActive() ) return;
     m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
@@ -224,14 +228,18 @@ void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e) {
 }
 
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
+    dbgRender << "Mouse press event";
+    if( m_d->blockMouseEvent.isActive() ) return;
     m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e) {
+    if( m_d->blockMouseEvent.isActive() ) return;
     m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
 void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e) {
+    if( m_d->blockMouseEvent.isActive() ) return;
     m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
 }
 
@@ -255,6 +263,7 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
 
 void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
 {
+    m_d->blockMouseEvent.start(100);
     dbgRender <<"tablet event:" << e->pressure() << e->type() << " " << e->device() << " " << e->x() << " " << e->y();
     switch( e->type() ) {
     case QEvent::TabletPress:

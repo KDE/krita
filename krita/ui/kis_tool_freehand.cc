@@ -82,7 +82,7 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-//    dbgUI << "mousePressEvent" << m_mode;
+    dbgUI << "mousePressEvent" << m_mode;
 //     if (!currentImage())
 //  		return;
 
@@ -99,7 +99,9 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     {
         currentPaintOpSettings()->mousePressEvent(e);
         if(e->isAccepted())
+        {
             return;
+        }
     }
 
     if (e->button() == Qt::LeftButton)

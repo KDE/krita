@@ -29,6 +29,7 @@ class StylePrivate
 public:
     StylePrivate();
     StylePrivate(const StylePrivate &other);
+    StylePrivate(const QMap<int, QVariant> &other);
     ~StylePrivate();
 
     void add(int key, const QVariant &value);

@@ -33,6 +33,10 @@ StylePrivate::StylePrivate(const StylePrivate &other)
 StylePrivate::~StylePrivate() {
 }
 
+StylePrivate::StylePrivate(const QMap<int, QVariant> &other)
+: m_properties(other)
+{
+}
 
 void StylePrivate::add(int key, const QVariant &value) {
     m_properties.insert(key, value);

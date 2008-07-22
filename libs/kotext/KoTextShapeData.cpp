@@ -250,7 +250,6 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
         if (blockData)
             isHeading = (blockData->outlineLevel() > 0);
-        KoParagraphStyle *paragstyle = KoParagraphStyle::fromBlock(block);
         if (block.textList() && !isHeading) {
             if ((textLists.isEmpty()) || (!textLists.contains(block.textList()))) {
                 writer->startElement( "text:list", false );

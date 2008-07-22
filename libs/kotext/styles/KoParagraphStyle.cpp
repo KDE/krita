@@ -89,11 +89,12 @@ KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
         setListStyle(*orig.d->listStyle);
 }
 
-KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat)
+KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat)
     : QObject(),
     d(new Private())
 {
     d->stylesPrivate = new StylePrivate(blockFormat.properties());
+    d->charStyle = new KoCharacterStyle(charFormat);
 }
 
 KoParagraphStyle::~KoParagraphStyle() {

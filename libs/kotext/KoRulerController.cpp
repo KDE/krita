@@ -122,7 +122,7 @@ public:
 
         if (originalTabIndex == -2 || originalTabIndex != originalIndex) {
             originalTabIndex = originalIndex;
-            KoParagraphStyle style(cursor.blockFormat());
+            KoParagraphStyle style(cursor.blockFormat(), cursor.blockCharFormat());
             tabList = style.tabPositions();
             if (originalTabIndex >= 0) { // modification
                 currentTab = tabList[originalTabIndex];

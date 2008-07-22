@@ -145,7 +145,7 @@ public:
     /// Copy constructor
     KoParagraphStyle(const KoParagraphStyle &orig);
     /// Copy constructor
-    KoParagraphStyle(const QTextFormat &textFormat);
+    KoParagraphStyle(const QTextBlockFormat &textFormat);
     /// Destructor
     ~KoParagraphStyle();
 

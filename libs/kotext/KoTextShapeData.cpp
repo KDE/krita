@@ -198,7 +198,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             if (textFormat.type() == QTextFormat::BlockFormat) {
                 KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(textFormat.intProperty(KoParagraphStyle::StyleId));
                 // we'll convert it to a KoParagraphStyle to check for local changes.
-                KoParagraphStyle paragStyle(textFormat);
+                KoParagraphStyle paragStyle(textFormat.toBlockFormat());
                 if (originalParagraphStyle) {
                     displayName = originalParagraphStyle->name();
                     internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");

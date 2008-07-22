@@ -31,9 +31,7 @@ macro_log_feature(GMM_FOUND "GMM" "The Krita Panorama plugin will not be built."
 macro_log_feature(HAVE_OPENGL "OpenGL" "The Krita shader filter plugin will not be built" "" FALSE "")
 macro_log_feature(HAVE_GLEW "GLEW" "The Krita shader filter plugin will not be built" "http://glew.sourceforge.net" FALSE "")
 
-if(HAVE_OPENGL)
-    IF(HAVE_GLEW)
-       add_subdirectory( glsl )
-    ENDIF(HAVE_GLEW)
-endif(HAVE_OPENGL)
+if(HAVE_OPENGL AND HAVE_GLEW)
+   add_subdirectory( glsl )
+endif(HAVE_OPENGL AND HAVE_GLEW)
 

@@ -582,7 +582,7 @@ void TestLoading::addData()
 
     QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
 
-    QTest::newRow("colors") << "FormattingProperties/TextFormattingProperties/color";
+    QTest::newRow("color") << "FormattingProperties/TextFormattingProperties/color";
     QTest::newRow("country") << "FormattingProperties/TextFormattingProperties/country";
     QTest::newRow("fontCharset") << "FormattingProperties/TextFormattingProperties/fontCharacterSet";
     QTest::newRow("fontFamily") << "FormattingProperties/TextFormattingProperties/fontFamily";

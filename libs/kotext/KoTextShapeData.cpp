@@ -286,7 +286,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             QTextFragment currentFragment = it.fragment();
             const int fragmentStart = currentFragment.position();
             const int fragmentEnd = fragmentStart + currentFragment.length();
-            if (fragmentStart >= to)
+            if (to != -1 && fragmentStart >= to)
                 break;
             if (currentFragment.isValid()) {
                 QTextCharFormat charFormat = currentFragment.charFormat();
@@ -342,7 +342,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     
                     QString text = currentFragment.text();
                     int spanFrom = fragmentStart >= from ? 0 : from;
-                    int spanTo = fragmentEnd > to ? to : fragmentEnd;
+                    int spanTo = to == -1 ? fragmentEnd : (fragmentEnd > to ? to : fragmentEnd);
                     if (spanFrom != fragmentStart || spanTo != fragmentEnd) { // avoid mid, if possible
                         writer->addTextSpan(text.mid(spanFrom - fragmentStart, spanTo - spanFrom));
                     } else {

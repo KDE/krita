@@ -183,26 +183,31 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
 QString KoTextShapeData::Private::saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager, const QTextBlock &block)
 {
     Q_ASSERT(styleManager);
+    KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
+
     QTextBlockFormat blockFormat = block.blockFormat();
     QTextCharFormat charFormat = QTextCursor(block).blockCharFormat(); // fix this after TT Task 219905
  
     KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
-    QString displayName, internalName, generatedName;
-    if (originalParagraphStyle) {
-        displayName = originalParagraphStyle->name();
-        internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
-    }
+    if (!originalParagraphStyle)
+        originalParagraphStyle = defaultParagraphStyle;
+
+    QString generatedName;
+    QString displayName = originalParagraphStyle->name();
+    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
 
     // we'll convert the blockFormat to a KoParagraphStyle to check for local changes.
     KoParagraphStyle paragStyle(blockFormat, charFormat);
-    if (originalParagraphStyle && (paragStyle == (*originalParagraphStyle))) { // This is the real, unmodified character style.
-        KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
-        originalParagraphStyle->saveOdf(style);
-        generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
+    if (paragStyle == (*originalParagraphStyle)) { // This is the real, unmodified character style.
+        if (originalParagraphStyle != defaultParagraphStyle) {
+            KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
+            originalParagraphStyle->saveOdf(style);
+            generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
+        }
     } else { // There are manual changes... We'll have to store them then
         KoGenStyle style(KoGenStyle::StyleAuto, "paragraph", internalName);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
-            style.setAutoStyleInStylesDotXml( true );
+            style.setAutoStyleInStylesDotXml(true);
         if (originalParagraphStyle)
             paragStyle.removeDuplicates(*originalParagraphStyle);
         paragStyle.saveOdf(style);

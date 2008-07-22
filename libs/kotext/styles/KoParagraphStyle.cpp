@@ -69,83 +69,6 @@ public:
     StylePrivate *stylesPrivate;
 };
 
-// all relevant properties.
-static const int properties[] = {
-    QTextFormat::BlockTopMargin,
-    QTextFormat::BlockBottomMargin,
-    QTextFormat::BlockLeftMargin,
-    QTextFormat::BlockRightMargin,
-    QTextFormat::BlockAlignment,
-    QTextFormat::TextIndent,
-    QTextFormat::BlockIndent,
-    QTextFormat::BlockNonBreakableLines,
-    QTextFormat::BackgroundBrush,
-    KoParagraphStyle::StyleId,
-    KoParagraphStyle::FixedLineHeight,
-    KoParagraphStyle::MinimumLineHeight,
-    KoParagraphStyle::LineSpacing,
-    KoParagraphStyle::PercentLineHeight,
-    KoParagraphStyle::LineSpacingFromFont,
-//      KoParagraphStyle::AlignLastLine,
-//      KoParagraphStyle::WidowThreshold,
-//      KoParagraphStyle::OrphanThreshold,
-    KoParagraphStyle::DropCaps,
-    KoParagraphStyle::DropCapsLength,
-    KoParagraphStyle::DropCapsLines,
-    KoParagraphStyle::DropCapsDistance,
-    KoParagraphStyle::DropCapsTextStyle,
-//      KoParagraphStyle::FollowDocBaseline,
-    KoParagraphStyle::BreakBefore,
-    KoParagraphStyle::BreakAfter,
-//      KoParagraphStyle::HasLeftBorder,
-//      KoParagraphStyle::HasTopBorder,
-//      KoParagraphStyle::HasRightBorder,
-//      KoParagraphStyle::HasBottomBorder,
-//      KoParagraphStyle::BorderLineWidth,
-//      KoParagraphStyle::SecondBorderLineWidth,
-//      KoParagraphStyle::DistanceToSecondBorder,
-    KoParagraphStyle::LeftPadding,
-    KoParagraphStyle::TopPadding,
-    KoParagraphStyle::RightPadding,
-    KoParagraphStyle::BottomPadding,
-    KoParagraphStyle::LeftBorderWidth,
-    KoParagraphStyle::LeftInnerBorderWidth,
-    KoParagraphStyle::LeftBorderSpacing,
-    KoParagraphStyle::LeftBorderStyle,
-    KoParagraphStyle::TopBorderWidth,
-    KoParagraphStyle::TopInnerBorderWidth,
-    KoParagraphStyle::TopBorderSpacing,
-    KoParagraphStyle::TopBorderStyle,
-    KoParagraphStyle::RightBorderWidth,
-    KoParagraphStyle::RightInnerBorderWidth,
-    KoParagraphStyle::RightBorderSpacing,
-    KoParagraphStyle::RightBorderStyle,
-    KoParagraphStyle::BottomBorderWidth,
-    KoParagraphStyle::BottomInnerBorderWidth,
-    KoParagraphStyle::BottomBorderSpacing,
-    KoParagraphStyle::BottomBorderStyle,
-    KoParagraphStyle::LeftBorderColor,
-    KoParagraphStyle::TopBorderColor,
-    KoParagraphStyle::RightBorderColor,
-    KoParagraphStyle::BottomBorderColor,
-    KoParagraphStyle::ListStartValue,
-    KoParagraphStyle::RestartListNumbering,
-    KoParagraphStyle::AutoTextIndent,
-    KoParagraphStyle::TabStopDistance,
-    KoParagraphStyle::TabPositions,
-    KoParagraphStyle::TextProgressionDirection,
-    KoParagraphStyle::MasterPageName,
-    KoParagraphStyle::StartNewList,
-
-//sebsauer; why we don't copy them?
-//KoParagraphStyle::ListStartValue,
-//KoParagraphStyle::RestartListNumbering,
-//KoParagraphStyle::ListLevel,
-//KoParagraphStyle::IsListHeader,
-
-    -1
-};
-
 KoParagraphStyle::KoParagraphStyle()
 : d(new Private())
 {
@@ -157,8 +80,7 @@ KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
     : QObject(),
     d(new Private())
 {
-    d->stylesPrivate = new StylePrivate();
-    d->stylesPrivate->copyMissing(orig.d->stylesPrivate);
+    d->stylesPrivate = new StylePrivate(*orig.d->stylesPrivate);
     d->name = orig.name();
     d->charStyle = orig.d->charStyle;
     d->next = orig.d->next;
@@ -171,11 +93,7 @@ KoParagraphStyle::KoParagraphStyle(const QTextFormat &textFormat)
     d(new Private())
 {
     d->stylesPrivate = new StylePrivate();
-    QMapIterator<int, QVariant> i(textFormat.properties());
-    while (i.hasNext()) {
-        i.next();
-        d->setProperty(i.key(), i.value());
-    }
+    d->stylesPrivate->copy(textFormat.properties());
 }
 
 KoParagraphStyle::~KoParagraphStyle() {
@@ -249,15 +167,13 @@ QColor KoParagraphStyle::propertyColor(int key) const {
     return qvariant_cast<QColor>(variant);
 }
 
-void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
-    int i=0;
-    while(properties[i] != -1) {
-        QVariant variant = value(properties[i]);
-        if(! variant.isNull())
-            format.setProperty(properties[i], variant);
-        else
-            format.clearProperty(properties[i]);
-        i++;
+void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const 
+{
+    format = QTextBlockFormat();
+    QList<int> keys = d->stylesPrivate->keys();
+    for (int i = 0; i < keys.count(); i++) {
+        QVariant variant = d->stylesPrivate->value(keys[i]);
+        format.setProperty(keys[i], variant);
     }
 }
 
@@ -1363,7 +1279,6 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
     }
     if(answer == 0) {
         answer = new KoParagraphStyle();
-        answer->remove(PercentLineHeight);
         delete answer->characterStyle();
     }
     answer->d->charStyle = charStyle;
@@ -1371,12 +1286,10 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
     if(block.textList())
         answer->d->listStyle = KoListStyle::fromTextList(block.textList());
 
-    int i=0;
-    while(properties[i] != -1) {
-        int key = properties[i];
-        if(format.hasProperty(key))
-            answer->setProperty(key, format.property(key));
-        i++;
+    QMap<int, QVariant> properties = format.properties();
+    QList<int> keys = properties.keys();
+    for (int i = 0; i < keys.count(); i++) {
+        answer->setProperty(keys[i], properties.value(keys[i]));
     }
 
     return answer;

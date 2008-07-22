@@ -25,6 +25,11 @@
 StylePrivate::StylePrivate() {
 }
 
+StylePrivate::StylePrivate(const StylePrivate &other)
+: m_properties(other.m_properties)
+{
+}
+
 StylePrivate::~StylePrivate() {
 }
 
@@ -57,6 +62,13 @@ void StylePrivate::copyMissing(const StylePrivate *other) {
     }
 }
 
+void StylePrivate::copyMissing(const QMap<int, QVariant> &other) {
+    foreach(int key, other.keys()) {
+        if(! m_properties.contains(key))
+            m_properties.insert(key, other.value(key));
+    }
+}
+
 void StylePrivate::removeDuplicates(const StylePrivate *other) {
     foreach(int key, other->m_properties.keys()) {
         if(m_properties.value(key) == other->value(key))
@@ -64,7 +76,7 @@ void StylePrivate::removeDuplicates(const StylePrivate *other) {
     }
 }
 
-void StylePrivate::removeDuplicates(const QHash<int, QVariant> &other)
+void StylePrivate::removeDuplicates(const QMap<int, QVariant> &other)
 {
     foreach(int key, other.keys()) {
         if (m_properties.value(key) == other.value(key))
@@ -85,3 +97,14 @@ bool StylePrivate::operator==( const StylePrivate &other ) const {
     }
     return true;
 }
+
+void StylePrivate::copy(const QMap<int, QVariant> &other)
+{
+    m_properties = other;
+}
+
+void StylePrivate::copy(const StylePrivate &other)
+{
+    m_properties = other.m_properties;
+}
+

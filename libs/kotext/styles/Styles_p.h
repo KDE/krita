@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,11 +22,13 @@
 #define KOTEXT_STYLES_PRIVATE_H
 
 #include <QVariant>
-#include <QHash>
+#include <QMap>
 
-class StylePrivate {
+class StylePrivate 
+{
 public:
     StylePrivate();
+    StylePrivate(const StylePrivate &other);
     ~StylePrivate();
 
     void add(int key, const QVariant &value);
@@ -33,14 +36,19 @@ public:
     const QVariant value(int key) const;
     bool contains(int key) const;
     void copyMissing(const StylePrivate *other);
+    void copyMissing(const QMap<int, QVariant> &other);
     void removeDuplicates(const StylePrivate *other);
-    void removeDuplicates(const QHash<int, QVariant> &other);
+    void removeDuplicates(const QMap<int, QVariant> &other);
     void clearAll() { m_properties.clear(); }
     QList<int> keys();
     bool operator==( const StylePrivate &other ) const;
     bool isEmpty() const;
 
+    void copy(const QMap<int, QVariant> &other);
+    void copy(const StylePrivate &other);
+
 private:
-    QHash<int, QVariant> m_properties;
+    QMap<int, QVariant> m_properties;
 };
+
 #endif

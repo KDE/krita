@@ -98,19 +98,13 @@ KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format)
 }
 
 void KoCharacterStyle::copyProperties(const KoCharacterStyle *style) {
-    d->stylesPrivate->clearAll();
-    d->stylesPrivate->copyMissing(style->d->stylesPrivate);
+    d->stylesPrivate->copy(*style->d->stylesPrivate);
     d->name = style->name();
 }
 
 void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
 {
-    d->stylesPrivate->clearAll();
-    QMapIterator<int, QVariant> iter(format.properties());
-    while (iter.hasNext()) {
-        iter.next();
-        d->setProperty(iter.key(), iter.value());
-    }
+    d->stylesPrivate->copy(format.properties());
 }
 
 KoCharacterStyle::~KoCharacterStyle() {
@@ -153,58 +147,14 @@ void KoCharacterStyle::clearForeground() {
     d->stylesPrivate->remove(QTextCharFormat::ForegroundBrush);
 }
 
-void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
-    // copy all relevant properties.
-    static const int properties[] = {
-        StyleId,
-        QTextFormat::FontPointSize,
-        QTextCharFormat::ForegroundBrush,
-        QTextFormat::FontFamily,
-        QTextFormat::FontWeight,
-        QTextFormat::FontItalic,
-        QTextFormat::FontOverline,
-        QTextFormat::FontFixedPitch,
-        QTextFormat::TextVerticalAlignment,
-        QTextFormat::TextOutline,
-        QTextFormat::BackgroundBrush,
-        QTextFormat::ForegroundBrush,
-        QTextFormat::TextUnderlineColor,
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-        QTextFormat::FontLetterSpacing,
-        QTextFormat::FontWordSpacing,
-        QTextFormat::FontCapitalization,
-#endif
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
-        QTextFormat::FontStyleHint,
-        QTextFormat::FontStyleStrategy,
-        QTextFormat::FontKerning,
-#endif
-        KoCharacterStyle::StrikeOutStyle,
-        KoCharacterStyle::StrikeOutType,
-        KoCharacterStyle::StrikeOutColor,
-        KoCharacterStyle::StrikeOutWidth,
-        KoCharacterStyle::StrikeOutWeight,
-        KoCharacterStyle::StrikeOutText,
-        KoCharacterStyle::UnderlineStyle,
-        KoCharacterStyle::UnderlineType,
-        KoCharacterStyle::UnderlineWidth,
-        KoCharacterStyle::UnderlineWeight,
-        KoCharacterStyle::HasHyphenation,
-        KoCharacterStyle::UnderlineMode,
-        KoCharacterStyle::StrikeOutMode,
-        KoCharacterStyle::Language,
-        KoCharacterStyle::Country,
-        KoCharacterStyle::FontCharset,
-        -1
-    };
-
-    int i=0;
-    while(properties[i] != -1) {
-        QVariant variant = d->stylesPrivate->value(properties[i]);
-        if ( !variant.isNull() ) {
-            format.setProperty(properties[i], variant);
+void KoCharacterStyle::applyStyle(QTextCharFormat &format) const 
+{
+    QList<int> keys = d->stylesPrivate->keys();
+    for (int i = 0; i < keys.count(); i++) {
+        QVariant variant = d->stylesPrivate->value(keys[i]);
+        if (!variant.isNull()) {
+            format.setProperty(keys[i], variant);
         }
-        i++;
     }
 }
 

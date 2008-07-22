@@ -1,6 +1,8 @@
 /*
- *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>
  *
+ *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2008 Tom Burdick <thomas.burdick@gmail.com> 
+ * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -42,15 +44,15 @@ public:
     virtual ~KisOpenGLShader();
 
     /**
-     * Load the shader source code from the QVector<QString> of strings specified by sourceCodeStrings.
+     * Load the shader source code from the QString specified by sourceCodeString.
      *
-     * The source code strings can be freed after loading as the shader makes a copy.
+     * The source code string can be freed after loading as the shader makes a copy.
      *
      * This is a wrapper for the glShaderSource() function.
      *
      * @param sourceCodeStrings An array of pointers to the source code strings
      */
-    void loadSourceCode(QVector<QString> sourceCodeStrings);
+    void loadSourceCodeFromQString(QString sourceCodeString);
 
     /**
      * Load the shader source code from the array of strings specified by sourceCodeStrings. The number of strings
@@ -68,7 +70,7 @@ public:
      * @param sourceCodeStrings An array of pointers to the source code strings
      * @param stringLengths An array containing the lengths of each source code string
      */
-    void loadSourceCode(GLsizei numSourceCodeStrings, const GLcharARB **sourceCodeStrings, const GLint *stringLengths);
+    void loadSourceCodeFromCStrings(GLsizei numSourceCodeStrings, const GLchar **sourceCodeStrings, const GLint *stringLengths);
 
     /**
      * Load the shader source code from the given file, which will be searched for in the 'kis_shaders' resource
@@ -76,12 +78,12 @@ public:
      *
      * @param sourceCodeFilename The file to read the source code from
      */
-    void loadSourceCode(const QString & sourceCodeFilename);
+    void loadSourceCodeFromFile(const QString & sourceCodeFilename);
 
     /**
      * Returns the handle for this shader object.
      */
-    GLhandleARB handle() const;
+    GLuint handle() const;
 
     /**
      * Returns true if the shader is valid and can be attached to a program. It is valid if its
@@ -97,7 +99,7 @@ public:
 protected:
     KisOpenGLShader(GLenum shaderType);
 
-    GLhandleARB m_shader;
+    GLuint m_shader;
     bool m_valid;
 };
 

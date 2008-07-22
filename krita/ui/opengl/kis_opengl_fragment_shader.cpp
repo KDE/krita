@@ -21,14 +21,21 @@
 
 #include <GL/glew.h>
 
-KisOpenGLFragmentShader::KisOpenGLFragmentShader(const QString& sourceCodeFilename)
-    : KisOpenGLShader(GL_FRAGMENT_SHADER_ARB)
+KisOpenGLFragmentShader KisOpenGLFragmentShader::file(const QString& sourceCodeFilename)
 {
-    loadSourceCode(sourceCodeFilename);
+    KisOpenGLFragmentShader shader;
+    shader.loadSourceCodeFromFile(sourceCodeFilename);
+    return shader;
 }
 
-KisOpenGLFragmentShader::KisOpenGLFragmentShader(const QVector<QString>& sourceCodeStrings)
-    : KisOpenGLShader(GL_FRAGMENT_SHADER_ARB)
+KisOpenGLFragmentShader KisOpenGLFragmentShader::string(const QString& sourceCodeString)
 {
-    loadSourceCode(sourceCodeStrings);
+    KisOpenGLFragmentShader shader;
+    shader.loadSourceCodeFromQString(sourceCodeString);
+    return shader;
+}
+
+KisOpenGLFragmentShader::KisOpenGLFragmentShader() :
+    KisOpenGLShader(GL_FRAGMENT_SHADER)
+{
 }

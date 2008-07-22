@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2008 Tom Burdick <thomas.burdick@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +37,7 @@ KisOpenGLShader::KisOpenGLShader(GLenum shaderType)
 
     KIS_OPENGL_CLEAR_ERROR();
 
-    m_shader = glCreateShaderObjectARB(shaderType);
+    m_shader = glCreateShader(shaderType);
     KIS_OPENGL_PRINT_ERROR();
 
     if (m_shader == 0) {
@@ -48,24 +49,24 @@ KisOpenGLShader::~KisOpenGLShader()
 {
     if (m_shader != 0) {
         KIS_OPENGL_CLEAR_ERROR();
-        glDeleteObjectARB(m_shader);
+        glDeleteShader(m_shader);
         KIS_OPENGL_PRINT_ERROR();
     }
 }
 
-void KisOpenGLShader::loadSourceCode(GLsizei numSourceCodeStrings, const GLcharARB **sourceCodeStrings, const GLint *stringLengths)
+void KisOpenGLShader::loadSourceCodeFromCStrings(GLsizei numSourceCodeStrings, const GLchar **sourceCodeStrings, const GLint *stringLengths)
 {
     if (m_shader != 0) {
         KIS_OPENGL_CLEAR_ERROR();
-        glShaderSourceARB(m_shader, numSourceCodeStrings, sourceCodeStrings, stringLengths);
+        glShaderSource(m_shader, numSourceCodeStrings, sourceCodeStrings, stringLengths);
         KIS_OPENGL_PRINT_ERROR();
 
-        glCompileShaderARB(m_shader);
+        glCompileShader(m_shader);
         KIS_OPENGL_PRINT_ERROR();
 
         GLint compiled;
 
-        glGetObjectParameterivARB(m_shader, GL_OBJECT_COMPILE_STATUS_ARB, &compiled);
+        glGetShaderiv(m_shader, GL_COMPILE_STATUS, &compiled);
         KIS_OPENGL_PRINT_ERROR();
 
         if (compiled) {
@@ -77,7 +78,7 @@ void KisOpenGLShader::loadSourceCode(GLsizei numSourceCodeStrings, const GLcharA
     }
 }
 
-void KisOpenGLShader::loadSourceCode(const QString & sourceCodeFilename)
+void KisOpenGLShader::loadSourceCodeFromFile(const QString & sourceCodeFilename)
 {
     QString fullFilename = KisFactory2::componentData().dirs()->findResource("kis_shaders", sourceCodeFilename);
 
@@ -100,7 +101,7 @@ void KisOpenGLShader::loadSourceCode(const QString & sourceCodeFilename)
         sourceCodeStringList.append(sourceCodeStream.readLine().toLatin1());
     }
 
-    QVector<const GLcharARB *> sourceCodeStrings;
+    QVector<const GLchar *> sourceCodeStrings;
 
     foreach(const QByteArray &sourceString, sourceCodeStringList) {
         sourceCodeStrings.append(sourceString.constData());
@@ -111,26 +112,21 @@ void KisOpenGLShader::loadSourceCode(const QString & sourceCodeFilename)
         return;
     }
 
-    loadSourceCode(sourceCodeStrings.count(), &(sourceCodeStrings[0]), NULL);
+    loadSourceCodeFromCStrings(sourceCodeStrings.count(), &(sourceCodeStrings[0]), NULL);
 }
 
-void KisOpenGLShader::loadSourceCode(QVector<QString> sourceCodeStrings)
+void KisOpenGLShader::loadSourceCodeFromQString(QString sourceCodeString)
 {
-    QVector<const GLcharARB *> sourceCodeStringsGL;
-    QVector<GLsizei> sourceCodeStringLengths;
+    QByteArray string = sourceCodeString.toAscii();
 
-    foreach(const QString &sourceString, sourceCodeStrings) {
-        QByteArray string = sourceString.toAscii();
-        sourceCodeStringsGL.append(string.constData());
-        sourceCodeStringLengths.append(string.size());
-    }
-
-    if (sourceCodeStrings.isEmpty()) {
+    if (string.length() == 0) {
         dbgUI <<"Shader source code vector is empty";
         return;
     }
-
-    loadSourceCode(sourceCodeStringsGL.count(), &(sourceCodeStringsGL[0]), &(sourceCodeStringLengths[0]));
+    GLint length = string.length();
+    GLsizei size = 1;
+    const char* cstring = string.constData();
+    loadSourceCodeFromCStrings(size, &(cstring), &length);
 }
 
 bool KisOpenGLShader::isValid() const
@@ -138,7 +134,7 @@ bool KisOpenGLShader::isValid() const
     return m_valid;
 }
 
-GLhandleARB KisOpenGLShader::handle() const
+GLuint KisOpenGLShader::handle() const
 {
     return m_shader;
 }
@@ -149,14 +145,14 @@ QString KisOpenGLShader::getInfoLog()
     QString infoLog;
 
     KIS_OPENGL_CLEAR_ERROR();
-    glGetObjectParameterivARB(m_shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infoLogLength);
+    glGetShaderiv(m_shader, GL_INFO_LOG_LENGTH, &infoLogLength);
     KIS_OPENGL_PRINT_ERROR();
 
     if (infoLogLength > 0) {
-        GLcharARB *infoLogBuffer = new GLcharARB[infoLogLength];
+        GLchar *infoLogBuffer = new GLchar[infoLogLength];
         Q_CHECK_PTR(infoLogBuffer);
 
-        glGetInfoLogARB(m_shader, infoLogLength, NULL, infoLogBuffer);
+        glGetShaderInfoLog(m_shader, infoLogLength, NULL, infoLogBuffer);
         KIS_OPENGL_PRINT_ERROR();
 
         infoLog = infoLogBuffer;

@@ -55,8 +55,8 @@ protected:
 };
 
 KisOpenGLGradientShader::KisOpenGLGradientShader(KisOpenGLProgram *program, const QString &sourceFilename)
-    : m_program(program)
-    , m_shader(sourceFilename)
+    : m_program(program),
+      m_shader(KisOpenGLFragmentShader::file(sourceFilename))
 {
 }
 

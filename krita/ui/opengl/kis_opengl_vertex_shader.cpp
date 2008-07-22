@@ -21,15 +21,22 @@
 
 #include <GL/glew.h>
 
-KisOpenGLVertexShader::KisOpenGLVertexShader(const QString& sourceCodeFilename)
-    : KisOpenGLShader(GL_VERTEX_SHADER_ARB)
+KisOpenGLVertexShader KisOpenGLVertexShader::file(const QString& sourceCodeFilename)
 {
-    loadSourceCode(sourceCodeFilename);
+    KisOpenGLVertexShader shader;
+    shader.loadSourceCodeFromFile(sourceCodeFilename);
+    return shader;
 }
 
-KisOpenGLVertexShader::KisOpenGLVertexShader(const QVector<QString>& sourceCodeStrings)
-    : KisOpenGLShader(GL_VERTEX_SHADER_ARB)
+KisOpenGLVertexShader KisOpenGLVertexShader::string(const QString& sourceCodeString)
 {
-    loadSourceCode(sourceCodeStrings);
+    KisOpenGLVertexShader shader;
+    shader.loadSourceCodeFromQString(sourceCodeString);
+    return shader;
+}
+
+KisOpenGLVertexShader::KisOpenGLVertexShader() 
+    : KisOpenGLShader(GL_VERTEX_SHADER)
+{
 }
 

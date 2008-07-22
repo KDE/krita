@@ -57,7 +57,7 @@ void KisOpenGLHDRExposureProgram::activate()
 
 void KisOpenGLHDRExposureProgram::createProgram()
 {
-    KisOpenGLFragmentShader shader("hdr_exposure.frag");
+    KisOpenGLFragmentShader shader = KisOpenGLFragmentShader::file("hdr_exposure.frag");
 
     if (shader.isValid()) {
         attachShader(shader);

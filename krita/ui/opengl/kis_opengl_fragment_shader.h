@@ -22,7 +22,11 @@
 #include <QVector>
 
 #include "krita_export.h"
+#include "kis_shared_ptr.h"
 #include "opengl/kis_opengl_shader.h"
+
+class KisOpenGLFragmentShader;
+typedef KisSharedPtr<KisOpenGLFragmentShader> KisOpenGLFragmentShaderSP;
 
 /**
  * An encapsulation of an OpenGL Shading Language fragment shader object. 
@@ -36,14 +40,24 @@ public:
      * Refer to KisOpenGLShader for more information.
      * @param sourceCodeFilename the file to read the source code from
      */
-    KisOpenGLFragmentShader(const QString& sourceCodeFilename);
+    static KisOpenGLFragmentShader file(const QString& sourceCodeFilename);
 
     /**
-     * Loads the shader source code from the given QVector<QString>
+     * Loads the shader source code from the given QString
      *
-     * @param sourceCodeStrings the vector of source strings to load from
+     * @param sourceCodeStrings the source string to load from
      */
-    KisOpenGLFragmentShader(const QVector<QString> &sourceCodeStrings);
+    static KisOpenGLFragmentShader string(const QString& sourceCodeString);
+    
+    /**
+     * Loads the shader source code from the given char* string 
+     *
+     * @param sourceCodeString the source string to load from
+     */
+    static KisOpenGLFragmentShader string(const char* sourceCodeString);
+
+protected:
+    KisOpenGLFragmentShader();
 };
 
 #endif // KIS_OPENGL_FRAGMENT_SHADER_H_

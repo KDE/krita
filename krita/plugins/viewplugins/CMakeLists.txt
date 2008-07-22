@@ -28,17 +28,12 @@ endif (EIGEN_FOUND AND GMM_FOUND)
 
 macro_log_feature(GMM_FOUND "GMM" "The Krita Panorama plugin will not be built." "http://home.gna.org/getfem/download.html" FALSE "")
 
-macro_optional_find_package(GLUT)
-
 macro_log_feature(HAVE_OPENGL "OpenGL" "The Krita shader filter plugin will not be built" "" FALSE "")
 macro_log_feature(HAVE_GLEW "GLEW" "The Krita shader filter plugin will not be built" "http://glew.sourceforge.net" FALSE "")
-macro_log_feature(GLUT_FOUND "GLUT" "The Krita shader filter plugin will not be built" "http://www.opengl.org/resources/libraries/glut" FALSE "")
 
 if(HAVE_OPENGL)
     IF(HAVE_GLEW)
-        if (GLUT_FOUND)
-           add_subdirectory( glsl )
-        endif(GLUT_FOUND)
+       add_subdirectory( glsl )
     ENDIF(HAVE_GLEW)
 endif(HAVE_OPENGL)
 

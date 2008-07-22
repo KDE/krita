@@ -135,6 +135,7 @@ static const int properties[] = {
     KoParagraphStyle::TabPositions,
     KoParagraphStyle::TextProgressionDirection,
     KoParagraphStyle::MasterPageName,
+    KoParagraphStyle::StartNewList,
 
 //sebsauer; why we don't copy them?
 //KoParagraphStyle::ListStartValue,

@@ -114,7 +114,10 @@ public:
         TabPositions,           ///< A list of tab positions
         TextProgressionDirection,
 
-        MasterPageName          ///< Optional name of the master-page.
+        MasterPageName,         ///< Optional name of the master-page.
+        StartNewList            ///< Boolean marker to indicate that a new list starts from this block, even if
+                                ///< it's part of an existing QTextList. (This is nothing related to ODF; exists
+                                ///< because of how lists are handled in KOffice. See KoListStyle.)
 
 // do 15.5.24
 // continue at 15.5.28

@@ -20,6 +20,7 @@
 #include "KoListStyle.h"
 #include "KoListLevelProperties.h"
 #include "KoTextBlockData.h"
+#include "KoParagraphStyle.h"
 
 #include <KoStyleStack.h>
 #include <KoOdfStylesReader.h>
@@ -158,8 +159,15 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level) {
     QTextList *textList = d->textList(level, block.document());
     if(textList && block.textList() && block.textList() != textList) // remove old one
         block.textList()->remove(block);
-    if(block.textList() == 0 && textList) // add if new
+    if(block.textList() == 0 && textList) { // add if new
+        if (block.previous().textList() != textList) {
+            QTextCursor cursor(block);
+            QTextBlockFormat format = cursor.blockFormat();
+            format.setProperty(KoParagraphStyle::StartNewList, true);
+            cursor.setBlockFormat(format);
+        }
         textList->add(block);
+    }
     if(block.textList() && textList == 0) {
         textList = block.textList(); // missed it ?
         d->setTextList(level, block.document(), textList);

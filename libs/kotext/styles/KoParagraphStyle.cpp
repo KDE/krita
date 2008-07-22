@@ -1249,9 +1249,10 @@ double KoParagraphStyle::tabStopDistance() const {
 }
 
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style) {
-    d->stylesPrivate->clearAll();
-    d->stylesPrivate->copyMissing(style->d->stylesPrivate);
+    d->stylesPrivate->copy(*style->d->stylesPrivate);
     d->name = style->name();
+    if (d->charStyle)
+        delete d->charStyle;
     d->charStyle = style->d->charStyle;
     d->next = style->d->next;
     if(style->d->listStyle)
@@ -1294,12 +1295,22 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
     return answer;
 }
 
-bool KoParagraphStyle::operator==( const KoParagraphStyle &other ) const {
-    return ((*(other.d->stylesPrivate)) == (*(this->d->stylesPrivate)));
+bool KoParagraphStyle::operator==(const KoParagraphStyle &other) const
+{
+    if ((*(other.d->stylesPrivate)) != (*(this->d->stylesPrivate)))
+        return false;
+    if (d->charStyle == 0 && other.d->charStyle == 0)
+        return true;
+    if (!d->charStyle || !other.d->charStyle)
+        return false;
+    return *d->charStyle == *other.d->charStyle;
 }
 
-void KoParagraphStyle::removeDuplicates ( const KoParagraphStyle &other ) {
+void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
+{
     this->d->stylesPrivate->removeDuplicates(other.d->stylesPrivate);
+    if (d->charStyle && other.d->charStyle)
+        d->charStyle->removeDuplicates(*other.d->charStyle);
 }
 
 void KoParagraphStyle::saveOdf( KoGenStyle & style )

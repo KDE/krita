@@ -76,15 +76,6 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-
-    if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
-//         dbgKrita <<"src != dst";
-        KisPainter gc(dst, dstInfo.selection());
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
-        gc.end();
-    }
-
-    
     if(!config) config = new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
@@ -111,32 +102,12 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
             kas = new KisRectangleMaskGenerator(width, height, hFade, vFade);
             break;
     }
-#if 0
-    QImage mask = kas->createBrush();
-
-    mask.convertToFormat(QImage::Format_Mono);
-
-    if( rotate != 0)
-    {
-        QMatrix m;
-        m.rotate( rotate );
-        mask = mask.transformed( m );
-        if( (mask.height() & 1) || mask.width() & 1)
-        {
-            mask.scaled( mask.width() + !(mask.width() & 1),
-                         mask.height() + !(mask.height() & 1),
-                         Qt::KeepAspectRatio,
-                         Qt::SmoothTransformation );
-        }
-    }
-
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromQImage(mask);
-#endif
+    
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas, rotate);
     delete kas;
     KisConvolutionPainter painter( dst, dstInfo.selection() );
     painter.setProgress( progressUpdater );
-    painter.applyMatrix(kernel, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
+    painter.applyMatrix(kernel, src, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
 }
 

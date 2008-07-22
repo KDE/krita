@@ -57,13 +57,6 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-    if (dst != src) { // TODO: fix the convolution painter to avoid that stupid copy
-//         dbgKrita <<"src != dst";
-        KisPainter gc(dst);
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
-        gc.end();
-    }
-
     KisConvolutionPainter painter( dst, dstInfo.selection() );
 
     QBitArray channelFlags;
@@ -73,7 +66,7 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
     }
     
     painter.setProgress( progressUpdater );
-    painter.applyMatrix(m_matrix, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
+    painter.applyMatrix(m_matrix, src, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
 }
 

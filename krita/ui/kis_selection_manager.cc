@@ -759,7 +759,7 @@ void KisSelectionManager::feather()
     // XXX: we should let gaussian blur & others influence alpha channels as well
     // (on demand of the caller)
 
-    KisConvolutionPainter painter(KisPaintDeviceSP(selection.data()));
+    KisConvolutionPainter painter(selection);
 
     KisConvolutionKernelSP k = new KisConvolutionKernel(3, 3, 0, 16);
 
@@ -778,7 +778,7 @@ void KisSelectionManager::feather()
     rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 6, rect.height() + 6);
     rect &= QRect(0, 0, img->width(), img->height());
     painter.setChannelFlags( selection->colorSpace()->channelFlags( false, true, false, false ) );
-    painter.applyMatrix(k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID);
+    painter.applyMatrix(k, selection, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID);
     painter.end();
 
     m_view->document()->addCommand(t);

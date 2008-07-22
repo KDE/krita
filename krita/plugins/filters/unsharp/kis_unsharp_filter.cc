@@ -95,7 +95,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     KoColorSpace * cs = interm->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
     
-    KisConvolutionPainter painter( interm );
+    KisConvolutionPainter painter( interm ); // TODO no need for a full copy and then a transaction
     if (progressUpdater){
     	painter.setProgress( convolutionUpdater );
     }
@@ -105,7 +105,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     }
     painter.setChannelFlags( channelFlags );
     painter.beginTransaction("convolution step");
-    painter.applyMatrix(kernel, src.topLeft().x(), src.topLeft().y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
+    painter.applyMatrix(kernel, interm, src.topLeft().x(), src.topLeft().y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
 
     if (progressUpdater && progressUpdater->interrupted()) {
         return;

@@ -25,6 +25,8 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_paint_device.h>
+#include <kis_processing_information.h>
+#include <kis_selection.h>
 
 struct KisFiltersModel::Private {
     struct Node {
@@ -170,8 +172,9 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
             {
                 if( !d->previewCache.contains( filter->filter ) )
                 {
-                    KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
-                    filter->filter->process(target, QRect(0,0,100,100), filter->filter->defaultConfiguration( d->thumb ) );
+//                     KisPaintDeviceSP target = new KisPaintDevice( d->thumb->colorSpace() );
+                    KisPaintDeviceSP target = new KisPaintDevice( *d->thumb );
+                    filter->filter->process(KisConstProcessingInformation(d->thumb, QPoint(0,0)), KisProcessingInformation(target, QPoint(0,0)), QSize(100,100), filter->filter->defaultConfiguration( d->thumb ) );
                     d->previewCache[ filter->filter ] = target->convertToQImage(0);
                 }
                 return d->previewCache[ filter->filter ];

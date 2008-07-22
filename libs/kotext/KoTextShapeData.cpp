@@ -61,7 +61,9 @@ public:
     {
     }
 
-    QString saveParagraphStyle(KoShapeSavingContext &context, const QTextBlock &block);
+    QString saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *manager, const QTextBlock &block);
+    QString saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *manager, 
+                               const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
 
     QTextDocument *document;
     bool ownsDocument, dirty;
@@ -178,14 +180,11 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     return true;
 }
 
-QString KoTextShapeData::Private::saveParagraphStyle(KoShapeSavingContext &context, const QTextBlock &block)
+QString KoTextShapeData::Private::saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager, const QTextBlock &block)
 {
+    Q_ASSERT(styleManager);
     QTextBlockFormat blockFormat = block.blockFormat();
     QTextCharFormat charFormat = QTextCursor(block).blockCharFormat(); // fix this after TT Task 219905
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
-    Q_ASSERT(layout);
-    KoStyleManager *styleManager = layout->styleManager();
-    Q_ASSERT(styleManager);
  
     KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
     QString displayName, internalName, generatedName;
@@ -209,6 +208,46 @@ QString KoTextShapeData::Private::saveParagraphStyle(KoShapeSavingContext &conte
         paragStyle.saveOdf(style);
         generatedName = context.mainStyles().lookup(style, "P");
     }
+    return generatedName;
+}
+
+QString KoTextShapeData::Private::saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager, 
+                                                     const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
+{
+    Q_ASSERT(styleManager);
+    KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
+
+    KoCharacterStyle *originalCharStyle = styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
+    if (!originalCharStyle)
+        originalCharStyle = defaultCharStyle;
+
+    QString generatedName;
+    QString displayName = originalCharStyle->name();
+    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
+
+    KoCharacterStyle charStyle(charFormat);
+    // we'll convert it to a KoCharacterStyle to check for local changes.
+    if (charStyle == (*originalCharStyle)) { // This is the real, unmodified character style.
+        if (originalCharStyle != defaultCharStyle) {
+            charStyle.removeDuplicates(blockCharFormat);
+            if (!charStyle.isEmpty()) {
+                KoGenStyle style(KoGenStyle::StyleUser, "text");
+                originalCharStyle->saveOdf(style);
+                generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
+            }
+        }
+    } else { // There are manual changes... We'll have to store them then
+        KoGenStyle style(KoGenStyle::StyleAuto, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
+        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+           style.setAutoStyleInStylesDotXml(true);
+        charStyle.removeDuplicates(*originalCharStyle);
+        charStyle.removeDuplicates(blockCharFormat);
+        if (!charStyle.isEmpty()) {
+           charStyle.saveOdf(style);
+           generatedName = context.mainStyles().lookup(style, "T");
+        }
+    }
+
     return generatedName;
 }
 
@@ -240,8 +279,6 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         block = block.next();
     }
     block = startBlock;
-
-    KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
 
     QList<QTextList*> textLists;	// Store the current lists being stored.
     // Ok, now that the styles are done, we can store the blocks themselves.
@@ -280,7 +317,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         }
 
         // Write the block format
-        QString styleName = d->saveParagraphStyle(context, block);
+        QString styleName = d->saveParagraphStyle(context, styleManager, block);
         if (!styleName.isEmpty())
             writer->addAttribute("text:style-name", styleName);
 
@@ -301,50 +338,15 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                 if (inlineObject) {
                     inlineObject->saveOdf(context);
                 } else {
-                    QString displayName, internalName, generatedName;
-
-                    KoCharacterStyle *originalCharStyle = styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
-
-                    if (!originalCharStyle) {
-                        originalCharStyle = defaultCharStyle;
-                    }
-
-                    displayName = originalCharStyle->name();
-                    internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
-
-                    KoCharacterStyle charStyle(charFormat);
-                    // we'll convert it to a KoCharacterStyle to check for local changes.
-                    if (charStyle == (*originalCharStyle)) { // This is the real, unmodified character style.
-                        if (originalCharStyle != defaultCharStyle) {
-                            charStyle.removeDuplicates(blockCharFormat);
-                            if (!charStyle.isEmpty()) {
-                                KoGenStyle style(KoGenStyle::StyleUser, "text");
-                                originalCharStyle->saveOdf(style);
-                                generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
-                            }
-                        }
-                    } else { // There are manual changes... We'll have to store them then
-                        KoGenStyle style(KoGenStyle::StyleAuto, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
-                        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
-                           style.setAutoStyleInStylesDotXml(true);
-                        charStyle.removeDuplicates(*originalCharStyle);
-                        charStyle.removeDuplicates(blockCharFormat);
-                        if (!charStyle.isEmpty()) {
-                           charStyle.saveOdf(style);
-                           generatedName = context.mainStyles().lookup(style, "T");
-                        }
-                    }
+                    QString styleName = d->saveCharacterStyle(context, styleManager, charFormat, blockCharFormat);
 
                     if (charFormat.isAnchor()) {
                         writer->startElement("text:a", false);
                         writer->addAttribute("xlink:type", "simple");
                         writer->addAttribute("xlink:href", charFormat.anchorHref());
-                    } else if (!generatedName.isEmpty()) {
+                    } else if (!styleName.isEmpty()) {
                         writer->startElement("text:span", false);
-                    }
-
-                    if (!generatedName.isEmpty()) {
-                        writer->addAttribute("text:style-name", generatedName);
+                        writer->addAttribute("text:style-name", styleName);
                     }
                     
                     QString text = currentFragment.text();
@@ -356,7 +358,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                         writer->addTextSpan(text);
                     }
 
-                    if ((!generatedName.isEmpty()) || (charFormat.isAnchor()))
+                    if (!styleName.isEmpty() || charFormat.isAnchor())
                         writer->endElement();
                 } // if (inlineObject)
             } // if (fragment.valid())

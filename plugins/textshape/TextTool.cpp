@@ -319,7 +319,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect( m_actionFormatFontSize, SIGNAL(fontSizeChanged( int )), &m_selectionHandler, SLOT(setFontSize(int)) );
 
     m_actionFormatTextColor = new KoColorSetAction(this);
-    m_actionFormatTextColor->setIcon(KIcon("textcolor"));
+    m_actionFormatTextColor->setIcon(KIcon("format-text-color"));
     m_actionFormatTextColor->setToolTip(i18n("Text Color..."));
     addAction("format_textcolor", m_actionFormatTextColor);
     connect(m_actionFormatTextColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setTextColor(const KoColor &)) );

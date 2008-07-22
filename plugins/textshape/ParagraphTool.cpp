@@ -49,8 +49,6 @@
 #include <QVectorIterator>
 
 /* FIXME:
- * - the separator line uses firstLine.right(), which is not calculated correctly
- *   (should be done using border - right margin instead of simply the right end of the layouted text)
  * - make sure that rulers only draw into the right area, pass a bounding rectangle to the drawing method for this
  *
  * TODO:

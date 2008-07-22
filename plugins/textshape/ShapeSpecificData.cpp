@@ -39,6 +39,7 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
 
     // first line rectangle
     m_firstLine = layout->lineAt(0).rect();
+    m_firstLine.setRight(m_border.right() - paragraphStyle->rightMargin());
 
     // counter rectangle 
     KoTextBlockData *blockData = static_cast<KoTextBlockData*> (textBlock.userData());

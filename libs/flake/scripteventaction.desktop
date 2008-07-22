@@ -8,6 +8,7 @@ Name[it]=Plegin per azioni d'evento degli script
 Name[nds]=Moduul "Skript-Begeefnisakschoon"
 Name[pt]='Plugin' de Acção do Evento do Programa
 Name[pt_BR]=Plugin de Ação do Evento do Programa
+Name[sv]=Insticksprogram med skripthändelseåtgärd
 Name[uk]=Додаток сценаріїв реакцій на події
 Name[zh_TW]=文稿事件動作外掛程式
 Type=ServiceType
@@ -21,6 +22,7 @@ Comment[it]=Un plugin contenente un'azione d'evento degli script
 Comment[nds]=En Moduul, dat en Skript-Begeefnisakschoon bargt
 Comment[pt]=Um 'plugin' que contém uma acção de evento do programa
 Comment[pt_BR]=Um plugin que contém uma ação de evento do programa
+Comment[sv]=Ett insticksprogram som innehåller en skripthändelseåtgärd
 Comment[uk]=Додаток, що містить сценарій реакції на подію
 Comment[zh_TW]=包含文稿事件動作的外掛程式
 [PropertyDef::X-ScriptEventAction-MinVersion]

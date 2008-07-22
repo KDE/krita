@@ -90,12 +90,55 @@ public:
         }
         return T::nConseqHPixels();
     }
+    inline void nextRow();
+    inline void nextCol();
 
 private:
 
     qint32 m_offsetx, m_offsety;
 
 };
+
+
+template<>
+inline void KisLineIteratorPixelBase<KisHLineIterator, quint8*>::nextRow()
+{
+    KisHLineIterator::nextRow();
+    if( this->m_selectionIterator )
+    {
+        this->m_selectionIterator->nextRow();
+    }
+}
+
+template<>
+inline void KisLineIteratorPixelBase<KisHLineConstIterator, const quint8*>::nextRow()
+{
+    KisHLineConstIterator::nextRow();
+    if( this->m_selectionIterator )
+    {
+        this->m_selectionIterator->nextRow();
+    }
+}
+
+template<>
+inline void KisLineIteratorPixelBase<KisVLineIterator, quint8*>::nextCol()
+{
+    KisVLineIterator::nextCol();
+    if( this->m_selectionIterator )
+    {
+        this->m_selectionIterator->nextCol();
+    }
+}
+
+template<>
+inline void KisLineIteratorPixelBase<KisVLineConstIterator, const quint8*>::nextCol()
+{
+    KisVLineConstIterator::nextCol();
+    if( this->m_selectionIterator )
+    {
+        this->m_selectionIterator->nextCol();
+    }
+}
 
 template<class T, typename TSelect>
 class KisRectIteratorPixelBase : public T, public KisIteratorPixelTrait<T, TSelect>

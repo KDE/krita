@@ -102,6 +102,11 @@ bool StylePrivate::operator==( const StylePrivate &other ) const {
     return true;
 }
 
+bool StylePrivate::operator!=( const StylePrivate &other ) const
+{
+    return !operator==(other);
+}
+
 void StylePrivate::copy(const QMap<int, QVariant> &other)
 {
     m_properties = other;

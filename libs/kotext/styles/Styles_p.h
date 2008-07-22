@@ -43,6 +43,7 @@ public:
     void clearAll() { m_properties.clear(); }
     QList<int> keys();
     bool operator==( const StylePrivate &other ) const;
+    bool operator!=( const StylePrivate &other ) const;
     bool isEmpty() const;
 
     void copy(const QMap<int, QVariant> &other);

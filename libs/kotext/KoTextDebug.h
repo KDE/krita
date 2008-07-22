@@ -29,6 +29,8 @@ class QTextTable;
 class QTextFragment;
 class QTextCharFormat;
 class QTextBlockFormat;
+class KoParagraphStyle;
+class KoCharacterStyle;
 
 #include <QMap>
 #include <QVariant>
@@ -42,7 +44,9 @@ public:
     static void dumpTable(const QTextTable *);
     static void dumpFragment(const QTextFragment &fragment);
     static QString textAttributes(const QTextCharFormat &format);
+    static QString textAttributes(const KoCharacterStyle &style);
     static QString paraAttributes(const QTextBlockFormat &format);
+    static QString paraAttributes(const KoParagraphStyle &style);
 
 private:
     KoTextDebug();

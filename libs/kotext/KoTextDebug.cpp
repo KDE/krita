@@ -100,6 +100,13 @@ void KoTextDebug::dumpDocument(const QTextDocument *doc)
     document = 0;
 }
 
+QString KoTextDebug::textAttributes(const KoCharacterStyle &style)
+{
+    QTextCharFormat format;
+    style.applyStyle(format);
+    return textAttributes(format);
+}
+
 QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
 {
     QString attrs;
@@ -228,6 +235,14 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
     }
     return attrs;
 }
+
+QString KoTextDebug::paraAttributes(const KoParagraphStyle &style)
+{
+    QTextBlockFormat format;
+    style.applyStyle(format);
+    return paraAttributes(format);
+}
+
 QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
 {
     QString attrs;

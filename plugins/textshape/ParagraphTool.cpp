@@ -51,7 +51,6 @@
 /* FIXME:
  * - the separator line uses firstLine.right(), which is not calculated correctly
  *   (should be done using border - right margin instead of simply the right end of the layouted text)
- * - think about were to store paragraph properties such as singeLine and isList, ParagraphTool or ShapeSpecificData?
  * - make sure that rulers only draw into the right area, pass a bounding rectangle to the drawing method for this
  *
  * TODO:
@@ -99,15 +98,21 @@ void ParagraphTool::initializeRuler(Ruler &ruler, int options)
     connect(&ruler, SIGNAL(valueChanged(qreal)), this, SLOT(updateLayout()));
 }
 
-/* clear list of shapes and then add all shapes that contain the given paragraph to the list
- */
-bool ParagraphTool::createShapeList(QTextBlock textBlock)
+void ParagraphTool::initParagraphProperties()
+{
+    m_isSingleLine = (textBlock().layout()->lineCount() == 1);
+
+    KoTextBlockData *blockData = static_cast<KoTextBlockData*> (textBlock().userData());
+    m_isList = (blockData != NULL);
+}
+
+bool ParagraphTool::createShapeList()
 {
     m_shapes.clear();
 
-    KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock.document()->documentLayout());
-    int start = textBlock.position();
-    int end = start + textBlock.length() - 1;
+    KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
+    int start = textBlock().position();
+    int end = start + textBlock().length() - 1;
 
     // FIXME: for now we only add the first and the last shape to the list
     //       for >2 shape support we need to do a little bit more work to find all shapes in between
@@ -123,7 +128,7 @@ bool ParagraphTool::createShapeList(QTextBlock textBlock)
 
     // create dimensions for the shape list
     for (int shape = 0; shape != m_shapes.size(); ++shape) {
-        m_shapes[shape].initDimensions(textBlock, m_paragraphStyle);
+        m_shapes[shape].initDimensions(textBlock(), m_paragraphStyle);
     }
 
     return true;
@@ -158,19 +163,13 @@ QWidget *ParagraphTool::createOptionWidget()
 
 void ParagraphTool::loadRulers()
 {
+    m_rulers[firstIndentRuler].setValue(m_paragraphStyle->leftMargin() + m_paragraphStyle->textIndent());
+    m_rulers[followingIndentRuler].setValue(m_paragraphStyle->leftMargin());
     m_rulers[rightMarginRuler].setValue(m_paragraphStyle->rightMargin());
     m_rulers[topMarginRuler].setValue(m_paragraphStyle->topMargin());
     m_rulers[bottomMarginRuler].setValue(m_paragraphStyle->bottomMargin());
 
-    if (m_singleLine) {
-        m_rulers[firstIndentRuler].setValue(m_paragraphStyle->leftMargin() + m_paragraphStyle->textIndent());
-        m_rulers[followingIndentRuler].hide();
-    }
-    else {
-        m_rulers[firstIndentRuler].setValue(m_paragraphStyle->leftMargin() + m_paragraphStyle->textIndent());
-        m_rulers[followingIndentRuler].setValue(m_paragraphStyle->leftMargin());
-        m_rulers[followingIndentRuler].show();
-    }
+    m_rulers[followingIndentRuler].setVisible(!m_isSingleLine);
 
     scheduleRepaint();
 }
@@ -220,7 +219,8 @@ void ParagraphTool::updateLayout()
 
     static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
 
-    if (createShapeList(textBlock())) {
+    initParagraphProperties();
+    if (createShapeList()) {
         loadRulers();
     }
     else {
@@ -300,13 +300,13 @@ void ParagraphTool::paintRulers(QPainter &painter, const KoViewConverter &conver
 
     painter.setPen(Qt::darkGray);
 
-    m_rulers[firstIndentRuler].paint(painter, shape.baseline(firstIndentRuler));
-
-    if (!m_singleLine) {
-        m_rulers[followingIndentRuler].paint(painter, shape.baseline(followingIndentRuler));
-
+    if (!m_isSingleLine) {
         painter.drawLine(shape.separatorLine());
     }
+
+    m_rulers[firstIndentRuler].paint(painter, shape.baseline(firstIndentRuler));
+
+    m_rulers[followingIndentRuler].paint(painter, shape.baseline(followingIndentRuler));
 
     m_rulers[rightMarginRuler].paint(painter, shape.baseline(rightMarginRuler));
 
@@ -534,7 +534,8 @@ bool ParagraphTool::selectTextBlockAt(const QPointF &point)
     m_block = textBlock;
     m_paragraphStyle = KoParagraphStyle::fromBlock(textBlock);
 
-    createShapeList(textBlock);
+    initParagraphProperties();
+    createShapeList();
 
     emit styleNameChanged(styleName());
 

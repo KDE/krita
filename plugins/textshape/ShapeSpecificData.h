@@ -71,9 +71,6 @@ private:
            m_firstLine,
            m_followingLines,
            m_border;
-
-    bool m_singleLine,
-         m_isList;
 };
 
 #endif

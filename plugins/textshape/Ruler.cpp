@@ -208,6 +208,10 @@ void Ruler::paint(QPainter &painter, const QLineF &baseline) const
 
 void Ruler::paint(QPainter & painter, const QMatrix &matrix, qreal width) const
 {
+    if (!isVisible()) {
+        return;
+    }
+
     painter.save();
 
     painter.setWorldMatrix(matrix, true);

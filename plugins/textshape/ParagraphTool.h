@@ -105,7 +105,8 @@ signals:
 protected:
     QWidget *createOptionWidget();
 
-    bool createShapeList(QTextBlock textBlock);
+    void initParagraphProperties();
+    bool createShapeList();
 
     void loadRulers();
     void saveRulers();
@@ -156,7 +157,7 @@ private:
     QPointF m_mousePosition;
     QRectF m_storedRepaintRectangle;
 
-    bool m_singleLine,
+    bool m_isSingleLine,
          m_isList,
          m_textBlockValid,
          m_needsRepaint,

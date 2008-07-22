@@ -31,7 +31,7 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
 {
     QTextLayout *layout = textBlock.layout();
 
-    m_singleLine = (layout->lineCount() == 1);
+    bool isSingleLine = (layout->lineCount() == 1);
 
     // border rectangle left and right
     m_border.setLeft(0.0);
@@ -45,14 +45,10 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
     if (blockData != NULL) {
         m_counter = QRectF(blockData->counterPosition(), QSizeF(blockData->counterWidth() - blockData->counterSpacing(),
                     m_firstLine.height()));
-        m_isList = true;
-    }
-    else {
-        m_isList = false;
     }
 
     // folowing lines rectangle
-    if (!m_singleLine) {
+    if (!isSingleLine) {
         m_followingLines = QRectF(layout->lineAt(1).rect().topLeft(),
                 layout->lineAt(layout->lineCount() - 1).rect().bottomRight());
     }
@@ -62,11 +58,11 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
 
     // border rectangle top and bottom
     m_border.setTop(m_firstLine.top() - paragraphStyle->topMargin());
-    m_border.setBottom(m_singleLine ? m_firstLine.bottom() + paragraphStyle->bottomMargin()
+    m_border.setBottom(isSingleLine ? m_firstLine.bottom() + paragraphStyle->bottomMargin()
             : m_followingLines.bottom() + paragraphStyle->bottomMargin());
 
     // workaround: the lines overlap slightly so right now we simply calculate the mean of the two y-values
-    if (!m_singleLine) {
+    if (!isSingleLine) {
         qreal lineBreak((m_firstLine.bottom() + m_followingLines.top()) / 2.0);
         m_firstLine.setBottom(lineBreak);
         m_counter.setBottom(lineBreak);

@@ -1534,9 +1534,9 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
                 elementWriter.addAttribute("style:leader-style", leaderStyleMap[tab.leaderStyle]);
             if (!leaderWeightMap[tab.leaderWeight].isEmpty())
                 elementWriter.addAttribute("style:leader-width", leaderWeightMap[tab.leaderWeight]);
-            else if (tab.leaderWeight = KoCharacterStyle::PercentLineWeight)
+            else if (tab.leaderWeight == KoCharacterStyle::PercentLineWeight)
                 elementWriter.addAttribute("style:leader-width", QString("%1%").arg(QString::number(tab.leaderWidth)));
-            else if (tab.leaderWeight = KoCharacterStyle::LengthLineWeight)
+            else if (tab.leaderWeight == KoCharacterStyle::LengthLineWeight)
                 elementWriter.addAttributePt("style:leader-width", tab.leaderWidth);
             if (tab.leaderColor.isValid())
                 elementWriter.addAttribute("style:leader-color", tab.leaderColor.name());

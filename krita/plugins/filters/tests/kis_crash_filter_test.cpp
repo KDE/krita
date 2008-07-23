@@ -97,6 +97,7 @@ void KisCrashFilterTest::testCrashFilters()
     QStringList successes;
 
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
+    qSort(filterList);
     for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
         if (testFilter(KisFilterRegistry::instance()->value(*it)))
             successes << *it;

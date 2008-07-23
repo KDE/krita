@@ -118,9 +118,9 @@ public:
      */
     explicit KoCharacterStyle(QObject *parent = 0);
     /// Copy constructor
-    KoCharacterStyle(const KoCharacterStyle &other);
+    KoCharacterStyle(const KoCharacterStyle &other, QObject *parent = 0);
     /// Copy constructor
-    KoCharacterStyle(const QTextCharFormat &format);
+    KoCharacterStyle(const QTextCharFormat &format, QObject *parent = 0);
     /// Destructor
     ~KoCharacterStyle();
 

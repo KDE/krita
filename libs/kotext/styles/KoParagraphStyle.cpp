@@ -94,7 +94,7 @@ KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QT
     d(new Private())
 {
     d->stylesPrivate = new StylePrivate(blockFormat.properties());
-    d->charStyle = new KoCharacterStyle(charFormat);
+    d->charStyle = new KoCharacterStyle(charFormat, this);
 }
 
 KoParagraphStyle::~KoParagraphStyle() {

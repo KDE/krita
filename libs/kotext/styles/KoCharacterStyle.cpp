@@ -84,15 +84,15 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
 {
 }
 
-KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style)
-    : QObject(0), d( new Private() )
+KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style, QObject *parent)
+    : QObject(parent), d( new Private() )
 {
     d->stylesPrivate->copyMissing(style.d->stylesPrivate);
     d->name = style.name();
 }
 
-KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format)
-    : QObject(0), d( new Private() )
+KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format, QObject *parent)
+    : QObject(parent), d( new Private() )
 {
     copyProperties(format);
 }

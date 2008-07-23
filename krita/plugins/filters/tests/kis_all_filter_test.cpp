@@ -40,6 +40,7 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2 )
     int h2 = img2.height();
 
     if ( w1 != w2 || h1 != h2 ) {
+        qDebug() << w1 << " " << w2 << " " << h1 << " " << h2;
         pt.setX( -1 );
         pt.setY( -1 );
         return false;
@@ -148,7 +149,13 @@ bool testFilter(KisFilterSP f)
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
-    QImage result( QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png" );
+    QString resultFileName = QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png";
+    QImage result( resultFileName );
+    if( !QFileInfo( resultFileName ).exists() )
+    {
+        qDebug() << resultFileName << " not found";
+        return false;
+    }
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimg, "", 0, 0);
     KisTransaction * cmd = new KisTransaction( f->name(), dev);
@@ -182,6 +189,7 @@ bool testFilter(KisFilterSP f)
     delete cmd;
 
     if ( !compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        qDebug() << errpoint;
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("lena_%1.png").arg(f->id()));
         return false;
     }

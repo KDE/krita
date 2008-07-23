@@ -26,6 +26,7 @@
 #include "kis_threaded_applicator.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
+#include "kis_transaction.h"
 #include <KoColorSpaceRegistry.h>
 
 bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2 )
@@ -57,7 +58,50 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2 )
     return true;
 }
 
-bool testFilter(KisFilterSP f)
+bool testFilterSrcNotIsDev(KisFilterSP f)
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage result( QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png" );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    KisPaintDeviceSP dstdev = new KisPaintDevice(cs);
+    dev->convertFromQImage(qimg, "", 0, 0);
+
+    // Get the predefined configuration from a file
+    KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
+
+    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        //qDebug() << "creating new file for " << f->id();
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream out(&file);
+        out << kfc->toXML();
+    }
+    else {
+        QString s;
+        QTextStream in(&file);
+        s = in.readAll();
+        //qDebug() << "Read for " << f->id() << "\n" << s;
+        kfc->fromXML( s );
+    }
+    qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
+
+    KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
+    KisProcessingInformation dst( dstdev, QPoint(0, 0), 0 );
+
+    f->process(src, dst, qimg.size(), kfc);
+
+    QPoint errpoint;
+
+    if ( !compareQImages( errpoint, result, dstdev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("src_not_is_dst_lena_%1.png").arg(f->id()));
+        return false;
+    }
+    return true;
+}
+
+bool testFilterNoTransaction(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -91,6 +135,51 @@ bool testFilter(KisFilterSP f)
     f->process(src, dst, qimg.size(), kfc);
 
     QPoint errpoint;
+
+    if ( !compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("no_transactio_lena_%1.png").arg(f->id()));
+        return false;
+    }
+    return true;
+}
+
+bool testFilter(KisFilterSP f)
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage result( QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png" );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(qimg, "", 0, 0);
+    KisTransaction * cmd = new KisTransaction( f->name(), dev);
+
+    // Get the predefined configuration from a file
+    KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
+
+    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        //qDebug() << "creating new file for " << f->id();
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream out(&file);
+        out << kfc->toXML();
+    }
+    else {
+        QString s;
+        QTextStream in(&file);
+        s = in.readAll();
+        //qDebug() << "Read for " << f->id() << "\n" << s;
+        kfc->fromXML( s );
+    }
+    qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
+
+    KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
+    KisProcessingInformation dst( dev, QPoint(0, 0), 0 );
+
+    f->process(src, dst, qimg.size(), kfc);
+
+    QPoint errpoint;
+
+    delete cmd;
 
     if ( !compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("lena_%1.png").arg(f->id()));
@@ -166,6 +255,44 @@ void KisAllFilterTest::testAllFilters()
     if (failures.size() > 0) {
         QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
     }
+}
+
+void KisAllFilterTest::testAllFiltersNoTransaction()
+{
+    QStringList failures;
+    QStringList successes;
+
+    QList<QString> filterList = KisFilterRegistry::instance()->keys();
+    for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
+        if (testFilterNoTransaction(KisFilterRegistry::instance()->value(*it)))
+            successes << *it;
+        else
+            failures << *it;
+    }
+    qDebug() << "Success (no transaction): " << successes;
+    if (failures.size() > 0) {
+        QFAIL(QString("Failed filters (no transaction):\n\t %1").arg(failures.join("\n\t")).toAscii());
+    }
+
+}
+
+void KisAllFilterTest::testAllFiltersSrcNotIsDev()
+{
+    QStringList failures;
+    QStringList successes;
+
+    QList<QString> filterList = KisFilterRegistry::instance()->keys();
+    for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
+        if (testFilterSrcNotIsDev(KisFilterRegistry::instance()->value(*it)))
+            successes << *it;
+        else
+            failures << *it;
+    }
+    qDebug() << "Src!=Dev Success: " << successes;
+    if (failures.size() > 0) {
+        QFAIL(QString("Src!=Dev Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
+    }
+
 }
 
 void KisAllFilterTest::testAllFiltersWithSelections()

@@ -60,14 +60,6 @@ bool applyFilter( const KoColorSpace * cs,  KisFilterSP f ) {
 
     f->process(src, dst, qimg.size(), kfc);
 
-#if 0
-    QPoint errpoint;
-
-    if ( !compareQImages( errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
-        //dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("lena_%1.png").arg(f->id()));
-        return false;
-    }
-#endif
     return true;
 
 }

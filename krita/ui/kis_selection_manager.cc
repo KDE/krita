@@ -46,6 +46,7 @@
 #include <KoLineBorder.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+#include <KoToolProxy.h>
 
 #include "kis_adjustment_layer.h"
 #include "canvas/kis_canvas2.h"
@@ -75,6 +76,7 @@
 #include "commands/kis_selection_commands.h"
 #include "kis_selection_transaction.h"
 #include "kis_selection_mask.h"
+#include "kis_shape_layer.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -222,6 +224,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     QClipboard *cb = QApplication::clipboard();
     connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
+    connect(m_view->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), SLOT(clipboardDataChanged()));
 
 }
 
@@ -308,13 +311,43 @@ void KisSelectionManager::updateGUI()
 
     // You can copy from locked layers and paste the clip into a new layer, even when
     // the current layer is locked.
+
     enable = false;
     if (img && l) {
         enable = l->selection() && l->visible();
+
+
     }
 
-    m_copy->setEnabled(enable);
-    m_paste->setEnabled(!img.isNull() && m_clipboard->hasClip());
+    l = m_view->activeLayer();
+    KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( l.data() );
+
+    bool shapePasteEnable = false;
+    bool shapeCopyEnable = false;
+    if(shapeLayer) {
+
+    // TODO listen selectionChanded signals form the shapelayer
+        shapeCopyEnable = true;
+//         if (shapeLayer) {
+//             shapeLayerEnable = shapeLayer->shapeManager()->selection()->count() > 0;
+//         }
+
+        const QMimeData* data = QApplication::clipboard()->mimeData();
+        if (data)
+        {
+            QStringList mimeTypes = m_view->canvasBase()->toolProxy()->supportedPasteMimeTypes();
+            foreach(QString mimeType, mimeTypes)
+            {
+                if ( data->hasFormat( mimeType ) ) {
+                    shapePasteEnable = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    m_copy->setEnabled(enable || shapeCopyEnable);
+    m_paste->setEnabled(!img.isNull() && (m_clipboard->hasClip() || shapePasteEnable));
     m_pasteNew->setEnabled(!img.isNull() && m_clipboard->hasClip());
     m_toNewLayer->setEnabled(enable);
 
@@ -424,59 +457,70 @@ void KisSelectionManager::cut()
 
 void KisSelectionManager::copy()
 {
-    KisImageSP img = m_view->image();
-    if ( !img ) return;
+    KisLayerSP layer = m_view->activeLayer();
+    if (!layer) return;
 
-    if ( !m_view->selection() ) return;
+    KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( layer.data() );
+    if ( shapeLayer ) {
+        m_view->canvasBase()->toolProxy()->copy();
+    }
+    else {
 
-    KisPaintDeviceSP dev = m_view->activeDevice();
-    if (!dev) return;
+        KisImageSP img = m_view->image();
+        if ( !img ) return;
 
-    KisSelectionSP selection = m_view->selection();
+        if ( !m_view->selection() ) return;
 
-    QRect r = selection->selectedExactRect();
+        KisPaintDeviceSP dev = m_view->activeDevice();
+        if (!dev) return;
 
-    KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace(), "clip");
-    Q_CHECK_PTR(clip);
+        KisSelectionSP selection = m_view->selection();
 
-    const KoColorSpace * cs = clip->colorSpace();
+        QRect r = selection->selectedExactRect();
 
-    // TODO if the source is linked... copy from all linked layers?!?
+        KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace(), "clip");
+        Q_CHECK_PTR(clip);
 
-    // Copy image data
-    KisPainter gc;
-    gc.begin(clip);
-    gc.bitBlt(0, 0, COMPOSITE_COPY, dev, r.x(), r.y(), r.width(), r.height());
-    gc.end();
+        const KoColorSpace * cs = clip->colorSpace();
 
-    // Apply selection mask.
+        // TODO if the source is linked... copy from all linked layers?!?
 
-    KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
-    KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
+        // Copy image data
+        KisPainter gc;
+        gc.begin(clip);
+        gc.bitBlt(0, 0, COMPOSITE_COPY, dev, r.x(), r.y(), r.width(), r.height());
+        gc.end();
 
-    for (qint32 y = 0; y < r.height(); y++) {
+        // Apply selection mask.
 
-        while (!layerIt.isDone()) {
+        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
+        KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
 
-            cs->applyAlphaU8Mask( layerIt.rawData(), selectionIt.rawData(), 1 );
+        for (qint32 y = 0; y < r.height(); y++) {
+
+            while (!layerIt.isDone()) {
+
+                cs->applyAlphaU8Mask( layerIt.rawData(), selectionIt.rawData(), 1 );
 
 
-            ++layerIt;
-            ++selectionIt;
+                ++layerIt;
+                ++selectionIt;
+            }
+            layerIt.nextRow();
+            selectionIt.nextRow();
         }
-        layerIt.nextRow();
-        selectionIt.nextRow();
+
+        m_clipboard->setClip(clip);
     }
 
-    m_clipboard->setClip(clip);
     selectionChanged();
 }
 
 
-KisLayerSP KisSelectionManager::paste()
+void KisSelectionManager::paste()
 {
     KisImageSP img = m_view->image();
-    if (!img) return KisLayerSP(0);
+    if (!img) return;
 
     KisPaintDeviceSP clip = m_clipboard->clip();
 
@@ -509,15 +553,10 @@ KisLayerSP KisSelectionManager::paste()
   if (dlg->exec() == QDialog::Accepted)
   layer->convertTo(img->colorSpace());
 */
-	if(!img->addNode( layer ,
-                          m_view->activeLayer()->parent(),
-                          m_view->activeLayer().data() ) ) {
-            return 0;
-        }
-
-        return KisLayerSP(layer);
+	img->addNode( layer , m_view->activeLayer()->parent(), m_view->activeLayer().data() );
     }
-    return KisLayerSP(0);
+    else
+        m_view->canvasBase()->toolProxy()->paste();
 }
 
 void KisSelectionManager::pasteNew()

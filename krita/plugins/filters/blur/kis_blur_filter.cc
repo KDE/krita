@@ -95,11 +95,11 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
     switch(shape)
     {
         case 1:
-            kas = new KisCircleMaskGenerator(width, height , hFade, vFade);
+            kas = new KisRectangleMaskGenerator(width, height , hFade, vFade);
             break;
         case 0:
         default:
-            kas = new KisRectangleMaskGenerator(width, height, hFade, vFade);
+            kas = new KisCircleMaskGenerator(width, height, hFade, vFade);
             break;
     }
     

@@ -122,7 +122,8 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const {
         return llp;
     }
     KoListLevelProperties llp;
-    llp.setStyleId(d->styleId);
+    if (d->styleId)
+        llp.setStyleId(d->styleId);
     llp.setLevel(level);
     return llp;
 }
@@ -230,7 +231,8 @@ void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& styl
     forEachElement(styleElem, style) {
         KoListLevelProperties properties;
         properties.loadOdf(context, styleElem);
-        properties.setStyleId(d->styleId);
+        if (d->styleId)
+            properties.setStyleId(d->styleId);
         setLevelProperties(properties);
     }
 }

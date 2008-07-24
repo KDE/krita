@@ -105,6 +105,8 @@ private slots:
     void resourceChanged( int key, const QVariant & res );
     void pointSelectionChanged();
     void updateActions();
+    void pointToLine();
+    void pointToCurve();
 
 private:
 
@@ -123,6 +125,8 @@ private:
     QAction *m_actionPathPointCorner;
     QAction *m_actionPathPointSmooth;
     QAction *m_actionPathPointSymmetric;
+    QAction *m_actionCurvePoint;
+    QAction *m_actionLinePoint;
     QAction *m_actionLineSegment;
     QAction *m_actionCurveSegment;
     QAction *m_actionAddPoint;
@@ -132,7 +136,6 @@ private:
     QAction *m_actionJoinSegment;
     QAction *m_actionMergePoints;
     QAction *m_actionConvertToPath;
-
     QCursor m_selectCursor;
     QCursor m_moveCursor;
 };

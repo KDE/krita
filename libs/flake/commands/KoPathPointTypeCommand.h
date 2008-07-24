@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -38,7 +38,9 @@ public:
     {
         Corner,
         Smooth,
-        Symmetric
+        Symmetric,
+        Line,
+        Curve
     };
     /**
      * Command to change the type of the given points
@@ -66,10 +68,16 @@ private:
         QPointF m_oldControlPoint1;
         QPointF m_oldControlPoint2;
         KoPathPoint::KoPointProperties m_oldProperties;
+        bool m_hadControlPoint1;
+        bool m_hadControlPoint2;
     };
+
+    bool appendPointData( KoPathPointData data );
+    void undoChanges( const QList<PointData> &data );
 
     PointType m_pointType;
     QList<PointData> m_oldPointData;
+    QList<PointData> m_additionalPointData;
 };
 
 #endif // KOPATHPOINTTYPECOMMAND_H

@@ -503,6 +503,38 @@ KoPathSegment KoPathSegment::mapped( const QMatrix &matrix ) const
     return KoPathSegment( p1, p2 );
 }
 
+KoPathSegment KoPathSegment::toCubic() const
+{
+    if( ! isValid() )
+        return KoPathSegment();
+
+    KoPathPoint * p1 = new KoPathPoint( *d->first );
+    KoPathPoint * p2 = new KoPathPoint( *d->second );
+
+    if( degree() == 1 )
+    {
+        p1->setControlPoint2( p1->point() + 0.3 * ( p2->point() - p1->point() ) );
+        p2->setControlPoint1( p2->point() + 0.3 * ( p1->point() - p2->point() ) );
+    }
+    else if( degree() == 2 )
+    {
+        /* quadric bezier (a0,a1,a2) to cubic bezier (b0,b1,b2,b3):
+        *
+        * b0 = a0
+        * b1 = a0 + 2/3 * (a1-a0)
+        * b2 = a1 + 1/3 * (a2-a1)
+        * b3 = a2
+        */
+        QPointF a1 = p1->activeControlPoint2() ? p1->controlPoint2() : p2->controlPoint1();
+        QPointF b1 = p1->point() + 2.0/3.0 * ( a1 - p1->point() );
+        QPointF b2 = a1 + 1.0/3.0 * ( p2->point() - a1 );
+        p1->setControlPoint2( b1 );
+        p2->setControlPoint1( b2 );
+    }
+
+    return KoPathSegment( p1, p2 );
+}
+
 qreal KoPathSegment::length( qreal error ) const
 {
     /*

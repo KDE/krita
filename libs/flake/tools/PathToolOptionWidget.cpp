@@ -29,6 +29,8 @@ PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     widget.symmetric->setDefaultAction(tool->action("pathpoint-symmetric"));
     widget.lineSegment->setDefaultAction(tool->action("pathsegment-line"));
     widget.curveSegment->setDefaultAction(tool->action("pathsegment-curve"));
+    widget.linePoint->setDefaultAction(tool->action("pathpoint-line"));
+    widget.curvePoint->setDefaultAction(tool->action("pathpoint-curve"));
     widget.addPoint->setDefaultAction(tool->action("pathpoint-insert"));
     widget.removePoint->setDefaultAction(tool->action("pathpoint-remove"));
     widget.breakPoint->setDefaultAction(tool->action("path-break-point"));

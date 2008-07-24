@@ -85,6 +85,14 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     m_actionPathPointSymmetric->setData(KoPathPointTypeCommand::Symmetric );
     points->addAction(m_actionPathPointSymmetric);
 
+    m_actionCurvePoint = new QAction(KIcon("pathpoint-curve"), i18n("Make curve point"), this);
+    addAction("pathpoint-curve", m_actionCurvePoint);
+    connect( m_actionCurvePoint, SIGNAL( triggered() ), this, SLOT( pointToCurve() ) );
+
+    m_actionLinePoint = new QAction(KIcon("pathpoint-line"), i18n("Make line point"), this);
+    addAction("pathpoint-line", m_actionLinePoint);
+    connect( m_actionLinePoint, SIGNAL( triggered() ), this, SLOT( pointToLine() ) );
+
     m_actionLineSegment = new QAction(KIcon("pathsegment-line"), i18n("Segment to Line"), this);
     m_actionLineSegment->setShortcut(Qt::Key_F);
     addAction("pathsegment-line", m_actionLineSegment );
@@ -217,6 +225,52 @@ void KoPathTool::removePoints() {
         }
         m_pointSelection.clear();
         m_canvas->addCommand( cmd );
+    }
+}
+
+void KoPathTool::pointToLine()
+{
+    if( ! m_pointSelection.hasSelection() )
+    {
+        QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
+        QList<KoPathPointData> pointToChange;
+
+        QList<KoPathPointData>::const_iterator it( selectedPoints.begin() );
+        for( ; it != selectedPoints.end(); ++it )
+        {
+            KoPathPoint *point = it->pathShape->pointByIndex( it->pointIndex );
+            if( point && ( point->activeControlPoint1() || point->activeControlPoint2() ) )
+                pointToChange.append( *it );
+        }
+
+        if( ! pointToChange.isEmpty() )
+        {
+            m_canvas->addCommand( new KoPathPointTypeCommand( pointToChange, KoPathPointTypeCommand::Line ) );
+            updateActions();
+        }
+    }
+}
+
+void KoPathTool::pointToCurve()
+{
+    if( ! m_pointSelection.hasSelection() )
+    {
+        QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
+        QList<KoPathPointData> pointToChange;
+
+        QList<KoPathPointData>::const_iterator it( selectedPoints.begin() );
+        for( ; it != selectedPoints.end(); ++it )
+        {
+            KoPathPoint *point = it->pathShape->pointByIndex( it->pointIndex );
+            if( point && ( ! point->activeControlPoint1() || ! point->activeControlPoint2() ) )
+                pointToChange.append( *it );
+        }
+
+        if( ! pointToChange.isEmpty() )
+        {
+            m_canvas->addCommand( new KoPathPointTypeCommand( pointToChange, KoPathPointTypeCommand::Curve ) );
+            updateActions();
+        }
     }
 }
 
@@ -645,6 +699,8 @@ void KoPathTool::updateActions() {
     m_actionPathPointSymmetric->setEnabled(hasPointsSelected);
     m_actionRemovePoint->setEnabled(hasPointsSelected);
     m_actionBreakPoint->setEnabled(hasPointsSelected);
+    m_actionCurvePoint->setEnabled(hasPointsSelected);
+    m_actionLinePoint->setEnabled(hasPointsSelected);
 
     bool hasSegmentsSelected = false;
     if ( hasPointsSelected && m_pointSelection.size() > 1 )

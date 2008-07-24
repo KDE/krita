@@ -98,6 +98,9 @@ public:
     /// Returns transformed segment
     KoPathSegment mapped( const QMatrix & matrix ) const;
 
+    /// Returns cubic bezier curve segment of this segment
+    KoPathSegment toCubic() const;
+
     /** 
      * Returns the length of the path segment
      * @param error the error tolerance

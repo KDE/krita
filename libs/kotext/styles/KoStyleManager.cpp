@@ -38,11 +38,13 @@ public:
     Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0) { }
     ~Private() {
         delete defaultListStyle;
+        // ##: Who deletes the rest of the stuff?
     }
     static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
 
     QList<KoCharacterStyle*> charStyles;
     QList<KoParagraphStyle*> paragStyles;
+    QList<KoListStyle*> listStyles;
     QList<ChangeFollower*> documentUpdaterProxies;
 
     bool updateTriggered;
@@ -114,6 +116,18 @@ void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
         characterStyle->saveOdf( style );
         mainStyles.lookup( style, name );
     }
+
+    foreach(KoListStyle *listStyle, d->listStyles) {
+        if (listStyle == d->defaultListStyle)
+            continue;
+        QString name(QString(QUrl::toPercentEncoding(listStyle->name(), "", " ")).replace("%", "_"));
+        if (name.isEmpty())
+            name = "L";
+
+        KoGenStyle style(KoGenStyle::StyleList);
+        listStyle->saveOdf(style);
+        mainStyles.lookup(style, name);
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style) {
@@ -139,6 +153,15 @@ void KoStyleManager::add(KoParagraphStyle *style) {
     emit styleAdded(style);
 }
 
+void KoStyleManager::add(KoListStyle *style) 
+{
+    if(d->listStyles.contains(style))
+        return;
+    style->setStyleId(d->s_stylesNumber++);
+    d->listStyles.append(style);
+    emit styleAdded(style);
+}
+
 void KoStyleManager::remove(KoCharacterStyle *style) {
     if(d->charStyles.removeAll(style))
         emit styleRemoved(style);
@@ -146,6 +169,12 @@ void KoStyleManager::remove(KoCharacterStyle *style) {
 
 void KoStyleManager::remove(KoParagraphStyle *style) {
     if(d->paragStyles.removeAll(style))
+        emit styleRemoved(style);
+}
+
+void KoStyleManager::remove(KoListStyle *style) 
+{
+    if (d->listStyles.removeAll(style))
         emit styleRemoved(style);
 }
 
@@ -179,6 +208,18 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *style) {
         return;
     }
     if(! d->updateQueue.contains(id))
+        d->updateQueue.append(id);
+    requestFireUpdate();
+}
+
+void KoStyleManager::alteredStyle(const KoListStyle *style) {
+    Q_ASSERT(style);
+    int id = style->styleId();
+    if (id <= 0) {
+        kWarning(32500) << "alteredStyle received from a non registered style!";
+        return;
+    }
+    if (!d->updateQueue.contains(id))
         d->updateQueue.append(id);
     requestFireUpdate();
 }
@@ -233,6 +274,15 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const {
     return 0;
 }
 
+KoListStyle *KoStyleManager::listStyle(int id) const 
+{
+    foreach(KoListStyle *style, d->listStyles) {
+        if (style->styleId() == id)
+            return style;
+    }
+    return 0;
+}
+
 KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const {
     foreach(KoCharacterStyle *style, d->charStyles) {
         if(style->name() == name)
@@ -244,6 +294,15 @@ KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const {
 KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
     foreach(KoParagraphStyle *style, d->paragStyles) {
         if(style->name() == name)
+            return style;
+    }
+    return 0;
+}
+
+KoListStyle *KoStyleManager::listStyle(const QString &name) const 
+{
+    foreach(KoListStyle *style, d->listStyles) {
+        if (style->name() == name)
             return style;
     }
     return 0;
@@ -264,6 +323,11 @@ QList<KoCharacterStyle*> KoStyleManager::characterStyles() const {
 
 QList<KoParagraphStyle*> KoStyleManager::paragraphStyles() const {
     return d->paragStyles;
+}
+
+QList<KoListStyle*> KoStyleManager::listStyles() const 
+{
+    return d->listStyles;
 }
 
 bool KoStyleManager::completeLoading( KoStore *)

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +30,7 @@
 class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
+class KoListStyle;
 class KoXmlWriter;
 class ChangeFollower;
 class KoGenStyles;
@@ -72,6 +74,11 @@ public:
      */
     void add(KoParagraphStyle *style);
     /**
+     * Add a new list style, automatically giving it a new styleId.
+     */
+    void add(KoListStyle *style);
+
+    /**
      * Remove a style.
      */
     void remove(KoCharacterStyle *style);
@@ -79,6 +86,10 @@ public:
      * Remove a style.
      */
     void remove(KoParagraphStyle *style);
+    /**
+     * Remove a list style.
+     */
+    void remove(KoListStyle *style);
 
     /**
      * Add a document for which the styles will be applied.
@@ -110,6 +121,11 @@ public:
     KoParagraphStyle *paragraphStyle(int id) const;
 
     /**
+     * Return a list style by its id.
+     */
+    KoListStyle *listStyle(int id) const;
+
+    /**
      * Return the first characterStyle with the param user-visible-name.
      * Since the name does not have to be unique there can be multiple
      * styles registered with that name, only the first is returned
@@ -128,6 +144,11 @@ public:
     KoParagraphStyle *paragraphStyle(const QString &name) const;
 
     /**
+     * Returns the first  listStyle ith the param use-visible-name.
+     */
+    KoListStyle *listStyle(const QString &name) const;
+
+    /**
      * Return the default paragraph style that will always be present in each
      * document. You can alter the style, but you can never delete it.
      * The default is suppost to stay invisible to the user and its called
@@ -136,11 +157,20 @@ public:
      */
     KoParagraphStyle *defaultParagraphStyle() const;
 
+    /**
+     * Returns the default list style to be used for lists, headers, paragraphs
+     * that do not specify a list-style
+     */
+    KoListStyle *defaultListStyle() const;
+
     /// return all the characterStyles registered.
     QList<KoCharacterStyle*> characterStyles() const;
 
     /// return all the paragraphStyles registered.
     QList<KoParagraphStyle*> paragraphStyles() const;
+
+    /// return all the listStyles registered.
+    QList<KoListStyle*> listStyles() const;
 
     /// reimplemented
     virtual bool completeLoading( KoStore *store);
@@ -151,8 +181,10 @@ public:
 signals:
     void styleAdded(KoParagraphStyle*);
     void styleAdded(KoCharacterStyle*);
+    void styleAdded(KoListStyle*);
     void styleRemoved(KoParagraphStyle*);
     void styleRemoved(KoCharacterStyle*);
+    void styleRemoved(KoListStyle*);
 
 public slots:
     /**
@@ -167,6 +199,13 @@ public slots:
      * Note that successive calls are aggregated.
      */
     void alteredStyle(const KoCharacterStyle *style);
+
+    /**
+     * Slot that should be called whenever a style is changed. This will update
+     * all documents with the style.
+     * Note that successive calls are aggregated.
+     */
+    void alteredStyle(const KoListStyle *style);
 
 private slots:
     void updateAlteredStyles(); // for the QTimer::singleshot

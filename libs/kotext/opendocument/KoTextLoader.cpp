@@ -4,6 +4,7 @@
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -82,7 +83,7 @@ class KoTextLoader::Private
         int lastElapsed;
         QTime dt;
 
-        QString currentListStyleName;
+        KoListStyle *currentListStyle;
         int currentListLevel;
 
         KoStyleManager *styleManager;
@@ -98,6 +99,7 @@ class KoTextLoader::Private
         , bodyProgressTotal( 0 )
         , bodyProgressValue( 0 )
         , lastElapsed( 0 )
+        , currentListStyle ( 0 )
         , currentListLevel( 1 )
         , styleManager(0)
         {
@@ -166,7 +168,7 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
             if (firstTime) {
                 cursorPosition = cursor.position();
             } else {
-                cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+                cursor.insertBlock();
             }
             if ( tag.namespaceURI() == KoXmlNS::text ) {
                 if ( localName == "p" ) {  // text paragraph
@@ -303,7 +305,7 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
 
     if ( paragraphStyle ) {
         QTextBlock block = cursor.block();
-        paragraphStyle->applyStyle(block, false);
+        paragraphStyle->applyStyle(block, !d->currentListStyle);
     }
     else {
         kWarning(32500) << "paragraph style " << styleName << " not found";
@@ -372,37 +374,23 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
 void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
 {
     // The optional text:style-name attribute specifies the name of the list style that is applied to the list.
-    QString styleName;
-    if ( element.hasAttributeNS( KoXmlNS::text, "style-name" ) ) {
-        styleName = element.attributeNS( KoXmlNS::text, "style-name", QString() );
-        d->currentListStyleName = styleName;
-    }
-    else {
-        // If this attribute is not included and therefore no list style is specified, one of the following actions is taken:
-        // * If the list is contained within another list, the list style defaults to the style of the surrounding list.
-        // * If there is no list style specified for the surrounding list, but the list contains paragraphs that have paragraph styles attached specifying a list style, this list style is used for any of these paragraphs.
-        // * An application specific default list style is applied to any other paragraphs.
-        styleName = d->currentListStyleName;
-    }
+    QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
-    // Get the KoListStyle the name may reference to
-    KoListStyle* listStyle = d->textSharedData->listStyle( styleName , d->stylesDotXml);
-    if( ! listStyle ) { // no such list means we define a default one
-        kWarning(32500) << "liststyle" << styleName << "not found";
-        listStyle = new KoListStyle();
-        listStyle->setName(styleName);
-        // TODO d->addStyle(listStyle);
-        d->currentListStyleName = styleName;
-    }
+    KoListStyle *prevListStyle = d->currentListStyle; // save a copy
+    if (KoListStyle *listStyle = d->textSharedData->listStyle(styleName , d->stylesDotXml))
+        d->currentListStyle = listStyle;
 
     // The level specifies the level of the list style.
     int level = d->currentListLevel;
 
     #ifdef KOOPENDOCUMENTLOADER_DEBUG
-        kDebug(32500) << "styleName =" << styleName << "listStyle =" << ( listStyle ? listStyle->name() :"NULL" )
-                      <<"level =" << level << "hasLevelProperties =" << listStyle->hasLevelProperties( level )
-                    //<<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()
-                      ;
+        if (d->currentListStyle)
+            kDebug(32500) << "styleName =" << styleName << "listStyle =" << d->currentListStyle->name()
+                          <<"level =" << level << "hasLevelProperties =" << d->currentListStyle->hasLevelProperties( level )
+                         //<<" style="<<props.style()<<" prefix="<<props.listItemPrefix()<<" suffix="<<props.listItemSuffix()
+                          ;
+        else
+            kDebug(32500) << "styleName =" << styleName << " currentListStyle = 0";
     #endif
 
     // increment list level by one for nested lists.
@@ -418,8 +406,7 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         if( ( e.tagName() != "list-item" ) || ( e.namespaceURI() != KoXmlNS::text ) ) {
             continue;
         }
-        //listStyle->applyStyle(cursor.block(), level + 1);
-        //listStyle->applyStyle(cursor.block());
+
         if (firstTime) {
             firstTime = false;
         } else {
@@ -429,62 +416,27 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         QTextBlock current = cursor.block();
         
         loadBody( e, cursor );
-        
-        /*
-        if ( ! listStyle->hasLevelProperties( level ) ) { // set default style
-            KoListLevelProperties props;
-            props.setStyle( KoListStyle::DecimalItem );
-            props.setListItemSuffix( "." );
-            props.setLevel( 0 );
-            listStyle->setLevel( props );
-        } */
-        listStyle->applyStyle(current, level);
 
-        //TODO handle also the other item properties
+        if (!d->currentListStyle) {
+            if (cursor.block().textList() == 0 && d->styleManager) {
+                // We did not find the list-style and the loadParagraph did not put the block in the list either
+                d->styleManager->defaultListStyle()->applyStyle(current, level);
+            }
+        } else {
+            d->currentListStyle->applyStyle(current, level);
+        }
+
         if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {
             int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
-            KoParagraphStyle *paraStyle = KoParagraphStyle::fromBlock( current );
-            if (paraStyle) {
-                paraStyle->setListStartValue(startValue);
-                paraStyle->applyStyle(current);
-            }
+            QTextBlockFormat blockFormat;
+            blockFormat.setProperty(KoParagraphStyle::ListStartValue, startValue);
+            cursor.mergeBlockFormat(blockFormat);
         }
     }
 
     // set the list level back to the previous value
     d->currentListLevel = level;
-    /*
-    // add the new blocks to the list
-    QTextBlock current = cursor.block();
-    for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) {
-        list->add(b);
-        listStyle->applyStyle(b, level);
-    }
-    */
-    /*
-    // Get the matching paragraph style
-    //QString userStyleName = context.styleStack().userStyleName( "paragraph" );
-    KoParagraphStyle *paragStyle = d->paragraphStyle(styleName);
-    if( ! paragStyle ) {
-        //paragStyle = d->stylemanager->defaultParagraphStyle();
-        paragStyle = new KoParagraphStyle();
-        paragStyle->setName(styleName);
-        d->addStyle(paragStyle);
-        context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
-        paragStyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
-        KoCharacterStyle *charstyle = paragStyle->characterStyle();
-        context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-        charstyle->loadOasis(context); // load the KoCharacterStyle from the stylestack
-    }
-    //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
-
-    // The paragraph style has a list style
-    KoListStyle prevliststyle = paragStyle->listStyle();
-    KoListStyle* listStyle = prevliststyle.isValid() ? new KoListStyle(prevliststyle) : new KoListStyle();
-    listStyle->setName(styleName);
-    listStyle->loadOasis(context);
-    paragStyle->setListStyle(*listStyle);
-    */
+    d->currentListStyle = prevListStyle;
 }
 
 void KoTextLoader::loadSection( const KoXmlElement& sectionElem, QTextCursor& cursor )

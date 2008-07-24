@@ -364,6 +364,80 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
     return attrs;
 }
 
+QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
+{
+    QString attrs;
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
+    if (lay && lay->styleManager()) {
+        int id = listFormat.intProperty(KoListStyle::StyleId);
+        KoListStyle *listStyle = lay->styleManager()->listStyle(id);
+        attrs.append(" listStyle=\"id:").append(QString::number(id));
+        if (listStyle)
+             attrs.append(" name:").append(listStyle->name());
+        attrs.append("\"");
+    }
+
+    QMap<int, QVariant> properties = listFormat.properties();
+    foreach(int id, properties.keys()) {
+        QString key, value;
+        switch (id) {
+        case QTextListFormat::ListStyle:
+            key = "style";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::ListItemPrefix:
+            key = "prefix";
+            value = properties[id].toString();
+            break;
+        case KoListStyle::ListItemSuffix:
+             key = "suffix";
+             value = properties[id].toString();
+             break;
+        case KoListStyle::StartValue:
+             key = "start-value";
+             value = QString::number(properties[id].toInt());
+             break;
+        case KoListStyle::Level:
+             key = "level";
+             value = QString::number(properties[id].toInt());
+             break;
+       case KoListStyle::DisplayLevel:
+             key = "display-level";
+             value = QString::number(properties[id].toInt());
+             break;
+       case KoListStyle::CharacterStyleId:
+             key = "charstyleid";
+             value = QString::number(properties[id].toInt());
+             break;
+       case KoListStyle::Alignment:
+             key = "alignment";
+             value = QString::number(properties[id].toInt());
+             break;
+       case KoListStyle::BulletSize:
+             key = "bullet-size";
+             value = QString::number(properties[id].toInt());
+             break;
+       case KoListStyle::BulletCharacter:
+             key = "bullet-char";
+             value = properties[id].toString();
+             break;
+       case KoListStyle::LetterSynchronization:
+             key = "letter-sync";
+             value = QString::number(properties[id].toInt());
+             break;
+       case KoListStyle::StyleId:
+             key = "styleid";
+             value = QString::number(properties[id].toInt());
+             break;
+        default:
+             break;
+        }
+        if (!key.isEmpty())
+            attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+    }
+    return attrs;
+}
+
 void KoTextDebug::dumpFrame(const QTextFrame *frame)
 {
     depth += INDENT;

@@ -28,6 +28,7 @@ class QTextBlock;
 class QTextTable;
 class QTextFragment;
 class QTextCharFormat;
+class QTextListFormat;
 class QTextBlockFormat;
 class KoParagraphStyle;
 class KoCharacterStyle;
@@ -47,6 +48,7 @@ public:
     static QString textAttributes(const KoCharacterStyle &style);
     static QString paraAttributes(const QTextBlockFormat &format);
     static QString paraAttributes(const KoParagraphStyle &style);
+    static QString listAttributes(const QTextListFormat &format);
 
 private:
     KoTextDebug();

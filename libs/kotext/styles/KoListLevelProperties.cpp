@@ -60,9 +60,6 @@ static const int properties[] = {
 KoListLevelProperties::KoListLevelProperties()
     : d( new Private())
 {
-    setStyle(KoListStyle::DecimalItem);
-    setListItemSuffix(".");
-    setStartValue(1);
 }
 
 KoListLevelProperties::KoListLevelProperties(const KoListLevelProperties &other)

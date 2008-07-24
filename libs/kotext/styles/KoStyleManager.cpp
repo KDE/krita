@@ -22,6 +22,7 @@
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
+#include "KoListLevelProperties.h"
 #include "ChangeFollower.h"
 
 #include <KoGenStyle.h>
@@ -71,6 +72,12 @@ KoStyleManager::KoStyleManager(QObject *parent)
     add(d->defaultParagraphStyle);
 
     d->defaultListStyle = new KoListStyle();
+    KoListLevelProperties properties;
+    properties.setLevel(1);
+    properties.setStyle(KoListStyle::DecimalItem);
+    properties.setListItemSuffix(".");
+    properties.setStartValue(1);
+    d->defaultListStyle->setLevelProperties(properties);
 }
 
 KoStyleManager::~KoStyleManager() {

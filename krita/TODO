@@ -71,7 +71,6 @@ Functionality that _should_ be in KOffice
 
 * Bugs
 
-    * The filter dialog asks for a Ruby interpreter?
     * Filters that need access to the whole image do not work correctly with masks.
 BR  * When changing the image size, the canvas doesn't realize that (change document
       size on canvas controller when image size changes)

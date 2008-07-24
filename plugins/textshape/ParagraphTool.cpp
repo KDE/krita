@@ -305,15 +305,9 @@ void ParagraphTool::paintRulers(QPainter &painter, const KoViewConverter &conver
         painter.drawLine(shape.separatorLine());
     }
 
-    m_rulers[firstIndentRuler].paint(painter, shape.baseline(firstIndentRuler));
-
-    m_rulers[followingIndentRuler].paint(painter, shape.baseline(followingIndentRuler));
-
-    m_rulers[rightMarginRuler].paint(painter, shape.baseline(rightMarginRuler));
-
-    m_rulers[topMarginRuler].paint(painter, shape.baseline(topMarginRuler));
-
-    m_rulers[bottomMarginRuler].paint(painter, shape.baseline(bottomMarginRuler));
+    for (int ruler = 0; ruler != maxRuler; ++ruler) {
+        m_rulers[ruler].paint(painter, shape.baseline(static_cast<RulerIndex>(ruler)));
+    }
 
     painter.restore();
 }

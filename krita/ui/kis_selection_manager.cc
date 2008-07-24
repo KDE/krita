@@ -270,7 +270,7 @@ void KisSelectionManager::updateGUI()
     if (img && m_view->activeDevice() && m_view->activeLayer()) {
         l = m_view->activeLayer();
 
-        enable = l && l->selection() && !l->locked() && l->visible();
+        enable = l && !l->locked() && l->visible();
 #if 0 // XXX_SELECTION (how are we going to handle deselect and
       // reselectt now?
         if ( l->inherits( "KisAdjustmentLayer" )
@@ -282,15 +282,18 @@ void KisSelectionManager::updateGUI()
     }
 
     m_cut->setEnabled(enable);
-    m_cutToNewLayer->setEnabled(enable);
-    m_selectAll->setEnabled(!img.isNull());
     m_clear->setEnabled(enable);
     m_fillForegroundColor->setEnabled(enable);
     m_fillBackgroundColor->setEnabled(enable);
     m_fillPattern->setEnabled(enable);
-    m_invert->setEnabled(enable);
 
-    m_feather->setEnabled(enable);
+    m_cutToNewLayer->setEnabled(enable && l->selection());
+    m_selectAll->setEnabled(!img.isNull());
+
+    bool hasPixelSelection = enable && l->selection() && l->selection()->hasPixelSelection()
+                             && !m_view->selection()->isDeselected();
+    m_invert->setEnabled(hasPixelSelection);
+    m_feather->setEnabled(hasPixelSelection);
 
     m_smooth->setEnabled(enable);
 //    m_load->setEnabled(enable);
@@ -482,14 +485,12 @@ void KisSelectionManager::copy()
         KisImageSP img = m_view->image();
         if ( !img ) return;
 
-        if ( !m_view->selection() ) return;
-
         KisPaintDeviceSP dev = m_view->activeDevice();
         if (!dev) return;
 
         KisSelectionSP selection = m_view->selection();
 
-        QRect r = selection->selectedExactRect();
+        QRect r = (selection) ? selection->selectedExactRect() : img->bounds();
 
         KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace(), "clip");
         Q_CHECK_PTR(clip);
@@ -504,23 +505,25 @@ void KisSelectionManager::copy()
         gc.bitBlt(0, 0, COMPOSITE_COPY, dev, r.x(), r.y(), r.width(), r.height());
         gc.end();
 
-        // Apply selection mask.
+        if(selection) {
+            // Apply selection mask.
 
-        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
-        KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
+            KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
+            KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
 
-        for (qint32 y = 0; y < r.height(); y++) {
+            for (qint32 y = 0; y < r.height(); y++) {
 
-            while (!layerIt.isDone()) {
+                while (!layerIt.isDone()) {
 
-                cs->applyAlphaU8Mask( layerIt.rawData(), selectionIt.rawData(), 1 );
+                    cs->applyAlphaU8Mask( layerIt.rawData(), selectionIt.rawData(), 1 );
 
 
-                ++layerIt;
-                ++selectionIt;
+                    ++layerIt;
+                    ++selectionIt;
+                }
+                layerIt.nextRow();
+                selectionIt.nextRow();
             }
-            layerIt.nextRow();
-            selectionIt.nextRow();
         }
 
         m_clipboard->setClip(clip);
@@ -657,19 +660,22 @@ void KisSelectionManager::deselect()
 
 void KisSelectionManager::clear()
 {
-    KisLayerSP layer = m_view->activeLayer();
-    if(!layer) return;
-
     KisImageSP img = m_view->image();
     if (!img) return;
 
+    KisPaintDeviceSP dev = m_view->activeDevice();
+    if (!dev) return;
+
     KisSelectionSP sel = m_view->selection();
-    if (!sel) return;
 
-    KisTransaction * t = new KisTransaction(i18n("Clear"), layer->paintDevice());
+    KisTransaction * t = new KisTransaction(i18n("Clear"), dev);
 
-    layer->paintDevice()->clearSelection(m_view->selection());
+    if(sel)
+        dev->clearSelection(sel);
+    else
+        dev->clear();
 
+    dev->setDirty(img->bounds());
     img->undoAdapter()->addCommand(t);
 }
 
@@ -689,7 +695,6 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
     if (!dev) return;
 
     KisSelectionSP selection = m_view->selection();
-    if ( !selection ) return;
 
     KisPaintDeviceSP filled = new KisPaintDevice(dev->colorSpace());
 

@@ -38,6 +38,7 @@ public:
 	~Brush();
 	Brush(KoColor inkColor, BrushShape shape);
 	void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
+	void paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 	void setInkDepletion(QList<float> *curveData);
 	void setInkColor(const KoColor &color);
 	void addStrokeSample(StrokeSample sample);
@@ -51,7 +52,8 @@ public:
 	void setRadius(int radius);
 	void setSigma(double sigma);
 	void setBrushShape(BrushShape brushShape);
-
+	double computeMousePressure(double distance);
+	void enableMousePressure(bool enable);
 
 private:
 	QVector<Bristle> m_bristles;
@@ -69,6 +71,10 @@ private:
 	double m_lastSlope;
 
 	double m_angle;
+
+	double m_oldPressure;
+
+	bool m_mousePressure;
 };
 
 #endif

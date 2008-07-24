@@ -72,6 +72,7 @@ public:
 	double sigma() const;
 	int brushDimension() const;
 	int inkAmount() const;
+	bool mousePressure() const;
 
 private:
     Ui::WdgSumieOptions* m_options;
@@ -94,7 +95,7 @@ public:
     virtual bool incremental() { return false; }
 
     void paintAt(const KisPaintInformation& info);
-    //double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
+    double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
 
 
 private:

@@ -82,3 +82,5 @@ KoColor Bristle::color(){
 void Bristle::setColor(KoColor color){
 	m_color = color;
 }
+
+

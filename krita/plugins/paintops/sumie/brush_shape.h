@@ -32,12 +32,17 @@ public:
 	QVector<Bristle> getBristles();
 	int width();
 	int height();
+	int radius();
+	float sigma();
 
 private:
 	int m_width;
 	int m_height;
+
+	int	m_radius;
+	float m_sigma;
+
 	QVector<Bristle> m_bristles;
-	
 };
 
 #endif

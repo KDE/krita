@@ -6,6 +6,7 @@ set(kritasumipaintop_PART_SRCS
 	bristle.cpp
 	brush_shape.cpp
 	brush.cpp	
+	gauss.cpp
     )
 
 kde4_add_ui_files(kritasumipaintop_PART_SRCS wdgsumieoptions.ui )

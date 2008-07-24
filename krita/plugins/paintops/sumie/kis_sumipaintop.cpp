@@ -111,6 +111,10 @@ double KisSumiPaintOpSettings::sigma() const{
 	return m_options->sigmaSpinBox->value();
 }
 
+bool KisSumiPaintOpSettings::mousePressure() const{
+	return m_options->mousePressureCBox->isChecked();
+}
+
 int KisSumiPaintOpSettings::brushDimension() const{
 	if ( m_options->oneDimBrushBtn->isChecked() ){
 		return 1;
@@ -143,6 +147,9 @@ KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter
     m_image = image;
 
 	BrushShape brushShape;
+	
+	dbgPlugins << "Radius && sigma from GUI:"  << settings->radius() << " | " << settings->sigma();
+
 	if (settings->brushDimension() == 1){
 		brushShape.fromLine(settings->radius(), settings->sigma() );
 	}
@@ -155,6 +162,9 @@ KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter
 	}
 
 	m_brush.setBrushShape(brushShape);
+
+	m_brush.enableMousePressure( settings->mousePressure() );
+
 	m_brush.setInkDepletion( settings->curve() );
 	m_brush.setInkColor( painter->paintColor() );
 	// delete??
@@ -167,80 +177,33 @@ KisSumiPaintOp::~KisSumiPaintOp()
 
 void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 {
-    QMutexLocker locker(&m_mutex);
-    if (!painter()) return;
-    // read, write pixel data
-    //color: painter()->paintColor()
-	KisPaintDeviceSP device = painter()->device();
-    if (!device) return;
-
-    if ( newStrokeFlag ) {
-        newStrokeFlag = false;
-    } else
-    {
-	dab = cachedDab( );
-	dab->clear();
-
-	float x1,y1;
-
-	x1 = info.pos().x();
-	y1 = info.pos().y();
-
-	double slope;
-	if (info.movement().x() != 0)
-	{
-		slope = info.movement().y() / info.movement().x();
-	} else slope = 0.0;
-	
-	
-/*	int ix = info.movement().x()+0.5;
-	int iy = info.movement().y()+0.5;
-
-	double angle = atan2( iy, ix );*/
-
-	//double angle = m_brush.getAngleDelta(info);
-	double angle = info.angle();
-
-	m_brush.paint(dab, info);
-	m_brush.rotateBristles(angle);
-
-	QRect rc = dab->extent();
-	painter()->bitBlt( rc.topLeft(), dab, rc );
-    }
-
-    //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
+	Q_UNUSED(info);
 }
 
 
-/*double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,
-  const KisPaintInformation &pi2,
-  double savedDist )
-  {
-  Q_UNUSED(savedDist);
+double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist ){
+    QMutexLocker locker(&m_mutex);
 
-  if (!painter()) return -1;
-  // read, write pixel data
-  KisPaintDeviceSP device = painter()->device();
-  if (!device) return -1;
+    if (!painter()) return -1;
+    //color: painter()->paintColor()
+	KisPaintDeviceSP device = painter()->device();
+    if (!device) return -1;
 
-  dab = cachedDab( );
-  dab->clear();
+//     if ( newStrokeFlag ) {
+//         newStrokeFlag = false;
+//     } else
+//     {
 
-  float x0,y0,x1,y1;
-  x0 = pi1.pos().x();
-  y0 = pi1.pos().y();
+	dab = cachedDab( );
+	dab->clear();
 
-  x1 = pi2.pos().x();
-  y1 = pi2.pos().y();
+	m_brush.paintLine(dab, pi1, pi2);
+	
 
-  Lines lines;
-  //lines.drawGSLine(dab,(int)x0, (int)y0, (int)x1, (int)y1,10,5, painter()->paintColor() );
-  // Feel free to uncomment any line
-  //lines.drawDDALine(dab, (int)x0, (int)y0, (int)x1, (int)y1,painter()->paintColor() );
-  lines.drawWuLine(dab,(int)x0, (int)y0, (int)x1, (int)y1, 1 ,painter()->paintColor() );
+	QRect rc = dab->extent();
+	painter()->bitBlt( rc.topLeft(), dab, rc );
 
-  QRect rc = dab->extent();
-  painter()->bitBlt( rc.topLeft(), dab, rc );
-
+//     } newStroke
+    //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
   return 0;
-  }*/
+}

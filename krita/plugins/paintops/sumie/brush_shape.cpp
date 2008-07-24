@@ -36,6 +36,9 @@ BrushShape::~BrushShape(){
 
 
 void BrushShape::fromGaussian(int radius, float sigma){
+		m_radius = radius;
+		m_sigma = sigma;
+
 	    m_width = m_height = radius * 2 + 1;
         int gaussLength = (int)(m_width*m_width);
 		//int center = (edgeSize - 1) / 2;
@@ -82,6 +85,9 @@ void BrushShape::fromGaussian(int radius, float sigma){
 
 void BrushShape::fromLine(int radius, float sigma)
 {
+	m_radius = radius;
+	m_sigma = sigma;
+
 	m_width = radius*2+1;
 	m_height = 1;
 
@@ -122,4 +128,12 @@ int BrushShape::width(){
 
 int BrushShape::height(){
 	return m_height;
+}
+
+int BrushShape::radius(){
+	return m_radius;
+}
+
+float BrushShape::sigma(){
+	return m_sigma;
 }

@@ -93,6 +93,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
       m_selectAll(0),
       m_deselect(0),
       m_clear(0),
+      m_delete(0),
       m_reselect(0),
       m_invert(0),
       m_toNewLayer(0),
@@ -157,6 +158,11 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
 
     m_clear = collection->addAction(KStandardAction::Clear,  "clear", this, SLOT(clear()));
+
+    m_delete = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    collection->addAction("delete", m_delete );
+    m_delete->setShortcut(QKeySequence(Qt::Key_Delete));
+    connect(m_delete, SIGNAL(triggered()), this, SLOT(deleteSelection()));
 
     m_reselect  = new KAction(i18n("&Reselect"), this);
     collection->addAction("reselect", m_reselect );
@@ -350,6 +356,13 @@ void KisSelectionManager::updateGUI()
     m_paste->setEnabled(!img.isNull() && (m_clipboard->hasClip() || shapePasteEnable));
     m_pasteNew->setEnabled(!img.isNull() && m_clipboard->hasClip());
     m_toNewLayer->setEnabled(enable);
+
+    if( shapeLayer || (m_view->selection() && m_view->selection()->hasShapeSelection()) &&
+        m_view->canvasBase()->shapeManager()->selection()->count() > 0) {
+        m_delete->setEnabled(true);
+    }
+    else
+        m_delete->setEnabled(false);
 
     updateStatusBar();
 
@@ -644,25 +657,27 @@ void KisSelectionManager::deselect()
 
 void KisSelectionManager::clear()
 {
+    KisLayerSP layer = m_view->activeLayer();
+    if(!layer) return;
+
     KisImageSP img = m_view->image();
     if (!img) return;
 
     KisSelectionSP sel = m_view->selection();
     if (!sel) return;
 
-#if 0 // XXX_SELECTION
-    KisTransaction * t = 0;
+    KisTransaction * t = new KisTransaction(i18n("Clear"), layer->paintDevice());
 
-    if (img->undo()) {
-        t = new KisTransaction(i18n("Clear"), dev);
-    }
-#endif
+    layer->paintDevice()->clearSelection(m_view->selection());
 
-    sel->clear();
+    img->undoAdapter()->addCommand(t);
+}
 
-#if 0
-    if (img->undo()) img->undoAdapter()->addCommand(t);
-#endif    
+void KisSelectionManager::deleteSelection()
+{
+    if( m_view->canvasBase()->shapeManager()->selection())
+            m_view->canvasBase()->toolProxy()->deleteSelection();
+    updateGUI();
 }
 
 void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const QString& transactionText)

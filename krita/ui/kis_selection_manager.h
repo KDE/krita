@@ -73,6 +73,7 @@ public slots:
     void selectAll();
     void deselect();
     void clear();
+    void deleteSelection();
     void fillForegroundColor();
     void fillBackgroundColor();
     void fillPattern();
@@ -121,6 +122,7 @@ private:
     QAction *m_selectAll;
     QAction *m_deselect;
     QAction *m_clear;
+    QAction *m_delete;
     QAction *m_reselect;
     QAction *m_invert;
     QAction *m_toNewLayer;

@@ -160,11 +160,18 @@ void KisShapeController::removeShape( KoShape* shape )
         KisCanvas2 * canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
         KisSelectionSP selection;
         if ( canvas && (selection = canvas->view()->selection()) ) {
-            if ( !selection->shapeSelection() ) {
-                selection->setShapeSelection( new KisShapeSelection( m_d->image, selection ) );
+            if ( selection->hasShapeSelection() ) {
+                KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+                shapeSelection->removeChild(shape);
             }
-            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-            shapeSelection->removeChild(shape);
+        }
+        else {
+            KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
+
+            // XXX: What happens if the shape is added embedded in another
+            // shape?
+            if ( shapeLayer )
+                shapeLayer->removeChild( shape );
         }
     }
 

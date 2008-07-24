@@ -14,6 +14,7 @@
   <Action name="fill_selection_foreground_color"/>
   <Action name="fill_selection_background_color"/>
   <Action name="fill_selection_pattern"/>
+  <Action name="delete"/>
   <Separator/>
   <Action name="revert"/>
   <Separator/>

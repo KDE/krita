@@ -30,6 +30,7 @@ private slots:
     void testRefTwoSharedPointersOneInstance();
     void testCopy();
     void testCopy2();
+    void testCopy0();
     void testWeakSP();
 
 

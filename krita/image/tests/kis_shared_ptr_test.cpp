@@ -128,6 +128,17 @@ void KisSharedPtrTest::testCopy2()
     QVERIFY( tcw->deleted = true );
 }
 
+void KisSharedPtrTest::testCopy0()
+{
+    TestClassSP null = 0;
+    QVERIFY(null == 0 );
+    TestClassSP null2 = null;
+    QVERIFY(null2 == 0 );
+    TestClassSP null3;
+    null3 = null;
+    QVERIFY(null3 == null);
+}
+
 void KisSharedPtrTest::testWeakSP()
 {
 

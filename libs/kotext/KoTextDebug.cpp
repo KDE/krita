@@ -28,6 +28,7 @@
 #include <QDebug>
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
+#include "styles/KoListStyle.h"
 #include "styles/KoStyleManager.h"
 #include "KoTextBlockData.h"
 #include <KoTextDocumentLayout.h>
@@ -403,6 +404,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
     if (list) {
         attrs.append(" list=\"item:").append(QString::number(list->itemNumber(block)+1)).append('/')
               .append(QString::number(list->count()));
+        attrs.append(" listid:").append(QString::number(list->format().property(KoListStyle::StyleId).toInt()));
         attrs.append(" listindent:").append(QString::number(list->format().indent()));
         attrs.append(" liststyle:").append(QString::number(list->format().style()));
         attrs.append("\"");

@@ -61,6 +61,21 @@
  * - add proper relayouting (when relayouting is done by the tool it doesn't flow around other shapes)
  * - think about a method to give instructions to new users (the bubble used by okular might ne a good way to do this)
  */
+bool shapeContainsBlock(const TextShape *textShape, QTextBlock textBlock)
+{
+    QTextLayout *layout = textBlock.layout();
+    qreal blockStart = layout->lineAt(0).y();
+
+    QTextLine endLine = layout->lineAt(layout->lineCount()-1);
+    qreal blockEnd = endLine.y() + endLine.height();
+
+    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape->userData());
+    qreal shapeStart = textShapeData->documentOffset();
+    qreal shapeEnd = shapeStart + textShape->size().height();
+
+    return (blockEnd >= shapeStart && blockStart < shapeEnd);
+}
+
 ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
     : KoTool(canvas),
     m_paragraphStyle(NULL),
@@ -109,19 +124,12 @@ bool ParagraphTool::createShapeList()
     m_shapes.clear();
 
     KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
-    int start = textBlock().position();
-    int end = start + textBlock().length() - 1;
 
-    // FIXME: for now we only add the first and the last shape to the list
-    //       for >2 shape support we need to do a little bit more work to find all shapes in between
-
-    KoShape *firstShape = layout->shapeForPosition(start);
-    KoShape *lastShape = layout->shapeForPosition(end);
-
-    if (firstShape != NULL)
-        m_shapes << ShapeSpecificData(static_cast<TextShape*>(firstShape));
-    if (lastShape != firstShape && lastShape != NULL) {
-        m_shapes << ShapeSpecificData(static_cast<TextShape*>(lastShape));
+    QList<KoShape*> shapes = layout->shapes();
+    foreach (KoShape *shape, shapes) {
+        if (shapeContainsBlock(static_cast<TextShape*>(shape), textBlock())) {
+            m_shapes << ShapeSpecificData(static_cast<TextShape*>(shape));
+        }
     }
 
     // create dimensions for the shape list
@@ -175,11 +183,6 @@ void ParagraphTool::loadRulers()
 
 void ParagraphTool::saveRulers()
 {
-    // TODO: split this into separate functions for each property, that way we can apply properties to parent styles
-    // how do we handle following line indent if we want to apply it to the parent ruler? we always need to apply both
-    // at the same time. maybe it's best to return followingIndent to the way the backend does it
-    Q_ASSERT(m_paragraphStyle != NULL);
-
     m_paragraphStyle->setLeftMargin(m_rulers[followingIndentRuler].value());
     m_paragraphStyle->setRightMargin(m_rulers[rightMarginRuler].value());
     m_paragraphStyle->setTopMargin(m_rulers[topMarginRuler].value());

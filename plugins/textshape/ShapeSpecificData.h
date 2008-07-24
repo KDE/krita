@@ -43,13 +43,6 @@ public:
     // wrapper method for textShapeData->documentOffset()
     qreal shapeStartOffset() const;
 
-    // shapeStartOffset + height of the shape
-    qreal shapeEndOffset() const;
-
-    // returns true if the shape contains the block at least partially, returns false otherwise
-    bool shapeContainsBlock(QTextBlock textBlock) const;
-
-    // maps KoDocument coordinates to Shape coordinates
     QPointF mapDocumentToShape(QPointF point) const;
 
     // returns the rectangle which needs to be repainted to fully refresh the display for this shape

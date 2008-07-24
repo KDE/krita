@@ -78,32 +78,6 @@ qreal ShapeSpecificData::shapeStartOffset() const
     return textShapeData->documentOffset();
 }
 
-qreal ShapeSpecificData::shapeEndOffset() const
-{
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape()->userData());
-
-    return textShapeData->documentOffset() + textShape()->size().height();
-}
-
-bool ShapeSpecificData::shapeContainsBlock(QTextBlock textBlock) const
-{
-    QTextLayout *layout = textBlock.layout();
-    qreal blockStart = layout->lineAt(0).y();
-
-    QTextLine endLine = layout->lineAt(layout->lineCount()-1);
-    qreal blockEnd = endLine.y() + endLine.height();
-
-    qreal shapeStart = shapeStartOffset();
-    qreal shapeEnd = shapeEndOffset();
-
-    if (blockEnd < shapeStart || blockStart > shapeEnd) {
-        return false;
-    }
-    else {
-        return true;
-    }
-}
-
 QPointF ShapeSpecificData::mapDocumentToShape(QPointF point) const
 {
     QMatrix matrix = textShape()->absoluteTransformation(NULL);

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -83,7 +84,10 @@ public:
      */
     KoCharacterStyle * characterStyle( const QString &name, bool stylesDotXml );
 
-    KoListStyle * listStyle( const QString &name );
+    /**
+     * Get the list style for the given name
+     */
+    KoListStyle *listStyle(const QString &name, bool stylesDotXml);
 
     KoListLevelProperties outlineLevel( int level, const KoListLevelProperties& defaultprops = KoListLevelProperties() );
 
@@ -106,7 +110,8 @@ private:
     // helper functions for loading of paragraph styles
     void addParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
                              KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
-    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements );
+    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, 
+                                                                   int styleTypes, KoStyleManager *manager = 0);
 
     // helper functions for loading of character styles
     void addCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
@@ -114,7 +119,10 @@ private:
     QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements );
 
     // helper functions for loading of list styles
-    void addListStyles( KoOdfLoadingContext & context );
+    void addListStyles(KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
+                       KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
+    QList<QPair<QString, KoListStyle *> > loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+ 
     void addOutlineStyles( KoOdfLoadingContext & context );
 
     class Private;

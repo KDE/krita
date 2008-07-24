@@ -43,7 +43,6 @@ public:
     QHash<QString /*name*/, KoXmlElement*> styles; // page-layout, font-face etc.
     QHash<QString /*name*/, KoXmlElement*> masterPages;
     QHash<QString /*name*/, KoXmlElement*> presentationPageLayouts;
-    QHash<QString /*name*/, KoXmlElement*> listStyles;
     QHash<QString /*name*/, KoXmlElement*> drawStyles;
 
     KoXmlElement           officeStyle;
@@ -69,7 +68,6 @@ KoOdfStylesReader::~KoOdfStylesReader()
     qDeleteAll( d->styles );
     qDeleteAll( d->masterPages );
     qDeleteAll( d->presentationPageLayouts );
-    qDeleteAll( d->listStyles );
     qDeleteAll( d->drawStyles );
     delete d;
 }
@@ -191,8 +189,9 @@ void KoOdfStylesReader::insertStyle( const KoXmlElement& e, TypeAndLocation type
     const QString ns = e.namespaceURI();
 
     const QString name = e.attributeNS( KoXmlNS::style, "name", QString() );
-    if ( ns == KoXmlNS::style && localName == "style" ) {
-        const QString family = e.attributeNS( KoXmlNS::style, "family", QString() );
+    if ((ns == KoXmlNS::style && localName == "style")
+        || (ns == KoXmlNS::text && localName == "list-style")) {
+        const QString family = localName == "list-style" ? "list" : e.attributeNS( KoXmlNS::style, "family", QString() );
 
         if ( typeAndLocation == AutomaticInContent ) {
             QHash<QString, KoXmlElement*>& dict = d->contentAutoStyles[ family ];
@@ -243,9 +242,6 @@ void KoOdfStylesReader::insertStyle( const KoXmlElement& e, TypeAndLocation type
         const QString family = e.attributeNS( KoXmlNS::style, "family", QString() );
         if ( !family.isEmpty() )
             d->defaultStyles.insert( family, new KoXmlElement( e ) );
-    } else if ( localName == "list-style" && ns == KoXmlNS::text ) {
-        d->listStyles.insert( name, new KoXmlElement( e ) );
-        //kDebug(30003) <<"List style: '" << name <<"' loaded";
     } else if ( ns == KoXmlNS::number && (
                    localName == "number-style"
                 || localName == "currency-style"
@@ -273,11 +269,6 @@ const KoXmlElement& KoOdfStylesReader::officeStyle() const
 const KoXmlElement& KoOdfStylesReader::layerSet() const
 {
     return d->layerSet;
-}
-
-QHash<QString, KoXmlElement*> KoOdfStylesReader::listStyles() const
-{
-    return d->listStyles;
 }
 
 QHash<QString, KoXmlElement*> KoOdfStylesReader::masterPages() const

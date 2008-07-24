@@ -107,9 +107,6 @@ public:
     /// @return the draw:layer-set element
     const KoXmlElement& layerSet() const;
 
-    /// @return all list styles ("text:list-style" elements), hashed by name
-    QHash<QString, KoXmlElement*> listStyles() const;
-
     /// @return master pages ("style:master-page" elements), hashed by name
     QHash<QString, KoXmlElement*> masterPages() const;
 

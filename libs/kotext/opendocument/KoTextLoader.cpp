@@ -386,7 +386,7 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
     }
 
     // Get the KoListStyle the name may reference to
-    KoListStyle* listStyle = d->textSharedData->listStyle( styleName );
+    KoListStyle* listStyle = d->textSharedData->listStyle( styleName , d->stylesDotXml);
     if( ! listStyle ) { // no such list means we define a default one
         kWarning(32500) << "liststyle" << styleName << "not found";
         listStyle = new KoListStyle();

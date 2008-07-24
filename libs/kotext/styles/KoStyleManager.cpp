@@ -48,7 +48,7 @@ public:
     bool updateTriggered;
     QList<int> updateQueue;
 
-    KoParagraphStyle *standard;
+    KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
 };
 
@@ -58,15 +58,15 @@ int KoStyleManager::Private::s_stylesNumber = 100;
 KoStyleManager::KoStyleManager(QObject *parent)
     : QObject(parent), d(new Private())
 {
-    d->standard = new KoParagraphStyle();
-    d->standard->setName(i18n("Default"));
-    KoCharacterStyle *charStyle = d->standard->characterStyle();
+    d->defaultParagraphStyle = new KoParagraphStyle();
+    d->defaultParagraphStyle->setName(i18n("Default"));
+    KoCharacterStyle *charStyle = d->defaultParagraphStyle->characterStyle();
     charStyle->setName(i18n("Default"));
     // ###: Load the default from an external resource and load it into the style stack
     // This is a temporary hack until we make KoXmlElement non-readonly
     charStyle->setFontFamily("Sans Serif");
     charStyle->setFontPointSize(12.0);
-    add(d->standard);
+    add(d->defaultParagraphStyle);
 
     d->defaultListStyle = new KoListStyle();
 }
@@ -79,7 +79,7 @@ void KoStyleManager::saveOdfDefaultStyles(KoGenStyles &mainStyles)
 {
     KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
     style.setDefaultStyle(true);
-    d->standard->saveOdf(style);
+    d->defaultParagraphStyle->saveOdf(style);
     mainStyles.lookup(style);
 }
 
@@ -88,7 +88,7 @@ void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
     saveOdfDefaultStyles(mainStyles);
 
     foreach ( KoParagraphStyle *paragraphStyle, d->paragStyles ) {
-        if (paragraphStyle == d->standard)
+        if (paragraphStyle == d->defaultParagraphStyle)
             continue;
 
         QString name( QString( QUrl::toPercentEncoding( paragraphStyle->name(), "", " " ) ).replace( "%", "_" ) );
@@ -102,7 +102,7 @@ void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
     }
 
     foreach ( KoCharacterStyle *characterStyle, d->charStyles ) {
-        if (characterStyle == d->standard->characterStyle())
+        if (characterStyle == d->defaultParagraphStyle->characterStyle())
             continue;
 
         QString name( QString( QUrl::toPercentEncoding( characterStyle->name(), "", " " ) ).replace( "%", "_" ) );
@@ -250,7 +250,7 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
 }
 
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const {
-    return d->standard;
+    return d->defaultParagraphStyle;
 }
 
 KoListStyle *KoStyleManager::defaultListStyle() const

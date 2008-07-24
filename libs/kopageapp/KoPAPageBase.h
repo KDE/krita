@@ -59,12 +59,13 @@ public:
      */
     virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
 
-    // reimplemented
+    /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
 
     /// @return the layout of the page
     virtual KoPageLayout & pageLayout() = 0;
+    virtual const KoPageLayout & pageLayout() const = 0;
 
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
@@ -86,6 +87,9 @@ public:
     virtual bool displayMasterShapes() = 0;
 
     virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
+
+    /// reimplemented
+    virtual QSizeF size() const;
 
 protected:
     /**

@@ -68,8 +68,17 @@ KoPageLayout & KoPAPage::pageLayout()
     return m_masterPage->pageLayout();
 }
 
+const KoPageLayout & KoPAPage::pageLayout() const
+{
+    Q_ASSERT( m_masterPage );
+
+    return m_masterPage->pageLayout();
+}
+
 void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
+    QString master = element.attributeNS (KoXmlNS::draw, "master-page-name" );
+    setMasterPage( loadingContext.masterPageFromName( master ) );
     KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
     int pageProperties = UseMasterBackground | DisplayMasterShapes | DisplayMasterBackground;
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
@@ -78,8 +87,6 @@ void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &
     }
     m_pageProperties = pageProperties;
     setName( element.attributeNS( KoXmlNS::draw, "name" ) );
-    QString master = element.attributeNS (KoXmlNS::draw, "master-page-name" );
-    setMasterPage( loadingContext.masterPageFromName( master ) );
 }
 
 void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )

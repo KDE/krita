@@ -39,6 +39,7 @@ public:
 
     /// @return the layout set by the masterpage
     KoPageLayout & pageLayout();
+    const KoPageLayout & pageLayout() const;
 
     /// Set the masterpage for this page to @p masterPage
     void setMasterPage( KoPAMasterPage * masterPage );

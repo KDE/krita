@@ -184,3 +184,9 @@ void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element,
         setBackground( loadOdfFill( element, loadingContext ) );
     }
 }
+
+QSizeF KoPAPageBase::size() const
+{
+    const KoPageLayout layout = pageLayout();
+    return QSize( layout.width, layout.height );
+}

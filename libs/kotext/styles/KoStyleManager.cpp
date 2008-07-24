@@ -21,6 +21,7 @@
 #include "KoStyleManager.h"
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
+#include "KoListStyle.h"
 #include "ChangeFollower.h"
 
 #include <KoGenStyle.h>
@@ -34,7 +35,10 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false) { }
+    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0) { }
+    ~Private() {
+        delete defaultListStyle;
+    }
     static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
 
     QList<KoCharacterStyle*> charStyles;
@@ -45,6 +49,7 @@ public:
     QList<int> updateQueue;
 
     KoParagraphStyle *standard;
+    KoListStyle *defaultListStyle;
 };
 
 // static
@@ -62,6 +67,8 @@ KoStyleManager::KoStyleManager(QObject *parent)
     charStyle->setFontFamily("Sans Serif");
     charStyle->setFontPointSize(12.0);
     add(d->standard);
+
+    d->defaultListStyle = new KoListStyle();
 }
 
 KoStyleManager::~KoStyleManager() {
@@ -244,6 +251,11 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
 
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const {
     return d->standard;
+}
+
+KoListStyle *KoStyleManager::defaultListStyle() const
+{
+    return d->defaultListStyle;
 }
 
 QList<KoCharacterStyle*> KoStyleManager::characterStyles() const {

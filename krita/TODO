@@ -35,8 +35,6 @@ Regressions from 1.x
     Run filter test to see which filters are broken (or need a fixed test)
 
 BR  * Make the bumpmap filter get the right layer on loading as adj. layer or filter mask.
-    * unsharp mask does something weird using the channelflags that breaks convolution
-    * the other convolution filters appear broken
     * all filters are extremely slow
     
 * Paintops

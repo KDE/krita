@@ -1,14 +1,14 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="13">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="14">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
-  <Action name="cut"/>
-  <Action name="copy"/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
   <Action name="copy_merged"/>
-  <Action name="paste"/>
+  <Action name="edit_paste"/>
   <Action name="paste_new"/>
   <Action name="clear"/>
   <Action name="fill_selection_foreground_color"/>

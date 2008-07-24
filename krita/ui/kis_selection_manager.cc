@@ -144,9 +144,9 @@ void KisSelectionManager::setup(KActionCollection * collection)
 {
     // XXX: setup shortcuts!
 
-    m_cut = collection->addAction(KStandardAction::Cut,  "cut", this, SLOT(cut()));
-    m_copy = collection->addAction(KStandardAction::Copy,  "copy", this, SLOT(copy()));
-    m_paste = collection->addAction(KStandardAction::Paste,  "paste", this, SLOT(paste()));
+    m_cut = KStandardAction::cut( this, SLOT(cut()), collection);
+    m_copy = KStandardAction::copy(this, SLOT(copy()), collection);
+    m_paste = KStandardAction::paste(this, SLOT(paste()), collection);
 
     m_pasteNew  = new KAction(i18n("Paste into &New Image"), this);
     collection->addAction("paste_new", m_pasteNew );

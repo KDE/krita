@@ -246,7 +246,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
         if ((actualList->format().properties() != expectedList->format().properties())
             || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))) {
             qDebug() << "compareBlocks: list properties mismatch at " << actualBlock.text()
-                     << actualList->format().properties() << expectedList->format().properties()
+                     << KoTextDebug::listAttributes(actualList->format()) << KoTextDebug::listAttributes(expectedList->format())
                      << actualList->itemNumber(actualBlock) << expectedList->itemNumber(expectedBlock);
             return false;
         }

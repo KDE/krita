@@ -27,8 +27,6 @@ Regressions from 1.x
     * opening a backup file causes a crash ( krita(8568)/koffice (filter manager) 
       KoFilterManager::importDocument: Can't open  "application/zip" , trying filter chooser
       ASSERT: "mime" in file /home/boud/kde/src/koffice/libs/main/KoFilterManager.cpp, line 82)
-    * deselect/reselect doesn't work and probably needs some redesign
-    * the selection undo command needs to be ported to the new structure
 
 * Tools
 
@@ -119,7 +117,7 @@ BR  * Fix flake layers: deletion of shapes
     * Review "Scale to new Size" dialog. Add a keep aspect ratio switch
     * Create a "Change canvas size" dialog
 BR  * make it possible to save and load masks
-    
+    * check if edit->clear and edit->delete can the combined
 
 * Tools
     

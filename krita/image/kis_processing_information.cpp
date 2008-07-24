@@ -22,9 +22,9 @@
 
 struct KisConstProcessingInformation::Private
 {
-    Private() {}
+    Private() : device(0), selection(0) {}
     KisPaintDeviceSP device;
-    const KisSelectionSP selection;
+    KisSelectionSP selection;
     QPoint topLeft;
 };
 
@@ -33,6 +33,22 @@ KisConstProcessingInformation::KisConstProcessingInformation(const KisPaintDevic
     d->device = device;
     d->selection = selection;
     d->topLeft = topLeft;
+}
+
+KisConstProcessingInformation::KisConstProcessingInformation(const KisConstProcessingInformation& _rhs ) : d(new Private)
+{
+  *d = *_rhs.d;
+}
+
+KisConstProcessingInformation& KisConstProcessingInformation::operator=(const KisConstProcessingInformation& _rhs )
+{
+  *d = *_rhs.d;
+  return *this;
+}
+
+KisConstProcessingInformation::~KisConstProcessingInformation()
+{
+  delete d;
 }
 
 const KisPaintDeviceSP KisConstProcessingInformation::paintDevice() const
@@ -58,6 +74,22 @@ struct KisProcessingInformation::Private
 KisProcessingInformation::KisProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : KisConstProcessingInformation(device, topLeft, selection), d(new Private)
 {
     d->device = device;
+}
+
+KisProcessingInformation::KisProcessingInformation(const KisProcessingInformation& _rhs ) : KisConstProcessingInformation(_rhs), d(new Private(*_rhs.d))
+{
+}
+
+KisProcessingInformation& KisProcessingInformation::operator=(const KisProcessingInformation& _rhs )
+{
+  *d = *_rhs.d;
+  KisConstProcessingInformation::operator=(_rhs);
+  return *this;
+}
+
+KisProcessingInformation::~KisProcessingInformation()
+{
+  delete d;
 }
 
 KisPaintDeviceSP KisProcessingInformation::paintDevice()

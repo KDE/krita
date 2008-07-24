@@ -95,7 +95,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), CategoryAdjust, i18n("&Auto
     setSupportsPainting( false );
     setSupportsThreading( false );
     setColorSpaceIndependence( TO_LAB16 );
-    
+
 }
 
 bool KisAutoContrast::workWith(const KoColorSpace* cs) const
@@ -246,6 +246,7 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
         }
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
+    delete cfg;
     delete adj;
 }
 
@@ -291,7 +292,7 @@ void KisDesaturateFilter::process(KisConstProcessingInformation srcInfo,
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
-    
+
     KoColorTransformation * m_adj = src->colorSpace()->createDesaturateAdjustment();
 
     KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());

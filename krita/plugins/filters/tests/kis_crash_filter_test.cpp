@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoColorProfile.h>
 #include "kis_crash_filter_test.h"
 #include <qtest_kde.h>
 #include "filter/kis_filter_configuration.h"
@@ -53,7 +54,7 @@ bool applyFilter( const KoColorSpace * cs,  KisFilterSP f ) {
         s = in.readAll();
         kfc->fromXML( s );
     }
-    qDebug() << f->id() << ", " << cs->id();// << kfc->toXML() << "\n";
+    qDebug() << f->id() << ", " << cs->id() << ", " << cs->profile()->name();// << kfc->toXML() << "\n";
 
     KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
     KisProcessingInformation dst( dev, QPoint(0, 0), 0 );

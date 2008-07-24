@@ -201,7 +201,8 @@ KisPerChannelFilter::KisPerChannelFilter() : KisFilter( id(), CategoryAdjust, i1
     setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
-    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisPerChannelFilterConfigurationFactory()));
+    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(),
+                       new KisPerChannelFilterConfigurationFactory()));
 }
 
 KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev, const KisImageSP image ) const

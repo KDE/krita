@@ -53,6 +53,7 @@ static const int properties[] = {
     KoListStyle::BulletSize,
     KoListStyle::Alignment,
     KoListStyle::LetterSynchronization,
+    KoListStyle::StyleId,
     -1
 };
 
@@ -72,6 +73,16 @@ KoListLevelProperties::KoListLevelProperties(const KoListLevelProperties &other)
 
 KoListLevelProperties::~KoListLevelProperties() {
     delete d;
+}
+
+int KoListLevelProperties::styleId() const 
+{
+    return propertyInt(KoListStyle::StyleId);
+}
+
+void KoListLevelProperties::setStyleId(int id) 
+{
+    setProperty(KoListStyle::StyleId, id);
 }
 
 void KoListLevelProperties::setProperty(int key, const QVariant &value) {

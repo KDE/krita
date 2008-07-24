@@ -40,6 +40,11 @@ public:
     /// Destructor
     ~KoListLevelProperties();
 
+    /// each style has a unique ID (non persistent) given out by the styleManager
+    int styleId() const;
+    /// each style has a unique ID (non persistent) given out by the styleManager
+    void setStyleId(int id);
+
     /// set the style to be used for this list-level.
     void setStyle(KoListStyle::Style style);
     /// return the used style

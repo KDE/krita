@@ -33,7 +33,7 @@
 
 class KoListStyle::Private {
 public:
-    Private() : refCount(1) { }
+    Private() : refCount(1), styleId(0) { }
 
     QTextList *textList(int level, const QTextDocument *doc) {
         if(! textLists.contains(level))
@@ -54,6 +54,7 @@ public:
     }
 
     QString name;
+    int styleId;
     QMap<int, KoListLevelProperties> levels;
     QMap<int, QMap<const QTextDocument*, QPointer<QTextList> > > textLists;
     int refCount;
@@ -102,6 +103,16 @@ void KoListStyle::setName(const QString &name) {
     d->name = name;
 }
 
+int KoListStyle::styleId() const 
+{
+    return d->styleId;
+}
+
+void KoListStyle::setStyleId(int id) 
+{
+    d->styleId = id;
+}
+
 KoListLevelProperties KoListStyle::levelProperties(int level) const {
     if(d->levels.contains(level))
         return d->levels.value(level);
@@ -111,6 +122,7 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const {
         return llp;
     }
     KoListLevelProperties llp;
+    llp.setStyleId(d->styleId);
     llp.setLevel(level);
     return llp;
 }
@@ -218,6 +230,7 @@ void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& styl
     forEachElement(styleElem, style) {
         KoListLevelProperties properties;
         properties.loadOdf(context, styleElem);
+        properties.setStyleId(d->styleId);
         setLevelProperties(properties);
     }
 }

@@ -108,8 +108,9 @@ public:
         Alignment,      ///< Alignment of the counter
         MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
         ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
-        IsOutline,       ///< If true then this list is an outline list (for header paragraphs)
-        LetterSynchronization ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
+        IsOutline,      ///< If true then this list is an outline list (for header paragraphs)
+        LetterSynchronization, ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
+        StyleId         ///< The id stored in the listFormat to link the list to this style.
     };
 
     /**
@@ -122,6 +123,12 @@ public:
 
     /// Destructor
     ~KoListStyle();
+
+    /// each style has a unique ID (non persistent) given out by the styleManager
+    int styleId() const;
+
+    /// each style has a unique ID (non persistent) given out by the styleManager
+    void setStyleId(int id);
 
     /**
      * Return the properties for the specified list level.

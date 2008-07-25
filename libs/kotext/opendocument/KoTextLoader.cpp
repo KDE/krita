@@ -85,6 +85,7 @@ class KoTextLoader::Private
 
         KoListStyle *currentListStyle;
         int currentListLevel;
+        bool isList;
 
         KoStyleManager *styleManager;
 
@@ -101,6 +102,7 @@ class KoTextLoader::Private
         , lastElapsed( 0 )
         , currentListStyle ( 0 )
         , currentListLevel( 1 )
+        , isList ( false )
         , styleManager(0)
         {
             dt.start();
@@ -305,7 +307,9 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
 
     if ( paragraphStyle ) {
         QTextBlock block = cursor.block();
-        paragraphStyle->applyStyle(block, !d->currentListStyle);
+        // apply the paragraph's list style only if we are in a list and the list context we
+        // are in (ie. current list and it's parent lists) does not specify a list style 
+        paragraphStyle->applyStyle(block, /*applyListStyle*/ d->isList && !d->currentListStyle);
     }
     else {
         kWarning(32500) << "paragraph style " << styleName << " not found";
@@ -377,8 +381,11 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
     KoListStyle *prevListStyle = d->currentListStyle; // save a copy
+    // if list style is not specified or is invalid, fall back to existing currentListStyle,
+    // which is the list style of the containing list
     if (KoListStyle *listStyle = d->textSharedData->listStyle(styleName , d->stylesDotXml))
         d->currentListStyle = listStyle;
+    d->isList = true;
 
     // The level specifies the level of the list style.
     int level = d->currentListLevel;
@@ -437,6 +444,7 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
     // set the list level back to the previous value
     d->currentListLevel = level;
     d->currentListStyle = prevListStyle;
+    d->isList = false;
 }
 
 void KoTextLoader::loadSection( const KoXmlElement& sectionElem, QTextCursor& cursor )

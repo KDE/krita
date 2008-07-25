@@ -528,7 +528,29 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     void loadOdf( const KoXmlElement* element, KoOdfLoadingContext & context );
 
     void saveOdf( KoGenStyle &style );
+
+    /**
+     * Returns true if this paragraph style has the property set.
+     * Note that this method does not delegate to the parent style.
+     * @param key the key as found in the Property enum
+     */
     bool hasProperty(int key) const;
+
+    /**
+     * Set a property with key to a certain value, overriding the value from the parent style.
+     * If the value set is equal to the value of the parent style, the key will be removed instead.
+     * @param key the Property to set.
+     * @param value the new value to set on this style.
+     * @see hasProperty(), value()
+     */
+    void setProperty(int key, const QVariant &value);
+    /**
+     * Return the value of key as represented on this style, taking into account parent styles.
+     * You should consider using the direct accessors for individual properties instead.
+     * @param key the Property to request.
+     * @returns a QVariant which holds the property value.
+     */
+    QVariant value(int key) const;
 
 private:
     /**
@@ -536,13 +558,10 @@ private:
      * OpenDocument format.
      */
     void loadOdfProperties( KoStyleStack& styleStack );
-
-    void setProperty(int key, const QVariant &value);
     double propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
-    QVariant value(int key) const;
 
     class Private;
     Private * const d;

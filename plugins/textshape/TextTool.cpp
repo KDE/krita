@@ -1230,28 +1230,23 @@ QWidget *TextTool::createOptionWidget()
 {
     QTabWidget *widget = new QTabWidget();
     SimpleStyleWidget *ssw = new SimpleStyleWidget(this, widget);
-    widget->addTab(ssw, i18n("Abc")); // XXX: Replace with icon
-    StylesWidget *paragTab = new StylesWidget(StylesWidget::ParagraphStyle, widget);
-    widget->addTab(paragTab, i18n("¶")); // XXX: Replace with icon
-    StylesWidget *charTab =new StylesWidget(StylesWidget::CharacterStyle, widget);
-    widget->addTab(charTab, i18n("T")); // XXX: Replace with icon
+    widget->addTab(ssw, i18n("Abc"));
+    StylesWidget *styles = new StylesWidget(widget);
+    widget->addTab(styles, i18n("Styles"));
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), ssw, SLOT(setCurrentBlock(const QTextBlock&)));
     connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)), ssw, SLOT(setCurrentFormat(const QTextCharFormat &)));
 
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), paragTab, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), charTab, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), styles, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)),
-            paragTab, SLOT(setCurrentFormat(const QTextCharFormat &)));
+            styles, SLOT(setCurrentFormat(const QTextCharFormat &)));
     connect(this, SIGNAL(blockFormatChanged(const QTextBlockFormat &)),
-            paragTab, SLOT(setCurrentFormat(const QTextBlockFormat &)));
-    connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)),
-            charTab, SLOT(setCurrentFormat(const QTextCharFormat &)));
+            styles, SLOT(setCurrentFormat(const QTextBlockFormat &)));
 
-    connect(paragTab, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)),
+    connect(styles, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)),
             &m_selectionHandler, SLOT(setStyle(KoParagraphStyle*)));
-    connect(charTab, SIGNAL(characterStyleSelected(KoCharacterStyle *)),
+    connect(styles, SIGNAL(characterStyleSelected(KoCharacterStyle *)),
             &m_selectionHandler, SLOT(setStyle(KoCharacterStyle*)));
 
     updateStyleManager();

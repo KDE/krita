@@ -9,28 +9,18 @@
     <height>300</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" colspan="4" >
-    <widget class="QListWidget" name="styleList" />
-   </item>
-   <item row="1" column="0" >
-    <widget class="QToolButton" name="newStyle" >
-     <property name="text" >
-      <string>...</string>
-     </property>
-       <property name="autoRaise" >
-        <bool>true</bool>
-       </property>
-    </widget>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" colspan="5" >
+    <widget class="QTreeView" name="stylesView" />
    </item>
    <item row="1" column="1" >
     <widget class="QToolButton" name="modifyStyle" >
+     <property name="toolTip" >
+      <string>Show properties</string>
+     </property>
      <property name="text" >
       <string>...</string>
      </property>
-       <property name="autoRaise" >
-        <bool>true</bool>
-       </property>
     </widget>
    </item>
    <item row="1" column="2" >
@@ -38,7 +28,7 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>281</width>
        <height>26</height>
@@ -46,14 +36,31 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="3" >
+   <item row="1" column="4" >
     <widget class="QToolButton" name="deleteStyle" >
      <property name="text" >
       <string>...</string>
      </property>
-       <property name="autoRaise" >
-        <bool>true</bool>
-       </property>
+    </widget>
+   </item>
+   <item row="1" column="3" >
+    <widget class="QToolButton" name="newStyle" >
+     <property name="toolTip" >
+      <string>Add a new style</string>
+     </property>
+     <property name="text" >
+      <string>...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QToolButton" name="applyStyle" >
+     <property name="toolTip" >
+      <string>Apply selected style to text</string>
+     </property>
+     <property name="text" >
+      <string>...</string>
+     </property>
     </widget>
    </item>
   </layout>

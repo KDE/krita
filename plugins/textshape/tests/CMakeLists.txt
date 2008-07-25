@@ -23,3 +23,12 @@ set(TestChangeListCommand_test_SRCS
 kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
 target_link_libraries(TestChangeListCommand kotext ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestStylesModel_test_SRCS
+    TestStylesModel.cpp
+    ../dialogs/StylesModel.cpp
+)
+kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
+target_link_libraries(TestStylesModel kotext ${QT_QTTEST_LIBRARY})
+

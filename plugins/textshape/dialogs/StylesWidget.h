@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007-2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,43 +30,37 @@ class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class QListWidgetItem;
+class StylesModel;
 
 class StylesWidget : public QWidget {
     Q_OBJECT
 public:
-    enum Type { CharacterStyle, ParagraphStyle };
-
-    explicit StylesWidget(Type type, QWidget *parent = 0);
+    explicit StylesWidget(QWidget *parent = 0);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
-    void itemSelected(QListWidgetItem *item);
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
 
 private slots:
     void newStyleClicked();
     void deleteStyleClicked();
-    void editStyle(QListWidgetItem * item);
     void editStyle();
-    void addParagraphStyle(KoParagraphStyle*);
-    void addCharacterStyle(KoCharacterStyle*);
-    void removeParagraphStyle(KoParagraphStyle*);
-    void removeCharacterStyle(KoCharacterStyle*);
+    void applyStyle();
+    /// updates button state
+    void setCurrent(const QModelIndex &index);
 
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);
     void characterStyleSelected(KoCharacterStyle *style);
 
 private:
-    void removeStyle(int styleId);
-
     Ui::StylesWidget widget;
-    Type m_type;
     KoStyleManager *m_styleManager;
 
     QTextBlockFormat m_currentBlockFormat;
     QTextCharFormat m_currentCharFormat;
+    StylesModel *m_stylesModel;
     bool m_blockSignals;
 };
 

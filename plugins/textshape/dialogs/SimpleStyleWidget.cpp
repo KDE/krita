@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,8 +50,8 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
         widget.alignRight->setDefaultAction(tool->action("format_alignright"));
     }
 
-    widget.textColor->setDefaultAction(tool->action("format_textcolor"));
-    widget.backgroundColor->setDefaultAction(tool->action("format_backgroundcolor"));
+    //widget.textColor->setDefaultAction(tool->action("format_textcolor"));
+    //widget.backgroundColor->setDefaultAction(tool->action("format_backgroundcolor"));
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
     widget.alignBlock->setDefaultAction(tool->action("format_alignblock"));
     widget.superscript->setDefaultAction(tool->action("format_super"));
@@ -62,10 +62,7 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     fillListsCombobox();
 
     connect(widget.listType, SIGNAL(currentIndexChanged(int)), this, SLOT(listStyleChanged(int)));
-//     connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
-    connect(widget.fontComboBox, SIGNAL(currentFontChanged(const QFont&)),
-            this, SLOT(fontChanged(const QFont&)));
-    connect(widget.sizeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)));
+    connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
 }
 
 void SimpleStyleWidget::fillListsCombobox() {
@@ -86,7 +83,7 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block) {
     };
     Finally finally(this);
 
-//     widget.reversedText->setVisible(m_tool->isBidiDocument());
+    widget.reversedText->setVisible(m_tool->isBidiDocument());
     QTextLayout *layout = block.layout();
     if(layout) {
         switch(layout->textOption().textDirection()) {
@@ -132,10 +129,6 @@ void SimpleStyleWidget::setStyleManager(KoStyleManager *sm) {
 
 void SimpleStyleWidget::setCurrentFormat(const QTextCharFormat& format)
 {
-    m_blockSignals = true;
-    widget.fontComboBox->setCurrentFont(format.font());
-    widget.sizeSpinBox->setValue(qRound(format.font().pointSizeF()));
-    m_blockSignals = false;
 }
 
 void SimpleStyleWidget::listStyleChanged(int row) {
@@ -171,20 +164,6 @@ void SimpleStyleWidget::directionChangeRequested() {
     cursor.setBlockFormat(format);
 }
 
-void SimpleStyleWidget::fontChanged ( const QFont & font )  
-{
-    if (m_blockSignals)
-        return;
-    static_cast<KoTextSelectionHandler*>(m_tool->selection())->setFontFamily(font.family());
-}
-
-void SimpleStyleWidget::fontSizeChanged( int size )  
-{
-    if (m_blockSignals)
-        return;
-    static_cast<KoTextSelectionHandler*>(m_tool->selection())->setFontSize(size);
-}
-
 void SimpleStyleWidget::updateDirection(DirectionButtonState state) {
     if(m_directionButtonState == state) return;
     m_directionButtonState = state;
@@ -201,7 +180,7 @@ void SimpleStyleWidget::updateDirection(DirectionButtonState state) {
             buttonText = i18nc("Automatic direction detection", "Auto");
             break;
     }
-//     widget.reversedText->setText(buttonText);
+    widget.reversedText->setText(buttonText);
 }
 
 #include <SimpleStyleWidget.moc>

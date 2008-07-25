@@ -37,6 +37,7 @@ public:
 
     void setStyle(KoCharacterStyle *style);
 
+public slots:
     void save();
 
     void switchToGeneralTab();

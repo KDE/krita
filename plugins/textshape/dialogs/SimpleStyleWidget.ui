@@ -5,30 +5,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>155</width>
-    <height>213</height>
+    <width>188</width>
+    <height>227</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <property name="leftMargin" >
-    <number>4</number>
+    <number>3</number>
    </property>
    <property name="topMargin" >
-    <number>4</number>
+    <number>3</number>
    </property>
    <property name="rightMargin" >
-    <number>4</number>
+    <number>3</number>
    </property>
    <property name="bottomMargin" >
-    <number>4</number>
+    <number>0</number>
    </property>
-   <property name="horizontalSpacing" >
-    <number>6</number>
-   </property>
-   <property name="verticalSpacing" >
-    <number>6</number>
-   </property>
-   <item row="3" column="0" colspan="2" >
+   <item row="4" column="0" colspan="2" >
     <widget class="QFrame" name="buttonFrame2" >
      <property name="frameShadow" >
       <enum>QFrame::Raised</enum>
@@ -37,29 +31,43 @@
       <property name="spacing" >
        <number>0</number>
       </property>
-      <property name="leftMargin" >
-       <number>0</number>
-      </property>
-      <property name="topMargin" >
-       <number>0</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
-      <property name="bottomMargin" >
+      <property name="margin" >
        <number>0</number>
       </property>
       <item>
+       <widget class="QLabel" name="label_3" >
+        <property name="text" >
+         <string>Indent:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>6</width>
+          <height>1</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QToolButton" name="decreaseIndent" >
         <property name="autoRaise" >
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="increaseIndent" >
         <property name="autoRaise" >
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -68,10 +76,10 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>1</width>
-          <height>20</height>
+          <height>1</height>
          </size>
         </property>
        </spacer>
@@ -86,7 +94,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2" >
+   <item row="3" column="0" colspan="2" >
     <widget class="QComboBox" name="listType" >
      <property name="maxVisibleItems" >
       <number>15</number>
@@ -105,22 +113,22 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>1</width>
-       <height>71</height>
+       <height>1</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="4" column="0" >
+   <item row="5" column="0" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
-       <width>111</width>
+       <width>1</width>
        <height>1</height>
       </size>
      </property>
@@ -137,96 +145,121 @@
      <property name="frameShape" >
       <enum>QFrame::NoFrame</enum>
      </property>
-     <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>0</number>
-      </property>
-      <property name="topMargin" >
-       <number>0</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>0</number>
-      </property>
+     <layout class="QGridLayout" name="_2" >
       <property name="horizontalSpacing" >
        <number>0</number>
       </property>
-      <property name="verticalSpacing" >
+      <property name="margin" >
        <number>0</number>
       </property>
-      <item row="1" column="3" >
+      <item row="1" column="5" >
        <widget class="QToolButton" name="strikeOut" >
         <property name="autoRaise" >
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" >
+      <item row="0" column="5" >
        <widget class="QToolButton" name="alignBlock" >
         <property name="autoRaise" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QToolButton" name="alignLeft" >
-        <property name="autoRaise" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QToolButton" name="italic" >
-        <property name="autoRaise" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
-       <widget class="QToolButton" name="subscript" >
-        <property name="autoRaise" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QToolButton" name="superscript" >
-        <property name="autoRaise" >
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item row="0" column="2" >
-       <widget class="QToolButton" name="alignRight" >
+       <widget class="QToolButton" name="alignLeft" >
         <property name="autoRaise" >
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
+      <item row="1" column="3" >
+       <widget class="QToolButton" name="italic" >
+        <property name="autoRaise" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" >
+       <widget class="QToolButton" name="subscript" >
+        <property name="autoRaise" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" >
+       <widget class="QToolButton" name="superscript" >
+        <property name="autoRaise" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4" >
+       <widget class="QToolButton" name="alignRight" >
+        <property name="autoRaise" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" >
        <widget class="QToolButton" name="alignCenter" >
         <property name="autoRaise" >
-         <bool>true</bool>
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4" >
+       <widget class="QToolButton" name="underline" >
+        <property name="autoRaise" >
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item row="1" column="2" >
-       <widget class="QToolButton" name="underline" >
+       <widget class="QToolButton" name="bold" >
         <property name="autoRaise" >
-         <bool>true</bool>
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Align:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QToolButton" name="bold" >
-        <property name="autoRaise" >
-         <bool>true</bool>
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>Style:</string>
         </property>
        </widget>
       </item>
+      <item row="1" column="1" >
+       <spacer name="horizontalSpacer" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>6</width>
+          <height>1</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QLabel" name="label_4" >
+     <property name="text" >
+      <string>List Style:</string>
+     </property>
     </widget>
    </item>
   </layout>

@@ -1,5 +1,6 @@
 project( textPlugin)
 
+add_subdirectory( pics )
 add_subdirectory( tests )
 
 include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
@@ -29,6 +30,7 @@ SET ( textshape_SRCS
     dialogs/ParagraphBulletsNumbers.cpp
     dialogs/ParagraphSettingsDialog.cpp
     dialogs/ListsSpinBox.cpp
+    dialogs/StylesModel.cpp
     dialogs/StyleManager.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
@@ -49,7 +51,7 @@ SET ( textshape_SRCS
 )
 
 kde4_add_ui_files(textshape_SRCS
-    dialogs/SimpleStyleWidget_2.ui
+    dialogs/SimpleStyleWidget.ui
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui

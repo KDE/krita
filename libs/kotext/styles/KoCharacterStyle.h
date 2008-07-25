@@ -313,6 +313,14 @@ public:
      */
     bool isEmpty() const;
 
+    /**
+     * Return the value of key as represented on this style.
+     * You should consider using the direct accessors for individual properties instead.
+     * @param key the Property to request.
+     * @returns a QVariant which holds the property value.
+     */
+    QVariant value(int key) const;
+
 private:
     class Private;
     Private * const d;

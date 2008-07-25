@@ -1073,4 +1073,9 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
     //TODO: font name and family
 }
 
+QVariant KoCharacterStyle::value(int key) const
+{
+    return d->stylesPrivate->value(key);
+}
+
 #include "KoCharacterStyle.moc"

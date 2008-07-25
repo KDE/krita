@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
@@ -670,7 +670,10 @@ QString KoParagraphStyle::name() const {
 }
 
 void KoParagraphStyle::setName(const QString &name) {
+    if (name == d->name)
+        return;
     d->name = name;
+    emit nameChanged(name);
 }
 
 int KoParagraphStyle::styleId() const {
@@ -1252,7 +1255,7 @@ double KoParagraphStyle::tabStopDistance() const {
 
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style) {
     d->stylesPrivate->copy(*style->d->stylesPrivate);
-    d->name = style->name();
+    setName(style->name()); // make sure we emit property change
     if (d->charStyle)
         delete d->charStyle;
     d->charStyle = style->d->charStyle;

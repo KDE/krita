@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -320,6 +320,9 @@ public:
      * @returns a QVariant which holds the property value.
      */
     QVariant value(int key) const;
+
+signals:
+    void nameChanged(const QString &newName);
 
 private:
     class Private;

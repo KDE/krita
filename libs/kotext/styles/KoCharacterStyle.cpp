@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -99,7 +99,7 @@ KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format, QObject *paren
 
 void KoCharacterStyle::copyProperties(const KoCharacterStyle *style) {
     d->stylesPrivate->copy(*style->d->stylesPrivate);
-    d->name = style->name();
+    setName(style->name()); // make sure we emit property change
 }
 
 void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
@@ -396,8 +396,12 @@ void KoCharacterStyle::setForeground (const QBrush &brush) {
 QString KoCharacterStyle::name() const {
     return d->name;
 }
-void KoCharacterStyle::setName(const QString &name) {
+void KoCharacterStyle::setName(const QString &name)
+{
+    if (name == d->name)
+        return;
     d->name = name;
+    emit nameChanged(name);
 }
 int KoCharacterStyle::styleId() const {
     return d->propertyInt(StyleId);

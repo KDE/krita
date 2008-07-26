@@ -239,7 +239,7 @@ QList<QPointF> KoSnapProxy::pointsFromShape( KoShape * shape )
 {
     QList<QPointF> snapPoints;
     // no snapping to hidden shapes
-    if( ! shape->isVisible() )
+    if( ! shape->isVisible(true) )
         return snapPoints;
 
     // add the bounding box corners as default snap points
@@ -330,7 +330,7 @@ QList<KoShape*> KoSnapProxy::shapes( bool omitEditedShape )
     // filter all hidden and ignored shapes
     foreach( KoShape * shape, allShapes )
     {
-        if( ! shape->isVisible() )
+        if( ! shape->isVisible(true) )
             continue;
         if( ignoredShapes.contains( shape ) )
             continue;

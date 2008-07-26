@@ -140,7 +140,7 @@ public:
     virtual bool snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance );
     virtual QPainterPath decoration( const KoViewConverter &converter ) const;
 private:
-    Qt::Orientation m_orientation;
+    int m_orientation;
 };
 
 #endif // KOSNAPSTRATEGY_H

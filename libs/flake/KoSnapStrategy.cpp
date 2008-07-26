@@ -551,44 +551,46 @@ bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
           return false;
 
     QPointF snappedPoint = mousePosition;
+    m_orientation = 0;
 
-    double minDistance = maxSnapDistance;
+    double minHorzDistance = maxSnapDistance;
     foreach( double guidePos, guidesData->horizontalGuideLines() )
     {
         double distance = qAbs( guidePos - mousePosition.y() );
-        if( distance < minDistance )
+        if( distance < minHorzDistance )
         {
-            snappedPoint = QPointF( mousePosition.x(), guidePos );
-            minDistance = distance;
-            m_orientation = Qt::Horizontal;
+            snappedPoint.setY( guidePos );
+            minHorzDistance = distance;
+            m_orientation |= Qt::Horizontal;
         }
     }
+    double minVertSnapDistance = maxSnapDistance;
     foreach( double guidePos, guidesData->verticalGuideLines() )
     {
         double distance = qAbs( guidePos - mousePosition.x() );
-        if( distance < minDistance )
+        if( distance < minVertSnapDistance )
         {
-            snappedPoint = QPointF( guidePos, mousePosition.y() );
-            minDistance = distance;
-            m_orientation = Qt::Vertical;
+            snappedPoint.setX( guidePos );
+            minVertSnapDistance = distance;
+            m_orientation |= Qt::Vertical;
         }
     }
 
     setSnappedPosition( snappedPoint );
 
-    return (minDistance < maxSnapDistance);
+    return (minHorzDistance < maxSnapDistance || minVertSnapDistance < maxSnapDistance);
 }
 
 QPainterPath LineGuideSnapStrategy::decoration( const KoViewConverter &converter ) const
 {
     QSizeF unzoomedSize = converter.viewToDocument( QSizeF( 5, 5 ) );
     QPainterPath decoration;
-    if( m_orientation == Qt::Horizontal )
+    if( m_orientation & Qt::Horizontal )
     {
         decoration.moveTo( snappedPosition()-QPointF(unzoomedSize.width(),0) );
         decoration.lineTo( snappedPosition()+QPointF(unzoomedSize.width(),0) );
     }
-    else
+    if( m_orientation & Qt::Vertical )
     {
         decoration.moveTo( snappedPosition()-QPointF(0,unzoomedSize.height()) );
         decoration.lineTo( snappedPosition()+QPointF(0,unzoomedSize.height()) );

@@ -35,11 +35,18 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="checkBoxIgnoreAlpha" >
+     <property name="text" >
+      <string>ignore alpha</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer>
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>40</width>
        <height>20</height>

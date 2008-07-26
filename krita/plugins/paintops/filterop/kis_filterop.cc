@@ -143,11 +143,17 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
     return m_currentFilterConfigWidget->configuration();
 }
 
+bool KisFilterOpSettings::ignoreAlpha() const
+{
+    return m_uiOptions->checkBoxIgnoreAlpha->isChecked();
+}
+
 KisPaintOpSettingsSP KisFilterOpSettings::clone() const
 {
     KisFilterOpSettings* s = new KisFilterOpSettings(0, m_image);
     s->m_paintDevice = m_paintDevice;
     s->setCurrentFilter( KoID(m_currentFilter->id()) );
+    s->m_uiOptions->checkBoxIgnoreAlpha->setChecked( ignoreAlpha() );
     if(s->m_currentFilterConfigWidget && m_currentFilterConfigWidget)
     {
         s->m_currentFilterConfigWidget->setConfiguration( m_currentFilterConfigWidget->configuration() );
@@ -173,6 +179,7 @@ void KisFilterOpSettings::fromXML(const QDomElement& elt)
                 m_currentFilterConfigWidget->setConfiguration( kfc );
             }
         }
+        m_uiOptions->checkBoxIgnoreAlpha->setChecked( elt.attribute("IgnoreAlpha").toInt(0));
     }
 }
 
@@ -186,6 +193,7 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
         config->toXML( doc, filterElt );
         delete config;
     }
+    rootElt.setAttribute( "IgnoreAlpha", QString::number( ignoreAlpha() ) );
 }
 
 KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter)
@@ -248,7 +256,27 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
     brush->mask(m_tmpDevice, scale, scale, 0.0, info, xFraction, yFraction);
-
+    
+    if( !m_settings->ignoreAlpha())
+    {
+      KisHLineIteratorPixel itTmpDev = m_tmpDevice->createHLineIterator( 0,0, maskWidth );
+      KisHLineIteratorPixel itSrc = source()->createHLineIterator( x, y, maskWidth );
+      const KoColorSpace* cs = m_tmpDevice->colorSpace();
+      for( int y = 0; y < maskHeight; ++y )
+      {
+        while( !itTmpDev.isDone())
+        {
+          quint8 alphaTmpDev = cs->alpha( itTmpDev.rawData());
+          quint8 alphaSrc = cs->alpha( itSrc.rawData());
+          
+          cs->setAlpha( itTmpDev.rawData(), qMin( alphaTmpDev, alphaSrc), 1);
+          ++itTmpDev;
+          ++itSrc;
+        }
+        itTmpDev.nextRow();
+        itSrc.nextRow();
+      }
+    }
 
     // Blit the paint device onto the layer
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);

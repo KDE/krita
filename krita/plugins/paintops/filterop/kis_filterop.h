@@ -61,6 +61,7 @@ public:
     virtual QWidget *widget() const { return m_optionsWidget; }
     const KisFilterSP filter() const;
     KisFilterConfiguration* filterConfig() const;
+    bool ignoreAlpha() const;
     virtual void setNode( KisNodeSP node );
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;

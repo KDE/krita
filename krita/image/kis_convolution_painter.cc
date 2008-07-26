@@ -265,7 +265,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
         {
             itH -= itStart + kh - yLastMinuskhh;
         }
-        KisVLineConstIteratorPixel kitSrc = src->createVLineIterator(col + khalfWidth + 1, itStart, itH);
+        KisVLineConstIteratorPixel kitSrc = src->createVLineIterator(col + khalfWidth , itStart, itH);
         while (!hit.isDone()) {
 
             // Iterate over all contributing pixels that are covered by the kernel

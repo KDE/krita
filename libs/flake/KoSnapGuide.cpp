@@ -237,37 +237,44 @@ QList<KoShape*> KoSnapProxy::shapesInRect( const QRectF &rect, bool omitEditedSh
 
 QList<QPointF> KoSnapProxy::pointsFromShape( KoShape * shape )
 {
-    QList<QPointF> pathPoints;
+    QList<QPointF> snapPoints;
+
+    // add the bounding box corners as default snap points
+    QRectF bbox = shape->boundingRect();
+    snapPoints.append( bbox.topLeft() );
+    snapPoints.append( bbox.topRight() );
+    snapPoints.append( bbox.bottomRight() );
+    snapPoints.append( bbox.bottomLeft() );
+
+    // return the special snap points of the shape
+    snapPoints += shape->snapData().snapPoints();
 
     KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-    if( ! path )
+    if( path )
     {
-        // return the special snap points of the shape
-        return shape->snapData().snapPoints();
-    }
+        QMatrix m = path->absoluteTransformation(0);
 
-    QMatrix m = path->absoluteTransformation(0);
+        QList<KoPathPoint*> ignoredPoints = m_snapGuide->ignoredPathPoints();
 
-    QList<KoPathPoint*> ignoredPoints = m_snapGuide->ignoredPathPoints();
-
-    int subpathCount = path->subpathCount();
-    for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
-    {
-        int pointCount = path->pointCountSubpath( subpathIndex );
-        for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
+        int subpathCount = path->subpathCount();
+        for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
         {
-            KoPathPoint * p = path->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex )  );
-            if( ! p || ignoredPoints.contains( p ) )
-                continue;
+            int pointCount = path->pointCountSubpath( subpathIndex );
+            for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
+            {
+                KoPathPoint * p = path->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex )  );
+                if( ! p || ignoredPoints.contains( p ) )
+                    continue;
 
-            pathPoints.append( m.map( p->point() ) );
+                snapPoints.append( m.map( p->point() ) );
+            }
         }
+
+        if( shape == m_snapGuide->editedShape() )
+            snapPoints.removeLast();
     }
 
-    if( shape == m_snapGuide->editedShape() )
-        pathPoints.removeLast();
-
-    return pathPoints;
+    return snapPoints;
 }
 
 QList<KoPathSegment> KoSnapProxy::segmentsInRect( const QRectF &rect )

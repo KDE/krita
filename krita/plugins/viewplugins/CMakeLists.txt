@@ -18,7 +18,7 @@ add_subdirectory( together )
 add_subdirectory( tonemapping )
 add_subdirectory( trianglecolorselector )
 
-#add_subdirectory( histogram_docker )
+add_subdirectory( histogram_docker )
 MESSAGE("Krita: port the histogram docker")
 find_package(GMM)
 

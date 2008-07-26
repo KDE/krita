@@ -79,20 +79,14 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
 
         for (int j = 0; j < channels && !m_stop; j++) {
             for (int k = 0; k < nrOfBins; k++) {
-                bins.at(j).at(k) += p->getBinAt(j, k);
+                bins[j][k] += p->getBinAt(j, k);
             }
         }
     }
 
     if (!m_stop) {
         // This function is thread-safe; and it takes ownership of the event
-        QApplication::postEvent(m_source, new QEvent(static_cast<QEvent::Type>(EmitCompletedType)));
-    }
-}
-
-void KisAccumulatingHistogramProducer::customEvent(QCustomEvent* e) {
-    if (e->type() == EmitCompletedType) {
-        emit completed();
+//         emit(completed());
     }
 }
 

@@ -49,7 +49,7 @@ private:
     KoHistogramProducerFactory* m_factory;
     KisCachedHistogramObserver::Producers m_producers;
     KisAccumulatingHistogramProducer* m_producer;
-    KoColorSpace* m_cs;
+    const KoColorSpace* m_cs;
     KisView2* m_view;
     KisHistogramView* m_hview;
     KisImageRasteredCache* m_cache;

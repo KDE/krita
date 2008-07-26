@@ -21,7 +21,9 @@
 #include "kis_cachedhistogram.h"
 
 #include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceSP dev) {
+#include <kis_iterators_pixel.h>
+
+void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceSP dev) {
     m_producer->clear();
     KisRectConstIteratorPixel srcIt = dev->createRectConstIterator(m_x, m_y, m_w, m_h);
     int i;

@@ -42,7 +42,7 @@ public:
     KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source);
     ~KisAccumulatingHistogramProducer();
     /// Does _nothing_, use addRegionsToBinAsync
-    virtual void addRegionToBin(const quint8 *, const quint8*, quint32, KoColorSpace *) {}
+    virtual void addRegionToBin(const quint8 *, const quint8*, quint32, const KoColorSpace *) {}
     virtual void addRegionsToBinAsync();
     virtual QString positionToString(double pos) const
         { return m_source->at(0)->positionToString(pos); }
@@ -65,7 +65,6 @@ signals:
     void completed();
 
 protected:
-    virtual void customEvent(QCustomEvent* e);
     /// source already converts external to internal
     virtual int externalToInternal(int ext) { return ext; }
     KisCachedHistogramObserver::Producers* m_source;

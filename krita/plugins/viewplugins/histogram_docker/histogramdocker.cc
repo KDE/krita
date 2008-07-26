@@ -51,13 +51,14 @@ namespace {
     class KisHistogramDock : public QDockWidget {
 
         public:
-            KisHistogramDock(KisHistogramView *view ) : QDockWidget(i18n("Histogram"), view) {
+            KisHistogramDock(KisHistogramView *view ) : QDockWidget(i18n("Histogram")) {
+                setWidget(view);
             }
     };
 
     class KisHistogramDockFactory : public KoDockFactory {
 public:
-    KisHistogramDockFactory(KisView2 * view)
+    KisHistogramDockFactory(KisHistogramView * view)
         : m_view( view )
         {
         }
@@ -86,7 +87,7 @@ public:
     }        
 
 private:
-    KisView2 * m_view;
+    KisHistogramView * m_view;
 
     };
 }
@@ -172,7 +173,7 @@ void KritaHistogramDocker::producerChanged(QAction *action)
     QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
-    m_factory = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(pos));
+    m_factory = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(pos).id());
 
     KisCachedHistogramObserver observer(&m_producers, m_factory, 0, 0, 0, 0, false);
 

@@ -28,13 +28,15 @@
 #include <QPainter>
 #include <QRectF>
 
+#define DEFAULT_GRID_SIZE_MM 5.0
+
 class KoGridData::Private {
 public:
     Private()
      :snapToGrid(false),
       showGrid(false),
-      gridX(MM_TO_POINT(5.0)),
-      gridY(MM_TO_POINT(5.0)),
+      gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
+      gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
       gridColor(Qt::lightGray)
     {
     }
@@ -153,8 +155,8 @@ bool KoGridData::loadOdfSettings( const KoXmlDocument & settingsDoc )
     if( firstView.isNull() )
         return false;
 
-    qreal gridX = firstView.parseConfigItemInt( "GridFineWidth" );
-    qreal gridY = firstView.parseConfigItemInt( "GridFineHeight" );
+    qreal gridX = firstView.parseConfigItemInt( "GridFineWidth", DEFAULT_GRID_SIZE_MM );
+    qreal gridY = firstView.parseConfigItemInt( "GridFineHeight", DEFAULT_GRID_SIZE_MM );
     d->gridX = MM_TO_POINT( gridX / 100.0 );
     d->gridY = MM_TO_POINT( gridY / 100.0 );
     d->snapToGrid = firstView.parseConfigItemBool( "IsSnapToGrid" );

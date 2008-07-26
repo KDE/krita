@@ -711,12 +711,12 @@ void KoView::endOperation()
 
 KoMainWindow * KoView::shell() const
 {
-    return dynamic_cast<KoMainWindow *>( topLevelWidget() );
+    return dynamic_cast<KoMainWindow *>( window() );
 }
 
 KXmlGuiWindow * KoView::mainWindow() const
 {
-    return dynamic_cast<KXmlGuiWindow *>( topLevelWidget() );
+    return dynamic_cast<KXmlGuiWindow *>( window() );
 }
 
 KStatusBar * KoView::statusBar() const

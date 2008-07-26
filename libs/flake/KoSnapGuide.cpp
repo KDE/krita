@@ -238,6 +238,9 @@ QList<KoShape*> KoSnapProxy::shapesInRect( const QRectF &rect, bool omitEditedSh
 QList<QPointF> KoSnapProxy::pointsFromShape( KoShape * shape )
 {
     QList<QPointF> snapPoints;
+    // no snapping to hidden shapes
+    if( ! shape->isVisible() )
+        return snapPoints;
 
     // add the bounding box corners as default snap points
     QRectF bbox = shape->boundingRect();
@@ -320,16 +323,24 @@ QList<KoPathSegment> KoSnapProxy::segmentsInRect( const QRectF &rect )
 
 QList<KoShape*> KoSnapProxy::shapes( bool omitEditedShape )
 {
-    QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapes();
-    foreach( KoShape * shape, m_snapGuide->ignoredShapes() )
+    QList<KoShape*> allShapes = m_snapGuide->canvas()->shapeManager()->shapes();
+    QList<KoShape*> filteredShapes;
+    QList<KoShape*> ignoredShapes = m_snapGuide->ignoredShapes();
+
+    // filter all hidden and ignored shapes
+    foreach( KoShape * shape, allShapes )
     {
-        int index = shapes.indexOf( shape );
-        if( index >= 0 )
-            shapes.removeAt( index );
+        if( ! shape->isVisible() )
+            continue;
+        if( ignoredShapes.contains( shape ) )
+            continue;
+
+        filteredShapes.append( shape );
     }
     if( ! omitEditedShape && m_snapGuide->editedShape() )
-        shapes.append( m_snapGuide->editedShape() );
-    return shapes;
+        filteredShapes.append( m_snapGuide->editedShape() );
+
+    return filteredShapes;
 }
 
 KoCanvasBase * KoSnapProxy::canvas()

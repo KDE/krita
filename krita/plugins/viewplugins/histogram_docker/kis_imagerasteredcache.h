@@ -59,7 +59,7 @@ signals:
     void cacheUpdated();
 
 private slots:
-    void imageUpdated(QRegion rc);
+    void imageUpdated(QRect rc);
     void imageSizeChanged(qint32 w, qint32 h);
     void timeOut();
 

@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SnapGuideConfigWidget.h"
+#include "KoSnapGuideConfigWidget.h"
 #include "KoSnapGuide.h"
 #include "KoSnapStrategy.h"
 
-SnapGuideConfigWidget::SnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget * parent )
+KoSnapGuideConfigWidget::KoSnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget * parent )
     :QWidget(parent), m_snapGuide(snapGuide)
 {
     widget.setupUi(this);
@@ -40,17 +40,17 @@ SnapGuideConfigWidget::SnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget *
     widget.useSnapGuides->setCheckState( snapGuide->isSnapping() ? Qt::Checked : Qt::Unchecked );
 }
 
-SnapGuideConfigWidget::~SnapGuideConfigWidget()
+KoSnapGuideConfigWidget::~KoSnapGuideConfigWidget()
 {
 }
 
-void SnapGuideConfigWidget::snappingEnabled( int state )
+void KoSnapGuideConfigWidget::snappingEnabled( int state )
 {
     widget.strategyPanel->setEnabled( state == QCheckBox::On );
     m_snapGuide->enableSnapping( state == QCheckBox::On );
 }
 
-void SnapGuideConfigWidget::strategyChanged()
+void KoSnapGuideConfigWidget::strategyChanged()
 {
     int strategies = 0;
     if( widget.orthogonalSnapGuide->checkState() == Qt::Checked )
@@ -69,12 +69,12 @@ void SnapGuideConfigWidget::strategyChanged()
     m_snapGuide->enableSnapStrategies( strategies );
 }
 
-void SnapGuideConfigWidget::distanceChanged( int distance )
+void KoSnapGuideConfigWidget::distanceChanged( int distance )
 {
     m_snapGuide->setSnapDistance( distance );
 }
 
-void SnapGuideConfigWidget::updateControls()
+void KoSnapGuideConfigWidget::updateControls()
 {
     if( m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Orthogonal )
         widget.orthogonalSnapGuide->setCheckState( Qt::Checked );
@@ -104,10 +104,10 @@ void SnapGuideConfigWidget::updateControls()
     widget.snapDistance->setValue( m_snapGuide->snapDistance() );
 }
 
-void SnapGuideConfigWidget::showEvent( QShowEvent * event )
+void KoSnapGuideConfigWidget::showEvent( QShowEvent * event )
 {
     Q_UNUSED(event);
     updateControls();
 }
 
-#include "SnapGuideConfigWidget.moc"
+#include "KoSnapGuideConfigWidget.moc"

@@ -68,7 +68,6 @@ set(flake_SRCS
     KoSnapGuide.cpp
     KoSnapStrategy.cpp
     KoSnapData.cpp
-    SnapGuideConfigWidget.cpp
     KoShapeShadow.cpp
     KoDevice.cpp
     KoDeviceEvent.cpp
@@ -146,7 +145,6 @@ set(flake_SRCS
 kde4_add_ui_files(flake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
-    SnapGuideConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 

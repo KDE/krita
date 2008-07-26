@@ -21,7 +21,6 @@
 
 #include "KoCreatePathTool.h"
 #include "KoSnapGuide.h"
-#include "SnapGuideConfigWidget.h"
 
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
@@ -326,9 +325,4 @@ void KoCreatePathTool::repaintActivePoint()
 
     rect.adjust( -border.x(), -border.y(), border.x(), border.y() );
     m_canvas->updateCanvas( rect );
-}
-
-QWidget * KoCreatePathTool::createOptionWidget() {
-    SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_canvas->snapGuide());
-    return widget;
 }

@@ -17,23 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SNAPGUIDECONFIGWIDGET_H
-#define SNAPGUIDECONFIGWIDGET_H
+#ifndef KOSNAPGUIDECONFIGWIDGET_H
+#define KOSNAPGUIDECONFIGWIDGET_H
 
-#include "ui_SnapGuideConfigWidget.h"
+#include "ui_KoSnapGuideConfigWidget.h"
 
 #include <QtGui/QWidget>
 
 class KoSnapGuide;
 class QShowEvent;
 
-class SnapGuideConfigWidget : public QWidget
+class KoSnapGuideConfigWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit SnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget *parent = 0);
-    ~SnapGuideConfigWidget();
+    explicit KoSnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget *parent = 0);
+    ~KoSnapGuideConfigWidget();
 private slots:
     void snappingEnabled( int state );
     void strategyChanged();
@@ -46,4 +46,4 @@ private:
     KoSnapGuide * m_snapGuide;
 };
 
-#endif // SNAPGUIDECONFIGWIDGET_H
+#endif // KOSNAPGUIDECONFIGWIDGET_H

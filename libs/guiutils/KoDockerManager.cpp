@@ -37,7 +37,7 @@ public:
 
 #define NUMDOCKERS 3
 KoDockerManager::KoDockerManager(KoView *view)
-    :  d( new Private() )
+    : QObject(view), d( new Private() )
 {
     d->view = view;
     KoToolDockerFactory toolDockerFactory;

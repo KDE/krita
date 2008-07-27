@@ -180,9 +180,6 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     foreach ( KoShape * shape, sortedShapes ) {
-        if(shape->parent() != 0 && shape->parent()->childClipped(shape))
-            continue;
-
         d->strategy->paint( shape, painter, converter, forPrint );
     }
 

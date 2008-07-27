@@ -293,7 +293,7 @@ QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const 
     KoShapeContainer * container = d->parent;
     if( container ) {
         if( container->childClipped(this) )
-            matrix = container->absoluteTransformation(converter);
+            matrix = container->absoluteTransformation(0);
         else {
             QSizeF containerSize = container->size();
             QPointF containerPos = container->absolutePosition() - QPointF( 0.5*containerSize.width(), 0.5*containerSize.height() );

@@ -39,8 +39,8 @@ class KoShapeLoadingContext;
  * </draw:frame>
  * @endcode
  *
- * The loading code of the shape gets passed the the draw:frame element. Out of this element the 
- * odf attributes can be loaded. Then it class loadOdfFrame which loads the correct flame element 
+ * The loading code of the shape gets passed to the draw:frame element. Out of this element the 
+ * odf attributes can be loaded. Then it calls loadOdfFrame which loads the correct flame element 
  * the object supports. The loading of the frame element is done in the loadOdfFrameElement.
  *
  * @code

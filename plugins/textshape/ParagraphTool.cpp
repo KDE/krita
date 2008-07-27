@@ -505,12 +505,13 @@ bool ParagraphTool::selectTextBlockAt(const QPointF &point)
     initParagraphProperties();
     if (createShapeList()) {
         loadRulers();
+        emit styleNameChanged(styleName());
+
     }
     else {
         deselectTextBlock();
+        return false;
     }
-
-    emit styleNameChanged(styleName());
 
     return true;
 }

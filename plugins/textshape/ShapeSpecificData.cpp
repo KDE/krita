@@ -27,11 +27,17 @@
 #include <QTextBlock>
 #include <QTextLayout>
 
+ShapeSpecificData::ShapeSpecificData(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style)
+    : m_rulers(rulers), m_textShape(textShape)
+{
+    m_isSingleLine = (textBlock.layout()->lineCount() == 1);
+
+    initDimensions(textBlock, style);
+}
+
 void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle)
 {
     QTextLayout *layout = textBlock.layout();
-
-    bool isSingleLine = (layout->lineCount() == 1);
 
     // border rectangle left and right
     m_border.setLeft(0.0);
@@ -49,7 +55,7 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
     }
 
     // folowing lines rectangle
-    if (!isSingleLine) {
+    if (!m_isSingleLine) {
         m_followingLines = QRectF(layout->lineAt(1).rect().topLeft(),
                 layout->lineAt(layout->lineCount() - 1).rect().bottomRight());
     }
@@ -59,11 +65,11 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
 
     // border rectangle top and bottom
     m_border.setTop(m_firstLine.top() - paragraphStyle->topMargin());
-    m_border.setBottom(isSingleLine ? m_firstLine.bottom() + paragraphStyle->bottomMargin()
+    m_border.setBottom(m_isSingleLine ? m_firstLine.bottom() + paragraphStyle->bottomMargin()
             : m_followingLines.bottom() + paragraphStyle->bottomMargin());
 
     // workaround: the lines overlap slightly so right now we simply calculate the mean of the two y-values
-    if (!isSingleLine) {
+    if (!m_isSingleLine) {
         qreal lineBreak((m_firstLine.bottom() + m_followingLines.top()) / 2.0);
         m_firstLine.setBottom(lineBreak);
         m_counter.setBottom(lineBreak);
@@ -83,6 +89,28 @@ QPointF ShapeSpecificData::mapDocumentToShape(QPointF point) const
     QMatrix matrix = textShape()->absoluteTransformation(NULL);
     matrix.translate(0.0, -shapeStartOffset());
     return matrix.inverted().map(point);
+}
+
+void ShapeSpecificData::paint(QPainter &painter, const KoViewConverter &converter) const
+{
+    painter.save();
+
+    // transform painter from view coordinate system to shape coordinate system
+    painter.setMatrix(textShape()->absoluteTransformation(&converter) * painter.matrix());
+    KoShape::applyConversion(painter, converter);
+    painter.translate(0.0, -shapeStartOffset());
+
+    painter.setPen(Qt::darkGray);
+
+    if (!m_isSingleLine) {
+        painter.drawLine(separatorLine());
+    }
+
+    for (int ruler = 0; ruler != maxRuler; ++ruler) {
+        m_rulers[ruler].paint(painter, baseline(static_cast<RulerIndex>(ruler)));
+    }
+
+    painter.restore();
 }
 
 QRectF ShapeSpecificData::dirtyRectangle() const

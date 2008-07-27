@@ -35,31 +35,37 @@ class KoParagraphStyle;
 class ShapeSpecificData
 {
 public:
-    ShapeSpecificData(TextShape *textShape = NULL) : m_textShape(textShape) { };
-    ~ShapeSpecificData() {};
+    ShapeSpecificData() {};
+    ShapeSpecificData(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style);
 
-    void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
+    ~ShapeSpecificData() {};
 
     // wrapper method for textShapeData->documentOffset()
     qreal shapeStartOffset() const;
 
     QPointF mapDocumentToShape(QPointF point) const;
 
+    void paint(QPainter &painter, const KoViewConverter &converter) const;
+
+    QLineF baseline(RulerIndex ruler) const;
+
     // returns the rectangle which needs to be repainted to fully refresh the display for this shape
     // currently this is the bounding rectangle of the shape plus a margin for the arrows on all four sides
     QRectF dirtyRectangle() const;
 
-    QLineF baseline(RulerIndex ruler) const;
+    TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
+
+protected:
+    void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
 
     QLineF separatorLine() const;
 
-    TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
-    void setTextShape(TextShape *textShape) { m_textShape = textShape; }
-
 private:
+    Ruler *m_rulers;
     TextShape *m_textShape;
 
-    // not yet used, should represent the QRectF which are currently stored in the ParagraphTool itself
+    bool m_isSingleLine;
+
     QRectF m_counter,
            m_firstLine,
            m_followingLines,

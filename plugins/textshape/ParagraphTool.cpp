@@ -128,13 +128,8 @@ bool ParagraphTool::createShapeList()
     QList<KoShape*> shapes = layout->shapes();
     foreach (KoShape *shape, shapes) {
         if (shapeContainsBlock(static_cast<TextShape*>(shape), textBlock())) {
-            m_shapes << ShapeSpecificData(static_cast<TextShape*>(shape));
+            m_shapes << ShapeSpecificData(m_rulers, static_cast<TextShape*>(shape), textBlock(), m_paragraphStyle);
         }
-    }
-
-    // create dimensions for the shape list
-    for (int shape = 0; shape != m_shapes.size(); ++shape) {
-        m_shapes[shape].initDimensions(textBlock(), m_paragraphStyle);
     }
 
     return true;
@@ -290,35 +285,13 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
     painter.restore();
 }
 
-void ParagraphTool::paintRulers(QPainter &painter, const KoViewConverter &converter, const ShapeSpecificData &shape) const
-{
-    painter.save();
-
-    // transform painter from view coordinate system to shape coordinate system
-    painter.setMatrix(shape.textShape()->absoluteTransformation(&converter) * painter.matrix());
-    KoShape::applyConversion(painter, converter);
-    painter.translate(0.0, -shape.shapeStartOffset());
-
-    painter.setPen(Qt::darkGray);
-
-    if (!m_isSingleLine) {
-        painter.drawLine(shape.separatorLine());
-    }
-
-    for (int ruler = 0; ruler != maxRuler; ++ruler) {
-        m_rulers[ruler].paint(painter, shape.baseline(static_cast<RulerIndex>(ruler)));
-    }
-
-    painter.restore();
-}
-
 void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (!m_textBlockValid)
         return;
 
     foreach (ShapeSpecificData shape, m_shapes) {
-        paintRulers(painter, converter, shape);
+        shape.paint(painter, converter);
     }
 
     paintLabel(painter, converter);
@@ -530,11 +503,14 @@ bool ParagraphTool::selectTextBlockAt(const QPointF &point)
     m_paragraphStyle = KoParagraphStyle::fromBlock(textBlock);
 
     initParagraphProperties();
-    createShapeList();
+    if (createShapeList()) {
+        loadRulers();
+    }
+    else {
+        deselectTextBlock();
+    }
 
     emit styleNameChanged(styleName());
-
-    loadRulers();
 
     return true;
 }

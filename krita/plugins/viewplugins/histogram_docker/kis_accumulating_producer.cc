@@ -22,7 +22,9 @@
 
 #include <QThread>
 #include <QApplication>
-#include <QEvent>static const int EmitCompletedType = QEvent::User + 1;
+#include <QEvent>
+
+static const int EmitCompletedType = QEvent::User + 1;
 
 /**
  * The threaded producer definition in c++ file because this is really an internal affair.

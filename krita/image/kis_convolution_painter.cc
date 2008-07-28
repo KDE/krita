@@ -74,7 +74,7 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 }
 
 
-void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h,
+void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h,
                                         KisConvolutionBorderOp borderOp )
 {
     dbgImage << *kernel;
@@ -176,7 +176,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, Kis
                     }
                 }
                 qint32 i = kw - 1;
-                KisVLineConstIteratorPixel kitSrc = src->createVLineIterator(col + khalfWidth, row - khalfHeight, kh);
+                KisVLineConstIteratorPixel kitSrc = src->createVLineConstIterator(col + khalfWidth, row - khalfHeight, kh);
                 while (!kitSrc.isDone()) {
                     memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
                     ++kitSrc;
@@ -220,7 +220,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, Kis
     delete[] pixelPtrCache;
 }
 
-void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kernel, KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h )
+void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h )
 {
     int lastProgressPercent = 0;
     // Determine the kernel's extent from the center pixel
@@ -265,7 +265,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
         {
             itH -= itStart + kh - yLastMinuskhh;
         }
-        KisVLineConstIteratorPixel kitSrc = src->createVLineIterator(col + khalfWidth , itStart, itH);
+        KisVLineConstIteratorPixel kitSrc = src->createVLineConstIterator(col + khalfWidth , itStart, itH);
         while (!hit.isDone()) {
 
             // Iterate over all contributing pixels that are covered by the kernel
@@ -281,7 +281,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                     if( x < khalfWidth)
                     { // the left pixels are outside of the layer, in the corner
                         qint32 kcol = 0;
-                        KisHLineConstIteratorPixel kitSrc = src->createHLineIterator(0, 0, kw);
+                        KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(0, 0, kw);
                         for(; kcol < (khalfWidth - x) + 1; ++kcol)
                         { // First copy the address of the topleft pixel
                             memcpy(pixelPtrCache[kcol], kitSrc.oldRawData(), cdepth);
@@ -293,7 +293,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                         }
                     } else {
                         uint kcol = 0;
-                        KisHLineConstIteratorPixel kitSrc = src->createHLineIterator(col - khalfWidth, 0, kw);
+                        KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(col - khalfWidth, 0, kw);
                         while (!kitSrc.isDone()) {
                             memcpy(pixelPtrCache[kcol], kitSrc.oldRawData(), cdepth);
                             ++kitSrc;
@@ -328,7 +328,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                         itW += itHStart;
                         itHStart = 0;
                     }
-                    KisHLineConstIteratorPixel kitSrc = src->createHLineIterator(itHStart, (row - khalfHeight) + krow, itW);
+                    KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(itHStart, (row - khalfHeight) + krow, itW);
                     if( col < khalfWidth )
                     {
                         for(; i <  krow * kw + ( kw - itW ); i+= 1)

@@ -61,7 +61,7 @@ public:
      * If you want to convolve a subset of the channels in a pixel,
      * set those channels with KisPainter::setChannelFlags();
      */
-    void applyMatrix(const KisConvolutionKernelSP kernel, KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h,
+    void applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h,
                      KisConvolutionBorderOp borderOp = BORDER_AVOID);
 private:
     /**

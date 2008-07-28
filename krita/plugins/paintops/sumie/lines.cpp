@@ -28,14 +28,14 @@ void Lines::drawLine(KisPaintDeviceSP dev, int x0,int y0,int x1,int y1,const KoC
 }
 
 
-void Lines::drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const KoColor &color)
+void Lines::drawDDALine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1,const KoColor &color)
 {
     KisPainter gc( image );
     gc.setPaintColor( color );
     gc.drawDDALine( QPointF(x0, y0), QPointF(x1, y1) );
 }
 
-void Lines::drawDDAALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const KoColor &color)
+void Lines::drawDDAALine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1,const KoColor &color)
 {
     KisPainter gc( image );
     gc.setPaintColor( color );
@@ -43,7 +43,7 @@ void Lines::drawDDAALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,
 
 
 }
-void Lines::drawWuLine ( KisPaintDeviceSP dev, float x1, float y1, float x2, float y2, const KoColor &color )
+void Lines::drawWuLine ( KisPaintDeviceSP dev, float x0, float y0, float x1, float y1, const KoColor &color )
 {
     KisPainter gc( dev );
     gc.setPaintColor( color );

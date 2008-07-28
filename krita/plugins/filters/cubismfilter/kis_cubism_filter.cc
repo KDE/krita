@@ -249,7 +249,7 @@ void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
         qint32 ex = (qint32) (*poly)[1].x();
         qint32 ey = (qint32) (*poly)[1].y();
 
-        double dist = sqrt (SQR (ex - sx) + SQR (ey - sy));
+        double dist = sqrt ((double)(SQR (ex - sx) + SQR (ey - sy)));
         double oneOverDist = 0.0;
         if (dist > 0.0)
         {

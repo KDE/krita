@@ -289,7 +289,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
 			fx2 = ix2 = ( int ) ( randomFactor + x2 + bristle->x()* scale );
 			fy2 = iy2 = ( int ) ( randomFactor + y2 + bristle->y()* scale );
 
-			lines.drawDDALine(dev, ix1, iy1, ix2, iy2, brColor);
+			lines.drawLine(dev, ix1, iy1, ix2, iy2, brColor);
 
 			accessor.moveTo ( ix1,iy1 );
 			memcpy ( accessor.rawData(), brColor.data(), pixelSize );
@@ -302,26 +302,6 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
 		rotateBristles(-(angle+1.57));
 
 // 		repositionBristles(angle,slope);
-}
-
-inline double modulo(double x, double r)
-{
-            return x-floor(x/r)*r;
-}
-
-double Brush::getAngleDelta(const KisPaintInformation& info)
-{
-    double angle = info.angle();
-    double v = modulo(m_angle - angle + M_PI, 2.0 * M_PI) - M_PI;
-    if(v < 0)
-    {
-        m_angle += 0.01;
-    } else if( v > 0)
-    {
-        m_angle -= 0.01;
-    }
-    m_angle = modulo(m_angle, 2.0 * M_PI);
-    return m_angle;
 }
 
 

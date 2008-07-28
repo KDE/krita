@@ -15,23 +15,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef STROKE_H
-#define STROKE_H
+#ifndef _LINES_H
+#define _LINES_H
 
 
 #include <KoColor.h>
 #include "kis_paint_device.h"
 
+/*
+* Some line algorithms and custom-made line algorithms
+*/
 class Lines{
 
 public:
-	void drawLine(int x0,int y0,int x1,int y1,KoColor color);
-	void drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, int w1, int w2, const KoColor &color);
+	Lines(){}
+	~Lines(){}
+	/// calls drawThickLine with thickness 1,1 
+	void drawLine(KisPaintDeviceSP dev, int x0,int y0,int x1,int y1,const KoColor &color);
+
+	/// paints DDA line with thickness of 1px
 	void drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const KoColor &color);
-	void drawWuLine(KisPaintDeviceSP dev, float x1, float y1, float x2, float y2, float width,const KoColor &color);
+	/// custom made line, somehow irregular, it was a test to make it anti*aliased, but now it is quite nice effect
+	void drawDDAALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const KoColor &color);
+	/// draws anti-aliased line with thickness of 1px
+	void drawWuLine(KisPaintDeviceSP dev, float x1, float y1, float x2, float y2, const KoColor &color);
+	/// draws anti-aliased line with variable thickness for both end-points, the support for gradient color of line is not supported
+	void drawThickLine(KisPaintDeviceSP dev, int x0, int y0, int x1, int y1,const KoColor color1, const KoColor color2, int w1, int w2);
 
 private:
-	int gsfilter(float val);
 	float inline frac(float value);
 	float inline invertFrac(float value);
 	

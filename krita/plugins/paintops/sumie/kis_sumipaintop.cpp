@@ -197,8 +197,37 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,const KisPaintIn
 	dab = cachedDab( );
 	dab->clear();
 
-	m_brush.paintLine(dab, pi1, pi2);
+
+	Lines line;
+	//line.drawDDAALine(dab, pi1.pos().x(), pi1.pos().y(), pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
+	//line.drawThickLine(dab, pi1.pos().x(), pi1.pos().y(), pi2.pos().x(), pi2.pos().y(),painter()->paintColor(),painter()->paintColor(), 2*pi1.pressure(), 20*pi2.pressure() );
+	//line.drawWuLine(dab, pi1.pos().x(), pi1.pos().y(), pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
+
+
+	int x, y;
+	float phase = 0.0;
 	
+for (float theta= phase; theta<360+phase; theta += 10 )
+	{
+		x = (int)(100.0*cos(theta*3.14/180.0)+pi1.pos().x());
+		y = (int)(-100.0*sin(theta*3.14/180.0)+pi1.pos().y());
+		//line.drawDDAALine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
+		//line.drawThickLine(dab, x, y, pi1.pos().x(), pi1.pos().y(),painter()->paintColor(),painter()->paintColor(), 1, 1);
+		
+	}
+
+phase = 0.0;
+for (float theta= phase; theta<360+phase; theta += 10 )
+	{
+		x = (int)(100.0*cos(theta*3.14/180.0)+pi2.pos().x());
+		y = (int)(-100.0*sin(theta*3.14/180.0)+pi2.pos().y());
+		//line.drawWuLine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
+		//line.drawDDAALine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
+	}
+
+
+
+	m_brush.paintLine(dab, pi1, pi2);
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );

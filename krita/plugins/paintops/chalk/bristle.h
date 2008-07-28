@@ -42,7 +42,7 @@ public:
 
 
 	float distanceCenter(){
-		return sqrt(m_x*m_x + m_y*m_y);
+		return std::sqrt((double)(m_x*m_x + m_y*m_y));
 	}
 	float amount();
 private:

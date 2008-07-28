@@ -48,7 +48,7 @@ public:
 	void setColor(KoColor color);
 
 	float distanceCenter(){
-		return sqrt(m_x*m_x + m_y*m_y);
+		return std::sqrt(m_x*m_x + m_y*m_y);
 	}
 
 	float inkAmount();

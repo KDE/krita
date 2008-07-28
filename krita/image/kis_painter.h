@@ -20,6 +20,8 @@
 #ifndef KIS_PAINTER_H_
 #define KIS_PAINTER_H_
 
+#include <math.h>
+
 #include <KoColorSpaceConstants.h>
 
 #include "kis_global.h"
@@ -391,8 +393,46 @@ public:
      * Fills the area enclosed by the given QPainterPath
      */
     void fillPainterPath(const QPainterPath& path);
-    // ------------------------------------------------------------------------
-    // Set the parameters for the higher level graphics primitives.
+
+    /**
+     * paint an unstroked one-pixel wide line from specified start position to the
+     * specified end position.
+     *
+     * XXX: this method really should work with subpixel precision for start and end position
+     */
+    void drawLine(const QPointF & start, const QPointF & end);
+
+    /**
+     * paints an unstroked one-pixel line using the DDA algorithm from specified start position to the
+     * specified end position.
+     *
+     * XXX: this method really should work with subpixel precision for start and end position
+     */
+    void drawDDALine(const QPointF & start, const QPointF & end);
+
+    /**
+     * Paint an unstroked, wobbly one-pixel wide line from the specified start to the specified
+     * end position.
+     *
+     * XXX: this method really should work with subpixel precision for start and end position
+     */
+    void drawWobblyLine(const QPointF & start, const QPointF & end);
+
+    /**
+     * Paint an unstroked, one-pixel wide line from the specified start to the specified
+     * end position using the Wu algorithm
+     */
+    void drawWuLine(const QPointF & start, const QPointF & end);
+
+    /**
+     * Paint an unstroked wide line from the specified start to the specified
+     * end position with width varying from @param w1 at the start to @param w2 at
+     * the end.
+     *
+     * XXX: the width should be set in doubles, not integers.
+     * XXX: this method really should work with subpixel precision for start and end position
+     */
+    void drawThickLine(const QPointF & start, const QPointF & end, int startWidth, int endWidth);
 
     /**
      * Set the channelflags: a bit array where true means that the
@@ -546,6 +586,18 @@ private:
 
     KisPainter(const KisPainter&);
     KisPainter& operator=(const KisPainter&);
+
+    float frac(float value)
+    {
+        float tmp = 0;
+        return modff(value , &tmp);
+    }
+
+    float invertFrac(float value)
+    {
+        float tmp = 0;
+        return 1.0f - modff(value , &tmp);
+    }
 
 protected:
     KoUpdater * progressUpdater();

@@ -30,7 +30,7 @@ class Lines{
 public:
 	Lines(){}
 	~Lines(){}
-	/// calls drawThickLine with thickness 1,1 
+	/// calls drawThickLine with thickness 1,1
 	void drawLine(KisPaintDeviceSP dev, int x0,int y0,int x1,int y1,const KoColor &color);
 
 	/// paints DDA line with thickness of 1px
@@ -42,10 +42,6 @@ public:
 	/// draws anti-aliased line with variable thickness for both end-points, the support for gradient color of line is not supported
 	void drawThickLine(KisPaintDeviceSP dev, int x0, int y0, int x1, int y1,const KoColor color1, const KoColor color2, int w1, int w2);
 
-private:
-	float inline frac(float value);
-	float inline invertFrac(float value);
-	
 };
 
-#endif 
+#endif

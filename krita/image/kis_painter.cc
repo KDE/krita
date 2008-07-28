@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -199,7 +200,7 @@ QUndoCommand* KisPainter::endTransaction()
     if ( !d->transaction ) return 0;
 
     if ( d->device )
-            d->device->disconnect( d->transaction );
+        d->device->disconnect( d->transaction );
 
     QUndoCommand *command = d->transaction;
     d->transaction = 0;
@@ -243,20 +244,20 @@ void KisPainter::setPaintOp(KisPaintOp * paintOp)
 }
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
-            const KoCompositeOp* op,
-            const KisPaintDeviceSP src,
-            qint32 sx, qint32 sy,
-            qint32 sw, qint32 sh)
+                        const KoCompositeOp* op,
+                        const KisPaintDeviceSP src,
+                        qint32 sx, qint32 sy,
+                        qint32 sw, qint32 sh)
 {
     bitBlt(dx, dy, op, src, OPACITY_OPAQUE, sx, sy, sw, sh);
 }
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
-            const QString & op,
-            const KisPaintDeviceSP src,
-            quint8 opacity,
-            qint32 sx, qint32 sy,
-            qint32 sw, qint32 sh)
+                        const QString & op,
+                        const KisPaintDeviceSP src,
+                        quint8 opacity,
+                        qint32 sx, qint32 sy,
+                        qint32 sw, qint32 sh)
 {
     bitBlt(dx, dy, d->colorSpace->compositeOp(op), src, opacity, sx, sy, sw, sh);
 }
@@ -301,8 +302,8 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     qint32 srcY = sy;
     qint32 rowsRemaining = sh;
 
-   KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx,sy);
-   KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(dx,dy);
+    KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx,sy);
+    KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(dx,dy);
 
     while (rowsRemaining > 0) {
 
@@ -332,17 +333,17 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             quint8 *dstData = dstIt.rawData();
 
             d->colorSpace->bitBlt(dstData,
-                                 dstRowStride,
-                                 srcCs,
-                                 srcData,
-                                 srcRowStride,
-                                 0,
-                                 0,
-                                 opacity,
-                                 rows,
-                                 columns,
-                                 op,
-                                 d->channelFlags);
+                                  dstRowStride,
+                                  srcCs,
+                                  srcData,
+                                  srcRowStride,
+                                  0,
+                                  0,
+                                  opacity,
+                                  rows,
+                                  columns,
+                                  op,
+                                  d->channelFlags);
 
             srcX += columns;
             dstX += columns;
@@ -356,21 +357,21 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 }
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                    const QString & op,
-                    const KisPaintDeviceSP src,
-                    quint8 opacity,
-                    qint32 sx, qint32 sy,
-                    qint32 sw, qint32 sh)
+                              const QString & op,
+                              const KisPaintDeviceSP src,
+                              quint8 opacity,
+                              qint32 sx, qint32 sy,
+                              qint32 sw, qint32 sh)
 {
     bltSelection(dx, dy, d->colorSpace->compositeOp(op), src, opacity, sx, sy, sw, sh);
 }
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                    const KoCompositeOp *op,
-                    const KisPaintDeviceSP srcdev,
-                    quint8 opacity,
-                    qint32 sx, qint32 sy,
-                    qint32 sw, qint32 sh)
+                              const KoCompositeOp *op,
+                              const KisPaintDeviceSP srcdev,
+                              quint8 opacity,
+                              qint32 sx, qint32 sy,
+                              qint32 sw, qint32 sh)
 {
     if (d->device.isNull()) return;
     if ( !d->selection ) {
@@ -387,12 +388,12 @@ void KisPainter::bltSelection(const QPoint & pos, const KisPaintDeviceSP src, co
 }
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                    const QString & op,
-                    const KisPaintDeviceSP src,
-                    const KisSelectionSP selMask,
-                    quint8 opacity,
-                    qint32 sx, qint32 sy,
-                    qint32 sw, qint32 sh)
+                              const QString & op,
+                              const KisPaintDeviceSP src,
+                              const KisSelectionSP selMask,
+                              quint8 opacity,
+                              qint32 sx, qint32 sy,
+                              qint32 sw, qint32 sh)
 {
     bltSelection(dx, dy, d->colorSpace->compositeOp(op), src, selMask, opacity, sx, sy, sw, sh);
 }
@@ -476,17 +477,17 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
             const quint8 *maskData = maskIt.rawData();
 
             d->colorSpace->bitBlt(dstData,
-                                 dstRowStride,
-                                 srcCs,
-                                 srcData,
-                                 srcRowStride,
-                                 maskData,
-                                 maskRowStride,
-                                 opacity,
-                                 rows,
-                                 columns,
-                                 op,
-                                 d->channelFlags);
+                                  dstRowStride,
+                                  srcCs,
+                                  srcData,
+                                  srcRowStride,
+                                  maskData,
+                                  maskRowStride,
+                                  opacity,
+                                  rows,
+                                  columns,
+                                  op,
+                                  d->channelFlags);
 
             srcX += columns;
             dstX += columns;
@@ -714,24 +715,24 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
         QPainterPath::Element element = path.elementAt( i );
         switch( element.type )
         {
-            case QPainterPath::MoveToElement:
-                lastPoint =  QPointF( element.x, element.y );
-                break;
-            case QPainterPath::LineToElement:
-                nextPoint =  QPointF( element.x, element.y );
-                paintLine( KisPaintInformation( lastPoint ), KisPaintInformation( nextPoint ));
-                lastPoint = nextPoint;
-                break;
-            case QPainterPath::CurveToElement:
-                nextPoint =  QPointF( path.elementAt(i+2).x, path.elementAt(i+2).y );
-                paintBezierCurve( KisPaintInformation( lastPoint ),
-                                  QPointF( path.elementAt(i).x, path.elementAt(i).y),
-                                  QPointF( path.elementAt(i+1).x, path.elementAt(i+1).y),
-                                  KisPaintInformation( nextPoint ));
-                lastPoint = nextPoint;
-                break;
-            default:
-                continue;
+        case QPainterPath::MoveToElement:
+            lastPoint =  QPointF( element.x, element.y );
+            break;
+        case QPainterPath::LineToElement:
+            nextPoint =  QPointF( element.x, element.y );
+            paintLine( KisPaintInformation( lastPoint ), KisPaintInformation( nextPoint ));
+            lastPoint = nextPoint;
+            break;
+        case QPainterPath::CurveToElement:
+            nextPoint =  QPointF( path.elementAt(i+2).x, path.elementAt(i+2).y );
+            paintBezierCurve( KisPaintInformation( lastPoint ),
+                              QPointF( path.elementAt(i).x, path.elementAt(i).y),
+                              QPointF( path.elementAt(i+1).x, path.elementAt(i+1).y),
+                              KisPaintInformation( nextPoint ));
+            lastPoint = nextPoint;
+            break;
+        default:
+            continue;
         }
     }
 }
@@ -832,6 +833,781 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
 
     bltSelection(r.x(), r.y(), d->compositeOp, polygon, opacity(), r.x(), r.y(), r.width(), r.height());
 }
+
+void KisPainter::drawLine(const QPointF & start, const QPointF & end)
+{
+    drawThickLine(start, end, 1, 1);
+}
+
+void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
+{
+    KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
+    int pixelSize = d->device->pixelSize();
+
+    // Width and height of the line
+    int xd = (int)(end.x() - start.x());
+    int yd = (int)(end.y() - start.y());
+
+    int x = start.x();
+    int y = start.y();
+    float fx = start.x();
+    float fy = start.y();
+    float m = (float)yd/(float)xd;
+    int y2 = end.y();
+    int x2 = end.x();
+
+    if ( fabs(m) > 1 )
+    {
+        int incr;
+        if ( yd > 0 )
+        {
+            m = 1.0f/m;
+            incr = 1;
+        }
+        else
+        {
+            m = -1.0f/m;
+            incr = -1;
+        }
+        while ( y!=y2 )
+        {
+            fx = fx + m;
+            y = y + incr;
+            x = (int)(fx + 0.5f);
+            accessor.moveTo(x, y);
+            if (accessor.isSelected()) {
+                memcpy(accessor.rawData(), d->paintColor.data(), pixelSize);
+            }
+        }
+    }else
+    {
+        int incr;
+        if ( xd > 0 )
+        {
+            incr = 1;
+        }else
+        {
+            incr = -1;
+            m = -m;
+        }
+        while ( x!=x2 )
+        {
+            fy= fy + m;
+            x = x + incr;
+            y = (int)(fy + 0.5f);
+            accessor.moveTo(x, y);
+            if (accessor.isSelected()) {
+                memcpy(accessor.rawData(), d->paintColor.data(), pixelSize);
+            }
+        }
+    }
+
+}
+
+void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
+{
+    KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
+    int pixelSize = d->device->pixelSize();
+    KoColor mycolor(d->paintColor);
+
+    int x1 = start.x();
+    int y1 = start.y();
+    int x2 = end.x();
+    int y2 = end.y();
+
+    // Width and height of the line
+    int xd = (x2 - x1);
+    int yd = (y2 - y1);
+
+    int x;
+    int y;
+    float fx = (x = x1);
+    float fy = (y = y1);
+    float m = (float)yd/(float)xd;
+
+    if ( fabs(m) > 1 )
+    {
+        int incr;
+        if ( yd > 0 )
+        {
+            m = 1.0f/m;
+            incr = 1;
+        }
+        else
+        {
+            m = -1.0f/m;
+            incr = -1;
+        }
+        while ( y!=y2 )
+        {
+            fx = fx + m;
+            y = y + incr;
+
+            x = (int)(fx + 0.5f);
+            float br1 = int(fx+1) - fx;
+            float br2 = fx - (int)fx;
+
+            accessor.moveTo(x, y);
+            if (accessor.isSelected()) {
+                mycolor.setOpacity( (int)(255*br1) );
+                memcpy(accessor.rawData(), mycolor.data(), pixelSize);
+            }
+
+            accessor.moveTo(x + 1, y);
+            if (accessor.isSelected()) {
+                mycolor.setOpacity( (int)(255*br2) );
+                memcpy(accessor.rawData(), mycolor.data(), pixelSize);
+            }
+        }
+    }
+    else {
+        int incr;
+        if ( xd > 0 )
+        {
+            incr = 1;
+        }else
+        {
+            incr = -1;
+            m = -m;
+        }
+        while ( x!=x2 )
+        {
+            fy= fy + m;
+            x = x + incr;
+            y = (int)(fy + 0.5f);
+
+            float br1 = int(fy+1) - fy;
+            float br2 = fy - (int)fy;
+
+            accessor.moveTo(x, y);
+            if (accessor.isSelected()) {
+                mycolor.setOpacity( (int)(255*br1) );
+                memcpy(accessor.rawData(), mycolor.data(), pixelSize);
+            }
+
+            accessor.moveTo(x, y + 1);
+            if (accessor.isSelected()) {
+                mycolor.setOpacity( (int)(255*br2) );
+                memcpy(accessor.rawData(), mycolor.data(), pixelSize);
+            }
+        }
+    }
+
+}
+
+void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
+{
+    KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
+    int pixelSize = d->device->pixelSize();
+    KoColor lineColor ( d->paintColor );
+
+    int x1 = start.x();
+    int y1 = start.y();
+    int x2 = end.x();
+    int y2 = end.y();
+
+
+    float grad, xd, yd;
+    float xgap,ygap, xend, yend, yf, xf;
+    float brightness1, brightness2;
+
+    int ix1, ix2, iy1, iy2;
+    int c1, c2;
+    const float MaxPixelValue = 255.0f;
+
+    // gradient of line
+    xd = ( x2 - x1 );
+    yd = ( y2 - y1 );
+
+    if (yd == 0){
+        /* Horizontal line */
+        int incr = (x1 < x2) ? 1 : -1;
+        ix1 = (int)x1;
+        ix2 = (int)x2;
+        iy1 = (int)y1;
+        while(ix1!=ix2){
+            ix1 = ix1 + incr;
+            accessor.moveTo(ix1, iy1);
+            if ( accessor.isSelected() ) {
+                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            }
+        }
+        return;
+    }
+
+    if (xd == 0){
+        /* Vertical line */
+        int incr = (y1 < y2) ? 1 : -1;
+        iy1 = (int)y1;
+        iy2 = (int)y2;
+        ix1 = (int)x1;
+        while(iy1!=iy2){
+            iy1 = iy1 + incr;
+            accessor.moveTo(ix1, iy1);
+            if ( accessor.isSelected() ) {
+                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            }
+        }
+        return;
+    }
+
+    if (fabs( xd ) > fabs( yd ) ){
+        // horizontal line
+        // line have to be paint from left to right
+        if ( x1 > x2 )
+        {
+            float tmp;
+            tmp=x1;x1=x2;x2=tmp;
+            tmp=y1;y1=y2;y2=tmp;
+            xd = ( x2 - x1 );
+            yd = ( y2 - y1 );
+        }
+        grad = yd/xd;
+        // nearest X,Y interger coordinates
+        xend = static_cast<int>( x1+0.5f );
+        yend = y1 + grad * ( xend - x1 );
+
+        xgap = invertFrac ( x1 + 0.5f );
+
+        ix1 = static_cast<int> ( xend );
+        iy1 = static_cast<int> ( yend );
+
+        // calc the intensity of the other end point pixel pair.
+        brightness1 = invertFrac ( yend ) * xgap;
+        brightness2 =       frac ( yend ) * xgap;
+
+        c1 = ( int ) ( brightness1 * MaxPixelValue );
+        c2 = ( int ) ( brightness2 * MaxPixelValue );
+
+        accessor.moveTo(ix1, iy1);
+        if ( accessor.isSelected() ) {
+            lineColor.setOpacity ( c1 );
+            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+        }
+
+        accessor.moveTo(ix1, iy1 + 1);
+        if ( accessor.isSelected() ) {
+            lineColor.setOpacity ( c2 );
+            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+        }
+
+        // calc first Y-intersection for main loop
+        yf = yend+grad;
+
+        xend = trunc ( x2+0.5f );
+        yend = y2 + grad * ( xend - x2 );
+
+        xgap = invertFrac ( x2-0.5f );
+
+        ix2 = static_cast<int> ( xend );
+        iy2 = static_cast<int> ( yend );
+
+        brightness1 = invertFrac ( yend ) * xgap;
+        brightness2 =    frac ( yend ) * xgap;
+
+        c1 = ( int ) ( brightness1 * MaxPixelValue );
+        c2 = ( int ) ( brightness2 * MaxPixelValue );
+
+        accessor.moveTo( ix2, iy2);
+        if ( accessor.isSelected() ) {
+            lineColor.setOpacity ( c1 );
+            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+        }
+
+        accessor.moveTo( ix2, iy2 + 1 );
+        if ( accessor.isSelected() ) {
+            lineColor.setOpacity ( c2 );
+            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+        }
+
+        // main loop
+        for ( int x = ix1+1; x <= ix2-1; x++ )
+        {
+            brightness1 = invertFrac ( yf );
+            brightness2 =    frac ( yf );
+            c1 = ( int ) ( brightness1 * MaxPixelValue );
+            c2 = ( int ) ( brightness2 * MaxPixelValue );
+
+            accessor.moveTo( x, int ( yf ) );
+            if ( accessor.isSelected() ) {
+                lineColor.setOpacity ( c1 );
+                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            }
+
+            accessor.moveTo( x, int ( yf ) + 1 );
+            if ( accessor.isSelected() ) {
+                lineColor.setOpacity ( c2 );
+                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            }
+
+            yf = yf + grad;
+        }
+    }
+    else {
+        //vertical
+        // line have to be painted from left to right
+        if ( y1 > y2 )
+        {
+            float tmp;
+            tmp=x1;x1=x2;x2=tmp;
+            tmp=y1;y1=y2;y2=tmp;
+            xd = ( x2 - x1 );
+            yd = ( y2 - y1 );
+        }
+
+        grad = xd/yd;
+
+        // nearest X,Y interger coordinates
+        yend = static_cast<int> ( y1+0.5f );
+        xend = x1 + grad * ( yend - y1 );
+
+        ygap = invertFrac ( y1 + 0.5f );
+
+        ix1 = static_cast<int> ( xend );
+        iy1 = static_cast<int> ( yend );
+
+        // calc the intensity of the other end point pixel pair.
+        brightness1 = invertFrac ( xend ) * ygap;
+        brightness2 =       frac ( xend ) * ygap;
+
+        c1 = ( int ) ( brightness1 * MaxPixelValue );
+        c2 = ( int ) ( brightness2 * MaxPixelValue );
+
+        accessor.moveTo( ix1, iy1 );
+        if ( accessor.isSelected() ) {
+            lineColor.setOpacity ( c1 );
+            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+        }
+
+        accessor.moveTo( x1 + 1, y1 );
+        if ( accessor.isSelected() ) {
+            lineColor.setOpacity ( c2 );
+            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+        }
+
+        // calc first Y-intersection for main loop
+        xf = xend+grad;
+
+        yend = trunc ( y2+0.5f );
+        xend = x2 + grad * ( yend - y2 );
+
+        ygap = invertFrac ( y2-0.5f );
+
+        ix2 = static_cast<int> ( xend );
+        iy2 = static_cast<int> ( yend );
+
+        brightness1 = invertFrac ( xend ) * ygap;
+        brightness2 =    frac ( xend ) * ygap;
+
+        c1 = ( int ) ( brightness1 * MaxPixelValue );
+        c2 = ( int ) ( brightness2 * MaxPixelValue );
+
+        accessor.moveTo( ix2, iy2 );
+        if ( accessor.isSelected() ) {
+            lineColor.setOpacity ( c1 );
+            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+        }
+
+        accessor.moveTo( ix2 + 1, iy2 );
+        if ( accessor.isSelected() ) {
+            lineColor.setOpacity ( c2 );
+            memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+        }
+
+        // main loop
+        for ( int y = iy1+1; y <= iy2-1; y++ )
+        {
+            brightness1 = invertFrac ( xf );
+            brightness2 =    frac ( xf );
+            c1 = ( int ) ( brightness1 * MaxPixelValue );
+            c2 = ( int ) ( brightness2 * MaxPixelValue );
+
+            accessor.moveTo( int (xf ), y );
+            if ( accessor.isSelected() ) {
+                lineColor.setOpacity ( c1 );
+                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            }
+
+            accessor.moveTo( int (xf ) + 1, y );
+            if ( accessor.isSelected() ) {
+                lineColor.setOpacity ( c2 );
+                memcpy(accessor.rawData(), lineColor.data(), pixelSize);
+            }
+
+            xf = xf + grad;
+        }
+    }//end-of-else
+
+}
+
+void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int startWidth, int endWidth)
+{
+    KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
+    int pixelSize = d->device->pixelSize();
+    KoColorSpace * cs = d->device->colorSpace();
+
+    KoColor c1 ( d->paintColor );
+    KoColor c2 ( d->paintColor );
+    KoColor c3 ( d->paintColor );
+    KoColor col1 ( c1 );
+    KoColor col2 ( c1 );
+
+    float grada, gradb, dxa, dxb, dya, dyb, adya, adyb, fraca, fracb,
+        xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dx, dy;
+    int x, y, ix1, ix2, iy1, iy2;
+
+    KoColor pix;
+
+    int x0a, y0a, x1a, y1a, x0b, y0b, x1b, y1b;
+    int tp0, tn0, tp1, tn1;
+
+    int horizontal = 0;
+    float opacity = 0.0;
+
+    tp0 = startWidth/2;
+    tn0 = startWidth/2;
+    if ( startWidth%2==0 ) // even width startWidth
+        tn0--;
+
+    tp1 = endWidth/2;
+    tn1 = endWidth/2;
+    if ( endWidth%2==0 ) // even width endWidth
+        tn1--;
+
+    int x0 = start.x();
+    int y0 = start.y();
+    int x1 = start.x();
+    int y1 = start.y();
+
+    dx = x1 - x0; // run of general line
+    dy = y1 - y0; // rise of general line
+
+    if ( dy < 0 ) dy = -dy;
+    if ( dx < 0 ) dx = -dx;
+
+    if ( dx > dy ) // horizontalish
+    {
+        horizontal=1;
+        x0a = x0;   y0a = y0 - tn0;
+        x0b = x0;   y0b = y0 + tp0;
+        x1a = x1;   y1a = y1 - tn1;
+        x1b = x1;   y1b = y1 + tp1;
+    }
+    else
+    {
+        x0a = x0 - tn0;   y0a = y0;
+        x0b = x0 + tp0;   y0b = y0;
+        x1a = x1 - tn1;   y1a = y1;
+        x1b = x1 + tp1;   y1b = y1;
+    }
+
+    if ( horizontal ) // draw endpoints
+    {
+        for ( int i=y0a; i<=y0b; i++ ) {
+            accessor.moveTo(x0, i);
+            if (accessor.isSelected()) {
+                memcpy( accessor.rawData(), c1.data(), pixelSize);
+            }
+        }
+        for ( int i=y1a; i<=y1b; i++ ) {
+            accessor.moveTo(x1, i);
+            if (accessor.isSelected()) {
+                memcpy( accessor.rawData(), c1.data(), pixelSize);
+            }
+        }
+
+    }
+    else
+    {
+        for ( int i=x0a; i<=x0b; i++ ) {
+            accessor.moveTo(i, y0);
+            if (accessor.isSelected()) {
+                memcpy( accessor.rawData(), c1.data(), pixelSize);
+            }
+        }
+        for ( int i=x1a; i<=x1b; i++ ) {
+            accessor.moveTo(i, y1);
+            if (accessor.isSelected()) {
+                memcpy( accessor.rawData(), c1.data(), pixelSize);
+            }
+        }
+    }
+
+    //antialias endpoints
+    if ( x1!=x0 && y1!=y0 )
+    {
+        if ( horizontal )
+        {
+            accessor.moveTo( x0a, y0a-1 );
+            if (accessor.isSelected()) {
+                quint8 alpha = cs->alpha(accessor.rawData());
+                opacity = .25 * c1.opacity() + ( 1 -.25 ) * alpha;
+                col1.setOpacity ( opacity );
+                memcpy( accessor.rawData(), col1.data(), pixelSize);
+            }
+
+            accessor.moveTo( x1b, y1b + 1 );
+            if (accessor.isSelected()) {
+                quint8 alpha = cs->alpha(accessor.rawData());
+                opacity = .25 * c2.opacity() + ( 1 -.25 ) * alpha;
+                col1.setOpacity ( opacity );
+                memcpy( accessor.rawData(), col1.data(), pixelSize);
+            }
+
+        }
+        else
+        {
+            accessor.moveTo( x0a - 1, y0a );
+            if (accessor.isSelected()) {
+                quint8 alpha = cs->alpha(accessor.rawData());
+                opacity = .25 * c1.opacity() + ( 1 -.25 ) * alpha;
+                col1.setOpacity ( opacity );
+                memcpy( accessor.rawData(), col1.data(), pixelSize);
+            }
+
+            accessor.moveTo( x1b + 1,y1b );
+            if (accessor.isSelected()) {
+                quint8 alpha = cs->alpha(accessor.rawData());
+                opacity = .25 * c2.opacity() + ( 1 -.25 ) * alpha;
+                col1.setOpacity ( opacity );
+                memcpy( accessor.rawData(), col1.data(), pixelSize);
+            }
+        }
+    }
+
+    dxa = x1a - x0a; // run of a
+    dya = y1a - y0a; // rise of a
+    dxb = x1b - x0b; // run of b
+    dyb = y1b - y0b; // rise of b
+
+    if ( dya < 0 ) adya = -dya;
+    else adya = dya;
+    if ( dyb < 0 ) adyb = -dyb;
+    else adyb = dyb;
+
+
+    if ( horizontal ) // horizontal-ish lines
+    {
+        if ( x1 < x0 )
+        {
+            int xt, yt, wt;
+            KoColor tmp;
+            xt = x1a;     x1a = x0a;    x0a = xt;
+            yt = y1a;     y1a = y0a;    y0a = yt;
+            xt = x1b;     x1b = x0b;    x0b = xt;
+            yt = y1b;     y1b = y0b;    y0b = yt;
+            xt = x1;      x1 = x0;      x0 = xt;
+            yt = y1;      y1 = y0;      y0 = yt;
+
+            tmp = c1; c1= c2; c2 = tmp;
+            wt = startWidth;      startWidth = endWidth;      endWidth = wt;
+        }
+
+        grada = dya/dxa;
+        gradb = dyb/dxb;
+
+        ix1 = x0;   iy1 = y0;
+        ix2 = x1;   iy2 = y1;
+
+        yfa = y0a + grada;
+        yfb = y0b + gradb;
+
+        for ( x = ix1+1; x <= ix2-1; x++ )
+        {
+            fraca = yfa - int ( yfa );
+            b1a = 1 - fraca;
+            b2a = fraca;
+
+            fracb = yfb - int ( yfb );
+            b1b = 1 - fracb;
+            b2b = fracb;
+
+            // color first pixel of bottom line
+            opacity = ( ( x-ix1 ) /dx ) *c2.opacity() + ( 1 - ( x-ix1 ) /dx ) *c1.opacity();
+            c3.setOpacity ( static_cast<int> ( opacity ) );
+
+            accessor.moveTo( x, (int)yfa );
+            if (accessor.isSelected()) {
+                quint8 alpha = cs->alpha(accessor.rawData());
+                opacity = b1a * c3.opacity() + ( 1 - b1a ) * alpha;
+                col1.setOpacity ( opacity );
+                memcpy( accessor.rawData(), col1.data(), pixelSize);
+            }
+
+            // color first pixel of top line
+            if ( ! ( startWidth==1 && endWidth==1 ) )
+            {
+                accessor.moveTo( x, (int)yfb );
+                if (accessor.isSelected()) {
+                    quint8 alpha = cs->alpha(accessor.rawData());
+                    opacity = b1b*c3.opacity() + ( 1-b1b ) * alpha;
+                    col1.setOpacity ( opacity );
+                    memcpy( accessor.rawData(), col1.data(), pixelSize);
+                }
+            }
+
+            // color second pixel of bottom line
+            if ( grada != 0 && grada != 1 ) // if not flat or exact diagonal
+            {
+                accessor.moveTo( x, int ( yfa ) +1 );
+                if (accessor.isSelected()) {
+                    quint8 alpha = cs->alpha(accessor.rawData());
+                    opacity = b2a*c3.opacity() + ( 1-b2a )  * alpha;
+                    col2.setOpacity ( opacity );
+                    memcpy( accessor.rawData(), col2.data(), pixelSize);
+                }
+
+            }
+
+            // color second pixel of top line
+            if ( gradb != 0 && gradb != 1 && ! ( startWidth==1 && endWidth==1 ) )
+            {
+                accessor.moveTo( x, int ( yfb ) +1 );
+                if (accessor.isSelected()) {
+                    quint8 alpha = cs->alpha(accessor.rawData());
+                    opacity = b2b * c3.opacity() + ( 1 - b2b ) * alpha;
+                    col2.setOpacity ( opacity );
+                    memcpy( accessor.rawData(), col2.data(), pixelSize);
+                }
+
+            }
+
+            // fill remaining pixels
+            if ( ! ( startWidth==1 && endWidth==1 ) )
+            {
+                if ( yfa<yfb )
+                    for ( int i=yfa+1; i<=yfb; i++ ) {
+                        accessor.moveTo(x, i);
+                        if (accessor.isSelected()) {
+                            memcpy( accessor.rawData(), c3.data(), pixelSize);
+                        }
+                    }
+                else
+                    for ( int i=yfa+1; i>=yfb; i-- ) {
+                        accessor.moveTo(x, i);
+                        if (accessor.isSelected()) {
+                            memcpy( accessor.rawData(), c3.data(), pixelSize);
+                        }
+                    }
+
+            }
+
+            yfa += grada;
+            yfb += gradb;
+        }
+    }
+    else // vertical-ish lines
+    {
+        if ( y1 < y0 )
+        {
+            int xt, yt, wt;
+            xt = x1a;     x1a = x0a;    x0a = xt;
+            yt = y1a;     y1a = y0a;    y0a = yt;
+            xt = x1b;     x1b = x0b;    x0b = xt;
+            yt = y1b;     y1b = y0b;    y0b = yt;
+            xt = x1;      x1 = x0;      x0 = xt;
+            yt = y1;      y1 = y0;      y0 = yt;
+
+            KoColor tmp;
+            tmp = c1; c1 = c2; c2 = tmp;
+            wt = startWidth;      startWidth = endWidth;      endWidth = wt;
+        }
+
+        grada = dxa/dya;
+        gradb = dxb/dyb;
+
+        ix1 = x0;   iy1 = y0;
+        ix2 = x1;   iy2 = y1;
+
+        xfa = x0a + grada;
+        xfb = x0b + gradb;
+
+        for ( y = iy1+1; y <= iy2-1; y++ )
+        {
+            fraca = xfa - int ( xfa );
+            b1a = 1 - fraca;
+            b2a = fraca;
+
+            fracb = xfb - int ( xfb );
+            b1b = 1 - fracb;
+            b2b = fracb;
+
+            // color first pixel of left line
+            opacity = ( ( y-iy1 ) /dy ) *c2.opacity() + ( 1 - ( y-iy1 ) /dy ) *c1.opacity();
+            c3.setOpacity ( static_cast<int> ( opacity ) );
+
+            accessor.moveTo( int ( xfa ), y );
+            if (accessor.isSelected()) {
+                quint8 alpha = cs->alpha(accessor.rawData());
+                opacity = b1a*c3.opacity() + ( 1-b1a ) * alpha;
+                col1.setOpacity ( opacity );
+                memcpy( accessor.rawData(), col1.data(), pixelSize);
+            }
+
+            // color first pixel of right line
+            if ( ! ( startWidth==1 && endWidth==1 ) )
+            {
+                accessor.moveTo( int( xfb ), y );
+                if (accessor.isSelected()) {
+                    quint8 alpha = cs->alpha(accessor.rawData());
+                    opacity = b1b*c3.opacity() + ( 1-b1b )  * alpha;
+                    col1.setOpacity ( opacity );
+                    memcpy( accessor.rawData(), col1.data(), pixelSize);
+                }
+            }
+
+            // color second pixel of left line
+            if ( grada != 0 && grada != 1 ) // if not flat or exact diagonal
+            {
+                accessor.moveTo( int( xfa ) + 1, y );
+                if (accessor.isSelected()) {
+                    quint8 alpha = cs->alpha(accessor.rawData());
+                    opacity = b2a * c3.opacity() + ( 1 - b2a ) * alpha;
+                    col2.setOpacity ( opacity );
+                    memcpy( accessor.rawData(), col2.data(), pixelSize);
+                }
+
+            }
+
+            // color second pixel of right line
+            if ( gradb != 0 && gradb != 1 && ! ( startWidth==1 && endWidth==1 ) )
+            {
+                accessor.moveTo( int( xfb ) + 1, y );
+                if (accessor.isSelected()) {
+                    quint8 alpha = cs->alpha(accessor.rawData());
+                    opacity = b2b*c3.opacity() + ( 1-b2b ) * alpha;
+                    col2.setOpacity ( opacity );
+                    memcpy( accessor.rawData(), col2.data(), pixelSize);
+                }
+            }
+
+            // fill remaining pixels between current xfa,xfb
+            if ( ! ( startWidth==1 && endWidth==1 ) )
+            {
+                if ( xfa<xfb )
+                    for ( int i= ( int ) xfa+1; i<= ( int ) xfb; i++ ) {
+                        accessor.moveTo(i, y);
+                        if (accessor.isSelected()) {
+                            memcpy( accessor.rawData(), c3.data(), pixelSize);
+                        }
+                    }
+                else
+                    for ( int i= ( int ) xfb; i<= ( int ) xfa+1; i++ ){
+                        accessor.moveTo(i, y);
+                        if (accessor.isSelected()) {
+                            memcpy( accessor.rawData(), c3.data(), pixelSize);
+                        }
+                    }
+            }
+
+            xfa += grada;
+            xfb += gradb;
+        }
+    }
+
+}
+
+
 
 void KisPainter::setProgress(KoUpdater * progressUpdater)
 {

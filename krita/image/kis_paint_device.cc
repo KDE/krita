@@ -106,7 +106,7 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 {
     setObjectName(name);
     Q_ASSERT( colorSpace );
- 
+
     m_d->x = 0;
     m_d->y = 0;
 
@@ -580,6 +580,7 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
                 ->colorSpace("RGBA", srcProfileName)->
                         convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
+        delete[] dstData;
    }
 }
 
@@ -604,7 +605,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
 
 QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h)
 {
-    
+
     if (w < 0)
         return QImage();
 
@@ -625,7 +626,8 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     // XXX: Is this really faster than converting line by line and building the QImage directly?
     //      This copies potentially a lot of data.
     readBytes(data, x1, y1, w, h);
-    QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile, KoColorConversionTransformation::IntentPerceptual);
+    QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile,
+                                                 KoColorConversionTransformation::IntentPerceptual);
     delete[] data;
 
     return image;

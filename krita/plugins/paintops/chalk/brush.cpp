@@ -62,7 +62,7 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y,const KoColor &color){
 	double dirt, result;
 
 	//count decrementing of saturation and alpha
-	result = log (m_counter);
+	result = log ((double)m_counter);
 	result = -(result * 10)/100.0;
 
 	

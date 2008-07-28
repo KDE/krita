@@ -46,7 +46,7 @@ void BrushShape::fromGaussian(int radius, float maxLength, float sigma){
 		
 		for (int y=-radius;y<=radius;y++){
 			for (int x=-radius;x<=radius;x++){
-				length = (exp( (x*x + y*y) / sigmaSquare ) * sigmaConst);
+				length = (std::exp( (float)(x*x + y*y) / sigmaSquare ) * sigmaConst);
 				total += length;
 				Bristle b(x,y,length*maxLength);
 				b.setInkAmount(1.0f);

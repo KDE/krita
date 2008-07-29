@@ -268,8 +268,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     if (styleManager)
         styleManager->saveOdfDefaultStyles(context.mainStyles());
   
-    //TODO: The list formats are currently not stored in the KoStyleManager ??
-    QMap<QTextList *, QString> listStyleNames;
+    QHash<QTextList *, QString> listStyleNames;
     QTextBlock startBlock = block;
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
         if ((block.textList()) && (!listStyleNames.contains(block.textList()))) {
@@ -376,6 +375,12 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
 
         block = block.next();
     } // while
+
+    // Close any remaining lists
+    while (!textLists.isEmpty()) {
+        textLists.removeLast();
+        writer->endElement();
+    }
 }
 
 #include "KoTextShapeData.moc"

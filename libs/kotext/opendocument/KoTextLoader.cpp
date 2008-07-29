@@ -335,17 +335,20 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     int level = qMax(1,element.attributeNS( KoXmlNS::text, "outline-level", "1" ).toInt());
     QString styleName = element.attributeNS( KoXmlNS::text, "style-name", QString() );
 
-    //context.setCurrentListStyleName(styleName);
-    //int level = context.currentListLevel();
-
-    kDebug(32500) << "localName =" << element.localName() << "style-name =" << styleName << "outline-level =" << level;
-
-    // Add a new block which will become the list-item for the header
     QTextBlock block = cursor.block();
 
     // Set the paragraph-style on the block
     KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName, d->stylesDotXml );
-    paragraphStyle->applyStyle(block, /*applyListStyle*/ false);
+    if (!paragraphStyle && d->styleManager) {
+         paragraphStyle = d->styleManager->defaultParagraphStyle();
+    }
+    if ( paragraphStyle ) {
+        // apply the paragraph's list style only if we are in a list and the list context we
+        // are in (ie. current list and it's parent lists) does not specify a list style 
+        paragraphStyle->applyStyle(block, /*applyListStyle*/ d->isList && !d->currentListStyle);
+    } else {
+        kWarning(32500) << "paragraph style " << styleName << " not found";
+    }
 
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
     if (!blockData)
@@ -359,10 +362,14 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
         blockData->setOutlineLevel(level);
     }
     
-    KoListStyle listStyle;
-    listStyle.setLevelProperties(d->textSharedData->outlineLevel(level));
-    listStyle.applyStyle(block, level);
+    if (!d->isList) { // apply <text:outline-style> only if heading is not within a <text:list>
+        KoListStyle listStyle;
+        listStyle.setLevelProperties(d->textSharedData->outlineLevel(level));
+        listStyle.applyStyle(block, level);
+    }
     
+    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
+
     bool stripLeadingSpace = true;
     int pos = cursor.position();
     loadSpan( element, cursor, &stripLeadingSpace );
@@ -373,6 +380,7 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
             tempCursor.removeSelectedText();                                    // remove it
         }
     }
+    cursor.setCharFormat( cf ); // restore the cursor char format
 }
 
 void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )

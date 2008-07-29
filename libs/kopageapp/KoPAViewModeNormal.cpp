@@ -54,12 +54,17 @@ void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
 
     KoViewConverter * converter = m_view->viewConverter( m_canvas );
     m_view->activePage()->paintBackground( painter, *converter );
-    m_canvas->document()->gridData().paintGrid( painter, *converter, clipRect );
-    m_canvas->document()->guidesData().paintGuides( painter, *converter, clipRect );
     if ( m_view->activePage()->displayMasterShapes() ) {
         m_canvas->masterShapeManager()->paint( painter, *converter, false );
     }
     m_canvas->shapeManager()->paint( painter, *converter, false );
+    painter.setRenderHint( QPainter::Antialiasing, false );
+
+    QRectF updateRect = converter->viewToDocument( clipRect );
+    m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
+    m_canvas->document()->guidesData().paintGuides( painter, *converter, updateRect );
+
+    painter.setRenderHint( QPainter::Antialiasing );
     m_toolProxy->paint( painter, *converter );
 }
 

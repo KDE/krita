@@ -400,37 +400,38 @@ void KoListLevelProperties::saveOdf (KoXmlWriter *writer) const
 {
     bool isNumber = false;
     switch (d->stylesPrivate.value(QTextListFormat::ListStyle).toInt()) {
-	case KoListStyle::DecimalItem:
-	case KoListStyle::AlphaLowerItem:
-	case KoListStyle::UpperAlphaItem:
-	case KoListStyle::RomanLowerItem:
-	case KoListStyle::UpperRomanItem:
-	    isNumber = true;
-	    break;
+    case KoListStyle::DecimalItem:
+    case KoListStyle::AlphaLowerItem:
+    case KoListStyle::UpperAlphaItem:
+    case KoListStyle::RomanLowerItem:
+    case KoListStyle::UpperRomanItem:
+        isNumber = true;
+        break;
     }
     if (isNumber)
-	writer->startElement("list-level-style-number");
+        writer->startElement("list-level-style-number");
     else
-	writer->startElement("text:list-style-content");
+        writer->startElement("text:list-style-content");
     
     if (d->stylesPrivate.contains(KoListStyle::Level))
-	writer->addAttribute("text:level", d->stylesPrivate.value(KoListStyle::Level).toInt());
-    if (isNumber)
-    {
-	if (d->stylesPrivate.contains(KoListStyle::StartValue))
-	    writer->addAttribute("text:start-value", QChar(d->stylesPrivate.value(KoListStyle::StartValue).toInt()));
-	if (d->stylesPrivate.contains(KoListStyle::DisplayLevel))
-	    writer->addAttribute("text:display-level", QChar(d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt()));
+        writer->addAttribute("text:level", d->stylesPrivate.value(KoListStyle::Level).toInt());
+
+    if (isNumber) {
+        if (d->stylesPrivate.contains(KoListStyle::StartValue))
+            writer->addAttribute("text:start-value", QChar(d->stylesPrivate.value(KoListStyle::StartValue).toInt()));
+        if (d->stylesPrivate.contains(KoListStyle::DisplayLevel))
+            writer->addAttribute("text:display-level", QChar(d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt()));
     } else {
         if (d->stylesPrivate.contains(KoListStyle::BulletCharacter))
-	    writer->addAttribute("text:bullet-char", QChar(d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt()));
-	
+            writer->addAttribute("text:bullet-char", QChar(d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt()));
     }
+
     kDebug() << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
     kDebug() << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);
     kDebug() << "Key KoListStyle::CharacterStyleId :" << d->stylesPrivate.value(KoListStyle::CharacterStyleId);
     kDebug() << "Key KoListStyle::BulletSize :" << d->stylesPrivate.value(KoListStyle::BulletSize);
     kDebug() << "Key KoListStyle::Alignment :" << d->stylesPrivate.value(KoListStyle::Alignment);
     kDebug() << "Key KoListStyle::LetterSynchronization :" << d->stylesPrivate.value(KoListStyle::LetterSynchronization);
+
     writer->endElement();
 }

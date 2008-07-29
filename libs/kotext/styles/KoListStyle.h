@@ -59,7 +59,7 @@ public:
         NoItem = 1,
         /// use lower roman counting.  (i, ii, iii, iv, ...)
         RomanLowerItem,
-        /// use lower roman counting.  (I, II, III, IV, ...)
+        /// use upper roman counting.  (I, II, III, IV, ...)
         UpperRomanItem,
         /// draw a box
         BoxItem,

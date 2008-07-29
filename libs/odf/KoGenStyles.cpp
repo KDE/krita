@@ -66,7 +66,7 @@ static const struct {
     { KoGenStyle::StyleAutoTableCell, "style:style", "style:table-cell-properties", false  },
     { KoGenStyle::StyleSectionAuto, "style:style", "style:section-properties", false  },
     { KoGenStyle::StylePageLayout, "style:page-layout", "style:page-layout-properties", false  },
-    { KoGenStyle::StyleAutoList, "text:list-style", 0, false  },
+    { KoGenStyle::StyleListAuto, "text:list-style", 0, false  },
     { KoGenStyle::StyleNumericNumber, "number:number-style", 0, false  },
     { KoGenStyle::StyleNumericFraction, "number:number-style", 0, false  },
     { KoGenStyle::StyleNumericScientific, "number:number-style", 0, false  },

@@ -39,8 +39,7 @@ public:
     Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0) { }
     ~Private() {
         delete defaultListStyle;
-        if (outlineStyle)
-            delete outlineStyle;
+        delete outlineStyle;
         // ##: Who deletes the rest of the stuff?
     }
     static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
@@ -324,8 +323,7 @@ KoListStyle *KoStyleManager::defaultListStyle() const
 
 void KoStyleManager::setOutlineStyle(KoListStyle* listStyle)
 {
-    if (d->outlineStyle)
-        delete d->outlineStyle;
+    delete d->outlineStyle;
     d->outlineStyle = listStyle;
 }
 

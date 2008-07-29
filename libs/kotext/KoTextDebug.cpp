@@ -382,7 +382,11 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
         QString key, value;
         switch (id) {
         case QTextListFormat::ListStyle:
-            key = "style";
+            key = "type";
+            value = QString::number(properties[id].toInt());
+            break;
+        case QTextListFormat::ListIndent:
+            key = "indent";
             value = QString::number(properties[id].toInt());
             break;
         case KoListStyle::ListItemPrefix:
@@ -478,10 +482,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
     if (list) {
         attrs.append(" list=\"item:").append(QString::number(list->itemNumber(block)+1)).append('/')
               .append(QString::number(list->count()));
-        attrs.append(" listid:").append(QString::number(list->format().property(KoListStyle::StyleId).toInt()));
-        attrs.append(" listindent:").append(QString::number(list->format().indent()));
-        attrs.append(" liststyle:").append(QString::number(list->format().style()));
-        attrs.append("\"");
+        attrs.append(listAttributes(list->format()));
     }
 
     qDebug("%*s<block%s>", depth, " ", qPrintable(attrs));

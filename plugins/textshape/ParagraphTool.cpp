@@ -229,7 +229,7 @@ void ParagraphTool::updateLayout()
 void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &converter) const
 {
     RulerIndex ruler;
-    ShapeSpecificData *shape;
+    const ShapeSpecificData *shape;
     QColor foregroundColor;
 
     if (hasActiveRuler()) {
@@ -248,18 +248,11 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
 
     painter.save();
 
-    // transform painter from view coordinate system to shape coordinate system
-    painter.setMatrix(shape->textShape()->absoluteTransformation(&converter) * painter.matrix());
-    KoShape::applyConversion(painter, converter);
-    painter.translate(0.0, -shape->shapeStartOffset());
-
-    QMatrix matrix(painter.combinedMatrix());
-
-    QString text(m_rulers[ruler].valueString());
-    QLineF connector(matrix.map(m_rulers[ruler].labelConnector(shape->baseline(ruler))));
+    QLineF unmapped(shape->labelConnector(ruler));
+    QLineF connector(converter.documentToView(unmapped.p1()), converter.documentToView(unmapped.p2()));
     connector.setLength(10.0);
 
-    painter.resetMatrix();
+    QString text(m_rulers[ruler].valueString());
 
     painter.setBrush(Qt::white);
     painter.setPen(foregroundColor);
@@ -290,7 +283,7 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (!m_textBlockValid)
         return;
 
-    foreach (ShapeSpecificData shape, m_shapes) {
+    foreach (const ShapeSpecificData &shape, m_shapes) {
         shape.paint(painter, converter);
     }
 
@@ -342,15 +335,11 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
         return false;
     }
 
-    for (int shape = 0; shape != m_shapes.size(); ++shape) {
-        QPointF mappedPoint(m_shapes[shape].mapDocumentToShape(point));
-
-        for (int ruler = 0; ruler != maxRuler; ++ruler) {
-            if (hitTest((RulerIndex)ruler, m_shapes[shape], mappedPoint)) {
-                activateRuler((RulerIndex)ruler, &m_shapes[shape]);
-
-                return true;
-            }
+    foreach (const ShapeSpecificData &shape, m_shapes) {
+        RulerIndex ruler = shape.hitTest(point);
+        if (ruler != noRuler) {
+            activateRuler(ruler, shape);
+            return true;
         }
     }
 
@@ -359,10 +348,10 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
 }
 
 
-void ParagraphTool::activateRuler(RulerIndex ruler, ShapeSpecificData *shape)
+void ParagraphTool::activateRuler(RulerIndex ruler, const ShapeSpecificData &shape)
 {
     m_activeRuler = ruler;
-    m_activeShape = shape;
+    m_activeShape = &shape;
     m_rulers[m_activeRuler].setActive(true);
 
     // disable hovering if we have an active ruler
@@ -398,10 +387,8 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
 {
     // check if we were already hovering over an element
     if (hasHighlightedRuler()) {
-        QPointF mappedPoint(m_highlightShape->mapDocumentToShape(point));
-
         // check if we are still over the same element
-        if (hitTest((RulerIndex)m_highlightRuler, *m_highlightShape, mappedPoint)) {
+        if (m_highlightShape->hitTest((RulerIndex)m_highlightRuler, point)) {
             return;
         }
         else {
@@ -411,16 +398,13 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
     }
 
     // check if we are hovering over a new control
-    for (int shape = 0; shape != m_shapes.size(); ++shape) {
-        QPointF mappedPoint(m_shapes[shape].mapDocumentToShape(point));
-
-        for (int ruler = 0; ruler != maxRuler; ++ruler) {
-            if (hitTest((RulerIndex)ruler, m_shapes[shape], mappedPoint)) {
-                m_highlightRuler = (RulerIndex)ruler;
-                m_highlightShape = &m_shapes[shape];
-                m_rulers[m_highlightRuler].setHighlighted(true);
-                break;
-            }
+    foreach (const ShapeSpecificData &shape, m_shapes) {
+        RulerIndex ruler = shape.hitTest(point);
+        if (ruler != noRuler) {
+            m_highlightRuler = ruler;
+            m_highlightShape = &shape;
+            m_rulers[m_highlightRuler].setHighlighted(true);
+            break;
         }
     }
 }
@@ -604,14 +588,8 @@ void ParagraphTool::deactivate()
     deselectTextBlock();
 }
 
-bool ParagraphTool::hitTest(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point) const
-{
-    return m_rulers[ruler].hitTest(point, shape.baseline(ruler));
-}
-
 void ParagraphTool::moveActiveRulerTo(const QPointF &point)
 {
-    QPointF mappedPoint(m_activeShape->mapDocumentToShape(point));
-    m_rulers[m_activeRuler].moveRuler(mappedPoint, smoothMovement(), m_activeShape->baseline(m_activeRuler));
+    m_activeShape->moveRulerTo(m_activeRuler, point, smoothMovement());
 }
 

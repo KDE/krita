@@ -24,8 +24,13 @@
 #include <KoTextBlockData.h>
 #include <KoTextShapeData.h>
 
+#include <KDebug>
+
 #include <QTextBlock>
 #include <QTextLayout>
+
+/* TODO: define the class' interface better. make sure that mapping is done inside this class and textShape() doesn't need to be accessed
+ */
 
 ShapeSpecificData::ShapeSpecificData(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style)
     : m_rulers(rulers), m_textShape(textShape)
@@ -77,18 +82,34 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
     }
 }
 
-qreal ShapeSpecificData::shapeStartOffset() const
+RulerIndex ShapeSpecificData::hitTest(const QPointF &point) const
 {
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape()->userData());
+    QPointF mappedPoint(mapDocumentToText(point));
 
-    return textShapeData->documentOffset();
+    for (int ruler = 0; ruler != maxRuler; ++ruler) {
+        if (m_rulers[ruler].hitTest(mappedPoint, baseline(static_cast<RulerIndex>(ruler)))) {
+            return static_cast<RulerIndex>(ruler);
+        }
+    }
+
+    return noRuler;
 }
 
-QPointF ShapeSpecificData::mapDocumentToShape(QPointF point) const
+bool ShapeSpecificData::hitTest(RulerIndex ruler, const QPointF &point) const
 {
-    QMatrix matrix = textShape()->absoluteTransformation(NULL);
-    matrix.translate(0.0, -shapeStartOffset());
-    return matrix.inverted().map(point);
+    QPointF mappedPoint(mapDocumentToText(point));
+    return m_rulers[ruler].hitTest(mappedPoint, baseline(ruler));
+}
+
+void ShapeSpecificData::moveRulerTo(RulerIndex ruler, const QPointF &point, bool smoothMovement) const
+{
+    QPointF mappedPoint(mapDocumentToText(point));
+    m_rulers[ruler].moveRuler(mappedPoint, smoothMovement, baseline(ruler));
+}
+
+QLineF ShapeSpecificData::labelConnector(RulerIndex ruler) const
+{
+    return mapTextToDocument(m_rulers[ruler].labelConnector(baseline(ruler)));
 }
 
 void ShapeSpecificData::paint(QPainter &painter, const KoViewConverter &converter) const
@@ -132,6 +153,34 @@ QRectF ShapeSpecificData::dirtyRectangle() const
     boundingRect = textShape()->absoluteTransformation(0).mapRect(boundingRect);
 
     return boundingRect;
+}
+
+qreal ShapeSpecificData::shapeStartOffset() const
+{
+    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape()->userData());
+
+    return textShapeData->documentOffset();
+}
+
+QPointF ShapeSpecificData::mapDocumentToText(QPointF point) const
+{
+    QMatrix matrix = textShape()->absoluteTransformation(NULL);
+    matrix.translate(0.0, -shapeStartOffset());
+    return matrix.inverted().map(point);
+}
+
+QPointF ShapeSpecificData::mapTextToDocument(QPointF point) const
+{
+    QMatrix matrix = textShape()->absoluteTransformation(NULL);
+    matrix.translate(0.0, -shapeStartOffset());
+    return matrix.map(point);
+}
+
+QLineF ShapeSpecificData::mapTextToDocument(QLineF line) const
+{
+    QMatrix matrix = textShape()->absoluteTransformation(NULL);
+    matrix.translate(0.0, -shapeStartOffset());
+    return matrix.map(line);
 }
 
 QLineF ShapeSpecificData::baseline(RulerIndex ruler) const

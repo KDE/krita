@@ -112,7 +112,7 @@ protected:
     void saveRulers();
 
     bool hasActiveRuler() const { return m_activeRuler != noRuler; }
-    void activateRuler(RulerIndex ruler, ShapeSpecificData *shape);
+    void activateRuler(RulerIndex ruler, const ShapeSpecificData &shape);
     bool activateRulerAt(const QPointF &point);
     void deactivateRuler();
     void resetActiveRuler();
@@ -129,9 +129,6 @@ protected:
     // paint all rulers for a given shape
     void paintRulers(QPainter &painter, const KoViewConverter &converter, const ShapeSpecificData &shape) const;
 
-    // hit test for a single ruler on a single shape
-    bool hitTest(RulerIndex ruler, const ShapeSpecificData &shape, const QPointF &point) const;
-
     void moveActiveRulerTo(const QPointF &point);
 
     // internal convencience methods
@@ -146,8 +143,8 @@ private:
 
     QVector<ShapeSpecificData> m_shapes;
 
-    ShapeSpecificData *m_activeShape,
-                      *m_highlightShape;
+    const ShapeSpecificData *m_activeShape,
+                            *m_highlightShape;
 
     Ruler m_rulers[maxRuler];
 

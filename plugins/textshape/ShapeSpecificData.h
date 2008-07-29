@@ -40,25 +40,40 @@ public:
 
     ~ShapeSpecificData() {};
 
-    // wrapper method for textShapeData->documentOffset()
-    qreal shapeStartOffset() const;
+    // return the first ruler at the point
+    RulerIndex hitTest(const QPointF &point) const;
 
-    QPointF mapDocumentToShape(QPointF point) const;
+    // test if the point is inside of the active area of the ruler
+    bool hitTest(RulerIndex ruler, const QPointF &point) const;
 
+    // change the value of the ruler so that it touches the point
+    void moveRulerTo(RulerIndex ruler, const QPointF &point, bool smoothMovement) const;
+
+    // return the line which connects the ruler to its label
+    QLineF labelConnector(RulerIndex ruler) const;
+
+    // paint all rulers for this shape
     void paint(QPainter &painter, const KoViewConverter &converter) const;
-
-    QLineF baseline(RulerIndex ruler) const;
 
     // returns the rectangle which needs to be repainted to fully refresh the display for this shape
     // currently this is the bounding rectangle of the shape plus a margin for the arrows on all four sides
     QRectF dirtyRectangle() const;
 
-    TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
-
 protected:
     void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
 
+    // wrapper method for textShapeData->documentOffset()
+    qreal shapeStartOffset() const;
+
+    QPointF mapDocumentToText(QPointF point) const;
+    QPointF mapTextToDocument(QPointF point) const;
+    QLineF mapTextToDocument(QLineF line) const;
+
+    QLineF baseline(RulerIndex ruler) const;
+
     QLineF separatorLine() const;
+
+    TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
 
 private:
     Ruler *m_rulers;

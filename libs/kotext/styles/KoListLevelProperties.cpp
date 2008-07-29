@@ -420,7 +420,7 @@ void KoListLevelProperties::saveOdf (KoXmlWriter *writer) const
         if (d->stylesPrivate.contains(KoListStyle::StartValue))
             writer->addAttribute("text:start-value", d->stylesPrivate.value(KoListStyle::StartValue).toInt());
         if (d->stylesPrivate.contains(KoListStyle::DisplayLevel))
-            writer->addAttribute("text:display-level", QChar(d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt()));
+            writer->addAttribute("text:display-levels", d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt());
     } else {
         if (d->stylesPrivate.contains(KoListStyle::BulletCharacter))
             writer->addAttribute("text:bullet-char", QChar(d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt()));

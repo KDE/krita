@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -291,8 +292,7 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
         kDebug(32500)<<"style.localName()="<<style.localName()<<"level="<<level<<"displayLevel="<<displayLevel<<"bulletChar="<<bulletChar;
         if( bulletChar.isEmpty() ) { // list without any visible bullets
             setStyle(KoListStyle::NoItem);
-        }
-        else { // try to determinate the bullet we should use
+        } else { // try to determinate the bullet we should use
             switch( bulletChar[0].unicode() ) {
                 case 0x2022: // bullet, a small disc -> circle
                     //TODO use BulletSize to differ between small and large discs
@@ -329,7 +329,6 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
                     kDebug(32500) <<"Unhandled bullet code 0x" << QString::number( (uint)customBulletChar.unicode(), 16 );
                     kDebug(32500) << "Should use the style =>" << style.attributeNS( KoXmlNS::text, "style-name", QString::null ) << "<=";
                     setStyle(KoListStyle::CustomCharItem);
-                    setBulletCharacter(customBulletChar);
                     /*
                     QString customBulletFont;
                     // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
@@ -347,7 +346,8 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
                     */
 //                     setStyle(KoListStyle::BoxItem); //fallback
                     break;
-            }
+            } // switch
+            setBulletCharacter(bulletChar[0]);
         }
 
     }
@@ -409,18 +409,34 @@ void KoListLevelProperties::saveOdf (KoXmlWriter *writer) const
         break;
     }
     if (isNumber)
-        writer->startElement("list-level-style-number");
+        writer->startElement("text:list-level-style-number");
     else
         writer->startElement("text:list-style-content");
     
+    // These apply to bulleted and numbered lists
     if (d->stylesPrivate.contains(KoListStyle::Level))
         writer->addAttribute("text:level", d->stylesPrivate.value(KoListStyle::Level).toInt());
+    if (d->stylesPrivate.contains(KoListStyle::ListItemPrefix))
+        writer->addAttribute("style:num-prefix", d->stylesPrivate.value(KoListStyle::ListItemPrefix).toString());
+    if (d->stylesPrivate.contains(KoListStyle::ListItemSuffix))
+        writer->addAttribute("style:num-suffix", d->stylesPrivate.value(KoListStyle::ListItemSuffix).toString());
 
     if (isNumber) {
         if (d->stylesPrivate.contains(KoListStyle::StartValue))
             writer->addAttribute("text:start-value", d->stylesPrivate.value(KoListStyle::StartValue).toInt());
         if (d->stylesPrivate.contains(KoListStyle::DisplayLevel))
             writer->addAttribute("text:display-levels", d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt());
+
+        QChar format;
+        switch (style()) {
+        case KoListStyle::DecimalItem:      format = '1'; break;
+        case KoListStyle::AlphaLowerItem:   format = 'a'; break;
+        case KoListStyle::UpperAlphaItem:   format = 'A'; break;
+        case KoListStyle::RomanLowerItem:   format = 'i'; break;
+        case KoListStyle::UpperRomanItem:   format = 'I'; break;
+        default: break;
+        }
+        writer->addAttribute("style:num-format", format);
     } else {
         if (d->stylesPrivate.contains(KoListStyle::BulletCharacter))
             writer->addAttribute("text:bullet-char", QChar(d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt()));

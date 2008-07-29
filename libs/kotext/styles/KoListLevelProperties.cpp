@@ -383,8 +383,6 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
         const QString startValue = style.attributeNS( KoXmlNS::text, "start-value", QString() );
         if ( ! startValue.isEmpty() )
             setStartValue( startValue.toInt() );
-        else
-            setStartValue(1);
     }
     else { // if not defined, we have do nothing
         kDebug(32500)<<"stylename else:"<<style.localName()<<"level="<<level<<"displayLevel="<<displayLevel;

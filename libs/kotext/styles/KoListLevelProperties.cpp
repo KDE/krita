@@ -319,7 +319,6 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
                     break;
                 case 0x2d: // minus
                     setStyle(KoListStyle::CustomCharItem);
-                    setBulletCharacter('-');
                     break;
                 case 0x2717: // cross
                     setStyle(KoListStyle::BallotXItem);

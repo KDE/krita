@@ -166,9 +166,40 @@ QTextListFormat.clone = function(fmt) {
 
 // KOffice specific
 var KoListStyle = {};
-KoListStyle.ListItemSuffix = 0x1003E9;
-KoListStyle.StartValue = 0x1003EA;
-KoListStyle.Level = 0x1003EB;
+i = QTextFormat.UserProperty+1000;
+KoListStyle.ListItemPrefix = i++;
+KoListStyle.ListItemSuffix = i++;
+KoListStyle.StartValue = i++;
+KoListStyle.Level = i++;
+KoListStyle.DisplayLevel = i++;
+KoListStyle.CharacterStyleId = i++;
+KoListStyle.BulletCharacter = i++;
+KoListStyle.BulletSize = i++;
+KoListStyle.Alignment = i++;
+KoListStyle.MinimumWidth = i++;
+KoListStyle.ListId = i++;
+KoListStyle.IsOutline = i++;
+KoListStyle.LetterSynchronization = i++;
+KoListStyle.StyleId = i++;
+
+KoListStyle.SquareItem = QTextListFormat.ListSquare;
+KoListStyle.DiscItem = QTextListFormat.ListDisc;
+KoListStyle.CircleItem = QTextListFormat.ListCircle;
+KoListStyle.DecimalItem = QTextListFormat.ListDecimal;
+KoListStyle.AlphaLowerItem = QTextListFormat.ListLowerAlpha;
+KoListStyle.UpperAlphaItem = QTextListFormat.ListUpperAlpha;
+
+i = 1;
+KoListStyle.NoItem = i++;
+KoListStyle.RomanLowerItem = i++;
+KoListStyle.UpperRomanItem = i++;
+KoListStyle.BoxItem = i++;
+KoListStyle.RhombusItem = i++;
+KoListStyle.HeavyCheckMarkItem = i++;
+KoListStyle.BallotXItem = i++;
+KoListStyle.RightArrowItem = i++;
+KoListStyle.RightArrowHeadItem = i++;
+KoListStyle.CustomCharItem = i++;
 
 var defaultListItemFormat = QTextCharFormat.clone(defaultTextFormat); // new QTextCharFormat;
 

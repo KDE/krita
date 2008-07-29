@@ -225,6 +225,9 @@ void ListItemsHelper::recalculate()
     const KoListStyle::Style listStyle = static_cast<KoListStyle::Style> (m_textList->format().style());
 
     int index = format.intProperty(KoListStyle::StartValue);
+    if (!format.hasProperty(KoListStyle::StartValue))
+        index = 1; // pick a safe default
+
     QString prefix = format.stringProperty( KoListStyle::ListItemPrefix );
     QString suffix = format.stringProperty( KoListStyle::ListItemSuffix );
     const int level = format.intProperty(KoListStyle::Level);

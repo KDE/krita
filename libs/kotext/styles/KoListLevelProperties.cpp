@@ -418,7 +418,7 @@ void KoListLevelProperties::saveOdf (KoXmlWriter *writer) const
 
     if (isNumber) {
         if (d->stylesPrivate.contains(KoListStyle::StartValue))
-            writer->addAttribute("text:start-value", QChar(d->stylesPrivate.value(KoListStyle::StartValue).toInt()));
+            writer->addAttribute("text:start-value", d->stylesPrivate.value(KoListStyle::StartValue).toInt());
         if (d->stylesPrivate.contains(KoListStyle::DisplayLevel))
             writer->addAttribute("text:display-level", QChar(d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt()));
     } else {

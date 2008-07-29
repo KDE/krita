@@ -36,9 +36,11 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0) { }
+    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0) { }
     ~Private() {
         delete defaultListStyle;
+        if (outlineStyle)
+            delete outlineStyle;
         // ##: Who deletes the rest of the stuff?
     }
     static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
@@ -53,6 +55,7 @@ public:
 
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
+    KoListStyle *outlineStyle;
 };
 
 // static
@@ -317,6 +320,18 @@ KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const {
 KoListStyle *KoStyleManager::defaultListStyle() const
 {
     return d->defaultListStyle;
+}
+
+void KoStyleManager::setOutlineStyle(KoListStyle* listStyle)
+{
+    if (d->outlineStyle)
+        delete d->outlineStyle;
+    d->outlineStyle = listStyle;
+}
+
+KoListStyle *KoStyleManager::outlineStyle() const
+{
+    return d->outlineStyle;
 }
 
 QList<KoCharacterStyle*> KoStyleManager::characterStyles() const {

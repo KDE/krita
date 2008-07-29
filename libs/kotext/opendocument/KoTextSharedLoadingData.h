@@ -89,8 +89,6 @@ public:
      */
     KoListStyle *listStyle(const QString &name, bool stylesDotXml);
 
-    KoListLevelProperties outlineLevel( int level, const KoListLevelProperties& defaultprops = KoListLevelProperties() );
-
 protected:
 
     /**
@@ -123,7 +121,7 @@ private:
                        KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
     QList<QPair<QString, KoListStyle *> > loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
  
-    void addOutlineStyles( KoOdfLoadingContext & context );
+    void addOutlineStyle( KoOdfLoadingContext & context, KoStyleManager *styleManager );
 
     class Private;
     Private * const d;

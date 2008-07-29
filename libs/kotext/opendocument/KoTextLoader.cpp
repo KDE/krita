@@ -362,10 +362,10 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
         blockData->setOutlineLevel(level);
     }
     
-    if (!d->isList) { // apply <text:outline-style> only if heading is not within a <text:list>
-        KoListStyle listStyle;
-        listStyle.setLevelProperties(d->textSharedData->outlineLevel(level));
-        listStyle.applyStyle(block, level);
+    if (!d->isList) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
+        KoListStyle *outlineStyle = d->styleManager->outlineStyle();
+        if (outlineStyle)
+            outlineStyle->applyStyle(block, level);
     }
     
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format

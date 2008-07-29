@@ -163,6 +163,16 @@ public:
      */
     KoListStyle *defaultListStyle() const;
 
+    /**
+     * Sets the outline style to be used for headers that are not specified as lists
+     */
+    void setOutlineStyle(KoListStyle *listStyle);
+
+    /**
+     * Returns the outline style to be used for headers that are not specified as lists
+     */
+    KoListStyle *outlineStyle() const;
+
     /// return all the characterStyles registered.
     QList<KoCharacterStyle*> characterStyles() const;
 

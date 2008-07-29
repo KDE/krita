@@ -60,8 +60,6 @@ public:
     QHash<QString, KoCharacterStyle *> characterStylesDotXmlStyles;
     QHash<QString, KoListStyle *>      listStylesDotXmlStyles;
 
-    KoListStyle outlineStyles;
-
     QList<KoParagraphStyle *> paragraphStylesToDelete;
     QList<KoCharacterStyle *> characterStylesToDelete;
     QList<KoListStyle *>      listStylesToDelete;
@@ -103,7 +101,7 @@ void KoTextSharedLoadingData::loadOdfStyles( KoOdfLoadingContext & context, KoSt
     addParagraphStyles( context, context.stylesReader().customStyles( "paragraph" ).values(), ContextDotXml | StylesDotXml, styleManager, insertOfficeStyles );
     addDefaultParagraphStyle( context, context.stylesReader().defaultStyle( "paragraph" ), styleManager );
 
-    addOutlineStyles( context );
+    addOutlineStyle( context, styleManager );
 
     kDebug(32500) << "content.xml: paragraph styles" << d->paragraphContentDotXmlStyles.count() << "character styles" << d->characterContentDotXmlStyles.count();
     kDebug(32500) << "styles.xml:  paragraph styles" << d->paragraphStylesDotXmlStyles.count() << "character styles" << d->characterStylesDotXmlStyles.count();
@@ -255,17 +253,14 @@ QList<QPair<QString, KoListStyle *> > KoTextSharedLoadingData::loadListStyles(Ko
     return listStyles;
 }
 
-void KoTextSharedLoadingData::addOutlineStyles( KoOdfLoadingContext & context )
+void KoTextSharedLoadingData::addOutlineStyle( KoOdfLoadingContext & context, KoStyleManager *styleManager )
 {
     // outline-styles used e.g. for headers
-    KoXmlElement outlineStyle = KoXml::namedItemNS( context.stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
-    KoXmlElement tag;
-    forEachElement( tag, outlineStyle )
-    {
-        kDebug(32500) << "outline-listStyle =" << tag.localName();
-        KoListLevelProperties properties;
-        properties.loadOdf( context, tag );
-        d->outlineStyles.setLevelProperties( properties );
+    KoXmlElement outlineStyleElem = KoXml::namedItemNS( context.stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
+    if (styleManager && outlineStyleElem.isElement()) {
+        KoListStyle *outlineStyle = new KoListStyle();
+        outlineStyle->loadOdf(context, outlineStyleElem);
+        styleManager->setOutlineStyle(outlineStyle); // style manager owns it now. he will take care of deleting it.
     }
 }
 
@@ -284,7 +279,3 @@ KoListStyle * KoTextSharedLoadingData::listStyle(const QString &name, bool style
     return stylesDotXml ? d->listStylesDotXmlStyles.value(name) : d->listContentDotXmlStyles.value(name);
 }
 
-KoListLevelProperties KoTextSharedLoadingData::outlineLevel( int level, const KoListLevelProperties& defaultprops )
-{
-    return d->outlineStyles.hasLevelProperties( level ) ? d->outlineStyles.levelProperties( level ) : defaultprops;
-}

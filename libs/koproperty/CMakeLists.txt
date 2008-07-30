@@ -6,26 +6,26 @@ include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${CMAKE_SOURCE_
 
 
 set(libkopropertyeditors_SRCS
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/booledit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/coloredit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/combobox.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/cursoredit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/dateedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/datetimeedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/dummywidget.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/fontedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/linestyledit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/pixmapedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/pointedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/rectedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/sizeedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/sizepolicyedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/spinbox.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/stringedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/stringlistedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/symbolcombo.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/timeedit.cpp
-	${CMAKE_SOURCE_DIR}/libs/koproperty/editors/urledit.cpp
+  editors/booledit.cpp
+  editors/coloredit.cpp
+  editors/combobox.cpp
+  editors/cursoredit.cpp
+  editors/dateedit.cpp
+  editors/datetimeedit.cpp
+  editors/dummywidget.cpp
+  editors/fontedit.cpp
+  editors/linestyledit.cpp
+  editors/pixmapedit.cpp
+  editors/pointedit.cpp
+  editors/rectedit.cpp
+  editors/sizeedit.cpp
+  editors/sizepolicyedit.cpp
+  editors/spinbox.cpp
+  editors/stringedit.cpp
+  editors/stringlistedit.cpp
+  editors/symbolcombo.cpp
+  editors/timeedit.cpp
+  editors/urledit.cpp
 )
 
 ########### next target ###############

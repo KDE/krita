@@ -1262,7 +1262,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     int tp0, tn0, tp1, tn1;
 
     int horizontal = 0;
-    float opacity = 0.0;
+    float opacity = OPACITY_OPAQUE;
 
     tp0 = startWidth/2;
     tn0 = startWidth/2;
@@ -1276,8 +1276,8 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
 
     int x0 = start.x();
     int y0 = start.y();
-    int x1 = start.x();
-    int y1 = start.y();
+    int x1 = end.x();
+    int y1 = end.y();
 
     dx = x1 - x0; // run of general line
     dy = y1 - y0; // rise of general line

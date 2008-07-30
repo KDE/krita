@@ -46,82 +46,82 @@ class GroupWidget;
  */
 class EditorItem : public K3ListViewItem
 {
-	public:
-		typedef Q3AsciiDict<EditorItem> Dict;
+  public:
+    typedef Q3AsciiDict<EditorItem> Dict;
 
-		/*! Creates an EditorItem child of \a parent, associated to \a property.
-		 It \a property has not desctiption set, its name (i.e. not i18n'ed) is reused.
-		*/
-		EditorItem(Editor *editor, EditorItem *parent, Property *property,
-			Q3ListViewItem *after=0);
+    /*! Creates an EditorItem child of \a parent, associated to \a property.
+     It \a property has not desctiption set, its name (i.e. not i18n'ed) is reused.
+    */
+    EditorItem(Editor *editor, EditorItem *parent, Property *property,
+      Q3ListViewItem *after=0);
 
-		//! Two helper contructors for subclass
-		explicit EditorItem(K3ListView *parent);
-		EditorItem(EditorItem *parent, const QString &text);
-		EditorItem(EditorItem *parent, EditorItem *after, const QString &text);
+    //! Two helper contructors for subclass
+    explicit EditorItem(K3ListView *parent);
+    EditorItem(EditorItem *parent, const QString &text);
+    EditorItem(EditorItem *parent, EditorItem *after, const QString &text);
 
-		virtual ~EditorItem();
+    virtual ~EditorItem();
 
-		//! \return a pointer to the property associated to this item.
-		Property* property();
+    //! \return a pointer to the property associated to this item.
+    Property* property();
 
-	protected:
-		/*! Reimplemented from K3ListViewItem to draw custom contents. Properties names are wriiten in bold if
-		    modified. Also takes care of drawing borders around the cells as well as pixmaps or colors if necessary.
-		*/
-		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+  protected:
+    /*! Reimplemented from K3ListViewItem to draw custom contents. Properties names are wriiten in bold if
+        modified. Also takes care of drawing borders around the cells as well as pixmaps or colors if necessary.
+    */
+    virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 
-		/*! Reimplemented from K3ListViewItem to draw custom contents. It takes care of drawing the [+] and [-]
-		    signs only if the item has children.
-		*/
-		virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
+    /*! Reimplemented from K3ListViewItem to draw custom contents. It takes care of drawing the [+] and [-]
+        signs only if the item has children.
+    */
+    virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
 
-		virtual void paintFocus(QPainter * p, const QColorGroup & cg, const QRect & r);
+    virtual void paintFocus(QPainter * p, const QColorGroup & cg, const QRect & r);
 
-		virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
+    virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
 
-		virtual void setHeight( int height );
+    virtual void setHeight( int height );
 
-	protected:
-		EditorItemPrivate * const d;
+  protected:
+    EditorItemPrivate * const d;
 };
 
 //! @internal
 class EditorGroupItem : public EditorItem
 {
-	public:
-		EditorGroupItem(EditorItem *parent, EditorItem *after, const QString &text, 
-			const QString &icon, int sortOrder);
-		EditorGroupItem(EditorItem *parent, const QString &text, 
-			const QString &icon, int sortOrder);
-		virtual ~EditorGroupItem();
+  public:
+    EditorGroupItem(EditorItem *parent, EditorItem *after, const QString &text, 
+      const QString &icon, int sortOrder);
+    EditorGroupItem(EditorItem *parent, const QString &text, 
+      const QString &icon, int sortOrder);
+    virtual ~EditorGroupItem();
 
 //		void  setLabel(QLabel *label) { m_label = label; }
-		QWidget*  label() const;
+    QWidget*  label() const;
 
-	protected:
-		virtual void init(const QString &icon);
+  protected:
+    virtual void init(const QString &icon);
 
-		/*! Reimplemented from K3ListViewItem to draw custom contents. */
-		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
-		virtual void setup();
-		virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
+    /*! Reimplemented from K3ListViewItem to draw custom contents. */
+    virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+    virtual void setup();
+    virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
 
-		GroupWidget *m_label;
-		int m_sortOrder;
+    GroupWidget *m_label;
+    int m_sortOrder;
 };
 
 //! @internal
 class EditorDummyItem : public EditorItem
 {
-	public:
-		explicit EditorDummyItem(K3ListView *parent);
-		virtual ~EditorDummyItem();
+  public:
+    explicit EditorDummyItem(K3ListView *parent);
+    virtual ~EditorDummyItem();
 
-	protected:
-		virtual void setup();
-		/*virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
-		virtual void paintFocus(QPainter * p, const QColorGroup & cg, const QRect & r);*/
+  protected:
+    virtual void setup();
+    /*virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+    virtual void paintFocus(QPainter * p, const QColorGroup & cg, const QRect & r);*/
 };
 
 }

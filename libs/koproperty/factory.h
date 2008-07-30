@@ -39,19 +39,19 @@ class FactoryManagerInternal;
 //! \brief A prototype for custom property factory
 class KOPROPERTY_EXPORT CustomPropertyFactory : public QObject
 {
-	public:
-		explicit CustomPropertyFactory(QObject *parent);
-		virtual ~CustomPropertyFactory();
+  public:
+    explicit CustomPropertyFactory(QObject *parent);
+    virtual ~CustomPropertyFactory();
 
-		/*! \return a new instance of custom property for \a parent.
-		 Implement this for property types you want to support.
-		 Use parent->type() to get type of the property. */
-		virtual CustomProperty* createCustomProperty(Property *parent) = 0;
+    /*! \return a new instance of custom property for \a parent.
+     Implement this for property types you want to support.
+     Use parent->type() to get type of the property. */
+    virtual CustomProperty* createCustomProperty(Property *parent) = 0;
 
-		/*! \return a new instance of custom property for \a property.
-		 Implement this for property editor types you want to support.
-		 Use parent->type() to get type of the property. */
-		virtual Widget* createCustomWidget(Property *property) = 0;
+    /*! \return a new instance of custom property for \a property.
+     Implement this for property editor types you want to support.
+     Use parent->type() to get type of the property. */
+    virtual Widget* createCustomWidget(Property *property) = 0;
 };
 
 //! \brief Manages factories providing custom editors and properties.
@@ -109,56 +109,56 @@ class KOPROPERTY_EXPORT CustomPropertyFactory : public QObject
  */
 class KOPROPERTY_EXPORT FactoryManager : public QObject
 {
-	public:
-		/*! Registers a custom factory \a factory for handling property editor for \a editorType.
-		This custom factory will be used before defaults when widgetForProperty() is called.
-		\a creator is not owned by this Factory object, but it's good idea
-		to instantiate CustomPropertyFactory object itself as a child of Factory parent. For example:
-		\code
-			MyCustomPropertyFactory *f = new MyCustomPropertyFactory(KoProperty::Factory::self());
-			KoProperty::Factory::self()->registerEditor( MyCustomType, f );
-		\endcode */
-		void registerFactoryForEditor(int editorType, CustomPropertyFactory *factory);
+  public:
+    /*! Registers a custom factory \a factory for handling property editor for \a editorType.
+    This custom factory will be used before defaults when widgetForProperty() is called.
+    \a creator is not owned by this Factory object, but it's good idea
+    to instantiate CustomPropertyFactory object itself as a child of Factory parent. For example:
+    \code
+      MyCustomPropertyFactory *f = new MyCustomPropertyFactory(KoProperty::Factory::self());
+      KoProperty::Factory::self()->registerEditor( MyCustomType, f );
+    \endcode */
+    void registerFactoryForEditor(int editorType, CustomPropertyFactory *factory);
 
-		/*! Registers custom factory \a factory for handling property editors for \a editorTypes.
-		 @see registerFactoryForEditor(). */
-		void registerFactoryForEditors(const QList<int> &editorTypes, CustomPropertyFactory *factory);
+    /*! Registers custom factory \a factory for handling property editors for \a editorTypes.
+     @see registerFactoryForEditor(). */
+    void registerFactoryForEditors(const QList<int> &editorTypes, CustomPropertyFactory *factory);
 
-		/*! \return custom factory for type \a type or NULL if there
-		 is no such property type registered.
-		 To create a custom widget createWidgetForProperty() should be rather used. */
-		CustomPropertyFactory *factoryForEditorType(int type);
+    /*! \return custom factory for type \a type or NULL if there
+     is no such property type registered.
+     To create a custom widget createWidgetForProperty() should be rather used. */
+    CustomPropertyFactory *factoryForEditorType(int type);
 
-		/*! Creates and returns the editor for given property type.
-		Warning: editor and viewer widgets won't have parent widget. Property editor
-		cares about reparenting and deletion of returned widgets in machines.
-		If \a createWidget is false, just create child properties, not widget.*/
-		Widget* createWidgetForProperty(Property *property);
+    /*! Creates and returns the editor for given property type.
+    Warning: editor and viewer widgets won't have parent widget. Property editor
+    cares about reparenting and deletion of returned widgets in machines.
+    If \a createWidget is false, just create child properties, not widget.*/
+    Widget* createWidgetForProperty(Property *property);
 
-		/*! Registers a custom factory that handles a CustomProperty of a type \a type.
-		 This function will be called every time a property of \a type is created. */
-		void registerFactoryForProperty(int propertyType, CustomPropertyFactory *factory);
+    /*! Registers a custom factory that handles a CustomProperty of a type \a type.
+     This function will be called every time a property of \a type is created. */
+    void registerFactoryForProperty(int propertyType, CustomPropertyFactory *factory);
 
-		/*! Registers a custom property factory that handles a CustomProperty for \a types.
-		 @see registerFactoryForProperty() */
-		void registerFactoryForProperties(const QList<int> &propertyTypes,
-			CustomPropertyFactory *factory);
+    /*! Registers a custom property factory that handles a CustomProperty for \a types.
+     @see registerFactoryForProperty() */
+    void registerFactoryForProperties(const QList<int> &propertyTypes,
+      CustomPropertyFactory *factory);
 
-		/*! This function is called in Property::Property() to create (optional)
-		  custom property. It creates the custom property for built-in types, or
-		  calls one of createCustomProperty function previously registered for other types. */
-		CustomProperty* createCustomProperty(Property *parent);
+    /*! This function is called in Property::Property() to create (optional)
+      custom property. It creates the custom property for built-in types, or
+      calls one of createCustomProperty function previously registered for other types. */
+    CustomProperty* createCustomProperty(Property *parent);
 
-		/*! \return a pointer to a property factory instance.*/
-		static FactoryManager* self();
+    /*! \return a pointer to a property factory instance.*/
+    static FactoryManager* self();
 
-	protected:
-		FactoryManager();
-		~FactoryManager();
+  protected:
+    FactoryManager();
+    ~FactoryManager();
 
-		class Private;
-		Private * const d;
-		friend class FactoryManagerInternal;
+    class Private;
+    Private * const d;
+    friend class FactoryManagerInternal;
 };
 
 }

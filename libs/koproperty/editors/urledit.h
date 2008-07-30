@@ -29,25 +29,25 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT URLEdit : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit URLEdit(Property *property, QWidget *parent=0);
-		virtual ~URLEdit();
+  public:
+    explicit URLEdit(Property *property, QWidget *parent=0);
+    virtual ~URLEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void setProperty(Property *property);
+    virtual void setProperty(Property *property);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
-	protected slots:
-		void slotValueChanged(const QString &url);
+  protected slots:
+    void slotValueChanged(const QString &url);
 
-	private:
-		KUrlRequester *m_edit;
+  private:
+    KUrlRequester *m_edit;
 };
 
 }

@@ -30,25 +30,25 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT LineStyleEdit : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit LineStyleEdit(Property *property, QWidget *parent=0);
-		virtual ~LineStyleEdit();
+  public:
+    explicit LineStyleEdit(Property *property, QWidget *parent=0);
+    virtual ~LineStyleEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
-	protected slots:
-		void slotValueChanged(int value);
+  protected slots:
+    void slotValueChanged(int value);
 
-	private:
-		KoLineStyleSelector *m_edit;
+  private:
+    KoLineStyleSelector *m_edit;
 };
 
 }

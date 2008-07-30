@@ -36,19 +36,19 @@ using namespace KoProperty;
 DateEdit::DateEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
-	QHBoxLayout *l = new QHBoxLayout(this);
-	l->setMargin(0);
-	l->setSpacing(0);
+  QHBoxLayout *l = new QHBoxLayout(this);
+  l->setMargin(0);
+  l->setSpacing(0);
 
-	m_edit = new Q3DateEdit(this);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+  m_edit = new Q3DateEdit(this);
+  m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  m_edit->setMinimumHeight(5);
+  l->addWidget(m_edit);
 
-	setLeavesTheSpaceForRevertButton(true);
+  setLeavesTheSpaceForRevertButton(true);
 
-	setFocusWidget(m_edit);
-	connect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged(const QDate&)));
+  setFocusWidget(m_edit);
+  connect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged(const QDate&)));
 }
 
 DateEdit::~DateEdit()
@@ -57,37 +57,37 @@ DateEdit::~DateEdit()
 QVariant
 DateEdit::value() const
 {
-	return m_edit->date();
+  return m_edit->date();
 }
 
 void
 DateEdit::setValue(const QVariant &value, bool emitChange)
 {
-	m_edit->blockSignals(true);
-	m_edit->setDate(value.toDate());
-	m_edit->blockSignals(false);
-	if (emitChange)
-		emit valueChanged(this);
+  m_edit->blockSignals(true);
+  m_edit->setDate(value.toDate());
+  m_edit->blockSignals(false);
+  if (emitChange)
+    emit valueChanged(this);
 }
 
 void
 DateEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	p->eraseRect(r);
-	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
+  p->eraseRect(r);
+  Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
 }
 
 void
 DateEdit::slotValueChanged(const QDate&)
 {
-	emit valueChanged(this);
+  emit valueChanged(this);
 }
 
 void
 DateEdit::setReadOnlyInternal(bool readOnly)
 {
-	setVisibleFlag(!readOnly);
+  setVisibleFlag(!readOnly);
 }
 
 #include "dateedit.moc"

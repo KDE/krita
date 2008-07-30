@@ -29,22 +29,22 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT DummyWidget: public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit DummyWidget(Property *property, QWidget *parent=0);
-		virtual ~DummyWidget();
+  public:
+    explicit DummyWidget(Property *property, QWidget *parent=0);
+    virtual ~DummyWidget();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
-	private:
-		QVariant  m_value;
+  private:
+    QVariant  m_value;
 };
 
 }

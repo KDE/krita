@@ -61,22 +61,22 @@ CustomPropertyFactory::~CustomPropertyFactory()
 //! @internal
 class FactoryManager::Private
 {
-	public:
-		Private() {}
-		~Private() {}
+  public:
+    Private() {}
+    ~Private() {}
 
-		//registered widgets for property types
-		QHash<int, CustomPropertyFactory*> registeredWidgets;
-		QHash<int, CustomPropertyFactory*> registeredCustomProperties;
+    //registered widgets for property types
+    QHash<int, CustomPropertyFactory*> registeredWidgets;
+    QHash<int, CustomPropertyFactory*> registeredCustomProperties;
 };
 
 //! @internal
 class FactoryManagerInternal
 {
-	public:
-		FactoryManagerInternal() : manager( new FactoryManager() ) {}
-		~FactoryManagerInternal() { delete manager; }
-		FactoryManager* manager;
+  public:
+    FactoryManagerInternal() : manager( new FactoryManager() ) {}
+    ~FactoryManagerInternal() { delete manager; }
+    FactoryManager* manager;
 };
 
 }
@@ -89,18 +89,18 @@ FactoryManager::FactoryManager()
 : QObject(0)
 , d( new Private )
 {
-	setObjectName("KoProperty::FactoryManager");
+  setObjectName("KoProperty::FactoryManager");
 }
 
 FactoryManager::~FactoryManager()
 {
-	delete d;
+  delete d;
 }
 
 FactoryManager*
 FactoryManager::self()
 {
-	return _int->manager;
+  return _int->manager;
 }
 
 ///////////////////  Functions related to widgets /////////////////////////////////////
@@ -108,119 +108,119 @@ FactoryManager::self()
 void
 FactoryManager::registerFactoryForEditor(int editorType, CustomPropertyFactory *widgetFactory)
 {
-	if(!widgetFactory)
-		return;
-	if(d->registeredWidgets.contains(editorType))
-		kopropertywarn << "FactoryManager::registerFactoryForEditor(): "
-		"Overriding already registered custom widget type \"" << editorType << "\"" << endl;
-	d->registeredWidgets.insert(editorType, widgetFactory);
+  if(!widgetFactory)
+    return;
+  if(d->registeredWidgets.contains(editorType))
+    kopropertywarn << "FactoryManager::registerFactoryForEditor(): "
+    "Overriding already registered custom widget type \"" << editorType << "\"" << endl;
+  d->registeredWidgets.insert(editorType, widgetFactory);
 }
 
 void
 FactoryManager::registerFactoryForEditors(const QList<int> &editorTypes, CustomPropertyFactory *factory)
 {
-	QList<int>::ConstIterator endIt = editorTypes.constEnd();
-	for(QList<int>::ConstIterator it = editorTypes.constBegin(); it != endIt; ++it)
-		registerFactoryForEditor(*it, factory);
+  QList<int>::ConstIterator endIt = editorTypes.constEnd();
+  for(QList<int>::ConstIterator it = editorTypes.constBegin(); it != endIt; ++it)
+    registerFactoryForEditor(*it, factory);
 }
 
 CustomPropertyFactory *
 FactoryManager::factoryForEditorType(int type)
 {
-	return d->registeredWidgets[type];
+  return d->registeredWidgets[type];
 }
 
 Widget*
 FactoryManager::createWidgetForProperty(Property *property)
 {
-	if(!property)
-		return 0;
+  if(!property)
+    return 0;
 
-	const int type = property->type();
+  const int type = property->type();
 
-	CustomPropertyFactory *factory = d->registeredWidgets[type];
-	if (factory)
-		return factory->createCustomWidget(property);
+  CustomPropertyFactory *factory = d->registeredWidgets[type];
+  if (factory)
+    return factory->createCustomWidget(property);
 
-	//handle combobox-based widgets:
-	if (type==Cursor)
-		return new CursorEdit(property);
+  //handle combobox-based widgets:
+  if (type==Cursor)
+    return new CursorEdit(property);
 
-	if (property->listData()) {
-		return new ComboBox(property);
-	}
+  if (property->listData()) {
+    return new ComboBox(property);
+  }
 
-	//handle other widget types:
-	switch(type)
-	{
-		// Default QVariant types
-		case String:
-		case CString:
-			return new StringEdit(property);
-		case Rect_X:
-		case Rect_Y:
-		case Rect_Width:
-		case Rect_Height:
-		case Point_X:
-		case Point_Y:
-		case Size_Width:
-		case Size_Height:
-		case SizePolicy_HorStretch:
-		case SizePolicy_VerStretch:
-		case Integer:
-			return new IntEdit(property);
-		case Double:
-			return new DoubleEdit(property);
-		case Boolean: {
-			//boolean editors can optionally accept 3rd state:
-			QVariant thirdState = property->option("3rdState");
-			if (thirdState.toString().isEmpty())
-				return new BoolEdit(property);
-			else
-				return new ThreeStateBoolEdit(property);
-		}
-		case Date:
-			return new DateEdit(property);
-		case Time:
-			return new TimeEdit(property);
-		case DateTime:
-			return new DateTimeEdit(property);
-		case StringList:
-			return new StringListEdit(property);
-		case Color:
-			return new ColorButton(property);
-		case Font:
-			return new FontEdit(property);
-		case Pixmap:
-			return new PixmapEdit(property);
+  //handle other widget types:
+  switch(type)
+  {
+    // Default QVariant types
+    case String:
+    case CString:
+      return new StringEdit(property);
+    case Rect_X:
+    case Rect_Y:
+    case Rect_Width:
+    case Rect_Height:
+    case Point_X:
+    case Point_Y:
+    case Size_Width:
+    case Size_Height:
+    case SizePolicy_HorStretch:
+    case SizePolicy_VerStretch:
+    case Integer:
+      return new IntEdit(property);
+    case Double:
+      return new DoubleEdit(property);
+    case Boolean: {
+      //boolean editors can optionally accept 3rd state:
+      QVariant thirdState = property->option("3rdState");
+      if (thirdState.toString().isEmpty())
+        return new BoolEdit(property);
+      else
+        return new ThreeStateBoolEdit(property);
+    }
+    case Date:
+      return new DateEdit(property);
+    case Time:
+      return new TimeEdit(property);
+    case DateTime:
+      return new DateTimeEdit(property);
+    case StringList:
+      return new StringListEdit(property);
+    case Color:
+      return new ColorButton(property);
+    case Font:
+      return new FontEdit(property);
+    case Pixmap:
+      return new PixmapEdit(property);
 
-		// Other default types
-		case Symbol:
-			return new SymbolCombo(property);
-		//case FontName:
-		//	return new FontCombo(property);
-		case FileURL:
-		case DirectoryURL:
-			return new URLEdit(property);
-		case LineStyle:
-			return new LineStyleEdit(property);
+    // Other default types
+    case Symbol:
+      return new SymbolCombo(property);
+    //case FontName:
+    //	return new FontCombo(property);
+    case FileURL:
+    case DirectoryURL:
+      return new URLEdit(property);
+    case LineStyle:
+      return new LineStyleEdit(property);
 
-		// Composed types
-		case Size:
-			return new SizeEdit(property);
-		case Point:
-			return new PointEdit(property);
-		case Rect:
-			return new RectEdit(property);
-		case SizePolicy:
-			return new SizePolicyEdit(property);
+    // Composed types
+    case Size:
+      return new SizeEdit(property);
+    case Point:
+      return new PointEdit(property);
+    case Rect:
+      return new RectEdit(property);
+    case SizePolicy:
+      return new SizePolicyEdit(property);
 
-		case List:
-		case Map:
-		default:
-			kopropertywarn << "No editor for property " << property->name() << " of type " << property->type() << endl;
-			return new DummyWidget(property);
-	}
+    case List:
+    case Map:
+    default:
+      kopropertywarn << "No editor for property " << property->name() << " of type " << property->type() << endl;
+      return new DummyWidget(property);
+  }
 }
 
 ///////////////////  Functions related to custom properties /////////////////////////////////////
@@ -228,45 +228,45 @@ FactoryManager::createWidgetForProperty(Property *property)
 void
 FactoryManager::registerFactoryForProperty(int propertyType, CustomPropertyFactory *factory)
 {
-	if(!factory)
-		return;
-	if(d->registeredCustomProperties.contains(propertyType))
-		kopropertywarn << "FactoryManager::registerFactoryForProperty(): "
-		"Overriding already registered custom property type \"" << propertyType << "\"" << endl;
-	
-	delete d->registeredCustomProperties[ propertyType ];
-	d->registeredCustomProperties.insert(propertyType, factory);
+  if(!factory)
+    return;
+  if(d->registeredCustomProperties.contains(propertyType))
+    kopropertywarn << "FactoryManager::registerFactoryForProperty(): "
+    "Overriding already registered custom property type \"" << propertyType << "\"" << endl;
+  
+  delete d->registeredCustomProperties[ propertyType ];
+  d->registeredCustomProperties.insert(propertyType, factory);
 }
 
 void
 FactoryManager::registerFactoryForProperties(const QList<int> &propertyTypes, 
-	CustomPropertyFactory *factory)
+  CustomPropertyFactory *factory)
 {
-	QList<int>::ConstIterator endIt = propertyTypes.constEnd();
-	for(QList<int>::ConstIterator it = propertyTypes.constBegin(); it != endIt; ++it)
-		registerFactoryForProperty(*it, factory);
+  QList<int>::ConstIterator endIt = propertyTypes.constEnd();
+  for(QList<int>::ConstIterator it = propertyTypes.constBegin(); it != endIt; ++it)
+    registerFactoryForProperty(*it, factory);
 }
 
 CustomProperty*
 FactoryManager::createCustomProperty(Property *parent)
 {
-	const int type = parent->type();
-	CustomPropertyFactory *factory = d->registeredWidgets[type];
-	if (factory)
-		return factory->createCustomProperty(parent);
+  const int type = parent->type();
+  CustomPropertyFactory *factory = d->registeredWidgets[type];
+  if (factory)
+    return factory->createCustomProperty(parent);
 
-	switch(type) {
-		case Size: case Size_Width: case Size_Height:
-			return new SizeCustomProperty(parent);
-		case Point: case Point_X: case Point_Y:
-			return new PointCustomProperty(parent);
-		case Rect: case Rect_X: case Rect_Y: case Rect_Width: case Rect_Height:
-			return new RectCustomProperty(parent);
-		case SizePolicy: case SizePolicy_HorStretch: case SizePolicy_VerStretch:
-		case SizePolicy_HorData: case SizePolicy_VerData:
-			return new SizePolicyCustomProperty(parent);
-		default:
-			return 0;
-	}
+  switch(type) {
+    case Size: case Size_Width: case Size_Height:
+      return new SizeCustomProperty(parent);
+    case Point: case Point_X: case Point_Y:
+      return new PointCustomProperty(parent);
+    case Rect: case Rect_X: case Rect_Y: case Rect_Width: case Rect_Height:
+      return new RectCustomProperty(parent);
+    case SizePolicy: case SizePolicy_HorStretch: case SizePolicy_VerStretch:
+    case SizePolicy_HorData: case SizePolicy_VerData:
+      return new SizePolicyCustomProperty(parent);
+    default:
+      return 0;
+  }
 }
 

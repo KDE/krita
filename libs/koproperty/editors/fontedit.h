@@ -32,26 +32,26 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT FontEdit : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit FontEdit(Property *property, QWidget *parent=0);
-		virtual ~FontEdit();
+  public:
+    explicit FontEdit(Property *property, QWidget *parent=0);
+    virtual ~FontEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
-		virtual bool eventFilter(QObject* watched, QEvent* e);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
+    virtual bool eventFilter(QObject* watched, QEvent* e);
 
-	protected slots:
-		void  slotValueChanged(const QFont &font);
+  protected slots:
+    void  slotValueChanged(const QFont &font);
 
-	private:
-		FontEditRequester *m_edit;
+  private:
+    FontEditRequester *m_edit;
 };
 
 }

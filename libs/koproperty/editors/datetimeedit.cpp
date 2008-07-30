@@ -36,18 +36,18 @@ using namespace KoProperty;
 DateTimeEdit::DateTimeEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
-	QHBoxLayout *l = new QHBoxLayout(this);
-	l->setMargin(0);
-	l->setSpacing(0);
+  QHBoxLayout *l = new QHBoxLayout(this);
+  l->setMargin(0);
+  l->setSpacing(0);
 
-	m_edit = new Q3DateTimeEdit(this);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+  m_edit = new Q3DateTimeEdit(this);
+  m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  m_edit->setMinimumHeight(5);
+  l->addWidget(m_edit);
 
-	setLeavesTheSpaceForRevertButton(true);
-	setFocusWidget(m_edit);
-	connect(m_edit, SIGNAL(valueChanged(const QDateTime&)), this, SLOT(slotValueChanged(const QDateTime&)));
+  setLeavesTheSpaceForRevertButton(true);
+  setFocusWidget(m_edit);
+  connect(m_edit, SIGNAL(valueChanged(const QDateTime&)), this, SLOT(slotValueChanged(const QDateTime&)));
 }
 
 DateTimeEdit::~DateTimeEdit()
@@ -56,24 +56,24 @@ DateTimeEdit::~DateTimeEdit()
 QVariant
 DateTimeEdit::value() const
 {
-	return m_edit->dateTime();
+  return m_edit->dateTime();
 }
 
 void
 DateTimeEdit::setValue(const QVariant &value, bool emitChange)
 {
-	m_edit->blockSignals(true);
-	m_edit->setDateTime(value.toDateTime());
-	m_edit->blockSignals(false);
-	if (emitChange)
-		emit valueChanged(this);
+  m_edit->blockSignals(true);
+  m_edit->setDateTime(value.toDateTime());
+  m_edit->blockSignals(false);
+  if (emitChange)
+    emit valueChanged(this);
 }
 
 void
 DateTimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	p->eraseRect(r);
-	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */ ));
+  p->eraseRect(r);
+  Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */ ));
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
 //		KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */ ));
 }
@@ -81,13 +81,13 @@ DateTimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, con
 void
 DateTimeEdit::slotValueChanged(const QDateTime&)
 {
-	emit valueChanged(this);
+  emit valueChanged(this);
 }
 
 void
 DateTimeEdit::setReadOnlyInternal(bool readOnly)
 {
-	setVisibleFlag(!readOnly);
+  setVisibleFlag(!readOnly);
 }
 
 #include "datetimeedit.moc"

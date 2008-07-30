@@ -34,45 +34,45 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT BoolEdit : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit BoolEdit(Property *property, QWidget *parent=0);
-		virtual ~BoolEdit();
+  public:
+    explicit BoolEdit(Property *property, QWidget *parent=0);
+    virtual ~BoolEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected slots:
-		void  slotValueChanged(bool state);
+  protected slots:
+    void  slotValueChanged(bool state);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
-		void setState(bool state);
-		virtual void resizeEvent(QResizeEvent *ev);
-		virtual bool eventFilter(QObject* watched, QEvent* e);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
+    void setState(bool state);
+    virtual void resizeEvent(QResizeEvent *ev);
+    virtual bool eventFilter(QObject* watched, QEvent* e);
 
-	private:
-		QToolButton *m_toggle;
-		QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
+  private:
+    QToolButton *m_toggle;
+    QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 };
 
 class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		ThreeStateBoolEdit(Property *property, QWidget *parent=0);
-		virtual ~ThreeStateBoolEdit();
+  public:
+    ThreeStateBoolEdit(Property *property, QWidget *parent=0);
+    virtual ~ThreeStateBoolEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void setProperty(Property *property);
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-		QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
+    virtual void setProperty(Property *property);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 };
 
 }

@@ -29,23 +29,23 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT StringEdit : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit StringEdit(Property *property, QWidget *parent=0);
-		virtual ~StringEdit();
+  public:
+    explicit StringEdit(Property *property, QWidget *parent=0);
+    virtual ~StringEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
-	protected slots:
-		void slotValueChanged(const QString&);
+  protected slots:
+    void slotValueChanged(const QString&);
 
-	protected:
-		QLineEdit *m_edit;
+  protected:
+    QLineEdit *m_edit;
 };
 
 }

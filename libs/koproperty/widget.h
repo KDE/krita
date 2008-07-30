@@ -38,86 +38,86 @@ class Property;
 */
 class KOPROPERTY_EXPORT Widget : public QWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		Widget(Property *property, QWidget *parent);
-		virtual ~Widget();
+  public:
+    Widget(Property *property, QWidget *parent);
+    virtual ~Widget();
 
-		/*! \return the value currently entered in the item editor widget.*/
-		virtual QVariant value() const = 0;
+    /*! \return the value currently entered in the item editor widget.*/
+    virtual QVariant value() const = 0;
 
-		/*! Sets the value shown in the item editor widget. Set emitChange to false
-		if you don't want to emit propertyChanged signal.*/
-		virtual void setValue(const QVariant &value, bool emitChange=true) = 0;
+    /*! Sets the value shown in the item editor widget. Set emitChange to false
+    if you don't want to emit propertyChanged signal.*/
+    virtual void setValue(const QVariant &value, bool emitChange=true) = 0;
 
-		/*! \return edited property. */
-		virtual Property* property() const;
+    /*! \return edited property. */
+    virtual Property* property() const;
 
-		/*! Sets the name of edited property.*/
-		virtual void setProperty(Property *property);
+    /*! Sets the name of edited property.*/
+    virtual void setProperty(Property *property);
 
-		/*! Function to draw a property viewer when the item editor isn't shown.*/
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    /*! Function to draw a property viewer when the item editor isn't shown.*/
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-		/*! Reverts the property value to previous setting.*/
-		virtual void undo();
+    /*! Reverts the property value to previous setting.*/
+    virtual void undo();
 
-		/*! Sets the widget that will receive focus when the Widget is selected. */
-		void setFocusWidget(QWidget*focusProxy);
+    /*! Sets the widget that will receive focus when the Widget is selected. */
+    void setFocusWidget(QWidget*focusProxy);
 
-		//! \sa d->leaveTheSpaceForRevertButton description
-		bool leavesTheSpaceForRevertButton() const;
+    //! \sa d->leaveTheSpaceForRevertButton description
+    bool leavesTheSpaceForRevertButton() const;
 
-		/*! \return true if this editor has borders. 
-		 Editors with borders have slightly larger height and width set by property editor widget. */
-		bool hasBorders() const;
+    /*! \return true if this editor has borders. 
+     Editors with borders have slightly larger height and width set by property editor widget. */
+    bool hasBorders() const;
 
-		/*! \return true if the widget is read-only. 
-		 Read-only property widget does not allow to change its property value.
-		 The flag is inherited from the underlying property and property set.
-		 Editor::setValue() method will still work, however.
-		 @see Set::isReadOnly(). */
-		bool isReadOnly() const;
+    /*! \return true if the widget is read-only. 
+     Read-only property widget does not allow to change its property value.
+     The flag is inherited from the underlying property and property set.
+     Editor::setValue() method will still work, however.
+     @see Set::isReadOnly(). */
+    bool isReadOnly() const;
 
-		/*! Sets this widget to be read-only. 
-		 Disables or enables editing in the appropriate widget(s).
-		 @see isReadOnly() */
-		void setReadOnly(bool readOnly);
+    /*! Sets this widget to be read-only. 
+     Disables or enables editing in the appropriate widget(s).
+     @see isReadOnly() */
+    void setReadOnly(bool readOnly);
 
-		/*! @internal
-		 This flag is checked by Editor when the widget is about to show. */
-		bool visibleFlag() const;
+    /*! @internal
+     This flag is checked by Editor when the widget is about to show. */
+    bool visibleFlag() const;
 
-	signals:
-		void valueChanged(Widget *widget);
-		void acceptInput(Widget *widget);
-		void rejectInput(Widget *widget);
+  signals:
+    void valueChanged(Widget *widget);
+    void acceptInput(Widget *widget);
+    void rejectInput(Widget *widget);
 
-	protected:
-		void setEditor(QWidget* editor);
+  protected:
+    void setEditor(QWidget* editor);
 
-		/*! Filters some event for main widget, eg Enter or Esc key presses. */
-		virtual bool eventFilter(QObject* watched, QEvent* e);
+    /*! Filters some event for main widget, eg Enter or Esc key presses. */
+    virtual bool eventFilter(QObject* watched, QEvent* e);
 
-		virtual void resizeEvent(QResizeEvent *e);
+    virtual void resizeEvent(QResizeEvent *e);
 
-		void setLeavesTheSpaceForRevertButton(bool set);
-		void setHasBorders(bool set);
+    void setLeavesTheSpaceForRevertButton(bool set);
+    void setHasBorders(bool set);
 
-		/*! Called by setReadOnly(bool).
-		 For implementation: for read-only you should disable editing in the appropriate widget(s). */
-		virtual void setReadOnlyInternal(bool readOnly) = 0;
+    /*! Called by setReadOnly(bool).
+     For implementation: for read-only you should disable editing in the appropriate widget(s). */
+    virtual void setReadOnlyInternal(bool readOnly) = 0;
 
-		/*! Used only in setReadOnlyInternal() to make the widget visible or invisible.
-		 This flag is checked by Editor when the widget is about to show. 
-		 By default widgets are visible. */
-		void setVisibleFlag(bool visible);
+    /*! Used only in setReadOnlyInternal() to make the widget visible or invisible.
+     This flag is checked by Editor when the widget is about to show. 
+     By default widgets are visible. */
+    void setVisibleFlag(bool visible);
 
-		/*! Sets a stylesheet that will remove thick borders from the widget @a w to make it more usable as the property editor item.*/
-		void setPlainWidgetStyle(QWidget* w);
-	protected:
-		WidgetPrivate * const d;
+    /*! Sets a stylesheet that will remove thick borders from the widget @a w to make it more usable as the property editor item.*/
+    void setPlainWidgetStyle(QWidget* w);
+  protected:
+    WidgetPrivate * const d;
 };
 
 }

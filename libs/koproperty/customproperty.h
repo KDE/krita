@@ -39,83 +39,83 @@ class Property;
 */
 class KOPROPERTY_EXPORT CustomProperty
 {
-	public:
-		explicit CustomProperty(Property *parent);
-		virtual ~CustomProperty();
+  public:
+    explicit CustomProperty(Property *parent);
+    virtual ~CustomProperty();
 
-		/*! This function is called by \ref Property::setValue() when
-		a custom property is set.
-		You don't have to modify the property value, it is done by Property class.
-		You just have to update child or parent properties value (m_property->parent()->setValue()).
-		Note that, when calling Property::setValue, you <b>need</b> to set
-		useCustomProperty (3rd parameter) to false, or there will be infinite recursion. */
-		virtual void setValue(const QVariant &value, bool rememberOldValue) = 0;
+    /*! This function is called by \ref Property::setValue() when
+    a custom property is set.
+    You don't have to modify the property value, it is done by Property class.
+    You just have to update child or parent properties value (m_property->parent()->setValue()).
+    Note that, when calling Property::setValue, you <b>need</b> to set
+    useCustomProperty (3rd parameter) to false, or there will be infinite recursion. */
+    virtual void setValue(const QVariant &value, bool rememberOldValue) = 0;
 
-		/*! This function is called by \ref Property::value() when
-		a custom property is set and \ref handleValue() is true.
-		You should return property's value, taken from parent's value.*/
-		virtual QVariant value() const = 0;
+    /*! This function is called by \ref Property::value() when
+    a custom property is set and \ref handleValue() is true.
+    You should return property's value, taken from parent's value.*/
+    virtual QVariant value() const = 0;
 
-		/*! Tells whether CustomProperty should be used to get the property's value.
-		CustomProperty::setValue() will always be called. But if hadleValue() == true,
-		then the value stored in the Property won't be changed.
-		You should return true for child properties, and false for others. */
-		virtual bool handleValue() const { return false; }
+    /*! Tells whether CustomProperty should be used to get the property's value.
+    CustomProperty::setValue() will always be called. But if hadleValue() == true,
+    then the value stored in the Property won't be changed.
+    You should return true for child properties, and false for others. */
+    virtual bool handleValue() const { return false; }
 
-	protected:
-		Property  *m_property;
+  protected:
+    Property  *m_property;
 
-		/*! This method emits the \a Set::propertyChanged() signal for all
-		sets our parent-property is registered in. */
-		void emitPropertyChanged();
+    /*! This method emits the \a Set::propertyChanged() signal for all
+    sets our parent-property is registered in. */
+    void emitPropertyChanged();
 };
 
 //! \brief Custom property implementation for QSize type
 class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 {
-	public:
-		explicit SizeCustomProperty(Property *parent);
-		~SizeCustomProperty();
+  public:
+    explicit SizeCustomProperty(Property *parent);
+    ~SizeCustomProperty();
 
-		void setValue(const QVariant &value, bool rememberOldValue);
-		QVariant value() const;
-		bool handleValue() const;
+    void setValue(const QVariant &value, bool rememberOldValue);
+    QVariant value() const;
+    bool handleValue() const;
 };
 
 //! \brief Custom property implementation for QPoint type
 class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 {
-	public:
-		explicit PointCustomProperty(Property *parent);
-		~PointCustomProperty();
+  public:
+    explicit PointCustomProperty(Property *parent);
+    ~PointCustomProperty();
 
-		void setValue(const QVariant &value, bool rememberOldValue);
-		QVariant value() const;
-		bool handleValue() const;
+    void setValue(const QVariant &value, bool rememberOldValue);
+    QVariant value() const;
+    bool handleValue() const;
 };
 
 //! \brief Custom property implementation for QRect type
 class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 {
-	public:
-		explicit RectCustomProperty(Property *parent);
-		~RectCustomProperty();
+  public:
+    explicit RectCustomProperty(Property *parent);
+    ~RectCustomProperty();
 
-		void setValue(const QVariant &value, bool rememberOldValue);
-		QVariant value() const;
-		bool handleValue() const;
+    void setValue(const QVariant &value, bool rememberOldValue);
+    QVariant value() const;
+    bool handleValue() const;
 };
 
 //! \brief Custom property implementation for QSizePolicy type
 class KOPROPERTY_EXPORT SizePolicyCustomProperty : public CustomProperty
 {
-	public:
-		explicit SizePolicyCustomProperty(Property *parent);
-		~SizePolicyCustomProperty();
+  public:
+    explicit SizePolicyCustomProperty(Property *parent);
+    ~SizePolicyCustomProperty();
 
-		void setValue(const QVariant &value, bool rememberOldValue);
-		QVariant value() const;
-		bool handleValue() const;
+    void setValue(const QVariant &value, bool rememberOldValue);
+    QVariant value() const;
+    bool handleValue() const;
 };
 
 }

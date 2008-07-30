@@ -31,26 +31,26 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT ColorButton : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit ColorButton(Property *property, QWidget *parent=0);
-		virtual ~ColorButton();
+  public:
+    explicit ColorButton(Property *property, QWidget *parent=0);
+    virtual ~ColorButton();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
-		virtual bool eventFilter(QObject* watched, QEvent* e);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
+    virtual bool eventFilter(QObject* watched, QEvent* e);
 
-	protected slots:
-		void  slotValueChanged(int index);
+  protected slots:
+    void  slotValueChanged(int index);
 
-	private:
-		KColorCombo  *m_edit;
+  private:
+    KColorCombo  *m_edit;
 };
 
 }

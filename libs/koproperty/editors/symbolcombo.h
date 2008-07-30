@@ -30,27 +30,27 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT SymbolCombo : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit SymbolCombo(Property *property, QWidget *parent=0);
-		virtual ~SymbolCombo();
+  public:
+    explicit SymbolCombo(Property *property, QWidget *parent=0);
+    virtual ~SymbolCombo();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
-	protected slots:
-		void  selectChar();
-		void  slotValueChanged(const QString &text);
+  protected slots:
+    void  selectChar();
+    void  slotValueChanged(const QString &text);
 
-	private:
-		QLineEdit  *m_edit;
-		QPushButton  *m_select;
+  private:
+    QLineEdit  *m_edit;
+    QPushButton  *m_select;
 };
 
 }

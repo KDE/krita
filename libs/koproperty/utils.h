@@ -29,17 +29,17 @@ namespace KoProperty {
 //! for a property editor-like panes.
 class KOPROPERTY_EXPORT GroupContainer : public QWidget
 {
-	public:
-		GroupContainer(const QString& title, QWidget* parent);
-		~GroupContainer();
+  public:
+    GroupContainer(const QString& title, QWidget* parent);
+    ~GroupContainer();
 
-		void setContents( QWidget* contents );
+    void setContents( QWidget* contents );
 
-	protected:
-		virtual bool event( QEvent * e );
+  protected:
+    virtual bool event( QEvent * e );
 
-		class Private;
-		Private * const d;
+    class Private;
+    Private * const d;
 };
 
 KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);

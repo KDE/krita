@@ -32,13 +32,13 @@
  */
 class Test : public KXmlGuiWindow
 {
-	Q_OBJECT
-	public:
-	    Test();
-		virtual ~Test();
+  Q_OBJECT
+  public:
+      Test();
+    virtual ~Test();
 
-	private:
-	KoProperty::Set *m_set;
+  private:
+  KoProperty::Set *m_set;
 };
 
 #endif

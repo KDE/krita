@@ -30,25 +30,25 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT DateEdit : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit DateEdit(Property *property, QWidget *parent=0);
-		virtual ~DateEdit();
+  public:
+    explicit DateEdit(Property *property, QWidget *parent=0);
+    virtual ~DateEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
-	protected slots:
-		void  slotValueChanged(const QDate &date);
+  protected slots:
+    void  slotValueChanged(const QDate &date);
 
-	private:
-		Q3DateEdit   *m_edit;
+  private:
+    Q3DateEdit   *m_edit;
 };
 
 }

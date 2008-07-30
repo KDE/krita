@@ -29,25 +29,25 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT TimeEdit : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit TimeEdit(Property *property, QWidget *parent=0);
-		virtual ~TimeEdit();
+  public:
+    explicit TimeEdit(Property *property, QWidget *parent=0);
+    virtual ~TimeEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
-	protected slots:
-		void slotValueChanged(const QTime &time);
+  protected slots:
+    void slotValueChanged(const QTime &time);
 
-	private:
-		Q3TimeEdit   *m_edit;
+  private:
+    Q3TimeEdit   *m_edit;
 };
 
 }

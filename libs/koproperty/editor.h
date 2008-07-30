@@ -71,125 +71,125 @@ class EditorItem;
  */
 class KOPROPERTY_EXPORT Editor : public K3ListView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		/*! Creates an empty Editor with \a parent as parent widget.
-		If \a autoSync == true, properties values are automatically synced as
-		soon as editor contents change (eg the user types text, etc.)
-		and the values are written in the property set. Otherwise, property set
-		is updated only when selected item changes or user presses Enter key.
-		Each property can overwrite this if its autoSync() == 0 or 1.
-		*/
-		Editor(QWidget *parent=0, bool autoSync=true, const char *name=0);
+  public:
+    /*! Creates an empty Editor with \a parent as parent widget.
+    If \a autoSync == true, properties values are automatically synced as
+    soon as editor contents change (eg the user types text, etc.)
+    and the values are written in the property set. Otherwise, property set
+    is updated only when selected item changes or user presses Enter key.
+    Each property can overwrite this if its autoSync() == 0 or 1.
+    */
+    Editor(QWidget *parent=0, bool autoSync=true, const char *name=0);
 
-		virtual ~Editor();
+    virtual ~Editor();
 
-		virtual QSize sizeHint() const;
-		virtual void setFocus();
-		virtual void setSorting( int column, bool ascending = true );
+    virtual QSize sizeHint() const;
+    virtual void setFocus();
+    virtual void setSorting( int column, bool ascending = true );
 
-	public slots:
-		/*! Populates the editor with an item for each property in the List.
-		  Also creates child items for composed properties. 
-		 If \a preservePrevSelection is true, previously selected editor 
-		 item will be kept selected, if present. */
-		void changeSet(Set *set, bool preservePrevSelection = false);
+  public slots:
+    /*! Populates the editor with an item for each property in the List.
+      Also creates child items for composed properties. 
+     If \a preservePrevSelection is true, previously selected editor 
+     item will be kept selected, if present. */
+    void changeSet(Set *set, bool preservePrevSelection = false);
 
-		/*! Populates the editor with an item for each property in the List.
-		  Also creates child items for composed properties. 
-		 If \a propertyToSelect is not empty, editor item for this property name
-		 will be selected, if present. */
-		void changeSet(Set *set, const QByteArray& propertyToSelect);
+    /*! Populates the editor with an item for each property in the List.
+      Also creates child items for composed properties. 
+     If \a propertyToSelect is not empty, editor item for this property name
+     will be selected, if present. */
+    void changeSet(Set *set, const QByteArray& propertyToSelect);
 
-		/*! Clears all items in the list.
-		   if \a editorOnly is true, then only the current editor will be cleared,
-			not the whole list.
-		*/
-		void clear(bool editorOnly = false);
+    /*! Clears all items in the list.
+       if \a editorOnly is true, then only the current editor will be cleared,
+      not the whole list.
+    */
+    void clear(bool editorOnly = false);
 
-		/*! Accept the changes mae to the current editor (as if the user had pressed Enter key) */
-		void acceptInput();
+    /*! Accept the changes mae to the current editor (as if the user had pressed Enter key) */
+    void acceptInput();
 
-	signals:
-		/*! Emitted when current property set has been changed. May be 0. */
-		void propertySetChanged(KoProperty::Set *set);
+  signals:
+    /*! Emitted when current property set has been changed. May be 0. */
+    void propertySetChanged(KoProperty::Set *set);
 
-	protected slots:
-		/*! Updates property widget in the editor.*/
-		void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+  protected slots:
+    /*! Updates property widget in the editor.*/
+    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-		void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
 
-		/*! Updates property in the list when new value is selected in the editor.*/
-		void slotWidgetValueChanged(Widget* widget);
+    /*! Updates property in the list when new value is selected in the editor.*/
+    void slotWidgetValueChanged(Widget* widget);
 
-		/*! Called when the user presses Enter to accet the input
-		   (only applies when autoSync() == false).*/
-		void slotWidgetAcceptInput(Widget *widget);
+    /*! Called when the user presses Enter to accet the input
+       (only applies when autoSync() == false).*/
+    void slotWidgetAcceptInput(Widget *widget);
 
-		/*! Called when the user presses Esc. Calls undo(). */
-		void slotWidgetRejectInput(Widget *widget);
+    /*! Called when the user presses Esc. Calls undo(). */
+    void slotWidgetRejectInput(Widget *widget);
 
-		/*! Called when current property set is about to be cleared. */
-		void slotSetWillBeCleared();
+    /*! Called when current property set is about to be cleared. */
+    void slotSetWillBeCleared();
 
-		/*! Called when current property set is about to be destroyed. */
-		void slotSetWillBeDeleted();
+    /*! Called when current property set is about to be destroyed. */
+    void slotSetWillBeDeleted();
 
-		/*! This slot is called when the user clicks the list view.
-		   It takes care of deleting current editor and
-		   creating a new editor for the newly selected item. */
-		void slotClicked(Q3ListViewItem *item);
+    /*! This slot is called when the user clicks the list view.
+       It takes care of deleting current editor and
+       creating a new editor for the newly selected item. */
+    void slotClicked(Q3ListViewItem *item);
 
-		/*! Undoes the last change in property editor.*/
-		void undo();
+    /*! Undoes the last change in property editor.*/
+    void undo();
 
-		void updateEditorGeometry(bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
-		void updateEditorGeometry(EditorItem *item, Widget* widget, bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
-		void updateGroupLabelsPosition();
+    void updateEditorGeometry(bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
+    void updateEditorGeometry(EditorItem *item, Widget* widget, bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
+    void updateGroupLabelsPosition();
 
-		void hideEditor();
+    void hideEditor();
 
-		void slotCollapsed(Q3ListViewItem *item);
-		void slotExpanded(Q3ListViewItem *item);
-		void slotColumnSizeChanged(int section);
-		void slotColumnSizeChanged(int section, int oldSize, int newSize);
-		void slotCurrentChanged(Q3ListViewItem *item);
-		void changeSetLater();
-		void selectItemLater();
-	protected:
-		/*! \return \ref Widget for given property.
-		Uses cache to store created widgets.
-		Cache will be cleared only with clearWidgetCache().*/
-		Widget *createWidgetForProperty(Property *property, bool changeWidgetProperty=true);
+    void slotCollapsed(Q3ListViewItem *item);
+    void slotExpanded(Q3ListViewItem *item);
+    void slotColumnSizeChanged(int section);
+    void slotColumnSizeChanged(int section, int oldSize, int newSize);
+    void slotCurrentChanged(Q3ListViewItem *item);
+    void changeSetLater();
+    void selectItemLater();
+  protected:
+    /*! \return \ref Widget for given property.
+    Uses cache to store created widgets.
+    Cache will be cleared only with clearWidgetCache().*/
+    Widget *createWidgetForProperty(Property *property, bool changeWidgetProperty=true);
 
-		/*! Deletes cached machines.*/
-		void clearWidgetCache();
+    /*! Deletes cached machines.*/
+    void clearWidgetCache();
 
-		void fill();
-		void addItem(const QByteArray &name, EditorItem *parent);
+    void fill();
+    void addItem(const QByteArray &name, EditorItem *parent);
 
-		void showUndoButton( bool show );
+    void showUndoButton( bool show );
 
-		virtual void resizeEvent(QResizeEvent *ev);
-		virtual bool eventFilter( QObject * watched, QEvent * e );
-		bool handleKeyPress(QKeyEvent* ev);
+    virtual void resizeEvent(QResizeEvent *ev);
+    virtual bool eventFilter( QObject * watched, QEvent * e );
+    bool handleKeyPress(QKeyEvent* ev);
 
-		virtual bool event( QEvent * e );
-		void updateFont();
+    virtual bool event( QEvent * e );
+    void updateFont();
 
-		virtual void contentsMousePressEvent( QMouseEvent * e );
+    virtual void contentsMousePressEvent( QMouseEvent * e );
 
-		/*! Used for changeSet(). */
-		void changeSetInternal(Set *set, bool preservePrevSelection, 
-			const QByteArray& propertyToSelect);
+    /*! Used for changeSet(). */
+    void changeSetInternal(Set *set, bool preservePrevSelection, 
+      const QByteArray& propertyToSelect);
 
-	private:
-		EditorPrivate * const d;
+  private:
+    EditorPrivate * const d;
 
-	friend class EditorItem;
-	friend class Widget;
+  friend class EditorItem;
+  friend class Widget;
 };
 
 }

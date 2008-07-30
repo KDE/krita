@@ -35,17 +35,17 @@ using namespace KoProperty;
 SizeEdit::SizeEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
-	setHasBorders(false);
-	m_edit = new QLabel(this);
-	m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
+  setHasBorders(false);
+  m_edit = new QLabel(this);
+  m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
 //	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-	QPalette pal = m_edit->palette();
-	pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
-	m_edit->setPalette(pal);
+  QPalette pal = m_edit->palette();
+  pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
+  m_edit->setPalette(pal);
 //	m_edit->setBackgroundMode(Qt::PaletteBase);
 //	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	m_edit->setMinimumHeight(5);
-	setEditor(m_edit);
+  m_edit->setMinimumHeight(5);
+  setEditor(m_edit);
 //	setFocusWidget(m_edit);
 }
 
@@ -55,27 +55,27 @@ SizeEdit::~SizeEdit()
 QVariant
 SizeEdit::value() const
 {
-	return m_value;
+  return m_value;
 }
 
 void
 SizeEdit::setValue(const QVariant &value, bool emitChange)
 {
-	m_value = value;
-	m_edit->setText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
-	this->setToolTip( QString("%1 x %2").arg(value.toSize().width()).arg(value.toSize().height()));
+  m_value = value;
+  m_edit->setText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
+  this->setToolTip( QString("%1 x %2").arg(value.toSize().width()).arg(value.toSize().height()));
 
-	if (emitChange)
-		emit valueChanged(this);
+  if (emitChange)
+    emit valueChanged(this);
 }
 
 void
 SizeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	QRect rect(r);
-	rect.setBottom(r.bottom()+1);
-	Widget::drawViewer(p, cg, rect, 
-		QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
+  QRect rect(r);
+  rect.setBottom(r.bottom()+1);
+  Widget::drawViewer(p, cg, rect, 
+    QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
 //		QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
@@ -84,7 +84,7 @@ SizeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 void
 SizeEdit::setReadOnlyInternal(bool readOnly)
 {
-	Q_UNUSED(readOnly);
+  Q_UNUSED(readOnly);
 }
 
 #include "sizeedit.moc"

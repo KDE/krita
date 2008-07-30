@@ -34,29 +34,29 @@ DummyWidget::~DummyWidget()
 QVariant
 DummyWidget::value() const
 {
-	return m_value;
+  return m_value;
 }
 
 void
 DummyWidget::setValue(const QVariant &value, bool emitChange)
 {
-	m_value = value;
-	if(emitChange)
-		emit valueChanged(this);
+  m_value = value;
+  if(emitChange)
+    emit valueChanged(this);
 }
 
 void
 DummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &)
 {
-	p->setBrush(cg.window());
-	p->setPen(Qt::NoPen);
-	p->drawRect(r);
+  p->setBrush(cg.window());
+  p->setPen(Qt::NoPen);
+  p->drawRect(r);
 }
 
 void
 DummyWidget::setReadOnlyInternal(bool readOnly)
 {
-	Q_UNUSED(readOnly);
+  Q_UNUSED(readOnly);
 }
 
 #include "dummywidget.moc"

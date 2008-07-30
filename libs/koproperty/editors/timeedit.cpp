@@ -37,17 +37,17 @@ using namespace KoProperty;
 TimeEdit::TimeEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
-	QHBoxLayout *l = new QHBoxLayout(this);
-	l->setMargin(0);
-	l->setSpacing(0);
+  QHBoxLayout *l = new QHBoxLayout(this);
+  l->setMargin(0);
+  l->setSpacing(0);
 
-	m_edit = new Q3TimeEdit(this);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+  m_edit = new Q3TimeEdit(this);
+  m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  m_edit->setMinimumHeight(5);
+  l->addWidget(m_edit);
 
-	setLeavesTheSpaceForRevertButton(true);
-	connect(m_edit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged(const QTime&)));
+  setLeavesTheSpaceForRevertButton(true);
+  connect(m_edit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged(const QTime&)));
 }
 
 TimeEdit::~TimeEdit()
@@ -56,37 +56,37 @@ TimeEdit::~TimeEdit()
 QVariant
 TimeEdit::value() const
 {
-	return m_edit->time();
+  return m_edit->time();
 }
 
 void
 TimeEdit::setValue(const QVariant &value, bool emitChange)
 {
-	m_edit->blockSignals(true);
-	m_edit->setTime(value.toTime());
-	m_edit->blockSignals(false);
-	if (emitChange)
-		emit valueChanged(this);
+  m_edit->blockSignals(true);
+  m_edit->setTime(value.toTime());
+  m_edit->blockSignals(false);
+  if (emitChange)
+    emit valueChanged(this);
 }
 
 void
 TimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 //	p->eraseRect(r);
-	Widget::drawViewer(p, cg, r, value.toDate().toString(Qt::LocalDate));
+  Widget::drawViewer(p, cg, r, value.toDate().toString(Qt::LocalDate));
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toDate().toString(Qt::LocalDate));
 }
 
 void
 TimeEdit::slotValueChanged(const QTime&)
 {
-	emit valueChanged(this);
+  emit valueChanged(this);
 }
 
 void
 TimeEdit::setReadOnlyInternal(bool readOnly)
 {
-	setVisibleFlag(!readOnly);
+  setVisibleFlag(!readOnly);
 }
 
 #include "timeedit.moc"

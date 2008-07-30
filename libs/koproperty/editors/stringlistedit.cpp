@@ -42,24 +42,24 @@ using namespace KoProperty;
 StringListEdit::StringListEdit(Property *property, QWidget *parent)
  : Widget(property, parent)
 {
-	setHasBorders(false);
-	QHBoxLayout *l = new QHBoxLayout(this);
-	l->setMargin(0);
-	l->setSpacing(0);
+  setHasBorders(false);
+  QHBoxLayout *l = new QHBoxLayout(this);
+  l->setMargin(0);
+  l->setSpacing(0);
 
-	m_edit = new QLineEdit(this);
+  m_edit = new QLineEdit(this);
 //	m_edit->setLineWidth(0);
-	m_edit->setReadOnly(true);
-	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	m_edit->setMinimumHeight(5);
-	l->addWidget(m_edit);
+  m_edit->setReadOnly(true);
+  m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  m_edit->setMinimumHeight(5);
+  l->addWidget(m_edit);
 
-	m_selectButton = new QPushButton("...", this);
-	m_selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-	l->addWidget(m_selectButton);
-	setFocusWidget(m_selectButton);
+  m_selectButton = new QPushButton("...", this);
+  m_selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+  l->addWidget(m_selectButton);
+  setFocusWidget(m_selectButton);
 
-	connect(m_selectButton, SIGNAL(clicked()), this, SLOT(showEditor()));
+  connect(m_selectButton, SIGNAL(clicked()), this, SLOT(showEditor()));
 }
 
 StringListEdit::~StringListEdit()
@@ -68,16 +68,16 @@ StringListEdit::~StringListEdit()
 QVariant
 StringListEdit::value() const
 {
-	return m_list;
+  return m_list;
 }
 
 void
 StringListEdit::setValue(const QVariant &value, bool emitChange)
 {
-	m_list = value.toStringList();
-	m_edit->setText(value.toStringList().join(", "));
-	if(emitChange)
-		emit valueChanged(this);
+  m_list = value.toStringList();
+  m_edit->setText(value.toStringList().join(", "));
+  if(emitChange)
+    emit valueChanged(this);
 }
 
 void
@@ -85,35 +85,35 @@ StringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
 {
 //	p->eraseRect(r);
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toStringList().join(", "));
-	Widget::drawViewer(p, cg, r, value.toStringList().join(", "));
+  Widget::drawViewer(p, cg, r, value.toStringList().join(", "));
 }
 
 void
 StringListEdit::showEditor()
 {
-	KDialog dialog(this->topLevelWidget() );
-	dialog.setCaption( i18n("Edit List of Items") );
-	dialog.setObjectName( "stringlist_dialog" );
-	dialog.setButtons( KDialog::Ok|KDialog::Cancel );
-	dialog.setDefaultButton( KDialog::Ok );
-	dialog.setModal( false );
-	dialog.showButtonSeparator( true );
-	KEditListBox *edit = new KEditListBox(i18n("Contents of %1", property()->caption()), &dialog, "editlist");
-	dialog.setMainWidget(edit);
-	edit->insertStringList(m_list);
+  KDialog dialog(this->topLevelWidget() );
+  dialog.setCaption( i18n("Edit List of Items") );
+  dialog.setObjectName( "stringlist_dialog" );
+  dialog.setButtons( KDialog::Ok|KDialog::Cancel );
+  dialog.setDefaultButton( KDialog::Ok );
+  dialog.setModal( false );
+  dialog.showButtonSeparator( true );
+  KEditListBox *edit = new KEditListBox(i18n("Contents of %1", property()->caption()), &dialog, "editlist");
+  dialog.setMainWidget(edit);
+  edit->insertStringList(m_list);
 
-	if(dialog.exec() == QDialog::Accepted)
-	{
-		m_list = edit->items();
-		m_edit->setText(m_list.join(", "));
-		emit valueChanged(this);
-	}
+  if(dialog.exec() == QDialog::Accepted)
+  {
+    m_list = edit->items();
+    m_edit->setText(m_list.join(", "));
+    emit valueChanged(this);
+  }
 }
 
 void
 StringListEdit::setReadOnlyInternal(bool readOnly)
 {
-	m_selectButton->setEnabled(!readOnly);
+  m_selectButton->setEnabled(!readOnly);
 }
 
 #include "stringlistedit.moc"

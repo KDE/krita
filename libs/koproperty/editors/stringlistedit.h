@@ -32,27 +32,27 @@ namespace KoProperty {
 
 class KOPROPERTY_EXPORT StringListEdit : public Widget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		explicit StringListEdit(Property *property, QWidget *parent=0);
-		virtual ~StringListEdit();
+  public:
+    explicit StringListEdit(Property *property, QWidget *parent=0);
+    virtual ~StringListEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-	protected:
-		virtual void setReadOnlyInternal(bool readOnly);
+  protected:
+    virtual void setReadOnlyInternal(bool readOnly);
 
-	protected slots:
-		void  showEditor();
+  protected slots:
+    void  showEditor();
 
-	private:
-		QLineEdit  *m_edit;
-		QStringList  m_list;
-		QPushButton *m_selectButton;
+  private:
+    QLineEdit  *m_edit;
+    QStringList  m_list;
+    QPushButton *m_selectButton;
 };
 
 }

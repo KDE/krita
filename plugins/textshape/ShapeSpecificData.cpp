@@ -38,6 +38,8 @@ ShapeSpecificData::ShapeSpecificData(Ruler* rulers, TextShape *textShape, QTextB
     m_isSingleLine = (textBlock.layout()->lineCount() == 1);
 
     initDimensions(textBlock, style);
+
+    initBaselines();
 }
 
 void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle)
@@ -80,6 +82,25 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
         m_counter.setBottom(lineBreak);
         m_followingLines.setTop(lineBreak);
     }
+}
+
+
+void ShapeSpecificData::initBaselines()
+{
+    setBaseline(firstIndentRuler,
+            QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom()));
+
+    setBaseline(followingIndentRuler,
+        QLineF(m_border.left(), m_followingLines.top(), m_border.left(), m_followingLines.bottom()));
+
+    setBaseline(rightMarginRuler,
+        QLineF(m_border.right(), m_followingLines.bottom(), m_border.right(), m_firstLine.top()));
+
+    setBaseline(topMarginRuler,
+        QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top()));
+
+    setBaseline(bottomMarginRuler,
+        QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom()));
 }
 
 RulerIndex ShapeSpecificData::hitTest(const QPointF &point) const
@@ -185,20 +206,20 @@ QLineF ShapeSpecificData::mapTextToDocument(QLineF line) const
 
 QLineF ShapeSpecificData::baseline(RulerIndex ruler) const
 {
-    switch (ruler) {
-        case firstIndentRuler:
-            return QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom());
-        case followingIndentRuler:
-            return QLineF(m_border.left(), m_followingLines.top(), m_border.left(), m_followingLines.bottom());
-        case rightMarginRuler:
-            return QLineF(m_border.right(), m_followingLines.bottom(), m_border.right(), m_firstLine.top());
-        case topMarginRuler:
-            return QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top());
-        case bottomMarginRuler:
-            return QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom());
-        default:
-            return QLineF();
+    if (ruler < 0 || ruler >= maxRuler) {
+        return QLineF();
     }
+
+    return m_baselines[ruler];
+}
+
+void ShapeSpecificData::setBaseline(RulerIndex ruler, QLineF baseline)
+{
+    if (ruler < 0 || ruler >= maxRuler) {
+        return;
+    }
+
+    m_baselines[ruler] = baseline;
 }
 
 QLineF ShapeSpecificData::separatorLine() const

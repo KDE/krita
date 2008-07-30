@@ -61,6 +61,7 @@ public:
 
 protected:
     void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
+    void initBaselines();
 
     // wrapper method for textShapeData->documentOffset()
     qreal shapeStartOffset() const;
@@ -70,6 +71,7 @@ protected:
     QLineF mapTextToDocument(QLineF line) const;
 
     QLineF baseline(RulerIndex ruler) const;
+    void setBaseline(RulerIndex ruler, QLineF baseline);
 
     QLineF separatorLine() const;
 
@@ -85,6 +87,8 @@ private:
            m_firstLine,
            m_followingLines,
            m_border;
+
+    QLineF m_baselines[maxRuler];
 };
 
 #endif

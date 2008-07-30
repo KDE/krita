@@ -42,6 +42,8 @@ public:
 	/// draws anti-aliased line with variable thickness for both end-points, the support for gradient color of line is not supported
 	void drawThickLine(KisPaintDeviceSP dev, int x0, int y0, int x1, int y1,const KoColor color1, const KoColor color2, int w1, int w2);
 
+	void drawThick(KisPaintDeviceSP dev,KoColor color1,const QPointF & start, const QPointF & end, int startWidth, int endWidth);
+
 };
 
 #endif

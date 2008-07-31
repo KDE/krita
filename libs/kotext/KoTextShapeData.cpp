@@ -296,13 +296,16 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             isHeading = (blockData->outlineLevel() > 0);
         if (block.textList() && !isHeading) {
             if ((textLists.isEmpty()) || (!textLists.contains(block.textList()))) {
+                if (!textLists.isEmpty()) // sublists should be written within a list-item
+                    writer->startElement( "text:list-item", false );
                 writer->startElement( "text:list", false );
                 writer->addAttribute("text:style-name", listStyleNames[block.textList()]);
                 textLists.append(block.textList());
             } else if (block.textList() != textLists.last()) {
                 while ((!textLists.isEmpty()) && (block.textList() != textLists.last())) {
                     textLists.removeLast();
-                    writer->endElement();
+                    writer->endElement(); // </text:list>
+                    writer->endElement(); // </text:list-element>
                 }
             }
             writer->startElement( "text:list-item", false );
@@ -310,7 +313,10 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
             // Close any remaining list...
             while (!textLists.isEmpty()) {
                 textLists.removeLast();
-                writer->endElement();
+                writer->endElement(); // </text:list>
+                if (!textLists.isEmpty()) {
+                    writer->endElement(); // </text:list-element>
+                }
             }
         }
         if (isHeading) {

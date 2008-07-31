@@ -165,7 +165,7 @@ public:
     const KoColorSpace * alpha8();
 
     /**
-     * Convenience method to get an RGB 8bit colorspace. If a profile is not specified,
+     * Convenience method to get an RGBA 8bit colorspace. If a profile is not specified,
      * an sRGB profile will be used.
      * @param profileName the name of an RGB color profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
@@ -173,14 +173,14 @@ public:
     const KoColorSpace * rgb8(const QString &profileName = QString());
     
     /**
-     * Convenience method to get an RGB 8bit colorspace with the given profile.
+     * Convenience method to get an RGBA 8bit colorspace with the given profile.
      * @param profile an RGB profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
     const KoColorSpace * rgb8(const KoColorProfile * profile);
     
     /**
-     * Convenience method to get an RGB 16bit colorspace. If a profile is not specified,
+     * Convenience method to get an RGBA 16bit colorspace. If a profile is not specified,
      * an sRGB profile will be used.
      * @param profileName the name of an RGB color profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
@@ -188,7 +188,7 @@ public:
     const KoColorSpace * rgb16(const QString &profileName = QString());
 
     /**
-     * Convenience method to get an RGB 16bit colorspace with the given profile.
+     * Convenience method to get an RGBA 16bit colorspace with the given profile.
      * @param profile an RGB profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */

@@ -61,10 +61,12 @@ public:
 
 protected:
     void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
+    void initVisibility();
     void initBaselines();
 
     // wrapper method for textShapeData->documentOffset()
-    qreal shapeStartOffset() const;
+    qreal shapeTop() const;
+    qreal shapeBottom() const;
 
     QPointF mapDocumentToText(QPointF point) const;
     QPointF mapTextToDocument(QPointF point) const;
@@ -73,7 +75,8 @@ protected:
     QLineF baseline(RulerIndex ruler) const;
     void setBaseline(RulerIndex ruler, QLineF baseline);
 
-    QLineF separatorLine() const;
+    bool visible(RulerIndex ruler) const;
+    void setVisible(RulerIndex ruler, bool visible);
 
     TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
 
@@ -82,13 +85,19 @@ private:
     TextShape *m_textShape;
 
     bool m_isSingleLine;
+    bool m_paintSeparator;
 
     QRectF m_counter,
            m_firstLine,
            m_followingLines,
            m_border;
 
+    // store position of the baselines of each ruler
     QLineF m_baselines[maxRuler];
+
+    // use visibility to determine if a ruler needs to be painted
+    // or if a hit tests needs to be done
+    bool m_visible[maxRuler];
 };
 
 #endif

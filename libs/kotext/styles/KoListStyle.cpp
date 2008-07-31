@@ -173,12 +173,6 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level) {
     if(textList && block.textList() && block.textList() != textList) // remove old one
         block.textList()->remove(block);
     if(block.textList() == 0 && textList) { // add if new
-        if (block.previous().textList() != textList) {
-            QTextCursor cursor(block);
-            QTextBlockFormat format = cursor.blockFormat();
-            format.setProperty(KoParagraphStyle::StartNewList, true);
-            cursor.setBlockFormat(format);
-        }
         textList->add(block);
     }
     if(block.textList() && textList == 0) {

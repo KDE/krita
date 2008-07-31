@@ -422,9 +422,7 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
             continue;
         }
 
-        if (firstTime) {
-            firstTime = false;
-        } else {
+        if (!firstTime) {
             cursor.insertBlock();
         }
 
@@ -442,6 +440,13 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
                 d->currentListStyle->applyStyle(current, level);
             }
             // else: if it's already in a list, it belongs to a sublist. doesn't belong to this level.
+        }
+
+        if (firstTime) {
+            firstTime = false;
+            QTextBlockFormat blockFormat;
+            blockFormat.setProperty(KoParagraphStyle::StartNewList, true);
+            cursor.mergeBlockFormat(blockFormat);
         }
 
         if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {

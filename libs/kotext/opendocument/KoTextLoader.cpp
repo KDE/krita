@@ -438,7 +438,10 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
                 d->styleManager->defaultListStyle()->applyStyle(current, level);
             }
         } else {
-            d->currentListStyle->applyStyle(current, level);
+            if (cursor.block().textList() == 0) {
+                d->currentListStyle->applyStyle(current, level);
+            }
+            // else: if it's already in a list, it belongs to a sublist. doesn't belong to this level.
         }
 
         if( e.hasAttributeNS( KoXmlNS::text, "start-value" ) ) {

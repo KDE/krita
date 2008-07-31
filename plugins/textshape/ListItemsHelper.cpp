@@ -233,6 +233,7 @@ void ListItemsHelper::recalculate()
         dp = level;
     const int displayLevel = dp;
 
+    QList<QTextList*> sublistsToRecalculate;
     for(int i=0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);
         //kDebug(32500) <<" *" << tb.text();
@@ -377,7 +378,26 @@ void ListItemsHelper::recalculate()
             width = qMax(width, m_fm.width(item));
         data->setCounterText(prefix + item + suffix);
         index++;
+
+        // have to recalculate any sublists under this element too
+        QTextBlock nb = tb.next();
+        while (nb.isValid() && nb.textList() == 0)
+            nb = nb.next();
+        if (nb.isValid()) {
+            if (nb.textList()->format().intProperty(KoListStyle::Level) > level) {
+                // this is a sublist
+                // have to remember to recalculate this list after the current level is done
+                // cant do it right away since the sublist's prefix text is dependant on this level
+                sublistsToRecalculate.append(nb.textList());
+            }
+        }
     }
+
+    for (int i=0; i<sublistsToRecalculate.count(); i++) {
+        ListItemsHelper lih(sublistsToRecalculate.at(i), m_displayFont);
+        lih.recalculate();
+    }
+
     double counterSpacing = m_fm.width(' ');
     width += counterSpacing + m_fm.width(prefix + suffix); // same for all
     for(int i=0; i < m_textList->count(); i++) {

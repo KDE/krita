@@ -47,7 +47,6 @@
 #include <KoCompositeOp.h>
 
 #include "kis_brush.h"
-#include "kis_debug.h"
 #include "kis_image.h"
 #include "filter/kis_filter.h"
 #include "kis_layer.h"

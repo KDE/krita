@@ -6,13 +6,13 @@
     <x>0</x>
     <y>0</y>
     <width>450</width>
-    <height>490</height>
+    <height>540</height>
    </rect>
   </property>
   <property name="minimumSize" >
    <size>
     <width>450</width>
-    <height>490</height>
+    <height>540</height>
    </size>
   </property>
   <widget class="QWidget" name="layoutWidget" >
@@ -196,6 +196,12 @@
          <height>101</height>
         </rect>
        </property>
+       <property name="minimumSize" >
+        <size>
+         <width>410</width>
+         <height>100</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -203,6 +209,19 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QPushButton" name="previewBtn" >
+   <property name="geometry" >
+    <rect>
+     <x>170</x>
+     <y>500</y>
+     <width>84</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Preview</string>
+   </property>
   </widget>
  </widget>
  <customwidgets>

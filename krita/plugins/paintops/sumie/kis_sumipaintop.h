@@ -29,8 +29,8 @@
 
 #include "lines.h"
 #include "brush.h"
-#include "ui_wdgsumieoptions.h"
-#include "widgets/kis_popup_button.h"
+
+#include "kis_sumipaintopsettings.h"
 
 class QPointF;
 class KisPainter;
@@ -50,44 +50,9 @@ public:
 
 };
 
-class KisSumiPaintOpSettings : public QObject, public KisPaintOpSettings {
-    Q_OBJECT
-
-public:
-    KisSumiPaintOpSettings(QWidget * paren );
-    virtual ~KisSumiPaintOpSettings() {}
-
-    virtual KisPaintOpSettingsSP clone() const;
-
-    QWidget * widget() const { return m_optionsWidget; }
-
-    using KisPropertiesConfiguration::fromXML;
-    using KisPropertiesConfiguration::toXML;
-
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-
-	QList<float> * curve() const;
-	int radius() const;
-	double sigma() const;
-	int brushDimension() const;
-	int inkAmount() const;
-	bool mousePressure() const;
-
-private:
-    Ui::WdgSumieOptions* m_options;
-    KisPopupButton * m_optionsWidget;
-    QWidget * m_popupWidget;
-
-	int m_curveSamples;
-	QList<QPointF> m_curveData;
-};
-
-
 class KisSumiPaintOp : public KisPaintOp {
 
 public:
-
     KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual ~KisSumiPaintOp();
 
@@ -96,7 +61,6 @@ public:
 
     void paintAt(const KisPaintInformation& info);
     double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
-
 
 private:
     QColor c;

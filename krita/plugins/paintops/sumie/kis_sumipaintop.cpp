@@ -17,6 +17,8 @@
  */
 
 #include "kis_sumipaintop.h"
+#include "kis_sumipaintopsettings.h"
+
 #include <cmath>
 
 #include <QRect>
@@ -45,7 +47,7 @@
 #include "brush.h"
 #include "brush_shape.h"
 
-KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
 {
     const KisSumiPaintOpSettings *sumiSettings = dynamic_cast<const KisSumiPaintOpSettings *>(settings.data());
     Q_ASSERT(settings == 0 || sumiSettings != 0);
@@ -68,84 +70,11 @@ KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(KisImageSP image)
     return new KisSumiPaintOpSettings( 0 );
 }
 
-KisSumiPaintOpSettings::KisSumiPaintOpSettings(QWidget * parent )
-    : KisPaintOpSettings()
-{
-    m_optionsWidget = new KisPopupButton( parent );
-    m_optionsWidget->setText( "..." );
-    m_optionsWidget->setToolTip( i18n( "Options for the sumi-e brush" ) );
-
-    m_popupWidget = new QWidget( parent );
-    m_options = new Ui::WdgSumieOptions( );
-    m_options->setupUi( m_popupWidget );
-
-    m_optionsWidget->setPopupWidget(m_popupWidget);
-
-	m_curveSamples = m_options->inkAmountSpinBox->value();
-}
-
-KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
-{
-    KisSumiPaintOpSettings* s = new KisSumiPaintOpSettings( 0 );
-    return s;
-
-}
-
-QList<float> * KisSumiPaintOpSettings::curve() const
-{
-	int curveSamples = inkAmount();
-	QList<float> *result = new QList<float>;
-	for (int i=0; i < curveSamples ; i++)
-	{
-		result->append( (float)m_options->inkCurve->getCurveValue( i / (float)(curveSamples-1.0f) ) );
-	}
-	// have to be freed!!
-	return result;
-}
-
-int KisSumiPaintOpSettings::radius() const{
-	return m_options->radiusSpinBox->value();
-}
-
-double KisSumiPaintOpSettings::sigma() const{
-	return m_options->sigmaSpinBox->value();
-}
-
-bool KisSumiPaintOpSettings::mousePressure() const{
-	return m_options->mousePressureCBox->isChecked();
-}
-
-int KisSumiPaintOpSettings::brushDimension() const{
-	if ( m_options->oneDimBrushBtn->isChecked() ){
-		return 1;
-	} else
-		return 2;
-}
-
-int KisSumiPaintOpSettings::inkAmount() const{
-	return m_options->inkAmountSpinBox->value();
-}
-
-
-
-void KisSumiPaintOpSettings::fromXML(const QDomElement&)
-{
-    // XXX: save to xml. See for instance the color adjustment filters
-}
-
-void KisSumiPaintOpSettings::toXML(QDomDocument&, QDomElement&) const
-{
-    // XXX: load from xml. See for instance the color adjustment filters
-}
-
-
-
 KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter * painter, KisImageSP image)
     : KisPaintOp(painter)
 {
     newStrokeFlag = true;
     m_image = image;
-
 	BrushShape brushShape;
 
 	if (settings->brushDimension() == 1){
@@ -166,8 +95,6 @@ KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter
 	m_brush.setInkDepletion( settings->curve() );
 	m_brush.setInkColor( painter->paintColor() );
 
-
-
 	// delete??
 }
 
@@ -184,6 +111,8 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist ){
     QMutexLocker locker(&m_mutex);
 
+	Q_UNUSED(savedDist);
+
     if (!painter()) return -1;
     //color: painter()->paintColor()
 	KisPaintDeviceSP device = painter()->device();
@@ -196,7 +125,6 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,const KisPaintIn
 
 	dab = cachedDab( );
 	dab->clear();
-
 
 	Lines line;
 	//line.drawDDAALine(dab, pi1.pos().x(), pi1.pos().y(), pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
@@ -228,8 +156,16 @@ for (float theta= phase; theta<360+phase; theta += 10 )
 	}
 
 */
+    dbgPlugins << "Start coords:";
 
- 	m_brush.paintLine(dab, pi1, pi2);
+ 	dbgPlugins << pi1.pos().x();
+    dbgPlugins << pi1.pos().y();
+    dbgPlugins << "End coords:";
+    dbgPlugins << pi2.pos().x();
+    dbgPlugins << pi2.pos().y();
+    dbgPlugins << "--------------";
+
+    m_brush.paintLine(dab, pi1, pi2);
 
 	QRect rc = dab->extent();
 	painter()->bitBlt( rc.topLeft(), dab, rc );

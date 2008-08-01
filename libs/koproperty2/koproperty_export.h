@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KOPROPERTY_EXPORT
-# if defined(MAKE_KOPROPERTY_LIB)
+# if defined(MAKE_KOPROPERTY2_LIB)
    /* We are building this library */ 
 #  define KOPROPERTY_EXPORT KDE_EXPORT
 # else

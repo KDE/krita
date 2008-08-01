@@ -508,7 +508,6 @@ double KisPainter::paintLine(const KisPaintInformation &pi1,
 {
     if (!d->device) return 0;
     if (!d->paintOp) return 0;
-    if (!d->brush) return 0;
 
     return d->paintOp->paintLine(pi1, pi2, savedDist);
 }

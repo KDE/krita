@@ -1,8 +1,8 @@
-
-
 add_subdirectory( test )
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${CMAKE_SOURCE_DIR}/libs/guiutils ${KOMAIN_INCLUDES} )
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30007)
+
+include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty2/editors ${CMAKE_SOURCE_DIR}/libs/guiutils ${KOMAIN_INCLUDES} )
 
 
 set(libkopropertyeditors_SRCS
@@ -36,16 +36,18 @@ set(koproperty_LIB_SRCS ${libkopropertyeditors_SRCS}
    set.cpp
    editor.cpp
    editoritem.cpp
+   EditorView.cpp
+   EditorDataModel.cpp
    factory.cpp
    widget.cpp )
 
 
-kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
+kde4_add_library(koproperty2 SHARED ${koproperty_LIB_SRCS})
 
-target_link_libraries(koproperty koguiutils ${KDE4_KDE3SUPPORT_LIBS} )
+target_link_libraries(koproperty2 koguiutils ${KDE4_KDE3SUPPORT_LIBS} )
 
-set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS koproperty  ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(koproperty2 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+install(TARGETS koproperty2  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
@@ -63,7 +65,7 @@ set.h
 utils.h
 widget.h
 widgetproxy.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2 COMPONENT Devel)
 
 install( FILES
 editors/booledit.h
@@ -88,5 +90,5 @@ editors/stringlistedit.h
 editors/symbolcombo.h
 editors/timeedit.h
 editors/urledit.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2/editors COMPONENT Devel)
 

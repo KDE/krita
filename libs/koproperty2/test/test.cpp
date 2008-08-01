@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "EditorView.h"
+#include "EditorDataModel.h"
+
 #include <kmainwindow.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -39,8 +42,9 @@ using namespace KoProperty;
 
 Test::Test()
  : KXmlGuiWindow()
-{	
+{
   setObjectName("koproperty_test");
+  setWindowIcon(DesktopIcon("document-properties"));
 
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
   const bool flat = args->isSet("flat");
@@ -114,16 +118,26 @@ Test::Test()
 
 //	kDebug(30007) << m_set->groupNames();
 
-  Editor *edit = new Editor(this,true/*autosync*/);
-  setCentralWidget(edit);
+// ---------------------------
+
+  edit = new Editor(0,true/*autosync*/);
+  edit->show();
   edit->changeSet(m_set);
   resize(400,qApp->desktop()->height()-200);
   move(x(),5);
-  edit->setFocus();
+//  edit->setFocus();
+
+// ---------------------------
+  EditorDataModel *editorDataModel = new EditorDataModel(*m_set, this);
+  EditorView *editorView = new EditorView(this);
+  editorView->setModel(editorDataModel);
+  setCentralWidget(editorView);
+  editorView->setFocus();
 }
 
 Test::~Test()
 {
+  delete edit;
 }
 
 #include "test.moc"

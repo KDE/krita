@@ -24,6 +24,10 @@
 
 #include "set.h"
 
+namespace KoProperty {
+  class Editor;
+}
+
 /*!
  * @internal
  * @short KoProperty test appliation main window
@@ -39,6 +43,7 @@ class Test : public KXmlGuiWindow
 
   private:
   KoProperty::Set *m_set;
+  KoProperty::Editor *edit;
 };
 
 #endif

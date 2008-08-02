@@ -86,7 +86,7 @@ KisPaintopBox::KisPaintopBox (KisView2 * view, QWidget *parent, const char * nam
 
     KisPresetWidget * m_presetWidget = new KisPresetWidget(this, "presetwidget");
     m_presetWidget->setToolTip(i18n("Edit brush preset"));
-    m_presetWidget->setFixedSize( 130, 26 );
+    m_presetWidget->setFixedSize( 120, 26 );
     m_layout->addWidget(m_presetWidget);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_presetWidget);
@@ -236,22 +236,14 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
 
 void KisPaintopBox::updateOptionWidget()
 {
-    if (m_optionWidget != 0) {
-        m_layout->removeWidget(m_optionWidget);
-        m_optionWidget->hide();
-        m_layout->invalidate();
-    }
-
+    // XXX: use active preset
     const KisPaintOpSettingsSP settings =
         activeSetting(currentPaintop(), KoToolManager::instance()->currentInputDevice());
 
     if (settings != 0) {
         m_optionWidget = settings->widget();
         Q_ASSERT(m_optionWidget != 0);
-
-        m_layout->addWidget(m_optionWidget);
-        updateGeometry();
-        m_optionWidget->show();
+        m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
     }
 }
 

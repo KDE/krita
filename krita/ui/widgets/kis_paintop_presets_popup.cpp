@@ -23,6 +23,7 @@
 #include <QComboBox>
 #include <QHBoxLayout>
 #include <QToolButton>
+#include <QGridLayout>
 
 #include <kis_paintop_preset.h>
 
@@ -35,6 +36,8 @@ class KisPaintOpPresetsPopup::Private
 public:
 
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
+    QGridLayout * layout;
+    QWidget * settingsWidget;
 
 };
 
@@ -44,10 +47,27 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup( QWidget * parent )
 {
     setObjectName("KisPaintOpPresetsPopup");
     m_d->uiWdgPaintOpPresets.setupUi( this );
+    m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
+    m_d->settingsWidget = 0;
 }
 
 
 KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 {
     delete m_d;
+}
+
+void KisPaintOpPresetsPopup::setPaintOpSettingsWidget( QWidget * widget )
+{
+    if (m_d->settingsWidget) {
+        m_d->layout->removeWidget( m_d->settingsWidget );
+        m_d->settingsWidget->hide();
+        m_d->layout->invalidate();
+    }
+    if (!widget) return;
+    m_d->settingsWidget = widget;
+    m_d->layout->addWidget( widget );
+    m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer->updateGeometry();
+    widget->show();
+
 }

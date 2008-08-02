@@ -32,30 +32,30 @@ struct KisFiltersModel::Private {
     struct Node {
 
         virtual ~Node() {}
-        
+
         QString name;
         QString displayRole() { return name; }
         virtual int childrenCount() = 0;
-        
+
     };
     struct Filter : public Node {
 
         virtual ~Filter() {}
-        
+
         QString id;
         QPixmap icon;
         KisFilterSP filter;
         virtual int childrenCount() { return 0; }
     };
     struct Category : public Node {
-    
+
         virtual ~Category() {}
-        
+
         QString id;
         QList<Filter> filters;
         virtual int childrenCount() { return filters.count(); }
     };
-    
+
     QHash<QString, Category> categories;
     QList<QString> categoriesKeys;
     KisPaintDeviceSP thumb;
@@ -174,7 +174,9 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
                 {
 //                     KisPaintDeviceSP target = new KisPaintDevice( d->thumb->colorSpace() );
                     KisPaintDeviceSP target = new KisPaintDevice( *d->thumb );
-                    filter->filter->process(KisConstProcessingInformation(d->thumb, QPoint(0,0)), KisProcessingInformation(target, QPoint(0,0)), QSize(100,100), filter->filter->defaultConfiguration( d->thumb ) );
+                    KisConstProcessingInformation cpi(d->thumb, QPoint(0,0));
+                    KisProcessingInformation cp(target, QPoint(0,0));
+                    filter->filter->process(cpi, cp, QSize(100,100), filter->filter->defaultConfiguration( d->thumb ) );
                     d->previewCache[ filter->filter ] = target->convertToQImage(0);
                 }
                 return d->previewCache[ filter->filter ];
@@ -196,7 +198,7 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags KisFiltersModel::flags(const QModelIndex & index) const
 {
     if(!index.isValid()) return 0;
-    
+
     Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
     Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
     if(filter)

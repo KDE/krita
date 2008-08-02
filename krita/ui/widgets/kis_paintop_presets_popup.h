@@ -37,6 +37,8 @@ public:
 
     ~KisPaintOpPresetsPopup();
 
+    void setPaintOpSettingsWidget( QWidget * widget );
+
 private:
 
     class Private;

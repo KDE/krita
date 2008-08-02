@@ -81,7 +81,7 @@ public:
             // Temporarily
             setToolType( TOOL_TYPE_SHAPE );
             setIcon( "krita_tool_freehand" );
-            setShortcut( KShortcut( Qt::CTRL + Qt::Key_B ) );
+            setShortcut( KShortcut( Qt::Key_B ) );
             setPriority( 0 );
             //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setInputDeviceAgnostic(false);

@@ -89,7 +89,7 @@ public:
             //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setPriority( 15 );
             setIcon("krita_tool_color_picker");
-            setShortcut( KShortcut( Qt::CTRL + Qt::Key_P ) );
+            setShortcut( KShortcut( Qt::Key_P ) );
         }
 
     virtual ~KisToolColorPickerFactory(){}

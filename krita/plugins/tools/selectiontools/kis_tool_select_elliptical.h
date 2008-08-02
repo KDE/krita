@@ -81,7 +81,7 @@ public:
             setToolType( TOOL_TYPE_SELECTED);
             //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_elliptical_selection" );
-            setShortcut( KShortcut(Qt::CTRL + Qt::Key_J) );
+            setShortcut( KShortcut(Qt::Key_J) );
             setPriority( 53 );
         }
 

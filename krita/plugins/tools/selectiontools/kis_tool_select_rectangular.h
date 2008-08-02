@@ -77,7 +77,7 @@ public:
             setToolType( TOOL_TYPE_SELECTED );
             //setActivationShapeId( KIS_LAYER_SHAPE_ID );
             setIcon( "tool_rect_selection" );
-            setShortcut( KShortcut( Qt::CTRL + Qt::Key_R ) );
+            setShortcut( KShortcut( Qt::Key_R ) );
             setPriority( 52 );
         }
 

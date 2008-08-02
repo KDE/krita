@@ -27,15 +27,12 @@
 
 #include <kis_paintop_preset.h>
 
-#include <ui_wdgpaintoppresets.h>
-
 class KisPaintOpPresetsWidget::Private
 {
 
 public:
 
     QList<KisPaintOpOption*> paintOpOptions;
-    Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
 
 };
 
@@ -44,7 +41,6 @@ KisPaintOpPresetsWidget::KisPaintOpPresetsWidget( QWidget * parent )
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsWidget");
-    m_d->uiWdgPaintOpPresets.setupUi( this );
 }
 
 

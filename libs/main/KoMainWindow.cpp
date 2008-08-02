@@ -64,6 +64,7 @@
 #include <QLayout>
 #include <QProgressBar>
 #include <QSplitter>
+#include <QTabBar>
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
 
@@ -222,6 +223,8 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
 {
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
+
+    connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
     d->m_manager = new KoPartManager( this );
 
@@ -1926,7 +1929,22 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
     dockWidgetFont.setPointSizeF(pointSize);
     dockWidget->setFont(dockWidgetFont);
 
+    connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
+
     return dockWidget;
+}
+
+void KoMainWindow::forceDockTabFonts()
+{
+    QObjectList chis = children();
+    for (int i = 0; i < chis.size(); ++i) {
+        if (chis.at(i)->inherits("QTabBar")) {
+            QFont dockWidgetFont  = KGlobalSettings::generalFont();
+            double pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+            dockWidgetFont.setPointSizeF(pointSize);
+            ((QTabBar *)chis.at(i))->setFont(dockWidgetFont);
+        }    
+    }
 }
 
 QList<QDockWidget*> KoMainWindow::dockWidgets()

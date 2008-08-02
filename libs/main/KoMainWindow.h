@@ -390,6 +390,7 @@ private slots:
     void slotLoadCanceled (const QString &);
     void slotSaveCompleted();
     void slotSaveCanceled(const QString &);
+    void forceDockTabFonts();
 
 private:
     /**

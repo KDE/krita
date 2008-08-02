@@ -131,7 +131,7 @@ public:
         {
             setToolTip( i18n( "Transform a layer or a selection" ) );
             setToolType( TOOL_TYPE_TRANSFORM );
-            setIcon( "transform" );
+            setIcon( "transform-rotate" );
             setPriority( 11 );
 
             //setActivationShapeId( KIS_LAYER_SHAPE_ID );

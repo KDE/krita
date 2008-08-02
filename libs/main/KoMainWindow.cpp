@@ -592,9 +592,9 @@ KoDocument* KoMainWindow::createDoc() const
 
 void KoMainWindow::updateCaption()
 {
-  //kDebug(30003) <<"KoMainWindow::updateCaption()";
+  kDebug(30003) <<"KoMainWindow::updateCaption()";
   if ( !d->m_rootDoc )
-    setCaption(QString());
+    updateCaption(QString(), false);
   else if ( rootDocument()->isCurrent() )
   {
       QString caption;
@@ -612,7 +612,7 @@ void KoMainWindow::updateCaption()
       if ( d->m_readOnly )
         caption += i18n("(write protected)");
 
-      setCaption( caption, rootDocument()->isModified() );
+      updateCaption( caption, rootDocument()->isModified() );
       if ( !rootDocument()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty() )
         d->m_paSave->setToolTip( i18n("Save as %1", rootDocument()->url().fileName(KUrl::ObeyTrailingSlash)) );
       else
@@ -622,7 +622,7 @@ void KoMainWindow::updateCaption()
 
 void KoMainWindow::updateCaption( const QString & caption, bool mod )
 {
-  //kDebug(30003)<<"KoMainWindow::updateCaption("<<caption<<","<<mod<<")";
+  kDebug(30003)<<"KoMainWindow::updateCaption("<<caption<<","<<mod<<")";
   #ifdef ALPHA
   setCaption( QString("ALPHA %1: %2").arg(ALPHA).arg(caption), mod);
   return;
@@ -635,7 +635,7 @@ void KoMainWindow::updateCaption( const QString & caption, bool mod )
   setCaption( "RELEASE CANDIDATE %1: %2").arg(RC).arg(caption), mod);
   return;
   #endif
- 
+
   setCaption( caption, mod );
 }
 
@@ -1960,7 +1960,7 @@ void KoMainWindow::forceDockTabFonts()
             double pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
             dockWidgetFont.setPointSizeF(pointSize);
             ((QTabBar *)chis.at(i))->setFont(dockWidgetFont);
-        }    
+        }
     }
 }
 

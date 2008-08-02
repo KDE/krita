@@ -72,6 +72,10 @@
 #include <QtGui/QPrintPreviewDialog>
 #endif
 
+#define ALPHA 10
+//#define BETA
+//#define RC
+
 class KoPartManager : public KParts::PartManager
 {
 public:
@@ -619,6 +623,19 @@ void KoMainWindow::updateCaption()
 void KoMainWindow::updateCaption( const QString & caption, bool mod )
 {
   //kDebug(30003)<<"KoMainWindow::updateCaption("<<caption<<","<<mod<<")";
+  #ifdef ALPHA
+  setCaption( QString("ALPHA %1: %2").arg(ALPHA).arg(caption), mod);
+  return;
+  #endif
+  #ifdef BETA
+  setCaption( QString("BETA %1: %2").arg(BETA).arg(caption), mod);
+  return;
+  #endif
+  #ifdef RC
+  setCaption( "RELEASE CANDIDATE %1: %2").arg(RC).arg(caption), mod);
+  return;
+  #endif
+ 
   setCaption( caption, mod );
 }
 

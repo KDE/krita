@@ -56,8 +56,7 @@ public slots:
 
 private:
     Ui::WdgSumieOptions* m_options;
-    KisPopupButton * m_optionsWidget;
-    QWidget * m_popupWidget;
+    QWidget * m_optionsWidget;
 
 	int m_curveSamples;
 	QList<QPointF> m_curveData;

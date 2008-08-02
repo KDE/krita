@@ -35,15 +35,9 @@
 KisSumiPaintOpSettings::KisSumiPaintOpSettings(QWidget * parent )
     : KisPaintOpSettings()
 {
-    m_optionsWidget = new KisPopupButton( parent );
-    m_optionsWidget->setText( "..." );
-    m_optionsWidget->setToolTip( i18n( "Options for the sumi-e brush" ) );
-
-    m_popupWidget = new QWidget( parent );
+    m_optionsWidget = new QWidget( parent );
     m_options = new Ui::WdgSumieOptions( );
-    m_options->setupUi( m_popupWidget );
-
-    m_optionsWidget->setPopupWidget(m_popupWidget);
+    m_options->setupUi( m_optionsWidget );
 
     m_curveSamples = m_options->inkAmountSpinBox->value();
 

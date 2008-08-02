@@ -245,6 +245,9 @@ void KisPaintopBox::updateOptionWidget()
         Q_ASSERT(m_optionWidget != 0);
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
     }
+    else {
+        m_presetsPopup->setPaintOpSettingsWidget(0);
+    }
 }
 
 const KoID& KisPaintopBox::currentPaintop()

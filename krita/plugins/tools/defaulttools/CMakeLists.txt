@@ -34,6 +34,7 @@ install( FILES
     krita_tool_pan.png
     krita_tool_freehand.png
     krita_tool_measure.png
+    krita_draw_path.png
 # cursors
     tool_rectangle_cursor.png
     tool_ellipse_cursor.png

@@ -50,7 +50,7 @@ public:
             setToolTip( i18n( "Draw a path." ) );
             setToolType( TOOL_TYPE_SHAPE );
             //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "tool_bezier_paint" );
+            setIcon( "krita_draw_path" );
             setPriority( 7 );
         }
 

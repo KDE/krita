@@ -198,7 +198,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         if(! shape->isVisible())
             continue;
         if(! childClipped(shape) ) // the shapeManager will have to draw those, or else we can't do clipRects
-            return;
+            continue;
         if(painter.hasClipping()) {
             QRectF rect = converter.viewToDocument( painter.clipRegion().boundingRect() );
             rect = matrix().mapRect(rect);

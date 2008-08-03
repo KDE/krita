@@ -57,6 +57,7 @@ WidgetProxy::WidgetProxy(QWidget *parent, const char *name)
 WidgetProxy::~WidgetProxy()
 {
   delete d->property;
+  delete d;
 }
 
 void

@@ -104,6 +104,7 @@ KoPathSegment::~KoPathSegment()
         delete d->first;
     if( d->second && ! d->second->parent() )
         delete d->second;
+    delete d;
 }
 
 KoPathPoint * KoPathSegment::first() const

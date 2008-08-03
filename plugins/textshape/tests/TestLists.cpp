@@ -63,7 +63,7 @@ void TestDocumentLayout::testNumberedList() {
     QVERIFY(block.isValid());
 
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.levelProperties(1);
+    KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
     style.setListStyle(listStyle);
@@ -241,8 +241,9 @@ void TestDocumentLayout::testNestedLists() {
     styleManager->add(&h4);
 
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.levelProperties(1);
+    KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DecimalItem);
+
     listStyle.setLevelProperties(llp);
     h1.setListStyle(listStyle);
 
@@ -350,7 +351,7 @@ void TestDocumentLayout::testAutoRestartList() {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (car.userData());
     QVERIFY(data);
     // qDebug() << data->counterText();
-    QCOMPARE(data->counterText(), QString("2.1"));
+    QCOMPARE(data->counterText(), QString("2.1."));
 }
 
 void TestDocumentLayout::testListParagraphIndent() {
@@ -396,7 +397,7 @@ void TestDocumentLayout::testRestartNumbering() {
     KoParagraphStyle h1;
     styleManager->add(&h1);
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.levelProperties(1);
+    KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
     h1.setListStyle(listStyle);
@@ -422,6 +423,7 @@ void TestDocumentLayout::testRestartNumbering() {
     while(block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
         QVERIFY(data);
+        // qDebug() << data->counterText() << QString(values[i]);
         QCOMPARE(data->counterText(), QString(values[i++]));
 
         block = block.next();
@@ -466,7 +468,7 @@ void TestDocumentLayout::testLetterSynchronization() {
     KoParagraphStyle h1;
     styleManager->add(&h1);
     KoListStyle listStyle;
-    KoListLevelProperties llp = listStyle.levelProperties(1);
+    KoListLevelProperties llp;
     llp.setStyle(KoListStyle::AlphaLowerItem);
     llp.setLetterSynchronization(true);
     llp.setStartValue(25);

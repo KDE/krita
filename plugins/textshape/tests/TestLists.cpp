@@ -18,10 +18,12 @@ void TestDocumentLayout::testBasicList() {
     QVERIFY(block.isValid());
 
     KoListStyle listStyle;
+    KoListLevelProperties level1;
+    listStyle.setLevelProperties(level1);
     style.setListStyle(listStyle);
     style.applyStyle(block); // make this a listStyle
     QVERIFY(block.textList());
-    QVERIFY(block.textList()->format().intProperty(QTextListFormat::ListStyle) == KoListStyle::DiscItem);
+    QCOMPARE(block.textList()->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DiscItem);
     block = block.next();
     QVERIFY(block.isValid());
     style.applyStyle(block); // make this a listStyle
@@ -36,6 +38,7 @@ void TestDocumentLayout::testBasicList() {
     QVERIFY(data);
     double counterSpacing = data->counterSpacing();
     QVERIFY(counterSpacing > 0.);
+    // 12 is hardcoded to be the width of a discitem (taken from the default font):
     QCOMPARE(blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
     block = block.next();
     QVERIFY(block.isValid());

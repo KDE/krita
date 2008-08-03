@@ -33,7 +33,7 @@
 
 class KoListStyle::Private {
 public:
-    Private() : refCount(1), styleId(0) { }
+    Private() : styleId(0), refCount(1) { }
 
     QTextList *textList(int level, const QTextDocument *doc) {
         if(! textLists.contains(level))

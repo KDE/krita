@@ -115,7 +115,7 @@ public:
 
     /**
      * Constructor
-     * Create a new list style which uses bulletted listitems.
+     * Create a new list style which uses numbered (KoListStyle::ListDecimal) listitems.
      */
     explicit KoListStyle();
     /// Copy constructor

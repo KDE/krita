@@ -30,45 +30,46 @@
 
 class QToolButton;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT BoolEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit BoolEdit(Property *property, QWidget *parent=0);
+public:
+    explicit BoolEdit(Property *property, QWidget *parent = 0);
     virtual ~BoolEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  protected slots:
+protected slots:
     void  slotValueChanged(bool state);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
     void setState(bool state);
     virtual void resizeEvent(QResizeEvent *ev);
     virtual bool eventFilter(QObject* watched, QEvent* e);
 
-  private:
+private:
     QToolButton *m_toggle;
     QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 };
 
 class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    ThreeStateBoolEdit(Property *property, QWidget *parent=0);
+public:
+    ThreeStateBoolEdit(Property *property, QWidget *parent = 0);
     virtual ~ThreeStateBoolEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void setProperty(Property *property);
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);

@@ -33,21 +33,21 @@
 using namespace KoProperty;
 
 URLEdit::URLEdit(Property *property, QWidget *parent)
- : Widget(property, parent)
+        : Widget(property, parent)
 {
-  QHBoxLayout *l = new QHBoxLayout(this);
-  l->setMargin(0);
-  l->setSpacing(0);
+    QHBoxLayout *l = new QHBoxLayout(this);
+    l->setMargin(0);
+    l->setSpacing(0);
 
-  m_edit = new KUrlRequester(this);
-  m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  m_edit->setMinimumHeight(5);
-  l->addWidget(m_edit);
+    m_edit = new KUrlRequester(this);
+    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_edit->setMinimumHeight(5);
+    l->addWidget(m_edit);
 
-  setProperty(property);
+    setProperty(property);
 
-  connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
-  m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
 URLEdit::~URLEdit()
@@ -56,45 +56,45 @@ URLEdit::~URLEdit()
 QVariant
 URLEdit::value() const
 {
-  return m_edit->url();
+    return m_edit->url();
 }
 
 void
 URLEdit::setValue(const QVariant &value, bool emitChange)
 {
-  m_edit->blockSignals(true);
-  m_edit->setUrl(value.toString());
-  m_edit->blockSignals(false);
-  if (emitChange)
-    emit valueChanged(this);
+    m_edit->blockSignals(true);
+    m_edit->setUrl(value.toString());
+    m_edit->blockSignals(false);
+    if (emitChange)
+        emit valueChanged(this);
 }
 
 void
 URLEdit::slotValueChanged(const QString&)
 {
-  emit valueChanged(this);
+    emit valueChanged(this);
 }
 
 void
 URLEdit::setProperty(Property *property)
 {
-  if(property) {
-        	KFile::Modes mode;
-    switch(property->type()) {
-      case DirectoryURL:  mode = KFile::Directory|KFile::ExistingOnly;  break;
-      case FileURL: case PictureFileURL: default: mode = KFile::File|KFile::ExistingOnly;
+    if (property) {
+        KFile::Modes mode;
+        switch (property->type()) {
+        case DirectoryURL:  mode = KFile::Directory|KFile::ExistingOnly;  break;
+    case FileURL: case PictureFileURL: default: mode = KFile::File|KFile::ExistingOnly;
+        }
+        m_edit->setMode(mode);
     }
-    m_edit->setMode(mode);
-  }
 
-  Widget::setProperty(property);
+    Widget::setProperty(property);
 }
 
 void
 URLEdit::setReadOnlyInternal(bool readOnly)
 {
-  m_edit->lineEdit()->setReadOnly(readOnly);
-  m_edit->button()->setEnabled(!readOnly);
+    m_edit->lineEdit()->setReadOnly(readOnly);
+    m_edit->button()->setEnabled(!readOnly);
 }
 
 #include "urledit.moc"

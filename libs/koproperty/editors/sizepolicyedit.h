@@ -31,26 +31,27 @@ template<class U, class T> class QMap;
 
 class QLabel;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT SizePolicyEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit SizePolicyEdit(Property *property, QWidget *parent=0);
+public:
+    explicit SizePolicyEdit(Property *property, QWidget *parent = 0);
     virtual ~SizePolicyEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
     QString findDescription(const QVariant &value) const;
 
-  private:
+private:
     QVariant  m_value;
     QLabel  *m_edit;
     static QMap<QString, QVariant> *m_spValues;

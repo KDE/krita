@@ -25,23 +25,24 @@
 
 template<class U, class T> class QMap;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT CursorEdit : public ComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit CursorEdit(Property *property, QWidget *parent=0);
+public:
+    explicit CursorEdit(Property *property, QWidget *parent = 0);
     virtual ~CursorEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void setProperty(Property *property);
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  private:
+private:
     static QMap<QString, QVariant> *m_spValues;
 };
 

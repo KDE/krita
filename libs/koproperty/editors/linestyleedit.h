@@ -26,28 +26,29 @@
 #include <libs/guiutils/KoLineStyleSelector.h>
 class KoLineStyleSelector;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT LineStyleEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit LineStyleEdit(Property *property, QWidget *parent=0);
+public:
+    explicit LineStyleEdit(Property *property, QWidget *parent = 0);
     virtual ~LineStyleEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
 
-  protected slots:
+protected slots:
     void slotValueChanged(int value);
 
-  private:
+private:
     KoLineStyleSelector *m_edit;
 };
 

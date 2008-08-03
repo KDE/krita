@@ -27,25 +27,26 @@
 
 class QLabel;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT PointEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit PointEdit(Property *property, QWidget *parent=0);
+public:
+    explicit PointEdit(Property *property, QWidget *parent = 0);
     virtual ~PointEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
 
-  private:
+private:
     QLabel *m_edit;
     QVariant m_value;
 };

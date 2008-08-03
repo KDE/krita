@@ -25,7 +25,8 @@
 #include "koproperty_global.h"
 #include <QObject>
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class Widget;
 class CustomProperty;
@@ -39,7 +40,7 @@ class FactoryManagerInternal;
 //! \brief A prototype for custom property factory
 class KOPROPERTY_EXPORT CustomPropertyFactory : public QObject
 {
-  public:
+public:
     explicit CustomPropertyFactory(QObject *parent);
     virtual ~CustomPropertyFactory();
 
@@ -109,7 +110,7 @@ class KOPROPERTY_EXPORT CustomPropertyFactory : public QObject
  */
 class KOPROPERTY_EXPORT FactoryManager : public QObject
 {
-  public:
+public:
     /*! Registers a custom factory \a factory for handling property editor for \a editorType.
     This custom factory will be used before defaults when widgetForProperty() is called.
     \a creator is not owned by this Factory object, but it's good idea
@@ -142,7 +143,7 @@ class KOPROPERTY_EXPORT FactoryManager : public QObject
     /*! Registers a custom property factory that handles a CustomProperty for \a types.
      @see registerFactoryForProperty() */
     void registerFactoryForProperties(const QList<int> &propertyTypes,
-      CustomPropertyFactory *factory);
+                                      CustomPropertyFactory *factory);
 
     /*! This function is called in Property::Property() to create (optional)
       custom property. It creates the custom property for built-in types, or
@@ -152,7 +153,7 @@ class KOPROPERTY_EXPORT FactoryManager : public QObject
     /*! \return a pointer to a property factory instance.*/
     static FactoryManager* self();
 
-  protected:
+protected:
     FactoryManager();
     ~FactoryManager();
 

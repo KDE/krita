@@ -35,88 +35,88 @@ using namespace KoProperty;
 QMap<QString, QVariant> *SizePolicyEdit::m_spValues = 0;
 
 SizePolicyEdit::SizePolicyEdit(Property *property, QWidget *parent)
- : Widget(property, parent)
+        : Widget(property, parent)
 {
-  setHasBorders(false);
-//	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-  m_edit = new QLabel(this);
-  m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-  m_edit->setBackgroundRole(QPalette::Base);
-//	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  m_edit->setMinimumHeight(5);
-  setEditor(m_edit);
-//	l->addWidget(m_edit);
-  setFocusWidget(m_edit);
+    setHasBorders(false);
+// QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+    m_edit = new QLabel(this);
+    m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
+    m_edit->setBackgroundRole(QPalette::Base);
+// m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_edit->setMinimumHeight(5);
+    setEditor(m_edit);
+// l->addWidget(m_edit);
+    setFocusWidget(m_edit);
 
 
-  if(!m_spValues) {
-    m_spValues = new QMap<QString, QVariant>();
-    (*m_spValues)[i18nc("Size Policy", "Fixed")] = QSizePolicy::Fixed;
-    (*m_spValues)[i18nc("Size Policy", "Minimum")] = QSizePolicy::Minimum;
-    (*m_spValues)[i18nc("Size Policy", "Maximum")] = QSizePolicy::Maximum;
-    (*m_spValues)[i18nc("Size Policy", "Preferred")] = QSizePolicy::Preferred;
-    (*m_spValues)[i18nc("Size Policy", "Expanding")] = QSizePolicy::Expanding;
-    (*m_spValues)[i18nc("Size Policy", "Minimum Expanding")] = QSizePolicy::MinimumExpanding;
-    (*m_spValues)[i18nc("Size Policy", "Ignored")] = QSizePolicy::Ignored;
-  }
+    if (!m_spValues) {
+        m_spValues = new QMap<QString, QVariant>();
+        (*m_spValues)[i18nc("Size Policy", "Fixed")] = QSizePolicy::Fixed;
+        (*m_spValues)[i18nc("Size Policy", "Minimum")] = QSizePolicy::Minimum;
+        (*m_spValues)[i18nc("Size Policy", "Maximum")] = QSizePolicy::Maximum;
+        (*m_spValues)[i18nc("Size Policy", "Preferred")] = QSizePolicy::Preferred;
+        (*m_spValues)[i18nc("Size Policy", "Expanding")] = QSizePolicy::Expanding;
+        (*m_spValues)[i18nc("Size Policy", "Minimum Expanding")] = QSizePolicy::MinimumExpanding;
+        (*m_spValues)[i18nc("Size Policy", "Ignored")] = QSizePolicy::Ignored;
+    }
 }
 
 SizePolicyEdit::~SizePolicyEdit()
 {
-  delete m_spValues;
-  m_spValues = 0;
+    delete m_spValues;
+    m_spValues = 0;
 }
 
 QVariant
 SizePolicyEdit::value() const
 {
-  return m_value;
+    return m_value;
 }
 
 void
 SizePolicyEdit::setValue(const QVariant &value, bool emitChange)
 {
-  m_value = value;
-  m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horizontalPolicy())).
-    arg(findDescription(value.value<QSizePolicy>().verticalPolicy())).
-    arg(value.value<QSizePolicy>().horizontalStretch()).arg(value.value<QSizePolicy>().verticalStretch()));
-  this->setToolTip( m_edit->text());
+    m_value = value;
+    m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horizontalPolicy())).
+                    arg(findDescription(value.value<QSizePolicy>().verticalPolicy())).
+                    arg(value.value<QSizePolicy>().horizontalStretch()).arg(value.value<QSizePolicy>().verticalStretch()));
+    this->setToolTip(m_edit->text());
 
-  if (emitChange)
-    emit valueChanged(this);
+    if (emitChange)
+        emit valueChanged(this);
 }
 
 void
 SizePolicyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-//	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-  QRect rect(r);
-  rect.setBottom(r.bottom()+1);
-  Widget::drawViewer(p, cg, rect, 
-    QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horizontalPolicy())).
-    arg(findDescription(value.value<QSizePolicy>().verticalPolicy())).
-    arg(value.value<QSizePolicy>().horizontalStretch()).arg(value.value<QSizePolicy>().verticalStretch()));
+// p->eraseRect(r);
+// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
+    QRect rect(r);
+    rect.setBottom(r.bottom() + 1);
+    Widget::drawViewer(p, cg, rect,
+                       QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horizontalPolicy())).
+                       arg(findDescription(value.value<QSizePolicy>().verticalPolicy())).
+                       arg(value.value<QSizePolicy>().horizontalStretch()).arg(value.value<QSizePolicy>().verticalStretch()));
 }
 
 QString
 SizePolicyEdit::findDescription(const QVariant &value) const
 {
-  if(!m_spValues)
-    return QString();
+    if (!m_spValues)
+        return QString();
 
-  QMap<QString, QVariant>::ConstIterator endIt = m_spValues->constEnd();
-  for (QMap<QString, QVariant>::ConstIterator it = m_spValues->constBegin(); it != endIt; ++ it) {
-    if (it.value() == value)
-      return it.key();
-  }
-  return QString();;
+    QMap<QString, QVariant>::ConstIterator endIt = m_spValues->constEnd();
+    for (QMap<QString, QVariant>::ConstIterator it = m_spValues->constBegin(); it != endIt; ++ it) {
+        if (it.value() == value)
+            return it.key();
+    }
+    return QString();;
 }
 
 void
 SizePolicyEdit::setReadOnlyInternal(bool readOnly)
 {
-  Q_UNUSED(readOnly);
+    Q_UNUSED(readOnly);
 }
 
 #include "sizepolicyedit.moc"

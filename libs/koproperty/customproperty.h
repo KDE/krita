@@ -24,7 +24,8 @@
 
 class QVariant;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class Property;
 
@@ -39,7 +40,7 @@ class Property;
 */
 class KOPROPERTY_EXPORT CustomProperty
 {
-  public:
+public:
     explicit CustomProperty(Property *parent);
     virtual ~CustomProperty();
 
@@ -60,9 +61,11 @@ class KOPROPERTY_EXPORT CustomProperty
     CustomProperty::setValue() will always be called. But if hadleValue() == true,
     then the value stored in the Property won't be changed.
     You should return true for child properties, and false for others. */
-    virtual bool handleValue() const { return false; }
+    virtual bool handleValue() const {
+        return false;
+    }
 
-  protected:
+protected:
     Property  *m_property;
 
     /*! This method emits the \a Set::propertyChanged() signal for all
@@ -73,7 +76,7 @@ class KOPROPERTY_EXPORT CustomProperty
 //! \brief Custom property implementation for QSize type
 class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 {
-  public:
+public:
     explicit SizeCustomProperty(Property *parent);
     ~SizeCustomProperty();
 
@@ -85,7 +88,7 @@ class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 //! \brief Custom property implementation for QPoint type
 class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 {
-  public:
+public:
     explicit PointCustomProperty(Property *parent);
     ~PointCustomProperty();
 
@@ -97,7 +100,7 @@ class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 //! \brief Custom property implementation for QRect type
 class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 {
-  public:
+public:
     explicit RectCustomProperty(Property *parent);
     ~RectCustomProperty();
 
@@ -109,7 +112,7 @@ class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 //! \brief Custom property implementation for QSizePolicy type
 class KOPROPERTY_EXPORT SizePolicyCustomProperty : public CustomProperty
 {
-  public:
+public:
     explicit SizePolicyCustomProperty(Property *parent);
     ~SizePolicyCustomProperty();
 

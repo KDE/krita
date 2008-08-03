@@ -37,9 +37,9 @@
 using namespace KoProperty;
 
 BoolEdit::BoolEdit(Property *property, QWidget *parent)
- : Widget(property, parent)
- , m_yesIcon( SmallIcon("dialog-ok") )
- , m_noIcon( SmallIcon("button_no") )
+        : Widget(property, parent)
+        , m_yesIcon(SmallIcon("dialog-ok"))
+        , m_noIcon(SmallIcon("button_no"))
 {
     m_toggle = new QToolButton(this);
     m_toggle->setFocusPolicy(Qt::WheelFocus);
@@ -55,7 +55,7 @@ BoolEdit::BoolEdit(Property *property, QWidget *parent)
         border: 1px solid %1; \
         border-radius: 0px; \
         padding: 0 0px; }").arg(focus.name()));
-    
+
     setFocusWidget(m_toggle);
     connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
 }
@@ -89,21 +89,19 @@ BoolEdit::slotValueChanged(bool state)
 }
 
 static void drawViewerInternal(QPainter *p, const QRect &r, const QVariant &value,
- const QPixmap& yesIcon, const QPixmap& noIcon, const QString& nullText)
+                               const QPixmap& yesIcon, const QPixmap& noIcon, const QString& nullText)
 {
     p->eraseRect(r);
     QRect r2(r);
     r2.moveLeft(KIconLoader::SizeSmall + 6);
 
-    if(value.isNull() && !nullText.isEmpty()) {
+    if (value.isNull() && !nullText.isEmpty()) {
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, nullText);
-    }
-    else if(value.toBool()) {
-        p->drawPixmap(3, (r.height()-1-KIconLoader::SizeSmall)/2, yesIcon);
+    } else if (value.toBool()) {
+        p->drawPixmap(3, (r.height() - 1 - KIconLoader::SizeSmall) / 2, yesIcon);
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("Yes"));
-    }
-    else {
-        p->drawPixmap(3, (r.height()-1-KIconLoader::SizeSmall)/2, noIcon);
+    } else {
+        p->drawPixmap(3, (r.height() - 1 - KIconLoader::SizeSmall) / 2, noIcon);
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("No"));
     }
 }
@@ -118,13 +116,10 @@ BoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 void
 BoolEdit::setState(bool state)
 {
-    if(state)
-    {
+    if (state) {
         m_toggle->setIcon(QIcon(SmallIcon("dialog-ok")));
         m_toggle->setText(i18n("Yes"));
-    }
-    else
-    {
+    } else {
         m_toggle->setIcon(QIcon(SmallIcon("button_no")));
         m_toggle->setText(i18n("No"));
     }
@@ -139,10 +134,10 @@ BoolEdit::resizeEvent(QResizeEvent *ev)
 bool
 BoolEdit::eventFilter(QObject* watched, QEvent* e)
 {
-    if(e->type() == QEvent::KeyPress) {
+    if (e->type() == QEvent::KeyPress) {
         QKeyEvent* ev = static_cast<QKeyEvent*>(e);
         const int k = ev->key();
-        if(k == Qt::Key_Space || k == Qt::Key_Enter || k == Qt::Key_Return) {
+        if (k == Qt::Key_Space || k == Qt::Key_Enter || k == Qt::Key_Return) {
             if (m_toggle)
                 m_toggle->toggle();
             return true;
@@ -154,22 +149,22 @@ BoolEdit::eventFilter(QObject* watched, QEvent* e)
 void
 BoolEdit::setReadOnlyInternal(bool readOnly)
 {
-  setVisibleFlag(!readOnly);
+    setVisibleFlag(!readOnly);
 }
 
 //--------------------------------------------------
 
 ThreeStateBoolEdit::ThreeStateBoolEdit(Property *property, QWidget *parent)
- : ComboBox(property, parent)
- , m_yesIcon( SmallIcon("dialog-ok") )
- , m_noIcon( SmallIcon("button_no") )
+        : ComboBox(property, parent)
+        , m_yesIcon(SmallIcon("dialog-ok"))
+        , m_noIcon(SmallIcon("button_no"))
 {
-  m_edit->addItem( m_yesIcon, i18n("Yes") );
-  m_edit->addItem( m_noIcon, i18n("No") );
-  QVariant thirdState = property ? property->option("3rdState") : QVariant();
-  QPixmap nullIcon( m_yesIcon.size() ); //transparent pixmap of appropriate size
-  nullIcon.fill( Qt::transparent );
-  m_edit->addItem( nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString() );
+    m_edit->addItem(m_yesIcon, i18n("Yes"));
+    m_edit->addItem(m_noIcon, i18n("No"));
+    QVariant thirdState = property ? property->option("3rdState") : QVariant();
+    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
+    nullIcon.fill(Qt::transparent);
+    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString());
 }
 
 ThreeStateBoolEdit::~ThreeStateBoolEdit()
@@ -179,44 +174,44 @@ ThreeStateBoolEdit::~ThreeStateBoolEdit()
 QVariant
 ThreeStateBoolEdit::value() const
 {
-  // list items: true, false, NULL
-  const int idx = m_edit->currentIndex();
-  if (idx==0)
-    return QVariant(true);
-  else
-    return idx==1 ? QVariant(false) : QVariant();
+    // list items: true, false, NULL
+    const int idx = m_edit->currentIndex();
+    if (idx == 0)
+        return QVariant(true);
+    else
+        return idx == 1 ? QVariant(false) : QVariant();
 }
 
 void
 ThreeStateBoolEdit::setProperty(Property *prop)
 {
-  m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
-  Widget::setProperty(prop);
-  m_setValueEnabled = true;
-  if(prop)
-    setValue(prop->value(), false); //now the value can be set
+    m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
+    Widget::setProperty(prop);
+    m_setValueEnabled = true;
+    if (prop)
+        setValue(prop->value(), false); //now the value can be set
 }
 
 void
 ThreeStateBoolEdit::setValue(const QVariant &value, bool emitChange)
 {
-  if (!m_setValueEnabled)
-    return;
+    if (!m_setValueEnabled)
+        return;
 
-  if (value.isNull())
-    m_edit->setCurrentIndex(2);
-  else
-    m_edit->setCurrentIndex(value.toBool() ? 0 : 1);
+    if (value.isNull())
+        m_edit->setCurrentIndex(2);
+    else
+        m_edit->setCurrentIndex(value.toBool() ? 0 : 1);
 
-  if (emitChange)
-    emit valueChanged(this);
+    if (emitChange)
+        emit valueChanged(this);
 }
 
 void
 ThreeStateBoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-  Q_UNUSED(cg);
-  drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, m_edit->itemText(2));
+    Q_UNUSED(cg);
+    drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, m_edit->itemText(2));
 }
 
 #include "booledit.moc"

@@ -40,12 +40,10 @@
 #include <QColor>
 #include <QGridLayout>
 #include <QLabel>
-#include <QPen>
 #include <QString>
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTextLine>
-#include <QTextList>
 #include <QVectorIterator>
 
 /* TODO:

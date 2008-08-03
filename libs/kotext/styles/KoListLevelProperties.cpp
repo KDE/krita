@@ -63,8 +63,7 @@ KoListLevelProperties::KoListLevelProperties()
 {
     setLevel(1);
     setStartValue(1);
-    setStyle(KoListStyle::DecimalItem);
-    setListItemSuffix(".");
+    setStyle(KoListStyle::DiscItem);
 }
 
 KoListLevelProperties::KoListLevelProperties(const KoListLevelProperties &other)

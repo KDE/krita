@@ -101,7 +101,7 @@ void TestChangeListCommand::joinList() {
     block = block.next(); // parag2
     QVERIFY(block.textList() == 0);
 
-    ChangeListCommand clc(block, KoListStyle::DiscItem);
+    ChangeListCommand clc(block, KoListStyle::DecimalItem);
     clc.redo();
     QCOMPARE(block.textList(), tl);
 }
@@ -112,11 +112,14 @@ void TestChangeListCommand::joinList2() {
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4");
     KoListStyle style;
+    KoListLevelProperties llp1;
+    llp1.setStyle(KoListStyle::DiscItem);
+    style.setLevelProperties(llp1);
     QTextBlock block = doc.begin().next().next();
     style.applyStyle(block); // apply on parag2
 
     KoListStyle style2;
-    KoListLevelProperties llp = style2.levelProperties(1);
+    KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DecimalItem);
     style2.setLevelProperties(llp);
     block = block.next().next(); // parag4
@@ -169,21 +172,26 @@ void TestChangeListCommand::splitList() {
     block = block.next();
     style2.applyStyle(block);
 
-    block = block.previous();
-    QTextList *tl = block.textList();
-    ChangeListCommand clc2(block, KoListStyle::DecimalItem);
-    clc2.redo();
+    QTextBlock paragA = doc.begin().next();
+    QVERIFY (paragA.textList());
+    QTextBlock paragB = paragA.next();
+    QVERIFY (paragB.textList());
+    QVERIFY (paragB.textList() != paragA.textList());
+    QTextBlock paragC = paragB.next();
+    QVERIFY (paragC.textList());
+    QCOMPARE (paragC.textList(), paragB.textList());
 
-    block = doc.begin();
-    QVERIFY(block.textList() == 0);
-    block = block.next();
-    QVERIFY(block.textList());
-    block = block.next();
-    QTextList *newTextList = block.textList();
+    QTextList *tl = paragB.textList();
+    ChangeListCommand clc(paragB, KoListStyle::AlphaLowerItem);
+    clc.redo();
+
+    QVERIFY(doc.begin().textList() == 0);
+    QVERIFY(paragA.textList());
+    QTextList *newTextList = paragB.textList();
     QVERIFY(newTextList != tl);
-    block = block.next();
-    QCOMPARE(block.textList(), tl);
+    QCOMPARE(paragC.textList(), tl);
 
+    QCOMPARE(tl->format().intProperty(KoListStyle::Level), 2);
     QCOMPARE(newTextList->format().intProperty(KoListStyle::Level), 2);
 }
 

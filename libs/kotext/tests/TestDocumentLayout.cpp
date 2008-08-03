@@ -1,11 +1,4 @@
 #include "TestDocumentLayout.h"
-
-//   #include "styles/KoParagraphStyle.h"
-//   #include "styles/KoListStyle.h"
-//   #include "styles/KoStyleManager.h"
-//   #include "KoTextBlockData.h"
-//   #include "KoTextBlockBorderData.h"
-
 #include <QtGui>
 
 #include <kdebug.h>

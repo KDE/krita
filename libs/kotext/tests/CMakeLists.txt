@@ -57,3 +57,9 @@ set(TestBorder_test_SRCS TestBorder.cpp)
 kde4_add_unit_test(TestBorder TESTNAME libs-kotext-TestBorder  ${TestBorder_test_SRCS})
 target_link_libraries(TestBorder kotext ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestStyles_test_SRCS TestStyles.cpp)
+kde4_add_unit_test(TestStyles TESTNAME libs-kotext-TestStyles  ${TestStyles_test_SRCS})
+target_link_libraries(TestStyles kotext ${QT_QTTEST_LIBRARY})
+

@@ -24,8 +24,9 @@
 
 #include "set.h"
 
-namespace KoProperty {
-  class Editor;
+namespace KoProperty
+{
+class Editor;
 }
 
 /*!
@@ -36,14 +37,14 @@ namespace KoProperty {
  */
 class Test : public KXmlGuiWindow
 {
-  Q_OBJECT
-  public:
-      Test();
+    Q_OBJECT
+public:
+    Test();
     virtual ~Test();
 
-  private:
-  KoProperty::Set *m_set;
-  KoProperty::Editor *edit;
+private:
+    KoProperty::Set *m_set;
+    KoProperty::Editor *edit;
 };
 
 #endif

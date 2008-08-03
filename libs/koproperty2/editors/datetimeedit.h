@@ -26,28 +26,29 @@
 class Q3DateTimeEdit;
 class QDateTime;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT DateTimeEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit DateTimeEdit(Property *property, QWidget *parent=0);
+public:
+    explicit DateTimeEdit(Property *property, QWidget *parent = 0);
     virtual ~DateTimeEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
 
-  protected slots:
+protected slots:
     void  slotValueChanged(const QDateTime &dateTime);
 
-  private:
+private:
     Q3DateTimeEdit   *m_edit;
 };
 

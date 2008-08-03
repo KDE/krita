@@ -26,7 +26,8 @@
 
 class QVariant;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class WidgetProxyPrivate;
 
@@ -36,12 +37,12 @@ class WidgetProxyPrivate;
 */
 class KOPROPERTY_EXPORT WidgetProxy : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit WidgetProxy(QWidget *parent, const char *name=0);
+public:
+    explicit WidgetProxy(QWidget *parent, const char *name = 0);
     WidgetProxy();
-        virtual ~WidgetProxy();
+    virtual ~WidgetProxy();
 
     void setPropertyType(int propertyType);
     int propertyType() const;
@@ -49,13 +50,13 @@ class KOPROPERTY_EXPORT WidgetProxy : public QWidget
     QVariant value() const;
     void setValue(const QVariant &value);
 
-    virtual bool setProperty( const char *name, const QVariant &value);
-    virtual QVariant property( const char *name) const;
+    virtual bool setProperty(const char *name, const QVariant &value);
+    virtual QVariant property(const char *name) const;
 
-  protected:
+protected:
     void setWidget();
 
-  private:
+private:
     WidgetProxyPrivate * const d;
 };
 

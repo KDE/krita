@@ -25,8 +25,9 @@
 
 using namespace KoProperty;
 
-class EditorDataModel::Private {
-  public:
+class EditorDataModel::Private
+{
+public:
     Private() {}
     Set *set;
     Property rootItem;
@@ -35,98 +36,96 @@ class EditorDataModel::Private {
 // -------------------
 
 EditorDataModel::EditorDataModel(Set &propertySet, QObject *parent)
-  : QAbstractItemModel(parent)
-  , d(new Private)
+        : QAbstractItemModel(parent)
+        , d(new Private)
 {
-  d->set = &propertySet;
+    d->set = &propertySet;
 }
 
 EditorDataModel::~EditorDataModel()
 {
-  delete d;
+    delete d;
 }
 
 int EditorDataModel::columnCount(const QModelIndex &parent) const
 {
-  Q_UNUSED(parent);
-  return 2;
+    Q_UNUSED(parent);
+    return 2;
 }
 
 QVariant EditorDataModel::data(const QModelIndex &index, int role) const
 {
-  if (!index.isValid())
-    return QVariant();
+    if (!index.isValid())
+        return QVariant();
 
-  if (role != Qt::DisplayRole && role != Qt::EditRole)
-    return QVariant();
+    if (role != Qt::DisplayRole && role != Qt::EditRole)
+        return QVariant();
 
-  Property *prop = getItem(index);
-  const int col = index.column();
-  if (col == 0)
-    return prop->name();
+    Property *prop = getItem(index);
+    const int col = index.column();
+    if (col == 0)
+        return prop->name();
 
-  return prop->value();
+    return prop->value();
 }
 
 Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
 {
-  if (!index.isValid())
-    return Qt::ItemIsEnabled;
+    if (!index.isValid())
+        return Qt::ItemIsEnabled;
 
-  const int col = index.column();
-  if (col == 0)
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    const int col = index.column();
+    if (col == 0)
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
-  return Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    return Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 Property *EditorDataModel::getItem(const QModelIndex &index) const
 {
-  if (index.isValid()) {
-    Property *item = static_cast<Property*>(index.internalPointer());
-    if (item)
-      return item;
-  }
-  return &d->rootItem;
+    if (index.isValid()) {
+        Property *item = static_cast<Property*>(index.internalPointer());
+        if (item)
+            return item;
+    }
+    return &d->rootItem;
 }
 
 QVariant EditorDataModel::headerData(int section, Qt::Orientation orientation,
                                      int role) const
 {
-  if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-    if (section == 0) {
-      return i18n("Name");
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        if (section == 0) {
+            return i18n("Name");
+        } else {
+            return i18n("Value");
+        }
     }
-    else {
-      return i18n("Value");
-    }
-  }
-  return QVariant();
+    return QVariant();
 }
 
 QModelIndex EditorDataModel::index(int row, int column, const QModelIndex &parent) const
 {
-  if (parent.isValid() && parent.column() != 0)
-    return QModelIndex();
+    if (parent.isValid() && parent.column() != 0)
+        return QModelIndex();
 
-  Property *parentItem = getItem(parent);
-  Property *childItem;
-  if (parentItem == &d->rootItem) { // special case: top level
-    int r = 0;
-    Set::Iterator it(*d->set);
-    for (; r < row && it.current(); r++, ++it)
-      ;
-    childItem = it.current();
-  }
-  else {
-    const QList<Property*>* children = parentItem->children();
-    if (!children)
-      return QModelIndex();
-    childItem = children->value(row);
-  }
-  if (!childItem)
-    return QModelIndex();
-  return createIndex(row, column, childItem);
+    Property *parentItem = getItem(parent);
+    Property *childItem;
+    if (parentItem == &d->rootItem) { // special case: top level
+        int r = 0;
+        Set::Iterator it(*d->set);
+        for (; r < row && it.current(); r++, ++it)
+            ;
+        childItem = it.current();
+    } else {
+        const QList<Property*>* children = parentItem->children();
+        if (!children)
+            return QModelIndex();
+        childItem = children->value(row);
+    }
+    if (!childItem)
+        return QModelIndex();
+    return createIndex(row, column, childItem);
 }
 
 /*bool EditorDataModel::insertColumns(int position, int columns, const QModelIndex &parent)
@@ -155,21 +154,21 @@ bool EditorDataModel::insertRows(int position, int rows, const QModelIndex &pare
 
 QModelIndex EditorDataModel::parent(const QModelIndex &index) const
 {
-  if (!index.isValid())
-    return QModelIndex();
+    if (!index.isValid())
+        return QModelIndex();
 
-  Property *childItem = getItem(index);
-  Property *parentItem = childItem->parent();
+    Property *childItem = getItem(index);
+    Property *parentItem = childItem->parent();
 
-  if (!parentItem)
-    return QModelIndex();
+    if (!parentItem)
+        return QModelIndex();
 
-  const QList<Property*>* children = parentItem->children();
-  Q_ASSERT(children);
-  const int indexOfItem = children->indexOf(childItem);
-  Q_ASSERT(indexOfItem!=-1);
+    const QList<Property*>* children = parentItem->children();
+    Q_ASSERT(children);
+    const int indexOfItem = children->indexOf(childItem);
+    Q_ASSERT(indexOfItem != -1);
 
-  return createIndex(indexOfItem, 0, parentItem);
+    return createIndex(indexOfItem, 0, parentItem);
 }
 
 /*bool EditorDataModel::removeColumns(int position, int columns, const QModelIndex &parent)
@@ -200,47 +199,46 @@ bool EditorDataModel::removeRows(int position, int rows, const QModelIndex &pare
 
 int EditorDataModel::rowCount(const QModelIndex &parent) const
 {
-  Property *parentItem = getItem(parent);
-  if (!parentItem)
-    return 0;
-  if (parentItem == &d->rootItem) { // top level
-    int count = 0;
-    Set::Iterator it(*d->set);
-    for (; it.current(); count++, ++it)
-      ;
-    return count;
-  }
-  else {
-    const QList<Property*>* children = parentItem->children();
-    return children ? children->count() : 0;
-  }
+    Property *parentItem = getItem(parent);
+    if (!parentItem)
+        return 0;
+    if (parentItem == &d->rootItem) { // top level
+        int count = 0;
+        Set::Iterator it(*d->set);
+        for (; it.current(); count++, ++it)
+            ;
+        return count;
+    } else {
+        const QList<Property*>* children = parentItem->children();
+        return children ? children->count() : 0;
+    }
 }
 
 bool EditorDataModel::setData(const QModelIndex &index, const QVariant &value,
                               int role)
 {
-  if (role != Qt::EditRole)
-    return false;
+    if (role != Qt::EditRole)
+        return false;
 
-  Property *item = getItem(index);
-  if (item == &d->rootItem)
-    return false;
-  item->setValue(value);
-  return true;
+    Property *item = getItem(index);
+    if (item == &d->rootItem)
+        return false;
+    item->setValue(value);
+    return true;
 }
 
 bool EditorDataModel::setHeaderData(int section, Qt::Orientation orientation,
                                     const QVariant &value, int role)
 {
-  Q_UNUSED(section);
-  Q_UNUSED(orientation);
-  Q_UNUSED(value);
-  Q_UNUSED(role);
-  return false;
-/*    if (role != Qt::EditRole || orientation != Qt::Horizontal)
-        return false;
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(value);
+    Q_UNUSED(role);
+    return false;
+    /*    if (role != Qt::EditRole || orientation != Qt::Horizontal)
+            return false;
 
-    return rootItem->setData(section, value);*/
+        return rootItem->setData(section, value);*/
 }
 
 /*

@@ -27,7 +27,8 @@
 //Added by qt3to4:
 #include <QEvent>
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class IntEdit;
 class DoubleEdit;
@@ -36,39 +37,43 @@ class DoubleEdit;
 
 class IntSpinBox : public KIntSpinBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    IntSpinBox(int lower, int upper, int step, int value, int base=10,
-      IntEdit *parent=0);
-    virtual ~IntSpinBox() {;}
+public:
+    IntSpinBox(int lower, int upper, int step, int value, int base = 10,
+               IntEdit *parent = 0);
+    virtual ~IntSpinBox() {
+        ;
+    }
 
     virtual void setValue(const QVariant &value);
 
     virtual bool eventFilter(QObject *o, QEvent *e);
-    QLineEdit * lineEdit() const { return KIntSpinBox::lineEdit(); }
+    QLineEdit * lineEdit() const {
+        return KIntSpinBox::lineEdit();
+    }
 };
 
 class KOPROPERTY_EXPORT IntEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    IntEdit(Property *property, QWidget *parent=0);
+public:
+    IntEdit(Property *property, QWidget *parent = 0);
     virtual ~IntEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
     void updateSpinWidgets();
 
-  protected slots:
+protected slots:
     void slotValueChanged(int value);
 
-  private:
+private:
     IntSpinBox  *m_edit;
 };
 
@@ -76,41 +81,45 @@ class KOPROPERTY_EXPORT IntEdit : public Widget
 
 class DoubleSpinBox : public QDoubleSpinBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     //! \todo Support setting precision limits, step, etc.
-    DoubleSpinBox(double lower, double upper, double step, double value=0,
-      int precision=2, DoubleEdit *parent=0);
-    virtual ~DoubleSpinBox() {;}
+    DoubleSpinBox(double lower, double upper, double step, double value = 0,
+                  int precision = 2, DoubleEdit *parent = 0);
+    virtual ~DoubleSpinBox() {
+        ;
+    }
 
     virtual bool eventFilter(QObject *o, QEvent *e);
-    QLineEdit * lineEdit() const { return QDoubleSpinBox::lineEdit(); }
+    QLineEdit * lineEdit() const {
+        return QDoubleSpinBox::lineEdit();
+    }
 
-  public slots:
-    virtual void setValue( const QVariant& value );
+public slots:
+    virtual void setValue(const QVariant& value);
 };
 
 class KOPROPERTY_EXPORT DoubleEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    DoubleEdit(Property *property, QWidget *parent=0);
+public:
+    DoubleEdit(Property *property, QWidget *parent = 0);
     virtual ~DoubleEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
     void updateSpinWidgets();
 
-  protected slots:
+protected slots:
     void slotValueChanged(double value);
 
-  private:
+private:
     DoubleSpinBox  *m_edit;
 };
 

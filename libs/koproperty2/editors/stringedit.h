@@ -25,26 +25,27 @@
 
 class QLineEdit;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT StringEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit StringEdit(Property *property, QWidget *parent=0);
+public:
+    explicit StringEdit(Property *property, QWidget *parent = 0);
     virtual ~StringEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
 
-  protected slots:
+protected slots:
     void slotValueChanged(const QString&);
 
-  protected:
+protected:
     QLineEdit *m_edit;
 };
 

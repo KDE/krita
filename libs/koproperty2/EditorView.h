@@ -38,11 +38,12 @@ class QSize;*/
 
 #include <QtGui/QTreeView>
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT EditorView : public QTreeView
 {
-  public:
+public:
     EditorView(QWidget *parent = 0);
     ~EditorView();
 };
@@ -69,7 +70,7 @@ class EditorItem;
     <li> 3rdState: i18n'd QString used in BoolEdit. If not empty, the the editor's button
      accept third "null" state with name equal to this string. When this value is selected,
      Widget::value() returns null QVariant. This option is used for example in the "defaultValue"
-     property for a field of type boolean (in Kexi Table Designer). Third, "null" value 
+     property for a field of type boolean (in Kexi Table Designer). Third, "null" value
      of the property means there is no "defaultValue" specified. </li>
     <li>
      extraValueAllowed: Allow the user to manually enter a value into a combobox
@@ -82,9 +83,9 @@ class EditorItem;
  */
 class KOPROPERTY_EXPORT Editor : public K3ListView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /*! Creates an empty Editor with \a parent as parent widget.
     If \a autoSync == true, properties values are automatically synced as
     soon as editor contents change (eg the user types text, etc.)
@@ -92,23 +93,23 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
     is updated only when selected item changes or user presses Enter key.
     Each property can overwrite this if its autoSync() == 0 or 1.
     */
-    Editor(QWidget *parent=0, bool autoSync=true, const char *name=0);
+    Editor(QWidget *parent = 0, bool autoSync = true, const char *name = 0);
 
     virtual ~Editor();
 
     virtual QSize sizeHint() const;
     virtual void setFocus();
-    virtual void setSorting( int column, bool ascending = true );
+    virtual void setSorting(int column, bool ascending = true);
 
-  public slots:
+public slots:
     /*! Populates the editor with an item for each property in the List.
-      Also creates child items for composed properties. 
-     If \a preservePrevSelection is true, previously selected editor 
+      Also creates child items for composed properties.
+     If \a preservePrevSelection is true, previously selected editor
      item will be kept selected, if present. */
     void changeSet(Set *set, bool preservePrevSelection = false);
 
     /*! Populates the editor with an item for each property in the List.
-      Also creates child items for composed properties. 
+      Also creates child items for composed properties.
      If \a propertyToSelect is not empty, editor item for this property name
      will be selected, if present. */
     void changeSet(Set *set, const QByteArray& propertyToSelect);
@@ -122,11 +123,11 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
     /*! Accept the changes mae to the current editor (as if the user had pressed Enter key) */
     void acceptInput();
 
-  signals:
+signals:
     /*! Emitted when current property set has been changed. May be 0. */
     void propertySetChanged(KoProperty::Set *set);
 
-  protected slots:
+protected slots:
     /*! Updates property widget in the editor.*/
     void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
@@ -169,11 +170,11 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
     void slotCurrentChanged(Q3ListViewItem *item);
     void changeSetLater();
     void selectItemLater();
-  protected:
+protected:
     /*! \return \ref Widget for given property.
     Uses cache to store created widgets.
     Cache will be cleared only with clearWidgetCache().*/
-    Widget *createWidgetForProperty(Property *property, bool changeWidgetProperty=true);
+    Widget *createWidgetForProperty(Property *property, bool changeWidgetProperty = true);
 
     /*! Deletes cached machines.*/
     void clearWidgetCache();
@@ -181,26 +182,26 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
     void fill();
     void addItem(const QByteArray &name, EditorItem *parent);
 
-    void showUndoButton( bool show );
+    void showUndoButton(bool show);
 
     virtual void resizeEvent(QResizeEvent *ev);
-    virtual bool eventFilter( QObject * watched, QEvent * e );
+    virtual bool eventFilter(QObject * watched, QEvent * e);
     bool handleKeyPress(QKeyEvent* ev);
 
-    virtual bool event( QEvent * e );
+    virtual bool event(QEvent * e);
     void updateFont();
 
-    virtual void contentsMousePressEvent( QMouseEvent * e );
+    virtual void contentsMousePressEvent(QMouseEvent * e);
 
     /*! Used for changeSet(). */
-    void changeSetInternal(Set *set, bool preservePrevSelection, 
-      const QByteArray& propertyToSelect);
+    void changeSetInternal(Set *set, bool preservePrevSelection,
+                           const QByteArray& propertyToSelect);
 
-  private:
+private:
     EditorPrivate * const d;
 
-  friend class EditorItem;
-  friend class Widget;
+    friend class EditorItem;
+    friend class Widget;
 };
 #endif
 

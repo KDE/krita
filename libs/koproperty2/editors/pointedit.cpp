@@ -34,20 +34,20 @@
 using namespace KoProperty;
 
 PointEdit::PointEdit(Property *property, QWidget *parent)
- : Widget(property, parent)
+        : Widget(property, parent)
 {
-  setHasBorders(false);
-  m_edit = new QLabel(this);
-  m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
-//	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-  QPalette pal = m_edit->palette();
-  pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
-  m_edit->setPalette(pal);
-//	m_edit->setBackgroundMode(Qt::PaletteBase);
-//	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  m_edit->setMinimumHeight(5);
-  setEditor(m_edit);
-//	setFocusWidget(m_edit);
+    setHasBorders(false);
+    m_edit = new QLabel(this);
+    m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
+// m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
+    QPalette pal = m_edit->palette();
+    pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
+    m_edit->setPalette(pal);
+// m_edit->setBackgroundMode(Qt::PaletteBase);
+// m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_edit->setMinimumHeight(5);
+    setEditor(m_edit);
+// setFocusWidget(m_edit);
 }
 
 PointEdit::~PointEdit()
@@ -56,35 +56,35 @@ PointEdit::~PointEdit()
 QVariant
 PointEdit::value() const
 {
-  return m_value;
+    return m_value;
 }
 
 void
 PointEdit::setValue(const QVariant &value, bool emitChange)
 {
-  m_value = value;
-  m_edit->setText(QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
-  this->setToolTip( QString("%1, %2").arg(value.toPoint().x()).arg(value.toPoint().y()));
+    m_value = value;
+    m_edit->setText(QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
+    this->setToolTip(QString("%1, %2").arg(value.toPoint().x()).arg(value.toPoint().y()));
 
-  if (emitChange)
-    emit valueChanged(this);
+    if (emitChange)
+        emit valueChanged(this);
 }
 
 void
 PointEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-  QRect rect(r);
-  rect.setBottom(r.bottom()+1);
-  Widget::drawViewer(p, cg, rect, QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
-//	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-//		QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
+    QRect rect(r);
+    rect.setBottom(r.bottom() + 1);
+    Widget::drawViewer(p, cg, rect, QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
+// p->eraseRect(r);
+// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
+//  QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
 }
 
 void
 PointEdit::setReadOnlyInternal(bool readOnly)
 {
-  Q_UNUSED(readOnly);
+    Q_UNUSED(readOnly);
 }
 
 #include "pointedit.moc"

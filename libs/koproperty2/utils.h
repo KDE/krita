@@ -23,20 +23,21 @@
 #include <qmap.h>
 #include <qwidget.h>
 
-namespace KoProperty {
+namespace KoProperty
+{
 
-//! @short A container widget that can be used to split information into hideable sections 
+//! @short A container widget that can be used to split information into hideable sections
 //! for a property editor-like panes.
 class KOPROPERTY_EXPORT GroupContainer : public QWidget
 {
-  public:
+public:
     GroupContainer(const QString& title, QWidget* parent);
     ~GroupContainer();
 
-    void setContents( QWidget* contents );
+    void setContents(QWidget* contents);
 
-  protected:
-    virtual bool event( QEvent * e );
+protected:
+    virtual bool event(QEvent * e);
 
     class Private;
     Private * const d;

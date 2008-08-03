@@ -35,11 +35,11 @@ template<class U> class Q3AsciiDictIterator;
  Main classes of this framework are:
   - Property, representing a single property with its own type and value
   - Set, a set of properties
-  - Editor, a widget for displaying and editing properties provided by a Set object. 
-    Every property has its own row displayed using EditorItem object, within Editor widget. 
+  - Editor, a widget for displaying and editing properties provided by a Set object.
+    Every property has its own row displayed using EditorItem object, within Editor widget.
     Widget class provides editing feature for EditorItem objects if a user selects a given item.
 
- KoProperty framework also supports adding custom property types 
+ KoProperty framework also supports adding custom property types
  and custom property editor types using Custom Property and CustomPropertyFactory.
   If you cannot store your value type in a QVariant, consider using composed properties
  (see FactoryManager for more information) or storing it in CustomProperty yourself with handleValue()
@@ -51,7 +51,8 @@ template<class U> class Q3AsciiDictIterator;
  \author Alexander Dymo <cloudtemple@mskat.net>
  \author Jaroslaw Staniek <js@iidea.pl>
 */
-namespace KoProperty {
+namespace KoProperty
+{
 
 class PropertyPrivate;
 class CustomProperty;
@@ -59,71 +60,71 @@ class Set;
 
 ///*! Helper function to create a value list from two string lists. */
 //KOPROPERTY_EXPORT QMap<QString, QVariant> createValueListFromStringLists(
-//	const QStringList &keys, const QStringList &values);
+// const QStringList &keys, const QStringList &values);
 
 /*! PropertyType.
 Integers that represent the type of the property. Plugin defined properties
 should have a type number >= UserDefined .*/
 enum PropertyType {
-  //standard supported QVariant types
-  Auto = 0x00ffffff,
-  Invalid = QVariant::Invalid   /**<invalid property type*/,
-  Map = QVariant::Map           /**<QMap<QString, QVariant>*/,
-  List = QVariant::List         /**<QList<QVariant>*/,
-  String = QVariant::String     /**<string*/,
-  StringList = QVariant::StringList  /**<string list*/,
-  Font = QVariant::Font         /**<font*/,
-  Pixmap = QVariant::Pixmap     /**<pixmap*/,
-  //! @todo implement QVariant::Brush
-  Rect = QVariant::Rect         /**<rectangle (x,y, width, height)*/,
-  Size = QVariant::Size         /**<size (width, height)*/,
-  Color = QVariant::Color       /**<color*/,
-  //! \todo implement QVariant::Palette
-  //! \todo implement QVariant::ColorGroup
-  //! \todo implement QVariant::IconSet
-  Point = QVariant::Point       /**<point (x,y)*/,
-  //! \todo implement QVariant::Image
-  Integer = QVariant::Int       /**<integer*/,
-  //! \todo implement QVariant::UInt
-  Boolean = QVariant::Bool      /**<boolean*/,
-  Double = QVariant::Double     /**<double*/,
-  CString = QVariant::CString   /** latin-1 string*/,
-  //! @todo implement QVariant::PointArray
-  //! @todo implement QVariant::Region
-  //! @todo implement QVariant::Bitmap
-  Cursor = QVariant::Cursor     /**<cursor*/,
-  SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
-  Date = QVariant::Date         /**<date*/,
-  Time = QVariant::Time         /**<time*/,
-  DateTime = QVariant::DateTime /**<date and time*/,
-  //! @todo implement QVariant::ByteArray
-  //! @todo implement QVariant::BitArray
-  //! @todo implement QVariant::KeySequence
+    //standard supported QVariant types
+    Auto = 0x00ffffff,
+    Invalid = QVariant::Invalid   /**<invalid property type*/,
+    Map = QVariant::Map           /**<QMap<QString, QVariant>*/,
+    List = QVariant::List         /**<QList<QVariant>*/,
+    String = QVariant::String     /**<string*/,
+    StringList = QVariant::StringList  /**<string list*/,
+    Font = QVariant::Font         /**<font*/,
+    Pixmap = QVariant::Pixmap     /**<pixmap*/,
+    //! @todo implement QVariant::Brush
+    Rect = QVariant::Rect         /**<rectangle (x,y, width, height)*/,
+    Size = QVariant::Size         /**<size (width, height)*/,
+    Color = QVariant::Color       /**<color*/,
+    //! \todo implement QVariant::Palette
+    //! \todo implement QVariant::ColorGroup
+    //! \todo implement QVariant::IconSet
+    Point = QVariant::Point       /**<point (x,y)*/,
+    //! \todo implement QVariant::Image
+    Integer = QVariant::Int       /**<integer*/,
+    //! \todo implement QVariant::UInt
+    Boolean = QVariant::Bool      /**<boolean*/,
+    Double = QVariant::Double     /**<double*/,
+    CString = QVariant::CString   /** latin-1 string*/,
+    //! @todo implement QVariant::PointArray
+    //! @todo implement QVariant::Region
+    //! @todo implement QVariant::Bitmap
+    Cursor = QVariant::Cursor     /**<cursor*/,
+    SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
+    Date = QVariant::Date         /**<date*/,
+    Time = QVariant::Time         /**<time*/,
+    DateTime = QVariant::DateTime /**<date and time*/,
+    //! @todo implement QVariant::ByteArray
+    //! @todo implement QVariant::BitArray
+    //! @todo implement QVariant::KeySequence
 
-  //predefined custom types
-  ValueFromList = 2000          /**<string value from a list*/,
-  Symbol = 2001                 /**<unicode symbol code*/,
-  FontName                      /**<font name, e.g. "times new roman"*/,
-  FileURL                       /**<url of a file*/,
-  PictureFileURL                /**<url of a pixmap*/,
-  DirectoryURL                  /**<url of a directory*/,
-  LineStyle                     /**<line style*/,
+    //predefined custom types
+    ValueFromList = 2000          /**<string value from a list*/,
+    Symbol = 2001                 /**<unicode symbol code*/,
+    FontName                      /**<font name, e.g. "times new roman"*/,
+    FileURL                       /**<url of a file*/,
+    PictureFileURL                /**<url of a pixmap*/,
+    DirectoryURL                  /**<url of a directory*/,
+    LineStyle                     /**<line style*/,
 
-  // Child property types
-  Size_Height = 3001,
-  Size_Width,
-  Point_X,
-  Point_Y,
-  Rect_X,
-  Rect_Y,
-  Rect_Width,
-  Rect_Height,
-  SizePolicy_HorData,
-  SizePolicy_VerData,
-  SizePolicy_HorStretch,
-  SizePolicy_VerStretch,
+    // Child property types
+    Size_Height = 3001,
+    Size_Width,
+    Point_X,
+    Point_Y,
+    Rect_X,
+    Rect_Y,
+    Rect_Width,
+    Rect_Height,
+    SizePolicy_HorData,
+    SizePolicy_VerData,
+    SizePolicy_HorStretch,
+    SizePolicy_VerStretch,
 
-  UserDefined = 4000            /**<plugin defined properties should start here*/
+    UserDefined = 4000            /**<plugin defined properties should start here*/
 };
 
 /*! \brief The base class representing a single property
@@ -162,9 +163,9 @@ enum PropertyType {
 
   Sometimes, for longer property captions or these with more words, e.g. "Allow Zero Size",
   its usable to provide newline characters, e.g. "Allow Zero\nSize".
-  If caption argument of the constructors contains newline characters, 
+  If caption argument of the constructors contains newline characters,
   caption() will return this text with substituted these characters with spaces.
-  In such cases, captionForDisplaying() is used to get the original caption text usable 
+  In such cases, captionForDisplaying() is used to get the original caption text usable
   (with newline, if any) for displaying within a property editor.
 
   \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -173,7 +174,7 @@ enum PropertyType {
 */
 class KOPROPERTY_EXPORT Property
 {
-  public:
+public:
     //! A contant for null property
     QT_STATIC_CONST Property null;
 
@@ -184,56 +185,56 @@ class KOPROPERTY_EXPORT Property
     class KOPROPERTY_EXPORT ListData
     {
     public:
-      /*! Data container for list-value property.
-       We will be able to choose an item from this list. */
-      ListData(const QStringList& keys_, const QStringList& names_);
-      ListData(const QList<QVariant> keys_, const QStringList& names_);
-      ListData();
-      ~ListData();
+        /*! Data container for list-value property.
+         We will be able to choose an item from this list. */
+        ListData(const QStringList& keys_, const QStringList& names_);
+        ListData(const QList<QVariant> keys_, const QStringList& names_);
+        ListData();
+        ~ListData();
 
-      void setKeysAsStringList(const QStringList& list);
-      QStringList keysAsStringList() const;
+        void setKeysAsStringList(const QStringList& list);
+        QStringList keysAsStringList() const;
 
-      /*! The string list containing all possible keys for this property
-       or NULL if this is not a property of type 'list'. The values in this list are ordered,
-       so the first key element is associated with first element from
-       the 'names' list, and so on. */
-      QList<QVariant> keys;
-//			QStringList keys;
+        /*! The string list containing all possible keys for this property
+         or NULL if this is not a property of type 'list'. The values in this list are ordered,
+         so the first key element is associated with first element from
+         the 'names' list, and so on. */
+        QList<QVariant> keys;
+//   QStringList keys;
 
 //! @todo what about using QValueList<QVariant> here too?
-      /*! The list of i18n'ed names that will be visible on the screen.
-       First value is referenced by first key, and so on. */
-      QStringList names;
+        /*! The list of i18n'ed names that will be visible on the screen.
+         First value is referenced by first key, and so on. */
+        QStringList names;
 
-//unused for now			/*! True (the default), if the list has fixed number of possible
-//unused for now			 items (keys). If this is false, user can add or enter own values. */
-//unused for now			bool fixed : 1;
+//unused for now   /*! True (the default), if the list has fixed number of possible
+//unused for now    items (keys). If this is false, user can add or enter own values. */
+//unused for now   bool fixed : 1;
     };
 
     /*! Constructs a null property. */
     Property();
 
-    /*! Constructs property of simple type. 
-     If \a caption contains newline characters, caption() will return \a caption with substituted 
-     these with spaces. captionForDisplaying() is used to get original caption text usable 
+    /*! Constructs property of simple type.
+     If \a caption contains newline characters, caption() will return \a caption with substituted
+     these with spaces. captionForDisplaying() is used to get original caption text usable
      (with newline, if any) for displaying within a property editor. */
     Property(const QByteArray &name, const QVariant &value = QVariant(),
-      const QString &caption = QString::null, const QString &description = QString::null,
-      int type = Auto, Property* parent = 0);
+             const QString &caption = QString::null, const QString &description = QString::null,
+             int type = Auto, Property* parent = 0);
 
     /*! Constructs property of \ref ValueFromList type. */
-    Property(const QByteArray &name, const QStringList &keys, const QStringList &strings, 
-      const QVariant &value = QVariant(),
-      const QString &caption = QString::null, const QString &description = QString::null,
-      int type = ValueFromList, Property* parent = 0);
+    Property(const QByteArray &name, const QStringList &keys, const QStringList &strings,
+             const QVariant &value = QVariant(),
+             const QString &caption = QString::null, const QString &description = QString::null,
+             int type = ValueFromList, Property* parent = 0);
 
     /*! Constructs property of \ref ValueFromList type.
      This is overload of the above ctor added for convenience. */
     Property(const QByteArray &name, ListData* listData,
-      const QVariant &value = QVariant(),
-      const QString &caption = QString::null, const QString &description = QString::null,
-      int type = ValueFromList, Property* parent = 0);
+             const QVariant &value = QVariant(),
+             const QString &caption = QString::null, const QString &description = QString::null,
+             int type = ValueFromList, Property* parent = 0);
 
     /*! Constructs a deep copy of \a prop property. */
     Property(const Property &prop);
@@ -249,13 +250,13 @@ class KOPROPERTY_EXPORT Property
     /*! \return the caption of the property.*/
     QString caption() const;
 
-    /*! \return the caption text of the property for displaying. 
-     It is similar to caption() but if the property caption contains newline characters, 
+    /*! \return the caption text of the property for displaying.
+     It is similar to caption() but if the property caption contains newline characters,
      these are not substituted with spaces. */
     QString captionForDisplaying() const;
 
-    /*! Sets the name of the property. If the caption contains newline characters, 
-     these are replaced by spaces. You can use captionForDisplaying() 
+    /*! Sets the name of the property. If the caption contains newline characters,
+     these are replaced by spaces. You can use captionForDisplaying()
      to access the original caption text you passed here.*/
     void setCaption(const QString &caption);
 
@@ -278,13 +279,13 @@ class KOPROPERTY_EXPORT Property
     QVariant oldValue() const;
 
     /*! Sets the value of the property.*/
-    void setValue(const QVariant &value, bool rememberOldValue = true, bool useCustomProperty=true);
+    void setValue(const QVariant &value, bool rememberOldValue = true, bool useCustomProperty = true);
 
-    /*! Resets the value of the property to the old value. 
+    /*! Resets the value of the property to the old value.
      @see oldValue() */
     void resetValue();
 
-    /*! \return the qstring-to-value correspondence list of the property. 
+    /*! \return the qstring-to-value correspondence list of the property.
      used to create comboboxes-like property editors.*/
     ListData* listData() const;
 
@@ -318,7 +319,7 @@ class KOPROPERTY_EXPORT Property
     no custom property defined. */
     CustomProperty* customProperty() const;
 
-    /*! Sets custom property \a prop for this property. 
+    /*! Sets custom property \a prop for this property.
      @see CustomPropertyFactory */
     void setCustomProperty(CustomProperty *prop);
 
@@ -334,14 +335,14 @@ class KOPROPERTY_EXPORT Property
     //! Clears "modified" flag, so isModified() will return false.
     void clearModifiedFlag();
 
-    /*! \return true if the property is read-only. 
-     The property can be read-write but still not editable because the property 
-     set containing it may be set to read-only. 
+    /*! \return true if the property is read-only.
+     The property can be read-write but still not editable because the property
+     set containing it may be set to read-only.
      By default the property is read-write.
      See Set::isReadOnly() for more details. */
     bool isReadOnly() const;
 
-    /*! Sets this property to be read-only. 
+    /*! Sets this property to be read-only.
      @see isReadOnly() */
     void setReadOnly(bool readOnly);
 
@@ -360,16 +361,16 @@ class KOPROPERTY_EXPORT Property
     void setStorable(bool storable);
 
     /*! \return 1 if the property should be synced automatically in Property Editor
-    as soon as editor contents change (e.g. when the user types text). 
-    If autoSync() == 0, property value will be updated when the user presses Enter 
+    as soon as editor contents change (e.g. when the user types text).
+    If autoSync() == 0, property value will be updated when the user presses Enter
     or when another editor gets the focus.
     Property follows Property Editor's global rule if autoSync() !=0 and !=1 (the default).
     */
     int autoSync() const;
 
     /*! if \a sync is 1, the property will be synced automatically in the Property Editor
-    as soon as editor's contents change (e.g. when the user types text). 
-    If \a sync is 0, property value will be updated when the user presses 
+    as soon as editor's contents change (e.g. when the user types text).
+    If \a sync is 0, property value will be updated when the user presses
     Enter or when another editor gets the focus.
     Property follows Property Editor's global rule if sync !=0 and !=1 (the default).
     */
@@ -397,13 +398,13 @@ class KOPROPERTY_EXPORT Property
     /*! Compares two properties.*/
     bool operator ==(const Property &prop) const;
 
-    /*! \return a key used for sorting. 
+    /*! \return a key used for sorting.
      Usually its set by Set::addProperty() and Property::addChild() t oa unique value,
-     so that this property can be sorted in a property editor in original order. 
+     so that this property can be sorted in a property editor in original order.
      \see EditorItem::compare() */
     int sortingKey() const;
 
-  protected:
+protected:
     /*! Adds \a prop as a child of this property.
      The children will be owned by this property. */
     void addChild(Property *prop);
@@ -431,9 +432,9 @@ class KOPROPERTY_EXPORT Property
     //! @internal
     PropertyPrivate * const d;
 
-  friend class Set;
-  friend class Buffer;
-  friend class CustomProperty;
+    friend class Set;
+    friend class Buffer;
+    friend class CustomProperty;
 };
 
 }

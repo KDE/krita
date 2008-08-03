@@ -33,17 +33,17 @@
 using namespace KoProperty;
 
 RectEdit::RectEdit(Property *property, QWidget *parent)
- : Widget(property, parent)
+        : Widget(property, parent)
 {
-  setHasBorders(false);
-  m_edit = new QLabel(this);
-  m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  QPalette pal = m_edit->palette();
-  pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
-  m_edit->setPalette(pal);
-  m_edit->setMinimumHeight(5);
-  setEditor(m_edit);
-//	setFocusWidget(m_edit);
+    setHasBorders(false);
+    m_edit = new QLabel(this);
+    m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    QPalette pal = m_edit->palette();
+    pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
+    m_edit->setPalette(pal);
+    m_edit->setMinimumHeight(5);
+    setEditor(m_edit);
+// setFocusWidget(m_edit);
 }
 
 RectEdit::~RectEdit()
@@ -52,40 +52,40 @@ RectEdit::~RectEdit()
 QVariant
 RectEdit::value() const
 {
-  return m_value;
+    return m_value;
 }
 
 void
 RectEdit::setValue(const QVariant &value, bool emitChange)
 {
-  m_value = value;
-  m_edit->setText(QString(RECTEDIT_MASK).arg(value.toRect().x()).
-    arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
-  this->setToolTip( i18n("Position: %1, %2\nSize: %3 x %4", value.toRect().x()).
-    arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
+    m_value = value;
+    m_edit->setText(QString(RECTEDIT_MASK).arg(value.toRect().x()).
+                    arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
+    this->setToolTip(i18n("Position: %1, %2\nSize: %3 x %4", value.toRect().x()).
+                     arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
 
-  if (emitChange)
-    emit valueChanged(this);
+    if (emitChange)
+        emit valueChanged(this);
 }
 
 void
 RectEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-  QRect rect(r);
-  rect.setBottom(r.bottom()+1);
-  Widget::drawViewer(p, cg, rect, 
-    QString(RECTEDIT_MASK).arg(value.toRect().x()).arg(value.toRect().y())
-   	.arg(value.toRect().width()).arg(value.toRect().height()));
-//	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-//	 	QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).arg(value.toRect().y())
-//	 	.arg(value.toRect().width()).arg(value.toRect().height()));
+    QRect rect(r);
+    rect.setBottom(r.bottom() + 1);
+    Widget::drawViewer(p, cg, rect,
+                       QString(RECTEDIT_MASK).arg(value.toRect().x()).arg(value.toRect().y())
+                       .arg(value.toRect().width()).arg(value.toRect().height()));
+// p->eraseRect(r);
+// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
+//   QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).arg(value.toRect().y())
+//   .arg(value.toRect().width()).arg(value.toRect().height()));
 }
 
 void
 RectEdit::setReadOnlyInternal(bool readOnly)
 {
-  Q_UNUSED(readOnly);
+    Q_UNUSED(readOnly);
 }
 
 #include "rectedit.moc"

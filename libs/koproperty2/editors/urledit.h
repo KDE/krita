@@ -25,28 +25,29 @@
 
 class KUrlRequester;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT URLEdit : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit URLEdit(Property *property, QWidget *parent=0);
+public:
+    explicit URLEdit(Property *property, QWidget *parent = 0);
     virtual ~URLEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void setProperty(Property *property);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
 
-  protected slots:
+protected slots:
     void slotValueChanged(const QString &url);
 
-  private:
+private:
     KUrlRequester *m_edit;
 };
 

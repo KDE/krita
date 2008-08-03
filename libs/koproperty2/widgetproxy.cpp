@@ -27,13 +27,13 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 
-namespace KoProperty {
+namespace KoProperty
+{
 class WidgetProxyPrivate
 {
-  public:
+public:
     WidgetProxyPrivate()
-    : property(0), widget(0), type(Invalid), layout(0)
-    {}
+            : property(0), widget(0), type(Invalid), layout(0) {}
     ~WidgetProxyPrivate() {}
 
     Property  *property;
@@ -47,82 +47,81 @@ class WidgetProxyPrivate
 using namespace KoProperty;
 
 WidgetProxy::WidgetProxy(QWidget *parent, const char *name)
- : QWidget(parent, name)
+        : QWidget(parent, name)
 {
-  d = new WidgetProxyPrivate();
-  d->property = new Property();
-  d->layout = new Q3HBoxLayout(this, 0, 0);
+    d = new WidgetProxyPrivate();
+    d->property = new Property();
+    d->layout = new Q3HBoxLayout(this, 0, 0);
 }
 
 WidgetProxy::~WidgetProxy()
 {
-  delete d->property;
-  delete d;
+    delete d->property;
+    delete d;
 }
 
 void
 WidgetProxy::setPropertyType(int propertyType)
 {
-  d->type = propertyType;
-  setWidget();
+    d->type = propertyType;
+    setWidget();
 }
 
 int
 WidgetProxy::propertyType() const
 {
-  return d->type;
+    return d->type;
 }
 
 QVariant
 WidgetProxy::value() const
 {
-  if (m_editor)
-    return m_editor->value();
-  else
-    return QVariant();
+    if (m_editor)
+        return m_editor->value();
+    else
+        return QVariant();
 }
 
 void
 WidgetProxy::setValue(const QVariant &value)
 {
-  if (d->widget)
-    d->widget->setValue(value, false);
+    if (d->widget)
+        d->widget->setValue(value, false);
 }
 
 bool
 WidgetProxy::setProperty(const char *name, const QVariant &value)
 {
-  if( strcmp(name, "value") == 0 ) {
-    setPropertyType((int) value.type() );
-    setValue(value);
-    return true;
-  }
-  else
-    return QWidget::setProperty(name, value);
+    if (strcmp(name, "value") == 0) {
+        setPropertyType((int) value.type());
+        setValue(value);
+        return true;
+    } else
+        return QWidget::setProperty(name, value);
 }
 
 QVariant
 WidgetProxy::property(const char *name) const
 {
-  if( strcmp( name, "value") == 0 )
-    return value(  );
-  else
-    return QWidget::property(name);
+    if (strcmp(name, "value") == 0)
+        return value();
+    else
+        return QWidget::property(name);
 }
 
 void
 WidgetProxy::setWidget()
 {
-  if (d->widget)
-    delete d->widget;
+    if (d->widget)
+        delete d->widget;
 
-  p->setType(d->type);
-  d->widget = Factory::getInstance()->widgetForProperty(p);
+    p->setType(d->type);
+    d->widget = Factory::getInstance()->widgetForProperty(p);
 
-  if (d->widget) {
-    d->widget->reparent(this, QPoint(0,0), true);
-    d->layout->addWidget(d->widget);
-  }
+    if (d->widget) {
+        d->widget->reparent(this, QPoint(0, 0), true);
+        d->layout->addWidget(d->widget);
+    }
 }
 
 #include "widgetproxy.moc"

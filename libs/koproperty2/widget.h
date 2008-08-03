@@ -27,7 +27,8 @@
 #include <QEvent>
 #include "koproperty_global.h"
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class WidgetPrivate;
 class Property;
@@ -38,9 +39,9 @@ class Property;
 */
 class KOPROPERTY_EXPORT Widget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     Widget(Property *property, QWidget *parent);
     virtual ~Widget();
 
@@ -49,7 +50,7 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 
     /*! Sets the value shown in the item editor widget. Set emitChange to false
     if you don't want to emit propertyChanged signal.*/
-    virtual void setValue(const QVariant &value, bool emitChange=true) = 0;
+    virtual void setValue(const QVariant &value, bool emitChange = true) = 0;
 
     /*! \return edited property. */
     virtual Property* property() const;
@@ -69,18 +70,18 @@ class KOPROPERTY_EXPORT Widget : public QWidget
     //! \sa d->leaveTheSpaceForRevertButton description
     bool leavesTheSpaceForRevertButton() const;
 
-    /*! \return true if this editor has borders. 
+    /*! \return true if this editor has borders.
      Editors with borders have slightly larger height and width set by property editor widget. */
     bool hasBorders() const;
 
-    /*! \return true if the widget is read-only. 
+    /*! \return true if the widget is read-only.
      Read-only property widget does not allow to change its property value.
      The flag is inherited from the underlying property and property set.
      Editor::setValue() method will still work, however.
      @see Set::isReadOnly(). */
     bool isReadOnly() const;
 
-    /*! Sets this widget to be read-only. 
+    /*! Sets this widget to be read-only.
      Disables or enables editing in the appropriate widget(s).
      @see isReadOnly() */
     void setReadOnly(bool readOnly);
@@ -89,12 +90,12 @@ class KOPROPERTY_EXPORT Widget : public QWidget
      This flag is checked by Editor when the widget is about to show. */
     bool visibleFlag() const;
 
-  signals:
+signals:
     void valueChanged(Widget *widget);
     void acceptInput(Widget *widget);
     void rejectInput(Widget *widget);
 
-  protected:
+protected:
     void setEditor(QWidget* editor);
 
     /*! Filters some event for main widget, eg Enter or Esc key presses. */
@@ -110,13 +111,13 @@ class KOPROPERTY_EXPORT Widget : public QWidget
     virtual void setReadOnlyInternal(bool readOnly) = 0;
 
     /*! Used only in setReadOnlyInternal() to make the widget visible or invisible.
-     This flag is checked by Editor when the widget is about to show. 
+     This flag is checked by Editor when the widget is about to show.
      By default widgets are visible. */
     void setVisibleFlag(bool visible);
 
     /*! Sets a stylesheet that will remove thick borders from the widget @a w to make it more usable as the property editor item.*/
     void setPlainWidgetStyle(QWidget* w);
-  protected:
+protected:
     WidgetPrivate * const d;
 };
 

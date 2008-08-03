@@ -25,32 +25,33 @@
 
 class KComboBox;
 
-namespace KoProperty {
+namespace KoProperty
+{
 
 class KOPROPERTY_EXPORT ComboBox : public Widget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit ComboBox(Property *property, QWidget *parent=0);
+public:
+    explicit ComboBox(Property *property, QWidget *parent = 0);
     virtual ~ComboBox();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
     virtual void setProperty(Property *property);
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-  protected slots:
+protected slots:
     void slotValueChanged(int value);
 
-  protected:
+protected:
     virtual void setReadOnlyInternal(bool readOnly);
     QString keyForValue(const QVariant &value);
     void fillBox();
 
     KComboBox *m_edit;
-    bool m_setValueEnabled : 1;
+bool m_setValueEnabled : 1;
     bool m_extraValueAllowed;
 };
 

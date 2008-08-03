@@ -288,6 +288,7 @@ bool Ruler::hitTest(const QPointF &point, const QLineF &baseline) const
 
 bool Ruler::hitTest(const QPointF &point, const QMatrix &matrix, qreal width) const
 {
-    return QRectF(value() - 5.0, 0.0, 10.0, width).contains(matrix.inverted().map(point));
+    QRectF rect(value() - 5.0, 0.0, 10.0, width);
+    return rect.contains(matrix.inverted().map(point));
 }
 

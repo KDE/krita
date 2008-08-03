@@ -48,18 +48,20 @@
 #include <QTextList>
 #include <QVectorIterator>
 
-/* FIXME:
- * - make sure that rulers only draw into the right area, pass a bounding rectangle to the drawing method for this
- *
- * TODO:
+/* TODO:
+ * - add undo support (QTextDocument::undo(QTextCursor*) could help)
  * - add accessibility support
- * - remove hard-coded colors (use KDE theme or adjust to document/shape background?)
+ * - remove hard-coded colors
+ *   (use KDE theme or adjust to document/shape background?)
  * - add RTL support
- * - add undo support
  * - add linespacing support
  * - add more feature via the options docker
- * - add proper relayouting (when relayouting is done by the tool it doesn't flow around other shapes)
- * - think about a method to give instructions to new users (the bubble used by okular might ne a good way to do this)
+ * - add proper relayouting
+ *   (the tools layouting doesn't flow around other shapes)
+ * - highlight the paragraph over which the mouse is currently hovering
+ *   (best would be if this included the top and bottom margins, too)
+ * - think about a method to give instructions to the users
+ *   (the bubble used by okular might be a good way to do this)
  */
 bool shapeContainsBlock(const TextShape *textShape, QTextBlock textBlock)
 {
@@ -81,7 +83,6 @@ ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
     m_paragraphStyle(NULL),
     m_activeRuler(noRuler),
     m_highlightRuler(noRuler),
-    m_textBlockValid(false),
     m_needsRepaint(false),
     m_smoothMovement(false)
 {
@@ -107,16 +108,10 @@ void ParagraphTool::initializeRuler(Ruler &ruler, int options)
     ruler.setOptions(options);
     ruler.setUnit(canvas()->unit());
     ruler.setMinimumValue(0.0);
-    connect(&ruler, SIGNAL(needsRepaint()), this, SLOT(scheduleRepaint()));
-    connect(&ruler, SIGNAL(valueChanged(qreal)), this, SLOT(updateLayout()));
-}
-
-void ParagraphTool::initParagraphProperties()
-{
-    m_isSingleLine = (textBlock().layout()->lineCount() == 1);
-
-    KoTextBlockData *blockData = static_cast<KoTextBlockData*> (textBlock().userData());
-    m_isList = (blockData != NULL);
+    connect(&ruler, SIGNAL(needsRepaint()),
+            this, SLOT(scheduleRepaint()));
+    connect(&ruler, SIGNAL(valueChanged(qreal)),
+            this, SLOT(updateLayout()));
 }
 
 bool ParagraphTool::createShapeList()
@@ -137,7 +132,8 @@ bool ParagraphTool::createShapeList()
 
 QWidget *ParagraphTool::createOptionWidget()
 {
-    // TODO: move this to a ui file, can't do right now, because Qt's designer is broken on my system
+    // TODO: move this to a ui file, can't do right now, because Qt's
+    // designer is broken on my system
     QWidget *widget = new QWidget();
     QGridLayout *layout = new QGridLayout;
 
@@ -170,8 +166,6 @@ void ParagraphTool::loadRulers()
     m_rulers[topMarginRuler].setValue(m_paragraphStyle->topMargin());
     m_rulers[bottomMarginRuler].setValue(m_paragraphStyle->bottomMargin());
 
-    m_rulers[followingIndentRuler].setVisible(!m_isSingleLine);
-
     scheduleRepaint();
 }
 
@@ -187,10 +181,7 @@ void ParagraphTool::saveRulers()
     QTextBlockFormat format;
     m_paragraphStyle->applyStyle(format);
 
-    QTextCursor cursor(textBlock());
-    cursor.mergeBlockFormat(format);
-
-    m_block = cursor.block();
+    m_cursor.mergeBlockFormat(format);
 }
 
 QString ParagraphTool::styleName()
@@ -208,14 +199,14 @@ QString ParagraphTool::styleName()
 }
 
 /* slot which is called when the value of one of the rulers changed
- * causes storing and reloading of the positions and values of the rulers from the file */
+ * causes storing and reloading of the positions and values of the rulers
+ * from the file */
 void ParagraphTool::updateLayout()
 {
     saveRulers();
 
     static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
 
-    initParagraphProperties();
     if (createShapeList()) {
         loadRulers();
     }
@@ -280,7 +271,7 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
 
 void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (!m_textBlockValid)
+    if (!hasSelection())
         return;
 
     foreach (const ShapeSpecificData &shape, m_shapes) {
@@ -296,7 +287,8 @@ void ParagraphTool::repaintDecorations()
         return;
     }
 
-    // TODO: should add previous and current label positions to the repaint area
+    // TODO: should add previous and current label positions to the
+    // repaint area
     QRectF repaintRectangle = m_storedRepaintRectangle;
     m_storedRepaintRectangle = QRectF();
     foreach (ShapeSpecificData shape, m_shapes) {
@@ -316,7 +308,7 @@ void ParagraphTool::scheduleRepaint()
 
 void ParagraphTool::deselectTextBlock()
 {
-    if (!m_textBlockValid)
+    if (!hasSelection())
         return;
 
     emit styleNameChanged(QString(i18n("n/a")));
@@ -324,13 +316,14 @@ void ParagraphTool::deselectTextBlock()
     deactivateRuler();
     dehighlightRuler();
 
-    m_textBlockValid = false;
+    // invalidate text cursor
+    m_cursor = QTextCursor();
     scheduleRepaint();
 }
 
 bool ParagraphTool::activateRulerAt(const QPointF &point)
 {
-    if (!m_textBlockValid) {
+    if (!hasSelection()) {
         // can't select a ruler without a textblock
         return false;
     }
@@ -371,7 +364,8 @@ void ParagraphTool::deactivateRuler()
     m_activeRuler = noRuler;
     m_rulers[deactivateRuler].setActive(false);
 
-    // there's no active ruler anymore, so we have to check if we hover somewhere
+    // there's no active ruler anymore, so we have to check if we hover
+    // over any other ruler
     highlightRulerAt(m_mousePosition);
 }
 
@@ -446,14 +440,15 @@ void ParagraphTool::applyParentStyleToActiveRuler()
 
     deactivateRuler();
 
-    // we need to call the updateLayout() slot manually, it is not emitted if
-    // the ruler has been changed by calling setValue()
-    // TODO: maybe setValue() should emit valueChanged(), too
-    // but make sure that this doesn't trigger additional repaints or relayouts
+    // we need to call the updateLayout() slot manually, it is not emitted
+    // if the ruler has been changed by calling setValue()
+    // TODO: maybe setValue() should emit valueChanged(), too but make
+    // sure that this doesn't trigger additional repaints or relayouts
     updateLayout();
 }
 
-// try to find and select a text block below the cursor. return true if successfull
+// try to find and select a text block below the cursor.
+// return true if successfull
 bool ParagraphTool::selectTextBlockAt(const QPointF &point)
 {
     TextShape *textShape = dynamic_cast<TextShape*> (canvas()->shapeManager()->shapeAt(point));
@@ -471,22 +466,20 @@ bool ParagraphTool::selectTextBlockAt(const QPointF &point)
         return false;
     }
 
-    QTextBlock textBlock(document->findBlock(position));
-    if (!textBlock.isValid()) {
+    QTextBlock block(document->findBlock(position));
+    if (!block.isValid()) {
         // the text block is not valid, this shouldn't really happen
         return false;
     }
 
-    // the text block is already selected, no need for a repaint and all that
-    if (m_textBlockValid && textBlock == m_block) {
+    // the textblock is already selected, no need for a repaint and all that
+    if (hasSelection() && block == textBlock()) {
         return true;
     }
 
-    m_textBlockValid = true;
-    m_block = textBlock;
-    m_paragraphStyle = KoParagraphStyle::fromBlock(textBlock);
+    m_cursor = QTextCursor(block);
+    m_paragraphStyle = KoParagraphStyle::fromBlock(block);
 
-    initParagraphProperties();
     if (createShapeList()) {
         loadRulers();
         emit styleNameChanged(styleName());
@@ -527,7 +520,7 @@ void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     m_mousePosition = event->point;
 
-    if (m_textBlockValid) {
+    if (hasSelection()) {
         deactivateRuler();
     }
 
@@ -538,7 +531,7 @@ void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
 {
     m_mousePosition = event->point;
 
-    if (m_textBlockValid) {
+    if (hasSelection()) {
         if (hasActiveRuler()) {
             moveActiveRulerTo(event->point);
         }
@@ -578,13 +571,14 @@ void ParagraphTool::keyReleaseEvent( QKeyEvent *event)
 
 void  ParagraphTool::activate( bool )
 {
-    // don't know why force=true is needed and what it does, but almost everyone else uses it...
+    // don't know why force=true is needed and what it does,
+    // but almost everyone else uses it...
     useCursor(Qt::ArrowCursor, true);
 }
 
 void ParagraphTool::deactivate()
 {
-    // the document might have changed, so we have to deselect the text block
+    // the document might have changed, so we have to deselect the textblock
     deselectTextBlock();
 }
 

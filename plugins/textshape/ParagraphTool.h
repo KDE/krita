@@ -25,6 +25,7 @@
 
 #include <KoTool.h>
 
+#include <QTextCursor>
 #include <QTextBlock>
 #include <QVector>
 
@@ -50,12 +51,13 @@ public:
     void initializeRuler(Ruler &ruler, int options = 0);
 
     // reimplemented from superclass
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-    // select the paragraph below the specified cursor position, if there is a paragraph
+    // select the paragraph below the specified cursor position
     bool selectTextBlockAt(const QPointF &point);
 
-    // deselect the current text block (for example use clicked somwhere else)
+    // deselect the current text block
+    // (for example use clicked somwhere else)
     void deselectTextBlock();
 
     // reimplemented from superclass
@@ -88,14 +90,16 @@ public slots:
     // should be called when the value of any of the rulers changed
     void updateLayout();
 
-    // Apply the parent's style to the active ruler (essentially deletes the setting)
+    // Apply the parent's style to the active ruler
+    // (essentially deletes the setting)
     void applyParentStyleToActiveRuler();
 
-    // if the parargraph style is inherited from a named paragraph style return that name
-    // otherwise return QString()
+    // if the parargraph style is inherited from a named paragraph style
+    // return that name, otherwise return QString()
     QString styleName();
 
-    void toggleSmoothMovement() {m_smoothMovement = !m_smoothMovement; emit smoothMovementChanged(m_smoothMovement); }
+    void toggleSmoothMovement() { m_smoothMovement = !m_smoothMovement; emit smoothMovementChanged(m_smoothMovement); }
+
     void setSmoothMovement(bool smoothMovement) { m_smoothMovement = smoothMovement; }
 
 signals:
@@ -105,7 +109,6 @@ signals:
 protected:
     QWidget *createOptionWidget();
 
-    void initParagraphProperties();
     bool createShapeList();
 
     void loadRulers();
@@ -131,14 +134,17 @@ protected:
 
     void moveActiveRulerTo(const QPointF &point);
 
+    bool hasSelection() const { return !m_cursor.isNull(); }
+
     // internal convencience methods
-    QTextBlock textBlock() const { Q_ASSERT(m_textBlockValid); return m_block; }
+    QTextBlock textBlock() const { Q_ASSERT(m_cursor.block().isValid()); return m_cursor.block(); }
+
     QTextBlockFormat blockFormat() const { return textBlock().blockFormat(); }
     QTextCharFormat charFormat() const { return textBlock().charFormat(); }
     QTextLayout *textLayout() const { return textBlock().layout(); }
 
 private:
-    QTextBlock m_block;
+    QTextCursor m_cursor;
     KoParagraphStyle *m_paragraphStyle;
 
     QVector<ShapeSpecificData> m_shapes;
@@ -154,10 +160,7 @@ private:
     QPointF m_mousePosition;
     QRectF m_storedRepaintRectangle;
 
-    bool m_isSingleLine,
-         m_isList,
-         m_textBlockValid,
-         m_needsRepaint,
+    bool m_needsRepaint,
          m_smoothMovement;
 
 };

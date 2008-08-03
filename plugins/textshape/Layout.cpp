@@ -412,7 +412,12 @@ bool Layout::nextParag()
         QTextCursor blockStart(m_block);
         QTextLayout::FormatRange dropCapsFormatRange;
         dropCapsFormatRange.format = blockStart.charFormat();
-        dropCapsFormatRange.format.setFontPointSize( blockStart.charFormat().fontPointSize() * dropCapsLines);
+        qreal size;
+        if (blockStart.charFormat().hasProperty(QTextFormat::FontPointSize))
+            size = blockStart.charFormat().fontPointSize();
+        else
+            size = 12.0; // default when unset
+        dropCapsFormatRange.format.setFontPointSize( size * dropCapsLines);
         dropCapsFormatRange.format.setProperty(KoCharacterStyle::DropCapsAdditionalFormatting, (QVariant) true);
         dropCapsFormatRange.start = 0;
         dropCapsFormatRange.length = dropCapsLength + firstNonSpace;

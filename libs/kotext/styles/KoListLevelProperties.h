@@ -31,6 +31,9 @@ class KoListStyle;
 class KoOdfLoadingContext;
 class KoXmlWriter;
 
+/**
+ * Properties per list level.
+ */
 class KOTEXT_EXPORT KoListLevelProperties {
 public:
     /// Constructor

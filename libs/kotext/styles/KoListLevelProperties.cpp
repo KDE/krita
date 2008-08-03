@@ -20,10 +20,7 @@
 
 #include "KoListLevelProperties.h"
 #include "Styles_p.h"
-//#include "KoTextBlockData.h"
 
-//#include <QTextCursor>
-//#include <QSharedData>
 #include <kdebug.h>
 
 #include <KoXmlNS.h>

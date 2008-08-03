@@ -36,6 +36,7 @@ public:
     ~Private() {
         delete[] indentBuffer;
         delete[] escapeBuffer;
+        //TODO: look at if we must delete "dev". For me we must delete it otherwise we will leak it
     }
 
     QIODevice* dev;

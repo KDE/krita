@@ -81,18 +81,17 @@ void KoSubpathJoinCommand::redo()
 
     // if the endpoint is has a control point create a contol point for the new segment to be 
     // at the symetric position to the exiting one
-    if ( m_reverse & ReverseFirst || closeSubpath )
+    if ( m_reverse & ReverseFirst || closeSubpath ) {
         if ( point1->activeControlPoint2() )
             point1->setControlPoint1( 2.0 * point1->point() - point1->controlPoint2() );
-    else
-        if ( point1->activeControlPoint1() )
-            point1->setControlPoint2( 2.0 * point1->point() - point1->controlPoint1() );
-    if ( m_reverse & ReverseSecond || closeSubpath )
+    }
+    else if ( point1->activeControlPoint1() )
+        point1->setControlPoint2( 2.0 * point1->point() - point1->controlPoint1() );
+    if ( m_reverse & ReverseSecond || closeSubpath ) {
         if ( point2->activeControlPoint1() )
             point2->setControlPoint2( 2.0 * point2->point() - point2->controlPoint1() );
-    else
-        if ( point2->activeControlPoint2() )
-            point2->setControlPoint1( 2.0 * point2->point() - point2->controlPoint2() );
+    } else if ( point2->activeControlPoint2() )
+        point2->setControlPoint1( 2.0 * point2->point() - point2->controlPoint2() );
 
     if ( closeSubpath )
     {

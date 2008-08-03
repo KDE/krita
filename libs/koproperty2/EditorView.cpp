@@ -26,7 +26,8 @@ EditorView::EditorView(QWidget* parent)
 {
   setObjectName(QLatin1String("EditorView"));
   setAlternatingRowColors(true);
-  setSelectionBehavior(QAbstractItemView::SelectItems);
+  setSelectionBehavior(QAbstractItemView::SelectRows);
+  setSelectionMode(QAbstractItemView::SingleSelection);
   setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
   setAnimated(false);
   setAllColumnsShowFocus(true);

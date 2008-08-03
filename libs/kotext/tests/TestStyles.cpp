@@ -1,15 +1,6 @@
 #include "TestStyles.h"
 
 #include "styles/KoParagraphStyle.h"
-//   #include "styles/KoListStyle.h"
-//   #include "styles/KoStyleManager.h"
-//   #include "KoTextBlockData.h"
-//   #include "KoTextBlockBorderData.h"
-
-//#include <QtGui>
-
-//#include <kdebug.h>
-//#include <kcomponentdata.h>
 
 void TestStyles::testApplyParagraphStyle()
 {
@@ -86,6 +77,22 @@ void TestStyles::testApplyParagraphStyleWithParent()
     QCOMPARE(format.property(KoParagraphStyle::StyleId).toInt(), 1004);
     QCOMPARE(format.leftMargin(), 10.);
     QCOMPARE(format.rightMargin(), 20.);
+}
+
+void TestStyles::testCopyParagraphStyle()
+{
+    KoParagraphStyle style1;
+    KoParagraphStyle style2;
+    style2.setParent(&style1);
+
+    style1.setLeftMargin(10.);
+    style1.setRightMargin(30.);
+    style2.setRightMargin(20.);
+
+    // the assignment operator should take the *effective* style.
+    KoParagraphStyle newStyle = style2;
+    QCOMPARE(newStyle.leftMargin(), 10.);
+    QCOMPARE(newStyle.rightMargin(), 20.);
 }
 
 QTEST_KDEMAIN(TestStyles,GUI)

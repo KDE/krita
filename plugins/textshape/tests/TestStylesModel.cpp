@@ -1,4 +1,6 @@
-#include <QtTest/QtTest>
+#include <qtest_kde.h>
+#include <kcomponentdata.h>
+
 #include <QDebug>
 
 #include <KoStyleManager.h>
@@ -116,5 +118,6 @@ void TestStylesModel::fillManager()
     manager->add(style);
 }
 
-QTEST_MAIN(TestStylesModel)
+QTEST_KDEMAIN(TestStylesModel, GUI)
+
 #include "TestStylesModel.moc"

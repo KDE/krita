@@ -131,6 +131,7 @@ Test::Test()
     EditorDataModel *editorDataModel = new EditorDataModel(*m_set, this);
     EditorView *editorView = new EditorView(this);
     editorView->setModel(editorDataModel);
+//crashes.. why?: editorView->expandAll();
     setCentralWidget(editorView);
     editorView->setFocus();
 }

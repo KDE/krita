@@ -805,7 +805,7 @@ KisDoc2 * KisView2::document() const
 
 KoPrintJob * KisView2::createPrintJob()
 {
-    return new KisPrintJob(this);
+    return new KisPrintJob(image());
 }
 
 KisNodeManager * KisView2::nodeManager()

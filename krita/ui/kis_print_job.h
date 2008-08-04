@@ -21,12 +21,12 @@
 #define KISPRINTJOB_H
 
 #include <KoPrintingDialog.h>
+#include <kis_types.h>
 
-class KisView2;
 
 class KisPrintJob : public KoPrintJob {
 public:
-    KisPrintJob(KisView2 *view);
+    KisPrintJob(KisImageSP image);
 
 protected:
     virtual QPrinter &printer() { return m_printer; }
@@ -34,7 +34,7 @@ protected:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 private:
-    KisView2 *m_view;
+    KisImageSP m_image;
     QPrinter m_printer;
 };
 

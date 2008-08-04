@@ -20,7 +20,7 @@
 
 #include "kis_print_job.h"
 
-#include "kis_view2.h"
+#include "kis_image.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
@@ -31,9 +31,9 @@
 
 #include <QPainter>
 
-KisPrintJob::KisPrintJob(KisView2 *view)
-    : KoPrintJob(view),
-    m_view(view)
+KisPrintJob::KisPrintJob(KisImageSP image)
+    : KoPrintJob(image.data())
+    , m_image(image)
 {
     m_printer.setFromTo(1, 1);
 }
@@ -42,8 +42,7 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
 {
     QPainter gc(&m_printer);
 
-    KisImageSP img = m_view->image();
-    if (!img) return;
+    if (!m_image) return;
 
     gc.setClipping(false);
 
@@ -51,13 +50,13 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
     QString printerProfileName = cfg.printerProfile();
     const KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
 
-    double scaleX = m_printer.resolution() / (72.0 * img->xRes());
-    double scaleY = m_printer.resolution() / (72.0 * img->yRes());
+    double scaleX = m_printer.resolution() / (72.0 * m_image->xRes());
+    double scaleY = m_printer.resolution() / (72.0 * m_image->yRes());
 
-    QRect r = img->bounds();
+    QRect r = m_image->bounds();
 
     gc.scale(scaleX, scaleY);
-    img->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile );
+    m_image->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile );
     if (removePolicy == DeleteWhenDone)
         deleteLater();
 }

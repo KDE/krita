@@ -440,8 +440,8 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
         return;
     }
 
-    if (!m_thesProc->waitForReadyRead())
-        ;
+    if (!m_thesProc->waitForReadyRead()) {
+    }
     QByteArray byteArray = m_thesProc->readAllStandardOutput();
     QString stdoutString(byteArray);
     QStringList lines = stdoutString.split(QChar('\n'));

@@ -67,6 +67,7 @@
 #include <QTabBar>
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
+#include <QDesktopWidget>
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
 #include <QtGui/QPrintPreviewDialog>
@@ -362,10 +363,18 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
     createShellGUI();
     d->bMainWindowGUIBuilt = true;
 
+    // Get screen geometry
+    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+
+    // if the desktop is virtual then use virtual screen size
+    if (QApplication::desktop()->isVirtualDesktop())
+        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
+    
     if ( !initialGeometrySet() )
     {
         // Default size
-        const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
+        const int deskWidth = desk.width();
         if (deskWidth > 1100) // very big desktop ?
             resize( 1000, 800 );
         if (deskWidth > 850) // big desktop ?
@@ -376,7 +385,19 @@ KoMainWindow::KoMainWindow( const KComponentData &componentData )
 
     // Saved size
     //kDebug(30003) <<"KoMainWindow::restoreWindowSize";
-    restoreWindowSize( config->group( "MainWindow" ) );
+//     restoreWindowSize( config->group( "MainWindow" ) );
+    
+    // Dunno why, but  KWindowSystem::setState( winId(), state ); make KOffice application becomes smaller instead of staying big, TODO contact David Faure about this when he is around again.
+    {
+        KConfigGroup config ( KGlobal::config(), "MainWindow" );
+
+        const QSize size( config.readEntry( QString::fromLatin1("Width %1").arg(desk.width()), 0 ),
+                    config.readEntry( QString::fromLatin1("Height %1").arg(desk.height()), 0 ) );
+        if ( !size.isEmpty() )
+        {
+            resize( size );
+        }
+    }
 }
 
 KoMainWindow::~KoMainWindow()
@@ -1122,8 +1143,9 @@ void KoMainWindow::saveWindowSettings()
     {
         KSharedConfigPtr config = componentData().config();
         // Save window size into the config file of our componentData
-        //kDebug(30003) <<"KoMainWindow::saveWindowSettings";
+        kDebug(30003) <<"KoMainWindow::saveWindowSettings";
         saveWindowSize( config->group( "MainWindow" ) );
+        config->sync();
         d->m_windowSizeDirty = false;
 
         // Save toolbar position into the config file of the app, under the doc's component name

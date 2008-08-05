@@ -326,7 +326,7 @@ KoToolBox::KoToolBox(KoCanvasController *canvas)
 
     d->buttonGroup = new QButtonGroup(this);
     setLayout(d->layout);
-    foreach(KoToolManager::Button button, KoToolManager::instance()->createToolList()) {
+    foreach(KoToolManager::Button button, KoToolManager::instance()->createToolList(canvas->canvas())) {
         addButton(button.button, button.section, button.priority, button.buttonGroupId);
         d->visibilityCodes.insert(button.button, button.visibilityCode);
     }

@@ -58,9 +58,10 @@ QString ToolHelper::name() const {
 }
 
 KoTool *ToolHelper::createTool(KoCanvasBase *canvas) const {
+    if (! canCreateTool(canvas))
+        return 0;
     KoTool *tool = m_toolFactory->createTool(canvas);
-    if (tool)
-        tool->setToolId(id());
+    tool->setToolId(id());
     return tool;
 }
 
@@ -78,6 +79,11 @@ KShortcut ToolHelper::shortcut() const {
 
 bool ToolHelper::inputDeviceAgnostic() const {
     return m_toolFactory->inputDeviceAgnostic();
+}
+
+bool ToolHelper::canCreateTool(KoCanvasBase *canvas) const
+{
+    return m_toolFactory->canCreateTool(canvas);
 }
 
 //   ************ Connector **********

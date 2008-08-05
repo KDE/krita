@@ -70,8 +70,18 @@ public:
      * @param canvas the canvas that the new tool will work on. Should be passed
      *    to the constructor of the tool.
      * @return a new KoTool instance, or zero if the tool doesn't want to show up.
+     * @see canCreateTool()
      */
     virtual KoTool * createTool(KoCanvasBase *canvas) = 0;
+
+    /**
+     * Returns true if this factory will create a tool instance when called with the same canvas in createTool()
+     * The default implementation returns true.
+     * @param canvas the canvas that the new tool will work on. Should be passed
+     *    to the constructor of the tool.
+     */
+    virtual bool canCreateTool(KoCanvasBase *canvas) const;
+
     /**
      * return the id for the tool this factory creates.
      * @return the id for the tool this factory creates.

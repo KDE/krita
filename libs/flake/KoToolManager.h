@@ -170,7 +170,7 @@ public:
      * @returns a list of Buttons.
      * This is a factory method for buttons and meta information on the button to better display the button.
      */
-    QList<Button> createToolList() const;
+    QList<Button> createToolList(KoCanvasBase *canvas) const;
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation( KoCanvasController * controller );

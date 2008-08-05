@@ -115,4 +115,9 @@ bool KoToolFactory::inputDeviceAgnostic() const {
     return d->inputDeviceAgnostic;
 }
 
+bool KoToolFactory::canCreateTool(KoCanvasBase *) const
+{
+    return true;
+}
+
 #include "KoToolFactory.moc"

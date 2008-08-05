@@ -122,12 +122,13 @@ public:
                 toolsHash.insert(tool->id(), origHash.value(tool->id()));
                 continue;
             }
-            kDebug(30006) <<"Creating tool" << tool->id() <<". Activated on:" << tool->activationShapeId() <<", prio:" << tool->priority();
-            KoTool *tl = tool->createTool(controller->canvas());
-            if (tl == 0) {
-                kDebug(30006) <<"   Tool factory returned zero, skipping tool";
+            if (! tool->canCreateTool(controller->canvas())) {
+                kDebug(30006) <<"Skipping the creation of tool" << tool->id();
                 continue;
             }
+            kDebug(30006) <<"Creating tool" << tool->id() <<". Activated on:" << tool->activationShapeId() <<", prio:" << tool->priority();
+            KoTool *tl = tool->createTool(controller->canvas());
+            Q_ASSERT(tl);
             uniqueToolIds.insert(tl, tool->uniqueId());
             toolsHash.insert(tool->id(), tl);
             tl->setObjectName(tool->id());
@@ -190,13 +191,15 @@ void KoToolManager::setup() {
     KoDeviceRegistry::instance();
 }
 
-QList<KoToolManager::Button> KoToolManager::createToolList() const {
+QList<KoToolManager::Button> KoToolManager::createToolList(KoCanvasBase *canvas) const {
     QList<KoToolManager::Button> answer;
     foreach(ToolHelper *tool, d->tools) {
         if(tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
         if(tool->id() == KoGuidesTool_ID)
             continue; // don't show this one.
+        if (! tool->canCreateTool(canvas))
+            continue;
         Button button;
         button.button = tool->createButton();
         button.section = tool->toolType();

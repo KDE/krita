@@ -30,9 +30,9 @@
 #include <KoLineBorder.h>
 
 KoConnectionShapeFactory::KoConnectionShapeFactory( QObject* parent)
-    : KoShapeFactory( parent, KOCONNECTIONSHAPEID, i18n( "Connection Shape" ) )
+    : KoShapeFactory( parent, KOCONNECTIONSHAPEID, i18n( "Tie" ) )
 {
-    setToolTip( i18n( "A shape which displays a connection between two other shapes" ) );
+    setToolTip( i18n( "A connection between two other shapes" ) );
     setIcon("x-shape-connection");
     setOdfElementNames( KoXmlNS::draw, QStringList( "connector" ) );
     setLoadingPriority( 1 );

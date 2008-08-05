@@ -66,10 +66,10 @@ public:
     virtual ~KoToolFactory();
 
     /**
-     *  instanciate a new tool
+     * Instanciate a new tool
      * @param canvas the canvas that the new tool will work on. Should be passed
      *    to the constructor of the tool.
-     * @return a new KoTool instance
+     * @return a new KoTool instance, or zero if the tool doesn't want to show up.
      */
     virtual KoTool * createTool(KoCanvasBase *canvas) = 0;
     /**

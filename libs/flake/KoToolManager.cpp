@@ -124,6 +124,10 @@ public:
             }
             kDebug(30006) <<"Creating tool" << tool->id() <<". Activated on:" << tool->activationShapeId() <<", prio:" << tool->priority();
             KoTool *tl = tool->createTool(controller->canvas());
+            if (tl == 0) {
+                kDebug(30006) <<"   Tool factory returned zero, skipping tool";
+                continue;
+            }
             uniqueToolIds.insert(tl, tool->uniqueId());
             toolsHash.insert(tool->id(), tl);
             tl->setObjectName(tool->id());

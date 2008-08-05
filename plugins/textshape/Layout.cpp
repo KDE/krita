@@ -872,7 +872,6 @@ static double computeWidth(KoCharacterStyle::LineWeight weight, double width, co
         case KoCharacterStyle::PercentLineWeight:
             return QFontInfo(font).pointSizeF() * width / 100;
         case KoCharacterStyle::LengthLineWeight:
-        default:
             return width;
     }
     Q_ASSERT(0); // illegal weight passed

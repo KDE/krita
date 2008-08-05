@@ -182,3 +182,18 @@ void KisSumiPaintOpSettings::toXML(QDomDocument&, QDomElement&) const
 {
     // XXX: load from xml. See for instance the color adjustment filters
 }
+
+double KisSumiPaintOpSettings::shearFactor() const
+{
+    return m_options->shearBox->value();
+}
+
+double KisSumiPaintOpSettings::randomFactor() const
+{
+    return m_options->rndBox->value();
+}
+
+double KisSumiPaintOpSettings::scaleFactor() const
+{
+    return m_options->scaleBox->value();
+}

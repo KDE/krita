@@ -6,13 +6,13 @@
     <x>0</x>
     <y>0</y>
     <width>450</width>
-    <height>540</height>
+    <height>672</height>
    </rect>
   </property>
   <property name="minimumSize" >
    <size>
     <width>450</width>
-    <height>540</height>
+    <height>672</height>
    </size>
   </property>
   <widget class="QWidget" name="layoutWidget" >
@@ -222,6 +222,94 @@
    <property name="text" >
     <string>Preview</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>530</y>
+     <width>431</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string>Experimental Params</string>
+   </property>
+   <widget class="QWidget" name="" >
+    <property name="geometry" >
+     <rect>
+      <x>12</x>
+      <y>41</y>
+      <width>271</width>
+      <height>54</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout" >
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2" >
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Scale factor</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="scaleBox" >
+         <property name="minimum" >
+          <double>-99.000000000000000</double>
+         </property>
+         <property name="value" >
+          <double>2.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3" >
+       <item>
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>Shear factor</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="shearBox" >
+         <property name="minimum" >
+          <double>-99.000000000000000</double>
+         </property>
+         <property name="value" >
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4" >
+       <item>
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>Random offset</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="rndBox" >
+         <property name="minimum" >
+          <double>-99.000000000000000</double>
+         </property>
+         <property name="value" >
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <customwidgets>

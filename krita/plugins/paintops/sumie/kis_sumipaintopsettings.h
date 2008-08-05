@@ -51,6 +51,10 @@ public:
 	int inkAmount() const;
 	bool mousePressure() const;
 
+    double shearFactor() const;
+    double randomFactor() const;
+    double scaleFactor() const;
+
 public slots:
 	void updateImg();
 

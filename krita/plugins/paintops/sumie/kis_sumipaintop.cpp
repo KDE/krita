@@ -95,6 +95,9 @@ KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter
 	m_brush.setInkDepletion( settings->curve() );
 	m_brush.setInkColor( painter->paintColor() );
 
+    m_brush.setScale(settings->scaleFactor() );
+    m_brush.setRandom(settings->randomFactor() );
+    m_brush.setShear(settings->shearFactor() );
 	// delete??
 }
 
@@ -156,14 +159,14 @@ for (float theta= phase; theta<360+phase; theta += 10 )
 	}
 
 */
-    dbgPlugins << "Start coords:";
-
- 	dbgPlugins << pi1.pos().x();
-    dbgPlugins << pi1.pos().y();
-    dbgPlugins << "End coords:";
-    dbgPlugins << pi2.pos().x();
-    dbgPlugins << pi2.pos().y();
-    dbgPlugins << "--------------";
+//     dbgPlugins << "Start coords:";
+// 
+//  	dbgPlugins << pi1.pos().x();
+//     dbgPlugins << pi1.pos().y();
+//     dbgPlugins << "End coords:";
+//     dbgPlugins << pi2.pos().x();
+//     dbgPlugins << pi2.pos().y();
+//     dbgPlugins << "--------------";
 
     m_brush.paintLine(dab, pi1, pi2);
 

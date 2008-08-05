@@ -55,10 +55,16 @@ public:
 	double computeMousePressure(double distance);
 	void enableMousePressure(bool enable);
 
+    void setShear(double shearFactor){ m_shearFactor = shearFactor; }
+    void setRandom(double randomFactor){ m_randomFactor = randomFactor; }
+    void setScale(double scaleFactor){ m_scaleFactor = scaleFactor; }
+
 private:
 	QVector<Bristle> m_bristles;
 	QVector<StrokeSample> m_stroke;
 	QList<float> m_inkDepletion; // array
+    QTransform m_transform;
+
 
 	BrushShape m_initialShape;
 	KoColor m_inkColor;
@@ -71,10 +77,14 @@ private:
 	double m_lastSlope;
 
 	double m_angle;
-
 	double m_oldPressure;
 
-	bool m_mousePressure;
+	bool m_mousePressureEnabled;
+
+    double m_scaleFactor;
+    double m_randomFactor;
+    double m_shearFactor;
+
 };
 
 #endif

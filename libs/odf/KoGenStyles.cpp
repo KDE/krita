@@ -44,7 +44,8 @@ static const struct {
     { KoGenStyle::StyleFillImage, "draw:fill-image", 0, true  },
     { KoGenStyle::StyleHatch, "draw:hatch", "style:graphic-properties", true  },
     { KoGenStyle::StyleGradient, "draw:gradient", "style:graphic-properties", true  },
-    { KoGenStyle::StyleMarker, "draw:marker", "style:graphic-properties", true  }
+    { KoGenStyle::StyleMarker, "draw:marker", "style:graphic-properties", true  },
+    { KoGenStyle::StylePresentationPageLayout, "style:presentation-page-layout", 0, false  }
 };
 
 static const unsigned int numStyleData = sizeof( styleData ) / sizeof( *styleData );

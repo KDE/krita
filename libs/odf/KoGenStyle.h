@@ -72,6 +72,7 @@ public:
            StyleNumericBoolean,         ///< number:boolean 14.7.6 Boolean Style not used
            StyleOpacity,                ///< draw:opacity as in odf 14.14.5 Opacity Gradient not used
            StyleMarker,                 ///< draw:marker as in odf 14.14.6 Marker
+           StylePresentationPageLayout, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts  
            StyleAutoTable,              ///< style:table-properties as in odf 15.8 Table Formatting Properties // office:style needed?
            StyleTableColumn,            ///< style:table-column-properties as in odf 15.9 Column Formatting Properties (office:style)
            StyleAutoTableColumn,        ///< style:table-column-properties as in odf 15.9 Column Formatting Properties

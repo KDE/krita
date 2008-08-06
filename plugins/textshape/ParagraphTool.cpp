@@ -80,7 +80,8 @@ ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
     : KoTool(canvas),
     m_paragraphStyle(NULL),
     m_activeRuler(noRuler),
-    m_highlightRuler(noRuler),
+    m_focusedRuler(noRuler),
+    m_highlightedRuler(noRuler),
     m_needsRepaint(false),
     m_smoothMovement(false)
 {
@@ -227,7 +228,7 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
         foregroundColor = m_rulers[ruler].activeColor();
     }
     else if (hasHighlightedRuler()) {
-        ruler = m_highlightRuler;
+        ruler = m_highlightedRuler;
         shape = m_highlightShape;
         foregroundColor = m_rulers[ruler].highlightColor();
     }
@@ -375,12 +376,20 @@ void ParagraphTool::resetActiveRuler()
     }
 }
 
+void ParagraphTool::defocusRuler()
+{
+    if (hasFocusedRuler()) {
+        m_rulers[m_focusedRuler].setFocused(false);
+        m_focusedRuler = noRuler;
+    }
+}
+
 void ParagraphTool::highlightRulerAt(const QPointF &point)
 {
     // check if we were already hovering over an element
     if (hasHighlightedRuler()) {
         // check if we are still over the same element
-        if (m_highlightShape->hitTest((RulerIndex)m_highlightRuler, point)) {
+        if (m_highlightShape->hitTest((RulerIndex)m_highlightedRuler, point)) {
             return;
         }
         else {
@@ -393,9 +402,9 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
     foreach (const ShapeSpecificData &shape, m_shapes) {
         RulerIndex ruler = shape.hitTest(point);
         if (ruler != noRuler) {
-            m_highlightRuler = ruler;
+            m_highlightedRuler = ruler;
             m_highlightShape = &shape;
-            m_rulers[m_highlightRuler].setHighlighted(true);
+            m_rulers[m_highlightedRuler].setHighlighted(true);
             break;
         }
     }
@@ -404,8 +413,8 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
 void ParagraphTool::dehighlightRuler()
 {
     if (hasHighlightedRuler()) {
-        m_rulers[m_highlightRuler].setHighlighted(false);
-        m_highlightRuler = noRuler;
+        m_rulers[m_highlightedRuler].setHighlighted(false);
+        m_highlightedRuler = noRuler;
     }
 }
 

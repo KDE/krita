@@ -39,6 +39,7 @@ Ruler::Ruler(QObject *parent)
     m_maxValue(std::numeric_limits<qreal>::infinity()),
     m_visible(true),
     m_active(false),
+    m_focused(false),
     m_highlighted(false),
     m_options(noOptions)
 {}
@@ -177,6 +178,12 @@ void Ruler::setActive(bool active)
     }
 }
 
+void Ruler::setFocused(bool focused)
+{
+    m_focused = focused;
+    emit needsRepaint();
+}
+
 void Ruler::setHighlighted(bool highlighted)
 {
     m_highlighted = highlighted;
@@ -237,6 +244,8 @@ void Ruler::paint(QPainter & painter, const QMatrix &matrix, qreal width) const
         painter.setPen(activeColor());
     else if (isHighlighted())
         painter.setPen(highlightColor());
+    else if (isFocused())
+        painter.setPen(focusColor());
     else
         painter.setPen(normalColor());
 

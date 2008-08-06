@@ -94,6 +94,9 @@ public:
     bool isActive() const { return m_active; }
     void setActive(bool active);
 
+    bool isFocused() const { return m_focused; }
+    void setFocused(bool focused);
+
     bool isHighlighted() const { return m_highlighted; }
     void setHighlighted(bool highlighted);
 
@@ -108,6 +111,7 @@ public:
     QColor activeColor() const { return QColor(100, 148, 255); }
     QColor highlightColor() const { return QColor(78, 117, 201); }
     QColor normalColor() const { return QColor(100, 100, 100); }
+    QColor focusColor() const { return QColor(100, 148, 255); }
 
 signals:
     // emitted when value has been changed via the user interface
@@ -146,6 +150,7 @@ private:
 
     bool m_visible;
     bool m_active;
+    bool m_focused;
     bool m_highlighted;
     int m_options;
 };

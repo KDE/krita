@@ -120,7 +120,11 @@ protected:
     void deactivateRuler();
     void resetActiveRuler();
 
-    bool hasHighlightedRuler() const { return m_highlightRuler != noRuler; }
+    bool hasFocusedRuler() const { return m_focusedRuler != noRuler; }
+    void focusRuler(RulerIndex ruler);
+    void defocusRuler();
+
+    bool hasHighlightedRuler() const {return m_highlightedRuler != noRuler;}
     void highlightRulerAt(const QPointF &point);
     void dehighlightRuler();
 
@@ -155,7 +159,8 @@ private:
     Ruler m_rulers[maxRuler];
 
     RulerIndex m_activeRuler,
-               m_highlightRuler;
+               m_focusedRuler,
+               m_highlightedRuler;
 
     QPointF m_mousePosition;
     QRectF m_storedRepaintRectangle;

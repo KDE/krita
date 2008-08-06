@@ -23,7 +23,7 @@
 /**
  * The KoSharedLoadingData class is used to share data between shapes during loading.
  * These data can be added to the KoShapeLoadingContext using KoShapeLoadingContext::addSharedData().
- * A different shape can then get the data form the context using KoShapeLoadingContext::sharedData().
+ * A different shape can then get the data from the context using KoShapeLoadingContext::sharedData().
  */
 class KoSharedLoadingData
 {

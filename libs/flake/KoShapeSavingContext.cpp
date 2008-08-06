@@ -189,3 +189,26 @@ bool KoShapeSavingContext::saveDataCenter( KoStore *store, KoXmlWriter* manifest
     }
     return ok;
 }
+
+void KoShapeSavingContext::addSharedData( const QString & id, KoSharedSavingData * data )
+{
+    QMap<QString, KoSharedSavingData*>::iterator it( m_sharedData.find( id ) );
+    // data will not be overwritten
+    if ( it == m_sharedData.end() ) {
+        m_sharedData.insert( id, data );
+    }
+    else {
+        kWarning(30006) << "The id" << id << "is already registered. Data not inserted";
+        Q_ASSERT( it == m_sharedData.end() );
+    }
+}
+
+KoSharedSavingData * KoShapeSavingContext::sharedData( const QString & id ) const
+{
+    KoSharedSavingData * data = 0;
+    QMap<QString, KoSharedSavingData*>::const_iterator it( m_sharedData.find( id ) );
+    if ( it != m_sharedData.end() ) {
+        data = it.value();
+    }
+    return data;
+}

@@ -37,6 +37,7 @@ class KoDataCenter;
 class KoEmbeddedDocumentSaver;
 class KoShapeLayer;
 class KoStore;
+class KoSharedSavingData;
 
 /**
  * The set of data for the ODF file format used during saving of a shape.
@@ -199,6 +200,35 @@ public:
      */
     bool saveDataCenter( KoStore *store, KoXmlWriter* manifestWriter );
 
+    /**
+     * Add shared data
+     *
+     * This can be use to pass data between shapes on saving. E.g. The presentation page layout
+     * styles. With that e.g. the styles only need to be saved once and can be used everywhere
+     * without creating them again.
+     *
+     * The ownership of the added data is passed to the context. The KoShapeSavingContext will
+     * delete the added data when it is destroyed.
+     *
+     * Data inserted for a specific id will not be overwritten by calling addSharedData with 
+     * the same id again.
+     *
+     * You get an assertion when the id is already existing.
+     *
+     * @see KoSharedSavingData
+     */
+    void addSharedData( const QString & id, KoSharedSavingData * data );
+
+    /**
+     * Get the shared data.
+     *
+     * @see KoSharedLoadingData
+     *
+     * @param id The id used to identify the shared data.
+     * @return The shared data for the id or 0 if there is no shared data for the id.
+     */
+    KoSharedSavingData * sharedData( const QString & id ) const;
+
 private:
     KoXmlWriter *m_xmlWriter;
     KoShapeSavingOptions m_savingOptions;
@@ -207,6 +237,7 @@ private:
     QMap<QString, QPixmap> m_pixmaps;
     QSet<KoDataCenter *> m_dataCenter;
     int m_drawId;
+    QMap<QString, KoSharedSavingData*> m_sharedData;
 
     KoGenStyles& m_mainStyles;
     KoEmbeddedDocumentSaver& m_embeddedSaver;

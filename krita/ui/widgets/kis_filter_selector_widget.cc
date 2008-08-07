@@ -81,12 +81,6 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
     delete d;
 }
 
-void KisFilterSelectorWidget::setLayer(KisLayerSP layer)
-{
-    setPaintDevice( layer->paintDevice() );
-    setImage( layer->image() );
-}
-
 void KisFilterSelectorWidget::setPaintDevice( KisPaintDeviceSP _paintDevice)
 {
     if (!_paintDevice) return;
@@ -112,13 +106,16 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     dbgKrita << "setFilter: " << f;
     d->currentFilter = f;
     delete d->currentCentralWidget;
+
     {
         bool v = d->uiFilterSelector.filtersSelector->blockSignals( true );
         d->uiFilterSelector.filtersSelector->setCurrentIndex( d->filtersModel->indexForFilter( f->id() ) );
         d->uiFilterSelector.filtersSelector->blockSignals( v );
     }
+
     KisFilterConfigWidget* widget =
         d->currentFilter->createConfigurationWidget( d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image );
+
     if( !widget )
     { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;

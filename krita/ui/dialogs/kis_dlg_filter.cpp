@@ -62,7 +62,8 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     d->mask->selection()->updateProjection();
 
     d->layer->setPreviewMask( d->mask );
-    d->uiFilterDialog.filterSelection->setLayer( d->layer );
+    d->uiFilterDialog.filterSelection->setPaintDevice( d->layer->paintDevice() );
+    d->uiFilterDialog.filterSelection->setImage( d->layer->image() );
     d->timer.setSingleShot(true);
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(close()));

@@ -27,29 +27,27 @@
 class QModelIndex;
 class KisFilterConfiguration;
 
+/**
+ *
+ */
 class KisFilterSelectorWidget : public QWidget {
     Q_OBJECT
-    public:
-        KisFilterSelectorWidget( QWidget* parent);
-        ~KisFilterSelectorWidget();
-        void setFilter(KisFilterSP f);
-        /**
-         * Convenient function that will call \ref setPaintDevice with the layer paint device
-         * and \ref setImage with the layer image
-         */
-        void setLayer(KisLayerSP layer);
-        void setPaintDevice( KisPaintDeviceSP );
-        void setImage( KisImageSP );
-        KisFilterConfiguration* configuration();
-    protected slots:
-        void slotBookmarkedFilterConfigurationSelected(int );
-        void setFilterIndex(const QModelIndex& );
-        void editConfigurations();
-    signals:
-        void configurationChanged();
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisFilterSelectorWidget( QWidget* parent);
+    ~KisFilterSelectorWidget();
+    void setFilter(KisFilterSP f);
+    void setPaintDevice( KisPaintDeviceSP );
+    void setImage( KisImageSP );
+    KisFilterConfiguration* configuration();
+protected slots:
+    void slotBookmarkedFilterConfigurationSelected(int );
+    void setFilterIndex(const QModelIndex& );
+    void editConfigurations();
+signals:
+    void configurationChanged();
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

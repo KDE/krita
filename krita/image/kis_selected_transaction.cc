@@ -29,15 +29,17 @@
 
 KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent) :
     KisTransaction(name, node->paintDevice(), parent),
-    m_hadSelection(false /*device->hasSelection()*/)
+    m_hadSelection(false /*device->hasSelection()*/),
+    m_selTransaction(0)
 {
     m_layer = dynamic_cast<KisLayer*>(node.data());
     while ( !m_layer && node->parent() ) {
         m_layer = dynamic_cast<KisLayer*>(node->parent().data());
         node = node->parent();
     }
-    Q_ASSERT( m_layer->selection() );
-    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
+
+    if( m_layer->selection())
+        m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
 //     if(! m_hadSelection) {
 //         m_device->deselect(); // let us not be the cause of select
 //     }
@@ -55,12 +57,16 @@ void KisSelectedTransaction::redo()
     if(m_firstRedo)
     {
         m_firstRedo = false;
-        m_selTransaction->redo();
+
+        if(m_selTransaction)
+            m_selTransaction->redo();
         return;
     }
 
     KisTransaction::redo();
-    m_selTransaction->redo();
+
+    if(m_selTransaction)
+        m_selTransaction->redo();
 //     if(m_redoHasSelection)
 //         m_device->selection();
 //     else
@@ -75,7 +81,9 @@ void KisSelectedTransaction::undo()
 //     m_redoHasSelection = m_device->hasSelection();
 
     KisTransaction::undo();
-    m_selTransaction->undo();
+
+    if(m_selTransaction)
+        m_selTransaction->undo();
 //     if(m_hadSelection)
 //         m_device->selection();
 //     else

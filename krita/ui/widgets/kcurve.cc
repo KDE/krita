@@ -162,7 +162,7 @@ void KCurve::paintEvent(QPaintEvent *)
 
     // Draw curve.
     double curvePrevVal = getCurveValue(0.0);
-    p.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
+    p.setPen(QPen::QPen(palette().text(), 1, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++)
     {
         double curveX;

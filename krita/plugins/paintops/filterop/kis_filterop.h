@@ -34,6 +34,8 @@ class KisFilterConfiguration;
 class KisFilterConfigWidget;
 class Ui_FilterOpOptions;
 class KoID;
+class QGridLayout;
+class KisFilterOpSettings;
 
 class KisFilterOpFactory  : public KisPaintOpFactory  {
 
@@ -49,38 +51,6 @@ class KisFilterOpFactory  : public KisPaintOpFactory  {
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
-class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
-
-Q_OBJECT
-
-public:
-	
-    KisFilterOpSettings(QWidget* parent, KisImageSP image);
-    virtual ~KisFilterOpSettings();
-    virtual KisPaintOpSettingsSP clone() const;
-    virtual QWidget *widget() const { return m_optionsWidget; }
-    const KisFilterSP filter() const;
-    KisFilterConfiguration* filterConfig() const;
-    bool ignoreAlpha() const;
-    virtual void setNode( KisNodeSP node );
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-  
-protected slots:
-
-    void setCurrentFilter(const KoID &);
-
-private:
-
-    QWidget* m_optionsWidget;
-    Ui_FilterOpOptions* m_uiOptions;
-    const KisFilterSP m_currentFilter;
-    KisPaintDeviceSP m_paintDevice;
-    KisFilterConfigWidget* m_currentFilterConfigWidget;
-    KisImageSP m_image;
-
-};
-
 class KisFilterOp : public KisPaintOp {
 
 public:
@@ -91,7 +61,7 @@ public:
     void paintAt(const KisPaintInformation& info);
 
 private:
-    
+
     const KisFilterOpSettings* m_settings;
     KisPaintDeviceSP m_tmpDevice;
 };

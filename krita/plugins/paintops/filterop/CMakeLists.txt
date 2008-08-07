@@ -3,6 +3,7 @@
 set(kritafilterop_PART_SRCS
     filterop.cc
     kis_filterop.cc
+    kis_filterop_settings.cpp
     )
 
 

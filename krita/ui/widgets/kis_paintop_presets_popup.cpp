@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +24,9 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QGridLayout>
-
+#include <QFont>
+#include <kconfig.h>
+#include <kglobalsettings.h>
 #include <kis_paintop_preset.h>
 
 #include <ui_wdgpaintoppresets.h>
@@ -38,6 +40,7 @@ public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
     QGridLayout * layout;
     QWidget * settingsWidget;
+    QFont smallFont;
 
 };
 
@@ -46,7 +49,14 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup( QWidget * parent )
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
+    KConfigGroup group( KGlobal::config(), "GUI" );
+    m_d->smallFont  = KGlobalSettings::generalFont();
+    double pointSize = group.readEntry("palettefontsize", m_d->smallFont.pointSize() * 0.75);
+    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
+    m_d->smallFont.setPointSizeF(pointSize);
+    setFont(m_d->smallFont);
     m_d->uiWdgPaintOpPresets.setupUi( this );
+
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
     m_d->settingsWidget = 0;
 }
@@ -65,6 +75,9 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget( QWidget * widget )
         m_d->layout->invalidate();
     }
     if (!widget) return;
+
+    widget->setFont(m_d->smallFont);
+
     m_d->settingsWidget = widget;
     m_d->layout->addWidget( widget );
     m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer->updateGeometry();

@@ -1,7 +1,7 @@
 /*
  *  kis_paintop_box.h - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2004-2008 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

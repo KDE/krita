@@ -359,9 +359,11 @@ void ParagraphTool::deactivateRuler()
         return;
     }
 
-    RulerIndex deactivateRuler = m_activeRuler;
+    RulerIndex activeRuler = m_activeRuler;
     m_activeRuler = noRuler;
-    m_rulers[deactivateRuler].setActive(false);
+    m_rulers[activeRuler].setActive(false);
+
+    focusRuler(activeRuler);
 
     // there's no active ruler anymore, so we have to check if we hover
     // over any other ruler
@@ -376,12 +378,28 @@ void ParagraphTool::resetActiveRuler()
     }
 }
 
+void ParagraphTool::focusRuler(RulerIndex ruler)
+{
+    if (m_focusedRuler == ruler) {
+        return;
+    }
+
+    if (m_focusedRuler >= 0 && m_focusedRuler < maxRuler) {
+        m_rulers[m_focusedRuler].setFocused(false);
+    }
+
+    m_focusedRuler = ruler;
+    m_rulers[m_focusedRuler].setFocused(true);
+}
+
 void ParagraphTool::defocusRuler()
 {
-    if (hasFocusedRuler()) {
-        m_rulers[m_focusedRuler].setFocused(false);
-        m_focusedRuler = noRuler;
+    if (!hasFocusedRuler()) {
+        return;
     }
+
+    m_rulers[m_focusedRuler].setFocused(false);
+    m_focusedRuler = noRuler;
 }
 
 void ParagraphTool::highlightRulerAt(const QPointF &point)
@@ -509,8 +527,14 @@ void ParagraphTool::mousePressEvent(KoPointerEvent *event)
         bool activated = activateRulerAt(event->point);
 
         if (!activated) {
-            deselectTextBlock();
-            selectTextBlockAt(event->point);
+
+            if (hasFocusedRuler()) {
+                defocusRuler();
+            }
+            else {
+                deselectTextBlock();
+                selectTextBlockAt(event->point);
+            }
         }
     }
     else if (event->button() == Qt::RightButton) {

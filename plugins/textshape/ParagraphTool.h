@@ -120,7 +120,7 @@ protected:
     void deactivateRuler();
     void resetActiveRuler();
 
-    bool hasFocusedRuler() const { return m_focusedRuler != noRuler; }
+    bool hasFocusedRuler() const { return m_focusedRuler >= 0 && m_focusedRuler < maxRuler; }
     void focusRuler(RulerIndex ruler);
     void defocusRuler();
 

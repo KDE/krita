@@ -32,13 +32,14 @@ class QPointF;
 
 // TODO: move this to a separate file. ParagraphTool itself would be nice,
 // but we need it in ShapeSpecificData, too.
+// this enum defines the order in which the rulers will be focused when tab is pressed
 typedef enum
 {
-    firstIndentRuler,
-    followingIndentRuler,
-    rightMarginRuler,
     topMarginRuler,
+    rightMarginRuler,
     bottomMarginRuler,
+    followingIndentRuler,
+    firstIndentRuler,
     maxRuler,
     noRuler
 } RulerIndex;
@@ -107,6 +108,9 @@ public:
     bool hitTest(const QPointF &point, const QLineF &baseline) const;
 
     void moveRuler(const QPointF &point, bool smooth, QLineF baseline);
+
+    void increaseByStep() { setValue(value() + stepValue()); emit valueChanged(value()); }
+    void decreaseByStep() { setValue(value() - stepValue()); emit valueChanged(value()); }
 
     QColor activeColor() const { return QColor(100, 148, 255); }
     QColor highlightColor() const { return QColor(78, 117, 201); }

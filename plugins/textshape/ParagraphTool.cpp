@@ -384,7 +384,7 @@ void ParagraphTool::focusRuler(RulerIndex ruler)
         return;
     }
 
-    if (m_focusedRuler >= 0 && m_focusedRuler < maxRuler) {
+    if (hasFocusedRuler()) {
         m_rulers[m_focusedRuler].setFocused(false);
     }
 
@@ -576,20 +576,51 @@ void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
 
 void ParagraphTool::keyPressEvent(QKeyEvent *event)
 {
-    switch (event->key()) {
-        case Qt::Key_Shift:
-            toggleSmoothMovement();
-            break;
-        case Qt::Key_Escape:
-            resetActiveRuler();
-            break;
-        case Qt::Key_Delete:
-        case Qt::Key_BackSpace:
-            applyParentStyleToActiveRuler();
-            break;
-        default:
-            break;
+    if (hasActiveRuler()) {
+        switch (event->key()) {
+            case Qt::Key_Shift:
+                toggleSmoothMovement();
+                break;
+            case Qt::Key_Escape:
+                resetActiveRuler();
+                break;
+            case Qt::Key_Delete:
+            case Qt::Key_BackSpace:
+                applyParentStyleToActiveRuler();
+                break;
+            default:
+                break;
+        }
     }
+    else if (hasFocusedRuler()) {
+        switch (event->key()) {
+            case Qt::Key_Plus:
+                m_rulers[m_focusedRuler].increaseByStep();
+                break;
+            case Qt::Key_Minus:
+                m_rulers[m_focusedRuler].decreaseByStep();
+                break;
+            case Qt::Key_PageUp:
+                break;
+            case Qt::Key_PageDown:
+                break;
+            case Qt::Key_Tab:
+                focusRuler((RulerIndex)(((int)m_focusedRuler + 1)%maxRuler));
+                break;
+            default:
+                break;
+        }
+    }
+    else {
+        switch (event->key()) {
+            case Qt::Key_Tab:
+                focusRuler(topMarginRuler);
+                break;
+            default:
+                break;
+        }
+    }
+        
 
     repaintDecorations();
 }

@@ -33,7 +33,7 @@ class KisFilterDialog : public QDialog {
 
 public:
 
-    KisFilterDialog(QWidget* parent, KisLayerSP device);
+    KisFilterDialog(QWidget* parent, KisNodeSP device, KisImageSP image);
 
     ~KisFilterDialog();
 
@@ -57,7 +57,7 @@ private slots:
 
 signals:
 
-    void sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*);
+    void sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*);
 
 private:
     struct Private;

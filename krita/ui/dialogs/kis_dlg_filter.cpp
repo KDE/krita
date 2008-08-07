@@ -26,6 +26,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_filter_mask.h>
+#include <kis_node.h>
 #include <kis_layer.h>
 #include <kis_selection.h>
 #include <kis_pixel_selection.h>
@@ -43,27 +44,38 @@ struct KisFilterDialog::Private {
     KisFilterSP currentFilter;
     Ui_FilterDialog uiFilterDialog;
     KisFilterMaskSP mask;
-    KisLayerSP layer;
+    KisNodeSP node;
     QTimer timer;
+    KisImageSP image;
 };
 
-KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
+KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP image ) :
     QDialog( parent ),
     d( new Private )
 {
-    QRect rc = layer->extent();
+    QRect rc = node->extent();
     setModal( false );
-    d->uiFilterDialog.setupUi( this );
-    d->layer = layer;
 
+    d->uiFilterDialog.setupUi( this );
+    d->node = node;
+    d->image = image;
     d->mask = new KisFilterMask();
+
     KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
     psel->select( rc );
     d->mask->selection()->updateProjection();
 
-    d->layer->setPreviewMask( d->mask );
-    d->uiFilterDialog.filterSelection->setPaintDevice( d->layer->paintDevice() );
-    d->uiFilterDialog.filterSelection->setImage( d->layer->image() );
+    if (d->node->inherits("KisLayer")) {
+        qobject_cast<KisLayer*>(d->node.data())->setPreviewMask( d->mask );
+        d->uiFilterDialog.pushButtonCreateMaskEffect->show();
+        d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(true);
+        connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
+    }
+    else {
+        d->uiFilterDialog.pushButtonCreateMaskEffect->hide();
+    }
+    d->uiFilterDialog.filterSelection->setPaintDevice( d->node->paintDevice() );
+    d->uiFilterDialog.filterSelection->setImage( d->image );
     d->timer.setSingleShot(true);
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(close()));
@@ -71,7 +83,8 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisLayerSP layer ) :
     connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
-    connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
+
+
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(kickTimer()));
     connect(&d->timer, SIGNAL(timeout()), SLOT(updatePreview()));
 }
@@ -105,20 +118,28 @@ void KisFilterDialog::apply()
     if ( !d->currentFilter ) return;
 
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
-    emit(sigPleaseApplyFilter(d->layer, config));
+    emit(sigPleaseApplyFilter(d->node, config));
 }
 
 void KisFilterDialog::close()
 {
-    d->layer->removePreviewMask();
-    d->layer->setDirty(d->layer->extent());
+    if (d->node->inherits("KisLayer")) {
+        qobject_cast<KisLayer*>(d->node.data())->removePreviewMask();
+    }
+    d->node->setDirty(d->node->extent());
 }
 
 void KisFilterDialog::createMask()
 {
-    KisEffectMaskSP mask = d->layer->previewMask();
-    d->layer->removePreviewMask();
-
+    KisEffectMaskSP mask;
+    if (d->node->inherits("KisLayer")) {
+        KisLayer * l = qobject_cast<KisLayer*>(d->node.data());
+        mask = l->previewMask();
+        l->removePreviewMask();
+        d->image->addNode(mask, l);
+        l->setDirty();
+        close();
+    }
 }
 
 void KisFilterDialog::kickTimer()

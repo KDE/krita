@@ -5,19 +5,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>679</width>
-    <height>61</height>
+    <width>217</width>
+    <height>136</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" >
-   <item>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
     <widget class="QLabel" name="label" >
      <property name="text" >
       <string>Shape:</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="0" column="1" >
     <widget class="QComboBox" name="comboBoxShapes" >
      <item>
       <property name="text" >
@@ -31,24 +31,24 @@
      </item>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0" >
     <widget class="QLabel" name="label_2" >
      <property name="text" >
       <string>Program:</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="1" column="1" >
     <widget class="QComboBox" name="comboBoxShapePrograms" />
    </item>
-   <item>
+   <item row="2" column="0" >
     <widget class="QLabel" name="label_3" >
      <property name="text" >
       <string>Coloring:</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="2" column="1" >
     <widget class="QComboBox" name="comboBoxColoring" >
      <item>
       <property name="text" >
@@ -72,25 +72,25 @@
      </item>
     </widget>
    </item>
-   <item>
+   <item row="3" column="0" >
     <widget class="QLabel" name="label_4" >
      <property name="text" >
       <string>Program:</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="3" column="1" >
     <widget class="QComboBox" name="comboBoxColoringPrograms" />
    </item>
-   <item>
-    <spacer>
+   <item row="4" column="1" >
+    <spacer name="verticalSpacer" >
      <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
-       <width>51</width>
-       <height>43</height>
+       <width>20</width>
+       <height>8</height>
       </size>
      </property>
     </spacer>

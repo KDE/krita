@@ -47,7 +47,6 @@
 #include <KoRulerController.h>
 #include <KoDrag.h>
 #include <KoShapeDeleteCommand.h>
-#include <KoSnapGuideConfigAction.h>
 
 #include "KoShapeTraversal.h"
 #include "KoPACanvas.h"
@@ -215,8 +214,6 @@ void KoPAView::initActions()
     m_actionViewShowGuides->setToolTip( i18n( "Shows or hides guides" ) );
     actionCollection()->addAction( "view_show_guides", m_actionViewShowGuides );
     connect( m_actionViewShowGuides, SIGNAL(triggered(bool)), this, SLOT(viewGuides(bool)));
-
-    actionCollection()->addAction( "view_snapguides", new KoSnapGuideConfigAction( this ) );
 
     m_actionViewShowMasterPages = new KToggleAction(i18n( "Show Master Pages" ), this );
     actionCollection()->addAction( "view_masterpages", m_actionViewShowMasterPages );

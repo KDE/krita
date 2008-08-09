@@ -16,49 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_curve_option.h"
+#include "widgets/kcurve.h"
 
-#include "kis_paintop_option.h"
-#include <kis_paintop_preset.h>
-
-class KisPaintOpOption::Private {
-public:
-    bool checked;
-    QString label;
-    QWidget * configurationPage;
-};
-
-KisPaintOpOption::KisPaintOpOption( const QString & label, bool checked )
-    : m_d(new Private())
+KisCurveOption::KisCurveOption( const QString & label )
+    : KisPaintOpOption( label )
+    , m_customCurve( false )
 {
-    m_d->checked = checked;
-    m_d->label = label;
-    m_d->configurationPage = 0;
+    m_curveWidget = new KCurve();
+    m_curveWidget->hide();
+    setConfigurationPage(m_curveWidget);
+    m_curve = QVector<double>( 255, 0.0 );
+    connect( m_curveWidget, SIGNAL( modified() ), this, SLOT( transferCurve() ) );
 }
 
-KisPaintOpOption::~KisPaintOpOption()
-{
-    delete m_d;
+void KisCurveOption::transferCurve() {
+    double value;
+    for (int i = 0; i < 256; i++) {
+        value = m_curveWidget->getCurveValue( i / 255.0);
+        if (value < PRESSURE_MIN)
+            m_curve[i] = PRESSURE_MIN;
+        else if (value > PRESSURE_MAX)
+            m_curve[i] = PRESSURE_MAX;
+        else
+            m_curve[i] = value;
+    }
+    m_customCurve = true;
 }
-
-bool KisPaintOpOption::isChecked () const
-{
-    return m_d->checked;
-}
-
-void KisPaintOpOption::setChecked ( bool checked )
-{
-    m_d->checked = checked;
-}
-
-
-void KisPaintOpOption::setConfigurationPage( QWidget * page )
-{
-    m_d->configurationPage = page;
-}
-
-QWidget * KisPaintOpOption::configurationPage() const
-{
-    return m_d->configurationPage;
-}
-
-

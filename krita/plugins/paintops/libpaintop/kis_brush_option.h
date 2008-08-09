@@ -17,48 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_paintop_option.h"
-#include <kis_paintop_preset.h>
+#ifndef KIS_BRUSH_OPTION_H
+#define KIS_BRUSH_OPTION_H
 
-class KisPaintOpOption::Private {
+#include "kis_paintop_option.h"
+
+/**
+ * The brush option allows the user to select a particular brush
+ * footprint for suitable paintops
+ */
+class KisBrushOption : public KisPaintOpOption
+{
 public:
-    bool checked;
-    QString label;
-    QWidget * configurationPage;
+
 };
 
-KisPaintOpOption::KisPaintOpOption( const QString & label, bool checked )
-    : m_d(new Private())
-{
-    m_d->checked = checked;
-    m_d->label = label;
-    m_d->configurationPage = 0;
-}
-
-KisPaintOpOption::~KisPaintOpOption()
-{
-    delete m_d;
-}
-
-bool KisPaintOpOption::isChecked () const
-{
-    return m_d->checked;
-}
-
-void KisPaintOpOption::setChecked ( bool checked )
-{
-    m_d->checked = checked;
-}
-
-
-void KisPaintOpOption::setConfigurationPage( QWidget * page )
-{
-    m_d->configurationPage = page;
-}
-
-QWidget * KisPaintOpOption::configurationPage() const
-{
-    return m_d->configurationPage;
-}
-
-
+#endif

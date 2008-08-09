@@ -16,49 +16,38 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_pressure_opacity_option.h"
+#include <klocale.h>
+#include <kis_painter.h>
+#include <KoColor.h>
+#include <KoColorSpace.h>
 
-#include "kis_paintop_option.h"
-#include <kis_paintop_preset.h>
-
-class KisPaintOpOption::Private {
-public:
-    bool checked;
-    QString label;
-    QWidget * configurationPage;
-};
-
-KisPaintOpOption::KisPaintOpOption( const QString & label, bool checked )
-    : m_d(new Private())
+KisPressureOpacityOption::KisPressureOpacityOption()
+    : KisCurveOption( i18n( "Opacity" ) )
 {
-    m_d->checked = checked;
-    m_d->label = label;
-    m_d->configurationPage = 0;
 }
 
-KisPaintOpOption::~KisPaintOpOption()
+void KisPressureOpacityOption::writeOptionSetting( KisPaintOpPresetSP preset ) const
 {
-    delete m_d;
+    // XXX
 }
 
-bool KisPaintOpOption::isChecked () const
+void KisPressureOpacityOption::readOptionSetting( KisPaintOpPresetSP preset )
 {
-    return m_d->checked;
+    // XXX
 }
 
-void KisPaintOpOption::setChecked ( bool checked )
+void KisPressureOpacityOption::apply( KisPainter * painter, double pressure ) const
 {
-    m_d->checked = checked;
+    if ( !isChecked() ) {
+        return;
+    }
+    quint8 origOpacity = painter->opacity();
+
+    if ( !customCurve() ) {
+        painter->setOpacity((qint8)(origOpacity * pressure));
+    }
+    else {
+        painter->setOpacity((qint8)(origOpacity * scaleToCurve(pressure)));
+    }
 }
-
-
-void KisPaintOpOption::setConfigurationPage( QWidget * page )
-{
-    m_d->configurationPage = page;
-}
-
-QWidget * KisPaintOpOption::configurationPage() const
-{
-    return m_d->configurationPage;
-}
-
-

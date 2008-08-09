@@ -16,49 +16,39 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_pressure_size_option.h"
+#include "kis_pressure_opacity_option.h"
+#include <klocale.h>
+#include <kis_painter.h>
+#include <KoColor.h>
+#include <KoColorSpace.h>
 
-#include "kis_paintop_option.h"
-#include <kis_paintop_preset.h>
-
-class KisPaintOpOption::Private {
-public:
-    bool checked;
-    QString label;
-    QWidget * configurationPage;
-};
-
-KisPaintOpOption::KisPaintOpOption( const QString & label, bool checked )
-    : m_d(new Private())
+KisPressureSizeOption::KisPressureSizeOption()
+    : KisCurveOption( i18n( "Size" ) )
 {
-    m_d->checked = checked;
-    m_d->label = label;
-    m_d->configurationPage = 0;
 }
 
-KisPaintOpOption::~KisPaintOpOption()
+void KisPressureSizeOption::writeOptionSetting( KisPaintOpPresetSP preset ) const
 {
-    delete m_d;
+    // XXX
 }
 
-bool KisPaintOpOption::isChecked () const
+void KisPressureSizeOption::readOptionSetting( KisPaintOpPresetSP preset )
 {
-    return m_d->checked;
+    // XXX
 }
 
-void KisPaintOpOption::setChecked ( bool checked )
+KisPaintInformation KisPressureSizeOption::apply( const KisPaintInformation & info ) const
 {
-    m_d->checked = checked;
+    KisPaintInformation adjustedInfo(info);
+    if ( !isChecked() ) {
+        adjustedInfo.setPressure( PRESSURE_DEFAULT );
+    }
+    else {
+        if ( customCurve() ) {
+            adjustedInfo.setPressure(scaleToCurve(adjustedInfo.pressure()));
+        }
+    }
+
+    return adjustedInfo;
 }
-
-
-void KisPaintOpOption::setConfigurationPage( QWidget * page )
-{
-    m_d->configurationPage = page;
-}
-
-QWidget * KisPaintOpOption::configurationPage() const
-{
-    return m_d->configurationPage;
-}
-
-

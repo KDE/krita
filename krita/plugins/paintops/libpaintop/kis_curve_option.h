@@ -17,48 +17,54 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_paintop_option.h"
-#include <kis_paintop_preset.h>
+#ifndef KIS_CURVE_OPTION_H
+#define KIS_CURVE_OPTION_H
 
-class KisPaintOpOption::Private {
+#include <QObject>
+#include <QVector>
+
+#include "kis_global.h"
+#include "kis_paintop_option.h"
+
+class KCurve;
+
+/**
+ * KisCurveOption is the base class for paintop options that are
+ * defined through a curve.
+ *
+ * XXX; Add a reset button!
+ */
+class KisCurveOption : public QObject, public KisPaintOpOption {
+
+Q_OBJECT
+
 public:
-    bool checked;
-    QString label;
-    QWidget * configurationPage;
+
+    KisCurveOption( const QString & label );
+
+
+protected:
+
+    double scaleToCurve(double pressure) const {
+        int offset = int(255.0 * pressure);
+        if (offset < 0)
+            offset = 0;
+        if (offset > 255)
+            offset =  255; // Was: clamp(..., 0, 255);
+        return m_curve[offset];
+    }
+
+    bool customCurve() const { return m_customCurve; }
+
+private slots:
+
+    void transferCurve();
+
+private:
+
+    bool m_customCurve;
+    KCurve * m_curveWidget;
+    QVector<double> m_curve;
 };
 
-KisPaintOpOption::KisPaintOpOption( const QString & label, bool checked )
-    : m_d(new Private())
-{
-    m_d->checked = checked;
-    m_d->label = label;
-    m_d->configurationPage = 0;
-}
-
-KisPaintOpOption::~KisPaintOpOption()
-{
-    delete m_d;
-}
-
-bool KisPaintOpOption::isChecked () const
-{
-    return m_d->checked;
-}
-
-void KisPaintOpOption::setChecked ( bool checked )
-{
-    m_d->checked = checked;
-}
-
-
-void KisPaintOpOption::setConfigurationPage( QWidget * page )
-{
-    m_d->configurationPage = page;
-}
-
-QWidget * KisPaintOpOption::configurationPage() const
-{
-    return m_d->configurationPage;
-}
-
-
+#endif

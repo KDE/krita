@@ -59,8 +59,21 @@ public:
 
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
-    /// add a selected object
-    virtual void select(KoShape * object);
+    /**
+     * Adds an object to the selection.
+     *
+     * If the object is a KoShapeGroup all of its child objects are automatically added
+     * to the selection.
+     * If the object has no parent or is not a KoShapeGroup, only the given object is 
+     * added to the selection.
+     * If the given object is a child of a KoShapeGroup and recursive selection is enabled
+     * the all parents and their child object up to the toplevel KoShapeGroup are added to
+     * the selection.
+     *
+     * @param object the object to add to the selection
+     * @param recursive enables recursively selecting shapes if object is inside a shape group
+     */
+    virtual void select(KoShape * object, bool recursive = true );
 
     /// remove a selected object
     virtual void deselect(KoShape * object);

@@ -1118,6 +1118,9 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
         return 0;
     }
 
+    bool selectMultiple = event->modifiers() & Qt::ControlModifier;
+    bool selectNextInStack = event->modifiers() & Qt::ShiftModifier;
+
     if(editableShape) {
         // manipulation of selected shapes goes first
         if(handle != KoFlake::NoHandle) {
@@ -1135,21 +1138,22 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
                 return new ShapeRotateStrategy(this, m_canvas, event->point, event->buttons() );
         }
         // This is wrong now when there is a single rotated object as you get it also when pressing outside of the object
-        if(event->buttons() == Qt::LeftButton && select->boundingRect().contains(event->point))
+        if( ! ( selectMultiple || selectNextInStack ) && event->buttons() == Qt::LeftButton && select->boundingRect().contains(event->point))
             return new ShapeMoveStrategy(this, m_canvas, event->point);
     }
 
     if((event->buttons() & Qt::LeftButton) == 0)
         return 0;  // Nothing to do for middle/right mouse button
 
-    KoShape * object( shapeManager->shapeAt( event->point, (event->modifiers() & Qt::ShiftModifier) ? KoFlake::NextUnselected : KoFlake::ShapeOnTop ) );
+    KoShape * object( shapeManager->shapeAt( event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop ) );
+
     if( !object && handle == KoFlake::NoHandle) {
         // check if we have hit a guide
         if( m_guideLine->isValid() ) {
             m_guideLine->select();
             return 0;
         }
-        if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
+        if ( ! selectMultiple )
         {
             repaintDecorations();
             select->deselectAll();
@@ -1158,16 +1162,16 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
     }
 
     if(select->isSelected(object)) {
-        if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier ) {
+        if ( selectMultiple ) {
             repaintDecorations();
             select->deselect(object);
         }
     }
     else if(handle == KoFlake::NoHandle) { // clicked on object which is not selected
         repaintDecorations();
-        if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
+        if ( ! selectMultiple )
             shapeManager->selection()->deselectAll();
-        select->select(object);
+        select->select(object, selectNextInStack ? false : true );
         repaintDecorations();
         return new ShapeMoveStrategy(this, m_canvas, event->point);
     }

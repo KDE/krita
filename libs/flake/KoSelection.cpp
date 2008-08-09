@@ -72,7 +72,7 @@ void KoSelection::selectGroupChilds( KoShapeGroup *group )
     }
 }
 
-void KoSelection::select(KoShape * object)
+void KoSelection::select(KoShape * object, bool recursive)
 {
     Q_ASSERT(object != this);
     Q_ASSERT(object);
@@ -81,19 +81,23 @@ void KoSelection::select(KoShape * object)
     if(!d->selectedShapes.contains(object))
         d->selectedShapes << object;
 
+    // autmatically recursively select all child shapes downwards in the hierarchy
     KoShapeGroup* group = dynamic_cast<KoShapeGroup*>(object);
     if( group )
         selectGroupChilds( group );
 
-    KoShapeContainer *parent = object->parent();
-    while( parent ) {
-        KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(parent);
-        if( ! parentGroup ) break;
-        if( ! d->selectedShapes.contains(parentGroup) ) {
-            d->selectedShapes << parentGroup;
-            selectGroupChilds( parentGroup );
+    if( recursive ) {
+        // recursively select all parents and their childs upwards the hierarchy
+        KoShapeContainer *parent = object->parent();
+        while( parent ) {
+            KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(parent);
+            if( ! parentGroup ) break;
+            if( ! d->selectedShapes.contains(parentGroup) ) {
+                d->selectedShapes << parentGroup;
+                selectGroupChilds( parentGroup );
+            }
+            parent = parentGroup->parent();
         }
-        parent = parentGroup->parent();
     }
 
     if(d->selectedShapes.count() == 1)

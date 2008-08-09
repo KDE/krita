@@ -57,7 +57,6 @@ void KoToolDocker::removeOptionWidget()
     if(d->currentWidget) {
         d->currentWidget->hide();
         d->currentWidget->setParent(0);
-        d->currentWidget->resize(0,0);
     }
     setWidget(d->minimalWidget);
     d->minimalWidget->show();
@@ -70,11 +69,15 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
     if(d->currentWidget) {
         d->currentWidget->hide();
         d->currentWidget->setParent(0);
-        d->currentWidget->resize(0,0);
     }
     d->currentWidget = optionWidget;
+    if(isFloating())
+        setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
     setWidget(optionWidget);
+    d->minimalWidget->setParent(0);
+    adjustSize();
     optionWidget->show();
+    update(); // force qt to update the layout even when we are floating
 }
 
 #include "KoToolDocker.moc"

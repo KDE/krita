@@ -59,6 +59,8 @@ public slots:
 protected:
     /// add path shape to document
     virtual void addPathShape();
+    /// reimplemented
+    virtual QWidget * createOptionWidget();
 
     KoPathShape *m_shape;
 

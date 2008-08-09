@@ -65,8 +65,6 @@ set(koguiutils_LIB_SRCS
     KoPageLayoutDialog.cpp
     KoPageLayoutWidget.cpp
     KoPagePreviewWidget.cpp
-    KoSnapGuideConfigWidget.cpp
-    KoSnapGuideConfigAction.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS
@@ -77,7 +75,6 @@ kde4_add_ui_files( koguiutils_LIB_SRCS
     #KoPageLayoutHeaderBase.ui
     KoEditColorSet.ui
     KoShadowConfigWidget.ui
-    KoSnapGuideConfigWidget.ui
 )
 
 kde4_add_library(koguiutils SHARED ${koguiutils_LIB_SRCS})

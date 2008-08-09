@@ -108,7 +108,7 @@ public:
         painter->save();
         parent->printPage(page.toInt(), *painter);
         painter->restore();
-        if (!stop)
+        if (!stop && shapeManager)
             shapeManager->paint(*painter, zoomer, true);
         painter->restore(); // state before page preparation
 

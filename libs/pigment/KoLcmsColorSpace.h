@@ -76,9 +76,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 profiles[1] = 0;
                 profiles[2] = 0;
             }
-        
+
             ~KoLcmsColorTransformation() {
-        
+
                 if (cmstransform)
                     cmsDeleteTransform(cmstransform);
                 if (profiles[0] && profiles[0] != csProfile)
@@ -88,7 +88,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 if(profiles[2] && profiles[2] != csProfile)
                     cmsCloseProfile(profiles[2]);
             }
-        
+
             virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
             {
                 cmsDoTransform(cmstransform, const_cast<quint8 *>(src), dst, nPixels);
@@ -97,17 +97,19 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
                 while (numPixels > 0) {
                     quint8 alpha = m_colorSpace->alpha(src);
                     m_colorSpace->setAlpha(dst, alpha, 1);
-        
+
                     src += pixelSize;
                     dst += pixelSize;
                     numPixels--;
                 }
             }
+
             const KoColorSpace* m_colorSpace;
             cmsHPROFILE csProfile;
             cmsHPROFILE profiles[3];
             cmsHTRANSFORM cmstransform;
         };
+
         struct Private {
             mutable quint8 * qcolordata; // A small buffer for conversion from and to qcolor.
             cmsHTRANSFORM defaultToRGB;    // Default transform to 8 bit sRGB
@@ -119,7 +121,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             KoLcmsColorProfileContainer *  profile;
             KoColorProfile* colorProfile;
         };
+
     protected:
+
         KoLcmsColorSpace(const QString &id, const QString &name,  DWORD cmType,
                          icColorSpaceSignature colorSpaceSignature,
                          KoColorProfile *p) : KoColorSpaceAbstract<_CSTraits>(id, name), KoLcmsInfo( cmType, colorSpaceSignature), d( new Private())
@@ -136,6 +140,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->defaultFromRGB = 0;
             d->defaultToRGB = 0;
         }
+
         virtual ~KoLcmsColorSpace()
         {
             cmsCloseProfile(d->lastFromRGB);

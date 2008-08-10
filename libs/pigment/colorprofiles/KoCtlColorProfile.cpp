@@ -85,7 +85,7 @@ KoColorProfile* KoCtlColorProfile::clone() const
 
 bool KoCtlColorProfile::valid() const
 {
-    kDebug(/*DBG_PIGMENT*/) << d->colorModelID.isNull() << " " << d->colorDepthID.isNull();
+    kDebug(DBG_PIGMENT) << d->colorModelID.isNull() << " " << d->colorDepthID.isNull();
     return ( d->module and d->module->isCompiled()
             and not d->colorModelID.isNull() and not d->colorDepthID.isNull());
 }
@@ -206,7 +206,7 @@ void KoCtlColorProfile::decodeTransformations(QDomElement& elt)
         QDomElement et = nt.toElement();
         if(not et.isNull())
         {
-            kDebug(/*DBG_PIGMENT*/) << et.tagName();
+            kDebug(DBG_PIGMENT) << et.tagName();
             if(et.tagName() == "conversions")
             {
                 decodeConversions(et);
@@ -220,7 +220,7 @@ QString generateDepthID(QString depth, QString type)
     QString prefix;
     if(type == "integer") prefix = "U";
     else if(type == "float") prefix = "F";
-    else kDebug(/*DBG_PIGMENT*/) << "Invalid type";
+    else kDebug(DBG_PIGMENT) << "Invalid type";
     return prefix + depth;
 }
 
@@ -231,7 +231,7 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
         QDomElement e = n.toElement();
         if(not e.isNull())
         {
-            kDebug(/*DBG_PIGMENT*/) << e.tagName();
+            kDebug(DBG_PIGMENT) << e.tagName();
             if(e.tagName() == "conversion")
             {
                 QDomElement eIn = e.firstChildElement("input");
@@ -259,12 +259,12 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
                         d->conversionInfos.push_back( ci );
                     }
                 } else {
-                    kDebug(/*DBG_PIGMENT*/) << "Invalid conversion, missing <input> or <output> or both";
+                    kDebug(DBG_PIGMENT) << "Invalid conversion, missing <input> or <output> or both";
                 }
             }
         }
     }
-    kDebug(/*DBG_PIGMENT*/) << d->conversionInfos.size() << " convertions were found";
+    kDebug(DBG_PIGMENT) << d->conversionInfos.size() << " convertions were found";
 }
 
 bool KoCtlColorProfile::load()
@@ -273,13 +273,13 @@ bool KoCtlColorProfile::load()
     QFile file(fileName());
     if (not file.open(QIODevice::ReadOnly))
     {
-        kDebug(/*DBG_PIGMENT*/) << "Can't open file : " << fileName();
+        kDebug(DBG_PIGMENT) << "Can't open file : " << fileName();
         return false;
     }
     QString errorMsg;
     int errorLine;
     if (not doc.setContent(&file, &errorMsg, &errorLine)) {
-        kDebug(/*DBG_PIGMENT*/) << "Can't parse file : " << fileName() << " Error at line " << errorLine << " " << errorMsg;
+        kDebug(DBG_PIGMENT) << "Can't parse file : " << fileName() << " Error at line " << errorLine << " " << errorMsg;
         file.close();
         return false;
     }
@@ -287,27 +287,27 @@ bool KoCtlColorProfile::load()
     QDomElement docElem = doc.documentElement();
     if(docElem.tagName() != "ctlprofile")
     {
-        kDebug(/*DBG_PIGMENT*/) << "Not a ctlprofile, root tag was : " << docElem.tagName();
+        kDebug(DBG_PIGMENT) << "Not a ctlprofile, root tag was : " << docElem.tagName();
         return false;
     }
     QDomNode n = docElem.firstChild();
     while(not n.isNull()) {
         QDomElement e = n.toElement();
         if(not e.isNull()) {
-            kDebug(/*DBG_PIGMENT*/) << e.tagName();
+            kDebug(DBG_PIGMENT) << e.tagName();
             if( e.tagName() == "info")
             {
                 setName(e.attribute("name"));
                 d->colorDepthID = generateDepthID(e.attribute("depth"), e.attribute("type"));
                 d->colorModelID = e.attribute("colorModel");
-                kDebug(/*DBG_PIGMENT*/) << "colorModel = " << e.attribute("colorModel");;
+                kDebug(DBG_PIGMENT) << "colorModel = " << e.attribute("colorModel");;
             } else if(e.tagName() == "program")
             {
                 QDomNode nCDATA = e.firstChild();
                 if( not nCDATA.isNull())
                 {
                     QDomCDATASection CDATA = nCDATA.toCDATASection();
-                    kDebug(/*DBG_PIGMENT*/) << CDATA.data();
+                    kDebug(DBG_PIGMENT) << CDATA.data();
                     d->module = new OpenCTL::Module(name().toAscii().data());
                     d->module->setSource( CDATA.data().toAscii().data());
                     d->module->compile();

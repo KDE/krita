@@ -27,7 +27,6 @@
 
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kservice.h>
@@ -115,6 +114,7 @@ void KoColorSpaceRegistry::init()
                 d->profileMap[profile->name()] = profile;
             } else {
                 dbgPigmentCSRegistry << "Invalid profile : " << profile->name();
+                delete profile;
             }
         }
     }
@@ -139,15 +139,16 @@ void KoColorSpaceRegistry::init()
             profile = new KoCtlColorProfile(*it);
             profile->load();
             if (profile->valid()) {
-                kDebug(/*DBG_PIGMENT*/) << "Valid profile : " << profile->name();
+                dbgPigment << "Valid profile : " << profile->name();
                 d->profileMap[profile->name()] = profile;
             } else {
-                kDebug(/*DBG_PIGMENT*/) << "Invalid profile : " << profile->name();
+                dbgPigment << "Invalid profile : " << profile->name();
+                delete profile;
             }
         }
     }
 #endif
-    
+
     // Initialise LAB
     KoColorProfile *labProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
@@ -201,6 +202,17 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
     delete d->colorConversionSystem;
     delete d->colorConversionCache;
+    foreach( KoColorProfile* profile, d->profileMap) {
+        delete profile;
+    }
+    d->profileMap.clear();
+    foreach( const KoColorSpace * cs, d->csMap) {
+        delete cs;
+    }
+    d->csMap.clear();
+    delete d->alphaCs;
+    delete d->rgbU8sRGB;
+    delete d->lab16sLAB;
     delete d;
 }
 
@@ -321,6 +333,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             return 0;
 
         d->csMap[name] = cs;
+        dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
     }
 
     if(d->csMap.contains(name))
@@ -356,6 +369,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
             QString name = csID + "<comb>" + profile->name();
             d->csMap[name] = cs;
+            dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
         }
 
         return cs;

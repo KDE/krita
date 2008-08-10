@@ -19,8 +19,6 @@
 
 #include "KoCtlColorConversionTransformation.h"
 
-#include <kdebug.h>
-
 #include <GTLCore/Buffer.h>
 #include <GTLCore/Value.h>
 #include <OpenCTL/Program.h>
@@ -38,7 +36,7 @@ struct KoCtlColorConversionTransformation::Private {
 
 KoCtlColorConversionTransformation::KoCtlColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs) : KoColorConversionTransformation(srcCs, dstCs), d(new Private)
 {
-    kDebug() << "init KoCtlColorConversionTransformation " << srcCs->id() << " and " << dstCs->id();
+    dbgPigment << "init KoCtlColorConversionTransformation " << srcCs->id() << " and " << dstCs->id();
     d->program = 0;
     const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>( srcCs->profile() );
     if(ctlp)
@@ -112,7 +110,7 @@ KoColorConversionTransformation* KoCtlColorConversionTransformationFactory::crea
     Q_UNUSED(renderingIntent);
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
-    kDebug(/*DBG_PIGMENT*/) << "Creating transformation from " << srcColorSpace->id() << " to " << dstColorSpace->id();
+    dbgPigment << "Creating transformation from " << srcColorSpace->id() << " to " << dstColorSpace->id();
     return new KoCtlColorConversionTransformation(srcColorSpace, dstColorSpace);
 }
 

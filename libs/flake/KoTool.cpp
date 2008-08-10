@@ -171,7 +171,7 @@ QMap<QString, QWidget *>  KoTool::createOptionWidgets()
 {
     QMap<QString, QWidget *> ow;
     if(QWidget *widget = createOptionWidget())
-        ow.insert(i18n("Tool Option"), widget);
+        ow.insert(i18n("Tool Options"), widget);
     return ow;
 }
 

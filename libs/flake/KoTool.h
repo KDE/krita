@@ -55,7 +55,7 @@ public:
      * Constructor, normally only called by the factory (see KoToolFactory)
      * @param canvas the canvas interface this tool will work for.
      */
-    explicit KoTool(KoCanvasBase *canvas );
+    explicit KoTool( KoCanvasBase *canvas );
     virtual ~KoTool();
 
     /**

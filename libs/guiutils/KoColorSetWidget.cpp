@@ -86,7 +86,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
 
     if (colorSet) {
         for( int i = 0; i < colorSet->nColors(); i++) {
-            if(!hide || i%3!=0 && i%16!=5) {
+            if(!hide || (i % 3 != 0 && i % 16 != 5)) {
                 KoColorPatch *patch = new KoColorPatch(colorSetContainer);
                 patch->setColor(colorSet->getColor(i).color);
                 patch->setFrameShape(QFrame::Box);
@@ -230,6 +230,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 
 void KoColorSetWidget::setOppositeColor(const KoColor &color)
 {
+    Q_UNUSED(color);
 }
 
 void KoColorSetWidget::setColorSet(KoColorSet *colorSet)

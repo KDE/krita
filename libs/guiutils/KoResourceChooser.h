@@ -50,6 +50,9 @@ class KoIconToolTip: public KoItemToolTip
         typedef KoItemToolTip super;
 };
 
+/**
+ * XXX? A table from which a resource can be chosen.
+ */
 class KOGUIUTILS_EXPORT KoResourceChooser: public QTableWidget
 {
     Q_OBJECT

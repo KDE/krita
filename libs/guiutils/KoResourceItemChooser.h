@@ -47,6 +47,10 @@ private:
     KoResource *m_resource;
 };
 
+/**
+ * A widget that contains a KoResourceChooser as well
+ * as an import/export button
+ */
 class KOGUIUTILS_EXPORT KoResourceItemChooser : public QWidget
 {
   Q_OBJECT
@@ -79,6 +83,7 @@ private slots:
 
 protected:
     QSize viewportSize();
+
 private:
     enum Buttons { Button_Import, Button_Remove };
 

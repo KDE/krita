@@ -156,7 +156,7 @@ private:
     friend int KoFilterChain::filterManagerDirection() const;
     int direction() const { return static_cast<int>( m_direction ); }
     friend KoFilterChain* KoFilterChain::filterManagerParentChain() const;
-    KoFilterChain* const parentChain() const { return m_parentChain; }
+    KoFilterChain* parentChain() const { return m_parentChain; }
 
     // Private API
     KoFilterManager( const KoFilterManager& rhs );

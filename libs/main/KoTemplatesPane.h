@@ -34,6 +34,7 @@ class KoTemplatesPanePrivate;
  */
 class KoTemplatesPane : public KoDetailsPane
 {
+
   Q_OBJECT
   public:
     /**
@@ -58,6 +59,8 @@ class KoTemplatesPane : public KoDetailsPane
 
   protected slots:
     void selectionChanged(const QModelIndex& index);
+
+    void openFile();
     void openFile(const QModelIndex& index);
     void alwaysUseClicked();
     void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);

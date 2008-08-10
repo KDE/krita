@@ -115,6 +115,11 @@ void KoTemplatesPane::selectionChanged(const QModelIndex& index)
   }
 }
 
+void KoTemplatesPane::openFile()
+{
+    KoDetailsPane::openFile();
+}
+
 void KoTemplatesPane::openFile(const QModelIndex& index)
 {
   if(index.isValid()) {

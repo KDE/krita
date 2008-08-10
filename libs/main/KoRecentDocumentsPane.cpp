@@ -169,6 +169,11 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
   }
 }
 
+void KoRecentDocumentsPane::openFile()
+{
+    KoDetailsPane::openFile();
+}
+
 void KoRecentDocumentsPane::openFile(const QModelIndex& index)
 {
   if(!index.isValid()) return;

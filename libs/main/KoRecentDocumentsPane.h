@@ -48,6 +48,7 @@ class KoRecentDocumentsPane : public KoDetailsPane
 
   protected slots:
     void selectionChanged(const QModelIndex& index);
+    void openFile();
     void openFile(const QModelIndex& index);
 
     void previewResult(KJob* job);

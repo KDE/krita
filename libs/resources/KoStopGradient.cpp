@@ -329,7 +329,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
 
                         stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace("CMYK", QString());
                         if(stopColorSpace) {
-                            quint8 data[4];
+                            quint8 data[5];
                             data[0] = static_cast<quint8>(color1 * 255 + 0.5);
                             data[1] = static_cast<quint8>(color2 * 255 + 0.5);
                             data[2] = static_cast<quint8>(color3 * 255 + 0.5);
@@ -530,7 +530,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
         QDomElement colorstop = n.toElement();
         if( colorstop.tagName() == "stop" )
         {
-            double opacity;
+            double opacity = 0.0;
             QColor c;
             float off;
             QString temp = colorstop.attribute( "offset" );

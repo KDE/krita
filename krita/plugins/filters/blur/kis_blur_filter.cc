@@ -24,7 +24,6 @@
 
 #include <KoCompositeOp.h>
 
-#include <kis_auto_brush.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
 #include <kis_iterators_pixel.h>
@@ -48,6 +47,7 @@ KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
 
 KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image ) const
 {
+    Q_UNUSED(image)
     return new KisWdgBlur(parent);
 }
 
@@ -102,7 +102,7 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
             kas = new KisCircleMaskGenerator(width, height, hFade, vFade);
             break;
     }
-    
+
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas, rotate);
     delete kas;
     KisConvolutionPainter painter( dst, dstInfo.selection() );

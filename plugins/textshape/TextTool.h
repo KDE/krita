@@ -30,6 +30,7 @@
 #include <QAction>
 #include <QHash>
 #include <QTextBlock>
+#include <QTimer>
 #include <QClipboard>
 
 class KoAction;
@@ -175,6 +176,8 @@ private slots:
     void selectFont();
     void shapeAddedToCanvas();
 
+    void blinkCaret();
+
 private:
     bool pasteHelper(QClipboard::Mode mode);
     void repaintCaret();
@@ -212,6 +215,8 @@ private:
     bool m_processingKeyPress; // all undo commands generated from key-presses should be combined.
     int m_prevCursorPosition; /// used by editingPluginEvents
 
+    QTimer m_caretTimer;
+    bool m_caretTimerState;
     QAction *m_actionFormatBold;
     QAction *m_actionFormatItalic;
     QAction *m_actionFormatUnderline;

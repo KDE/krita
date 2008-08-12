@@ -72,6 +72,7 @@
 #include <QPointer>
 #include <QTabWidget>
 #include <QTextBlock>
+#include <QTimer>
 #include <QUndoCommand>
 #include <QSignalMapper>
 #include <KoGenStyles.h>
@@ -125,6 +126,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_needSpellChecking(true),
     m_processingKeyPress(false),
     m_prevCursorPosition(-1),
+    m_caretTimer(this),
+    m_caretTimerState(true),
     m_spellcheckPlugin(0),
     m_currentCommand(0),
     m_currentCommandHasChildren(false),
@@ -422,11 +425,21 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect(&m_selectionHandler, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
     connect(&m_selectionHandler, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
+
+    m_caretTimer.setInterval(200);
+    connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
+    m_caretTimer.start();
 }
 
 TextTool::~TextTool()
 {
     qDeleteAll(m_textEditingPlugins);
+}
+
+void TextTool::blinkCaret()
+{
+    m_caretTimerState = !m_caretTimerState;
+    repaintCaret();
 }
 
 void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
@@ -498,7 +511,8 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
             }
             painter.setPen(caretPen);
             const int posInParag = m_textCursor.position() - block.position();
-            block.layout()->drawCursor(&painter, QPointF(0,0), posInParag);
+            if (m_caretTimerState)
+                block.layout()->drawCursor(&painter, QPointF(0,0), posInParag);
         }
 
         painter.restore();

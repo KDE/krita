@@ -347,8 +347,6 @@ bool Layout::nextParag()
         if(m_data)
             m_data->setPosition(m_block.position());
     }
-    if ((m_data) && (! masterPageName.isNull()))
-        m_data->setMasterPageName(masterPageName);
 
     m_y += topMargin();
     layout = m_block.layout();

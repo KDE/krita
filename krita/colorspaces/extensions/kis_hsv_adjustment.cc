@@ -83,6 +83,7 @@ class KisHSVAdjustment : public KoColorTransformation {
         KisHSVAdjustment(double _adj_h, double _adj_s, double _adj_v) : m_adj_h(_adj_h), m_adj_s(_adj_s), m_adj_v(_adj_v)
         {
         }
+
     public:
         void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
         {
@@ -103,12 +104,31 @@ class KisHSVAdjustment : public KoColorTransformation {
                 dst->green = SCALE_FROM_FLOAT( g );
                 dst->blue = SCALE_FROM_FLOAT( b );
                 dst->alpha = src->alpha;
-                
+
                 --nPixels;
                 ++src;
                 ++dst;
             }
         }
+
+    virtual void setParameters(QHash<QString, QVariant> parameters)
+    {
+
+        if(parameters.contains("h"))
+        {
+            m_adj_h = parameters["h"].toDouble();
+        }
+        if(parameters.contains("s"))
+        {
+            m_adj_s = parameters["s"].toDouble();
+        }
+        if(parameters.contains("v"))
+        {
+            m_adj_v = parameters["v"].toDouble();
+        }
+
+    }
+
     private:
         double m_adj_h, m_adj_s, m_adj_v;
 };
@@ -116,7 +136,7 @@ class KisHSVAdjustment : public KoColorTransformation {
 
 KisHSVAdjustmentFactory::KisHSVAdjustmentFactory() : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment") )
 {
-    
+
 }
 
 QList< QPair< KoID, KoID > > KisHSVAdjustmentFactory::supportedModels() const
@@ -131,19 +151,6 @@ QList< QPair< KoID, KoID > > KisHSVAdjustmentFactory::supportedModels() const
 
 KoColorTransformation* KisHSVAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
-    double h = 0.0, s = 0.0, v = 0.0;
-    if(parameters.contains("h"))
-    {
-        h = parameters["h"].toDouble();
-    }
-    if(parameters.contains("s"))
-    {
-        s = parameters["s"].toDouble();
-    }
-    if(parameters.contains("v"))
-    {
-        v = parameters["v"].toDouble();
-    }
     if( colorSpace->colorModelId() != RGBAColorModelID)
     {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";

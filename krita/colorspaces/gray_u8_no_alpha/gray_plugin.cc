@@ -43,13 +43,14 @@ GrayPlugin::GrayPlugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
-    
+
     KoColorSpaceFactory * csFactory = new KisGrayColorSpaceFactory();
     f->add(csFactory);
 
-    KoColorSpace * colorSpaceGrayA = new KisGrayColorSpace( KoColorSpaceRegistry::instance()->profileByName(csFactory->defaultProfile())->clone());
+    KoColorSpace * colorSpaceGrayA =
+        new KisGrayColorSpace( KoColorSpaceRegistry::instance()->profileByName(csFactory->defaultProfile())->clone());
     KoHistogramProducerFactoryRegistry::instance()->add(
-    new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+        new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
                 (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );
 }
 

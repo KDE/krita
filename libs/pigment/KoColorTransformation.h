@@ -20,14 +20,17 @@
 #ifndef _KO_COLOR_TRANSFORMATION_H_
 #define _KO_COLOR_TRANSFORMATION_H_
 
+#include <QHash>
+#include <QString>
+#include <QVariant>
 #include <qglobal.h>
 
 /**
  * This is the base class of all color transform that takes one pixel in input
  * and one pixel in output.
- * 
+ *
  * They are created by color spaces.
- * 
+ *
  * For instance:
  * @code
  * KoColorSpace* cs = KoColorSpaceRegistry::rgb8();
@@ -42,16 +45,22 @@ class KoColorTransformation {
     virtual ~KoColorTransformation() {}
     /**
      * This function apply the transformation on a given number of pixels.
-     * 
+     *
      * @param src a pointer to the source pixels
      * @param dst a pointer to the destination pixels
      * @param nPixels the number of pixels
-     * 
+     *
      * This function may or may not be thread safe. You need to create one
      * KoColorTransformation per thread.
      */
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const=0;
 
+    /**
+     * Update the parameters of a cached transformation object.
+     *
+     * XXX: The default implementation is empty for now.
+     */
+    virtual void setParameters(QHash<QString, QVariant> parameters) { Q_UNUSED(parameters) };
 };
 
 #endif

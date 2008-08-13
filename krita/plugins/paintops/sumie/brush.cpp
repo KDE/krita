@@ -20,6 +20,7 @@
 #include "brush_shape.h"
 #include "lines.h"
 #include "gauss.h"
+#include "trajectory.h"
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -97,8 +98,8 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
     int x = info.pos().x();
     int y = info.pos().y();
 
-    qint32 pixelSize = dev->colorSpace()->pixelSize();
-    KisRandomAccessor accessor = dev->createRandomAccessor( x,y );
+    qint32 pixelSize = m_dev->colorSpace()->pixelSize();
+    KisRandomAccessor accessor = m_dev->createRandomAccessor( x,y );
     
     double inkDeplation;
     if ( m_counter >= m_inkDepletion.size()-1 ){
@@ -154,7 +155,7 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
     
             // saturation
             params["s"] = - ( 1.0 - ( info.pressure() * bristle->length() * bristle->inkAmount() ) );
-            transfo = dev->colorSpace()->createColorTransformation ( "hsv_adjustment", params );
+            transfo = m_dev->colorSpace()->createColorTransformation ( "hsv_adjustment", params );
             transfo->transform ( m_inkColor.data(), brColor.data() , 1 );
     
             // opacity
@@ -186,6 +187,14 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
 
 
 void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const KisPaintInformation &pi2){
+/* 
+    Q_CHECK_PTR(m_accessor);
+        dbgPlugins << "Accessor passed...";
+    Q_CHECK_PTR(m_dev);
+        dbgPlugins << "PaintDevice passed...";
+*/
+
+
     m_counter++;
 
     double dx = pi2.pos().x() - pi1.pos().x();
@@ -222,15 +231,11 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
     KoColor brColor;
 
     KisRandomAccessor accessor = dev->createRandomAccessor( (int)x1, (int)y1 );
-    qint32 pixelSize = dev->colorSpace()->pixelSize();
+    m_pixelSize = dev->colorSpace()->pixelSize();
+    m_accessor = &accessor;
+    m_dev = dev;
 
     double inkDeplation;
-    if ( m_counter >= m_inkDepletion.size()-1 ){
-        inkDeplation = m_inkDepletion[m_inkDepletion.size() - 1];
-    }else{
-        inkDeplation = m_inkDepletion[m_counter];
-    }
-//     dbgPlugins << "inkDeplation: " << inkDeplation;
 
     QHash<QString, QVariant> params;
     params["h"] = 0.0;
@@ -238,45 +243,16 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
     params["v"] = 0.0;
     KoColorTransformation* transfo;
 
+    rotateBristles(angle+1.57);
+    int ix1, iy1, ix2, iy2;
 
-    /*BrushShape bs;
-    bs.fromLine(m_initialShape.radius()+(int)(pressure+0.5) , m_initialShape.sigma() );
-    setBrushShape(bs);*/
-        rotateBristles(angle+1.57);
-        int ix1, iy1, ix2, iy2;
-        Lines lines;
-        // init random generator
-        srand48(time(0));
-        for ( int i=0;i<m_bristles.size();i++ )
-        {
-            /*if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
+    srand48(time(0));
+    for ( int i=0;i<m_bristles.size();i++ )
+    {
+/*            if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
                 continue;
             }*/
             bristle = &m_bristles[i];
-            brColor = bristle->color();
-    
-            // saturation
-            params["s"] = ( 
-            pressure* 
-            bristle->length()* 
-            bristle->inkAmount()* 
-            (1.0 - inkDeplation))-1.0; 
-//             dbgPlugins << "saturation: " << params["s"];
-
-            transfo = dev->colorSpace()->createColorTransformation ( "hsv_adjustment", params );
-            transfo->transform ( m_inkColor.data(), brColor.data() , 1 );
-    
-            // opacity
-            double opacity =
-            255.0*    
-             pressure* 
-            bristle->length()* 
-            bristle->inkAmount()*
-            (1.0 - inkDeplation); 
-
-//             dbgPlugins << "opacity: " << opacity;
-            brColor.setOpacity ( static_cast<int>(opacity) );
-
 
             double fx1, fy1, fx2, fy2;
 
@@ -308,6 +284,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
             // all coords relative to device position
             fx1 += x1;
             fy1 += y1;
+
             fx2 += x2;
             fy2 += y2;
 
@@ -323,21 +300,63 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
             iy2 = (int)fy2;
 
             // paint between first and last dab
-            lines.drawLine(dev, ix1, iy1, ix2, iy2, brColor);
+            //lines.drawLine(m_dev, ix1, iy1, ix2, iy2, brColor);
+
+            Trajectory trajectory;
+            QVector<QPointF> bristlePath;
+            bristlePath = trajectory.getLinearTrajectory( QPointF(fx1,fy1),QPointF(fx2,fy2), 1.0);
+
+            brColor = bristle->color();
+            int bristleCounter = 0;
+            for (int i = 0;i <  path.size() ; i++)
+            {
+                bristleCounter = bristle->increment();
+                if ( bristleCounter >= m_inkDepletion.size()-1){
+                    inkDeplation = m_inkDepletion[m_inkDepletion.size() - 1];
+                }else{
+                    inkDeplation = m_inkDepletion[bristleCounter];
+                }
+
+                // saturation
+                params["s"] = ( 
+                pressure* 
+                bristle->length()* 
+                bristle->inkAmount()* 
+                (1.0 - inkDeplation))-1.0; 
+
+                transfo = m_dev->colorSpace()->createColorTransformation ( "hsv_adjustment", params );
+                transfo->transform ( m_inkColor.data(), brColor.data() , 1 );
+
+                // opacity
+                double opacity =
+                255.0*    
+                pressure* 
+                bristle->length()* 
+                bristle->inkAmount()*
+                (1.0 - inkDeplation); 
+
+                brColor.setOpacity ( static_cast<int>(opacity) );
+                //dbgPlugins << "opacity: "<< brColor.opacity();
+
+                QPointF bristlePos = bristlePath[i];
+                putBristle(bristle, bristlePos.x(), bristlePos.y(), brColor);
+                bristle->setInkAmount ( 1.0 - inkDeplation );
+            }
+            //dbgPlugins << "path size" << path.size();
 
             // paint start bristle
-            accessor.moveTo ( ix1,iy1 );
-            memcpy ( accessor.rawData(), brColor.data(), pixelSize );
-
+            //putBristle(ix1, iy1, brColor);
             // paint end bristle
-            accessor.moveTo ( ix2,iy2 );
-            memcpy ( accessor.rawData(), brColor.data(), pixelSize );
-
-            bristle->setInkAmount ( 1.0 - inkDeplation );
+            //putBristle(ix2,iy2, brColor);
+            // set ink amount for next paint
+            
         }
         rotateBristles(-(angle+1.57));
 
 //         repositionBristles(angle,slope);
+
+    m_dev = 0;
+    m_accessor = 0;
 }
 
 
@@ -379,6 +398,58 @@ void Brush::repositionBristles(double angle, double slope){
 }
 
 Brush::~Brush(){
+/*    if (!m_accessor){ 
+        delete m_accessor;
+    }*/
+}
+
+
+void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &color)
+{
+    m_accessor->moveTo(wx,   wy);
+    memcpy ( m_accessor->rawData(), color.data(), m_pixelSize );
+    // bristle delivered some ink
+    bristle->upIncrement();
+
+// Wu particles..useless, the result is not better        
+//     int x = int(wx);
+//     int y = int(wy);
+//     float fx = wx - x;
+//     float fy = wy - y;
+// 
+//     float MAX_OPACITY = mycolor.opacity();
+// 
+//     int btl = (1-fx) * (1-fy) * MAX_OPACITY;
+//     int btr =  (fx)  * (1-fy) * MAX_OPACITY;
+//     int bbl = (1-fx) *  (fy)  * MAX_OPACITY;
+//     int bbr =  (fx)  *  (fy)  * MAX_OPACITY;
+// 
+//     const int MIN_OPACITY = 10;
+// 
+//     if (btl>MIN_OPACITY)
+//     {
+//         m_accessor->moveTo(x,   y);
+//         mycolor.setOpacity(btl);
+//         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
+//     }
+// 
+//     if (btr>MIN_OPACITY){
+//         m_accessor->moveTo(x+1, y);
+//         mycolor.setOpacity(btr);
+//         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
+//     }
+// 
+//     if (bbl>MIN_OPACITY){
+//         m_accessor->moveTo(x, y+1);
+//         mycolor.setOpacity(bbl);
+//         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
+//     }
+// 
+//     if (bbr>MIN_OPACITY){
+//         m_accessor->moveTo(x+1, y+1);
+//         mycolor.setOpacity(bbr);
+//         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
+//     }
 }
 
 void Brush::addStrokeSample(StrokeSample sample){

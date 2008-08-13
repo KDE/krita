@@ -27,8 +27,10 @@
 #include "bristle.h"
 #include "brush_shape.h"
 #include "stroke_sample.h"
-#include "kis_paint_device.h"
-#include "kis_paint_information.h"
+
+#include <kis_paint_device.h>
+#include <kis_paint_information.h>
+#include <kis_random_accessor.h>
 
 class Brush{
 
@@ -59,6 +61,9 @@ public:
     void setRandom(double randomFactor){ m_randomFactor = randomFactor; }
     void setScale(double scaleFactor){ m_scaleFactor = scaleFactor; }
 
+    /// paints single bristle
+    void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
+
 private:
 	QVector<Bristle> m_bristles;
 	QVector<StrokeSample> m_stroke;
@@ -68,6 +73,11 @@ private:
 
 	BrushShape m_initialShape;
 	KoColor m_inkColor;
+
+    KisPaintDeviceSP m_dev;
+    KisRandomAccessor * m_accessor;
+    quint32 m_pixelSize;
+
 	int m_counter;
 
 	int m_radius;

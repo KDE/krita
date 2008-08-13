@@ -142,8 +142,8 @@ for (float theta= phase; theta<360+phase; theta += 10 )
 	{
 		x = (int)(100.0*cos(theta*3.14/180.0)+pi1.pos().x());
 		y = (int)(-100.0*sin(theta*3.14/180.0)+pi1.pos().y());
-// 		line.drawDDAALine(dab, x, y, pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
- 		line.drawThickLine(dab, x, y, pi1.pos().x(), pi1.pos().y(),painter()->paintColor(),painter()->paintColor(), 1, 1);
+ 		line.drawDDALine(dab, x, y, pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
+ 		//line.drawThickLine(dab, x, y, pi1.pos().x(), pi1.pos().y(),painter()->paintColor(),painter()->paintColor(), 1, 1);
 // 		line.drawWuLine(dab, x,y ,pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
 		//painter()->drawThickLine(QPointF(x, y), QPointF(pi1.pos().x(), pi1.pos().y()), 1, 1);
 		
@@ -168,6 +168,7 @@ for (float theta= phase; theta<360+phase; theta += 10 )
 //     dbgPlugins << pi2.pos().y();
 //     dbgPlugins << "--------------";
 
+    
     m_brush.paintLine(dab, pi1, pi2);
 
 	QRect rc = dab->extent();

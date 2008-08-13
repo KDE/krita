@@ -16,54 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _BRISTLE_H_
-#define _BRISTLE_H_
+#include <QVector>
+#include <QPointF>
 
-#include <cmath>
-#include <KoColor.h>
-
-class Bristle{
+class Trajectory{
 
 public:
-	Bristle(float x, float y,float length);
-	Bristle();
-	~Bristle();
-	float x();
-	void setX(float x){ m_x = x; }
-
-	float y();
-	void setY(float y){ m_y = y; }
-
-	float length();
-	void setLength(float length);
-
-
-	void addInk(float value);	
-	void removeInk(float value); 
-	void setInkAmount(float inkAmount);
-
-	KoColor color();
-	void setColor(KoColor color);
-
-	float distanceCenter(){
-		return std::sqrt(m_x*m_x + m_y*m_y);
-	}
-
-	float inkAmount();
-    int increment();
-    void upIncrement();
-	
+    Trajectory();
+    ~Trajectory();
+    QVector<QPointF> getLinearTrajectory(QPointF start, QPointF end, double space);
+    QVector<QPointF> getDDATrajectory(QPointF start, QPointF end, double space);
 private:
-	// coordinates of bristle
-	float m_x;
-	float m_y;
-	float m_length; // z - coordinate
-	KoColor m_color;
-	float m_inkAmount;
+    QVector<QPointF> path;
 
-    // new dimension in bristle
-    int m_counter;
-	
 };
-
-#endif

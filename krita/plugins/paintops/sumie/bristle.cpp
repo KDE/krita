@@ -19,15 +19,14 @@
 #include "bristle.h"
 
 Bristle::Bristle(){
-	m_x = 0;
-	m_y = 0;
-	m_length = 0;
+    Bristle(0,0,0);
 }
 
 Bristle::Bristle(float x, float y,float length){
 	m_x = x;
 	m_y = y;
 	m_length = length;
+    m_counter = 0;
 }
 
 Bristle::~Bristle(){
@@ -83,4 +82,10 @@ void Bristle::setColor(KoColor color){
 	m_color = color;
 }
 
+int Bristle::increment(){
+    return m_counter;
+}
 
+void Bristle::upIncrement(){
+        m_counter++;
+}

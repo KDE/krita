@@ -80,7 +80,7 @@ class KisHSVAdjustment : public KoColorTransformation {
     typedef KoRgbTraits<_channel_type_> RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
     public:
-        KisHSVAdjustment(double _adj_h, double _adj_s, double _adj_v) : m_adj_h(_adj_h), m_adj_s(_adj_s), m_adj_v(_adj_v)
+        KisHSVAdjustment()
         {
         }
 
@@ -151,29 +151,34 @@ QList< QPair< KoID, KoID > > KisHSVAdjustmentFactory::supportedModels() const
 
 KoColorTransformation* KisHSVAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
-    if( colorSpace->colorModelId() != RGBAColorModelID)
+    KoColorTransformation * adj;
+    if ( colorSpace->colorModelId() != RGBAColorModelID)
     {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";
         return 0;
     }
-    if( colorSpace->colorDepthId() == Integer8BitsColorDepthID )
+    if ( colorSpace->colorDepthId() == Integer8BitsColorDepthID )
     {
-        return new KisHSVAdjustment< quint8 >(h,s,v);
-    } else if( colorSpace->colorDepthId() == Integer16BitsColorDepthID )
+        adj = new KisHSVAdjustment< quint8 >();
+    }
+    else if( colorSpace->colorDepthId() == Integer16BitsColorDepthID )
     {
-        return new KisHSVAdjustment< quint16 >(h,s,v);
+        adj = new KisHSVAdjustment< quint16 >();
     }
 #ifdef HAVE_OPENEXR
     else if( colorSpace->colorDepthId() == Float16BitsColorDepthID )
     {
-        return new KisHSVAdjustment< half >(h,s,v);
+        adj = new KisHSVAdjustment< half >();
     }
 #endif
     else if( colorSpace->colorDepthId() == Float32BitsColorDepthID )
     {
-        return new KisHSVAdjustment< float >(h,s,v);
+        adj = new KisHSVAdjustment< float >();
     } else {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";
         return 0;
     }
+    adj->setParameters(parameters);
+    return adj;
+
 }

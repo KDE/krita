@@ -111,7 +111,7 @@ class KisHSVAdjustment : public KoColorTransformation {
             }
         }
 
-    virtual void setParameters(QHash<QString, QVariant> parameters)
+    virtual void setParameters(const QHash<QString, QVariant> & parameters)
     {
 
         if(parameters.contains("h"))

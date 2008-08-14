@@ -60,7 +60,7 @@ class KoColorTransformation {
      *
      * XXX: The default implementation is empty for now.
      */
-    virtual void setParameters(QHash<QString, QVariant> parameters) { Q_UNUSED(parameters) };
+    virtual void setParameters(const QHash<QString, QVariant> & parameters) { Q_UNUSED(parameters) };
 };
 
 #endif

@@ -75,8 +75,21 @@ public:
      */
     virtual void select(KoShape * object, bool recursive = true );
 
-    /// remove a selected object
-    virtual void deselect(KoShape * object);
+    /**
+     * Removes a selected object.
+     *
+     * If the object is a KoShapeGroup all of its child objects are automatically removed
+     * from the selection.
+     * If the object has no parent or is not a KoShapeGroup, only the given object is 
+     * removed from the selection.
+     * If the given object is a child of a KoShapeGroup and recursive selection is enabled
+     * the all parents and their child object up to the toplevel KoShapeGroup are removed
+     * from the selection.
+     *
+     * @param object the object to add to the selection
+     * @param recursive enables recursively selecting shapes if object is inside a shape group
+     */
+    virtual void deselect(KoShape * object, bool recursive = true);
 
     /// clear the selections list
     virtual void deselectAll();
@@ -99,7 +112,7 @@ public:
     /// return true if the shape is selected
     virtual bool isSelected(const KoShape *object) const;
 
-    /// return the selection count
+    /// return the selection count, i.e. the number of all selected shapes
     virtual int count() const;
 
     virtual bool hitTest( const QPointF &position ) const;
@@ -132,6 +145,7 @@ private slots:
 private:
     void requestSelectionChangedEvent();
     void selectGroupChilds( KoShapeGroup *group );
+    void deselectGroupChilds( KoShapeGroup *group );
     virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
 

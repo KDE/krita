@@ -110,18 +110,39 @@ void KoSelection::select(KoShape * object, bool recursive)
     requestSelectionChangedEvent();
 }
 
-void KoSelection::deselect(KoShape * object)
+void KoSelection::deselectGroupChilds( KoShapeGroup *group )
+{
+    if( ! group )
+        return;
+
+    foreach( KoShape *shape, group->iterator() ) {
+        if( d->selectedShapes.contains( shape ) )
+            d->selectedShapes.removeAll( shape );
+
+        KoShapeGroup* childGroup = dynamic_cast<KoShapeGroup*>( shape );
+        if( childGroup )
+            deselectGroupChilds( childGroup );
+    }
+}
+
+void KoSelection::deselect(KoShape * object, bool recursive)
 {
     if(! d->selectedShapes.contains(object))
         return;
-    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(object->parent());
-    if(group) {
-        d->selectedShapes.removeAll(group);
-        foreach(KoShape *shape, group->iterator())
-            d->selectedShapes.removeAll(shape);
+
+    d->selectedShapes.removeAll( object );
+
+    KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(object);
+    if( recursive ) {
+        // recursively find the top group upwards int the hierarchy
+        KoShapeGroup * parentGroup = dynamic_cast<KoShapeGroup*>( object->parent() );
+        while( parentGroup ) {
+            group = parentGroup;
+            parentGroup = dynamic_cast<KoShapeGroup*>( parentGroup->parent() );
+        }
     }
-    else
-        d->selectedShapes.removeAll( object );
+    if( group )
+        deselectGroupChilds( group );
 
     if(d->selectedShapes.count() == 1)
         setTransformation( firstSelectedShape()->absoluteTransformation(0) );

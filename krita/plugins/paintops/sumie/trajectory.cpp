@@ -27,20 +27,21 @@ Trajectory::Trajectory(){
 
 QVector<QPointF> Trajectory::getLinearTrajectory(QPointF start, QPointF end, double space)
 {
+    Q_UNUSED(space);
     path.clear();
 
     // Width and height of the line
     float xd = (end.x() - start.x());
     float yd = (end.y() - start.y());
 
-    int x = start.x();
-    int y = start.y();
+    int x = (int)start.x();
+    int y = (int)start.y();
     float fx = start.x();
     float fy = start.y();
     float m = yd/xd;
 
-    int y2 = end.y();
-    int x2 = end.x();
+    int y2 = (int)end.y();
+    int x2 = (int)end.x();
 
     path.append(start);
 
@@ -93,18 +94,19 @@ QVector<QPointF> Trajectory::getLinearTrajectory(QPointF start, QPointF end, dou
 
 QVector<QPointF> Trajectory::getDDATrajectory(QPointF start, QPointF end, double space)
 {
+    Q_UNUSED(space);
     path.clear();
     // Width and height of the line
     int xd = (int)(end.x() - start.x());
     int yd = (int)(end.y() - start.y());
 
-    int x = start.x();
-    int y = start.y();
+    int x = (int)start.x();
+    int y = (int)start.y();
     float fx = start.x();
     float fy = start.y();
     float m = (float)yd/(float)xd;
-    int y2 = end.y();
-    int x2 = end.x();
+    int y2 = (int)end.y();
+    int x2 = (int)end.x();
 
     if ( fabs(m) > 1 )
     {

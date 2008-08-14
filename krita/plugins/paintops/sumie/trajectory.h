@@ -16,6 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef _TRAJECTORY_H_
+#define _TRAJECTORY_H_
+
+
 #include <QVector>
 #include <QPointF>
 
@@ -30,3 +34,5 @@ private:
     QVector<QPointF> path;
 
 };
+#endif
+

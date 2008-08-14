@@ -308,7 +308,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
 
             brColor = bristle->color();
             int bristleCounter = 0;
-            for (int i = 0;i <  path.size() ; i++)
+            for (int i = 0;i <  bristlePath.size() ; i++)
             {
                 bristleCounter = bristle->increment();
                 if ( bristleCounter >= m_inkDepletion.size()-1){
@@ -406,7 +406,7 @@ Brush::~Brush(){
 
 void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
-    m_accessor->moveTo(wx,   wy);
+    m_accessor->moveTo((int)wx,   (int)wy);
     memcpy ( m_accessor->rawData(), color.data(), m_pixelSize );
     // bristle delivered some ink
     bristle->upIncrement();

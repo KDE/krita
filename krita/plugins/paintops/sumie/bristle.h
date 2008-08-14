@@ -28,31 +28,49 @@ public:
 	Bristle(float x, float y,float length);
 	Bristle();
 	~Bristle();
-	float x();
-	void setX(float x){ m_x = x; }
 
-	float y();
-	void setY(float y){ m_y = y; }
+    inline float x(){
+        return m_x;
+    }
 
-	float length();
-	void setLength(float length);
+    inline float y(){
+        return m_y;
+    }
 
+    inline float length(){
+        return m_length;
+    }
+
+    inline  KoColor color(){
+        return m_color;
+    }
+
+    inline int increment(){
+        return m_counter;
+    }
+
+    inline void upIncrement(){
+        m_counter++;
+    }
+
+    inline float inkAmount(){
+        return m_inkAmount;
+    };
+
+    inline float distanceCenter(){
+        return std::sqrt(m_x*m_x + m_y*m_y);
+    }
+
+	inline void setX(float x){ m_x = x; }
+	inline void setY(float y){ m_y = y; }
+
+    void setLength(float length);
+    void setColor(KoColor color);
 
 	void addInk(float value);	
 	void removeInk(float value); 
 	void setInkAmount(float inkAmount);
 
-	KoColor color();
-	void setColor(KoColor color);
-
-	float distanceCenter(){
-		return std::sqrt(m_x*m_x + m_y*m_y);
-	}
-
-	float inkAmount();
-    int increment();
-    void upIncrement();
-	
 private:
 	// coordinates of bristle
 	float m_x;

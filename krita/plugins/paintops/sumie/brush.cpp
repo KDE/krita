@@ -209,10 +209,10 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
     double angle = atan2(dy, dx);
     //dbgPlugins << "angle: " << angle;
 
-    double slope = 0.0;
+/*    double slope = 0.0;
     if (dx != 0){
         slope = dy / dx;
-    } 
+    } */
 //     dbgPlugins << "slope: " << slope;
 
     double distance = sqrt(dx*dx + dy*dy);
@@ -241,13 +241,19 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
     params["h"] = 0.0;
     params["s"] = 0.0;
     params["v"] = 0.0;
+
+    QString saturation("s");
+
     KoColorTransformation* transfo;
+    transfo = m_dev->colorSpace()->createColorTransformation ( "hsv_adjustment", params );
 
     rotateBristles(angle+1.57);
     int ix1, iy1, ix2, iy2;
 
     srand48(time(0));
-    for ( int i=0;i<m_bristles.size();i++ )
+    int size = m_bristles.size();
+    Trajectory trajectory; // used for interpolation the path of bristles
+    for ( int i=0;i<size;i++ )
     {
 /*            if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
                 continue;
@@ -302,29 +308,31 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
             // paint between first and last dab
             //lines.drawLine(m_dev, ix1, iy1, ix2, iy2, brColor);
 
-            Trajectory trajectory;
+            
             QVector<QPointF> bristlePath;
             bristlePath = trajectory.getLinearTrajectory( QPointF(fx1,fy1),QPointF(fx2,fy2), 1.0);
 
             brColor = bristle->color();
             int bristleCounter = 0;
-            for (int i = 0;i <  bristlePath.size() ; i++)
+            int brpathSize = bristlePath.size();
+            int inkDepletionSize = m_inkDepletion.size();
+            for (int i = 0;i < brpathSize ; i++)
             {
                 bristleCounter = bristle->increment();
-                if ( bristleCounter >= m_inkDepletion.size()-1){
-                    inkDeplation = m_inkDepletion[m_inkDepletion.size() - 1];
+                if ( bristleCounter >= inkDepletionSize-1){
+                    inkDeplation = m_inkDepletion[inkDepletionSize - 1];
                 }else{
                     inkDeplation = m_inkDepletion[bristleCounter];
                 }
 
                 // saturation
-                params["s"] = ( 
+                params[saturation] = ( 
                 pressure* 
                 bristle->length()* 
                 bristle->inkAmount()* 
                 (1.0 - inkDeplation))-1.0; 
 
-                transfo = m_dev->colorSpace()->createColorTransformation ( "hsv_adjustment", params );
+                transfo->setParameters(params);
                 transfo->transform ( m_inkColor.data(), brColor.data() , 1 );
 
                 // opacity
@@ -338,8 +346,8 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
                 brColor.setOpacity ( static_cast<int>(opacity) );
                 //dbgPlugins << "opacity: "<< brColor.opacity();
 
-                QPointF bristlePos = bristlePath[i];
-                putBristle(bristle, bristlePos.x(), bristlePos.y(), brColor);
+                QPointF *bristlePos = &bristlePath[i];
+                putBristle(bristle, bristlePos->x(), bristlePos->y(), brColor);
                 bristle->setInkAmount ( 1.0 - inkDeplation );
             }
             //dbgPlugins << "path size" << path.size();

@@ -30,19 +30,6 @@ Bristle::Bristle(float x, float y,float length){
 }
 
 Bristle::~Bristle(){
-
-}
-
-float Bristle::x(){
-	return m_x;
-}
-
-float Bristle::y(){
-	return m_y;
-}
-
-float Bristle::length(){
-	return m_length;
 }
 
 void Bristle::setLength(float length){
@@ -71,21 +58,7 @@ void Bristle::setInkAmount(float inkAmount){
 	m_inkAmount = inkAmount;
 }
 
-float Bristle::inkAmount(){
-	return m_inkAmount;
-}
-
-KoColor Bristle::color(){
-	return m_color;
-}
 void Bristle::setColor(KoColor color){
 	m_color = color;
 }
 
-int Bristle::increment(){
-    return m_counter;
-}
-
-void Bristle::upIncrement(){
-        m_counter++;
-}

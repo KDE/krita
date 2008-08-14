@@ -26,6 +26,8 @@
 #include <QColor>
 #include <QMutexLocker>
 
+#include <qdebug.h>
+
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
@@ -172,6 +174,7 @@ for (float theta= phase; theta<360+phase; theta += 10 )
     m_brush.paintLine(dab, pi1, pi2);
 
 	QRect rc = dab->extent();
+    qDebug() << rc;
 	painter()->bitBlt( rc.topLeft(), dab, rc );
 
 //     } newStroke

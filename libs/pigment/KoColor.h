@@ -40,7 +40,7 @@ public:
     /// Create an empty KoColor. It will be valid, but also black and transparent
     KoColor();
 
-    virtual ~KoColor();
+    ~KoColor();
 
     /// Create a null KoColor. It will be valid, but all channels will be set to 0
     explicit KoColor(const KoColorSpace * colorSpace);

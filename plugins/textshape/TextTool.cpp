@@ -426,9 +426,8 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect(&m_selectionHandler, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
 
-    m_caretTimer.setInterval(200);
+    m_caretTimer.setInterval(500);
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
-    m_caretTimer.start();
 }
 
 TextTool::~TextTool()
@@ -439,7 +438,8 @@ TextTool::~TextTool()
 void TextTool::blinkCaret()
 {
     m_caretTimerState = !m_caretTimerState;
-    repaintCaret();
+    if (m_textShapeData)
+        repaintCaret();
 }
 
 void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
@@ -494,10 +494,12 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
         painter.save();
         painter.setMatrix( painter.matrix() * ts->absoluteTransformation(&converter) );
         painter.translate(0, -data->documentOffset());
-        QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));
-        painter.setClipRect(clip, Qt::IntersectClip);
-        data->document()->documentLayout()->draw( &painter, pc);
-        if (data == m_textShapeData) {
+        if (qMin(data->endPosition(), selectEnd) != qMax(data->position(), selectStart)) {
+            QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));
+            painter.setClipRect(clip, Qt::IntersectClip);
+            data->document()->documentLayout()->draw( &painter, pc);
+        }
+        if ((data == m_textShapeData) && m_caretTimerState) {
             // paint caret
             QPen caretPen(Qt::black);
             if(! m_textShape->hasTransparency()) {
@@ -511,8 +513,7 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
             }
             painter.setPen(caretPen);
             const int posInParag = m_textCursor.position() - block.position();
-            if (m_caretTimerState)
-                block.layout()->drawCursor(&painter, QPointF(0,0), posInParag);
+            block.layout()->drawCursor(&painter, QPointF(0,0), posInParag);
         }
 
         painter.restore();
@@ -1086,6 +1087,7 @@ void TextTool::updateStyleManager()
 void TextTool::activate (bool temporary)
 {
     Q_UNUSED(temporary);
+    m_caretTimer.start();
     KoSelection *selection = m_canvas->shapeManager()->selection();
     foreach(KoShape *shape, selection->selectedShapes()) {
         m_textShape = dynamic_cast<TextShape*> (shape);
@@ -1137,6 +1139,9 @@ void TextTool::activate (bool temporary)
 
 void TextTool::deactivate()
 {
+    m_caretTimer.stop();
+    m_caretTimerState = false;
+    repaintCaret();
     m_textShape = 0;
     if(m_textShapeData) {
         m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.

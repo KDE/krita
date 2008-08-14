@@ -63,6 +63,7 @@ public:
 
     /// paints single bristle
     void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
+    void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
 
 private:
 	QVector<Bristle> m_bristles;

@@ -137,3 +137,11 @@ int BrushShape::radius(){
 float BrushShape::sigma(){
 	return m_sigma;
 }
+
+void BrushShape::tresholdBristles(double treshold){
+    for (int i=0;i<m_bristles.size();i++){
+        if (m_bristles[i].length() < treshold){
+            m_bristles.remove(i);
+        }
+    }
+}

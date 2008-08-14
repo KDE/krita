@@ -25,10 +25,10 @@ Trajectory::Trajectory(){
 
 }
 
-QVector<QPointF> Trajectory::getLinearTrajectory(QPointF start, QPointF end, double space)
+QVector<QPointF> &Trajectory::getLinearTrajectory(QPointF start, QPointF end, double space)
 {
     Q_UNUSED(space);
-    path.clear();
+    m_path.clear();
 
     // Width and height of the line
     float xd = (end.x() - start.x());
@@ -43,7 +43,7 @@ QVector<QPointF> Trajectory::getLinearTrajectory(QPointF start, QPointF end, dou
     int y2 = (int)end.y();
     int x2 = (int)end.x();
 
-    path.append(start);
+    m_path.append(start);
 
     if ( fabs(m) > 1 )
     {
@@ -64,7 +64,7 @@ QVector<QPointF> Trajectory::getLinearTrajectory(QPointF start, QPointF end, dou
             fx = fx + m;
             y = y + incr;
             x = (int)(fx + 0.5f);
-            path.append( QPointF(fx, y) );
+            m_path.append( QPointF(fx, y) );
         }
     }else
     {
@@ -83,19 +83,19 @@ QVector<QPointF> Trajectory::getLinearTrajectory(QPointF start, QPointF end, dou
             fy= fy + m;
             x = x + incr;
             y = (int)(fy + 0.5f);
-            path.append( QPointF(x, fy) );
+            m_path.append( QPointF(x, fy) );
         }
     }
 
-    path.append(end);
-    return path;
+    m_path.append(end);
+    return m_path;
 
 }
 
 QVector<QPointF> Trajectory::getDDATrajectory(QPointF start, QPointF end, double space)
 {
     Q_UNUSED(space);
-    path.clear();
+    m_path.clear();
     // Width and height of the line
     int xd = (int)(end.x() - start.x());
     int yd = (int)(end.y() - start.y());
@@ -126,7 +126,7 @@ QVector<QPointF> Trajectory::getDDATrajectory(QPointF start, QPointF end, double
             fx = fx + m;
             y = y + incr;
             x = (int)(fx + 0.5f);
-            path.append(QPointF(x, y));
+            m_path.append(QPointF(x, y));
         }
     }else
     {
@@ -144,11 +144,11 @@ QVector<QPointF> Trajectory::getDDATrajectory(QPointF start, QPointF end, double
             fy= fy + m;
             x = x + incr;
             y = (int)(fy + 0.5f);
-            path.append( QPointF(x, y) );
+            m_path.append( QPointF(x, y) );
         }
     }
 
-    return path;
+    return m_path;
 }
 
 

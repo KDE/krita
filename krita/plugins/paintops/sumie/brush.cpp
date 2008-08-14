@@ -253,6 +253,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
     srand48(time(0));
     int size = m_bristles.size();
     Trajectory trajectory; // used for interpolation the path of bristles
+    QVector<QPointF> bristlePath; // path for single bristle
     for ( int i=0;i<size;i++ )
     {
 /*            if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
@@ -308,14 +309,13 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
             // paint between first and last dab
             //lines.drawLine(m_dev, ix1, iy1, ix2, iy2, brColor);
 
-            
-            QVector<QPointF> bristlePath;
             bristlePath = trajectory.getLinearTrajectory( QPointF(fx1,fy1),QPointF(fx2,fy2), 1.0);
 
             brColor = bristle->color();
             int bristleCounter = 0;
             int brpathSize = bristlePath.size();
             int inkDepletionSize = m_inkDepletion.size();
+
             for (int i = 0;i < brpathSize ; i++)
             {
                 bristleCounter = bristle->increment();
@@ -347,7 +347,8 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
                 //dbgPlugins << "opacity: "<< brColor.opacity();
 
                 QPointF *bristlePos = &bristlePath[i];
-                putBristle(bristle, bristlePos->x(), bristlePos->y(), brColor);
+//                 putBristle(bristle, bristlePos->x(), bristlePos->y(), brColor);
+                addBristleInk(bristle, bristlePos->x(), bristlePos->y(), brColor);
                 bristle->setInkAmount ( 1.0 - inkDeplation );
             }
             //dbgPlugins << "path size" << path.size();
@@ -411,6 +412,25 @@ Brush::~Brush(){
     }*/
 }
 
+
+void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color){
+    KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
+    m_accessor->moveTo((int)wx,   (int)wy);
+    const quint8 *colors[2];
+    colors[0] = color.data();
+    colors[1] = m_accessor->rawData();
+
+    qint16 colorWeights[2];
+
+    colorWeights[0] = static_cast<quint8>(color.opacity());
+    colorWeights[1] = static_cast<quint8>(255-color.opacity());
+    mixOp->mixColors(colors, colorWeights, 2, m_accessor->rawData() );
+
+    //memcpy ( m_accessor->rawData(), c.data(), m_pixelSize );
+    // bristle delivered some ink
+    bristle->upIncrement();
+
+}
 
 void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &color)
 {

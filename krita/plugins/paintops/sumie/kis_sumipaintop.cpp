@@ -81,10 +81,12 @@ KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter
 
 	if (settings->brushDimension() == 1){
 		brushShape.fromLine(settings->radius(), settings->sigma() );
+        brushShape.tresholdBristles(0.1);
 	}
 	else if (settings->brushDimension() == 2)
 	{
 		brushShape.fromGaussian(settings->radius(), settings->sigma() );
+        brushShape.tresholdBristles(0.1);
 	}
 	else {
 		Q_ASSERT(false);
@@ -174,7 +176,7 @@ for (float theta= phase; theta<360+phase; theta += 10 )
     m_brush.paintLine(dab, pi1, pi2);
 
 	QRect rc = dab->extent();
-    qDebug() << rc;
+//    qDebug() << rc;
 	painter()->bitBlt( rc.topLeft(), dab, rc );
 
 //     } newStroke

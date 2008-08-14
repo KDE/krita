@@ -29,6 +29,8 @@ public:
 	~BrushShape();
 	void fromGaussian(int radius, float sigma);
 	void fromLine(int radius, float sigma);
+    void tresholdBristles(double treshold);
+
 	QVector<Bristle> getBristles();
 	int width();
 	int height();

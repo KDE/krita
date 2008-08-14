@@ -22,7 +22,7 @@
 
 #include <QString>
 #include <QFlags>
-#include "koguiutils_export.h"
+#include <koguiutils_export.h>
 
 /**
  * The ZoomMode container

@@ -256,7 +256,7 @@ QString KoTextShapeData::Private::saveCharacterStyle(KoShapeSavingContext &conte
     return generatedName;
 }
 
-void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) const {
+void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, bool saveDefaultStyles) const {
     KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
 
@@ -265,7 +265,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     Q_ASSERT(layout->inlineObjectTextManager());
 
     KoStyleManager *styleManager = layout->styleManager();
-    if (styleManager)
+    if (styleManager && saveDefaultStyles)
         styleManager->saveOdfDefaultStyles(context.mainStyles());
   
     QHash<QTextList *, QString> listStyleNames;

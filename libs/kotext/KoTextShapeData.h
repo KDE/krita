@@ -137,10 +137,11 @@ public:
 
     /**
     * Store the TextShape data as ODF.
-    *
+    * @param saveDefaultStyles If set to false, the default styles won't be saved. This way, you can have several
+    * text shapes and save them all even if they share styles.
     * @see TextShape::saveOdf()
     */
-    void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1) const;
+    void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1, bool saveDefaultStyles = true) const;
 
     /**
      * Set the page direction.
@@ -154,7 +155,6 @@ public:
      * new paragraphs default direction.
      */
     KoText::Direction pageDirection() const;
-
 signals:
     /**
      * emitted when the shape thinks it should be relayouted, for example after

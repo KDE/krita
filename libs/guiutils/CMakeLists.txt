@@ -89,6 +89,7 @@ install( FILES zoom-width.png zoom-page.png zoom-pixels.png DESTINATION ${DATA_I
 ########### install files ###############
 install(
     FILES
+    koguiutils_export.h
     KoCharSelectDia.h
     KoContextHelp.h
     KoDocumentSectionModel.h

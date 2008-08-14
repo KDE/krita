@@ -114,7 +114,6 @@ private:
 
     // tab setting
     double m_defaultTabSizing;
-    QString m_masterPageName;
     int m_currentTabStop; // = n, where we should be looking from the nth tab stop onwards when 
                           // we decorate the tab for the text of a fragment
     int m_dropCapsNChars, m_dropCapsAffectsNMoreLines;

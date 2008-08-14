@@ -335,11 +335,8 @@ bool Layout::nextParag()
                        m_format.boolProperty(KoParagraphStyle::BreakBefore) );
 
     const QString masterPageName = m_format.property(KoParagraphStyle::MasterPageName).toString();
-    if(! masterPageName.isNull() && masterPageName != m_masterPageName) {
-        if(! m_masterPageName.isNull())
-            pagebreak = true; // new master-page means new page
-        m_masterPageName = masterPageName;
-    }
+    if(! masterPageName.isNull())
+        pagebreak = true; // new master-page means new page
 
     if(!m_newShape && pagebreak) {
         m_data->setEndPosition(m_block.position()-1);
@@ -347,7 +344,7 @@ bool Layout::nextParag()
         if(m_data)
             m_data->setPosition(m_block.position());
     }
-
+    
     m_y += topMargin();
     layout = m_block.layout();
     QTextOption option = layout->textOption();

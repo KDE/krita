@@ -35,8 +35,7 @@ public:
     Private() : data(0), colorSpace(0) {}
 
     ~Private() {
-        if ( data )
-            delete [] data;
+        delete [] data;
     }
 
     quint8 * data;

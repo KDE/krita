@@ -1,6 +1,7 @@
+include_directories(libpaintop)
+
 add_subdirectory( libpaintop )
 add_subdirectory( defaultpaintops )
-add_subdirectory( smearybrush )
 add_subdirectory( cpaint )
 add_subdirectory( sumie )
 add_subdirectory( chalk )
@@ -8,3 +9,4 @@ add_subdirectory( filterop )
 if( NOT MSVC )
 add_subdirectory( dynamicbrush )
 endif( NOT MSVC )
+add_subdirectory( complexop )

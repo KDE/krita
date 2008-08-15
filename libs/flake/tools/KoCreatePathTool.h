@@ -24,6 +24,8 @@
 
 #include <KoTool.h>
 
+#include <QMap>
+
 class KoPathShape;
 class KoPathPoint;
 class QRectF;
@@ -60,7 +62,7 @@ protected:
     /// add path shape to document
     virtual void addPathShape();
     /// reimplemented
-    virtual QWidget * createOptionWidget();
+    virtual QMap<QString, QWidget *> createOptionWidgets();
 
     KoPathShape *m_shape;
 

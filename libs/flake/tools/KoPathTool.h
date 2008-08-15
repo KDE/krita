@@ -27,6 +27,8 @@
 #include "KoTool.h"
 #include "KoPathToolSelection.h"
 
+#include "QMap"
+
 class QButtonGroup;
 class KoCanvasBase;
 class KoInteractionStrategy;
@@ -84,7 +86,8 @@ signals:
     void pathChanged(KoPathShape* path);
 protected:
     /// reimplemented
-    virtual QWidget * createOptionWidget();
+    virtual QMap<QString, QWidget *>  createOptionWidgets();
+
 
 private:
     void updateOptionsWidget();

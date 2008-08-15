@@ -26,6 +26,13 @@ SnapGuideConfigWidget::SnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget *
 {
     widget.setupUi(this);
 
+    widget.orthogonalSnapGuide->setIcon(KIcon("snap-orto"));
+    widget.nodeSnapGuide->setIcon(KIcon("snap-node"));
+    widget.extensionSnapGuide->setIcon(KIcon("snap-extension"));
+    widget.intersectionSnapGuide->setIcon(KIcon("snap-intersection"));
+    widget.boundingBoxSnapGuide->setIcon(KIcon("snap-boundingbox"));
+    widget.lineGuideSnapGuide->setIcon(KIcon("snap-guideline"));
+
     updateControls();
 
     connect( widget.useSnapGuides, SIGNAL(stateChanged(int)), this, SLOT(snappingEnabled(int)));
@@ -46,8 +53,15 @@ SnapGuideConfigWidget::~SnapGuideConfigWidget()
 
 void SnapGuideConfigWidget::snappingEnabled( int state )
 {
-    widget.strategyPanel->setEnabled( state == QCheckBox::On );
-    m_snapGuide->enableSnapping( state == QCheckBox::On );
+    widget.orthogonalSnapGuide->setEnabled(state == QCheckBox::On);
+    widget.nodeSnapGuide->setEnabled(state == QCheckBox::On);
+    widget.extensionSnapGuide->setEnabled(state == QCheckBox::On);
+    widget.intersectionSnapGuide->setEnabled(state == QCheckBox::On);
+    widget.boundingBoxSnapGuide->setEnabled(state == QCheckBox::On);
+    widget.lineGuideSnapGuide->setEnabled(state == QCheckBox::On);
+    widget.snapDistance->setEnabled(state == QCheckBox::On);
+
+    m_snapGuide->enableSnapping(state == QCheckBox::On);
 }
 
 void SnapGuideConfigWidget::strategyChanged()

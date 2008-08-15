@@ -328,7 +328,9 @@ void KoCreatePathTool::repaintActivePoint()
     m_canvas->updateCanvas( rect );
 }
 
-QWidget * KoCreatePathTool::createOptionWidget() {
+QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets() {
+    QMap<QString, QWidget *> map;
     SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_canvas->snapGuide());
-    return widget;
+    map.insert(i18n("Snapping"), widget);
+    return map;
 }

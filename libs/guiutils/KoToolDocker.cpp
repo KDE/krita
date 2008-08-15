@@ -71,8 +71,7 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
         d->currentWidget->setParent(0);
     }
     d->currentWidget = optionWidget;
-    if(isFloating())
-        setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
+    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
     setWidget(optionWidget);
     d->minimalWidget->setParent(0);
     adjustSize();

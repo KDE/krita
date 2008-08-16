@@ -239,14 +239,14 @@ void KoXmlWriter::addAttribute( const char* attrName, const char* value )
 void KoXmlWriter::addAttribute( const char* attrName, double value )
 {
     QByteArray str;
-    str.setNum( value, 'g', DBL_DIG );
+    str.setNum( value, 'f', DBL_DIG );
     addAttribute( attrName, str.data() );
 }
 
 void KoXmlWriter::addAttributePt( const char* attrName, double value )
 {
     QByteArray str;
-    str.setNum( value, 'g', DBL_DIG );
+    str.setNum( value, 'f', DBL_DIG );
     str += "pt";
     addAttribute( attrName, str.data() );
 }

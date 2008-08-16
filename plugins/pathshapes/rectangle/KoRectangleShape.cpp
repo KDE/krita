@@ -81,8 +81,8 @@ void KoRectangleShape::saveOdf( KoShapeSavingContext & context ) const
     {
         context.xmlWriter().startElement("draw:rect");
         saveOdfAttributes( context, OdfAllAttributes );
-        context.xmlWriter().addAttribute( "svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0 );
-        context.xmlWriter().addAttribute( "svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0 );
+        context.xmlWriter().addAttributePt( "svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0 );
+        context.xmlWriter().addAttributePt( "svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0 );
         saveOdfCommonChildElements( context );
         context.xmlWriter().endElement();
     }

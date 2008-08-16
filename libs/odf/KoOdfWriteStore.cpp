@@ -109,7 +109,7 @@ KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter( QIODevice* dev, const char* 
         writer->addAttribute( "xmlns:smil", KoXmlNS::smil );
         writer->addAttribute( "xmlns:koffice", KoXmlNS::koffice );
     }
-    // missing: office:version="1.0"
+    writer->addAttribute( "office:version", "1.2" );
 
     writer->addAttribute( "xmlns:dc", KoXmlNS::dc );
     writer->addAttribute( "xmlns:xlink", KoXmlNS::xlink );

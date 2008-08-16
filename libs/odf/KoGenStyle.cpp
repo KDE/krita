@@ -215,7 +215,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, const KoGenStyles& styles, con
 void KoGenStyle::addPropertyPt( const QString& propName, double propValue, PropertyType type )
 {
     QString str;
-    str.setNum( propValue, 'g', DBL_DIG );
+    str.setNum( propValue, 'f', DBL_DIG );
     str += "pt";
     m_properties[type].insert( propName, str );
 }
@@ -223,7 +223,7 @@ void KoGenStyle::addPropertyPt( const QString& propName, double propValue, Prope
 void KoGenStyle::addAttributePt( const QString& attrName, double attrValue )
 {
     QString str;
-    str.setNum( attrValue, 'g', DBL_DIG );
+    str.setNum( attrValue, 'f', DBL_DIG );
     str += "pt";
     m_attributes.insert( attrName, str );
 }

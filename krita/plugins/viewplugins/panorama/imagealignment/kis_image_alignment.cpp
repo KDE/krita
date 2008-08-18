@@ -20,7 +20,7 @@
 #include "kis_image_alignment.h"
 
 
-#include <eigen/vector.h>
+#include <Eigen/Core>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -53,7 +53,7 @@ KisImageAlignment::~KisImageAlignment()
     delete d;
 }
 
-Eigen::Matrix3d recComputeTransfo( Eigen::Matrix3d transfoToFrame, KisImageAlignment::ImageInfo* referenceFrame )
+Eigen::Matrix3d recComputeTransfo( const Eigen::Matrix3d& transfoToFrame, KisImageAlignment::ImageInfo* referenceFrame )
 {
     if(referenceFrame == 0)
     {

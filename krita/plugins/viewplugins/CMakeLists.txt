@@ -17,21 +17,20 @@ add_subdirectory( specificcolorselector )
 add_subdirectory( together )
 add_subdirectory( tonemapping )
 add_subdirectory( trianglecolorselector )
-
 add_subdirectory( histogram_docker )
 MESSAGE("Krita: port the histogram docker")
-find_package(GMM)
 
-if (EIGEN_FOUND AND GMM_FOUND)
-    add_subdirectory( panorama )
-endif (EIGEN_FOUND AND GMM_FOUND)
+macro_optional_find_package(GMM)
 
 macro_log_feature(GMM_FOUND "GMM" "The Krita Panorama plugin will not be built." "http://home.gna.org/getfem/download.html" FALSE "")
-
+macro_log_feature(EIGEN2_FOUND "Eigen 2" "The Krita Panorama plugin will not be built." "Module into kdesupport" FALSE "")
 macro_log_feature(HAVE_OPENGL "OpenGL" "The Krita shader filter plugin will not be built" "" FALSE "")
 macro_log_feature(HAVE_GLEW "GLEW" "The Krita shader filter plugin will not be built" "http://glew.sourceforge.net" FALSE "")
+
+if (EIGEN2_FOUND AND GMM_FOUND)
+    add_subdirectory( panorama )
+endif (EIGEN2_FOUND AND GMM_FOUND)
 
 if(HAVE_OPENGL AND HAVE_GLEW)
    add_subdirectory( glsl )
 endif(HAVE_OPENGL AND HAVE_GLEW)
-

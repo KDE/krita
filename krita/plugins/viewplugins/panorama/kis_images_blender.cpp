@@ -16,7 +16,7 @@
 
 #include "kis_images_blender.h"
 
-
+#include <Eigen/LU>
 #include <QPolygon>
 
 #include <kis_paint_device.h>

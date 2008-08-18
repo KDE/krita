@@ -13,7 +13,7 @@ set(kritapanorama_PART_SRCS
     )
 
 
-include_directories( ${EIGEN_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/imagealignment)
+include_directories( ${EIGEN2_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/imagealignment)
 kde4_add_ui_files(kritapanorama_PART_SRCS wdgpanoramacreation.ui )
 
 kde4_add_plugin(kritapanorama ${kritapanorama_PART_SRCS})

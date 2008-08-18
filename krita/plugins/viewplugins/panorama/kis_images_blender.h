@@ -23,7 +23,7 @@
 // TODO: remove it !
 
 #include "kis_types.h"
-#include "eigen/matrix.h"
+#include <Eigen/Core>
 #include <QRect>
 #include <QRegion>
 #include <QList>

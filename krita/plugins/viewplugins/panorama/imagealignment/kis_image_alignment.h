@@ -24,7 +24,7 @@
 
 #include <QRect>
 
-#include <eigen/matrix.h>
+#include <Eigen/Core>
 
 #include <kis_types.h>
 #include "kis_interest_points_detector.h"
@@ -36,7 +36,7 @@ class KisImageAlignment {
         struct ImageInfo {
             ImageInfo() : referenceFrame(0)
             {
-                transfoToFrame.loadIdentity();
+                transfoToFrame.setIdentity();
             }
             KisPaintDeviceSP bigDevice;
             KisPaintDeviceSP smallDevice;

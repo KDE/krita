@@ -19,19 +19,34 @@ find_package(LCMS REQUIRED)
 find_package(PNG REQUIRED)
 find_package(CreateResources)
 message( STATUS "Create Resources will be required in the final release")
-find_package(Eigen)
+macro_optional_find_package(Eigen2)
 macro_optional_find_package(Blitz)
-
 macro_optional_find_package(QCA2)
 macro_optional_find_package(Exif)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
 
-macro_log_feature(EIGEN2_FOUND "Eigen2" "Eigen2 is needed by KSpread, KSpread won't be built" "http://eigen.tuxfamily.org" FALSE "1.0.5")
+macro_log_feature(EIGEN2_FOUND "Eigen2" "Eigen2 is needed by KSpread and by some Krita plugins. They won't be built." "Module into kdesupport" FALSE "2.0")
+if(EIGEN2_FOUND)
+  # Some Eigen methods are guared by asserts which are very costly in terms of performance.
+  # This is mostly the () and [] operators for accessing coefficients. One way to avoid that cost is to use
+  # the alternatibe coeff() and coeffRef() methods which are not guarded by an assert. Another way is
+  # to disable Eigen asserts by defininig EIGEN_NO_DEBUG, which we do here except in "debug" and "debugfull"
+  # build types.
+  string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_TOLOWER)
+  if(CMAKE_BUILD_TYPE_TOLOWER MATCHES debug OR CMAKE_BUILD_TYPE_TOLOWER MATCHES debugfull)
+    message(STATUS "Enabling Eigen debugging assertions")
+  else(CMAKE_BUILD_TYPE_TOLOWER MATCHES debug OR CMAKE_BUILD_TYPE_TOLOWER MATCHES debugfull)
+    message(STATUS "Disabling Eigen debugging assertions")
+    add_definitions(-DEIGEN_NO_DEBUG)
+  endif(CMAKE_BUILD_TYPE_TOLOWER MATCHES debug OR CMAKE_BUILD_TYPE_TOLOWER MATCHES debugfull)
+endif(EIGEN2_FOUND)
 
 macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for encrypted OpenDocument files" "Module into kdesupport" FALSE "2.0" "" )
 
 macro_log_feature(Boost_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" FALSE "")
+
+
 
 set(REQUIRED_LCMS_VERSION 115)
 

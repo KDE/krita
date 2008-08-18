@@ -216,7 +216,11 @@ void KoSelection::deselectAll()
 
 int KoSelection::count() const
 {
-    return d->selectedShapes.count();
+    int count = 0;
+    foreach (KoShape *shape, d->selectedShapes)
+        if (dynamic_cast<KoShapeGroup*> (shape) == 0)
+            ++count;
+    return count;
 }
 
 bool KoSelection::hitTest( const QPointF &position ) const
@@ -246,9 +250,6 @@ QRectF KoSelection::boundingRect() const
 }
 
 const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) const {
-    // a full selection contains all selected objects
-    if( strip == KoFlake::FullSelection )
-        return d->selectedShapes;
     QList<KoShape*> answer;
     // strip the child objects when there is also a parent included.
     bool doStripping = strip == KoFlake::StrippedSelection;

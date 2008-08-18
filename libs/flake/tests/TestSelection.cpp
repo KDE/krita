@@ -4,7 +4,8 @@
 #include <KoSelection.h>
 #include <kdebug.h>
 
-void TestSelection::testSelectedShapes() {
+void TestSelection::testSelectedShapes()
+{
     KoSelection selection;
     MockShape shape1;
     MockShape shape2;
@@ -35,9 +36,9 @@ void TestSelection::testSelectedShapes() {
     group1.addChild(&shape1);
     group1.addChild(&shape2);
     selection.select(&group1);
-    QCOMPARE( selection.count(), 4);
+    QCOMPARE( selection.count(), 3); // don't return the grouping shape.
     // Stripped returns no groups, so simply all 3 shapes
-    QCOMPARE( selection.selectedShapes(KoFlake::FullSelection).count(), 4);
+    QCOMPARE( selection.selectedShapes(KoFlake::FullSelection).count(), 3);
     // stripped returns no groups; so simply all shapes.
     QCOMPARE( selection.selectedShapes(KoFlake::StrippedSelection).count(), 3);
     // toplevel returns shape3 and group1
@@ -47,9 +48,9 @@ void TestSelection::testSelectedShapes() {
     group2.addChild(&shape3);
     group2.addChild(&group1);
     selection.select(&group2);
-    QCOMPARE( selection.count(), 5);
-    // Full returns all shapes, so simply all 5 shapes
-    QCOMPARE( selection.selectedShapes(KoFlake::FullSelection).count(), 5);
+    QCOMPARE( selection.count(), 3); // thats 5 minus 2 grouping shapes.
+    // Stripped returns no groups, so simply all 3 shapes
+    QCOMPARE( selection.selectedShapes(KoFlake::FullSelection).count(), 3);
     // Stripped returns no groups, so simply all 3 shapes
     QCOMPARE( selection.selectedShapes(KoFlake::StrippedSelection).count(), 3);
     // toplevel returns only group2
@@ -62,9 +63,9 @@ void TestSelection::testSelectedShapes() {
     container.addChild(&shape1);
     container.addChild(&shape2);
     selection.select(&container);
-    QCOMPARE( selection.count(), 6);
+    QCOMPARE( selection.count(), 4); // thats 6 minus 2 grouping shapes.
     // Stripped returns no groups, so simply all 3 shapes + container
-    QCOMPARE( selection.selectedShapes(KoFlake::FullSelection).count(), 6);
+    QCOMPARE( selection.selectedShapes(KoFlake::FullSelection).count(), 4);
     // Stripped returns no groups, and no children of a container. So; container + shape3
     QCOMPARE( selection.selectedShapes(KoFlake::StrippedSelection).count(), 2);
     // toplevel returns only group2 + container

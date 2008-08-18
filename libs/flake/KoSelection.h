@@ -73,7 +73,7 @@ public:
      * @param object the object to add to the selection
      * @param recursive enables recursively selecting shapes if object is inside a shape group
      */
-    virtual void select(KoShape * object, bool recursive = true );
+    void select(KoShape * object, bool recursive = true );
 
     /**
      * Removes a selected object.
@@ -89,10 +89,10 @@ public:
      * @param object the object to add to the selection
      * @param recursive enables recursively selecting shapes if object is inside a shape group
      */
-    virtual void deselect(KoShape * object, bool recursive = true);
+    void deselect(KoShape * object, bool recursive = true);
 
     /// clear the selections list
-    virtual void deselectAll();
+    void deselectAll();
 
     /**
      * Return the list of selected shapes
@@ -100,7 +100,7 @@ public:
      * @param strip if StrippedSelection, the returned list will not include any children
      *    of a container shape if the container-parent is itself also in the set.
      */
-    virtual const QList<KoShape*> selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+    const QList<KoShape*> selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
 
     /**
      * Return the first selected shape, or 0 if there is nothing selected.
@@ -110,10 +110,10 @@ public:
     KoShape *firstSelectedShape(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
 
     /// return true if the shape is selected
-    virtual bool isSelected(const KoShape *object) const;
+    bool isSelected(const KoShape *object) const;
 
     /// return the selection count, i.e. the number of all selected shapes
-    virtual int count() const;
+    int count() const;
 
     virtual bool hitTest( const QPointF &position ) const;
 

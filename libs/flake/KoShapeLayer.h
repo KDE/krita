@@ -38,7 +38,7 @@ public:
     KoShapeLayer();
     /// empty implementation, as the layer itself is not visible
     virtual void paintComponent(QPainter &, const KoViewConverter &) {}
-    bool hitTest( const QPointF &position ) const;
+    virtual bool hitTest( const QPointF &position ) const;
     virtual QRectF boundingRect() const;
     /// reimplemented from KoShape
     virtual void saveOdf( KoShapeSavingContext & context ) const;

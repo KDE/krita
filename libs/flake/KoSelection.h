@@ -139,17 +139,11 @@ signals:
     /// emitted when the selection is changed
     void selectionChanged();
 
-private slots:
-    void selectionChangedEvent();
-
 private:
-    void requestSelectionChangedEvent();
-    void selectGroupChilds( KoShapeGroup *group );
-    void deselectGroupChilds( KoShapeGroup *group );
-    virtual void saveOdf( KoShapeSavingContext & ) const {}
-    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
+    virtual void saveOdf( KoShapeSavingContext & ) const;
+    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &);
 
-    QRectF sizeRect() const;
+    Q_PRIVATE_SLOT(d, void selectionChangedEvent())
 
     class Private;
     Private * const d;

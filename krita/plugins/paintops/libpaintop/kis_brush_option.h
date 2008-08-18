@@ -26,10 +26,6 @@
  * The brush option allows the user to select a particular brush
  * footprint for suitable paintops
  */
-class KisBrushOption : public KisPaintOpOption
-{
-public:
-
-};
+typedef KisPaintOpOption KisBrushOption;
 
 #endif

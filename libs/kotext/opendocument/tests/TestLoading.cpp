@@ -636,6 +636,8 @@ void TestLoading::addData()
     QTest::newRow("tabPosition") << "FormattingProperties/ParagraphFormattingProperties/tabPosition";
     QTest::newRow("tabStopDistance") << "FormattingProperties/ParagraphFormattingProperties/tabStopDistance";
     QTest::newRow("tabType") << "FormattingProperties/ParagraphFormattingProperties/tabType";
+    
+    QTest::newRow("bookmark") << "ParagraphElements/bookmark";
 }
 
 QTextDocument *TestLoading::documentFromScript(const QString &script)
@@ -714,11 +716,14 @@ QString TestLoading::documentToOdt(QTextDocument *document)
 
     KoTextShapeData *textShapeData = new KoTextShapeData;
     textShapeData->setDocument(document, false /* ownership */);
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-    textShapeData->document()->setDocumentLayout(layout);
-    layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
-    KoStyleManager *styleManager = new KoStyleManager;
-    layout->setStyleManager(styleManager);
+    if (dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) == 0) {
+        // Setup layout and managers just like kotext
+        KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
+        textShapeData->document()->setDocumentLayout(layout);
+        layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
+        KoStyleManager *styleManager = new KoStyleManager;
+        layout->setStyleManager(styleManager);
+    }
     textShapeData->saveOdf(context);
 
     xmlWriter.endElement(); // office:text

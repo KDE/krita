@@ -1,6 +1,8 @@
 var document = new QTextDocument;
 var cursor = new QTextCursor(document);
 
+var InlineObjectMaker = "\uFFFC"; // QChar.ObjectReplacementCharacter
+
 // Default paragraph formatting
 var i;
 var KoParagraphStyle = {};

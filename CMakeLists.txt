@@ -27,7 +27,7 @@ macro_optional_find_package(Exif)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
 
-macro_log_feature(EIGEN_FOUND "Eigen" "Eigen is needed by KSpread, KSpread won't be built" "http://eigen.tuxfamily.org" FALSE "1.0.5")
+macro_log_feature(EIGEN2_FOUND "Eigen2" "Eigen2 is needed by KSpread, KSpread won't be built" "http://eigen.tuxfamily.org" FALSE "1.0.5")
 
 macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for encrypted OpenDocument files" "Module into kdesupport" FALSE "2.0" "" )
 
@@ -153,11 +153,11 @@ if(SHOULD_BUILD_KARBON)
 	macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
-if(EIGEN_FOUND)
+if(EIGEN2_FOUND)
     set(SHOULD_BUILD_KSPREAD true)
-else(EIGEN_FOUND)
+else(EIGEN2_FOUND)
     set(SHOULD_BUILD_KSPREAD FALSE)
-endif(EIGEN_FOUND)
+endif(EIGEN2_FOUND)
 
 if(SHOULD_BUILD_KSPREAD)
     macro_optional_add_subdirectory(kspread)

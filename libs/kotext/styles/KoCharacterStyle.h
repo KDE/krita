@@ -70,8 +70,9 @@ public:
         Language,
         Country,
         FontCharset,
-        DropCapsAdditionalFormatting // to identify the purpose of the additionalFormatting
+        DropCapsAdditionalFormatting, // to identify the purpose of the additionalFormatting
                                      // set on the layout. is not copied during applyStyle().
+        InlineInstanceId = 577297549 // Internal: Reserved for KoInlineTextObjectManager
     };
 
     /// list of possible line type : no line, single line, double line

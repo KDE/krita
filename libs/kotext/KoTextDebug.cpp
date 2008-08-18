@@ -32,6 +32,8 @@
 #include "styles/KoStyleManager.h"
 #include "KoTextBlockData.h"
 #include <KoTextDocumentLayout.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoBookmark.h>
 #include <kdeversion.h>
 
 #define PARAGRAPH_BORDER_DEBUG
@@ -60,7 +62,7 @@ static QString fontProperties(const QTextCharFormat &textFormat)
             fontProps.append(QString("%1adj").arg(properties[id].toDouble()));
             break;
         case QTextFormat::FontWeight:
-            fontProps.append(QString("%1 weight").arg(properties[id].toInt()));
+            fontProps.append(QString("weight %1").arg(properties[id].toInt()));
             break;
         case QTextFormat::FontItalic:
             fontProps.append(properties[id].toBool() ? "italic" : "non-italic");
@@ -108,10 +110,39 @@ QString KoTextDebug::textAttributes(const KoCharacterStyle &style)
     return textAttributes(format);
 }
 
+QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
+{
+    QString attrs;
+    
+    if (textFormat.objectType() == QTextFormat::UserObject + 1) {
+        KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
+        KoInlineTextObjectManager *inlineObjectManager = lay ? lay->inlineObjectTextManager() : 0;
+        KoInlineObject *inlineObject = inlineObjectManager->inlineTextObject(textFormat);
+        if (KoBookmark *bookmark = dynamic_cast<KoBookmark *>(inlineObject)) {
+            if (bookmark->type() == KoBookmark::SinglePosition) {
+                attrs.append(" type=\"bookmark\"");
+            } else if (bookmark->type() == KoBookmark::StartBookmark) {
+                attrs.append(" type=\"bookmark-start\"");
+            } else if (bookmark->type() == KoBookmark::EndBookmark) {
+                attrs.append(" type=\"bookmark-end\"");
+            } else {
+                attrs.append(" type=\"bookmark-unknown\"");
+            }
+            attrs.append(QString(" name=\"%1\"").arg(bookmark->name()));
+        } else {
+            attrs.append(" type=\"inlineobject\">");
+        }
+    }
+    
+    return attrs;
+}
+
 QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
 {
     QString attrs;
 
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
+    
     QTextImageFormat imageFormat = textFormat.toImageFormat();
  
     if (imageFormat.isValid()) {
@@ -119,7 +150,6 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
         return attrs;
     }
 
-    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
     if (lay && lay->styleManager()) {
         int id = textFormat.intProperty(KoCharacterStyle::StyleId);
         KoCharacterStyle *characterStyle = lay->styleManager()->characterStyle(id);
@@ -512,13 +542,22 @@ void KoTextDebug::dumpTable(const QTextTable *)
 void KoTextDebug::dumpFragment(const QTextFragment &fragment)
 {
     depth += INDENT;
-    QString cf = textAttributes(fragment.charFormat());
+    
+    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
+    QTextCharFormat charFormat = fragment.charFormat();
+    KoInlineObject *inlineObject = lay ? lay->inlineObjectTextManager()->inlineTextObject(charFormat) : 0;
+    if (inlineObject) {
+        QString cf = inlineObjectAttributes(charFormat);
+        
+        qDebug("%*s<fragment%s/>", depth, " ", qPrintable(cf));
+    } else {        
+        QString cf = textAttributes(charFormat);
 
-    qDebug("%*s<fragment%s>", depth, " ", qPrintable(cf));
-
-    qDebug("%*s|%s|", depth+INDENT, " ", qPrintable(fragment.text()));
-
-    qDebug("%*s%s", depth, " ", "</fragment>");
+        qDebug("%*s<fragment%s>", depth, " ", qPrintable(cf));
+        qDebug("%*s|%s|", depth+INDENT, " ", qPrintable(fragment.text()));
+        qDebug("%*s%s", depth, " ", "</fragment>");
+    }
+    
     depth -= INDENT;
 }
 

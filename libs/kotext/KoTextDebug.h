@@ -49,7 +49,8 @@ public:
     static QString paraAttributes(const QTextBlockFormat &format);
     static QString paraAttributes(const KoParagraphStyle &style);
     static QString listAttributes(const QTextListFormat &format);
-
+    static QString inlineObjectAttributes(const QTextCharFormat &textFormat);
+    
 private:
     KoTextDebug();
     KoTextDebug( const KoTextDebug& );

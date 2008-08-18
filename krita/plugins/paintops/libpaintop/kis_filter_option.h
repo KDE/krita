@@ -27,10 +27,5 @@
  * that can be applied by the paintop to the brush footprint or the
  * original paint device data.
  */
-class KisFilterOption : public KisPaintOpOption
-{
-public:
-
-};
-
+typedef KisPaintOpOption KisFilterOption;
 #endif

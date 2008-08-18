@@ -33,12 +33,13 @@ class KoShapeLoadingContext;
  * Provide grouping for shapes.
  * The group shape allows you to add children which will then be grouped in selections
  * and actions.
- * <p>If you have a set of shapes, that together make up a bigger shape it is often
+ * <p>If you have a set of shapes that together make up a bigger shape it is often
  * useful to group them together so the user will perceive the different shapes as
- * actually being one.  This means that if the user clicks on one object, all objects
+ * actually being one.  This means that if the user clicks on one shape, all shapes
  * in the group will be selected at once, making the tools that works on
  * selections alter all of them at the same time.
- * <p>Note that while this object is also a shape, it is not actually visible.
+ * <p>Note that while this object is also a shape, it is not actually visible and the user
+ * can't interact with it.
  */
 class FLAKE_EXPORT KoShapeGroup : public KoShapeContainer {
 public:

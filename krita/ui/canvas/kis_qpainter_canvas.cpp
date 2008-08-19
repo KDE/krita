@@ -55,6 +55,7 @@
 #include "kis_selection_manager.h"
 #include "kis_selection.h"
 #include "kis_perspective_grid_manager.h"
+#include "kis_config_notifier.h"
 
 //#define DEBUG_REPAINT
 //#define USE_QT_SCALING
@@ -88,6 +89,8 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     // XXX: Reset pattern size and color when the properties change!
 
     KisConfig cfg;
+    
+    connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
     m_d->canvas =  canvas;
     m_d->toolProxy = canvas->toolProxy();
@@ -335,6 +338,13 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
         dbgRender << "Adjusted resize event to" << size;
     }
     m_d->prescaledProjection->resizePrescaledImage( size );
+}
+
+void KisQPainterCanvas::slotConfigChanged()
+{
+    KisConfig cfg;
+    
+    m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
 }
 
 #include "kis_qpainter_canvas.moc"

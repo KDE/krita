@@ -27,9 +27,9 @@ macro_log_feature(EIGEN2_FOUND "Eigen 2" "The Krita Panorama plugin will not be 
 macro_log_feature(HAVE_OPENGL "OpenGL" "The Krita shader filter plugin will not be built" "" FALSE "")
 macro_log_feature(HAVE_GLEW "GLEW" "The Krita shader filter plugin will not be built" "http://glew.sourceforge.net" FALSE "")
 
-if (EIGEN2_FOUND AND GMM_FOUND)
+if (EIGEN2_FOUND AND GMM_FOUND AND NOT MSVC)
     add_subdirectory( panorama )
-endif (EIGEN2_FOUND AND GMM_FOUND)
+endif (EIGEN2_FOUND AND GMM_FOUND AND NOT MSVC)
 
 if(HAVE_OPENGL AND HAVE_GLEW)
    add_subdirectory( glsl )

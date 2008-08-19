@@ -130,47 +130,47 @@ void KoInlineNote::paint (QPainter &painter, QPaintDevice *pd, const QTextDocume
 
 bool KoInlineNote::loadOdf (const KoXmlElement & element)
 {
-    if ((element.localName() == "note") && (element.namespaceURI() == KoXmlNS::text)) {
-        QString className = element.attributeNS ( KoXmlNS::text, "note-class");
-        if (className == "footnote")
-            d->type = Footnote;
-        else if (className == "endnote")
-            d->type = Endnote;
-        else
-            return false;
+    if (element.namespaceURI() != KoXmlNS::text || element.localName() != "note")
+        return false;
 
-        d->id = element.attributeNS ( KoXmlNS::text, "id");
-        for ( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
-            setAutoNumbering(false);
-            KoXmlElement ts = node.toElement();
-            if (ts.namespaceURI() == KoXmlNS::text) {
-                if (ts.localName() == "note-body") {
-                    d->text = "";
-                    KoXmlNode node = ts.firstChild();
-                    while( !node.isNull() ) {
-                        KoXmlElement commentElement = node.toElement();
-                        if( !commentElement.isNull() )
-                            if( commentElement.localName() == "p" && commentElement.namespaceURI() == KoXmlNS::text ) {
-                                if( !d->text.isEmpty() ) d->text.append( '\n' );
-                                    d->text.append( commentElement.text() );
-                            }
-                        node = node.nextSibling();
+    QString className = element.attributeNS ( KoXmlNS::text, "note-class");
+    if (className == "footnote")
+        d->type = Footnote;
+    else if (className == "endnote")
+        d->type = Endnote;
+    else
+        return false;
+
+    d->id = element.attributeNS ( KoXmlNS::text, "id");
+    for ( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
+        setAutoNumbering(false);
+        KoXmlElement ts = node.toElement();
+        if (ts.namespaceURI() != KoXmlNS::text)
+            continue;
+        if (ts.localName() == "note-body") {
+            d->text = "";
+            KoXmlNode node = ts.firstChild();
+            while( !node.isNull() ) {
+                KoXmlElement commentElement = node.toElement();
+                if( !commentElement.isNull() ) {
+                    if( commentElement.localName() == "p" && commentElement.namespaceURI() == KoXmlNS::text ) {
+                        if( !d->text.isEmpty() )
+                            d->text.append( '\n' );
+                        d->text.append( commentElement.text() );
                     }
                 }
-                else if (ts.localName() == "note-citation") {
-                    d->label = ts.attributeNS(KoXmlNS::text, "label");
-                    if (d->label.isEmpty()) {
-                        setAutoNumbering(true);
-                        d->label = ts.text();
-                    }
-                }
+                node = node.nextSibling();
+            }
+        } else if (ts.localName() == "note-citation") {
+            d->label = ts.attributeNS(KoXmlNS::text, "label");
+            if (d->label.isEmpty()) {
+                setAutoNumbering(true);
+                d->label = ts.text();
             }
         }
-
-        return true;
     }
 
-    return false;
+    return true;
 }
 
 void KoInlineNote::saveOdf( KoShapeSavingContext & context )

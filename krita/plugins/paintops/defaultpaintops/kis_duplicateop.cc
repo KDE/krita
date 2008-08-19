@@ -153,7 +153,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 }
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image)
-    : KisPaintOp(painter), m_srcdev(0), m_image( image )
+    : KisBrushBasedPaintOp(painter), m_srcdev(0), m_image( image )
     , m_settings(settings)
     , m_duplicateStartIsSet(false)
 {
@@ -205,7 +205,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     if (!source()) return;
 
-    KisBrush * brush = painter()->brush();
+    KisBrush * brush = m_brush;
     if (!brush) return;
     if (! brush->canPaintFor(info) )
         return;

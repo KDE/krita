@@ -1,7 +1,6 @@
 /*
- *  kis_tool_polyline.cc -- part of Krita
- *
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +19,6 @@
 
 #include "kis_tool_polyline.h"
 
-
 #include <math.h>
 
 #include <QPainter>
@@ -33,12 +31,16 @@
 #include <klocale.h>
 #include <kis_debug.h>
 #include <knuminput.h>
+
+#include <KoCanvasBase.h>
+#include <KoPointerEvent.h>
+
 #include <kis_selection.h>
-#include "KoCanvasBase.h"
-#include "kis_painter.h"
-#include "KoPointerEvent.h"
-#include "kis_paintop_registry.h"
-#include "kis_cursor.h"
+#include <kis_painter.h>
+#include <kis_cursor.h>
+#include <kis_paint_information.h>
+#include <kis_paintop_preset.h>
+
 KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
         : super(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6)),
           m_dragging (false)
@@ -103,11 +105,9 @@ void KisToolPolyline::finish()
     painter.beginTransaction (i18n ("Polyline"));
 
     painter.setPaintColor(currentFgColor());
-    painter.setBrush(currentBrush());
     painter.setOpacity(m_opacity);
     painter.setCompositeOp(m_compositeOp);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), &painter, currentImage());
-    painter.setPaintOp(op); // Painter takes ownership
+    painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // Painter takes ownership
 
     QPointF start,end;
     KoPointVector::iterator it;

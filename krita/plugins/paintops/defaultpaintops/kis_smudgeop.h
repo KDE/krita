@@ -21,7 +21,7 @@
 
 #include <QDialog>
 
-#include "kis_paintop.h"
+#include "kis_brush_based_paintop.h"
 #include <qobject.h>
 #include <klocale.h>
 
@@ -49,7 +49,7 @@ public:
 };
 
 class KisSmudgeOpSettings : public QObject, public KisPaintOpSettings {
-    
+
     Q_OBJECT
 
 public:
@@ -74,7 +74,7 @@ public:
 
 
 private slots:
-    
+
     void slotCustomCurves();
 
 private:
@@ -88,7 +88,7 @@ private:
     QCheckBox * m_opacity;
     Ui::WdgBrushCurveControl* m_curveControl;
     QDialog* m_curveControlWidget;
-    
+
     bool m_customSize;
     bool m_customRate;
     bool m_customOpacity;
@@ -97,7 +97,7 @@ private:
     double m_opacityCurve[256];
 };
 
-class KisSmudgeOp : public KisPaintOp {
+class KisSmudgeOp : public KisBrushBasedPaintOp {
 
 public:
 

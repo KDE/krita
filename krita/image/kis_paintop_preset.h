@@ -22,8 +22,8 @@
 #include "KoResource.h"
 #include "KoID.h"
 
-#include "kis_shared.h"
 #include "kis_types.h"
+#include "kis_shared.h"
 #include "krita_export.h"
 
 class QImage;
@@ -42,6 +42,7 @@ public:
 
     ~KisPaintOpPreset();
 
+    KisPaintOpPresetSP clone() const;
 
     /// set the id of the paintop plugin
     void setPaintOp(const KoID & paintOp);
@@ -64,6 +65,8 @@ public:
     bool removable() const { return true; }
 
     QString defaultFileExtension() const { return "kpp"; }
+
+    // XXX: serialize to/from xml for recording!
 
 private:
 

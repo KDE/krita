@@ -24,7 +24,7 @@
 #define KIS_AIRBRUSHOP_H_
 
 #include <klocale.h>
-#include "kis_paintop.h"
+#include "kis_brush_based_paintop.h"
 
 class QPointF;
 class KisPainter;
@@ -43,7 +43,7 @@ public:
 
 
 
-class KisAirbrushOp : public KisPaintOp {
+class KisAirbrushOp : public KisBrushBasedPaintOp {
 
 public:
 
@@ -51,7 +51,7 @@ public:
     virtual ~KisAirbrushOp();
 
     // We want to spray even when the pointer doesn't move.
-    virtual bool incremental() { return true; }
+    virtual bool incremental()  const { return true; }
 
     void paintAt(const KisPaintInformation& info);
 

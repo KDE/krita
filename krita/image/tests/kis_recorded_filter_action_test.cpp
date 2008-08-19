@@ -19,7 +19,7 @@
 #include "kis_recorded_filter_action_test.h"
 
 #include <qtest_kde.h>
-#include "filter/kis_recorded_filter_action.h"
+#include "recorder/kis_recorded_filter_action.h"
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_paint_layer.h"

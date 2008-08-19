@@ -38,10 +38,10 @@ K_EXPORT_COMPONENT_FACTORY( kritasumipaintop, SumiPaintOpPluginFactory( "krita" 
 SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    // 
+    //
 	setComponentData(SumiPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(KisPaintOpFactorySP( new KisSumiPaintOpFactory ));
+    r->add(new KisSumiPaintOpFactory);
 
 }
 

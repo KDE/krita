@@ -38,7 +38,6 @@ set(kritaui_LIB_SRCS
     kis_config_notifier.cpp 
     kis_control_frame.cpp 
     kis_cursor.cc
-    kis_custom_brush.cc 
     kis_custom_palette.cc 
     kis_custom_pattern.cc
     kis_doc2.cc 
@@ -50,7 +49,6 @@ set(kritaui_LIB_SRCS
     kis_histogram_view.cc 
     kis_icon_item.cc 
     kis_image_manager.cc
-    kis_imagepipe_brush.cc 
     kis_image_view_converter.cpp
     kis_import_catcher.cc 
     kra/kis_kra_loader.cpp 
@@ -71,7 +69,6 @@ set(kritaui_LIB_SRCS
     kis_palette_docker.cc
     kis_png_converter.cpp
     kis_print_job.cpp 
-    kis_recorded_paint_actions.cc 
     kis_resource_mediator.cc
     kis_resource_server_provider.cpp 
     kra/kis_savexml_visitor.cc
@@ -84,7 +81,6 @@ set(kritaui_LIB_SRCS
     kis_shape_selection.cpp
     kis_shape_selection_model.cpp 
     kis_statusbar.cc 
-    kis_text_brush.cc
     kis_tool.cc 
     kis_tool_freehand.cc 
     kis_tool_freehand_p.cpp
@@ -102,8 +98,6 @@ set(kritaui_LIB_SRCS
     widgets/imageviewer.cc 
     widgets/kis_preset_chooser.cpp
     widgets/kcurve.cc
-    widgets/kis_auto_brush_widget.cpp 
-    widgets/kis_brush_chooser.cc
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_idlist.cc 
@@ -146,7 +140,6 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
-    forms/wdgautobrush.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
@@ -155,7 +148,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdggenerators.ui
     forms/wdgbookmarkedconfigurationseditor.ui
     forms/wdgapplyprofile.ui
-    forms/wdgcustombrush.ui
     forms/wdgcustompattern.ui
     forms/wdglayerproperties.ui
     forms/wdgcolorsettings.ui
@@ -168,7 +160,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgselectionoptions.ui
     forms/wdgshapeoptions.ui
     forms/wdgcustompalette.ui
-    forms/wdgtextbrush.ui
     forms/wdgnewimage.ui
     forms/wdgimageproperties.ui
     forms/wdgtransformationeffect.ui

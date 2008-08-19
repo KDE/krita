@@ -1,0 +1,13 @@
+* connect brush changed signals to active brush in kis_brush_selection_widget
+* fix spacing method in kis_brush_based_paintop once the paintop settings object that holds a brush param is done
+* move filter setting into libpaintop
+* refactor kisbrush based paintops to share the brush selector and various pressure
+curve responses through libpaintop
+* move paintop preview code to preset
+* make loading/saving/editing of presets work
+* move incremental option to paintop settings, instead of tool options.
+* fix mixer canvas to use right paintop preset
+* set a default paintop preset in the canvas resource provider
+* pass image to kis_custom_brush from kis_brush_selection_widget
+* fix dynamic brush where it tries to get a brush shape (it probably shouldn't inherit
+kis_brush_based_paintop,t hough)

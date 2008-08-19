@@ -1,9 +1,10 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +24,7 @@
 #ifndef KIS_ERASEOP_H_
 #define KIS_ERASEOP_H_
 
-#include "kis_paintop.h"
+#include "kis_brush_based_paintop.h"
 #include <QString>
 #include <klocale.h>
 
@@ -43,7 +44,7 @@ public:
 };
 
 
-class KisEraseOp : public KisPaintOp {
+class KisEraseOp : public KisBrushBasedPaintOp {
 
 public:
 

@@ -42,7 +42,8 @@ const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
     : KisBaseProcessor(id, category, entry)
 {
-    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
+    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(),
+                       new KisFilterConfigurationFactory(id.id(), 1) ));
 }
 
 KisFilter::~KisFilter()

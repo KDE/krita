@@ -1,7 +1,6 @@
 add_subdirectory( filters )
-add_subdirectory( paintops )
 add_subdirectory( tools )
 add_subdirectory( viewplugins )
-#add_subdirectory( brushes )
 add_subdirectory( generators )
 add_subdirectory( painterlyframework )
+add_subdirectory( paintops )

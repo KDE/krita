@@ -235,18 +235,4 @@ void Painter::setPattern(QObject* pattern)
     if(p) m_painter->setPattern( p->getPattern() );
 }
 
-void Painter::setBrush(QObject* brush)
-{
-    Brush* b = dynamic_cast< Brush* >(brush);
-    if(b) m_painter->setBrush( b->getBrush() );
-}
-
-void Painter::setPaintOp(const QString& paintopname)
-{
-    // XXX: Find a good way to pass the image to the paint registry:
-    // some paintops need to know about the image.
-    KisPaintOp* op = KisPaintOpRegistry::instance()->paintOp( paintopname, 0, m_painter, 0 );
-    if(op) m_painter->setPaintOp( op );
-}
-
 #include "krs_painter.moc"

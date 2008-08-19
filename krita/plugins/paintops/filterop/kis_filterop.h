@@ -23,7 +23,7 @@
 #ifndef KIS_FILTEROP_H_
 #define KIS_FILTEROP_H_
 
-#include "kis_paintop.h"
+#include "kis_brush_based_paintop.h"
 #include <kis_paintop_settings.h>
 #include <QString>
 #include <klocale.h>
@@ -51,7 +51,7 @@ class KisFilterOpFactory  : public KisPaintOpFactory  {
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
-class KisFilterOp : public KisPaintOp {
+class KisFilterOp : public KisBrushBasedPaintOp {
 
 public:
 

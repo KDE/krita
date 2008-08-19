@@ -26,14 +26,14 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include <kis_action_recorder.h>
+#include <recorder/kis_action_recorder.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
-#include <kis_recorded_action.h>
-#include <kis_recorded_action_factory_registry.h>
+#include <recorder/kis_recorded_action.h>
+#include <recorder/kis_recorded_action_factory_registry.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 
@@ -129,7 +129,7 @@ void BigBrotherPlugin::slotStartRecordingMacro()
     // Alternate actions
     m_startRecordingMacroAction->setEnabled( false );
     m_stopRecordingMacroAction->setEnabled( true );
-    
+
     // Create recorder
     m_recorder = new KisMacro(m_view->image());
     connect(m_view->image()->actionRecorder(), SIGNAL(addedAction(const KisRecordedAction&)), m_recorder, SLOT(addAction(const KisRecordedAction&)));
@@ -156,9 +156,9 @@ void BigBrotherPlugin::saveMacro(const KisMacro* macro)
     {
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");
-        
+
         macro->toXML(doc, e);
-        
+
         doc.appendChild(e);
         QFile f(filename);
         f.open( QIODevice::WriteOnly);

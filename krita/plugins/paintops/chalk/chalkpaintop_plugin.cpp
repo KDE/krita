@@ -38,10 +38,10 @@ K_EXPORT_COMPONENT_FACTORY( kritachalkpaintop, ChalkPaintOpPluginFactory( "krita
 ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    // 
+    //
 	setComponentData(ChalkPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(KisPaintOpFactorySP( new KisChalkPaintOpFactory ));
+    r->add( new KisChalkPaintOpFactory() );
 
 }
 

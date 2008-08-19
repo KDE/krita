@@ -19,12 +19,12 @@
 #include "kis_macro_test.h"
 
 #include <qtest_kde.h>
-#include "kis_macro.h"
+#include "recorder/kis_macro.h"
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_image.h"
 
-#include "kis_recorded_action.h"
+#include "recorder/kis_recorded_action.h"
 
 class TestAction : public KisRecordedAction
 {

@@ -32,6 +32,8 @@
 #include "kis_image.h"
 
 struct KisPaintOpPreset::Private {
+
+    Private() : settings(new KisPaintOpSettings()){}
     KisPaintOpSettingsSP settings;
     QImage img;
 };
@@ -55,8 +57,28 @@ KisPaintOpPreset::~KisPaintOpPreset()
     delete m_d;
 }
 
+
+KisPaintOpPresetSP KisPaintOpPreset::clone() const
+{
+    KisPaintOpPreset * preset = new KisPaintOpPreset();
+    if ( settings() ) {
+        preset->setSettings( settings()->clone() );
+    }
+    preset->setPaintOp( paintOp() );
+    preset->setName( name() );
+    preset->setValid( valid() );
+
+    return preset;
+}
+
+
+
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
 {
+    kDebug() << this;
+    kDebug() << m_d;
+    kDebug() << m_d->settings;
+    kDebug() << paintOp.id();
     m_d->settings->setProperty("paintop", paintOp.id());
 }
 
@@ -67,10 +89,11 @@ KoID KisPaintOpPreset::paintOp() const
 
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
+    m_d->settings = 0;
     if (settings)
         m_d->settings = settings->clone();
     else
-        m_d->settings = 0;
+        m_d->settings = new KisPaintOpSettings();
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
@@ -118,9 +141,7 @@ void KisPaintOpPreset::updateImg()
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "paintop_preset");
     KisPainter gc(dev);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_d->settings->getString("paintop"),
-                                                              m_d->settings, &gc);
-    gc.setPaintOp(op);
+    gc.setPaintOpPreset(this);
 
     KisPaintInformation i1(QPointF(0, 25), PRESSURE_MIN);
     KisPaintInformation i2(QPointF(50, 25), PRESSURE_MAX);

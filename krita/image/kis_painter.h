@@ -44,12 +44,10 @@ class KoColor;
 class KoCompositeOp;
 
 class KisTransaction;
-class KisBrush;
 class KisPattern;
 class KisFilterConfiguration;
-class KisPaintOp;
 class KisPaintInformation;
-
+class KisPaintOp;
 /**
  * KisPainter contains the graphics primitives necessary to draw on a
  * KisPaintDevice. This is the same kind of abstraction as used in Qt
@@ -451,16 +449,22 @@ public:
 
     QBitArray channelFlags();
 
-    /// Set the current brush
-    void KDE_DEPRECATED setBrush(KisBrush* brush);
+    /**
+     * Set the paintop preset to use. If @param image is given,
+     * the paintop will be created using this image as parameter.
+     * Some paintops really want to know about the image they work
+     * for, e.g. the duplicate paintop.
+     */
+    void setPaintOpPreset( KisPaintOpPresetSP preset, KisImageSP image = 0 );
 
-    /// Returns the currently set brush
-    KisBrush* KDE_DEPRECATED brush() const;
-
-    /// Set the paintop preset to use
-    void setPaintOpPreset( KisPaintOpPresetSP preset );
     /// Return the paintop preset
     KisPaintOpPresetSP preset() const;
+
+    /**
+     * Return the active paintop (which is created based on the specified preset and
+     * will be deleted as soon as the KisPainter instance dies).
+     */
+    KisPaintOp* paintOp() const;
 
     /// Set the current pattern
     void setPattern(KisPattern * pattern);
@@ -538,15 +542,6 @@ public:
     /// larger as it goes
     void setBounds( const QRect & bounds );
     QRect bounds();
-
-    /**
-     * Set the current paint operation. This is used for all drawing functions.
-     * The painter will DELETE the paint op itself!!
-     * That means no that you should not delete it yourself (or put it on the stack)
-     */
-    void setPaintOp(KisPaintOp * paintOp);
-    /// Returns the current paint operation
-    KisPaintOp * paintOp() const;
 
     /// Set the composite op for this painter
     void setCompositeOp(const KoCompositeOp * op);

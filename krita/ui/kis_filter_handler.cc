@@ -26,13 +26,13 @@
 #include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
 
-#include <kis_action_recorder.h>
+#include <recorder/kis_action_recorder.h>
 #include <kis_bookmarked_configuration_manager.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_layer.h>
-#include <filter/kis_recorded_filter_action.h>
+#include <recorder/kis_recorded_filter_action.h>
 #include <kis_selection.h>
 #include <kis_image.h>
 

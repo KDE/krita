@@ -73,10 +73,11 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
         return 0;
     }
 
-    if ( !painter->bounds().isValid() && image )
+    if ( !painter->bounds().isValid() && image ) {
         painter->setBounds( image->bounds() );
+    }
 
-    KisPaintOpFactorySP f = value(id);
+    KisPaintOpFactory* f = value(id);
     if (f) {
         return f->createOp(settings, painter, image);
     }
@@ -85,12 +86,18 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageSP image) const
 {
-    return 0;
+    Q_ASSERT(preset);
+    if (!preset) return 0;
+    kDebug() << preset;
+    kDebug() << preset->paintOp();
+    kDebug() << preset->paintOp().id();
+    kDebug() << preset->settings();
+    return paintOp(preset->paintOp().id(), preset->settings(), painter, image);
 }
 
 KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image) const
 {
-    KisPaintOpFactorySP f = value(id.id());
+    KisPaintOpFactory* f = value(id.id());
     if (f)
         return f->settings( parent, inputDevice, image);
 
@@ -105,7 +112,7 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, QWidget * p
     if (preset->settings() && preset->settings()->widget()) {
         preset->settings()->widget()->hide();
     }
-
+    preset->setPaintOp(id);
     preset->setValid(true);
     return preset;
 }
@@ -113,7 +120,7 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, QWidget * p
 bool KisPaintOpRegistry::userVisible(const KoID & id, const KoColorSpace* cs) const
 {
 
-    KisPaintOpFactorySP f = value(id.id());
+    KisPaintOpFactory* f = value(id.id());
     if (!f) {
         dbgRegistry <<"No paintop" << id.id() <<"";
         return false;
@@ -124,7 +131,7 @@ bool KisPaintOpRegistry::userVisible(const KoID & id, const KoColorSpace* cs) co
 
 QString KisPaintOpRegistry::pixmap(const KoID & id) const
 {
-    KisPaintOpFactorySP f = value(id.id());
+    KisPaintOpFactory* f = value(id.id());
 
     if (!f) {
         dbgRegistry <<"No paintop" << id.id() <<"";

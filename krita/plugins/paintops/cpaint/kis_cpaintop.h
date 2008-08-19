@@ -72,6 +72,7 @@ public:
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
+
 private slots:
 
     void resetCurrentBrush();
@@ -93,6 +94,13 @@ public:
     virtual ~KisCPaintOp();
 
     void paintAt(const KisPaintInformation& info);
+
+    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
+    {
+        // XXX: this is wrong!
+        return 0.5;
+    }
+
 
 private:
 

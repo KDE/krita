@@ -25,7 +25,7 @@ kde4_add_ui_files(kritadynamicbrushlib_LIB_SRCS
 
 kde4_add_library(kritadynamicbrush SHARED ${kritadynamicbrushlib_LIB_SRCS})
 
-target_link_libraries(kritadynamicbrush kritaui )
+target_link_libraries(kritadynamicbrush kritaui kritalibpaintop )
 
 set_target_properties(kritadynamicbrush PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

@@ -30,12 +30,12 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include <kis_action_recorder.h>
+#include <recorder/kis_action_recorder.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <kis_global.h>
 #include <kis_image.h>
-#include <kis_recorded_action.h>
+#include <recorder/kis_recorded_action.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 

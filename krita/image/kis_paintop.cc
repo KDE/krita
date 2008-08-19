@@ -31,7 +31,6 @@
 
 #include "kis_painter.h"
 #include "kis_layer.h"
-#include "kis_brush.h"
 #include "kis_types.h"
 
 #include "kis_image.h"
@@ -41,6 +40,8 @@
 #include "kis_datamanager.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
+#include "kis_paint_information.h"
+#include "kis_vec.h"
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #define MAXIMUM_SCALE 2
@@ -78,7 +79,7 @@ KisPaintDeviceSP KisPaintOp::cachedDab( const KoColorSpace *cs )
   return d->dab;
 }
 
-void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction)
+void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction) const
 {
     qint32 i = static_cast<qint32>(coordinate);
 
@@ -218,12 +219,12 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         return 0;
 }
 
-KisPainter* KisPaintOp::painter()
+KisPainter* KisPaintOp::painter() const
 {
     return d->painter;
 }
 
-KisPaintDeviceSP KisPaintOp::source()
+KisPaintDeviceSP KisPaintOp::source() const
 {
     return d->painter->device();
 }
@@ -241,29 +242,6 @@ double KisPaintOp::scaleForPressure(double pressure)
     }
 
     return scale;
-}
-
-double KisPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
-{
-
-    // XXX: The spacing should vary as the pressure changes along the line.
-    // This is a quick simplification.
-    xSpacing = d->painter->brush()->xSpacing( scaleForPressure( (pressure1 + pressure2) / 2) );
-    ySpacing = d->painter->brush()->ySpacing( scaleForPressure( (pressure1 + pressure2) / 2) );
-
-    if (xSpacing < 0.5) {
-        xSpacing = 0.5;
-    }
-    if (ySpacing < 0.5) {
-        ySpacing = 0.5;
-    }
-
-    if (xSpacing > ySpacing) {
-        return xSpacing;
-    }
-    else {
-        return ySpacing;
-    }
 }
 
 //------------------------ KisPaintOpFactory ------------------------//

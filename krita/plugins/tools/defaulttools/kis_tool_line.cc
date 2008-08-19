@@ -31,9 +31,9 @@
 
 #include <kis_selection.h>
 #include <kis_paint_device.h>
-
-#include "kis_cursor.h"
-#include "kis_painter.h"
+#include <kis_paint_information.h>
+#include <kis_cursor.h>
+#include <kis_painter.h>
 
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
@@ -42,8 +42,8 @@
 #include "kis_layer.h"
 #include "KoCanvasBase.h"
 
-#include <kis_action_recorder.h>
-#include <kis_recorded_paint_actions.h>
+#include <recorder/kis_action_recorder.h>
+#include <recorder/kis_recorded_polyline_paint_action.h>
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
     : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
@@ -75,8 +75,6 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolLine::mousePressEvent(KoPointerEvent *e)
 {
     if (!m_canvas || !currentImage()) return;
-
-    if (!currentBrush()) return;
 
     QPointF pos = convertToPixelCoord(e);
 
@@ -133,7 +131,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
             KisPaintDeviceSP device;
 
-            if (currentNode() &&  ( device = currentNode()->paintDevice()) &&  currentBrush()) {
+            if ( currentNode() &&  ( device = currentNode()->paintDevice()) ) {
                 delete m_painter;
                 m_painter = new KisPainter( device, currentSelection() );
                 Q_CHECK_PTR(m_painter);
@@ -141,12 +139,10 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_painter->beginTransaction(i18nc("a straight drawn line", "Line"));
 
                 m_painter->setPaintColor(currentFgColor());
-                m_painter->setBrush(currentBrush());
                 m_painter->setOpacity(m_opacity);
                 m_painter->setCompositeOp(m_compositeOp);
-                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(), currentPaintOpSettings(), m_painter, currentImage());
-                m_painter->setPaintOp(op); // Painter takes ownership
-                m_painter->paintLine(m_startPos, m_endPos );
+                m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
+                m_painter->paintLine( m_startPos, m_endPos );
                 QRegion dirtyRegion = m_painter->dirtyRegion();
                 device->setDirty( dirtyRegion );
                 notifyModified();
@@ -157,10 +153,10 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
                 if (image())
                 {
-                  KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction( i18n("Line tool"), currentNode(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp );
-                  linePaintAction->addPoint( m_startPos );
-                  linePaintAction->addPoint( m_endPos );
-                  image()->actionRecorder()->addAction(*linePaintAction);
+                    KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction( i18n("Line tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp );
+                    linePaintAction->addPoint( m_startPos );
+                    linePaintAction->addPoint( m_endPos );
+                    image()->actionRecorder()->addAction(*linePaintAction);
                 }
 
                 m_canvas->addCommand(m_painter->endTransaction());

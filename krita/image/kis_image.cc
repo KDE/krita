@@ -43,7 +43,7 @@
 #include "KoColorConversionTransformation.h"
 #include "colorprofiles/KoIccColorProfile.h"
 
-#include "kis_action_recorder.h"
+#include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
 #include "kis_change_profile_visitor.h"

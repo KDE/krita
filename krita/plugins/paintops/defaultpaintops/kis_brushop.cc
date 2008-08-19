@@ -234,7 +234,7 @@ KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
 
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
-    : KisPaintOp(painter)
+    : KisBrushBasedPaintOp(painter)
     , m_pressureSize(true)
     , m_pressureOpacity(false)
     , m_pressureDarken(false)
@@ -270,6 +270,8 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     KisPaintInformation adjustedInfo(info);
     if (!m_pressureSize)
         adjustedInfo.setPressure( PRESSURE_DEFAULT );
+    else if (m_customSize)
+        adjustedInfo.setPressure(scaleToCurve(adjustedInfo.pressure(), m_sizeCurve));
 
 
     // Painting should be implemented according to the following algorithm:
@@ -286,7 +288,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     if (!painter()->device()) return;
 
-    KisBrush *brush = painter()->brush();
+    KisBrush *brush = m_brush;
 
     Q_ASSERT(brush);
     if (!brush) return;

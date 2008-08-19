@@ -84,7 +84,7 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
         moreButton->setArrowType(Qt::UpArrow);
         moreButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         moreButton->setMinimumSize(QSize(24,24)); // Bah, I had hoped the above line would make this unneeded
-    
+
         connect(moreButton, SIGNAL(clicked()), this, SLOT(slotCustomCurves()));
     } else {
         m_pressureVariation = 0;
@@ -179,7 +179,7 @@ void KisSmudgeOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     kpc.setProperty("PressureOpacity", m_opacity->isChecked());
     kpc.setProperty("CustomSize", m_customSize);
     kpc.setProperty("CustomOpacity", m_customOpacity);
-    
+
     for(int i = 0; i < 256; i++)
     {
         if( m_customSize )
@@ -187,7 +187,7 @@ void KisSmudgeOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
         if( m_customOpacity )
             kpc.setProperty( QString("OpacityCurve%0").arg(i), m_opacityCurve[i] );
     }
-    
+
     QDomElement paramsElt = doc.createElement( "Params" );
     rootElt.appendChild( paramsElt );
     kpc.toXML( doc, paramsElt);
@@ -205,7 +205,7 @@ KisPaintOpSettingsSP KisSmudgeOpFactory::settings(QWidget * parent, const KoInpu
 }
 
 KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter)
-    : KisPaintOp(painter)
+    : KisBrushBasedPaintOp(painter)
     , m_firstRun(true)
     , m_rate(50)
     , m_pressureSize(true)
@@ -252,7 +252,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     if (!painter()->device()) return;
 
-    KisBrush *brush = painter()->brush();
+    KisBrush *brush = m_brush;
 
     Q_ASSERT(brush);
     if (!brush) return;
@@ -299,7 +299,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, pScale, 0.0, info, xFraction, yFraction);
     }
 
-    
+
     painter()->setPressure(adjustedInfo.pressure);
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(adjustedInfo),
@@ -307,11 +307,11 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImage * image = device->image();
-    
+
     if (image != 0) {
         dstRect &= image->bounds();
     }
-    
+
     Q_INT32 sw = dab->extent().width();
     Q_INT32 sh = dab->extent().height();
 
@@ -343,16 +343,16 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     KisPainter copyPainter(m_srcdev);
     copyPainter.bitBlt(0, 0, COMPOSITE_OVER, device, opacity, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
-    
+
     m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
-    
+
     copyPainter.begin(m_target);
 
     copyPainter.bltSelection(0, 0, COMPOSITE_OVER, m_srcdev, dab,
                              OPACITY_OPAQUE, 0, 0, sw, sh);
     copyPainter.end();
 
-    
+
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     Q_INT32 sx = dstRect.x() - x;
@@ -371,7 +371,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     painter()->addDirtyRect(dstRect);
 
     painter()->setOpacity(origOpacity);
-    
+
 }
 
 #include "kis_smudgeop.moc"

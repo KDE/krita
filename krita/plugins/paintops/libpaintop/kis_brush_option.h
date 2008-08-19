@@ -22,10 +22,25 @@
 
 #include "kis_paintop_option.h"
 
+class KisBrushSelectionWidget;
+class KisBrush;
 /**
  * The brush option allows the user to select a particular brush
  * footprint for suitable paintops
  */
-typedef KisPaintOpOption KisBrushOption;
+class KisBrushOption : public KisPaintOpOption
+{
+public:
+
+    KisBrushOption();
+
+    /**
+     * @return the currently selected brush
+     */
+    KisBrush * brush();
+private:
+
+    KisBrushSelectionWidget * m_brushChooser;
+};
 
 #endif

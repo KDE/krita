@@ -92,7 +92,7 @@ namespace Scripting {
             * @endcode
             */
             QObject* activeLayer();
-            
+
             /**
              * This function returns a new \a Image object.
              * It takes four arguments :
@@ -115,7 +115,7 @@ namespace Scripting {
              *  - red color (0 to 255)
              *  - blue color (0 to 255)
              *  - green color (0 to 255)
-             * 
+             *
              * For example (in Ruby) :
              * @code
              * require "Krita"
@@ -131,7 +131,7 @@ namespace Scripting {
              *  - hue color (0 to 255)
              *  - saturation color (0 to 255)
              *  - value color (0 to 255)
-             * 
+             *
              * For example (in Ruby) :
              * @code
              * require "Krita"
@@ -145,7 +145,7 @@ namespace Scripting {
              * of Krita.
              * It takes one argument :
              *  - the name of the pattern
-             * 
+             *
              * For example (in Ruby) :
              * @code
              * require "Krita"
@@ -153,13 +153,13 @@ namespace Scripting {
              * @endcode
              */
             QObject* pattern(const QString& patternname);
-
+#if 0
             /**
              * This function return a \a Brush taken from the list of resources
              * of Krita.
              * It takes one argument :
              *  - the name of the brush
-             * 
+             *
              * For example (in Ruby) :
              * @code
              * require "Krita"
@@ -175,9 +175,9 @@ namespace Scripting {
              *  - height
              *  - width of the shading
              *  - height of the shading
-             * 
+             *
              * If the shading isn't specified, no shading will be used.
-             * 
+             *
              * For example (in Ruby) :
              * @code
              * require "Krita"
@@ -205,13 +205,13 @@ namespace Scripting {
              * @endcode
              */
             QObject* createRectBrush(uint w, uint h, uint hf, uint vf);
-
+#endif
             /**
              * This function return a \a Filter object taken from the list
              * of resources of Krita.
              * It takes one argument :
              *  - the name of the filter
-             * 
+             *
              * For example (in Ruby) :
              * @code
              * require "Krita"
@@ -219,13 +219,13 @@ namespace Scripting {
              * @endcode
              */
             QObject* filter(const QString& filtername);
-
+#if 0
             /**
              * This function loads a Brush and then returns it.
              * It takes one argument: the filename of the brush.
              */
             QObject* loadBrush(const QString& filename);
-
+#endif
             /**
              * This function loads a Pattern and then returns it.
              * It takes one argument: the filename of the pattern.

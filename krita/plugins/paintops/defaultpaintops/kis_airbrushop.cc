@@ -50,7 +50,7 @@ KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
 
 
 KisAirbrushOp::KisAirbrushOp(KisPainter * painter)
-    : KisPaintOp(painter)
+    : KisBrushBasedPaintOp(painter)
 {
 }
 
@@ -101,7 +101,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     // ellipes and cones, and it shows the working of the timer.
     if (!device) return;
 
-    KisBrush * brush = painter()->brush();
+    KisBrush * brush = m_brush;
     if (! brush->canPaintFor(info) )
         return;
     KisPaintDeviceSP dab = 0;

@@ -164,8 +164,7 @@ void KisToolSelectPolygonal::finish()
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);
             painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
             painter.setOpacity(OPACITY_OPAQUE);
-            KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, currentImage());
-            painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
+            painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
             painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
             painter.paintPolygon(m_points);
 

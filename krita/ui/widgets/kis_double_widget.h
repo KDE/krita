@@ -24,11 +24,12 @@
 
 #include <QWidget>
 #include <QSlider>
+#include <krita_export.h>
 
 class QHBoxLayout;
 class QDoubleSpinBox;
 
-class KisDoubleWidget : public QWidget
+class KRITAUI_EXPORT KisDoubleWidget : public QWidget
 {
     Q_OBJECT
 

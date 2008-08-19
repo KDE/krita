@@ -94,9 +94,11 @@ KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& img)
 
 KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGenerator* kmg, double angle)
 {
+    Q_UNUSED(angle);
+
     qint32 width = (int)( kmg->width() + 0.5 );
     qint32 height = (int)( kmg->height() + 0.5 );
-    
+
     KisConvolutionKernelSP k = new KisConvolutionKernel( width, height, 0, 0);
     double cosa = 1.0;//cos(angle);
     double sina = 0.0;//sin(angle);
@@ -179,4 +181,4 @@ QDebug operator<<(QDebug dbg, const KisConvolutionKernel &c)
     }
     dbg.nospace() << c.factor()<< " " << c.offset() <<  " }";
     return dbg.space();
-} 
+}

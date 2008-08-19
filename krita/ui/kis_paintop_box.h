@@ -81,7 +81,6 @@ private:
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
     KoID defaultPaintop(const KoInputDevice & inputDevice);
-    KisPaintOpSettingsSP activeSetting(const KoID & paintop, const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
 
 private:
@@ -101,9 +100,6 @@ private:
 
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
-
-    typedef QHash<KoInputDevice, QList<KisPaintOpSettingsSP> > InputDevicePaintopSettingsMap;
-    InputDevicePaintopSettingsMap m_inputDevicePaintopSettings;
 
     typedef QHash<KoInputDevice, QList<KisPaintOpPresetSP> > InputDevicePresetsMap;
     InputDevicePresetsMap m_inputDevicePresets;

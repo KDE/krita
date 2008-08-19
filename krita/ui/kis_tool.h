@@ -27,10 +27,8 @@
 #include <KoCanvasResourceProvider.h>
 #include <krita_export.h>
 #include <kis_types.h>
-#include <kis_paintop_settings.h>
 
 class KoCanvasBase;
-class KisBrush;
 class KisPattern;
 class KoAbstractGradient;
 class KisFilterConfiguration;
@@ -118,14 +116,12 @@ protected:
     void notifyModified() const;
 
     KisImageSP currentImage();
-    KisBrush* currentBrush();
     KisPattern* currentPattern();
     KoAbstractGradient * currentGradient();
     KisNodeSP currentNode();
     KoColor currentFgColor();
     KoColor currentBgColor();
-    QString currentPaintOp();
-    KisPaintOpSettingsSP currentPaintOpSettings();
+    KisPaintOpPresetSP currentPaintOpPreset();
     KisFilterConfiguration * currentGenerator();
 
     /// convenience method to fill the painter's settings with all the current resources

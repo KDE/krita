@@ -183,12 +183,6 @@ target_link_libraries(KisAnnotationTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${
 
 ########### next target ###############
 
-set(kis_auto_brush_test_SRCS kis_auto_brush_test.cpp )
-kde4_add_unit_test(KisAutobrushTest TESTNAME krita-image-KisAutobrushTest ${kis_auto_brush_test_SRCS})
-target_link_libraries(KisAutobrushTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_autogradient_resource_test_SRCS kis_autogradient_resource_test.cpp )
 kde4_add_unit_test(KisAutogradientResourceTest TESTNAME krita-image-KisAutogradientResourceTest ${kis_autogradient_resource_test_SRCS})
 target_link_libraries(KisAutogradientResourceTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
@@ -210,12 +204,6 @@ target_link_libraries(KisBookmarkedConfigurationManagerTest  ${KDE4_KDEUI_LIBS} 
 set(kis_boundary_test_SRCS kis_boundary_test.cpp )
 kde4_add_unit_test(KisBoundaryTest TESTNAME krita-image-KisBoundaryTest ${kis_boundary_test_SRCS})
 target_link_libraries(KisBoundaryTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_brush_test_SRCS kis_brush_test.cpp )
-kde4_add_unit_test(KisBrushTest TESTNAME krita-image-KisBrushTest ${kis_brush_test_SRCS})
-target_link_libraries(KisBrushTest  ${KDE4_KDEUI_LIBS} komain kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

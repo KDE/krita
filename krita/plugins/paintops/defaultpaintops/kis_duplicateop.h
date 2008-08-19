@@ -26,7 +26,7 @@
 #include <QDomElement>
 #include <QDomDocument>
 
-#include "kis_paintop.h"
+#include "kis_brush_based_paintop.h"
 #include <QString>
 #include <klocale.h>
 
@@ -63,7 +63,7 @@ Q_OBJECT
         QPointF offset() const { return m_offset; }
         bool healing() const;
         bool perspectiveCorrection() const;
-        
+
         virtual void fromXML(const QDomElement&);
         virtual void toXML(QDomDocument&, QDomElement&) const;
     private:
@@ -75,7 +75,7 @@ Q_OBJECT
         QPointF m_offset;
 };
 
-class KisDuplicateOp : public KisPaintOp {
+class KisDuplicateOp : public KisBrushBasedPaintOp {
 
 public:
 

@@ -73,7 +73,6 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget( QWidget * widget )
         m_d->layout->removeWidget( m_d->settingsWidget );
         m_d->settingsWidget->hide();
         m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer->updateGeometry();
-        m_d->layout->invalidate();
     }
     if (!widget) return;
 
@@ -81,7 +80,8 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget( QWidget * widget )
 
     m_d->settingsWidget = widget;
     m_d->layout->addWidget( widget );
-    m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer->updateGeometry();
+    updateGeometry();
+    m_d->layout->update();
     widget->show();
 
 }

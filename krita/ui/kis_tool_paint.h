@@ -37,7 +37,6 @@
 #include <kis_types.h>
 #include <kis_image.h>
 
-#include <kis_brush.h>
 #include <kis_pattern.h>
 
 #include "kis_tool.h"

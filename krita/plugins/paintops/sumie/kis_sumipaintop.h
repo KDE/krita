@@ -57,10 +57,17 @@ public:
     virtual ~KisSumiPaintOp();
 
     // Do we want to spray even when no movement?
-    virtual bool incremental() { return false; }
+    virtual bool incremental() const { return false; }
 
     void paintAt(const KisPaintInformation& info);
     double paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist);
+
+    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
+    {
+        // XXX: this is wrong, but that doesn't matter, since paintLine doesn't use spacing.
+        return 0.5;
+    }
+
 
 private:
     QColor c;

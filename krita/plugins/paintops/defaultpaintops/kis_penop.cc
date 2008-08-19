@@ -43,6 +43,7 @@
 #include "kis_iterator.h"
 #include "kis_selection.h"
 #include "kis_iterators_pixel.h"
+
 KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED( image );
@@ -55,7 +56,7 @@ KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings, KisP
 
 
 KisPenOp::KisPenOp(KisPainter * painter)
-    : KisPaintOp(painter)
+    : KisBrushBasedPaintOp(painter)
 {
 }
 
@@ -68,7 +69,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     if (!painter()) return;
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
-    KisBrush * brush = painter()->brush();
+    KisBrush * brush = m_brush;
     if (!brush) return;
     if (! brush->canPaintFor(info) )
         return;

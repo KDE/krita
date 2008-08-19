@@ -94,9 +94,10 @@ public:
      * Whether this paintop wants to deposit paint even when not moving, i.e. the
      * tool needs to activate its timer.
      */
-    virtual bool incremental() { return false; }
+    virtual bool incremental() const { return false; }
 
 protected:
+
     static double scaleForPressure(double pressure);
 
     KisPaintDeviceSP cachedDab();
@@ -105,23 +106,23 @@ protected:
     /**
      * Split the coordinate into whole + fraction, where fraction is always >= 0.
      */
-    virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
+    virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction)const ;
 
     /**
      * Determine the x and y spacing between two calls to paintAt.
      * @return the spacing
      */
-    virtual double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
+    virtual double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const = 0;
 
     /**
      * Return the painter this paintop is owned by
      */
-    KisPainter* painter();
+    KisPainter* painter() const;
 
     /**
      * Return the paintdevice the painter this paintop is owned by
      */
-    KisPaintDeviceSP source();
+    KisPaintDeviceSP source() const;
 
 private:
     Private* const d;

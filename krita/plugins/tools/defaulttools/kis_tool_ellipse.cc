@@ -70,10 +70,8 @@ void KisToolEllipse::mousePressEvent(KoPointerEvent *event)
 {
      if (!m_canvas || !currentImage()) return;
 
-    if (!currentBrush()) return;
-
     if (event->button() == Qt::LeftButton) {
-	QPointF pos = convertToPixelCoord(event);
+    QPointF pos = convertToPixelCoord(event);
         m_dragging = true;
         m_dragStart = m_dragCenter = m_dragEnd = pos;
         //draw(m_dragStart, m_dragEnd);
@@ -89,7 +87,7 @@ void KisToolEllipse::mouseMoveEvent(KoPointerEvent *event)
         bound.setBottomRight(m_dragEnd);
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
-	QPointF pos = convertToPixelCoord(event);
+        QPointF pos = convertToPixelCoord(event);
         // erase old lines on canvas
         //draw(m_dragStart, m_dragEnd);
         // move (alt) or resize ellipse
@@ -99,7 +97,7 @@ void KisToolEllipse::mouseMoveEvent(KoPointerEvent *event)
             m_dragEnd += trans;
         } else {
             QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
-				  ? m_dragCenter : m_dragStart);
+                  ? m_dragCenter : m_dragStart);
             // circle?
             if (event->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
@@ -118,7 +116,7 @@ void KisToolEllipse::mouseMoveEvent(KoPointerEvent *event)
         }
         // draw new lines on canvas
         //draw(m_dragStart, m_dragEnd);
-	bound.setTopLeft(m_dragStart);
+    bound.setTopLeft(m_dragStart);
         bound.setBottomRight(m_dragEnd);
         /* FIXME Which rectangle to repaint */
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
@@ -184,9 +182,9 @@ void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
 
         gc.setPen(pen);
 
-	start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
-	end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
-	gc.drawEllipse(QRect(start, end));
+    start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
+    end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
+    gc.drawEllipse(QRect(start, end));
         gc.setPen(old);
     }
 }

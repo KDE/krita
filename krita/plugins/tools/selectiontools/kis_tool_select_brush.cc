@@ -33,7 +33,6 @@
 
 #include "KoPointerEvent.h"
 
-#include "kis_brush.h"
 #include "widgets/kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_doc2.h"
@@ -94,11 +93,9 @@ void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
     m_painter = new KisPainter(selection);
     Q_CHECK_PTR(m_painter);
     m_painter->setPaintColor(KoColor(Qt::black, selection->colorSpace()));
-    m_painter->setBrush(currentBrush());
     m_painter->setOpacity(OPACITY_OPAQUE);//m_currentFgColor.colorSpace()->intensity8(m_currentFgColor));
     m_painter->setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_OVER));
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, m_painter, currentImage());
-    m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
+    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
     // Set the cursor -- ideally. this should be a mask created from the brush,
     // now that X11 can handle colored cursors.

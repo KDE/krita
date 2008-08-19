@@ -68,7 +68,7 @@ KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 
 
 KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter)
-    : KisPaintOp(painter)
+    : KisBrushBasedPaintOp(painter)
 {
     m_settings = dynamic_cast<const KisFilterOpSettings*>(settings.data());
     m_tmpDevice = new KisPaintDevice(source()->colorSpace(), "tmp");
@@ -96,7 +96,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
       return;
     }
 
-    KisBrush * brush = painter()->brush();
+    KisBrush * brush = m_brush;;
     if (!brush) return;
 
     double scale = KisPaintOp::scaleForPressure( info.pressure() );

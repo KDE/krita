@@ -24,10 +24,11 @@
 class KisActionRecorderTest : public QObject
 {
     Q_OBJECT
+
 private slots:
 
     void testCreation();
-
+    void testFiles();
 };
 
 #endif

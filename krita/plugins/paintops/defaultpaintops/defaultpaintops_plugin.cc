@@ -47,11 +47,11 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList 
     setComponentData(DefaultPaintOpsPluginFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(KisPaintOpFactorySP( new KisAirbrushOpFactory ));
-    r->add(KisPaintOpFactorySP( new KisBrushOpFactory ));
-    r->add(KisPaintOpFactorySP( new KisDuplicateOpFactory ));
-    r->add(KisPaintOpFactorySP( new KisEraseOpFactory ));
-    r->add(KisPaintOpFactorySP( new KisPenOpFactory ));
+    r->add( new KisAirbrushOpFactory );
+    r->add( new KisBrushOpFactory );
+    r->add( new KisDuplicateOpFactory );
+    r->add( new KisEraseOpFactory );
+    r->add( new KisPenOpFactory );
 //    r->add(KisPaintOpFactorySP( new KisSmudgeOpFactory ));
 }
 

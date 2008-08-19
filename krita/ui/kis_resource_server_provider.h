@@ -4,6 +4,7 @@
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2003-2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +32,6 @@
 #include <krita_export.h>
 
 class KoResource;
-class KisBrush;
 class KisPattern;
 class KisPaintOpPreset;
 
@@ -44,7 +44,6 @@ public:
 
     static KisResourceServerProvider* instance();
 
-    KoResourceServer<KisBrush>* brushServer();
     KoResourceServer<KisPattern>* patternServer();
     KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
 
@@ -55,20 +54,17 @@ private:
     KisResourceServerProvider operator=(const KisResourceServerProvider&);
 
     static KisResourceServerProvider *m_singleton;
-    
-    KoResourceServer<KisBrush>* m_brushServer;
+
     KoResourceServer<KisPattern>* m_patternServer;
     KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
 
 private slots:
 
-    void brushThreadDone();
     void patternThreadDone();
     void paintOpPresetThreadDone();
 
 private:
-    
-    QThread * brushThread;
+
     QThread * patternThread;
     QThread * paintOpPresetThread;
 };

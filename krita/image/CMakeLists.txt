@@ -58,14 +58,10 @@ set(kritaimage_LIB_SRCS
    filter/kis_filter_config_widget.cc
    filter/kis_filter_job.cpp
    filter/kis_filter_registry.cc
-   kis_filter_strategy.cc
-   filter/kis_recorded_filter_action.cc
    generator/kis_generator.cpp
-   generator/kis_generator_registry.cpp
    generator/kis_generator_layer.cpp
-   kis_action_recorder.cc
+   generator/kis_generator_registry.cpp
    kis_adjustment_layer.cc
-   kis_auto_brush.cpp
    kis_autogradient_resource.cc
    kis_base_node.cpp
    kis_base_processor.cpp
@@ -73,22 +69,19 @@ set(kritaimage_LIB_SRCS
    kis_bookmarked_configuration_manager.cc
    kis_bottom_up_update_strategy.cpp
    kis_boundary.cc
-   kis_brush.cc
-   kis_brush_p.cc
-   kis_brush_registry.cpp
    kis_clone_layer.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
    kis_effect_mask.cc
    kis_fill_painter.cc
    kis_filter_mask.cpp
+   kis_filter_strategy.cc
    kis_gradient_painter.cc
    kis_group_layer.cc
    kis_histogram.cc
    kis_image.cc
    kis_iterator.cc
    kis_layer.cc
-   kis_macro.cc
    kis_mask.cc
    kis_mask_generator.cc
    kis_math_toolbox.cpp
@@ -103,9 +96,9 @@ set(kritaimage_LIB_SRCS
    kis_paint_information.cc
    kis_paint_layer.cc
    kis_paintop.cc
+   kis_paintop_preset.cpp
    kis_paintop_registry.cc
    kis_paintop_settings.cpp
-   kis_paintop_preset.cpp
    kis_pattern.cc
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
@@ -116,21 +109,19 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_recorded_action.cc
-   kis_recorded_action_factory_registry.cc
    kis_rotate_visitor.cc
    kis_selected_transaction.cc
-   kis_selection_transaction.cc
    kis_selection.cc
    kis_selection_mask.cpp
+   kis_selection_transaction.cc
    kis_serializable_configuration.cc
    kis_shared.cc
    kis_threaded_applicator.cpp
+   kis_top_down_update_strategy.cpp
    kis_transaction.cc
    kis_transformation_mask.cpp
    kis_transform_worker.cc
    kis_transparency_mask.cc
-   kis_top_down_update_strategy.cpp
    kis_undo_adapter.cc
    kis_vec.cc
    metadata/kis_meta_data_entry.cc
@@ -145,6 +136,14 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_schema.cc
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc
+   recorder/kis_action_recorder.cc
+   recorder/kis_macro.cc
+   recorder/kis_recorded_action.cc
+   recorder/kis_recorded_action_factory_registry.cc
+   recorder/kis_recorded_bezier_curve_paint_action.cpp
+   recorder/kis_recorded_filter_action.cpp
+   recorder/kis_recorded_paint_action.cpp
+   recorder/kis_recorded_polyline_paint_action.cpp
 )
 
 
@@ -161,12 +160,11 @@ install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})
 #install( FILES   kis_debug.h kis_global.h kis_annotation.h
 #kis_shared_ptr_vector.h kis_undo_adapter.h kis_progress_subject.h
 #kis_progress_display_interface.h kis_adjustment_layer.h
-#  	kis_autobrush_resource.h
-#kis_autogradient_resource.h kis_boundary.h kis_brush.h
+#kis_autogradient_resource.h kis_boundary.h 
 #kis_command.h kis_convolution_painter.h kis_fill_painter.h
 #kis_filter.h  	kis_filter_registry.h kis_gradient.h
 #kis_gradient_painter.h kis_histogram.h kis_image.h
-#kis_imagepipe_brush.h kis_iterator.h kis_iterators_pixel.h
+# kis_iterator.h kis_iterators_pixel.h
 #kis_iteratorpixeltrait.h kis_layer.h kis_meta_registry.h
 #kis_nameserver.h   kis_paint_device.h kis_painter.h kis_paintop.h
 #kis_paintop_registry.h  	kis_palette.h kis_pattern.h 

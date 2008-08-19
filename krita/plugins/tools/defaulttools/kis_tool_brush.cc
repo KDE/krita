@@ -39,8 +39,7 @@
 #include "KoCanvasBase.h"
 
 #include "kis_config.h"
-#include "kis_brush.h"
-#include "kis_paintop.h"
+#include "kis_paintop_preset.h"
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
 #include "kis_painter.h"
@@ -91,12 +90,6 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
         return;
     }
 
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(currentPaintOp(),
-                                                              currentPaintOpSettings(),
-                                                              m_painter,
-                                                              currentImage());
-    if (!op) return;
-
 #if 0
     // XXX: TOOL_REFACTOR: how to update all of the canvas? Or how to
     // find out the cursor area around the cursor so we can remove the
@@ -104,9 +97,9 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
     m_canvas->updateCanvas(); // remove the outline
 #endif
 
-    m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
+    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
 
-    if (op->incremental()) {
+    if (m_painter->paintOp()->incremental()) {
         m_timer->start( m_rate );
     }
 }

@@ -72,26 +72,23 @@ void KisToolRectangle::mousePressEvent(KoPointerEvent *e)
 {
     if (!m_canvas || !currentImage()) return;
 
-    if (!currentBrush()) return;
-
     if (e->button() == Qt::LeftButton) {
-	QPointF pos = convertToPixelCoord(e);
-	m_dragging = true;
-	m_dragStart = m_dragCenter = m_dragEnd = pos;
-	//draw(m_dragStart, m_dragEnd);
+        QPointF pos = convertToPixelCoord(e);
+        m_dragging = true;
+        m_dragStart = m_dragCenter = m_dragEnd = pos;
     }
 }
 
 void KisToolRectangle::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
-	QPointF pos = convertToPixelCoord(event);
+        QPointF pos = convertToPixelCoord(event);
         // erase old lines on canvas
-	// This is not enough, how to do?
-	QRectF bound;
+        // This is not enough, how to do?
+        QRectF bound;
         bound.setTopLeft(m_dragStart);
         bound.setBottomRight(m_dragEnd);
-	m_canvas->updateCanvas(convertToPt(bound.normalized()));
+        m_canvas->updateCanvas(convertToPt(bound.normalized()));
         //draw(m_dragStart, m_dragEnd);
         // move (alt) or resize rectangle
         if (event->modifiers() & Qt::AltModifier) {
@@ -119,7 +116,7 @@ void KisToolRectangle::mouseMoveEvent(KoPointerEvent *event)
         }
         // draw new lines on canvas
         //draw(m_dragStart, m_dragEnd);
-	//QRectF bound;
+        //QRectF bound;
         bound.setTopLeft(m_dragStart);
         bound.setBottomRight(m_dragEnd);
         /* FIXME Which rectangle to repaint */
@@ -145,7 +142,7 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
     KisPaintDeviceSP device = currentNode()->paintDevice();
     if (!device) return;
 
-    if (m_dragging && currentBrush() && event->button() == Qt::LeftButton) {
+    if (m_dragging && event->button() == Qt::LeftButton) {
         m_dragging = false;
 
         if (m_dragStart == m_dragEnd)
@@ -171,8 +168,8 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
 
         m_canvas->addCommand(m_painter->endTransaction());
 
-	delete m_painter;
-	m_painter = 0;
+        delete m_painter;
+        m_painter = 0;
     }
 }
 
@@ -196,9 +193,9 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
 
         gc.setPen(pen);
 
-	start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
-	end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
-	gc.drawRect(QRect(start, end));
+        start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
+        end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
+        gc.drawRect(QRect(start, end));
         gc.setPen(old);
     }
 }

@@ -64,6 +64,7 @@ QList<float> * KisSumiPaintOpSettings::curve() const
 }
 
 void KisSumiPaintOpSettings::updateImg(){
+#if 0 // XXX: port to KisPaintOpPreset
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP mydevice = new KisPaintDevice(cs, "preview device");
     Q_CHECK_PTR(mydevice);
@@ -72,11 +73,11 @@ void KisSumiPaintOpSettings::updateImg(){
     KoColor c(Qt::black, cs);
     painter.setPaintColor(c);
 
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("sumibrush", this, &painter ); 
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("sumibrush", this, &painter );
     painter.setPaintOp(op);
 
     QLabel *label = m_options->previewLbl;
-    int width = label->width(); 
+    int width = label->width();
     int height = label->height();
 
 /*    QPointF p1(0,0);
@@ -112,7 +113,7 @@ void KisSumiPaintOpSettings::updateImg(){
     KisPaintInformation pi1(p1, 0.0);
     KisPaintInformation pi2(p2, 0.95);
     KisPaintInformation pi3(p3, 0.75);
-    KisPaintInformation pi4(p4, 0.0);    
+    KisPaintInformation pi4(p4, 0.0);
 
     QPointF c1(p1.x(),p1.y() - 5);
     QPointF c2(p1.x(),p1.y() + 5);
@@ -139,15 +140,16 @@ void KisSumiPaintOpSettings::updateImg(){
     dbgPlugins << xx << " " << yy << " " << ww << " " << hh;
     dbgPlugins << mydevice->extent();*/
     QImage img = mydevice->convertToQImage(0,xx,yy,ww,hh);
-    
+
 /*    const QString filePath("/tmp/sumi-e-preview.png");
     bool r = img.save(filePath);
 
     dbgPlugins << "saved to?: "<< r << " " << filePath;*/
     QPixmap pixmap = QPixmap::fromImage( img );
-    
+
     Q_CHECK_PTR(label);
     label->setPixmap( pixmap );
+#endif
 }
 
 int KisSumiPaintOpSettings::radius() const{

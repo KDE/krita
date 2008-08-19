@@ -45,17 +45,10 @@ void MixerTool::initPaint(KoPointerEvent *e) {
 
     KisToolFreehand::initPaint(e);
 
-    KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-
     if (!m_painter)
         return;
 
-    KisPaintOp *op = r->paintOp(currentPaintOp(), currentPaintOpSettings(), m_painter, 0);
-
-    if (!op)
-        return;
-
-    m_painter->setPaintOp(op);
+    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
 }
 

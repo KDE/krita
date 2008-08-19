@@ -23,7 +23,7 @@
 #ifndef KIS_CONVOLVEOP_H_
 #define KIS_CONVOLVEOP_H_
 
-#include "kis_paintop.h"
+#include "kis_brush_based_paintop.h"
 
 class QPointF;
 class KisPainter;
@@ -41,7 +41,7 @@ public:
 };
 
 
-class KisConvolveOp : public KisPaintOp {
+class KisConvolveOp : public KisBrushBasedPaintOp {
 
 public:
 

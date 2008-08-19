@@ -23,7 +23,6 @@
 
 #include <kis_debug.h>
 
-#include <kis_auto_brush.h>
 #include <kis_convolution_painter.h>
 #include <kis_generic_colorspace.h>
 #include <kis_iterators_pixel.h>
@@ -126,19 +125,19 @@ void matchingPropag( QList<const KisInterestPoint*>& allreadyMatchedRef, QList<c
         }
       }
     }
-  
+
 }
 
 lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& pointsmatch)
 {
     lMatches matchPoints;
-    
+
     QList<const KisInterestPoint*> allreadyMatchedRef;
     QList<const KisInterestPoint*> allreadyMatchedMatch;
-    
+
     // Simple matching
       matchingPropag( allreadyMatchedRef, allreadyMatchedMatch, matchPoints, pointsref,  pointsmatch, 0.8, 0.8 );
-    
+
     dbgPlugins << matchPoints.size() <<" points were matched";
     return matchPoints;
 }
@@ -271,7 +270,7 @@ void propageMatch( MatchHypothesis& hypo, const KisMatch& seedMatch, const QList
 lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& pointsmatch)
 {
     lMatches matchPoints;
-    
+
     QList<const KisInterestPoint*> allreadyMatchedRef;
     QList<const KisInterestPoint*> allreadyMatchedMatch;
     for(lInterestPoints::const_iterator it_ref = pointsref.begin(); it_ref != pointsref.end(); it_ref++)

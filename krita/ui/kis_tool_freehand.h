@@ -1,7 +1,5 @@
 /*
- *  kis_tool_brush.h - part of Krita
- *
- *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2003-2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +21,7 @@
 
 #include "kis_types.h"
 #include "kis_tool_paint.h"
+#include "kis_paint_information.h"
 
 #include "krita_export.h"
 
@@ -61,7 +60,7 @@ protected:
     /// Paint a line between the specified positions on the current layer
     virtual void paintLine(const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
-                   
+
     virtual void paintBezierCurve(const KisPaintInformation &pi1,
                    const QPointF &control1,
                    const QPointF &control2,
@@ -71,12 +70,12 @@ protected:
     virtual void endPaint();
 
     void paintOutline(const QPointF& point);
-    
+
 protected slots:
 
     void setSmooth(bool smooth);
     void setAssistant(bool assistan);
-    
+
 private:
 
     /**
@@ -84,7 +83,7 @@ private:
      */
     QPointF adjustPosition( const QPointF& point);
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
-    
+
 protected:
 
     KisPaintInformation m_previousPaintInformation;
@@ -106,7 +105,7 @@ protected:
     double m_smoothness;
     bool m_assistant;
     double m_magnetism;
-    
+
 private:
 
     bool m_paintedOutline;

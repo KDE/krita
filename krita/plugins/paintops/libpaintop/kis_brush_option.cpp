@@ -17,3 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "kis_brush_option.h"
+#include "kis_brush_selection_widget.h"
+#include <klocale.h>
+
+KisBrushOption::KisBrushOption()
+    : KisPaintOpOption(i18n("Brush Tip"))
+{
+    m_brushChooser = new KisBrushSelectionWidget();
+    m_brushChooser->hide();
+    setConfigurationPage(m_brushChooser);
+}
+
+KisBrush * KisBrushOption::brush()
+{
+    return m_brushChooser->brush();
+}

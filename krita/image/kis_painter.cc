@@ -46,7 +46,6 @@
 #include <KoColor.h>
 #include <KoCompositeOp.h>
 
-#include "kis_brush.h"
 #include "kis_image.h"
 #include "filter/kis_filter.h"
 #include "kis_layer.h"
@@ -61,6 +60,8 @@
 #include "kis_fill_painter.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_pixel_selection.h"
+#include "kis_paint_information.h"
+#include "kis_paintop_registry.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -74,7 +75,7 @@ struct KisPainter::Private {
 
     QRegion dirtyRegion;
     QRect dirtyRect;
-
+    KisPaintOp * paintOp;
     QRect bounds;
     KoColor paintColor;
     KoColor backgroundColor;
@@ -84,11 +85,9 @@ struct KisPainter::Private {
     FillStyle fillStyle;
     StrokeStyle strokeStyle;
     bool antiAliasPolygonFill;
-    KisBrush *brush;
     KisPattern *pattern;
     QPointF duplicateOffset;
     quint8 opacity;
-    KisPaintOp * paintOp;
     qint32 pixelSize;
     const KoColorSpace * colorSpace;
     KoColorProfile *  profile;
@@ -96,6 +95,7 @@ struct KisPainter::Private {
     QBitArray channelFlags;
     bool useBoundingDirtyRect;
     KoAbstractGradient* gradient;
+    KisPaintOpPresetSP paintOpPreset;
 };
 
 KisPainter::KisPainter()
@@ -126,7 +126,6 @@ void KisPainter::init()
     d->selection = 0 ;
     d->transaction = 0;
     d->paintOp = 0;
-    d->brush = 0;
     d->pattern= 0;
     d->opacity = OPACITY_OPAQUE;
     d->sourceLayer = 0;
@@ -144,7 +143,6 @@ void KisPainter::init()
 KisPainter::~KisPainter()
 {
     end();
-    d->brush = 0;
     delete d->paintOp;
     delete d;
 }
@@ -235,12 +233,6 @@ QRegion KisPainter::addDirtyRect(const QRect & r)
     }
 }
 
-
-void KisPainter::setPaintOp(KisPaintOp * paintOp)
-{
-    delete d->paintOp;
-    d->paintOp = paintOp;
-}
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KoCompositeOp* op,
@@ -1627,19 +1619,20 @@ QBitArray KisPainter::channelFlags()
     return d->channelFlags;
 }
 
-void KisPainter::setBrush(KisBrush* brush) { d->brush = brush; }
-KisBrush * KisPainter::brush() const { return d->brush; }
-
 void KisPainter::setPattern(KisPattern * pattern) { d->pattern = pattern; }
+
 KisPattern * KisPainter::pattern() const { return d->pattern; }
 
 void KisPainter::setPaintColor(const KoColor& color) { d->paintColor = color;}
+
 KoColor KisPainter::paintColor() const { return d->paintColor; }
 
 void KisPainter::setBackgroundColor(const KoColor& color) {d->backgroundColor = color; }
+
 KoColor KisPainter::backgroundColor() const { return d->backgroundColor; }
 
 void KisPainter::setFillColor(const KoColor& color) { d->fillColor = color; }
+
 KoColor KisPainter::fillColor() const { return d->fillColor; }
 
 void KisPainter::setGenerator(KisFilterConfiguration * generator)
@@ -1651,7 +1644,6 @@ KisFilterConfiguration * KisPainter::generator() const
 {
     return d->generator;
 }
-
 
 void KisPainter::setFillStyle(FillStyle fillStyle) { d->fillStyle = fillStyle; }
 
@@ -1674,14 +1666,15 @@ KisPainter::StrokeStyle KisPainter::strokeStyle() const
 }
 
 void KisPainter::setOpacity(quint8 opacity) { d->opacity = opacity; }
+
 quint8 KisPainter::opacity() const { return d->opacity; }
 
 void KisPainter::setBounds( const QRect & bounds ) { d->bounds = bounds;  }
+
 QRect KisPainter::bounds() { return d->bounds;  }
 
-KisPaintOp * KisPainter::paintOp() const { return d->paintOp; }
-
 void KisPainter::setCompositeOp(const KoCompositeOp * op) { d->compositeOp = op; }
+
 const KoCompositeOp * KisPainter::compositeOp() { return d->compositeOp; }
 
 void KisPainter::setSelection(KisSelectionSP selection) { d->selection = selection; }
@@ -1697,4 +1690,23 @@ void KisPainter::setGradient(KoAbstractGradient* gradient)
 KoAbstractGradient* KisPainter::gradient()
 {
     return d->gradient;
+}
+
+void KisPainter::setPaintOpPreset( KisPaintOpPresetSP preset, KisImageSP image )
+{
+    kDebug() << "setting the paintop " << preset;
+    d->paintOpPreset = preset;
+    delete d->paintOp;
+    d->paintOp = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
+    kDebug() << " paintop: " << d->paintOp;
+}
+
+KisPaintOpPresetSP KisPainter::preset() const
+{
+    return d->paintOpPreset;
+}
+
+KisPaintOp* KisPainter::paintOp() const
+{
+    return d->paintOp;
 }

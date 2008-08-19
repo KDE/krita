@@ -76,6 +76,12 @@ public:
     virtual ~KisDynamicOp();
 
     void paintAt(const KisPaintInformation& info);
+    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
+    {
+        // XXX: this is wrong!
+        return 0.5;
+    }
+
 
 private:
     KisDynamicBrush* m_brush;

@@ -52,7 +52,7 @@ public:
 
 public:
 
-    
+
     /**
      * Fill the filter configuration object from the XML encoded representation in s.
      * This function use the "Legacy" style XML in the 1.x kra file.
@@ -63,19 +63,19 @@ public:
      * This function use the "Legacy" style XML in the 1.x kra file.
      */
     virtual void fromXML(const QDomElement&);
-    
+
     /**
      * Create a serialized version of this filter config
      * This function use the "Legacy" style XML in the 1.x kra file.
      */
     virtual void toXML(QDomDocument&, QDomElement&) const;
-    
+
     /**
      * Create a serialized version of this filter config
      * This function use the "Legacy" style XML in the 1.x kra file.
      */
     virtual QString toXML() const;
-    
+
     /**
      * Set the property with name to value.
      */
@@ -88,7 +88,7 @@ public:
     virtual bool getProperty(const QString & name, QVariant & value) const;
 
     virtual QVariant getProperty(const QString & name) const;
-    
+
     int getInt(const QString & name, int def = 0) const;
     double getDouble(const QString & name, double def = 0.0) const;
     bool getBool(const QString & name, bool def = false) const;
@@ -100,21 +100,21 @@ protected:
     /// Clear the map of properties
     void clearProperties();
 private:
-        void dump();
+    void dump();
 private:
     struct Private;
     Private* const d;
 };
 
 class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializableConfigurationFactory {
-    public:
-        KisPropertiesConfigurationFactory();
-        virtual ~KisPropertiesConfigurationFactory();
-        virtual KisSerializableConfiguration* createDefault();
-        virtual KisSerializableConfiguration* create(const QDomElement& e);
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisPropertiesConfigurationFactory();
+    virtual ~KisPropertiesConfigurationFactory();
+    virtual KisSerializableConfiguration* createDefault();
+    virtual KisSerializableConfiguration* create(const QDomElement& e);
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

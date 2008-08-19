@@ -253,6 +253,7 @@ public:
      * @return the action recorder associated with this image
      */
     KisActionRecorder* actionRecorder() const;
+
     /**
      * Returns true if this image wants undo information, false otherwise
      */

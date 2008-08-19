@@ -136,13 +136,6 @@ typedef KisSharedPtr<KisPixelSelection> KisPixelSelectionSP;
 class KisHistogram;
 typedef KisSharedPtr<KisHistogram> KisHistogramSP;
 
-class KisPaintOpFactory;
-typedef KisSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
-
-class KisBrushFactory;
-typedef KisSharedPtr<KisBrushFactory> KisBrushFactorySP;
-typedef KisSharedPtrVector<KisBrushFactory> vKisBrushFactorySP;
-
 typedef QVector<QPoint> vKisSegments;
 
 class KisQImagemask;
@@ -189,9 +182,6 @@ typedef QVector<QPointF> vQPointF;
 
 class KisPaintOpPreset;
 typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
-
-class KisPaintOp;
-typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
 
 class KisPaintOpSettings;
 typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;

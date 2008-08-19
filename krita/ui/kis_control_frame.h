@@ -4,6 +4,7 @@
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004 Sven Langkamp  <sven.langkamp@gmail.com>
+ *  Copyright (c) 2003-2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,9 +35,6 @@ class KToolBar;
 
 class KoResourceItem;
 
-class KisAutoBrushWidget;
-class KisBrush;
-class KisBrushChooser;
 class KoAbstractGradient;
 class KisGradientChooser;
 class KoResourceItemChooser;
@@ -49,7 +47,7 @@ class KXmlGuiWindow;
 
 /**
  *   Control Frame - status display with access to
- *   color selector, brushes, patterns, and preview
+ *   color selector, gradient, patterns, and paintop presets
  */
 class KisControlFrame : public QObject
 {
@@ -62,17 +60,14 @@ public:
 
 public slots:
 
-    void slotSetBrush(QTableWidgetItem *item);
     void slotSetPattern(QTableWidgetItem *item);
     void slotSetGradient(QTableWidgetItem *item);
 
-    void slotBrushChanged(KisBrush * brush);
     void slotPatternChanged(KisPattern * pattern);
     void slotGradientChanged(KoAbstractGradient * gradient);
 
 private:
 
-    void createBrushesChooser(KisView2 * view);
     void createPatternsChooser(KisView2 * view);
     void createGradientsChooser(KisView2 * view);
 
@@ -81,24 +76,18 @@ private:
     QFont m_font;
     KisView2 * m_view;
 
-    QTabWidget * m_brushesTab;
     QTabWidget * m_gradientTab;
     QTabWidget * m_patternsTab;
 
-    KisIconWidget *m_brushWidget;
     KisIconWidget *m_patternWidget;
     KisIconWidget *m_gradientWidget;
 
-    QWidget * m_brushChooserPopup;
     QWidget * m_patternChooserPopup;
     QWidget * m_gradientChooserPopup;
 
-    KisResourceMediator *m_brushMediator;
     KisResourceMediator *m_patternMediator;
     KisResourceMediator *m_gradientMediator;
 
-    KisAutoBrushWidget * m_autoBrushWidget;
-    KisBrushChooser * m_brushChooser;
     KisGradientChooser * m_gradientChooser;
 
     KisPaintopBox * m_paintopBox;

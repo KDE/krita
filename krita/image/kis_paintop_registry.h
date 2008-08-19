@@ -40,7 +40,7 @@ class KoInputDevice;
 /**
  * Manages the loading and creating of all paintop plugins.
  */
-class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericRegistry<KisPaintOpFactorySP>
+class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericRegistry<KisPaintOpFactory*>
 {
 
     Q_OBJECT
@@ -51,7 +51,7 @@ public:
     /**
      * Return a newly created paintop. You are responsible for deleting
      */
-    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0) const;
+    KisPaintOp * KDE_DEPRECATED paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0) const;
 
     /**
      * Create and return a paintop based on the given preset. A preset defines

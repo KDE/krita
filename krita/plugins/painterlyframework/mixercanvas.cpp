@@ -27,7 +27,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
 #include <kis_canvas_resource_provider.h>
-#include <kis_paintop_settings.h>
+#include <kis_paintop_preset.h>
 
 #include <KoCanvasResourceProvider.h>
 #include <KoColorSpace.h>
@@ -95,13 +95,14 @@ void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
 
     internal->setResource(KoCanvasResource::ForegroundColor, rp->fgColor());
     internal->setResource(KoCanvasResource::BackgroundColor, rp->bgColor());
-    internal->setResource(KisCanvasResourceProvider::CurrentBrush, rp->currentBrush());
     internal->setResource(KisCanvasResourceProvider::CurrentPattern, rp->currentPattern());
     internal->setResource(KisCanvasResourceProvider::CurrentGradient, rp->currentGradient());
 
     internal->setResource(KisCanvasResourceProvider::CurrentKritaNode, rp->currentNode().data());
     internal->setResource(KisCanvasResourceProvider::HdrExposure, rp->HDRExposure());
-    internal->setResource(KisCanvasResourceProvider::CurrentPaintop, rp->currentPaintop());
+    QVariant v;
+    v.setValue(rp->currentPreset());
+    internal->setResource( KisCanvasResourceProvider::CurrentPaintOpPreset, v );
 
     checkCurrentPaintop();
 
@@ -109,17 +110,14 @@ void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
              this, SLOT(slotResourceChanged(int, const QVariant &)));
 
     // By now, both properties have been set
-    connect( rp, SIGNAL(sigPaintopChanged(KoID, const KisPaintOpSettingsSP)),
+    connect( rp, SIGNAL(sigPaintOpPresetChanged( KisPaintOpPresetSP )),
              this, SLOT(checkCurrentPaintop()));
 }
 
 void MixerCanvas::checkCurrentPaintop()
 {
+#if 0
     KoCanvasResourceProvider *internal = resourceProvider();
-
-    KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>(internal->resource(KisCanvasResourceProvider::CurrentPaintopSettings).value<void *>());
-    if (!settings) return;
 
     KisPainter painter(device());
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
@@ -129,6 +127,7 @@ void MixerCanvas::checkCurrentPaintop()
 
     if (current && !current->painterly())
         internal->setResource(KisCanvasResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
+#endif
 }
 
 void MixerCanvas::checkCurrentLayer()
@@ -227,21 +226,24 @@ void MixerCanvas::slotClear()
 
 void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
 {
+#if 0 // Apparently setting the paintop and settings is not atomic: it will be when I have fixed
+
     if (key != KisCanvasResourceProvider::CurrentPaintopSettings)
         resourceProvider()->setResource(key, value);
     else
         return;
     switch (key) {
-#if 0 // Apparently setting the paintop and settings is not atomic: it will be when I have fixed
+
       // the presets thing (boud)
         case KisCanvasResourceProvider::CurrentPaintop:
             checkCurrentPaintop();
             break;
-#endif
+
         case KisCanvasResourceProvider::CurrentKritaNode:
             checkCurrentLayer();
             break;
     }
+#endif
 }
 
 #include "mixercanvas.moc"

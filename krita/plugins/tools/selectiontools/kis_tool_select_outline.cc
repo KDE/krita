@@ -121,8 +121,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
                 painter.setOpacity(OPACITY_OPAQUE);
-                KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, currentImage());
-                painter.setPaintOp(op);    // And now the painter owns the op and will destroy it.
+                painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
                 painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
                 painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
                 painter.paintPolygon(m_points);

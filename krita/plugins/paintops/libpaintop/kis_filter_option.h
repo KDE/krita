@@ -21,11 +21,32 @@
 #define KIS_FILTER_OPTION_H
 
 #include "kis_paintop_option.h"
+#include <kis_types.h>
 
+class KisFilterConfiguration;
 /**
  * The filter option allows the user to select a particular filter
  * that can be applied by the paintop to the brush footprint or the
  * original paint device data.
  */
-typedef KisPaintOpOption KisFilterOption;
+class KisFilterOption : public KisPaintOpOption
+{
+
+public:
+
+    KisFilterOption();
+
+    /**
+     * Return the currently selected filter
+     */
+    const KisFilterSP filter() const;
+
+    /**
+     * Return the currently selected filter configuration
+     */
+    KisFilterConfiguration* filterConfig() const;
+
+
+};
+
 #endif

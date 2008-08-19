@@ -17,3 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "kis_filter_option.h"
+#include <klocale.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_configuration.h>
+
+KisFilterOption::KisFilterOption()
+    : KisPaintOpOption( i18n( "Filter" ) )
+{
+}
+
+const KisFilterSP KisFilterOption::KisFilterOption::filter() const
+{
+    return 0;
+}
+
+KisFilterConfiguration* KisFilterOption::filterConfig() const
+{
+    return 0;
+}

@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 
-#include "kis_paintop.h"
+#include "kis_brush_based_paintop.h"
 
 class QPointF;
 class KisPainter;
@@ -46,7 +46,7 @@ public:
 };
 
 
-class KisPenOp : public KisPaintOp {
+class KisPenOp : public KisBrushBasedPaintOp {
 
 public:
 

@@ -30,7 +30,6 @@
 
 #include "KoPointerEvent.h"
 
-#include "kis_brush.h"
 #include "kis_layer.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
@@ -86,11 +85,9 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
     Q_CHECK_PTR(m_painter);
     m_painter->beginTransaction(i18n("Selection Eraser"));
     m_painter->setPaintColor(KoColor(Qt::white, selection->colorSpace()));
-    m_painter->setBrush(currentBrush());
     m_painter->setOpacity(OPACITY_OPAQUE);
     m_painter->setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_ERASE));
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, m_painter, currentImage());
-    m_painter->setPaintOp(op); // And now the painter owns the op and will destroy it.
+    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
     // Set the cursor -- ideally. this should be a mask created from the brush,
     // now that X11 can handle colored cursors.

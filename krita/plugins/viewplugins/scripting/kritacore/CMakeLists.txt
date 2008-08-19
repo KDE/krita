@@ -1,7 +1,7 @@
 include_directories(${KOKROSS_INCLUDES})
 
 set(krossmodulekrita_LIB_SRCS
-   krs_brush.cpp
+#   krs_brush.cpp
    krs_color.cpp
    krs_const_paint_device.cpp
    krs_filter.cpp

@@ -99,10 +99,7 @@ void KisBristleShape::startPainting(KisPainter* _painter)
 {
     dbgPlugins << "startPainting";
     KisDynamicShape::startPainting(_painter);
-    KisCircleMaskGenerator* kacs = new KisCircleMaskGenerator(1, 1, 1.0, 1.0);
     m_paintBrush->bristlesPainter = new KisPainter(painter()->device() );
-    m_paintBrush->bristlesPainter->setBrush( new KisAutoBrush(kacs) );
-    m_paintBrush->bristlesPainter->setPaintOp( KisPaintOpRegistry::instance()->paintOp( "paintbrush", 0, m_paintBrush->bristlesPainter, 0) );
     dbgPlugins << (int)((255.0*rand()) / RAND_MAX) << " " << (int)((255.0*rand()) / RAND_MAX) << " " << (int)((255.0*rand()) / RAND_MAX );
     m_paintBrush->bristlesPainter->setPaintColor( KoColor( QColor( (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX )), KoColorSpaceRegistry::instance()->rgb8()) );
 
@@ -139,9 +136,9 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
         m_paintBrush->bristlesPainter->setPaintColor( color );
         if( m_paintBrush->m_firstStroke)
         {
-            m_paintBrush->bristlesPainter->paintLine( pos, pos );
+            m_paintBrush->bristlesPainter->drawLine( pos, pos );
         } else {
-            m_paintBrush->bristlesPainter->paintLine( QPointF(it->m_lastX, it->m_lastY), pos );
+            m_paintBrush->bristlesPainter->drawLine( QPointF(it->m_lastX, it->m_lastY), pos );
         }
         it->m_lastX = pos.x();
         it->m_lastY = pos.y();

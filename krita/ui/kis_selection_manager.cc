@@ -360,8 +360,13 @@ void KisSelectionManager::updateGUI()
     m_pasteNew->setEnabled(!img.isNull() && m_clipboard->hasClip());
     m_toNewLayer->setEnabled(enable);
 
-    if( shapeLayer || (m_view->selection() && m_view->selection()->hasShapeSelection()) &&
-        m_view->canvasBase()->shapeManager()->selection()->count() > 0) {
+    if ( shapeLayer || (    (    m_view->selection()
+                              && m_view->selection()->hasShapeSelection()
+                            )
+                         &&   m_view->canvasBase()->shapeManager()->selection()->count() > 0
+                       )
+       )
+    {
         m_delete->setEnabled(true);
     }
     else

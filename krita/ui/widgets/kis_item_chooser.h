@@ -21,6 +21,7 @@
 #include <QList>
 #include <QWidget>
 #include <kvbox.h>
+#include <krita_export.h>
 
 class KHBox;
 
@@ -33,7 +34,7 @@ class QTableWidgetItem;
  * more information about the currently selected item. Reimplement update()
  * to extract that information and fill the appropriate widgets.
  */
-class KisItemChooser : public QWidget {
+class KRITAUI_EXPORT KisItemChooser : public QWidget {
 
     Q_OBJECT
 

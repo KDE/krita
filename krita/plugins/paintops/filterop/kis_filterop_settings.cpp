@@ -127,6 +127,7 @@ void KisFilterOpSettings::updateFilterConfigWidget()
             m_currentFilterConfigWidget->show();
         }
     }
+    m_layout->update();
 }
 
 const KisFilterSP KisFilterOpSettings::filter() const

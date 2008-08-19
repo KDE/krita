@@ -33,19 +33,3 @@ kde4_add_plugin(kritapainterlymixer ${kritapainterlymixer_PART_SRCS})
 target_link_libraries(kritapainterlymixer kritaui pigmentcms kritaimage)
 install(TARGETS kritapainterlymixer DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kritapainterlymixer.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-
-#################################################
-
-# Painterly Complex Paintop
-
-set(kritacomplexbrush_PART_SRCS
-    complexbrush.cpp
-    kis_complexop.cpp
-    mathematics.cpp
-    )
-
-kde4_add_ui_files(kritacomplexbrush_PART_SRCS wdgbrushcurves.ui)
-kde4_add_plugin(kritacomplexbrush ${kritacomplexbrush_PART_SRCS})
-target_link_libraries(kritacomplexbrush pigmentcms kritaimage kritaui)
-install(TARGETS kritacomplexbrush DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kritacomplexbrush.desktop DESTINATION ${SERVICES_INSTALL_DIR})

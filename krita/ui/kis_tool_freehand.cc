@@ -39,17 +39,17 @@
 #include <KoCanvasResourceProvider.h>
 
 // Krita/image
-#include <kis_action_recorder.h>
-#include <kis_brush.h>
+#include <recorder/kis_action_recorder.h>
 #include <kis_fill_painter.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
-#include <kis_recorded_paint_actions.h>
+#include <recorder/kis_recorded_polyline_paint_action.h>
+#include <recorder/kis_recorded_bezier_curve_paint_action.h>
 #include <kis_selection.h>
-#include <kis_paintop_settings.h>
+#include <kis_paintop_preset.h>
 
 // Krita/ui
 #include "kis_boundary_painter.h"
@@ -86,18 +86,15 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 //     if (!currentImage())
 //  		return;
 
-    if (!currentBrush())
-        return;
-
     if (!currentNode())
         return;
 
     if (!currentNode()->paintDevice())
         return;
 
-    if(currentPaintOpSettings())
+    if(currentPaintOpPreset() && currentPaintOpPreset()->settings())
     {
-        currentPaintOpSettings()->mousePressEvent(e);
+        currentPaintOpPreset()->settings()->mousePressEvent(e);
         if(e->isAccepted())
         {
             return;
@@ -283,9 +280,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 */
     if(m_smooth)
     {
-        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction( i18n("Freehand tool"),  currentNode(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
+        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction( i18n("Freehand tool"),  currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
     } else {
-        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction( i18n("Freehand tool"), currentNode(), currentBrush(), currentPaintOp(), currentPaintOpSettings(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
+        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction( i18n("Freehand tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
     }
     m_executor->start();
 }

@@ -29,45 +29,45 @@ class QDomDocument;
  * is also unknown at creation time.
  */
 class KRITAIMAGE_EXPORT KisSerializableConfiguration {
-    public:
+public:
 
-        virtual ~KisSerializableConfiguration() {};
+    virtual ~KisSerializableConfiguration() {};
 
-        /**
-         * Fill the object from the XML encoded representation in s.
-         */
-        virtual void fromXML(const QString&);
+    /**
+     * Fill the object from the XML encoded representation in s.
+     */
+    virtual void fromXML(const QString&);
 
-        /**
-         * Fill the object from the XML encoded representation in s.
-         */
-        virtual void fromXML(const QDomElement&) = 0;
-        
-        /**
-         * Create a serialized version of this object
-         */
-        virtual void toXML(QDomDocument&, QDomElement&) const = 0;
+    /**
+     * Fill the object from the XML encoded representation in s.
+     */
+    virtual void fromXML(const QDomElement&) = 0;
 
-        /**
-         * Create a serialized version of this object
-         */
-        virtual QString toXML() const;
+    /**
+     * Create a serialized version of this object
+     */
+    virtual void toXML(QDomDocument&, QDomElement&) const = 0;
+
+    /**
+     * Create a serialized version of this object
+     */
+    virtual QString toXML() const;
 };
 
 /**
  * This is an interface for a factory of serializable configuration objects.
  */
 class KRITAIMAGE_EXPORT KisSerializableConfigurationFactory {
-    public:
-        virtual ~KisSerializableConfigurationFactory();
-        /**
-         * @return an empty object with a sane default configuration
-         */
-        virtual KisSerializableConfiguration* createDefault() =0;
-        /**
-         * @return an unserialied version of the configuration
-         */
-        virtual KisSerializableConfiguration* create(const QDomElement&) =0;
+public:
+    virtual ~KisSerializableConfigurationFactory();
+    /**
+     * @return an empty object with a sane default configuration
+     */
+    virtual KisSerializableConfiguration* createDefault() =0;
+    /**
+     * @return an unserialied version of the configuration
+     */
+    virtual KisSerializableConfiguration* create(const QDomElement&) =0;
 };
 
 

@@ -28,7 +28,6 @@
 #include "kis_layer.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_paintop_registry.h"
-#include "kis_brush.h"
 #include "kis_selection.h"
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
@@ -50,10 +49,6 @@ void KisToolPath::addPathShape()
     KisImageSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
     KisPaintDeviceSP dev = currentNode->paintDevice();
 
-    KisBrush* brush =
-        static_cast<KisBrush *>( m_canvas->resourceProvider()->
-                                    resource( KisCanvasResourceProvider::CurrentBrush ).value<void *>());
-
     KisSelectionSP selection = image->globalSelection();
     // XXX: also get global selection!
     if ( selection && currentNode->inherits("KisLayer") ) {
@@ -65,10 +60,11 @@ void KisToolPath::addPathShape()
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     painter.setStrokeStyle(KisPainter::StrokeStyleNone);
     painter.setOpacity(OPACITY_OPAQUE);
-    painter.setBrush(brush);
     painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter, image);
-    painter.setPaintOp(op);
+    KisPaintOpPresetSP preset =
+        static_cast<KisPaintOpPreset*>( m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentPaintOpPreset ).value<void *>() );
+    painter.setPaintOpPreset(preset, image);
 
     QMatrix matrix;
     matrix.scale(image->xRes(), image->yRes());

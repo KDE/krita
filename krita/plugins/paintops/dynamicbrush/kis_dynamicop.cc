@@ -128,7 +128,9 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
         default:
         case 0:
         {
+#if 0 // XXX: Fix!
             current->setShape( new KisDabShape( painter->brush() ) );
+#endif
         }
     }
     // Init coloring
@@ -149,7 +151,7 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
             current->setColoring( new KisPlainColoring( painter->backgroundColor() , painter->paintColor() ) );
         }
     }
-    
+
     return current;
 }
 
@@ -167,27 +169,27 @@ void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     // Save shape program
     QDomElement shapeElt = doc.createElement( "Shape" );
     rootElt.appendChild( shapeElt );
-    
+
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
             m_uiOptions->comboBoxShapePrograms->currentIndex(),0);
     KisDynamicShapeProgram* shapeProgram = static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration( shapeModelIndex ) );
     Q_ASSERT(shapeProgram);
-    
+
     shapeProgram->toXML( doc, shapeElt );
-    
+
     delete shapeProgram;
-    
+
     // Save Coloring program
     QDomElement coloringElt = doc.createElement( "Coloring" );
     rootElt.appendChild( coloringElt );
-    
+
     QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
             m_uiOptions->comboBoxColoringPrograms->currentIndex(),0);
     KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration( coloringModelIndex ) );
     Q_ASSERT(coloringProgram);
-    
+
     coloringProgram->toXML( doc, coloringElt );
-    
+
     delete coloringProgram;
 }
 
@@ -217,19 +219,19 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     KoColor origColor = painter()->paintColor();
 
     KisDynamicScattering scatter = m_brush->shapeProgram()->scattering( info );
-    
+
     double maxDist = scatter.maximumDistance();
-    
+
     for(int i = 0; i < scatter.count(); i ++)
     {
         KisPaintInformation localInfo(info);
-        
+
         localInfo.setPos(localInfo.pos() + QPointF( maxDist * (rand() / (double) RAND_MAX - 0.5), maxDist * (rand() / (double) RAND_MAX - 0.5) ) );
-        
+
         KisDynamicShape* dabsrc = m_brush->shape()->clone();
         KisDynamicColoring* coloringsrc = m_brush->coloring()->clone();
         coloringsrc->selectColor( m_brush->coloringProgram()->mix( localInfo ) );
-    
+
         m_brush->shapeProgram()->apply(dabsrc, localInfo);
         m_brush->coloringProgram()->apply(coloringsrc, localInfo);
         dabsrc->paintAt(localInfo.pos(), localInfo, coloringsrc );

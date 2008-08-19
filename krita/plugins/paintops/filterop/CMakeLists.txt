@@ -13,7 +13,7 @@ kde4_add_plugin(kritafilterop ${kritafilterop_PART_SRCS})
 
 
 
-target_link_libraries(kritafilterop kritaui)
+target_link_libraries(kritafilterop kritaui kritalibpaintop)
 
 install(TARGETS kritafilterop  DESTINATION ${PLUGIN_INSTALL_DIR})
 

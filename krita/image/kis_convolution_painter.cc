@@ -44,7 +44,7 @@
 
 #include <KoProgressUpdater.h>
 
-#include "kis_brush.h"
+#include "kis_convolution_kernel.h"
 #include "kis_convolution_kernel.h"
 #include "kis_global.h"
 #include "kis_image.h"

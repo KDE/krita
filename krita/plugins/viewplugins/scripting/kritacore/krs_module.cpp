@@ -29,8 +29,10 @@
 #include <KoColorSpaceRegistry.h>
 
 // krita
+#if 0
 #include <kis_auto_brush.h>
 #include <kis_brush.h>
+#endif
 #include <kis_doc2.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -44,7 +46,9 @@
 #include <kis_view2.h>
 
 // kritacore
+#if 0
 #include "krs_brush.h"
+#endif
 #include "krs_color.h"
 #include "krs_filter.h"
 #include "krs_image.h"
@@ -150,7 +154,7 @@ QObject* Module::pattern(const QString& patternname)
     kWarning(41011) << QString("Unknown pattern \"%1\"").arg(patternname);
     return 0;
 }
-
+#if 0
 QObject* Module::brush(const QString& brushname)
 {
     KoResourceServer<KisBrush>* rServer = KisResourceServerProvider::instance()->brushServer();
@@ -174,6 +178,7 @@ QObject* Module::createRectBrush(uint w, uint h, uint hf, uint vf)
     KisAutoBrush *thing = new KisAutoBrush(kas);
     return new Brush(this, thing, false);
 }
+#endif
 
 QObject* Module::loadPattern(const QString& filename)
 {
@@ -184,7 +189,7 @@ QObject* Module::loadPattern(const QString& filename)
     kWarning(41011) << i18n("Unknown pattern \"%1\"", filename);
     return 0;
 }
-
+#if 0
 QObject* Module::loadBrush(const QString& filename)
 {
     KisBrush* brush = new KisBrush(filename);
@@ -194,7 +199,7 @@ QObject* Module::loadBrush(const QString& filename)
     kWarning(41011) << i18n("Unknown brush \"%1\"", filename);
     return 0;
 }
-
+#endif
 QObject* Module::filter(const QString& filtername)
 {
     KisFilter* filter = KisFilterRegistry::instance()->get(filtername).data();

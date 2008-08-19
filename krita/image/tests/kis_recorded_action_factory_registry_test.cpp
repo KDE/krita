@@ -19,7 +19,7 @@
 #include "kis_recorded_action_factory_registry_test.h"
 
 #include <qtest_kde.h>
-#include "kis_recorded_action_factory_registry.h"
+#include "recorder/kis_recorded_action_factory_registry.h"
 
 void KisRecordedActionFactoryRegistryTest::testCreation()
 {

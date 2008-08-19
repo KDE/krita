@@ -1,3 +1,6 @@
 libpaintop is meant to share common classes used
 by Krita brush engines, suchs as certain configuration
 widgets.
+
+XXX: may split of the the brush stuff into something like
+a libpotato?

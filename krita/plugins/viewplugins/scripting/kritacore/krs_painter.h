@@ -37,6 +37,8 @@ class PaintDevice;
 /**
  * The painter enables drawing to a \a PaintDevice object.
  *
+ * XXX: add setPaintOpPreset
+ *
  * Ruby sample that paints a sky :
  * @code
  * require "Krita"
@@ -252,20 +254,6 @@ class Painter : public QObject
          */
         void setPattern(QObject* pattern);
 
-        /**
-         * This function sets the brush used for painting.
-         * It takes one argument :
-         *  - a Brush object
-         */
-        void setBrush(QObject* brush);
-
-        /**
-         * This function defines the paint operation.
-         * It takes one argument :
-         *  - the name of the paint operation
-         */
-        void setPaintOp(const QString& paintopname);
-
     protected:
         inline KisPaintDeviceSP paintDevice() { return m_layer; }
 
@@ -284,7 +272,6 @@ class Painter : public QObject
         inline KisFillPainter* createFillPainter()
         {
             KisFillPainter* fp = new KisFillPainter(m_painter->device());
-            fp->setBrush( m_painter->brush() );
             fp->setFillColor( m_painter->fillColor() );
             fp->setPaintColor( m_painter->paintColor() );
             fp->setFillStyle( m_painter->fillStyle() );

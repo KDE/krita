@@ -23,13 +23,12 @@
 #ifndef KIS_BRUSHOP_H_
 #define KIS_BRUSHOP_H_
 
-#include "kis_paintop.h"
+#include "kis_brush_based_paintop.h"
 #include <klocale.h>
 #include <QDialog>
 #include <KoColorSpace.h>
 
 #include <kis_paintop_settings.h>
-
 
 class QWidget;
 class QCheckBox;
@@ -72,11 +71,11 @@ public:
     const double* darkenCurve() const { return m_darkenCurve; }
 
     virtual QWidget *widget() const { return m_optionsWidget; }
-    
+
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 public:
-    
+
 private slots:
     void slotCustomCurves();
 
@@ -98,7 +97,7 @@ private:
     double m_darkenCurve[256];
 };
 
-class KisBrushOp : public KisPaintOp {
+class KisBrushOp : public KisBrushBasedPaintOp {
 
 public:
 

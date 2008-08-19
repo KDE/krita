@@ -25,12 +25,10 @@
 #include <KoID.h>
 #include <KoCanvasResourceProvider.h>
 
-#include <kis_paintop_settings.h>
 #include "kis_types.h"
 #include "krita_export.h"
 
 class KisView2;
-class KisBrush;
 class KoAbstractGradient;
 class KisPattern;
 class KoResource;
@@ -49,11 +47,8 @@ public:
 
     enum Resources {
         HdrExposure = KoCanvasResource::KritaStart+1,
-        CurrentBrush,
         CurrentPattern,
         CurrentGradient,
-        CurrentPaintop,
-        CurrentPaintopSettings,
         CurrentDisplayProfile,
         CurrentImage,
         CurrentKritaNode,
@@ -78,12 +73,9 @@ public:
     float HDRExposure() const;
     void setHDRExposure(float exposure);
 
-    KisBrush *currentBrush() const;
     KisPattern *currentPattern() const;
-    KoAbstractGradient *currentGradient() const;
 
-    KoID currentPaintop() const;
-    const KisPaintOpSettingsSP currentPaintopSettings() const;
+    KoAbstractGradient *currentGradient() const;
 
     void resetDisplayProfile();
     const KoColorProfile * currentDisplayProfile() const;
@@ -100,10 +92,8 @@ public slots:
 
     void slotSetFGColor(const KoColor& c);
     void slotSetBGColor(const KoColor& c);
-    void slotBrushActivated(KoResource *brush);
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
-    void slotPaintopActivated(const KoID & paintop, const KisPaintOpSettingsSP paintopSettings);
     void slotPaintOpPresetActivated( const KisPaintOpPresetSP preset );
     void slotNodeActivated( const KisNodeSP node );
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
@@ -123,10 +113,8 @@ signals:
 
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
-    void sigBrushChanged(KisBrush * brush);
     void sigGradientChanged(KoAbstractGradient *);
     void sigPatternChanged(KisPattern *);
-    void sigPaintopChanged(KoID paintop, const KisPaintOpSettingsSP);
     void sigPaintOpPresetChanged( KisPaintOpPresetSP preset );
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
@@ -136,7 +124,6 @@ private:
 
     KisView2 * m_view;
     KoCanvasResourceProvider * m_resourceProvider;
-    KisBrush * m_defaultBrush;
     const KoColorProfile * m_displayProfile;
 
 };

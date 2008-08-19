@@ -76,6 +76,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
 {
+    Q_UNUSED(text);
     if (m_freezeName)
         return;
 

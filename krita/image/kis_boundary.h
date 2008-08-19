@@ -26,9 +26,11 @@
 
 /**
  * Generates an 'outline' for a paint device. It should look a bit like the outline of a
- * marching ants selection. You can use it to paint the outline of a KisBrush while painting.
+ * marching ants selection. 
+ *
  * It's not really optimized, so it's not recommended to do big things with it and expect
  * it to be fast.
+ *
  * Usage: construct a KisBoundary, and then run a generateBoundary(w, h) on it. After that,
  * you can use the KisBoundaryPainter::paint method to let it paint the outline, or get a pixmap.
  **/

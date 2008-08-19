@@ -16,7 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
+#include <QApplication>
+#include <QDesktopWidget>
 #include "widgets/kis_popup_button.h"
 #include <QFrame>
 #include <QHBoxLayout>
@@ -80,7 +81,17 @@ void KisPopupButton::showPopupWidget()
 {
     if(d->popupWidget)
     {
-        d->frame->move( mapToGlobal ( QPoint(0, height() )));
+        QPoint pt = mapToGlobal ( QPoint(0, height()) );
+        QRect screen = qApp->desktop()->availableGeometry();
+        qDebug() << pt;
+        qDebug() << screen;
+
+        if (pt.x() + d->popupWidget->width() > screen.width() ) {
+            pt.setX(pt.x() + (screen.width() - pt.x() + d->popupWidget->width()));
+        }
+        qDebug() << d->popupWidget->geometry();
+        qDebug() << pt;
+        d->frame->move(pt);
         d->frame->setVisible(true);
     }
 }

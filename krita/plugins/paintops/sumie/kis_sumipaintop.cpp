@@ -30,6 +30,7 @@
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
+#include <KoInputDevice.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>

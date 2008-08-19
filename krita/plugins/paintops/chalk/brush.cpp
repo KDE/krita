@@ -29,6 +29,11 @@
 #include "kis_random_accessor.h"
 #include <cmath>
 
+#ifdef _WIN32
+#define srand48 srand
+#define drand48 rand
+#endif
+
 Brush::Brush(const BrushShape &initialShape, KoColor inkColor){
 	m_initialShape = initialShape;
 	m_inkColor = inkColor;	

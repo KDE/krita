@@ -62,8 +62,9 @@ public:
     }
 
     QString saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *manager, const QTextBlock &block);
-    QString saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *manager, 
+    QString saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *manager,
                                const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
+    QHash<QTextList *, QString> saveListStyles(KoShapeSavingContext &context, QTextBlock block, int to);
 
     QTextDocument *document;
     bool ownsDocument, dirty;
@@ -187,7 +188,7 @@ QString KoTextShapeData::Private::saveParagraphStyle(KoShapeSavingContext &conte
 
     QTextBlockFormat blockFormat = block.blockFormat();
     QTextCharFormat charFormat = QTextCursor(block).blockCharFormat(); // fix this after TT Task 219905
- 
+
     KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
     if (!originalParagraphStyle)
         originalParagraphStyle = defaultParagraphStyle;
@@ -216,7 +217,7 @@ QString KoTextShapeData::Private::saveParagraphStyle(KoShapeSavingContext &conte
     return generatedName;
 }
 
-QString KoTextShapeData::Private::saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager, 
+QString KoTextShapeData::Private::saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager,
                                                      const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
 {
     Q_ASSERT(styleManager);
@@ -256,6 +257,24 @@ QString KoTextShapeData::Private::saveCharacterStyle(KoShapeSavingContext &conte
     return generatedName;
 }
 
+QHash<QTextList *, QString> KoTextShapeData::Private::saveListStyles(KoShapeSavingContext &context, QTextBlock block, int to)
+{
+    QHash<QTextList *, QString> listStyles;
+    while (block.isValid() && ((to == -1) || (block.position() < to))) {
+        if ((block.textList()) && (!listStyles.contains(block.textList()))) {
+            // Generate a style from that...
+            KoGenStyle style(KoGenStyle::StyleList);
+            KoListStyle *listStyle = KoListStyle::fromTextList(block.textList());
+            listStyle->saveOdf(style);
+            QString generatedName = context.mainStyles().lookup(style, listStyle->name());
+            listStyles[block.textList()] = generatedName;
+            delete listStyle;
+        }
+        block = block.next();
+    }
+    return listStyles;
+}
+
 void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, bool saveDefaultStyles) const {
     KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
@@ -267,25 +286,10 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
     KoStyleManager *styleManager = layout->styleManager();
     if (styleManager && saveDefaultStyles)
         styleManager->saveOdfDefaultStyles(context.mainStyles());
-  
-    QHash<QTextList *, QString> listStyleNames;
-    QTextBlock startBlock = block;
-    while(block.isValid() && ((to == -1) || (block.position() < to))) {
-        if ((block.textList()) && (!listStyleNames.contains(block.textList()))) {
-            // Generate a style from that...
-            KoGenStyle style(KoGenStyle::StyleList);
-            KoListStyle *listStyle = KoListStyle::fromTextList(block.textList());
-            listStyle->saveOdf(style);
-            QString generatedName = context.mainStyles().lookup(style, listStyle->name());
-            listStyleNames[block.textList()] = generatedName;
-            delete(listStyle);
-        }
-        block = block.next();
-    }
-    block = startBlock;
 
+    QHash<QTextList *, QString> listStyles = d->saveListStyles(context, block, to);
     QList<QTextList*> textLists;	// Store the current lists being stored.
-    // Ok, now that the styles are done, we can store the blocks themselves.
+
     while(block.isValid() && ((to == -1) || (block.position() < to))) {
         if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
             break;
@@ -299,7 +303,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
                 if (!textLists.isEmpty()) // sublists should be written within a list-item
                     writer->startElement( "text:list-item", false );
                 writer->startElement( "text:list", false );
-                writer->addAttribute("text:style-name", listStyleNames[block.textList()]);
+                writer->addAttribute("text:style-name", listStyles[block.textList()]);
                 textLists.append(block.textList());
             } else if (block.textList() != textLists.last()) {
                 while ((!textLists.isEmpty()) && (block.textList() != textLists.last())) {
@@ -334,7 +338,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
         // Write the fragments and their formats
         QTextCursor cursor(block);
         QTextCharFormat blockCharFormat = cursor.blockCharFormat(); // Fix this after TT task 219905
- 
+
         QTextBlock::iterator it;
         for (it = block.begin(); !(it.atEnd()); ++it) {
             QTextFragment currentFragment = it.fragment();
@@ -358,7 +362,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
                         writer->startElement("text:span", false);
                         writer->addAttribute("text:style-name", styleName);
                     }
-                    
+
                     QString text = currentFragment.text();
                     int spanFrom = fragmentStart >= from ? 0 : from;
                     int spanTo = to == -1 ? fragmentEnd : (fragmentEnd > to ? to : fragmentEnd);

@@ -73,12 +73,12 @@ KoListLevelProperties::~KoListLevelProperties() {
     delete d;
 }
 
-int KoListLevelProperties::styleId() const 
+int KoListLevelProperties::styleId() const
 {
     return propertyInt(KoListStyle::StyleId);
 }
 
-void KoListLevelProperties::setStyleId(int id) 
+void KoListLevelProperties::setStyleId(int id)
 {
     setProperty(KoListStyle::StyleId, id);
 }
@@ -406,8 +406,8 @@ void KoListLevelProperties::saveOdf (KoXmlWriter *writer) const
     if (isNumber)
         writer->startElement("text:list-level-style-number");
     else
-        writer->startElement("text:list-style-content");
-    
+        writer->startElement("text:list-level-style-bullet");
+
     // These apply to bulleted and numbered lists
     if (d->stylesPrivate.contains(KoListStyle::Level))
         writer->addAttribute("text:level", d->stylesPrivate.value(KoListStyle::Level).toInt());
@@ -433,8 +433,23 @@ void KoListLevelProperties::saveOdf (KoXmlWriter *writer) const
         }
         writer->addAttribute("style:num-format", format);
     } else {
-        if (d->stylesPrivate.contains(KoListStyle::BulletCharacter))
-            writer->addAttribute("text:bullet-char", QChar(d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt()));
+        int bullet;
+        if (d->stylesPrivate.contains(KoListStyle::BulletCharacter)) {
+            bullet = d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt();
+        } else { // try to determine the bullet character from the style
+            switch (style()) {
+            case KoListStyle::CircleItem:           bullet = 0x2022; break;
+            case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
+            case KoListStyle::SquareItem:           bullet = 0xE00A; break;
+            case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
+            case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
+            case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
+            case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+            case KoListStyle::DiscItem: // intentional fall through
+            default:                                bullet = 0x25CF; break;
+            }
+        }
+        writer->addAttribute("text:bullet-char", QChar(bullet));
     }
 
     kDebug() << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);

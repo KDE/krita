@@ -96,7 +96,7 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisFilterConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image ) const
 {
     return new KisLevelConfigWidget(parent, dev);
 }

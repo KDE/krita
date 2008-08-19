@@ -34,6 +34,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
+#include <KoInlineNote.h>
 #include <kdeversion.h>
 
 #define PARAGRAPH_BORDER_DEBUG
@@ -113,7 +114,7 @@ QString KoTextDebug::textAttributes(const KoCharacterStyle &style)
 QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
 {
     QString attrs;
-    
+
     if (textFormat.objectType() == QTextFormat::UserObject + 1) {
         KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
         KoInlineTextObjectManager *inlineObjectManager = lay ? lay->inlineObjectTextManager() : 0;
@@ -129,11 +130,20 @@ QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
                 attrs.append(" type=\"bookmark-unknown\"");
             }
             attrs.append(QString(" name=\"%1\"").arg(bookmark->name()));
+        } else if (KoInlineNote *note = dynamic_cast<KoInlineNote *>(inlineObject)) {
+            attrs.append(QString(" id=\"%1\"").arg(note->id()));
+            if (note->type() == KoInlineNote::Footnote) {
+                attrs.append(" type=\"footnote\"");
+            } else if (note->type() == KoInlineNote::Endnote) {
+                attrs.append(" type=\"endnote\"");
+            }
+            attrs.append(QString(" label=\"%1\"").arg(note->label()));
+            attrs.append(QString(" text=\"%1\"").arg(note->text()));
         } else {
             attrs.append(" type=\"inlineobject\">");
         }
     }
-    
+
     return attrs;
 }
 
@@ -142,9 +152,9 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
     QString attrs;
 
     KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
-    
+
     QTextImageFormat imageFormat = textFormat.toImageFormat();
- 
+
     if (imageFormat.isValid()) {
         attrs.append(" type=\"image\">");
         return attrs;
@@ -164,7 +174,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
     QString fontProps = fontProperties(textFormat);
     if (!fontProps.isEmpty())
         attrs.append(QString(" font=\"%1\"").arg(fontProps));
-    
+
     if (textFormat.isAnchor()) {
         attrs.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
         attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
@@ -542,22 +552,22 @@ void KoTextDebug::dumpTable(const QTextTable *)
 void KoTextDebug::dumpFragment(const QTextFragment &fragment)
 {
     depth += INDENT;
-    
+
     KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
     QTextCharFormat charFormat = fragment.charFormat();
     KoInlineObject *inlineObject = lay ? lay->inlineObjectTextManager()->inlineTextObject(charFormat) : 0;
     if (inlineObject) {
         QString cf = inlineObjectAttributes(charFormat);
-        
+
         qDebug("%*s<fragment%s/>", depth, " ", qPrintable(cf));
-    } else {        
+    } else {
         QString cf = textAttributes(charFormat);
 
         qDebug("%*s<fragment%s>", depth, " ", qPrintable(cf));
         qDebug("%*s|%s|", depth+INDENT, " ", qPrintable(fragment.text()));
         qDebug("%*s%s", depth, " ", "</fragment>");
     }
-    
+
     depth -= INDENT;
 }
 

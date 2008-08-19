@@ -74,7 +74,7 @@ class KoTextLoader::Private
     public:
         KoShapeLoadingContext & context;
         KoTextSharedLoadingData * textSharedData;
-        // store it here so that you don't need to get it all the time from 
+        // store it here so that you don't need to get it all the time from
         // the KoOdfLoadingContext.
         bool stylesDotXml;
 
@@ -296,7 +296,7 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
     QString styleName = element.attributeNS( KoXmlNS::text, "style-name", QString() );
 
     KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle( styleName, d->stylesDotXml );
-    
+
     if (!paragraphStyle && d->styleManager) {
          // Either the paragraph has no style or the style-name could not be found.
          // Fix up the paragraphStyle to be our default paragraph style in either case.
@@ -308,7 +308,7 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
     if ( paragraphStyle ) {
         QTextBlock block = cursor.block();
         // apply the paragraph's list style only if we are in a list and the list context we
-        // are in (ie. current list and it's parent lists) does not specify a list style 
+        // are in (ie. current list and it's parent lists) does not specify a list style
         paragraphStyle->applyStyle(block, /*applyListStyle*/ d->isList && !d->currentListStyle);
     }
     else {
@@ -344,7 +344,7 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     }
     if ( paragraphStyle ) {
         // apply the paragraph's list style only if we are in a list and the list context we
-        // are in (ie. current list and it's parent lists) does not specify a list style 
+        // are in (ie. current list and it's parent lists) does not specify a list style
         paragraphStyle->applyStyle(block, /*applyListStyle*/ d->isList && !d->currentListStyle);
     } else {
         kWarning(32500) << "paragraph style " << styleName << " not found";
@@ -361,13 +361,13 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     {
         blockData->setOutlineLevel(level);
     }
-    
+
     if (!d->isList) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
         KoListStyle *outlineStyle = d->styleManager->outlineStyle();
         if (outlineStyle)
             outlineStyle->applyStyle(block, level);
     }
-    
+
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
     bool stripLeadingSpace = true;
@@ -427,7 +427,7 @@ void KoTextLoader::loadList( const KoXmlElement& element, QTextCursor& cursor )
         }
 
         QTextBlock current = cursor.block();
-        
+
         loadBody( e, cursor );
 
         if (!d->currentListStyle) {
@@ -585,7 +585,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             QTextCharFormat linkCf( cf ); // and copy it to alter it
             linkCf.setAnchor( true );
             linkCf.setAnchorHref( ts.attributeNS( KoXmlNS::xlink, "href" ) );
-            
+
             // TODO make configurable ? Ho, and it will interfere with saving :/
             QBrush foreground = linkCf.foreground();
             foreground.setColor( Qt::blue );
@@ -594,7 +594,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
             linkCf.setProperty( KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine );
             linkCf.setProperty( KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine );
             linkCf.setFontItalic( true );
-            
+
             cursor.setCharFormat( linkCf );
             loadSpan( ts, cursor, stripLeadingSpace ); // recurse
             cursor.setCharFormat( cf ); // restore the cursor char format
@@ -710,7 +710,7 @@ void KoTextLoader::loadFrame( const KoXmlElement& frameElem, QTextCursor& cursor
     if( !shape ) {
         return;
     }
-    
+
     KoTextAnchor *anchor = new KoTextAnchor(shape);
     anchor->loadOdfFromShape();
     d->textSharedData->shapeInserted(shape);

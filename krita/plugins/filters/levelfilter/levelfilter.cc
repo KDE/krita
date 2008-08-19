@@ -32,7 +32,7 @@ LevelFilter::LevelFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(LevelFilterFactory::componentData());
-
+    dbgFilters << "Loading Level filter";
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(new KisLevelFilter());

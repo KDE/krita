@@ -1,0 +1,275 @@
+<ui version="4.0" >
+ <class>WdgLevel</class>
+ <widget class="QWidget" name="WdgLevel" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>285</width>
+    <height>479</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="MinimumExpanding" hsizetype="MinimumExpanding" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>32767</width>
+    <height>32767</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Levels</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QCheckBox" name="chkLogarithmic" >
+     <property name="text" >
+      <string>Logarithmic</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="textLabel2" >
+     <property name="text" >
+      <string>&lt;b>Input levels&lt;/b></string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <layout class="QVBoxLayout" >
+     <item>
+      <widget class="QLabel" name="histview" >
+       <property name="minimumSize" >
+        <size>
+         <width>256</width>
+         <height>256</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>256</width>
+         <height>256</height>
+        </size>
+       </property>
+       <property name="scaledContents" >
+        <bool>true</bool>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="KGradientSlider" native="1" name="ingradient" >
+         <property name="minimumSize" >
+          <size>
+           <width>256</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QSpinBox" name="blackspin" >
+           <property name="buttonSymbols" >
+            <enum>QAbstractSpinBox::PlusMinus</enum>
+           </property>
+           <property name="maximum" >
+            <number>255</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="spacer5" >
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::MinimumExpanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0" >
+            <size>
+             <width>25</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="gammaspin" >
+           <property name="text" >
+            <string>1.0</string>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="wordWrap" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="spacer6" >
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::MinimumExpanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0" >
+            <size>
+             <width>25</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="whitespin" >
+           <property name="buttonSymbols" >
+            <enum>QAbstractSpinBox::PlusMinus</enum>
+           </property>
+           <property name="maximum" >
+            <number>255</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="textLabel3" >
+       <property name="text" >
+        <string>&lt;b>Output levels&lt;/b></string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="KGradientSlider" native="1" name="outgradient" >
+         <property name="minimumSize" >
+          <size>
+           <width>256</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QSpinBox" name="outblackspin" >
+           <property name="buttonSymbols" >
+            <enum>QAbstractSpinBox::PlusMinus</enum>
+           </property>
+           <property name="maximum" >
+            <number>255</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="spacer3" >
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::MinimumExpanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0" >
+            <size>
+             <width>50</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="outwhitespin" >
+           <property name="buttonSymbols" >
+            <enum>QAbstractSpinBox::PlusMinus</enum>
+           </property>
+           <property name="maximum" >
+            <number>255</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="1" >
+    <spacer name="spacer5_2" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>21</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" >
+    <spacer name="spacer6_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <customwidgets>
+  <customwidget>
+   <class>KGradientSlider</class>
+   <extends>QWidget</extends>
+   <header>kgradientslider.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local" >kgradientslider.h</include>
+  <include location="local" >kgradientslider.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

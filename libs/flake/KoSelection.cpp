@@ -197,7 +197,7 @@ void KoSelection::deselect(KoShape * object, bool recursive)
     if( group )
         d->deselectGroupChildren( group );
 
-    if(d->selectedShapes.count() == 1)
+    if(count() == 1)
         setTransformation( firstSelectedShape()->absoluteTransformation(0) );
 
     d->requestSelectionChangedEvent();

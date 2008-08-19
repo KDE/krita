@@ -863,7 +863,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         }
-        else if(event->text().at(0) == '\r') {
+        else if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
             startKeyPressMacro();
             if (m_textCursor.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
@@ -1545,10 +1545,10 @@ void TextTool::updateParagraphDirection(const QVariant &variant)
     if(! m_updateParagDirection.block.isValid())
         return;
     QTextBlockFormat format = m_updateParagDirection.block.blockFormat();
-    
+
     KoText::Direction dir =
         static_cast<KoText::Direction> (format.intProperty( KoParagraphStyle::TextProgressionDirection));
-        
+
     if(dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom ||
             dir == KoText::PerhapsRightLeftTopBottom) {
         bool rtl = isRightToLeft(m_updateParagDirection.block.text());

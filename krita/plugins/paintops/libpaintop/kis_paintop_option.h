@@ -23,6 +23,7 @@
 #include <QString>
 #include <QWidget>
 #include <kis_types.h>
+#include "kis_paintop_preset.h"
 
 /**
  * Base interface for paintop options. A paintop option

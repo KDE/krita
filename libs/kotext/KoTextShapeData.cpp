@@ -261,10 +261,12 @@ QHash<QTextList *, QString> KoTextShapeData::Private::saveListStyles(KoShapeSavi
 {
     QHash<QTextList *, QString> listStyles;
     while (block.isValid() && ((to == -1) || (block.position() < to))) {
-        if ((block.textList()) && (!listStyles.contains(block.textList()))) {
+        QTextList *textList = block.textList();
+        if (textList && !listStyles.contains(textList)) {
             // Generate a style from that...
-            KoGenStyle style(KoGenStyle::StyleList);
-            KoListStyle *listStyle = KoListStyle::fromTextList(block.textList());
+            const bool namedStyle = textList->format().hasProperty(KoListStyle::StyleId);
+            KoGenStyle style(namedStyle ? KoGenStyle::StyleList : KoGenStyle::StyleListAuto);
+            KoListStyle *listStyle = KoListStyle::fromTextList(textList);
             listStyle->saveOdf(style);
             QString generatedName = context.mainStyles().lookup(style, listStyle->name());
             listStyles[block.textList()] = generatedName;

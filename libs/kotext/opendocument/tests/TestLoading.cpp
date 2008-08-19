@@ -85,7 +85,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
 
     QTextCharFormat expectedFormat = expectedFragment.charFormat();
     QTextImageFormat expectedImageFormat = expectedFormat.toImageFormat();
-    
+
     if (actualImageFormat.isValid()) {
         if (!expectedImageFormat.isValid()) {
             qDebug() << "compareFragments: actualDocument has unexpected image at " << actualFragment.text();
@@ -111,32 +111,32 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
 #endif
            && actualFormat.underlineColor() == expectedFormat.underlineColor()
            && actualFormat.textOutline() == expectedFormat.textOutline()
-           && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt() 
+           && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
                   == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
-           && actualFormat.property(KoCharacterStyle::UnderlineMode).toInt() 
+           && actualFormat.property(KoCharacterStyle::UnderlineMode).toInt()
                   == expectedFormat.property(KoCharacterStyle::UnderlineMode).toInt()
-           && actualFormat.property(KoCharacterStyle::UnderlineWeight).toInt() 
+           && actualFormat.property(KoCharacterStyle::UnderlineWeight).toInt()
                   == expectedFormat.property(KoCharacterStyle::UnderlineWeight).toInt()
-           && actualFormat.property(KoCharacterStyle::UnderlineWidth).toDouble() 
+           && actualFormat.property(KoCharacterStyle::UnderlineWidth).toDouble()
                   == expectedFormat.property(KoCharacterStyle::UnderlineWidth).toDouble()
            && qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
                   == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))
-           && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt() 
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt()  
-           && actualFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt() 
-           && actualFormat.property(KoCharacterStyle::StrikeOutMode).toInt() 
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt() 
-           && actualFormat.property(KoCharacterStyle::StrikeOutWeight).toInt() 
+           && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt()
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt()
+           && actualFormat.property(KoCharacterStyle::StrikeOutType).toInt()
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt()
+           && actualFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
+                  == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
+           && actualFormat.property(KoCharacterStyle::StrikeOutWeight).toInt()
                   == expectedFormat.property(KoCharacterStyle::StrikeOutWeight).toInt()
-           && actualFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble() 
+           && actualFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble()
                   == expectedFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble()
-           && actualFormat.property(KoCharacterStyle::StrikeOutText).toString() 
+           && actualFormat.property(KoCharacterStyle::StrikeOutText).toString()
                   == expectedFormat.property(KoCharacterStyle::StrikeOutText).toString()
            && actualFormat.property(KoCharacterStyle::Country).toString()
                   == expectedFormat.property(KoCharacterStyle::Country).toString()
            && actualFormat.property(KoCharacterStyle::Language).toString()
-                  == expectedFormat.property(KoCharacterStyle::Language).toString() 
+                  == expectedFormat.property(KoCharacterStyle::Language).toString()
            && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
 
     if (!equal) {
@@ -218,7 +218,7 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
               // just checking if it's equal results in floating point errors
               match = false;
             break;
-        case KoParagraphStyle::TabPositions: 
+        case KoParagraphStyle::TabPositions:
             if (!compareTabProperties(actualProperty[id], expectedProperty[id]))
               match = false;
             break;
@@ -396,7 +396,7 @@ static QScriptValue setFormatProperty(QScriptContext *context, QScriptEngine *en
         qWarning() << "too few arguments to setFormatProperty(format, id, value)";
         return engine->nullValue();
     }
-    
+
     QTextFormat *format = qscriptvalue_cast<QTextFormat *>(context->argument(0));
     int id = context->argument(1).toInt32();
     QScriptValue arg = context->argument(2);
@@ -428,7 +428,7 @@ static QScriptValue setFormatProperty(QScriptContext *context, QScriptEngine *en
             format->setProperty(id, value);
             break;
         }
-        //FIXME: Ain't able to convert KoText::Tab->QVariant>QScriptValue 
+        //FIXME: Ain't able to convert KoText::Tab->QVariant>QScriptValue
         //       in QtScript and back to QScriptValue->QVariant->KoText::Tab
         //       in C++. If one can, there's no need for a switch-case here.
     } else {
@@ -446,7 +446,7 @@ static QScriptValue copyFormatProperties(QScriptContext *context, QScriptEngine 
 {
     if (context->argumentCount() < 1)
         return engine->nullValue();
-    
+
     QTextFormat *dest = qscriptvalue_cast<QTextFormat *>(context->argument(0));
     QTextFormat *src = qscriptvalue_cast<QTextFormat *>(context->argument(1));
     if (dest && src) {
@@ -461,7 +461,7 @@ static QScriptValue copyFormatProperties(QScriptContext *context, QScriptEngine 
 
 
 // May the testing begin
-TestLoading::TestLoading() 
+TestLoading::TestLoading()
 {
     componentData = new KComponentData("TestLoading");
 }
@@ -541,7 +541,7 @@ void TestLoading::initTestCase()
     QScriptValue qscript = engine->newObject();
     qscript.setProperty("importExtension", engine->newFunction(importExtension));
     globalObject.property("qt").setProperty("script", qscript);
-    
+
     globalObject.setProperty("include", engine->newFunction(includeFunction));
     globalObject.setProperty("setFormatProperty", engine->newFunction(setFormatProperty));
     globalObject.setProperty("copyFormatProperties", engine->newFunction(copyFormatProperties));
@@ -636,8 +636,9 @@ void TestLoading::addData()
     QTest::newRow("tabPosition") << "FormattingProperties/ParagraphFormattingProperties/tabPosition";
     QTest::newRow("tabStopDistance") << "FormattingProperties/ParagraphFormattingProperties/tabStopDistance";
     QTest::newRow("tabType") << "FormattingProperties/ParagraphFormattingProperties/tabType";
-    
+
     QTest::newRow("bookmark") << "ParagraphElements/bookmark";
+    QTest::newRow("note") << "ParagraphElements/note";
 }
 
 QTextDocument *TestLoading::documentFromScript(const QString &script)
@@ -756,7 +757,7 @@ void TestLoading::testLoading_data()
     addData();
 }
 
-void TestLoading::testLoading() 
+void TestLoading::testLoading()
 {
     QFETCH(QString, testcase);
     testcase.prepend(FILES_DATA_DIR);

@@ -50,10 +50,10 @@ StylesWidget::StylesWidget(QWidget *parent)
 
     setCurrent(QModelIndex()); // register that we don't have a selection at startup
 
-    connect(widget.newStyle, SIGNAL(pressed()), this, SLOT(newStyleClicked()));
-    connect(widget.deleteStyle, SIGNAL(pressed()), this, SLOT(deleteStyleClicked()));
-    connect(widget.modifyStyle, SIGNAL(pressed()), this, SLOT(editStyle()));
-    connect(widget.applyStyle, SIGNAL(pressed()), this, SLOT(applyStyle()));
+    connect(widget.newStyle, SIGNAL(clicked()), this, SLOT(newStyleClicked()));
+    connect(widget.deleteStyle, SIGNAL(clicked()), this, SLOT(deleteStyleClicked()));
+    connect(widget.modifyStyle, SIGNAL(clicked()), this, SLOT(editStyle()));
+    connect(widget.applyStyle, SIGNAL(clicked()), this, SLOT(applyStyle()));
     connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(setCurrent(const QModelIndex&)));
 }
 

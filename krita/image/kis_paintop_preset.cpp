@@ -75,10 +75,6 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
 {
-    kDebug() << this;
-    kDebug() << m_d;
-    kDebug() << m_d->settings;
-    kDebug() << paintOp.id();
     m_d->settings->setProperty("paintop", paintOp.id());
 }
 

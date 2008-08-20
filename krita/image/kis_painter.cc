@@ -1694,11 +1694,9 @@ KoAbstractGradient* KisPainter::gradient()
 
 void KisPainter::setPaintOpPreset( KisPaintOpPresetSP preset, KisImageSP image )
 {
-    kDebug() << "setting the paintop " << preset;
     d->paintOpPreset = preset;
     delete d->paintOp;
     d->paintOp = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
-    kDebug() << " paintop: " << d->paintOp;
 }
 
 KisPaintOpPresetSP KisPainter::preset() const

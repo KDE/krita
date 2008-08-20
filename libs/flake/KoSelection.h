@@ -71,7 +71,7 @@ public:
      * the selection.
      *
      * @param object the object to add to the selection
-     * @param recursive enables recursively selecting shapes if object is inside a shape group
+     * @param recursive enables recursively selecting shapes of parent groups
      */
     void select(KoShape * object, bool recursive = true );
 
@@ -86,8 +86,8 @@ public:
      * the all parents and their child object up to the toplevel KoShapeGroup are removed
      * from the selection.
      *
-     * @param object the object to add to the selection
-     * @param recursive enables recursively selecting shapes if object is inside a shape group
+     * @param object the object to remove from the selection
+     * @param recursive enables recursively deselecting shapes of parent groups
      */
     void deselect(KoShape * object, bool recursive = true);
 

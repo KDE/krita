@@ -78,11 +78,6 @@ public:
     qreal maximumValue() const;
     void setMaximumValue(qreal value);
 
-    bool isVisible() const { return m_visible; }
-    void setVisible(bool visible) { m_visible = visible; }
-    void hide() { setVisible(false); }
-    void show() { setVisible(true); }
-
     // these options specify how the ruler will be drawn
     enum Options{
         noOptions = 0,
@@ -152,7 +147,6 @@ private:
     qreal m_maxValue;
     KoUnit m_unit;
 
-    bool m_visible;
     bool m_active;
     bool m_focused;
     bool m_highlighted;

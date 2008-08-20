@@ -37,7 +37,6 @@ Ruler::Ruler(QObject *parent)
     m_stepValue(10.0),
     m_minValue(-std::numeric_limits<qreal>::infinity()),
     m_maxValue(std::numeric_limits<qreal>::infinity()),
-    m_visible(true),
     m_active(false),
     m_focused(false),
     m_highlighted(false),
@@ -215,10 +214,6 @@ void Ruler::paint(QPainter &painter, const QLineF &baseline) const
 
 void Ruler::paint(QPainter & painter, const QMatrix &matrix, qreal width) const
 {
-    if (!isVisible()) {
-        return;
-    }
-
     painter.save();
 
     painter.setWorldMatrix(matrix, true);

@@ -29,6 +29,7 @@ public:
 
 KisPaintOpOption::KisPaintOpOption( const QString & label, bool checked )
     : m_d(new Private())
+    , m_checkable( true )
 {
     m_d->checked = checked;
     m_d->label = label;

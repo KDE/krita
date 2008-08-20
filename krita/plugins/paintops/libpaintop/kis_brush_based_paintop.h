@@ -20,7 +20,9 @@
 
 #include "krita_export.h"
 #include "kis_paintop.h"
+
 class KisBrush;
+class KisPaintOpPresetsWidget;
 
 /**
  * This is a base class for paintops that use a KisBrush or derived
@@ -32,12 +34,15 @@ class KRITAIMAGE_EXPORT KisBrushBasedPaintOp : public KisPaintOp {
 public:
 
     KisBrushBasedPaintOp( KisPainter * painter );
+    virtual ~KisBrushBasedPaintOp();
 
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
 
 protected:
 
     KisBrush * m_brush;
+    KisPaintOpPresetsWidget * m_widget;
+
 };
 
 #endif

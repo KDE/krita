@@ -42,6 +42,7 @@ public:
 
     bool isChecked () const;
     void setChecked ( bool checked );
+    virtual bool checkable() const { return m_checkable; }
 
     void setConfigurationPage( QWidget * page );
     QWidget * configurationPage() const;
@@ -62,6 +63,8 @@ public:
             Q_UNUSED(preset);
         }
 
+protected:
+    bool m_checkable;
 private:
 
     class Private;

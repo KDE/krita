@@ -13,7 +13,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_filter_option.cpp
     kis_imagepipe_brush.cc
     kis_paintop_option.cpp
-    kis_paintop_presets_widget.cpp
+    kis_paintop_options_widget.cpp
     kis_pressure_darken_option.cpp
     kis_pressure_opacity_option.cpp
     kis_pressure_size_option.cpp

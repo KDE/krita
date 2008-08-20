@@ -17,11 +17,26 @@
  */
 #include "kis_brush_based_paintop.h"
 #include "kis_brush.h"
+#include <QImage>
+#include <QPainter>
 
 KisBrushBasedPaintOp::KisBrushBasedPaintOp( KisPainter * painter )
     : KisPaintOp( painter )
 {
-    m_brush = 0;
+    QImage img( 10, 10, QImage::Format_ARGB32 );
+    QPainter p( &img );
+    p.setRenderHint( QPainter::Antialiasing );
+    p.fillRect( 0, 0, 10, 10, QBrush(QColor( 255, 255, 255, 0) ) );
+    p.setBrush( QBrush( QColor( 0, 0, 0, 255 ) ) );
+    p.drawEllipse( 0, 0, 10, 10 );
+    p.end();
+
+    m_brush = new KisBrush( img );
+}
+
+KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
+{
+    delete m_brush;
 }
 
 double KisBrushBasedPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const

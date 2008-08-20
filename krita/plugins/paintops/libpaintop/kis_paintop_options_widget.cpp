@@ -16,40 +16,43 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_PAINTOP_PRESETS_WIDGET_H
-#define KIS_PAINTOP_PRESETS_WIDGET_H
 
-#include <QWidget>
+#include "kis_paintop_options_widget.h"
+#include "kis_paintop_option.h"
 
-class QString;
-class KisPaintOpOption;
-class KisPaintOpPreset;
-class KisPropertiesConfiguration;
+#include <QList>
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QToolButton>
 
-/**
- * A common widget for enabling/disabling and determining
- * the effect of tablet pressure, tilt and rotation and
- * other paintop settings.
- *
- * Every effect can be enabled/disabled through a checkbox
- * and has a popdown button that shows a settings widget.
- *
- */
-class KisPaintOpPresetsWidget : public QWidget {
+#include <kis_paintop_preset.h>
+
+class KisPaintOpOptionsWidget::Private
+{
 
 public:
 
-    KisPaintOpPresetsWidget( QWidget * parent = 0 );
-
-    ~KisPaintOpPresetsWidget();
-
-    void addPaintOpOption( KisPaintOpOption * option );
-
-private:
-
-    class Private;
-    Private * const m_d;
+    QList<KisPaintOpOption*> paintOpOptions;
 
 };
 
-#endif
+KisPaintOpOptionsWidget::KisPaintOpOptionsWidget( QWidget * parent )
+    : QWidget( parent )
+    , m_d(new Private())
+{
+    setObjectName("KisPaintOpPresetsWidget");
+}
+
+
+KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
+{
+    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
+        delete option;
+    }
+    delete m_d;
+}
+
+void KisPaintOpOptionsWidget::addPaintOpOption( KisPaintOpOption * option )
+{
+    m_d->paintOpOptions << option;
+}

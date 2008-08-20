@@ -23,6 +23,7 @@
 KisBrushOption::KisBrushOption()
     : KisPaintOpOption(i18n("Brush Tip"))
 {
+    m_checkable = false;
     m_brushChooser = new KisBrushSelectionWidget();
     m_brushChooser->hide();
     setConfigurationPage(m_brushChooser);

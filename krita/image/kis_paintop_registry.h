@@ -51,7 +51,7 @@ public:
     /**
      * Return a newly created paintop. You are responsible for deleting
      */
-    KisPaintOp * KDE_DEPRECATED paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0) const;
+    KDE_DEPRECATED KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0) const;
 
     /**
      * Create and return a paintop based on the given preset. A preset defines

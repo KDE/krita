@@ -72,6 +72,8 @@ public:
 	void setInkAmount(float inkAmount);
 
 private:
+    void init (float x, float y, float length);
+ 
 	// coordinates of bristle
 	float m_x;
 	float m_y;

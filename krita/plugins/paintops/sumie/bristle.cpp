@@ -18,11 +18,18 @@
 
 #include "bristle.h"
 
-Bristle::Bristle(){
-    Bristle(0,0,0);
+Bristle::Bristle()
+{
+    init(0,0,0);
 }
 
-Bristle::Bristle(float x, float y,float length){
+Bristle::Bristle(float x, float y,float length)
+{
+    init (x, y, length);   
+}
+
+void Bristle::init(float x, float y, float length)
+{
 	m_x = x;
 	m_y = y;
 	m_length = length;

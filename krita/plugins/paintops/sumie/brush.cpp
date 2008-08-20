@@ -45,13 +45,13 @@ const float radToDeg = 57.29578;
 
 Brush::Brush(const BrushShape &initialShape, KoColor inkColor){
     m_initialShape = initialShape;
-    m_inkColor = inkColor;    
+    m_inkColor = inkColor;
     m_counter = 0;
 }
 
 Brush::Brush(){
     m_radius = 20;
-    m_sigma = 20.f;    
+    m_sigma = 20.f;
 
     m_counter = 0;
     m_lastAngle = 0.0;
@@ -60,8 +60,8 @@ Brush::Brush(){
     BrushShape bs;
     //bs.fromGaussian( m_radius, m_sigma );
     bs.fromLine( m_radius, m_sigma );
-    
-    setBrushShape(bs);    
+
+    setBrushShape(bs);
 }
 
 void Brush::setBrushShape(BrushShape brushShape){
@@ -97,7 +97,7 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
     Q_UNUSED(dev)
     Q_UNUSED(info)
 /*    m_counter++;
-    
+
     Bristle *bristle;
     KoColor brColor;
     int x = info.pos().x();
@@ -105,7 +105,7 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
 
     qint32 pixelSize = m_dev->colorSpace()->pixelSize();
     KisRandomAccessor accessor = m_dev->createRandomAccessor( x,y );
-    
+
     double inkDeplation;
     if ( m_counter >= m_inkDepletion.size()-1 ){
         inkDeplation = m_inkDepletion[m_inkDepletion.size() - 1];
@@ -129,7 +129,7 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
     dbgPlugins << "pressure: " << pressure << endl;
 
 //     dbgPlugins << m_counter ;
-    
+
     int dx, dy; // used for counting the coords of bristles relative to the center of the brush
     bool rotate = true;
 
@@ -143,7 +143,7 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
         angleDec = -0.1;
     }
 
-    
+
 */
     /*
     * MAIN LOOP *HIGHLY* careful
@@ -157,29 +157,29 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
 //             }
             bristle = &m_bristles[i];
             brColor = bristle->color();
-    
+
             // saturation
             params["s"] = - ( 1.0 - ( info.pressure() * bristle->length() * bristle->inkAmount() ) );
             transfo = m_dev->colorSpace()->createColorTransformation ( "hsv_adjustment", params );
             transfo->transform ( m_inkColor.data(), brColor.data() , 1 );
-    
+
             // opacity
             brColor.setOpacity ( static_cast<int> ( 255.0* pressure*bristle->length() * bristle->inkAmount() * ( 1.0 - inkDeplation ) ) );
-    
+
             dx = ( int ) ( x+bristle->x() );
             dy = ( int ) ( y+bristle->y() );
-    
+
             accessor.moveTo ( dx,dy );
             memcpy ( accessor.rawData(), brColor.data(), pixelSize );
-    
+
             bristle->setInkAmount ( 1.0 - inkDeplation - pressure );
             //bristle->setColor(brColor);
         }
-        
+
         */
         return;
         //TODO When the angle is wide, paint every bristle
-        /*if (m_lastAngle == info.angle() || safeCounter > 12)    
+        /*if (m_lastAngle == info.angle() || safeCounter > 12)
             rotate = false;
         else
         {
@@ -192,7 +192,7 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info){
 
 
 void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const KisPaintInformation &pi2){
-/* 
+/*
     Q_CHECK_PTR(m_accessor);
         dbgPlugins << "Accessor passed...";
     Q_CHECK_PTR(m_dev);
@@ -330,23 +330,25 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
                     inkDeplation = m_inkDepletion[bristleCounter];
                 }
 
-                // saturation
-                params[saturation] = ( 
-                pressure* 
-                bristle->length()* 
-                bristle->inkAmount()* 
-                (1.0 - inkDeplation))-1.0; 
+                // saturation XXX: make option
+                if (0) {
+                    params[saturation] = (
+                        pressure*
+                        bristle->length()*
+                        bristle->inkAmount()*
+                        (1.0 - inkDeplation))-1.0;
 
-                transfo->setParameters(params);
+                        transfo->setParameters(params);
+                }
                 transfo->transform ( m_inkColor.data(), brColor.data() , 1 );
 
                 // opacity
                 double opacity =
-                255.0*    
-                pressure* 
-                bristle->length()* 
+                255.0*
+                pressure*
+                bristle->length()*
                 bristle->inkAmount()*
-                (1.0 - inkDeplation); 
+                (1.0 - inkDeplation);
 
                 brColor.setOpacity ( static_cast<int>(opacity) );
                 //dbgPlugins << "opacity: "<< brColor.opacity();
@@ -363,7 +365,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const
             // paint end bristle
             //putBristle(ix2,iy2, brColor);
             // set ink amount for next paint
-            
+
         }
         rotateBristles(-(angle+1.57));
 
@@ -379,7 +381,7 @@ void Brush::rotateBristles(double angle){
 
     m_transform.reset();
     m_transform.rotateRadians ( angle );
-    
+
     for ( int i=0;i<m_bristles.size();i++ )
     {
         x = m_bristles[i].x();
@@ -412,7 +414,7 @@ void Brush::repositionBristles(double angle, double slope){
 }
 
 Brush::~Brush(){
-/*    if (!m_accessor){ 
+/*    if (!m_accessor){
         delete m_accessor;
     }*/
 }
@@ -444,40 +446,40 @@ void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &colo
     // bristle delivered some ink
     bristle->upIncrement();
 
-// Wu particles..useless, the result is not better        
+// Wu particles..useless, the result is not better
 //     int x = int(wx);
 //     int y = int(wy);
 //     float fx = wx - x;
 //     float fy = wy - y;
-// 
+//
 //     float MAX_OPACITY = mycolor.opacity();
-// 
+//
 //     int btl = (1-fx) * (1-fy) * MAX_OPACITY;
 //     int btr =  (fx)  * (1-fy) * MAX_OPACITY;
 //     int bbl = (1-fx) *  (fy)  * MAX_OPACITY;
 //     int bbr =  (fx)  *  (fy)  * MAX_OPACITY;
-// 
+//
 //     const int MIN_OPACITY = 10;
-// 
+//
 //     if (btl>MIN_OPACITY)
 //     {
 //         m_accessor->moveTo(x,   y);
 //         mycolor.setOpacity(btl);
 //         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
 //     }
-// 
+//
 //     if (btr>MIN_OPACITY){
 //         m_accessor->moveTo(x+1, y);
 //         mycolor.setOpacity(btr);
 //         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
 //     }
-// 
+//
 //     if (bbl>MIN_OPACITY){
 //         m_accessor->moveTo(x, y+1);
 //         mycolor.setOpacity(bbl);
 //         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
 //     }
-// 
+//
 //     if (bbr>MIN_OPACITY){
 //         m_accessor->moveTo(x+1, y+1);
 //         mycolor.setOpacity(bbr);
@@ -506,7 +508,7 @@ double Brush::computeMousePressure(double distance)
     double scale = 20.0;
     double minPressure = 0.02;
     double oldPressure = m_oldPressure;
-    
+
     double factor = 1.0 - distance/scale;
     if (factor < 0.0) factor = 0.0;
 

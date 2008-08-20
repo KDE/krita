@@ -28,60 +28,21 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 
+#include <KoBasicHistogramProducers.h>
+#include <KoColorSpace.h>
+#include <KoColorTransformation.h>
+#include <KoProgressUpdater.h>
+
 #include "kis_level_filter.h"
-#include "KoColorSpace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
 #include "kis_histogram.h"
-#include "KoBasicHistogramProducers.h"
 #include "kis_painter.h"
 #include "kgradientslider.h"
 #include "kis_processing_information.h"
+#include "kis_selection.h"
 #include "kis_types.h"
-
-#if 0
-KisLevelFilterConfiguration::KisLevelFilterConfiguration()
-    : KisFilterConfiguration( "levels", 1 )
-{
-    whitevalue = 255;
-    blackvalue = 0;
-    gammavalue = 1.0;
-
-    outwhitevalue = 0xFFFF;
-    outblackvalue = 0;
-
-    m_adjustment = 0;
-}
-
-KisLevelFilterConfiguration::~KisLevelFilterConfiguration()
-{
-    delete m_adjustment;
-}
-
-void KisLevelFilterConfiguration::fromXML( const QString& s )
-{
-    KisFilterConfiguration::fromXML(s);
-    blackvalue = getInt( "blackvalue" );
-    whitevalue = getInt( "whitevalue" );
-    gammavalue = getDouble( "gammavalue" );
-    outblackvalue = getInt( "outblackvalue" );
-    outwhitevalue = getInt( "outwhitevalue" );
-}
-
-QString KisLevelFilterConfiguration::toString()
-{
-    m_properties.clear();
-    setProperty("blackvalue", blackvalue);
-    setProperty("whitevalue", whitevalue);
-    setProperty("gammavalue", gammavalue);
-    setProperty("outblackvalue", outblackvalue);
-    setProperty("outwhitevalue", outwhitevalue);
-
-    return KisFilterConfiguration::toString();
-}
-
-#endif
 
 KisLevelFilter::KisLevelFilter()
     : KisFilter( id(), CategoryAdjust, i18n("&Levels"))
@@ -107,98 +68,117 @@ bool KisLevelFilter::workWith(KoColorSpace* cs) const
 }
 
 
-void KisLevelFilter::process(KisConstProcessingInformation src,
-                         KisProcessingInformation dst,
+void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
+                         KisProcessingInformation dstInfo,
                          const QSize& size,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater
         ) const
 {
-#if 0
+    const KisPaintDeviceSP src = srcInfo.paintDevice();
+    KisPaintDeviceSP dst = dstInfo.paintDevice();
+    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint srcTopLeft = srcInfo.topLeft();
     if (!config) {
         kdWarning() << "No configuration object for level filter\n";
         return;
     }
     
-    KisLevelFilterConfiguration* configBC = (KisLevelFilterConfiguration*) config;
     Q_ASSERT(config);
 
-    if (src!=dst) {
-        KisPainter gc(dst);
-        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
-        gc.end();
-    }
-
-    if (configBC->m_adjustment == 0) {
-        Q_UINT16 transfer[256];
-        for (int i = 0; i < 256; i++) {
-            if (i <= configBC->blackvalue)
-                transfer[i] = configBC->outblackvalue;
-            else if (i < configBC->whitevalue)
-            {
-                double a = (double)(i - configBC->blackvalue) / (double)(configBC->whitevalue - configBC->blackvalue);
-                a = (double)(configBC->outwhitevalue - configBC->outblackvalue) * pow (a, (1.0 / configBC->gammavalue));
-                transfer[i] = int(configBC->outblackvalue + a);
-            }
-            else
-                transfer[i] = configBC->outwhitevalue;
-        }
-        configBC->m_adjustment = src->colorSpace()->createBrightnessContrastAdjustment(transfer);
-    }
+    KoColorTransformation * adjustment = 0;
     
-    KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+    int blackvalue = config->getInt( "blackvalue" );
+    int whitevalue = config->getInt( "whitevalue", 255 );
+    double gammavalue = config->getDouble( "gammavalue", 1.0 );
+    int outblackvalue = config->getInt( "outblackvalue" );
+    int outwhitevalue = config->getInt( "outwhitevalue", 255 );
+    
+    Q_UINT16 transfer[256];
+    for (int i = 0; i < 256; i++) {
+        if (i <= blackvalue)
+            transfer[i] = outblackvalue;
+        else if (i < whitevalue)
+        {
+            double a = (double)(i - blackvalue) / (double)(whitevalue - blackvalue);
+            a = (double)(outwhitevalue - outblackvalue) * pow (a, (1.0 / gammavalue));
+            transfer[i] = int(outblackvalue + a);
+        }
+        else
+            transfer[i] = outwhitevalue;
+        // TODO use floats instead of integer in the configuration
+        transfer[i] = ((int)transfer[i] * 0xFFFF) / 0xFF ;
+    }
+    adjustment = src->colorSpace()->createBrightnessContrastAdjustment(transfer);
+    
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
-    setProgressTotalSteps(rect.width() * rect.height());
+    if( progressUpdater )
+    {
+        progressUpdater->setRange(0, size.width() * size.height() );
+    }
     Q_INT32 pixelsProcessed = 0;
 
-    while( ! iter.isDone()  && !cancelRequested())
+    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row )
     {
-        Q_UINT32 npix=0, maxpix = iter.nConseqPixels();
-        Q_UINT8 selectedness = iter.selectedness();
-        // The idea here is to handle stretches of completely selected and completely unselected pixels.
-        // Partially selected pixels are handled one pixel at a time.
-        switch(selectedness)
+        while( ! srcIt.isDone()  && !(progressUpdater && progressUpdater->interrupted()) )
         {
-            case MIN_SELECTED:
-                while(iter.selectedness()==MIN_SELECTED && maxpix)
-                {
-                    --maxpix;
-                    ++iter;
-                    ++npix;
-                }
-                pixelsProcessed += npix;
-                break;
-
-            case MAX_SELECTED:
+            Q_UINT32 npix=0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
+            Q_UINT8 selectedness = dstIt.selectedness();
+            // The idea here is to handle stretches of completely selected and completely unselected pixels.
+            // Partially selected pixels are handled one pixel at a time.
+            switch(selectedness)
             {
-                Q_UINT8 *firstPixel = iter.rawData();
-                while(iter.selectedness()==MAX_SELECTED && maxpix)
+                case MIN_SELECTED:
+                    while(dstIt.selectedness()==MIN_SELECTED && maxpix)
+                    {
+                        --maxpix;
+                        ++srcIt;
+                        ++dstIt;
+                        ++npix;
+                    }
+                    pixelsProcessed += npix;
+                    break;
+    
+                case MAX_SELECTED:
                 {
-                    --maxpix;
-                    if (maxpix != 0)
-                        ++iter;
-                    ++npix;
+                    const Q_UINT8 *firstPixelSrc = srcIt.oldRawData();
+                    Q_UINT8 *firstPixelDst = dstIt.rawData();
+                    while(dstIt.selectedness()==MAX_SELECTED && maxpix)
+                    {
+                        --maxpix;
+                        if (maxpix != 0)
+                        {
+                          ++srcIt;
+                          ++dstIt;
+                        }
+                        ++npix;
+                    }
+                    // adjust
+                    adjustment->transform(firstPixelSrc, firstPixelDst, npix);
+                    pixelsProcessed += npix;
+                    ++srcIt;
+                    ++dstIt;
+                    break;
                 }
-                // adjust
-                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, configBC->m_adjustment, npix);
-                pixelsProcessed += npix;
-                ++iter;
-                break;
+    
+                default:
+                    // adjust, but since it's partially selected we also only partially adjust
+                    adjustment->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
+                    const quint8 *pixels[2] = {srcIt.oldRawData(), dstIt.rawData()};
+                    qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                    src->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 2, dstIt.rawData());
+                    ++srcIt;
+                    ++dstIt;
+                    pixelsProcessed++;
+                    break;
             }
-
-            default:
-                // adjust, but since it's partially selected we also only partially adjust
-                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), configBC->m_adjustment, 1);
-                const Q_UINT8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-                Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-                src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
-                ++iter;
-                pixelsProcessed++;
-                break;
+            if(progressUpdater) progressUpdater->setValue( pixelsProcessed );
         }
-        setProgress(pixelsProcessed);
+        srcIt.nextRow();
+        dstIt.nextRow();
     }
-#endif
 }
 
 KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)

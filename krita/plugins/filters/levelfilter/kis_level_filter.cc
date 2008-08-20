@@ -289,26 +289,39 @@ void KisLevelConfigWidget::drawHistogram(bool logarithmic)
 
 KisFilterConfiguration * KisLevelConfigWidget::configuration() const
 {
-    KisFilterConfiguration * cfg = new KisFilterConfiguration(KisLevelFilter::id().id(), 1);
+    KisFilterConfiguration * config = new KisFilterConfiguration(KisLevelFilter::id().id(), 1);
 
-//     cfg->blackvalue = m_page.blackspin->value();
-//     cfg->whitevalue = m_page.whitespin->value();
-//     cfg->gammavalue = m_page.ingradient->getGamma();
-
-//     cfg->outblackvalue = m_page.outblackspin->value() * 255;
-//     cfg->outwhitevalue = m_page.outwhitespin->value() * 255;
-
-    return cfg;
+    config->setProperty( "blackvalue", m_page.blackspin->value());
+    config->setProperty( "whitevalue", m_page.whitespin->value());
+    config->setProperty( "gammavalue", m_page.ingradient->getGamma());
+    config->setProperty( "outblackvalue", m_page.outblackspin->value());
+    config->setProperty( "outwhitevalue", m_page.outwhitespin->value());
+    
+    return config;
 }
 
 void KisLevelConfigWidget::setConfiguration( KisFilterConfiguration * config )
 {
-//     KisLevelFilterConfiguration * cfg = dynamic_cast<KisLevelFilterConfiguration *>(config);
-//     m_page.blackspin->setValue(cfg->blackvalue);
-//     m_page.whitespin->setValue(cfg->whitevalue);
-//     m_page.ingradient->modifyGamma(cfg->gammavalue);
-
-//     m_page.outblackspin->setValue(cfg->outblackvalue / 255);
-//     m_page.outwhitespin->setValue(cfg->outwhitevalue / 255);
+    QVariant value;
+    if (config->getProperty("blackvalue", value))
+    {
+      m_page.blackspin->setValue( value.toUInt() );
+    }
+    if (config->getProperty("whitevalue", value))
+    {
+      m_page.whitespin->setValue( value.toUInt() );
+    }
+    if (config->getProperty("gammavalue", value))
+    {
+      m_page.ingradient->modifyGamma(value.toDouble());
+    }
+    if (config->getProperty("outblackvalue", value))
+    {
+      m_page.outblackspin->setValue( value.toUInt() );
+    }
+    if (config->getProperty("outwhitevalue", value))
+    {
+      m_page.outwhitespin->setValue( value.toUInt() );
+    }
 }
 

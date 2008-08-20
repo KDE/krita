@@ -41,7 +41,6 @@ KGradientSlider::KGradientSlider(QWidget *parent)
     m_dragging = false;
     
     setMouseTracking(true);
-    setPaletteBackgroundColor(Qt::NoBackground);
     setMaximumSize(255, 28);
 
     m_blackcursor = 0;
@@ -65,11 +64,7 @@ void KGradientSlider::paintEvent(QPaintEvent *)
     
     // A QPixmap is used for enable the double buffering.
     /*if (!m_dragging) {*/
-        QPixmap pm(size());
-        QPainter p1;
-        p1.begin(&pm, this);
-
-        pm.fill();
+        QPainter p1(this);
 
         // Draw first gradient
         y = 0;
@@ -123,8 +118,6 @@ void KGradientSlider::paintEvent(QPaintEvent *)
         p1.setBrush(Qt::white);
         p1.drawPolygon(a, 3);
 
-    p1.end();
-    bitBlt(this, 0, 0, &pm);
 }
 
 void KGradientSlider::mousePressEvent ( QMouseEvent * e )
@@ -204,7 +197,7 @@ void KGradientSlider::mousePressEvent ( QMouseEvent * e )
             m_gamma = 1.0 / pow (10, tmp);
             break;
        }
-    repaint(false);
+    update();
 }
 
 void KGradientSlider::mouseReleaseEvent ( QMouseEvent * e )
@@ -213,7 +206,7 @@ void KGradientSlider::mouseReleaseEvent ( QMouseEvent * e )
         return;
 
     m_dragging = false;
-    repaint(false);
+    update();
 
     switch (m_grab_cursor) {
         case BlackCursor:
@@ -284,7 +277,7 @@ void KGradientSlider::mouseMoveEvent ( QMouseEvent * e )
         }
     }
 
-    repaint(false);
+    update();
 }
 
 void KGradientSlider::leaveEvent( QEvent * )
@@ -295,7 +288,7 @@ void KGradientSlider::leaveEvent( QEvent * )
 void KGradientSlider::enableGamma(bool b)
 {
     m_gammaEnabled = b;
-    repaint(false);
+    update();
 }
 
 double KGradientSlider::getGamma(void)
@@ -312,7 +305,7 @@ void KGradientSlider::modifyBlack(int v) {
             double tmp   = log10 (1.0 / m_gamma);
             m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
         }
-        repaint(false);
+        update();
     }
 }
 void KGradientSlider::modifyWhite(int v) {
@@ -324,16 +317,20 @@ void KGradientSlider::modifyWhite(int v) {
             double tmp   = log10 (1.0 / m_gamma);
             m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
         }
-        repaint(false);
+        update();
     }
 }
 void KGradientSlider::modifyGamma(double v) {
+    if( m_gamma != v )
+    {
+      emit modifiedGamma( v );
+    }
     m_gamma = v;
     double delta = (double) (m_whitecursor - m_blackcursor) / 2.0;
     double mid   = (double)m_blackcursor + delta;
     double tmp   = log10 (1.0 / m_gamma);
     m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
-    repaint(false);
+    update();
 }
 
 #include "kgradientslider.moc"

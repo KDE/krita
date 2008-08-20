@@ -31,7 +31,7 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
-class KRITAUI_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction {
+class KRITAIMAGE_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction {
 
 public:
 

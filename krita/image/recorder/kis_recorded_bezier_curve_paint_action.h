@@ -30,7 +30,7 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
-class KRITAUI_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction {
+class KRITAIMAGE_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction {
 
 public:
 

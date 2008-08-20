@@ -29,7 +29,7 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
-class KRITAUI_EXPORT KisRecordedPaintAction : public KisRecordedAction {
+class KRITAIMAGE_EXPORT KisRecordedPaintAction : public KisRecordedAction {
 public:
 
     KisRecordedPaintAction(const QString & name,

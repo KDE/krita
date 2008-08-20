@@ -38,23 +38,6 @@ public:
     }
 };
 
-// all relevant properties.
-static const int properties[] = {
-    QTextListFormat::ListStyle,
-    KoListStyle::ListItemPrefix,
-    KoListStyle::ListItemSuffix,
-    KoListStyle::StartValue,
-    KoListStyle::Level,
-    KoListStyle::DisplayLevel,
-    KoListStyle::CharacterStyleId,
-    KoListStyle::BulletCharacter,
-    KoListStyle::BulletSize,
-    KoListStyle::Alignment,
-    KoListStyle::LetterSynchronization,
-    KoListStyle::StyleId,
-    -1
-};
-
 KoListLevelProperties::KoListLevelProperties()
     : d( new Private())
 {
@@ -116,33 +99,15 @@ QString KoListLevelProperties::propertyString(int key) const {
 }
 
 void KoListLevelProperties::applyStyle(QTextListFormat &format) const {
-    int i=0;
-    while(properties[i] != -1) {
-        QVariant variant = d->stylesPrivate.value(properties[i]);
-        if(! variant.isNull())
-            format.setProperty(properties[i], variant);
-        i++;
+    QList<int> keys = d->stylesPrivate.keys();
+    for (int i = 0; i < keys.count(); i++) {
+        QVariant variant = d->stylesPrivate.value(keys[i]);
+        format.setProperty(keys[i], variant);
     }
 }
 
 bool KoListLevelProperties::operator==(const KoListLevelProperties &other) const {
-    // TODO move this to the stylesPrivate
-
-    int i=0;
-    while(properties[i] != -1) {
-        QVariant variant = d->stylesPrivate.value(properties[i]);
-        if(! variant.isNull()) {
-            if(other.d->stylesPrivate.value(properties[i]) != 0)
-                return false;
-        }
-        else {
-            QVariant otherVariant = d->stylesPrivate.value(properties[i]);
-            if(otherVariant == 0 || otherVariant != variant)
-                return false;
-        }
-        i++;
-    }
-    return true;
+    return d->stylesPrivate == other.d->stylesPrivate;
 }
 
 void KoListLevelProperties::setListItemPrefix(const QString &prefix) {
@@ -258,14 +223,7 @@ void KoListLevelProperties::setLetterSynchronization(bool on) {
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list) {
     KoListLevelProperties llp;
-    QTextListFormat format = list->format();
-    int i=0;
-    while(properties[i] != -1) {
-        int key = properties[i];
-        if(format.hasProperty(key))
-            llp.setProperty(key, format.property(key));
-        i++;
-    }
+    llp.d->stylesPrivate.copy(list->format().properties());
     return llp;
 }
 

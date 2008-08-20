@@ -202,7 +202,7 @@ public:
     /**
      * @brief zoom so that rect is exactly visible (as close as possible)
      *
-     * The rect must be specified in document coordinates. The scrollbar positions
+     * The rect must be specified in pixel coordinates. The scrollbar positions
      * are changed so that the center of the rect becomes center if possible.
      *
      * @param rect the rect in pixel coords that should fit the view afterwards

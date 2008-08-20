@@ -85,6 +85,7 @@ KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
     d->name = orig.name();
     d->charStyle = orig.d->charStyle;
     d->next = orig.d->next;
+    d->parent = orig.d->parent;
     if(orig.d->listStyle)
         setListStyle(*orig.d->listStyle);
 }
@@ -102,20 +103,13 @@ KoParagraphStyle::~KoParagraphStyle() {
 }
 
 void KoParagraphStyle::setParent(KoParagraphStyle *parent) {
-    Q_ASSERT(parent != this);
-    const int id = styleId();
-    if(d->parent)
-        d->stylesPrivate->copyMissing(d->parent->d->stylesPrivate);
     d->parent = parent;
-    if(d->parent)
-        d->stylesPrivate->removeDuplicates(d->parent->d->stylesPrivate);
-    setStyleId(id);
 }
 
 void KoParagraphStyle::setProperty(int key, const QVariant &value) {
-    if(d->parent) {
+    if (d->parent) {
         QVariant var = d->parent->value(key);
-        if(!var.isNull() && var == value) { // same as parent, so its actually a reset.
+        if (!var.isNull() && var == value) { // same as parent, so its actually a reset.
             d->stylesPrivate->remove(key);
             return;
         }
@@ -168,9 +162,12 @@ QColor KoParagraphStyle::propertyColor(int key) const {
     return qvariant_cast<QColor>(variant);
 }
 
-void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const 
+void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
-    format = QTextBlockFormat();
+    KoParagraphStyle *parent = d->parent;
+    if (d->parent) {
+        d->parent->applyStyle(format);
+    }
     QList<int> keys = d->stylesPrivate->keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate->value(keys[i]);
@@ -771,7 +768,7 @@ QBrush KoParagraphStyle::background() const {
 void KoParagraphStyle::loadOdf( const KoXmlElement* element, KoOdfLoadingContext & context )
 {
     d->name = element->attributeNS( KoXmlNS::style, "display-name", QString() );
-    // if no style:display-name is given us the style:name 
+    // if no style:display-name is given us the style:name
     if ( d->name.isEmpty() ) {
         d->name = element->attributeNS( KoXmlNS::style, "name", QString() );
     }
@@ -871,7 +868,7 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
     }
 
     // Automatic Text indent
-    // OOo is not assuming this. Commenting this line thus allow more OpenDocuments to be supported, including a 
+    // OOo is not assuming this. Commenting this line thus allow more OpenDocuments to be supported, including a
     // testcase from the ODF test suite. See §15.5.18 in the spec.
     //if ( hasMarginLeft || hasMarginRight ) {
         // style:auto-text-indent takes precedence

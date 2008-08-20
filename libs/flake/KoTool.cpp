@@ -210,4 +210,9 @@ KoCanvasBase * KoTool::canvas() const
     return m_canvas;
 }
 
+void KoTool::setStatusText( const QString &statusText )
+{
+    emit statusTextChanged( statusText );
+}
+
 #include "KoTool.moc"

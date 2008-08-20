@@ -47,6 +47,10 @@ KoInteractionStrategy::KoInteractionStrategy(KoTool *parent, KoCanvasBase *canva
 {
 }
 
+KoInteractionStrategy::~KoInteractionStrategy()
+{
+    m_parent->setStatusText( "" );
+}
 
 void KoInteractionStrategy::applyGrid(QPointF &point) {
     // The 1e-10 here is a workaround for some weird division problem.

@@ -28,6 +28,7 @@
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 #include <KoSnapGuide.h>
+#include <KoTool.h>
 
 #include <klocale.h>
 
@@ -90,6 +91,8 @@ ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         default:
              Q_ASSERT(0); // illegal 'corner'
     }
+
+    tool->setStatusText( i18n("Press CTRL to resize from center.") );
 }
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)

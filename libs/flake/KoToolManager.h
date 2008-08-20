@@ -213,6 +213,12 @@ signals:
      */
     void changedCanvas( const KoCanvasBase * canvas );
 
+    /**
+     * Emitted whenever the active tool changes the status text.
+     * @param statusText the new status text
+     */
+    void changedStatusText( const QString &statusText );
+
 protected:
     friend class KoToolProxy;
     /**

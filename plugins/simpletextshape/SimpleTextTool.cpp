@@ -208,6 +208,8 @@ void SimpleTextTool::activate( bool )
     createTextCursorShape();
 
     updateActions();
+
+    emit statusTextChanged( i18n("Press return to finish editing.") );
 }
 
 void SimpleTextTool::blinkCursor()

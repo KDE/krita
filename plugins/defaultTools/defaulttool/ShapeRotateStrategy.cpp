@@ -53,6 +53,8 @@ ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, co
         m_rotationCenter = canvas->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
     else
         m_rotationCenter = m_initialBoundingRect.center();
+
+    tool->setStatusText( i18n( "Press ALT to rotate in 45 degree steps." ) );
 }
 
 void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {

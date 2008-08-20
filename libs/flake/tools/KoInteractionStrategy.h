@@ -49,7 +49,7 @@ class FLAKE_EXPORT KoInteractionStrategy
 {
 public:
     /// Destructor
-    virtual ~KoInteractionStrategy() {}
+    virtual ~KoInteractionStrategy();
 
     /**
      * Reimplement this if the action needs to draw a "blob" on the canvas;

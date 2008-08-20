@@ -376,6 +376,8 @@ double DefaultTool::rotationOfHandle( KoFlake::SelectionHandle handle, bool useE
 void DefaultTool::updateCursor() {
     QCursor cursor = Qt::ArrowCursor;
 
+    QString statusText;
+
     if(koSelection()->count() > 0) { // has a selection
         bool editable=false;
         // check if we have at least one shape that is edtiable
@@ -390,80 +392,111 @@ void DefaultTool::updateCursor() {
             m_angle = rotationOfHandle( m_lastHandle, true );
             int rotOctant = 8 + int(8.5 + m_angle / 45);
 
+            bool rotateHandle = false;
+            bool shearHandle = false;
             switch(m_lastHandle) {
                 case KoFlake::TopMiddleHandle:
                     cursor = m_shearCursors[(0 +rotOctant)%8];
+                    shearHandle = true;
                     break;
                 case KoFlake::TopRightHandle:
                     cursor = m_rotateCursors[(1 +rotOctant)%8];
+                    rotateHandle = true;
                     break;
                 case KoFlake::RightMiddleHandle:
                     cursor = m_shearCursors[(2 +rotOctant)%8];
+                    shearHandle = true;
                     break;
                 case KoFlake::BottomRightHandle:
                     cursor = m_rotateCursors[(3 +rotOctant)%8];
+                    rotateHandle = true;
                     break;
                 case KoFlake::BottomMiddleHandle:
                     cursor = m_shearCursors[(4 +rotOctant)%8];
+                    shearHandle = true;
                     break;
                 case KoFlake::BottomLeftHandle:
                     cursor = m_rotateCursors[(5 +rotOctant)%8];
+                    rotateHandle = true;
                     break;
                 case KoFlake::LeftMiddleHandle:
                     cursor = m_shearCursors[(6 +rotOctant)%8];
+                    shearHandle = true;
                     break;
                 case KoFlake::TopLeftHandle:
                     cursor = m_rotateCursors[(7 +rotOctant)%8];
+                    rotateHandle = true;
                     break;
                 case KoFlake::NoHandle:
                     if( m_guideLine->isValid() )
+                    {
                         cursor = m_guideLine->orientation() == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
+                        statusText = i18n( "Click and drag to move guide line." );
+                    }
                     else
                         cursor = Qt::ArrowCursor;
                     break;
-             }
+            }
+            if( rotateHandle )
+                statusText = i18n("Left click rotates around center, right click around highlighted position.");
+            if( shearHandle )
+                statusText = i18n("Click and drag to shear selection.");
         }
         else {
+            statusText = i18n( "Click and drag to resize selection." );
             m_angle = rotationOfHandle( m_lastHandle, false );
             int rotOctant = 8 + int(8.5 + m_angle / 45);
+            bool cornerHandle = false;
             switch(m_lastHandle) {
                 case KoFlake::TopMiddleHandle:
                     cursor = m_sizeCursors[(0 +rotOctant)%8];
                     break;
                 case KoFlake::TopRightHandle:
                     cursor = m_sizeCursors[(1 +rotOctant)%8];
+                    cornerHandle = true;
                     break;
                 case KoFlake::RightMiddleHandle:
                     cursor = m_sizeCursors[(2 +rotOctant)%8];
                     break;
                 case KoFlake::BottomRightHandle:
                     cursor = m_sizeCursors[(3 +rotOctant)%8];
+                    cornerHandle = true;
                     break;
                 case KoFlake::BottomMiddleHandle:
                     cursor = m_sizeCursors[(4 +rotOctant)%8];
                     break;
                 case KoFlake::BottomLeftHandle:
                     cursor = m_sizeCursors[(5 +rotOctant)%8];
+                    cornerHandle = true;
                     break;
                 case KoFlake::LeftMiddleHandle:
                     cursor = m_sizeCursors[(6 +rotOctant)%8];
                     break;
                 case KoFlake::TopLeftHandle:
                     cursor = m_sizeCursors[(7 +rotOctant)%8];
+                    cornerHandle = true;
                     break;
                 case KoFlake::NoHandle:
                     cursor = Qt::SizeAllCursor;
+                    statusText = i18n( "Click and drag to move selection." );
                     break;
             }
+            if( cornerHandle )
+                statusText = i18n( "Click and drag to resize selection. Middle click to set highlighted position." );
         }
         if( !editable)
             cursor = Qt::ArrowCursor;
     }
     else {
         if( m_guideLine->isValid() )
+        {
             cursor = m_guideLine->orientation() == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
+            statusText = i18n( "Click and drag to move guide line." );
+        }
     }
     useCursor(cursor);
+    if( ! m_currentStrategy )
+        emit statusTextChanged( statusText );
 }
 
 void DefaultTool::paint( QPainter &painter, const KoViewConverter &converter) {

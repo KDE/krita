@@ -30,6 +30,8 @@
 #include <commands/KoShapeMoveCommand.h>
 #include <KoSnapGuide.h>
 #include <KoPointerEvent.h>
+#include <KoTool.h>
+#include <KLocale>
 
 ShapeMoveStrategy::ShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoInteractionStrategy(tool, canvas)
@@ -49,6 +51,8 @@ ShapeMoveStrategy::ShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const 
     m_initialOffset = selection->absolutePosition( SelectionDecorator::hotPosition() ) - m_start;
     m_initialSelectionPosition = selection->position();
     m_canvas->snapGuide()->setIgnoredShapes( selection->selectedShapes( KoFlake::FullSelection ) );
+
+    tool->setStatusText( i18n("Press ALT to hold x- or y-position.") );
 }
 
 void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) 

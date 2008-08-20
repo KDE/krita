@@ -325,6 +325,8 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
         disconnect(d->canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
                 this, SLOT(switchToolTemporaryRequested(const QString &)));
         disconnect(d->canvasData->activeTool, SIGNAL(done()), this, SLOT(switchBackRequested()));
+        disconnect(d->canvasData->activeTool, SIGNAL(statusTextChanged(const QString &)),
+                this, SIGNAL(changedStatusText(const QString &)) );
     }
 
     d->canvasData->activeTool = tool;
@@ -335,6 +337,11 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     connect(d->canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
             this, SLOT(switchToolTemporaryRequested(const QString &)));
     connect(d->canvasData->activeTool, SIGNAL(done()), this, SLOT(switchBackRequested()));
+    connect(d->canvasData->activeTool, SIGNAL(statusTextChanged(const QString &)),
+            this, SIGNAL(changedStatusText(const QString &)) );
+
+    // emit a empty status text to clear status text from last active tool
+    emit changedStatusText( "" );
 
     // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
     d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);

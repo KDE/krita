@@ -302,6 +302,11 @@ public slots:
      */
     virtual void resourceChanged( int key, const QVariant & res );
 
+    /**
+     * This method just relays the given text via the tools statusTextChanged signal.
+     * @param statusText the new status text
+     */
+    void setStatusText( const QString &statusText );
 
 signals:
 
@@ -339,6 +344,12 @@ signals:
      * @param hasSelection is true when the tool holds selected data.
      */
     void selectionChanged(bool hasSelection);
+
+    /**
+     * Emitted when the tool wants to display a different status text
+     * @param statusText the new status text
+     */
+    void statusTextChanged( const QString &statusText );
 
 protected:
     /**

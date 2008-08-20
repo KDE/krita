@@ -164,7 +164,7 @@ QColor KoParagraphStyle::propertyColor(int key) const {
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
-    KoParagraphStyle *parent = d->parent;
+    format = QTextBlockFormat();
     if (d->parent) {
         d->parent->applyStyle(format);
     }

@@ -234,6 +234,8 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP 
         dbgUI << "Warning: no <Waypoints /> found";
     }
     return rplpa;
+#else
+    return 0;
 #endif
 }
 

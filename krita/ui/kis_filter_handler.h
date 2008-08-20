@@ -47,7 +47,7 @@ public slots:
 
     void showDialog();
     void reapply();
-    void apply(KisLayerSP, KisFilterConfiguration*);
+    void apply(KisNodeSP, KisFilterConfiguration*);
     void areaDone(const QRect & rc);
 
 private:

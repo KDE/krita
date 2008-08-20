@@ -109,8 +109,8 @@ void KisFilterHandler::showDialog()
 
     KisFilterDialog* dialog = new KisFilterDialog( m_d->view , m_d->view->activeNode(), m_d->view->image());
     dialog->setFilter( m_d->filter );
-    connect(dialog, SIGNAL(sigPleaseApplyFilter(KisLayerSP, KisFilterConfiguration*)),
-            SLOT(apply(KisLayerSP, KisFilterConfiguration*)));
+    connect(dialog, SIGNAL(sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*)),
+            SLOT(apply(KisNodeSP, KisFilterConfiguration*)));
     dialog->setVisible(true);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 }
@@ -120,7 +120,7 @@ void KisFilterHandler::reapply()
     apply(m_d->view->activeLayer(), m_d->lastConfiguration);
 }
 
-void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
+void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
 {
     dbgUI <<"Applying a filter";
     if( !layer ) return;
@@ -130,7 +130,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
     m_d->dev = layer->paintDevice();
 
     QRect r1 = m_d->dev->extent();
-    QRect r2 = layer->image()->bounds();
+    QRect r2 = m_d->view->image()->bounds();
 
     // Filters should work only on the visible part of an image.
     QRect rect = r1.intersect(r2);
@@ -144,7 +144,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
 
     KisTransaction * cmd = 0;
     KoProgressUpdater updater( m_d->view->statusBar()->progress() );
-    if (layer->image()->undo()) cmd = new KisTransaction( filter->name(), m_d->dev);
+    if (m_d->view->image()->undo()) cmd = new KisTransaction( filter->name(), m_d->dev);
 
     KisProcessingInformation src( m_d->dev, rect.topLeft(), selection );
     KisProcessingInformation dst( m_d->dev, rect.topLeft(), selection );
@@ -181,7 +181,7 @@ void KisFilterHandler::apply(KisLayerSP layer, KisFilterConfiguration* config)
         m_d->lastConfiguration = config;
         m_d->manager->setLastFilterHandler(this);
 
-        layer->image()->actionRecorder()->addAction( KisRecordedFilterAction(filter->name(), layer, filter, config));
+        m_d->view->image()->actionRecorder()->addAction( KisRecordedFilterAction(filter->name(), layer, filter, config));
     }
     layer->setDirty( rect );
     QApplication::restoreOverrideCursor();

@@ -46,7 +46,10 @@
 #include <QTextLine>
 #include <QVectorIterator>
 
-/* TODO:
+/* FIXME:
+ * - tab iterates over all rulers, maybe try to restrict to visible rulers
+ *
+ * TODO:
  * - add undo support (QTextDocument::undo(QTextCursor*) could help)
  * - add accessibility support
  * - remove hard-coded colors
@@ -113,22 +116,6 @@ void ParagraphTool::initializeRuler(Ruler &ruler, int options)
             this, SLOT(updateLayout()));
 }
 
-bool ParagraphTool::createShapeList()
-{
-    m_shapes.clear();
-
-    KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
-
-    QList<KoShape*> shapes = layout->shapes();
-    foreach (KoShape *shape, shapes) {
-        if (shapeContainsBlock(static_cast<TextShape*>(shape), textBlock())) {
-            m_shapes << ShapeSpecificData(m_rulers, static_cast<TextShape*>(shape), textBlock(), m_paragraphStyle);
-        }
-    }
-
-    return true;
-}
-
 QWidget *ParagraphTool::createOptionWidget()
 {
     // TODO: move this to a ui file, can't do right now, because Qt's
@@ -180,7 +167,7 @@ void ParagraphTool::saveRulers()
     QTextBlockFormat format;
     m_paragraphStyle->applyStyle(format);
 
-    m_cursor.mergeBlockFormat(format);
+    m_activeCursor.mergeBlockFormat(format);
 }
 
 QString ParagraphTool::styleName()
@@ -195,25 +182,6 @@ QString ParagraphTool::styleName()
     }
 
     return QString(i18n("None"));
-}
-
-/* slot which is called when the value of one of the rulers changed
- * causes storing and reloading of the positions and values of the rulers
- * from the file */
-void ParagraphTool::updateLayout()
-{
-    saveRulers();
-
-    static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
-
-    if (createShapeList()) {
-        loadRulers();
-    }
-    else {
-        deselectTextBlock();
-    }
-
-    repaintDecorations();
 }
 
 void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &converter) const
@@ -270,7 +238,7 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
 
 void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (!hasSelection())
+    if (!hasActiveTextBlock())
         return;
 
     foreach (const ShapeSpecificData &shape, m_shapes) {
@@ -305,9 +273,90 @@ void ParagraphTool::scheduleRepaint()
     m_needsRepaint = true;
 }
 
-void ParagraphTool::deselectTextBlock()
+bool ParagraphTool::createShapeList()
 {
-    if (!hasSelection())
+    m_shapes.clear();
+
+    KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
+
+    QList<KoShape*> shapes = layout->shapes();
+    foreach (KoShape *shape, shapes) {
+        if (shapeContainsBlock(static_cast<TextShape*>(shape), textBlock())) {
+            m_shapes << ShapeSpecificData(m_rulers, static_cast<TextShape*>(shape), textBlock(), m_paragraphStyle);
+        }
+    }
+
+    return true;
+}
+
+/* slot which is called when the value of one of the rulers changed
+ * causes storing and reloading of the positions and values of the rulers
+ * from the file */
+void ParagraphTool::updateLayout()
+{
+    saveRulers();
+
+    static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
+
+    if (createShapeList()) {
+        loadRulers();
+    }
+    else {
+        deactivateTextBlock();
+    }
+
+    repaintDecorations();
+}
+
+// try to find and activate a text block below the mouse position
+// return true if successfull
+bool ParagraphTool::activateTextBlockAt(const QPointF &point)
+{
+    TextShape *textShape = dynamic_cast<TextShape*> (canvas()->shapeManager()->shapeAt(point));
+    if (!textShape) {
+        // the shape below the mouse position is not a text shape
+        return false;
+    }
+
+    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape->userData());
+    QTextDocument *document = textShapeData->document();
+
+    int position = document->documentLayout()->hitTest(textShape->convertScreenPos(point), Qt::ExactHit);
+    if (position == -1) {
+        // there is no text below the mouse position
+        return false;
+    }
+
+    QTextBlock block(document->findBlock(position));
+    if (!block.isValid()) {
+        // the text block is not valid, this shouldn't really happen
+        return false;
+    }
+
+    // the textblock is already activated, no need for a repaint and all that
+    if (hasActiveTextBlock() && block == textBlock()) {
+        return true;
+    }
+
+    m_activeCursor = QTextCursor(block);
+    m_paragraphStyle = KoParagraphStyle::fromBlock(block);
+
+    if (createShapeList()) {
+        loadRulers();
+        emit styleNameChanged(styleName());
+
+    }
+    else {
+        deactivateTextBlock();
+        return false;
+    }
+
+    return true;
+}
+
+void ParagraphTool::deactivateTextBlock()
+{
+    if (!hasActiveTextBlock())
         return;
 
     emit styleNameChanged(QString(i18n("n/a")));
@@ -315,15 +364,15 @@ void ParagraphTool::deselectTextBlock()
     deactivateRuler();
     dehighlightRuler();
 
-    // invalidate text cursor
-    m_cursor = QTextCursor();
+    // invalidate active cursor
+    m_activeCursor = QTextCursor();
     scheduleRepaint();
 }
 
 bool ParagraphTool::activateRulerAt(const QPointF &point)
 {
-    if (!hasSelection()) {
-        // can't select a ruler without a textblock
+    if (!hasActiveTextBlock()) {
+        // can't activate a ruler without a textblock
         return false;
     }
 
@@ -376,6 +425,11 @@ void ParagraphTool::resetActiveRuler()
         m_rulers[m_activeRuler].reset();
         deactivateRuler();
     }
+}
+
+void ParagraphTool::moveActiveRulerTo(const QPointF &point)
+{
+    m_activeShape->moveRulerTo(m_activeRuler, point, smoothMovement());
 }
 
 void ParagraphTool::focusRuler(RulerIndex ruler)
@@ -472,52 +526,6 @@ void ParagraphTool::applyParentStyleToActiveRuler()
     updateLayout();
 }
 
-// try to find and select a text block below the cursor.
-// return true if successfull
-bool ParagraphTool::selectTextBlockAt(const QPointF &point)
-{
-    TextShape *textShape = dynamic_cast<TextShape*> (canvas()->shapeManager()->shapeAt(point));
-    if (!textShape) {
-        // the shape below the cursor is not a text shape
-        return false;
-    }
-
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape->userData());
-    QTextDocument *document = textShapeData->document();
-
-    int position = document->documentLayout()->hitTest(textShape->convertScreenPos(point), Qt::ExactHit);
-    if (position == -1) {
-        // there is no text below the cursor
-        return false;
-    }
-
-    QTextBlock block(document->findBlock(position));
-    if (!block.isValid()) {
-        // the text block is not valid, this shouldn't really happen
-        return false;
-    }
-
-    // the textblock is already selected, no need for a repaint and all that
-    if (hasSelection() && block == textBlock()) {
-        return true;
-    }
-
-    m_cursor = QTextCursor(block);
-    m_paragraphStyle = KoParagraphStyle::fromBlock(block);
-
-    if (createShapeList()) {
-        loadRulers();
-        emit styleNameChanged(styleName());
-
-    }
-    else {
-        deselectTextBlock();
-        return false;
-    }
-
-    return true;
-}
-
 void ParagraphTool::mousePressEvent(KoPointerEvent *event)
 {
     m_mousePosition = event->point;
@@ -532,8 +540,8 @@ void ParagraphTool::mousePressEvent(KoPointerEvent *event)
                 defocusRuler();
             }
             else {
-                deselectTextBlock();
-                selectTextBlockAt(event->point);
+                deactivateTextBlock();
+                activateTextBlockAt(event->point);
             }
         }
     }
@@ -551,7 +559,7 @@ void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     m_mousePosition = event->point;
 
-    if (hasSelection()) {
+    if (hasActiveTextBlock()) {
         deactivateRuler();
     }
 
@@ -562,7 +570,7 @@ void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
 {
     m_mousePosition = event->point;
 
-    if (hasSelection()) {
+    if (hasActiveTextBlock()) {
         if (hasActiveRuler()) {
             moveActiveRulerTo(event->point);
         }
@@ -640,12 +648,7 @@ void  ParagraphTool::activate( bool )
 
 void ParagraphTool::deactivate()
 {
-    // the document might have changed, so we have to deselect the textblock
-    deselectTextBlock();
-}
-
-void ParagraphTool::moveActiveRulerTo(const QPointF &point)
-{
-    m_activeShape->moveRulerTo(m_activeRuler, point, smoothMovement());
+    // the document might have changed, so we have to deactivate the textblock
+    deactivateTextBlock();
 }
 

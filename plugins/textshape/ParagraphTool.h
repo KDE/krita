@@ -53,13 +53,6 @@ public:
     // reimplemented from superclass
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-    // select the paragraph below the specified cursor position
-    bool selectTextBlockAt(const QPointF &point);
-
-    // deselect the current text block
-    // (for example use clicked somwhere else)
-    void deselectTextBlock();
-
     // reimplemented from superclass
     virtual void mousePressEvent( KoPointerEvent *event );
 
@@ -109,16 +102,32 @@ signals:
 protected:
     QWidget *createOptionWidget();
 
-    bool createShapeList();
-
     void loadRulers();
     void saveRulers();
+
+    // paint a label at the specified position
+    void paintLabel(QPainter &painter, const KoViewConverter &converter) const;
+
+    // paint all rulers for a given shape
+    void paintRulers(QPainter &painter, const KoViewConverter &converter, const ShapeSpecificData &shape) const;
+
+    bool createShapeList();
+
+    // activate the paragraph below the specified cursor position
+    bool activateTextBlockAt(const QPointF &point);
+
+    // deactivate the current text block
+    // (for example use clicked somwhere else)
+    void deactivateTextBlock();
+
+    bool hasActiveTextBlock() const { return !m_activeCursor.isNull(); }
 
     bool hasActiveRuler() const { return m_activeRuler != noRuler; }
     void activateRuler(RulerIndex ruler, const ShapeSpecificData &shape);
     bool activateRulerAt(const QPointF &point);
     void deactivateRuler();
     void resetActiveRuler();
+    void moveActiveRulerTo(const QPointF &point);
 
     bool hasFocusedRuler() const { return m_focusedRuler >= 0 && m_focusedRuler < maxRuler; }
     void focusRuler(RulerIndex ruler);
@@ -130,25 +139,15 @@ protected:
 
     bool smoothMovement() { return m_smoothMovement; }
 
-    // paint a label at the specified position
-    void paintLabel(QPainter &painter, const KoViewConverter &converter) const;
-
-    // paint all rulers for a given shape
-    void paintRulers(QPainter &painter, const KoViewConverter &converter, const ShapeSpecificData &shape) const;
-
-    void moveActiveRulerTo(const QPointF &point);
-
-    bool hasSelection() const { return !m_cursor.isNull(); }
-
     // internal convencience methods
-    QTextBlock textBlock() const { Q_ASSERT(m_cursor.block().isValid()); return m_cursor.block(); }
+    QTextBlock textBlock() const { Q_ASSERT(m_activeCursor.block().isValid()); return m_activeCursor.block(); }
 
     QTextBlockFormat blockFormat() const { return textBlock().blockFormat(); }
     QTextCharFormat charFormat() const { return textBlock().charFormat(); }
     QTextLayout *textLayout() const { return textBlock().layout(); }
 
 private:
-    QTextCursor m_cursor;
+    QTextCursor m_activeCursor;
     KoParagraphStyle *m_paragraphStyle;
 
     QVector<ShapeSpecificData> m_shapes;

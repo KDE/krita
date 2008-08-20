@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ class SetPrivate;
 
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
-   \author Jaroslaw Staniek <js@iidea.pl>
+   \author Jarosław Staniek <staniek@kde.org>
  */
 class KOPROPERTY_EXPORT Set : public QObject
 {

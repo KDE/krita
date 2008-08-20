@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -79,7 +79,7 @@ class EditorItem;
     </ul>
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
-   \author Jaroslaw Staniek <js@iidea.pl>
+   \author Jarosław Staniek <staniek@kde.org>
  */
 class KOPROPERTY_EXPORT Editor : public K3ListView
 {

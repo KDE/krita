@@ -83,14 +83,10 @@ void KisPopupButton::showPopupWidget()
     {
         QPoint pt = mapToGlobal ( QPoint(0, height()) );
         QRect screen = qApp->desktop()->availableGeometry();
-        qDebug() << pt;
-        qDebug() << screen;
 
         if (pt.x() + d->popupWidget->width() > screen.width() ) {
             pt.setX(pt.x() + (screen.width() - pt.x() + d->popupWidget->width()));
         }
-        qDebug() << d->popupWidget->geometry();
-        qDebug() << pt;
         d->frame->move(pt);
         d->frame->setVisible(true);
     }

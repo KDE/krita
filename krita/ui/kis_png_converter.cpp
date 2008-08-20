@@ -139,7 +139,7 @@ namespace {
     
         const uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
     
-        kDebug() << "Writing Raw profile: type=" << profile_type << ", length=" << profile_data.length() << endl;
+        dbgFile << "Writing Raw profile: type=" << profile_type << ", length=" << profile_data.length() << endl;
     
         text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
         description_length = profile_type.length();

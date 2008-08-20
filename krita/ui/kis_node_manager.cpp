@@ -150,10 +150,6 @@ bool allowAsChild( const QString & parentType, const QString & childType )
 
 void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode)
 {
-    qDebug() << "Type: " << nodeType;
-    qDebug() << "Parent: " << parent;
-    qDebug() << "active node: " << _activeNode;
-
     KisNodeSP root = m_d->view->image()->root();
     if (!_activeNode)
         _activeNode = root->firstChild();

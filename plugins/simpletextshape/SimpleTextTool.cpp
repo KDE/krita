@@ -177,6 +177,8 @@ void SimpleTextTool::keyPressEvent(QKeyEvent *event)
             setTextCursor( textCursor() + 1 );
         } else if ((event->key() == Qt::Key_Left)) {
             setTextCursor( textCursor() - 1 );
+        } else if( event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter ) {
+            emit done();
         } else {
             addToTextCursor( event->text() );
         }

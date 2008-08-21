@@ -2,7 +2,7 @@
  *  kis_pattern.cc - part of Krayon
  *
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
- *                2001 John Califf
+ *                2001 John Califf <jwcaliff@compuzone.net>
  *                2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify

@@ -1,7 +1,7 @@
 /*
  *  kis_tool_line.cc - part of Krayon
  *
- *  Copyright (c) 2000 John Califf
+ *  Copyright (c) 2000 John Califf <jwcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
  *

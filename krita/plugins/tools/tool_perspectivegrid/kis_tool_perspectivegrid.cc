@@ -61,6 +61,7 @@ KisToolPerspectiveGrid::~KisToolPerspectiveGrid()
 
 void KisToolPerspectiveGrid::activate(bool )
 {
+    m_canvas->view()->perspectiveGridManager()->startEdition();
     if( ! m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid()->hasSubGrids() )
     {
         m_mode = MODE_CREATION;
@@ -75,6 +76,7 @@ void KisToolPerspectiveGrid::activate(bool )
 
 void KisToolPerspectiveGrid::deactivate()
 {
+    m_canvas->view()->perspectiveGridManager()->stopEdition();
     if( m_mode == MODE_CREATION )
     {
         m_points.clear();

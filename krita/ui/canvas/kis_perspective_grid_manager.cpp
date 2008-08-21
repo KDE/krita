@@ -96,7 +96,13 @@ void KisPerspectiveGridManager::startEdition()
 void KisPerspectiveGridManager::stopEdition()
 {
     m_toggleEdition = false;
-    m_toggleGrid->setEnabled( true );
+    if( m_view->resourceProvider()->currentImage()->perspectiveGrid()->hasSubGrids() )
+    {
+      m_toggleGrid->setEnabled( true );
+      m_toggleGrid->setChecked( true );
+    } else {
+      m_toggleGrid->setChecked( false );
+    }
 }
 
 #define pixelToView(point) \
@@ -110,7 +116,7 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QPoint& docum
     KisImageSP image = m_view->resourceProvider()->currentImage();
 
 
-    if (image && m_toggleEdition) {
+    if (image && !m_toggleEdition) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 
         KisConfig cfg;

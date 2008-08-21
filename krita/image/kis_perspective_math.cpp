@@ -134,7 +134,7 @@ QPointF KisPerspectiveMath::computeIntersection(const KisPerspectiveMath::LineEq
     // whether the two lines are approximately parallel.
     if(Eigen::ei_isMuchSmallerThan(det, qreal(1)))
     {   // special case where the two lines are approximately parallel. Pick any point on the first line.
-        if(qAbs(d1.b)>qAbs(d1.a))
+        if(std::abs(d1.b)>std::abs(d1.a))
             return QPointF(d1.b, d1.c/d1.b-d1.a);
         else
             return QPointF(d1.c/d1.a-d1.b, d1.a);

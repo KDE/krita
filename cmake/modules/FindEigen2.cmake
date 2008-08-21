@@ -19,6 +19,7 @@ find_path(EIGEN2_INCLUDE_DIR NAMES Eigen/Core
      PATHS
      ${INCLUDE_INSTALL_DIR}/eigen2
      ${KDE4_INCLUDE_DIR}/eigen2
+     ${CMAKE_INCLUDE_PATH}/eigen2
    )
 
 include(FindPackageHandleStandardArgs)

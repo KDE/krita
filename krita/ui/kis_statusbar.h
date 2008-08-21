@@ -58,11 +58,12 @@ private:
     KoProgressBar * m_progress;
     KStatusBar * m_statusbar;
 
+    QLabel *m_selectionStatusLabel;
     QLabel *m_statusBarZoomLabel; // Make interactive line edit
     QLabel *m_statusBarPositionLabel;
     QLabel *m_sizeLabel;
 
-    KSqueezedTextLabel *m_statusBarSelectionLabel;
+    KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;
     KSqueezedTextLabel *m_statusBarHelpLabel;
 

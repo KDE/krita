@@ -49,6 +49,11 @@ KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
     : m_view( view )
     , m_statusbar( sb )
 {
+    m_selectionStatusLabel = new QLabel(sb);
+    m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
+    m_selectionStatusLabel->setEnabled(false);
+    sb->addWidget(m_selectionStatusLabel);
+
     sb->insertFixedItem("99999 x 99999", IMAGE_SIZE_ID);
     sb->insertFixedItem("99999, 99999", POINTER_POSITION_ID);
 
@@ -56,8 +61,10 @@ KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
     sb->changeItem("", IMAGE_SIZE_ID);
 
     // XXX: Use the KStatusbar fixed size labels!
-    m_statusBarSelectionLabel = new KSqueezedTextLabel(sb);
-    sb->addWidget(m_statusBarSelectionLabel,2);
+    m_statusBarStatusLabel = new KSqueezedTextLabel(sb);
+    connect( KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
+             m_statusBarStatusLabel, SLOT(setText(const QString &)) );
+    sb->addWidget(m_statusBarStatusLabel,2);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel(sb);
     sb->addWidget(m_statusBarProfileLabel,3);
@@ -108,19 +115,16 @@ void KisStatusBar::setSelection( KisImageSP img )
 {
     Q_UNUSED( img );
 
-    if (m_statusBarSelectionLabel == 0) {
-        return;
-    }
-
     KisSelectionSP selection = m_view->selection();
     if ( selection ) {
+        m_selectionStatusLabel->setEnabled(true);
+
         QRect r = selection->selectedExactRect();
-        m_statusBarSelectionLabel->setText( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
+        m_selectionStatusLabel->setToolTip( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
         return;
     }
-
-    m_statusBarSelectionLabel->setText(i18n("No Selection"));
-
+    m_selectionStatusLabel->setEnabled(false);
+    m_selectionStatusLabel->setToolTip(i18n("No Selection"));
 }
 
 void KisStatusBar::setProfile( KisImageSP img )

@@ -59,11 +59,13 @@ KisLevelFilter::~KisLevelFilter()
 
 KisFilterConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image ) const
 {
+    Q_UNUSED(image);
     return new KisLevelConfigWidget(parent, dev);
 }
 
 bool KisLevelFilter::workWith(KoColorSpace* cs) const
 {
+    Q_UNUSED(cs);
     return true;
 }
 
@@ -80,20 +82,20 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
     QPoint dstTopLeft = dstInfo.topLeft();
     QPoint srcTopLeft = srcInfo.topLeft();
     if (!config) {
-        kdWarning() << "No configuration object for level filter\n";
+        kWarning() << "No configuration object for level filter\n";
         return;
     }
-    
+
     Q_ASSERT(config);
 
     KoColorTransformation * adjustment = 0;
-    
+
     int blackvalue = config->getInt( "blackvalue" );
     int whitevalue = config->getInt( "whitevalue", 255 );
     double gammavalue = config->getDouble( "gammavalue", 1.0 );
     int outblackvalue = config->getInt( "outblackvalue" );
     int outwhitevalue = config->getInt( "outwhitevalue", 255 );
-    
+
     Q_UINT16 transfer[256];
     for (int i = 0; i < 256; i++) {
         if (i <= blackvalue)
@@ -110,7 +112,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
         transfer[i] = ((int)transfer[i] * 0xFFFF) / 0xFF ;
     }
     adjustment = src->colorSpace()->createBrightnessContrastAdjustment(transfer);
-    
+
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
@@ -140,7 +142,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
                     }
                     pixelsProcessed += npix;
                     break;
-    
+
                 case MAX_SELECTED:
                 {
                     const Q_UINT8 *firstPixelSrc = srcIt.oldRawData();
@@ -162,7 +164,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
                     ++dstIt;
                     break;
                 }
-    
+
                 default:
                     // adjust, but since it's partially selected we also only partially adjust
                     adjustment->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
@@ -276,7 +278,7 @@ KisFilterConfiguration * KisLevelConfigWidget::configuration() const
     config->setProperty( "gammavalue", m_page.ingradient->getGamma());
     config->setProperty( "outblackvalue", m_page.outblackspin->value());
     config->setProperty( "outwhitevalue", m_page.outwhitespin->value());
-    
+
     return config;
 }
 

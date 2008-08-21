@@ -100,7 +100,7 @@ class RotationFunction : public BaseFunction {
             double sinAngle21 = sin(angle21);
             double tx21 = parameters[ m_idx[ INDX_tx21 ] ];
             double ty21 = parameters[ m_idx[ INDX_ty21 ] ];
-            
+
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
@@ -123,7 +123,7 @@ class RotationFunction : public BaseFunction {
             double angle21 = parameters[ m_idx[ INDX_angle ] ];
             double cosAngle21 = cos(angle21);
             double sinAngle21 = sin(angle21);
-            
+
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
@@ -190,7 +190,7 @@ class HomographyFunction : public BaseFunction {
             double h32 = parameters[ m_idx[ INDX_h32 ] ];
             double h13 = parameters[ m_idx[ INDX_h13 ] ];
             double h23 = parameters[ m_idx[ INDX_h23 ] ];
-            
+
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
@@ -221,7 +221,7 @@ class HomographyFunction : public BaseFunction {
             double h32 = parameters[ m_idx[ INDX_h32 ] ];
             double h13 = parameters[ m_idx[ INDX_h13 ] ];
             double h23 = parameters[ m_idx[ INDX_h23 ] ];
-            
+
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
@@ -236,11 +236,11 @@ class HomographyFunction : public BaseFunction {
             double fx2 = func(aim2, bim2, cim2, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim2, bim2, cim2, r2, m_yc, m_j2, m_yc);
             double norm = 1.0 / ( h13 * fx2 + h23 * fy2 + 1.0 );
-            
+
 //             double norm = 1.0 / ( h13 * fx2 + h23 * fy2 + 1.0 );
 //             res_f1 = (fx1 - (h11 * fx2 + h21 * fy2 + h31) * norm);
 //             res_f2 = (fy1 - (h12 * fx2 + h22 * fy2 + h32) * norm);
-            
+
             // Compute the jacobian
             // derivative of the first function
             jt(pos, 0) = derivEnA(aim1, bim1, cim1, r1, m_xc, m_i1, m_xc);
@@ -304,7 +304,7 @@ class HomographySameDistortionFunction : public BaseFunction {
             double h32 = parameters[ m_idx[ INDX_h32 ] ];
             double h13 = parameters[ m_idx[ INDX_h13 ] ];
             double h23 = parameters[ m_idx[ INDX_h23 ] ];
-            
+
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
@@ -332,7 +332,7 @@ class HomographySameDistortionFunction : public BaseFunction {
             double h32 = parameters[ m_idx[ INDX_h32 ] ];
             double h13 = parameters[ m_idx[ INDX_h13 ] ];
             double h23 = parameters[ m_idx[ INDX_h23 ] ];
-            
+
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
@@ -347,11 +347,11 @@ class HomographySameDistortionFunction : public BaseFunction {
             double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
             double norm = 1.0 / ( h13 * fx2 + h23 * fy2 + 1.0 );
-            
+
 //             double norm = 1.0 / ( h13 * fx2 + h23 * fy2 + 1.0 );
 //             res_f1 = (fx1 - (h11 * fx2 + h21 * fy2 + h31) * norm);
 //             res_f2 = (fy1 - (h12 * fx2 + h22 * fy2 + h32) * norm);
-            
+
             // Compute the jacobian
             // derivative of the first function
             jt(pos, 0) = derivEnA(aim, bim, cim, r1, m_xc, m_i1, m_xc) - (da2f1* h11 + da2f2 * h21) * norm;
@@ -422,7 +422,7 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             double h32_2 = parameters[ INDX_h32 + frame2start ];
             double h13_2 = parameters[ INDX_h13 + frame2start ];
             double h23_2 = parameters[ INDX_h23 + frame2start ];
-            
+
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
@@ -433,7 +433,7 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
             double norm_2 = 1.0 / ( h13_2 * fx2 + h23_2 * fy2 + 1.0 );
-            
+
             res_f1 = ( ( h11_1 * fx1 + h21_1 * fy1 + h31_1 ) * norm_1
                      - ( h11_2 * fx2 + h21_2 * fy2 + h31_2 ) * norm_2 );
             res_f2 = ( ( h12_1 * fx1 + h22_1 * fy1 + h32_1 ) * norm_1
@@ -447,10 +447,10 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             int frame1start = m_frame1 * SIZEHOMOGRAPHYINDEXES + SIZEINDEXES;
             double h11_1 = parameters[ INDX_h11 + frame1start ];
             double h21_1 = parameters[ INDX_h21 + frame1start ];
-            double h31_1 = parameters[ INDX_h31 + frame1start ];
+            //double h31_1 = parameters[ INDX_h31 + frame1start ];
             double h12_1 = parameters[ INDX_h12 + frame1start ];
             double h22_1 = parameters[ INDX_h22 + frame1start ];
-            double h32_1 = parameters[ INDX_h32 + frame1start ];
+            //cdouble h32_1 = parameters[ INDX_h32 + frame1start ];
             double h13_1 = parameters[ INDX_h13 + frame1start ];
             double h23_1 = parameters[ INDX_h23 + frame1start ];
             int frame2start = m_frame2 * SIZEHOMOGRAPHYINDEXES + SIZEINDEXES;
@@ -462,7 +462,7 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             double h32_2 = parameters[ INDX_h32 + frame2start ];
             double h13_2 = parameters[ INDX_h13 + frame2start ];
             double h23_2 = parameters[ INDX_h23 + frame2start ];
-            
+
             double r1 = (m_i1 - m_xc) * (m_i1 - m_xc) + (m_j1 - m_yc) * (m_j1 - m_yc);
             r1 *= m_norm;
             double r2 = (m_i2 - m_xc) * (m_i2 - m_xc) + (m_j2 - m_yc) * (m_j2 - m_yc);
@@ -488,11 +488,11 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             double fx2 = func(aim, bim, cim, r2, m_xc, m_i2, m_xc);
             double fy2 = func(aim, bim, cim, r2, m_yc, m_j2, m_yc);
             double norm_2 = 1.0 / ( h13_2 * fx2 + h23_2 * fy2 + 1.0 );
-            
+
 //             double norm = 1.0 / ( h13 * fx2 + h23 * fy2 + 1.0 );
 //             res_f1 = (fx1 - (h11 * fx2 + h21 * fy2 + h31) * norm);
 //             res_f2 = (fy1 - (h12 * fx2 + h22 * fy2 + h32) * norm);
-            
+
             // Compute the jacobian
             // derivative of the first function
             jt(pos, INDX_a ) = (da2f1_1 * h11_1 + da2f2_1 * h21_1) * norm_1 - (da2f1_2 * h11_2 + da2f2_2 * h21_2) * norm_2;
@@ -506,7 +506,7 @@ class DoubleHomographySameDistortionFunction : public BaseFunction {
             jt(pos, INDX_h12 + frame1start ) = 0; // dh12
             jt(pos, INDX_h22 + frame1start ) = 0; // dh22
             jt(pos, INDX_h32 + frame1start ) = 0; // dh32
-            jt(pos, INDX_h13 + frame1start ) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fx1; 
+            jt(pos, INDX_h13 + frame1start ) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fx1;
             jt(pos, INDX_h23 + frame1start ) = -(h11_1 * fx1 + h21_1 * fy1 + h31_1) * norm_1 * norm_1 * fy1;
 #endif
             // Image 2

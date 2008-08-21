@@ -226,24 +226,21 @@ void MixerCanvas::slotClear()
 
 void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
 {
-#if 0 // Apparently setting the paintop and settings is not atomic: it will be when I have fixed
-
-    if (key != KisCanvasResourceProvider::CurrentPaintopSettings)
+    if (key != KisCanvasResourceProvider::CurrentPaintOpPreset) {
         resourceProvider()->setResource(key, value);
-    else
-        return;
+    }
     switch (key) {
-
-      // the presets thing (boud)
-        case KisCanvasResourceProvider::CurrentPaintop:
+    case KisCanvasResourceProvider::CurrentPaintOpPreset:
             checkCurrentPaintop();
             break;
 
         case KisCanvasResourceProvider::CurrentKritaNode:
             checkCurrentLayer();
             break;
+        default:
+            ;
     }
-#endif
+
 }
 
 #include "mixercanvas.moc"

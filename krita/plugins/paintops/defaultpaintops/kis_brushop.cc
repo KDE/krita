@@ -230,6 +230,7 @@ KisPaintOpSettingsSP KisBrushOpFactory::settings(QWidget * parent, const KoInput
 
 KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
 {
+    Q_UNUSED(image);
     return new KisBrushOpSettings(0);
 }
 

@@ -52,12 +52,12 @@ private slots:
 
 private:
     KisView2 *m_view;
+    KisCanvasResourceProvider *m_resources;
     MixerTool *m_tool;
 
     QButtonGroup *m_bgColors;
     QList<KoColor> m_vColors;
 
-    KisCanvasResourceProvider *m_resources;
 
     const KoColorSpace *m_colorspace;
 };

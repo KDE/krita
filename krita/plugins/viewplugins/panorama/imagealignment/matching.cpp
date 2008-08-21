@@ -281,7 +281,7 @@ lMatches matching(const lInterestPoints& pointsref, const lInterestPoints& point
             if( hypo.sumScore > (0.6 * 3) && fabs(hypo.angle) < 0.1 )
             {
                 dbgPlugins << "Kept : " << hypo.angle << " " << hypo.sumScore << " " << hypo.matches.size();
-                double score = hypo.sumScore;
+                //double score = hypo.sumScore;
                 lMatches seedMatches = hypo.matches;
                 for(lMatches::iterator it = seedMatches.begin();
                     it != seedMatches.end();

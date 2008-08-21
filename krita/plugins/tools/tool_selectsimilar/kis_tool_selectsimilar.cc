@@ -175,6 +175,7 @@ void KisToolSelectSimilar::slotTimer()
 
 void KisToolSelectSimilar::setPickerCursor(selectionAction action)
 {
+    Q_UNUSED(action);
 //     switch (action) {
 //         case SELECTION_ADD:
 //             useCursor(m_addCursor);

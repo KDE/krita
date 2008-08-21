@@ -49,7 +49,7 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
                     m_functions.push_back(_TFunction_( m_xc, m_yc, m_norm, frameRef, ref.x(), ref.y(), frameMatch, match.x(), match.y() ) );
                 }
             }
-            
+
         }
         dbgPlugins << "Nb of functions is " << m_functions.size();
     }
@@ -58,9 +58,9 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
     {
         std::vector<double> values_ = values(parameters);
         QList<_TFunction_> functions_;
-        
+
         Q_ASSERT(2 * m_functions.size() == values_.size());
-        for(int i = 0; i < m_functions.size(); i++)
+        for(uint i = 0; i < m_functions.size(); i++)
         {
             if( fabs(values_[ 2 * i + 1]) < threshold && fabs(values_[ 2 * i ]) < threshold)
             {
@@ -90,7 +90,7 @@ class PanoptimFunction : public KisImageAlignmentModel::OptimizationFunction {
     gmm::row_matrix< gmm::rsvector<double> > jacobian(const std::vector<double>& parameters)
     {
       gmm::row_matrix< gmm::wsvector<double> > jt(count(), parameters.size());
-      
+
       // Compute the jacobian
       int pos = 0;
       for(typename QList<_TFunction_>::iterator it = m_functions.begin(); it != m_functions.end(); ++it)

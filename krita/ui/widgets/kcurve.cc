@@ -209,12 +209,12 @@ int KCurve::nearestPointInRange(QPointF pt) const
     int nearestIndex = -1;
     int i = 0;
 
-    foreach (QPointF point, m_points)
+    foreach (const QPointF & point, m_points)
     {
-        double distanceSquared = ( pt.x() - point.rx() ) *
-                                 ( pt.x() - point.rx() ) +
-                                 ( pt.y() - point.ry() ) *
-                                 ( pt.y() - point.ry() );
+        double distanceSquared = ( pt.x() - point.x() ) *
+                                 ( pt.x() - point.x() ) +
+                                 ( pt.y() - point.y() ) *
+                                 ( pt.y() - point.y() );
 
         if (distanceSquared < nearestDistanceSquared)
         {

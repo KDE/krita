@@ -64,6 +64,10 @@ public:
 
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
     {
+        Q_UNUSED(xSpacing);
+        Q_UNUSED(ySpacing);
+        Q_UNUSED(pressure1);
+        Q_UNUSED(pressure2);
         // XXX: this is wrong, but that doesn't matter, since paintLine doesn't use spacing.
         return 0.5;
     }

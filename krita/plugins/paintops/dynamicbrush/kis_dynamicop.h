@@ -44,7 +44,10 @@ class KisDynamicOpFactory : public KisPaintOpFactory  {
         virtual QString id() const { return "dynamicbrush"; }
         virtual QString name() const { return i18n("Dynamic Brush"); }
         virtual QString pixmap() { return "dynamicbrush.png"; }
+
+        using KisPaintOpFactory::settings;
         virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+
     private:
         KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
         KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
@@ -59,7 +62,11 @@ class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
         virtual QWidget *widget() const { return m_optionsWidget; }
         /// @return a brush with the current shapes, coloring and program
         KisDynamicBrush* createBrush(KisPainter *painter) const;
+
+        using KisPaintOpSettings::fromXML;
         virtual void fromXML(const QDomElement&);
+
+        using KisPaintOpSettings::toXML;
         virtual void toXML(QDomDocument&, QDomElement&) const;
     private:
         QWidget* m_optionsWidget;
@@ -78,6 +85,10 @@ public:
     void paintAt(const KisPaintInformation& info);
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
     {
+        Q_UNUSED(xSpacing);
+        Q_UNUSED(ySpacing);
+        Q_UNUSED(pressure1);
+        Q_UNUSED(pressure2);
         // XXX: this is wrong!
         return 0.5;
     }

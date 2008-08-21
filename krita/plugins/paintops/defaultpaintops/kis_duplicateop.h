@@ -64,7 +64,10 @@ Q_OBJECT
         bool healing() const;
         bool perspectiveCorrection() const;
 
+        using KisPaintOpSettings::fromXML;
         virtual void fromXML(const QDomElement&);
+
+        using KisPaintOpSettings::toXML;
         virtual void toXML(QDomDocument&, QDomElement&) const;
     private:
         QWidget* m_optionsWidget;

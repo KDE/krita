@@ -34,14 +34,14 @@ class KisHistogram;
 #if 0
 
 class KisLevelFilterConfiguration : public KisFilterConfiguration {
-    
+
 public:
-    
+
     KisLevelFilterConfiguration();
     virtual ~KisLevelFilterConfiguration();
     virtual void fromXML( const QString&  );
     virtual QString toString();
-    
+
 public:
     Q_UINT8 blackvalue, whitevalue;
     double gammavalue;
@@ -66,6 +66,9 @@ public:
 
 //     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+
+    using KisFilter::process;
+
     virtual void process(KisConstProcessingInformation src,
                          KisProcessingInformation dst,
                          const QSize& size,

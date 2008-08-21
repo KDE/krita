@@ -82,7 +82,7 @@ void KisToolPerspectiveGrid::deactivate()
         m_points.clear();
         m_dragging = false;
     }
-    m_canvas->updateCanvas(); 
+    m_canvas->updateCanvas();
 }
 
 bool KisToolPerspectiveGrid::mouseNear(const QPointF& mousep, const QPointF& point)
@@ -305,6 +305,7 @@ void KisToolPerspectiveGrid::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolPerspectiveGrid::paint(QPainter& gc, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
     if( m_mode == MODE_CREATION )
     {
         drawGridCreation(gc);
@@ -316,7 +317,7 @@ void KisToolPerspectiveGrid::paint(QPainter& gc, const KoViewConverter &converte
 void KisToolPerspectiveGrid::drawGridCreation(QPainter& gc)
 {
     dbgPlugins << "drawGridCreation";
-    
+
     KisConfig cfg;
     QPen pen = QPen ( cfg.getGridMainColor(), 1, Qt::SolidLine );
 
@@ -362,7 +363,7 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
 
     KisConfig cfg;
     QPen pen = QPen ( cfg.getGridMainColor(), 1, Qt::SolidLine );
-    
+
     QPointF startPos;
     QPointF endPos;
 
@@ -374,7 +375,7 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
     for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
     {
         KisSubPerspectiveGrid* grid = *it;
-        int index = grid->index();
+
         { // Draw top
             startPos = pixelToView(*grid->topLeft());
             endPos = pixelToView(*grid->topRight());

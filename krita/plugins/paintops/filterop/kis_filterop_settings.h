@@ -42,8 +42,10 @@ public:
 
     virtual void setNode( KisNodeSP node );
 
+    using KisPaintOpSettings::fromXML;
     virtual void fromXML(const QDomElement&);
 
+    using KisPaintOpSettings::toXML;
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
 protected slots:

@@ -72,7 +72,10 @@ public:
 
     virtual QWidget *widget() const { return m_optionsWidget; }
 
+    using KisPaintOpSettings::fromXML;
     virtual void fromXML(const QDomElement&);
+
+    using KisPaintOpSettings::toXML;
     virtual void toXML(QDomDocument&, QDomElement&) const;
 public:
 

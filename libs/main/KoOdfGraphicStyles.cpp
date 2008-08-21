@@ -219,18 +219,22 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
             double cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString() ).remove('%') );
             rg->setCenter( QPointF( size.width() * 0.01 * cx, size.height() * 0.01 * cy ) );
             rg->setFocalPoint( rg->center() );
-            double dx = 0.5 * size.width();
-            double dy = 0.5 * size.height();
+
+            double border = e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
+            double dx = 0.5 * size.width() * ( 1 - ( border / 100) );
+            double dy = 0.5 * size.height() * ( 1 - ( border / 100) );
             rg->setRadius( sqrt( dx*dx + dy*dy ) );
             gradient = rg;
         }
-        else if( type == "linear" )
+        else if( type == "linear" || type == "axial" )
         {
             QLinearGradient * lg = new QLinearGradient();
             double angle = 90 + e->attributeNS( KoXmlNS::draw, "angle", "0" ).toDouble();
             double radius = 0.5 * sqrt( size.width()*size.width() + size.height()*size.height() );
-            double sx = cos( angle * M_PI / 180 ) * radius;
-            double sy = sin( angle * M_PI / 180 ) * radius;
+
+            double border = e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
+            double sx = cos( angle * M_PI / 180 ) * radius * ( 1 - ( border / 100) );
+            double sy = sin( angle * M_PI / 180 ) * radius * ( 1 - ( border / 100) );
             lg->setStart( QPointF( 0.5 * size.width() + sx, 0.5 * size.height() + sy ) );
             lg->setFinalStop( QPointF( 0.5 * size.width() - sx, 0.5 * size.height() - sy ) );
             gradient = lg;
@@ -238,18 +242,38 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         else
             return QBrush();
 
-        QGradientStop start;
-        start.first = 0.0;
-        start.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
-        start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove('%').toDouble() );
+        QGradientStops stops;
+        if( type != "axial" )
+        {
+            QGradientStop start;
+            start.first = 0.0;
+            start.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
+            start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove('%').toDouble() );
+            stops << start;
+        }
+        else
+        {
+            QGradientStop start;
+            start.first = 0.0;
+            start.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
+            start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove('%').toDouble() );
+
+            QGradientStop middle;
+            middle.first = 0.5;
+            middle.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
+            middle.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove('%').toDouble() );
+
+            stops << start << middle;
+        }
 
         QGradientStop end;
         end.first = 1.0;
         end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
         end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove('%').toDouble() );
 
-        QGradientStops stops;
-        gradient->setStops( stops << start << end );
+        stops << end;
+
+        gradient->setStops( stops );
     }
     else if( e->namespaceURI() == KoXmlNS::svg )
     {

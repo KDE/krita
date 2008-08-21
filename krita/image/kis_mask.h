@@ -125,22 +125,22 @@ public:
     QRect exactBounds() const;
 
     /**
-     * overriden from KisBaseNode
+     * overridden from KisBaseNode
      */
     qint32 x() const;
 
     /**
-     * overriden from KisBaseNode
+     * overridden from KisBaseNode
      */
     void setX(qint32 x);
 
     /**
-     * overriden from KisBaseNode
+     * overridden from KisBaseNode
      */
     qint32 y() const;
 
     /**
-     * overriden from KisBaseNode
+     * overridden from KisBaseNode
      */
     void setY(qint32 y);
 

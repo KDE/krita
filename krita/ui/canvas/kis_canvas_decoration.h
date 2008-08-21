@@ -40,7 +40,7 @@ class KRITAUI_EXPORT KisCanvasDecoration : public QObject {
         const QString& id() const;
         const QString& name() const;
         /**
-         * @return wether the decoration is visible.
+         * @return whether the decoration is visible.
          */
         bool visible() const;
         /**

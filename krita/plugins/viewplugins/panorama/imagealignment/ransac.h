@@ -45,7 +45,7 @@ class Ransac {
       std::list<_Tmodel_*> models;
       if( _data.size() < _Tmodel_::nbFit())
       {
-        std::cerr << "Not enought data a minimum of " << _Tmodel_::nbFit() << " is required but " << _data.size() << " werer provided" << std::endl;
+        std::cerr << "Not enough data a minimum of " << _Tmodel_::nbFit() << " is required but " << _data.size() << " werer provided" << std::endl;
         return models;
       }
       for(uint i = 0; i < m_iter; i++)
@@ -84,7 +84,7 @@ class Ransac {
               }
             }
           }
-          // Check if there is enought good data
+          // Check if there is enough good data
           if( gooddata.size() > m_nbGood)
           {
             model->addData( gooddata.begin(), gooddata.end() );

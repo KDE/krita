@@ -19151,7 +19151,7 @@ namespace cimg {
 \endverbatim
 
    \warning As the type of object returned by the macro \c cimg_option(option,default,usage) 
-   is defined by the type of \c default, undesired casts may appear when writting code such as :
+   is defined by the type of \c default, undesired casts may appear when writing code such as :
    \code
    const double sigma = cimg_option("-val",0,"A floating point value");
    \endcode

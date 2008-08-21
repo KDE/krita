@@ -121,7 +121,7 @@ void KisTileSwapper::run() {
             return;
         // AGRESSIVE SWAPPER! Loops until everything is swapped, and wakes as soon as something is swappable! (Hopefully, there's the chance of a signal happening
         // between queue unlock and waitlock ###)
-        // ### Less agressive swapper would be problematic atm: If we signal during the swapping, it is lost!
+        // ### Less aggressive swapper would be problematic atm: If we signal during the swapping, it is lost!
 
         // There are new items in the workqueue, hopefully
         m_swapQueueLock.lock();

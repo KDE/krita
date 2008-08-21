@@ -61,26 +61,27 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
 bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)
 {
     QString filename = d->saveContext->saveDeviceData( layer );
-    
+
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
     elt.setAttribute("src", filename);
     d->currentElement->appendChild( elt );
-    
+
     return true;
 }
 
 bool KisOpenRasterStackSaveVisitor::visit(KisGeneratorLayer* layer)
 {
+    Q_UNUSED(layer);
     // XXX: implement!
-    
+
     return true;
 }
 
 bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
 {
     QDomElement* previousElt = d->currentElement;
-    
+
     QDomElement elt = d->layerStack.createElement("stack");
     d->currentElement = &elt;
     saveLayerInfo(elt, layer );
@@ -96,7 +97,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
         d->currentElement = 0;
         d->saveContext->saveStack( d->layerStack );
     }
-    
+
     return true;
 }
 

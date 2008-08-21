@@ -42,7 +42,7 @@ void pfstmo_trilateral( int argc, char* argv[] )
   pfs::DOMIO pfsio;
 
   //--- default tone mapping parameters;
-static double    sigma_c          = 21.;         /* The only user paramter                */
+static double    sigma_c          = 21.;         /* The only user parameter                */
 static double    saturation       = 1.0;
 static double    base_range       = 5.0;
 static double    base_value       = 0.0;

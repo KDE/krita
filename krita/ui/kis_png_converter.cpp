@@ -111,90 +111,90 @@ namespace {
     long formatStringList(char *string, const size_t length, const char *format, va_list operands)
     {
         int n = vsnprintf(string, length, format, operands);
-    
+
         if (n < 0)
             string[length-1] = '\0';
-    
+
         return((long) n);
     }
-    
+
     long formatString(char *string, const size_t length, const char *format,...)
     {
         long n;
-    
+
         va_list operands;
-    
+
         va_start(operands,format);
         n = (long) formatStringList(string, length, format, operands);
         va_end(operands);
         return(n);
     }
-    
+
     void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type, QByteArray profile_data)
     {
-        
+
         png_textp      text;
-    
+
         png_uint_32    allocated_length, description_length;
-    
+
         const uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-    
+
         dbgFile << "Writing Raw profile: type=" << profile_type << ", length=" << profile_data.length() << endl;
-    
+
         text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
         description_length = profile_type.length();
         allocated_length   = (png_uint_32) (profile_data.length()*2 + (profile_data.length() >> 5) + 20 + description_length);
-    
+
         text[0].text   = (png_charp) png_malloc(ping, allocated_length);
-    
+
         QString key = "Raw profile type " + profile_type.toLatin1();
         QByteArray keyData = key.toLatin1();
         text[0].key = keyData.data();
-    
+
         uchar* sp = (uchar*)profile_data.data();
         png_charp dp = text[0].text;
         *dp++='\n';
-    
+
         memcpy(dp, (const char *) profile_type.toLatin1().data(), profile_type.length());
-    
+
         dp += description_length;
         *dp++='\n';
-    
+
         formatString(dp, allocated_length-strlen(text[0].text), "%8lu ", profile_data.length());
-    
+
         dp += 8;
-    
+
         for(long i=0; i < (long) profile_data.length(); i++)
         {
             if (i%36 == 0)
                 *dp++='\n';
-    
+
             *(dp++)=(char) hex[((*sp >> 4) & 0x0f)];
             *(dp++)=(char) hex[((*sp++ ) & 0x0f)];
         }
-    
+
         *dp++='\n';
         *dp='\0';
         text[0].text_length = (png_size_t) (dp-text[0].text);
         text[0].compression = -1;
-    
+
         if (text[0].text_length <= allocated_length)
             png_set_text(ping, ping_info,text, 1);
-    
+
         png_free(ping, text[0].text);
         png_free(ping, text);
     }
     QByteArray png_read_raw_profile(png_textp text)
     {
         QByteArray profile;
-        
+
         unsigned char unhex[103]={0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
                     0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
                     0,0,0,0,0,0,0,0,0,1, 2,3,4,5,6,7,8,9,0,0,
                     0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,
                     0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,10,11,12,
                     13,14,15};
-        
+
         png_charp sp=text[0].text + 1;
         /* look for newline */
         while (*sp != '\n')
@@ -460,7 +460,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // read all PNG info up to image data
     png_read_info(png_ptr, info_ptr);
 
-    
+
     if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY && info_ptr->bit_depth < 8)
     {
       png_set_expand (png_ptr);
@@ -471,7 +471,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
       png_set_packing (png_ptr);
     }
 
-  
+
     if (info_ptr->color_type != PNG_COLOR_TYPE_PALETTE &&
       (info_ptr->valid & PNG_INFO_tRNS))
     {
@@ -633,7 +633,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if(color_type == PNG_COLOR_TYPE_PALETTE) {
         png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette);
     }
-    
+
     // Read the transparency palette
     quint8 palette_alpha[256];
     memset(palette_alpha, 255, 256);
@@ -808,7 +808,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP im
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
-    // Open a QIODevice for writting
+    // Open a QIODevice for writing
     QFile *fp = new QFile( QFile::encodeName(uri.path()) );
     KisImageBuilder_Result result = buildFile(fp, img, device, annotationsStart, annotationsEnd, options, metaData);
     delete fp;
@@ -821,7 +821,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 {
     if(!iodevice->open(QIODevice::WriteOnly))
     {
-        dbgFile << "Failed to open PNG File for writting";
+        dbgFile << "Failed to open PNG File for writing";
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -831,7 +831,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 
-    // Setup the writting callback of libpng
+    // Setup the writing callback of libpng
     int height = img->height();
     int width = img->width();
     // Initialize structures
@@ -957,7 +957,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
-        if (!(*it) || (*it) -> type() == QString()) {
+        if (!(*it) || (*it)->type().isEmpty()) {
             dbgFile << "Warning: empty annotation";
             ++it;
             continue;
@@ -1003,9 +1003,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 
         png_set_text(png_ptr, info_ptr, texts, nbtexts);
     }
-    
+
     // Save metadata following imagemagick way
-    
+
         // Save exif
     if( metaData && !metaData->empty())
     {
@@ -1052,7 +1052,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
         }
 #endif
     }
-    
+
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);
     png_write_flush(png_ptr);

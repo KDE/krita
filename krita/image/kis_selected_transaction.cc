@@ -27,10 +27,10 @@
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
 
-KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent) :
-    KisTransaction(name, node->paintDevice(), parent),
-    m_hadSelection(false /*device->hasSelection()*/),
-    m_selTransaction(0)
+KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent)
+   : KisTransaction(name, node->paintDevice(), parent)
+   , m_selTransaction(0)
+   , m_hadSelection(false /*device->hasSelection()*/)
 {
     m_layer = dynamic_cast<KisLayer*>(node.data());
     while ( !m_layer && node->parent() ) {

@@ -150,7 +150,7 @@ KisTile::~KisTile()
 {
     m_tileData->lock.lock();
 
-    if ( (m_tileData->references == 1) && (m_tileData->timesLockedInMemory == 0) && (m_tileData->deleteable) ) { // We are the last tile refering to this shared tile data (timesLockedInMemory -> tileswapper
+    if ( (m_tileData->references == 1) && (m_tileData->timesLockedInMemory == 0) && (m_tileData->deleteable) ) { // We are the last tile referring to this shared tile data (timesLockedInMemory -> tileswapper
         m_tileData->lock.unlock();
 
         delete m_tileData; // Deregisters and deallocates itself

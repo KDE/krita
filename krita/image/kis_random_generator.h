@@ -27,7 +27,7 @@
  * This is a class that return a pseudo-random number that will be constant for a given
  * pixel coordinate.
  * The rational is that filters that use random number (such as noises, or raindrops)
- * needs to allways get the same random value at each run, or else the result will constantly
+ * needs to always get the same random value at each run, or else the result will constantly
  * changes when used as an adjustement layer.
  */
 class KRITAIMAGE_EXPORT KisRandomGenerator {

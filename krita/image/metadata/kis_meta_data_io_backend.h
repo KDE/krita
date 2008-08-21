@@ -35,7 +35,7 @@ namespace KisMetaData {
     class KRITAIMAGE_EXPORT IOBackend {
         public:
             /**
-             * Tell wether the backend input/output from/to binary data
+             * Tell whether the backend input/output from/to binary data
              * or text (XML or RDF) data.
              */
             enum BackendType {

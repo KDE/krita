@@ -40,8 +40,8 @@ struct KisPaintOpPreset::Private {
 
 
 KisPaintOpPreset::KisPaintOpPreset()
- : KoResource(QString::null)
- , m_d(new Private)
+   : KoResource(QString())
+   , m_d(new Private)
 {
     m_d->settings = 0;
 }

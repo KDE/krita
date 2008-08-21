@@ -104,6 +104,8 @@ void KisPerspectiveGridManager::stopEdition()
 
 void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, const QRect& area, const KoViewConverter &converter)
 {
+    Q_UNUSED(documentOffset);
+    Q_UNUSED(area);
 
     KisImageSP image = m_view->resourceProvider()->currentImage();
 
@@ -143,7 +145,7 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QPoint& docum
                 KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( &pol1, &vertVanishingPoint );
                 QPointF pol1b =  KisPerspectiveMath::computeIntersection(d1,d34);
                 gc.drawLine( pixelToView(pol1.toPoint()), pixelToView(pol1b.toPoint() ));
-        
+
                 QPointF pol2 = *grid->bottomRight() + i * v23;
                 KisPerspectiveMath::LineEquation d2 = KisPerspectiveMath::computeLineEquation( &pol2, &horizVanishingPoint );
                 QPointF pol2b = KisPerspectiveMath::computeIntersection(d2,d41);

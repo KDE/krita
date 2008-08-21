@@ -179,7 +179,7 @@ public:
 
     /**
      * Change the spacing of the brush.
-     * @param spacing a spacing of 1.0 means that strokes will be seperated from one time the size
+     * @param spacing a spacing of 1.0 means that strokes will be separated from one time the size
      *                of the brush.
      */
     void setSpacing(double spacing);

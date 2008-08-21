@@ -54,7 +54,7 @@ namespace KisMetaData {
             /**
              * Insert a new entry.
              * @param entry the new entry to insert in the metadata store, it must be a key which doesn't already exist
-             * @return false if the entry couldn't be included wether because the key already
+             * @return false if the entry couldn't be included whether because the key already
              *  exists
              */
             bool addEntry(const Entry& entry);

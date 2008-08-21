@@ -44,8 +44,8 @@ class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListMode
          */
         KisBookmarkedConfigurationManager* bookmarkedConfigurationManager();
         /**
-         * @return the number of configurations (the minimum is allways 2, the default
-         * configuration and the last used configuration are allways present)
+         * @return the number of configurations (the minimum is always 2, the default
+         * configuration and the last used configuration are always present)
          */
         virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
         /**

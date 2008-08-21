@@ -68,7 +68,7 @@ typedef double  COLOR[3];       /* red, green, blue (or X,Y,Z) */
 
 //static COLOR   **tmp_image;
 //static double  **tmp_float;
-static double    sigma_c          = 21.;         /* The only user paramter                */
+static double    sigma_c          = 21.;         /* The only user parameter                */
 static double    saturation       = 1.0;
 static double    base_range       = 5.0;
 static double    base_value       = 0.0;

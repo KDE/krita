@@ -56,7 +56,7 @@ protected:
      * false. Then visitAll returns false, otherwise true.
      *
      * @param node the parent node whose children will be visited
-     * @param breakOnFail break if one of the childs returns false on accept
+     * @param breakOnFail break if one of the children returns false on accept
      * @return true if none of the childnodes returns false on
      * accepting the visitor.
      */
@@ -78,7 +78,7 @@ protected:
      * false. Then visitAll returns false, otherwise true.
      *
      * @param node the parent node whose children will be visited
-     * @param breakOnFail break if one of the childs returns false on accept
+     * @param breakOnFail break if one of the children returns false on accept
      * @return true if none of the childnodes returns false on
      * accepting the visitor.
      */

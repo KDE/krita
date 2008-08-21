@@ -67,7 +67,7 @@ public:
 
     /**
      * Check if that configuration is compatible with this paint device.
-     * The default implementation allways return true.
+     * The default implementation always return true.
      */
     virtual bool isCompatible(const KisPaintDeviceSP) const;
 

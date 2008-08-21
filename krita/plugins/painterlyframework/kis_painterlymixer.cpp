@@ -40,7 +40,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     QString csid = KisKSF32ColorSpace<3>::ColorSpaceId().id();
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
 
-    // TODO Illuminant and colorspace has to be choosen at runtime
+    // TODO Illuminant and colorspace has to be chosen at runtime
     QList<const KoColorProfile*> profiles = f->profilesFor(csid);
     if (profiles.count()) { // don't crash if the profile is not available.
         const KoColorProfile* testp = profiles.at(0);

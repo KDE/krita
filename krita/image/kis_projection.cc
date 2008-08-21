@@ -43,7 +43,7 @@ public:
         , m_rc( rc )
         , m_group( layer )
         {
-            dbgRender << "queing job for layer " << layer->name() << " on rect " << rc;
+            dbgRender << "queueing job for layer " << layer->name() << " on rect " << rc;
         }
 
     void run()

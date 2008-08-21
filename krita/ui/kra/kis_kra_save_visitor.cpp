@@ -184,26 +184,31 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
 
 bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 {
+    Q_UNUSED(layer);
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisFilterMask *mask)
 {
+    Q_UNUSED(mask);
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisTransparencyMask *mask)
 {
+    Q_UNUSED(mask);
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisTransformationMask *mask)
 {
+    Q_UNUSED(mask);
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
 {
+    Q_UNUSED(mask);
     return true;
 }
 

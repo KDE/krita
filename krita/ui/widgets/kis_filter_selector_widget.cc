@@ -54,6 +54,7 @@ struct KisFilterSelectorWidget::Private {
 
 KisFilterSelectorWidget::KisFilterSelectorWidget( QWidget* parent ) : d(new Private)
 {
+    Q_UNUSED(parent);
     d->currentCentralWidget = 0;
     d->currentFilterConfigurationWidget = 0;
     d->currentBookmarkedFilterConfigurationsModel = 0;

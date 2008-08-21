@@ -97,6 +97,8 @@ QPainterPath KisShapeSelection::selectionOutline()
 
 void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 void KisShapeSelection::renderToProjection(KisSelection* projection)

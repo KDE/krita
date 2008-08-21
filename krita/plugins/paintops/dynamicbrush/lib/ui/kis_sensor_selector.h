@@ -36,7 +36,7 @@ class DYNAMIC_BRUSH_EXPORT KisSensorSelector : public QWidget {
     signals:
         void sensorChanged(KisDynamicSensor* sensor);
         /**
-         * This signal is emited when the parameters of sensor are changed.
+         * This signal is emitted when the parameters of sensor are changed.
          */
         void parametersChanged();
     private slots:

@@ -286,7 +286,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         dstLen = scale;
 
     // Calculate extra length (in each side) needed due to shear
-    qint32 extraLen = (support+256)>>8  + 1;
+    qint32 extraLen = ((support + 256) >> 8)  + 1;
 
     quint8 *tmpLine = new quint8[(srcLen +2*extraLen)* pixelSize];
     Q_CHECK_PTR(tmpLine);
@@ -561,7 +561,7 @@ bool KisTransformWorker::run()
     {
         // No need to filter again when we are only scaling
         srcdev->move(srcdev->x() + xtranslate, srcdev->y());
-        if(rotQuadrant!=0)  // no need to copy back if we havn't copied the device in the first place
+        if(rotQuadrant!=0)  // no need to copy back if we have not copied the device in the first place
             rotateNone(srcdev, m_dev);
     }
 

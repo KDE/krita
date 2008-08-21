@@ -158,7 +158,7 @@ public slots:
     void preScale();
 
     /**
-     * preScale and draw onto the scaled projection the specfied rect,
+     * preScale and draw onto the scaled projection the specified rect,
      * in canvas view pixels.
      */
     void preScale( const QRect & rc );

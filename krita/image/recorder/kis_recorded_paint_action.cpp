@@ -204,7 +204,8 @@ KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QSt
         settings->fromXML( elt );
     }
 #else
-    KisPaintOpSettingsSP settings;
+    //KisPaintOpSettingsSP settings;
+    KisPaintOpPresetSP settings;
 #endif
     return settings;
 }

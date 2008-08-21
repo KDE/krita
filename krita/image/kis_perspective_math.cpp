@@ -101,3 +101,19 @@ Matrix3qreal KisPerspectiveMath::computeMatrixTransfoFromPerspective(const QRect
     return KisPerspectiveMath::computeMatrixTransfo(r.topLeft(), r.topRight(), r.bottomLeft(), r.bottomRight(), topLeft, topRight, bottomLeft, bottomRight);
 }
 
+QPointF KisPerspectiveMath::computeIntersection(const LineEquation& d1, const LineEquation& d2)
+{
+    qreal det = d1.a * d2.b - d1.b * d2.a;
+    if(Eigen::ei_isMuchSmallerThan(det, qMax(qAbs(d1.c),qAbs(d2.c))))
+    {   // special case where the two lines are approximately parallel. Pick any point on the first line.
+        if(qAbs(d1.b)>qAbs(d1.a))
+            return QPointF(d1.b, d1.c/d1.b-d1.a);
+        else
+            return QPointF(d1.c/d1.a-d1.b, d1.a);
+    }
+    else
+    {   // general case
+        qreal invdet = qreal(1) / det;
+        return QPointF(invdet*(d2.b*d1.c-d1.b*d2.c), invdet*(d1.a*d1.c-d2.a*d2.c));
+    }
+}

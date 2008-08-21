@@ -603,17 +603,17 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
     else if (hasFocusedRuler()) {
         switch (event->key()) {
             case Qt::Key_Plus:
-                m_rulers[m_focusedRuler].increaseByStep();
+                focusedRuler().increaseByStep();
                 break;
             case Qt::Key_Minus:
-                m_rulers[m_focusedRuler].decreaseByStep();
+                focusedRuler().decreaseByStep();
                 break;
             case Qt::Key_PageUp:
                 break;
             case Qt::Key_PageDown:
                 break;
             case Qt::Key_Tab:
-                focusRuler((RulerIndex)(((int)m_focusedRuler + 1)%maxRuler));
+                focusNextRuler();
                 break;
             default:
                 break;

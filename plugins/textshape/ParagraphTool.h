@@ -129,8 +129,10 @@ protected:
     void resetActiveRuler();
     void moveActiveRulerTo(const QPointF &point);
 
+    Ruler &focusedRuler() { return m_rulers[m_focusedRuler]; }
     bool hasFocusedRuler() const { return m_focusedRuler >= 0 && m_focusedRuler < maxRuler; }
     void focusRuler(RulerIndex ruler);
+    void focusNextRuler() { focusRuler((RulerIndex)(((int)m_focusedRuler + 1)%maxRuler)); }
     void defocusRuler();
 
     bool hasHighlightedRuler() const {return m_highlightedRuler != noRuler;}

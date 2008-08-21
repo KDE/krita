@@ -41,11 +41,9 @@
 #include "kis_image.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_layer.h"
-#include "kis_paint_device.h"
 #include "kis_selection_options.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
-#include "kis_selection_options.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
@@ -64,7 +62,7 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
-void KisToolSelectContiguous::activate( bool tmp ) 
+void KisToolSelectContiguous::activate( bool tmp )
 {
     super::activate( tmp );
 

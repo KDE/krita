@@ -22,6 +22,8 @@
  */
 
 #include "kis_brush.h"
+#include "kis_brush_p.h"
+
 #include <QDomElement>
 #include <QFile>
 #include <QImage>
@@ -40,7 +42,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"
 
-#include "kis_brush_p.h"
+
 
 #include <netinet/in.h> // htonl
 
@@ -82,7 +84,7 @@ KisBrush::PlainColoringInformation::~PlainColoringInformation()
 {
 }
 
-const quint8* KisBrush::PlainColoringInformation::color() const 
+const quint8* KisBrush::PlainColoringInformation::color() const
 {
     return m_color;
 }
@@ -457,13 +459,13 @@ void KisBrush::generateMask(KisPaintDeviceSP dst, ColoringInformation* src, doub
 {
     Q_UNUSED(angle);
     Q_UNUSED(info_);
-    
+
     double scale = 0.5 *(scaleX + scaleY);
-    
+
     if (d->scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
-    
+
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
 
@@ -491,13 +493,13 @@ void KisBrush::generateMask(KisPaintDeviceSP dst, ColoringInformation* src, doub
             outputMask = scaleSinglePixelMask(s, aboveBrush->mask()->alphaAt(0, 0), subPixelX, subPixelY);
         }
     }
-    
+
     // Generate the paint device from the mask
-    
+
     const KoColorSpace* cs = dst->colorSpace();
-    
+
     quint32 pixelSize = cs->pixelSize();
-    
+
     quint8 * maskData = outputMask->data();
     qint32 maskWidth = outputMask->width();
     qint32 maskHeight = outputMask->height();
@@ -522,7 +524,7 @@ void KisBrush::generateMask(KisPaintDeviceSP dst, ColoringInformation* src, doub
         if(src) src->nextRow();
         hiter.nextRow();
     }
-    
+
 }
 
 void KisBrush::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info , double subPixelX, double subPixelY ) const

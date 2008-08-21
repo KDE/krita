@@ -102,8 +102,6 @@ KisPaintOpSettingsSP KisDynamicOpSettings::clone() const
 }
 
 // TEMP
-#include <kis_dynamic_brush.h>
-// TEMP
 KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
 {
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));

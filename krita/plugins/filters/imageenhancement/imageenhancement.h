@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef EXAMPLE_H
-#define EXAMPLE_H
+#ifndef IMAGEENHANCEMENT_H
+#define IMAGEENHANCEMENT_H
 
 #include <kparts/plugin.h>
 

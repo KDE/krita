@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_filterop_settings.h"
 
 #include <QDomElement>
 #include <QRect>
@@ -43,7 +44,7 @@
 #include <kis_selection.h>
 #include <kis_paintop_settings.h>
 #include "ui_FilterOpOptionsWidget.h"
-#include "kis_filterop_settings.h"
+
 
 
 KisFilterOpSettings::KisFilterOpSettings(QWidget* parent, KisImageSP image)

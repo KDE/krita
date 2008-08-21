@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __filltool_h__
-#define __filltool_h__
+#ifndef KIS_TOOL_FILL_H_
+#define KIS_TOOL_FILL_H_
 
 #include <QPoint>
 //Added by qt3to4:

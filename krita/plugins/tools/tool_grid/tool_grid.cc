@@ -15,6 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_grid.h"
 #include "tool_grid.h"
 
 #include <stdlib.h>
@@ -35,7 +36,7 @@
 #include <KoToolRegistry.h>
 
 
-#include "kis_tool_grid.h"
+
 
 
 typedef KGenericFactory<GridPlugin> GridFactory;

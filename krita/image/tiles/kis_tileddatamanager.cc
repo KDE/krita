@@ -20,8 +20,6 @@
 
 #include <q3valuevector.h>
 
-#include <kis_debug.h>
-
 #include <KoStore.h>
 
 #include "kis_global.h"

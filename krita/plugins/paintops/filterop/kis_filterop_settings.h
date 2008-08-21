@@ -15,10 +15,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-
 #ifndef KIS_FILTEROP_SETTINGS_H
 #define KIS_FILTEROP_SETTINGS_H
+
+#include "kis_types.h"
+#include "kis_paintop_settings.h"
+
+class QWidget;
+class KisFilterConfiguration;
+class QDomElement;
+class QDomDocument;
+class QGridLayout;
+class Ui_FilterOpOptions;
+class KoID;
+class KisFilterConfigWidget;
 
 class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
 

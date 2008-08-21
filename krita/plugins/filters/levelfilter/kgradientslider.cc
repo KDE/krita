@@ -17,7 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+#include "kgradientslider.h"
+
 // C++ includes.
 
 #include <cmath>
@@ -33,13 +34,13 @@
 
 // Local includes.
 
-#include "kgradientslider.h"
+
 
 KGradientSlider::KGradientSlider(QWidget *parent)
             : QWidget(parent)
 {
     m_dragging = false;
-    
+
     setMouseTracking(true);
     setMaximumSize(255, 28);
 
@@ -61,7 +62,7 @@ void KGradientSlider::paintEvent(QPaintEvent *)
     int    wHeight = height();
 
     int gradientHeight = (wHeight / 3);
-    
+
     // A QPixmap is used for enable the double buffering.
     /*if (!m_dragging) {*/
         QPainter p1(this);
@@ -75,7 +76,7 @@ void KGradientSlider::paintEvent(QPaintEvent *)
             p1.setPen(QColor(gray, gray, gray));
             p1.drawLine(x, y, x, y + gradientHeight - 1);
         }
-    
+
         // Draw second gradient
         y = (wHeight / 3);
         if (m_blackcursor > 0) {
@@ -124,10 +125,10 @@ void KGradientSlider::mousePressEvent ( QMouseEvent * e )
 {
     eCursor closest_cursor;
     int distance;
-    
+
     if (e->button() != Qt::LeftButton)
         return;
-    
+
     unsigned int x = e->pos().x();
 
     distance = 1000; // just a big number

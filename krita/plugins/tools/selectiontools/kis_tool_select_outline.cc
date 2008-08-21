@@ -23,8 +23,6 @@
 
 #include "kis_tool_select_outline.h"
 
-#include <kis_tool_select_outline.h>
-
 #include <QApplication>
 #include <QPainter>
 #include <QWidget>

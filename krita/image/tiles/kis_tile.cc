@@ -20,8 +20,6 @@
 #include <assert.h>
 #include <kis_debug.h>
 
-#include "kis_debug.h"
-
 #include "kis_tileddatamanager.h"
 #include "kis_tilemanager.h"
 

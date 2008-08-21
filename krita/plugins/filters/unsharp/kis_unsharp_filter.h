@@ -18,19 +18,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_BLUR_FILTER_H
-#define KIS_BLUR_FILTER_H
+#ifndef KIS_UNSHARP_FILTER_H
+#define KIS_UNSHARP_FILTER_H
 
 #include "filter/kis_filter.h"
 
 class KisUnsharpFilter : public KisFilter
 {
 public:
-    
+
     KisUnsharpFilter();
 
     using KisFilter::process;
-    
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
@@ -39,7 +39,7 @@ public:
         ) const;
 
     static inline KoID id() { return KoID("unsharp", i18n("Unsharp Mask")); }
-    
+
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image =0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     int overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const;

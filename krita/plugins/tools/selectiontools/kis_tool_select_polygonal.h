@@ -20,8 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __selecttoolpolygonal_h__
-#define __selecttoolpolygonal_h__
+#ifndef KIS_TOOL_SELECT_POLYGONAL_H_
+#define KIS_TOOL_SELECT_POLYGONAL_H_
 
 #include "KoToolFactory.h"
 

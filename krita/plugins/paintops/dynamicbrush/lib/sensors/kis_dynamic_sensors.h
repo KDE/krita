@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_DYNAMICS_SENSORS_H_
-#define _KIS_DYNAMICS_SENSORS_H_
+#ifndef _KIS_DYNAMIC_SENSORS_H_
+#define _KIS_DYNAMIC_SENSORS_H_
 
 #include "kis_dynamic_sensor.h"
 

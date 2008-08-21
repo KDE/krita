@@ -27,19 +27,18 @@
 #include <QLayout>
 #include <QGridLayout>
 
-#include <kis_debug.h>
 #include <klocale.h>
-#include <kis_debug.h>
 #include <knuminput.h>
 
 #include "KoCanvasBase.h"
-#include "canvas/kis_canvas2.h"
-#include "kis_painter.h"
 #include "KoPointerEvent.h"
-#include "kis_paintop_registry.h"
-#include "QPainter"
-#include "kis_cursor.h"
-#include "kis_paint_device.h"
+
+#include <kis_debug.h>
+#include <canvas/kis_canvas2.h>
+#include <kis_painter.h>
+#include <kis_paintop_registry.h>
+#include <kis_cursor.h>
+#include <kis_paint_device.h>
 
 #include "kis_selection.h"
 

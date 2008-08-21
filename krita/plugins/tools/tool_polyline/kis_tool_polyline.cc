@@ -27,7 +27,6 @@
 #include <QMenu>
 
 #include <kicon.h>
-#include <kis_debug.h>
 #include <klocale.h>
 #include <kis_debug.h>
 #include <knuminput.h>

@@ -27,7 +27,6 @@
 #include <kis_paintop_registry.h>
 
 #include "kis_cpaintop.h"
-#include "kis_paintop_registry.h"
 
 typedef KGenericFactory<CPaintBrush> CPaintBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacpaintbrush, CPaintBrushFactory("krita"))

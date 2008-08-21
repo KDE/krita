@@ -27,7 +27,7 @@ class KoStore;
 
 // Change the following two lines to switch (at compiletime) to another datamanager
 //#define USE_OLD_TILESYSTEM
-#include "config-tiles.h" // For the next define
+#include <config-tiles.h> // For the next define
 
 
 #ifdef USE_OLD_TILESYSTEM

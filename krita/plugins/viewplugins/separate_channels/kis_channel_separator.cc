@@ -36,7 +36,6 @@
 #include <knuminput.h>
 #include <kfiledialog.h>
 
-
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
 
@@ -52,7 +51,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
-#include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_view2.h>

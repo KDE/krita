@@ -18,8 +18,8 @@
 */
 
 
-#ifndef _KIS_HSV_ADJUSTEMENT_FILTER_H_
-#define _KIS_HSV_ADJUSTEMENT_FILTER_H_
+#ifndef _KIS_HSV_ADJUSTMENT_FILTER_H_
+#define _KIS_HSV_ADJUSTMENT_FILTER_H_
 
 #include <QList>
 
@@ -54,7 +54,7 @@ public:
         ) const;
     static inline KoID id() { return KoID("hsvadjustment", i18n("HSV Adjustment")); }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    
+
 };
 
 

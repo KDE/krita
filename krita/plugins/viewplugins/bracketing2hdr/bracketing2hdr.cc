@@ -52,7 +52,7 @@
 
 #include "ui_wdgbracketing2hdr.h"
 
-#include "config-powf.h"
+#include <config-powf.h>
 
 #ifndef HAVE_POWF
 #undef powf

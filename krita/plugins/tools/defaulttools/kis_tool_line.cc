@@ -22,9 +22,9 @@
 
 #include "kis_tool_line.h"
 
-#include <QPainter>
 #include <QLayout>
 #include <QWidget>
+#include "QPainter"
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -37,8 +37,6 @@
 
 #include "KoPointerEvent.h"
 #include "kis_paintop_registry.h"
-#include "QPainter"
-#include "kis_cursor.h"
 #include "kis_layer.h"
 #include "KoCanvasBase.h"
 

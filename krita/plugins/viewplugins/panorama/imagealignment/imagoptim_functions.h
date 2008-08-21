@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#ifndef _PANOPTIM_FUNCTIONS_H_
-#define _PANOPTIM_FUNCTIONS_H_
+#ifndef _IMAGOPTIM_FUNCTIONS_H_
+#define _IMAGOPTIM_FUNCTIONS_H_
 
 #include <kis_debug.h>
 

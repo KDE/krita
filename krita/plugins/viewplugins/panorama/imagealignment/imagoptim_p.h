@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#ifndef _PANOPTIM_P_H_
-#define _PANOPTIM_P_H_
+#ifndef _IMAGOPTIM_P_H_
+#define _IMAGOPTIM_P_H_
 
 #include "optimization.h"
 #include "imagoptim_functions.h"

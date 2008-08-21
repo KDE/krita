@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KS_TO_CTL_RGB_COLOR_CONVERSION_TRANSFORMATION_H_
-#define KIS_KS_TO_CTL_RGB_COLOR_CONVERSION_TRANSFORMATION_H_
+#ifndef KIS_KS_TO_RGB_COLOR_CONVERSION_TRANSFORMATION_CTL_H_
+#define KIS_KS_TO_RGB_COLOR_CONVERSION_TRANSFORMATION_CTL_H_
 
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"

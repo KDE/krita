@@ -36,7 +36,6 @@
 
 #include <KoProgressUpdater.h>
 
-#include <kis_painter.h>
 #include <kis_doc2.h>
 #include <kis_debug.h>
 #include <kis_image.h>
@@ -75,7 +74,7 @@ void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
     QPoint srcTopLeft = srcInfo.topLeft();
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
-    
+
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 numberOfTiles = config->getInt( "numberOfTiles", 2);
 

@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_MATCHED_PONT_H_
-#define _KIS_MATCHED_PONT_H_
+#ifndef _KIS_MATCHED_POINT_H_
+#define _KIS_MATCHED_POINT_H_
 
 #include <QList>
 #include <QPointF>

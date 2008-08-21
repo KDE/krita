@@ -17,8 +17,6 @@
 
 #include "kis_color_input.h"
 
-#include <kis_color_input.h>
-
 #include <config-openexr.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>

@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CURVE_ITERATOR_H
-#define KIS_CURVE_ITERATOR_H
+#ifndef KIS_RANDOM_SUB_ACCESSOR_H
+#define KIS_RANDOM_SUB_ACCESSOR_H
 
 
 #include "kis_random_accessor.h"

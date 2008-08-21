@@ -41,10 +41,7 @@
 #include "kis_clone_layer.h"
 #include "kis_processing_information.h"
 #include "kis_node.h"
-#include "kis_image.h"
 #include "kis_projection.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
 
 namespace {
 /**

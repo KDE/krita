@@ -37,8 +37,6 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
-#include <KoProgressUpdater.h>
-
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -114,7 +112,7 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 
-    
+
     //read the filter configuration values from the KisFilterConfiguration object
     bool doHorizontal = configuration->getBool("doHorizontally", true);
     bool doVertical = configuration->getBool("doVertically", true);

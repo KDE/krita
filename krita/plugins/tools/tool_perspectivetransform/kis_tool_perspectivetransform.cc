@@ -48,8 +48,6 @@
 #include <kis_undo_adapter.h>
 #include <kis_selected_transaction.h>
 #include <KoPointerEvent.h>
-#include <KoPointerEvent.h>
-#include <KoPointerEvent.h>
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <widgets/kis_cmb_idlist.h>

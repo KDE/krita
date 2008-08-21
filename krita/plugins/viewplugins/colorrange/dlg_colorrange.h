@@ -24,8 +24,6 @@
 
 #include <kdialog.h>
 
-#include <kis_types.h>
-
 #include <kis_selection.h> // For enums
 #include <kis_pixel_selection.h>
 #include <kis_types.h>

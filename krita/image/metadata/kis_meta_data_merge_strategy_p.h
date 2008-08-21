@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_META_DATA_MERGE_STRATEGY_P_H
+#define KIS_META_DATA_MERGE_STRATEGY_P_H
 
 #include "kis_meta_data_merge_strategy.h"
 
@@ -69,3 +71,4 @@ namespace KisMetaData {
             Value election(QList<const Store*> srcs, QList<double> score, const QString & key ) const;
     };
 }
+#endif

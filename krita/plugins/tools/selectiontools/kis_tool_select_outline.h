@@ -20,8 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __selecttoolfreehand_h__
-#define __selecttoolfreehand_h__
+#ifndef KIS_TOOL_SELECT_OUTLINE_H_
+#define KIS_TOOL_SELECT_OUTLINE_H_
 
 #include <QPoint>
 

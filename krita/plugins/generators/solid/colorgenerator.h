@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef COLORFILTER_H
-#define COLORFILTER_H
+#ifndef COLOR_GENERATOR_H
+#define COLOR_GENERATOR_H
 
 #include <kparts/plugin.h>
 #include "generator/kis_generator.h"
@@ -40,13 +40,13 @@ public:
     KisColorGenerator();
 
     using KisGenerator::generate;
-    
+
     void generate( KisProcessingInformation dst,
                    const QSize& size,
                    const KisFilterConfiguration* config,
                    KoUpdater* progressUpdater
         ) const;
-    
+
     static inline KoID id() { return KoID("color", i18n("Color")); }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image =0) const;

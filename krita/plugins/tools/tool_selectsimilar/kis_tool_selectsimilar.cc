@@ -39,7 +39,6 @@
 #include <kis_selection_manager.h>
 #include <kis_image.h>
 #include <kis_layer.h>
-#include <kis_paint_device.h>
 #include <KoPointerEvent.h>
 #include <kis_selection_options.h>
 #include <kis_selection.h>

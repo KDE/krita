@@ -28,22 +28,18 @@
 
 #include <klocale.h>
 
+#include "KoColorSpaceRegistry.h"
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
 
-#include "kis_debug.h"
 #include "kis_image.h"
-
 #include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
-
-#include "KoColorSpaceRegistry.h"
 #include "kis_datamanager.h"
-#include "kis_undo_adapter.h"
 #include "kis_effect_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_mask.h"

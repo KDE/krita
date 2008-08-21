@@ -18,8 +18,6 @@
 
 #include "kis_legacy_importer.h"
 
-#include <kis_legacy_importer.h>
-
 /*
 struct ExifToKMD {
     QString exivPrefix;

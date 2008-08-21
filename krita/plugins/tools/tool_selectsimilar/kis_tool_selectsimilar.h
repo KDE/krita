@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_TOOL_SELECT_PICKER_H_
-#define KIS_TOOL_SELECT_PICKER_H_
+#ifndef KIS_TOOL_SELECT_SIMILAR_H_
+#define KIS_TOOL_SELECT_SIMILAR_H_
 
 #include <QtGui/QPainter>
 #include <kis_tool.h>

@@ -18,7 +18,6 @@
  */
 
 #include "kis_tool_perspectivegrid.h"
-#include <kis_tool_perspectivegrid.h>
 
 #include <qapplication.h>
 #include <qpainter.h>
@@ -33,7 +32,6 @@
 
 #include <KoCanvasController.h>
 
-#include <KoPointerEvent.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <kis_image.h>

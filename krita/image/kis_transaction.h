@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TILE_COMMAND_H_
-#define KIS_TILE_COMMAND_H_
+#ifndef KIS_TRANSACTION_H_
+#define KIS_TRANSACTION_H_
 
 #include <QString>
 #include <QUndoCommand>

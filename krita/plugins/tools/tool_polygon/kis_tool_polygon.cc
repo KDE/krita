@@ -25,7 +25,6 @@
 #include <QSpinBox>
 
 #include <kaction.h>
-#include <kis_debug.h>
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <kis_debug.h>

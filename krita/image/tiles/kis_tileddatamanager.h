@@ -20,7 +20,7 @@
 
 #include <qglobal.h>
 #include <q3valuevector.h>
-#include <qvector.h>
+#include <QVector>
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>

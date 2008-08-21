@@ -26,8 +26,6 @@
 #include <kis_debug.h>
 #include <kgenericfactory.h>
 
-#include <kis_paintop_registry.h>
-
 #include "kis_airbrushop.h"
 #include "kis_brushop.h"
 #include "kis_duplicateop.h"

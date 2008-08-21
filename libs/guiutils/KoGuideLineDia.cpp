@@ -47,7 +47,10 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, doub
     KHBox *page = new KHBox();
     setMainWidget(page);
     new QLabel( i18n( "Position:" ), page );
-    m_position= new KoUnitDoubleSpinBox( page, qMax( 0.00, minPos ), qMax( 0.00, maxPos ), 1, qMax( 0.00, pos ), unit );
+    m_position= new KoUnitDoubleSpinBox( page );
+    m_position->setMinMaxStep( qMax( 0.00, minPos ), qMax( 0.00, maxPos ), 1.0 );
+    m_position->changeValue( qMax( 0.00, pos ) );
+    m_position->setUnit( unit );
     m_position->setFocus();
 }
 
@@ -82,7 +85,10 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, QPointF &pos, QRectF &rect,
 
     KHBox *hbox = new KHBox( vbox );
     QLabel *label = new QLabel( i18n( "&Position:" ), hbox );
-    m_position= new KoUnitDoubleSpinBox( hbox, qMax( 0.0, m_rect.left() ), qMax( 0.0, m_rect.right() ), 1, qMax( 0.0, pos.x() ), unit );
+    m_position= new KoUnitDoubleSpinBox( hbox );
+    m_position->setMinMaxStep( qMax( 0.0, m_rect.left() ), qMax( 0.0, m_rect.right() ), 1.0 );
+    m_position->changeValue( qMax( 0.0, pos.x() ) );
+    m_position->setUnit( unit );
     m_position->setFocus();
     label->setBuddy( m_position );
 

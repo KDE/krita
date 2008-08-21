@@ -292,7 +292,7 @@ void KoTemplateCreateDia::slotOk() {
             tmpIcon=".icon/"+file+".png";
             icon=iconDir+file+".png";
         }
-        while ( KIO::NetAccess::exists( dest, true, this ) );
+        while ( KIO::NetAccess::exists( dest, KIO::NetAccess::DestinationSide, this ) );
     }
     bool ignore = false;
     kDebug(30004) <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
@@ -344,7 +344,7 @@ void KoTemplateCreateDia::slotOk() {
         if((*it).contains(dir)==0) {
             orig.setPath( (*it)+".directory" );
             // Check if we can read the file
-            if( KIO::NetAccess::exists(orig, true, this) ) {
+            if( KIO::NetAccess::exists(orig, KIO::NetAccess::DestinationSide, this) ) {
                 dest.setPath( dir+"/.directory" );
                 // We copy the file with overwrite
                 KIO::FileCopyJob *job = KIO::file_copy( orig, dest,KIO::Overwrite | KIO::HideProgressInfo);

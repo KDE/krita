@@ -43,7 +43,7 @@ public:
         : QListWidgetItem(text, parent, type)
         {
         }
-    
+
     KisGeneratorSP generator;
 
 };
@@ -95,7 +95,7 @@ void KisWdgGenerator::init(KisPaintDeviceSP dev)
     d->widgetLayout = new QGridLayout( d->uiWdgGenerators.centralWidgetHolder );
     KisGeneratorRegistry * registry = KisGeneratorRegistry::instance();
 
-    foreach(QString key, registry->keys())
+    foreach(const QString & key, registry->keys())
     {
         KisGeneratorSP generator = registry->get(key);
         Q_ASSERT(generator);
@@ -145,22 +145,22 @@ KisFilterConfiguration * KisWdgGenerator::configuration()
 void KisWdgGenerator::slotGeneratorActivated(int row)
 {
     KisGeneratorItem * item = dynamic_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(row));
-    
+
     if (!item) {
         d->centralWidget = new QLabel( i18n("No configuration options."),
                                        d->uiWdgGenerators.centralWidgetHolder );
     }
     else {
 
-        
+
         d->currentGenerator = item->generator;
-    
+
         delete d->centralWidget;
-    
+
         KisFilterConfigWidget* widget =
             d->currentGenerator->createConfigurationWidget( d->uiWdgGenerators.centralWidgetHolder,
                                                             d->dev );
-        
+
         if ( !widget )
         { // No widget, so display a label instead
             d->centralWidget = new QLabel( i18n("No configuration options."),
@@ -173,7 +173,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
     }
     d->widgetLayout->addWidget( d->centralWidget, 0 , 0);
     d->uiWdgGenerators.centralWidgetHolder->setMinimumSize( d->centralWidget->minimumSize() );
-    
+
 
 }
 

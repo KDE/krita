@@ -129,7 +129,7 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
                     if (!curvesElement.isNull() && !curvesElement.text().isEmpty()) {
                         QStringList data = curvesElement.text().split( ';' );
 
-                        foreach (QString pair, data) {
+                        foreach (const QString & pair, data) {
                             if (pair.indexOf(',') > -1) {
                                 QPointF p;
                                 p.rx() = pair.section(',', 0, 0).toDouble();
@@ -179,8 +179,8 @@ QString KisPerChannelFilterConfiguration::toString()
         QDomElement t = doc.createElement("curve");
         KisCurve curve = curves[i];
         QString sCurve;
-        QPointF pair;
-        foreach (pair, curve) {
+
+        foreach (const QPointF & pair, curve) {
             sCurve += QString::number(pair.x());
             sCurve += ',';
             sCurve += QString::number(pair.y());

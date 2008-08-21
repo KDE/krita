@@ -96,8 +96,7 @@ void PanoramaPlugin::slotAddImages()
 //     dbgPlugins <<"Add image";
     QStringList openfiles = KFileDialog::getOpenFileNames(KUrl(),"*", m_view);
 //     dbgPlugins << openfiles.size() <<" files selected for inclusion";
-    QString filename;
-    foreach(filename, openfiles)
+    foreach(const QString & filename, openfiles)
     {
         addImage( filename );
     }
@@ -110,7 +109,7 @@ void PanoramaPlugin::slotRemoveImage()
 
 void PanoramaPlugin::slotImageUp()
 {
-    if (m_wdgPanoramaCreation->listImages->currentRow() == 0) return; 
+    if (m_wdgPanoramaCreation->listImages->currentRow() == 0) return;
     QListWidgetItem * w = m_wdgPanoramaCreation->listImages->takeItem(m_wdgPanoramaCreation->listImages->currentRow());
     m_wdgPanoramaCreation->listImages->insertItem(m_wdgPanoramaCreation->listImages->currentRow(), w);
     m_wdgPanoramaCreation->listImages->setCurrentItem(w);
@@ -121,10 +120,10 @@ void PanoramaPlugin::slotImageDown()
     if (m_wdgPanoramaCreation->listImages->currentRow() == m_wdgPanoramaCreation->listImages->count() - 1) return;
 
     int i = m_wdgPanoramaCreation->listImages->currentRow();
-        
+
     QListWidgetItem * w = m_wdgPanoramaCreation->listImages->takeItem(m_wdgPanoramaCreation->listImages->currentRow());
 
-    if (i == 0) 
+    if (i == 0)
         m_wdgPanoramaCreation->listImages->insertItem(m_wdgPanoramaCreation->listImages->currentRow() + 1, w);
     else
         m_wdgPanoramaCreation->listImages->insertItem(m_wdgPanoramaCreation->listImages->currentRow() + 2, w);
@@ -136,7 +135,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     dbgPlugins <<"Create a panorama layer";
     delete m_wdgPanoramaCreation;
     m_wdgPanoramaCreation = new Ui_WdgPanoramaCreation();
-    
+
     QDialog* dialog = new QDialog(m_view);
     dialog->setWindowTitle(i18n("Create Panorama Layer"));
     dialog->setModal(true);
@@ -184,7 +183,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     m_wdgPanoramaCreation->bnRemove->setIcon(SmallIcon("list-remove"));
     m_wdgPanoramaCreation->bnUp->setIcon(SmallIcon("go-up"));
     m_wdgPanoramaCreation->bnDown->setIcon(SmallIcon("go-down"));
-    
+
     if(dialog->exec()==QDialog::Accepted)
     {
 

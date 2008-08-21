@@ -94,7 +94,7 @@ void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
     QPoint srcTopLeft = srcInfo.topLeft();
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 embossdepth = config ?  config->getInt("depth",30) : 30;
 
@@ -174,6 +174,8 @@ int KisEmbossFilter::Lim_Max (int Now, int Up, int Max) const
 
 KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image) const
 {
+    Q_UNUSED(image);
+
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth"), "depth" ) );
     KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget( id().id(), parent, id().id(), param );

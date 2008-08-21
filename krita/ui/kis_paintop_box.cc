@@ -152,7 +152,7 @@ void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
     m_displayedOps.clear();
     m_cmbPaintops->clear();
 
-    foreach (KoID paintopId, m_paintops) {
+    foreach (const KoID & paintopId, m_paintops) {
         if (KisPaintOpRegistry::instance()->userVisible(paintopId, cs)) {
             QPixmap pm = paintopPixmap(paintopId);
 
@@ -223,7 +223,7 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
         it != m_inputDevicePresets.end();
         ++it)
     {
-        foreach(KisPaintOpPresetSP preset, it.value())
+        foreach(const KisPaintOpPresetSP & preset, it.value())
         {
             if(preset && preset->settings()) {
                 preset->settings()->setNode(node);
@@ -278,7 +278,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
 
     InputDevicePresetsMap::iterator it = m_inputDevicePresets.find( inputDevice );
     if (it == m_inputDevicePresets.end()) {
-        foreach (KoID paintopId, m_paintops) {
+        foreach (const KoID & paintopId, m_paintops) {
             KisPaintOpPresetSP preset =
                 KisPaintOpRegistry::instance()->defaultPreset( paintopId, 0, inputDevice, m_view->image() );
             if (preset && preset->settings() && preset->settings()->widget()) {

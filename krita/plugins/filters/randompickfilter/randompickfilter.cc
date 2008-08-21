@@ -109,7 +109,7 @@ void KisFilterRandomPick::process(KisConstProcessingInformation srcInfo,
     int seedThreshold = rand();
     int seedH = rand();
     int seedV = rand();
-    
+
     if( config )
     {
         seedThreshold = config->getInt( "seedThreshold", seedThreshold);
@@ -155,6 +155,7 @@ void KisFilterRandomPick::process(KisConstProcessingInformation srcInfo,
 
 KisFilterConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image ) const
 {
+    Q_UNUSED(image);
     Q_UNUSED(dev);
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
 }
@@ -168,6 +169,6 @@ KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaint
     config->setProperty("seedThreshold", rand() );
     config->setProperty("seedH", rand() );
     config->setProperty("seedV", rand() );
-    
+
     return config;
 }

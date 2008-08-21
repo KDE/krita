@@ -48,7 +48,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
 
     QStringList files = KGlobal::dirs()->findAllResources("data", "kritaplugins/metadataeditor/*.rc");
 
-    foreach(QString file, files)
+    foreach(const QString & file, files)
     {
 
         QFile xmlFile(file);

@@ -52,7 +52,7 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     list = KGlobal::mainComponent().dirs()->findAllResources("illuminant_profiles", "*.xll",  KStandardDirs::Recursive);
 
     KisIlluminantProfile *p;
-    foreach(QString curr, list) {
+    foreach(const QString & curr, list) {
         p = new KisIlluminantProfile(curr);
         bool r = p->load();
         if(!r) {

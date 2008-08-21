@@ -212,7 +212,7 @@ MatchHypothesis findSeed( const KisInterestPoint* ref, const lInterestPoints& po
                         dbgPlugins << " preHypothesis : " << preHs.size() << " median = " << median;
                         MatchHypothesis currentHypo;
                         currentHypo.sumScore = 0.0;
-                        foreach( MatchPreHypothesis mph, preHs )
+                        foreach( const MatchPreHypothesis & mph, preHs )
                         {
                             if( diffAngle(mph.angle, median ) < 0.1)
                             {

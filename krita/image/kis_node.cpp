@@ -50,7 +50,7 @@ KisNode::KisNode()
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
-    
+
     init();
 }
 
@@ -61,7 +61,7 @@ KisNode::KisNode( const KisNode & rhs )
 {
     m_d->parent = 0;
     m_d->graphListener = rhs.m_d->graphListener;
-    foreach( KisNodeSP node, rhs.m_d->nodes ) {
+    foreach( const KisNodeSP & node, rhs.m_d->nodes ) {
         m_d->nodes.append( node.data()->clone() );
     }
     init();
@@ -120,7 +120,7 @@ void KisNode::setDirty( const QRegion & region)
 {
     if ( region.isEmpty() ) return;
 
-    foreach (QRect rc, region.rects()) {
+    foreach (const QRect & rc, region.rects()) {
         m_d->updateStrategy->setDirty( rc );
     }
 }
@@ -194,9 +194,9 @@ QList<KisNodeSP> KisNode::childNodes( const QStringList & nodeTypes, const KoPro
 {
     QList<KisNodeSP> nodes;
 
-    foreach( KisNodeSP node, m_d->nodes ) {
+    foreach( const KisNodeSP & node, m_d->nodes ) {
         if ( !nodeTypes.isEmpty() ) {
-            foreach ( QString nodeType,  nodeTypes ) {
+            foreach ( const QString & nodeType,  nodeTypes ) {
                 if ( node->inherits( nodeType.toAscii() ) ) {
                     if ( properties.isEmpty() || node->check( properties ) )
                         nodes.append( node );
@@ -263,9 +263,9 @@ bool KisNode::remove( quint32 index )
             m_d->graphListener->aboutToRemoveANode( this, index );
 
         removedNode->setParent( 0 ); // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
-        
+
         m_d->nodes.removeAt( index );
-        
+
         setDirty(); // FIXME Would probably better if we could set a QRect
 
         if ( m_d->graphListener ) m_d->graphListener->nodeHasBeenRemoved(this, index);

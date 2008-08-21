@@ -61,7 +61,7 @@ KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(const QStr
             return 0;
     }
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
-    
+
     QDomDocument doc;
     doc.setContent( cfg.readEntry<QString>(configname, "") );
     QDomElement e = doc.documentElement();
@@ -91,7 +91,7 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
     QList<QString> keys = m.keys();
     QList<QString> configsKey;
-    foreach(QString key, keys)
+    foreach(const QString & key, keys)
     {
         if(key != ConfigDefault.id() && key != ConfigLastUsed.id())
         {

@@ -133,7 +133,6 @@ void KisPaintDeviceTest::testGeometry()
     QVERIFY( dev->extent() == QRect( 50, 50, 50, 50 ) );
 
     QColor c;
-    quint8 opacity;
 
     dev->clear( QRect( 50, 50, 50, 50 ) );
     dev->pixel( 80, 80, &c );
@@ -336,7 +335,6 @@ void KisPaintDeviceTest::testPixel()
     dev->setPixel( 5, 5, c );
 
     QColor c2;
-    quint8 opacity2;
 
     dev->pixel( 5, 5, &c2 );
 
@@ -380,7 +378,7 @@ void KisPaintDeviceTest::testDirty()
     QVERIFY( layer->isDirty() );
     QVERIFY( !layer->isDirty( QRect( -10, -10, 5, 5 ) ) );
     QVERIFY( layer->isDirty( QRect( 0, 0, 512, 512 ) ) );
-#endif    
+#endif
 }
 
 void KisPaintDeviceTest::testMirror()

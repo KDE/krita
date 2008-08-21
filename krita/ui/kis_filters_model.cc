@@ -66,7 +66,7 @@ KisFiltersModel::KisFiltersModel(KisPaintDeviceSP thumb) : d(new Private)
 {
     d->thumb = thumb;
     KisFilterRegistry* registry = KisFilterRegistry::instance();
-    foreach(QString key, registry->keys())
+    foreach(const QString & key, registry->keys())
     {
         KisFilterSP filter = registry->get(key);
         Q_ASSERT(filter);

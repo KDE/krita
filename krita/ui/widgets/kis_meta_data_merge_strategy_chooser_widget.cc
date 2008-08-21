@@ -27,11 +27,14 @@ struct KisMetaDataMergeStrategyChooserWidget::Private {
     Ui::WdgMetaDataMergeStrategyChooser uiWdg;
 };
 
-KisMetaDataMergeStrategyChooserWidget::KisMetaDataMergeStrategyChooserWidget(QWidget* parent) : d(new Private)
+KisMetaDataMergeStrategyChooserWidget::KisMetaDataMergeStrategyChooserWidget( QWidget* parent )
+ : d(new Private)
 {
+    Q_UNUSED(parent);
+
     d->uiWdg.setupUi(this);
     QList<QString> keys = KisMetaData::MergeStrategyRegistry::instance()->keys();
-    foreach(QString key, keys)
+    foreach(const QString & key, keys)
     {
         const KisMetaData::MergeStrategy* ms = KisMetaData::MergeStrategyRegistry::instance()->get( key );
         d->uiWdg.mergeStrategy->addItem( ms->name(), ms->id() );
@@ -61,7 +64,7 @@ const KisMetaData::MergeStrategy* KisMetaDataMergeStrategyChooserWidget::showDia
     dlg.setCaption(  i18n("Choose meta data merge strategy") );
     dlg.setButtons( KDialog::Ok | KDialog::Cancel );
     dlg.setDefaultButton( KDialog::Ok);
-    
+
     KisMetaDataMergeStrategyChooserWidget* wdg = new KisMetaDataMergeStrategyChooserWidget( &dlg );
     dlg.setMainWidget(wdg);
     if( dlg.exec() == QDialog::Accepted )

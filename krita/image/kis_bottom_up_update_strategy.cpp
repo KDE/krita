@@ -182,16 +182,16 @@ public:
             KisPainter gc(m_projection);
             gc.setChannelFlags( layer->channelFlags() );
 
-            KisBottomUpUpdateStrategy * updateStrategy = 
+            KisBottomUpUpdateStrategy * updateStrategy =
                                   static_cast<KisBottomUpUpdateStrategy*>(layer->updateStrategy());
-                                  
+
             if (updateStrategy->isDirty(rc)) {
                 QRegion dirty = updateStrategy->dirtyRegion( m_rc );
-                foreach (QRect rect, dirty.rects() ) {
+                foreach (const QRect & rect, dirty.rects() ) {
                     layer->updateProjection(rect);
                 }
             }
-                
+
             KisPaintDeviceSP source = layer->projection();
 
             if (tempTarget) {
@@ -203,7 +203,7 @@ public:
                 gc.bitBlt(dx, dy, m_projection->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), sx, sy, w, h);
             else
                 gc.bitBlt(dx, dy, layer->compositeOp(), source, layer->opacity(), sx, sy, w, h);
-                
+
 
             updateStrategy->setClean( rc );
 
@@ -253,7 +253,7 @@ public:
                 return true;
 
             QRect tmpRc = m_rc;
-            
+
             KisPaintDeviceSP tempTarget = layer->temporaryTarget();
             dbgImage << "tempTarget: " << tempTarget;
             if (tempTarget) {
@@ -283,7 +283,7 @@ public:
             gc1.setCompositeOp(layerProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
             gc1.bitBlt(m_rc.topLeft(), m_projection, m_rc);
             gc1.end();
-            
+
             KisConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
             KisProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
 
@@ -388,12 +388,12 @@ public:
     KisNodeWSP node;
     KisImageSP image;
     KisProjection * projection;
-    
+
 #ifdef USE_PAINTERPATH
     QPainterPath dirtyArea;
 #else
     QRegion dirtyRegion;
-#endif    
+#endif
     QMutex regionLock;
 };
 
@@ -424,8 +424,8 @@ void KisBottomUpUpdateStrategy::setDirty(const QRect & rc )
     m_d->dirtyArea.addRect(rc)
 #else
     m_d->dirtyRegion += QRegion(rc);
-#endif    
-    
+#endif
+
     if (m_d->projection) {
         emit rectDirtied(rc);
     }
@@ -443,18 +443,18 @@ void KisBottomUpUpdateStrategy::unlock()
         m_d->projection->unlock();
 }
 
-void KisBottomUpUpdateStrategy::setImage(KisImageSP image) 
+void KisBottomUpUpdateStrategy::setImage(KisImageSP image)
 {
     // Hey, we're the root node!
     if (image && m_d->node->inherits("KisGroupLayer") && !m_d->node->parent()) {
-    
+
         m_d->image = image;
         m_d->projection = new KisProjection(image);
         m_d->projection->setRootLayer(static_cast<KisGroupLayer*>(m_d->node.data()));
-        
-        connect( m_d->projection, SIGNAL( sigProjectionUpdated( const QRect & ) ), 
+
+        connect( m_d->projection, SIGNAL( sigProjectionUpdated( const QRect & ) ),
                  m_d->image.data(), SLOT( slotProjectionUpdated( const QRect &) ) );
-        connect( this, SIGNAL( rectDirtied(const QRect &)), 
+        connect( this, SIGNAL( rectDirtied(const QRect &)),
                  m_d->projection, SLOT( addDirtyRect( const QRect & ) ) );
     }
 }
@@ -484,9 +484,9 @@ void KisBottomUpUpdateStrategy::setClean( const QRect & rc )
     QPainterPath p;
     p.addRect(QRectF(rc));
     m_d->dirtyArea = m_d->dirtyArea.subtracted(p);
-#else    
+#else
     m_d->dirtyRegion -= QRegion( rc );
-#endif    
+#endif
 }
 
 void KisBottomUpUpdateStrategy::setClean()
@@ -494,9 +494,9 @@ void KisBottomUpUpdateStrategy::setClean()
     QMutexLocker(&m_d->regionLock);
 #ifdef USE_PAINTERPATH
     m_d->dirtyArea = QPainterPath();
-#else    
+#else
     m_d->dirtyRegion = QRegion();
-#endif    
+#endif
 }
 
 QRegion KisBottomUpUpdateStrategy::dirtyRegion( const QRect & rc )
@@ -522,7 +522,7 @@ KisPaintDeviceSP KisBottomUpUpdateStrategy::updateGroupLayerProjection( const QR
     else {
         projection->clear( rc );
     }
-    
+
     KisLayerSP startWith = KisLayerSP(0);
 
     KisAdjustmentLayerSP adjLayer = KisAdjustmentLayerSP(0);
@@ -542,14 +542,14 @@ KisPaintDeviceSP KisBottomUpUpdateStrategy::updateGroupLayerProjection( const QR
                 // If this adjustment layer is dirty, start compositing with the
                 // previous layer, if there's one.
                 if (   static_cast<KisBottomUpUpdateStrategy*>(tmpAdjLayer->updateStrategy())->isDirty(rc)
-                    && !adjLayer.isNull() 
-                    && adjLayer->visible()) 
+                    && !adjLayer.isNull()
+                    && adjLayer->visible())
                 {
                     startWith = dynamic_cast<KisLayer*>( adjLayer->prevSibling().data() );
                     break;
                 }
-                else if (   tmpAdjLayer->visible() 
-                         && !static_cast<KisBottomUpUpdateStrategy*>(tmpAdjLayer->updateStrategy())->isDirty(rc)) 
+                else if (   tmpAdjLayer->visible()
+                         && !static_cast<KisBottomUpUpdateStrategy*>(tmpAdjLayer->updateStrategy())->isDirty(rc))
                 {
                     // This is the first adj. layer that is not dirty -- the perfect starting point
                     adjLayer = tmpAdjLayer;
@@ -615,7 +615,7 @@ KisPaintDeviceSP KisBottomUpUpdateStrategy::updateGroupLayerProjection( const QR
         child->accept(visitor);
         child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
     }
-    
+
     return projection;
 }
 

@@ -345,7 +345,7 @@ void KisSelectionManager::updateGUI()
         if (data)
         {
             QStringList mimeTypes = m_view->canvasBase()->toolProxy()->supportedPasteMimeTypes();
-            foreach(QString mimeType, mimeTypes)
+            foreach(const QString & mimeType, mimeTypes)
             {
                 if ( data->hasFormat( mimeType ) ) {
                     shapePasteEnable = true;
@@ -421,7 +421,7 @@ void KisSelectionManager::selectionChanged()
 void KisSelectionManager::updateSimpleOutline()
 {
     simpleOutline.clear();
-    foreach(QPolygon polygon, outline) {
+    foreach(const QPolygon & polygon, outline) {
         QPolygon simplePolygon;
 
         simplePolygon << polygon.at(0);
@@ -1781,13 +1781,13 @@ void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
         int i=0;
         gc.setPen(pen);
         if(1/m_view->image()->xRes()*sx<3)
-            foreach(QPolygon polygon, simpleOutline)
+            foreach(const QPolygon & polygon, simpleOutline)
             {
                 gc.drawPolygon(polygon);
                 i++;
             }
         else
-            foreach(QPolygon polygon, outline)
+            foreach(const QPolygon & polygon, outline)
             {
                 gc.drawPolygon(polygon);
                 i++;

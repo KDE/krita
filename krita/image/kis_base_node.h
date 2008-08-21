@@ -146,7 +146,7 @@ public:
      * but with a different value. Properties that are not in both
      * lists are disregarded.
      */
-    bool check( const KoProperties & properties );
+    bool check( const KoProperties & properties ) const;
 
     /**
      * Accept the KisNodeVisitor (for the Visitor design pattern),

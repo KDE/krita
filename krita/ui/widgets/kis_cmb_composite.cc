@@ -86,7 +86,7 @@ void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
     m_list.clear();
 
     // First, insert all composite ops that we know about, in a nice order.
-    foreach (QString id, opsInOrder) {
+    foreach (const QString & id, opsInOrder) {
         foreach (KoCompositeOp* op, list) {
             if ( op->id() == id ) {
                 m_list.append(op);
@@ -96,7 +96,7 @@ void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
     }
     // Then check for all given composite ops whether they are already inserted, and if not, add them at the end.
     foreach(KoCompositeOp* op1, list) {
-        bool found = false; 
+        bool found = false;
         foreach(KoCompositeOp* op2, m_list) {
             if (op1->id() == op2->id()) {
                 found = true;

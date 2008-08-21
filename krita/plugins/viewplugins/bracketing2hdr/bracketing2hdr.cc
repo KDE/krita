@@ -140,8 +140,7 @@ void Bracketing2HDRPlugin::slotAddImages()
 //     dbgPlugins <<"Add image";
     QStringList openfiles = KFileDialog::getOpenFileNames(KUrl(),"*", m_view);
 //     dbgPlugins << openfiles.size() <<" files selected for inclusion";
-    QString filename;
-    foreach(filename, openfiles)
+    foreach(const QString & filename, openfiles)
     {
         addImage( filename );
     }
@@ -536,7 +535,7 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         f.apexBrightness = 2.0 * log(f.aperture ) + log( 1.0 / f.exposure) - log( f.sensitivity / 3.125 );
         f.apexBrightness /= log(2.0);
         f.apexBrightness = 1.0 / ( powf(2.0, f.apexBrightness) );// * ( 1.0592f * 11.4f / 3.125f ) ); // TODO: the magic number is apparrently dependent of the camera, this value is taken from pfscalibrate, this need to be configurable (it is the reflected-light meter calibration constant)
-        if( i >=  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 && 
+        if( i >=  m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 &&
             i < m_wdgBracketing2HDR->tableWidgetImages->rowCount() / 2 + 1)
         {
             apexNorm = f.apexBrightness;

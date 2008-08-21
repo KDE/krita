@@ -104,7 +104,7 @@ void KisRecordedBezierCurvePaintAction::toXML(QDomDocument& doc, QDomElement& el
 {
     KisRecordedPaintAction::toXML(doc,elt);
     QDomElement waypointsElt = doc.createElement( "Waypoints");
-    foreach(Private::BezierCurveSlice info, d->infos)
+    foreach(const Private::BezierCurveSlice & info, d->infos)
     {
         QDomElement infoElt = doc.createElement( "Waypoint");
         // Point1

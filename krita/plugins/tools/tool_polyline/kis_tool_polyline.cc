@@ -50,7 +50,7 @@ KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
     QAction *action = new QAction(i18n("&Finish Polyline"), this);
     addAction("finish_polyline", action );
     connect(action, SIGNAL(triggered()), this, SLOT(finish()));
-    action = new QAction(KIcon("cancel"), i18n("&Cancel"), this);
+    action = new QAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
     addAction("cancel_polyline", action );
     connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
 

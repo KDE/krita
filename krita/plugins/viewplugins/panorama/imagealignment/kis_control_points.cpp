@@ -65,7 +65,7 @@ const QList<KisControlPoint>& KisControlPoints::controlPoints() const
 
 void KisControlPoints::addMatches( const lMatches& matches, int frameRef, int frameMatch )
 {
-    foreach( KisMatch m, matches )
+    foreach( const KisMatch & m, matches )
     {
         KisControlPoint cp( d->framesCount );
         if( findControlPoint( m.ref, frameRef, cp) )

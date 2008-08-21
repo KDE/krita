@@ -93,7 +93,7 @@ void KisBaseNode::mergeNodeProperties( const KoProperties & properties )
     }
 }
 
-bool KisBaseNode::check( const KoProperties & properties )
+bool KisBaseNode::check( const KoProperties & properties ) const
 {
     QMapIterator<QString, QVariant> iter = properties.propertyIterator();
     while ( iter.hasNext() ) {

@@ -92,11 +92,11 @@ void PriorityToFirstMergeStrategy::merge(Store* dst, QList<const Store*> srcs, Q
 {
     Q_UNUSED(score);
     dbgImage << "Priority to first meta data";
-    
+
     foreach( const Store* store, srcs )
     {
         QList<QString> keys = store->keys();
-        foreach(QString key, keys)
+        foreach(const QString & key, keys)
         {
             if( !dst->containsEntry( key ) )
             {
@@ -136,10 +136,10 @@ void OnlyIdenticalMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QLi
     Q_UNUSED(score);
     dbgImage << "OnlyIdenticalMergeStrategy";
     dbgImage << "Priority to first meta data";
-    
+
     Q_ASSERT(srcs.size() > 0 );
     QList<QString> keys = srcs[0]->keys();
-    foreach(QString key, keys)
+    foreach(const QString & key, keys)
     {
         bool keep = true;
         const Entry& e = srcs[0]->getEntry(key);
@@ -270,20 +270,20 @@ void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<doubl
         srcs = scores2srcs.values();
         scores = scores2srcs.keys();
     }
-    
+
     // First attempt to see if one of the store has a higher score than the others
     if(scores[0] > 2 * scores[1])
     { // One of the store has a higher importance than the other ones
         dst->copyFrom( srcs[0] );
     } else {
         // Merge exif info
-        
-        
+
+
         // Election
         foreach(const Store* store, srcs)
         {
             QList<QString> keys = store->keys();
-            foreach(QString key, keys)
+            foreach(const QString & key, keys)
             {
                 if(!dst->containsEntry( key ) )
                 {
@@ -291,7 +291,7 @@ void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<doubl
                 }
             }
         }
-        
+
         // Compute rating
         double rating = 0.0;
         double norm = 0.0;

@@ -67,8 +67,10 @@ KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), Categ
 }
 
 
-KisFilterConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image) const
+KisFilterConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
+    Q_UNUSED(dev);
+    Q_UNUSED(image);
     return new KisWdgFastColorTransfer(parent);
 }
 

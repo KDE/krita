@@ -150,7 +150,7 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
     QPoint srcTopLeft = srcInfo.topLeft();
-    
+
     if (!src) return;
     if (!dst) return;
     if (!config) return;
@@ -240,7 +240,7 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
     }
 
     return;
-    
+
     qint32 sel_h = size.height();
     qint32 sel_w = size.width();
 
@@ -306,8 +306,7 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
         while (!srcIt.isDone() && !( progressUpdater && progressUpdater->interrupted()) ) {
             if (srcIt.isSelected()) {
                 // Calculate surface normal from bumpmap
-                if (config->getBool("tiled", true) || row_in_bumpmap &&
-                    x >= - tmp&& x < - tmp + bm_w) {
+                if (config->getBool("tiled", true) || ( row_in_bumpmap && x >= - tmp && x < - tmp + bm_w )) {
 
                     if (config->getBool("tiled", true)) {
                         xofs1 = MOD (xofs2 - 1, bm_w);
@@ -398,12 +397,12 @@ KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* par
 KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f)
     : KisFilterConfigWidget(parent, f)
     , m_device(dev)
-        , m_image(image)  
+        , m_image(image)
 {
     Q_ASSERT(m_device);
 
     m_page = new BumpmapWidget(this);
-    
+
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
@@ -411,11 +410,11 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const
 
     m_model = new KisNodeModel(this);
     m_model->setImage(image);
-    
+
     m_page->listLayers->setModel( m_model );
     m_page->listLayers->expandAll();
     m_page->listLayers->scrollToBottom();
-    
+
 }
 
 void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
@@ -425,7 +424,7 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
     KisNodeSP node = cfg->getProperty("source_layer").value<KisNodeSP>();
     if (node)
         m_page->listLayers->setCurrentIndex( m_model->indexFromNode( node ) );
-    
+
     m_page->dblAzimuth->setValue(cfg->getDouble("azimuth", 135.0) );
     m_page->dblElevation->setValue(cfg->getDouble("elevation", 45.0));
     m_page->dblDepth->setValue(cfg->getInt("depth", 3));

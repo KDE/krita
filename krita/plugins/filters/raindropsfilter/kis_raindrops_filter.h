@@ -30,6 +30,9 @@ class KisRainDropsFilter : public KisFilter
 public:
     KisRainDropsFilter();
 public:
+
+    using KisFilter::process;
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,

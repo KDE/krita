@@ -207,6 +207,7 @@ KisPerChannelFilter::KisPerChannelFilter() : KisFilter( id(), CategoryAdjust, i1
 
 KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev, const KisImageSP image ) const
 {
+    Q_UNUSED(image);
     return new KisPerChannelConfigWidget(parent, dev);
 }
 

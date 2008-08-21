@@ -38,6 +38,7 @@ KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
 KisFilterConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image ) const
 {
     Q_UNUSED(dev);
+    Q_UNUSED(image);
     return new KisHSVConfigWidget(parent);
 }
 
@@ -86,7 +87,7 @@ void KisHSVAdjustmentFilter::process(KisConstProcessingInformation srcInfo,
         srcIt.nextRow();
         dstIt.nextRow();
     }
-           
+
     delete transfo;
 }
 

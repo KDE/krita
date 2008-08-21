@@ -29,8 +29,9 @@ class KisOilPaintFilter : public KisFilter
 public:
     KisOilPaintFilter();
 public:
-//     using KisFilter::process;
-    
+
+    using KisFilter::process;
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
@@ -38,7 +39,7 @@ public:
                  KoUpdater* progressUpdater
         ) const;
     static inline KoID id() { return KoID("oilpaint", i18n("Oilpaint")); }
-    
+
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;

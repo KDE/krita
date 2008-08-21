@@ -96,7 +96,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
     Q_UNUSED( config );
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
-    
+
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 DropSize = config->getInt("dropSize", 80);
     quint32 number = config->getInt("number", 80);
@@ -156,7 +156,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
         }
     }
 
-    for (int NumBlurs = 0; (NumBlurs <= number) && !(progressUpdater && progressUpdater->interrupted()); ++NumBlurs)
+    for (uint NumBlurs = 0; (NumBlurs <= number) && !(progressUpdater && progressUpdater->interrupted()); ++NumBlurs)
     {
         NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
         halfSize = NewSize / 2;

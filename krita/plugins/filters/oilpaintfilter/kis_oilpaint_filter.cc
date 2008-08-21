@@ -59,7 +59,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter( id(), KisFilter::CategoryArt
 {
     setSupportsPainting( true );
     setSupportsPreview( true );
-    
+
 }
 
 void KisOilPaintFilter::process(KisConstProcessingInformation srcInfo,
@@ -69,6 +69,8 @@ void KisOilPaintFilter::process(KisConstProcessingInformation srcInfo,
                  KoUpdater* progressUpdater
         ) const
 {
+    Q_UNUSED(progressUpdater);
+
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
@@ -122,7 +124,7 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
 
             if (it.isSelected()) {
 
-//                 uint color = 
+//                 uint color =
                 MostFrequentColor(src, dstIt.rawData(), bounds, it.x(), it.y(), BrushSize, Smoothness);
 //                 dst->colorSpace()->fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), dstIt.rawData());
             }
@@ -156,20 +158,19 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
 
 void KisOilPaintFilter::MostFrequentColor (const KisPaintDeviceSP src, quint8* dst, const QRect& bounds, int X, int Y, int Radius, int Intensity) const
 {
-    uint color;
     uint I;
 
     double Scale = Intensity / 255.0;
 
     // Alloc some arrays to be used
     uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
-    
+
     const KoColorSpace* cs = src->colorSpace();
-    
-    
+
+
     QVector<float> channel(cs->channelCount());
     QVector<float>* AverageChannels = new QVector<float>[(Intensity + 1)];
-    
+
     // Erase the array
     memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
 

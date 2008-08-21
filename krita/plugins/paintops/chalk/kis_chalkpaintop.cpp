@@ -73,7 +73,7 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     if ( newStrokeFlag ) {
         newStrokeFlag = false;
     } else
-	{	
+	{
 	dab = cachedDab( );
 	dab->clear();
 

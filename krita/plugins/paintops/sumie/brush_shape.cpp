@@ -42,15 +42,15 @@ void BrushShape::fromGaussian(int radius, float sigma){
 	    m_width = m_height = radius * 2 + 1;
         int gaussLength = (int)(m_width*m_width);
 		//int center = (edgeSize - 1) / 2;
-		
+
 		float sigmaSquare = - 2.0 * sigma * sigma;
 		float sigmaConst = 1.0 / (2.0 * PI * sigma * sigma);
-	
+
 		float total = 0;
 		float length = 0;
 		int p = 0;
 
-				
+
 
 		for (int y=-radius;y<=radius;y++){
 			for (int x=-radius;x<=radius;x++){
@@ -67,8 +67,8 @@ void BrushShape::fromGaussian(int radius, float sigma){
 	float minLen = m_bristles[0].length();
 	float maxLen = m_bristles[gaussLength/2].length();
 	float dist = maxLen - minLen;
-	
-	// normalise lengths 
+
+	// normalise lengths
 	float result;
 	int i = 0;
 
@@ -108,9 +108,9 @@ void BrushShape::fromLine(int radius, float sigma)
 	float maxLen = m_bristles[gaussLength/2].length();
 	float dist = maxLen - minLen;
 
-	// normalise lengths 
+	// normalise lengths
 	float result;
-	
+
 	for (int x=0;x<m_width;x++)
 	{
 		result = (m_bristles[x].length() - minLen ) / dist;

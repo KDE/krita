@@ -40,7 +40,7 @@ struct Store::Private {
 
 Store::Store() : d(new Private)
 {
-    
+
 }
 
 Store::Store(const Store& s) : d(new Private(*s.d)) {
@@ -72,7 +72,7 @@ void Store::copyFrom(const Store* store)
 
 bool Store::addEntry(const Entry& entry)
 {
-    Q_ASSERT( !entry.name().isEmpty() ); 
+    Q_ASSERT( !entry.name().isEmpty() );
     if(d->entries.contains(entry.qualifiedName()) && d->entries[entry.qualifiedName()].isValid() )
     {
         dbgImage <<"Entry" << entry.qualifiedName() <<" already exists in the store, cannot be included twice";
@@ -107,10 +107,12 @@ Entry& Store::getEntry(const QString & entryKey)
 {
     if( !d->entries.contains( entryKey ) )
     {
-        QStringList splitedKey = entryKey.split(":");
-        QString prefix = splitedKey[0];
-        splitedKey.pop_front();
-        d->entries[entryKey] = Entry( SchemaRegistry::instance()->schemaFromPrefix( prefix ) , splitedKey.join(":"), Value() );
+        QStringList splitKey = entryKey.split(':');
+        QString prefix = splitKey[0];
+        splitKey.pop_front();
+        d->entries[entryKey] = Entry( SchemaRegistry::instance()->schemaFromPrefix( prefix ),
+                                      splitKey.join(":"),
+                                      Value() );
     }
     return d->entries [entryKey];
 }

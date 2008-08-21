@@ -69,7 +69,7 @@ void KisOpenRasterStackLoadVisitor::loadImage()
     d->image = new KisImage(d->doc->undoAdapter(), 100, 100, KoColorSpaceRegistry::instance()->colorSpace("RGBA",""), "OpenRaster Image (name)"); // TODO: take into account width and height parameters, and metadata, when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
 
     QDomDocument doc = d->loadContext->loadStack();
-    
+
     d->image->lock();
     for (QDomNode node = doc.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "stack") { // it's the root layer !
@@ -141,7 +141,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
             {
 
                 QString filterType = subelem.attribute("type");
-                QStringList filterTypeSplit = filterType.split(":");
+                QStringList filterTypeSplit = filterType.split(':');
                 KisFilterSP f = 0;
                 if(filterTypeSplit[0] == "applications" && filterTypeSplit[1] == "krita")
                 {

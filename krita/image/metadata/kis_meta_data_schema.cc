@@ -40,7 +40,7 @@ struct Schema::Private {
     QString prefix;
 };
 
-Schema::Schema(const QString & _uri, const QString & _ns) 
+Schema::Schema(const QString & _uri, const QString & _ns)
     : d(new Private)
 {
     d->uri = _uri;
@@ -68,7 +68,7 @@ QString Schema::generateQualifiedName(const QString & name) const
 {
     dbgImage << "generateQualifiedName for " << name;
     Q_ASSERT( !name.isEmpty() && !name.isNull());
-    return prefix() + ":" + name;
+    return prefix() + ':' + name;
 }
 
 QDebug operator<<(QDebug dbg, const KisMetaData::Schema &c)

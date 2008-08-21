@@ -33,10 +33,6 @@
 
 #include "kis_entry_editor.h"
 
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
-
 struct KisMetaDataEditor::Private {
     KisMetaData::Store* originalStore;
     KisMetaData::Store* store;
@@ -49,17 +45,17 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
 {
     d->originalStore = originalStore;
     d->store = new KisMetaData::Store(*originalStore);
-    
+
     QStringList files = KGlobal::dirs()->findAllResources("data", "kritaplugins/metadataeditor/*.rc");
 
     foreach(QString file, files)
     {
-        
+
         QFile xmlFile(file);
         xmlFile.open(QFile::ReadOnly);
         QString errMsg;
         int errLine, errCol;
-        
+
         QDomDocument document;
         if(!document.setContent(&xmlFile, false, &errMsg, &errLine, &errCol))
         {
@@ -70,12 +66,12 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         {
             dbgPlugins <<"Invalid XML file";
         }
-        
+
         const QString uiFileName = rootElement.attribute("uiFile");
         const QString pageName = rootElement.attribute("name");
         const QString iconName = rootElement.attribute("icon");
         if(uiFileName == "") continue;
-        
+
         // Read the ui file
         QUiLoader loader;
         QFile uiFile(KStandardDirs::locate("data","kritaplugins/metadataeditor/" + uiFileName));
@@ -87,7 +83,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             continue;
         }
         uiFile.close();
-        
+
         QDomNodeList list = rootElement.childNodes();
         const int size = list.size();
         for(int i = 0; i < size; ++i) {
@@ -99,7 +95,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             const QString editorSignal = '2' + elem.attribute("editorSignal");
             const QString propertyName = elem.attribute("propertyName");
             const QString structureField = elem.attribute("structureField");
-            
+
             QWidget* obj = widget->findChild<QWidget*>(editorName);
             if(obj)
             {

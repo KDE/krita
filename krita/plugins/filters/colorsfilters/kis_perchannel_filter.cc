@@ -127,13 +127,13 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
                     QDomElement curvesElement = curvesNode.toElement();
 
                     if (!curvesElement.isNull() && !curvesElement.text().isEmpty()) {
-                        QStringList data = curvesElement.text().split( ";" );
+                        QStringList data = curvesElement.text().split( ';' );
 
                         foreach (QString pair, data) {
-                            if (pair.indexOf(",") > -1) {
+                            if (pair.indexOf(',') > -1) {
                                 QPointF p;
-                                p.rx() = pair.section(",", 0, 0).toDouble();
-                                p.ry() = pair.section(",", 1, 1).toDouble();
+                                p.rx() = pair.section(',', 0, 0).toDouble();
+                                p.ry() = pair.section(',', 1, 1).toDouble();
                                 curves[count].append(p);
                             }
                         }

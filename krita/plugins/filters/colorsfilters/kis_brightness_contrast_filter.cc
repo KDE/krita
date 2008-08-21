@@ -96,7 +96,7 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
         e = n.toElement();
         if (!e.isNull()) {
             if (e.attribute("name") == "transfer") { // ### 1.6 needs .tagName("name") here!
-                QStringList data = e.text().split( "," );
+                QStringList data = e.text().split( ',' );
                 QStringList::Iterator start = data.begin();
                 QStringList::Iterator end = data.end();
                 int i = 0;
@@ -107,13 +107,13 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
                 }
             }
             else if (e.attribute("name") == "curve") { // ### 1.6 needs .tagName("name") here!
-                QStringList data = e.text().split( ";" );
+                QStringList data = e.text().split( ';' );
                 curve.clear();
                 foreach (QString pair, data) {
-                    if (pair.indexOf(",") > -1) {
+                    if (pair.indexOf(',') > -1) {
                         QPointF p;
-                        p.rx() = pair.section(",", 0, 0).toDouble();
-                        p.ry() = pair.section(",", 1, 1).toDouble();
+                        p.rx() = pair.section(',', 0, 0).toDouble();
+                        p.ry() = pair.section(',', 1, 1).toDouble();
                         curve.append(p);
                     }
                 }
@@ -169,7 +169,7 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
     setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisBrightnessContrastFilterConfigurationFactory()));
-    
+
 }
 
 KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageSP image) const

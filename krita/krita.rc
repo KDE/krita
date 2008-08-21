@@ -51,7 +51,7 @@
    <Action name="view_fast_grid_20x20" />
    <Action name="view_fast_grid_40x40" />
   </Menu>
-  <Seperator/>
+  <Separator/>
   <Action name="view_toggle_perspective_grid" />
   <Action name="view_clear_perspective_grid" />
   <Separator/>

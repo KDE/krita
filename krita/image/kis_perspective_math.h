@@ -40,7 +40,10 @@ class KRITAIMAGE_EXPORT KisPerspectiveMath {
         static Matrix3qreal computeMatrixTransfoToPerspective(const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, const QRect& r);
         static Matrix3qreal computeMatrixTransfoFromPerspective(const QRect& r, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight);
         struct LineEquation {
-            // a*x + b*y = c
+            // a*x + b*y = c. We normalize a and b so that a^2+b^2=1. This makes computeLineEquation
+            // slightly more complex, but simplifies computeIntersection. Since for n lines there are
+            // n*(n-1)/2 intersections to compute, it is indeed more important to make
+            // computeIntersection faster.
             qreal a, b, c;
         };
         /// TODO: get rid of this in 2.0
@@ -50,14 +53,7 @@ class KRITAIMAGE_EXPORT KisPerspectiveMath {
             return QPointF( (p.x() * m.coeff(0,0) + p.y() * m.coeff(0,1) + m.coeff(0,2) ) * s,
                               (p.x() * m.coeff(1,0) + p.y() * m.coeff(1,1) + m.coeff(1,2) ) * s );
         }
-        static inline LineEquation computeLineEquation(const QPointF* p1, const QPointF* p2)
-        {
-            LineEquation eq;
-            eq.a = p1->y() - p2->y();
-            eq.b = p2->x() - p1->x();
-            eq.c = eq.b * p1->x() + eq.a * p1->y();
-            return eq;
-        }
+        static LineEquation computeLineEquation(const QPointF* p1, const QPointF* p2);
                     
         static QPointF computeIntersection(const LineEquation& d1, const LineEquation& d2);
 };

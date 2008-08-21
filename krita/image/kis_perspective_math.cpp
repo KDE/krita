@@ -101,10 +101,38 @@ Matrix3qreal KisPerspectiveMath::computeMatrixTransfoFromPerspective(const QRect
     return KisPerspectiveMath::computeMatrixTransfo(r.topLeft(), r.topRight(), r.bottomLeft(), r.bottomRight(), topLeft, topRight, bottomLeft, bottomRight);
 }
 
-QPointF KisPerspectiveMath::computeIntersection(const LineEquation& d1, const LineEquation& d2)
+KisPerspectiveMath::LineEquation KisPerspectiveMath::computeLineEquation(const QPointF* p1, const QPointF* p2)
+{
+    LineEquation eq;
+    eq.a = p1->y() - p2->y();
+    eq.b = p2->x() - p1->x();
+    qreal square_distance = eq.a * eq.a + eq.b * eq.b;
+
+    if(Eigen::ei_isMuchSmallerThan(square_distance, p1->x()*p1->x()+p1->y()*p1->y()))
+    {
+        // the two points are approximately the same. Choose any line passing through them.
+        eq.a = 0;
+        eq.b = 1;
+        eq.c = p1->y();
+    }
+    else
+    {
+        // the two points are really distinct. Hence there exists a unique line equation ax+by=c
+        // satisfying the additional condition that  a^2+b^2=1
+        qreal scale = qreal(1) / Eigen::ei_sqrt(square_distance);
+        eq.a *= scale;
+        eq.b *= scale;
+        eq.c = scale * (p1->y() * p2->x() - p2->y() * p1->x());
+    }
+    return eq;
+}
+
+QPointF KisPerspectiveMath::computeIntersection(const KisPerspectiveMath::LineEquation& d1, const KisPerspectiveMath::LineEquation& d2)
 {
     qreal det = d1.a * d2.b - d1.b * d2.a;
-    if(Eigen::ei_isMuchSmallerThan(det, qMax(qAbs(d1.c),qAbs(d2.c))))
+    // since the line equations ax+by=c are normalized with a^2+b^2=1, the following tests
+    // whether the two lines are approximately parallel.
+    if(Eigen::ei_isMuchSmallerThan(det, qreal(1)))
     {   // special case where the two lines are approximately parallel. Pick any point on the first line.
         if(qAbs(d1.b)>qAbs(d1.a))
             return QPointF(d1.b, d1.c/d1.b-d1.a);
@@ -114,6 +142,6 @@ QPointF KisPerspectiveMath::computeIntersection(const LineEquation& d1, const Li
     else
     {   // general case
         qreal invdet = qreal(1) / det;
-        return QPointF(invdet*(d2.b*d1.c-d1.b*d2.c), invdet*(d1.a*d1.c-d2.a*d2.c));
+        return QPointF(invdet*(d2.b*d1.c-d1.b*d2.c), invdet*(d1.a*d2.c-d2.a*d1.c));
     }
 }

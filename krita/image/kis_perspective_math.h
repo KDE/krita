@@ -21,8 +21,13 @@
 #ifndef _KIS_PERSPECTVE_MATH_H_
 #define _KIS_PERSPECTVE_MATH_H_
 
-#include <math.h>
 #include <QPointF>
+
+#include <Eigen/Core>
+typedef Eigen::Matrix<qreal, 3, 3> Matrix3qreal;
+typedef Eigen::Matrix<qreal, 9, 9> Matrix9qreal;
+typedef Eigen::Matrix<qreal, 9, 1> Vector9qreal;
+
 #include <krita_export.h>
 
 class QRect;
@@ -31,41 +36,40 @@ class KRITAIMAGE_EXPORT KisPerspectiveMath {
     private:
         KisPerspectiveMath() { }
     public:
-        static double* computeMatrixTransfo( const QPointF& topLeft1, const QPointF& topRight1, const QPointF& bottomLeft1, const QPointF& bottomRight1 , const QPointF& topLeft2, const QPointF& topRight2, const QPointF& bottomLeft2, const QPointF& bottomRight2);
-      static double* computeMatrixTransfoToPerspective(const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, const QRect& r);
-      static double* computeMatrixTransfoFromPerspective(const QRect& r, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight);
+        static Matrix3qreal computeMatrixTransfo( const QPointF& topLeft1, const QPointF& topRight1, const QPointF& bottomLeft1, const QPointF& bottomRight1, const QPointF& topLeft2, const QPointF& topRight2, const QPointF& bottomLeft2, const QPointF& bottomRight2);
+      static Matrix3qreal computeMatrixTransfoToPerspective(const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, const QRect& r);
+      static Matrix3qreal computeMatrixTransfoFromPerspective(const QRect& r, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight);
       struct LineEquation {
             // y = a*x + b
       double a, b;
     };
-    /// TODO: get ride of this in 2.0
-    inline static QPointF matProd(const double (&m)[3][3], const QPointF& p)
+    /// TODO: get rid of this in 2.0
+    inline static QPointF matProd(const Matrix3qreal& m, const QPointF& p)
     {
-        double s = ( p.x() * m[2][0] + p.y() * m[2][1] + 1.0);
-        s = (s == 0.) ? 1. : 1./s;
-        return QPointF( (p.x() * m[0][0] + p.y() * m[0][1] + m[0][2] ) * s,
-                         (p.x() * m[1][0] + p.y() * m[1][1] + m[1][2] ) * s );
+        qreal s = qreal(1) / ( p.x() * m.coeff(2,0) + p.y() * m.coeff(2,1) + 1.0);
+        return QPointF( (p.x() * m.coeff(0,0) + p.y() * m.coeff(0,1) + m.coeff(0,2) ) * s,
+                         (p.x() * m.coeff(1,0) + p.y() * m.coeff(1,1) + m.coeff(1,2) ) * s );
     }
     static inline LineEquation computeLineEquation(const QPointF* p1, const QPointF* p2)
     {
       LineEquation eq;
-      double x1 = p1->x(); double x2 = p2->x();
+      qreal x1 = p1->x(), x2 = p2->x();
       if( fabs(x1 - x2) < 0.000001 )
       {
         x1 += 0.0001; // Introduce a small perturbation
       }
-      eq.a = (p2->y() - p1->y()) / (double)( x2 - x1 );
+      eq.a = (p2->y() - p1->y()) / ( x2 - x1 );
       eq.b = -eq.a * x1 + p1->y();
       return eq;
     }
     static inline QPointF computeIntersection(const LineEquation& d1, const LineEquation& d2)
     {
-      double a1 = d1.a; double a2 = d2.a;
+      qreal a1 = d1.a; qreal a2 = d2.a;
       if( fabs(a1 - a2) < 0.000001 )
       {
         a1 += 0.0001; // Introduce a small perturbation
       }
-      double x = (d1.b - d2.b) / (a2 - a1);
+      qreal x = (d1.b - d2.b) / (a2 - a1);
       return QPointF(x, a2 * x + d2.b);
     }
 };

@@ -345,16 +345,7 @@ void KisToolPerspectiveTransform::mouseMoveEvent(KoPointerEvent *event)
                 QPointF translate = event->pos().toPointF() - m_dragEnd;
                 m_dragEnd = event->pos().toPointF();
 
-                double matrixFrom[3][3];
-                double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(m_topleft, m_topright, m_bottomleft, m_bottomright, m_initialRect);
-                for(int i = 0; i < 3; i++)
-                {
-                    for(int j = 0; j < 3; j++)
-                    {
-                        matrixFrom[i][j] = b[3*i+j];
-                    }
-                }
-                delete b;
+                Matrix3qreal matrixFrom = KisPerspectiveMath::computeMatrixTransfoToPerspective(m_topleft, m_topright, m_bottomleft, m_bottomright, m_initialRect);
 
                 QPointF topLeft = KisPerspectiveMath::matProd(matrixFrom, m_initialRect.topLeft() );
                 QPointF topRight = KisPerspectiveMath::matProd(matrixFrom, m_initialRect.topRight() );
@@ -379,16 +370,7 @@ void KisToolPerspectiveTransform::mouseMoveEvent(KoPointerEvent *event)
                     case NOHANDLE:
                         dbgPlugins <<"Should NOT happen";
                 }
-                double matrixTo[3][3];
-                b = KisPerspectiveMath::computeMatrixTransfoToPerspective(topLeft, topRight, bottomLeft, bottomRight, dstRect );
-                for(int i = 0; i < 3; i++)
-                {
-                    for(int j = 0; j < 3; j++)
-                    {
-                        matrixTo[i][j] = b[3*i+j];
-                    }
-                }
-                delete b;
+                Matrix3qreal matrixTo = KisPerspectiveMath::computeMatrixTransfoToPerspective(topLeft, topRight, bottomLeft, bottomRight, dstRect );
                 m_topleft = KisPerspectiveMath::matProd(matrixTo, m_initialRect.topLeft());
                 m_topright = KisPerspectiveMath::matProd(matrixTo, m_initialRect.topRight());
                 m_bottomleft = KisPerspectiveMath::matProd(matrixTo, m_initialRect.bottomLeft());
@@ -434,16 +416,7 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
                         m_topright  = m_points[1];
                         m_bottomleft  = m_points[3];
                         m_bottomright  = m_points[2];
-                        double matrix[3][3];
-                        double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(m_topleft, m_topright, m_bottomleft, m_bottomright, m_initialRect );
-                        for(int i = 0; i < 3; i++)
-                        {
-                            for(int j = 0; j < 3; j++)
-                            {
-                                dbgPlugins <<"sol[" << 3*i+j <<"]=" << b[3*i+j];
-                                matrix[i][j] = b[3*i+j];
-                            }
-                        }
+                        Matrix3qreal matrix = KisPerspectiveMath::computeMatrixTransfoToPerspective(m_topleft, m_topright, m_bottomleft, m_bottomright, m_initialRect );
                         m_topleft = KisPerspectiveMath::matProd(matrix, m_initialRect.topLeft());
                         m_topright = KisPerspectiveMath::matProd(matrix, m_initialRect.topRight());
                         m_bottomleft = KisPerspectiveMath::matProd(matrix, m_initialRect.bottomLeft());

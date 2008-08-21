@@ -185,7 +185,7 @@ double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h
         }
         memcpy(sol, m, 3* sizeof(double));
         m+=3; sol+=3;
-}
+    }
     memcpy(sol, m, 3* sizeof(double) * w);
     return err;
 }
@@ -249,18 +249,9 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     KisPainter copyPainter(m_srcdev);
     if(m_settings->perspectiveCorrection())
     {
-        double startM[3][3];
-        double endM[3][3];
-        for(int i = 0; i < 3; i++)
-        {
-            for(int j = 0; j < 3; j++)
-            {
-                startM[i][j] = 0.;
-                endM[i][j] = 0.;
-            }
-            startM[i][i] = 1.;
-            endM[i][i] = 1.;
-        }
+        Matrix3qreal startM = Matrix3qreal::Identity();
+        Matrix3qreal endM = Matrix3qreal::Identity();
+
         // First look for the grid corresponding to the start point
         KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
         QRect r = QRect(0,0, m_image->width(), m_image->height());
@@ -268,15 +259,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 #if 1
         if(subGridStart)
         {
-            double* b = KisPerspectiveMath::computeMatrixTransfoFromPerspective( r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
-            for(int i = 0; i < 3; i++)
-            {
-                for(int j = 0; j < 3; j++)
-                {
-                    startM[i][j] = b[3*i+j];
-                }
-            }
-
+            startM = KisPerspectiveMath::computeMatrixTransfoFromPerspective( r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
         }
 #endif
 #if 1
@@ -284,21 +267,14 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
         if(subGridEnd)
         {
-            double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
-            for(int i = 0; i < 3; i++)
-            {
-                for(int j = 0; j < 3; j++)
-                {
-                    endM[i][j] = b[3*i+j];
-                }
-            }
+            endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
         }
 #endif
 
         // Compute the translation in the perspective transformation space:
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) );
-        QPointF duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(m_settings->offset()) );
-        QPointF translat = duplicateStartPoisitionT - positionStartPaintingT;
+        QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(m_settings->offset()) );
+        QPointF translat = duplicateStartPositionT - positionStartPaintingT;
         KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
         KisRandomSubAccessorPixel srcAcc = source()->createRandomSubAccessor();
         //Action

@@ -26,7 +26,7 @@ macro_optional_find_package(Exif)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
 
-macro_log_feature(EIGEN2_FOUND "Eigen2" "Eigen2 is needed by KSpread and by some Krita plugins. They won't be built." "Module in kdesupport" FALSE "2.0")
+macro_log_feature(EIGEN2_FOUND "Eigen2" "Eigen2 is needed by KSpread and Krita. They won't be built." "Module in kdesupport" FALSE "2.0")
 if(EIGEN2_FOUND)
   # Some Eigen methods are guared by asserts which are very costly in terms of performance.
   # This is mostly the () and [] operators for accessing coefficients. One way to avoid that cost is to use
@@ -133,9 +133,9 @@ set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 
 set(SHOULD_BUILD_KRITA TRUE)
 
-if(NOT BLITZ_FOUND)
+if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT BLITZ_FOUND)
+endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND)
 
 macro_log_feature(BLITZ_FOUND "qimageblitz" "Krita requires qimageblitz. Krita will not be built" "qimageblitz is available from kdesupport" FALSE "")
 

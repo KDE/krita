@@ -75,6 +75,8 @@ if (SHOULD_BUILD_KRITA)
         endif(HAVE_GLEW)
     endif(HAVE_OPENGL)
 
+    include_directories(${EIGEN2_INCLUDE_DIR})
+
     add_subdirectory( image )
     add_subdirectory( ui )
     add_subdirectory( shape )

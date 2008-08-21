@@ -422,7 +422,7 @@ void ParagraphTool::deactivateRuler()
 void ParagraphTool::resetActiveRuler()
 {
     if (hasActiveRuler()) {
-        m_rulers[m_activeRuler].reset();
+        m_rulers[m_activeRuler].resetValue();
         deactivateRuler();
     }
 }

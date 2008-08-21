@@ -17,16 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PERSHAPEDATA_H
-#define PERSHAPEDATA_H
+#ifndef SHAPESPECIFICDATA_H
+#define SHAPESPECIFICDATA_H
 
 #include "TextShape.h"
 
 #include "Ruler.h"
+#include "RulerControl.h"
 
 #include <QRectF>
 
 class KoParagraphStyle;
+
+// this enum defines the order in which the rulers will be focused when tab is pressed
+typedef enum
+{
+    topMarginRuler,
+    rightMarginRuler,
+    bottomMarginRuler,
+    followingIndentRuler,
+    firstIndentRuler,
+    maxRuler,
+    noRuler
+} RulerIndex;
 
 /* ShapeSpecificData is used by ParagraphTool to store information about a paragraph which is specific to a shape.
  * As the width of shapes may be different the positions and sizes of its ruler will be different, too.
@@ -73,16 +86,9 @@ protected:
     QPointF mapTextToDocument(QPointF point) const;
     QLineF mapTextToDocument(QLineF line) const;
 
-    QLineF baseline(RulerIndex ruler) const;
-    void setBaseline(RulerIndex ruler, QLineF baseline);
-
-    bool visible(RulerIndex ruler) const;
-    void setVisible(RulerIndex ruler, bool visible);
-
     TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
 
 private:
-    Ruler *m_rulers;
     TextShape *m_textShape;
 
     bool m_isSingleLine;
@@ -93,12 +99,7 @@ private:
            m_followingLines,
            m_border;
 
-    // store position of the baselines of each ruler
-    QLineF m_baselines[maxRuler];
-
-    // use visibility to determine if a ruler needs to be painted
-    // or if a hit tests needs to be done
-    bool m_visible[maxRuler];
+    RulerControl m_rulerControls[maxRuler];
 };
 
 #endif

@@ -30,23 +30,12 @@
 class QPainter;
 class QPointF;
 
-// TODO: move this to a separate file. ParagraphTool itself would be nice,
-// but we need it in ShapeSpecificData, too.
-// this enum defines the order in which the rulers will be focused when tab is pressed
-typedef enum
-{
-    topMarginRuler,
-    rightMarginRuler,
-    bottomMarginRuler,
-    followingIndentRuler,
-    firstIndentRuler,
-    maxRuler,
-    noRuler
-} RulerIndex;
-
-/** A Ruler is a user interface element which can be used to change the
- * Spacing and Dimensions in a KOffice document,for example the spacing
- * in a text paragraph, by simply dragging the ruler across the screen */
+/* A Ruler manages several values like the minimum value, the maximum value
+ * the current value and the old value of a ruler, which can then be used
+ * by the RulerControl class to display the Ruler on the screen.
+ * A Ruler can be painted at more than one place by using multiple
+ * RulerControl instances with a single Ruler instance.
+ */
 class Ruler : public QObject
 {
     Q_OBJECT
@@ -61,9 +50,11 @@ public:
     qreal value() const;
     QString valueString() const;
     void setValue(qreal value);
+    void moveTo(qreal value, bool smooth);
+    void resetValue();
 
     qreal oldValue() const { return m_oldValue; }
-    void reset();
+    void setOldValue(qreal value) { m_oldValue = value; }
 
     // distance in points between steps when moving the ruler,
     // set this to 0.0 to disable stepping
@@ -96,14 +87,6 @@ public:
     bool isHighlighted() const { return m_highlighted; }
     void setHighlighted(bool highlighted);
 
-    QLineF labelConnector(const QLineF &baseline) const;
-
-    void paint(QPainter &painter, const QLineF &baseline) const;
-
-    bool hitTest(const QPointF &point, const QLineF &baseline) const;
-
-    void moveRuler(const QPointF &point, bool smooth, QLineF baseline);
-
     void increaseByStep() { setValue(value() + stepValue()); emit valueChanged(value()); }
     void decreaseByStep() { setValue(value() - stepValue()); emit valueChanged(value()); }
 
@@ -119,22 +102,6 @@ signals:
 
     // emitted when the ruler needs to be repainted
     void needsRepaint();
-
-protected:
-    void paint(QPainter &painter, const QMatrix &matrix, qreal width) const;
-
-    bool hitTest(const QPointF &point, const QMatrix &matrix, qreal width) const; QLineF labelConnector(const QMatrix &matrix, qreal width) const;
-
-    void moveRuler(const QPointF &point, bool smooth, QMatrix matrix);
-    void moveRuler(qreal value, bool smooth);
-
-    void setOldValue(qreal value) { m_oldValue = value; }
-    void paintArrow(QPainter &painter, const QPointF &tip, const qreal angle, qreal value) const;
-
-    // some convenience methods for rendering the arrow
-    static qreal arrowSize() { return 10.0; }
-    static qreal arrowDiagonal() { return arrowSize() / sqrt(2.0) / 2.0; }
-    static qreal arrowMinimumValue() { return arrowDiagonal() *2.0 + 2.0; }
 
 private:
     // the value of a ruler is the distance between the baseline and

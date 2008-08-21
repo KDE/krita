@@ -18,6 +18,7 @@ SET ( textshape_SRCS
     ParagraphTool.cpp
     ParagraphToolFactory.cpp
     ShapeSpecificData.cpp
+    RulerControl.cpp
     Ruler.cpp
 
     ChangeTracker.cpp

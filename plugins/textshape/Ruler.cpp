@@ -100,26 +100,7 @@ void Ruler::setValue(qreal value)
     }
 }
 
-void Ruler::reset()
-{
-    setValue(oldValue());
-}
-
-void Ruler::moveRuler(const QPointF &point, bool smooth, QLineF baseline)
-{
-    QMatrix matrix;
-    matrix.translate(baseline.p1().x(), baseline.p1().y());
-    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
-
-    moveRuler(point, smooth, matrix);
-}
-
-void Ruler::moveRuler(const QPointF &point, bool smooth, QMatrix matrix)
-{
-    moveRuler(matrix.inverted().map(point).x(), smooth);
-}
-
-void Ruler::moveRuler(qreal value, bool smooth)
+void Ruler::moveTo(qreal value, bool smooth)
 {
     qreal newValue;
 
@@ -143,6 +124,11 @@ void Ruler::moveRuler(qreal value, bool smooth)
         m_value = newValue;
         emit needsRepaint();
     }
+}
+
+void Ruler::resetValue()
+{
+    setValue(oldValue());
 }
 
 qreal Ruler::minimumValue() const
@@ -187,112 +173,5 @@ void Ruler::setHighlighted(bool highlighted)
 {
     m_highlighted = highlighted;
     emit needsRepaint();
-}
-
-QLineF Ruler::labelConnector(const QLineF &baseline) const
-{
-    QMatrix matrix;
-    matrix.translate(baseline.p1().x(), baseline.p1().y());
-    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
-
-    return labelConnector(matrix, baseline.length());
-}
-
-QLineF Ruler::labelConnector(const QMatrix &matrix, qreal width) const
-{
-    return matrix.map(QLineF(value()/2.0, width/2.0, value()/2.0, width/2.0 + 1.0));
-}
-
-void Ruler::paint(QPainter &painter, const QLineF &baseline) const
-{
-    QMatrix matrix;
-    matrix.translate(baseline.p1().x(), baseline.p1().y());
-    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
-
-    paint(painter, matrix, baseline.length());
-}
-
-void Ruler::paint(QPainter & painter, const QMatrix &matrix, qreal width) const
-{
-    painter.save();
-
-    painter.setWorldMatrix(matrix, true);
-
-    // draw dark gray square for old value
-
-    painter.setPen(QPen(Qt::darkGray));
-
-    if (value() != 0.0)
-        painter.drawLine(QLineF(0.0, 0.0, 0.0, width));
-
-    if (oldValue() != value() && oldValue() != 0.0)
-        painter.drawLine(QLineF(oldValue(), 0.0, oldValue(), width));
-
-    if (options() & drawSides) {
-        painter.drawLine(QLineF(0.0, 0.0, oldValue(), 0.0));
-        painter.drawLine(QLineF(0.0, width, oldValue(), width));
-    }
-
-    // draw arrow and ruler line for current value
-
-    if (isActive())
-        painter.setPen(activeColor());
-    else if (isHighlighted())
-        painter.setPen(highlightColor());
-    else if (isFocused())
-        painter.setPen(focusColor());
-    else
-        painter.setPen(normalColor());
-
-    painter.drawLine(QLineF(value(), 0.0, value(), width));
-
-    painter.drawLine(QLineF(0.0, width/2.0, value(), width/2.0));
-
-    if (value() >= 0.0) {
-        paintArrow(painter, QPointF(value(), width/2.0), 0.0, value());
-    }
-    else {
-        paintArrow(painter, QPointF(value(), width/2.0), 180.0, -value());
-    }
-
-    painter.restore();
-}
-
-void Ruler::paintArrow(QPainter &painter, const QPointF &tip, const qreal angle, qreal value) const
-{
-
-    painter.save();
-
-    painter.translate(tip);
-
-    painter.rotate(angle);
-
-    QLineF arrowLeft(-arrowDiagonal(), arrowDiagonal(), 0.0, 0.0);
-    painter.drawLine(arrowLeft);
-
-    QLineF arrowRight(-arrowDiagonal(), -arrowDiagonal(), 0.0, 0.0);
-    painter.drawLine(arrowRight);
-
-    if (value < arrowMinimumValue()) {
-        QLineF arrowMiddle(-arrowSize(), 0.0, 0.0, 0.0);
-        painter.drawLine(arrowMiddle);
-    }
-
-    painter.restore();
-}
-
-bool Ruler::hitTest(const QPointF &point, const QLineF &baseline) const
-{
-    QMatrix matrix;
-    matrix.translate(baseline.p1().x(), baseline.p1().y());
-    matrix.rotate(baseline.angle(QLineF(0.0, 0.0, 0.0, 1.0)));
-
-    return hitTest(point, matrix, baseline.length());
-}
-
-bool Ruler::hitTest(const QPointF &point, const QMatrix &matrix, qreal width) const
-{
-    QRectF rect(value() - 5.0, 0.0, 10.0, width);
-    return rect.contains(matrix.inverted().map(point));
 }
 

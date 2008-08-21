@@ -30,8 +30,11 @@
 #include <QTextLayout>
 
 ShapeSpecificData::ShapeSpecificData(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style)
-    : m_rulers(rulers), m_textShape(textShape)
+    : m_textShape(textShape)
 {
+    for (int ruler = 0; ruler != maxRuler; ++ruler) {
+        m_rulerControls[ruler].setRuler(&rulers[ruler]);
+    }
     m_isSingleLine = (textBlock.layout()->lineCount() == 1);
 
     initDimensions(textBlock, style);
@@ -81,26 +84,25 @@ void ShapeSpecificData::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
     }
 }
 
-
 void ShapeSpecificData::initVisibility()
 {
     qreal top(shapeTop());
     qreal bottom(shapeBottom());
 
     // first line
-    setVisible(firstIndentRuler, top < m_firstLine.bottom());
+    m_rulerControls[firstIndentRuler].setVisible(top < m_firstLine.bottom());
 
     // following lines
-    setVisible(followingIndentRuler, top < m_followingLines.bottom() && bottom > m_followingLines.top() && !m_isSingleLine);
+    m_rulerControls[followingIndentRuler].setVisible(top < m_followingLines.bottom() && bottom > m_followingLines.top() && !m_isSingleLine);
 
     // right margin
-    setVisible(rightMarginRuler, true);
+    m_rulerControls[rightMarginRuler].setVisible(true);
 
     // top margin
-    setVisible(topMarginRuler, top <= m_firstLine.top());
+    m_rulerControls[topMarginRuler].setVisible(top <= m_firstLine.top());
 
     // bottom margin
-    setVisible(bottomMarginRuler, bottom >= m_followingLines.bottom());
+    m_rulerControls[bottomMarginRuler].setVisible(bottom >= m_followingLines.bottom());
 }
 
 void ShapeSpecificData::initBaselines()
@@ -112,17 +114,17 @@ void ShapeSpecificData::initBaselines()
     qreal followingTop = qMax(top, m_followingLines.top());
     qreal followingBottom = qMin(bottom, m_followingLines.bottom());
 
-    m_paintSeparator = !m_isSingleLine && rightTop != followingTop && m_visible[followingIndentRuler];
+    m_paintSeparator = !m_isSingleLine && rightTop != followingTop && m_rulerControls[followingIndentRuler].isVisible();
 
-    setBaseline(firstIndentRuler, QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom()));
+    m_rulerControls[firstIndentRuler].setBaseline(QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom()));
 
-    setBaseline(followingIndentRuler, QLineF(m_border.left(), followingTop, m_border.left(), followingBottom));
+    m_rulerControls[followingIndentRuler].setBaseline(QLineF(m_border.left(), followingTop, m_border.left(), followingBottom));
 
-    setBaseline(rightMarginRuler, QLineF(m_border.right(), followingBottom, m_border.right(), rightTop));
+    m_rulerControls[rightMarginRuler].setBaseline(QLineF(m_border.right(), followingBottom, m_border.right(), rightTop));
 
-    setBaseline(topMarginRuler, QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top()));
+    m_rulerControls[topMarginRuler].setBaseline(QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top()));
 
-    setBaseline(bottomMarginRuler, QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom()));
+    m_rulerControls[bottomMarginRuler].setBaseline(QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom()));
 }
 
 RulerIndex ShapeSpecificData::hitTest(const QPointF &point) const
@@ -130,7 +132,7 @@ RulerIndex ShapeSpecificData::hitTest(const QPointF &point) const
     QPointF mappedPoint(mapDocumentToText(point));
 
     for (int ruler = 0; ruler != maxRuler; ++ruler) {
-        if (m_rulers[ruler].hitTest(mappedPoint, baseline(static_cast<RulerIndex>(ruler)))) {
+        if (m_rulerControls[ruler].hitTest(mappedPoint)) {
             return static_cast<RulerIndex>(ruler);
         }
     }
@@ -141,18 +143,19 @@ RulerIndex ShapeSpecificData::hitTest(const QPointF &point) const
 bool ShapeSpecificData::hitTest(RulerIndex ruler, const QPointF &point) const
 {
     QPointF mappedPoint(mapDocumentToText(point));
-    return m_rulers[ruler].hitTest(mappedPoint, baseline(ruler));
+    return m_rulerControls[ruler].hitTest(mappedPoint);
 }
 
 void ShapeSpecificData::moveRulerTo(RulerIndex ruler, const QPointF &point, bool smoothMovement) const
 {
     QPointF mappedPoint(mapDocumentToText(point));
-    m_rulers[ruler].moveRuler(mappedPoint, smoothMovement, baseline(ruler));
+    m_rulerControls[ruler].moveTo(mappedPoint, smoothMovement);
 }
+
 
 QLineF ShapeSpecificData::labelConnector(RulerIndex ruler) const
 {
-    return mapTextToDocument(m_rulers[ruler].labelConnector(baseline(ruler)));
+    return mapTextToDocument(m_rulerControls[ruler].labelConnector());
 }
 
 void ShapeSpecificData::paint(QPainter &painter, const KoViewConverter &converter) const
@@ -172,9 +175,7 @@ void ShapeSpecificData::paint(QPainter &painter, const KoViewConverter &converte
     }
 
     for (int ruler = 0; ruler != maxRuler; ++ruler) {
-        if (m_visible[ruler]) {
-            m_rulers[ruler].paint(painter, baseline(static_cast<RulerIndex>(ruler)));
-        }
+        m_rulerControls[ruler].paint(painter);
     }
 
     painter.restore();
@@ -233,41 +234,5 @@ QLineF ShapeSpecificData::mapTextToDocument(QLineF line) const
     QMatrix matrix = textShape()->absoluteTransformation(NULL);
     matrix.translate(0.0, -shapeTop());
     return matrix.map(line);
-}
-
-QLineF ShapeSpecificData::baseline(RulerIndex ruler) const
-{
-    if (ruler < 0 || ruler >= maxRuler) {
-        return QLineF();
-    }
-
-    return m_baselines[ruler];
-}
-
-void ShapeSpecificData::setBaseline(RulerIndex ruler, QLineF baseline)
-{
-    if (ruler < 0 || ruler >= maxRuler) {
-        return;
-    }
-
-    m_baselines[ruler] = baseline;
-}
-
-bool ShapeSpecificData::visible(RulerIndex ruler) const
-{
-    if (ruler < 0 || ruler >= maxRuler) {
-        return false;
-    }
-
-    return m_visible[ruler];
-}
-
-void ShapeSpecificData::setVisible(RulerIndex ruler, bool visible)
-{
-    if (ruler < 0 || ruler >= maxRuler) {
-        return;
-    }
-
-    m_visible[ruler] = visible;
 }
 

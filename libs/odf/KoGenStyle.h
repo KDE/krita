@@ -327,9 +327,9 @@ private:
     QByteArray m_familyName;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
-    QMap<QString, QString> m_properties[N_NumTypes];
-    QMap<QString, QString> m_attributes;
     typedef QMap<QString, QString> StyleMap;
+    StyleMap m_properties[N_NumTypes];
+    StyleMap m_attributes;
     QList<StyleMap> m_maps; // we can't really sort the maps between themselves...
 
     bool m_autoStyleInStylesDotXml;

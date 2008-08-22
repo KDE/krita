@@ -245,13 +245,15 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         QGradientStops stops;
         if( type != "axial" )
         {
+            // In case of radial gradients the colors are reversed, because OOo saves them as the oppsite of the SVG direction
+            // see bug 137639
             QGradientStop start;
-            start.first = border;
+            start.first = ( type != "radial" ) ? border : 1.0 - border;
             start.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
             start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove('%').toDouble() );
 
             QGradientStop end;
-            end.first = 1.0;
+            end.first = ( type != "radial" ) ? 1.0 : 0.0;
             end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
             end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove('%').toDouble() );
 

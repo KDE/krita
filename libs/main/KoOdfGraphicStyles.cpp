@@ -227,14 +227,15 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         else if( type == "linear" || type == "axial" )
         {
             QLinearGradient * lg = new QLinearGradient();
-            double angle = 90 + e->attributeNS( KoXmlNS::draw, "angle", "0" ).toDouble();
+            // Dividing by 10 here because OOo saves as degree * 10
+            double angle = 90 + e->attributeNS( KoXmlNS::draw, "angle", "0" ).toDouble() / 10;
             double radius = 0.5 * sqrt( size.width()*size.width() + size.height()*size.height() );
 
             double border = e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
             double sx = cos( angle * M_PI / 180 ) * radius;
             double sy = sin( angle * M_PI / 180 ) * radius;
-            lg->setStart( QPointF( 0.5 * size.width() + sx, 0.5 * size.height() + sy ) );
-            lg->setFinalStop( QPointF( 0.5 * size.width() - sx, 0.5 * size.height() - sy ) );
+            lg->setStart( QPointF( 0.5 * size.width() + sx, 0.5 * size.height() - sy ) );
+            lg->setFinalStop( QPointF( 0.5 * size.width() - sx, 0.5 * size.height() + sy ) );
             gradient = lg;
         }
         else

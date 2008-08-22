@@ -162,14 +162,13 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
 
     startBody( KoXml::childNodesCount( bodyElem ) );
     KoXmlElement tag;
-    int cursorPosition;
+    bool handledTag;
     bool firstTime = true;
     forEachElement(tag, bodyElem) {
         if ( ! tag.isNull() ) {
             const QString localName = tag.localName();
-            if (firstTime) {
-                cursorPosition = cursor.position();
-            } else {
+            handledTag = true;
+            if (!firstTime) {
                 cursor.insertBlock();
             }
             if ( tag.namespaceURI() == KoXmlNS::text ) {
@@ -202,6 +201,7 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
                         }
                     }
                     else {
+                        handledTag = false;
                         kWarning(32500) << "unhandled text:" << localName;
                     }
                 }
@@ -212,6 +212,7 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
                 }
                 else {
                     kWarning(32500) << "unhandled draw:" << localName;
+                    handledTag = false;
                 }
             } else if( tag.namespaceURI() == KoXmlNS::table ) {
                 if ( localName == "table" ) {
@@ -283,7 +284,7 @@ void KoTextLoader::loadBody( const KoXmlElement& bodyElem, QTextCursor& cursor )
 #endif
             }
         }
-        if ((firstTime) && (cursor.position() != cursorPosition))
+        if ((firstTime) && (handledTag))
             firstTime = false;
         processBody();
     }

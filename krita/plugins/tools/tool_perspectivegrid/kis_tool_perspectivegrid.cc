@@ -93,22 +93,22 @@ bool KisToolPerspectiveGrid::mouseNear(const QPointF& mousep, const QPointF& poi
 
 KisPerspectiveGridNodeSP KisToolPerspectiveGrid::nodeNearPoint( KisSubPerspectiveGrid* grid, QPointF point)
 {
-    if( mouseNear( point, *grid->topLeft() ) )
+    if( mouseNear( point, pixelToView(*grid->topLeft()) ) )
     {
         dbgPlugins <<" NEAR TOPLEFT HANDLE";
         return grid->topLeft();
     }
-    else if( mouseNear( point, *grid->topRight() ) )
+    else if( mouseNear( point, pixelToView(*grid->topRight()) ) )
     {
         dbgPlugins <<" NEAR TOPRIGHT HANDLE";
         return grid->topRight();
     }
-    else if( mouseNear( point, *grid->bottomLeft() ) )
+    else if( mouseNear( point, pixelToView(*grid->bottomLeft()) ) )
     {
         dbgPlugins <<" NEAR BOTTOMLEFT HANDLE";
         return grid->bottomLeft();
     }
-    else if( mouseNear( point, *grid->bottomRight() ) )
+    else if( mouseNear( point, pixelToView(*grid->bottomRight()) ) )
     {
         dbgPlugins <<" NEAR BOTTOMRIGHT HANDLE";
         return grid->bottomRight();
@@ -143,7 +143,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     } else if(m_mode == MODE_EDITING && event->button() == Qt::LeftButton){
         // Look for the handle which was pressed
-        QPointF mousep = viewToPixel( event->pos() );
+        QPointF mousep = event->pos();
         for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
         {
             KisSubPerspectiveGrid* grid = *it;
@@ -153,7 +153,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
             {
                 m_mode = MODE_DRAGING_NODE;
                 break;
-            } else if( mouseNear( mousep, ((*grid->topLeft() + *grid->bottomLeft() )*0.5) ) )
+            } else if( mouseNear( mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->bottomLeft()) )*0.5) ) )
             {
                 dbgPlugins <<" PRESS LEFT HANDLE";
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
@@ -165,7 +165,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
             }
-            else if( mouseNear( mousep, ((*grid->topRight() + *grid->bottomRight() )*0.5) ) )
+            else if( mouseNear( mousep, ((pixelToView(*grid->topRight()) + pixelToView(*grid->bottomRight()) )*0.5) ) )
             {
                 dbgPlugins <<" PRESS RIGHT HANDLE";
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
@@ -177,7 +177,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
             }
-            else if( mouseNear( mousep, ((*grid->topLeft() + *grid->topRight() )*0.5) ) )
+            else if( mouseNear( mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->topRight()) )*0.5) ) )
             {
                 dbgPlugins <<" PRESS TOP HANDLE";
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
@@ -189,7 +189,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
             }
-            else if( mouseNear( mousep, ((*grid->bottomLeft() + *grid->bottomRight() )*0.5) ) )
+            else if( mouseNear( mousep, ((pixelToView(*grid->bottomLeft()) + pixelToView(*grid->bottomRight()) )*0.5) ) )
             {
                 dbgPlugins <<" PRESS BOTTOM HANDLE";
                 m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
@@ -200,7 +200,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 pGrid->addNewSubGrid( newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
-            } else if( QRectF( (gridCenter.x() - 16), (gridCenter.y() - 16), 32, 32).contains(mousep))
+            } else if( pixelToView(QRectF( (gridCenter.x() - 16), (gridCenter.y() - 16), 32, 32)).contains(mousep))
             {
                 dbgPlugins << " PRESS DELETE ICON";
                 pGrid->deleteSubGrid( grid );
@@ -246,7 +246,7 @@ void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
         }
     }
     bool wasHiglightedNode = m_higlightedNode != 0;
-    QPointF mousep = viewToPixel( event->pos() );
+    QPointF mousep = event->pos();
     KisPerspectiveGrid* pGrid = m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid();
     for( QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
     {
@@ -354,7 +354,7 @@ void KisToolPerspectiveGrid::drawGridCreation(QPainter& gc)
 
 void KisToolPerspectiveGrid::drawSmallRectangle(QPainter& gc, const QPointF& p)
 {
-    gc.drawRect( p.x() - m_handleHalfSize - 1, p.y() - m_handleHalfSize - 1, m_handleSize, m_handleSize);
+    gc.drawRect( p.x() - m_handleHalfSize, p.y() - m_handleHalfSize, m_handleSize, m_handleSize);
 }
 
 void KisToolPerspectiveGrid::drawGrid(QPainter& gc)

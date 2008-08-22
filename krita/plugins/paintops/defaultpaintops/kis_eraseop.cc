@@ -29,16 +29,45 @@
 #include <kis_image.h>
 #include <kis_debug.h>
 
-#include "kis_brush.h"
-#include "kis_global.h"
-#include "kis_paint_device.h"
+#include <kis_brush.h>
+#include <kis_global.h>
+#include <kis_paint_device.h>
 
-#include "kis_painter.h"
-#include "kis_types.h"
-#include "kis_paintop.h"
-#include "kis_iterators_pixel.h"
-#include "KoColorSpace.h"
-#include "kis_selection.h"
+#include <kis_painter.h>
+#include <kis_types.h>
+#include <kis_paintop.h>
+#include <kis_iterators_pixel.h>
+#include <KoColorSpace.h>
+#include <kis_selection.h>
+
+#include <kis_paintop_settings.h>
+#include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop.h>
+
+
+class KisEraseOpSettings : public KisPaintOpSettings
+{
+public:
+
+    KisEraseOpSettings( QWidget * widget )
+        : KisPaintOpSettings()
+        {
+            m_optionsWidget = new KisPaintOpOptionsWidget();
+        }
+
+    KisPaintOpSettingsSP clone() const
+        {
+            KisPaintOpSettings * c = new KisEraseOpSettings( 0 );
+            c->fromXML(toXML());
+            return c;
+        }
+
+    QWidget * widget() const { return m_optionsWidget; }
+
+private:
+    KisPaintOpOptionsWidget *m_optionsWidget;
+};
+
 
 
 KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
@@ -50,6 +79,17 @@ KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings, Ki
     return op;
 }
 
+
+KisPaintOpSettingsSP KisEraseOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
+{
+    return new KisEraseOpSettings(parent);
+}
+
+KisPaintOpSettingsSP KisEraseOpFactory::settings(KisImageSP image)
+{
+    Q_UNUSED(image);
+    return new KisEraseOpSettings(0);
+}
 
 KisEraseOp::KisEraseOp(KisPainter * painter)
     : KisBrushBasedPaintOp(painter)

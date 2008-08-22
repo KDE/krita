@@ -25,6 +25,7 @@
 
 #include "kis_global.h"
 #include "kis_paintop_option.h"
+#include "krita_export.h"
 
 class KCurve;
 
@@ -34,7 +35,7 @@ class KCurve;
  *
  * XXX; Add a reset button!
  */
-class KisCurveOption : public QObject, public KisPaintOpOption {
+class KRITAUI_EXPORT KisCurveOption : public QObject, public KisPaintOpOption {
 
 Q_OBJECT
 

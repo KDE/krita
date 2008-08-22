@@ -21,7 +21,8 @@
 #define KIS_PRESSURE_DARKEN_OPTION_H
 
 #include "kis_curve_option.h"
-#include "kis_types.h"
+#include <kis_types.h>
+#include <krita_export.h>
 
 class KisPainter;
 
@@ -29,7 +30,7 @@ class KisPainter;
  * The pressure opacity option defines a curve that is used to
  * calculate the effect of pressure on the darkness of the dab
  */
-class KisPressureDarkenOption : public KisCurveOption
+class KRITAUI_EXPORT KisPressureDarkenOption : public KisCurveOption
 {
 public:
 

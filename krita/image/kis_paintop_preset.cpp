@@ -31,9 +31,8 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 
-struct KisPaintOpPreset::Private {
-
-    Private() : settings(new KisPaintOpSettings()){}
+struct KisPaintOpPreset::Private
+{
     KisPaintOpSettingsSP settings;
     QImage img;
 };
@@ -56,7 +55,6 @@ KisPaintOpPreset::~KisPaintOpPreset()
 {
     delete m_d;
 }
-
 
 KisPaintOpPresetSP KisPaintOpPreset::clone() const
 {
@@ -85,11 +83,7 @@ KoID KisPaintOpPreset::paintOp() const
 
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
-    m_d->settings = 0;
-    if (settings)
-        m_d->settings = settings->clone();
-    else
-        m_d->settings = new KisPaintOpSettings();
+    m_d->settings = settings->clone();
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const

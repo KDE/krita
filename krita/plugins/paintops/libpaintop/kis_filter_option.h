@@ -22,6 +22,7 @@
 
 #include "kis_paintop_option.h"
 #include <kis_types.h>
+#include <krita_export.h>
 
 class KisFilterConfiguration;
 /**
@@ -29,8 +30,7 @@ class KisFilterConfiguration;
  * that can be applied by the paintop to the brush footprint or the
  * original paint device data.
  */
-class KisFilterOption : public KisPaintOpOption
-{
+class KRITAUI_EXPORT KisFilterOption : public KisPaintOpOption {
 
 public:
 

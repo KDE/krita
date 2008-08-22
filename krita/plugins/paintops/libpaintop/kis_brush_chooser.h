@@ -20,13 +20,14 @@
 
 #include "widgets/kis_item_chooser.h"
 #include <QLabel>
+#include <krita_export.h>
 
 class QLabel;
 class QCheckBox;
 
 class KisDoubleWidget;
 
-class KisBrushChooser : public KisItemChooser {
+class KRITAUI_EXPORT KisBrushChooser : public KisItemChooser {
 
     Q_OBJECT
 

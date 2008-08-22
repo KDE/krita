@@ -29,8 +29,9 @@
 #include "kis_brush_based_paintop.h"
 #include <QString>
 #include <klocale.h>
-
 #include "kis_paintop_settings.h"
+
+class KisDuplicateOpSettings;
 class QPointF;
 class KisPainter;
 class Ui_DuplicateOpOptionsWidget;
@@ -47,35 +48,6 @@ public:
     virtual QString pixmap() { return "krita-duplicate.png"; }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
-};
-
-class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
-
-Q_OBJECT
-
-    public:
-        KisDuplicateOpSettings(QWidget* parent, KisImageSP image);
-        virtual ~KisDuplicateOpSettings();
-        virtual KisPaintOpSettingsSP clone() const;
-        virtual QWidget *widget() const { return m_optionsWidget; }
-        virtual void mousePressEvent(KoPointerEvent *e);
-        virtual void activate();
-        QPointF offset() const { return m_offset; }
-        bool healing() const;
-        bool perspectiveCorrection() const;
-
-        using KisPaintOpSettings::fromXML;
-        virtual void fromXML(const QDomElement&);
-
-        using KisPaintOpSettings::toXML;
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-    private:
-        QWidget* m_optionsWidget;
-        Ui_DuplicateOpOptionsWidget* m_uiOptions;
-        KisImageSP m_image;
-        bool m_isOffsetNotUptodate;
-        QPointF m_position; // Give the position of the last alt-click
-        QPointF m_offset;
 };
 
 class KisDuplicateOp : public KisBrushBasedPaintOp {

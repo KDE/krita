@@ -46,20 +46,9 @@ void KisPaintOpSettings::activate()
 {
 }
 
-QWidget* KisPaintOpSettings::widget() const
-{
-    return 0;
-}
-
 void KDE_DEPRECATED KisPaintOpSettings::setNode(KisNodeSP node )
 {
     d->node = node;
 }
 
-KisPaintOpSettingsSP KisPaintOpSettings::clone() const
-{
-    KisPaintOpSettings * c = new KisPaintOpSettings();
-    c->fromXML(toXML());
-    return c;
-}
 

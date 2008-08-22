@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
@@ -49,8 +49,11 @@
 #include <kis_paintop.h>
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
-
-#include "ui_wdgbrushcurves.h"
+#include <kis_brush_option.h>
+#include <kis_pressure_darken_option.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_size_option.h>
+#include <kis_paint_action_type_option.h>
 
 KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisPainter * painter, KisImageSP image)
@@ -66,93 +69,42 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
+KisPaintOpSettingsSP KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
+{
+    return new KisBrushOpSettings(parent);
+}
+
+KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
+{
+    Q_UNUSED(image);
+    return new KisBrushOpSettings(0);
+}
+
+
+
 KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     : KisPaintOpSettings()
 {
-    m_optionsWidget = new QWidget(parent);
+    kDebug() << "creating settings " << this;
+    m_optionsWidget = new KisPaintOpOptionsWidget(parent);
     m_optionsWidget->setObjectName("brush option widget");
 
-    QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
+    m_brushOption = new KisBrushOption();
+    m_sizeOption = new KisPressureSizeOption();
+    m_opacityOption = new KisPressureOpacityOption();
+    m_darkenOption = new KisPressureDarkenOption();
+    m_paintActionTypeOption = new KisPaintActionTypeOption();
 
-    m_size =  new QCheckBox(i18n("size"), m_optionsWidget);
-    m_size->setChecked(true);
-    l->addWidget(m_size);
-
-    m_opacity = new QCheckBox(i18n("opacity"), m_optionsWidget);
-    l->addWidget(m_opacity);
-
-    m_darken = new QCheckBox(i18n("darken"), m_optionsWidget);
-    l->addWidget(m_darken);
-
-    m_curveControl = new Ui::WdgBrushCurveControl();
-    m_curveControlWidget = new KDialog(m_optionsWidget);
-    m_curveControl->setupUi(m_curveControlWidget);
-
-    QToolButton* moreButton = new QToolButton(m_optionsWidget);
-    moreButton->setArrowType(Qt::DownArrow);
-    moreButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    moreButton->setMaximumSize(QSize(24,24)); // Bah, I had hoped the above line would make this unneeded
-    connect(moreButton, SIGNAL(clicked()), this, SLOT(slotCustomCurves()));
-
-    l->addWidget(moreButton);
-
-    m_customSize = false;
-    m_customOpacity = false;
-    m_customDarken = false;
-    // the curves will get filled in when the slot gets accepted
-}
-
-void KisBrushOpSettings::slotCustomCurves()
-{
-
-    if (m_curveControlWidget->exec() == KDialog::Accepted) {
-
-        m_customSize = m_curveControl->sizeCheckbox->isChecked();
-        m_customOpacity = m_curveControl->opacityCheckbox->isChecked();
-        m_customDarken = m_curveControl->darkenCheckbox->isChecked();
-
-        if (m_customSize) {
-            transferCurve(m_curveControl->sizeCurve, m_sizeCurve);
-        }
-        if (m_customOpacity) {
-            transferCurve(m_curveControl->opacityCurve, m_opacityCurve);
-        }
-        if (m_customDarken) {
-            transferCurve(m_curveControl->darkenCurve, m_darkenCurve);
-        }
-    }
-}
-
-void KisBrushOpSettings::transferCurve(KCurve* curve, double* target) {
-    double value;
-    for (int i = 0; i < 256; i++) {
-        value = curve->getCurveValue( i / 255.0);
-        if (value < PRESSURE_MIN)
-            target[i] = PRESSURE_MIN;
-        else if (value > PRESSURE_MAX)
-            target[i] = PRESSURE_MAX;
-        else
-            target[i] = value;
-    }
-}
-
-bool KisBrushOpSettings::varySize() const
-{
-    return m_size->isChecked();
-}
-
-bool KisBrushOpSettings::varyOpacity() const
-{
-    return m_opacity->isChecked();
-}
-
-bool KisBrushOpSettings::varyDarken() const
-{
-    return m_darken->isChecked();
+    m_optionsWidget->addPaintOpOption(m_brushOption);
+    m_optionsWidget->addPaintOpOption(m_sizeOption);
+    m_optionsWidget->addPaintOpOption(m_opacityOption);
+    m_optionsWidget->addPaintOpOption(m_darkenOption);
+    m_optionsWidget->addPaintOpOption(m_paintActionTypeOption);
 }
 
 void KisBrushOpSettings::fromXML(const QDomElement& elt)
 {
+#if 0
     QDomElement e = elt.firstChildElement("Params");
     if(!e.isNull())
     {
@@ -174,10 +126,12 @@ void KisBrushOpSettings::fromXML(const QDomElement& elt)
                 m_darkenCurve[i] = kpc.getDouble( QString("DarkenCurve%0").arg(i), i / 255.0 );
         }
     }
+#endif
 }
 
 void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
+#if 0
     KisPropertiesConfiguration kpc;
     kpc.setProperty("PressureSize", m_size->isChecked());
     kpc.setProperty("PressureOpacity", m_opacity->isChecked());
@@ -199,12 +153,15 @@ void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     QDomElement paramsElt = doc.createElement( "Params" );
     rootElt.appendChild( paramsElt );
     kpc.toXML( doc, paramsElt);
+#endif
 }
 
 
 KisPaintOpSettingsSP KisBrushOpSettings::clone() const
 {
+
     KisBrushOpSettings* s = new KisBrushOpSettings(0);
+#if 0
     s->m_size->setChecked( m_size->isChecked() );
     s->m_opacity->setChecked( m_opacity->isChecked() );
     s->m_darken->setChecked( m_darken->isChecked() );
@@ -214,23 +171,10 @@ KisPaintOpSettingsSP KisBrushOpSettings::clone() const
     memcpy(s->m_sizeCurve, m_sizeCurve, 256*sizeof(double));
     memcpy(s->m_opacityCurve, m_opacityCurve, 256*sizeof(double));
     memcpy(s->m_darkenCurve, m_darkenCurve, 256*sizeof(double));
+
+#endif
     return s;
-}
 
-KisPaintOpSettingsSP KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
-{
-    if (inputDevice == KoInputDevice::mouse()) {
-        // No options for mouse, only tablet devices
-        return 0;
-    } else {
-        return new KisBrushOpSettings(parent);
-    }
-}
-
-KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
-{
-    Q_UNUSED(image);
-    return new KisBrushOpSettings(0);
 }
 
 
@@ -243,6 +187,7 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
     , m_customOpacity(false)
     , m_customDarken(false)
 {
+#if 0
     if (settings != 0) {
         m_pressureSize = settings->varySize();
         m_pressureOpacity = settings->varyOpacity();
@@ -260,6 +205,7 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
             memcpy(m_darkenCurve, settings->darkenCurve(), 256 * sizeof(double));
         }
     }
+#endif
 }
 
 KisBrushOp::~KisBrushOp()

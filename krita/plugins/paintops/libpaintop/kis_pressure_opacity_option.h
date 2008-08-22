@@ -21,12 +21,14 @@
 #define KIS_PRESSURE_OPACITY_OPTION
 
 #include "kis_curve_option.h"
+#include <krita_export.h>
+
 class KisPainter;
 /**
  * The pressure opacity option defines a curve that is used to
  * calculate the effect of pressure on opacity
  */
-class KisPressureOpacityOption : public KisCurveOption
+class KRITAUI_EXPORT KisPressureOpacityOption : public KisCurveOption
 {
 public:
 

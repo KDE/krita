@@ -24,7 +24,8 @@
 #define KIS_AIRBRUSHOP_H_
 
 #include <klocale.h>
-#include "kis_brush_based_paintop.h"
+#include <kis_brush_based_paintop.h>
+
 
 class QPointF;
 class KisPainter;
@@ -39,8 +40,9 @@ public:
     virtual QString id() const { return "airbrush"; }
     virtual QString name() const { return i18n("Pixel Airbrush"); }
     virtual QString pixmap() { return "krita-airbrush.png"; }
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
-
 
 
 class KisAirbrushOp : public KisBrushBasedPaintOp {

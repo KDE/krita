@@ -21,6 +21,7 @@
 #define KIS_BRUSH_OPTION_H
 
 #include "kis_paintop_option.h"
+#include <krita_export.h>
 
 class KisBrushSelectionWidget;
 class KisBrush;
@@ -28,7 +29,7 @@ class KisBrush;
  * The brush option allows the user to select a particular brush
  * footprint for suitable paintops
  */
-class KisBrushOption : public KisPaintOpOption
+class KRITAUI_EXPORT KisBrushOption : public KisPaintOpOption
 {
 public:
 

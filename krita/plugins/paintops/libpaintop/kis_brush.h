@@ -55,7 +55,7 @@ class KisBrush;
  * A brush factory can create a new brush instance based
  * on a filename and a brush id or just a brush id.
  */
-class KRITAIMAGE_EXPORT KisBrushFactory : public KisShared {
+class KRITAUI_EXPORT KisBrushFactory : public KisShared {
 
 public:
 

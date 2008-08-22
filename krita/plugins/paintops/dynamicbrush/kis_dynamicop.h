@@ -32,48 +32,28 @@ class Ui_DynamicBrushOptions;
 
 class KisBookmarkedConfigurationManager;
 class KisBookmarkedConfigurationsModel;
+class KisDynamicOpSettings;
 
 class KisDynamicOpFactory : public KisPaintOpFactory  {
-    public:
-        KisDynamicOpFactory(KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
-          m_shapeBookmarksManager(shapeBookmarksManager), m_coloringBookmarksManager(coloringBookmarksManager)
-        {}
-        virtual ~KisDynamicOpFactory() {}
+public:
+    KisDynamicOpFactory(KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
+        m_shapeBookmarksManager(shapeBookmarksManager), m_coloringBookmarksManager(coloringBookmarksManager)
+    {}
+    virtual ~KisDynamicOpFactory() {}
 
-        virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-        virtual QString id() const { return "dynamicbrush"; }
-        virtual QString name() const { return i18n("Dynamic Brush"); }
-        virtual QString pixmap() { return "dynamicbrush.png"; }
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
+    virtual QString id() const { return "dynamicbrush"; }
+    virtual QString name() const { return i18n("Dynamic Brush"); }
+    virtual QString pixmap() { return "dynamicbrush.png"; }
 
-        using KisPaintOpFactory::settings;
-        virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 
-    private:
-        KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
-        KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
+private:
+    KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
+    KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
 };
 
-class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
-    Q_OBJECT
-    public:
-        KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeConfigurationManager, KisBookmarkedConfigurationManager* coloringConfigurationManager);
-        virtual ~KisDynamicOpSettings();
-        virtual KisPaintOpSettingsSP clone() const;
-        virtual QWidget *widget() const { return m_optionsWidget; }
-        /// @return a brush with the current shapes, coloring and program
-        KisDynamicBrush* createBrush(KisPainter *painter) const;
-
-        using KisPaintOpSettings::fromXML;
-        virtual void fromXML(const QDomElement&);
-
-        using KisPaintOpSettings::toXML;
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-    private:
-        QWidget* m_optionsWidget;
-        Ui_DynamicBrushOptions* m_uiOptions;
-        KisBookmarkedConfigurationsModel* m_shapeBookmarksModel;
-        KisBookmarkedConfigurationsModel* m_coloringBookmarksModel;
-};
 
 class KisDynamicOp : public KisPaintOp {
 

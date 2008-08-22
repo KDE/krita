@@ -23,12 +23,12 @@
 KisBrushBasedPaintOp::KisBrushBasedPaintOp( KisPainter * painter )
     : KisPaintOp( painter )
 {
-    QImage img( 10, 10, QImage::Format_ARGB32 );
+    QImage img( 3, 3, QImage::Format_ARGB32 );
     QPainter p( &img );
     p.setRenderHint( QPainter::Antialiasing );
-    p.fillRect( 0, 0, 10, 10, QBrush(QColor( 255, 255, 255, 0) ) );
+    p.fillRect( 0, 0, 3, 3, QBrush(QColor( 255, 255, 255, 0) ) );
     p.setBrush( QBrush( QColor( 0, 0, 0, 255 ) ) );
-    p.drawEllipse( 0, 0, 10, 10 );
+    p.drawEllipse( 0, 0, 3, 3 );
     p.end();
 
     m_brush = new KisBrush( img );

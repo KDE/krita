@@ -24,7 +24,7 @@
 
 class KisMaskGenerator;
 
-class KRITAIMAGE_EXPORT KisAutoBrush : public KisBrush
+class KRITAUI_EXPORT KisAutoBrush : public KisBrush
 {
     public:
         KisAutoBrush(KisMaskGenerator* img);

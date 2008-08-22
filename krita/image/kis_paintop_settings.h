@@ -56,7 +56,7 @@ public:
      * Clone the current settings object. Override this if your settings instance doesn't
      * store everything as properties.
      */
-    virtual KisPaintOpSettingsSP clone() const;
+    virtual KisPaintOpSettingsSP clone() const = 0;
 
     /**
      * Override this function if your paintop is interested in which
@@ -67,7 +67,7 @@ public:
     /**
      * @return a pointer to the widget displaying the settings
      */
-    virtual QWidget *widget() const;
+    virtual QWidget* widget() const = 0;
 
     /**
      * Call this function when the paint op is selected or the tool is activated

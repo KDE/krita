@@ -24,9 +24,10 @@
 #ifndef KIS_ERASEOP_H_
 #define KIS_ERASEOP_H_
 
-#include "kis_brush_based_paintop.h"
+
 #include <QString>
 #include <klocale.h>
+#include <kis_brush_based_paintop.h>
 
 class QPointF;
 class KisPainter;
@@ -41,6 +42,8 @@ public:
     virtual QString id() const { return "eraser"; }
     virtual QString name() const { return i18n("Pixel Eraser"); }
     virtual QString pixmap() { return "krita-eraser.png"; }
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 

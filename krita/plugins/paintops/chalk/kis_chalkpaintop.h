@@ -31,6 +31,7 @@
 
 class QPointF;
 class KisPainter;
+class KisChalkOpSettings;
 
 class KisChalkPaintOpFactory : public KisPaintOpFactory {
 
@@ -42,7 +43,10 @@ public:
     virtual QString id() const { return "chalkbrush"; }
     virtual QString name() const { return i18n("Chalk-e brush"); }
     virtual QString pixmap() { return "krita-chalk.png"; }
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
+
 
 class KisChalkPaintOp : public KisPaintOp {
 

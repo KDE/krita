@@ -16,9 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_paint_action_type_option.h"
+#include <klocale.h>
 
 KisPaintActionTypeOption::KisPaintActionTypeOption()
- : kis_paintop_option()
+   : KisPaintOpOption(i18n("Paint deposition"), false)
 {
 }
 

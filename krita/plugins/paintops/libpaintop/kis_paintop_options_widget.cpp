@@ -21,9 +21,10 @@
 #include "kis_paintop_option.h"
 
 #include <QList>
-#include <QComboBox>
+#include <QLabel>
 #include <QHBoxLayout>
-#include <QToolButton>
+#include <QListWidget>
+#include <QStackedWidget>
 
 #include <kis_paintop_preset.h>
 
@@ -33,7 +34,8 @@ class KisPaintOpOptionsWidget::Private
 public:
 
     QList<KisPaintOpOption*> paintOpOptions;
-
+    QListWidget * optionsList;
+    QStackedWidget * optionsStack;
 };
 
 KisPaintOpOptionsWidget::KisPaintOpOptionsWidget( QWidget * parent )
@@ -41,7 +43,16 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget( QWidget * parent )
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsWidget");
-}
+    QHBoxLayout * layout = new QHBoxLayout(this);
+    m_d->optionsList = new QListWidget(this);
+    m_d->optionsStack = new QStackedWidget(this);
+    layout->addWidget(m_d->optionsList);
+    layout->addWidget(m_d->optionsStack);
+
+    connect(m_d->optionsList,
+             SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+             this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));
+ }
 
 
 KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
@@ -54,5 +65,32 @@ KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
 
 void KisPaintOpOptionsWidget::addPaintOpOption( KisPaintOpOption * option )
 {
+    kDebug() << option;
+    kDebug() << m_d->optionsStack;
+
+    // XXX
+    if ( !option->configurationPage() ) return;
+
+    kDebug() << option->configurationPage();
+
     m_d->paintOpOptions << option;
+    m_d->optionsStack->addWidget( option->configurationPage() );
+    m_d->paintOpOptions << option;
+
+    QListWidgetItem * item = new QListWidgetItem( m_d->optionsList );
+    item->setText( option->label() );
+    item->setTextAlignment(Qt::AlignHCenter);
+    if ( option->checkable() ) {
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+    }
+    else {
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    }
 }
+
+void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    m_d->optionsStack->setCurrentIndex( m_d->optionsList->row( current ) );
+}
+
+#include "kis_paintop_options_widget.moc"

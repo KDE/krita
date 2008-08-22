@@ -163,12 +163,9 @@ public:
     /**
      * Create and return an settings object for this paintop when used with the
      * specified input device. The settings object knows how to create a widget.
-     *
-     * @return 0 if there are no settings available for the given
-     * device.
      */
-    virtual KisPaintOpSettingsSP settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image) = 0;
+    virtual KisPaintOpSettingsSP settings(KisImageSP image) = 0;
 
 };
 #endif // KIS_PAINTOP_H_

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
@@ -29,14 +29,18 @@
 #include <KoColorSpace.h>
 
 #include <kis_paintop_settings.h>
+#include <kis_paintop_options_widget.h>
+
+class KisBrushOption;
+class KisPressureSizeOption;
+class KisPressureDarkenOption;
+class KisPressureOpacityOption;
+class KisPaintActionTypeOption;
 
 class QWidget;
-class QCheckBox;
-class QLabel;
 class QPointF;
 class KisPainter;
 class KCurve;
-namespace Ui { class WdgBrushCurveControl; }
 
 class KisBrushOpFactory : public KisPaintOpFactory  {
 
@@ -56,48 +60,27 @@ class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
     Q_OBJECT
 
 public:
+
     KisBrushOpSettings(QWidget *parent);
     virtual KisPaintOpSettingsSP clone() const;
 
-    bool varySize() const;
-    bool varyOpacity() const;
-    bool varyDarken() const;
-
-    bool customSize() const { return m_customSize; }
-    bool customOpacity() const { return m_customOpacity; }
-    bool customDarken() const { return m_customDarken; }
-    const double* sizeCurve() const { return m_sizeCurve; }
-    const double* opacityCurve() const { return m_opacityCurve; }
-    const double* darkenCurve() const { return m_darkenCurve; }
-
-    virtual QWidget *widget() const { return m_optionsWidget; }
+    virtual QWidget* widget() const { Q_ASSERT(m_optionsWidget); return m_optionsWidget; }
 
     using KisPaintOpSettings::fromXML;
     virtual void fromXML(const QDomElement&);
 
     using KisPaintOpSettings::toXML;
     virtual void toXML(QDomDocument&, QDomElement&) const;
-public:
-
-private slots:
-    void slotCustomCurves();
 
 private:
-    void transferCurve(KCurve* curve, double* target);
-    QWidget *m_optionsWidget;
-    QLabel * m_pressureVariation;
-    QCheckBox * m_size;
-    QCheckBox * m_opacity;
-    QCheckBox * m_darken;
-    Ui::WdgBrushCurveControl* m_curveControl;
-    QDialog* m_curveControlWidget;
+    KisBrushOption * m_brushOption;
+    KisPressureOpacityOption * m_opacityOption;
+    KisPressureDarkenOption * m_darkenOption;
+    KisPressureSizeOption * m_sizeOption;
+    KisPaintActionTypeOption * m_paintActionTypeOption;
 
-    bool m_customSize;
-    bool m_customOpacity;
-    bool m_customDarken;
-    double m_sizeCurve[256];
-    double m_opacityCurve[256];
-    double m_darkenCurve[256];
+    KisPaintOpOptionsWidget *m_optionsWidget;
+
 };
 
 class KisBrushOp : public KisBrushBasedPaintOp {

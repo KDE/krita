@@ -21,12 +21,14 @@
 #define KIS_PRESSURE_SIZE_OPTION_H
 
 #include "kis_curve_option.h"
-#include "kis_paint_information.h"
+#include <kis_paint_information.h>
+#include <krita_export.h>
+
 /**
  * The pressure opacity option defines a curve that is used to
  * calculate the effect of pressure on the size of the dab
  */
-class KisPressureSizeOption : public KisCurveOption
+class KRITAUI_EXPORT KisPressureSizeOption : public KisCurveOption
 {
 public:
     KisPressureSizeOption();

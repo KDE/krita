@@ -237,7 +237,11 @@ void KisPaintopBox::updateOptionWidget()
     const KisPaintOpPresetSP preset =
         activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
 
-    dbgUI << "active preset: " << preset;
+    kDebug() << " active preset: " << preset;
+    kDebug() << " active paintop: " << preset->paintOp().id();
+    kDebug() << " settings: " << preset->settings();
+    kDebug() << " settings: " << preset->settings()->widget();
+
     if (preset != 0 && preset->settings() && preset->settings()->widget() ) {
         m_optionWidget = preset->settings()->widget();
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);

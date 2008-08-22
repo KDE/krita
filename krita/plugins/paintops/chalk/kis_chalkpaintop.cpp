@@ -29,18 +29,41 @@
 #include <kis_image.h>
 #include <kis_debug.h>
 
-#include "kis_brush.h"
-#include "kis_global.h"
-#include "kis_paint_device.h"
-#include "kis_painter.h"
-#include "kis_types.h"
-#include "kis_paintop.h"
-#include "kis_selection.h"
-#include "kis_random_accessor.h"
+#include <kis_brush.h>
+#include <kis_global.h>
+#include <kis_paint_device.h>
+#include <kis_painter.h>
+#include <kis_types.h>
+#include <kis_paintop.h>
+#include <kis_selection.h>
+#include <kis_random_accessor.h>
 
-#include "kis_datamanager.h"
+#include <kis_paintop_settings.h>
+#include <kis_paintop_options_widget.h>
 
-#include "brush.h"
+
+class KisChalkOpSettings : public KisPaintOpSettings
+{
+public:
+
+    KisChalkOpSettings( QWidget * widget )
+        : KisPaintOpSettings()
+        {
+            m_optionsWidget = new KisPaintOpOptionsWidget();
+        }
+
+    KisPaintOpSettingsSP clone() const
+        {
+            KisPaintOpSettings * c = new KisChalkOpSettings( 0 );
+            c->fromXML(toXML());
+            return c;
+        }
+
+    QWidget * widget() const { return m_optionsWidget; }
+
+private:
+    KisPaintOpOptionsWidget *m_optionsWidget;
+};
 
 KisPaintOp * KisChalkPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
@@ -49,6 +72,19 @@ KisPaintOp * KisChalkPaintOpFactory::createOp(const KisPaintOpSettingsSP setting
 	Q_CHECK_PTR(op);
     return op;
 }
+
+
+KisPaintOpSettingsSP KisChalkPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
+{
+    return new KisChalkOpSettings(parent);
+}
+
+KisPaintOpSettingsSP KisChalkPaintOpFactory::settings(KisImageSP image)
+{
+    Q_UNUSED(image);
+    return new KisChalkOpSettings(0);
+}
+
 
 
 KisChalkPaintOp::KisChalkPaintOp(KisPainter * painter, KisImageSP image)

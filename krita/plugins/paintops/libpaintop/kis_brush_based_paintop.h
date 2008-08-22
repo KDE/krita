@@ -28,7 +28,7 @@ class KisBrush;
  * brush to paint with. This is mainly important for the spacing
  * generation.
  */
-class KRITAIMAGE_EXPORT KisBrushBasedPaintOp : public KisPaintOp {
+class KRITAUI_EXPORT KisBrushBasedPaintOp : public KisPaintOp {
 
 public:
 

@@ -12,9 +12,9 @@ kde4_add_ui_files(kritadynamicbrush_PART_SRCS DynamicBrushOptions.ui DynamicProg
 
 kde4_add_plugin(kritadynamicbrushpaintop ${kritadynamicbrush_PART_SRCS})
 
-target_link_libraries(kritadynamicbrushpaintop kritaui kritadynamicbrush
+target_link_libraries(kritadynamicbrushpaintop kritaui kritalibpaintop kritadynamicbrush
   # link to this to "load" the programs factory
-#   kritafilterslistdynamicprogram
+  #kritafilterslistdynamicprogram
   kritabasicdynamicshapeprogram
   kritabasicdynamiccoloringprogram
   )

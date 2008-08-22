@@ -20,11 +20,13 @@
 #define KIS_PAINTOP_OPTIONS_WIDGET_H
 
 #include <QWidget>
+#include <krita_export.h>
 
 class QString;
 class KisPaintOpOption;
 class KisPaintOpPreset;
 class KisPropertiesConfiguration;
+class QListWidgetItem;
 
 /**
  * A common widget for enabling/disabling and determining
@@ -35,7 +37,9 @@ class KisPropertiesConfiguration;
  * and has a popdown button that shows a settings widget.
  *
  */
-class KisPaintOpOptionsWidget : public QWidget {
+class KRITAUI_EXPORT KisPaintOpOptionsWidget : public QWidget {
+
+Q_OBJECT
 
 public:
 
@@ -44,6 +48,10 @@ public:
     ~KisPaintOpOptionsWidget();
 
     void addPaintOpOption( KisPaintOpOption * option );
+
+private slots:
+
+    void changePage(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
 

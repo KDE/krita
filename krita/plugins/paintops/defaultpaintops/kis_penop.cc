@@ -44,6 +44,36 @@
 #include "kis_selection.h"
 #include "kis_iterators_pixel.h"
 
+#include <kis_paintop_settings.h>
+#include <kis_paintop_options_widget.h>
+#include <kis_brush_based_paintop.h>
+
+
+class KisPenOpSettings : public KisPaintOpSettings
+{
+public:
+    KisPenOpSettings( QWidget * parent )
+        : KisPaintOpSettings()
+        {
+            m_optionsWidget = new KisPaintOpOptionsWidget( parent );
+        }
+
+    KisPaintOpSettingsSP clone() const
+        {
+            KisPaintOpSettings * c = new KisPenOpSettings( 0 );
+            c->fromXML(toXML());
+            return c;
+        }
+
+    QWidget * widget() const { return m_optionsWidget; }
+
+private:
+
+    KisPaintOpOptionsWidget *m_optionsWidget;
+
+};
+
+
 KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED( image );
@@ -52,6 +82,17 @@ KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings, KisP
     KisPaintOp * op = new KisPenOp(painter);
     Q_CHECK_PTR(op);
     return op;
+}
+
+KisPaintOpSettingsSP KisPenOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP /*image*/)
+{
+    return new KisPenOpSettings(parent);
+}
+
+KisPaintOpSettingsSP KisPenOpFactory::settings(KisImageSP image)
+{
+    Q_UNUSED(image);
+    return new KisPenOpSettings(0);
 }
 
 

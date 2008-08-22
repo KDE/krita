@@ -50,6 +50,110 @@
 
 #include "ui_wdgduplicateop.h"
 
+
+class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings {
+
+    Q_OBJECT
+
+public:
+
+    KisDuplicateOpSettings(QWidget* parent, KisImageSP image) :
+        QObject(parent),
+        KisPaintOpSettings(),
+        m_optionsWidget(new QWidget(parent)),
+        m_uiOptions(new Ui_DuplicateOpOptionsWidget()),
+        m_image(image),
+        m_isOffsetNotUptodate(true)
+    {
+        m_uiOptions->setupUi(m_optionsWidget);
+
+    }
+
+    ~KisDuplicateOpSettings()
+    {
+        delete m_uiOptions;
+    }
+
+    virtual QWidget *widget() const { return m_optionsWidget; }
+
+    QPointF offset() const { return m_offset; }
+
+    void mousePressEvent(KoPointerEvent *e)
+    {
+        if (e->modifiers() == Qt::ShiftModifier) {
+            m_position = m_image->documentToPixel(e->point);
+            m_isOffsetNotUptodate = true;
+            e->accept();
+        } else {
+            if ( m_isOffsetNotUptodate )
+            {
+                m_offset = m_image->documentToPixel(e->point) - m_position;
+                m_isOffsetNotUptodate = false;
+            }
+            e->ignore();
+        }
+    }
+
+    void activate()
+    {
+        if( m_image->perspectiveGrid()->countSubGrids() != 1 )
+        {
+            m_uiOptions->cbPerspective->setEnabled( false );
+            m_uiOptions->cbPerspective->setChecked( false );
+        } else {
+            m_uiOptions->cbPerspective->setEnabled( true );
+        }
+    }
+
+    bool healing() const
+    {
+        return m_uiOptions->cbHealing->isChecked();
+    }
+
+    bool perspectiveCorrection() const
+    {
+        return m_uiOptions->cbPerspective->isChecked();
+    }
+
+    void fromXML(const QDomElement& elt)
+    {
+        m_uiOptions->cbHealing->setChecked( elt.attribute("Healing", "0" ).toInt() );
+        m_uiOptions->cbPerspective->setChecked( elt.attribute("PerspectiveCorrection", "0" ).toInt() );
+        m_offset.setX( elt.attribute("OffsetX", "0.0" ).toDouble() );
+        m_offset.setY( elt.attribute("OffsetY", "0.0" ).toDouble() );
+        m_isOffsetNotUptodate = false;
+    }
+
+    void toXML(QDomDocument&, QDomElement& elt) const
+    {
+        elt.setAttribute( "OffsetX", QString::number( m_offset.x() ));
+        elt.setAttribute( "OffsetY", QString::number( m_offset.y() ));
+        elt.setAttribute( "Healing", QString::number( m_uiOptions->cbHealing->isChecked() ) );
+        elt.setAttribute( "PerspectiveCorrection", QString::number( m_uiOptions->cbPerspective->isChecked() ) );
+    }
+
+    KisPaintOpSettingsSP clone() const
+    {
+        KisDuplicateOpSettings* s = new KisDuplicateOpSettings(0, m_image);
+        s->m_uiOptions->cbHealing->setChecked( healing() );
+        s->m_uiOptions->cbPerspective->setChecked( perspectiveCorrection() );
+        s->m_offset = m_offset;
+        s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;
+        s->m_position = m_position;
+        return s;
+    }
+
+private:
+    QWidget* m_optionsWidget;
+    Ui_DuplicateOpOptionsWidget* m_uiOptions;
+    KisImageSP m_image;
+    bool m_isOffsetNotUptodate;
+    QPointF m_position; // Give the position of the last alt-click
+    QPointF m_offset;
+};
+
+
+
 KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP _settings, KisPainter * _painter, KisImageSP _image)
 {
     const KisDuplicateOpSettings* settings = dynamic_cast<const KisDuplicateOpSettings *>(_settings.data());
@@ -70,87 +174,6 @@ KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageSP image)
     return new KisDuplicateOpSettings(0, image);
 }
 
-KisDuplicateOpSettings::KisDuplicateOpSettings(QWidget* parent, KisImageSP image) :
-        QObject(parent),
-        KisPaintOpSettings(),
-        m_optionsWidget(new QWidget(parent)),
-        m_uiOptions(new Ui_DuplicateOpOptionsWidget()),
-        m_image(image),
-        m_isOffsetNotUptodate(true)
-{
-    m_uiOptions->setupUi(m_optionsWidget);
-
-}
-
-KisDuplicateOpSettings::~KisDuplicateOpSettings()
-{
-    delete m_uiOptions;
-}
-
-void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
-{
-    if (e->modifiers() == Qt::ShiftModifier) {
-      m_position = m_image->documentToPixel(e->point);
-      m_isOffsetNotUptodate = true;
-      e->accept();
-    } else {
-      if ( m_isOffsetNotUptodate )
-      {
-          m_offset = m_image->documentToPixel(e->point) - m_position;
-          m_isOffsetNotUptodate = false;
-      }
-      e->ignore();
-    }
-}
-
-void KisDuplicateOpSettings::activate()
-{
-    if( m_image->perspectiveGrid()->countSubGrids() != 1 )
-    {
-        m_uiOptions->cbPerspective->setEnabled( false );
-        m_uiOptions->cbPerspective->setChecked( false );
-    } else {
-        m_uiOptions->cbPerspective->setEnabled( true );
-    }
-}
-
-bool KisDuplicateOpSettings::healing() const
-{
-    return m_uiOptions->cbHealing->isChecked();
-}
-
-bool KisDuplicateOpSettings::perspectiveCorrection() const
-{
-    return m_uiOptions->cbPerspective->isChecked();
-}
-
-void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
-{
-    m_uiOptions->cbHealing->setChecked( elt.attribute("Healing", "0" ).toInt() );
-    m_uiOptions->cbPerspective->setChecked( elt.attribute("PerspectiveCorrection", "0" ).toInt() );
-    m_offset.setX( elt.attribute("OffsetX", "0.0" ).toDouble() );
-    m_offset.setY( elt.attribute("OffsetY", "0.0" ).toDouble() );
-    m_isOffsetNotUptodate = false;
-}
-
-void KisDuplicateOpSettings::toXML(QDomDocument&, QDomElement& elt) const
-{
-    elt.setAttribute( "OffsetX", QString::number( m_offset.x() ));
-    elt.setAttribute( "OffsetY", QString::number( m_offset.y() ));
-    elt.setAttribute( "Healing", QString::number( m_uiOptions->cbHealing->isChecked() ) );
-    elt.setAttribute( "PerspectiveCorrection", QString::number( m_uiOptions->cbPerspective->isChecked() ) );
-}
-
-KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
-{
-    KisDuplicateOpSettings* s = new KisDuplicateOpSettings(0, m_image);
-    s->m_uiOptions->cbHealing->setChecked( healing() );
-    s->m_uiOptions->cbPerspective->setChecked( perspectiveCorrection() );
-    s->m_offset = m_offset;
-    s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;
-    s->m_position = m_position;
-    return s;
-}
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings* settings, KisPainter * painter, KisImageSP image)
     : KisBrushBasedPaintOp(painter), m_srcdev(0), m_image( image )

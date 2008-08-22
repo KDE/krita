@@ -32,6 +32,9 @@ class QSlider;
 class KisPoint;
 class KisPainter;
 class KCurve;
+
+class KisSmudgeOpSettings;
+
 namespace Ui { class WdgBrushCurveControl; }
 
 
@@ -46,55 +49,7 @@ public:
     virtual QString name() const { return i18n("Smudge Brush"); }
     virtual QString pixmap() { return "paintbrush.png"; }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-};
-
-class KisSmudgeOpSettings : public QObject, public KisPaintOpSettings {
-
-    Q_OBJECT
-
-public:
-    KisSmudgeOpSettings(QWidget *parent, bool isTablet);
-
-    int rate() const;
-    bool varyRate() const;
-    bool varySize() const;
-    bool varyOpacity() const;
-
-    bool customRate() const { return m_customRate; }
-    bool customSize() const { return m_customSize; }
-    bool customOpacity() const { return m_customOpacity; }
-    const double* rateCurve() const { return m_rateCurve; }
-    const double* sizeCurve() const { return m_sizeCurve; }
-    const double* opacityCurve() const { return m_opacityCurve; }
-
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-
-    virtual QWidget *widget() const { return m_optionsWidget; }
-
-
-private slots:
-
-    void slotCustomCurves();
-
-private:
-    void transferCurve(KCurve* curve, double* target);
-    QWidget *m_optionsWidget;
-    QLabel* m_rateLabel;
-    QSlider* m_rateSlider;
-    QLabel * m_pressureVariation;
-    QCheckBox * m_rate;
-    QCheckBox * m_size;
-    QCheckBox * m_opacity;
-    Ui::WdgBrushCurveControl* m_curveControl;
-    QDialog* m_curveControlWidget;
-
-    bool m_customSize;
-    bool m_customRate;
-    bool m_customOpacity;
-    double m_rateCurve[256];
-    double m_sizeCurve[256];
-    double m_opacityCurve[256];
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 class KisSmudgeOp : public KisBrushBasedPaintOp {

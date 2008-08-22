@@ -19,6 +19,7 @@
 #define KIS_PAINT_ACTION_TYPE_OPTION_H
 
 #include <kis_paintop_option.h>
+#include <krita_export.h>
 
 /**
  * Allows the user to choose between three types of paint action:
@@ -26,7 +27,7 @@
  * * indirect (like photoshop and gimp)
  * * rate (staying in the same spot makes it darker)
  */
-class KisPaintActionTypeOption : public kis_paintop_option
+class KRITAUI_EXPORT KisPaintActionTypeOption : public KisPaintOpOption
 {
 public:
     KisPaintActionTypeOption();

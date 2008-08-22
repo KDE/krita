@@ -23,8 +23,8 @@
 #include <QString>
 #include <QWidget>
 #include <kis_types.h>
-#include "kis_paintop_preset.h"
-
+#include <kis_paintop_preset.h>
+#include <krita_export.h>
 /**
  * Base interface for paintop options. A paintop option
  * can be enabled/disabled, has a configuration page
@@ -33,13 +33,14 @@
  *
  * Options are disabled by default.
  */
-class KisPaintOpOption {
+class KRITAUI_EXPORT KisPaintOpOption {
 
 public:
 
     KisPaintOpOption( const QString & label, bool checked = false );
     virtual ~KisPaintOpOption();
 
+    QString & label() const;
     bool isChecked () const;
     void setChecked ( bool checked );
     virtual bool checkable() const { return m_checkable; }
@@ -64,7 +65,9 @@ public:
         }
 
 protected:
+
     bool m_checkable;
+
 private:
 
     class Private;

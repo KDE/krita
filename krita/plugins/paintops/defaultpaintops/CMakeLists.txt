@@ -10,7 +10,7 @@ set(kritadefaultpaintops_PART_SRCS
 #    kis_smudgeop.cc   
     )
 
-kde4_add_ui_files(kritadefaultpaintops_PART_SRCS wdgbrushcurves.ui wdgduplicateop.ui )
+kde4_add_ui_files(kritadefaultpaintops_PART_SRCS wdgduplicateop.ui )
 
 kde4_add_plugin(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
 

@@ -11,7 +11,7 @@ set(kritachalkpaintop_PART_SRCS
 kde4_add_plugin(kritachalkpaintop ${kritachalkpaintop_PART_SRCS})
 
 
-target_link_libraries(kritachalkpaintop kritaui)
+target_link_libraries(kritachalkpaintop kritaui kritalibpaintop) 
 
 install(TARGETS kritachalkpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 

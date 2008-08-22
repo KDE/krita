@@ -27,8 +27,7 @@
 #include <QWidget>
 
 #include <klocale.h>
-
-#include "kis_brush_based_paintop.h"
+#include <kis_brush_based_paintop.h>
 
 class QPointF;
 class KisPainter;
@@ -43,7 +42,10 @@ public:
     virtual QString id() const { return "pen"; }
     virtual QString name() const { return i18n("Pixel Pencil"); }
     virtual QString pixmap() { return "krita-pencil.png"; }
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
+
 
 
 class KisPenOp : public KisBrushBasedPaintOp {

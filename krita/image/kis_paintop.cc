@@ -255,19 +255,6 @@ bool KisPaintOpFactory::userVisible(const KoColorSpace * cs )
     return cs && cs->id() != "WET";
 }
 
-
-KisPaintOpSettingsSP KisPaintOpFactory::settings(QWidget* /*parent*/, const KoInputDevice& /*inputDevice*/, KisImageSP /*image*/)
-{
-    return 0;
-}
-
-KisPaintOpSettingsSP KisPaintOpFactory::settings(KisImageSP image)
-{
-    Q_UNUSED(image);
-    return 0;
-}
-
-
 QString KisPaintOpFactory::pixmap()
 {
     return "";

@@ -57,6 +57,29 @@
 #include "shapes/kis_bristle_shape.h"
 #include "shapes/kis_dab_shape.h"
 
+class KisDynamicOpSettings : public QObject, public KisPaintOpSettings {
+    Q_OBJECT
+public:
+    KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeConfigurationManager, KisBookmarkedConfigurationManager* coloringConfigurationManager);
+    virtual ~KisDynamicOpSettings();
+    virtual KisPaintOpSettingsSP clone() const;
+    virtual QWidget *widget() const { return m_optionsWidget; }
+    /// @return a brush with the current shapes, coloring and program
+    KisDynamicBrush* createBrush(KisPainter *painter) const;
+
+    using KisPaintOpSettings::fromXML;
+    virtual void fromXML(const QDomElement&);
+
+    using KisPaintOpSettings::toXML;
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+private:
+    QWidget* m_optionsWidget;
+    Ui_DynamicBrushOptions* m_uiOptions;
+    KisBookmarkedConfigurationsModel* m_shapeBookmarksModel;
+    KisBookmarkedConfigurationsModel* m_coloringBookmarksModel;
+};
+
+
 KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
     Q_UNUSED(image);
@@ -74,6 +97,14 @@ KisPaintOpSettingsSP KisDynamicOpFactory::settings(QWidget * parent, const KoInp
     Q_UNUSED(inputDevice);
     return new KisDynamicOpSettings(parent, m_shapeBookmarksManager, m_coloringBookmarksManager);
 }
+
+KisPaintOpSettingsSP KisDynamicOpFactory::settings(KisImageSP image)
+{
+    Q_UNUSED( image );
+    return new KisDynamicOpSettings(0, m_shapeBookmarksManager, m_coloringBookmarksManager);
+}
+
+
 
 KisDynamicOpSettings::KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
         QObject(parent),

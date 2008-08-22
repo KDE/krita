@@ -219,10 +219,8 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
             double cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString() ).remove('%') );
             rg->setCenter( QPointF( size.width() * 0.01 * cx, size.height() * 0.01 * cy ) );
             rg->setFocalPoint( rg->center() );
-
-            double border = e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
-            double dx = 0.5 * size.width() * ( 1 - ( border / 100) );
-            double dy = 0.5 * size.height() * ( 1 - ( border / 100) );
+            double dx = 0.5 * size.width();
+            double dy = 0.5 * size.height();
             rg->setRadius( sqrt( dx*dx + dy*dy ) );
             gradient = rg;
         }
@@ -233,8 +231,8 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
             double radius = 0.5 * sqrt( size.width()*size.width() + size.height()*size.height() );
 
             double border = e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
-            double sx = cos( angle * M_PI / 180 ) * radius * ( 1 - ( border / 100) );
-            double sy = sin( angle * M_PI / 180 ) * radius * ( 1 - ( border / 100) );
+            double sx = cos( angle * M_PI / 180 ) * radius;
+            double sy = sin( angle * M_PI / 180 ) * radius;
             lg->setStart( QPointF( 0.5 * size.width() + sx, 0.5 * size.height() + sy ) );
             lg->setFinalStop( QPointF( 0.5 * size.width() - sx, 0.5 * size.height() - sy ) );
             gradient = lg;
@@ -242,19 +240,26 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         else
             return QBrush();
 
+        double border = 0.01 * e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
         QGradientStops stops;
         if( type != "axial" )
         {
             QGradientStop start;
-            start.first = 0.0;
+            start.first = border;
             start.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
             start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove('%').toDouble() );
-            stops << start;
+
+            QGradientStop end;
+            end.first = 1.0;
+            end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
+            end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove('%').toDouble() );
+
+            stops << start << end;
         }
         else
         {
             QGradientStop start;
-            start.first = 0.0;
+            start.first = 0.5 * border;
             start.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
             start.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove('%').toDouble() );
 
@@ -263,15 +268,13 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
             middle.second = QColor( e->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
             middle.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove('%').toDouble() );
 
-            stops << start << middle;
+            QGradientStop end;
+            end.first = 1.0 - 0.5 * border;
+            end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
+            end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove('%').toDouble() );
+
+            stops << start << middle << end;
         }
-
-        QGradientStop end;
-        end.first = 1.0;
-        end.second = QColor( e->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
-        end.second.setAlphaF( 0.01 * e->attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove('%').toDouble() );
-
-        stops << end;
 
         gradient->setStops( stops );
     }

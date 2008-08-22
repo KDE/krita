@@ -40,7 +40,7 @@ class KoShape;
 /**
  * This class is used to cache the loaded styles so that they have to be loaded only once
  * and can be used by all text shapes.
- * When a text shape is loaded it checks if the KoTextSharedLoadingData is already there. 
+ * When a text shape is loaded it checks if the KoTextSharedLoadingData is already there.
  * If not it is created.
  */
 class KOTEXT_EXPORT KoTextSharedLoadingData : public KoSharedLoadingData
@@ -53,7 +53,7 @@ public:
     /**
      * Load the styles
      *
-     * If your application uses a style manager call this function from you application with insertOfficeStyles = true 
+     * If your application uses a style manager call this function from you application with insertOfficeStyles = true
      * to load the custom styles into the style manager before the rest of the loading is started.
      *
      * @param context The shape loading context.
@@ -102,13 +102,13 @@ protected:
 
 private:
     enum StyleType {
-        ContextDotXml = 1,
+        ContentDotXml = 1,
         StylesDotXml = 2
     };
     // helper functions for loading of paragraph styles
     void addParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
                              KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
-    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, 
+    QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
                                                                    int styleTypes, KoStyleManager *manager = 0);
 
     // helper functions for loading of character styles
@@ -120,7 +120,7 @@ private:
     void addListStyles(KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
     QList<QPair<QString, KoListStyle *> > loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
- 
+
     void addOutlineStyle( KoOdfLoadingContext & context, KoStyleManager *styleManager );
 
     class Private;

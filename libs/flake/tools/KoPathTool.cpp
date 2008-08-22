@@ -481,6 +481,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
             if ( handleId != -1 )
             {
                 useCursor(m_moveCursor);
+                emit statusTextChanged( i18n("Drag to move handle.") );
                 if(m_activeHandle)
                     m_activeHandle->repaint();
                 delete m_activeHandle;
@@ -520,6 +521,10 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
                     type = KoPathPoint::ControlPoint2;
 
                 useCursor( m_moveCursor );
+                if( type == KoPathPoint::Node )
+                    emit statusTextChanged( i18n( "Drag to move point. Shift click to change point type." ) );
+                else
+                    emit statusTextChanged( i18n( "Drag to move control point." ) );
 
                 PointHandle *prev = dynamic_cast<PointHandle*> (m_activeHandle);
                 if(prev && prev->activePoint() == p && prev->activePointType() == type)
@@ -540,6 +545,13 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
         m_activeHandle->repaint();
     delete m_activeHandle;
     m_activeHandle = 0;
+    uint selectedPointCount = m_pointSelection.selectedPoints().size();
+    if( selectedPointCount == 0 )
+        emit statusTextChanged( "" );
+    else if( selectedPointCount == 1 )
+        emit statusTextChanged( i18n( "Press B to break path at selected point." ) );
+    else
+        emit statusTextChanged( i18n( "Press B to break path at selected segments." ) );
 }
 
 void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {

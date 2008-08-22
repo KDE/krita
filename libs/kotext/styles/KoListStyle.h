@@ -87,12 +87,10 @@ public:
         Thai,       ///< Thai characters for normal 10-base counting
         Abjad,      ///< Abjad sequence.
         AbjadMinor, ///< A lesser known version of the Abjad sequence.
-        ArabicAlphabet,
+        ArabicAlphabet
 
          // TODO look at css 3 for things like hebrew counters
          // TODO allow a bitmap 'bullet'
-
-        Foo
     };
 
     /// further properties
@@ -188,12 +186,12 @@ public:
      * OpenDocument format.
      */
     void loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style = KoXmlElement());
-    
+
     /**
      * Save the style to a KoGenStyle object using the OpenDocument format
      */
     void saveOdf( KoGenStyle &style );
-    
+
 protected:
     friend class KoParagraphStyle;
     void apply(const KoListStyle &other);

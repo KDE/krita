@@ -47,11 +47,12 @@ public:
     {
         qDeleteAll( paragraphStylesToDelete );
         qDeleteAll( characterStylesToDelete );
+        qDeleteAll( listStylesToDelete );
     }
 
     // It is possible that automatic-styles in content.xml and styles.xml have the same name
     // within the same family. Therefore we have to keep them separate. The office:styles are
-    // added to the autostyles so that only one lookup is needed to get the style. This is 
+    // added to the autostyles so that only one lookup is needed to get the style. This is
     // about 30% faster than having a special data structure for office:styles.
     QHash<QString, KoParagraphStyle *> paragraphContentDotXmlStyles;
     QHash<QString, KoCharacterStyle *> characterContentDotXmlStyles;

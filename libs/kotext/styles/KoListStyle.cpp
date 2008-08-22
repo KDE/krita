@@ -103,12 +103,12 @@ void KoListStyle::setName(const QString &name) {
     d->name = name;
 }
 
-int KoListStyle::styleId() const 
+int KoListStyle::styleId() const
 {
     return d->styleId;
 }
 
-void KoListStyle::setStyleId(int id) 
+void KoListStyle::setStyleId(int id)
 {
     d->styleId = id;
 }
@@ -223,6 +223,12 @@ KoListStyle* KoListStyle::fromTextList(QTextList *list) {
 
 void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style)
 {
+    d->name = style.attributeNS(KoXmlNS::style, "display-name", QString());
+    // if no style:display-name is given us the style:name
+    if (d->name.isEmpty()) {
+        d->name = style.attributeNS(KoXmlNS::style, "name", QString());
+    }
+
     KoXmlElement styleElem;
     forEachElement(styleElem, style) {
         KoListLevelProperties properties;

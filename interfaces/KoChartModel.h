@@ -20,12 +20,15 @@
 #ifndef KO_CHART_MODEL
 #define KO_CHART_MODEL
 
-#include <QHash>
-#include <QVector>
-#include <QtPlugin>
+
+#include <QtCore/QHash>
+#include <QtCore/QVector>
+#include <QtCore/QtPlugin>
+
 
 class QAbstractItemModel;
 class QRect;
+
 
 namespace KoChart {
 

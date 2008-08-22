@@ -19,12 +19,15 @@
 #ifndef KOCHART_INTERFACE
 #define KOCHART_INTERFACE
 
-#include <QtPlugin>
+
+#include <QtCore/QtPlugin>
+
 
 #define ChartShapeId "ChartShape"
 
 class QAbstractItemModel;
 class QRect;
+
 
 namespace KoChart
 {

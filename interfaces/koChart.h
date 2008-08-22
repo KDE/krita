@@ -20,9 +20,9 @@
 #define __koChart_h__
 
 #include <QtCore/QVariant>
-#include <QVector>
-#include <QRect>
-#include <QtPlugin>
+#include <QtCore/QVector>
+#include <QtCore/QRect>
+#include <QtCore/QtPlugin>
 
 #include <KoDocument.h>
 #include "kochart_export.h"

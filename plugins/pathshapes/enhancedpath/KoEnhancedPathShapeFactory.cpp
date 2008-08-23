@@ -399,12 +399,12 @@ void KoEnhancedPathShapeFactory::addGearhead()
     commands.append( "N" );
 
     uint toothCount = 10;
-    double toothAngle = 360.0 / double(toothCount);
+    qreal toothAngle = 360.0 / qreal(toothCount);
     //kDebug() <<"toothAngle =" << toothAngle;
-    double outerRadius = 0.5 * 25.0;
-    double innerRadius = 0.5 * 17.0;
+    qreal outerRadius = 0.5 * 25.0;
+    qreal innerRadius = 0.5 * 17.0;
     QPointF center( 20, 25 );
-    double radian = (270.0 - 0.35 * toothAngle) * M_PI / 180.0;
+    qreal radian = (270.0 - 0.35 * toothAngle) * M_PI / 180.0;
     commands.append( QString( "M %1 %2" ).arg( center.x() + innerRadius*cos(radian) ).arg( center.y() + innerRadius*sin(radian) ) );
     QString cmd( "L" );
     for( uint i = 0; i < toothCount; ++i )

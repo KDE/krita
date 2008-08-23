@@ -82,23 +82,23 @@ public:
         RightPadding,   ///< distance between text and border
         BottomPadding,   ///< distance between text and border
         LeftBorderWidth,        ///< The thickness of the border, or 0 if there is no border
-        LeftInnerBorderWidth,   ///< In case of style being 'double' the thickness of the inner border line
-        LeftBorderSpacing,      ///< In case of style being 'double' the space between the inner and outer border lines
+        LeftInnerBorderWidth,   ///< In case of style being 'qreal' the thickness of the inner border line
+        LeftBorderSpacing,      ///< In case of style being 'qreal' the space between the inner and outer border lines
         LeftBorderStyle,        ///< The border style. (see BorderStyle)
         LeftBorderColor,        ///< The border Color
         TopBorderWidth,         ///< The thickness of the border, or 0 if there is no border
-        TopInnerBorderWidth,    ///< In case of style being 'double' the thickness of the inner border line
-        TopBorderSpacing,       ///< In case of style being 'double' the space between the inner and outer border lines
+        TopInnerBorderWidth,    ///< In case of style being 'qreal' the thickness of the inner border line
+        TopBorderSpacing,       ///< In case of style being 'qreal' the space between the inner and outer border lines
         TopBorderStyle,         ///< The border style. (see BorderStyle)
         TopBorderColor,         ///< The border Color
         RightBorderWidth,       ///< The thickness of the border, or 0 if there is no border
-        RightInnerBorderWidth,  ///< In case of style being 'double' the thickness of the inner border line
-        RightBorderSpacing,     ///< In case of style being 'double' the space between the inner and outer border lines
+        RightInnerBorderWidth,  ///< In case of style being 'qreal' the thickness of the inner border line
+        RightBorderSpacing,     ///< In case of style being 'qreal' the space between the inner and outer border lines
         RightBorderStyle,       ///< The border style. (see BorderStyle)
         RightBorderColor,       ///< The border Color
         BottomBorderWidth,      ///< The thickness of the border, or 0 if there is no border
-        BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
-        BottomBorderSpacing,    ///< In case of style being 'double' the space between the inner and outer border lines
+        BottomInnerBorderWidth, ///< In case of style being 'qreal' the thickness of the inner border line
+        BottomBorderSpacing,    ///< In case of style being 'qreal' the space between the inner and outer border lines
         BottomBorderStyle,      ///< The border style. (see BorderStyle)
         BottomBorderColor,      ///< The border Color
 
@@ -167,18 +167,18 @@ public:
      * Sets the line height to a specific pt-based height, ignoring the font size.
      * Setting this will ignore the lineHeightPercent() and lineSpacing() values.
      */
-    void setLineHeightAbsolute(double height);
+    void setLineHeightAbsolute(qreal height);
     /// @see setLineHeightAbsolute
-    double lineHeightAbsolute() const;
+    qreal lineHeightAbsolute() const;
 
     /**
      * Sets the line height to have a minimum height in pt.
      * You should consider doing a remove(KoParagraphStyle::FixedLineHeight); because if set, it will
      *  be used instead of this value.
      */
-    void setMinimumLineHeight(double height);
+    void setMinimumLineHeight(qreal height);
     /// @see setMinimumLineHeight
-    double minimumLineHeight() const;
+    qreal minimumLineHeight() const;
 
     /**
      * Sets the space between two lines to be a specific height. The total linespacing will become
@@ -186,9 +186,9 @@ public:
      * You should consider doing a remove(KoParagraphStyle::FixedLineHeight) and a
      * remove(KoParagraphStyle::PercentLineHeight); because if set, they will be used instead of this value.
      */
-    void setLineSpacing(double spacing);
+    void setLineSpacing(qreal spacing);
     /// @see setLineSpacing
-    double lineSpacing() const;
+    qreal lineSpacing() const;
 
     /**
      * If set to true the font-encoded height will be used instead of the font-size propery
@@ -281,12 +281,12 @@ public:
      * @see setDropCaps
      * @see setDropCapsLines
      */
-    void setDropCapsDistance(double distance);
+    void setDropCapsDistance(qreal distance);
     /**
      * Set dropCaps distance
      * @see setDropCapsDistance
      */
-    double dropCapsDistance() const;
+    qreal dropCapsDistance() const;
     /**
      * If true the baselines will be aligned with the doc-wide grid
      */
@@ -308,52 +308,52 @@ public:
     bool breakBefore();
     void setBreakAfter(bool on);
     bool breakAfter();
-    void setLeftPadding(double padding);
-    double leftPadding();
-    void setTopPadding(double padding);
-    double topPadding();
-    void setRightPadding(double padding);
-    double rightPadding();
-    void setBottomPadding(double padding);
-    double bottomPadding();
-    void setPadding(double padding);
+    void setLeftPadding(qreal padding);
+    qreal leftPadding();
+    void setTopPadding(qreal padding);
+    qreal topPadding();
+    void setRightPadding(qreal padding);
+    qreal rightPadding();
+    void setBottomPadding(qreal padding);
+    qreal bottomPadding();
+    void setPadding(qreal padding);
 
-    void setLeftBorderWidth(double width);
-    double leftBorderWidth();
-    void setLeftInnerBorderWidth(double width);
-    double leftInnerBorderWidth();
-    void setLeftBorderSpacing(double width);
-    double leftBorderSpacing();
+    void setLeftBorderWidth(qreal width);
+    qreal leftBorderWidth();
+    void setLeftInnerBorderWidth(qreal width);
+    qreal leftInnerBorderWidth();
+    void setLeftBorderSpacing(qreal width);
+    qreal leftBorderSpacing();
     void setLeftBorderStyle(BorderStyle style);
     BorderStyle leftBorderStyle();
     void setLeftBorderColor(const QColor& color);
     QColor leftBorderColor();
-    void setTopBorderWidth(double width);
-    double topBorderWidth();
-    void setTopInnerBorderWidth(double width);
-    double topInnerBorderWidth();
-    void setTopBorderSpacing(double width);
-    double topBorderSpacing();
+    void setTopBorderWidth(qreal width);
+    qreal topBorderWidth();
+    void setTopInnerBorderWidth(qreal width);
+    qreal topInnerBorderWidth();
+    void setTopBorderSpacing(qreal width);
+    qreal topBorderSpacing();
     void setTopBorderStyle(BorderStyle style);
     BorderStyle topBorderStyle();
     void setTopBorderColor(const QColor& color);
     QColor topBorderColor();
-    void setRightBorderWidth(double width);
-    double rightBorderWidth();
-    void setRightInnerBorderWidth(double width);
-    double rightInnerBorderWidth();
-    void setRightBorderSpacing(double width);
-    double rightBorderSpacing();
+    void setRightBorderWidth(qreal width);
+    qreal rightBorderWidth();
+    void setRightInnerBorderWidth(qreal width);
+    qreal rightInnerBorderWidth();
+    void setRightBorderSpacing(qreal width);
+    qreal rightBorderSpacing();
     void setRightBorderStyle(BorderStyle style);
     BorderStyle rightBorderStyle();
     void setRightBorderColor(const QColor& color);
     QColor rightBorderColor();
-    void setBottomBorderWidth(double width);
-    double bottomBorderWidth();
-    void setBottomInnerBorderWidth(double width);
-    double bottomInnerBorderWidth();
-    void setBottomBorderSpacing(double width);
-    double bottomBorderSpacing();
+    void setBottomBorderWidth(qreal width);
+    qreal bottomBorderWidth();
+    void setBottomInnerBorderWidth(qreal width);
+    qreal bottomInnerBorderWidth();
+    void setBottomBorderSpacing(qreal width);
+    qreal bottomBorderSpacing();
     void setBottomBorderStyle(BorderStyle style);
     BorderStyle bottomBorderStyle();
     void setBottomBorderColor(const QColor& color);
@@ -364,23 +364,23 @@ public:
 
     // ************ properties from QTextBlockFormat
     /// duplicated property from QTextBlockFormat
-    void setTopMargin(double topMargin);
+    void setTopMargin(qreal topMargin);
     /// duplicated property from QTextBlockFormat
-    double topMargin() const;
+    qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin (double margin);
+    void setBottomMargin (qreal margin);
     /// duplicated property from QTextBlockFormat
-    double bottomMargin () const;
+    qreal bottomMargin () const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin (double margin);
+    void setLeftMargin (qreal margin);
     /// duplicated property from QTextBlockFormat
-    double leftMargin () const;
+    qreal leftMargin () const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin (double margin);
+    void setRightMargin (qreal margin);
     /// duplicated property from QTextBlockFormat
-    double rightMargin () const;
+    qreal rightMargin () const;
     /// set the margin around the paragraph, making the margin on all sides equal.
-    void setMargin (double margin);
+    void setMargin (qreal margin);
 
     void setIsListHeader(bool on);
     bool isListHeader() const;
@@ -390,9 +390,9 @@ public:
     /// duplicated property from QTextBlockFormat
     Qt::Alignment alignment () const;
     /// duplicated property from QTextBlockFormat
-    void setTextIndent (double margin);
+    void setTextIndent (qreal margin);
     /// duplicated property from QTextBlockFormat
-    double textIndent () const;
+    qreal textIndent () const;
     /// Custom KoParagraphStyle property for auto-text-indent
     void setAutoTextIndent (bool on);
     bool autoTextIndent () const;
@@ -450,9 +450,9 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     bool restartListNumbering();
 
     /// Set the tab stop distance for this paragraph style.
-    void setTabStopDistance(double value);
+    void setTabStopDistance(qreal value);
     /// return the tab stop distance for this paragraph style
-    double tabStopDistance() const;
+    qreal tabStopDistance() const;
     /// Set the tab data for this paragraph style.
     void setTabPositions(const QList<KoText::Tab> &tabs);
     /// return the tabs data for this paragraph style
@@ -561,7 +561,7 @@ private:
      * OpenDocument format.
      */
     void loadOdfProperties( KoStyleStack& styleStack );
-    double propertyDouble(int key) const;
+    qreal propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;

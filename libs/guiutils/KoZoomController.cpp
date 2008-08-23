@@ -51,15 +51,15 @@ public:
     }
 
     /// when the canvas controller wants us to change zoom
-    void requestZoomBy(const double factor)
+    void requestZoomBy(const qreal factor)
     {
-        double zoom = zoomHandler->zoom();
+        qreal zoom = zoomHandler->zoom();
         action->setZoom(factor*zoom);
         setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
         action->setEffectiveZoom(factor*zoom);
     }
 
-    void setZoom(KoZoomMode::Mode mode, double zoom)
+    void setZoom(KoZoomMode::Mode mode, qreal zoom)
     {
         parent->setZoom(mode, zoom);
     }
@@ -78,8 +78,8 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
 {
     d->canvasController = co;
     d->zoomHandler = zh;
-    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
-            this, SLOT(setZoom(KoZoomMode::Mode, double)));
+    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+            this, SLOT(setZoom(KoZoomMode::Mode, qreal)));
     connect(d->action, SIGNAL(aspectModeChanged(bool)),
             this, SIGNAL(aspectModeChanged(bool)));
 
@@ -89,7 +89,7 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
 
     connect(d->canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize() ) );
 
-    connect(d->canvasController, SIGNAL( zoomBy(const double ) ), this, SLOT( requestZoomBy( const double ) ) );
+    connect(d->canvasController, SIGNAL( zoomBy(const qreal ) ), this, SLOT( requestZoomBy( const qreal ) ) );
 }
 
 KoZoomController::~KoZoomController()
@@ -127,7 +127,7 @@ void KoZoomController::setDocumentSize( const QSizeF &documentSize )
     d->canvasController->recenterPreferred();
 }
 
-void KoZoomController::setZoom(KoZoomMode::Mode mode, double zoom)
+void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 {
     if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom)
         return; // no change

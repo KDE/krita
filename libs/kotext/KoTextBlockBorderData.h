@@ -75,8 +75,8 @@ public:
      * @param style the border style for this side.
      * @param width the thickness of the border-line.
      * @param color the property for the color of the border-line(s).
-     * @param space the amount of spacing between the outer border and the inner border in case of style being double
-     * @param innerWidth the thickness of the inner border-line in case of style being double
+     * @param space the amount of spacing between the outer border and the inner border in case of style being qreal
+     * @param innerWidth the thickness of the inner border-line in case of style being qreal
      */
     void setEdge(Side side, const QTextBlockFormat &bf, KoParagraphStyle::Property style,
             KoParagraphStyle::Property width, KoParagraphStyle::Property color,
@@ -96,13 +96,13 @@ public:
             the border.  If false; its above the border.
      * @see inset()
      */
-    void applyInsets(KoInsets &insets, double paragraphStart, bool startUnderBorder) const;
+    void applyInsets(KoInsets &insets, qreal paragraphStart, bool startUnderBorder) const;
 
     /**
      * Alter the bounding rect of the borders to move the bottom to the parameter position.
      * @param bottom the new y position of the bottom. The border will be drawn directly below that point.
      */
-    void setParagraphBottom(double bottom);
+    void setParagraphBottom(qreal bottom);
 
     /**
      * Return the rectangle in which the border is drawn.  The border is drawn on the insides of the rect
@@ -113,7 +113,7 @@ public:
      * Find the inset that a border causes for a specific side.
      * @see applyInsets()
      */
-    double inset(Side side) const;
+    qreal inset(Side side) const;
 
     /// returns true if the borders of param border are the same as this one.
     bool operator==(const KoTextBlockBorderData &border);

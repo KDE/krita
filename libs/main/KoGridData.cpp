@@ -43,7 +43,7 @@ public:
 
     bool snapToGrid;
     bool showGrid;
-    double gridX, gridY;
+    qreal gridX, gridY;
     QColor gridColor;
 };
 
@@ -56,17 +56,17 @@ KoGridData::~KoGridData() {
     delete d;
 }
 
-double KoGridData::gridX() const
+qreal KoGridData::gridX() const
 {
    return d->gridX;
 }
 
-double KoGridData::gridY() const
+qreal KoGridData::gridY() const
 {
   return d->gridY;
 }
 
-void KoGridData::setGrid(double x, double y)
+void KoGridData::setGrid(qreal x, qreal y)
 {
    d->gridX = x;
    d->gridY = y;
@@ -109,7 +109,7 @@ void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, 
 
     painter.setPen( gridColor() );
 
-    double x = 0.0;
+    qreal x = 0.0;
     do {
         painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
                           converter.documentToView( QPointF( x, area.bottom() ) ) );
@@ -124,7 +124,7 @@ void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, 
         x -= gridX();
     };
 
-    double y = 0.0;
+    qreal y = 0.0;
     do {
         painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ),
                           converter.documentToView( QPointF( area.right(), y ) ) );

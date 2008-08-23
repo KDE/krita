@@ -127,7 +127,7 @@ private:
     void recalcSelectionBox();
     void updateCursor();
     /// Returns rotation angle of given handle of the current selection
-    double rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation );
+    qreal rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation );
 
     void selectionAlign(KoShapeAlignCommand::Align align);
     void selectionReorder(KoShapeReorderCommand::MoveShapeType order );
@@ -156,7 +156,7 @@ private:
     QCursor m_sizeCursors[8];
     QCursor m_rotateCursors[8];
     QCursor m_shearCursors[8];
-    double m_angle;
+    qreal m_angle;
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
     KoInteractionStrategy * m_customEventStrategy;

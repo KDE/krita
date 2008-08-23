@@ -48,7 +48,7 @@ KoColorSet::KoColorSet(const KisGradient * gradient, qint32 nColors, const QStri
     Q_ASSERT(nColors > 0);
     Q_ASSERT(gradient != 0);
 
-    double dx, cur_x;
+    qreal dx, cur_x;
     qint32 i;
     dx = 1.0 / (nColors - 1);
 

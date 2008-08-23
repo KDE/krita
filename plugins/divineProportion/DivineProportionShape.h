@@ -59,7 +59,7 @@ private:
     void divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left);
     void draw(QPainter &painter);
 
-    const double m_divineProportion;
+    const qreal m_divineProportion;
     Orientation m_orientation;
     bool m_printable;
 };

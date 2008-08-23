@@ -57,7 +57,7 @@ public:
     {}
     ~MockCanvas() {}
 
-    void gridSize(double *, double *) const {}
+    void gridSize(qreal *, qreal *) const {}
     bool snapToGrid() const  { return false; }
     void addCommand(QUndoCommand*) { }
     KoShapeManager *shapeManager() const  { return 0; }
@@ -76,11 +76,11 @@ class MockViewConverter : public KoViewConverter {
     QRectF viewToDocument( const QRectF &viewRect ) const { return viewRect; }
     QSizeF documentToView( const QSizeF& documentSize ) const { return documentSize; }
     QSizeF viewToDocument( const QSizeF& viewSize ) const { return viewSize; }
-    double documentToViewX( double documentX ) const { return documentX; }
-    double documentToViewY( double documentY ) const{ return documentY; }
-    double viewToDocumentX( double viewX ) const { return viewX; }
-    double viewToDocumentY( double viewY ) const { return viewY; }
-    void zoom(double *zoomX, double *zoomY) const { *zoomX = 1.0; *zoomY = 1.0; }
+    qreal documentToViewX( qreal documentX ) const { return documentX; }
+    qreal documentToViewY( qreal documentY ) const{ return documentY; }
+    qreal viewToDocumentX( qreal viewX ) const { return viewX; }
+    qreal viewToDocumentY( qreal viewY ) const { return viewY; }
+    void zoom(qreal *zoomX, qreal *zoomY) const { *zoomX = 1.0; *zoomY = 1.0; }
 };
 
 class MockShapeController : public KoShapeControllerBase

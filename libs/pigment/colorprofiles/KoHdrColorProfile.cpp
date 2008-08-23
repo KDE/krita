@@ -25,10 +25,10 @@
 
 struct KoHdrColorProfile::Private {
     KoIccColorProfile* iccProfile;
-    double exposure;
-    double exposureFactor;
-    double invExposureFactor;
-    double middleGreyScaleFactor;
+    qreal exposure;
+    qreal exposureFactor;
+    qreal invExposureFactor;
+    qreal middleGreyScaleFactor;
 };
 
 KoHdrColorProfile::KoHdrColorProfile(const QString &name, const QString &info) : d(new Private)
@@ -93,12 +93,12 @@ bool KoHdrColorProfile::isSuitableForDisplay() const
     return true;
 }
 
-double KoHdrColorProfile::hdrExposure() const
+qreal KoHdrColorProfile::hdrExposure() const
 {
     return d->exposure;
 }
 
-void KoHdrColorProfile::setHdrExposure(double exposure)
+void KoHdrColorProfile::setHdrExposure(qreal exposure)
 {
     d->exposure = exposure;
     d->exposureFactor = pow(2, exposure + 2.47393) * d->middleGreyScaleFactor* 65535.0;
@@ -115,7 +115,7 @@ bool KoHdrColorProfile::operator==(const KoColorProfile& rhs) const
     return false;
 }
 
-quint16 KoHdrColorProfile::channelToDisplay(double value) const
+quint16 KoHdrColorProfile::channelToDisplay(qreal value) const
 {
     value *= d->exposureFactor;
 
@@ -125,22 +125,22 @@ quint16 KoHdrColorProfile::channelToDisplay(double value) const
     return (quint16)qBound(minU16, qRound(value), maxU16);
 }
 
-double KoHdrColorProfile::displayToChannel(quint16 value) const
+qreal KoHdrColorProfile::displayToChannel(quint16 value) const
 {
     return value * d->invExposureFactor;
 }
 
-double KoHdrColorProfile::channelToDisplayDouble(double value) const
+qreal KoHdrColorProfile::channelToDisplayDouble(qreal value) const
 {
     value = value * d->exposureFactor / 0xFFFF;
 
-    const double min = 0;
-    const double max = 1;
+    const qreal min = 0;
+    const qreal max = 1;
 
     return qBound(min, value, max);
 }
 
-double KoHdrColorProfile::displayToChannelDouble(double value) const
+qreal KoHdrColorProfile::displayToChannelDouble(qreal value) const
 {
     return value * 0xFFFF * d->invExposureFactor;
 }

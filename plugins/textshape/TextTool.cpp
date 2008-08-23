@@ -238,7 +238,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
             this, SLOT( textSpacingSingle() ),
             actionCollection(), "format_spacingsingle" );
     m_actionFormatSpacingSingle->setActionGroup( spacingActionGroup );
-    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.5" ), "format-line-spacing-double", Qt::CTRL + Qt::Key_5,
+    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.5" ), "format-line-spacing-qreal", Qt::CTRL + Qt::Key_5,
             this, SLOT( textSpacingOneAndHalf() ),
             actionCollection(), "format_spacing15" );
     m_actionFormatSpacingOneAndHalf->setActionGroup( spacingActionGroup );
@@ -477,7 +477,7 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
     if (shapesToPaint.isEmpty()) // quite unlikely, though ;)
         return;
 
-    double zoomX, zoomY;
+    qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
 
@@ -1013,7 +1013,7 @@ void TextTool::ensureCursorVisible()
         // So take bottom of last paragraph.
         QTextBlock block = m_textCursor.block().previous();
         if(block.isValid()) {
-            double y = block.layout()->boundingRect().bottom();
+            qreal y = block.layout()->boundingRect().bottom();
             cursorPos = QRectF(0, y, 1, 10);
         }
     }
@@ -1225,7 +1225,7 @@ QRectF TextTool::textRect(int startPosition, int endPosition) const
     QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
     if(! line1.isValid())
         return QRectF();
-    double startX = line1.cursorToX(startPosition - block.position());
+    qreal startX = line1.cursorToX(startPosition - block.position());
     if(startPosition == endPosition)
         return QRectF(startX, line1.y(), 1, line1.height());
 
@@ -1233,7 +1233,7 @@ QRectF TextTool::textRect(int startPosition, int endPosition) const
     QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
     if(! line2.isValid())
         return QRectF();
-    double endX = line2.cursorToX(endPosition - block2.position());
+    qreal endX = line2.cursorToX(endPosition - block2.position());
 
     if(line1.textStart() + block.position() == line2.textStart()+ block2.position() )
         return QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height());

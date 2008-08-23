@@ -106,7 +106,7 @@ KoEnhancedPathFormula::~KoEnhancedPathFormula()
 {
 }
 
-double KoEnhancedPathFormula::evaluate()
+qreal KoEnhancedPathFormula::evaluate()
 {
     // shortcut
     if( m_error != ErrorNone )
@@ -156,7 +156,7 @@ double KoEnhancedPathFormula::evaluate()
             case Opcode::Neg:
             {
                 bool success = false;
-                double value = stack.pop().toDouble( &success );
+                qreal value = stack.pop().toDouble( &success );
                 if( success ) // do nothing if we got an error
                     value *= -1.0;
                 stack.push( QVariant( value ) );
@@ -167,32 +167,32 @@ double KoEnhancedPathFormula::evaluate()
             // push the result to stack
             case Opcode::Add:
             {
-                double val2 = stack.pop().toDouble();
-                double val1 = stack.pop().toDouble();
+                qreal val2 = stack.pop().toDouble();
+                qreal val1 = stack.pop().toDouble();
                 stack.push( QVariant( val1 + val2 ) );
             }
             break;
 
             case Opcode::Sub:
             {
-                double val2 = stack.pop().toDouble();
-                double val1 = stack.pop().toDouble();
+                qreal val2 = stack.pop().toDouble();
+                qreal val1 = stack.pop().toDouble();
                 stack.push( QVariant( val1 - val2 ) );
             }
             break;
 
             case Opcode::Mul:
             {
-                double val2 = stack.pop().toDouble();
-                double val1 = stack.pop().toDouble();
+                qreal val2 = stack.pop().toDouble();
+                qreal val1 = stack.pop().toDouble();
                 stack.push( QVariant( val1 * val2 ) );
             }
             break;
 
             case Opcode::Div:
             {
-                double val2 = stack.pop().toDouble();
-                double val1 = stack.pop().toDouble();
+                qreal val2 = stack.pop().toDouble();
+                qreal val1 = stack.pop().toDouble();
                 stack.push( QVariant( val1 / val2 ) );
             }
             break;
@@ -222,10 +222,10 @@ double KoEnhancedPathFormula::evaluate()
             }
 
             /// prepare function arguments
-            QList<double> args;
+            QList<qreal> args;
             for( ; index; index-- )
             {
-                double value = stack.pop().toDouble();
+                qreal value = stack.pop().toDouble();
                 args.push_front( value );
             }
 
@@ -250,7 +250,7 @@ double KoEnhancedPathFormula::evaluate()
     return stack.pop().toDouble();
 }
 
-double KoEnhancedPathFormula::evaluateFunction( Function function, const QList<double> &arguments ) const
+qreal KoEnhancedPathFormula::evaluateFunction( Function function, const QList<qreal> &arguments ) const
 {
     switch( function )
     {
@@ -736,7 +736,7 @@ FormulaToken & FormulaToken::operator=( const FormulaToken &rhs )
     return *this;
 }
 
-double FormulaToken::asNumber() const
+qreal FormulaToken::asNumber() const
 {
     if( isNumber() )
         return m_text.toDouble();

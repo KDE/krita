@@ -49,9 +49,9 @@ public:
     explicit KoEnhancedPathParameter( KoEnhancedPathShape * parent );
     virtual ~KoEnhancedPathParameter();
     /// evaluates the parameter using the given path
-    virtual double evaluate() = 0;
+    virtual qreal evaluate() = 0;
     /// modifies the parameter if possible, using the new value
-    virtual void modify( double value );
+    virtual void modify( qreal value );
     /// returns string representation of the parameter
     virtual QString toString() const = 0;
 protected:
@@ -65,11 +65,11 @@ class KoEnhancedPathConstantParameter : public KoEnhancedPathParameter
 {
 public:
     /// Constructs the constant parameter with the given value
-    KoEnhancedPathConstantParameter( double value, KoEnhancedPathShape * parent );
-    double evaluate();
+    KoEnhancedPathConstantParameter( qreal value, KoEnhancedPathShape * parent );
+    qreal evaluate();
     virtual QString toString() const;
 private:
-    double m_value; ///< the constant value
+    qreal m_value; ///< the constant value
 };
 
 /// A named parameter, one that refers to a variable of the path
@@ -80,7 +80,7 @@ public:
     KoEnhancedPathNamedParameter( Identifier identifier, KoEnhancedPathShape * parent );
     /// Constructs named parameter from given identifier string
     KoEnhancedPathNamedParameter( const QString &identifier, KoEnhancedPathShape * parent );
-    double evaluate();
+    qreal evaluate();
     /// Returns identfier type from given string
     static Identifier identifierFromString( const QString &text );
     virtual QString toString() const;
@@ -94,8 +94,8 @@ class KoEnhancedPathReferenceParameter : public KoEnhancedPathParameter
 public:
     /// Constructs reference paramater from the fiven reference string
     explicit KoEnhancedPathReferenceParameter( const QString &reference, KoEnhancedPathShape * parent );
-    double evaluate();
-    virtual void modify( double value );
+    qreal evaluate();
+    virtual void modify( qreal value );
     virtual QString toString() const;
 private:
     QString m_reference; ///< the reference, formula or modifier

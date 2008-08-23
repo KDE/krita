@@ -206,7 +206,7 @@ public:
      * @param sx scale in x direction
      * @param sy scale in y direction
      */
-    void setScale( double sx, double sy );
+    void setScale( qreal sx, qreal sy );
 
     /**
      * @brief Rotate the shape (relative)
@@ -215,13 +215,13 @@ public:
      *
      * @param angle change the angle of rotation increasing it with 'angle' degrees
      */
-    void rotate( double angle );
+    void rotate( qreal angle );
 
     /**
      * Return the current rotation in degrees.
      * It returns NaN if the shape has a shearing or scaling transformation applied.
      */
-    double rotation() const;
+    qreal rotation() const;
 
     /**
      * @brief Shear the shape
@@ -231,7 +231,7 @@ public:
      * @param sx shear in x direction
      * @param sy shear in y direction
      */
-    void setShear( double sx, double sy );
+    void setShear( qreal sx, qreal sy );
 
     /**
      * @brief Resize the shape

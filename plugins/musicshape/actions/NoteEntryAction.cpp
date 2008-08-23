@@ -86,7 +86,7 @@ NoteEntryAction::NoteEntryAction(Duration duration, bool isRest, SimpleEntryTool
 void NoteEntryAction::renderPreview(QPainter& painter, const QPointF& point)
 {
     if (!m_isRest) {
-        double sl = 3.5;
+        qreal sl = 3.5;
         if (m_duration < SixteenthNote) sl += 1;
         if (m_duration < ThirtySecondNote) sl += 1;
         m_tool->shape()->renderer()->renderNote(painter, m_duration, point - QPointF(3, 0), sl * 5, Qt::gray);

@@ -114,7 +114,7 @@ void SimpleTextTool::mousePressEvent( KoPointerEvent *event )
          pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
          const int len = m_currentShape->text().length();
          int hit = len;
-         double mindist = DBL_MAX;
+         qreal mindist = DBL_MAX;
          for ( int i = 0; i < len;++i ) {
              QPointF center;
              m_currentShape->getCharPositionAt( i, center );

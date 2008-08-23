@@ -75,7 +75,7 @@ public:
 
   QPointer<KoDocument> m_doc; // our KoDocument
   QPointer<KParts::PartManager> m_manager;
-  double m_zoom;
+  qreal m_zoom;
   Q3PtrList<KoViewChild> m_children;
   QWidget *m_tempActiveWidget;
 //   KoViewIface *m_dcopObject;
@@ -327,13 +327,13 @@ int KoView::bottomBorder() const
   return 0;
 }
 
-void KoView::setZoom( double zoom )
+void KoView::setZoom( qreal zoom )
 {
   d->m_zoom = zoom;
   update();
 }
 
-double KoView::zoom() const
+qreal KoView::zoom() const
 {
   return d->m_zoom;
 }

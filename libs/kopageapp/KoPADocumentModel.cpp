@@ -208,7 +208,7 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
                 foreach( KoShape* shape, container->iterator() )
                     bbox = bbox.united( shape->outline().boundingRect() );
             }
-            return double(bbox.width()) / bbox.height();
+            return qreal(bbox.width()) / bbox.height();
         }
         default:
             if (role >= int(BeginThumbnailRole))
@@ -303,7 +303,7 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     if (page) { // We create a thumbnail with actual width / height ratio for page
         KoZoomHandler zoomHandler;
         KoPageLayout layout = page->pageLayout();
-        double ratio = (zoomHandler.resolutionX() * layout.width) / (zoomHandler.resolutionY() * layout.height);
+        qreal ratio = (zoomHandler.resolutionX() * layout.width) / (zoomHandler.resolutionY() * layout.height);
         if ( ratio > 1 ) {
             size.setHeight( size.width() / ratio );
         }

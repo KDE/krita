@@ -86,7 +86,7 @@ struct KoIccColorProfile::Private
     Shared* shared;
 };
 
-KoIccColorProfile::KoIccColorProfile(const KoRGBChromaticities& chromacities, double gamma, QString name ) : KoColorProfile(""), d(new Private)
+KoIccColorProfile::KoIccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, QString name ) : KoColorProfile(""), d(new Private)
 {
     d->shared = new Private::Shared();
     d->shared->count ++;

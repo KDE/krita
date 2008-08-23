@@ -34,7 +34,7 @@ KoStarShape::KoStarShape()
 , m_zoomY( 1.0 )
 , m_convex( false )
 {
-    double radianStep = M_PI / static_cast<double>(m_cornerCount);
+    qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 
     m_radius[base] = 25.0;
     m_radius[tip] = 50.0;
@@ -65,35 +65,35 @@ uint KoStarShape::cornerCount() const
     return m_cornerCount;
 }
 
-void KoStarShape::setBaseRadius( double baseRadius )
+void KoStarShape::setBaseRadius( qreal baseRadius )
 {
     m_radius[base] = fabs( baseRadius );
     updatePath( QSize() );
 }
 
-double KoStarShape::baseRadius() const
+qreal KoStarShape::baseRadius() const
 {
     return m_radius[base];
 }
 
-void KoStarShape::setTipRadius( double tipRadius )
+void KoStarShape::setTipRadius( qreal tipRadius )
 {
     m_radius[tip] = fabs( tipRadius );
     updatePath( QSize() );
 }
 
-double KoStarShape::tipRadius() const
+qreal KoStarShape::tipRadius() const
 {
     return m_radius[tip];
 }
 
-void KoStarShape::setBaseRoundness( double baseRoundness )
+void KoStarShape::setBaseRoundness( qreal baseRoundness )
 {
     m_roundness[base] = baseRoundness;
     updatePath( QSize() );
 }
 
-void KoStarShape::setTipRoundness( double tipRoundness )
+void KoStarShape::setTipRoundness( qreal tipRoundness )
 {
     m_roundness[tip] = tipRoundness;
     updatePath( QSize() );
@@ -120,10 +120,10 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
     if( modifiers & Qt::ShiftModifier )
     {
         QPointF tangentVector = point - m_handles[handleId];
-        double distance = sqrt( tangentVector.x()*tangentVector.x() + tangentVector.y()*tangentVector.y() );
+        qreal distance = sqrt( tangentVector.x()*tangentVector.x() + tangentVector.y()*tangentVector.y() );
         QPointF radialVector = m_handles[handleId] - m_center;
         // cross product to determine in which direction the user is dragging
-        double moveDirection = radialVector.x()*tangentVector.y() - radialVector.y()*tangentVector.x();
+        qreal moveDirection = radialVector.x()*tangentVector.y() - radialVector.y()*tangentVector.x();
         // make the roundness stick to zero if distance is under a certain value
         float snapDistance = 3.0;
         if( distance >= 0.0 )
@@ -144,11 +144,11 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
         distVector.ry() /= m_zoomY;
         m_radius[handleId] = sqrt( distVector.x()*distVector.x() + distVector.y()*distVector.y() );
 
-        double angle = atan2( distVector.y(), distVector.x() );
+        qreal angle = atan2( distVector.y(), distVector.x() );
         if( angle < 0.0 )
             angle += 2.0*M_PI;
-        double diffAngle = angle-m_angles[handleId];
-        double radianStep = M_PI / static_cast<double>(m_cornerCount);
+        qreal diffAngle = angle-m_angles[handleId];
+        qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
         if( handleId == tip )
         {
             m_angles[tip] += diffAngle-radianStep;
@@ -168,7 +168,7 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
 void KoStarShape::updatePath( const QSizeF &size )
 {
     Q_UNUSED(size);
-    double radianStep = M_PI / static_cast<double>(m_cornerCount);
+    qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 
     uint index = 0;
     for( uint i = 0; i < 2*m_cornerCount; ++i )
@@ -176,7 +176,7 @@ void KoStarShape::updatePath( const QSizeF &size )
         uint cornerType = i % 2;
         if( cornerType == base && m_convex )
             continue;
-        double radian = static_cast<double>( (i+1)*radianStep ) + m_angles[cornerType];
+        qreal radian = static_cast<qreal>( (i+1)*radianStep ) + m_angles[cornerType];
         QPointF cornerPoint = QPointF( m_zoomX * m_radius[cornerType] * cos( radian ), m_zoomY * m_radius[cornerType] * sin( radian ) );
 
         m_points[index]->setPoint( m_center + cornerPoint );
@@ -205,7 +205,7 @@ void KoStarShape::updatePath( const QSizeF &size )
 void KoStarShape::createPath()
 {
     clear();
-    double radianStep = M_PI / static_cast<double>(m_cornerCount);
+    qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 
     QPointF center = QPointF( m_radius[tip], m_radius[tip] );
 
@@ -216,7 +216,7 @@ void KoStarShape::createPath()
         uint cornerType = i % 2;
         if( cornerType == base && m_convex )
             continue;
-        double radian = static_cast<double>( (i+1)*radianStep )  + m_angles[cornerType];
+        qreal radian = static_cast<qreal>( (i+1)*radianStep )  + m_angles[cornerType];
         cornerPoint = QPointF( m_radius[cornerType] * cos( radian ), m_radius[cornerType] * sin( radian ) );
         lineTo( center + cornerPoint );
     }
@@ -254,7 +254,7 @@ QPointF KoStarShape::computeCenter() const
         else
             center += m_points[2*i]->point();
     }
-    return center / static_cast<double>( m_cornerCount );
+    return center / static_cast<qreal>( m_cornerCount );
 }
 
 bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
@@ -310,7 +310,7 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
             // sharpness is radius of ellipse on which inner polygon points are located
             // 0% means all polygon points are on a single ellipse
             // 100% means inner points are located at polygon center point
-            double percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
+            qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
             context.xmlWriter().addAttribute( "draw:sharpness", QString("%1%" ).arg( percent ) );
         }
         saveOdfCommonChildElements( context );

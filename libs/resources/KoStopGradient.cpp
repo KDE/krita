@@ -124,14 +124,14 @@ QGradient* KoStopGradient::toQGradient() const
         case QGradient::RadialGradient:
         {
             QPointF diff = m_stop-m_start;
-            double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+            qreal radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
             gradient = new QRadialGradient( m_start, radius, m_focalPoint );
             break;
         }
         case QGradient::ConicalGradient:
         {
             QPointF diff = m_stop-m_start;
-            double angle = atan2( m_start.y(), m_start.x() ) * 180.0 / M_PI;
+            qreal angle = atan2( m_start.y(), m_start.x() ) * 180.0 / M_PI;
             if( angle < 0.0 )
                 angle += 360.0;
             gradient = new QConicalGradient( m_start, angle );
@@ -148,7 +148,7 @@ QGradient* KoStopGradient::toQGradient() const
     return gradient;
 }
 
-void KoStopGradient::colorAt(KoColor& dst, double t) const
+void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 {
     QList<KoGradientStop>::const_iterator iter = m_stops.begin();
     while( (iter != m_stops.end() || (iter+1) != m_stops.end()) && ( t > (iter+1)->first + DBL_EPSILON))
@@ -167,8 +167,8 @@ void KoStopGradient::colorAt(KoColor& dst, double t) const
         colors[0] = leftStop.second.data();
         colors[1] = rightStop.second.data();
 
-        double localT;
-        double stopDistance = rightStop.first - leftStop.first;
+        qreal localT;
+        qreal stopDistance = rightStop.first - leftStop.first;
         if (stopDistance < DBL_EPSILON) {
             localT = 0.5;
         }
@@ -215,7 +215,7 @@ KoStopGradient * KoStopGradient::fromQGradient( QGradient * gradient )
         case QGradient::ConicalGradient:
         {
             QConicalGradient * g = static_cast<QConicalGradient*>( gradient );
-            double radian = g->angle() * M_PI / 180.0;
+            qreal radian = g->angle() * M_PI / 180.0;
             newGradient->m_start = g->center();
             newGradient->m_stop = QPointF( 100.0 * cos( radian ), 100.0 * sin( radian ) ); 
             newGradient->m_focalPoint = g->center();
@@ -304,7 +304,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
 
     m_stops.clear();
 
-    double color1, color2, color3, color4, opacity;
+    qreal color1, color2, color3, color4, opacity;
     KoColor color;
     // load stops
     QDomNodeList list = element.childNodes();
@@ -385,7 +385,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                         color.setColor(data, stopColorSpace);
                 }
 
-                double offset = colorstop.attribute("ramppoint", "0.0").toFloat();
+                qreal offset = colorstop.attribute("ramppoint", "0.0").toFloat();
 //              midpoint = colorstop.attribute("midpoint", "0.5").toFloat();
 
                 m_stops.append(KoGradientStop(offset, color));
@@ -415,28 +415,28 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
             QString s;
 
             s = element.attribute( "x1", "0%" );
-            double xOrigin;
+            qreal xOrigin;
             if( s.endsWith( '%' ) )
                 xOrigin = s.remove( '%' ).toDouble();
             else
                 xOrigin = s.toDouble() * 100.0;
 
             s = element.attribute( "y1", "0%" );
-            double yOrigin;
+            qreal yOrigin;
             if( s.endsWith( '%' ) )
                 yOrigin = s.remove( '%' ).toDouble();
             else
                 yOrigin = s.toDouble() * 100.0;
 
             s = element.attribute( "x2", "100%" );
-            double xVector;
+            qreal xVector;
             if( s.endsWith( '%' ) )
                 xVector = s.remove( '%' ).toDouble();
             else
                 xVector = s.toDouble() * 100.0;
 
             s = element.attribute( "y2", "0%" );
-            double yVector;
+            qreal yVector;
             if( s.endsWith( '%' ) )
                 yVector = s.remove( '%' ).toDouble();
             else
@@ -456,21 +456,21 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
             QString s;
 
             s = element.attribute( "cx", "50%" );
-            double xOrigin;
+            qreal xOrigin;
             if( s.endsWith( '%' ) )
                 xOrigin = s.remove( '%' ).toDouble();
             else
                 xOrigin = s.toDouble() * 100.0;
 
             s = element.attribute( "cy", "50%" );
-            double yOrigin;
+            qreal yOrigin;
             if( s.endsWith( '%' ) )
                 yOrigin = s.remove( '%' ).toDouble();
             else
                 yOrigin = s.toDouble() * 100.0;
 
             s = element.attribute( "cx", "50%" );
-            double xVector;
+            qreal xVector;
             if( s.endsWith( '%' ) )
                 xVector = s.remove( '%' ).toDouble();
             else
@@ -483,21 +483,21 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
                 xVector += s.toDouble() * 100.0;
 
             s = element.attribute( "cy", "50%" );
-            double yVector;
+            qreal yVector;
             if( s.endsWith( '%' ) )
                 yVector = s.remove( '%' ).toDouble();
             else
                 yVector = s.toDouble() * 100.0;
 
             s = element.attribute( "fx", "50%" );
-            double xFocal;
+            qreal xFocal;
             if( s.endsWith( '%' ) )
                 xFocal = s.remove( '%' ).toDouble();
             else
                 xFocal = s.toDouble() * 100.0;
 
             s = element.attribute( "fy", "50%" );
-            double yFocal;
+            qreal yFocal;
             if( s.endsWith( '%' ) )
                 yFocal = s.remove( '%' ).toDouble();
             else
@@ -530,7 +530,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
         QDomElement colorstop = n.toElement();
         if( colorstop.tagName() == "stop" )
         {
-            double opacity = 0.0;
+            qreal opacity = 0.0;
             QColor c;
             float off;
             QString temp = colorstop.attribute( "offset" );
@@ -591,19 +591,19 @@ void KoStopGradient::parseSvgColor(QColor &color, const QString &s)
         if( r.contains( "%" ) )
         {
             r = r.left( r.length() - 1 );
-            r = QString::number( int( ( double( 255 * r.toDouble() ) / 100.0 ) ) );
+            r = QString::number( int( ( qreal( 255 * r.toDouble() ) / 100.0 ) ) );
         }
 
         if( g.contains( "%" ) )
         {
             g = g.left( g.length() - 1 );
-            g = QString::number( int( ( double( 255 * g.toDouble() ) / 100.0 ) ) );
+            g = QString::number( int( ( qreal( 255 * g.toDouble() ) / 100.0 ) ) );
         }
 
         if( b.contains( "%" ) )
         {
             b = b.left( b.length() - 1 );
-            b = QString::number( int( ( double( 255 * b.toDouble() ) / 100.0 ) ) );
+            b = QString::number( int( ( qreal( 255 * b.toDouble() ) / 100.0 ) ) );
         }
 
         color = QColor( r.toInt(), g.toInt(), b.toInt() );

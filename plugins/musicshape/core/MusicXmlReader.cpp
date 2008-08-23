@@ -56,7 +56,7 @@ static Duration parseDuration(const QString& type, int length, int div)
     else if (type == "breve")   return BreveNote;
     
     // else try to parse it from length
-    double fact = 26880.0 / div;
+    qreal fact = 26880.0 / div;
     int ticks = (int) round(length * fact);
     // TODO: take number of dots into account
     if (ticks <= Note128Length)       return HundredTwentyEighthNote;

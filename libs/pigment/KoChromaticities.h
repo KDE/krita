@@ -21,9 +21,9 @@
 #define _KO_CHROMATICITIES_H_
 
 struct KoCIExyY {
-    double x;
-    double y;
-    double Y;
+    qreal x;
+    qreal y;
+    qreal Y;
 };
 struct KoCIExyYZ2Rgb {
     KoCIExyY Red;

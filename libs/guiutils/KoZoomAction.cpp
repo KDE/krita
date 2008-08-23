@@ -50,10 +50,10 @@ class KoZoomAction::Private
 public:
     KoZoomMode::Modes zoomModes;
     QSlider *slider;
-    double sliderLookup[33];
+    qreal sliderLookup[33];
     KoZoomInput* input;
 
-    double effectiveZoom;
+    qreal effectiveZoom;
     bool doSpecialAspectMode;
 };
 
@@ -84,7 +84,7 @@ KoZoomAction::~KoZoomAction()
     delete d;
 }
 
-void KoZoomAction::setZoom( double zoom )
+void KoZoomAction::setZoom( qreal zoom )
 {
     setEffectiveZoom(zoom);
     regenerateItems( zoom, true );
@@ -121,10 +121,10 @@ void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )
     regenerateItems( d->effectiveZoom );
 }
 
-void KoZoomAction::regenerateItems(const double zoom, bool asCurrent)
+void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 {
     // where we'll store sorted new zoom values
-    QList<double> zoomLevels;
+    QList<qreal> zoomLevels;
     zoomLevels << 33;
     zoomLevels << 50;
     zoomLevels << 75;
@@ -154,7 +154,7 @@ void KoZoomAction::regenerateItems(const double zoom, bool asCurrent)
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
     }
 
-    foreach(double value, zoomLevels) {
+    foreach(qreal value, zoomLevels) {
         if(value>10.0)
             values << i18n("%1%", KGlobal::locale()->formatNumber(value, 0));
         else
@@ -198,7 +198,7 @@ void KoZoomAction::zoomIn()
         i++;
     // else i is the next zoom level already
 
-    double zoom = d->sliderLookup[i];
+    qreal zoom = d->sliderLookup[i];
     setZoom(zoom);
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
@@ -212,7 +212,7 @@ void KoZoomAction::zoomOut()
     if(i>0)
         i--;
 
-    double zoom = d->sliderLookup[i];
+    qreal zoom = d->sliderLookup[i];
     setZoom(zoom);
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
@@ -264,7 +264,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     return group;
 }
 
-void KoZoomAction::setEffectiveZoom(double zoom)
+void KoZoomAction::setEffectiveZoom(qreal zoom)
 {
     if(d->effectiveZoom == zoom)
         return;

@@ -74,9 +74,9 @@ public:
     }
 
     /// list of positions of horizontal guide lines
-    QList<double> horzGuideLines;
+    QList<qreal> horzGuideLines;
     /// list of positions of vertical guide lines
-    QList<double> vertGuideLines;
+    QList<qreal> vertGuideLines;
     bool showGuideLines;
     QColor guidesColor;
 };
@@ -91,23 +91,23 @@ KoGuidesData::~KoGuidesData()
     delete d;
 }
 
-void KoGuidesData::setHorizontalGuideLines( const QList<double> &lines )
+void KoGuidesData::setHorizontalGuideLines( const QList<qreal> &lines )
 {
     d->horzGuideLines = lines;
 }
 
-void KoGuidesData::setVerticalGuideLines( const QList<double> &lines )
+void KoGuidesData::setVerticalGuideLines( const QList<qreal> &lines )
 {
     d->vertGuideLines = lines;
 }
 
-void KoGuidesData::setGuideLines( const QList<double> &horizontalLines, const QList<double> &verticalLines)
+void KoGuidesData::setGuideLines( const QList<qreal> &horizontalLines, const QList<qreal> &verticalLines)
 {
     d->horzGuideLines = horizontalLines;
     d->vertGuideLines = verticalLines;
 }
 
-void KoGuidesData::addGuideLine( Qt::Orientation o, double pos )
+void KoGuidesData::addGuideLine( Qt::Orientation o, qreal pos )
 {
     if ( o == Qt::Horizontal )
     {
@@ -129,12 +129,12 @@ void KoGuidesData::setShowGuideLines( bool show )
   d->showGuideLines=show;
 }
 
-QList<double> KoGuidesData::horizontalGuideLines() const
+QList<qreal> KoGuidesData::horizontalGuideLines() const
 {
     return d->horzGuideLines;
 }
 
-QList<double> KoGuidesData::verticalGuideLines() const
+QList<qreal> KoGuidesData::verticalGuideLines() const
 {
     return d->vertGuideLines;
 }
@@ -145,14 +145,14 @@ void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &convert
         return;
 
     painter.setPen( d->guidesColor );
-    foreach( double guide, d->horzGuideLines )
+    foreach( qreal guide, d->horzGuideLines )
     {
         if( guide < area.top() || guide > area.bottom() )
             continue;
         painter.drawLine( converter.documentToView( QPointF( area.left(), guide ) ),
                           converter.documentToView( QPointF( area.right(), guide ) ) );
     }
-    foreach( double guide, d->vertGuideLines )
+    foreach( qreal guide, d->vertGuideLines )
     {
         if( guide < area.left() || guide > area.right() )
             continue;
@@ -204,12 +204,12 @@ void KoGuidesData::saveOdfSettings( KoXmlWriter &settingsWriter )
 
     QString lineStr;
 
-    foreach( double h, d->horzGuideLines )
+    foreach( qreal h, d->horzGuideLines )
     {
         int tmpY = static_cast<int>( POINT_TO_MM( h * 100.0 ) );
         lineStr += 'H' + QString::number( tmpY );
     }
-    foreach( double v, d->vertGuideLines )
+    foreach( qreal v, d->vertGuideLines )
     {
         int tmpX = static_cast<int>( POINT_TO_MM( v * 100.0 ) );
         lineStr += 'V' + QString::number( tmpX );

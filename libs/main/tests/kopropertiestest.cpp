@@ -52,7 +52,7 @@ void KoPropertiesTest::testRoundTrip()
     props.setProperty( "cdata", "<![CDATA[blabla]]>" );
     props.setProperty( "int", 10 );
     props.setProperty( "bool",  false );
-    props.setProperty( "double",  1.38 );
+    props.setProperty( "qreal",  1.38 );
 
     QString stored = props.store();
     KoProperties restored;
@@ -64,7 +64,7 @@ void KoPropertiesTest::testRoundTrip()
     QVERIFY( restored.stringProperty( "cdata" ) == "<![CDATA[blabla]]>" );
     QVERIFY( restored.intProperty( "int" ) == 10 );
     QVERIFY( restored.boolProperty( "bool") == false);
-    QVERIFY( restored.doubleProperty( "double" ) == 1.38 );
+    QVERIFY( restored.doubleProperty( "qreal" ) == 1.38 );
 
 }
 
@@ -85,10 +85,10 @@ void KoPropertiesTest::testProperties()
     props.setProperty( "bool",  false );
     QVERIFY( props.boolProperty( "bool", true ) == false );
 
-    props.setProperty( "double",  1.0 );
-    QVERIFY( props.doubleProperty( "double", 2.0 ) == 1.0 );
-    props.setProperty( "double",  2.0 );
-    QVERIFY( props.doubleProperty( "double", 1.0 ) == 2.0 );
+    props.setProperty( "qreal",  1.0 );
+    QVERIFY( props.doubleProperty( "qreal", 2.0 ) == 1.0 );
+    props.setProperty( "qreal",  2.0 );
+    QVERIFY( props.doubleProperty( "qreal", 1.0 ) == 2.0 );
 
     props.setProperty( "int",  1 );
     QVERIFY( props.intProperty( "int", 2 ) == 1 );

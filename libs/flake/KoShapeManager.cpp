@@ -188,8 +188,8 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
 
 #ifdef KOFFICE_RTREE_DEBUG
     // paint tree
-    double zx = 0;
-    double zy = 0;
+    qreal zx = 0;
+    qreal zy = 0;
     converter.zoom( &zx, &zy );
     painter.save();
     painter.scale( zx, zy );

@@ -78,7 +78,7 @@ void TestDocumentLayout::testMultiFrameLineBreaking() {
 
     QTextLine line = blockLayout->lineAt(3);
     QVERIFY(line.y() > shape1->size().height()); // it has to be outside of shape1
-    const double topOfFrame2 = line.y();
+    const qreal topOfFrame2 = line.y();
     line = blockLayout->lineAt(4);
     //qDebug() << line.y() - topOfFrame2 - 14.4;
     QVERIFY(qAbs( line.y() - topOfFrame2 - 14.4) < 0.125);
@@ -95,10 +95,10 @@ void TestDocumentLayout::testBasicLineSpacing() {
     cursor.mergeCharFormat(charFormat);
     layout->layout();
 
-    const double fontHeight12 = 12;
-    double lineSpacing12 = fontHeight12 * 1.2; // 120% is the normal lineSpacing.
-    const double fontHeight18 = 18;
-    double lineSpacing18 = fontHeight18 * 1.2; // 120% is the normal lineSpacing.
+    const qreal fontHeight12 = 12;
+    qreal lineSpacing12 = fontHeight12 * 1.2; // 120% is the normal lineSpacing.
+    const qreal fontHeight18 = 18;
+    qreal lineSpacing18 = fontHeight18 * 1.2; // 120% is the normal lineSpacing.
 
     // QCOMPARE(blockLayout->lineCount(), 15);
     QCOMPARE(blockLayout->lineForTextPosition(1).width(), 200.0);
@@ -257,7 +257,7 @@ void TestDocumentLayout::testAdvancedLineSpacing() {
     //qDebug() << blockLayout->lineAt(0).y();
     QCOMPARE(blockLayout->lineAt(0).y(), 92.0 + 12 + 8);
 
-    double height = blockLayout->lineAt(0).height();
+    qreal height = blockLayout->lineAt(0).height();
     block = block.next(); // line 7
     QVERIFY(block.isValid());
     blockLayout = block.layout();
@@ -304,8 +304,8 @@ void TestDocumentLayout::testMargins() {
 
     QTextLine lastLineOfParag1 =  blockLayout->lineAt(blockLayout->lineCount()-1);
     QTextLine firstLineOfParag2 =  layout->lineAt(0);
-    const double FONTSIZE = 12.0;
-    const double BottomParag1 = lastLineOfParag1.y() + (FONTSIZE * 1.2);
+    const qreal FONTSIZE = 12.0;
+    const qreal BottomParag1 = lastLineOfParag1.y() + (FONTSIZE * 1.2);
     QVERIFY(qAbs(firstLineOfParag2.y() - BottomParag1  - 12.0) < ROUNDING);
 }
 
@@ -661,7 +661,7 @@ void TestDocumentLayout::testParagraphBorders() {
     QCOMPARE(borderOutline.left(), 0.);
     QCOMPARE(borderOutline.right(), 200.);
 
-    // double borders.  Specify an additional width for each side.
+    // qreal borders.  Specify an additional width for each side.
     bf.setProperty(KoParagraphStyle::LeftBorderStyle, KoParagraphStyle::BorderDouble);
     bf.setProperty(KoParagraphStyle::TopBorderStyle, KoParagraphStyle::BorderDouble);
     bf.setProperty(KoParagraphStyle::BottomBorderStyle, KoParagraphStyle::BorderDouble);
@@ -683,7 +683,7 @@ void TestDocumentLayout::testParagraphBorders() {
     //qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - ( 9.0 + 14.4 + 10 + (5.0 + 2.0) * 2)) < ROUNDING);
 
-    // and last, make the 2 double border have a blank space in the middle.
+    // and last, make the 2 qreal border have a blank space in the middle.
     bf.setProperty(KoParagraphStyle::LeftBorderSpacing, 3.0);
     bf.setProperty(KoParagraphStyle::RightBorderSpacing, 3.0);
     bf.setProperty(KoParagraphStyle::BottomBorderSpacing, 3.0);
@@ -767,7 +767,7 @@ void TestDocumentLayout::testEmptyParag() {
     QTextLayout *lay = block.layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
-    const double y = lay->lineAt(0).position().y();
+    const qreal y = lay->lineAt(0).position().y();
 
     block = block.next();
     lay = block.layout();
@@ -806,7 +806,7 @@ void TestDocumentLayout::testDropCaps() {
     QEXPECT_FAIL("", "Drop caps not implemented yet", Abort);
     QCOMPARE(line.textLength(), 1);
     QCOMPARE(line.position(), QPointF(0, 0));
-    double w = line.width();
+    qreal w = line.width();
 
     line = blockLayout->lineAt(1);
     QVERIFY(line.textLength() > 2);

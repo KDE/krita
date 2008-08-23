@@ -70,17 +70,17 @@ void KoPagePreview::setPageLayout( const KoPageLayout &layout )
 void KoPagePreview::updateZoomedSize()
 {
     // resolution[XY] is in pixel per pt
-    double resolutionX = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiX()) );
-    double resolutionY = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiY()) );
+    qreal resolutionX = POINT_TO_INCH( static_cast<qreal>(KoGlobal::dpiX()) );
+    qreal resolutionY = POINT_TO_INCH( static_cast<qreal>(KoGlobal::dpiY()) );
 
     m_pageWidth = m_layout.ptWidth * resolutionX;
     m_pageHeight = m_layout.ptHeight * resolutionY;
 
     QRect cr = contentsRect();
 
-    double zh = (cr.height()-30) / m_pageHeight;
-    double zw = (cr.width()-30) / m_pageWidth;
-    double z = qMin( zw, zh );
+    qreal zh = (cr.height()-30) / m_pageHeight;
+    qreal zw = (cr.width()-30) / m_pageWidth;
+    qreal z = qMin( zw, zh );
 
     m_pageWidth *= z;
     m_pageHeight *= z;
@@ -105,9 +105,9 @@ void KoPagePreview::paintEvent( QPaintEvent * event )
     QGroupBox::paintEvent( event );
     QPainter painter( this );
 
-    double cw = m_textFrameWidth;
+    qreal cw = m_textFrameWidth;
     if(columns!=1)
-        cw/=static_cast<double>(columns);
+        cw/=static_cast<qreal>(columns);
 
     painter.setBrush( Qt::white );
     painter.setPen( QPen( Qt::black ) );

@@ -37,7 +37,7 @@ KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoColumns& colum
     m_spacing = new KoUnitDoubleSpinBox( columnSpacingPane );
     m_spacing->setValue(  m_columns.ptColumnSpacing );
     m_spacing->setUnit( unit );
-    double dStep = KoUnit::fromUserValue( 0.2, unit );
+    qreal dStep = KoUnit::fromUserValue( 0.2, unit );
     m_spacing->setMinMaxStep( 0, layout.ptWidth/2, dStep );
     lay->addWidget(m_spacing);
     labelSpacing->setBuddy( m_spacing );
@@ -45,7 +45,7 @@ KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoColumns& colum
     m_preview->setPageColumns( m_columns );
 
     connect( nColumns, SIGNAL( valueChanged( int ) ), this, SLOT( nColChanged( int ) ) );
-    connect( m_spacing, SIGNAL( valueChangedPt(double) ), this, SLOT( nSpaceChanged( double ) ) );
+    connect( m_spacing, SIGNAL( valueChangedPt(qreal) ), this, SLOT( nSpaceChanged( qreal ) ) );
 }
 
 void KoPageLayoutColumns::setEnableColumns(bool on) {
@@ -60,7 +60,7 @@ void KoPageLayoutColumns::nColChanged( int columns ) {
     emit propertyChange(m_columns);
 }
 
-void KoPageLayoutColumns::nSpaceChanged( double spacing ) {
+void KoPageLayoutColumns::nSpaceChanged( qreal spacing ) {
     m_columns.ptColumnSpacing = spacing;
     emit propertyChange(m_columns);
 }

@@ -69,7 +69,7 @@ public:
 
     QTextDocument *document;
     bool ownsDocument, dirty;
-    double offset;
+    qreal offset;
     int position, endPosition, pageNumber;
     KoInsets margins;
     KoText::Direction direction;
@@ -106,11 +106,11 @@ QTextDocument *KoTextShapeData::document() {
     return d->document;
 }
 
-double KoTextShapeData::documentOffset() const {
+qreal KoTextShapeData::documentOffset() const {
     return d->offset;
 }
 
-void KoTextShapeData::setDocumentOffset(double offset) {
+void KoTextShapeData::setDocumentOffset(qreal offset) {
     d->offset = offset;
 }
 

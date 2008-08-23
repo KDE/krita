@@ -39,7 +39,7 @@ class PIGMENTCMS_EXPORT KoCtlColorSpace : public KoColorSpace {
         virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const;
         virtual KoColorTransformation *createDesaturateAdjustment() const;
         virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const* transferValues) const;
-        virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, double compensation) const;
+        virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const;
         virtual KoColorTransformation *createInvertTransformation() const;
         virtual quint8 difference(const quint8* src1, const quint8* src2) const;
         virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;

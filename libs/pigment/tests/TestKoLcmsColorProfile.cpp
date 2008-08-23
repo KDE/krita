@@ -5,9 +5,9 @@
 
 #include <kdebug.h>
 
-double testRounding(double value)
+qreal testRounding(qreal value)
 {
-    double factor;
+    qreal factor;
     int temp;
     const int numPlaces = 3;
 
@@ -62,7 +62,7 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
     chromaticities.whitePoint.y = 0.35850f;
     chromaticities.whitePoint.Y = 1.0f;
 
-    double gamma = 1.75f;
+    qreal gamma = 1.75f;
 
     KoLcmsRGBColorProfile *profile = new KoLcmsRGBColorProfile(chromaticities, gamma);
     QVERIFY(profile != 0);

@@ -38,12 +38,12 @@ public:
 
   QRect m_geometry;
 
-  double m_rotation;
-  double m_shearX;
-  double m_shearY;
+  qreal m_rotation;
+  qreal m_shearX;
+  qreal m_shearY;
   QPoint m_rotationPoint;
-  double m_scaleX;
-  double m_scaleY;
+  qreal m_scaleX;
+  qreal m_scaleY;
   QMatrix m_matrix;
   bool m_lock;
   QPolygon m_old;
@@ -127,7 +127,7 @@ void KoChild::setClipRegion( QPainter &painter, bool combine )
     painter.setClipRegion( region( painter.matrix() ) );
 }
 
-void KoChild::setScaling( double x, double y )
+void KoChild::setScaling( qreal x, qreal y )
 {
   if ( !d->m_lock )
     d->m_old = framePointArray();
@@ -145,17 +145,17 @@ void KoChild::setScaling( double x, double y )
     emit changed( this );
 }
 
-double KoChild::xScaling() const
+qreal KoChild::xScaling() const
 {
   return d->m_scaleX;
 }
 
-double KoChild::yScaling() const
+qreal KoChild::yScaling() const
 {
   return d->m_scaleY;
 }
 
-void KoChild::setShearing( double x, double y )
+void KoChild::setShearing( qreal x, qreal y )
 {
   if ( !d->m_lock )
     d->m_old = framePointArray();
@@ -169,17 +169,17 @@ void KoChild::setShearing( double x, double y )
     emit changed( this );
 }
 
-double KoChild::xShearing() const
+qreal KoChild::xShearing() const
 {
   return d->m_shearX;
 }
 
-double KoChild::yShearing() const
+qreal KoChild::yShearing() const
 {
   return d->m_shearY;
 }
 
-void KoChild::setRotation( double rot )
+void KoChild::setRotation( qreal rot )
 {
   if ( !d->m_lock )
     d->m_old = framePointArray();
@@ -191,7 +191,7 @@ void KoChild::setRotation( double rot )
     emit changed( this );
 }
 
-double KoChild::rotation() const
+qreal KoChild::rotation() const
 {
   return d->m_rotation;
 }

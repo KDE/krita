@@ -122,21 +122,21 @@ public:
      * This overrides the method in the VoiceElement class to return the correct y position based on pitch
      * of the notes this chord contains.
      */
-    virtual double y() const;
+    virtual qreal y() const;
     
     /**
      * This overrides the method in the VoiceElement class to return the correct height based on the pitch of
      * the notes in this chord.
      */
-    virtual double height() const;
-    virtual double width() const;
+    virtual qreal height() const;
+    virtual qreal width() const;
     
-    double stemX() const;
-    double centerX() const;
-    double topNoteY() const;
-    double bottomNoteY() const;
-    double stemEndY(bool interpolateBeams = true) const;
-    double beamDirection() const;
+    qreal stemX() const;
+    qreal centerX() const;
+    qreal topNoteY() const;
+    qreal bottomNoteY() const;
+    qreal stemEndY(bool interpolateBeams = true) const;
+    qreal beamDirection() const;
 
     StemDirection stemDirection() const;
     StemDirection desiredStemDirection() const;
@@ -145,9 +145,9 @@ public:
     /**
      * Length of the stem as it extends beyond the top-most or bottom-most note, measured in number of lines.
      */
-    double stemLength() const;
-    void setStemLength(double stemLength);
-    double desiredStemLength() const;
+    qreal stemLength() const;
+    void setStemLength(qreal stemLength);
+    qreal desiredStemLength() const;
     
     int beamCount() const;
     const Chord* beamStart(int index) const;

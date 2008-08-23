@@ -83,8 +83,8 @@ void KoEnhancedPathShape::setSize( const QSizeF &newSize )
 
     KoParameterShape::setSize( newSize );
 
-    double scaleX = newSize.width() / oldSize.width();
-    double scaleY = newSize.height() / oldSize.height();
+    qreal scaleX = newSize.width() / oldSize.width();
+    qreal scaleY = newSize.height() / oldSize.height();
     m_viewBoxOffset.rx() *= scaleX;
     m_viewBoxOffset.ry() *= scaleY;
     m_viewMatrix.scale( scaleX, scaleY );
@@ -116,14 +116,14 @@ void KoEnhancedPathShape::evaluateHandles()
     }
 }
 
-double KoEnhancedPathShape::evaluateReference( const QString &reference )
+qreal KoEnhancedPathShape::evaluateReference( const QString &reference )
 {
     if( reference.isEmpty() )
         return 0.0;
 
     QChar c = reference[0];
 
-    double res = 0.0;
+    qreal res = 0.0;
 
     switch( c.toAscii() )
     {
@@ -158,7 +158,7 @@ double KoEnhancedPathShape::evaluateReference( const QString &reference )
     return res;
 }
 
-void KoEnhancedPathShape::modifyReference( const QString &reference, double value )
+void KoEnhancedPathShape::modifyReference( const QString &reference, qreal value )
 {
     if( reference.isEmpty() )
         return;
@@ -192,7 +192,7 @@ KoEnhancedPathParameter * KoEnhancedPathShape::parameter( const QString & text )
             if( c.isDigit() )
             {
                 bool success = false;
-                double constant = text.toDouble( &success );
+                qreal constant = text.toDouble( &success );
                 if( success )
                     parameter = new KoEnhancedPathConstantParameter( constant, this );
             }
@@ -322,12 +322,12 @@ QPointF KoEnhancedPathShape::viewboxToShape( const QPointF & point ) const
     return m_viewMatrix.map( point ) + m_viewBoxOffset;
 }
 
-double KoEnhancedPathShape::shapeToViewbox( double value ) const
+qreal KoEnhancedPathShape::shapeToViewbox( qreal value ) const
 {
     return m_viewMatrix.inverted().map( QPointF( value, value ) ).x();
 }
 
-double KoEnhancedPathShape::viewboxToShape( double value ) const
+qreal KoEnhancedPathShape::viewboxToShape( qreal value ) const
 {
     return m_viewMatrix.map( QPointF( value, value ) ).x();
 }
@@ -343,7 +343,7 @@ void KoEnhancedPathShape::saveOdf( KoShapeSavingContext & context ) const
         context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg( m_viewBox.x() ).arg( m_viewBox.y() ).arg( m_viewBox.width() ).arg( m_viewBox.height() ) );
 
         QString modifiers;
-        foreach( double modifier, m_modifiers )
+        foreach( qreal modifier, m_modifiers )
             modifiers += QString::number( modifier ) + ' ';
         context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed() );
 

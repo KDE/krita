@@ -479,13 +479,13 @@ static QScriptValue importExtension(QScriptContext *context, QScriptEngine *engi
 QScriptValue KoTextTabToQScriptValue(QScriptEngine *engine, const KoTextTab &tab)
 {
     QScriptValue obj = engine->newObject();
-    obj.setProperty("position", QScriptValue(engine, tab.position)); // double
+    obj.setProperty("position", QScriptValue(engine, tab.position)); // qreal
     obj.setProperty("type", QScriptValue(engine, tab.type)); // enum
     obj.setProperty("delimiter", QScriptValue(engine, tab.delimiter)); // QChar
     obj.setProperty("leaderType", QScriptValue(engine, tab.leaderType)); // enum
     obj.setProperty("leaderStyle", QScriptValue(engine, tab.leaderStyle)); // enum
     obj.setProperty("leaderWeight", QScriptValue(engine, tab.leaderWeight)); // enum
-    obj.setProperty("leaderWidth", QScriptValue(engine, tab.leaderWidth)); // double
+    obj.setProperty("leaderWidth", QScriptValue(engine, tab.leaderWidth)); // qreal
     if (tab.leaderColor.isValid())
         obj.setProperty("leaderColor", QScriptValue(engine, tab.leaderColor.name())); // QColor
     else

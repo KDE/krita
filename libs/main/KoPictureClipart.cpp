@@ -68,7 +68,7 @@ void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
 
     painter.translate(x,y); // Translating must be done before scaling!
     if ( br.width() && br.height() )
-        painter.scale(double(width)/double(br.width()),double(height)/double(br.height()));
+        painter.scale(qreal(width)/qreal(br.width()),qreal(height)/qreal(br.height()));
     else
         kWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height();
     painter.drawPicture(0,0,clipart);
@@ -132,7 +132,7 @@ QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/
 
     QRect br = m_clipart.boundingRect();
     if ( br.width() && br.height() )
-        p.scale( (double)pixmap.width() / (double)br.width(), (double)pixmap.height() / (double)br.height() );
+        p.scale( (qreal)pixmap.width() / (qreal)br.width(), (qreal)pixmap.height() / (qreal)br.height() );
     p.drawPicture( 0, 0, m_clipart );
     p.end();
     return pixmap;

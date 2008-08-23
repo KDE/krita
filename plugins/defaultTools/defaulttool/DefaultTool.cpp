@@ -247,7 +247,7 @@ void DefaultTool::setupActions()
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
 }
 
-double DefaultTool::rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation )
+qreal DefaultTool::rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation )
 {
     QPointF selectionCenter = koSelection()->absolutePosition();
     QPointF direction;
@@ -323,7 +323,7 @@ double DefaultTool::rotationOfHandle( KoFlake::SelectionHandle handle, bool useE
             break;
     }
 
-    double rotation = atan2( direction.y(), direction.x() ) * 180.0 / M_PI;
+    qreal rotation = atan2( direction.y(), direction.x() ) * 180.0 / M_PI;
 
     switch( handle )
     {
@@ -572,10 +572,10 @@ void DefaultTool::selectGuideAtPosition( const QPointF &position )
     KoGuidesData * guidesData = m_canvas->guidesData();
     if( guidesData && guidesData->showGuideLines() ) {
         qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
-        double minDistance = m_canvas->viewConverter()->viewToDocumentX( handleRadius );
+        qreal minDistance = m_canvas->viewConverter()->viewToDocumentX( handleRadius );
         uint i = 0;
-        foreach( double guidePos, guidesData->horizontalGuideLines() ) {
-            double distance = qAbs( guidePos - position.y() );
+        foreach( qreal guidePos, guidesData->horizontalGuideLines() ) {
+            qreal distance = qAbs( guidePos - position.y() );
             if( distance < minDistance ) {
                 orientation = Qt::Horizontal;
                 index = i;
@@ -584,9 +584,9 @@ void DefaultTool::selectGuideAtPosition( const QPointF &position )
             i++;
         }
         i = 0;
-        foreach( double guidePos, guidesData->verticalGuideLines() )
+        foreach( qreal guidePos, guidesData->verticalGuideLines() )
         {
-            double distance = qAbs( guidePos - position.x() );
+            qreal distance = qAbs( guidePos - position.x() );
             if( distance < minDistance ) {
                 orientation = Qt::Vertical;
                 index = i;
@@ -645,7 +645,7 @@ void DefaultTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
 
 bool DefaultTool::moveSelection( int direction, Qt::KeyboardModifiers modifiers )
 {
-    double x=0.0, y=0.0;
+    qreal x=0.0, y=0.0;
     if(direction == Qt::Key_Left)
         x=-0.5;
     else if(direction == Qt::Key_Right)

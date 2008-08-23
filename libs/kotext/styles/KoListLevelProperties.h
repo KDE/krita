@@ -89,9 +89,9 @@ public:
     /// return how the list label should be aligned in the width this list reserves for the listitems
     Qt::Alignment alignment() const;
     /// set the minimum width (in pt) of the list label for all items in this list
-    void setMinimumWidth(double width);
+    void setMinimumWidth(qreal width);
     /// return the minimum width (in pt) of the list label for all items in this list
-    double minimumWidth();
+    qreal minimumWidth();
     /// set the listId used by all list-styles that together make 1 user defined list in an ODF file.
     void setListId(const QString &listId);
     /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.
@@ -137,7 +137,7 @@ private:
     void setProperty(int key, const QVariant &value);
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
-    double propertyDouble(int key) const;
+    qreal propertyDouble(int key) const;
     QString propertyString(int key) const;
 
     class Private;

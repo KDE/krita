@@ -165,7 +165,7 @@ Thesaurus::Thesaurus()
     connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
             this, SLOT(slotSetReplaceTermHypo(QListWidgetItem *)));
 
-    // double click -- set the double clicked item as the new search term
+    // qreal click -- set the qreal clicked item as the new search term
 
     connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
             this, SLOT(slotFindTermFromList(QListWidgetItem *)));
@@ -378,7 +378,7 @@ void Thesaurus::slotFindTerm()
     slotFindTerm(m_edit->currentText());
 }
 
-// Triggered when a list item is double-clicked.
+// Triggered when a list item is qreal-clicked.
 void Thesaurus::slotFindTermFromList(QListWidgetItem *item)
 {
     slotFindTerm(item->text());

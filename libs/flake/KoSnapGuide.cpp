@@ -97,9 +97,9 @@ QPointF KoSnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers m
 
     KoSnapProxy proxy( this );
 
-    double minDistance = HUGE_VAL;
+    qreal minDistance = HUGE_VAL;
 
-    double maxSnapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( m_snapDistance, m_snapDistance ) ).width();
+    qreal maxSnapDistance = m_canvas->viewConverter()->viewToDocument( QSizeF( m_snapDistance, m_snapDistance ) ).width();
 
     foreach( KoSnapStrategy * strategy, m_strategies )
     {
@@ -109,7 +109,7 @@ QPointF KoSnapGuide::snap( const QPointF &mousePosition, Qt::KeyboardModifiers m
                 continue;
 
             QPointF snapCandidate = strategy->snappedPosition();
-            double distance = KoSnapStrategy::fastDistance( snapCandidate, mousePosition );
+            qreal distance = KoSnapStrategy::fastDistance( snapCandidate, mousePosition );
             if( distance < minDistance )
             {
                 m_currentStrategy = strategy;

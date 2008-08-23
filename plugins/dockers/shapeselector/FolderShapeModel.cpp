@@ -58,7 +58,7 @@ void FolderShapeModel::containerChanged(KoShapeContainer *container)
 void FolderShapeModel::folderResized()
 {
     int x = 5, y = 5;
-    const double width = m_parent->size().width();
+    const qreal width = m_parent->size().width();
     int rowHeight=0;
     foreach(KoShape *shape, m_icons) {
         const QSizeF size = shape->size();
@@ -83,7 +83,7 @@ void FolderShapeModel::childChanged(KoShape *child, KoShape::ChangeType type) {
 void FolderShapeModel::add(KoShape *shape) {
     int x = 5, y = 5;
     const int w = (int) shape->size().width();
-    const double width = m_parent->size().width();
+    const qreal width = m_parent->size().width();
     bool ok;
     do {
         int rowHeight=0;

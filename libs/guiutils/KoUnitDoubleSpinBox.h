@@ -114,7 +114,7 @@ public:
 
 signals:
     /// emitted like valueChanged in the parent, but this one emits the point value
-    void valueChangedPt( double );
+    void valueChangedPt( qreal );
 
 private:
     class Private;

@@ -46,7 +46,7 @@ public:
 
     virtual QGradient* toQGradient() const;
 
-    void colorAt(KoColor&, double t) const;
+    void colorAt(KoColor&, qreal t) const;
 
     /// Creates KoStopGradient from a QGradient
     static KoStopGradient * fromQGradient( QGradient * gradient );

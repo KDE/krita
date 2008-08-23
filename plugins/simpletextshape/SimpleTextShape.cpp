@@ -212,8 +212,8 @@ void SimpleTextShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
     if ( !oldSize.isNull() ) {
-        double zoomX = newSize.width() / oldSize.width(); 
-        double zoomY = newSize.height() / oldSize.height(); 
+        qreal zoomX = newSize.width() / oldSize.width(); 
+        qreal zoomY = newSize.height() / oldSize.height(); 
         QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
         update();

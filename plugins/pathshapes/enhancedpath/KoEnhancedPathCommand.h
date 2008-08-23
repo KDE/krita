@@ -49,11 +49,11 @@ private:
     /// Returns a list of points, created from the parameter list
     QList<QPointF> pointsFromParameters();
     /// Calculates angle from given point
-    double angleFromPoint( const QPointF & point ) const;
+    qreal angleFromPoint( const QPointF & point ) const;
     /// Returns sweep angle from start to stop and given direction
-    double radSweepAngle( double start, double stop, bool clockwise ) const;
+    qreal radSweepAngle( qreal start, qreal stop, bool clockwise ) const;
     /// Returns sweep angle from start to stop and given direction
-    double degSweepAngle( double start, double stop, bool clockwise ) const;
+    qreal degSweepAngle( qreal start, qreal stop, bool clockwise ) const;
     /// Returns the last path point of given path
     KoPathPoint * lastPathPoint() const;
     /// Returns rectangle from given points

@@ -39,8 +39,8 @@ KoZoomHandler::~KoZoomHandler()
 void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
     // m_resolution[XY] is in pixel per pt
-    m_resolutionX = POINT_TO_INCH( static_cast<double>(dpiX) );
-    m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
+    m_resolutionX = POINT_TO_INCH( static_cast<qreal>(dpiX) );
+    m_resolutionY = POINT_TO_INCH( static_cast<qreal>(dpiY) );
     setZoom( zoom / 100.0 );
     /*kDebug(30004) <<"KoZoomHandler::setZoomAndResolution" << zoom <<"" << dpiX <<"," << dpiY
               << " m_resolutionX=" << m_resolutionX
@@ -51,11 +51,11 @@ void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 
 void KoZoomHandler::setResolutionToStandard()
 {
-    setResolution( POINT_TO_INCH( double(KoGlobal::dpiX())),
-                   POINT_TO_INCH( double(KoGlobal::dpiY())) );
+    setResolution( POINT_TO_INCH( qreal(KoGlobal::dpiX())),
+                   POINT_TO_INCH( qreal(KoGlobal::dpiY())) );
 }
 
-void KoZoomHandler::setResolution( double resolutionX, double resolutionY )
+void KoZoomHandler::setResolution( qreal resolutionX, qreal resolutionY )
 {
     m_resolutionX = resolutionX;
     m_resolutionY = resolutionY;
@@ -63,7 +63,7 @@ void KoZoomHandler::setResolution( double resolutionX, double resolutionY )
     m_zoomedResolutionY = m_zoom * resolutionY;
 }
 
-void KoZoomHandler::setZoomedResolution( double zoomedResolutionX, double zoomedResolutionY )
+void KoZoomHandler::setZoomedResolution( qreal zoomedResolutionX, qreal zoomedResolutionY )
 {
     // m_zoom doesn't matter, it's only used in setZoom() to calculated the zoomed resolutions
     // Here we know them. The whole point of this method is to allow a different zoom factor
@@ -72,7 +72,7 @@ void KoZoomHandler::setZoomedResolution( double zoomedResolutionX, double zoomed
     m_zoomedResolutionY = zoomedResolutionY;
 }
 
-void KoZoomHandler::setZoom( double zoom )
+void KoZoomHandler::setZoom( qreal zoom )
 {
     m_zoom = zoom;
     if( m_zoom == 1.0 ) {
@@ -126,27 +126,27 @@ QSizeF KoZoomHandler::viewToDocument( const QSizeF &viewSize ) const
                    unzoomItY( viewSize.height() ) );
 }
 
-double KoZoomHandler::documentToViewX( double documentX ) const
+qreal KoZoomHandler::documentToViewX( qreal documentX ) const
 {
     return zoomItX( documentX );
 }
 
-double KoZoomHandler::documentToViewY( double documentY ) const
+qreal KoZoomHandler::documentToViewY( qreal documentY ) const
 {
     return zoomItY( documentY );
 }
 
-double KoZoomHandler::viewToDocumentX( double viewX ) const
+qreal KoZoomHandler::viewToDocumentX( qreal viewX ) const
 {
     return unzoomItX( viewX );
 }
 
-double KoZoomHandler::viewToDocumentY( double viewY ) const
+qreal KoZoomHandler::viewToDocumentY( qreal viewY ) const
 {
     return unzoomItY( viewY );
 }
 
-void KoZoomHandler::zoom(double *zoomX, double *zoomY) const
+void KoZoomHandler::zoom(qreal *zoomX, qreal *zoomY) const
 {
     *zoomX = zoomItX(100.0) / 100.0;
     *zoomY = zoomItY(100.0) / 100.0;

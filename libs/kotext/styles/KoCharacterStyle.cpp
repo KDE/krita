@@ -44,7 +44,7 @@ public:
     void setProperty(int key, const QVariant &value) {
         stylesPrivate->add(key, value);
     }
-    double propertyDouble(int key) const {
+    qreal propertyDouble(int key) const {
         QVariant variant = stylesPrivate->value(key);
         if(variant.isNull())
             return 0.0;
@@ -176,7 +176,7 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
 // OASIS 14.2.29
 static void importOdfLine(const QString& type, const QString& style, const QString& width,
                           KoCharacterStyle::LineStyle& lineStyle, KoCharacterStyle::LineType& lineType,
-                          KoCharacterStyle::LineWeight& lineWeight, double& lineWidth)
+                          KoCharacterStyle::LineWeight& lineWeight, qreal& lineWidth)
 {
     lineStyle = KoCharacterStyle::NoLineStyle;
     lineType = KoCharacterStyle::NoLineType;
@@ -192,7 +192,7 @@ static void importOdfLine(const QString& type, const QString& style, const QStri
     
     if (fixedType == "single")
         lineType = KoCharacterStyle::SingleLine;
-    else if (fixedType == "double")
+    else if (fixedType == "qreal")
         lineType = KoCharacterStyle::DoubleLine;
     
     if ( fixedStyle == "solid" )
@@ -243,7 +243,7 @@ static QString exportOdfLineType(KoCharacterStyle::LineType lineType) {
         case KoCharacterStyle::SingleLine:
             return "single";
         case KoCharacterStyle::DoubleLine:
-            return "double";
+            return "qreal";
         default:
             return "";
     }
@@ -282,7 +282,7 @@ static QString exportOdfLineMode(KoCharacterStyle::LineMode lineMode) {
     }
 }
 
-static QString exportOdfLineWidth(KoCharacterStyle::LineWeight lineWeight, double lineWidth)
+static QString exportOdfLineWidth(KoCharacterStyle::LineWeight lineWeight, qreal lineWidth)
 {
     switch (lineWeight) {
     case KoCharacterStyle::AutoLineWeight:
@@ -337,7 +337,7 @@ QString KoCharacterStyle::fontFamily () const {
 void KoCharacterStyle::setFontPointSize (qreal size) {
     d->setProperty(QTextFormat::FontPointSize, size);
 }
-double KoCharacterStyle::fontPointSize () const {
+qreal KoCharacterStyle::fontPointSize () const {
     return d->propertyDouble(QTextFormat::FontPointSize);
 }
 void KoCharacterStyle::setFontWeight (int weight) {
@@ -451,12 +451,12 @@ QColor KoCharacterStyle::strikeOutColor () const {
     return d->propertyColor(StrikeOutColor);
 }
 
-void KoCharacterStyle::setStrikeOutWidth (LineWeight weight, double width) {
+void KoCharacterStyle::setStrikeOutWidth (LineWeight weight, qreal width) {
     d->setProperty(KoCharacterStyle::StrikeOutWeight, weight);
     d->setProperty(KoCharacterStyle::StrikeOutWidth, width);
 }
 
-void KoCharacterStyle::strikeOutWidth (LineWeight& weight, double& width) const {
+void KoCharacterStyle::strikeOutWidth (LineWeight& weight, qreal& width) const {
      weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::StrikeOutWeight);
      width = d->propertyDouble(KoCharacterStyle::StrikeOutWidth);
 }
@@ -498,12 +498,12 @@ QColor KoCharacterStyle::underlineColor () const {
     return d->propertyColor(QTextFormat::TextUnderlineColor);
 }
 
-void KoCharacterStyle::setUnderlineWidth (LineWeight weight, double width) {
+void KoCharacterStyle::setUnderlineWidth (LineWeight weight, qreal width) {
     d->setProperty(KoCharacterStyle::UnderlineWeight, weight);
     d->setProperty(KoCharacterStyle::UnderlineWidth, width);
 }
 
-void KoCharacterStyle::underlineWidth (LineWeight& weight, double& width) const {
+void KoCharacterStyle::underlineWidth (LineWeight& weight, qreal& width) const {
      weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::UnderlineWeight);
      width = d->propertyDouble(KoCharacterStyle::UnderlineWidth);
 }
@@ -663,12 +663,12 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context) {
 
     // Specify the size of a font. The value of these attribute is either an absolute length or a percentage
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
-        double pointSize = styleStack.fontSize();
+        qreal pointSize = styleStack.fontSize();
         if (pointSize > 0)
             setFontPointSize(pointSize);
     } else if ( styleStack.hasProperty( KoXmlNS::style, "font-size-rel" ) ) {
         // These attributes specify a relative font size change as a length such as +1pt, -3pt. It changes the font size based on the font size of the parent style.
-        double pointSize = styleStack.fontSize() + KoUnit::parseValue( styleStack.property( KoXmlNS::style, "font-size-rel" ) );
+        qreal pointSize = styleStack.fontSize() + KoUnit::parseValue( styleStack.property( KoXmlNS::style, "font-size-rel" ) );
         if (pointSize > 0)
             setFontPointSize(pointSize);
     }
@@ -707,7 +707,7 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context) {
                       && (styleStack.property( KoXmlNS::fo, "score-spaces") == "false");
     if( styleStack.hasProperty( KoXmlNS::style, "text-crossing-out" )) { // 3.10.6
         QString strikeOutType = styleStack.property( KoXmlNS::style, "text-crossing-out" );
-        if( strikeOutType =="double-line")
+        if( strikeOutType =="qreal-line")
             m_strikeOutType = S_DOUBLE;
         else if( strikeOutType =="single-line")
             m_strikeOutType = S_SIMPLE;
@@ -727,12 +727,12 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context) {
         }
     }
 
-    // Specifies whether text is underlined, and if so, whether a single or double line will be used for underlining.
+    // Specifies whether text is underlined, and if so, whether a single or qreal line will be used for underlining.
     if ( styleStack.hasProperty( KoXmlNS::style, "text-underline-type" )
         || styleStack.hasProperty( KoXmlNS::style, "text-underline-style" ) ) { // OASIS 14.4.28
         LineStyle underlineStyle;
         LineType underlineType;
-        double underlineWidth;
+        qreal underlineWidth;
         LineWeight underlineWeight;
     
         importOdfLine(styleStack.property( KoXmlNS::style, "text-underline-type" ),
@@ -753,7 +753,7 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context) {
     if (( styleStack.hasProperty( KoXmlNS::style, "text-line-through-type" ) ) ||  ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-style" ))) { // OASIS 14.4.7
         KoCharacterStyle::LineStyle throughStyle;
         LineType throughType;
-        double throughWidth;
+        qreal throughWidth;
         LineWeight throughWeight;
         
         importOdfLine(styleStack.property( KoXmlNS::style, "text-line-through-type" ),
@@ -1015,7 +1015,7 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
                 style.addProperty("style:text-underline-mode", exportOdfLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         } else if (key == UnderlineWidth) {
             KoCharacterStyle::LineWeight weight;
-            double width;
+            qreal width;
             underlineWidth(weight, width);
             style.addProperty("style:text-underline-width", exportOdfLineWidth(weight, width), KoGenStyle::TextType);
         } else if (key == StrikeOutStyle) {
@@ -1041,7 +1041,7 @@ void KoCharacterStyle::saveOdf( KoGenStyle &style )
                 style.addProperty("style:text-line-through-mode", exportOdfLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         } else if (key == StrikeOutWidth) {
             KoCharacterStyle::LineWeight weight;
-            double width;
+            qreal width;
             strikeOutWidth(weight, width);
             style.addProperty("style:text-line-through-width", exportOdfLineWidth(weight, width), KoGenStyle::TextType);
         } else if (key == QTextFormat::BackgroundBrush) {

@@ -121,7 +121,7 @@ public:
      * @param horizontalPos A list of the position of the horizontal guide lines.
      * @param verticalPos A list of the position of the vertical guide lines.
      */
-    void setGuideLines( const QList<double> &horizontalPos, const QList<double> &verticalPos );
+    void setGuideLines( const QList<qreal> &horizontalPos, const QList<qreal> &verticalPos );
 
     /**
      * @brief Set the positions for snapping of auto guide lines
@@ -131,7 +131,7 @@ public:
      * @param horizontalPos A list of the position of the horizontal guide lines.
      * @param verticalPos A list of the position of the vertical guide lines.
      */
-    void setAutoGuideLines( const QList<double> &horizontalPos, const QList<double> &verticalPos );
+    void setAutoGuideLines( const QList<qreal> &horizontalPos, const QList<qreal> &verticalPos );
 
     /**
      * @brief Get the position of the guide lines
@@ -142,7 +142,7 @@ public:
      * @param horizontalPos A list of the position of the horizontal guide lines.
      * @param verticalPos A list of the position of the vertical guide lines.
      */
-    void getGuideLines( QList<double> &horizontalPos, QList<double> &verticalPos ) const;
+    void getGuideLines( QList<qreal> &horizontalPos, QList<qreal> &verticalPos ) const;
 
     /**
      * @brief Snap rect to guidelines
@@ -276,7 +276,7 @@ private:
     /// Strukt holding the data of a guide line
     struct KoGuideLine 
     {
-        KoGuideLine( Qt::Orientation o, double pos, bool a = false )
+        KoGuideLine( Qt::Orientation o, qreal pos, bool a = false )
         : orientation( o )
         , position( pos )
         , selected( false )
@@ -284,7 +284,7 @@ private:
         , automatic( a )
         {}
         Qt::Orientation orientation;
-        double position;
+        qreal position;
         bool selected; // if this guide is selected
         bool snapping; // if this guide is being snapped to
         bool automatic; // if this is a atomatic guide line
@@ -351,7 +351,7 @@ private:
      * @return the fould guide
      * @return 0 if none is found
      */
-    KoGuideLine * find( QPointF &p, double diff );
+    KoGuideLine * find( QPointF &p, qreal diff );
 
     /**
      * @brief Move selected guides.
@@ -390,7 +390,7 @@ private:
      * @return true if they are the same
      * @return false otherwise
      */ 
-    bool virtuallyEqual( double a, double b ) { return QABS( a - b ) < 1E-4; }
+    bool virtuallyEqual( qreal a, qreal b ) { return QABS( a - b ) < 1E-4; }
 
     /// view
     KoView * m_view;

@@ -42,7 +42,7 @@ public Q_SLOTS:
     void setColumns(const KoColumns &columns);
 
 private:
-    void drawPage(QPainter &painter, double zoom, const QRect &dimensions, bool left);
+    void drawPage(QPainter &painter, qreal zoom, const QRect &dimensions, bool left);
 
 private:
     class Private;

@@ -61,7 +61,7 @@ public slots:
    * into the list at proper place so that the the values remain sorted.
    * emits zoomChanged
    */
-  void setZoom( double zoom );
+  void setZoom( qreal zoom );
 
   /**
    * Change the zoom modes that should be shown
@@ -86,7 +86,7 @@ public slots:
    * Set the actual zoom value used in the app. This is needed when using @ref zoomIn() , @ref zoomOut() and/or when
    * plugged into the viewbar.
    */
-  void setEffectiveZoom(double zoom);
+  void setEffectiveZoom(qreal zoom);
 
   /**
    * Change the selected zoom mode.
@@ -106,7 +106,7 @@ signals:
    * @param mode The selected zoom mode
    * @param zoom the zoom, only defined if @p mode is KoZoomMode::ZOOM_CONSTANT
    */
-  void zoomChanged( KoZoomMode::Mode mode, double zoom );
+  void zoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
   /**
    * Signal aspectModeChanged is triggered when the user toggles the widget.
@@ -118,7 +118,7 @@ signals:
 protected:
 
     /// Regenerates the action's items
-    void regenerateItems( const double zoom, bool asCurrent = false );
+    void regenerateItems( const qreal zoom, bool asCurrent = false );
 
 private:
     Q_DISABLE_COPY( KoZoomAction )

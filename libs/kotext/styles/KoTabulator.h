@@ -34,7 +34,7 @@ struct KoTabulator {
     /**
      * Position of the tab in pt
     */
-    double ptPos;
+    qreal ptPos;
     /**
      * Type of tab (left/center/right/decimalpoint)
     */
@@ -46,7 +46,7 @@ struct KoTabulator {
     /**
      * Width of the tab filling line.
     */
-    double ptWidth;
+    qreal ptWidth;
     /**
      * Alignment character.
     */

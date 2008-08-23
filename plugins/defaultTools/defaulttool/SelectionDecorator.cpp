@@ -149,7 +149,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 #if 0
     // draw the move arrow(s)
     if(m_arrows != KoFlake::NoHandle && bounds.width() > 45 && bounds.height() > 45) {
-        double x1,x2,y1,y2; // 2 is where the arrow head is
+        qreal x1,x2,y1,y2; // 2 is where the arrow head is
         switch(m_arrows) {
             case KoFlake::TopMiddleHandle:
                 x1=bounds.center().x(); x2=x1; y2=bounds.y()+8; y1=y2+20;

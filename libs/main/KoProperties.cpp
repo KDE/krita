@@ -160,7 +160,7 @@ int KoProperties::intProperty(const QString & name, int def) const
 
 }
 
-double KoProperties::doubleProperty(const QString & name, double def) const
+qreal KoProperties::doubleProperty(const QString & name, qreal def) const
 {
     const QVariant v = property(name);
     if (v.isValid())

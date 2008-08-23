@@ -1963,7 +1963,7 @@ QDockWidget* KoMainWindow::createDockWidget( KoDockFactory* factory )
 
     KConfigGroup group( KGlobal::config(), "GUI" );
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
-    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
+    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
     dockWidgetFont.setPointSizeF(pointSize);
     dockWidget->setFont(dockWidgetFont);
@@ -1979,7 +1979,7 @@ void KoMainWindow::forceDockTabFonts()
     for (int i = 0; i < chis.size(); ++i) {
         if (chis.at(i)->inherits("QTabBar")) {
             QFont dockWidgetFont  = KGlobalSettings::generalFont();
-            double pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+            qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
             dockWidgetFont.setPointSizeF(pointSize);
             ((QTabBar *)chis.at(i))->setFont(dockWidgetFont);
         }

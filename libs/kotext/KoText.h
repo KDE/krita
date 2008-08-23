@@ -57,13 +57,13 @@ namespace KoText {
     /// For paragraphs each tab definition is represented by this struct.
     struct KOTEXT_EXPORT Tab {
         Tab();
-        double position;    ///< distance in point from the start of the text-shape
+        qreal position;    ///< distance in point from the start of the text-shape
         QTextOption::TabType type;       ///< Determine which type is used.
         QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
-        KoCharacterStyle::LineType leaderType; // none/single/double
+        KoCharacterStyle::LineType leaderType; // none/single/qreal
         KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...
         KoCharacterStyle::LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
-        double leaderWidth; // the width value if length/percentage
+        qreal leaderWidth; // the width value if length/percentage
         QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
         QString leaderText;   ///< character to print as the leader (filler of the tabbed space)
 

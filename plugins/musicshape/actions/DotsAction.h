@@ -26,7 +26,7 @@ class DotsAction : public AbstractNoteMusicAction
 public:
     DotsAction(SimpleEntryTool* tool);
     
-    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, double distance, const QPointF& pos);
+    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
 };
 
 #endif // DOTSACTION_H

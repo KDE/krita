@@ -45,7 +45,7 @@ public:
         delete m_zoomHandler;
     }
 
-    virtual void gridSize(double *horizontal, double *vertical) const
+    virtual void gridSize(qreal *horizontal, qreal *vertical) const
     {
         if( horizontal )
             *horizontal = 0;
@@ -144,9 +144,9 @@ bool KoShapePainter::paintShapes( QImage & image )
 
     // compute the zoom factor based on the bounding rects in document coordinates
     // so that the content fits into the image
-    double zoomW = imageBox.width() / bound.width();
-    double zoomH = imageBox.height() / bound.height();
-    double zoom = qMin( zoomW, zoomH );
+    qreal zoomW = imageBox.width() / bound.width();
+    qreal zoomH = imageBox.height() / bound.height();
+    qreal zoom = qMin( zoomW, zoomH );
 
     // now set the zoom into the zoom handler used for painting the shape
     zoomHandler.setZoom( zoom );

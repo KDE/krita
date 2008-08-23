@@ -43,7 +43,7 @@ KoPathShapeLoader::~KoPathShapeLoader()
     delete d;
 }
 
-void KoPathShapeLoader::svgMoveTo( double x1, double y1, bool abs )
+void KoPathShapeLoader::svgMoveTo( qreal x1, qreal y1, bool abs )
 {
     if( abs )
         d->lastPoint = QPointF( x1, y1 );
@@ -52,7 +52,7 @@ void KoPathShapeLoader::svgMoveTo( double x1, double y1, bool abs )
     d->path->moveTo( d->lastPoint );
 }
 
-void KoPathShapeLoader::svgLineTo( double x1, double y1, bool abs )
+void KoPathShapeLoader::svgLineTo( qreal x1, qreal y1, bool abs )
 {
     if( abs )
         d->lastPoint = QPointF( x1, y1 );
@@ -62,7 +62,7 @@ void KoPathShapeLoader::svgLineTo( double x1, double y1, bool abs )
     d->path->lineTo( d->lastPoint );
 }
 
-void KoPathShapeLoader::svgLineToHorizontal( double x, bool abs )
+void KoPathShapeLoader::svgLineToHorizontal( qreal x, bool abs )
 {
     if( abs )
         d->lastPoint.setX( x );
@@ -72,7 +72,7 @@ void KoPathShapeLoader::svgLineToHorizontal( double x, bool abs )
     d->path->lineTo( d->lastPoint );
 }
 
-void KoPathShapeLoader::svgLineToVertical( double y, bool abs )
+void KoPathShapeLoader::svgLineToVertical( qreal y, bool abs )
 {
     if( abs )
         d->lastPoint.setY( y );
@@ -82,7 +82,7 @@ void KoPathShapeLoader::svgLineToVertical( double y, bool abs )
     d->path->lineTo( d->lastPoint );
 }
 
-void KoPathShapeLoader::svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool abs )
+void KoPathShapeLoader::svgCurveToCubic( qreal x1, qreal y1, qreal x2, qreal y2, qreal x, qreal y, bool abs )
 {
     QPointF p1, p2;
     if( abs )
@@ -101,7 +101,7 @@ void KoPathShapeLoader::svgCurveToCubic( double x1, double y1, double x2, double
     d->path->curveTo( p1, p2, d->lastPoint );
 }
 
-void KoPathShapeLoader::svgCurveToCubicSmooth( double x, double y, double x2, double y2, bool abs )
+void KoPathShapeLoader::svgCurveToCubicSmooth( qreal x, qreal y, qreal x2, qreal y2, bool abs )
 {
     Q_UNUSED ( x );
     Q_UNUSED ( y );
@@ -111,7 +111,7 @@ void KoPathShapeLoader::svgCurveToCubicSmooth( double x, double y, double x2, do
     // TODO implement
 }
 
-void KoPathShapeLoader::svgCurveToQuadratic( double x, double y, double x1, double y1, bool abs )
+void KoPathShapeLoader::svgCurveToQuadratic( qreal x, qreal y, qreal x1, qreal y1, bool abs )
 {
     Q_UNUSED ( x );
     Q_UNUSED ( y );
@@ -121,7 +121,7 @@ void KoPathShapeLoader::svgCurveToQuadratic( double x, double y, double x1, doub
     // TODO implement
 }
 
-void KoPathShapeLoader::svgCurveToQuadraticSmooth( double x, double y, bool abs )
+void KoPathShapeLoader::svgCurveToQuadraticSmooth( qreal x, qreal y, bool abs )
 {
     Q_UNUSED ( x );
     Q_UNUSED ( y );
@@ -129,7 +129,7 @@ void KoPathShapeLoader::svgCurveToQuadraticSmooth( double x, double y, bool abs 
     // TODO implement
 }
 
-void KoPathShapeLoader::svgArcTo( double x, double y, double r1, double r2, double angle, bool largeArcFlag, bool sweepFlag, bool abs )
+void KoPathShapeLoader::svgArcTo( qreal x, qreal y, qreal r1, qreal r2, qreal angle, bool largeArcFlag, bool sweepFlag, bool abs )
 {
     Q_UNUSED ( x );
     Q_UNUSED ( y );

@@ -504,8 +504,8 @@ void KoPADocument::loadConfig()
         gridData().setShowGrid(showGrid);
         bool snapToGrid = configGroup.readEntry<bool>( "SnapToGrid", defGrid.snapToGrid() );
         gridData().setSnapToGrid(snapToGrid);
-        double spacingX = configGroup.readEntry<double>( "SpacingX", defGrid.gridX() );
-        double spacingY = configGroup.readEntry<double>( "SpacingY", defGrid.gridY() );
+        qreal spacingX = configGroup.readEntry<qreal>( "SpacingX", defGrid.gridX() );
+        qreal spacingY = configGroup.readEntry<qreal>( "SpacingY", defGrid.gridY() );
         gridData().setGrid( spacingX, spacingY );
         QColor color = configGroup.readEntry( "Color", defGrid.gridColor() );
         gridData().setGridColor( color );
@@ -537,13 +537,13 @@ void KoPADocument::saveConfig()
     else
         configGroup.writeEntry("SnapToGrid", snapToGrid);
 
-    double spacingX = gridData().gridX();
+    qreal spacingX = gridData().gridX();
     if ((spacingX == defGrid.gridX()) && !configGroup.hasDefault("SpacingX"))
         configGroup.revertToDefault("SpacingX");
     else
         configGroup.writeEntry("SpacingX", spacingX);
 
-    double spacingY = gridData().gridY();
+    qreal spacingY = gridData().gridY();
     if ((spacingY == defGrid.gridY()) && !configGroup.hasDefault("SpacingY"))
         configGroup.revertToDefault("SpacingY");
     else

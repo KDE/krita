@@ -50,7 +50,7 @@ void KisGrayU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, Q
 {
     const GrayU16Traits::channels_type* p = reinterpret_cast<const GrayU16Traits::channels_type*>( pixel );
     QDomElement labElt = doc.createElement( "Gray" );
-    labElt.setAttribute("g", KoColorSpaceMaths< GrayU16Traits::channels_type, double>::scaleToA( p[0]) );
+    labElt.setAttribute("g", KoColorSpaceMaths< GrayU16Traits::channels_type, qreal>::scaleToA( p[0]) );
     labElt.setAttribute("space", profile()->name() );
     colorElt.appendChild( labElt );
 }
@@ -58,6 +58,6 @@ void KisGrayU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, Q
 void KisGrayU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     GrayU16Traits::channels_type* p = reinterpret_cast<GrayU16Traits::channels_type*>( pixel );
-    p[0] = KoColorSpaceMaths< double, GrayU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p[0] = KoColorSpaceMaths< qreal, GrayU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
 }
 

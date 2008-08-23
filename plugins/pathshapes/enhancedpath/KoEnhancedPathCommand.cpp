@@ -24,7 +24,7 @@
 #include <math.h>
 
 // radian to degree factor
-const double rad2deg = 180.0/M_PI;
+const qreal rad2deg = 180.0/M_PI;
 
 KoEnhancedPathCommand::KoEnhancedPathCommand( const QChar & command, KoEnhancedPathShape * parent )
     : m_command( command ), m_parent( parent )
@@ -102,7 +102,7 @@ bool KoEnhancedPathCommand::execute()
                 const QPointF &angles = points[i+2] / rad2deg;
                 // compute the ellipses starting point
                 QPointF start( radii.x() * cos( angles.x() ), radii.y() * sin( angles.x() ) );
-                double sweepAngle = degSweepAngle( points[i+2].x(), points[i+2].y(), false );
+                qreal sweepAngle = degSweepAngle( points[i+2].x(), points[i+2].y(), false );
 
                 if( lineTo )
                     m_parent->lineTo( m_parent->viewboxToShape( points[i] ) + start );
@@ -124,12 +124,12 @@ bool KoEnhancedPathCommand::execute()
             {
                 QRectF bbox = rectFromPoints( points[i], points[i+1] );
                 QPointF center = bbox.center();
-                double rx = 0.5 * m_parent->viewboxToShape( bbox.width() );
-                double ry = 0.5 * m_parent->viewboxToShape( bbox.height() );
-                double startAngle = angleFromPoint( points[i+2] - center );
-                double stopAngle = angleFromPoint( points[i+3] - center );
+                qreal rx = 0.5 * m_parent->viewboxToShape( bbox.width() );
+                qreal ry = 0.5 * m_parent->viewboxToShape( bbox.height() );
+                qreal startAngle = angleFromPoint( points[i+2] - center );
+                qreal stopAngle = angleFromPoint( points[i+3] - center );
                 // we are moving counter-clockwise to the end angle
-                double sweepAngle = radSweepAngle( startAngle, stopAngle, false );
+                qreal sweepAngle = radSweepAngle( startAngle, stopAngle, false );
                 // compute the starting point to draw the line to
                 QPointF startPoint( rx * cos( startAngle ), ry * sin( 2*M_PI - startAngle ) );
 
@@ -153,12 +153,12 @@ bool KoEnhancedPathCommand::execute()
             {
                 QRectF bbox = rectFromPoints( points[i], points[i+1] );
                 QPointF center = bbox.center();
-                double rx = 0.5 * m_parent->viewboxToShape( bbox.width() );
-                double ry = 0.5 * m_parent->viewboxToShape( bbox.height() );
-                double startAngle = angleFromPoint( points[i+2] - center );
-                double stopAngle = angleFromPoint( points[i+3] - center );
+                qreal rx = 0.5 * m_parent->viewboxToShape( bbox.width() );
+                qreal ry = 0.5 * m_parent->viewboxToShape( bbox.height() );
+                qreal startAngle = angleFromPoint( points[i+2] - center );
+                qreal stopAngle = angleFromPoint( points[i+3] - center );
                 // we are moving clockwise to the end angle
-                double sweepAngle = radSweepAngle( startAngle, stopAngle, true );
+                qreal sweepAngle = radSweepAngle( startAngle, stopAngle, true );
 
                 if( lineTo )
                     m_parent->lineTo( m_parent->viewboxToShape( points[i+2] ) );
@@ -176,10 +176,10 @@ bool KoEnhancedPathCommand::execute()
             foreach( QPointF point, points )
             {
                 point = m_parent->viewboxToShape( point );
-                double rx = lastPoint->point().x() - point.x();
-                double ry = lastPoint->point().y() - point.y();
-                double startAngle = ry > 0.0 ? 270.0 : 90.0;
-                double sweepAngle = rx*rx > 0.0 ? 90.0 : -90.0;
+                qreal rx = lastPoint->point().x() - point.x();
+                qreal ry = lastPoint->point().y() - point.y();
+                qreal startAngle = ry > 0.0 ? 270.0 : 90.0;
+                qreal sweepAngle = rx*rx > 0.0 ? 90.0 : -90.0;
                 lastPoint = m_parent->arcTo( fabs(rx), fabs(ry), startAngle, sweepAngle );
             }
         }
@@ -191,10 +191,10 @@ bool KoEnhancedPathCommand::execute()
             foreach( QPointF point, points )
             {
                 point = m_parent->viewboxToShape( point );
-                double rx = lastPoint->point().x() - point.x();
-                double ry = lastPoint->point().y() - point.y();
-                double startAngle = rx > 0.0 ? 0.0 : 180.0;
-                double sweepAngle = ry*ry > 0.0 ? 90.0 : -90.0;
+                qreal rx = lastPoint->point().x() - point.x();
+                qreal ry = lastPoint->point().y() - point.y();
+                qreal startAngle = rx > 0.0 ? 0.0 : 180.0;
+                qreal sweepAngle = ry*ry > 0.0 ? 90.0 : -90.0;
                 lastPoint = m_parent->arcTo( fabs(rx), fabs(ry), startAngle, sweepAngle );
             }
         }
@@ -230,18 +230,18 @@ void KoEnhancedPathCommand::addParameter( KoEnhancedPathParameter *parameter )
         m_parameters.append( parameter );
 }
 
-double KoEnhancedPathCommand::angleFromPoint( const QPointF & point ) const
+qreal KoEnhancedPathCommand::angleFromPoint( const QPointF & point ) const
 {
-    double angle = atan2( point.y(), point.x() );
+    qreal angle = atan2( point.y(), point.x() );
     if( angle < 0.0 )
         angle += 2*M_PI;
 
     return 2*M_PI - angle;
 }
 
-double KoEnhancedPathCommand::radSweepAngle( double start, double stop, bool clockwise ) const
+qreal KoEnhancedPathCommand::radSweepAngle( qreal start, qreal stop, bool clockwise ) const
 {
-    double sweepAngle = stop - start;
+    qreal sweepAngle = stop - start;
     if( clockwise )
     {
         // we are moving clockwise to the end angle
@@ -258,9 +258,9 @@ double KoEnhancedPathCommand::radSweepAngle( double start, double stop, bool clo
    return sweepAngle;
 }
 
-double KoEnhancedPathCommand::degSweepAngle( double start, double stop, bool clockwise ) const
+qreal KoEnhancedPathCommand::degSweepAngle( qreal start, qreal stop, bool clockwise ) const
 {
-    double sweepAngle = stop - start;
+    qreal sweepAngle = stop - start;
     if( clockwise )
     {
         // we are moving clockwise to the end angle

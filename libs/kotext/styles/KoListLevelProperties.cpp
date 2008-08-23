@@ -77,7 +77,7 @@ int KoListLevelProperties::propertyInt(int key) const {
     return variant.toInt();
 }
 
-double KoListLevelProperties::propertyDouble(int key) const {
+qreal KoListLevelProperties::propertyDouble(int key) const {
     QVariant variant = d->stylesPrivate.value(key);
     if(variant.isNull())
         return 0.;
@@ -190,11 +190,11 @@ Qt::Alignment KoListLevelProperties::alignment() const {
     return static_cast<Qt::Alignment>(propertyInt(KoListStyle::Alignment));
 }
 
-void KoListLevelProperties::setMinimumWidth(double width) {
+void KoListLevelProperties::setMinimumWidth(qreal width) {
     setProperty(KoListStyle::MinimumWidth, width);
 }
 
-double KoListLevelProperties::minimumWidth() {
+qreal KoListLevelProperties::minimumWidth() {
     return propertyDouble(KoListStyle::MinimumWidth);
 }
 

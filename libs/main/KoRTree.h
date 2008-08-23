@@ -577,7 +577,7 @@ QPair<int, int> KoRTree<T>::pickSeeds( Node *node )
 {
     int s1 = 0;
     int s2 = 1;
-    double max = 0;
+    qreal max = 0;
     for ( int i = 0; i < m_capacity + 1; ++i )
     {
         for ( int j = 0; j < m_capacity + 1; ++j )
@@ -587,7 +587,7 @@ QPair<int, int> KoRTree<T>::pickSeeds( Node *node )
                 QRectF bb1( node->childBoundingBox(i) );
                 QRectF bb2( node->childBoundingBox(j) );
                 QRectF comp( node->childBoundingBox(i).unite( node->childBoundingBox(j) ) );
-                double area = comp.width() * comp.height() - bb1.width() * bb1.height() - bb2.width() * bb2.height();
+                qreal area = comp.width() * comp.height() - bb1.width() * bb1.height() - bb2.width() * bb2.height();
                 //qDebug() << " ps" << i << j << area;
                 if ( area > max )
                 {
@@ -605,7 +605,7 @@ template <typename T>
 QPair<int, int> KoRTree<T>::pickNext( Node * node, QVector<bool> & marker, Node * group1, Node * group2 )
 {
     //qDebug() << "KoRTree::pickNext" << marker;
-    double max = -1.0;
+    qreal max = -1.0;
     int select = 0;
     int group = 0;
     for ( int i = 0; i < m_capacity + 1; ++i )
@@ -614,9 +614,9 @@ QPair<int, int> KoRTree<T>::pickNext( Node * node, QVector<bool> & marker, Node 
         {
             QRectF bb1 = group1->boundingBox().unite( node->childBoundingBox(i) );
             QRectF bb2 = group2->boundingBox().unite( node->childBoundingBox(i) );
-            double d1 = bb1.width() * bb1.height() - group1->boundingBox().width() * group1->boundingBox().height();
-            double d2 = bb2.width() * bb2.height() - group2->boundingBox().width() * group2->boundingBox().height();
-            double diff = qAbs( d1 - d2 );
+            qreal d1 = bb1.width() * bb1.height() - group1->boundingBox().width() * group1->boundingBox().height();
+            qreal d2 = bb2.width() * bb2.height() - group2->boundingBox().width() * group2->boundingBox().height();
+            qreal diff = qAbs( d1 - d2 );
             //qDebug() << " diff" << diff << i << d1 << d2;
             if ( diff > max )
             {
@@ -940,7 +940,7 @@ template <typename T>
 typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getLeastEnlargement( const QRectF& bb ) const
 {
     //qDebug() << "NoneLeafNode::getLeastEnlargement";
-    QVarLengthArray<double> area(this->m_counter);
+    QVarLengthArray<qreal> area(this->m_counter);
     for ( int i = 0; i < this->m_counter; ++i )
     {
         QSizeF big( this->m_childBoundingBox[i].unite( bb ).size() );
@@ -948,7 +948,7 @@ typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getLeastEnlargement( const
     }
 
     int minIndex = 0;
-    double minArea = area[minIndex];
+    qreal minArea = area[minIndex];
     //qDebug() << " min" << minIndex << minArea;
 
     for ( int i = 1; i < this->m_counter; ++i )

@@ -234,7 +234,7 @@ void KoPageLayoutSize::setUnit( KoUnit unit ) {
     epgHeight->setMinMaxStep( 0, KoUnit::fromUserValue( 9999, m_unit ), KoUnit::fromUserValue( 0.01, m_unit ) );
     epgHeight->changeValue( m_layout.ptHeight );
 
-    double dStep = KoUnit::fromUserValue( 0.2, m_unit );
+    qreal dStep = KoUnit::fromUserValue( 0.2, m_unit );
 
     ebrLeft->setUnit( m_unit );
     ebrLeft->changeValue( m_layout.ptLeft );
@@ -285,7 +285,7 @@ void KoPageLayoutSize::orientationChanged(int which) {
     m_layout.orientation = which == KoPageFormat::Portrait ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
     // swap dimension
-    double val = epgWidth->value();
+    qreal val = epgWidth->value();
     epgWidth->changeValue(epgHeight->value());
     epgHeight->changeValue(val);
     // and adjust margins

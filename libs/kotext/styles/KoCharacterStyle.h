@@ -75,7 +75,7 @@ public:
         InlineInstanceId = 577297549 // Internal: Reserved for KoInlineTextObjectManager
     };
 
-    /// list of possible line type : no line, single line, double line
+    /// list of possible line type : no line, single line, qreal line
     enum LineType {
         NoLineType,
         SingleLine,
@@ -135,7 +135,7 @@ public:
     /// See similar named method on QTextCharFormat
     void setFontPointSize (qreal size);
     /// See similar named method on QTextCharFormat
-    double fontPointSize () const;
+    qreal fontPointSize () const;
     /// See similar named method on QTextCharFormat
     void setFontWeight (int weight);
     /// See similar named method on QTextCharFormat
@@ -202,9 +202,9 @@ public:
     /// Get the current font strike out style of this KoCharacterStyle
     LineStyle strikeOutStyle () const;
     /// Apply a font strike out width to this KoCharacterStyle
-    void setStrikeOutWidth (LineWeight weight, double width);
+    void setStrikeOutWidth (LineWeight weight, qreal width);
     /// Get the current font strike out width of this KoCharacterStyle
-    void strikeOutWidth (LineWeight& weight, double& width) const;
+    void strikeOutWidth (LineWeight& weight, qreal& width) const;
     /// Apply a font strike out color to this KoCharacterStyle
     void setStrikeOutColor (const QColor &color);
     /// Get the current font strike out color of this KoCharacterStyle
@@ -227,9 +227,9 @@ public:
     /// Get the current font underline style of this KoCharacterStyle
     LineStyle underlineStyle () const;
     /// Apply a font underline width to this KoCharacterStyle
-    void setUnderlineWidth (LineWeight weight, double width);
+    void setUnderlineWidth (LineWeight weight, qreal width);
     /// Get the current font underline width of this KoCharacterStyle
-    void underlineWidth (LineWeight& weight, double& width) const;
+    void underlineWidth (LineWeight& weight, qreal& width) const;
     /// Apply a font underline color to this KoCharacterStyle
     void setUnderlineColor (const QColor &color);
     /// Get the current font underline color of this KoCharacterStyle

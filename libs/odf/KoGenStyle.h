@@ -195,7 +195,7 @@ public:
      *  (unlike QString::number and setNum, which default to 6 digits),
      *  and the unit name ("pt") is appended to it.
      */
-    void addPropertyPt( const QString& propName, double propValue, PropertyType type = DefaultType );
+    void addPropertyPt( const QString& propName, qreal propValue, PropertyType type = DefaultType );
 
     /**
      *  Add an attribute to the style
@@ -225,7 +225,7 @@ public:
      *  (unlike QString::number and setNum, which default to 6 digits),
      *  and the unit name ("pt") is appended to it.
      */
-    void addAttributePt( const QString& attrName, double attrValue );
+    void addAttributePt( const QString& attrName, qreal attrValue );
 
     /**
      * @brief Add a child element to the style properties.

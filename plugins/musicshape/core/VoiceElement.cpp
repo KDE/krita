@@ -25,12 +25,12 @@ class VoiceElement::Private
 public:
     Staff* staff;
     int length;
-    double x;
-    double y;
-    double width;
-    double height;
+    qreal x;
+    qreal y;
+    qreal width;
+    qreal height;
     VoiceBar* voiceBar;
-    double beatline;
+    qreal beatline;
 };
 
 VoiceElement::VoiceElement(int length) : d(new Private)
@@ -70,48 +70,48 @@ void VoiceElement::setVoiceBar(VoiceBar* voiceBar)
     d->voiceBar = voiceBar;
 }
 
-double VoiceElement::x() const
+qreal VoiceElement::x() const
 {
     return d->x;
 }
 
-void VoiceElement::setX(double x)
+void VoiceElement::setX(qreal x)
 {
     if (d->x == x) return;
     d->x = x;
     emit xChanged(x);
 }
 
-double VoiceElement::y() const
+qreal VoiceElement::y() const
 {
     return d->y;
 }
 
-void VoiceElement::setY(double y)
+void VoiceElement::setY(qreal y)
 {
     if (d->y == y) return;
     d->y = y;
     emit yChanged(y);
 }
 
-double VoiceElement::width() const
+qreal VoiceElement::width() const
 {
     return d->width;
 }
 
-void VoiceElement::setWidth(double width)
+void VoiceElement::setWidth(qreal width)
 {
     if (d->width == width) return;
     d->width = width;
     emit widthChanged(width);
 }
 
-double VoiceElement::height() const
+qreal VoiceElement::height() const
 {
     return d->height;
 }
 
-void VoiceElement::setHeight(double height)
+void VoiceElement::setHeight(qreal height)
 {
     if (d->height == height) return;
     d->height = height;
@@ -130,12 +130,12 @@ void VoiceElement::setLength(int length)
     emit lengthChanged(length);
 }
 
-double VoiceElement::beatline() const
+qreal VoiceElement::beatline() const
 {
     return d->beatline;
 }
 
-void VoiceElement::setBeatline(double beatline)
+void VoiceElement::setBeatline(qreal beatline)
 {
     d->beatline = beatline;
 }

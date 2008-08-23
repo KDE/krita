@@ -51,14 +51,14 @@ KoSnapStrategy::SnapType KoSnapStrategy::type() const
     return m_snapType;
 }
 
-double KoSnapStrategy::fastDistance( const QPointF &p1, const QPointF &p2 )
+qreal KoSnapStrategy::fastDistance( const QPointF &p1, const QPointF &p2 )
 {
-    double dx = p1.x()-p2.x();
-    double dy = p1.y()-p2.y();
+    qreal dx = p1.x()-p2.x();
+    qreal dy = p1.y()-p2.y();
     return dx*dx + dy*dy;
 }
 
-double KoSnapStrategy::scalarProduct(const QPointF &p1, const QPointF &p2)
+qreal KoSnapStrategy::scalarProduct(const QPointF &p1, const QPointF &p2)
 {
     return p1.x() * p2.x() + p1.y() * p2.y();
 }
@@ -68,11 +68,11 @@ OrthogonalSnapStrategy::OrthogonalSnapStrategy()
 {
 }
 
-bool OrthogonalSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool OrthogonalSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
     QPointF horzSnap, vertSnap;
-    double minVertDist = HUGE_VAL;
-    double minHorzDist = HUGE_VAL;
+    qreal minVertDist = HUGE_VAL;
+    qreal minHorzDist = HUGE_VAL;
 
     QList<KoShape*> shapes = proxy->shapes();
     foreach( KoShape * shape, shapes )
@@ -80,13 +80,13 @@ bool OrthogonalSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * p
         QList<QPointF> points = proxy->pointsFromShape( shape );
         foreach( QPointF point, points )
         {
-            double dx = fabs( point.x() - mousePosition.x() );
+            qreal dx = fabs( point.x() - mousePosition.x() );
             if( dx < minHorzDist && dx < maxSnapDistance )
             {
                 minHorzDist = dx;
                 horzSnap = point;
             }
-            double dy = fabs( point.y() - mousePosition.y() );
+            qreal dy = fabs( point.y() - mousePosition.y() );
             if( dy < minVertDist && dy < maxSnapDistance )
             {
                 minVertDist = dy;
@@ -140,10 +140,10 @@ NodeSnapStrategy::NodeSnapStrategy()
 {
 }
 
-bool NodeSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool NodeSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
-    double maxDistance = maxSnapDistance*maxSnapDistance;
-    double minDistance = HUGE_VAL;
+    qreal maxDistance = maxSnapDistance*maxSnapDistance;
+    qreal minDistance = HUGE_VAL;
 
     QRectF rect( -maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance );
     rect.moveCenter( mousePosition );
@@ -153,7 +153,7 @@ bool NodeSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, 
 
     foreach( QPointF point, points )
     {
-        double distance = fastDistance( mousePosition, point );
+        qreal distance = fastDistance( mousePosition, point );
         if( distance < maxDistance && distance < minDistance )
         {
             snappedPoint = point;
@@ -180,10 +180,10 @@ ExtensionSnapStrategy::ExtensionSnapStrategy()
 {
 }
 
-bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
-    double maxDistance = maxSnapDistance*maxSnapDistance;
-    double minDistance = HUGE_VAL;
+    qreal maxDistance = maxSnapDistance*maxSnapDistance;
+    qreal minDistance = HUGE_VAL;
 
     QPointF snappedPoint = mousePosition;
     QPointF startPoint;
@@ -210,7 +210,7 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
             QPointF firstSnapPosition = mousePosition;
             if( snapToExtension( firstSnapPosition, first, matrix ) )
             {
-                double distance = fastDistance( firstSnapPosition, mousePosition );
+                qreal distance = fastDistance( firstSnapPosition, mousePosition );
                 if( distance < maxDistance && distance < minDistance )
                 {
                     minDistance = distance;
@@ -224,7 +224,7 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
             QPointF lastSnapPosition = mousePosition;
             if( snapToExtension( lastSnapPosition, last, matrix ) )
             {
-                double distance = fastDistance( lastSnapPosition, mousePosition );
+                qreal distance = fastDistance( lastSnapPosition, mousePosition );
                 if( distance < maxDistance && distance < minDistance )
                 {
                     minDistance = distance;
@@ -274,17 +274,17 @@ bool ExtensionSnapStrategy::snapToExtension( QPointF &position, KoPathPoint * po
     return true;
 }
 
-double ExtensionSnapStrategy::project( const QPointF &lineStart, const QPointF &lineEnd, const QPointF &point )
+qreal ExtensionSnapStrategy::project( const QPointF &lineStart, const QPointF &lineEnd, const QPointF &point )
 {
     QPointF diff = lineEnd - lineStart;
     QPointF relPoint = point - lineStart;
-    double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+    qreal diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
     if( diffLength == 0.0 )
         return 0.0;
 
     diff /= diffLength;
     // project mouse position relative to stop position on extension line
-    double scalar = relPoint.x()*diff.x() + relPoint.y()*diff.y();
+    qreal scalar = relPoint.x()*diff.x() + relPoint.y()*diff.y();
     return scalar /= diffLength;
 }
 
@@ -335,10 +335,10 @@ IntersectionSnapStrategy::IntersectionSnapStrategy()
 {
 }
 
-bool IntersectionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool IntersectionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
-    double maxDistance = maxSnapDistance*maxSnapDistance;
-    double minDistance = HUGE_VAL;
+    qreal maxDistance = maxSnapDistance*maxSnapDistance;
+    qreal minDistance = HUGE_VAL;
 
     QRectF rect( -maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance );
     rect.moveCenter( mousePosition );
@@ -359,7 +359,7 @@ bool IntersectionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy *
             {
                 if( ! rect.contains( point ) )
                     continue;
-                double distance = fastDistance( mousePosition, point );
+                qreal distance = fastDistance( mousePosition, point );
                 if( distance < maxDistance && distance < minDistance )
                 {
                     snappedPoint = point;
@@ -388,15 +388,15 @@ GridSnapStrategy::GridSnapStrategy()
 {
 }
 
-bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
     if( ! proxy->canvas()->snapToGrid() )
         return false;
 
     // The 1e-10 here is a workaround for some weird division problem.
-    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
+    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a qreal,
     // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
-    double gridX, gridY;
+    qreal gridX, gridY;
     proxy->canvas()->gridSize(&gridX, &gridY);
 
     // we want to snap to the nearest grid point, so calculate
@@ -454,10 +454,10 @@ BoundingBoxSnapStrategy::BoundingBoxSnapStrategy()
 {
 }
 
-bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
-    double maxDistance = maxSnapDistance*maxSnapDistance;
-    double minDistance = HUGE_VAL;
+    qreal maxDistance = maxSnapDistance*maxSnapDistance;
+    qreal minDistance = HUGE_VAL;
 
     QRectF rect( -maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance );
     rect.moveCenter( mousePosition );
@@ -474,12 +474,12 @@ bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * 
     QList<KoShape*> shapes = proxy->shapesInRect( rect, true );
     foreach( KoShape * shape, shapes )
     {
-        double shapeMinDistance = HUGE_VAL;
+        qreal shapeMinDistance = HUGE_VAL;
         // first check the corner and center points
         for( int i = 0; i < 5; ++i )
         {
             m_boxPoints[i] = shape->absolutePosition( pointId[i] );
-            double d = fastDistance( mousePosition, m_boxPoints[i] );
+            qreal d = fastDistance( mousePosition, m_boxPoints[i] );
             if( d < minDistance && d < maxDistance )
             {
                 shapeMinDistance = d;
@@ -495,7 +495,7 @@ bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * 
         for( int i = 0; i < 4; ++i )
         {
             QPointF pointOnLine;
-            double d = squareDistanceToLine( m_boxPoints[i], m_boxPoints[(i+1)%4], mousePosition, pointOnLine );
+            qreal d = squareDistanceToLine( m_boxPoints[i], m_boxPoints[(i+1)%4], mousePosition, pointOnLine );
             if( d < minDistance && d < maxDistance )
             {
                 minDistance = d;
@@ -510,14 +510,14 @@ bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * 
 
 }
 
-double BoundingBoxSnapStrategy::squareDistanceToLine( const QPointF &lineA, const QPointF &lineB, const QPointF &point, QPointF &pointOnLine )
+qreal BoundingBoxSnapStrategy::squareDistanceToLine( const QPointF &lineA, const QPointF &lineB, const QPointF &point, QPointF &pointOnLine )
 {
     QPointF diff = lineB - lineA;
-    double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+    qreal diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
     if( diffLength == 0.0f )
         return HUGE_VAL;
     // project mouse position relative to start position on line
-    double scalar = KoSnapStrategy::scalarProduct( point-lineA, diff / diffLength );
+    qreal scalar = KoSnapStrategy::scalarProduct( point-lineA, diff / diffLength );
     if( scalar < 0.0 || scalar > diffLength )
         return HUGE_VAL;
     // calculate vector between relative mouse position and projected mouse position
@@ -544,7 +544,7 @@ LineGuideSnapStrategy::LineGuideSnapStrategy()
 {
 }
 
-bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, double maxSnapDistance )
+bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
     KoGuidesData * guidesData = proxy->canvas()->guidesData();
     if( ! guidesData || ! guidesData->showGuideLines() )
@@ -553,10 +553,10 @@ bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
     QPointF snappedPoint = mousePosition;
     m_orientation = 0;
 
-    double minHorzDistance = maxSnapDistance;
-    foreach( double guidePos, guidesData->horizontalGuideLines() )
+    qreal minHorzDistance = maxSnapDistance;
+    foreach( qreal guidePos, guidesData->horizontalGuideLines() )
     {
-        double distance = qAbs( guidePos - mousePosition.y() );
+        qreal distance = qAbs( guidePos - mousePosition.y() );
         if( distance < minHorzDistance )
         {
             snappedPoint.setY( guidePos );
@@ -564,10 +564,10 @@ bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
             m_orientation |= Qt::Horizontal;
         }
     }
-    double minVertSnapDistance = maxSnapDistance;
-    foreach( double guidePos, guidesData->verticalGuideLines() )
+    qreal minVertSnapDistance = maxSnapDistance;
+    foreach( qreal guidePos, guidesData->verticalGuideLines() )
     {
-        double distance = qAbs( guidePos - mousePosition.x() );
+        qreal distance = qAbs( guidePos - mousePosition.x() );
         if( distance < minVertSnapDistance )
         {
             snappedPoint.setX( guidePos );

@@ -154,7 +154,7 @@ KisLayerBox::KisLayerBox()
     
     connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
-    connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(double, bool)), SIGNAL(sigOpacityChanged(double, bool)));
+    connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal, bool)), SIGNAL(sigOpacityChanged(qreal, bool)));
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
 }
 

@@ -47,7 +47,7 @@ DotsAction::DotsAction(SimpleEntryTool* tool)
 {
 }
 
-void DotsAction::mousePress(Chord* chord, Note* note, double distance, const QPointF& pos)
+void DotsAction::mousePress(Chord* chord, Note* note, qreal distance, const QPointF& pos)
 {
     Q_UNUSED( note );
     Q_UNUSED( pos );

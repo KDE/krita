@@ -189,8 +189,8 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
         QList< KoShape * > shapes = lay->shapes();
         // Get the bottom of the text.
         bool moreText = false;
-        double max = m_textShapeData->documentOffset()+size().height();
-        double bottom = 0.0;
+        qreal max = m_textShapeData->documentOffset()+size().height();
+        qreal bottom = 0.0;
         QTextBlock block = m_textShapeData->document()->begin();
         while(block.isValid()) {
             QTextLayout *tl = block.layout();

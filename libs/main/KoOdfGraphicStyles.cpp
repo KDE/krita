@@ -215,12 +215,12 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         {
             QRadialGradient * rg = new QRadialGradient();
             // TODO : find out whether Oasis works with boundingBox only?
-            double cx = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cx", QString() ).remove('%') );
-            double cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString() ).remove('%') );
+            qreal cx = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cx", QString() ).remove('%') );
+            qreal cy = KoUnit::parseValue( e->attributeNS( KoXmlNS::draw, "cy", QString() ).remove('%') );
             rg->setCenter( QPointF( size.width() * 0.01 * cx, size.height() * 0.01 * cy ) );
             rg->setFocalPoint( rg->center() );
-            double dx = 0.5 * size.width();
-            double dy = 0.5 * size.height();
+            qreal dx = 0.5 * size.width();
+            qreal dy = 0.5 * size.height();
             rg->setRadius( sqrt( dx*dx + dy*dy ) );
             gradient = rg;
         }
@@ -228,12 +228,12 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         {
             QLinearGradient * lg = new QLinearGradient();
             // Dividing by 10 here because OOo saves as degree * 10
-            double angle = 90 + e->attributeNS( KoXmlNS::draw, "angle", "0" ).toDouble() / 10;
-            double radius = 0.5 * sqrt( size.width()*size.width() + size.height()*size.height() );
+            qreal angle = 90 + e->attributeNS( KoXmlNS::draw, "angle", "0" ).toDouble() / 10;
+            qreal radius = 0.5 * sqrt( size.width()*size.width() + size.height()*size.height() );
 
-            double border = e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
-            double sx = cos( angle * M_PI / 180 ) * radius;
-            double sy = sin( angle * M_PI / 180 ) * radius;
+            qreal border = e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
+            qreal sx = cos( angle * M_PI / 180 ) * radius;
+            qreal sy = sin( angle * M_PI / 180 ) * radius;
             lg->setStart( QPointF( 0.5 * size.width() + sx, 0.5 * size.height() - sy ) );
             lg->setFinalStop( QPointF( 0.5 * size.width() - sx, 0.5 * size.height() + sy ) );
             gradient = lg;
@@ -241,7 +241,7 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
         else
             return QBrush();
 
-        double border = 0.01 * e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
+        qreal border = 0.01 * e->attributeNS( KoXmlNS::draw, "border", "0" ).remove('%').toDouble();
         QGradientStops stops;
         if( type != "axial" )
         {
@@ -301,7 +301,7 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle( const KoStyleStack &styleStac
             QPointF center, focalPoint;
             center.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "cx", QString() ) ) );
             center.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "cy", QString() ) ) );
-            double r = KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "r", QString() ) );
+            qreal r = KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "r", QString() ) );
             focalPoint.setX( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "fx", QString() ) ) );
             focalPoint.setY( KoUnit::parseValue( e->attributeNS( KoXmlNS::svg, "fy", QString() ) ) );
             rg->setCenter( center );
@@ -397,13 +397,13 @@ QBrush KoOdfGraphicStyles::loadOasisPatternStyle( const KoStyleStack &styleStack
         if( styleStack.hasProperty( KoXmlNS::draw, "fill-image-height" ) && styleStack.hasProperty( KoXmlNS::draw, "fill-image-width" ) )
         {
             QString height = styleStack.property( KoXmlNS::draw, "fill-image-height" );
-            double newHeight = 0.0;
+            qreal newHeight = 0.0;
             if( height.endsWith( '%' ) )
                 newHeight = 0.01 * height.remove( '%' ).toDouble() * imageSize.height();
             else
                 newHeight = KoUnit::parseValue( height );
             QString width = styleStack.property( KoXmlNS::draw, "fill-image-width" );
-            double newWidth = 0.0;
+            qreal newWidth = 0.0;
             if( width.endsWith( '%' ) )
                 newWidth = 0.01 * width.remove( '%' ).toDouble() * imageSize.width();
             else
@@ -584,7 +584,7 @@ QBrush KoOdfGraphicStyles::loadOasisFillStyle( const KoStyleStack &styleStack, c
                         break;
                     }
                 }
-                else if( styleHash == "double")
+                else if( styleHash == "qreal")
                 {
                     switch( angle )
                     {
@@ -659,9 +659,9 @@ QPen KoOdfGraphicStyles::loadOasisStrokeStyle( const KoStyleStack &styleStack, c
                 QVector<qreal> dashes;
                 if( dashElement->hasAttributeNS( KoXmlNS::draw, "dots1" ) )
                 {
-                    double dotLength = KoUnit::parseValue( dashElement->attributeNS( KoXmlNS::draw, "dots1-length", QString() ) );
+                    qreal dotLength = KoUnit::parseValue( dashElement->attributeNS( KoXmlNS::draw, "dots1-length", QString() ) );
                     dashes.append( dotLength / tmpPen.width() );
-                    double dotDistance = KoUnit::parseValue( dashElement->attributeNS( KoXmlNS::draw, "distance", QString() ) );
+                    qreal dotDistance = KoUnit::parseValue( dashElement->attributeNS( KoXmlNS::draw, "distance", QString() ) );
                     dashes.append( dotDistance / tmpPen.width() );
                     if( dashElement->hasAttributeNS( KoXmlNS::draw, "dots2" ) )
                     {
@@ -703,8 +703,8 @@ QMatrix KoOdfGraphicStyles::loadTransformation( const QString &transformation )
             // TODO find out what oo2 really does when rotating, it seems severly broken
             if(params.count() == 3)
             {
-                double x = KoUnit::parseValue( params[1] );
-                double y = KoUnit::parseValue( params[2] );
+                qreal x = KoUnit::parseValue( params[1] );
+                qreal y = KoUnit::parseValue( params[2] );
 
                 matrix.translate(x, y);
                 // oo2 rotates by radians
@@ -721,8 +721,8 @@ QMatrix KoOdfGraphicStyles::loadTransformation( const QString &transformation )
         {
             if(params.count() == 2)
             {
-                double x = KoUnit::parseValue( params[0] );
-                double y = KoUnit::parseValue( params[1] );
+                qreal x = KoUnit::parseValue( params[0] );
+                qreal y = KoUnit::parseValue( params[1] );
                 matrix.translate(x, y);
             }
             else    // Spec : if only one param given, assume 2nd param to be 0

@@ -236,14 +236,14 @@ void KoXmlWriter::addAttribute( const char* attrName, const char* value )
     writeChar( '"' );
 }
 
-void KoXmlWriter::addAttribute( const char* attrName, double value )
+void KoXmlWriter::addAttribute( const char* attrName, qreal value )
 {
     QByteArray str;
     str.setNum( value, 'f', DBL_DIG );
     addAttribute( attrName, str.data() );
 }
 
-void KoXmlWriter::addAttributePt( const char* attrName, double value )
+void KoXmlWriter::addAttributePt( const char* attrName, qreal value )
 {
     QByteArray str;
     str.setNum( value, 'f', DBL_DIG );
@@ -362,11 +362,11 @@ void KoXmlWriter::addConfigItem( const QString & configName, int value )
     endElement();
 }
 
-void KoXmlWriter::addConfigItem( const QString & configName, double value )
+void KoXmlWriter::addConfigItem( const QString & configName, qreal value )
 {
     startElement( "config:config-item" );
     addAttribute( "config:name", configName );
-    addAttribute( "config:type", "double" );
+    addAttribute( "config:type", "qreal" );
     addTextNode( QString::number( value ) );
     endElement();
 }

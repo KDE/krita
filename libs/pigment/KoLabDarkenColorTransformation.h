@@ -25,7 +25,7 @@
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation
 {
-    KoLabDarkenColorTransformation(qint32 shade, bool compensate, double compensation) : m_shade(shade), m_compensate(compensate), m_compensation(compensation)
+    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation) : m_shade(shade), m_compensate(compensate), m_compensation(compensation)
     {
 
     }
@@ -47,7 +47,7 @@ struct KoLabDarkenColorTransformation : public KoColorTransformation
     const KoColorConversionTransformation* m_defaultFromLab;
     qint32 m_shade;
     bool m_compensate;
-    double m_compensation;
+    qreal m_compensation;
 };
 
 #endif

@@ -82,7 +82,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
 
     QPointF edge;
-    double angle = 0.0;
+    qreal angle = 0.0;
     if( m_top )
     {
         edge = sel->absolutePosition( KoFlake::BottomLeftCorner ) - sel->absolutePosition( KoFlake::BottomRightCorner );
@@ -103,7 +103,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
         edge = sel->absolutePosition( KoFlake::TopRightCorner ) - sel->absolutePosition( KoFlake::BottomRightCorner );
         angle = 270.0;
     }
-    double currentAngle = atan2( edge.y(), edge.x() ) / M_PI * 180;
+    qreal currentAngle = atan2( edge.y(), edge.x() ) / M_PI * 180;
     m_initialSelectionAngle = currentAngle - angle;
 
     kDebug(30006) <<" PREsol.x=" << m_solidPoint.x() <<" sol.y=" << m_solidPoint.y();
@@ -125,7 +125,7 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
     m.rotate(-m_initialSelectionAngle);
     shearVector = m.map(shearVector);
 
-    double shearX=0, shearY=0;
+    qreal shearX=0, shearY=0;
 
     if(m_top || m_left)
         shearVector = - shearVector;

@@ -46,7 +46,7 @@ SelectionAction::SelectionAction(SimpleEntryTool* tool)
     m_firstBar = -1;
 }
 
-inline static double sqr(double a) { return a*a; }
+inline static qreal sqr(qreal a) { return a*a; }
 
 void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 {
@@ -55,7 +55,7 @@ void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
     Bar* bar = sheet->bar(barIdx);
     
     // loop over all chords
-    double closestDist = 1e9;
+    qreal closestDist = 1e9;
     Chord* chord = 0;
     
     // outer loop, loop over all voices
@@ -68,9 +68,9 @@ void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
             Chord* c = dynamic_cast<Chord*>(vb->element(e));
             if (!c) continue;
             
-            double centerX = c->x() + (c->width() / 2);
-            double centerY = c->y() + (c->height() / 2);
-            double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
+            qreal centerX = c->x() + (c->width() / 2);
+            qreal centerY = c->y() + (c->height() / 2);
+            qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
             if (dist < closestDist) {
                 closestDist = dist;
                 chord = c;

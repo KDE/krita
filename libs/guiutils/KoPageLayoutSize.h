@@ -96,12 +96,12 @@ protected:
 
 protected slots:
     void formatChanged( int );
-    void widthChanged( double );
-    void heightChanged( double );
-    void leftChanged( double );
-    void rightChanged( double );
-    void topChanged( double );
-    void bottomChanged( double );
+    void widthChanged( qreal );
+    void heightChanged( qreal );
+    void leftChanged( qreal );
+    void rightChanged( qreal );
+    void topChanged( qreal );
+    void bottomChanged( qreal );
     void orientationChanged( int );
     void setUnitInt( int unit );
 

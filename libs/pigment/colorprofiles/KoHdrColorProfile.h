@@ -60,20 +60,20 @@ class PIGMENTCMS_EXPORT KoHdrColorProfile : public KoColorProfile {
         /**
          * @return the current exposure
          */
-        double hdrExposure() const;
+        qreal hdrExposure() const;
         /**
          * Set the exposure for this profile. The exposure is a settings
          * that allows to simulate the exposure time of a silver film
          * camera.
          */
-        void setHdrExposure(double exposure);
+        void setHdrExposure(qreal exposure);
         virtual bool operator==(const KoColorProfile&) const;
     public:
-        quint16 channelToDisplay(double value) const;
-        double displayToChannel(quint16 value) const;
+        quint16 channelToDisplay(qreal value) const;
+        qreal displayToChannel(quint16 value) const;
 
-        double channelToDisplayDouble(double value) const;
-        double displayToChannelDouble(double value) const;
+        qreal channelToDisplayDouble(qreal value) const;
+        qreal displayToChannelDouble(qreal value) const;
     private:
         struct Private;
         Private* const d;

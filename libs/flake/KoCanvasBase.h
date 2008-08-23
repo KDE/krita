@@ -67,10 +67,10 @@ public:
     /**
      * retrieve the grid size setting.
      * The grid spacing will be provided in pt.
-     * @param horizontal a pointer to a double that will be filled with the horizontal grid-spacing
-     * @param vertical a pointer to a double that will be filled with the vertical grid-spacing
+     * @param horizontal a pointer to a qreal that will be filled with the horizontal grid-spacing
+     * @param vertical a pointer to a qreal that will be filled with the vertical grid-spacing
      */
-    virtual void gridSize(double *horizontal, double *vertical) const = 0;
+    virtual void gridSize(qreal *horizontal, qreal *vertical) const = 0;
 
     /**
      * return if snap to grid is enabled.

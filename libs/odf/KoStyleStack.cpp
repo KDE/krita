@@ -136,10 +136,10 @@ bool KoStyleStack::hasProperty( const char* nsURI, const char* name, const char*
 
 // Font size is a bit special. "115%" applies to "the fontsize of the parent style".
 // This can be generalized though (hasPropertyThatCanBePercentOfParent() ? :)
-double KoStyleStack::fontSize(const double defaultFontPointSize) const
+qreal KoStyleStack::fontSize(const qreal defaultFontPointSize) const
 {
     const QString name = "font-size";
-    double percent = 1;
+    qreal percent = 1;
     QList<KoXmlElement>::ConstIterator it = m_stack.end(); // reverse iterator
 
     while ( it != m_stack.begin() )

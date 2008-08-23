@@ -61,7 +61,7 @@ Canvas::Canvas(ShapeSelector *parent)
         this, SLOT(focusChanged(QWidget*, QWidget*)));
 }
 
-void Canvas::gridSize (double *, double *) const {
+void Canvas::gridSize (qreal *, qreal *) const {
 }
 
 void Canvas::updateCanvas (const QRectF &rc) {
@@ -287,7 +287,7 @@ void  Canvas::dropEvent(QDropEvent *event) {
 void Canvas::paintEvent(QPaintEvent * e) {
     QPainter painter( this );
     painter.setClipRect(e->rect());
-    double zoomX, zoomY;
+    qreal zoomX, zoomY;
     m_converter.zoom(&zoomX, &zoomY);
 
     painter.save();

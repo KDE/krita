@@ -271,7 +271,7 @@ int KoDocumentSectionDelegate::thumbnailHeight( const QStyleOptionViewItem &opti
     if( size.width() <= width )
         return size.height();
     else
-        return int( width / ( double( size.width() ) / size.height() ) );
+        return int( width / ( qreal( size.width() ) / size.height() ) );
 }
 
 int KoDocumentSectionDelegate::availableWidth( const QModelIndex &index ) const
@@ -456,8 +456,8 @@ void KoDocumentSectionDelegate::drawThumbnail( QPainter *p, const QStyleOptionVi
     p->save();
     {
         p->setClipRect( r );
-        const double myratio = double( r.width() ) / r.height();
-        const double thumbratio = index.data( Model::AspectRatioRole ).toDouble();
+        const qreal myratio = qreal( r.width() ) / r.height();
+        const qreal thumbratio = index.data( Model::AspectRatioRole ).toDouble();
         const int s = ( myratio > thumbratio ) ? r.height() : r.width();
 
         const QImage i = index.data( int( Model::BeginThumbnailRole ) + s ).value<QImage>();

@@ -48,7 +48,7 @@ public:
      * @param lineWidth the width, in pt
      * @param color the color we draw the outline in.
      */
-    explicit KoLineBorder(double lineWidth, const QColor &color = Qt::black);
+    explicit KoLineBorder(qreal lineWidth, const QColor &color = Qt::black);
     virtual ~KoLineBorder();
 
     /// Assignment operator
@@ -63,13 +63,13 @@ public:
     /// Returns the lines join style
     Qt::PenJoinStyle joinStyle() const;
     /// Sets the line width
-    void setLineWidth( double lineWidth );
+    void setLineWidth( qreal lineWidth );
     /// Returns the line width
-    double lineWidth() const;
+    qreal lineWidth() const;
     /// Sets the miter limit
-    void setMiterLimit( double miterLimit );
+    void setMiterLimit( qreal miterLimit );
     /// Returns the miter limit
-    double miterLimit() const;
+    qreal miterLimit() const;
     /// Sets the line style
     void setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes );
     /// Returns the line style
@@ -77,9 +77,9 @@ public:
     /// Returns the line dashes
     QVector<qreal> lineDashes() const;
     /// Sets the dash offset
-    void setDashOffset( double dashOffset );
+    void setDashOffset( qreal dashOffset );
     /// Returns the dash offset
-    double dashOffset() const;
+    qreal dashOffset() const;
 
     /// Returns the color
     const QColor & color() const;

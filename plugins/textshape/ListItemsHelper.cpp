@@ -220,7 +220,7 @@ ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
 void ListItemsHelper::recalculate()
 {
     //kDebug(32500) <<"ListItemsHelper::recalculate";
-    double width = 0.0;
+    qreal width = 0.0;
     QTextListFormat format = m_textList->format();
     const KoListStyle::Style listStyle = static_cast<KoListStyle::Style> (m_textList->format().style());
 
@@ -398,7 +398,7 @@ void ListItemsHelper::recalculate()
         lih.recalculate();
     }
 
-    double counterSpacing = m_fm.width(' ');
+    qreal counterSpacing = m_fm.width(' ');
     width += counterSpacing + m_fm.width(prefix + suffix); // same for all
     for(int i=0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);

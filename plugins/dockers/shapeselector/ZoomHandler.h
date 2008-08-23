@@ -39,15 +39,15 @@ public:
     /// reimplemented from superclass
     virtual QSizeF viewToDocument (const QSizeF &viewSize) const;
     /// reimplemented from superclass
-    virtual void zoom (double *zoomX, double *zoomY) const;
+    virtual void zoom (qreal *zoomX, qreal *zoomY) const;
     /// reimplemented from superclass
-    virtual double documentToViewX (double documentX) const;
+    virtual qreal documentToViewX (qreal documentX) const;
     /// reimplemented from superclass
-    virtual double documentToViewY (double documentY) const;
+    virtual qreal documentToViewY (qreal documentY) const;
     /// reimplemented from superclass
-    virtual double viewToDocumentX (double viewX) const;
+    virtual qreal viewToDocumentX (qreal viewX) const;
     /// reimplemented from superclass
-    virtual double viewToDocumentY (double viewY) const;
+    virtual qreal viewToDocumentY (qreal viewY) const;
 
     void setZoomIndex(int zoomIndex);
     void setAbsoluteZoom(qreal zoom);

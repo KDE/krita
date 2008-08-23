@@ -21,7 +21,7 @@
 #include "KoPathPointInsertCommand.h"
 #include <klocale.h>
 
-KoPathPointInsertCommand::KoPathPointInsertCommand( const QList<KoPathPointData> & pointDataList, double insertPosition, QUndoCommand *parent )
+KoPathPointInsertCommand::KoPathPointInsertCommand( const QList<KoPathPointData> & pointDataList, qreal insertPosition, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_deletePoints( true )
 {

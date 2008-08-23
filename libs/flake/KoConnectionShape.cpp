@@ -152,7 +152,7 @@ void KoConnectionShape::updatePath( const QSizeF &size )
 {
     Q_UNUSED( size );
 
-    const double MinimumEscapeLength = 20.0;
+    const qreal MinimumEscapeLength = 20.0;
 
     clear();
     switch( d->connectionType )
@@ -186,7 +186,7 @@ void KoConnectionShape::updatePath( const QSizeF &size )
                     }
 
                     // check if we are going toward the other handle
-                    double sp = scalarProd( direction1, edgePoint2-edgePoint1 );
+                    qreal sp = scalarProd( direction1, edgePoint2-edgePoint1 );
                     if( sp >= 0.0 )
                     {
                         // if we are having the same direction, go all the way toward
@@ -359,7 +359,7 @@ QPointF KoConnectionShape::escapeDirection( int handleId ) const
         else
             centerPoint = d->shape2->absolutePosition( KoFlake::CenteredPosition );
 
-        double angle = atan2( handlePoint.y()-centerPoint.y(), handlePoint.x()-centerPoint.x() );
+        qreal angle = atan2( handlePoint.y()-centerPoint.y(), handlePoint.x()-centerPoint.x() );
         if( angle < 0.0 )
             angle += 2.0*M_PI;
         angle *= 180.0 / M_PI;
@@ -383,16 +383,16 @@ QPointF KoConnectionShape::escapeDirection( int handleId ) const
 
 bool KoConnectionShape::intersects( const QPointF &p1, const QPointF &d1, const QPointF &p2, const QPointF &d2, QPointF &isect )
 {
-    double sp1 = scalarProd( d1, p2-p1 );
+    qreal sp1 = scalarProd( d1, p2-p1 );
     if( sp1 < 0.0 )
         return false;
 
-    double sp2 = scalarProd( d2, p1-p2 );
+    qreal sp2 = scalarProd( d2, p1-p2 );
     if( sp2 < 0.0 )
         return false;
 
     // use cross product to check if rays intersects at all
-    double cp = crossProd( d1, d2 );
+    qreal cp = crossProd( d1, d2 );
     if( cp == 0.0 )
     {
         // rays are parallel or coincidient
@@ -418,12 +418,12 @@ bool KoConnectionShape::intersects( const QPointF &p1, const QPointF &d1, const 
     return true;
 }
 
-double KoConnectionShape::scalarProd( const QPointF &v1, const QPointF &v2 )
+qreal KoConnectionShape::scalarProd( const QPointF &v1, const QPointF &v2 )
 {
     return v1.x()*v2.x() + v1.y()*v2.y();
 }
 
-double KoConnectionShape::crossProd( const QPointF &v1, const QPointF &v2 )
+qreal KoConnectionShape::crossProd( const QPointF &v1, const QPointF &v2 )
 {
     return (v1.x()*v2.y() - v1.y()*v2.x() );
 }
@@ -431,7 +431,7 @@ double KoConnectionShape::crossProd( const QPointF &v1, const QPointF &v2 )
 QPointF KoConnectionShape::perpendicularDirection( const QPointF &p1, const QPointF &d1, const QPointF &p2 )
 {
     QPointF perpendicular( d1.y(), -d1.x() );
-    double sp = scalarProd( perpendicular, p2-p1 );
+    qreal sp = scalarProd( perpendicular, p2-p1 );
     if( sp < 0.0 )
         perpendicular *= -1.0;
 

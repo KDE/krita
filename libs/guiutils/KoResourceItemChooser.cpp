@@ -51,10 +51,10 @@ QImage KoResourceItem::thumbnail( const QSize &thumbSize ) const
     QSize imgSize = m_resource->img().size();
 
     if(imgSize.height() > thumbSize.height() || imgSize.width() > thumbSize.width()) {
-        double scaleW = static_cast<double>( thumbSize.width() ) / static_cast<double>( imgSize.width() );
-        double scaleH = static_cast<double>( thumbSize.height() ) / static_cast<double>( imgSize.height() );
+        qreal scaleW = static_cast<qreal>( thumbSize.width() ) / static_cast<qreal>( imgSize.width() );
+        qreal scaleH = static_cast<qreal>( thumbSize.height() ) / static_cast<qreal>( imgSize.height() );
 
-        double scale = qMin( scaleW, scaleH );
+        qreal scale = qMin( scaleW, scaleH );
 
         int thumbW = static_cast<int>( imgSize.width() * scale );
         int thumbH = static_cast<int>( imgSize.height() * scale );

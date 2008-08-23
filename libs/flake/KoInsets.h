@@ -34,7 +34,7 @@ public:
      * @param bottom the inset at the bottom
      * @param right the inset at the right
      */
-    KoInsets(double top, double left, double bottom, double right) {
+    KoInsets(qreal top, qreal left, qreal bottom, qreal right) {
         this->top = top;
         this->left = left;
         this->bottom = bottom;
@@ -46,10 +46,10 @@ public:
      */
     KoInsets() : top(0.), bottom(0.), left(0.), right(0.) {
     }
-    double top;     ///< Top inset
-    double bottom;  ///< Bottom inset
-    double left;    ///< Left inset
-    double right;   ///< Right inset
+    qreal top;     ///< Top inset
+    qreal bottom;  ///< Bottom inset
+    qreal left;    ///< Left inset
+    qreal right;   ///< Right inset
 };
 
 #endif

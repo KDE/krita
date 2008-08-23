@@ -144,15 +144,15 @@ public:
         /// return the number of columns of the line to be layouted
         virtual int numColumns() { return 0; } // if numColumns() returns 0, use width() instead
         /// return the width of the line to be layouted
-        virtual double width() = 0;
+        virtual qreal width() = 0;
         /// return the x position of the line to be layouted
-        virtual double x() = 0;
+        virtual qreal x() = 0;
         /// return the y position (top of text) of the line to be layouted
-        virtual double y() = 0;
+        virtual qreal y() = 0;
         /// return the cursor position (in the document) of the last character that has been positioned in the lay-out
         virtual int cursorPosition() const = 0;
         /// return the y offset of the document at start of shape.
-        virtual double docOffsetInShape() const = 0;
+        virtual qreal docOffsetInShape() const = 0;
         /// when a line is added, update internal vars.  Return true if line does not fit in shape
         virtual bool addLine(QTextLine &line) = 0;
         /// prepare for next paragraph; return false if there is no next parag.
@@ -160,7 +160,7 @@ public:
         /// revert layout to the previous paragraph. Return false if there is no previous paragraph.
         virtual bool previousParag() = 0;
         /// Return the y position of the offset for the current shape (See KoTextShapeData::documentOffset() )
-        virtual double documentOffsetInShape() = 0;
+        virtual qreal documentOffsetInShape() = 0;
         /**
          * Paint the document.
          * Paint the whole document, at least within the cliprect as set on the painter.

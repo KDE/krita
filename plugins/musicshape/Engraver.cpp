@@ -68,11 +68,11 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
 
     // now layout bars in staff systems
     int curSystem = firstSystem;
-    double deltay = sheet->staffSystem(firstSystem)->top() - sheet->staffSystem(0)->top();
+    qreal deltay = sheet->staffSystem(firstSystem)->top() - sheet->staffSystem(0)->top();
     QPointF p(0, sheet->staffSystem(curSystem)->top() - deltay);
     int lastStart = firstBar;
-    double lineWidth = size.width();
-    double indent = sheet->staffSystem(curSystem)->indent();
+    qreal lineWidth = size.width();
+    qreal indent = sheet->staffSystem(curSystem)->indent();
     lineWidth -= indent;
     if (firstBar > 0) {
         p.setX(indent - sheet->bar(firstBar-1)->prefix());
@@ -84,7 +84,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
         if (i > 0 && p.x() + bar->naturalSize() + bar->prefix() - indent > lineWidth) {
             // scale all sizes
             // first calculate the total scalable width and total fixed width of all preceding bars
-            double scalable = 0, fixed = 0;
+            qreal scalable = 0, fixed = 0;
             for (int j = lastStart; j < i; j++) {
                 scalable += sheet->bar(j)->size();
                 fixed += sheet->bar(j)->prefix();
@@ -94,7 +94,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
                 fixed -= sheet->bar(lastStart)->prefix();
             }
             // now scale factor is (available width - fixed) / scalable width;
-            double factor = (lineWidth - fixed) / scalable;
+            qreal factor = (lineWidth - fixed) / scalable;
             QPointF sp = sheet->bar(lastStart)->position() - QPointF(sheet->bar(lastStart)->prefix(), 0);
             for (int j = lastStart; j < i; j++) {
                 //sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
@@ -119,7 +119,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
                 Part* part = sheet->part(partIdx);
                 for (int staffIdx = 0; staffIdx < part->staffCount(); staffIdx++) {
                     Staff* staff = part->staff(staffIdx);
-                    double w = 0;
+                    qreal w = 0;
                     Clef* clef = staff->lastClefChange(i, 0);
                     if (clef) {
                         w += clef->width() + 15;
@@ -153,13 +153,13 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
     if (*lastSystem == -1) *lastSystem = curSystem;
     // potentially scale last staff system if it is too wide
     if (p.x() - indent > lineWidth) {
-        double scalable = 0, fixed = 0;
+        qreal scalable = 0, fixed = 0;
         for (int j = lastStart; j < sheet->barCount(); j++) {
             scalable += sheet->bar(j)->size();
             fixed += sheet->bar(j)->prefix();
         }
         // now scale factor is (available width - fixed) / scalable width;
-        double factor = (lineWidth - fixed) / scalable;
+        qreal factor = (lineWidth - fixed) / scalable;
         QPointF sp = sheet->bar(lastStart)->position() - QPointF(sheet->bar(lastStart)->prefix(), 0);
         for (int j = lastStart; j < sheet->barCount(); j++) {
             //sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
@@ -175,7 +175,7 @@ struct Simultanity {
     int startTime;
     int duration; ///< the duration of this simultanity (as in the startTime of the next one minus start time of this one)
     int minChordDuration; ///< the duration of the shortest note not yet finished at this time
-    double space;
+    qreal space;
     QList<VoiceElement*> voiceElements;
     Simultanity(int time) : startTime(time), duration(0), minChordDuration(0), space(0) {}
 };
@@ -273,22 +273,22 @@ void Engraver::engraveBar(Bar* bar)
     collectSimultanities(sheet, barIdx, simultanities, shortestNoteLength);
 
     // 'T' in the formula
-    double baseFactor = bar->sizeFactor() - log2((double) qMin(shortestNoteLength, (int) Note8Length) / WholeLength);
+    qreal baseFactor = bar->sizeFactor() - log2((qreal) qMin(shortestNoteLength, (int) Note8Length) / WholeLength);
 
     // assign space to simultanities according to durations
     for (int i = 0; i < simultanities.size(); i++) {
         Simultanity& sim = simultanities[i];
 
-        double scaleFactor = (double) sim.duration / sim.minChordDuration; // 'e' in the formula
+        qreal scaleFactor = (qreal) sim.duration / sim.minChordDuration; // 'e' in the formula
         if (scaleFactor > 1) scaleFactor = 1;
-        double duration = (double) sim.duration / WholeLength;
+        qreal duration = (qreal) sim.duration / WholeLength;
         sim.space = scaleFactor * ( log2(duration) + baseFactor );
     }
 
     // give voice elements positions according to space assigned
-    double noteHeadSize = 7.0;
+    qreal noteHeadSize = 7.0;
 
-    double curx = 15.0;
+    qreal curx = 15.0;
     for (int s = 0; s < simultanities.size(); s++) {
         Simultanity& sim = simultanities[s];
         foreach (VoiceElement* ve, sim.voiceElements) {
@@ -343,7 +343,7 @@ void Engraver::engraveBar(Bar* bar)
         }
     }
 
-    double x = 0; // this is the end position of the last placed elements
+    qreal x = 0; // this is the end position of the last placed elements
     bool endOfPrefix = false;
     QList<StaffElement*> prefix;
     // loop until all elements are placed
@@ -374,7 +374,7 @@ void Engraver::engraveBar(Bar* bar)
             // we've reached the end of the prefix; now update all already placed staff elements to have correct
             // (negative) x coordinates, and set the size of the prefix.
             if (prefix.size() > 0) {
-                double prefixSize = x + 5;
+                qreal prefixSize = x + 5;
                 bar->setPrefix(prefixSize);
                 foreach (StaffElement* se, prefix) {
                     se->setX(se->x() - prefixSize);
@@ -389,15 +389,15 @@ void Engraver::engraveBar(Bar* bar)
         // none found, break
         if (time == INT_MAX) break;
 
-        double maxEnd = x;
+        qreal maxEnd = x;
         // now update all items with correct start time
         if (staffElement) {
             for (int s = 0; s < staffCount; s++) {
                 if (staffElements[s].size() > 0 && staffElements[s][0]->startTime() == time && staffElements[s][0]->priority() == priority) {
                     StaffElement* se = staffElements[s].takeAt(0);
-                    double xpos = x + 15;
+                    qreal xpos = x + 15;
                     se->setX(xpos);
-                    double xend = se->width() + xpos;
+                    qreal xend = se->width() + xpos;
                     if (xend > maxEnd) maxEnd = xend;
                     if (!endOfPrefix) prefix.append(se);
                 }
@@ -453,9 +453,9 @@ void Engraver::engraveBar(Bar* bar)
                         }
                     }
 
-                    double xpos = x + 15;
+                    qreal xpos = x + 15;
                     //voices[i]->element(nextIndex[i])->setX(xpos);
-                    double xend = voices[i]->element(nextIndex[i])->width() + xpos;
+                    qreal xend = voices[i]->element(nextIndex[i])->width() + xpos;
                     if (xend > maxEnd) maxEnd = xend;
                     nextTime[i] += voices[i]->element(nextIndex[i])->length();
                     nextIndex[i]++;
@@ -500,14 +500,14 @@ void Engraver::engraveBar(Bar* bar)
                 }
 
                 // now somehow fit a line through all those points...
-                double bestError = 1e99;
-                double bestK = 0, bestL = 0;
+                qreal bestError = 1e99;
+                qreal bestK = 0, bestL = 0;
                 for (int a = 0; a < stemEnds.size(); a++) {
                     for (int b = a+1; b < stemEnds.size(); b++) {
                         // assume a line that passes through stemEnds[a] and stemEnds[b]
                         // line is in form of k*x + l
-                        double k = (stemEnds[b].y() - stemEnds[a].y()) / (stemEnds[b].x() - stemEnds[a].x());
-                        double l = stemEnds[a].y() - (stemEnds[a].x() * k);
+                        qreal k = (stemEnds[b].y() - stemEnds[a].y()) / (stemEnds[b].x() - stemEnds[a].x());
+                        qreal l = stemEnds[a].y() - (stemEnds[a].x() * k);
 
                         //kDebug() << "a:" << stemEnds[a] << ", b:" << stemEnds[b] << ", k:" << k << ", l:" << l;
 
@@ -516,9 +516,9 @@ void Engraver::engraveBar(Bar* bar)
                         //}
                         // check if it is entirely above all stemEnds, and calculate sum of distances to stemEnds
                         bool validLine = true;
-                        double error = 0;
+                        qreal error = 0;
                         for (int j = 0; j < stemEnds.size(); j++) {
-                            double y = k * stemEnds[j].x() + l;
+                            qreal y = k * stemEnds[j].x() + l;
                             if (y < stemEnds[j].y() - 1e-9) {
                                 validLine = false;
                                 break;
@@ -540,9 +540,9 @@ void Engraver::engraveBar(Bar* bar)
 
                 c->setStemLength(c->desiredStemLength() + bestL / c->staff()->lineSpacing());
                 Chord* endChord = c->beamEnd(0);
-                double endY = stemEnds[stemEnds.size()-1].x() * bestK + bestL;
+                qreal endY = stemEnds[stemEnds.size()-1].x() * bestK + bestL;
                 //kDebug() << "old y:" << stemEnds[stemEnds.size()-1].y() << "new y:" << endY;
-                double extra = endY - stemEnds[stemEnds.size()-1].y();
+                qreal extra = endY - stemEnds[stemEnds.size()-1].y();
                 endChord->setStemLength(endChord->desiredStemLength() + extra / endChord->staff()->lineSpacing());
             }
         }

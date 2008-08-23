@@ -27,7 +27,7 @@ public:
     AccidentalAction(int accidentals, SimpleEntryTool* tool);
 
     virtual void renderPreview(QPainter& painter, const QPointF& point);
-    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, double distance, const QPointF& pos);
+    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
 private:
     int m_accidentals;
 };

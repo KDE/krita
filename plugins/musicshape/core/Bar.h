@@ -78,7 +78,7 @@ public:
     /**
      * Returns the (horizontal) size of the bar.
      */
-    double size() const;
+    qreal size() const;
     
     /**
      * The prefix of a bar contains any staff elements at time 0 such as clefs and key signatures.
@@ -90,14 +90,14 @@ public:
      * bar start at position() + (size(), 0); all coordinates (including staff elements with start time 0) are relative
      * to position(). This means that elements in the prefix have negative x coordinates.
      */
-    double prefix() const;
+    qreal prefix() const;
     
     /**
      * Set the size of the prefix of this bar. The prefix contains all staff elements at time 0.
      *
      * @param prefix the new size of the prefix of this bar
      */
-    void setPrefix(double prefix);
+    void setPrefix(qreal prefix);
     
     /**
      * Returns the position at which the prefix is drawn. This position is relative to the top-left corner of the sheet
@@ -115,10 +115,10 @@ public:
     /**
      * Returns the desired size of this bar. The desired size is the space all the elements in this bar would ideally use.
      */
-    double naturalSize() const;
+    qreal naturalSize() const;
     
-    double sizeFactor() const;
-    double desiredSizeFactor() const;
+    qreal sizeFactor() const;
+    qreal desiredSizeFactor() const;
     
     /**
      * Returns the number of staff elements in the given staff in this bar.
@@ -158,7 +158,7 @@ public slots:
      *
      * @param size the new size of the bar
      */
-    void setSize(double size);
+    void setSize(qreal size);
 signals:
     /**
      * This signal is emitted when the position of the bar is changed.
@@ -168,7 +168,7 @@ signals:
     /**
      * This signal is emitted when the size of the bar is changed.
      */
-    void sizeChanged(double size);
+    void sizeChanged(qreal size);
 private:
     class Private;
     Private * const d;

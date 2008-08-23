@@ -251,12 +251,12 @@ const QSizeF KoImageData:: imageSize() {
         image(); // make sure the image is loaded
 
         if(d->image.dotsPerMeterX())
-            d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (double) d->image.dotsPerMeterX() * 10.0) );
+            d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (qreal) d->image.dotsPerMeterX() * 10.0) );
         else
             d->imageSize.setWidth( d->image.width() / 72.0);
 
         if(d->image.dotsPerMeterY())
-            d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (double) d->image.dotsPerMeterY() * 10.0) );
+            d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (qreal) d->image.dotsPerMeterY() * 10.0) );
         else
             d->imageSize.setHeight( d->image.height() / 72.0);
     }

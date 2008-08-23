@@ -55,7 +55,7 @@ private:
     QPointF m_solidPoint;
     QSizeF m_initialSize;
     bool m_top, m_left, m_bottom, m_right;
-    double m_initialSelectionAngle;
+    qreal m_initialSelectionAngle;
     QMatrix m_shearMatrix;
     bool m_isMirrored;
     QList<QMatrix> m_oldTransforms;

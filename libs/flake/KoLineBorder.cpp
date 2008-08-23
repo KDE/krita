@@ -51,7 +51,7 @@ KoLineBorder::KoLineBorder( const KoLineBorder & other )
     d->brush = other.d->brush;
 }
 
-KoLineBorder::KoLineBorder(double lineWidth, const QColor &color)
+KoLineBorder::KoLineBorder(qreal lineWidth, const QColor &color)
     : d(new Private())
 {
     d->pen.setWidthF( qMax(0.0,lineWidth) );
@@ -131,7 +131,7 @@ void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
 
 void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
     Q_UNUSED(shape);
-    double lineWidth = d->pen.widthF();
+    qreal lineWidth = d->pen.widthF();
     if(lineWidth < 0)
          lineWidth = 1;
     lineWidth /= 2; // since we draw a line half inside, and half outside the object.
@@ -174,19 +174,19 @@ Qt::PenJoinStyle KoLineBorder::joinStyle() const {
     return d->pen.joinStyle();
 }
 
-void KoLineBorder::setLineWidth( double lineWidth ) {
+void KoLineBorder::setLineWidth( qreal lineWidth ) {
     d->pen.setWidthF( qMax(0.0,lineWidth) );
 }
 
-double KoLineBorder::lineWidth() const {
+qreal KoLineBorder::lineWidth() const {
     return d->pen.widthF();
 }
 
-void KoLineBorder::setMiterLimit( double miterLimit ) {
+void KoLineBorder::setMiterLimit( qreal miterLimit ) {
     d->pen.setMiterLimit( miterLimit );
 }
 
-double KoLineBorder::miterLimit() const {
+qreal KoLineBorder::miterLimit() const {
     return d->pen.miterLimit();
 }
 
@@ -218,12 +218,12 @@ QVector<qreal> KoLineBorder::lineDashes() const
     return d->pen.dashPattern();
 }
 
-void KoLineBorder::setDashOffset( double dashOffset )
+void KoLineBorder::setDashOffset( qreal dashOffset )
 {
     d->pen.setDashOffset( dashOffset );
 }
 
-double KoLineBorder::dashOffset() const
+qreal KoLineBorder::dashOffset() const
 {
     return d->pen.dashOffset();
 }

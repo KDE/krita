@@ -176,7 +176,7 @@ void DefaultToolWidget::sizeHasChanged()
 
     if( aspectButton->isChecked() )
     {
-        double aspect = rect.width() / rect.height();
+        qreal aspect = rect.width() / rect.height();
         if( rect.width() != newSize.width() )
             newSize.setHeight( newSize.width() / aspect );
         else if( rect.height() != newSize.height() )
@@ -205,8 +205,8 @@ void DefaultToolWidget::sizeHasChanged()
             // that tells us the effective scale values we have to use for the resizing
             QMatrix localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
             // save the effective scale values
-            double scaleX = localMatrix.m11();
-            double scaleY = localMatrix.m22();
+            qreal scaleX = localMatrix.m11();
+            qreal scaleY = localMatrix.m22();
 
             // calculate the scale matrix which is equivalent to our resizing above
             QMatrix scaleMatrix = (QMatrix().scale( scaleX, scaleY ));
@@ -263,7 +263,7 @@ void DefaultToolWidget::rotationChanged()
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
 
-    double angle = rotateSpinBox->value();
+    qreal angle = rotateSpinBox->value();
     QPointF rotationCenter = m_tool->canvas()->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
     QMatrix matrix;
     matrix.translate(rotationCenter.x(), rotationCenter.y());
@@ -296,7 +296,7 @@ void DefaultToolWidget::shearXChanged()
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
 
-    double shearX = shearXSpinBox->value() / selection->size().height();
+    qreal shearX = shearXSpinBox->value() / selection->size().height();
     QPointF basePoint = selection->absolutePosition( SelectionDecorator::hotPosition() );
     QMatrix matrix;
     matrix.translate(basePoint.x(), basePoint.y());
@@ -329,7 +329,7 @@ void DefaultToolWidget::shearYChanged()
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
 
-    double shearY = shearYSpinBox->value() / selection->size().width();
+    qreal shearY = shearYSpinBox->value() / selection->size().width();
     QPointF basePoint = selection->absolutePosition( SelectionDecorator::hotPosition() );
     QMatrix matrix;
     matrix.translate(basePoint.x(), basePoint.y());
@@ -361,7 +361,7 @@ void DefaultToolWidget::scaleXChanged()
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
 
-    double scale = scaleXSpinBox->value() * 0.01; // Input is in per cent
+    qreal scale = scaleXSpinBox->value() * 0.01; // Input is in per cent
     QPointF basePoint = m_tool->canvas()->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
     QMatrix matrix;
     matrix.translate(basePoint.x(), basePoint.y());
@@ -398,7 +398,7 @@ void DefaultToolWidget::scaleYChanged()
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
 
-    double scale = scaleYSpinBox->value() * 0.01; // Input is in per cent
+    qreal scale = scaleYSpinBox->value() * 0.01; // Input is in per cent
     QPointF basePoint = m_tool->canvas()->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
     QMatrix matrix;
     matrix.translate(basePoint.x(), basePoint.y());

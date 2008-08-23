@@ -51,10 +51,10 @@ enum {
 
 class KORESOURCES_EXPORT KoGradientSegment {
     public:
-        KoGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor);
+        KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor);
 
         // startOffset <= t <= endOffset
-        void colorAt(KoColor&, double t) const;
+        void colorAt(KoColor&, qreal t) const;
 
         const KoColor& startColor() const;
         const KoColor& endColor() const;
@@ -62,15 +62,15 @@ class KORESOURCES_EXPORT KoGradientSegment {
         void setStartColor(const KoColor& color) { m_startColor = color; }
         void setEndColor(const KoColor& color) { m_endColor = color; }
 
-        double startOffset() const;
-        double middleOffset() const;
-        double endOffset() const;
+        qreal startOffset() const;
+        qreal middleOffset() const;
+        qreal endOffset() const;
 
-        void setStartOffset(double t);
-        void setMiddleOffset(double t);
-        void setEndOffset(double t);
+        void setStartOffset(qreal t);
+        void setMiddleOffset(qreal t);
+        void setEndOffset(qreal t);
 
-        double length() { return m_length; }
+        qreal length() { return m_length; }
 
         int interpolation() const;
         int colorInterpolation() const;
@@ -86,7 +86,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
             ColorInterpolationStrategy() {}
             virtual ~ColorInterpolationStrategy() {}
 
-            virtual void colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const = 0;
+            virtual void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const = 0;
             virtual int type() const = 0;
         };
 
@@ -94,7 +94,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
         public:
             static RGBColorInterpolationStrategy *instance();
 
-            virtual void colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const;
+            virtual void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const;
             virtual int type() const { return COLOR_INTERP_RGB; }
 
         private:
@@ -111,7 +111,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
         public:
             static HSVCWColorInterpolationStrategy *instance();
 
-            virtual void colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const;
+            virtual void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CW; }
         private:
             HSVCWColorInterpolationStrategy();
@@ -124,7 +124,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
         public:
             static HSVCCWColorInterpolationStrategy *instance();
 
-            virtual void colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const;
+            virtual void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CCW; }
         private:
             HSVCCWColorInterpolationStrategy();
@@ -138,7 +138,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
             InterpolationStrategy() {}
             virtual ~InterpolationStrategy() {}
 
-            virtual double valueAt(double t, double middle) const = 0;
+            virtual qreal valueAt(qreal t, qreal middle) const = 0;
             virtual int type() const = 0;
         };
 
@@ -146,13 +146,13 @@ class KORESOURCES_EXPORT KoGradientSegment {
         public:
             static LinearInterpolationStrategy *instance();
 
-            virtual double valueAt(double t, double middle) const;
+            virtual qreal valueAt(qreal t, qreal middle) const;
             virtual int type() const { return INTERP_LINEAR; }
 
             // This does the actual calculation and is made
             // static as an optimization for the other
             // strategies that need this for their own calculation.
-            static double calcValueAt(double t, double middle);
+            static qreal calcValueAt(qreal t, qreal middle);
 
         private:
             LinearInterpolationStrategy() {}
@@ -164,20 +164,20 @@ class KORESOURCES_EXPORT KoGradientSegment {
         public:
             static CurvedInterpolationStrategy *instance();
 
-            virtual double valueAt(double t, double middle) const;
+            virtual qreal valueAt(qreal t, qreal middle) const;
             virtual int type() const { return INTERP_CURVED; }
         private:
             CurvedInterpolationStrategy();
 
             static CurvedInterpolationStrategy *m_instance;
-            double m_logHalf;
+            qreal m_logHalf;
         };
 
         class SphereIncreasingInterpolationStrategy : public InterpolationStrategy {
         public:
             static SphereIncreasingInterpolationStrategy *instance();
 
-            virtual double valueAt(double t, double middle) const;
+            virtual qreal valueAt(qreal t, qreal middle) const;
             virtual int type() const { return INTERP_SPHERE_INCREASING; }
         private:
             SphereIncreasingInterpolationStrategy() {}
@@ -189,7 +189,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
         public:
             static SphereDecreasingInterpolationStrategy *instance();
 
-            virtual double valueAt(double t, double middle) const;
+            virtual qreal valueAt(qreal t, qreal middle) const;
             virtual int type() const { return INTERP_SPHERE_DECREASING; }
         private:
             SphereDecreasingInterpolationStrategy() {}
@@ -201,7 +201,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
         public:
             static SineInterpolationStrategy *instance();
 
-            virtual double valueAt(double t, double middle) const;
+            virtual qreal valueAt(qreal t, qreal middle) const;
             virtual int type() const { return INTERP_SINE; }
         private:
             SineInterpolationStrategy() {}
@@ -212,11 +212,11 @@ class KORESOURCES_EXPORT KoGradientSegment {
         InterpolationStrategy *m_interpolator;
         ColorInterpolationStrategy *m_colorInterpolator;
 
-        double m_startOffset;
-        double m_middleOffset;
-        double m_endOffset;
-        double m_length;
-        double m_middleT;
+        qreal m_startOffset;
+        qreal m_middleOffset;
+        qreal m_endOffset;
+        qreal m_length;
+        qreal m_middleT;
 
         KoColor m_startColor;
         KoColor m_endColor;
@@ -233,9 +233,9 @@ public:
     virtual bool load();
     virtual bool save();
 
-    void colorAt(KoColor& dst, double t) const;
+    void colorAt(KoColor& dst, qreal t) const;
 
-    KoGradientSegment *segmentAt(double t) const;
+    KoGradientSegment *segmentAt(qreal t) const;
 
     virtual QGradient* toQGradient() const;
 

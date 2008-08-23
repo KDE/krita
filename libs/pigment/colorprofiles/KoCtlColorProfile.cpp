@@ -57,8 +57,8 @@ struct KoCtlColorProfile::Private {
     QList<ConversionInfo> conversionInfos;
     QString colorModelID;
     QString colorDepthID;
-    double exposure;
-    double middleGreyScaleFactor;
+    qreal exposure;
+    qreal middleGreyScaleFactor;
 };
 
 KoCtlColorProfile::KoCtlColorProfile(QString filename) : KoColorProfile(filename), d(new Private)

@@ -47,8 +47,8 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
     connect( d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SIGNAL(shadowVisibilityChanged(bool)) );
     connect( d->widget.shadowColor, SIGNAL(changed(const QColor&)), 
         this, SIGNAL(shadowColorChanged(const QColor&)));
-    connect( d->widget.shadowAngle, SIGNAL(valueChanged(double,bool)), this, SLOT(offsetChanged()));
-    connect( d->widget.shadowOffset, SIGNAL(valueChangedPt(double)), this, SLOT(offsetChanged()));
+    connect( d->widget.shadowAngle, SIGNAL(valueChanged(qreal,bool)), this, SLOT(offsetChanged()));
+    connect( d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(offsetChanged()));
 }
 
 KoShadowConfigWidget::~KoShadowConfigWidget()

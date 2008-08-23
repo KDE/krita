@@ -67,14 +67,14 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     connect(d->widget.units, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)));
     connect(group2, SIGNAL(buttonClicked (int)), this, SLOT(facingPagesChanged()));
     connect(d->orientationGroup, SIGNAL(buttonClicked (int)), this, SLOT(orientationChanged()));
-    connect(d->widget.width, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
-    connect(d->widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
-    connect(d->widget.topMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
-    connect(d->widget.bottomMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
-    connect(d->widget.bindingEdgeMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
-    connect(d->widget.pageEdgeMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
-    connect(d->widget.width, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
-    connect(d->widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+    connect(d->widget.width, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
+    connect(d->widget.height, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
+    connect(d->widget.topMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
+    connect(d->widget.bottomMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
+    connect(d->widget.bindingEdgeMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
+    connect(d->widget.pageEdgeMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
+    connect(d->widget.width, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
+    connect(d->widget.height, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
 
     setUnit(KoUnit(KoUnit::Millimeter));
     d->allowSignals = true;
@@ -183,11 +183,11 @@ void KoPageLayoutWidget::marginsChanged() {
     d->pageLayout.pageEdge = -1;
     d->pageLayout.top = d->marginsEnabled?d->widget.topMargin->value():0;
     d->pageLayout.bottom = d->marginsEnabled?d->widget.bottomMargin->value():0;
-    double left = d->marginsEnabled?d->widget.bindingEdgeMargin->value():0;
-    double right = d->marginsEnabled?d->widget.pageEdgeMargin->value():0;
+    qreal left = d->marginsEnabled?d->widget.bindingEdgeMargin->value():0;
+    qreal right = d->marginsEnabled?d->widget.pageEdgeMargin->value():0;
     if(left + right > d->pageLayout.width - 10) {
         // make sure the actual text area is never smaller than 10 points.
-        double diff = d->pageLayout.width - 10 - left - right;
+        qreal diff = d->pageLayout.width - 10 - left - right;
         left = qMin(d->pageLayout.width - 10, qMax(0.0, left - diff / 2.0));
         right = qMax(0.0, right - d->pageLayout.width - 10 - left);
     }
@@ -228,7 +228,7 @@ void KoPageLayoutWidget::orientationChanged() {
     d->allowSignals = false;
     d->pageLayout.orientation = d->widget.landscape->isChecked() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
 
-    double x = d->widget.height->value();
+    qreal x = d->widget.height->value();
     d->widget.height->changeValue( d->widget.width->value() );
     d->widget.width->changeValue( x );
 

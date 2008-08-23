@@ -29,7 +29,7 @@
 
 // Same as qfuzzycompare, but less precise because KoZoomHandler is a
 // bit messy itself.
-static inline bool fuzzyCompare(double p1, double p2)
+static inline bool fuzzyCompare(qreal p1, qreal p2)
 {
     return qAbs(p1 - p2) < 0.0000001;
 }
@@ -54,7 +54,7 @@ void zoomhandler_test::testConstruction()
 void zoomhandler_test::testApi()
 {
     KoZoomHandler zoomHandler;
-    double x, y;
+    qreal x, y;
 
     zoomHandler.setResolution( 128, 129 );
     QCOMPARE( zoomHandler.resolutionX(), 128. );

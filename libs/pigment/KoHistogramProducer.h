@@ -70,7 +70,7 @@ public:
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace* colorSpace) = 0;
 
     // Methods to set what exactly is being added to the bins
-    virtual void setView(double from, double width) = 0;
+    virtual void setView(qreal from, qreal width) = 0;
     virtual void setSkipTransparent(bool set) { m_skipTransparent = set; }
     virtual void setSkipUnselected(bool set) { m_skipUnselected = set; }
 
@@ -78,10 +78,10 @@ public:
     virtual const KoID& id() const = 0;
     virtual QList<KoChannelInfo *> channels() = 0;
     virtual qint32 numberOfBins() = 0;
-    virtual QString positionToString(double pos) const = 0;
-    virtual double viewFrom() const = 0;
-    virtual double viewWidth() const = 0;
-    virtual double maximalZoom() const = 0;
+    virtual QString positionToString(qreal pos) const = 0;
+    virtual qreal viewFrom() const = 0;
+    virtual qreal viewWidth() const = 0;
+    virtual qreal maximalZoom() const = 0;
 
     // Methods to get information on the data we have seen
     virtual qint32 count() = 0;

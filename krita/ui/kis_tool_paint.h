@@ -99,7 +99,7 @@ private:
 private slots:
 
     void slotPopupQuickHelp();
-    void slotSetOpacity(double opacityPerCent, bool final);
+    void slotSetOpacity(qreal opacityPerCent, bool final);
     void slotSetCompositeMode(const KoCompositeOp* compositeOp);
 
 protected:

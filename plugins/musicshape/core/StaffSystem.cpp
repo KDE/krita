@@ -25,11 +25,11 @@ namespace MusicCore {
 class StaffSystem::Private
 {
 public:
-    double top;
-    double height;
+    qreal top;
+    qreal height;
     int firstBar;
-    double indent;
-    double lineWidth;
+    qreal indent;
+    qreal lineWidth;
     QList<Clef*> clefs;
 };
 
@@ -48,22 +48,22 @@ StaffSystem::~StaffSystem()
     delete d;
 }
 
-double StaffSystem::top() const
+qreal StaffSystem::top() const
 {
     return d->top;
 }
 
-double StaffSystem::height() const
+qreal StaffSystem::height() const
 {
     return d->height;
 }
 
-void StaffSystem::setHeight(double height)
+void StaffSystem::setHeight(qreal height)
 {
     d->height = height;
 }
 
-void StaffSystem::setTop(double top)
+void StaffSystem::setTop(qreal top)
 {
     if (d->top == top) return;
     d->top = top;
@@ -82,17 +82,17 @@ void StaffSystem::setFirstBar(int bar)
     emit firstBarChanged(bar);
 }
 
-double StaffSystem::indent() const
+qreal StaffSystem::indent() const
 {
     return d->indent;
 }
 
-void StaffSystem::setIndent(double indent)
+void StaffSystem::setIndent(qreal indent)
 {
     d->indent = indent;
 }
 
-void StaffSystem::setLineWidth(double width)
+void StaffSystem::setLineWidth(qreal width)
 {
     d->lineWidth = width;
 }

@@ -94,14 +94,14 @@ public:
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits)
      */
-    void addAttribute( const char* attrName, double value );
+    void addAttribute( const char* attrName, qreal value );
     /**
      * Add an attribute which represents a distance, measured in pt
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits),
      * and the unit name ("pt") is appended to it.
      */
-    void addAttributePt( const char* attrName, double value );
+    void addAttributePt( const char* attrName, qreal value );
 
     /// Overloaded version of the one taking a const char* argument, for convenience
     void addAttribute( const char* attrName, const QByteArray& value );
@@ -181,7 +181,7 @@ public:
     /// @note OASIS-specific
     void addConfigItem( const QString & configName, int value );
     /// @note OASIS-specific
-    void addConfigItem( const QString & configName, double value );
+    void addConfigItem( const QString & configName, qreal value );
     /// @note OASIS-specific
     void addConfigItem( const QString & configName, long value );
     /// @note OASIS-specific

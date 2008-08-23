@@ -35,22 +35,22 @@ public:
     StaffSystem(Sheet* sheet);
     ~StaffSystem();
 
-    double top() const;
-    double height() const;
-    void setHeight(double height);
+    qreal top() const;
+    qreal height() const;
+    void setHeight(qreal height);
     int firstBar() const;
-    double indent() const;
-    void setIndent(double indent);
-    double lineWidth() const;
-    void setLineWidth(double width);
+    qreal indent() const;
+    void setIndent(qreal indent);
+    qreal lineWidth() const;
+    void setLineWidth(qreal width);
     QList<Clef*> clefs() const;
     Clef* clef(Staff* staff) const;
     void setClefs(QList<Clef*> clefs);
 public slots:
-    void setTop(double top);
+    void setTop(qreal top);
     void setFirstBar(int bar);
 signals:
-    void topChanged(double top);
+    void topChanged(qreal top);
     void firstBarChanged(int bar);
 private:
     class Private;

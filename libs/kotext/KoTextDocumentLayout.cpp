@@ -44,14 +44,14 @@ public:
     void reset() {}
     bool interrupted() { return false; }
     int numColumns() { return 0; }
-    double width() { return 0; }
-    double x() { return 0; }
-    double y() { return 0; }
-    double docOffsetInShape() const { return 0; }
+    qreal width() { return 0; }
+    qreal x() { return 0; }
+    qreal y() { return 0; }
+    qreal docOffsetInShape() const { return 0; }
     bool addLine(QTextLine &) { return false; }
     bool nextParag() { return false; }
     bool previousParag() { return false; }
-    double documentOffsetInShape() { return 0; }
+    qreal documentOffsetInShape() { return 0; }
     void draw(QPainter *, const KoTextDocumentLayout::PaintContext &) {}
     KoStyleManager *styleManager() const { return m_styleManager; }
     void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
@@ -311,7 +311,7 @@ void KoTextDocumentLayout::layout() {
     while(m_state->shape) {
         QTextLine line = m_state->layout->createLine();
         if (!line.isValid()) { // end of parag
-            double posY = m_state->y();
+            qreal posY = m_state->y();
             bool moreText = m_state->nextParag();
             if(m_state->shape && m_state->y() > posY)
                 m_state->shape->update(QRectF(0, posY,

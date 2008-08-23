@@ -47,8 +47,8 @@ struct PageFormatInfo
     QPrinter::PageSize qprinter;
     const char* shortName; // Short name
     const char* descriptiveName; // Full name, which will be translated
-    double width; // in mm
-    double height; // in mm
+    qreal width; // in mm
+    qreal height; // in mm
 };
 
 // NOTES:
@@ -105,21 +105,21 @@ QPrinter::PageSize KoPageFormat::printerPageSize( KoPageFormat::Format format )
     return pageFormatInfo[ format ].qprinter;
 }
 
-double KoPageFormat::width( Format format, Orientation orientation )
+qreal KoPageFormat::width( Format format, Orientation orientation )
 {
     if ( orientation == Landscape )
         return height( format, Portrait );
     return pageFormatInfo[ format ].width;
 }
 
-double KoPageFormat::height( Format format, Orientation orientation )
+qreal KoPageFormat::height( Format format, Orientation orientation )
 {
     if ( orientation == Landscape )
         return width( format, Portrait );
     return pageFormatInfo[ format ].height;
 }
 
-KoPageFormat::Format KoPageFormat::guessFormat( double width, double height )
+KoPageFormat::Format KoPageFormat::guessFormat( qreal width, qreal height )
 {
     for(int i=0; pageFormatInfo[i].format != -1 ;i++)
     {

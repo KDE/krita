@@ -36,7 +36,7 @@ void TestDocumentLayout::testBasicList() {
     blockLayout = block.layout(); // parag 2
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
     QVERIFY(data);
-    double counterSpacing = data->counterSpacing();
+    qreal counterSpacing = data->counterSpacing();
     QVERIFY(counterSpacing > 0.);
     // 12 is hardcoded to be the width of a discitem (taken from the default font):
     QCOMPARE(blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
@@ -88,7 +88,7 @@ void TestDocumentLayout::testNumberedList() {
 
     QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     QTextBlock blok = doc->begin().next();
-    double indent = blok.layout()->lineAt(0).x();
+    qreal indent = blok.layout()->lineAt(0).x();
     QVERIFY(indent > 0.0);
     for(i=1; i <= 9; i++) {
         // qDebug() << "=>" << blok.text();
@@ -109,7 +109,7 @@ void TestDocumentLayout::testNumberedList() {
 
     QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     blok = doc->begin().next();
-    double indent2 = blok.layout()->lineAt(0).x();
+    qreal indent2 = blok.layout()->lineAt(0).x();
     QVERIFY(indent2 > indent); // since it takes an extra digit
     for(i=2; i <= 12; i++) {
         // qDebug() << "=>" << blok.text();
@@ -299,7 +299,7 @@ void TestDocumentLayout::testNestedLists() {
     block = block.next();
     static const char* texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.0.1", "1.1" };
     int i=0;
-    double indent=0.0;
+    qreal indent=0.0;
     while(block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
         //qDebug() << "text: " << block.text();

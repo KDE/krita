@@ -85,13 +85,13 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
 
     if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) && element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
     {
-        double rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx" ) );
-        double ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry" ) );
+        qreal rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx" ) );
+        qreal ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry" ) );
         size = QSizeF( 2*rx, 2*ry );
     }
     else if( element.hasAttributeNS( KoXmlNS::svg, "r" ) )
     {
-        double r = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r" ) );
+        qreal r = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r" ) );
         size = QSizeF( 2*r, 2*r );
     }
     else {
@@ -105,8 +105,8 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
 
     if( element.hasAttributeNS( KoXmlNS::svg, "cx" ) && element.hasAttributeNS( KoXmlNS::svg, "cy" ) )
     {
-        double cx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cx" ) );
-        double cy = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cy" ) );
+        qreal cx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cx" ) );
+        qreal cy = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cy" ) );
         pos = QPointF( cx - 0.5 * size.width(), cy - 0.5 * size.height() );
     }
     else {
@@ -162,7 +162,7 @@ void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::
 
     QPointF diff( m_center - point );
     diff.setX( -diff.x() );
-    double angle = 0;
+    qreal angle = 0;
     if ( diff.x() == 0 )
     {
         angle = ( diff.y() < 0 ? 270 : 90 ) * M_PI / 180.0;
@@ -305,15 +305,15 @@ void KoEllipseShape::updateKindHandle()
 
 void KoEllipseShape::updateAngleHandles()
 {
-    double startRadian = m_startAngle * M_PI / 180.0;
-    double endRadian = m_endAngle * M_PI / 180.0;
+    qreal startRadian = m_startAngle * M_PI / 180.0;
+    qreal endRadian = m_endAngle * M_PI / 180.0;
     m_handles[0] = m_center + QPointF( cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
     m_handles[1] = m_center + QPointF( cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
 }
 
-double KoEllipseShape::sweepAngle() const
+qreal KoEllipseShape::sweepAngle() const
 {
-    double sAngle =  m_endAngle - m_startAngle;
+    qreal sAngle =  m_endAngle - m_startAngle;
     // treat also as full circle
     if ( sAngle == 0 || sAngle == -360 )
         sAngle = 360;
@@ -336,7 +336,7 @@ KoEllipseShape::KoEllipseType KoEllipseShape::type() const
     return m_type;
 }
 
-void KoEllipseShape::setStartAngle( double angle )
+void KoEllipseShape::setStartAngle( qreal angle )
 {
     m_startAngle = angle;
     updateKindHandle();
@@ -344,12 +344,12 @@ void KoEllipseShape::setStartAngle( double angle )
     updatePath( size() );
 }
 
-double KoEllipseShape::startAngle() const
+qreal KoEllipseShape::startAngle() const
 {
     return m_startAngle;
 }
 
-void KoEllipseShape::setEndAngle( double angle )
+void KoEllipseShape::setEndAngle( qreal angle )
 {
     m_endAngle = angle;
     updateKindHandle();
@@ -357,7 +357,7 @@ void KoEllipseShape::setEndAngle( double angle )
     updatePath( size() );
 }
 
-double KoEllipseShape::endAngle() const
+qreal KoEllipseShape::endAngle() const
 {
     return m_endAngle;
 }

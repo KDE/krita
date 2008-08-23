@@ -41,9 +41,9 @@ public:
     ~KoGridData();
 
     /// return the grid width
-    double gridX() const;
+    qreal gridX() const;
     /// return the grid height
-    double gridY() const;
+    qreal gridY() const;
     /**
      * Set the size grid to a new value
      * @param x the width of a grid unit
@@ -52,7 +52,7 @@ public:
      * @see gridX()
      * @see gridY()
      */
-    void setGrid(double x, double y);
+    void setGrid(qreal x, qreal y);
 
     /**
      * return if snap to grid is enabled.

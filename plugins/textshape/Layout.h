@@ -46,20 +46,20 @@ public:
     virtual void reset();
     /// returns true if reset has been called.
     virtual bool interrupted();
-    virtual double width();
-    virtual double x();
-    virtual double y();
+    virtual qreal width();
+    virtual qreal x();
+    virtual qreal y();
     virtual int cursorPosition() const;
     /// return the y offset of the document at start of shape.
-    virtual double docOffsetInShape() const;
+    virtual qreal docOffsetInShape() const;
     /// when a line is added, update internal vars.  Return true if line does not fit in shape
     virtual bool addLine(QTextLine &line);
     /// prepare for next paragraph; return false if there is no next parag.
     virtual bool nextParag();
     virtual bool previousParag();
-    virtual double documentOffsetInShape();
+    virtual qreal documentOffsetInShape();
     // get the text indent accounting for auto-text-indent
-    double resolveTextIndent();
+    qreal resolveTextIndent();
     virtual bool setFollowupShape(KoShape *shape);
     /// called by the KoTextDocumentLayout to notify the LayoutState of a successfully resized inline object
     virtual void registerInlineObject(const QTextInlineObject &inlineObject);
@@ -74,12 +74,12 @@ public:
     virtual void clearTillEnd();
 
     /// set default tab size for this document
-    virtual void setTabSpacing(double spacing) { m_defaultTabSizing = spacing; }
+    virtual void setTabSpacing(qreal spacing) { m_defaultTabSizing = spacing; }
 
 private:
     void updateBorders();
-    double topMargin();
-    double listIndent();
+    qreal topMargin();
+    qreal listIndent();
     void cleanupShapes();
     void cleanupShape(KoShape *daShape);
     void nextShape();
@@ -87,15 +87,15 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
     
-    double inlineCharHeight(const QTextFragment &fragment);
-    double findFootnote(const QTextLine &line);
+    qreal inlineCharHeight(const QTextFragment &fragment);
+    qreal findFootnote(const QTextLine &line);
 
     void resetPrivate();
 
 private:
     KoStyleManager *m_styleManager;
 
-    double m_y;
+    qreal m_y;
     QTextBlock m_block;
     KoTextBlockData *m_blockData;
 
@@ -106,18 +106,18 @@ private:
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
-    QHash<int, double> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
+    QHash<int, qreal> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
     TextShape *m_textShape;
 
     // demoText feature
     bool m_demoText, m_endOfDemoText;
 
     // tab setting
-    double m_defaultTabSizing;
+    qreal m_defaultTabSizing;
     int m_currentTabStop; // = n, where we should be looking from the nth tab stop onwards when 
                           // we decorate the tab for the text of a fragment
     int m_dropCapsNChars, m_dropCapsAffectsNMoreLines;
-    double m_dropCapsAffectedLineWidthAdjust, m_y_justBelowDropCaps;
+    qreal m_dropCapsAffectedLineWidthAdjust, m_y_justBelowDropCaps;
     int numColumns() { return m_dropCapsNChars; }
 };
 

@@ -105,8 +105,8 @@ private:
     // reimplemented
     virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
 
-    double scalarProd( const QPointF &v1, const QPointF &v2 );
-    double crossProd( const QPointF &v1, const QPointF &v2 );
+    qreal scalarProd( const QPointF &v1, const QPointF &v2 );
+    qreal crossProd( const QPointF &v1, const QPointF &v2 );
 
     struct Private;
     Private * const d;

@@ -76,7 +76,7 @@ KoColorTransformation *KoCtlColorSpace::createPerChannelAdjustment(const quint16
     return 0;
 }
 
-KoColorTransformation *KoCtlColorSpace::createDarkenAdjustment(qint32 shade, bool compensate, double compensation) const
+KoColorTransformation *KoCtlColorSpace::createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const
 {
     return 0;
 }

@@ -33,7 +33,7 @@
 #include <kvbox.h>
 
 
-KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, double maxPos,
+KoGuideLineDia::KoGuideLineDia( QWidget *parent, qreal pos, qreal minPos, qreal maxPos,
                                 KoUnit unit, const char *name )
 : KDialog( parent )
 , m_hButton( 0 )
@@ -96,7 +96,7 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, QPointF &pos, QRectF &rect,
 }
 
 
-double KoGuideLineDia::pos() const
+qreal KoGuideLineDia::pos() const
 {
     return m_position->value();
 }

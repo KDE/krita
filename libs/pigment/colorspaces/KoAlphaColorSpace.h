@@ -135,7 +135,7 @@ public:
         kWarning() << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
-    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , double ) const
+    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal ) const
     {
         kWarning() << i18n("Undefined operation in the alpha colorspace");
         return 0;

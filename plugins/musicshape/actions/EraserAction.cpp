@@ -49,7 +49,7 @@ EraserAction::EraserAction(SimpleEntryTool* tool)
 {
 }
 
-void EraserAction::mousePress(Chord* chord, Note* note, double distance, const QPointF& pos)
+void EraserAction::mousePress(Chord* chord, Note* note, qreal distance, const QPointF& pos)
 {
     Q_UNUSED( pos );
     
@@ -63,7 +63,7 @@ void EraserAction::mousePress(Chord* chord, Note* note, double distance, const Q
     }
 }
 
-void EraserAction::mousePress(StaffElement* se, double distance, const QPointF& pos)
+void EraserAction::mousePress(StaffElement* se, qreal distance, const QPointF& pos)
 {
     Q_UNUSED( pos );
     

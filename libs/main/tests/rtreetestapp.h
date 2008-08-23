@@ -86,7 +86,7 @@ protected:
     void paintEvent(QPaintEvent * e);
 
 private:
-    double m_zoom;
+    qreal m_zoom;
     QSet<Data*> m_rects;
     QList<Data*> m_found;
     QRectF m_insertRect;

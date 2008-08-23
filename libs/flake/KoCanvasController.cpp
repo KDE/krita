@@ -60,8 +60,8 @@ public:
     QSize documentSize;
     QPoint documentOffset;
     Viewport * viewportWidget;
-    double preferredCenterFractionX;
-    double preferredCenterFractionY;
+    qreal preferredCenterFractionX;
+    qreal preferredCenterFractionY;
     bool ignoreScrollSignals;
 };
 
@@ -385,15 +385,15 @@ void KoCanvasController::zoomBy(const QPoint &center, qreal zoom )
 
 void KoCanvasController::zoomTo(const QRect &viewRect)
 {
-    double scale;
+    qreal scale;
 
     if(1.0 * viewport()->width() / viewRect.width() > 1.0 * viewport()->height() / viewRect.height())
         scale = 1.0 * viewport()->height() / viewRect.height();
     else
         scale = 1.0 * viewport()->width() / viewRect.width();
 
-    const double preferredCenterFractionX = 1.0 * viewRect.center().x() / m_d->documentSize.width();
-    const double preferredCenterFractionY = 1.0 * viewRect.center().y() / m_d->documentSize.height();
+    const qreal preferredCenterFractionX = 1.0 * viewRect.center().x() / m_d->documentSize.width();
+    const qreal preferredCenterFractionY = 1.0 * viewRect.center().y() / m_d->documentSize.height();
 
     emit zoomBy(scale);
 
@@ -572,7 +572,7 @@ void KoCanvasController::wheelEvent( QWheelEvent *event ) {
 
         const QPoint offset( horizontalScrollBar()->value(), verticalScrollBar()->value() );
         const QPoint mousePos( event->pos() + offset );
-        const double zoomLevel = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
+        const qreal zoomLevel = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
 
         QPointF oldCenter = preferredCenter();
         if ( visibleWidth() >= m_d->documentSize.width() )

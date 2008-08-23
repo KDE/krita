@@ -123,19 +123,19 @@ bool KoSegmentGradient::init()
         QTextStream segmentFields(&segmentText);
         QStringList values = segmentText.split(" ");
 
-        double leftOffset = values[0].toDouble();
-        double middleOffset = values[1].toDouble();
-        double rightOffset = values[2].toDouble();
+        qreal leftOffset = values[0].toDouble();
+        qreal middleOffset = values[1].toDouble();
+        qreal rightOffset = values[2].toDouble();
 
-        double leftRed = values[3].toDouble();
-        double leftGreen = values[4].toDouble();
-        double leftBlue = values[5].toDouble();
-        double leftAlpha = values[6].toDouble();
+        qreal leftRed = values[3].toDouble();
+        qreal leftGreen = values[4].toDouble();
+        qreal leftBlue = values[5].toDouble();
+        qreal leftAlpha = values[6].toDouble();
 
-        double rightRed = values[7].toDouble();
-        double rightGreen = values[8].toDouble();
-        double rightBlue = values[9].toDouble();
-        double rightAlpha = values[10].toDouble();
+        qreal rightRed = values[7].toDouble();
+        qreal rightGreen = values[8].toDouble();
+        qreal rightBlue = values[9].toDouble();
+        qreal rightAlpha = values[10].toDouble();
 
         int interpolationType = values[11].toInt();
         int colorInterpolationType = values[12].toInt();
@@ -176,7 +176,7 @@ bool KoSegmentGradient::init()
     }
 }
 
-KoGradientSegment *KoSegmentGradient::segmentAt(double t) const
+KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const
 {
     Q_ASSERT(t >= 0 || t <= 1);
     Q_ASSERT(!m_segments.empty());
@@ -191,7 +191,7 @@ KoGradientSegment *KoSegmentGradient::segmentAt(double t) const
     return 0;
 }
 
-void KoSegmentGradient::colorAt(KoColor& dst, double t) const
+void KoSegmentGradient::colorAt(KoColor& dst, qreal t) const
 {
     const KoGradientSegment *segment = segmentAt(t);
     Q_ASSERT(segment != 0);
@@ -221,7 +221,7 @@ QString KoSegmentGradient::defaultFileExtension() const
     return QString(".ggr");
 }
 
-KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor)
+KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor)
 {
     m_interpolator = 0;
 
@@ -313,22 +313,22 @@ const KoColor& KoGradientSegment::endColor() const
     return m_endColor;
 }
 
-double KoGradientSegment::startOffset() const
+qreal KoGradientSegment::startOffset() const
 {
     return m_startOffset;
 }
 
-double KoGradientSegment::middleOffset() const
+qreal KoGradientSegment::middleOffset() const
 {
     return m_middleOffset;
 }
 
-double KoGradientSegment::endOffset() const
+qreal KoGradientSegment::endOffset() const
 {
     return m_endOffset;
 }
 
-void KoGradientSegment::setStartOffset(double t)
+void KoGradientSegment::setStartOffset(qreal t)
 {
     m_startOffset = t;
     m_length = m_endOffset - m_startOffset;
@@ -340,7 +340,7 @@ void KoGradientSegment::setStartOffset(double t)
         m_middleT = (m_middleOffset - m_startOffset) / m_length;
     }
 }
-void KoGradientSegment::setMiddleOffset(double t)
+void KoGradientSegment::setMiddleOffset(qreal t)
 {
     m_middleOffset = t;
 
@@ -352,7 +352,7 @@ void KoGradientSegment::setMiddleOffset(double t)
     }
 }
 
-void KoGradientSegment::setEndOffset(double t)
+void KoGradientSegment::setEndOffset(qreal t)
 {
     m_endOffset = t;
     m_length = m_endOffset - m_startOffset;
@@ -411,11 +411,11 @@ void KoGradientSegment::setColorInterpolation(int colorInterpolationType)
     }
 }
 
-void KoGradientSegment::colorAt(KoColor& dst, double t) const
+void KoGradientSegment::colorAt(KoColor& dst, qreal t) const
 {
     Q_ASSERT(t > m_startOffset - DBL_EPSILON && t < m_endOffset + DBL_EPSILON);
 
-    double segmentT;
+    qreal segmentT;
 
     if (m_length < DBL_EPSILON) {
         segmentT = 0.5;
@@ -424,7 +424,7 @@ void KoGradientSegment::colorAt(KoColor& dst, double t) const
         segmentT = (t - m_startOffset) / m_length;
     }
 
-    double colorT = m_interpolator->valueAt(segmentT, m_middleT);
+    qreal colorT = m_interpolator->valueAt(segmentT, m_middleT);
 
     m_colorInterpolator->colorAt(dst, colorT, m_startColor, m_endColor);
 
@@ -452,7 +452,7 @@ KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInt
     return m_instance;
 }
 
-void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
 {
     m_start.fromKoColor(start);
     m_end.fromKoColor(end);
@@ -485,7 +485,7 @@ KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColo
     return m_instance;
 }
 
-void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
 {
     QColor sc;
     QColor ec;
@@ -532,7 +532,7 @@ KoGradientSegment::HSVCCWColorInterpolationStrategy *KoGradientSegment::HSVCCWCo
     return m_instance;
 }
 
-void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, double t, const KoColor& start, const KoColor& end) const
+void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
 {
     QColor sc;
     QColor se;
@@ -573,12 +573,12 @@ KoGradientSegment::LinearInterpolationStrategy *KoGradientSegment::LinearInterpo
     return m_instance;
 }
 
-double KoGradientSegment::LinearInterpolationStrategy::calcValueAt(double t, double middle)
+qreal KoGradientSegment::LinearInterpolationStrategy::calcValueAt(qreal t, qreal middle)
 {
     Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
     Q_ASSERT(middle > -DBL_EPSILON && middle < 1 + DBL_EPSILON);
 
-    double value = 0;
+    qreal value = 0;
 
     if (t <= middle) {
         if (middle < DBL_EPSILON) {
@@ -600,7 +600,7 @@ double KoGradientSegment::LinearInterpolationStrategy::calcValueAt(double t, dou
     return value;
 }
 
-double KoGradientSegment::LinearInterpolationStrategy::valueAt(double t, double middle) const
+qreal KoGradientSegment::LinearInterpolationStrategy::valueAt(qreal t, qreal middle) const
 {
     return calcValueAt(t, middle);
 }
@@ -620,12 +620,12 @@ KoGradientSegment::CurvedInterpolationStrategy *KoGradientSegment::CurvedInterpo
     return m_instance;
 }
 
-double KoGradientSegment::CurvedInterpolationStrategy::valueAt(double t, double middle) const
+qreal KoGradientSegment::CurvedInterpolationStrategy::valueAt(qreal t, qreal middle) const
 {
     Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
     Q_ASSERT(middle > -DBL_EPSILON && middle < 1 + DBL_EPSILON);
 
-    double value = 0;
+    qreal value = 0;
 
     if (middle < DBL_EPSILON) {
         middle = DBL_EPSILON;
@@ -646,10 +646,10 @@ KoGradientSegment::SineInterpolationStrategy *KoGradientSegment::SineInterpolati
     return m_instance;
 }
 
-double KoGradientSegment::SineInterpolationStrategy::valueAt(double t, double middle) const
+qreal KoGradientSegment::SineInterpolationStrategy::valueAt(qreal t, qreal middle) const
 {
-    double lt = LinearInterpolationStrategy::calcValueAt(t, middle);
-    double value = (sin(-M_PI_2 + M_PI * lt) + 1.0) / 2.0;
+    qreal lt = LinearInterpolationStrategy::calcValueAt(t, middle);
+    qreal value = (sin(-M_PI_2 + M_PI * lt) + 1.0) / 2.0;
 
     return value;
 }
@@ -664,10 +664,10 @@ KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::Sph
     return m_instance;
 }
 
-double KoGradientSegment::SphereIncreasingInterpolationStrategy::valueAt(double t, double middle) const
+qreal KoGradientSegment::SphereIncreasingInterpolationStrategy::valueAt(qreal t, qreal middle) const
 {
-    double lt = LinearInterpolationStrategy::calcValueAt(t, middle) - 1;
-    double value = sqrt(1 - lt * lt);
+    qreal lt = LinearInterpolationStrategy::calcValueAt(t, middle) - 1;
+    qreal value = sqrt(1 - lt * lt);
 
     return value;
 }
@@ -682,10 +682,10 @@ KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::Sph
     return m_instance;
 }
 
-double KoGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(double t, double middle) const
+qreal KoGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(qreal t, qreal middle) const
 {
-    double lt = LinearInterpolationStrategy::calcValueAt(t, middle);
-    double value = 1 - sqrt(1 - lt * lt);
+    qreal lt = LinearInterpolationStrategy::calcValueAt(t, middle);
+    qreal value = 1 - sqrt(1 - lt * lt);
 
     return value;
 }

@@ -35,22 +35,22 @@ struct KoTriangleColorSelector::Private {
     int saturation;
     int value;
     int sizeColorSelector;
-    double centerColorSelector;
-    double wheelWidthProportion;
-    double wheelWidth;
-    double wheelNormExt;
-    double wheelNormInt;
-    double wheelInnerRadius;
-    double triangleRadius;
-    double triangleLength;
-    double triangleHeight;
-    double triangleBottom;
-    double triangleTop;
-    double normExt;
-    double normInt;
+    qreal centerColorSelector;
+    qreal wheelWidthProportion;
+    qreal wheelWidth;
+    qreal wheelNormExt;
+    qreal wheelNormInt;
+    qreal wheelInnerRadius;
+    qreal triangleRadius;
+    qreal triangleLength;
+    qreal triangleHeight;
+    qreal triangleBottom;
+    qreal triangleTop;
+    qreal normExt;
+    qreal normInt;
     bool updateAllowed;
     CurrentHandle handle;
-    double triangleHandleSize;
+    qreal triangleHandleSize;
 };
 
 KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -106,9 +106,9 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
     // Draw value,saturation selector
     //   Compute coordinates
     {
-        double vs_selector_ypos_ = value() / 255.0;
-        double ls_ = (vs_selector_ypos_) * d->triangleLength; // length of the saturation on the triangle
-        double vs_selector_xpos_ = ls_ * (saturation() / 255.0 - 0.5);
+        qreal vs_selector_ypos_ = value() / 255.0;
+        qreal ls_ = (vs_selector_ypos_) * d->triangleLength; // length of the saturation on the triangle
+        qreal vs_selector_xpos_ = ls_ * (saturation() / 255.0 - 0.5);
         // Draw it
         p.save();
         p.setPen( QPen( Qt::white, 1.0) );
@@ -123,9 +123,9 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
     p.save();
     p.setPen( QPen( Qt::white, 1.0) );
     p.rotate( hue() - 90 );
-    double hueSelectorWidth_ = 0.8;
-    double hueSelectorOffset_ = 0.5 *( 1.0 - hueSelectorWidth_) * d->wheelWidth;
-    double hueSelectorSize_ = 0.8 * d->wheelWidth;
+    qreal hueSelectorWidth_ = 0.8;
+    qreal hueSelectorOffset_ = 0.5 *( 1.0 - hueSelectorWidth_) * d->wheelWidth;
+    qreal hueSelectorSize_ = 0.8 * d->wheelWidth;
     p.drawRect( QRectF( -1.5, -d->centerColorSelector + hueSelectorOffset_, 3.0, hueSelectorSize_ ));
     p.restore();
     p.end();
@@ -214,7 +214,7 @@ void KoTriangleColorSelector::resizeEvent( QResizeEvent * event )
     generateTriangle();
 }
 
-inline double pow2(double v)
+inline qreal pow2(qreal v)
 {
     return v*v;
 }
@@ -234,25 +234,25 @@ void KoTriangleColorSelector::generateTriangle()
     
     for(int y = 0; y < d->sizeColorSelector; y++)
     {
-        double ynormalize = ( d->triangleTop - y ) / ( d->triangleTop - d->triangleBottom );
-        double v = 255 * ynormalize;
-        double ls_ = (ynormalize) * d->triangleLength;
-        double startx_ = d->centerColorSelector - 0.5 * ls_;
+        qreal ynormalize = ( d->triangleTop - y ) / ( d->triangleTop - d->triangleBottom );
+        qreal v = 255 * ynormalize;
+        qreal ls_ = (ynormalize) * d->triangleLength;
+        qreal startx_ = d->centerColorSelector - 0.5 * ls_;
         for(int x = 0; x < d->sizeColorSelector; x++)
         {
-            double s = 255 * (x - startx_) / ls_;
+            qreal s = 255 * (x - startx_) / ls_;
             if(v < -1.0 || v > 256.0 || s < -1.0 || s > 256.0 )
             {
                 img.setPixel(x,y, qRgba(0,0,0,0));
             } else {
-                double va = 1.0, sa = 1.0;
+                qreal va = 1.0, sa = 1.0;
                 if( v < 0.0) { va = 1.0 + v; v = 0; }
                 else if( v > 255.0 ) { va = 256.0 - v; v = 255; }
                 if( s < 0.0) { sa = 1.0 + s; s = 0; }
                 else if( s > 255.0 ) { sa = 256.0 - s; s = 255; }
                 int r,g,b;
                 hsv_to_rgb(hue_, (int)s, (int)v, &r, &g, &b);
-                double coef = va * sa;
+                qreal coef = va * sa;
                 if( coef < 0.999)
                 {
                     img.setPixel(x,y, qRgba( (int)(r * coef), (int)(g * coef), (int)(b * coef), (int)(255 * coef)));
@@ -271,18 +271,18 @@ void KoTriangleColorSelector::generateWheel()
     QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
     for(int y = 0; y < d->sizeColorSelector; y++)
     {
-        double yc = y - d->centerColorSelector;
-        double y2 = pow2( yc );
+        qreal yc = y - d->centerColorSelector;
+        qreal y2 = pow2( yc );
         for(int x = 0; x < d->sizeColorSelector; x++)
         {
-            double xc = x - d->centerColorSelector;
-            double norm = sqrt(pow2( xc ) + y2);
+            qreal xc = x - d->centerColorSelector;
+            qreal norm = sqrt(pow2( xc ) + y2);
             if( norm <= d->wheelNormExt + 1.0 && norm >= d->wheelNormInt - 1.0 )
             {
-                double acoef = 1.0;
+                qreal acoef = 1.0;
                 if(norm > d->wheelNormExt ) acoef = (1.0 + d->wheelNormExt - norm);
                 else if(norm < d->wheelNormInt ) acoef = (1.0 - d->wheelNormInt + norm);
-                double angle = atan2(yc, xc);
+                qreal angle = atan2(yc, xc);
                 int h = (int)((180 * angle / M_PI) + 180);
                 int r,g,b;
                 hsv_to_rgb(h, 255, 255, &r, &g, &b);
@@ -332,10 +332,10 @@ void KoTriangleColorSelector::mouseMoveEvent( QMouseEvent * event )
 void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
 {
     Q_UNUSED( checkInWheel );
-    double x = _x - 0.5*width();
-    double y = _y - 0.5*height();
+    qreal x = _x - 0.5*width();
+    qreal y = _y - 0.5*height();
     // Check if the click is inside the wheel
-    double norm = sqrt( x * x + y * y);
+    qreal norm = sqrt( x * x + y * y);
     if ( ( (norm < d->wheelNormExt) && (norm > d->wheelNormInt) && d->handle == NoHandle )
          || d->handle == HueHandle ) {
         d->handle = HueHandle;
@@ -344,18 +344,18 @@ void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
     }
     else {
     // Compute the s and v value, if they are in range, use them
-        double rotation = -(hue() + 150) * M_PI / 180;
-        double cr = cos(rotation);
-        double sr = sin(rotation);
-        double x1 = x * cr - y * sr; // <- now x1 gives the saturation
-        double y1 = x * sr + y * cr; // <- now y1 gives the value
+        qreal rotation = -(hue() + 150) * M_PI / 180;
+        qreal cr = cos(rotation);
+        qreal sr = sin(rotation);
+        qreal x1 = x * cr - y * sr; // <- now x1 gives the saturation
+        qreal y1 = x * sr + y * cr; // <- now y1 gives the value
         y1 += d->wheelNormExt;
-        double ynormalize = (d->triangleTop - y1 ) / ( d->triangleTop - d->triangleBottom );
+        qreal ynormalize = (d->triangleTop - y1 ) / ( d->triangleTop - d->triangleBottom );
         if( (ynormalize >= 0.0 && ynormalize <= 1.0 ) || d->handle == ValueSaturationHandle)
         {
             d->handle = ValueSaturationHandle;
-            double ls_ = (ynormalize) * d->triangleLength; // length of the saturation on the triangle
-            double sat = ( x1 / ls_ + 0.5) ;
+            qreal ls_ = (ynormalize) * d->triangleLength; // length of the saturation on the triangle
+            qreal sat = ( x1 / ls_ + 0.5) ;
             if((sat >= 0.0 && sat <= 1.0) || d->handle == ValueSaturationHandle)
             {
                 setHSV( d->hue, sat * 255, ynormalize * 255);

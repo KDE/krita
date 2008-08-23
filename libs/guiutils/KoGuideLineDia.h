@@ -46,7 +46,7 @@ public:
      * @param unit The unit used in the document
      * @param name The name is send to the QObject constructor
      */
-    KoGuideLineDia( QWidget *parent, double pos, double minPos, double maxPos,
+    KoGuideLineDia( QWidget *parent, qreal pos, qreal minPos, qreal maxPos,
                     KoUnit unit, const char *name = 0L );
 
     /**
@@ -69,7 +69,7 @@ public:
      *
      * @return the value of the position input
      */
-    double pos() const;
+    qreal pos() const;
 
     /**
      * @brief the orientation

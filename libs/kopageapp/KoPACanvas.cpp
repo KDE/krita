@@ -75,7 +75,7 @@ void KoPACanvas::setDocumentOffset(const QPoint &offset) {
     m_documentOffset = offset;
 }
 
-void KoPACanvas::gridSize( double *horizontal, double *vertical ) const
+void KoPACanvas::gridSize( qreal *horizontal, qreal *vertical ) const
 {
     *horizontal = m_doc->gridData().gridX();
     *vertical = m_doc->gridData().gridY();

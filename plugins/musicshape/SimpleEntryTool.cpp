@@ -424,14 +424,14 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 
     // find closest staff
     Staff* closestStaff = 0;
-    double dist = 1e99;
-    double yrel = p.y() - system->top();
+    qreal dist = 1e99;
+    qreal yrel = p.y() - system->top();
     for (int prt = 0; prt < sheet->partCount(); prt++) {
         Part* part = sheet->part(prt);
         for (int st = 0; st < part->staffCount(); st++) {
             Staff* staff = part->staff(st);
-            double top = staff->top();
-            double bot = staff->top() + (staff->lineCount() - 1) * staff->lineSpacing();
+            qreal top = staff->top();
+            qreal bot = staff->top() + (staff->lineCount() - 1) * staff->lineSpacing();
             if (fabs(top - yrel) < dist) {
                 closestStaff = staff;
                 dist = fabs(top - yrel);
@@ -532,14 +532,14 @@ void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
         
         // find closest staff
         Staff* closestStaff = 0;
-        double dist = 1e99;
-        double yrel = p.y() - system->top();
+        qreal dist = 1e99;
+        qreal yrel = p.y() - system->top();
         for (int prt = 0; prt < sheet->partCount(); prt++) {
             Part* part = sheet->part(prt);
             for (int st = 0; st < part->staffCount(); st++) {
                 Staff* staff = part->staff(st);
-                double top = staff->top();
-                double bot = staff->top() + (staff->lineCount() - 1) * staff->lineSpacing();
+                qreal top = staff->top();
+                qreal bot = staff->top() + (staff->lineCount() - 1) * staff->lineSpacing();
                 if (fabs(top - yrel) < dist) {
                     closestStaff = staff;
                     dist = fabs(top - yrel);

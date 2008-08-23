@@ -83,7 +83,7 @@ void KoSpiralShape::moveHandleAction( int handleId, const QPointF & point, Qt::K
 
     QPointF diff( m_center - point );
     diff.setX( -diff.x() );
-    double angle = 0;
+    qreal angle = 0;
     if ( diff.x() == 0 )
     {
         angle = ( diff.y() < 0 ? 270 : 90 ) * M_PI / 180.0;
@@ -192,10 +192,10 @@ void KoSpiralShape::createPath( const QSizeF &size )
     clear();
     QPointF center = QPointF( m_radii.x() / 2.0, m_radii.y() / 2.0 );
     //moveTo( QPointF( size.width(), m_radii.y() ) );
-    double adv_ang = ( m_clockwise ? -1.0 : 1.0 ) * M_PI_2;
+    qreal adv_ang = ( m_clockwise ? -1.0 : 1.0 ) * M_PI_2;
     // radius of first segment is non-faded radius:
-    double m_radius = m_radii.x() / 2.0;
-    double r = m_radius;
+    qreal m_radius = m_radii.x() / 2.0;
+    qreal r = m_radius;
 
     QPointF oldP( center.x(), ( m_clockwise ? -1.0 : 1.0 ) * m_radius + center.y() );
     QPointF newP;
@@ -210,8 +210,8 @@ void KoSpiralShape::createPath( const QSizeF &size )
         newP.setY( r * sin( adv_ang * ( i + 2 ) ) + newCenter.y() );
 
         if( m_type == Curve ) {
-	    double rx = abs( oldP.x() - newP.x() );
-	    double ry = abs( oldP.y() - newP.y() );
+	    qreal rx = abs( oldP.x() - newP.x() );
+	    qreal ry = abs( oldP.y() - newP.y() );
 	    if ( m_clockwise ) {
                 arcTo( rx, ry, ( ( i + 1 ) % 4 ) * 90, 90 );
 	    } else {
@@ -250,8 +250,8 @@ void KoSpiralShape::updateKindHandle()
 
 void KoSpiralShape::updateAngleHandles()
 {
-//    double startRadian = m_startAngle * M_PI / 180.0;
-//    double endRadian = m_endAngle * M_PI / 180.0;
+//    qreal startRadian = m_startAngle * M_PI / 180.0;
+//    qreal endRadian = m_endAngle * M_PI / 180.0;
 //    m_handles[0] = m_center + QPointF( cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
 //    m_handles[1] = m_center + QPointF( cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
 }
@@ -268,7 +268,7 @@ KoSpiralShape::KoSpiralType KoSpiralShape::type() const
     return m_type;
 }
 
-void KoSpiralShape::setFade( double fade )
+void KoSpiralShape::setFade( qreal fade )
 {
     m_fade = fade;
     updateKindHandle();
@@ -276,7 +276,7 @@ void KoSpiralShape::setFade( double fade )
     updatePath( size() );
 }
 
-double KoSpiralShape::fade() const
+qreal KoSpiralShape::fade() const
 {
     return m_fade;
 }

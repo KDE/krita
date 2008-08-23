@@ -337,7 +337,7 @@ void KisNodeManager::nodeProperties( KisNodeSP node )
     }
 }
 
-void KisNodeManager::nodeOpacityChanged( double opacity, bool final)
+void KisNodeManager::nodeOpacityChanged( qreal opacity, bool final)
 {
     m_d->layerManager->layerOpacity( opacity, final );
 }

@@ -60,12 +60,12 @@ QPen MusicStyle::noteDotPen(const QColor& color)
     return m_noteDotPen;
 }
 
-double MusicStyle::beamLineWidth()
+qreal MusicStyle::beamLineWidth()
 {
     return 3.0;
 }
 
-void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Duration duration, const QColor& color)
+void MusicStyle::renderNoteHead(QPainter& painter, qreal x, qreal y, Duration duration, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
@@ -91,7 +91,7 @@ void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Duration 
     }
 }
 
-void MusicStyle::renderRest(QPainter& painter, double x, double y, Duration duration, const QColor& color)
+void MusicStyle::renderRest(QPainter& painter, qreal x, qreal y, Duration duration, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
@@ -127,7 +127,7 @@ void MusicStyle::renderRest(QPainter& painter, double x, double y, Duration dura
     }
 }
 
-void MusicStyle::renderClef(QPainter& painter, double x, double y, Clef::ClefShape shape, const QColor& color)
+void MusicStyle::renderClef(QPainter& painter, qreal x, qreal y, Clef::ClefShape shape, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
@@ -145,7 +145,7 @@ void MusicStyle::renderClef(QPainter& painter, double x, double y, Clef::ClefSha
     }
 }
 
-void MusicStyle::renderAccidental(QPainter& painter, double x, double y, int accidental, const QColor& color)
+void MusicStyle::renderAccidental(QPainter& painter, qreal x, qreal y, int accidental, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
@@ -169,7 +169,7 @@ void MusicStyle::renderAccidental(QPainter& painter, double x, double y, int acc
     }
 }
 
-void MusicStyle::renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number, const QColor& color)
+void MusicStyle::renderTimeSignatureNumber(QPainter& painter, qreal x, qreal y, qreal w, int number, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
@@ -179,7 +179,7 @@ void MusicStyle::renderTimeSignatureNumber(QPainter& painter, double x, double y
     painter.drawText(QPointF(x + (w - m.width(txt))/2, y), txt);
 }
 
-void MusicStyle::renderNoteFlags(QPainter& painter, double x, double y, Duration duration, bool stemsUp, const QColor& color)
+void MusicStyle::renderNoteFlags(QPainter& painter, qreal x, qreal y, Duration duration, bool stemsUp, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);

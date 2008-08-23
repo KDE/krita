@@ -43,7 +43,7 @@ KoAbstractGradient::~KoAbstractGradient()
    delete d;
 }
 
-void KoAbstractGradient::colorAt(KoColor&, double t) const
+void KoAbstractGradient::colorAt(KoColor&, qreal t) const
 {
     Q_UNUSED(t);
 }
@@ -86,10 +86,10 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
     QColor color;
     for (int x = 0; x < img.width(); x++) {
 
-        double t = static_cast<double>(x) / (img.width() - 1);
+        qreal t = static_cast<qreal>(x) / (img.width() - 1);
         colorAt(c, t);
         c.toQColor( &color );
-        double alpha = static_cast<double>(color.alpha()) / OPACITY_OPAQUE;
+        qreal alpha = static_cast<qreal>(color.alpha()) / OPACITY_OPAQUE;
 
         for (int y = 0; y < img.height(); y++) {
             int backgroundRed = 128 + 63 * ((x / 4 + y / 4) % 2);

@@ -51,8 +51,8 @@ bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCont
 
     if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) && element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
     {
-        double rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx", "0" ) );
-        double ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry", "0" ) );
+        qreal rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx", "0" ) );
+        qreal ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry", "0" ) );
         m_cornerRadiusX = rx / (0.5 * size().width() ) * 100;
         m_cornerRadiusY = ry / (0.5 * size().height() ) * 100;
     }
@@ -95,8 +95,8 @@ void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt
     Q_UNUSED( modifiers );
     QPointF p( point );
 
-    double width2 = size().width() / 2.0;
-    double height2 = size().height() / 2.0;
+    qreal width2 = size().width() / 2.0;
+    qreal height2 = size().height() / 2.0;
     switch ( handleId )
     {
         case 0:
@@ -145,16 +145,16 @@ void KoRectangleShape::updateHandles()
 
 void KoRectangleShape::updatePath( const QSizeF &size )
 {
-    double rx = 0;
-    double ry = 0;
+    qreal rx = 0;
+    qreal ry = 0;
     if ( m_cornerRadiusX > 0 && m_cornerRadiusY > 0 )
     {
         rx = size.width() / 200.0 * m_cornerRadiusX;
         ry = size.height() / 200.0 * m_cornerRadiusY;
     }
 
-    double x2 = size.width() - rx;
-    double y2 = size.height() - ry;
+    qreal x2 = size.width() - rx;
+    qreal y2 = size.height() - ry;
 
     // the points of the object must not be deleted and recreated as that will 
     // break command history
@@ -246,10 +246,10 @@ void KoRectangleShape::updatePath( const QSizeF &size )
 
 void KoRectangleShape::createPath( const QSizeF &size )
 {
-    double rx = size.width() / 4;
-    double ry = size.height() / 4;
-    double x2 = size.width() - rx;
-    double y2 = size.height() - ry;
+    qreal rx = size.width() / 4;
+    qreal ry = size.height() / 4;
+    qreal x2 = size.width() - rx;
+    qreal y2 = size.height() - ry;
     moveTo( QPointF( rx, 0 ) );
     lineTo( QPointF( x2, 0 ) );
     arcTo( rx, ry, 90, -90 );
@@ -262,12 +262,12 @@ void KoRectangleShape::createPath( const QSizeF &size )
     closeMerge();
 }
 
-double KoRectangleShape::cornerRadiusX() const
+qreal KoRectangleShape::cornerRadiusX() const
 {
     return m_cornerRadiusX;
 }
 
-void KoRectangleShape::setCornerRadiusX( double radius )
+void KoRectangleShape::setCornerRadiusX( qreal radius )
 {
     if( radius >= 0.0 && radius <= 100.0 )
     {
@@ -277,12 +277,12 @@ void KoRectangleShape::setCornerRadiusX( double radius )
     }
 }
 
-double KoRectangleShape::cornerRadiusY() const
+qreal KoRectangleShape::cornerRadiusY() const
 {
     return m_cornerRadiusY;
 }
 
-void KoRectangleShape::setCornerRadiusY( double radius )
+void KoRectangleShape::setCornerRadiusY( qreal radius )
 {
     if( radius >= 0.0 && radius <= 100.0 )
     {

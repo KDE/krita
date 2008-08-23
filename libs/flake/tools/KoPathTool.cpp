@@ -764,7 +764,7 @@ void KoPathTool::pointSelectionChanged()
 void KoPathTool::repaint( const QRectF &repaintRect ) {
     //kDebug(30006) <<"KoPathTool::repaint(" << repaintRect <<")" << m_handleRadius;
     // widen border to take antialiasing into account
-    double radius = m_handleRadius+1;
+    qreal radius = m_handleRadius+1;
     m_canvas->updateCanvas( repaintRect.adjusted( -radius, -radius, radius, radius ) );
 }
 

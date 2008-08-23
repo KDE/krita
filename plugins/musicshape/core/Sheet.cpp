@@ -213,7 +213,7 @@ StaffSystem* Sheet::staffSystem(int index)
 {
     Q_ASSERT( index >= 0 );
     int idx = d->staffSystems.size();
-    double ssHeight = 0;
+    qreal ssHeight = 0;
     if (partCount() > 0) {
         Part* prt = part(partCount() - 1);
         ssHeight = prt->staff(prt->staffCount() - 1)->bottom() + 30;

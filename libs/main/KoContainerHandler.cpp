@@ -107,15 +107,15 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
         QPoint p = d->m_invert.map( d->m_invertParentMatrix.map( e->pos() /*+ QPoint(d->m_view->canvasXOffset(), d->m_view->canvasYOffset()) */ ) );
         QRegion rgn( d->m_child->frameRegion( d->m_parentMatrix, true ) );
 
-        double x1_x, x1_y, x2_x, x2_y;
-        d->m_matrix.map( double( p.x() ), 0.0, &x1_x, &x1_y );
-        d->m_matrix.map( double( d->m_mouseStart.x() ), 0.0, &x2_x, &x2_y );
-        double y1_x, y1_y, y2_x, y2_y;
-        d->m_matrix.map( 0.0, double( p.y() ), &y1_x, &y1_y );
-        d->m_matrix.map( 0.0, double( d->m_mouseStart.y() ), &y2_x, &y2_y );
+        qreal x1_x, x1_y, x2_x, x2_y;
+        d->m_matrix.map( qreal( p.x() ), 0.0, &x1_x, &x1_y );
+        d->m_matrix.map( qreal( d->m_mouseStart.x() ), 0.0, &x2_x, &x2_y );
+        qreal y1_x, y1_y, y2_x, y2_y;
+        d->m_matrix.map( 0.0, qreal( p.y() ), &y1_x, &y1_y );
+        d->m_matrix.map( 0.0, qreal( d->m_mouseStart.y() ), &y2_x, &y2_y );
 
-        double dx = x2_x - x1_x;
-        double dy = x2_y - x1_y;
+        qreal dx = x2_x - x1_x;
+        qreal dy = x2_y - x1_y;
         int x = int( sqrt( dx * dx + dy * dy ) * ( d->m_mouseStart.x() < p.x() ? 1.0 : -1.0 ) );
 
         dx = y2_x - y1_x;

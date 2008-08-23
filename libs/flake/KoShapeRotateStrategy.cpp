@@ -50,12 +50,12 @@ KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas
 
 void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
     QPointF center = m_initialBoundingRect.center();
-    double angle = atan2( point.y() - center.y(), point.x() - center.x() ) -
+    qreal angle = atan2( point.y() - center.y(), point.x() - center.x() ) -
         atan2( m_start.y() - center.y(), m_start.x() - center.x() );
     angle = angle / M_PI * 180;  // convert to degrees.
     if(modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
         // limit to 45 degree angles
-        double modula = qAbs(angle);
+        qreal modula = qAbs(angle);
         while(modula > 45.0)
             modula -= 45.0;
         if(modula > 22.5)

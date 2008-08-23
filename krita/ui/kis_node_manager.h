@@ -88,7 +88,7 @@ public slots:
     void activateNode( KisNodeSP layer );
     void nodesUpdated();
     void nodeProperties( KisNodeSP node );
-    void nodeOpacityChanged( double opacity, bool final);
+    void nodeOpacityChanged( qreal opacity, bool final);
     void nodeCompositeOpChanged( const KoCompositeOp* op );
     void duplicateActiveNode( KisNodeSP node );
     

@@ -90,12 +90,12 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     foreach(KoShape *shape, m_selectedShapes)
         keepAspect = keepAspect || shape->keepAspectRatio();
 
-    double startWidth = m_initialSize.width();
-    double startHeight = m_initialSize.height();
+    qreal startWidth = m_initialSize.width();
+    qreal startHeight = m_initialSize.height();
 
     QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
 
-    double zoomX=1, zoomY=1;
+    qreal zoomX=1, zoomY=1;
     if(m_left)
         zoomX = (startWidth - distance.x()) / startWidth;
     else if(m_right)
@@ -164,8 +164,8 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         // that tells us the effective scale values we have to use for the resizing
         QMatrix localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
         // save the effective scale values
-        double scaleX = localMatrix.m11();
-        double scaleY = localMatrix.m22();
+        qreal scaleX = localMatrix.m11();
+        qreal scaleY = localMatrix.m22();
 
         // calculate the scale matrix which is equivalent to our resizing above
         QMatrix scaleMatrix = (QMatrix().scale( scaleX, scaleY ));

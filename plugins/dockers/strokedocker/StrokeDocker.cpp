@@ -79,7 +79,7 @@ StrokeDocker::StrokeDocker()
     d->setLineWidth->setUnit( KoUnit(KoUnit::Point) );
     d->setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
     mainLayout->addWidget( d->setLineWidth, 0, 1, 1, 3 );
-    connect( d->setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) );
+    connect( d->setLineWidth, SIGNAL( valueChangedPt( qreal ) ), this, SLOT( widthChanged() ) );
 
     QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
     mainLayout->addWidget( capLabel, 1, 0 );
@@ -150,7 +150,7 @@ StrokeDocker::StrokeDocker()
     d->miterLimit->setUnit( KoUnit(KoUnit::Point) );
     d->miterLimit->setToolTip( i18n( "Set miter limit" ) );
     mainLayout->addWidget( d->miterLimit, 3, 1, 1, 3 );
-    connect( d->miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
+    connect( d->miterLimit, SIGNAL( valueChangedPt( qreal ) ), this, SLOT( miterLimitChanged() ) );
 
     QLabel * styleLabel = new QLabel( i18n( "Style:" ), mainWidget );
     mainLayout->addWidget( styleLabel, 4, 0 );

@@ -119,7 +119,7 @@ struct KoColorSpaceTrait {
     {
         if(channelIndex > channels_nb) return QString("Error");
         channels_type c = nativeArray(pixel)[channelIndex];
-        return QString().setNum( 100. * ((double)c ) / KoColorSpaceMathsTraits< channels_type>::unitValue);
+        return QString().setNum( 100. * ((qreal)c ) / KoColorSpaceMathsTraits< channels_type>::unitValue);
     }
 
     inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels)
@@ -128,7 +128,7 @@ struct KoColorSpaceTrait {
         channels_type c;
         for (uint i = 0; i < channels_nb; i++) {
             c = nativeArray(pixel)[i];
-            channels[i] = ((double)c ) / KoColorSpaceMathsTraits<channels_type>::unitValue;
+            channels[i] = ((qreal)c ) / KoColorSpaceMathsTraits<channels_type>::unitValue;
         }
     }
 

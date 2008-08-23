@@ -109,8 +109,8 @@ void KoCreateShapeStrategy::paint( QPainter &painter, const KoViewConverter &con
         painter.setBrush( sb );
         QRectF paintRect = converter.documentToView(selectRect());
 
-        double xscale = paintRect.width() / m_outlineBoundingRect.width();
-        double yscale = paintRect.height() / m_outlineBoundingRect.height();
+        qreal xscale = paintRect.width() / m_outlineBoundingRect.width();
+        qreal yscale = paintRect.height() / m_outlineBoundingRect.height();
         QMatrix matrix;
         matrix.translate( -m_outlineBoundingRect.left(), -m_outlineBoundingRect.top() );
         matrix.scale( xscale, yscale );

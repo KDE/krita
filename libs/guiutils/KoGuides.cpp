@@ -280,7 +280,7 @@ bool KoGuides::keyPressEvent( QKeyEvent *e )
     return eventProcessed;
 }
 
-void KoGuides::setGuideLines( const QList<double> &horizontalPos, const QList<double> &verticalPos )
+void KoGuides::setGuideLines( const QList<qreal> &horizontalPos, const QList<qreal> &verticalPos )
 {
     removeSelected();
 
@@ -291,7 +291,7 @@ void KoGuides::setGuideLines( const QList<double> &horizontalPos, const QList<do
     }
     m_guideLines[GL].clear();
 
-    QList<double>::ConstIterator posIt = horizontalPos.begin();
+    QList<qreal>::ConstIterator posIt = horizontalPos.begin();
     for ( ; posIt != horizontalPos.end(); ++posIt )
     {
         KoGuideLine *guideLine = new KoGuideLine( Qt::Horizontal, *posIt, false );
@@ -306,7 +306,7 @@ void KoGuides::setGuideLines( const QList<double> &horizontalPos, const QList<do
     paint();
 }
 
-void KoGuides::setAutoGuideLines( const QList<double> &horizontalPos, const QList<double> &verticalPos )
+void KoGuides::setAutoGuideLines( const QList<qreal> &horizontalPos, const QList<qreal> &verticalPos )
 {
     QList<KoGuideLine *>::iterator it = m_guideLines[GL_AUTOMATIC].begin();
     for ( ; it != m_guideLines[GL_AUTOMATIC].end(); ++it )
@@ -315,7 +315,7 @@ void KoGuides::setAutoGuideLines( const QList<double> &horizontalPos, const QLis
     }
     m_guideLines[GL_AUTOMATIC].clear();
 
-    QList<double>::ConstIterator posIt = horizontalPos.begin();
+    QList<qreal>::ConstIterator posIt = horizontalPos.begin();
     for ( ; posIt != horizontalPos.end(); ++posIt )
     {
         KoGuideLine *guideLine = new KoGuideLine( Qt::Horizontal, *posIt, true );
@@ -330,7 +330,7 @@ void KoGuides::setAutoGuideLines( const QList<double> &horizontalPos, const QLis
 }
 
 
-void KoGuides::getGuideLines( QList<double> &horizontalPos, QList<double> &verticalPos ) const
+void KoGuides::getGuideLines( QList<qreal> &horizontalPos, QList<qreal> &verticalPos ) const
 {
     horizontalPos.clear();
     verticalPos.clear();
@@ -376,7 +376,7 @@ void KoGuides::snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus,
         {
             if ( ( *it )->orientation == Qt::Horizontal )
             {
-                double tmp = (*it)->position - rect.top();
+                qreal tmp = (*it)->position - rect.top();
                 if ( snapStatus & Qt::Horizontal || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.y()))
@@ -397,7 +397,7 @@ void KoGuides::snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus,
             }
             else
             {
-                double tmp = (*it)->position - rect.left();
+                qreal tmp = (*it)->position - rect.left();
                 if ( snapStatus & Qt::Vertical || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.x()))
@@ -440,7 +440,7 @@ void KoGuides::snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus,
         {
             if ( ( *it )->orientation == Qt::Horizontal )
             {
-                double tmp = (*it)->position - pos.y();
+                qreal tmp = (*it)->position - pos.y();
                 if ( snapStatus & Qt::Horizontal || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.y()))
@@ -452,7 +452,7 @@ void KoGuides::snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus,
             }
             else
             {
-                double tmp = (*it)->position - pos.x();
+                qreal tmp = (*it)->position - pos.x();
                 if ( snapStatus & Qt::Vertical || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.x()))
@@ -617,8 +617,8 @@ void KoGuides::diffNextGuide( QRectF &rect, QPointF &diff )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
             {
-                double moveyl = ( *it )->position - rect.top();
-                double moveyr = ( *it )->position - rect.bottom();
+                qreal moveyl = ( *it )->position - rect.top();
+                qreal moveyr = ( *it )->position - rect.bottom();
                 if ( diff.y() > 0 )
                 {
                     if ( moveyl < diff.y() && moveyl > 1E-10 )
@@ -644,8 +644,8 @@ void KoGuides::diffNextGuide( QRectF &rect, QPointF &diff )
             }
             else
             {
-                double movexl = ( *it )->position - rect.left();
-                double movexr = ( *it )->position - rect.right();
+                qreal movexl = ( *it )->position - rect.left();
+                qreal movexr = ( *it )->position - rect.right();
                 if ( diff.x() > 0 )
                 {
                     if ( movexl < diff.x() && movexl > 1E-10 )
@@ -722,7 +722,7 @@ void KoGuides::slotChangePosition()
     KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
 
     const KoPageLayout& pl = m_view->koDocument()->pageLayout();
-    double max = 0.0;
+    qreal max = 0.0;
     if ( guideLine->orientation == Qt::Vertical )
     {
         max = qMax( pl.width, m_zoomHandler->unzoomItX( m_view->canvas()->size().width() + m_view->canvasXOffset() - 1 ) );
@@ -816,7 +816,7 @@ bool KoGuides::hasSelected()
 }
 
 
-KoGuides::KoGuideLine * KoGuides::find( QPointF &p, double diff )
+KoGuides::KoGuideLine * KoGuides::find( QPointF &p, qreal diff )
 {
     QList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
     for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
@@ -853,15 +853,15 @@ void KoGuides::moveSelectedBy( QPoint &p )
     if ( m_guideLines[GL_SELECTED].count() > 1 )
     {
         const KoPageLayout& pl = m_view->koDocument()->pageLayout();
-        double right = qMax( pl.width, m_zoomHandler->unzoomItX( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
-        double bottom = qMax( pl.height, m_zoomHandler->unzoomItY( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
+        qreal right = qMax( pl.width, m_zoomHandler->unzoomItX( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
+        qreal bottom = qMax( pl.height, m_zoomHandler->unzoomItY( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
 
         QList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
         for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
         {
             if ( ( *it )->orientation == Qt::Vertical )
             {
-                double tmp = ( *it )->position + point.x();
+                qreal tmp = ( *it )->position + point.x();
                 if ( tmp < 0 )
                 {
                     point.setX( point.x() - tmp );
@@ -873,7 +873,7 @@ void KoGuides::moveSelectedBy( QPoint &p )
             }
             else
             {
-                double tmp = ( *it )->position + point.y();
+                qreal tmp = ( *it )->position + point.y();
                 if ( tmp < 0 )
                 {
                     point.setY( point.y() - tmp );
@@ -906,8 +906,8 @@ QPointF KoGuides::mapFromScreen( const QPoint & pos )
 {
     int x = pos.x() + m_view->canvasXOffset();
     int y = pos.y() + m_view->canvasYOffset();
-    double xf = m_zoomHandler->unzoomItX( x );
-    double yf = m_zoomHandler->unzoomItY( y );
+    qreal xf = m_zoomHandler->unzoomItX( x );
+    qreal yf = m_zoomHandler->unzoomItY( y );
     return QPointF( xf, yf );
 }
 

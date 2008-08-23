@@ -46,7 +46,7 @@ TiedNoteAction::TiedNoteAction(SimpleEntryTool* tool)
 {
 }
 
-void TiedNoteAction::mousePress(Chord* chord, Note* note, double distance, const QPointF& pos)
+void TiedNoteAction::mousePress(Chord* chord, Note* note, qreal distance, const QPointF& pos)
 {
     Q_UNUSED( chord );
     Q_UNUSED( pos );

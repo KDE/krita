@@ -350,7 +350,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             this->toLabA16Converter()->transform( src2, lab2, 1),
             cmsLabEncoded2Float(&labF1, (WORD *)lab1);
             cmsLabEncoded2Float(&labF2, (WORD *)lab2);
-            double diff = cmsDeltaE(&labF1, &labF2);
+            qreal diff = cmsDeltaE(&labF1, &labF2);
             if(diff>255)
                 return 255;
             else
@@ -373,7 +373,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             return iccp->asLcms();
         }
         typedef struct {
-            double Saturation;
+            qreal Saturation;
 
         } BCHSWADJUSTS, *LPBCHSWADJUSTS;
 

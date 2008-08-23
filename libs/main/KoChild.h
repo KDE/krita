@@ -109,42 +109,42 @@ public:
    * Scales the content of the child part. However, that does not
    * affect the size of the child part.
    */
-  virtual void setScaling( double x, double y );
+  virtual void setScaling( qreal x, qreal y );
 
   /**
    * @return the x axis scaling of the child part
    */
-  virtual double xScaling() const;
+  virtual qreal xScaling() const;
 
   /**
    * @return the y axis scaling of the child part
    */
-  virtual double yScaling() const;
+  virtual qreal yScaling() const;
 
   /**
    * Shears the content of the child part.
    */
-  virtual void setShearing( double x, double y );
+  virtual void setShearing( qreal x, qreal y );
 
   /**
    * @return the x axis shearing of the child part
    */
-  virtual double xShearing() const;
+  virtual qreal xShearing() const;
 
   /**
    * @return the y axis shearing of the child part
    */
-  virtual double yShearing() const;
+  virtual qreal yShearing() const;
 
   /**
    * Sets the angle of rotation.
    */
-  virtual void setRotation( double );
+  virtual void setRotation( qreal );
 
   /**
    * @return the angle of rotation
    */
-  virtual double rotation() const;
+  virtual qreal rotation() const;
 
   /**
    * Sets the center of the rotation to the point @p pos.

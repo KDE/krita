@@ -122,12 +122,12 @@ KoDocument* KoDocumentChild::hitTest( const QPoint& p, KoView* view, const QMatr
 
 void KoDocumentChild::loadOasis( const KoXmlElement &frameElement, const KoXmlElement& objectElement )
 {
-    double x, y, w, h;
+    qreal x, y, w, h;
     x = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "x", QString() ) );
     y = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "y", QString() ) );
     w = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "width", QString() ) );
     h = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "height", QString() ) );
-    m_tmpGeometry = QRect((int)x, (int)y, (int)w, (int)h); // #### double->int conversion
+    m_tmpGeometry = QRect((int)x, (int)y, (int)w, (int)h); // #### qreal->int conversion
     setGeometry(m_tmpGeometry);
 
     QString url = objectElement.attributeNS( KoXmlNS::xlink, "href", QString() );

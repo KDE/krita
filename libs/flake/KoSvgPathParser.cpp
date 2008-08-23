@@ -27,10 +27,10 @@
 #include <kdebug.h>
 
 // parses the coord into number and forwards to the next token
-const char * KoSvgPathParser::getCoord( const char *ptr, double &number )
+const char * KoSvgPathParser::getCoord( const char *ptr, qreal &number )
 {
     int integer, exponent;
-    double decimal, frac;
+    qreal decimal, frac;
     int sign, expsign;
 
     exponent = 0;
@@ -81,7 +81,7 @@ const char * KoSvgPathParser::getCoord( const char *ptr, double &number )
         }
     }
     number = integer + decimal;
-    number *= sign * pow( (double)10, double( expsign * exponent ) );
+    number *= sign * pow( (qreal)10, qreal( expsign * exponent ) );
 
     // skip the following space
     if(*ptr == ' ')
@@ -102,8 +102,8 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
         const char *ptr = buffer.constData();
         const char *end = buffer.constData() + buffer.length() + 1;
 
-        double contrlx, contrly, curx, cury, subpathx, subpathy, tox, toy, x1, y1, x2, y2, xc, yc;
-        double px1, py1, px2, py2, px3, py3;
+        qreal contrlx, contrly, curx, cury, subpathx, subpathy, tox, toy, x1, y1, x2, y2, xc, yc;
+        qreal px1, py1, px2, py2, px3, py3;
         bool relative;
         char command = *(ptr++), lastCommand = ' ';
 
@@ -351,7 +351,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                 case 'A':
                 {
                     bool largeArc, sweep;
-                    double angle, rx, ry;
+                    qreal angle, rx, ry;
                     ptr = getCoord( ptr, rx );
                     ptr = getCoord( ptr, ry );
                     ptr = getCoord( ptr, angle );
@@ -410,41 +410,41 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
 // For each bezier found a svgToCurve call is done.
 // Adapted from Niko's code in kdelibs/kdecore/svgicons.
 // Maybe this can serve in some shared lib? (Rob)
-void KoSvgPathParser::calculateArc(bool relative, double &curx, double &cury, double angle, double x, double y, double r1, double r2, bool largeArcFlag, bool sweepFlag)
+void KoSvgPathParser::calculateArc(bool relative, qreal &curx, qreal &cury, qreal angle, qreal x, qreal y, qreal r1, qreal r2, bool largeArcFlag, bool sweepFlag)
 {
-    double sin_th, cos_th;
-    double a00, a01, a10, a11;
-    double x0, y0, x1, y1, xc, yc;
-    double d, sfactor, sfactor_sq;
-    double th0, th1, th_arc;
+    qreal sin_th, cos_th;
+    qreal a00, a01, a10, a11;
+    qreal x0, y0, x1, y1, xc, yc;
+    qreal d, sfactor, sfactor_sq;
+    qreal th0, th1, th_arc;
     int i, n_segs;
 
     sin_th = sin(angle * (M_PI / 180.0));
     cos_th = cos(angle * (M_PI / 180.0));
 
-    double dx;
+    qreal dx;
 
     if(!relative)
         dx = (curx - x) / 2.0;
     else
         dx = -x / 2.0;
 
-    double dy;
+    qreal dy;
 
     if(!relative)
         dy = (cury - y) / 2.0;
     else
         dy = -y / 2.0;
 
-    double _x1 =  cos_th * dx + sin_th * dy;
-    double _y1 = -sin_th * dx + cos_th * dy;
-    double Pr1 = r1 * r1;
-    double Pr2 = r2 * r2;
-    double Px = _x1 * _x1;
-    double Py = _y1 * _y1;
+    qreal _x1 =  cos_th * dx + sin_th * dy;
+    qreal _y1 = -sin_th * dx + cos_th * dy;
+    qreal Pr1 = r1 * r1;
+    qreal Pr2 = r2 * r2;
+    qreal Px = _x1 * _x1;
+    qreal Py = _y1 * _y1;
 
     // Spec : check if radii are large enough
-    double check = Px / Pr1 + Py / Pr2;
+    qreal check = Px / Pr1 + Py / Pr2;
     if(check > 1)
     {
         r1 = r1 * sqrt(check);
@@ -505,14 +505,14 @@ void KoSvgPathParser::calculateArc(bool relative, double &curx, double &cury, do
     for(i = 0; i < n_segs; i++)
     {
         {
-            double sin_th, cos_th;
-            double a00, a01, a10, a11;
-            double x1, y1, x2, y2, x3, y3;
-            double t;
-            double th_half;
+            qreal sin_th, cos_th;
+            qreal a00, a01, a10, a11;
+            qreal x1, y1, x2, y2, x3, y3;
+            qreal t;
+            qreal th_half;
 
-            double _th0 = th0 + i * th_arc / n_segs;
-            double _th1 = th0 + (i + 1) * th_arc / n_segs;
+            qreal _th0 = th0 + i * th_arc / n_segs;
+            qreal _th1 = th0 + (i + 1) * th_arc / n_segs;
 
             sin_th = sin(angle * (M_PI / 180.0));
             cos_th = cos(angle * (M_PI / 180.0));
@@ -547,27 +547,27 @@ void KoSvgPathParser::calculateArc(bool relative, double &curx, double &cury, do
         cury += y;	
 }
 
-void KoSvgPathParser::svgLineToHorizontal( double, bool )
+void KoSvgPathParser::svgLineToHorizontal( qreal, bool )
 {
 }
 
-void KoSvgPathParser::svgLineToVertical( double, bool )
+void KoSvgPathParser::svgLineToVertical( qreal, bool )
 {
 }
 
-void KoSvgPathParser::svgCurveToCubicSmooth( double, double, double, double, bool )
+void KoSvgPathParser::svgCurveToCubicSmooth( qreal, qreal, qreal, qreal, bool )
 {
 }
 
-void KoSvgPathParser::svgCurveToQuadratic( double, double, double, double, bool )
+void KoSvgPathParser::svgCurveToQuadratic( qreal, qreal, qreal, qreal, bool )
 {
 }
 
-void KoSvgPathParser::svgCurveToQuadraticSmooth( double, double, bool )
+void KoSvgPathParser::svgCurveToQuadraticSmooth( qreal, qreal, bool )
 {
 }
 
-void KoSvgPathParser::svgArcTo( double, double, double, double, double, bool, bool, bool )
+void KoSvgPathParser::svgArcTo( qreal, qreal, qreal, qreal, qreal, bool, bool, bool )
 {
 }
 

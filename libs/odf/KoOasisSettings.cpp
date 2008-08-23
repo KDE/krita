@@ -183,11 +183,11 @@ int KoOasisSettings::Items::parseConfigItemInt( const QString& configName, int d
     return defValue;
 }
 
-double KoOasisSettings::Items::parseConfigItemDouble( const QString& configName, double defValue ) const
+qreal KoOasisSettings::Items::parseConfigItemDouble( const QString& configName, qreal defValue ) const
 {
     bool ok;
     const QString str = findConfigItem( configName, &ok );
-    double value;
+    qreal value;
     if ( ok ) {
         value = str.toDouble( &ok );
         if ( ok )

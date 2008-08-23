@@ -108,9 +108,9 @@ void KoRgbU8ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDom
 {
     const RgbU8Traits::Pixel* p = reinterpret_cast<const RgbU8Traits::Pixel*>( pixel );
     QDomElement labElt = doc.createElement( "RGB" );
-    labElt.setAttribute("r", KoColorSpaceMaths< RgbU8Traits::channels_type, double>::scaleToA( p->red) );
-    labElt.setAttribute("g", KoColorSpaceMaths< RgbU8Traits::channels_type, double>::scaleToA( p->green) );
-    labElt.setAttribute("b", KoColorSpaceMaths< RgbU8Traits::channels_type, double>::scaleToA( p->blue) );
+    labElt.setAttribute("r", KoColorSpaceMaths< RgbU8Traits::channels_type, qreal>::scaleToA( p->red) );
+    labElt.setAttribute("g", KoColorSpaceMaths< RgbU8Traits::channels_type, qreal>::scaleToA( p->green) );
+    labElt.setAttribute("b", KoColorSpaceMaths< RgbU8Traits::channels_type, qreal>::scaleToA( p->blue) );
     labElt.setAttribute("space", profile()->name() );
     colorElt.appendChild( labElt );
 }
@@ -118,9 +118,9 @@ void KoRgbU8ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDom
 void KoRgbU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     RgbU8Traits::Pixel* p = reinterpret_cast<RgbU8Traits::Pixel*>( pixel );
-    p->red = KoColorSpaceMaths< double, RgbU8Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
-    p->green = KoColorSpaceMaths< double, RgbU8Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
-    p->blue = KoColorSpaceMaths< double, RgbU8Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    p->red = KoColorSpaceMaths< qreal, RgbU8Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
+    p->green = KoColorSpaceMaths< qreal, RgbU8Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p->blue = KoColorSpaceMaths< qreal, RgbU8Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
 }
 
 quint8 KoRgbU8ColorSpace::intensity8(const quint8 * src) const

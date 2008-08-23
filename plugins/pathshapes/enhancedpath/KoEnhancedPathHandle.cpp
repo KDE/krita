@@ -63,7 +63,7 @@ QPointF KoEnhancedPathHandle::position()
     {
         // convert polar coordinates into cartesian coordinates
         QPointF center( m_polarX->evaluate(), m_polarY->evaluate() );
-        double angleInRadian = position.x() * M_PI / 180.0;
+        qreal angleInRadian = position.x() * M_PI / 180.0;
         position = center + position.y() * QPointF( cos( angleInRadian ), sin( angleInRadian ) );
     }
 
@@ -83,9 +83,9 @@ void KoEnhancedPathHandle::changePosition( const QPointF &position )
         QPointF polarCenter( m_polarX->evaluate(), m_polarY->evaluate() );
         QPointF diff = constrainedPosition - polarCenter;
         // compute the polar radius
-        double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+        qreal radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
         // compute the polar angle
-        double angle = atan2( diff.y(), diff.x() );
+        qreal angle = atan2( diff.y(), diff.x() );
         if( angle < 0.0 )
             angle += 2 * M_PI;
 

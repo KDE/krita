@@ -571,7 +571,7 @@ qreal KoPathSegment::length( qreal error ) const
     QList<QPointF> ctrlPoints = controlPoints();
 
     // calculate chord length
-    double chordLen = chordLength();
+    qreal chordLen = chordLength();
 
     if( deg == 1 )
     {
@@ -579,7 +579,7 @@ qreal KoPathSegment::length( qreal error ) const
     }
 
     // calculate length of control polygon
-    double polyLength = 0.0;
+    qreal polyLength = 0.0;
 
     for( int i = 0; i < deg; ++i )
     {
@@ -661,7 +661,7 @@ bool KoPathSegment::isFlat( qreal tolerance ) const
 
     QPointF chord = d->second->point() - d->first->point();
     // calculate angle of chord to the x-axis
-    double chordAngle = atan2( chord.y(), chord.x() );
+    qreal chordAngle = atan2( chord.y(), chord.x() );
     QMatrix m;
     m.translate( d->first->point().x(), d->first->point().y() );
     m.rotate( chordAngle * M_PI / 180.0 );
@@ -1023,7 +1023,7 @@ QList<qreal> KoPathSegment::extrema() const
         }
         else
         {
-            double rx = b.x()*b.x() - 4.0*a.x()*c.x();
+            qreal rx = b.x()*b.x() - 4.0*a.x()*c.x();
             if( rx < 0.0 )
                 rx = 0.0;
             params.append( ( -b.x() + sqrt( rx ) ) / ( 2.0*a.x() ) );
@@ -1037,7 +1037,7 @@ QList<qreal> KoPathSegment::extrema() const
         }
         else
         {
-            double ry = b.y()*b.y() - 4.0*a.y()*c.y();
+            qreal ry = b.y()*b.y() - 4.0*a.y()*c.y();
             if( ry < 0.0 )
                 ry = 0.0;
             params.append( ( -b.y() + sqrt( ry ) ) / ( 2.0*a.y() ) );

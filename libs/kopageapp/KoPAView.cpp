@@ -119,8 +119,8 @@ void KoPAView::initGUI()
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
     m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection(), false );
-    connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
-             this, SLOT( slotZoomChanged( KoZoomMode::Mode, double ) ) );
+    connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, qreal ) ),
+             this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
     m_zoomAction = m_zoomController->zoomAction();
     addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0, true );
@@ -363,7 +363,7 @@ void KoPAView::formatMasterPage()
     delete dialog;
 }
 
-void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, double zoom )
+void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
     Q_UNUSED(mode);
     Q_UNUSED(zoom);

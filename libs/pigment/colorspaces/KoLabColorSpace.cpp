@@ -90,9 +90,9 @@ void KoLabColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomEl
 {
     const KoLabU16Traits::Pixel* p = reinterpret_cast<const KoLabU16Traits::Pixel*>( pixel );
     QDomElement labElt = doc.createElement( "Lab" );
-    labElt.setAttribute("L", KoColorSpaceMaths< KoLabU16Traits::channels_type, double>::scaleToA( p->L) );
-    labElt.setAttribute("a", KoColorSpaceMaths< KoLabU16Traits::channels_type, double>::scaleToA( p->a) );
-    labElt.setAttribute("b", KoColorSpaceMaths< KoLabU16Traits::channels_type, double>::scaleToA( p->b) );
+    labElt.setAttribute("L", KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA( p->L) );
+    labElt.setAttribute("a", KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA( p->a) );
+    labElt.setAttribute("b", KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA( p->b) );
     labElt.setAttribute("space", profile()->name() );
     colorElt.appendChild( labElt );
 }
@@ -100,7 +100,7 @@ void KoLabColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomEl
 void KoLabColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     KoLabU16Traits::Pixel* p = reinterpret_cast<KoLabU16Traits::Pixel*>( pixel );
-    p->L = KoColorSpaceMaths< double, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());
-    p->a = KoColorSpaceMaths< double, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("a").toDouble());
-    p->b = KoColorSpaceMaths< double, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    p->L = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());
+    p->a = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("a").toDouble());
+    p->b = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
 }

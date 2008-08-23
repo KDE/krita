@@ -26,8 +26,8 @@ public:
         if(border && border->removeUser() == 0)
             delete border;
     }
-    double counterWidth;
-    double counterSpacing;
+    qreal counterWidth;
+    qreal counterSpacing;
     QString counterText;
     QString partialCounterText;
     QPointF counterPos;
@@ -49,7 +49,7 @@ bool KoTextBlockData::hasCounterData() const {
     return d->counterWidth >= 0 && !d->counterText.isNull();
 }
 
-double KoTextBlockData::counterWidth() const {
+qreal KoTextBlockData::counterWidth() const {
     return qMax(0., d->counterWidth);
 }
 
@@ -61,15 +61,15 @@ void KoTextBlockData::setBorder(KoTextBlockBorderData *border) {
         d->border->addUser();
 }
 
-void KoTextBlockData::setCounterWidth(double width) {
+void KoTextBlockData::setCounterWidth(qreal width) {
     d->counterWidth = width;
 }
 
-double KoTextBlockData::counterSpacing() const {
+qreal KoTextBlockData::counterSpacing() const {
     return d->counterSpacing;
 }
 
-void KoTextBlockData::setCounterSpacing(double spacing) {
+void KoTextBlockData::setCounterSpacing(qreal spacing) {
     d->counterSpacing = spacing;
 }
 

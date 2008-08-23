@@ -188,7 +188,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
     // clip the children to the parent outline.
     QMatrix m;
-    double zoomX, zoomY;
+    qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     m.scale(zoomX, zoomY);
     painter.setClipPath(m.map(outline()));

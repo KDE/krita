@@ -414,8 +414,8 @@ QIcon KoShapeCollectionDocker::generateShapeIcon(KoShape* shape)
 {
     KoZoomHandler converter;
 
-    double diffx = 30 / converter.documentToViewX(shape->size().width());
-    double diffy = 30 / converter.documentToViewY(shape->size().height());
+    qreal diffx = 30 / converter.documentToViewX(shape->size().width());
+    qreal diffy = 30 / converter.documentToViewY(shape->size().height());
     converter.setZoom(qMin(diffx, diffy));
 
     QPixmap pixmap(qRound(converter.documentToViewX(shape->size().width())) + 2, qRound(converter.documentToViewY(shape->size().height())) + 2);

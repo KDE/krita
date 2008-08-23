@@ -137,11 +137,11 @@ public:
      */
     int intProperty(const QString & name, int def = 0) const;
     /**
-     * Return a double property by name.
+     * Return a qreal property by name.
      * @param name the name (or key) with which the variant was registered.
      * @param def the default value, should there not be any property by the name this will be returned.
      */
-    double doubleProperty(const QString & name, double def = 0.0) const;
+    qreal doubleProperty(const QString & name, qreal def = 0.0) const;
     /**
      * Return a boolean property by name.
      * @param name the name (or key) with which the variant was registered.

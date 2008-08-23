@@ -114,8 +114,8 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
 
     const int wantedWidth = size.width();
     const int wantedHeight = size.height();
-    const double xScale = double(size.width()) / double(m_boundingBox.width());
-    const double yScale = double(size.height()) / double(m_boundingBox.height());
+    const qreal xScale = qreal(size.width()) / qreal(m_boundingBox.width());
+    const qreal yScale = qreal(size.height()) / qreal(m_boundingBox.height());
 
     // create GS command line
 

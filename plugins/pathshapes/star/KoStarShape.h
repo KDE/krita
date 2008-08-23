@@ -57,19 +57,19 @@ public:
      * The base radius has no meaning if the star is set convex.
      * @param baseRadius the new base radius
      */
-    void setBaseRadius( double baseRadius );
+    void setBaseRadius( qreal baseRadius );
 
     /// Returns the base radius
-    double baseRadius() const;
+    qreal baseRadius() const;
 
     /**
      * Sets the radius of the tip points.
      * @param tipRadius the new tip radius
      */
-    void setTipRadius( double tipRadius );
+    void setTipRadius( qreal tipRadius );
 
     /// Returns the tip radius
-    double tipRadius() const;
+    qreal tipRadius() const;
 
     /**
      * Sets the roundness at the base points.
@@ -78,7 +78,7 @@ public:
      *
      * @param baseRoundness the new base roundness
      */
-    void setBaseRoundness( double baseRoundness );
+    void setBaseRoundness( qreal baseRoundness );
 
     /**
      * Sets the roundness at the tip points.
@@ -87,7 +87,7 @@ public:
      *
      * @param tipRoundness the new base roundness
      */
-    void setTipRoundness( double tipRoundness );
+    void setTipRoundness( qreal tipRoundness );
 
     /**
      * Sets the star to be convex, looking like a polygon.
@@ -129,11 +129,11 @@ private:
     enum Handles { tip = 0, base = 1 };
 
     uint m_cornerCount;    ///< number of corners
-    double m_radius[2];    ///< the different radii
-    double m_angles[2];    ///< the offset angles
-    double m_zoomX;        ///< scaling in x
-    double m_zoomY;        ///< scaling in y
-    double m_roundness[2]; ///< the roundness at the handles
+    qreal m_radius[2];    ///< the different radii
+    qreal m_angles[2];    ///< the offset angles
+    qreal m_zoomX;        ///< scaling in x
+    qreal m_zoomY;        ///< scaling in y
+    qreal m_roundness[2]; ///< the roundness at the handles
     QPointF m_center;      ///< the star center point
     bool m_convex;         ///< controls if the star is convex
     KoSubpath m_points;    ///< the path points

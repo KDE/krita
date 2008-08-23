@@ -50,7 +50,7 @@ bool FolderBorder::hasTransparency()
 
 void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
-    double zoomX, zoomY;
+    qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
 

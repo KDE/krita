@@ -70,7 +70,7 @@ protected:
 
 private slots:
     void nColChanged( int );
-    void nSpaceChanged( double );
+    void nSpaceChanged( qreal );
 };
 
 #endif

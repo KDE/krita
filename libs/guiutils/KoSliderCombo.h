@@ -25,7 +25,7 @@
 #include "koguiutils_export.h"
 
 /**
- * @short A widget for double values with a popup slider
+ * @short A widget for qreal values with a popup slider
  *
  * KoSliderCombo combines a numerical input and a dropdown slider in a way that takes up as
  * little screen space as possible.
@@ -61,19 +61,19 @@ public:
      * The precision of values given as the number of digits after the period.
      * default is 2
      */
-    double decimals() const;
+    qreal decimals() const;
 
     /**
      * The minimum value that can be entered.
      * default is 0
      */
-    double minimum() const;
+    qreal minimum() const;
 
     /**
      * The maximum value that can be entered.
      * default is 100
      */
-    double maximum() const;
+    qreal maximum() const;
 
     /**
      * Sets the precision of the entered values.
@@ -86,18 +86,18 @@ public:
      * Sets the minimum value that can be entered.
      * @param min the minimum value
      */
-    void setMinimum(double min);
+    void setMinimum(qreal min);
 
     /**
      * Sets the maximum value that can be entered.
      * @param max the maximum value
      */
-    void setMaximum(double max);
+    void setMaximum(qreal max);
 
      /**
      * The value shown.
      */
-    double value() const;
+    qreal value() const;
 
     virtual QSize minimumSizeHint() const; ///< reimplemented from QComboBox
     virtual QSize sizeHint() const; ///< reimplemented from QComboBox
@@ -109,7 +109,7 @@ public slots:
      * The value actually set is forced to be within the legal range: minimum <= value <= maximum
      * @param value the new value
      */
-    void setValue(double value);
+    void setValue(qreal value);
 
 signals:
 
@@ -119,7 +119,7 @@ signals:
      * @param value the new value
      * @param final if the value is final ie not produced during sliding (on slider release it's final)
      */
-    void valueChanged(double value, bool final);
+    void valueChanged(qreal value, bool final);
 
 protected:
     virtual void paintEvent(QPaintEvent *); ///< reimplemented from QComboBox

@@ -244,7 +244,7 @@ void GuidesTool::mouseDoubleClickEvent( KoPointerEvent *event )
     else
     {
         // guide line hit -> remove it
-        QList<double> lines;
+        QList<qreal> lines;
         if( line.first == Qt::Horizontal )
         {
             lines = guidesData->horizontalGuideLines();
@@ -288,7 +288,7 @@ void GuidesTool::editGuideLine( Qt::Orientation orientation, uint index )
     d->mode = Private::EditGuide;
 }
 
-void GuidesTool::updateGuidePosition( double position )
+void GuidesTool::updateGuidePosition( qreal position )
 {
     if( d->mode == Private::MoveGuide || d->mode == Private::EditGuide )
     {
@@ -297,13 +297,13 @@ void GuidesTool::updateGuidePosition( double position )
         {
             if( d->orientation == Qt::Horizontal )
             {
-                QList<double> guideLines = guidesData->horizontalGuideLines();
+                QList<qreal> guideLines = guidesData->horizontalGuideLines();
                 guideLines[d->index] = position;
                 guidesData->setHorizontalGuideLines( guideLines );
             }
             else
             {
-                QList<double> guideLines = guidesData->verticalGuideLines();
+                QList<qreal> guideLines = guidesData->verticalGuideLines();
                 guideLines[d->index] = position;
                 guidesData->setVerticalGuideLines( guideLines );
             }
@@ -345,7 +345,7 @@ void GuidesTool::guideLinesChanged( Qt::Orientation orientation )
 
     if( orientation == d->orientation )
     {
-        QList<double> lines;
+        QList<qreal> lines;
         if( d->orientation == Qt::Horizontal )
             lines = guidesData->horizontalGuideLines();
         else
@@ -377,10 +377,10 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition( const QPointF &position )
     KoGuidesData * guidesData = m_canvas->guidesData();
     if( guidesData && guidesData->showGuideLines() ) {
         qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
-        double minDistance = m_canvas->viewConverter()->viewToDocumentX( handleRadius );
+        qreal minDistance = m_canvas->viewConverter()->viewToDocumentX( handleRadius );
         uint i = 0;
-        foreach( double guidePos, guidesData->horizontalGuideLines() ) {
-            double distance = qAbs( guidePos - position.y() );
+        foreach( qreal guidePos, guidesData->horizontalGuideLines() ) {
+            qreal distance = qAbs( guidePos - position.y() );
             if( distance < minDistance ) {
                 orientation = Qt::Horizontal;
                 index = i;
@@ -389,9 +389,9 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition( const QPointF &position )
             i++;
         }
         i = 0;
-        foreach( double guidePos, guidesData->verticalGuideLines() )
+        foreach( qreal guidePos, guidesData->verticalGuideLines() )
         {
-            double distance = qAbs( guidePos - position.x() );
+            qreal distance = qAbs( guidePos - position.x() );
             if( distance < minDistance ) {
                 orientation = Qt::Vertical;
                 index = i;

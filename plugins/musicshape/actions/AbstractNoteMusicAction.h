@@ -38,11 +38,11 @@ public:
     virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
     virtual void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos);
 
-    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, double distance, const QPointF& pos) = 0;
-    virtual void mouseMove(MusicCore::Chord* chord, MusicCore::Note* note, double distance, const QPointF& pos);
+    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos) = 0;
+    virtual void mouseMove(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
 
-    virtual void mousePress(MusicCore::StaffElement* se, double distance, const QPointF& pos);
-    virtual void mouseMove(MusicCore::StaffElement* se, double distance, const QPointF& pos);
+    virtual void mousePress(MusicCore::StaffElement* se, qreal distance, const QPointF& pos);
+    virtual void mouseMove(MusicCore::StaffElement* se, qreal distance, const QPointF& pos);
 };
 
 #endif // ABSTRACTMUSICACTION_H

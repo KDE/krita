@@ -74,8 +74,8 @@ QUndoCommand * RectangleShapeConfigWidget::createCommand()
     {
         QSizeF size = m_rectangle->size();
 
-        double cornerRadiusX = 100.0 * widget.cornerRadiusX->value() / (0.5 * size.width());
-        double cornerRadiusY = 100.0 * widget.cornerRadiusY->value() / (0.5 * size.height());
+        qreal cornerRadiusX = 100.0 * widget.cornerRadiusX->value() / (0.5 * size.width());
+        qreal cornerRadiusY = 100.0 * widget.cornerRadiusY->value() / (0.5 * size.height());
 
         return new RectangleShapeConfigCommand( m_rectangle, cornerRadiusX, cornerRadiusY );
     }

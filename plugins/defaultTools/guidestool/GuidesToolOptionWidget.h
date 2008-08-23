@@ -33,16 +33,16 @@ public:
     ~GuidesToolOptionWidget();
 
     /// Sets horizontal guide lines
-    void setHorizontalGuideLines( const QList<double> &lines );
+    void setHorizontalGuideLines( const QList<qreal> &lines );
 
     /// Sets vertical guide lines
-    void setVerticalGuideLines( const QList<double> &lines );
+    void setVerticalGuideLines( const QList<qreal> &lines );
 
      /// Returns the list of horizontal guide lines.
-    QList<double> horizontalGuideLines() const;
+    QList<qreal> horizontalGuideLines() const;
 
      /// Returns the list of vertical guide lines.
-    QList<double> verticalGuideLines() const;
+    QList<qreal> verticalGuideLines() const;
 
     /// Returns the current selected lines orientation
     Qt::Orientation orientation() const;
@@ -65,14 +65,14 @@ signals:
 private slots:
     void updateList( int orientation );
     void updatePosition( int index );
-    void positionChanged( double position );
+    void positionChanged( qreal position );
     void removeLine();
     void addLine();
 
 private:
     Ui_GuidesToolOptionWidget widget;
-    QList<double> m_hGuides;
-    QList<double> m_vGuides;
+    QList<qreal> m_hGuides;
+    QList<qreal> m_vGuides;
     KoUnit m_unit;
 };
 

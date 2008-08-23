@@ -27,7 +27,7 @@
 
 void KoPAUtil::setZoom( const KoPageLayout & pageLayout, const QSize & size, KoZoomHandler & zoomHandler )
 {
-    double zoom = size.width() / ( zoomHandler.resolutionX() * pageLayout.width );
+    qreal zoom = size.width() / ( zoomHandler.resolutionX() * pageLayout.width );
     zoom = qMin( zoom, size.height() / ( zoomHandler.resolutionY() * pageLayout.height ) );
     zoomHandler.setZoom( zoom );
 }

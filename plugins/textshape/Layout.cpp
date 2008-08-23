@@ -88,10 +88,10 @@ bool Layout::interrupted()
     return m_reset;
 }
 
-double Layout::width()
+qreal Layout::width()
 {
     Q_ASSERT(shape);
-    double ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
+    qreal ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
     if(m_newParag)
         ptWidth -= resolveTextIndent();
     if(m_newParag && m_blockData)
@@ -101,9 +101,9 @@ double Layout::width()
     return ptWidth;
 }
 
-double Layout::x()
+qreal Layout::x()
 {
-    double result = m_newParag?resolveTextIndent():0.0;
+    qreal result = m_newParag?resolveTextIndent():0.0;
     result += m_isRtl ? m_format.rightMargin() : m_format.leftMargin();
     result += listIndent();
     result += m_borderInsets.left + m_shapeBorder.left;
@@ -111,12 +111,12 @@ double Layout::x()
     return result;
 }
 
-double Layout::y()
+qreal Layout::y()
 {
     return m_y;
 }
 
-double Layout::resolveTextIndent()
+qreal Layout::resolveTextIndent()
 {
     if ( (m_block.blockFormat().property(KoParagraphStyle::AutoTextIndent).toBool()) ) {
         // if auto-text-indent is set,
@@ -128,7 +128,7 @@ double Layout::resolveTextIndent()
     return m_block.blockFormat().textIndent();
 }
 
-double Layout::docOffsetInShape() const
+qreal Layout::docOffsetInShape() const
 {
     Q_ASSERT(m_data);
     return m_data->documentOffset();
@@ -136,8 +136,8 @@ double Layout::docOffsetInShape() const
 
 bool Layout::addLine(QTextLine &line)
 {
-    double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    double objectHeight = 0.0;
+    qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+    qreal objectHeight = 0.0;
     bool useFixedLineHeight = height != 0.0;
     if (m_dropCapsNChars > 0)
         height = line.ascent();
@@ -163,7 +163,7 @@ bool Layout::addLine(QTextLine &line)
         }
     }
 
-    const double footnoteHeight = findFootnote(line);
+    const qreal footnoteHeight = findFootnote(line);
 
     if(m_data->documentOffset() + shape->size().height() - footnoteHeight < m_y + line.height() + m_shapeBorder.bottom) {
         // line does not fit.
@@ -194,7 +194,7 @@ bool Layout::addLine(QTextLine &line)
 
     // add linespacing
     if(! useFixedLineHeight) {
-        double linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);;
+        qreal linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);;
         if(linespacing == 0.0) { // unset
             int percent = m_format.intProperty(KoParagraphStyle::PercentLineHeight);
             if(percent != 0)
@@ -205,7 +205,7 @@ bool Layout::addLine(QTextLine &line)
         height = qMax(height, objectHeight) + linespacing;
     }
 
-    double minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
+    qreal minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
     if(minimum > 0.0)
         height = qMax(height, minimum);
     if(qAbs(m_y - line.y()) < 0.126) // rounding problems due to Qt-scribe internally using ints.
@@ -220,7 +220,7 @@ bool Layout::addLine(QTextLine &line)
         m_y_justBelowDropCaps = m_y; // save the y position just below the dropped characters
         m_y = line.y();              // keep the same y for the next line
         m_dropCapsNChars = 0;
-        double dropCapDistance = m_format.doubleProperty(KoParagraphStyle::DropCapsDistance);
+        qreal dropCapDistance = m_format.doubleProperty(KoParagraphStyle::DropCapsDistance);
         // save the x-offset that the dropped characters have caused on drop-cap-affected lines
         m_dropCapsAffectedLineWidthAdjust = line.naturalTextWidth() + dropCapDistance + 1;
     } else if (m_dropCapsAffectsNMoreLines > 0) { // we just laid out a drop-cap-affected line
@@ -249,7 +249,7 @@ bool Layout::nextParag()
             m_blockData = 0;
             return false;
         }
-        double borderBottom = m_y;
+        qreal borderBottom = m_y;
         if(m_block.isValid() && !m_newShape) { // only add bottom of prev parag if we did not go to a new shape for this parag.
             if(m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysAfter ||
                     m_format.boolProperty(KoParagraphStyle::BreakAfter)) {
@@ -278,7 +278,7 @@ bool Layout::nextParag()
         m_data->setEndPosition(block.position() + block.length());
 
         // repaint till end of shape.
-        const double offsetInShape = m_y - m_data->documentOffset();
+        const qreal offsetInShape = m_y - m_data->documentOffset();
         shape->update(QRectF(0.0, offsetInShape, shape->size().width(), shape->size().width() - offsetInShape));
         // cleanup and repaint rest of shapes.
         m_textShape->markLayoutDone();
@@ -349,7 +349,7 @@ bool Layout::nextParag()
     layout = m_block.layout();
     QTextOption option = layout->textOption();
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere );
-    double tabStopDistance =  m_format.property(KoParagraphStyle::TabStopDistance).toDouble();
+    qreal tabStopDistance =  m_format.property(KoParagraphStyle::TabStopDistance).toDouble();
     if (tabStopDistance > 0)
         option.setTabStop (tabStopDistance * qt_defaultDpiX() / 72.);
     else
@@ -446,7 +446,7 @@ bool Layout::nextParag()
     return true;
 }
 
-double Layout::documentOffsetInShape()
+qreal Layout::documentOffsetInShape()
 {
     return m_data->documentOffset();
 }
@@ -511,7 +511,7 @@ void Layout::cleanupShape(KoShape *daShape)
     daShape->update();
 }
 
-double Layout::listIndent()
+qreal Layout::listIndent()
 {
     if(m_blockData == 0)
         return 0;
@@ -575,7 +575,7 @@ void Layout::resetPrivate()
                 // in case this parag has a border we have to subtract that as well
                 m_blockData = dynamic_cast<KoTextBlockData*> (m_block.userData());
                 if(m_blockData && m_blockData->border()) {
-                    double top = m_blockData->border()->inset(KoTextBlockBorderData::Top);
+                    qreal top = m_blockData->border()->inset(KoTextBlockBorderData::Top);
                     // but only when this border actually makes us have an indent.
                     if(qAbs(m_blockData->border()->rect().top() + top - m_y) < 1E-10)
                         m_y -= top;
@@ -667,7 +667,7 @@ void Layout::updateBorders()
     m_borderInsets.right += m_format.doubleProperty(KoParagraphStyle::RightPadding);
 }
 
-double Layout::topMargin()
+qreal Layout::topMargin()
 {
     bool allowMargin = true; // wheather to allow margins at top of shape
     if(m_newShape) {
@@ -753,7 +753,7 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
         lastBorder->paint(*painter);
 }
 
-static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, double width, const double x1, const double x2, const double y)
+static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, qreal width, const qreal x1, const qreal x2, const qreal y)
 {
     QPen penBackup = painter->pen();
     QPen pen = painter->pen();
@@ -763,9 +763,9 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
         // Ok, try the waves :)
         pen.setStyle(Qt::SolidLine);
         painter->setPen(pen);
-        double x = x1;
-        const double halfWaveWidth = 2 * width;
-        const double halfWaveLength = 6 * width;
+        qreal x = x1;
+        const qreal halfWaveWidth = 2 * width;
+        const qreal halfWaveLength = 6 * width;
         const int startAngle = 0 * 16;
         const int middleAngle = 180 * 16;
         const int endAngle = 180 * 16;
@@ -816,8 +816,8 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
     painter->setPen(penBackup);
 }
 
-static void drawDecorationText (QPainter *painter, const QTextLine &line, const QColor &color, const QString& decorText, double x1, double x2) {
-    double y = line.position().y();
+static void drawDecorationText (QPainter *painter, const QTextLine &line, const QColor &color, const QString& decorText, qreal x1, qreal x2) {
+    qreal y = line.position().y();
     QPen oldPen = painter->pen();
     painter->setPen(QPen(color));
     do {
@@ -828,9 +828,9 @@ static void drawDecorationText (QPainter *painter, const QTextLine &line, const 
     painter->setPen(oldPen);
 }
 
-static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const QString& decorText, double width, const double y)
+static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const QString& decorText, qreal width, const qreal y)
 {
-    double wordBeginX = -1;
+    qreal wordBeginX = -1;
     int j = line.textStart();
     while (j < line.textLength()+line.textStart()) {
         if (text[j].isSpace()) {
@@ -854,7 +854,7 @@ static void drawDecorationWords(QPainter *painter, const QTextLine &line, const 
     }
 }
 
-static double computeWidth(KoCharacterStyle::LineWeight weight, double width, const QFont& font) {
+static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, const QFont& font) {
     switch(weight) {
         case KoCharacterStyle::AutoLineWeight:
         case KoCharacterStyle::NormalLineWeight:
@@ -885,7 +885,7 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
     int fragmentOffset = currentFragment.position() - startOfBlock;
 
     QFontMetricsF fm(currentFragment.charFormat().font());
-    double tabStyleLineMargin = fm.averageCharWidth()/4; // leave some margin for the tab decoration line
+    qreal tabStyleLineMargin = fm.averageCharWidth()/4; // leave some margin for the tab decoration line
 
     // currentFragment.position() : start of this fragment w.r.t. the document
     // startOfBlock : start of this block w.r.t. the document
@@ -912,8 +912,8 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
         searchForTabTill = line.textLength() + line.textStart() - fragmentOffset;
     }
     for( int i = searchForTabFrom ; i < searchForTabTill; i++ ) {
-        double tabStyleLeftLineMargin = tabStyleLineMargin;
-        double tabStyleRightLineMargin = tabStyleLineMargin;
+        qreal tabStyleLeftLineMargin = tabStyleLineMargin;
+        qreal tabStyleRightLineMargin = tabStyleLineMargin;
         if (m_currentTabStop >= tabList.size()) // no more decorations
             break;
         if (fragText[i] == '\t') {
@@ -923,8 +923,8 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
             if ( i < (searchForTabTill - 1) && fragText[i+1] == '\t' )
                 tabStyleRightLineMargin = 0;
 
-            double x1 = line.cursorToX(currentFragment.position() - startOfBlock + i);
-            double x2 = line.cursorToX(currentFragment.position() - startOfBlock + i + 1);
+            qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock + i);
+            qreal x2 = line.cursorToX(currentFragment.position() - startOfBlock + i + 1);
 
             // find a tab-stop decoration for this tab position
             // for eg., if there's a tab-stop at 1in, but the text before \t already spans 1.2in,
@@ -938,13 +938,13 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
             if (tab.position <= x1) // no appropriate tab-stop found
                 break;
 
-            double y = line.position().y() + line.ascent() - 1 ;
+            qreal y = line.position().y() + line.ascent() - 1 ;
             x1 += tabStyleLeftLineMargin;
             x2 -= tabStyleRightLineMargin;
             QColor tabDecorColor = currentFragment.charFormat().foreground().color();
             if (tab.leaderColor.isValid())
                 tabDecorColor = tab.leaderColor;
-            double width = computeWidth(tab.leaderWeight, tab.leaderWidth, painter->font());
+            qreal width = computeWidth(tab.leaderWeight, tab.leaderWidth, painter->font());
             if (x1 < x2) {
                 if (tab.leaderText.isEmpty())
                    drawDecorationLine(painter, tabDecorColor, tab.leaderType, tab.leaderStyle, width, x1, x2, y);
@@ -955,7 +955,7 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
     }
 }
 
-static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, double x1, double x2) {
+static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, qreal x1, qreal x2) {
     QTextCharFormat fmt = currentFragment.charFormat();
     KoCharacterStyle::LineStyle strikeOutStyle = (KoCharacterStyle::LineStyle)
                                                      fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
@@ -963,7 +963,7 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
                                                     fmt.intProperty(KoCharacterStyle::StrikeOutType);
     if ((strikeOutStyle != KoCharacterStyle::NoLineStyle) &&
         (strikeOutType != KoCharacterStyle::NoLineType)) {
-        double y = line.position().y() + line.height()/2;
+        qreal y = line.position().y() + line.height()/2;
         QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
         if (!color.isValid())
             color = fmt.foreground().color();
@@ -971,7 +971,7 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
                     (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::StrikeOutMode);
 
         QString strikeOutText = fmt.stringProperty(KoCharacterStyle::StrikeOutText);
-        double width = 0;
+        qreal width = 0;
         if (strikeOutText.isEmpty()) {
             width = computeWidth(
                      (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
@@ -990,20 +990,20 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
     }
 }
 
-static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, double x1, double x2) {
+static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, qreal x1, qreal x2) {
     QTextCharFormat fmt = currentFragment.charFormat();
     KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
     KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
     if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
         (fontUnderLineType != KoCharacterStyle::NoLineType)) {
         QFontMetrics metrics( fmt.font() );
-        double y = line.position().y() + line.ascent() + metrics.underlinePos();
+        qreal y = line.position().y() + line.ascent() + metrics.underlinePos();
         QColor color = fmt.underlineColor();
         if (!color.isValid())
             color = fmt.foreground().color();
         KoCharacterStyle::LineMode underlineMode = 
                     (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::UnderlineMode);
-        double width = computeWidth(
+        qreal width = computeWidth(
                  (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::UnderlineWeight),
                  fmt.doubleProperty (KoCharacterStyle::UnderlineWidth),
                  painter->font() );
@@ -1042,8 +1042,8 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                    double x1 = line.cursorToX(currentFragment.position() - startOfBlock);
-                    double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
+                    qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
+                    qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
 
                     drawStrikeOuts(painter, currentFragment, line, x1, x2);
                     drawUnderlines(painter, currentFragment, line, x1, x2);
@@ -1051,7 +1051,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
 
                     bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);
                     if (misspelled) {
-                        double y = line.position().y() + line.ascent() + painter->fontMetrics().underlinePos();
+                        qreal y = line.position().y() + line.ascent() + painter->fontMetrics().underlinePos();
                         drawDecorationLine (painter, QColor(255,0,0), KoCharacterStyle::SingleLine, KoCharacterStyle::WaveLine, painter->fontMetrics().lineWidth(), x1, x2, y);
                     }
                 }
@@ -1136,13 +1136,13 @@ painter->setPen(Qt::gray);
 painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, data->counterPosition().y() + fm.height()));
 #endif
 
-            double width = fm.xHeight();
-            double y = data->counterPosition().y() + fm.ascent() - fm.xHeight(); // at top of text.
+            qreal width = fm.xHeight();
+            qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight(); // at top of text.
             int percent = listFormat.intProperty(KoListStyle::BulletSize);
             if(percent > 0)
                 width *= percent / 100.0;
             y -= width / 10.; // move it up just slightly
-            double x = qMax(1., data->counterPosition().x() + fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
+            qreal x = qMax(1., data->counterPosition().x() + fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
                 switch( listStyle ) {
                 case KoListStyle::SquareItem: {
                     painter->fillRect(QRectF(x, y, width, width), QBrush(Qt::black));
@@ -1162,7 +1162,7 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
                     painter->fillRect(QRectF(0, 0, width, width), QBrush(Qt::black));
                 } break;
                 case KoListStyle::RightArrowItem: {
-                    const double half = width/2.0;
+                    const qreal half = width/2.0;
                     painter->translate(QPointF(x,y));
                     QPointF points[] = { QPointF(half,0), QPointF(width,half), QPointF(half,width) };
                     painter->drawPolyline(points,3);
@@ -1174,7 +1174,7 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
                     painter->drawPolyline(points,3);
                 } break;
                 case KoListStyle::HeavyCheckMarkItem: {
-                    const double half = width/2.0;
+                    const qreal half = width/2.0;
                     painter->translate(QPointF(x,y));
                     QPointF points[] = { QPointF(half,half), QPointF(half,width), QPointF(width,0) };
                     painter->drawPolyline(points,3);
@@ -1280,14 +1280,14 @@ void Layout::registerInlineObject(const QTextInlineObject &inlineObject)
     m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), inlineObject.height());
 }
 
-double Layout::inlineCharHeight(const QTextFragment &fragment)
+qreal Layout::inlineCharHeight(const QTextFragment &fragment)
 {
     if(m_inlineObjectHeights.contains(fragment.position()))
         return m_inlineObjectHeights[fragment.position()];
     return 0.0;
 }
 
-double Layout::findFootnote(const QTextLine &line)
+qreal Layout::findFootnote(const QTextLine &line)
 {
     if(m_parent->inlineObjectTextManager() == 0)
         return 0;

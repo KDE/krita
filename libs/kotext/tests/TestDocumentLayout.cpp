@@ -29,10 +29,10 @@ void TestDocumentLayout:: testHitTest() {
     initForNewTest();
     doc->setHtml("<p>lsdjflkdsjf lsdkjf lsdlflksejrl sdflsd flksjdf lksjrpdslfjfsdhtwkr[ivxxmvlwerponldsjf;dslflkjsorindfsn;epsdf</p><p>sldkfnwerpodsnf</p><p>sldkjfnpqwrdsf</p>");
     QTextBlock block = doc->begin();
-    double offset=50.0;
-    double lineHeight = 0;
+    qreal offset=50.0;
+    qreal lineHeight = 0;
     int lines = 0, parag=0;
-    double paragOffets[3];
+    qreal paragOffets[3];
     while(1) {
         if(!block.isValid()) break;
         paragOffets[parag++] = offset;

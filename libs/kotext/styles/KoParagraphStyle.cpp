@@ -132,7 +132,7 @@ bool KoParagraphStyle::hasProperty(int key) const {
     return d->stylesPrivate->contains(key);
 }
 
-double KoParagraphStyle::propertyDouble(int key) const {
+qreal KoParagraphStyle::propertyDouble(int key) const {
     QVariant variant = value(key);
     if(variant.isNull())
         return 0.0;
@@ -218,7 +218,7 @@ static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle
         return KoParagraphStyle::BorderDashDotPattern;
     if ( borderstyle == "dot-dot-dash" )
         return KoParagraphStyle::BorderDashDotDotPattern;
-    if ( borderstyle == "double" )
+    if ( borderstyle == "qreal" )
         return KoParagraphStyle::BorderDouble;
     if ( borderstyle == "groove" ) // NOT OASIS COMPATIBLE
         return KoParagraphStyle::BorderGroove;
@@ -241,7 +241,7 @@ static QString odfBorderStyleString(const KoParagraphStyle::BorderStyle borderst
         case KoParagraphStyle::BorderDashDotDotPattern:
             return QString("dot-dot-dash"); // not odf
         case KoParagraphStyle::BorderDouble:
-            return QString("double");
+            return QString("qreal");
         case KoParagraphStyle::BorderGroove:
             return QString("groove");
         case KoParagraphStyle::BorderRidge:
@@ -266,27 +266,27 @@ int KoParagraphStyle::lineHeightPercent() const {
     return propertyInt(PercentLineHeight);
 }
 
-void KoParagraphStyle::setLineHeightAbsolute(double height) {
+void KoParagraphStyle::setLineHeightAbsolute(qreal height) {
     setProperty(FixedLineHeight, height);
 }
 
-double KoParagraphStyle::lineHeightAbsolute() const {
+qreal KoParagraphStyle::lineHeightAbsolute() const {
     return propertyDouble(FixedLineHeight);
 }
 
-void KoParagraphStyle::setMinimumLineHeight(double height) {
+void KoParagraphStyle::setMinimumLineHeight(qreal height) {
     setProperty(MinimumLineHeight, height);
 }
 
-double KoParagraphStyle::minimumLineHeight() const {
+qreal KoParagraphStyle::minimumLineHeight() const {
     return propertyDouble(MinimumLineHeight);
 }
 
-void KoParagraphStyle::setLineSpacing(double spacing) {
+void KoParagraphStyle::setLineSpacing(qreal spacing) {
     setProperty(LineSpacing, spacing);
 }
 
-double KoParagraphStyle::lineSpacing() const {
+qreal KoParagraphStyle::lineSpacing() const {
     return propertyDouble(LineSpacing);
 }
 
@@ -346,11 +346,11 @@ int KoParagraphStyle::dropCapsLines() const {
     return propertyInt(DropCapsLines);
 }
 
-void KoParagraphStyle::setDropCapsDistance(double distance) {
+void KoParagraphStyle::setDropCapsDistance(qreal distance) {
     setProperty(DropCapsDistance, distance);
 }
 
-double KoParagraphStyle::dropCapsDistance() const {
+qreal KoParagraphStyle::dropCapsDistance() const {
     return propertyDouble(DropCapsDistance);
 }
 
@@ -378,66 +378,66 @@ bool KoParagraphStyle::breakAfter() {
     return propertyBoolean(BreakAfter);
 }
 
-void KoParagraphStyle::setLeftPadding(double padding) {
+void KoParagraphStyle::setLeftPadding(qreal padding) {
     setProperty(LeftPadding, padding);
 }
 
-double KoParagraphStyle::leftPadding() {
+qreal KoParagraphStyle::leftPadding() {
     return propertyDouble(LeftPadding);
 }
 
-void KoParagraphStyle::setTopPadding(double padding) {
+void KoParagraphStyle::setTopPadding(qreal padding) {
     setProperty(TopPadding, padding);
 }
 
-double KoParagraphStyle::topPadding() {
+qreal KoParagraphStyle::topPadding() {
     return propertyDouble(TopPadding);
 }
 
-void KoParagraphStyle::setRightPadding(double padding) {
+void KoParagraphStyle::setRightPadding(qreal padding) {
     setProperty(RightPadding, padding);
 }
 
-double KoParagraphStyle::rightPadding() {
+qreal KoParagraphStyle::rightPadding() {
     return propertyDouble(RightPadding);
 }
 
-void KoParagraphStyle::setBottomPadding(double padding) {
+void KoParagraphStyle::setBottomPadding(qreal padding) {
     setProperty(BottomPadding, padding);
 }
 
-double KoParagraphStyle::bottomPadding() {
+qreal KoParagraphStyle::bottomPadding() {
     return propertyDouble(BottomPadding);
 }
 
-void KoParagraphStyle::setPadding(double padding) {
+void KoParagraphStyle::setPadding(qreal padding) {
     setBottomPadding(padding);
     setTopPadding(padding);
     setRightPadding(padding);
     setLeftPadding(padding);
 }
 
-void KoParagraphStyle::setLeftBorderWidth(double width) {
+void KoParagraphStyle::setLeftBorderWidth(qreal width) {
     setProperty(LeftBorderWidth, width);
 }
 
-double KoParagraphStyle::leftBorderWidth() {
+qreal KoParagraphStyle::leftBorderWidth() {
     return propertyDouble(LeftBorderWidth);
 }
 
-void KoParagraphStyle::setLeftInnerBorderWidth(double width) {
+void KoParagraphStyle::setLeftInnerBorderWidth(qreal width) {
     setProperty(LeftInnerBorderWidth, width);
 }
 
-double KoParagraphStyle::leftInnerBorderWidth() {
+qreal KoParagraphStyle::leftInnerBorderWidth() {
     return propertyDouble(LeftInnerBorderWidth);
 }
 
-void KoParagraphStyle::setLeftBorderSpacing(double width) {
+void KoParagraphStyle::setLeftBorderSpacing(qreal width) {
     setProperty(LeftBorderSpacing, width);
 }
 
-double KoParagraphStyle::leftBorderSpacing() {
+qreal KoParagraphStyle::leftBorderSpacing() {
     return propertyDouble(LeftBorderSpacing);
 }
 
@@ -457,27 +457,27 @@ QColor KoParagraphStyle::leftBorderColor() {
     return propertyColor(LeftBorderColor);
 }
 
-void KoParagraphStyle::setTopBorderWidth(double width) {
+void KoParagraphStyle::setTopBorderWidth(qreal width) {
     setProperty(TopBorderWidth, width);
 }
 
-double KoParagraphStyle::topBorderWidth() {
+qreal KoParagraphStyle::topBorderWidth() {
     return propertyDouble(TopBorderWidth);
 }
 
-void KoParagraphStyle::setTopInnerBorderWidth(double width) {
+void KoParagraphStyle::setTopInnerBorderWidth(qreal width) {
     setProperty(TopInnerBorderWidth, width);
 }
 
-double KoParagraphStyle::topInnerBorderWidth() {
+qreal KoParagraphStyle::topInnerBorderWidth() {
     return propertyDouble(TopInnerBorderWidth);
 }
 
-void KoParagraphStyle::setTopBorderSpacing(double width) {
+void KoParagraphStyle::setTopBorderSpacing(qreal width) {
     setProperty(TopBorderSpacing, width);
 }
 
-double KoParagraphStyle::topBorderSpacing() {
+qreal KoParagraphStyle::topBorderSpacing() {
     return propertyDouble(TopBorderSpacing);
 }
 
@@ -497,27 +497,27 @@ QColor KoParagraphStyle::topBorderColor() {
     return propertyColor(TopBorderColor);
 }
 
-void KoParagraphStyle::setRightBorderWidth(double width) {
+void KoParagraphStyle::setRightBorderWidth(qreal width) {
     setProperty(RightBorderWidth, width);
 }
 
-double KoParagraphStyle::rightBorderWidth() {
+qreal KoParagraphStyle::rightBorderWidth() {
     return propertyDouble(RightBorderWidth);
 }
 
-void KoParagraphStyle::setRightInnerBorderWidth(double width) {
+void KoParagraphStyle::setRightInnerBorderWidth(qreal width) {
     setProperty(RightInnerBorderWidth, width);
 }
 
-double KoParagraphStyle::rightInnerBorderWidth() {
+qreal KoParagraphStyle::rightInnerBorderWidth() {
     return propertyDouble(RightInnerBorderWidth);
 }
 
-void KoParagraphStyle::setRightBorderSpacing(double width) {
+void KoParagraphStyle::setRightBorderSpacing(qreal width) {
     setProperty(RightBorderSpacing, width);
 }
 
-double KoParagraphStyle::rightBorderSpacing() {
+qreal KoParagraphStyle::rightBorderSpacing() {
     return propertyDouble(RightBorderSpacing);
 }
 
@@ -537,27 +537,27 @@ QColor KoParagraphStyle::rightBorderColor() {
     return propertyColor(RightBorderColor);
 }
 
-void KoParagraphStyle::setBottomBorderWidth(double width) {
+void KoParagraphStyle::setBottomBorderWidth(qreal width) {
     setProperty(BottomBorderWidth, width);
 }
 
-double KoParagraphStyle::bottomBorderWidth() {
+qreal KoParagraphStyle::bottomBorderWidth() {
     return propertyDouble(BottomBorderWidth);
 }
 
-void KoParagraphStyle::setBottomInnerBorderWidth(double width) {
+void KoParagraphStyle::setBottomInnerBorderWidth(qreal width) {
     setProperty(BottomInnerBorderWidth, width);
 }
 
-double KoParagraphStyle::bottomInnerBorderWidth() {
+qreal KoParagraphStyle::bottomInnerBorderWidth() {
     return propertyDouble(BottomInnerBorderWidth);
 }
 
-void KoParagraphStyle::setBottomBorderSpacing(double width) {
+void KoParagraphStyle::setBottomBorderSpacing(qreal width) {
     setProperty(BottomBorderSpacing, width);
 }
 
-double KoParagraphStyle::bottomBorderSpacing() {
+qreal KoParagraphStyle::bottomBorderSpacing() {
     return propertyDouble(BottomBorderSpacing);
 }
 
@@ -577,39 +577,39 @@ QColor KoParagraphStyle::bottomBorderColor() {
     return propertyColor(BottomBorderColor);
 }
 
-void KoParagraphStyle::setTopMargin(double topMargin) {
+void KoParagraphStyle::setTopMargin(qreal topMargin) {
     setProperty(QTextFormat::BlockTopMargin, topMargin);
 }
 
-double KoParagraphStyle::topMargin() const {
+qreal KoParagraphStyle::topMargin() const {
     return propertyDouble(QTextFormat::BlockTopMargin);
 }
 
-void KoParagraphStyle::setBottomMargin (double margin) {
+void KoParagraphStyle::setBottomMargin (qreal margin) {
     setProperty(QTextFormat::BlockBottomMargin, margin);
 }
 
-double KoParagraphStyle::bottomMargin () const {
+qreal KoParagraphStyle::bottomMargin () const {
     return propertyDouble(QTextFormat::BlockBottomMargin);
 }
 
-void KoParagraphStyle::setLeftMargin (double margin) {
+void KoParagraphStyle::setLeftMargin (qreal margin) {
     setProperty(QTextFormat::BlockLeftMargin, margin);
 }
 
-double KoParagraphStyle::leftMargin () const {
+qreal KoParagraphStyle::leftMargin () const {
     return propertyDouble(QTextFormat::BlockLeftMargin);
 }
 
-void KoParagraphStyle::setRightMargin (double margin) {
+void KoParagraphStyle::setRightMargin (qreal margin) {
     setProperty(QTextFormat::BlockRightMargin, margin);
 }
 
-double KoParagraphStyle::rightMargin () const {
+qreal KoParagraphStyle::rightMargin () const {
     return propertyDouble(QTextFormat::BlockRightMargin);
 }
 
-void KoParagraphStyle::setMargin (double margin) {
+void KoParagraphStyle::setMargin (qreal margin) {
     setTopMargin(margin);
     setBottomMargin(margin);
     setLeftMargin(margin);
@@ -626,11 +626,11 @@ Qt::Alignment KoParagraphStyle::alignment () const {
     return static_cast<Qt::Alignment> (propertyInt(QTextFormat::BlockAlignment));
 }
 
-void KoParagraphStyle::setTextIndent (double margin) {
+void KoParagraphStyle::setTextIndent (qreal margin) {
     setProperty(QTextFormat::TextIndent, margin);
 }
 
-double KoParagraphStyle::textIndent () const {
+qreal KoParagraphStyle::textIndent () const {
     return propertyDouble(QTextFormat::TextIndent);
 }
 
@@ -906,7 +906,7 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
 
     // Tabulators
     if ( styleStack.hasProperty( KoXmlNS::style, "tab-stop-distance" ) ) {
-        double tabStopDistance = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "tab-stop-distance" ) );
+        qreal tabStopDistance = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "tab-stop-distance" ) );
         if (tabStopDistance > 0)
             setTabStopDistance(tabStopDistance);
     }
@@ -951,7 +951,7 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
             } else {
                 if ( leaderType == "single" )
                     tab.leaderType = KoCharacterStyle::SingleLine;
-                else if ( leaderType == "double" )
+                else if ( leaderType == "qreal" )
                     tab.leaderType = KoCharacterStyle::DoubleLine;
                 // change default leaderStyle
                 tab.leaderStyle = KoCharacterStyle::SolidLine;
@@ -1058,8 +1058,8 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
             QString bordercolor = border.section(' ', 2, 2);
 
             setLeftBorderWidth( KoUnit::parseValue( borderwidth, 1.0 ) );
-            //setLeftInnerBorderWidth(double width);
-            //setLeftBorderSpacing(double width);
+            //setLeftInnerBorderWidth(qreal width);
+            //setLeftBorderSpacing(qreal width);
             setLeftBorderStyle( oasisBorderStyle(borderstyle) );
             setLeftBorderColor( QColor(bordercolor) );
         }
@@ -1137,7 +1137,7 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
         }
         const QString lines = dropCap.attributeNS( KoXmlNS::style, "lines", QString("1") );
         setDropCapsLines(lines.toInt());
-        const double distance = KoUnit::parseValue( dropCap.attributeNS( KoXmlNS::style, "distance", QString() ) );
+        const qreal distance = KoUnit::parseValue( dropCap.attributeNS( KoXmlNS::style, "distance", QString() ) );
         setDropCapsDistance(distance);
     }
 
@@ -1242,11 +1242,11 @@ QList<KoText::Tab> KoParagraphStyle::tabPositions() const {
     return answer;
 }
 
-void KoParagraphStyle::setTabStopDistance(double value) {
+void KoParagraphStyle::setTabStopDistance(qreal value) {
     setProperty(TabStopDistance, value);
 }
 
-double KoParagraphStyle::tabStopDistance() const {
+qreal KoParagraphStyle::tabStopDistance() const {
     return propertyDouble(TabStopDistance);
 }
 
@@ -1503,7 +1503,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
         tabTypeMap[QTextOption::DelimiterTab] = "char";
         leaderTypeMap[KoCharacterStyle::NoLineType] = "none";
         leaderTypeMap[KoCharacterStyle::SingleLine] = "single";
-        leaderTypeMap[KoCharacterStyle::DoubleLine] = "double";
+        leaderTypeMap[KoCharacterStyle::DoubleLine] = "qreal";
         leaderStyleMap[KoCharacterStyle::NoLineStyle] = "none";
         leaderStyleMap[KoCharacterStyle::SolidLine] = "solid";
         leaderStyleMap[KoCharacterStyle::DottedLine] = "dotted";

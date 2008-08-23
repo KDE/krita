@@ -297,7 +297,7 @@ signals:
      *
      * @param factor by how much the zoom needs to change.
      */
-    void zoomBy( const double factor );
+    void zoomBy( const qreal factor );
 
 public slots:
 

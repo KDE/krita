@@ -318,7 +318,7 @@ void KoPathShape::paintPoints( QPainter &painter, const KoViewConverter &convert
     }
 }
 
-QRectF KoPathShape::handleRect( const QPointF &p, double radius ) const
+QRectF KoPathShape::handleRect( const QPointF &p, qreal radius ) const
 {
     return QRectF( p.x()-radius, p.y()-radius, 2*radius, 2*radius );
 }
@@ -410,8 +410,8 @@ QSizeF KoPathShape::size() const
 void KoPathShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
-    double zoomX = oldSize.width() == 0.0 ? 1.0 : newSize.width() / oldSize.width();
-    double zoomY = oldSize.height() == 0.0 ? 1.0 : newSize.height() / oldSize.height();
+    qreal zoomX = oldSize.width() == 0.0 ? 1.0 : newSize.width() / oldSize.width();
+    qreal zoomY = oldSize.height() == 0.0 ? 1.0 : newSize.height() / oldSize.height();
     QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
     //qDebug() << "setSize" << zoomX << "," << zoomY << "," << newSize;
@@ -470,7 +470,7 @@ KoPathPoint * KoPathShape::curveTo( const QPointF &c, const QPointF &p )
     return point;
 }
 
-KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, double sweepAngle )
+KoPathPoint * KoPathShape::arcTo( qreal rx, qreal ry, qreal startAngle, qreal sweepAngle )
 {
     if ( m_subpaths.empty() )
     {
@@ -495,7 +495,7 @@ KoPathPoint * KoPathShape::arcTo( double rx, double ry, double startAngle, doubl
     return newEndPoint;
 }
 
-int KoPathShape::arcToCurve( double rx, double ry, double startAngle, double sweepAngle, const QPointF & offset, QPointF * curvePoints ) const
+int KoPathShape::arcToCurve( qreal rx, qreal ry, qreal startAngle, qreal sweepAngle, const QPointF & offset, QPointF * curvePoints ) const
 {
     int pointCnt = 0;
 
@@ -513,15 +513,15 @@ int KoPathShape::arcToCurve( double rx, double ry, double startAngle, double swe
     }
 
     // split angles bigger than 90° so that it gives a good aproximation to the circle
-    double parts = ceil( qAbs( sweepAngle / 90.0 ) );
+    qreal parts = ceil( qAbs( sweepAngle / 90.0 ) );
 
-    double sa_rad = startAngle * M_PI / 180.0;
-    double partangle = sweepAngle / parts;
-    double endangle = startAngle + partangle;
-    double se_rad = endangle * M_PI / 180.0;
-    double sinsa = sin( sa_rad );
-    double cossa = cos( sa_rad );
-    double kappa = 4.0 / 3.0 * tan( ( se_rad - sa_rad ) / 4 );
+    qreal sa_rad = startAngle * M_PI / 180.0;
+    qreal partangle = sweepAngle / parts;
+    qreal endangle = startAngle + partangle;
+    qreal se_rad = endangle * M_PI / 180.0;
+    qreal sinsa = sin( sa_rad );
+    qreal cossa = cos( sa_rad );
+    qreal kappa = 4.0 / 3.0 * tan( ( se_rad - sa_rad ) / 4 );
 
     // startpoint is at the last point is the path but when it is closed
     // it is at the first point
@@ -537,8 +537,8 @@ int KoPathShape::arcToCurve( double rx, double ry, double startAngle, double swe
         // start tangent
         curvePoints[pointCnt++] = QPointF( startpoint - QPointF( sinsa * rx * kappa, cossa * ry * kappa ) );
 
-        double sinse = sin( se_rad );
-        double cosse = cos( se_rad );
+        qreal sinse = sin( se_rad );
+        qreal cosse = cos( se_rad );
 
         // end point
         QPointF endpoint( center + QPointF( cosse * rx, -sinse * ry ) );

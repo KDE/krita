@@ -72,7 +72,7 @@ void KoColorSlider::drawContents( QPainter *painter )
   if( orientation() == Qt::Horizontal ) {
     for (int x = 0; x < contentsRect_.width(); x++) {
 
-        double t = static_cast<double>(x) / (contentsRect_.width() - 1);
+        qreal t = static_cast<qreal>(x) / (contentsRect_.width() - 1);
 
         qint16 colorWeights[2];
         colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
@@ -89,7 +89,7 @@ void KoColorSlider::drawContents( QPainter *painter )
   else {
     for (int y = 0; y < contentsRect_.height(); y++) {
 
-        double t = static_cast<double>(y) / (contentsRect_.height() - 1);
+        qreal t = static_cast<qreal>(y) / (contentsRect_.height() - 1);
 
         qint16 colorWeights[2];
         colorWeights[0] = static_cast<quint8>((t) * 255 + 0.5);

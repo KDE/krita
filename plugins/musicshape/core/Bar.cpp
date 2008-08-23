@@ -31,10 +31,10 @@ class Bar::Private
 public:
     QHash<Voice*, VoiceBar*> voices;
     QPointF position;
-    double size;
-    double naturalSize;
-    double sizeFactor;
-    double prefix;
+    qreal size;
+    qreal naturalSize;
+    qreal sizeFactor;
+    qreal prefix;
     QPointF prefixPosition;
     QList<StaffElement*> staffElements;
 };
@@ -81,29 +81,29 @@ void Bar::setPosition(const QPointF& position, bool setPrefix)
     emit positionChanged(position);
 }
 
-double Bar::size() const
+qreal Bar::size() const
 {
     return d->size;
 }
 
-void Bar::setSize(double size)
+void Bar::setSize(qreal size)
 {
     if (d->size == size) return;
     d->size = size;
     emit sizeChanged(size);
 }
 
-double Bar::naturalSize() const
+qreal Bar::naturalSize() const
 {
     return d->size;
 }
 
-double Bar::prefix() const
+qreal Bar::prefix() const
 {
     return d->prefix;
 }
 
-void Bar::setPrefix(double prefix)
+void Bar::setPrefix(qreal prefix)
 {
     d->prefix = prefix;
 }
@@ -192,7 +192,7 @@ void Bar::removeStaffElement(StaffElement* element, bool deleteElement)
     }
 }
 
-double Bar::sizeFactor() const
+qreal Bar::sizeFactor() const
 {
     return 2.0; // number of noteheads of space to associate with shortest note in a measure
 }

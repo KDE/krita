@@ -37,13 +37,13 @@ public:
 
     virtual void clear();
 
-    virtual void setView(double from, double size) { m_from = from; m_width = size; }
+    virtual void setView(qreal from, qreal size) { m_from = from; m_width = size; }
 
     virtual const KoID& id() const { return m_id; }
     virtual QList<KoChannelInfo *> channels() { return m_colorSpace->channels(); }
     virtual qint32 numberOfBins() { return m_nrOfBins; }
-    virtual double viewFrom() const { return m_from; }
-    virtual double viewWidth() const { return m_width; }
+    virtual qreal viewFrom() const { return m_from; }
+    virtual qreal viewWidth() const { return m_width; }
 
     virtual qint32 count() { return m_count; }
 
@@ -74,7 +74,7 @@ protected:
     typedef QVector<quint32> vBins;
     QVector<vBins> m_bins;
     vBins m_outLeft, m_outRight;
-    double m_from, m_width;
+    qreal m_from, m_width;
     qint32 m_count;
     int m_channels, m_nrOfBins;
     const KoColorSpace *m_colorSpace;
@@ -86,24 +86,24 @@ class PIGMENTCMS_EXPORT KoBasicU8HistogramProducer : public KoBasicHistogramProd
 public:
     KoBasicU8HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(double pos) const;
-    virtual double maximalZoom() const { return 1.0; }
+    virtual QString positionToString(qreal pos) const;
+    virtual qreal maximalZoom() const { return 1.0; }
 };
 
 class PIGMENTCMS_EXPORT KoBasicU16HistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicU16HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(double pos) const;
-    virtual double maximalZoom() const;
+    virtual QString positionToString(qreal pos) const;
+    virtual qreal maximalZoom() const;
 };
 
 class PIGMENTCMS_EXPORT KoBasicF32HistogramProducer : public KoBasicHistogramProducer {
 public:
     KoBasicF32HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(double pos) const;
-    virtual double maximalZoom() const;
+    virtual QString positionToString(qreal pos) const;
+    virtual qreal maximalZoom() const;
 };
 
 
@@ -112,8 +112,8 @@ class PIGMENTCMS_EXPORT KoBasicF16HalfHistogramProducer : public KoBasicHistogra
 public:
     KoBasicF16HalfHistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(double pos) const;
-    virtual double maximalZoom() const;
+    virtual QString positionToString(qreal pos) const;
+    virtual qreal maximalZoom() const;
 };
 #endif
 
@@ -148,8 +148,8 @@ class PIGMENTCMS_EXPORT KoGenericRGBHistogramProducer : public KoBasicHistogramP
 public:
     KoGenericRGBHistogramProducer();
     virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(double pos) const;
-    virtual double maximalZoom() const;
+    virtual QString positionToString(qreal pos) const;
+    virtual qreal maximalZoom() const;
     virtual QList<KoChannelInfo *> channels();
 protected:
     QList<KoChannelInfo *> m_channelsList;
@@ -177,8 +177,8 @@ class  PIGMENTCMS_EXPORT KoGenericLabHistogramProducer : public KoBasicHistogram
         KoGenericLabHistogramProducer();
         virtual ~KoGenericLabHistogramProducer();
         virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-        virtual QString positionToString(double pos) const;
-        virtual double maximalZoom() const;
+        virtual QString positionToString(qreal pos) const;
+        virtual qreal maximalZoom() const;
         virtual QList<KoChannelInfo *> channels();
     protected:
         QList<KoChannelInfo *> m_channelsList;

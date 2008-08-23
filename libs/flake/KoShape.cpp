@@ -178,7 +178,7 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
     }*/
 }
 
-void KoShape::setScale( double sx, double sy )
+void KoShape::setScale( qreal sx, qreal sy )
 {
     QPointF pos = position();
     QMatrix scaleMatrix;
@@ -191,7 +191,7 @@ void KoShape::setScale( double sx, double sy )
     d->shapeChanged(ScaleChanged);
 }
 
-void KoShape::rotate( double angle )
+void KoShape::rotate( qreal angle )
 {
     QPointF center = d->localMatrix.map( QPointF( 0.5*size().width(), 0.5*size().height() ) );
     QMatrix rotateMatrix;
@@ -204,7 +204,7 @@ void KoShape::rotate( double angle )
     d->shapeChanged(RotationChanged);
 }
 
-void KoShape::setShear( double sx, double sy )
+void KoShape::setShear( qreal sx, qreal sy )
 {
     QPointF pos = position();
     QMatrix shearMatrix;
@@ -488,19 +488,19 @@ KoInsets KoShape::borderInsets() const {
     return answer;
 }
 
-double KoShape::rotation() const {
+qreal KoShape::rotation() const {
     // try to extract the rotation angle out of the local matrix
     // if it is a pure rotation matrix
 
     // check if the matrix has shearing mixed in
     if( fabs( fabs(d->localMatrix.m12()) - fabs(d->localMatrix.m21()) ) > 1e-10 )
-        return std::numeric_limits<double>::quiet_NaN();
+        return std::numeric_limits<qreal>::quiet_NaN();
     // check if the matrix has scaling mixed in
     if( fabs( d->localMatrix.m11() - d->localMatrix.m22() ) > 1e-10 )
-        return std::numeric_limits<double>::quiet_NaN();
+        return std::numeric_limits<qreal>::quiet_NaN();
 
     // calculate the angle from the matrix elements
-    double angle = atan2( -d->localMatrix.m21(), d->localMatrix.m11() ) * 180.0 / M_PI;
+    qreal angle = atan2( -d->localMatrix.m21(), d->localMatrix.m11() ) * 180.0 / M_PI;
     if( angle < 0.0 )
         angle += 360.0;
 
@@ -948,8 +948,8 @@ QMatrix KoShape::parseOdfTransform( const QString &transform )
             // TODO find out what oo2 really does when rotating, it seems severly broken
             if(params.count() == 3)
             {
-                double x = KoUnit::parseValue( params[1] );
-                double y = KoUnit::parseValue( params[2] );
+                qreal x = KoUnit::parseValue( params[1] );
+                qreal y = KoUnit::parseValue( params[2] );
 
                 matrix.translate(x, y);
                 // oo2 rotates by radians
@@ -966,8 +966,8 @@ QMatrix KoShape::parseOdfTransform( const QString &transform )
         {
             if(params.count() == 2)
             {
-                double x = KoUnit::parseValue( params[0] );
-                double y = KoUnit::parseValue( params[1] );
+                qreal x = KoUnit::parseValue( params[0] );
+                qreal y = KoUnit::parseValue( params[1] );
                 matrix.translate(x, y);
             }
             else    // Spec : if only one param given, assume 2nd param to be 0
@@ -1069,7 +1069,7 @@ void KoShape::saveOdfCommonChildElements( KoShapeSavingContext &context ) const
 
 // static
 void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter) {
-    double zoomX, zoomY;
+    qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
 }

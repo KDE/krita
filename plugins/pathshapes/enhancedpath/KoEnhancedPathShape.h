@@ -54,7 +54,7 @@ public:
      * @param reference the reference to evaluate
      * @return the result of the evaluation
      */
-    double evaluateReference( const QString &reference );
+    qreal evaluateReference( const QString &reference );
 
     /**
      * Attempts to modify a given reference.
@@ -64,7 +64,7 @@ public:
      * @param reference the reference to modify
      * @param value the new value
      */
-    void modifyReference( const QString &reference, double value );
+    void modifyReference( const QString &reference, qreal value );
 
     // from KoShape
     virtual void setSize( const QSizeF &newSize );
@@ -83,8 +83,8 @@ public:
     const QRectF & viewBox() const;
     QPointF shapeToViewbox( const QPointF & point ) const;
     QPointF viewboxToShape( const QPointF & point ) const;
-    double shapeToViewbox( double value ) const;
-    double viewboxToShape( double value ) const;
+    qreal shapeToViewbox( qreal value ) const;
+    qreal viewboxToShape( qreal value ) const;
 
     /// Returns parameter from given textual representation
     KoEnhancedPathParameter * parameter( const QString & text );
@@ -105,7 +105,7 @@ private:
     void parsePathData( const QString & data );
 
     typedef QMap<QString, KoEnhancedPathFormula*> FormulaStore;
-    typedef QList<double> ModifierStore;
+    typedef QList<qreal> ModifierStore;
     typedef QMap<QString, KoEnhancedPathParameter*> ParameterStore;
 
     QRectF m_viewBox;

@@ -54,9 +54,9 @@ KoInteractionStrategy::~KoInteractionStrategy()
 
 void KoInteractionStrategy::applyGrid(QPointF &point) {
     // The 1e-10 here is a workaround for some weird division problem.
-    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
+    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a qreal,
     // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
-    double gridX, gridY;
+    qreal gridX, gridY;
     m_canvas->gridSize(&gridX, &gridY);
 
     // we want to snap to the nearest grid point, so calculate

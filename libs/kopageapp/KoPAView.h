@@ -147,7 +147,7 @@ protected slots:
     void viewSnapToGrid(bool snap);
     void viewGrid(bool show);
     void viewGuides(bool show);
-    void slotZoomChanged( KoZoomMode::Mode mode, double zoom );
+    void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
     void editCut();
     void editCopy();

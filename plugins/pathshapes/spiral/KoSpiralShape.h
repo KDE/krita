@@ -57,10 +57,10 @@ public:
      * Sets the fade parameter of the spiral.
      * @param angle the new start angle in degree
      */
-    void setFade( double fade );
+    void setFade( qreal fade );
 
     /// Returns the actual fade parameter
-    double fade() const;
+    qreal fade() const;
 
     bool clockWise() const;
     void setClockWise( bool clockwise );
@@ -83,9 +83,9 @@ private:
     void updateAngleHandles();
 
     // fade parameter
-    double m_fade;
+    qreal m_fade;
     // angle for modifying the kind in radiant
-    double m_kindAngle;
+    qreal m_kindAngle;
     // the center of the spiral
     QPointF m_center;
     // the radii of the spiral

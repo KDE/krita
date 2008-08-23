@@ -72,7 +72,7 @@ QString KoUnit::unitDescription( KoUnit _unit )
     }
 }
 
-double KoUnit::toUserValue( double ptValue ) const
+qreal KoUnit::toUserValue( qreal ptValue ) const
 {
     switch ( m_unit ) {
     case Millimeter:
@@ -95,7 +95,7 @@ double KoUnit::toUserValue( double ptValue ) const
     }
 }
 
-double KoUnit::ptToUnit( const double ptValue, const KoUnit unit )
+qreal KoUnit::ptToUnit( const qreal ptValue, const KoUnit unit )
 {
     switch ( unit.m_unit )
     {
@@ -119,12 +119,12 @@ double KoUnit::ptToUnit( const double ptValue, const KoUnit unit )
     }
 }
 
-QString KoUnit::toUserStringValue( double ptValue ) const
+QString KoUnit::toUserStringValue( qreal ptValue ) const
 {
     return KGlobal::locale()->formatNumber( toUserValue( ptValue ) );
 }
 
-double KoUnit::fromUserValue( double value ) const
+qreal KoUnit::fromUserValue( qreal value ) const
 {
     switch ( m_unit ) {
     case Millimeter:
@@ -147,12 +147,12 @@ double KoUnit::fromUserValue( double value ) const
     }
 }
 
-double KoUnit::fromUserValue( const QString& value, bool* ok ) const
+qreal KoUnit::fromUserValue( const QString& value, bool* ok ) const
 {
     return fromUserValue( KGlobal::locale()->readNumber( value, ok ) );
 }
 
-double KoUnit::parseValue( const QString& _value, double defaultVal )
+qreal KoUnit::parseValue( const QString& _value, qreal defaultVal )
 {
     if( _value.isEmpty() )
         return defaultVal;
@@ -175,7 +175,7 @@ double KoUnit::parseValue( const QString& _value, double defaultVal )
 
     const QString unit = value.mid( firstLetter );
     value.truncate( firstLetter );
-    const double val = value.toDouble();
+    const qreal val = value.toDouble();
 
     if ( unit == "pt" )
         return val;

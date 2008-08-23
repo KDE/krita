@@ -108,8 +108,8 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     if( scaleImage )
     {
         // use full resolution of image
-        double xScale = double(width) / double(origSize.width());
-        double yScale = double(height) / double(origSize.height());
+        qreal xScale = qreal(width) / qreal(origSize.width());
+        qreal yScale = qreal(height) / qreal(origSize.height());
 
         painter.save();
         painter.translate( x, y );

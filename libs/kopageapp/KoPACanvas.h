@@ -42,7 +42,7 @@ public:
     KoPADocument* document() const { return m_doc; }
 
     /// reimplemented method
-    virtual void gridSize( double *horizontal, double *vertical ) const;
+    virtual void gridSize( qreal *horizontal, qreal *vertical ) const;
     /// reimplemented method
     virtual bool snapToGrid() const;
     /// reimplemented method

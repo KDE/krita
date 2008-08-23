@@ -91,13 +91,13 @@ namespace KoPageFormat
      * Returns the width (in mm) for a given page format and orientation
      * 'Custom' isn't supported by this function, obviously.
      */
-    KOMAIN_EXPORT double width( Format format, Orientation orientation = Landscape);
+    KOMAIN_EXPORT qreal width( Format format, Orientation orientation = Landscape);
 
     /**
      * Returns the height (in mm) for a given page format and orientation
      * 'Custom' isn't supported by this function, obviously.
      */
-    KOMAIN_EXPORT double height( Format format, Orientation orientation  = Landscape);
+    KOMAIN_EXPORT qreal height( Format format, Orientation orientation  = Landscape);
 
     /**
      * Returns the internal name of the given page format.
@@ -131,7 +131,7 @@ namespace KoPageFormat
      * Try to find the paper format for the given width and height (in mm).
      * Useful to some import filters.
      */
-    KOMAIN_EXPORT Format guessFormat( double width, double height );
+    KOMAIN_EXPORT Format guessFormat( qreal width, qreal height );
 }
 
 #endif

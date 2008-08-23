@@ -60,7 +60,7 @@ public:
     /// revert the actions done in redo
     virtual void undo();
 private:
-    double getAvailableSpace( KoShape *first, KoShape *last, double extent, QRectF boundingRect );
+    qreal getAvailableSpace( KoShape *first, KoShape *last, qreal extent, QRectF boundingRect );
 
     class Private;
     Private * const d;

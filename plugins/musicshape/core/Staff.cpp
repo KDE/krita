@@ -38,9 +38,9 @@ namespace MusicCore {
 class Staff::Private
 {
 public:
-    double spacing;
+    qreal spacing;
     int lineCount;
-    double lineSpacing;
+    qreal lineSpacing;
 };
 
 Staff::Staff(Part* part) : QObject(part), d(new Private)
@@ -60,19 +60,19 @@ Part* Staff::part()
     return qobject_cast<Part*>(parent());
 }
 
-double Staff::spacing() const
+qreal Staff::spacing() const
 {
     return d->spacing;
 }
 
-void Staff::setSpacing(double spacing)
+void Staff::setSpacing(qreal spacing)
 {
     if (d->spacing == spacing) return;
     d->spacing = spacing;
     emit spacingChanged(spacing);
 }
 
-double Staff::top()
+qreal Staff::top()
 {
     if (!part()) return 0;
     int n = 0;
@@ -87,12 +87,12 @@ double Staff::top()
     return 30;
 }
 
-double Staff::bottom()
+qreal Staff::bottom()
 {
     return top() + lineSpacing() * (lineCount() - 1);
 }
 
-double Staff::center()
+qreal Staff::center()
 {
     return top() + bottom() / 2;
 }
@@ -109,19 +109,19 @@ void Staff::setLineCount(int lineCount)
     emit lineCountChanged(lineCount);
 }
 
-double Staff::lineSpacing() const
+qreal Staff::lineSpacing() const
 {
     return d->lineSpacing;
 }
 
-void Staff::setLineSpacing(double lineSpacing)
+void Staff::setLineSpacing(qreal lineSpacing)
 {
     if (d->lineSpacing == lineSpacing) return;
     d->lineSpacing = lineSpacing;
     emit lineSpacingChanged(lineSpacing);
 }
 
-int Staff::line(double y) const
+int Staff::line(qreal y) const
 {
     y = (lineCount()-1) * lineSpacing() - y;
     y /= lineSpacing() / 2;

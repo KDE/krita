@@ -158,7 +158,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move) {
             KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (child->parent()->userData());
             Q_ASSERT(data);
             QTextLine tl = layout->lineAt(0);
-            double y = tl.y() - data->documentOffset() - newPosition.y();
+            qreal y = tl.y() - data->documentOffset() - newPosition.y();
             if(y >= 0 && y < 10)
 {//kDebug(32500) <<"  TopOfParagraph" << y <<"";
                 relation->anchor->setAlignment(KoTextAnchor::TopOfParagraph);

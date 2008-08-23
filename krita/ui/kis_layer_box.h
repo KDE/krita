@@ -78,7 +78,7 @@ signals:
     //      use strings
     void sigRequestNewNode( const QString & nodetype);
     void sigRequestNodeProperties(KisNodeSP node);
-    void sigOpacityChanged(double opacity, bool final);
+    void sigOpacityChanged(qreal opacity, bool final);
     void sigItemComposite(const KoCompositeOp*);
 
 private slots:

@@ -166,7 +166,7 @@ public:
                         }
                     }
                 } else {
-                    double a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use double as it easily saturate
+                    qreal a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use qreal as it easily saturate
                     for(uint i = 0; i < _CSTrait::channels_nb; i++)
                     {
                         compositetype v = (compositetype)( totals[i] * a + offset );
@@ -311,7 +311,7 @@ class KoColorSpaceAbstract : public KoColorSpace {
             return new KoInvertColorTransformation(this);
         }
 
-         virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, double compensation) const
+         virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const
         {
             return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>( shade, compensate, compensation) );
         }

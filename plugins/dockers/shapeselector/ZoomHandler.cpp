@@ -60,24 +60,24 @@ QSizeF ZoomHandler::viewToDocument (const QSizeF &viewSize) const {
     return QSizeF(viewToDocumentX(viewSize.width()), viewToDocumentY(viewSize.height()));
 }
 
-void ZoomHandler::zoom (double *zoomX, double *zoomY) const {
+void ZoomHandler::zoom (qreal *zoomX, qreal *zoomY) const {
     *zoomX = m_zoomLevel;
     *zoomY = m_zoomLevel;
 }
 
-double ZoomHandler::documentToViewX (double documentX) const {
+qreal ZoomHandler::documentToViewX (qreal documentX) const {
     return documentX * m_zoomLevel;
 }
 
-double ZoomHandler::documentToViewY (double documentY) const {
+qreal ZoomHandler::documentToViewY (qreal documentY) const {
     return documentY * m_zoomLevel;
 }
 
-double ZoomHandler::viewToDocumentX (double viewX) const {
+qreal ZoomHandler::viewToDocumentX (qreal viewX) const {
     return viewX / m_zoomLevel;
 }
 
-double ZoomHandler::viewToDocumentY (double viewY) const {
+qreal ZoomHandler::viewToDocumentY (qreal viewY) const {
     return viewY / m_zoomLevel;
 }
 

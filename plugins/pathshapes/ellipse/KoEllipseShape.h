@@ -61,19 +61,19 @@ public:
      * Sets the start angle of the ellipse.
      * @param angle the new start angle in degree
      */
-    void setStartAngle( double angle );
+    void setStartAngle( qreal angle );
 
     /// Returns the actual ellipse start angle in degree
-    double startAngle() const;
+    qreal startAngle() const;
 
     /**
      * Sets the end angle of the ellipse.
      * @param angle the new end angle in degree
      */
-    void setEndAngle( double angle );
+    void setEndAngle( qreal angle );
 
     /// Returns the actual ellipse end angle in degree
-    double endAngle() const;
+    qreal endAngle() const;
 
     /// reimplemented
     virtual QString pathShapeId() const;
@@ -89,17 +89,17 @@ protected:
     void createPath( const QSizeF &size );
 
 private:
-    double sweepAngle() const;
+    qreal sweepAngle() const;
 
     void updateKindHandle();
     void updateAngleHandles();
 
     // start angle in degree
-    double m_startAngle;
+    qreal m_startAngle;
     // end angle in degree
-    double m_endAngle;
+    qreal m_endAngle;
     // angle for modifying the kind in radiant
-    double m_kindAngle;
+    qreal m_kindAngle;
     // the center of the ellipse
     QPointF m_center;
     // the radii of the ellips

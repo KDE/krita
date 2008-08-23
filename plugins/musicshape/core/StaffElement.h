@@ -56,24 +56,24 @@ public:
      * Returns the x position of this musical element. The x position of an element is measured relative to the left
      * barline of the bar the element is in.
      */
-    double x() const;
+    qreal x() const;
 
     /**
      * Returns the y position of this musical element. The y position of an element is measure relative to the center
      * of the staff it is in, although some musical elements that have a notion of pitch such as notes/rests/clefs or
      * key signatures might have a different reference point.
      */
-    double y() const;
+    qreal y() const;
 
     /**
      * Returns the width of this musical element.
      */
-    double width() const;
+    qreal width() const;
 
     /**
      * Returns the height of this musical element.
      */
-    double height() const;
+    qreal height() const;
 
     /**
      * Returns the start time of this musical elements in ticks.
@@ -89,12 +89,12 @@ public slots:
     /**
      * Sets the x position of this musical element.
      */
-    void setX(double x);
+    void setX(qreal x);
 
     /**
      * Sets the y position of this musical element.
      */
-    void setY(double y);
+    void setY(qreal y);
 
     /**
      * Sets the start time of this musical element.
@@ -106,20 +106,20 @@ protected slots:
      *
      * @param width the new width of this musical element
      */
-    void setWidth(double width);
+    void setWidth(qreal width);
 
     /**
      * Sets the height of this musical element.
      *
      * @param height the new height of this musical element
      */
-    void setHeight(double height);
+    void setHeight(qreal height);
 signals:
-    void xChanged(double x);
-    void yChanged(double y);
+    void xChanged(qreal x);
+    void yChanged(qreal y);
     void startTimeChanged(int startTime);
-    void widthChanged(double width);
-    void heightChanged(double height);
+    void widthChanged(qreal width);
+    void heightChanged(qreal height);
 private:
     class Private;
     Private * const d;

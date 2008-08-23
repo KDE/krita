@@ -40,8 +40,8 @@ GuidesToolOptionWidget::GuidesToolOptionWidget( QWidget * parent )
              this, SLOT(updateList(int)) );
     connect( widget.positionList, SIGNAL(currentRowChanged(int)),
              this, SLOT(updatePosition(int)) );
-    connect( widget.position, SIGNAL(valueChangedPt(double)),
-             this, SLOT(positionChanged(double)) );
+    connect( widget.position, SIGNAL(valueChangedPt(qreal)),
+             this, SLOT(positionChanged(qreal)) );
     connect( widget.removeButton, SIGNAL(clicked(bool)),
              this, SLOT(removeLine()) );
     connect( widget.addButton, SIGNAL(clicked(bool)),
@@ -52,26 +52,26 @@ GuidesToolOptionWidget::~GuidesToolOptionWidget()
 {
 }
 
-void GuidesToolOptionWidget::setHorizontalGuideLines( const QList<double> &lines )
+void GuidesToolOptionWidget::setHorizontalGuideLines( const QList<qreal> &lines )
 {
     m_hGuides = lines;
     if( orientation() == Qt::Horizontal )
         updateList( widget.orientation->currentIndex() );
 }
 
-void GuidesToolOptionWidget::setVerticalGuideLines( const QList<double> &lines )
+void GuidesToolOptionWidget::setVerticalGuideLines( const QList<qreal> &lines )
 {
     m_vGuides = lines;
     if( orientation() == Qt::Vertical )
         updateList( widget.orientation->currentIndex() );
 }
 
-QList<double> GuidesToolOptionWidget::horizontalGuideLines() const
+QList<qreal> GuidesToolOptionWidget::horizontalGuideLines() const
 {
     return m_hGuides;
 }
 
-QList<double> GuidesToolOptionWidget::verticalGuideLines() const
+QList<qreal> GuidesToolOptionWidget::verticalGuideLines() const
 {
     return m_vGuides;
 }
@@ -105,12 +105,12 @@ void GuidesToolOptionWidget::updateList( int orientation )
     widget.positionList->clear();
     if( orientation == Qt::Horizontal-1 )
     {
-        foreach( double p, m_hGuides )
+        foreach( qreal p, m_hGuides )
             widget.positionList->addItem( m_unit.toUserStringValue( p ) );
     }
     else
     {
-        foreach( double p, m_vGuides )
+        foreach( qreal p, m_vGuides )
             widget.positionList->addItem( m_unit.toUserStringValue( p ) );
     }
 
@@ -138,7 +138,7 @@ void GuidesToolOptionWidget::updatePosition( int index )
     widget.position->blockSignals( false );
 }
 
-void GuidesToolOptionWidget::positionChanged( double position )
+void GuidesToolOptionWidget::positionChanged( qreal position )
 {
     int index = widget.positionList->currentRow();
     if( index < 0 )

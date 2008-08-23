@@ -67,14 +67,14 @@ public:
     /**
      * Returns the spacing in points between this staff and the staff above it.
      */
-    double spacing() const;
+    qreal spacing() const;
 
     /**
      * Returns the vertical position of this staff relative to the top of the staff system.
      */
-    double top();
-    double center();
-    double bottom();
+    qreal top();
+    qreal center();
+    qreal bottom();
 
     /**
      * Returns the number of lines in this staff. Typical values are 5 for normal music, or 1 for a percussion part.
@@ -85,7 +85,7 @@ public:
     /**
      * Returns the distance in points between two lines of this staff.
      */
-    double lineSpacing() const;
+    qreal lineSpacing() const;
 
     /**
      * Returns the closest line corresponding to the given y coordinate, where the coordinate should be relative
@@ -93,7 +93,7 @@ public:
      *
      * @param y the coordinate for which to return the closest line.
      */
-    int line(double y) const;
+    int line(qreal y) const;
 
     /**
      * Returns the last Clef element in this staff that is at or before the given time in the given bar. If oldClef is
@@ -115,7 +115,7 @@ public slots:
      *
      * @param spacing the new spacing.
      */
-    void setSpacing(double spacing);
+    void setSpacing(qreal spacing);
 
     /**
      * Sets the number of lines of this staff.
@@ -129,11 +129,11 @@ public slots:
      *
      * @param lineSpacing the new distance between two lines.
      */
-    void setLineSpacing(double lineSpacing);
+    void setLineSpacing(qreal lineSpacing);
 signals:
-    void spacingChanged(double spacing);
+    void spacingChanged(qreal spacing);
     void lineCountChanged(int lineCount);
-    void lineSpacingChanged(double lineSpacing);
+    void lineSpacingChanged(qreal lineSpacing);
 private:
     class Private;
     Private * const d;

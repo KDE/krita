@@ -169,13 +169,13 @@ public:
    *
    * The default scaling is 1.0 in both orientations.
    */
-  virtual void setZoom( double zoom );
+  virtual void setZoom( qreal zoom );
   /**
    * @return the current scaling factor (zoom level)
    *
    * @see #setZoom
    */
-  virtual double zoom() const;
+  virtual qreal zoom() const;
 
   /**
    * Overload this function if the content will be displayed

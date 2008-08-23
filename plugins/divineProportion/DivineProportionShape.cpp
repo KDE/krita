@@ -60,8 +60,8 @@ void DivineProportionShape::draw(QPainter &painter) {
     divideVertical(painter, rect, top, left);
 
     painter.setPen(QPen(QColor(173, 123, 134)));
-    const double x1 = rect.width() / m_divineProportion;
-    const double x2 = rect.width() - x1;
+    const qreal x1 = rect.width() / m_divineProportion;
+    const qreal x2 = rect.width() - x1;
     if(top && !left || !top && left) {
         painter.drawLine(rect.bottomLeft(), rect.topRight());
         painter.drawLine(QPointF(x1, 0), rect.bottomRight());
@@ -85,8 +85,8 @@ bool DivineProportionShape::loadOdf( const KoXmlElement & element, KoShapeLoadin
 void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &rect, bool top, bool left) {
     if(rect.height() < 2)
         return;
-    const double y = rect.height() / m_divineProportion;
-    const double offset = top ? rect.bottom() - y : rect.top() + y;
+    const qreal y = rect.height() / m_divineProportion;
+    const qreal offset = top ? rect.bottom() - y : rect.top() + y;
 
     // draw horizontal line.
     painter.drawLine(QPointF(rect.left(), offset), QPointF(rect.right(), offset));
@@ -97,8 +97,8 @@ void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &re
 void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left) {
     if(rect.width() < 2)
         return;
-    const double x = rect.width() / m_divineProportion;
-    const double offset = left ? rect.right() - x : rect.left() + x;
+    const qreal x = rect.width() / m_divineProportion;
+    const qreal offset = left ? rect.right() - x : rect.left() + x;
     // draw vertical line
     painter.drawLine(QPointF(offset, rect.top()), QPointF(offset, rect.bottom()));
     divideHorizontal(painter, QRectF(QPointF( left ? rect.left() : offset, rect.top()),

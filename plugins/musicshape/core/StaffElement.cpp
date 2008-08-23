@@ -26,10 +26,10 @@ public:
     Staff* staff;
     Bar* bar;
     int startTime;
-    double x;
-    double y;
-    double width;
-    double height;
+    qreal x;
+    qreal y;
+    qreal width;
+    qreal height;
 };
 
 StaffElement::StaffElement(Staff* staff, int startTime) : d(new Private)
@@ -63,48 +63,48 @@ void StaffElement::setBar(Bar* bar)
     d->bar = bar;
 }
 
-double StaffElement::x() const
+qreal StaffElement::x() const
 {
     return d->x;
 }
 
-void StaffElement::setX(double x)
+void StaffElement::setX(qreal x)
 {
     if (d->x == x) return;
     d->x = x;
     emit xChanged(x);
 }
 
-double StaffElement::y() const
+qreal StaffElement::y() const
 {
     return d->y;
 }
 
-void StaffElement::setY(double y)
+void StaffElement::setY(qreal y)
 {
     if (d->y == y) return;
     d->y = y;
     emit yChanged(y);
 }
 
-double StaffElement::width() const
+qreal StaffElement::width() const
 {
     return d->width;
 }
 
-void StaffElement::setWidth(double width)
+void StaffElement::setWidth(qreal width)
 {
     if (d->width == width) return;
     d->width = width;
     emit widthChanged(width);
 }
 
-double StaffElement::height() const
+qreal StaffElement::height() const
 {
     return d->height;
 }
 
-void StaffElement::setHeight(double height)
+void StaffElement::setHeight(qreal height)
 {
     if (d->height == height) return;
     d->height = height;

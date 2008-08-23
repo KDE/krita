@@ -85,7 +85,7 @@ public:
      * Set the zoom and the zoom mode for this zoom Controller.  Typically for use just after construction
      * to restore the persistent data.
      */
-    void setZoom(KoZoomMode::Mode mode, double zoom);
+    void setZoom(KoZoomMode::Mode mode, qreal zoom);
 
 public slots:
     /**
@@ -115,7 +115,7 @@ signals:
      * This signal is emitted whenever either the zoommode or the zoom level is changed by the user.
      * the application can use the emitted data for persistency purposes.
      */
-    void zoomChanged (KoZoomMode::Mode mode, double zoom);
+    void zoomChanged (KoZoomMode::Mode mode, qreal zoom);
 
     /**
      * emitted when the special aspect mode toggle changes.
@@ -125,8 +125,8 @@ signals:
 
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())
-    Q_PRIVATE_SLOT(d, void requestZoomBy(const double))
-    Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, double))
+    Q_PRIVATE_SLOT(d, void requestZoomBy(const qreal))
+    Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, qreal))
     Q_DISABLE_COPY( KoZoomController )
 
     class Private;

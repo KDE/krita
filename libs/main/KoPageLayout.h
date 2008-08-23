@@ -40,21 +40,21 @@ struct KoPageLayout
     KoPageFormat::Orientation orientation;
 
     /** Page width in points */
-    double width;
+    qreal width;
     /** Page height in points */
-    double height;
+    qreal height;
     /** Left margin in points */
-    double left;
+    qreal left;
     /** Right margin in points */
-    double right;
+    qreal right;
     /** Top margin in points */
-    double top;
+    qreal top;
     /** Bottom margin in points */
-    double bottom;
+    qreal bottom;
     /// margin on page edge
-    double pageEdge;
+    qreal pageEdge;
     /// margin on page-binding edge
-    double bindingSide;
+    qreal bindingSide;
 
     bool operator==( const KoPageLayout& l ) const {
        return ( width == l.width &&
@@ -102,7 +102,7 @@ struct KoHeadFoot
 struct KoColumns
 {
     int columns;
-    double columnSpacing;
+    qreal columnSpacing;
     bool operator==( const KoColumns& rhs ) const {
         return columns == rhs.columns &&
                qAbs(columnSpacing - rhs.columnSpacing) <= 1E-10;

@@ -121,7 +121,7 @@ public:
         NamedMap namedMap( const QString& itemMapName ) const;
 
         int parseConfigItemInt( const QString& configName, int defValue = 0 ) const;
-        double parseConfigItemDouble( const QString& configName, double defValue = 0 ) const;
+        qreal parseConfigItemDouble( const QString& configName, qreal defValue = 0 ) const;
         QString parseConfigItemString( const QString& configName, const QString& defValue = QString() ) const;
         bool parseConfigItemBool( const QString& configName, bool defValue = false ) const;
         short parseConfigItemShort( const QString& configName, short defValue = 0 ) const;

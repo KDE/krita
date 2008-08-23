@@ -37,7 +37,7 @@ public:
     ~KoRectangleShape();
 
     /// Returns the corner radius in x-direction
-    double cornerRadiusX() const;
+    qreal cornerRadiusX() const;
 
     /**
      * Sets the corner radius in x-direction.
@@ -47,10 +47,10 @@ public:
      *
      * @param radius the new corner radius in x-direction
      */
-    void setCornerRadiusX( double radius );
+    void setCornerRadiusX( qreal radius );
 
     /// Returns the corner radius in y-direction
-    double cornerRadiusY() const;
+    qreal cornerRadiusY() const;
 
     /**
      * Sets the corner radius in y-direction.
@@ -60,7 +60,7 @@ public:
      *
      * @param radius the new corner radius in y-direction
      */
-    void setCornerRadiusY( double radius );
+    void setCornerRadiusY( qreal radius );
 
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
@@ -79,8 +79,8 @@ protected:
     void updateHandles();
 
 private:
-    double m_cornerRadiusX; ///< in percent of half of the rectangle width (a number between 0 and 100)
-    double m_cornerRadiusY; ///< in percent of half of the rectangle height (a number between 0 and 100)
+    qreal m_cornerRadiusX; ///< in percent of half of the rectangle width (a number between 0 and 100)
+    qreal m_cornerRadiusY; ///< in percent of half of the rectangle height (a number between 0 and 100)
 
     KoSubpath m_points;
 };

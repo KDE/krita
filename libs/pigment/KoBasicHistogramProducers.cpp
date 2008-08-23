@@ -95,7 +95,7 @@ KoBasicU8HistogramProducer::KoBasicU8HistogramProducer(const KoID& id, const KoC
 {
 }
 
-QString KoBasicU8HistogramProducer::positionToString(double pos) const {
+QString KoBasicU8HistogramProducer::positionToString(qreal pos) const {
     return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
@@ -143,12 +143,12 @@ KoBasicU16HistogramProducer::KoBasicU16HistogramProducer(const KoID& id, const K
 {
 }
 
-QString KoBasicU16HistogramProducer::positionToString(double pos) const
+QString KoBasicU16HistogramProducer::positionToString(qreal pos) const
 {
     return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
-double KoBasicU16HistogramProducer::maximalZoom() const
+qreal KoBasicU16HistogramProducer::maximalZoom() const
 {
     return 1.0 / 255.0;
 }
@@ -159,7 +159,7 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
     quint16 from = static_cast<quint16>(m_from * UINT16_MAX);
     quint16 width = static_cast<quint16>(m_width * UINT16_MAX + 0.5); // We include the end
     quint16 to = from + width;
-    double factor = 255.0 / width;
+    qreal factor = 255.0 / width;
 
     qint32 pSize = cs->pixelSize();
 
@@ -212,11 +212,11 @@ KoBasicF32HistogramProducer::KoBasicF32HistogramProducer(const KoID& id, const K
 {
 }
 
-QString KoBasicF32HistogramProducer::positionToString(double pos) const {
+QString KoBasicF32HistogramProducer::positionToString(qreal pos) const {
     return QString("%1").arg(static_cast<float>(pos)); // XXX I doubt this is correct!
 }
 
-double KoBasicF32HistogramProducer::maximalZoom() const {
+qreal KoBasicF32HistogramProducer::maximalZoom() const {
     // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromis for the moment
     return 1.0 / 255.0;
 }
@@ -284,11 +284,11 @@ KoBasicF16HalfHistogramProducer::KoBasicF16HalfHistogramProducer(const KoID& id,
     : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs) {
 }
 
-QString KoBasicF16HalfHistogramProducer::positionToString(double pos) const {
+QString KoBasicF16HalfHistogramProducer::positionToString(qreal pos) const {
     return QString("%1").arg(static_cast<float>(pos)); // XXX I doubt this is correct!
 }
 
-double KoBasicF16HalfHistogramProducer::maximalZoom() const {
+qreal KoBasicF16HalfHistogramProducer::maximalZoom() const {
     // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromis for the moment
     return 1.0 / 255.0;
 }
@@ -358,11 +358,11 @@ QList<KoChannelInfo *> KoGenericRGBHistogramProducer::channels() {
     return m_channelsList;
 }
 
-QString KoGenericRGBHistogramProducer::positionToString(double pos) const {
+QString KoGenericRGBHistogramProducer::positionToString(qreal pos) const {
     return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
-double KoGenericRGBHistogramProducer::maximalZoom() const {
+qreal KoGenericRGBHistogramProducer::maximalZoom() const {
     return 1.0;
 }
 
@@ -434,11 +434,11 @@ QList<KoChannelInfo *> KoGenericLabHistogramProducer::channels() {
     return m_channelsList;
 }
 
-QString KoGenericLabHistogramProducer::positionToString(double pos) const {
+QString KoGenericLabHistogramProducer::positionToString(qreal pos) const {
     return QString("%1").arg(static_cast<quint16>(pos * UINT16_MAX));
 }
 
-double KoGenericLabHistogramProducer::maximalZoom() const {
+qreal KoGenericLabHistogramProducer::maximalZoom() const {
     return 1.0;
 }
 

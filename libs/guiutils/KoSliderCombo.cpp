@@ -71,8 +71,8 @@ public:
     KoSliderComboContainer *container;
     QSlider *slider;
     QStyle::StateFlag arrowState;
-    double minimum;
-    double maximum;
+    qreal minimum;
+    qreal maximum;
     int decimals;
     bool firstShowOfSlider;
 
@@ -247,7 +247,7 @@ void KoSliderCombo::mousePressEvent(QMouseEvent *e)
 
 void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
 {
-    double value = thePublic->currentText().toDouble();
+    qreal value = thePublic->currentText().toDouble();
     slider->blockSignals(true);
     slider->setValue(int((value - minimum) * 256 / maximum + 0.5));
     slider->blockSignals(false);
@@ -258,32 +258,32 @@ void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
 {
     thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + maximum*slidervalue/256, decimals));
 
-    double value = thePublic->currentText().toDouble();
+    qreal value = thePublic->currentText().toDouble();
     emit thePublic->valueChanged(value, false);
 }
 
 void KoSliderCombo::KoSliderComboPrivate::sliderReleased()
 {
-    double value = thePublic->currentText().toDouble();
+    qreal value = thePublic->currentText().toDouble();
     emit thePublic->valueChanged(value, true);
 }
 
-double KoSliderCombo::maximum() const
+qreal KoSliderCombo::maximum() const
 {
     return d->maximum;
 }
 
-double KoSliderCombo::minimum() const
+qreal KoSliderCombo::minimum() const
 {
     return d->minimum;
 }
 
-double KoSliderCombo::decimals() const
+qreal KoSliderCombo::decimals() const
 {
     return d->decimals;
 }
 
-double KoSliderCombo::value() const
+qreal KoSliderCombo::value() const
 {
     return currentText().toDouble();
 }
@@ -293,17 +293,17 @@ void KoSliderCombo::setDecimals(int dec)
     d->decimals = dec;
 }
 
-void KoSliderCombo::setMinimum(double min)
+void KoSliderCombo::setMinimum(qreal min)
 {
     d->minimum = min;
 }
 
-void KoSliderCombo::setMaximum(double max)
+void KoSliderCombo::setMaximum(qreal max)
 {
     d->maximum = max;
 }
 
-void KoSliderCombo::setValue(double value)
+void KoSliderCombo::setValue(qreal value)
 {
     if(value < d->minimum)
         value = d->minimum;

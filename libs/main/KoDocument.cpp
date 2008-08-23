@@ -841,8 +841,8 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
 
         painter.scale( 1.0 / child->xScaling(), 1.0 / child->yScaling() );
 
-        int w = int( (double)child->contentRect().width() * child->xScaling() );
-        int h = int( (double)child->contentRect().height() * child->yScaling() );
+        int w = int( (qreal)child->contentRect().width() * child->xScaling() );
+        int h = int( (qreal)child->contentRect().height() * child->yScaling() );
         if ( ( manager->selectedPart() == (KParts::Part *)child->document() &&
                manager->selectedWidget() == (QWidget *)view ) ||
              ( manager->activePart() == (KParts::Part *)child->document() &&
@@ -1296,7 +1296,7 @@ bool KoDocument::savePreview( KoStore* store )
 
 QPixmap KoDocument::generatePreview( const QSize& size )
 {
-    double docWidth, docHeight;
+    qreal docWidth, docHeight;
     int pixmapSize = qMax(size.width(), size.height());
 
     if (m_pageLayout.width > 1.0) {
@@ -1309,7 +1309,7 @@ QPixmap KoDocument::generatePreview( const QSize& size )
         docHeight = 500.0;
     }
 
-    double ratio = docWidth / docHeight;
+    qreal ratio = docWidth / docHeight;
 
     int previewWidth, previewHeight;
     if (ratio > 1.0)

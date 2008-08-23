@@ -44,9 +44,9 @@ public:
      */
     struct TabLineData {
         /// the tab positions as set on the QTextOption.setTabArray()
-        QList<double> tabs;
+        QList<qreal> tabs;
         /// the length of each tab so we know which area to paint when we want to decorate it.
-        QList<double> tabLength;
+        QList<qreal> tabLength;
     };
 
     KoTextBlockData();
@@ -55,13 +55,13 @@ public:
     /// return if this block has up-to-date counter data
     bool hasCounterData() const;
     /// return the width (in pt) of the counter.
-    double counterWidth() const;
+    qreal counterWidth() const;
     /// set the width of the counter in pt.
-    void setCounterWidth(double width);
+    void setCounterWidth(qreal width);
     /// return the spacing (in pt) between the counter and the text
-    double counterSpacing() const;
+    qreal counterSpacing() const;
     /// set the spacing (in pt) between the counter and the text
-    void setCounterSpacing(double spacing);
+    void setCounterSpacing(qreal spacing);
     /// set the exact text that will be painted as the counter
     void setCounterText(const QString &text);
     /// return the exact text that will be painted as the counter

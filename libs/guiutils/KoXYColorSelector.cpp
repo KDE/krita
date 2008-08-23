@@ -57,8 +57,8 @@ void KoXYColorSelector::drawContents( QPainter *painter )
     for (int x = 0; x < contentsRect_.width(); x++)
         for (int y = 0; y < contentsRect_.height(); y++){
 
-            double xVal = static_cast<double>(x) / (contentsRect_.width() - 1);
-            double yVal = static_cast<double>(y) / (contentsRect_.height() - 1);
+            qreal xVal = static_cast<qreal>(x) / (contentsRect_.width() - 1);
+            qreal yVal = static_cast<qreal>(y) / (contentsRect_.height() - 1);
 
             qint16 colorWeights[4];
             colorWeights[0] = static_cast<quint8>((1.0 - yVal) * (1.0 - xVal) * 255 + 0.5);

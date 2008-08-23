@@ -61,7 +61,7 @@ public:
     virtual void editGuideLine( Qt::Orientation orientation, uint index );
 
 private slots:
-    void updateGuidePosition( double position );
+    void updateGuidePosition( qreal position );
     void guideLineSelected( Qt::Orientation orientation, uint index );
     void guideLinesChanged( Qt::Orientation orientation );
     /// reimplemented from KoTool

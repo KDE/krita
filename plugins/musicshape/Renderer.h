@@ -59,7 +59,7 @@ public:
     void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, const QPointF& pos, const QColor& color = Qt::black);
     void renderChord(QPainter& painter, MusicCore::Chord* chord, MusicCore::Voice* voice, const QPointF& ref, const QColor& color = Qt::black);
     void renderRest(QPainter& painter, MusicCore::Duration duration, const QPointF& pos, const QColor& color = Qt::black);
-    void renderNote(QPainter& painter, MusicCore::Duration duration, const QPointF& pos, double stemLength, const QColor& color = Qt::black);
+    void renderNote(QPainter& painter, MusicCore::Duration duration, const QPointF& pos, qreal stemLength, const QColor& color = Qt::black);
     void renderAccidental(QPainter& painter, int accidentals, const QPointF& pos, const QColor& color = Qt::black);
 private:
     MusicStyle* m_style;

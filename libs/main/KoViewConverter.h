@@ -78,35 +78,35 @@ public:
      * @param documentX the x coordinate in pt.
      * @return the x coordinate in pixels.
      */
-    virtual double documentToViewX( double documentX ) const = 0;
+    virtual qreal documentToViewX( qreal documentX ) const = 0;
 
     /**
      * Convert a single y coordinate in pt to pixels.
      * @param documentY the y coordinate in pt.
      * @return the y coordinate in pixels.
      */
-    virtual double documentToViewY( double documentY ) const = 0;
+    virtual qreal documentToViewY( qreal documentY ) const = 0;
 
     /**
      * Convert a single x coordinate in pixels to pt.
      * @param viewX the x coordinate in pixels.
      * @return the x coordinate in pt.
      */
-    virtual double viewToDocumentX( double viewX ) const = 0;
+    virtual qreal viewToDocumentX( qreal viewX ) const = 0;
 
     /**
      * Convert a single y coordinate in pixels to pt.
      * @param viewY the y coordinate in pixels.
      * @return the y coordinate in pt.
      */
-    virtual double viewToDocumentY( double viewY ) const = 0;
+    virtual qreal viewToDocumentY( qreal viewY ) const = 0;
 
     /**
      * Retrieve the zoom levels of the individual x and y axes.
-     * @param zoomX a pointer to a double which will be modified to the horizontal zoom.
-     * @param zoomY a pointer to a double which will be modified to the vertical zoom.
+     * @param zoomX a pointer to a qreal which will be modified to the horizontal zoom.
+     * @param zoomY a pointer to a qreal which will be modified to the vertical zoom.
      */
-    virtual void zoom(double *zoomX, double *zoomY) const = 0;
+    virtual void zoom(qreal *zoomX, qreal *zoomY) const = 0;
 
 };
 

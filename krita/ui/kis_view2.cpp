@@ -541,8 +541,8 @@ void KisView2::createGUI()
     connect(m_d->layerBox, SIGNAL(sigRequestNodeProperties(KisNodeSP)),
             m_d->nodeManager, SLOT(nodeProperties(KisNodeSP)));
 
-    connect(m_d->layerBox, SIGNAL(sigOpacityChanged(double, bool)),
-            m_d->nodeManager, SLOT(nodeOpacityChanged(double, bool)));
+    connect(m_d->layerBox, SIGNAL(sigOpacityChanged(qreal, bool)),
+            m_d->nodeManager, SLOT(nodeOpacityChanged(qreal, bool)));
 
     connect(m_d->layerBox, SIGNAL(sigItemComposite(const KoCompositeOp*)),
             m_d->nodeManager, SLOT(nodeCompositeOpChanged(const KoCompositeOp*)));

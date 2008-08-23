@@ -48,7 +48,7 @@ private:
     /**
      * Create a byte array holding an ICC profile generated with the given RGB Chromaticities
      */
-    static QByteArray createFromChromacities(const KoRGBChromaticities& chromacities, double gamma, QString name);
+    static QByteArray createFromChromacities(const KoRGBChromaticities& chromacities, qreal gamma, QString name);
 public:
     /**
      * @param profile lcms memory structure with the profile, it is freed after the call

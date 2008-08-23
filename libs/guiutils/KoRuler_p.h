@@ -57,7 +57,7 @@ public:
     virtual QSize sizeHint();
 
 private:
-    double lengthInPixel;
+    qreal lengthInPixel;
 };
 
 class VerticalPaintingStrategy : public PaintingStrategy {
@@ -71,7 +71,7 @@ public:
     virtual QSize sizeHint();
 
 private:
-    double lengthInPixel;
+    qreal lengthInPixel;
 };
 
 class HorizontalDistancesPaintingStrategy : public HorizontalPaintingStrategy {
@@ -81,7 +81,7 @@ public:
     virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
 
 private:
-    void drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const double start, const double end);
+    void drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const qreal start, const qreal end);
 };
 
 class KoRulerPrivate {
@@ -96,21 +96,21 @@ public:
     const KoViewConverter * const viewConverter;
 
     int offset;
-    double rulerLength;
-    double activeRangeStart;
-    double activeRangeEnd;
+    qreal rulerLength;
+    qreal activeRangeStart;
+    qreal activeRangeEnd;
 
     int mouseCoordinate;
     int showMousePosition;
 
     bool showSelectionBorders;
-    double firstSelectionBorder;
-    double secondSelectionBorder;
+    qreal firstSelectionBorder;
+    qreal secondSelectionBorder;
 
     bool showIndents;
-    double firstLineIndent;
-    double paragraphIndent;
-    double endIndent;
+    qreal firstLineIndent;
+    qreal paragraphIndent;
+    qreal endIndent;
 
     bool showTabs;
     bool tabMoved; // set to true on first move of a selected tab
@@ -150,9 +150,9 @@ public:
 
     KoRuler *ruler;
 
-    double numberStepForUnit() const;
+    qreal numberStepForUnit() const;
     /// @return The rounding of value to the nearest multiple of stepValue
-    double doSnapping(const double value) const;
+    qreal doSnapping(const qreal value) const;
     Selection selectionAtPosition(const QPoint & pos, int *selectOffset = 0);
     int hotSpotIndex(const QPoint & pos);
 

@@ -159,7 +159,7 @@ public:
      *
      * @return The newly created point 
      */
-    KoPathPoint * arcTo( double rx, double ry, double startAngle, double sweepAngle );
+    KoPathPoint * arcTo( qreal rx, qreal ry, qreal startAngle, qreal sweepAngle );
 
 
     /**
@@ -452,7 +452,7 @@ private:
     virtual void loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 protected:
-    QRectF handleRect( const QPointF &p, double radius ) const;
+    QRectF handleRect( const QPointF &p, qreal radius ) const;
     /**
      * @brief add a arc.
      *
@@ -467,7 +467,7 @@ protected:
      *
      * @return number of points created by the curve
      */
-    int arcToCurve( double rx, double ry, double startAngle, double sweepAngle, const QPointF & offset, QPointF * curvePoints ) const;
+    int arcToCurve( qreal rx, qreal ry, qreal startAngle, qreal sweepAngle, const QPointF & offset, QPointF * curvePoints ) const;
 
     /// Returns the viewbox from the given xml element.
     QRectF loadOdfViewbox( const KoXmlElement & element ) const;

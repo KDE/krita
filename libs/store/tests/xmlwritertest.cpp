@@ -150,14 +150,14 @@ int main( int argc, char** argv ) {
     TEST_BEGIN( 0, 0 );
     bool val = true;
     int num = 1;
-    double numdouble = 5.0;
+    qreal numdouble = 5.0;
     writer.addConfigItem( QString::fromLatin1( "TestConfigBool" ), val );
     writer.addConfigItem( QString::fromLatin1( "TestConfigInt" ), num );
     writer.addConfigItem( QString::fromLatin1( "TestConfigDouble" ), numdouble );
     TEST_END( "test config", "<r>\n"
                              " <config:config-item config:name=\"TestConfigBool\" config:type=\"boolean\">true</config:config-item>\n"
                              " <config:config-item config:name=\"TestConfigInt\" config:type=\"int\">1</config:config-item>\n"
-                             " <config:config-item config:name=\"TestConfigDouble\" config:type=\"double\">5</config:config-item>\n"
+                             " <config:config-item config:name=\"TestConfigDouble\" config:type=\"qreal\">5</config:config-item>\n"
                              "</r>\n" );
 
     speedTest();

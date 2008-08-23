@@ -54,8 +54,8 @@ KoPathConnectionPointStrategy::~KoPathConnectionPointStrategy()
 
 void KoPathConnectionPointStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers )
 {
-    const double MAX_DISTANCE = 20.0; // TODO make user definable
-    const double MAX_DISTANCE_SQR = MAX_DISTANCE*MAX_DISTANCE;
+    const qreal MAX_DISTANCE = 20.0; // TODO make user definable
+    const qreal MAX_DISTANCE_SQR = MAX_DISTANCE*MAX_DISTANCE;
 
     m_newConnection = KoConnection(0,-1);
 
@@ -65,7 +65,7 @@ void KoPathConnectionPointStrategy::handleMouseMove( const QPointF &mouseLocatio
         KoParameterChangeStrategy::handleMouseMove( mouseLocation, modifiers );
     else
     {
-        double minimalDistance = DBL_MAX;
+        qreal minimalDistance = DBL_MAX;
         QPointF nearestPoint;
         KoShape *nearestShape = 0;
         int nearestPointIndex = -1;
@@ -98,7 +98,7 @@ void KoPathConnectionPointStrategy::handleMouseMove( const QPointF &mouseLocatio
             for( int i = 0; i < connectionPointCount; ++i )
             {
                 QPointF difference = localMousePosition-connectionPoints[i];
-                double distance = difference.x()*difference.x() + difference.y()*difference.y();
+                qreal distance = difference.x()*difference.x() + difference.y()*difference.y();
                 if( distance > MAX_DISTANCE_SQR )
                     continue;
                 if( distance < minimalDistance )

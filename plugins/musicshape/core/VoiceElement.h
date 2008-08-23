@@ -63,23 +63,23 @@ public:
      * Returns the x position of this musical element. The x position of an element is measured relative to the left
      * barline of the bar the element is in.
      */
-    virtual double x() const;
+    virtual qreal x() const;
 
     /**
      * Returns the y position of this musical element. The y position of an element is measure relative to the top
      * of the staff it is in.
      */
-    virtual double y() const;
+    virtual qreal y() const;
 
     /**
      * Returns the width of this musical element.
      */
-    virtual double width() const;
+    virtual qreal width() const;
 
     /**
      * Returns the height of this musical element.
      */
-    virtual double height() const;
+    virtual qreal height() const;
 
     /**
      * Returns the duration of this musical elements in ticks.
@@ -89,18 +89,18 @@ public:
     /**
      * Returns the beatline of this element. This is an x position relative to the start of the element.
      */
-    double beatline() const;
+    qreal beatline() const;
     
 public slots:
     /**
      * Sets the x position of this musical element.
      */
-    void setX(double x);
+    void setX(qreal x);
 
     /**
      * Sets the y position of this musical element.
      */
-    void setY(double y);
+    void setY(qreal y);
 protected slots:
     /**
      * Changes the duration of this musical element.
@@ -114,22 +114,22 @@ protected slots:
      *
      * @param width the new width of this musical element
      */
-    void setWidth(double width);
+    void setWidth(qreal width);
 
     /**
      * Sets the height of this musical element.
      *
      * @param height the new height of this musical element
      */
-    void setHeight(double height);
+    void setHeight(qreal height);
     
-    void setBeatline(double beatline);
+    void setBeatline(qreal beatline);
 signals:
-    void xChanged(double x);
-    void yChanged(double y);
+    void xChanged(qreal x);
+    void yChanged(qreal y);
     void lengthChanged(int length);
-    void widthChanged(double width);
-    void heightChanged(double height);
+    void widthChanged(qreal width);
+    void heightChanged(qreal height);
 private:
     class Private;
     Private * const d;

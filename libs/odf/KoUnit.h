@@ -49,7 +49,7 @@ class KoXmlWriter;
 #define PI_TO_POINT(pi)((pi)*12)
 #define CC_TO_POINT(cc)((cc)*12.840103)
 /**
- * %KOffice stores everything in pt (using "double") internally.
+ * %KOffice stores everything in pt (using "qreal") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  */
@@ -72,7 +72,7 @@ public:
     };
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
-    explicit KoUnit(Unit unit=Point, double factor=1.0) { m_unit = unit; m_pixelConversion=factor;}
+    explicit KoUnit(Unit unit=Point, qreal factor=1.0) { m_unit = unit; m_pixelConversion=factor;}
 
     KoUnit& operator=(const Unit unit) {m_unit=unit; m_pixelConversion=1.0; return *this;}
 
@@ -82,7 +82,7 @@ public:
      * Prepare ptValue to be displayed in pt
      * This method will round to 0.001 precision
      */
-    static double toPoint( double ptValue ) {
+    static qreal toPoint( qreal ptValue ) {
         // No conversion, only rounding (to 0.001 precision)
         return floor( ptValue * 1000.0 ) / 1000.0;
     }
@@ -91,7 +91,7 @@ public:
      * Prepare ptValue to be displayed in mm
      * This method will round to 0.0001 precision, use POINT_TO_MM() for lossless conversion.
      */
-    static double toMillimeter( double ptValue ) {
+    static qreal toMillimeter( qreal ptValue ) {
         // "mm" values are rounded to 0.0001 millimeters
         return floor( POINT_TO_MM( ptValue ) * 10000.0 ) / 10000.0;
     }
@@ -100,7 +100,7 @@ public:
      * Prepare ptValue to be displayed in cm
      * This method will round to 0.0001 precision, use POINT_TO_CM() for lossless conversion.
      */
-    static double toCentimeter( double ptValue ) {
+    static qreal toCentimeter( qreal ptValue ) {
         return floor( POINT_TO_CM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
@@ -108,7 +108,7 @@ public:
      * Prepare ptValue to be displayed in dm
      * This method will round to 0.0001 precision, use POINT_TO_DM() for lossless conversion.
      */
-    static double toDecimeter( double ptValue ) {
+    static qreal toDecimeter( qreal ptValue ) {
         return floor( POINT_TO_DM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
@@ -116,7 +116,7 @@ public:
      * Prepare ptValue to be displayed in inch
      * This method will round to 0.00001 precision, use POINT_TO_INCH() for lossless conversion.
      */
-    static double toInch( double ptValue ) {
+    static qreal toInch( qreal ptValue ) {
         // "in" values are rounded to 0.00001 inches
         return floor( POINT_TO_INCH( ptValue ) * 100000.0 ) / 100000.0;
     }
@@ -125,7 +125,7 @@ public:
      * Prepare ptValue to be displayed in pica
      * This method will round to 0.00001 precision, use POINT_TO_PI() for lossless conversion.
      */
-    static double toPica( double ptValue ) {
+    static qreal toPica( qreal ptValue ) {
         // "pi" values are rounded to 0.00001 inches
         return floor( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
     }
@@ -134,7 +134,7 @@ public:
      * Prepare ptValue to be displayed in cicero
      * This method will round to 0.00001 precision, use POINT_TO_CC() for lossless conversion.
      */
-    static double toCicero( double ptValue ) {
+    static qreal toCicero( qreal ptValue ) {
         // "cc" values are rounded to 0.00001 inches
         return floor( POINT_TO_CC( ptValue ) * 100000.0 ) / 100000.0;
     }
@@ -143,29 +143,29 @@ public:
      * This method is the one to use to display a value in a dialog
      * \return the value @p ptValue converted to unit and rounded, ready to be displayed
      */
-    double toUserValue( double ptValue ) const;
+    qreal toUserValue( qreal ptValue ) const;
 
     /**
      * Convert the value @p ptValue to a given unit @p unit
      * Unlike KoUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
      * \return the converted value
      */
-    static double ptToUnit( const double ptValue, const KoUnit unit );
+    static qreal ptToUnit( const qreal ptValue, const KoUnit unit );
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted the unit and rounded, ready to be displayed
-    QString toUserStringValue( double ptValue ) const;
+    QString toUserStringValue( qreal ptValue ) const;
 
     /// This method is the one to use to read a value from a dialog
     /// @return the value converted to points for internal use
-    double fromUserValue( double value ) const;
+    qreal fromUserValue( qreal value ) const;
 
     /// This method is the one to use to read a value from a dialog
     /// @param value value entered by the user
     /// @param ok if set, the pointed bool is set to true if the value could be
-    /// converted to a double, and to false otherwise.
+    /// converted to a qreal, and to false otherwise.
     /// @return the value converted to points for internal use
-    double fromUserValue( const QString& value, bool* ok = 0 ) const;
+    qreal fromUserValue( const QString& value, bool* ok = 0 ) const;
 
     /// Convert a unit name into a KoUnit
     /// @param _unitName name to convert
@@ -182,14 +182,14 @@ public:
     uint indexInList(bool hidePixel=true) const;
 
     /// parse common %KOffice and OO values, like "10cm", "5mm" to pt
-    static double parseValue( const QString& value, double defaultVal = 0.0 );
+    static qreal parseValue( const QString& value, qreal defaultVal = 0.0 );
 
     /// Save a unit in OASIS format
     static void saveOasis(KoXmlWriter* settingsWriter, KoUnit _unit);
 
 private:
     Unit m_unit;
-    double m_pixelConversion;
+    qreal m_pixelConversion;
 };
 
 #endif

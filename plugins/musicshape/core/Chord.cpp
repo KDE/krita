@@ -45,11 +45,11 @@ public:
     int dots;
     QList<Note*> notes;
     StemDirection stemDirection;
-    double stemLength;
+    qreal stemLength;
     QList<Beam> beams;
 };
 
-static double calcStemLength(Duration duration)
+static qreal calcStemLength(Duration duration)
 {
     switch (duration) {
         case BreveNote:
@@ -107,9 +107,9 @@ Chord::~Chord()
     delete d;
 }
 
-double Chord::width() const
+qreal Chord::width() const
 {
-    double w = 7;
+    qreal w = 7;
 
     int lastPitch = INT_MIN;
     bool hasConflict = false;
@@ -227,13 +227,13 @@ void Chord::removeNote(Note* note, bool deleteNote)
     removeNote(index, deleteNote);
 }
 
-double Chord::y() const
+qreal Chord::y() const
 {
     if (d->notes.size() == 0) {
         return staff()->lineSpacing();
     }
 
-    double top = 1e9;
+    qreal top = 1e9;
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
     foreach (Note* n, d->notes) {
@@ -242,21 +242,21 @@ double Chord::y() const
 
         Staff* s = n->staff();
         line--;
-        double y = s->top() + line * s->lineSpacing() / 2;
+        qreal y = s->top() + line * s->lineSpacing() / 2;
         if (y < top) top = y;
     }
     if (staff()) top -= staff()->top();
     return top;
 }
 
-double Chord::height() const
+qreal Chord::height() const
 {
     if (d->notes.size() == 0) {
         return staff()->lineSpacing() * 2;
     }
 
-    double top = 1e9;
-    double bottom = -1e9;
+    qreal top = 1e9;
+    qreal bottom = -1e9;
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
     foreach (Note* n, d->notes) {
@@ -265,7 +265,7 @@ double Chord::height() const
 
         Staff* s = n->staff();
         line--;
-        double y = s->top() + line * s->lineSpacing() / 2;
+        qreal y = s->top() + line * s->lineSpacing() / 2;
         if (y < top) top = y;
         line += 2;
         y = s->top() + line * s->lineSpacing() / 2;
@@ -278,7 +278,7 @@ double Chord::height() const
     return bottom - top;
 }
 
-double Chord::stemX() const
+qreal Chord::stemX() const
 {
     int lastPitch = INT_MIN;
     bool hasConflict = false;
@@ -297,18 +297,18 @@ double Chord::stemX() const
     }
 }
 
-double Chord::centerX() const
+qreal Chord::centerX() const
 {
     return x() + 3;
 }
 
-double Chord::topNoteY() const
+qreal Chord::topNoteY() const
 {
     if (d->notes.size() == 0) {
         return staff()->lineSpacing() * 2 + staff()->top();
     }
 
-    double top = 1e9;
+    qreal top = 1e9;
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
     foreach (Note* n, d->notes) {
@@ -316,19 +316,19 @@ double Chord::topNoteY() const
         if (clef) line = clef->pitchToLine(n->pitch());
 
         Staff* s = n->staff();
-        double y = s->top() + line * s->lineSpacing() / 2;
+        qreal y = s->top() + line * s->lineSpacing() / 2;
         if (y < top) top = y;
     }
     return top;
 }
 
-double Chord::bottomNoteY() const
+qreal Chord::bottomNoteY() const
 {
     if (d->notes.size() == 0) {
         return staff()->lineSpacing() * 2 + staff()->top();
     }
 
-    double bottom = -1e9;
+    qreal bottom = -1e9;
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
     foreach (Note* n, d->notes) {
@@ -336,28 +336,28 @@ double Chord::bottomNoteY() const
         if (clef) line = clef->pitchToLine(n->pitch());
 
         Staff* s = n->staff();
-        double y = s->top() + line * s->lineSpacing() / 2;
+        qreal y = s->top() + line * s->lineSpacing() / 2;
         if (y > bottom) bottom = y;
     }
     return bottom;
 }
 
-double Chord::stemEndY(bool interpolateBeams) const
+qreal Chord::stemEndY(bool interpolateBeams) const
 {
     if (d->notes.size() == 0) return staff()->center();
 
     if (beamType(0) == BeamContinue && interpolateBeams) {
         // in the middle of a beam, interpolate stem length from beam
-        double sx = beamStart(0)->stemX(), ex = beamEnd(0)->stemX();
-        double sy = beamStart(0)->stemEndY(), ey = beamEnd(0)->stemEndY();
-        double dydx = (ey-sy) / (ex-sx);
+        qreal sx = beamStart(0)->stemX(), ex = beamEnd(0)->stemX();
+        qreal sy = beamStart(0)->stemEndY(), ey = beamEnd(0)->stemEndY();
+        qreal dydx = (ey-sy) / (ex-sx);
 
         return (stemX() - sx) * dydx + sy;
     }
 
     Staff* topStaff = NULL;
     Staff* bottomStaff = NULL;
-    double top = 1e9, bottom = -1e9;
+    qreal top = 1e9, bottom = -1e9;
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
     foreach (Note* n, d->notes) {
@@ -365,7 +365,7 @@ double Chord::stemEndY(bool interpolateBeams) const
         if (clef) line = clef->pitchToLine(n->pitch());
 
         Staff* s = n->staff();
-        double y = s->top() + line * s->lineSpacing() / 2;
+        qreal y = s->top() + line * s->lineSpacing() / 2;
         if (y > bottom) {
             bottom = y;
             bottomStaff = s;
@@ -386,12 +386,12 @@ double Chord::stemEndY(bool interpolateBeams) const
     }
 }
 
-double Chord::beamDirection() const
+qreal Chord::beamDirection() const
 {
     if (beamType(0) == BeamStart || beamType(0) == BeamEnd || beamType(0) == BeamContinue) {
-        double sx = beamStart(0)->stemX(), ex = beamEnd(0)->stemX();
-        double sy = beamStart(0)->stemEndY(), ey = beamEnd(0)->stemEndY();
-        double dydx = (ey-sy) / (ex-sx);
+        qreal sx = beamStart(0)->stemX(), ex = beamEnd(0)->stemX();
+        qreal sy = beamStart(0)->stemEndY(), ey = beamEnd(0)->stemEndY();
+        qreal dydx = (ey-sy) / (ex-sx);
         return dydx;
     } else {
         return 0;
@@ -415,13 +415,13 @@ StemDirection Chord::desiredStemDirection() const
     int barIdx = bar->sheet()->indexOfBar(bar);
 
     int topLine = 0, bottomLine = 0;
-    double topy = 1e9, bottomy = -1e9;
+    qreal topy = 1e9, bottomy = -1e9;
     for (int n = 0; n < noteCount(); n++) {
         Note* note = this->note(n);
         Staff * s = note->staff();
         Clef* clef = s->lastClefChange(barIdx);
         int line = clef->pitchToLine(note->pitch());
-        double ypos = s->top() + line * s->lineSpacing() / 2;
+        qreal ypos = s->top() + line * s->lineSpacing() / 2;
         if (ypos < topy) {
             topy = ypos;
             topLine = line;
@@ -431,21 +431,21 @@ StemDirection Chord::desiredStemDirection() const
             bottomLine = line;
         }
     }
-    double center = (bottomLine + topLine) * 0.5;
+    qreal center = (bottomLine + topLine) * 0.5;
     return (center < 4 ? StemDown : StemUp);
 }
 
-double Chord::stemLength() const
+qreal Chord::stemLength() const
 {
     return d->stemLength;
 }
 
-void Chord::setStemLength(double stemLength)
+void Chord::setStemLength(qreal stemLength)
 {
     d->stemLength = stemLength;
 }
 
-double Chord::desiredStemLength() const
+qreal Chord::desiredStemLength() const
 {
     return calcStemLength(d->duration);
 }

@@ -58,7 +58,7 @@ public:
 
         /// For paragraphs each tab definition is represented by this struct.
         struct Tab {
-            double position;    ///< distance in point from the start of the text-shape
+            qreal position;    ///< distance in point from the start of the text-shape
             QTextOption::TabType type;       ///< Determine which type is used.
         };
 
@@ -66,19 +66,19 @@ public:
         KoUnit unit() const;
 
         /// The length of the ruler in points (pt)
-        double rulerLength() const;
+        qreal rulerLength() const;
 
         /// The orientation of the ruler
         Qt::Orientation orientation() const;
 
         /// The start indent of the first line
-        double firstLineIndent() const;
+        qreal firstLineIndent() const;
 
         /// The start indent of the rest of the lines
-        double paragraphIndent() const;
+        qreal paragraphIndent() const;
 
         /// The end indent of all lines
-        double endIndent() const;
+        qreal endIndent() const;
 
         /// The tab chooser widget, which you must put into a layout along with the ruler.
         /// Returns 0 for vertical rulers,
@@ -107,14 +107,14 @@ public:
         void setOffset(int offset);
 
         /// Sets the length of the ruler to @p length in points (pt)
-        void setRulerLength(double length);
+        void setRulerLength(qreal length);
 
         /** Set the active range, ie the part of the ruler that is most likely used.
           * set to 0, 0 when there is no longer any active range
           * @param start the start of the range in pt
           * @param end the end of the range in pt
           */
-        void setActiveRange(double start, double end);
+        void setActiveRange(qreal start, qreal end);
 
         /** Set the state of the ruler so that it shows everything in right to left mode.
           * @param isRightToLeft state of right to left mode. Default is false.
@@ -131,19 +131,19 @@ public:
           * If Right To left is set the indent is relative to the right side of the active range .
           * @param indent the value relative to the active range.
           */
-        void setFirstLineIndent(double indent);
+        void setFirstLineIndent(qreal indent);
 
         /** Set the position of the rest of the lines start indent relative to the active range.
           * If Right To left is set the indent is relative to the right side of the active range .
           * @param indent the value relative to the active range.
           */
-        void setParagraphIndent(double indent);
+        void setParagraphIndent(qreal indent);
 
         /** Set the position of the end indent relative to the active range.
           * If Right To left is set the indent is relative to the left side of the active range .
           * @param indent the value relative to the active range.
           */
-        void setEndIndent(double indent);
+        void setEndIndent(qreal indent);
 
         /** Set wether the ruler should show the current mouse position.
           * Update the position with updateMouseCoordinate().
@@ -169,7 +169,7 @@ public:
          * @param first the first selection border in points
          * @param second the other selection border in points
          */
-        void updateSelectionBorders(double first, double second);
+        void updateSelectionBorders(qreal first, qreal second);
 
         /**
          * Set whether the ruler should show tabs

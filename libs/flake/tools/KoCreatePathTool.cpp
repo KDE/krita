@@ -162,7 +162,7 @@ void KoCreatePathTool::mouseDoubleClickEvent( KoPointerEvent *event )
 
     if ( m_shape )
     {
-        // the first click of the double click created a new point which has the be removed again
+        // the first click of the qreal click created a new point which has the be removed again
         m_shape->removePoint( m_shape->pathPointIndex( m_activePoint ) );
 
         addPathShape();
@@ -288,10 +288,10 @@ QRectF KoCreatePathTool::handleRect( const QPointF &p )
     QPointF border = m_canvas->viewConverter()
             ->viewToDocument( QPointF(m_handleRadius, m_handleRadius) );
 
-    const double x = p.x() - border.x();
-    const double y = p.y() - border.y();
-    const double w = border.x() * 2;
-    const double h = border.x() * 2;
+    const qreal x = p.x() - border.x();
+    const qreal y = p.y() - border.y();
+    const qreal w = border.x() * 2;
+    const qreal h = border.x() * 2;
     return QRectF( x, y, w, h );
 }
 

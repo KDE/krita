@@ -20,7 +20,7 @@
 #include "SpiralShapeConfigCommand.h"
 #include <klocale.h>
 
-SpiralShapeConfigCommand::SpiralShapeConfigCommand( KoSpiralShape * spiral, KoSpiralShape::KoSpiralType type, bool clockWise, double fade, QUndoCommand *parent )
+SpiralShapeConfigCommand::SpiralShapeConfigCommand( KoSpiralShape * spiral, KoSpiralShape::KoSpiralType type, bool clockWise, qreal fade, QUndoCommand *parent )
     : QUndoCommand( parent )
     , m_spiral(spiral)
     , m_newType(type)

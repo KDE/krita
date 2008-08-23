@@ -93,7 +93,7 @@ KoIccColorProfile* KoLcmsColorProfileContainer::createFromLcmsProfile(const cmsH
  dst .y = src .y; \
  dst .Y = src .Y;
 
-QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChromaticities& _chromacities, double gamma, QString _profileName)
+QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChromaticities& _chromacities, qreal gamma, QString _profileName)
 {
     cmsCIExyYTRIPLE primaries;
     cmsCIExyY whitePoint;
@@ -242,7 +242,7 @@ QString KoLcmsColorProfileContainer::info() const
     return d->info;
 }
 
-static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, double red, double green, double blue)
+static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal blue)
 {
     cmsHPROFILE XYZProfile = cmsCreateXYZProfile();
 
@@ -254,14 +254,14 @@ static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, double red, double green, double
                                                  INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
 
     struct XYZPixel {
-        double X;
-        double Y;
-        double Z;
+        qreal X;
+        qreal Y;
+        qreal Z;
     };
     struct RGBPixel {
-        double red;
-        double green;
-        double blue;
+        qreal red;
+        qreal green;
+        qreal blue;
     };
 
     XYZPixel xyzPixel;

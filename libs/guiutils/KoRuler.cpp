@@ -67,7 +67,7 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
     painter.setBrush(palette().color(QPalette::Text));
     painter.setRenderHint( QPainter::Antialiasing );
 
-    double x= width()/2;
+    qreal x= width()/2;
     painter.translate(0,-height()/2+5);
 
     switch (m_type) {
@@ -109,7 +109,7 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     QRectF rectangle;
     rectangle.setX(qMax(0, d->offset));
     rectangle.setY(2);
-    rectangle.setWidth(qMin((double) d->ruler->width() - 1.0 - rectangle.x(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
+    rectangle.setWidth(qMin((qreal) d->ruler->width() - 1.0 - rectangle.x(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
     rectangle.setHeight( d->ruler->height() - 6.0);
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(qMax(rectangle.x() + 1,
@@ -128,12 +128,12 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     if(d->showSelectionBorders) {
         // Draw first selection border
         if(d->firstSelectionBorder > 0) {
-            double border = d->viewConverter->documentToViewX(d->firstSelectionBorder) + d->offset;
+            qreal border = d->viewConverter->documentToViewX(d->firstSelectionBorder) + d->offset;
             painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
         }
         // Draw second selection border
         if(d->secondSelectionBorder > 0) {
-            double border = d->viewConverter->documentToViewX(d->secondSelectionBorder) + d->offset;
+            qreal border = d->viewConverter->documentToViewX(d->secondSelectionBorder) + d->offset;
             painter.drawLine(QPointF(border, rectangle.y() + 1), QPointF(border, rectangle.bottom() - 1));
         }
     }
@@ -150,7 +150,7 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     painter.setRenderHint( QPainter::Antialiasing );
 
     foreach (KoRuler::Tab t, d->tabs) {
-        double x;
+        qreal x;
         if (d->rightToLeft)
             x = d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
                     + qMin(0, d->offset);
@@ -192,7 +192,7 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
 }
 
 void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
-    double numberStep = d->numberStepForUnit(); // number step in unit
+    qreal numberStep = d->numberStepForUnit(); // number step in unit
     QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
     const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
@@ -223,8 +223,8 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
         start = qAbs(d->offset);
 
     // make a little hack so rulers shows correctly inversed number aligned
-    const double lengthInUnit = d->unit.toUserValue(d->rulerLength);
-    const double hackyLength = lengthInUnit - fmod(lengthInUnit, numberStep);
+    const qreal lengthInUnit = d->unit.toUserValue(d->rulerLength);
+    const qreal hackyLength = lengthInUnit - fmod(lengthInUnit, numberStep);
     if(d->rightToLeft) {
         start -= int(d->viewConverter->documentToViewX(fmod(d->rulerLength,
                     d->unit.fromUserValue(numberStep))));
@@ -317,7 +317,7 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
     painter.setBrush(d->ruler->palette().brush(QPalette::Base));
     painter.setRenderHint( QPainter::Antialiasing );
 
-    double x;
+    qreal x;
     // Draw first line start indent
     if (d->rightToLeft)
         x = d->activeRangeEnd - d->firstLineIndent - d->paragraphIndent;
@@ -347,7 +347,7 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
     painter.drawPolygon(polygon);
 
     // Draw end-indent or paragraph indent if mode is rightToLeft
-    double diff;
+    qreal diff;
     if (d->rightToLeft)
         diff = d->viewConverter->documentToViewX(d->activeRangeEnd
                      - d->paragraphIndent) + qMax(0, d->offset) - x;
@@ -376,7 +376,7 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     rectangle.setX(0);
     rectangle.setY(qMax(0, d->offset));
     rectangle.setWidth(d->ruler->width() - 1.0);
-    rectangle.setHeight(qMin((double)d->ruler->height() - 1.0 - rectangle.y(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
+    rectangle.setHeight(qMin((qreal)d->ruler->height() - 1.0 - rectangle.y(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
 
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(rectangle.x() + 1);
@@ -395,12 +395,12 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     if(d->showSelectionBorders) {
         // Draw first selection border
         if(d->firstSelectionBorder > 0) {
-            double border = d->viewConverter->documentToViewY(d->firstSelectionBorder) + d->offset;
+            qreal border = d->viewConverter->documentToViewY(d->firstSelectionBorder) + d->offset;
             painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
         }
         // Draw second selection border
         if(d->secondSelectionBorder > 0) {
-            double border = d->viewConverter->documentToViewY(d->secondSelectionBorder) + d->offset;
+            qreal border = d->viewConverter->documentToViewY(d->secondSelectionBorder) + d->offset;
             painter.drawLine(QPointF(rectangle.x() + 1, border), QPointF(rectangle.right() - 1, border));
         }
     }
@@ -409,7 +409,7 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
 }
 
 void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
-    double numberStep = d->numberStepForUnit(); // number step in unit
+    qreal numberStep = d->numberStepForUnit(); // number step in unit
     int numberStepPixel = qRound(d->viewConverter->documentToViewY( d->unit.fromUserValue(numberStep)));
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
     // Calc the longest text length
@@ -526,7 +526,7 @@ QSize VerticalPaintingStrategy::sizeHint() {
 }
 
 
-void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const double start, const double end) {
+void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const qreal start, const qreal end) {
 
     // Don't draw too short lines
     if (qMax(start, end) - qMin(start, end) < 1)
@@ -553,7 +553,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     painter.drawText(labelPosition, label);
 
     // Draw the arrow lines
-    double arrowLength = (line.length() - fontMetrics.width(label)) / 2 - 2;
+    qreal arrowLength = (line.length() - fontMetrics.width(label)) / 2 - 2;
     arrowLength = qMax(0.0, arrowLength);
     QLineF startArrow(line.p1(), line.pointAt(arrowLength / line.length()));
     QLineF endArrow(line.p2(), line.pointAt(1.0 - arrowLength / line.length()));
@@ -574,7 +574,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
 }
 
 void HorizontalDistancesPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF&) {
-    QList<double> points;
+    QList<qreal> points;
     points << 0.0;
     points << d->activeRangeStart + d->paragraphIndent + d->firstLineIndent;
     points << d->activeRangeStart + d->paragraphIndent;
@@ -583,7 +583,7 @@ void HorizontalDistancesPaintingStrategy::drawMeasurements(const KoRulerPrivate 
     points << d->activeRangeEnd;
     points << d->rulerLength;
     qSort(points.begin(), points.end());
-    QListIterator<double> i(points);
+    QListIterator<qreal> i(points);
     i.next();
     while (i.hasNext() && i.hasPrevious()) {
         drawDistanceLine(d, painter, i.peekPrevious(), i.peekNext());
@@ -632,7 +632,7 @@ KoRulerPrivate::~KoRulerPrivate()
     delete distancesPaintingStrategy;
 }
 
-double KoRulerPrivate::numberStepForUnit() const
+qreal KoRulerPrivate::numberStepForUnit() const
 {
     switch(unit.indexInList()) {
         case KoUnit::Inch:
@@ -649,9 +649,9 @@ double KoRulerPrivate::numberStepForUnit() const
     }
 }
 
-double KoRulerPrivate::doSnapping(const double value) const
+qreal KoRulerPrivate::doSnapping(const qreal value) const
 {
-    double numberStep = unit.fromUserValue(numberStepForUnit()/4.0);
+    qreal numberStep = unit.fromUserValue(numberStepForUnit()/4.0);
     return numberStep * qRound(value / numberStep);
 }
 
@@ -751,7 +751,7 @@ void KoRuler::setUnit(KoUnit unit)
     update();
 }
 
-double KoRuler::rulerLength() const
+qreal KoRuler::rulerLength() const
 {
     return d->rulerLength;
 }
@@ -767,7 +767,7 @@ void KoRuler::setOffset(int offset)
     update();
 }
 
-void KoRuler::setRulerLength(double length)
+void KoRuler::setRulerLength(qreal length)
 {
     d->rulerLength = length;
     update();
@@ -801,7 +801,7 @@ QSize KoRuler::sizeHint() const
     return d->paintingStrategy->sizeHint();
 }
 
-void KoRuler::setActiveRange(double start, double end)
+void KoRuler::setActiveRange(qreal start, qreal end)
 {
     d->activeRangeStart = start;
     d->activeRangeEnd = end;
@@ -834,35 +834,35 @@ void KoRuler::setShowIndents(bool show)
     update();
 }
 
-void KoRuler::setFirstLineIndent(double indent)
+void KoRuler::setFirstLineIndent(qreal indent)
 {
     d->firstLineIndent = indent;
     update();
 }
 
-void KoRuler::setParagraphIndent(double indent)
+void KoRuler::setParagraphIndent(qreal indent)
 {
     d->paragraphIndent = indent;
     update();
 }
 
-void KoRuler::setEndIndent(double indent)
+void KoRuler::setEndIndent(qreal indent)
 {
     d->endIndent = indent;
     update();
 }
 
-double KoRuler::firstLineIndent() const
+qreal KoRuler::firstLineIndent() const
 {
     return d->firstLineIndent;
 }
 
-double KoRuler::paragraphIndent() const
+qreal KoRuler::paragraphIndent() const
 {
     return d->paragraphIndent;
 }
 
-double KoRuler::endIndent() const
+qreal KoRuler::endIndent() const
 {
     return d->endIndent;
 }
@@ -878,7 +878,7 @@ void KoRuler::setShowSelectionBorders(bool show)
     update();
 }
 
-void KoRuler::updateSelectionBorders(double first, double second)
+void KoRuler::updateSelectionBorders(qreal first, qreal second)
 {
     d->firstSelectionBorder = first;
     d->secondSelectionBorder = second;
@@ -958,7 +958,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 
     if (d->showTabs && d->selected == KoRulerPrivate::None) {
         // still haven't found something so let assume the user wants to add a tab
-        double tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
+        qreal tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
                     - d->activeRangeStart;
         Tab t = {tabpos, d->tabChooser->type()};
         d->tabs.append(t);
@@ -1006,7 +1006,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
 
-    double activeLength = d->activeRangeEnd - d->activeRangeStart;
+    qreal activeLength = d->activeRangeEnd - d->activeRangeStart;
 
     switch(d->selected) {
     case KoRulerPrivate::FirstLineIndent:

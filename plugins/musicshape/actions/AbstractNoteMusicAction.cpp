@@ -46,7 +46,7 @@ AbstractNoteMusicAction::AbstractNoteMusicAction(const QString& text, SimpleEntr
 {
 }
 
-static inline double sqr(double a)
+static inline qreal sqr(qreal a)
 {
     return a * a;
 }
@@ -60,7 +60,7 @@ void AbstractNoteMusicAction::mousePress(Staff* staff, int barIdx, const QPointF
     Clef* clef = staff->lastClefChange(barIdx, 0);
     
     // loop over all noteheads
-    double closestDist = 1e9;
+    qreal closestDist = 1e9;
     Note* closestNote = 0;
     Chord* chord = 0;
     
@@ -74,12 +74,12 @@ void AbstractNoteMusicAction::mousePress(Staff* staff, int barIdx, const QPointF
             Chord* c = dynamic_cast<Chord*>(vb->element(e));
             if (!c) continue;
             
-            double centerX = c->x() + (c->width() / 2);
+            qreal centerX = c->x() + (c->width() / 2);
             
             // check if it is a rest
             if (c->noteCount() == 0) {
-                double centerY = c->y() + (c->height() / 2);
-                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
+                qreal centerY = c->y() + (c->height() / 2);
+                qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestNote = NULL;
@@ -93,9 +93,9 @@ void AbstractNoteMusicAction::mousePress(Staff* staff, int barIdx, const QPointF
                 if (note->staff() != staff) continue;
                 
                 int line = clef->pitchToLine(note->pitch());
-                double centerY = line * staff->lineSpacing() / 2;
+                qreal centerY = line * staff->lineSpacing() / 2;
                 
-                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
+                qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestNote = note;
@@ -108,9 +108,9 @@ void AbstractNoteMusicAction::mousePress(Staff* staff, int barIdx, const QPointF
     StaffElement* se = 0;
     for (int e = 0; e < bar->staffElementCount(staff); e++) {
         StaffElement* elem = bar->staffElement(staff, e);
-        double centerX = elem->x() + (elem->width() / 2);
-        double centerY = elem->y() + (elem->height() / 2);
-        double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
+        qreal centerX = elem->x() + (elem->width() / 2);
+        qreal centerY = elem->y() + (elem->height() / 2);
+        qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
         if (dist < closestDist) {
             se = elem;
             closestDist = dist;
@@ -124,7 +124,7 @@ void AbstractNoteMusicAction::mousePress(Staff* staff, int barIdx, const QPointF
     }
 }
 
-void AbstractNoteMusicAction::mousePress(StaffElement*, double, const QPointF&)
+void AbstractNoteMusicAction::mousePress(StaffElement*, qreal, const QPointF&)
 {
     // empty default implementation
 }
@@ -138,7 +138,7 @@ void AbstractNoteMusicAction::mouseMove(Staff* staff, int barIdx, const QPointF&
     Clef* clef = staff->lastClefChange(barIdx, 0);
     
     // loop over all noteheads
-    double closestDist = 1e9;
+    qreal closestDist = 1e9;
     Note* closestNote = 0;
     Chord* chord = 0;
     
@@ -152,12 +152,12 @@ void AbstractNoteMusicAction::mouseMove(Staff* staff, int barIdx, const QPointF&
             Chord* c = dynamic_cast<Chord*>(vb->element(e));
             if (!c) continue;
             
-            double centerX = c->x() + (c->width() / 2);
+            qreal centerX = c->x() + (c->width() / 2);
             
             // check if it is a rest
             if (c->noteCount() == 0) {
-                double centerY = c->y() + (c->height() / 2);
-                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
+                qreal centerY = c->y() + (c->height() / 2);
+                qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestNote = NULL;
@@ -171,9 +171,9 @@ void AbstractNoteMusicAction::mouseMove(Staff* staff, int barIdx, const QPointF&
                 if (note->staff() != staff) continue;
                 
                 int line = clef->pitchToLine(note->pitch());
-                double centerY = line * staff->lineSpacing() / 2;
+                qreal centerY = line * staff->lineSpacing() / 2;
                 
-                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
+                qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestNote = note;
@@ -186,9 +186,9 @@ void AbstractNoteMusicAction::mouseMove(Staff* staff, int barIdx, const QPointF&
     StaffElement* se = 0;
     for (int e = 0; e < bar->staffElementCount(staff); e++) {
         StaffElement* elem = bar->staffElement(staff, e);
-        double centerX = elem->x() + (elem->width() / 2);
-        double centerY = elem->y() + (elem->height() / 2);
-        double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
+        qreal centerX = elem->x() + (elem->width() / 2);
+        qreal centerY = elem->y() + (elem->height() / 2);
+        qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
         if (dist < closestDist) {
             se = elem;
             closestDist = dist;
@@ -202,12 +202,12 @@ void AbstractNoteMusicAction::mouseMove(Staff* staff, int barIdx, const QPointF&
     }
 }
 
-void AbstractNoteMusicAction::mouseMove(Chord*, Note*, double, const QPointF&)
+void AbstractNoteMusicAction::mouseMove(Chord*, Note*, qreal, const QPointF&)
 {
     // empty default implementation
 }
 
-void AbstractNoteMusicAction::mouseMove(StaffElement*, double, const QPointF&)
+void AbstractNoteMusicAction::mouseMove(StaffElement*, qreal, const QPointF&)
 {
     // empty default implementation
 }

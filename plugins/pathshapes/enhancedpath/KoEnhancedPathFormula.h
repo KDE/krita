@@ -75,8 +75,8 @@ public:
     /// Returns  if token is a reference
     bool isReference() const { return m_type == TypeReference; }
 
-    /// Returns the token converted to double
-    double asNumber() const;
+    /// Returns the token converted to qreal
+    qreal asNumber() const;
     /// Returns the token as operator
     Operator asOperator() const;
 private:
@@ -131,7 +131,7 @@ public:
      * @param path the path to use as input
      * @return the evaluated result
      */
-    double evaluate();
+    qreal evaluate();
 
     /// Returns the last occurred error
     Error error() { return m_error; }
@@ -151,7 +151,7 @@ private:
      * @param function the identifier of the function to evaluate
      * @param arguments the functions arguments
      */
-    double evaluateFunction( Function function, const QList<double> &arguments ) const;
+    qreal evaluateFunction( Function function, const QList<qreal> &arguments ) const;
 
     /// Prints token list
     void debugTokens( const TokenList &tokens );

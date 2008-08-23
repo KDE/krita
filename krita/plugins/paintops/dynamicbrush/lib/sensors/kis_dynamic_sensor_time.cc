@@ -25,14 +25,14 @@
 #include "kis_paint_information.h"
 #include "kis_sensor_selector.h"
 
-KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(30), m_periodic(true)
+KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(30), m_periodic(true), m_previousPos(KisVector2D::Zero())
 {
     
 }
 
 double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
 {
-    m_time += pi.movement().length();
+    m_time += pi.movement().norm();
     if( m_time > m_length)
     {
         if(m_periodic)

@@ -38,7 +38,7 @@ class KisDynamicSensorSpeed : public KisDynamicSensor {
         KisDynamicSensorSpeed();
         virtual ~KisDynamicSensorSpeed() { }
         virtual double parameter(const KisPaintInformation& info)
-        { return 1.0 + info.movement().length() * 0.1; }
+        { return 1.0 + info.movement().norm() * 0.1; }
 };
 
 class KisDynamicSensorDrawingAngle : public KisDynamicSensor {

@@ -62,6 +62,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_paint_information.h"
 #include "kis_paintop_registry.h"
+#include "kis_perspective_math.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -522,37 +523,40 @@ void KisPainter::paintPolyline (const vQPointF &points,
     }
 }
 
+static void getBezierCurvePoints(const KisVector2D &pos1,
+                                 const KisVector2D &control1,
+                                 const KisVector2D &control2,
+                                 const KisVector2D &pos2,
+                                 vQPointF& points)
+{
+    LineEquation line(pos1, pos2);
+    qreal d1 = line.distance(control1);
+    qreal d2 = line.distance(control2);
+
+    if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
+        points.push_back(toQPointF(pos1));
+    } else {
+        // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
+
+        KisVector2D l2 = (pos1 + control1) / 2;
+        KisVector2D h = (control1 + control2) / 2;
+        KisVector2D l3 = (l2 + h) / 2;
+        KisVector2D r3 = (control2 + pos2) / 2;
+        KisVector2D r2 = (h + r3) / 2;
+        KisVector2D l4 = (l3 + r2) / 2;
+
+        getBezierCurvePoints(pos1, l2, l3, l4, points);
+        getBezierCurvePoints(l4, r2, r3, pos2, points);
+    }
+}
+
 void KisPainter::getBezierCurvePoints(const QPointF &pos1,
                                       const QPointF &control1,
                                       const QPointF &control2,
                                       const QPointF &pos2,
                                       vQPointF& points) const
 {
-    double d1 = pointToLineDistance(control1, pos1, pos2);
-    double d2 = pointToLineDistance(control2, pos1, pos2);
-
-    if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
-        points.push_back(pos1);
-    } else {
-        // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
-        KisVector2D p1 = pos1;
-        KisVector2D p2 = control1;
-        KisVector2D p3 = control2;
-        KisVector2D p4 = pos2;
-
-        KisVector2D l2 = (p1 + p2) / 2;
-        KisVector2D h = (p2 + p3) / 2;
-        KisVector2D l3 = (l2 + h) / 2;
-        KisVector2D r3 = (p3 + p4) / 2;
-        KisVector2D r2 = (h + r3) / 2;
-        KisVector2D l4 = (l3 + r2) / 2;
-        KisVector2D r1 = l4;
-        KisVector2D l1 = p1;
-        KisVector2D r4 = p4;
-
-        getBezierCurvePoints(l1.toKoPoint(), l2.toKoPoint(), l3.toKoPoint(), l4.toKoPoint(), points);
-        getBezierCurvePoints(r1.toKoPoint(), r2.toKoPoint(), r3.toKoPoint(), r4.toKoPoint(), points);
-    }
+    ::getBezierCurvePoints(toKisVector2D(pos1), toKisVector2D(control1), toKisVector2D(control2), toKisVector2D(pos2), points);
 }
 
 double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
@@ -639,19 +643,6 @@ void KisPainter::paintAt(const KisPaintInformation& pi)
 {
     if (!d->paintOp) return;
     d->paintOp->paintAt(pi);
-}
-
-double KisPainter::pointToLineDistance(const QPointF& p, const QPointF& l0, const QPointF& l1)
-{
-    double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
-    double distance = 0;
-
-    if (lineLength > DBL_EPSILON) {
-        distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y()) / lineLength;
-        distance = fabs(distance);
-    }
-
-    return distance;
 }
 
 void KisPainter::fillPolygon(const vQPointF& points, FillStyle fillStyle)

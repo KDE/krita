@@ -74,7 +74,7 @@ KisBasicDynamicProgram::~KisBasicDynamicProgram()
 
 inline double jitter(int amount, double v)
 {
-    v = (1.0 + (rand() - RAND_MAX / 2 ) * amount / (RAND_MAX * 50) ) * v;
+    v *= 1.0 + double(rand() - RAND_MAX / 2 ) * amount / (RAND_MAX * 50) ;
     if(v >= 1.0) v= 1.0;
     return v;
 }
@@ -87,7 +87,7 @@ KisDynamicScattering KisBasicDynamicProgram::scattering( const KisPaintInformati
     if( m_scatterEnabled )
     {
         double v = jitter( m_scatterJitter, m_scatterSensor->parameter( info ) );
-        distance = v * info.movement().length() * m_scatterAmount * 0.01;
+        distance = v * info.movement().norm() * m_scatterAmount * 0.01;
     }
     if( m_enableCout )
     {

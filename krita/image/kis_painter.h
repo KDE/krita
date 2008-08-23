@@ -547,9 +547,6 @@ public:
     void setCompositeOp(const KoCompositeOp * op);
     const KoCompositeOp * compositeOp();
 
-    /// Calculate the distance that point p is from the line made by connecting l0 and l1
-    static double pointToLineDistance(const QPointF& p, const QPointF& l0, const QPointF& l1);
-
     /**
      * Add the r to the current dirty rect, and return the dirtyRegion after adding r to it.
      */

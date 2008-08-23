@@ -44,7 +44,7 @@ public:
     void operator=(const KisPaintInformation& rhs);
     ~KisPaintInformation();
 
-    QPointF pos() const;
+    const QPointF& pos() const;
     void setPos(const QPointF& p);
         
     /// The pressure of the value (from 0.0 to 1.0)

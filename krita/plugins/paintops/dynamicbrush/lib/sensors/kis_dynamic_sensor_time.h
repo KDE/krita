@@ -45,7 +45,7 @@ class KisDynamicSensorTime : public KisDynamicSensor {
         int m_length;
         bool m_periodic;
         bool m_firstPos;
-        KisVector2D previousPos;
+        KisVector2D m_previousPos;
 };
 
 #endif

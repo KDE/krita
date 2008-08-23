@@ -409,7 +409,8 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
 }
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info) {
-    if (info.movement().isNull() && m_parasite.needsMovement)
+    if (info.movement().isMuchSmallerThan(1) // FIXME the 1 here is completely arbitrary. What is the correct order of magnitude?
+        && m_parasite.needsMovement)
         return false;
     return true;
 }

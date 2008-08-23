@@ -92,7 +92,7 @@ KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
         rotation, tangentialPressure);
 }
 
-QPointF KisPaintInformation::pos() const
+const QPointF& KisPaintInformation::pos() const
 {
     return d->pos;
 }

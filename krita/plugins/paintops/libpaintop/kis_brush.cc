@@ -484,7 +484,7 @@ void KisBrush::generateMask(KisPaintDeviceSP dst, ColoringInformation* src, doub
 
         outputMask = KisQImagemask::interpolate(scaledBelowMask, scaledAboveMask, t);
     } else {
-        if (fabs(scale - aboveBrush->scale()) < DBL_EPSILON) {
+        if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {
             // Exact match.
             outputMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
         } else {
@@ -572,7 +572,7 @@ KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace, double scale, 
 
         outputImage = interpolate(scaledBelowImage, scaledAboveImage, t);
     } else {
-        if (fabs(scale - aboveBrush->scale()) < DBL_EPSILON) {
+        if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {
             // Exact match.
             outputImage = scaleImage(aboveBrush, scale, subPixelX, subPixelY);
         } else {
@@ -962,7 +962,7 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
     double xScale = static_cast<double>(srcWidth) / width;
     double yScale = static_cast<double>(srcHeight) / height;
 
-    if (xScale > 2 + DBL_EPSILON || yScale > 2 + DBL_EPSILON || xScale < 1 - DBL_EPSILON || yScale < 1 - DBL_EPSILON) {
+    if (xScale > 2 || yScale > 2 || xScale < 1 || yScale < 1) {
         // smoothScale gives better results when scaling an image up
         // or scaling it to less than half size.
         scaledImage = srcImage.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -1101,7 +1101,7 @@ void KisBrush::findScaledBrushes(double scale, const ScaledBrush **aboveBrush, c
     while (true) {
         *aboveBrush = &(d->scaledBrushes[current]);
 
-        if (fabs((*aboveBrush)->scale() - scale) < DBL_EPSILON) {
+        if (Eigen::ei_isApprox(scale, (*aboveBrush)->scale())) {
             // Scale matches exactly
             break;
         }
@@ -1111,7 +1111,7 @@ void KisBrush::findScaledBrushes(double scale, const ScaledBrush **aboveBrush, c
             break;
         }
 
-        if (scale > d->scaledBrushes[current + 1].scale() + DBL_EPSILON) {
+        if (scale > d->scaledBrushes[current + 1].scale()) {
             // We fit in between the two.
             *belowBrush = &(d->scaledBrushes[current + 1]);
             break;
@@ -1256,7 +1256,6 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
 QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double t)
 {
     Q_ASSERT((image1.width() == image2.width()) && (image1.height() == image2.height()));
-    Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
 
     int width = image1.width();
     int height = image1.height();

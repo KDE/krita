@@ -123,7 +123,6 @@ set(kritaimage_LIB_SRCS
    kis_transform_worker.cc
    kis_transparency_mask.cc
    kis_undo_adapter.cc
-   kis_vec.cc
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc

@@ -23,11 +23,11 @@
 
 void KisVecTest::testCreation()
 {
-    KisVector2D v2d;
+    KisVector2D v2d = KisVector2D::Zero();
     QVERIFY(v2d.x() == 0.0);
     QVERIFY(v2d.y() == 0.0);
 
-    KisVector3D v3d;
+    KisVector3D v3d = KisVector3D::Zero();
     QVERIFY(v3d.x() == 0.0);
     QVERIFY(v3d.y() == 0.0);
     QVERIFY(v3d.z() == 0.0);

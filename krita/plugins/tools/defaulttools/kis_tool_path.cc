@@ -61,9 +61,8 @@ void KisToolPath::addPathShape()
     painter.setStrokeStyle(KisPainter::StrokeStyleNone);
     painter.setOpacity(OPACITY_OPAQUE);
     painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
-    KisPaintOpPresetSP preset =
-        static_cast<KisPaintOpPreset*>( m_canvas->resourceProvider()->
-                        resource( KisCanvasResourceProvider::CurrentPaintOpPreset ).value<void *>() );
+    KisPaintOpPresetSP preset = m_canvas->resourceProvider()->
+                        resource( KisCanvasResourceProvider::CurrentPaintOpPreset ).value<KisPaintOpPresetSP>();
     painter.setPaintOpPreset(preset, image);
 
     QMatrix matrix;

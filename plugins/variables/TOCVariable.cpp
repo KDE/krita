@@ -114,36 +114,36 @@ void TOCSource::buildFromDocument (const QTextDocument *source, QTextCursor *tar
     target->insertBlock();
     if (m_titleStyle)
     {
-	block = target->block().previous();
-	m_titleStyle->applyStyle(block, true);
+        block = target->block().previous();
+        m_titleStyle->applyStyle(block, true);
     }
     // Ok, look in the document, find the title... :)
     KoTextDocumentLayout *docLayout = dynamic_cast<KoTextDocumentLayout*>(source->documentLayout());
     if (!docLayout)
     {
-	kDebug() << "No layout for the document ??? I cancel.";
-	return;
+        kDebug() << "No layout for the document ??? I cancel.";
+        return;
     }
     block = source->begin();
     while (block.isValid())
     {
-	if (block.userData())
-	{
-	    KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
-	    if (blockData)
-	    {
-		if (blockData->outlineLevel() > 0)
-		{
-		    KoShape *shape = docLayout->shapeForPosition(block.position());
-		    if (shape)
-		    {
-			target->insertText("TOC entry " + QString::number(blockData->outlineLevel()) + " :" + block.text() + ";page" + QString::number(dynamic_cast<KoTextShapeData *>(shape->userData())->pageNumber()));
-			target->insertBlock();
-		    }
-		}
-	    }
-	}
-	block = block.next();
+        if (block.userData())
+        {
+            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
+            if (blockData)
+            {
+                if (blockData->outlineLevel() > 0)
+                {
+                    KoShape *shape = docLayout->shapeForPosition(block.position());
+                    if (shape)
+                    {
+                    target->insertText("TOC entry " + QString::number(blockData->outlineLevel()) + " :" + block.text() + ";page" + QString::number(dynamic_cast<KoTextShapeData *>(shape->userData())->pageNumber()));
+                    target->insertBlock();
+                    }
+                }
+            }
+        }
+        block = block.next();
     }
     target->endEditBlock();
 }
@@ -156,8 +156,9 @@ bool TOCSourceTemplate::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
         textSharedData = dynamic_cast<KoTextSharedLoadingData *>( sharedData );
     }
     m_style = textSharedData->paragraphStyle(element.attributeNS( KoXmlNS::text, "style-name", ""), false);
-    if ( !m_style )
-	m_style = textSharedData->paragraphStyle(element.attributeNS( KoXmlNS::text, "style-name", ""), true);
+    if ( !m_style ) {
+        m_style = textSharedData->paragraphStyle(element.attributeNS( KoXmlNS::text, "style-name", ""), true);
+    }
     m_outlineLevel = element.attributeNS( KoXmlNS::text, "outline-level", "10").toInt();
     return true;
 }
@@ -174,23 +175,23 @@ bool TOCSource::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & c
     KoXmlElement e;
     forEachElement( e, element )
     {
-	if (e.namespaceURI() != KoXmlNS::text)
-	    continue;
-	if (e.tagName() == "table-of-content-entry-template")
-	{
-	    TOCSourceTemplate tpl;
-	    tpl.loadOdf( e, context );
-	    m_sources << tpl;
-	}
-	else if (e.tagName() == "index-title-template")
-	{
-	    m_titleTemplate = e.text();
-	    m_titleStyle = textSharedData->paragraphStyle(e.attributeNS( KoXmlNS::text, "style-name", ""), false);
-	    if ( !m_titleStyle )
-	    {
-		m_titleStyle = textSharedData->paragraphStyle(e.attributeNS( KoXmlNS::text, "style-name", ""), true);
-	    }
-	}
+        if (e.namespaceURI() != KoXmlNS::text)
+            continue;
+        if (e.tagName() == "table-of-content-entry-template")
+        {
+            TOCSourceTemplate tpl;
+            tpl.loadOdf( e, context );
+            m_sources << tpl;
+        }
+        else if (e.tagName() == "index-title-template")
+        {
+            m_titleTemplate = e.text();
+            m_titleStyle = textSharedData->paragraphStyle(e.attributeNS( KoXmlNS::text, "style-name", ""), false);
+            if ( !m_titleStyle )
+            {
+                m_titleStyle = textSharedData->paragraphStyle(e.attributeNS( KoXmlNS::text, "style-name", ""), true);
+            }
+        }
     }
     return true;
 }
@@ -206,30 +207,30 @@ bool TOCVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
     KoXmlElement e;
     forEachElement( e, element )
     {
-	//kDebug() << e.namespaceURI() << e.tagName();
-	if (e.namespaceURI() != KoXmlNS::text)
-	    continue;
-	if (e.tagName() == "table-of-content-source")
-	{
-	    source.loadOdf(e, context);
-	}
-	else if (e.tagName() == "index-body")
-	{
-	    KoTextLoader indexLoader(context);
-	    QTextCursor cursor(&indexBody);
-	    KoXmlElement bodyElem;
-	    forEachElement( bodyElem, e )
-	    {
-		if (bodyElem.namespaceURI() != KoXmlNS::text)
-		    continue;
-		if (bodyElem.tagName() == "index-title")
-		{
-		    indexLoader.loadBody(bodyElem, cursor);
-		    break;
-		}
-	    }
-	    indexLoader.loadBody(e, cursor);
-	}
+        //kDebug() << e.namespaceURI() << e.tagName();
+        if (e.namespaceURI() != KoXmlNS::text)
+            continue;
+        if (e.tagName() == "table-of-content-source")
+        {
+            source.loadOdf(e, context);
+        }
+        else if (e.tagName() == "index-body")
+        {
+            KoTextLoader indexLoader(context);
+            QTextCursor cursor(&indexBody);
+            KoXmlElement bodyElem;
+            forEachElement( bodyElem, e )
+            {
+                if (bodyElem.namespaceURI() != KoXmlNS::text)
+                    continue;
+                if (bodyElem.tagName() == "index-title")
+                {
+                    indexLoader.loadBody(bodyElem, cursor);
+                    break;
+                }
+            }
+            indexLoader.loadBody(e, cursor);
+        }
     }
     return true;
 }

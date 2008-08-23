@@ -42,7 +42,7 @@ KisToolPath::~KisToolPath()
 void KisToolPath::addPathShape()
 {
     KisNodeSP currentNode =
-        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode ).value<KisLayerSP>();
+        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode ).value<KisNodeSP>();
     if(!currentNode)
         return;
 

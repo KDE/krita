@@ -40,8 +40,6 @@ public:
     void setTextDirection(KoText::Direction direction);
     void showPageSpread(bool on);
     void setPageSpread(bool pageSpread);
-    int startPageNumber() const;
-    void setStartPageNumber(int pageNumber);
     const KoPageLayout& pageLayout() const;
 
 private Q_SLOTS:

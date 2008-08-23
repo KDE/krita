@@ -48,7 +48,6 @@ public:
     enum Property {
         DocumentURL,
         PageCount,
-        StartPage,
         AuthorName,
         SenderEmail,
         SenderCompany,

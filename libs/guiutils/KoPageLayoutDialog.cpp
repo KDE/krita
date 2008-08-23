@@ -147,13 +147,3 @@ void KoPageLayoutDialog::setPageSpread(bool pageSpread)
 {
     d->pageLayoutWidget->setPageSpread(pageSpread);
 }
-
-int KoPageLayoutDialog::startPageNumber() const
-{
-    return d->pageLayoutWidget->startPageNumber();
-}
-
-void KoPageLayoutDialog::setStartPageNumber(int pageNumber)
-{
-    d->pageLayoutWidget->setStartPageNumber(pageNumber);
-}

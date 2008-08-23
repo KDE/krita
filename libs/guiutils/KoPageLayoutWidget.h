@@ -39,7 +39,6 @@ public:
     void showUnitchooser(bool on);
     void showPageSpread(bool on);
     void setPageSpread(bool pageSpread);
-    void setStartPageNumber(int pageNumber);
     void showTextDirection(bool on);
     void setTextDirection(KoText::Direction direction);
     KoText::Direction textDirection() const;

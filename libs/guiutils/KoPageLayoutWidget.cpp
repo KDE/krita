@@ -269,14 +269,6 @@ void KoPageLayoutWidget::setApplyToDocument(bool apply)
     }
 }
 
-void KoPageLayoutWidget::setStartPageNumber(int pageNumber) {
-    d->widget.firstPage->setValue(pageNumber);
-}
-
-int KoPageLayoutWidget::startPageNumber() const {
-    return d->widget.firstPage->value();
-}
-
 void KoPageLayoutWidget::showTextDirection(bool on) {
     d->widget.directionLabel->setVisible(on);
     d->widget.textDirection->setVisible(on);

@@ -96,7 +96,7 @@ public:
 
     /// mark shape as dirty triggering a re-layout of its text.
     void foul();
-    
+
     /// mark shape as not-dirty
     void wipe();
 
@@ -113,8 +113,9 @@ public:
      * @param margins the margins that shrink the text area.
      */
     void setShapeMargins(const KoInsets &margins);
-    
-    /// returns the currently set margins for the shape.
+    /**
+     * returns the currently set margins for the shape.
+     */
     KoInsets shapeMargins() const;
 
     /**
@@ -127,6 +128,29 @@ public:
     int pageNumber() const;
 
     /**
+     * Display Previous or Following Page Numbers. The PageNumberSelectType represents
+     * the text:select-page attribute which is used to display the number of the previous
+     * or the following page rather than the number of the current page.
+     *
+     * \note To display the current page number on all pages except the first or last
+     * page, use a combination of the text:select page and text:page adjust attributes.
+     *
+     * Example: Displaying the current page number on all pages except the first page
+     * \code
+     * <text:page-number text:select-page="previous" text:page-adjust="1" style:num-format="1"/>
+     * \endcode
+     */
+    enum PageNumberSelectType {
+        PageNumberSelectPageCurrent, ///< Select the "current" page.
+        PageNumberSelectPagePrev,    ///< Select the "previous" page.
+        PageNumberSelectPageNext     ///< Select the "next" page.
+    };
+    /// Returns the text:select-page value.
+    PageNumberSelectType pageNumberSelectType() const;
+    /// Sets the text:select-page value.
+    void setPageNumberSelectType(PageNumberSelectType selecttype);
+
+    /**
     * Load the TextShape from ODF.
     *
     * @see the @a TextShape::loadOdf() method which calls this method.
@@ -134,7 +158,6 @@ public:
     * to load the ODF.
     */
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
-
     /**
     * Store the TextShape data as ODF.
     * @param saveDefaultStyles If set to false, the default styles won't be saved. This way, you can have several
@@ -155,6 +178,7 @@ public:
      * new paragraphs default direction.
      */
     KoText::Direction pageDirection() const;
+
 signals:
     /**
      * emitted when the shape thinks it should be relayouted, for example after

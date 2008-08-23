@@ -57,7 +57,8 @@ public:
         position(-1),
         endPosition(-1),
         pageNumber(-1),
-        direction(KoText::AutoDirection)
+        direction(KoText::AutoDirection),
+        pageNumberSelectType(KoTextShapeData::PageNumberSelectPageCurrent)
     {
     }
 
@@ -72,6 +73,7 @@ public:
     int position, endPosition, pageNumber;
     KoInsets margins;
     KoText::Direction direction;
+    PageNumberSelectType pageNumberSelectType;
 };
 
 
@@ -169,6 +171,14 @@ void KoTextShapeData::setPageDirection(KoText::Direction direction) {
 
 KoText::Direction KoTextShapeData::pageDirection() const {
     return d->direction;
+}
+
+KoTextShapeData::PageNumberSelectType KoTextShapeData::pageNumberSelectType() const {
+    return d->pageNumberSelectType;
+}
+
+void KoTextShapeData::setPageNumberSelectType(KoTextShapeData::PageNumberSelectType selecttype) {
+    d->pageNumberSelectType = selecttype;
 }
 
 bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) {

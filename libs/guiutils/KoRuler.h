@@ -233,11 +233,17 @@ signals:
     void guideLineCreated( Qt::Orientation orientation, int viewPosition );
 
 protected:
-        virtual void paintEvent(QPaintEvent* event);
-        virtual void mousePressEvent ( QMouseEvent* ev );
-        virtual void mouseReleaseEvent ( QMouseEvent* ev );
-        virtual void mouseMoveEvent ( QMouseEvent* ev );
+    /// reimplemented
+    virtual void paintEvent(QPaintEvent* event);
+    /// reimplemented
+    virtual void mousePressEvent ( QMouseEvent* ev );
+    /// reimplemented
+    virtual void mouseReleaseEvent ( QMouseEvent* ev );
+    /// reimplemented
+    virtual void mouseMoveEvent ( QMouseEvent* ev );
+    /// reimplemented
     virtual QSize minimumSizeHint() const;
+    /// reimplemented
     virtual QSize sizeHint() const;
 
 

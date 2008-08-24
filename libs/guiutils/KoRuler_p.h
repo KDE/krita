@@ -35,15 +35,44 @@ private:
 
 class PaintingStrategy {
 public:
+    /// constructor
     PaintingStrategy() {}
+    /// destructor
     virtual ~PaintingStrategy() {}
 
+    /**
+     * Draw the background of the ruler.
+     * @param ruler the ruler to draw on.
+     * @param painter the painter we can paint with.
+     */
     virtual QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter) = 0;
-    virtual void drawTabs(const KoRulerPrivate *ruler, QPainter &painter) = 0;
-    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) = 0;
-    virtual void drawIndents(const KoRulerPrivate *ruler, QPainter &painter) = 0;
-    virtual QSize sizeHint() = 0;
 
+    /**
+     * Draw the indicators for text-tabs.
+     * @param ruler the ruler to draw on.
+     * @param painter the painter we can paint with.
+     */
+    virtual void drawTabs(const KoRulerPrivate *ruler, QPainter &painter) = 0;
+
+    /**
+     * Draw the indicators for the measurements which typically are drawn every [unit].
+     * @param ruler the ruler to draw on.
+     * @param painter the painter we can paint with.
+     * @param rectangle
+     */
+    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) = 0;
+
+    /**
+     * Draw the indicators for the indents of a text paragraph
+     * @param ruler the ruler to draw on.
+     * @param painter the painter we can paint with.
+     */
+    virtual void drawIndents(const KoRulerPrivate *ruler, QPainter &painter) = 0;
+
+    /**
+     *returns the size suggestion for a ruler with this strategy.
+     */
+    virtual QSize sizeHint() = 0;
 };
 
 class HorizontalPaintingStrategy : public PaintingStrategy {

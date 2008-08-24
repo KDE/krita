@@ -50,7 +50,7 @@ bool KoTextBlockData::hasCounterData() const {
 }
 
 qreal KoTextBlockData::counterWidth() const {
-    return qMax(0., d->counterWidth);
+    return qMax(qreal(0), d->counterWidth);
 }
 
 void KoTextBlockData::setBorder(KoTextBlockBorderData *border) {

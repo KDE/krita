@@ -334,8 +334,8 @@ void SimpleTextShape::setStartOffset( qreal offset )
 
     update();
     m_startOffset = offset;
-    m_startOffset = qMin( 1.0, m_startOffset );
-    m_startOffset = qMax( 0.0, m_startOffset );
+    m_startOffset = qMin( qreal(1.0), m_startOffset );
+    m_startOffset = qMax( qreal(0.0), m_startOffset );
     updateSizeAndPosition();
     update();
 }

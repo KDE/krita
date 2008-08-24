@@ -332,7 +332,7 @@ void KoTextSelectionHandler::decreaseIndent() {
     public:
         void visit(QTextBlockFormat &format) const {
             // TODO make the 10 configurable.
-            format.setLeftMargin(qMax(0.0, format.leftMargin() - 10));
+            format.setLeftMargin(qMax(qreal(0.0), format.leftMargin() - 10));
         }
         Qt::Alignment alignment;
     };

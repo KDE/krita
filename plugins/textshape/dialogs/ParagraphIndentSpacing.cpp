@@ -88,7 +88,7 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row) {
             break;
         case 4: // additional
             custom = true;
-            customValue = qMax(0.1, m_style->lineSpacing());
+            customValue = qMax(qreal(0.1), m_style->lineSpacing());
             break;
         case 5: // fixed
             custom = true;

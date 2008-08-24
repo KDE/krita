@@ -1142,7 +1142,7 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
             if(percent > 0)
                 width *= percent / 100.0;
             y -= width / 10.; // move it up just slightly
-            qreal x = qMax(1., data->counterPosition().x() + fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
+            qreal x = qMax(qreal(1), data->counterPosition().x() + fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
                 switch( listStyle ) {
                 case KoListStyle::SquareItem: {
                     painter->fillRect(QRectF(x, y, width, width), QBrush(Qt::black));

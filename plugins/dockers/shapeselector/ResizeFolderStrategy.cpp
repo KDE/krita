@@ -57,13 +57,13 @@ void ResizeFolderStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Key
         newSize.setWidth(newSize.width() - distanceTravelled.x());
         break;
     case MoveRightBorder:
-        newSize.setWidth( qMax(40., m_startSize.width() + distanceTravelled.x()) );
+        newSize.setWidth( qMax(qreal(40), m_startSize.width() + distanceTravelled.x()) );
         break;
     case MoveBottomBorder:
-        newSize.setHeight( qMax(40., m_startSize.height() + distanceTravelled.y()) );
+        newSize.setHeight( qMax(qreal(40), m_startSize.height() + distanceTravelled.y()) );
         break;
     case ScaleShape:
-        newSize = QSizeF( qMax(40., m_startSize.width() + distanceTravelled.x()), qMax(40., m_startSize.height() + distanceTravelled.y()) );
+        newSize = QSizeF( qMax(qreal(40), m_startSize.width() + distanceTravelled.x()), qMax(qreal(40), m_startSize.height() + distanceTravelled.y()) );
         break;
     }
     m_folder->setSize(newSize);

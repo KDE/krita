@@ -31,7 +31,8 @@
 #include <QIODevice>
 #include <QPainter>
 
-class KoImageData::Private {
+class KoImageData::Private
+{
 public:
     Private(KoImageCollection *c)
     : refCount(0)
@@ -74,30 +75,34 @@ KoImageData::KoImageData(const KoImageData &imageData)
     d->refCount++;
 }
 
-KoImageData::~KoImageData() {
-    if(--d->refCount == 0) {
+KoImageData::~KoImageData()
+{
+    if (--d->refCount == 0) {
         d->collection->removeImage(this);
         delete d;
     }
 }
 
-void KoImageData::setImageQuality(KoImageData::ImageQuality quality) {
-    if(d->quality == quality) return;
+void KoImageData::setImageQuality(KoImageData::ImageQuality quality)
+{
+    if (d->quality == quality) return;
     d->pixmap = QPixmap(); // remove data
     d->quality  = quality;
 }
 
-KoImageData::ImageQuality KoImageData::imageQuality() const {
+KoImageData::ImageQuality KoImageData::imageQuality() const
+{
     return d->quality;
 }
 
-QPixmap KoImageData::pixmap() {
-    if(d->pixmap.isNull()) {
+QPixmap KoImageData::pixmap()
+{
+    if (d->pixmap.isNull()) {
         image(); // force loading if only present in a tmp file
 
-        if(! d->image.isNull()) {
+        if (! d->image.isNull()) {
             int multiplier = 150; // max 150 ppi
-            if(d->quality == NoPreviewImage) {
+            if (d->quality == NoPreviewImage) {
                 d->pixmap = QPixmap(1,1);
                 QPainter p(&d->pixmap);
                 p.setPen(QPen(Qt::gray));
@@ -105,16 +110,16 @@ QPixmap KoImageData::pixmap() {
                 p.end();
                 return d->pixmap;
             }
-            if(d->quality == LowQuality)
+            if (d->quality == LowQuality)
                 multiplier = 50;
-            else if(d->quality == MediumQuality)
+            else if (d->quality == MediumQuality)
                 multiplier = 100;
             int width = qMin(d->image.width(), qRound(imageSize().width() * multiplier / 72.));
             int height = qMin(d->image.height(), qRound(imageSize().height() * multiplier / 72.));
             // kDebug(30004)() <<"  image:" << width <<"x" << height;
 
             QImage scaled = d->image.scaled(width, height);
-            if(d->tempImageFile) // free memory
+            if (d->tempImageFile) // free memory
                 d->image = QImage();
 
             d->pixmap = QPixmap::fromImage(scaled);
@@ -123,15 +128,17 @@ QPixmap KoImageData::pixmap() {
     return d->pixmap;
 }
 
-KUrl KoImageData::imageLocation() const {
+KUrl KoImageData::imageLocation() const
+{
     return d->url;
 }
 
-QString KoImageData::tagForSaving() {
+QString KoImageData::tagForSaving()
+{
     static int counter=0;
     d->taggedForSaving=true;
     d->storeHref = QString("Pictures/image%1").arg(counter++);
-    if(d->tempImageFile) {
+    if (d->tempImageFile) {
         // we should set a suffix, unfortunately the tmp file don'thave a correct one set
         //d->storeHref += 
     }
@@ -143,34 +150,35 @@ QString KoImageData::tagForSaving() {
     return d->storeHref;
 }
 
-QString KoImageData::storeHref() const {
+QString KoImageData::storeHref() const
+{
     return d->storeHref;
 }
 
 bool KoImageData::saveToFile(QIODevice *device)
 {
-    if(d->tempImageFile) {
-        if(! d->tempImageFile->open())
+    if (d->tempImageFile) {
+        if (! d->tempImageFile->open())
             return false;
         char * data = new char[32 * 1024];
         while(true) {
             bool failed = false;
             qint64 bytes = d->tempImageFile->read(data, 32*1024);
-            if(bytes == 0)
+            if (bytes == 0)
                 break;
-            else if(bytes == -1) {
+            else if (bytes == -1) {
                 kWarning() << "Failed to read data from the tmpfile\n";
                 failed = true;
             }
             while(! failed && bytes > 0) {
                 qint64 written = device->write(data, bytes);
-                if(written < 0) {// error!
+                if (written < 0) {// error!
                     kWarning() << "Failed to copy the image from the temp to the store\n";
                     failed = true;
                 }
                 bytes -= written;
             }
-            if(failed) { // read or write failed; so lets cleanly abort.
+            if (failed) { // read or write failed; so lets cleanly abort.
                  delete[] data;
                 return false;
             }
@@ -189,7 +197,8 @@ bool KoImageData::isTaggedForSaving()
 }
 
 
-bool KoImageData::loadFromFile(QIODevice *device) {
+bool KoImageData::loadFromFile(QIODevice *device)
+{
     struct Finally {
         Finally(QIODevice *d) : device (d), bytes(0) {}
         ~Finally() {
@@ -206,30 +215,30 @@ bool KoImageData::loadFromFile(QIODevice *device) {
     d->tempImageFile = 0;
     d->image = QImage();
 
-    if(true) { //  right now we tmp file everything device->size() > 25E4) { // larger than 250Kb, save to tmp file.
+    if (true) { //  right now we tmp file everything device->size() > 25E4) { // larger than 250Kb, save to tmp file.
         d->tempImageFile = new KTemporaryFile();
-        if(! d->tempImageFile->open())
+        if (! d->tempImageFile->open())
             return false;
         char * data = new char[32 * 1024];
         finally.bytes = data;
         while(true) {
             bool failed = false;
             qint64 bytes = device->read(data, 32*1024);
-            if(bytes == 0)
+            if (bytes == 0)
                 break;
-            else if(bytes == -1) {
+            else if (bytes == -1) {
                 kWarning() << "Failed to read data from the store\n";
                 failed = true;
             }
             while(! failed && bytes > 0) {
                 qint64 written = d->tempImageFile->write(data, bytes);
-                if(written < 0) {// error!
+                if (written < 0) {// error!
                     kWarning() << "Failed to copy the image from the store to temp\n";
                     failed = true;
                 }
                 bytes -= written;
             }
-            if(failed) { // read or write failed; so lets cleanly abort.
+            if (failed) { // read or write failed; so lets cleanly abort.
                 delete d->tempImageFile;
                 d->tempImageFile = 0;
                 return false;
@@ -244,18 +253,19 @@ bool KoImageData::loadFromFile(QIODevice *device) {
     return true;
 }
 
-const QSizeF KoImageData:: imageSize() {
-    if(!d->imageSize.isValid()) {
+const QSizeF KoImageData:: imageSize()
+{
+    if (!d->imageSize.isValid()) {
         // The imagesize have not yet been calculated 
 
         image(); // make sure the image is loaded
 
-        if(d->image.dotsPerMeterX())
+        if (d->image.dotsPerMeterX())
             d->imageSize.setWidth( DM_TO_POINT(d->image.width() / (qreal) d->image.dotsPerMeterX() * 10.0) );
         else
             d->imageSize.setWidth( d->image.width() / 72.0);
 
-        if(d->image.dotsPerMeterY())
+        if (d->image.dotsPerMeterY())
             d->imageSize.setHeight( DM_TO_POINT(d->image.height() / (qreal) d->image.dotsPerMeterY() * 10.0) );
         else
             d->imageSize.setHeight( d->image.height() / 72.0);
@@ -263,8 +273,9 @@ const QSizeF KoImageData:: imageSize() {
     return d->imageSize;
 }
 
-const QImage KoImageData::image() const {
-    if(d->image.isNull() && d->tempImageFile) {
+const QImage KoImageData::image() const
+{
+    if (d->image.isNull() && d->tempImageFile) {
         d->tempImageFile->open();
         d->image.load(d->tempImageFile, 0);
             // kDebug(30004)() <<"  orig:" << d->image.width() <<"x" << d->image.height();
@@ -274,7 +285,8 @@ const QImage KoImageData::image() const {
     return d->image;
 }
 
-void KoImageData::setImage( const QImage &image ) {
+void KoImageData::setImage( const QImage &image )
+{
     // remove prev data
     delete d->tempImageFile;
     d->tempImageFile = 0;

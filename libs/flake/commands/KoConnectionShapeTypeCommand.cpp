@@ -39,7 +39,7 @@ void KoConnectionShapeTypeCommand::redo()
 
     m_connection->update();
 
-    if( m_oldType != m_newType )
+    if ( m_oldType != m_newType )
         m_connection->setConnectionType( m_newType );
 
     m_connection->update();
@@ -51,7 +51,7 @@ void KoConnectionShapeTypeCommand::undo()
 
     m_connection->update();
 
-    if( m_oldType != m_newType )
+    if ( m_oldType != m_newType )
         m_connection->setConnectionType( m_oldType );
 
     m_connection->update();

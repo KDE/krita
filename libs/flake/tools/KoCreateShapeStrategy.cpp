@@ -34,7 +34,7 @@ KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvas
 {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(parent->shapeId());
-    if( factory)
+    if ( factory)
     {
         const KoProperties *props = parent->shapeProperties();
         KoShape *shape;
@@ -53,10 +53,11 @@ KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvas
     }
 }
 
-QUndoCommand* KoCreateShapeStrategy::createCommand() {
+QUndoCommand* KoCreateShapeStrategy::createCommand()
+{
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(parent->shapeId());
-    if(! factory) {
+    if (! factory) {
         kWarning(30006) << "Application requested a shape that is not registered '" <<
             parent->shapeId() << "'" << endl;
         return 0;
@@ -64,18 +65,18 @@ QUndoCommand* KoCreateShapeStrategy::createCommand() {
 
     const KoProperties *props = parent->shapeProperties();
     KoShape *shape;
-    if(props)
+    if (props)
         shape = factory->createShapeAndInit( props, parent->m_canvas->shapeController()->shapeControllerBase() );
     else
         shape = factory->createDefaultShapeAndInit( parent->m_canvas->shapeController()->shapeControllerBase() );
-    if( shape->shapeId().isEmpty() )
+    if ( shape->shapeId().isEmpty() )
         shape->setShapeId(factory->id());
     QRectF rect = selectRect();
     shape->setPosition(rect.topLeft());
     QSizeF newSize = rect.size();
     // if the user has dragged when creating the shape,
     // resize the shape to the dragged size
-    if(newSize.width() > 1.0 && newSize.height() > 1.0)
+    if (newSize.width() > 1.0 && newSize.height() > 1.0)
         shape->setSize(newSize);
 
     QUndoCommand * cmd = parent->m_canvas->shapeController()->addShape( shape );
@@ -88,14 +89,15 @@ QUndoCommand* KoCreateShapeStrategy::createCommand() {
     return cmd;
 }
 
-void KoCreateShapeStrategy::finishInteraction( Qt::KeyboardModifiers modifiers ) {
+void KoCreateShapeStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
+{
     Q_UNUSED( modifiers );
     m_canvas->updateCanvas(selectRect());
 }
 
 void KoCreateShapeStrategy::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    if( m_outline.isEmpty() )
+    if ( m_outline.isEmpty() )
         KoShapeRubberSelectStrategy::paint( painter, converter );
     else
     {
@@ -116,7 +118,7 @@ void KoCreateShapeStrategy::paint( QPainter &painter, const KoViewConverter &con
         matrix.scale( xscale, yscale );
         painter.translate( paintRect.left(), paintRect.top() );
 
-        if(painter.hasClipping())
+        if (painter.hasClipping())
             paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
 
         painter.setMatrix( matrix, true );
@@ -125,8 +127,9 @@ void KoCreateShapeStrategy::paint( QPainter &painter, const KoViewConverter &con
     }
 }
 
-void KoCreateShapeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
+void KoCreateShapeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
+{
     KoShapeRubberSelectStrategy::handleMouseMove( point, modifiers );
-    if( ! m_outline.isEmpty() )
+    if ( ! m_outline.isEmpty() )
         m_canvas->updateCanvas( selectRect() );
 }

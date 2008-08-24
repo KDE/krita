@@ -33,6 +33,7 @@ KoZoomToolFactory::KoZoomToolFactory(QObject *parent)
     setActivationShapeId("flake/always");
 }
 
-KoTool* KoZoomToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool* KoZoomToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new KoZoomTool(canvas);
 }

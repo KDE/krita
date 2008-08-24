@@ -36,7 +36,8 @@
 #include <kpagedialog.h>
 #include <klocale.h>
 
-class KoShapeController::Private {
+class KoShapeController::Private
+{
 public:
     Private() : canvas(0), shapeController(0) {}
     KoCanvasBase *canvas;
@@ -62,12 +63,12 @@ public:
             qSort(panels.begin(), panels.end(), KoShapeConfigFactory::compare);
             QList<KoShapeConfigWidgetBase*> widgets;
             foreach (KoShapeConfigFactory *panelFactory, panels) {
-                if(! panelFactory->showForShapeId( shape->shapeId() ) )
+                if (! panelFactory->showForShapeId( shape->shapeId() ) )
                     continue;
                 KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
-                if(widget == 0)
+                if (widget == 0)
                     continue;
-                if( ! widget->showOnShapeCreate() ) {
+                if ( ! widget->showOnShapeCreate() ) {
                     delete widget;
                     continue;
                 }
@@ -78,7 +79,7 @@ public:
                 pageCount ++;
             }
             foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
-                if( ! panel->showOnShapeCreate() )
+                if ( ! panel->showOnShapeCreate() )
                     continue;
                 panel->open(shape);
                 widgets.append(panel);
@@ -89,10 +90,10 @@ public:
                 pageCount ++;
             }
 
-            if(pageCount > 0) {
-                if(pageCount > 1)
+            if (pageCount > 0) {
+                if (pageCount > 1)
                     dialog->setFaceType(KPageDialog::Tabbed);
-                if(dialog->exec() != KPageDialog::Accepted) {
+                if (dialog->exec() != KPageDialog::Accepted) {
                     delete dialog;
                     return 0;
                 }
@@ -119,7 +120,8 @@ KoShapeController::KoShapeController( KoCanvasBase *canvas, KoShapeControllerBas
     d->shapeController = shapeController;
 }
 
-KoShapeController::~KoShapeController() {
+KoShapeController::~KoShapeController()
+{
     delete d;
 }
 

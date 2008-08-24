@@ -24,7 +24,8 @@
 
 #include <klocale.h>
 
-class KoShapeDistributeCommand::Private {
+class KoShapeDistributeCommand::Private
+{
 public:
     Private() : command(0) {}
     ~Private() { delete command; }

@@ -19,8 +19,10 @@
 
 #include "KoCanvasObserver.h"
 
-KoCanvasObserver::KoCanvasObserver() {
+KoCanvasObserver::KoCanvasObserver()
+{
 }
 
-KoCanvasObserver::~KoCanvasObserver() {
+KoCanvasObserver::~KoCanvasObserver()
+{
 }

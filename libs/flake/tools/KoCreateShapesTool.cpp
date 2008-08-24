@@ -29,7 +29,8 @@
 #include "KoCreateShapeStrategy.h"
 
 
-class KoCreateShapesTool::Private {
+class KoCreateShapesTool::Private
+{
 public:
     Private() : newShapeProperties(0) {}
 
@@ -48,37 +49,45 @@ KoCreateShapesTool::~KoCreateShapesTool()
     delete d;
 }
 
-void KoCreateShapesTool::paint( QPainter &painter, const KoViewConverter &converter) {
+void KoCreateShapesTool::paint( QPainter &painter, const KoViewConverter &converter)
+{
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
 }
 
-void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event ) {
+void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event )
+{
     KoInteractionTool::mouseReleaseEvent(event);
     emit KoTool::done();
 }
 
-void KoCreateShapesTool::activate( bool ) {
+void KoCreateShapesTool::activate( bool )
+{
     useCursor( Qt::ArrowCursor, true );
 }
 
-void KoCreateShapesTool::setShapeId( const QString &id ) {
+void KoCreateShapesTool::setShapeId( const QString &id )
+{
     d->shapeId = id;
 }
 
-const QString &KoCreateShapesTool::shapeId() const {
+const QString &KoCreateShapesTool::shapeId() const
+{
     return d->shapeId;
 }
 
-void KoCreateShapesTool::setShapeProperties( KoProperties *properties ) {
+void KoCreateShapesTool::setShapeProperties( KoProperties *properties )
+{
     d->newShapeProperties = properties;
 }
 
-KoProperties const * KoCreateShapesTool::shapeProperties() {
+KoProperties const * KoCreateShapesTool::shapeProperties()
+{
     return d->newShapeProperties;
 }
 
-KoInteractionStrategy *KoCreateShapesTool::createStrategy(KoPointerEvent *event) {
+KoInteractionStrategy *KoCreateShapesTool::createStrategy(KoPointerEvent *event)
+{
     return new KoCreateShapeStrategy(this, m_canvas, event->point);
 }
 

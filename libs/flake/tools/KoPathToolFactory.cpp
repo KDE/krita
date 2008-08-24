@@ -33,10 +33,12 @@ KoPathToolFactory::KoPathToolFactory(QObject *parent)
     setActivationShapeId (KoPathShapeId);
 }
 
-KoPathToolFactory::~KoPathToolFactory() {
+KoPathToolFactory::~KoPathToolFactory()
+{
 }
 
-KoTool * KoPathToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool * KoPathToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new KoPathTool(canvas);
 }
 

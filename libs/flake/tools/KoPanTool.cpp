@@ -34,19 +34,22 @@ KoPanTool::KoPanTool(KoCanvasBase *canvas)
 {
 }
 
-bool KoPanTool::wantsAutoScroll() {
+bool KoPanTool::wantsAutoScroll()
+{
     return false;
 }
 
-void KoPanTool::mousePressEvent( KoPointerEvent *event ) {
+void KoPanTool::mousePressEvent( KoPointerEvent *event )
+{
     m_lastPosition = documentToViewport( event->point );
     event->accept();
     useCursor(QCursor(Qt::ClosedHandCursor));
 }
 
-void KoPanTool::mouseMoveEvent( KoPointerEvent *event ) {
+void KoPanTool::mouseMoveEvent( KoPointerEvent *event )
+{
     Q_ASSERT(m_controller);
-    if(event->buttons() == 0)
+    if (event->buttons() == 0)
         return;
     event->accept();
 
@@ -57,31 +60,36 @@ void KoPanTool::mouseMoveEvent( KoPointerEvent *event ) {
     m_lastPosition = actualPosition;
 }
 
-void KoPanTool::mouseReleaseEvent( KoPointerEvent *event ) {
+void KoPanTool::mouseReleaseEvent( KoPointerEvent *event )
+{
     event->accept();
     useCursor(QCursor(Qt::OpenHandCursor));
-    if(m_temporary)
+    if (m_temporary)
         emit done();
 }
 
-void KoPanTool::keyPressEvent(QKeyEvent *event) {
+void KoPanTool::keyPressEvent(QKeyEvent *event)
+{
     // TODO use arrow bottons to scroll.
     event->accept();
 }
 
-void KoPanTool::activate(bool temporary) {
-    if(m_controller == 0)
+void KoPanTool::activate(bool temporary)
+{
+    if (m_controller == 0)
         emit done();
     m_temporary = temporary;
     useCursor(QCursor(Qt::OpenHandCursor), true);
 }
 
-void KoPanTool::customMoveEvent( KoPointerEvent * event ) {
+void KoPanTool::customMoveEvent( KoPointerEvent * event )
+{
     m_controller->pan( QPoint( -event->x(), -event->y() ) );
     event->accept();
 }
 
-QPointF KoPanTool::documentToViewport( const QPointF &p ) {
+QPointF KoPanTool::documentToViewport( const QPointF &p )
+{
     QPointF viewportPoint = m_canvas->viewConverter()->documentToView( p );
     viewportPoint += m_canvas->documentOrigin();
     viewportPoint += QPoint( m_controller->canvasOffsetX(), m_controller->canvasOffsetY() );

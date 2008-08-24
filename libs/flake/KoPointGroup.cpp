@@ -28,7 +28,7 @@ void KoPointGroup::add( KoPathPoint * point )
     point->addToGroup( this );
 }
 
-void KoPointGroup::remove( KoPathPoint * point ) 
+void KoPointGroup::remove( KoPathPoint * point )
 { 
     if ( m_points.remove( point ) ) 
     {    

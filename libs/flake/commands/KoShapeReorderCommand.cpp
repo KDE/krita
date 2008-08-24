@@ -37,7 +37,8 @@ KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QLis
     setText(i18n( "Reorder shapes" ));
 }
 
-void KoShapeReorderCommand::redo() {
+void KoShapeReorderCommand::redo()
+{
     QUndoCommand::redo();
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->update();
@@ -46,7 +47,8 @@ void KoShapeReorderCommand::redo() {
     }
 }
 
-void KoShapeReorderCommand::undo() {
+void KoShapeReorderCommand::undo()
+{
     QUndoCommand::undo();
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->update();
@@ -56,7 +58,8 @@ void KoShapeReorderCommand::undo() {
 }
 
 // static
-KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager, MoveShapeType move, QUndoCommand *parent) {
+KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager, MoveShapeType move, QUndoCommand *parent)
+{
     QList<int> newIndexes;
     QList<KoShape*> changedShapes;
     foreach(KoShape *shape, shapes) {
@@ -64,15 +67,15 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         // since two indexes can not collide we may need to change the zIndex of a number
         // of other shapes in the stack as well.
         QList<KoShape*> sortedShapes( manager->shapesAt(shape->boundingRect(), false) );
-        if( sortedShapes.count() == 0 )
+        if ( sortedShapes.count() == 0 )
             continue;
         qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
-        if(move == BringToFront) {
+        if (move == BringToFront) {
             KoShape *top = *(--sortedShapes.end());
             changedShapes.append(shape);
             newIndexes.append(top->zIndex()+1);
         }
-        else if(move == SendToBack) {
+        else if (move == SendToBack) {
             KoShape *bottom = (*sortedShapes.begin());
             changedShapes.append(shape);
             newIndexes.append(bottom->zIndex()-1);
@@ -81,11 +84,11 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
             QList<KoShape*>::Iterator iter = sortedShapes.begin();
             while((*iter) != shape && iter != sortedShapes.end())
                 iter++;
-            if( iter == sortedShapes.end() )
+            if ( iter == sortedShapes.end() )
                 continue;
 
-            if(move == RaiseShape) {
-                if(++iter == sortedShapes.end()) continue; // already at top
+            if (move == RaiseShape) {
+                if (++iter == sortedShapes.end()) continue; // already at top
                 int newIndex = (*iter)->zIndex()+1;
                 changedShapes.append(shape);
                 newIndexes.append(newIndex);
@@ -96,13 +99,13 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
                     iter++;
                 }
             }
-            else if(move == LowerShape) {
-                if(iter == sortedShapes.begin()) continue; // already at bottom
+            else if (move == LowerShape) {
+                if (iter == sortedShapes.begin()) continue; // already at bottom
                 iter--; // go to the one below
                 int newIndex = (*iter)->zIndex()-1;
                 changedShapes.append(shape);
                 newIndexes.append(newIndex);
-                if(iter == sortedShapes.begin()) continue; // moved to the bottom
+                if (iter == sortedShapes.begin()) continue; // moved to the bottom
                 --iter; // skip the one we want to get below
                 while(iter != sortedShapes.begin() && newIndex >= (*iter)->zIndex()) {
                     changedShapes.append(*iter);

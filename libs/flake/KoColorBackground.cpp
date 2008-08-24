@@ -46,7 +46,7 @@ KoColorBackground::KoColorBackground()
 KoColorBackground::KoColorBackground( const QColor &color, Qt::BrushStyle style )
     : d( new Private() )
 {
-    if( style < Qt::SolidPattern || style >= Qt::LinearGradientPattern )
+    if ( style < Qt::SolidPattern || style >= Qt::LinearGradientPattern )
         style = Qt::SolidPattern;
     d->style = style;
     d->color = color;
@@ -81,11 +81,11 @@ void KoColorBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &cont
 bool KoColorBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF & )
 {
     KoStyleStack &styleStack = context.styleStack();
-    if( ! styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) 
+    if ( ! styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) 
         return false;
 
     QString fillStyle = styleStack.property( KoXmlNS::draw, "fill" );
-    if( fillStyle == "solid" || fillStyle == "hatch" )
+    if ( fillStyle == "solid" || fillStyle == "hatch" )
     {
         QBrush brush = KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fillStyle, context.stylesReader() );
         d->color = brush.color();

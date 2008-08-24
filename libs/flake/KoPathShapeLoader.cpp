@@ -45,7 +45,7 @@ KoPathShapeLoader::~KoPathShapeLoader()
 
 void KoPathShapeLoader::svgMoveTo( qreal x1, qreal y1, bool abs )
 {
-    if( abs )
+    if ( abs )
         d->lastPoint = QPointF( x1, y1 );
     else
         d->lastPoint += QPointF( x1, y1 );
@@ -54,7 +54,7 @@ void KoPathShapeLoader::svgMoveTo( qreal x1, qreal y1, bool abs )
 
 void KoPathShapeLoader::svgLineTo( qreal x1, qreal y1, bool abs )
 {
-    if( abs )
+    if ( abs )
         d->lastPoint = QPointF( x1, y1 );
     else
         d->lastPoint += QPointF( x1, y1 );
@@ -64,7 +64,7 @@ void KoPathShapeLoader::svgLineTo( qreal x1, qreal y1, bool abs )
 
 void KoPathShapeLoader::svgLineToHorizontal( qreal x, bool abs )
 {
-    if( abs )
+    if ( abs )
         d->lastPoint.setX( x );
     else
         d->lastPoint.rx() += x;
@@ -74,7 +74,7 @@ void KoPathShapeLoader::svgLineToHorizontal( qreal x, bool abs )
 
 void KoPathShapeLoader::svgLineToVertical( qreal y, bool abs )
 {
-    if( abs )
+    if ( abs )
         d->lastPoint.setY( y );
     else
         d->lastPoint.ry() += y;
@@ -85,7 +85,7 @@ void KoPathShapeLoader::svgLineToVertical( qreal y, bool abs )
 void KoPathShapeLoader::svgCurveToCubic( qreal x1, qreal y1, qreal x2, qreal y2, qreal x, qreal y, bool abs )
 {
     QPointF p1, p2;
-    if( abs )
+    if ( abs )
     {
         p1 = QPointF( x1, y1 );
         p2 = QPointF( x2, y2 );

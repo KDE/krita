@@ -35,9 +35,11 @@ KoCreateShapesToolFactory::KoCreateShapesToolFactory(QObject *parent)
     setPriority(1);
 }
 
-KoCreateShapesToolFactory::~KoCreateShapesToolFactory() {
+KoCreateShapesToolFactory::~KoCreateShapesToolFactory()
+{
 }
 
-KoTool* KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool* KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new KoCreateShapesTool(canvas);
 }

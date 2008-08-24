@@ -23,7 +23,8 @@
 #include <KoColor.h> // Zut, do we want this? It's convenient, but
                      // also makes flake dependent on pigment. (BSAR)
 
-class KoCanvasResourceProvider::Private {
+class KoCanvasResourceProvider::Private
+{
 public:
     QHash<int, QVariant> resources;
 };
@@ -78,7 +79,7 @@ void KoCanvasResourceProvider::setResource( int key, const KoID & id )
 
 KoColor KoCanvasResourceProvider::koColorResource( int key )
 {
-    if(! d->resources.contains(key)) {
+    if (! d->resources.contains(key)) {
         KoColor empty;
         return empty;
     }
@@ -118,7 +119,7 @@ KoID KoCanvasResourceProvider::koIDResource(int key)
 void KoCanvasResourceProvider::setHandleRadius( int handleRadius )
 {
     // do not allow arbitrary small handles
-    if( handleRadius < 3 )
+    if ( handleRadius < 3 )
         handleRadius = 3;
     setResource( KoCanvasResource::HandleRadius, QVariant( handleRadius) );
 }
@@ -133,47 +134,53 @@ void KoCanvasResourceProvider::setUnitChanged()
     setResource( KoCanvasResource::Unit, true );
 }
 
-bool KoCanvasResourceProvider::boolResource(int key) const {
-    if(! d->resources.contains(key))
+bool KoCanvasResourceProvider::boolResource(int key) const
+{
+    if (! d->resources.contains(key))
         return false;
     return d->resources[key].toBool();
 }
 
-int KoCanvasResourceProvider::intResource(int key) const {
-    if(! d->resources.contains(key))
+int KoCanvasResourceProvider::intResource(int key) const
+{
+    if (! d->resources.contains(key))
         return 0;
     return d->resources[key].toInt();
 }
 
-bool KoCanvasResourceProvider::doubleResource(int key) const {
-    if(! d->resources.contains(key))
+bool KoCanvasResourceProvider::doubleResource(int key) const
+{
+    if (! d->resources.contains(key))
         return 0.;
     return d->resources[key].toDouble();
 }
 
 QString KoCanvasResourceProvider::stringResource(int key)
 {
-    if(! d->resources.contains(key)) {
+    if (! d->resources.contains(key)) {
         QString empty;
         return empty;
     }
     return qvariant_cast<QString>(resource(key));
 }
 
-QSizeF KoCanvasResourceProvider::sizeResource(int key) {
-    if(! d->resources.contains(key)) {
+QSizeF KoCanvasResourceProvider::sizeResource(int key)
+{
+    if (! d->resources.contains(key)) {
         QSizeF empty;
         return empty;
     }
     return qvariant_cast<QSizeF>(resource(key));
 }
 
-bool KoCanvasResourceProvider::hasResource(int key) {
+bool KoCanvasResourceProvider::hasResource(int key)
+{
     return d->resources.contains(key);
 }
 
-void KoCanvasResourceProvider::clearResource(int key) {
-    if(! d->resources.contains(key))
+void KoCanvasResourceProvider::clearResource(int key)
+{
+    if (! d->resources.contains(key))
         return;
     d->resources.remove(key);
     QVariant empty;

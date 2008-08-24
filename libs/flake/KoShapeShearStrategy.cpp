@@ -42,7 +42,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
     KoSelection * sel = canvas->shapeManager()->selection();
     QList<KoShape*> selectedShapes = sel->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if( ! isEditable( shape ) )
+        if ( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
         m_oldTransforms << shape->transformation();
@@ -72,33 +72,33 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
     m_initialSize = sel->size();
     m_solidPoint = QPointF( m_initialSize.width() / 2, m_initialSize.height() / 2);
 
-    if(m_top)
+    if (m_top)
         m_solidPoint += QPointF(0, m_initialSize.height() / 2);
-    else if(m_bottom)
+    else if (m_bottom)
         m_solidPoint -= QPointF(0, m_initialSize.height() / 2);
-    if(m_left)
+    if (m_left)
         m_solidPoint += QPointF(m_initialSize.width() / 2, 0);
-    else if(m_right)
+    else if (m_right)
         m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
 
     QPointF edge;
     qreal angle = 0.0;
-    if( m_top )
+    if ( m_top )
     {
         edge = sel->absolutePosition( KoFlake::BottomLeftCorner ) - sel->absolutePosition( KoFlake::BottomRightCorner );
         angle = 180.0;
     }
-    else if( m_bottom )
+    else if ( m_bottom )
     {
         edge = sel->absolutePosition( KoFlake::TopRightCorner ) - sel->absolutePosition( KoFlake::TopLeftCorner );
         angle = 0.0;
     }
-    else if( m_left )
+    else if ( m_left )
     {
         edge = sel->absolutePosition( KoFlake::BottomLeftCorner ) - sel->absolutePosition( KoFlake::TopLeftCorner );
         angle = 90.0;
     }
-    else if( m_right )
+    else if ( m_right )
     {
         edge = sel->absolutePosition( KoFlake::TopRightCorner ) - sel->absolutePosition( KoFlake::BottomRightCorner );
         angle = 270.0;
@@ -127,15 +127,15 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
 
     qreal shearX=0, shearY=0;
 
-    if(m_top || m_left)
+    if (m_top || m_left)
         shearVector = - shearVector;
-    if(m_top || m_bottom)
+    if (m_top || m_bottom)
         shearX = shearVector.x() / m_initialSize.height();
-    if(m_left || m_right)
+    if (m_left || m_right)
         shearY = shearVector.y() / m_initialSize.width();
 
     // if selection is mirrored invert the shear values
-    if( m_isMirrored )
+    if ( m_isMirrored )
     {
         shearX *= -1.0;
         shearY *= -1.0;
@@ -160,14 +160,16 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
     m_shearMatrix = matrix;
 }
 
-void KoShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
+void KoShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+{
     SelectionDecorator decorator(KoFlake::NoHandle, true, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     decorator.paint(painter, converter);
 }
 
-QUndoCommand* KoShapeShearStrategy::createCommand() {
+QUndoCommand* KoShapeShearStrategy::createCommand()
+{
     QList<QMatrix> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();

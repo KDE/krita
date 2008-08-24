@@ -26,7 +26,8 @@
 #include <klocale.h>
 // #include <kdebug.h>
 
-class KoShapeAlignCommand::Private {
+class KoShapeAlignCommand::Private
+{
 public:
     Private() : command(0) {}
     ~Private() {
@@ -46,9 +47,9 @@ KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align a
     QPointF delta;
     QRectF bRect;
     foreach( KoShape *shape, shapes ) {
-//   if(dynamic_cast<KoShapeGroup*> (shape))
+//   if (dynamic_cast<KoShapeGroup*> (shape))
 //       kDebug(30006) <<"Found Group";
-//   else if(dynamic_cast<KoShapeContainer*> (shape))
+//   else if (dynamic_cast<KoShapeContainer*> (shape))
 //       kDebug(30006) <<"Found Container";
 //   else
 //       kDebug(30006) <<"Found shape";

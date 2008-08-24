@@ -30,7 +30,8 @@ ShapeDeleter::ShapeDeleter(KoShape *shape)
     deleteLater();
 }
 
-ShapeDeleter::~ShapeDeleter() {
+ShapeDeleter::~ShapeDeleter()
+{
     Q_ASSERT(QThread::currentThread() == QCoreApplication::instance()->thread());
     delete m_shape;
 }

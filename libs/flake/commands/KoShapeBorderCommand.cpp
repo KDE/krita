@@ -24,12 +24,13 @@
 
 #include <klocale.h>
 
-class KoShapeBorderCommand::Private {
+class KoShapeBorderCommand::Private
+{
 public:
     Private() {}
     ~Private() {
         foreach(KoShapeBorderModel* border, oldBorders) {
-            if(border && border->useCount() <= 0)
+            if (border && border->useCount() <= 0)
                 delete border;
         }
     }
@@ -84,11 +85,13 @@ KoShapeBorderCommand::KoShapeBorderCommand( KoShape* shape, KoShapeBorderModel *
     setText( i18n( "Set border" ) );
 }
 
-KoShapeBorderCommand::~KoShapeBorderCommand() {
+KoShapeBorderCommand::~KoShapeBorderCommand()
+{
     delete d;
 }
 
-void KoShapeBorderCommand::redo () {
+void KoShapeBorderCommand::redo ()
+{
     QUndoCommand::redo();
     QList<KoShapeBorderModel*>::iterator borderIt = d->newBorders.begin();
     foreach( KoShape *shape, d->shapes ) {
@@ -99,7 +102,8 @@ void KoShapeBorderCommand::redo () {
     }
 }
 
-void KoShapeBorderCommand::undo () {
+void KoShapeBorderCommand::undo ()
+{
     QUndoCommand::undo();
     QList<KoShapeBorderModel*>::iterator borderIt = d->oldBorders.begin();
     foreach( KoShape *shape, d->shapes ) {

@@ -62,7 +62,7 @@ void PointHandle::paint( QPainter &painter, const KoViewConverter &converter )
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
 
     KoPathPoint::KoPointType type = KoPathPoint::Node;
-    if( selection && selection->contains( m_activePoint ) )
+    if ( selection && selection->contains( m_activePoint ) )
         type = KoPathPoint::All;
     m_activePoint->paint( painter, handle.size(), type );
     painter.restore();
@@ -72,20 +72,20 @@ void PointHandle::repaint() const
 {
     bool active = false;
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
-    if( selection && selection->contains( m_activePoint ) )
+    if ( selection && selection->contains( m_activePoint ) )
         active = true;
     m_tool->repaint( m_activePoint->boundingRect( !active ) );
 }
 
 KoInteractionStrategy * PointHandle::handleMousePress( KoPointerEvent *event )
 {
-    if( ( event->button() & Qt::LeftButton ) == 0)
+    if ( ( event->button() & Qt::LeftButton ) == 0)
         return 0;
-    if((event->modifiers() & Qt::ShiftButton) == 0) { // no shift pressed.
+    if ((event->modifiers() & Qt::ShiftButton) == 0) { // no shift pressed.
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
 
         // control select adds/removes points to/from the selection
-        if( event->modifiers() & Qt::ControlModifier )
+        if ( event->modifiers() & Qt::ControlModifier )
         {
             if ( selection->contains( m_activePoint ) )
             {
@@ -121,14 +121,14 @@ KoInteractionStrategy * PointHandle::handleMousePress( KoPointerEvent *event )
     }
     else {
         KoPathPoint::KoPointProperties props = m_activePoint->properties();
-        if( ! m_activePoint->activeControlPoint1() || ! m_activePoint->activeControlPoint2() )
+        if ( ! m_activePoint->activeControlPoint1() || ! m_activePoint->activeControlPoint2() )
             return 0;
 
         KoPathPointTypeCommand::PointType pointType = KoPathPointTypeCommand::Smooth;
         // cycle the smooth->symmetric->unsmooth state of the path point
-        if( props & KoPathPoint::IsSmooth )
+        if ( props & KoPathPoint::IsSmooth )
             pointType = KoPathPointTypeCommand::Symmetric;
-        else if( props & KoPathPoint::IsSymmetric )
+        else if ( props & KoPathPoint::IsSymmetric )
             pointType = KoPathPointTypeCommand::Corner;
 
         QList<KoPathPointData> pointData;
@@ -181,10 +181,10 @@ void ParameterHandle::repaint() const
 
 KoInteractionStrategy * ParameterHandle::handleMousePress( KoPointerEvent *event )
 {
-    if( event->button() & Qt::LeftButton )
+    if ( event->button() & Qt::LeftButton )
     {
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
-        if( selection )
+        if ( selection )
             selection->clear();
         return new KoParameterChangeStrategy( m_tool, m_tool->canvas(), m_parameterShape, m_handleId );
     }
@@ -204,10 +204,10 @@ ConnectionHandle::ConnectionHandle( KoPathTool *tool, KoParameterShape *paramete
 
 KoInteractionStrategy * ConnectionHandle::handleMousePress( KoPointerEvent *event )
 {
-    if( event->button() & Qt::LeftButton )
+    if ( event->button() & Qt::LeftButton )
     {
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
-        if( selection )
+        if ( selection )
             selection->clear();
         KoConnectionShape * shape = dynamic_cast<KoConnectionShape*>( m_parameterShape );
         if ( ! shape ) 

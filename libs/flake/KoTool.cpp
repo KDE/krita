@@ -27,7 +27,8 @@
 #include <kactioncollection.h>
 #include <QWidget>
 
-class KoToolPrivate {
+class KoToolPrivate
+{
 public:
     KoToolPrivate()
         : previousCursor(Qt::ArrowCursor) { }
@@ -43,7 +44,7 @@ KoTool::KoTool(KoCanvasBase *canvas )
     : m_canvas(canvas),
     d(new KoToolPrivate())
 {
-    if(m_canvas) { // in the case of KoToolManagers dummytool it can be zero :(
+    if (m_canvas) { // in the case of KoToolManagers dummytool it can be zero :(
         KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
         Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
         if (crp)
@@ -61,11 +62,13 @@ KoTool::~KoTool()
     delete d;
 }
 
-void KoTool::activate(bool temporary) {
+void KoTool::activate(bool temporary)
+{
     Q_UNUSED(temporary);
 }
 
-void KoTool::deactivate() {
+void KoTool::deactivate()
+{
 }
 
 void KoTool::resourceChanged( int key, const QVariant & res )
@@ -74,28 +77,34 @@ void KoTool::resourceChanged( int key, const QVariant & res )
     Q_UNUSED( res );
 }
 
-bool KoTool::wantsAutoScroll() {
+bool KoTool::wantsAutoScroll()
+{
     return true;
 }
 
-void KoTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+void KoTool::mouseDoubleClickEvent( KoPointerEvent *event )
+{
     event->ignore();
 }
 
-void KoTool::keyPressEvent(QKeyEvent *e) {
+void KoTool::keyPressEvent(QKeyEvent *e)
+{
     e->ignore();
 }
 
-void KoTool::keyReleaseEvent(QKeyEvent *e) {
+void KoTool::keyReleaseEvent(QKeyEvent *e)
+{
     e->ignore();
 }
 
-void KoTool::wheelEvent( KoPointerEvent * e ) {
+void KoTool::wheelEvent( KoPointerEvent * e )
+{
     e->ignore();
 }
 
-QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const {
-    if(m_canvas->canvasWidget() == 0)
+QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
+{
+    if (m_canvas->canvasWidget() == 0)
         return QVariant();
 
     switch(query) {
@@ -108,8 +117,9 @@ QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConver
     }
 }
 
-void KoTool::inputMethodEvent (QInputMethodEvent * event) {
-    if(! event->commitString().isEmpty()) {
+void KoTool::inputMethodEvent (QInputMethodEvent * event)
+{
+    if (! event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
         keyPressEvent(&ke);
     }
@@ -131,11 +141,12 @@ void KoTool::customMoveEvent( KoPointerEvent * event )
     event->ignore();
 }
 
-void KoTool::useCursor(QCursor cursor, bool force) {
-    if(!force && cursor.shape() != Qt::BitmapCursor && cursor.shape() == d->previousCursor.shape())
+void KoTool::useCursor(QCursor cursor, bool force)
+{
+    if (!force && cursor.shape() != Qt::BitmapCursor && cursor.shape() == d->previousCursor.shape())
         return;
 
-    if(!force && cursor.shape()==Qt::BitmapCursor && d->previousCursor.shape()==Qt::BitmapCursor &&
+    if (!force && cursor.shape()==Qt::BitmapCursor && d->previousCursor.shape()==Qt::BitmapCursor &&
                 cursor.pixmap().cacheKey() == d->previousCursor.pixmap().cacheKey())
         return;
 
@@ -143,22 +154,26 @@ void KoTool::useCursor(QCursor cursor, bool force) {
     emit cursorChanged(d->previousCursor);
 }
 
-QMap<QString, QWidget *> KoTool::optionWidgets() {
+QMap<QString, QWidget *> KoTool::optionWidgets()
+{
     if (d->optionWidgets.empty()) {
         d->optionWidgets = createOptionWidgets();
     }
     return d->optionWidgets;
 }
 
-void KoTool::addAction(const QString &name, QAction *action) {
+void KoTool::addAction(const QString &name, QAction *action)
+{
     d->actionCollection.insert(name, action);
 }
 
-QHash<QString, QAction*> KoTool::actions() const {
+QHash<QString, QAction*> KoTool::actions() const
+{
     return d->actionCollection;
 }
 
-QAction *KoTool::action(const QString &name) const {
+QAction *KoTool::action(const QString &name) const
+{
     return d->actionCollection[name];
 }
 
@@ -175,15 +190,18 @@ QMap<QString, QWidget *>  KoTool::createOptionWidgets()
     return ow;
 }
 
-void KoTool::setToolId(const QString &id) {
+void KoTool::setToolId(const QString &id)
+{
     d->toolId = id;
 }
 
-QString KoTool::toolId() const {
+QString KoTool::toolId() const
+{
     return d->toolId;
 }
 
-QCursor KoTool::cursor() const {
+QCursor KoTool::cursor() const
+{
     return d->previousCursor;
 }
 
@@ -197,11 +215,13 @@ void KoTool::cut()
     deleteSelection();
 }
 
-QList<QAction*> KoTool::popupActionList() const {
+QList<QAction*> KoTool::popupActionList() const
+{
     return d->popupActionList;
 }
 
-void KoTool::setPopupActionList(const QList<QAction*> &list) {
+void KoTool::setPopupActionList(const QList<QAction*> &list)
+{
     d->popupActionList = list;
 }
 

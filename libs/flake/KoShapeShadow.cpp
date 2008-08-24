@@ -55,7 +55,7 @@ void KoShapeShadow::fillStyle( KoGenStyle &style, KoShapeSavingContext &context 
 
     style.addProperty( "draw:shadow", d->visible ? "visible" : "hidden" );
     style.addProperty( "draw:shadow-color", d->color.name() );
-    if( d->color.alphaF() != 1.0 )
+    if ( d->color.alphaF() != 1.0 )
         style.addProperty( "draw:shadow-opacity", QString("%1%").arg( d->color.alphaF() * 100.0 ) );
     style.addProperty( "draw:shadow-offset-x", QString("%1pt").arg( d->offset.x() ) );
     style.addProperty( "draw:shadow-offset-y", QString("%1pt").arg( d->offset.y() ) );
@@ -63,13 +63,13 @@ void KoShapeShadow::fillStyle( KoGenStyle &style, KoShapeSavingContext &context 
 
 void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
-    if( ! d->visible )
+    if ( ! d->visible )
         return;
 
     KoShape::applyConversion( painter, converter );
 
     painter.setPen( d->color );
-    if( shape->background() )
+    if ( shape->background() )
         painter.setBrush( QBrush(d->color) );
     QMatrix tm;
     tm.translate( d->offset.x(), d->offset.y() );
@@ -77,7 +77,7 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     painter.setMatrix( tr * tm * tr.inverted() * painter.matrix() );
     QPainterPath path( shape->outline() );
     KoPathShape * pathShape = dynamic_cast<KoPathShape*>( shape );
-    if( pathShape )
+    if ( pathShape )
         path.setFillRule( pathShape->fillRule() );
     painter.drawPath( path );
 }
@@ -114,7 +114,7 @@ bool KoShapeShadow::isVisible() const
 
 void KoShapeShadow::insets( const KoShape *shape, KoInsets &insets )
 {
-    if( ! d->visible )
+    if ( ! d->visible )
         return;
 
     Q_UNUSED( shape );

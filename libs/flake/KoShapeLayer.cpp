@@ -45,7 +45,7 @@ QRectF KoShapeLayer::boundingRect() const
 
     foreach( KoShape* shape, iterator() )
     {
-        if(bb.isEmpty())
+        if (bb.isEmpty())
              bb = shape->boundingRect();
         else
             bb = bb.unite( shape->boundingRect() );
@@ -54,7 +54,8 @@ QRectF KoShapeLayer::boundingRect() const
     return bb;
 }
 
-void KoShapeLayer::saveOdf( KoShapeSavingContext & context ) const {
+void KoShapeLayer::saveOdf( KoShapeSavingContext & context ) const
+{
     // save later according to parag 9.1.3
     context.addLayerForSaving( this );
 
@@ -66,7 +67,8 @@ void KoShapeLayer::saveOdf( KoShapeSavingContext & context ) const {
     }
 }
 
-bool KoShapeLayer::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+bool KoShapeLayer::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
     // set layer name
     setName( element.attributeNS( KoXmlNS::draw, "name" ) );
     // layer locking

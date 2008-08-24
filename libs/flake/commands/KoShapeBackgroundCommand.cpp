@@ -24,7 +24,8 @@
 
 #include <klocale.h>
 
-class KoShapeBackgroundCommand::Private {
+class KoShapeBackgroundCommand::Private
+{
 public:
     Private()
     {
@@ -32,11 +33,11 @@ public:
     ~Private()
     {
         foreach(KoShapeBackground* fill, oldFills) {
-            if(fill && fill->useCount() <= 0)
+            if (fill && fill->useCount() <= 0)
                 delete fill;
         }
         foreach(KoShapeBackground* fill, newFills) {
-            if(fill && fill->useCount() <= 0)
+            if (fill && fill->useCount() <= 0)
                 delete fill;
         }
     }
@@ -86,7 +87,8 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand( const QList<KoShape*> &shape
 }
 
 
-void KoShapeBackgroundCommand::redo () {
+void KoShapeBackgroundCommand::redo ()
+{
     QList<KoShapeBackground*>::iterator brushIt = d->newFills.begin();
     foreach( KoShape *shape, d->shapes ) {
         shape->setBackground( *brushIt );
@@ -96,7 +98,8 @@ void KoShapeBackgroundCommand::redo () {
     QUndoCommand::redo();
 }
 
-void KoShapeBackgroundCommand::undo () {
+void KoShapeBackgroundCommand::undo ()
+{
     QUndoCommand::undo();
     QList<KoShapeBackground*>::iterator brushIt = d->oldFills.begin();
     foreach( KoShape *shape, d->shapes ) {
@@ -106,7 +109,8 @@ void KoShapeBackgroundCommand::undo () {
     }
 }
 
-KoShapeBackgroundCommand::~KoShapeBackgroundCommand() {
+KoShapeBackgroundCommand::~KoShapeBackgroundCommand()
+{
     delete d;
 }
 

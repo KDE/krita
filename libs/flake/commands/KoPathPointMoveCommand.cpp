@@ -35,7 +35,7 @@ KoPathPointMoveCommand::KoPathPointMoveCommand( const KoPathShapePointMap &point
 void KoPathPointMoveCommand::redo()
 {
     QUndoCommand::redo();
-    if(! m_undoCalled)
+    if (! m_undoCalled)
         return;
     KoPathShapePointMap::iterator it( m_pointMap.begin() );
     for ( ; it != m_pointMap.end(); ++it )
@@ -60,7 +60,7 @@ void KoPathPointMoveCommand::redo()
 void KoPathPointMoveCommand::undo()
 {
     QUndoCommand::undo();
-    if(m_undoCalled)
+    if (m_undoCalled)
         return;
     m_offset *= -1.0;
     m_undoCalled = true;

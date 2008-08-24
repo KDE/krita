@@ -22,7 +22,8 @@
 
 #include <klocale.h>
 
-class KoPathFillRuleCommand::Private {
+class KoPathFillRuleCommand::Private
+{
 public:
     Private(Qt::FillRule fillRule) : newFillRule(fillRule)
     {
@@ -44,11 +45,13 @@ KoPathFillRuleCommand::KoPathFillRuleCommand( const QList<KoPathShape*> &shapes,
     setText( i18n( "Set fill rule" ) );
 }
 
-KoPathFillRuleCommand::~KoPathFillRuleCommand() {
+KoPathFillRuleCommand::~KoPathFillRuleCommand()
+{
     delete d;
 }
 
-void KoPathFillRuleCommand::redo () {
+void KoPathFillRuleCommand::redo ()
+{
     QUndoCommand::redo();
     foreach( KoPathShape *shape, d->shapes ) {
         shape->setFillRule( d->newFillRule );
@@ -56,7 +59,8 @@ void KoPathFillRuleCommand::redo () {
     }
 }
 
-void KoPathFillRuleCommand::undo () {
+void KoPathFillRuleCommand::undo ()
+{
     QUndoCommand::undo();
     QList<Qt::FillRule>::iterator ruleIt = d->oldFillRules.begin();
     foreach( KoPathShape *shape, d->shapes ) {

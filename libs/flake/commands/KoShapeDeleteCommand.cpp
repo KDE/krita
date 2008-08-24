@@ -24,7 +24,8 @@
 
 #include <klocale.h>
 
-class KoShapeDeleteCommand::Private {
+class KoShapeDeleteCommand::Private
+{
 public:
     Private(KoShapeControllerBase *c)
         : controller(c),
@@ -33,7 +34,7 @@ public:
     }
 
     ~Private() {
-        if( ! deleteShapes )
+        if ( ! deleteShapes )
             return;
 
         foreach (KoShape *shape, shapes )
@@ -69,31 +70,34 @@ KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, c
     setText( i18n( "Delete shapes" ) );
 }
 
-KoShapeDeleteCommand::~KoShapeDeleteCommand() {
+KoShapeDeleteCommand::~KoShapeDeleteCommand()
+{
     delete d;
 }
 
-void KoShapeDeleteCommand::redo () {
+void KoShapeDeleteCommand::redo ()
+{
     QUndoCommand::redo();
-    if( ! d->controller )
+    if ( ! d->controller )
         return;
 
     for(int i=0; i < d->shapes.count(); i++) {
         // the parent has to be there when it is removed from the KoShapeControllerBase
         d->controller->removeShape( d->shapes[i] );
-        if( d->oldParents.at( i ) )
+        if ( d->oldParents.at( i ) )
             d->oldParents.at( i )->removeChild( d->shapes[i] );
     }
     d->deleteShapes = true;
 }
 
-void KoShapeDeleteCommand::undo () {
+void KoShapeDeleteCommand::undo ()
+{
     QUndoCommand::undo();
-    if( ! d->controller )
+    if ( ! d->controller )
         return;
 
     for(int i=0; i < d->shapes.count(); i++) {
-        if( d->oldParents.at( i ) )
+        if ( d->oldParents.at( i ) )
             d->oldParents.at( i )->addChild( d->shapes[i] );
         // the parent has to be there when it is added to the KoShapeControllerBase
         d->controller->addShape( d->shapes[i] );

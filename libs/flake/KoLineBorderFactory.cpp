@@ -26,7 +26,8 @@ KoLineBorderFactory::KoLineBorderFactory(QObject *parent)
 {
 }
 
-KoShapeBorderModel * KoLineBorderFactory::createBorder() const {
+KoShapeBorderModel * KoLineBorderFactory::createBorder() const
+{
     return new KoLineBorder();
 }
 

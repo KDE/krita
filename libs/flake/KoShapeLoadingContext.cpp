@@ -35,7 +35,8 @@ uint qHash( const KoShapeLoadingContext::AdditionalAttributeData & attributeData
 
 static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttributes;
 
-class KoShapeLoadingContext::Private {
+class KoShapeLoadingContext::Private
+{
 public:
     Private( KoOdfLoadingContext &c, KoShapeControllerBase * sc )
     : context( c )
@@ -95,7 +96,7 @@ KoShape * KoShapeLoadingContext::shapeById( const QString & id )
 
 KoImageCollection * KoShapeLoadingContext::imageCollection()
 {
-    if( ! d->shapeController )
+    if ( ! d->shapeController )
         return 0;
 
     QMap<QString, KoDataCenter *>  dataCenterMap = d->shapeController->dataCenterMap();

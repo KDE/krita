@@ -22,7 +22,8 @@
 
 #include <klocale.h>
 
-class KoShapeSizeCommand::Private {
+class KoShapeSizeCommand::Private
+{
 public:
     QList<KoShape*> shapes;
     QList<QSizeF> previousSizes, newSizes;
@@ -41,11 +42,13 @@ KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSiz
     setText(i18n( "Resize shapes" ));
 }
 
-KoShapeSizeCommand::~KoShapeSizeCommand() {
+KoShapeSizeCommand::~KoShapeSizeCommand()
+{
     delete d;
 }
 
-void KoShapeSizeCommand::redo () {
+void KoShapeSizeCommand::redo ()
+{
     QUndoCommand::redo();
     int i=0;
     foreach(KoShape *shape, d->shapes) {
@@ -55,7 +58,8 @@ void KoShapeSizeCommand::redo () {
     }
 }
 
-void KoShapeSizeCommand::undo () {
+void KoShapeSizeCommand::undo ()
+{
     QUndoCommand::undo();
     int i=0;
     foreach(KoShape *shape, d->shapes) {

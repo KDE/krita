@@ -37,10 +37,10 @@ KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas
 {
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if( ! isEditable( shape ) )
+        if ( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
-        if( m_selectedShapes.count() == 1 )
+        if ( m_selectedShapes.count() == 1 )
             m_initialBoundingRect = shape->boundingRect();
         else
             m_initialBoundingRect = m_initialBoundingRect.united( shape->boundingRect() );
@@ -48,17 +48,18 @@ KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas
     }
 }
 
-void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
+void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
+{
     QPointF center = m_initialBoundingRect.center();
     qreal angle = atan2( point.y() - center.y(), point.x() - center.x() ) -
         atan2( m_start.y() - center.y(), m_start.x() - center.x() );
     angle = angle / M_PI * 180;  // convert to degrees.
-    if(modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
+    if (modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
         // limit to 45 degree angles
         qreal modula = qAbs(angle);
         while(modula > 45.0)
             modula -= 45.0;
-        if(modula > 22.5)
+        if (modula > 22.5)
             modula -= 45.0;
         angle += (angle>0?-1:1)*modula;
     }
@@ -78,7 +79,8 @@ void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
 }
 
-void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
+void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+{
     SelectionDecorator decorator(KoFlake::NoHandle, true, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
@@ -93,7 +95,8 @@ void KoShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &con
     painter.drawEllipse( circle );
 }
 
-QUndoCommand* KoShapeRotateStrategy::createCommand() {
+QUndoCommand* KoShapeRotateStrategy::createCommand()
+{
     QList<QMatrix> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();

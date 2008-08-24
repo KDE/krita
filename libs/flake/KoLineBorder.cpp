@@ -29,7 +29,8 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 
-class KoLineBorder::Private {
+class KoLineBorder::Private
+{
 public:
     QColor color;
     QPen pen;
@@ -59,13 +60,14 @@ KoLineBorder::KoLineBorder(qreal lineWidth, const QColor &color)
     d->color = color;
 }
 
-KoLineBorder::~KoLineBorder() {
+KoLineBorder::~KoLineBorder()
+{
     delete d;
 }
 
 KoLineBorder& KoLineBorder::operator = ( const KoLineBorder &rhs )
 {
-    if( this == &rhs )
+    if ( this == &rhs )
         return *this;
 
     d->pen = rhs.d->pen;
@@ -97,7 +99,7 @@ void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
             dashStyle.addAttribute( "draw:dots1", static_cast<int>(1) );
             dashStyle.addAttributePt( "draw:dots1-length", dashes[0]*lineWidth() );
             dashStyle.addAttributePt( "draw:distance", dashes[1]*lineWidth() );
-            if( dashes.size() > 2 )
+            if ( dashes.size() > 2 )
             {
                 dashStyle.addAttribute( "draw:dots2", static_cast<int>(1) );
                 dashStyle.addAttributePt( "draw:dots2-length", dashes[2]*lineWidth() );
@@ -129,10 +131,11 @@ void KoLineBorder::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
     }
 }
 
-void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
+void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets)
+{
     Q_UNUSED(shape);
     qreal lineWidth = d->pen.widthF();
-    if(lineWidth < 0)
+    if (lineWidth < 0)
          lineWidth = 1;
     lineWidth /= 2; // since we draw a line half inside, and half outside the object.
     insets.top = lineWidth;
@@ -141,16 +144,18 @@ void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) {
     insets.right = lineWidth;
 }
 
-bool KoLineBorder::hasTransparency() {
+bool KoLineBorder::hasTransparency()
+{
     return d->color.alpha() > 0;
 }
 
-void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) {
+void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+{
     KoShape::applyConversion( painter, converter );
 
     QPen pen = d->pen;
 
-    if( d->brush.gradient() )
+    if ( d->brush.gradient() )
         pen.setBrush( d->brush );
     else
         pen.setColor(d->color);
@@ -158,35 +163,43 @@ void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewCo
     painter.strokePath( shape->outline(), pen );
 }
 
-void KoLineBorder::setCapStyle( Qt::PenCapStyle style ) {
+void KoLineBorder::setCapStyle( Qt::PenCapStyle style )
+{
     d->pen.setCapStyle( style );
 }
 
-Qt::PenCapStyle KoLineBorder::capStyle() const {
+Qt::PenCapStyle KoLineBorder::capStyle() const
+{
     return d->pen.capStyle();
 }
 
-void KoLineBorder::setJoinStyle( Qt::PenJoinStyle style ) {
+void KoLineBorder::setJoinStyle( Qt::PenJoinStyle style )
+{
     d->pen.setJoinStyle( style );
 }
 
-Qt::PenJoinStyle KoLineBorder::joinStyle() const {
+Qt::PenJoinStyle KoLineBorder::joinStyle() const
+{
     return d->pen.joinStyle();
 }
 
-void KoLineBorder::setLineWidth( qreal lineWidth ) {
+void KoLineBorder::setLineWidth( qreal lineWidth )
+{
     d->pen.setWidthF( qMax(0.0,lineWidth) );
 }
 
-qreal KoLineBorder::lineWidth() const {
+qreal KoLineBorder::lineWidth() const
+{
     return d->pen.widthF();
 }
 
-void KoLineBorder::setMiterLimit( qreal miterLimit ) {
+void KoLineBorder::setMiterLimit( qreal miterLimit )
+{
     d->pen.setMiterLimit( miterLimit );
 }
 
-qreal KoLineBorder::miterLimit() const {
+qreal KoLineBorder::miterLimit() const
+{
     return d->pen.miterLimit();
 }
 
@@ -202,7 +215,7 @@ void KoLineBorder::setColor( const QColor & color )
 
 void KoLineBorder::setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes )
 {
-    if( style < Qt::CustomDashLine )
+    if ( style < Qt::CustomDashLine )
         d->pen.setStyle( style );
     else
         d->pen.setDashPattern( dashes );

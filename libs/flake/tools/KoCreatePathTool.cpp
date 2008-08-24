@@ -88,7 +88,7 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
         // paint the first point
 
         // check if we have to color the first point
-        if( m_mouseOverFirstPoint )
+        if ( m_mouseOverFirstPoint )
             painter.setBrush( Qt::red ); // //TODO make configurable
         else
             painter.setBrush( Qt::white ); //TODO make configurable
@@ -106,7 +106,7 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KoCreatePathTool::mousePressEvent( KoPointerEvent *event )
 {
-    if( (event->buttons() & Qt::RightButton) && m_shape )
+    if ( (event->buttons() & Qt::RightButton) && m_shape )
     {
         // repaint the shape before removing the last point
         m_canvas->updateCanvas( m_shape->boundingRect() );
@@ -213,7 +213,7 @@ void KoCreatePathTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
 {
-    if( event->key() == Qt::Key_Escape )
+    if ( event->key() == Qt::Key_Escape )
         emit done();
     else
         event->ignore();
@@ -232,7 +232,7 @@ void KoCreatePathTool::activate( bool temporary )
 void KoCreatePathTool::deactivate()
 {
     m_canvas->snapGuide()->reset();
-    if( m_shape )
+    if ( m_shape )
     {
         m_canvas->updateCanvas( handleRect( m_firstPoint->point() ) );
         m_canvas->updateCanvas( m_shape->boundingRect() );
@@ -328,7 +328,8 @@ void KoCreatePathTool::repaintActivePoint()
     m_canvas->updateCanvas( rect );
 }
 
-QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets() {
+QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
+{
     QMap<QString, QWidget *> map;
     SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_canvas->snapGuide());
     map.insert(i18n("Snapping"), widget);

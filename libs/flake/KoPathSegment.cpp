@@ -45,12 +45,12 @@ KoPathSegment::KoPathSegment( KoPathPoint * first, KoPathPoint * second )
 KoPathSegment::KoPathSegment( const KoPathSegment & segment )
     : d( new Private(0,0) )
 {
-   if( ! segment.first() || segment.first()->parent() )
+   if ( ! segment.first() || segment.first()->parent() )
        setFirst( segment.first() );
    else
        setFirst( new KoPathPoint( *segment.first() ) );
 
-   if( ! segment.second() || segment.second()->parent() )
+   if ( ! segment.second() || segment.second()->parent() )
        setSecond( segment.second() );
    else
        setSecond( new KoPathPoint( *segment.second() ) );
@@ -82,15 +82,15 @@ KoPathSegment::KoPathSegment( const QPointF &p0, const QPointF &p1, const QPoint
 
 KoPathSegment & KoPathSegment::operator=( const KoPathSegment &rhs )
 {
-    if( this == &rhs )
+    if ( this == &rhs )
         return (*this);
 
-    if( ! rhs.first() || rhs.first()->parent() )
+    if ( ! rhs.first() || rhs.first()->parent() )
         setFirst( rhs.first() );
     else
         setFirst( new KoPathPoint( *rhs.first() ) );
 
-    if( ! rhs.second() || rhs.second()->parent() )
+    if ( ! rhs.second() || rhs.second()->parent() )
         setSecond( rhs.second() );
     else
         setSecond( new KoPathPoint( *rhs.second() ) );
@@ -100,9 +100,9 @@ KoPathSegment & KoPathSegment::operator=( const KoPathSegment &rhs )
 
 KoPathSegment::~KoPathSegment()
 {
-    if( d->first && ! d->first->parent() )
+    if ( d->first && ! d->first->parent() )
         delete d->first;
-    if( d->second && ! d->second->parent() )
+    if ( d->second && ! d->second->parent() )
         delete d->second;
     delete d;
 }
@@ -114,7 +114,7 @@ KoPathPoint * KoPathSegment::first() const
 
 void KoPathSegment::setFirst( KoPathPoint * first )
 {
-    if( d->first && ! d->first->parent() )
+    if ( d->first && ! d->first->parent() )
         delete d->first;
     d->first = first;
 }
@@ -126,7 +126,7 @@ KoPathPoint * KoPathSegment::second() const
 
 void KoPathSegment::setSecond( KoPathPoint * second )
 {
-    if( d->second && ! d->second->parent() )
+    if ( d->second && ! d->second->parent() )
         delete d->second;
     d->second = second;
 }
@@ -138,11 +138,11 @@ bool KoPathSegment::isValid() const
 
 bool KoPathSegment::operator == ( const KoPathSegment &rhs ) const
 {
-    if( ! isValid() && ! rhs.isValid() )
+    if ( ! isValid() && ! rhs.isValid() )
         return true;
-    if( isValid() && ! rhs.isValid() )
+    if ( isValid() && ! rhs.isValid() )
         return false;
-    if( ! isValid() && rhs.isValid() )
+    if ( ! isValid() && rhs.isValid() )
         return false;
 
     return ( *first() == *rhs.first() &&  *second() == *rhs.second() );
@@ -150,24 +150,24 @@ bool KoPathSegment::operator == ( const KoPathSegment &rhs ) const
 
 int KoPathSegment::degree() const
 {
-    if( ! isValid() )
+    if ( ! isValid() )
         return -1;
 
     bool c1 = d->first->activeControlPoint2();
     bool c2 = d->second->activeControlPoint1();
-    if( ! c1 && ! c2 )
+    if ( ! c1 && ! c2 )
         return 1;
-    if( c1 && c2 )
+    if ( c1 && c2 )
         return 3;
     return 2;
 }
 
 QPointF KoPathSegment::pointAt( qreal t ) const
 {
-    if( ! isValid() )
+    if ( ! isValid() )
         return QPointF();
 
-    if( degree() == 1 )
+    if ( degree() == 1 )
     {
         return d->first->point() + t * ( d->second->point() - d->first->point() );
     }
@@ -183,7 +183,7 @@ QPointF KoPathSegment::pointAt( qreal t ) const
 
 QRectF KoPathSegment::controlPointRect() const
 {
-    if( ! isValid() )
+    if ( ! isValid() )
         return QRectF();
 
     QList<QPointF> points = controlPoints();
@@ -196,12 +196,12 @@ QRectF KoPathSegment::controlPointRect() const
         bbox.setBottom( qMax( bbox.bottom(), p.y() ) );
     }
 
-    if( degree() == 1 )
+    if ( degree() == 1 )
     {
         // adjust bounding rect of horizontal and vertical lines
-        if( bbox.height() == 0.0 )
+        if ( bbox.height() == 0.0 )
             bbox.setHeight( 0.1 );
-        if( bbox.width() == 0.0 )
+        if ( bbox.width() == 0.0 )
             bbox.setWidth( 0.1 );
     }
 
@@ -210,17 +210,17 @@ QRectF KoPathSegment::controlPointRect() const
 
 QRectF KoPathSegment::boundingRect() const
 {
-    if( ! isValid() )
+    if ( ! isValid() )
         return QRectF();
 
     QRectF rect = QRectF( d->first->point(), d->second->point() ).normalized();
 
-    if( degree() == 1 )
+    if ( degree() == 1 )
     {
         // adjust bounding rect of horizontal and vertical lines
-        if( rect.height() == 0.0 )
+        if ( rect.height() == 0.0 )
             rect.setHeight( 0.1 );
-        if( rect.width() == 0.0 )
+        if ( rect.width() == 0.0 )
             rect.setWidth( 0.1 );
     }
     else
@@ -232,7 +232,7 @@ QRectF KoPathSegment::boundingRect() const
          */
         foreach( qreal t, extrema() )
         {
-            if( t >= 0.0 && t <= 1.0 )
+            if ( t >= 0.0 && t <= 1.0 )
             {
                 QPointF p = pointAt( t );
                 rect.setLeft( qMin( rect.left(), p.x() ) );
@@ -253,7 +253,7 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
 
     QList<QPointF> isects;
 
-    if( ! isValid() || ! segment.isValid() )
+    if ( ! isValid() || ! segment.isValid() )
         return isects;
 
     int degree1 = degree();
@@ -263,14 +263,14 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
     QRectF otherBound = segment.boundingRect();
     //kDebug(30006) << "my boundingRect =" << myBound;
     //kDebug(30006) << "other boundingRect =" << otherBound;
-    if( ! myBound.intersects( otherBound ) )
+    if ( ! myBound.intersects( otherBound ) )
     {
         //kDebug(30006) << "segments do not intersect";
         return isects;
     }
 
     // short circuit lines intersection
-    if( degree1 == 1 && degree2 == 1 )
+    if ( degree1 == 1 && degree2 == 1 )
     {
         //kDebug(30006) << "intersecting two lines";
         isects += linesIntersection( segment );
@@ -280,15 +280,15 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
     // first calculate the fat line L by using the signed distances
     // of the control points from the chord
     qreal dmin, dmax;
-    if( degree1 == 1 )
+    if ( degree1 == 1 )
     {
         dmin = 0.0;
         dmax = 0.0;
     }
-    else if( degree1 == 2 )
+    else if ( degree1 == 2 )
     {
         qreal d1;
-        if( d->first->activeControlPoint2() )
+        if ( d->first->activeControlPoint2() )
             d1 = distanceFromChord( d->first->controlPoint2() );
         else
             d1 = distanceFromChord( d->second->controlPoint1() );
@@ -299,7 +299,7 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
     {
         qreal d1 = distanceFromChord( d->first->controlPoint2() );
         qreal d2 = distanceFromChord( d->second->controlPoint1() );
-        if( d1*d2 > 0.0 )
+        if ( d1*d2 > 0.0 )
         {
             dmin = 0.75 * qMin( 0.0, qMin( d1, d2 ) );
             dmax = 0.75 * qMax( 0.0, qMax( d1, d2 ) );
@@ -333,13 +333,13 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
     // now calculate the control points of D(t) by using the signed 
     // distances of P_i to our chord
     KoPathSegment dt;
-    if( degree2 == 1 )
+    if ( degree2 == 1 )
     {
         QPointF p0( 0.0, distanceFromChord( segment.first()->point() ) );
         QPointF p1( 1.0, distanceFromChord( segment.second()->point() ) );
         dt = KoPathSegment( p0, p1 );
     }
-    else if( degree2 == 2 )
+    else if ( degree2 == 2 )
     {
         QPointF p0( 0.0, distanceFromChord( segment.first()->point() ) );
         QPointF p1 = segment.first()->activeControlPoint2() 
@@ -348,7 +348,7 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
         QPointF p2( 1.0, distanceFromChord( segment.second()->point() ) );
         dt = KoPathSegment( p0, p1, p2 );
     }
-    else if( degree2 == 3 )
+    else if ( degree2 == 3 )
     {
         QPointF p0( 0.0, distanceFromChord( segment.first()->point() ) );
         QPointF p1( 1./3., distanceFromChord( segment.first()->controlPoint2() ) );
@@ -378,21 +378,21 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
         QPointF p2 = hull[(i+1)%hullCount];
         //kDebug(30006) << "intersecting hull edge (" << p1 << p2 << ")";
         // hull edge is completely above dmax
-        if( p1.y() > dmax && p2.y() > dmax )
+        if ( p1.y() > dmax && p2.y() > dmax )
             continue;
         // hull egde is completely below dmin
-        if( p1.y() < dmin && p2.y() < dmin )
+        if ( p1.y() < dmin && p2.y() < dmin )
             continue;
-        if( p1.x() == p2.x() )
+        if ( p1.x() == p2.x() )
         {
             // vertical edge
             bool dmaxIntersection = ( dmax < qMax(p1.y(), p2.y()) && dmax > qMin(p1.y(),p2.y()) );
             bool dminIntersection = ( dmin < qMax(p1.y(), p2.y()) && dmin > qMin(p1.y(),p2.y()) );
-            if( dmaxIntersection || dminIntersection )
+            if ( dmaxIntersection || dminIntersection )
             {
                 tmin = qMin( tmin, p1.x() );
                 tmax = qMax( tmax, p1.x() );
-                if( dmaxIntersection )
+                if ( dmaxIntersection )
                 {
                     intersectionsFoundMax = true;
                     //kDebug(30006) << "found intersection with dmax at " << p1.x() << "," << dmax;
@@ -404,12 +404,12 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
                 }
             }
         }
-        else if( p1.y() == p2.y() )
+        else if ( p1.y() == p2.y() )
         {
             // horizontal line
-            if( p1.y() == dmin || p1.y() == dmax )
+            if ( p1.y() == dmin || p1.y() == dmax )
             {
-                if( p1.y() == dmin )
+                if ( p1.y() == dmin )
                 {
                     intersectionsFoundMin = true;
                     //kDebug(30006) << "found intersection with dmin at " << p1.x() << "," << dmin;
@@ -434,7 +434,7 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
             qreal m = dy / dx;
             qreal n = p1.y() - m * p1.x();
             qreal t1 = (dmax - n) / m;
-            if( t1 >= 0.0 && t1 <= 1.0 )
+            if ( t1 >= 0.0 && t1 <= 1.0 )
             {
                 tmin = qMin( tmin, t1 );
                 tmax = qMax( tmax, t1 );
@@ -442,7 +442,7 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
                 //kDebug(30006) << "found intersection with dmax at " << t1 << "," << dmax;
             }
             qreal t2 = (dmin - n) / m;
-            if( t2 >= 0.0 && t2 < 1.0 )
+            if ( t2 >= 0.0 && t2 < 1.0 )
             {
                 tmin = qMin( tmin, t2 );
                 tmax = qMax( tmax, t2 );
@@ -454,17 +454,17 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
 
     bool intersectionsFound = intersectionsFoundMin && intersectionsFoundMax;
 
-    //if( intersectionsFound )
+    //if ( intersectionsFound )
     //    kDebug(30006) << "clipping segment to interval [" << tmin << "," << tmax << "]";
 
-    if( ! intersectionsFound || (1.0-(tmax-tmin)) <= 0.2 )
+    if ( ! intersectionsFound || (1.0-(tmax-tmin)) <= 0.2 )
     {
         //kDebug(30006) << "could not clip enough -> split segment";
         // we could not reduce the interval significantly
         // so split the curve and calculate intersections
         // with the remaining parts
         QPair<KoPathSegment,KoPathSegment> parts = splitAt( 0.5 );
-        if( chordLength() < 1e-5 )
+        if ( chordLength() < 1e-5 )
             isects += parts.first.second()->point();
         else
         {
@@ -472,7 +472,7 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
             isects += segment.intersections( parts.second );
         }
     }
-    else if( qAbs(tmin - tmax) < 1e-5 )
+    else if ( qAbs(tmin - tmax) < 1e-5 )
     {
         //kDebug(30006) << "Yay, we found an intersection";
         // the inteval is pretty small now, just calculate the intersection at this point
@@ -493,7 +493,7 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
 
 KoPathSegment KoPathSegment::mapped( const QMatrix &matrix ) const
 {
-    if( ! isValid() )
+    if ( ! isValid() )
         return *this;
 
     KoPathPoint * p1 = new KoPathPoint( *d->first );
@@ -506,18 +506,18 @@ KoPathSegment KoPathSegment::mapped( const QMatrix &matrix ) const
 
 KoPathSegment KoPathSegment::toCubic() const
 {
-    if( ! isValid() )
+    if ( ! isValid() )
         return KoPathSegment();
 
     KoPathPoint * p1 = new KoPathPoint( *d->first );
     KoPathPoint * p2 = new KoPathPoint( *d->second );
 
-    if( degree() == 1 )
+    if ( degree() == 1 )
     {
         p1->setControlPoint2( p1->point() + 0.3 * ( p2->point() - p1->point() ) );
         p2->setControlPoint1( p2->point() + 0.3 * ( p1->point() - p2->point() ) );
     }
-    else if( degree() == 2 )
+    else if ( degree() == 2 )
     {
         /* quadric bezier (a0,a1,a2) to cubic bezier (b0,b1,b2,b3):
         *
@@ -565,7 +565,7 @@ qreal KoPathSegment::length( qreal error ) const
 
     int deg = degree();
 
-    if( deg == -1 )
+    if ( deg == -1 )
         return 0.0;
 
     QList<QPointF> ctrlPoints = controlPoints();
@@ -573,7 +573,7 @@ qreal KoPathSegment::length( qreal error ) const
     // calculate chord length
     qreal chordLen = chordLength();
 
-    if( deg == 1 )
+    if ( deg == 1 )
     {
         return chordLen;
     }
@@ -587,7 +587,7 @@ qreal KoPathSegment::length( qreal error ) const
         polyLength += sqrt( ctrlSegment.x()*ctrlSegment.x() + ctrlSegment.y()*ctrlSegment.y() );
     }
 
-    if( (polyLength-chordLen) > error )
+    if ( (polyLength-chordLen) > error )
     {
         // the error is still bigger than our tolerance -> split segment
         QPair<KoPathSegment,KoPathSegment> parts = splitAt( 0.5 );
@@ -596,7 +596,7 @@ qreal KoPathSegment::length( qreal error ) const
     else
     {
         // the error is smaller than our tolerance
-        if( deg == 3 )
+        if ( deg == 3 )
             return 0.5 * chordLen + 0.5 * polyLength;
         else
             return (2.0 * chordLen + polyLength) / 3.0;
@@ -605,9 +605,9 @@ qreal KoPathSegment::length( qreal error ) const
 
 qreal KoPathSegment::lengthAt( qreal t, qreal error ) const
 {
-    if( t == 0.0 )
+    if ( t == 0.0 )
         return 0.0;
-    if( t == 1.0 )
+    if ( t == 1.0 )
         return length( error );
 
     QPair<KoPathSegment,KoPathSegment> parts = splitAt( t );
@@ -617,12 +617,12 @@ qreal KoPathSegment::lengthAt( qreal t, qreal error ) const
 qreal KoPathSegment::paramAtLength( qreal length, qreal tolerance ) const
 {
     int deg = degree();
-    if( deg < 1 )
+    if ( deg < 1 )
         return 0.0;
-    if( length <= 0.0 )
+    if ( length <= 0.0 )
         return 0.0;
 
-    if( deg == 1 )
+    if ( deg == 1 )
         return length / chordLength();
 
     qreal startT = 0.0; // interval start
@@ -632,7 +632,7 @@ qreal KoPathSegment::paramAtLength( qreal length, qreal tolerance ) const
     qreal midLength = lengthAt( 0.5 );
     while( qAbs( midLength - length ) / length > tolerance )
     {
-        if( midLength < length )
+        if ( midLength < length )
             startT = midT;
         else
             endT = midT;
@@ -656,7 +656,7 @@ bool KoPathSegment::isFlat( qreal tolerance ) const
      * The curve points at the extrema are then used to 
      * calculate the height.
      */
-    if( degree() <= 1 )
+    if ( degree() <= 1 )
         return true;
 
     QPointF chord = d->second->point() - d->first->point();
@@ -674,7 +674,7 @@ bool KoPathSegment::isFlat( qreal tolerance ) const
 
     foreach( qreal t, s.extrema() )
     {
-        if( t >= 0.0 && t <= 1.0 )
+        if ( t >= 0.0 && t <= 1.0 )
         {
             QPointF p = pointAt( t );
             qreal dist = s.distanceFromChord( p );
@@ -703,7 +703,7 @@ qreal KoPathSegment::distanceFromChord( const QPointF &point ) const
     qreal distance = sqrt( diffVec.x()*diffVec.x() + diffVec.y() * diffVec.y() );
 
     // determine sign of the distance using the cross product
-    if( chord.x()*relPoint.y() - chord.y()*relPoint.x() > 0 )
+    if ( chord.x()*relPoint.y() - chord.y()*relPoint.x() > 0 )
     {
         return distance;
     }
@@ -723,13 +723,13 @@ QList<QPointF> KoPathSegment::convexHull() const
 {
     QList<QPointF> hull;
     int deg = degree();
-    if( deg == 1 )
+    if ( deg == 1 )
     {
         // easy just the two end points
         hull.append( d->first->point() );
         hull.append( d->second->point() );
     }
-    else if( deg == 2 )
+    else if ( deg == 2 )
     {
         // we want to have a counter-clockwise oriented triangle
         // of the three control points
@@ -739,13 +739,13 @@ QList<QPointF> KoPathSegment::convexHull() const
         // check on which side of the chord the control point is
         bool pIsRight = (chord.x()*relP.y() - chord.y()*relP.x() > 0 );
         hull.append( d->first->point() );
-        if( pIsRight )
+        if ( pIsRight )
             hull.append( cp );
         hull.append( d->second->point() );
-        if( ! pIsRight )
+        if ( ! pIsRight )
             hull.append( cp );
     }
-    else if( deg == 3 )
+    else if ( deg == 3 )
     {
         // we want a counter-clockwise oriented polygon
         QPointF chord = d->second->point() - d->first->point();
@@ -753,10 +753,10 @@ QList<QPointF> KoPathSegment::convexHull() const
         // check on which side of the chord the control points are
         bool p1IsRight = (chord.x()*relP1.y() - chord.y()*relP1.x() > 0 );
         hull.append( d->first->point() );
-        if( p1IsRight )
+        if ( p1IsRight )
             hull.append( d->first->controlPoint2() );
         hull.append( d->second->point() );
-        if( ! p1IsRight )
+        if ( ! p1IsRight )
             hull.append( d->first->controlPoint2() );
 
         // now we have a counter-clockwise triangle with the points i,j,k
@@ -774,21 +774,21 @@ QList<QPointF> KoPathSegment::convexHull() const
             int prev = (3+i-1)%3;
             int next = (i+1)%3;
             // check if point is only right of the n-th edge
-            if( ! rightOfEdge[prev] && rightOfEdge[i] && ! rightOfEdge[next] )
+            if ( ! rightOfEdge[prev] && rightOfEdge[i] && ! rightOfEdge[next] )
             {
                 // insert by breaking the n-th edge
                 hull.insert( i+1, lastPoint );
                 break;
             }
             // check if it is right of the n-th and right of the (n+1)-th edge
-            if( rightOfEdge[i] && rightOfEdge[next] )
+            if ( rightOfEdge[i] && rightOfEdge[next] )
             {
                 // remove both edge, insert two new edges
                 hull[i+1] = lastPoint;
                 break;
             }
             // check if it is right of n-th and right of (n-1)-th edge
-            if( rightOfEdge[i] && rightOfEdge[prev] )
+            if ( rightOfEdge[i] && rightOfEdge[prev] )
             {
                 hull[i] = lastPoint;
                 break;
@@ -802,10 +802,10 @@ QList<QPointF> KoPathSegment::convexHull() const
 QPair<KoPathSegment, KoPathSegment> KoPathSegment::splitAt( qreal t ) const
 {
     QPair<KoPathSegment,KoPathSegment> results;
-    if( ! isValid() )
+    if ( ! isValid() )
         return results;
 
-    if( degree() == 1 )
+    if ( degree() == 1 )
     {
         QPointF p = d->first->point() + t * ( d->second->point() - d->first->point());
         results.first = KoPathSegment( d->first->point(), p );
@@ -817,7 +817,7 @@ QPair<KoPathSegment, KoPathSegment> KoPathSegment::splitAt( qreal t ) const
 
         deCasteljau( t, &newCP2, &splitCP1, &splitP, &splitCP2, &newCP1 );
 
-        if( degree() == 2 )
+        if ( degree() == 2 )
         {
             results.first = KoPathSegment( d->first->point(), splitCP1, splitP );
             results.second = KoPathSegment( splitP, splitCP2, d->second->point() );
@@ -838,11 +838,11 @@ void KoPathSegment::deCasteljau( qreal t, QPointF *p1, QPointF *p2, QPointF *p3,
     QPointF q[4];
 
     q[0] = d->first->point();
-    if( deg == 2 )
+    if ( deg == 2 )
     {
         q[1] = d->first->activeControlPoint2() ? d->first->controlPoint2() : d->second->controlPoint1();
     }
-    else if( deg == 3 )
+    else if ( deg == 3 )
     {
         q[1] = d->first->controlPoint2();
         q[2] = d->second->controlPoint1();
@@ -862,26 +862,26 @@ void KoPathSegment::deCasteljau( qreal t, QPointF *p1, QPointF *p2, QPointF *p3,
         p[j - 1] = q[0];
     }
 
-    if( deg == 2 )
+    if ( deg == 2 )
     {
-        if( p2 )
+        if ( p2 )
             *p2 = p[0];
-        if( p3 )
+        if ( p3 )
             *p3 = p[1];
-        if( p4 )
+        if ( p4 )
             *p4 = q[1];
     }
-    else if( deg == 3 )
+    else if ( deg == 3 )
     {
-        if( p1 )
+        if ( p1 )
             *p1 = p[0];
-        if( p2 )
+        if ( p2 )
             *p2 = p[1];
-        if( p3 )
+        if ( p3 )
             *p3 = p[2];
-        if( p4 )
+        if ( p4 )
             *p4 = q[1];
-        if( p5 )
+        if ( p5 )
             *p5 = q[2];
     }
 }
@@ -890,9 +890,9 @@ QList<QPointF> KoPathSegment::controlPoints() const
 {
     QList<QPointF> controlPoints;
     controlPoints.append( d->first->point() );
-    if( d->first->activeControlPoint2() )
+    if ( d->first->activeControlPoint2() )
         controlPoints.append( d->first->controlPoint2() );
-    if( d->second->activeControlPoint1() )
+    if ( d->second->activeControlPoint1() )
         controlPoints.append( d->second->controlPoint1() );
     controlPoints.append( d->second->point() );
 
@@ -923,7 +923,7 @@ QList<QPointF> KoPathSegment::linesIntersection( const KoPathSegment &segment ) 
     qreal denom = (B.x()-A.x())*(D.y()-C.y()) - (B.y()-A.y())*(D.x()-C.x());
     qreal num_r = (A.y()-C.y())*(D.x()-C.x())-(A.x()-C.x())*(D.y()-C.y());
         // check if lines are collinear
-    if( denom == 0.0 && num_r == 0.0 )
+    if ( denom == 0.0 && num_r == 0.0 )
         return isects;
 
     qreal num_s = (A.y()-C.y())*(B.x()-A.x())-(A.x()-C.x())*(B.y()-A.y());
@@ -931,9 +931,9 @@ QList<QPointF> KoPathSegment::linesIntersection( const KoPathSegment &segment ) 
     qreal s = num_s / denom;
 
         // check if intersection is inside our line segments
-    if( r < 0.0 || r > 1.0 )
+    if ( r < 0.0 || r > 1.0 )
         return isects;
-    if( s < 0.0 || s > 1.0 )
+    if ( s < 0.0 || s > 1.0 )
         return isects;
 
         // calculate the actual intersection point
@@ -945,7 +945,7 @@ QList<QPointF> KoPathSegment::linesIntersection( const KoPathSegment &segment ) 
 QList<qreal> KoPathSegment::extrema() const
 {
     int deg = degree();
-    if( deg <= 1 )
+    if ( deg <= 1 )
         return QList<qreal>();
 
     QList<qreal> params;
@@ -963,7 +963,7 @@ QList<qreal> KoPathSegment::extrema() const
      * successive control points lets us find the parameters t, where the original
      * bezier curve has a minimum or a maximum.
      */
-    if( deg == 2 )
+    if ( deg == 2 )
     {
         /*
          * For quadratic bezier curves r(t) is a linear Bezier curve:
@@ -987,12 +987,12 @@ QList<qreal> KoPathSegment::extrema() const
         QPointF a = x1 - x0;
         QPointF c = x0;
 
-        if( a.x() != 0.0 )
+        if ( a.x() != 0.0 )
             params.append( -c.x() / a.x() );
-        if( a.y() != 0.0 )
+        if ( a.y() != 0.0 )
             params.append( -c.y() / a.y() );
     }
-    else if( deg == 3 )
+    else if ( deg == 3 )
     {
         /*
          * For cubic bezier curves r(t) is a quadratic Bezier curve:
@@ -1017,28 +1017,28 @@ QList<qreal> KoPathSegment::extrema() const
         QPointF c = x0;
 
         // calculating parameter t at minimum/maximum in x-direction
-        if( a.x() == 0.0 )
+        if ( a.x() == 0.0 )
         {
             params.append( - c.x() / b.x() );
         }
         else
         {
             qreal rx = b.x()*b.x() - 4.0*a.x()*c.x();
-            if( rx < 0.0 )
+            if ( rx < 0.0 )
                 rx = 0.0;
             params.append( ( -b.x() + sqrt( rx ) ) / ( 2.0*a.x() ) );
             params.append( ( -b.x() - sqrt( rx ) ) / ( 2.0*a.x() ) );
         }
 
         // calculating parameter t at minimum/maximum in y-direction
-        if( a.y() == 0.0 )
+        if ( a.y() == 0.0 )
         {
             params.append( - c.y() / b.y() );
         }
         else
         {
             qreal ry = b.y()*b.y() - 4.0*a.y()*c.y();
-            if( ry < 0.0 )
+            if ( ry < 0.0 )
                 ry = 0.0;
             params.append( ( -b.y() + sqrt( ry ) ) / ( 2.0*a.y() ) );
             params.append( ( -b.y() - sqrt( ry ) ) / ( 2.0*a.y() ) );
@@ -1052,19 +1052,19 @@ void KoPathSegment::printDebug() const
 {
     int deg = degree();
     kDebug(30006) << "degree:" << deg;
-    if( deg < 1 )
+    if ( deg < 1 )
         return;
 
     kDebug(30006) << "P0:" << d->first->point();
-    if( deg == 2 )
+    if ( deg == 2 )
     {
-        if( d->first->activeControlPoint2() )
+        if ( d->first->activeControlPoint2() )
             kDebug(30006) << "P1:" << d->first->controlPoint2();
         else
             kDebug(30006) << "P1:" << d->second->controlPoint1();
         kDebug(30006) << "P2:" << d->second->point();
     }
-    else if( deg == 3 )
+    else if ( deg == 3 )
     {
         kDebug(30006) << "P1:" << d->first->controlPoint2();
         kDebug(30006) << "P2:" << d->second->controlPoint1();

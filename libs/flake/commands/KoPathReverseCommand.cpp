@@ -33,7 +33,7 @@ public:
 
     void reverse()
     {
-        if( ! paths.size() )
+        if ( ! paths.size() )
             return;
 
         foreach( KoPathShape* shape, paths )

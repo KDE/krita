@@ -22,7 +22,8 @@
 
 #include <klocale.h>
 
-class KoShapeMoveCommand::Private {
+class KoShapeMoveCommand::Private
+{
 public:
     QList<KoShape*> shapes;
     QList<QPointF> previousPositions, newPositions;
@@ -41,11 +42,13 @@ KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPoi
     setText( i18n( "Move shapes" ) );
 }
 
-KoShapeMoveCommand::~KoShapeMoveCommand() {
+KoShapeMoveCommand::~KoShapeMoveCommand()
+{
     delete d;
 }
 
-void KoShapeMoveCommand::redo() {
+void KoShapeMoveCommand::redo()
+{
     QUndoCommand::redo();
     for(int i=0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
@@ -54,7 +57,8 @@ void KoShapeMoveCommand::redo() {
     }
 }
 
-void KoShapeMoveCommand::undo() {
+void KoShapeMoveCommand::undo()
+{
     QUndoCommand::undo();
     for(int i=0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
@@ -64,6 +68,7 @@ void KoShapeMoveCommand::undo() {
 }
 
 /// update newPositions list with new postions.
-void KoShapeMoveCommand::setNewPositions(QList<QPointF> newPositions) {
+void KoShapeMoveCommand::setNewPositions(QList<QPointF> newPositions)
+{
     d->newPositions = newPositions;
 }

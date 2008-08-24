@@ -26,7 +26,8 @@
 #include <KDebug>
 #include <kmimetype.h>
 
-class KoImageCollection::Private {
+class KoImageCollection::Private
+{
 public:
     QList<KoImageData*> images;
 };
@@ -36,32 +37,36 @@ KoImageCollection::KoImageCollection()
 {
 }
 
-KoImageCollection::~KoImageCollection() {
+KoImageCollection::~KoImageCollection()
+{
     delete d;
 }
 
-void KoImageCollection::addImage(KoImageData *image) {
+void KoImageCollection::addImage(KoImageData *image)
+{
     d->images.append(new KoImageData(*image));
 }
 
-void KoImageCollection::removeImage(KoImageData *image) {
+void KoImageCollection::removeImage(KoImageData *image)
+{
     foreach(KoImageData *data, d->images) {
-        if(data->operator==(*image)) {
+        if (data->operator==(*image)) {
             d->images.removeAll(data);
             delete data;
         }
     }
 }
 
-bool KoImageCollection::completeLoading(KoStore *store) {
+bool KoImageCollection::completeLoading(KoStore *store)
+{
     foreach(KoImageData *image, d->images) {
-        if(! store->open(image->storeHref())) {
+        if (! store->open(image->storeHref())) {
             kWarning(30006) << "open image " << image->storeHref() << "failed";
             return false;
         }
         bool ok = image->loadFromFile(new KoStoreDevice(store));
         store->close();
-        if(! ok) {
+        if (! ok) {
             kWarning(30006) << "load image " << image->storeHref() << "failed";
             return false;
         }
@@ -69,15 +74,16 @@ bool KoImageCollection::completeLoading(KoStore *store) {
     return true;
 }
 
-bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter ) {
+bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter )
+{
     foreach(KoImageData *image, d->images) {
-        if(image->isTaggedForSaving())
+        if (image->isTaggedForSaving())
         {
-            if(! store->open(image->storeHref()))
+            if (! store->open(image->storeHref()))
                 return false;
             bool ok = image->saveToFile(new KoStoreDevice(store));
             store->close();
-            if(! ok)
+            if (! ok)
                 return false;
             const QString mimetype( KMimeType::findByPath( image->storeHref(), 0 ,true )->name() );
             manifestWriter->addManifestEntry( image->storeHref(), mimetype );

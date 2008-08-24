@@ -52,13 +52,13 @@ public:
     QSizeF targetSize()
     {
         QSizeF size = imageData->imageSize();
-        if( targetImageSizePercent.width() > 0.0 )
+        if ( targetImageSizePercent.width() > 0.0 )
             size.setWidth( 0.01 * targetImageSizePercent.width() * size.width() );
-        else if( targetImageSize.width() > 0.0 )
+        else if ( targetImageSize.width() > 0.0 )
             size.setWidth( targetImageSize.width() );
-        if( targetImageSizePercent.height() > 0.0 )
+        if ( targetImageSizePercent.height() > 0.0 )
             size.setHeight( 0.01 * targetImageSizePercent.height() * size.height() );
-        else if( targetImageSize.height() > 0.0 )
+        else if ( targetImageSize.height() > 0.0 )
             size.setHeight( targetImageSize.height() );
 
         return size;
@@ -107,9 +107,9 @@ public:
             default:
                 break;
         }
-        if( refPointOffsetPercent.x() > 0.0 )
+        if ( refPointOffsetPercent.x() > 0.0 )
             offset += QPointF( 0.01 * refPointOffsetPercent.x() * imageSize.width(), 0 );
-        if( refPointOffsetPercent.y() > 0.0 )
+        if ( refPointOffsetPercent.y() > 0.0 )
             offset += QPointF( 0, 0.01 * refPointOffsetPercent.y() * imageSize.height() );
 
         return offset;
@@ -150,17 +150,17 @@ QMatrix KoPatternBackground::matrix() const
 
 void KoPatternBackground::setPattern( const QImage &pattern )
 {
-    if( d->imageData )
+    if ( d->imageData )
         delete d->imageData;
 
     d->imageData = new KoImageData( d->imageCollection );
-    if( d->imageData )
+    if ( d->imageData )
         d->imageData->setImage( pattern );
 }
 
 QImage KoPatternBackground::pattern()
 {
-    if( d->imageData )
+    if ( d->imageData )
         return d->imageData->image();
     return QImage();
 }
@@ -226,7 +226,7 @@ QSizeF KoPatternBackground::patternOriginalSize() const
 
 KoPatternBackground& KoPatternBackground::operator = ( const KoPatternBackground &rhs )
 {
-    if( this == &rhs )
+    if ( this == &rhs )
         return *this;
 
     d->matrix = rhs.d->matrix;
@@ -238,13 +238,13 @@ KoPatternBackground& KoPatternBackground::operator = ( const KoPatternBackground
     d->tileRepeatOffsetPercent = rhs.d->tileRepeatOffsetPercent;
     d->imageCollection = rhs.d->imageCollection;
 
-    if( d->imageData )
+    if ( d->imageData )
     {
         delete d->imageData;
         d->imageData = 0;
     }
 
-    if( rhs.d->imageData )
+    if ( rhs.d->imageData )
     {
         d->imageData = new KoImageData( *(rhs.d->imageData) );
     }
@@ -258,12 +258,12 @@ KoPatternBackground& KoPatternBackground::operator = ( const KoPatternBackground
 
 void KoPatternBackground::paint( QPainter &painter, const QPainterPath &fillPath ) const
 {
-    if( ! d->imageData )
+    if ( ! d->imageData )
         return;
 
     painter.save();
 
-    if( d->repeat == Tiled )
+    if ( d->repeat == Tiled )
     {
         // calculate scaling of pixmap
         QSizeF targetSize = d->targetSize();
@@ -287,7 +287,7 @@ void KoPatternBackground::paint( QPainter &painter, const QPainterPath &fillPath
         painter.setWorldMatrix( matrix, true );
         painter.drawTiledPixmap( targetRect, d->imageData->pixmap(), -offset );
     }
-    else if( d->repeat == Original )
+    else if ( d->repeat == Original )
     {
         QRectF sourceRect = QRectF( QPoint(0,0), d->imageData->pixmap().size() );
         QRectF targetRect = QRectF( QPoint(0,0), d->targetSize() );
@@ -295,7 +295,7 @@ void KoPatternBackground::paint( QPainter &painter, const QPainterPath &fillPath
         painter.setClipPath( fillPath );
         painter.drawPixmap( targetRect, d->imageData->pixmap(), sourceRect );
     }
-    else if( d->repeat == Stretched )
+    else if ( d->repeat == Stretched )
     {
         QRectF sourceRect = QRectF( QPoint(0,0), d->imageData->pixmap().size() );
         QRectF targetRect = fillPath.boundingRect();
@@ -308,7 +308,7 @@ void KoPatternBackground::paint( QPainter &painter, const QPainterPath &fillPath
 
 void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
 {
-    if( ! d->imageData )
+    if ( ! d->imageData )
         return;
 
     switch( d->repeat )
@@ -324,7 +324,7 @@ void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &co
             break;
     }
 
-    if( d->repeat == Tiled )
+    if ( d->repeat == Tiled )
     {
         QString refPointId = "top-left";
         switch( d->refPoint )
@@ -340,19 +340,19 @@ void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &co
             case BottomRight: refPointId = "bottom-right"; break;
         }
         style.addProperty( "draw:fill-image-ref-point", refPointId );
-        if( d->refPointOffsetPercent.x() > 0.0 )
+        if ( d->refPointOffsetPercent.x() > 0.0 )
             style.addProperty( "draw:fill-image-ref-point-x", QString("%1%").arg( d->refPointOffsetPercent.x() ) );
-        if( d->refPointOffsetPercent.y() > 0.0 )
+        if ( d->refPointOffsetPercent.y() > 0.0 )
             style.addProperty( "draw:fill-image-ref-point-y", QString("%1%").arg( d->refPointOffsetPercent.y() ) );
     }
 
-    if( d->repeat != Stretched )
+    if ( d->repeat != Stretched )
     {
         QSizeF targetSize = d->targetSize();
         QSizeF imageSize = d->imageData->imageSize();
-        if( targetSize.height() != imageSize.height() )
+        if ( targetSize.height() != imageSize.height() )
             style.addAttribute( "draw:fill-image-height", QString("%1").arg( targetSize.height() ) );
-        if( targetSize.width() != imageSize.width() )
+        if ( targetSize.width() != imageSize.width() )
             style.addAttribute( "draw:fill-image-width", QString("%1").arg( targetSize.width() ) );
     }
 
@@ -373,103 +373,103 @@ void KoPatternBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &co
 bool KoPatternBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF & )
 {
     KoStyleStack &styleStack = context.styleStack();
-    if( ! styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) 
+    if ( ! styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) 
         return false;
 
     QString fillStyle = styleStack.property( KoXmlNS::draw, "fill" );
-    if( fillStyle != "bitmap" )
+    if ( fillStyle != "bitmap" )
         return false;
 
     QString styleName = styleStack.property( KoXmlNS::draw, "fill-image-name" );
 
     KoXmlElement* e = context.stylesReader().drawStyles()[styleName];
-    if( ! e )
+    if ( ! e )
         return false;
 
     const QString href = e->attributeNS( KoXmlNS::xlink, "href", QString() );
-    if( href.isEmpty() )
+    if ( href.isEmpty() )
         return false;
 
     delete d->imageData;
     d->imageData = new KoImageData( d->imageCollection, href );
-    if( ! d->imageData )
+    if ( ! d->imageData )
         return false;
 
     // read the pattern repeat style
     QString style = styleStack.property( KoXmlNS::style, "repeat" );
-    if( style == "stretch" )
+    if ( style == "stretch" )
         d->repeat = Stretched;
-    else if( style == "repeat" )
+    else if ( style == "repeat" )
         d->repeat = Tiled;
     else
         d->repeat = Original;
 
-    if( style != "stretch" )
+    if ( style != "stretch" )
     {
         // optional attributes which can override original image size
-        if( styleStack.hasProperty( KoXmlNS::draw, "fill-image-height" )  )
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill-image-height" )  )
         {
             QString height = styleStack.property( KoXmlNS::draw, "fill-image-height" );
-            if( height.endsWith( '%' ) )
+            if ( height.endsWith( '%' ) )
                 d->targetImageSizePercent.setHeight( height.remove( '%' ).toDouble() );
             else
                 d->targetImageSize.setHeight( KoUnit::parseValue( height ) );
         }
-        if( styleStack.hasProperty( KoXmlNS::draw, "fill-image-width" ) )
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill-image-width" ) )
         {
             QString width = styleStack.property( KoXmlNS::draw, "fill-image-width" );
-            if( width.endsWith( '%' ) )
+            if ( width.endsWith( '%' ) )
                 d->targetImageSizePercent.setWidth( width.remove( '%' ).toDouble() );
             else
                 d->targetImageSize.setWidth( KoUnit::parseValue( width ) );
         }
     }
 
-    if( style == "repeat" )
+    if ( style == "repeat" )
     {
-        if( styleStack.hasProperty( KoXmlNS::draw, "fill-image-ref-point" ) )
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill-image-ref-point" ) )
         {
             // align pattern to the given size
             QString align = styleStack.property( KoXmlNS::draw, "fill-image-ref-point" );
-            if( align == "top-left" )
+            if ( align == "top-left" )
                 d->refPoint = TopLeft;
-            else if( align == "top" )
+            else if ( align == "top" )
                 d->refPoint = Top;
-            else if( align == "top-right" )
+            else if ( align == "top-right" )
                 d->refPoint = TopRight;
-            else if( align == "left" )
+            else if ( align == "left" )
                 d->refPoint = Left;
-            else if( align == "center" )
+            else if ( align == "center" )
                 d->refPoint = Center;
-            else if( align == "right" )
+            else if ( align == "right" )
                 d->refPoint = Right;
-            else if( align == "bottom-left" )
+            else if ( align == "bottom-left" )
                 d->refPoint = BottomLeft;
-            else if( align == "bottom" )
+            else if ( align == "bottom" )
                 d->refPoint = Bottom;
-            else if( align == "bottom-right" )
+            else if ( align == "bottom-right" )
                 d->refPoint = BottomRight;
         }
-        if( styleStack.hasProperty( KoXmlNS::draw, "fill-image-ref-point-x" ) )
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill-image-ref-point-x" ) )
         {
             QString pointX = styleStack.property( KoXmlNS::draw, "fill-image-ref-point-x" );
             d->refPointOffsetPercent.setX( pointX.remove( '%' ).toDouble() );
         }
-        if( styleStack.hasProperty( KoXmlNS::draw, "fill-image-ref-point-y" ) )
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill-image-ref-point-y" ) )
         {
             QString pointY = styleStack.property( KoXmlNS::draw, "fill-image-ref-point-y" );
             d->refPointOffsetPercent.setY( pointY.remove( '%' ).toDouble() );
         }
-        if( styleStack.hasProperty( KoXmlNS::draw, "tile-repeat-offset" ) )
+        if ( styleStack.hasProperty( KoXmlNS::draw, "tile-repeat-offset" ) )
         {
             QString repeatOffset = styleStack.property( KoXmlNS::draw, "tile-repeat-offset" );
             QStringList tokens = repeatOffset.split( '%' );
-            if( tokens.count() == 2 )
+            if ( tokens.count() == 2 )
             {
                 QString direction = tokens[1].simplified();
-                if( direction == "horizontal" )
+                if ( direction == "horizontal" )
                     d->tileRepeatOffsetPercent.setX( tokens[0].toDouble() );
-                else if( direction == "vertical" )
+                else if ( direction == "vertical" )
                     d->tileRepeatOffsetPercent.setY( tokens[0].toDouble() );
             }
         }

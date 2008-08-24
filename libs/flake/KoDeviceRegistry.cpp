@@ -22,10 +22,12 @@
 
 #include <KoPluginLoader.h>
 
-KoDeviceRegistry::KoDeviceRegistry() {
+KoDeviceRegistry::KoDeviceRegistry()
+{
 }
 
-void KoDeviceRegistry::init() {
+void KoDeviceRegistry::init()
+{
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "DevicePlugins";
     config.blacklist = "DevicePluginsDisabled";
@@ -36,7 +38,7 @@ void KoDeviceRegistry::init() {
     foreach( QString id, keys() )
     {
         KoDevice * d = value(id);
-        if( d )
+        if ( d )
             d->start();
     }
 }
@@ -46,7 +48,7 @@ KoDeviceRegistry::~KoDeviceRegistry()
     foreach( QString id, keys() )
     {
         KoDevice * d = value(id);
-        if( d )
+        if ( d )
             d->stop();
     }
 }
@@ -57,7 +59,7 @@ static K3StaticDeleter<KoDeviceRegistry> staticToolRegistryDeleter;
 
 KoDeviceRegistry* KoDeviceRegistry::instance()
 {
-    if(KoDeviceRegistry::s_instance == 0) {
+    if (KoDeviceRegistry::s_instance == 0) {
         staticToolRegistryDeleter.setObject(s_instance, new KoDeviceRegistry());
         KoDeviceRegistry::s_instance->init();
     }

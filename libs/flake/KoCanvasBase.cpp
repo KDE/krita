@@ -29,7 +29,8 @@
 #include <KSharedPtr>
 #include <KSharedConfig>
 
-class KoCanvasBase::Private {
+class KoCanvasBase::Private
+{
 public:
     Private() : shapeController(0), resourceProvider(0), controller(0) {}
     ~Private() {
@@ -60,7 +61,8 @@ KoCanvasBase::~KoCanvasBase()
 }
 
 
-KoShapeController * KoCanvasBase::shapeController() const {
+KoShapeController * KoCanvasBase::shapeController() const
+{
     return d->shapeController;
 }
 
@@ -69,12 +71,14 @@ KoCanvasResourceProvider * KoCanvasBase::resourceProvider() const
     return d->resourceProvider;
 }
 
-void KoCanvasBase::ensureVisible(const QRectF &rect) {
-    if(d->controller)
+void KoCanvasBase::ensureVisible(const QRectF &rect)
+{
+    if (d->controller)
         d->controller->ensureVisible(rect);
 }
 
-void KoCanvasBase::setCanvasController(KoCanvasController *controller) {
+void KoCanvasBase::setCanvasController(KoCanvasController *controller)
+{
     d->controller = controller;
 }
 
@@ -83,7 +87,8 @@ KoCanvasController * KoCanvasBase::canvasController() const
     return d->controller;
 }
 
-void KoCanvasBase::clipToDocument(const KoShape *, QPointF &) const {
+void KoCanvasBase::clipToDocument(const KoShape *, QPointF &) const
+{
 }
 
 bool KoCanvasBase::isAntialiased() const

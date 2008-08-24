@@ -80,7 +80,7 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
     // first clear the path data from the default path
     clear();
 
-    if( element.localName() == "line" )
+    if ( element.localName() == "line" )
     {
         QPointF start;
         start.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", "" ) ) );
@@ -91,7 +91,7 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
         moveTo( start );
         lineTo( end );
     }
-    else if( element.localName() == "polyline" || element.localName() == "polygon" )
+    else if ( element.localName() == "polyline" || element.localName() == "polygon" )
     {
         QString points = element.attributeNS( KoXmlNS::draw, "points" ).simplified();
         points.replace( ',', ' ' );
@@ -105,7 +105,7 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
             point.setX( (*it).toDouble() );
             ++it;
             point.setY( (*it).toDouble() );
-            if( firstPoint )
+            if ( firstPoint )
             {
                 moveTo( point );
                 firstPoint = false;
@@ -113,7 +113,7 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
             else
                 lineTo( point );
         }
-        if( element.localName() == "polygon" ) 
+        if ( element.localName() == "polygon" ) 
             close();
     }
     else // path loading
@@ -151,12 +151,12 @@ void KoPathShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext
     styleStack.save();
 
     // fill the style stack with the shapes style
-    if( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    if ( element.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
         context.odfLoadingContext().fillStyleStack( element, KoXmlNS::draw, "style-name", "graphic" );
         styleStack.setTypeProperties( "graphic" );
     }
-    else if( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
+    else if ( element.hasAttributeNS( KoXmlNS::presentation, "style-name" ) )
     {
         context.odfLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
         styleStack.setTypeProperties( "graphic" );
@@ -175,11 +175,11 @@ QRectF KoPathShape::loadOdfViewbox( const KoXmlElement & element ) const
     QRectF viewbox;
 
     QString data = element.attributeNS( KoXmlNS::svg, "viewBox" );
-    if( ! data.isEmpty() )
+    if ( ! data.isEmpty() )
     {
         data.replace( ',', ' ' );
         QStringList coordinates = data.simplified().split( ' ', QString::SkipEmptyParts );
-        if( coordinates.count() == 4 )
+        if ( coordinates.count() == 4 )
         {
             viewbox.setRect( coordinates[0].toDouble(), coordinates[1].toDouble(),
                              coordinates[2].toDouble(), coordinates[3].toDouble() );
@@ -193,7 +193,7 @@ void KoPathShape::applyViewboxTransformation( const KoXmlElement & element )
 {
     // apply viewbox transformation
     QRectF viewBox = loadOdfViewbox( element );
-    if( ! viewBox.isEmpty() )
+    if ( ! viewBox.isEmpty() )
     {
         // load the desired size
         QSizeF size;
@@ -233,7 +233,7 @@ void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter )
     QPainterPath path( outline() );
     path.setFillRule( d->fillRule );
 
-    if( background() )
+    if ( background() )
         background()->paint( painter, path );
     //paintDebug( painter );
 }
@@ -382,7 +382,7 @@ const QPainterPath KoPathShape::outline() const
 QRectF KoPathShape::boundingRect() const
 {
     QRectF bb( outline().boundingRect() );
-    if( border() )
+    if ( border() )
     {
         KoInsets inset;
         border()->borderInsets( this, inset );
@@ -390,7 +390,7 @@ QRectF KoPathShape::boundingRect() const
     }
     //qDebug() << "KoPathShape::boundingRect = " << bb;
     bb = absoluteTransformation( 0 ).mapRect( bb );
-    if( shadow() )
+    if ( shadow() )
     {
         KoInsets insets;
         shadow()->insets( this, insets );
@@ -458,7 +458,7 @@ KoPathPoint * KoPathShape::curveTo( const QPointF &c1, const QPointF &c2, const 
 
 KoPathPoint * KoPathShape::curveTo( const QPointF &c, const QPointF &p )
 {
-    if( m_subpaths.empty() )
+    if ( m_subpaths.empty() )
         moveTo( QPointF( 0, 0 ) );
 
     KoPathPoint * lastPoint = m_subpaths.last()->last();
@@ -647,11 +647,11 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
         KoSubpath::iterator it( ( *pathIt )->begin() );
         for ( ; it != ( *pathIt )->end(); ++it )
         {
-            if( r.contains( (*it)->point() ) )
+            if ( r.contains( (*it)->point() ) )
                 result.append( *it );
-            else if( (*it)->activeControlPoint1() && r.contains( (*it)->controlPoint1() ) )
+            else if ( (*it)->activeControlPoint1() && r.contains( (*it)->controlPoint1() ) )
                 result.append( *it );
-            else if( (*it)->activeControlPoint2() && r.contains( (*it)->controlPoint2() ) )
+            else if ( (*it)->activeControlPoint2() && r.contains( (*it)->controlPoint2() ) )
                 result.append( *it );
         }
     }
@@ -669,14 +669,14 @@ QList<KoPathSegment> KoPathShape::segmentsAt( const QRectF &r )
         bool subpathClosed = isClosedSubpath( subpathIndex );
         for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
         {
-            if( pointIndex == (pointCount-1) && ! subpathClosed )
+            if ( pointIndex == (pointCount-1) && ! subpathClosed )
                 break;
             KoPathSegment s( subpath->at( pointIndex ), subpath->at( (pointIndex+1)%pointCount ) );
             QRectF controlRect = s.controlPointRect();
-            if( ! r.intersects( controlRect ) && ! controlRect.contains( r ) )
+            if ( ! r.intersects( controlRect ) && ! controlRect.contains( r ) )
                 continue;
             QRectF bound = s.boundingRect();
-            if( ! r.intersects( bound ) && ! bound.contains( r ) )
+            if ( ! r.intersects( bound ) && ! bound.contains( r ) )
                 continue;
 
             segments.append( s );
@@ -998,7 +998,7 @@ bool KoPathShape::reverseSubpath( int subpathIndex )
     firstProps &= ~KoPathPoint::StopSubpath;
     lastProps |= KoPathPoint::StopSubpath;
     lastProps &= ~KoPathPoint::StartSubpath;
-    if( firstProps & KoPathPoint::CloseSubpath )
+    if ( firstProps & KoPathPoint::CloseSubpath )
     {
         firstProps |= KoPathPoint::CloseSubpath;
         lastProps |= KoPathPoint::CloseSubpath;
@@ -1031,7 +1031,7 @@ bool KoPathShape::addSubpath( KoSubpath * subpath, int subpathIndex )
 
 bool KoPathShape::combine( KoPathShape *path )
 {
-    if( ! path )
+    if ( ! path )
         return false;
 
     QMatrix pathMatrix = path->absoluteTransformation(0);
@@ -1057,7 +1057,7 @@ bool KoPathShape::combine( KoPathShape *path )
 
 bool KoPathShape::separate( QList<KoPathShape*> & separatedPaths )
 {
-    if( ! m_subpaths.size() )
+    if ( ! m_subpaths.size() )
         return false;
 
     QMatrix myMatrix = absoluteTransformation(0);
@@ -1065,7 +1065,7 @@ bool KoPathShape::separate( QList<KoPathShape*> & separatedPaths )
     foreach( KoSubpath* subpath, m_subpaths )
     {
         KoPathShape *shape = new KoPathShape();
-        if( ! shape ) continue;
+        if ( ! shape ) continue;
 
         shape->setBorder( border() );
         shape->setShapeId( shapeId() );
@@ -1087,7 +1087,7 @@ bool KoPathShape::separate( QList<KoPathShape*> & separatedPaths )
 
 void KoPathShape::closeSubpath( KoSubpath *subpath )
 {
-    if( ! subpath )
+    if ( ! subpath )
         return;
 
     subpath->last()->setProperty( KoPathPoint::CloseSubpath );

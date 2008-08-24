@@ -25,7 +25,8 @@
 
 #include <klocale.h>
 
-class KoShapeCreateCommand::Private {
+class KoShapeCreateCommand::Private
+{
 public:
     Private(KoShapeControllerBase *c, KoShape *s)
         : controller(c),
@@ -35,7 +36,7 @@ public:
     {
     }
     ~Private() {
-        if( shape && deleteShape )
+        if ( shape && deleteShape )
             delete shape;
     }
 
@@ -52,40 +53,44 @@ KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerBase *controller, K
     setText( i18n( "Create shape" ) );
 }
 
-KoShapeCreateCommand::~KoShapeCreateCommand() {
+KoShapeCreateCommand::~KoShapeCreateCommand()
+{
     delete d;
 }
 
-void KoShapeCreateCommand::redo () {
+void KoShapeCreateCommand::redo ()
+{
     QUndoCommand::redo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
-    if( d->shapeParent )
+    if ( d->shapeParent )
         d->shapeParent->addChild( d->shape );
     // the parent has to be there when it is added to the KoShapeControllerBase
     recurse(d->shape, Add);
     d->deleteShape = false;
 }
 
-void KoShapeCreateCommand::undo () {
+void KoShapeCreateCommand::undo ()
+{
     QUndoCommand::undo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
     // the parent has to be there when it is removed from the KoShapeControllerBase
     recurse(d->shape, Remove);
-    if( d->shapeParent )
+    if ( d->shapeParent )
         d->shapeParent->removeChild( d->shape );
     d->deleteShape = true;
 }
 
-void KoShapeCreateCommand::recurse(KoShape *shape, const AddRemove ar) {
-    if(ar == Remove)
+void KoShapeCreateCommand::recurse(KoShape *shape, const AddRemove ar)
+{
+    if (ar == Remove)
         d->controller->removeShape( d->shape );
     else
         d->controller->addShape( d->shape );
 
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*> (shape);
-    if(container) {
+    if (container) {
         foreach(KoShape *child, container->iterator())
             recurse(child, ar);
     }

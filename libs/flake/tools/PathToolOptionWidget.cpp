@@ -41,12 +41,14 @@ PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     connect(widget.convertToPath, SIGNAL(released()), tool->action("convert-to-path"), SLOT(trigger()));
 }
 
-PathToolOptionWidget::~PathToolOptionWidget() {
+PathToolOptionWidget::~PathToolOptionWidget()
+{
 }
 
-void PathToolOptionWidget::setSelectionType(int type) {
+void PathToolOptionWidget::setSelectionType(int type)
+{
     const bool plain = type & PlainPath;
-    if( plain )
+    if ( plain )
         widget.stackedWidget->setCurrentIndex(0);
     else
         widget.stackedWidget->setCurrentIndex(1);

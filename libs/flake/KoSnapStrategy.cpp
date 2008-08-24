@@ -81,13 +81,13 @@ bool OrthogonalSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * p
         foreach( QPointF point, points )
         {
             qreal dx = fabs( point.x() - mousePosition.x() );
-            if( dx < minHorzDist && dx < maxSnapDistance )
+            if ( dx < minHorzDist && dx < maxSnapDistance )
             {
                 minHorzDist = dx;
                 horzSnap = point;
             }
             qreal dy = fabs( point.y() - mousePosition.y() );
-            if( dy < minVertDist && dy < maxSnapDistance )
+            if ( dy < minVertDist && dy < maxSnapDistance )
             {
                 minVertDist = dy;
                 vertSnap = point;
@@ -97,17 +97,17 @@ bool OrthogonalSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * p
 
     QPointF snappedPoint = mousePosition;
 
-    if( minHorzDist < HUGE_VAL )
+    if ( minHorzDist < HUGE_VAL )
         snappedPoint.setX( horzSnap.x() );
-    if( minVertDist < HUGE_VAL )
+    if ( minVertDist < HUGE_VAL )
         snappedPoint.setY( vertSnap.y() );
 
-    if( minHorzDist < HUGE_VAL )
+    if ( minHorzDist < HUGE_VAL )
         m_hLine = QLineF( horzSnap, snappedPoint );
     else
         m_hLine = QLineF();
 
-    if( minVertDist < HUGE_VAL )
+    if ( minVertDist < HUGE_VAL )
         m_vLine = QLineF( vertSnap, snappedPoint );
     else
         m_vLine = QLineF();
@@ -122,12 +122,12 @@ QPainterPath OrthogonalSnapStrategy::decoration( const KoViewConverter &converte
     Q_UNUSED( converter );
 
     QPainterPath decoration;
-    if( ! m_hLine.isNull() )
+    if ( ! m_hLine.isNull() )
     {
         decoration.moveTo( m_hLine.p1() );
         decoration.lineTo( m_hLine.p2() );
     }
-    if( ! m_vLine.isNull() )
+    if ( ! m_vLine.isNull() )
     {
         decoration.moveTo( m_vLine.p1() );
         decoration.lineTo( m_vLine.p2() );
@@ -154,7 +154,7 @@ bool NodeSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, 
     foreach( QPointF point, points )
     {
         qreal distance = fastDistance( mousePosition, point );
-        if( distance < maxDistance && distance < minDistance )
+        if ( distance < maxDistance && distance < minDistance )
         {
             snappedPoint = point;
             minDistance = distance;
@@ -192,7 +192,7 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
     foreach( KoShape * shape, shapes )
     {
         KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-        if( ! path )
+        if ( ! path )
             continue;
 
         QMatrix matrix = path->absoluteTransformation(0);
@@ -200,7 +200,7 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
         int subpathCount = path->subpathCount();
         for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
         {
-            if( path->isClosedSubpath( subpathIndex ) )
+            if ( path->isClosedSubpath( subpathIndex ) )
                 continue;
 
             int pointCount = path->pointCountSubpath( subpathIndex );
@@ -208,10 +208,10 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
             // check the extension from the start point
             KoPathPoint * first = path->pointByIndex( KoPathPointIndex( subpathIndex, 0 )  );
             QPointF firstSnapPosition = mousePosition;
-            if( snapToExtension( firstSnapPosition, first, matrix ) )
+            if ( snapToExtension( firstSnapPosition, first, matrix ) )
             {
                 qreal distance = fastDistance( firstSnapPosition, mousePosition );
-                if( distance < maxDistance && distance < minDistance )
+                if ( distance < maxDistance && distance < minDistance )
                 {
                     minDistance = distance;
                     snappedPoint = firstSnapPosition;
@@ -222,10 +222,10 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
             // now check the extension from the last point
             KoPathPoint * last = path->pointByIndex( KoPathPointIndex( subpathIndex, pointCount-1 )  );
             QPointF lastSnapPosition = mousePosition;
-            if( snapToExtension( lastSnapPosition, last, matrix ) )
+            if ( snapToExtension( lastSnapPosition, last, matrix ) )
             {
                 qreal distance = fastDistance( lastSnapPosition, mousePosition );
-                if( distance < maxDistance && distance < minDistance )
+                if ( distance < maxDistance && distance < minDistance )
                 {
                     minDistance = distance;
                     snappedPoint = lastSnapPosition;
@@ -235,7 +235,7 @@ bool ExtensionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
         }
     }
 
-    if( minDistance < HUGE_VAL )
+    if ( minDistance < HUGE_VAL )
         m_line = QLineF( startPoint, snappedPoint );
     else
         m_line = QLineF();
@@ -250,7 +250,7 @@ QPainterPath ExtensionSnapStrategy::decoration( const KoViewConverter &converter
     Q_UNUSED( converter );
 
     QPainterPath decoration;
-    if( ! m_line.isNull() )
+    if ( ! m_line.isNull() )
     {
         decoration.moveTo( m_line.p1() );
         decoration.lineTo( m_line.p2() );
@@ -261,13 +261,13 @@ QPainterPath ExtensionSnapStrategy::decoration( const KoViewConverter &converter
 bool ExtensionSnapStrategy::snapToExtension( QPointF &position, KoPathPoint * point, const QMatrix &matrix )
 {
     QPointF direction = extensionDirection( point, matrix );
-    if( direction.isNull() )
+    if ( direction.isNull() )
         return false;
 
     QPointF extensionStart = matrix.map( point->point() );
     QPointF extensionStop = matrix.map( point->point() ) + direction;
     float posOnExtension = project( extensionStart, extensionStop, position );
-    if( posOnExtension < 0.0 )
+    if ( posOnExtension < 0.0 )
         return false;
 
     position = extensionStart + posOnExtension * direction;
@@ -279,7 +279,7 @@ qreal ExtensionSnapStrategy::project( const QPointF &lineStart, const QPointF &l
     QPointF diff = lineEnd - lineStart;
     QPointF relPoint = point - lineStart;
     qreal diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
-    if( diffLength == 0.0 )
+    if ( diffLength == 0.0 )
         return 0.0;
 
     diff /= diffLength;
@@ -294,18 +294,18 @@ QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QM
     KoPathPointIndex index = path->pathPointIndex( point );
 
     /// check if it is a start point
-    if( point->properties() & KoPathPoint::StartSubpath )
+    if ( point->properties() & KoPathPoint::StartSubpath )
     {
-        if( point->activeControlPoint2() )
+        if ( point->activeControlPoint2() )
         {
             return matrix.map(point->point()) - matrix.map(point->controlPoint2());
         }
         else
         {
             KoPathPoint * next = path->pointByIndex( KoPathPointIndex( index.first, index.second+1 ) );
-            if( ! next )
+            if ( ! next )
                 return QPointF();
-            else if( next->activeControlPoint1() )
+            else if ( next->activeControlPoint1() )
                 return matrix.map(point->point()) - matrix.map(next->controlPoint1());
             else
                 return matrix.map(point->point()) - matrix.map(next->point());
@@ -313,16 +313,16 @@ QPointF ExtensionSnapStrategy::extensionDirection( KoPathPoint * point, const QM
     }
     else
     {
-        if( point->activeControlPoint1() )
+        if ( point->activeControlPoint1() )
         {
             return matrix.map(point->point()) - matrix.map(point->controlPoint1());
         }
         else
         {
             KoPathPoint * prev = path->pointByIndex( KoPathPointIndex( index.first, index.second-1 ) );
-            if( ! prev )
+            if ( ! prev )
                 return QPointF();
-            else if( prev->activeControlPoint2() )
+            else if ( prev->activeControlPoint2() )
                 return matrix.map(point->point()) - matrix.map(prev->controlPoint2());
             else
                 return matrix.map(point->point()) - matrix.map(prev->point());
@@ -357,10 +357,10 @@ bool IntersectionSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy *
             //kDebug() << isects.count() << "intersections found";
             foreach( const QPointF &point, isects )
             {
-                if( ! rect.contains( point ) )
+                if ( ! rect.contains( point ) )
                     continue;
                 qreal distance = fastDistance( mousePosition, point );
-                if( distance < maxDistance && distance < minDistance )
+                if ( distance < maxDistance && distance < minDistance )
                 {
                     snappedPoint = point;
                     minDistance = distance;
@@ -390,7 +390,7 @@ GridSnapStrategy::GridSnapStrategy()
 
 bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
-    if( ! proxy->canvas()->snapToGrid() )
+    if ( ! proxy->canvas()->snapToGrid() )
         return false;
 
     // The 1e-10 here is a workaround for some weird division problem.
@@ -409,7 +409,7 @@ bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, 
     // now check which grid line has less distance to the point
     qreal distToCol = qAbs( col * gridX - mousePosition.x() );
     qreal distToNextCol = qAbs( nextCol * gridX - mousePosition.x() );
-    if( distToCol > distToNextCol )
+    if ( distToCol > distToNextCol )
     {
         col = nextCol;
         distToCol = distToNextCol;
@@ -417,7 +417,7 @@ bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, 
 
     qreal distToRow = qAbs( row * gridY - mousePosition.y() );
     qreal distToNextRow = qAbs( nextRow * gridY - mousePosition.y() );
-    if( distToRow > distToNextRow )
+    if ( distToRow > distToNextRow )
     {
         row = nextRow;
         distToRow = distToNextRow;
@@ -428,7 +428,7 @@ bool GridSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, 
     qreal distance = distToCol*distToCol+distToRow*distToRow;
     qreal maxDistance = maxSnapDistance*maxSnapDistance;
     // now check if we are inside the snap distance
-    if( distance < maxDistance )
+    if ( distance < maxDistance )
     {
         snappedPoint = QPointF( col * gridX, row * gridY );
     }
@@ -480,7 +480,7 @@ bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * 
         {
             m_boxPoints[i] = shape->absolutePosition( pointId[i] );
             qreal d = fastDistance( mousePosition, m_boxPoints[i] );
-            if( d < minDistance && d < maxDistance )
+            if ( d < minDistance && d < maxDistance )
             {
                 shapeMinDistance = d;
                 minDistance = d;
@@ -488,7 +488,7 @@ bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * 
             }
         }
         // prioritize points over edges
-        if( shapeMinDistance < maxDistance )
+        if ( shapeMinDistance < maxDistance )
             continue;
 
         // now check distances to edges of bounding box
@@ -496,7 +496,7 @@ bool BoundingBoxSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * 
         {
             QPointF pointOnLine;
             qreal d = squareDistanceToLine( m_boxPoints[i], m_boxPoints[(i+1)%4], mousePosition, pointOnLine );
-            if( d < minDistance && d < maxDistance )
+            if ( d < minDistance && d < maxDistance )
             {
                 minDistance = d;
                 snappedPoint = pointOnLine;
@@ -514,11 +514,11 @@ qreal BoundingBoxSnapStrategy::squareDistanceToLine( const QPointF &lineA, const
 {
     QPointF diff = lineB - lineA;
     qreal diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
-    if( diffLength == 0.0f )
+    if ( diffLength == 0.0f )
         return HUGE_VAL;
     // project mouse position relative to start position on line
     qreal scalar = KoSnapStrategy::scalarProduct( point-lineA, diff / diffLength );
-    if( scalar < 0.0 || scalar > diffLength )
+    if ( scalar < 0.0 || scalar > diffLength )
         return HUGE_VAL;
     // calculate vector between relative mouse position and projected mouse position
     pointOnLine = lineA + scalar/diffLength * diff;
@@ -547,7 +547,7 @@ LineGuideSnapStrategy::LineGuideSnapStrategy()
 bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance )
 {
     KoGuidesData * guidesData = proxy->canvas()->guidesData();
-    if( ! guidesData || ! guidesData->showGuideLines() )
+    if ( ! guidesData || ! guidesData->showGuideLines() )
           return false;
 
     QPointF snappedPoint = mousePosition;
@@ -557,7 +557,7 @@ bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
     foreach( qreal guidePos, guidesData->horizontalGuideLines() )
     {
         qreal distance = qAbs( guidePos - mousePosition.y() );
-        if( distance < minHorzDistance )
+        if ( distance < minHorzDistance )
         {
             snappedPoint.setY( guidePos );
             minHorzDistance = distance;
@@ -568,7 +568,7 @@ bool LineGuideSnapStrategy::snap( const QPointF &mousePosition, KoSnapProxy * pr
     foreach( qreal guidePos, guidesData->verticalGuideLines() )
     {
         qreal distance = qAbs( guidePos - mousePosition.x() );
-        if( distance < minVertSnapDistance )
+        if ( distance < minVertSnapDistance )
         {
             snappedPoint.setX( guidePos );
             minVertSnapDistance = distance;
@@ -585,12 +585,12 @@ QPainterPath LineGuideSnapStrategy::decoration( const KoViewConverter &converter
 {
     QSizeF unzoomedSize = converter.viewToDocument( QSizeF( 5, 5 ) );
     QPainterPath decoration;
-    if( m_orientation & Qt::Horizontal )
+    if ( m_orientation & Qt::Horizontal )
     {
         decoration.moveTo( snappedPosition()-QPointF(unzoomedSize.width(),0) );
         decoration.lineTo( snappedPosition()+QPointF(unzoomedSize.width(),0) );
     }
-    if( m_orientation & Qt::Vertical )
+    if ( m_orientation & Qt::Vertical )
     {
         decoration.moveTo( snappedPosition()-QPointF(0,unzoomedSize.height()) );
         decoration.lineTo( snappedPosition()+QPointF(0,unzoomedSize.height()) );

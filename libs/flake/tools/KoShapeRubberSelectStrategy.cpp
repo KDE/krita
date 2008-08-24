@@ -53,16 +53,17 @@ void KoShapeRubberSelectStrategy::paint( QPainter &painter, const KoViewConverte
     QRectF paintRect = converter.documentToView(m_selectRect);
     paintRect = paintRect.normalized();
     paintRect.adjust( 0., -0.5, 0.5, 0. );
-    if(painter.hasClipping())
+    if (painter.hasClipping())
         paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
     painter.drawRect( paintRect );
 }
 
-void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers) {
+void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers)
+{
     QPointF point = p;
-    if(m_useSnapToGrid && (modifiers & Qt::ShiftModifier) == 0)
+    if (m_useSnapToGrid && (modifiers & Qt::ShiftModifier) == 0)
         applyGrid(point);
-    if((modifiers & Qt::AltModifier) != 0) {
+    if ((modifiers & Qt::AltModifier) != 0) {
         m_canvas->updateCanvas(m_selectRect.normalized());
         m_selectRect.moveTopLeft(m_selectRect.topLeft() - (m_lastPos - point));
         m_lastPos = point;
@@ -106,7 +107,7 @@ void KoShapeRubberSelectStrategy::finishInteraction( Qt::KeyboardModifiers modif
     QList<KoShape *> shapes( m_canvas->shapeManager()->shapesAt( m_selectRect ) );
     foreach ( KoShape * shape, shapes )
     {
-        if(! (shape->isSelectable() && shape->isVisible()))
+        if (! (shape->isSelectable() && shape->isVisible()))
             continue;
         selection->select( shape );
     }
@@ -114,6 +115,7 @@ void KoShapeRubberSelectStrategy::finishInteraction( Qt::KeyboardModifiers modif
     m_canvas->updateCanvas(m_selectRect.normalized());
 }
 
-const QRectF KoShapeRubberSelectStrategy::selectRect() const {
+const QRectF KoShapeRubberSelectStrategy::selectRect() const
+{
     return m_selectRect.normalized();
 }

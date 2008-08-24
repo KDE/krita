@@ -40,7 +40,7 @@ KoZoomToolWidget::~KoZoomToolWidget()
 void KoZoomToolWidget::paintBirdEye()
 {
     QPainter p;
-    if( m_dirtyThumbnail ) {
+    if ( m_dirtyThumbnail ) {
         m_thumbnail = QPixmap( birdEyeLabel->size() );
 //        m_thumbnail.fill( birdEyeLabel->palette().dark().color() );
         p.begin( &m_thumbnail );
@@ -57,14 +57,14 @@ void KoZoomToolWidget::paintBirdEye()
 
 bool KoZoomToolWidget::eventFilter( QObject* object, QEvent* event )
 {
-    if( object == birdEyeLabel ) {
-        if( event->type() == QEvent::Paint ) {
+    if ( object == birdEyeLabel ) {
+        if ( event->type() == QEvent::Paint ) {
             paintBirdEye();
             return true;
         }
-        else if( event->type() == QEvent::MouseMove ) {
+        else if ( event->type() == QEvent::MouseMove ) {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent*>( event );
-            if( mouseEvent->buttons() | Qt::LeftButton ) {
+            if ( mouseEvent->buttons() | Qt::LeftButton ) {
                 // m_tool->canvasController()->pan
                 // TODO implement panning
             }

@@ -25,7 +25,8 @@
 #include <QPainter>
 #include <QPainterPath>
 
-class ChildrenData : public KoShapeContainerModel {
+class ChildrenData : public KoShapeContainerModel
+{
 public:
     ChildrenData() {}
     ~ChildrenData() {
@@ -39,9 +40,9 @@ public:
 
     void setClipping(const KoShape *child, bool clipping) {
         Relation *relation = findRelation(child);
-        if(relation == 0) // throw exception?
+        if (relation == 0) // throw exception?
             return;
-        if(relation->m_inside == clipping)
+        if (relation->m_inside == clipping)
             return;
         relation->m_inside = clipping;
         relation->child()->update();
@@ -51,14 +52,14 @@ public:
 
     bool childClipped(const KoShape *child) const {
         Relation *relation = findRelation(child);
-        if(relation == 0) // throw exception?
+        if (relation == 0) // throw exception?
             return false;
         return relation->m_inside;
     }
 
     void remove(KoShape *child) {
         Relation *relation = findRelation(child);
-        if(relation == 0)
+        if (relation == 0)
             return;
         m_relations.removeAll(relation);
     }
@@ -96,7 +97,7 @@ private:
 
     Relation* findRelation(const KoShape *child) const {
         foreach(Relation *relation, m_relations) {
-            if(relation->child() == child)
+            if (relation->child() == child)
                 return relation;
         }
         return 0;
@@ -106,11 +107,12 @@ private: // members
     QList <Relation *> m_relations;
 };
 
-class KoShapeContainer::Private {
+class KoShapeContainer::Private
+{
 public:
     Private() : children(0) {}
     ~Private() {
-        if(children)
+        if (children)
         {
             foreach (KoShape *shape, children->iterator())
                 shape->setParent(0);
@@ -120,7 +122,8 @@ public:
     KoShapeContainerModel *children;
 };
 
-KoShapeContainer::KoShapeContainer() : KoShape(), d(new Private()) {
+KoShapeContainer::KoShapeContainer() : KoShape(), d(new Private())
+{
 }
 
 KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
@@ -130,55 +133,62 @@ KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
     d->children = model;
 }
 
-KoShapeContainer::~KoShapeContainer() {
+KoShapeContainer::~KoShapeContainer()
+{
     delete d;
 }
 
-void KoShapeContainer::addChild(KoShape *shape) {
+void KoShapeContainer::addChild(KoShape *shape)
+{
     Q_ASSERT(shape);
-    if(shape->parent() == this && iterator().contains( shape ) )
+    if (shape->parent() == this && iterator().contains( shape ) )
         return;
-    if(d->children == 0)
+    if (d->children == 0)
         d->children = new ChildrenData();
-    if( shape->parent() && shape->parent() != this)
+    if ( shape->parent() && shape->parent() != this)
         shape->parent()->removeChild( shape );
     d->children->add(shape);
     shape->setParent(this);
     childCountChanged();
 }
 
-void KoShapeContainer::removeChild(KoShape *shape) {
+void KoShapeContainer::removeChild(KoShape *shape)
+{
     Q_ASSERT(shape);
-    if(d->children == 0)
+    if (d->children == 0)
         return;
     d->children->remove(shape);
     shape->setParent(0);
     childCountChanged();
 }
 
-int  KoShapeContainer::childCount() const {
-    if(d->children == 0)
+int  KoShapeContainer::childCount() const
+{
+    if (d->children == 0)
         return 0;
     return d->children->count();
 }
 
-bool KoShapeContainer::isChildLocked(const KoShape *child) const {
-    if(d->children == 0)
+bool KoShapeContainer::isChildLocked(const KoShape *child) const
+{
+    if (d->children == 0)
         return false;
     return d->children->isChildLocked(child);
 }
 
-void KoShapeContainer::setClipping(const KoShape *child, bool clipping) {
-    if(d->children == 0)
+void KoShapeContainer::setClipping(const KoShape *child, bool clipping)
+{
+    if (d->children == 0)
         return;
     d->children->setClipping(child, clipping);
 }
 
-void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter) {
+void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter)
+{
     painter.save();
     paintComponent(painter, converter);
     painter.restore();
-    if(d->children == 0 || d->children->count() == 0)
+    if (d->children == 0 || d->children->count() == 0)
         return;
 
     QList<KoShape*> sortedObjects = d->children->iterator();
@@ -195,15 +205,15 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
     foreach (KoShape *shape, sortedObjects) {
         //kDebug(30006) <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
-        if(! shape->isVisible())
+        if (! shape->isVisible())
             continue;
-        if(! childClipped(shape) ) // the shapeManager will have to draw those, or else we can't do clipRects
+        if (! childClipped(shape) ) // the shapeManager will have to draw those, or else we can't do clipRects
             continue;
-        if(painter.hasClipping()) {
+        if (painter.hasClipping()) {
             QRectF rect = converter.viewToDocument( painter.clipRegion().boundingRect() );
             rect = matrix().mapRect(rect);
             // don't try to draw a child shape that is not in the clipping rect of the painter.
-            if(! rect.intersects(shape->boundingRect()))
+            if (! rect.intersects(shape->boundingRect()))
                 continue;
         }
 
@@ -211,7 +221,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         painter.setMatrix( shape->absoluteTransformation(&converter) * baseMatrix );
         shape->paint(painter, converter);
         painter.restore();
-        if(shape->border()) {
+        if (shape->border()) {
             painter.save();
             painter.setMatrix( shape->absoluteTransformation(&converter) * baseMatrix );
             shape->border()->paintBorder(shape, painter, converter);
@@ -220,10 +230,11 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     }
 }
 
-void KoShapeContainer::shapeChanged(ChangeType type) {
-    if(d->children == 0)
+void KoShapeContainer::shapeChanged(ChangeType type)
+{
+    if (d->children == 0)
         return;
-    if(! (type == RotationChanged || type == ScaleChanged || type == ShearChanged
+    if (! (type == RotationChanged || type == ScaleChanged || type == ShearChanged
                 || type == SizeChanged || type == PositionChanged))
         return;
     d->children->containerChanged(this);
@@ -231,27 +242,31 @@ void KoShapeContainer::shapeChanged(ChangeType type) {
         shape->notifyChanged();
 }
 
-bool KoShapeContainer::childClipped(const KoShape *child) const {
-    if(d->children == 0) // throw exception??
+bool KoShapeContainer::childClipped(const KoShape *child) const
+{
+    if (d->children == 0) // throw exception??
         return false;
     return d->children->childClipped(child);
 }
 
-void KoShapeContainer::update() const {
+void KoShapeContainer::update() const
+{
     KoShape::update();
-    if(d->children)
+    if (d->children)
         foreach ( KoShape *shape, d->children->iterator())
             shape->update();
 }
 
-QList<KoShape*> KoShapeContainer::iterator() const {
-    if(d->children == 0)
+QList<KoShape*> KoShapeContainer::iterator() const
+{
+    if (d->children == 0)
         return QList<KoShape*>();
 
     return d->children->iterator();
 }
 
-KoShapeContainerModel *KoShapeContainer::model() const {
+KoShapeContainerModel *KoShapeContainer::model() const
+{
     return d->children;
 }
 

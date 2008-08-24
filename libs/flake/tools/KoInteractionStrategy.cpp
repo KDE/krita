@@ -33,9 +33,10 @@
 
 #include <QMouseEvent>
 
-void KoInteractionStrategy::cancelInteraction() {
+void KoInteractionStrategy::cancelInteraction()
+{
     QUndoCommand *cmd = createCommand();
-    if(cmd) {
+    if (cmd) {
         cmd->undo();
         delete cmd;
     }
@@ -52,7 +53,8 @@ KoInteractionStrategy::~KoInteractionStrategy()
     m_parent->setStatusText( "" );
 }
 
-void KoInteractionStrategy::applyGrid(QPointF &point) {
+void KoInteractionStrategy::applyGrid(QPointF &point)
+{
     // The 1e-10 here is a workaround for some weird division problem.
     // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a qreal,
     // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
@@ -67,17 +69,18 @@ void KoInteractionStrategy::applyGrid(QPointF &point) {
     int nextRow = row + 1;
 
     // now check which grid line has less distance to the point
-    if( qAbs( col * gridX - point.x() ) > qAbs( nextCol * gridX - point.x() ) )
+    if ( qAbs( col * gridX - point.x() ) > qAbs( nextCol * gridX - point.x() ) )
         col = nextCol;
-    if( qAbs( row * gridY - point.y() ) > qAbs( nextRow * gridY - point.y() ) )
+    if ( qAbs( row * gridY - point.y() ) > qAbs( nextRow * gridY - point.y() ) )
         row = nextRow;
 
     point.setX( col * gridX );
     point.setY( row * gridY );
 }
 
-QPointF KoInteractionStrategy::snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers ) {
-    if( ! m_canvas->snapToGrid() || (modifiers & Qt::ShiftModifier) )
+QPointF KoInteractionStrategy::snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers )
+{
+    if ( ! m_canvas->snapToGrid() || (modifiers & Qt::ShiftModifier) )
         return point;
     QPointF p = point;
     applyGrid(p);

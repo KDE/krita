@@ -99,7 +99,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 {
     // if not a canvas set then ignore this, makes it possible to assume
     // we have a canvas in all the support methods.
-    if(! (m_parent->canvas() && m_parent->canvas()->canvasWidget()))
+    if (! (m_parent->canvas() && m_parent->canvas()->canvasWidget()))
         return;
     if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
             event->mimeData()->hasFormat(SHAPEID_MIMETYPE)) {
@@ -116,7 +116,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         QString id;
         dataStream >> id;
         QString properties;
-        if(isTemplate)
+        if (isTemplate)
             dataStream >> properties;
 
         // and finally, there is a point.
@@ -126,7 +126,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         // The rest of this method is mostly a copy paste from the KoCreateShapeStrategy
         // So, lets remove this again when Zagge adds his new class that does this kind of thing. (KoLoadSave)
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
-        if(! factory) {
+        if (! factory) {
             kWarning(30006) << "Application requested a shape that is not registered '" <<
                 id << "', Ignoring" << endl;
             event->ignore();
@@ -135,7 +135,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         event->setDropAction(Qt::CopyAction);
         event->accept();
 
-        if(isTemplate) {
+        if (isTemplate) {
             KoProperties props;
             props.load(properties);
             m_draggedShape = factory->createShapeAndInit( &props, m_parent->canvas()->shapeController()->shapeControllerBase() );
@@ -146,7 +146,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         Q_ASSERT(m_draggedShape);
         if (!m_draggedShape) return;
 
-        if( m_draggedShape->shapeId().isEmpty() )
+        if ( m_draggedShape->shapeId().isEmpty() )
             m_draggedShape->setShapeId(factory->id());
         m_draggedShape->setZIndex(INT_MAX);
 
@@ -154,7 +154,8 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-void Viewport::handleDropEvent(QDropEvent *event) {
+void Viewport::handleDropEvent(QDropEvent *event)
+{
 
     if ( !m_draggedShape ) return;
     repaint(m_draggedShape);
@@ -165,7 +166,7 @@ void Viewport::handleDropEvent(QDropEvent *event) {
     m_parent->canvas()->clipToDocument(m_draggedShape, newPos); // ensure the shape is dropped inside the document.
     m_draggedShape->setAbsolutePosition( newPos );
     QUndoCommand * cmd = m_parent->canvas()->shapeController()->addShape( m_draggedShape );
-    if(cmd) {
+    if (cmd) {
         m_parent->canvas()->addCommand(cmd);
         KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
 
@@ -182,7 +183,8 @@ void Viewport::handleDropEvent(QDropEvent *event) {
     m_draggedShape = 0;
 }
 
-QPointF Viewport::correctPosition(const QPoint &point) const {
+QPointF Viewport::correctPosition(const QPoint &point) const
+{
     QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
     Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
     QPoint correctedPos(point.x() - canvasWidget->x(), point.y() - canvasWidget->y());
@@ -192,8 +194,9 @@ QPointF Viewport::correctPosition(const QPoint &point) const {
     return m_parent->canvas()->viewConverter()->viewToDocument(correctedPos);
 }
 
-void Viewport::handleDragMoveEvent (QDragMoveEvent *event) {
-    if(m_draggedShape == 0)
+void Viewport::handleDragMoveEvent (QDragMoveEvent *event)
+{
+    if (m_draggedShape == 0)
         return;
     m_draggedShape->update();
     repaint(m_draggedShape);
@@ -202,7 +205,8 @@ void Viewport::handleDragMoveEvent (QDragMoveEvent *event) {
     repaint(m_draggedShape);
 }
 
-void Viewport::repaint(KoShape *shape) {
+void Viewport::repaint(KoShape *shape)
+{
     QRect rect = m_parent->canvas()->viewConverter()->documentToView(shape->boundingRect()).toRect();
     QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
     Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
@@ -212,8 +216,9 @@ void Viewport::repaint(KoShape *shape) {
     update(rect);
 }
 
-void Viewport::handleDragLeaveEvent(QDragLeaveEvent *) {
-    if(m_draggedShape) {
+void Viewport::handleDragLeaveEvent(QDragLeaveEvent *)
+{
+    if (m_draggedShape) {
         repaint(m_draggedShape);
         m_parent->canvas()->shapeManager()->remove(m_draggedShape);
         delete m_draggedShape;
@@ -225,7 +230,7 @@ void Viewport::handlePaintEvent(QPainter & painter, QPaintEvent *event)
 {
     Q_UNUSED(event);
     // Draw the shadow around the canvas.
-    if(m_parent->canvas() && m_parent->canvas()->canvasWidget() && m_drawShadow ) {
+    if (m_parent->canvas() && m_parent->canvas()->canvasWidget() && m_drawShadow ) {
         QWidget *canvas = m_parent->canvas()->canvasWidget();
         painter.setPen(Qt::black);
         QRect rect(canvas->x(), canvas->y(), canvas->width(), canvas->height());
@@ -234,7 +239,7 @@ void Viewport::handlePaintEvent(QPainter & painter, QPaintEvent *event)
         painter.drawLine(rect.right()+2, rect.top()+2, rect.right()+2, rect.bottom()+2);
         painter.drawLine(rect.left()+2, rect.bottom()+2, rect.right()+2, rect.bottom()+2);
     }
-    if(m_draggedShape) {
+    if (m_draggedShape) {
         const KoViewConverter *vc = m_parent->canvas()->viewConverter();
 
         painter.save();
@@ -328,11 +333,11 @@ void Viewport::resetLayout()
         if ( marginBottom > 0 ) resizeH = viewH - marginBottom;
 
     }
-    if( m_parent->canvasMode() == KoCanvasController::AlignTop ) {
+    if ( m_parent->canvasMode() == KoCanvasController::AlignTop ) {
         moveY = 0;
     }
     if (m_canvas) {
-        if( m_parent->canvasMode() == KoCanvasController::Infinite )
+        if ( m_parent->canvasMode() == KoCanvasController::Infinite )
             m_canvas->setGeometry( 0, 0, viewW, viewH );
         else
             m_canvas->setGeometry( moveX, moveY, resizeW, resizeH );

@@ -41,9 +41,9 @@ const char * KoSvgPathParser::getCoord( const char *ptr, qreal &number )
     expsign = 1;
 
     // read the sign
-    if(*ptr == '+')
+    if (*ptr == '+')
         ptr++;
-    else if(*ptr == '-')
+    else if (*ptr == '-')
     {
         ptr++;
         sign = -1;
@@ -52,21 +52,21 @@ const char * KoSvgPathParser::getCoord( const char *ptr, qreal &number )
     // read the integer part
     while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
         integer = (integer * 10) + *(ptr++) - '0';
-    if(*ptr == '.') // read the decimals
+    if (*ptr == '.') // read the decimals
     {
         ptr++;
         while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
             decimal += (*(ptr++) - '0') * (frac *= 0.1);
     }
 
-    if(*ptr == 'e' || *ptr == 'E') // read the exponent part
+    if (*ptr == 'e' || *ptr == 'E') // read the exponent part
     {
         ptr++;
 
         // read the sign of the exponent
-        if(*ptr == '+')
+        if (*ptr == '+')
             ptr++;
-        else if(*ptr == '-')
+        else if (*ptr == '-')
         {
             ptr++;
             expsign = -1;
@@ -84,7 +84,7 @@ const char * KoSvgPathParser::getCoord( const char *ptr, qreal &number )
     number *= sign * pow( (qreal)10, qreal( expsign * exponent ) );
 
     // skip the following space
-    if(*ptr == ' ')
+    if (*ptr == ' ')
         ptr++;
 
     return ptr;
@@ -92,7 +92,7 @@ const char * KoSvgPathParser::getCoord( const char *ptr, qreal &number )
 
 void KoSvgPathParser::parseSvg( const QString &s, bool process )
 {
-    if( !s.isEmpty() )
+    if ( !s.isEmpty() )
     {
         QString d = s;
         d = d.replace( ',', ' ' );
@@ -110,7 +110,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
         subpathx = subpathy = curx = cury = contrlx = contrly = 0.0;
         while( ptr < end )
         {
-            if( *ptr == ' ' )
+            if ( *ptr == ' ' )
                 ptr++;
 
             relative = false;
@@ -125,7 +125,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                     ptr = getCoord( ptr, tox );
                     ptr = getCoord( ptr, toy );
 
-                    if( process )
+                    if ( process )
                     {
                         subpathx = curx = relative ? curx + tox : tox;
                         subpathy = cury = relative ? cury + toy : toy;
@@ -143,7 +143,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                     ptr = getCoord( ptr, tox );
                     ptr = getCoord( ptr, toy );
 
-                    if( process )
+                    if ( process )
                     {
                         curx = relative ? curx + tox : tox;
                         cury = relative ? cury + toy : toy;
@@ -157,7 +157,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                 case 'h':
                 {
                     ptr = getCoord( ptr, tox );
-                    if( process )
+                    if ( process )
                     {
                         curx = curx + tox;
                         svgLineTo( curx, cury );
@@ -169,7 +169,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                 case 'H':
                 {
                     ptr = getCoord( ptr, tox );
-                    if( process )
+                    if ( process )
                     {
                         curx = tox;
                         svgLineTo( curx, cury );
@@ -181,7 +181,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                 case 'v':
                 {
                     ptr = getCoord( ptr, toy );
-                    if( process )
+                    if ( process )
                     {
                         cury = cury + toy;
                         svgLineTo( curx, cury );
@@ -193,7 +193,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                 case 'V':
                 {
                     ptr = getCoord( ptr, toy );
-                    if( process )
+                    if ( process )
                     {
                         cury = toy;
                         svgLineTo( curx, cury );
@@ -206,7 +206,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                 case 'Z':
                 {
                     // reset curx, cury for next path
-                    if( process )
+                    if ( process )
                     {
                         curx = subpathx;
                         cury = subpathy;
@@ -225,7 +225,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                     ptr = getCoord( ptr, tox );
                     ptr = getCoord( ptr, toy );
 
-                    if( process )
+                    if ( process )
                     {
                         px1 = relative ? curx + x1 : x1;
                         py1 = relative ? cury + y1 : y1;
@@ -254,14 +254,14 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                     ptr = getCoord( ptr, y2 );
                     ptr = getCoord( ptr, tox );
                     ptr = getCoord( ptr, toy );
-                    if( !( lastCommand == 'c' || lastCommand == 'C' ||
+                    if ( !( lastCommand == 'c' || lastCommand == 'C' ||
                         lastCommand == 's' || lastCommand == 'S' ) )
                     {
                         contrlx = curx;
                         contrly = cury;
                     }
 
-                    if( process )
+                    if ( process )
                     {
                         px1 = 2 * curx - contrlx;
                         py1 = 2 * cury - contrly;
@@ -290,7 +290,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                     ptr = getCoord( ptr, tox );
                     ptr = getCoord( ptr, toy );
 
-                    if( process )
+                    if ( process )
                     {
                         px1 = relative ? (curx + 2 * (x1 + curx)) * (1.0 / 3.0) : (curx + 2 * x1) * (1.0 / 3.0);
                         py1 = relative ? (cury + 2 * (y1 + cury)) * (1.0 / 3.0) : (cury + 2 * y1) * (1.0 / 3.0);
@@ -316,14 +316,14 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                 {
                     ptr = getCoord(ptr, tox);
                     ptr = getCoord(ptr, toy);
-                    if( !( lastCommand == 'q' || lastCommand == 'Q' ||
+                    if ( !( lastCommand == 'q' || lastCommand == 'Q' ||
                             lastCommand == 't' || lastCommand == 'T' ) )
                     {
                         contrlx = curx;
                         contrly = cury;
                     }
 
-                    if( process )
+                    if ( process )
                     {
                         xc = 2 * curx - contrlx;
                         yc = 2 * cury - contrly;
@@ -366,7 +366,7 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
                     rx = fabs(rx);
                     ry = fabs(ry);
 
-                    if( process )
+                    if ( process )
                         calculateArc( relative, curx, cury, angle, tox, toy, rx, ry, largeArc, sweep );
                     else
                         svgArcTo( tox, toy, rx, ry, angle, largeArc, sweep, !relative );
@@ -383,18 +383,18 @@ void KoSvgPathParser::parseSvg( const QString &s, bool process )
 
             lastCommand = command;
 
-            if(*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9'))
+            if (*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9'))
             {
                 // there are still coords in this command
-                if(command == 'M')
+                if (command == 'M')
                     command = 'L';
-                else if(command == 'm')
+                else if (command == 'm')
                     command = 'l';
             }
             else
                 command = *(ptr++);
 
-            if( lastCommand != 'C' && lastCommand != 'c' &&
+            if ( lastCommand != 'C' && lastCommand != 'c' &&
                 lastCommand != 'S' && lastCommand != 's' &&
                 lastCommand != 'Q' && lastCommand != 'q' &&
                 lastCommand != 'T' && lastCommand != 't')
@@ -424,14 +424,14 @@ void KoSvgPathParser::calculateArc(bool relative, qreal &curx, qreal &cury, qrea
 
     qreal dx;
 
-    if(!relative)
+    if (!relative)
         dx = (curx - x) / 2.0;
     else
         dx = -x / 2.0;
 
     qreal dy;
 
-    if(!relative)
+    if (!relative)
         dy = (cury - y) / 2.0;
     else
         dy = -y / 2.0;
@@ -445,7 +445,7 @@ void KoSvgPathParser::calculateArc(bool relative, qreal &curx, qreal &cury, qrea
 
     // Spec : check if radii are large enough
     qreal check = Px / Pr1 + Py / Pr2;
-    if(check > 1)
+    if (check > 1)
     {
         r1 = r1 * sqrt(check);
         r2 = r2 * sqrt(check);
@@ -459,12 +459,12 @@ void KoSvgPathParser::calculateArc(bool relative, qreal &curx, qreal &cury, qrea
     x0 = a00 * curx + a01 * cury;
     y0 = a10 * curx + a11 * cury;
 
-    if(!relative)
+    if (!relative)
         x1 = a00 * x + a01 * y;
     else
         x1 = a00 * (curx + x) + a01 * (cury + y);
 
-    if(!relative)
+    if (!relative)
         y1 = a10 * x + a11 * y;
     else
         y1 = a10 * (curx + x) + a11 * (cury + y);
@@ -479,12 +479,12 @@ void KoSvgPathParser::calculateArc(bool relative, qreal &curx, qreal &cury, qrea
 
     sfactor_sq = 1.0 / d - 0.25;
 
-    if(sfactor_sq < 0)
+    if (sfactor_sq < 0)
         sfactor_sq = 0;
 
     sfactor = sqrt(sfactor_sq);
 
-    if(sweepFlag == largeArcFlag)
+    if (sweepFlag == largeArcFlag)
         sfactor = -sfactor;
 
     xc = 0.5 * (x0 + x1) - sfactor * (y1 - y0);
@@ -495,9 +495,9 @@ void KoSvgPathParser::calculateArc(bool relative, qreal &curx, qreal &cury, qrea
     th1 = atan2(y1 - yc, x1 - xc);
 
     th_arc = th1 - th0;
-    if(th_arc < 0 && sweepFlag)
+    if (th_arc < 0 && sweepFlag)
         th_arc += 2 * M_PI;
-    else if(th_arc > 0 && !sweepFlag)
+    else if (th_arc > 0 && !sweepFlag)
         th_arc -= 2 * M_PI;
 
     n_segs = (int) (int) ceil(fabs(th_arc / (M_PI * 0.5 + 0.001)));
@@ -536,12 +536,12 @@ void KoSvgPathParser::calculateArc(bool relative, qreal &curx, qreal &cury, qrea
         }
     }
 
-    if(!relative)
+    if (!relative)
         curx = x;
     else
         curx += x;
 
-    if(!relative)
+    if (!relative)
         cury = y;
     else
         cury += y;	

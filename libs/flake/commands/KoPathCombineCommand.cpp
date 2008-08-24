@@ -23,7 +23,8 @@
 #include "KoShapeContainer.h"
 #include <klocale.h>
 
-class KoPathCombineCommand::Private {
+class KoPathCombineCommand::Private
+{
 public:
     Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
         : controller(c),
@@ -33,7 +34,7 @@ public:
     {
     }
     ~Private() {
-        if( isCombined && controller )
+        if ( isCombined && controller )
         {
             foreach( KoPathShape* path, paths )
                 delete path;
@@ -64,14 +65,14 @@ KoPathCombineCommand::~KoPathCombineCommand()
 void KoPathCombineCommand::redo()
 {
     QUndoCommand::redo();
-    if( ! d->paths.size() )
+    if ( ! d->paths.size() )
         return;
 
-    if( ! d->combinedPath )
+    if ( ! d->combinedPath )
     {
         d->combinedPath = new KoPathShape();
         KoShapeContainer * parent = d->paths.first()->parent();
-        if(parent)
+        if (parent)
             parent->addChild(d->combinedPath);
         d->combinedPath->setBorder( d->paths.first()->border() );
         d->combinedPath->setShapeId( d->paths.first()->shapeId() );
@@ -82,7 +83,7 @@ void KoPathCombineCommand::redo()
 
     d->isCombined = true;
 
-    if( d->controller )
+    if ( d->controller )
     {
         foreach( KoPathShape* p, d->paths )
             d->controller->removeShape( p );
@@ -94,12 +95,12 @@ void KoPathCombineCommand::redo()
 void KoPathCombineCommand::undo()
 {
     QUndoCommand::undo();
-    if( ! d->paths.size() )
+    if ( ! d->paths.size() )
         return;
 
     d->isCombined = false;
 
-    if( d->controller )
+    if ( d->controller )
     {
         d->controller->removeShape( d->combinedPath );
         foreach( KoPathShape* p, d->paths )

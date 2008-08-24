@@ -53,13 +53,13 @@ void KoPathControlPointMoveCommand::redo()
         if ( m_pointType == KoPathPoint::ControlPoint1 )
         {
             point->setControlPoint1( point->controlPoint1() + m_offset );
-            if( point->properties() & KoPathPoint::IsSymmetric )
+            if ( point->properties() & KoPathPoint::IsSymmetric )
             {
                 // set the other control point so that it lies on the line between the moved
                 // control point and the point, with the same distance to the point as the moved point
                 point->setControlPoint2( 2.0 * point->point() - point->controlPoint1() );
             }
-            else if( point->properties() & KoPathPoint::IsSmooth )
+            else if ( point->properties() & KoPathPoint::IsSmooth )
             {
                 // move the other control point so that it lies on the line through point and control point
                 // keeping its distance to the point
@@ -70,16 +70,16 @@ void KoPathControlPointMoveCommand::redo()
                 point->setControlPoint2( point->point() + length * direction );
             }
         }
-        else if( m_pointType == KoPathPoint::ControlPoint2 )
+        else if ( m_pointType == KoPathPoint::ControlPoint2 )
         {
             point->setControlPoint2( point->controlPoint2() + m_offset );
-            if( point->properties() & KoPathPoint::IsSymmetric )
+            if ( point->properties() & KoPathPoint::IsSymmetric )
             {
                 // set the other control point so that it lies on the line between the moved
                 // control point and the point, with the same distance to the point as the moved point
                 point->setControlPoint1( 2.0 * point->point() - point->controlPoint2() );
             }
-            else if( point->properties() & KoPathPoint::IsSmooth )
+            else if ( point->properties() & KoPathPoint::IsSmooth )
             {
                 // move the other control point so that it lies on the line through point and control point
                 // keeping its distance to the point

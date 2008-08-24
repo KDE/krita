@@ -35,23 +35,27 @@ KoShapeGroup::KoShapeGroup()
     setSize( QSizeF(0,0) );
 }
 
-void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter) {
+void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter)
+{
     Q_UNUSED(painter);
     Q_UNUSED(converter);
 }
 
-bool KoShapeGroup::hitTest( const QPointF &position ) const {
+bool KoShapeGroup::hitTest( const QPointF &position ) const
+{
     Q_UNUSED(position);
     return false;
 }
 
-void KoShapeGroup::childCountChanged() {
+void KoShapeGroup::childCountChanged()
+{
     QRectF br = boundingRect();
     setAbsolutePosition( br.topLeft(), KoFlake::TopLeftCorner );
     setSize( br.size() );
 }
 
-void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const {
+void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const
+{
     context.xmlWriter().startElement( "draw:g" );
     saveOdfAttributes( context, OdfMandatories | OdfAdditionalAttributes );
     context.xmlWriter().addAttributePt( "svg:y", position().y() );
@@ -67,14 +71,15 @@ void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const {
     context.xmlWriter().endElement();
 }
 
-bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
     loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
     forEachElement( child, element )
     {
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
-        if( shape )
+        if ( shape )
         {
             addChild( shape );
         }
@@ -84,7 +89,7 @@ bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     bool boundInitialized = false;
     foreach( KoShape * shape, iterator() )
     {
-        if( ! boundInitialized ) {
+        if ( ! boundInitialized ) {
             bound = shape->boundingRect();
             boundInitialized = true;
         }

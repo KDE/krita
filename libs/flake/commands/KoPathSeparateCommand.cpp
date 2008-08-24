@@ -23,7 +23,8 @@
 #include "KoPathShape.h"
 #include <klocale.h>
 
-class KoPathSeparateCommand::Private {
+class KoPathSeparateCommand::Private
+{
 public:
     Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
         : controller(c),
@@ -33,7 +34,7 @@ public:
     }
 
     ~Private() {
-        if( isSeparated && controller )
+        if ( isSeparated && controller )
         {
             foreach( KoPathShape* p, paths )
                 delete p;
@@ -67,19 +68,19 @@ KoPathSeparateCommand::~KoPathSeparateCommand()
 void KoPathSeparateCommand::redo()
 {
     QUndoCommand::redo();
-    if( d->separatedPaths.isEmpty() )
+    if ( d->separatedPaths.isEmpty() )
     {
         foreach( KoPathShape* p, d->paths )
         {
             QList<KoPathShape*> separatedPaths;
-            if( p->separate( separatedPaths ) )
+            if ( p->separate( separatedPaths ) )
                 d->separatedPaths << separatedPaths;
         }
     }
 
     d->isSeparated = true;
 
-    if( d->controller )
+    if ( d->controller )
     {
         foreach( KoPathShape* p, d->paths )
             d->controller->removeShape( p );
@@ -93,7 +94,7 @@ void KoPathSeparateCommand::redo()
 void KoPathSeparateCommand::undo()
 {
     QUndoCommand::undo();
-    if( d->controller )
+    if ( d->controller )
     {
         foreach( KoPathShape *p, d->separatedPaths )
             d->controller->removeShape( p );

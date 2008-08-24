@@ -26,7 +26,8 @@
 
 #include <kdebug.h>
 
-class KoShapeFactory::Private {
+class KoShapeFactory::Private
+{
 public:
     Private( const QString &i, const QString &n )
         : id(i)
@@ -60,7 +61,8 @@ KoShapeFactory::KoShapeFactory(QObject *parent, const QString &id, const QString
 {
 }
 
-KoShapeFactory::~KoShapeFactory() {
+KoShapeFactory::~KoShapeFactory()
+{
     delete d;
 }
 
@@ -82,15 +84,18 @@ KoShape * KoShapeFactory::createShapeAndInit( const KoProperties * params, KoSha
     return shape;
 }
 
-QString KoShapeFactory::toolTip() const {
+QString KoShapeFactory::toolTip() const
+{
     return d->tooltip;
 }
 
-QString KoShapeFactory::icon() const {
+QString KoShapeFactory::icon() const
+{
     return d->iconName;
 }
 
-QString KoShapeFactory::name() const {
+QString KoShapeFactory::name() const
+{
     return d->name;
 }
 
@@ -117,32 +122,39 @@ bool KoShapeFactory::supports(const KoXmlElement & e) const
     return false;
 }
 
-void KoShapeFactory::addTemplate(KoShapeTemplate &params) {
+void KoShapeFactory::addTemplate(KoShapeTemplate &params)
+{
     params.id = d->id;
     d->templates.append(params);
 }
 
-void KoShapeFactory::setToolTip(const QString & tooltip) {
+void KoShapeFactory::setToolTip(const QString & tooltip)
+{
     d->tooltip = tooltip;
 }
 
-void KoShapeFactory::setIcon(const QString & iconName) {
+void KoShapeFactory::setIcon(const QString & iconName)
+{
     d->iconName = iconName;
 }
 
-QString KoShapeFactory::id() const {
+QString KoShapeFactory::id() const
+{
     return d->id;
 }
 
-void KoShapeFactory::setOptionPanels(QList<KoShapeConfigFactory*> &panelFactories) {
+void KoShapeFactory::setOptionPanels(QList<KoShapeConfigFactory*> &panelFactories)
+{
     d->configPanels = panelFactories;
 }
 
-const QList<KoShapeConfigFactory*> &KoShapeFactory::panelFactories() {
+const QList<KoShapeConfigFactory*> &KoShapeFactory::panelFactories()
+{
     return d->configPanels;
 }
 
-const QList<KoShapeTemplate> KoShapeFactory::templates() const {
+const QList<KoShapeTemplate> KoShapeFactory::templates() const
+{
     return d->templates;
 }
 

@@ -39,7 +39,8 @@ KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, QList<qr
     setText(i18n( "Shear shapes" ));
 }
 
-void KoShapeShearCommand::redo() {
+void KoShapeShearCommand::redo()
+{
     QUndoCommand::redo();
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->update();
@@ -48,7 +49,8 @@ void KoShapeShearCommand::redo() {
     }
 }
 
-void KoShapeShearCommand::undo() {
+void KoShapeShearCommand::undo()
+{
     QUndoCommand::undo();
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->update();

@@ -42,7 +42,7 @@ KoPathConnectionPointStrategy::KoPathConnectionPointStrategy( KoPathTool *tool, 
     , m_handleId( handleId )
     , m_startPoint( m_connectionShape->shapeToDocument( m_connectionShape->handlePosition( handleId ) ) )
 {
-    if( handleId == 0 )
+    if ( handleId == 0 )
         m_oldConnection = m_connectionShape->connection1();
     else
         m_oldConnection = m_connectionShape->connection2();
@@ -61,7 +61,7 @@ void KoPathConnectionPointStrategy::handleMouseMove( const QPointF &mouseLocatio
 
     QRectF roi( mouseLocation-QPointF(MAX_DISTANCE,MAX_DISTANCE), QSizeF(2*MAX_DISTANCE,2*MAX_DISTANCE ) );
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi, true );
-    if( shapes.count() < 2 )
+    if ( shapes.count() < 2 )
         KoParameterChangeStrategy::handleMouseMove( mouseLocation, modifiers );
     else
     {
@@ -74,13 +74,13 @@ void KoPathConnectionPointStrategy::handleMouseMove( const QPointF &mouseLocatio
         foreach( KoShape* shape, shapes )
         {
             // we do not want to connect to ourself
-            if( shape == m_connectionShape )
+            if ( shape == m_connectionShape )
                 continue;
 
             bool alreadyPresent = true;
             QMatrix m = shape->absoluteTransformation(0);
             QList<QPointF> connectionPoints = shape->connectionPoints();
-            if( ! connectionPoints.count() )
+            if ( ! connectionPoints.count() )
             {
                 QSizeF size = shape->size();
                 connectionPoints.append( QPointF( 0.0, 0.0 ) );
@@ -99,9 +99,9 @@ void KoPathConnectionPointStrategy::handleMouseMove( const QPointF &mouseLocatio
             {
                 QPointF difference = localMousePosition-connectionPoints[i];
                 qreal distance = difference.x()*difference.x() + difference.y()*difference.y();
-                if( distance > MAX_DISTANCE_SQR )
+                if ( distance > MAX_DISTANCE_SQR )
                     continue;
-                if( distance < minimalDistance )
+                if ( distance < minimalDistance )
                 {
                     nearestShape = shape;
                     nearestPoint = connectionPoints[i];
@@ -112,9 +112,9 @@ void KoPathConnectionPointStrategy::handleMouseMove( const QPointF &mouseLocatio
             }
         }
 
-        if( nearestShape )
+        if ( nearestShape )
         {
-            if( ! nearestAlreadyPresent )
+            if ( ! nearestAlreadyPresent )
             {
                 //nearestShape->addConnectionPoint( nearestPoint );
                 nearestPointIndex = -1;
@@ -127,7 +127,7 @@ void KoPathConnectionPointStrategy::handleMouseMove( const QPointF &mouseLocatio
             nearestPointIndex = -1;
         }
         m_newConnection = KoConnection( nearestShape, nearestPointIndex );
-        if( m_handleId == 0 )
+        if ( m_handleId == 0 )
             m_connectionShape->setConnection1( m_newConnection.first, m_newConnection.second );
         else 
             m_connectionShape->setConnection2( m_newConnection.first, m_newConnection.second );
@@ -143,7 +143,7 @@ void KoPathConnectionPointStrategy::finishInteraction( Qt::KeyboardModifiers mod
 QUndoCommand* KoPathConnectionPointStrategy::createCommand()
 {
     // check if we connect to a shape and if the connection point is already present
-    if( m_newConnection.first && m_newConnection.second == -1 )
+    if ( m_newConnection.first && m_newConnection.second == -1 )
     {
         // map handle position into document coordinates
         QPointF p = m_connectionShape->shapeToDocument( m_connectionShape->handlePosition( m_handleId ) );
@@ -153,7 +153,7 @@ QUndoCommand* KoPathConnectionPointStrategy::createCommand()
     }
 
     // set the connection corresponding to the handle we are working on
-    if( m_handleId == 0 )
+    if ( m_handleId == 0 )
         m_connectionShape->setConnection1( m_newConnection.first, m_newConnection.second );
     else 
         m_connectionShape->setConnection2( m_newConnection.first, m_newConnection.second );

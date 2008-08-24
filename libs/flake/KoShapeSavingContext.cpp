@@ -83,12 +83,14 @@ KoShapeSavingContext::KoShapeSavingOptions KoShapeSavingContext::options() const
     return m_savingOptions;
 }
 
-void KoShapeSavingContext::addOption( ShapeSavingOption option) {
+void KoShapeSavingContext::addOption( ShapeSavingOption option)
+{
     m_savingOptions = m_savingOptions | option;
 }
 
-void KoShapeSavingContext::removeOption( ShapeSavingOption option) {
-    if(isSet(option))
+void KoShapeSavingContext::removeOption( ShapeSavingOption option)
+{
+    if (isSet(option))
         m_savingOptions = m_savingOptions ^ option; // xor to remove it.
 }
 
@@ -114,7 +116,7 @@ void KoShapeSavingContext::clearDrawIds()
 
 void KoShapeSavingContext::addLayerForSaving( const KoShapeLayer * layer )
 {
-    if( layer && ! m_layers.contains( layer ) )
+    if ( layer && ! m_layers.contains( layer ) )
         m_layers.append( layer );
 }
 
@@ -127,9 +129,9 @@ void KoShapeSavingContext::saveLayerSet( KoXmlWriter * xmlWriter ) const
     {
         xmlWriter->startElement( "draw:layer" );
         xmlWriter->addAttribute( "draw:name", layer->name() );
-        if( layer->isLocked() )
+        if ( layer->isLocked() )
             xmlWriter->addAttribute( "draw:protected", "true" );
-        if( ! layer->isVisible() )
+        if ( ! layer->isVisible() )
             xmlWriter->addAttribute( "draw:display", "none" );
         xmlWriter->endElement();  // draw:layer
     }
@@ -139,7 +141,7 @@ void KoShapeSavingContext::saveLayerSet( KoXmlWriter * xmlWriter ) const
 QString KoShapeSavingContext::addImageForSaving( const QPixmap &pixmap )
 {
     QString filename = "Pictures/image" + QTime::currentTime().toString( "_hh_mm_ss_zzz.png" );
-    if( m_pixmaps.contains( filename ) )
+    if ( m_pixmaps.contains( filename ) )
     {
         int i = 1;
         while( m_pixmaps.contains( filename + QString("_%1").arg( i ) ) )
@@ -161,7 +163,7 @@ bool KoShapeSavingContext::saveImages( KoStore * store, KoXmlWriter * manifestWr
     while( i.hasNext() )
     {
         i.next();
-        if( store->open( i.key() ) )
+        if ( store->open( i.key() ) )
         {
             KoStoreDevice dev(store);
             if ( ! i.value().save(&dev, "PNG" ) )

@@ -20,7 +20,8 @@
 
 #include "KoShapeBorderFactory.h"
 
-class KoShapeBorderFactory::Private {
+class KoShapeBorderFactory::Private
+{
 public:
     Private( const QString &i, const QString &n ) : id(i), name(n) { }
     const QString id;
@@ -33,15 +34,18 @@ KoShapeBorderFactory::KoShapeBorderFactory(QObject *parent, const QString &id, c
 {
 }
 
-KoShapeBorderFactory::~KoShapeBorderFactory() {
+KoShapeBorderFactory::~KoShapeBorderFactory()
+{
     delete d;
 }
 
-QString KoShapeBorderFactory::name() const {
+QString KoShapeBorderFactory::name() const
+{
     return d->name;
 }
 
-QString KoShapeBorderFactory::id() const {
+QString KoShapeBorderFactory::id() const
+{
     return d->id;
 }
 

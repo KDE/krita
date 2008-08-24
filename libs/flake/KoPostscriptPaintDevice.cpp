@@ -21,14 +21,17 @@
 
 #include <limits.h>
 
-KoPostscriptPaintDevice::KoPostscriptPaintDevice() {
+KoPostscriptPaintDevice::KoPostscriptPaintDevice()
+{
 }
 
-QPaintEngine *KoPostscriptPaintDevice::paintEngine () const {
+QPaintEngine *KoPostscriptPaintDevice::paintEngine () const
+{
     return 0;
 }
 
-int KoPostscriptPaintDevice::metric (QPaintDevice::PaintDeviceMetric metric) const {
+int KoPostscriptPaintDevice::metric (QPaintDevice::PaintDeviceMetric metric) const
+{
     switch(metric) {
         case QPaintDevice::PdmWidth:
         case QPaintDevice::PdmHeight:

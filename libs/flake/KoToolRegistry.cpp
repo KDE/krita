@@ -23,10 +23,12 @@
 
 #include <KoPluginLoader.h>
 
-KoToolRegistry::KoToolRegistry() {
+KoToolRegistry::KoToolRegistry()
+{
 }
 
-void KoToolRegistry::init() {
+void KoToolRegistry::init()
+{
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
@@ -49,7 +51,7 @@ static K3StaticDeleter<KoToolRegistry> staticToolRegistryDeleter;
 
 KoToolRegistry* KoToolRegistry::instance()
 {
-    if(KoToolRegistry::s_instance == 0) {
+    if (KoToolRegistry::s_instance == 0) {
         staticToolRegistryDeleter.setObject(s_instance, new KoToolRegistry());
         KoToolRegistry::s_instance->init();
     }

@@ -58,7 +58,8 @@ KoShapeRegistry::~KoShapeRegistry()
     delete d;
 }
 
-void KoShapeRegistry::init() {
+void KoShapeRegistry::init()
+{
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
@@ -110,7 +111,7 @@ static K3StaticDeleter<KoShapeRegistry> staticShapeRegistryDeleter;
 
 KoShapeRegistry* KoShapeRegistry::instance()
 {
-    if(KoShapeRegistry::s_singleton == 0)
+    if (KoShapeRegistry::s_singleton == 0)
     {
         staticShapeRegistryDeleter.setObject(s_singleton, new KoShapeRegistry());
         KoShapeRegistry::s_singleton->init();
@@ -139,7 +140,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     }
     // Hardwire the group shape into the loading as it should not appear
     // in the shape selector
-    else if( e.localName() == "g" && e.namespaceURI() == KoXmlNS::draw )
+    else if ( e.localName() == "g" && e.namespaceURI() == KoXmlNS::draw )
     {
         KoShapeGroup * group = new KoShapeGroup();
 
@@ -147,7 +148,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
         bool loaded = group->loadOdf( e, context );
         context.odfLoadingContext().styleStack().restore();
 
-        if( loaded )
+        if ( loaded )
             return group;
 
         delete group;
@@ -177,14 +178,14 @@ KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & fullElement
 
             KoShape * shape = factory->createDefaultShapeAndInit( context.shapeController() );
 
-            if( shape->shapeId().isEmpty() )
+            if ( shape->shapeId().isEmpty() )
                 shape->setShapeId(factory->id());
 
             context.odfLoadingContext().styleStack().save();
             bool loaded = shape->loadOdf( fullElement, context );
             context.odfLoadingContext().styleStack().restore();
 
-            if( loaded )
+            if ( loaded )
                 return shape;
 
             // Maybe a shape with a lower priority can load our

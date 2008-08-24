@@ -37,7 +37,7 @@ KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 void KoConnectionShapeConfigWidget::open(KoShape *shape)
 {
     m_connection = dynamic_cast<KoConnectionShape*>( shape );
-    if( ! m_connection )
+    if ( ! m_connection )
         return;
 
     widget.connectionType->blockSignals( true );
@@ -49,7 +49,7 @@ void KoConnectionShapeConfigWidget::open(KoShape *shape)
 
 void KoConnectionShapeConfigWidget::save()
 {
-    if( ! m_connection )
+    if ( ! m_connection )
         return;
 
     m_connection->setConnectionType( static_cast<KoConnectionShape::Type>( widget.connectionType->currentIndex() ) );
@@ -57,7 +57,7 @@ void KoConnectionShapeConfigWidget::save()
 
 QUndoCommand * KoConnectionShapeConfigWidget::createCommand()
 {
-    if( ! m_connection )
+    if ( ! m_connection )
         return 0;
     else
     {

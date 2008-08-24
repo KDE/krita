@@ -44,7 +44,7 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
-        if( ! isEditable( shape ) )
+        if ( ! isEditable( shape ) )
             continue;
         m_selectedShapes << shape;
         m_previousPositions << shape->position();
@@ -55,17 +55,18 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
     m_initialSelectionPosition = canvas->shapeManager()->selection()->position();
 }
 
-void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
-    if(m_selectedShapes.isEmpty()) return;
+void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
+{
+    if (m_selectedShapes.isEmpty()) return;
     QPointF diff = point - m_start;
-    if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0) {
+    if (m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0) {
         QPointF newPos = m_initialTopLeft + diff;
         applyGrid(newPos);
         diff = newPos - m_initialTopLeft;
     }
-    if(modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
+    if (modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
         // keep x or y position unchanged
-        if(qAbs(diff.x()) < qAbs(diff.y()))
+        if (qAbs(diff.x()) < qAbs(diff.y()))
             diff.setX(0);
         else
             diff.setY(0);
@@ -77,7 +78,7 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     int i=0;
     foreach(KoShape *shape, m_selectedShapes) {
         diff = m_previousPositions.at(i) + m_diff - shape->position();
-        if(shape->parent())
+        if (shape->parent())
             shape->parent()->model()->proposeMove(shape, diff);
         m_canvas->clipToDocument(shape, diff);
         QPointF newPos (shape->position() + diff);
@@ -90,13 +91,15 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     m_canvas->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
 }
 
-QUndoCommand* KoShapeMoveStrategy::createCommand() {
-    if(m_diff.x() == 0 && m_diff.y() == 0)
+QUndoCommand* KoShapeMoveStrategy::createCommand()
+{
+    if (m_diff.x() == 0 && m_diff.y() == 0)
         return 0;
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
 }
 
-void KoShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
+void KoShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+{
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );

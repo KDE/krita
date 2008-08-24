@@ -31,7 +31,7 @@ public:
     {
         foreach( KoShapeShadow* shadow, oldShadows )
         {
-            if(shadow && shadow->useCount() <= 0)
+            if (shadow && shadow->useCount() <= 0)
                 delete shadow;
         }
     }

@@ -19,7 +19,8 @@
 
 #include "KoInputDevice.h"
 
-class KoInputDevice::Private {
+class KoInputDevice::Private
+{
 public:
     Private( QTabletEvent::TabletDevice d, QTabletEvent::PointerType p, qint64 id, bool m)
         : device(d),
@@ -50,7 +51,8 @@ KoInputDevice::KoInputDevice(const KoInputDevice &other)
 }
 
 
-KoInputDevice::~KoInputDevice() {
+KoInputDevice::~KoInputDevice()
+{
     delete d;
 }
 
@@ -75,16 +77,19 @@ bool KoInputDevice::isMouse() const
 }
 
 
-bool KoInputDevice::operator==(const KoInputDevice &other) const {
+bool KoInputDevice::operator==(const KoInputDevice &other) const
+{
     return d->device == other.d->device && d->pointer == other.d->pointer &&
         d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;
 }
 
-bool KoInputDevice::operator!=(const KoInputDevice &other) const {
+bool KoInputDevice::operator!=(const KoInputDevice &other) const
+{
     return ! (operator==(other));
 }
 
-KoInputDevice & KoInputDevice::operator=(const KoInputDevice &other) {
+KoInputDevice & KoInputDevice::operator=(const KoInputDevice &other)
+{
     d->device = other.d->device;
     d->pointer = other.d->pointer;
     d->uniqueTabletId = other.d->uniqueTabletId;
@@ -93,18 +98,21 @@ KoInputDevice & KoInputDevice::operator=(const KoInputDevice &other) {
 }
 
 // static
-KoInputDevice KoInputDevice::mouse() {
+KoInputDevice KoInputDevice::mouse()
+{
     KoInputDevice id;
     return id;
 }
 // static
-KoInputDevice KoInputDevice::stylus() {
+KoInputDevice KoInputDevice::stylus()
+{
     KoInputDevice id(QTabletEvent::Stylus, QTabletEvent::Pen);
     return id;
 }
 
 // static
-KoInputDevice KoInputDevice::eraser() {
+KoInputDevice KoInputDevice::eraser()
+{
     KoInputDevice id(QTabletEvent::Stylus, QTabletEvent::Eraser);
     return id;
 }

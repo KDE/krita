@@ -39,7 +39,7 @@ public:
     }
     QGradient * cloneGradient( const QGradient * gradient ) const
     {
-        if( ! gradient )
+        if ( ! gradient )
             return 0;
 
         QGradient * clone = 0;
@@ -111,7 +111,7 @@ QMatrix KoGradientBackground::matrix() const
 
 void KoGradientBackground::setGradient( QGradient * gradient )
 {
-    if( d->gradient )
+    if ( d->gradient )
         delete d->gradient;
 
     d->gradient = gradient;
@@ -120,7 +120,7 @@ void KoGradientBackground::setGradient( QGradient * gradient )
 
 void KoGradientBackground::setGradient( const QGradient & gradient )
 {
-    if( d->gradient )
+    if ( d->gradient )
         delete d->gradient;
 
     d->gradient = d->cloneGradient( &gradient );
@@ -134,7 +134,7 @@ const QGradient * KoGradientBackground::gradient() const
 
 KoGradientBackground& KoGradientBackground::operator = ( const KoGradientBackground &rhs )
 {
-    if( this == &rhs )
+    if ( this == &rhs )
         return *this;
 
     d->matrix = rhs.d->matrix;
@@ -164,7 +164,7 @@ void KoGradientBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &c
 bool KoGradientBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF &shapeSize )
 {
     KoStyleStack &styleStack = context.styleStack();
-    if( ! styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) 
+    if ( ! styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) 
         return false;
 
     QString fillStyle = styleStack.property( KoXmlNS::draw, "fill" );

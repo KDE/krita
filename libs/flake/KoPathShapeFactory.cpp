@@ -37,7 +37,8 @@ KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
     setLoadingPriority( 0 );
 }
 
-KoShape * KoPathShapeFactory::createDefaultShape() const {
+KoShape * KoPathShapeFactory::createDefaultShape() const
+{
     KoPathShape* path = new KoPathShape();
     path->moveTo( QPointF( 0, 50 ) );
     path->curveTo( QPointF( 0, 120 ), QPointF( 50, 120 ), QPointF( 50, 50 ) );
@@ -47,20 +48,21 @@ KoShape * KoPathShapeFactory::createDefaultShape() const {
     return path;
 }
 
-KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {
+KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const
+{
     Q_UNUSED(params);
     return createDefaultShape();
 }
 
 bool KoPathShapeFactory::supports(const KoXmlElement & e) const
 {
-    if( e.localName() == "path" && e.namespaceURI() == KoXmlNS::draw )
+    if ( e.localName() == "path" && e.namespaceURI() == KoXmlNS::draw )
         return true;
-    if( e.localName() == "line" && e.namespaceURI() == KoXmlNS::draw )
+    if ( e.localName() == "line" && e.namespaceURI() == KoXmlNS::draw )
         return true;
-    if( e.localName() == "polyline" && e.namespaceURI() == KoXmlNS::draw )
+    if ( e.localName() == "polyline" && e.namespaceURI() == KoXmlNS::draw )
         return true;
-    if( e.localName() == "polygon" && e.namespaceURI() == KoXmlNS::draw )
+    if ( e.localName() == "polygon" && e.namespaceURI() == KoXmlNS::draw )
         return true;
 
     return false;
@@ -72,7 +74,7 @@ void KoPathShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   &
     // we want to make sure that there is always an image collection
     // added to the data center map, in case the picture shape plugin
     // is not loaded
-    if( ! dataCenterMap.contains( "ImageCollection" ) )
+    if ( ! dataCenterMap.contains( "ImageCollection" ) )
     {
         KoImageCollection *imgCol = new KoImageCollection();
         dataCenterMap["ImageCollection"] = imgCol;

@@ -36,10 +36,12 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, QList<
     setText(i18n( "Ungroup shapes" ));
 }
 
-void KoShapeUngroupCommand::redo () {
+void KoShapeUngroupCommand::redo ()
+{
     KoShapeGroupCommand::undo();
 }
 
-void KoShapeUngroupCommand::undo () {
+void KoShapeUngroupCommand::undo ()
+{
     KoShapeGroupCommand::redo();
 }

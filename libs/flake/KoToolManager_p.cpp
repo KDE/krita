@@ -28,12 +28,14 @@
 #include <stdlib.h> // for random()
 
 //   ************ ToolHelper **********
-ToolHelper::ToolHelper(KoToolFactory *tool) {
+ToolHelper::ToolHelper(KoToolFactory *tool)
+{
     m_toolFactory = tool;
     m_uniqueId = (int) random();
 }
 
-QToolButton* ToolHelper::createButton() {
+QToolButton* ToolHelper::createButton()
+{
     QToolButton *but = new QToolButton();
     but->setIcon(KIcon( m_toolFactory->icon() ).pixmap(22));
     but->setToolTip(m_toolFactory->toolTip());
@@ -41,23 +43,28 @@ QToolButton* ToolHelper::createButton() {
     return but;
 }
 
-void ToolHelper::buttonPressed() {
+void ToolHelper::buttonPressed()
+{
     emit toolActivated(this);
 }
 
-QString ToolHelper::id() const {
+QString ToolHelper::id() const
+{
     return m_toolFactory->id();
 }
 
-QString ToolHelper::activationShapeId() const {
+QString ToolHelper::activationShapeId() const
+{
     return m_toolFactory->activationShapeId();
 }
 
-QString ToolHelper::name() const {
+QString ToolHelper::name() const
+{
     return m_toolFactory->name();
 }
 
-KoTool *ToolHelper::createTool(KoCanvasBase *canvas) const {
+KoTool *ToolHelper::createTool(KoCanvasBase *canvas) const
+{
     if (! canCreateTool(canvas))
         return 0;
     KoTool *tool = m_toolFactory->createTool(canvas);
@@ -65,19 +72,23 @@ KoTool *ToolHelper::createTool(KoCanvasBase *canvas) const {
     return tool;
 }
 
-QString ToolHelper::toolType() const {
+QString ToolHelper::toolType() const
+{
     return m_toolFactory->toolType();
 }
 
-int ToolHelper::priority() const {
+int ToolHelper::priority() const
+{
     return m_toolFactory->priority();
 }
 
-KShortcut ToolHelper::shortcut() const {
+KShortcut ToolHelper::shortcut() const
+{
     return m_toolFactory->shortcut();
 }
 
-bool ToolHelper::inputDeviceAgnostic() const {
+bool ToolHelper::inputDeviceAgnostic() const
+{
     return m_toolFactory->inputDeviceAgnostic();
 }
 
@@ -94,7 +105,8 @@ Connector::Connector(KoShapeManager *parent)
     connect(m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
-void Connector::selectionChanged() {
+void Connector::selectionChanged()
+{
     emit selectionChanged(m_shapeManager->selection()->selectedShapes());
 }
 

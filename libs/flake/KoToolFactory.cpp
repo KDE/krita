@@ -19,7 +19,8 @@
 
 #include "KoToolFactory.h"
 
-class KoToolFactory::Private {
+class KoToolFactory::Private
+{
 public:
     Private(const QString &i, const QString &n)
         : priority(100),
@@ -50,51 +51,63 @@ KoToolFactory::~KoToolFactory()
     delete d;
 }
 
-QString KoToolFactory::id() const {
+QString KoToolFactory::id() const
+{
     return d->id;
 }
 
-int KoToolFactory::priority() const {
+int KoToolFactory::priority() const
+{
     return d->priority;
 }
 
-QString KoToolFactory::toolType() const {
+QString KoToolFactory::toolType() const
+{
     return d->toolType;
 }
 
-QString KoToolFactory::toolTip() const {
+QString KoToolFactory::toolTip() const
+{
     return d->tooltip;
 }
 
-QString KoToolFactory::icon() const {
+QString KoToolFactory::icon() const
+{
     return d->icon;
 }
 
-QString KoToolFactory::activationShapeId() const {
+QString KoToolFactory::activationShapeId() const
+{
     return d->activationId;
 }
 
-KShortcut KoToolFactory::shortcut() const {
+KShortcut KoToolFactory::shortcut() const
+{
     return d->shortcut;
 }
 
-void KoToolFactory::setActivationShapeId(const QString &activationShapeId) {
+void KoToolFactory::setActivationShapeId(const QString &activationShapeId)
+{
     d->activationId = activationShapeId;
 }
 
-void KoToolFactory::setToolTip(const QString & tooltip) {
+void KoToolFactory::setToolTip(const QString & tooltip)
+{
     d->tooltip = tooltip;
 }
 
-void KoToolFactory::setToolType(const QString & toolType) {
+void KoToolFactory::setToolType(const QString & toolType)
+{
     d->toolType = toolType;
 }
 
-void KoToolFactory::setIcon(const QString & icon) {
+void KoToolFactory::setIcon(const QString & icon)
+{
     d->icon = icon;
 }
 
-void KoToolFactory::setPriority(int newPriority) {
+void KoToolFactory::setPriority(int newPriority)
+{
     d->priority = newPriority;
 }
 
@@ -103,15 +116,18 @@ void KoToolFactory::setShortcut(const KShortcut & shortcut)
     d->shortcut = shortcut;
 }
 
-QString KoToolFactory::name() const {
+QString KoToolFactory::name() const
+{
     return d->name;
 }
 
-void KoToolFactory::setInputDeviceAgnostic(bool agnostic) {
+void KoToolFactory::setInputDeviceAgnostic(bool agnostic)
+{
     d->inputDeviceAgnostic = agnostic;
 }
 
-bool KoToolFactory::inputDeviceAgnostic() const {
+bool KoToolFactory::inputDeviceAgnostic() const
+{
     return d->inputDeviceAgnostic;
 }
 

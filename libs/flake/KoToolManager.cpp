@@ -64,7 +64,8 @@
 #include <QStack>
 #include <QLabel>
 
-class CanvasData {
+class CanvasData
+{
 public:
     CanvasData(KoCanvasController *cc, const KoInputDevice &id)
         : activeTool(0),
@@ -86,7 +87,8 @@ public:
     QLabel *dummyToolLabel;
 };
 
-class KoToolManager::Private {
+class KoToolManager::Private
+{
 public:
     Private() : canvasData(0)
     {
@@ -112,12 +114,12 @@ public:
     // helper method.
     CanvasData *createCanvasData(KoCanvasController *controller, KoInputDevice device) {
         QHash<QString, KoTool*> origHash;
-        if(canvasses.contains(controller))
+        if (canvasses.contains(controller))
             origHash = canvasses.value(controller).first()->allTools;
 
         QHash<QString, KoTool*> toolsHash;
         foreach(ToolHelper *tool, tools) {
-            if(tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
+            if (tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
                 // reuse ones that are marked as inputDeviceAgnostic();
                 toolsHash.insert(tool->id(), origHash.value(tool->id()));
                 continue;
@@ -135,10 +137,10 @@ public:
             foreach(QAction *action, tl->actions().values())
                 action->setEnabled(false);
             KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*> (tl);
-            if(zoomTool)
+            if (zoomTool)
                 zoomTool->setCanvasController(controller);
             KoPanTool *panTool = dynamic_cast<KoPanTool*> (tl);
-            if(panTool)
+            if (panTool)
                 panTool->setCanvasController(controller);
         }
         KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
@@ -162,11 +164,13 @@ KoToolManager::KoToolManager()
     QApplication::instance()->installEventFilter(this);
 }
 
-KoToolManager::~KoToolManager() {
+KoToolManager::~KoToolManager()
+{
     delete d;
 }
 
-void KoToolManager::setup() {
+void KoToolManager::setup()
+{
     if (d->tools.size() > 0)
         return;
 
@@ -191,12 +195,13 @@ void KoToolManager::setup() {
     KoDeviceRegistry::instance();
 }
 
-QList<KoToolManager::Button> KoToolManager::createToolList(KoCanvasBase *canvas) const {
+QList<KoToolManager::Button> KoToolManager::createToolList(KoCanvasBase *canvas) const
+{
     QList<KoToolManager::Button> answer;
     foreach(ToolHelper *tool, d->tools) {
-        if(tool->id() == KoCreateShapesTool_ID)
+        if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
-        if(tool->id() == KoGuidesTool_ID)
+        if (tool->id() == KoGuidesTool_ID)
             continue; // don't show this one.
         if (! tool->canCreateTool(canvas))
             continue;
@@ -213,12 +218,12 @@ QList<KoToolManager::Button> KoToolManager::createToolList(KoCanvasBase *canvas)
 
 void KoToolManager::requestToolActivation( KoCanvasController * controller )
 {
-    if( d->canvasses.contains( controller ) )
+    if ( d->canvasses.contains( controller ) )
     {
         QString activeToolId = d->canvasses.value( controller ).first()->activeToolId;
         foreach( ToolHelper * th, d->tools )
         {
-            if( th->id() == activeToolId )
+            if ( th->id() == activeToolId )
             {
                 toolActivated( th );
                 break;
@@ -227,14 +232,16 @@ void KoToolManager::requestToolActivation( KoCanvasController * controller )
     }
 }
 
-KoInputDevice KoToolManager::currentInputDevice() const {
+KoInputDevice KoToolManager::currentInputDevice() const
+{
     return d->inputDevice;
 }
 
-void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *controller) {
+void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *controller)
+{
     setup();
 
-    if(! d->canvasses.contains(controller)) {
+    if (! d->canvasses.contains(controller)) {
         kWarning(30006) << "registerTools called on a canvasController that has not been registered (yet)!\n";
         return;
     }
@@ -246,8 +253,9 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     }
 }
 
-void KoToolManager::addController(KoCanvasController *controller ) {
-    if(d->canvasses.keys().contains(controller))
+void KoToolManager::addController(KoCanvasController *controller )
+{
+    if (d->canvasses.keys().contains(controller))
         return;
     setup();
     attachCanvas(controller);
@@ -255,13 +263,15 @@ void KoToolManager::addController(KoCanvasController *controller ) {
     connect(controller, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
 }
 
-void KoToolManager::removeCanvasController(KoCanvasController *controller) {
+void KoToolManager::removeCanvasController(KoCanvasController *controller)
+{
     detachCanvas(controller);
     disconnect(controller, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     disconnect(controller, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
 }
 
-void KoToolManager::toolActivated(ToolHelper *tool) {
+void KoToolManager::toolActivated(ToolHelper *tool)
+{
     Q_ASSERT(d->canvasData);
     KoTool *t = d->canvasData->allTools.value(tool->id());
     Q_ASSERT(t);
@@ -272,7 +282,8 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
     switchTool(t, false);
 }
 
-void KoToolManager::switchTool(const QString &id, bool temporary) {
+void KoToolManager::switchTool(const QString &id, bool temporary)
+{
     if (d->canvasData->activeTool && temporary)
         d->canvasData->stack.push(d->canvasData->activeToolId);
     d->canvasData->activeToolId = id;
@@ -283,7 +294,7 @@ void KoToolManager::switchTool(const QString &id, bool temporary) {
     }
 
     foreach(ToolHelper *th, d->tools) {
-        if(th->id() == id) {
+        if (th->id() == id) {
             d->canvasData->activationShapeId = th->activationShapeId();
             break;
         }
@@ -292,7 +303,8 @@ void KoToolManager::switchTool(const QString &id, bool temporary) {
     switchTool(tool, temporary);
 }
 
-void KoToolManager::switchTool(KoTool *tool, bool temporary) {
+void KoToolManager::switchTool(KoTool *tool, bool temporary)
+{
     Q_ASSERT(tool);
     if (d->canvasData == 0)
         return;
@@ -304,15 +316,15 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
         // check if this tool is inputDeviceAgnostic and used by other devices, in which case we should not deactivate.
         QList<CanvasData*> items = d->canvasses[d->canvasData->canvas];
         foreach(CanvasData *cd, items) {
-            if(cd == d->canvasData) continue;
-            if(cd->activeTool == d->canvasData->activeTool) {
+            if (cd == d->canvasData) continue;
+            if (cd->activeTool == d->canvasData->activeTool) {
                 newActiveTool = false;
                 break;
             }
         }
     }
 
-    if(newActiveTool) {
+    if (newActiveTool) {
         foreach(QAction *action, d->canvasData->activeTool->actions().values())
             action->setEnabled(false);
         // repaint the decorations before we deactivate the tool as it might deleted
@@ -354,29 +366,30 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     postSwitchTool();
 }
 
-void KoToolManager::postSwitchTool() {
+void KoToolManager::postSwitchTool()
+{
 #ifndef NDEBUG
     int canvasCount = 1;
     foreach(QList<CanvasData*> list, d->canvasses) {
         bool first = true;
         foreach(CanvasData *data, list) {
-            if(first)
+            if (first)
                 kDebug(30006) <<"Canvas" << canvasCount++;
             kDebug(30006) <<"  +- Tool:" << data->activeToolId  << (data == d->canvasData?" *":"");
             first = false;
         }
     }
 #endif
-    if(d->canvasData->canvas->canvas()) {
+    if (d->canvasData->canvas->canvas()) {
         KoCanvasBase *canvas = d->canvasData->canvas->canvas();
         KoToolProxy *tp = d->proxies.value(canvas);
-        if(tp)
+        if (tp)
             tp->setActiveTool(d->canvasData->activeTool);
         canvas->updateInputMethodInfo();
     }
 
     QMap<QString, QWidget *> optionWidgetMap = d->canvasData->activeTool->optionWidgets();
-    if(optionWidgetMap.empty()) { // no option widget.
+    if (optionWidgetMap.empty()) { // no option widget.
         QWidget *toolWidget;
         QString name;
         foreach( ToolHelper * tool, d->tools ) {
@@ -386,7 +399,7 @@ void KoToolManager::postSwitchTool() {
             }
         }
         toolWidget = d->canvasData->dummyToolWidget;
-        if(toolWidget == 0) {
+        if (toolWidget == 0) {
             toolWidget = new QWidget();
             QVBoxLayout *layout = new QVBoxLayout(toolWidget);
             layout->setMargin(3);
@@ -404,7 +417,8 @@ void KoToolManager::postSwitchTool() {
 }
 
 
-void KoToolManager::attachCanvas(KoCanvasController *controller) {
+void KoToolManager::attachCanvas(KoCanvasController *controller)
+{
     CanvasData *cd = d->createCanvasData(controller, KoInputDevice::mouse());
     // switch to new canvas as the active one.
     d->canvasData = cd;
@@ -414,7 +428,7 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     d->canvasses[controller] = canvasses;
 
     KoToolProxy *tp = d->proxies[controller->canvas()];
-    if(tp)
+    if (tp)
         tp->setCanvasController(controller);
 
     if (cd->activeTool == 0)
@@ -424,16 +438,16 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
         ToolHelper * helper = 0;
         foreach( ToolHelper * th, d->tools )
         {
-            if( th->toolType() == KoToolFactory::mainToolType() )
+            if ( th->toolType() == KoToolFactory::mainToolType() )
             {
-                if( th->priority() < highestPriority )
+                if ( th->priority() < highestPriority )
                 {
                     highestPriority = qMin( highestPriority, th->priority() );
                     helper = th;
                 }
             }
         }
-        if( helper )
+        if ( helper )
             toolActivated( helper );
     }
 
@@ -445,7 +459,8 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
     emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
 }
 
-void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
+void KoToolManager::movedFocus(QWidget *from, QWidget *to)
+{
     Q_UNUSED(from);
     if (to == 0 || d->canvasData && to == d->canvasData->canvas)
         return;
@@ -464,10 +479,10 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     if (d->canvasData && newCanvas == d->canvasData->canvas)
         return;
 
-    if(! d->canvasses.contains(newCanvas))
+    if (! d->canvasses.contains(newCanvas))
         return;
     foreach(CanvasData *data, d->canvasses.value(newCanvas)) {
-        if(data->inputDevice == d->inputDevice) {
+        if (data->inputDevice == d->inputDevice) {
             d->canvasData = data;
             postSwitchTool();
             d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
@@ -483,20 +498,21 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
 }
 
-void KoToolManager::detachCanvas(KoCanvasController *controller) {
+void KoToolManager::detachCanvas(KoCanvasController *controller)
+{
     // check if we are removing the active canvas controller
     if (d->canvasData && d->canvasData->canvas == controller) {
         KoCanvasController *newCanvas = 0;
         // try to find another canvas controller beside the one we are removing
         foreach(KoCanvasController* canvas, d->canvasses.keys()) {
-            if( canvas != controller )
+            if ( canvas != controller )
             {
                 // yay found one
                 newCanvas = canvas;
                 break;
             }
         }
-        if( newCanvas ) {
+        if ( newCanvas ) {
             // activate the found canvas controller
             d->canvasData = d->canvasses.value(newCanvas).first();
             d->inputDevice = d->canvasData->inputDevice;
@@ -510,7 +526,7 @@ void KoToolManager::detachCanvas(KoCanvasController *controller) {
     QList<KoTool *> tools;
     foreach(CanvasData *cd, d->canvasses.value(controller)) {
         foreach(KoTool *tool, cd->allTools.values())
-        if(! tools.contains(tool))
+        if (! tools.contains(tool))
             tools.append(tool);
         delete cd;
     }
@@ -522,24 +538,28 @@ void KoToolManager::detachCanvas(KoCanvasController *controller) {
     emit changedCanvas( d->canvasData ? d->canvasData->canvas->canvas() : 0 );
 }
 
-void KoToolManager::updateCursor(QCursor cursor) {
+void KoToolManager::updateCursor(QCursor cursor)
+{
     Q_ASSERT(d->canvasData);
     Q_ASSERT(d->canvasData->canvas);
     Q_ASSERT(d->canvasData->canvas->canvas());
     d->canvasData->canvas->canvas()->canvasWidget()->setCursor(cursor);
 }
 
-void KoToolManager::switchToolRequested(const QString & id) {
+void KoToolManager::switchToolRequested(const QString & id)
+{
     while (!d->canvasData->stack.isEmpty()) // switching means to flush the stack
         d->canvasData->stack.pop();
     switchTool(id, false);
 }
 
-void KoToolManager::switchToolTemporaryRequested(const QString &id) {
+void KoToolManager::switchToolTemporaryRequested(const QString &id)
+{
     switchTool(id, true);
 }
 
-void KoToolManager::switchBackRequested() {
+void KoToolManager::switchBackRequested()
+{
     if (d->canvasData->stack.isEmpty()) {
         // default to changing to the interactionTool
         switchTool(KoInteractionTool_ID, false);
@@ -576,7 +596,8 @@ KoGuidesTool * KoToolManager::guidesTool( KoCanvasBase * canvas ) const
     return 0;
 }
 
-void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
+void KoToolManager::selectionChanged(QList<KoShape*> shapes)
+{
     QList<QString> types;
     foreach(KoShape *shape, shapes) {
         if (! types.contains(shape->shapeId())) {
@@ -596,8 +617,9 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
     emit toolCodesSelected(d->canvasData->canvas, types);
 }
 
-KoCanvasController *KoToolManager::activeCanvasController() const {
-    if( ! d->canvasData )
+KoCanvasController *KoToolManager::activeCanvasController() const
+{
+    if ( ! d->canvasData )
         return 0;
     return d->canvasData->canvas;
 }
@@ -614,7 +636,8 @@ void KoToolManager::switchToolByShortcut(QKeyEvent *event)
     }
 }
 
-QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) {
+QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
+{
     QList<QString> types;
     foreach(KoShape *shape, shapes)
         if (! types.contains(shape->shapeId()))
@@ -623,11 +646,11 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) 
     QString toolType = KoInteractionTool_ID;
     int prio = INT_MAX;
     foreach(ToolHelper *helper, d->tools) {
-        if(helper->priority() >= prio)
+        if (helper->priority() >= prio)
             continue;
-        if(helper->toolType() == KoToolFactory::mainToolType())
+        if (helper->toolType() == KoToolFactory::mainToolType())
             continue;
-        if(types.contains(helper->activationShapeId())) {
+        if (types.contains(helper->activationShapeId())) {
             toolType = helper->id();
             prio = helper->priority();
         }
@@ -637,11 +660,12 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes) 
 
 #define MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED 100
 
-void KoToolManager::switchInputDevice(const KoInputDevice &device) {
+void KoToolManager::switchInputDevice(const KoInputDevice &device)
+{
     if (!device.isMouse()) {
         d->tabletEventTimer.start(MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED);
     }
-    if(d->inputDevice == device) return;
+    if (d->inputDevice == device) return;
     if (device.isMouse() && d->tabletEventTimer.isActive()) {
         // Ignore switch to mouse for a short time after a tablet event
         // is received, as this is likely to be either the mouse event sent
@@ -652,9 +676,9 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device) {
     d->inputDevice = device;
     QList<CanvasData*> items = d->canvasses[d->canvasData->canvas];
     foreach(CanvasData *cd, items) {
-        if(cd->inputDevice == device) {
+        if (cd->inputDevice == device) {
             d->canvasData = cd;
-            if(cd->activeTool == 0)
+            if (cd->activeTool == 0)
                 switchTool(KoInteractionTool_ID, false);
             else {
                 postSwitchTool();
@@ -709,10 +733,11 @@ bool KoToolManager::eventFilter(QObject *object, QEvent *event)
     return QObject::eventFilter(object, event);
 }
 
-void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas) {
+void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas)
+{
     d->proxies.insert(canvas, proxy);
     foreach(KoCanvasController *controller, d->canvasses.keys()) {
-        if(controller->canvas() == canvas) {
+        if (controller->canvas() == canvas) {
             proxy->setCanvasController(controller);
             break;
         }
@@ -721,13 +746,13 @@ void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas) 
 
 void KoToolManager::injectDeviceEvent( KoDeviceEvent * event )
 {
-    if( d->canvasData->canvas->canvas() )
+    if ( d->canvasData->canvas->canvas() )
     {
-        if( event->type() == KoDeviceEvent::ButtonPressed )
+        if ( event->type() == KoDeviceEvent::ButtonPressed )
             d->canvasData->activeTool->customPressEvent( event->pointerEvent() );
-        else if( event->type() == KoDeviceEvent::ButtonReleased )
+        else if ( event->type() == KoDeviceEvent::ButtonReleased )
             d->canvasData->activeTool->customReleaseEvent( event->pointerEvent() );
-        else if( event->type() ==  KoDeviceEvent::PositionChanged )
+        else if ( event->type() ==  KoDeviceEvent::PositionChanged )
             d->canvasData->activeTool->customMoveEvent( event->pointerEvent() );
     }
 }
@@ -736,7 +761,8 @@ void KoToolManager::injectDeviceEvent( KoDeviceEvent * event )
 KoToolManager* KoToolManager::s_instance = 0;
 static K3StaticDeleter<KoToolManager> staticToolManagerDeleter;
 
-KoToolManager* KoToolManager::instance() {
+KoToolManager* KoToolManager::instance()
+{
     if (s_instance == 0)
         staticToolManagerDeleter.setObject(s_instance, new KoToolManager());
     return s_instance;

@@ -122,9 +122,10 @@ void KoCanvasController::resizeEvent(QResizeEvent * resizeEvent)
     setDocumentOffset();
 }
 
-void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
+void KoCanvasController::setCanvas(KoCanvasBase *canvas)
+{
     Q_ASSERT(canvas); // param is not null
-    if(m_d->canvas) {
+    if (m_d->canvas) {
         emit canvasRemoved(this);
         canvas->setCanvasController(0);
         m_d->canvas->canvasWidget()->removeEventFilter(this);
@@ -139,7 +140,8 @@ void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
     QTimer::singleShot(0, this, SLOT(activate()));
 }
 
-KoCanvasBase* KoCanvasController::canvas() const {
+KoCanvasBase* KoCanvasController::canvas() const
+{
     return m_d->canvas;
 }
 
@@ -153,13 +155,14 @@ void KoCanvasController::changeCanvasWidget(QWidget *widget)
     widget->setMouseTracking(true);
 }
 
-int KoCanvasController::visibleHeight() const {
-    if(m_d->canvas == 0)
+int KoCanvasController::visibleHeight() const
+{
+    if (m_d->canvas == 0)
         return 0;
     QWidget *canvasWidget = canvas()->canvasWidget();
 
     int height1;
-    if(canvasWidget == 0)
+    if (canvasWidget == 0)
         height1 = viewport()->height();
     else
         height1 = qMin(viewport()->height(), canvasWidget->height());
@@ -167,13 +170,14 @@ int KoCanvasController::visibleHeight() const {
     return qMin(height1, height2);
 }
 
-int KoCanvasController::visibleWidth() const {
-    if(m_d->canvas == 0)
+int KoCanvasController::visibleWidth() const
+{
+    if (m_d->canvas == 0)
         return 0;
     QWidget *canvasWidget = canvas()->canvasWidget();
 
     int width1;
-    if(canvasWidget == 0)
+    if (canvasWidget == 0)
         width1 = viewport()->width();
     else
         width1 = qMin(viewport()->width(), canvasWidget->width());
@@ -206,55 +210,60 @@ KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
     return m_d->canvasMode;
 }
 
-int KoCanvasController::canvasOffsetX() const {
+int KoCanvasController::canvasOffsetX() const
+{
     int offset = 0;
 
-    if(m_d->canvas) {
+    if (m_d->canvas) {
         offset = m_d->canvas->canvasWidget()->x() + frameWidth();
     }
 
-    if(horizontalScrollBar()) {
+    if (horizontalScrollBar()) {
         offset -= horizontalScrollBar()->value();
     }
 
     return offset;
 }
 
-int KoCanvasController::canvasOffsetY() const {
+int KoCanvasController::canvasOffsetY() const
+{
     int offset = 0;
 
-    if(m_d->canvas) {
+    if (m_d->canvas) {
         offset = m_d->canvas->canvasWidget()->y() + frameWidth();
     }
 
-    if(verticalScrollBar()) {
+    if (verticalScrollBar()) {
         offset -= verticalScrollBar()->value();
     }
 
     return offset;
 }
 
-void KoCanvasController::updateCanvasOffsetX() {
-    if(m_d->ignoreScrollSignals)
+void KoCanvasController::updateCanvasOffsetX()
+{
+    if (m_d->ignoreScrollSignals)
         return;
     emit canvasOffsetXChanged(canvasOffsetX());
-    if(m_d->viewportWidget && m_d->viewportWidget->canvas())
+    if (m_d->viewportWidget && m_d->viewportWidget->canvas())
         m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
     m_d->preferredCenterFractionX = (horizontalScrollBar()->value() + horizontalScrollBar()->pageStep() /2.0) / m_d->documentSize.width();
 }
 
-void KoCanvasController::updateCanvasOffsetY() {
-    if(m_d->ignoreScrollSignals)
+void KoCanvasController::updateCanvasOffsetY()
+{
+    if (m_d->ignoreScrollSignals)
         return;
     emit canvasOffsetYChanged(canvasOffsetY());
-    if(m_d->viewportWidget && m_d->viewportWidget->canvas())
+    if (m_d->viewportWidget && m_d->viewportWidget->canvas())
         m_d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
     m_d->preferredCenterFractionY = (verticalScrollBar()->value() + verticalScrollBar()->pageStep() /2.0) / m_d->documentSize.height();
 }
 
-bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
-    if(m_d->canvas && m_d->canvas->canvasWidget() && (watched == m_d->canvas->canvasWidget())) {
-        if((event->type() == QEvent::Resize) || event->type() == QEvent::Move) {
+bool KoCanvasController::eventFilter(QObject* watched, QEvent* event)
+{
+    if (m_d->canvas && m_d->canvas->canvasWidget() && (watched == m_d->canvas->canvasWidget())) {
+        if ((event->type() == QEvent::Resize) || event->type() == QEvent::Move) {
             updateCanvasOffsetX();
             updateCanvasOffsetY();
         }
@@ -288,42 +297,44 @@ void KoCanvasController::emitPointerPositionChangedSignals(QEvent *event)
     emit canvasMousePositionChanged( pointerPos );
 }
 
-void KoCanvasController::ensureVisible( KoShape *shape ) {
+void KoCanvasController::ensureVisible( KoShape *shape )
+{
     Q_ASSERT(shape);
     ensureVisible( shape->boundingRect() );
 }
 
-void KoCanvasController::ensureVisible( const QRectF &rect, bool smooth ) {
+void KoCanvasController::ensureVisible( const QRectF &rect, bool smooth )
+{
     QRect currentVisible (qMax(0, -canvasOffsetX()), qMax(0, -canvasOffsetY()), visibleWidth(), visibleHeight());
 
     // convert the document based rect into a canvas based rect
     QRect viewRect = m_d->canvas->viewConverter()->documentToView( rect ).toRect();
     viewRect.translate( m_d->canvas->documentOrigin() );
-    if(! viewRect.isValid() || currentVisible.contains(viewRect))
+    if (! viewRect.isValid() || currentVisible.contains(viewRect))
         return; // its visible. Nothing to do.
 
     // if we move, we move a little more so the amount of times we have to move is less.
     int jumpWidth = smooth ? 0 : currentVisible.width() / 5;
     int jumpHeight = smooth ? 0 : currentVisible.height() / 5;
-    if(!smooth && viewRect.width() + jumpWidth > currentVisible.width())
+    if (!smooth && viewRect.width() + jumpWidth > currentVisible.width())
         jumpWidth = 0;
-    if(!smooth && viewRect.height() + jumpHeight > currentVisible.height())
+    if (!smooth && viewRect.height() + jumpHeight > currentVisible.height())
         jumpHeight = 0;
 
     int horizontalMove = 0;
-    if(currentVisible.width() <= viewRect.width())      // center view
+    if (currentVisible.width() <= viewRect.width())      // center view
         horizontalMove = viewRect.center().x() - currentVisible.center().x();
-    else if(currentVisible.x() > viewRect.x())          // move left
+    else if (currentVisible.x() > viewRect.x())          // move left
         horizontalMove = viewRect.x() - currentVisible.x() - jumpWidth;
-    else if(currentVisible.right() < viewRect.right())  // move right
+    else if (currentVisible.right() < viewRect.right())  // move right
         horizontalMove = viewRect.right() - qMax(0, currentVisible.right() - jumpWidth);
 
     int verticalMove = 0;
-    if(currentVisible.height() <= viewRect.height())       // center view
+    if (currentVisible.height() <= viewRect.height())       // center view
         verticalMove = viewRect.center().y() - currentVisible.center().y();
-    if(currentVisible.y() > viewRect.y())               // move up
+    if (currentVisible.y() > viewRect.y())               // move up
         verticalMove = viewRect.y() - currentVisible.y() - jumpHeight;
-    else if(currentVisible.bottom() < viewRect.bottom()) // move down
+    else if (currentVisible.bottom() < viewRect.bottom()) // move down
         verticalMove = viewRect.bottom() - qMax(0, currentVisible.bottom() - jumpHeight);
 
     pan(QPoint(horizontalMove, verticalMove));
@@ -331,7 +342,7 @@ void KoCanvasController::ensureVisible( const QRectF &rect, bool smooth ) {
 
 void KoCanvasController::recenterPreferred()
 {
-    if(viewport()->width() >= m_d->documentSize.width()
+    if (viewport()->width() >= m_d->documentSize.width()
                 && viewport()->height() >= m_d->documentSize.height())
         return; // no need to center when image is smaller than viewport
     const bool oldIgnoreScrollSignals = m_d->ignoreScrollSignals;
@@ -387,7 +398,7 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
 {
     qreal scale;
 
-    if(1.0 * viewport()->width() / viewRect.width() > 1.0 * viewport()->height() / viewRect.height())
+    if (1.0 * viewport()->width() / viewRect.width() > 1.0 * viewport()->height() / viewRect.height())
         scale = 1.0 * viewport()->height() / viewRect.height();
     else
         scale = 1.0 * viewport()->width() / viewRect.width();
@@ -403,7 +414,8 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
     m_d->canvas->canvasWidget()->update();
 }
 
-void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap) {
+void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap)
+{
     emit toolOptionWidgetsChanged(widgetMap);
 }
 
@@ -423,9 +435,9 @@ void KoCanvasController::setDocumentSize( const QSize & sz, bool recalculateCent
     m_d->ignoreScrollSignals = oldIgnoreScrollSignals;
 
     // in case the document got so small a slider dissapeared; emit the new offset.
-    if(!horizontalScrollBar()->isVisible())
+    if (!horizontalScrollBar()->isVisible())
         updateCanvasOffsetX();
-    if(!verticalScrollBar()->isVisible())
+    if (!verticalScrollBar()->isVisible())
         updateCanvasOffsetY();
 }
 
@@ -491,7 +503,7 @@ void KoCanvasController::resetScrollBars()
         // we need a horizontal scrollbar only
         vScroll->setRange( 0, 0 );
         hScroll->setRange(0, docW - drawW);
-    } else if(docW <= drawW) {
+    } else if (docW <= drawW) {
         // we need a vertical scrollbar only
         hScroll->setRange( 0, 0 );
         vScroll->setRange(0, docH - drawH);
@@ -510,12 +522,13 @@ void KoCanvasController::resetScrollBars()
 
 }
 
-void KoCanvasController::pan(const QPoint &distance) {
+void KoCanvasController::pan(const QPoint &distance)
+{
     QScrollBar *hBar = horizontalScrollBar();
-    if( hBar && hBar->isVisible() )
+    if ( hBar && hBar->isVisible() )
         hBar->setValue( hBar->value() + distance.x());
     QScrollBar *vBar = verticalScrollBar();
-    if( vBar && vBar->isVisible() )
+    if ( vBar && vBar->isVisible() )
         vBar->setValue( vBar->value() + distance.y());
 }
 
@@ -565,8 +578,9 @@ void KoCanvasController::keyPressEvent(QKeyEvent *event)
     KoToolManager::instance()->switchToolByShortcut(event);
 }
 
-void KoCanvasController::wheelEvent( QWheelEvent *event ) {
-    if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
+void KoCanvasController::wheelEvent( QWheelEvent *event )
+{
+    if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
         const bool oldIgnoreScrollSignals = m_d->ignoreScrollSignals;
         m_d->ignoreScrollSignals = true;
 
@@ -582,7 +596,7 @@ void KoCanvasController::wheelEvent( QWheelEvent *event ) {
 
         const QPointF newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
 
-        if(event->delta() > 0)
+        if (event->delta() > 0)
             zoomIn( newCenter.toPoint() );
         else
             zoomOut( newCenter.toPoint() );
@@ -601,13 +615,13 @@ void KoCanvasController::activate()
         parent = parent->parentWidget();
 
     KoMainWindow *mw = dynamic_cast<KoMainWindow*> (parent);
-    if( ! mw )
+    if ( ! mw )
         return;
 
     foreach(QDockWidget *docker, mw->dockWidgets())
     {
         KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>( docker );
-        if( observer )
+        if ( observer )
             observer->setCanvas( canvas() );
     }
 }
@@ -615,13 +629,13 @@ void KoCanvasController::activate()
 void KoCanvasController::addGuideLine( Qt::Orientation orientation, int viewPosition )
 {
     KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool( m_d->canvas );
-    if( ! guidesTool )
+    if ( ! guidesTool )
         return;
     // check if the canvas does provide access to guides data
-    if( ! m_d->canvas->guidesData() )
+    if ( ! m_d->canvas->guidesData() )
         return;
 
-    if( orientation == Qt::Horizontal )
+    if ( orientation == Qt::Horizontal )
         guidesTool->addGuideLine( orientation, m_d->canvas->viewConverter()->viewToDocumentY( viewPosition ) );
     else
         guidesTool->addGuideLine( orientation, m_d->canvas->viewConverter()->viewToDocumentX( viewPosition ) );

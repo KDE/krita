@@ -19,7 +19,8 @@
 
 #include "KoShapeBorderModel.h"
 
-class KoShapeBorderModel::Private {
+class KoShapeBorderModel::Private
+{
 public:
     Private() : refCount(0) { }
     QAtomicInt refCount;
@@ -35,21 +36,25 @@ KoShapeBorderModel::~KoShapeBorderModel()
     delete d;
 }
 
-KoInsets KoShapeBorderModel::borderInsets(const KoShape *shape) {
+KoInsets KoShapeBorderModel::borderInsets(const KoShape *shape)
+{
     KoInsets insets;
     borderInsets(shape, insets);
     return insets;
 }
 
-void KoShapeBorderModel::addUser() {
+void KoShapeBorderModel::addUser()
+{
     d->refCount.ref();
 }
 
-bool KoShapeBorderModel::removeUser() {
+bool KoShapeBorderModel::removeUser()
+{
     return d->refCount.deref();
 }
 
-int KoShapeBorderModel::useCount() const {
+int KoShapeBorderModel::useCount() const
+{
     return d->refCount;
 }
 

@@ -23,7 +23,8 @@
 #include <QPainter>
 #include <KDebug>
 
-class KoParameterShape::Private {
+class KoParameterShape::Private
+{
 public:
     Private() : modified(false) {}
     bool modified;
@@ -140,10 +141,12 @@ QPointF KoParameterShape::normalize()
     return offset;
 }
 
-bool KoParameterShape::isParametricShape() const {
+bool KoParameterShape::isParametricShape() const
+{
     return !d->modified;
 }
 
-void KoParameterShape::setModified( bool modified ) {
+void KoParameterShape::setModified( bool modified )
+{
     d->modified = modified;
 }

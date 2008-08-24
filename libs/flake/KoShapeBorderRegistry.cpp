@@ -25,7 +25,8 @@ KoShapeBorderRegistry::KoShapeBorderRegistry()
 {
 }
 
-void KoShapeBorderRegistry::init() {
+void KoShapeBorderRegistry::init()
+{
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakeBorderPlugins";
     config.blacklist = "FlakeBorderPluginsDisabled";
@@ -47,7 +48,7 @@ static K3StaticDeleter<KoShapeBorderRegistry> staticShapeRegistryDeleter;
 
 KoShapeBorderRegistry* KoShapeBorderRegistry::instance()
 {
-    if(KoShapeBorderRegistry::m_singleton == 0)
+    if (KoShapeBorderRegistry::m_singleton == 0)
     {
         staticShapeRegistryDeleter.setObject(m_singleton, new KoShapeBorderRegistry());
         KoShapeBorderRegistry::m_singleton->init();

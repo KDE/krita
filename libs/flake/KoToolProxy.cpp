@@ -33,7 +33,8 @@
 
 /* Unused for now.
 #if 0
-namespace {
+namespace
+{
 
     // Helper class to determine when the user might switch between
     // tablet and mouse.
@@ -71,7 +72,8 @@ namespace {
 #endif */
 
 
-class KoToolProxy::Private {
+class KoToolProxy::Private
+{
 public:
     Private(KoToolProxy *p) : activeTool(0), tabletPressed(false), hasSelection(false), controller(0), parent(p) {
         scrollTimer.setInterval(100);
@@ -90,7 +92,7 @@ public:
         controller->ensureVisible(mouseArea, true);
 
         QPoint moved(offsetX - controller->canvasOffsetX(), offsetY - controller->canvasOffsetY());
-        if(moved.x() == 0 && moved.y() == 0)
+        if (moved.x() == 0 && moved.y() == 0)
             return;
         scrollEdgePoint += controller->canvas()->viewConverter()->viewToDocument(moved);
 
@@ -100,17 +102,17 @@ public:
     }
 
     void checkAutoScroll(const KoPointerEvent &event) {
-        if(controller == 0) return;
-        if(!activeTool->wantsAutoScroll()) return;
-        if(!event.isAccepted()) return;
-        if(event.buttons() != Qt::LeftButton) return;
+        if (controller == 0) return;
+        if (!activeTool->wantsAutoScroll()) return;
+        if (!event.isAccepted()) return;
+        if (event.buttons() != Qt::LeftButton) return;
         scrollEdgePoint = event.point;
-        if(! scrollTimer.isActive())
+        if (! scrollTimer.isActive())
             scrollTimer.start();
     }
 
     void selectionChanged(bool newSelection) {
-        if(hasSelection == newSelection)
+        if (hasSelection == newSelection)
             return;
         hasSelection = newSelection;
         emit parent->selectionChanged(hasSelection);
@@ -136,11 +138,13 @@ KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
     connect(&d->scrollTimer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
 
-KoToolProxy::~KoToolProxy() {
+KoToolProxy::~KoToolProxy()
+{
     delete d;
 }
 
-void KoToolProxy::paint( QPainter &painter, const KoViewConverter &converter ) {
+void KoToolProxy::paint( QPainter &painter, const KoViewConverter &converter )
+{
     if (d->activeTool) d->activeTool->paint(painter, converter);
 }
 
@@ -158,7 +162,7 @@ void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
     switch( event->type() ) {
     case QEvent::TabletPress:
         ev.setTabletButton(Qt::LeftButton);
-        if(! d->tabletPressed && d->activeTool)
+        if (! d->tabletPressed && d->activeTool)
             d->activeTool->mousePressEvent( &ev );
         d->tabletPressed = true;
         break;
@@ -169,7 +173,7 @@ void KoToolProxy::tabletEvent( QTabletEvent *event, const QPointF &point )
         if (d->activeTool) d->activeTool->mouseReleaseEvent( &ev );
         break;
     case QEvent::TabletMove:
-        if(d->tabletPressed) ev.setTabletButton(Qt::LeftButton);
+        if (d->tabletPressed) ev.setTabletButton(Qt::LeftButton);
         if (d->activeTool) d->activeTool->mouseMoveEvent( &ev );
         d->checkAutoScroll(ev);
     default:
@@ -188,7 +192,7 @@ void KoToolProxy::mousePressEvent( QMouseEvent *event, const QPointF &point )
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
 
-    if(d->tabletPressed) // refuse to send a press unless there was a release first.
+    if (d->tabletPressed) // refuse to send a press unless there was a release first.
         return;
 
     KoPointerEvent ev( event, point );
@@ -200,23 +204,23 @@ void KoToolProxy::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &poin
     d->mouseLeaveWorkaround = false;
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
-    if( d->activeTool == 0)  return;
+    if ( d->activeTool == 0)  return;
 
     KoPointerEvent ev( event, point );
     d->activeTool->mouseDoubleClickEvent( &ev );
-    if(! event->isAccepted())
+    if (! event->isAccepted())
         d->activeTool->m_canvas->shapeManager()->suggestChangeTool(&ev);
 }
 
 void KoToolProxy::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
 {
-    if(d->mouseLeaveWorkaround) {
+    if (d->mouseLeaveWorkaround) {
         d->mouseLeaveWorkaround = false;
         return;
     }
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
-    if(d->activeTool == 0)
+    if (d->activeTool == 0)
         return;
 
     KoPointerEvent ev( event, point );
@@ -252,25 +256,29 @@ void KoToolProxy::wheelEvent ( QWheelEvent * event, const QPointF &point )
     if (d->activeTool) d->activeTool->wheelEvent( &ev );
 }
 
-QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const {
+QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const
+{
     if (d->activeTool)
         return d->activeTool->inputMethodQuery(query, converter);
     return QVariant();
 }
 
-void KoToolProxy::inputMethodEvent(QInputMethodEvent *event) {
+void KoToolProxy::inputMethodEvent(QInputMethodEvent *event)
+{
     if (d->activeTool) d->activeTool->inputMethodEvent( event );
 }
 
-KoToolSelection* KoToolProxy::selection() {
+KoToolSelection* KoToolProxy::selection()
+{
     if (d->activeTool)
         return d->activeTool->selection();
     return 0;
 }
 
-void KoToolProxy::setActiveTool(KoTool *tool) {
+void KoToolProxy::setActiveTool(KoTool *tool)
+{
     Q_ASSERT(tool);
-    if(d->activeTool)
+    if (d->activeTool)
         disconnect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     d->activeTool = tool;
     connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
@@ -278,11 +286,13 @@ void KoToolProxy::setActiveTool(KoTool *tool) {
     emit toolChanged(tool->toolId());
 }
 
-void KoToolProxy::setCanvasController(KoCanvasController *controller) {
+void KoToolProxy::setCanvasController(KoCanvasController *controller)
+{
     d->controller = controller;
 }
 
-QHash<QString, QAction*> KoToolProxy::actions() const {
+QHash<QString, QAction*> KoToolProxy::actions() const
+{
     return d->activeTool ? d->activeTool->actions() : QHash<QString, QAction*>();
 }
 
@@ -291,31 +301,36 @@ void KoToolProxy::cut()
     if (d->activeTool)
         d->activeTool->cut();
 }
-void KoToolProxy::copy() const {
+void KoToolProxy::copy() const
+{
     if (d->activeTool)
         d->activeTool->copy();
 }
 
-bool KoToolProxy::paste() {
+bool KoToolProxy::paste()
+{
     if (d->activeTool)
         return d->activeTool->paste();
     return false;
 }
 
-QStringList KoToolProxy::supportedPasteMimeTypes() const {
+QStringList KoToolProxy::supportedPasteMimeTypes() const
+{
     if (d->activeTool)
         return d->activeTool->supportedPasteMimeTypes();
 
     return QStringList();
 }
 
-QList<QAction*> KoToolProxy::popupActionList() const {
+QList<QAction*> KoToolProxy::popupActionList() const
+{
     if (d->activeTool)
         return d->activeTool->popupActionList();
     return QList<QAction*>();
 }
 
-void KoToolProxy::deleteSelection() {
+void KoToolProxy::deleteSelection()
+{
     if (d->activeTool)
         return d->activeTool->deleteSelection();
 }

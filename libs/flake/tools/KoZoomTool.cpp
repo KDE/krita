@@ -46,51 +46,58 @@ void KoZoomTool::wheelEvent ( KoPointerEvent * event )
     event->ignore();
 }
 
-void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event ) {
+void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event )
+{
     KoInteractionTool::mouseReleaseEvent(event);
-    if(m_temporary)
+    if (m_temporary)
         emit KoTool::done();
 }
 
-void KoZoomTool::mouseMoveEvent( KoPointerEvent *event ) {
-    if(event->modifiers() & Qt::ControlModifier)
+void KoZoomTool::mouseMoveEvent( KoPointerEvent *event )
+{
+    if (event->modifiers() & Qt::ControlModifier)
         useCursor(m_outCursor);
     else
         useCursor(m_inCursor);
 
-    if(m_currentStrategy)
+    if (m_currentStrategy)
         m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
 }
 
-void KoZoomTool::keyPressEvent(QKeyEvent *event) {
+void KoZoomTool::keyPressEvent(QKeyEvent *event)
+{
     event->ignore();
 
-    if(event->modifiers() & Qt::ControlModifier)
+    if (event->modifiers() & Qt::ControlModifier)
         useCursor(m_outCursor);
     else
         useCursor(m_inCursor);
 }
 
-void KoZoomTool::keyReleaseEvent(QKeyEvent *event) {
+void KoZoomTool::keyReleaseEvent(QKeyEvent *event)
+{
     event->ignore();
 
-    if(event->modifiers() & Qt::ControlModifier)
+    if (event->modifiers() & Qt::ControlModifier)
         useCursor(m_outCursor);
     else
         useCursor(m_inCursor);
     KoInteractionTool::keyReleaseEvent(event);
 }
 
-void KoZoomTool::activate(bool temporary) {
+void KoZoomTool::activate(bool temporary)
+{
     m_temporary = temporary;
     useCursor(m_inCursor, true);
 }
 
-void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event )
+{
     mousePressEvent(event);
 }
 
-KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event) {
+KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event)
+{
     KoZoomStrategy *zs = new KoZoomStrategy(this, m_controller, event->point);
     if (event->button() == Qt::RightButton)
         zs->forceZoomOut();

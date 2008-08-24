@@ -33,6 +33,7 @@ KoPanToolFactory::KoPanToolFactory(QObject *parent)
     setActivationShapeId("flake/always");
 }
 
-KoTool* KoPanToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool* KoPanToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new KoPanTool(canvas);
 }

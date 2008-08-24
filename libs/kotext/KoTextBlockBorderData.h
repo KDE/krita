@@ -75,8 +75,8 @@ public:
      * @param style the border style for this side.
      * @param width the thickness of the border-line.
      * @param color the property for the color of the border-line(s).
-     * @param space the amount of spacing between the outer border and the inner border in case of style being qreal
-     * @param innerWidth the thickness of the inner border-line in case of style being qreal
+     * @param space the amount of spacing between the outer border and the inner border in case of style being double 
+     * @param innerWidth the thickness of the inner border-line in case of style being double
      */
     void setEdge(Side side, const QTextBlockFormat &bf, KoParagraphStyle::Property style,
             KoParagraphStyle::Property width, KoParagraphStyle::Property color,

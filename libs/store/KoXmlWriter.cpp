@@ -366,7 +366,7 @@ void KoXmlWriter::addConfigItem( const QString & configName, qreal value )
 {
     startElement( "config:config-item" );
     addAttribute( "config:name", configName );
-    addAttribute( "config:type", "qreal" );
+    addAttribute( "config:type", "double" );
     addTextNode( QString::number( value ) );
     endElement();
 }

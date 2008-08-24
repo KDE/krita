@@ -218,7 +218,7 @@ static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle
         return KoParagraphStyle::BorderDashDotPattern;
     if ( borderstyle == "dot-dot-dash" )
         return KoParagraphStyle::BorderDashDotDotPattern;
-    if ( borderstyle == "qreal" )
+    if ( borderstyle == "double" )
         return KoParagraphStyle::BorderDouble;
     if ( borderstyle == "groove" ) // NOT OASIS COMPATIBLE
         return KoParagraphStyle::BorderGroove;
@@ -241,7 +241,7 @@ static QString odfBorderStyleString(const KoParagraphStyle::BorderStyle borderst
         case KoParagraphStyle::BorderDashDotDotPattern:
             return QString("dot-dot-dash"); // not odf
         case KoParagraphStyle::BorderDouble:
-            return QString("qreal");
+            return QString("double");
         case KoParagraphStyle::BorderGroove:
             return QString("groove");
         case KoParagraphStyle::BorderRidge:
@@ -951,7 +951,7 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
             } else {
                 if ( leaderType == "single" )
                     tab.leaderType = KoCharacterStyle::SingleLine;
-                else if ( leaderType == "qreal" )
+                else if ( leaderType == "double" )
                     tab.leaderType = KoCharacterStyle::DoubleLine;
                 // change default leaderStyle
                 tab.leaderStyle = KoCharacterStyle::SolidLine;
@@ -1503,7 +1503,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
         tabTypeMap[QTextOption::DelimiterTab] = "char";
         leaderTypeMap[KoCharacterStyle::NoLineType] = "none";
         leaderTypeMap[KoCharacterStyle::SingleLine] = "single";
-        leaderTypeMap[KoCharacterStyle::DoubleLine] = "qreal";
+        leaderTypeMap[KoCharacterStyle::DoubleLine] = "double";
         leaderStyleMap[KoCharacterStyle::NoLineStyle] = "none";
         leaderStyleMap[KoCharacterStyle::SolidLine] = "solid";
         leaderStyleMap[KoCharacterStyle::DottedLine] = "dotted";

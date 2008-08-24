@@ -82,23 +82,23 @@ public:
         RightPadding,   ///< distance between text and border
         BottomPadding,   ///< distance between text and border
         LeftBorderWidth,        ///< The thickness of the border, or 0 if there is no border
-        LeftInnerBorderWidth,   ///< In case of style being 'qreal' the thickness of the inner border line
-        LeftBorderSpacing,      ///< In case of style being 'qreal' the space between the inner and outer border lines
+        LeftInnerBorderWidth,   ///< In case of style being 'double' the thickness of the inner border line
+        LeftBorderSpacing,      ///< In case of style being 'double' the space between the inner and outer border lines
         LeftBorderStyle,        ///< The border style. (see BorderStyle)
         LeftBorderColor,        ///< The border Color
         TopBorderWidth,         ///< The thickness of the border, or 0 if there is no border
-        TopInnerBorderWidth,    ///< In case of style being 'qreal' the thickness of the inner border line
-        TopBorderSpacing,       ///< In case of style being 'qreal' the space between the inner and outer border lines
+        TopInnerBorderWidth,    ///< In case of style being 'double' the thickness of the inner border line
+        TopBorderSpacing,       ///< In case of style being 'double' the space between the inner and outer border lines
         TopBorderStyle,         ///< The border style. (see BorderStyle)
         TopBorderColor,         ///< The border Color
         RightBorderWidth,       ///< The thickness of the border, or 0 if there is no border
-        RightInnerBorderWidth,  ///< In case of style being 'qreal' the thickness of the inner border line
-        RightBorderSpacing,     ///< In case of style being 'qreal' the space between the inner and outer border lines
+        RightInnerBorderWidth,  ///< In case of style being 'double' the thickness of the inner border line
+        RightBorderSpacing,     ///< In case of style being 'double' the space between the inner and outer border lines
         RightBorderStyle,       ///< The border style. (see BorderStyle)
         RightBorderColor,       ///< The border Color
         BottomBorderWidth,      ///< The thickness of the border, or 0 if there is no border
-        BottomInnerBorderWidth, ///< In case of style being 'qreal' the thickness of the inner border line
-        BottomBorderSpacing,    ///< In case of style being 'qreal' the space between the inner and outer border lines
+        BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
+        BottomBorderSpacing,    ///< In case of style being 'double' the space between the inner and outer border lines
         BottomBorderStyle,      ///< The border style. (see BorderStyle)
         BottomBorderColor,      ///< The border Color
 

@@ -75,7 +75,7 @@ public:
         InlineInstanceId = 577297549 // Internal: Reserved for KoInlineTextObjectManager
     };
 
-    /// list of possible line type : no line, single line, qreal line
+    /// list of possible line type : no line, single line, double line
     enum LineType {
         NoLineType,
         SingleLine,

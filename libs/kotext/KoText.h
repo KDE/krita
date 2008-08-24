@@ -60,7 +60,7 @@ namespace KoText {
         qreal position;    ///< distance in point from the start of the text-shape
         QTextOption::TabType type;       ///< Determine which type is used.
         QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
-        KoCharacterStyle::LineType leaderType; // none/single/qreal
+        KoCharacterStyle::LineType leaderType; // none/single/double
         KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...
         KoCharacterStyle::LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
         qreal leaderWidth; // the width value if length/percentage

@@ -192,7 +192,7 @@ static void importOdfLine(const QString& type, const QString& style, const QStri
     
     if (fixedType == "single")
         lineType = KoCharacterStyle::SingleLine;
-    else if (fixedType == "qreal")
+    else if (fixedType == "double")
         lineType = KoCharacterStyle::DoubleLine;
     
     if ( fixedStyle == "solid" )
@@ -243,7 +243,7 @@ static QString exportOdfLineType(KoCharacterStyle::LineType lineType) {
         case KoCharacterStyle::SingleLine:
             return "single";
         case KoCharacterStyle::DoubleLine:
-            return "qreal";
+            return "double";
         default:
             return "";
     }
@@ -707,7 +707,7 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context) {
                       && (styleStack.property( KoXmlNS::fo, "score-spaces") == "false");
     if( styleStack.hasProperty( KoXmlNS::style, "text-crossing-out" )) { // 3.10.6
         QString strikeOutType = styleStack.property( KoXmlNS::style, "text-crossing-out" );
-        if( strikeOutType =="qreal-line")
+        if( strikeOutType =="double-line")
             m_strikeOutType = S_DOUBLE;
         else if( strikeOutType =="single-line")
             m_strikeOutType = S_SIMPLE;

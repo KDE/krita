@@ -98,7 +98,7 @@ int main (int argc, char ** argv)
         w->m_bottomBorder.color = Qt::green;
     }
     {
-        // Third square, with qreal borders
+        // Third square, with double borders
         MyWidget* w2 = new MyWidget(zh, grid);
         w2->m_leftBorder.setPenWidth( 2 );
         w2->m_leftBorder.setStyle( KoBorder::DOUBLE_LINE );
@@ -113,7 +113,7 @@ int main (int argc, char ** argv)
         w2->m_bottomBorder.setStyle( KoBorder::DOUBLE_LINE );
     }
     {
-        // Fourth square, with qreal borders
+        // Fourth square, with double borders
         MyWidget* w2 = new MyWidget(zh, grid);
         w2->m_leftBorder.setPenWidth( 1 );
         w2->m_leftBorder.setStyle( KoBorder::DOUBLE_LINE );

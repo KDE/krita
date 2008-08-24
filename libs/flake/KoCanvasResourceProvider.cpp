@@ -148,9 +148,9 @@ int KoCanvasResourceProvider::intResource(int key) const
     return d->resources[key].toInt();
 }
 
-bool KoCanvasResourceProvider::doubleResource(int key) const
+qreal KoCanvasResourceProvider::doubleResource(int key) const
 {
-    if (! d->resources.contains(key))
+    if(! d->resources.contains(key))
         return 0.;
     return d->resources[key].toDouble();
 }

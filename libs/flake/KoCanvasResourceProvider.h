@@ -157,7 +157,7 @@ public:
      * Return the resource determined by param key as a qreal.
      * @param key the indentifying key for the resource.
      */
-    bool doubleResource(int key) const;
+    qreal doubleResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoColor.

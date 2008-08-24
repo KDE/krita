@@ -2759,7 +2759,7 @@ QString *errorMsg, int *errorLine, int *errorColumn)
 
   Note 1: maximum allocated space is thus 2*KOXML_BUFSIZE due to the
   stringData (a QString instance).
-  TODO: use mmap to avoid qreal-buffering like this.
+  TODO: use mmap to avoid double-buffering like this.
   
   Note 2: a much larger buffer won't speed up significantly. This is because
   the bottleneck is elsewhere, not here.

@@ -122,7 +122,7 @@ public:
     virtual void mousePressEvent( KoPointerEvent *event ) = 0;
 
     /**
-     * Called when (one of) the mouse or stylus buttons is qreal clicked.
+     * Called when (one of) the mouse or stylus buttons is double clicked.
      * Implementors should call event->ignore() if they do not actually use the event.
      * Default implementation ignores this event.
      * @param event state and reason of this mouse or stylus press

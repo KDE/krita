@@ -8,7 +8,8 @@ set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")
 set(GENERIC_KOFFICE_LIB_SOVERSION "5")
 
 # search packages used by KDE
-find_package(KDE4 REQUIRED)
+set(KDE_MIN_VERSION "4.1.0")
+find_package(KDE4 4.1.0 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
 macro_optional_find_package(Boost)

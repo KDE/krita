@@ -192,8 +192,8 @@ QPointF KoPatternBackground::referencePointOffset() const
 
 void KoPatternBackground::setReferencePointOffset( const QPointF &offset )
 {
-    qreal ox = qMax( 0.0, qMin( 100.0, offset.x() ) );
-    qreal oy = qMax( 0.0, qMin( 100.0, offset.y() ) );
+    qreal ox = qMax( qreal(0.0), qMin( qreal(100.0), offset.x() ) );
+    qreal oy = qMax( qreal(0.0), qMin( qreal(100.0), offset.y() ) );
 
     d->refPointOffsetPercent = QPointF( ox, oy );
 }

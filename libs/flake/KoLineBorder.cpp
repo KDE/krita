@@ -55,7 +55,7 @@ KoLineBorder::KoLineBorder( const KoLineBorder & other )
 KoLineBorder::KoLineBorder(qreal lineWidth, const QColor &color)
     : d(new Private())
 {
-    d->pen.setWidthF( qMax(0.0,lineWidth) );
+    d->pen.setWidthF( qMax(qreal(0.0),lineWidth) );
     d->pen.setJoinStyle(Qt::MiterJoin);
     d->color = color;
 }
@@ -185,7 +185,7 @@ Qt::PenJoinStyle KoLineBorder::joinStyle() const
 
 void KoLineBorder::setLineWidth( qreal lineWidth )
 {
-    d->pen.setWidthF( qMax(0.0,lineWidth) );
+    d->pen.setWidthF( qMax(qreal(0.0),lineWidth) );
 }
 
 qreal KoLineBorder::lineWidth() const

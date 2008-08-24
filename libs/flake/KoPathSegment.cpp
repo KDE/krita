@@ -301,13 +301,13 @@ QList<QPointF> KoPathSegment::intersections( const KoPathSegment &segment ) cons
         qreal d2 = distanceFromChord( d->second->controlPoint1() );
         if ( d1*d2 > 0.0 )
         {
-            dmin = 0.75 * qMin( 0.0, qMin( d1, d2 ) );
-            dmax = 0.75 * qMax( 0.0, qMax( d1, d2 ) );
+            dmin = 0.75 * qMin( qreal(0.0), qMin( d1, d2 ) );
+            dmax = 0.75 * qMax( qreal(0.0), qMax( d1, d2 ) );
         }
         else
         {
-            dmin = 4.0/9.0 * qMin( 0.0, qMin( d1, d2 ) );
-            dmax = 4.0/9.0 * qMax( 0.0, qMax( d1, d2 ) );
+            dmin = 4.0/9.0 * qMin( qreal(0.0), qMin( d1, d2 ) );
+            dmax = 4.0/9.0 * qMax( qreal(0.0), qMax( d1, d2 ) );
         }
     }
 

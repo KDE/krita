@@ -63,7 +63,7 @@ QTextDocument *KoDocumentSectionToolTip::createDocument( const QModelIndex &inde
     const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
 
     doc->setHtml( html );
-    doc->setTextWidth( qMin( doc->size().width(), 500.0 ) );
+    doc->setTextWidth( qMin( doc->size().width(), qreal(500.0) ) );
 
     return doc;
 }

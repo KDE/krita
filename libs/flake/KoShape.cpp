@@ -412,7 +412,7 @@ void KoShape::update(const QRectF &shape) const
 const QPainterPath KoShape::outline() const
 {
     QPainterPath path;
-    path.addRect(QRectF( QPointF(0, 0), QSizeF( qMax(d->size.width(), 0.0001), qMax(d->size.height(), 0.0001) ) ));
+    path.addRect(QRectF( QPointF(0, 0), QSizeF( qMax(d->size.width(), qreal(0.0001)), qMax(d->size.height(), qreal(0.0001)) ) ));
     return path;
 }
 

@@ -373,7 +373,7 @@ bool KoPathPoint::isSmooth( KoPathPoint * prev, KoPathPoint * next ) const
     // normalize tangent vectors
     qreal l1 = sqrt( t1.x()*t1.x() + t1.y()*t1.y() );
     qreal l2 = sqrt( t2.x()*t2.x() + t2.y()*t2.y() );
-    if ( qFuzzyCompare( l1 + 1, 1.0 ) || qFuzzyCompare( l2 + 1, 1.0 ) )
+    if ( qFuzzyCompare( l1 + 1, qreal(1.0) ) || qFuzzyCompare( l2 + 1, qreal(1.0) ) )
         return true;
 
     t1 /= l1;
@@ -381,7 +381,7 @@ bool KoPathPoint::isSmooth( KoPathPoint * prev, KoPathPoint * next ) const
 
     qreal scalar = t1.x()*t2.x() + t1.y()*t2.y();
     // tangents are parallel if t1*t2 = |t1|*|t2|
-    return qFuzzyCompare( scalar, 1.0 );
+    return qFuzzyCompare( scalar, qreal(1.0) );
 }
 
 void KoPathPoint::removeFromGroup()

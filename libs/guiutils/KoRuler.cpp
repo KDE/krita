@@ -109,7 +109,7 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     QRectF rectangle;
     rectangle.setX(qMax(0, d->offset));
     rectangle.setY(2);
-    rectangle.setWidth(qMin((qreal) d->ruler->width() - 1.0 - rectangle.x(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
+    rectangle.setWidth(qMin(qreal(d->ruler->width() - 1.0 - rectangle.x()), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
     rectangle.setHeight( d->ruler->height() - 6.0);
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(qMax(rectangle.x() + 1,
@@ -376,7 +376,7 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     rectangle.setX(0);
     rectangle.setY(qMax(0, d->offset));
     rectangle.setWidth(d->ruler->width() - 1.0);
-    rectangle.setHeight(qMin((qreal)d->ruler->height() - 1.0 - rectangle.y(), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
+    rectangle.setHeight(qMin(qreal(d->ruler->height() - 1.0 - rectangle.y()), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
 
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(rectangle.x() + 1);
@@ -554,7 +554,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
 
     // Draw the arrow lines
     qreal arrowLength = (line.length() - fontMetrics.width(label)) / 2 - 2;
-    arrowLength = qMax(0.0, arrowLength);
+    arrowLength = qMax(qreal(0.0), arrowLength);
     QLineF startArrow(line.p1(), line.pointAt(arrowLength / line.length()));
     QLineF endArrow(line.p2(), line.pointAt(1.0 - arrowLength / line.length()));
     painter.drawLine(startArrow);

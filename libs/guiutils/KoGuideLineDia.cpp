@@ -48,8 +48,8 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, qreal pos, qreal minPos, qreal 
     setMainWidget(page);
     new QLabel( i18n( "Position:" ), page );
     m_position= new KoUnitDoubleSpinBox( page );
-    m_position->setMinMaxStep( qMax( 0.00, minPos ), qMax( 0.00, maxPos ), 1.0 );
-    m_position->changeValue( qMax( 0.00, pos ) );
+    m_position->setMinMaxStep( qMax( qreal(0.00), minPos ), qMax( qreal(0.00), maxPos ), 1.0 );
+    m_position->changeValue( qMax( qreal(0.00), pos ) );
     m_position->setUnit( unit );
     m_position->setFocus();
 }
@@ -86,8 +86,8 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, QPointF &pos, QRectF &rect,
     KHBox *hbox = new KHBox( vbox );
     QLabel *label = new QLabel( i18n( "&Position:" ), hbox );
     m_position= new KoUnitDoubleSpinBox( hbox );
-    m_position->setMinMaxStep( qMax( 0.0, m_rect.left() ), qMax( 0.0, m_rect.right() ), 1.0 );
-    m_position->changeValue( qMax( 0.0, pos.x() ) );
+    m_position->setMinMaxStep( qMax( qreal(0.0), m_rect.left() ), qMax( qreal(0.0), m_rect.right() ), 1.0 );
+    m_position->changeValue( qMax( qreal(0.0), pos.x() ) );
     m_position->setUnit( unit );
     m_position->setFocus();
     label->setBuddy( m_position );
@@ -119,8 +119,8 @@ void KoGuideLineDia::slotOrientationChanged()
     {
         if ( m_hButton->isChecked() )
         {
-            m_position->setMinimum( qMax( 0.0, m_rect.top() ) );
-            m_position->setMaximum( qMax( 0.0, m_rect.bottom() ) );
+            m_position->setMinimum( qMax( qreal(0.0), m_rect.top() ) );
+            m_position->setMaximum( qMax( qreal(0.0), m_rect.bottom() ) );
             if ( ! m_positionChanged )
             {
                 disconnect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );
@@ -130,8 +130,8 @@ void KoGuideLineDia::slotOrientationChanged()
         }
         else if ( m_vButton->isChecked() )
         {
-            m_position->setMinimum( qMax( 0.0, m_rect.left() ) );
-            m_position->setMaximum( qMax( 0.0, m_rect.right() ) );
+            m_position->setMinimum( qMax( qreal(0.0), m_rect.left() ) );
+            m_position->setMaximum( qMax( qreal(0.0), m_rect.right() ) );
             if ( ! m_positionChanged )
             {
                 disconnect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );

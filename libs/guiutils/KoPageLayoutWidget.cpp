@@ -188,8 +188,8 @@ void KoPageLayoutWidget::marginsChanged() {
     if(left + right > d->pageLayout.width - 10) {
         // make sure the actual text area is never smaller than 10 points.
         qreal diff = d->pageLayout.width - 10 - left - right;
-        left = qMin(d->pageLayout.width - 10, qMax(0.0, left - diff / 2.0));
-        right = qMax(0.0, right - d->pageLayout.width - 10 - left);
+        left = qMin(d->pageLayout.width - 10, qMax(qreal(0.0), left - diff / qreal(2.0)));
+        right = qMax(qreal(0.0), right - d->pageLayout.width - 10 - left);
     }
 
     if(d->widget.singleSided->isChecked()) {

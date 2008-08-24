@@ -238,7 +238,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
             this, SLOT( textSpacingSingle() ),
             actionCollection(), "format_spacingsingle" );
     m_actionFormatSpacingSingle->setActionGroup( spacingActionGroup );
-    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.5" ), "format-line-spacing-qreal", Qt::CTRL + Qt::Key_5,
+    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.5" ), "format-line-spacing-double", Qt::CTRL + Qt::Key_5,
             this, SLOT( textSpacingOneAndHalf() ),
             actionCollection(), "format_spacing15" );
     m_actionFormatSpacingOneAndHalf->setActionGroup( spacingActionGroup );

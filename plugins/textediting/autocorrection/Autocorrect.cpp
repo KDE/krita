@@ -55,8 +55,8 @@ Autocorrect::Autocorrect() {
     m_replaceSingleQuotes = false;
 
     // TODO put this into configuration dialog
-    // default qreal quote open 0x201c
-    // default qreal quote close 0x201d
+    // default double quote open 0x201c
+    // default double quote close 0x201d
     // default single quote open 0x2018
     // default single quote close 0x2019
     m_typographicSingleQuotes.begin = QChar(0x2018);

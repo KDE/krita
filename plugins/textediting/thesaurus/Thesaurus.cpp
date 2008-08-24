@@ -165,7 +165,7 @@ Thesaurus::Thesaurus()
     connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
             this, SLOT(slotSetReplaceTermHypo(QListWidgetItem *)));
 
-    // qreal click -- set the qreal clicked item as the new search term
+    // double click -- set the double clicked item as the new search term
 
     connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
             this, SLOT(slotFindTermFromList(QListWidgetItem *)));

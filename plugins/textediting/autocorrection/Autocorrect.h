@@ -122,7 +122,7 @@ private:
     bool m_uppercaseFirstCharOfSentence; // convert first letter of a sentence automaticall to uppercase
     bool m_fixTwoUppercaseChars;  // convert two uppercase characters to one upper and one lowercase.
     bool m_autoFormatURLs;
-    bool m_singleSpaces; // suppress qreal spaces.
+    bool m_singleSpaces; // suppress double spaces.
     bool m_trimParagraphs; // remove spaces at beginning and end of paragraphs
     bool m_autoBoldUnderline; // automatically do bold and underline formatting
     bool m_autoFractions; // replace 1/2 with ½
@@ -132,7 +132,7 @@ private:
     bool m_autoFormatBulletList; // use list formatting for bulletted paragraphs.
     bool m_advancedAutocorrect; // autocorrection from a list of entries
 
-    bool m_replaceDoubleQuotes;  // replace qreal quotes with typographical quotes
+    bool m_replaceDoubleQuotes;  // replace double quotes with typographical quotes
     bool m_replaceSingleQuotes;  // replace single quotes with typographical quotes
 
     QString m_word;

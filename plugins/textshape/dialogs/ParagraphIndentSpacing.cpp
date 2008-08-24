@@ -64,7 +64,7 @@ void ParagraphIndentSpacing::open(KoParagraphStyle *style) {
         else if(percent == 180)
             index = 1; // 1.5
         else if(percent == 240)
-            index = 2; // qreal
+            index = 2; // double
         else
             index = 3; // proportional
     }

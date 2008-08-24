@@ -131,7 +131,7 @@ public:
      * Load the image data from the param device.
      * Note that if the file is bigger than 250Kb instead of loading the full file into memory it will
      * copy the data to a temp-file and postpone loading it until the first time pixmap() is called.
-     * @para device the device that is used to get the data from.
+     * @param device the device that is used to get the data from.
      * @return returns true if load was successful.
      */
     bool loadFromFile(QIODevice *device);
@@ -139,7 +139,7 @@ public:
     /**
      * Save the image data to the param device.
      * The full file is saved.
-     * @para device the device that is used to get the data from.
+     * @param device the device that is used to get the data from.
      * @return returns true if load was successful.
      */
     bool saveToFile(QIODevice *device);

@@ -103,7 +103,7 @@ ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
 ParagraphTool::~ParagraphTool()
 {}
 
-// helper function to initalize rulers
+// helper function to initialize rulers
 void ParagraphTool::initializeRuler(Ruler &ruler, int options)
 {
     ruler.setParent(this);
@@ -258,7 +258,7 @@ void ParagraphTool::repaintDecorations()
     // repaint area
     QRectF repaintRectangle = m_storedRepaintRectangle;
     m_storedRepaintRectangle = QRectF();
-    foreach (ParagraphFragment fragment, m_fragments) {
+    foreach (const ParagraphFragment &fragment, m_fragments) {
         m_storedRepaintRectangle |= fragment.dirtyRectangle();
     }
     repaintRectangle |= m_storedRepaintRectangle;
@@ -309,7 +309,7 @@ void ParagraphTool::updateLayout()
 }
 
 // try to find and activate a text block below the mouse position
-// return true if successfull
+// return true if successful
 bool ParagraphTool::activateTextBlockAt(const QPointF &point)
 {
     TextShape *textShape = dynamic_cast<TextShape*> (canvas()->shapeManager()->shapeAt(point));

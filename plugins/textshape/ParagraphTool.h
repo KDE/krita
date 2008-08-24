@@ -20,7 +20,7 @@
 #ifndef PARAGRAPHTOOL_H
 #define PARAGRAPHTOOL_H
 
-#include "ShapeSpecificData.h"
+#include "ParagraphFragment.h"
 #include "Ruler.h"
 
 #include <KoTool.h>
@@ -108,10 +108,10 @@ protected:
     // paint a label at the specified position
     void paintLabel(QPainter &painter, const KoViewConverter &converter) const;
 
-    // paint all rulers for a given shape
-    void paintRulers(QPainter &painter, const KoViewConverter &converter, const ShapeSpecificData &shape) const;
+    // paint all rulers for a given fragment
+    void paintRulers(QPainter &painter, const KoViewConverter &converter, const ParagraphFragment &fragment) const;
 
-    bool createShapeList();
+    bool createFragments();
 
     // activate the paragraph below the specified cursor position
     bool activateTextBlockAt(const QPointF &point);
@@ -123,7 +123,7 @@ protected:
     bool hasActiveTextBlock() const { return !m_activeCursor.isNull(); }
 
     bool hasActiveRuler() const { return m_activeRuler != noRuler; }
-    void activateRuler(RulerIndex ruler, const ShapeSpecificData &shape);
+    void activateRuler(RulerIndex ruler, const ParagraphFragment &fragment);
     bool activateRulerAt(const QPointF &point);
     void deactivateRuler();
     void resetActiveRuler();
@@ -152,10 +152,10 @@ private:
     QTextCursor m_activeCursor;
     KoParagraphStyle *m_paragraphStyle;
 
-    QVector<ShapeSpecificData> m_shapes;
+    QVector<ParagraphFragment> m_fragments;
 
-    const ShapeSpecificData *m_activeShape,
-                            *m_highlightShape;
+    const ParagraphFragment *m_activeFragment,
+                            *m_highlightedFragment;
 
     Ruler m_rulers[maxRuler];
 

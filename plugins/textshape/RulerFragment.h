@@ -33,24 +33,25 @@ class QPainter;
 class QPointF;
 class KoViewConverter;
 
-/* The RulerControl class represents a Ruler on a specific shape. This class
+/* The RulerFragment class represents a Ruler on a specific shape. This class
  * takes care of mapping input and output between the ruler coordinates to
- * the document coordinates. It also takes care of painting the ruler on
- * the screen. For each Ruler there may be multiple RulerControl elements.
- * The ParagraphTool has a RulerControl element for each shape on which
- * the Ruler needs to e displayed.
+ * the document coordinates. It also takes care of painting this part of the
+ * the ruler onto the screen. For each Ruler there may be multiple
+ * RulerFragment elements. The ParagraphTool has a ParagraphFragment
+ * instance for each shape on which the Rulers need to be painted. Every
+ * ParagraphFragment then owns a RulerFragment for each Ruler.
  */
-class RulerControl
+class RulerFragment
 {
 public:
-    RulerControl() : m_ruler(NULL), m_visible(true) {}
+    RulerFragment() : m_ruler(NULL), m_visible(true) {}
 
-    RulerControl(Ruler *ruler)
+    RulerFragment(Ruler *ruler)
        : m_ruler(ruler),
        m_visible(true)
     {}
 
-    ~RulerControl() {}
+    ~RulerFragment() {}
 
     bool hitTest(const QPointF &point) const;
 

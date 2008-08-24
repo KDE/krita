@@ -17,28 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "RulerControl.h"
+#include "RulerFragment.h"
 
 #include "Ruler.h"
 
-bool RulerControl::hitTest(const QPointF &point) const
+bool RulerFragment::hitTest(const QPointF &point) const
 {
     QRectF rect(m_ruler->value() - 5.0, 0.0, 10.0, m_width);
     return rect.contains(m_matrix.inverted().map(point));
 }
 
-void RulerControl::moveTo(const QPointF &point, bool smoothMovement) const
+void RulerFragment::moveTo(const QPointF &point, bool smoothMovement) const
 {
     m_ruler->moveTo(m_matrix.inverted().map(point).x(), smoothMovement);
 }
 
-QLineF RulerControl::labelConnector() const
+QLineF RulerFragment::labelConnector() const
 {
     qreal value = m_ruler->value();
     return m_matrix.map(QLineF(value/2.0, m_width/2.0, value/2.0, m_width/2.0 + 1.0));
 }
 
-void RulerControl::paint(QPainter &painter) const
+void RulerFragment::paint(QPainter &painter) const
 {
     if (!m_visible) {
         return;
@@ -90,7 +90,7 @@ void RulerControl::paint(QPainter &painter) const
     painter.restore();
 }
 
-void RulerControl::paintArrow(QPainter &painter, const QPointF &tip, const qreal angle, qreal value) const
+void RulerFragment::paintArrow(QPainter &painter, const QPointF &tip, const qreal angle, qreal value) const
 {
     painter.save();
 
@@ -112,7 +112,7 @@ void RulerControl::paintArrow(QPainter &painter, const QPointF &tip, const qreal
     painter.restore();
 }
 
-void RulerControl::setBaseline(const QLineF &baseline)
+void RulerFragment::setBaseline(const QLineF &baseline)
 {
     m_matrix.reset();
     m_matrix.translate(baseline.p1().x(), baseline.p1().y());
@@ -121,7 +121,7 @@ void RulerControl::setBaseline(const QLineF &baseline)
     m_width = baseline.length();
 }
 
-void RulerControl::setVisible(bool visible)
+void RulerFragment::setVisible(bool visible)
 {
     m_visible = visible;
 }

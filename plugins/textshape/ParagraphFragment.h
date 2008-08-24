@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SHAPESPECIFICDATA_H
-#define SHAPESPECIFICDATA_H
+#ifndef PARAGRAPHFRAGMENT_H
+#define PARAGRAPHFRAGMENT_H
 
 #include "TextShape.h"
 
 #include "Ruler.h"
-#include "RulerControl.h"
+#include "RulerFragment.h"
 
 #include <QRectF>
 
@@ -41,17 +41,19 @@ typedef enum
     noRuler
 } RulerIndex;
 
-/* ShapeSpecificData is used by ParagraphTool to store information about a paragraph which is specific to a shape.
- * As the width of shapes may be different the positions and sizes of its ruler will be different, too.
- * This class takes care of these differences when painting the rulers or when handling input events.
+/* ParagraphFragment is used by ParagraphTool to store information about a
+ * paragraph which is specific to a shape. As the width of shapes may be
+ * different the positions and sizes of its ruler will be different, too.
+ * This class takes care of these differences when painting the rulers or
+ * when handling input events.
  */
-class ShapeSpecificData
+class ParagraphFragment
 {
 public:
-    ShapeSpecificData() {};
-    ShapeSpecificData(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style);
+    ParagraphFragment() {};
+    ParagraphFragment(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style);
 
-    ~ShapeSpecificData() {};
+    ~ParagraphFragment() {};
 
     // return the first ruler at the point
     RulerIndex hitTest(const QPointF &point) const;
@@ -99,7 +101,7 @@ private:
            m_followingLines,
            m_border;
 
-    RulerControl m_rulerControls[maxRuler];
+    RulerFragment m_rulerFragments[maxRuler];
 };
 
 #endif

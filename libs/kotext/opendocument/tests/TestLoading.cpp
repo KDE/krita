@@ -55,6 +55,7 @@
 #include <KoText.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextSharedLoadingData.h>
 
 typedef KoText::Tab KoTextTab;
 // because in a QtScript, I don't seem to be able to use a namespaced type
@@ -233,6 +234,15 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
     return match;
 }
 
+static bool compareListFormats(const QTextListFormat &actualFormat, const QTextListFormat &expectedFormat)
+{
+    QMap<int, QVariant> actualProperties = actualFormat.properties();
+    actualProperties.remove(KoListStyle::StyleId);
+    QMap<int, QVariant> expectedProperties = expectedFormat.properties();
+    expectedProperties.remove(KoListStyle::StyleId);
+    return actualProperties == expectedProperties;
+}
+
 static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock)
 {
     QTextList *actualList = actualBlock.textList();
@@ -243,7 +253,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
             qDebug() << "compareBlocks: Unexpected list in actualDocument at " << actualBlock.text();
             return false;
         }
-        if ((actualList->format().properties() != expectedList->format().properties())
+        if (!compareListFormats(actualList->format(), expectedList->format())
             || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))) {
             qDebug() << "compareBlocks: list properties mismatch at " << actualBlock.text()
                      << KoTextDebug::listAttributes(actualList->format()) << KoTextDebug::listAttributes(expectedList->format())
@@ -664,16 +674,22 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
 
+    KoStyleManager *styleManager = new KoStyleManager;
+
     KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store());
     KoShapeLoadingContext shapeLoadingContext(odfLoadingContext, 0 /* KoShapeControllerBase (KWDocument) */);
+    KoTextSharedLoadingData *textSharedLoadingData = new KoTextSharedLoadingData;
+    textSharedLoadingData->loadOdfStyles(odfLoadingContext, styleManager);
+    shapeLoadingContext.addSharedData(KOTEXT_SHARED_LOADING_ID, textSharedLoadingData);
+
     KoTextShapeData *textShapeData = new KoTextShapeData;
     QTextDocument *document = new QTextDocument;
     textShapeData->setDocument(document, false /* ownership */);
     KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-    textShapeData->document()->setDocumentLayout(layout);
     layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
-    KoStyleManager *styleManager = new KoStyleManager;
     layout->setStyleManager(styleManager);
+    textShapeData->document()->setDocumentLayout(layout);
+
     if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
         qDebug() << "KoTextShapeData failed to load ODT";
     }

@@ -58,9 +58,8 @@ public:
      *
      * @param context The shape loading context.
      * @param styleManager The style manager too use or 0 if you don't have a style manager.
-     * @param insertOfficeStyles If true the office:styles are inserted into the style manager.
      */
-    void loadOdfStyles( KoOdfLoadingContext & context, KoStyleManager * styleManager, bool insertOfficeStyles = false );
+    void loadOdfStyles( KoOdfLoadingContext & context, KoStyleManager * styleManager);
 
     /**
      * Get the paragraph style for the given name
@@ -107,18 +106,18 @@ private:
     };
     // helper functions for loading of paragraph styles
     void addParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
-                             KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
+                             KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
                                                                    int styleTypes, KoStyleManager *manager = 0);
 
     // helper functions for loading of character styles
     void addCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
-                             KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
+                             KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements );
 
     // helper functions for loading of list styles
     void addListStyles(KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
-                       KoStyleManager *styleManager = 0, bool insertOfficeStyles = false );
+                       KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoListStyle *> > loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     void addOutlineStyle( KoOdfLoadingContext & context, KoStyleManager *styleManager );

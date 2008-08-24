@@ -128,7 +128,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     // Load text styles before the corresponding text shapes try to use them!
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap()["StyleManager"] );
-    sharedData->loadOdfStyles( loadingContext, styleManager, true );
+    sharedData->loadOdfStyles(loadingContext, styleManager);
     paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );

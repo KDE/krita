@@ -82,16 +82,16 @@ static void addDefaultParagraphStyle( KoOdfLoadingContext & context, const KoXml
     }
 }
 
-void KoTextSharedLoadingData::loadOdfStyles( KoOdfLoadingContext & context, KoStyleManager * styleManager, bool insertOfficeStyles )
+void KoTextSharedLoadingData::loadOdfStyles( KoOdfLoadingContext & context, KoStyleManager * styleManager)
 {
     addCharacterStyles( context, context.stylesReader().autoStyles( "text" ).values(), ContentDotXml );
     addCharacterStyles( context, context.stylesReader().autoStyles( "text", true ).values(), StylesDotXml );
     // only add styles of office:styles to the style manager
-    addCharacterStyles( context, context.stylesReader().customStyles( "text" ).values(), ContentDotXml | StylesDotXml, styleManager, insertOfficeStyles );
+    addCharacterStyles( context, context.stylesReader().customStyles( "text" ).values(), ContentDotXml | StylesDotXml, styleManager);
 
     addListStyles(context, context.stylesReader().autoStyles("list").values(), ContentDotXml);
     addListStyles(context, context.stylesReader().autoStyles("list", true ).values(), StylesDotXml);
-    addListStyles(context, context.stylesReader().customStyles("list").values(), ContentDotXml | StylesDotXml, styleManager, insertOfficeStyles);
+    addListStyles(context, context.stylesReader().customStyles("list").values(), ContentDotXml | StylesDotXml, styleManager);
 
     // add office:automatic-styles in content.xml to paragraphContentDotXmlStyles
     addParagraphStyles( context, context.stylesReader().autoStyles( "paragraph" ).values(), ContentDotXml );
@@ -99,7 +99,7 @@ void KoTextSharedLoadingData::loadOdfStyles( KoOdfLoadingContext & context, KoSt
     addParagraphStyles( context, context.stylesReader().autoStyles( "paragraph", true ).values(), StylesDotXml );
     // add office:styles from styles.xml to paragraphContentDotXmlStyles, paragraphStylesDotXmlStyles and styleManager
     // now all styles referencable from the body in content.xml is in paragraphContentDotXmlStyles
-    addParagraphStyles( context, context.stylesReader().customStyles( "paragraph" ).values(), ContentDotXml | StylesDotXml, styleManager, insertOfficeStyles );
+    addParagraphStyles( context, context.stylesReader().customStyles( "paragraph" ).values(), ContentDotXml | StylesDotXml, styleManager);
     addDefaultParagraphStyle( context, context.stylesReader().defaultStyle( "paragraph" ), styleManager );
 
     addOutlineStyle( context, styleManager );
@@ -109,7 +109,7 @@ void KoTextSharedLoadingData::loadOdfStyles( KoOdfLoadingContext & context, KoSt
 }
 
 void KoTextSharedLoadingData::addParagraphStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements,
-                                                  int styleTypes, KoStyleManager * styleManager, bool insertOfficeStyles )
+                                                  int styleTypes, KoStyleManager * styleManager)
 {
     QList<QPair<QString, KoParagraphStyle *> > paragraphStyles(loadParagraphStyles(context, styleElements, styleTypes, styleManager));
 
@@ -125,10 +125,9 @@ void KoTextSharedLoadingData::addParagraphStyles( KoOdfLoadingContext & context,
 
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
         // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
-        if ( styleManager && insertOfficeStyles ) {
+        if (styleManager) {
             styleManager->add( it->second );
-        }
-        else {
+        } else {
             d->paragraphStylesToDelete.append( it->second );
         }
     }
@@ -158,7 +157,7 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
 }
 
 void KoTextSharedLoadingData::addCharacterStyles( KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements,
-                                                  int styleTypes, KoStyleManager *styleManager, bool insertOfficeStyles )
+                                                  int styleTypes, KoStyleManager *styleManager)
 {
     QList<QPair<QString, KoCharacterStyle *> > characterStyles( loadCharacterStyles( context, styleElements ) );
 
@@ -174,10 +173,9 @@ void KoTextSharedLoadingData::addCharacterStyles( KoOdfLoadingContext & context,
 
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
         // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
-        if ( styleManager && insertOfficeStyles ) {
+        if (styleManager) {
             styleManager->add( it->second );
-        }
-        else {
+        } else {
             d->characterStylesToDelete.append( it->second );
         }
     }
@@ -216,7 +214,7 @@ QList<QPair<QString, KoCharacterStyle *> > KoTextSharedLoadingData::loadCharacte
 }
 
 void KoTextSharedLoadingData::addListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
-                                            int styleTypes, KoStyleManager *styleManager, bool insertOfficeStyles)
+                                            int styleTypes, KoStyleManager *styleManager)
 {
     QList<QPair<QString, KoListStyle *> > listStyles(loadListStyles(context, styleElements));
 
@@ -230,7 +228,7 @@ void KoTextSharedLoadingData::addListStyles(KoOdfLoadingContext &context, QList<
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
         // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
-        if (styleManager && insertOfficeStyles) {
+        if (styleManager) {
             styleManager->add(it->second);
         } else {
             d->listStylesToDelete.append(it->second);

@@ -111,6 +111,9 @@ int KoListStyle::styleId() const
 void KoListStyle::setStyleId(int id)
 {
     d->styleId = id;
+    foreach (int level, d->levels.keys()) {
+        d->levels[level].setStyleId(id);
+    }
 }
 
 KoListLevelProperties KoListStyle::levelProperties(int level) const {
@@ -187,6 +190,8 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level) {
         format = block.textList()->format();
 
     KoListLevelProperties llp = this->levelProperties(level);
+    if (d->styleId)
+        llp.setStyleId(d->styleId);
     llp.applyStyle(format);
 
     if(textList) {

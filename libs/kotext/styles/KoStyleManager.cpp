@@ -293,9 +293,20 @@ KoListStyle *KoStyleManager::listStyle(int id) const
         if (style->styleId() == id)
             return style;
     }
+    return 0;
+}
+
+KoListStyle *KoStyleManager::listStyle(int id, bool *automatic) const
+{
+    if (KoListStyle *style = listStyle(id)) {
+        *automatic = false;
+        return style;
+    }
     foreach(KoListStyle *style, d->automaticListStyles) {
-        if (style->styleId() == id)
+        if (style->styleId() == id) {
+            *automatic = true;
             return style;
+        }
     }
     return 0;
 }

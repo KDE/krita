@@ -227,6 +227,8 @@ private:
 
     friend class KoTextSharedLoadingData;
     void addAutomaticListStyle(KoListStyle *listStyle);
+    friend class KoTextShapeData;
+    KoListStyle *listStyle(int id, bool *automatic) const;
 
 private:
     class Private;

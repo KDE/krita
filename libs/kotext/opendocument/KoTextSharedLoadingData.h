@@ -117,7 +117,7 @@ private:
 
     // helper functions for loading of list styles
     void addListStyles(KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
-                       KoStyleManager *styleManager = 0);
+                       KoStyleManager *styleManager, bool automaticStyle);
     QList<QPair<QString, KoListStyle *> > loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     void addOutlineStyle( KoOdfLoadingContext & context, KoStyleManager *styleManager );

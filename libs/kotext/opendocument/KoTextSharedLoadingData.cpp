@@ -47,7 +47,6 @@ public:
     {
         qDeleteAll( paragraphStylesToDelete );
         qDeleteAll( characterStylesToDelete );
-        qDeleteAll( listStylesToDelete );
     }
 
     // It is possible that automatic-styles in content.xml and styles.xml have the same name
@@ -63,7 +62,6 @@ public:
 
     QList<KoParagraphStyle *> paragraphStylesToDelete;
     QList<KoCharacterStyle *> characterStylesToDelete;
-    QList<KoListStyle *>      listStylesToDelete;
 };
 
 KoTextSharedLoadingData::KoTextSharedLoadingData()
@@ -89,9 +87,9 @@ void KoTextSharedLoadingData::loadOdfStyles( KoOdfLoadingContext & context, KoSt
     // only add styles of office:styles to the style manager
     addCharacterStyles( context, context.stylesReader().customStyles( "text" ).values(), ContentDotXml | StylesDotXml, styleManager);
 
-    addListStyles(context, context.stylesReader().autoStyles("list").values(), ContentDotXml);
-    addListStyles(context, context.stylesReader().autoStyles("list", true ).values(), StylesDotXml);
-    addListStyles(context, context.stylesReader().customStyles("list").values(), ContentDotXml | StylesDotXml, styleManager);
+    addListStyles(context, context.stylesReader().autoStyles("list").values(), ContentDotXml, styleManager, true);
+    addListStyles(context, context.stylesReader().autoStyles("list", true ).values(), StylesDotXml, styleManager, true);
+    addListStyles(context, context.stylesReader().customStyles("list").values(), ContentDotXml | StylesDotXml, styleManager, false);
 
     // add office:automatic-styles in content.xml to paragraphContentDotXmlStyles
     addParagraphStyles( context, context.stylesReader().autoStyles( "paragraph" ).values(), ContentDotXml );
@@ -214,7 +212,7 @@ QList<QPair<QString, KoCharacterStyle *> > KoTextSharedLoadingData::loadCharacte
 }
 
 void KoTextSharedLoadingData::addListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
-                                            int styleTypes, KoStyleManager *styleManager)
+                                            int styleTypes, KoStyleManager *styleManager, bool automaticStyle)
 {
     QList<QPair<QString, KoListStyle *> > listStyles(loadListStyles(context, styleElements));
 
@@ -229,9 +227,11 @@ void KoTextSharedLoadingData::addListStyles(KoOdfLoadingContext &context, QList<
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
         // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
         if (styleManager) {
-            styleManager->add(it->second);
-        } else {
-            d->listStylesToDelete.append(it->second);
+            if (automaticStyle) {
+                styleManager->addAutomaticListStyle(it->second);
+            } else {
+                styleManager->add(it->second);
+            }
         }
     }
 }

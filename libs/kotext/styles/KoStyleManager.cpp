@@ -47,6 +47,7 @@ public:
     QList<KoCharacterStyle*> charStyles;
     QList<KoParagraphStyle*> paragStyles;
     QList<KoListStyle*> listStyles;
+    QList<KoListStyle *> automaticListStyles;
     QList<ChangeFollower*> documentUpdaterProxies;
 
     bool updateTriggered;
@@ -157,13 +158,21 @@ void KoStyleManager::add(KoParagraphStyle *style) {
     emit styleAdded(style);
 }
 
-void KoStyleManager::add(KoListStyle *style) 
+void KoStyleManager::add(KoListStyle *style)
 {
     if(d->listStyles.contains(style))
         return;
     style->setStyleId(d->s_stylesNumber++);
     d->listStyles.append(style);
     emit styleAdded(style);
+}
+
+void KoStyleManager::addAutomaticListStyle(KoListStyle *style)
+{
+    if (d->automaticListStyles.contains(style))
+        return;
+    style->setStyleId(d->s_stylesNumber++);
+    d->automaticListStyles.append(style);
 }
 
 void KoStyleManager::remove(KoCharacterStyle *style) {
@@ -176,7 +185,7 @@ void KoStyleManager::remove(KoParagraphStyle *style) {
         emit styleRemoved(style);
 }
 
-void KoStyleManager::remove(KoListStyle *style) 
+void KoStyleManager::remove(KoListStyle *style)
 {
     if (d->listStyles.removeAll(style))
         emit styleRemoved(style);
@@ -278,9 +287,13 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const {
     return 0;
 }
 
-KoListStyle *KoStyleManager::listStyle(int id) const 
+KoListStyle *KoStyleManager::listStyle(int id) const
 {
     foreach(KoListStyle *style, d->listStyles) {
+        if (style->styleId() == id)
+            return style;
+    }
+    foreach(KoListStyle *style, d->automaticListStyles) {
         if (style->styleId() == id)
             return style;
     }
@@ -303,7 +316,7 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
     return 0;
 }
 
-KoListStyle *KoStyleManager::listStyle(const QString &name) const 
+KoListStyle *KoStyleManager::listStyle(const QString &name) const
 {
     foreach(KoListStyle *style, d->listStyles) {
         if (style->name() == name)
@@ -340,7 +353,7 @@ QList<KoParagraphStyle*> KoStyleManager::paragraphStyles() const {
     return d->paragStyles;
 }
 
-QList<KoListStyle*> KoStyleManager::listStyles() const 
+QList<KoListStyle*> KoStyleManager::listStyles() const
 {
     return d->listStyles;
 }

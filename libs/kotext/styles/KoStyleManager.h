@@ -225,6 +225,9 @@ private:
     void requestFireUpdate();
     void remove(ChangeFollower *cf);
 
+    friend class KoTextSharedLoadingData;
+    void addAutomaticListStyle(KoListStyle *listStyle);
+
 private:
     class Private;
     Private* const d;

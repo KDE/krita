@@ -39,12 +39,12 @@ const float KoColorSpaceMathsTraits<float>::min = -FLT_MAX;
 const float KoColorSpaceMathsTraits<float>::epsilon = FLT_EPSILON;
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<float>::channelValueType = KoChannelInfo::FLOAT32;
 
-const qreal KoColorSpaceMathsTraits<qreal>::zeroValue = 0.0;
-const qreal KoColorSpaceMathsTraits<qreal>::unitValue = 1.0;
-const qreal KoColorSpaceMathsTraits<qreal>::max = FLT_MAX;
-const qreal KoColorSpaceMathsTraits<qreal>::min = -FLT_MAX;
-const qreal KoColorSpaceMathsTraits<qreal>::epsilon = FLT_EPSILON;
-const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<qreal>::channelValueType = KoChannelInfo::FLOAT64;
+const double KoColorSpaceMathsTraits<double>::zeroValue = 0.0;
+const double KoColorSpaceMathsTraits<double>::unitValue = 1.0;
+const double KoColorSpaceMathsTraits<double>::max = DBL_MAX;
+const double KoColorSpaceMathsTraits<double>::min = -DBL_MAX;
+const double KoColorSpaceMathsTraits<double>::epsilon = DBL_EPSILON;
+const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<double>::channelValueType = KoChannelInfo::FLOAT64;
 
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint8>::channelValueType = KoChannelInfo::UINT8;
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint16>::channelValueType = KoChannelInfo::UINT16;

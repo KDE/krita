@@ -106,7 +106,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint32> {
 template<>
 class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<half> {
     public:
-        typedef qreal compositetype;
+        typedef double compositetype;
         static const half zeroValue;
         static const half unitValue;
         static const half max;
@@ -120,7 +120,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<half> {
 template<>
 class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<float> {
     public:
-        typedef qreal compositetype;
+        typedef double compositetype;
         static const float zeroValue;
         static const float unitValue;
         static const float max;
@@ -131,14 +131,14 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<float> {
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<qreal> {
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<double> {
     public:
-        typedef qreal compositetype;
-        static const qreal zeroValue;
-        static const qreal unitValue;
-        static const qreal max;
-        static const qreal min;
-        static const qreal epsilon;
+        typedef double compositetype;
+        static const double zeroValue;
+        static const double unitValue;
+        static const double max;
+        static const double min;
+        static const double epsilon;
         static const qint8 bits = 64;
         static const KoChannelInfo::enumChannelValueType channelValueType;
 };
@@ -191,29 +191,29 @@ class KoColorSpaceMaths {
         }
 };
 
-//------------------------------ qreal specialization ------------------------------//
+//------------------------------ double specialization ------------------------------//
 template<>
-inline quint8 KoColorSpaceMaths<qreal,quint8>::scaleToA(qreal a)
+inline quint8 KoColorSpaceMaths<double,quint8>::scaleToA(double a)
 {
-    qreal v = a * 255;
+    double v = a * 255;
     return (quint8)(CLAMP(v, 0, 255));
 }
 
 template<>
-inline qreal KoColorSpaceMaths<quint8,qreal>::scaleToA(quint8 a)
+inline double KoColorSpaceMaths<quint8,double>::scaleToA(quint8 a)
 {
     return a * ( 1.0 / 255.0 );
 }
 
 template<>
-inline quint16 KoColorSpaceMaths<qreal, quint16>::scaleToA(qreal a)
+inline quint16 KoColorSpaceMaths<double, quint16>::scaleToA(double a)
 {
-    qreal v = a * 0xFFFF;
+    double v = a * 0xFFFF;
     return (quint16)(CLAMP(v, 0, 0xFFFF));
 }
 
 template<>
-inline qreal KoColorSpaceMaths<quint16, qreal>::scaleToA(quint16 a)
+inline double KoColorSpaceMaths<quint16, double>::scaleToA(quint16 a)
 {
     return a * ( 1.0 / 0xFFFF );
 }
@@ -221,13 +221,13 @@ inline qreal KoColorSpaceMaths<quint16, qreal>::scaleToA(quint16 a)
 //------------------------------ half specialization ------------------------------//
 
 template<>
-inline float KoColorSpaceMaths<qreal, float>::scaleToA(qreal a)
+inline float KoColorSpaceMaths<double, float>::scaleToA(double a)
 {
     return (float)a;
 }
 
 template<>
-inline qreal KoColorSpaceMaths<float, qreal>::scaleToA(float a)
+inline double KoColorSpaceMaths<float, double>::scaleToA(float a)
 {
     return a;
 }
@@ -269,13 +269,13 @@ inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 #ifdef HAVE_OPENEXR
 
 template<>
-inline half KoColorSpaceMaths<qreal, half>::scaleToA(qreal a)
+inline half KoColorSpaceMaths<double, half>::scaleToA(double a)
 {
     return (half)a;
 }
 
 template<>
-inline qreal KoColorSpaceMaths<half, qreal>::scaleToA(half a)
+inline double KoColorSpaceMaths<half, double>::scaleToA(half a)
 {
     return a;
 }
@@ -308,7 +308,7 @@ inline half KoColorSpaceMaths<quint8,half>::scaleToA(quint8 a)
 template<>
 inline quint16 KoColorSpaceMaths<half,quint16>::scaleToA(half a)
 {
-    qreal v = a * 0xFFFF;
+    double v = a * 0xFFFF;
     return (quint16)(CLAMP(v, 0, 0xFFFF));
 }
 

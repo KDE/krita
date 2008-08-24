@@ -31,6 +31,7 @@ class KoXmlElement;
 class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
+class KoTextShapeDataPrivate;
 
 /**
  * The data store that is held by each KoTextShape instance.
@@ -189,8 +190,7 @@ signals:
     void relayout();
 
 private:
-    class Private;
-    Private *const d;
+    KoTextShapeDataPrivate *const d;
 };
 
 #endif

@@ -34,6 +34,7 @@ class KoListStyle;
 class KoXmlWriter;
 class ChangeFollower;
 class KoGenStyles;
+class KoTextShapeData;
 
 /**
  * Manages all character and paragraph styles for any number of documents.
@@ -228,6 +229,7 @@ private:
     friend class KoTextSharedLoadingData;
     void addAutomaticListStyle(KoListStyle *listStyle);
     friend class KoTextShapeData;
+    friend class KoTextShapeDataPrivate;
     KoListStyle *listStyle(int id, bool *automatic) const;
 
 private:

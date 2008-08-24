@@ -47,9 +47,9 @@
 
 #include "KoTextDebug.h"
 
-class KoTextShapeData::Private {
+class KoTextShapeDataPrivate {
 public:
-    Private()
+    KoTextShapeDataPrivate()
         : document(0),
         ownsDocument(true),
         dirty(true),
@@ -74,12 +74,12 @@ public:
     int position, endPosition, pageNumber;
     KoInsets margins;
     KoText::Direction direction;
-    PageNumberSelectType pageNumberSelectType;
+    KoTextShapeData::PageNumberSelectType pageNumberSelectType;
 };
 
 
 KoTextShapeData::KoTextShapeData()
-: d(new Private())
+: d(new KoTextShapeDataPrivate())
 {
     setDocument(new QTextDocument, true);
 }
@@ -192,7 +192,7 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     return true;
 }
 
-QString KoTextShapeData::Private::saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager, const QTextBlock &block)
+QString KoTextShapeDataPrivate::saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager, const QTextBlock &block)
 {
     Q_ASSERT(styleManager);
     KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
@@ -228,7 +228,7 @@ QString KoTextShapeData::Private::saveParagraphStyle(KoShapeSavingContext &conte
     return generatedName;
 }
 
-QString KoTextShapeData::Private::saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager,
+QString KoTextShapeDataPrivate::saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager,
                                                      const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
 {
     Q_ASSERT(styleManager);
@@ -268,7 +268,7 @@ QString KoTextShapeData::Private::saveCharacterStyle(KoShapeSavingContext &conte
     return generatedName;
 }
 
-QHash<QTextList *, QString> KoTextShapeData::Private::saveListStyles(KoShapeSavingContext &context, const KoStyleManager *styleManager,
+QHash<QTextList *, QString> KoTextShapeDataPrivate::saveListStyles(KoShapeSavingContext &context, const KoStyleManager *styleManager,
                                                                        QTextBlock block, int to)
 {
     QSet<KoListStyle *> generatedListStyles;

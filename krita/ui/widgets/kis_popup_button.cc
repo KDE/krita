@@ -16,9 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#include "widgets/kis_popup_button.h"
+
 #include <QApplication>
 #include <QDesktopWidget>
-#include "widgets/kis_popup_button.h"
+
 #include <QFrame>
 #include <QHBoxLayout>
 
@@ -81,14 +84,22 @@ void KisPopupButton::showPopupWidget()
 {
     if(d->popupWidget)
     {
-        QPoint pt = mapToGlobal ( QPoint(0, height()) );
-        QRect screen = qApp->desktop()->availableGeometry();
+        QSize popSize = d->frame->size();
+        QRect popupRect(this->mapToGlobal(QPoint(x(), this->size().height())), popSize);
 
-        if (pt.x() + d->popupWidget->width() > screen.width() ) {
-            pt.setX(pt.x() + (screen.width() - pt.x() + d->popupWidget->width()));
-        }
-        d->frame->move(pt);
-        d->frame->setVisible(true);
+        // Make sure the popup is not drawn outside the screen area
+        QRect screenRect = QApplication::desktop()->availableGeometry(d->frame);
+        if (popupRect.right() > screenRect.right())
+            popupRect.translate(screenRect.right() - popupRect.right(), 0);
+        if (popupRect.left() < screenRect.left())
+            popupRect.translate(screenRect.left() - popupRect.left(), 0);
+        if (popupRect.bottom() > screenRect.bottom())
+            popupRect.translate(0, -d->frame->height());
+
+        d->frame->setGeometry(popupRect);
+        d->frame->raise();
+        d->frame->show();
+
     }
 }
 

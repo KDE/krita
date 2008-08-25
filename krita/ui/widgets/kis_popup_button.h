@@ -25,43 +25,43 @@
 #include <krita_export.h>
 
 /**
- * This class is a convenience class for a button that 
+ * This class is a convenience class for a button that
  * when clicked displays a popup widget.
  */
 class KRITAUI_EXPORT KisPopupButton : public QPushButton {
 
 Q_OBJECT
-    
+
 public:
-        
+
     KisPopupButton(QWidget* parent);
     ~KisPopupButton();
-    
+
     /**
      * Set the popup widget, the KisPopupButton becomes
      * the owner and parent of the widget.
      */
     void setPopupWidget(QWidget* widget);
-    
+
     /**
      * This function allow to force the popup to be visible.
      * @param v set to true to force the popup to be visible, set to false
      *          to allow the popup to be hidden
      */
     void setAlwaysVisible(bool v);
-    
+
     /**
      * Set the width of the popup widget.
      * @return new width of the popup widget
      */
     void setPopupWidgetWidth( int w );
-    
+
 public slots:
-    
+
     void showPopupWidget();
-    
+
     void hidePopupWidget();
-    
+
 private:
     struct Private;
     Private* const d;

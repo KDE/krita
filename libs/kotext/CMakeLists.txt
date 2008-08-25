@@ -83,9 +83,12 @@ kde4_add_ui_files(kotext_LIB_SRCS
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 
-target_link_libraries(kotext flake ${KDE4_KUTILS_LIBS} komain koguiutils )
+target_link_libraries(kotext flake ${KDE4_KUTILS_LIBS} ${QT_QTGUI_LIBRARY} komain koguiutils )
 
-set_target_properties(kotext PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kotext PROPERTIES 
+   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+   ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "${QT_QTGUI_LIBRARY}"
+)
 install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 

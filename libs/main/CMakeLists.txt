@@ -100,7 +100,7 @@ kde4_add_plugin(kodocinfopropspage ${kodocinfopropspage_PART_SRCS})
 
 
 
-target_link_libraries(kodocinfopropspage  ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(kodocinfopropspage  ${KDE4_KIO_LIBS} komain )
 
 install(TARGETS kodocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -11,3 +11,5 @@ curve responses through libpaintop
 * pass image to kis_custom_brush from kis_brush_selection_widget
 * fix dynamic brush where it tries to get a brush shape (it probably shouldn't inherit
 kis_brush_based_paintop,t hough)
+* fix scripting plugins (include scripts themselves)
+* fix action recorder serialize/unserialize

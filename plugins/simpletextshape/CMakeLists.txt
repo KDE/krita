@@ -17,7 +17,8 @@ kde4_add_ui_files( SimpleTextShape_SRCS
 
 kde4_add_plugin( simpletextshape ${SimpleTextShape_SRCS} )
 
-target_link_libraries( simpletextshape flake )
+target_link_libraries(simpletextshape flake ${QT_QTGUI_LIBRARY} ${KDE4_KUTILS_LIBS} komain)
+
 install( TARGETS simpletextshape DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############

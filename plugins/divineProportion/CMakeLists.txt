@@ -17,7 +17,8 @@ kde4_add_ui_files(divineProportionShape_SRCS
 
 kde4_add_plugin(divineproportionshape ${divineProportionShape_SRCS})
 
-target_link_libraries(divineproportionshape flake)
+target_link_libraries(divineproportionshape flake ${QT_QTGUI_LIBRARY} ${KDE4_KUTILS_LIBS})
+
 install(TARGETS divineproportionshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

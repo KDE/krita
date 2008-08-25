@@ -36,7 +36,7 @@ set( kopageapp_LIB_SRCS
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
-target_link_libraries(kopageapp ${KDE4_KDECORE_LIBS} koguiutils flake kotext)
+target_link_libraries(kopageapp komain kstore ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KDECORE_LIBS} koguiutils flake kotext)
 
 set_target_properties(kopageapp PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kopageapp  ${INSTALL_TARGETS_DEFAULT_ARGS})

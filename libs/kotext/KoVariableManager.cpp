@@ -35,10 +35,9 @@ KoVariableManager::KoVariableManager(KoInlineTextObjectManager *inlineObjectMana
     d->inlineObjectManager = inlineObjectManager;
 
 /* for test */
-
-setValue("Foo", "Bar");
-setValue("Foo", "Baz");
-setValue("Bike", "Shed");
+//setValue("Foo", "Bar");
+//setValue("Foo", "Baz");
+//setValue("Bike", "Shed");
 }
 
 KoVariableManager::~KoVariableManager()

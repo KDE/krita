@@ -26,6 +26,8 @@
 #include <QUrl>
 #include <QTextDocument>
 #include <QTextBlock>
+#include <QPointer>
+#include <QMetaObject>
 
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
@@ -56,9 +58,8 @@ public:
         offset(0.0),
         position(-1),
         endPosition(-1),
-        pageNumber(-1),
         direction(KoText::AutoDirection),
-        pageNumberSelectType(KoTextShapeData::PageNumberSelectPageCurrent)
+        pageNumberProvider(0)
     {
     }
 
@@ -71,10 +72,10 @@ public:
     QTextDocument *document;
     bool ownsDocument, dirty;
     qreal offset;
-    int position, endPosition, pageNumber;
+    int position, endPosition;
     KoInsets margins;
     KoText::Direction direction;
-    KoTextShapeData::PageNumberSelectType pageNumberSelectType;
+    QPointer<QObject> pageNumberProvider;
 };
 
 
@@ -155,17 +156,6 @@ KoInsets KoTextShapeData::shapeMargins() const {
     return d->margins;
 }
 
-void KoTextShapeData::setPageNumber(int page) {
-    if (page == d->pageNumber)
-        return;
-    d->pageNumber = page;
-    d->dirty = true;
-}
-
-int KoTextShapeData::pageNumber() const {
-    return d->pageNumber;
-}
-
 void KoTextShapeData::setPageDirection(KoText::Direction direction) {
     d->direction = direction;
 }
@@ -174,12 +164,23 @@ KoText::Direction KoTextShapeData::pageDirection() const {
     return d->direction;
 }
 
-KoTextShapeData::PageNumberSelectType KoTextShapeData::pageNumberSelectType() const {
-    return d->pageNumberSelectType;
+void KoTextShapeData::setPageNumberProvider(QObject* pagenumprovider) {
+    d->pageNumberProvider = pagenumprovider;
 }
 
-void KoTextShapeData::setPageNumberSelectType(KoTextShapeData::PageNumberSelectType selecttype) {
-    d->pageNumberSelectType = selecttype;
+QObject* KoTextShapeData::pageNumberProvider() const {
+    return d->pageNumberProvider;
+}
+
+int KoTextShapeData::pageNumber(KoInlineObject* inlineObject) {
+    Q_ASSERT(d->pageNumberProvider);
+    int pagenumber = -1;
+    bool ok = QMetaObject::invokeMethod(
+        d->pageNumberProvider, "pageNumber", Qt::DirectConnection,
+        Q_RETURN_ARG(int,pagenumber), Q_ARG(KoInlineObject*,inlineObject)
+    );
+    Q_ASSERT(ok);
+    return pagenumber;
 }
 
 bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) {

@@ -41,7 +41,7 @@
 #include <KoTextBlockData.h>
 
 TOCVariable::TOCVariable()
-    : KoVariable(true), currentDoc(0)
+    : KoVariable(true), currentDoc(0), source(TOCSource(this))
 {
 }
 
@@ -85,7 +85,7 @@ void TOCSource::saveOdf( KoShapeSavingContext & context )
     writer->endElement();	// text:index-title-template
     foreach ( TOCSourceTemplate tpl, m_sources )
     {
-	tpl.saveOdf(context);
+        tpl.saveOdf(context);
     }
     writer->endElement();
 }
@@ -137,8 +137,12 @@ void TOCSource::buildFromDocument (const QTextDocument *source, QTextCursor *tar
                     KoShape *shape = docLayout->shapeForPosition(block.position());
                     if (shape)
                     {
-                    target->insertText("TOC entry " + QString::number(blockData->outlineLevel()) + " :" + block.text() + ";page" + QString::number(dynamic_cast<KoTextShapeData *>(shape->userData())->pageNumber()));
-                    target->insertBlock();
+                        KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
+                        target->insertText("TOC entry " + 
+                            QString::number(blockData->outlineLevel()) + " :" + block.text() +
+                            ";page" + QString::number(shapeData->pageNumber(m_variable))
+                        );
+                        target->insertBlock();
                     }
                 }
             }
@@ -263,9 +267,8 @@ void TOCVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument
 void TOCVariable::update( )
 {
     if (!currentDoc)
-	return;
+        return;
     indexBody.clear();
     QTextCursor cursor(&indexBody);
     source.buildFromDocument(currentDoc, &cursor);
-    
 }

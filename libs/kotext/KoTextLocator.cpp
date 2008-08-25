@@ -34,7 +34,7 @@
 
 class KoTextLocator::Private {
 public:
-    Private() : document(0), dirty(false), cursorPosition(0), chapterPosition(-1), pageNumber(1) { }
+    Private(KoTextLocator *q) : q(q), document(0), dirty(false), cursorPosition(0), chapterPosition(-1), pageNumber(1) { }
     void update() {
         if(dirty == false)
             return;
@@ -64,7 +64,7 @@ public:
             pageNumber = -1;
         else {
             KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
-            pageNumber = data->pageNumber();
+            pageNumber = data->pageNumber(q);
         }
         if(pageTmp != pageNumber || chapterTmp != chapterPosition) {
             foreach(KoTextReference* reference, listeners)
@@ -72,6 +72,7 @@ public:
         }
     }
 
+    KoTextLocator *q;
     const QTextDocument *document;
     bool dirty;
     int cursorPosition;
@@ -84,7 +85,7 @@ public:
 
 KoTextLocator::KoTextLocator()
     : KoInlineObject(false),
-    d(new Private())
+    d(new Private(this))
 {
 }
 

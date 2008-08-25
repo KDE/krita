@@ -32,6 +32,7 @@ class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoTextShapeDataPrivate;
+class KoInlineObject;
 
 /**
  * The data store that is held by each KoTextShape instance.
@@ -119,37 +120,13 @@ public:
      */
     KoInsets shapeMargins() const;
 
-    /**
-     * Set the page number this shape will appear on.
-     */
-    void setPageNumber(int page);
-    /**
-     * return the page number this shape will appear on.
-     */
-    int pageNumber() const;
-
-    /**
-     * Display Previous or Following Page Numbers. The PageNumberSelectType represents
-     * the text:select-page attribute which is used to display the number of the previous
-     * or the following page rather than the number of the current page.
-     *
-     * \note To display the current page number on all pages except the first or last
-     * page, use a combination of the text:select page and text:page adjust attributes.
-     *
-     * Example: Displaying the current page number on all pages except the first page
-     * \code
-     * <text:page-number text:select-page="previous" text:page-adjust="1" style:num-format="1"/>
-     * \endcode
-     */
-    enum PageNumberSelectType {
-        PageNumberSelectPageCurrent, ///< Select the "current" page.
-        PageNumberSelectPagePrev,    ///< Select the "previous" page.
-        PageNumberSelectPageNext     ///< Select the "next" page.
-    };
-    /// Returns the text:select-page value.
-    PageNumberSelectType pageNumberSelectType() const;
-    /// Sets the text:select-page value.
-    void setPageNumberSelectType(PageNumberSelectType selecttype);
+//TODO probably it would be better to go with an interface for that...
+    /// Set the provider that does provide us the number of the page this shape will appear on.
+    void setPageNumberProvider(QObject* pagenumprovider);
+    /// Returns the provider that does provide us the number of the page this shape will appear on.
+    QObject* pageNumberProvider() const;
+    /// Returns the number of the page for the \a KoInlineObject instance.
+    int pageNumber(KoInlineObject* inlineObject);
 
     /**
     * Load the TextShape from ODF.

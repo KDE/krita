@@ -33,6 +33,7 @@ public:
     KoInlineTextObjectManager *manager;
     int id;
     bool propertyChangeListener;
+    QVariantMap attributes;
 };
 
 KoInlineObject::KoInlineObject(bool propertyChangeListener)
@@ -71,6 +72,18 @@ void KoInlineObject::setId(int id) {
 
 bool KoInlineObject::propertyChangeListener() const {
     return d->propertyChangeListener;
+}
+
+QVariantMap KoInlineObject::attributes() const {
+    return d->attributes;
+}
+
+QVariant KoInlineObject::attribute(const QString& name, const QVariant& defaultValue) {
+    return d->attributes.contains(name) ? d->attributes[name] : defaultValue;
+}
+
+void KoInlineObject::setAttribute(const QString& name, const QVariant& value) {
+    d->attributes[name] = value;
 }
 
 //static

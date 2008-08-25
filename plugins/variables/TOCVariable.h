@@ -25,6 +25,7 @@
 
 class KoShapeSavingContext;
 class KoParagraphStyle;
+class TOCVariable;
 
 class TOCSourceTemplate
 {
@@ -44,12 +45,14 @@ private:
 class TOCSource
 {
 public:
+    explicit TOCSource(TOCVariable* v) : m_variable(v) {}
     bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
     void saveOdf( KoShapeSavingContext & context );
     const QList<TOCSourceTemplate> &sources() { return m_sources; }
     int outlineLevel() const { return m_outlineLevel; }
     void buildFromDocument (const QTextDocument *source, QTextCursor *target);
 private:
+    TOCVariable* m_variable;
     QString m_titleTemplate;
     KoParagraphStyle *m_titleStyle;
     int m_outlineLevel;

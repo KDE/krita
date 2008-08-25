@@ -1,6 +1,7 @@
 /*
    Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (c) 2008 Carlos Licea <carlos.licea@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,6 +75,13 @@ void KoCanvasResourceProvider::setResource( int key, const KoID & id )
 {
     QVariant v;
     v.setValue( id );
+    setResource( key, v );
+}
+
+void KoCanvasResourceProvider::setResource( int key, KoShape* shape )
+{
+    QVariant v;
+    v.setValue<void*>( shape );
     setResource( key, v );
 }
 

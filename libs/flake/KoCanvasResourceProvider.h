@@ -1,6 +1,7 @@
 /*
    Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (c) 2008 Carlos Licea <carlos.licea@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include <KoID.h>
 #include "flake_export.h"
 class KoColor;
+class KoShape;
 
 /**
  * The KoCanvasResource contains a set of per-canvas
@@ -49,6 +51,7 @@ namespace KoCanvasResource {
         DocumentIsLoading,  ///< A boolean that is set to true while loading is happening.
         Unit,               ///< The unit of this canvas has changed
         HotPosition,        ///< The hot position has changed
+        CurrentPage,        ///< The current page has changed
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
         KivioStart = 3000,       ///< Base number for kivio specific values.
@@ -98,6 +101,12 @@ public:
      * @param id the new value for the key.
      */
     void setResource( int key, const KoID & id );
+    /**
+     * Set a resource of type KoShape*.
+     * @param key the integer key, based on KoCanvasResource::CanvasResource
+     * @param id the new value for the key.
+     */
+    void setResource( int key, KoShape* shape );
 
     /**
      * Returns a qvariant containing the specified resource or a standard one if the

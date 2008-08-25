@@ -40,6 +40,7 @@ public:
     ~Private() {
         delete defaultListStyle;
         delete outlineStyle;
+        qDeleteAll(automaticListStyles);
         // ##: Who deletes the rest of the stuff?
     }
     static int s_stylesNumber; // For giving out unique numbers to the styles for referencing

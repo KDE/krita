@@ -22,6 +22,8 @@
 #include <QMap>
 #include <QWidget>
 
+#include <krita_export.h>
+
 class QTableWidgetItem;
 class KisItemChooser;
 class KoResourceItem;
@@ -34,7 +36,7 @@ class KoAbstractResourceServerAdapter;
  * For every view, a new resource mediator is created for every
  * resource type.
  */
-class KisResourceMediator : public QObject {
+class KRITAUI_EXPORT KisResourceMediator : public QObject {
     Q_OBJECT
 
 public:

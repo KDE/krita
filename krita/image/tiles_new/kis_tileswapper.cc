@@ -119,7 +119,7 @@ void KisTileSwapper::run() {
     forever {
         if (m_stopThread) // No locking, since it only changes from false to true
             return;
-        // AGRESSIVE SWAPPER! Loops until everything is swapped, and wakes as soon as something is swappable! (Hopefully, there's the chance of a signal happening
+        // AGGRESSIVE SWAPPER! Loops until everything is swapped, and wakes as soon as something is swappable! (Hopefully, there's the chance of a signal happening
         // between queue unlock and waitlock ###)
         // ### Less aggressive swapper would be problematic atm: If we signal during the swapping, it is lost!
 
@@ -151,7 +151,7 @@ void KisTileSwapper::run() {
               The front element is the oldest element. If the oldest element is too young, we have to go to sleep at least as long as its age, and then check again
               to see if, in the case it's still there, to swap it
             */
-            
+
             unsigned long toSleepMSec = shouldSleepAmountmsecs(tileData);
 
             if (toSleepMSec > 0) { // ### FUZZIFY?

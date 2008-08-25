@@ -23,7 +23,6 @@
 
 #include "kis_doc2.h"
 
-#include "modeltest.h"
 
 #include <QApplication>
 #include <qdom.h>
@@ -207,8 +206,6 @@ bool KisDoc2::init()
 
     m_d->shapeController = new KisShapeController( this, m_d->nserver );
     m_d->nodeModel = new KisNodeModel( this );
-//    new ModelTest(m_d->nodeModel, this);
-
 
     return true;
 }

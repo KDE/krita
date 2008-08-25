@@ -28,15 +28,9 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 
-#include <KoResourceItemChooser.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceServerProvider.h>
-
 #include "kis_brush.h"
 #include "kis_auto_brush.h"
 #include "kis_imagepipe_brush.h"
-#include <kis_resource_mediator.h>
 #include "kis_brush_chooser.h"
 #include "kis_auto_brush_widget.h"
 #include "kis_custom_brush.h"

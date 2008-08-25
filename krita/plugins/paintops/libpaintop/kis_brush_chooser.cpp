@@ -27,6 +27,11 @@
 #include <kfiledialog.h>
 
 #include <KoResourceItemChooser.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerAdapter.h>
+#include <KoResourceServerProvider.h>
+#include "kis_resource_mediator.h"
+
 #include "kis_brush_server.h"
 #include "widgets/kis_double_widget.h"
 
@@ -65,10 +70,18 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->addWidget(m_chkColorMask, 1, 0, 1, 2);
 
     connect( this, SIGNAL( importClicked() ), this, SLOT( slotImportBrush() ) );
+
+    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
+    KoResourceServerAdapter<KisBrush>* rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
+
+    m_brushMediator = new KisResourceMediator(this, rServerAdapter, this);
+//    connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
+//            m_view->resourceProvider(), SLOT(slotBrushActivated(KoResource*)));
 }
 
 KisBrushChooser::~KisBrushChooser()
 {
+    delete m_brushMediator;
 }
 
 void KisBrushChooser::slotSetItemSpacing(double spacingValue)

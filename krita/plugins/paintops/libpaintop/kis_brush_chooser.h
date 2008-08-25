@@ -26,6 +26,7 @@ class QLabel;
 class QCheckBox;
 
 class KisDoubleWidget;
+class KisResourceMediator;
 
 class KRITAUI_EXPORT KisBrushChooser : public KisItemChooser {
 
@@ -48,6 +49,8 @@ private:
     QLabel *m_lbSpacing;
     KisDoubleWidget *m_slSpacing;
     QCheckBox *m_chkColorMask;
+    KisResourceMediator * m_brushMediator;
+
 };
 
 #endif // KIS_BRUSH_CHOOSER_H_

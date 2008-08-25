@@ -26,6 +26,7 @@
 
 class KoResource;
 class KisBrush;
+
 /**
  *
  */

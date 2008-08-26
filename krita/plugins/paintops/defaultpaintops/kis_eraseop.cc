@@ -127,7 +127,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
 
-    KisBrush *brush = m_brush;
+    KisBrushSP brush = m_brush;
     if (! brush->canPaintFor(info) )
         return;
     double scale = KisPaintOp::scaleForPressure( info.pressure() );

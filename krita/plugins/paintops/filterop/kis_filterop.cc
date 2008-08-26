@@ -96,7 +96,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
       return;
     }
 
-    KisBrush * brush = m_brush;;
+    KisBrushSP brush = m_brush;;
     if (!brush) return;
 
     double scale = KisPaintOp::scaleForPressure( info.pressure() );

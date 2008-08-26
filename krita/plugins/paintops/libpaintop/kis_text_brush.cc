@@ -46,7 +46,7 @@ void KisTextBrushResource::updateBrush()
 
 KisTextBrush::KisTextBrush(QWidget *parent, const char* name, const QString& caption)
 	: KisWdgTextBrush(parent, name),
-	  m_textBrushResource(new KisTextBrushResource())
+	  m_textBrush(new KisTextBrushResource())
 {
 	setWindowTitle(caption);
 	connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
@@ -66,10 +66,10 @@ void KisTextBrush::rebuildTextBrush()
 {
 	lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
 	lblFont->setFont(m_font);
-	m_textBrushResource->setFont(m_font);
-	m_textBrushResource->setText(lineEdit->text());
-	m_textBrushResource->updateBrush();
-	emit(activatedResource(m_textBrushResource));
+        KisTextBrushResource* textBrush = dynamic_cast<KisTextBrushResource*>( m_textBrush.data() );
+	textBrush->setFont(m_font);
+	textBrush->setText(lineEdit->text());
+	textBrush->updateBrush();
 }
 
 #include "kis_text_brush.moc"

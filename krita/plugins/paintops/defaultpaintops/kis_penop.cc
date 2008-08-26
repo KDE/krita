@@ -110,7 +110,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     if (!painter()) return;
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
-    KisBrush * brush = m_brush;
+    KisBrushSP brush = m_brush;
     if (!brush) return;
     if (! brush->canPaintFor(info) )
         return;

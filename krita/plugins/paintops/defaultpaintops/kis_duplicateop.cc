@@ -228,7 +228,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     if (!source()) return;
 
-    KisBrush * brush = m_brush;
+    KisBrushSP brush = m_brush;
     if (!brush) return;
     if (! brush->canPaintFor(info) )
         return;

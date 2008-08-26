@@ -21,12 +21,14 @@
 #include "widgets/kis_item_chooser.h"
 #include <QLabel>
 #include <krita_export.h>
-
+#include "kis_brush.h"
 class QLabel;
 class QCheckBox;
 
 class KisDoubleWidget;
 class KisResourceMediator;
+class KoResource;
+
 
 class KRITAUI_EXPORT KisBrushChooser : public KisItemChooser {
 
@@ -35,14 +37,17 @@ class KRITAUI_EXPORT KisBrushChooser : public KisItemChooser {
 public:
     KisBrushChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisBrushChooser();
+    KisBrushSP brush() { return m_brush; };
 
 protected:
     virtual void update(QTableWidgetItem *item);
 
 private slots:
-    void slotSetItemSpacing(double spacing);
+    void slotSetItemSpacing(double);
     void slotSetItemUseColorAsMask(bool);
     void slotImportBrush();
+    void slotActivatedBrush(KoResource *);
+
 
 private:
     QLabel *m_lbName;
@@ -50,6 +55,7 @@ private:
     KisDoubleWidget *m_slSpacing;
     QCheckBox *m_chkColorMask;
     KisResourceMediator * m_brushMediator;
+    KisBrushSP m_brush;
 
 };
 

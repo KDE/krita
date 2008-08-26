@@ -19,11 +19,14 @@
 #define KIS_BRUSH_SELECTION_WIDGET_H
 
 #include <QWidget>
+#include "kis_brush.h"
 
 class QTabWidget;
 class KisAutoBrushWidget;
-class KisBrush;
 class KisBrushChooser;
+class KisTextBrush;
+class KisCustomBrush;
+
 class KisView2;
 
 /**
@@ -31,18 +34,23 @@ class KisView2;
  */
 class KisBrushSelectionWidget : public QWidget
 {
+    Q_OBJECT
+
 public:
     KisBrushSelectionWidget( QWidget * parent = 0 );
 
     ~KisBrushSelectionWidget();
 
-    KisBrush * brush();
+    KisBrushSP brush();
+
 private:
 
     QTabWidget * m_brushesTab;
     KisAutoBrushWidget * m_autoBrushWidget;
     KisBrushChooser * m_brushChooser;
-    KisBrush * m_activeBrush;
+    KisTextBrush * m_textBrushWidget;
+    KisCustomBrush * m_customBrushWidget;
+
 };
 
 #endif

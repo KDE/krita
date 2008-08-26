@@ -137,7 +137,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     // ellipes and cones, and it shows the working of the timer.
     if (!device) return;
 
-    KisBrush * brush = m_brush;
+    KisBrushSP brush = m_brush;
     if (! brush->canPaintFor(info) )
         return;
     KisPaintDeviceSP dab = 0;

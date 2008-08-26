@@ -66,13 +66,8 @@ KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
 
 void KisPaintOpOptionsWidget::addPaintOpOption( KisPaintOpOption * option )
 {
-    kDebug() << option;
-    kDebug() << m_d->optionsStack;
-
     // XXX
     if ( !option->configurationPage() ) return;
-
-    kDebug() << option->configurationPage();
 
     m_d->paintOpOptions << option;
     m_d->optionsStack->addWidget( option->configurationPage() );

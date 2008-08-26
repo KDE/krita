@@ -26,18 +26,18 @@ class KisMaskGenerator;
 
 class KRITAUI_EXPORT KisAutoBrush : public KisBrush
 {
-    public:
-        KisAutoBrush(KisMaskGenerator* img);
-        virtual ~KisAutoBrush();
-    public:
-        virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
-    public:
-        virtual bool load() { return false; }
-        virtual void toXML(QDomDocument& , QDomElement&) const;
-    private:
-        QImage createBrushPreview();
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisAutoBrush(KisMaskGenerator* img);
+    virtual ~KisAutoBrush();
+public:
+    virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+public:
+    virtual bool load() { return false; }
+    virtual void toXML(QDomDocument& , QDomElement&) const;
+private:
+    QImage createBrushPreview();
+private:
+    struct Private;
+    Private* const d;
 };
 #endif // _KIS_AUTOBRUSH_RESOURCE_H_

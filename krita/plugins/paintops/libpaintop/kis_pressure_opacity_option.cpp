@@ -37,10 +37,10 @@ void KisPressureOpacityOption::readOptionSetting( KisPaintOpPresetSP preset )
     // XXX
 }
 
-void KisPressureOpacityOption::apply( KisPainter * painter, double pressure ) const
+quint8 KisPressureOpacityOption::apply( KisPainter * painter, double pressure ) const
 {
     if ( !isChecked() ) {
-        return;
+        return painter->opacity();
     }
     quint8 origOpacity = painter->opacity();
 
@@ -50,4 +50,6 @@ void KisPressureOpacityOption::apply( KisPainter * painter, double pressure ) co
     else {
         painter->setOpacity((qint8)(origOpacity * scaleToCurve(pressure)));
     }
+
+    return origOpacity;
 }

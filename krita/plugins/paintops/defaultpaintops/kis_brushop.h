@@ -36,6 +36,7 @@ class KisPressureSizeOption;
 class KisPressureDarkenOption;
 class KisPressureOpacityOption;
 class KisPaintActionTypeOption;
+class KisBrushOpSettings;
 
 class QWidget;
 class QPointF;
@@ -56,33 +57,6 @@ public:
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
-class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
-    Q_OBJECT
-
-public:
-
-    KisBrushOpSettings(QWidget *parent);
-    virtual KisPaintOpSettingsSP clone() const;
-
-    virtual QWidget* widget() const { Q_ASSERT(m_optionsWidget); return m_optionsWidget; }
-
-    using KisPaintOpSettings::fromXML;
-    virtual void fromXML(const QDomElement&);
-
-    using KisPaintOpSettings::toXML;
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-
-private:
-    KisBrushOption * m_brushOption;
-    KisPressureOpacityOption * m_opacityOption;
-    KisPressureDarkenOption * m_darkenOption;
-    KisPressureSizeOption * m_sizeOption;
-    KisPaintActionTypeOption * m_paintActionTypeOption;
-
-    KisPaintOpOptionsWidget *m_optionsWidget;
-
-};
-
 class KisBrushOp : public KisBrushBasedPaintOp {
 
 public:
@@ -96,23 +70,8 @@ public:
                              double savedDist = -1);
 
 private:
-    inline double scaleToCurve(double pressure, double* curve) const {
-        int offset = int(255.0 * pressure);
-        if (offset < 0)
-            offset = 0;
-        if (offset > 255)
-            offset =  255; // Was: clamp(..., 0, 255);
-        return curve[offset];
-    }
-    bool m_pressureSize;
-    bool m_pressureOpacity;
-    bool m_pressureDarken;
-    bool m_customSize;
-    bool m_customOpacity;
-    bool m_customDarken;
-    double m_sizeCurve[256];
-    double m_opacityCurve[256];
-    double m_darkenCurve[256];
+
+    const KisBrushOpSettings * settings;
 };
 
 #endif // KIS_BRUSHOP_H_

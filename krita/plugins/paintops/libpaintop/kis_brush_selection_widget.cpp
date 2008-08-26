@@ -52,35 +52,23 @@ KisBrushSelectionWidget::KisBrushSelectionWidget( QWidget * parent )
 
     l->addWidget(m_brushesTab);
 
-    KisAutoBrushWidget * m_autoBrushWidget = new KisAutoBrushWidget(0, "autobrush", i18n("Autobrush"));
+    m_autoBrushWidget = new KisAutoBrushWidget(0, "autobrush", i18n("Autobrush"));
     m_brushesTab->addTab( m_autoBrushWidget, i18n("Autobrush"));
 
-    m_brushChooser = new KisBrushChooser(m_brushesTab);
+    m_brushChooser = new KisBrushChooser(0);
     m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
 
     // XXX: pass image!
-    KisCustomBrush* customBrushes = new KisCustomBrush(0, i18n("Custom Brush"), 0);
-    m_brushesTab->addTab( customBrushes, i18n("Custom Brush"));
+    m_customBrushWidget = new KisCustomBrush(0, i18n("Custom Brush"), 0);
+    m_brushesTab->addTab( m_customBrushWidget, i18n("Custom Brush"));
 
-    KisTextBrush* textBrushes = new KisTextBrush(0, "textbrush",
-            i18n("Text Brush")/*, m_view*/);
-    m_brushesTab->addTab( textBrushes, i18n("Text Brush"));
+    m_textBrushWidget = new KisTextBrush(0, "textbrush", i18n("Text Brush"));
+    m_brushesTab->addTab( m_textBrushWidget, i18n("Text Brush"));
 
     setLayout(l);
 
     m_brushChooser->setCurrent( 0 );
     m_autoBrushWidget->activate();
-
-    QImage img( 100, 100, QImage::Format_ARGB32 );
-    QPainter p( &img );
-    p.setRenderHint( QPainter::Antialiasing );
-    p.fillRect( 0, 0, 100, 100, QBrush(QColor( 255, 255, 255, 0) ) );
-    p.setBrush( QBrush( QColor( 0, 0, 0, 255 ) ) );
-    p.drawEllipse( 0, 0, 100, 100 );
-    p.end();
-
-    m_activeBrush = new KisBrush( img );
-
 }
 
 
@@ -88,7 +76,29 @@ KisBrushSelectionWidget::~KisBrushSelectionWidget()
 {
 }
 
-KisBrush * KisBrushSelectionWidget::brush()
+KisBrushSP KisBrushSelectionWidget::brush()
 {
-    return m_activeBrush;
+    KisBrushSP theBrush;
+    kDebug() << m_brushesTab->currentIndex();
+    switch (m_brushesTab->currentIndex()) {
+    case 0:
+        theBrush = m_autoBrushWidget->brush();
+        break;
+    case 1:
+        theBrush = m_brushChooser->brush();
+        break;
+    case 2:
+        theBrush = m_customBrushWidget->brush();
+        break;
+    case 3:
+        theBrush = m_textBrushWidget->brush();
+        break;
+    default:
+        ;
+    }
+    kDebug() << theBrush;
+    return theBrush;
+
 }
+
+#include "kis_brush_selection_widget.moc"

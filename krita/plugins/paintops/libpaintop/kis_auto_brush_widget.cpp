@@ -29,7 +29,9 @@
 
 #include "kis_mask_generator.h"
 
-KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
+KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption)
+    : KisWdgAutobrush(parent, name)
+    , m_autoBrush(0)
 {
     setWindowTitle(caption);
 
@@ -53,10 +55,10 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
     connect(spinBoxVertical,SIGNAL(valueChanged(int)),this,SLOT(spinBoxVerticalChanged(int)));
 
     m_brush = QImage(1, 1, QImage::Format_RGB32);
-    paramChanged();
-
 
     connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));
+
+    paramChanged();
 
 }
 
@@ -87,10 +89,11 @@ void KisAutoBrushWidget::paramChanged()
         Q_CHECK_PTR(kas);
 
     }
-    KisAutoBrush * resource = new KisAutoBrush(kas);
-    m_brush = resource->img();
+    m_autoBrush = new KisAutoBrush(kas);
+    kDebug() << m_autoBrush;
 
-    QPixmap p;
+    m_brush = m_autoBrush->img();
+
     QImage pi(m_brush);
     double coeff = 1.0;
     int bPw = brushPreview->width()-3;
@@ -108,11 +111,9 @@ void KisAutoBrushWidget::paramChanged()
         pi = pi.scaled( (int)(coeff * pi.width()) , (int)(coeff * pi.height()),  Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
-    p = QPixmap::fromImage(pi);
+    QPixmap p = QPixmap::fromImage(pi);
     brushPreview->setIcon(QIcon(p));
-    Q_CHECK_PTR(resource);
 
-    emit(activatedResource(resource));
 }
 void KisAutoBrushWidget::spinBoxWidthChanged(int a)
 {
@@ -122,7 +123,7 @@ void KisAutoBrushWidget::spinBoxWidthChanged(int a)
         spinBoxHeigth->setValue(a);
         spinBoxVertical->setMaximum(a/2);
     }
-    this->paramChanged();
+    paramChanged();
 }
 void KisAutoBrushWidget::spinBoxHeigthChanged(int a)
 {
@@ -132,19 +133,19 @@ void KisAutoBrushWidget::spinBoxHeigthChanged(int a)
         spinBoxWidth->setValue(a);
         spinBoxHorizontal->setMaximum(a/2);
     }
-    this->paramChanged();
+    paramChanged();
 }
 void KisAutoBrushWidget::spinBoxHorizontalChanged(int a)
 {
     if(m_linkFade)
         spinBoxVertical->setValue(a);
-    this->paramChanged();
+    paramChanged();
 }
 void KisAutoBrushWidget::spinBoxVerticalChanged(int a)
 {
     if(m_linkFade)
         spinBoxHorizontal->setValue(a);
-    this->paramChanged();
+    paramChanged();
 }
 
 void KisAutoBrushWidget::linkSizeToggled(bool b)
@@ -171,6 +172,13 @@ void KisAutoBrushWidget::linkFadeToggled(bool b)
     else {
         bnLinkFade->setIcon(QIcon(kir.chainBroken()));
     }
+}
+
+KisBrushSP KisAutoBrushWidget::brush()
+{
+    kDebug() << this;
+    kDebug() << m_autoBrush;
+    return m_autoBrush;
 }
 
 #include "kis_auto_brush_widget.moc"

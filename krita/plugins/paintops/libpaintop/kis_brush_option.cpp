@@ -19,17 +19,19 @@
 #include "kis_brush_option.h"
 #include "kis_brush_selection_widget.h"
 #include <klocale.h>
+#include "kis_brush.h"
 
 KisBrushOption::KisBrushOption()
     : KisPaintOpOption(i18n("Brush Tip"))
 {
     m_checkable = false;
-    m_brushChooser = new KisBrushSelectionWidget();
-    m_brushChooser->hide();
-    setConfigurationPage(m_brushChooser);
+    m_brushSelectionWidget = new KisBrushSelectionWidget();
+    m_brushSelectionWidget->hide();
+    setConfigurationPage(m_brushSelectionWidget);
 }
 
-KisBrush * KisBrushOption::brush()
+KisBrushSP KisBrushOption::brush()
 {
-    return m_brushChooser->brush();
+    kDebug() << m_brushSelectionWidget->brush()->name();
+    return m_brushSelectionWidget->brush();
 }

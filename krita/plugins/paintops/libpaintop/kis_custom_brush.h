@@ -26,16 +26,16 @@
 
 #include "ui_wdgcustombrush.h"
 #include "kis_types.h"
+#include "kis_brush.h"
 
 class KoResource;
-class KisBrush;
 
 class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
 {
     Q_OBJECT
 
-    public:
-        KisWdgCustomBrush(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    KisWdgCustomBrush(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
 class KisCustomBrush : public KisWdgCustomBrush
@@ -44,12 +44,7 @@ class KisCustomBrush : public KisWdgCustomBrush
 public:
     KisCustomBrush(QWidget *parent, const QString& caption, KisImageSP image);
     virtual ~KisCustomBrush();
-
-public slots:
-    void slotUseBrush();
-
-signals:
-    void activatedResource(KoResource *);
+    KisBrushSP brush() { return m_brush; };
 
 protected:
     virtual void showEvent(QShowEvent *);
@@ -57,12 +52,12 @@ protected:
 private slots:
     void slotExport();
     void slotAddPredefined();
-    void slotUpdateCurrentBrush(int); // To connect with activated(int)
+    void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
 
 private:
     void createBrush();
     KisImageSP m_image;
-    KisBrush* m_brush;
+    KisBrushSP m_brush;
     KoResourceServerAdapter<KisBrush>* m_rServerAdapter;
 };
 

@@ -48,19 +48,17 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImage
     , m_image(image)
 {
     setWindowTitle(caption);
-
-    m_brush = 0;
-
     preview->setScaledContents(true);
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
-    connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUseBrush()));
-//    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
+    connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
+    //    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(stateChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
+    slotUpdateCurrentBrush();
 }
 
 KisCustomBrush::~KisCustomBrush() {
@@ -73,8 +71,6 @@ void KisCustomBrush::showEvent(QShowEvent *) {
 }
 
 void KisCustomBrush::slotUpdateCurrentBrush(int) {
-    delete m_brush;
-    m_brush = 0;
     if (m_image) {
         createBrush();
         if (m_brush)
@@ -115,14 +111,6 @@ void KisCustomBrush::slotAddPredefined() {
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServerAdapter)
         m_rServerAdapter->addResource(m_brush->clone());
-}
-
-void KisCustomBrush::slotUseBrush() {
-    KisBrush* copy = m_brush->clone();
-
-    Q_CHECK_PTR(copy);
-
-    emit(activatedResource(copy));
 }
 
 void KisCustomBrush::createBrush() {

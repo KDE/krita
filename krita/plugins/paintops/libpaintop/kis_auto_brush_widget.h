@@ -38,12 +38,12 @@ class KRITAUI_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
     Q_OBJECT
 public:
     KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption);
+    virtual ~KisAutoBrushWidget() { delete m_autoBrush; }
     void activate();
+    KisBrushSP brush();
 
-signals:
-    void activatedResource(KoResource *r);
-    
 private slots:
+
     void paramChanged();
     void spinBoxWidthChanged(int );
     void spinBoxHeigthChanged(int );
@@ -57,6 +57,7 @@ protected:
 
 private:
     QImage m_brush;
+    KisBrushSP m_autoBrush;
     bool m_linkSize;
     bool m_linkFade;
 };

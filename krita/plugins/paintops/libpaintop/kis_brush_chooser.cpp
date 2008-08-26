@@ -75,8 +75,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     KoResourceServerAdapter<KisBrush>* rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
 
     m_brushMediator = new KisResourceMediator(this, rServerAdapter, this);
-//    connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
-//            m_view->resourceProvider(), SLOT(slotBrushActivated(KoResource*)));
+    connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
+            this , SLOT(slotActivatedBrush(KoResource*)));
 }
 
 KisBrushChooser::~KisBrushChooser()
@@ -131,6 +131,14 @@ void KisBrushChooser::slotImportBrush()
     QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Brush to Add" ) );
 
     KisBrushServer::instance()->brushServer()->importResource(filename);
+}
+
+void KisBrushChooser::slotActivatedBrush(KoResource * resource)
+{
+    KisBrush * brush = dynamic_cast<KisBrush*>(resource);
+    if ( brush ) {
+        m_brush = brush->clone();
+    }
 }
 
 #include "kis_brush_chooser.moc"

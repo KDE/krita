@@ -36,7 +36,7 @@ public:
     virtual void writeOptionSetting( KisPaintOpPresetSP preset ) const;
     virtual void readOptionSetting( KisPaintOpPresetSP preset );
 
-    void apply( KisPainter * painter, double pressure ) const;
+    quint8 apply( KisPainter * painter, double pressure ) const;
 
 };
 

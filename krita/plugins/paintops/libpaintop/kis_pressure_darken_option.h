@@ -23,7 +23,7 @@
 #include "kis_curve_option.h"
 #include <kis_types.h>
 #include <krita_export.h>
-
+#include <KoColor.h>
 class KisPainter;
 
 /**
@@ -38,7 +38,7 @@ public:
     virtual void writeOptionSetting( KisPaintOpPresetSP preset ) const;
     virtual void readOptionSetting( KisPaintOpPresetSP preset );
 
-    void apply( KisPainter * painter, double pressure ) const;
+    KoColor apply( KisPainter * painter, double pressure ) const;
 };
 
 #endif

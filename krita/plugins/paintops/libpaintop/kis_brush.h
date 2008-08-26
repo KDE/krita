@@ -77,12 +77,12 @@ public:
 };
 
 
-class KRITAIMAGE_EXPORT KisBrush : public KoResource {
+class KRITAIMAGE_EXPORT KisBrush : public KoResource, public KisShared {
 
   class ScaledBrush;
 
     Q_OBJECT
-    
+
 protected:
 
     class ColoringInformation {
@@ -92,7 +92,7 @@ protected:
         virtual void nextColumn() = 0;
         virtual void nextRow() = 0;
     };
-    
+
     class PlainColoringInformation : public ColoringInformation {
     public:
         PlainColoringInformation(const quint8* color);
@@ -103,7 +103,7 @@ protected:
     private:
         const quint8* m_color;
     };
-    
+
     class PaintDeviceColoringInformation : public ColoringInformation {
     public:
         PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width);
@@ -115,7 +115,7 @@ protected:
         const KisPaintDeviceSP m_source;
         KisHLineConstIteratorPixel* m_iterator;
     };
-    
+
 public:
 
     /// Construct brush to load filename later as brush
@@ -136,6 +136,7 @@ public:
 
     virtual bool load();
     /// synchronous, doesn't emit any signal (none defined!)
+
     virtual bool save();
     /**
      * @return a preview of the brush
@@ -147,7 +148,7 @@ public:
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
-     * 
+     *
      * @param dst the destination that will be draw on the image, and this function
      *            will edit its alpha channel
      * @param src coloring information that will be copied on the dab, it can be null
@@ -158,12 +159,12 @@ public:
      *             KisImagePipeBrush is ignoring scale and angle information)
      * @param subPixelX sub position of the brush (contained between 0.0 and 1.0)
      * @param subPixelY sub position of the brush (contained between 0.0 and 1.0)
-     * 
+     *
      * @return a mask computed from the grey-level values of the
      * pixels in the brush.
      */
     virtual void generateMask(KisPaintDeviceSP dst, ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
-    
+
     void mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
 
     void mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
@@ -283,5 +284,9 @@ private:
     struct Private;
     Private* const d;
 };
+
+class KisBrush;
+typedef KisSharedPtr<KisBrush> KisBrushSP;
+
 #endif // KIS_BRUSH_
 

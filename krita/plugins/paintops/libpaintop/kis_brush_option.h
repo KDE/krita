@@ -22,9 +22,10 @@
 
 #include "kis_paintop_option.h"
 #include <krita_export.h>
+#include "kis_brush.h"
 
 class KisBrushSelectionWidget;
-class KisBrush;
+
 /**
  * The brush option allows the user to select a particular brush
  * footprint for suitable paintops
@@ -38,10 +39,10 @@ public:
     /**
      * @return the currently selected brush
      */
-    KisBrush * brush();
+    KisBrushSP brush();
 private:
 
-    KisBrushSelectionWidget * m_brushChooser;
+    KisBrushSelectionWidget * m_brushSelectionWidget;
 };
 
 #endif

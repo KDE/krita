@@ -37,13 +37,15 @@ void KisPressureDarkenOption::readOptionSetting( KisPaintOpPresetSP preset )
     // XXX
 }
 
-void KisPressureDarkenOption::apply( KisPainter * painter, double pressure ) const
+KoColor KisPressureDarkenOption::apply( KisPainter * painter, double pressure ) const
 {
     if (!isChecked()) {
-        return;
+        return painter->paintColor();
     }
 
     KoColor darkened = painter->paintColor();
+    KoColor origColor = darkened;
+
     // Darken docs aren't really clear about what exactly the amount param can have as value...
     quint32 darkenAmount;
     if ( !customCurve() ) {
@@ -55,5 +57,7 @@ void KisPressureDarkenOption::apply( KisPainter * painter, double pressure ) con
     KoColorTransformation* darkenTransformation  = darkened.colorSpace()->createDarkenAdjustment(darkenAmount, false, 0.0);
     darkenTransformation ->transform(painter->paintColor().data(), darkened.data(), 1);
     painter->setPaintColor(darkened);
-    delete darkenTransformation ;
+    delete darkenTransformation;
+
+    return origColor;
 }

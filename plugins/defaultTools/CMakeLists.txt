@@ -29,7 +29,17 @@ kde4_add_ui_files(defaulttools_SRCS
 )
 
 kde4_add_plugin(defaulttools ${defaulttools_SRCS})
-target_link_libraries(defaulttools flake koguiutils kotext)
+target_link_libraries(
+    defaulttools
+    flake
+    koguiutils
+    kotext
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 install(TARGETS defaulttools DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

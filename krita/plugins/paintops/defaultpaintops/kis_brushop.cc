@@ -212,12 +212,13 @@ KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
 
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
-    : KisBrushBasedPaintOp(painter, settings->m_brushOption->brush())
+    : KisBrushBasedPaintOp(painter)
     , settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     Q_ASSERT(settings->m_brushOption);
+    m_brush = settings->m_brushOption->brush();
 }
 
 KisBrushOp::~KisBrushOp()
@@ -227,10 +228,6 @@ KisBrushOp::~KisBrushOp()
 void KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     kDebug() << settings;
-    kDebug() << settings->m_brushOption;
-    kDebug() << settings->m_brushOption->brush();
-    kDebug() << settings->m_brushOption->brush()->name();
-
 
     // Painting should be implemented according to the following algorithm:
     // retrieve brush
@@ -246,7 +243,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     if (!painter()->device()) return;
 
-    KisBrushSP brush = settings->m_brushOption->brush();
+    KisBrushSP brush = m_brush;
 
     Q_ASSERT(brush);
     if (!brush) return;

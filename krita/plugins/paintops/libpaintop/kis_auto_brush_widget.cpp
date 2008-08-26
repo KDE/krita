@@ -113,7 +113,7 @@ void KisAutoBrushWidget::paramChanged()
 
     QPixmap p = QPixmap::fromImage(pi);
     brushPreview->setIcon(QIcon(p));
-
+    kDebug() << m_autoBrush;
 }
 void KisAutoBrushWidget::spinBoxWidthChanged(int a)
 {

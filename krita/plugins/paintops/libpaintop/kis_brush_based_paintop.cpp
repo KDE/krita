@@ -28,7 +28,6 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp( KisPainter * painter, KisBrushSP bru
 
 KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
 {
-    delete m_brush;
 }
 
 double KisBrushBasedPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const

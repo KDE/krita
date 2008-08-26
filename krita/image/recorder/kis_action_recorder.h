@@ -38,11 +38,6 @@ public slots:
 signals:
 
     void addedAction(const KisRecordedAction& action);
-
-private:
-
-    struct Private;
-    Private* const d;
 };
 
 

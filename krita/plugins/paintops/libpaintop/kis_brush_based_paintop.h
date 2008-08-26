@@ -32,8 +32,6 @@ class KRITAUI_EXPORT KisBrushBasedPaintOp : public KisPaintOp {
 public:
 
     KisBrushBasedPaintOp( KisPainter * painter, KisBrushSP brush = 0 );
-    virtual ~KisBrushBasedPaintOp();
-
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
 
 protected: // XXX: make private!

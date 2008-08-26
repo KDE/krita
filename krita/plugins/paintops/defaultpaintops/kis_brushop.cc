@@ -227,8 +227,6 @@ KisBrushOp::~KisBrushOp()
 
 void KisBrushOp::paintAt(const KisPaintInformation& info)
 {
-    kDebug() << settings;
-
     // Painting should be implemented according to the following algorithm:
     // retrieve brush
     // if brush == mask

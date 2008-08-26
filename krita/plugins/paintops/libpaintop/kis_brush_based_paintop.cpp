@@ -26,10 +26,6 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp( KisPainter * painter, KisBrushSP bru
 {
 }
 
-KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
-{
-}
-
 double KisBrushBasedPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
 {
     // XXX: The spacing should vary as the pressure changes along the line.

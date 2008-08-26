@@ -23,6 +23,7 @@
 #include <QVariant>
 #include <KoColor.h> // Zut, do we want this? It's convenient, but
                      // also makes flake dependent on pigment. (BSAR)
+#include "KoShape.h"
 
 class KoCanvasResourceProvider::Private
 {
@@ -81,7 +82,7 @@ void KoCanvasResourceProvider::setResource( int key, const KoID & id )
 void KoCanvasResourceProvider::setResource( int key, KoShape* shape )
 {
     QVariant v;
-    v.setValue<void*>( shape );
+    v.setValue( shape );
     setResource( key, v );
 }
 
@@ -111,7 +112,6 @@ void KoCanvasResourceProvider::setBackgroundColor( const KoColor & color )
     //QVariant v;
     //v.setValue( color );
     setResource( KoCanvasResource::BackgroundColor, color );
-
 }
 
 KoColor KoCanvasResourceProvider::backgroundColor()
@@ -122,6 +122,14 @@ KoColor KoCanvasResourceProvider::backgroundColor()
 KoID KoCanvasResourceProvider::koIDResource(int key)
 {
     return resource( key ).value<KoID>();
+}
+
+KoShape * KoCanvasResourceProvider::koShapeResource( int key )
+{
+    if (! d->resources.contains(key))
+        return 0;
+
+    return resource( key ).value<KoShape *>();
 }
 
 void KoCanvasResourceProvider::setHandleRadius( int handleRadius )

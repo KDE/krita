@@ -31,6 +31,7 @@
 #include <QSet>
 #include <QMap>
 #include <QBrush>
+#include <QMetaType>
 
 #include <KoXmlReaderForward.h>
 #include <KoSnapData.h>
@@ -852,5 +853,7 @@ private:
     friend class Private;
     Private * const d;
 };
+
+Q_DECLARE_METATYPE(KoShape*)
 
 #endif

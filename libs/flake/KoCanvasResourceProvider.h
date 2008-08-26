@@ -181,6 +181,12 @@ public:
     KoID koIDResource(int key);
 
     /**
+     * Return the resource determined by param key as a pointer to a KoShape.
+     * @param key the indentifying key for the resource.
+     */
+    KoShape * koShapeResource( int key );
+
+    /**
      * Return the resource determined by param key as a QString .
      * @param key the indentifying key for the resource.
      */

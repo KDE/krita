@@ -43,7 +43,6 @@ public:
     QString & label() const;
     bool isChecked () const;
     void setChecked ( bool checked );
-    virtual bool checkable() const { return m_checkable; }
 
     void setConfigurationPage( QWidget * page );
     QWidget * configurationPage() const;

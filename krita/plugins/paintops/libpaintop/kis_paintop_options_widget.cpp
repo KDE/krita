@@ -75,12 +75,7 @@ void KisPaintOpOptionsWidget::addPaintOpOption( KisPaintOpOption * option )
 
     QListWidgetItem * item = new QListWidgetItem( m_d->optionsList );
     item->setText( option->label() );
-    if ( option->checkable() ) {
-        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
-    }
-    else {
-        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    }
+    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
 void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetItem *previous)

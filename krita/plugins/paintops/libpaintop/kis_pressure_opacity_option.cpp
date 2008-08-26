@@ -25,6 +25,7 @@
 KisPressureOpacityOption::KisPressureOpacityOption()
     : KisCurveOption( i18n( "Opacity" ) )
 {
+    setChecked(true);
 }
 
 void KisPressureOpacityOption::writeOptionSetting( KisPaintOpPresetSP preset ) const

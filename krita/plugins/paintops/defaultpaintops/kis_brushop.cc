@@ -273,8 +273,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     double scale = KisPaintOp::scaleForPressure( adjustedInfo.pressure() );
 
-    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0),
-                          brush->maskHeight(scale, 0.0));
+    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
 
@@ -312,10 +311,10 @@ double KisBrushOp::paintLine(const KisPaintInformation &pi1,
 {
     KisPaintInformation adjustedInfo1(pi1);
     KisPaintInformation adjustedInfo2(pi2);
-/*    if ( !m_pressureSize ) {
+    if ( !settings->m_sizeOption->isChecked()) {
         adjustedInfo1.setPressure( PRESSURE_DEFAULT );
         adjustedInfo2.setPressure( PRESSURE_DEFAULT );
-    }*/
+    }
     return KisPaintOp::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
 }
 

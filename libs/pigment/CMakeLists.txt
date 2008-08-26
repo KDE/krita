@@ -71,7 +71,16 @@ add_subdirectory(tests)
 
 kde4_add_library(pigmentcms SHARED ${pigmentcms_SRCS})
 
-target_link_libraries(pigmentcms ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${X11_X11_LIB} ${LINK_OPENEXR_LIB} komain ${LINK_OPENCTL_LIB})
+target_link_libraries(
+    pigmentcms
+    komain
+    lcms
+    ${KDE4_KPARTS_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${X11_X11_LIB}
+    ${LINK_OPENEXR_LIB}
+    ${LINK_OPENCTL_LIB}
+    )
 
 set_target_properties(pigmentcms PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 

@@ -10,7 +10,15 @@ set(koffice_graya_u16_LIB_SRCS kis_gray_u16_colorspace.cc )
 
 kde4_add_library(koffice_graya_u16 SHARED ${koffice_graya_u16_LIB_SRCS})
 
-target_link_libraries(koffice_graya_u16  ${KDE4_KDECORE_LIBS} pigmentcms )
+target_link_libraries(
+    koffice_graya_u16
+    pigmentcms
+    lcms
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QTXML_LIBRARY}
+    )
 
 set_target_properties(koffice_graya_u16 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koffice_graya_u16  DESTINATION ${LIB_INSTALL_DIR})

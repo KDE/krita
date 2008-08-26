@@ -30,6 +30,7 @@
 #include "compositeops/KoCompositeOpDodge.h"
 #include "compositeops/KoCompositeOpScreen.h"
 #include "compositeops/KoCompositeOpOverlay.h"
+#include "compositeops/KoCompositeOpAlphaDarken.h"
 
 /**
  * This function add to the colorspace all the composite ops defined by
@@ -46,6 +47,7 @@ void addStandardCompositeOps(KoColorSpace* cs)
     cs->addCompositeOp( new KoCompositeOpDodge<_Traits_>( cs ) );
     cs->addCompositeOp( new KoCompositeOpScreen<_Traits_>( cs ) );
     cs->addCompositeOp( new KoCompositeOpOverlay<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpAlphaDarken<_Traits_>( cs ) );
 }
 
 #endif

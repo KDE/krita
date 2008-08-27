@@ -7,8 +7,8 @@ consistency, these are the rules new code should adhere to:
 
 Indentation
 
-	With four spaces. Use the default Java indentation
-	style of (X)Emacs or KDevelop -- also for brace placement.
+	With four spaces. Use the default kdelibs indentation 
+    (http://techbase.kde.org/Policies/Kdelibs_Coding_Style)
 
 Includes
 

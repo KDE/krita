@@ -522,7 +522,7 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter)
 
 void TextTool::updateSelectedShape(KoPointerEvent *event)
 {
-    const bool canMoveCaret = !m_textCursor.hasSelection() || event->button() ==  Qt::LeftButton;
+    const bool canMoveCaret = event->button() == Qt::LeftButton;
 
     if(canMoveCaret && ! m_textShape->boundingRect().contains(event->point)) {
         QRectF area(event->point, QSizeF(1,1));
